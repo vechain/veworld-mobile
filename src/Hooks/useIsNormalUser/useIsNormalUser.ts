@@ -1,13 +1,15 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQueries, useQuery } from "@tanstack/react-query"
 import { ThorClient } from "@vechain/sdk-network"
 import { useEffect, useMemo } from "react"
 import { VET } from "~Constants"
 import generatedAbi from "~Generated/abi"
 import { useMainnetThorClient } from "~Hooks/useThorClient"
+import { useTokenBalanceConfig } from "~Hooks/useTokenBalance"
+import { NETWORK_TYPE } from "~Model"
 import {
     selectAccountsWithoutObserved,
     selectIsNormalUser,
-    selectMainnetVETBalanceForAllAccounts,
+    selectNetworksByType,
     setIsNormalUser,
     useAppDispatch,
     useAppSelector,
@@ -38,8 +40,33 @@ const getAccountsActions = async (thorClient: ThorClient, addresses: string[]) =
 
 export const useIsNormalUser = () => {
     const accounts = useAppSelector(selectAccountsWithoutObserved)
-    const balances = useAppSelector(selectMainnetVETBalanceForAllAccounts)
+    const networks = useAppSelector(selectNetworksByType(NETWORK_TYPE.MAIN))
+    const thor = useMainnetThorClient()
     const cachedIsNormalUser = useAppSelector(selectIsNormalUser)
+    const queryConfigs = useMemo(
+        () =>
+            accounts.map(account => ({
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                ...useTokenBalanceConfig({
+                    address: account.address,
+                    network: networks[0],
+                    thor: thor,
+                    tokenAddress: VET.address,
+                }),
+                enabled: !cachedIsNormalUser,
+            })),
+        [accounts, cachedIsNormalUser, networks, thor],
+    )
+    const { data: balances } = useQueries({
+        queries: queryConfigs,
+        combine(results) {
+            return {
+                data: results
+                    .map(result => result.data)
+                    .filter((balance): balance is NonNullable<typeof balance> => balance !== undefined),
+            }
+        },
+    })
     const dispatch = useAppDispatch()
     const mainnetThorClient = useMainnetThorClient()
 

@@ -1,4 +1,5 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query"
+import { ThorClient } from "@vechain/sdk-network"
 import { Network } from "~Model"
 import { BalanceUtils } from "~Utils"
 
@@ -21,7 +22,7 @@ export const useTokenBalanceConfig = ({
     address: string
     tokenAddress: string
     network: Network
-    thor: Connex.Thor
+    thor: Connex.Thor | ThorClient
 }) =>
     queryOptions({
         queryKey: ["TOKENS", "SINGLE", address, network.genesis.id, tokenAddress],

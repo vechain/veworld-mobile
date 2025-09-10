@@ -19,10 +19,10 @@ import { FungibleToken } from "~Model"
 import {
     addOrUpdateCustomTokens,
     addTokenBalance,
+    selectCustomTokens,
     selectOfficialTokens,
     selectSelectedAccount,
     selectSelectedNetwork,
-    selectVisibleCustomTokens,
     updateAccountBalances,
     useAppDispatch,
     useAppSelector,
@@ -56,7 +56,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
 
         const officialTokens = useAppSelector(selectOfficialTokens)
 
-        const customTokens = useAppSelector(selectVisibleCustomTokens)
+        const customTokens = useAppSelector(selectCustomTokens)
 
         const account = useAppSelector(selectSelectedAccount)
 

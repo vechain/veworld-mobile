@@ -38,6 +38,7 @@ import {
     selectSelectedNetwork,
     selectVisibleAccounts,
     setAppResetTimestamp,
+    updateAccountBalances,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -124,17 +125,8 @@ export const HomeScreen = () => {
     }, [queryClient, selectedAccount.address, selectedNetwork.type])
 
     const invalidateBalanceQueries = useCallback(async () => {
-        await queryClient.invalidateQueries({
-            predicate(query) {
-                const queryKey = query.queryKey as string[]
-                if (!["TOKENS"].includes(queryKey[0])) return false
-                if (!["SINGLE", "MULTIPLE"].includes(queryKey[1])) return false
-                if (!AddressUtils.compareAddresses(queryKey[2], selectedAccount.address)) return false
-                if (queryKey[3] !== selectedNetwork.genesis.id) return false
-                return true
-            },
-        })
-    }, [queryClient, selectedAccount.address, selectedNetwork.genesis.id])
+        await dispatch(updateAccountBalances(selectedAccount.address, queryClient))
+    }, [dispatch, queryClient, selectedAccount.address])
 
     const onRefresh = useCallback(async () => {
         setRefreshing(true)

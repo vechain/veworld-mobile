@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react"
 import {
-    BaseIcon,
     BaseSearchInput,
     BaseSpacer,
     BaseText,
-    BaseTouchableBox,
     BaseView,
     DismissKeyboardView,
     Layout,
@@ -12,35 +10,25 @@ import {
     PlusIconHeaderButton,
     useThor,
 } from "~Components"
-import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal } from "~Hooks"
 
-import { useNavigation } from "@react-navigation/native"
 import { AnalyticsEvent } from "~Constants"
+import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
-import { Routes } from "~Navigation"
 import { updateAccountBalances, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import {
-    selectNonVechainFungibleTokens,
-    selectNonVechainTokensWithBalances,
-    selectSelectedAccount,
-    selectSelectedNetwork,
-} from "~Storage/Redux/Selectors"
+import { selectNonVechainFungibleTokens, selectSelectedAccount, selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { addTokenBalance, removeTokenBalance, setIsAppLoading } from "~Storage/Redux/Slices"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 
 export const ManageTokenScreen = () => {
-    const theme = useTheme()
-
-    const nav = useNavigation()
-
     const { LL } = useI18nContext()
 
     const dispatch = useAppDispatch()
 
     const account = useAppSelector(selectSelectedAccount)
 
-    const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
+    const { data: tokenBalances } = useNonVechainTokensBalance()
 
     const tokens = useAppSelector(selectNonVechainFungibleTokens)
 
@@ -108,10 +96,6 @@ export const ManageTokenScreen = () => {
         }
     }
 
-    const navigateManageCustomTokenScreen = () => {
-        nav.navigate(Routes.MANAGE_CUSTOM_TOKEN)
-    }
-
     useEffect(() => {
         setTimeout(() => {
             dispatch(setIsAppLoading(false))
@@ -134,19 +118,6 @@ export const ManageTokenScreen = () => {
                         <BaseView>
                             <BaseSpacer height={8} />
                             <BaseText typographyFont="body">{LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}</BaseText>
-                            <BaseSpacer height={16} />
-
-                            <BaseTouchableBox
-                                haptics="Light"
-                                action={navigateManageCustomTokenScreen}
-                                justifyContent="center">
-                                <BaseIcon name="icon-settings-2" color={theme.colors.primary} />
-                                <BaseSpacer width={8} />
-                                <BaseText typographyFont="bodyMedium">
-                                    {LL.MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED()}
-                                </BaseText>
-                                <BaseSpacer width={8} />
-                            </BaseTouchableBox>
                             <BaseSpacer height={16} />
                             <BaseSearchInput
                                 value={tokenQuery}

@@ -8,14 +8,10 @@ import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet 
 import { B3TR } from "~Constants"
 import { ColorThemeType, typography } from "~Constants/Theme"
 import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import {
-    selectBalanceVisible,
-    selectSelectedAccount,
-    selectSendableTokensWithBalance,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectBalanceVisible, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { AssetChart, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
@@ -37,7 +33,7 @@ export const BridgeAssetDetailScreen = ({ route }: Props) => {
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
-    const tokens = useAppSelector(selectSendableTokensWithBalance)
+    const tokens = useSendableTokensWithBalance()
     const foundToken = tokens.find(
         t =>
             t.name?.toLowerCase().includes(token.name.toLowerCase()) ||

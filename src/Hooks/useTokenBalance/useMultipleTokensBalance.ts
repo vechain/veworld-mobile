@@ -1,21 +1,24 @@
 import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect, useMemo } from "react"
 import { useThor } from "~Components"
-import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccountAddress, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BalanceUtils } from "~Utils"
 import { buildUseTokenBalanceQueryKey } from "./useTokenBalance.config"
 import { Balance } from "~Model"
 
-export const useMultipleTokensBalance = (addresses: string[], accountAddress: string) => {
+export const useMultipleTokensBalance = (addresses: string[], accountAddress?: string) => {
     const thor = useThor()
     const network = useAppSelector(selectSelectedNetwork)
     const sortedAddresses = useMemo(() => [...addresses].sort(), [addresses])
+    const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
+
+    const address = useMemo(() => accountAddress ?? selectedAccountAddress!, [accountAddress, selectedAccountAddress])
 
     const qc = useQueryClient()
 
     const { data, dataUpdatedAt, isLoading } = useQuery({
         queryKey: ["TOKENS", "MULTIPLE", accountAddress, network.genesis.id, sortedAddresses],
-        queryFn: () => BalanceUtils.getBalancesFromBlockchain(sortedAddresses, accountAddress, network, thor),
+        queryFn: () => BalanceUtils.getBalancesFromBlockchain(sortedAddresses, address, network, thor),
         staleTime: 5 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
         placeholderData: keepPreviousData,
@@ -25,7 +28,7 @@ export const useMultipleTokensBalance = (addresses: string[], accountAddress: st
         if (!data) return
         data.forEach(value => {
             const queryKey = buildUseTokenBalanceQueryKey({
-                address: accountAddress,
+                address,
                 networkGenesisId: network.genesis.id,
                 tokenAddress: value.tokenAddress,
             })
@@ -34,20 +37,20 @@ export const useMultipleTokensBalance = (addresses: string[], accountAddress: st
                 qc.setQueryData(queryKey, value, { updatedAt: dataUpdatedAt })
             }
         })
-    }, [accountAddress, data, dataUpdatedAt, network.genesis.id, qc])
+    }, [accountAddress, address, data, dataUpdatedAt, network.genesis.id, qc])
 
     const mappedData = useMemo(() => {
         if (!data) return undefined
         return data.map(d => {
             const queryKey = buildUseTokenBalanceQueryKey({
-                address: accountAddress,
+                address,
                 networkGenesisId: network.genesis.id,
                 tokenAddress: d.tokenAddress,
             })
             const qData = qc.getQueryData<Balance>(queryKey)
             return qData ?? d
         })
-    }, [accountAddress, data, network.genesis.id, qc])
+    }, [address, data, network.genesis.id, qc])
 
     return useMemo(() => ({ isLoading, data: mappedData }), [isLoading, mappedData])
 }

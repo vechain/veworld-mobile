@@ -8,6 +8,8 @@ import { BigNumber } from "bignumber.js"
 import BigNutils from "~Utils/BigNumberUtils"
 import { ethers } from "ethers"
 import { VIP180 } from "~Constants/Constants/Thor/abis"
+import { ThorClient } from "@vechain/sdk-network"
+import { ABIFunction } from "@vechain/sdk-core"
 
 const vip180Interface = new ethers.utils.Interface([VIP180.balanceOf])
 
@@ -46,7 +48,11 @@ const getBalanceFromBlockchain = async (
     }
 }
 
-const getErc20BalancesFromBlockchain = async (tokenAddresses: string[], accountAddress: string, thor: Connex.Thor) => {
+const getErc20BalancesFromBlockchainLegacy = async (
+    tokenAddresses: string[],
+    accountAddress: string,
+    thor: Connex.Thor,
+) => {
     const clauses = tokenAddresses.map(token =>
         thor.account(token).method(abis.VIP180.balanceOf).asClause(accountAddress),
     )
@@ -71,6 +77,49 @@ const getErc20BalancesFromBlockchain = async (tokenAddresses: string[], accountA
     })
 }
 
+const getErc20BalancesFromBlockchainNew = async (
+    tokenAddresses: string[],
+    accountAddress: string,
+    thor: ThorClient,
+) => {
+    const clauses = tokenAddresses.map(token => ({
+        to: token,
+        value: "0x0",
+        data: vip180Interface.encodeFunctionData("balanceOf", [accountAddress]),
+    }))
+
+    const result = await thor.transactions.executeMultipleClausesCall(
+        clauses.map(clause => ({
+            clause,
+            functionAbi: new ABIFunction(vip180Interface.functions["balanceOf(address)"].format("full")),
+        })),
+    )
+
+    const nowIso = new Date().toISOString()
+
+    return result
+        .map((res, idx) => {
+            if (!res.success) return
+            const value = res.result.plain as bigint
+            return {
+                balance: `0x${value.toString(16)}`,
+                tokenAddress: tokenAddresses[idx],
+                timeUpdated: nowIso,
+                isHidden: false,
+            }
+        })
+        .filter((u): u is NonNullable<typeof u> => u !== undefined)
+}
+
+const getErc20BalancesFromBlockchain = async (
+    tokenAddresses: string[],
+    accountAddress: string,
+    thor: Connex.Thor | ThorClient,
+) => {
+    if (thor instanceof ThorClient) return getErc20BalancesFromBlockchainNew(tokenAddresses, accountAddress, thor)
+    return getErc20BalancesFromBlockchainLegacy(tokenAddresses, accountAddress, thor)
+}
+
 const getNativeBalancesFromBlockchain = async (accountAddress: string, network: Network) => {
     const result = await getVetAndVthoBalancesFromBlockchain(accountAddress, network)
     return [
@@ -93,7 +142,7 @@ const getBalancesFromBlockchain = async (
     tokenAddresses: string[],
     accountAddress: string,
     network: Network,
-    thor: Connex.Thor,
+    thor: Connex.Thor | ThorClient,
 ): Promise<Balance[]> => {
     try {
         // Check if VET or VTHO is in the balances to update

@@ -1,14 +1,14 @@
 import React from "react"
 import DropShadow from "react-native-drop-shadow"
 import { BaseIcon, BaseText, BaseView, FiatBalance } from "~Components"
+import { TokenImage } from "~Components/Reusable/TokenImage"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Token } from "~Model"
-import { selectOfficialTokens, selectVisibleCustomTokens, useAppSelector } from "~Storage/Redux"
-import { SWAP_SIDE } from "../SwapCard"
-import { TokenImage } from "~Components/Reusable/TokenImage"
+import { selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
 import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
+import { SWAP_SIDE } from "../SwapCard"
 
 type Props = {
     provenance: SWAP_SIDE
@@ -35,7 +35,7 @@ export const TokenBox = ({
 
     const provenanceText = provenance === SWAP_SIDE.PAID ? LL.PAID() : LL.RECEIVED()
 
-    const customTokens = useAppSelector(selectVisibleCustomTokens)
+    const customTokens = useAppSelector(selectCustomTokens)
 
     const officialTokens = useAppSelector(selectOfficialTokens)
 
