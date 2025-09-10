@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseButton, BaseCarousel, BaseChip, BaseSpacer, BaseText, BaseView, CarouselSlideItem } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
@@ -29,13 +29,33 @@ export const StargateCarousel = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const address = useAppSelector(selectSelectedAccountAddress)
-    const [filter, setFilter] = useState<StakingFilter>(StakingFilter.OWN)
 
     const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes)
     const nav = useNavigation()
 
     const { navigateWithTab } = useBrowserTab()
+
+    const hasOwnedNodes = useMemo(
+        () => stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address)),
+        [stargateNodes, address],
+    )
+    const hasManagedNodes = useMemo(
+        () => stargateNodes.some(node => !AddressUtils.compareAddresses(node.xNodeOwner, address)),
+        [stargateNodes, address],
+    )
+
+    // Initialize filter state
+    const [filter, setFilter] = useState<StakingFilter>(StakingFilter.OWN)
+
+    useEffect(() => {
+        if (isLoadingNodes || !stargateNodes.length) return
+
+        const preferredFilter = hasOwnedNodes ? StakingFilter.OWN : StakingFilter.MANAGING
+        setFilter(currentFilter => {
+            return currentFilter !== preferredFilter ? preferredFilter : currentFilter
+        })
+    }, [hasOwnedNodes, isLoadingNodes, stargateNodes.length])
 
     const filteredNodes = useMemo(() => {
         return filter === StakingFilter.OWN
@@ -93,9 +113,6 @@ export const StargateCarousel = () => {
         [LL],
     )
 
-    const hasOwnedNodes = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
-    const hasManagedNodes = stargateNodes.some(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
-
     if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0)
         return <BannersCarousel location="token_screen" />
 
@@ -121,7 +138,7 @@ export const StargateCarousel = () => {
                     isLoading={isLoadingNodes || isLoadingNfts}
                     nfts={filteredNfts}
                     rootStyle={styles.section}
-                    isNodeOwner={filter === StakingFilter.OWN}
+                    isNodeOwner={filter === StakingFilter.OWN && hasOwnedNodes}
                 />
                 <BaseSpacer bg={theme.colors.cardDivider} height={1} />
                 <BaseCarousel
