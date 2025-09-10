@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
-import { VET, VTHO } from "~Constants"
+import { VeDelegate, VET, VTHO } from "~Constants"
 import { useOfficialTokens } from "~Hooks/useOfficialTokens"
 import { useMultipleTokensBalance } from "~Hooks/useTokenBalance/useMultipleTokensBalance"
 import { getUseUserTokensConfig } from "~Hooks/useUserTokens"
@@ -12,7 +12,7 @@ import {
     selectSelectedNetwork,
     useAppSelector,
 } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { AddressUtils, BigNutils } from "~Utils"
 
 export const useNonVechainTokensBalance = ({
     accountAddress,
@@ -60,18 +60,24 @@ export const useNonVechainTokensBalance = ({
 
     const tokensWithBalance = useMemo(
         () =>
-            userValidTokens.map(
-                tk =>
-                    ({
-                        ...tk,
-                        balance: balances?.find(b => AddressUtils.compareAddresses(b.tokenAddress, tk.address)) ?? {
-                            balance: "0",
-                            isHidden: false,
-                            timeUpdated: new Date().toISOString(),
-                            tokenAddress: tk.address,
-                        },
-                    } satisfies FungibleTokenWithBalance),
-            ),
+            userValidTokens
+                .map(
+                    tk =>
+                        ({
+                            ...tk,
+                            balance: balances?.find(b => AddressUtils.compareAddresses(b.tokenAddress, tk.address)) ?? {
+                                balance: "0",
+                                isHidden: false,
+                                timeUpdated: new Date().toISOString(),
+                                tokenAddress: tk.address,
+                            },
+                        } satisfies FungibleTokenWithBalance),
+                )
+                .filter(token => {
+                    //Hide VeDelegate if the balance is exactly 0
+                    if (!AddressUtils.compareAddresses(token.address, VeDelegate.address)) return true
+                    return !BigNutils(token.balance.balance).isZero
+                }),
         [balances, userValidTokens],
     )
 
