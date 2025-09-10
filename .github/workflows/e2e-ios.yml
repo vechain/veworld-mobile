@@ -4,6 +4,10 @@ on:
     workflow_dispatch:
 
     workflow_call:
+        outputs:
+            resultUrl:
+                description: "Device Cloud Output URL:"
+                value: $${{ jobs.build-e2e-ios.resultUrl }}
 
 jobs:
     build-e2e-ios:

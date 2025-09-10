@@ -89,7 +89,7 @@ const AnimatedSectionList = Animated.createAnimatedComponent(
     >,
 )
 
-const ANIMATION_CONFIG = { stiffness: 90, damping: 15 }
+const ANIMATION_CONFIG = { stiffness: 90, damping: 15, duration: 300 }
 
 // component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
@@ -165,11 +165,18 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
             resetHeight()
         }, [resetHeight, selectedKey, setSmallViewport])
 
+        const handleDismiss = useCallback(() => {
+            setSmallViewport(false)
+            initialLayout.current = false
+            resetHeight()
+            onDismiss?.()
+        }, [onDismiss, resetHeight, setSmallViewport])
+
         return (
             <BaseBottomSheet
                 dynamicHeight
                 ref={ref}
-                onDismiss={onDismiss}
+                onDismiss={handleDismiss}
                 contentStyle={contentStyle}
                 enableContentPanningGesture={false}
                 animationConfigs={ANIMATION_CONFIG}>

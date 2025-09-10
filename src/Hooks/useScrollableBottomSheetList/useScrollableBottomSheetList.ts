@@ -1,4 +1,4 @@
-import { MutableRefObject, useCallback, useMemo, useState } from "react"
+import { MutableRefObject, useCallback, useMemo, useRef, useState } from "react"
 import { LayoutChangeEvent, useWindowDimensions, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { usePrevious } from "~Hooks/usePrevious"
@@ -23,12 +23,13 @@ export const useScrollableBottomSheetList = ({ onResize, initialLayout }: Args) 
 
     const [height, setHeight] = useState(maxHeight)
     const previousHeight = usePrevious(height)
-    const [offsetY, setOffsetY] = useState(160)
+    const offsetY = useRef(160)
     const onContentSizeChange = useCallback(
         (_: number, contentHeight: number) => {
             if (contentHeight <= height) {
-                const overflows = contentHeight + offsetY >= height
-                const minValue = overflows ? maxHeight - offsetY - 100 : contentHeight
+                const overflows = contentHeight + offsetY.current >= height
+                //32 is the size of the handle + 4px of offset
+                const minValue = overflows ? maxHeight - offsetY.current - 32 : contentHeight
                 setHeight(minValue)
                 //If the height increased, just set it as a small viewport to set the correct size
                 if ((previousHeight ?? 0) < contentHeight) onResize(true)
@@ -44,7 +45,7 @@ export const useScrollableBottomSheetList = ({ onResize, initialLayout }: Args) 
     const onLayout = useCallback(
         (e: LayoutChangeEvent) => {
             const _height = e.nativeEvent.layout.height
-            setOffsetY(e.nativeEvent.layout.y)
+            offsetY.current = e.nativeEvent.layout.y
             if (initialLayout.current) return
 
             if (_height < maxHeight) {
@@ -55,7 +56,7 @@ export const useScrollableBottomSheetList = ({ onResize, initialLayout }: Args) 
         [initialLayout, maxHeight],
     )
 
-    const style = useMemo(() => ({ maxHeight: height, height } as ViewStyle), [height])
+    const style = useMemo(() => ({ maxHeight: height, height, minHeight: height } as ViewStyle), [height])
 
     const resetHeight = useCallback(() => setHeight(maxHeight), [maxHeight])
 

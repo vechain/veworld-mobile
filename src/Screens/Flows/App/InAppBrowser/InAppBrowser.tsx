@@ -1,10 +1,10 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { MutableRefObject, useCallback, useEffect, useMemo, useState } from "react"
-import { Platform, StyleSheet, View } from "react-native"
+import { BackHandler, Platform, StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import FastImage, { ImageStyle } from "react-native-fast-image"
-import Animated, { Easing, FadeOut, runOnJS } from "react-native-reanimated"
+import Animated, { Easing, FadeOut } from "react-native-reanimated"
 import WebView from "react-native-webview"
 import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
 import { BaseIcon, BaseStatusBar, BaseView, Layout, URLBar, useInAppBrowser } from "~Components"
@@ -17,11 +17,8 @@ import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
-import { Gesture, GestureDetector } from "react-native-gesture-handler"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
-
-const NAVIGATION_GESTURE_THRESHOLD = 80
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const {
@@ -38,8 +35,6 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         ChangeAccountNetworkBottomSheetRef,
         originWhitelist,
         isLoading,
-        goBack,
-        goForward,
     } = useInAppBrowser()
 
     const track = useAnalyticTracking()
@@ -110,18 +105,22 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         theme.colors.history.historyItem.iconColor,
     ])
 
-    const navigationGesture = useMemo(() => {
-        return Gesture.Pan()
-            .onChange(event => {
-                if (event.translationX > NAVIGATION_GESTURE_THRESHOLD) {
-                    runOnJS(goBack)()
-                }
-                if (event.translationX < -NAVIGATION_GESTURE_THRESHOLD) {
-                    runOnJS(goForward)()
-                }
-            })
-            .activeOffsetX([-NAVIGATION_GESTURE_THRESHOLD, NAVIGATION_GESTURE_THRESHOLD])
-    }, [goBack, goForward])
+    const onAndroidBackPress = useCallback((): boolean => {
+        if (webviewRef.current) {
+            webviewRef.current.goBack()
+            return true // prevent default behavior (exit app)
+        }
+        return false
+    }, [webviewRef])
+
+    useEffect((): (() => void) | undefined => {
+        if (Platform.OS === "android") {
+            const nativeEventSubscription = BackHandler.addEventListener("hardwareBackPress", onAndroidBackPress)
+            return (): void => {
+                nativeEventSubscription.remove()
+            }
+        }
+    }, [onAndroidBackPress])
 
     return (
         <Layout
@@ -142,32 +141,28 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 <View style={styles.container}>
                     {Platform.OS === "ios" && <BaseStatusBar hero={true} />}
                     {userAgent && !isLoading && (
-                        <GestureDetector gesture={Gesture.Exclusive(navigationGesture)}>
-                            <Animated.View
-                                ref={webviewContainerRef}
-                                style={[styles.webviewContainer]}
-                                collapsable={false}>
-                                <WebView
-                                    ref={webviewRef as MutableRefObject<WebView>}
-                                    source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
-                                    userAgent={userAgent}
-                                    onNavigationStateChange={onNavigationStateChange}
-                                    javaScriptEnabled={true}
-                                    onMessage={onMessage}
-                                    onScroll={onScroll}
-                                    onLoadEnd={onLoadEnd}
-                                    style={styles.loginWebView}
-                                    scalesPageToFit={true}
-                                    injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
-                                    allowsInlineMediaPlayback={true}
-                                    originWhitelist={originWhitelist}
-                                    collapsable={false}
-                                    pullToRefreshEnabled
-                                    startInLoadingState={true}
-                                    renderLoading={renderLoading}
-                                />
-                            </Animated.View>
-                        </GestureDetector>
+                        <Animated.View ref={webviewContainerRef} style={[styles.webviewContainer]} collapsable={false}>
+                            <WebView
+                                ref={webviewRef as MutableRefObject<WebView>}
+                                source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
+                                userAgent={userAgent}
+                                onNavigationStateChange={onNavigationStateChange}
+                                javaScriptEnabled={true}
+                                onMessage={onMessage}
+                                onScroll={onScroll}
+                                onLoadEnd={onLoadEnd}
+                                allowsBackForwardNavigationGestures
+                                style={styles.loginWebView}
+                                scalesPageToFit={true}
+                                injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
+                                allowsInlineMediaPlayback={true}
+                                originWhitelist={originWhitelist}
+                                collapsable={false}
+                                pullToRefreshEnabled
+                                startInLoadingState={true}
+                                renderLoading={renderLoading}
+                            />
+                        </Animated.View>
                     )}
 
                     <ChangeAccountNetworkBottomSheet

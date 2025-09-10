@@ -21,6 +21,7 @@ import {
     IndexedHistoryEvent,
     Network,
     NonFungibleTokenActivity,
+    NFTMarketplaceActivity,
     SignCertActivity,
     StargateActivity,
     SwapActivity,
@@ -506,6 +507,7 @@ const processActivity = (
         case ActivityType.TRANSFER_VET:
             return enrichActivityWithVetTransfer(activity, clause, direction)
         case ActivityType.TRANSFER_NFT:
+        case ActivityType.NFT_SALE:
             return enrichActivityWithNFTData(activity, clause, direction)
         default:
             return enrichActivityWithDappData(activity, appName, appUrl)
@@ -606,6 +608,21 @@ export const createActivityFromIndexedHistoryEvent = (
                 contractAddress: contractAddress,
                 direction: direction,
             } as NonFungibleTokenActivity
+        }
+        case ActivityEvent.NFT_SALE: {
+            const direction = AddressUtils.compareAddresses(from, selectedAccountAddress)
+                ? DIRECTIONS.UP
+                : DIRECTIONS.DOWN
+            return {
+                ...baseActivity,
+                tokenId: tokenId,
+                contractAddress: contractAddress,
+                direction: direction,
+                price: value ?? "0",
+                buyer: to ?? "",
+                seller: from ?? "",
+                tokenAddress: event.tokenAddress,
+            } as NFTMarketplaceActivity
         }
         case ActivityEvent.SWAP_FT_TO_VET: {
             return {

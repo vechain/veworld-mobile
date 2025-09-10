@@ -63,14 +63,6 @@ env:
 - tapOn:
       id: "AccountCard_changeAccountButton"
 - runFlow:
-      when:
-          platform: Android
-      commands:
-          - tapOn:
-                text: "Account 1"
-- runFlow:
-      when:
-          platform: iOS
       commands:
           - tapOn:
                 id: "selectAccount"
