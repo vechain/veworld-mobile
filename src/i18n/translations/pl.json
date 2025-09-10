@@ -947,7 +947,7 @@
   "SECURITY_UPGRADE_REMINDER_DESC": "Prosimy upewnij się, że utworzyłeś kopię zapasową swojej frazy odzyskiwania przed kontynuowaniem aktualizacji.",
   "SELECT_ACCOUNT_DESCRIPTION": "Wybierz aktywne konto",
   "SELECT_ACCOUNT_TITLE": "Portfele",
-  "SELECT_ACCOUNT_WATCHING": "Obserwowane",
+  "SELECT_ACCOUNT_WATCHING": "Obserwowanie",
   "SELECT_ACCOUNT_YOUR_WALLETS": "Twoje portfele",
   "SEND_ACCEPT_NO_GAS_ACCEPT": "ROZUMIEM",
   "SEND_ACCEPT_NO_GAS_MESSAGE": "VTHO jest tokenem gazowym (nie VET). Kup lub przetransferuj trochę VTHO na swoje konto, aby przeprowadzić tę transakcję.",

@@ -947,7 +947,7 @@
   "SECURITY_UPGRADE_REMINDER_DESC": "Vänligen se till att du har säkerhetskopierat din återställningsfras innan du går vidare med uppgraderingen.",
   "SELECT_ACCOUNT_DESCRIPTION": "Välj det aktiva kontot",
   "SELECT_ACCOUNT_TITLE": "Plånböcker",
-  "SELECT_ACCOUNT_WATCHING": "Bevakar",
+  "SELECT_ACCOUNT_WATCHING": "Övervakar",
   "SELECT_ACCOUNT_YOUR_WALLETS": "Dina plånböcker",
   "SEND_ACCEPT_NO_GAS_ACCEPT": "JAG FÖRSTÅR",
   "SEND_ACCEPT_NO_GAS_MESSAGE": "VTHO är gastoken (inte VET). Köp eller överför lite VTHO till ditt konto för att genomföra denna transaktion.",

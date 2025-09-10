@@ -945,7 +945,7 @@
   "SECURITY_UPGRADE_ONLY_PK": "Het lijkt erop dat u alleen een private key-wallet op VeWorld heeft aangesloten. U kunt het beveiligingsniveau upgraden zonder een back-up te maken.",
   "SECURITY_UPGRADE_REMINDER": "Belangrijke herinnering",
   "SECURITY_UPGRADE_REMINDER_DESC": "Zorg ervoor dat u een back-up heeft gemaakt van uw herstelzin voordat u verdergaat met de upgrade.",
-  "SELECT_ACCOUNT_DESCRIPTION": "Selecteer de actieve account",
+  "SELECT_ACCOUNT_DESCRIPTION": "Selecteer het actieve account",
   "SELECT_ACCOUNT_TITLE": "Wallets",
   "SELECT_ACCOUNT_WATCHING": "Bekijken",
   "SELECT_ACCOUNT_YOUR_WALLETS": "Jouw wallets",

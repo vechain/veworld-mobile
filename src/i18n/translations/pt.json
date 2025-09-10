@@ -1062,7 +1062,7 @@
   "SIGN_TRANSACTION_REQUEST_TITLE": "Transação de aplicativo",
   "SIGN_TYPED_DATA_REQUEST_CTA": "Assinar",
   "SIGN_TYPED_DATA_REQUEST_TITLE": "Assinar dados tipados",
-  "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Carteira inteligente delegada ainda não suportada",
+  "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Delegação de carteira inteligente ainda não suportada",
   "STARGATE_CLAIMABLE": "Reclamável",
   "STARGATE_DELEGATEE_LABEL": "Gerenciando",
   "STARGATE_LOCKED": "Bloqueado",

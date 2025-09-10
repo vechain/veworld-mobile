@@ -209,7 +209,7 @@
   "BD_NOT_BACKED_UP_TO_CLOUD": "Non sauvegardé sur iCloud",
   "BD_NOT_BACKED_UP_TO_DRIVE": "Non sauvegardé sur Google Drive",
   "BD_NO_TOKEN_FOUND": "Aucun token trouvé",
-  "BD_OBSERVE_WALLET": "Vous pouvez surveiller un portefeuille en ajoutant son adresse. Cela vous permettra de voir le solde et les transactions du portefeuille.",
+  "BD_OBSERVE_WALLET": "Vous pouvez surveiller un portefeuille en ajoutant son adresse. Cela vous permettra de voir le solde du portefeuille et les transactions.",
   "BD_ONBOARDING_SLIDE_01": "Consulter et gérer vos actifs cryptographiques n'a jamais été aussi facile.",
   "BD_ONBOARDING_SLIDE_02": "Grâce à la technologie verte innovante, continuez à bâtir l'avenir de la sécurité.",
   "BD_ONBOARDING_SLIDE_03": "L'extension Wallet offre un moyen plus simple et sécurisé de gérer vos monnaies.",
