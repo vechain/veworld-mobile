@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.2 (2025-09-10)</small>
+
+* build: init ([23cf392](https://github.com/vechain/veworld-mobile/commit/23cf392))
+* Fix UX while rendering locked value info for managing only wallets on details flow (#3274) ([cbeb6b3](https://github.com/vechain/veworld-mobile/commit/cbeb6b3)), closes [#3274](https://github.com/vechain/veworld-mobile/issues/3274)
+
 ## <small>2.4.1 (2025-09-04)</small>
 
 * build: init ([055b5de](https://github.com/vechain/veworld-mobile/commit/055b5de))
