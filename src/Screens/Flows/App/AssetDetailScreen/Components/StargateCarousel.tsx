@@ -36,19 +36,27 @@ export const StargateCarousel = () => {
 
     const { navigateWithTab } = useBrowserTab()
 
-    const hasOwnedNodes = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
-    const hasManagedNodes = stargateNodes.some(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
+    const hasOwnedNodes = useMemo(
+        () => stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address)),
+        [stargateNodes, address],
+    )
+    const hasManagedNodes = useMemo(
+        () => stargateNodes.some(node => !AddressUtils.compareAddresses(node.xNodeOwner, address)),
+        [stargateNodes, address],
+    )
 
     // Initialize filter state
     const [filter, setFilter] = useState<StakingFilter>(StakingFilter.OWN)
 
     // Update filter when data loads - prefer owned, fallback to managing
     useEffect(() => {
-        if (!isLoadingNodes && stargateNodes.length > 0) {
-            const preferredFilter = hasOwnedNodes ? StakingFilter.OWN : StakingFilter.MANAGING
-            setFilter(preferredFilter)
-        }
-    }, [hasOwnedNodes, isLoadingNodes, stargateNodes.length])
+        if (isLoadingNodes || !stargateNodes.length) return
+
+        const preferredFilter = hasOwnedNodes ? StakingFilter.OWN : StakingFilter.MANAGING
+        setFilter(currentFilter => {
+            return currentFilter !== preferredFilter ? preferredFilter : currentFilter
+        })
+    }, [hasOwnedNodes, hasManagedNodes, isLoadingNodes, stargateNodes.length])
 
     const filteredNodes = useMemo(() => {
         return filter === StakingFilter.OWN
