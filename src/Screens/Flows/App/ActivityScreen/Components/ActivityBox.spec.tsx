@@ -28,20 +28,7 @@ import {
     VeVoteCastActivity,
 } from "~Model"
 
-const mockTheme = {
-    colors: {
-        activityCard: {
-            time: "#666",
-            title: "#000",
-            subtitleBold: "#333",
-            subtitleLight: "#999",
-            swap: "#444",
-        },
-    },
-}
-
-jest.mock("~Hooks", () => ({
-    ...jest.requireActual("~Hooks"),
+jest.mock("~Hooks/useNFTInfo", () => ({
     useNFTInfo: () => ({
         tokenMetadata: {
             image: "https://example.com/nft.jpg",
@@ -49,33 +36,15 @@ jest.mock("~Hooks", () => ({
         collectionName: "Test Collection",
         isMediaLoading: false,
     }),
-    useThemedStyles: () => ({
-        styles: {
-            rootContainer: {},
-            iconContainer: {},
-            titleContainer: {},
-            textContainer: {},
-            rightTextContainer: {},
-            rightImageContainer: {},
-        },
-        theme: mockTheme,
-    }),
-    useTheme: () => mockTheme,
+}))
+
+jest.mock("~Hooks/useNFTMedia", () => ({
     useNFTMedia: () => ({
         fetchMedia: async () => ({
             image: "https://example.com/nft.jpg",
             mime: "image/jpeg",
             mediaType: "IMAGE",
         }),
-    }),
-}))
-
-jest.mock("~Components/Providers/PersistedCacheProvider", () => ({
-    usePersistedCache: () => ({
-        mediaCache: {
-            getItem: () => null,
-            setItem: () => {},
-        },
     }),
 }))
 
@@ -352,9 +321,6 @@ describe("ActivityBox", () => {
                     suggestedTokens: [],
                 },
             },
-        },
-        veBetterDao: {
-            dapps: [],
         },
     }
 
