@@ -96,7 +96,7 @@ const validateFeeClause = (
 ): GenericDelegatorTransactionValidationResult => {
     if (delegationToken === VET.symbol) {
         if (
-            selectedFee.clone().minus(BigNutils(clause.value).toBN).div(selectedFee.clone().toBN).toBN.abs().gt("0.1")
+            selectedFee.clone().minus(BigNutils(clause.value).toBN).div(selectedFee.clone().toBN).toBN.abs().gt("0.3")
         ) {
             return {
                 valid: false,
@@ -135,7 +135,7 @@ const validateFeeClause = (
             .minus(BigNutils(decoded.amount?.toString()).toBN)
             .div(selectedFee.clone().toBN)
             .toBN.abs()
-            .gt("0.1")
+            .gt("0.3")
     ) {
         return {
             valid: false,
