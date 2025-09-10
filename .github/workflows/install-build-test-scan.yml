@@ -54,11 +54,11 @@ jobs:
           webhook-type: incoming-webhook
           payload: |
             {
-              "text": "${{ job.status }} scan ${{ needs.scan.result }}\n \
-                       ${{ needs.build-and-test-ios.outputs.resultUrl && format('iOS {0} url: {1}', needs.build-and-test-ios.result || 'skipped', needs.build-and-test-ios.outputs.resultUrl) || '' }}\n \
-                       ${{ needs.build-and-test-android.outputs.resultUrl && format('Android {0} url: {1}', needs.build-and-test-android.result || 'skipped', needs.build-and-test-android.outputs.resultUrl) || '' }}\n \
+              "text": "*Test Run:* ${{ job.status }}, *Scan:* ${{ needs.scan.result }}\n \
+                       iOS ${{ needs.build-and-test-ios.result || 'skipped' }} url: ${{ needs.build-and-test-ios.outputs.resultUrl || 'N/A' }}\n \
+                       Android ${{ needs.build-and-test-android.result || 'skipped' }} url: ${{ needs.build-and-test-android.outputs.resultUrl || 'N/A' }}\n \
                        Action Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" 
-              "slack-message": "🚨🚨🚨 ${{ needs.build-and-test-ios.result != 'success' && needs.build-and-test-android.result != 'success' && 'Android and iOS' || (needs.build-and-test-android.result != 'success' && 'Android' || 'iOS') }} Nightly E2E Tests failed 🚨🚨🚨"
+              "slack-message": "Nightly E2E Tests Results"
             }
       - name: FailureReportE2E2Slack
         if:  github.ref == 'refs/heads/main' && (needs.build-and-test-ios.result != 'success' || needs.build-and-test-android.result != 'success')  
@@ -68,10 +68,10 @@ jobs:
           webhook-type: incoming-webhook
           payload: |
             {
-              "text": "${{ job.status }} scan ${{ needs.scan.result }}\n \
-                       ${{ needs.build-and-test-ios.outputs.resultUrl && format('iOS {0} url: {1}', needs.build-and-test-ios.result || 'skipped', needs.build-and-test-ios.outputs.resultUrl) || '' }}\n \
-                       ${{ needs.build-and-test-android.outputs.resultUrl && format('Android {0} url: {1}', needs.build-and-test-android.result || 'skipped', needs.build-and-test-android.outputs.resultUrl) || '' }}\n \
-                       Commit: ${{ github.sha }} by *${{ github.actor }}*\n \
+              "text": "🚨🚨🚨 ${{ needs.build-and-test-ios.result != 'success' && needs.build-and-test-android.result != 'success' && 'Android and iOS' || (needs.build-and-test-android.result != 'success' && 'Android' || 'iOS') }} E2E Tests failed on main 🚨🚨🚨\n\
+                       ${{ needs.build-and-test-ios.result != 'success' && format('iOS {0} url: {1}\n', needs.build-and-test-ios.result || 'skipped', needs.build-and-test-ios.outputs.resultUrl || 'N/A') || '' }}\
+                       ${{ needs.build-and-test-android.result != 'success' && format('Android {0} url: {1}\n', needs.build-and-test-android.result || 'skipped', needs.build-and-test-android.outputs.resultUrl || 'N/A') || '' }}\
+                       Commit: ${{ github.sha }} by *${{ github.actor }}*\n\
                        Action Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-              "slack-message": "🚨🚨🚨 ${{ needs.build-and-test-ios.result != 'success' && needs.build-and-test-android.result != 'success' && 'Android and iOS' || (needs.build-and-test-android.result != 'success' && 'Android' || 'iOS') }} E2E Tests failed on main 🚨🚨🚨"
+              "slack-message": "E2E Tests failed on main"
             }
