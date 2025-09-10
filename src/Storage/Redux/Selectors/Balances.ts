@@ -10,6 +10,6 @@ export const selectHiddenBalancesByAccount = createSelector(
     selectSelectedNetwork,
     (_state: RootState, accountAddress: string) => accountAddress,
     (balances, network, accountAddress) => {
-        return balances[network.type][HexUtils.normalize(accountAddress)].hiddenTokenAddresses
+        return balances[network.type]?.[HexUtils.normalize(accountAddress)]?.hiddenTokenAddresses ?? []
     },
 )
