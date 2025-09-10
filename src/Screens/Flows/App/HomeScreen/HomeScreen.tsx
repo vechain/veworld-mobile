@@ -29,9 +29,11 @@ import {
     useSetSelectedAccount,
     useTheme,
 } from "~Hooks"
+import { useOfficialTokens } from "~Hooks/useOfficialTokens"
 import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import {
+    addOfficialTokens,
     selectBalanceVisible,
     selectCurrency,
     selectSelectedAccount,
@@ -65,12 +67,20 @@ export const HomeScreen = () => {
     // Pre Fetch featured dapps
     useFetchFeaturedDApps()
 
+    const { data: officialTokens } = useOfficialTokens()
+
     const nav = useNavigation()
     const queryClient = useQueryClient()
 
     const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (officialTokens?.length)
+            dispatch(addOfficialTokens({ network: selectedNetwork.type, tokens: officialTokens }))
+    }, [dispatch, officialTokens, selectedNetwork.type])
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
@@ -79,7 +89,7 @@ export const HomeScreen = () => {
         on the error boundary. This is needed because the error boundary will not unmount
         and we're left with a wrong state.
     */
-    const dispatch = useAppDispatch()
+
     useEffect(() => {
         dispatch(setAppResetTimestamp())
     }, [dispatch])

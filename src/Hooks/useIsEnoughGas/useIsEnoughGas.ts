@@ -1,10 +1,9 @@
 import { useMemo } from "react"
 import { B3TR, VET, VTHO } from "~Constants"
-import { useOfficialTokens } from "~Hooks/useOfficialTokens"
 import { useMultipleTokensBalance } from "~Hooks/useTokenBalance"
 import { FungibleToken, NETWORK_TYPE } from "~Model"
 import { getReceiptProcessor, InspectableOutput, ReceiptOutput } from "~Services/AbiService"
-import { selectNetworkVBDTokens, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { selectNetworkVBDTokens, selectOfficialTokens, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNumberUtils, BigNutils } from "~Utils"
 import AddressUtils from "~Utils/AddressUtils"
 
@@ -66,7 +65,7 @@ export const useIsEnoughGas = ({
     transactionOutputs,
     origin,
 }: Args) => {
-    const { data: officialTokens } = useOfficialTokens()
+    const officialTokens = useAppSelector(selectOfficialTokens)
     const { B3TR: networkB3TR } = useAppSelector(selectNetworkVBDTokens)
     const addressesToCheck = useMemo(() => [VTHO.address, networkB3TR.address, VET.address], [networkB3TR.address])
     const { data: balances } = useMultipleTokensBalance(addressesToCheck)
@@ -78,8 +77,8 @@ export const useIsEnoughGas = ({
                 if (isLoadingFees || allFeeOptions === undefined || !transactionOutputs)
                     return [tokenSymbol, true] as const
                 if (allFeeOptions[tokenSymbol] === undefined) return [tokenSymbol, false] as const
-                const foundTmpToken = officialTokens?.find(tk => tk.symbol === tokenSymbol)
-                if (!foundTmpToken) return [tokenSymbol, true]
+                const foundTmpToken = officialTokens.find(tk => tk.symbol === tokenSymbol)
+                if (!foundTmpToken) return [tokenSymbol, false]
                 const foundBalance = balances?.find(tk =>
                     AddressUtils.compareAddresses(tk.tokenAddress, foundTmpToken.address),
                 )

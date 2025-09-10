@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { VeDelegate, VET, VTHO } from "~Constants"
-import { useOfficialTokens } from "~Hooks/useOfficialTokens"
 import { useMultipleTokensBalance } from "~Hooks/useTokenBalance/useMultipleTokensBalance"
 import { getUseUserTokensConfig } from "~Hooks/useUserTokens"
 import { FungibleTokenWithBalance } from "~Model"
@@ -9,6 +8,7 @@ import {
     selectCustomTokensByAccount,
     selectHiddenBalancesByAccount,
     selectNetworkVBDTokens,
+    selectOfficialTokens,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
     useAppSelector,
@@ -28,7 +28,7 @@ export const useNonVechainTokensBalance = ({
         () => accountAddress ?? selectedAccountAddress!,
         [accountAddress, selectedAccountAddress],
     )
-    const { data: officialTokens, isLoading: isLoadingOfficialTokens } = useOfficialTokens()
+    const officialTokens = useAppSelector(selectOfficialTokens)
     const customTokens = useAppSelector(state => selectCustomTokensByAccount(state, parsedAddress))
     const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
     const hiddenBalances = useAppSelector(state => selectHiddenBalancesByAccount(state, parsedAddress))
@@ -89,10 +89,7 @@ export const useNonVechainTokensBalance = ({
         [balances, hiddenBalances, userValidTokens],
     )
 
-    const isLoading = useMemo(
-        () => isLoadingOfficialTokens || isLoadingUserTokens || isLoadingBalances,
-        [isLoadingBalances, isLoadingOfficialTokens, isLoadingUserTokens],
-    )
+    const isLoading = useMemo(() => isLoadingUserTokens || isLoadingBalances, [isLoadingBalances, isLoadingUserTokens])
 
     return useMemo(() => ({ isLoading, data: tokensWithBalance }), [isLoading, tokensWithBalance])
 }
