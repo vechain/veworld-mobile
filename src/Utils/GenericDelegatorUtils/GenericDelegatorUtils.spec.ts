@@ -92,7 +92,7 @@ describe("GenericDelegatorUtils", () => {
             expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe("CLAUSES_DIFF")
         })
         describe("VET", () => {
-            it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
+            it("should return false if the difference between the sent value and the estimate is > 30%", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
                 const toAccount = ethers.Wallet.createRandom().address
                 const result = await validateGenericDelegatorTx(
@@ -102,7 +102,7 @@ describe("GenericDelegatorUtils", () => {
                         constructVETTransfer(depositAccount, VET.of(100, Units.wei)),
                     ]),
                     "VET",
-                    BigNutils("89"),
+                    BigNutils("69"),
                 )
                 expect(result.valid).toBe(false)
                 expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe("OVER_THRESHOLD")
@@ -152,7 +152,7 @@ describe("GenericDelegatorUtils", () => {
                 expect(result.valid).toBe(false)
                 expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe("NOT_ERC20_TRANSFER")
             })
-            it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
+            it("should return false if the difference between the sent value and the estimate is > 30%", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
                 const toAccount = ethers.Wallet.createRandom().address
                 const result = await validateGenericDelegatorTx(
@@ -162,7 +162,7 @@ describe("GenericDelegatorUtils", () => {
                         constructTokenTransfer(depositAccount, VET.of(100, Units.wei)),
                     ]),
                     "B3TR",
-                    BigNutils("89"),
+                    BigNutils("69"),
                 )
                 expect(result.valid).toBe(false)
                 expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe("OVER_THRESHOLD")
@@ -213,7 +213,7 @@ describe("GenericDelegatorUtils", () => {
                 )
             })
 
-            it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
+            it("should return false if the difference between the sent value and the estimate is > 30%", async () => {
                 const userTransaction = constructVETTransfer()
                 const vetFeeClause = constructVETTransfer(depositAccount, VET.of(100, Units.wei))
                 const smartAccountTx = await constructTx([
@@ -228,7 +228,7 @@ describe("GenericDelegatorUtils", () => {
                 const result = await validateGenericDelegatorTxSmartAccount(
                     smartAccountTx,
                     "VET",
-                    BigNutils("89"), // 11% difference
+                    BigNutils("69"), // 31% difference
                     depositAccount,
                 )
 
@@ -333,7 +333,7 @@ describe("GenericDelegatorUtils", () => {
                 )
             })
 
-            it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
+            it("should return false if the difference between the sent value and the estimate is > 30%", async () => {
                 const userTransaction = constructVETTransfer()
                 const tokenFeeClause = constructTokenTransfer(depositAccount, VET.of(100, Units.wei))
                 const smartAccountTx = await constructTx([
@@ -348,7 +348,7 @@ describe("GenericDelegatorUtils", () => {
                 const result = await validateGenericDelegatorTxSmartAccount(
                     smartAccountTx,
                     "B3TR",
-                    BigNutils("89"), // 11% difference
+                    BigNutils("69"), // 31% difference
                     depositAccount,
                 )
 
