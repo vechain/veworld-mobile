@@ -1,16 +1,16 @@
+import { useQueryClient } from "@tanstack/react-query"
 import { useCallback } from "react"
-import { useThor } from "~Components"
 import { refreshNFTs, updateAccountBalances, useAppDispatch } from "~Storage/Redux"
 
 export const useStateReconciliation = () => {
     const dispatch = useAppDispatch()
-    const thor = useThor()
+    const queryClient = useQueryClient()
 
     const updateBalances = useCallback(
         (params: { accountAddress: string }) => {
-            dispatch(updateAccountBalances(thor, params.accountAddress, true))
+            dispatch(updateAccountBalances(params.accountAddress, queryClient))
         },
-        [dispatch, thor],
+        [dispatch, queryClient],
     )
 
     const updateNFTs = useCallback(

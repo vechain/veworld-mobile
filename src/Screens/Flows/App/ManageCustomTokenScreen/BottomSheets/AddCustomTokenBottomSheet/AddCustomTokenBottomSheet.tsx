@@ -1,4 +1,5 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { useQueryClient } from "@tanstack/react-query"
 import { isEmpty } from "lodash"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
@@ -59,6 +60,8 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
         const customTokens = useAppSelector(selectCustomTokens)
 
         const account = useAppSelector(selectSelectedAccount)
+
+        const queryClient = useQueryClient()
 
         // TODO: refactor token checks to a hook #1415
         const handleValueChange = useCallback(
@@ -145,7 +148,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
                     },
                 }),
             )
-            dispatch(updateAccountBalances(thorClient, account.address))
+            dispatch(updateAccountBalances(account.address, queryClient))
             track(AnalyticsEvent.TOKENS_CUSTOM_TOKEN_ADDED)
 
             onClose()

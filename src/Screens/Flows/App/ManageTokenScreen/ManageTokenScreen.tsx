@@ -8,10 +8,10 @@ import {
     Layout,
     OfficialTokenCard,
     PlusIconHeaderButton,
-    useThor,
 } from "~Components"
 import { useAnalyticTracking, useBottomSheetModal } from "~Hooks"
 
+import { useQueryClient } from "@tanstack/react-query"
 import { AnalyticsEvent } from "~Constants"
 import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useI18nContext } from "~i18n"
@@ -54,7 +54,7 @@ export const ManageTokenScreen = () => {
     )
     const selectedTokens = filteredTokens.filter(token => selectedTokenSymbols.includes(token.symbol))
     const unselectedTokens = filteredTokens.filter(token => !selectedTokenSymbols.includes(token.symbol))
-    const thorClient = useThor()
+    const queryClient = useQueryClient()
 
     const selectToken = async (token: FungibleToken) => {
         setSelectedTokenSymbols(tokenSymbols => [...tokenSymbols, token.symbol])
@@ -73,7 +73,7 @@ export const ManageTokenScreen = () => {
             }),
         )
 
-        dispatch(updateAccountBalances(thorClient, account.address))
+        dispatch(updateAccountBalances(account.address, queryClient))
 
         track(AnalyticsEvent.TOKENS_CUSTOM_TOKEN_ADDED)
     }

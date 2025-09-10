@@ -1,4 +1,4 @@
-import { showSuccessToast, useThor } from "~Components"
+import { showSuccessToast } from "~Components"
 import {
     selectLastReviewTimestamp,
     selectSelectedAccount,
@@ -17,6 +17,7 @@ import { useI18nContext } from "~i18n"
 import InAppReview from "react-native-in-app-review"
 import moment from "moment"
 import { Transaction } from "@vechain/sdk-core"
+import { useQueryClient } from "@tanstack/react-query"
 /**
  * Hooks that expose a function to send a transaction and perform updates, showing a toast on success
  * @param onSuccess the function to handle success
@@ -24,11 +25,11 @@ import { Transaction } from "@vechain/sdk-core"
  */
 export const useSendTransaction = (onSuccess: (transaction: Transaction, id: string) => Promise<void> | void) => {
     const dispatch = useAppDispatch()
-    const thorClient = useThor()
     const { LL } = useI18nContext()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const lastReviewTimestamp = useAppSelector(selectLastReviewTimestamp)
+    const queryClient = useQueryClient()
 
     const sendTransaction = async (signedTransaction: Transaction): Promise<string> => {
         dispatch(setIsAppLoading(true))
@@ -74,7 +75,7 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
             }
 
             try {
-                await dispatch(updateAccountBalances(thorClient, selectedAccount.address))
+                await dispatch(updateAccountBalances(selectedAccount.address, queryClient))
             } catch (balanceError) {
                 // Log the balance update error but don't re-throw,
                 // as sending the transaction succeeded.
