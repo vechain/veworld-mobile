@@ -1,5 +1,4 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useQueryClient } from "@tanstack/react-query"
 import { isEmpty } from "lodash"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
@@ -19,12 +18,10 @@ import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
 import {
     addOrUpdateCustomTokens,
-    addTokenBalance,
     selectCustomTokens,
     selectOfficialTokens,
     selectSelectedAccount,
     selectSelectedNetwork,
-    updateAccountBalances,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -60,8 +57,6 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
         const customTokens = useAppSelector(selectCustomTokens)
 
         const account = useAppSelector(selectSelectedAccount)
-
-        const queryClient = useQueryClient()
 
         // TODO: refactor token checks to a hook #1415
         const handleValueChange = useCallback(
@@ -135,20 +130,6 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
                     newTokens: availableTokens,
                 }),
             )
-            dispatch(
-                addTokenBalance({
-                    network: network.type,
-                    accountAddress: account.address,
-                    balance: {
-                        balance: "0",
-                        tokenAddress: token?.address ?? newCustomToken?.address ?? "",
-                        timeUpdated: new Date(0).toISOString(),
-                        isCustomToken: true,
-                        isHidden: false,
-                    },
-                }),
-            )
-            dispatch(updateAccountBalances(account.address, queryClient))
             track(AnalyticsEvent.TOKENS_CUSTOM_TOKEN_ADDED)
 
             onClose()

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import {
     BaseSearchInput,
     BaseSpacer,
@@ -11,14 +11,13 @@ import {
 } from "~Components"
 import { useAnalyticTracking, useBottomSheetModal } from "~Hooks"
 
-import { useQueryClient } from "@tanstack/react-query"
 import { AnalyticsEvent } from "~Constants"
 import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
-import { updateAccountBalances, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectNonVechainFungibleTokens, selectSelectedAccount, selectSelectedNetwork } from "~Storage/Redux/Selectors"
-import { addTokenBalance, removeTokenBalance, setIsAppLoading } from "~Storage/Redux/Slices"
+import { setIsAppLoading, toggleTokenVisibility } from "~Storage/Redux/Slices"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 
 export const ManageTokenScreen = () => {
@@ -37,9 +36,6 @@ export const ManageTokenScreen = () => {
     const track = useAnalyticTracking()
 
     const [tokenQuery, setTokenQuery] = useState<string>("")
-    const [selectedTokenSymbols, setSelectedTokenSymbols] = useState<string[]>(
-        tokenBalances.map(tokenWithBalance => tokenWithBalance.symbol),
-    )
 
     const {
         ref: addCustomTokenSheetRef,
@@ -47,40 +43,41 @@ export const ManageTokenScreen = () => {
         onClose: closeAddCustomTokenSheet,
     } = useBottomSheetModal()
 
-    const filteredTokens = tokens.filter(
-        token =>
-            token.name.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()) ||
-            token.symbol.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()),
+    const selectedTokenSymbols = useMemo(() => {
+        return tokenBalances.filter(tk => !tk.balance.isHidden).map(tokenWithBalance => tokenWithBalance.symbol)
+    }, [tokenBalances])
+
+    const filteredTokens = useMemo(
+        () =>
+            tokens.filter(
+                token =>
+                    token.name.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()) ||
+                    token.symbol.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()),
+            ),
+        [tokenQuery, tokens],
     )
-    const selectedTokens = filteredTokens.filter(token => selectedTokenSymbols.includes(token.symbol))
-    const unselectedTokens = filteredTokens.filter(token => !selectedTokenSymbols.includes(token.symbol))
-    const queryClient = useQueryClient()
+    const selectedTokens = useMemo(
+        () => filteredTokens.filter(token => selectedTokenSymbols.includes(token.symbol)),
+        [filteredTokens, selectedTokenSymbols],
+    )
+    const unselectedTokens = useMemo(
+        () => filteredTokens.filter(token => !selectedTokenSymbols.includes(token.symbol)),
+        [filteredTokens, selectedTokenSymbols],
+    )
 
     const selectToken = async (token: FungibleToken) => {
-        setSelectedTokenSymbols(tokenSymbols => [...tokenSymbols, token.symbol])
-
         dispatch(
-            addTokenBalance({
+            toggleTokenVisibility({
                 network: currentNetwork.type,
                 accountAddress: account.address,
-                balance: {
-                    balance: "0",
-                    tokenAddress: token.address,
-                    timeUpdated: new Date(0).toISOString(),
-                    isCustomToken: false,
-                    isHidden: false,
-                },
+                tokenAddress: token.address,
             }),
         )
-
-        dispatch(updateAccountBalances(account.address, queryClient))
-
         track(AnalyticsEvent.TOKENS_CUSTOM_TOKEN_ADDED)
     }
     const unselectToken = (token: FungibleToken) => {
-        setSelectedTokenSymbols(tokenSymbols => tokenSymbols.filter(tokenSymbol => tokenSymbol !== token.symbol))
         dispatch(
-            removeTokenBalance({
+            toggleTokenVisibility({
                 network: currentNetwork.type,
                 accountAddress: account.address,
                 tokenAddress: token.address,

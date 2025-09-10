@@ -7,6 +7,7 @@ import { getUseUserTokensConfig } from "~Hooks/useUserTokens"
 import { FungibleTokenWithBalance } from "~Model"
 import {
     selectCustomTokensByAccount,
+    selectHiddenBalancesByAccount,
     selectNetworkVBDTokens,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
@@ -30,6 +31,7 @@ export const useNonVechainTokensBalance = ({
     const { data: officialTokens, isLoading: isLoadingOfficialTokens } = useOfficialTokens()
     const customTokens = useAppSelector(state => selectCustomTokensByAccount(state, parsedAddress))
     const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
+    const hiddenBalances = useAppSelector(state => selectHiddenBalancesByAccount(state, parsedAddress))
 
     const { data: userTokens, isLoading: isLoadingUserTokens } = useQuery({
         ...getUseUserTokensConfig({ address: parsedAddress, network }),
@@ -77,8 +79,14 @@ export const useNonVechainTokensBalance = ({
                     //Hide VeDelegate if the balance is exactly 0
                     if (!AddressUtils.compareAddresses(token.address, VeDelegate.address)) return true
                     return !BigNutils(token.balance.balance).isZero
-                }),
-        [balances, userValidTokens],
+                })
+                //Populate `isHidden` based on `hiddenBalances`
+                .map(balanceToken =>
+                    hiddenBalances.find(tk => AddressUtils.compareAddresses(tk, balanceToken.address))
+                        ? { ...balanceToken, balance: { ...balanceToken.balance, isHidden: true } }
+                        : balanceToken,
+                ),
+        [balances, hiddenBalances, userValidTokens],
     )
 
     const isLoading = useMemo(
