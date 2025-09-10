@@ -6,9 +6,9 @@ import FastImage, { ImageStyle } from "react-native-fast-image"
 import Animated from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles, useTabManagement, useVisitedUrls } from "~Hooks"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
-import { closeTab, selectCurrentTabId, setCurrentTab, Tab, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectCurrentTabId, setCurrentTab, Tab, useAppDispatch, useAppSelector } from "~Storage/Redux"
 
 type TabViewCardProps = {
     tab: Tab
@@ -20,23 +20,26 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
     const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser>>()
     const selectedTabId = useAppSelector(selectCurrentTabId)
+    const { closeTab } = useTabManagement()
+    const { addVisitedUrl } = useVisitedUrls()
 
     const dispatch = useAppDispatch()
 
     const onPress = useCallback(() => {
         dispatch(setCurrentTab(tab.id))
+        addVisitedUrl(tab.href)
         nav.replace(Routes.BROWSER, { url: tab.href })
-    }, [dispatch, tab.id, tab.href, nav])
+    }, [dispatch, tab.id, tab.href, nav, addVisitedUrl])
 
     const onClose = useCallback(() => {
-        dispatch(closeTab(tab.id))
-    }, [dispatch, tab.id])
+        closeTab(tab.id)
+    }, [closeTab, tab.id])
 
     return (
         <AnimatedTouchableOpacity
             style={[styles.container, tab.id === selectedTabId && styles.selected]}
             onPress={onPress}>
-            <ImageBackground source={{ uri: tab.preview }} resizeMode="cover" style={[styles.image]}>
+            <ImageBackground source={{ uri: tab.previewPath }} resizeMode="cover" style={[styles.image]}>
                 <View style={styles.header}>
                     <View style={styles.headerText}>
                         {tab.favicon ? (
@@ -69,13 +72,15 @@ const baseStyles = (theme: ColorThemeType) => {
             height: 194,
             minWidth: 148,
             borderRadius: 12,
-            borderWidth: 3,
+            borderStyle: "solid",
+            borderWidth: 1,
             backgroundColor: theme.colors.tabsFooter.background,
-            borderColor: theme.colors.tabsFooter.background,
+            borderColor: theme.colors.tabsFooter.border,
             overflow: "hidden",
         },
         selected: {
             borderColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
+            borderWidth: 3,
         },
         header: {
             flexDirection: "row",

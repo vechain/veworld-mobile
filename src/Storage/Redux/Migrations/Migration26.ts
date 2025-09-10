@@ -1,25 +1,37 @@
 import { PersistedState } from "redux-persist/es/types"
-import { UserPreferenceState } from "~Storage/Redux"
-import nacl from "tweetnacl"
-import { encodeBase64 } from "tweetnacl-util"
+import { ERROR_EVENTS } from "~Constants"
+import { debug } from "~Utils"
+import { DiscoveryState } from "../Slices"
 
 export const Migration26 = (state: PersistedState): PersistedState => {
+    debug(ERROR_EVENTS.SECURITY, "Performing migration 26: Removing preview field from tabs (migrating to previewPath)")
+
     // @ts-ignore
-    const currentState: UserPreferenceState = state.userPreferences
+    const currentState: DiscoveryState = state.discovery
 
-    // Generate a new key pair for signing session tokens for external dapps connections
-    const keyPair = nacl.sign.keyPair()
+    if (!currentState || Object.keys(currentState).length === 0) {
+        debug(ERROR_EVENTS.SECURITY, "================= **** No state to migrate **** =================")
+        return state
+    }
 
-    const newState: UserPreferenceState = {
+    // Remove the preview field from all tabs
+    const updatedTabs =
+        currentState.tabsManager?.tabs?.map(tab => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { preview, ...tabWithoutPreview } = tab
+            return tabWithoutPreview
+        }) || []
+
+    const newState: DiscoveryState = {
         ...currentState,
-        signKeyPair: {
-            publicKey: encodeBase64(keyPair.publicKey),
-            privateKey: encodeBase64(keyPair.secretKey),
+        tabsManager: {
+            ...currentState.tabsManager,
+            tabs: updatedTabs,
         },
     }
 
     return {
         ...state,
-        userPreferences: newState,
+        discovery: newState,
     } as PersistedState
 }

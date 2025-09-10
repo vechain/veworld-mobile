@@ -1,12 +1,32 @@
-/* eslint-disable jest/no-disabled-tests */
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React from "react"
+import { screen } from "@testing-library/react-native"
 import { TestWrapper, TestHelpers } from "~Test"
 import { FavoritesBottomSheet } from "./FavoritesBottomSheet"
 import { DiscoveryDApp } from "~Constants"
-import { screen } from "@testing-library/react-native"
 
 const { renderComponentWithProps } = TestHelpers.render
+
+// Mock dependencies
+jest.mock("../Hooks", () => ({
+    useDAppActions: () => ({
+        onDAppPress: jest.fn(),
+    }),
+}))
+
+jest.mock("react-native-draggable-flatlist", () => {
+    const { View } = require("react-native")
+    return ({ data, renderItem, ListEmptyComponent, ...props }: any) => {
+        if (!data || data.length === 0) {
+            return React.createElement(View, { testID: props.testID }, ListEmptyComponent)
+        }
+        return React.createElement(
+            View,
+            { testID: props.testID },
+            data.map((item: any, index: number) => renderItem({ item, index, isActive: false, drag: jest.fn() })),
+        )
+    }
+})
 
 const mockDApps: DiscoveryDApp[] = [
     {
@@ -42,66 +62,109 @@ const mockDApps: DiscoveryDApp[] = [
     },
 ]
 
-describe.skip("FavoritesBottomSheet", () => {
-    describe.skip("Rendering", () => {
-        it("should render correctly with favorite dApps", async () => {
-            const ref = { current: null } as React.RefObject<BottomSheetModalMethods>
-            renderComponentWithProps(<FavoritesBottomSheet ref={ref} onClose={jest.fn()} />, {
-                wrapper: TestWrapper,
-                initialProps: {
-                    preloadedState: {
-                        discovery: {
-                            favorites: mockDApps,
-                            featured: mockDApps,
-                            custom: [],
-                            bannerInteractions: {},
-                            connectedApps: [],
-                            hasOpenedDiscovery: true,
-                            tabsManager: {
-                                currentTabId: null,
-                                tabs: [],
-                            },
+describe("FavoritesBottomSheet", () => {
+    const mockOnClose = jest.fn()
+    const ref = { current: null } as React.RefObject<BottomSheetModalMethods>
+
+    const renderWithFavorites = (favorites: DiscoveryDApp[] = mockDApps) => {
+        return renderComponentWithProps(<FavoritesBottomSheet ref={ref} onClose={mockOnClose} />, {
+            wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: {
+                    discovery: {
+                        favorites,
+                        featured: [],
+                        custom: [],
+                        bannerInteractions: {},
+                        connectedApps: [],
+                        hasOpenedDiscovery: true,
+                        tabsManager: {
+                            currentTabId: null,
+                            tabs: [],
                         },
                     },
                 },
-            })
+            },
+        })
+    }
 
-            const flatList = await screen.getByTestId("draggable-flatlist")
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
 
-            expect(flatList).toBeTruthy()
-            // expect(screen.getByTestId("favorite-dapp-card-dapp1")).toBeTruthy()
-            // expect(screen.getByTestId("favorite-dapp-card-dapp2")).toBeTruthy()
-            // expect(screen.getByTestId("favorite-dapp-card-dapp3")).toBeTruthy()
+    describe("Rendering", () => {
+        it("should render correctly with favorite dApps", () => {
+            renderWithFavorites()
+
+            expect(screen.getByTestId("draggable-flatlist")).toBeTruthy()
+            expect(screen.getByTestId("dapps-list-header")).toBeTruthy()
+            expect(screen.getByText("Test DApp 1")).toBeTruthy()
+            expect(screen.getByText("Test DApp 2")).toBeTruthy()
         })
 
         it("should render empty state when no favorites", () => {
-            const ref = { current: null } as React.RefObject<BottomSheetModalMethods>
-            const { getByTestId } = renderComponentWithProps(<FavoritesBottomSheet ref={ref} onClose={jest.fn()} />, {
-                wrapper: TestWrapper,
-                initialProps: {
-                    preloadedState: {
-                        discovery: {
-                            favorites: [],
-                            featured: [],
-                            custom: [],
-                            bannerInteractions: {},
-                            connectedApps: [],
-                            hasOpenedDiscovery: true,
-                            tabsManager: {
-                                currentTabId: null,
-                                tabs: [],
-                            },
-                        },
-                    },
-                },
-            })
+            renderWithFavorites([])
 
-            expect(getByTestId("empty-results")).toBeTruthy()
+            expect(screen.getByTestId("empty-results")).toBeTruthy()
+            expect(screen.getByTestId("draggable-flatlist")).toBeTruthy()
         })
 
-        // it("should render reorder button in normal mode", () => {
-        //     const { getByTestId } = renderComponent()
-        //     expect(getByTestId("reorder-button")).toBeTruthy()
-        // })
+        it("should show reorder button in normal mode", () => {
+            renderWithFavorites()
+
+            const reorderButton = screen.getByTestId("Reorder-HeaderIcon")
+            expect(reorderButton).toBeTruthy()
+        })
+    })
+
+    describe("Edit Mode", () => {
+        it("should have reorder functionality available", () => {
+            renderWithFavorites()
+
+            const reorderButton = screen.getByTestId("Reorder-HeaderIcon")
+            expect(reorderButton).toBeTruthy()
+
+            expect(reorderButton.props.accessible).toBe(true)
+        })
+    })
+
+    describe("DApp Interactions", () => {
+        it("should display dApp names correctly", () => {
+            renderWithFavorites()
+
+            expect(screen.getByText("Test DApp 1")).toBeTruthy()
+            expect(screen.getByText("Test DApp 2")).toBeTruthy()
+            expect(screen.getByText("Test DApp 3")).toBeTruthy()
+        })
+
+        it("should display dApp descriptions correctly", () => {
+            renderWithFavorites()
+
+            expect(screen.getByText("Test Description 1")).toBeTruthy()
+            expect(screen.getByText("Test Description 2")).toBeTruthy()
+            expect(screen.getByText("Test Description 3")).toBeTruthy()
+        })
+    })
+
+    describe("Component Behavior", () => {
+        it("should show correct title", () => {
+            renderWithFavorites()
+
+            expect(screen.getByText("Favorites")).toBeTruthy()
+        })
+
+        it("should render draggable flatlist for reordering", () => {
+            renderWithFavorites()
+
+            const flatList = screen.getByTestId("draggable-flatlist")
+            expect(flatList).toBeTruthy()
+        })
+
+        it("should have proper component structure", () => {
+            renderWithFavorites()
+
+            expect(screen.getByTestId("dapps-list-header")).toBeTruthy()
+            expect(screen.getByTestId("draggable-flatlist")).toBeTruthy()
+        })
     })
 })

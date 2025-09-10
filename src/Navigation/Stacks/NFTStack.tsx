@@ -1,6 +1,9 @@
-import React from "react"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { TransactionClause } from "@vechain/sdk-core"
+import React from "react"
+import { useNavAnimation } from "~Hooks"
+import { Device, FungibleTokenWithBalance } from "~Model"
+import { Routes } from "~Navigation/Enums"
 import {
     InsertAddressSendScreen,
     NFTCollectionDetailScreen,
@@ -8,10 +11,9 @@ import {
     NFTScreen,
     ReportNFTTransactionScreen,
     SendNFTRecapScreen,
+    WalletDetailScreen,
+    WalletManagementScreen,
 } from "~Screens"
-import { Routes } from "~Navigation/Enums"
-import { FungibleTokenWithBalance } from "~Model"
-import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListNFT = {
     [Routes.NFTS]: undefined
@@ -38,15 +40,18 @@ export type RootStackParamListNFT = {
         nftAddress: string
         transactionClauses: TransactionClause[]
     }
+
+    [Routes.WALLET_MANAGEMENT]: undefined
+    [Routes.WALLET_DETAILS]: { device: Device }
 }
 
-const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListNFT>()
+const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListNFT>()
 
 export const NFTStack = () => {
     const { animation } = useNavAnimation()
 
     return (
-        <Navigator id="NftStack" screenOptions={{ headerShown: false, animation }}>
+        <Navigator id="NftStack" screenOptions={{ headerShown: false, animationEnabled: animation !== "none" }}>
             <Group>
                 <Screen name={Routes.NFTS} component={NFTScreen} options={{ headerShown: false }} />
 
@@ -71,6 +76,13 @@ export const NFTStack = () => {
                 />
 
                 <Screen name={Routes.SEND_NFT_RECAP} component={SendNFTRecapScreen} options={{ headerShown: false }} />
+
+                <Screen
+                    name={Routes.WALLET_MANAGEMENT}
+                    component={WalletManagementScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
             </Group>
         </Navigator>
     )

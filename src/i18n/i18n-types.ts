@@ -898,7 +898,7 @@ type RootTranslation = {
 	 */
 	BD_NO_TOKEN_FOUND: string
 	/**
-	 * Y​o​u​ ​c​a​n​ ​o​b​s​e​r​v​e​ ​a​ ​w​a​l​l​e​t​ ​b​y​ ​a​d​d​i​n​g​ ​i​t​s​ ​a​d​d​r​e​s​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​v​i​e​w​ ​t​h​e​ ​w​a​l​l​e​t​'​s​ ​b​a​l​a​n​c​e​ ​a​n​d​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 * Y​o​u​ ​c​a​n​ ​w​a​t​c​h​ ​a​ ​w​a​l​l​e​t​ ​b​y​ ​a​d​d​i​n​g​ ​i​t​s​ ​a​d​d​r​e​s​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​v​i​e​w​ ​t​h​e​ ​w​a​l​l​e​t​'​s​ ​b​a​l​a​n​c​e​ ​a​n​d​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
 	 */
 	BD_OBSERVE_WALLET: string
 	/**
@@ -1234,6 +1234,10 @@ type RootTranslation = {
 	 */
 	BROWSER_RELOAD_PAGE: string
 	/**
+	 * G​o​ ​t​o​ ​p​r​e​v​i​o​u​s​ ​p​a​g​e
+	 */
+	BROWSER_GO_BACK: string
+	/**
 	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_REMOVE_FAVORITE_DAPPS: string
@@ -1471,15 +1475,15 @@ type RootTranslation = {
 	 */
 	BTN_NO_GO_BACK: string
 	/**
-	 * O​b​s​e​r​v​e​d
+	 * W​a​t​c​h​i​n​g
 	 */
 	BTN_OBSERVED: string
 	/**
-	 * O​b​s​e​r​v​e​ ​w​a​l​l​e​t
+	 * W​a​t​c​h​ ​w​a​l​l​e​t
 	 */
 	BTN_OBSERVE_WALLET: string
 	/**
-	 * I​m​p​o​r​t​ ​a​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​o​n​l​y​ ​o​b​s​e​r​v​e​ ​t​h​i​s​ ​w​a​l​l​e​t
+	 * W​a​t​c​h​ ​a​ ​p​u​b​l​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: string
 	/**
@@ -2704,6 +2708,10 @@ type RootTranslation = {
 	 */
 	FAVOURITES_DAPPS_NO_RECORDS: string
 	/**
+	 * No favorited apps to show
+	 */
+	FAVOURITES_DAPPS_EMPTY_LIST: string
+	/**
 	 * S​e​a​r​c​h
 	 */
 	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: string
@@ -2848,6 +2856,10 @@ type RootTranslation = {
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: string
 	/**
+	 * Delegated smart wallet not supported yet
+	 */
+	SMART_WALLET_DELEGATION_NOT_SUPPORTED: string
+	/**
 	 * T​y​p​e​d​ ​D​a​t​a​ ​c​a​n​n​o​t​ ​b​e​ ​s​i​g​n​e​d​ ​w​i​t​h​ ​a​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​a​c​c​o​u​n​t​.
 	 */
 	LEDGER_DEVICE_ALERT: string
@@ -2883,6 +2895,10 @@ type RootTranslation = {
 	 * L​o​a​d​i​n​g​ ​m​o​r​e
 	 */
 	LOADING_MORE: string
+	/**
+	 * L​o​a​d​i​n​g​ ​p​a​g​e​ ​c​o​n​t​e​n​t
+	 */
+	LOADING_PAGE_CONTENT: string
 	/**
 	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​t​o​k​e​n​?
 	 */
@@ -3870,6 +3886,22 @@ type RootTranslation = {
 	 */
 	SECURITY_UPGRADE_REMINDER_DESC: string
 	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​a​c​c​o​u​n​t
+	 */
+	SELECT_ACCOUNT_DESCRIPTION: string
+	/**
+	 * W​a​l​l​e​t​s
+	 */
+	SELECT_ACCOUNT_TITLE: string
+	/**
+	 * W​a​t​c​h​i​n​g
+	 */
+	SELECT_ACCOUNT_WATCHING: string
+	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​s
+	 */
+	SELECT_ACCOUNT_YOUR_WALLETS: string
+	/**
 	 * I​ ​U​N​D​E​R​S​T​A​N​D
 	 */
 	SEND_ACCEPT_NO_GAS_ACCEPT: string
@@ -4339,6 +4371,10 @@ type RootTranslation = {
 	 */
 	STARGATE_CLAIMABLE: string
 	/**
+	 * Own
+	 */
+	STARGATE_OWN_LABEL: string
+	/**
 	 * M​a​n​a​g​i​n​g
 	 */
 	STARGATE_DELEGATEE_LABEL: string
@@ -4589,7 +4625,7 @@ type RootTranslation = {
 	 */
 	TITLE_NOTIFICATIONS: string
 	/**
-	 * O​b​s​e​r​v​e​ ​W​a​l​l​e​t
+	 * W​a​t​c​h​ ​w​a​l​l​e​t
 	 */
 	TITLE_OBSERVE_WALLET: string
 	/**
@@ -5839,7 +5875,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_NO_TOKEN_FOUND: () => LocalizedString
 	/**
-	 * You can observe a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
+	 * You can watch a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
 	 */
 	BD_OBSERVE_WALLET: () => LocalizedString
 	/**
@@ -6173,6 +6209,10 @@ Thanks for your patience!
 	 */
 	BROWSER_RELOAD_PAGE: () => LocalizedString
 	/**
+	 * Go to previous page
+	 */
+	BROWSER_GO_BACK: () => LocalizedString
+	/**
 	 * Remove from Favorites
 	 */
 	BROWSER_REMOVE_FAVORITE_DAPPS: () => LocalizedString
@@ -6409,15 +6449,15 @@ Thanks for your patience!
 	 */
 	BTN_NO_GO_BACK: () => LocalizedString
 	/**
-	 * Observed
+	 * Watching
 	 */
 	BTN_OBSERVED: () => LocalizedString
 	/**
-	 * Observe wallet
+	 * Watch wallet
 	 */
 	BTN_OBSERVE_WALLET: () => LocalizedString
 	/**
-	 * Import a wallet address to only observe this wallet
+	 * Watch a public wallet address
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: () => LocalizedString
 	/**
@@ -7633,6 +7673,10 @@ Thanks for your patience!
 	 */
 	FAVOURITES_DAPPS_NO_RECORDS: () => LocalizedString
 	/**
+	 * No favorited apps to show
+	 */
+	FAVOURITES_DAPPS_EMPTY_LIST: () => LocalizedString
+	/**
 	 * Search
 	 */
 	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: () => LocalizedString
@@ -7777,6 +7821,10 @@ Thanks for your patience!
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: () => LocalizedString
 	/**
+	 * Smart wallet not supported yet
+	 */
+	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
+	/**
 	 * Typed Data cannot be signed with a Ledger device. Please select another account.
 	 */
 	LEDGER_DEVICE_ALERT: () => LocalizedString
@@ -7812,6 +7860,10 @@ Thanks for your patience!
 	 * Loading more
 	 */
 	LOADING_MORE: () => LocalizedString
+	/**
+	 * Loading page content
+	 */
+	LOADING_PAGE_CONTENT: () => LocalizedString
 	/**
 	 * Are you sure you want to add the selected token?
 	 */
@@ -8774,6 +8826,22 @@ Thanks for your patience!
 	 */
 	SECURITY_UPGRADE_REMINDER_DESC: () => LocalizedString
 	/**
+	 * Select the active account
+	 */
+	SELECT_ACCOUNT_DESCRIPTION: () => LocalizedString
+	/**
+	 * Wallets
+	 */
+	SELECT_ACCOUNT_TITLE: () => LocalizedString
+	/**
+	 * Watching
+	 */
+	SELECT_ACCOUNT_WATCHING: () => LocalizedString
+	/**
+	 * Your wallets
+	 */
+	SELECT_ACCOUNT_YOUR_WALLETS: () => LocalizedString
+	/**
 	 * I UNDERSTAND
 	 */
 	SEND_ACCEPT_NO_GAS_ACCEPT: () => LocalizedString
@@ -9234,6 +9302,10 @@ Here's what it's all about:
 	 */
 	STARGATE_CLAIMABLE: () => LocalizedString
 	/**
+	 * Own
+	 */
+	STARGATE_OWN_LABEL: () => LocalizedString
+	/**
 	 * Managing
 	 */
 	STARGATE_DELEGATEE_LABEL: () => LocalizedString
@@ -9482,7 +9554,7 @@ Here's what it's all about:
 	 */
 	TITLE_NOTIFICATIONS: () => LocalizedString
 	/**
-	 * Observe Wallet
+	 * Watch wallet
 	 */
 	TITLE_OBSERVE_WALLET: () => LocalizedString
 	/**
