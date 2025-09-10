@@ -9,8 +9,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { MMKV } from "react-native-mmkv"
 import { Provider } from "react-redux"
 import { PersistConfig } from "redux-persist/es/types"
-import { BaseToast } from "~Components"
+import { BaseToast, FeatureFlagsContext } from "~Components"
 import { ConnexContext } from "~Components/Providers/ConnexProvider"
+import { initialState as ffInitialState } from "~Components/Providers/FeatureFlagsProvider"
 import { NotificationsProvider } from "~Components/Providers/NotificationsProvider"
 import { ThemeEnum } from "~Constants"
 import { useTheme } from "~Hooks"
@@ -19,10 +20,10 @@ import { DEVICE_TYPE } from "~Model"
 import { SecurePersistedCache } from "~Storage/PersistedCache"
 import { newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
+import { FeatureFlaggedSmartWallet } from "../Components/Providers/FeatureFlaggedSmartWallet"
 import { usePersistedTheme } from "../Components/Providers/PersistedThemeProvider/PersistedThemeProvider"
 import TestHelpers from "./helpers"
 import { B3TRWithBalance, token1WithBalance, token2WithBalance, VOT3WithBalance } from "./helpers/data"
-import { FeatureFlaggedSmartWallet } from "../Components/Providers/FeatureFlaggedSmartWallet"
 
 export { default as TestHelpers } from "./helpers"
 
@@ -162,11 +163,14 @@ export const TestWrapper = ({
                     <GestureHandlerRootView>
                         <ConnexContext.Provider value={TestHelpers.thor.mockThorInstance({})}>
                             <BottomSheetModalProvider>
-                                <NavigationProvider>
-                                    <NotificationsProvider>
-                                        <TestTranslationProvider>{children}</TestTranslationProvider>
-                                    </NotificationsProvider>
-                                </NavigationProvider>
+                                <FeatureFlagsContext.Provider
+                                    value={{ ...ffInitialState, pushNotificationFeature: { enabled: false } }}>
+                                    <NavigationProvider>
+                                        <NotificationsProvider>
+                                            <TestTranslationProvider>{children}</TestTranslationProvider>
+                                        </NotificationsProvider>
+                                    </NavigationProvider>
+                                </FeatureFlagsContext.Provider>
                             </BottomSheetModalProvider>
                             <BaseToast />
                         </ConnexContext.Provider>

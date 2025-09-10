@@ -10,6 +10,7 @@ import {
     SelectAccountBottomSheet,
     SelectedNetworkViewer,
 } from "~Components"
+import { NetworkSwitcherContextMenu } from "~Components/Reusable/ContextMenu"
 import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
@@ -57,7 +58,9 @@ export const ActivityScreen = () => {
                 <BaseView style={HeaderStyleV2}>
                     <HeaderTitle title={LL.BTN_HISTORY()} leftIconName="icon-history" />
                     <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
-                        <SelectedNetworkViewer />
+                        <NetworkSwitcherContextMenu>
+                            <SelectedNetworkViewer />
+                        </NetworkSwitcherContextMenu>
                         <BaseSpacer width={8} />
                         <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
                     </BaseView>

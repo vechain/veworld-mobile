@@ -95,31 +95,31 @@ describe("useGalacticaFees", () => {
             options: {
                 [GasPriceCoefficient.REGULAR]: {
                     estimatedFee: BigNutils("21000000210000"),
-                    maxFee: BigNutils("21420000210000"),
+                    maxFee: BigNutils("23940000210000"),
                     priorityFee: BigNutils("210000"),
                 },
                 [GasPriceCoefficient.MEDIUM]: {
                     estimatedFee: BigNutils("21000000420000"),
-                    maxFee: BigNutils("21630000420000"),
+                    maxFee: BigNutils("24150000420000"),
                     priorityFee: BigNutils("420000"),
                 },
                 [GasPriceCoefficient.HIGH]: {
                     estimatedFee: BigNutils("21000000630000"),
-                    maxFee: BigNutils("21966000630000"),
+                    maxFee: BigNutils("24486000630000"),
                     priorityFee: BigNutils("630000"),
                 },
             },
             txOptions: {
                 [GasPriceCoefficient.REGULAR]: {
-                    maxFeePerGas: "1020000010",
+                    maxFeePerGas: "1140000010",
                     maxPriorityFeePerGas: "10",
                 },
                 [GasPriceCoefficient.MEDIUM]: {
-                    maxFeePerGas: "1030000020",
+                    maxFeePerGas: "1150000020",
                     maxPriorityFeePerGas: "20",
                 },
                 [GasPriceCoefficient.HIGH]: {
-                    maxFeePerGas: "1046000030",
+                    maxFeePerGas: "1166000030",
                     maxPriorityFeePerGas: "30",
                 },
             },
@@ -261,31 +261,31 @@ describe("useGalacticaFees", () => {
             options: {
                 [GasPriceCoefficient.REGULAR]: {
                     estimatedFee: BigNutils("21000000210000"),
-                    maxFee: BigNutils("21420000210000"),
+                    maxFee: BigNutils("23940000210000"),
                     priorityFee: BigNutils("210000"),
                 },
                 [GasPriceCoefficient.MEDIUM]: {
                     estimatedFee: BigNutils("21000000420000"),
-                    maxFee: BigNutils("21630000420000"),
+                    maxFee: BigNutils("24150000420000"),
                     priorityFee: BigNutils("420000"),
                 },
                 [GasPriceCoefficient.HIGH]: {
                     estimatedFee: BigNutils("21000000630000"),
-                    maxFee: BigNutils("21966000630000"),
+                    maxFee: BigNutils("24486000630000"),
                     priorityFee: BigNutils("630000"),
                 },
             },
             txOptions: {
                 [GasPriceCoefficient.REGULAR]: {
-                    maxFeePerGas: "1020000010",
+                    maxFeePerGas: "1140000010",
                     maxPriorityFeePerGas: "10",
                 },
                 [GasPriceCoefficient.MEDIUM]: {
-                    maxFeePerGas: "1030000020",
+                    maxFeePerGas: "1150000020",
                     maxPriorityFeePerGas: "20",
                 },
                 [GasPriceCoefficient.HIGH]: {
-                    maxFeePerGas: "1046000030",
+                    maxFeePerGas: "1166000030",
                     maxPriorityFeePerGas: "30",
                 },
             },
@@ -343,31 +343,31 @@ describe("useGalacticaFees", () => {
             options: {
                 [GasPriceCoefficient.REGULAR]: {
                     estimatedFee: BigNutils("119000000007000"),
-                    maxFee: BigNutils("119420000007000"),
+                    maxFee: BigNutils("121940000007000"),
                     priorityFee: BigNutils("98000000007000"),
                 },
                 [GasPriceCoefficient.MEDIUM]: {
                     estimatedFee: BigNutils("132999999993000"),
-                    maxFee: BigNutils("133629999993000"),
+                    maxFee: BigNutils("136149999993000"),
                     priorityFee: BigNutils("111999999993000"),
                 },
                 [GasPriceCoefficient.HIGH]: {
                     estimatedFee: BigNutils("147000000000000"),
-                    maxFee: BigNutils("147966000000000"),
+                    maxFee: BigNutils("150486000000000"),
                     priorityFee: BigNutils("126000000000000"),
                 },
             },
             txOptions: {
                 [GasPriceCoefficient.REGULAR]: {
-                    maxFeePerGas: "5686666667",
+                    maxFeePerGas: "5806666667",
                     maxPriorityFeePerGas: "4666666667",
                 },
                 [GasPriceCoefficient.MEDIUM]: {
-                    maxFeePerGas: "6363333333",
+                    maxFeePerGas: "6483333333",
                     maxPriorityFeePerGas: "5333333333",
                 },
                 [GasPriceCoefficient.HIGH]: {
-                    maxFeePerGas: "7046000000",
+                    maxFeePerGas: "7166000000",
                     maxPriorityFeePerGas: "6000000000",
                 },
             },
@@ -425,31 +425,31 @@ describe("useGalacticaFees", () => {
             options: {
                 [GasPriceCoefficient.REGULAR]: {
                     estimatedFee: BigNutils("168000000000000"),
-                    maxFee: BigNutils("168420000000000"),
+                    maxFee: BigNutils("170940000000000"),
                     priorityFee: BigNutils("147000000000000"),
                 },
                 [GasPriceCoefficient.MEDIUM]: {
                     estimatedFee: BigNutils("189000000000000"),
-                    maxFee: BigNutils("189630000000000"),
+                    maxFee: BigNutils("192150000000000"),
                     priorityFee: BigNutils("168000000000000"),
                 },
                 [GasPriceCoefficient.HIGH]: {
                     estimatedFee: BigNutils("210000000000000"),
-                    maxFee: BigNutils("210966000000000"),
+                    maxFee: BigNutils("213486000000000"),
                     priorityFee: BigNutils("189000000000000"),
                 },
             },
             txOptions: {
                 [GasPriceCoefficient.REGULAR]: {
-                    maxFeePerGas: "8020000000",
+                    maxFeePerGas: "8140000000",
                     maxPriorityFeePerGas: "7000000000",
                 },
                 [GasPriceCoefficient.MEDIUM]: {
-                    maxFeePerGas: "9030000000",
+                    maxFeePerGas: "9150000000",
                     maxPriorityFeePerGas: "8000000000",
                 },
                 [GasPriceCoefficient.HIGH]: {
-                    maxFeePerGas: "10046000000",
+                    maxFeePerGas: "10166000000",
                     maxPriorityFeePerGas: "9000000000",
                 },
             },
