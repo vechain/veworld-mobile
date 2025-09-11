@@ -13,7 +13,7 @@ export const buildUseTokenBalanceQueryKey = ({
     tokenAddress: string
 }) => ["TOKENS", "BALANCE", address, networkGenesisId, tokenAddress]
 
-export const useTokenBalanceConfig = ({
+export const getUseTokenBalanceConfig = ({
     address,
     tokenAddress,
     network,
@@ -28,7 +28,7 @@ export const useTokenBalanceConfig = ({
         queryKey: ["TOKENS", "SINGLE", address, network.genesis.id, tokenAddress],
         queryFn: () =>
             BalanceUtils.getBalancesFromBlockchain([tokenAddress], address, network, thor).then(res => res[0]),
-        staleTime: 5 * 60 * 1000,
-        gcTime: 5 * 60 * 1000,
+        staleTime: 10 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
         placeholderData: keepPreviousData,
     })

@@ -2,7 +2,7 @@ import { useQueries } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { VET } from "~Constants"
 import { useMainnetThorClient } from "~Hooks/useThorClient"
-import { useTokenBalanceConfig } from "~Hooks/useTokenBalance"
+import { getUseTokenBalanceConfig } from "~Hooks/useTokenBalance"
 import { NETWORK_TYPE } from "~Model"
 import { selectAccountsWithoutObserved, selectNetworksByType, useAppSelector } from "~Storage/Redux"
 
@@ -14,8 +14,7 @@ export const useVetBalances = (enabled: boolean) => {
     const queryConfigs = useMemo(
         () =>
             accounts.map(account => ({
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                ...useTokenBalanceConfig({
+                ...getUseTokenBalanceConfig({
                     address: account.address,
                     network: networks[0],
                     thor: thor,

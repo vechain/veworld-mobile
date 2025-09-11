@@ -74,14 +74,18 @@ export const useIsEnoughGas = ({
     const hasEnoughBalanceOnToken = useMemo(() => {
         return Object.fromEntries(
             DELEGATION_TOKENS.map(tokenSymbol => {
+                //Always return true if it's either loading fees, fee options are not loaded yet or there are no transaction outputs.
                 if (isLoadingFees || allFeeOptions === undefined || !transactionOutputs)
                     return [tokenSymbol, true] as const
+                //If the generic delegator fails and doesn't have the specific symbol, return false to not break the UI
                 if (allFeeOptions[tokenSymbol] === undefined) return [tokenSymbol, false] as const
                 const foundTmpToken = officialTokens.find(tk => tk.symbol === tokenSymbol)
+                //If the token is not found in the list of official tokens, which is unlikely, return false.
                 if (!foundTmpToken) return [tokenSymbol, false]
                 const foundBalance = balances?.find(tk =>
                     AddressUtils.compareAddresses(tk.tokenAddress, foundTmpToken.address),
                 )
+                //If the balance is not found, then it's probably loading
                 if (!foundBalance) return [tokenSymbol, true]
                 const balance = foundBalance.balance
                 const clausesValue = calculateClausesValue({

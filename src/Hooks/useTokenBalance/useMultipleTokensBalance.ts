@@ -6,6 +6,12 @@ import { BalanceUtils } from "~Utils"
 import { buildUseTokenBalanceQueryKey } from "./useTokenBalance.config"
 import { Balance } from "~Model"
 
+/**
+ * Performs a batch request of balances. Prefer this hook over `useTokenBalance` if multiple token balances are needed at the same time.
+ * @param addresses List of token addresses
+ * @param accountAddress Account address. If not defined, fallbacks to the currently selected account
+ * @returns the list of balances together with the loading state
+ */
 export const useMultipleTokensBalance = (addresses: string[], accountAddress?: string) => {
     const thor = useThor()
     const network = useAppSelector(selectSelectedNetwork)
@@ -19,13 +25,14 @@ export const useMultipleTokensBalance = (addresses: string[], accountAddress?: s
     const { data, dataUpdatedAt, isLoading } = useQuery({
         queryKey: ["TOKENS", "MULTIPLE", accountAddress, network.genesis.id, sortedAddresses],
         queryFn: () => BalanceUtils.getBalancesFromBlockchain(sortedAddresses, address, network, thor),
-        staleTime: 5 * 60 * 1000,
-        gcTime: 5 * 60 * 1000,
+        staleTime: 10 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
         placeholderData: keepPreviousData,
     })
 
     useEffect(() => {
         if (!data) return
+        //Update `useTokenBalance` query key. This query key will be used in multiple places, so it's better to to copy over the values from here
         data.forEach(value => {
             const queryKey = buildUseTokenBalanceQueryKey({
                 address,
@@ -39,6 +46,9 @@ export const useMultipleTokensBalance = (addresses: string[], accountAddress?: s
         })
     }, [accountAddress, address, data, dataUpdatedAt, network.genesis.id, qc])
 
+    /**
+     * Return the query data from the `useTokenBalance` hook instead of from this hook
+     */
     const mappedData = useMemo(() => {
         if (!data) return undefined
         return data.map(d => {
