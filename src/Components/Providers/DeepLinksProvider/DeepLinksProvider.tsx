@@ -6,8 +6,10 @@ import { useInteraction } from "../InteractionProvider"
 // import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
 // import { error } from "~Utils"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
-import { selectExternalDappSessions, useAppSelector } from "~Storage/Redux"
+import { selectExternalDappSessions } from "~Storage/Redux"
 import { DAppUtils } from "~Utils"
+import { useStore } from "../StoreProvider"
+import { RootState } from "~Storage/Redux/Types"
 
 type DeepLinkEvent = "discover" | "connect" | "signTransaction" | "signCertificate" | "signTypedData" | "disconnect"
 
@@ -61,11 +63,13 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         setCertificateBsData,
         certificateBsRef,
     } = useInteraction()
-    const externalDappSessions = useAppSelector(selectExternalDappSessions)
+    // const externalDappSessions = useAppSelector(selectExternalDappSessions)
+    const { store } = useStore()
 
     const handleConnectionLink = useCallback(
         (params: ConnectionLinkParams) => {
             if (currentDappPublicKey) {
+                DAppUtils.dispatchResourceNotAvailableError(params.redirect_url ?? "")
                 return
             }
             setCurrentDappPublicKey(params.public_key)
@@ -85,63 +89,102 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
     const handleSignTransaction = useCallback(
         async (params: ExternalAppRequestParams) => {
-            if (currentDappPublicKey) {
-                return
-            }
-            const request = await DAppUtils.parseTransactionRequest(params.request, externalDappSessions)
-            if (request) {
-                // setCurrentDappPublicKey(request.publicKey)
-                setTransactionBsData(request)
-                transactionBsRef.current?.present()
+            const externalDappSessions = selectExternalDappSessions(store?.getState() as RootState)
+            try {
+                const request = await DAppUtils.parseTransactionRequest(
+                    params.request,
+                    externalDappSessions,
+                    params.redirect_url,
+                )
+                if (request && request.type === "external-app") {
+                    if (currentDappPublicKey) {
+                        DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
+                        return
+                    }
+                    // setCurrentDappPublicKey(request.publicKey)
+                    setTransactionBsData(request)
+                    transactionBsRef.current?.present()
+                }
+            } catch (e) {
+                DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setTransactionBsData, transactionBsRef, currentDappPublicKey, externalDappSessions],
+        [setTransactionBsData, transactionBsRef, currentDappPublicKey, store],
     )
 
     const handleSignTypedData = useCallback(
         async (params: ExternalAppRequestParams) => {
-            if (currentDappPublicKey) {
-                return
-            }
-            const request = await DAppUtils.parseTypedDataRequest(params.request, externalDappSessions)
-            if (request) {
-                // setCurrentDappPublicKey(request.publicKey)
-                setTypedDataBsData(request)
-                typedDataBsRef.current?.present()
+            const externalDappSessions = selectExternalDappSessions(store?.getState() as RootState)
+            try {
+                const request = await DAppUtils.parseTypedDataRequest(
+                    params.request,
+                    externalDappSessions,
+                    params.redirect_url,
+                )
+                if (request && request.type === "external-app") {
+                    if (currentDappPublicKey) {
+                        DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
+                        return
+                    }
+                    // setCurrentDappPublicKey(request.publicKey)
+                    setTypedDataBsData(request)
+                    typedDataBsRef.current?.present()
+                }
+            } catch (e) {
+                DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setTypedDataBsData, typedDataBsRef, currentDappPublicKey, externalDappSessions],
+        [setTypedDataBsData, typedDataBsRef, currentDappPublicKey, store],
     )
 
     const handleSignCertificate = useCallback(
         async (params: ExternalAppRequestParams) => {
-            if (currentDappPublicKey) {
-                return
-            }
-            const request = await DAppUtils.parseCertificateRequest(params.request, externalDappSessions)
-            if (request) {
-                // setCurrentDappPublicKey(request.publicKey)
-                setCertificateBsData(request)
-                certificateBsRef.current?.present()
+            const externalDappSessions = selectExternalDappSessions(store?.getState() as RootState)
+            try {
+                const request = await DAppUtils.parseCertificateRequest(
+                    params.request,
+                    externalDappSessions,
+                    params.redirect_url,
+                )
+                if (request && request.type === "external-app") {
+                    if (currentDappPublicKey) {
+                        DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
+                        return
+                    }
+                    // setCurrentDappPublicKey(request.publicKey)
+                    setCertificateBsData(request)
+                    certificateBsRef.current?.present()
+                }
+            } catch (e) {
+                DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setCertificateBsData, certificateBsRef, currentDappPublicKey, externalDappSessions],
+        [setCertificateBsData, certificateBsRef, currentDappPublicKey, store],
     )
 
     const handleDisconnect = useCallback(
         async (params: ExternalAppRequestParams) => {
-            if (currentDappPublicKey) {
-                return
-            }
-
-            const request = await DAppUtils.parseDisconnectRequest(params.request, externalDappSessions)
-            if (request) {
-                setCurrentDappPublicKey(request.publicKey)
-                setDisconnectBsData(request)
-                disconnectBsRef.current?.present()
+            const externalDappSessions = selectExternalDappSessions(store?.getState() as RootState)
+            try {
+                const request = await DAppUtils.parseDisconnectRequest(
+                    params.request,
+                    externalDappSessions,
+                    params.redirect_url,
+                )
+                if (request && request.type === "external-app") {
+                    if (currentDappPublicKey) {
+                        DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
+                        return
+                    }
+                    setCurrentDappPublicKey(request.publicKey)
+                    setDisconnectBsData(request)
+                    disconnectBsRef.current?.present()
+                }
+            } catch (e) {
+                DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setDisconnectBsData, disconnectBsRef, externalDappSessions, currentDappPublicKey],
+        [setDisconnectBsData, disconnectBsRef, currentDappPublicKey, store],
     )
 
     useEffect(() => {
@@ -172,7 +215,9 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             }
         }
 
-        Linking.addEventListener("url", handleDeepLink)
+        const interaction = InteractionManager.runAfterInteractions(() => {
+            Linking.addEventListener("url", handleDeepLink)
+        })
 
         if (!mounted.current) {
             mounted.current = true
@@ -182,6 +227,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         }
 
         return () => {
+            interaction.cancel()
             Linking.removeAllListeners("url")
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

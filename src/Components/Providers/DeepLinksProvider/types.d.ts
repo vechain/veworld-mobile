@@ -20,4 +20,8 @@ type ExternalAppRequestParams = {
      * Encoded URI of the transaction request object
      */
     request: string
+    /**
+     * Redirect URL to send response to the external app
+     */
+    redirect_url: string
 }

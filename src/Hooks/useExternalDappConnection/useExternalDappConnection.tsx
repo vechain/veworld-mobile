@@ -46,6 +46,7 @@ export const useExternalDappConnection = () => {
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const { setCurrentDappPublicKey } = useDeepLinksSession()
     const externalDappSessions = useAppSelector(selectExternalDappSessions)
+
     const dispatch = useAppDispatch()
 
     const getKeyPairFromPrivateKey = useCallback((privateKey: string) => {
@@ -112,8 +113,11 @@ export const useExternalDappConnection = () => {
                     data: encodeBase64(encrypted),
                     nonce: encodeBase64(nonce),
                 })
-                await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+
                 setCurrentDappPublicKey(null)
+                setTimeout(() => {
+                    Linking.openURL(`${redirectUrl}?${params.toString()}`)
+                }, 800)
             } catch (_err: unknown) {
                 const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
 
@@ -132,12 +136,9 @@ export const useExternalDappConnection = () => {
 
     const onDappDisconnected = useCallback(
         async ({ dappPublicKey, network: dappNetwork, redirectUrl }: OnDappDisconnectedParams) => {
-            // console.log("dappPublicKey", dappPublicKey)
-            // console.log("dappNetwork", dappNetwork)
-            // console.log("redirectUrl", redirectUrl)
             dispatch(deleteExternalDappSession({ appPublicKey: dappPublicKey, network: dappNetwork }))
-            await Linking.openURL(`${redirectUrl}`)
             setCurrentDappPublicKey(null)
+            await Linking.openURL(`${redirectUrl}`)
         },
         [dispatch, setCurrentDappPublicKey],
     )

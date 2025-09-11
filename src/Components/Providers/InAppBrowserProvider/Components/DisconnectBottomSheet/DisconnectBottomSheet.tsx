@@ -74,14 +74,14 @@ export const DisconnectBottomSheet = () => {
     const onDisconnect = useCallback(
         async (request: DisconnectAppRequest) => {
             if (request.type === "external-app") {
+                isUserAction.current = true
                 await onDappDisconnected({
                     dappPublicKey: request.publicKey,
                     redirectUrl: request.redirectUrl,
                     network: request.network,
                 })
+                onCloseBs()
             }
-            isUserAction.current = true
-            onCloseBs()
         },
         [onCloseBs, onDappDisconnected],
     )

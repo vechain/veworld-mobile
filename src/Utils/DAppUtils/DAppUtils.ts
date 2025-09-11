@@ -149,6 +149,7 @@ const encryptPayload = (payload: string, publicKey: string, secretKey: string): 
 const parseRequest = async <T>(
     encodedRequest: string,
     externalDappSessions: Record<string, SessionState>,
+    redirectUrl: string,
 ): Promise<ParsedRequest<T> | undefined> => {
     const request = decodeURIComponent(encodedRequest)
     const { payload: encPayload, ...decodedRequest } = JSON.parse(new TextDecoder().decode(decodeBase64(request)))
@@ -158,7 +159,7 @@ const parseRequest = async <T>(
         if (!session) {
             const err = new DeepLinkError(DeepLinkErrorCode.Unauthorized)
             await Linking.openURL(
-                `${decodedRequest.redirectUrl}?errorMessage=${encodeURIComponent(err.message)}&errorCode=${err.code}`,
+                `${redirectUrl}?errorMessage=${encodeURIComponent(err.message)}&errorCode=${err.code}`,
             )
             return
         }
@@ -177,9 +178,7 @@ const parseRequest = async <T>(
 
         if (!decryptedPayload) {
             const err = new DeepLinkError(DeepLinkErrorCode.InvalidPayload)
-            await Linking.openURL(
-                `${decodedRequest.redirectUrl}?erroMessage=${encodeURIComponent(err.message)}&errorCode=${err.code}`,
-            )
+            await Linking.openURL(`${redirectUrl}?erroMessage=${encodeURIComponent(err.message)}&errorCode=${err.code}`)
             return
         }
 
@@ -189,7 +188,7 @@ const parseRequest = async <T>(
     } catch (e) {
         const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
         error("EXTERNAL_DAPP_CONNECTION", err)
-        await Linking.openURL(`${decodedRequest.redirectUrl}?errorMessage=${err.message}&errorCode=${err.code}`)
+        await Linking.openURL(`${redirectUrl}?errorMessage=${err.message}&errorCode=${err.code}`)
         return
     }
 }
@@ -197,8 +196,9 @@ const parseRequest = async <T>(
 const parseTransactionRequest = async (
     encodedRequest: string,
     externalDappSessions: Record<string, SessionState>,
+    redirectUrl: string,
 ): Promise<TransactionRequest | undefined> => {
-    const parsedRequest = await parseRequest<TransactionRequest>(encodedRequest, externalDappSessions)
+    const parsedRequest = await parseRequest<TransactionRequest>(encodedRequest, externalDappSessions, redirectUrl)
 
     if (!parsedRequest) {
         const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
@@ -211,7 +211,7 @@ const parseTransactionRequest = async (
             errorMessage: err.message,
             errorCode: err.code.toString(),
         })
-        await Linking.openURL(`${parsedRequest?.request.redirectUrl}?${params.toString()}`)
+        await Linking.openURL(`${redirectUrl}?${params.toString()}`)
         return
     }
 
@@ -221,8 +221,9 @@ const parseTransactionRequest = async (
 const parseTypedDataRequest = async (
     encodedRequest: string,
     externalDappSessions: Record<string, SessionState>,
+    redirectUrl: string,
 ): Promise<TypeDataRequest | undefined> => {
-    const parsedRequest = await parseRequest<TypeDataRequest>(encodedRequest, externalDappSessions)
+    const parsedRequest = await parseRequest<TypeDataRequest>(encodedRequest, externalDappSessions, redirectUrl)
 
     if (!parsedRequest) {
         const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
@@ -235,7 +236,7 @@ const parseTypedDataRequest = async (
             errorMessage: err.message,
             errorCode: err.code.toString(),
         })
-        await Linking.openURL(`${parsedRequest?.request.redirectUrl}?${params.toString()}`)
+        await Linking.openURL(`${redirectUrl}?${params.toString()}`)
         return
     }
 
@@ -245,8 +246,9 @@ const parseTypedDataRequest = async (
 const parseCertificateRequest = async (
     encodedRequest: string,
     externalDappSessions: Record<string, SessionState>,
+    redirectUrl: string,
 ): Promise<CertificateRequest | undefined> => {
-    const parsedRequest = await parseRequest<CertificateRequest>(encodedRequest, externalDappSessions)
+    const parsedRequest = await parseRequest<CertificateRequest>(encodedRequest, externalDappSessions, redirectUrl)
 
     if (!parsedRequest) {
         const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
@@ -259,23 +261,45 @@ const parseCertificateRequest = async (
             errorMessage: err.message,
             errorCode: err.code.toString(),
         })
-        await Linking.openURL(`${parsedRequest?.request.redirectUrl}?${params.toString()}`)
+        await Linking.openURL(`${redirectUrl}?${params.toString()}`)
         return
     }
 
-    return { ...parsedRequest.payload.certificate, ...parsedRequest.request } as CertificateRequest
+    return {
+        ...parsedRequest.payload.certificate,
+        ...parsedRequest.request,
+    } as CertificateRequest
 }
 
 const parseDisconnectRequest = async (
     encodedRequest: string,
     externalDappSessions: Record<string, SessionState>,
+    redirectUrl: string,
 ): Promise<DisconnectAppRequest | undefined> => {
-    const parsedRequest = await parseRequest<DisconnectAppRequest>(encodedRequest, externalDappSessions)
+    const parsedRequest = await parseRequest<DisconnectAppRequest>(encodedRequest, externalDappSessions, redirectUrl)
     if (!parsedRequest) {
         const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
         throw new Error(err.message)
     }
     return { ...parsedRequest.request } as DisconnectAppRequest
+}
+
+const dispatchResourceNotAvailableError = (redirectUrl: string) => {
+    const err = new DeepLinkError(DeepLinkErrorCode.ResourceNotAvailable)
+    const params = new URLSearchParams({
+        errorMessage: err.message,
+        errorCode: err.code.toString(),
+    })
+    Linking.openURL(`${redirectUrl}?${params.toString()}`)
+}
+
+const dispatchInternalError = (redirectUrl: string) => {
+    const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
+    const params = new URLSearchParams({
+        errorMessage: err.message,
+        errorCode: err.code.toString(),
+    })
+    Linking.openURL(`${redirectUrl}?${params.toString()}`)
 }
 
 export const DAppUtils = {
@@ -289,4 +313,6 @@ export const DAppUtils = {
     parseCertificateRequest,
     parseDisconnectRequest,
     encryptPayload,
+    dispatchResourceNotAvailableError,
+    dispatchInternalError,
 }
