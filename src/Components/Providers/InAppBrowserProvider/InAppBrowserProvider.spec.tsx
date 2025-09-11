@@ -12,6 +12,7 @@ import { RootState } from "../../../Storage/Redux/Types"
 import { getStore } from "../../../Test"
 import { usePersistedTheme } from "../PersistedThemeProvider"
 
+import { FeatureFlaggedSmartWallet } from "../FeatureFlaggedSmartWallet"
 import * as InteractionProvider from "../InteractionProvider"
 import { InAppBrowserProvider, useInAppBrowser } from "./InAppBrowserProvider"
 
@@ -90,12 +91,14 @@ const createWrapper = (platform: PlatformOSType) => {
         })
         return (
             <Provider store={getStore(preloadedState)}>
-                <QueryClientProvider client={queryClient}>
-                    <InAppBrowserProvider platform={platform}>
-                        {children}
-                        <BaseToast />
-                    </InAppBrowserProvider>
-                </QueryClientProvider>
+                <FeatureFlaggedSmartWallet nodeUrl="https://testnet.vechain.com" networkType="testnet">
+                    <QueryClientProvider client={queryClient}>
+                        <InAppBrowserProvider platform={platform}>
+                            {children}
+                            <BaseToast />
+                        </InAppBrowserProvider>
+                    </QueryClientProvider>
+                </FeatureFlaggedSmartWallet>
             </Provider>
         )
     }

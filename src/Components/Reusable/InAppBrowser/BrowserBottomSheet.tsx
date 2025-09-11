@@ -6,11 +6,11 @@ import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useFeatureFlags, useInAppBrowser } from "~Components/Providers"
 import { ColorThemeType, SCREEN_HEIGHT } from "~Constants"
-import { useDappBookmarking, useThemedStyles } from "~Hooks"
+import { useDappBookmarking, useTabManagement, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
 import { RootStackParamListApps, RootStackParamListBrowser, RootStackParamListSettings, Routes } from "~Navigation"
-import { closeTab, selectCurrentTabId, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectCurrentTabId, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     onNavigate?: () => void | Promise<void>
@@ -28,20 +28,34 @@ type BottomSheetAction = {
     icon: IconKey
     label: string
     onPress: () => void
+    disabled?: boolean
 }
 
 type BottomSheetActionItem = BottomSheetActionSeparator | BottomSheetAction
 
+export const getActionTextColor = (
+    action: BottomSheetAction,
+    theme: { colors: { actionBottomSheet: { disabledText: string; dangerText: string; text: string } } },
+) => {
+    if (action.disabled) {
+        return theme.colors.actionBottomSheet.disabledText
+    }
+    if (action.id === "close-tab") {
+        return theme.colors.actionBottomSheet.dangerText
+    }
+    return theme.colors.actionBottomSheet.text
+}
+
 export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onNavigate, onClose }, ref) => {
     const { LL } = useI18nContext()
-    const { isDapp, navigationState, webviewRef, dappMetadata } = useInAppBrowser()
+    const { navigationState, webviewRef, dappMetadata } = useInAppBrowser()
     const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav =
         useNavigation<
             NativeStackNavigationProp<RootStackParamListBrowser & RootStackParamListSettings & RootStackParamListApps>
         >()
-    const dispatch = useAppDispatch()
+    const { closeTab } = useTabManagement()
     const currentTabId = useAppSelector(selectCurrentTabId)
     const { betterWorldFeature } = useFeatureFlags()
     const [actionContainerHeight, setActionContainerHeight] = useState(SCREEN_HEIGHT / 2)
@@ -76,10 +90,10 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
 
     const closeCurrentTab = useCallback(() => {
         if (currentTabId) {
-            dispatch(closeTab(currentTabId))
+            closeTab(currentTabId)
             navToSearch()
         }
-    }, [currentTabId, dispatch, navToSearch])
+    }, [currentTabId, closeTab, navToSearch])
 
     const actions: BottomSheetActionItem[] = useMemo(() => {
         const favoriteItem: BottomSheetAction = isBookMarked
@@ -99,7 +113,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
               }
 
         return [
-            ...(isDapp ? [favoriteItem] : []),
+            favoriteItem,
             {
                 type: "action",
                 id: "reload",
@@ -107,6 +121,17 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 label: LL.BROWSER_RELOAD_PAGE(),
                 onPress: () => {
                     webviewRef.current?.reload()
+                    onClose?.()
+                },
+            },
+            {
+                type: "action",
+                id: "go-back",
+                icon: "icon-chevron-left",
+                label: LL.BROWSER_GO_BACK(),
+                disabled: !navigationState?.canGoBack,
+                onPress: () => {
+                    webviewRef.current?.goBack()
                     onClose?.()
                 },
             },
@@ -158,9 +183,9 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         isBookMarked,
         LL,
         toggleBookmark,
-        isDapp,
         webviewRef,
         onClose,
+        navigationState?.canGoBack,
         navigationState?.url,
         dappMetadata,
         navToNewTab,
@@ -192,11 +217,16 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 style={styles.actionContainer}>
                 {actions.map(action =>
                     action.type === "action" ? (
-                        <BaseTouchable key={action.id} style={styles.actionItemContainer} action={action.onPress}>
+                        <BaseTouchable
+                            key={action.id}
+                            style={styles.actionItemContainer}
+                            action={action.onPress}
+                            disabled={action.disabled}>
                             <BaseIcon
                                 name={action.icon}
                                 size={16}
                                 iconPadding={8}
+                                disabled={action.disabled}
                                 bg={theme.colors.actionBottomSheet.dangerIconBackground}
                                 color={
                                     action.id === "close-tab"
@@ -204,13 +234,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                                         : theme.colors.actionBottomSheet.icon
                                 }
                             />
-                            <BaseText
-                                typographyFont="bodySemiBold"
-                                color={
-                                    action.id === "close-tab"
-                                        ? theme.colors.actionBottomSheet.dangerText
-                                        : theme.colors.actionBottomSheet.text
-                                }>
+                            <BaseText typographyFont="bodySemiBold" color={getActionTextColor(action, theme)}>
                                 {action.label}
                             </BaseText>
                         </BaseTouchable>

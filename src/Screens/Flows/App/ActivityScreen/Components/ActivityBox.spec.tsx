@@ -23,25 +23,13 @@ import {
     LoginActivity,
     NETWORK_TYPE,
     NonFungibleTokenActivity,
+    NFTMarketplaceActivity,
     SwapActivity,
     UnknownTxActivity,
     VeVoteCastActivity,
 } from "~Model"
 
-const mockTheme = {
-    colors: {
-        activityCard: {
-            time: "#666",
-            title: "#000",
-            subtitleBold: "#333",
-            subtitleLight: "#999",
-            swap: "#444",
-        },
-    },
-}
-
-jest.mock("~Hooks", () => ({
-    ...jest.requireActual("~Hooks"),
+jest.mock("~Hooks/useNFTInfo", () => ({
     useNFTInfo: () => ({
         tokenMetadata: {
             image: "https://example.com/nft.jpg",
@@ -49,33 +37,15 @@ jest.mock("~Hooks", () => ({
         collectionName: "Test Collection",
         isMediaLoading: false,
     }),
-    useThemedStyles: () => ({
-        styles: {
-            rootContainer: {},
-            iconContainer: {},
-            titleContainer: {},
-            textContainer: {},
-            rightTextContainer: {},
-            rightImageContainer: {},
-        },
-        theme: mockTheme,
-    }),
-    useTheme: () => mockTheme,
+}))
+
+jest.mock("~Hooks/useNFTMedia", () => ({
     useNFTMedia: () => ({
         fetchMedia: async () => ({
             image: "https://example.com/nft.jpg",
             mime: "image/jpeg",
             mediaType: "IMAGE",
         }),
-    }),
-}))
-
-jest.mock("~Components/Providers/PersistedCacheProvider", () => ({
-    usePersistedCache: () => ({
-        mediaCache: {
-            getItem: () => null,
-            setItem: () => {},
-        },
     }),
 }))
 
@@ -368,9 +338,6 @@ describe("ActivityBox", () => {
                 },
             },
         },
-        veBetterDao: {
-            dapps: [],
-        },
     }
 
     describe("TokenTransfer", () => {
@@ -548,6 +515,45 @@ describe("ActivityBox", () => {
             const { getByTestId } = render(
                 <TestWrapper preloadedState={mockPreloadedState}>
                     <ActivityBox.NFTTransfer activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+            expect(getByTestId("nft-media")).toBeTruthy()
+        })
+    })
+
+    describe("NFT Sale", () => {
+        const nftSaleActivity: NFTMarketplaceActivity = {
+            id: "test-nft-sale-id",
+            blockNumber: 123,
+            timestamp: Date.now(),
+            type: ActivityType.NFT_SALE,
+            tokenId: "12345",
+            contractAddress: "0x123",
+            direction: DIRECTIONS.UP,
+            from: "0x0e73ea",
+            to: ["0x3ca506"],
+            status: ActivityStatus.SUCCESS,
+            isTransaction: false,
+            delegated: false,
+            price: "2500000000000000000",
+            buyer: "0x3ca506",
+            seller: "0x0e73ea",
+            tokenAddress: "VET",
+        }
+
+        it("renders NFT sale correctly", () => {
+            const { getByTestId } = render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.NFTSale activity={nftSaleActivity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+            expect(getByTestId(`NFT-SALE-${nftSaleActivity.id}`)).toBeTruthy()
+        })
+
+        it("renders NFTMedia when NFT metadata is available for sale", () => {
+            const { getByTestId } = render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.NFTSale activity={nftSaleActivity} onPress={mockOnPress} />
                 </TestWrapper>,
             )
             expect(getByTestId("nft-media")).toBeTruthy()

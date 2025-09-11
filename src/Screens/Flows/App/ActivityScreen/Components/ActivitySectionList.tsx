@@ -22,6 +22,7 @@ import {
     FungibleTokenActivity,
     LoginActivity,
     NonFungibleTokenActivity,
+    NFTMarketplaceActivity,
     SignCertActivity,
     StargateActivity,
     SwapActivity,
@@ -90,6 +91,14 @@ const Item = ({
                 <ActivityBox.NFTTransfer
                     key={activityToRender.id}
                     activity={activity as NonFungibleTokenActivity}
+                    onPress={onPress}
+                />
+            )
+        case ActivityType.NFT_SALE:
+            return (
+                <ActivityBox.NFTSale
+                    key={activityToRender.id}
+                    activity={activity as NFTMarketplaceActivity}
                     onPress={onPress}
                 />
             )

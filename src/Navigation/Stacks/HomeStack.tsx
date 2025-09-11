@@ -46,6 +46,7 @@ import {
     WalletManagementScreen,
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -144,7 +145,7 @@ export const HomeStack = () => {
     const { betterWorldFeature } = useFeatureFlags()
 
     return (
-        <Navigator id="HomeStack" screenOptions={{ headerShown: false }}>
+        <Navigator id="HomeStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
                 <Screen name={Routes.HOME} component={HomeScreen} options={{ headerShown: false }} />
                 <Screen
@@ -237,6 +238,7 @@ export const HomeStack = () => {
                         presentation: "modal",
                         transitionSpec: TRANSITION_SPECS,
                         gestureDirection: "vertical",
+                        gestureEnabled: true,
                     }}
                 />
                 <Screen
@@ -266,6 +268,7 @@ export const HomeStack = () => {
                         presentation: "modal",
                         transitionSpec: TRANSITION_SPECS,
                         gestureDirection: "vertical",
+                        gestureEnabled: true,
                     }}
                 />
                 <Screen
@@ -277,6 +280,7 @@ export const HomeStack = () => {
                         presentation: "modal",
                         transitionSpec: TRANSITION_SPECS,
                         gestureDirection: "vertical",
+                        gestureEnabled: true,
                     }}
                 />
             </Group>

@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { MutableRefObject, default as React, useCallback, useEffect, useMemo, useState } from "react"
-import { Platform, StyleSheet, View } from "react-native"
+import { BackHandler, Platform, StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import Animated, { Easing, FadeOut } from "react-native-reanimated"
@@ -16,6 +16,7 @@ import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { deleteSession, selectSelectedNetwork, selectSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
@@ -83,7 +84,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const renderLoading = useCallback(() => {
         if (!dappMetadata)
             return (
-                <Animated.View exiting={FadeOut.duration(400)} style={[styles.loadingWebView]}>
+                <Animated.View exiting={isIOS() ? FadeOut.duration(400) : undefined} style={[styles.loadingWebView]}>
                     <BaseView style={[styles.loadingIcon, styles.notDappLoadingIcon]}>
                         <BaseIcon name="icon-globe" size={32} color={theme.colors.history.historyItem.iconColor} />
                     </BaseView>
@@ -92,7 +93,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
         return (
             <Animated.View
-                exiting={FadeOut.duration(400).easing(Easing.out(Easing.ease))}
+                exiting={isIOS() ? FadeOut.duration(400).easing(Easing.out(Easing.ease)) : undefined}
                 style={[styles.loadingWebView]}>
                 <FastImage
                     source={{
@@ -116,6 +117,23 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         if (!activeSession || !navigationState?.url || activeSession.kind !== "temporary") return
         dispatch(deleteSession(navigationState?.url))
     }, [activeSession, dispatch, navigationState?.url, performScreenshot])
+
+    const onAndroidBackPress = useCallback((): boolean => {
+        if (webviewRef.current) {
+            webviewRef.current.goBack()
+            return true // prevent default behavior (exit app)
+        }
+        return false
+    }, [webviewRef])
+
+    useEffect((): (() => void) | undefined => {
+        if (Platform.OS === "android") {
+            const nativeEventSubscription = BackHandler.addEventListener("hardwareBackPress", onAndroidBackPress)
+            return (): void => {
+                nativeEventSubscription.remove()
+            }
+        }
+    }, [onAndroidBackPress])
 
     return (
         <Layout
@@ -146,12 +164,14 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                                 onMessage={onMessage}
                                 onScroll={onScroll}
                                 onLoadEnd={onLoadEnd}
+                                allowsBackForwardNavigationGestures
                                 style={styles.loginWebView}
                                 scalesPageToFit={true}
                                 injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
                                 allowsInlineMediaPlayback={true}
                                 originWhitelist={originWhitelist}
                                 collapsable={false}
+                                pullToRefreshEnabled
                                 startInLoadingState={true}
                                 renderLoading={renderLoading}
                             />

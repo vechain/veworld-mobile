@@ -5,6 +5,7 @@ import {
     ActivityStatus,
     FungibleTokenActivity,
     LoginActivityValue,
+    DEVICE_TYPE,
     NonFungibleTokenActivity,
     TypedData,
 } from "~Model"
@@ -17,7 +18,7 @@ import {
     createSignCertificateActivity,
     createSingTypedDataActivity,
 } from "~Networking"
-import { selectSelectedAccount, selectSelectedNetwork } from "~Storage/Redux/Selectors"
+import { selectSelectedAccount, selectDevice, selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { addActivity } from "~Storage/Redux/Slices"
 import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
 
@@ -67,8 +68,10 @@ export const addPendingTransferTransactionActivity =
     (outgoingTx: Transaction): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
+        const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
 
-        if (!selectedAccount || !outgoingTx.id) return
+        // Ignore if the selected account is a smart wallet for now
+        if (!selectedAccount || !outgoingTx.id || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
 
         const pendingActivity: FungibleTokenActivity = createPendingTransferActivityFromTx(outgoingTx)
         dispatch(addActivity(pendingActivity))
@@ -89,7 +92,9 @@ export const addPendingNFTtransferTransactionActivity =
     (outgoingTx: Transaction): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
-        if (!selectedAccount || !outgoingTx.id) return
+        const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
+        // Ignore if the selected account is a smart wallet for now
+        if (!selectedAccount || !outgoingTx.id || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
 
         const pendingActivity: NonFungibleTokenActivity = createPendingNFTTransferActivityFromTx(outgoingTx)
         dispatch(addActivity(pendingActivity))
@@ -198,8 +203,9 @@ export const addPendingDappTransactionActivity =
     (tx: Transaction, name?: string, linkUrl?: string): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
+        const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
 
-        if (!selectedAccount) return
+        if (!selectedAccount || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
 
         const pendingDappActivity: Activity = createPendingDappTransactionActivity(tx, name, linkUrl)
         dispatch(addActivity(pendingDappActivity))

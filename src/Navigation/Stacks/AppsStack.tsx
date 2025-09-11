@@ -1,10 +1,12 @@
 import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
+import { Device } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
-import { InAppBrowser, TabsManagerScreen } from "~Screens"
+import { InAppBrowser, TabsManagerScreen, WalletDetailScreen, WalletManagementScreen } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AppsScreen } from "~Screens/Flows/App/AppsScreen/AppsScreen"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 export type RootStackParamListApps = {
     [Routes.APPS]: undefined
@@ -16,13 +18,15 @@ export type RootStackParamListApps = {
     [Routes.APPS_SEARCH]: undefined
     [Routes.APPS_TABS_MANAGER]: undefined
     [Routes.ACTIVITY_STAKING]: undefined
+    [Routes.WALLET_MANAGEMENT]: undefined
+    [Routes.WALLET_DETAILS]: { device: Device }
 }
 
 const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListApps>()
 
 export const AppsStack = () => {
     return (
-        <Navigator id="AppsStack" screenOptions={{ headerShown: false }}>
+        <Navigator id="AppsStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
                 <Screen name={Routes.APPS} component={AppsScreen} options={{ headerShown: false }} />
                 <Screen
@@ -34,6 +38,7 @@ export const AppsStack = () => {
                         presentation: "modal",
                         transitionSpec: TRANSITION_SPECS,
                         gestureDirection: "vertical",
+                        gestureEnabled: true,
                     }}
                 />
             </Group>
@@ -47,6 +52,7 @@ export const AppsStack = () => {
                     presentation: "modal",
                     transitionSpec: TRANSITION_SPECS,
                     gestureDirection: "vertical",
+                    gestureEnabled: true,
                 }}
             />
             <Screen
@@ -58,8 +64,16 @@ export const AppsStack = () => {
                     presentation: "modal",
                     transitionSpec: TRANSITION_SPECS,
                     gestureDirection: "vertical",
+                    gestureEnabled: true,
                 }}
             />
+
+            <Screen
+                name={Routes.WALLET_MANAGEMENT}
+                component={WalletManagementScreen}
+                options={{ headerShown: false }}
+            />
+            <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
         </Navigator>
     )
 }

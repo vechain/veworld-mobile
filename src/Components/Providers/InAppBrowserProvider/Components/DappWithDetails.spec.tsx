@@ -3,6 +3,11 @@ import React, { PropsWithChildren } from "react"
 import { TestWrapper } from "~Test"
 import { DappWithDetails } from "./DappWithDetails"
 
+jest.mock("react-native", () => ({
+    ...jest.requireActual("react-native"),
+    LayoutAnimation: { configureNext: jest.fn(), Types: {}, Properties: {} },
+}))
+
 const Wrapper = ({ children }: PropsWithChildren) => (
     <TestWrapper
         preloadedState={{

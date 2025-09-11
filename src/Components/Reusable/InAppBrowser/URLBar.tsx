@@ -16,6 +16,8 @@ import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { DAppUtils } from "~Utils/DAppUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { BrowserBottomSheet } from "./BrowserBottomSheet"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import { Spinner } from "../Spinner"
 
 type Props = {
     navigationUrl: string
@@ -65,22 +67,6 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
         }
     }, [betterWorldFeature.appsScreen.enabled, nav, onNavigate])
 
-    const animatedStyles = useAnimatedStyle(
-        () => ({
-            height: showToolbars ? withTiming(56) : withTiming(24),
-            marginBottom: showToolbars ? 0 : 8,
-        }),
-        [showToolbars],
-    )
-
-    const animatedIconStyles = useAnimatedStyle(
-        () => ({
-            opacity: withTiming(showToolbars ? 1 : 0, { duration: 400 }),
-            transform: [{ scale: withTiming(showToolbars ? 1 : 0, { duration: 300 }) }],
-        }),
-        [showToolbars],
-    )
-
     const animatedFaviconStyles = useAnimatedStyle(
         () => ({
             transform: [{ scale: withTiming(showToolbars ? 1 : 0.6, { duration: 300 }) }],
@@ -110,7 +96,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
             <AnimatedFavicon
                 testID="URL-bar-dapp-favicon"
                 source={{ uri: parsedDappMetadata.icon, priority: FastImage.priority.high }}
-                style={[animatedFaviconStyles, styles.favicon]}
+                style={isIOS() ? [animatedFaviconStyles, styles.favicon] : styles.favicon}
             />
         ) : (
             <AnimatedBaseIcon
@@ -120,7 +106,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                 bg={COLORS.GREY_600}
                 size={12}
                 p={6}
-                style={[animatedFaviconStyles, styles.favicon]}
+                style={isIOS() ? [animatedFaviconStyles, styles.favicon] : styles.favicon}
             />
         )
     }, [parsedDappMetadata, animatedFaviconStyles])
@@ -132,7 +118,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
 
     return (
         <>
-            <Animated.View style={[styles.animatedContainer, animatedStyles]}>
+            <Animated.View style={styles.animatedContainer}>
                 <AnimatedBaseView style={styles.inputContainer}>
                     {/* Icon on the left */}
                     <AnimatedBaseIcon
@@ -144,7 +130,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                         haptics="Light"
                         size={16}
                         p={8}
-                        style={[animatedIconStyles, styles.iconButton]}
+                        style={styles.iconButton}
                     />
 
                     {/* URL Text centered */}
@@ -159,7 +145,11 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                             flexDirection="row"
                             justifyContent="center"
                             gap={8}>
-                            {websiteFavicon}
+                            {isLoading ? (
+                                <Spinner color={COLORS.WHITE} size={20} style={styles.spinner} />
+                            ) : (
+                                websiteFavicon
+                            )}
                             <AnimatedBaseText
                                 allowFontScaling={false}
                                 typographyFont="bodySemiBold"
@@ -178,7 +168,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                         haptics="Light"
                         size={16}
                         p={8}
-                        style={[animatedIconStyles, styles.iconButton]}
+                        style={styles.iconButton}
                     />
                 </AnimatedBaseView>
             </Animated.View>
@@ -249,5 +239,8 @@ const styles = StyleSheet.create({
     },
     iconButton: {
         transformOrigin: "center",
+    },
+    spinner: {
+        padding: 2,
     },
 })

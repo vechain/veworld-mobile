@@ -1,0 +1,1 @@
+export { useDelegatorDepositAddress } from "./useDelegatorDepositAddress"

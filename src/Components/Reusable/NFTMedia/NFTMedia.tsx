@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { useTheme, useNFTMedia, useThemedStyles } from "~Hooks"
+import { useTheme, useThemedStyles } from "~Hooks"
+import { useNFTMedia } from "~Hooks/useNFTMedia"
 import { NFTMediaType, NFTMedia as Media } from "~Model"
 import { warn } from "~Utils"
 import { NFTVideo } from "../NFTVideo"

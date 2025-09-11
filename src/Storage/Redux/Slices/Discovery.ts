@@ -18,7 +18,7 @@ export type LoginSession = { genesisId: string; url: string; name: string } & (
 export type Tab = {
     id: string
     href: string
-    preview?: string
+    previewPath?: string
     favicon?: string
     title: string
 }

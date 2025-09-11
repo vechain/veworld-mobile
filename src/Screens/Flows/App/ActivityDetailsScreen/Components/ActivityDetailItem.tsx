@@ -10,6 +10,7 @@ type Props = {
     activityDetail: ActivityDetailContent
     border?: boolean
     isLoading?: boolean
+    testID?: string
 }
 
 const ActivityDetailItemSkeleton = () => {
@@ -33,70 +34,76 @@ const ActivityDetailItemSkeleton = () => {
     )
 }
 
-export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, border = true, isLoading = false }) => {
-    const theme = useTheme()
+export const ActivityDetailItem: React.FC<Props> = memo(
+    ({ activityDetail, border = true, isLoading = false, testID }) => {
+        const theme = useTheme()
 
-    const activityDetailValue = useMemo(() => {
-        if (isLoading) return <ActivityDetailItemSkeleton />
-        if (typeof activityDetail.value === "string")
-            return (
-                <BaseText typographyFont={activityDetail.typographyFont} underline={activityDetail.underline}>
-                    {activityDetail.value ?? ""}
-                </BaseText>
-            )
-        return activityDetail.value
-    }, [activityDetail.typographyFont, activityDetail.underline, activityDetail.value, isLoading])
-
-    return (
-        <BaseView
-            key={activityDetail.id}
-            w={100}
-            pt={12}
-            style={[
-                baseStyles.container,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {
-                    borderBottomColor: border ? theme.colors.separator : "",
-                    borderBottomWidth: border ? 0.5 : 0,
-                },
-            ]}
-            justifyContent="flex-start">
-            <BaseView>
-                <BaseText typographyFont="body" pb={5}>
-                    {activityDetail.eventName ?? ""}
-                </BaseText>
-                {typeof activityDetail.title === "string" ? (
-                    <BaseText typographyFont="body" pb={5}>
-                        {activityDetail.title}
+        const activityDetailValue = useMemo(() => {
+            if (isLoading) return <ActivityDetailItemSkeleton />
+            if (typeof activityDetail.value === "string")
+                return (
+                    <BaseText
+                        typographyFont={activityDetail.typographyFont}
+                        underline={activityDetail.underline}
+                        testID={testID ? `${testID}-value` : undefined}>
+                        {activityDetail.value ?? ""}
                     </BaseText>
-                ) : (
-                    activityDetail.title
-                )}
+                )
+            return activityDetail.value
+        }, [activityDetail.typographyFont, activityDetail.underline, activityDetail.value, isLoading, testID])
 
-                <BaseTouchable
-                    action={activityDetail.onValuePress}
-                    disabled={!activityDetail.onValuePress}
-                    style={baseStyles.valueContainer}>
-                    {activityDetailValue}
+        return (
+            <BaseView
+                key={activityDetail.id}
+                w={100}
+                pt={12}
+                style={[
+                    baseStyles.container,
+                    // eslint-disable-next-line react-native/no-inline-styles
+                    {
+                        borderBottomColor: border ? theme.colors.separator : "",
+                        borderBottomWidth: border ? 0.5 : 0,
+                    },
+                ]}
+                justifyContent="flex-start">
+                <BaseView>
+                    <BaseText typographyFont="body" pb={5}>
+                        {activityDetail.eventName ?? ""}
+                    </BaseText>
+                    {typeof activityDetail.title === "string" ? (
+                        <BaseText typographyFont="body" pb={5}>
+                            {activityDetail.title}
+                        </BaseText>
+                    ) : (
+                        activityDetail.title
+                    )}
 
-                    {activityDetail.valueAdditional && (
-                        <FiatBalance
-                            typographyFont="buttonSecondary"
-                            ml={6}
-                            balances={[activityDetail.valueAdditional]}
-                            prefix="≈ "
-                        />
-                    )}
-                    {activityDetail.icon && (
-                        <BaseView pl={3}>
-                            <BaseIcon name={activityDetail.icon} size={12} color={theme.colors.text} />
-                        </BaseView>
-                    )}
-                </BaseTouchable>
+                    <BaseTouchable
+                        action={activityDetail.onValuePress}
+                        disabled={!activityDetail.onValuePress}
+                        style={baseStyles.valueContainer}>
+                        {activityDetailValue}
+
+                        {activityDetail.valueAdditional && (
+                            <FiatBalance
+                                typographyFont="buttonSecondary"
+                                ml={6}
+                                balances={[activityDetail.valueAdditional]}
+                                prefix="≈ "
+                                testID={testID ? `${testID}-additional` : undefined}
+                            />
+                        )}
+                        {activityDetail.icon && (
+                            <BaseView pl={3}>
+                                <BaseIcon name={activityDetail.icon} size={12} color={theme.colors.text} />
+                            </BaseView>
+                        )}
+                    </BaseTouchable>
+                </BaseView>
             </BaseView>
-        </BaseView>
-    )
-})
+        )
+    },
+)
 
 const baseStyles = StyleSheet.create({
     container: {
