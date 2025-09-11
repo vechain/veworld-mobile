@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { InteractionManager, Linking } from "react-native"
-import { ConnectionLinkParams, SignTransactionParams } from "./types"
+import { ConnectionLinkParams, ExternalAppRequestParams } from "./types"
 import { useInteraction } from "../InteractionProvider"
 // import { DeepLinkError } from "~Utils/ErrorMessageUtils"
 // import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
 // import { error } from "~Utils"
-import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { selectExternalDappSessions, useAppSelector } from "~Storage/Redux"
+import { DAppUtils } from "~Utils"
 
 type DeepLinkEvent = "discover" | "connect" | "signTransaction" | "signCertificate" | "signTypedData" | "disconnect"
 
@@ -19,6 +20,13 @@ type DappURLRequest = {
     event: Exclude<DeepLinkEvent, "discover">
     request: Record<string, string>
 }
+
+type ContextType = {
+    currentDappPublicKey: string | null
+    setCurrentDappPublicKey: (publicKey: string | null) => void
+}
+
+const Context = React.createContext<ContextType | undefined>(undefined)
 
 const parseUrl = (url: string): DiscoverURLRequest | DappURLRequest => {
     const urlObj = new URL(url)
@@ -38,6 +46,7 @@ const parseUrl = (url: string): DiscoverURLRequest | DappURLRequest => {
 }
 
 export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) => {
+    const [currentDappPublicKey, setCurrentDappPublicKey] = useState<string | null>(null)
     const { navigateWithTab } = useBrowserTab()
     const mounted = useRef(false)
     const {
@@ -47,12 +56,19 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         transactionBsRef,
         setDisconnectBsData,
         disconnectBsRef,
+        setTypedDataBsData,
+        typedDataBsRef,
+        setCertificateBsData,
+        certificateBsRef,
     } = useInteraction()
-    const { parseTransactionRequest, parseDisconnectRequest } = useExternalDappConnection()
+    const externalDappSessions = useAppSelector(selectExternalDappSessions)
 
     const handleConnectionLink = useCallback(
         (params: ConnectionLinkParams) => {
-            // console.log("connection link", params)
+            if (currentDappPublicKey) {
+                return
+            }
+            setCurrentDappPublicKey(params.public_key)
             setConnectBsData({
                 type: "external-app",
                 appName: params.app_name,
@@ -64,36 +80,69 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             })
             connectBsRef.current?.present()
         },
-        [setConnectBsData, connectBsRef],
+        [setConnectBsData, connectBsRef, currentDappPublicKey],
     )
 
     const handleSignTransaction = useCallback(
-        async (params: SignTransactionParams) => {
-            const request = await parseTransactionRequest(params.request)
+        async (params: ExternalAppRequestParams) => {
+            if (currentDappPublicKey) {
+                return
+            }
+            const request = await DAppUtils.parseTransactionRequest(params.request, externalDappSessions)
             if (request) {
+                // setCurrentDappPublicKey(request.publicKey)
                 setTransactionBsData(request)
                 transactionBsRef.current?.present()
             }
         },
-        [parseTransactionRequest, setTransactionBsData, transactionBsRef],
+        [setTransactionBsData, transactionBsRef, currentDappPublicKey, externalDappSessions],
+    )
+
+    const handleSignTypedData = useCallback(
+        async (params: ExternalAppRequestParams) => {
+            if (currentDappPublicKey) {
+                return
+            }
+            const request = await DAppUtils.parseTypedDataRequest(params.request, externalDappSessions)
+            if (request) {
+                // setCurrentDappPublicKey(request.publicKey)
+                setTypedDataBsData(request)
+                typedDataBsRef.current?.present()
+            }
+        },
+        [setTypedDataBsData, typedDataBsRef, currentDappPublicKey, externalDappSessions],
+    )
+
+    const handleSignCertificate = useCallback(
+        async (params: ExternalAppRequestParams) => {
+            if (currentDappPublicKey) {
+                return
+            }
+            const request = await DAppUtils.parseCertificateRequest(params.request, externalDappSessions)
+            if (request) {
+                // setCurrentDappPublicKey(request.publicKey)
+                setCertificateBsData(request)
+                certificateBsRef.current?.present()
+            }
+        },
+        [setCertificateBsData, certificateBsRef, currentDappPublicKey, externalDappSessions],
     )
 
     const handleDisconnect = useCallback(
-        async (params: SignTransactionParams) => {
-            const request = await parseDisconnectRequest(params.request)
+        async (params: ExternalAppRequestParams) => {
+            if (currentDappPublicKey) {
+                return
+            }
+
+            const request = await DAppUtils.parseDisconnectRequest(params.request, externalDappSessions)
             if (request) {
+                setCurrentDappPublicKey(request.publicKey)
                 setDisconnectBsData(request)
                 disconnectBsRef.current?.present()
             }
         },
-        [parseDisconnectRequest, setDisconnectBsData, disconnectBsRef],
+        [setDisconnectBsData, disconnectBsRef, externalDappSessions, currentDappPublicKey],
     )
-
-    // const handleInvalidEvent = (redirectUrl: string) => {
-    //     const err = new DeepLinkError(DeepLinkErrorCode.MethodNotFound)
-    //     error("EXTERNAL_DAPP_CONNECTION", err)
-    //     Linking.openURL(`${redirectUrl}?errorMessage=${err.message}&errorCode=${err.name}`)
-    // }
 
     useEffect(() => {
         const handleDeepLink = ({ url }: { url: string }) => {
@@ -107,14 +156,16 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     handleConnectionLink(request as ConnectionLinkParams)
                     break
                 case "signTransaction":
-                    handleSignTransaction(request as SignTransactionParams)
+                    handleSignTransaction(request as ExternalAppRequestParams)
                     break
                 case "signCertificate":
+                    handleSignCertificate(request as ExternalAppRequestParams)
                     break
                 case "signTypedData":
+                    handleSignTypedData(request as ExternalAppRequestParams)
                     break
                 case "disconnect":
-                    handleDisconnect(request as SignTransactionParams)
+                    handleDisconnect(request as ExternalAppRequestParams)
                     break
                 default:
                     break
@@ -136,5 +187,15 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    return <>{children}</>
+    return <Context.Provider value={{ currentDappPublicKey, setCurrentDappPublicKey }}>{children}</Context.Provider>
+}
+
+export const useDeepLinksSession = () => {
+    const context = useContext(Context)
+
+    if (!context) {
+        throw new Error("useDeepLinksSession must be used within a DeepLinksProvider")
+    }
+
+    return context
 }

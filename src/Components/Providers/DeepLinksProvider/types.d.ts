@@ -15,7 +15,7 @@ type DisconnectParams = {
     redirect_url: string
 }
 
-type SignTransactionParams = {
+type ExternalAppRequestParams = {
     /**
      * Encoded URI of the transaction request object
      */

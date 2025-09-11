@@ -3,7 +3,8 @@ import { Linking } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import nacl from "tweetnacl"
 import { decodeBase64, encodeBase64 } from "tweetnacl-util"
-import { BaseExternalAppRequest, DisconnectAppRequest, NETWORK_TYPE, TransactionRequest } from "~Model"
+import { useDeepLinksSession } from "~Components/Providers/DeepLinksProvider"
+import { NETWORK_TYPE } from "~Model"
 import {
     useAppSelector,
     selectSignKeyPair,
@@ -12,12 +13,13 @@ import {
     newExternalDappSession,
     setSignKeyPair,
     selectSelectedAccountOrNull,
-    selectExternalDappSessions,
     deleteExternalDappSession,
+    selectExternalDappSessions,
 } from "~Storage/Redux"
-import { error } from "~Utils"
+import { DAppUtils, error } from "~Utils"
 import { DeepLinkError } from "~Utils/ErrorMessageUtils"
 import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
+import { assertDefined } from "~Utils/TypeUtils"
 
 type OnConnectParams = {
     dappPublicKey: string
@@ -32,24 +34,18 @@ type OnDappDisconnectedParams = {
     redirectUrl: string
 }
 
-type ExternalRequestParsedPayload<T> = {
-    transaction?: T
-    typedData?: T
-    certificate?: T
-    session: string
-}
-
-type ParsedRequest<T> = {
-    payload: ExternalRequestParsedPayload<T>
-    request: BaseExternalAppRequest
+type OnSuccessParams = {
+    redirectUrl: string
+    data: object
+    publicKey: string
 }
 
 export const useExternalDappConnection = () => {
     const signKeyPair = useAppSelector(selectSignKeyPair)
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
+    const { setCurrentDappPublicKey } = useDeepLinksSession()
     const externalDappSessions = useAppSelector(selectExternalDappSessions)
-
     const dispatch = useAppDispatch()
 
     const getKeyPairFromPrivateKey = useCallback((privateKey: string) => {
@@ -111,20 +107,27 @@ export const useExternalDappConnection = () => {
                     }),
                 )
 
-                await Linking.openURL(
-                    `${redirectUrl}?public_key=${encodeURIComponent(
-                        encodeBase64(keyPair.publicKey),
-                    )}&data=${encodeURIComponent(encodeBase64(encrypted))}&nonce=${encodeURIComponent(
-                        encodeBase64(nonce),
-                    )}`,
-                )
+                const params = new URLSearchParams({
+                    public_key: encodeBase64(keyPair.publicKey),
+                    data: encodeBase64(encrypted),
+                    nonce: encodeBase64(nonce),
+                })
+                await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+                setCurrentDappPublicKey(null)
             } catch (_err: unknown) {
                 const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
+
                 error("EXTERNAL_DAPP_CONNECTION", err)
-                await Linking.openURL(`${redirectUrl}?errorMessage=${err.message}&errorCode=${err.name}`)
+
+                const params = new URLSearchParams({
+                    errorMessage: err.message,
+                    errorCode: err.code.toString(),
+                })
+                await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+                setCurrentDappPublicKey(null)
             }
         },
-        [dispatch, network.type, selectedAccount, signKeyPair],
+        [dispatch, network.type, selectedAccount, signKeyPair, setCurrentDappPublicKey],
     )
 
     const onDappDisconnected = useCallback(
@@ -134,120 +137,99 @@ export const useExternalDappConnection = () => {
             // console.log("redirectUrl", redirectUrl)
             dispatch(deleteExternalDappSession({ appPublicKey: dappPublicKey, network: dappNetwork }))
             await Linking.openURL(`${redirectUrl}`)
+            setCurrentDappPublicKey(null)
         },
-        [dispatch],
+        [dispatch, setCurrentDappPublicKey],
     )
 
-    const parseRequest = useCallback(
-        async <T,>(encodedRequest: string): Promise<ParsedRequest<T> | undefined> => {
-            const request = decodeURIComponent(encodedRequest)
-            const { payload: encPayload, ...decodedRequest } = JSON.parse(
-                new TextDecoder().decode(decodeBase64(request)),
-            )
-            try {
-                const session = externalDappSessions[decodedRequest.publicKey]
+    const getSessionKeyPair = useCallback(
+        (publicKey: string) => {
+            const session = externalDappSessions[publicKey]
 
-                if (!session) {
-                    await Linking.openURL(
-                        `${decodedRequest.redirectUrl}?errorMessage=${encodeURIComponent(
-                            "Unauthorized",
-                        )}&error_code=401`,
-                    )
-                    return
-                }
-                //TODO: verify session is valid
+            //TODO: handle missing session
+            if (!session) {
+                return null
+            }
 
-                const KP = nacl.box.keyPair.fromSecretKey(decodeBase64(session.keyPair.privateKey))
-
-                // Decrypt the payload
-                const sharedSecret = nacl.box.before(decodeBase64(decodedRequest.publicKey), KP.secretKey)
-
-                const decryptedPayload = nacl.box.open.after(
-                    decodeBase64(encPayload),
-                    decodeBase64(decodedRequest.nonce),
-                    sharedSecret,
-                )
-
-                if (!decryptedPayload) {
-                    await Linking.openURL(
-                        `${decodedRequest.redirectUrl}?erroMessage=${encodeURIComponent(
-                            "Invalid payload",
-                        )}&error_code=400`,
-                    )
-                    return
-                }
-
-                const payload = JSON.parse(new TextDecoder().decode(decryptedPayload))
-
-                return { payload, request: decodedRequest } as ParsedRequest<T>
-            } catch (e) {
-                const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
-                error("EXTERNAL_DAPP_CONNECTION", err)
-                await Linking.openURL(`${decodedRequest.redirectUrl}?errorMessage=${err.message}&errorCode=${err.code}`)
-                return
+            return {
+                publicKey: session.keyPair.publicKey,
+                secretKey: session.keyPair.privateKey,
             }
         },
         [externalDappSessions],
     )
 
-    const parseTransactionRequest = useCallback(
-        async (encodedRequest: string): Promise<TransactionRequest | undefined> => {
-            const parsedRequest = await parseRequest<TransactionRequest>(encodedRequest)
+    /**
+     * Called when the operation requested form the external app is successful
+     * @param redirectUrl - The redirect url to send the data to
+     * @param data - The encrypted data to send to the redirect url
+     * @param nonce - The nonce to decrypt the data
+     * @param publicKey - The public key to decrypt the data
+     */
+    const onSuccess = useCallback(
+        async ({ redirectUrl, data, publicKey }: OnSuccessParams) => {
+            const sessionKeyPair = getSessionKeyPair(publicKey)
+            assertDefined(sessionKeyPair)
 
-            // console.log("parsedRequest", parsedRequest)
+            const [nonce, encryptedPayload] = DAppUtils.encryptPayload(
+                JSON.stringify(data),
+                publicKey,
+                sessionKeyPair.secretKey,
+            )
 
-            if (!parsedRequest) {
-                throw new Error("Invalid request") //TODO: handle invalid request
-            }
-
-            if (!("transaction" in parsedRequest.payload)) {
-                await Linking.openURL(
-                    `${parsedRequest?.request.redirectUrl}?errorMessage=${encodeURIComponent(
-                        "Invalid request",
-                    )}&error_code=400`,
-                )
-                throw new Error("Invalid request") //TODO: handle invalid request
-            }
-            return { ...parsedRequest.payload.transaction, ...parsedRequest.request } as TransactionRequest
+            const params = new URLSearchParams({
+                data: encodeBase64(encryptedPayload),
+                nonce: encodeBase64(nonce),
+                public_key: publicKey,
+            })
+            await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+            setCurrentDappPublicKey(null)
         },
-        [parseRequest],
+        [getSessionKeyPair, setCurrentDappPublicKey],
     )
 
-    const parseDisconnectRequest = useCallback(
-        async (encodedRequest: string): Promise<DisconnectAppRequest | undefined> => {
-            const parsedRequest = await parseRequest<DisconnectAppRequest>(encodedRequest)
-            if (!parsedRequest) {
-                throw new Error("Invalid request") //TODO: handle invalid request
-            }
-            return { ...parsedRequest.request } as DisconnectAppRequest
+    /**
+     * Called when the operation requested form the external app is failed
+     * @param redirectUrl - The redirect url to send the data to
+     */
+    const onFailure = useCallback(
+        async (redirectUrl: string) => {
+            const err = new DeepLinkError(DeepLinkErrorCode.TransactionRejected)
+            const params = new URLSearchParams({
+                errorMessage: err.message,
+                errorCode: err.code.toString(),
+            })
+
+            await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+            setCurrentDappPublicKey(null)
         },
-        [parseRequest],
+        [setCurrentDappPublicKey],
     )
 
-    const onTransactionSuccess = useCallback(async (redirectUrl: string, txId: string) => {
-        await Linking.openURL(`${redirectUrl}/onTransactionSuccess?id=${encodeURIComponent(txId)}`)
-    }, [])
-
-    const onTransactionFailure = useCallback(async (redirectUrl: string) => {
-        const err = new DeepLinkError(DeepLinkErrorCode.TransactionRejected)
-        await Linking.openURL(
-            `${redirectUrl}/onTransactionFailure?errorMessage=${encodeURIComponent(err.message)}&errorCode=${err.code}`,
-        )
-    }, [])
-
-    const onRejectRequest = useCallback(async (redirectUrl: string) => {
-        const err = new DeepLinkError(DeepLinkErrorCode.UserRejected)
-        await Linking.openURL(`${redirectUrl}?errorMessage=${encodeURIComponent(err.message)}&errorCode=${err.code}`)
-    }, [])
+    /**
+     * Called when the operation requested form the external app is rejected by the user
+     * @param redirectUrl - The redirect url to send the data to
+     */
+    const onRejectRequest = useCallback(
+        async (redirectUrl: string) => {
+            const err = new DeepLinkError(DeepLinkErrorCode.UserRejected)
+            const params = new URLSearchParams({
+                errorMessage: err.message,
+                errorCode: err.code.toString(),
+            })
+            await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+            setCurrentDappPublicKey(null)
+        },
+        [setCurrentDappPublicKey],
+    )
 
     return {
         onConnect,
         getKeyPairFromPrivateKey,
         onRejectRequest,
-        parseTransactionRequest,
-        parseDisconnectRequest,
-        onTransactionSuccess,
-        onTransactionFailure,
+        onSuccess,
+        onFailure,
         onDappDisconnected,
+        getSessionKeyPair,
     }
 }

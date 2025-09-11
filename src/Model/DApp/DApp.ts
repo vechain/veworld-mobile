@@ -78,6 +78,8 @@ type WcCertRequest = BaseCertificateRequest & BaseWcRequest
 
 type InAppCertRequest = BaseCertificateRequest & BaseInAppRequest
 
+type ExternalAppCertRequest = BaseCertificateRequest & BaseExternalAppRequest
+
 type WcTxRequest = BaseTransactionRequest & BaseWcRequest
 
 type InAppTxRequest = BaseTransactionRequest & BaseInAppRequest
@@ -88,11 +90,13 @@ type WcSignDataRequest = BaseTypedDataRequest & BaseWcRequest
 
 type InAppTypedDataRequest = BaseTypedDataRequest & BaseInAppRequest
 
-export type CertificateRequest = WcCertRequest | InAppCertRequest
+type ExternalAppTypedDataRequest = BaseTypedDataRequest & BaseExternalAppRequest
+
+export type CertificateRequest = WcCertRequest | InAppCertRequest | ExternalAppCertRequest
 
 export type TransactionRequest = WcTxRequest | InAppTxRequest | ExternalAppTxRequest
 
-export type TypeDataRequest = WcSignDataRequest | InAppTypedDataRequest
+export type TypeDataRequest = WcSignDataRequest | InAppTypedDataRequest | ExternalAppTypedDataRequest
 
 export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest | BaseExternalConnectAppRequest
 
@@ -163,4 +167,19 @@ export type ExternalAppRequest = BaseExternalAppRequest & {
      * It is then parsed into a TransactionRequest
      */
     payload: string
+}
+
+type ExternalRequestParsedPayload<T> = {
+    transaction?: T
+    typedData?: T
+    certificate?: T
+    session: string
+}
+
+/**
+ * Request parsed from the external app encrypted payload
+ */
+export type ParsedRequest<T> = {
+    payload: ExternalRequestParsedPayload<T>
+    request: BaseExternalAppRequest
 }

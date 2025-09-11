@@ -26,6 +26,7 @@ import { AccountUtils, error, HexUtils } from "~Utils"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { DappWithDetails } from "../DappWithDetails"
 import { Signable } from "../Signable"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 
 type Request = {
     request: CertificateRequest
@@ -150,6 +151,8 @@ export const CertificateBottomSheet = () => {
 
     const { failRequest, processRequest } = useWalletConnect()
 
+    const { onSuccess, onFailure, onRejectRequest } = useExternalDappConnection()
+
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
 
     const nav = useNavigation()
@@ -223,6 +226,14 @@ export const CertificateBottomSheet = () => {
 
                 if (request.type === "wallet-connect") {
                     await processRequest(request.requestEvent, res)
+                } else if (request.type === "external-app") {
+                    await onSuccess({
+                        redirectUrl: request.redirectUrl,
+                        data: {
+                            signature,
+                        },
+                        publicKey: request.publicKey,
+                    })
                 } else {
                     postMessage({ id: request.id, data: res, method: RequestMethods.SIGN_CERTIFICATE })
                 }
@@ -245,6 +256,8 @@ export const CertificateBottomSheet = () => {
 
                 if (request.type === "wallet-connect") {
                     await failRequest(request.requestEvent, getRpcError("internal"))
+                } else if (request.type === "external-app") {
+                    await onFailure(request.redirectUrl)
                 } else {
                     postMessage({
                         id: request.id,
@@ -261,6 +274,8 @@ export const CertificateBottomSheet = () => {
             failRequest,
             nav,
             onCloseBs,
+            onFailure,
+            onSuccess,
             postMessage,
             processRequest,
             selectedAccount,
@@ -274,6 +289,8 @@ export const CertificateBottomSheet = () => {
             setIsLoading(true)
             if (request.type === "wallet-connect") {
                 await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
+            } else if (request.type === "external-app") {
+                await onRejectRequest(request.redirectUrl)
             } else {
                 postMessage({
                     id: request.id,
@@ -284,7 +301,7 @@ export const CertificateBottomSheet = () => {
 
             track(AnalyticsEvent.DAPP_CERTIFICATE_REJECTED)
         },
-        [failRequest, postMessage, track],
+        [failRequest, postMessage, track, onRejectRequest],
     )
 
     const onCancel = useCallback(

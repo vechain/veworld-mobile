@@ -2,8 +2,11 @@ import { SignedDataRequest } from "~Components/Providers/InAppBrowserProvider/ty
 import { RequestMethods } from "~Constants"
 import { decodeBase64 } from "tweetnacl-util"
 import nacl from "tweetnacl"
-import { KeyPair, SessionState } from "~Storage/Redux"
-import { BaseTransactionRequest, ExternalAppRequest, TransactionRequest } from "~Model"
+import { SessionState } from "~Storage/Redux"
+import { CertificateRequest, DisconnectAppRequest, ParsedRequest, TransactionRequest, TypeDataRequest } from "~Model"
+import { DeepLinkError, DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
+import { Linking } from "react-native"
+import { error } from "~Utils/Logger/Logger"
 
 const isValidTxMessage = (message: unknown): message is Connex.Vendor.TxMessage => {
     if (!Array.isArray(message)) {
@@ -118,65 +121,161 @@ const generateFaviconUrl = (url: string, { size = 48 }: { size?: number } = {}) 
     return generatedUrl.href
 }
 
-const validateExternalAppSession = (session: string, signKeyPair: KeyPair) => {
-    const sessionKeyPair = nacl.sign.keyPair.fromSecretKey(decodeBase64(signKeyPair.privateKey))
+/**
+ * Encrypt the payload with the shared secret of the session
+ * @param payload - JSON stringified payload
+ * @returns The nonce and encrypted payload
+ */
+const encryptPayload = (payload: string, publicKey: string, secretKey: string): [Uint8Array, Uint8Array] => {
+    const nonce = nacl.randomBytes(24)
+    const payloadBytes = new TextEncoder().encode(payload)
+    const encryptedPayload = nacl.box(payloadBytes, nonce, decodeBase64(publicKey), decodeBase64(secretKey))
 
-    const decryptedSession = nacl.sign.open(decodeBase64(session), sessionKeyPair.publicKey)
-
-    if (!decryptedSession) {
-        return false
-    }
-
-    return true
+    return [nonce, encryptedPayload]
 }
 
-const parseSignTxRequest = (
-    request: string,
+// const validateExternalAppSession = (session: string, signKeyPair: KeyPair) => {
+//     const sessionKeyPair = nacl.sign.keyPair.fromSecretKey(decodeBase64(signKeyPair.privateKey))
+
+//     const decryptedSession = nacl.sign.open(decodeBase64(session), sessionKeyPair.publicKey)
+
+//     if (!decryptedSession) {
+//         return false
+//     }
+
+//     return true
+// }
+
+const parseRequest = async <T>(
+    encodedRequest: string,
     externalDappSessions: Record<string, SessionState>,
-    signKeyPair: KeyPair,
-) => {
-    const { payload: encPayload, ...decodedRequest }: ExternalAppRequest = JSON.parse(
-        new TextDecoder().decode(decodeBase64(request)),
-    )
+): Promise<ParsedRequest<T> | undefined> => {
+    const request = decodeURIComponent(encodedRequest)
+    const { payload: encPayload, ...decodedRequest } = JSON.parse(new TextDecoder().decode(decodeBase64(request)))
+    try {
+        const session = externalDappSessions[decodedRequest.publicKey]
 
-    const session = externalDappSessions[decodedRequest.publicKey]
+        if (!session) {
+            const err = new DeepLinkError(DeepLinkErrorCode.Unauthorized)
+            await Linking.openURL(
+                `${decodedRequest.redirectUrl}?errorMessage=${encodeURIComponent(err.message)}&errorCode=${err.code}`,
+            )
+            return
+        }
+        //TODO: verify session is valid
 
-    if (!session) {
-        throw new Error("Session not found")
+        const KP = nacl.box.keyPair.fromSecretKey(decodeBase64(session.keyPair.privateKey))
+
+        // Decrypt the payload
+        const sharedSecret = nacl.box.before(decodeBase64(decodedRequest.publicKey), KP.secretKey)
+
+        const decryptedPayload = nacl.box.open.after(
+            decodeBase64(encPayload),
+            decodeBase64(decodedRequest.nonce),
+            sharedSecret,
+        )
+
+        if (!decryptedPayload) {
+            const err = new DeepLinkError(DeepLinkErrorCode.InvalidPayload)
+            await Linking.openURL(
+                `${decodedRequest.redirectUrl}?erroMessage=${encodeURIComponent(err.message)}&errorCode=${err.code}`,
+            )
+            return
+        }
+
+        const payload = JSON.parse(new TextDecoder().decode(decryptedPayload))
+
+        return { payload, request: decodedRequest } as ParsedRequest<T>
+    } catch (e) {
+        const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
+        error("EXTERNAL_DAPP_CONNECTION", err)
+        await Linking.openURL(`${decodedRequest.redirectUrl}?errorMessage=${err.message}&errorCode=${err.code}`)
+        return
+    }
+}
+
+const parseTransactionRequest = async (
+    encodedRequest: string,
+    externalDappSessions: Record<string, SessionState>,
+): Promise<TransactionRequest | undefined> => {
+    const parsedRequest = await parseRequest<TransactionRequest>(encodedRequest, externalDappSessions)
+
+    if (!parsedRequest) {
+        const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
+        throw new Error(err.message)
     }
 
-    const sessionKeyPair = nacl.box.keyPair.fromSecretKey(decodeBase64(session.keyPair.privateKey))
-
-    // Decrypt the payload
-    const sharedSecret = nacl.box.before(decodeBase64(decodedRequest.publicKey), sessionKeyPair.secretKey)
-
-    const decryptedPayload = nacl.box.open.after(
-        decodeBase64(encPayload),
-        decodeBase64(decodedRequest.nonce),
-        sharedSecret,
-    )
-
-    if (!decryptedPayload) {
-        // TODO: Respond to the external app with an error using the error helper
-        throw new Error("500 - Invalid payload")
+    if (!("transaction" in parsedRequest.payload)) {
+        const err = new DeepLinkError(DeepLinkErrorCode.InvalidPayload)
+        const params = new URLSearchParams({
+            errorMessage: err.message,
+            errorCode: err.code.toString(),
+        })
+        await Linking.openURL(`${parsedRequest?.request.redirectUrl}?${params.toString()}`)
+        return
     }
 
-    const payload: {
-        transaction: BaseTransactionRequest
-        session: string
-    } = JSON.parse(new TextDecoder().decode(decryptedPayload))
+    return { ...parsedRequest.payload.transaction, ...parsedRequest.request } as TransactionRequest
+}
 
-    if (!payload.session || !validateExternalAppSession(payload.session, signKeyPair)) {
-        // TODO: Unauthorized
-        throw new Error("401 - Unauthorized")
+const parseTypedDataRequest = async (
+    encodedRequest: string,
+    externalDappSessions: Record<string, SessionState>,
+): Promise<TypeDataRequest | undefined> => {
+    const parsedRequest = await parseRequest<TypeDataRequest>(encodedRequest, externalDappSessions)
+
+    if (!parsedRequest) {
+        const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
+        throw new Error(err.message)
     }
 
-    const req: TransactionRequest = {
-        ...payload.transaction,
-        ...decodedRequest,
+    if (!("typedData" in parsedRequest.payload)) {
+        const err = new DeepLinkError(DeepLinkErrorCode.InvalidPayload)
+        const params = new URLSearchParams({
+            errorMessage: err.message,
+            errorCode: err.code.toString(),
+        })
+        await Linking.openURL(`${parsedRequest?.request.redirectUrl}?${params.toString()}`)
+        return
     }
 
-    return req
+    return { ...parsedRequest.payload.typedData, ...parsedRequest.request } as TypeDataRequest
+}
+
+const parseCertificateRequest = async (
+    encodedRequest: string,
+    externalDappSessions: Record<string, SessionState>,
+): Promise<CertificateRequest | undefined> => {
+    const parsedRequest = await parseRequest<CertificateRequest>(encodedRequest, externalDappSessions)
+
+    if (!parsedRequest) {
+        const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
+        throw new Error(err.message)
+    }
+
+    if (!("certificate" in parsedRequest.payload)) {
+        const err = new DeepLinkError(DeepLinkErrorCode.InvalidPayload)
+        const params = new URLSearchParams({
+            errorMessage: err.message,
+            errorCode: err.code.toString(),
+        })
+        await Linking.openURL(`${parsedRequest?.request.redirectUrl}?${params.toString()}`)
+        return
+    }
+
+    return { ...parsedRequest.payload.certificate, ...parsedRequest.request } as CertificateRequest
+}
+
+const parseDisconnectRequest = async (
+    encodedRequest: string,
+    externalDappSessions: Record<string, SessionState>,
+): Promise<DisconnectAppRequest | undefined> => {
+    const parsedRequest = await parseRequest<DisconnectAppRequest>(encodedRequest, externalDappSessions)
+    if (!parsedRequest) {
+        const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
+        throw new Error(err.message)
+    }
+    return { ...parsedRequest.request } as DisconnectAppRequest
 }
 
 export const DAppUtils = {
@@ -185,5 +284,9 @@ export const DAppUtils = {
     getAppHubIconUrl,
     isValidSignedDataMessage,
     generateFaviconUrl,
-    parseSignTxRequest,
+    parseTransactionRequest,
+    parseTypedDataRequest,
+    parseCertificateRequest,
+    parseDisconnectRequest,
+    encryptPayload,
 }
