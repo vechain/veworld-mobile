@@ -15,11 +15,11 @@ import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~S
 import { BigNutils } from "~Utils"
 import { getHistoricalVTHOClaimed } from "./historical"
 
-const getUserStargateNftsQueryKey = (network: NETWORK_TYPE, address: string | undefined, nodesLength: number) => [
+const getUserStargateNftsQueryKey = (network: NETWORK_TYPE, address: string | undefined, nodeIds: string[]) => [
     "userStargateNfts",
     network,
     address,
-    nodesLength,
+    nodeIds,
 ]
 
 export const getUserStargateNfts = async (
@@ -94,8 +94,12 @@ export const useUserStargateNfts = (stargateNodes: NodeInfo[] = [], isLoadingNod
     }, [network.type])
 
     const queryKey = useMemo(() => {
-        return getUserStargateNftsQueryKey(network.type, selectedAccount.address, stargateNodes.length)
-    }, [network.type, selectedAccount.address, stargateNodes.length])
+        return getUserStargateNftsQueryKey(
+            network.type,
+            selectedAccount.address,
+            stargateNodes.map(node => node.nodeId),
+        )
+    }, [network.type, selectedAccount.address, stargateNodes])
 
     const enabled =
         !!thor && !!stargateNodes.length && !!stargateNFTAddress && !!stargateDelegationAddress && !isLoadingNodes
