@@ -68,7 +68,7 @@ describe("SwitchWalletBottomSheet", () => {
         expect(screen.queryByTestId("SWITCH_WALLET_REQUEST_TITLE")).toBeNull()
     })
 
-    it.each(["in-app"] as const)("should be able to cancel switch (%s)", async () => {
+    it("should be able to cancel switch", async () => {
         const switchWalletBsRef = { current: { present: jest.fn(), close: jest.fn() } }
         const postMessage = jest.fn()
         jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
@@ -114,7 +114,7 @@ describe("SwitchWalletBottomSheet", () => {
         })
     })
 
-    it.each(["in-app"] as const)("should be able to switch wallet (%s)", async () => {
+    it("should be able to switch wallet", async () => {
         const switchWalletBsRef = { current: { present: jest.fn(), close: jest.fn() } }
         const postMessage = jest.fn()
         jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({

@@ -724,6 +724,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 return
             } else if ("purpose" in request.params.value) {
                 //Certificate message
+                //We can safely assume that if the key `purpose` in the parameters value, given that the typed-data message doesn't have it, it's 100% a certificate message
                 const isValid = DAppUtils.isValidCertMessage(request.params.value)
                 if (!isValid) {
                     return postMessage({
