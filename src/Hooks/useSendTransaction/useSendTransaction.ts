@@ -1,5 +1,6 @@
 import { showSuccessToast } from "~Components"
 import {
+    invalidateUserTokens,
     selectLastReviewTimestamp,
     selectSelectedAccount,
     selectSelectedNetwork,
@@ -75,6 +76,7 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
             }
 
             try {
+                await dispatch(invalidateUserTokens(selectedAccount.address, queryClient))
                 await dispatch(updateAccountBalances(selectedAccount.address, queryClient))
             } catch (balanceError) {
                 // Log the balance update error but don't re-throw,

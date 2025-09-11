@@ -34,6 +34,7 @@ import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import {
     addOfficialTokens,
+    invalidateUserTokens,
     selectBalanceVisible,
     selectCurrency,
     selectSelectedAccount,
@@ -138,13 +139,17 @@ export const HomeScreen = () => {
         await dispatch(updateAccountBalances(selectedAccount.address, queryClient))
     }, [dispatch, queryClient, selectedAccount.address])
 
+    const invalidateTokens = useCallback(async () => {
+        await dispatch(invalidateUserTokens(selectedAccount.address, queryClient))
+    }, [dispatch, queryClient, selectedAccount.address])
+
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
 
-        await Promise.all([invalidateStargateQueries(), invalidateBalanceQueries()])
+        await Promise.all([invalidateStargateQueries(), invalidateBalanceQueries(), invalidateTokens()])
 
         setRefreshing(false)
-    }, [invalidateBalanceQueries, invalidateStargateQueries])
+    }, [invalidateBalanceQueries, invalidateStargateQueries, invalidateTokens])
 
     const { animateEntering } = useMemoizedAnimation({
         enteringAnimation: new FadeInRight(),

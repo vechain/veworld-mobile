@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useCallback } from "react"
-import { refreshNFTs, updateAccountBalances, useAppDispatch } from "~Storage/Redux"
+import { invalidateUserTokens, refreshNFTs, updateAccountBalances, useAppDispatch } from "~Storage/Redux"
 
 export const useStateReconciliation = () => {
     const dispatch = useAppDispatch()
@@ -8,6 +8,7 @@ export const useStateReconciliation = () => {
 
     const updateBalances = useCallback(
         (params: { accountAddress: string }) => {
+            dispatch(invalidateUserTokens(params.accountAddress, queryClient))
             dispatch(updateAccountBalances(params.accountAddress, queryClient))
         },
         [dispatch, queryClient],
