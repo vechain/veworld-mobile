@@ -8,12 +8,14 @@ import { ethers } from "ethers"
 const mockDispatch = jest.fn()
 
 const mockUpdateAccountBalances = jest.fn()
+const mockInvalidateUserTokens = jest.fn()
 
 jest.mock("~Storage/Redux", () => {
     const originalModule = jest.requireActual("~Storage/Redux")
     return {
         ...originalModule,
         updateAccountBalances: () => mockUpdateAccountBalances,
+        invalidateUserTokens: () => mockInvalidateUserTokens,
         useAppDispatch: () => mockDispatch,
     }
 })
@@ -56,6 +58,7 @@ describe("useSendTransaction", () => {
     beforeEach(() => {
         mockDispatch.mockClear()
         mockUpdateAccountBalances.mockClear()
+        mockInvalidateUserTokens.mockClear()
     })
 
     it("should render correctly", async () => {
@@ -125,6 +128,37 @@ describe("useSendTransaction", () => {
         // Verify dispatch was called
         expect(mockDispatch).toHaveBeenCalled()
         expect(mockUpdateAccountBalances).toHaveBeenCalled()
+    })
+
+    it("should return transaction ID even if invalidate user tokens fails", async () => {
+        mockInvalidateUserTokens.mockImplementationOnce(() => {
+            throw new Error("Balance update failed")
+        })
+        // Setup mock dispatch to actually execute the thunk action
+        mockDispatch.mockImplementation(action => {
+            if (typeof action === "function") {
+                return action()
+            }
+            return action
+        })
+
+        const { result } = renderHook(() => useSendTransaction(jest.fn()), {
+            wrapper: TestWrapper,
+        })
+        expect(result.current).toEqual({
+            sendTransaction: expect.any(Function),
+        })
+        const signedTx = toSignedTx(dappTransaction1)
+        ;(axios.post as jest.Mock).mockResolvedValueOnce({
+            data: { id: signedTx.id },
+        })
+
+        // Test should pass since the hook catches the error and returns the transaction ID
+        await expect(result.current.sendTransaction(signedTx)).resolves.toEqual(signedTx.id)
+        // Verify dispatch was called
+        expect(mockDispatch).toHaveBeenCalled()
+        expect(mockInvalidateUserTokens).toHaveBeenCalled()
+        expect(mockUpdateAccountBalances).not.toHaveBeenCalled()
     })
 
     it("should handle NFT tx", async () => {

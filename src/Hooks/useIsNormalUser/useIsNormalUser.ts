@@ -1,20 +1,18 @@
-import { useQueries, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { ThorClient } from "@vechain/sdk-network"
 import { useEffect, useMemo } from "react"
 import { VET } from "~Constants"
 import generatedAbi from "~Generated/abi"
 import { useMainnetThorClient } from "~Hooks/useThorClient"
-import { useTokenBalanceConfig } from "~Hooks/useTokenBalance"
-import { NETWORK_TYPE } from "~Model"
 import {
     selectAccountsWithoutObserved,
     selectIsNormalUser,
-    selectNetworksByType,
     setIsNormalUser,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
+import { useVetBalances } from "./useVetBalances"
 
 const VET_AMOUNT_THRESHOLD = "10"
 const B3TR_ACTIONS_THRESHOLD = 3
@@ -40,33 +38,8 @@ const getAccountsActions = async (thorClient: ThorClient, addresses: string[]) =
 
 export const useIsNormalUser = () => {
     const accounts = useAppSelector(selectAccountsWithoutObserved)
-    const networks = useAppSelector(selectNetworksByType(NETWORK_TYPE.MAIN))
-    const thor = useMainnetThorClient()
     const cachedIsNormalUser = useAppSelector(selectIsNormalUser)
-    const queryConfigs = useMemo(
-        () =>
-            accounts.map(account => ({
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                ...useTokenBalanceConfig({
-                    address: account.address,
-                    network: networks[0],
-                    thor: thor,
-                    tokenAddress: VET.address,
-                }),
-                enabled: !cachedIsNormalUser,
-            })),
-        [accounts, cachedIsNormalUser, networks, thor],
-    )
-    const { data: balances } = useQueries({
-        queries: queryConfigs,
-        combine(results) {
-            return {
-                data: results
-                    .map(result => result.data)
-                    .filter((balance): balance is NonNullable<typeof balance> => balance !== undefined),
-            }
-        },
-    })
+    const { data: balances } = useVetBalances(!cachedIsNormalUser)
     const dispatch = useAppDispatch()
     const mainnetThorClient = useMainnetThorClient()
 
