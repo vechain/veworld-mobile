@@ -104,6 +104,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
+                    //TODO: verify session is valid
                     setTransactionBsData({
                         ...request,
                         redirectUrl: params.redirect_url,
@@ -112,6 +113,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             } catch (e) {
                 release?.()
+                //TODO: check the error code and dispatch the correct error
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
@@ -133,6 +135,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
+                    //TODO: verify session is valid
                     setTypedDataBsData({
                         ...request,
                         redirectUrl: params.redirect_url,
@@ -141,6 +144,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             } catch (e) {
                 release?.()
+                //TODO: check the error code and dispatch the correct error
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
@@ -162,6 +166,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
+                    //TODO: verify session is valid
                     setCertificateBsData({
                         ...request,
                         redirectUrl: params.redirect_url,
@@ -170,6 +175,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             } catch (e) {
                 release?.()
+                //TODO: check the error code and dispatch the correct error
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
@@ -191,6 +197,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
+                    //TODO: verify session is valid
                     setDisconnectBsData({
                         ...request,
                         redirectUrl: params.redirect_url,
@@ -199,6 +206,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             } catch (e) {
                 release?.()
+                //TODO: check the error code and dispatch the correct error
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },

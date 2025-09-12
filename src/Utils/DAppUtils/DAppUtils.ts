@@ -136,13 +136,10 @@ const encryptPayload = (payload: string, publicKey: string, secretKey: string): 
 
 // const validateExternalAppSession = (session: string, signKeyPair: KeyPair) => {
 //     const sessionKeyPair = nacl.sign.keyPair.fromSecretKey(decodeBase64(signKeyPair.privateKey))
-
 //     const decryptedSession = nacl.sign.open(decodeBase64(session), sessionKeyPair.publicKey)
-
 //     if (!decryptedSession) {
 //         return false
 //     }
-
 //     return true
 // }
 
@@ -154,18 +151,17 @@ const parseRequest = async <T>(
     const request = decodeURIComponent(encodedRequest)
     const { payload: encPayload, ...decodedRequest } = JSON.parse(new TextDecoder().decode(decodeBase64(request)))
     try {
-        const session = externalDappSessions[decodedRequest.publicKey]
+        const dappSession = externalDappSessions[decodedRequest.publicKey]
 
-        if (!session) {
+        if (!dappSession) {
             const err = new DeepLinkError(DeepLinkErrorCode.Unauthorized)
             await Linking.openURL(
                 `${redirectUrl}?errorMessage=${encodeURIComponent(err.message)}&errorCode=${err.code}`,
             )
             return
         }
-        //TODO: verify session is valid
 
-        const KP = nacl.box.keyPair.fromSecretKey(decodeBase64(session.keyPair.privateKey))
+        const KP = nacl.box.keyPair.fromSecretKey(decodeBase64(dappSession.keyPair.privateKey))
 
         // Decrypt the payload
         const sharedSecret = nacl.box.before(decodeBase64(decodedRequest.publicKey), KP.secretKey)
