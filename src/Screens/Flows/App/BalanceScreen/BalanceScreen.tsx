@@ -3,7 +3,7 @@ import { default as React } from "react"
 import { TouchableOpacity } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseIcon, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
-import { COLORS, SCREEN_WIDTH } from "~Constants"
+import { COLORS, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 import { IconKey } from "~Model"
 import { selectCurrencySymbol, useAppSelector } from "~Storage/Redux"
 import { Glow } from "./Glow"
@@ -26,7 +26,9 @@ const GlassButtonFull = ({ label, icon }: { label: string; icon: IconKey }) => {
     return (
         <BaseView flexDirection="column" gap={8} alignItems="center">
             <GlassButton icon={icon} />
-            <BaseText>{label}</BaseText>
+            <BaseText typographyFont="captionSemiBold" color={COLORS.PURPLE_LABEL}>
+                {label}
+            </BaseText>
         </BaseView>
     )
 }
@@ -106,16 +108,17 @@ export const BalanceScreen = () => {
                         </BaseView> */}
                     </BaseView>
 
-                    {/* <BaseView
+                    <BaseView
                         style={{
                             transform: [{ translateY: -24 }],
                             backgroundColor: COLORS.LIGHT_GRAY,
                             padding: 16,
                             borderTopLeftRadius: 24,
                             borderTopRightRadius: 24,
+                            paddingBottom: SCREEN_HEIGHT,
                         }}>
                         <BaseText>TEST</BaseText>
-                    </BaseView> */}
+                    </BaseView>
                 </>
             }
         />
