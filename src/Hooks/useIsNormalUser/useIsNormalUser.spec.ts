@@ -3,8 +3,10 @@ import { TestWrapper } from "~Test"
 import { useIsNormalUser } from "./useIsNormalUser"
 import { renderHook } from "@testing-library/react-hooks"
 import { ethers } from "ethers"
-import { B3TR, VET } from "~Constants"
+import { VET } from "~Constants"
 import { useQuery } from "@tanstack/react-query"
+import { useVetBalances } from "./useVetBalances"
+import { Balance } from "~Model"
 
 const setIsNormalUser = jest.fn().mockImplementation(payload => ({ type: "discovery/setIsNormalUser", payload }))
 
@@ -18,12 +20,17 @@ jest.mock("@tanstack/react-query", () => ({
     useQuery: jest.fn(),
 }))
 
+jest.mock("./useVetBalances", () => ({
+    useVetBalances: jest.fn(),
+}))
+
 describe("useIsNormalUser", () => {
     beforeEach(() => {
         jest.clearAllMocks()
     })
     test("should use the cached value if true", () => {
         ;(useQuery as jest.Mock).mockReturnValue({ data: undefined })
+        ;(useVetBalances as jest.Mock).mockReturnValue({ data: [] })
         const { result } = renderHook(() => useIsNormalUser(), {
             wrapper: TestWrapper,
             initialProps: {
@@ -50,41 +57,36 @@ describe("useIsNormalUser", () => {
 
     test("should return true if the user has enough balance across wallets", () => {
         ;(useQuery as jest.Mock).mockReturnValue({ data: undefined })
+        ;(useVetBalances as jest.Mock).mockReturnValue({
+            data: [
+                {
+                    balance: ethers.utils.parseEther("1").toString(),
+                    isHidden: false,
+                    timeUpdated: Date.now().toString(),
+                    tokenAddress: VET.address,
+                },
+                {
+                    balance: ethers.utils.parseEther("1").toString(),
+                    isHidden: false,
+                    timeUpdated: Date.now().toString(),
+                    tokenAddress: VET.address,
+                },
+                {
+                    balance: ethers.utils.parseEther("1").toString(),
+                    isHidden: false,
+                    timeUpdated: Date.now().toString(),
+                    tokenAddress: VET.address,
+                },
+                {
+                    balance: ethers.utils.parseEther("7").toString(),
+                    isHidden: false,
+                    timeUpdated: Date.now().toString(),
+                    tokenAddress: VET.address,
+                },
+            ] satisfies Balance[],
+        })
         const { result } = renderHook(() => useIsNormalUser(), {
             wrapper: TestWrapper,
-            initialProps: {
-                preloadedState: {
-                    balances: {
-                        mainnet: {
-                            [ethers.Wallet.createRandom().address]: [
-                                {
-                                    balance: ethers.utils.parseEther("1").toHexString(),
-                                    tokenAddress: VET.address,
-                                    isHidden: false,
-                                    timeUpdated: new Date().toISOString(),
-                                },
-                                {
-                                    balance: ethers.utils.parseEther("1").toHexString(),
-                                    tokenAddress: B3TR.address,
-                                    isHidden: false,
-                                    timeUpdated: new Date().toISOString(),
-                                },
-                            ],
-                            [ethers.Wallet.createRandom().address]: [
-                                {
-                                    balance: ethers.utils.parseEther("9").toHexString(),
-                                    tokenAddress: VET.address,
-                                    isHidden: false,
-                                    timeUpdated: new Date().toISOString(),
-                                },
-                            ],
-                        },
-                        testnet: {},
-                        other: {},
-                        solo: {},
-                    },
-                },
-            },
         })
 
         expect(result.current).toBe(true)
@@ -92,6 +94,8 @@ describe("useIsNormalUser", () => {
     })
     test("should return true if the user has completed at least 3 actions", () => {
         ;(useQuery as jest.Mock).mockReturnValue({ data: true })
+        ;(useVetBalances as jest.Mock).mockReturnValue({ data: [] })
+
         const { result } = renderHook(() => useIsNormalUser(), {
             wrapper: TestWrapper,
             initialProps: {

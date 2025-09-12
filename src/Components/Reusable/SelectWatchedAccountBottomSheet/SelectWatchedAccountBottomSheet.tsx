@@ -1,5 +1,5 @@
-import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import React, { useCallback } from "react"
 import { AccountCard, BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
 import { WatchedAccount } from "~Model"
 import { useI18nContext } from "~i18n"
@@ -10,12 +10,11 @@ type Props = {
     account?: WatchedAccount
     confirmAccount: () => void
     isBalanceVisible?: boolean
-    formattedBalance: string
 }
 
 // component to select an account
 export const SelectWatchedAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ closeBottomSheet, onDismiss, isBalanceVisible = true, confirmAccount, account, formattedBalance }, ref) => {
+    ({ closeBottomSheet, onDismiss, isBalanceVisible = true, confirmAccount, account }, ref) => {
         const { LL } = useI18nContext()
 
         const handlePress = useCallback(() => {
@@ -34,7 +33,6 @@ export const SelectWatchedAccountBottomSheet = React.forwardRef<BottomSheetModal
                             account={account}
                             onPress={handlePress}
                             isBalanceVisible={isBalanceVisible}
-                            formattedBalance={formattedBalance}
                         />
                         <BaseSpacer height={12} />
                     </>
