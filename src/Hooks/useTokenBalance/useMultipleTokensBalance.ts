@@ -18,12 +18,15 @@ export const useMultipleTokensBalance = (addresses: string[], accountAddress?: s
     const sortedAddresses = useMemo(() => [...addresses].sort(), [addresses])
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
 
-    const address = useMemo(() => accountAddress ?? selectedAccountAddress!, [accountAddress, selectedAccountAddress])
+    const address = useMemo(
+        () => (accountAddress ?? selectedAccountAddress!).toLowerCase(),
+        [accountAddress, selectedAccountAddress],
+    )
 
     const qc = useQueryClient()
 
     const { data, dataUpdatedAt, isLoading } = useQuery({
-        queryKey: ["TOKENS", "MULTIPLE", accountAddress, network.genesis.id, sortedAddresses],
+        queryKey: ["TOKENS", "MULTIPLE", address, network.genesis.id, sortedAddresses],
         queryFn: () => BalanceUtils.getBalancesFromBlockchain(sortedAddresses, address, network, thor),
         staleTime: 10 * 60 * 1000,
         gcTime: 10 * 60 * 1000,
