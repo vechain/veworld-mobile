@@ -23,7 +23,6 @@ import {
     ConnectedAppsScreen,
     ConvertTransactionScreen,
     EnableAdditionalSettings,
-    HomeScreen,
     ImportFromCloudScreen,
     ImportLocalWallet,
     ImportMnemonicBackupPasswordScreen,
@@ -46,6 +45,7 @@ import {
     WalletManagementScreen,
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
@@ -147,7 +147,7 @@ export const HomeStack = () => {
     return (
         <Navigator id="HomeStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
-                <Screen name={Routes.HOME} component={HomeScreen} options={{ headerShown: false }} />
+                <Screen name={Routes.HOME} component={BalanceScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.SELECT_TOKEN_SEND}
                     component={SelectTokenSendScreen}
