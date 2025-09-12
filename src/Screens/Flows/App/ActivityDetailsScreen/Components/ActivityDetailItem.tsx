@@ -65,7 +65,8 @@ export const ActivityDetailItem: React.FC<Props> = memo(
                         borderBottomWidth: border ? 0.5 : 0,
                     },
                 ]}
-                justifyContent="flex-start">
+                justifyContent="flex-start"
+                testID={testID}>
                 <BaseView>
                     <BaseText typographyFont="body" pb={5}>
                         {activityDetail.eventName ?? ""}
