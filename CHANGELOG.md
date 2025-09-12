@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.3 (2025-09-12)</small>
+
+* build: init ([a85e36b](https://github.com/vechain/veworld-mobile/commit/a85e36b))
+* version: build artifacts version-2.4.2 [iOS] (#3282) ([f8b4f84](https://github.com/vechain/veworld-mobile/commit/f8b4f84)), closes [#3282](https://github.com/vechain/veworld-mobile/issues/3282)
+
 ## <small>2.4.2 (2025-09-10)</small>
 
 * build: init ([82afb17](https://github.com/vechain/veworld-mobile/commit/82afb17))
