@@ -8,6 +8,7 @@ import { useTheme } from "~Hooks"
 import { IconKey } from "~Model"
 import { selectCurrencySymbol, useAppSelector } from "~Storage/Redux"
 import { Header } from "./Header"
+import { ScrambleText } from "./ScrambleText"
 import { Tokens } from "./Tabs/Tokens"
 
 const GlassButton = ({ icon }: { icon: IconKey }) => {
@@ -64,11 +65,7 @@ export const BalanceScreen = () => {
                             <BaseText typographyFont="headerTitle" fontWeight="400" color={COLORS.PURPLE_LABEL}>
                                 {currencySymbol}
                             </BaseText>
-                            <BaseText
-                                style={{ fontSize: 36, fontWeight: 600, lineHeight: 40, fontFamily: "Inter-SemiBold" }}
-                                color={COLORS.GREY_50}>
-                                {99.999}
-                            </BaseText>
+                            <ScrambleText text="99.999" />
                         </BaseView>
 
                         <BaseSpacer height={12} />
