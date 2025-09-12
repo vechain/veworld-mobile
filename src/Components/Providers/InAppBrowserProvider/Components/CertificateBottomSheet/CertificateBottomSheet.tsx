@@ -10,11 +10,11 @@ import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { AnalyticsEvent, COLORS, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
+import { useLoginSession } from "~Hooks/useLoginSession"
 import { useI18nContext } from "~i18n"
 import { CertificateRequest, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { Routes } from "~Navigation"
 import {
-    addConnectedDiscoveryApp,
     addSignCertificateActivity,
     selectSelectedAccountOrNull,
     selectVerifyContext,
@@ -78,7 +78,7 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 justifyContent="space-between"
                 testID="SIGN_CERTIFICATE_REQUEST_TITLE">
                 <BaseView flex={1} flexDirection="row" gap={12}>
-                    <BaseIcon name="icon-user-check" size={20} color={theme.colors.editSpeedBs.title} />
+                    <BaseIcon name="icon-certificate" size={20} color={theme.colors.editSpeedBs.title} />
                     <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
                         {LL.SIGN_CERTIFICATE_REQUEST_TITLE()}
                     </BaseText>
@@ -147,6 +147,7 @@ export const CertificateBottomSheet = () => {
     const track = useAnalyticTracking()
 
     const { postMessage } = useInAppBrowser()
+    const { createSessionIfNotExists } = useLoginSession()
 
     const { failRequest, processRequest } = useWalletConnect()
 
@@ -185,13 +186,6 @@ export const CertificateBottomSheet = () => {
         async ({ request, password }: { request: CertificateRequest; password?: string }) => {
             try {
                 const { certificate, payload } = buildCertificate(request)!
-                dispatch(
-                    addConnectedDiscoveryApp({
-                        name: request.appName,
-                        href: new URL(request.appUrl).hostname,
-                        connectedTime: Date.now(),
-                    }),
-                )
                 if (selectedAccount!.device.type === DEVICE_TYPE.LEDGER) {
                     // Do not reject request if it's a ledger request
                     isUserAction.current = true
@@ -236,6 +230,8 @@ export const CertificateBottomSheet = () => {
                     ),
                 )
 
+                createSessionIfNotExists(request)
+
                 track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
                 isUserAction.current = true
             } catch (err: unknown) {
@@ -257,6 +253,7 @@ export const CertificateBottomSheet = () => {
         },
         [
             buildCertificate,
+            createSessionIfNotExists,
             dispatch,
             failRequest,
             nav,

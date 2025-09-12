@@ -1169,6 +1169,10 @@ type RootTranslation = {
 	 */
 	BROWSER_FAVOURITES_TITLE: string
 	/**
+	 * G​o​ ​t​o​ ​p​r​e​v​i​o​u​s​ ​p​a​g​e
+	 */
+	BROWSER_GO_BACK: string
+	/**
 	 * T​h​i​s​ ​a​d​d​r​e​s​s​ ​c​a​n​'​t​ ​b​e​ ​r​e​a​c​h​e​d
 	 */
 	BROWSER_HISTORY_ADDRESS_ERROR: string
@@ -1233,10 +1237,6 @@ type RootTranslation = {
 	 * R​e​l​o​a​d​ ​p​a​g​e
 	 */
 	BROWSER_RELOAD_PAGE: string
-	/**
-	 * G​o​ ​t​o​ ​p​r​e​v​i​o​u​s​ ​p​a​g​e
-	 */
-	BROWSER_GO_BACK: string
 	/**
 	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​s
 	 */
@@ -1483,7 +1483,7 @@ type RootTranslation = {
 	 */
 	BTN_OBSERVE_WALLET: string
 	/**
-	 * W​a​t​c​h​ ​a​ ​p​u​b​l​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s
+	 * A​d​d​ ​a​n​y​ ​p​u​b​l​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​a​n​d​ ​k​e​e​p​ ​t​r​a​c​k​ ​o​f​ ​i​t​s​ ​b​a​l​a​n​c​e​s​ ​a​n​d​ ​a​c​t​i​v​i​t​y
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: string
 	/**
@@ -2276,6 +2276,26 @@ type RootTranslation = {
 	 */
 	DAPP_CONNECTION: string
 	/**
+	 * M​e​t​h​o​d
+	 */
+	DAPP_LOGIN_METHOD: string
+	/**
+	 * C​e​r​t​i​f​i​c​a​t​e
+	 */
+	DAPP_LOGIN_METHOD_CERTIFICATE: string
+	/**
+	 * N​o​ ​s​i​g​n​a​t​u​r​e
+	 */
+	DAPP_LOGIN_METHOD_SIMPLE: string
+	/**
+	 * T​y​p​e​d​ ​d​a​t​a
+	 */
+	DAPP_LOGIN_METHOD_TYPED_DATA: string
+	/**
+	 * d​A​p​p​ ​l​o​g​i​n
+	 */
+	DAPP_LOGIN_TITLE: string
+	/**
 	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	DAPP_SIGN_CERT: string
@@ -2704,13 +2724,13 @@ type RootTranslation = {
 	 */
 	FAVOURITES_BOTTOM_SHEET_TITLE: string
 	/**
+	 * N​o​ ​f​a​v​o​r​i​t​e​d​ ​a​p​p​s​ ​t​o​ ​s​h​o​w
+	 */
+	FAVOURITES_DAPPS_EMPTY_LIST: string
+	/**
 	 * C​o​u​l​d​ ​n​o​t​ ​f​i​n​d​ ​a​n​y​ ​d​a​p​p​s​ ​w​i​t​h​ ​t​h​i​s​ ​n​a​m​e
 	 */
 	FAVOURITES_DAPPS_NO_RECORDS: string
-	/**
-	 * No favorited apps to show
-	 */
-	FAVOURITES_DAPPS_EMPTY_LIST: string
 	/**
 	 * S​e​a​r​c​h
 	 */
@@ -2856,10 +2876,6 @@ type RootTranslation = {
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: string
 	/**
-	 * Delegated smart wallet not supported yet
-	 */
-	SMART_WALLET_DELEGATION_NOT_SUPPORTED: string
-	/**
 	 * T​y​p​e​d​ ​D​a​t​a​ ​c​a​n​n​o​t​ ​b​e​ ​s​i​g​n​e​d​ ​w​i​t​h​ ​a​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​a​c​c​o​u​n​t​.
 	 */
 	LEDGER_DEVICE_ALERT: string
@@ -2895,6 +2911,18 @@ type RootTranslation = {
 	 * L​o​a​d​i​n​g​ ​m​o​r​e
 	 */
 	LOADING_MORE: string
+	/**
+	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
+	 */
+	LOGIN_KEEP_ME_SIGNED_IN: string
+	/**
+	 * L​o​g​i​n
+	 */
+	LOGIN_REQUEST_CTA: string
+	/**
+	 * L​o​g​i​n
+	 */
+	LOGIN_REQUEST_TITLE: string
 	/**
 	 * L​o​a​d​i​n​g​ ​p​a​g​e​ ​c​o​n​t​e​n​t
 	 */
@@ -3145,6 +3173,10 @@ type RootTranslation = {
 	 */
 	NFT_DOWNLOAD_ERROR: string
 	/**
+	 * N​F​T​ ​P​u​r​c​h​a​s​e​d
+	 */
+	NFT_PURCHASED: string
+	/**
 	 * N​F​T​ ​R​e​c​e​i​v​e
 	 */
 	NFT_RECEIVE: string
@@ -3165,21 +3197,17 @@ type RootTranslation = {
 	 */
 	NFT_SEND: string
 	/**
-	 * N​F​T​ ​r​e​c​e​i​v​e​d
+	 * N​F​T​ ​S​o​l​d
+	 */
+	NFT_SOLD: string
+	/**
+	 * N​F​T​ ​R​e​c​e​i​v​e​d
 	 */
 	NFT_TRANSFER_RECEIVED: string
 	/**
-	 * N​F​T​ ​s​e​n​t
+	 * N​F​T​ ​S​e​n​t
 	 */
 	NFT_TRANSFER_SENT: string
-	/**
-	 * N​F​T​ ​p​u​r​c​h​a​s​e​d
-	 */
-	NFT_PURCHASED: () => LocalizedString
-	/**
-	 * N​F​T​ ​s​o​l​d
-	 */
-	NFT_SOLD: () => LocalizedString
 	/**
 	 * G​o​ ​t​o​ ​N​F​T​s
 	 */
@@ -4343,11 +4371,11 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE: string
 	/**
-	 * L​o​g​i​n
+	 * S​i​g​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: string
 	/**
-	 * L​o​g​i​n
+	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: string
 	/**
@@ -4375,13 +4403,13 @@ type RootTranslation = {
 	 */
 	SIGN_TYPED_DATA_REQUEST_TITLE: string
 	/**
+	 * D​e​l​e​g​a​t​e​d​ ​s​m​a​r​t​ ​w​a​l​l​e​t​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​y​e​t
+	 */
+	SMART_WALLET_DELEGATION_NOT_SUPPORTED: string
+	/**
 	 * C​l​a​i​m​a​b​l​e
 	 */
 	STARGATE_CLAIMABLE: string
-	/**
-	 * Own
-	 */
-	STARGATE_OWN_LABEL: string
 	/**
 	 * M​a​n​a​g​i​n​g
 	 */
@@ -4398,6 +4426,10 @@ type RootTranslation = {
 	 * N​e​w​ ​s​t​a​k​e
 	 */
 	STARGATE_NEW_STAKE: string
+	/**
+	 * O​w​n
+	 */
+	STARGATE_OWN_LABEL: string
 	/**
 	 * R​e​w​a​r​d​s
 	 */
@@ -4443,6 +4475,14 @@ type RootTranslation = {
 	 * S​w​a​p​ ​t​o​k​e​n​s
 	 */
 	SWAP_TITLE: string
+	/**
+	 * S​w​i​t​c​h
+	 */
+	SWITCH_WALLET_REQUEST_CTA: string
+	/**
+	 * S​w​i​t​c​h​ ​w​a​l​l​e​t
+	 */
+	SWITCH_WALLET_REQUEST_TITLE: string
 	/**
 	 * S​y​s​t​e​m
 	 */
@@ -6153,6 +6193,10 @@ Thanks for your patience!
 	 */
 	BROWSER_FAVOURITES_TITLE: () => LocalizedString
 	/**
+	 * Go to previous page
+	 */
+	BROWSER_GO_BACK: () => LocalizedString
+	/**
 	 * This address can't be reached
 	 */
 	BROWSER_HISTORY_ADDRESS_ERROR: () => LocalizedString
@@ -6216,10 +6260,6 @@ Thanks for your patience!
 	 * Reload page
 	 */
 	BROWSER_RELOAD_PAGE: () => LocalizedString
-	/**
-	 * Go to previous page
-	 */
-	BROWSER_GO_BACK: () => LocalizedString
 	/**
 	 * Remove from Favorites
 	 */
@@ -6465,7 +6505,7 @@ Thanks for your patience!
 	 */
 	BTN_OBSERVE_WALLET: () => LocalizedString
 	/**
-	 * Watch a public wallet address
+	 * Add any public wallet address and keep track of its balances and activity
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: () => LocalizedString
 	/**
@@ -7249,6 +7289,26 @@ Thanks for your patience!
 	 */
 	DAPP_CONNECTION: () => LocalizedString
 	/**
+	 * Method
+	 */
+	DAPP_LOGIN_METHOD: () => LocalizedString
+	/**
+	 * Certificate
+	 */
+	DAPP_LOGIN_METHOD_CERTIFICATE: () => LocalizedString
+	/**
+	 * No signature
+	 */
+	DAPP_LOGIN_METHOD_SIMPLE: () => LocalizedString
+	/**
+	 * Typed data
+	 */
+	DAPP_LOGIN_METHOD_TYPED_DATA: () => LocalizedString
+	/**
+	 * dApp login
+	 */
+	DAPP_LOGIN_TITLE: () => LocalizedString
+	/**
 	 * Sign certificate
 	 */
 	DAPP_SIGN_CERT: () => LocalizedString
@@ -7677,13 +7737,13 @@ Thanks for your patience!
 	 */
 	FAVOURITES_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
-	 * Could not find any dapps with this name
-	 */
-	FAVOURITES_DAPPS_NO_RECORDS: () => LocalizedString
-	/**
 	 * No favorited apps to show
 	 */
 	FAVOURITES_DAPPS_EMPTY_LIST: () => LocalizedString
+	/**
+	 * Could not find any dapps with this name
+	 */
+	FAVOURITES_DAPPS_NO_RECORDS: () => LocalizedString
 	/**
 	 * Search
 	 */
@@ -7829,10 +7889,6 @@ Thanks for your patience!
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: () => LocalizedString
 	/**
-	 * Smart wallet not supported yet
-	 */
-	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
-	/**
 	 * Typed Data cannot be signed with a Ledger device. Please select another account.
 	 */
 	LEDGER_DEVICE_ALERT: () => LocalizedString
@@ -7868,6 +7924,18 @@ Thanks for your patience!
 	 * Loading more
 	 */
 	LOADING_MORE: () => LocalizedString
+	/**
+	 * Keep me signed in for future sessions
+	 */
+	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
+	/**
+	 * Login
+	 */
+	LOGIN_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Login
+	 */
+	LOGIN_REQUEST_TITLE: () => LocalizedString
 	/**
 	 * Loading page content
 	 */
@@ -8118,6 +8186,10 @@ Thanks for your patience!
 	 */
 	NFT_DOWNLOAD_ERROR: () => LocalizedString
 	/**
+	 * NFT Purchased
+	 */
+	NFT_PURCHASED: () => LocalizedString
+	/**
 	 * NFT Receive
 	 */
 	NFT_RECEIVE: () => LocalizedString
@@ -8138,21 +8210,17 @@ Thanks for your patience!
 	 */
 	NFT_SEND: () => LocalizedString
 	/**
-	 * NFT received
+	 * NFT Sold
+	 */
+	NFT_SOLD: () => LocalizedString
+	/**
+	 * NFT Received
 	 */
 	NFT_TRANSFER_RECEIVED: () => LocalizedString
 	/**
-	 * NFT sent
+	 * NFT Sent
 	 */
 	NFT_TRANSFER_SENT: () => LocalizedString
-	/**
-	 * NFT purchased
-	 */
-	NFT_PURCHASED: () => LocalizedString
-	/**
-	 * NFT sold
-	 */
-	NFT_SOLD: () => LocalizedString
 	/**
 	 * Go to NFTs
 	 */
@@ -9282,11 +9350,11 @@ Here's what it's all about:
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
 	/**
-	 * Login
+	 * Sign
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: () => LocalizedString
 	/**
-	 * Login
+	 * Sign certificate
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
 	/**
@@ -9314,13 +9382,13 @@ Here's what it's all about:
 	 */
 	SIGN_TYPED_DATA_REQUEST_TITLE: () => LocalizedString
 	/**
+	 * Delegated smart wallet not supported yet
+	 */
+	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
+	/**
 	 * Claimable
 	 */
 	STARGATE_CLAIMABLE: () => LocalizedString
-	/**
-	 * Own
-	 */
-	STARGATE_OWN_LABEL: () => LocalizedString
 	/**
 	 * Managing
 	 */
@@ -9337,6 +9405,10 @@ Here's what it's all about:
 	 * New stake
 	 */
 	STARGATE_NEW_STAKE: () => LocalizedString
+	/**
+	 * Own
+	 */
+	STARGATE_OWN_LABEL: () => LocalizedString
 	/**
 	 * Rewards
 	 */
@@ -9381,6 +9453,14 @@ Here's what it's all about:
 	 * Swap tokens
 	 */
 	SWAP_TITLE: () => LocalizedString
+	/**
+	 * Switch
+	 */
+	SWITCH_WALLET_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Switch wallet
+	 */
+	SWITCH_WALLET_REQUEST_TITLE: () => LocalizedString
 	/**
 	 * System
 	 */

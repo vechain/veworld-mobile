@@ -8,6 +8,7 @@ export enum ActivityType {
     CONNECTED_APP_TRANSACTION = "CONNECTED_APP_TRANSACTION",
     SIGN_CERT = "SIGN_CERT", // local
     SIGN_TYPED_DATA = "SIGN_TYPED_DATA", // local
+    DAPP_LOGIN = "DAPP_LOGIN", // local
 
     DAPP_TRANSACTION = "DAPP_TRANSACTION",
 
