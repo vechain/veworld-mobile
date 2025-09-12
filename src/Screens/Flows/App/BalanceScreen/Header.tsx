@@ -7,7 +7,7 @@ import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 export const Header = () => {
     const account = useAppSelector(selectSelectedAccount)
     return (
-        <BaseView flexDirection="row" pt={8} justifyContent="space-between" px={16}>
+        <BaseView flexDirection="row" pt={8} justifyContent="space-between" px={16} pb={16}>
             <TouchableOpacity>
                 <BaseView flexDirection="row" gap={12} p={8} pr={16} bg="rgba(255, 255, 255, 0.05)" borderRadius={99}>
                     <AccountIcon address={account.address} size={24} borderRadius={100} />
