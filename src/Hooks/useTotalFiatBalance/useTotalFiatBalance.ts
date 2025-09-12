@@ -38,10 +38,11 @@ export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
 
     const { stargateNodes, isLoading: loadingNodes } = useUserNodes(address, enabled)
 
-    const { ownedStargateNfts: stargateNfts, isLoading: loadingStargateNfts } = useUserStargateNfts(
-        stargateNodes,
-        loadingNodes,
-    )
+    const { ownedStargateNfts: stargateNfts, isLoading: loadingStargateNfts } = useUserStargateNfts({
+        nodes: stargateNodes,
+        isLoadingNodes: loadingNodes,
+        address,
+    })
 
     const totalStargateVet = useMemo(() => {
         return stargateNfts.reduce((acc, nft) => {

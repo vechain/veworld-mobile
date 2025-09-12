@@ -19,7 +19,11 @@ export interface StakingGroup {
 
 export const useGroupedStakingData = (userAddress?: string) => {
     const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(userAddress)
-    const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes)
+    const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts({
+        nodes: stargateNodes,
+        isLoadingNodes,
+        address: userAddress,
+    })
 
     const stakingGroups = useMemo((): StakingGroup[] => {
         if (!stargateNodes.length) return []

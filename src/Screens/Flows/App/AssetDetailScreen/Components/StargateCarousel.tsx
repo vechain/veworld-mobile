@@ -15,10 +15,10 @@ import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
 import { BannersCarousel } from "../../HomeScreen/Components"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
 import { StargateCarouselItem } from "./StargateCarouselItem"
-import { AddressUtils } from "~Utils"
 
 enum StakingFilter {
     OWN = "own",
@@ -31,7 +31,10 @@ export const StargateCarousel = () => {
     const address = useAppSelector(selectSelectedAccountAddress)
 
     const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
-    const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes)
+    const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts({
+        nodes: stargateNodes,
+        isLoadingNodes,
+    })
     const nav = useNavigation()
 
     const { navigateWithTab } = useBrowserTab()

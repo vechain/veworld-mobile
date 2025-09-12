@@ -80,10 +80,20 @@ export const getUserStargateNfts = async (
     }
 }
 
-export const useUserStargateNfts = (stargateNodes: NodeInfo[] = [], isLoadingNodes?: boolean) => {
+export const useUserStargateNfts = ({
+    nodes: stargateNodes = [],
+    isLoadingNodes,
+    address: _address,
+}: {
+    nodes?: NodeInfo[]
+    isLoadingNodes?: boolean
+    address?: string
+}) => {
     const thor = useThorClient()
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
+
+    const address = useMemo(() => _address ?? selectedAccount.address, [_address, selectedAccount.address])
 
     const { stargateNFTAddress, stargateDelegationAddress } = useMemo(() => {
         const config = getStargateNetworkConfig(network.type)
@@ -96,10 +106,10 @@ export const useUserStargateNfts = (stargateNodes: NodeInfo[] = [], isLoadingNod
     const queryKey = useMemo(() => {
         return getUserStargateNftsQueryKey(
             network.type,
-            selectedAccount.address,
+            address,
             stargateNodes.map(node => node.nodeId),
         )
-    }, [network.type, selectedAccount.address, stargateNodes])
+    }, [network.type, address, stargateNodes])
 
     const enabled =
         !!thor && !!stargateNodes.length && !!stargateNFTAddress && !!stargateDelegationAddress && !isLoadingNodes
@@ -113,13 +123,7 @@ export const useUserStargateNfts = (stargateNodes: NodeInfo[] = [], isLoadingNod
     } = useQuery({
         queryKey,
         queryFn: async () =>
-            await getUserStargateNfts(
-                thor,
-                stargateNodes,
-                selectedAccount.address,
-                stargateNFTAddress,
-                stargateDelegationAddress,
-            ),
+            await getUserStargateNfts(thor, stargateNodes, address, stargateNFTAddress, stargateDelegationAddress),
         enabled,
         staleTime: 60 * 5 * 1000,
     })
