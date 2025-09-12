@@ -7,8 +7,8 @@ import Markdown from "react-native-markdown-display"
 import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
 import { B3TR } from "~Constants"
 import { ColorThemeType, typography } from "~Constants/Theme"
-import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
-import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectBalanceVisible, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -32,13 +32,6 @@ export const BridgeAssetDetailScreen = ({ route }: Props) => {
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
-
-    const tokens = useSendableTokensWithBalance()
-    const foundToken = tokens.find(
-        t =>
-            t.name?.toLowerCase().includes(token.name.toLowerCase()) ||
-            t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
-    )
 
     const isObserved = useMemo(() => AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
 
@@ -92,7 +85,7 @@ export const BridgeAssetDetailScreen = ({ route }: Props) => {
 
                         <AssetBalanceCard
                             tokenWithInfo={tokenWithCompleteInfo}
-                            foundToken={foundToken}
+                            foundToken={token}
                             isBalanceVisible={isBalanceVisible}
                             openQRCodeSheet={openQRCodeSheet}
                             isObserved={isObserved}

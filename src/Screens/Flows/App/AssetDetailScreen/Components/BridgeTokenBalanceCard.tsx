@@ -13,9 +13,9 @@ import { TokenWithCompleteInfo, useBottomSheetModal, useThemedStyles, useTokenCa
 import { useI18nContext } from "~i18n"
 import { FastAction, FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
+import { PlatformUtils } from "~Utils"
 import { ActionsButtonGroup } from "./ActionsButtonGroup"
 import { BalanceView } from "./BalanceView"
-import { PlatformUtils } from "~Utils"
 
 type Props = {
     token: TokenWithCompleteInfo
