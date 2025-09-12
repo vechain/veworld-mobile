@@ -28,6 +28,7 @@ export type BaseExternalAppRequest = BaseRequest & {
     type: "external-app"
     publicKey: string
     nonce: string
+    redirectUrl: string
     network?: NETWORK_TYPE
 }
 

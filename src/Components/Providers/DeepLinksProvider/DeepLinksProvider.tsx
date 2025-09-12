@@ -1,15 +1,13 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react"
+import React, { useCallback, useContext, useEffect, useRef } from "react"
 import { InteractionManager, Linking } from "react-native"
 import { ConnectionLinkParams, ExternalAppRequestParams } from "./types"
 import { useInteraction } from "../InteractionProvider"
-// import { DeepLinkError } from "~Utils/ErrorMessageUtils"
-// import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
-// import { error } from "~Utils"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { selectExternalDappSessions } from "~Storage/Redux"
 import { DAppUtils } from "~Utils"
 import { useStore } from "../StoreProvider"
 import { RootState } from "~Storage/Redux/Types"
+import { Mutex } from "async-mutex"
 
 type DeepLinkEvent = "discover" | "connect" | "signTransaction" | "signCertificate" | "signTypedData" | "disconnect"
 
@@ -24,8 +22,10 @@ type DappURLRequest = {
 }
 
 type ContextType = {
-    currentDappPublicKey: string | null
-    setCurrentDappPublicKey: (publicKey: string | null) => void
+    /**
+     * A mutex to prevent multiple requests from being processed at the same time
+     */
+    mutex: Mutex
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -48,7 +48,10 @@ const parseUrl = (url: string): DiscoverURLRequest | DappURLRequest => {
 }
 
 export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) => {
-    const [currentDappPublicKey, setCurrentDappPublicKey] = useState<string | null>(null)
+    /**
+     * A mutex to prevent multiple requests from being processed at the same time
+     */
+    const mutex = useRef<Mutex>(new Mutex())
     const { navigateWithTab } = useBrowserTab()
     const mounted = useRef(false)
     const {
@@ -63,16 +66,15 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         setCertificateBsData,
         certificateBsRef,
     } = useInteraction()
-    // const externalDappSessions = useAppSelector(selectExternalDappSessions)
     const { store } = useStore()
 
     const handleConnectionLink = useCallback(
-        (params: ConnectionLinkParams) => {
-            if (currentDappPublicKey) {
+        async (params: ConnectionLinkParams) => {
+            if (mutex.current.isLocked()) {
                 DAppUtils.dispatchResourceNotAvailableError(params.redirect_url ?? "")
                 return
             }
-            setCurrentDappPublicKey(params.public_key)
+            await mutex.current.acquire()
             setConnectBsData({
                 type: "external-app",
                 appName: params.app_name,
@@ -84,12 +86,17 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             })
             connectBsRef.current?.present()
         },
-        [setConnectBsData, connectBsRef, currentDappPublicKey],
+        [setConnectBsData, connectBsRef],
     )
 
     const handleSignTransaction = useCallback(
         async (params: ExternalAppRequestParams) => {
             const externalDappSessions = selectExternalDappSessions(store?.getState() as RootState)
+            if (mutex.current.isLocked()) {
+                DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
+                return
+            }
+            const release = await mutex.current.acquire()
             try {
                 const request = await DAppUtils.parseTransactionRequest(
                     params.request,
@@ -97,24 +104,28 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
-                    if (currentDappPublicKey) {
-                        DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
-                        return
-                    }
-                    // setCurrentDappPublicKey(request.publicKey)
-                    setTransactionBsData(request)
+                    setTransactionBsData({
+                        ...request,
+                        redirectUrl: params.redirect_url,
+                    })
                     transactionBsRef.current?.present()
                 }
             } catch (e) {
+                release?.()
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setTransactionBsData, transactionBsRef, currentDappPublicKey, store],
+        [setTransactionBsData, transactionBsRef, store],
     )
 
     const handleSignTypedData = useCallback(
         async (params: ExternalAppRequestParams) => {
             const externalDappSessions = selectExternalDappSessions(store?.getState() as RootState)
+            if (mutex.current.isLocked()) {
+                DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
+                return
+            }
+            const release = await mutex.current.acquire()
             try {
                 const request = await DAppUtils.parseTypedDataRequest(
                     params.request,
@@ -122,24 +133,28 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
-                    if (currentDappPublicKey) {
-                        DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
-                        return
-                    }
-                    // setCurrentDappPublicKey(request.publicKey)
-                    setTypedDataBsData(request)
+                    setTypedDataBsData({
+                        ...request,
+                        redirectUrl: params.redirect_url,
+                    })
                     typedDataBsRef.current?.present()
                 }
             } catch (e) {
+                release?.()
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setTypedDataBsData, typedDataBsRef, currentDappPublicKey, store],
+        [setTypedDataBsData, typedDataBsRef, store],
     )
 
     const handleSignCertificate = useCallback(
         async (params: ExternalAppRequestParams) => {
             const externalDappSessions = selectExternalDappSessions(store?.getState() as RootState)
+            if (mutex.current.isLocked()) {
+                DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
+                return
+            }
+            const release = await mutex.current.acquire()
             try {
                 const request = await DAppUtils.parseCertificateRequest(
                     params.request,
@@ -147,24 +162,28 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
-                    if (currentDappPublicKey) {
-                        DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
-                        return
-                    }
-                    // setCurrentDappPublicKey(request.publicKey)
-                    setCertificateBsData(request)
+                    setCertificateBsData({
+                        ...request,
+                        redirectUrl: params.redirect_url,
+                    })
                     certificateBsRef.current?.present()
                 }
             } catch (e) {
+                release?.()
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setCertificateBsData, certificateBsRef, currentDappPublicKey, store],
+        [setCertificateBsData, certificateBsRef, store],
     )
 
     const handleDisconnect = useCallback(
         async (params: ExternalAppRequestParams) => {
             const externalDappSessions = selectExternalDappSessions(store?.getState() as RootState)
+            if (mutex.current.isLocked()) {
+                DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
+                return
+            }
+            const release = await mutex.current.acquire()
             try {
                 const request = await DAppUtils.parseDisconnectRequest(
                     params.request,
@@ -172,19 +191,18 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
-                    if (currentDappPublicKey) {
-                        DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
-                        return
-                    }
-                    setCurrentDappPublicKey(request.publicKey)
-                    setDisconnectBsData(request)
+                    setDisconnectBsData({
+                        ...request,
+                        redirectUrl: params.redirect_url,
+                    })
                     disconnectBsRef.current?.present()
                 }
             } catch (e) {
+                release?.()
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setDisconnectBsData, disconnectBsRef, currentDappPublicKey, store],
+        [setDisconnectBsData, disconnectBsRef, store],
     )
 
     useEffect(() => {
@@ -233,7 +251,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    return <Context.Provider value={{ currentDappPublicKey, setCurrentDappPublicKey }}>{children}</Context.Provider>
+    return <Context.Provider value={{ mutex: mutex.current }}>{children}</Context.Provider>
 }
 
 export const useDeepLinksSession = () => {

@@ -44,7 +44,7 @@ export const useExternalDappConnection = () => {
     const signKeyPair = useAppSelector(selectSignKeyPair)
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
-    const { setCurrentDappPublicKey } = useDeepLinksSession()
+    const { mutex } = useDeepLinksSession()
     const externalDappSessions = useAppSelector(selectExternalDappSessions)
 
     const dispatch = useAppDispatch()
@@ -114,7 +114,7 @@ export const useExternalDappConnection = () => {
                     nonce: encodeBase64(nonce),
                 })
 
-                setCurrentDappPublicKey(null)
+                mutex.release()
                 setTimeout(() => {
                     Linking.openURL(`${redirectUrl}?${params.toString()}`)
                 }, 800)
@@ -128,19 +128,19 @@ export const useExternalDappConnection = () => {
                     errorCode: err.code.toString(),
                 })
                 await Linking.openURL(`${redirectUrl}?${params.toString()}`)
-                setCurrentDappPublicKey(null)
+                mutex.release()
             }
         },
-        [dispatch, network.type, selectedAccount, signKeyPair, setCurrentDappPublicKey],
+        [dispatch, network.type, selectedAccount, signKeyPair, mutex],
     )
 
     const onDappDisconnected = useCallback(
         async ({ dappPublicKey, network: dappNetwork, redirectUrl }: OnDappDisconnectedParams) => {
             dispatch(deleteExternalDappSession({ appPublicKey: dappPublicKey, network: dappNetwork }))
-            setCurrentDappPublicKey(null)
+            mutex.release()
             await Linking.openURL(`${redirectUrl}`)
         },
-        [dispatch, setCurrentDappPublicKey],
+        [dispatch, mutex],
     )
 
     const getSessionKeyPair = useCallback(
@@ -184,9 +184,9 @@ export const useExternalDappConnection = () => {
                 public_key: publicKey,
             })
             await Linking.openURL(`${redirectUrl}?${params.toString()}`)
-            setCurrentDappPublicKey(null)
+            mutex.release()
         },
-        [getSessionKeyPair, setCurrentDappPublicKey],
+        [getSessionKeyPair, mutex],
     )
 
     /**
@@ -202,9 +202,9 @@ export const useExternalDappConnection = () => {
             })
 
             await Linking.openURL(`${redirectUrl}?${params.toString()}`)
-            setCurrentDappPublicKey(null)
+            mutex.release()
         },
-        [setCurrentDappPublicKey],
+        [mutex],
     )
 
     /**
@@ -219,9 +219,9 @@ export const useExternalDappConnection = () => {
                 errorCode: err.code.toString(),
             })
             await Linking.openURL(`${redirectUrl}?${params.toString()}`)
-            setCurrentDappPublicKey(null)
+            mutex.release()
         },
-        [setCurrentDappPublicKey],
+        [mutex],
     )
 
     return {
