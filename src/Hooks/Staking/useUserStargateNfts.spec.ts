@@ -101,7 +101,7 @@ describe("useUserStargateNfts", () => {
     })
 
     it("should return empty array when no nodes are provided", () => {
-        const { result } = renderHook(() => useUserStargateNfts([], false), {
+        const { result } = renderHook(() => useUserStargateNfts({ nodes: [], isLoadingNodes: false }), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: preloadedState,
@@ -113,7 +113,7 @@ describe("useUserStargateNfts", () => {
     })
 
     it("should return NFTs data when nodes are provided", () => {
-        const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, false), {
+        const { result } = renderHook(() => useUserStargateNfts({ nodes: StargateNodeMocks, isLoadingNodes: false }), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: preloadedState,
@@ -128,7 +128,7 @@ describe("useUserStargateNfts", () => {
     })
 
     it("should handle loading state when isLoadingNodes is true", () => {
-        const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, true), {
+        const { result } = renderHook(() => useUserStargateNfts({ nodes: StargateNodeMocks, isLoadingNodes: true }), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: preloadedState,
@@ -142,7 +142,7 @@ describe("useUserStargateNfts", () => {
         const mockUseQuery = require("@tanstack/react-query").useQuery
         mockUseQuery.mockImplementation(() => mockQueryLoading)
 
-        const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, false), {
+        const { result } = renderHook(() => useUserStargateNfts({ nodes: StargateNodeMocks, isLoadingNodes: false }), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: preloadedState,
@@ -157,7 +157,7 @@ describe("useUserStargateNfts", () => {
         const mockUseQuery = require("@tanstack/react-query").useQuery
         mockUseQuery.mockImplementation(() => mockQueryError)
 
-        const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, false), {
+        const { result } = renderHook(() => useUserStargateNfts({ nodes: StargateNodeMocks, isLoadingNodes: false }), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: preloadedState,
@@ -171,7 +171,7 @@ describe("useUserStargateNfts", () => {
     })
 
     it("should handle network type changes correctly", () => {
-        const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, false), {
+        const { result } = renderHook(() => useUserStargateNfts({ nodes: StargateNodeMocks, isLoadingNodes: false }), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: {
