@@ -1,11 +1,20 @@
-import { default as React } from "react"
+import { useNavigation } from "@react-navigation/native"
+import { default as React, useCallback } from "react"
 import { TouchableOpacity } from "react-native"
 import { AccountIcon, BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
+import { Routes } from "~Navigation"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 
 export const Header = () => {
     const account = useAppSelector(selectSelectedAccount)
+
+    const nav = useNavigation()
+
+    const onWalletManagementPress = useCallback(() => {
+        nav.navigate(Routes.WALLET_MANAGEMENT)
+    }, [nav])
+
     return (
         <BaseView flexDirection="row" pt={8} justifyContent="space-between" px={16} pb={16}>
             <TouchableOpacity>
@@ -18,7 +27,7 @@ export const Header = () => {
             </TouchableOpacity>
 
             <BaseView flexDirection="row" gap={12}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={onWalletManagementPress}>
                     <BaseView borderRadius={99} p={10} bg="rgba(255, 255, 255, 0.05)">
                         <BaseIcon name="icon-wallet" color={COLORS.PURPLE_LABEL} size={20} />
                     </BaseView>

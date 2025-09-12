@@ -8,6 +8,7 @@ import { useTheme } from "~Hooks"
 import { IconKey } from "~Model"
 import { selectCurrencySymbol, useAppSelector } from "~Storage/Redux"
 import { Header } from "./Header"
+import { Tokens } from "./Tabs/Tokens"
 
 const GlassButton = ({ icon }: { icon: IconKey }) => {
     return (
@@ -92,13 +93,15 @@ export const BalanceScreen = () => {
                             padding: 16,
                             borderTopLeftRadius: 24,
                             borderTopRightRadius: 24,
-                        }}>
+                        }}
+                        gap={16}>
                         <BaseSimpleTabs
                             keys={TABS}
                             labels={labels}
                             selectedKey={selectedTab}
                             setSelectedKey={setSelectedTab}
                         />
+                        <BaseView mt={16}>{selectedTab === "TOKENS" ? <Tokens /> : null}</BaseView>
                     </BaseView>
                 </>
             }
