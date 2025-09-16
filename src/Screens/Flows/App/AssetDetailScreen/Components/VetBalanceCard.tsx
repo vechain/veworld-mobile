@@ -250,7 +250,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
 
         if (PlatformUtils.isAndroid() && featureFlags.paymentProvidersFeature.coinify.android)
             commonActions.push(ActionsBottomSheet.sell)
-        // TODO: Uncomment this when we have a way to show the sell button on iOS
+        // Uncomment this when we have a way to show the sell button on iOS
         // if (PlatformUtils.isIOS() && featureFlags.paymentProvidersFeature.coinify.iOS)
         // commonActions.push(ActionsBottomSheet.sell)
 
