@@ -6,7 +6,7 @@ import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { RefreshControl } from "react-native-gesture-handler"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
-import { LinearShadowView } from "~Components/Reusable/ShadowView"
+import { ShadowView } from "~Components/Reusable/ShadowView"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -21,18 +21,18 @@ import { Tokens } from "./Tabs/Tokens"
 const GlassButton = ({ icon }: { icon: IconKey }) => {
     return (
         <TouchableOpacity>
-            <LinearShadowView
+            {/* <LinearShadowView
                 inset
                 from="top"
                 to="bottom"
-                colors={["rgba(29, 23, 58, 0.20)", "rgba(177, 168, 220, 0.20)"]}
+                colors={["black", "white"]}
                 shadowOffset={{ height: -4, width: 0 }}
                 shadowBlur={4}
                 style={{ padding: 12, borderRadius: 99 }}
                 isReflectedLightEnabled={false}>
                 <BaseIcon name={icon} size={24} color={COLORS.PURPLE_LABEL} />
-            </LinearShadowView>
-            {/* <LinearGradient
+            </LinearShadowView> */}
+            <LinearGradient
                 colors={["rgba(29, 23, 58, 0.20)", "rgba(177, 168, 220, 0.20)"]}
                 angle={0}
                 style={{ borderRadius: 99 }}>
@@ -45,7 +45,7 @@ const GlassButton = ({ icon }: { icon: IconKey }) => {
                     style={{ padding: 12, borderRadius: 99 }}>
                     <BaseIcon name={icon} size={24} color={COLORS.PURPLE_LABEL} />
                 </ShadowView>
-            </LinearGradient> */}
+            </LinearGradient>
             {/* <ShadowView
                 backgroundColor="transparent"
                 shadowColor="rgba(214, 212, 227, 0.10)"
