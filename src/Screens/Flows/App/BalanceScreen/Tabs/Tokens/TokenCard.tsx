@@ -104,7 +104,7 @@ export const TokenCard = ({ token }: Props) => {
             <TokenImage
                 icon={token.icon}
                 isVechainToken={AddressUtils.compareAddresses(VET.address, token.address)}
-                iconSize={32}
+                iconSize={40}
                 isCrossChainToken={isCrossChainToken}
                 rounded={!isCrossChainToken}
             />
