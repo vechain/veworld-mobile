@@ -82,7 +82,7 @@ export const BalanceScreen = () => {
 
     return (
         <Layout
-            bg="#1D173A"
+            bg={COLORS.BALANCE_BACKGROUND}
             noBackButton
             fixedHeader={<Header />}
             noMargin
@@ -92,7 +92,7 @@ export const BalanceScreen = () => {
                         <RefreshControl onRefresh={onRefresh} tintColor={theme.colors.border} refreshing={refreshing} />
                     }>
                     <LinearGradient
-                        colors={["#1D173A", "rgba(29, 23, 58, 0.50)", COLORS.PURPLE]}
+                        colors={[COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.50)", COLORS.PURPLE]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 0, y: 1 }}
                         style={{ position: "relative", marginTop: 16 }}
