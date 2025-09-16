@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { Image, StyleSheet } from "react-native"
 import { VeChainTokenBadge } from "~Assets/Icons"
 import { BaseCustomTokenIcon, BaseView } from "~Components/Base"
@@ -16,6 +16,20 @@ type Props = {
     rounded?: boolean
 }
 
+/**
+ * Mapping between the image size and the crosschain size.
+ * Keys should also be the only possible values for the size.
+ */
+const KNOWN_TOKEN_SIZES = {
+    12: 6,
+    16: 8,
+    20: 8,
+    24: 14,
+    32: 16,
+    40: 24,
+    48: 24,
+}
+
 export const TokenImage = ({
     icon,
     symbol,
@@ -25,6 +39,11 @@ export const TokenImage = ({
     testID,
     rounded,
 }: Props) => {
+    const crosschainImageStyle = useMemo(() => {
+        //Use 14 as fallback since it's the old value
+        const size = (KNOWN_TOKEN_SIZES as Record<number, number>)[iconSize] ?? 14
+        return { width: size, height: size }
+    }, [iconSize])
     if (isVechainToken) {
         if (rounded)
             return (
@@ -48,7 +67,9 @@ export const TokenImage = ({
             {icon ? (
                 <BaseView style={[styles.imageContainer, rounded && styles.roundedImg]}>
                     <Image testID={testID} source={{ uri: icon }} width={iconSize} height={iconSize} />
-                    {isCrossChainToken && <Image source={VeChainTokenBadge} style={styles.crossChainBadge} />}
+                    {isCrossChainToken && (
+                        <Image source={VeChainTokenBadge} style={[styles.crossChainBadge, crosschainImageStyle]} />
+                    )}
                 </BaseView>
             ) : (
                 <BaseView style={[styles.imageContainer, rounded && styles.roundedImg]}>

@@ -1,3 +1,4 @@
+import moment from "moment"
 import React, { useMemo } from "react"
 import { Animated, StyleSheet } from "react-native"
 import { LineChart } from "react-native-wagmi-charts"
@@ -46,11 +47,25 @@ export const Chart = ({ token }: Props) => {
 
     const isGoingUp = useMemo(() => getPriceChange(chartData) >= 0, [chartData])
 
+    const downsampled = useMemo(() => {
+        if (!chartData) return null
+        return [
+            ...chartData
+                .reduce((acc, curr) => {
+                    const key = moment(curr.timestamp).format("DDD-HH")
+                    if (acc.has(key)) return acc
+                    acc.set(key, { value: curr.value, timestamp: curr.timestamp })
+                    return acc
+                }, new Map<string, { timestamp: number; value: number }>())
+                .values(),
+        ]
+    }, [chartData])
+
     if (![B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol)) return null
 
     return (
         <Animated.View style={styles.root}>
-            <LineChart.Provider data={chartData ?? DEFAULT_LINE_CHART_DATA}>
+            <LineChart.Provider data={downsampled ?? DEFAULT_LINE_CHART_DATA}>
                 <LineChart width={isSmallScreen ? 60 : 120} height={32} yGutter={1}>
                     <LineChart.Path color={isGoingUp ? COLORS.GREEN_300 : COLORS.RED_400} width={3} />
                 </LineChart>
