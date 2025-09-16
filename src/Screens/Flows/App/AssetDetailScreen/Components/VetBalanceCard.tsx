@@ -6,7 +6,6 @@ import {
     BaseSkeleton,
     BaseText,
     BaseView,
-    DisabledBuySwapIosBottomSheet,
     FastActionsBottomSheet,
     showWarningToast,
     useFeatureFlags,
@@ -43,12 +42,6 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
         ref: FastActionsBottomSheetRef,
         onOpen: openFastActionsSheet,
         onClose: closeFastActionsSheet,
-    } = useBottomSheetModal()
-
-    const {
-        ref: blockedFeaturesIOSBottomSheetRef,
-        onOpen: openBlockedFeaturesIOSBottomSheet,
-        onClose: closeBlockedFeaturesIOSBottomSheet,
     } = useBottomSheetModal()
 
     const actionBottomSheetIcon = useCallback(
@@ -95,11 +88,6 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 name: LL.BTN_SWAP(),
                 disabled: !foundToken || isObserved,
                 action: () => {
-                    if (PlatformUtils.isIOS()) {
-                        openBlockedFeaturesIOSBottomSheet()
-                        return
-                    }
-
                     if (foundToken) {
                         nav.navigate(Routes.SWAP)
                     } else {
@@ -132,10 +120,6 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
             buy: {
                 name: LL.BTN_BUY(),
                 action: () => {
-                    if (PlatformUtils.isIOS()) {
-                        openBlockedFeaturesIOSBottomSheet()
-                        return
-                    }
                     nav.navigate(Routes.BUY_FLOW)
                 },
                 icon: (
@@ -162,7 +146,6 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
             foundToken,
             isObserved,
             nav,
-            openBlockedFeaturesIOSBottomSheet,
             openFastActionsSheet,
             openQRCodeSheet,
             theme.colors.actionBanner.buttonTextDisabled,
@@ -175,10 +158,6 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
             buy: {
                 name: LL.BTN_BUY(),
                 action: () => {
-                    if (PlatformUtils.isIOS()) {
-                        openBlockedFeaturesIOSBottomSheet()
-                        return
-                    }
                     nav.navigate(Routes.BUY_FLOW)
                 },
                 icon: actionBottomSheetIcon("icon-plus-circle"),
@@ -205,10 +184,6 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 name: LL.BTN_SWAP(),
                 disabled: !foundToken || isObserved,
                 action: () => {
-                    if (PlatformUtils.isIOS()) {
-                        openBlockedFeaturesIOSBottomSheet()
-                        return
-                    }
                     if (foundToken) {
                         nav.navigate(Routes.SWAP)
                     } else {
@@ -258,7 +233,6 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
             isObserved,
             nav,
             navigateWithTab,
-            openBlockedFeaturesIOSBottomSheet,
             openQRCodeSheet,
             token.balance?.balance,
         ],
@@ -334,10 +308,6 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 ref={FastActionsBottomSheetRef}
                 actions={vetBottomSheet}
                 closeBottomSheet={closeFastActionsSheet}
-            />
-            <DisabledBuySwapIosBottomSheet
-                ref={blockedFeaturesIOSBottomSheetRef}
-                onConfirm={closeBlockedFeaturesIOSBottomSheet}
             />
         </BaseView>
     )
