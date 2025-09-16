@@ -344,15 +344,12 @@ export const useTransactionScreen = ({
     const signAndSendTransaction = useCallback(
         async (password?: string) => {
             setLoading(true)
-            let shouldResetLoading = true
 
             try {
                 const transaction: SignTransactionResponse = await signTransaction(password)
 
                 switch (transaction) {
                     case SignStatus.NAVIGATE_TO_LEDGER:
-                        // Don't reset loading state as user continues flow on Ledger screen
-                        shouldResetLoading = false
                         onNavigateToLedger?.()
                         return
                     case SignStatus.DELEGATION_FAILURE:
@@ -365,8 +362,6 @@ export const useTransactionScreen = ({
                         return
                     default:
                         await sendTransactionSafe(transaction)
-                        // sendTransactionSafe handles its own loading state reset
-                        shouldResetLoading = false
                 }
             } catch (e) {
                 error(ERROR_EVENTS.SIGN, e)
@@ -374,13 +369,9 @@ export const useTransactionScreen = ({
                     text1: LL.ERROR(),
                     text2: LL.SIGN_TRANSACTION_ERROR(),
                 })
+                setLoading(false)
+                dispatch(setIsAppLoading(false))
                 await onTransactionFailure(e)
-            } finally {
-                // Ensure loading state is reset for delegation failure and signing errors
-                if (shouldResetLoading) {
-                    setLoading(false)
-                    dispatch(setIsAppLoading(false))
-                }
             }
         },
         [signTransaction, onNavigateToLedger, resetDelegation, LL, sendTransactionSafe, dispatch, onTransactionFailure],
