@@ -1,12 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
-import { default as React, useMemo, useState } from "react"
+import { useQueryClient } from "@tanstack/react-query"
+import { default as React, useCallback, useMemo, useState } from "react"
 import { TouchableOpacity } from "react-native"
+import { NestableScrollContainer } from "react-native-draggable-flatlist"
+import { RefreshControl } from "react-native-gesture-handler"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
-import { selectCurrencySymbol, useAppSelector } from "~Storage/Redux"
+import { selectCurrencySymbol, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
+import { useTokenBalances } from "../HomeScreen/Hooks"
 import { Header } from "./Header"
 import { ScrambleText } from "./ScrambleText"
 import { Tokens } from "./Tabs/Tokens"
@@ -38,13 +44,41 @@ const GlassButtonFull = ({ label, icon }: { label: string; icon: IconKey }) => {
 const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
 
 export const BalanceScreen = () => {
+    const { LL } = useI18nContext()
     const currencySymbol = useAppSelector(selectCurrencySymbol)
 
     const [selectedTab, setSelectedTab] = useState<(typeof TABS)[number]>("TOKENS")
 
-    const labels = useMemo(() => ["Tokens", "Staking", "Collectibles"], [])
+    const labels = useMemo(() => TABS.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL])
 
     const theme = useTheme()
+
+    const queryClient = useQueryClient()
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const [refreshing, setRefreshing] = useState(false)
+    const { updateBalances, updateSuggested } = useTokenBalances()
+
+    const invalidateStargateQueries = useCallback(async () => {
+        await queryClient.invalidateQueries({
+            predicate(query) {
+                if (!["userStargateNodes", "userStargateNfts"].includes(query.queryKey[0] as string)) return false
+                if (query.queryKey.length < 3) return false
+                if (query.queryKey[1] !== selectedNetwork.type) return false
+                if (!AddressUtils.compareAddresses(query.queryKey[2] as string | undefined, selectedAccount.address))
+                    return false
+                return true
+            },
+        })
+    }, [queryClient, selectedAccount.address, selectedNetwork.type])
+
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true)
+
+        await Promise.all([updateBalances(true), updateSuggested(), invalidateStargateQueries()])
+
+        setRefreshing(false)
+    }, [invalidateStargateQueries, updateBalances, updateSuggested])
 
     return (
         <Layout
@@ -52,8 +86,11 @@ export const BalanceScreen = () => {
             noBackButton
             fixedHeader={<Header />}
             noMargin
-            body={
-                <>
+            fixedBody={
+                <NestableScrollContainer
+                    refreshControl={
+                        <RefreshControl onRefresh={onRefresh} tintColor={theme.colors.border} refreshing={refreshing} />
+                    }>
                     <LinearGradient
                         colors={["#1D173A", "rgba(29, 23, 58, 0.50)", COLORS.PURPLE]}
                         start={{ x: 0, y: 0 }}
@@ -98,9 +135,9 @@ export const BalanceScreen = () => {
                             selectedKey={selectedTab}
                             setSelectedKey={setSelectedTab}
                         />
-                        <BaseView mt={16}>{selectedTab === "TOKENS" ? <Tokens /> : null}</BaseView>
+                        <BaseView>{selectedTab === "TOKENS" ? <Tokens /> : null}</BaseView>
                     </BaseView>
-                </>
+                </NestableScrollContainer>
             }
         />
     )
