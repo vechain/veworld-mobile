@@ -250,8 +250,9 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
 
         if (PlatformUtils.isAndroid() && featureFlags.paymentProvidersFeature.coinify.android)
             commonActions.push(ActionsBottomSheet.sell)
-        if (PlatformUtils.isIOS() && featureFlags.paymentProvidersFeature.coinify.iOS)
-            commonActions.push(ActionsBottomSheet.sell)
+        // TODO: Uncomment this when we have a way to show the sell button on iOS
+        // if (PlatformUtils.isIOS() && featureFlags.paymentProvidersFeature.coinify.iOS)
+        // commonActions.push(ActionsBottomSheet.sell)
 
         if (featureFlags.discoveryFeature.showStargateBanner) {
             commonActions.push(ActionsBottomSheet.stakeRewards)
@@ -261,7 +262,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
     }, [
         ActionsBottomSheet,
         featureFlags.paymentProvidersFeature.coinify.android,
-        featureFlags.paymentProvidersFeature.coinify.iOS,
+        // featureFlags.paymentProvidersFeature.coinify.iOS,
         featureFlags.discoveryFeature.showStargateBanner,
     ])
 

@@ -181,14 +181,15 @@ export const HomeScreen = () => {
 
         if (PlatformUtils.isAndroid() && featureFlags.paymentProvidersFeature.coinify.android)
             return [...sharedActions, sellAction]
-        if (PlatformUtils.isIOS() && featureFlags.paymentProvidersFeature.coinify.iOS)
-            return [...sharedActions, sellAction]
+        // TODO: Uncomment this when we have a way to show the sell button on iOS
+        // if (PlatformUtils.isIOS() && featureFlags.paymentProvidersFeature.coinify.iOS)
+        //     return [...sharedActions, sellAction]
 
         return sharedActions
     }, [
         LL,
         featureFlags.paymentProvidersFeature.coinify.android,
-        featureFlags.paymentProvidersFeature.coinify.iOS,
+        // featureFlags.paymentProvidersFeature.coinify.iOS,
         nav,
         selectedAccount,
         theme.colors.text,
