@@ -8,6 +8,7 @@ import { useBalances, useCombineFiatBalances, useFormatFiat, useThemedStyles } f
 import { FungibleTokenWithBalance } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BalanceUtils } from "~Utils"
+import { Chart } from "./Chart"
 
 type Props = {
     token: FungibleTokenWithBalance
@@ -112,32 +113,56 @@ export const TokenCard = ({ token }: Props) => {
 
             {symbol ? (
                 <>
-                    <BaseView flexDirection="column">
-                        <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.GREY_800}>
+                    <BaseView flexDirection="column" flex={1}>
+                        <BaseText
+                            typographyFont="subSubTitleSemiBold"
+                            color={COLORS.GREY_800}
+                            flexDirection="row"
+                            numberOfLines={1}>
                             {name}
                         </BaseText>
                         {symbol}
                     </BaseView>
                 </>
             ) : (
-                <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.GREY_800}>
+                <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.GREY_800} flex={1} flexDirection="row">
                     {name}
                 </BaseText>
             )}
 
-            <BaseView flexDirection="column" style={styles.price}>
+            <BaseSpacer width={8} />
+            <Chart token={token} />
+            <BaseSpacer width={8} />
+
+            <BaseView flexDirection="column" style={styles.price} flex={1} alignItems="flex-end">
                 {showFiatBalance ? (
                     <>
-                        <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.GREY_800} align="right">
+                        <BaseText
+                            typographyFont="subSubTitleSemiBold"
+                            color={COLORS.GREY_800}
+                            align="right"
+                            numberOfLines={1}
+                            flexDirection="row">
                             {areAlmostZero && token.balance.isHidden && "< "}
                             {renderFiatBalance}
                         </BaseText>
-                        <BaseText typographyFont="bodyMedium" color={COLORS.GREY_500} align="right">
+                        <BaseText
+                            typographyFont="bodyMedium"
+                            color={COLORS.GREY_500}
+                            align="right"
+                            numberOfLines={1}
+                            flexDirection="row">
                             {tokenBalance}
                         </BaseText>
                     </>
                 ) : (
-                    <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.GREY_800} align="right">
+                    <BaseText
+                        typographyFont="subSubTitleSemiBold"
+                        color={COLORS.GREY_800}
+                        align="right"
+                        flex={1}
+                        numberOfLines={1}
+                        flexDirection="row">
                         {tokenBalance}
                     </BaseText>
                 )}
@@ -152,6 +177,6 @@ const baseStyles = () =>
             height: 80,
         },
         price: {
-            marginLeft: "auto",
+            // marginLeft: "auto",
         },
     })
