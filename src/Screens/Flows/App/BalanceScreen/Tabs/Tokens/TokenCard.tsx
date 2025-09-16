@@ -38,11 +38,11 @@ export const TokenCard = ({ token }: Props) => {
             case "B3TR":
                 return (
                     <BaseView flexDirection="row" gap={4}>
-                        <BaseText typographyFont="captionSemiBold" color={COLORS.GREY_500}>
+                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500}>
                             {B3TR.symbol}
                         </BaseText>
                         <BaseIcon name="icon-arrow-left-right" size={12} color={COLORS.GREY_300} />
-                        <BaseText typographyFont="captionSemiBold" color={COLORS.GREY_500}>
+                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500}>
                             {VOT3.symbol}
                         </BaseText>
                     </BaseView>
@@ -51,7 +51,7 @@ export const TokenCard = ({ token }: Props) => {
                 return null
             default:
                 return (
-                    <BaseText typographyFont="captionSemiBold" color={COLORS.GREY_500}>
+                    <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500}>
                         {token.symbol}
                     </BaseText>
                 )
@@ -113,14 +113,14 @@ export const TokenCard = ({ token }: Props) => {
             {symbol ? (
                 <>
                     <BaseView flexDirection="column">
-                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_800}>
+                        <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.GREY_800}>
                             {name}
                         </BaseText>
                         {symbol}
                     </BaseView>
                 </>
             ) : (
-                <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_800}>
+                <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.GREY_800}>
                     {name}
                 </BaseText>
             )}
@@ -128,16 +128,16 @@ export const TokenCard = ({ token }: Props) => {
             <BaseView flexDirection="column" style={styles.price}>
                 {showFiatBalance ? (
                     <>
-                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_800} align="right">
+                        <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.GREY_800} align="right">
                             {areAlmostZero && token.balance.isHidden && "< "}
                             {renderFiatBalance}
                         </BaseText>
-                        <BaseText typographyFont="captionMedium" color={COLORS.GREY_500} align="right">
+                        <BaseText typographyFont="bodyMedium" color={COLORS.GREY_500} align="right">
                             {tokenBalance}
                         </BaseText>
                     </>
                 ) : (
-                    <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_800} align="right">
+                    <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.GREY_800} align="right">
                         {tokenBalance}
                     </BaseText>
                 )}
