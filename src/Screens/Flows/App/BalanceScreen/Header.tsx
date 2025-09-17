@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { default as React, useCallback } from "react"
 import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
-import Animated, { clamp, SharedValue, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
+import Animated, { clamp, interpolate, SharedValue, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { AccountIcon, BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -30,8 +30,16 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
 
     const gradientStyle = useAnimatedStyle(() => {
         return {
-            height: contentOffsetY.value + height.value * 1.5,
-            transform: [{ translateY: -clamp(scrollY.value, 0, contentOffsetY.value - 40) }],
+            height: height.value * 2,
+            transform: [
+                {
+                    translateY: -clamp(
+                        interpolate(scrollY.value, [0, contentOffsetY.value - height.value], [0, height.value * 0.58]),
+                        0,
+                        height.value,
+                    ),
+                },
+            ],
         }
     }, [scrollY.value, contentOffsetY.value])
 
@@ -45,10 +53,10 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
     return (
         <BaseView style={styles.root} onLayout={onLayout}>
             <AnimatedLinearGradient
-                colors={[COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.50)", COLORS.PURPLE]}
+                colors={[COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.50)", "#423483"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
-                locations={[0, 0.6524, 1]}
+                locations={[0, 0.65, 1]}
                 angle={0}
                 style={[gradientStyle, styles.gradient]}
             />

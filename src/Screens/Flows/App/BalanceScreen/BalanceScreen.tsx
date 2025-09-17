@@ -44,11 +44,11 @@ export const BalanceScreen = () => {
             fixedBody={
                 <ScrollView refreshControl={<PullToRefresh />} onScroll={onScroll}>
                     <LinearGradient
-                        colors={[COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.50)", COLORS.PURPLE]}
+                        colors={[COLORS.BALANCE_BACKGROUND, "#1D173A80", "#423483"]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 0, y: 1 }}
                         style={{ position: "relative", marginTop: 16 }}
-                        locations={[0, 0.6524, 1]}
+                        locations={[0, 0.55, 1]}
                         angle={180}>
                         <BaseView flexDirection="row" gap={4} alignSelf="center">
                             <BaseText typographyFont="headerTitle" fontWeight="400" color={COLORS.PURPLE_LABEL}>
