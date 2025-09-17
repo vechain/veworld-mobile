@@ -80,21 +80,6 @@ export const selectHasUserOpenedDiscovery = createSelector(
 
 export const selectConnectedDiscoverDApps = createSelector(getDiscoveryState, discovery => discovery.connectedApps)
 
-export const selectFeaturedImages = createSelector(getDiscoveryState, discovery => {
-    // domain -> image
-    const images: Record<string, object | undefined> = {}
-
-    for (const dapp of discovery.featured) {
-        if (!dapp.image) continue
-
-        try {
-            images[new URL(dapp.href).host] = dapp.image
-        } catch {}
-    }
-
-    return images
-})
-
 export const selectSwapFeaturedDapps = createSelector(selectFeaturedDapps, dapps =>
     dapps.filter(dapp => dapp?.tags?.map(t => t.toLowerCase())?.includes("swap")),
 )
@@ -108,6 +93,21 @@ export const selectCurrentTab = createSelector(selectTabs, selectCurrentTabId, (
 )
 export const selectBannerInteractions = createSelector(getDiscoveryState, discovery => discovery.bannerInteractions)
 
+export const selectSession = createSelector(
+    getDiscoveryState,
+    (__: RootState, url: string, genesisId?: string) => ({ url, genesisId }),
+    (state, { url, genesisId }) => {
+        if (!url) return undefined
+        const session = state.sessions?.[new URL(url).origin]
+        if (!genesisId) return session
+        if (session?.genesisId?.toLowerCase() === genesisId) return session
+        return undefined
+    },
+)
+
+export const selectSessions = createSelector(getDiscoveryState, state => {
+    return state.sessions ?? {}
+})
 export const selectIsNormalUser = createSelector(getDiscoveryState, state => state.isNormalUser ?? false)
 
 export const selectSuggestedAppIds = createSelector(getDiscoveryState, state => state.suggestedAppIds)
