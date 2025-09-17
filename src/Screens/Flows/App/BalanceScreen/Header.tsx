@@ -1,10 +1,10 @@
 import { useNavigation } from "@react-navigation/native"
-import { default as React, useCallback, useState } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { default as React, useCallback } from "react"
+import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
-import { Extrapolation, interpolate, runOnJS, SharedValue, useDerivedValue } from "react-native-reanimated"
+import Animated, { clamp, SharedValue, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { AccountIcon, BaseIcon, BaseText, BaseView } from "~Components"
-import { COLORS } from "~Constants"
+import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -14,41 +14,46 @@ type Props = {
     contentOffsetY: SharedValue<number>
 }
 
+const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
+
 export const Header = ({ scrollY, contentOffsetY }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const account = useAppSelector(selectSelectedAccount)
 
     const nav = useNavigation()
 
-    const [locations, setLocations] = useState([0, 0, 0])
+    const height = useSharedValue(90)
 
     const onWalletManagementPress = useCallback(() => {
         nav.navigate(Routes.WALLET_MANAGEMENT)
     }, [nav])
 
-    const secondStop = useDerivedValue(
-        () => interpolate(scrollY.value, [0, contentOffsetY.value], [1, 0.6524], Extrapolation.CLAMP),
-        [scrollY.value, contentOffsetY.value],
-    )
-    const thirdStop = useDerivedValue(
-        () => interpolate(scrollY.value, [0, contentOffsetY.value], [1, 1], Extrapolation.CLAMP),
-        [scrollY.value, contentOffsetY.value],
-    )
+    const gradientStyle = useAnimatedStyle(() => {
+        return {
+            height: contentOffsetY.value + height.value * 1.5,
+            transform: [{ translateY: -clamp(scrollY.value, 0, contentOffsetY.value - 40) }],
+        }
+    }, [scrollY.value, contentOffsetY.value])
 
-    const stops = useDerivedValue(() => [0, secondStop.value, thirdStop.value], [secondStop.value, thirdStop.value])
-
-    useDerivedValue(() => runOnJS(setLocations)(stops.value), [stops.value])
+    const onLayout = useCallback(
+        (e: LayoutChangeEvent) => {
+            height.value = e.nativeEvent.layout.height
+        },
+        [height],
+    )
 
     return (
-        <LinearGradient
-            style={styles.root}
-            colors={[COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.50)", COLORS.PURPLE]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            locations={locations}
-            angle={0}>
+        <BaseView style={styles.root} onLayout={onLayout}>
+            <AnimatedLinearGradient
+                colors={[COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.50)", COLORS.PURPLE]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0, y: 1 }}
+                locations={[0, 0.6524, 1]}
+                angle={0}
+                style={[gradientStyle, styles.gradient]}
+            />
             <TouchableOpacity>
-                <BaseView flexDirection="row" gap={12} p={8} pr={16} bg="rgba(255, 255, 255, 0.05)" borderRadius={99}>
+                <BaseView flexDirection="row" gap={12} p={8} pr={16} borderRadius={99} bg="rgba(255, 255, 255, 0.05)">
                     <AccountIcon address={account.address} size={24} borderRadius={100} />
                     <BaseText typographyFont="captionSemiBold" color={COLORS.PURPLE_LABEL}>
                         {account.alias}
@@ -68,7 +73,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                     </BaseView>
                 </TouchableOpacity>
             </BaseView>
-        </LinearGradient>
+        </BaseView>
     )
 }
 
@@ -80,5 +85,15 @@ const baseStyles = () =>
             paddingHorizontal: 16,
             paddingBottom: 16,
             justifyContent: "space-between",
+            position: "relative",
+            overflow: "hidden",
+        },
+        gradient: {
+            position: "absolute",
+            top: 0,
+            left: 0,
+            transformOrigin: "bottom",
+            width: SCREEN_WIDTH,
+            zIndex: -1,
         },
     })
