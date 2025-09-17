@@ -277,7 +277,18 @@ const parseDisconnectRequest = async (
         const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
         throw new Error(err.message)
     }
-    return { ...parsedRequest.request } as DisconnectAppRequest
+
+    if (!("session" in parsedRequest.payload)) {
+        const err = new DeepLinkError(DeepLinkErrorCode.InvalidPayload)
+        const params = new URLSearchParams({
+            errorMessage: err.message,
+            errorCode: err.code.toString(),
+        })
+        await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+        return
+    }
+
+    return { ...parsedRequest.request, session: parsedRequest.payload.session } as DisconnectAppRequest
 }
 
 const dispatchResourceNotAvailableError = (redirectUrl: string) => {

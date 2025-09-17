@@ -1,6 +1,5 @@
 import { useCallback, useEffect } from "react"
 import { Linking } from "react-native"
-import DeviceInfo from "react-native-device-info"
 import nacl from "tweetnacl"
 import { decodeBase64, encodeBase64 } from "tweetnacl-util"
 import { useDeepLinksSession } from "~Components/Providers/DeepLinksProvider"
@@ -68,14 +67,18 @@ export const useExternalDappConnection = () => {
 
     const onConnect = useCallback(
         async ({ dappPublicKey, redirectUrl, dappName, dappUrl }: OnConnectParams) => {
-            if (!dappPublicKey || !selectedAccount || !signKeyPair) return
+            if (!dappPublicKey || !selectedAccount || !signKeyPair) {
+                DAppUtils.dispatchInternalError(redirectUrl)
+                mutex.release()
+                return
+            }
 
             try {
                 const keyPair = nacl.box.keyPair()
                 const sharedSecret = nacl.box.before(decodeBase64(dappPublicKey), keyPair.secretKey)
 
                 const sessionData = JSON.stringify({
-                    app_id: DeviceInfo.getBundleId(),
+                    app_id: dappName,
                     network: network.type,
                     address: selectedAccount.address,
                     timestamp: new Date().getTime(),
@@ -115,9 +118,7 @@ export const useExternalDappConnection = () => {
                 })
 
                 mutex.release()
-                setTimeout(() => {
-                    Linking.openURL(`${redirectUrl}?${params.toString()}`)
-                }, 800)
+                Linking.openURL(`${redirectUrl}?${params.toString()}`)
             } catch (_err: unknown) {
                 const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
 
@@ -127,8 +128,8 @@ export const useExternalDappConnection = () => {
                     errorMessage: err.message,
                     errorCode: err.code.toString(),
                 })
-                await Linking.openURL(`${redirectUrl}?${params.toString()}`)
                 mutex.release()
+                await Linking.openURL(`${redirectUrl}?${params.toString()}`)
             }
         },
         [dispatch, network.type, selectedAccount, signKeyPair, mutex],
@@ -183,8 +184,8 @@ export const useExternalDappConnection = () => {
                 nonce: encodeBase64(nonce),
                 public_key: publicKey,
             })
-            await Linking.openURL(`${redirectUrl}?${params.toString()}`)
             mutex.release()
+            await Linking.openURL(`${redirectUrl}?${params.toString()}`)
         },
         [getSessionKeyPair, mutex],
     )
@@ -201,8 +202,8 @@ export const useExternalDappConnection = () => {
                 errorCode: err.code.toString(),
             })
 
-            await Linking.openURL(`${redirectUrl}?${params.toString()}`)
             mutex.release()
+            await Linking.openURL(`${redirectUrl}?${params.toString()}`)
         },
         [mutex],
     )
@@ -218,8 +219,8 @@ export const useExternalDappConnection = () => {
                 errorMessage: err.message,
                 errorCode: err.code.toString(),
             })
-            await Linking.openURL(`${redirectUrl}?${params.toString()}`)
             mutex.release()
+            await Linking.openURL(`${redirectUrl}?${params.toString()}`)
         },
         [mutex],
     )
