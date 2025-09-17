@@ -5,14 +5,12 @@ import { TestWrapper } from "~Test"
 import { waitFor } from "@testing-library/react-native"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import axios from "axios"
 
 jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
     useNavigation: jest.fn(),
 }))
 jest.mock("./useVisitedUrls")
-jest.mock("axios")
 
 describe("useBrowserNavigation", () => {
     beforeEach(() => {
@@ -27,21 +25,18 @@ describe("useBrowserNavigation", () => {
         ;(useNavigation as jest.Mock).mockReturnValue({
             navigate,
         })
-        ;(axios.get as jest.Mock).mockResolvedValue({
-            status: 200,
-        })
 
         const { result } = renderHook(() => useBrowserNavigation(), {
             wrapper: TestWrapper,
         })
 
         act(() => {
-            result.current.navigateToBrowser("https://vechain.org")
+            result.current.navigateToBrowser("https://google.com")
         })
 
         await waitFor(() => {
-            expect(navigate).toHaveBeenCalledWith(Routes.BROWSER, { url: "https://vechain.org" })
-            expect(addVisitedUrl).toHaveBeenCalledWith("https://vechain.org")
+            expect(navigate).toHaveBeenCalledWith(Routes.BROWSER, { url: "https://google.com" })
+            expect(addVisitedUrl).toHaveBeenCalledWith("https://google.com")
         })
     })
 

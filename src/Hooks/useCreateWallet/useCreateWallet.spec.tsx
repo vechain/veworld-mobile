@@ -1,7 +1,12 @@
 /* eslint-disable max-len */
 import { renderHook } from "@testing-library/react-hooks"
 import { waitFor } from "@testing-library/react-native"
-import { addDeviceAndAccounts, addLedgerDeviceAndAccounts, setMnemonic } from "~Storage/Redux"
+import {
+    addDeviceAndAccounts,
+    addLedgerDeviceAndAccounts,
+    addSmartWalletDeviceAndAccount,
+    setMnemonic,
+} from "~Storage/Redux"
 import { TestWrapper } from "~Test"
 import { useCreateWallet } from "./useCreateWallet"
 import { IMPORT_TYPE, NewLedgerDevice } from "~Model"
@@ -84,6 +89,9 @@ jest.mock("~Storage/Redux/Actions", () => ({
     setUserSelectedSecurity: jest.fn(jest.requireActual("~Storage/Redux/Actions").setUserSelectedSecurity),
     setMnemonic: jest.fn(jest.requireActual("~Storage/Redux/Actions").setMnemonic),
     addLedgerDeviceAndAccounts: jest.fn(jest.requireActual("~Storage/Redux/Actions").addLedgerDeviceAndAccounts),
+    addSmartWalletDeviceAndAccount: jest.fn(
+        jest.requireActual("~Storage/Redux/Actions").addSmartWalletDeviceAndAccount,
+    ),
 }))
 
 jest.mock("~Storage/Redux/Selectors", () => ({
@@ -170,6 +178,40 @@ describe("useCreateWallet", () => {
             } catch (e) {}
 
             expect(addLedgerDeviceAndAccounts).toHaveBeenCalledWith(ledger)
+        })
+    })
+
+    describe("createSmartWallet", () => {
+        it("should create a Smart Wallet device and mark as complete", async () => {
+            const { result } = renderHook(() => useCreateWallet(), { wrapper: TestWrapper })
+
+            const address = "0x4444444444444444444444444444444444444444"
+            await result.current.createSmartWallet({ address })
+
+            await waitFor(() => result.current.isComplete)
+
+            expect(addSmartWalletDeviceAndAccount).toHaveBeenCalledWith({
+                rootAddress: address,
+                type: "smart-wallet",
+                alias: "Smart Wallet",
+                position: 0,
+            })
+            expect(result.current.isComplete).toBe(true)
+        })
+
+        it("should call onError and throw when creation fails", async () => {
+            ;(addSmartWalletDeviceAndAccount as jest.Mock).mockImplementationOnce(() => {
+                throw new Error("failed")
+            })
+
+            const { result } = renderHook(() => useCreateWallet(), { wrapper: TestWrapper })
+            const onError = jest.fn()
+
+            await expect(
+                result.current.createSmartWallet({ address: "0x1234567890123456789012345678901234567890", onError }),
+            ).rejects.toThrow()
+
+            expect(onError).toHaveBeenCalled()
         })
     })
 })

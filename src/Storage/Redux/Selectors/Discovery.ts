@@ -1,7 +1,7 @@
 import { RootState } from "../Types"
 import { createSelector } from "@reduxjs/toolkit"
+import _ from "lodash"
 import { DiscoveryDApp } from "~Constants"
-import { URIUtils } from "~Utils"
 
 const getDiscoveryState = (state: RootState) => state.discovery
 
@@ -16,16 +16,11 @@ export const selectCustomDapps = createSelector(getDiscoveryState, (discovery): 
 
 export const selectBookmarkedDapps = createSelector(
     selectFavoritesDapps,
-    (favorites: DiscoveryDApp[]): DiscoveryDApp[] => {
-        const dapps: DiscoveryDApp[] = []
+    selectCustomDapps,
+    (favorites, custom): DiscoveryDApp[] => {
+        const dapps: DiscoveryDApp[] = [...favorites, ...custom]
 
-        for (const dapp of favorites) {
-            if (!dapps.find(d => URIUtils.compareURLs(d.href, dapp.href))) {
-                dapps.push(dapp)
-            }
-        }
-
-        return dapps
+        return _.uniqBy(dapps, value => value.href)
     },
 )
 

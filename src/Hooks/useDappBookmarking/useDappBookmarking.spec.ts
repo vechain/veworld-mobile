@@ -3,6 +3,8 @@ import { useDappBookmarking } from "./useDappBookmarking"
 import { TestWrapper } from "~Test"
 import { DiscoveryDApp } from "~Constants"
 import { DiscoveryState } from "~Storage/Redux"
+import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
+import { VbdDApp } from "~Model"
 
 const bookmarkedDapps: DiscoveryDApp[] = [
     {
@@ -165,6 +167,58 @@ describe("useDappBookmarking", () => {
             expect(result.current.isBookMarked).toBe(true)
             expect(result.current.existingBookmark).toBeDefined()
             expect(result.current.existingBookmark?.href).toBe("https://example2.com")
+        })
+    })
+
+    it("should add a bookmark from VBD", async () => {
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+            data: [
+                {
+                    app_urls: [],
+                    banner: "https://vechain.org",
+                    createdAtTimestamp: new Date().toISOString(),
+                    description: "DESC",
+                    external_url: "https://example2.com",
+                    id: "0x1",
+                    logo: "https://google.com",
+                    metadataURI: "ipfs://test1",
+                    name: "TEST NAME",
+                    screenshots: [],
+                    social_urls: [],
+                    teamWalletAddress: "0x0",
+                    appAvailableForAllocationVoting: true,
+                },
+            ] satisfies VbdDApp[],
+            isLoading: false,
+        })
+        const { result, waitFor } = renderHook(() => useDappBookmarking("https://example2.com", "Example 2"), {
+            wrapper: TestWrapper,
+        })
+
+        await act(async () => {
+            await result.current.toggleBookmark()
+        })
+
+        await waitFor(() => {
+            expect(result.current.isBookMarked).toBe(true)
+            expect(result.current.existingBookmark).toBeDefined()
+            expect(result.current.existingBookmark?.href).toBe("https://example2.com")
+        })
+    })
+
+    it("should add a bookmark from a generic URL", async () => {
+        const { result, waitFor } = renderHook(() => useDappBookmarking("https://exampletest.com", "Example Test"), {
+            wrapper: TestWrapper,
+        })
+
+        await act(async () => {
+            await result.current.toggleBookmark()
+        })
+
+        await waitFor(() => {
+            expect(result.current.isBookMarked).toBe(true)
+            expect(result.current.existingBookmark).toBeDefined()
+            expect(result.current.existingBookmark?.href).toBe("https://exampletest.com")
         })
     })
 

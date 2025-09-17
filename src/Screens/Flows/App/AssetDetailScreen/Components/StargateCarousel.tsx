@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { BaseButton, BaseCarousel, BaseSpacer, BaseText, BaseView, CarouselSlideItem } from "~Components"
+import { BaseButton, BaseCarousel, BaseChip, BaseSpacer, BaseText, BaseView, CarouselSlideItem } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
 import {
     ColorThemeType,
@@ -15,10 +15,15 @@ import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
 import { BannersCarousel } from "../../HomeScreen/Components"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
 import { StargateCarouselItem } from "./StargateCarouselItem"
-import { AddressUtils } from "~Utils"
+
+enum StakingFilter {
+    OWN = "own",
+    MANAGING = "managing",
+}
 
 export const StargateCarousel = () => {
     const { LL } = useI18nContext()
@@ -26,15 +31,49 @@ export const StargateCarousel = () => {
     const address = useAppSelector(selectSelectedAccountAddress)
 
     const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
-    const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes)
-    // We only include staked VET in fiat balance if user is the owner, not a manager - Stargate staking
-    const isNodeOwner = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
+    const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts({
+        nodes: stargateNodes,
+        address,
+        isLoadingNodes: isLoadingNodes,
+    })
     const nav = useNavigation()
 
     const { navigateWithTab } = useBrowserTab()
 
+    const hasOwnedNodes = useMemo(
+        () => stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address)),
+        [stargateNodes, address],
+    )
+    const hasManagedNodes = useMemo(
+        () => stargateNodes.some(node => !AddressUtils.compareAddresses(node.xNodeOwner, address)),
+        [stargateNodes, address],
+    )
+
+    // Initialize filter state
+    const [filter, setFilter] = useState<StakingFilter>(StakingFilter.OWN)
+
+    useEffect(() => {
+        if (isLoadingNodes || !stargateNodes.length) return
+
+        const preferredFilter = hasOwnedNodes ? StakingFilter.OWN : StakingFilter.MANAGING
+        setFilter(currentFilter => {
+            return currentFilter !== preferredFilter ? preferredFilter : currentFilter
+        })
+    }, [hasOwnedNodes, isLoadingNodes, stargateNodes.length])
+
+    const filteredNodes = useMemo(() => {
+        return filter === StakingFilter.OWN
+            ? stargateNodes.filter(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
+            : stargateNodes.filter(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
+    }, [stargateNodes, filter, address])
+
+    const filteredNfts = useMemo(() => {
+        const nodeIds = new Set(filteredNodes.map(n => n.nodeId))
+        return ownedStargateNfts.filter(nft => nodeIds.has(nft.tokenId))
+    }, [ownedStargateNfts, filteredNodes])
+
     const cards = useMemo(() => {
-        return ownedStargateNfts
+        return filteredNfts
             .map(
                 (nft, idx) =>
                     ({
@@ -58,7 +97,7 @@ export const StargateCarousel = () => {
                     testID: "STARGATE_CAROUSEL_NEW_STAKE",
                 } satisfies CarouselSlideItem,
             ])
-    }, [ownedStargateNfts, styles.biggerCarouselItem, styles.carouselItem])
+    }, [filteredNfts, styles.biggerCarouselItem, styles.carouselItem])
 
     const onNavigateToStargate = useCallback(() => {
         navigateWithTab({
@@ -70,20 +109,40 @@ export const StargateCarousel = () => {
         })
     }, [nav, navigateWithTab])
 
+    const filterButtons = useMemo(
+        () => [
+            { id: StakingFilter.OWN, label: LL.STARGATE_OWN_LABEL() },
+            { id: StakingFilter.MANAGING, label: LL.STARGATE_DELEGATEE_LABEL() },
+        ],
+        [LL],
+    )
+
     if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0)
         return <BannersCarousel location="token_screen" />
 
     return (
         <BaseView flexDirection="column" gap={12} w={100} mb={40}>
-            <BaseText py={10} typographyFont="bodySemiBold">
-                {LL.ACTIVITY_STAKING_LABEL()}
-            </BaseText>
+            <BaseView flexDirection="row" alignItems="center" justifyContent="space-between" py={8}>
+                <BaseText typographyFont="bodySemiBold">{LL.ACTIVITY_STAKING_LABEL()}</BaseText>
+                {hasOwnedNodes && hasManagedNodes && (
+                    <BaseView flexDirection="row" gap={12}>
+                        {filterButtons.map(button => (
+                            <BaseChip
+                                key={button.id}
+                                label={button.label}
+                                active={filter === button.id}
+                                onPress={() => setFilter(button.id)}
+                            />
+                        ))}
+                    </BaseView>
+                )}
+            </BaseView>
             <BaseView style={styles.card}>
                 <StargateLockedValue
                     isLoading={isLoadingNodes || isLoadingNfts}
-                    nfts={ownedStargateNfts}
+                    nfts={filteredNfts}
                     rootStyle={styles.section}
-                    isNodeOwner={isNodeOwner}
+                    isNodeOwner={filter === StakingFilter.OWN && hasOwnedNodes}
                 />
                 <BaseSpacer bg={theme.colors.cardDivider} height={1} />
                 <BaseCarousel
