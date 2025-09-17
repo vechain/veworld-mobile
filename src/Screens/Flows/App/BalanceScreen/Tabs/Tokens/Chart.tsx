@@ -8,7 +8,7 @@ import {
     MarketChartResponse,
     useSmartMarketChart,
 } from "~Api/Coingecko"
-import { B3TR, COLORS, isSmallScreen, VET, VTHO } from "~Constants"
+import { B3TR, COLORS, SCREEN_WIDTH, VET, VTHO } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { FungibleToken } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
@@ -21,7 +21,7 @@ type Props = {
  * Get the price change in the timeframe passed
  * @returns The price change
  */
-const getPriceChange = (data?: MarketChartResponse) => {
+export const getPriceChange = (data?: MarketChartResponse) => {
     // Use chart data if available so the change is sycned with the asset charts,
     // otherwise fallback to the token info change
     if (data?.length) {
@@ -34,6 +34,8 @@ const getPriceChange = (data?: MarketChartResponse) => {
     }
     return 0
 }
+
+export const CAN_DISPLAY_CHART = SCREEN_WIDTH >= 450
 
 export const Chart = ({ token }: Props) => {
     const currency = useAppSelector(selectCurrency)
@@ -61,12 +63,13 @@ export const Chart = ({ token }: Props) => {
         ]
     }, [chartData])
 
+    if (!CAN_DISPLAY_CHART) return null
     if (![B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol)) return null
 
     return (
         <Animated.View style={styles.root}>
             <LineChart.Provider data={downsampled ?? DEFAULT_LINE_CHART_DATA}>
-                <LineChart width={isSmallScreen ? 60 : 120} height={32} yGutter={1}>
+                <LineChart width={120} height={32} yGutter={1}>
                     <LineChart.Path color={isGoingUp ? COLORS.GREEN_300 : COLORS.RED_400} width={3} />
                 </LineChart>
             </LineChart.Provider>
@@ -78,5 +81,6 @@ const baseStyles = () =>
     StyleSheet.create({
         root: {
             height: 32,
+            flex: 1,
         },
     })

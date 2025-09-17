@@ -1,14 +1,14 @@
-import React, { useMemo } from "react"
+import { default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useExchangeRate, useSmartMarketChart } from "~Api/Coingecko"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { B3TR, COLORS, VET, VOT3 } from "~Constants"
 import { useBalances, useCombineFiatBalances, useFormatFiat, useThemedStyles } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BalanceUtils } from "~Utils"
-import { Chart } from "./Chart"
+import { CAN_DISPLAY_CHART, Chart, getPriceChange } from "./Chart"
 
 type Props = {
     token: FungibleTokenWithBalance
@@ -34,6 +34,26 @@ export const TokenCard = ({ token }: Props) => {
         }
     }, [token.name, token.symbol])
 
+    const { data: chartData } = useSmartMarketChart({
+        id: getCoinGeckoIdBySymbol[token.symbol],
+        vs_currency: currency,
+        days: 1,
+        placeholderData: DEFAULT_LINE_CHART_DATA,
+    })
+
+    const isGoingUp = useMemo(() => getPriceChange(chartData) >= 0, [chartData])
+
+    const chartIcon = useMemo(() => {
+        if (!chartData || CAN_DISPLAY_CHART) return null
+        return (
+            <BaseIcon
+                name={isGoingUp ? "icon-stat-arrow-up" : "icon-stat-arrow-down"}
+                size={16}
+                color={isGoingUp ? COLORS.GREEN_300 : COLORS.RED_400}
+            />
+        )
+    }, [chartData, isGoingUp])
+
     const symbol = useMemo(() => {
         switch (token.symbol) {
             case "B3TR":
@@ -46,18 +66,22 @@ export const TokenCard = ({ token }: Props) => {
                         <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500}>
                             {VOT3.symbol}
                         </BaseText>
+                        {chartIcon}
                     </BaseView>
                 )
             case "veB3TR":
                 return null
             default:
                 return (
-                    <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500}>
-                        {token.symbol}
-                    </BaseText>
+                    <BaseView flexDirection="row" gap={4}>
+                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500}>
+                            {token.symbol}
+                        </BaseText>
+                        {chartIcon}
+                    </BaseView>
                 )
         }
-    }, [token.symbol])
+    }, [chartIcon, token.symbol])
 
     const exchangeRateId = useMemo(() => {
         const coingeckoId = getCoinGeckoIdBySymbol[token.symbol]
@@ -101,40 +125,40 @@ export const TokenCard = ({ token }: Props) => {
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
     return (
-        <BaseView flexDirection="row" p={16} bg={COLORS.WHITE} borderRadius={12} style={styles.root}>
-            <TokenImage
-                icon={token.icon}
-                isVechainToken={AddressUtils.compareAddresses(VET.address, token.address)}
-                iconSize={40}
-                isCrossChainToken={isCrossChainToken}
-                rounded={!isCrossChainToken}
-            />
-            <BaseSpacer width={16} />
+        <BaseView flexDirection="row" p={16} bg={COLORS.WHITE} borderRadius={12} style={styles.root} gap={8}>
+            <BaseView flexDirection="row" gap={16} flex={1}>
+                <TokenImage
+                    icon={token.icon}
+                    isVechainToken={AddressUtils.compareAddresses(VET.address, token.address)}
+                    iconSize={40}
+                    isCrossChainToken={isCrossChainToken}
+                    rounded={!isCrossChainToken}
+                />
 
-            {symbol ? (
-                <>
-                    <BaseView flexDirection="column" flex={1}>
-                        <BaseText
-                            typographyFont="subSubTitleSemiBold"
-                            color={COLORS.GREY_800}
-                            flexDirection="row"
-                            numberOfLines={1}>
-                            {name}
-                        </BaseText>
-                        {symbol}
-                    </BaseView>
-                </>
-            ) : (
-                <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.GREY_800} flex={1} flexDirection="row">
-                    {name}
-                </BaseText>
-            )}
+                {symbol ? (
+                    <>
+                        <BaseView flexDirection="column" flex={1}>
+                            <BaseText
+                                typographyFont="subSubTitleSemiBold"
+                                color={COLORS.GREY_800}
+                                flexDirection="row"
+                                numberOfLines={1}
+                                flex={1}>
+                                {name}
+                            </BaseText>
+                            {symbol}
+                        </BaseView>
+                    </>
+                ) : (
+                    <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.GREY_800} flexDirection="row">
+                        {name}
+                    </BaseText>
+                )}
+            </BaseView>
 
-            <BaseSpacer width={8} />
             <Chart token={token} />
-            <BaseSpacer width={8} />
 
-            <BaseView flexDirection="column" style={styles.price} flex={1} alignItems="flex-end">
+            <BaseView flexDirection="column" style={styles.price} alignItems="flex-end" flexShrink={0}>
                 {showFiatBalance ? (
                     <>
                         <BaseText
@@ -160,7 +184,6 @@ export const TokenCard = ({ token }: Props) => {
                         typographyFont="subSubTitleSemiBold"
                         color={COLORS.GREY_800}
                         align="right"
-                        flex={1}
                         numberOfLines={1}
                         flexDirection="row">
                         {tokenBalance}
