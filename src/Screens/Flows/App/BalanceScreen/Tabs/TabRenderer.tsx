@@ -29,7 +29,8 @@ export const TabRenderer = ({ onLayout }: Props) => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
-            transform: [{ translateY: -24 }],
+            marginTop: -24,
+            paddingBottom: 24,
             backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.LIGHT_GRAY,
             padding: 16,
             borderTopLeftRadius: 24,
