@@ -70,7 +70,7 @@ export const SwapScreen = () => {
 
     const onDAppPress = useCallback(
         ({ href, custom }: { href: string; custom?: boolean }) => {
-            nav.navigate(Routes.BROWSER, { url: href })
+            nav.navigate(Routes.BROWSER, { url: href, returnScreen: Routes.SWAP })
 
             track(AnalyticsEvent.SWAPP_USER_OPENED_DAPP, {
                 url: href,
