@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.3 (2025-09-17)</small>
+
+* build: init ([2c58554](https://github.com/vechain/veworld-mobile/commit/2c58554))
+* Fix BottomSheet actions' ordering (#3291) ([684c4af](https://github.com/vechain/veworld-mobile/commit/684c4af)), closes [#3291](https://github.com/vechain/veworld-mobile/issues/3291)
+
 ## <small>2.4.2 (2025-09-10)</small>
 
 * build: init ([82afb17](https://github.com/vechain/veworld-mobile/commit/82afb17))
