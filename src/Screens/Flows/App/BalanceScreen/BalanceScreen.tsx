@@ -1,54 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
 import { useQueryClient } from "@tanstack/react-query"
 import { default as React, useCallback, useMemo, useState } from "react"
-import { TouchableOpacity } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { RefreshControl } from "react-native-gesture-handler"
 import LinearGradient from "react-native-linear-gradient"
-import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
-import { ShadowView } from "~Components/Reusable/ShadowView"
+import { BaseSimpleTabs, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { IconKey } from "~Model"
 import { selectCurrencySymbol, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { useTokenBalances } from "../HomeScreen/Hooks"
+import { GlassButtonWithLabel } from "./Components/GlassButton"
 import { Header } from "./Header"
 import { ScrambleText } from "./ScrambleText"
 import { Tokens } from "./Tabs/Tokens"
-
-const GlassButton = ({ icon }: { icon: IconKey }) => {
-    return (
-        <TouchableOpacity>
-            <LinearGradient
-                colors={["rgba(29, 23, 58, 0.20)", "rgba(177, 168, 220, 0.20)"]}
-                angle={0}
-                style={{ borderRadius: 99 }}>
-                <ShadowView
-                    inset
-                    backgroundColor="transparent"
-                    shadowColor="rgba(214, 212, 227, 0.10)"
-                    shadowOffset={{ height: 4, width: 0 }}
-                    shadowBlur={4}
-                    style={{ padding: 12, borderRadius: 99 }}>
-                    <BaseIcon name={icon} size={24} color={COLORS.PURPLE_LABEL} />
-                </ShadowView>
-            </LinearGradient>
-        </TouchableOpacity>
-    )
-}
-
-const GlassButtonFull = ({ label, icon }: { label: string; icon: IconKey }) => {
-    return (
-        <BaseView flexDirection="column" gap={8} alignItems="center">
-            <GlassButton icon={icon} />
-            <BaseText typographyFont="captionSemiBold" color={COLORS.PURPLE_LABEL}>
-                {label}
-            </BaseText>
-        </BaseView>
-    )
-}
 
 const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
 
@@ -120,10 +86,22 @@ export const BalanceScreen = () => {
                         <BaseSpacer height={12} />
 
                         <BaseView alignSelf="center" flexDirection="row" gap={24}>
-                            <GlassButtonFull label="buy" icon="icon-plus" />
-                            <GlassButtonFull label="receive" icon="icon-arrow-down" />
-                            <GlassButtonFull label="send" icon="icon-arrow-up" />
-                            <GlassButtonFull label="other" icon="icon-more-vertical" />
+                            <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} icon="icon-plus" onPress={() => {}} />
+                            <GlassButtonWithLabel
+                                label={LL.BALANCE_ACTION_RECEIVE()}
+                                icon="icon-arrow-down"
+                                onPress={() => {}}
+                            />
+                            <GlassButtonWithLabel
+                                label={LL.BALANCE_ACTION_SEND()}
+                                icon="icon-arrow-up"
+                                onPress={() => {}}
+                            />
+                            <GlassButtonWithLabel
+                                label={LL.BALANCE_ACTION_OTHER()}
+                                icon="icon-more-vertical"
+                                onPress={() => {}}
+                            />
                         </BaseView>
 
                         <BaseSpacer height={64} />
