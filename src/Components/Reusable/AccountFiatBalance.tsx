@@ -52,10 +52,10 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
 
     const { stargateNodes, isLoading: loadingNodes } = useUserNodes(accountAddress)
 
-    const { ownedStargateNfts: stargateNfts, isLoading: loadingStargateNfts } = useUserStargateNfts(
-        stargateNodes,
-        loadingNodes,
-    )
+    const { ownedStargateNfts: stargateNfts, isLoading: loadingStargateNfts } = useUserStargateNfts({
+        nodes: stargateNodes,
+        isLoadingNodes: loadingNodes,
+    })
 
     const totalStargateVet = useMemo(() => {
         return stargateNfts.reduce((acc, nft) => {

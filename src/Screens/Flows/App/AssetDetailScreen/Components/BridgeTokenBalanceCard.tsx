@@ -1,21 +1,13 @@
 import { useNavigation } from "@react-navigation/native"
 import { default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import {
-    BaseIcon,
-    BaseSkeleton,
-    BaseText,
-    BaseView,
-    DisabledBuySwapIosBottomSheet,
-    showWarningToast,
-} from "~Components"
-import { TokenWithCompleteInfo, useBottomSheetModal, useThemedStyles, useTokenCardFiatInfo } from "~Hooks"
+import { BaseIcon, BaseSkeleton, BaseText, BaseView, showWarningToast } from "~Components"
+import { TokenWithCompleteInfo, useThemedStyles, useTokenCardFiatInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FastAction, FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
 import { ActionsButtonGroup } from "./ActionsButtonGroup"
 import { BalanceView } from "./BalanceView"
-import { PlatformUtils } from "~Utils"
 
 type Props = {
     token: TokenWithCompleteInfo
@@ -31,12 +23,6 @@ export const BridgeTokenBalanceCard = ({ token, isBalanceVisible, foundToken, op
     const nav = useNavigation()
 
     const { change24h, exchangeRate, isPositive24hChange, isLoading } = useTokenCardFiatInfo(token)
-
-    const {
-        ref: blockedFeaturesIOSBottomSheetRef,
-        onOpen: openBlockedFeaturesIOSBottomSheet,
-        onClose: closeBlockedFeaturesIOSBottomSheet,
-    } = useBottomSheetModal()
 
     const Actions: Record<string, FastAction> = useMemo(
         () => ({
@@ -71,11 +57,6 @@ export const BridgeTokenBalanceCard = ({ token, isBalanceVisible, foundToken, op
                 name: LL.BTN_SWAP(),
                 disabled: !foundToken || isObserved,
                 action: () => {
-                    if (PlatformUtils.isIOS()) {
-                        openBlockedFeaturesIOSBottomSheet()
-                        return
-                    }
-
                     if (foundToken) {
                         nav.navigate(Routes.SWAP)
                     } else {
@@ -111,7 +92,6 @@ export const BridgeTokenBalanceCard = ({ token, isBalanceVisible, foundToken, op
             foundToken,
             isObserved,
             nav,
-            openBlockedFeaturesIOSBottomSheet,
             openQRCodeSheet,
             theme.colors.actionBanner.buttonTextDisabled,
             theme.colors.actionBanner.buttonTextSecondary,
@@ -159,10 +139,6 @@ export const BridgeTokenBalanceCard = ({ token, isBalanceVisible, foundToken, op
         <BaseView style={styles.container}>
             {renderFiatBalance}
             <ActionsButtonGroup actions={actions} />
-            <DisabledBuySwapIosBottomSheet
-                ref={blockedFeaturesIOSBottomSheetRef}
-                onConfirm={closeBlockedFeaturesIOSBottomSheet}
-            />
         </BaseView>
     )
 }
