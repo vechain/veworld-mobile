@@ -1,0 +1,38 @@
+import React, { useMemo, useState } from "react"
+import { LayoutChangeEvent, StyleSheet } from "react-native"
+import { BaseSimpleTabs, BaseView } from "~Components"
+import { COLORS, ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { Tokens } from "./Tokens"
+
+const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
+
+type Props = {
+    onLayout: (e: LayoutChangeEvent) => void
+}
+
+export const TabRenderer = ({ onLayout }: Props) => {
+    const { LL } = useI18nContext()
+    const { styles } = useThemedStyles(baseStyles)
+    const [selectedTab, setSelectedTab] = useState<(typeof TABS)[number]>("TOKENS")
+
+    const labels = useMemo(() => TABS.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL])
+    return (
+        <BaseView style={styles.root} gap={16} onLayout={onLayout}>
+            <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
+            <BaseView>{selectedTab === "TOKENS" ? <Tokens /> : null}</BaseView>
+        </BaseView>
+    )
+}
+
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        root: {
+            transform: [{ translateY: -24 }],
+            backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.LIGHT_GRAY,
+            padding: 16,
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+        },
+    })

@@ -193,17 +193,20 @@ export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency:
         !isCoingecko,
     )
 
+    const enabled = useMemo(() => {
+        if (isCoingecko) return Boolean(tokenInfoStatus === "success" && id)
+        return Boolean(vechainStatsStatus === "success" && id)
+    }, [id, isCoingecko, tokenInfoStatus, vechainStatsStatus])
+
     return useQuery({
         queryKey: getExchangeRateQueryKey({ id, vs_currency }),
         queryFn: () => {
             if (!id) return
             if (Object.keys(getSymbolByCoingeckoId).includes(id)) return tokenInfo?.market_data.current_price[currency]
-            if (!vechainStatsExchangeRate) return undefined
+            if (!vechainStatsExchangeRate) return null
             return parseFloat(vechainStatsExchangeRate)
         },
-        enabled:
-            (tokenInfoStatus === "success" || tokenInfoStatus === "error") &&
-            (vechainStatsStatus === "success" || vechainStatsStatus === "error"),
+        enabled,
         staleTime: getQueryCacheTime(),
         refetchInterval: getRefetchIntevalTime(),
     })

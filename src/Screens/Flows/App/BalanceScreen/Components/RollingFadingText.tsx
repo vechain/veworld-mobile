@@ -16,27 +16,6 @@ type Props = {
     text: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FadingTextElement = ({ value, index, totalChars }: { value: string; index: number; totalChars: number }) => {
-    const sharedValue = useSharedValue(0)
-    const { styles } = useThemedStyles(baseStyles)
-
-    useEffect(() => {
-        sharedValue.value = withRepeat(
-            withDelay(index * 200, withTiming(1, { duration: 200 * (totalChars - index) })),
-            -1,
-            false,
-        )
-    }, [index, sharedValue, totalChars])
-
-    const animatedStyles = useAnimatedStyle(() => {
-        return {
-            opacity: sharedValue.value,
-        }
-    }, [])
-    return <Animated.Text style={[animatedStyles, styles.text]}>{value}</Animated.Text>
-}
-
 const RollingFadingTextElement = ({
     value,
     index,
@@ -70,7 +49,7 @@ const RollingFadingTextElement = ({
     return <Animated.Text style={[animatedStyles, styles.text]}>{value}</Animated.Text>
 }
 
-export const ScrambleText = ({ text }: Props) => {
+export const RollingFadingText = ({ text }: Props) => {
     const splittedText = useMemo(() => text.split(""), [text])
 
     return (
