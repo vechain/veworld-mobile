@@ -1,14 +1,16 @@
 import { useNavigation } from "@react-navigation/native"
-import { default as React, useCallback } from "react"
+import { default as React, useCallback, useMemo } from "react"
 import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { clamp, interpolate, SharedValue, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { AccountIcon, BaseIcon, BaseText, BaseView, QRCodeBottomSheet, SelectAccountBottomSheet } from "~Components"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
+import { AccountUtils } from "~Utils"
 
 type Props = {
     scrollY: SharedValue<number>
@@ -18,6 +20,7 @@ type Props = {
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
 export const Header = ({ scrollY, contentOffsetY }: Props) => {
+    const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
     const account = useAppSelector(selectSelectedAccount)
 
@@ -73,20 +76,23 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
         [onSetSelectedAccount],
     )
 
+    const isObservedAccount = useMemo(() => {
+        return AccountUtils.isObservedAccount(selectedAccount)
+    }, [selectedAccount])
+
     return (
         <BaseView style={styles.root} onLayout={onLayout}>
-            <AnimatedLinearGradient
-                colors={[
-                    COLORS.BALANCE_BACKGROUND,
-                    COLORS.BALANCE_BACKGROUND_50,
-                    COLORS.BALANCE_BACKGROUND_GRADIENT_END,
-                ]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 1 }}
-                locations={[0, 0.65, 1]}
-                angle={0}
-                style={[gradientStyle, styles.gradient]}
-            />
+            {!isObservedAccount && (
+                <AnimatedLinearGradient
+                    colors={[COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.50)", "#423483"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    locations={[0, 0.65, 1]}
+                    angle={0}
+                    style={[gradientStyle, styles.gradient]}
+                />
+            )}
+
             <TouchableOpacity onPress={handleOpenWalletSwitcher}>
                 <BaseView flexDirection="row" gap={12} py={4} px={8} borderRadius={99}>
                     <AccountIcon address={account.address} size={32} borderRadius={100} />
@@ -98,8 +104,17 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
 
             <BaseView flexDirection="row" gap={12}>
                 <TouchableOpacity onPress={onWalletManagementPress}>
-                    <BaseView borderRadius={99} p={8}>
-                        <BaseIcon name="icon-wallet" color={COLORS.PURPLE_LABEL} size={24} />
+                    <BaseView borderRadius={99} p={8} gap={8} flexDirection="row">
+                        {isObservedAccount ? (
+                            <>
+                                <BaseText color={COLORS.DARK_PURPLE_DISABLED} typographyFont="captionMedium">
+                                    {LL.VIEW_ONLY()}
+                                </BaseText>
+                                <BaseIcon name="icon-eye" color={COLORS.DARK_PURPLE_DISABLED} size={16} />
+                            </>
+                        ) : (
+                            <BaseIcon name="icon-wallet" color={COLORS.PURPLE_LABEL} size={24} />
+                        )}
                     </BaseView>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleOpenQRCode}>
