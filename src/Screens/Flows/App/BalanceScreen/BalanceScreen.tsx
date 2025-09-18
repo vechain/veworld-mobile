@@ -6,17 +6,15 @@ import LinearGradient from "react-native-linear-gradient"
 import { useSharedValue } from "react-native-reanimated"
 import { BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { COLORS } from "~Constants"
-import { useI18nContext } from "~i18n"
 import { selectCurrencySymbol, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
-import { GlassButtonWithLabel } from "./Components/GlassButton"
+import { BalanceActions } from "./Components/Actions/BalanceActions"
 import { PullToRefresh } from "./Components/PullToRefresh"
 import { RollingFadingText } from "./Components/RollingFadingText"
 import { Header } from "./Header"
 import { TabRenderer } from "./Tabs/TabRenderer"
 
 export const BalanceScreen = () => {
-    const { LL } = useI18nContext()
     const currencySymbol = useAppSelector(selectCurrencySymbol)
 
     const scrollY = useSharedValue(0)
@@ -86,28 +84,7 @@ export const BalanceScreen = () => {
                             <BaseSpacer height={24} />
                             <BaseSpacer height={12} />
 
-                            <BaseView alignSelf="center" flexDirection="row" gap={24}>
-                                <GlassButtonWithLabel
-                                    label={LL.BALANCE_ACTION_BUY()}
-                                    icon="icon-plus"
-                                    onPress={() => {}}
-                                />
-                                <GlassButtonWithLabel
-                                    label={LL.BALANCE_ACTION_RECEIVE()}
-                                    icon="icon-arrow-down"
-                                    onPress={() => {}}
-                                />
-                                <GlassButtonWithLabel
-                                    label={LL.BALANCE_ACTION_SEND()}
-                                    icon="icon-arrow-up"
-                                    onPress={() => {}}
-                                />
-                                <GlassButtonWithLabel
-                                    label={LL.BALANCE_ACTION_OTHER()}
-                                    icon="icon-more-vertical"
-                                    onPress={() => {}}
-                                />
-                            </BaseView>
+                            <BalanceActions />
 
                             <BaseSpacer height={64} />
                         </LinearGradient>
