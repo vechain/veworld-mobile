@@ -184,4 +184,7 @@ export type ParsedRequest<T> = {
     request: BaseExternalAppRequest
 }
 
+/**
+ * Request decoded from the external app
+ */
 export type DecodedRequest = BaseExternalAppRequest & { payload: string }

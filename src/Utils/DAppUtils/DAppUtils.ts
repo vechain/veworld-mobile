@@ -2,7 +2,7 @@ import { SignedDataRequest } from "~Components/Providers/InAppBrowserProvider/ty
 import { RequestMethods } from "~Constants"
 import { decodeBase64 } from "tweetnacl-util"
 import nacl from "tweetnacl"
-import { SessionState } from "~Storage/Redux"
+import { KeyPair, SessionState } from "~Storage/Redux"
 import {
     CertificateRequest,
     DecodedRequest,
@@ -14,6 +14,7 @@ import {
 import { DeepLinkError, DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
 import { Linking } from "react-native"
 import { error } from "~Utils/Logger/Logger"
+import { SessionData } from "~Components/Providers/DeepLinksProvider/types"
 
 const isValidTxMessage = (message: unknown): message is Connex.Vendor.TxMessage => {
     if (!Array.isArray(message)) {
@@ -141,14 +142,23 @@ const encryptPayload = (payload: string, publicKey: string, secretKey: string): 
     return [nonce, encryptedPayload]
 }
 
-// const validateExternalAppSession = (session: string, signKeyPair: KeyPair) => {
-//     const sessionKeyPair = nacl.sign.keyPair.fromSecretKey(decodeBase64(signKeyPair.privateKey))
-//     const decryptedSession = nacl.sign.open(decodeBase64(session), sessionKeyPair.publicKey)
-//     if (!decryptedSession) {
-//         return false
-//     }
-//     return true
-// }
+/**
+ * Validate the session of the external app
+ * @param session - The session of the external app
+ * @param signKeyPair - The sign key pair of the external app
+ * @returns The address of the external app and if the session is valid
+ */
+const validateExternalAppSession = (session: string, signKeyPair: KeyPair): [boolean, string | undefined] => {
+    const sessionKeyPair = nacl.sign.keyPair.fromSecretKey(decodeBase64(signKeyPair.privateKey))
+    const decryptedSession = nacl.sign.open(decodeBase64(session), sessionKeyPair.publicKey)
+    if (!decryptedSession) {
+        return [false, undefined]
+    }
+
+    const sessionData = JSON.parse(new TextDecoder().decode(decryptedSession)) as SessionData
+
+    return [true, sessionData.address]
+}
 
 const decodeRequest = (encodedRequest: string): DecodedRequest => {
     const request = decodeURIComponent(encodedRequest)
@@ -334,4 +344,5 @@ export const DAppUtils = {
     dispatchResourceNotAvailableError,
     dispatchInternalError,
     decodeRequest,
+    validateExternalAppSession,
 }

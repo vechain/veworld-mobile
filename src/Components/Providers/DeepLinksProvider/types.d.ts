@@ -23,3 +23,10 @@ export type ExternalAppRequestParams = {
      */
     redirect_url: string
 }
+
+export type SessionData = {
+    app_id: string
+    genesisId: string
+    address: string
+    timestamp: number
+}
