@@ -103,5 +103,8 @@ export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
         return areAlmostZero ? `< ${balance}` : balance
     }, [formatFiat, amount, isVisible, areAlmostZero])
 
-    return useMemo(() => ({ balances, isLoading, renderedBalance }), [balances, isLoading, renderedBalance])
+    return useMemo(
+        () => ({ balances, isLoading, renderedBalance, rawAmount: amount }),
+        [amount, balances, isLoading, renderedBalance],
+    )
 }
