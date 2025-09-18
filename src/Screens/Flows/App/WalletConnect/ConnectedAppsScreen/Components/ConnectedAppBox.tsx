@@ -6,7 +6,7 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { DAppUtils } from "~Utils"
-import type { ConnectedApp } from "../ConnectedAppsScreen"
+import { ConnectedApp } from "../ConnectedAppUtils"
 
 type Props = {
     connectedApp: ConnectedApp

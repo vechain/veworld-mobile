@@ -7,7 +7,6 @@ import {
     BaseSkeleton,
     BaseText,
     BaseView,
-    DisabledBuySwapIosBottomSheet,
     FastActionsBottomSheet,
     FiatBalance,
     showWarningToast,
@@ -28,7 +27,7 @@ import {
     selectVot3TokenWithBalance,
     useAppSelector,
 } from "~Storage/Redux"
-import { BalanceUtils, PlatformUtils } from "~Utils"
+import { BalanceUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ActionsButtonGroup } from "./ActionsButtonGroup"
 import { BalanceView } from "./BalanceView"
@@ -63,12 +62,6 @@ export const VbdBalanceCard = memo(
             onOpen: openConvertBetterSheet,
             onClose: closeConvertBetterSheet,
         } = useBottomSheetModal({ externalRef: convertB3trBottomSheetRef })
-
-        const {
-            ref: blockedFeaturesIOSBottomSheetRef,
-            onOpen: openBlockedFeaturesIOSBottomSheet,
-            onClose: closeBlockedFeaturesIOSBottomSheet,
-        } = useBottomSheetModal()
 
         const vot3Token = useTokenWithCompleteInfo(VOT3)
         const b3trToken = useTokenWithCompleteInfo(B3TR)
@@ -199,11 +192,6 @@ export const VbdBalanceCard = memo(
                     name: LL.BTN_SWAP(),
                     disabled: !b3trTokenWithBalance || isObserved,
                     action: () => {
-                        if (PlatformUtils.isIOS()) {
-                            openBlockedFeaturesIOSBottomSheet()
-                            return
-                        }
-
                         if (veB3trFiatBalance) {
                             nav.navigate(Routes.SWAP)
                         } else {
@@ -232,7 +220,6 @@ export const VbdBalanceCard = memo(
                 nav,
                 FastActionsBottomSheetRef,
                 openDelayConvertBetterSheet,
-                openBlockedFeaturesIOSBottomSheet,
             ],
         )
 
@@ -337,10 +324,6 @@ export const VbdBalanceCard = memo(
                 />
 
                 <ConvertBetterBottomSheet ref={convertBetterBottomSheetRef} onClose={closeConvertBetterSheet} />
-                <DisabledBuySwapIosBottomSheet
-                    ref={blockedFeaturesIOSBottomSheetRef}
-                    onConfirm={closeBlockedFeaturesIOSBottomSheet}
-                />
             </>
         )
     },

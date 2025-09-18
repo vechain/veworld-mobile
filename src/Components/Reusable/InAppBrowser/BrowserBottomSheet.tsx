@@ -113,17 +113,6 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
               }
 
         return [
-            favoriteItem,
-            {
-                type: "action",
-                id: "reload",
-                icon: "icon-retry",
-                label: LL.BROWSER_RELOAD_PAGE(),
-                onPress: () => {
-                    webviewRef.current?.reload()
-                    onClose?.()
-                },
-            },
             {
                 type: "action",
                 id: "go-back",
@@ -135,6 +124,17 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                     onClose?.()
                 },
             },
+            {
+                type: "action",
+                id: "reload",
+                icon: "icon-retry",
+                label: LL.BROWSER_RELOAD_PAGE(),
+                onPress: () => {
+                    webviewRef.current?.reload()
+                    onClose?.()
+                },
+            },
+            favoriteItem,
             {
                 type: "action",
                 id: "share",
