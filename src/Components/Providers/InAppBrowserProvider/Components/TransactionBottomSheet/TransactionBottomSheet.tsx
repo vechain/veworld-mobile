@@ -16,9 +16,9 @@ import {
     useThemedStyles,
     useTransactionScreen,
 } from "~Hooks"
+import { useLoginSession } from "~Hooks/useLoginSession"
 import { TransactionRequest } from "~Model"
 import {
-    addConnectedDiscoveryApp,
     addPendingDappTransactionActivity,
     selectSelectedAccountOrNull,
     selectSelectedNetwork,
@@ -63,8 +63,6 @@ export const TransactionBottomSheetContent = ({
     })
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
-
-    const dispatch = useAppDispatch()
 
     const sessionContext = useAppSelector(state =>
         selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),
@@ -125,17 +123,6 @@ export const TransactionBottomSheetContent = ({
         dappRequest: request,
         onNavigateToLedger,
     })
-
-    const onSign = useCallback(() => {
-        dispatch(
-            addConnectedDiscoveryApp({
-                name: request.appName,
-                href: new URL(request.appUrl).hostname,
-                connectedTime: Date.now(),
-            }),
-        )
-        return onSubmit()
-    }, [dispatch, onSubmit, request.appName, request.appUrl])
 
     return (
         <>
@@ -206,7 +193,7 @@ export const TransactionBottomSheetContent = ({
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
                 <BaseButton
-                    action={onSign}
+                    action={onSubmit}
                     flex={1}
                     disabled={
                         AccountUtils.isObservedAccount(selectedAccount) ||
@@ -249,6 +236,7 @@ export const TransactionBottomSheet = () => {
     const track = useAnalyticTracking()
 
     const { postMessage } = useInAppBrowser()
+    const { createSessionIfNotExists } = useLoginSession()
 
     const { failRequest, processRequest } = useWalletConnect()
 
@@ -274,13 +262,14 @@ export const TransactionBottomSheet = () => {
                         dappUrl: transactionBsData.appUrl ?? transactionBsData.appName,
                     }),
                 })
+                createSessionIfNotExists(transactionBsData)
             }
 
             isUserAction.current = true
             dispatch(setIsAppLoading(false))
             onCloseBs()
         },
-        [transactionBsData, dispatch, onCloseBs, track, network.name],
+        [transactionBsData, dispatch, onCloseBs, track, network.name, createSessionIfNotExists],
     )
 
     const onTransactionSuccess = useCallback(

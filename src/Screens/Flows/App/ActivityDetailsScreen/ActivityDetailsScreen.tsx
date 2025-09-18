@@ -28,7 +28,9 @@ import {
     ContactType,
     DappTxActivity,
     FungibleTokenActivity,
+    LoginActivity,
     NonFungibleTokenActivity,
+    NFTMarketplaceActivity,
     SignCertActivity,
     StargateActivity,
     SwapActivity,
@@ -44,8 +46,10 @@ import {
     DappTransactionDetails,
     FungibleTokenTransferDetails,
     NonFungibleTokenTransferDetails,
+    NonFungibleTokenMarketplaceDetails,
     SignCertificateDetails,
 } from "./Components"
+import DappLoginDetails from "./Components/DappLoginDetails"
 import { StargateActivityDetails } from "./Components/StakingDetails"
 import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
 
@@ -133,7 +137,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
     }, [transaction?.reverted])
 
     const isNFTtransfer = useMemo(() => {
-        return activity.type === ActivityType.TRANSFER_NFT
+        return activity.type === ActivityType.TRANSFER_NFT || activity.type === ActivityType.NFT_SALE
     }, [activity.type])
 
     const explorerUrl = useMemo(() => {
@@ -179,6 +183,15 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
                     />
                 )
             }
+            case ActivityType.NFT_SALE: {
+                return (
+                    <NonFungibleTokenMarketplaceDetails
+                        activity={(activityFromStore ?? activity) as NFTMarketplaceActivity}
+                        paid={transaction?.paid}
+                        isLoading={isloadingTxDetails}
+                    />
+                )
+            }
             case ActivityType.TRANSFER_NFT: {
                 return (
                     <NonFungibleTokenTransferDetails
@@ -210,6 +223,9 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             }
             case ActivityType.SIGN_TYPED_DATA: {
                 return <TypedDataTransactionDetails activity={(activityFromStore ?? activity) as TypedDataActivity} />
+            }
+            case ActivityType.DAPP_LOGIN: {
+                return <DappLoginDetails activity={(activityFromStore ?? activity) as LoginActivity} />
             }
             default:
                 return <></>

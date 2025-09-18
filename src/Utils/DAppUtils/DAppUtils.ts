@@ -1,3 +1,5 @@
+import { TypedDataDomain } from "@vechain/sdk-network"
+import { TypedDataField } from "ethers"
 import { SignedDataRequest } from "~Components/Providers/InAppBrowserProvider/types"
 import { RequestMethods } from "~Constants"
 import { decodeBase64 } from "tweetnacl-util"
@@ -107,6 +109,38 @@ export const isValidSignedDataMessage = (message: unknown): message is SignedDat
         return false
     }
     if (typeof _message.origin !== "string") {
+        return false
+    }
+    if (typeof _message.types !== "object") {
+        return false
+    }
+    if (typeof _message.value !== "object") {
+        return false
+    }
+    return true
+}
+
+export const isValidSignedData = (
+    message: unknown,
+): message is {
+    domain: TypedDataDomain
+    types: Record<string, TypedDataField[]>
+    value: Record<string, unknown>
+} => {
+    if (message === null || message === undefined || typeof message !== "object" || Array.isArray(message)) {
+        return false
+    }
+    const _message: Partial<{
+        domain: TypedDataDomain
+        types: Record<string, TypedDataField[]>
+        value: Record<string, unknown>
+    }> = message
+    if (!_message.domain || !_message.types || !_message.value) {
+        return false
+    }
+    if (!["string", "number"].includes(typeof _message.domain.chainId)) return false
+    if (!["string", "undefined"].includes(typeof _message.domain.verifyingContract)) return false
+    if (typeof _message.domain.name !== "string" || typeof _message.domain.version !== "string") {
         return false
     }
     if (typeof _message.types !== "object") {
@@ -336,6 +370,7 @@ export const DAppUtils = {
     getAppHubIconUrl,
     isValidSignedDataMessage,
     generateFaviconUrl,
+    isValidSignedData,
     parseTransactionRequest,
     parseTypedDataRequest,
     parseCertificateRequest,

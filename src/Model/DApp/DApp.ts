@@ -2,6 +2,11 @@ import { PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconne
 import { ethers } from "ethers"
 
 export type DAppSourceType = "wallet-connect" | "in-app" | "external-app"
+export type TypedDataMessage = {
+    domain: ethers.TypedDataDomain
+    types: Record<string, ethers.TypedDataField[]>
+    value: Record<string, unknown>
+}
 
 type BaseRequest = {
     type: DAppSourceType
@@ -20,7 +25,6 @@ type BaseWcRequest = BaseRequest & {
 type BaseInAppRequest = BaseRequest & {
     type: "in-app"
     id: string
-    isFirstRequest: boolean
 }
 
 export type BaseExternalAppRequest = BaseRequest & {
@@ -45,13 +49,10 @@ export type BaseTransactionRequest = {
 }
 
 type BaseTypedDataRequest = {
-    domain: ethers.TypedDataDomain
-    origin: string
     options: Connex.Signer.CertOptions
-    types: Record<string, ethers.TypedDataField[]>
-    value: Record<string, unknown>
     method: "thor_signTypedData"
-}
+    origin: string
+} & TypedDataMessage
 
 type BaseExternalConnectAppRequest = BaseRequest & {
     type: "external-app"
@@ -72,6 +73,29 @@ type WcConnectAppRequest = BaseRequest & {
 type InAppConnectAppRequest = BaseRequest & {
     type: "in-app"
     initialRequest: InAppCertRequest | InAppTxRequest | InAppTypedDataRequest
+}
+
+type InAppLoginRequest = BaseInAppRequest & {
+    method: "thor_connect"
+    external: boolean | undefined
+    genesisId: string
+} & (
+        | { kind: "simple"; value: null }
+        | { kind: "certificate"; value: Connex.Vendor.CertMessage }
+        | {
+              kind: "typed-data"
+              value: TypedDataMessage
+          }
+    )
+
+type InAppSwitchWalletRequest = BaseInAppRequest & {
+    method: "thor_switchWallet"
+    genesisId: string
+}
+
+type InAppWalletRequest = BaseInAppRequest & {
+    method: "thor_wallet"
+    genesisId: string
 }
 
 type WcCertRequest = BaseCertificateRequest & BaseWcRequest
@@ -98,11 +122,24 @@ export type TransactionRequest = WcTxRequest | InAppTxRequest | ExternalAppTxReq
 
 export type TypeDataRequest = WcSignDataRequest | InAppTypedDataRequest | ExternalAppTypedDataRequest
 
+/**
+ * Login request. WC doesn't support it, so it'll be only in-app
+ */
+export type LoginRequest = InAppLoginRequest
+
 export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest | BaseExternalConnectAppRequest
 
 export type DisconnectAppRequest = BaseExternalDisconnectAppRequest
 
-export type InAppRequest = InAppCertRequest | InAppTxRequest | InAppTypedDataRequest
+export type SwitchWalletRequest = InAppSwitchWalletRequest
+export type WalletRequest = InAppWalletRequest
+
+export type InAppRequest =
+    | InAppCertRequest
+    | InAppTxRequest
+    | InAppTypedDataRequest
+    | InAppLoginRequest
+    | InAppSwitchWalletRequest
 
 export enum DAppType {
     ALL = "all",

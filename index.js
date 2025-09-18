@@ -44,6 +44,7 @@ import {
     useFeatureFlags,
 } from "~Components/Providers"
 import {
+    clearTemporarySessions,
     selectAnalyticsTrackingEnabled,
     selectExternalDappSessions,
     selectLanguage,
@@ -97,6 +98,8 @@ const Main = () => {
         [fontFamily.DesignSystemIcons]: DesignSystemIcons,
     })
 
+    const dispatch = useAppDispatch()
+
     // Online status management
     // https://tanstack.com/query/v4/docs/react/react-native#online-status-management
     onlineManager.setEventListener(setOnline => {
@@ -128,6 +131,14 @@ const Main = () => {
             AnalyticsUtils.initialize()
         }
     }, [isAnalyticsEnabled])
+
+    const mounted = useRef(false)
+
+    useEffect(() => {
+        if (mounted.current) return
+        mounted.current = true
+        dispatch(clearTemporarySessions())
+    }, [dispatch])
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const networkType = selectedNetwork.type
