@@ -816,6 +816,7 @@
   "NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error": "トランザクションは正しくブロードキャストされましたが、dAppとの通信中にエラーが発生しました。",
   "NOTIFICATION_warning_wallet_connect_connection_could_delay": "接続には数秒かかる場合があります。",
   "NOT_VERIFIED_DAPP": "このdAppはVeWorldによって検証されていません。",
+  "NOT_VERIFIED_WATCHED_ACCOUNT": "閲覧専用アカウントではこのdAppに接続できません。",
   "NOVEMBER": "11月",
   "NO_ACCOUNTS_VTHO": "VTHO残高があるアカウントはありません。",
   "NO_HIDDEN_COLLECTIONS": "隠された{name: string}はありません。",

@@ -816,6 +816,7 @@
   "NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error": "Transactie correct uitgezonden, maar er trad een fout op bij de communicatie met de dapp.",
   "NOTIFICATION_warning_wallet_connect_connection_could_delay": "Verbinding maken kan enkele seconden duren.",
   "NOT_VERIFIED_DAPP": "Deze dApp is niet geverifieerd door VeWorld.",
+  "NOT_VERIFIED_WATCHED_ACCOUNT": "Je kunt geen verbinding maken met deze dApp met een alleen-lezen account.",
   "NOVEMBER": "November",
   "NO_ACCOUNTS_VTHO": "Er zijn geen accounts met een VTHO-saldo om te delegeren",
   "NO_HIDDEN_COLLECTIONS": "Je hebt geen verborgen {name: string}",

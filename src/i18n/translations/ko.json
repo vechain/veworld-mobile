@@ -816,6 +816,7 @@
   "NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error": "트랜잭션이 정상적으로 방송되었지만 dapp과의 통신 중 오류가 발생했습니다.",
   "NOTIFICATION_warning_wallet_connect_connection_could_delay": "연결하는 데 몇 초가 걸릴 수 있습니다.",
   "NOT_VERIFIED_DAPP": "이 dApp은 VeWorld에서 인증되지 않았습니다.",
+  "NOT_VERIFIED_WATCHED_ACCOUNT": "보기 전용 계정으로 이 dApp에 연결할 수 없습니다.",
   "NOVEMBER": "11월",
   "NO_ACCOUNTS_VTHO": "위임할 VTHO 잔액이 있는 계정이 없습니다.",
   "NO_HIDDEN_COLLECTIONS": "숨겨진 {name: string}이(가) 없습니다.",

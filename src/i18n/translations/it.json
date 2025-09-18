@@ -816,6 +816,7 @@
   "NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error": "Transazione trasmessa correttamente ma si è verificato un errore durante la comunicazione con la dapp.",
   "NOTIFICATION_warning_wallet_connect_connection_could_delay": "Il collegamento potrebbe richiedere alcuni secondi.",
   "NOT_VERIFIED_DAPP": "Questa dApp non è verificata da VeWorld.",
+  "NOT_VERIFIED_WATCHED_ACCOUNT": "Non puoi connetterti a questa dApp con un account di sola visualizzazione.",
   "NOVEMBER": "Novembre",
   "NO_ACCOUNTS_VTHO": "Non ci sono conti con saldo VTHO da delegare",
   "NO_HIDDEN_COLLECTIONS": "Non hai nessuna {name: string} nascosta",

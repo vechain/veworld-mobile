@@ -816,6 +816,7 @@
   "NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error": "İşlem doğru bir şekilde yayınlandı ancak dapp ile iletişim kurarken bir hata oluştu.",
   "NOTIFICATION_warning_wallet_connect_connection_could_delay": "Bağlantı birkaç saniye sürebilir.",
   "NOT_VERIFIED_DAPP": "Bu dApp, VeWorld tarafından doğrulanmamıştır.",
+  "NOT_VERIFIED_WATCHED_ACCOUNT": "Bu dApp'e yalnızca görüntülenebilir bir hesapla bağlanamazsınız.",
   "NOVEMBER": "Kasım",
   "NO_ACCOUNTS_VTHO": "VTHO bakiyesi olan hesap yok",
   "NO_HIDDEN_COLLECTIONS": "Gizli {name: string} yok",

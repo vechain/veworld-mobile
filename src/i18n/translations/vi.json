@@ -816,6 +816,7 @@
   "NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error": "Giao dịch được phát chính xác nhưng xảy ra lỗi khi giao tiếp với dapp.",
   "NOTIFICATION_warning_wallet_connect_connection_could_delay": "Kết nối có thể mất vài giây.",
   "NOT_VERIFIED_DAPP": "Dapp này chưa được VeWorld xác minh.",
+  "NOT_VERIFIED_WATCHED_ACCOUNT": "Bạn không thể kết nối với dApp này bằng tài khoản chỉ xem.",
   "NOVEMBER": "Tháng Mười Một",
   "NO_ACCOUNTS_VTHO": "Không có tài khoản nào có số dư VTHO để ủy quyền",
   "NO_HIDDEN_COLLECTIONS": "Bạn không có {name: string} nào bị ẩn",

@@ -816,6 +816,7 @@
   "NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error": "लेन-देन सही ढंग से प्रसारित किया गया लेकिन डीऐप से संवाद करते समय एक त्रुटि उत्पन्न हुई।",
   "NOTIFICATION_warning_wallet_connect_connection_could_delay": "कनेक्ट करने में कुछ सेकंड लग सकते हैं।",
   "NOT_VERIFIED_DAPP": "यह डैप VeWorld द्वारा सत्यापित नहीं है।",
+  "NOT_VERIFIED_WATCHED_ACCOUNT": "आप केवल दृश्य खाता के साथ इस dApp से कनेक्ट नहीं हो सकते।",
   "NOVEMBER": "नवंबर",
   "NO_ACCOUNTS_VTHO": "VTHO बैलेंस के साथ कोई खाते प्रतिनिधि बनाने के लिए नहीं हैं।",
   "NO_HIDDEN_COLLECTIONS": "आपके पास कोई भी {name: string} छिपी हुई नहीं है।",
