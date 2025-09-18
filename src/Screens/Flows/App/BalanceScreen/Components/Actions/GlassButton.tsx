@@ -25,7 +25,7 @@ const GlassButton = ({ icon, onPress, disabled }: GlassButtonProps) => {
                     colors={["rgba(29, 23, 58, 0.20)", "rgba(177, 168, 220, 0.20)"]}
                     angle={0}
                     useAngle
-                    style={styles.innerShadow}>
+                    style={styles.gradientBtnContainer}>
                     <BaseIcon name={icon} size={24} color={COLORS.PURPLE_LABEL} />
                 </LinearGradient>
             )}
@@ -50,5 +50,5 @@ export const GlassButtonWithLabel = ({ label, icon, onPress, disabled }: Props) 
 
 const baseStyles = () =>
     StyleSheet.create({
-        innerShadow: { padding: 16, borderRadius: 99, borderWidth: 1, borderColor: COLORS.PURPLE_LABEL_5 },
+        gradientBtnContainer: { padding: 16, borderRadius: 99, borderWidth: 1, borderColor: COLORS.PURPLE_LABEL_5 },
     })
