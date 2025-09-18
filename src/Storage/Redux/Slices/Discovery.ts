@@ -9,6 +9,12 @@ export type ConnectedDiscoveryApp = {
     connectedTime: number
 }
 
+export type LoginSession = { genesisId: string; url: string; name: string } & (
+    | { kind: "external"; address: string }
+    | { kind: "temporary"; address: string }
+    | { kind: "permanent" }
+)
+
 export type Tab = {
     id: string
     href: string
@@ -33,6 +39,9 @@ export type DiscoveryState = {
     }
     bannerInteractions: {
         [bannerName: string]: BannerInteractionDetails
+    }
+    sessions?: {
+        [appOrigin: string]: LoginSession
     }
     isNormalUser?: boolean
     suggestedAppIds?: string[]
@@ -165,6 +174,22 @@ export const DiscoverySlice = createSlice({
                 amountOfInteractions: (state.bannerInteractions[action.payload]?.amountOfInteractions ?? 0) + 1,
             }
         },
+        clearTemporarySessions: state => {
+            state.sessions = Object.fromEntries(
+                Object.entries(state.sessions ?? {}).filter(([_, session]) => {
+                    if (session.kind === "temporary") return false
+                    return true
+                }),
+            )
+        },
+        deleteSession(state, action: PayloadAction<string>) {
+            delete state.sessions?.[new URL(action.payload).origin]
+        },
+        addSession(state, action: PayloadAction<LoginSession>) {
+            const parsedUrl = new URL(action.payload.url)
+            if (!state.sessions) state.sessions = {}
+            state.sessions[parsedUrl.origin] = { ...action.payload, url: parsedUrl.origin }
+        },
         setIsNormalUser: state => {
             state.isNormalUser = true
         },
@@ -190,6 +215,9 @@ export const {
     closeTab,
     closeAllTabs,
     incrementBannerInteractions,
+    clearTemporarySessions,
+    deleteSession,
+    addSession,
     setIsNormalUser,
     setSuggestedAppIds,
 } = DiscoverySlice.actions

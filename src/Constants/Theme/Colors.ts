@@ -56,7 +56,6 @@ export type Colors = {
     horizontalButtonTextReversed: string
     cardBorder: string
     cardDivider: string
-    switchEnabled: string
     textLight: string
     textLightish: string
     checkboxFilledBackground: string
@@ -311,6 +310,10 @@ export type Colors = {
         title: string
     }
     veworldLogo: string
+    switch: {
+        true: string
+        false: string
+    }
 }
 
 export enum COLORS {
@@ -474,7 +477,6 @@ const light: Colors = {
     horizontalButtonSelected: COLORS.DARK_PURPLE,
     textSecondary: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.DARK_PURPLE,
-    switchEnabled: COLORS.LIGHT_GREEN,
     checkboxFilledBackground: COLORS.DARK_PURPLE,
     checkboxIcon: COLORS.WHITE,
     passwordPlaceholder: COLORS.GREY_400,
@@ -727,6 +729,10 @@ const light: Colors = {
         icon: COLORS.DARK_PURPLE_DISABLED,
         title: COLORS.GREY_700,
     },
+    switch: {
+        true: COLORS.LIGHT_GREEN,
+        false: COLORS.GREY_300,
+    },
 }
 
 const dark: Colors = {
@@ -789,7 +795,6 @@ const dark: Colors = {
     horizontalButtonSelected: COLORS.DARK_PURPLE,
     textSecondary: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.WHITE,
-    switchEnabled: COLORS.LIGHT_GREEN,
     checkboxFilledBackground: COLORS.WHITE,
     checkboxIcon: COLORS.DARK_PURPLE,
     passwordPlaceholder: COLORS.GREY_400,
@@ -1042,6 +1047,10 @@ const dark: Colors = {
         },
     },
     veworldLogo: COLORS.GREY_50,
+    switch: {
+        true: COLORS.LIGHT_GREEN,
+        false: COLORS.DARK_PURPLE_DISABLED,
+    },
 }
 
 export const colors = { light, dark }

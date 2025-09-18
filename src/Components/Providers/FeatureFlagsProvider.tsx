@@ -27,7 +27,7 @@ export const initialState: FeatureFlags = {
         },
         coinify: {
             android: true,
-            iOS: false,
+            iOS: true,
         },
     },
     discoveryFeature: {
