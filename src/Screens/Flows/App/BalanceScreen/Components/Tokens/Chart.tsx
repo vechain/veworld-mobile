@@ -1,38 +1,15 @@
-import moment from "moment"
 import React, { useMemo } from "react"
 import { Animated, StyleSheet } from "react-native"
 import { LineChart } from "react-native-wagmi-charts"
-import {
-    DEFAULT_LINE_CHART_DATA,
-    getCoinGeckoIdBySymbol,
-    MarketChartResponse,
-    useSmartMarketChart,
-} from "~Api/Coingecko"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { B3TR, COLORS, SCREEN_WIDTH, VET, VTHO } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { FungibleToken } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import ChartUtils from "~Utils/ChartUtils"
 
 type Props = {
     token: FungibleToken
-}
-
-/**
- * Get the price change in the timeframe passed
- * @returns The price change
- */
-export const getPriceChange = (data?: MarketChartResponse) => {
-    // Use chart data if available so the change is sycned with the asset charts,
-    // otherwise fallback to the token info change
-    if (data?.length) {
-        const openPrice = data[0]?.value
-        const closePrice = data[data.length - 1]?.value
-
-        if (openPrice && closePrice) {
-            return closePrice - openPrice
-        }
-    }
-    return 0
 }
 
 export const CAN_DISPLAY_CHART = SCREEN_WIDTH >= 450
@@ -47,21 +24,9 @@ export const Chart = ({ token }: Props) => {
         placeholderData: DEFAULT_LINE_CHART_DATA,
     })
 
-    const isGoingUp = useMemo(() => getPriceChange(chartData) >= 0, [chartData])
+    const isGoingUp = useMemo(() => ChartUtils.getPriceChange(chartData) >= 0, [chartData])
 
-    const downsampled = useMemo(() => {
-        if (!chartData) return null
-        return [
-            ...chartData
-                .reduce((acc, curr) => {
-                    const key = moment(curr.timestamp).format("DDD-HH")
-                    if (acc.has(key)) return acc
-                    acc.set(key, { value: curr.value, timestamp: curr.timestamp })
-                    return acc
-                }, new Map<string, { timestamp: number; value: number }>())
-                .values(),
-        ]
-    }, [chartData])
+    const downsampled = useMemo(() => ChartUtils.downsampleData(chartData), [chartData])
 
     if (!CAN_DISPLAY_CHART) return null
     if (![B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol)) return null

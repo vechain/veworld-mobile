@@ -9,7 +9,8 @@ import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
-import { CAN_DISPLAY_CHART, Chart, getPriceChange } from "./Chart"
+import ChartUtils from "~Utils/ChartUtils"
+import { CAN_DISPLAY_CHART, Chart } from "./Chart"
 
 type Props = {
     token: FungibleTokenWithBalance
@@ -40,7 +41,7 @@ export const TokenCard = ({ token }: Props) => {
         placeholderData: DEFAULT_LINE_CHART_DATA,
     })
 
-    const isGoingUp = useMemo(() => getPriceChange(chartData) >= 0, [chartData])
+    const isGoingUp = useMemo(() => ChartUtils.getPriceChange(chartData) >= 0, [chartData])
 
     const chartIcon = useMemo(() => {
         if (!chartData || CAN_DISPLAY_CHART) return null
