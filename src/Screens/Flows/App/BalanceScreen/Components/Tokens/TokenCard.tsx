@@ -119,7 +119,7 @@ export const TokenCard = ({ token }: Props) => {
 
             <Chart token={token} />
 
-            <BaseView flexDirection="column" style={styles.price} alignItems="flex-end" flexShrink={0}>
+            <BaseView flexDirection="column" alignItems="flex-end" flexShrink={0}>
                 {showFiatBalance ? (
                     <>
                         <BaseText
@@ -161,8 +161,5 @@ const baseStyles = () =>
     StyleSheet.create({
         root: {
             height: 80,
-        },
-        price: {
-            // marginLeft: "auto",
         },
     })
