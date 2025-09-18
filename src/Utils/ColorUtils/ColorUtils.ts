@@ -47,7 +47,7 @@ const generateColorHash = (input: string): string => {
  * @throws "Invalid color format" if the format is invalid
  */
 const getRgbFromColor = (color: string) => {
-    if (color.match(/^rgb/)) {
+    if (/^rgb/.test(color)) {
         const rgb = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/)
         if (!rgb) throw new Error("Invalid color format")
         return {

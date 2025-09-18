@@ -98,20 +98,18 @@ export const TokenCard = ({ token }: Props) => {
                 />
 
                 {symbol ? (
-                    <>
-                        <BaseView flexDirection="column" flex={1}>
-                            <BaseText
-                                typographyFont="subSubTitleSemiBold"
-                                color={COLORS.GREY_800}
-                                flexDirection="row"
-                                numberOfLines={1}
-                                flex={1}
-                                testID="TOKEN_CARD_NAME">
-                                {name}
-                            </BaseText>
-                            {symbol}
-                        </BaseView>
-                    </>
+                    <BaseView flexDirection="column" flex={1}>
+                        <BaseText
+                            typographyFont="subSubTitleSemiBold"
+                            color={COLORS.GREY_800}
+                            flexDirection="row"
+                            numberOfLines={1}
+                            flex={1}
+                            testID="TOKEN_CARD_NAME">
+                            {name}
+                        </BaseText>
+                        {symbol}
+                    </BaseView>
                 ) : (
                     <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.GREY_800} flexDirection="row">
                         {name}

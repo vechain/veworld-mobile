@@ -32,7 +32,7 @@ export const useTokenCardBalance = ({ token }: Args) => {
         id: exchangeRateId,
     })
 
-    const { fiatBalance: fiatBalance } = useBalances({
+    const { fiatBalance } = useBalances({
         token,
         exchangeRate: exchangeRate ?? 0,
     })
