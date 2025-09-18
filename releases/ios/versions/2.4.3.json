@@ -1,8 +1,11 @@
 {
   "version": "2.4.3",
-  "major": false,
+  "major": true,
   "descriptions": {
-    "en": [],
+    "en": [
+      "Buy and Swap available on iOS",
+      "Bug fixes and enhancements"
+    ],
     "de": [],
     "es": [],
     "fr": [],
