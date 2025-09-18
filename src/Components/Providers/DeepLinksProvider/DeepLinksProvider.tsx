@@ -7,6 +7,8 @@ import { useI18nContext } from "~i18n/i18n-react"
 import { ConnectAppRequest, DecodedRequest } from "~Model"
 import {
     changeSelectedNetwork,
+    isValidSession,
+    selectAccounts,
     selectExternalDappSessions,
     selectNetworks,
     selectSelectedNetwork,
@@ -14,12 +16,13 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
-import { DAppUtils } from "~Utils"
+import { AddressUtils, DAppUtils } from "~Utils"
 import { DeepLinkError } from "~Utils/ErrorMessageUtils"
 import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
 import { useInteraction } from "../InteractionProvider"
 import { useStore } from "../StoreProvider"
 import { ConnectionLinkParams, ExternalAppRequestParams } from "./types"
+import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 
 type DeepLinkEvent = "discover" | "connect" | "signTransaction" | "signCertificate" | "signTypedData" | "disconnect"
 
@@ -80,9 +83,11 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
     } = useInteraction()
     const { store } = useStore()
     const networks = useAppSelector(selectNetworks)
+    const accounts = useAppSelector(selectAccounts)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
+    const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const switchNetwork = useCallback(
         (request: Omit<DecodedRequest, "nonce" | "session" | "payload">) => {
@@ -104,6 +109,19 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             dispatch(changeSelectedNetwork(network))
         },
         [networks, dispatch, selectedNetwork.genesis.id, LL],
+    )
+
+    const switchAccount = useCallback(
+        (address: string) => {
+            onSetSelectedAccount({ address })
+            const account = accounts.find(acct => AddressUtils.compareAddresses(acct.address, address))
+            showInfoToast({
+                text1: LL.NOTIFICATION_WC_ACCOUNT_CHANGED({
+                    account: account?.alias ?? "",
+                }),
+            })
+        },
+        [accounts, onSetSelectedAccount, LL],
     )
 
     const handleConnectionLink = useCallback(
@@ -158,7 +176,13 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
-                    //TODO: verify session is valid
+                    const isValid = dispatch(isValidSession(request.genesisId, request.publicKey, "", switchAccount))
+
+                    if (!isValid) {
+                        DAppUtils.dispatchInternalError(params.redirect_url)
+                        return
+                    }
+
                     setTransactionBsData({
                         ...request,
                         redirectUrl: params.redirect_url,
@@ -171,7 +195,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setTransactionBsData, transactionBsRef, store, switchNetwork],
+        [setTransactionBsData, transactionBsRef, store, switchNetwork, switchAccount, dispatch],
     )
 
     const handleSignTypedData = useCallback(
@@ -200,7 +224,15 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
-                    //TODO: verify session is valid
+                    const isValid = dispatch(
+                        isValidSession(request.genesisId, request.publicKey, request.session, switchAccount),
+                    )
+
+                    if (!isValid) {
+                        DAppUtils.dispatchInternalError(params.redirect_url)
+                        return
+                    }
+
                     setTypedDataBsData({
                         ...request,
                         redirectUrl: params.redirect_url,
@@ -213,7 +245,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setTypedDataBsData, typedDataBsRef, store, switchNetwork],
+        [setTypedDataBsData, typedDataBsRef, store, switchNetwork, dispatch, switchAccount],
     )
 
     const handleSignCertificate = useCallback(
@@ -241,8 +273,17 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     externalDappSessions,
                     params.redirect_url,
                 )
+
                 if (request && request.type === "external-app") {
-                    //TODO: verify session is valid
+                    const isValid = dispatch(
+                        isValidSession(request.genesisId, request.publicKey, request.session, switchAccount),
+                    )
+
+                    if (!isValid) {
+                        DAppUtils.dispatchInternalError(params.redirect_url)
+                        return
+                    }
+
                     setCertificateBsData({
                         ...request,
                         redirectUrl: params.redirect_url,
@@ -255,7 +296,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setCertificateBsData, certificateBsRef, store, switchNetwork],
+        [setCertificateBsData, certificateBsRef, store, switchNetwork, switchAccount, dispatch],
     )
 
     const handleDisconnect = useCallback(
@@ -284,7 +325,15 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
-                    //TODO: verify session is valid
+                    const isValid = dispatch(
+                        isValidSession(request.genesisId, request.publicKey, request.session, switchAccount),
+                    )
+
+                    if (!isValid) {
+                        DAppUtils.dispatchInternalError(params.redirect_url)
+                        return
+                    }
+
                     setDisconnectBsData({
                         ...request,
                         redirectUrl: params.redirect_url,
@@ -297,7 +346,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setDisconnectBsData, disconnectBsRef, store, switchNetwork],
+        [setDisconnectBsData, disconnectBsRef, store, switchNetwork, dispatch, switchAccount],
     )
 
     useEffect(() => {

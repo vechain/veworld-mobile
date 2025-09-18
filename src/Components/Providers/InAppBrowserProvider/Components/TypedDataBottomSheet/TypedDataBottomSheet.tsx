@@ -250,23 +250,15 @@ export const TypedDataBottomSheet = () => {
         [
             buildTypedData,
             createSessionIfNotExists,
-
             dispatch,
-
             failRequest,
-
             onCloseBs,
-
             onFailure,
             onSuccess,
             postMessage,
-
             processRequest,
-
             signTypedData,
-
             track,
-            ,
         ],
     )
 

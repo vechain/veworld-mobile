@@ -223,9 +223,7 @@ export const CertificateBottomSheet = () => {
                 } else if (request.type === "external-app") {
                     await onSuccess({
                         redirectUrl: request.redirectUrl,
-                        data: {
-                            signature,
-                        },
+                        data: res,
                         publicKey: request.publicKey,
                     })
                 } else {
