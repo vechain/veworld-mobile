@@ -1,18 +1,19 @@
 import React, { memo } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import { SvgXml } from "react-native-svg"
-import { PicassoUtils } from "~Utils"
 import { BaseView } from "~Components/Base"
+import { PicassoUtils } from "~Utils"
 
 type AccountIconProps = {
     address: string
     size?: number
+    borderRadius?: number
 }
 
-export const AccountIcon: React.FC<AccountIconProps> = memo(({ address, size }) => {
+export const AccountIcon: React.FC<AccountIconProps> = memo(({ address, size, borderRadius }) => {
     return (
         <BaseView>
-            <PicassoAddressIcon address={address} size={size} />
+            <PicassoAddressIcon address={address} size={size} borderRadius={borderRadius} />
         </BaseView>
     )
 })

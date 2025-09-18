@@ -45,6 +45,9 @@ export type FeatureFlags = {
         appsScreen: {
             enabled: boolean
         }
+        balanceScreen: {
+            enabled: boolean
+        }
     }
 }
 
