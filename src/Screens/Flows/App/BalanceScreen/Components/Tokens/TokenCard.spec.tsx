@@ -21,6 +21,9 @@ jest.mock("react-native", () => ({
 }))
 
 describe("TokenCard", () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
     it("should render correctly", () => {
         ;(useSmartMarketChart as jest.Mock).mockReturnValue({ data: [] })
         ;(useTokenCardBalance as jest.Mock).mockReturnValue({

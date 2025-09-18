@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { B3TR } from "~Constants"
+import { B3TR, VeDelegate } from "~Constants"
 import { useBalances } from "~Hooks/useBalances"
 import { useCombineFiatBalances } from "~Hooks/useCombineFiatBalances"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
@@ -23,7 +23,7 @@ export const useTokenCardBalance = ({ token }: Args) => {
         const coingeckoId = getCoinGeckoIdBySymbol[token.symbol]
         if (coingeckoId) return coingeckoId
         //Handle VeDelegate
-        if (token.symbol === "veDelegate") return getCoinGeckoIdBySymbol[B3TR.symbol]
+        if (token.symbol === VeDelegate.symbol) return getCoinGeckoIdBySymbol[B3TR.symbol]
         return token.symbol
     }, [token.symbol])
 
