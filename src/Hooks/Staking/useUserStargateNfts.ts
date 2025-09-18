@@ -81,11 +81,11 @@ export const getUserStargateNfts = async (
 }
 
 export const useUserStargateNfts = ({
-    nodes: stargateNodes = [],
+    nodes = [],
     isLoadingNodes,
     address: _address,
 }: {
-    nodes?: NodeInfo[]
+    nodes: NodeInfo[]
     isLoadingNodes?: boolean
     address?: string
 }) => {
@@ -107,12 +107,11 @@ export const useUserStargateNfts = ({
         return getUserStargateNftsQueryKey(
             network.type,
             address,
-            stargateNodes.map(node => node.nodeId),
+            nodes.map(node => node.nodeId),
         )
-    }, [network.type, address, stargateNodes])
+    }, [address, network.type, nodes])
 
-    const enabled =
-        !!thor && !!stargateNodes.length && !!stargateNFTAddress && !!stargateDelegationAddress && !isLoadingNodes
+    const enabled = !!thor && !!nodes.length && !!stargateNFTAddress && !!stargateDelegationAddress && !isLoadingNodes
 
     const {
         data,
@@ -123,7 +122,7 @@ export const useUserStargateNfts = ({
     } = useQuery({
         queryKey,
         queryFn: async () =>
-            await getUserStargateNfts(thor, stargateNodes, address, stargateNFTAddress, stargateDelegationAddress),
+            await getUserStargateNfts(thor, nodes, address, stargateNFTAddress, stargateDelegationAddress),
         enabled,
         staleTime: 60 * 5 * 1000,
     })

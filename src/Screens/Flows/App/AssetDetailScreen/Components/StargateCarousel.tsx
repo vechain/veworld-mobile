@@ -34,6 +34,7 @@ export const StargateCarousel = () => {
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts({
         nodes: stargateNodes,
         isLoadingNodes,
+        address,
     })
     const nav = useNavigation()
 

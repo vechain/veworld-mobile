@@ -369,9 +369,10 @@ export const useTransactionScreen = ({
                     text1: LL.ERROR(),
                     text2: LL.SIGN_TRANSACTION_ERROR(),
                 })
+                await onTransactionFailure(e)
+            } finally {
                 setLoading(false)
                 dispatch(setIsAppLoading(false))
-                await onTransactionFailure(e)
             }
         },
         [signTransaction, onNavigateToLedger, resetDelegation, LL, sendTransactionSafe, dispatch, onTransactionFailure],

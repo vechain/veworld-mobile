@@ -21,8 +21,8 @@ export const useGroupedStakingData = (userAddress?: string) => {
     const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(userAddress)
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts({
         nodes: stargateNodes,
-        isLoadingNodes,
         address: userAddress,
+        isLoadingNodes,
     })
 
     const stakingGroups = useMemo((): StakingGroup[] => {

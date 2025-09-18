@@ -1,31 +1,21 @@
-import { SessionTypes } from "@walletconnect/types"
+import _ from "lodash"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { BaseSpacer, BaseView, Layout, SwipeableRow } from "~Components"
 import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
-import { DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import {
+    deleteSession,
     removeConnectedDiscoveryApp,
     selectConnectedDiscoverDApps,
     selectFeaturedDapps,
+    selectSessions,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { ConfirmDisconnectBottomSheet, ConnectedAppBox, EmptyListView } from "./Components"
-import { mapConnectedApps } from "./ConnectedAppUtils"
-
-type DiscoveryConnectedApp = {
-    app: DiscoveryDApp
-    type: "in-app"
-}
-type WCConnectedApp = {
-    type: "wallet-connect"
-    session: SessionTypes.Struct
-}
-
-export type ConnectedApp = DiscoveryConnectedApp | WCConnectedApp
+import { ConnectedApp, mapAppSessions, mapConnectedApps } from "./ConnectedAppUtils"
 
 const generateAppKey = (app: ConnectedApp) => {
     if (app.type === "in-app") {
@@ -39,6 +29,7 @@ export const ConnectedAppsScreen = () => {
     const { LL } = useI18nContext()
     const { disconnectSession, activeSessions } = useWalletConnect()
     const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
+    const appSessions = useAppSelector(selectSessions)
     const allApps = useAppSelector(selectFeaturedDapps)
     const [selectedApp, setSelectedApp] = useState<ConnectedApp>()
 
@@ -50,7 +41,10 @@ export const ConnectedAppsScreen = () => {
     const connectedApps: ConnectedApp[] = useMemo(() => {
         const sessions = Object.values(activeSessions)
 
-        const discoveryDApps = mapConnectedApps(connectedDiscoveryApps, allApps)
+        const appsParsed = mapConnectedApps(connectedDiscoveryApps, allApps)
+        const sessionsParsed = mapAppSessions(appSessions, allApps)
+
+        const uniqueSessions = _.uniqBy([...appsParsed, ...sessionsParsed], value => value.app.href)
 
         const wcApps: ConnectedApp[] = sessions.map(session => {
             return {
@@ -59,8 +53,8 @@ export const ConnectedAppsScreen = () => {
             }
         })
 
-        return [...discoveryDApps, ...wcApps]
-    }, [activeSessions, connectedDiscoveryApps, allApps])
+        return [...uniqueSessions, ...wcApps]
+    }, [activeSessions, connectedDiscoveryApps, allApps, appSessions])
 
     const {
         ref: confirmDisconnectBottomSheetRef,
@@ -78,6 +72,7 @@ export const ConnectedAppsScreen = () => {
                     connectedTime: Date.now(),
                 }),
             )
+            dispatch(deleteSession(selectedApp.app.href))
         } else {
             await disconnectSession(selectedApp.session.topic)
         }

@@ -9,7 +9,6 @@ import {
     BaseIcon,
     BaseSpacer,
     BaseView,
-    DisabledBuySwapIosBottomSheet,
     FastActionsBar,
     Layout,
     QRCodeBottomSheet,
@@ -110,12 +109,6 @@ export const HomeScreen = () => {
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
 
-    const {
-        ref: blockedFeaturesIOSBottomSheetRef,
-        onOpen: openBlockedFeaturesIOSBottomSheet,
-        onClose: closeBlockedFeaturesIOSBottomSheet,
-    } = useBottomSheetModal()
-
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
@@ -178,10 +171,6 @@ export const HomeScreen = () => {
             {
                 name: LL.BTN_SWAP(),
                 action: () => {
-                    if (PlatformUtils.isIOS()) {
-                        openBlockedFeaturesIOSBottomSheet()
-                        return
-                    }
                     nav.navigate(Routes.SWAP)
                 },
                 icon: <BaseIcon color={theme.colors.text} name="icon-arrow-left-right" size={20} />,
@@ -190,10 +179,6 @@ export const HomeScreen = () => {
             {
                 name: LL.BTN_BUY(),
                 action: () => {
-                    if (PlatformUtils.isIOS()) {
-                        openBlockedFeaturesIOSBottomSheet()
-                        return
-                    }
                     nav.navigate(Routes.BUY_FLOW)
                     track(AnalyticsEvent.BUY_CRYPTO_BUTTON_CLICKED)
                 },
@@ -214,16 +199,16 @@ export const HomeScreen = () => {
 
         if (PlatformUtils.isAndroid() && featureFlags.paymentProvidersFeature.coinify.android)
             return [...sharedActions, sellAction]
-        if (PlatformUtils.isIOS() && featureFlags.paymentProvidersFeature.coinify.iOS)
-            return [...sharedActions, sellAction]
+        // Uncomment this when we have a way to show the sell button on iOS
+        // if (PlatformUtils.isIOS() && featureFlags.paymentProvidersFeature.coinify.iOS)
+        //     return [...sharedActions, sellAction]
 
         return sharedActions
     }, [
         LL,
         featureFlags.paymentProvidersFeature.coinify.android,
-        featureFlags.paymentProvidersFeature.coinify.iOS,
+        // featureFlags.paymentProvidersFeature.coinify.iOS,
         nav,
-        openBlockedFeaturesIOSBottomSheet,
         selectedAccount,
         theme.colors.text,
         track,
@@ -296,10 +281,6 @@ export const HomeScreen = () => {
                     <EnableNotificationsBottomSheet />
                     <VersionUpdateAvailableBottomSheet />
                     <VersionChangelogBottomSheet />
-                    <DisabledBuySwapIosBottomSheet
-                        ref={blockedFeaturesIOSBottomSheetRef}
-                        onConfirm={closeBlockedFeaturesIOSBottomSheet}
-                    />
                 </NestableScrollContainer>
             }
         />
