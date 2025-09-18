@@ -49,6 +49,6 @@ export const GlassButtonWithLabel = ({ label, icon, onPress }: Props) => {
 
 const baseStyles = () =>
     StyleSheet.create({
-        innerShadow: { padding: 12, borderRadius: 99 },
+        innerShadow: { padding: 16, borderRadius: 99 },
         gradient: { borderRadius: 99 },
     })
