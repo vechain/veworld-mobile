@@ -1,13 +1,25 @@
+import { Mutex } from "async-mutex"
 import React, { useCallback, useContext, useEffect, useRef } from "react"
 import { InteractionManager, Linking } from "react-native"
-import { ConnectionLinkParams, ExternalAppRequestParams } from "./types"
-import { useInteraction } from "../InteractionProvider"
+import { showInfoToast } from "~Components/Base/BaseToast"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
-import { selectExternalDappSessions } from "~Storage/Redux"
-import { DAppUtils } from "~Utils"
-import { useStore } from "../StoreProvider"
+import { useI18nContext } from "~i18n/i18n-react"
+import { ConnectAppRequest, DecodedRequest } from "~Model"
+import {
+    changeSelectedNetwork,
+    selectExternalDappSessions,
+    selectNetworks,
+    selectSelectedNetwork,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
-import { Mutex } from "async-mutex"
+import { DAppUtils } from "~Utils"
+import { DeepLinkError } from "~Utils/ErrorMessageUtils"
+import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
+import { useInteraction } from "../InteractionProvider"
+import { useStore } from "../StoreProvider"
+import { ConnectionLinkParams, ExternalAppRequestParams } from "./types"
 
 type DeepLinkEvent = "discover" | "connect" | "signTransaction" | "signCertificate" | "signTypedData" | "disconnect"
 
@@ -67,6 +79,32 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         certificateBsRef,
     } = useInteraction()
     const { store } = useStore()
+    const networks = useAppSelector(selectNetworks)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const { LL } = useI18nContext()
+    const dispatch = useAppDispatch()
+
+    const switchNetwork = useCallback(
+        (request: Omit<DecodedRequest, "nonce" | "session" | "payload">) => {
+            if (selectedNetwork.genesis.id === request.genesisId) {
+                return
+            }
+
+            const network = networks.find(n => n.genesis.id === request.genesisId)
+            if (!network) {
+                throw new DeepLinkError(DeepLinkErrorCode.InvalidPayload)
+            }
+
+            showInfoToast({
+                text1: LL.NOTIFICATION_WC_NETWORK_CHANGED({
+                    network: network.name,
+                }),
+            })
+
+            dispatch(changeSelectedNetwork(network))
+        },
+        [networks, dispatch, selectedNetwork.genesis.id, LL],
+    )
 
     const handleConnectionLink = useCallback(
         async (params: ConnectionLinkParams) => {
@@ -75,31 +113,47 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 return
             }
             await mutex.current.acquire()
-            setConnectBsData({
+
+            const decodedRequest: ConnectAppRequest = {
                 type: "external-app",
                 appName: params.app_name,
                 appUrl: params.app_url ?? "",
                 publicKey: params.public_key,
                 redirectUrl: params.redirect_url ?? "",
-                network: params.network,
                 iconUrl: params.app_icon,
-            })
+                genesisId: params.genesis_id,
+            }
+
+            // Switch network if I'm not on the same network
+            switchNetwork(decodedRequest)
+
+            setConnectBsData(decodedRequest)
             connectBsRef.current?.present()
         },
-        [setConnectBsData, connectBsRef],
+        [setConnectBsData, connectBsRef, switchNetwork],
     )
 
-    const handleSignTransaction = useCallback(
+    const handleSignAndSendTransaction = useCallback(
         async (params: ExternalAppRequestParams) => {
-            const externalDappSessions = selectExternalDappSessions(store?.getState() as RootState)
             if (mutex.current.isLocked()) {
                 DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
                 return
             }
             const release = await mutex.current.acquire()
+
+            // Decode the request from the params uri encoded string
+            const decodedRequest = DAppUtils.decodeRequest(params.request)
+            const externalDappSessions = selectExternalDappSessions(
+                store?.getState() as RootState,
+                decodedRequest.genesisId,
+            )
+
+            // Switch network if I'm not on the same network
+            switchNetwork({ ...decodedRequest, redirectUrl: params.redirect_url })
+
             try {
                 const request = await DAppUtils.parseTransactionRequest(
-                    params.request,
+                    decodedRequest,
                     externalDappSessions,
                     params.redirect_url,
                 )
@@ -117,20 +171,31 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setTransactionBsData, transactionBsRef, store],
+        [setTransactionBsData, transactionBsRef, store, switchNetwork],
     )
 
     const handleSignTypedData = useCallback(
         async (params: ExternalAppRequestParams) => {
-            const externalDappSessions = selectExternalDappSessions(store?.getState() as RootState)
             if (mutex.current.isLocked()) {
                 DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
                 return
             }
             const release = await mutex.current.acquire()
+
+            // Decode the request from the params uri encoded string
+            const decodedRequest = DAppUtils.decodeRequest(params.request)
+
+            // Switch network if I'm not on the same network
+            switchNetwork({ ...decodedRequest, redirectUrl: params.redirect_url })
+
+            const externalDappSessions = selectExternalDappSessions(
+                store?.getState() as RootState,
+                decodedRequest.genesisId,
+            )
+
             try {
                 const request = await DAppUtils.parseTypedDataRequest(
-                    params.request,
+                    decodedRequest,
                     externalDappSessions,
                     params.redirect_url,
                 )
@@ -148,20 +213,31 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setTypedDataBsData, typedDataBsRef, store],
+        [setTypedDataBsData, typedDataBsRef, store, switchNetwork],
     )
 
     const handleSignCertificate = useCallback(
         async (params: ExternalAppRequestParams) => {
-            const externalDappSessions = selectExternalDappSessions(store?.getState() as RootState)
             if (mutex.current.isLocked()) {
                 DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
                 return
             }
             const release = await mutex.current.acquire()
+
+            // Decode the request from the params uri encoded string
+            const decodedRequest = DAppUtils.decodeRequest(params.request)
+
+            const externalDappSessions = selectExternalDappSessions(
+                store?.getState() as RootState,
+                decodedRequest.genesisId,
+            )
+
+            // Switch network if I'm not on the same network
+            switchNetwork({ ...decodedRequest, redirectUrl: params.redirect_url })
+
             try {
                 const request = await DAppUtils.parseCertificateRequest(
-                    params.request,
+                    decodedRequest,
                     externalDappSessions,
                     params.redirect_url,
                 )
@@ -179,20 +255,31 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setCertificateBsData, certificateBsRef, store],
+        [setCertificateBsData, certificateBsRef, store, switchNetwork],
     )
 
     const handleDisconnect = useCallback(
         async (params: ExternalAppRequestParams) => {
-            const externalDappSessions = selectExternalDappSessions(store?.getState() as RootState)
             if (mutex.current.isLocked()) {
                 DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
                 return
             }
             const release = await mutex.current.acquire()
+
+            // Decode the request from the params uri encoded string
+            const decodedRequest = DAppUtils.decodeRequest(params.request)
+
+            const externalDappSessions = selectExternalDappSessions(
+                store?.getState() as RootState,
+                decodedRequest.genesisId,
+            )
+
+            // Switch network if I'm not on the same network
+            switchNetwork({ ...decodedRequest, redirectUrl: params.redirect_url })
+
             try {
                 const request = await DAppUtils.parseDisconnectRequest(
-                    params.request,
+                    decodedRequest,
                     externalDappSessions,
                     params.redirect_url,
                 )
@@ -210,7 +297,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setDisconnectBsData, disconnectBsRef, store],
+        [setDisconnectBsData, disconnectBsRef, store, switchNetwork],
     )
 
     useEffect(() => {
@@ -225,7 +312,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     handleConnectionLink(request as ConnectionLinkParams)
                     break
                 case "signTransaction":
-                    handleSignTransaction(request as ExternalAppRequestParams)
+                    handleSignAndSendTransaction(request as ExternalAppRequestParams)
                     break
                 case "signCertificate":
                     handleSignCertificate(request as ExternalAppRequestParams)

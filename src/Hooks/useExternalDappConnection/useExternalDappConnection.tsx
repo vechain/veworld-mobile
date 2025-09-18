@@ -3,7 +3,6 @@ import { Linking } from "react-native"
 import nacl from "tweetnacl"
 import { decodeBase64, encodeBase64 } from "tweetnacl-util"
 import { useDeepLinksSession } from "~Components/Providers/DeepLinksProvider"
-import { NETWORK_TYPE } from "~Model"
 import {
     useAppSelector,
     selectSignKeyPair,
@@ -24,12 +23,13 @@ type OnConnectParams = {
     dappPublicKey: string
     redirectUrl: string
     dappName: string
+    genesisId: string
     dappUrl?: string
 }
 
 type OnDappDisconnectedParams = {
     dappPublicKey: string
-    network: NETWORK_TYPE
+    genesisId: string
     redirectUrl: string
 }
 
@@ -41,10 +41,10 @@ type OnSuccessParams = {
 
 export const useExternalDappConnection = () => {
     const signKeyPair = useAppSelector(selectSignKeyPair)
-    const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const { mutex } = useDeepLinksSession()
-    const externalDappSessions = useAppSelector(selectExternalDappSessions)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const externalDappSessions = useAppSelector(state => selectExternalDappSessions(state, selectedNetwork.genesis.id))
 
     const dispatch = useAppDispatch()
 
@@ -66,7 +66,7 @@ export const useExternalDappConnection = () => {
     }, [signKeyPair, dispatch])
 
     const onConnect = useCallback(
-        async ({ dappPublicKey, redirectUrl, dappName, dappUrl }: OnConnectParams) => {
+        async ({ dappPublicKey, redirectUrl, dappName, dappUrl, genesisId }: OnConnectParams) => {
             if (!dappPublicKey || !selectedAccount || !signKeyPair) {
                 DAppUtils.dispatchInternalError(redirectUrl)
                 mutex.release()
@@ -79,7 +79,7 @@ export const useExternalDappConnection = () => {
 
                 const sessionData = JSON.stringify({
                     app_id: dappName,
-                    network: network.type,
+                    genesisId: genesisId,
                     address: selectedAccount.address,
                     timestamp: new Date().getTime(),
                 })
@@ -98,7 +98,7 @@ export const useExternalDappConnection = () => {
 
                 dispatch(
                     newExternalDappSession({
-                        network: network.type,
+                        genesisId: genesisId,
                         keyPair: {
                             publicKey: encodeBase64(keyPair.publicKey),
                             privateKey: encodeBase64(keyPair.secretKey),
@@ -132,14 +132,25 @@ export const useExternalDappConnection = () => {
                 await Linking.openURL(`${redirectUrl}?${params.toString()}`)
             }
         },
-        [dispatch, network.type, selectedAccount, signKeyPair, mutex],
+        [dispatch, selectedAccount, signKeyPair, mutex],
     )
 
     const onDappDisconnected = useCallback(
-        async ({ dappPublicKey, network: dappNetwork, redirectUrl }: OnDappDisconnectedParams) => {
-            dispatch(deleteExternalDappSession({ appPublicKey: dappPublicKey, network: dappNetwork }))
-            mutex.release()
-            await Linking.openURL(`${redirectUrl}`)
+        async ({ dappPublicKey, genesisId, redirectUrl }: OnDappDisconnectedParams) => {
+            try {
+                dispatch(deleteExternalDappSession({ appPublicKey: dappPublicKey, genesisId }))
+                mutex.release()
+                await Linking.openURL(`${redirectUrl}`)
+            } catch (e) {
+                const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
+                error("EXTERNAL_DAPP_CONNECTION", err)
+                const params = new URLSearchParams({
+                    errorMessage: err.message,
+                    errorCode: err.code.toString(),
+                })
+                mutex.release()
+                await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+            }
         },
         [dispatch, mutex],
     )
@@ -148,9 +159,8 @@ export const useExternalDappConnection = () => {
         (publicKey: string) => {
             const session = externalDappSessions[publicKey]
 
-            //TODO: handle missing session
             if (!session) {
-                return null
+                throw new DeepLinkError(DeepLinkErrorCode.Unauthorized)
             }
 
             return {
@@ -170,22 +180,43 @@ export const useExternalDappConnection = () => {
      */
     const onSuccess = useCallback(
         async ({ redirectUrl, data, publicKey }: OnSuccessParams) => {
-            const sessionKeyPair = getSessionKeyPair(publicKey)
-            assertDefined(sessionKeyPair)
+            try {
+                const sessionKeyPair = getSessionKeyPair(publicKey)
+                assertDefined(sessionKeyPair)
 
-            const [nonce, encryptedPayload] = DAppUtils.encryptPayload(
-                JSON.stringify(data),
-                publicKey,
-                sessionKeyPair.secretKey,
-            )
+                const [nonce, encryptedPayload] = DAppUtils.encryptPayload(
+                    JSON.stringify(data),
+                    publicKey,
+                    sessionKeyPair.secretKey,
+                )
 
-            const params = new URLSearchParams({
-                data: encodeBase64(encryptedPayload),
-                nonce: encodeBase64(nonce),
-                public_key: publicKey,
-            })
-            mutex.release()
-            await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+                const params = new URLSearchParams({
+                    data: encodeBase64(encryptedPayload),
+                    nonce: encodeBase64(nonce),
+                    public_key: sessionKeyPair.publicKey,
+                })
+                mutex.release()
+                await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+            } catch (e) {
+                mutex.release()
+                if (e instanceof DeepLinkError) {
+                    const params = new URLSearchParams({
+                        errorMessage: e.message,
+                        errorCode: e.code.toString(),
+                    })
+                    await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+                    return
+                }
+                const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
+
+                error("EXTERNAL_DAPP_CONNECTION", err)
+
+                const params = new URLSearchParams({
+                    errorMessage: err.message,
+                    errorCode: err.code.toString(),
+                })
+                await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+            }
         },
         [getSessionKeyPair, mutex],
     )

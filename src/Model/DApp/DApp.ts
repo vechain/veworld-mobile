@@ -1,6 +1,5 @@
 import { PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { ethers } from "ethers"
-import { NETWORK_TYPE } from "~Model/Network"
 
 export type DAppSourceType = "wallet-connect" | "in-app" | "external-app"
 
@@ -30,7 +29,7 @@ export type BaseExternalAppRequest = BaseRequest & {
     nonce: string
     session: string
     redirectUrl: string
-    network?: NETWORK_TYPE
+    genesisId: string
 }
 
 type BaseCertificateRequest = {
@@ -58,11 +57,11 @@ type BaseExternalConnectAppRequest = BaseRequest & {
     type: "external-app"
     publicKey: string
     redirectUrl: string
-    network: NETWORK_TYPE
+    genesisId: string
 }
 
 type BaseExternalDisconnectAppRequest = BaseExternalAppRequest & {
-    network: NETWORK_TYPE
+    genesisId: string
 }
 
 type WcConnectAppRequest = BaseRequest & {
@@ -184,3 +183,5 @@ export type ParsedRequest<T> = {
     payload: ExternalRequestParsedPayload<T>
     request: BaseExternalAppRequest
 }
+
+export type DecodedRequest = BaseExternalAppRequest & { payload: string }

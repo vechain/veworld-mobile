@@ -1,5 +1,4 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
-import { NETWORK_TYPE } from "~Model"
 
 export type KeyPair = {
     publicKey: string
@@ -15,12 +14,12 @@ export type SessionState = {
 }
 
 export type ExternalDappsState = {
-    sessions: { [Network in NETWORK_TYPE]: Record<string, SessionState> }
+    sessions: { [genesisId: string]: Record<string, SessionState> }
     blackListedApps: string[]
 }
 
 export const initialExternalDappsState: ExternalDappsState = {
-    sessions: { [NETWORK_TYPE.MAIN]: {}, [NETWORK_TYPE.TEST]: {}, [NETWORK_TYPE.OTHER]: {}, [NETWORK_TYPE.SOLO]: {} },
+    sessions: {},
     blackListedApps: [],
 }
 
@@ -31,7 +30,7 @@ export const ExternalDappsSlice = createSlice({
         newExternalDappSession: (
             state: Draft<ExternalDappsState>,
             action: PayloadAction<{
-                network: NETWORK_TYPE
+                genesisId: string
                 keyPair: KeyPair
                 appPublicKey: string
                 appUrl: string
@@ -40,9 +39,13 @@ export const ExternalDappsSlice = createSlice({
                 address: string
             }>,
         ) => {
-            const { network, keyPair, appPublicKey, appUrl, appName, sharedSecret, address } = action.payload
+            const { genesisId, keyPair, appPublicKey, appUrl, appName, sharedSecret, address } = action.payload
 
-            state.sessions[network][appPublicKey] = {
+            if (!state.sessions[genesisId]) {
+                state.sessions[genesisId] = {}
+            }
+
+            state.sessions[genesisId][appPublicKey] = {
                 keyPair,
                 appUrl,
                 appName,
@@ -53,12 +56,12 @@ export const ExternalDappsSlice = createSlice({
         deleteExternalDappSession: (
             state: Draft<ExternalDappsState>,
             action: PayloadAction<{
-                network: NETWORK_TYPE
+                genesisId: string
                 appPublicKey: string
             }>,
         ) => {
-            const { network, appPublicKey } = action.payload
-            delete state.sessions[network][appPublicKey]
+            const { genesisId, appPublicKey } = action.payload
+            delete state.sessions[genesisId][appPublicKey]
         },
         addBlackListedApp: (state: Draft<ExternalDappsState>, action: PayloadAction<string>) => {
             state.blackListedApps.push(action.payload)

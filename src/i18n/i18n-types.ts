@@ -1169,6 +1169,10 @@ type RootTranslation = {
 	 */
 	BROWSER_FAVOURITES_TITLE: string
 	/**
+	 * G​o​ ​t​o​ ​p​r​e​v​i​o​u​s​ ​p​a​g​e
+	 */
+	BROWSER_GO_BACK: string
+	/**
 	 * T​h​i​s​ ​a​d​d​r​e​s​s​ ​c​a​n​'​t​ ​b​e​ ​r​e​a​c​h​e​d
 	 */
 	BROWSER_HISTORY_ADDRESS_ERROR: string
@@ -1233,10 +1237,6 @@ type RootTranslation = {
 	 * R​e​l​o​a​d​ ​p​a​g​e
 	 */
 	BROWSER_RELOAD_PAGE: string
-	/**
-	 * G​o​ ​t​o​ ​p​r​e​v​i​o​u​s​ ​p​a​g​e
-	 */
-	BROWSER_GO_BACK: string
 	/**
 	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​s
 	 */
@@ -1483,7 +1483,7 @@ type RootTranslation = {
 	 */
 	BTN_OBSERVE_WALLET: string
 	/**
-	 * W​a​t​c​h​ ​a​ ​p​u​b​l​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s
+	 * A​d​d​ ​a​n​y​ ​p​u​b​l​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​a​n​d​ ​k​e​e​p​ ​t​r​a​c​k​ ​o​f​ ​i​t​s​ ​b​a​l​a​n​c​e​s​ ​a​n​d​ ​a​c​t​i​v​i​t​y
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: string
 	/**
@@ -2704,13 +2704,13 @@ type RootTranslation = {
 	 */
 	FAVOURITES_BOTTOM_SHEET_TITLE: string
 	/**
+	 * N​o​ ​f​a​v​o​r​i​t​e​d​ ​a​p​p​s​ ​t​o​ ​s​h​o​w
+	 */
+	FAVOURITES_DAPPS_EMPTY_LIST: string
+	/**
 	 * C​o​u​l​d​ ​n​o​t​ ​f​i​n​d​ ​a​n​y​ ​d​a​p​p​s​ ​w​i​t​h​ ​t​h​i​s​ ​n​a​m​e
 	 */
 	FAVOURITES_DAPPS_NO_RECORDS: string
-	/**
-	 * No favorited apps to show
-	 */
-	FAVOURITES_DAPPS_EMPTY_LIST: string
 	/**
 	 * S​e​a​r​c​h
 	 */
@@ -2855,10 +2855,6 @@ type RootTranslation = {
 	 * D​e​l​e​g​a​t​e​d​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​y​e​t
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: string
-	/**
-	 * Delegated smart wallet not supported yet
-	 */
-	SMART_WALLET_DELEGATION_NOT_SUPPORTED: string
 	/**
 	 * T​y​p​e​d​ ​D​a​t​a​ ​c​a​n​n​o​t​ ​b​e​ ​s​i​g​n​e​d​ ​w​i​t​h​ ​a​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​a​c​c​o​u​n​t​.
 	 */
@@ -3361,6 +3357,10 @@ type RootTranslation = {
 	 * T​h​i​s​ ​d​A​p​p​ ​i​s​n​'​t​ ​v​e​r​i​f​i​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.
 	 */
 	NOT_VERIFIED_DAPP: string
+	/**
+	 * Y​o​u​ ​c​a​n​'​t​ ​c​o​n​n​e​c​t​ ​t​o​ ​t​h​i​s​ ​d​A​p​p​ ​w​i​t​h​ ​a​ ​v​i​e​w​ ​o​n​l​y​ ​a​c​c​o​u​n​t​.
+	 */
+	NOT_VERIFIED_WATCHED_ACCOUNT: string
 	/**
 	 * N​o​v​e​m​b​e​r
 	 */
@@ -4367,13 +4367,13 @@ type RootTranslation = {
 	 */
 	SIGN_TYPED_DATA_REQUEST_TITLE: string
 	/**
+	 * D​e​l​e​g​a​t​e​d​ ​s​m​a​r​t​ ​w​a​l​l​e​t​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​y​e​t
+	 */
+	SMART_WALLET_DELEGATION_NOT_SUPPORTED: string
+	/**
 	 * C​l​a​i​m​a​b​l​e
 	 */
 	STARGATE_CLAIMABLE: string
-	/**
-	 * Own
-	 */
-	STARGATE_OWN_LABEL: string
 	/**
 	 * M​a​n​a​g​i​n​g
 	 */
@@ -4390,6 +4390,10 @@ type RootTranslation = {
 	 * N​e​w​ ​s​t​a​k​e
 	 */
 	STARGATE_NEW_STAKE: string
+	/**
+	 * O​w​n
+	 */
+	STARGATE_OWN_LABEL: string
 	/**
 	 * R​e​w​a​r​d​s
 	 */
@@ -6145,6 +6149,10 @@ Thanks for your patience!
 	 */
 	BROWSER_FAVOURITES_TITLE: () => LocalizedString
 	/**
+	 * Go to previous page
+	 */
+	BROWSER_GO_BACK: () => LocalizedString
+	/**
 	 * This address can't be reached
 	 */
 	BROWSER_HISTORY_ADDRESS_ERROR: () => LocalizedString
@@ -6208,10 +6216,6 @@ Thanks for your patience!
 	 * Reload page
 	 */
 	BROWSER_RELOAD_PAGE: () => LocalizedString
-	/**
-	 * Go to previous page
-	 */
-	BROWSER_GO_BACK: () => LocalizedString
 	/**
 	 * Remove from Favorites
 	 */
@@ -6457,7 +6461,7 @@ Thanks for your patience!
 	 */
 	BTN_OBSERVE_WALLET: () => LocalizedString
 	/**
-	 * Watch a public wallet address
+	 * Add any public wallet address and keep track of its balances and activity
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: () => LocalizedString
 	/**
@@ -7669,13 +7673,13 @@ Thanks for your patience!
 	 */
 	FAVOURITES_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
-	 * Could not find any dapps with this name
-	 */
-	FAVOURITES_DAPPS_NO_RECORDS: () => LocalizedString
-	/**
 	 * No favorited apps to show
 	 */
 	FAVOURITES_DAPPS_EMPTY_LIST: () => LocalizedString
+	/**
+	 * Could not find any dapps with this name
+	 */
+	FAVOURITES_DAPPS_NO_RECORDS: () => LocalizedString
 	/**
 	 * Search
 	 */
@@ -7820,10 +7824,6 @@ Thanks for your patience!
 	 * Delegated hardware wallet not supported yet
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: () => LocalizedString
-	/**
-	 * Smart wallet not supported yet
-	 */
-	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
 	/**
 	 * Typed Data cannot be signed with a Ledger device. Please select another account.
 	 */
@@ -8309,6 +8309,10 @@ Thanks for your patience!
 	 * This dApp isn't verified by VeWorld.
 	 */
 	NOT_VERIFIED_DAPP: () => LocalizedString
+	/**
+	 * You can't connect to this dApp with a view only account.
+	 */
+	NOT_VERIFIED_WATCHED_ACCOUNT: () => LocalizedString
 	/**
 	 * November
 	 */
@@ -9298,13 +9302,13 @@ Here's what it's all about:
 	 */
 	SIGN_TYPED_DATA_REQUEST_TITLE: () => LocalizedString
 	/**
+	 * Delegated smart wallet not supported yet
+	 */
+	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
+	/**
 	 * Claimable
 	 */
 	STARGATE_CLAIMABLE: () => LocalizedString
-	/**
-	 * Own
-	 */
-	STARGATE_OWN_LABEL: () => LocalizedString
 	/**
 	 * Managing
 	 */
@@ -9321,6 +9325,10 @@ Here's what it's all about:
 	 * New stake
 	 */
 	STARGATE_NEW_STAKE: () => LocalizedString
+	/**
+	 * Own
+	 */
+	STARGATE_OWN_LABEL: () => LocalizedString
 	/**
 	 * Rewards
 	 */

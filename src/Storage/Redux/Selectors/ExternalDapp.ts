@@ -1,6 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
-import { selectSelectedNetwork } from "./Network"
 import { selectSelectedAccount } from "./Account"
 import { AddressUtils } from "~Utils"
 import { SessionState } from "../Slices"
@@ -8,8 +7,8 @@ import { SessionState } from "../Slices"
 export const selectExternalDappsState = (state: RootState) => state.externalDapps
 
 export const selectExternalDappSessions = createSelector(
-    [selectExternalDappsState, selectSelectedNetwork],
-    (externalDapps, network) => externalDapps.sessions[network.type],
+    [selectExternalDappsState, (_: RootState, genesisId: string) => genesisId],
+    (externalDapps, genesisId) => externalDapps.sessions[genesisId],
 )
 
 export const selectExternalDappSession = createSelector(

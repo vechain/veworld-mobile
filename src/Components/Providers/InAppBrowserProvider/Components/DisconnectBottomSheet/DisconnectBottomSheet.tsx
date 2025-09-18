@@ -78,7 +78,7 @@ export const DisconnectBottomSheet = () => {
                 await onDappDisconnected({
                     dappPublicKey: request.publicKey,
                     redirectUrl: request.redirectUrl,
-                    network: request.network,
+                    genesisId: request.genesisId,
                 })
                 onCloseBs()
             }

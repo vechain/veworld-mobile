@@ -3,7 +3,14 @@ import { RequestMethods } from "~Constants"
 import { decodeBase64 } from "tweetnacl-util"
 import nacl from "tweetnacl"
 import { SessionState } from "~Storage/Redux"
-import { CertificateRequest, DisconnectAppRequest, ParsedRequest, TransactionRequest, TypeDataRequest } from "~Model"
+import {
+    CertificateRequest,
+    DecodedRequest,
+    DisconnectAppRequest,
+    ParsedRequest,
+    TransactionRequest,
+    TypeDataRequest,
+} from "~Model"
 import { DeepLinkError, DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
 import { Linking } from "react-native"
 import { error } from "~Utils/Logger/Logger"
@@ -143,15 +150,19 @@ const encryptPayload = (payload: string, publicKey: string, secretKey: string): 
 //     return true
 // }
 
+const decodeRequest = (encodedRequest: string): DecodedRequest => {
+    const request = decodeURIComponent(encodedRequest)
+    return JSON.parse(new TextDecoder().decode(decodeBase64(request))) as DecodedRequest
+}
+
 const parseRequest = async <T>(
-    encodedRequest: string,
+    decodedRequest: DecodedRequest,
     externalDappSessions: Record<string, SessionState>,
     redirectUrl: string,
 ): Promise<ParsedRequest<T> | undefined> => {
-    const request = decodeURIComponent(encodedRequest)
-    const { payload: encPayload, ...decodedRequest } = JSON.parse(new TextDecoder().decode(decodeBase64(request)))
+    const { payload: encPayload, ...request } = decodedRequest
     try {
-        const dappSession = externalDappSessions[decodedRequest.publicKey]
+        const dappSession = externalDappSessions[request.publicKey]
 
         if (!dappSession) {
             const err = new DeepLinkError(DeepLinkErrorCode.Unauthorized)
@@ -164,11 +175,11 @@ const parseRequest = async <T>(
         const KP = nacl.box.keyPair.fromSecretKey(decodeBase64(dappSession.keyPair.privateKey))
 
         // Decrypt the payload
-        const sharedSecret = nacl.box.before(decodeBase64(decodedRequest.publicKey), KP.secretKey)
+        const sharedSecret = nacl.box.before(decodeBase64(request.publicKey), KP.secretKey)
 
         const decryptedPayload = nacl.box.open.after(
             decodeBase64(encPayload),
-            decodeBase64(decodedRequest.nonce),
+            decodeBase64(request.nonce),
             sharedSecret,
         )
 
@@ -180,7 +191,7 @@ const parseRequest = async <T>(
 
         const payload = JSON.parse(new TextDecoder().decode(decryptedPayload))
 
-        return { payload, request: decodedRequest } as ParsedRequest<T>
+        return { payload, request } as ParsedRequest<T>
     } catch (e) {
         const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
         error("EXTERNAL_DAPP_CONNECTION", err)
@@ -190,11 +201,11 @@ const parseRequest = async <T>(
 }
 
 const parseTransactionRequest = async (
-    encodedRequest: string,
+    decodedRequest: DecodedRequest,
     externalDappSessions: Record<string, SessionState>,
     redirectUrl: string,
 ): Promise<TransactionRequest | undefined> => {
-    const parsedRequest = await parseRequest<TransactionRequest>(encodedRequest, externalDappSessions, redirectUrl)
+    const parsedRequest = await parseRequest<TransactionRequest>(decodedRequest, externalDappSessions, redirectUrl)
 
     if (!parsedRequest) {
         const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
@@ -215,11 +226,11 @@ const parseTransactionRequest = async (
 }
 
 const parseTypedDataRequest = async (
-    encodedRequest: string,
+    decodedRequest: DecodedRequest,
     externalDappSessions: Record<string, SessionState>,
     redirectUrl: string,
 ): Promise<TypeDataRequest | undefined> => {
-    const parsedRequest = await parseRequest<TypeDataRequest>(encodedRequest, externalDappSessions, redirectUrl)
+    const parsedRequest = await parseRequest<TypeDataRequest>(decodedRequest, externalDappSessions, redirectUrl)
 
     if (!parsedRequest) {
         const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
@@ -240,11 +251,11 @@ const parseTypedDataRequest = async (
 }
 
 const parseCertificateRequest = async (
-    encodedRequest: string,
+    decodedRequest: DecodedRequest,
     externalDappSessions: Record<string, SessionState>,
     redirectUrl: string,
 ): Promise<CertificateRequest | undefined> => {
-    const parsedRequest = await parseRequest<CertificateRequest>(encodedRequest, externalDappSessions, redirectUrl)
+    const parsedRequest = await parseRequest<CertificateRequest>(decodedRequest, externalDappSessions, redirectUrl)
 
     if (!parsedRequest) {
         const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
@@ -268,14 +279,14 @@ const parseCertificateRequest = async (
 }
 
 const parseDisconnectRequest = async (
-    encodedRequest: string,
+    decodedRequest: DecodedRequest,
     externalDappSessions: Record<string, SessionState>,
     redirectUrl: string,
 ): Promise<DisconnectAppRequest | undefined> => {
-    const parsedRequest = await parseRequest<DisconnectAppRequest>(encodedRequest, externalDappSessions, redirectUrl)
+    const parsedRequest = await parseRequest<DisconnectAppRequest>(decodedRequest, externalDappSessions, redirectUrl)
+
     if (!parsedRequest) {
-        const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
-        throw new Error(err.message)
+        throw new DeepLinkError(DeepLinkErrorCode.InternalError)
     }
 
     if (!("session" in parsedRequest.payload)) {
@@ -322,4 +333,5 @@ export const DAppUtils = {
     encryptPayload,
     dispatchResourceNotAvailableError,
     dispatchInternalError,
+    decodeRequest,
 }

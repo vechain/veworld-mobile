@@ -1,21 +1,19 @@
-import { NETWORK_TYPE } from "~Model"
-
-type ConnectionLinkParams = {
+export type ConnectionLinkParams = {
     app_name: string
     app_url?: string
     app_icon: string
     public_key: string
     redirect_url: string
-    network: NETWORK_TYPE
+    genesis_id: string
 }
 
-type DisconnectParams = {
+export type DisconnectParams = {
     public_key: string
-    network: NETWORK_TYPE
+    genesis_id: string
     redirect_url: string
 }
 
-type ExternalAppRequestParams = {
+export type ExternalAppRequestParams = {
     /**
      * Encoded URI of the transaction request object
      */
