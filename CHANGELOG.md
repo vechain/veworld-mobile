@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.3 (2025-09-17)</small>
+
+* build: init ([c9e9281](https://github.com/vechain/veworld-mobile/commit/c9e9281))
+* fix: return to swap page from inappbrowser when closed (#3292) ([193df87](https://github.com/vechain/veworld-mobile/commit/193df87)), closes [#3292](https://github.com/vechain/veworld-mobile/issues/3292)
+
 ## <small>2.4.2 (2025-09-10)</small>
 
 * build: init ([82afb17](https://github.com/vechain/veworld-mobile/commit/82afb17))
