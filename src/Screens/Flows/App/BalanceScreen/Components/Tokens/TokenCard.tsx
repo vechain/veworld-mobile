@@ -51,6 +51,7 @@ export const TokenCard = ({ token }: Props) => {
                 name={isGoingUp ? "icon-stat-arrow-up" : "icon-stat-arrow-down"}
                 size={16}
                 color={isGoingUp ? COLORS.GREEN_300 : COLORS.RED_400}
+                testID="TOKEN_CARD_CHART_ICON"
             />
         )
     }, [chartData, isGoingUp])
@@ -60,11 +61,11 @@ export const TokenCard = ({ token }: Props) => {
             case "B3TR":
                 return (
                     <BaseView flexDirection="row" gap={4}>
-                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500}>
+                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500} testID="TOKEN_CARD_SYMBOL_1">
                             {B3TR.symbol}
                         </BaseText>
                         <BaseIcon name="icon-arrow-left-right" size={12} color={COLORS.GREY_300} />
-                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500}>
+                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500} testID="TOKEN_CARD_SYMBOL_2">
                             {VOT3.symbol}
                         </BaseText>
                         {chartIcon}
@@ -73,7 +74,7 @@ export const TokenCard = ({ token }: Props) => {
             case "veB3TR":
                 return (
                     <BaseView flexDirection="row" gap={4}>
-                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500}>
+                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500} testID="TOKEN_CARD_SYMBOL">
                             {"veDelegate"}
                         </BaseText>
                         {chartIcon}
@@ -82,7 +83,7 @@ export const TokenCard = ({ token }: Props) => {
             default:
                 return (
                     <BaseView flexDirection="row" gap={4}>
-                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500}>
+                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500} testID="TOKEN_CARD_SYMBOL">
                             {token.symbol}
                         </BaseText>
                         {chartIcon}
@@ -114,7 +115,8 @@ export const TokenCard = ({ token }: Props) => {
                                 color={COLORS.GREY_800}
                                 flexDirection="row"
                                 numberOfLines={1}
-                                flex={1}>
+                                flex={1}
+                                testID="TOKEN_CARD_NAME">
                                 {name}
                             </BaseText>
                             {symbol}
@@ -137,7 +139,8 @@ export const TokenCard = ({ token }: Props) => {
                             color={COLORS.GREY_800}
                             align="right"
                             numberOfLines={1}
-                            flexDirection="row">
+                            flexDirection="row"
+                            testID="TOKEN_CARD_FIAT_BALANCE">
                             {fiatBalance}
                         </BaseText>
                         <BaseText
@@ -145,7 +148,8 @@ export const TokenCard = ({ token }: Props) => {
                             color={COLORS.GREY_500}
                             align="right"
                             numberOfLines={1}
-                            flexDirection="row">
+                            flexDirection="row"
+                            testID="TOKEN_CARD_TOKEN_BALANCE">
                             {tokenBalance}
                         </BaseText>
                     </>
@@ -155,7 +159,8 @@ export const TokenCard = ({ token }: Props) => {
                         color={COLORS.GREY_800}
                         align="right"
                         numberOfLines={1}
-                        flexDirection="row">
+                        flexDirection="row"
+                        testID="TOKEN_CARD_TOKEN_BALANCE">
                         {tokenBalance}
                     </BaseText>
                 )}
