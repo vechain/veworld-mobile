@@ -50,7 +50,7 @@ export const initialState: FeatureFlags = {
             enabled: true,
         },
         balanceScreen: {
-            enabled: true,
+            enabled: false,
         },
     },
 }
