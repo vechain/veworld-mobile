@@ -596,6 +596,22 @@ type RootTranslation = {
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
 	/**
+	 * B​u​y
+	 */
+	BALANCE_ACTION_BUY: string
+	/**
+	 * O​t​h​e​r
+	 */
+	BALANCE_ACTION_OTHER: string
+	/**
+	 * R​e​c​e​i​v​e
+	 */
+	BALANCE_ACTION_RECEIVE: string
+	/**
+	 * S​e​n​d
+	 */
+	BALANCE_ACTION_SEND: string
+	/**
 	 * C​o​l​l​e​c​t​i​b​l​e​s
 	 */
 	BALANCE_TAB_COLLECTIBLES: string
@@ -607,22 +623,6 @@ type RootTranslation = {
 	 * T​o​k​e​n​s
 	 */
 	BALANCE_TAB_TOKENS: string
-	/**
-	 * B​u​y
-	 */
-	BALANCE_ACTION_BUY: string
-	/**
-	 * R​e​c​e​i​v​e
-	 */
-	BALANCE_ACTION_RECEIVE: string
-	/**
-	 * S​e​n​d
-	 */
-	BALANCE_ACTION_SEND: string
-	/**
-	 * O​t​h​e​r
-	 */
-	BALANCE_ACTION_OTHER: string
 	/**
 	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
 	 */
@@ -2940,6 +2940,10 @@ type RootTranslation = {
 	 */
 	LOADING_MORE: string
 	/**
+	 * L​o​a​d​i​n​g​ ​p​a​g​e​ ​c​o​n​t​e​n​t
+	 */
+	LOADING_PAGE_CONTENT: string
+	/**
 	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: string
@@ -2951,10 +2955,6 @@ type RootTranslation = {
 	 * L​o​g​i​n
 	 */
 	LOGIN_REQUEST_TITLE: string
-	/**
-	 * L​o​a​d​i​n​g​ ​p​a​g​e​ ​c​o​n​t​e​n​t
-	 */
-	LOADING_PAGE_CONTENT: string
 	/**
 	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​t​o​k​e​n​?
 	 */
@@ -4903,6 +4903,10 @@ type RootTranslation = {
 	 */
 	VIEW_ON_EXPLORER: string
 	/**
+	 * V​i​e​w​ ​o​n​l​y
+	 */
+	VIEW_ONLY: string
+	/**
 	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.
 	 */
 	WALLETS_SAVED_ON_DRIVE: string
@@ -5651,6 +5655,22 @@ Try reconnect your device to the internet.
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
 	/**
+	 * Buy
+	 */
+	BALANCE_ACTION_BUY: () => LocalizedString
+	/**
+	 * Other
+	 */
+	BALANCE_ACTION_OTHER: () => LocalizedString
+	/**
+	 * Receive
+	 */
+	BALANCE_ACTION_RECEIVE: () => LocalizedString
+	/**
+	 * Send
+	 */
+	BALANCE_ACTION_SEND: () => LocalizedString
+	/**
 	 * Collectibles
 	 */
 	BALANCE_TAB_COLLECTIBLES: () => LocalizedString
@@ -5662,22 +5682,6 @@ Try reconnect your device to the internet.
 	 * Tokens
 	 */
 	BALANCE_TAB_TOKENS: () => LocalizedString
-	/**
-	 * Buy
-	 */
-	BALANCE_ACTION_BUY: () => LocalizedString
-	/**
-	 * Receive
-	 */
-	BALANCE_ACTION_RECEIVE: () => LocalizedString
-	/**
-	 * Send
-	 */
-	BALANCE_ACTION_SEND: () => LocalizedString
-	/**
-	 * Other
-	 */
-	BALANCE_ACTION_OTHER: () => LocalizedString
 	/**
 	 * Get **VTHO** by staking your **VET tokens**
 	 */
@@ -7981,6 +7985,10 @@ Thanks for your patience!
 	 */
 	LOADING_MORE: () => LocalizedString
 	/**
+	 * Loading page content
+	 */
+	LOADING_PAGE_CONTENT: () => LocalizedString
+	/**
 	 * Keep me signed in for future sessions
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
@@ -7992,10 +8000,6 @@ Thanks for your patience!
 	 * Login
 	 */
 	LOGIN_REQUEST_TITLE: () => LocalizedString
-	/**
-	 * Loading page content
-	 */
-	LOADING_PAGE_CONTENT: () => LocalizedString
 	/**
 	 * Are you sure you want to add the selected token?
 	 */
@@ -9905,6 +9909,10 @@ Here's what it's all about:
 	 * View on explorer
 	 */
 	VIEW_ON_EXPLORER: () => LocalizedString
+	/**
+	 * View only
+	 */
+	VIEW_ONLY: () => LocalizedString
 	/**
 	 * wallets saved on Google Drive.
 	 */
