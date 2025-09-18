@@ -49,6 +49,9 @@ export const initialState: FeatureFlags = {
         appsScreen: {
             enabled: true,
         },
+        balanceScreen: {
+            enabled: true,
+        },
     },
 }
 

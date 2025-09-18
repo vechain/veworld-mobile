@@ -23,6 +23,7 @@ import {
     ConnectedAppsScreen,
     ConvertTransactionScreen,
     EnableAdditionalSettings,
+    HomeScreen,
     ImportFromCloudScreen,
     ImportLocalWallet,
     ImportMnemonicBackupPasswordScreen,
@@ -147,7 +148,11 @@ export const HomeStack = () => {
     return (
         <Navigator id="HomeStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
-                <Screen name={Routes.HOME} component={BalanceScreen} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.HOME}
+                    component={betterWorldFeature.balanceScreen?.enabled ? BalanceScreen : HomeScreen}
+                    options={{ headerShown: false }}
+                />
                 <Screen
                     name={Routes.SELECT_TOKEN_SEND}
                     component={SelectTokenSendScreen}
