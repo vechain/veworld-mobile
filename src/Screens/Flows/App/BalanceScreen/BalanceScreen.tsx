@@ -75,7 +75,8 @@ export const BalanceScreen = () => {
                             end={{ x: 0, y: 1 }}
                             style={{ position: "relative", marginTop: 16 }}
                             locations={[0, 0.55, 1]}
-                            angle={180}>
+                            angle={180}
+                            useAngle>
                             <BaseView flexDirection="row" gap={4} alignSelf="center">
                                 <BaseText typographyFont="headerTitle" fontWeight="400" color={COLORS.PURPLE_LABEL}>
                                     {currencySymbol}

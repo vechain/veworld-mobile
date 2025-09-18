@@ -24,6 +24,7 @@ const GlassButton = ({ icon, onPress, disabled }: GlassButtonProps) => {
                 <LinearGradient
                     colors={["rgba(29, 23, 58, 0.20)", "rgba(177, 168, 220, 0.20)"]}
                     angle={0}
+                    useAngle
                     style={styles.innerShadow}>
                     <BaseIcon name={icon} size={24} color={COLORS.PURPLE_LABEL} />
                 </LinearGradient>
