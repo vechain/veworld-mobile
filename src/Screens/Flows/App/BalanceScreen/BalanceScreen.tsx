@@ -4,20 +4,18 @@ import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "reac
 import { ScrollView } from "react-native-gesture-handler"
 import LinearGradient from "react-native-linear-gradient"
 import { useSharedValue } from "react-native-reanimated"
-import { BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
+import { BaseSpacer, BaseView, Layout, QRCodeBottomSheet } from "~Components"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
-import { selectCurrencySymbol, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { BalanceActions } from "./Components/Actions/BalanceActions"
+import { CurrentBalance } from "./Components/Balance/CurrentBalance"
 import { PullToRefresh } from "./Components/PullToRefresh"
-import { RollingFadingText } from "./Components/RollingFadingText"
 import { Header } from "./Header"
 import { TabRenderer } from "./Tabs/TabRenderer"
 
 export const BalanceScreen = () => {
-    const currencySymbol = useAppSelector(selectCurrencySymbol)
-
     const scrollY = useSharedValue(0)
     const contentOffsetY = useSharedValue(0)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -54,13 +52,7 @@ export const BalanceScreen = () => {
                 <ScrollView refreshControl={<PullToRefresh />} onScroll={onScroll}>
                     {isObservedAccount ? (
                         <BaseView bg={COLORS.BALANCE_BACKGROUND}>
-                            <BaseView flexDirection="row" gap={4} alignSelf="center">
-                                <BaseText typographyFont="headerTitle" fontWeight="400" color={COLORS.PURPLE_LABEL}>
-                                    {currencySymbol}
-                                </BaseText>
-                                {/* This is just a placeholder for the loading state. Update it accordingly */}
-                                <RollingFadingText text="99.999" />
-                            </BaseView>
+                            <CurrentBalance />
 
                             <BaseSpacer height={12} />
                             {/* The 24px container should be the pagination */}
@@ -77,13 +69,7 @@ export const BalanceScreen = () => {
                             locations={[0, 0.55, 1]}
                             angle={180}
                             useAngle>
-                            <BaseView flexDirection="row" gap={4} alignSelf="center">
-                                <BaseText typographyFont="headerTitle" fontWeight="400" color={COLORS.PURPLE_LABEL}>
-                                    {currencySymbol}
-                                </BaseText>
-                                {/* This is just a placeholder for the loading state. Update it accordingly */}
-                                <RollingFadingText text="99.999" />
-                            </BaseView>
+                            <CurrentBalance />
 
                             <BaseSpacer height={12} />
                             {/* The 24px container should be the pagination */}

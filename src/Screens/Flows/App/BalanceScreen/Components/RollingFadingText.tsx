@@ -68,5 +68,5 @@ export const RollingFadingText = ({ text }: Props) => {
 
 const baseStyles = () =>
     StyleSheet.create({
-        text: { color: COLORS.GREY_50, fontWeight: 600, fontSize: 36, fontFamily: "Inter-SemiBold" },
+        text: { color: COLORS.GREY_50, fontWeight: 600, fontSize: 36, fontFamily: "Inter-SemiBold", lineHeight: 40 },
     })
