@@ -16,6 +16,8 @@ type Props = {
     text: string
 }
 
+const ANIMATION_DURATION = 600
+
 const RollingFadingTextElement = ({
     value,
     index,
@@ -31,10 +33,13 @@ const RollingFadingTextElement = ({
     useEffect(() => {
         sharedValue.value = withRepeat(
             withSequence(
-                withDelay(index * 600, withTiming(1, { duration: 600 })),
-                withTiming(1, { duration: 600 * (totalChars - index - 1) }),
-                withDelay(600 * (totalChars - index - 1), withTiming(0, { duration: 600 })),
-                withTiming(0, { duration: 600 * index }),
+                withDelay(index * ANIMATION_DURATION, withTiming(1, { duration: ANIMATION_DURATION })),
+                withTiming(1, { duration: ANIMATION_DURATION * (totalChars - index - 1) }),
+                withDelay(
+                    ANIMATION_DURATION * (totalChars - index - 1),
+                    withTiming(0, { duration: ANIMATION_DURATION }),
+                ),
+                withTiming(0, { duration: ANIMATION_DURATION * index }),
             ),
             -1,
             false,

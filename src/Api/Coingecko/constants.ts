@@ -41,15 +41,9 @@ export const getCoinGeckoIdBySymbol = {
     XRP: XRP_COINGECKO_ID,
 }
 
-export const getSymbolByCoingeckoId = {
-    [VET_COINGECKO_ID]: VET.symbol,
-    [VETHOR_COINGECKO_ID]: VTHO.symbol,
-    [B3TR_COINGECKO_ID]: B3TR.symbol,
-    [BTC_COINGECKO_ID]: "BTC",
-    [ETH_COINGECKO_ID]: "ETH",
-    [SOL_COINGECKO_ID]: "SOL",
-    [USDC_COINGECKO_ID]: "USDC",
-    [USDT_COINGECKO_ID]: "USDT",
-    [WAN_COINGECKO_ID]: "WAN",
-    [XRP_COINGECKO_ID]: "XRP",
-}
+/**
+ * Reverse map of `getCoinGeckoIdBySymbol`
+ */
+export const getSymbolByCoingeckoId = Object.fromEntries(
+    Object.entries(getCoinGeckoIdBySymbol).map(([key, value]) => [value, key]),
+)
