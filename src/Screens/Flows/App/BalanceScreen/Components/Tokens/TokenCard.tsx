@@ -1,13 +1,14 @@
 import { default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useExchangeRate, useSmartMarketChart } from "~Api/Coingecko"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { B3TR, COLORS, VET, VOT3 } from "~Constants"
-import { useBalances, useCombineFiatBalances, useFormatFiat, useThemedStyles } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
+import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BalanceUtils } from "~Utils"
+import { AddressUtils } from "~Utils"
 import { CAN_DISPLAY_CHART, Chart, getPriceChange } from "./Chart"
 
 type Props = {
@@ -70,7 +71,14 @@ export const TokenCard = ({ token }: Props) => {
                     </BaseView>
                 )
             case "veB3TR":
-                return null
+                return (
+                    <BaseView flexDirection="row" gap={4}>
+                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500}>
+                            {"veDelegate"}
+                        </BaseText>
+                        {chartIcon}
+                    </BaseView>
+                )
             default:
                 return (
                     <BaseView flexDirection="row" gap={4}>
@@ -83,44 +91,7 @@ export const TokenCard = ({ token }: Props) => {
         }
     }, [chartIcon, token.symbol])
 
-    const exchangeRateId = useMemo(() => {
-        const coingeckoId = getCoinGeckoIdBySymbol[token.symbol]
-        if (coingeckoId) return coingeckoId
-        if (token.symbol === "veB3TR") return getCoinGeckoIdBySymbol[B3TR.symbol]
-        return token.symbol
-    }, [token.symbol])
-
-    const { data: exchangeRate } = useExchangeRate({
-        vs_currency: currency,
-        id: exchangeRateId,
-    })
-
-    const { fiatBalance: fiatBalance } = useBalances({
-        token,
-        exchangeRate: exchangeRate ?? 0,
-    })
-
-    const { combineFiatBalances } = useCombineFiatBalances()
-
-    const { amount, areAlmostZero } = useMemo(
-        () => combineFiatBalances([fiatBalance]),
-        [combineFiatBalances, fiatBalance],
-    )
-
-    const { formatFiat, formatLocale } = useFormatFiat()
-    const renderFiatBalance = useMemo(
-        () => formatFiat({ amount, cover: token.balance.isHidden }),
-        [formatFiat, amount, token.balance.isHidden],
-    )
-
-    const tokenBalance = useMemo(
-        () => BalanceUtils.getTokenUnitBalance(token.balance.balance, token.decimals ?? 0, 2, formatLocale),
-        [formatLocale, token.balance.balance, token.decimals],
-    )
-
-    const showFiatBalance = useMemo(() => {
-        return !!exchangeRate
-    }, [exchangeRate])
+    const { fiatBalance, showFiatBalance, tokenBalance } = useTokenCardBalance({ token })
 
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
@@ -167,8 +138,7 @@ export const TokenCard = ({ token }: Props) => {
                             align="right"
                             numberOfLines={1}
                             flexDirection="row">
-                            {areAlmostZero && token.balance.isHidden && "< "}
-                            {renderFiatBalance}
+                            {fiatBalance}
                         </BaseText>
                         <BaseText
                             typographyFont="bodyMedium"

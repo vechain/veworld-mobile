@@ -5,7 +5,7 @@ import { B3TR, VOT3 } from "~Constants"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectTokensWithBalances, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
-import { TokenCard } from "./TokenCard"
+import { TokenCard } from "../../Components/Tokens/TokenCard"
 
 const ItemSeparator = () => <BaseSpacer height={8} />
 
