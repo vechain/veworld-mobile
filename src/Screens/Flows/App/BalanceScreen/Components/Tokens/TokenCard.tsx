@@ -28,8 +28,6 @@ export const TokenCard = ({ token }: Props) => {
                 return "VeBetter"
             case "VOT3":
                 return "VeBetter"
-            case "veB3TR":
-                return "veDelegate"
             default:
                 return token.name
         }
@@ -67,15 +65,6 @@ export const TokenCard = ({ token }: Props) => {
                         <BaseIcon name="icon-arrow-left-right" size={12} color={COLORS.GREY_300} />
                         <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500} testID="TOKEN_CARD_SYMBOL_2">
                             {VOT3.symbol}
-                        </BaseText>
-                        {chartIcon}
-                    </BaseView>
-                )
-            case "veB3TR":
-                return (
-                    <BaseView flexDirection="row" gap={4}>
-                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500} testID="TOKEN_CARD_SYMBOL">
-                            {"veDelegate"}
                         </BaseText>
                         {chartIcon}
                     </BaseView>

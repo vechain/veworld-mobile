@@ -23,7 +23,7 @@ export const useTokenCardBalance = ({ token }: Args) => {
         const coingeckoId = getCoinGeckoIdBySymbol[token.symbol]
         if (coingeckoId) return coingeckoId
         //Handle VeDelegate
-        if (token.symbol === "veB3TR") return getCoinGeckoIdBySymbol[B3TR.symbol]
+        if (token.symbol === "veDelegate") return getCoinGeckoIdBySymbol[B3TR.symbol]
         return token.symbol
     }, [token.symbol])
 
