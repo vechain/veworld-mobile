@@ -3,11 +3,12 @@ import { default as React, useCallback } from "react"
 import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { clamp, interpolate, SharedValue, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
-import { AccountIcon, BaseIcon, BaseText, BaseView } from "~Components"
+import { AccountIcon, BaseIcon, BaseText, BaseView, QRCodeBottomSheet, SelectAccountBottomSheet } from "~Components"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     scrollY: SharedValue<number>
@@ -50,6 +51,28 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
         [height],
     )
 
+    const {
+        ref: selectAccountBottomSheetRef,
+        onOpen: openSelectAccountBottomSheet,
+        onClose: closeSelectAccountBottonSheet,
+    } = useBottomSheetModal()
+
+    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
+
+    const handleOpenQRCode = useCallback(() => openQRCodeSheet(), [openQRCodeSheet])
+    const handleOpenWalletSwitcher = useCallback(() => openSelectAccountBottomSheet(), [openSelectAccountBottomSheet])
+
+    const accounts = useAppSelector(selectVisibleAccounts)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const { onSetSelectedAccount } = useSetSelectedAccount()
+
+    const setSelectedAccount = useCallback(
+        (_account: AccountWithDevice | WatchedAccount) => {
+            onSetSelectedAccount({ address: _account.address })
+        },
+        [onSetSelectedAccount],
+    )
+
     return (
         <BaseView style={styles.root} onLayout={onLayout}>
             <AnimatedLinearGradient
@@ -64,9 +87,9 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                 angle={0}
                 style={[gradientStyle, styles.gradient]}
             />
-            <TouchableOpacity>
-                <BaseView flexDirection="row" gap={12} p={8} pr={16} borderRadius={99} bg={COLORS.WHITE_RGBA_05}>
-                    <AccountIcon address={account.address} size={24} borderRadius={100} />
+            <TouchableOpacity onPress={handleOpenWalletSwitcher}>
+                <BaseView flexDirection="row" gap={12} py={4} px={8} borderRadius={99}>
+                    <AccountIcon address={account.address} size={32} borderRadius={100} />
                     <BaseText typographyFont="captionSemiBold" color={COLORS.PURPLE_LABEL}>
                         {account.alias}
                     </BaseText>
@@ -75,16 +98,26 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
 
             <BaseView flexDirection="row" gap={12}>
                 <TouchableOpacity onPress={onWalletManagementPress}>
-                    <BaseView borderRadius={99} p={10} bg={COLORS.WHITE_RGBA_05}>
-                        <BaseIcon name="icon-wallet" color={COLORS.PURPLE_LABEL} size={20} />
+                    <BaseView borderRadius={99} p={8}>
+                        <BaseIcon name="icon-wallet" color={COLORS.PURPLE_LABEL} size={24} />
                     </BaseView>
                 </TouchableOpacity>
-                <TouchableOpacity>
-                    <BaseView borderRadius={99} p={10} bg={COLORS.WHITE_RGBA_05}>
-                        <BaseIcon name="icon-scanQR" color={COLORS.PURPLE_LABEL} size={20} />
+                <TouchableOpacity onPress={handleOpenQRCode}>
+                    <BaseView borderRadius={99} p={8}>
+                        <BaseIcon name="icon-scanQR" color={COLORS.PURPLE_LABEL} size={24} />
                     </BaseView>
                 </TouchableOpacity>
             </BaseView>
+
+            <SelectAccountBottomSheet
+                closeBottomSheet={closeSelectAccountBottonSheet}
+                accounts={accounts}
+                setSelectedAccount={setSelectedAccount}
+                selectedAccount={selectedAccount}
+                ref={selectAccountBottomSheetRef}
+                goToWalletEnabled
+            />
+            <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
         </BaseView>
     )
 }
