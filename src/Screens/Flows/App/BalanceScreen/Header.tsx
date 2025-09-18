@@ -1,9 +1,10 @@
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
-import { default as React, useCallback, useMemo } from "react"
+import { default as React, RefObject, useCallback, useMemo } from "react"
 import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { clamp, interpolate, SharedValue, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
-import { AccountIcon, BaseIcon, BaseText, BaseView, QRCodeBottomSheet, SelectAccountBottomSheet } from "~Components"
+import { AccountIcon, BaseIcon, BaseText, BaseView, SelectAccountBottomSheet } from "~Components"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -15,11 +16,12 @@ import { AccountUtils } from "~Utils"
 type Props = {
     scrollY: SharedValue<number>
     contentOffsetY: SharedValue<number>
+    qrCodeBottomSheetRef: RefObject<BottomSheetModalMethods>
 }
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
-export const Header = ({ scrollY, contentOffsetY }: Props) => {
+export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
     const account = useAppSelector(selectSelectedAccount)
@@ -60,7 +62,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
+    const { onOpen: openQRCodeSheet } = useBottomSheetModal({ externalRef: qrCodeBottomSheetRef })
 
     const handleOpenQRCode = useCallback(() => openQRCodeSheet(), [openQRCodeSheet])
     const handleOpenWalletSwitcher = useCallback(() => openSelectAccountBottomSheet(), [openSelectAccountBottomSheet])
@@ -132,7 +134,6 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                 ref={selectAccountBottomSheetRef}
                 goToWalletEnabled
             />
-            <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
         </BaseView>
     )
 }

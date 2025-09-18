@@ -4,8 +4,9 @@ import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "reac
 import { ScrollView } from "react-native-gesture-handler"
 import LinearGradient from "react-native-linear-gradient"
 import { useSharedValue } from "react-native-reanimated"
-import { BaseSpacer, BaseText, BaseView, Layout } from "~Components"
+import { BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
 import { COLORS } from "~Constants"
+import { useBottomSheetModal } from "~Hooks"
 import { selectCurrencySymbol, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { BalanceActions } from "./Components/Actions/BalanceActions"
@@ -20,6 +21,8 @@ export const BalanceScreen = () => {
     const scrollY = useSharedValue(0)
     const contentOffsetY = useSharedValue(0)
     const selectedAccount = useAppSelector(selectSelectedAccount)
+
+    const { ref: qrCodeBottomSheetRef } = useBottomSheetModal()
 
     const onLayout = useCallback(
         (e: LayoutChangeEvent) => {
@@ -43,7 +46,9 @@ export const BalanceScreen = () => {
         <Layout
             bg={COLORS.BALANCE_BACKGROUND}
             noBackButton
-            fixedHeader={<Header scrollY={scrollY} contentOffsetY={contentOffsetY} />}
+            fixedHeader={
+                <Header scrollY={scrollY} contentOffsetY={contentOffsetY} qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
+            }
             noMargin
             fixedBody={
                 <ScrollView refreshControl={<PullToRefresh />} onScroll={onScroll}>
@@ -84,13 +89,14 @@ export const BalanceScreen = () => {
                             <BaseSpacer height={24} />
                             <BaseSpacer height={12} />
 
-                            <BalanceActions />
+                            <BalanceActions qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
 
                             <BaseSpacer height={64} />
                         </LinearGradient>
                     )}
 
                     <TabRenderer onLayout={onLayout} />
+                    <QRCodeBottomSheet ref={qrCodeBottomSheetRef} />
                 </ScrollView>
             }
         />

@@ -414,6 +414,7 @@ export enum COLORS {
     WHITE_RGBA_85 = "rgba(255,255,255,0.85)",
     WHITE_RGBA_15 = "rgba(255,255,255,0.15)",
     PURPLE_LABEL = "#B9B5CF",
+    PURPLE_LABEL_5 = "rgba(185, 181, 207, 0.05)",
     BALANCE_BACKGROUND = "#1D173A",
 }
 
