@@ -1,9 +1,10 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import React, { RefObject, useCallback, useMemo } from "react"
-import { BaseView } from "~Components"
+import { StyleSheet } from "react-native"
+import Animated from "react-native-reanimated"
 import { AnalyticsEvent } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -16,6 +17,8 @@ type Props = {
 
 export const BalanceActions = ({ qrCodeBottomSheetRef }: Props) => {
     const { LL } = useI18nContext()
+
+    const { styles } = useThemedStyles(baseStyles)
 
     const nav = useNavigation()
     const track = useAnalyticTracking()
@@ -38,7 +41,7 @@ export const BalanceActions = ({ qrCodeBottomSheetRef }: Props) => {
     const isSendDisabled = useMemo(() => rawAmount === 0, [rawAmount])
 
     return (
-        <BaseView alignSelf="center" flexDirection="row" gap={24}>
+        <Animated.View style={styles.root}>
             <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} icon="icon-plus" onPress={onBuy} />
             <GlassButtonWithLabel label={LL.BALANCE_ACTION_RECEIVE()} icon="icon-arrow-down" onPress={onReceive} />
             <GlassButtonWithLabel
@@ -48,6 +51,15 @@ export const BalanceActions = ({ qrCodeBottomSheetRef }: Props) => {
                 disabled={isSendDisabled}
             />
             <GlassButtonWithLabel label={LL.BALANCE_ACTION_OTHER()} icon="icon-more-vertical" onPress={() => {}} />
-        </BaseView>
+        </Animated.View>
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        root: {
+            alignSelf: "center",
+            flexDirection: "row",
+            gap: 24,
+        },
+    })

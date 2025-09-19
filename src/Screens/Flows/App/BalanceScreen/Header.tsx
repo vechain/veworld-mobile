@@ -6,7 +6,7 @@ import LinearGradient from "react-native-linear-gradient"
 import Animated, { clamp, interpolate, SharedValue, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { AccountIcon, BaseIcon, BaseText, BaseView, SelectAccountBottomSheet } from "~Components"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
-import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
@@ -68,8 +68,12 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
     const handleOpenWalletSwitcher = useCallback(() => openSelectAccountBottomSheet(), [openSelectAccountBottomSheet])
 
     const accounts = useAppSelector(selectVisibleAccounts)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
     const { onSetSelectedAccount } = useSetSelectedAccount()
+
+    const { name: vnsName } = useVns({
+        address: account.address,
+        name: "",
+    })
 
     const setSelectedAccount = useCallback(
         (_account: AccountWithDevice | WatchedAccount) => {
@@ -79,8 +83,14 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
     )
 
     const isObservedAccount = useMemo(() => {
-        return AccountUtils.isObservedAccount(selectedAccount)
-    }, [selectedAccount])
+        return AccountUtils.isObservedAccount(account)
+    }, [account])
+
+    const displayUsername = useMemo(() => {
+        if (!vnsName) return account.alias
+        if (vnsName.endsWith(".veworld.vet")) return vnsName.split(".veworld.vet")[0]
+        return vnsName
+    }, [account.alias, vnsName])
 
     return (
         <BaseView style={styles.root} onLayout={onLayout}>
@@ -104,7 +114,7 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
                         color={COLORS.PURPLE_LABEL}
                         numberOfLines={1}
                         flexDirection="row">
-                        {account.alias}
+                        {displayUsername}
                     </BaseText>
                 </BaseView>
             </TouchableOpacity>
@@ -135,7 +145,7 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
                 closeBottomSheet={closeSelectAccountBottonSheet}
                 accounts={accounts}
                 setSelectedAccount={setSelectedAccount}
-                selectedAccount={selectedAccount}
+                selectedAccount={account}
                 ref={selectAccountBottomSheetRef}
                 goToWalletEnabled
             />
