@@ -39,49 +39,54 @@ const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps
 
 type FavouritesProps = {
     bookmarkedDApps: DiscoveryDApp[]
-    onActionLabelPress: () => void
     onDAppPress: (dapp: DiscoveryDApp) => void
+    onActionLabelPress?: () => void
+    renderCTASeeAll?: boolean
 }
 
-export const FavouritesV2 = React.memo(({ bookmarkedDApps, onActionLabelPress, onDAppPress }: FavouritesProps) => {
-    const { LL } = useI18nContext()
-    const showBookmarkedDAppsList = bookmarkedDApps.length > 0
-    const theme = useTheme()
+export const FavouritesV2 = React.memo(
+    ({ bookmarkedDApps, onActionLabelPress, onDAppPress, renderCTASeeAll = true }: FavouritesProps) => {
+        const { LL } = useI18nContext()
+        const showBookmarkedDAppsList = bookmarkedDApps.length > 0
+        const theme = useTheme()
 
-    return (
-        <BaseView gap={16} flexDirection="column">
-            <BaseView flexDirection="row" justifyContent="space-between" px={16} alignItems="center">
-                <BaseText typographyFont="subSubTitleSemiBold" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}>
-                    {LL.DISCOVER_TAB_FAVOURITES()}
-                </BaseText>
+        return (
+            <BaseView gap={16} flexDirection="column">
+                <BaseView flexDirection="row" justifyContent="space-between" px={16} alignItems="center">
+                    <BaseText
+                        typographyFont="subSubTitleSemiBold"
+                        color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}>
+                        {LL.DISCOVER_TAB_FAVOURITES()}
+                    </BaseText>
+
+                    {renderCTASeeAll && onActionLabelPress && (
+                        <BaseTouchable action={onActionLabelPress}>
+                            <BaseView flexDirection="row">
+                                <BaseText
+                                    typographyFont="buttonMedium"
+                                    mx={2}
+                                    color={theme.isDark ? COLORS.GREY_300 : COLORS.DARK_PURPLE}>
+                                    {LL.DISCOVER_SEE_ALL_BOOKMARKS()}
+                                </BaseText>
+                                <BaseIcon
+                                    name="icon-arrow-right"
+                                    //This should be 12, but given that we're increasing the font size of the label
+                                    //It makes sense to have it set as 14
+                                    size={14}
+                                    color={theme.isDark ? COLORS.GREY_300 : COLORS.DARK_PURPLE}
+                                />
+                            </BaseView>
+                        </BaseTouchable>
+                    )}
+                </BaseView>
 
                 {showBookmarkedDAppsList && (
-                    <BaseTouchable action={onActionLabelPress}>
-                        <BaseView flexDirection="row">
-                            <BaseText
-                                typographyFont="buttonMedium"
-                                mx={2}
-                                color={theme.isDark ? COLORS.GREY_300 : COLORS.DARK_PURPLE}>
-                                {LL.DISCOVER_SEE_ALL_BOOKMARKS()}
-                            </BaseText>
-                            <BaseIcon
-                                name="icon-arrow-right"
-                                //This should be 12, but given that we're increasing the font size of the label
-                                //It makes sense to have it set as 14
-                                size={14}
-                                color={theme.isDark ? COLORS.GREY_300 : COLORS.DARK_PURPLE}
-                            />
-                        </BaseView>
-                    </BaseTouchable>
+                    <BookmarkedDAppsList bookmarkedDApps={bookmarkedDApps.slice(0, 15)} onDAppPress={onDAppPress} />
                 )}
             </BaseView>
-
-            {showBookmarkedDAppsList && (
-                <BookmarkedDAppsList bookmarkedDApps={bookmarkedDApps.slice(0, 15)} onDAppPress={onDAppPress} />
-            )}
-        </BaseView>
-    )
-})
+        )
+    },
+)
 
 const styles = StyleSheet.create({
     flatListContainer: {
