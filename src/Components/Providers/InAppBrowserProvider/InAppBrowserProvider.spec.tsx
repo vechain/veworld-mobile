@@ -40,6 +40,16 @@ jest.mock("react-native/Libraries/Settings/Settings", () => ({
     set: jest.fn(),
 }))
 
+jest.mock("../DeepLinksProvider", () => ({
+    ...jest.requireActual("../DeepLinksProvider"),
+    useDeepLinksSession: jest.fn().mockReturnValue({
+        mutex: {
+            acquire: jest.fn(),
+            release: jest.fn(),
+        },
+    } as any),
+}))
+
 const mockedNavigate = jest.fn()
 const mockedReplace = jest.fn()
 
