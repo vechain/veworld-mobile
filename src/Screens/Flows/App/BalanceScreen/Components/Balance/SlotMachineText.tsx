@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { LayoutChangeEvent, LayoutRectangle, StyleProp, StyleSheet, Text, ViewStyle } from "react-native"
 import Animated, {
     FadeIn,
@@ -64,20 +64,24 @@ export const SlotMachineText = ({ value }: Props) => {
 
     const [sizes, setSizes] = useState<LayoutRectangle[]>([])
 
+    const parsedValue = useMemo(() => {
+        if (!/\d/.test(value)) return 0
+        return parseInt(value, 10)
+    }, [value])
+
     useEffect(() => {
         if (!/\d/.test(value)) return
         if (sizes.length !== 10) return
-        const parsed = parseInt(value, 10)
         overflow.value = "visible"
         translateY.value = withSpring(
-            sizes.filter((_, idx) => idx < parsed).reduce((acc, curr) => acc + curr.height, 0),
+            sizes.filter((_, idx) => idx < parsedValue).reduce((acc, curr) => acc + curr.height, 0),
             undefined,
             () => {
                 "worklet"
                 overflow.value = "hidden"
             },
         )
-    }, [opacity, overflow, sizes, translateY, value])
+    }, [opacity, overflow, parsedValue, sizes, translateY, value])
 
     const animatedStyles = useAnimatedStyle(() => {
         return {
@@ -95,7 +99,7 @@ export const SlotMachineText = ({ value }: Props) => {
     return (
         <Animated.View style={[styles.root]}>
             <Animated.View style={[styles.innerContainer, animatedStyles]}>
-                <Text style={[styles.text, styles.hiddenText]}>0</Text>
+                <Text style={[styles.text, styles.hiddenText]}>{parsedValue}</Text>
                 {VALUE_ARRAY.map((item, idx) => (
                     <T
                         item={item}
