@@ -97,9 +97,13 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
             )}
 
             <TouchableOpacity onPress={handleOpenWalletSwitcher}>
-                <BaseView flexDirection="row" gap={12} py={4} px={8} borderRadius={99}>
+                <BaseView flexDirection="row" gap={12} py={4} px={8} borderRadius={99} style={styles.account}>
                     <AccountIcon address={account.address} size={32} borderRadius={100} />
-                    <BaseText typographyFont="captionSemiBold" color={COLORS.PURPLE_LABEL}>
+                    <BaseText
+                        typographyFont="captionSemiBold"
+                        color={COLORS.PURPLE_LABEL}
+                        numberOfLines={1}
+                        flexDirection="row">
                         {account.alias}
                     </BaseText>
                 </BaseView>
@@ -157,5 +161,8 @@ const baseStyles = () =>
             transformOrigin: "bottom",
             width: SCREEN_WIDTH,
             zIndex: -1,
+        },
+        account: {
+            maxWidth: 140,
         },
     })
