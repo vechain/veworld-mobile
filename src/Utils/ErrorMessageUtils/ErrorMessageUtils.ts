@@ -52,7 +52,7 @@ export const getDeepLinkErrorMessage = (code: DeepLinkErrorCode) => {
             return "Missing or invalid parameters."
         case DeepLinkErrorCode.ResourceNotAvailable:
             // eslint-disable-next-line max-len
-            return "This error occurs when a dapp attempts to submit a new transaction while Phantom's approval dialog is already open for a previous transaction. Only one approve window can be open at a time. Users should  approve or reject their transaction before initiating a new transaction."
+            return "This error occurs when a dapp attempts to submit a new transaction while VeWorld's approval dialog is already open for a previous transaction. Only one approve window can be open at a time. Users should  approve or reject their transaction before initiating a new transaction."
         case DeepLinkErrorCode.TransactionRejected:
             return "VeWorld does not recognize a valid transaction."
         case DeepLinkErrorCode.MethodNotFound:
