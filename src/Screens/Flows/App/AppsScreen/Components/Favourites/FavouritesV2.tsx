@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { FlatList, ListRenderItemInfo, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { COLORS, DiscoveryDApp } from "~Constants"
@@ -51,12 +51,20 @@ export const FavouritesV2 = React.memo(
         const showBookmarkedDAppsList = bookmarkedDApps.length > 0
         const theme = useTheme()
 
+        const titleTypography = useMemo(
+            () => (renderCTASeeAll ? "subSubTitleSemiBold" : ("bodySemiBold" as const)),
+            [renderCTASeeAll],
+        )
+
+        const titleColor = useMemo(
+            () => (theme.isDark ? COLORS.GREY_100 : renderCTASeeAll ? COLORS.GREY_800 : COLORS.PURPLE),
+            [theme.isDark, renderCTASeeAll],
+        )
+
         return (
             <BaseView gap={16} flexDirection="column" style={style}>
                 <BaseView flexDirection="row" justifyContent="space-between" px={16} alignItems="center">
-                    <BaseText
-                        typographyFont="subSubTitleSemiBold"
-                        color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}>
+                    <BaseText typographyFont={titleTypography} color={titleColor}>
                         {LL.DISCOVER_TAB_FAVOURITES()}
                     </BaseText>
 
