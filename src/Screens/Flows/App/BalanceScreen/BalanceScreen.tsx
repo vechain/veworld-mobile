@@ -3,18 +3,19 @@ import React, { useCallback, useMemo } from "react"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import LinearGradient from "react-native-linear-gradient"
-import { useSharedValue } from "react-native-reanimated"
-import { BaseSpacer, BaseView, Layout, QRCodeBottomSheet } from "~Components"
+import Animated, { LinearTransition, useSharedValue } from "react-native-reanimated"
+import { BaseSpacer, Layout, QRCodeBottomSheet } from "~Components"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { BalanceActions } from "./Components/Actions/BalanceActions"
 import { CurrentBalance } from "./Components/Balance/CurrentBalance"
-import { Pagination } from "./Components/Pagination/Pagination"
 import { PullToRefresh } from "./Components/PullToRefresh"
 import { Header } from "./Header"
 import { TabRenderer } from "./Tabs/TabRenderer"
+
+const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
 export const BalanceScreen = () => {
     const scrollY = useSharedValue(0)
@@ -41,6 +42,11 @@ export const BalanceScreen = () => {
         return AccountUtils.isObservedAccount(selectedAccount)
     }, [selectedAccount])
 
+    const colors = useMemo(() => {
+        if (isObservedAccount) return [COLORS.BALANCE_BACKGROUND, COLORS.BALANCE_BACKGROUND, COLORS.BALANCE_BACKGROUND]
+        return [COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.5)", "#423483"]
+    }, [isObservedAccount])
+
     return (
         <Layout
             bg={COLORS.BALANCE_BACKGROUND}
@@ -51,36 +57,31 @@ export const BalanceScreen = () => {
             noMargin
             fixedBody={
                 <ScrollView refreshControl={<PullToRefresh />} onScroll={onScroll}>
-                    {isObservedAccount ? (
-                        <BaseView bg={COLORS.BALANCE_BACKGROUND}>
-                            <CurrentBalance />
-
-                            {/* Half of the size on Figma, since we have an additional 6px on the balance */}
-                            <BaseSpacer height={6} />
-                            <Pagination />
-
-                            <BaseSpacer height={64} />
-                        </BaseView>
-                    ) : (
-                        <LinearGradient
-                            colors={[COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.5)", "#423483"]}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 0, y: 1 }}
-                            style={{ position: "relative", marginTop: 16 }}
-                            locations={[0, 0.55, 1]}
-                            angle={180}
-                            useAngle>
+                    <AnimatedLinearGradient
+                        colors={colors}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 0, y: 1 }}
+                        style={{ position: "relative", marginTop: 16 }}
+                        locations={[0, 0.55, 1]}
+                        angle={180}
+                        useAngle>
+                        <Animated.View layout={LinearTransition.duration(1000)}>
                             <CurrentBalance />
 
                             <BaseSpacer height={6} />
-                            <Pagination />
-                            <BaseSpacer height={12} />
+                            {/* Space for pagination (eventually) */}
+                            <BaseSpacer height={24} />
 
-                            <BalanceActions qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
+                            {!isObservedAccount && (
+                                <>
+                                    <BaseSpacer height={12} />
+                                    <BalanceActions qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
+                                </>
+                            )}
 
                             <BaseSpacer height={64} />
-                        </LinearGradient>
-                    )}
+                        </Animated.View>
+                    </AnimatedLinearGradient>
 
                     <TabRenderer onLayout={onLayout} />
                     <QRCodeBottomSheet ref={qrCodeBottomSheetRef} />
