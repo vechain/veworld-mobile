@@ -83,6 +83,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
     } = useInteraction()
     const { store } = useStore()
     const networks = useAppSelector(selectNetworks)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const accounts = useAppSelector(selectAccounts)
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -91,7 +92,6 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
     const switchNetwork = useCallback(
         (request: Omit<DecodedRequest, "nonce" | "session" | "payload">) => {
             // Get the selected network from the store directly because rehydration is slow
-            const selectedNetwork = selectSelectedNetwork(store?.getState() as RootState)
             if (selectedNetwork.genesis.id === request.genesisId) {
                 return
             }
@@ -109,7 +109,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
             dispatch(changeSelectedNetwork(network))
         },
-        [networks, dispatch, LL, store],
+        [networks, dispatch, LL, selectedNetwork],
     )
 
     const switchAccount = useCallback(
@@ -131,7 +131,8 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchResourceNotAvailableError(params.redirect_url ?? "")
                 return
             }
-            await mutex.current.acquire()
+
+            const release = await mutex.current.acquire()
 
             const decodedRequest: ConnectAppRequest = {
                 type: "external-app",
@@ -143,11 +144,17 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 genesisId: params.genesis_id,
             }
 
-            // Switch network if I'm not on the same network
-            switchNetwork(decodedRequest)
+            try {
+                // Switch network if I'm not on the same network
+                switchNetwork(decodedRequest)
 
-            setConnectBsData(decodedRequest)
-            connectBsRef.current?.present()
+                setConnectBsData(decodedRequest)
+                connectBsRef.current?.present()
+            } catch (e) {
+                release?.()
+                //TODO: check the error code and dispatch the correct error
+                DAppUtils.dispatchInternalError(params.redirect_url)
+            }
         },
         [setConnectBsData, connectBsRef, switchNetwork],
     )
