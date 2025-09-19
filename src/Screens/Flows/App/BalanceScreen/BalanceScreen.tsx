@@ -54,7 +54,8 @@ export const BalanceScreen = () => {
                         <BaseView bg={COLORS.BALANCE_BACKGROUND}>
                             <CurrentBalance />
 
-                            <BaseSpacer height={12} />
+                            {/* Half of the size on Figma, since we have an additional 6px on the balance */}
+                            <BaseSpacer height={6} />
                             {/* The 24px container should be the pagination */}
                             <BaseSpacer height={24} />
 
