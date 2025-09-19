@@ -12,7 +12,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 
-export const useDAppActions = () => {
+export const useDAppActions = (sourceScreen?: string) => {
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
@@ -57,12 +57,12 @@ export const useDAppActions = () => {
             addVisitedUrl(url)
 
             setTimeout(() => {
-                dispatch(addNavigationToDApp({ href: url, isCustom }))
+                dispatch(addNavigationToDApp({ href: url, isCustom, sourceScreen }))
             }, 1000)
 
             navigateWithTab({ url, title })
         },
-        [track, addVisitedUrl, navigateWithTab, increaseDappCounter, checkPermissions, dispatch],
+        [track, addVisitedUrl, navigateWithTab, increaseDappCounter, checkPermissions, dispatch, sourceScreen],
     )
 
     return { onDAppPress }

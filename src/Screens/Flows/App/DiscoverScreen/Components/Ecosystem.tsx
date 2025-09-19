@@ -12,6 +12,7 @@ import { useDAppActions } from "../Hooks"
 import { DAppOptionsBottomSheet, SortableKeys, SortDAppsBottomSheet } from "./Bottomsheets"
 import { DAppHorizontalCard } from "./DAppHorizontalCard"
 import { DappHorizontalCardSkeleton } from "./DappHorizontalCardSkeleton"
+import { Routes } from "~Navigation"
 
 type Filter = {
     key: DAppType
@@ -131,7 +132,7 @@ export const Ecosystem = React.memo(({ title }: EcosystemProps) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.DISCOVER)
 
     const [selectedDappsType, setSelectedDappsType] = useState(DAppType.ALL)
     const [selectedDApp, setSelectedDApp] = useState<DiscoveryDApp | undefined>(undefined)

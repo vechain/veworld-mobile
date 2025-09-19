@@ -18,6 +18,7 @@ import {
 } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { Routes } from "~Navigation"
 import { reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { DAppOptionsBottomSheet } from "./Components/Bottomsheets"
@@ -29,7 +30,7 @@ export const FavouritesScreen = () => {
 
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.DISCOVER)
     const dispatch = useAppDispatch()
 
     const { ref: dappOptionsRef, onOpen: onOpenDAppOptions, onClose: onCloseDAppOptions } = useBottomSheetModal()

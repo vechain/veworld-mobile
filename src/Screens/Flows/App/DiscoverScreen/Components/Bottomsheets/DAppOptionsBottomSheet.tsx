@@ -26,7 +26,7 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
         const bookmarkedDApps = useDappBookmarking(selectedDApp?.href, selectedDApp?.name)
         const nav = useNavigation()
         const { LL } = useI18nContext()
-        const { onDAppPress } = useDAppActions()
+        const { onDAppPress } = useDAppActions(Routes.DISCOVER)
 
         const onOpenDAppPress = useCallback(() => {
             if (selectedDApp) {
