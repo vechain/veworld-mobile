@@ -124,6 +124,7 @@ const baseStyles = () =>
             fontSize: 38,
             fontFamily: "Inter-SemiBold",
             lineHeight: 40,
+            verticalAlign: "middle",
         },
         absolute: {
             position: "absolute",
