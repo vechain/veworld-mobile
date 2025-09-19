@@ -1,5 +1,5 @@
-import { default as React } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { default as React, useCallback, useMemo, useState } from "react"
+import { Pressable, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
@@ -14,22 +14,33 @@ type GlassButtonProps = {
 
 const GlassButton = ({ icon, onPress, disabled }: GlassButtonProps) => {
     const { styles } = useThemedStyles(baseStyles)
+
+    const [pressed, setPressed] = useState(false)
+
+    const onPressIn = useCallback(() => setPressed(true), [])
+    const onPressOut = useCallback(() => setPressed(false), [])
+
+    const colors = useMemo(() => {
+        if (pressed) return ["rgba(177, 168, 220, 0.20)", "rgba(29, 23, 58, 0.20)"]
+        return ["rgba(29, 23, 58, 0.20)", "rgba(177, 168, 220, 0.20)"]
+    }, [pressed])
+
+    const borderStyle = useMemo(() => {
+        if (pressed) return { borderColor: COLORS.PURPLE_LABEL_10 }
+    }, [pressed])
+
     return (
-        <TouchableOpacity onPress={onPress} disabled={disabled}>
+        <Pressable onPress={onPress} disabled={disabled} onPressIn={onPressIn} onPressOut={onPressOut}>
             {disabled ? (
                 <BaseView p={16} borderRadius={99} bg={COLORS.PURPLE_LABEL_5}>
                     <BaseIcon name={icon} size={24} color={COLORS.DARK_PURPLE_DISABLED} />
                 </BaseView>
             ) : (
-                <LinearGradient
-                    colors={["rgba(29, 23, 58, 0.20)", "rgba(177, 168, 220, 0.20)"]}
-                    angle={0}
-                    useAngle
-                    style={styles.gradientBtnContainer}>
+                <LinearGradient colors={colors} angle={0} useAngle style={[styles.gradientBtnContainer, borderStyle]}>
                     <BaseIcon name={icon} size={24} color={COLORS.PURPLE_LABEL} />
                 </LinearGradient>
             )}
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 
