@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { LayoutChangeEvent, LayoutRectangle, StyleSheet, Text } from "react-native"
+import React, { useCallback, useMemo, useState } from "react"
+import { LayoutChangeEvent, StyleSheet, Text } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, {
     FadeIn,
@@ -12,6 +12,7 @@ import Animated, {
 } from "react-native-reanimated"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { useEffectDebugger } from "~Hooks/useEffectDebugger"
 
 type Props = {
     value: string
@@ -53,9 +54,8 @@ export const SlotMachineText = ({ value }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
 
     const translateY = useSharedValue(0)
-    const opacity = useSharedValue(0)
 
-    const [sizes, setSizes] = useState<LayoutRectangle[]>([])
+    const [heights, setHeights] = useState<number[]>([])
 
     const parsedValue = useMemo(() => {
         if (!/\d/.test(value)) return 0
@@ -64,8 +64,8 @@ export const SlotMachineText = ({ value }: Props) => {
 
     const onLayout = useCallback(
         (index: number) => (e: LayoutChangeEvent) => {
-            const rectangle = { ...e.nativeEvent.layout }
-            setSizes(old => {
+            const rectangle = e.nativeEvent.layout.height
+            setHeights(old => {
                 const newArr = [...old]
                 newArr[index] = rectangle
                 return newArr
@@ -74,15 +74,18 @@ export const SlotMachineText = ({ value }: Props) => {
         [],
     )
 
-    useEffect(() => {
-        if (!/\d/.test(value)) return
-        if (sizes.length !== 10) return
+    useEffectDebugger(
+        () => {
+            if (!/\d/.test(value)) return
+            if (heights.length !== 10) return
 
-        translateY.value = withSpring(
-            sizes.filter((_, idx) => idx < parsedValue).reduce((acc, curr) => acc + curr.height, 0),
-            undefined,
-        )
-    }, [opacity, parsedValue, sizes, translateY, value])
+            translateY.value = withSpring(
+                heights.filter((_, idx) => idx < parsedValue).reduce((acc, curr) => acc + curr, 0),
+            )
+        },
+        [parsedValue, heights, translateY, value],
+        ["parsedValue", "sizes", "translateY", "value"],
+    )
 
     if (!/\d/.test(value))
         return (

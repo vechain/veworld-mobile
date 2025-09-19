@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useCallback, useMemo } from "react"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { ScrollView } from "react-native-gesture-handler"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { LinearTransition, useSharedValue } from "react-native-reanimated"
 import { BaseSpacer, Layout, QRCodeBottomSheet } from "~Components"
@@ -56,7 +55,7 @@ export const BalanceScreen = () => {
             }
             noMargin
             fixedBody={
-                <ScrollView refreshControl={<PullToRefresh />} onScroll={onScroll}>
+                <Animated.ScrollView refreshControl={<PullToRefresh />} onScroll={onScroll}>
                     <AnimatedLinearGradient
                         colors={colors}
                         start={{ x: 0, y: 0 }}
@@ -85,7 +84,7 @@ export const BalanceScreen = () => {
 
                     <TabRenderer onLayout={onLayout} />
                     <QRCodeBottomSheet ref={qrCodeBottomSheetRef} />
-                </ScrollView>
+                </Animated.ScrollView>
             }
         />
     )
