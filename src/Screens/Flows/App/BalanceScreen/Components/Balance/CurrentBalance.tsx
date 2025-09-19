@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
-import Animated, { LinearTransition } from "react-native-reanimated"
+import Animated, { FadeOut, LinearTransition } from "react-native-reanimated"
 import { BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -43,7 +43,7 @@ export const CurrentBalance = () => {
                 <BaseView flexDirection="row">
                     {splittedText.map((value, idx, arr) =>
                         isLoading ? (
-                            <Animated.Text style={styles.text} key={idx}>
+                            <Animated.Text style={styles.text} key={idx} exiting={FadeOut.duration(600)}>
                                 {value}
                             </Animated.Text>
                         ) : (
