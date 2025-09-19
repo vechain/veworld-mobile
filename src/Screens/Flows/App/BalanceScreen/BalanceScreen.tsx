@@ -62,7 +62,7 @@ export const BalanceScreen = () => {
                         </BaseView>
                     ) : (
                         <LinearGradient
-                            colors={[COLORS.BALANCE_BACKGROUND, "#1D173A80", "#423483"]}
+                            colors={[COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.5)", "#423483"]}
                             start={{ x: 0, y: 0 }}
                             end={{ x: 0, y: 1 }}
                             style={{ position: "relative", marginTop: 16 }}
