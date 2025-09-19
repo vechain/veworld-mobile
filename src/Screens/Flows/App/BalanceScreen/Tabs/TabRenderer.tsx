@@ -35,7 +35,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                         renderCTASeeAll={false}
                         style={styles.favorites}
                     />
-                    <BaseSpacer height={8} />
+                    <BaseSpacer height={24} />
                 </>
             )}
             <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />

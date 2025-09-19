@@ -90,7 +90,10 @@ export const FavouritesV2 = React.memo(
                 </BaseView>
 
                 {showBookmarkedDAppsList && (
-                    <BookmarkedDAppsList bookmarkedDApps={bookmarkedDApps.slice(0, 15)} onDAppPress={onDAppPress} />
+                    <BookmarkedDAppsList
+                        bookmarkedDApps={renderCTASeeAll ? bookmarkedDApps.slice(0, 15) : bookmarkedDApps}
+                        onDAppPress={onDAppPress}
+                    />
                 )}
             </BaseView>
         )
