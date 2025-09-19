@@ -182,7 +182,7 @@ export const getBlock = (thor: Connex.Thor, blockId: string) => {
 }
 
 export const getAppOverview = (appId: string) =>
-    `${process.env.REACT_APP_B3TR_URL}/sustainability/app/${appId}/overview`
+    `${process.env.REACT_APP_INDEXER_MAINNET_URL}/b3tr/actions/apps/${appId}/overview`
 
 /**
  * Get the contract addresses of fungible tokens owned by the given address

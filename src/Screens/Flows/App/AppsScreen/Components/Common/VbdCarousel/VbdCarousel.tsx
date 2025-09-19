@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -17,23 +17,16 @@ export const VbdCarousel = ({ appIds, isLoading: propsIsLoading }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { data: vbdApps, isLoading: vbdLoading } = useVeBetterDaoDapps(true)
 
-    const { ref, onOpen, onClose: onCloseBS } = useBottomSheetModal()
+    const { ref, onOpen } = useBottomSheetModal()
 
     const isLoading = useMemo(() => propsIsLoading || vbdLoading, [propsIsLoading, vbdLoading])
-    const [BSMetadata, setBSMetadata] = useState<Partial<VbdCarouselBottomSheetMetadata>>({})
 
     const onPressItem = useCallback(
         (newMetadata: VbdCarouselBottomSheetMetadata) => {
-            setBSMetadata(newMetadata)
-            onOpen()
+            onOpen(newMetadata)
         },
         [onOpen],
     )
-
-    const onCloseBottomSheet = useCallback(() => {
-        onCloseBS()
-        setBSMetadata({})
-    }, [onCloseBS])
 
     const items = useMemo(() => {
         if (isLoading || !vbdApps?.length || !appIds.length) {
@@ -68,14 +61,7 @@ export const VbdCarousel = ({ appIds, isLoading: propsIsLoading }: Props) => {
                 dotStyles={dotStyles}
             />
 
-            <VbdCarouselBottomSheet
-                bsRef={ref}
-                onClose={onCloseBottomSheet}
-                bannerUri={BSMetadata?.bannerUri}
-                iconUri={BSMetadata?.iconUri}
-                app={BSMetadata?.app}
-                category={BSMetadata?.category}
-            />
+            <VbdCarouselBottomSheet bsRef={ref} />
         </>
     )
 }
