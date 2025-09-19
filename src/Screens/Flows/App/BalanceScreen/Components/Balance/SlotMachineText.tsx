@@ -60,6 +60,7 @@ export const SlotMachineText = ({ value }: Props) => {
 
     const translateY = useSharedValue(0)
     const opacity = useSharedValue(0)
+    const overflow = useSharedValue<"visible" | "hidden">("hidden")
 
     const [sizes, setSizes] = useState<LayoutRectangle[]>([])
 
@@ -67,21 +68,22 @@ export const SlotMachineText = ({ value }: Props) => {
         if (!/\d/.test(value)) return
         if (sizes.length !== 10) return
         const parsed = parseInt(value, 10)
+        overflow.value = "visible"
         translateY.value = withSpring(
             sizes.filter((_, idx) => idx < parsed).reduce((acc, curr) => acc + curr.height, 0),
             undefined,
             () => {
                 "worklet"
-                opacity.value = 0
+                overflow.value = "hidden"
             },
         )
-    }, [opacity, sizes, translateY, value])
+    }, [opacity, overflow, sizes, translateY, value])
 
     const animatedStyles = useAnimatedStyle(() => {
         return {
-            // height: 40 * scale.value,
+            overflow: overflow.value,
         }
-    }, [])
+    }, [overflow.value])
 
     if (!/\d/.test(value))
         return (
@@ -91,26 +93,28 @@ export const SlotMachineText = ({ value }: Props) => {
         )
 
     return (
-        <Animated.View style={[styles.root, animatedStyles]}>
-            <Text style={[styles.text, styles.hiddenText]}>0</Text>
-            {VALUE_ARRAY.map((item, idx) => (
-                <T
-                    item={item}
-                    index={idx}
-                    translate={translateY}
-                    style={{}}
-                    opacity={opacity}
-                    target={parseInt(value, 10)}
-                    onLayout={e => {
-                        const rectangle = { ...e.nativeEvent.layout }
-                        setSizes(old => {
-                            const newArr = [...old]
-                            newArr[idx] = rectangle
-                            return newArr
-                        })
-                    }}
-                />
-            ))}
+        <Animated.View style={[styles.root, { flexDirection: "column", justifyContent: "center", height: 70 }]}>
+            <Animated.View style={[{ height: 40, position: "relative" }, animatedStyles]}>
+                <Text style={[styles.text, styles.hiddenText]}>0</Text>
+                {VALUE_ARRAY.map((item, idx) => (
+                    <T
+                        item={item}
+                        index={idx}
+                        translate={translateY}
+                        style={{}}
+                        opacity={opacity}
+                        target={parseInt(value, 10)}
+                        onLayout={e => {
+                            const rectangle = { ...e.nativeEvent.layout }
+                            setSizes(old => {
+                                const newArr = [...old]
+                                newArr[idx] = rectangle
+                                return newArr
+                            })
+                        }}
+                    />
+                ))}
+            </Animated.View>
         </Animated.View>
     )
 }
