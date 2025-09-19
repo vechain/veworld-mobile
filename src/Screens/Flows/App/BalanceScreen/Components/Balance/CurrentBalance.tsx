@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated"
-import { BaseText } from "~Components"
+import Animated, { LinearTransition } from "react-native-reanimated"
+import { BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
@@ -13,7 +13,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { RollingFadingText } from "../RollingFadingText"
+import { RollingFadingTextElement } from "../RollingFadingText"
 
 export const CurrentBalance = () => {
     const currencySymbol = useAppSelector(selectCurrencySymbol)
@@ -22,35 +22,43 @@ export const CurrentBalance = () => {
 
     const dispatch = useAppDispatch()
 
-    const [isLoading, setIsLoading] = useState(false)
-
     const { styles } = useThemedStyles(baseStyles)
-    const { renderedBalance } = useTotalFiatBalance({ account, enabled: true })
+    const { renderedBalance, isLoading } = useTotalFiatBalance({ account, enabled: true })
 
     const onPress = useCallback(() => {
         dispatch(setBalanceVisible(!isBalanceVisible))
     }, [dispatch, isBalanceVisible])
 
-    useEffect(() => {
-        const intervalId = setInterval(() => setIsLoading(old => !old), 4000)
-        return () => {
-            clearInterval(intervalId)
-        }
-    }, [])
+    const splittedText = useMemo(
+        () => renderedBalance.replace(currencySymbol, "").split(""),
+        [currencySymbol, renderedBalance],
+    )
 
     return (
-        <TouchableOpacity style={styles.root} onPress={onPress}>
-            <BaseText typographyFont="headerTitle" fontWeight="400" color={COLORS.PURPLE_LABEL}>
-                {currencySymbol}
-            </BaseText>
-            {/* This is just a placeholder for the loading state. Update it accordingly */}
-            {isLoading ? (
-                <RollingFadingText text="99.999" />
-            ) : (
-                <Animated.Text style={styles.text} entering={FadeIn.duration(600)} exiting={FadeOut.duration(600)}>
-                    {renderedBalance.replace(currencySymbol, "")}
-                </Animated.Text>
-            )}
+        <TouchableOpacity onPress={onPress}>
+            <Animated.View style={styles.root} layout={LinearTransition}>
+                <BaseText typographyFont="headerTitle" fontWeight="400" color={COLORS.PURPLE_LABEL}>
+                    {currencySymbol}
+                </BaseText>
+                <BaseView flexDirection="row">
+                    {splittedText.map((value, idx, arr) =>
+                        isLoading ? (
+                            <Animated.Text style={styles.text} key={idx}>
+                                {value}
+                            </Animated.Text>
+                        ) : (
+                            <RollingFadingTextElement
+                                key={idx}
+                                value={value}
+                                index={idx}
+                                totalChars={arr.length}
+                                repetition={1}
+                                half
+                            />
+                        ),
+                    )}
+                </BaseView>
+            </Animated.View>
         </TouchableOpacity>
     )
 }
