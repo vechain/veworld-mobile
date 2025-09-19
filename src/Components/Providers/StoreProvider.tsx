@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react"
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import { getPersistorConfig, newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
 import {
@@ -98,13 +98,15 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         reduxStorage && initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
     }, [initStore, reduxStorage])
 
+    const contextValue = useMemo(() => ({ store: store.current }), [store])
+
     if (!store.current || !persistor) {
         return <></>
     }
 
     return (
         <SplashScreen>
-            <StoreContext.Provider value={{ store: store.current }}>
+            <StoreContext.Provider value={contextValue}>
                 <Provider store={store.current}>
                     <PersistGate loading={null} persistor={persistor}>
                         <PersistedCacheProvider>{children}</PersistedCacheProvider>
