@@ -1,10 +1,8 @@
-import React, { useEffect } from "react"
-import { StyleProp, StyleSheet, ViewStyle } from "react-native"
+import React, { useEffect, useState } from "react"
+import { LayoutChangeEvent, LayoutRectangle, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, {
-    Extrapolation,
     FadeIn,
     FadeOut,
-    interpolate,
     SharedValue,
     useAnimatedStyle,
     useSharedValue,
@@ -27,6 +25,7 @@ const T = ({
     style,
     opacity,
     target,
+    onLayout,
 }: {
     item: (typeof VALUE_ARRAY)[number]
     translate: SharedValue<number>
@@ -34,6 +33,7 @@ const T = ({
     index: number
     style: StyleProp<ViewStyle>
     target: number
+    onLayout: (e: LayoutChangeEvent) => void
 }) => {
     const { styles } = useThemedStyles(baseStyles)
 
@@ -48,7 +48,8 @@ const T = ({
             style={[styles.text, styles.absolute, animatedStyles, { top: 40 * index }, style]}
             key={item.id}
             exiting={FadeOut.duration(300)}
-            entering={FadeIn.duration(300)}>
+            entering={FadeIn.duration(300)}
+            onLayout={onLayout}>
             {item.value}
         </Animated.Text>
     )
@@ -61,22 +62,25 @@ export const SlotMachineText = ({ value }: Props) => {
     const translateY = useSharedValue(0)
     const opacity = useSharedValue(0)
 
+    const [sizes, setSizes] = useState<LayoutRectangle[]>([])
+
     useEffect(() => {
         if (!/\d/.test(value)) return
+        if (sizes.length !== 10) return
         // console.log("SCROLLING TO", 20 + parseInt(value, 10))
         // ref.current.scrollToIndex({ index: 20 + parseInt(value, 10), animated: true })
         const parsed = parseInt(value, 10)
         opacity.value = 1
         const previousParsed = parseInt(/\d/.test(previousValue || "") ? previousValue ?? "0" : "0", 10)
         translateY.value = withSpring(
-            40 * interpolate(parsed, [0, 9], [previousParsed, parsed], Extrapolation.EXTEND),
+            sizes.filter((_, idx) => idx < parsed).reduce((acc, curr) => acc + curr.height, 0),
             undefined,
             () => {
                 "worklet"
                 opacity.value = 0
             },
         )
-    }, [opacity, previousValue, translateY, value])
+    }, [opacity, previousValue, sizes, translateY, value])
 
     const animatedStyles = useAnimatedStyle(() => {
         return {
@@ -111,6 +115,14 @@ export const SlotMachineText = ({ value }: Props) => {
                     style={{}}
                     opacity={opacity}
                     target={parseInt(value, 10)}
+                    onLayout={e => {
+                        const rectangle = { ...e.nativeEvent.layout }
+                        setSizes(old => {
+                            const newArr = [...old]
+                            newArr[idx] = rectangle
+                            return newArr
+                        })
+                    }}
                 />
             ))}
         </Animated.View>
