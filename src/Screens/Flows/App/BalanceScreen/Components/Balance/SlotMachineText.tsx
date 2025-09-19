@@ -93,8 +93,8 @@ export const SlotMachineText = ({ value }: Props) => {
         )
 
     return (
-        <Animated.View style={[styles.root, { flexDirection: "column", justifyContent: "center", height: 70 }]}>
-            <Animated.View style={[{ height: 40, position: "relative" }, animatedStyles]}>
+        <Animated.View style={[styles.root]}>
+            <Animated.View style={[styles.innerContainer, animatedStyles]}>
                 <Text style={[styles.text, styles.hiddenText]}>0</Text>
                 {VALUE_ARRAY.map((item, idx) => (
                     <T
@@ -135,10 +135,15 @@ const baseStyles = () =>
             transformOrigin: "center",
         },
         root: {
-            height: 50,
             position: "relative",
             overflow: "hidden",
             flexDirection: "column",
+            justifyContent: "center",
+            height: 70,
+        },
+        innerContainer: {
+            height: 40,
+            position: "relative",
         },
         hiddenText: {
             opacity: 0,
