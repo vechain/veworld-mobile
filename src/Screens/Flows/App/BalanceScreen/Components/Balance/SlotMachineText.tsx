@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { LayoutChangeEvent, LayoutRectangle, StyleProp, StyleSheet, Text, ViewStyle } from "react-native"
+import { LayoutChangeEvent, LayoutRectangle, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native"
+import LinearGradient from "react-native-linear-gradient"
 import Animated, {
     FadeIn,
     FadeOut,
@@ -7,6 +8,7 @@ import Animated, {
     useAnimatedStyle,
     useSharedValue,
     withSpring,
+    withTiming,
 } from "react-native-reanimated"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -60,7 +62,7 @@ export const SlotMachineText = ({ value }: Props) => {
 
     const translateY = useSharedValue(0)
     const opacity = useSharedValue(0)
-    const overflow = useSharedValue<"visible" | "hidden">("hidden")
+    const overflow = useSharedValue(0)
 
     const [sizes, setSizes] = useState<LayoutRectangle[]>([])
 
@@ -72,20 +74,19 @@ export const SlotMachineText = ({ value }: Props) => {
     useEffect(() => {
         if (!/\d/.test(value)) return
         if (sizes.length !== 10) return
-        overflow.value = "visible"
+        overflow.value = 1
+
+        overflow.value = withTiming(0, { duration: 280 })
+
         translateY.value = withSpring(
             sizes.filter((_, idx) => idx < parsedValue).reduce((acc, curr) => acc + curr.height, 0),
             undefined,
-            () => {
-                "worklet"
-                overflow.value = "hidden"
-            },
         )
     }, [opacity, overflow, parsedValue, sizes, translateY, value])
 
     const animatedStyles = useAnimatedStyle(() => {
         return {
-            overflow: overflow.value,
+            overflow: overflow.value > 0 ? "visible" : "hidden",
         }
     }, [overflow.value])
 
@@ -97,9 +98,23 @@ export const SlotMachineText = ({ value }: Props) => {
         )
 
     return (
-        <Animated.View style={[styles.root]}>
+        <View style={[styles.root]}>
+            <LinearGradient
+                colors={[
+                    COLORS.BALANCE_BACKGROUND,
+                    "rgba(29, 23, 58, 0.7)",
+                    "rgba(0, 0, 0, 0)",
+                    "rgba(0, 0, 0, 0)",
+                    "rgba(29, 23, 58, 0.7)",
+                    COLORS.BALANCE_BACKGROUND,
+                ]}
+                angle={180}
+                useAngle
+                locations={[0, 0.2, 0.3, 0.7, 0.8, 1]}
+                style={[StyleSheet.absoluteFill, styles.gradient]}
+            />
             <Animated.View style={[styles.innerContainer, animatedStyles]}>
-                <Text style={[styles.text, styles.hiddenText]}>{parsedValue}</Text>
+                <Text style={[styles.text, styles.hiddenText]}>{0}</Text>
                 {VALUE_ARRAY.map((item, idx) => (
                     <T
                         item={item}
@@ -119,7 +134,7 @@ export const SlotMachineText = ({ value }: Props) => {
                     />
                 ))}
             </Animated.View>
-        </Animated.View>
+        </View>
     )
 }
 
@@ -151,5 +166,8 @@ const baseStyles = () =>
         },
         hiddenText: {
             opacity: 0,
+        },
+        gradient: {
+            zIndex: 1,
         },
     })
