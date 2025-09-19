@@ -26,6 +26,7 @@ const isValidSession =
 
         const sessionKeyPair = nacl.sign.keyPair.fromSecretKey(decodeBase64(signKeyPair.privateKey))
         const decryptedSession = nacl.sign.open(decodeBase64(session), sessionKeyPair.publicKey)
+
         if (!decryptedSession) {
             return false
         }
@@ -49,7 +50,10 @@ const isValidSession =
         }
 
         //If the account is not the same as the session, switch to the new account
-        if (!AddressUtils.compareAddresses(account.address, sessionData.address)) {
+        if (
+            accountsState.selectedAccount &&
+            !AddressUtils.compareAddresses(accountsState.selectedAccount, sessionData.address)
+        ) {
             //Switch to the new account
             onSwitchAccount(sessionData.address)
             return true

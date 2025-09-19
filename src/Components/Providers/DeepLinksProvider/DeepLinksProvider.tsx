@@ -84,13 +84,14 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
     const { store } = useStore()
     const networks = useAppSelector(selectNetworks)
     const accounts = useAppSelector(selectAccounts)
-    const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const switchNetwork = useCallback(
         (request: Omit<DecodedRequest, "nonce" | "session" | "payload">) => {
+            // Get the selected network from the store directly because rehydration is slow
+            const selectedNetwork = selectSelectedNetwork(store?.getState() as RootState)
             if (selectedNetwork.genesis.id === request.genesisId) {
                 return
             }
@@ -108,7 +109,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
             dispatch(changeSelectedNetwork(network))
         },
-        [networks, dispatch, selectedNetwork.genesis.id, LL],
+        [networks, dispatch, LL, store],
     )
 
     const switchAccount = useCallback(
@@ -161,6 +162,8 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
+
+            // Get the selected network from the store directly because rehydration is slow
             const externalDappSessions = selectExternalDappSessions(
                 store?.getState() as RootState,
                 decodedRequest.genesisId,
@@ -176,7 +179,9 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
-                    const isValid = dispatch(isValidSession(request.genesisId, request.publicKey, "", switchAccount))
+                    const isValid = dispatch(
+                        isValidSession(request.genesisId, request.publicKey, request.session, switchAccount),
+                    )
 
                     if (!isValid) {
                         DAppUtils.dispatchInternalError(params.redirect_url)
@@ -212,6 +217,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             // Switch network if I'm not on the same network
             switchNetwork({ ...decodedRequest, redirectUrl: params.redirect_url })
 
+            // Get the selected network from the store directly because rehydration is slow
             const externalDappSessions = selectExternalDappSessions(
                 store?.getState() as RootState,
                 decodedRequest.genesisId,
@@ -230,6 +236,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
                     if (!isValid) {
                         DAppUtils.dispatchInternalError(params.redirect_url)
+                        release?.()
                         return
                     }
 
@@ -259,6 +266,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
+            // Get the selected network from the store directly because rehydration is slow
             const externalDappSessions = selectExternalDappSessions(
                 store?.getState() as RootState,
                 decodedRequest.genesisId,
@@ -281,6 +289,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
                     if (!isValid) {
                         DAppUtils.dispatchInternalError(params.redirect_url)
+                        release?.()
                         return
                     }
 
@@ -310,6 +319,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
+            // Get the selected network from the store directly because rehydration is slow
             const externalDappSessions = selectExternalDappSessions(
                 store?.getState() as RootState,
                 decodedRequest.genesisId,

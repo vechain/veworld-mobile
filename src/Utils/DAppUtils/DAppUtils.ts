@@ -247,7 +247,11 @@ const parseTransactionRequest = async (
         return
     }
 
-    return { ...parsedRequest.payload.transaction, ...parsedRequest.request } as TransactionRequest
+    return {
+        ...parsedRequest.payload.transaction,
+        ...parsedRequest.request,
+        session: parsedRequest.payload.session,
+    } as TransactionRequest
 }
 
 const parseTypedDataRequest = async (
@@ -272,7 +276,11 @@ const parseTypedDataRequest = async (
         return
     }
 
-    return { ...parsedRequest.payload.typedData, ...parsedRequest.request } as TypeDataRequest
+    return {
+        ...parsedRequest.payload.typedData,
+        ...parsedRequest.request,
+        session: parsedRequest.payload.session,
+    } as TypeDataRequest
 }
 
 const parseCertificateRequest = async (
@@ -300,6 +308,7 @@ const parseCertificateRequest = async (
     return {
         ...parsedRequest.payload.certificate,
         ...parsedRequest.request,
+        session: parsedRequest.payload.session,
     } as CertificateRequest
 }
 

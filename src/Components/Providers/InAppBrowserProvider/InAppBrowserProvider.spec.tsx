@@ -21,6 +21,7 @@ import _ from "lodash"
 import { usePostWebviewMessage } from "~Hooks/usePostWebviewMessage"
 
 jest.mock("../InteractionProvider")
+jest.mock("../DeepLinksProvider")
 jest.mock("~Hooks/usePostWebviewMessage", () => ({
     usePostWebviewMessage: jest.fn(),
 }))
