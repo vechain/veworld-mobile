@@ -1,5 +1,5 @@
 import { Mutex } from "async-mutex"
-import React, { useCallback, useContext, useEffect, useRef } from "react"
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from "react"
 import { InteractionManager, Linking } from "react-native"
 import { showInfoToast } from "~Components/Base/BaseToast"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
@@ -405,7 +405,9 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    return <Context.Provider value={{ mutex: mutex.current }}>{children}</Context.Provider>
+    const contextValue = useMemo(() => ({ mutex: mutex.current }), [mutex])
+
+    return <Context.Provider value={contextValue}>{children}</Context.Provider>
 }
 
 export const useDeepLinksSession = () => {
