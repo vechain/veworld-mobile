@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from "react"
 import { Pressable, StyleSheet, ViewStyle } from "react-native"
-import { RenderItemParams } from "react-native-draggable-flatlist"
 import { BaseIcon, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -8,21 +7,15 @@ import { FungibleTokenWithBalance } from "~Model"
 import HapticsService from "~Services/HapticsService"
 import { BridgeTokenCard } from "./BridgeTokenCard"
 import { TokenCard } from "./TokenCard"
-interface IAnimatedTokenCard extends Omit<RenderItemParams<FungibleTokenWithBalance>, "getIndex"> {
+interface IAnimatedTokenCard {
     isEdit: boolean
     isBalanceVisible: boolean
     rootStyle?: ViewStyle
+    item: FungibleTokenWithBalance
 }
 
-export const AnimatedTokenCard = ({
-    item,
-    drag,
-    isActive,
-    isEdit,
-    isBalanceVisible,
-    rootStyle,
-}: IAnimatedTokenCard) => {
-    const { styles, theme } = useThemedStyles(baseStyles(isActive))
+export const AnimatedTokenCard = ({ item, isEdit, isBalanceVisible, rootStyle }: IAnimatedTokenCard) => {
+    const { styles, theme } = useThemedStyles(baseStyles)
 
     const isBridgeToken = useMemo(() => {
         return !!item.crossChainProvider
@@ -30,15 +23,12 @@ export const AnimatedTokenCard = ({
 
     useEffect(() => {
         isEdit && HapticsService.triggerImpact({ level: "Light" })
-    }, [isActive, isEdit])
+    }, [isEdit])
 
     return (
         <BaseView style={[styles.animatedOuterContainer, rootStyle]}>
             {isEdit && (
-                <Pressable
-                    disabled={isActive}
-                    style={[styles.animatedInnerContainer]}
-                    onPressIn={isEdit ? drag : undefined}>
+                <Pressable style={[styles.animatedInnerContainer]}>
                     <BaseIcon color={theme.colors.text} name={"icon-grip-vertical"} size={30} />
                 </Pressable>
             )}
@@ -51,7 +41,7 @@ export const AnimatedTokenCard = ({
     )
 }
 
-const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         animatedOuterContainer: {
             backgroundColor: theme.colors.card,
@@ -60,7 +50,7 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
             flexDirection: "row",
             alignItems: "center",
             borderRadius: 12,
-            opacity: isActive ? 0.6 : 1,
+            opacity: 1,
         },
         animatedInnerContainer: {
             position: "relative",
