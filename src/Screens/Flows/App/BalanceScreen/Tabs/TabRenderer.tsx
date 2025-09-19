@@ -29,7 +29,12 @@ export const TabRenderer = ({ onLayout }: Props) => {
         <BaseView style={styles.root} gap={16} onLayout={onLayout}>
             {showFavorites && (
                 <>
-                    <FavouritesV2 bookmarkedDApps={bookmarkedDApps} onDAppPress={onDAppPress} renderCTASeeAll={false} />
+                    <FavouritesV2
+                        bookmarkedDApps={bookmarkedDApps}
+                        onDAppPress={onDAppPress}
+                        renderCTASeeAll={false}
+                        style={styles.favorites}
+                    />
                     <BaseSpacer height={8} />
                 </>
             )}
@@ -48,5 +53,8 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 16,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
+        },
+        favorites: {
+            marginLeft: -16,
         },
     })

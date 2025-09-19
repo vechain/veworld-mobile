@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
+import { FlatList, ListRenderItemInfo, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { COLORS, DiscoveryDApp } from "~Constants"
 import { useTheme } from "~Hooks"
@@ -42,16 +42,17 @@ type FavouritesProps = {
     onDAppPress: (dapp: DiscoveryDApp) => void
     onActionLabelPress?: () => void
     renderCTASeeAll?: boolean
+    style?: StyleProp<ViewStyle>
 }
 
 export const FavouritesV2 = React.memo(
-    ({ bookmarkedDApps, onActionLabelPress, onDAppPress, renderCTASeeAll = true }: FavouritesProps) => {
+    ({ bookmarkedDApps, onActionLabelPress, onDAppPress, renderCTASeeAll = true, style }: FavouritesProps) => {
         const { LL } = useI18nContext()
         const showBookmarkedDAppsList = bookmarkedDApps.length > 0
         const theme = useTheme()
 
         return (
-            <BaseView gap={16} flexDirection="column">
+            <BaseView gap={16} flexDirection="column" style={style}>
                 <BaseView flexDirection="row" justifyContent="space-between" px={16} alignItems="center">
                     <BaseText
                         typographyFont="subSubTitleSemiBold"
