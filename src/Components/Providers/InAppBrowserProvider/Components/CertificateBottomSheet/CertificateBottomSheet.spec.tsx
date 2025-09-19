@@ -12,9 +12,10 @@ import { AccountWithDevice } from "~Model"
 import { CryptoUtils } from "~Utils"
 import AddressUtils from "~Utils/AddressUtils"
 import { CertificateBottomSheet } from "./CertificateBottomSheet"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 
 jest.mock("~Components/Providers/InteractionProvider")
-
+jest.mock("~Components/Providers/DeepLinksProvider")
 jest.mock("~Components/Providers/WalletConnectProvider")
 jest.mock("~Components/Providers/InAppBrowserProvider")
 jest.mock("~Hooks/useCheckIdentity", () => ({
@@ -29,6 +30,18 @@ jest.mock("~Hooks/useCheckIdentity", () => ({
     }),
 }))
 jest.mock("~Hooks/useSignMessage", () => ({ useSignMessage: jest.fn().mockReturnValue({ signMessage: () => "0x00" }) }))
+
+jest.mock("~Hooks/useExternalDappConnection", () => ({
+    useExternalDappConnection: jest.fn().mockReturnValue({
+        onRejectRequest: jest.fn(),
+        onFailure: jest.fn(),
+        onSuccess: jest.fn(),
+        onDappDisconnected: jest.fn(),
+        getKeyPairFromPrivateKey: jest.fn(),
+        getSessionKeyPair: jest.fn(),
+        onConnect: jest.fn(),
+    } as any),
+}))
 
 const { device1, hdnode1 } = TestHelpers.data
 
@@ -48,6 +61,9 @@ describe("CertificateBottomSheet", () => {
     })
     it("should not show anything if certificate data is empty", async () => {
         const certificateBsRef = { current: { present: jest.fn(), close: jest.fn() } }
+        ;(useExternalDappConnection as jest.Mock).mockReturnValue({
+            onRejectRequest: jest.fn(),
+        } as any)
         jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
             certificateBsRef,
             certificateBsData: null,
@@ -127,6 +143,9 @@ describe("CertificateBottomSheet", () => {
                           },
                       },
             setCertificateData: jest.fn(),
+        } as any)
+        ;(useExternalDappConnection as jest.Mock).mockReturnValue({
+            onRejectRequest: jest.fn(),
         } as any)
         jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
             postMessage,
@@ -241,6 +260,9 @@ describe("CertificateBottomSheet", () => {
                           },
                       },
             setCertificateData: jest.fn(),
+        } as any)
+        ;(useExternalDappConnection as jest.Mock).mockReturnValue({
+            onFailure: jest.fn(),
         } as any)
         jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
             postMessage,

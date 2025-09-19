@@ -21,6 +21,7 @@ import _ from "lodash"
 import { usePostWebviewMessage } from "~Hooks/usePostWebviewMessage"
 
 jest.mock("../InteractionProvider")
+jest.mock("../DeepLinksProvider")
 jest.mock("~Hooks/usePostWebviewMessage", () => ({
     usePostWebviewMessage: jest.fn(),
 }))
@@ -37,6 +38,16 @@ jest.mock("react-native", () => ({
 jest.mock("react-native/Libraries/Settings/Settings", () => ({
     get: jest.fn(),
     set: jest.fn(),
+}))
+
+jest.mock("../DeepLinksProvider", () => ({
+    ...jest.requireActual("../DeepLinksProvider"),
+    useDeepLinksSession: jest.fn().mockReturnValue({
+        mutex: {
+            acquire: jest.fn(),
+            release: jest.fn(),
+        },
+    } as any),
 }))
 
 const mockedNavigate = jest.fn()

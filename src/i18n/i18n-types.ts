@@ -3398,6 +3398,10 @@ type RootTranslation = {
 	 */
 	NOT_VERIFIED_DAPP: string
 	/**
+	 * Y​o​u​ ​c​a​n​'​t​ ​c​o​n​n​e​c​t​ ​t​o​ ​t​h​i​s​ ​d​A​p​p​ ​w​i​t​h​ ​a​ ​v​i​e​w​ ​o​n​l​y​ ​a​c​c​o​u​n​t​.
+	 */
+	NOT_VERIFIED_WATCHED_ACCOUNT: string
+	/**
 	 * N​o​v​e​m​b​e​r
 	 */
 	NOVEMBER: string
@@ -8393,6 +8397,10 @@ Thanks for your patience!
 	 * This dApp isn't verified by VeWorld.
 	 */
 	NOT_VERIFIED_DAPP: () => LocalizedString
+	/**
+	 * You can't connect to this dApp with a view only account.
+	 */
+	NOT_VERIFIED_WATCHED_ACCOUNT: () => LocalizedString
 	/**
 	 * November
 	 */

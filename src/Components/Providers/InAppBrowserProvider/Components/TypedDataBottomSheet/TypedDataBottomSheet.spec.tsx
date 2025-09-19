@@ -6,6 +6,7 @@ import React from "react"
 import * as InAppBrowserProvider from "~Components/Providers/InAppBrowserProvider"
 import * as InteractionProvider from "~Components/Providers/InteractionProvider"
 import * as WalletConnectProvider from "~Components/Providers/WalletConnectProvider"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { RequestMethods } from "~Constants"
 import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 import { AddressUtils, CryptoUtils } from "~Utils"
@@ -14,6 +15,7 @@ import { TypedDataBottomSheet } from "./TypedDataBottomSheet"
 const { renderComponentWithProps } = TestHelpers.render
 
 jest.mock("~Components/Providers/InteractionProvider")
+jest.mock("~Components/Providers/DeepLinksProvider")
 jest.mock("~Components/Providers/WalletConnectProvider")
 jest.mock("~Components/Providers/InAppBrowserProvider")
 jest.mock("~Hooks/useCheckIdentity", () => ({
@@ -26,6 +28,18 @@ jest.mock("~Hooks/useCheckIdentity", () => ({
             isBiometricsEmpty: false,
         }
     }),
+}))
+
+jest.mock("~Hooks/useExternalDappConnection", () => ({
+    useExternalDappConnection: jest.fn().mockReturnValue({
+        onRejectRequest: jest.fn(),
+        onFailure: jest.fn(),
+        onSuccess: jest.fn(),
+        onDappDisconnected: jest.fn(),
+        getKeyPairFromPrivateKey: jest.fn(),
+        getSessionKeyPair: jest.fn(),
+        onConnect: jest.fn(),
+    } as any),
 }))
 
 const { device1, hdnode1 } = TestHelpers.data
@@ -133,6 +147,9 @@ describe("TypedDataBottomSheet", () => {
                           },
                       },
             setTypedDataBsData: jest.fn(),
+        } as any)
+        ;(useExternalDappConnection as jest.Mock).mockReturnValue({
+            onRejectRequest: jest.fn(),
         } as any)
         jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
             postMessage,
@@ -287,6 +304,10 @@ describe("TypedDataBottomSheet", () => {
                       },
             setTypedDataBsData: jest.fn(),
         } as any)
+        ;(useExternalDappConnection as jest.Mock).mockReturnValue({
+            onFailure: jest.fn(),
+            onSuccess: jest.fn(),
+        } as any)
         jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
             postMessage,
         } as any)
@@ -387,6 +408,9 @@ describe("TypedDataBottomSheet", () => {
                 isFirstRequest: false,
             },
             setTypedDataBsData: jest.fn(),
+        } as any)
+        ;(useExternalDappConnection as jest.Mock).mockReturnValue({
+            onFailure: jest.fn(),
         } as any)
         jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
             postMessage,
