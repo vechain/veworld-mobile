@@ -120,20 +120,20 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
             </TouchableOpacity>
 
             <BaseView flexDirection="row" gap={12}>
-                <TouchableOpacity onPress={onWalletManagementPress}>
+                {isObservedAccount ? (
                     <BaseView borderRadius={99} p={8} gap={8} flexDirection="row">
-                        {isObservedAccount ? (
-                            <>
-                                <BaseText color={COLORS.DARK_PURPLE_DISABLED} typographyFont="captionMedium">
-                                    {LL.VIEW_ONLY()}
-                                </BaseText>
-                                <BaseIcon name="icon-eye" color={COLORS.DARK_PURPLE_DISABLED} size={16} />
-                            </>
-                        ) : (
-                            <BaseIcon name="icon-wallet" color={COLORS.PURPLE_LABEL} size={24} />
-                        )}
+                        <BaseText color={COLORS.DARK_PURPLE_DISABLED} typographyFont="captionMedium">
+                            {LL.VIEW_ONLY()}
+                        </BaseText>
+                        <BaseIcon name="icon-eye" color={COLORS.DARK_PURPLE_DISABLED} size={16} />
                     </BaseView>
-                </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity onPress={onWalletManagementPress}>
+                        <BaseView borderRadius={99} p={8} gap={8} flexDirection="row">
+                            <BaseIcon name="icon-wallet" color={COLORS.PURPLE_LABEL} size={24} />
+                        </BaseView>
+                    </TouchableOpacity>
+                )}
                 <TouchableOpacity onPress={handleOpenQRCode}>
                     <BaseView borderRadius={99} p={8}>
                         <BaseIcon name="icon-scanQR" color={COLORS.PURPLE_LABEL} size={24} />
