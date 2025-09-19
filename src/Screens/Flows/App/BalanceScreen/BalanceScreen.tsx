@@ -11,6 +11,7 @@ import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { BalanceActions } from "./Components/Actions/BalanceActions"
 import { CurrentBalance } from "./Components/Balance/CurrentBalance"
+import { Pagination } from "./Components/Pagination/Pagination"
 import { PullToRefresh } from "./Components/PullToRefresh"
 import { Header } from "./Header"
 import { TabRenderer } from "./Tabs/TabRenderer"
@@ -56,8 +57,7 @@ export const BalanceScreen = () => {
 
                             {/* Half of the size on Figma, since we have an additional 6px on the balance */}
                             <BaseSpacer height={6} />
-                            {/* The 24px container should be the pagination */}
-                            <BaseSpacer height={24} />
+                            <Pagination />
 
                             <BaseSpacer height={64} />
                         </BaseView>
@@ -72,9 +72,8 @@ export const BalanceScreen = () => {
                             useAngle>
                             <CurrentBalance />
 
-                            <BaseSpacer height={12} />
-                            {/* The 24px container should be the pagination */}
-                            <BaseSpacer height={24} />
+                            <BaseSpacer height={6} />
+                            <Pagination />
                             <BaseSpacer height={12} />
 
                             <BalanceActions qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
