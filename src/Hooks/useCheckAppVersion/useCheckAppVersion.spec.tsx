@@ -31,6 +31,7 @@ const initialVersionState: AppVersion = {
         dismissCount: 0,
         lastDismissedDate: null,
     },
+    changelogDismissed: false,
 }
 
 describe("useCheckAppVersion", () => {

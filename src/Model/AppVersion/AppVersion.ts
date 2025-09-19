@@ -12,6 +12,7 @@ export interface AppVersion {
     lastManifestCheck: number | null
     shouldShowChangelog: boolean
     changelogKey: string | null
+    changelogDismissed: boolean
     updateRequest: {
         dismissCount: number
         lastDismissedDate: number | null
