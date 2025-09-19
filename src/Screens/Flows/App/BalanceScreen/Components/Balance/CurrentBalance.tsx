@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseText, BaseView } from "~Components"
@@ -23,22 +23,16 @@ export const CurrentBalance = () => {
     const dispatch = useAppDispatch()
 
     const { styles } = useThemedStyles(baseStyles)
-    const { renderedBalance, isLoading } = useTotalFiatBalance({ account, enabled: true })
-
-    const [dddddddd, setValue] = useState(Math.random().toFixed(2))
+    const { renderedBalance } = useTotalFiatBalance({ account, enabled: true })
 
     const onPress = useCallback(() => {
         dispatch(setBalanceVisible(!isBalanceVisible))
     }, [dispatch, isBalanceVisible])
 
-    const splittedText = useMemo(() => dddddddd.replace(currencySymbol, "").split(""), [currencySymbol, dddddddd])
-
-    useEffect(() => {
-        const interval = setInterval(() => setValue((Math.random() * 100).toFixed(2)), 5000)
-        return () => {
-            clearInterval(interval)
-        }
-    }, [])
+    const splittedText = useMemo(
+        () => renderedBalance.replace(currencySymbol, "").split(""),
+        [currencySymbol, renderedBalance],
+    )
 
     return (
         <TouchableOpacity onPress={onPress}>
@@ -47,7 +41,7 @@ export const CurrentBalance = () => {
                     {currencySymbol}
                 </BaseText>
                 <BaseView flexDirection="row">
-                    {splittedText.map((value, idx, arr) => (
+                    {splittedText.map((value, idx) => (
                         <SlotMachineText key={idx} value={value} />
                     ))}
                 </BaseView>
