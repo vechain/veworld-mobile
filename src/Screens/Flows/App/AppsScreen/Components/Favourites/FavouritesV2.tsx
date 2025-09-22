@@ -56,10 +56,10 @@ export const FavouritesV2 = React.memo(
             [renderCTASeeAll],
         )
 
-        const titleColor = useMemo(
-            () => (theme.isDark ? COLORS.GREY_100 : renderCTASeeAll ? COLORS.GREY_800 : COLORS.PURPLE),
-            [theme.isDark, renderCTASeeAll],
-        )
+        const titleColor = useMemo(() => {
+            if (theme.isDark) return COLORS.GREY_100
+            return renderCTASeeAll ? COLORS.GREY_800 : COLORS.PURPLE
+        }, [theme.isDark, renderCTASeeAll])
 
         return (
             <BaseView gap={16} flexDirection="column" style={style}>
