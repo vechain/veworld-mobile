@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { default as React, useCallback, useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { LinearTransition, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
