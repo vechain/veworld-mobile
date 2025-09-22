@@ -6,7 +6,8 @@ import LinearGradient from "react-native-linear-gradient"
 import Animated, { clamp, interpolate, SharedValue, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { AccountIcon, BaseIcon, BaseText, BaseView, SelectAccountBottomSheet } from "~Components"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
-import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles, useVns } from "~Hooks"
+import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import { useVns } from "~Hooks/useVns"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
@@ -113,7 +114,8 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
                         typographyFont="captionSemiBold"
                         color={COLORS.PURPLE_LABEL}
                         numberOfLines={1}
-                        flexDirection="row">
+                        flexDirection="row"
+                        testID="BALANCE_HEADER_DISPLAY_USERNAME">
                         {displayUsername}
                     </BaseText>
                 </BaseView>
@@ -122,7 +124,10 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
             <BaseView flexDirection="row" gap={12}>
                 {isObservedAccount ? (
                     <BaseView borderRadius={99} p={8} gap={8} flexDirection="row">
-                        <BaseText color={COLORS.DARK_PURPLE_DISABLED} typographyFont="captionMedium">
+                        <BaseText
+                            color={COLORS.DARK_PURPLE_DISABLED}
+                            typographyFont="captionMedium"
+                            testID="BALANCE_HEADER_VIEW_ONLY">
                             {LL.VIEW_ONLY()}
                         </BaseText>
                         <BaseIcon name="icon-eye" color={COLORS.DARK_PURPLE_DISABLED} size={16} />
