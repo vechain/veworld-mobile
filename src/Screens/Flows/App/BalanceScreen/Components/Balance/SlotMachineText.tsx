@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useLayoutEffect, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet, Text } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, {
@@ -12,7 +12,6 @@ import Animated, {
 } from "react-native-reanimated"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { useEffectDebugger } from "~Hooks/useEffectDebugger"
 
 type Props = {
     value: string
@@ -74,18 +73,14 @@ export const SlotMachineText = ({ value }: Props) => {
         [],
     )
 
-    useEffectDebugger(
-        () => {
-            if (!/\d/.test(value)) return
-            if (heights.length !== 10) return
+    useLayoutEffect(() => {
+        if (!/\d/.test(value)) return
+        if (heights.length !== 10) return
 
-            translateY.value = withSpring(
-                heights.filter((_, idx) => idx < parsedValue).reduce((acc, curr) => acc + curr, 0),
-            )
-        },
-        [parsedValue, heights, translateY, value],
-        ["parsedValue", "sizes", "translateY", "value"],
-    )
+        translateY.value = withSpring(
+            heights.filter((_, idx) => idx < parsedValue).reduce((acc, curr) => acc + curr, 0),
+        )
+    }, [parsedValue, heights, translateY, value])
 
     if (!/\d/.test(value))
         return (

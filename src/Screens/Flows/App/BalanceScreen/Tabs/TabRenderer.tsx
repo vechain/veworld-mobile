@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
+import Animated from "react-native-reanimated"
 import { BaseSimpleTabs, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -19,10 +20,10 @@ export const TabRenderer = ({ onLayout }: Props) => {
 
     const labels = useMemo(() => TABS.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL])
     return (
-        <BaseView style={styles.root} gap={16} onLayout={onLayout}>
+        <Animated.View style={styles.root} onLayout={onLayout}>
             <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
             <BaseView>{selectedTab === "TOKENS" ? <Tokens /> : null}</BaseView>
-        </BaseView>
+        </Animated.View>
     )
 }
 
@@ -35,5 +36,8 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 16,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
+            flex: 1,
+            gap: 16,
+            flexDirection: "column",
         },
     })

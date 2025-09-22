@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
-import { BaseText, BaseView } from "~Components"
+import { BaseText } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
@@ -40,11 +40,11 @@ export const CurrentBalance = () => {
                 <BaseText typographyFont="headerTitle" fontWeight="400" color={COLORS.PURPLE_LABEL}>
                     {currencySymbol}
                 </BaseText>
-                <BaseView flexDirection="row">
+                <Animated.View style={styles.balance}>
                     {splittedText.map((value, idx) => (
                         <SlotMachineText key={idx} value={value} />
                     ))}
-                </BaseView>
+                </Animated.View>
             </Animated.View>
         </TouchableOpacity>
     )
@@ -64,5 +64,11 @@ const baseStyles = () =>
             alignSelf: "center",
             gap: 4,
             alignItems: "center",
+        },
+        hiddenText: {
+            opacity: 0,
+        },
+        balance: {
+            flexDirection: "row",
         },
     })
