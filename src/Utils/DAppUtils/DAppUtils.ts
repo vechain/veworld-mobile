@@ -354,6 +354,14 @@ const dispatchInternalError = (redirectUrl: string) => {
     Linking.openURL(`${redirectUrl}?${params.toString()}`)
 }
 
+const dispatchExternalAppError = (redirectUrl: string, err: DeepLinkError) => {
+    const params = new URLSearchParams({
+        errorMessage: err.message,
+        errorCode: err.code.toString(),
+    })
+    Linking.openURL(`${redirectUrl}?${params.toString()}`)
+}
+
 export const DAppUtils = {
     isValidTxMessage,
     isValidCertMessage,
@@ -368,5 +376,6 @@ export const DAppUtils = {
     encryptPayload,
     dispatchResourceNotAvailableError,
     dispatchInternalError,
+    dispatchExternalAppError,
     decodeRequest,
 }

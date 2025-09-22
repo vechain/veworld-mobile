@@ -13,7 +13,6 @@ import { TabStack, TabStackParamList } from "~Navigation/Tabs"
 import {
     BlackListedCollectionsScreen,
     ChooseBackupDetailsPassword,
-    ConnectExternalAppScreenV1,
     DappChangeAccountScreen,
     DetailsBackupScreen,
 } from "~Screens"
@@ -139,11 +138,6 @@ export const SwitchStack = () => {
                             options={{
                                 presentation: "modal",
                             }}
-                        />
-
-                        <Switch.Screen
-                            name={Routes.CONNECT_EXTERNAL_APP_SCREEN_V1}
-                            component={ConnectExternalAppScreenV1}
                         />
                     </Switch.Group>
                 </>

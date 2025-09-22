@@ -84,6 +84,8 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
     const { store } = useStore()
     const networks = useAppSelector(selectNetworks)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    //BUG: this is not rehydrated when the app is opened from a deep link
+    const externalSessions = useAppSelector(state => selectExternalDappSessions(state, selectedNetwork.genesis.id))
     const accounts = useAppSelector(selectAccounts)
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -152,8 +154,11 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 connectBsRef.current?.present()
             } catch (e) {
                 release?.()
-                //TODO: check the error code and dispatch the correct error
-                DAppUtils.dispatchInternalError(params.redirect_url)
+                if (e instanceof DeepLinkError) {
+                    DAppUtils.dispatchExternalAppError(params.redirect_url, e)
+                } else {
+                    DAppUtils.dispatchInternalError(params.redirect_url)
+                }
             }
         },
         [setConnectBsData, connectBsRef, switchNetwork],
@@ -169,20 +174,13 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
-
-            // Get the selected network from the store directly because rehydration is slow
-            const externalDappSessions = selectExternalDappSessions(
-                store?.getState() as RootState,
-                decodedRequest.genesisId,
-            )
-
             // Switch network if I'm not on the same network
             switchNetwork({ ...decodedRequest, redirectUrl: params.redirect_url })
 
             try {
                 const request = await DAppUtils.parseTransactionRequest(
                     decodedRequest,
-                    externalDappSessions,
+                    externalSessions,
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
@@ -203,11 +201,14 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             } catch (e) {
                 release?.()
-                //TODO: check the error code and dispatch the correct error
-                DAppUtils.dispatchInternalError(params.redirect_url)
+                if (e instanceof DeepLinkError) {
+                    DAppUtils.dispatchExternalAppError(params.redirect_url, e)
+                } else {
+                    DAppUtils.dispatchInternalError(params.redirect_url)
+                }
             }
         },
-        [setTransactionBsData, transactionBsRef, store, switchNetwork, switchAccount, dispatch],
+        [switchNetwork, externalSessions, dispatch, switchAccount, setTransactionBsData, transactionBsRef],
     )
 
     const handleSignTypedData = useCallback(
@@ -224,16 +225,10 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             // Switch network if I'm not on the same network
             switchNetwork({ ...decodedRequest, redirectUrl: params.redirect_url })
 
-            // Get the selected network from the store directly because rehydration is slow
-            const externalDappSessions = selectExternalDappSessions(
-                store?.getState() as RootState,
-                decodedRequest.genesisId,
-            )
-
             try {
                 const request = await DAppUtils.parseTypedDataRequest(
                     decodedRequest,
-                    externalDappSessions,
+                    externalSessions,
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
@@ -255,11 +250,14 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             } catch (e) {
                 release?.()
-                //TODO: check the error code and dispatch the correct error
-                DAppUtils.dispatchInternalError(params.redirect_url)
+                if (e instanceof DeepLinkError) {
+                    DAppUtils.dispatchExternalAppError(params.redirect_url, e)
+                } else {
+                    DAppUtils.dispatchInternalError(params.redirect_url)
+                }
             }
         },
-        [setTypedDataBsData, typedDataBsRef, store, switchNetwork, dispatch, switchAccount],
+        [setTypedDataBsData, typedDataBsRef, switchNetwork, externalSessions, dispatch, switchAccount],
     )
 
     const handleSignCertificate = useCallback(
@@ -273,19 +271,14 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
-            // Get the selected network from the store directly because rehydration is slow
-            const externalDappSessions = selectExternalDappSessions(
-                store?.getState() as RootState,
-                decodedRequest.genesisId,
-            )
-
             // Switch network if I'm not on the same network
             switchNetwork({ ...decodedRequest, redirectUrl: params.redirect_url })
 
             try {
+                //Parse and decrypt the request
                 const request = await DAppUtils.parseCertificateRequest(
                     decodedRequest,
-                    externalDappSessions,
+                    externalSessions,
                     params.redirect_url,
                 )
 
@@ -297,7 +290,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     if (!isValid) {
                         DAppUtils.dispatchInternalError(params.redirect_url)
                         release?.()
-                        return
+                        throw new DeepLinkError(DeepLinkErrorCode.Unauthorized)
                     }
 
                     setCertificateBsData({
@@ -308,11 +301,14 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             } catch (e) {
                 release?.()
-                //TODO: check the error code and dispatch the correct error
-                DAppUtils.dispatchInternalError(params.redirect_url)
+                if (e instanceof DeepLinkError) {
+                    DAppUtils.dispatchExternalAppError(params.redirect_url, e)
+                } else {
+                    DAppUtils.dispatchInternalError(params.redirect_url)
+                }
             }
         },
-        [setCertificateBsData, certificateBsRef, store, switchNetwork, switchAccount, dispatch],
+        [switchNetwork, externalSessions, dispatch, switchAccount, setCertificateBsData, certificateBsRef],
     )
 
     const handleDisconnect = useCallback(
@@ -359,7 +355,11 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             } catch (e) {
                 release?.()
-                //TODO: check the error code and dispatch the correct error
+                if (e instanceof DeepLinkError) {
+                    DAppUtils.dispatchExternalAppError(params.redirect_url, e)
+                } else {
+                    DAppUtils.dispatchInternalError(params.redirect_url)
+                }
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
@@ -381,7 +381,9 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     handleSignAndSendTransaction(request as ExternalAppRequestParams)
                     break
                 case "signCertificate":
-                    handleSignCertificate(request as ExternalAppRequestParams)
+                    setTimeout(() => {
+                        handleSignCertificate(request as ExternalAppRequestParams)
+                    }, 2000)
                     break
                 case "signTypedData":
                     handleSignTypedData(request as ExternalAppRequestParams)
