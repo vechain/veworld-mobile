@@ -1,4 +1,4 @@
-import { default as React, useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseIcon, BaseText, BaseView } from "~Components"

@@ -56,7 +56,7 @@ export const SlotMachineText = ({ value }: Props) => {
 
     const parsedValue = useMemo(() => {
         if (!/\d/.test(value)) return 0
-        return parseInt(value, 10)
+        return Number.parseInt(value, 10)
     }, [value])
 
     useEffect(() => {
