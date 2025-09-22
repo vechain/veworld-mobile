@@ -352,6 +352,7 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
             testID={`FT-TRANSFER-${activity.id}`}
             time={time}
             onPress={onPressHandler}
+            activityStatus={activity.status}
             {...getActivityProps()}
         />
     )
