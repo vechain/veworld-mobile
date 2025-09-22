@@ -217,7 +217,7 @@ const parseRequest = async <T>(
         const payload = JSON.parse(new TextDecoder().decode(decryptedPayload))
 
         return { payload, request } as ParsedRequest<T>
-    } catch (e) {
+    } catch {
         const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
         error("EXTERNAL_DAPP_CONNECTION", err)
         await Linking.openURL(`${redirectUrl}?errorMessage=${err.message}&errorCode=${err.code}`)

@@ -61,10 +61,6 @@ type BaseExternalConnectAppRequest = BaseRequest & {
     genesisId: string
 }
 
-type BaseExternalDisconnectAppRequest = BaseExternalAppRequest & {
-    genesisId: string
-}
-
 type WcConnectAppRequest = BaseRequest & {
     type: "wallet-connect"
     proposal: SignClientTypes.EventArguments["session_proposal"]
@@ -122,14 +118,16 @@ export type TransactionRequest = WcTxRequest | InAppTxRequest | ExternalAppTxReq
 
 export type TypeDataRequest = WcSignDataRequest | InAppTypedDataRequest | ExternalAppTypedDataRequest
 
+export type DisconnectAppRequest = BaseExternalAppRequest & {
+    genesisId: string
+}
+
 /**
  * Login request. WC doesn't support it, so it'll be only in-app
  */
 export type LoginRequest = InAppLoginRequest
 
 export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest | BaseExternalConnectAppRequest
-
-export type DisconnectAppRequest = BaseExternalDisconnectAppRequest
 
 export type SwitchWalletRequest = InAppSwitchWalletRequest
 export type WalletRequest = InAppWalletRequest

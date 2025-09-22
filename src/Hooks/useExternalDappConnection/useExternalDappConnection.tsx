@@ -119,7 +119,7 @@ export const useExternalDappConnection = () => {
 
                 mutex.release()
                 Linking.openURL(`${redirectUrl}?${params.toString()}`)
-            } catch (_err: unknown) {
+            } catch {
                 const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
 
                 error("EXTERNAL_DAPP_CONNECTION", err)
@@ -141,7 +141,7 @@ export const useExternalDappConnection = () => {
                 dispatch(deleteExternalDappSession({ appPublicKey: dappPublicKey, genesisId }))
                 mutex.release()
                 Linking.openURL(`${redirectUrl}`)
-            } catch (e) {
+            } catch {
                 const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
                 error("EXTERNAL_DAPP_CONNECTION", err)
                 const params = new URLSearchParams({
