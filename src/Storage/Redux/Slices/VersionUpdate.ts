@@ -10,6 +10,7 @@ const initialVersionUpdateState: AppVersion = {
     lastManifestCheck: null,
     shouldShowChangelog: false,
     changelogKey: null,
+    changelogDismissed: false,
     updateRequest: {
         dismissCount: 0,
         lastDismissedDate: null,
@@ -39,7 +40,14 @@ export const VersionUpdateSlice = createSlice({
         },
 
         setInstalledVersion: (state, action: PayloadAction<string>) => {
-            state.installedVersion = action.payload
+            const newVersion = action.payload
+            const versionChanged = state.installedVersion !== newVersion
+
+            state.installedVersion = newVersion
+
+            if (versionChanged) {
+                state.changelogDismissed = false
+            }
         },
 
         setLatestVersion: (state, action: PayloadAction<string>) => {
@@ -59,6 +67,17 @@ export const VersionUpdateSlice = createSlice({
             state.changelogKey = action.payload.changelogKey
         },
 
+        setChangelogDismissed: (state, action: PayloadAction<boolean>) => {
+            const dismissed = action.payload
+
+            state.changelogDismissed = dismissed
+
+            if (dismissed) {
+                state.shouldShowChangelog = false
+                state.changelogKey = null
+            }
+        },
+
         resetVersionUpdateState: () => initialVersionUpdateState,
     },
 })
@@ -72,5 +91,6 @@ export const {
     setIsUpToDate,
     setLastManifestCheck,
     setChangelogToShow,
+    setChangelogDismissed,
     resetVersionUpdateState,
 } = VersionUpdateSlice.actions
