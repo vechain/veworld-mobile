@@ -1,0 +1,74 @@
+{
+  "version": "2.4.3",
+  "major": true,
+  "descriptions": {
+    "en": [
+      "Buy and Swap available on iOS",
+      "Bug fixes and enhancements"
+    ],
+    "de": [
+      "Kaufen und Tauschen verfügbar auf iOS",
+      "Fehlerbehebungen und Verbesserungen"
+    ],
+    "es": [
+      "Comprar e intercambiar disponible en iOS",
+      "Corrección de errores y mejoras"
+    ],
+    "fr": [
+      "Acheter et échanger disponible sur iOS",
+      "Corrections de bugs et améliorations"
+    ],
+    "hi": [
+      "iOS पर खरीदें और स्वैप उपलब्ध है",
+      "बग फिक्स और सुधार"
+    ],
+    "it": [
+      "Acquista e scambia disponibile su iOS",
+      "Correzioni di bug e miglioramenti"
+    ],
+    "ja": [
+      "購入とスワップはiOSで利用可能",
+      "バグ修正と改善"
+    ],
+    "ko": [
+      "iOS에서 구매 및 교환 가능",
+      "버그 수정 및 개선"
+    ],
+    "nl": [
+      "Kopen en ruilen beschikbaar op iOS",
+      "Bugfixes en verbeteringen"
+    ],
+    "pl": [
+      "Kupowanie i wymiana dostępne na iOS",
+      "Poprawki błędów i ulepszenia"
+    ],
+    "pt": [
+      "Compra e troca disponíveis no iOS",
+      "Correções de bugs e melhorias"
+    ],
+    "ru": [
+      "Покупка и обмен доступны на iOS",
+      "Исправление ошибок и улучшения"
+    ],
+    "sv": [
+      "Köp och byt tillgängligt på iOS",
+      "Bugfixar och förbättringar"
+    ],
+    "tr": [
+      "iOS'ta Satın Al ve Değiştir seçenekleri mevcut",
+      "Hata düzeltmeleri ve iyileştirmeler"
+    ],
+    "tw": [
+      "在 iOS 上可買和交換",
+      "錯誤修復和增強功能"
+    ],
+    "vi": [
+      "Mua và hoán đổi có sẵn trên iOS",
+      "Sửa lỗi và cải tiến"
+    ],
+    "zh": [
+      "iOS 上可进行购买和交换",
+      "修复错误和增强功能"
+    ]
+  }
+}
