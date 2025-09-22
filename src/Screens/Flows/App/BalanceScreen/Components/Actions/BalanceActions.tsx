@@ -1,8 +1,8 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import React, { RefObject, useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
-import Animated from "react-native-reanimated"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
+import Animated, { AnimatedStyle, FadeIn, FadeOut, LinearTransition } from "react-native-reanimated"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
@@ -13,9 +13,10 @@ import { GlassButtonWithLabel } from "./GlassButton"
 
 type Props = {
     qrCodeBottomSheetRef: RefObject<BottomSheetModalMethods>
+    style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
 }
 
-export const BalanceActions = ({ qrCodeBottomSheetRef }: Props) => {
+export const BalanceActions = ({ qrCodeBottomSheetRef, style }: Props) => {
     const { LL } = useI18nContext()
 
     const { styles } = useThemedStyles(baseStyles)
@@ -41,7 +42,11 @@ export const BalanceActions = ({ qrCodeBottomSheetRef }: Props) => {
     const isSendDisabled = useMemo(() => rawAmount === 0, [rawAmount])
 
     return (
-        <Animated.View style={styles.root}>
+        <Animated.View
+            style={[styles.root, style]}
+            layout={LinearTransition.duration(1000)}
+            exiting={FadeOut.duration(300)}
+            entering={FadeIn.duration(300)}>
             <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} icon="icon-plus" onPress={onBuy} />
             <GlassButtonWithLabel label={LL.BALANCE_ACTION_RECEIVE()} icon="icon-arrow-down" onPress={onReceive} />
             <GlassButtonWithLabel

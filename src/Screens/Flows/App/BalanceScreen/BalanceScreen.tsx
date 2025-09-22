@@ -2,7 +2,7 @@
 import React, { useCallback, useMemo } from "react"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
-import Animated, { LinearTransition, useSharedValue } from "react-native-reanimated"
+import Animated, { LinearTransition, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { BaseSpacer, Layout, QRCodeBottomSheet } from "~Components"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
@@ -46,6 +46,14 @@ export const BalanceScreen = () => {
         return [COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.5)", "#423483"]
     }, [isObservedAccount])
 
+    const balanceActionsAnimatedStyles = useAnimatedStyle(() => {
+        return {
+            marginTop: withTiming(isObservedAccount ? 0 : 12),
+            height: isObservedAccount ? 0 : "auto",
+            overflow: "hidden",
+        }
+    }, [isObservedAccount])
+
     return (
         <Layout
             bg={COLORS.BALANCE_BACKGROUND}
@@ -55,7 +63,12 @@ export const BalanceScreen = () => {
             }
             noMargin
             fixedBody={
-                <Animated.ScrollView refreshControl={<PullToRefresh />} onScroll={onScroll}>
+                <Animated.ScrollView
+                    refreshControl={<PullToRefresh />}
+                    onScroll={onScroll}
+                    layout={LinearTransition.duration(4000)}
+                    style={{ minHeight: "100%" }}
+                    contentContainerStyle={{ flexGrow: 1 }}>
                     <AnimatedLinearGradient
                         colors={colors}
                         start={{ x: 0, y: 0 }}
@@ -63,23 +76,19 @@ export const BalanceScreen = () => {
                         style={{ position: "relative", marginTop: 16 }}
                         locations={[0, 0.55, 1]}
                         angle={180}
-                        useAngle>
-                        <Animated.View layout={LinearTransition.duration(1000)}>
-                            <CurrentBalance />
+                        useAngle
+                        layout={LinearTransition.duration(4000)}>
+                        <CurrentBalance />
 
-                            <BaseSpacer height={6} />
-                            {/* Space for pagination (eventually) */}
-                            <BaseSpacer height={24} />
+                        <BaseSpacer height={6} />
+                        <BaseSpacer height={24} />
 
-                            {!isObservedAccount && (
-                                <>
-                                    <BaseSpacer height={12} />
-                                    <BalanceActions qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
-                                </>
-                            )}
+                        <BalanceActions
+                            qrCodeBottomSheetRef={qrCodeBottomSheetRef}
+                            style={balanceActionsAnimatedStyles}
+                        />
 
-                            <BaseSpacer height={64} />
-                        </Animated.View>
+                        <BaseSpacer height={64} />
                     </AnimatedLinearGradient>
 
                     <TabRenderer onLayout={onLayout} />
