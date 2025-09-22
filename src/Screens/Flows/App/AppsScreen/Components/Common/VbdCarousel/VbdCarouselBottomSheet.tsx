@@ -28,13 +28,12 @@ export type VbdCarouselBottomSheetMetadata = {
     bannerUri?: string
     iconUri?: string
     category?: (typeof AVAILABLE_CATEGORIES)[number]
-    app?: VbdDApp
+    app: VbdDApp
 }
 
 type VbdCarouselBottomSheetProps = {
     bsRef: React.RefObject<BottomSheetModalMethods>
-    onClose: () => void
-} & VbdCarouselBottomSheetMetadata
+}
 
 const VbdInfoColumn = ({
     Icon,
@@ -78,31 +77,22 @@ const VbdInfoColumn = ({
 const UsersIcon = (props: Partial<BaseIconProps>) => <BaseIcon name="icon-users" {...props} />
 const LeafIcon = (props: Partial<BaseIconProps>) => <BaseIcon name="icon-leaf" {...props} />
 
-export const VbdCarouselBottomSheet = ({
-    bsRef,
-    bannerUri,
-    iconUri,
-    category,
+const VbdCarouselBottomSheetContent = ({
     app,
+    bannerUri,
+    category,
+    iconUri,
     onClose,
-}: VbdCarouselBottomSheetProps) => {
+}: VbdCarouselBottomSheetMetadata & { onClose: () => void }) => {
     const { LL, locale } = useI18nContext()
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
-    const { ref, onClose: onCloseBS } = useBottomSheetModal({
-        externalRef: bsRef,
-    })
 
     const dispatch = useAppDispatch()
     const { onDAppPress } = useDAppActions()
-    const { data: appOverview, isLoading } = useAppOverview(app?.id)
+    const { data: appOverview, isLoading } = useAppOverview(app.id)
 
-    const { isBookMarked } = useDappBookmarking(app?.external_url, app?.name)
-
-    const handleClose = useCallback(() => {
-        onClose()
-        onCloseBS()
-    }, [onClose, onCloseBS])
+    const { isBookMarked } = useDappBookmarking(app?.external_url, app.name)
 
     const onToggleFavorite = useCallback(() => {
         if (!isBookMarked && app) {
@@ -113,11 +103,9 @@ export const VbdCarouselBottomSheet = ({
     }, [app, dispatch, isBookMarked])
 
     const onOpenApp = useCallback(() => {
-        if (app) {
-            handleClose()
-            onDAppPress(app)
-        }
-    }, [app, handleClose, onDAppPress])
+        onClose()
+        onDAppPress(app)
+    }, [app, onClose, onDAppPress])
 
     const date = useMemo(
         () =>
@@ -173,14 +161,7 @@ export const VbdCarouselBottomSheet = ({
     }, [isBookMarked, theme.isDark])
 
     return (
-        <BaseBottomSheet
-            ref={ref}
-            dynamicHeight
-            backgroundStyle={styles.backgroundStyle}
-            onDismiss={handleClose}
-            enablePanDownToClose={false}
-            noMargins
-            floating>
+        <>
             {bannerUri ? (
                 <ImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_BS">
                     <BaseIcon
@@ -188,7 +169,7 @@ export const VbdCarouselBottomSheet = ({
                         color={COLORS.WHITE}
                         size={22}
                         name="icon-x"
-                        action={handleClose}
+                        action={onClose}
                         testID="bottom-sheet-close-btn"
                     />
                     <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={18}>
@@ -266,6 +247,25 @@ export const VbdCarouselBottomSheet = ({
                     />
                 </BaseView>
             </BaseView>
+        </>
+    )
+}
+
+export const VbdCarouselBottomSheet = ({ bsRef }: VbdCarouselBottomSheetProps) => {
+    const { styles } = useThemedStyles(baseStyles)
+    const { ref, onClose: onCloseBS } = useBottomSheetModal({
+        externalRef: bsRef,
+    })
+
+    return (
+        <BaseBottomSheet<VbdCarouselBottomSheetMetadata>
+            ref={ref}
+            dynamicHeight
+            backgroundStyle={styles.backgroundStyle}
+            enablePanDownToClose={false}
+            noMargins
+            floating>
+            {data => <VbdCarouselBottomSheetContent {...data} onClose={onCloseBS} />}
         </BaseBottomSheet>
     )
 }

@@ -1,10 +1,11 @@
+import { act, fireEvent, screen, waitFor } from "@testing-library/react-native"
+import _ from "lodash"
 import React from "react"
-import { render, screen, fireEvent, waitFor } from "@testing-library/react-native"
-import { VbdCarouselBottomSheet } from "./VbdCarouselBottomSheet"
-import { TestWrapper } from "~Test"
 import { VbdDApp, X2ECategoryType } from "~Model"
 import { FetchAppOverviewResponse } from "~Networking/API/Types"
 import { RootState } from "~Storage/Redux/Types"
+import { TestHelpers, TestWrapper } from "~Test"
+import { VbdCarouselBottomSheet } from "./VbdCarouselBottomSheet"
 
 // Mock the external dependencies
 jest.mock("~Networking/DApps/fetchAppOverview")
@@ -34,11 +35,10 @@ const mockVbdDApp: VbdDApp = {
 }
 
 describe("VbdCarouselBottomSheet", () => {
-    const mockSetIsOpen = jest.fn()
     const mockOnDAppPress = jest.fn()
 
     const mockAppOverview: FetchAppOverviewResponse = {
-        entity: "test-entity",
+        appId: "test-entity",
         roundId: 1,
         date: "2024-01-01",
         totalRewardAmount: 1000,
@@ -65,6 +65,13 @@ describe("VbdCarouselBottomSheet", () => {
         totalUniqueUserInteractions: 1500,
     }
 
+    const appMetadata = {
+        bannerUri: "https://example.com/banner.png",
+        iconUri: "https://example.com/icon.png",
+        category: "green-finance-defi" as const,
+        app: mockVbdDApp,
+    }
+
     const defaultProps = {
         bsRef: {
             current: {
@@ -78,11 +85,6 @@ describe("VbdCarouselBottomSheet", () => {
                 forceClose: jest.fn(),
             },
         },
-        onClose: mockSetIsOpen,
-        bannerUri: "https://example.com/banner.png",
-        iconUri: "https://example.com/icon.png",
-        category: "green-finance-defi" as const,
-        app: mockVbdDApp,
     }
 
     const mockState: Partial<RootState> = {
@@ -110,16 +112,22 @@ describe("VbdCarouselBottomSheet", () => {
 
     describe("Rendering", () => {
         it("should render correctly when closed", () => {
-            render(<VbdCarouselBottomSheet {...defaultProps} />, {
-                wrapper: ({ children }) => <TestWrapper preloadedState={mockState}>{children}</TestWrapper>,
+            TestHelpers.render.renderComponentWithProps(<VbdCarouselBottomSheet {...defaultProps} />, {
+                wrapper: TestWrapper,
+                initialProps: { preloadedState: mockState },
             })
 
-            expect(screen.getByTestId("VBD_CAROUSEL_BS")).toBeOnTheScreen()
+            expect(screen.queryByTestId("VBD_CAROUSEL_BS")).toBeNull()
         })
 
-        it("should render app information correctly", () => {
-            render(<VbdCarouselBottomSheet {...defaultProps} />, {
-                wrapper: ({ children }) => <TestWrapper preloadedState={mockState}>{children}</TestWrapper>,
+        it("should render app information correctly", async () => {
+            TestHelpers.render.renderComponentWithProps(<VbdCarouselBottomSheet {...defaultProps} />, {
+                wrapper: TestWrapper,
+                initialProps: { preloadedState: mockState },
+            })
+
+            await act(() => {
+                defaultProps.bsRef.current.present(appMetadata)
             })
 
             expect(screen.getByTestId("VBD_CAROUSEL_BS_APP_NAME")).toHaveTextContent("Test DApp")
@@ -128,9 +136,14 @@ describe("VbdCarouselBottomSheet", () => {
             )
         })
 
-        it("should render category chip when category is provided", () => {
-            render(<VbdCarouselBottomSheet {...defaultProps} />, {
-                wrapper: ({ children }) => <TestWrapper preloadedState={mockState}>{children}</TestWrapper>,
+        it("should render category chip when category is provided", async () => {
+            TestHelpers.render.renderComponentWithProps(<VbdCarouselBottomSheet {...defaultProps} />, {
+                wrapper: TestWrapper,
+                initialProps: { preloadedState: mockState },
+            })
+
+            await act(() => {
+                defaultProps.bsRef.current.present(appMetadata)
             })
 
             // Category chip should be rendered (looking for the actual rendered text)
@@ -138,18 +151,28 @@ describe("VbdCarouselBottomSheet", () => {
             expect(screen.getByText("Web3")).toBeOnTheScreen()
         })
 
-        it("should not render category chip when category is not provided", () => {
-            render(<VbdCarouselBottomSheet {...defaultProps} category={undefined} />, {
-                wrapper: ({ children }) => <TestWrapper preloadedState={mockState}>{children}</TestWrapper>,
+        it("should not render category chip when category is not provided", async () => {
+            TestHelpers.render.renderComponentWithProps(<VbdCarouselBottomSheet {...defaultProps} />, {
+                wrapper: TestWrapper,
+                initialProps: { preloadedState: mockState },
+            })
+
+            await act(() => {
+                defaultProps.bsRef.current.present(_.omit(appMetadata, "category"))
             })
 
             // Category chip should not be rendered
             expect(screen.queryByText("pets")).not.toBeOnTheScreen()
         })
 
-        it("should render loading skeletons when app overview is loading", () => {
-            render(<VbdCarouselBottomSheet {...defaultProps} />, {
-                wrapper: ({ children }) => <TestWrapper preloadedState={mockState}>{children}</TestWrapper>,
+        it("should render loading skeletons when app overview is loading", async () => {
+            TestHelpers.render.renderComponentWithProps(<VbdCarouselBottomSheet {...defaultProps} />, {
+                wrapper: TestWrapper,
+                initialProps: { preloadedState: mockState },
+            })
+
+            await act(() => {
+                defaultProps.bsRef.current.present(_.omit(appMetadata, "category"))
             })
 
             // Should show skeleton loaders for stats (checking component type)
@@ -161,8 +184,13 @@ describe("VbdCarouselBottomSheet", () => {
         })
 
         it("should render app overview data when loaded", async () => {
-            render(<VbdCarouselBottomSheet {...defaultProps} />, {
-                wrapper: ({ children }) => <TestWrapper preloadedState={mockState}>{children}</TestWrapper>,
+            TestHelpers.render.renderComponentWithProps(<VbdCarouselBottomSheet {...defaultProps} />, {
+                wrapper: TestWrapper,
+                initialProps: { preloadedState: mockState },
+            })
+
+            await act(() => {
+                defaultProps.bsRef.current.present(_.omit(appMetadata, "category"))
             })
 
             await waitFor(() => {
@@ -178,9 +206,14 @@ describe("VbdCarouselBottomSheet", () => {
     })
 
     describe("Favorite functionality", () => {
-        it("Toggle favorite status", () => {
-            render(<VbdCarouselBottomSheet {...defaultProps} />, {
-                wrapper: ({ children }) => <TestWrapper preloadedState={mockState}>{children}</TestWrapper>,
+        it("Toggle favorite status", async () => {
+            TestHelpers.render.renderComponentWithProps(<VbdCarouselBottomSheet {...defaultProps} />, {
+                wrapper: TestWrapper,
+                initialProps: { preloadedState: mockState },
+            })
+
+            await act(() => {
+                defaultProps.bsRef.current.present(_.omit(appMetadata, "category"))
             })
 
             const favoriteButton = screen.getByTestId("Favorite_Button")
@@ -203,50 +236,39 @@ describe("VbdCarouselBottomSheet", () => {
     })
 
     describe("Actions", () => {
-        it("should call onDAppPress when Open App button is pressed", () => {
-            render(<VbdCarouselBottomSheet {...defaultProps} />, {
-                wrapper: ({ children }) => <TestWrapper preloadedState={mockState}>{children}</TestWrapper>,
+        it("should call onDAppPress when Open App button is pressed", async () => {
+            TestHelpers.render.renderComponentWithProps(<VbdCarouselBottomSheet {...defaultProps} />, {
+                wrapper: TestWrapper,
+                initialProps: { preloadedState: mockState },
+            })
+
+            await act(() => {
+                defaultProps.bsRef.current.present(_.omit(appMetadata, "category"))
             })
 
             const openButton = screen.getByTestId("Open_Button")
-            fireEvent.press(openButton)
 
-            expect(mockOnDAppPress).toHaveBeenCalledWith(mockVbdDApp)
-        })
-
-        it("should call setIsOpen(false) when close button is pressed", () => {
-            render(<VbdCarouselBottomSheet {...defaultProps} />, {
-                wrapper: ({ children }) => <TestWrapper preloadedState={mockState}>{children}</TestWrapper>,
+            await act(() => {
+                fireEvent.press(openButton)
             })
 
-            const closeButtons = screen.getAllByTestId("bottom-sheet-close-btn")
-            const headerCloseButton = closeButtons.find(button => button.props.style?.position === "absolute")
-            fireEvent.press(headerCloseButton || closeButtons[0])
-
-            // Note: Due to animation timing, setIsOpen might be called after a delay
-            // In a real test, you might want to use fake timers or wait for the animation
+            expect(mockOnDAppPress).toHaveBeenCalledWith(mockVbdDApp)
         })
     })
 
     describe("App overview fetching", () => {
         it("should fetch app overview when bottom sheet opens", async () => {
-            render(<VbdCarouselBottomSheet {...defaultProps} />, {
-                wrapper: ({ children }) => <TestWrapper preloadedState={mockState}>{children}</TestWrapper>,
+            TestHelpers.render.renderComponentWithProps(<VbdCarouselBottomSheet {...defaultProps} />, {
+                wrapper: TestWrapper,
+                initialProps: { preloadedState: mockState },
             })
+
+            await act(() => {
+                defaultProps.bsRef.current.present(_.omit(appMetadata, "category"))
+            })
+
             await waitFor(() => {
                 expect(mockFetchAppOverview).toHaveBeenCalledWith("test-app-id")
-            })
-        })
-
-        it("should not fetch app overview if app has no id", async () => {
-            const appWithoutId = { ...mockVbdDApp, id: undefined }
-
-            render(<VbdCarouselBottomSheet {...defaultProps} app={appWithoutId as any} />, {
-                wrapper: ({ children }) => <TestWrapper preloadedState={mockState}>{children}</TestWrapper>,
-            })
-
-            await waitFor(() => {
-                expect(mockFetchAppOverview).not.toHaveBeenCalled()
             })
         })
     })
