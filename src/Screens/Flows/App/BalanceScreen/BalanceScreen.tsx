@@ -2,7 +2,7 @@
 import React, { useCallback, useMemo } from "react"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
-import Animated, { LinearTransition, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+import Animated, { LinearTransition, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { BaseSpacer, Layout, QRCodeBottomSheet } from "~Components"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
@@ -48,9 +48,7 @@ export const BalanceScreen = () => {
 
     const balanceActionsAnimatedStyles = useAnimatedStyle(() => {
         return {
-            marginTop: withTiming(isObservedAccount ? 0 : 12),
-            height: isObservedAccount ? 0 : "auto",
-            overflow: "hidden",
+            marginTop: 12,
         }
     }, [isObservedAccount])
 
@@ -83,10 +81,12 @@ export const BalanceScreen = () => {
                         <BaseSpacer height={6} />
                         <BaseSpacer height={24} />
 
-                        <BalanceActions
-                            qrCodeBottomSheetRef={qrCodeBottomSheetRef}
-                            style={balanceActionsAnimatedStyles}
-                        />
+                        {!isObservedAccount && (
+                            <BalanceActions
+                                qrCodeBottomSheetRef={qrCodeBottomSheetRef}
+                                style={balanceActionsAnimatedStyles}
+                            />
+                        )}
 
                         <BaseSpacer height={64} />
                     </AnimatedLinearGradient>
