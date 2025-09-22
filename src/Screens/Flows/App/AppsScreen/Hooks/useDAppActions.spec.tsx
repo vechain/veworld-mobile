@@ -1,5 +1,6 @@
 import { renderHook, act } from "@testing-library/react-hooks"
 import { DiscoveryDApp } from "~Constants"
+import { NETWORK_TYPE } from "~Model"
 import { useDAppActions } from "./useDAppActions"
 
 const mockTrack = jest.fn()
@@ -20,21 +21,31 @@ jest.mock("~Hooks/useBrowserTab", () => ({
 
 jest.mock("~Storage/Redux", () => ({
     addNavigationToDApp: jest.fn(payload => ({ type: "addNavigationToDApp", payload })),
+    selectSelectedNetwork: jest.fn(),
+    selectNotificationFeautureEnabled: jest.fn(),
     useAppDispatch: () => mockDispatch,
-    useAppSelector: () => null,
+    useAppSelector: jest.fn(),
 }))
+
+import { useAppSelector } from "~Storage/Redux"
 
 describe("useDAppActions", () => {
     beforeEach(() => {
         jest.clearAllMocks()
         jest.useFakeTimers()
+        ;(useAppSelector as jest.Mock).mockImplementation(selector => {
+            if (selector.toString().includes("selectSelectedNetwork")) {
+                return { type: NETWORK_TYPE.MAIN }
+            }
+            return false
+        })
     })
 
     afterEach(() => {
         jest.useRealTimers()
     })
 
-    it("should dispatch addNavigationToDApp after 1000ms timeout (line 55)", async () => {
+    it("should dispatch addNavigationToDApp after 1000ms timeout", async () => {
         const mockDapp: DiscoveryDApp = {
             name: "Test DApp",
             href: "https://test.com",
