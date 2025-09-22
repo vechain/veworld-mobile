@@ -195,6 +195,7 @@ export const SettingsStack = () => {
                     presentation: "modal",
                     transitionSpec: TRANSITION_SPECS,
                     gestureDirection: "vertical",
+                    gestureEnabled: true,
                 }}
             />
             <Settings.Screen
@@ -206,6 +207,7 @@ export const SettingsStack = () => {
                     presentation: "modal",
                     transitionSpec: TRANSITION_SPECS,
                     gestureDirection: "vertical",
+                    gestureEnabled: true,
                 }}
             />
         </Settings.Navigator>

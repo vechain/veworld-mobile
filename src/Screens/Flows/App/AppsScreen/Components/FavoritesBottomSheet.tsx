@@ -12,7 +12,7 @@ import {
     ListEmptyResults,
     ReorderIconHeaderButton,
 } from "~Components"
-import { COLORS, ColorThemeType, DiscoveryDApp } from "~Constants"
+import { ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { removeBookmark, reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -144,7 +144,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     return (
         <BaseBottomSheet
             ref={ref}
-            enableContentPanningGesture={isEditingMode}
+            enableContentPanningGesture={!isEditingMode}
             noMargins
             snapPoints={["90%"]}
             backgroundStyle={styles.layout}
@@ -155,6 +155,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                     <DraggableFlatList
                         scrollEnabled={true}
                         contentContainerStyle={styles.listContentContainer}
+                        style={reorderedDapps.length === 0 ? styles.emptyListStyle : undefined}
                         extraData={isEditingMode}
                         data={reorderedDapps}
                         onDragEnd={onDragEnd}
@@ -167,9 +168,12 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         windowSize={5}
                         ListEmptyComponent={
                             <ListEmptyResults
-                                subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()}
-                                icon={"icon-search"}
+                                subtitle={LL.FAVOURITES_DAPPS_EMPTY_LIST()}
+                                icon={"icon-alert-circle"}
+                                iconColor={theme.colors.actionBottomSheet.emptyFavoritesIcon.color}
                                 testID="empty-results"
+                                iconStyle={styles.emptyIcon}
+                                subtitleColor={theme.colors.actionBottomSheet.subText}
                             />
                         }
                     />
@@ -192,17 +196,26 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         listContentContainer: {
             paddingTop: 12,
+            flexGrow: 1,
             paddingHorizontal: 24,
         },
         layout: {
-            backgroundColor: theme.colors.actionBottomSheet.background,
+            backgroundColor: theme.colors.card,
             borderTopRightRadius: 24,
             borderTopLeftRadius: 24,
         },
         reorderIcon: {
-            borderColor: theme.colors.actionBottomSheet.border,
-            backgroundColor: COLORS.TRANSPARENT,
+            borderColor: theme.colors.actionBottomSheet.iconBackground.border,
+            backgroundColor: theme.colors.actionBottomSheet.reorderButtonBackground,
             borderWidth: 1,
             borderRadius: 6,
+        },
+        emptyIcon: {
+            backgroundColor: theme.colors.actionBottomSheet.emptyFavoritesIcon.background,
+            borderRadius: 100,
+            padding: 16,
+        },
+        emptyListStyle: {
+            alignSelf: "center",
         },
     })

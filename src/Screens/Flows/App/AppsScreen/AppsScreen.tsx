@@ -1,24 +1,24 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseTouchable, BaseSpacer, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
+import { BaseIcon, BaseSpacer, BaseTouchable, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
+import { X2ECategoryType } from "~Model"
 import { Routes } from "~Navigation"
-import { EcosystemSection } from "./Components/Ecosystem"
-import { AppsBottomSheet, VeBetterSection } from "./Components/VeBetter"
-import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
-import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
 import { useAppSelector } from "~Storage/Redux/Hooks"
 import { selectBookmarkedDapps } from "~Storage/Redux/Selectors"
-import { useDAppActions } from "./Hooks/useDAppActions"
-import { Favourites } from "../DiscoverScreen/Components/Favourites"
+import { VeBetterDAOCarousel } from "../DiscoverScreen/Components/VeBetterDAOCarousel"
+import { EcosystemSection } from "./Components/Ecosystem"
 import { FavoritesBottomSheet } from "./Components/FavoritesBottomSheet"
 import { FavoritesSuggestionBanner } from "./Components/FavoritesSuggestionBanner"
-import { VeBetterDAOCarousel } from "../DiscoverScreen/Components/VeBetterDAOCarousel"
-import { X2ECategoryType } from "~Model"
+import { FavouritesV2 } from "./Components/Favourites/FavouritesV2"
+import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
+import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
+import { AppsBottomSheet, VeBetterSection } from "./Components/VeBetter"
+import { useDAppActions } from "./Hooks/useDAppActions"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
@@ -92,7 +92,7 @@ export const AppsScreen = () => {
 
                     {showFavorites && (
                         <>
-                            <Favourites
+                            <FavouritesV2
                                 bookmarkedDApps={bookmarkedDApps}
                                 onActionLabelPress={onOpenFavorites}
                                 onDAppPress={onDAppPress}

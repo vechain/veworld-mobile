@@ -19,8 +19,11 @@ import {
     DappTxActivity,
     FungibleTokenActivity,
     IndexedHistoryEvent,
+    LoginActivity,
+    LoginActivityValue,
     Network,
     NonFungibleTokenActivity,
+    NFTMarketplaceActivity,
     SignCertActivity,
     StargateActivity,
     SwapActivity,
@@ -286,6 +289,24 @@ export const createSingTypedDataActivity = (
     }
 }
 
+export const createLoginActivity = ({
+    url,
+    signer,
+    network,
+    ...rest
+}: { url: string; signer: string; network: Network } & LoginActivityValue): LoginActivity => {
+    return {
+        from: signer,
+        id: uuid.v4().toString(),
+        type: ActivityType.DAPP_LOGIN,
+        timestamp: Date.now(),
+        isTransaction: false,
+        linkUrl: url,
+        genesisId: network.genesis.id,
+        ...rest,
+    }
+}
+
 /**
  * This function creates a new pending DApp transaction activity object.
  *
@@ -506,6 +527,7 @@ const processActivity = (
         case ActivityType.TRANSFER_VET:
             return enrichActivityWithVetTransfer(activity, clause, direction)
         case ActivityType.TRANSFER_NFT:
+        case ActivityType.NFT_SALE:
             return enrichActivityWithNFTData(activity, clause, direction)
         default:
             return enrichActivityWithDappData(activity, appName, appUrl)
@@ -606,6 +628,21 @@ export const createActivityFromIndexedHistoryEvent = (
                 contractAddress: contractAddress,
                 direction: direction,
             } as NonFungibleTokenActivity
+        }
+        case ActivityEvent.NFT_SALE: {
+            const direction = AddressUtils.compareAddresses(from, selectedAccountAddress)
+                ? DIRECTIONS.UP
+                : DIRECTIONS.DOWN
+            return {
+                ...baseActivity,
+                tokenId: tokenId,
+                contractAddress: contractAddress,
+                direction: direction,
+                price: value ?? "0",
+                buyer: to ?? "",
+                seller: from ?? "",
+                tokenAddress: event.tokenAddress,
+            } as NFTMarketplaceActivity
         }
         case ActivityEvent.SWAP_FT_TO_VET: {
             return {

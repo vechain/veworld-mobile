@@ -20,7 +20,9 @@ import {
     DappTxActivity,
     FungibleToken,
     FungibleTokenActivity,
+    LoginActivity,
     NonFungibleTokenActivity,
+    NFTMarketplaceActivity,
     SignCertActivity,
     StargateActivity,
     SwapActivity,
@@ -89,6 +91,14 @@ const Item = ({
                 <ActivityBox.NFTTransfer
                     key={activityToRender.id}
                     activity={activity as NonFungibleTokenActivity}
+                    onPress={onPress}
+                />
+            )
+        case ActivityType.NFT_SALE:
+            return (
+                <ActivityBox.NFTSale
+                    key={activityToRender.id}
+                    activity={activity as NFTMarketplaceActivity}
                     onPress={onPress}
                 />
             )
@@ -171,6 +181,8 @@ const Item = ({
             return <ActivityBox.Staking activity={activity as StargateActivity} onPress={onPress} />
         case ActivityType.VEVOTE_VOTE_CAST:
             return <ActivityBox.VeVoteCast activity={activity as VeVoteCastActivity} onPress={onPress} />
+        case ActivityType.DAPP_LOGIN:
+            return <ActivityBox.DappLogin activity={activity as LoginActivity} onPress={onPress} />
         default:
             return null
     }

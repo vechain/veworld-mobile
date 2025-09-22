@@ -452,6 +452,10 @@ type RootTranslation = {
 	 */
 	APPS_SCREEN_TITLE: string
 	/**
+	 * S​e​a​r​c​h​ ​a​n​ ​A​p​p​ ​o​r​ ​W​e​b​s​i​t​e​.​.​.
+	 */
+	APPS_SEARCH_PLACEHOLDER: string
+	/**
 	 * A​p​p​s
 	 */
 	APPS_TITLE: string
@@ -529,10 +533,6 @@ type RootTranslation = {
 	 * @param {string} version
 	 */
 	APP_VERSION: RequiredParams<'version'>
-	/**
-	 * S​e​a​r​c​h​ ​a​n​ ​A​p​p​ ​o​r​ ​W​e​b​s​i​t​e​.​.​.
-	 */
-	APPS_SEARCH_PLACEHOLDER: string
 	/**
 	 * A​p​r​i​l
 	 */
@@ -898,7 +898,7 @@ type RootTranslation = {
 	 */
 	BD_NO_TOKEN_FOUND: string
 	/**
-	 * Y​o​u​ ​c​a​n​ ​o​b​s​e​r​v​e​ ​a​ ​w​a​l​l​e​t​ ​b​y​ ​a​d​d​i​n​g​ ​i​t​s​ ​a​d​d​r​e​s​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​v​i​e​w​ ​t​h​e​ ​w​a​l​l​e​t​'​s​ ​b​a​l​a​n​c​e​ ​a​n​d​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 * Y​o​u​ ​c​a​n​ ​w​a​t​c​h​ ​a​ ​w​a​l​l​e​t​ ​b​y​ ​a​d​d​i​n​g​ ​i​t​s​ ​a​d​d​r​e​s​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​v​i​e​w​ ​t​h​e​ ​w​a​l​l​e​t​'​s​ ​b​a​l​a​n​c​e​ ​a​n​d​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
 	 */
 	BD_OBSERVE_WALLET: string
 	/**
@@ -1168,6 +1168,10 @@ type RootTranslation = {
 	 * F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_FAVOURITES_TITLE: string
+	/**
+	 * G​o​ ​t​o​ ​p​r​e​v​i​o​u​s​ ​p​a​g​e
+	 */
+	BROWSER_GO_BACK: string
 	/**
 	 * T​h​i​s​ ​a​d​d​r​e​s​s​ ​c​a​n​'​t​ ​b​e​ ​r​e​a​c​h​e​d
 	 */
@@ -1471,15 +1475,15 @@ type RootTranslation = {
 	 */
 	BTN_NO_GO_BACK: string
 	/**
-	 * O​b​s​e​r​v​e​d
+	 * W​a​t​c​h​i​n​g
 	 */
 	BTN_OBSERVED: string
 	/**
-	 * O​b​s​e​r​v​e​ ​w​a​l​l​e​t
+	 * W​a​t​c​h​ ​w​a​l​l​e​t
 	 */
 	BTN_OBSERVE_WALLET: string
 	/**
-	 * I​m​p​o​r​t​ ​a​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​o​n​l​y​ ​o​b​s​e​r​v​e​ ​t​h​i​s​ ​w​a​l​l​e​t
+	 * A​d​d​ ​a​n​y​ ​p​u​b​l​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​a​n​d​ ​k​e​e​p​ ​t​r​a​c​k​ ​o​f​ ​i​t​s​ ​b​a​l​a​n​c​e​s​ ​a​n​d​ ​a​c​t​i​v​i​t​y
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: string
 	/**
@@ -2272,6 +2276,26 @@ type RootTranslation = {
 	 */
 	DAPP_CONNECTION: string
 	/**
+	 * M​e​t​h​o​d
+	 */
+	DAPP_LOGIN_METHOD: string
+	/**
+	 * C​e​r​t​i​f​i​c​a​t​e
+	 */
+	DAPP_LOGIN_METHOD_CERTIFICATE: string
+	/**
+	 * N​o​ ​s​i​g​n​a​t​u​r​e
+	 */
+	DAPP_LOGIN_METHOD_SIMPLE: string
+	/**
+	 * T​y​p​e​d​ ​d​a​t​a
+	 */
+	DAPP_LOGIN_METHOD_TYPED_DATA: string
+	/**
+	 * d​A​p​p​ ​l​o​g​i​n
+	 */
+	DAPP_LOGIN_TITLE: string
+	/**
 	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	DAPP_SIGN_CERT: string
@@ -2700,6 +2724,10 @@ type RootTranslation = {
 	 */
 	FAVOURITES_BOTTOM_SHEET_TITLE: string
 	/**
+	 * N​o​ ​f​a​v​o​r​i​t​e​d​ ​a​p​p​s​ ​t​o​ ​s​h​o​w
+	 */
+	FAVOURITES_DAPPS_EMPTY_LIST: string
+	/**
 	 * C​o​u​l​d​ ​n​o​t​ ​f​i​n​d​ ​a​n​y​ ​d​a​p​p​s​ ​w​i​t​h​ ​t​h​i​s​ ​n​a​m​e
 	 */
 	FAVOURITES_DAPPS_NO_RECORDS: string
@@ -2883,6 +2911,22 @@ type RootTranslation = {
 	 * L​o​a​d​i​n​g​ ​m​o​r​e
 	 */
 	LOADING_MORE: string
+	/**
+	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
+	 */
+	LOGIN_KEEP_ME_SIGNED_IN: string
+	/**
+	 * L​o​g​i​n
+	 */
+	LOGIN_REQUEST_CTA: string
+	/**
+	 * L​o​g​i​n
+	 */
+	LOGIN_REQUEST_TITLE: string
+	/**
+	 * L​o​a​d​i​n​g​ ​p​a​g​e​ ​c​o​n​t​e​n​t
+	 */
+	LOADING_PAGE_CONTENT: string
 	/**
 	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​t​o​k​e​n​?
 	 */
@@ -3129,6 +3173,10 @@ type RootTranslation = {
 	 */
 	NFT_DOWNLOAD_ERROR: string
 	/**
+	 * N​F​T​ ​P​u​r​c​h​a​s​e​d
+	 */
+	NFT_PURCHASED: string
+	/**
 	 * N​F​T​ ​R​e​c​e​i​v​e
 	 */
 	NFT_RECEIVE: string
@@ -3149,11 +3197,15 @@ type RootTranslation = {
 	 */
 	NFT_SEND: string
 	/**
-	 * N​F​T​ ​r​e​c​e​i​v​e​d
+	 * N​F​T​ ​S​o​l​d
+	 */
+	NFT_SOLD: string
+	/**
+	 * N​F​T​ ​R​e​c​e​i​v​e​d
 	 */
 	NFT_TRANSFER_RECEIVED: string
 	/**
-	 * N​F​T​ ​s​e​n​t
+	 * N​F​T​ ​S​e​n​t
 	 */
 	NFT_TRANSFER_SENT: string
 	/**
@@ -3870,6 +3922,22 @@ type RootTranslation = {
 	 */
 	SECURITY_UPGRADE_REMINDER_DESC: string
 	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​a​c​c​o​u​n​t
+	 */
+	SELECT_ACCOUNT_DESCRIPTION: string
+	/**
+	 * W​a​l​l​e​t​s
+	 */
+	SELECT_ACCOUNT_TITLE: string
+	/**
+	 * W​a​t​c​h​i​n​g
+	 */
+	SELECT_ACCOUNT_WATCHING: string
+	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​s
+	 */
+	SELECT_ACCOUNT_YOUR_WALLETS: string
+	/**
 	 * I​ ​U​N​D​E​R​S​T​A​N​D
 	 */
 	SEND_ACCEPT_NO_GAS_ACCEPT: string
@@ -4303,11 +4371,11 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE: string
 	/**
-	 * L​o​g​i​n
+	 * S​i​g​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: string
 	/**
-	 * L​o​g​i​n
+	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: string
 	/**
@@ -4335,6 +4403,10 @@ type RootTranslation = {
 	 */
 	SIGN_TYPED_DATA_REQUEST_TITLE: string
 	/**
+	 * D​e​l​e​g​a​t​e​d​ ​s​m​a​r​t​ ​w​a​l​l​e​t​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​y​e​t
+	 */
+	SMART_WALLET_DELEGATION_NOT_SUPPORTED: string
+	/**
 	 * C​l​a​i​m​a​b​l​e
 	 */
 	STARGATE_CLAIMABLE: string
@@ -4354,6 +4426,10 @@ type RootTranslation = {
 	 * N​e​w​ ​s​t​a​k​e
 	 */
 	STARGATE_NEW_STAKE: string
+	/**
+	 * O​w​n
+	 */
+	STARGATE_OWN_LABEL: string
 	/**
 	 * R​e​w​a​r​d​s
 	 */
@@ -4399,6 +4475,14 @@ type RootTranslation = {
 	 * S​w​a​p​ ​t​o​k​e​n​s
 	 */
 	SWAP_TITLE: string
+	/**
+	 * S​w​i​t​c​h
+	 */
+	SWITCH_WALLET_REQUEST_CTA: string
+	/**
+	 * S​w​i​t​c​h​ ​w​a​l​l​e​t
+	 */
+	SWITCH_WALLET_REQUEST_TITLE: string
 	/**
 	 * S​y​s​t​e​m
 	 */
@@ -4589,7 +4673,7 @@ type RootTranslation = {
 	 */
 	TITLE_NOTIFICATIONS: string
 	/**
-	 * O​b​s​e​r​v​e​ ​W​a​l​l​e​t
+	 * W​a​t​c​h​ ​w​a​l​l​e​t
 	 */
 	TITLE_OBSERVE_WALLET: string
 	/**
@@ -5399,6 +5483,10 @@ Try reconnect your device to the internet.
 	 */
 	APPS_SCREEN_TITLE: () => LocalizedString
 	/**
+	 * Search an App or Website...
+	 */
+	APPS_SEARCH_PLACEHOLDER: () => LocalizedString
+	/**
 	 * Apps
 	 */
 	APPS_TITLE: () => LocalizedString
@@ -5474,10 +5562,6 @@ Try reconnect your device to the internet.
 	 * version {version}
 	 */
 	APP_VERSION: (arg: { version: string }) => LocalizedString
-	/**
-	 * Search an App or Website...
-	 */
-	APPS_SEARCH_PLACEHOLDER: () => LocalizedString
 	/**
 	 * April
 	 */
@@ -5839,7 +5923,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_NO_TOKEN_FOUND: () => LocalizedString
 	/**
-	 * You can observe a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
+	 * You can watch a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
 	 */
 	BD_OBSERVE_WALLET: () => LocalizedString
 	/**
@@ -6108,6 +6192,10 @@ Thanks for your patience!
 	 * Favorites
 	 */
 	BROWSER_FAVOURITES_TITLE: () => LocalizedString
+	/**
+	 * Go to previous page
+	 */
+	BROWSER_GO_BACK: () => LocalizedString
 	/**
 	 * This address can't be reached
 	 */
@@ -6409,15 +6497,15 @@ Thanks for your patience!
 	 */
 	BTN_NO_GO_BACK: () => LocalizedString
 	/**
-	 * Observed
+	 * Watching
 	 */
 	BTN_OBSERVED: () => LocalizedString
 	/**
-	 * Observe wallet
+	 * Watch wallet
 	 */
 	BTN_OBSERVE_WALLET: () => LocalizedString
 	/**
-	 * Import a wallet address to only observe this wallet
+	 * Add any public wallet address and keep track of its balances and activity
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: () => LocalizedString
 	/**
@@ -7201,6 +7289,26 @@ Thanks for your patience!
 	 */
 	DAPP_CONNECTION: () => LocalizedString
 	/**
+	 * Method
+	 */
+	DAPP_LOGIN_METHOD: () => LocalizedString
+	/**
+	 * Certificate
+	 */
+	DAPP_LOGIN_METHOD_CERTIFICATE: () => LocalizedString
+	/**
+	 * No signature
+	 */
+	DAPP_LOGIN_METHOD_SIMPLE: () => LocalizedString
+	/**
+	 * Typed data
+	 */
+	DAPP_LOGIN_METHOD_TYPED_DATA: () => LocalizedString
+	/**
+	 * dApp login
+	 */
+	DAPP_LOGIN_TITLE: () => LocalizedString
+	/**
 	 * Sign certificate
 	 */
 	DAPP_SIGN_CERT: () => LocalizedString
@@ -7629,6 +7737,10 @@ Thanks for your patience!
 	 */
 	FAVOURITES_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
+	 * No favorited apps to show
+	 */
+	FAVOURITES_DAPPS_EMPTY_LIST: () => LocalizedString
+	/**
 	 * Could not find any dapps with this name
 	 */
 	FAVOURITES_DAPPS_NO_RECORDS: () => LocalizedString
@@ -7812,6 +7924,22 @@ Thanks for your patience!
 	 * Loading more
 	 */
 	LOADING_MORE: () => LocalizedString
+	/**
+	 * Keep me signed in for future sessions
+	 */
+	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
+	/**
+	 * Login
+	 */
+	LOGIN_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Login
+	 */
+	LOGIN_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Loading page content
+	 */
+	LOADING_PAGE_CONTENT: () => LocalizedString
 	/**
 	 * Are you sure you want to add the selected token?
 	 */
@@ -8058,6 +8186,10 @@ Thanks for your patience!
 	 */
 	NFT_DOWNLOAD_ERROR: () => LocalizedString
 	/**
+	 * NFT Purchased
+	 */
+	NFT_PURCHASED: () => LocalizedString
+	/**
 	 * NFT Receive
 	 */
 	NFT_RECEIVE: () => LocalizedString
@@ -8078,11 +8210,15 @@ Thanks for your patience!
 	 */
 	NFT_SEND: () => LocalizedString
 	/**
-	 * NFT received
+	 * NFT Sold
+	 */
+	NFT_SOLD: () => LocalizedString
+	/**
+	 * NFT Received
 	 */
 	NFT_TRANSFER_RECEIVED: () => LocalizedString
 	/**
-	 * NFT sent
+	 * NFT Sent
 	 */
 	NFT_TRANSFER_SENT: () => LocalizedString
 	/**
@@ -8774,6 +8910,22 @@ Thanks for your patience!
 	 */
 	SECURITY_UPGRADE_REMINDER_DESC: () => LocalizedString
 	/**
+	 * Select the active account
+	 */
+	SELECT_ACCOUNT_DESCRIPTION: () => LocalizedString
+	/**
+	 * Wallets
+	 */
+	SELECT_ACCOUNT_TITLE: () => LocalizedString
+	/**
+	 * Watching
+	 */
+	SELECT_ACCOUNT_WATCHING: () => LocalizedString
+	/**
+	 * Your wallets
+	 */
+	SELECT_ACCOUNT_YOUR_WALLETS: () => LocalizedString
+	/**
 	 * I UNDERSTAND
 	 */
 	SEND_ACCEPT_NO_GAS_ACCEPT: () => LocalizedString
@@ -9198,11 +9350,11 @@ Here's what it's all about:
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
 	/**
-	 * Login
+	 * Sign
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: () => LocalizedString
 	/**
-	 * Login
+	 * Sign certificate
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
 	/**
@@ -9230,6 +9382,10 @@ Here's what it's all about:
 	 */
 	SIGN_TYPED_DATA_REQUEST_TITLE: () => LocalizedString
 	/**
+	 * Delegated smart wallet not supported yet
+	 */
+	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
+	/**
 	 * Claimable
 	 */
 	STARGATE_CLAIMABLE: () => LocalizedString
@@ -9249,6 +9405,10 @@ Here's what it's all about:
 	 * New stake
 	 */
 	STARGATE_NEW_STAKE: () => LocalizedString
+	/**
+	 * Own
+	 */
+	STARGATE_OWN_LABEL: () => LocalizedString
 	/**
 	 * Rewards
 	 */
@@ -9293,6 +9453,14 @@ Here's what it's all about:
 	 * Swap tokens
 	 */
 	SWAP_TITLE: () => LocalizedString
+	/**
+	 * Switch
+	 */
+	SWITCH_WALLET_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Switch wallet
+	 */
+	SWITCH_WALLET_REQUEST_TITLE: () => LocalizedString
 	/**
 	 * System
 	 */
@@ -9482,7 +9650,7 @@ Here's what it's all about:
 	 */
 	TITLE_NOTIFICATIONS: () => LocalizedString
 	/**
-	 * Observe Wallet
+	 * Watch wallet
 	 */
 	TITLE_OBSERVE_WALLET: () => LocalizedString
 	/**

@@ -12,7 +12,7 @@ export const DeleteUnderlay: React.FC<Props> = ({ onPress, isObservable }) => {
         <BaseView style={styles.underlayContainer}>
             <BaseTouchable action={onPress} style={styles.underlayLeft} testID="DELETE_UNDERLAY_BTN">
                 <BaseIcon
-                    name="icon-trash"
+                    name="icon-trash-2"
                     size={24}
                     bg={theme.colors.danger}
                     color={theme.colors.card}
@@ -36,9 +36,9 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             justifyContent: "flex-end",
             marginLeft: "auto",
-            borderRadius: 12,
+            borderRadius: 8,
             height: "100%",
             backgroundColor: theme.colors.danger,
         },
-        deleteIcon: { marginRight: 10 },
+        deleteIcon: { marginRight: 8 },
     })

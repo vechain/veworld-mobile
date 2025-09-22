@@ -73,7 +73,7 @@ const fontWeight = {
     "700": "700",
     "800": "800",
     "900": "900",
-}
+} as const
 
 const fontSize = {
     10: 10,

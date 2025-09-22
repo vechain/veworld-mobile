@@ -124,7 +124,13 @@ export type RootStackParamListHome = {
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
-        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
+        returnScreen?:
+            | Routes.DISCOVER
+            | Routes.SETTINGS
+            | Routes.HOME
+            | Routes.ACTIVITY_STAKING
+            | Routes.APPS
+            | Routes.SWAP
     }
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
@@ -238,6 +244,7 @@ export const HomeStack = () => {
                         presentation: "modal",
                         transitionSpec: TRANSITION_SPECS,
                         gestureDirection: "vertical",
+                        gestureEnabled: true,
                     }}
                 />
                 <Screen
@@ -267,6 +274,7 @@ export const HomeStack = () => {
                         presentation: "modal",
                         transitionSpec: TRANSITION_SPECS,
                         gestureDirection: "vertical",
+                        gestureEnabled: true,
                     }}
                 />
                 <Screen
@@ -278,6 +286,7 @@ export const HomeStack = () => {
                         presentation: "modal",
                         transitionSpec: TRANSITION_SPECS,
                         gestureDirection: "vertical",
+                        gestureEnabled: true,
                     }}
                 />
             </Group>

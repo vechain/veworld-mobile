@@ -44,9 +44,9 @@ const calculateFeeHistory = (res: FeeHistoryResponse, maxPriorityFee: string) =>
         HexUInt.of(maxPriorityFee).bi,
     ).toBigInt
 
-    const baseFeeRegular = BigNutils(latestBaseFee.toString()).multiply(1.02).toBigInt
-    const baseFeeMedium = BigNutils(latestBaseFee.toString()).multiply(1.03).toBigInt
-    const baseFeeHigh = BigNutils(latestBaseFee.toString()).multiply(1.046).toBigInt
+    const baseFeeRegular = BigNutils(latestBaseFee.toString()).multiply(1.14).toBigInt
+    const baseFeeMedium = BigNutils(latestBaseFee.toString()).multiply(1.15).toBigInt
+    const baseFeeHigh = BigNutils(latestBaseFee.toString()).multiply(1.166).toBigInt
 
     return {
         [GasPriceCoefficient.REGULAR]: {
