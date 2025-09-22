@@ -1,10 +1,11 @@
-import React, { useCallback, useLayoutEffect, useMemo, useState } from "react"
-import { LayoutChangeEvent, StyleSheet, Text } from "react-native"
+import React, { useEffect, useMemo, useState } from "react"
+import { StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, {
     FadeIn,
     FadeOut,
     LinearTransition,
+    runOnJS,
     SharedValue,
     useAnimatedStyle,
     useSharedValue,
@@ -23,12 +24,10 @@ const SlotMachineTextElement = ({
     item,
     translate,
     index,
-    onLayout,
 }: {
     item: (typeof VALUE_ARRAY)[number]
     translate: SharedValue<number>
     index: number
-    onLayout: (e: LayoutChangeEvent) => void
 }) => {
     const { styles } = useThemedStyles(baseStyles)
 
@@ -42,8 +41,7 @@ const SlotMachineTextElement = ({
             style={[styles.text, styles.absolute, animatedStyles, { top: 40 * index }]}
             key={item.id}
             exiting={FadeOut.duration(300)}
-            entering={FadeIn.duration(300)}
-            onLayout={onLayout}>
+            entering={FadeIn.duration(300)}>
             {item.value}
         </Animated.Text>
     )
@@ -54,33 +52,20 @@ export const SlotMachineText = ({ value }: Props) => {
 
     const translateY = useSharedValue(0)
 
-    const [heights, setHeights] = useState<number[]>([])
+    const [hiddenValue, setHiddenValue] = useState(0)
 
     const parsedValue = useMemo(() => {
         if (!/\d/.test(value)) return 0
         return parseInt(value, 10)
     }, [value])
 
-    const onLayout = useCallback(
-        (index: number) => (e: LayoutChangeEvent) => {
-            const rectangle = e.nativeEvent.layout.height
-            setHeights(old => {
-                const newArr = [...old]
-                newArr[index] = rectangle
-                return newArr
-            })
-        },
-        [],
-    )
-
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (!/\d/.test(value)) return
-        if (heights.length !== 10) return
-
-        translateY.value = withSpring(
-            heights.filter((_, idx) => idx < parsedValue).reduce((acc, curr) => acc + curr, 0),
-        )
-    }, [parsedValue, heights, translateY, value])
+        translateY.value = withSpring(40 * parsedValue, undefined, () => {
+            "worklet"
+            runOnJS(setHiddenValue)(parsedValue)
+        })
+    }, [parsedValue, translateY, value])
 
     if (!/\d/.test(value))
         return (
@@ -99,15 +84,11 @@ export const SlotMachineText = ({ value }: Props) => {
                 style={[StyleSheet.absoluteFill, styles.gradient]}
             />
             <Animated.View style={[styles.innerContainer]} layout={LinearTransition.duration(300)}>
-                <Text style={[styles.text, styles.hiddenText]}>{parsedValue}</Text>
+                <Animated.Text style={[styles.text, styles.hiddenText]} layout={LinearTransition.duration(300)}>
+                    {hiddenValue}
+                </Animated.Text>
                 {VALUE_ARRAY.map((item, idx) => (
-                    <SlotMachineTextElement
-                        key={idx}
-                        item={item}
-                        index={idx}
-                        translate={translateY}
-                        onLayout={e => onLayout(idx)(e)}
-                    />
+                    <SlotMachineTextElement key={idx} item={item} index={idx} translate={translateY} />
                 ))}
             </Animated.View>
         </Animated.View>
