@@ -28,7 +28,7 @@ export const useLoginSession = () => {
         (request: TransactionRequest | TypeDataRequest | CertificateRequest) => {
             if (request.type !== "in-app") return
             const session = getLoginSession(request.appUrl, selectedNetwork.genesis.id)
-            if (session) return
+            if (session && !session.replaceable) return
             dispatch(
                 addSession({
                     kind: "temporary",
@@ -36,6 +36,7 @@ export const useLoginSession = () => {
                     genesisId: selectedNetwork.genesis.id,
                     url: request.appUrl,
                     name: request.appName,
+                    replaceable: true,
                 }),
             )
         },

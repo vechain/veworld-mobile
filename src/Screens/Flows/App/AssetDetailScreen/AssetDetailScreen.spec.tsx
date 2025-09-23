@@ -95,6 +95,9 @@ const mockedFeatureFlags: FeatureFlags = {
             enabled: false,
         },
     },
+    smartWalletFeature: {
+        enabled: false,
+    },
 }
 
 jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
