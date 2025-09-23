@@ -4579,6 +4579,14 @@ type RootTranslation = {
 	 */
 	THEM: string
 	/**
+	 * T​h​i​s​ ​m​o​n​t​h
+	 */
+	THIS_MONTH: string
+	/**
+	 * T​h​i​s​ ​w​e​e​k
+	 */
+	THIS_WEEK: string
+	/**
 	 * A​b​o​u​t
 	 */
 	TITLE_ABOUT: string
@@ -4852,6 +4860,10 @@ type RootTranslation = {
 	 */
 	TOKEN_TRANSFER_SENT: string
 	/**
+	 * T​o​t​a​l
+	 */
+	TOTAL: string
+	/**
 	 * T​o​u​c​h​ ​I​D
 	 */
 	TOUCH_ID: string
@@ -4901,10 +4913,6 @@ type RootTranslation = {
 	 */
 	VALUE_TITLE: string
 	/**
-	 * Y​o​u​r​ ​B​e​t​t​e​r​ ​A​c​t​i​o​n​s
-	 */
-	VBD_YOUR_BETTER_ACTIONS: string
-	/**
 	 * R​e​w​a​r​d​s​ ​e​a​r​n​e​d
 	 */
 	VBD_REWARDS_EARNED: string
@@ -4917,25 +4925,45 @@ type RootTranslation = {
 	 */
 	VBD_STAT_CO2: string
 	/**
-	 * W​a​t​e​r
-	 */
-	VBD_STAT_WATER: string
-	/**
 	 * T​r​e​e​s
 	 */
 	VBD_STAT_TREES: string
 	/**
-	 * T​h​i​s​ ​w​e​e​k
+	 * W​a​t​e​r
 	 */
-	THIS_WEEK: string
+	VBD_STAT_WATER: string
 	/**
-	 * T​h​i​s​ ​m​o​n​t​h
+	 * E​n​e​r​g​y
 	 */
-	THIS_MONTH: string
+	VBD_STAT_ENERGY: string
 	/**
-	 * T​o​t​a​l
+	 * P​l​a​s​t​i​c
 	 */
-	TOTAL: string
+	VBD_STAT_PLASTIC: string
+	/**
+	 * R​e​d​u​c​e​d
+	 */
+	VBD_STAT_REDUCED: string
+	/**
+	 * S​a​v​e​d
+	 */
+	VBD_STAT_SAVED: string
+	/**
+	 * C​o​n​s​e​r​v​e​d
+	 */
+	VBD_STAT_CONSERVED: string
+	/**
+	 * A​v​o​i​d​e​d
+	 */
+	VBD_STAT_AVOIDED: string
+	/**
+	 * Y​o​u​r​ ​o​f​f​s​e​t
+	 */
+	VBD_YOUR_OFFSET: string
+	/**
+	 * Y​o​u​r​ ​B​e​t​t​e​r​ ​A​c​t​i​o​n​s
+	 */
+	VBD_YOUR_BETTER_ACTIONS: string
 	/**
 	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
@@ -9636,6 +9664,14 @@ Here's what it's all about:
 	 */
 	THEM: () => LocalizedString
 	/**
+	 * This month
+	 */
+	THIS_MONTH: () => LocalizedString
+	/**
+	 * This week
+	 */
+	THIS_WEEK: () => LocalizedString
+	/**
 	 * About
 	 */
 	TITLE_ABOUT: () => LocalizedString
@@ -9908,6 +9944,10 @@ Here's what it's all about:
 	 */
 	TOKEN_TRANSFER_SENT: () => LocalizedString
 	/**
+	 * Total
+	 */
+	TOTAL: () => LocalizedString
+	/**
 	 * Touch ID
 	 */
 	TOUCH_ID: () => LocalizedString
@@ -9956,10 +9996,6 @@ Here's what it's all about:
 	 */
 	VALUE_TITLE: () => LocalizedString
 	/**
-	 * Your Better Actions
-	 */
-	VBD_YOUR_BETTER_ACTIONS: () => LocalizedString
-	/**
 	 * Rewards earned
 	 */
 	VBD_REWARDS_EARNED: () => LocalizedString
@@ -9972,25 +10008,45 @@ Here's what it's all about:
 	 */
 	VBD_STAT_CO2: () => LocalizedString
 	/**
-	 * Water
-	 */
-	VBD_STAT_WATER: () => LocalizedString
-	/**
 	 * Trees
 	 */
 	VBD_STAT_TREES: () => LocalizedString
 	/**
-	 * This week
+	 * Water
 	 */
-	THIS_WEEK: () => LocalizedString
+	VBD_STAT_WATER: () => LocalizedString
 	/**
-	 * This month
+	 * Energy
 	 */
-	THIS_MONTH: () => LocalizedString
+	VBD_STAT_ENERGY: () => LocalizedString
 	/**
-	 * Total
+	 * Plastic
 	 */
-	TOTAL: () => LocalizedString
+	VBD_STAT_PLASTIC: () => LocalizedString
+	/**
+	 * Reduced
+	 */
+	VBD_STAT_REDUCED: () => LocalizedString
+	/**
+	 * Saved
+	 */
+	VBD_STAT_SAVED: () => LocalizedString
+	/**
+	 * Conserved
+	 */
+	VBD_STAT_CONSERVED: () => LocalizedString
+	/**
+	 * Avoided
+	 */
+	VBD_STAT_AVOIDED: () => LocalizedString
+	/**
+	 * Your offset
+	 */
+	VBD_YOUR_OFFSET: () => LocalizedString
+	/**
+	 * Your Better Actions
+	 */
+	VBD_YOUR_BETTER_ACTIONS: () => LocalizedString
 	/**
 	 * Vechain news & updates
 	 */
