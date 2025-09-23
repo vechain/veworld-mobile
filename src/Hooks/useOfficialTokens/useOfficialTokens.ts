@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
 import { VeDelegate } from "~Constants"
 import { Network, NETWORK_TYPE } from "~Model"
 import { getTokensFromGithub } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+
+export const getUseOfficialTokensQueryKey = (genesisId: string) => ["TOKENS", "OFFICIAL", genesisId]
 
 const queryFn = async (network: Network) => {
     const tokens = await getTokensFromGithub({
@@ -20,8 +23,9 @@ const queryFn = async (network: Network) => {
 
 export const useOfficialTokens = () => {
     const network = useAppSelector(selectSelectedNetwork)
+    const queryKey = useMemo(() => getUseOfficialTokensQueryKey(network.genesis.id), [network.genesis.id])
     return useQuery({
-        queryKey: ["TOKENS", "OFFICIAL", network.genesis.id],
+        queryKey,
         queryFn: () => queryFn(network),
         staleTime: 24 * 60 * 60 * 1000,
         gcTime: 24 * 60 * 60 * 1000,
