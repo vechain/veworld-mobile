@@ -37,16 +37,16 @@ const DisconnectBottomSheetContent = ({
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                    {"Disconnection request"}
+                    {LL.DISCONNECTION_REQUEST()}
                 </BaseText>
             </BaseView>
             <BaseSpacer height={24} />
             <DappWithDetails appName={request.appName} appUrl={request.appUrl}>
-                <DappDetails.Title>{LL.CONNECTED_APP_ASKING_FOR_ACCESS({ dappName })}</DappDetails.Title>
+                <DappDetails.Title>{LL.DISCONNECTED_APP_ASKING_FOR_ACCESS({ dappName })}</DappDetails.Title>
                 <DappDetails.Container>
                     {([1, 2] as const).map(value => (
                         <DappDetails.CheckItem key={value}>
-                            {LL[`CONNECTED_APP_ASKING_FOR_ACCESS_${value}`]()}
+                            {LL[`DISCONNECTED_APP_ASKING_FOR_ACCESS_${value}`]()}
                         </DappDetails.CheckItem>
                     ))}
                 </DappDetails.Container>
@@ -57,7 +57,7 @@ const DisconnectBottomSheetContent = ({
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
                 <BaseButton action={onDisconnect.bind(null, request)} flex={1}>
-                    {"Disconnect"}
+                    {LL.COMMON_BTN_DISCONNECT()}
                 </BaseButton>
             </BaseView>
         </>

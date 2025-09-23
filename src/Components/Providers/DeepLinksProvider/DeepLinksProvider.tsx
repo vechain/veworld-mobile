@@ -16,12 +16,10 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { RootState } from "~Storage/Redux/Types"
 import { AddressUtils, DAppUtils } from "~Utils"
 import { DeepLinkError } from "~Utils/ErrorMessageUtils"
 import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
 import { useInteraction } from "../InteractionProvider"
-import { useStore } from "../StoreProvider"
 import { ConnectionLinkParams, ExternalAppRequestParams } from "./types"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 
@@ -83,7 +81,6 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         setCertificateBsData,
         certificateBsRef,
     } = useInteraction()
-    const { store } = useStore()
     const networks = useAppSelector(selectNetworks)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     //BUG: this is not rehydrated when the app is opened from a deep link
@@ -324,19 +321,13 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
-            // Get the selected network from the store directly because rehydration is slow
-            const externalDappSessions = selectExternalDappSessions(
-                store?.getState() as RootState,
-                decodedRequest.genesisId,
-            )
-
             // Switch network if I'm not on the same network
             switchNetwork({ ...decodedRequest, redirectUrl: params.redirect_url })
 
             try {
                 const request = await DAppUtils.parseDisconnectRequest(
                     decodedRequest,
-                    externalDappSessions,
+                    externalSessions,
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
@@ -365,7 +356,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setDisconnectBsData, disconnectBsRef, store, switchNetwork, dispatch, switchAccount],
+        [setDisconnectBsData, disconnectBsRef, switchNetwork, dispatch, switchAccount, externalSessions],
     )
 
     useEffect(() => {
@@ -386,9 +377,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     handleSignAndSendTransaction(request as ExternalAppRequestParams)
                     break
                 case "signCertificate":
-                    setTimeout(() => {
-                        handleSignCertificate(request as ExternalAppRequestParams)
-                    }, 2000)
+                    handleSignCertificate(request as ExternalAppRequestParams)
                     break
                 case "signTypedData":
                     handleSignTypedData(request as ExternalAppRequestParams)
