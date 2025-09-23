@@ -774,7 +774,7 @@
   "NFT_DETAIL_SCORES": "スコア",
   "NFT_DETAIL_TOTAL_SUPPLY": "総供給量",
   "NFT_DOWNLOAD_ERROR": "NFTを取得しようとした際にエラーが発生しました。\n しばらくしてから再試行してください。",
-  "NFT_PURCHASED": "NFTを購入しました",
+  "NFT_PURCHASED": "NFT 購入完了",
   "NFT_RECEIVE": "NFTを受け取る",
   "NFT_REPORT_COLLECTION": "コレクションを報告する",
   "NFT_REPORT_COLLECTION_CONFIRM": "報告を確認",
