@@ -3,7 +3,7 @@ import { UserPreferenceState } from "~Storage/Redux"
 import nacl from "tweetnacl"
 import { encodeBase64 } from "tweetnacl-util"
 
-export const Migration28 = (state: PersistedState): PersistedState => {
+export const Migration29 = (state: PersistedState): PersistedState => {
     // @ts-ignore
     const currentState: UserPreferenceState = state.userPreferences
 
