@@ -1,7 +1,7 @@
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { Transaction } from "@vechain/sdk-core"
-import { ComponentProps, default as React, useCallback, useMemo, useRef, useState } from "react"
+import React, { ComponentProps, useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, showErrorToast } from "~Components/Base"
 import { useInteraction } from "~Components/Providers/InteractionProvider"

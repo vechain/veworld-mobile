@@ -1,4 +1,4 @@
-import { default as React, useMemo, useState } from "react"
+import React, { useMemo, useState } from "react"
 import { Image, ImageStyle, LayoutAnimation, StyleProp, StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseText } from "~Components"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"

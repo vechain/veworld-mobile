@@ -1,4 +1,4 @@
-import { default as React, useCallback, useMemo, useRef } from "react"
+import React, { useCallback, useMemo, useRef } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { ERROR_EVENTS } from "~Constants"
