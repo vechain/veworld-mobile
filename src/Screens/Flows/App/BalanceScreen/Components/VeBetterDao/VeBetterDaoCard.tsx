@@ -1,13 +1,14 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
-import { b3mo, b3tr3D } from "~Assets"
+import { b3mo } from "~Assets"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
-import { B3TR, COLORS, ColorThemeType } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { useUserVeBetterStats } from "~Hooks/useUserVeBetterStats"
 import { useI18nContext } from "~i18n"
 import { BigNutils } from "~Utils"
+import { RewardsEarned } from "./RewardsEarned"
 import { StatsCard } from "./StatsCard"
 
 export const VeBetterDaoCard = () => {
@@ -18,18 +19,19 @@ export const VeBetterDaoCard = () => {
     const { formatLocale } = useFormatFiat()
 
     const stats = useMemo(() => {
-        if (!data) return { co2: 0, water: 0, trees: 0 }
+        if (!data) return { co2: 0, water: 0, energy: 0, plastic: 0 }
         return {
             co2: data.totalImpact.carbon,
             water: data.totalImpact.water,
-            trees: data.totalImpact.trees_planted,
+            energy: data.totalImpact.energy,
+            plastic: data.totalImpact.plastic,
         }
     }, [data])
 
     return (
         <BaseView style={styles.root}>
             <FastImage source={b3mo} style={styles.b3mo as ImageStyle} />
-            <BaseView pl={16} pb={16} flexDirection="column" gap={8}>
+            <BaseView pb={16} flexDirection="column" gap={8}>
                 <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="bodySemiBold">
                     {LL.VBD_YOUR_BETTER_ACTIONS()}
                 </BaseText>
@@ -38,79 +40,33 @@ export const VeBetterDaoCard = () => {
                 </BaseText>
             </BaseView>
 
-            <BaseView w={100} flexDirection="row" gap={8}>
-                <StatsCard label="co2" value={stats.co2} />
-                <StatsCard label="water" value={stats.water} />
-                <StatsCard label="trees" value={stats.trees} />
+            <BaseSpacer height={16} />
+
+            <BaseView flexDirection="row" gap={8}>
+                <BaseIcon name="icon-leaf" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} size={16} py={4} />
+                <BaseText color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} typographyFont="bodySemiBold">
+                    {LL.VBD_YOUR_OFFSET()}
+                </BaseText>
             </BaseView>
 
-            <BaseView pt={16} px={24} pb={8} gap={8} flexDirection="column" style={styles.rewards}>
-                <FastImage source={b3tr3D} style={styles.b3tr3D as ImageStyle} />
+            <BaseSpacer height={8} />
+
+            <BaseView w={100} flexDirection="column" gap={8}>
                 <BaseView flexDirection="row" gap={8}>
-                    <BaseIcon name="icon-gift" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} size={16} />
-                    <BaseText color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} typographyFont="bodySemiBold">
-                        {LL.VBD_REWARDS_EARNED()}
-                    </BaseText>
+                    <StatsCard label="co2" value={stats.co2} />
+                    <StatsCard label="energy" value={stats.energy} />
                 </BaseView>
-                <BaseView flexDirection="column">
-                    <BaseView py={4} flexDirection="row" justifyContent="space-between">
-                        <BaseText
-                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                            typographyFont="captionMedium">
-                            {LL.THIS_WEEK()}
-                        </BaseText>
-                        <BaseView flexDirection="row" gap={8}>
-                            <BaseText
-                                color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                                typographyFont="captionSemiBold">
-                                {BigNutils(data?.week ?? "0").toTokenFormatFull_string(2, formatLocale)}
-                            </BaseText>
-                            <BaseText
-                                color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                                typographyFont="smallCaptionMedium">
-                                {B3TR.symbol}
-                            </BaseText>
-                        </BaseView>
-                    </BaseView>
-                    <BaseView py={4} flexDirection="row" justifyContent="space-between">
-                        <BaseText
-                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                            typographyFont="captionMedium">
-                            {LL.THIS_MONTH()}
-                        </BaseText>
-                        <BaseView flexDirection="row" gap={8}>
-                            <BaseText
-                                color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                                typographyFont="captionSemiBold">
-                                {BigNutils(data?.month ?? "0").toTokenFormatFull_string(2, formatLocale)}
-                            </BaseText>
-                            <BaseText
-                                color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                                typographyFont="smallCaptionMedium">
-                                {B3TR.symbol}
-                            </BaseText>
-                        </BaseView>
-                    </BaseView>
-                </BaseView>
-                <BaseSpacer height={1} width={"100%"} background="rgba(185, 181, 207, 0.15)" />
-                <BaseView py={6} flexDirection="row" justifyContent="space-between">
-                    <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700} typographyFont="bodyMedium">
-                        {LL.TOTAL()}
-                    </BaseText>
-                    <BaseView flexDirection="row" gap={8}>
-                        <BaseText
-                            color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                            typographyFont="bodySemiBold">
-                            {BigNutils(data?.totalRewardAmount ?? "0").toTokenFormatFull_string(2, formatLocale)}
-                        </BaseText>
-                        <BaseText
-                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                            typographyFont="captionMedium">
-                            {B3TR.symbol}
-                        </BaseText>
-                    </BaseView>
+                <BaseView flexDirection="row" gap={8}>
+                    <StatsCard label="water" value={stats.water} />
+                    <StatsCard label="plastic" value={stats.plastic} />
                 </BaseView>
             </BaseView>
+
+            <BaseSpacer height={16} />
+
+            <RewardsEarned week={data?.week} month={data?.month} total={data?.totalRewardAmount} />
+
+            <BaseSpacer height={16} />
 
             <BaseButton
                 action={() => {}}
@@ -135,12 +91,11 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingHorizontal: 24,
             position: "relative",
             flexDirection: "column",
-            gap: 24,
             borderRadius: 16,
         },
         actionsText: {
             fontWeight: 600,
-            fontSize: 36,
+            fontSize: 40,
             fontFamily: "Inter-SemiBold",
             lineHeight: 40,
         },
