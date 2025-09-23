@@ -596,6 +596,22 @@ type RootTranslation = {
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
 	/**
+	 * B​u​y
+	 */
+	BALANCE_ACTION_BUY: string
+	/**
+	 * O​t​h​e​r
+	 */
+	BALANCE_ACTION_OTHER: string
+	/**
+	 * R​e​c​e​i​v​e
+	 */
+	BALANCE_ACTION_RECEIVE: string
+	/**
+	 * S​e​n​d
+	 */
+	BALANCE_ACTION_SEND: string
+	/**
 	 * C​o​l​l​e​c​t​i​b​l​e​s
 	 */
 	BALANCE_TAB_COLLECTIBLES: string
@@ -607,22 +623,6 @@ type RootTranslation = {
 	 * T​o​k​e​n​s
 	 */
 	BALANCE_TAB_TOKENS: string
-	/**
-	 * B​u​y
-	 */
-	BALANCE_ACTION_BUY: string
-	/**
-	 * R​e​c​e​i​v​e
-	 */
-	BALANCE_ACTION_RECEIVE: string
-	/**
-	 * S​e​n​d
-	 */
-	BALANCE_ACTION_SEND: string
-	/**
-	 * O​t​h​e​r
-	 */
-	BALANCE_ACTION_OTHER: string
 	/**
 	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
 	 */
@@ -4901,6 +4901,42 @@ type RootTranslation = {
 	 */
 	VALUE_TITLE: string
 	/**
+	 * Y​o​u​r​ ​B​e​t​t​e​r​ ​A​c​t​i​o​n​s
+	 */
+	VBD_YOUR_BETTER_ACTIONS: string
+	/**
+	 * R​e​w​a​r​d​s​ ​e​a​r​n​e​d
+	 */
+	VBD_REWARDS_EARNED: string
+	/**
+	 * S​e​e​ ​V​e​B​e​t​t​e​r​ ​p​r​o​f​i​l​e
+	 */
+	VBD_SEE_PROFILE: string
+	/**
+	 * C​O​2
+	 */
+	VBD_STAT_CO2: string
+	/**
+	 * W​a​t​e​r
+	 */
+	VBD_STAT_WATER: string
+	/**
+	 * T​r​e​e​s
+	 */
+	VBD_STAT_TREES: string
+	/**
+	 * T​h​i​s​ ​w​e​e​k
+	 */
+	THIS_WEEK: string
+	/**
+	 * T​h​i​s​ ​m​o​n​t​h
+	 */
+	THIS_MONTH: string
+	/**
+	 * T​o​t​a​l
+	 */
+	TOTAL: string
+	/**
 	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
 	VECHAIN_NEWS_AND_UPDATES: string
@@ -5669,6 +5705,22 @@ Try reconnect your device to the internet.
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
 	/**
+	 * Buy
+	 */
+	BALANCE_ACTION_BUY: () => LocalizedString
+	/**
+	 * Other
+	 */
+	BALANCE_ACTION_OTHER: () => LocalizedString
+	/**
+	 * Receive
+	 */
+	BALANCE_ACTION_RECEIVE: () => LocalizedString
+	/**
+	 * Send
+	 */
+	BALANCE_ACTION_SEND: () => LocalizedString
+	/**
 	 * Collectibles
 	 */
 	BALANCE_TAB_COLLECTIBLES: () => LocalizedString
@@ -5680,22 +5732,6 @@ Try reconnect your device to the internet.
 	 * Tokens
 	 */
 	BALANCE_TAB_TOKENS: () => LocalizedString
-	/**
-	 * Buy
-	 */
-	BALANCE_ACTION_BUY: () => LocalizedString
-	/**
-	 * Receive
-	 */
-	BALANCE_ACTION_RECEIVE: () => LocalizedString
-	/**
-	 * Send
-	 */
-	BALANCE_ACTION_SEND: () => LocalizedString
-	/**
-	 * Other
-	 */
-	BALANCE_ACTION_OTHER: () => LocalizedString
 	/**
 	 * Get **VTHO** by staking your **VET tokens**
 	 */
@@ -9919,6 +9955,42 @@ Here's what it's all about:
 	 * Value
 	 */
 	VALUE_TITLE: () => LocalizedString
+	/**
+	 * Your Better Actions
+	 */
+	VBD_YOUR_BETTER_ACTIONS: () => LocalizedString
+	/**
+	 * Rewards earned
+	 */
+	VBD_REWARDS_EARNED: () => LocalizedString
+	/**
+	 * See VeBetter profile
+	 */
+	VBD_SEE_PROFILE: () => LocalizedString
+	/**
+	 * CO2
+	 */
+	VBD_STAT_CO2: () => LocalizedString
+	/**
+	 * Water
+	 */
+	VBD_STAT_WATER: () => LocalizedString
+	/**
+	 * Trees
+	 */
+	VBD_STAT_TREES: () => LocalizedString
+	/**
+	 * This week
+	 */
+	THIS_WEEK: () => LocalizedString
+	/**
+	 * This month
+	 */
+	THIS_MONTH: () => LocalizedString
+	/**
+	 * Total
+	 */
+	TOTAL: () => LocalizedString
 	/**
 	 * Vechain news & updates
 	 */
