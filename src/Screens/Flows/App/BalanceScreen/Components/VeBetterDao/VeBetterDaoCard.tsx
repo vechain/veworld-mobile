@@ -20,8 +20,8 @@ export const VeBetterDaoCard = () => {
     const stats = useMemo(() => {
         if (!data) return { co2: 0, water: 0, trees: 0 }
         return {
-            co2: Math.ceil(data.totalImpact.carbon / 1000),
-            water: Math.ceil(data.totalImpact.water / 1000),
+            co2: data.totalImpact.carbon,
+            water: data.totalImpact.water,
             trees: data.totalImpact.trees_planted,
         }
     }, [data])
@@ -63,7 +63,7 @@ export const VeBetterDaoCard = () => {
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
                                 typographyFont="captionSemiBold">
-                                {BigNutils(data?.week ?? "0").toTokenFormatFull_string(0, formatLocale)}
+                                {BigNutils(data?.week ?? "0").toTokenFormatFull_string(2, formatLocale)}
                             </BaseText>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
@@ -82,7 +82,7 @@ export const VeBetterDaoCard = () => {
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
                                 typographyFont="captionSemiBold">
-                                {BigNutils(data?.month ?? "0").toTokenFormatFull_string(0, formatLocale)}
+                                {BigNutils(data?.month ?? "0").toTokenFormatFull_string(2, formatLocale)}
                             </BaseText>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
@@ -101,7 +101,7 @@ export const VeBetterDaoCard = () => {
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
                             typographyFont="bodySemiBold">
-                            {BigNutils(data?.totalRewardAmount ?? "0").toTokenFormatFull_string(0, formatLocale)}
+                            {BigNutils(data?.totalRewardAmount ?? "0").toTokenFormatFull_string(2, formatLocale)}
                         </BaseText>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
@@ -118,7 +118,8 @@ export const VeBetterDaoCard = () => {
                 rightIcon={<BaseIcon name="icon-arrow-link" color={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE} />}
                 typographyFont="bodyMedium"
                 textColor={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE}
-                selfAlign="center">
+                selfAlign="center"
+                py={0}>
                 {LL.VBD_SEE_PROFILE()}
             </BaseButton>
         </BaseView>

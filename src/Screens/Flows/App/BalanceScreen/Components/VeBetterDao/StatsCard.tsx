@@ -2,10 +2,10 @@ import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseView, BlurView } from "~Components"
 import { COLORS } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
-import { StringUtils } from "~Utils"
+import { BigNutils, StringUtils } from "~Utils"
 
 type Props = {
     label: "co2" | "water" | "trees"
@@ -15,6 +15,7 @@ type Props = {
 export const StatsCard = ({ label, value }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
+    const { formatLocale } = useFormatFiat()
     const icon = useMemo((): IconKey => {
         switch (label) {
             case "co2":
@@ -22,20 +23,45 @@ export const StatsCard = ({ label, value }: Props) => {
             case "water":
                 return "icon-droplets"
             case "trees":
-                return "icon-tree-pine"
+                return "icon-trees"
         }
     }, [label])
 
-    const unit = useMemo(() => {
+    // const { unit, value: parsedValue } = useMemo(() => {
+    //     switch (label) {
+    //         case "co2":
+    //             return UnitOfMeasureUtils.formatValue(value, {
+    //                 availableUnits: GRAMS_UNITS,
+    //                 minUnit: "Kg",
+    //                 locale: formatLocale,
+    //             })
+    //         case "water":
+    //             return UnitOfMeasureUtils.formatValue(value, {
+    //                 availableUnits: LITERS_UNITS,
+    //                 minUnit: "L",
+    //                 locale: formatLocale,
+    //             })
+    //         case "trees":
+    //             return { unit: null, value: value.toString() }
+    //     }
+    // }, [formatLocale, label, value])
+
+    const { unit, value: parsedValue } = useMemo(() => {
         switch (label) {
             case "co2":
-                return "Kg"
+                return {
+                    unit: "Kg",
+                    value: BigNutils(value).div(BigNutils(10).toBN.pow(3)).toCompactString(formatLocale, 0),
+                }
             case "water":
-                return "L"
+                return {
+                    unit: "L",
+                    value: BigNutils(value).div(BigNutils(10).toBN.pow(3)).toCompactString(formatLocale, 0),
+                }
             case "trees":
-                return null
+                return { unit: null, value: value.toString() }
         }
-    }, [label])
+    }, [formatLocale, label, value])
 
     return (
         <BaseView style={styles.root}>
@@ -53,7 +79,7 @@ export const StatsCard = ({ label, value }: Props) => {
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
                             typographyFont="subSubTitleSemiBold">
-                            -{value}
+                            -{parsedValue}
                         </BaseText>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
