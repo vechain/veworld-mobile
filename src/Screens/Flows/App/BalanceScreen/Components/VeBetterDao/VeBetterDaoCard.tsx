@@ -1,16 +1,31 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { b3mo, b3tr3D } from "~Assets"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { B3TR, COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useFormatFiat, useThemedStyles } from "~Hooks"
+import { useUserVeBetterStats } from "~Hooks/useUserVeBetterStats"
 import { useI18nContext } from "~i18n"
+import { BigNutils } from "~Utils"
 import { StatsCard } from "./StatsCard"
 
 export const VeBetterDaoCard = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
+
+    const { data } = useUserVeBetterStats()
+    const { formatLocale } = useFormatFiat()
+
+    const stats = useMemo(() => {
+        if (!data) return { co2: 0, water: 0, trees: 0 }
+        return {
+            co2: Math.ceil(data.totalImpact.carbon / 1000),
+            water: Math.ceil(data.totalImpact.water / 1000),
+            trees: data.totalImpact.trees_planted,
+        }
+    }, [data])
+
     return (
         <BaseView style={styles.root}>
             <FastImage source={b3mo} style={styles.b3mo as ImageStyle} />
@@ -19,14 +34,14 @@ export const VeBetterDaoCard = () => {
                     {LL.VBD_YOUR_BETTER_ACTIONS()}
                 </BaseText>
                 <BaseText color={theme.isDark ? COLORS.WHITE : COLORS.GREY_700} style={styles.actionsText}>
-                    {99.999}
+                    {BigNutils(data?.actionsRewarded ?? "0").toCurrencyFormat_string(0, formatLocale)}
                 </BaseText>
             </BaseView>
 
             <BaseView w={100} flexDirection="row" gap={8}>
-                <StatsCard label="co2" value={999} />
-                <StatsCard label="water" value={999} />
-                <StatsCard label="trees" value={999} />
+                <StatsCard label="co2" value={stats.co2} />
+                <StatsCard label="water" value={stats.water} />
+                <StatsCard label="trees" value={stats.trees} />
             </BaseView>
 
             <BaseView pt={16} px={24} pb={8} gap={8} flexDirection="column" style={styles.rewards}>
@@ -48,7 +63,7 @@ export const VeBetterDaoCard = () => {
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
                                 typographyFont="captionSemiBold">
-                                {999}
+                                {BigNutils(data?.week ?? "0").toTokenFormatFull_string(0, formatLocale)}
                             </BaseText>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
@@ -67,7 +82,7 @@ export const VeBetterDaoCard = () => {
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
                                 typographyFont="captionSemiBold">
-                                {9999}
+                                {BigNutils(data?.month ?? "0").toTokenFormatFull_string(0, formatLocale)}
                             </BaseText>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
@@ -86,7 +101,7 @@ export const VeBetterDaoCard = () => {
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
                             typographyFont="bodySemiBold">
-                            {999}
+                            {BigNutils(data?.totalRewardAmount ?? "0").toTokenFormatFull_string(0, formatLocale)}
                         </BaseText>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
@@ -101,6 +116,8 @@ export const VeBetterDaoCard = () => {
                 action={() => {}}
                 variant="ghost"
                 rightIcon={<BaseIcon name="icon-arrow-link" color={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE} />}
+                typographyFont="bodyMedium"
+                textColor={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE}
                 selfAlign="center">
                 {LL.VBD_SEE_PROFILE()}
             </BaseButton>

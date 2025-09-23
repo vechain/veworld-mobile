@@ -206,3 +206,31 @@ export const getFungibleTokensContracts = (
         ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/transfers/fungible-tokens-contracts?address=${address}&officialTokensOnly=${officialTokensOnly}&size=${pageSize}&page=${page}&direction=${direction}`
         : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/transfers/fungible-tokens-contracts?address=${address}&officialTokensOnly=${officialTokensOnly}&size=${pageSize}&page=${page}&direction=${direction}`
 }
+
+/**
+ * Get the VeBetter general overview for a user
+ * @param address Address of the user
+ * @returns The general overview for a user
+ */
+export const getVeBetterUserGeneralOverview = (address: string) => {
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/b3tr/actions/users/${address}/overview`
+}
+
+/**
+ * Get the VeBetter overview for a user in a timeframe
+ * @param address Address of the user
+ * @param fromDate Initial date (inclusive) in ISO String
+ * @param toDate End date (inclusive) in ISO String
+ * @returns The overview for a user for that timeframe
+ */
+export const getVeBetterUserOverview = (address: string, fromDate: string, toDate: string) => {
+    const from = moment(fromDate).format("YYYY-MM-DD")
+    const to = moment(toDate).format("YYYY-MM-DD")
+    const params = new URLSearchParams()
+    params.append("startDate", from)
+    params.append("endDate", to)
+    params.append("size", Math.ceil(moment(toDate).diff(fromDate, "day")).toString())
+    return `${
+        process.env.REACT_APP_INDEXER_MAINNET_URL
+    }/b3tr/actions/users/${address}/daily-summaries?${params.toString()}`
+}
