@@ -24,8 +24,9 @@ import {
     FungibleToken,
     FungibleTokenActivity,
     IconKey,
-    NonFungibleTokenActivity,
+    LoginActivity,
     NFTMarketplaceActivity,
+    NonFungibleTokenActivity,
     SignCertActivity,
     StargateActivity,
     SwapActivity,
@@ -38,11 +39,12 @@ import {
 import {
     selectAllTokens,
     selectCustomTokens,
+    selectFeaturedDapps,
     selectOfficialTokens,
     selectSelectedAccount,
     useAppSelector,
 } from "~Storage/Redux"
-import { AddressUtils, BigNutils } from "~Utils"
+import { AddressUtils, BigNutils, URIUtils } from "~Utils"
 import { getTokenLevelName } from "~Utils/StargateUtils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 
@@ -1029,6 +1031,37 @@ const VeVoteCast = ({ activity, onPress }: VeVoteCastProps) => {
     )
 }
 
+type DappLoginProps = {
+    activity: LoginActivity
+    onPress: (activity: Activity) => void
+}
+
+const DappLogin = ({ activity, onPress }: DappLoginProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+    const featuredDapps = useAppSelector(selectFeaturedDapps)
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    const description = useMemo(() => {
+        const foundApp = featuredDapps.find(app => URIUtils.compareURLs(app.href, activity.linkUrl))
+        return foundApp?.name ?? new URL(activity.linkUrl).hostname
+    }, [activity.linkUrl, featuredDapps])
+
+    return (
+        <BaseActivityBox
+            testID={`DAPP-LOGIN-${activity.id}`}
+            icon="icon-user-check"
+            time={time}
+            title={LL.DAPP_LOGIN_TITLE()}
+            description={description}
+            onPress={onPressHandler}
+        />
+    )
+}
+
 export const ActivityBox = {
     TokenTransfer: TokenTransfer,
     DAppTransaction: DAppTransaction,
@@ -1049,4 +1082,5 @@ export const ActivityBox = {
     B3trProposalSupport: B3trProposalSupport,
     UnknownTx: UnknownTx,
     VeVoteCast,
+    DappLogin,
 }
