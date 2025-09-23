@@ -51,7 +51,7 @@ export interface FetchIncomingTransfersResponse {
 }
 
 export interface FetchAppOverviewResponse {
-    entity: string
+    appId: string
     roundId: number
     date: string
     totalRewardAmount: number

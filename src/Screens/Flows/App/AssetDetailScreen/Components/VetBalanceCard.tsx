@@ -11,14 +11,15 @@ import {
     useFeatureFlags,
 } from "~Components"
 import { STARGATE_DAPP_URL, VET } from "~Constants"
-import { TokenWithCompleteInfo, useBottomSheetModal, useThemedStyles, useTokenCardFiatInfo } from "~Hooks"
+import { TokenWithCompleteInfo, useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { useTokenCardFiatInfo } from "~Hooks/useTokenCardFiatInfo"
 import { useI18nContext } from "~i18n"
 import { FastAction, FungibleTokenWithBalance, IconKey } from "~Model"
 import { Routes } from "~Navigation"
 import { BigNutils, PlatformUtils } from "~Utils"
 import { ActionsButtonGroup } from "./ActionsButtonGroup"
 import { BalanceView } from "./BalanceView"
-import { useBrowserTab } from "~Hooks/useBrowserTab"
 
 type Props = {
     token: TokenWithCompleteInfo
