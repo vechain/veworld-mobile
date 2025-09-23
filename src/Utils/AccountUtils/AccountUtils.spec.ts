@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { TestHelpers } from "~Test"
 import AccountUtils from "./index"
 import { Vns } from "~Hooks"
@@ -49,6 +50,7 @@ describe("AccountUtils", () => {
 
     it("getAccountForIndex - should throw when no xPub", () => {
         console.log(`${expect.getState().currentTestName ?? "DEBUG_TEST"} - init`)
+
         expect(() => AccountUtils.getAccountForIndex(0, { ...TestHelpers.data.device1, xPub: undefined }, 0)).toThrow(
             "The XPub can't be null for HD devices",
         )
