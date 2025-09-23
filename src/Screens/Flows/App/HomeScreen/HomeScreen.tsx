@@ -28,15 +28,19 @@ import {
     useSetSelectedAccount,
     useTheme,
 } from "~Hooks"
+import { useOfficialTokens } from "~Hooks/useOfficialTokens"
 import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import {
+    addOfficialTokens,
+    invalidateUserTokens,
     selectBalanceVisible,
     selectCurrency,
     selectSelectedAccount,
     selectSelectedNetwork,
     selectVisibleAccounts,
     setAppResetTimestamp,
+    updateAccountBalances,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -55,7 +59,6 @@ import {
 import { BannersCarousel } from "./Components/BannerCarousel"
 import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
 import { StakingSection } from "./Components/Staking"
-import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -64,13 +67,20 @@ export const HomeScreen = () => {
     // Pre Fetch featured dapps
     useFetchFeaturedDApps()
 
+    const { data: officialTokens } = useOfficialTokens()
+
     const nav = useNavigation()
     const queryClient = useQueryClient()
 
     const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()
-    const { updateBalances, updateSuggested } = useTokenBalances()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (officialTokens?.length)
+            dispatch(addOfficialTokens({ network: selectedNetwork.type, tokens: officialTokens }))
+    }, [dispatch, officialTokens, selectedNetwork.type])
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
@@ -79,7 +89,7 @@ export const HomeScreen = () => {
         on the error boundary. This is needed because the error boundary will not unmount
         and we're left with a wrong state.
     */
-    const dispatch = useAppDispatch()
+
     useEffect(() => {
         dispatch(setAppResetTimestamp())
     }, [dispatch])
@@ -118,13 +128,21 @@ export const HomeScreen = () => {
         })
     }, [queryClient, selectedAccount.address, selectedNetwork.type])
 
+    const invalidateBalanceQueries = useCallback(async () => {
+        await dispatch(updateAccountBalances(selectedAccount.address, queryClient))
+    }, [dispatch, queryClient, selectedAccount.address])
+
+    const invalidateTokens = useCallback(async () => {
+        await dispatch(invalidateUserTokens(selectedAccount.address, queryClient))
+    }, [dispatch, queryClient, selectedAccount.address])
+
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
 
-        await Promise.all([updateBalances(true), updateSuggested(), invalidateStargateQueries()])
+        await Promise.all([invalidateStargateQueries(), invalidateBalanceQueries(), invalidateTokens()])
 
         setRefreshing(false)
-    }, [invalidateStargateQueries, updateBalances, updateSuggested])
+    }, [invalidateBalanceQueries, invalidateStargateQueries, invalidateTokens])
 
     const { animateEntering } = useMemoizedAnimation({
         enteringAnimation: new FadeInRight(),

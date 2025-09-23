@@ -9,17 +9,12 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated"
 import { AccountIcon, BaseSkeleton, BaseText, BaseView, LedgerBadge } from "~Components"
-import { COLORS, ColorThemeType, typography, VET } from "~Constants"
+import { COLORS, ColorThemeType, typography, VET, VTHO } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
+import { useSimplifiedTokenBalance } from "~Hooks/useTokenBalance"
 import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
 import { AccountWithDevice, DEVICE_TYPE } from "~Model"
-import {
-    selectBalanceVisible,
-    selectCurrency,
-    selectVetBalanceByAccount,
-    selectVthoBalanceByAccount,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
 
 type Props = {
@@ -46,10 +41,18 @@ export const SelectableAccountCard = memo(
     }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const currency = useAppSelector(selectCurrency)
-        const vetBalance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
-        const vthoBalance = useAppSelector(state => selectVthoBalanceByAccount(state, account.address))
+        const { data: vetBalance } = useSimplifiedTokenBalance({
+            tokenAddress: VET.address,
+            address: account.address,
+            enabled: balanceToken === "VET",
+        })
+        const { data: vthoBalance } = useSimplifiedTokenBalance({
+            tokenAddress: VTHO.address,
+            address: account.address,
+            enabled: balanceToken === "VTHO",
+        })
         const { renderedBalance: renderedFiatBalance, isLoading } = useTotalFiatBalance({
-            account,
+            address: account.address,
             enabled: balanceToken === "FIAT",
         })
         const isBalanceVisible = useAppSelector(selectBalanceVisible)

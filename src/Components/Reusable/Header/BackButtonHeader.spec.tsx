@@ -3,8 +3,8 @@ jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
     useNavigation: jest.fn(() => ({ goBack: goBackMock })),
 }))
-import React from "react"
 import { act, fireEvent, render, screen } from "@testing-library/react-native"
+import React from "react"
 import { TestWrapper } from "~Test"
 import { BackButtonHeader } from "./BackButtonHeader"
 
@@ -36,7 +36,7 @@ describe("BackButtonHeader", () => {
 
         const backButton = await findBackButton()
         expect(backButton).toBeVisible()
-        act(() => fireEvent(backButton, "action"))
+        await act(async () => fireEvent(backButton, "action"))
         expect(goBackMock).toHaveBeenCalled()
     })
 })

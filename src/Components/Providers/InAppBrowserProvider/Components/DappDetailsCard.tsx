@@ -4,7 +4,7 @@ import { BaseButton, BaseIcon, BaseText } from "~Components"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
 import { BaseView } from "~Components/Base/BaseView"
 import { COLORS } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
@@ -64,6 +64,7 @@ export const DappDetailsCard = ({
     const [loadFallback, setLoadFallback] = useState(false)
     const [showDetails, setShowDetails] = useState(isDefaultVisible)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const { isFetching, isLoading } = useFetchFeaturedDApps()
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const allApps = useAppSelector(selectFeaturedDapps)
 
@@ -106,6 +107,8 @@ export const DappDetailsCard = ({
     const isWatchedAccount = useMemo(() => {
         return AccountUtils.isObservedAccount(selectedAccount)
     }, [selectedAccount])
+
+    const showNotVerifiedWarning = !isDapp && showDappWarning && !isFetching && allApps.length > 0 && !isLoading
 
     return (
         <BaseView bg={theme.isDark ? COLORS.PURPLE : COLORS.WHITE} p={16} flexDirection="column" borderRadius={12}>
@@ -170,7 +173,7 @@ export const DappDetailsCard = ({
                     <DappDetails.NotVerifiedWatchedAccountWarning />
                 </>
             )}
-            {!isDapp && showDappWarning && !isWatchedAccount && (
+            {showNotVerifiedWarning && !isWatchedAccount && (
                 <>
                     <BaseSpacer height={16} />
                     <DappDetails.NotVerifiedWarning />

@@ -1,6 +1,7 @@
 import { Mutex } from "async-mutex"
 import React, { useCallback, useContext, useEffect, useMemo, useRef } from "react"
 import { InteractionManager, Linking } from "react-native"
+import { useQueryClient } from "@tanstack/react-query"
 import { showInfoToast } from "~Components/Base/BaseToast"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n/i18n-react"
@@ -68,6 +69,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
      */
     const mutex = useRef<Mutex>(new Mutex())
     const { navigateWithTab } = useBrowserTab()
+    const queryClient = useQueryClient()
     const mounted = useRef(false)
     const {
         setConnectBsData,
@@ -368,6 +370,9 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
     useEffect(() => {
         const handleDeepLink = ({ url }: { url: string }) => {
+            // Force fresh dApp data when coming from external browser
+            queryClient.invalidateQueries({ queryKey: ["fetchFeaturedDApps"] })
+
             const { event, request } = parseUrl(url)
 
             switch (event) {
