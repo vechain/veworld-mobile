@@ -22,7 +22,7 @@
     "test:specific": "jest --watch --verbose <filepath>",
     "test:troubleshoot": "jest --detectOpenHandles",
     "test:coverage:debug": "yarn test --forceExit --coverage",
-    "test:coverage": "yarn test:coverage:debug --silent",
+    "test:coverage": "yarn test:coverage:debug",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "format": "yarn prettier --write src",
     "format:check": "yarn prettier --check src",

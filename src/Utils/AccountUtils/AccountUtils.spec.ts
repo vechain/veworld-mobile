@@ -14,23 +14,45 @@ const vnsData: Vns[] = [
     },
 ]
 
+const withLogging = <TResult>(testName: string, resultFn: () => TResult, cb: (result: TResult) => void) => {
+    console.log(`${testName} - init`)
+    const result = resultFn()
+    console.log(`${testName} - result`)
+    cb(result)
+    console.log(`${testName} - asserted`)
+}
+
 describe("AccountUtils", () => {
     it("nextAlias - should return the next alias", () => {
-        expect(AccountUtils.nextAlias(1, "Device")).toEqual("Device 1")
+        withLogging(
+            expect.getState().currentTestName ?? "DEBUG_TEST",
+            () => AccountUtils.nextAlias(1, "Device"),
+            r => expect(r).toEqual("Device 1"),
+        )
     })
 
     it("getNextIndex - should return the next index", () => {
-        expect(AccountUtils.getNextIndex(accounts)).toEqual(2)
+        withLogging(
+            expect.getState().currentTestName ?? "DEBUG_TEST",
+            () => AccountUtils.getNextIndex(accounts),
+            r => expect(r).toEqual(2),
+        )
     })
 
     it("getAccountForIndex - should return the correct account", () => {
-        expect(AccountUtils.getAccountForIndex(0, TestHelpers.data.device1, 0)).toEqual(TestHelpers.data.account1D1)
+        withLogging(
+            expect.getState().currentTestName ?? "DEBUG_TEST",
+            () => AccountUtils.getAccountForIndex(0, TestHelpers.data.device1, 0),
+            r => expect(r).toEqual(TestHelpers.data.account1D1),
+        )
     })
 
     it("getAccountForIndex - should throw when no xPub", () => {
+        console.log(`${expect.getState().currentTestName ?? "DEBUG_TEST"} - init`)
         expect(() => AccountUtils.getAccountForIndex(0, { ...TestHelpers.data.device1, xPub: undefined }, 0)).toThrow(
             "The XPub can't be null for HD devices",
         )
+        console.log(`${expect.getState().currentTestName ?? "DEBUG_TEST"} - asserted`)
     })
 
     it("updateAccountVns - should return an account with the vnsName property", () => {
