@@ -8,7 +8,7 @@ import { IconKey } from "~Model"
 import { BigNutils, StringUtils } from "~Utils"
 
 type Props = {
-    label: "co2" | "water" | "trees" | "energy" | "plastic"
+    label: "co2" | "water" | "energy" | "plastic"
     value: number
 }
 
@@ -22,33 +22,12 @@ export const StatsCard = ({ label, value }: Props) => {
                 return "icon-leaf"
             case "water":
                 return "icon-droplets"
-            case "trees":
-                return "icon-trees"
             case "energy":
                 return "icon-leaf"
             case "plastic":
                 return "icon-leaf"
         }
     }, [label])
-
-    // const { unit, value: parsedValue } = useMemo(() => {
-    //     switch (label) {
-    //         case "co2":
-    //             return UnitOfMeasureUtils.formatValue(value, {
-    //                 availableUnits: GRAMS_UNITS,
-    //                 minUnit: "Kg",
-    //                 locale: formatLocale,
-    //             })
-    //         case "water":
-    //             return UnitOfMeasureUtils.formatValue(value, {
-    //                 availableUnits: LITERS_UNITS,
-    //                 minUnit: "L",
-    //                 locale: formatLocale,
-    //             })
-    //         case "trees":
-    //             return { unit: null, value: value.toString() }
-    //     }
-    // }, [formatLocale, label, value])
 
     const { unit, value: parsedValue } = useMemo(() => {
         switch (label) {
@@ -62,11 +41,9 @@ export const StatsCard = ({ label, value }: Props) => {
                     unit: "L",
                     value: BigNutils(value).div(BigNutils(10).toBN.pow(3)).toCompactString(formatLocale, 0),
                 }
-            case "trees":
-                return { unit: null, value: value.toString() }
             case "energy":
                 return {
-                    unit: "kWh",
+                    unit: "KWh",
                     value: BigNutils(value).div(BigNutils(10).toBN.pow(3)).toCompactString(formatLocale, 0),
                 }
             case "plastic":
@@ -83,8 +60,6 @@ export const StatsCard = ({ label, value }: Props) => {
                 return LL.VBD_STAT_REDUCED()
             case "water":
                 return LL.VBD_STAT_CONSERVED()
-            case "trees":
-                return LL.VBD_STAT_REDUCED()
             case "energy":
                 return LL.VBD_STAT_SAVED()
             case "plastic":
@@ -98,12 +73,12 @@ export const StatsCard = ({ label, value }: Props) => {
                 <BaseView flexDirection="column" p={16} justifyContent="center" alignItems="center">
                     <BaseIcon color={COLORS.LIGHT_GREEN} size={24} name={icon} />
                     <BaseSpacer height={8} />
-                    <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="captionSemiBold">
+                    <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="bodySemiBold">
                         {LL[`VBD_STAT_${StringUtils.toUppercase(label)}`]()}
                     </BaseText>
                     <BaseText
                         color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                        typographyFont="smallCaptionMedium"
+                        typographyFont="captionMedium"
                         textTransform="lowercase">
                         {description}
                     </BaseText>
@@ -111,12 +86,12 @@ export const StatsCard = ({ label, value }: Props) => {
                     <BaseView flexDirection="row" alignItems="center" gap={2}>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                            typographyFont="subSubTitleSemiBold">
-                            -{parsedValue}
+                            typographyFont="subTitleSemiBold">
+                            {parsedValue}
                         </BaseText>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                            typographyFont="smallCaptionMedium">
+                            typographyFont="captionMedium">
                             {unit}
                         </BaseText>
                     </BaseView>
