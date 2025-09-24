@@ -18,16 +18,20 @@ export const getPriceChange = (data?: MarketChartResponse) => {
  * Downsample data to create a record for every hour of the dataset.
  * The value will be computed as the average per hour.
  * @param data Data to downsample
+ * @param unit Unit to downsample. Defaults to hour
+ * @param interval Interval to downsample. Defaults to 1
  * @returns Data, but downsampled
  */
-export const downsampleData = (data?: MarketChartResponse) => {
+export const downsampleData = (data: MarketChartResponse | undefined, unit: "hour" | "day" = "hour", interval = 1) => {
     if (!data) return undefined
 
     return [
         ...data
             .reduce((acc, curr) => {
                 //Create a map <timestamp, value[]> to then perform an average.
-                const key = moment(curr.timestamp).startOf("hour").valueOf()
+                const initialUnit = moment(curr.timestamp).startOf(unit)
+                const result = Math.floor(initialUnit[unit]() / interval) * interval
+                const key = initialUnit[unit](result).valueOf()
                 if (acc.has(key)) {
                     acc.get(key)?.push(curr.value)
                     return acc
