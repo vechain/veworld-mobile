@@ -23,9 +23,9 @@ export const StatsCard = ({ label, value }: Props) => {
             case "water":
                 return "icon-droplets"
             case "energy":
-                return "icon-leaf"
+                return "icon-plug"
             case "plastic":
-                return "icon-leaf"
+                return "icon-cup-soda"
         }
     }, [label])
 
