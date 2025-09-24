@@ -1,6 +1,7 @@
-import { ERROR_EVENTS, getVeBetterUserGeneralOverview, getVeBetterUserOverview } from "~Constants"
+import { ERROR_EVENTS, getVeBetterActions, getVeBetterUserGeneralOverview, getVeBetterUserOverview } from "~Constants"
 import {
     fetchFromEndpoint,
+    FetchVeBetterActionsResponseItem,
     FetchVeBetterUserGeneralOverviewResponse,
     FetchVeBetterUserOverviewResponseItem,
 } from "~Networking/API"
@@ -44,5 +45,18 @@ export const fetchVeBetterUserOverview = async (address: string, fromDate: strin
         }>(getVeBetterUserOverview(address, fromDate, toDate))
     } catch (error) {
         throw new Error(`Failed to fetch VeBetter user overview: ${error}`)
+    }
+}
+
+export const fetchVeBetterActions = async (...args: Parameters<typeof getVeBetterActions>) => {
+    debug(ERROR_EVENTS.VEBETTER, `Fetching VeBetter actions for ${args[0]}. Page: ${args[1]?.page ?? 0}`)
+
+    try {
+        return await fetchFromEndpoint<{
+            data: FetchVeBetterActionsResponseItem[]
+            pagination: PaginationResponse
+        }>(getVeBetterActions(...args))
+    } catch (error) {
+        throw new Error(`Failed to fetch VeBetter actions: ${error}`)
     }
 }
