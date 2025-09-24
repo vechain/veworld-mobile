@@ -10,6 +10,9 @@ jest.mock("~Networking", () => ({
 }))
 
 describe("useIsVeBetterUser", () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
     it("should return true if the number of actions is > 0", async () => {
         ;(fetchVeBetterActions as jest.Mock).mockResolvedValue({ data: [{}] })
         const { result, waitFor } = renderHook(() => useIsVeBetterUser(), {
