@@ -7,12 +7,12 @@ import { useMainnetThorClient } from "~Hooks/useThorClient"
 import {
     selectAccountsWithoutObserved,
     selectIsNormalUser,
-    selectMainnetVETBalanceForAllAccounts,
     setIsNormalUser,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
+import { useVetBalances } from "./useVetBalances"
 
 const VET_AMOUNT_THRESHOLD = "10"
 const B3TR_ACTIONS_THRESHOLD = 3
@@ -38,8 +38,8 @@ const getAccountsActions = async (thorClient: ThorClient, addresses: string[]) =
 
 export const useIsNormalUser = () => {
     const accounts = useAppSelector(selectAccountsWithoutObserved)
-    const balances = useAppSelector(selectMainnetVETBalanceForAllAccounts)
     const cachedIsNormalUser = useAppSelector(selectIsNormalUser)
+    const { data: balances } = useVetBalances(!cachedIsNormalUser)
     const dispatch = useAppDispatch()
     const mainnetThorClient = useMainnetThorClient()
 

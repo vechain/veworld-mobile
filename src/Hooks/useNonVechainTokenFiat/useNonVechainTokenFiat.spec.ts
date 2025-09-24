@@ -2,6 +2,7 @@ import { renderHook } from "@testing-library/react-hooks"
 import { useNonVechainTokenFiat } from "./useNonVechainTokenFiat"
 import { TestHelpers, TestWrapper } from "~Test"
 import { useVechainStatsTokensInfo } from "~Api/Coingecko"
+import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 
 const { token1WithCompleteInfo, token2WithCompleteInfo } = TestHelpers.data
 
@@ -281,38 +282,13 @@ const mockNonVeChainTokensFiat = {
     },
 }
 
-const mockedState = {
-    preloadedState: {
-        tokens: {
-            tokens: {
-                mainnet: {
-                    custom: {},
-                    officialTokens: [token1WithCompleteInfo, token2WithCompleteInfo],
-                    suggestedTokens: [],
-                },
-                testnet: {
-                    custom: {},
-                    officialTokens: [token1WithCompleteInfo, token2WithCompleteInfo],
-                    suggestedTokens: [],
-                },
-                solo: {
-                    custom: {},
-                    officialTokens: [],
-                    suggestedTokens: [],
-                },
-                other: {
-                    custom: {},
-                    officialTokens: [],
-                    suggestedTokens: [],
-                },
-            },
-        },
-    },
-}
-
 jest.mock("~Api/Coingecko", () => ({
     ...jest.requireActual("~Api/Coingecko"),
     useVechainStatsTokensInfo: jest.fn(),
+}))
+
+jest.mock("~Hooks/useNonVechainTokensBalance", () => ({
+    useNonVechainTokensBalance: jest.fn(),
 }))
 
 describe("useNonVechainTokenFiat", () => {
@@ -324,10 +300,12 @@ describe("useNonVechainTokenFiat", () => {
         ;(useVechainStatsTokensInfo as jest.Mock).mockReturnValue({
             data: mockNonVeChainTokensFiat,
         })
+        ;(useNonVechainTokensBalance as jest.Mock).mockReturnValue({
+            data: [token1WithCompleteInfo, token2WithCompleteInfo],
+        })
 
         const { result } = renderHook(() => useNonVechainTokenFiat(), {
             wrapper: TestWrapper,
-            initialProps: mockedState,
         })
 
         expect(result.current.length).toBe(2)

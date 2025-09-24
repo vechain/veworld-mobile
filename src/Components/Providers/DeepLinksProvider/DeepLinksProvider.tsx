@@ -1,11 +1,16 @@
 import React, { useEffect, useRef } from "react"
 import { Linking } from "react-native"
+import { useQueryClient } from "@tanstack/react-query"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) => {
     const { navigateWithTab } = useBrowserTab()
+    const queryClient = useQueryClient()
     const mounted = useRef(false)
     useEffect(() => {
         const handleDeepLink = ({ url }: { url: string }) => {
+            // Force fresh dApp data when coming from external browser
+            queryClient.invalidateQueries({ queryKey: ["fetchFeaturedDApps"] })
+
             const parsed = new URL(url)
             const pathname = parsed.pathname
             //Filter out all the useless elements
@@ -32,7 +37,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         return () => {
             Linking.removeAllListeners("url")
         }
-    }, [navigateWithTab])
+    }, [navigateWithTab, queryClient])
 
     return <>{children}</>
 }

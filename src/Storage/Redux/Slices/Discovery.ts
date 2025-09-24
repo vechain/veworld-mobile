@@ -9,11 +9,16 @@ export type ConnectedDiscoveryApp = {
     connectedTime: number
 }
 
-export type LoginSession = { genesisId: string; url: string; name: string } & (
-    | { kind: "external"; address: string }
-    | { kind: "temporary"; address: string }
-    | { kind: "permanent" }
-)
+export type LoginSession = {
+    genesisId: string
+    url: string
+    name: string
+    /**
+     * If the login session is marked as `replaceable`, it means that it can be replaced by another session with the same parameters.
+     * This is needed for backwards-compatibility with the old methods, which won't have a session
+     */
+    replaceable?: boolean
+} & ({ kind: "external"; address: string } | { kind: "temporary"; address: string } | { kind: "permanent" })
 
 export type Tab = {
     id: string

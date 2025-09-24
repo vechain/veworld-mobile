@@ -12,8 +12,8 @@ import {
 } from "~Components"
 import { ColorThemeType, VET, VTHO } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
+import { useSimplifiedTokenBalance } from "~Hooks/useTokenBalance"
 import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
-import { selectVetBalanceByAccount, selectVthoBalanceByAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils, AddressUtils, BigNutils } from "~Utils"
 
 type Props = {
@@ -42,8 +42,14 @@ export const AccountCard: React.FC<Props> = memo(
         testID,
     }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
-        const vetBalance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
-        const vthoBalance = useAppSelector(state => selectVthoBalanceByAccount(state, account.address))
+        const { data: vetBalance } = useSimplifiedTokenBalance({
+            tokenAddress: VET.address,
+            address: account.address,
+        })
+        const { data: vthoBalance } = useSimplifiedTokenBalance({
+            tokenAddress: VTHO.address,
+            address: account.address,
+        })
         const { name: vnsName, address: vnsAddress } = useVns({
             name: "",
             address: account.address,
