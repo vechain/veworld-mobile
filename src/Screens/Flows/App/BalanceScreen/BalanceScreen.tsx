@@ -1,11 +1,10 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, { useCallback, useMemo } from "react"
-import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native"
+import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
-import Animated, { LinearTransition, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
+import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { BaseSpacer, Layout, QRCodeBottomSheet } from "~Components"
 import { COLORS } from "~Constants"
-import { useBottomSheetModal } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { BalanceActions } from "./Components/Actions/BalanceActions"
@@ -20,6 +19,7 @@ export const BalanceScreen = () => {
     const scrollY = useSharedValue(0)
     const contentOffsetY = useSharedValue(0)
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const { styles } = useThemedStyles(baseStyles)
 
     const { ref: qrCodeBottomSheetRef } = useBottomSheetModal()
 
@@ -64,18 +64,16 @@ export const BalanceScreen = () => {
                 <Animated.ScrollView
                     refreshControl={<PullToRefresh />}
                     onScroll={onScroll}
-                    layout={LinearTransition.duration(4000)}
-                    style={{ minHeight: "100%" }}
-                    contentContainerStyle={{ flexGrow: 1 }}>
+                    style={styles.scrollViewRoot}
+                    contentContainerStyle={styles.scrollViewContent}>
                     <AnimatedLinearGradient
                         colors={colors}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 0, y: 1 }}
-                        style={{ position: "relative", marginTop: 16 }}
+                        style={styles.gradient}
                         locations={[0, 0.55, 1]}
                         angle={180}
-                        useAngle
-                        layout={LinearTransition.duration(4000)}>
+                        useAngle>
                         <CurrentBalance />
 
                         <BaseSpacer height={6} />
@@ -98,3 +96,10 @@ export const BalanceScreen = () => {
         />
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        scrollViewRoot: { minHeight: "100%" },
+        scrollViewContent: { flexGrow: 1 },
+        gradient: { position: "relative", marginTop: 16 },
+    })
