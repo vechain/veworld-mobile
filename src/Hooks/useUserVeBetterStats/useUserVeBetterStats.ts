@@ -37,6 +37,7 @@ export const useUserVeBetterStats = () => {
                 data: results.some(result => !result.data)
                     ? undefined
                     : {
+                          totalImpact: {},
                           ...results[0].data!,
                           week: results[1].data!.data.reduce(
                               (acc, curr) => acc.plus(curr.totalRewardAmount),

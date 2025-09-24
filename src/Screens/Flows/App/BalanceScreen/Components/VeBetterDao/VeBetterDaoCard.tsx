@@ -5,6 +5,7 @@ import { b3mo } from "~Assets"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
+import { useIsVeBetterUser } from "~Hooks/useIsVeBetterUser"
 import { useUserVeBetterStats } from "~Hooks/useUserVeBetterStats"
 import { useI18nContext } from "~i18n"
 import { BigNutils } from "~Utils"
@@ -16,17 +17,20 @@ export const VeBetterDaoCard = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const { data } = useUserVeBetterStats()
+    const { data: isVeBetterUser } = useIsVeBetterUser()
     const { formatLocale } = useFormatFiat()
 
     const stats = useMemo(() => {
         if (!data) return { co2: 0, water: 0, energy: 0, plastic: 0 }
         return {
-            co2: data.totalImpact.carbon,
-            water: data.totalImpact.water,
-            energy: data.totalImpact.energy,
-            plastic: data.totalImpact.plastic,
+            co2: data.totalImpact.carbon ?? 0,
+            water: data.totalImpact.water ?? 0,
+            energy: data.totalImpact.energy ?? 0,
+            plastic: data.totalImpact.plastic ?? 0,
         }
     }, [data])
+
+    if (!isVeBetterUser) return null
 
     return (
         <BaseView style={styles.root}>

@@ -234,3 +234,19 @@ export const getVeBetterUserOverview = (address: string, fromDate: string, toDat
         process.env.REACT_APP_INDEXER_MAINNET_URL
     }/b3tr/actions/users/${address}/daily-summaries?${params.toString()}`
 }
+
+/**
+ * Get the VeBetter actions of a user
+ * @param address Address of the user
+ * @param param1 Options
+ * @returns Return the VeBetter actions
+ */
+export const getVeBetterActions = (
+    address: string,
+    { page = 0, pageSize = 20 }: { page?: number; pageSize?: number } = {},
+) => {
+    const params = new URLSearchParams()
+    params.append("page", page.toString())
+    params.append("size", pageSize.toString())
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/b3tr/actions/users/${address}?${params.toString()}`
+}
