@@ -233,8 +233,7 @@ const parseTransactionRequest = async (
     const parsedRequest = await parseRequest<TransactionRequest>(decodedRequest, externalDappSessions, redirectUrl)
 
     if (!parsedRequest) {
-        const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
-        throw new Error(err.message)
+        throw new DeepLinkError(DeepLinkErrorCode.InternalError)
     }
 
     if (!("transaction" in parsedRequest.payload)) {
@@ -262,8 +261,7 @@ const parseTypedDataRequest = async (
     const parsedRequest = await parseRequest<TypeDataRequest>(decodedRequest, externalDappSessions, redirectUrl)
 
     if (!parsedRequest) {
-        const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
-        throw new Error(err.message)
+        throw new DeepLinkError(DeepLinkErrorCode.InternalError)
     }
 
     if (!("typedData" in parsedRequest.payload)) {
@@ -291,8 +289,7 @@ const parseCertificateRequest = async (
     const parsedRequest = await parseRequest<CertificateRequest>(decodedRequest, externalDappSessions, redirectUrl)
 
     if (!parsedRequest) {
-        const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
-        throw new Error(err.message)
+        throw new DeepLinkError(DeepLinkErrorCode.InternalError)
     }
 
     if (!("certificate" in parsedRequest.payload)) {

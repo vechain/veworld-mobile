@@ -31,9 +31,9 @@ export type BaseExternalAppRequest = BaseRequest & {
     type: "external-app"
     publicKey: string
     nonce: string
-    session: string
     redirectUrl: string
     genesisId: string
+    session: string
 }
 
 type BaseCertificateRequest = {
@@ -222,4 +222,4 @@ export type ParsedRequest<T> = {
 /**
  * Request decoded from the external app
  */
-export type DecodedRequest = BaseExternalAppRequest & { payload: string }
+export type DecodedRequest = Omit<BaseExternalAppRequest, "session" | "redirectUrl"> & { payload: string }

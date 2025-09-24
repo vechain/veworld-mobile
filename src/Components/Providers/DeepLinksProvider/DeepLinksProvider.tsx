@@ -91,7 +91,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const switchNetwork = useCallback(
-        (request: Omit<DecodedRequest, "nonce" | "session" | "payload">) => {
+        (request: Omit<DecodedRequest, "nonce" | "session" | "payload" | "redirectUrl">) => {
             // Get the selected network from the store directly because rehydration is slow
             if (selectedNetwork.genesis.id === request.genesisId) {
                 return
@@ -173,10 +173,11 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
-            // Switch network if I'm not on the same network
-            switchNetwork({ ...decodedRequest, redirectUrl: params.redirect_url })
 
             try {
+                // Switch network if I'm not on the same network
+                switchNetwork(decodedRequest)
+
                 const request = await DAppUtils.parseTransactionRequest(
                     decodedRequest,
                     externalSessions,
@@ -221,10 +222,10 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
-            // Switch network if I'm not on the same network
-            switchNetwork({ ...decodedRequest, redirectUrl: params.redirect_url })
-
             try {
+                // Switch network if I'm not on the same network
+                switchNetwork(decodedRequest)
+
                 const request = await DAppUtils.parseTypedDataRequest(
                     decodedRequest,
                     externalSessions,
@@ -270,10 +271,10 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
-            // Switch network if I'm not on the same network
-            switchNetwork({ ...decodedRequest, redirectUrl: params.redirect_url })
-
             try {
+                // Switch network if I'm not on the same network
+                switchNetwork(decodedRequest)
+
                 //Parse and decrypt the request
                 const request = await DAppUtils.parseCertificateRequest(
                     decodedRequest,
@@ -321,10 +322,10 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
-            // Switch network if I'm not on the same network
-            switchNetwork({ ...decodedRequest, redirectUrl: params.redirect_url })
-
             try {
+                // Switch network if I'm not on the same network
+                switchNetwork(decodedRequest)
+
                 const request = await DAppUtils.parseDisconnectRequest(
                     decodedRequest,
                     externalSessions,
@@ -402,7 +403,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         }
 
         return () => {
-            interaction.cancel()
+            interaction?.cancel()
             Linking.removeAllListeners("url")
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
