@@ -69,7 +69,7 @@ export const TransactionDetails = ({ request, outputs = [], clauses = [], onShow
 
     // Show details button only when meaningful events are detected
     const hasEvents = useMemo(() => {
-        return analyzedOutputs.length > 0 && analyzedOutputs.some(output => output.name !== "___INTERNAL_UNKNOWN___")
+        return analyzedOutputs.some(output => output.name !== "___INTERNAL_UNKNOWN___")
     }, [analyzedOutputs])
 
     return (
