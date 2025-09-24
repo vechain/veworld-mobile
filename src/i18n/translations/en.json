@@ -1083,7 +1083,6 @@
   "STATUS": "Status",
   "SUCCESS_DOMAIN_AVAILABLE": "Available to claim",
   "SUCCESS_GENERIC": "Success!",
-  "SUCCESS_GENERIC_OPERATION": "The operation went well!",
   "SUCCESS_GENERIC_VIEW_DETAIL_LINK": "View operation detail.",
   "SWAP": "Swap",
   "SWAP_DAPP_NUMBER": "{total: number} dApps",
