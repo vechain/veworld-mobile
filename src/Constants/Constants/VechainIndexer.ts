@@ -224,8 +224,8 @@ export const getVeBetterUserGeneralOverview = (address: string) => {
  * @returns The overview for a user for that timeframe
  */
 export const getVeBetterUserOverview = (address: string, fromDate: string, toDate: string) => {
-    const from = moment(fromDate).format("YYYY-MM-DD")
-    const to = moment(toDate).format("YYYY-MM-DD")
+    const from = moment(fromDate).utc().format("YYYY-MM-DD")
+    const to = moment(toDate).utc().format("YYYY-MM-DD")
     const params = new URLSearchParams()
     params.append("startDate", from)
     params.append("endDate", to)

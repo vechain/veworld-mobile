@@ -17,8 +17,8 @@ export const useUserVeBetterStats = () => {
                 queryFn: () =>
                     fetchVeBetterUserOverview(
                         selectedAccount.address,
-                        moment().startOf("week").toISOString(),
-                        moment().endOf("week").toISOString(),
+                        moment().utc().startOf("week").toISOString(),
+                        moment().utc().endOf("week").toISOString(),
                     ),
             },
             {
@@ -26,8 +26,8 @@ export const useUserVeBetterStats = () => {
                 queryFn: () =>
                     fetchVeBetterUserOverview(
                         selectedAccount.address,
-                        moment().startOf("month").toISOString(),
-                        moment().endOf("month").toISOString(),
+                        moment().utc().startOf("month").toISOString(),
+                        moment().utc().endOf("month").toISOString(),
                     ),
             },
         ],
