@@ -8,12 +8,7 @@ import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView }
 import { ColorThemeType } from "~Constants"
 import { useAmountInput, useConvertBetterTokens, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
-import {
-    selectB3trTokenWithBalance,
-    selectNetworkVBDTokens,
-    selectVot3TokenWithBalance,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ConvertBetterCard } from "./ConvertBetterCard"
@@ -35,8 +30,6 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const cardPosition = useSharedValue(0)
 
     const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
-    const b3trWithBalance = useAppSelector(selectB3trTokenWithBalance)
-    const vot3WithBalance = useAppSelector(selectVot3TokenWithBalance)
 
     const b3tr = useTokenWithCompleteInfo(B3TR)
     const vot3 = useTokenWithCompleteInfo(VOT3)
@@ -59,8 +52,8 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
         ),
     }))
 
-    const b3trTokenTotal = BigNutils(b3trWithBalance?.balance?.balance).toString
-    const vot3TokenTotal = BigNutils(vot3WithBalance?.balance?.balance).toString
+    const b3trTokenTotal = BigNutils(b3tr?.balance?.balance).toString
+    const vot3TokenTotal = BigNutils(vot3?.balance?.balance).toString
 
     const { convertB3tr, convertVot3 } = useConvertBetterTokens()
 
@@ -163,7 +156,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                 <Animated.View style={[styles.betterCardContainer]}>
                     <ConvertBetterCard
                         token={b3tr}
-                        balance={b3trWithBalance?.balance}
+                        balance={b3tr?.balance}
                         isSender={!isSwapped}
                         sendAmount={input}
                         error={isError}
@@ -190,7 +183,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
 
                     <ConvertBetterCard
                         token={vot3}
-                        balance={vot3WithBalance?.balance}
+                        balance={vot3?.balance}
                         isSender={isSwapped}
                         sendAmount={input}
                         error={isError}

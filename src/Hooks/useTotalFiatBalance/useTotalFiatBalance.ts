@@ -4,36 +4,29 @@ import { useUserNodes, useUserStargateNfts } from "~Hooks/Staking"
 import { useCombineFiatBalances } from "~Hooks/useCombineFiatBalances"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
+import { useTokenBalance } from "~Hooks/useTokenBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
-import { AccountWithDevice } from "~Model"
-import {
-    selectB3trAddress,
-    selectBalanceForTokenByAccount,
-    selectBalanceVisible,
-    selectNetworkVBDTokens,
-    selectVot3Address,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectBalanceVisible, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BalanceUtils, BigNutils } from "~Utils"
 
 type Args = {
-    account: AccountWithDevice
-    enabled: boolean
+    address: string
+    enabled?: boolean
 }
 
-export const useTotalFiatBalance = ({ account, enabled }: Args) => {
+export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
-    const accountAddress = useMemo(() => account.address, [account.address])
     const isVisible = useAppSelector(selectBalanceVisible)
 
-    const tokenWithInfoVET = useTokenWithCompleteInfo(VET, accountAddress)
-    const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO, accountAddress)
+    const tokenWithInfoVET = useTokenWithCompleteInfo(VET, address, { enabled })
+    const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO, address, { enabled })
 
-    const b3trAddress = useAppSelector(selectB3trAddress)
-    const vot3Address = useAppSelector(selectVot3Address)
-
-    const tokenWithInfoB3TR = useTokenWithCompleteInfo({ ...B3TR, address: b3trAddress }, accountAddress)
-    const vot3RawBalance = useAppSelector(state => selectBalanceForTokenByAccount(state, vot3Address, accountAddress))
+    const tokenWithInfoB3TR = useTokenWithCompleteInfo(B3TR, address, { enabled })
+    const { data: vot3RawBalance, isLoading: loadingVot3Balance } = useTokenBalance({
+        address,
+        tokenAddress: VOT3.address,
+        enabled,
+    })
 
     const vot3FiatBalance = BalanceUtils.getFiatBalance(
         vot3RawBalance?.balance ?? "0",
@@ -41,14 +34,14 @@ export const useTotalFiatBalance = ({ account, enabled }: Args) => {
         VOT3.decimals,
     )
 
-    const nonVechainTokensFiat = useNonVechainTokenFiat(accountAddress)
+    const nonVechainTokensFiat = useNonVechainTokenFiat({ accountAddress: address, enabled })
 
-    const { stargateNodes, isLoading: loadingNodes } = useUserNodes(accountAddress, enabled)
+    const { stargateNodes, isLoading: loadingNodes } = useUserNodes(address, enabled)
 
     const { ownedStargateNfts: stargateNfts, isLoading: loadingStargateNfts } = useUserStargateNfts({
         nodes: stargateNodes,
         isLoadingNodes: loadingNodes,
-        address: account.address,
+        address,
     })
 
     const totalStargateVet = useMemo(() => {
@@ -59,15 +52,28 @@ export const useTotalFiatBalance = ({ account, enabled }: Args) => {
 
     const stargateFiatBalance = useMemo(() => {
         // We only include staked VET in fiat balance if user is the owner, not a manager - Stargate staking
-        const isNodeOwner = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, accountAddress))
+        const isNodeOwner = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
 
         if (!isNodeOwner) return "0"
 
         return BalanceUtils.getFiatBalance(totalStargateVet.toString, tokenWithInfoVET.exchangeRate ?? 1, VET.decimals)
-    }, [totalStargateVet, tokenWithInfoVET.exchangeRate, stargateNodes, accountAddress])
+    }, [totalStargateVet, tokenWithInfoVET.exchangeRate, stargateNodes, address])
 
-    const isLoading = useMemo(() => loadingStargateNfts, [loadingStargateNfts])
-
+    const isLoading = useMemo(
+        () =>
+            loadingStargateNfts ||
+            tokenWithInfoVET.tokenInfoLoading ||
+            tokenWithInfoVTHO.tokenInfoLoading ||
+            tokenWithInfoB3TR.tokenInfoLoading ||
+            loadingVot3Balance,
+        [
+            loadingStargateNfts,
+            loadingVot3Balance,
+            tokenWithInfoB3TR.tokenInfoLoading,
+            tokenWithInfoVET.tokenInfoLoading,
+            tokenWithInfoVTHO.tokenInfoLoading,
+        ],
+    )
     const balances = useMemo(
         () => [
             tokenWithInfoVET.fiatBalance,

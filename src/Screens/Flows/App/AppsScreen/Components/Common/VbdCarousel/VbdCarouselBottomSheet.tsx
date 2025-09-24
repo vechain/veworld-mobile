@@ -1,6 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { ElementType, useCallback, useMemo } from "react"
-import { ImageBackground, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { getTimeZone } from "react-native-localize"
 import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
@@ -15,6 +15,7 @@ import {
     BaseView,
     BlurView,
 } from "~Components"
+import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
 import { useAppOverview, useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -163,7 +164,7 @@ const VbdCarouselBottomSheetContent = ({
     return (
         <>
             {bannerUri ? (
-                <ImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_BS">
+                <FastImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_BS">
                     <BaseIcon
                         style={styles.closeBtn}
                         color={COLORS.WHITE}
@@ -207,7 +208,7 @@ const VbdCarouselBottomSheetContent = ({
                             </BaseText>
                         </BaseView>
                     </BlurView>
-                </ImageBackground>
+                </FastImageBackground>
             ) : null}
 
             <BaseView style={styles.infoContainer} bg={theme.colors.actionBottomSheet.background}>
