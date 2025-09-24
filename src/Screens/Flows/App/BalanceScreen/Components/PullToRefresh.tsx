@@ -3,19 +3,33 @@ import React, { ComponentType, forwardRef, useCallback, useState } from "react"
 import { RefreshControlProps } from "react-native"
 import { NativeViewGestureHandlerProps, RefreshControl } from "react-native-gesture-handler"
 import { useTheme } from "~Hooks"
-import { selectSelectedAccountAddress, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import {
+    invalidateUserTokens,
+    selectSelectedAccountAddress,
+    selectSelectedNetwork,
+    updateAccountBalances,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
-import { useTokenBalances } from "../../HomeScreen/Hooks"
 
 type Props = Omit<RefreshControlProps, "onRefresh" | "refreshing" | "tintColor"> & NativeViewGestureHandlerProps
 
 export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function PullToRefresh(props, ref) {
     const [refreshing, setRefreshing] = useState(false)
-    const { updateBalances, updateSuggested } = useTokenBalances()
     const queryClient = useQueryClient()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const theme = useTheme()
+    const dispatch = useAppDispatch()
+
+    const invalidateBalanceQueries = useCallback(async () => {
+        await dispatch(updateAccountBalances(selectedAccountAddress!, queryClient))
+    }, [dispatch, queryClient, selectedAccountAddress])
+
+    const invalidateTokens = useCallback(async () => {
+        await dispatch(invalidateUserTokens(selectedAccountAddress!, queryClient))
+    }, [dispatch, queryClient, selectedAccountAddress])
 
     const invalidateStargateQueries = useCallback(async () => {
         await queryClient.invalidateQueries({
@@ -33,10 +47,10 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
 
-        await Promise.all([updateBalances(true), updateSuggested(), invalidateStargateQueries()])
+        await Promise.all([invalidateStargateQueries(), invalidateBalanceQueries(), invalidateTokens()])
 
         setRefreshing(false)
-    }, [invalidateStargateQueries, updateBalances, updateSuggested])
+    }, [invalidateBalanceQueries, invalidateStargateQueries, invalidateTokens])
     return (
         <RefreshControl
             onRefresh={onRefresh}

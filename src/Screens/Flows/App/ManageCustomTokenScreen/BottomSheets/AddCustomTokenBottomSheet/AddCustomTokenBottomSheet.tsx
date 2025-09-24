@@ -18,12 +18,10 @@ import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
 import {
     addOrUpdateCustomTokens,
-    addTokenBalance,
+    selectCustomTokens,
     selectOfficialTokens,
     selectSelectedAccount,
     selectSelectedNetwork,
-    selectVisibleCustomTokens,
-    updateAccountBalances,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -56,7 +54,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
 
         const officialTokens = useAppSelector(selectOfficialTokens)
 
-        const customTokens = useAppSelector(selectVisibleCustomTokens)
+        const customTokens = useAppSelector(selectCustomTokens)
 
         const account = useAppSelector(selectSelectedAccount)
 
@@ -132,20 +130,6 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
                     newTokens: availableTokens,
                 }),
             )
-            dispatch(
-                addTokenBalance({
-                    network: network.type,
-                    accountAddress: account.address,
-                    balance: {
-                        balance: "0",
-                        tokenAddress: token?.address ?? newCustomToken?.address ?? "",
-                        timeUpdated: new Date(0).toISOString(),
-                        isCustomToken: true,
-                        isHidden: false,
-                    },
-                }),
-            )
-            dispatch(updateAccountBalances(thorClient, account.address))
             track(AnalyticsEvent.TOKENS_CUSTOM_TOKEN_ADDED)
 
             onClose()
