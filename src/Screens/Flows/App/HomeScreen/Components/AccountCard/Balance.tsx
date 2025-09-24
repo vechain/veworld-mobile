@@ -5,7 +5,6 @@ import { AccountFiatBalance } from "~Components/Reusable"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { WalletAccount } from "~Model"
-import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     isVisible: boolean
@@ -16,8 +15,6 @@ type Props = {
 export const Balance: React.FC<Props> = memo(({ isVisible, toggleVisible }) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
-
-    const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
     return (
         <BaseView>
@@ -35,7 +32,7 @@ export const Balance: React.FC<Props> = memo(({ isVisible, toggleVisible }) => {
                 />
             </BaseView>
             <BaseView flexDirection="row" alignItems="baseline">
-                <AccountFiatBalance isLoading={isTokensOwnedLoading} isVisible={isVisible} />
+                <AccountFiatBalance isVisible={isVisible} />
             </BaseView>
         </BaseView>
     )

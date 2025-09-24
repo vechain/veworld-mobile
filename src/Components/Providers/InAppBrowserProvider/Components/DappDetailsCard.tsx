@@ -4,7 +4,7 @@ import { BaseButton, BaseIcon, BaseText } from "~Components"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
 import { BaseView } from "~Components/Base/BaseView"
 import { COLORS } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
@@ -58,7 +58,7 @@ export const DappDetailsCard = ({
     const [loadFallback, setLoadFallback] = useState(false)
     const [showDetails, setShowDetails] = useState(isDefaultVisible)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
-
+    const { isFetching, isLoading } = useFetchFeaturedDApps()
     const allApps = useAppSelector(selectFeaturedDapps)
 
     const fetchDynamicAppLogo = useDynamicAppLogo({ size: 64 })
@@ -96,6 +96,8 @@ export const DappDetailsCard = ({
             isDapp: selectedNetwork.type !== NETWORK_TYPE.MAIN,
         }
     }, [allApps, appName, appUrl, fetchDynamicAppLogo, selectedNetwork.type])
+
+    const showNotVerifiedWarning = !isDapp && showDappWarning && !isFetching && allApps.length > 0 && !isLoading
 
     return (
         <BaseView bg={theme.isDark ? COLORS.PURPLE : COLORS.WHITE} p={16} flexDirection="column" borderRadius={12}>
@@ -154,7 +156,7 @@ export const DappDetailsCard = ({
                     </BaseButton>
                 )}
             </BaseView>
-            {!isDapp && showDappWarning && (
+            {showNotVerifiedWarning && (
                 <>
                     <BaseSpacer height={16} />
                     <DappDetails.NotVerifiedWarning />

@@ -8,6 +8,18 @@ jest.mock("react-native", () => ({
     LayoutAnimation: { configureNext: jest.fn(), Types: {}, Properties: {} },
 }))
 
+jest.mock("~Hooks/useFetchFeaturedDApps", () => ({
+    useFetchFeaturedDApps: jest.fn(() => ({
+        isFetching: false,
+        isLoading: false,
+    })),
+    useVeBetterDaoDapps: jest.fn(() => ({
+        data: [],
+        isLoading: false,
+        error: null,
+    })),
+}))
+
 const Wrapper = ({ children }: PropsWithChildren) => (
     <TestWrapper
         preloadedState={{

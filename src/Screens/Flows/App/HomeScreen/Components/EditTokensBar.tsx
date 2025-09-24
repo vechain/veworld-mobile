@@ -1,11 +1,11 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
-import { useTheme } from "~Hooks"
-import { COLORS } from "~Constants"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { COLORS } from "~Constants"
+import { useTheme } from "~Hooks"
+import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { selectNonVechainTokensWithBalances, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     isEdit: boolean
@@ -27,7 +27,7 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
         }, 0)
     }, [nav])
 
-    const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
+    const { data: tokenBalances } = useNonVechainTokensBalance()
 
     const getActionsButtons = useCallback(() => {
         if (!isEdit)
