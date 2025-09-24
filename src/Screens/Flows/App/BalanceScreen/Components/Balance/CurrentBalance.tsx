@@ -23,7 +23,7 @@ export const CurrentBalance = () => {
     const dispatch = useAppDispatch()
 
     const { styles } = useThemedStyles(baseStyles)
-    const { renderedBalance } = useTotalFiatBalance({ account, enabled: true })
+    const { renderedBalance } = useTotalFiatBalance({ address: account.address, enabled: true })
 
     const onPress = useCallback(() => {
         dispatch(setBalanceVisible(!isBalanceVisible))

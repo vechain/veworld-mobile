@@ -28,7 +28,7 @@ export const BalanceActions = ({ qrCodeBottomSheetRef, style }: Props) => {
 
     const { onOpen: openQRCodeSheet } = useBottomSheetModal({ externalRef: qrCodeBottomSheetRef })
 
-    const { rawAmount } = useTotalFiatBalance({ account, enabled: true })
+    const { rawAmount } = useTotalFiatBalance({ address: account.address, enabled: true })
 
     const onBuy = useCallback(() => {
         nav.navigate(Routes.BUY_FLOW)

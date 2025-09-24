@@ -99,7 +99,7 @@ export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
     const { amount, areAlmostZero } = useMemo(() => combineFiatBalances(balances), [balances, combineFiatBalances])
 
     const { data: previousBalance } = useQuery({
-        queryKey: ["BALANCE", "TOTAL", account.address.toLowerCase()],
+        queryKey: ["BALANCE", "TOTAL", address.toLowerCase()],
         queryFn: () => amount,
         placeholderData: keepPreviousData,
         enabled: !isLoading,
