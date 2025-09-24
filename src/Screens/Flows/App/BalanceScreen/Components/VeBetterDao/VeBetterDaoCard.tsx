@@ -1,16 +1,21 @@
-import React, { useMemo } from "react"
+import { useNavigation } from "@react-navigation/native"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { b3mo } from "~Assets"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
+import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useIsVeBetterUser } from "~Hooks/useIsVeBetterUser"
 import { useUserVeBetterStats } from "~Hooks/useUserVeBetterStats"
 import { useI18nContext } from "~i18n"
+import { Routes } from "~Navigation"
 import { BigNutils } from "~Utils"
 import { RewardsEarned } from "./RewardsEarned"
 import { StatsCard } from "./StatsCard"
+
+const PROFILE_URL = "https://governance.vebetterdao.org/profile"
 
 export const VeBetterDaoCard = () => {
     const { LL } = useI18nContext()
@@ -29,6 +34,19 @@ export const VeBetterDaoCard = () => {
             plastic: data.totalImpact.plastic ?? 0,
         }
     }, [data])
+
+    const nav = useNavigation()
+    const { navigateWithTab } = useBrowserTab()
+
+    const onVeBetterNavigate = useCallback(() => {
+        navigateWithTab({
+            url: PROFILE_URL,
+            title: PROFILE_URL,
+            navigationFn(url) {
+                nav.navigate(Routes.BROWSER, { url, returnScreen: Routes.HOME })
+            },
+        })
+    }, [nav, navigateWithTab])
 
     if (!isVeBetterUser) return null
 
@@ -79,7 +97,7 @@ export const VeBetterDaoCard = () => {
             <BaseSpacer height={16} />
 
             <BaseButton
-                action={() => {}}
+                action={onVeBetterNavigate}
                 variant="ghost"
                 rightIcon={
                     <BaseIcon
