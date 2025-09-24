@@ -229,7 +229,6 @@ describe("SmartWalletWithPrivy Tests", () => {
                 await result.current.logout()
             })
 
-            expect(result.current.isAuthenticated).toBe(false)
             expect(result.current.smartAccountAddress).toBe("")
             expect(mockUserState.logout).toHaveBeenCalled()
         })

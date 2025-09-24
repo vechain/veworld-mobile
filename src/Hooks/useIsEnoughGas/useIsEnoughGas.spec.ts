@@ -1,34 +1,17 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { ethers } from "ethers"
-import { defaultTestNetwork, TEST_B3TR_ADDRESS, VTHO } from "~Constants"
+import { defaultTestNetwork, TEST_B3TR_ADDRESS, VET, VTHO } from "~Constants"
 import abi from "~Generated/abi"
-import { DEVICE_TYPE } from "~Model"
+import { Balance, DEVICE_TYPE } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
 import { TestWrapper } from "~Test"
 import { BigNutils } from "~Utils"
 import { useIsEnoughGas } from "./useIsEnoughGas"
+import { useMultipleTokensBalance } from "~Hooks/useTokenBalance"
 
-const createPreloadedState = (balance: string): Partial<RootState> => {
+const createPreloadedState = (): Partial<RootState> => {
     const userAddress = ethers.Wallet.createRandom().address
     return {
-        balances: {
-            testnet: {
-                [userAddress]: [
-                    {
-                        balance,
-                        isHidden: false,
-                        timeUpdated: new Date().toISOString(),
-                        tokenAddress: VTHO.address,
-                    },
-                    {
-                        balance,
-                        isHidden: false,
-                        timeUpdated: new Date().toISOString(),
-                        tokenAddress: TEST_B3TR_ADDRESS,
-                    },
-                ],
-            },
-        } as any,
         networks: {
             customNetworks: [],
             hardfork: {},
@@ -63,8 +46,32 @@ const createPreloadedState = (balance: string): Partial<RootState> => {
     }
 }
 
+const balanceMocker = (balances: Record<"VET" | "VTHO" | "B3TR", string>) => {
+    return {
+        data: [
+            { tokenAddress: VET.address, balance: balances.VET, isHidden: false, timeUpdated: Date.now().toString() },
+            {
+                tokenAddress: TEST_B3TR_ADDRESS,
+                balance: balances.B3TR,
+                isHidden: false,
+                timeUpdated: Date.now().toString(),
+            },
+            { tokenAddress: VTHO.address, balance: balances.VTHO, isHidden: false, timeUpdated: Date.now().toString() },
+        ] satisfies Balance[],
+    }
+}
+
+jest.mock("~Hooks/useTokenBalance", () => ({ useMultipleTokensBalance: jest.fn() }))
+
 describe("useIsEnoughGas", () => {
     it("should return true if user has enough VTHO & tx is delegated", () => {
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
+            balanceMocker({
+                VET: "1",
+                B3TR: "1",
+                VTHO: "1",
+            }),
+        )
         const { result } = renderHook(
             () =>
                 useIsEnoughGas({
@@ -78,7 +85,7 @@ describe("useIsEnoughGas", () => {
             {
                 wrapper: TestWrapper,
                 initialProps: {
-                    preloadedState: createPreloadedState("1"),
+                    preloadedState: createPreloadedState(),
                 },
             },
         )
@@ -86,6 +93,13 @@ describe("useIsEnoughGas", () => {
         expect(result.current.hasEnoughBalance).toBe(true)
     })
     it("should return true if user has enough VTHO & tx is not delegated", () => {
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
+            balanceMocker({
+                VET: "1",
+                B3TR: "1",
+                VTHO: "1",
+            }),
+        )
         const { result } = renderHook(
             () =>
                 useIsEnoughGas({
@@ -100,7 +114,7 @@ describe("useIsEnoughGas", () => {
             {
                 wrapper: TestWrapper,
                 initialProps: {
-                    preloadedState: createPreloadedState("1"),
+                    preloadedState: createPreloadedState(),
                 },
             },
         )
@@ -108,6 +122,13 @@ describe("useIsEnoughGas", () => {
         expect(result.current.hasEnoughBalance).toBe(true)
     })
     it("should return false if user doesn't have enough VTHO & tx is not delegated", () => {
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
+            balanceMocker({
+                VET: "1",
+                B3TR: "1",
+                VTHO: "1",
+            }),
+        )
         const { result } = renderHook(
             () =>
                 useIsEnoughGas({
@@ -122,7 +143,7 @@ describe("useIsEnoughGas", () => {
             {
                 wrapper: TestWrapper,
                 initialProps: {
-                    preloadedState: createPreloadedState("1"),
+                    preloadedState: createPreloadedState(),
                 },
             },
         )
@@ -130,6 +151,13 @@ describe("useIsEnoughGas", () => {
         expect(result.current.hasEnoughBalance).toBe(false)
     })
     it("should return true if user doesn't have enough VTHO & tx is delegated", () => {
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
+            balanceMocker({
+                VET: "0",
+                B3TR: "0",
+                VTHO: "1",
+            }),
+        )
         const { result } = renderHook(
             () =>
                 useIsEnoughGas({
@@ -144,7 +172,7 @@ describe("useIsEnoughGas", () => {
             {
                 wrapper: TestWrapper,
                 initialProps: {
-                    preloadedState: createPreloadedState("1"),
+                    preloadedState: createPreloadedState(),
                 },
             },
         )
@@ -152,11 +180,19 @@ describe("useIsEnoughGas", () => {
         expect(result.current.hasEnoughBalance).toBe(true)
     })
     it("should return true if user has exactly 0 VTHO & tx is delegated", () => {
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
+            balanceMocker({
+                VET: "0",
+                B3TR: "0",
+                VTHO: "0",
+            }),
+        )
         const { result } = renderHook(
             () =>
                 useIsEnoughGas({
                     selectedToken: "VTHO",
-                    clauses: [],
+                    transactionOutputs: [],
+                    origin: "0x0",
                     isDelegated: true,
                     allFeeOptions: { B3TR: BigNutils("0"), VTHO: BigNutils("2"), VET: BigNutils("0") },
                     isLoadingFees: false,
@@ -164,7 +200,7 @@ describe("useIsEnoughGas", () => {
             {
                 wrapper: TestWrapper,
                 initialProps: {
-                    preloadedState: createPreloadedState("0"),
+                    preloadedState: createPreloadedState(),
                 },
             },
         )
@@ -172,6 +208,13 @@ describe("useIsEnoughGas", () => {
         expect(result.current.hasEnoughBalance).toBe(true)
     })
     it("should return false if user doesn't have enough B3TR & tx is delegated", () => {
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
+            balanceMocker({
+                VET: "1",
+                B3TR: "1",
+                VTHO: "1",
+            }),
+        )
         const { result } = renderHook(
             () =>
                 useIsEnoughGas({
@@ -186,7 +229,7 @@ describe("useIsEnoughGas", () => {
             {
                 wrapper: TestWrapper,
                 initialProps: {
-                    preloadedState: createPreloadedState("1"),
+                    preloadedState: createPreloadedState(),
                 },
             },
         )
@@ -194,6 +237,13 @@ describe("useIsEnoughGas", () => {
         expect(result.current.hasEnoughBalance).toBe(false)
     })
     it("should return true if user has enough B3TR & tx is delegated", () => {
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
+            balanceMocker({
+                VET: "1",
+                B3TR: "3",
+                VTHO: "1",
+            }),
+        )
         const { result } = renderHook(
             () =>
                 useIsEnoughGas({
@@ -208,7 +258,7 @@ describe("useIsEnoughGas", () => {
             {
                 wrapper: TestWrapper,
                 initialProps: {
-                    preloadedState: createPreloadedState("3"),
+                    preloadedState: createPreloadedState(),
                 },
             },
         )
@@ -216,6 +266,13 @@ describe("useIsEnoughGas", () => {
         expect(result.current.hasEnoughBalance).toBe(true)
     })
     it("should return true if user has enough to cover clauses + fee", () => {
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
+            balanceMocker({
+                VET: "1",
+                B3TR: "13",
+                VTHO: "1",
+            }),
+        )
         const origin = ethers.Wallet.createRandom().address
         const { result } = renderHook(
             () =>
@@ -242,7 +299,7 @@ describe("useIsEnoughGas", () => {
             {
                 wrapper: TestWrapper,
                 initialProps: {
-                    preloadedState: createPreloadedState("13"),
+                    preloadedState: createPreloadedState(),
                 },
             },
         )
@@ -250,12 +307,19 @@ describe("useIsEnoughGas", () => {
         expect(result.current.hasEnoughBalance).toBe(true)
     })
     it("should return true if user has enough to cover clauses (but not fees) if using VTHO & tx is delegated", () => {
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
+            balanceMocker({
+                VET: "1",
+                B3TR: "1",
+                VTHO: "10",
+            }),
+        )
         const origin = ethers.Wallet.createRandom().address
 
         const { result } = renderHook(
             () =>
                 useIsEnoughGas({
-                    selectedToken: "B3TR",
+                    selectedToken: "VTHO",
                     transactionOutputs: [
                         {
                             transfers: [],
@@ -270,14 +334,14 @@ describe("useIsEnoughGas", () => {
                         },
                     ],
                     origin,
-                    allFeeOptions: { B3TR: BigNutils("2"), VTHO: BigNutils("0"), VET: BigNutils("0") },
+                    allFeeOptions: { B3TR: BigNutils("0"), VTHO: BigNutils("0"), VET: BigNutils("5") },
                     isLoadingFees: false,
                     isDelegated: true,
                 }),
             {
                 wrapper: TestWrapper,
                 initialProps: {
-                    preloadedState: createPreloadedState("10"),
+                    preloadedState: createPreloadedState(),
                 },
             },
         )
@@ -285,6 +349,13 @@ describe("useIsEnoughGas", () => {
         expect(result.current.hasEnoughBalance).toBe(true)
     })
     it("should return false if user has enough to cover clauses (but not fees) if using B3TR & tx is delegated", () => {
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
+            balanceMocker({
+                VET: "1",
+                B3TR: "10",
+                VTHO: "1",
+            }),
+        )
         const origin = ethers.Wallet.createRandom().address
 
         const { result } = renderHook(
@@ -296,7 +367,7 @@ describe("useIsEnoughGas", () => {
                             transfers: [],
                             events: [
                                 {
-                                    address: VTHO.address,
+                                    address: TEST_B3TR_ADDRESS,
                                     ...new ethers.utils.Interface([
                                         abi["Transfer(indexed address,indexed address,uint256)"],
                                     ]).encodeEventLog("Transfer", [origin, ethers.Wallet.createRandom().address, "10"]),
@@ -313,11 +384,11 @@ describe("useIsEnoughGas", () => {
             {
                 wrapper: TestWrapper,
                 initialProps: {
-                    preloadedState: createPreloadedState("10"),
+                    preloadedState: createPreloadedState(),
                 },
             },
         )
 
-        expect(result.current.hasEnoughBalance).toBe(true)
+        expect(result.current.hasEnoughBalance).toBe(false)
     })
 })

@@ -50,6 +50,34 @@ export interface FetchIncomingTransfersResponse {
     pagination: PaginationResponse
 }
 
+export interface FetchAppOverviewResponse {
+    appId: string
+    roundId: number
+    date: string
+    totalRewardAmount: number
+    actionsRewarded: number
+    totalImpact: {
+        carbon: number
+        water: number
+        energy: number
+        waste_mass: number
+        waste_items: number
+        waste_reduction: number
+        biodiversity: number
+        people: number
+        timber: number
+        plastic: number
+        education_time: number
+        trees_planted: number
+        calories_burned: number
+        clean_energy_production_wh: number
+        sleep_quality_percentage: number
+    }
+    rankByReward: number
+    rankByActionsRewarded: number
+    totalUniqueUserInteractions: number
+}
+
 export interface FetchActivitiesResponse {
     data: IndexedHistoryEvent[]
     pagination: PaginationResponse

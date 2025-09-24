@@ -1,12 +1,12 @@
 import React, { useEffect } from "react"
 import { StyleSheet, View } from "react-native"
 import LottieView from "lottie-react-native"
-import { AppLoader as NftLoaderAnimation } from "~Assets"
+import { AppLoaderLight, AppLoaderDark } from "~Assets"
 
 import { ColorThemeType, SCREEN_WIDTH } from "~Constants"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { BaseView } from "~Components"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles, useTheme } from "~Hooks"
 
 type Props = {
     children?: React.ReactNode
@@ -15,6 +15,7 @@ type Props = {
 
 export const NftLoader = ({ children, isLoading }: Props) => {
     const { styles: themedStyles } = useThemedStyles(baseStyles)
+    const theme = useTheme()
 
     const opacity = useSharedValue(isLoading ? 1 : 0)
 
@@ -26,17 +27,20 @@ export const NftLoader = ({ children, isLoading }: Props) => {
         return {
             opacity: opacity.value,
         }
-    })
+    }, [opacity])
 
     return (
         <View style={StyleSheet.absoluteFill}>
             {children}
-            <Animated.View style={[themedStyles.overlay, animatedStyle]} pointerEvents={isLoading ? "auto" : "none"}>
+            <Animated.View
+                testID="nft-loader-overlay"
+                style={[themedStyles.overlay, animatedStyle]}
+                pointerEvents={isLoading ? "auto" : "none"}>
                 <BaseView style={[themedStyles.overlay, themedStyles.opacityBackground]} />
 
                 <LottieView
                     // TODO: Replace with the actual animation once it's ready (https://github.com/vechainfoundation/veworld-mobile/issues/999)
-                    source={NftLoaderAnimation}
+                    source={theme.isDark ? AppLoaderDark : AppLoaderLight}
                     autoPlay={isLoading} // Prevent the animation from playing when it's not visible
                     loop
                     style={themedStyles.lottie}
@@ -62,6 +66,6 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         lottie: {
             width: "100%",
-            height: 100,
+            height: 140,
         },
     })

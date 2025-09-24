@@ -166,7 +166,7 @@ export const WelcomeScreen = () => {
                             </BaseText>
                         </BaseView>
 
-                        <VeWorldLogoSVG height={240} width={240} />
+                        <VeWorldLogoSVG height={240} width={240} color={theme.colors.veworldLogo} />
                     </BaseView>
                 }
                 footer={

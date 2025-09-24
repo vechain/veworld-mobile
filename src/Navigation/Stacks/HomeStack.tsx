@@ -1,7 +1,8 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import React from "react"
-import { TokenWithCompleteInfo, useNavAnimation } from "~Hooks"
+import { useFeatureFlags } from "~Components"
+import { TokenWithCompleteInfo } from "~Hooks"
 import {
     CloudKitWallet,
     ConnectedLedgerDevice,
@@ -12,6 +13,7 @@ import {
     LedgerAccountWithDevice,
 } from "~Model"
 import { Routes } from "~Navigation/Enums"
+import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import {
     AddCustomNodeScreen,
     AssetDetailScreen,
@@ -29,7 +31,6 @@ import {
     InsertAddressSendScreen,
     LedgerSignTransaction,
     ManageCustomNodesScreen,
-    ManageCustomTokenScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
     SelectAmountSendScreen,
@@ -43,6 +44,8 @@ import {
     WalletDetailScreen,
     WalletManagementScreen,
 } from "~Screens"
+import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -77,7 +80,6 @@ export type RootStackParamListHome = {
     [Routes.SWAP]: undefined
     [Routes.HISTORY]: undefined
     [Routes.MANAGE_TOKEN]: undefined
-    [Routes.MANAGE_CUSTOM_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.CREATE_WALLET_FLOW]: undefined
@@ -120,7 +122,13 @@ export type RootStackParamListHome = {
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
-        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING
+        returnScreen?:
+            | Routes.DISCOVER
+            | Routes.SETTINGS
+            | Routes.HOME
+            | Routes.ACTIVITY_STAKING
+            | Routes.APPS
+            | Routes.SWAP
     }
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
@@ -130,15 +138,18 @@ export type RootStackParamListHome = {
         username: string
     }
     [Routes.DISCOVER_TABS_MANAGER]: undefined
+    [Routes.APPS_TABS_MANAGER]: undefined
+    [Routes.APPS_SEARCH]: undefined
+    [Routes.DISCOVER_SEARCH]: undefined
 }
 
-const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
+const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome>()
 
 export const HomeStack = () => {
-    const { animation } = useNavAnimation()
+    const { betterWorldFeature } = useFeatureFlags()
 
     return (
-        <Navigator id="HomeStack" screenOptions={{ headerShown: false, animation }}>
+        <Navigator id="HomeStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
                 <Screen name={Routes.HOME} component={HomeScreen} options={{ headerShown: false }} />
                 <Screen
@@ -173,11 +184,6 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen name={Routes.MANAGE_TOKEN} component={ManageTokenScreen} options={{ headerShown: false }} />
-                <Screen
-                    name={Routes.MANAGE_CUSTOM_TOKEN}
-                    component={ManageCustomTokenScreen}
-                    options={{ headerShown: false }}
-                />
 
                 <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
                 <Screen
@@ -222,7 +228,18 @@ export const HomeStack = () => {
                         headerShown: false,
                     }}
                 />
-                <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.BROWSER}
+                    component={InAppBrowser}
+                    options={{
+                        headerShown: false,
+                        cardStyleInterpolator: slideFadeInTransition,
+                        presentation: "modal",
+                        transitionSpec: TRANSITION_SPECS,
+                        gestureDirection: "vertical",
+                        gestureEnabled: true,
+                    }}
+                />
                 <Screen
                     name={Routes.SETTINGS_NETWORK}
                     component={ChangeNetworkScreen}
@@ -240,9 +257,30 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen
-                    name={Routes.DISCOVER_TABS_MANAGER}
+                    name={
+                        betterWorldFeature.appsScreen.enabled ? Routes.APPS_TABS_MANAGER : Routes.DISCOVER_TABS_MANAGER
+                    }
                     component={TabsManagerScreen}
-                    options={{ headerShown: false }}
+                    options={{
+                        headerShown: false,
+                        cardStyleInterpolator: slideFadeInTransition,
+                        presentation: "modal",
+                        transitionSpec: TRANSITION_SPECS,
+                        gestureDirection: "vertical",
+                        gestureEnabled: true,
+                    }}
+                />
+                <Screen
+                    name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_SEARCH}
+                    component={AppsSearchScreen}
+                    options={{
+                        headerShown: false,
+                        cardStyleInterpolator: slideFadeInTransition,
+                        presentation: "modal",
+                        transitionSpec: TRANSITION_SPECS,
+                        gestureDirection: "vertical",
+                        gestureEnabled: true,
+                    }}
                 />
             </Group>
 

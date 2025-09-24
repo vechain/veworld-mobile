@@ -6,27 +6,11 @@ import { BaseCarousel } from "./BaseCarousel"
 
 type Props = {
     /**
-     * Padding on the left and right.
-     * @default 16
-     */
-    padding?: number
-    /**
      * Base width.
      * @default SCREEN_WIDTH
      */
     baseWidth?: number
-} & Pick<
-    ComponentProps<typeof BaseCarousel>,
-    | "data"
-    | "paginationAlignment"
-    | "showPagination"
-    | "onSlidePress"
-    | "onSlidePressActivation"
-    | "contentWrapperStyle"
-    | "testID"
-    | "itemHeight"
-    | "gap"
->
+} & Omit<ComponentProps<typeof BaseCarousel>, "w" | "snapOffsets">
 
 export const FullscreenBaseCarousel = ({
     padding = 16,
@@ -71,7 +55,8 @@ export const FullscreenBaseCarousel = ({
      * The cards in the middle need to show a card on the left and right, that's why it's double the gap
      */
     const calculateWidth = useCallback(
-        (idx: number) => {
+        (idx: number, arrayLength: number) => {
+            if (arrayLength === 1) return baseWidth
             if (idx === 0 || idx === data.length - 1) return baseWidth - 2 * gap
             return baseWidth - 4 * gap
         },
@@ -82,19 +67,24 @@ export const FullscreenBaseCarousel = ({
      */
     const mappedData = useMemo(
         () =>
-            data.map((d, idx) => ({
+            data.map((d, idx, array) => ({
                 ...d,
-                style: [d.style, { width: calculateWidth(idx) }],
+                style: [d.style, { width: calculateWidth(idx, array.length) }],
             })),
         [calculateWidth, data],
     )
+
+    const contentWrapper = useMemo(() => {
+        return [contentWrapperStyle, styles.itemWrapper]
+    }, [contentWrapperStyle, styles.itemWrapper])
+
     return (
         <BaseCarousel
             snapOffsets={snapOffsets}
             data={mappedData}
             padding={padding}
             gap={gap}
-            contentWrapperStyle={[contentWrapperStyle, styles.itemWrapper]}
+            contentWrapperStyle={contentWrapper}
             {...props}
         />
     )

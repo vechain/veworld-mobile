@@ -9,8 +9,9 @@ import {
 } from "~Api/Coingecko"
 import { B3TR, VOT3 } from "~Constants"
 import { useBalances } from "~Hooks/useBalances"
+import { useTokenBalance } from "~Hooks/useTokenBalance"
 import { Balance, FungibleToken } from "~Model"
-import { selectBalanceForToken, selectBalanceForTokenByAccount, selectCurrency, useAppSelector } from "~Storage/Redux"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
 export type TokenWithCompleteInfo = FungibleToken & {
     fiatBalance: string
@@ -29,12 +30,16 @@ export type TokenWithCompleteInfo = FungibleToken & {
  * @param token  token with balance (tokenAddress, symbol, balance, decimals)
  * @returns  token with complete info (fiatBalance, tokenUnitBalance, exchangeRate, exchangeRateCurrency, exchangeRateLoading, tokenInfo, tokenInfoLoading)
  */
-export const useTokenWithCompleteInfo = (token: FungibleToken, accountAddress?: string): TokenWithCompleteInfo => {
-    const balance = useAppSelector(state =>
-        accountAddress
-            ? selectBalanceForTokenByAccount(state, token.address, accountAddress)
-            : selectBalanceForToken(state, token.address),
-    )
+export const useTokenWithCompleteInfo = (
+    token: FungibleToken,
+    accountAddress?: string,
+    { enabled = true }: { enabled?: boolean } = {},
+): TokenWithCompleteInfo => {
+    const { data: balance, isFetching } = useTokenBalance({
+        tokenAddress: token.address,
+        address: accountAddress,
+        enabled,
+    })
 
     const parsedSymbol = useMemo(() => {
         if (token.symbol === VOT3.symbol) return B3TR.symbol
@@ -51,7 +56,7 @@ export const useTokenWithCompleteInfo = (token: FungibleToken, accountAddress?: 
         token: { ...token, balance },
         exchangeRate,
     })
-    const { data: tokenInfo, isLoading: tokenInfoLoading } = useTokenInfo({
+    const { data: tokenInfo, isLoading: _tokenInfoLoading } = useTokenInfo({
         id: getCoinGeckoIdBySymbol[parsedSymbol],
     })
 
@@ -60,6 +65,8 @@ export const useTokenWithCompleteInfo = (token: FungibleToken, accountAddress?: 
         vs_currency: currency,
         days: 1,
     })
+
+    const tokenInfoLoading = useMemo(() => _tokenInfoLoading || isFetching, [_tokenInfoLoading, isFetching])
 
     return {
         ...token,

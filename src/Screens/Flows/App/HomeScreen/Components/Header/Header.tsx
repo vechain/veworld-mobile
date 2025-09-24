@@ -1,15 +1,16 @@
 import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { memo, useCallback } from "react"
+import { VeWorldLogoSVG } from "~Assets"
+import { BaseIcon, BaseSpacer, BaseText, BaseView, HeaderStyleV2, useWalletConnect } from "~Components"
+import { NetworkSwitcherContextMenu } from "~Components/Reusable/ContextMenu"
+import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
+import { ERROR_EVENTS, ScanTarget } from "~Constants"
 import { useBlockchainNetwork, useCameraBottomSheet, useCopyClipboard, useTheme, useVisitedUrls } from "~Hooks"
-import { BaseIcon, BaseSpacer, BaseText, BaseView, useWalletConnect, HeaderStyle } from "~Components"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes, TabStackParamList } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
-import { ERROR_EVENTS, ScanTarget } from "~Constants"
-import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
 import { AddressUtils, debug, URIUtils, WalletConnectUtils } from "~Utils"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { VeWorldLogoDarkSVG, VeWorldLogoSVG } from "~Assets"
 
 type Navigation = NativeStackNavigationProp<TabStackParamList, "HomeStack"> &
     NativeStackNavigationProp<RootStackParamListHome, Routes.HOME>
@@ -20,7 +21,6 @@ export const Header = memo(() => {
     const { LL } = useI18nContext()
     const { addVisitedUrl } = useVisitedUrls()
     const { isMainnet } = useBlockchainNetwork()
-
     const { onPair } = useWalletConnect()
 
     const { onCopyToClipboard } = useCopyClipboard()
@@ -33,7 +33,7 @@ export const Header = memo(() => {
                         name: "DiscoverStack",
                         params: {
                             state: {
-                                routes: [{ name: Routes.DISCOVER }, { name: Routes.BROWSER, params: { url } }],
+                                routes: [{ name: Routes.APPS }, { name: Routes.BROWSER, params: { url } }],
                             },
                         },
                     },
@@ -74,15 +74,11 @@ export const Header = memo(() => {
     }, [nav])
 
     return (
-        <BaseView w={100} style={HeaderStyle}>
+        <BaseView w={100} style={HeaderStyleV2}>
             <BaseView flexDirection="row" alignItems="center" alignSelf="center">
-                {theme.isDark ? (
-                    <VeWorldLogoDarkSVG height={32} width={32} />
-                ) : (
-                    <VeWorldLogoSVG height={32} width={32} />
-                )}
+                <VeWorldLogoSVG height={32} width={32} color={theme.colors.veworldLogo} />
                 <BaseSpacer width={8} />
-                <BaseText typographyFont="bodySemiBold" testID="veworld-homepage">
+                <BaseText typographyFont="subTitleSemiBold" testID="veworld-homepage">
                     {LL.VEWORLD()}
                 </BaseText>
             </BaseView>
@@ -107,17 +103,19 @@ export const Header = memo(() => {
                     testID="HomeScreen_WalletManagementButton"
                 />
                 <BaseSpacer width={8} />
-                <SelectedNetworkViewer />
-                {isMainnet && (
-                    <BaseIcon
-                        p={4}
-                        name={"icon-globe"}
-                        size={24}
-                        color={theme.colors.text}
-                        action={goToChooseNetwork}
-                        haptics="Light"
-                    />
-                )}
+                <NetworkSwitcherContextMenu>
+                    <SelectedNetworkViewer />
+                    {isMainnet && (
+                        <BaseIcon
+                            p={4}
+                            name={"icon-globe"}
+                            size={24}
+                            color={theme.colors.text}
+                            action={goToChooseNetwork}
+                            haptics="Light"
+                        />
+                    )}
+                </NetworkSwitcherContextMenu>
             </BaseView>
 
             {RenderCameraModal}

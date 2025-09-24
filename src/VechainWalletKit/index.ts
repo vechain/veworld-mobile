@@ -2,7 +2,7 @@
 export * from "./types"
 
 // Export providers
-export { SmartWalletProvider, useSmartWallet } from "./providers/SmartWalletProvider"
+export { SmartWalletProvider, SmartWalletProviderContext, useSmartWallet } from "./providers/SmartWalletProvider"
 export { SmartWalletWithPrivyProvider } from "./providers/SmartWalletWithPrivy"
 export type { SmartWalletWithPrivyProps } from "./providers/SmartWalletWithPrivy"
 

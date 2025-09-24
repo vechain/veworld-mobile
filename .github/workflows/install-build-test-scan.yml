@@ -2,14 +2,13 @@ name: Build, Test & Scan
 on:
   workflow_call:
 
-  schedule:
-    # Runs at 22:00 UTC every Sunday to Thursday
-    - cron: '0 22 * * 0-4'
-
   workflow_dispatch:
   pull_request:
     branches:
       - "*"
+  schedule:
+    - cron: '0 22 * * 0-4'
+
   push:
     branches:
       - main
@@ -20,10 +19,18 @@ concurrency:
 
 jobs:
   build-and-test-ios:
+    if: >
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule'
     uses: ./.github/workflows/e2e-ios.yml
     secrets: inherit
 
   build-and-test-android:
+    if: >
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule'
     uses: ./.github/workflows/e2e-android.yml
     secrets: inherit
 
@@ -34,9 +41,12 @@ jobs:
   report:
     runs-on: ubuntu-latest
     needs: [build-and-test-ios, build-and-test-android, scan]
-    if: always()
+    if: >
+     always() && (needs.scan.result == 'success' || needs.scan.result == 'failure') &&
+     (needs.build-and-test-ios.result == 'success' || needs.build-and-test-ios.result == 'failure') && 
+     (needs.build-and-test-android.result == 'success' || needs.build-and-test-android.result == 'failure')
     steps:
-      - name: ReportE2E2Slack
+      - name: NightlyReportE2E2Slack
         if: ${{ github.event_name == 'schedule' }}
         uses: slackapi/slack-github-action@v2.0.0
         with:
@@ -44,9 +54,24 @@ jobs:
           webhook-type: incoming-webhook
           payload: |
             {
-              "text": "${{ job.status }} scan ${{ needs.scan.result }}, \
-                       iOS ${{ needs.build-and-test-ios.result }} \
-                       url: ${{ needs.build-and-test-ios.outputs.resultUrl }}, \
-                       Android ${{needs.build-and-test-android.result}} \
-                       url: ${{ needs.build-and-test-android.outputs.resultUrl }}"
+              "text": "*Test Run:* ${{ job.status }}, *Scan:* ${{ needs.scan.result }}\n \
+                       iOS ${{ needs.build-and-test-ios.result || 'skipped' }} url: ${{ needs.build-and-test-ios.outputs.resultUrl || 'N/A' }}\n \
+                       Android ${{ needs.build-and-test-android.result || 'skipped' }} url: ${{ needs.build-and-test-android.outputs.resultUrl || 'N/A' }}\n \
+                       Action Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" 
+              "slack-message": "Nightly E2E Tests Results"
+            }
+      - name: FailureReportE2E2Slack
+        if:  github.ref == 'refs/heads/main' && (needs.build-and-test-ios.result != 'success' || needs.build-and-test-android.result != 'success')  
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "text": "🚨🚨🚨 ${{ needs.build-and-test-ios.result != 'success' && needs.build-and-test-android.result != 'success' && 'Android and iOS' || (needs.build-and-test-android.result != 'success' && 'Android' || 'iOS') }} E2E Tests failed on main 🚨🚨🚨\n\
+                       ${{ needs.build-and-test-ios.result != 'success' && format('iOS {0} url: {1}\n', needs.build-and-test-ios.result || 'skipped', needs.build-and-test-ios.outputs.resultUrl || 'N/A') || '' }}\
+                       ${{ needs.build-and-test-android.result != 'success' && format('Android {0} url: {1}\n', needs.build-and-test-android.result || 'skipped', needs.build-and-test-android.outputs.resultUrl || 'N/A') || '' }}\
+                       Commit: ${{ github.sha }} by *${{ github.actor }}*\n\
+                       Action Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+              "slack-message": "E2E Tests failed on main"
             }

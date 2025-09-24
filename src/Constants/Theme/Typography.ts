@@ -1,9 +1,11 @@
 export type TFonts =
     | "hugeTitle"
     | "biggerTitle"
+    | "biggerTitleSemiBold"
     | "biggerTitleMedium"
     | "largeTitle"
     | "title"
+    | "headerTitle"
     | "subTitleBold"
     | "subTitleSemiBold"
     | "subTitleMedium"
@@ -71,7 +73,7 @@ const fontWeight = {
     "700": "700",
     "800": "800",
     "900": "900",
-}
+} as const
 
 const fontSize = {
     10: 10,
@@ -88,6 +90,7 @@ const fontSize = {
 }
 
 const lineHeight = {
+    biggerTitle: 32,
     title: 28,
     subSubtitle: 24,
     subTitle: 20.8,
@@ -123,6 +126,12 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontSize: 24,
         fontWeight: fontWeight[700],
     },
+    biggerTitleSemiBold: {
+        fontFamily: fontFamily["Inter-SemiBold"],
+        fontSize: 24,
+        fontWeight: fontWeight[600],
+        lineHeight: lineHeight.biggerTitle,
+    },
     biggerTitleMedium: {
         fontFamily: fontFamily["Inter-Medium"],
         fontSize: 24,
@@ -132,6 +141,12 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontFamily: fontFamily["Inter-Bold"],
         fontSize: fontSize[22],
         fontWeight: fontWeight[700],
+        lineHeight: lineHeight.title,
+    },
+    headerTitle: {
+        fontFamily: fontFamily["Inter-SemiBold"],
+        fontSize: fontSize[20],
+        fontWeight: fontWeight[600],
         lineHeight: lineHeight.title,
     },
     subTitleBold: {

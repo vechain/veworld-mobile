@@ -34,6 +34,7 @@ describe("ActivityDetailsUtils", () => {
             [ActivityType.DAPP_TRANSACTION, "DApp Transaction"],
             [ActivityType.TRANSFER_FT, "Receive"],
             [ActivityType.TRANSFER_NFT, "NFT Receive"],
+            [ActivityType.NFT_SALE, "NFT Purchased"],
             [ActivityType.TRANSFER_VET, "Receive"],
             [ActivityType.TRANSFER_SF, "Receive"],
         ])("should return the correct title for an %s activity", (type, expected) => {
@@ -48,6 +49,7 @@ describe("ActivityDetailsUtils", () => {
         it.each([
             [ActivityType.TRANSFER_FT, "Send"],
             [ActivityType.TRANSFER_NFT, "NFT Send"],
+            [ActivityType.NFT_SALE, "NFT Sold"],
             [ActivityType.TRANSFER_VET, "Send"],
             [ActivityType.TRANSFER_SF, "Send"],
         ])("should return the correct title for a %s send activity", (type, expected) => {
@@ -79,6 +81,32 @@ describe("ActivityDetailsUtils", () => {
             }
             const title = getActivityTitle(activity, LL)
             expect(title).toBe("Vote on round #1")
+        })
+
+        it("should return 'NFT sold' when NFT_SALE activity has direction UP", () => {
+            const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
+            const { LL } = result.current
+
+            const activity = {
+                ...activityMock,
+                type: ActivityType.NFT_SALE,
+                direction: DIRECTIONS.UP,
+            }
+            const title = getActivityTitle(activity, LL)
+            expect(title).toBe("NFT Sold")
+        })
+
+        it("should return 'NFT Purchased' when NFT_SALE activity has direction DOWN", () => {
+            const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
+            const { LL } = result.current
+
+            const activity = {
+                ...activityMock,
+                type: ActivityType.NFT_SALE,
+                direction: DIRECTIONS.DOWN,
+            }
+            const title = getActivityTitle(activity, LL)
+            expect(title).toBe("NFT Purchased")
         })
 
         it("should return the undefined for an unknown activity type", () => {

@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { TabIcon } from "~Components"
+import { TabIcon, useFeatureFlags } from "~Components"
 import { useCheckWalletBackup, useTheme } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
@@ -14,10 +14,12 @@ import {
     RootStackParamListSettings,
     SettingsStack,
 } from "~Navigation/Stacks"
+import { AppsStack, RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { selectCurrentScreen, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import PlatformUtils from "~Utils/PlatformUtils"
+import { useI18nContext } from "~i18n"
 
 export type TabStackParamList = {
     HomeStack: NavigatorScreenParams<RootStackParamListHome>
@@ -25,19 +27,23 @@ export type TabStackParamList = {
     DiscoverStack: NavigatorScreenParams<RootStackParamListBrowser>
     SettingsStack: NavigatorScreenParams<RootStackParamListSettings>
     [Routes.HISTORY_STACK]: NavigatorScreenParams<HistoryStackParamList>
+    AppsStack: NavigatorScreenParams<RootStackParamListApps>
 }
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
 
 export const TabStack = () => {
+    const { LL } = useI18nContext()
     const theme = useTheme()
     const currentScreen = useAppSelector(selectCurrentScreen)
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
 
+    const { betterWorldFeature } = useFeatureFlags()
+
     const renderTabBarIcon = useCallback(
-        (focused: boolean, iconName: IconKey) => {
+        (focused: boolean, iconName: IconKey, label: string) => {
             const isSettings = iconName === "icon-menu"
 
             return (
@@ -46,6 +52,7 @@ export const TabStack = () => {
                     title={iconName}
                     isSettings={isSettings}
                     isShowBackupModal={isShowBackupModal}
+                    label={label}
                 />
             )
         },
@@ -59,6 +66,9 @@ export const TabStack = () => {
             case Routes.BROWSER:
             case Routes.TOKEN_DETAILS:
             case Routes.DISCOVER_TABS_MANAGER:
+            case Routes.APPS_TABS_MANAGER:
+            case Routes.APPS_SEARCH:
+            case Routes.DISCOVER_SEARCH:
                 return "none"
 
             case "":
@@ -87,7 +97,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Wallet",
                     tabBarTestID: "wallet-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-home"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-home", LL.TAB_TITLE_HOME()),
                 }}
             />
 
@@ -97,19 +107,32 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "NFT",
                     tabBarTestID: "nft-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image", LL.TAB_TITLE_NFT()),
                 }}
             />
 
-            <Tab.Screen
-                name="DiscoverStack"
-                component={DiscoverStack}
-                options={{
-                    tabBarLabel: "Discover",
-                    tabBarTestID: "discover-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-explorer"),
-                }}
-            />
+            {betterWorldFeature?.appsScreen?.enabled ? (
+                <Tab.Screen
+                    name="AppsStack"
+                    component={AppsStack}
+                    options={{
+                        tabBarLabel: "Apps",
+                        tabBarTestID: "apps-tab",
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-apps", LL.TAB_TITLE_APPS()),
+                    }}
+                />
+            ) : (
+                <Tab.Screen
+                    name="DiscoverStack"
+                    component={DiscoverStack}
+                    options={{
+                        tabBarLabel: "Discover",
+                        tabBarTestID: "discover-tab",
+                        tabBarIcon: ({ focused }) =>
+                            renderTabBarIcon(focused, "icon-explorer", LL.TAB_TITLE_DISCOVER()),
+                    }}
+                />
+            )}
 
             <Tab.Screen
                 name={Routes.HISTORY_STACK}
@@ -117,7 +140,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: Routes.HISTORY,
                     tabBarTestID: "history-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-history"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-history", LL.TAB_TITLE_ACTIVITY()),
                 }}
             />
 
@@ -127,7 +150,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Settings",
                     tabBarTestID: "settings-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-menu"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-more-horizontal", LL.TAB_TITLE_MORE()),
                 }}
             />
         </Tab.Navigator>
@@ -141,7 +164,11 @@ export const tabbarBaseStyles = StyleSheet.create({
         left: 0,
         right: 0,
         borderTopWidth: 0,
-        padding: 8,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 8,
         height: PlatformUtils.isIOS() ? 90 : 56,
     },
     shadow: {

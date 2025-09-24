@@ -17,8 +17,10 @@ export const selectAccountsState = (state: RootState) => state.accounts
 export const selectAccounts = createSelector(selectAccountsState, selectDevicesState, (state, devices) => {
     return sortBy(
         state.accounts.map(account => {
-            const device = devices.find(_device => _device.rootAddress === account.rootAddress)
-
+            const device = devices.find(_device =>
+                AddressUtils.compareAddresses(_device.rootAddress, account.rootAddress),
+            )
+            // console.log("device", device, account)
             if (AccountUtils.isObservedAccount(account)) {
                 return account
             } else {
@@ -81,6 +83,10 @@ export const selectOtherAccounts = createSelector(
     },
 )
 
+export const selectAccountsWithoutObserved = createSelector(selectAccounts, allAccounts =>
+    allAccounts.filter(_account => !AccountUtils.isObservedAccount(_account)),
+)
+
 /**
  * @returns all the visibile accounts
  */
@@ -94,6 +100,16 @@ export const selectVisibleAccounts = createSelector(selectAccounts, accounts => 
 export const selectVisibleAccountsWithoutObserved = createSelector(selectAccounts, accounts => {
     return accounts.filter(account => account.visible && !AccountUtils.isObservedAccount(account))
 })
+
+/**
+ * @returns all the visibile accounts that are not ledger
+ */
+export const selectVisibleAccountsWithoutObservedAndLedger = createSelector(
+    selectVisibleAccountsWithoutObserved,
+    accounts => {
+        return accounts.filter(account => account.visible && account.device.type !== DEVICE_TYPE.LEDGER)
+    },
+)
 
 /**
  * @returns all the visibile accounts but the selected one

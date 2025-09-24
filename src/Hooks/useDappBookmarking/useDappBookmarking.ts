@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from "react"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking } from "~Hooks"
+import { useAnalyticTracking, useVeBetterDaoDapps } from "~Hooks"
 import {
     addBookmark,
     removeBookmark,
-    selectAllDapps,
     selectBookmarkedDapps,
+    selectFeaturedDapps,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -16,15 +16,14 @@ export const useDappBookmarking = (url?: string, title?: string) => {
     const track = useAnalyticTracking()
 
     const bookmarkedDapps = useAppSelector(selectBookmarkedDapps)
-    const allDApps = useAppSelector(selectAllDapps)
+    const featuredDapps = useAppSelector(selectFeaturedDapps)
+    const { data: vbdApps } = useVeBetterDaoDapps()
 
     const existingBookmark = useMemo(() => {
         if (!url) return undefined
-
+        const trimmed = URIUtils.getBaseURL(url)
         try {
-            return bookmarkedDapps.find(bookmark =>
-                URIUtils.compareURLs(new URL(bookmark.href.trim()).origin, new URL(url.trim()).origin),
-            )
+            return bookmarkedDapps.find(bookmark => URIUtils.getBaseURL(bookmark.href) === trimmed)
         } catch {
             return undefined
         }
@@ -38,38 +37,48 @@ export const useDappBookmarking = (url?: string, title?: string) => {
         if (!url) return
 
         if (existingBookmark) {
-            dispatch(removeBookmark(existingBookmark))
+            dispatch(
+                removeBookmark({
+                    href: existingBookmark.href ?? "",
+                    isCustom: existingBookmark.isCustom,
+                }),
+            )
 
             track(AnalyticsEvent.DISCOVERY_BOOKMARK_REMOVED, {
                 dapp: url,
             })
-        } else {
-            const existingDApp = allDApps.find(dapp => {
-                return URIUtils.compareURLs(URIUtils.getBaseURL(dapp.href), URIUtils.getBaseURL(url))
+
+            return
+        }
+
+        const baseURL = URIUtils.getBaseURL(url)
+        try {
+            const existingDApp = featuredDapps.find(dapp => {
+                return URIUtils.getBaseURL(dapp.href) === baseURL
             })
+            if (existingDApp) return dispatch(addBookmark(existingDApp))
+            const existingVbdApp = vbdApps?.find(dapp => {
+                return URIUtils.getBaseURL(dapp.external_url) === baseURL
+            })
+            if (existingVbdApp) return dispatch(addBookmark(existingVbdApp))
+            const _url = new URL(url)
 
-            if (existingDApp) {
-                return dispatch(addBookmark({ ...existingDApp, href: URIUtils.clean(url) }))
-            } else {
-                const _url = new URL(url)
-
-                const bookmark: DiscoveryDApp = {
-                    name: title ?? _url.host,
-                    href: URIUtils.clean(_url.href),
-                    desc: "",
-                    isCustom: true,
-                    createAt: new Date().getTime(),
-                    amountOfNavigations: 1,
-                }
-
-                dispatch(addBookmark(bookmark))
+            const bookmark: DiscoveryDApp = {
+                name: title ?? _url.host,
+                href: baseURL!,
+                desc: "",
+                isCustom: true,
+                createAt: new Date().getTime(),
+                amountOfNavigations: 1,
             }
 
+            dispatch(addBookmark(bookmark))
+        } finally {
             track(AnalyticsEvent.DISCOVERY_BOOKMARK_ADDED, {
-                dapp: URIUtils.clean(url),
+                dapp: baseURL,
             })
         }
-    }, [url, existingBookmark, dispatch, track, allDApps, title])
+    }, [url, existingBookmark, dispatch, track, featuredDapps, vbdApps, title])
 
     return {
         toggleBookmark,

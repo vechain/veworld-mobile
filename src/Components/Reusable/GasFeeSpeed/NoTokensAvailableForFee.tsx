@@ -23,7 +23,7 @@ export const NoTokensAvailableForFee = ({ isEnoughBalance }: Props) => {
                 px={12}
                 py={8}>
                 <BaseIcon size={16} color={theme.colors.errorAlert.icon} name="icon-alert-triangle" />
-                <BaseText typographyFont="body" color={theme.colors.errorAlert.text}>
+                <BaseText typographyFont="body" color={theme.colors.errorAlert.text} flexDirection="row" flex={1}>
                     {LL.NO_TOKENS_AVAILABLE_FOR_FEE()}
                 </BaseText>
             </BaseView>

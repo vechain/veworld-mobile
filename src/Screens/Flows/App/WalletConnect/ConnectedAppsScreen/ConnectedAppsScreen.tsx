@@ -1,36 +1,21 @@
-import React, { Fragment, useCallback, useMemo, useRef, useState } from "react"
-import { BaseSpacer, BaseText, BaseView, Layout, SwipeableRow, useWalletConnect } from "~Components"
+import _ from "lodash"
+import React, { useCallback, useMemo, useRef, useState } from "react"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import { BaseSpacer, BaseView, Layout, SwipeableRow } from "~Components"
+import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
+import { useBottomSheetModal } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import {
-    ConnectedDiscoveryApp,
+    deleteSession,
     removeConnectedDiscoveryApp,
     selectConnectedDiscoverDApps,
-    selectFeaturedImages,
+    selectFeaturedDapps,
+    selectSessions,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { SessionTypes } from "@walletconnect/types"
-import {
-    AppDetailsBottomSheet,
-    ConfirmDisconnectBottomSheet,
-    ConnectedAppBox,
-    ConnectedAppsHeader,
-    EmptyListView,
-} from "./Components"
-import { useI18nContext } from "~i18n"
-import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import { useBottomSheetModal } from "~Hooks"
-
-type DiscoveryConnectedApp = {
-    app: ConnectedDiscoveryApp
-    type: "in-app"
-    image?: object
-}
-type WCConnectedApp = {
-    type: "wallet-connect"
-    session: SessionTypes.Struct
-}
-
-export type ConnectedApp = DiscoveryConnectedApp | WCConnectedApp
+import { ConfirmDisconnectBottomSheet, ConnectedAppBox, EmptyListView } from "./Components"
+import { ConnectedApp, mapAppSessions, mapConnectedApps } from "./ConnectedAppUtils"
 
 const generateAppKey = (app: ConnectedApp) => {
     if (app.type === "in-app") {
@@ -44,7 +29,8 @@ export const ConnectedAppsScreen = () => {
     const { LL } = useI18nContext()
     const { disconnectSession, activeSessions } = useWalletConnect()
     const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
-    const dappImages = useAppSelector(selectFeaturedImages)
+    const appSessions = useAppSelector(selectSessions)
+    const allApps = useAppSelector(selectFeaturedDapps)
     const [selectedApp, setSelectedApp] = useState<ConnectedApp>()
 
     const dispatch = useAppDispatch()
@@ -55,21 +41,10 @@ export const ConnectedAppsScreen = () => {
     const connectedApps: ConnectedApp[] = useMemo(() => {
         const sessions = Object.values(activeSessions)
 
-        const discoveryDApps = connectedDiscoveryApps.map(app => {
-            let imageId: string
+        const appsParsed = mapConnectedApps(connectedDiscoveryApps, allApps)
+        const sessionsParsed = mapAppSessions(appSessions, allApps)
 
-            try {
-                imageId = new URL(app.href).hostname
-            } catch {
-                imageId = app.href
-            }
-
-            return {
-                type: "in-app" as const,
-                app,
-                image: dappImages[imageId],
-            }
-        })
+        const uniqueSessions = _.uniqBy([...appsParsed, ...sessionsParsed], value => value.app.href)
 
         const wcApps: ConnectedApp[] = sessions.map(session => {
             return {
@@ -78,12 +53,8 @@ export const ConnectedAppsScreen = () => {
             }
         })
 
-        return [...discoveryDApps, ...wcApps]
-    }, [dappImages, activeSessions, connectedDiscoveryApps])
-
-    const totalSessions = useMemo(() => {
-        return Object.keys(activeSessions).length
-    }, [activeSessions])
+        return [...uniqueSessions, ...wcApps]
+    }, [activeSessions, connectedDiscoveryApps, allApps, appSessions])
 
     const {
         ref: confirmDisconnectBottomSheetRef,
@@ -91,44 +62,38 @@ export const ConnectedAppsScreen = () => {
         onClose: closeConfirmDisconnectDetailsSheet,
     } = useBottomSheetModal()
 
-    const {
-        ref: connectedAppDetailsBottomSheetRef,
-        onOpen: openConnectedAppDetailsSheet,
-        onClose: closeConnectedAppDetailsSheet,
-    } = useBottomSheetModal()
+    const disconnect = useCallback(async () => {
+        if (!selectedApp) return
+        if (selectedApp.type === "in-app") {
+            dispatch(
+                removeConnectedDiscoveryApp({
+                    href: new URL(selectedApp.app.href).hostname,
+                    name: selectedApp.app.name,
+                    connectedTime: Date.now(),
+                }),
+            )
+            dispatch(deleteSession(selectedApp.app.href))
+        } else {
+            await disconnectSession(selectedApp.session.topic)
+        }
 
-    const disconnect = useCallback(
-        async (connectedApp: ConnectedApp) => {
-            if (connectedApp.type === "in-app") {
-                await dispatch(removeConnectedDiscoveryApp(connectedApp.app))
-            } else {
-                await disconnectSession(connectedApp.session.topic)
-            }
-
-            closeConfirmDisconnectDetailsSheet()
-        },
-        [dispatch, closeConfirmDisconnectDetailsSheet, disconnectSession],
-    )
+        closeConfirmDisconnectDetailsSheet()
+    }, [selectedApp, closeConfirmDisconnectDetailsSheet, dispatch, disconnectSession])
 
     const onClick = useCallback(
         (connectedApp: ConnectedApp) => {
             setSelectedApp(connectedApp)
-            //TODO: Why does the bottom sheet not open if called immediately?
-            setTimeout(() => {
-                openConnectedAppDetailsSheet()
-            }, 20)
+            openConfirmDisconnectDetailsSheet(connectedApp)
         },
-        [openConnectedAppDetailsSheet],
+        [openConfirmDisconnectDetailsSheet],
     )
 
     const handleTrashIconPress = useCallback(
         (item: ConnectedApp) => {
             setSelectedApp(item)
-            setTimeout(() => {
-                openConnectedAppDetailsSheet()
-            }, 20)
+            openConfirmDisconnectDetailsSheet(item)
         },
-        [openConnectedAppDetailsSheet],
+        [openConfirmDisconnectDetailsSheet],
     )
 
     return (
@@ -136,60 +101,38 @@ export const ConnectedAppsScreen = () => {
             safeAreaTestID="ConnectedAppsScreen"
             title={LL.CONNECTED_APPS_SCREEN_TITLE()}
             body={
-                <BaseView pt={16}>
-                    <BaseView>
-                        <ConnectedAppsHeader showAddButton={totalSessions > 0} />
-
-                        <BaseSpacer height={24} />
-                        <BaseText typographyFont="subTitle">{LL.CONNECTED_APPS_SCREEN_SUBTITLE()}</BaseText>
-                        <BaseSpacer height={12} />
-                        <BaseText typographyFont="buttonSecondary">{LL.CONNECTED_APPS_SCREEN_DESCRIPTION()}</BaseText>
-
-                        <BaseSpacer height={22} />
-
-                        {connectedApps.length === 0 && (
-                            <>
-                                <BaseSpacer height={60} />
-                                <EmptyListView />
-                            </>
-                        )}
-                    </BaseView>
+                <BaseView>
+                    {connectedApps.length === 0 && (
+                        <>
+                            <BaseSpacer height={60} />
+                            <EmptyListView />
+                        </>
+                    )}
                     {connectedApps.map((connectedApp, index) => {
                         const key = generateAppKey(connectedApp)
 
                         return (
                             <BaseView key={`base-view-${key}-${index}`}>
-                                <Fragment key={key}>
-                                    <SwipeableRow
-                                        item={connectedApp}
-                                        itemKey={`swipeable-row-${key}`}
-                                        swipeableItemRefs={swipeableItemRefs}
-                                        handleTrashIconPress={handleTrashIconPress}
-                                        onPress={onClick}
-                                        isOpen={selectedApp && key === generateAppKey(selectedApp)}>
-                                        <ConnectedAppBox key={key} connectedApp={connectedApp} />
-                                    </SwipeableRow>
-                                </Fragment>
+                                <SwipeableRow
+                                    item={connectedApp}
+                                    itemKey={`swipeable-row-${key}`}
+                                    swipeableItemRefs={swipeableItemRefs}
+                                    handleTrashIconPress={handleTrashIconPress}
+                                    onPress={onClick}
+                                    isOpen={selectedApp && key === generateAppKey(selectedApp)}
+                                    testID={`CONNECTED_APP_${key}`}
+                                    xMargins={0}>
+                                    <ConnectedAppBox key={key} connectedApp={connectedApp} />
+                                </SwipeableRow>
                             </BaseView>
                         )
                     })}
 
-                    {selectedApp && (
-                        <>
-                            <ConfirmDisconnectBottomSheet
-                                ref={confirmDisconnectBottomSheetRef}
-                                connectedApp={selectedApp}
-                                onConfirm={disconnect}
-                                onCancel={closeConfirmDisconnectDetailsSheet}
-                            />
-                            <AppDetailsBottomSheet
-                                ref={connectedAppDetailsBottomSheetRef}
-                                onClose={closeConnectedAppDetailsSheet}
-                                connectedApp={selectedApp}
-                                onDisconnect={openConfirmDisconnectDetailsSheet}
-                            />
-                        </>
-                    )}
+                    <ConfirmDisconnectBottomSheet
+                        ref={confirmDisconnectBottomSheetRef}
+                        onConfirm={disconnect}
+                        onCancel={closeConfirmDisconnectDetailsSheet}
+                    />
                 </BaseView>
             }
         />

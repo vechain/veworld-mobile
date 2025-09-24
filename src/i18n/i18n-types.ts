@@ -225,6 +225,54 @@ type RootTranslation = {
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
 	/**
+	 * A​L​L
+	 */
+	ADDITIONAL_DETAIL_ALL: string
+	/**
+	 * A​p​p
+	 */
+	ADDITIONAL_DETAIL_APP: string
+	/**
+	 * C​l​a​u​s​e
+	 */
+	ADDITIONAL_DETAIL_CLAUSE: string
+	/**
+	 * C​o​m​m​e​n​t
+	 */
+	ADDITIONAL_DETAIL_COMMENT: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​d​a​t​a
+	 */
+	ADDITIONAL_DETAIL_CONTRACT_DATA: string
+	/**
+	 * E​v​e​n​t
+	 */
+	ADDITIONAL_DETAIL_EVENT: string
+	/**
+	 * F​r​o​m
+	 */
+	ADDITIONAL_DETAIL_FROM: string
+	/**
+	 * R​e​c​e​i​v​e​r
+	 */
+	ADDITIONAL_DETAIL_RECEIVER: string
+	/**
+	 * R​e​c​e​i​v​e​r
+	 */
+	ADDITIONAL_DETAIL_SENDER: string
+	/**
+	 * S​p​e​n​d​e​r
+	 */
+	ADDITIONAL_DETAIL_SPENDER: string
+	/**
+	 * T​o
+	 */
+	ADDITIONAL_DETAIL_TO: string
+	/**
+	 * T​o​k​e​n​ ​I​D
+	 */
+	ADDITIONAL_DETAIL_TOKEN_ID: string
+	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
 	ADD_ACCOUNT: string
@@ -376,14 +424,81 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_VOT3: string
 	/**
-	 * U​p​d​a​t​e​ ​a​v​a​i​l​a​b​l​e
+	 * A​c​t​i​o​n​s
 	 */
-	APP_UPDATE_AVAILABLE: string
+	APPS_BS_ACTIONS: string
 	/**
-	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​n​o​w​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​u​p​d​a​t​e​ ​w​i​t​h​ ​n​e​w​ ​f​e​a​t​u​r​e​s​ ​a​n​d​ ​i​m​p​r​o​v​e​m​e​n​t​s​.
-	 * @param {string} version
+	 * A​d​d​ ​t​o​ ​f​a​v​o​r​i​t​e​s
 	 */
-	APP_UPDATE_AVAILABLE_MESSAGE: RequiredParams<'version'>
+	APPS_BS_BTN_ADD_FAVORITE: string
+	/**
+	 * O​p​e​n
+	 */
+	APPS_BS_BTN_OPEN_APP: string
+	/**
+	 * F​a​v​o​r​i​t​e​d
+	 */
+	APPS_BS_BTN_REMOVE_FAVORITE: string
+	/**
+	 * J​o​i​n​e​d
+	 */
+	APPS_BS_JOINED: string
+	/**
+	 * U​s​e​r​s
+	 */
+	APPS_BS_USERS: string
+	/**
+	 * A​p​p​s
+	 */
+	APPS_SCREEN_TITLE: string
+	/**
+	 * S​e​a​r​c​h​ ​a​n​ ​A​p​p​ ​o​r​ ​W​e​b​s​i​t​e​.​.​.
+	 */
+	APPS_SEARCH_PLACEHOLDER: string
+	/**
+	 * A​p​p​s
+	 */
+	APPS_TITLE: string
+	/**
+	 * E​n​e​r​g​y
+	 */
+	APP_CATEGORY_ENERGY: string
+	/**
+	 * F​o​o​d​ ​&​ ​D​r​i​n​k
+	 */
+	APP_CATEGORY_FOOD_AND_DRINK: string
+	/**
+	 * L​e​a​r​n​i​n​g
+	 */
+	APP_CATEGORY_LEARNING: string
+	/**
+	 * L​i​f​e​s​t​y​l​e
+	 */
+	APP_CATEGORY_LIFESTYLE: string
+	/**
+	 * O​t​h​e​r​s
+	 */
+	APP_CATEGORY_OTHERS: string
+	/**
+	 * P​e​t​s
+	 */
+	APP_CATEGORY_PETS: string
+	/**
+	 * R​e​c​y​c​l​i​n​g
+	 */
+	APP_CATEGORY_RECYCLING: string
+	/**
+	 * S​h​o​p​p​i​n​g
+	 */
+	APP_CATEGORY_SHOPPING: string
+	/**
+	 * T​r​a​n​s​p​o​r​t​a​t​i​o​n
+	 */
+	APP_CATEGORY_TRANSPORTATION: string
+	/**
+	 * W​e​b​3
+	 */
+	APP_CATEGORY_WEB3: string
 	/**
 	 * A​p​p​ ​u​p​d​a​t​e​d
 	 */
@@ -393,10 +508,14 @@ type RootTranslation = {
 	 */
 	APP_UPDATED_WHATS_NEW: string
 	/**
-	 * v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
+	 * U​p​d​a​t​e​ ​a​v​a​i​l​a​b​l​e
+	 */
+	APP_UPDATE_AVAILABLE: string
+	/**
+	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​n​o​w​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​u​p​d​a​t​e​ ​w​i​t​h​ ​n​e​w​ ​f​e​a​t​u​r​e​s​ ​a​n​d​ ​i​m​p​r​o​v​e​m​e​n​t​s​.
 	 * @param {string} version
 	 */
-	APP_VERSION: RequiredParams<'version'>
+	APP_UPDATE_AVAILABLE_MESSAGE: RequiredParams<'version'>
 	/**
 	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
 	 */
@@ -409,6 +528,11 @@ type RootTranslation = {
 	 * T​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​ ​t​h​a​t​ ​i​s​ ​m​a​k​i​n​g​ ​t​h​i​s​ ​r​e​q​u​e​s​t​ ​c​o​u​l​d​ ​n​o​t​ ​b​e​ ​v​e​r​i​f​i​e​d​.​ ​P​r​o​c​e​e​d​ ​a​t​ ​y​o​u​r​ ​o​w​n​ ​r​i​s​k​.
 	 */
 	APP_VERIFICATION_UNKNOWN: string
+	/**
+	 * v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
+	 * @param {string} version
+	 */
+	APP_VERSION: RequiredParams<'version'>
 	/**
 	 * A​p​r​i​l
 	 */
@@ -774,7 +898,7 @@ type RootTranslation = {
 	 */
 	BD_NO_TOKEN_FOUND: string
 	/**
-	 * Y​o​u​ ​c​a​n​ ​o​b​s​e​r​v​e​ ​a​ ​w​a​l​l​e​t​ ​b​y​ ​a​d​d​i​n​g​ ​i​t​s​ ​a​d​d​r​e​s​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​v​i​e​w​ ​t​h​e​ ​w​a​l​l​e​t​'​s​ ​b​a​l​a​n​c​e​ ​a​n​d​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 * Y​o​u​ ​c​a​n​ ​w​a​t​c​h​ ​a​ ​w​a​l​l​e​t​ ​b​y​ ​a​d​d​i​n​g​ ​i​t​s​ ​a​d​d​r​e​s​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​v​i​e​w​ ​t​h​e​ ​w​a​l​l​e​t​'​s​ ​b​a​l​a​n​c​e​ ​a​n​d​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
 	 */
 	BD_OBSERVE_WALLET: string
 	/**
@@ -1001,7 +1125,7 @@ type RootTranslation = {
 	 */
 	BROWSER_ADD_BOOKMARK_TITLE: string
 	/**
-	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_ADD_FAVORITE_DAPPS: string
 	/**
@@ -1041,9 +1165,13 @@ type RootTranslation = {
 	 */
 	BROWSER_COPY_LINK_SUCCESS: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_FAVOURITES_TITLE: string
+	/**
+	 * G​o​ ​t​o​ ​p​r​e​v​i​o​u​s​ ​p​a​g​e
+	 */
+	BROWSER_GO_BACK: string
 	/**
 	 * T​h​i​s​ ​a​d​d​r​e​s​s​ ​c​a​n​'​t​ ​b​e​ ​r​e​a​c​h​e​d
 	 */
@@ -1061,14 +1189,30 @@ type RootTranslation = {
 	 */
 	BROWSER_HISTORY_EMPTY: string
 	/**
+	 * F​o​u​n​d
+	 */
+	BROWSER_HISTORY_FOUND: string
+	/**
+	 * M​o​r​e​ ​r​e​s​u​l​t​s
+	 */
+	BROWSER_HISTORY_MORE_RESULTS: string
+	/**
+	 * N​o​ ​r​e​s​u​l​t​s​ ​f​o​u​n​d
+	 */
+	BROWSER_HISTORY_NO_RESULTS: string
+	/**
 	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
 	 */
 	BROWSER_HISTORY_No_RECORDS: string
 	/**
+	 * R​e​s​u​l​t​s
+	 */
+	BROWSER_HISTORY_RESULTS: string
+	/**
 	 * {​a​m​o​u​n​t​}​ ​R​e​s​u​l​t​s
 	 * @param {number} amount
 	 */
-	BROWSER_HISTORY_RESULTS: RequiredParams<'amount'>
+	BROWSER_HISTORY_RESULTS_AMOUNT: RequiredParams<'amount'>
 	/**
 	 * S​e​a​r​c​h
 	 */
@@ -1090,9 +1234,17 @@ type RootTranslation = {
 	 */
 	BROWSER_NEW_TAB: string
 	/**
-	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 * R​e​l​o​a​d​ ​p​a​g​e
+	 */
+	BROWSER_RELOAD_PAGE: string
+	/**
+	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_REMOVE_FAVORITE_DAPPS: string
+	/**
+	 * S​e​e​ ​a​l​l​ ​t​a​b​s​ ​o​p​e​n
+	 */
+	BROWSER_SEE_ALL_TABS: string
 	/**
 	 * S​h​a​r​e
 	 */
@@ -1113,6 +1265,10 @@ type RootTranslation = {
 	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
 	BTN_ADD_CUSTOM_NODE: string
+	/**
+	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​s
+	 */
+	BTN_ADD_TO_FAVORITE: string
 	/**
 	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
 	 */
@@ -1255,6 +1411,14 @@ type RootTranslation = {
 	 */
 	BTN_ENTER_PASSWORD: string
 	/**
+	 * F​a​v​o​r​i​t​e
+	 */
+	BTN_FAVORITE: string
+	/**
+	 * F​a​v​o​r​i​t​e​d
+	 */
+	BTN_FAVORiTED: string
+	/**
 	 * G​E​T​ ​S​T​A​R​T​E​D
 	 */
 	BTN_GET_STARTED: string
@@ -1311,15 +1475,15 @@ type RootTranslation = {
 	 */
 	BTN_NO_GO_BACK: string
 	/**
-	 * O​b​s​e​r​v​e​d
+	 * W​a​t​c​h​i​n​g
 	 */
 	BTN_OBSERVED: string
 	/**
-	 * O​b​s​e​r​v​e​ ​w​a​l​l​e​t
+	 * W​a​t​c​h​ ​w​a​l​l​e​t
 	 */
 	BTN_OBSERVE_WALLET: string
 	/**
-	 * I​m​p​o​r​t​ ​a​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​o​n​l​y​ ​o​b​s​e​r​v​e​ ​t​h​i​s​ ​w​a​l​l​e​t
+	 * A​d​d​ ​a​n​y​ ​p​u​b​l​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​a​n​d​ ​k​e​e​p​ ​t​r​a​c​k​ ​o​f​ ​i​t​s​ ​b​a​l​a​n​c​e​s​ ​a​n​d​ ​a​c​t​i​v​i​t​y
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: string
 	/**
@@ -1339,9 +1503,17 @@ type RootTranslation = {
 	 */
 	BTN_ONBOARDING_SLIDE_03: string
 	/**
+	 * O​p​e​n
+	 */
+	BTN_OPEN: string
+	/**
 	 * O​p​e​n​ ​d​A​p​p
 	 */
 	BTN_OPEN_DAPP: string
+	/**
+	 * O​r​d​e​r​ ​s​a​v​e​d​!
+	 */
+	BTN_ORDER_SAVED: string
 	/**
 	 * P​a​s​t​e​ ​A​d​d​r​e​s​s
 	 */
@@ -1354,6 +1526,10 @@ type RootTranslation = {
 	 * R​e​m​o​v​e​ ​a​c​c​o​u​n​t
 	 */
 	BTN_REMOVE_ACCOUNT: string
+	/**
+	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​s
+	 */
+	BTN_REMOVE_FROM_FAVORITE: string
 	/**
 	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
 	 */
@@ -1382,6 +1558,14 @@ type RootTranslation = {
 	 * R​e​t​r​y
 	 */
 	BTN_RETRY: string
+	/**
+	 * S​a​v​e
+	 */
+	BTN_SAVE: string
+	/**
+	 * S​a​v​e​d​!
+	 */
+	BTN_SAVED: string
 	/**
 	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
 	 */
@@ -1686,11 +1870,11 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_ERROR: string
 	/**
-	 * F​a​v​o​u​r​i​t​e
+	 * F​a​v​o​r​i​t​e
 	 */
 	COMMON_LBL_FAVOURITE: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	COMMON_LBL_FAVOURITES: string
 	/**
@@ -1730,6 +1914,10 @@ type RootTranslation = {
 	 * U​R​L
 	 */
 	COMMON_LBL_URL: string
+	/**
+	 * V​a​l​u​e
+	 */
+	COMMON_LBL_VALUE: string
 	/**
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
@@ -1850,6 +2038,14 @@ type RootTranslation = {
 	 * C​o​n​t​r​a​c​t
 	 */
 	CONNECTED_APP_CONTRACT: string
+	/**
+	 * Y​o​u​ ​c​a​n​ ​r​e​c​o​n​n​e​c​t​ ​a​n​y​t​i​m​e​ ​—​ ​r​e​m​o​v​i​n​g​ ​i​t​ ​j​u​s​t​ ​m​e​a​n​s​ ​y​o​u​'​l​l​ ​n​e​e​d​ ​t​o​ ​l​o​g​ ​i​n​ ​a​g​a​i​n​ ​n​e​x​t​ ​t​i​m​e​.
+	 */
+	CONNECTED_APP_DELETE_DESCRIPTION: string
+	/**
+	 * D​i​s​c​o​n​n​e​c​t​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p
+	 */
+	CONNECTED_APP_DELETE_TITLE: string
 	/**
 	 * D​e​s​c​r​i​p​t​i​o​n
 	 */
@@ -2028,9 +2224,77 @@ type RootTranslation = {
 	 */
 	CUSTOM_TOKENS_NOT_AVAIABLE: string
 	/**
+	 * C​a​r​b​o​n​ ​F​o​o​t​p​r​i​n​t
+	 */
+	DAPP_CATEGORY_CARBON_FOOTPRINT: string
+	/**
+	 * L​e​a​r​n​i​n​g
+	 */
+	DAPP_CATEGORY_EDUCATION_LEARNING: string
+	/**
+	 * L​i​f​e​s​t​y​l​e
+	 */
+	DAPP_CATEGORY_FITNESS_WELLNESS: string
+	/**
+	 * W​e​b​3
+	 */
+	DAPP_CATEGORY_GREEN_FINANCE_DEFI: string
+	/**
+	 * T​r​a​n​s​p​o​r​t​a​t​i​o​n
+	 */
+	DAPP_CATEGORY_GREEN_MOBILITY_TRAVEL: string
+	/**
+	 * F​o​o​d​ ​&​ ​D​r​i​n​k​s
+	 */
+	DAPP_CATEGORY_NUTRITION: string
+	/**
+	 * O​t​h​e​r​s
+	 */
+	DAPP_CATEGORY_OTHERS: string
+	/**
+	 * P​e​t​s
+	 */
+	DAPP_CATEGORY_PETS: string
+	/**
+	 * R​e​c​y​c​l​i​n​g
+	 */
+	DAPP_CATEGORY_PLASTIC_WASTE_RECYCLING: string
+	/**
+	 * E​n​e​r​g​y
+	 */
+	DAPP_CATEGORY_RENEWABLE_ENERGY_EFFICIENCY: string
+	/**
+	 * S​o​c​i​a​l​,​ ​C​o​m​m​u​n​i​t​y​,​ ​A​c​t​i​v​i​s​m
+	 */
+	DAPP_CATEGORY_SOCIAL_COMMUNITY_ACTIVISM: string
+	/**
+	 * S​h​o​p​p​i​n​g
+	 */
+	DAPP_CATEGORY_SUSTAINABLE_SHOPPING: string
+	/**
 	 * D​A​p​p​ ​C​o​n​n​e​c​t​i​o​n
 	 */
 	DAPP_CONNECTION: string
+	/**
+	 * M​e​t​h​o​d
+	 */
+	DAPP_LOGIN_METHOD: string
+	/**
+	 * C​e​r​t​i​f​i​c​a​t​e
+	 */
+	DAPP_LOGIN_METHOD_CERTIFICATE: string
+	/**
+	 * N​o​ ​s​i​g​n​a​t​u​r​e
+	 */
+	DAPP_LOGIN_METHOD_SIMPLE: string
+	/**
+	 * T​y​p​e​d​ ​d​a​t​a
+	 */
+	DAPP_LOGIN_METHOD_TYPED_DATA: string
+	/**
+	 * d​A​p​p​ ​l​o​g​i​n
+	 */
+	DAPP_LOGIN_TITLE: string
 	/**
 	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
@@ -2160,13 +2424,25 @@ type RootTranslation = {
 	 */
 	DISCOVER_ECOSYSTEM_FILTER_DAPPS: string
 	/**
+	 * D​e​F​i
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_DEFI: string
+	/**
+	 * G​o​v​e​r​n​a​n​c​e
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_GOVERNANCE: string
+	/**
 	 * N​F​T​s
 	 */
-	DISCOVER_ECOSYSTEM_FILTER_NFTS: string
+	DISCOVER_ECOSYSTEM_FILTER_NFT: string
 	/**
 	 * S​u​s​t​a​i​n​a​b​i​l​i​t​y
 	 */
 	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: string
+	/**
+	 * T​o​o​l​s
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_TOOLS: string
 	/**
 	 * A​d​d​ ​b​o​o​k​m​a​r​k​s​ ​i​n​ ​t​h​e​ ​b​r​o​w​s​e​r
 	 */
@@ -2176,13 +2452,25 @@ type RootTranslation = {
 	 */
 	DISCOVER_EMPTY_FAVOURITES: string
 	/**
-	 * N​o​ ​f​a​v​o​u​r​i​t​e​s​ ​a​d​d​e​d
+	 * N​o​ ​f​a​v​o​r​i​t​e​s​ ​a​d​d​e​d
 	 */
 	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: string
 	/**
 	 * N​o​ ​r​e​s​u​l​t​s​ ​f​o​u​n​d​ ​f​o​r​ ​y​o​u​r​ ​s​e​a​r​c​h
 	 */
 	DISCOVER_EMPTY_SEARCH: string
+	/**
+	 * F​o​r​ ​y​o​u
+	 */
+	DISCOVER_FOR_YOU: string
+	/**
+	 * N​e​w
+	 */
+	DISCOVER_FOR_YOU_NEW: string
+	/**
+	 * P​o​p​u​l​a​r
+	 */
+	DISCOVER_FOR_YOU_POPULAR: string
 	/**
 	 * N​o​ ​D​a​p​p​ ​f​o​u​n​d
 	 */
@@ -2208,7 +2496,11 @@ type RootTranslation = {
 	 */
 	DISCOVER_SUB_TITLE: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * S​u​g​g​e​s​t​e​d​ ​f​o​r​ ​y​o​u
+	 */
+	DISCOVER_SUGGESTED_FOR_YOU: string
+	/**
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	DISCOVER_TAB_FAVOURITES: string
 	/**
@@ -2424,9 +2716,17 @@ type RootTranslation = {
 	 */
 	FACE_ID: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * A​d​d​ ​y​o​u​r​ ​f​a​v​o​r​i​t​e​ ​a​p​p​s
+	 */
+	FAVORITES_SUGGESTION_BANNER_TITLE: string
+	/**
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	FAVOURITES_BOTTOM_SHEET_TITLE: string
+	/**
+	 * N​o​ ​f​a​v​o​r​i​t​e​d​ ​a​p​p​s​ ​t​o​ ​s​h​o​w
+	 */
+	FAVOURITES_DAPPS_EMPTY_LIST: string
 	/**
 	 * C​o​u​l​d​ ​n​o​t​ ​f​i​n​d​ ​a​n​y​ ​d​a​p​p​s​ ​w​i​t​h​ ​t​h​i​s​ ​n​a​m​e
 	 */
@@ -2436,7 +2736,7 @@ type RootTranslation = {
 	 */
 	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	FAVOURITES_DAPPS_TITLE: string
 	/**
@@ -2576,6 +2876,10 @@ type RootTranslation = {
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: string
 	/**
+	 * T​y​p​e​d​ ​D​a​t​a​ ​c​a​n​n​o​t​ ​b​e​ ​s​i​g​n​e​d​ ​w​i​t​h​ ​a​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​a​c​c​o​u​n​t​.
+	 */
+	LEDGER_DEVICE_ALERT: string
+	/**
 	 * M​e​s​s​a​g​e​ ​i​s​ ​r​e​a​d​y
 	 */
 	LEDGER_MESSAGE_READY: string
@@ -2607,6 +2911,22 @@ type RootTranslation = {
 	 * L​o​a​d​i​n​g​ ​m​o​r​e
 	 */
 	LOADING_MORE: string
+	/**
+	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
+	 */
+	LOGIN_KEEP_ME_SIGNED_IN: string
+	/**
+	 * L​o​g​i​n
+	 */
+	LOGIN_REQUEST_CTA: string
+	/**
+	 * L​o​g​i​n
+	 */
+	LOGIN_REQUEST_TITLE: string
+	/**
+	 * L​o​a​d​i​n​g​ ​p​a​g​e​ ​c​o​n​t​e​n​t
+	 */
+	LOADING_PAGE_CONTENT: string
 	/**
 	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​t​o​k​e​n​?
 	 */
@@ -2853,6 +3173,10 @@ type RootTranslation = {
 	 */
 	NFT_DOWNLOAD_ERROR: string
 	/**
+	 * N​F​T​ ​P​u​r​c​h​a​s​e​d
+	 */
+	NFT_PURCHASED: string
+	/**
 	 * N​F​T​ ​R​e​c​e​i​v​e
 	 */
 	NFT_RECEIVE: string
@@ -2873,11 +3197,15 @@ type RootTranslation = {
 	 */
 	NFT_SEND: string
 	/**
-	 * N​F​T​ ​r​e​c​e​i​v​e​d
+	 * N​F​T​ ​S​o​l​d
+	 */
+	NFT_SOLD: string
+	/**
+	 * N​F​T​ ​R​e​c​e​i​v​e​d
 	 */
 	NFT_TRANSFER_RECEIVED: string
 	/**
-	 * N​F​T​ ​s​e​n​t
+	 * N​F​T​ ​S​e​n​t
 	 */
 	NFT_TRANSFER_SENT: string
 	/**
@@ -3192,6 +3520,99 @@ type RootTranslation = {
 	 */
 	RECAP: string
 	/**
+	 * V​e​B​e​t​t​e​r​ ​a​c​t​i​o​n
+	 */
+	RECEIPT_OUTPUT_B3TR_ACTION: string
+	/**
+	 * V​o​t​i​n​g​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​c​a​l​l
+	 */
+	RECEIPT_OUTPUT_CONTRACT_CALL: string
+	/**
+	 * t​o​k​e​n
+	 */
+	RECEIPT_OUTPUT_GENERIC_TOKEN: string
+	/**
+	 * N​F​T​ ​a​p​p​r​o​v​a​l
+	 */
+	RECEIPT_OUTPUT_NFT_APPROVE: string
+	/**
+	 * N​F​T​ ​r​e​c​e​i​v​e
+	 */
+	RECEIPT_OUTPUT_NFT_RECEIVE: string
+	/**
+	 * N​F​T​ ​s​e​n​d
+	 */
+	RECEIPT_OUTPUT_NFT_SEND: string
+	/**
+	 * S​u​p​p​o​r​t​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_VOTE: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​r​o​u​n​d​ ​#​{​r​o​u​n​d​I​d​}
+	 * @param {number} roundId
+	 */
+	RECEIPT_OUTPUT_ROUND_VOTE: RequiredParams<'roundId'>
+	/**
+	 * B​a​s​e​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION: string
+	/**
+	 * N​o​d​e​ ​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATE: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e​ ​&​ ​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE_DELEGATE: string
+	/**
+	 * N​o​d​e​ ​u​n​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNDELEGATE: string
+	/**
+	 * V​E​T​ ​u​n​s​t​a​k​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNSTAKE: string
+	/**
+	 * S​w​a​p
+	 */
+	RECEIPT_OUTPUT_SWAP: string
+	/**
+	 * T​o​k​e​n​ ​a​p​p​r​o​v​a​l
+	 */
+	RECEIPT_OUTPUT_TOKEN_APPROVE: string
+	/**
+	 * T​o​k​e​n​ ​c​o​n​v​e​r​s​i​o​n
+	 */
+	RECEIPT_OUTPUT_TOKEN_CONVERSION: string
+	/**
+	 * T​o​k​e​n​ ​r​e​c​e​i​v​e
+	 */
+	RECEIPT_OUTPUT_TOKEN_RECEIVE: string
+	/**
+	 * T​o​k​e​n​ ​s​e​n​d
+	 */
+	RECEIPT_OUTPUT_TOKEN_SEND: string
+	/**
+	 * C​a​s​t​ ​v​o​t​e
+	 */
+	RECEIPT_OUTPUT_VEVOTE_CAST: string
+	/**
 	 * R​e​c​e​i​v​e​d
 	 */
 	RECEIVED: string
@@ -3500,6 +3921,22 @@ type RootTranslation = {
 	 * P​l​e​a​s​e​,​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​ ​h​a​v​e​ ​b​a​c​k​e​d​ ​u​p​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​b​e​f​o​r​e​ ​p​r​o​c​e​e​d​i​n​g​ ​w​i​t​h​ ​t​h​e​ ​u​p​g​r​a​d​e​.
 	 */
 	SECURITY_UPGRADE_REMINDER_DESC: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​a​c​c​o​u​n​t
+	 */
+	SELECT_ACCOUNT_DESCRIPTION: string
+	/**
+	 * W​a​l​l​e​t​s
+	 */
+	SELECT_ACCOUNT_TITLE: string
+	/**
+	 * W​a​t​c​h​i​n​g
+	 */
+	SELECT_ACCOUNT_WATCHING: string
+	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​s
+	 */
+	SELECT_ACCOUNT_YOUR_WALLETS: string
 	/**
 	 * I​ ​U​N​D​E​R​S​T​A​N​D
 	 */
@@ -3896,6 +4333,16 @@ type RootTranslation = {
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: string
 	/**
+	 * D​i​s​c​o​v​e​r​e​d​ ​{​n​a​m​e​}​ ​o​n​ ​V​e​W​o​r​l​d​ ​—​ ​d​e​f​i​n​i​t​e​l​y​ ​w​o​r​t​h​ ​a​ ​l​o​o​k​.​
+​H​e​r​e​'​s​ ​w​h​a​t​ ​i​t​'​s​ ​a​l​l​ ​a​b​o​u​t​:​
+​{​d​e​s​c​r​i​p​t​i​o​n​}​
+​{​u​r​l​}
+	 * @param {string} description
+	 * @param {string} name
+	 * @param {string} url
+	 */
+	SHARE_DAPP: RequiredParams<'description' | 'name' | 'url'>
+	/**
 	 * S​h​a​r​e​ ​i​m​a​g​e
 	 */
 	SHARE_IMAGE: string
@@ -3940,25 +4387,53 @@ type RootTranslation = {
 	 */
 	SIGN_TRANSACTION_ERROR: string
 	/**
+	 * C​o​n​f​i​r​m
+	 */
+	SIGN_TRANSACTION_REQUEST_CTA: string
+	/**
+	 * A​p​p​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SIGN_TRANSACTION_REQUEST_TITLE: string
+	/**
+	 * S​i​g​n
+	 */
+	SIGN_TYPED_DATA_REQUEST_CTA: string
+	/**
+	 * S​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a
+	 */
+	SIGN_TYPED_DATA_REQUEST_TITLE: string
+	/**
+	 * D​e​l​e​g​a​t​e​d​ ​s​m​a​r​t​ ​w​a​l​l​e​t​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​y​e​t
+	 */
+	SMART_WALLET_DELEGATION_NOT_SUPPORTED: string
+	/**
 	 * C​l​a​i​m​a​b​l​e
 	 */
 	STARGATE_CLAIMABLE: string
+	/**
+	 * M​a​n​a​g​i​n​g
+	 */
+	STARGATE_DELEGATEE_LABEL: string
 	/**
 	 * L​o​c​k​e​d
 	 */
 	STARGATE_LOCKED: string
 	/**
+	 * M​a​n​a​g​e​ ​y​o​u​r​ ​s​t​a​k​i​n​g
+	 */
+	STARGATE_MANAGE_STAKING: string
+	/**
 	 * N​e​w​ ​s​t​a​k​e
 	 */
 	STARGATE_NEW_STAKE: string
 	/**
+	 * O​w​n
+	 */
+	STARGATE_OWN_LABEL: string
+	/**
 	 * R​e​w​a​r​d​s
 	 */
 	STARGATE_REWARDS: string
-	/**
-	 * M​a​n​a​g​e​ ​y​o​u​r​ ​s​t​a​k​i​n​g
-	 */
-	STARGATE_MANAGE_STAKING: string
 	/**
 	 * S​t​a​t​u​s
 	 */
@@ -3971,10 +4446,7 @@ type RootTranslation = {
 	 * S​u​c​c​e​s​s​!
 	 */
 	SUCCESS_GENERIC: string
-	/**
-	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​e​l​l​!
-	 */
-	SUCCESS_GENERIC_OPERATION: string
+
 	/**
 	 * V​i​e​w​ ​o​p​e​r​a​t​i​o​n​ ​d​e​t​a​i​l​.
 	 */
@@ -4001,6 +4473,14 @@ type RootTranslation = {
 	 */
 	SWAP_TITLE: string
 	/**
+	 * S​w​i​t​c​h
+	 */
+	SWITCH_WALLET_REQUEST_CTA: string
+	/**
+	 * S​w​i​t​c​h​ ​w​a​l​l​e​t
+	 */
+	SWITCH_WALLET_REQUEST_TITLE: string
+	/**
 	 * S​y​s​t​e​m
 	 */
 	SYSTEM_THEME: string
@@ -4009,6 +4489,30 @@ type RootTranslation = {
 	 * @param {number} number
 	 */
 	TAB_AMOUNT: RequiredParams<'number'>
+	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	TAB_TITLE_ACTIVITY: string
+	/**
+	 * A​p​p​s
+	 */
+	TAB_TITLE_APPS: string
+	/**
+	 * D​i​s​c​o​v​e​r
+	 */
+	TAB_TITLE_DISCOVER: string
+	/**
+	 * H​o​m​e
+	 */
+	TAB_TITLE_HOME: string
+	/**
+	 * M​o​r​e
+	 */
+	TAB_TITLE_MORE: string
+	/**
+	 * N​F​T​s
+	 */
+	TAB_TITLE_NFT: string
 	/**
 	 * T​a​k​e​ ​m​e​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
 	 */
@@ -4142,6 +4646,10 @@ type RootTranslation = {
 	 */
 	TITLE_MNEMONIC: string
 	/**
+	 * M​o​r​e​ ​o​p​t​i​o​n​s
+	 */
+	TITLE_MORE_OPTIONS: string
+	/**
 	 * N​e​t​w​o​r​k
 	 */
 	TITLE_NETWORK: string
@@ -4162,7 +4670,7 @@ type RootTranslation = {
 	 */
 	TITLE_NOTIFICATIONS: string
 	/**
-	 * O​b​s​e​r​v​e​ ​W​a​l​l​e​t
+	 * W​a​t​c​h​ ​w​a​l​l​e​t
 	 */
 	TITLE_OBSERVE_WALLET: string
 	/**
@@ -4347,6 +4855,14 @@ type RootTranslation = {
 	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
 	VECHAIN_NEWS_AND_UPDATES: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​p​r​o​p​o​s​a​l
+	 */
+	VEVOTE_CAST_DESCRIPTION: string
+	/**
+	 * V​e​V​o​t​e
+	 */
+	VEVOTE_CAST_TITLE: string
 	/**
 	 * V​e​W​o​r​l​d
 	 */
@@ -4739,6 +5255,54 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
 	/**
+	 * ALL
+	 */
+	ADDITIONAL_DETAIL_ALL: () => LocalizedString
+	/**
+	 * App
+	 */
+	ADDITIONAL_DETAIL_APP: () => LocalizedString
+	/**
+	 * Clause
+	 */
+	ADDITIONAL_DETAIL_CLAUSE: () => LocalizedString
+	/**
+	 * Comment
+	 */
+	ADDITIONAL_DETAIL_COMMENT: () => LocalizedString
+	/**
+	 * Contract data
+	 */
+	ADDITIONAL_DETAIL_CONTRACT_DATA: () => LocalizedString
+	/**
+	 * Event
+	 */
+	ADDITIONAL_DETAIL_EVENT: () => LocalizedString
+	/**
+	 * From
+	 */
+	ADDITIONAL_DETAIL_FROM: () => LocalizedString
+	/**
+	 * Receiver
+	 */
+	ADDITIONAL_DETAIL_RECEIVER: () => LocalizedString
+	/**
+	 * Receiver
+	 */
+	ADDITIONAL_DETAIL_SENDER: () => LocalizedString
+	/**
+	 * Spender
+	 */
+	ADDITIONAL_DETAIL_SPENDER: () => LocalizedString
+	/**
+	 * To
+	 */
+	ADDITIONAL_DETAIL_TO: () => LocalizedString
+	/**
+	 * Token ID
+	 */
+	ADDITIONAL_DETAIL_TOKEN_ID: () => LocalizedString
+	/**
 	 * Add Account
 	 */
 	ADD_ACCOUNT: () => LocalizedString
@@ -4888,13 +5452,81 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
 	/**
-	 * Update available
+	 * Actions
 	 */
-	APP_UPDATE_AVAILABLE: () => LocalizedString
+	APPS_BS_ACTIONS: () => LocalizedString
 	/**
-	 * Version {version} is now available to update with new features and improvements.
+	 * Add to favorites
 	 */
-	APP_UPDATE_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
+	APPS_BS_BTN_ADD_FAVORITE: () => LocalizedString
+	/**
+	 * Open
+	 */
+	APPS_BS_BTN_OPEN_APP: () => LocalizedString
+	/**
+	 * Favorited
+	 */
+	APPS_BS_BTN_REMOVE_FAVORITE: () => LocalizedString
+	/**
+	 * Joined
+	 */
+	APPS_BS_JOINED: () => LocalizedString
+	/**
+	 * Users
+	 */
+	APPS_BS_USERS: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	APPS_SCREEN_TITLE: () => LocalizedString
+	/**
+	 * Search an App or Website...
+	 */
+	APPS_SEARCH_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	APPS_TITLE: () => LocalizedString
+	/**
+	 * Energy
+	 */
+	APP_CATEGORY_ENERGY: () => LocalizedString
+	/**
+	 * Food & Drink
+	 */
+	APP_CATEGORY_FOOD_AND_DRINK: () => LocalizedString
+	/**
+	 * Learning
+	 */
+	APP_CATEGORY_LEARNING: () => LocalizedString
+	/**
+	 * Lifestyle
+	 */
+	APP_CATEGORY_LIFESTYLE: () => LocalizedString
+	/**
+	 * Others
+	 */
+	APP_CATEGORY_OTHERS: () => LocalizedString
+	/**
+	 * Pets
+	 */
+	APP_CATEGORY_PETS: () => LocalizedString
+	/**
+	 * Recycling
+	 */
+	APP_CATEGORY_RECYCLING: () => LocalizedString
+	/**
+	 * Shopping
+	 */
+	APP_CATEGORY_SHOPPING: () => LocalizedString
+	/**
+	 * Transportation
+	 */
+	APP_CATEGORY_TRANSPORTATION: () => LocalizedString
+	/**
+	 * Web3
+	 */
+	APP_CATEGORY_WEB3: () => LocalizedString
 	/**
 	 * App updated
 	 */
@@ -4904,9 +5536,13 @@ Try reconnect your device to the internet.
 	 */
 	APP_UPDATED_WHATS_NEW: () => LocalizedString
 	/**
-	 * version {version}
+	 * Update available
 	 */
-	APP_VERSION: (arg: { version: string }) => LocalizedString
+	APP_UPDATE_AVAILABLE: () => LocalizedString
+	/**
+	 * Version {version} is now available to update with new features and improvements.
+	 */
+	APP_UPDATE_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
 	/**
 	 * Please confirm that you would like to process this request.
 	 */
@@ -4919,6 +5555,10 @@ Try reconnect your device to the internet.
 	 * The application that is making this request could not be verified. Proceed at your own risk.
 	 */
 	APP_VERIFICATION_UNKNOWN: () => LocalizedString
+	/**
+	 * version {version}
+	 */
+	APP_VERSION: (arg: { version: string }) => LocalizedString
 	/**
 	 * April
 	 */
@@ -5280,7 +5920,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_NO_TOKEN_FOUND: () => LocalizedString
 	/**
-	 * You can observe a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
+	 * You can watch a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
 	 */
 	BD_OBSERVE_WALLET: () => LocalizedString
 	/**
@@ -5506,7 +6146,7 @@ Thanks for your patience!
 	 */
 	BROWSER_ADD_BOOKMARK_TITLE: () => LocalizedString
 	/**
-	 * Add to Favorite dApps
+	 * Add to Favorites
 	 */
 	BROWSER_ADD_FAVORITE_DAPPS: () => LocalizedString
 	/**
@@ -5546,9 +6186,13 @@ Thanks for your patience!
 	 */
 	BROWSER_COPY_LINK_SUCCESS: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favorites
 	 */
 	BROWSER_FAVOURITES_TITLE: () => LocalizedString
+	/**
+	 * Go to previous page
+	 */
+	BROWSER_GO_BACK: () => LocalizedString
 	/**
 	 * This address can't be reached
 	 */
@@ -5566,13 +6210,29 @@ Thanks for your patience!
 	 */
 	BROWSER_HISTORY_EMPTY: () => LocalizedString
 	/**
+	 * Found
+	 */
+	BROWSER_HISTORY_FOUND: () => LocalizedString
+	/**
+	 * More results
+	 */
+	BROWSER_HISTORY_MORE_RESULTS: () => LocalizedString
+	/**
+	 * No results found
+	 */
+	BROWSER_HISTORY_NO_RESULTS: () => LocalizedString
+	/**
 	 * No History Available
 	 */
 	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
 	/**
+	 * Results
+	 */
+	BROWSER_HISTORY_RESULTS: () => LocalizedString
+	/**
 	 * {amount} Results
 	 */
-	BROWSER_HISTORY_RESULTS: (arg: { amount: number }) => LocalizedString
+	BROWSER_HISTORY_RESULTS_AMOUNT: (arg: { amount: number }) => LocalizedString
 	/**
 	 * Search
 	 */
@@ -5594,9 +6254,17 @@ Thanks for your patience!
 	 */
 	BROWSER_NEW_TAB: () => LocalizedString
 	/**
-	 * Remove from Favorite dApps
+	 * Reload page
+	 */
+	BROWSER_RELOAD_PAGE: () => LocalizedString
+	/**
+	 * Remove from Favorites
 	 */
 	BROWSER_REMOVE_FAVORITE_DAPPS: () => LocalizedString
+	/**
+	 * See all tabs open
+	 */
+	BROWSER_SEE_ALL_TABS: () => LocalizedString
 	/**
 	 * Share
 	 */
@@ -5617,6 +6285,10 @@ Thanks for your patience!
 	 * Add a custom node
 	 */
 	BTN_ADD_CUSTOM_NODE: () => LocalizedString
+	/**
+	 * Add to Favorites
+	 */
+	BTN_ADD_TO_FAVORITE: () => LocalizedString
 	/**
 	 * Add to Favorite dApps
 	 */
@@ -5758,6 +6430,14 @@ Thanks for your patience!
 	 */
 	BTN_ENTER_PASSWORD: () => LocalizedString
 	/**
+	 * Favorite
+	 */
+	BTN_FAVORITE: () => LocalizedString
+	/**
+	 * Favorited
+	 */
+	BTN_FAVORiTED: () => LocalizedString
+	/**
 	 * GET STARTED
 	 */
 	BTN_GET_STARTED: () => LocalizedString
@@ -5814,15 +6494,15 @@ Thanks for your patience!
 	 */
 	BTN_NO_GO_BACK: () => LocalizedString
 	/**
-	 * Observed
+	 * Watching
 	 */
 	BTN_OBSERVED: () => LocalizedString
 	/**
-	 * Observe wallet
+	 * Watch wallet
 	 */
 	BTN_OBSERVE_WALLET: () => LocalizedString
 	/**
-	 * Import a wallet address to only observe this wallet
+	 * Add any public wallet address and keep track of its balances and activity
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: () => LocalizedString
 	/**
@@ -5842,9 +6522,17 @@ Thanks for your patience!
 	 */
 	BTN_ONBOARDING_SLIDE_03: () => LocalizedString
 	/**
+	 * Open
+	 */
+	BTN_OPEN: () => LocalizedString
+	/**
 	 * Open dApp
 	 */
 	BTN_OPEN_DAPP: () => LocalizedString
+	/**
+	 * Order saved!
+	 */
+	BTN_ORDER_SAVED: () => LocalizedString
 	/**
 	 * Paste Address
 	 */
@@ -5857,6 +6545,10 @@ Thanks for your patience!
 	 * Remove account
 	 */
 	BTN_REMOVE_ACCOUNT: () => LocalizedString
+	/**
+	 * Remove from Favorites
+	 */
+	BTN_REMOVE_FROM_FAVORITE: () => LocalizedString
 	/**
 	 * Remove from Favorite dApps
 	 */
@@ -5885,6 +6577,14 @@ Thanks for your patience!
 	 * Retry
 	 */
 	BTN_RETRY: () => LocalizedString
+	/**
+	 * Save
+	 */
+	BTN_SAVE: () => LocalizedString
+	/**
+	 * Saved!
+	 */
+	BTN_SAVED: () => LocalizedString
 	/**
 	 * Scan QR Code
 	 */
@@ -6186,11 +6886,11 @@ Thanks for your patience!
 	 */
 	COMMON_LBL_ERROR: () => LocalizedString
 	/**
-	 * Favourite
+	 * Favorite
 	 */
 	COMMON_LBL_FAVOURITE: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favorites
 	 */
 	COMMON_LBL_FAVOURITES: () => LocalizedString
 	/**
@@ -6229,6 +6929,10 @@ Thanks for your patience!
 	 * URL
 	 */
 	COMMON_LBL_URL: () => LocalizedString
+	/**
+	 * Value
+	 */
+	COMMON_LBL_VALUE: () => LocalizedString
 	/**
 	 * Market Cap
 	 */
@@ -6345,6 +7049,14 @@ Thanks for your patience!
 	 * Contract
 	 */
 	CONNECTED_APP_CONTRACT: () => LocalizedString
+	/**
+	 * You can reconnect anytime — removing it just means you'll need to log in again next time.
+	 */
+	CONNECTED_APP_DELETE_DESCRIPTION: () => LocalizedString
+	/**
+	 * Disconnect connected app
+	 */
+	CONNECTED_APP_DELETE_TITLE: () => LocalizedString
 	/**
 	 * Description
 	 */
@@ -6522,9 +7234,77 @@ Thanks for your patience!
 	 */
 	CUSTOM_TOKENS_NOT_AVAIABLE: () => LocalizedString
 	/**
+	 * Carbon Footprint
+	 */
+	DAPP_CATEGORY_CARBON_FOOTPRINT: () => LocalizedString
+	/**
+	 * Learning
+	 */
+	DAPP_CATEGORY_EDUCATION_LEARNING: () => LocalizedString
+	/**
+	 * Lifestyle
+	 */
+	DAPP_CATEGORY_FITNESS_WELLNESS: () => LocalizedString
+	/**
+	 * Web3
+	 */
+	DAPP_CATEGORY_GREEN_FINANCE_DEFI: () => LocalizedString
+	/**
+	 * Transportation
+	 */
+	DAPP_CATEGORY_GREEN_MOBILITY_TRAVEL: () => LocalizedString
+	/**
+	 * Food & Drinks
+	 */
+	DAPP_CATEGORY_NUTRITION: () => LocalizedString
+	/**
+	 * Others
+	 */
+	DAPP_CATEGORY_OTHERS: () => LocalizedString
+	/**
+	 * Pets
+	 */
+	DAPP_CATEGORY_PETS: () => LocalizedString
+	/**
+	 * Recycling
+	 */
+	DAPP_CATEGORY_PLASTIC_WASTE_RECYCLING: () => LocalizedString
+	/**
+	 * Energy
+	 */
+	DAPP_CATEGORY_RENEWABLE_ENERGY_EFFICIENCY: () => LocalizedString
+	/**
+	 * Social, Community, Activism
+	 */
+	DAPP_CATEGORY_SOCIAL_COMMUNITY_ACTIVISM: () => LocalizedString
+	/**
+	 * Shopping
+	 */
+	DAPP_CATEGORY_SUSTAINABLE_SHOPPING: () => LocalizedString
+	/**
 	 * DApp Connection
 	 */
 	DAPP_CONNECTION: () => LocalizedString
+	/**
+	 * Method
+	 */
+	DAPP_LOGIN_METHOD: () => LocalizedString
+	/**
+	 * Certificate
+	 */
+	DAPP_LOGIN_METHOD_CERTIFICATE: () => LocalizedString
+	/**
+	 * No signature
+	 */
+	DAPP_LOGIN_METHOD_SIMPLE: () => LocalizedString
+	/**
+	 * Typed data
+	 */
+	DAPP_LOGIN_METHOD_TYPED_DATA: () => LocalizedString
+	/**
+	 * dApp login
+	 */
+	DAPP_LOGIN_TITLE: () => LocalizedString
 	/**
 	 * Sign certificate
 	 */
@@ -6654,13 +7434,25 @@ Thanks for your patience!
 	 */
 	DISCOVER_ECOSYSTEM_FILTER_DAPPS: () => LocalizedString
 	/**
+	 * DeFi
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_DEFI: () => LocalizedString
+	/**
+	 * Governance
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_GOVERNANCE: () => LocalizedString
+	/**
 	 * NFTs
 	 */
-	DISCOVER_ECOSYSTEM_FILTER_NFTS: () => LocalizedString
+	DISCOVER_ECOSYSTEM_FILTER_NFT: () => LocalizedString
 	/**
 	 * Sustainability
 	 */
 	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: () => LocalizedString
+	/**
+	 * Tools
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_TOOLS: () => LocalizedString
 	/**
 	 * Add bookmarks in the browser
 	 */
@@ -6670,13 +7462,25 @@ Thanks for your patience!
 	 */
 	DISCOVER_EMPTY_FAVOURITES: () => LocalizedString
 	/**
-	 * No favourites added
+	 * No favorites added
 	 */
 	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: () => LocalizedString
 	/**
 	 * No results found for your search
 	 */
 	DISCOVER_EMPTY_SEARCH: () => LocalizedString
+	/**
+	 * For you
+	 */
+	DISCOVER_FOR_YOU: () => LocalizedString
+	/**
+	 * New
+	 */
+	DISCOVER_FOR_YOU_NEW: () => LocalizedString
+	/**
+	 * Popular
+	 */
+	DISCOVER_FOR_YOU_POPULAR: () => LocalizedString
 	/**
 	 * No Dapp found
 	 */
@@ -6702,7 +7506,11 @@ Thanks for your patience!
 	 */
 	DISCOVER_SUB_TITLE: () => LocalizedString
 	/**
-	 * Favourites
+	 * Suggested for you
+	 */
+	DISCOVER_SUGGESTED_FOR_YOU: () => LocalizedString
+	/**
+	 * Favorites
 	 */
 	DISCOVER_TAB_FAVOURITES: () => LocalizedString
 	/**
@@ -6918,9 +7726,17 @@ Thanks for your patience!
 	 */
 	FACE_ID: () => LocalizedString
 	/**
-	 * Favourites
+	 * Add your favorite apps
+	 */
+	FAVORITES_SUGGESTION_BANNER_TITLE: () => LocalizedString
+	/**
+	 * Favorites
 	 */
 	FAVOURITES_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
+	 * No favorited apps to show
+	 */
+	FAVOURITES_DAPPS_EMPTY_LIST: () => LocalizedString
 	/**
 	 * Could not find any dapps with this name
 	 */
@@ -6930,7 +7746,7 @@ Thanks for your patience!
 	 */
 	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favorites
 	 */
 	FAVOURITES_DAPPS_TITLE: () => LocalizedString
 	/**
@@ -7070,6 +7886,10 @@ Thanks for your patience!
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: () => LocalizedString
 	/**
+	 * Typed Data cannot be signed with a Ledger device. Please select another account.
+	 */
+	LEDGER_DEVICE_ALERT: () => LocalizedString
+	/**
 	 * Message is ready
 	 */
 	LEDGER_MESSAGE_READY: () => LocalizedString
@@ -7101,6 +7921,22 @@ Thanks for your patience!
 	 * Loading more
 	 */
 	LOADING_MORE: () => LocalizedString
+	/**
+	 * Keep me signed in for future sessions
+	 */
+	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
+	/**
+	 * Login
+	 */
+	LOGIN_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Login
+	 */
+	LOGIN_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Loading page content
+	 */
+	LOADING_PAGE_CONTENT: () => LocalizedString
 	/**
 	 * Are you sure you want to add the selected token?
 	 */
@@ -7347,6 +8183,10 @@ Thanks for your patience!
 	 */
 	NFT_DOWNLOAD_ERROR: () => LocalizedString
 	/**
+	 * NFT Purchased
+	 */
+	NFT_PURCHASED: () => LocalizedString
+	/**
 	 * NFT Receive
 	 */
 	NFT_RECEIVE: () => LocalizedString
@@ -7367,11 +8207,15 @@ Thanks for your patience!
 	 */
 	NFT_SEND: () => LocalizedString
 	/**
-	 * NFT received
+	 * NFT Sold
+	 */
+	NFT_SOLD: () => LocalizedString
+	/**
+	 * NFT Received
 	 */
 	NFT_TRANSFER_RECEIVED: () => LocalizedString
 	/**
-	 * NFT sent
+	 * NFT Sent
 	 */
 	NFT_TRANSFER_SENT: () => LocalizedString
 	/**
@@ -7666,6 +8510,98 @@ Thanks for your patience!
 	 * Recap
 	 */
 	RECAP: () => LocalizedString
+	/**
+	 * VeBetter action
+	 */
+	RECEIPT_OUTPUT_B3TR_ACTION: () => LocalizedString
+	/**
+	 * Voting rewards
+	 */
+	RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS: () => LocalizedString
+	/**
+	 * Contract call
+	 */
+	RECEIPT_OUTPUT_CONTRACT_CALL: () => LocalizedString
+	/**
+	 * token
+	 */
+	RECEIPT_OUTPUT_GENERIC_TOKEN: () => LocalizedString
+	/**
+	 * NFT approval
+	 */
+	RECEIPT_OUTPUT_NFT_APPROVE: () => LocalizedString
+	/**
+	 * NFT receive
+	 */
+	RECEIPT_OUTPUT_NFT_RECEIVE: () => LocalizedString
+	/**
+	 * NFT send
+	 */
+	RECEIPT_OUTPUT_NFT_SEND: () => LocalizedString
+	/**
+	 * Support VeBetterDAO proposal
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: () => LocalizedString
+	/**
+	 * Vote on VeBetterDAO proposal
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_VOTE: () => LocalizedString
+	/**
+	 * Vote on round #{roundId}
+	 */
+	RECEIPT_OUTPUT_ROUND_VOTE: (arg: { roundId: number }) => LocalizedString
+	/**
+	 * Base rewards
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE: () => LocalizedString
+	/**
+	 * Delegation rewards
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION: () => LocalizedString
+	/**
+	 * Node delegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATE: () => LocalizedString
+	/**
+	 * VET stake
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE: () => LocalizedString
+	/**
+	 * VET stake & delegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE_DELEGATE: () => LocalizedString
+	/**
+	 * Node undelegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNDELEGATE: () => LocalizedString
+	/**
+	 * VET unstake
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNSTAKE: () => LocalizedString
+	/**
+	 * Swap
+	 */
+	RECEIPT_OUTPUT_SWAP: () => LocalizedString
+	/**
+	 * Token approval
+	 */
+	RECEIPT_OUTPUT_TOKEN_APPROVE: () => LocalizedString
+	/**
+	 * Token conversion
+	 */
+	RECEIPT_OUTPUT_TOKEN_CONVERSION: () => LocalizedString
+	/**
+	 * Token receive
+	 */
+	RECEIPT_OUTPUT_TOKEN_RECEIVE: () => LocalizedString
+	/**
+	 * Token send
+	 */
+	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
+	/**
+	 * Cast vote
+	 */
+	RECEIPT_OUTPUT_VEVOTE_CAST: () => LocalizedString
 	/**
 	 * Received
 	 */
@@ -7970,6 +8906,22 @@ Thanks for your patience!
 	 * Please, make sure you have backed up your recovery phrase before proceeding with the upgrade.
 	 */
 	SECURITY_UPGRADE_REMINDER_DESC: () => LocalizedString
+	/**
+	 * Select the active account
+	 */
+	SELECT_ACCOUNT_DESCRIPTION: () => LocalizedString
+	/**
+	 * Wallets
+	 */
+	SELECT_ACCOUNT_TITLE: () => LocalizedString
+	/**
+	 * Watching
+	 */
+	SELECT_ACCOUNT_WATCHING: () => LocalizedString
+	/**
+	 * Your wallets
+	 */
+	SELECT_ACCOUNT_YOUR_WALLETS: () => LocalizedString
 	/**
 	 * I UNDERSTAND
 	 */
@@ -8360,6 +9312,13 @@ Are you sure you want to continue?
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: () => LocalizedString
 	/**
+	 * Discovered {name} on VeWorld — definitely worth a look.
+Here's what it's all about:
+{description}
+{url}
+	 */
+	SHARE_DAPP: (arg: { description: string, name: string, url: string }) => LocalizedString
+	/**
 	 * Share image
 	 */
 	SHARE_IMAGE: () => LocalizedString
@@ -8404,25 +9363,53 @@ Are you sure you want to continue?
 	 */
 	SIGN_TRANSACTION_ERROR: () => LocalizedString
 	/**
+	 * Confirm
+	 */
+	SIGN_TRANSACTION_REQUEST_CTA: () => LocalizedString
+	/**
+	 * App transaction
+	 */
+	SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Sign
+	 */
+	SIGN_TYPED_DATA_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Sign typed data
+	 */
+	SIGN_TYPED_DATA_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Delegated smart wallet not supported yet
+	 */
+	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
+	/**
 	 * Claimable
 	 */
 	STARGATE_CLAIMABLE: () => LocalizedString
+	/**
+	 * Managing
+	 */
+	STARGATE_DELEGATEE_LABEL: () => LocalizedString
 	/**
 	 * Locked
 	 */
 	STARGATE_LOCKED: () => LocalizedString
 	/**
+	 * Manage your staking
+	 */
+	STARGATE_MANAGE_STAKING: () => LocalizedString
+	/**
 	 * New stake
 	 */
 	STARGATE_NEW_STAKE: () => LocalizedString
 	/**
+	 * Own
+	 */
+	STARGATE_OWN_LABEL: () => LocalizedString
+	/**
 	 * Rewards
 	 */
 	STARGATE_REWARDS: () => LocalizedString
-	/**
-	 * Manage your staking
-	 */
-	STARGATE_MANAGE_STAKING: () => LocalizedString
 	/**
 	 * Status
 	 */
@@ -8435,10 +9422,6 @@ Are you sure you want to continue?
 	 * Success!
 	 */
 	SUCCESS_GENERIC: () => LocalizedString
-	/**
-	 * The operation went well!
-	 */
-	SUCCESS_GENERIC_OPERATION: () => LocalizedString
 	/**
 	 * View operation detail.
 	 */
@@ -8464,6 +9447,14 @@ Are you sure you want to continue?
 	 */
 	SWAP_TITLE: () => LocalizedString
 	/**
+	 * Switch
+	 */
+	SWITCH_WALLET_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Switch wallet
+	 */
+	SWITCH_WALLET_REQUEST_TITLE: () => LocalizedString
+	/**
 	 * System
 	 */
 	SYSTEM_THEME: () => LocalizedString
@@ -8471,6 +9462,30 @@ Are you sure you want to continue?
 	 * {number} tabs
 	 */
 	TAB_AMOUNT: (arg: { number: number }) => LocalizedString
+	/**
+	 * Activity
+	 */
+	TAB_TITLE_ACTIVITY: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	TAB_TITLE_APPS: () => LocalizedString
+	/**
+	 * Discover
+	 */
+	TAB_TITLE_DISCOVER: () => LocalizedString
+	/**
+	 * Home
+	 */
+	TAB_TITLE_HOME: () => LocalizedString
+	/**
+	 * More
+	 */
+	TAB_TITLE_MORE: () => LocalizedString
+	/**
+	 * NFTs
+	 */
+	TAB_TITLE_NFT: () => LocalizedString
 	/**
 	 * Take me to Google Drive
 	 */
@@ -8604,6 +9619,10 @@ Are you sure you want to continue?
 	 */
 	TITLE_MNEMONIC: () => LocalizedString
 	/**
+	 * More options
+	 */
+	TITLE_MORE_OPTIONS: () => LocalizedString
+	/**
 	 * Network
 	 */
 	TITLE_NETWORK: () => LocalizedString
@@ -8624,7 +9643,7 @@ Are you sure you want to continue?
 	 */
 	TITLE_NOTIFICATIONS: () => LocalizedString
 	/**
-	 * Observe Wallet
+	 * Watch wallet
 	 */
 	TITLE_OBSERVE_WALLET: () => LocalizedString
 	/**
@@ -8807,6 +9826,14 @@ Are you sure you want to continue?
 	 * Vechain news & updates
 	 */
 	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
+	/**
+	 * Vote on proposal
+	 */
+	VEVOTE_CAST_DESCRIPTION: () => LocalizedString
+	/**
+	 * VeVote
+	 */
+	VEVOTE_CAST_TITLE: () => LocalizedString
 	/**
 	 * VeWorld
 	 */

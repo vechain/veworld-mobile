@@ -6,7 +6,7 @@ import { TokenImage } from "~Components/Reusable/TokenImage"
 import { COLORS } from "~Constants/Theme"
 import { useCombineFiatBalances, useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { selectBalanceForToken, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
+import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { BalanceUtils } from "~Utils"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
@@ -17,7 +17,6 @@ type Props = {
 
 export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) => {
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
-    const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
     const [width, setWidth] = useState<"auto" | number>("auto")
 
     const theme = useTheme()
@@ -28,7 +27,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
 
     const { combineFiatBalances } = useCombineFiatBalances()
 
-    const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
+    const tokenValueLabelColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
 
     const {
         isTokensOwnedLoading,
@@ -40,7 +39,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
     } = useTokenCardFiatInfo(b3trToken)
 
     const vot3FiatBalance = BalanceUtils.getFiatBalance(
-        vot3RawBalance?.balance ?? "0",
+        vot3Token?.balance?.balance ?? "0",
         exchangeRate ?? 0,
         VOT3.decimals,
     )
@@ -63,11 +62,12 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                     />
                 </BaseView>
             )
-        if (!exchangeRate) return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
+        if (!exchangeRate)
+            return <BaseText typographyFont="bodySemiBold">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
 
         return (
             <FiatBalance
-                typographyFont="subSubTitleSemiBold"
+                typographyFont="subSubTitleMedium"
                 color={tokenValueLabelColor}
                 balances={[veB3trFiatBalance.toString()]}
                 isVisible={isBalanceVisible}
@@ -90,7 +90,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                 <TokenImage isVechainToken iconSize={26} icon={B3TR.icon} />
                 <BaseView flexDirection="column" alignItems="flex-start">
                     <BaseView flexDirection="row" gap={4}>
-                        <BaseText color={tokenValueLabelColor} typographyFont="subSubTitleSemiBold" style={{ width }}>
+                        <BaseText typographyFont="subSubTitleSemiBold" style={{ width }}>
                             {b3trToken.symbol}
                         </BaseText>
                         {isLoading ? (
@@ -102,11 +102,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                                 width={40}
                             />
                         ) : (
-                            <BaseText
-                                typographyFont="subSubTitleMedium"
-                                align="right"
-                                color={theme.colors.tokenCardText}
-                                lineHeight={24}>
+                            <BaseText typographyFont="subSubTitleSemiBold" align="right" lineHeight={24}>
                                 {isBalanceVisible ? b3trToken.tokenUnitBalance : "•••••"}
                             </BaseText>
                         )}
@@ -129,11 +125,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                                 width={40}
                             />
                         ) : (
-                            <BaseText
-                                typographyFont="subSubTitleMedium"
-                                align="right"
-                                color={theme.colors.tokenCardText}
-                                lineHeight={24}>
+                            <BaseText typographyFont="subSubTitleSemiBold" align="right" lineHeight={24}>
                                 {isBalanceVisible ? vot3Token.tokenUnitBalance : "•••••"}
                             </BaseText>
                         )}

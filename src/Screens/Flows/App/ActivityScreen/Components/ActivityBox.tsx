@@ -4,7 +4,8 @@ import { StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
 import { B3TR, COLORS, DIRECTIONS, VET, VOT3, VTHO } from "~Constants"
-import { useFormatFiat, useNFTInfo, useTheme, useThemedStyles, useVns } from "~Hooks"
+import { useFormatFiat, useTheme, useThemedStyles, useVns } from "~Hooks"
+import { useNFTInfo } from "~Hooks/useNFTInfo"
 import { useI18nContext } from "~i18n"
 import {
     Activity,
@@ -23,6 +24,8 @@ import {
     FungibleToken,
     FungibleTokenActivity,
     IconKey,
+    LoginActivity,
+    NFTMarketplaceActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
     StargateActivity,
@@ -31,9 +34,17 @@ import {
     TypedDataActivity,
     UnknownTxActivity,
     VeBetterDaoDapp,
+    VeVoteCastActivity,
 } from "~Model"
-import { selectAllTokens, selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BigNutils } from "~Utils"
+import {
+    selectAllTokens,
+    selectCustomTokens,
+    selectFeaturedDapps,
+    selectOfficialTokens,
+    selectSelectedAccount,
+    useAppSelector,
+} from "~Storage/Redux"
+import { AddressUtils, BigNutils, URIUtils } from "~Utils"
 import { getTokenLevelName } from "~Utils/StargateUtils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 
@@ -387,7 +398,11 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
             title={title}
             rightAmount={rightAmount}
             rightAmountDescription={
-                <BaseText typographyFont="smallCaptionMedium" numberOfLines={1} color={theme.colors.activityCard.swap}>
+                <BaseText
+                    typographyFont="smallCaptionMedium"
+                    numberOfLines={1}
+                    color={theme.colors.activityCard.swap}
+                    allowFontScaling={false}>
                     {rightAmountDescription}
                 </BaseText>
             }
@@ -505,6 +520,59 @@ const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
             time={time}
             title={title}
             description={validatedCollectionName()}
+            onPress={onPressHandler}
+            nftImage={tokenMetadata?.image}
+        />
+    )
+}
+
+type NFTSaleActivityBoxProps = {
+    activity: NFTMarketplaceActivity
+    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+}
+
+const NFTSale = ({ activity, onPress }: NFTSaleActivityBoxProps) => {
+    const { LL } = useI18nContext()
+    const { collectionName, tokenMetadata } = useNFTInfo(activity?.tokenId, activity.contractAddress)
+    const { formatLocale } = useFormatFiat()
+    const customTokens = useAppSelector(selectCustomTokens)
+    const officialTokens = useAppSelector(selectOfficialTokens)
+
+    const allTokens = [customTokens, officialTokens].flat()
+    // Determine if user is buyer or seller based on their address
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const isBuyer = AddressUtils.compareAddresses(activity.buyer, selectedAccount.address)
+
+    const title = isBuyer ? LL.NFT_PURCHASED() : LL.NFT_SOLD()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const validatedCollectionName = () => {
+        if (!collectionName) return LL.UNKNOWN_COLLECTION()
+        return collectionName
+    }
+
+    const token = AddressUtils.compareAddresses(activity.tokenAddress, VET.address)
+        ? VET
+        : allTokens.find(_token => _token.address === activity.tokenAddress)
+
+    // Format the price
+    const formattedPrice = BigNutils(activity.price).toHuman(18).toTokenFormat_string(2, formatLocale)
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    const rightAmount = isBuyer ? `${DIRECTIONS.DOWN} ${formattedPrice}` : `${DIRECTIONS.UP} ${formattedPrice}`
+
+    return (
+        <BaseActivityBox
+            testID={`NFT-SALE-${activity.id}`}
+            icon="icon-image"
+            time={time}
+            title={title}
+            description={validatedCollectionName()}
+            rightAmount={rightAmount}
+            rightAmountDescription={token?.symbol ?? "VET"}
             onPress={onPressHandler}
             nftImage={tokenMetadata?.image}
         />
@@ -938,10 +1006,67 @@ const Staking = ({ activity, onPress }: StakingProps) => {
     )
 }
 
+type VeVoteCastProps = {
+    activity: VeVoteCastActivity
+    onPress: (activity: Activity) => void
+}
+
+const VeVoteCast = ({ activity, onPress }: VeVoteCastProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    return (
+        <BaseActivityBox
+            testID={`VEVOTE-CAST-${activity.id}`}
+            icon="icon-vote"
+            time={time}
+            title={LL.VEVOTE_CAST_TITLE()}
+            description={LL.VEVOTE_CAST_DESCRIPTION()}
+            onPress={onPressHandler}
+        />
+    )
+}
+
+type DappLoginProps = {
+    activity: LoginActivity
+    onPress: (activity: Activity) => void
+}
+
+const DappLogin = ({ activity, onPress }: DappLoginProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+    const featuredDapps = useAppSelector(selectFeaturedDapps)
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    const description = useMemo(() => {
+        const foundApp = featuredDapps.find(app => URIUtils.compareURLs(app.href, activity.linkUrl))
+        return foundApp?.name ?? new URL(activity.linkUrl).hostname
+    }, [activity.linkUrl, featuredDapps])
+
+    return (
+        <BaseActivityBox
+            testID={`DAPP-LOGIN-${activity.id}`}
+            icon="icon-user-check"
+            time={time}
+            title={LL.DAPP_LOGIN_TITLE()}
+            description={description}
+            onPress={onPressHandler}
+        />
+    )
+}
+
 export const ActivityBox = {
     TokenTransfer: TokenTransfer,
     DAppTransaction: DAppTransaction,
     NFTTransfer: NFTTransfer,
+    NFTSale: NFTSale,
     DAppSignCert: DAppSignCertBox,
     ConnectedAppActivity: ConnectedAppActivityBox,
     SignedTypedData: SignedTypedData,
@@ -956,4 +1081,6 @@ export const ActivityBox = {
     B3trSwapVot3ToB3tr: B3trSwapVot3ToB3tr,
     B3trProposalSupport: B3trProposalSupport,
     UnknownTx: UnknownTx,
+    VeVoteCast,
+    DappLogin,
 }

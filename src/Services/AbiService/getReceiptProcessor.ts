@@ -18,6 +18,7 @@ const businessEventManagers = {
         TREASURY_CONTRACT: "0xd5903bcc66e439c753e525f8af2fec7be2429593",
         STARGATE_DELEGATION_CONTRACT: "0x4cb1c9ef05b529c093371264fab2c93cc6cddb0e",
         STARGATE_NFT_CONTRACT: "0x1856c533ac2d94340aaa8544d35a5c1d4a21dee7",
+        VEVOTE_CONTRACT: "0x7d812e8e544bb0c7898ea656b70173e7ef426b4c",
     }),
     [NETWORK_TYPE.TEST]: new BusinessEventAbiManager(NETWORK_TYPE.TEST, {
         B3TR_CONTRACT: "0xbf64cf86894ee0877c4e7d03936e35ee8d8b864f",
@@ -30,6 +31,7 @@ const businessEventManagers = {
         TREASURY_CONTRACT: "0x039893ebe092a2d22b08e2b029735d211bff7f50",
         STARGATE_DELEGATION_CONTRACT: "0x7240e3bc0d26431512d5b67dbd26d199205bffe8",
         STARGATE_NFT_CONTRACT: "0x1ec1d168574603ec35b9d229843b7c2b44bcb770",
+        VEVOTE_CONTRACT: "0xe1ecc51fc02c29e54b428279c0456010fda5c4f2",
     }),
     [NETWORK_TYPE.SOLO]: new BusinessEventAbiManager(NETWORK_TYPE.SOLO, {}),
     [NETWORK_TYPE.OTHER]: new BusinessEventAbiManager(NETWORK_TYPE.OTHER, {}),
