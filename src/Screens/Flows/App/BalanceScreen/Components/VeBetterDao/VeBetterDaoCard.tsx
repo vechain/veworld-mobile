@@ -71,7 +71,7 @@ export const VeBetterDaoCard = () => {
             <BaseSpacer height={16} />
 
             <BaseView flexDirection="row" gap={8}>
-                <BaseIcon name="icon-leaf" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} size={16} py={4} />
+                <BaseIcon name="icon-leafs" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} size={16} py={4} />
                 <BaseText color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} typographyFont="subSubTitleSemiBold">
                     {LL.VBD_YOUR_OFFSET()}
                 </BaseText>
