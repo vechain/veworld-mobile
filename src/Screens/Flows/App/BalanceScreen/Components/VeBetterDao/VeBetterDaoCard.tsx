@@ -34,9 +34,15 @@ export const VeBetterDaoCard = () => {
 
     return (
         <BaseView style={styles.root}>
-            <FastImage source={b3mo} style={styles.b3mo as ImageStyle} />
+            <BaseView style={styles.b3mo}>
+                <FastImage
+                    source={b3mo}
+                    resizeMode={FastImage.resizeMode.contain}
+                    style={styles.b3moImage as ImageStyle}
+                />
+            </BaseView>
             <BaseView pb={16} flexDirection="column" gap={8}>
-                <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="bodySemiBold">
+                <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="subSubTitleSemiBold">
                     {LL.VBD_YOUR_BETTER_ACTIONS()}
                 </BaseText>
                 <BaseText color={theme.isDark ? COLORS.WHITE : COLORS.GREY_700} style={styles.actionsText}>
@@ -48,7 +54,7 @@ export const VeBetterDaoCard = () => {
 
             <BaseView flexDirection="row" gap={8}>
                 <BaseIcon name="icon-leaf" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} size={16} py={4} />
-                <BaseText color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} typographyFont="bodySemiBold">
+                <BaseText color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} typographyFont="subSubTitleSemiBold">
                     {LL.VBD_YOUR_OFFSET()}
                 </BaseText>
             </BaseView>
@@ -75,8 +81,14 @@ export const VeBetterDaoCard = () => {
             <BaseButton
                 action={() => {}}
                 variant="ghost"
-                rightIcon={<BaseIcon name="icon-arrow-link" color={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE} />}
-                typographyFont="bodyMedium"
+                rightIcon={
+                    <BaseIcon
+                        name="icon-arrow-link"
+                        color={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE}
+                        size={20}
+                    />
+                }
+                typographyFont="subSubTitleMedium"
                 textColor={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE}
                 selfAlign="center"
                 py={0}>
@@ -110,17 +122,8 @@ const baseStyles = (theme: ColorThemeType) =>
             width: 196,
             height: 196,
         },
-        b3tr3D: {
-            position: "absolute",
-            right: -20,
-            top: -20,
-            width: 68,
-            height: 68,
-        },
-        rewards: {
-            position: "relative",
-            borderWidth: 1,
-            borderColor: "rgba(185, 181, 207, 0.15)",
-            backgroundColor: theme.isDark ? "rgba(89, 82, 127, 0.65)" : theme.colors.transparent,
+        b3moImage: {
+            width: "100%",
+            height: "100%",
         },
     })
