@@ -141,7 +141,7 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
                 )}
                 <TouchableOpacity onPress={handleOpenQRCode}>
                     <BaseView borderRadius={99} p={8}>
-                        <BaseIcon name="icon-scanQR" color={COLORS.PURPLE_LABEL} size={24} />
+                        <BaseIcon name="icon-scan-line" color={COLORS.PURPLE_LABEL} size={24} />
                     </BaseView>
                 </TouchableOpacity>
             </BaseView>
