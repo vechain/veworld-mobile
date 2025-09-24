@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.4 (2025-09-24)</small>
+
+* build: init ([93f818c](https://github.com/vechain/veworld-mobile/commit/93f818c))
+* Fix and Enhancements for Mobile (#3310) ([a330ee4](https://github.com/vechain/veworld-mobile/commit/a330ee4)), closes [#3310](https://github.com/vechain/veworld-mobile/issues/3310)
+
 ## <small>2.4.3 (2025-09-17)</small>
 
 * build: init ([c9e9281](https://github.com/vechain/veworld-mobile/commit/c9e9281))
