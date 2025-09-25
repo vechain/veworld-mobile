@@ -101,6 +101,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
                     ActivityType.SIGN_CERT,
                     ActivityType.SIGN_TYPED_DATA,
                     ActivityType.CONNECTED_APP_TRANSACTION,
+                    ActivityType.DAPP_LOGIN,
                 ].includes(activity.type as ActivityType),
             )
             sortActivitiesByTimestamp(returnValue)
