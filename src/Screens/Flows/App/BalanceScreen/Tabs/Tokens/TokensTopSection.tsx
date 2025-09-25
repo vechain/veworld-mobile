@@ -17,8 +17,8 @@ export const TokensTopSection = () => {
 
     const getItemLayout = useCallback(
         (_: any, index: number) => ({
-            length: 80,
-            offset: 80 * index,
+            length: 88, // TokenCard height (80px) + ItemSeparator (8px)
+            offset: 88 * index,
             index,
         }),
         [],
