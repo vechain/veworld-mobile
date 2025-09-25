@@ -8,6 +8,7 @@ import { useVisitedUrls } from "~Hooks/useBrowserSearch"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { DAppUtils } from "~Utils"
 import { HistoryItem, HistoryUrlKind } from "~Utils/HistoryUtils"
+import { Routes } from "~Navigation"
 import { useDAppActions } from "../Hooks"
 
 type Props = {
@@ -21,7 +22,7 @@ export const SearchResultItem = ({ item, isValidQuery }: Props) => {
     const [loadFallback, setLoadFallback] = useState(false)
     const { removeVisitedUrl } = useVisitedUrls()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.DISCOVER)
     const { navigateWithTab } = useBrowserTab()
 
     const fetchDynamicAppLogo = useDynamicAppLogo({ size: IMAGE_SIZE })

@@ -4,6 +4,7 @@ import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useNewDApps } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { Routes } from "~Navigation"
 import { useDAppActions } from "../Hooks"
 import { DAppCard } from "./DAppCard"
 import { DAppsLoadingSkeleton } from "./DAppsLoadingSkeleton"
@@ -11,7 +12,7 @@ import { DAppsLoadingSkeleton } from "./DAppsLoadingSkeleton"
 export const NewDapps = () => {
     const { LL } = useI18nContext()
     const { isLoading, newDapps } = useNewDApps()
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.DISCOVER)
 
     const renderItem = useCallback(
         ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
