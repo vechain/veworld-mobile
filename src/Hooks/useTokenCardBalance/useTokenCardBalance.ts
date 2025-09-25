@@ -6,7 +6,7 @@ import { useCombineFiatBalances } from "~Hooks/useCombineFiatBalances"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
-import { BalanceUtils } from "~Utils"
+import { formatTokenAmount } from "~Utils/StandardizedFormatting"
 
 type Args = {
     token: FungibleTokenWithBalance
@@ -54,10 +54,12 @@ export const useTokenCardBalance = ({ token }: Args) => {
         return formattedFiat
     }, [formatFiat, amount, isBalanceVisible, areAlmostZero])
 
-    const tokenBalance = useMemo(
-        () => BalanceUtils.getTokenUnitBalance(token.balance.balance, token.decimals ?? 0, 2, formatLocale),
-        [formatLocale, token.balance.balance, token.decimals],
-    )
+    const tokenBalance = useMemo(() => {
+        return formatTokenAmount(token.balance.balance, token.symbol, token.decimals ?? 0, {
+            locale: formatLocale,
+            includeSymbol: false,
+        })
+    }, [formatLocale, token.balance.balance, token.decimals, token.symbol])
 
     const showFiatBalance = useMemo(() => {
         return !!exchangeRate

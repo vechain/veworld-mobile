@@ -3,7 +3,7 @@ import { FiatBalance } from "~Components"
 import { COLORS } from "~Constants"
 import { useFormatFiat, useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
-import { BalanceUtils } from "~Utils"
+import { formatTokenAmount } from "~Utils/StandardizedFormatting"
 import { BaseTokenCard } from "./BaseTokenCard"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
@@ -24,16 +24,14 @@ export const BridgeTokenCard = ({ tokenWithBalance, isBalanceVisible, isEdit }: 
     const { fiatBalance, change24h, isPositive24hChange, exchangeRate, isTokensOwnedLoading } =
         useTokenCardFiatInfo(tokenWithCompleteInfo)
 
-    const tokenBalance = useMemo(
-        () =>
-            BalanceUtils.getTokenUnitBalance(
-                tokenWithBalance.balance.balance,
-                tokenWithBalance.decimals ?? 0,
-                2,
-                formatLocale,
-            ),
-        [formatLocale, tokenWithBalance.balance.balance, tokenWithBalance.decimals],
-    )
+    const tokenBalance = useMemo(() => {
+        return formatTokenAmount(
+            tokenWithBalance.balance.balance,
+            tokenWithBalance.symbol,
+            tokenWithBalance.decimals ?? 0,
+            { locale: formatLocale, includeSymbol: false },
+        )
+    }, [formatLocale, tokenWithBalance.balance.balance, tokenWithBalance.decimals, tokenWithBalance.symbol])
 
     const showFiatBalance = useMemo(() => {
         return !!exchangeRate
