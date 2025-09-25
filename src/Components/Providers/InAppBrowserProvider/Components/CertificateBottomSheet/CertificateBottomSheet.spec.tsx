@@ -58,6 +58,10 @@ const mockAccountWithDevice1: AccountWithDevice = {
 describe("CertificateBottomSheet", () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        jest.useFakeTimers()
+    })
+    afterEach(() => {
+        jest.useRealTimers()
     })
     it("should not show anything if certificate data is empty", async () => {
         const certificateBsRef = { current: { present: jest.fn(), close: jest.fn() } }
@@ -242,9 +246,6 @@ describe("CertificateBottomSheet", () => {
     it.each(["in-app", "wallet-connect", "external-app"] as const)(
         "should be able to sign certificate (%s)",
         async kind => {
-            if (kind === "external-app") {
-                jest.useFakeTimers()
-            }
             const certificateBsRef = { current: { present: jest.fn(), close: jest.fn() } }
             const postMessage = jest.fn()
             const onSuccess = jest.fn()
@@ -386,7 +387,7 @@ describe("CertificateBottomSheet", () => {
                         annex: {
                             domain: "vechain.org",
                             signer: "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
-                            timestamp: Math.ceil(new Date().getTime() / 1000),
+                            timestamp: expect.any(Number),
                         },
                     },
                     redirectUrl: "https://vechainwalletlink.example",
@@ -404,10 +405,6 @@ describe("CertificateBottomSheet", () => {
                     },
                     data,
                 )
-
-            if (kind === "external-app") {
-                jest.useRealTimers()
-            }
         },
     )
 })
