@@ -242,6 +242,9 @@ describe("CertificateBottomSheet", () => {
     it.each(["in-app", "wallet-connect", "external-app"] as const)(
         "should be able to sign certificate (%s)",
         async kind => {
+            if (kind === "external-app") {
+                jest.useFakeTimers()
+            }
             const certificateBsRef = { current: { present: jest.fn(), close: jest.fn() } }
             const postMessage = jest.fn()
             const onSuccess = jest.fn()
@@ -401,6 +404,10 @@ describe("CertificateBottomSheet", () => {
                     },
                     data,
                 )
+
+            if (kind === "external-app") {
+                jest.useRealTimers()
+            }
         },
     )
 })

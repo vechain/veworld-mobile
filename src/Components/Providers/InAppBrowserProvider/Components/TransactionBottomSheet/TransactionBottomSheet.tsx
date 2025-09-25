@@ -285,6 +285,7 @@ export const TransactionBottomSheet = () => {
                 await onSuccess({
                     redirectUrl: transactionBsData.redirectUrl,
                     data: {
+                        id,
                         transaction,
                     },
                     publicKey: transactionBsData.publicKey,
