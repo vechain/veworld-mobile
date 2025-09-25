@@ -1,16 +1,16 @@
-import { default as React, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { default as React, useCallback, useMemo, useState } from "react"
+import { LayoutChangeEvent, StyleSheet } from "react-native"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, VET, VOT3 } from "~Constants"
+import { B3TR, COLORS, VET, VTHO, VOT3 } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
-import { CAN_DISPLAY_CHART, Chart } from "./Chart"
+import { Chart } from "./Chart"
 
 type Props = {
     token: FungibleTokenWithBalance
@@ -19,6 +19,7 @@ type Props = {
 export const TokenCard = ({ token }: Props) => {
     const currency = useAppSelector(selectCurrency)
     const { styles } = useThemedStyles(baseStyles)
+    const [availableChartWidth, setAvailableChartWidth] = useState<number>()
     const name = useMemo(() => {
         switch (token.symbol) {
             case "VET":
@@ -43,8 +44,19 @@ export const TokenCard = ({ token }: Props) => {
 
     const isGoingUp = useMemo(() => ChartUtils.getPriceChange(chartData) >= 0, [chartData])
 
+    const { fiatBalance, showFiatBalance, tokenBalance } = useTokenCardBalance({ token })
+
     const chartIcon = useMemo(() => {
-        if (!chartData || CAN_DISPLAY_CHART) return null
+        if (!chartData || !showFiatBalance) return null
+
+        const hasSpaceForChart = availableChartWidth ? availableChartWidth >= 110 : true
+        const tokenSupportsChart = [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol)
+
+        // Show icon if: no space for chart OR (has space but token doesn't support charts)
+        const shouldShowIcon = !hasSpaceForChart || (hasSpaceForChart && !tokenSupportsChart)
+
+        if (!shouldShowIcon) return null
+
         return (
             <BaseIcon
                 name={isGoingUp ? "icon-stat-arrow-up" : "icon-stat-arrow-down"}
@@ -53,7 +65,7 @@ export const TokenCard = ({ token }: Props) => {
                 testID="TOKEN_CARD_CHART_ICON"
             />
         )
-    }, [chartData, isGoingUp])
+    }, [isGoingUp, availableChartWidth, chartData, showFiatBalance, token.symbol])
 
     const symbol = useMemo(() => {
         switch (token.symbol) {
@@ -82,12 +94,31 @@ export const TokenCard = ({ token }: Props) => {
         }
     }, [chartIcon, token.symbol])
 
-    const { fiatBalance, showFiatBalance, tokenBalance } = useTokenCardBalance({ token })
-
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
+    const onLayoutChange = useCallback(
+        (event: LayoutChangeEvent) => {
+            const { width } = event.nativeEvent.layout
+            // p={16}*2 + iconSize={40} + gap={16} + gap={8} + balance(~100px estimated)
+            const estimatedFixedSpace = 32 + 40 + 16 + 8 + 100 // ~196px
+            const availableSpace = width - estimatedFixedSpace
+
+            if (Math.abs((availableChartWidth || 0) - availableSpace) > 5) {
+                setAvailableChartWidth(availableSpace)
+            }
+        },
+        [availableChartWidth],
+    )
+
     return (
-        <BaseView flexDirection="row" p={16} bg={COLORS.WHITE} borderRadius={12} style={styles.root} gap={8}>
+        <BaseView
+            flexDirection="row"
+            p={16}
+            bg={COLORS.WHITE}
+            borderRadius={12}
+            style={styles.root}
+            gap={8}
+            onLayout={onLayoutChange}>
             <BaseView flexDirection="row" gap={16} flex={1}>
                 <TokenImage
                     icon={token.icon}
@@ -117,7 +148,7 @@ export const TokenCard = ({ token }: Props) => {
                 )}
             </BaseView>
 
-            <Chart token={token} />
+            <Chart token={token} availableWidth={availableChartWidth} />
 
             <BaseView flexDirection="column" alignItems="flex-end" flexShrink={0}>
                 {showFiatBalance ? (
