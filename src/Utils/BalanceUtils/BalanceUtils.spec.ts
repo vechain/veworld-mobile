@@ -266,7 +266,7 @@ describe("BalanceUtils", () => {
     })
 
     describe("getBalancesFromBlockchain", () => {
-        it("should include VTHO if VET is included", async () => {
+        it("should not include VTHO if VET is included", async () => {
             mock.onGet(`${mainNetwork.currentUrl}/accounts/${account1D1.address}`).reply(200, mockedBalance)
 
             const result = await BalanceUtils.getBalancesFromBlockchain(
@@ -277,9 +277,8 @@ describe("BalanceUtils", () => {
             )
 
             expect(result[0].balance).toEqual(mockedBalance.balance)
-            expect(result[1].balance).toEqual(mockedBalance.energy)
         })
-        it("should include VET if VTHO is included", async () => {
+        it("should not include VET if VTHO is included", async () => {
             mock.onGet(`${mainNetwork.currentUrl}/accounts/${account1D1.address}`).reply(200, mockedBalance)
 
             const result = await BalanceUtils.getBalancesFromBlockchain(
@@ -289,8 +288,7 @@ describe("BalanceUtils", () => {
                 thorClient,
             )
 
-            expect(result[0].balance).toEqual(mockedBalance.balance)
-            expect(result[1].balance).toEqual(mockedBalance.energy)
+            expect(result[0].balance).toEqual(mockedBalance.energy)
         })
         it("should get balances for one ERC-20", async () => {
             const balance = ethers.utils.parseEther("3.3").toHexString()
