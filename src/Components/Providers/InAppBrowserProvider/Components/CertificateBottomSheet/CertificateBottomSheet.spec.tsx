@@ -58,11 +58,8 @@ const mockAccountWithDevice1: AccountWithDevice = {
 describe("CertificateBottomSheet", () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        jest.useFakeTimers()
     })
-    afterEach(() => {
-        jest.useRealTimers()
-    })
+
     it("should not show anything if certificate data is empty", async () => {
         const certificateBsRef = { current: { present: jest.fn(), close: jest.fn() } }
         ;(useExternalDappConnection as jest.Mock).mockReturnValue({
