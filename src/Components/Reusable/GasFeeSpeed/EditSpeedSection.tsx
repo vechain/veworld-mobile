@@ -77,6 +77,5 @@ const baseStyles = (speedChangeEnabled: boolean) => (theme: ColorThemeType) =>
             borderWidth: 1,
             backgroundColor: theme.colors.cardButton.background,
             gap: 8,
-            flex: 0.35,
         },
     })
