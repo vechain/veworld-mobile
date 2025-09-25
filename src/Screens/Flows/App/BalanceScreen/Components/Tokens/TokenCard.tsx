@@ -1,12 +1,15 @@
+import { useNavigation } from "@react-navigation/native"
 import { default as React, useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
-import { BaseIcon, BaseText, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { B3TR, COLORS, VET, VTHO, VOT3 } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
+import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { FungibleTokenWithBalance } from "~Model"
+import { Routes } from "~Navigation"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
@@ -17,6 +20,7 @@ type Props = {
 }
 
 export const TokenCard = ({ token }: Props) => {
+    const navigation = useNavigation()
     const currency = useAppSelector(selectCurrency)
     const { styles } = useThemedStyles(baseStyles)
     const [availableChartWidth, setAvailableChartWidth] = useState<number>()
@@ -45,6 +49,7 @@ export const TokenCard = ({ token }: Props) => {
     const isGoingUp = useMemo(() => ChartUtils.getPriceChange(chartData) >= 0, [chartData])
 
     const { fiatBalance, showFiatBalance, tokenBalance } = useTokenCardBalance({ token })
+    const tokenWithCompleteInfo = useTokenWithCompleteInfo(token)
 
     const chartIcon = useMemo(() => {
         if (!chartData || !showFiatBalance) return null
@@ -110,14 +115,29 @@ export const TokenCard = ({ token }: Props) => {
         [availableChartWidth],
     )
 
+    // Only allow navigation for tokens with detailed information available
+    const supportsDetailNavigation = useMemo(
+        () => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol),
+        [token.symbol],
+    )
+
+    const handlePress = useCallback(() => {
+        if (!supportsDetailNavigation) {
+            return
+        }
+
+        navigation.navigate(Routes.TOKEN_DETAILS, {
+            token: tokenWithCompleteInfo,
+        })
+    }, [navigation, tokenWithCompleteInfo, supportsDetailNavigation])
+
     return (
-        <BaseView
+        <BaseTouchableBox
+            action={supportsDetailNavigation ? handlePress : undefined}
+            py={24}
             flexDirection="row"
-            p={16}
             bg={COLORS.WHITE}
-            borderRadius={12}
-            style={styles.root}
-            gap={8}
+            containerStyle={styles.root}
             onLayout={onLayoutChange}>
             <BaseView flexDirection="row" gap={16} flex={1}>
                 <TokenImage
@@ -184,7 +204,7 @@ export const TokenCard = ({ token }: Props) => {
                     </BaseText>
                 )}
             </BaseView>
-        </BaseView>
+        </BaseTouchableBox>
     )
 }
 
