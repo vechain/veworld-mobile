@@ -1088,7 +1088,6 @@
   "STATUS": "ステータス",
   "SUCCESS_DOMAIN_AVAILABLE": "請求可能",
   "SUCCESS_GENERIC": "成功！",
-  "SUCCESS_GENERIC_OPERATION": "操作が成功しました！",
   "SUCCESS_GENERIC_VIEW_DETAIL_LINK": "操作の詳細を表示。",
   "SWAP": "スワップ",
   "SWAP_DAPP_NUMBER": "{total: number} アプリ",

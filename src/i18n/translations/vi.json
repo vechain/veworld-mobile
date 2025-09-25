@@ -1088,7 +1088,6 @@
   "STATUS": "Trạng thái",
   "SUCCESS_DOMAIN_AVAILABLE": "Có thể yêu cầu",
   "SUCCESS_GENERIC": "Thành công!",
-  "SUCCESS_GENERIC_OPERATION": "Giao dịch diễn ra tốt!",
   "SUCCESS_GENERIC_VIEW_DETAIL_LINK": "Xem chi tiết hoạt động.",
   "SWAP": "Hoán đổi",
   "SWAP_DAPP_NUMBER": "{total: number} dApp",

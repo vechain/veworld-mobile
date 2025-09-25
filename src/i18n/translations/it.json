@@ -1088,7 +1088,6 @@
   "STATUS": "Stato",
   "SUCCESS_DOMAIN_AVAILABLE": "Disponibile per il riscatto",
   "SUCCESS_GENERIC": "Successo!",
-  "SUCCESS_GENERIC_OPERATION": "L'operazione è andata a buon fine!",
   "SUCCESS_GENERIC_VIEW_DETAIL_LINK": "Visualizza i dettagli dell'operazione.",
   "SWAP": "Scambia",
   "SWAP_DAPP_NUMBER": "{total: number} dApp",
