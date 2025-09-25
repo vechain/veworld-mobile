@@ -67,11 +67,17 @@ export const TransactionDetails = ({ request, outputs = [], clauses = [], onShow
         [receiptProcessor, selectedAccount.address, outputs],
     )
 
+    // Show details button only when meaningful events are detected
+    const hasEvents = useMemo(() => {
+        return analyzedOutputs.some(output => output.name !== "___INTERNAL_UNKNOWN___")
+    }, [analyzedOutputs])
+
     return (
         <DappDetailsCard
             appName={request.appName}
             appUrl={request.appUrl}
             showSpacer={false}
+            renderDetailsButton={hasEvents}
             onShowDetails={onShowDetails}>
             {({ visible }) => {
                 return <TransactionCarousel outputs={analyzedOutputs} expanded={visible} clauses={clauses} />

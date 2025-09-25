@@ -1088,7 +1088,6 @@
   "STATUS": "狀態",
   "SUCCESS_DOMAIN_AVAILABLE": "可供主張",
   "SUCCESS_GENERIC": "成功！",
-  "SUCCESS_GENERIC_OPERATION": "操作順利！",
   "SUCCESS_GENERIC_VIEW_DETAIL_LINK": "查看操作詳情。",
   "SWAP": "交換",
   "SWAP_DAPP_NUMBER": "{total: number} 個去中心化應用程式",

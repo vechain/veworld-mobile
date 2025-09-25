@@ -1088,7 +1088,6 @@
   "STATUS": "Status",
   "SUCCESS_DOMAIN_AVAILABLE": "Beschikbaar om te claimen",
   "SUCCESS_GENERIC": "Succes!",
-  "SUCCESS_GENERIC_OPERATION": "De operatie is goed verlopen!",
   "SUCCESS_GENERIC_VIEW_DETAIL_LINK": "Bekijk details van de operatie.",
   "SWAP": "Wissel",
   "SWAP_DAPP_NUMBER": "{total: number} dApps",

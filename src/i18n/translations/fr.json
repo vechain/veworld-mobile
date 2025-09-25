@@ -1088,7 +1088,6 @@
   "STATUS": "Statut",
   "SUCCESS_DOMAIN_AVAILABLE": "Disponible à réclamer",
   "SUCCESS_GENERIC": "Succès !",
-  "SUCCESS_GENERIC_OPERATION": "L'opération s'est bien déroulée !",
   "SUCCESS_GENERIC_VIEW_DETAIL_LINK": "Voir le détail de l'opération.",
   "SWAP": "Échanger",
   "SWAP_DAPP_NUMBER": "{total: number} dApps",

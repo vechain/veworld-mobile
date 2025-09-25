@@ -1088,7 +1088,6 @@
   "STATUS": "Статус",
   "SUCCESS_DOMAIN_AVAILABLE": "Доступно для получения",
   "SUCCESS_GENERIC": "Успех!",
-  "SUCCESS_GENERIC_OPERATION": "Операция прошла успешно!",
   "SUCCESS_GENERIC_VIEW_DETAIL_LINK": "Просмотреть детали операции.",
   "SWAP": "Обменять",
   "SWAP_DAPP_NUMBER": "{total: number} децентрализованных приложений",

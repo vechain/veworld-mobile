@@ -1,4 +1,3 @@
-import { showSuccessToast } from "~Components"
 import {
     invalidateUserTokens,
     selectLastReviewTimestamp,
@@ -12,9 +11,7 @@ import {
 } from "~Storage/Redux"
 import { error, HexUtils } from "~Utils"
 import axios, { AxiosError, AxiosResponse } from "axios"
-import { Linking } from "react-native"
-import { ERROR_EVENTS, defaultMainNetwork } from "~Constants"
-import { useI18nContext } from "~i18n"
+import { ERROR_EVENTS } from "~Constants"
 import InAppReview from "react-native-in-app-review"
 import moment from "moment"
 import { Transaction } from "@vechain/sdk-core"
@@ -26,7 +23,6 @@ import { useQueryClient } from "@tanstack/react-query"
  */
 export const useSendTransaction = (onSuccess: (transaction: Transaction, id: string) => Promise<void> | void) => {
     const dispatch = useAppDispatch()
-    const { LL } = useI18nContext()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const lastReviewTimestamp = useAppSelector(selectLastReviewTimestamp)
@@ -47,19 +43,6 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
 
             id = response.data.id
             await onSuccess(signedTransaction, id)
-
-            showSuccessToast({
-                text1: LL.SUCCESS_GENERIC(),
-                text2: LL.SUCCESS_GENERIC_OPERATION(),
-                textLink: LL.NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION(),
-                onPress: async () => {
-                    await Linking.openURL(
-                        `${selectedNetwork.explorerUrl ?? defaultMainNetwork.explorerUrl}/transactions/${id}`,
-                    )
-                },
-                visibilityTime: 4000,
-                testID: "transactionSuccessToast",
-            })
 
             // this will ask for the review after 3 weeks if the user has not reviewed the app yet
             const nextReviewDate = moment(lastReviewTimestamp).add(3, "weeks")

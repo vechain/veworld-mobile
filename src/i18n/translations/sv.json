@@ -1088,7 +1088,6 @@
   "STATUS": "Status",
   "SUCCESS_DOMAIN_AVAILABLE": "Tillgänglig att hämta",
   "SUCCESS_GENERIC": "Lyckat!",
-  "SUCCESS_GENERIC_OPERATION": "Operationen gick bra!",
   "SUCCESS_GENERIC_VIEW_DETAIL_LINK": "Visa detaljer om operationen.",
   "SWAP": "Byt",
   "SWAP_DAPP_NUMBER": "{total: number} dApps",

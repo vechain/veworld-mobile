@@ -4467,10 +4467,7 @@ type RootTranslation = {
 	 * S​u​c​c​e​s​s​!
 	 */
 	SUCCESS_GENERIC: string
-	/**
-	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​e​l​l​!
-	 */
-	SUCCESS_GENERIC_OPERATION: string
+
 	/**
 	 * V​i​e​w​ ​o​p​e​r​a​t​i​o​n​ ​d​e​t​a​i​l​.
 	 */
@@ -9466,10 +9463,6 @@ Here's what it's all about:
 	 * Success!
 	 */
 	SUCCESS_GENERIC: () => LocalizedString
-	/**
-	 * The operation went well!
-	 */
-	SUCCESS_GENERIC_OPERATION: () => LocalizedString
 	/**
 	 * View operation detail.
 	 */

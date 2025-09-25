@@ -1088,7 +1088,6 @@
   "STATUS": "Durum",
   "SUCCESS_DOMAIN_AVAILABLE": "Talep edilebilir",
   "SUCCESS_GENERIC": "Başarılı!",
-  "SUCCESS_GENERIC_OPERATION": "İşlem başarılı!",
   "SUCCESS_GENERIC_VIEW_DETAIL_LINK": "İşlem detayına bak.",
   "SWAP": "Takas",
   "SWAP_DAPP_NUMBER": "{total: number} dApp",

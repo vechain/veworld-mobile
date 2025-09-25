@@ -1088,7 +1088,6 @@
   "STATUS": "상태",
   "SUCCESS_DOMAIN_AVAILABLE": "청구 가능",
   "SUCCESS_GENERIC": "성공!",
-  "SUCCESS_GENERIC_OPERATION": "작업이 잘 완료되었습니다!",
   "SUCCESS_GENERIC_VIEW_DETAIL_LINK": "작업 세부사항 보기.",
   "SWAP": "교환",
   "SWAP_DAPP_NUMBER": "{total: number} dApp",
