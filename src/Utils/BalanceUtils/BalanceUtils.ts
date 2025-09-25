@@ -158,10 +158,9 @@ const getBalancesFromBlockchain = async (
         if (vetOrVthoInAddresses) {
             const result = await getNativeBalancesFromBlockchain(accountAddress, network)
             balances.push(
-                ...result.filter(balance => {
-                    if (tokenAddresses.find(ta => AddressUtils.compareAddresses(ta, balance.tokenAddress))) return true
-                    return false
-                }),
+                ...result.filter(balance =>
+                    Boolean(tokenAddresses.find(ta => AddressUtils.compareAddresses(ta, balance.tokenAddress))),
+                ),
             )
         }
         if (notVetOrVtho.length === 0) return balances
