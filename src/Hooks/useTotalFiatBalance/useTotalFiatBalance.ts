@@ -34,7 +34,7 @@ export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
         VOT3.decimals,
     )
 
-    const nonVechainTokensFiat = useNonVechainTokenFiat({ accountAddress: address, enabled })
+    const { data: nonVechainTokensFiat } = useNonVechainTokenFiat({ accountAddress: address, enabled })
 
     const { stargateNodes, isLoading: loadingNodes } = useUserNodes(address, enabled)
 

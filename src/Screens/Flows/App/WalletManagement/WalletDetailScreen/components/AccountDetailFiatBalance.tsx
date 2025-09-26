@@ -41,7 +41,7 @@ export const AccountDetailFiatBalance: React.FC<Props> = ({ account, isVisible, 
                 vthoWithInfo.fiatBalance,
                 b3trWithInfo.fiatBalance,
                 vot3FiatBalance,
-                ...nonVechainTokens,
+                ...nonVechainTokens.data,
             ]}
             isVisible={isVisible}
             isLoading={isLoading}

@@ -73,7 +73,7 @@ describe("TokenCard", () => {
             tokenBalance: "0.00",
         })
 
-        render(<TokenCard token={TestHelpers.data.VETWithBalance} />, { wrapper: TestWrapper })
+        render(<TokenCard token={TestHelpers.data.VeDelegateWithBalance} />, { wrapper: TestWrapper })
 
         expect(screen.getByTestId("TOKEN_CARD_CHART_ICON")).toBeVisible()
     })
