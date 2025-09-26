@@ -16,6 +16,7 @@
   "ACTIVITIES_STATUS_pending": "En attente",
   "ACTIVITIES_STATUS_reverted": "Rétabli",
   "ACTIVITIES_STATUS_success": "Succès",
+  "ACTIVITY": "Activité",
   "ACTIVITY_ALL_EMPTY_LABEL": "Aucune activité à afficher pour le moment",
   "ACTIVITY_ALL_LABEL": "Tout",
   "ACTIVITY_B3TR_EMPTY_BUTTON": "Découvrez VeBetterDAO",

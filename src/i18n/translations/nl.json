@@ -16,6 +16,7 @@
   "ACTIVITIES_STATUS_pending": "In behandeling",
   "ACTIVITIES_STATUS_reverted": "Teruggedraaid",
   "ACTIVITIES_STATUS_success": "Succes",
+  "ACTIVITY": "Activiteit",
   "ACTIVITY_ALL_EMPTY_LABEL": "Nog geen activiteiten om te tonen",
   "ACTIVITY_ALL_LABEL": "Alles",
   "ACTIVITY_B3TR_EMPTY_BUTTON": "Ontdek VeBetterDAO",

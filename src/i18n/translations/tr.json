@@ -16,6 +16,7 @@
   "ACTIVITIES_STATUS_pending": "Beklemede",
   "ACTIVITIES_STATUS_reverted": "Eski haline döndürüldü",
   "ACTIVITIES_STATUS_success": "Başarılı",
+  "ACTIVITY": "Aktivite",
   "ACTIVITY_ALL_EMPTY_LABEL": "Gösterilecek etkinlik yok",
   "ACTIVITY_ALL_LABEL": "Tümü",
   "ACTIVITY_B3TR_EMPTY_BUTTON": "VeBetterDAO'yu Keşfet",

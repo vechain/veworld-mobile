@@ -16,6 +16,7 @@
   "ACTIVITIES_STATUS_pending": "보류 중",
   "ACTIVITIES_STATUS_reverted": "되돌림",
   "ACTIVITIES_STATUS_success": "성공",
+  "ACTIVITY": "활동",
   "ACTIVITY_ALL_EMPTY_LABEL": "표시할 활동이 없습니다",
   "ACTIVITY_ALL_LABEL": "모두",
   "ACTIVITY_B3TR_EMPTY_BUTTON": "VeBetterDAO 발견하기",

@@ -16,6 +16,7 @@
   "ACTIVITIES_STATUS_pending": "В ожидании",
   "ACTIVITIES_STATUS_reverted": "Отменено",
   "ACTIVITIES_STATUS_success": "Успешно",
+  "ACTIVITY": "Активность",
   "ACTIVITY_ALL_EMPTY_LABEL": "Пока нет активностей для отображения",
   "ACTIVITY_ALL_LABEL": "Все",
   "ACTIVITY_B3TR_EMPTY_BUTTON": "Откройте для себя VeBetterDAO",

@@ -16,6 +16,7 @@
   "ACTIVITIES_STATUS_pending": "待定",
   "ACTIVITIES_STATUS_reverted": "已还原",
   "ACTIVITIES_STATUS_success": "成功",
+  "ACTIVITY": "活动",
   "ACTIVITY_ALL_EMPTY_LABEL": "尚无活动显示",
   "ACTIVITY_ALL_LABEL": "全部",
   "ACTIVITY_B3TR_EMPTY_BUTTON": "探索 VeBetterDAO",

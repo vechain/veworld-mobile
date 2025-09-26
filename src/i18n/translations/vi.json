@@ -16,6 +16,7 @@
   "ACTIVITIES_STATUS_pending": "Đang chờ xử lý",
   "ACTIVITIES_STATUS_reverted": "Đã hoàn nguyên",
   "ACTIVITIES_STATUS_success": "Thành công",
+  "ACTIVITY": "Hoạt động",
   "ACTIVITY_ALL_EMPTY_LABEL": "Chưa có hoạt động nào để hiển thị",
   "ACTIVITY_ALL_LABEL": "Tất cả",
   "ACTIVITY_B3TR_EMPTY_BUTTON": "Khám phá VeBetterDAO",
