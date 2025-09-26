@@ -40,3 +40,10 @@ export const getCoinGeckoIdBySymbol = {
     WAN: WAN_COINGECKO_ID,
     XRP: XRP_COINGECKO_ID,
 }
+
+/**
+ * Reverse map of `getCoinGeckoIdBySymbol`
+ */
+export const getSymbolByCoingeckoId = Object.fromEntries(
+    Object.entries(getCoinGeckoIdBySymbol).map(([key, value]) => [value, key]),
+)

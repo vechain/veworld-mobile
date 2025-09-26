@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { B3TR, VET, VOT3, VTHO } from "~Constants"
+import { B3TR, VeDelegate, VET, VOT3, VTHO } from "~Constants"
 import { TokenWithCompleteInfo } from "~Hooks"
 import { FungibleTokenWithBalance, NftData, NFTMediaType, NodeInfo, NonFungibleToken, Token } from "~Model"
 
@@ -38,6 +38,16 @@ export const VOT3WithBalance: FungibleTokenWithBalance = {
     balance: {
         balance: "10259472020000000000000",
         tokenAddress: VOT3.address,
+        timeUpdated: Date.now().toString(),
+        isHidden: false,
+    },
+}
+
+export const VeDelegateWithBalance: FungibleTokenWithBalance = {
+    ...VeDelegate,
+    balance: {
+        balance: "10259472020000000000000",
+        tokenAddress: VeDelegate.address,
         timeUpdated: Date.now().toString(),
         isHidden: false,
     },
