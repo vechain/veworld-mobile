@@ -16,6 +16,7 @@
   "ACTIVITIES_STATUS_pending": "लंबित",
   "ACTIVITIES_STATUS_reverted": "वापस लिया गया",
   "ACTIVITIES_STATUS_success": "सफलता",
+  "ACTIVITY": "गतिविधि",
   "ACTIVITY_ALL_EMPTY_LABEL": "दिखाने के लिए कोई गतिविधियाँ नहीं",
   "ACTIVITY_ALL_LABEL": "सभी",
   "ACTIVITY_B3TR_EMPTY_BUTTON": "VeBetterDAO खोजें",

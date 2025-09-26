@@ -16,6 +16,7 @@
   "ACTIVITIES_STATUS_pending": "保留中",
   "ACTIVITIES_STATUS_reverted": "元に戻されました",
   "ACTIVITIES_STATUS_success": "成功",
+  "ACTIVITY": "アクティビティ",
   "ACTIVITY_ALL_EMPTY_LABEL": "表示するアクティビティがまだありません",
   "ACTIVITY_ALL_LABEL": "すべて",
   "ACTIVITY_B3TR_EMPTY_BUTTON": "VeBetterDAOを発見",
