@@ -14,7 +14,8 @@ import { ColorThemeType, VET, VTHO } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
 import { useSimplifiedTokenBalance } from "~Hooks/useTokenBalance"
 import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
-import { AccountUtils, AddressUtils, BigNutils } from "~Utils"
+import { AccountUtils, AddressUtils } from "~Utils"
+import { formatTokenAmount } from "~Utils/StandardizedFormatting"
 
 type Props = {
     account: AccountWithDevice | WatchedAccount
@@ -66,11 +67,10 @@ export const AccountCard: React.FC<Props> = memo(
 
             const computedVetBalance = formattedBalance ? formattedBalance : vetBalance
 
-            return `${
-                isVthoBalance
-                    ? BigNutils(vthoBalance).toHuman(VET.decimals).toTokenFormat_string(2)
-                    : BigNutils(computedVetBalance).toHuman(VET.decimals).toTokenFormat_string(2)
-            } ${isVthoBalance ? VTHO.symbol : VET.symbol}`
+            const tokenBalance = isVthoBalance ? vthoBalance : computedVetBalance
+            const tokenSymbol = isVthoBalance ? VTHO.symbol : VET.symbol
+
+            return formatTokenAmount(tokenBalance, tokenSymbol, VET.decimals)
         }, [isBalanceVisible, isVthoBalance, vetBalance, vthoBalance, formattedBalance])
 
         const accountWithDevice = useMemo(() => {
