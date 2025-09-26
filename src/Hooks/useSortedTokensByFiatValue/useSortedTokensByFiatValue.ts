@@ -14,8 +14,9 @@ import { BigNutils } from "~Utils"
  * Handles formats like "< $0.01", "$1,234.56", etc.
  */
 const extractFiatValue = (fiatBalanceString: string): number => {
-    const numericMatch = fiatBalanceString.match(/[\d,]+\.?\d*/)?.[0]
-    return numericMatch ? parseFloat(numericMatch.replace(/,/g, "")) : 0
+    const regex = /[\d,]+\.?\d*/
+    const numericMatch = regex.exec(fiatBalanceString)?.[0]
+    return numericMatch ? Number.parseFloat(numericMatch.replaceAll(",", "")) : 0
 }
 
 /**
@@ -36,12 +37,12 @@ const createFiatBalanceMap = (
     fiatMap.set("B3TR", extractFiatValue(b3trInfo.fiatBalance))
 
     // Non-VeChain tokens (including VeDelegate)
-    nonVechainTokenWithBalances.forEach((token, index) => {
+    for (const [index, token] of nonVechainTokenWithBalances.entries()) {
         if (nonVechainTokensFiat[index]) {
             const key = `${token.address}_${token.symbol}`
             fiatMap.set(key, extractFiatValue(nonVechainTokensFiat[index]))
         }
-    })
+    }
 
     return fiatMap
 }
