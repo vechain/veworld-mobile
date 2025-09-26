@@ -5,38 +5,10 @@ import { RefreshControl, SectionList, SectionListData, SectionListRenderItemInfo
 import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import {
-    Activity,
-    ActivityType,
-    B3trActionActivity,
-    B3trClaimRewardActivity,
-    B3trProposalSupportActivity,
-    B3trProposalVoteActivity,
-    B3trSwapB3trToVot3Activity,
-    B3trSwapVot3ToB3trActivity,
-    B3trUpgradeGmActivity,
-    B3trXAllocationVoteActivity,
-    ConnectedAppActivity,
-    DappTxActivity,
-    FungibleToken,
-    FungibleTokenActivity,
-    LoginActivity,
-    NonFungibleTokenActivity,
-    NFTMarketplaceActivity,
-    SignCertActivity,
-    StargateActivity,
-    SwapActivity,
-    TransactionOutcomes,
-    TypedDataActivity,
-    UnknownTxActivity,
-    VeBetterDaoDapp,
-    VeVoteCastActivity,
-} from "~Model"
+import { Activity, FungibleToken, TransactionOutcomes } from "~Model"
 import { Routes } from "~Navigation"
-import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
-import { useMonthTranslation } from "../Hooks"
-import { ActivityBox } from "./ActivityBox"
+import { DateUtils, StringUtils } from "~Utils"
+import { ActivityItemRenderer } from "./ActivityItemRenderer"
 import { SkeletonActivityBox } from "./SkeletonActivityBox"
 
 enum SectionName {
@@ -45,7 +17,6 @@ enum SectionName {
 }
 
 type ActivitySection = {
-    showYear: boolean
     title: string
     data: Activity[]
 }
@@ -56,136 +27,11 @@ type ActivitySectionListProps = {
     refreshActivities: () => Promise<void>
     isFetching: boolean
     isRefreshing: boolean
-    veBetterDaoDapps: VeBetterDaoDapp[]
     initialNumToRender?: number
 }
 
 const ItemSeparatorComponent = () => {
     return <BaseSpacer height={8} />
-}
-
-const Item = ({
-    activity,
-    onPress,
-    veBetterDaoDapps = [],
-}: {
-    activity: Activity
-    veBetterDaoDapps: VeBetterDaoDapp[]
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}) => {
-    const activityToRender = activity
-
-    switch (activity.type) {
-        case ActivityType.TRANSFER_FT:
-        case ActivityType.TRANSFER_VET: {
-            return (
-                <ActivityBox.TokenTransfer
-                    key={activityToRender.id}
-                    activity={activityToRender as FungibleTokenActivity}
-                    onPress={onPress}
-                />
-            )
-        }
-        case ActivityType.TRANSFER_NFT:
-            return (
-                <ActivityBox.NFTTransfer
-                    key={activityToRender.id}
-                    activity={activity as NonFungibleTokenActivity}
-                    onPress={onPress}
-                />
-            )
-        case ActivityType.NFT_SALE:
-            return (
-                <ActivityBox.NFTSale
-                    key={activityToRender.id}
-                    activity={activity as NFTMarketplaceActivity}
-                    onPress={onPress}
-                />
-            )
-        case ActivityType.SWAP_FT_TO_FT:
-        case ActivityType.SWAP_FT_TO_VET:
-        case ActivityType.SWAP_VET_TO_FT:
-            return <ActivityBox.TokenSwap activity={activity as SwapActivity} onPress={onPress} />
-        case ActivityType.DAPP_TRANSACTION: {
-            return (
-                <ActivityBox.DAppTransaction
-                    key={activityToRender.id}
-                    activity={activityToRender as DappTxActivity}
-                    onPress={onPress}
-                />
-            )
-        }
-        case ActivityType.SIGN_CERT:
-            return (
-                <ActivityBox.DAppSignCert
-                    key={activityToRender.id}
-                    activity={activityToRender as SignCertActivity}
-                    onPress={onPress}
-                />
-            )
-        case ActivityType.CONNECTED_APP_TRANSACTION:
-            return (
-                <ActivityBox.ConnectedAppActivity
-                    key={activityToRender.id}
-                    activity={activity as ConnectedAppActivity}
-                    onPress={onPress}
-                />
-            )
-        case ActivityType.SIGN_TYPED_DATA:
-            return (
-                <ActivityBox.SignedTypedData
-                    key={activityToRender.id}
-                    activity={activity as TypedDataActivity}
-                    onPress={onPress}
-                />
-            )
-        case ActivityType.B3TR_ACTION:
-            return (
-                <ActivityBox.B3trAction
-                    activity={activity as B3trActionActivity}
-                    onPress={onPress}
-                    veBetterDaoDapps={veBetterDaoDapps}
-                />
-            )
-        case ActivityType.B3TR_PROPOSAL_VOTE:
-            return <ActivityBox.B3trProposalVote activity={activity as B3trProposalVoteActivity} onPress={onPress} />
-        case ActivityType.B3TR_XALLOCATION_VOTE:
-            return (
-                <ActivityBox.B3trXAllocationVote activity={activity as B3trXAllocationVoteActivity} onPress={onPress} />
-            )
-        case ActivityType.B3TR_CLAIM_REWARD:
-            return <ActivityBox.B3trClaimReward activity={activity as B3trClaimRewardActivity} onPress={onPress} />
-        case ActivityType.B3TR_UPGRADE_GM:
-            return <ActivityBox.B3trUpgradeGM activity={activity as B3trUpgradeGmActivity} onPress={onPress} />
-        case ActivityType.B3TR_SWAP_B3TR_TO_VOT3:
-            return (
-                <ActivityBox.B3trSwapB3trToVot3 activity={activity as B3trSwapB3trToVot3Activity} onPress={onPress} />
-            )
-        case ActivityType.B3TR_SWAP_VOT3_TO_B3TR:
-            return (
-                <ActivityBox.B3trSwapVot3ToB3tr activity={activity as B3trSwapVot3ToB3trActivity} onPress={onPress} />
-            )
-        case ActivityType.B3TR_PROPOSAL_SUPPORT:
-            return (
-                <ActivityBox.B3trProposalSupport activity={activity as B3trProposalSupportActivity} onPress={onPress} />
-            )
-        case ActivityType.UNKNOWN_TX:
-            return <ActivityBox.UnknownTx activity={activity as UnknownTxActivity} onPress={onPress} />
-        case ActivityType.STARGATE_DELEGATE:
-        case ActivityType.STARGATE_STAKE:
-        case ActivityType.STARGATE_CLAIM_REWARDS_BASE:
-        case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE:
-        case ActivityType.STARGATE_UNDELEGATE:
-        case ActivityType.STARGATE_UNSTAKE:
-        case ActivityType.STARGATE_DELEGATE_ONLY:
-            return <ActivityBox.Staking activity={activity as StargateActivity} onPress={onPress} />
-        case ActivityType.VEVOTE_VOTE_CAST:
-            return <ActivityBox.VeVoteCast activity={activity as VeVoteCastActivity} onPress={onPress} />
-        case ActivityType.DAPP_LOGIN:
-            return <ActivityBox.DappLogin activity={activity as LoginActivity} onPress={onPress} />
-        default:
-            return null
-    }
 }
 
 export const ActivitySectionList = ({
@@ -194,23 +40,15 @@ export const ActivitySectionList = ({
     refreshActivities,
     isFetching,
     isRefreshing,
-    veBetterDaoDapps,
     initialNumToRender = 10,
 }: ActivitySectionListProps) => {
     const nav = useNavigation()
     const { styles, theme } = useThemedStyles(baseStyle)
-    const { LL } = useI18nContext()
-    const network = useAppSelector(selectSelectedNetwork)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const { LL, locale } = useI18nContext()
 
-    const previousNetwork = useRef(network)
     const hasScrolled = useRef(false)
     const onEndReachedCalledDuringMomentum = useRef(false)
-    const prevSelectedAccountAddress = useRef(selectedAccount.address)
-    const years = useRef<string[]>([moment().format("YYYY")])
     const sectionListRef = useRef<SectionList<Activity, ActivitySection>>(null)
-
-    const { getMonthNamebyNumber } = useMonthTranslation()
 
     const onActivityPress = useCallback(
         (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => {
@@ -238,20 +76,7 @@ export const ActivitySectionList = ({
         const sectionExist = sections.find(section => section.title === sectionName)
 
         if (!sectionExist) {
-            let showYear = false
-
-            if (sectionName !== SectionName.TODAY && sectionName !== SectionName.YESTERDAY) {
-                const date = moment(sectionName)
-                const year = date.format("YYYY")
-
-                if (!years.current.includes(year)) {
-                    showYear = true
-                    years.current.push(year)
-                }
-            }
-
             sections.push({
-                showYear: showYear,
                 title: sectionName,
                 data: [activity],
             })
@@ -267,13 +92,6 @@ export const ActivitySectionList = ({
     }, [])
 
     const sections = useMemo(() => {
-        if (
-            previousNetwork.current !== network ||
-            !AddressUtils.compareAddresses(prevSelectedAccountAddress.current, selectedAccount.address)
-        ) {
-            years.current = []
-        }
-
         const result = activities.reduce((acc: ActivitySection[], activity) => {
             const date = moment(activity.timestamp)
 
@@ -290,7 +108,7 @@ export const ActivitySectionList = ({
         }, [])
 
         return result
-    }, [activities, addItemToSection, isToday, isYesterday, network, selectedAccount.address])
+    }, [activities, addItemToSection, isToday, isYesterday])
 
     const onMomentumScrollBegin = useCallback(() => {
         onEndReachedCalledDuringMomentum.current = false
@@ -305,7 +123,6 @@ export const ActivitySectionList = ({
 
     const onRefresh = useCallback(async () => {
         await refreshActivities()
-        years.current = []
         hasScrolled.current = false
     }, [refreshActivities])
 
@@ -321,20 +138,22 @@ export const ActivitySectionList = ({
             } else {
                 const date = moment(section.title)
                 const year = date.format("YYYY")
-                const monthNumber = date.month()
-                const month = getMonthNamebyNumber(monthNumber)
-                const day = date.format("DD")
+                const monthDay = StringUtils.toTitleCase(
+                    date.locale(locale).format(`HH:mm - [${DateUtils.formatDate(date, locale)}]`),
+                )
 
                 return (
                     <>
-                        {section.showYear && <BaseText typographyFont="captionSemiBold">{year}</BaseText>}
+                        {moment().diff(date, "year") >= 1 && (
+                            <BaseText typographyFont="captionSemiBold">{year}</BaseText>
+                        )}
                         <BaseSpacer height={2} />
-                        <BaseText typographyFont="bodySemiBold">{`${month} ${day}`}</BaseText>
+                        <BaseText typographyFont="bodySemiBold">{monthDay}</BaseText>
                     </>
                 )
             }
         },
-        [LL, getMonthNamebyNumber],
+        [LL, locale],
     )
 
     const renderSectionFooter = useCallback(() => {
@@ -351,11 +170,11 @@ export const ActivitySectionList = ({
             return (
                 <>
                     {index === 0 && <BaseSpacer height={8} />}
-                    <Item activity={activity} onPress={onActivityPress} veBetterDaoDapps={veBetterDaoDapps} />
+                    <ActivityItemRenderer activity={activity} onPress={onActivityPress} />
                 </>
             )
         },
-        [onActivityPress, veBetterDaoDapps],
+        [onActivityPress],
     )
 
     const refreshControl = useMemo(() => {

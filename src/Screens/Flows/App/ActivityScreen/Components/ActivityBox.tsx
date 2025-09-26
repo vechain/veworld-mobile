@@ -57,7 +57,14 @@ type GradientConfig = {
 
 type ActivityBoxProps = {
     icon: IconKey
-    time: string
+    /**
+     * Timestamp of the activity
+     */
+    timestamp: number
+    /**
+     * Timestamp renderer. Defaults to HH:mm format
+     */
+    timestampRenderer?: (timestamp: number) => string
     title: string
     description?: string | React.ReactNode
     rightAmount?: string
@@ -73,10 +80,18 @@ type ActivityBoxProps = {
     testID?: string
 }
 
+const defaultTimestampRenderer = (timestamp: number) => moment(timestamp).format("HH:mm")
+
+export type OverridableActivityBoxProps<TActivity extends Activity> = {
+    activity: TActivity
+    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+} & Pick<ActivityBoxProps, "timestampRenderer">
+
 const BaseActivityBox = ({
     description,
     icon,
-    time,
+    timestamp,
+    timestampRenderer = defaultTimestampRenderer,
     title,
     rightAmount,
     rightAmountDescription,
@@ -164,7 +179,7 @@ const BaseActivityBox = ({
 
             <BaseView style={styles.textContainer} flexDirection="column">
                 <BaseText typographyFont="captionRegular" color={theme.colors.activityCard.time}>
-                    {time}
+                    {timestampRenderer(timestamp)}
                 </BaseText>
                 <BaseSpacer height={2} />
                 <BaseView style={styles.titleContainer}>
@@ -242,12 +257,7 @@ const baseStyles = () =>
         },
     })
 
-type TokenTransferActivityBoxProps = {
-    activity: FungibleTokenActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => {
+const TokenTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxProps<FungibleTokenActivity>) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
     const { formatLocale } = useFormatFiat()
@@ -274,8 +284,6 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
         ? VET
         : allTokens.find(_token => _token.address === tokenAddress)
 
-    const time = moment(timestamp).format("HH:mm")
-
     const getAmountTransferred = () => {
         if (!token?.decimals) {
             return "0"
@@ -286,7 +294,7 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
             .toTokenFormat_string(2, formatLocale)
     }
 
-    const getActivityProps = (): Omit<ActivityBoxProps, "time" | "onPress"> => {
+    const getActivityProps = (): Omit<ActivityBoxProps, "timestamp" | "onPress"> => {
         const amountToDisplay = getAmountTransferred()
 
         switch (type) {
@@ -350,24 +358,19 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
     return (
         <BaseActivityBox
             testID={`FT-TRANSFER-${activity.id}`}
-            time={time}
+            timestamp={timestamp}
             onPress={onPressHandler}
+            {...props}
             {...getActivityProps()}
         />
     )
 }
 
-type TokenSwapProps = {
-    activity: SwapActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
+const TokenSwap = ({ activity, onPress, ...props }: OverridableActivityBoxProps<SwapActivity>) => {
     const { LL } = useI18nContext()
 
     const title = LL.DAPP_TRANSACTION_SWAP()
     const icon = "icon-arrow-left-right"
-    const time = moment(activity.timestamp).format("HH:mm")
     const theme = useTheme()
     const { formatLocale } = useFormatFiat()
 
@@ -394,7 +397,7 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
         <BaseActivityBox
             testID={`SWAP-${activity.id}`}
             icon={icon}
-            time={time}
+            timestamp={activity.timestamp}
             title={title}
             rightAmount={rightAmount}
             rightAmountDescription={
@@ -407,19 +410,13 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
                 </BaseText>
             }
             onPress={onSwapPressHandler}
+            {...props}
         />
     )
 }
 
-type DAppTransactionProps = {
-    activity: DappTxActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const DAppTransaction = ({ activity, onPress }: DAppTransactionProps) => {
+const DAppTransaction = ({ activity, onPress, ...props }: OverridableActivityBoxProps<DappTxActivity>) => {
     const { LL } = useI18nContext()
-
-    const time = moment(activity.timestamp).format("HH:mm")
 
     const title = activity.isTransaction ? LL.DAPP_TRANSACTION_TITLE() : LL.DAPP_CONNECTION()
 
@@ -439,7 +436,7 @@ const DAppTransaction = ({ activity, onPress }: DAppTransactionProps) => {
         <BaseActivityBox
             testID={`DAPP-TX-${activity.id}`}
             icon="icon-layout-grid"
-            time={time}
+            timestamp={activity.timestamp}
             title={title}
             description={
                 <BaseView flexDirection="row" gap={4}>
@@ -461,18 +458,13 @@ const DAppTransaction = ({ activity, onPress }: DAppTransactionProps) => {
             }
             onPress={onPressHandler}
             activityStatus={activity.status}
+            {...props}
         />
     )
 }
 
-type DAppSignCert = {
-    activity: SignCertActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const DAppSignCertBox = ({ activity, onPress }: DAppSignCert) => {
+const DAppSignCertBox = ({ activity, onPress, ...props }: OverridableActivityBoxProps<SignCertActivity>) => {
     const { LL } = useI18nContext()
-    const time = moment(activity.timestamp).format("HH:mm")
     const title = LL.DAPP_SIGN_CERT()
     const description = activity?.name
 
@@ -484,25 +476,20 @@ const DAppSignCertBox = ({ activity, onPress }: DAppSignCert) => {
         <BaseActivityBox
             testID={`DAPP-SIGN-CERT-${activity.id}`}
             icon="icon-edit-2"
-            time={time}
+            timestamp={activity.timestamp}
             title={title}
             description={description}
             onPress={onPressHandler}
+            {...props}
         />
     )
 }
 
-type NFTTransferActivityBoxProps = {
-    activity: NonFungibleTokenActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
+const NFTTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxProps<NonFungibleTokenActivity>) => {
     const { LL } = useI18nContext()
     const { collectionName, tokenMetadata } = useNFTInfo(activity?.tokenId, activity.contractAddress)
     const isReceived = activity.direction === DIRECTIONS.DOWN
     const title = isReceived ? LL.NFT_TRANSFER_RECEIVED() : LL.NFT_TRANSFER_SENT()
-    const time = moment(activity.timestamp).format("HH:mm")
 
     const validatedCollectionName = () => {
         if (!collectionName) return LL.UNKNOWN_COLLECTION()
@@ -517,21 +504,17 @@ const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
         <BaseActivityBox
             testID={`NFT-TRANSFER-${activity.id}`}
             icon="icon-image"
-            time={time}
+            timestamp={activity.timestamp}
             title={title}
             description={validatedCollectionName()}
             onPress={onPressHandler}
             nftImage={tokenMetadata?.image}
+            {...props}
         />
     )
 }
 
-type NFTSaleActivityBoxProps = {
-    activity: NFTMarketplaceActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const NFTSale = ({ activity, onPress }: NFTSaleActivityBoxProps) => {
+const NFTSale = ({ activity, onPress, ...props }: OverridableActivityBoxProps<NFTMarketplaceActivity>) => {
     const { LL } = useI18nContext()
     const { collectionName, tokenMetadata } = useNFTInfo(activity?.tokenId, activity.contractAddress)
     const { formatLocale } = useFormatFiat()
@@ -544,7 +527,6 @@ const NFTSale = ({ activity, onPress }: NFTSaleActivityBoxProps) => {
     const isBuyer = AddressUtils.compareAddresses(activity.buyer, selectedAccount.address)
 
     const title = isBuyer ? LL.NFT_PURCHASED() : LL.NFT_SOLD()
-    const time = moment(activity.timestamp).format("HH:mm")
 
     const validatedCollectionName = () => {
         if (!collectionName) return LL.UNKNOWN_COLLECTION()
@@ -568,25 +550,24 @@ const NFTSale = ({ activity, onPress }: NFTSaleActivityBoxProps) => {
         <BaseActivityBox
             testID={`NFT-SALE-${activity.id}`}
             icon="icon-image"
-            time={time}
+            timestamp={activity.timestamp}
             title={title}
             description={validatedCollectionName()}
             rightAmount={rightAmount}
             rightAmountDescription={token?.symbol ?? "VET"}
             onPress={onPressHandler}
             nftImage={tokenMetadata?.image}
+            {...props}
         />
     )
 }
 
-type ConnectedAppActivityProps = {
-    activity: ConnectedAppActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const ConnectedAppActivityBox = ({ activity, onPress }: ConnectedAppActivityProps) => {
+const ConnectedAppActivityBox = ({
+    activity,
+    onPress,
+    ...props
+}: OverridableActivityBoxProps<ConnectedAppActivity>) => {
     const { LL } = useI18nContext()
-    const time = moment(activity.timestamp).format("HH:mm")
 
     const onPressHandler = () => {
         onPress(activity)
@@ -596,21 +577,16 @@ const ConnectedAppActivityBox = ({ activity, onPress }: ConnectedAppActivityProp
         <BaseActivityBox
             testID={`CONNECTED-APP-${activity.id}`}
             icon="icon-laptop"
-            time={time}
+            timestamp={activity.timestamp}
             title={LL.CONNECTED_APP_TITLE()}
             onPress={onPressHandler}
+            {...props}
         />
     )
 }
 
-type SignedTypedDataProps = {
-    activity: TypedDataActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const SignedTypedData = ({ activity, onPress }: SignedTypedDataProps) => {
+const SignedTypedData = ({ activity, onPress, ...props }: OverridableActivityBoxProps<TypedDataActivity>) => {
     const { LL } = useI18nContext()
-    const time = moment(activity.timestamp).format("HH:mm")
 
     const onPressHandler = () => {
         onPress(activity)
@@ -620,22 +596,20 @@ const SignedTypedData = ({ activity, onPress }: SignedTypedDataProps) => {
         <BaseActivityBox
             testID={`SIGN-TYPED-DATA-${activity.id}`}
             icon="icon-check-check"
-            time={time}
+            timestamp={activity.timestamp}
             title={LL.CONNECTED_APP_SIGN_TYPED_DATA()}
             onPress={onPressHandler}
+            {...props}
         />
     )
 }
 
-type B3trActionProps = {
-    activity: B3trActionActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+type B3trActionProps = OverridableActivityBoxProps<B3trActionActivity> & {
     veBetterDaoDapps: VeBetterDaoDapp[]
 }
 
-const B3trAction = ({ activity, onPress, veBetterDaoDapps }: B3trActionProps) => {
+const B3trAction = ({ activity, onPress, veBetterDaoDapps, ...props }: B3trActionProps) => {
     const { LL } = useI18nContext()
-    const time = moment(activity.timestamp).format("HH:mm")
     const { formatLocale } = useFormatFiat()
 
     const onPressHandler = () => {
@@ -650,25 +624,20 @@ const B3trAction = ({ activity, onPress, veBetterDaoDapps }: B3trActionProps) =>
             testID={`B3TR-ACTION-${activity.id}`}
             icon="icon-leaf"
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
-            time={time}
+            timestamp={activity.timestamp}
             title={LL.B3TR_ACTION()}
             description={dapp?.name}
             onPress={onPressHandler}
             rightAmount={`${DIRECTIONS.UP} ${rewardValue}`}
             rightAmountDescription={B3TR.symbol}
             invertedStyles
+            {...props}
         />
     )
 }
 
-type B3trPrpoposalVoteProps = {
-    activity: B3trProposalVoteActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const B3trProposalVote = ({ activity, onPress }: B3trPrpoposalVoteProps) => {
+const B3trProposalVote = ({ activity, onPress, ...props }: OverridableActivityBoxProps<B3trProposalVoteActivity>) => {
     const { LL } = useI18nContext()
-    const time = moment(activity.timestamp).format("HH:mm")
 
     const onPressHandler = () => {
         onPress(activity)
@@ -679,21 +648,20 @@ const B3trProposalVote = ({ activity, onPress }: B3trPrpoposalVoteProps) => {
             testID={`B3TR-PROPOSAL-VOTE-${activity.id}`}
             icon="icon-vote"
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
-            time={time}
+            timestamp={activity.timestamp}
             title={LL.B3TR_PROPOSAL_VOTE()}
             onPress={onPressHandler}
+            {...props}
         />
     )
 }
 
-type B3trXAllocartionVoteProps = {
-    activity: B3trXAllocationVoteActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const B3trXAllocationVote = ({ activity, onPress }: B3trXAllocartionVoteProps) => {
+const B3trXAllocationVote = ({
+    activity,
+    onPress,
+    ...props
+}: OverridableActivityBoxProps<B3trXAllocationVoteActivity>) => {
     const { LL } = useI18nContext()
-    const time = moment(activity.timestamp).format("HH:mm")
 
     const onPressHandler = () => {
         onPress(activity)
@@ -704,21 +672,16 @@ const B3trXAllocationVote = ({ activity, onPress }: B3trXAllocartionVoteProps) =
             testID={`B3TR-XALLOCATION-VOTE-${activity.id}`}
             icon="icon-vote"
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
-            time={time}
+            timestamp={activity.timestamp}
             title={LL.B3TR_XALLOCATION_VOTE({ number: parseInt(activity.roundId, 10) })}
             onPress={onPressHandler}
+            {...props}
         />
     )
 }
 
-type B3trClaimRewardProps = {
-    activity: B3trClaimRewardActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const B3trClaimReward = ({ activity, onPress }: B3trClaimRewardProps) => {
+const B3trClaimReward = ({ activity, onPress, ...props }: OverridableActivityBoxProps<B3trClaimRewardActivity>) => {
     const { LL } = useI18nContext()
-    const time = moment(activity.timestamp).format("HH:mm")
     const { formatLocale } = useFormatFiat()
 
     const onPressHandler = () => {
@@ -732,23 +695,18 @@ const B3trClaimReward = ({ activity, onPress }: B3trClaimRewardProps) => {
             testID={`B3TR-CLAIM-REWARD-${activity.id}`}
             icon="icon-leaf"
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
-            time={time}
+            timestamp={activity.timestamp}
             title={LL.B3TR_CLAIM_REWARD()}
             onPress={onPressHandler}
             rightAmount={`${DIRECTIONS.UP} ${rewardValue}`}
             rightAmountDescription={B3TR.symbol}
+            {...props}
         />
     )
 }
 
-type B3trUpgradeGMProps = {
-    activity: B3trUpgradeGmActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const B3trUpgradeGM = ({ activity, onPress }: B3trUpgradeGMProps) => {
+const B3trUpgradeGM = ({ activity, onPress, ...props }: OverridableActivityBoxProps<B3trUpgradeGmActivity>) => {
     const { LL } = useI18nContext()
-    const time = moment(activity.timestamp).format("HH:mm")
 
     const onPressHandler = () => {
         onPress(activity)
@@ -759,24 +717,23 @@ const B3trUpgradeGM = ({ activity, onPress }: B3trUpgradeGMProps) => {
             testID={`B3TR-UPGRADE-GM-${activity.id}`}
             icon="icon-vote"
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
-            time={time}
+            timestamp={activity.timestamp}
             title={LL.B3TR_UPGRADE_GM()}
             description={activity.newLevel}
             onPress={onPressHandler}
+            {...props}
         />
     )
 }
 
-type B3trSwapB3trToVot3Props = {
-    activity: B3trSwapB3trToVot3Activity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const B3trSwapB3trToVot3 = ({ activity, onPress }: B3trSwapB3trToVot3Props) => {
+const B3trSwapB3trToVot3 = ({
+    activity,
+    onPress,
+    ...props
+}: OverridableActivityBoxProps<B3trSwapB3trToVot3Activity>) => {
     const { LL } = useI18nContext()
     const { formatLocale } = useFormatFiat()
     const title = LL.TOKEN_CONVERSION()
-    const time = moment(activity.timestamp).format("HH:mm")
     const theme = useTheme()
 
     const amount = BigNutils(activity.value)
@@ -795,7 +752,7 @@ const B3trSwapB3trToVot3 = ({ activity, onPress }: B3trSwapB3trToVot3Props) => {
             testID={`B3TR-SWAP-B3TR-TO-VOT3-${activity.id}`}
             icon={"icon-convert"}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
-            time={time}
+            timestamp={activity.timestamp}
             title={title}
             rightAmount={rightAmount}
             rightAmountDescription={
@@ -804,19 +761,18 @@ const B3trSwapB3trToVot3 = ({ activity, onPress }: B3trSwapB3trToVot3Props) => {
                 </BaseText>
             }
             onPress={onSwapPressHandler}
+            {...props}
         />
     )
 }
 
-type B3trSwapVot3ToB3trProps = {
-    activity: B3trSwapVot3ToB3trActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const B3trSwapVot3ToB3tr = ({ activity, onPress }: B3trSwapVot3ToB3trProps) => {
+const B3trSwapVot3ToB3tr = ({
+    activity,
+    onPress,
+    ...props
+}: OverridableActivityBoxProps<B3trSwapVot3ToB3trActivity>) => {
     const { LL } = useI18nContext()
     const title = LL.TOKEN_CONVERSION()
-    const time = moment(activity.timestamp).format("HH:mm")
     const theme = useTheme()
     const { formatLocale } = useFormatFiat()
 
@@ -836,7 +792,7 @@ const B3trSwapVot3ToB3tr = ({ activity, onPress }: B3trSwapVot3ToB3trProps) => {
             testID={`B3TR-SWAP-VOT3-TO-B3TR-${activity.id}`}
             icon={"icon-convert"}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
-            time={time}
+            timestamp={activity.timestamp}
             title={title}
             rightAmount={rightAmount}
             rightAmountDescription={
@@ -845,18 +801,17 @@ const B3trSwapVot3ToB3tr = ({ activity, onPress }: B3trSwapVot3ToB3trProps) => {
                 </BaseText>
             }
             onPress={onSwapPressHandler}
+            {...props}
         />
     )
 }
 
-type B3trProposalSupportProps = {
-    activity: B3trProposalSupportActivity
-    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-}
-
-const B3trProposalSupport = ({ activity, onPress }: B3trProposalSupportProps) => {
+const B3trProposalSupport = ({
+    activity,
+    onPress,
+    ...props
+}: OverridableActivityBoxProps<B3trProposalSupportActivity>) => {
     const { LL } = useI18nContext()
-    const time = moment(activity.timestamp).format("HH:mm")
 
     const onPressHandler = () => {
         onPress(activity)
@@ -867,21 +822,16 @@ const B3trProposalSupport = ({ activity, onPress }: B3trProposalSupportProps) =>
             testID={`B3TR-PROPOSAL-SUPPORT-${activity.id}`}
             icon="icon-vote"
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
-            time={time}
+            timestamp={activity.timestamp}
             title={LL.B3TR_PROPOSAL_SUPPORT()}
             onPress={onPressHandler}
+            {...props}
         />
     )
 }
 
-type UnknownTxProps = {
-    activity: UnknownTxActivity
-    onPress: (activity: Activity) => void
-}
-
-const UnknownTx = ({ activity, onPress }: UnknownTxProps) => {
+const UnknownTx = ({ activity, onPress, ...props }: OverridableActivityBoxProps<UnknownTxActivity>) => {
     const { LL } = useI18nContext()
-    const time = moment(activity.timestamp).format("HH:mm")
 
     const onPressHandler = () => {
         onPress(activity)
@@ -891,22 +841,17 @@ const UnknownTx = ({ activity, onPress }: UnknownTxProps) => {
         <BaseActivityBox
             testID={`UNKNOWN-TX-${activity.id}`}
             icon="icon-block"
-            time={time}
+            timestamp={activity.timestamp}
             title={LL.UNKNOWN_TX()}
             onPress={onPressHandler}
             activityStatus={activity.status}
+            {...props}
         />
     )
 }
 
-type StakingProps = {
-    activity: StargateActivity
-    onPress: (activity: Activity) => void
-}
-
-const Staking = ({ activity, onPress }: StakingProps) => {
+const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<StargateActivity>) => {
     const { LL } = useI18nContext()
-    const time = moment(activity.timestamp).format("HH:mm")
     const { formatLocale } = useFormatFiat()
 
     const onPressHandler = () => {
@@ -1000,20 +945,15 @@ const Staking = ({ activity, onPress }: StakingProps) => {
                 start: { x: 0.15, y: 0 },
                 end: { x: 0.87, y: 1 },
             }}
-            time={time}
+            timestamp={activity.timestamp}
             {...baseActivityBoxProps()}
+            {...props}
         />
     )
 }
 
-type VeVoteCastProps = {
-    activity: VeVoteCastActivity
-    onPress: (activity: Activity) => void
-}
-
-const VeVoteCast = ({ activity, onPress }: VeVoteCastProps) => {
+const VeVoteCast = ({ activity, onPress, ...props }: OverridableActivityBoxProps<VeVoteCastActivity>) => {
     const { LL } = useI18nContext()
-    const time = moment(activity.timestamp).format("HH:mm")
 
     const onPressHandler = () => {
         onPress(activity)
@@ -1023,22 +963,17 @@ const VeVoteCast = ({ activity, onPress }: VeVoteCastProps) => {
         <BaseActivityBox
             testID={`VEVOTE-CAST-${activity.id}`}
             icon="icon-vote"
-            time={time}
+            timestamp={activity.timestamp}
             title={LL.VEVOTE_CAST_TITLE()}
             description={LL.VEVOTE_CAST_DESCRIPTION()}
             onPress={onPressHandler}
+            {...props}
         />
     )
 }
 
-type DappLoginProps = {
-    activity: LoginActivity
-    onPress: (activity: Activity) => void
-}
-
-const DappLogin = ({ activity, onPress }: DappLoginProps) => {
+const DappLogin = ({ activity, onPress, ...props }: OverridableActivityBoxProps<LoginActivity>) => {
     const { LL } = useI18nContext()
-    const time = moment(activity.timestamp).format("HH:mm")
     const featuredDapps = useAppSelector(selectFeaturedDapps)
 
     const onPressHandler = () => {
@@ -1054,10 +989,11 @@ const DappLogin = ({ activity, onPress }: DappLoginProps) => {
         <BaseActivityBox
             testID={`DAPP-LOGIN-${activity.id}`}
             icon="icon-user-check"
-            time={time}
+            timestamp={activity.timestamp}
             title={LL.DAPP_LOGIN_TITLE()}
             description={description}
             onPress={onPressHandler}
+            {...props}
         />
     )
 }
