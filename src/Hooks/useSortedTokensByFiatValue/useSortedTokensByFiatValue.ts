@@ -94,7 +94,9 @@ export const useSortedTokensByFiatValue = (accountAddress?: string) => {
     const vetInfo = useTokenWithCompleteInfo(VET, address)
     const vthoInfo = useTokenWithCompleteInfo(VTHO, address)
     const b3trInfo = useTokenWithCompleteInfo(B3TRToken, address)
-    const nonVechainTokensFiat = useNonVechainTokenFiat({ accountAddress: address })
+    const { data: nonVechainTokensFiat, isLoading: isLoadingNonVechainTokensFiat } = useNonVechainTokenFiat({
+        accountAddress: address,
+    })
 
     const sortedTokens = useMemo(() => {
         const notVBDBalances = tokenBalances.filter(tb => ![B3TRToken.symbol, VOT3Token.symbol].includes(tb.symbol))
@@ -153,7 +155,8 @@ export const useSortedTokensByFiatValue = (accountAddress?: string) => {
         isLoadingVechain ||
         vetInfo.tokenInfoLoading ||
         vthoInfo.tokenInfoLoading ||
-        b3trInfo.tokenInfoLoading
+        b3trInfo.tokenInfoLoading ||
+        isLoadingNonVechainTokensFiat
 
     return {
         tokens: sortedTokens,
