@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
-import { useQuery } from "@tanstack/react-query"
-import React, { useCallback, useState } from "react"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import React, { useCallback, useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
 import "react-native-url-polyfill/auto"
 import { WebView, WebViewMessageEvent } from "react-native-webview"
@@ -32,6 +32,21 @@ export const CoinbasePayWebView = ({
         staleTime: 0,
         gcTime: 0,
     })
+
+    const qc = useQueryClient()
+
+    useEffect(() => {
+        console.log(
+            JSON.stringify(
+                qc.getQueryCache().findAll({
+                    predicate(query) {
+                        if (query.queryKey[0] === "COINBASE" && query.queryKey[1] === "ONRAMP") return true
+                        return false
+                    },
+                }),
+            ),
+        )
+    }, [qc])
 
     const handleLoadEnd = useCallback(() => {
         setTimeout(() => {
