@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 import { StyleSheet, View } from "react-native"
 import { LineChart } from "react-native-wagmi-charts"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
-import { B3TR, COLORS, SCREEN_WIDTH, VET, VTHO } from "~Constants"
+import { B3TR, COLORS, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { FungibleToken } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
@@ -17,8 +17,8 @@ const CHART_STROKE_WIDTH = 2
 const MIN_CHART_SPACE = CHART_WIDTH + CHART_PADDING
 const B3TR_EXTRA_SPACE = 20
 const FALLBACK_SCREEN_THRESHOLD = 450
-// Supported chart tokens (constant to avoid array recreation)
-const SUPPORTED_CHART_TOKENS = new Set([B3TR.symbol, VET.symbol, VTHO.symbol])
+// Supported chart tokens (any token with CoinGecko ID supports charts)
+const SUPPORTED_CHART_TOKENS = new Set(Object.keys(getCoinGeckoIdBySymbol))
 
 type Props = {
     token: FungibleToken
