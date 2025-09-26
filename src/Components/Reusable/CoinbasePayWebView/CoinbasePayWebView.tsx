@@ -26,7 +26,7 @@ export const CoinbasePayWebView = ({
     const track = useAnalyticTracking()
     const { originWhitelist } = useInAppBrowser()
 
-    const { data: coinbaseURL, isLoading: isCoinbaseLoading } = useQuery({
+    const { data: coinbaseURL, isFetching: isCoinbaseLoading } = useQuery({
         queryKey: ["COINBASE", "ONRAMP", destinationAddress, currentAmount],
         queryFn: () => generateCoinbaseOnRampURL(destinationAddress),
         staleTime: 0,
