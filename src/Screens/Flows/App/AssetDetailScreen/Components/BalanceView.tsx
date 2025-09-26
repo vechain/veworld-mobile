@@ -8,6 +8,7 @@ import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
+import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 
 export const BalanceView = ({
     tokenWithInfo,
@@ -115,7 +116,10 @@ export const BalanceView = ({
                 ) : (
                     <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                         {isBalanceVisible
-                            ? BigNutils(balance?.balance).toHuman(decimals).toTokenFormatFull_string(7, formatLocale)
+                            ? (() => {
+                                  const humanBalance = BigNutils(balance?.balance).toHuman(decimals).toString
+                                  return formatFullPrecision(humanBalance, { locale: formatLocale })
+                              })()
                             : "•••••"}
                     </BaseText>
                 )}

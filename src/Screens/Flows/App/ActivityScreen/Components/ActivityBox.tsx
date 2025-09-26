@@ -45,6 +45,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AddressUtils, BigNutils, URIUtils } from "~Utils"
+import { formatWithLessThan } from "~Utils/StandardizedFormatting"
 import { getTokenLevelName } from "~Utils/StargateUtils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 
@@ -281,9 +282,8 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
             return "0"
         }
 
-        return BigNutils(amount)
-            .toHuman(token?.decimals ?? 0)
-            .toTokenFormat_string(2, formatLocale)
+        const humanAmount = Number(BigNutils(amount).toHuman(token?.decimals ?? 0).toString).toFixed(6)
+        return formatWithLessThan(humanAmount, 0.01, { locale: formatLocale })
     }
 
     const getActivityProps = (): Omit<ActivityBoxProps, "time" | "onPress"> => {
@@ -375,13 +375,15 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
     const outputToken = allTokens.find(_token => AddressUtils.compareAddresses(_token.address, activity.outputToken))
     const inputToken = allTokens.find(_token => AddressUtils.compareAddresses(_token.address, activity.inputToken))
 
-    const paidAmount = BigNutils(activity.inputValue)
-        .toHuman(inputToken?.decimals ?? 0)
-        .toTokenFormat_string(2, formatLocale)
+    const humanPaidAmount = Number(BigNutils(activity.inputValue).toHuman(inputToken?.decimals ?? 0).toString).toFixed(
+        6,
+    )
+    const paidAmount = formatWithLessThan(humanPaidAmount, 0.01, { locale: formatLocale })
 
-    const receivedAmount = BigNutils(activity.outputValue)
-        .toHuman(outputToken?.decimals ?? 0)
-        .toTokenFormat_string(2, formatLocale)
+    const humanReceivedAmount = Number(
+        BigNutils(activity.outputValue).toHuman(outputToken?.decimals ?? 0).toString,
+    ).toFixed(6)
+    const receivedAmount = formatWithLessThan(humanReceivedAmount, 0.01, { locale: formatLocale })
 
     const rightAmount = `${DIRECTIONS.UP} ${receivedAmount} ${outputToken?.symbol ?? ""}`
     const rightAmountDescription = `${DIRECTIONS.DOWN} ${paidAmount} ${inputToken?.symbol ?? ""}`
@@ -556,7 +558,8 @@ const NFTSale = ({ activity, onPress }: NFTSaleActivityBoxProps) => {
         : allTokens.find(_token => _token.address === activity.tokenAddress)
 
     // Format the price
-    const formattedPrice = BigNutils(activity.price).toHuman(18).toTokenFormat_string(2, formatLocale)
+    const humanPrice = Number(BigNutils(activity.price).toHuman(18).toString).toFixed(6)
+    const formattedPrice = formatWithLessThan(humanPrice, 0.01, { locale: formatLocale })
 
     const onPressHandler = () => {
         onPress(activity)
@@ -643,7 +646,8 @@ const B3trAction = ({ activity, onPress, veBetterDaoDapps }: B3trActionProps) =>
     }
 
     const dapp = veBetterDaoDapps.find(d => d.id === activity.appId)
-    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2, formatLocale)
+    const humanReward = Number(BigNutils(activity.value).toHuman(B3TR.decimals).toString).toFixed(6)
+    const rewardValue = formatWithLessThan(humanReward, 0.01, { locale: formatLocale })
 
     return (
         <BaseActivityBox
@@ -725,7 +729,8 @@ const B3trClaimReward = ({ activity, onPress }: B3trClaimRewardProps) => {
         onPress(activity)
     }
 
-    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2, formatLocale)
+    const humanReward = Number(BigNutils(activity.value).toHuman(B3TR.decimals).toString).toFixed(6)
+    const rewardValue = formatWithLessThan(humanReward, 0.01, { locale: formatLocale })
 
     return (
         <BaseActivityBox
@@ -779,9 +784,8 @@ const B3trSwapB3trToVot3 = ({ activity, onPress }: B3trSwapB3trToVot3Props) => {
     const time = moment(activity.timestamp).format("HH:mm")
     const theme = useTheme()
 
-    const amount = BigNutils(activity.value)
-        .toHuman(B3TR.decimals ?? 0)
-        .toTokenFormat_string(2, formatLocale)
+    const humanAmount = Number(BigNutils(activity.value).toHuman(B3TR.decimals ?? 0).toString).toFixed(6)
+    const amount = formatWithLessThan(humanAmount, 0.01, { locale: formatLocale })
 
     const rightAmount = `${DIRECTIONS.UP} ${amount} ${VOT3.symbol}`
     const rightAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${B3TR.symbol}`
@@ -820,9 +824,8 @@ const B3trSwapVot3ToB3tr = ({ activity, onPress }: B3trSwapVot3ToB3trProps) => {
     const theme = useTheme()
     const { formatLocale } = useFormatFiat()
 
-    const amount = BigNutils(activity.value)
-        .toHuman(B3TR.decimals ?? 0)
-        .toTokenFormat_string(2, formatLocale)
+    const humanAmount = Number(BigNutils(activity.value).toHuman(B3TR.decimals ?? 0).toString).toFixed(6)
+    const amount = formatWithLessThan(humanAmount, 0.01, { locale: formatLocale })
 
     const rightAmount = `${DIRECTIONS.UP} ${amount} ${B3TR.symbol}`
     const rightAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${VOT3.symbol}`
@@ -968,9 +971,8 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         )
     }, [activity?.type])
 
-    const amount = BigNutils(activity.value)
-        .toHuman(B3TR.decimals ?? 0)
-        .toTokenFormat_string(2, formatLocale)
+    const humanAmount = Number(BigNutils(activity.value).toHuman(B3TR.decimals ?? 0).toString).toFixed(6)
+    const amount = formatWithLessThan(humanAmount, 0.01, { locale: formatLocale })
 
     const rightAmount = useMemo(() => {
         if (hasRightAmount) {
