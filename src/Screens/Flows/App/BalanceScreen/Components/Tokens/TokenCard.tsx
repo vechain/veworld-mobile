@@ -55,10 +55,9 @@ export const TokenCard = ({ token }: Props) => {
         if (!chartData || !showFiatBalance) return null
 
         const hasSpaceForChart = availableChartWidth ? availableChartWidth >= 110 : true
-        const tokenSupportsChart = [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol)
 
-        // Show icon if: no space for chart OR (has space but token doesn't support charts)
-        const shouldShowIcon = !hasSpaceForChart || (hasSpaceForChart && !tokenSupportsChart)
+        // Show icon if there's no space for chart (since any token with fiat balance supports charts)
+        const shouldShowIcon = !hasSpaceForChart
 
         if (!shouldShowIcon) return null
 
@@ -70,7 +69,7 @@ export const TokenCard = ({ token }: Props) => {
                 testID="TOKEN_CARD_CHART_ICON"
             />
         )
-    }, [isGoingUp, availableChartWidth, chartData, showFiatBalance, token.symbol])
+    }, [isGoingUp, availableChartWidth, chartData, showFiatBalance])
 
     const symbol = useMemo(() => {
         switch (token.symbol) {
