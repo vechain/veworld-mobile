@@ -9,10 +9,10 @@ import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import ChartUtils from "~Utils/ChartUtils"
 
 // Chart configuration constants
-const CHART_WIDTH = 90
+const CHART_WIDTH = 60
 const CHART_HEIGHT = 32
-const CHART_PADDING = 8
-const CHART_STROKE_WIDTH = 3
+const CHART_PADDING = 12
+const CHART_STROKE_WIDTH = 2
 
 const MIN_CHART_SPACE = CHART_WIDTH + CHART_PADDING
 const B3TR_EXTRA_SPACE = 20
@@ -40,7 +40,7 @@ export const Chart = ({ token, availableWidth }: Props) => {
     })
 
     const isGoingUp = useMemo(() => ChartUtils.getPriceChange(chartData) >= 0, [chartData])
-    const downsampled = useMemo(() => ChartUtils.downsampleData(chartData, "hour", 4), [chartData])
+    const downsampled = useMemo(() => ChartUtils.downsampleData(chartData, "hour", 1), [chartData])
 
     const shouldDisplayChart = useMemo(() => {
         if (!isTokenSupported) {
