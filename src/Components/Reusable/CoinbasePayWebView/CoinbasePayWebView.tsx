@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
-import React, { useCallback, useEffect, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import "react-native-url-polyfill/auto"
 import { WebView, WebViewMessageEvent } from "react-native-webview"
@@ -26,27 +26,12 @@ export const CoinbasePayWebView = ({
     const track = useAnalyticTracking()
     const { originWhitelist } = useInAppBrowser()
 
-    const { data: coinbaseURL } = useQuery({
+    const { data: coinbaseURL, isLoading: isCoinbaseLoading } = useQuery({
         queryKey: ["COINBASE", "ONRAMP", destinationAddress, currentAmount],
         queryFn: () => generateCoinbaseOnRampURL(destinationAddress),
         staleTime: 0,
         gcTime: 0,
     })
-
-    const qc = useQueryClient()
-
-    useEffect(() => {
-        console.log(
-            JSON.stringify(
-                qc.getQueryCache().findAll({
-                    predicate(query) {
-                        if (query.queryKey[0] === "COINBASE" && query.queryKey[1] === "ONRAMP") return true
-                        return false
-                    },
-                }),
-            ),
-        )
-    }, [qc])
 
     const handleLoadEnd = useCallback(() => {
         setTimeout(() => {
@@ -96,13 +81,17 @@ export const CoinbasePayWebView = ({
         [nav, track],
     )
 
+    const url = useMemo(() => {
+        return isCoinbaseLoading ? undefined : coinbaseURL
+    }, [coinbaseURL, isCoinbaseLoading])
+
     return (
         <BaseView flex={1}>
             {!isLoading && isAndroid && <BaseStatusBar />}
             <BaseActivityIndicator isVisible={isLoading} />
-            {coinbaseURL && (
+            {url && (
                 <WebView
-                    source={{ uri: coinbaseURL }}
+                    source={{ uri: url }}
                     onLoadEnd={handleLoadEnd}
                     onMessage={onMessage}
                     style={styles.webView}
