@@ -117,6 +117,10 @@ type RootTranslation = {
 	 */
 	ACTIVITIES_STATUS_success: string
 	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	ACTIVITY: string
+	/**
 	 * N​o​ ​A​c​t​i​v​i​t​i​e​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: string
@@ -596,6 +600,22 @@ type RootTranslation = {
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
 	/**
+	 * B​u​y
+	 */
+	BALANCE_ACTION_BUY: string
+	/**
+	 * O​t​h​e​r
+	 */
+	BALANCE_ACTION_OTHER: string
+	/**
+	 * R​e​c​e​i​v​e
+	 */
+	BALANCE_ACTION_RECEIVE: string
+	/**
+	 * S​e​n​d
+	 */
+	BALANCE_ACTION_SEND: string
+	/**
 	 * C​o​l​l​e​c​t​i​b​l​e​s
 	 */
 	BALANCE_TAB_COLLECTIBLES: string
@@ -607,22 +627,6 @@ type RootTranslation = {
 	 * T​o​k​e​n​s
 	 */
 	BALANCE_TAB_TOKENS: string
-	/**
-	 * B​u​y
-	 */
-	BALANCE_ACTION_BUY: string
-	/**
-	 * R​e​c​e​i​v​e
-	 */
-	BALANCE_ACTION_RECEIVE: string
-	/**
-	 * S​e​n​d
-	 */
-	BALANCE_ACTION_SEND: string
-	/**
-	 * O​t​h​e​r
-	 */
-	BALANCE_ACTION_OTHER: string
 	/**
 	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
 	 */
@@ -5196,6 +5200,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITIES_STATUS_success: () => LocalizedString
 	/**
+	 * Activity
+	 */
+	ACTIVITY: () => LocalizedString
+	/**
 	 * No Activities to show yet
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: () => LocalizedString
@@ -5669,6 +5677,22 @@ Try reconnect your device to the internet.
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
 	/**
+	 * Buy
+	 */
+	BALANCE_ACTION_BUY: () => LocalizedString
+	/**
+	 * Other
+	 */
+	BALANCE_ACTION_OTHER: () => LocalizedString
+	/**
+	 * Receive
+	 */
+	BALANCE_ACTION_RECEIVE: () => LocalizedString
+	/**
+	 * Send
+	 */
+	BALANCE_ACTION_SEND: () => LocalizedString
+	/**
 	 * Collectibles
 	 */
 	BALANCE_TAB_COLLECTIBLES: () => LocalizedString
@@ -5680,22 +5704,6 @@ Try reconnect your device to the internet.
 	 * Tokens
 	 */
 	BALANCE_TAB_TOKENS: () => LocalizedString
-	/**
-	 * Buy
-	 */
-	BALANCE_ACTION_BUY: () => LocalizedString
-	/**
-	 * Receive
-	 */
-	BALANCE_ACTION_RECEIVE: () => LocalizedString
-	/**
-	 * Send
-	 */
-	BALANCE_ACTION_SEND: () => LocalizedString
-	/**
-	 * Other
-	 */
-	BALANCE_ACTION_OTHER: () => LocalizedString
 	/**
 	 * Get **VTHO** by staking your **VET tokens**
 	 */

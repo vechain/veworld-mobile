@@ -1,3 +1,6 @@
+import moment, { Moment } from "moment"
+import { Locales } from "~i18n"
+
 /**
  * Checks if the provided locale string is valid.
  *
@@ -78,3 +81,65 @@ export const formatDateTime = (
 }
 
 export const DEFAULT_TIMEZONE = "UTC"
+
+export const getMomentLocale = (locale: Locales) => {
+    switch (locale) {
+        case "tw":
+            return "zh-tw"
+        case "zh":
+            return "zh-cn"
+        case "de":
+            return "de"
+        case "en":
+            return "en"
+        case "es":
+            return "es"
+        case "fr":
+            return "fr"
+        case "hi":
+            return "hi"
+        case "it":
+            return "it"
+        case "ja":
+            return "ja"
+        case "ko":
+            return "ko"
+        case "nl":
+            return "nl"
+        case "pl":
+            return "pl"
+        case "pt":
+            return "pt"
+        case "ru":
+            return "ru"
+        case "sv":
+            return "sv"
+        case "tr":
+            return "tr"
+        case "vi":
+            return "vi"
+        default:
+            return "en"
+    }
+}
+
+type FormatDateArgs = {
+    /**
+     * Include the year as part of the formatted date.
+     * @default false
+     */
+    includeYear?: boolean
+}
+export const formatDate = (
+    value: string | number | Moment | Date,
+    locale: string,
+    { includeYear }: FormatDateArgs = {},
+) => {
+    const parsedLocale = locale.includes("zh") ? "zh" : locale
+    const formatter = new Intl.DateTimeFormat(parsedLocale, {
+        month: "long",
+        day: "2-digit",
+        ...(includeYear && { year: "numeric" }),
+    })
+    return formatter.format(moment(value).valueOf())
+}

@@ -4,9 +4,9 @@ import { BaseSimpleTabs, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { BalanceActivity } from "./Activity/BalanceActivity"
 import { Tokens } from "./Tokens"
-
-const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
+import { BALANCE_TABS, BalanceTab } from "./types"
 
 type Props = {
     onLayout: (e: LayoutChangeEvent) => void
@@ -15,13 +15,23 @@ type Props = {
 export const TabRenderer = ({ onLayout }: Props) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
-    const [selectedTab, setSelectedTab] = useState<(typeof TABS)[number]>("TOKENS")
+    const [selectedTab, setSelectedTab] = useState<BalanceTab>("TOKENS")
 
-    const labels = useMemo(() => TABS.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL])
+    const labels = useMemo(() => BALANCE_TABS.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL])
     return (
         <BaseView style={styles.root} gap={16} onLayout={onLayout}>
-            <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
-            <BaseView>{selectedTab === "TOKENS" ? <Tokens /> : null}</BaseView>
+            <BaseSimpleTabs
+                keys={BALANCE_TABS}
+                labels={labels}
+                selectedKey={selectedTab}
+                setSelectedKey={setSelectedTab}
+            />
+            <BaseView>
+                <>
+                    {selectedTab === "TOKENS" ? <Tokens /> : null}
+                    <BalanceActivity tab={selectedTab} />
+                </>
+            </BaseView>
         </BaseView>
     )
 }
