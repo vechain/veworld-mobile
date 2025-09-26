@@ -78,6 +78,6 @@ const baseStyles = () =>
         root: {
             height: CHART_HEIGHT,
             flex: 1,
-            paddingLeft: CHART_PADDING * 3,
+            alignItems: "center",
         },
     })
