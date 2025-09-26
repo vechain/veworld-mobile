@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.4 (2025-09-23)</small>
+
+* build: init ([a89a92f](https://github.com/vechain/veworld-mobile/commit/a89a92f))
+* 311 tech debt   react query to storefetchread wallet balance (#3284) ([5f9375d](https://github.com/vechain/veworld-mobile/commit/5f9375d)), closes [#3284](https://github.com/vechain/veworld-mobile/issues/3284)
+
 ## <small>2.4.3 (2025-09-17)</small>
 
 * build: init ([c9e9281](https://github.com/vechain/veworld-mobile/commit/c9e9281))
