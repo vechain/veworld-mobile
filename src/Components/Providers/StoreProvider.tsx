@@ -49,6 +49,19 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
             >
         >()
 
+    //Store that is reactive when the app goes back to the foreground
+    const [reactiveStore, setReactiveStore] =
+        useState<
+            ReturnType<
+                typeof configureStore<
+                    RootState,
+                    AnyAction,
+                    MiddlewareArray<[ThunkMiddleware<any, AnyAction, {}>]>,
+                    any[]
+                >
+            >
+        >()
+
     const [persistor, setPersistor] = useState<Persistor | undefined>()
 
     const initStore = useCallback(async (mmkv: MMKV, encryptionKey: string) => {
@@ -64,6 +77,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
 
         if (store.current) {
             store.current.replaceReducer(persistedReducer)
+            setReactiveStore(store.current)
         } else {
             store.current = configureStore<
                 RootState,
@@ -88,6 +102,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
                 enhancers: [reduxReset()],
                 devTools: process.env.NODE_ENV !== "production",
             })
+            setReactiveStore(store.current)
         }
 
         const _persistor = persistStore(store.current)
@@ -98,7 +113,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         reduxStorage && initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
     }, [initStore, reduxStorage])
 
-    const contextValue = useMemo(() => ({ store: store.current }), [store])
+    const contextValue = useMemo(() => ({ store: reactiveStore }), [reactiveStore])
 
     if (!store.current || !persistor) {
         return <></>

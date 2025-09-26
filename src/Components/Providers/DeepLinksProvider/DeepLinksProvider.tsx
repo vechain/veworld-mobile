@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { showInfoToast } from "~Components/Base/BaseToast"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n/i18n-react"
-import { ConnectAppRequest, DecodedRequest } from "~Model"
+import { ConnectAppRequest, DecodedRequest, Network } from "~Model"
 import {
     changeSelectedNetwork,
     isValidSession,
@@ -22,6 +22,7 @@ import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
 import { useInteraction } from "../InteractionProvider"
 import { ConnectionLinkParams, ExternalAppRequestParams } from "./types"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
+import { useStore } from "../StoreProvider"
 
 type DeepLinkEvent = "discover" | "connect" | "signTransaction" | "signCertificate" | "signTypedData" | "disconnect"
 
@@ -82,18 +83,29 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         certificateBsRef,
     } = useInteraction()
     const networks = useAppSelector(selectNetworks)
-    const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    //BUG: this is not rehydrated when the app is opened from a deep link
-    const externalSessions = useAppSelector(state => selectExternalDappSessions(state, selectedNetwork.genesis.id))
     const accounts = useAppSelector(selectAccounts)
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const { onSetSelectedAccount } = useSetSelectedAccount()
+    const { store } = useStore()
+
+    const getInitialStore = useCallback(() => {
+        const state = store?.getState()
+
+        if (!state) {
+            return
+        }
+
+        const selectedNetwork = selectSelectedNetwork(state)
+        const externalSessions = selectExternalDappSessions(state, selectedNetwork.genesis.id)
+
+        return { selectedNetwork, externalSessions }
+    }, [store])
 
     const switchNetwork = useCallback(
-        (request: Omit<DecodedRequest, "nonce" | "session" | "payload" | "redirectUrl">) => {
+        (request: Omit<DecodedRequest, "nonce" | "session" | "payload" | "redirectUrl">, selectedNetwork?: Network) => {
             // Get the selected network from the store directly because rehydration is slow
-            if (selectedNetwork.genesis.id === request.genesisId) {
+            if (selectedNetwork?.genesis.id === request.genesisId) {
                 return
             }
 
@@ -110,7 +122,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
             dispatch(changeSelectedNetwork(network))
         },
-        [networks, dispatch, LL, selectedNetwork],
+        [networks, dispatch, LL],
     )
 
     const switchAccount = useCallback(
@@ -133,6 +145,13 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 return
             }
 
+            const initialStore = getInitialStore()
+
+            if (!initialStore) {
+                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
+                return
+            }
+
             const release = await mutex.current.acquire()
 
             const decodedRequest: ConnectAppRequest = {
@@ -147,7 +166,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
             try {
                 // Switch network if I'm not on the same network
-                switchNetwork(decodedRequest)
+                switchNetwork(decodedRequest, initialStore.selectedNetwork)
 
                 setConnectBsData(decodedRequest)
                 connectBsRef.current?.present()
@@ -160,7 +179,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [setConnectBsData, connectBsRef, switchNetwork],
+        [setConnectBsData, connectBsRef, switchNetwork, getInitialStore],
     )
 
     const handleSignAndSendTransaction = useCallback(
@@ -169,6 +188,14 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
                 return
             }
+
+            const initialStore = getInitialStore()
+
+            if (!initialStore) {
+                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
+                return
+            }
+
             const release = await mutex.current.acquire()
 
             // Decode the request from the params uri encoded string
@@ -176,11 +203,11 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
             try {
                 // Switch network if I'm not on the same network
-                switchNetwork(decodedRequest)
+                switchNetwork(decodedRequest, initialStore.selectedNetwork)
 
                 const request = await DAppUtils.parseTransactionRequest(
                     decodedRequest,
-                    externalSessions,
+                    initialStore.externalSessions,
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
@@ -208,7 +235,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [switchNetwork, externalSessions, dispatch, switchAccount, setTransactionBsData, transactionBsRef],
+        [getInitialStore, switchNetwork, dispatch, switchAccount, setTransactionBsData, transactionBsRef],
     )
 
     const handleSignTypedData = useCallback(
@@ -217,6 +244,13 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
                 return
             }
+            const initialStore = getInitialStore()
+
+            if (!initialStore) {
+                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
+                return
+            }
+
             const release = await mutex.current.acquire()
 
             // Decode the request from the params uri encoded string
@@ -224,11 +258,11 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
             try {
                 // Switch network if I'm not on the same network
-                switchNetwork(decodedRequest)
+                switchNetwork(decodedRequest, initialStore.selectedNetwork)
 
                 const request = await DAppUtils.parseTypedDataRequest(
                     decodedRequest,
-                    externalSessions,
+                    initialStore.externalSessions,
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
@@ -257,7 +291,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [setTypedDataBsData, typedDataBsRef, switchNetwork, externalSessions, dispatch, switchAccount],
+        [getInitialStore, switchNetwork, dispatch, switchAccount, setTypedDataBsData, typedDataBsRef],
     )
 
     const handleSignCertificate = useCallback(
@@ -266,6 +300,14 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
                 return
             }
+
+            const initialStore = getInitialStore()
+
+            if (!initialStore) {
+                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
+                return
+            }
+
             const release = await mutex.current.acquire()
 
             // Decode the request from the params uri encoded string
@@ -273,12 +315,12 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
             try {
                 // Switch network if I'm not on the same network
-                switchNetwork(decodedRequest)
+                switchNetwork(decodedRequest, initialStore.selectedNetwork)
 
                 //Parse and decrypt the request
                 const request = await DAppUtils.parseCertificateRequest(
                     decodedRequest,
-                    externalSessions,
+                    initialStore.externalSessions,
                     params.redirect_url,
                 )
 
@@ -308,13 +350,20 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [switchNetwork, externalSessions, dispatch, switchAccount, setCertificateBsData, certificateBsRef],
+        [getInitialStore, switchNetwork, dispatch, switchAccount, setCertificateBsData, certificateBsRef],
     )
 
     const handleDisconnect = useCallback(
         async (params: ExternalAppRequestParams) => {
             if (mutex.current.isLocked()) {
                 DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
+                return
+            }
+
+            const initialStore = getInitialStore()
+
+            if (!initialStore) {
+                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
                 return
             }
             const release = await mutex.current.acquire()
@@ -324,11 +373,11 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
             try {
                 // Switch network if I'm not on the same network
-                switchNetwork(decodedRequest)
+                switchNetwork(decodedRequest, initialStore.selectedNetwork)
 
                 const request = await DAppUtils.parseDisconnectRequest(
                     decodedRequest,
-                    externalSessions,
+                    initialStore.externalSessions,
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
@@ -357,7 +406,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [setDisconnectBsData, disconnectBsRef, switchNetwork, dispatch, switchAccount, externalSessions],
+        [getInitialStore, switchNetwork, dispatch, switchAccount, setDisconnectBsData, disconnectBsRef],
     )
 
     useEffect(() => {

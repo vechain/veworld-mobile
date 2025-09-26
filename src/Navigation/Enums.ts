@@ -100,14 +100,4 @@ export enum Routes {
     APPS = "Apps",
     APPS_SEARCH = "Apps_Search",
     APPS_TABS_MANAGER = "Apps_Tabs_Manager",
-
-    // Routes for external apps that request connection/sign/send transactions with deep links
-
-    // ----------------------- VERSION 1 -----------------------
-    CONNECT_EXTERNAL_APP_SCREEN_V1 = "Connect_External_App_Screen_V1",
-    DISCONNECT_EXTERNAL_APP_SCREEN_V1 = "Disconnect_External_App_Screen_V1",
-    SIGN_TX_EXTERNAL_APP_SCREEN_V1 = "Sign_Tx_External_App_Screen_V1",
-    SIGN_MESSAGE_EXTERNAL_APP_SCREEN_V1 = "Sign_Message_External_App_Screen_V1",
-    SIGN_CERT_EXTERNAL_APP_SCREEN_V1 = "Sign_Cert_External_App_Screen_V1",
-    SIGN_TYPED_MESSAGE_EXTERNAL_APP_SCREEN_V1 = "Sign_Typed_Message_External_App_Screen_V1",
 }
