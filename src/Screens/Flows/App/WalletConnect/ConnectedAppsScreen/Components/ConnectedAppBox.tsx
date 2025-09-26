@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useState } from "react"
+import React, { memo, useCallback, useMemo, useState } from "react"
 import { StyleProp, StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { BaseCard, BaseIcon, BaseText, BaseView } from "~Components"
@@ -7,6 +7,7 @@ import { useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { DAppUtils } from "~Utils"
 import { ConnectedApp } from "../ConnectedAppUtils"
+import { useAppSelector, selectFeaturedDapps } from "~Storage/Redux"
 
 type Props = {
     connectedApp: ConnectedApp
@@ -18,29 +19,47 @@ export const ConnectedAppBox: React.FC<Props> = memo(({ connectedApp }: Props) =
     const [loadFallback, setLoadFallback] = useState(false)
     const { styles, theme } = useThemedStyles(baseStyles)
     const fetchDynamicAppLogo = useDynamicAppLogo({ size: IMAGE_SIZE })
+    const allApps = useAppSelector(selectFeaturedDapps)
 
     const name = useMemo(() => {
         if (connectedApp.type === "in-app") {
             return connectedApp.app.name
-        } else return connectedApp.session.peer.metadata.name
+        } else if (connectedApp.type === "external-app") {
+            return connectedApp.session.appName
+        }
+        return connectedApp.session.peer.metadata.name
     }, [connectedApp])
 
     const description = useMemo(() => {
         if (connectedApp.type === "in-app") {
             return new URL(connectedApp.app.href).hostname
+        } else if (connectedApp.type === "external-app") {
+            return new URL(connectedApp.session.appUrl ?? "").hostname
         } else return new URL(connectedApp.session.peer.metadata.url).hostname
     }, [connectedApp])
+
+    const getNativeAppImage = useCallback(
+        (appUrl: string) => {
+            const foundDapp = allApps.find(app => new URL(app.href).origin === new URL(appUrl).origin)
+            if (foundDapp) return fetchDynamicAppLogo({ app: foundDapp })
+            else return DAppUtils.generateFaviconUrl(appUrl, { size: IMAGE_SIZE })
+        },
+        [allApps, fetchDynamicAppLogo],
+    )
 
     const icon = useMemo(() => {
         if (connectedApp.type === "in-app") {
             return { uri: fetchDynamicAppLogo({ app: connectedApp.app }) }
-        } else
+        } else if (connectedApp.type === "external-app") {
+            return { uri: getNativeAppImage(connectedApp.session.appUrl ?? "") }
+        } else {
             return {
                 uri:
                     connectedApp.session.peer.metadata.icons[0] ??
                     DAppUtils.generateFaviconUrl(connectedApp.session.peer.metadata.url, { size: IMAGE_SIZE }),
             }
-    }, [connectedApp, fetchDynamicAppLogo])
+        }
+    }, [connectedApp, fetchDynamicAppLogo, getNativeAppImage])
 
     return (
         <BaseCard style={styles.container}>

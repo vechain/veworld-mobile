@@ -1,5 +1,5 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { default as React, useCallback, useMemo, useRef, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
@@ -27,6 +27,7 @@ import { DappDetails } from "../DappDetails"
 import { DappDetailsCard } from "../DappDetailsCard"
 import { Signable } from "../Signable"
 import { LedgerDeviceAlert } from "./LedgerDeviceAlert"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 
 type Props = {
     request: TypeDataRequest
@@ -161,6 +162,8 @@ export const TypedDataBottomSheet = () => {
 
     const { failRequest, processRequest } = useWalletConnect()
 
+    const { onSuccess, onFailure, onRejectRequest } = useExternalDappConnection()
+
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
 
     const dispatch = useAppDispatch()
@@ -203,6 +206,14 @@ export const TypedDataBottomSheet = () => {
 
                 if (request.type === "wallet-connect") {
                     await processRequest(request.requestEvent, signature)
+                } else if (request.type === "external-app") {
+                    await onSuccess({
+                        redirectUrl: request.redirectUrl,
+                        data: {
+                            signature,
+                        },
+                        publicKey: request.publicKey,
+                    })
                 } else {
                     postMessage({
                         id: request.id,
@@ -224,6 +235,8 @@ export const TypedDataBottomSheet = () => {
 
                 if (request.type === "wallet-connect") {
                     await failRequest(request.requestEvent, getRpcError("internal"))
+                } else if (request.type === "external-app") {
+                    await onFailure(request.redirectUrl)
                 } else {
                     postMessage({
                         id: request.id,
@@ -240,6 +253,8 @@ export const TypedDataBottomSheet = () => {
             dispatch,
             failRequest,
             onCloseBs,
+            onFailure,
+            onSuccess,
             postMessage,
             processRequest,
             signTypedData,
@@ -252,6 +267,8 @@ export const TypedDataBottomSheet = () => {
             setIsLoading(true)
             if (request.type === "wallet-connect") {
                 await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
+            } else if (request.type === "external-app") {
+                await onRejectRequest(request.redirectUrl)
             } else {
                 postMessage({
                     id: request.id,
@@ -262,7 +279,7 @@ export const TypedDataBottomSheet = () => {
 
             track(AnalyticsEvent.DAPP_CERTIFICATE_REJECTED)
         },
-        [failRequest, postMessage, track],
+        [failRequest, postMessage, track, onRejectRequest],
     )
 
     const onCancel = useCallback(

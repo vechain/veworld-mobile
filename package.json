@@ -205,6 +205,8 @@
     "striptags": "^3.2.0",
     "thor-devkit": "^2.0.9",
     "ts-retry-promise": "^0.8.1",
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-util": "^0.15.1",
     "typesafe-i18n": "^5.26.2",
     "usehooks-ts": "^3.1.1",
     "util": "^0.12.5",

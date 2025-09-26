@@ -61,6 +61,7 @@ import {
     WindowResponse,
 } from "./types"
 import { getLoginKind } from "./Utils/LoginUtils"
+import { DisconnectBottomSheet } from "./Components/DisconnectBottomSheet"
 
 const { PackageDetails } = NativeModules
 
@@ -1227,6 +1228,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     return (
         <Context.Provider value={contextValue}>
             <ConnectBottomSheet />
+            <DisconnectBottomSheet />
             <CertificateBottomSheet />
             <TransactionBottomSheet />
             <TypedDataBottomSheet />
