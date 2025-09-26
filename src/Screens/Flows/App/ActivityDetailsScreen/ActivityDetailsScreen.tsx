@@ -136,14 +136,21 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
         return !!transaction?.reverted
     }, [transaction?.reverted])
 
+    const activityStatus = useMemo(() => {
+        return (
+            (activityFromStore ?? activity).status ??
+            (isPendingOrFailedActivity ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS)
+        )
+    }, [activityFromStore, activity, isPendingOrFailedActivity])
+
     const isNFTtransfer = useMemo(() => {
         return activity.type === ActivityType.TRANSFER_NFT || activity.type === ActivityType.NFT_SALE
     }, [activity.type])
 
     const explorerUrl = useMemo(() => {
-        if (activity.txId)
+        if (activity.txId && (activityFromStore ?? activity).blockNumber)
             return `${getExplorerLink(network, ExplorerLinkType.TRANSACTION)}/${HexUtils.addPrefix(activity.txId)}`
-    }, [activity, network])
+    }, [activity, activityFromStore, network])
 
     const renderActivityDetails = useMemo(() => {
         switch (activity.type) {
@@ -177,7 +184,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
                     <DappTransactionDetails
                         activity={(activityFromStore ?? activity) as DappTxActivity}
                         clauses={transaction?.clauses}
-                        status={isPendingOrFailedActivity ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS}
+                        status={activityStatus}
                         paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
@@ -233,7 +240,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
     }, [
         activity,
         activityFromStore,
-        isPendingOrFailedActivity,
+        activityStatus,
         isloadingTxDetails,
         token,
         transaction?.clauses,
@@ -265,9 +272,9 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
 
                         <BaseSpacer height={16} />
 
-                        {isPendingOrFailedActivity && (
+                        {activityStatus !== ActivityStatus.SUCCESS && (
                             <>
-                                <TransactionStatusBox status={ActivityStatus.REVERTED} />
+                                <TransactionStatusBox status={activityStatus} />
                                 <BaseSpacer height={16} />
                             </>
                         )}
