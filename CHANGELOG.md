@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.4 (2025-09-25)</small>
+
+* build: init ([01c7e19](https://github.com/vechain/veworld-mobile/commit/01c7e19))
+* 369 bug   244 vtho gets vet balance when vet balance changes (#3314) ([27287dd](https://github.com/vechain/veworld-mobile/commit/27287dd)), closes [#3314](https://github.com/vechain/veworld-mobile/issues/3314)
+
 ## <small>2.4.3 (2025-09-17)</small>
 
 * build: init ([c9e9281](https://github.com/vechain/veworld-mobile/commit/c9e9281))
