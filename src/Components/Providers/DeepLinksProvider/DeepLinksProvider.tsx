@@ -89,23 +89,10 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
     const { onSetSelectedAccount } = useSetSelectedAccount()
     const { store } = useStore()
 
-    const getInitialStore = useCallback(() => {
-        const state = store?.getState()
-
-        if (!state) {
-            return
-        }
-
-        const selectedNetwork = selectSelectedNetwork(state)
-        const externalSessions = selectExternalDappSessions(state, selectedNetwork.genesis.id)
-
-        return { selectedNetwork, externalSessions }
-    }, [store])
-
     const switchNetwork = useCallback(
-        (request: Omit<DecodedRequest, "nonce" | "session" | "payload" | "redirectUrl">, selectedNetwork?: Network) => {
+        (request: Omit<DecodedRequest, "nonce" | "session" | "payload" | "redirectUrl">, selectedNetwork: Network) => {
             // Get the selected network from the store directly because rehydration is slow
-            if (selectedNetwork?.genesis.id === request.genesisId) {
+            if (selectedNetwork.genesis.id === request.genesisId) {
                 return
             }
 
@@ -123,6 +110,26 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             dispatch(changeSelectedNetwork(network))
         },
         [networks, dispatch, LL],
+    )
+
+    const getInitialStore = useCallback(
+        (request: Omit<DecodedRequest, "nonce" | "session" | "payload" | "redirectUrl">) => {
+            const state = store?.getState()
+
+            if (!state) {
+                return
+            }
+
+            const selectedNetwork = selectSelectedNetwork(state)
+
+            // Switch network if I'm not on the same network
+            switchNetwork(request, selectedNetwork)
+
+            const externalSessions = selectExternalDappSessions(state, selectedNetwork.genesis.id)
+
+            return { selectedNetwork, externalSessions }
+        },
+        [store, switchNetwork],
     )
 
     const switchAccount = useCallback(
@@ -145,13 +152,6 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 return
             }
 
-            const initialStore = getInitialStore()
-
-            if (!initialStore) {
-                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
-                return
-            }
-
             const release = await mutex.current.acquire()
 
             const decodedRequest: ConnectAppRequest = {
@@ -164,10 +164,15 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 genesisId: params.genesis_id,
             }
 
-            try {
-                // Switch network if I'm not on the same network
-                switchNetwork(decodedRequest, initialStore.selectedNetwork)
+            const initialStore = getInitialStore(decodedRequest)
 
+            if (!initialStore) {
+                release?.()
+                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
+                return
+            }
+
+            try {
                 setConnectBsData(decodedRequest)
                 connectBsRef.current?.present()
             } catch (e) {
@@ -179,7 +184,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [setConnectBsData, connectBsRef, switchNetwork, getInitialStore],
+        [setConnectBsData, connectBsRef, getInitialStore],
     )
 
     const handleSignAndSendTransaction = useCallback(
@@ -189,22 +194,20 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 return
             }
 
-            const initialStore = getInitialStore()
-
-            if (!initialStore) {
-                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
-                return
-            }
-
             const release = await mutex.current.acquire()
 
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
-            try {
-                // Switch network if I'm not on the same network
-                switchNetwork(decodedRequest, initialStore.selectedNetwork)
+            const initialStore = getInitialStore(decodedRequest)
 
+            if (!initialStore) {
+                release?.()
+                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
+                return
+            }
+
+            try {
                 const request = await DAppUtils.parseTransactionRequest(
                     decodedRequest,
                     initialStore.externalSessions,
@@ -235,7 +238,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [getInitialStore, switchNetwork, dispatch, switchAccount, setTransactionBsData, transactionBsRef],
+        [getInitialStore, dispatch, switchAccount, setTransactionBsData, transactionBsRef],
     )
 
     const handleSignTypedData = useCallback(
@@ -244,22 +247,21 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchResourceNotAvailableError(params.redirect_url)
                 return
             }
-            const initialStore = getInitialStore()
-
-            if (!initialStore) {
-                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
-                return
-            }
 
             const release = await mutex.current.acquire()
 
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
-            try {
-                // Switch network if I'm not on the same network
-                switchNetwork(decodedRequest, initialStore.selectedNetwork)
+            const initialStore = getInitialStore(decodedRequest)
 
+            if (!initialStore) {
+                release?.()
+                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
+                return
+            }
+
+            try {
                 const request = await DAppUtils.parseTypedDataRequest(
                     decodedRequest,
                     initialStore.externalSessions,
@@ -291,7 +293,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [getInitialStore, switchNetwork, dispatch, switchAccount, setTypedDataBsData, typedDataBsRef],
+        [getInitialStore, dispatch, switchAccount, setTypedDataBsData, typedDataBsRef],
     )
 
     const handleSignCertificate = useCallback(
@@ -301,22 +303,20 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 return
             }
 
-            const initialStore = getInitialStore()
-
-            if (!initialStore) {
-                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
-                return
-            }
-
             const release = await mutex.current.acquire()
 
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
-            try {
-                // Switch network if I'm not on the same network
-                switchNetwork(decodedRequest, initialStore.selectedNetwork)
+            const initialStore = getInitialStore(decodedRequest)
 
+            if (!initialStore) {
+                release?.()
+                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
+                return
+            }
+
+            try {
                 //Parse and decrypt the request
                 const request = await DAppUtils.parseCertificateRequest(
                     decodedRequest,
@@ -350,7 +350,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [getInitialStore, switchNetwork, dispatch, switchAccount, setCertificateBsData, certificateBsRef],
+        [getInitialStore, dispatch, switchAccount, setCertificateBsData, certificateBsRef],
     )
 
     const handleDisconnect = useCallback(
@@ -360,21 +360,20 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 return
             }
 
-            const initialStore = getInitialStore()
-
-            if (!initialStore) {
-                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
-                return
-            }
             const release = await mutex.current.acquire()
 
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
-            try {
-                // Switch network if I'm not on the same network
-                switchNetwork(decodedRequest, initialStore.selectedNetwork)
+            const initialStore = getInitialStore(decodedRequest)
 
+            if (!initialStore) {
+                release?.()
+                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
+                return
+            }
+
+            try {
                 const request = await DAppUtils.parseDisconnectRequest(
                     decodedRequest,
                     initialStore.externalSessions,
@@ -406,7 +405,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [getInitialStore, switchNetwork, dispatch, switchAccount, setDisconnectBsData, disconnectBsRef],
+        [getInitialStore, dispatch, switchAccount, setDisconnectBsData, disconnectBsRef],
     )
 
     useEffect(() => {
