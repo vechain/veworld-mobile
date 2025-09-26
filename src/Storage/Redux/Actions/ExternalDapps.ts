@@ -1,9 +1,14 @@
-import { AddressUtils } from "~Utils"
-import { AppThunk } from "../Types"
-import { deleteExternalDappSession } from "../Slices/ExternalDapps"
-import { decodeBase64 } from "tweetnacl-util"
 import nacl from "tweetnacl"
+import { decodeBase64 } from "tweetnacl-util"
+import { showInfoToast } from "~Components"
 import { SessionData } from "~Components/Providers/DeepLinksProvider/types"
+import { TranslationFunctions } from "~i18n/i18n-types"
+import { AddressUtils } from "~Utils"
+import { selectExternalDappSessions } from "../Selectors/ExternalDapp"
+import { selectNetworks, selectSelectedNetwork } from "../Selectors/Network"
+import { changeSelectedNetwork } from "../Slices"
+import { deleteExternalDappSession, SessionState } from "../Slices/ExternalDapps"
+import { AppThunk } from "../Types"
 
 const isValidSession =
     (
@@ -62,4 +67,32 @@ const isValidSession =
         return true
     }
 
-export { isValidSession }
+const switchNetwork =
+    (genesisId: string, LL: TranslationFunctions): AppThunk<Record<string, SessionState> | undefined> =>
+    (dispatch, getState) => {
+        const state = getState()
+        const networks = selectNetworks(state)
+        const selectedNetwork = selectSelectedNetwork(state)
+        const externalDapps = selectExternalDappSessions(state, selectedNetwork.genesis.id)
+
+        if (selectedNetwork.genesis.id === genesisId) {
+            return externalDapps
+        }
+
+        const network = networks.find(n => n.genesis.id === genesisId)
+        if (!network) {
+            return
+        }
+
+        showInfoToast({
+            text1: LL.NOTIFICATION_WC_NETWORK_CHANGED({
+                network: network.name,
+            }),
+        })
+
+        dispatch(changeSelectedNetwork(network))
+
+        return selectExternalDappSessions(state, network.genesis.id)
+    }
+
+export { isValidSession, switchNetwork }

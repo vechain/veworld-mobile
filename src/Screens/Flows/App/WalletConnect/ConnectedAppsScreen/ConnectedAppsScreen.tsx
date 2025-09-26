@@ -62,7 +62,7 @@ export const ConnectedAppsScreen = () => {
             }
         })
 
-        const externalApps: ConnectedApp[] = Object.entries(externalSessions).map(([publicKey, session]) => {
+        const externalApps: ConnectedApp[] = Object.entries(externalSessions || {}).map(([publicKey, session]) => {
             return {
                 type: "external-app" as const,
                 session: { ...session, publicKey },

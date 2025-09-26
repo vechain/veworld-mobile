@@ -1,28 +1,19 @@
+import { useQueryClient } from "@tanstack/react-query"
 import { Mutex } from "async-mutex"
 import React, { useCallback, useContext, useEffect, useMemo, useRef } from "react"
 import { InteractionManager, Linking } from "react-native"
-import { useQueryClient } from "@tanstack/react-query"
 import { showInfoToast } from "~Components/Base/BaseToast"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 import { useI18nContext } from "~i18n/i18n-react"
-import { ConnectAppRequest, DecodedRequest, Network } from "~Model"
-import {
-    changeSelectedNetwork,
-    isValidSession,
-    selectAccounts,
-    selectExternalDappSessions,
-    selectNetworks,
-    selectSelectedNetwork,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { ConnectAppRequest } from "~Model"
+import { isValidSession, selectAccounts, switchNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, DAppUtils } from "~Utils"
 import { DeepLinkError } from "~Utils/ErrorMessageUtils"
 import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
 import { useInteraction } from "../InteractionProvider"
-import { ConnectionLinkParams, ExternalAppRequestParams } from "./types"
-import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 import { useStore } from "../StoreProvider"
+import { ConnectionLinkParams, ExternalAppRequestParams } from "./types"
 
 type DeepLinkEvent = "discover" | "connect" | "signTransaction" | "signCertificate" | "signTypedData" | "disconnect"
 
@@ -82,55 +73,14 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         setCertificateBsData,
         certificateBsRef,
     } = useInteraction()
-    const networks = useAppSelector(selectNetworks)
     const accounts = useAppSelector(selectAccounts)
     const { LL } = useI18nContext()
-    const dispatch = useAppDispatch()
     const { onSetSelectedAccount } = useSetSelectedAccount()
     const { store } = useStore()
 
-    const switchNetwork = useCallback(
-        (request: Omit<DecodedRequest, "nonce" | "session" | "payload" | "redirectUrl">, selectedNetwork: Network) => {
-            // Get the selected network from the store directly because rehydration is slow
-            if (selectedNetwork.genesis.id === request.genesisId) {
-                return
-            }
-
-            const network = networks.find(n => n.genesis.id === request.genesisId)
-            if (!network) {
-                throw new DeepLinkError(DeepLinkErrorCode.InvalidPayload)
-            }
-
-            showInfoToast({
-                text1: LL.NOTIFICATION_WC_NETWORK_CHANGED({
-                    network: network.name,
-                }),
-            })
-
-            dispatch(changeSelectedNetwork(network))
-        },
-        [networks, dispatch, LL],
-    )
-
-    const getInitialStore = useCallback(
-        (request: Omit<DecodedRequest, "nonce" | "session" | "payload" | "redirectUrl">) => {
-            const state = store?.getState()
-
-            if (!state) {
-                return
-            }
-
-            const selectedNetwork = selectSelectedNetwork(state)
-
-            // Switch network if I'm not on the same network
-            switchNetwork(request, selectedNetwork)
-
-            const externalSessions = selectExternalDappSessions(state, selectedNetwork.genesis.id)
-
-            return { selectedNetwork, externalSessions }
-        },
-        [store, switchNetwork],
-    )
+    const getInitialStore = useCallback(() => {
+        return store
+    }, [store])
 
     const switchAccount = useCallback(
         (address: string) => {
@@ -164,7 +114,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 genesisId: params.genesis_id,
             }
 
-            const initialStore = getInitialStore(decodedRequest)
+            const initialStore = getInitialStore()
 
             if (!initialStore) {
                 release?.()
@@ -173,6 +123,8 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             }
 
             try {
+                initialStore.dispatch(switchNetwork(decodedRequest.genesisId, LL))
+
                 setConnectBsData(decodedRequest)
                 connectBsRef.current?.present()
             } catch (e) {
@@ -184,7 +136,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [setConnectBsData, connectBsRef, getInitialStore],
+        [setConnectBsData, connectBsRef, getInitialStore, LL],
     )
 
     const handleSignAndSendTransaction = useCallback(
@@ -199,22 +151,29 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
-            const initialStore = getInitialStore(decodedRequest)
+            const initialStore = getInitialStore()
 
             if (!initialStore) {
                 release?.()
-                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
+                DAppUtils.dispatchInternalError(params.redirect_url)
                 return
             }
 
             try {
+                const externalSessions = initialStore.dispatch(switchNetwork(decodedRequest.genesisId, LL))
+
+                if (!externalSessions) {
+                    release?.()
+                    throw new DeepLinkError(DeepLinkErrorCode.Unauthorized)
+                }
+
                 const request = await DAppUtils.parseTransactionRequest(
                     decodedRequest,
-                    initialStore.externalSessions,
+                    externalSessions,
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
-                    const isValid = dispatch(
+                    const isValid = initialStore.dispatch(
                         isValidSession(request.genesisId, request.publicKey, request.session, switchAccount),
                     )
 
@@ -238,7 +197,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [getInitialStore, dispatch, switchAccount, setTransactionBsData, transactionBsRef],
+        [getInitialStore, switchAccount, setTransactionBsData, transactionBsRef, LL],
     )
 
     const handleSignTypedData = useCallback(
@@ -253,22 +212,29 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
-            const initialStore = getInitialStore(decodedRequest)
+            const initialStore = getInitialStore()
 
             if (!initialStore) {
                 release?.()
-                DAppUtils.dispatchInternalError(params.redirect_url ?? "")
+                DAppUtils.dispatchInternalError(params.redirect_url)
                 return
             }
 
             try {
+                const externalSessions = initialStore.dispatch(switchNetwork(decodedRequest.genesisId, LL))
+
+                if (!externalSessions) {
+                    release?.()
+                    throw new DeepLinkError(DeepLinkErrorCode.Unauthorized)
+                }
+
                 const request = await DAppUtils.parseTypedDataRequest(
                     decodedRequest,
-                    initialStore.externalSessions,
+                    externalSessions,
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
-                    const isValid = dispatch(
+                    const isValid = initialStore.dispatch(
                         isValidSession(request.genesisId, request.publicKey, request.session, switchAccount),
                     )
 
@@ -293,7 +259,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [getInitialStore, dispatch, switchAccount, setTypedDataBsData, typedDataBsRef],
+        [getInitialStore, switchAccount, setTypedDataBsData, typedDataBsRef, LL],
     )
 
     const handleSignCertificate = useCallback(
@@ -308,7 +274,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
-            const initialStore = getInitialStore(decodedRequest)
+            const initialStore = getInitialStore()
 
             if (!initialStore) {
                 release?.()
@@ -317,15 +283,22 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             }
 
             try {
+                const externalSessions = initialStore.dispatch(switchNetwork(decodedRequest.genesisId, LL))
+
+                if (!externalSessions) {
+                    release?.()
+                    throw new DeepLinkError(DeepLinkErrorCode.Unauthorized)
+                }
+
                 //Parse and decrypt the request
                 const request = await DAppUtils.parseCertificateRequest(
                     decodedRequest,
-                    initialStore.externalSessions,
+                    externalSessions,
                     params.redirect_url,
                 )
 
                 if (request && request.type === "external-app") {
-                    const isValid = dispatch(
+                    const isValid = initialStore.dispatch(
                         isValidSession(request.genesisId, request.publicKey, request.session, switchAccount),
                     )
 
@@ -350,7 +323,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [getInitialStore, dispatch, switchAccount, setCertificateBsData, certificateBsRef],
+        [getInitialStore, switchAccount, setCertificateBsData, certificateBsRef, LL],
     )
 
     const handleDisconnect = useCallback(
@@ -365,7 +338,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             // Decode the request from the params uri encoded string
             const decodedRequest = DAppUtils.decodeRequest(params.request)
 
-            const initialStore = getInitialStore(decodedRequest)
+            const initialStore = getInitialStore()
 
             if (!initialStore) {
                 release?.()
@@ -374,13 +347,20 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             }
 
             try {
+                const externalSessions = initialStore.dispatch(switchNetwork(decodedRequest.genesisId, LL))
+
+                if (!externalSessions) {
+                    release?.()
+                    throw new DeepLinkError(DeepLinkErrorCode.Unauthorized)
+                }
+
                 const request = await DAppUtils.parseDisconnectRequest(
                     decodedRequest,
-                    initialStore.externalSessions,
+                    externalSessions,
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
-                    const isValid = dispatch(
+                    const isValid = initialStore.dispatch(
                         isValidSession(request.genesisId, request.publicKey, request.session, switchAccount),
                     )
 
@@ -405,7 +385,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [getInitialStore, dispatch, switchAccount, setDisconnectBsData, disconnectBsRef],
+        [getInitialStore, switchAccount, setDisconnectBsData, disconnectBsRef, LL],
     )
 
     useEffect(() => {
