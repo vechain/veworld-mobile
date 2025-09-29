@@ -60,7 +60,7 @@ describe("TokenCard", () => {
         expect(screen.getByTestId("TOKEN_CARD_NAME")).toHaveTextContent(name)
     })
 
-    it("should display the correct chart icon", () => {
+    it("should not display chart icon by default (when no layout event fired)", () => {
         ;(useSmartMarketChart as jest.Mock).mockReturnValue({
             data: [
                 { timestamp: Date.now(), value: 1 },
@@ -75,7 +75,9 @@ describe("TokenCard", () => {
 
         render(<TokenCard token={TestHelpers.data.VeDelegateWithBalance} />, { wrapper: TestWrapper })
 
-        expect(screen.getByTestId("TOKEN_CARD_CHART_ICON")).toBeVisible()
+        // By default, without layout event, availableChartWidth is undefined
+        // This means hasSpaceForChart defaults to true, so icon should not show
+        expect(screen.queryByTestId("TOKEN_CARD_CHART_ICON")).toBeNull()
     })
 
     it("should display the correct balance (with fiat)", () => {
