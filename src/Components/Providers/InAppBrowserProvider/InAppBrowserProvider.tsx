@@ -23,13 +23,11 @@ import {
     AccountWithDevice,
     CertificateRequest,
     InAppRequest,
-    Network,
     SwitchWalletRequest,
     TransactionRequest,
     TypeDataRequest,
     WalletRequest,
 } from "~Model"
-import { Routes } from "~Navigation"
 import {
     changeSelectedNetwork,
     deleteSession,
@@ -46,6 +44,7 @@ import { AccountUtils, AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"
 import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
+import { DisconnectBottomSheet } from "./Components/DisconnectBottomSheet"
 import { LoginBottomSheet } from "./Components/LoginBottomSheet/LoginBottomSheet"
 import { SwitchWalletBottomSheet } from "./Components/SwitchWalletBottomSheet"
 import { TransactionBottomSheet } from "./Components/TransactionBottomSheet/TransactionBottomSheet"
@@ -60,7 +59,6 @@ import {
     WindowResponse,
 } from "./types"
 import { getLoginKind } from "./Utils/LoginUtils"
-import { DisconnectBottomSheet } from "./Components/DisconnectBottomSheet"
 
 const { PackageDetails } = NativeModules
 
@@ -102,10 +100,8 @@ type ContextType = {
     navigationState: WebViewNavigation | undefined
     resetWebViewState: () => void
     addAppAndNavToRequest: (request: InAppRequest) => void
-    targetAccount?: AccountWithDevice
-    targetNetwork?: Network
-    handleCloseChangeAccountNetworkBottomSheet: () => void
-    handleConfirmChangeAccountNetworkBottomSheet: () => void
+    handleCloseChangeAccountNetworkBottomSheet: (event: TargetEvent) => void
+    handleConfirmChangeAccountNetworkBottomSheet: (event: TargetEvent) => void
     ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModalMethods>
     switchAccount: (request: WindowRequest) => void
     isLoading: boolean
@@ -119,6 +115,12 @@ enum ScrollDirection {
     NONE = "NONE",
     UP = "UP",
     DOWN = "DOWN",
+}
+
+export type TargetEvent = {
+    id: string
+    method: (typeof RequestMethods)[keyof typeof RequestMethods]
+    targetAccount: AccountWithDevice
 }
 
 type Props = {
@@ -176,27 +178,11 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         onOpen: openChangeAccountNetworkBottomSheet,
         onClose: closeChangeAccountNetworkBottomSheet,
     } = useBottomSheetModal()
-    const [targetAccount, setTargetAccount] = useState<AccountWithDevice>()
-    const [targetNetwork, setTargetNetwork] = useState<Network>()
     const [navigateToOperation, setNavigateToOperation] = useState<Function>()
     const [showToolbars, setShowToolbars] = useState(true)
     const { getLoginSession } = useLoginSession()
 
     const fetchDynamicAppLogo = useDynamicAppLogo({ size: 64 })
-
-    const handleCloseChangeAccountNetworkBottomSheet = useCallback(() => {
-        closeChangeAccountNetworkBottomSheet()
-        setTargetAccount(undefined)
-        setTargetNetwork(undefined)
-        showWarningToast({ text1: LL.BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING() })
-    }, [LL, closeChangeAccountNetworkBottomSheet])
-
-    const handleConfirmChangeAccountNetworkBottomSheet = useCallback(() => {
-        closeChangeAccountNetworkBottomSheet()
-        setTargetAccount(undefined)
-        setTargetNetwork(undefined)
-        navigateToOperation?.()
-    }, [closeChangeAccountNetworkBottomSheet, navigateToOperation])
 
     const dispatch = useAppDispatch()
 
@@ -259,6 +245,34 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
         },
         [navigationState, postWebviewMessage, track],
+    )
+
+    const handleCloseChangeAccountNetworkBottomSheet = useCallback(
+        ({ method, id }: TargetEvent) => {
+            closeChangeAccountNetworkBottomSheet()
+            postMessage({
+                id,
+                error: "User rejected account change",
+                method,
+            })
+            showWarningToast({ text1: LL.BROWSER_CHANGE_ACCOUNT_NETWORK_WARNING() })
+        },
+        [LL, closeChangeAccountNetworkBottomSheet, postMessage],
+    )
+
+    const handleConfirmChangeAccountNetworkBottomSheet = useCallback(
+        ({ targetAccount }: TargetEvent) => {
+            closeChangeAccountNetworkBottomSheet()
+            onSetSelectedAccount({ address: targetAccount.address })
+
+            showInfoToast({
+                text1: LL.NOTIFICATION_WC_ACCOUNT_CHANGED({
+                    account: targetAccount.alias,
+                }),
+            })
+            navigateToOperation?.()
+        },
+        [closeChangeAccountNetworkBottomSheet, navigateToOperation, LL, onSetSelectedAccount],
     )
 
     const navigateToUrl = useCallback((url: string) => {
@@ -341,98 +355,41 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 !request.options.signer ||
                 compareAddresses(selectedAccountAddress, request.options.signer)
             ) {
-                setTargetAccount(undefined)
-            } else {
-                const requestedAccount: AccountWithDevice | undefined = accounts.find(acct => {
-                    return AddressUtils.compareAddresses(request.options.signer, acct.address)
-                })
-
-                // change account if it exists
-                if (requestedAccount && !compareAddresses(requestedAccount.address, selectedAccountAddress)) {
-                    nav.navigate(Routes.DAPP_CHANGE_ACCOUNT_SCREEN, {
-                        request: request,
-                    })
-                    return
-                }
-
-                // cancel operation if account not found
-                if (!requestedAccount) {
-                    showInfoToast({
-                        text1: LL.NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND(),
-                    })
-
-                    postMessage({
-                        id: request.id,
-                        error: "Invalid account",
-                        method: request.method,
-                    })
-
-                    return
-                }
-
-                setTargetAccount(requestedAccount)
+                return
             }
 
-            let network: Network | undefined
+            const requestedAccount: AccountWithDevice | undefined = accounts.find(acct => {
+                return AddressUtils.compareAddresses(request.options.signer, acct.address)
+            })
 
-            if (selectedNetwork.genesis.id !== request.genesisId) {
-                network = networks.find(n => n.genesis.id === request.genesisId)
-                network ? setTargetNetwork(network) : setTargetNetwork(undefined)
-            }
-
-            if (!network) {
+            // cancel operation if account not found
+            if (!requestedAccount) {
                 showInfoToast({
-                    text1: LL.BROWSER_NETWORK_NOT_FOUND(),
+                    text1: LL.NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND(),
                 })
 
                 postMessage({
                     id: request.id,
-                    error: "Invalid network",
+                    error: "Invalid account",
                     method: request.method,
                 })
 
                 return
             }
 
-            openChangeAccountNetworkBottomSheet()
+            openChangeAccountNetworkBottomSheet({
+                targetAccount: requestedAccount,
+                method: request.method,
+                id: request.id,
+            })
         },
-        [
-            LL,
-            accounts,
-            nav,
-            networks,
-            openChangeAccountNetworkBottomSheet,
-            postMessage,
-            selectedAccountAddress,
-            selectedNetwork.genesis.id,
-        ],
+        [LL, accounts, openChangeAccountNetworkBottomSheet, postMessage, selectedAccountAddress],
     )
 
     // ~ NAVIGATION TO MESSAGE SCREEN
     const navigateToTransactionScreen = useCallback(
         (request: TxRequest, appUrl: string, appName: string) => {
             const message = request.message as Connex.Vendor.TxMessage
-
-            try {
-                switchAccount(request)
-                switchNetwork(request)
-            } catch {
-                return
-            }
-
-            // const session = getLoginSession(appUrl, request.genesisId)
-
-            // if (!session && request.options.signer)
-            //    dispatch(
-            //        addSession({
-            //            address: request.options.signer,
-            //            genesisId: request.genesisId,
-            //             kind: "temporary",
-            //             url: appUrl,
-            //             name: appName,
-            //             replaceable: true,
-            //         }),
-            //     )
 
             const req: TransactionRequest = {
                 method: request.method,
@@ -447,32 +404,11 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setTransactionBsData(req)
             transactionBsRef.current?.present()
         },
-        [setTransactionBsData, switchAccount, switchNetwork, transactionBsRef],
+        [setTransactionBsData, transactionBsRef],
     )
 
     const navigateToCertificateScreen = useCallback(
         (request: CertRequest, appUrl: string, appName: string) => {
-            try {
-                switchAccount(request)
-                switchNetwork(request)
-            } catch {
-                return
-            }
-
-            // const session = getLoginSession(appUrl, request.genesisId)
-
-            // if (!session && request.options.signer)
-            //     dispatch(
-            //         addSession({
-            //             address: request.options.signer,
-            //             genesisId: request.genesisId,
-            //             kind: "temporary",
-            //             url: appUrl,
-            //             name: appName,
-            //             replaceable: true,
-            //         }),
-            //     )
-
             const message = request.message as Connex.Vendor.CertMessage
 
             const req: CertificateRequest = {
@@ -488,32 +424,11 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setCertificateBsData(req)
             certificateBsRef.current?.present()
         },
-        [setCertificateBsData, certificateBsRef, switchAccount, switchNetwork],
+        [setCertificateBsData, certificateBsRef],
     )
 
     const navigateToSignedDataScreen = useCallback(
         (request: SignedDataRequest, appUrl: string, appName: string) => {
-            try {
-                switchAccount(request)
-                switchNetwork(request)
-            } catch {
-                return
-            }
-
-            // const session = getLoginSession(appUrl, request.genesisId)
-
-            // if (!session && request.options.signer)
-            //     dispatch(
-            //         addSession({
-            //             address: request.options.signer,
-            //             genesisId: request.genesisId,
-            //             kind: "temporary",
-            //             url: appUrl,
-            //             name: appName,
-            //             replaceable: true,
-            //         }),
-            //     )
-
             const req: TypeDataRequest = {
                 method: request.method,
                 id: request.id,
@@ -530,18 +445,11 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setTypedDataBsData(req)
             typedDataBsRef.current?.present()
         },
-        [setTypedDataBsData, switchAccount, switchNetwork, typedDataBsRef],
+        [setTypedDataBsData, typedDataBsRef],
     )
 
     const navigateToLoginScreen = useCallback(
         (request: LoginRequest, appUrl: string, appName: string) => {
-            try {
-                switchAccount(request)
-                switchNetwork(request)
-            } catch {
-                return
-            }
-
             const kind = getLoginKind(request)
 
             setLoginBsData({
@@ -557,7 +465,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             })
             loginBsRef.current?.present()
         },
-        [loginBsRef, setLoginBsData, switchAccount, switchNetwork],
+        [loginBsRef, setLoginBsData],
     )
 
     /**
@@ -590,6 +498,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     // ~ MESSAGE VALIDATION
     const validateTxMessage = useCallback(
         (request: TxRequest, appUrl: string, appName: string) => {
+            switchNetwork(request)
+
             const message = request.message
 
             track(AnalyticsEvent.DISCOVERY_TRANSACTION_REQUESTED, {
@@ -609,10 +519,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
             const res = checkIfOldRequestIsInvalid(request, appUrl, RequestMethods.REQUEST_TRANSACTION)
             if (res) return
-            if (
-                (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
-                selectedNetwork.genesis.id === request.genesisId
-            ) {
+
+            if (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) {
                 return navigateToTransactionScreen(request, appUrl, appName)
             }
             setNavigateToOperation(() => () => navigateToTransactionScreen(request, appUrl, appName))
@@ -621,8 +529,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         [
             track,
             checkIfOldRequestIsInvalid,
+            switchNetwork,
             selectedAccountAddress,
-            selectedNetwork.genesis.id,
             initAndOpenChangeAccountNetworkBottomSheet,
             postMessage,
             navigateToTransactionScreen,
@@ -632,6 +540,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const validateCertMessage = useCallback(
         (request: CertRequest, appUrl: string, appName: string) => {
             const message = request.message
+
+            switchNetwork(request)
 
             track(AnalyticsEvent.DISCOVERY_CERTIFICATE_REQUESTED, {
                 dapp: new URL(appUrl).origin,
@@ -650,10 +560,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             const res = checkIfOldRequestIsInvalid(request, appUrl, RequestMethods.SIGN_CERTIFICATE)
             if (res) return
 
-            if (
-                (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
-                selectedNetwork.genesis.id === request.genesisId
-            ) {
+            if (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) {
                 return navigateToCertificateScreen(request, appUrl, appName)
             }
 
@@ -661,18 +568,20 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             initAndOpenChangeAccountNetworkBottomSheet(request)
         },
         [
+            switchNetwork,
             checkIfOldRequestIsInvalid,
             initAndOpenChangeAccountNetworkBottomSheet,
             navigateToCertificateScreen,
             postMessage,
             selectedAccountAddress,
-            selectedNetwork.genesis.id,
             track,
         ],
     )
 
     const validateSignedDataMessage = useCallback(
         (request: SignedDataRequest, appUrl: string, appName: string) => {
+            switchNetwork(request)
+
             const message = request
 
             const isValid = DAppUtils.isValidSignedDataMessage(message)
@@ -692,10 +601,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             const res = checkIfOldRequestIsInvalid(request, appUrl, RequestMethods.SIGN_TYPED_DATA)
             if (res) return
 
-            if (
-                (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
-                selectedNetwork.genesis.id === request.genesisId
-            ) {
+            if (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) {
                 return navigateToSignedDataScreen(message, appUrl, appName)
             }
 
@@ -703,12 +609,12 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             initAndOpenChangeAccountNetworkBottomSheet(message)
         },
         [
+            switchNetwork,
             checkIfOldRequestIsInvalid,
             initAndOpenChangeAccountNetworkBottomSheet,
             navigateToSignedDataScreen,
             postMessage,
             selectedAccountAddress,
-            selectedNetwork.genesis.id,
             track,
         ],
     )
@@ -716,15 +622,12 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const validateConnectMessage = useCallback(
         (request: LoginRequest, appUrl: string, appName: string) => {
             track(AnalyticsEvent.DAPP_LOGIN_REQUESTED, { kind: getLoginKind(request), dapp: new URL(appUrl).origin })
+
+            switchNetwork(request)
+
             if (request.params.value === null) {
                 //Handle login without anything
-                if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
-                    return navigateToLoginScreen(request, appUrl, appName)
-                }
-
-                setNavigateToOperation(() => () => navigateToLoginScreen(request, appUrl, appName))
-                initAndOpenChangeAccountNetworkBottomSheet(request)
-                return
+                return navigateToLoginScreen(request, appUrl, appName)
             } else if ("purpose" in request.params.value) {
                 //Certificate message
                 //We can safely assume that if the key `purpose` in the parameters value, given that the typed-data message doesn't have it, it's 100% a certificate message
@@ -766,20 +669,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 }
             }
 
-            if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
-                return navigateToLoginScreen(request, appUrl, appName)
-            }
-
-            setNavigateToOperation(() => () => navigateToLoginScreen(request, appUrl, appName))
-            initAndOpenChangeAccountNetworkBottomSheet(request)
+            return navigateToLoginScreen(request, appUrl, appName)
         },
-        [
-            initAndOpenChangeAccountNetworkBottomSheet,
-            navigateToLoginScreen,
-            postMessage,
-            selectedNetwork.genesis.id,
-            track,
-        ],
+        [track, switchNetwork, navigateToLoginScreen, postMessage],
     )
 
     const addAppAndNavToRequest = useCallback(
@@ -811,11 +703,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const executeWalletMessage = useCallback(
         (request: WalletRequest, appUrl: string, appName: string) => {
-            try {
-                switchNetwork(request)
-            } catch {
-                return
-            }
             const loginSession = getLoginSession(appUrl, request.genesisId)
             if (!loginSession)
                 return postMessage({
@@ -861,21 +748,17 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             selectedAccount,
             selectedAccountAddress,
             setSwitchWalletBsData,
-            switchNetwork,
             switchWalletBsRef,
         ],
     )
 
     const validateWalletMessage = useCallback(
         (request: WalletRequest, appUrl: string, appName: string) => {
-            if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
-                return executeWalletMessage(request, appUrl, appName)
-            }
+            switchNetwork(request)
 
-            setNavigateToOperation(() => () => executeWalletMessage(request, appUrl, appName))
-            initAndOpenChangeAccountNetworkBottomSheet(request)
+            return executeWalletMessage(request, appUrl, appName)
         },
-        [executeWalletMessage, initAndOpenChangeAccountNetworkBottomSheet, selectedNetwork.genesis.id],
+        [executeWalletMessage, switchNetwork],
     )
 
     const validateDisconnectMessage = useCallback(
@@ -919,11 +802,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const executeSwitchWalletMessage = useCallback(
         (request: SwitchWalletRequest, appUrl: string, appName: string) => {
-            try {
-                switchNetwork(request)
-            } catch {
-                return
-            }
             const loginSession = getLoginSession(appUrl, request.genesisId)
             if (!loginSession || loginSession.kind !== "permanent")
                 return postMessage({
@@ -941,19 +819,16 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             })
             switchWalletBsRef.current?.present()
         },
-        [getLoginSession, postMessage, setSwitchWalletBsData, switchNetwork, switchWalletBsRef],
+        [getLoginSession, postMessage, setSwitchWalletBsData, switchWalletBsRef],
     )
 
     const validateSwitchWalletMessage = useCallback(
         (request: SwitchWalletRequest, appUrl: string, appName: string) => {
-            if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
-                return executeSwitchWalletMessage(request, appUrl, appName)
-            }
+            switchNetwork(request)
 
-            setNavigateToOperation(() => () => executeSwitchWalletMessage(request, appUrl, appName))
-            initAndOpenChangeAccountNetworkBottomSheet(request)
+            return executeSwitchWalletMessage(request, appUrl, appName)
         },
-        [executeSwitchWalletMessage, initAndOpenChangeAccountNetworkBottomSheet, selectedNetwork.genesis.id],
+        [executeSwitchWalletMessage, switchNetwork],
     )
 
     const onMessage = useCallback(
@@ -1186,8 +1061,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             navigationState,
             resetWebViewState,
             addAppAndNavToRequest,
-            targetAccount,
-            targetNetwork,
             handleCloseChangeAccountNetworkBottomSheet,
             handleConfirmChangeAccountNetworkBottomSheet,
             ChangeAccountNetworkBottomSheetRef,
@@ -1214,8 +1087,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         navigationState,
         resetWebViewState,
         addAppAndNavToRequest,
-        targetAccount,
-        targetNetwork,
         handleCloseChangeAccountNetworkBottomSheet,
         handleConfirmChangeAccountNetworkBottomSheet,
         ChangeAccountNetworkBottomSheetRef,
