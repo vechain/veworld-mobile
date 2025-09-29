@@ -44,10 +44,12 @@ export const ChangeAccountNetworkBottomSheet = React.forwardRef<BottomSheetModal
                             </BaseText>
                         </BaseView>
                     </BaseView>
-                    <BaseSpacer height={16} />
+                    <BaseSpacer height={8} />
                     <BaseView>
-                        <BaseText typographyFont="subSubTitleLight">{LL.BROWSER_CHANGE_ACCOUNT_DESC()}</BaseText>
-                        <BaseSpacer height={16} />
+                        <BaseText typographyFont="buttonSecondary" color={theme.colors.editSpeedBs.subtitle}>
+                            {LL.BROWSER_CHANGE_ACCOUNT_DESC()}
+                        </BaseText>
+                        <BaseSpacer height={8} />
                         <SelectableAccountCard account={event.targetAccount} balanceToken="FIAT" disabled />
                     </BaseView>
                     <BaseSpacer height={24} />
