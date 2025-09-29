@@ -591,7 +591,7 @@
   "DEVICE_PIN": "Pin del Dispositivo",
   "DISCONNECTED_APP_ASKING_FOR_ACCESS": "{dappName:string} ya no tendrá acceso a:",
   "DISCONNECTED_APP_ASKING_FOR_ACCESS_1": "Ya no solicitará transacciones para enviar a VeChain Thor.",
-  "DISCONNECTED_APP_ASKING_FOR_ACCESS_2": "Ya no solicitará su firma en certificados o identificaciones y acuerdos.",
+  "DISCONNECTED_APP_ASKING_FOR_ACCESS_2": "Ya no solicitará su firma en certificados o identificación y acuerdos.",
   "DISCONNECTION_REQUEST": "Solicitud de desconexión",
   "DISCOVER_CREATE_YOUR_DAPP": "Crea tu propio DApp en Vechain",
   "DISCOVER_DAPPS_TITLE": "DApps de VeBetterDAO",
