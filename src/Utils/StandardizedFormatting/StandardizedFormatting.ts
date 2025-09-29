@@ -36,7 +36,7 @@ export const formatDisplayNumber = (value: string | number, options: StandardFor
 
     const numValue = bigNum.toNumber
 
-    if (!isFinite(numValue) || isNaN(numValue)) {
+    if (!Number.isFinite(numValue) || Number.isNaN(numValue)) {
         return showZeroAs
     }
 
