@@ -1,12 +1,14 @@
-import { default as React, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { default as React, useCallback, useEffect, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
-import { ScrollView } from "react-native-gesture-handler"
 import Animated, {
     useAnimatedStyle,
     useSharedValue,
     withTiming,
     interpolate,
     Extrapolation,
+    useAnimatedRef,
+    useDerivedValue,
+    scrollTo,
 } from "react-native-reanimated"
 import { BaseText, BaseTouchable, BaseView } from "~Components"
 import { COLORS } from "~Constants"
@@ -37,7 +39,7 @@ export const FiltersSection = ({ selectedFilter, onPress }: Props) => {
         [selectedFilter, theme.isDark],
     )
 
-    const scrollViewRef = useRef<ScrollView>(null)
+    const scrollViewRef = useAnimatedRef<Animated.ScrollView>()
 
     const [measurements, setMeasurements] = useState<{
         chipPositions: number[]
@@ -51,6 +53,7 @@ export const FiltersSection = ({ selectedFilter, onPress }: Props) => {
 
     const scrollValue = useSharedValue(0)
     const scrollOffset = useSharedValue(0)
+    const targetScrollX = useSharedValue(0)
 
     const selectedIndex = useMemo(() => FILTERS.findIndex(filter => filter === selectedFilter), [selectedFilter])
 
@@ -68,6 +71,10 @@ export const FiltersSection = ({ selectedFilter, onPress }: Props) => {
         return { totalWidth, maxScroll }
     }, [isReady, measurements])
 
+    useDerivedValue(() => {
+        scrollTo(scrollViewRef, targetScrollX.value, 0, true)
+    })
+
     useEffect(() => {
         if (selectedIndex < 0 || !isReady) return
 
@@ -78,14 +85,11 @@ export const FiltersSection = ({ selectedFilter, onPress }: Props) => {
         const chipCenter = chipPosition + chipWidth / 2
         const viewportCenter = measurements.scrollViewWidth / 2
 
-        let scrollTo = chipCenter - viewportCenter
-        scrollTo = Math.max(0, Math.min(scrollTo, contentBounds.maxScroll))
+        let scrollToX = chipCenter - viewportCenter
+        scrollToX = Math.max(0, Math.min(scrollToX, contentBounds.maxScroll))
 
-        scrollViewRef.current?.scrollTo({
-            x: scrollTo,
-            animated: true,
-        })
-    }, [selectedIndex, isReady, measurements, contentBounds.maxScroll, scrollValue])
+        targetScrollX.value = withTiming(scrollToX, { duration: 150 })
+    }, [selectedIndex, isReady, measurements, contentBounds.maxScroll, scrollValue, targetScrollX])
 
     const handleChipLayout = useCallback((event: LayoutChangeEvent, index: number) => {
         const { x, width } = event.nativeEvent.layout
@@ -161,7 +165,7 @@ export const FiltersSection = ({ selectedFilter, onPress }: Props) => {
                 ]}
             />
 
-            <ScrollView
+            <Animated.ScrollView
                 ref={scrollViewRef}
                 horizontal
                 contentContainerStyle={styles.root}
@@ -184,7 +188,7 @@ export const FiltersSection = ({ selectedFilter, onPress }: Props) => {
                         </BaseTouchable>
                     </BaseView>
                 ))}
-            </ScrollView>
+            </Animated.ScrollView>
         </BaseView>
     )
 }
