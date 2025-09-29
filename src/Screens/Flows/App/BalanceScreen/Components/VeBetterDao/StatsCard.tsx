@@ -32,6 +32,7 @@ export const StatsCard = ({ label, value }: Props) => {
     const { unit, value: parsedValue } = useMemo(() => {
         switch (label) {
             case "co2":
+            case "plastic":
                 return {
                     unit: "Kg",
                     value: BigNutils(value).div(BigNutils(10).toBN.pow(3)).toCompactString(formatLocale, 0),
@@ -44,11 +45,6 @@ export const StatsCard = ({ label, value }: Props) => {
             case "energy":
                 return {
                     unit: "KWh",
-                    value: BigNutils(value).div(BigNutils(10).toBN.pow(3)).toCompactString(formatLocale, 0),
-                }
-            case "plastic":
-                return {
-                    unit: "Kg",
                     value: BigNutils(value).div(BigNutils(10).toBN.pow(3)).toCompactString(formatLocale, 0),
                 }
         }
