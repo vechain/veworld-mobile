@@ -110,8 +110,8 @@ export const getStore = (preloadedState: Partial<RootState>) =>
             balances: {
                 mainnet: {},
                 testnet: {},
-                solo: {},
                 other: {},
+                solo: {},
             },
             ...preloadedState,
         },
