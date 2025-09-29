@@ -53,7 +53,11 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
     return (
         <BaseView style={styles.root} onLayout={onLayout}>
             <AnimatedLinearGradient
-                colors={[COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.50)", "#423483"]}
+                colors={[
+                    COLORS.BALANCE_BACKGROUND,
+                    COLORS.BALANCE_BACKGROUND_50,
+                    COLORS.BALANCE_BACKGROUND_GRADIENT_END,
+                ]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
                 locations={[0, 0.65, 1]}
@@ -61,7 +65,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                 style={[gradientStyle, styles.gradient]}
             />
             <TouchableOpacity>
-                <BaseView flexDirection="row" gap={12} p={8} pr={16} borderRadius={99} bg="rgba(255, 255, 255, 0.05)">
+                <BaseView flexDirection="row" gap={12} p={8} pr={16} borderRadius={99} bg={COLORS.WHITE_RGBA_05}>
                     <AccountIcon address={account.address} size={24} borderRadius={100} />
                     <BaseText typographyFont="captionSemiBold" color={COLORS.PURPLE_LABEL}>
                         {account.alias}
@@ -71,12 +75,12 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
 
             <BaseView flexDirection="row" gap={12}>
                 <TouchableOpacity onPress={onWalletManagementPress}>
-                    <BaseView borderRadius={99} p={10} bg="rgba(255, 255, 255, 0.05)">
+                    <BaseView borderRadius={99} p={10} bg={COLORS.WHITE_RGBA_05}>
                         <BaseIcon name="icon-wallet" color={COLORS.PURPLE_LABEL} size={20} />
                     </BaseView>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                    <BaseView borderRadius={99} p={10} bg="rgba(255, 255, 255, 0.05)">
+                    <BaseView borderRadius={99} p={10} bg={COLORS.WHITE_RGBA_05}>
                         <BaseIcon name="icon-scanQR" color={COLORS.PURPLE_LABEL} size={20} />
                     </BaseView>
                 </TouchableOpacity>

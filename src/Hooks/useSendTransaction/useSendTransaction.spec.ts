@@ -47,6 +47,15 @@ jest.mock("react-native-toast-message", () => {
     }
 })
 
+jest.mock("~Components/Providers/NotificationsProvider", () => ({
+    NotificationsProvider: ({ children }: { children: React.ReactNode }) => children,
+    useNotifications: () => ({
+        // Add any methods/properties that NotificationsProvider exposes
+        showNotification: jest.fn(),
+        hideNotification: jest.fn(),
+    }),
+}))
+
 const { vetTransaction1, dappTransaction1, nftTransaction1 } = TestHelpers.data
 
 const toSignedTx = (tx: Transaction) => {
