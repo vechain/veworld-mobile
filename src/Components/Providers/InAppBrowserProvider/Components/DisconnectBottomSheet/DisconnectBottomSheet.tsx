@@ -92,7 +92,7 @@ export const DisconnectBottomSheet = () => {
                 try {
                     await onRejectRequest(request.redirectUrl)
                 } catch (err: unknown) {
-                    error(ERROR_EVENTS.WALLET_CONNECT, err)
+                    error(ERROR_EVENTS.EXTERNAL_DAPP_CONNECTION, err)
                 }
             }
         },
