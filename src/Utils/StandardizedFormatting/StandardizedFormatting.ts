@@ -42,7 +42,7 @@ export const formatDisplayNumber = (value: string | number, options: StandardFor
 
     if (useCompactNotation && Math.abs(numValue) >= 1000) {
         const compactString = bigNum.toCompactString(locale, 1)
-        return compactString.replace(/\.0([KMBTQ])/g, "$1")
+        return compactString.replaceAll(/\.0([KMBTQ])/g, "$1")
     }
 
     const decimals = forceDecimals ?? (numValue % 1 === 0 ? 0 : 1)
