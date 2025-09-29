@@ -51,7 +51,7 @@ export const VeBetterDaoCard = () => {
     if (!isVeBetterUser) return null
 
     return (
-        <BaseView style={styles.root}>
+        <BaseView style={styles.root} testID="VEBETTER_DAO_CARD">
             <BaseView style={styles.b3mo}>
                 <FastImage
                     source={b3mo}

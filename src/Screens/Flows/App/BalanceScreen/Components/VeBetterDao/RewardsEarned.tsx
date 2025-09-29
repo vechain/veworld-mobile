@@ -36,7 +36,8 @@ export const RewardsEarned = ({ week, month, total }: Props) => {
                         <BaseView flexDirection="row" gap={8}>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                                typographyFont="bodySemiBold">
+                                typographyFont="bodySemiBold"
+                                testID="REWARDS_EARNED_WEEK_VALUE">
                                 {BigNutils(week ?? "0").toTokenFormatFull_string(2, formatLocale)}
                             </BaseText>
                             <BaseText
@@ -53,7 +54,8 @@ export const RewardsEarned = ({ week, month, total }: Props) => {
                         <BaseView flexDirection="row" gap={8}>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                                typographyFont="bodySemiBold">
+                                typographyFont="bodySemiBold"
+                                testID="REWARDS_EARNED_MONTH_VALUE">
                                 {BigNutils(month ?? "0").toTokenFormatFull_string(2, formatLocale)}
                             </BaseText>
                             <BaseText
@@ -72,7 +74,8 @@ export const RewardsEarned = ({ week, month, total }: Props) => {
                     <BaseView flexDirection="row" gap={8}>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                            typographyFont="subSubTitleSemiBold">
+                            typographyFont="subSubTitleSemiBold"
+                            testID="REWARDS_EARNED_TOTAL_VALUE">
                             {BigNutils(total ?? "0").toTokenFormatFull_string(2, formatLocale)}
                         </BaseText>
                         <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="bodyMedium">
