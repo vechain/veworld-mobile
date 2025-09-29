@@ -1,7 +1,14 @@
 import { useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useRef } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet, Dimensions } from "react-native"
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing, runOnJS } from "react-native-reanimated"
+import Animated, {
+    useSharedValue,
+    useAnimatedStyle,
+    withTiming,
+    withDelay,
+    Easing,
+    runOnJS,
+} from "react-native-reanimated"
 import { BaseSpacer } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { DappHorizontalCardSkeleton } from "~Screens/Flows/App/DiscoverScreen/Components/DappHorizontalCardSkeleton"
@@ -44,17 +51,18 @@ export const DAppsList = ({
         opacity.value = 1
 
         translateX.value = withTiming(exitTranslateX, {
-            duration: 160,
+            duration: 100,
             easing: Easing.out(Easing.quad),
         })
-        opacity.value = withTiming(0.4, { duration: 160 })
+        opacity.value = withTiming(0.4, { duration: 90 })
 
-        const timeoutId = setTimeout(() => {
-            translateX.value = startTranslateX
-            translateX.value = withTiming(
+        translateX.value = startTranslateX
+        translateX.value = withDelay(
+            60,
+            withTiming(
                 0,
                 {
-                    duration: 230,
+                    duration: 130,
                     easing: Easing.out(Easing.quad),
                 },
                 finished => {
@@ -62,11 +70,9 @@ export const DAppsList = ({
                         runOnJS(onAnimationComplete)()
                     }
                 },
-            )
-            opacity.value = withTiming(1, { duration: 230 })
-        }, 150)
-
-        return () => clearTimeout(timeoutId)
+            ),
+        )
+        opacity.value = withDelay(60, withTiming(1, { duration: 140 }))
     }, [animationDirection, translateX, opacity, onAnimationComplete])
 
     const animatedStyle = useAnimatedStyle(() => {
