@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.4 (2025-09-25)</small>
+
+* build: init ([a565bd2](https://github.com/vechain/veworld-mobile/commit/a565bd2))
+* fix: fix delegation bottom sheet for account (#3317) ([49ab4e2](https://github.com/vechain/veworld-mobile/commit/49ab4e2)), closes [#3317](https://github.com/vechain/veworld-mobile/issues/3317)
+
 ## <small>2.4.3 (2025-09-17)</small>
 
 * build: init ([c9e9281](https://github.com/vechain/veworld-mobile/commit/c9e9281))
