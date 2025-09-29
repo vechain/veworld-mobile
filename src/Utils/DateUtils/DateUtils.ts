@@ -82,6 +82,11 @@ export const formatDateTime = (
 
 export const DEFAULT_TIMEZONE = "UTC"
 
+/**
+ * Get the moment locale from the internationalization library (from useI18nContext())
+ * @param locale Locale from our internationalization library
+ * @returns the correct locale from moment
+ */
 export const getMomentLocale = (locale: Locales) => {
     switch (locale) {
         case "tw":

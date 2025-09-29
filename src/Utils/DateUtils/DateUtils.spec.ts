@@ -1,4 +1,5 @@
-import { formatDateTime, isValidDateLocale, DEFAULT_TIMEZONE, formatDate } from "./DateUtils"
+import { Locales } from "~i18n"
+import { formatDateTime, isValidDateLocale, DEFAULT_TIMEZONE, formatDate, getMomentLocale } from "./DateUtils"
 
 describe("isValidLocale", () => {
     beforeAll(() => {
@@ -63,5 +64,30 @@ describe("formatDate", () => {
     })
     it("should display a date in Italian with default settings", () => {
         expect(formatDate(DEFAULT_DATE, "it")).toBe("10 nov")
+    })
+})
+
+describe("getMomentLocale", () => {
+    it.each([
+        ["tw", "zh-tw"],
+        ["zh", "zh-cn"],
+        ["de", "de"],
+        ["en", "en"],
+        ["es", "es"],
+        ["fr", "fr"],
+        ["hi", "hi"],
+        ["it", "it"],
+        ["ja", "ja"],
+        ["ko", "ko"],
+        ["nl", "nl"],
+        ["pl", "pl"],
+        ["pt", "pt"],
+        ["ru", "ru"],
+        ["sv", "sv"],
+        ["tr", "tr"],
+        ["vi", "vi"],
+        ["unknown", "en"],
+    ])("should get moment locale from %s to %s", (value, expected) => {
+        expect(getMomentLocale(value as Locales)).toBe(expected)
     })
 })
