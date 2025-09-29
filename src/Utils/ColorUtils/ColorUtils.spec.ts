@@ -30,8 +30,18 @@ describe("isLightColor", () => {
         expect(ColorUtils.isLightColor(lightColor)).toBeTruthy()
     })
 
+    it("should return true for a light color (in rgba)", () => {
+        const lightColor = "rgba(255,255,255,0.5)" // white
+        expect(ColorUtils.isLightColor(lightColor)).toBeTruthy()
+    })
+
     it("should return false for a dark color", () => {
         const darkColor = "#000000" // black
+        expect(ColorUtils.isLightColor(darkColor)).toBeFalsy()
+    })
+
+    it("should return false for a dark color (in rgba)", () => {
+        const darkColor = "rgba(0, 0, 0, 1)" // black
         expect(ColorUtils.isLightColor(darkColor)).toBeFalsy()
     })
 })

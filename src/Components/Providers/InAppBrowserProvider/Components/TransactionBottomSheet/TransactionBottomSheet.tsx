@@ -1,7 +1,7 @@
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { Transaction } from "@vechain/sdk-core"
-import { ComponentProps, default as React, useCallback, useMemo, useRef, useState } from "react"
+import React, { ComponentProps, useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, showErrorToast } from "~Components/Base"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
@@ -33,6 +33,8 @@ import { assertDefined } from "~Utils/TypeUtils"
 import { useI18nContext } from "~i18n"
 import { useInAppBrowser } from "../../InAppBrowserProvider"
 import { TransactionDetails } from "./TransactionDetails"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
+
 type Props = {
     request: TransactionRequest
     onCancel: (request: TransactionRequest) => Promise<void>
@@ -229,6 +231,7 @@ export const TransactionBottomSheet = () => {
     const { onClose: onCloseBs } = useBottomSheetModal({ externalRef: transactionBsRef })
     const { ref: selectAccountBsRef } = useBottomSheetModal()
     const network = useAppSelector(selectSelectedNetwork)
+    const { onRejectRequest, onSuccess, onFailure } = useExternalDappConnection()
 
     const track = useAnalyticTracking()
 
@@ -278,6 +281,15 @@ export const TransactionBottomSheet = () => {
                     txid: id,
                     signer: selectedAccount.address,
                 })
+            } else if (transactionBsData.type === "external-app") {
+                await onSuccess({
+                    redirectUrl: transactionBsData.redirectUrl,
+                    data: {
+                        id,
+                        transaction,
+                    },
+                    publicKey: transactionBsData.publicKey,
+                })
             } else {
                 postMessage({
                     id: transactionBsData.id,
@@ -295,7 +307,7 @@ export const TransactionBottomSheet = () => {
 
             onFinish(true)
         },
-        [transactionBsData, selectedAccount, dispatch, onFinish, processRequest, postMessage],
+        [transactionBsData, selectedAccount, dispatch, onFinish, processRequest, postMessage, onSuccess],
     )
 
     const onTransactionFailure = useCallback(async () => {
@@ -303,6 +315,8 @@ export const TransactionBottomSheet = () => {
         assertDefined(selectedAccount)
         if (transactionBsData.type === "wallet-connect") {
             await failRequest(transactionBsData.requestEvent, getRpcError("internal"))
+        } else if (transactionBsData.type === "external-app") {
+            await onFailure(transactionBsData.redirectUrl)
         } else {
             postMessage({
                 id: transactionBsData.id,
@@ -312,7 +326,7 @@ export const TransactionBottomSheet = () => {
         }
 
         onFinish(false)
-    }, [transactionBsData, selectedAccount, onFinish, failRequest, postMessage])
+    }, [transactionBsData, selectedAccount, onFinish, failRequest, postMessage, onFailure])
 
     const onNavigateToLedger = useCallback(() => {
         // Do not reject request if it's a ledger request
@@ -325,6 +339,8 @@ export const TransactionBottomSheet = () => {
             try {
                 if (request.type === "wallet-connect") {
                     await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
+                } else if (request.type === "external-app") {
+                    await onRejectRequest(request.redirectUrl)
                 } else {
                     postMessage({
                         id: request.id,
@@ -338,7 +354,7 @@ export const TransactionBottomSheet = () => {
                 })
             }
         },
-        [LL, failRequest, postMessage],
+        [LL, failRequest, postMessage, onRejectRequest],
     )
 
     const onCancel = useCallback(
