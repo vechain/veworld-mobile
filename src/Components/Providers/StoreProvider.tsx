@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import { getPersistorConfig, newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
 import {
@@ -13,23 +13,54 @@ import {
     REHYDRATE,
 } from "redux-persist"
 import reduxReset from "redux-reset"
-import { configureStore } from "@reduxjs/toolkit"
+import { configureStore, MiddlewareArray, ThunkMiddleware } from "@reduxjs/toolkit"
 import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
 import { PersistedCacheProvider, useApplicationSecurity } from "~Components/Providers"
-import { Reducer } from "redux"
+import { AnyAction, Reducer } from "redux"
 import { MMKV } from "react-native-mmkv"
 import { SplashScreen } from "../../../src/SplashScreen"
 import { PersistConfig } from "redux-persist/es/types"
 
-const StoreContext = React.createContext<undefined>(undefined)
+type StoreContextType = {
+    store:
+        | ReturnType<
+              typeof configureStore<RootState, AnyAction, MiddlewareArray<[ThunkMiddleware<any, AnyAction, {}>]>, any[]>
+          >
+        | undefined
+}
+
+const StoreContext = React.createContext<StoreContextType | undefined>(undefined)
 
 type StoreContextProviderProps = { children: React.ReactNode }
 
 const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     const { redux: reduxStorage } = useApplicationSecurity()
 
-    const store = useRef<ReturnType<typeof configureStore>>()
+    const store =
+        useRef<
+            ReturnType<
+                typeof configureStore<
+                    RootState,
+                    AnyAction,
+                    MiddlewareArray<[ThunkMiddleware<any, AnyAction, {}>]>,
+                    any[]
+                >
+            >
+        >()
+
+    //Store that is reactive when the app goes back to the foreground
+    const [reactiveStore, setReactiveStore] =
+        useState<
+            ReturnType<
+                typeof configureStore<
+                    RootState,
+                    AnyAction,
+                    MiddlewareArray<[ThunkMiddleware<any, AnyAction, {}>]>,
+                    any[]
+                >
+            >
+        >()
 
     const [persistor, setPersistor] = useState<Persistor | undefined>()
 
@@ -46,8 +77,14 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
 
         if (store.current) {
             store.current.replaceReducer(persistedReducer)
+            setReactiveStore(store.current)
         } else {
-            store.current = configureStore({
+            store.current = configureStore<
+                RootState,
+                AnyAction,
+                MiddlewareArray<[ThunkMiddleware<any, AnyAction, {}>]>,
+                any[]
+            >({
                 reducer: persistedReducer,
                 middleware: getDefaultMiddleware =>
                     getDefaultMiddleware({
@@ -65,6 +102,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
                 enhancers: [reduxReset()],
                 devTools: process.env.NODE_ENV !== "production",
             })
+            setReactiveStore(store.current)
         }
 
         const _persistor = persistStore(store.current)
@@ -75,13 +113,15 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         reduxStorage && initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
     }, [initStore, reduxStorage])
 
+    const contextValue = useMemo(() => ({ store: reactiveStore }), [reactiveStore])
+
     if (!store.current || !persistor) {
         return <></>
     }
 
     return (
         <SplashScreen>
-            <StoreContext.Provider value={undefined}>
+            <StoreContext.Provider value={contextValue}>
                 <Provider store={store.current}>
                     <PersistGate loading={null} persistor={persistor}>
                         <PersistedCacheProvider>{children}</PersistedCacheProvider>
@@ -92,4 +132,12 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     )
 }
 
-export { StoreContextProvider }
+const useStore = () => {
+    const context = useContext(StoreContext)
+    if (!context) {
+        throw new Error("useStore must be used within a StoreContextProvider")
+    }
+    return context
+}
+
+export { StoreContextProvider, useStore }

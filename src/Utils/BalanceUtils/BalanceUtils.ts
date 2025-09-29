@@ -157,7 +157,11 @@ const getBalancesFromBlockchain = async (
         const balances: Balance[] = []
         if (vetOrVthoInAddresses) {
             const result = await getNativeBalancesFromBlockchain(accountAddress, network)
-            balances.push(...result)
+            balances.push(
+                ...result.filter(balance =>
+                    Boolean(tokenAddresses.find(ta => AddressUtils.compareAddresses(ta, balance.tokenAddress))),
+                ),
+            )
         }
         if (notVetOrVtho.length === 0) return balances
         const erc20Balances = await getErc20BalancesFromBlockchain(notVetOrVtho, accountAddress, thor)
