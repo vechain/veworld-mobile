@@ -2022,6 +2022,19 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_ASKING_FOR_ACCESS_2: string
 	/**
+	 * {​d​a​p​p​N​a​m​e​}​ ​w​i​l​l​ ​n​o​ ​l​o​n​g​e​r​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​:
+	 * @param {string} dappName
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS: RequiredParams<'dappName'>
+	/**
+	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​e​n​d​ ​t​o​ ​V​e​C​h​a​i​n​ ​T​h​o​r​.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: string
+	/**
+	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s​.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: string
+	/**
 	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​ ​w​i​t​h​ ​a​ ​d​i​f​f​e​r​e​n​t​ ​a​c​c​o​u​n​t​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​w​i​t​c​h​ ​t​o​ ​t​h​e​ ​a​c​c​o​u​n​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​?
 	 * @param {string} dapp
 	 */
@@ -2034,6 +2047,10 @@ type RootTranslation = {
 	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t​s
 	 */
 	CONNECTED_APP_CONNECTION_REQUESTS: string
+	/**
+	 * D​i​s​c​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
+	 */
+	DISCONNECTION_REQUEST: string
 	/**
 	 * C​o​n​t​r​a​c​t
 	 */
@@ -2912,6 +2929,10 @@ type RootTranslation = {
 	 */
 	LOADING_MORE: string
 	/**
+	 * L​o​a​d​i​n​g​ ​p​a​g​e​ ​c​o​n​t​e​n​t
+	 */
+	LOADING_PAGE_CONTENT: string
+	/**
 	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: string
@@ -2923,10 +2944,6 @@ type RootTranslation = {
 	 * L​o​g​i​n
 	 */
 	LOGIN_REQUEST_TITLE: string
-	/**
-	 * L​o​a​d​i​n​g​ ​p​a​g​e​ ​c​o​n​t​e​n​t
-	 */
-	LOADING_PAGE_CONTENT: string
 	/**
 	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​t​o​k​e​n​?
 	 */
@@ -3397,6 +3414,10 @@ type RootTranslation = {
 	 * T​h​i​s​ ​d​A​p​p​ ​i​s​n​'​t​ ​v​e​r​i​f​i​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.
 	 */
 	NOT_VERIFIED_DAPP: string
+	/**
+	 * Y​o​u​ ​c​a​n​'​t​ ​c​o​n​n​e​c​t​ ​t​o​ ​t​h​i​s​ ​d​A​p​p​ ​w​i​t​h​ ​a​ ​v​i​e​w​ ​o​n​l​y​ ​a​c​c​o​u​n​t​.
+	 */
+	NOT_VERIFIED_WATCHED_ACCOUNT: string
 	/**
 	 * N​o​v​e​m​b​e​r
 	 */
@@ -7034,6 +7055,18 @@ Thanks for your patience!
 	 */
 	CONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
 	/**
+	 * {dappName} will no longer have access to:
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS: (arg: { dappName: string }) => LocalizedString
+	/**
+	 * No longer request transactions to send to VeChain Thor.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: () => LocalizedString
+	/**
+	 * No longer request your signature on certificates or identification and agreements.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
+	/**
 	 * You have previously connected to {dapp} with a different account. Do you want to switch to the account connected to {dapp}?
 	 */
 	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: (arg: { dapp: string }) => LocalizedString
@@ -7045,6 +7078,10 @@ Thanks for your patience!
 	 * Connection requests
 	 */
 	CONNECTED_APP_CONNECTION_REQUESTS: () => LocalizedString
+	/**
+	 * Disconnection request
+	 */
+	DISCONNECTION_REQUEST: () => LocalizedString
 	/**
 	 * Contract
 	 */
@@ -7922,6 +7959,10 @@ Thanks for your patience!
 	 */
 	LOADING_MORE: () => LocalizedString
 	/**
+	 * Loading page content
+	 */
+	LOADING_PAGE_CONTENT: () => LocalizedString
+	/**
 	 * Keep me signed in for future sessions
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
@@ -7933,10 +7974,6 @@ Thanks for your patience!
 	 * Login
 	 */
 	LOGIN_REQUEST_TITLE: () => LocalizedString
-	/**
-	 * Loading page content
-	 */
-	LOADING_PAGE_CONTENT: () => LocalizedString
 	/**
 	 * Are you sure you want to add the selected token?
 	 */
@@ -8390,6 +8427,10 @@ Thanks for your patience!
 	 * This dApp isn't verified by VeWorld.
 	 */
 	NOT_VERIFIED_DAPP: () => LocalizedString
+	/**
+	 * You can't connect to this dApp with a view only account.
+	 */
+	NOT_VERIFIED_WATCHED_ACCOUNT: () => LocalizedString
 	/**
 	 * November
 	 */

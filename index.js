@@ -46,6 +46,7 @@ import {
 import {
     clearTemporarySessions,
     selectAnalyticsTrackingEnabled,
+    selectExternalDappSessions,
     selectLanguage,
     selectSelectedNetwork,
     selectSentryTrackingEnabled,
@@ -181,8 +182,8 @@ const Main = () => {
 }
 
 /**
- *
  * @param {import ('~Api/FeatureFlags').FeatureFlags} featureFlags
+ * @param {import ('~Storage/Redux').ExternalDappSession[]} externalDappSessions
  * @returns
  */
 const generateLinkingConfig = featureFlags => {
@@ -254,6 +255,7 @@ const NavigationProvider = ({ children }) => {
         }),
         [theme],
     )
+    const externalDappSessions = useAppSelector(selectExternalDappSessions)
 
     const navigationRef = useNavigationContainerRef()
     const routeNameRef = useRef(null)
@@ -281,7 +283,7 @@ const NavigationProvider = ({ children }) => {
                 }
             }}
             theme={navigationTheme}
-            linking={generateLinkingConfig(featureFlags)}>
+            linking={generateLinkingConfig(featureFlags, externalDappSessions)}>
             {ready ? children : null}
         </NavigationContainer>
     )

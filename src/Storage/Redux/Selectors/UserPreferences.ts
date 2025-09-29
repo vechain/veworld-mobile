@@ -94,3 +94,7 @@ export const selectHideStargateBannerHomeScreen = createSelector(reducer, state 
 export const selectHideStargateBannerVETScreen = createSelector(reducer, state => {
     return state.hideStargateBannerVETScreen
 })
+
+export const selectSignKeyPair = createSelector(reducer, state => {
+    return state.signKeyPair ?? { publicKey: "", privateKey: "" }
+})
