@@ -97,7 +97,11 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
         <BaseView style={styles.root} onLayout={onLayout}>
             {!isObservedAccount && (
                 <AnimatedLinearGradient
-                    colors={[COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.50)", "#423483"]}
+                    colors={[
+                        COLORS.BALANCE_BACKGROUND,
+                        COLORS.BALANCE_BACKGROUND_50,
+                        COLORS.BALANCE_BACKGROUND_GRADIENT_END,
+                    ]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 0, y: 1 }}
                     locations={[0, 0.65, 1]}
