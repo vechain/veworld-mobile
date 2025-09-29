@@ -33,7 +33,7 @@ export const DiscoverScreen: React.FC = () => {
 
     const hasOpenedDiscovery = useAppSelector(selectHasUserOpenedDiscovery)
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.DISCOVER)
 
     const showFavorites = bookmarkedDApps.length > 0
 

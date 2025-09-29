@@ -59,7 +59,7 @@ import { Routes } from "~Navigation"
 import { AccountWithDevice, BaseDevice, SecurityLevelType, TransactionRequest } from "~Model"
 import crypto from "react-native-quick-crypto"
 import axios, { AxiosError } from "axios"
-import { selectDevice, selectSelectedAccount, selectVthoTokenWithBalanceByAccount } from "~Storage/Redux"
+import { selectDevice, selectSelectedAccount } from "~Storage/Redux"
 import { initialState, WalletEncryptionKeyHelper } from "~Components"
 import { BigNutils } from "~Utils"
 import { useSendTransaction } from "~Hooks/useSendTransaction"
@@ -87,7 +87,6 @@ jest.mock("~Storage/Redux", () => ({
     ...jest.requireActual("~Storage/Redux"),
     selectSelectedAccount: jest.fn(),
     selectDevice: jest.fn(),
-    selectVthoTokenWithBalanceByAccount: jest.fn(),
     getDefaultDelegationUrl: jest.fn().mockReturnValue("https://example.com"),
 }))
 
@@ -147,22 +146,6 @@ jest.mock("~Hooks/useGenericDelegationFees")
 jest.mock("~Hooks/useGenericDelegationTokens")
 jest.mock("~Hooks/useDelegatorDepositAddress")
 
-const mockedVtho = {
-    balance: {
-        balance: "0.00",
-        accountAddress: "0x0000000000000000000000000000456e65726779",
-        tokenAddress: "0x0000000000000000000000000000456e65726779",
-        isCustomToken: false,
-    },
-    decimals: 18,
-    name: "VTHO",
-    symbol: "VTHO",
-    address: "0x0000000000000000000000000000456e65726779",
-    icon: "string",
-    custom: false,
-    desc: undefined,
-}
-
 // Import the getSmartAccount mock so we can configure it
 import { getSmartAccount } from "~VechainWalletKit/utils/smartAccount"
 
@@ -189,11 +172,6 @@ const mockedUseDelegatorDepositAddress = useDelegatorDepositAddress as jest.Mock
 const mockAccount = (accountWithDevice: AccountWithDevice) => {
     // @ts-ignore
     ;(selectSelectedAccount as jest.Mock).mockReturnValue(accountWithDevice)
-}
-
-const mockVTHO = (_mockedVtho: any) => {
-    // @ts-ignore
-    ;(selectVthoTokenWithBalanceByAccount as jest.Mock).mockReturnValue(_mockedVtho)
 }
 
 const mockDevice = (device: BaseDevice) => {
@@ -273,7 +251,6 @@ describe("useTransactionScreen", () => {
             ...account1D1,
             device: device1,
         })
-        mockVTHO(mockedVtho)
         mockDevice(device1)
         ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValue(wallet1)
     })

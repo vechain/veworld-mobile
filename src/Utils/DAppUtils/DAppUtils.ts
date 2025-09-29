@@ -2,6 +2,20 @@ import { TypedDataDomain } from "@vechain/sdk-network"
 import { TypedDataField } from "ethers"
 import { SignedDataRequest } from "~Components/Providers/InAppBrowserProvider/types"
 import { RequestMethods } from "~Constants"
+import { decodeBase64 } from "tweetnacl-util"
+import nacl from "tweetnacl"
+import { SessionState } from "~Storage/Redux"
+import {
+    CertificateRequest,
+    DecodedRequest,
+    DisconnectAppRequest,
+    ParsedRequest,
+    TransactionRequest,
+    TypeDataRequest,
+} from "~Model"
+import { DeepLinkError, DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
+import { Linking } from "react-native"
+import { error } from "~Utils/Logger/Logger"
 
 const isValidTxMessage = (message: unknown): message is Connex.Vendor.TxMessage => {
     if (!Array.isArray(message)) {
@@ -148,6 +162,203 @@ const generateFaviconUrl = (url: string, { size = 48 }: { size?: number } = {}) 
     return generatedUrl.href
 }
 
+/**
+ * Encrypt the payload with the shared secret of the session
+ * @param payload - JSON stringified payload
+ * @returns The nonce and encrypted payload
+ */
+const encryptPayload = (payload: string, publicKey: string, secretKey: string): [Uint8Array, Uint8Array] => {
+    const nonce = nacl.randomBytes(24)
+    const payloadBytes = new TextEncoder().encode(payload)
+    const encryptedPayload = nacl.box(payloadBytes, nonce, decodeBase64(publicKey), decodeBase64(secretKey))
+
+    return [nonce, encryptedPayload]
+}
+
+const decodeRequest = (encodedRequest: string): DecodedRequest => {
+    const request = decodeURIComponent(encodedRequest)
+    return JSON.parse(new TextDecoder().decode(decodeBase64(request))) as DecodedRequest
+}
+
+const parseRequest = async <T>(
+    decodedRequest: DecodedRequest,
+    externalDappSessions: Record<string, SessionState>,
+    redirectUrl: string,
+): Promise<ParsedRequest<T> | undefined> => {
+    const { payload: encPayload, ...request } = decodedRequest
+    try {
+        const dappSession = externalDappSessions[request.publicKey]
+
+        if (!dappSession) {
+            const err = new DeepLinkError(DeepLinkErrorCode.Unauthorized)
+            await Linking.openURL(
+                `${redirectUrl}?errorMessage=${encodeURIComponent(err.message)}&errorCode=${err.code}`,
+            )
+            return
+        }
+
+        const KP = nacl.box.keyPair.fromSecretKey(decodeBase64(dappSession.keyPair.privateKey))
+
+        // Decrypt the payload
+        const sharedSecret = nacl.box.before(decodeBase64(request.publicKey), KP.secretKey)
+
+        const decryptedPayload = nacl.box.open.after(
+            decodeBase64(encPayload),
+            decodeBase64(request.nonce),
+            sharedSecret,
+        )
+
+        if (!decryptedPayload) {
+            const err = new DeepLinkError(DeepLinkErrorCode.InvalidPayload)
+            await Linking.openURL(`${redirectUrl}?erroMessage=${encodeURIComponent(err.message)}&errorCode=${err.code}`)
+            return
+        }
+
+        const payload = JSON.parse(new TextDecoder().decode(decryptedPayload))
+
+        return { payload, request } as ParsedRequest<T>
+    } catch {
+        const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
+        error("EXTERNAL_DAPP_CONNECTION", err)
+        await Linking.openURL(`${redirectUrl}?errorMessage=${err.message}&errorCode=${err.code}`)
+        return
+    }
+}
+
+const parseTransactionRequest = async (
+    decodedRequest: DecodedRequest,
+    externalDappSessions: Record<string, SessionState>,
+    redirectUrl: string,
+): Promise<TransactionRequest | undefined> => {
+    const parsedRequest = await parseRequest<TransactionRequest>(decodedRequest, externalDappSessions, redirectUrl)
+
+    if (!parsedRequest) {
+        throw new DeepLinkError(DeepLinkErrorCode.InternalError)
+    }
+
+    if (!("transaction" in parsedRequest.payload)) {
+        const err = new DeepLinkError(DeepLinkErrorCode.InvalidPayload)
+        const params = new URLSearchParams({
+            errorMessage: err.message,
+            errorCode: err.code.toString(),
+        })
+        await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+        return
+    }
+
+    return {
+        ...parsedRequest.payload.transaction,
+        ...parsedRequest.request,
+        session: parsedRequest.payload.session,
+    } as TransactionRequest
+}
+
+const parseTypedDataRequest = async (
+    decodedRequest: DecodedRequest,
+    externalDappSessions: Record<string, SessionState>,
+    redirectUrl: string,
+): Promise<TypeDataRequest | undefined> => {
+    const parsedRequest = await parseRequest<TypeDataRequest>(decodedRequest, externalDappSessions, redirectUrl)
+
+    if (!parsedRequest) {
+        throw new DeepLinkError(DeepLinkErrorCode.InternalError)
+    }
+
+    if (!("typedData" in parsedRequest.payload)) {
+        const err = new DeepLinkError(DeepLinkErrorCode.InvalidPayload)
+        const params = new URLSearchParams({
+            errorMessage: err.message,
+            errorCode: err.code.toString(),
+        })
+        await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+        return
+    }
+
+    return {
+        ...parsedRequest.payload.typedData,
+        ...parsedRequest.request,
+        session: parsedRequest.payload.session,
+    } as TypeDataRequest
+}
+
+const parseCertificateRequest = async (
+    decodedRequest: DecodedRequest,
+    externalDappSessions: Record<string, SessionState>,
+    redirectUrl: string,
+): Promise<CertificateRequest | undefined> => {
+    const parsedRequest = await parseRequest<CertificateRequest>(decodedRequest, externalDappSessions, redirectUrl)
+
+    if (!parsedRequest) {
+        throw new DeepLinkError(DeepLinkErrorCode.InternalError)
+    }
+
+    if (!("certificate" in parsedRequest.payload)) {
+        const err = new DeepLinkError(DeepLinkErrorCode.InvalidPayload)
+        const params = new URLSearchParams({
+            errorMessage: err.message,
+            errorCode: err.code.toString(),
+        })
+        await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+        return
+    }
+
+    return {
+        ...parsedRequest.payload.certificate,
+        ...parsedRequest.request,
+        session: parsedRequest.payload.session,
+    } as CertificateRequest
+}
+
+const parseDisconnectRequest = async (
+    decodedRequest: DecodedRequest,
+    externalDappSessions: Record<string, SessionState>,
+    redirectUrl: string,
+): Promise<DisconnectAppRequest | undefined> => {
+    const parsedRequest = await parseRequest<DisconnectAppRequest>(decodedRequest, externalDappSessions, redirectUrl)
+
+    if (!parsedRequest) {
+        throw new DeepLinkError(DeepLinkErrorCode.InternalError)
+    }
+
+    if (!("session" in parsedRequest.payload)) {
+        const err = new DeepLinkError(DeepLinkErrorCode.InvalidPayload)
+        const params = new URLSearchParams({
+            errorMessage: err.message,
+            errorCode: err.code.toString(),
+        })
+        await Linking.openURL(`${redirectUrl}?${params.toString()}`)
+        return
+    }
+
+    return { ...parsedRequest.request, session: parsedRequest.payload.session } as DisconnectAppRequest
+}
+
+const dispatchResourceNotAvailableError = (redirectUrl: string) => {
+    const err = new DeepLinkError(DeepLinkErrorCode.ResourceNotAvailable)
+    const params = new URLSearchParams({
+        errorMessage: err.message,
+        errorCode: err.code.toString(),
+    })
+    Linking.openURL(`${redirectUrl}?${params.toString()}`)
+}
+
+const dispatchInternalError = (redirectUrl: string) => {
+    const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
+    const params = new URLSearchParams({
+        errorMessage: err.message,
+        errorCode: err.code.toString(),
+    })
+    Linking.openURL(`${redirectUrl}?${params.toString()}`)
+}
+
+const dispatchExternalAppError = (redirectUrl: string, err: DeepLinkError) => {
+    const params = new URLSearchParams({
+        errorMessage: err.message,
+        errorCode: err.code.toString(),
+    })
+    Linking.openURL(`${redirectUrl}?${params.toString()}`)
+}
+
 export const DAppUtils = {
     isValidTxMessage,
     isValidCertMessage,
@@ -155,4 +366,13 @@ export const DAppUtils = {
     isValidSignedDataMessage,
     generateFaviconUrl,
     isValidSignedData,
+    parseTransactionRequest,
+    parseTypedDataRequest,
+    parseCertificateRequest,
+    parseDisconnectRequest,
+    encryptPayload,
+    dispatchResourceNotAvailableError,
+    dispatchInternalError,
+    dispatchExternalAppError,
+    decodeRequest,
 }

@@ -5,6 +5,8 @@ import { TestHelpers, TestWrapper } from "~Test"
 import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { ConnectedAppsScreen } from "./ConnectedAppsScreen"
 
+const { sessions } = TestHelpers.data
+
 const removeConnectedDiscoveryApp = jest
     .fn()
     .mockImplementation(payload => ({ type: "discovery/removeConnectedDiscoveryApp", payload }))
@@ -63,6 +65,12 @@ describe("ConnectedAppsScreen", () => {
                         favorites: [],
                         hasOpenedDiscovery: true,
                         tabsManager: { currentTabId: null, tabs: [] },
+                    },
+                    externalDapps: {
+                        sessions: {
+                            "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a": sessions,
+                        },
+                        blackListedApps: [],
                     },
                 },
             },

@@ -31,7 +31,6 @@ import {
     InsertAddressSendScreen,
     LedgerSignTransaction,
     ManageCustomNodesScreen,
-    ManageCustomTokenScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
     SelectAmountSendScreen,
@@ -46,6 +45,7 @@ import {
     WalletManagementScreen,
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
@@ -81,7 +81,6 @@ export type RootStackParamListHome = {
     [Routes.SWAP]: undefined
     [Routes.HISTORY]: undefined
     [Routes.MANAGE_TOKEN]: undefined
-    [Routes.MANAGE_CUSTOM_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.CREATE_WALLET_FLOW]: undefined
@@ -153,7 +152,11 @@ export const HomeStack = () => {
     return (
         <Navigator id="HomeStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
-                <Screen name={Routes.HOME} component={HomeScreen} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.HOME}
+                    component={betterWorldFeature.balanceScreen?.enabled ? BalanceScreen : HomeScreen}
+                    options={{ headerShown: false }}
+                />
                 <Screen
                     name={Routes.SELECT_TOKEN_SEND}
                     component={SelectTokenSendScreen}
@@ -186,11 +189,6 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen name={Routes.MANAGE_TOKEN} component={ManageTokenScreen} options={{ headerShown: false }} />
-                <Screen
-                    name={Routes.MANAGE_CUSTOM_TOKEN}
-                    component={ManageCustomTokenScreen}
-                    options={{ headerShown: false }}
-                />
 
                 <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
                 <Screen

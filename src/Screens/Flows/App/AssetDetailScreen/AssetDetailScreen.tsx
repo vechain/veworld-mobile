@@ -6,15 +6,11 @@ import striptags from "striptags"
 import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
 import { B3TR, VET } from "~Constants"
 import { typography } from "~Constants/Theme"
-import { useBottomSheetModal, useBottomSheetRef, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { useBottomSheetModal, useBottomSheetRef, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import {
-    selectBalanceVisible,
-    selectSelectedAccount,
-    selectSendableTokensWithBalance,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectBalanceVisible, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { AssetChart, ConvertedBetterBottomSheet, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
@@ -31,8 +27,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const tokenWithCompleteInfo = useTokenWithCompleteInfo(token)
-
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
 
     const {
@@ -45,12 +39,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
-    const tokens = useAppSelector(selectSendableTokensWithBalance)
-    const foundToken = tokens.find(
-        t =>
-            t.name?.toLowerCase().includes(token.name.toLowerCase()) ||
-            t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
-    )
+    const tokenWithBalance = useMemo(() => {
+        if (!token.balance) return
+        return token as FungibleTokenWithBalance
+    }, [token])
 
     const tokenName = useMemo(
         () => (token.symbol === B3TR.symbol ? LL.TITLE_VEBETTER() : token.name),
@@ -59,10 +51,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     // render description based on locale. NB: at the moment only EN is supported
     const description = useMemo(() => {
-        if (!tokenWithCompleteInfo?.tokenInfo?.description) return ""
+        if (!token?.tokenInfo?.description) return ""
 
-        return tokenWithCompleteInfo?.tokenInfo?.description[locale] ?? tokenWithCompleteInfo?.tokenInfo?.description.en
-    }, [tokenWithCompleteInfo?.tokenInfo?.description, locale])
+        return token?.tokenInfo?.description[locale] ?? token?.tokenInfo?.description.en
+    }, [token?.tokenInfo?.description, locale])
 
     const isObserved = useMemo(() => AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
 
@@ -89,8 +81,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         <BaseSpacer height={40} />
 
                         <AssetBalanceCard
-                            tokenWithInfo={tokenWithCompleteInfo}
-                            foundToken={foundToken}
+                            tokenWithInfo={token}
+                            foundToken={tokenWithBalance}
                             isBalanceVisible={isBalanceVisible}
                             openQRCodeSheet={openQRCodeSheet}
                             isObserved={isObserved}

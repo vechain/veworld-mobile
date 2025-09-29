@@ -19,14 +19,10 @@ import {
     useTokenCardFiatInfo,
     useTokenWithCompleteInfo,
 } from "~Hooks"
+import { useTokenBalance } from "~Hooks/useTokenBalance"
 import { FastAction, IconKey } from "~Model"
 import { Routes } from "~Navigation"
-import {
-    selectB3trTokenWithBalance,
-    selectNetworkVBDTokens,
-    selectVot3TokenWithBalance,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { BalanceUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ActionsButtonGroup } from "./ActionsButtonGroup"
@@ -46,9 +42,13 @@ export const VbdBalanceCard = memo(
         const nav = useNavigation()
         const { styles, theme } = useThemedStyles(baseStyles)
 
-        const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
-        const vot3TokenWithBalance = useAppSelector(state => selectVot3TokenWithBalance(state))
-        const b3trTokenWithBalance = useAppSelector(state => selectB3trTokenWithBalance(state))
+        const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
+        const { data: vot3Balance } = useTokenBalance({
+            tokenAddress: VOT3.address,
+        })
+        const { data: b3trBalance } = useTokenBalance({
+            tokenAddress: B3TR.address,
+        })
 
         const {
             ref: FastActionsBottomSheetRef,
@@ -77,7 +77,7 @@ export const VbdBalanceCard = memo(
         } = useTokenCardFiatInfo(b3trToken)
 
         const vot3FiatBalance = BalanceUtils.getFiatBalance(
-            vot3TokenWithBalance?.balance.balance ?? "0",
+            vot3Balance?.balance ?? "0",
             exchangeRate ?? 0,
             VOT3.decimals,
         )
@@ -104,11 +104,14 @@ export const VbdBalanceCard = memo(
             () => [
                 {
                     name: LL.BTN_SEND(),
-                    disabled: !veB3trFiatBalance || isObserved,
+                    disabled: !veB3trFiatBalance || isObserved || !b3trBalance,
                     action: () => {
-                        if (veB3trFiatBalance) {
+                        if (veB3trFiatBalance && b3trBalance) {
                             nav.navigate(Routes.INSERT_ADDRESS_SEND, {
-                                token: b3trTokenWithBalance,
+                                token: {
+                                    ...B3TR,
+                                    balance: b3trBalance,
+                                },
                             })
                         } else {
                             showWarningToast({
@@ -148,8 +151,9 @@ export const VbdBalanceCard = memo(
                 },
             ],
             [
+                B3TR,
                 LL,
-                b3trTokenWithBalance,
+                b3trBalance,
                 isObserved,
                 nav,
                 openConvertBetterSheet,
@@ -163,11 +167,14 @@ export const VbdBalanceCard = memo(
             () => [
                 {
                     name: LL.BTN_SEND(),
-                    disabled: !b3trTokenWithBalance || isObserved,
+                    disabled: !b3trBalance || isObserved || !b3trBalance,
                     action: () => {
-                        if (veB3trFiatBalance) {
+                        if (veB3trFiatBalance && b3trBalance) {
                             nav.navigate(Routes.INSERT_ADDRESS_SEND, {
-                                token: b3trTokenWithBalance,
+                                token: {
+                                    ...B3TR,
+                                    balance: b3trBalance,
+                                },
                             })
                         } else {
                             showWarningToast({
@@ -175,7 +182,7 @@ export const VbdBalanceCard = memo(
                             })
                         }
                     },
-                    icon: actionBottomSheetIcon("icon-arrow-up", !b3trTokenWithBalance),
+                    icon: actionBottomSheetIcon("icon-arrow-up", !b3trBalance),
                     testID: "sendButton",
                 },
                 {
@@ -190,7 +197,7 @@ export const VbdBalanceCard = memo(
                 },
                 {
                     name: LL.BTN_SWAP(),
-                    disabled: !b3trTokenWithBalance || isObserved,
+                    disabled: !b3trBalance || isObserved,
                     action: () => {
                         if (veB3trFiatBalance) {
                             nav.navigate(Routes.SWAP)
@@ -200,7 +207,7 @@ export const VbdBalanceCard = memo(
                             })
                         }
                     },
-                    icon: actionBottomSheetIcon("icon-arrow-left-right", !b3trTokenWithBalance),
+                    icon: actionBottomSheetIcon("icon-arrow-left-right", !b3trBalance),
                     testID: "swapButton",
                 },
                 {
@@ -212,12 +219,13 @@ export const VbdBalanceCard = memo(
             ],
             [
                 LL,
-                b3trTokenWithBalance,
+                b3trBalance,
                 isObserved,
                 actionBottomSheetIcon,
                 veB3trFiatBalance,
                 openQRCodeSheet,
                 nav,
+                B3TR,
                 FastActionsBottomSheetRef,
                 openDelayConvertBetterSheet,
             ],

@@ -1,15 +1,15 @@
-import { default as React, useMemo, useState } from "react"
+import React, { useMemo, useState } from "react"
 import { Image, ImageStyle, LayoutAnimation, StyleProp, StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseText } from "~Components"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
 import { BaseView } from "~Components/Base/BaseView"
 import { COLORS } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
-import { selectFeaturedDapps, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { DAppUtils } from "~Utils"
+import { selectFeaturedDapps, selectSelectedAccountOrNull, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { AccountUtils, DAppUtils } from "~Utils"
 import { DappDetails } from "./DappDetails"
 
 type Props = {
@@ -25,6 +25,11 @@ type Props = {
      * Show warning if the URL is not of a dapp. Defaults to true
      */
     showDappWarning?: boolean
+    /**
+     * Show warning if the account is a watched account. This will override the showDappWarning if true.
+     * @default true
+     */
+    showIsWatchedAccountWarning?: boolean
     /**
      * True if the details should be visible by default, false otherwise. Defaults to false
      */
@@ -48,6 +53,7 @@ export const DappDetailsCard = ({
     appUrl,
     children,
     showDappWarning = true,
+    showIsWatchedAccountWarning = true,
     isDefaultVisible = false,
     showSpacer = true,
     onShowDetails,
@@ -58,7 +64,8 @@ export const DappDetailsCard = ({
     const [loadFallback, setLoadFallback] = useState(false)
     const [showDetails, setShowDetails] = useState(isDefaultVisible)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
-
+    const { isFetching, isLoading } = useFetchFeaturedDApps()
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const allApps = useAppSelector(selectFeaturedDapps)
 
     const fetchDynamicAppLogo = useDynamicAppLogo({ size: 64 })
@@ -96,6 +103,12 @@ export const DappDetailsCard = ({
             isDapp: selectedNetwork.type !== NETWORK_TYPE.MAIN,
         }
     }, [allApps, appName, appUrl, fetchDynamicAppLogo, selectedNetwork.type])
+
+    const isWatchedAccount = useMemo(() => {
+        return AccountUtils.isObservedAccount(selectedAccount)
+    }, [selectedAccount])
+
+    const showNotVerifiedWarning = !isDapp && showDappWarning && !isFetching && allApps.length > 0 && !isLoading
 
     return (
         <BaseView bg={theme.isDark ? COLORS.PURPLE : COLORS.WHITE} p={16} flexDirection="column" borderRadius={12}>
@@ -154,7 +167,13 @@ export const DappDetailsCard = ({
                     </BaseButton>
                 )}
             </BaseView>
-            {!isDapp && showDappWarning && (
+            {showIsWatchedAccountWarning && isWatchedAccount && (
+                <>
+                    <BaseSpacer height={16} />
+                    <DappDetails.NotVerifiedWatchedAccountWarning />
+                </>
+            )}
+            {showNotVerifiedWarning && !isWatchedAccount && (
                 <>
                     <BaseSpacer height={16} />
                     <DappDetails.NotVerifiedWarning />
