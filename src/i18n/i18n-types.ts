@@ -596,6 +596,34 @@ type RootTranslation = {
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
 	/**
+	 * C​o​l​l​e​c​t​i​b​l​e​s
+	 */
+	BALANCE_TAB_COLLECTIBLES: string
+	/**
+	 * S​t​a​k​i​n​g
+	 */
+	BALANCE_TAB_STAKING: string
+	/**
+	 * T​o​k​e​n​s
+	 */
+	BALANCE_TAB_TOKENS: string
+	/**
+	 * B​u​y
+	 */
+	BALANCE_ACTION_BUY: string
+	/**
+	 * R​e​c​e​i​v​e
+	 */
+	BALANCE_ACTION_RECEIVE: string
+	/**
+	 * S​e​n​d
+	 */
+	BALANCE_ACTION_SEND: string
+	/**
+	 * O​t​h​e​r
+	 */
+	BALANCE_ACTION_OTHER: string
+	/**
 	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
 	 */
 	BANNER_STARGATE_DESC: string
@@ -5640,6 +5668,34 @@ Try reconnect your device to the internet.
 	 * Backup your wallet
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
+	/**
+	 * Collectibles
+	 */
+	BALANCE_TAB_COLLECTIBLES: () => LocalizedString
+	/**
+	 * Staking
+	 */
+	BALANCE_TAB_STAKING: () => LocalizedString
+	/**
+	 * Tokens
+	 */
+	BALANCE_TAB_TOKENS: () => LocalizedString
+	/**
+	 * Buy
+	 */
+	BALANCE_ACTION_BUY: () => LocalizedString
+	/**
+	 * Receive
+	 */
+	BALANCE_ACTION_RECEIVE: () => LocalizedString
+	/**
+	 * Send
+	 */
+	BALANCE_ACTION_SEND: () => LocalizedString
+	/**
+	 * Other
+	 */
+	BALANCE_ACTION_OTHER: () => LocalizedString
 	/**
 	 * Get **VTHO** by staking your **VET tokens**
 	 */
