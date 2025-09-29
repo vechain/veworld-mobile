@@ -44,7 +44,6 @@ export const VersionUpdateAvailableBottomSheet = () => {
     }, [shouldShowUpdatePrompt, majorVersion, latestVersion, track, onOpen, onClose, dismissCount])
 
     const handleUpdateApp = useCallback(async () => {
-        dispatch(incrementDismissCount())
         track(AnalyticsEvent.VERSION_UPGRADE_MODAL_SUCCESS, {
             platform: isIOS() ? "iOS" : "Android",
             majorVersion: majorVersion,
@@ -53,7 +52,7 @@ export const VersionUpdateAvailableBottomSheet = () => {
         })
         onClose()
         await Linking.openURL(PlatformUtils.isIOS() ? APPLE_STORE_URL : GOOGLE_STORE_URL)
-    }, [dispatch, track, majorVersion, latestVersion, dismissCount, onClose])
+    }, [track, majorVersion, latestVersion, dismissCount, onClose])
 
     const handleUpdateLater = useCallback(() => {
         dispatch(incrementDismissCount())

@@ -4,7 +4,7 @@ import { debug } from "~Utils"
 import { AppVersion } from "~Model/AppVersion"
 
 export const Migration28 = (state: PersistedState): PersistedState => {
-    debug(ERROR_EVENTS.SECURITY, "Performing migration 27: Resetting custom apps")
+    debug(ERROR_EVENTS.SECURITY, "Performing migration 28: Resetting custom apps")
 
     // @ts-ignore
     const currentState: AppVersion = state.versionUpdate
