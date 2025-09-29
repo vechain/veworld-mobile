@@ -838,7 +838,7 @@
   "NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error": "Transaktionen sändes korrekt men ett fel inträffade vid kommunikationen med dappen.",
   "NOTIFICATION_warning_wallet_connect_connection_could_delay": "Anslutningen kan ta några sekunder.",
   "NOT_VERIFIED_DAPP": "Denna dApp är inte verifierad av VeWorld.",
-  "NOT_VERIFIED_WATCHED_ACCOUNT": "Du kan inte ansluta till denna dApp med ett konto som endast är för visning.",
+  "NOT_VERIFIED_WATCHED_ACCOUNT": "Du kan inte ansluta till denna dApp med ett konto för endast visning.",
   "NOVEMBER": "November",
   "NO_ACCOUNTS_VTHO": "Inga konton har en VTHO-saldo att delegera",
   "NO_HIDDEN_COLLECTIONS": "Du har inga dolda {name: string}",

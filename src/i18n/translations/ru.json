@@ -838,7 +838,7 @@
   "NOTIFICATION_wallet_connect_transaction_broadcasted_with_communication_error": "Транзакция была успешно отправлена, но произошла ошибка при связи с приложением.",
   "NOTIFICATION_warning_wallet_connect_connection_could_delay": "Подключение может занять несколько секунд.",
   "NOT_VERIFIED_DAPP": "Это децентрализованное приложение не подтверждено VeWorld.",
-  "NOT_VERIFIED_WATCHED_ACCOUNT": "Вы не можете подключиться к этому dApp с аккаунтом только для просмотра.",
+  "NOT_VERIFIED_WATCHED_ACCOUNT": "Вы не можете подключиться к этому dApp с использованием аккаунта только для просмотра.",
   "NOVEMBER": "Ноябрь",
   "NO_ACCOUNTS_VTHO": "Нет учетных записей с балансом VTHO для делегирования",
   "NO_HIDDEN_COLLECTIONS": "У вас нет скрытых {name: string}",
