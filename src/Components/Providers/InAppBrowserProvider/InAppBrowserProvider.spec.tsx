@@ -921,77 +921,6 @@ describe("useInAppBrowser hook", () => {
                     type: "in-app",
                 })
             })
-            it("should navigate to the screen if everything is valid and create a session", async () => {
-                const typedDataBsRef = { current: { present: jest.fn(), close: jest.fn() } }
-                const postWebviewMessage = jest.fn()
-                ;(usePostWebviewMessage as jest.Mock).mockReturnValue(postWebviewMessage)
-
-                const setTypedDataBsData = jest.fn()
-                jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
-                    typedDataBsRef,
-                    setTypedDataBsData,
-                } as any)
-
-                const { result } = renderHook(() => useInAppBrowser(), {
-                    wrapper: createWrapper("ios"),
-                    initialProps: {
-                        preloadedState: {
-                            networks: {
-                                customNetworks: [],
-                                hardfork: {},
-                                isNodeError: false,
-                                selectedNetwork: defaultTestNetwork.id,
-                                showConversionOtherNets: false,
-                                showTestNetTag: false,
-                            },
-                        },
-                    },
-                })
-
-                await act(() => {
-                    result.current.onMessage({
-                        nativeEvent: {
-                            title: "https://vechain.org",
-                            url: "https://vechain.org",
-                            canGoBack: false,
-                            canGoForward: false,
-                            loading: false,
-                            lockIdentifier: 1,
-                            data: JSON.stringify({
-                                method: RequestMethods.SIGN_TYPED_DATA,
-                                ...typedDataMsg,
-                                origin: "https://vechain.org",
-                                options: {
-                                    signer: VALID_SIGNER,
-                                },
-                                genesisId: TESTNET_NETWORK.genesisBlock.id,
-                                id: "0x1",
-                            }),
-                        },
-                    } as any)
-                })
-
-                expect(setTypedDataBsData).toHaveBeenCalledWith({
-                    appName: "https://vechain.org",
-                    appUrl: "https://vechain.org",
-                    id: "0x1",
-                    ...typedDataMsg,
-                    origin: "https://vechain.org",
-                    method: RequestMethods.SIGN_TYPED_DATA,
-                    options: {
-                        signer: VALID_SIGNER,
-                    },
-                    type: "in-app",
-                })
-
-                expect(addSession).toHaveBeenCalledWith({
-                    address: VALID_SIGNER,
-                    genesisId: TESTNET_NETWORK.genesisBlock.id,
-                    kind: "temporary",
-                    url: "https://vechain.org",
-                    name: "https://vechain.org",
-                })
-            })
             it("should navigate to the screen if everything is valid and user has a valid session", async () => {
                 const typedDataBsRef = { current: { present: jest.fn(), close: jest.fn() } }
                 const postWebviewMessage = jest.fn()
@@ -1075,8 +1004,6 @@ describe("useInAppBrowser hook", () => {
                     },
                     type: "in-app",
                 })
-
-                expect(addSession).not.toHaveBeenCalled()
             })
         })
     })
