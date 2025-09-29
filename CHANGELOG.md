@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.5 (2025-09-29)</small>
+
+* build: init ([71cda08](https://github.com/vechain/veworld-mobile/commit/71cda08))
+* 115 - deeplinking for connecting native dApps (#3300) ([717508b](https://github.com/vechain/veworld-mobile/commit/717508b)), closes [#3300](https://github.com/vechain/veworld-mobile/issues/3300)
+
 ## <small>2.4.4 (2025-09-25)</small>
 
 * build: init ([a565bd2](https://github.com/vechain/veworld-mobile/commit/a565bd2))
