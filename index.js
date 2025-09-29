@@ -178,7 +178,7 @@ const Main = () => {
                                                             mode={
                                                                 isLowEndDevice
                                                                     ? ReduceMotion.Always
-                                                                    : ReduceMotion.Never
+                                                                    : ReduceMotion.System
                                                             }
                                                         />
                                                         <NotificationsProvider>

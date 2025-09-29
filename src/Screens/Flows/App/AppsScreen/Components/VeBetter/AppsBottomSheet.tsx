@@ -3,7 +3,14 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import React, { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
 import { ListRenderItemInfo, StyleSheet, Dimensions } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
-import Animated, { useAnimatedStyle, useSharedValue, withTiming, Easing, runOnJS } from "react-native-reanimated"
+import Animated, {
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
+    withDelay,
+    Easing,
+    runOnJS,
+} from "react-native-reanimated"
 import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useBatchAppOverviews, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps/useVeBetterDaoActiveApps"
@@ -283,22 +290,21 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
             opacity.value = 1
 
             translateX.value = withTiming(exitTranslateX, {
-                duration: 200,
+                duration: 100,
                 easing: Easing.out(Easing.quad),
             })
             opacity.value = withTiming(0.1, {
-                duration: 180,
+                duration: 90,
                 easing: Easing.out(Easing.quad),
             })
 
-            const timeoutId = setTimeout(() => {
-                opacity.value = 0.1
-                translateX.value = startTranslateX
-
-                translateX.value = withTiming(
+            translateX.value = startTranslateX
+            translateX.value = withDelay(
+                60,
+                withTiming(
                     0,
                     {
-                        duration: 250,
+                        duration: 130,
                         easing: Easing.out(Easing.quad),
                     },
                     finished => {
@@ -306,14 +312,15 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
                             runOnJS(handleAnimationComplete)()
                         }
                     },
-                )
-                opacity.value = withTiming(1, {
-                    duration: 280,
+                ),
+            )
+            opacity.value = withDelay(
+                60,
+                withTiming(1, {
+                    duration: 140,
                     easing: Easing.out(Easing.quad),
-                })
-            }, 150)
-
-            return () => clearTimeout(timeoutId)
+                }),
+            )
         }, [animationDirection, translateX, opacity, handleAnimationComplete])
 
         useEffect(() => {

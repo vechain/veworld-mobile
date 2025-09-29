@@ -1,4 +1,4 @@
-import { default as React, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { default as React, useCallback, useEffect, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
 import Animated, {
     useAnimatedStyle,
@@ -7,6 +7,9 @@ import Animated, {
     interpolate,
     Extrapolation,
     useAnimatedScrollHandler,
+    useAnimatedRef,
+    useDerivedValue,
+    scrollTo,
 } from "react-native-reanimated"
 import { BaseText, BaseTouchable, BaseView } from "~Components"
 import { COLORS } from "~Constants"
@@ -37,7 +40,7 @@ export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange 
         [selectedCategory.id, theme.isDark],
     )
 
-    const scrollViewRef = useRef<Animated.ScrollView>(null)
+    const scrollViewRef = useAnimatedRef<Animated.ScrollView>()
 
     const [measurements, setMeasurements] = useState<{
         chipPositions: number[]
@@ -51,6 +54,7 @@ export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange 
 
     const scrollValue = useSharedValue(0)
     const scrollOffset = useSharedValue(0)
+    const targetScrollX = useSharedValue(0)
 
     const selectedIndex = useMemo(
         () => categories.findIndex(category => category.id === selectedCategory.id),
@@ -73,6 +77,10 @@ export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange 
         return { totalWidth, maxScroll }
     }, [isReady, measurements])
 
+    useDerivedValue(() => {
+        scrollTo(scrollViewRef, targetScrollX.value, 0, true)
+    })
+
     useEffect(() => {
         if (selectedIndex < 0 || !isReady) return
 
@@ -83,14 +91,11 @@ export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange 
         const chipCenter = chipPosition + chipWidth / 2
         const viewportCenter = measurements.scrollViewWidth / 2
 
-        let scrollTo = chipCenter - viewportCenter
-        scrollTo = Math.max(0, Math.min(scrollTo, contentBounds.maxScroll))
+        let scrollToX = chipCenter - viewportCenter
+        scrollToX = Math.max(0, Math.min(scrollToX, contentBounds.maxScroll))
 
-        scrollViewRef.current?.scrollTo({
-            x: scrollTo,
-            animated: true,
-        })
-    }, [selectedIndex, isReady, measurements, contentBounds.maxScroll, scrollValue])
+        targetScrollX.value = withTiming(scrollToX, { duration: 150 })
+    }, [selectedIndex, isReady, measurements, contentBounds.maxScroll, scrollValue, targetScrollX])
 
     const handleChipLayout = useCallback((event: LayoutChangeEvent, index: number) => {
         const { x, width } = event.nativeEvent.layout
