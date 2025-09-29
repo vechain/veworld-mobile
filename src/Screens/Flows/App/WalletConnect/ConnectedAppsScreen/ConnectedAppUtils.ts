@@ -1,4 +1,4 @@
-import { ConnectedDiscoveryApp, LoginSession } from "~Storage/Redux"
+import { ConnectedDiscoveryApp, LoginSession, SessionState } from "~Storage/Redux"
 import { DiscoveryDApp } from "~Constants"
 import { SessionTypes } from "@walletconnect/types"
 
@@ -10,8 +10,12 @@ export type WCConnectedApp = {
     type: "wallet-connect"
     session: SessionTypes.Struct
 }
+export type ExternalConnectedApp = {
+    type: "external-app"
+    session: SessionState & { publicKey: string }
+}
 
-export type ConnectedApp = DiscoveryConnectedApp | WCConnectedApp
+export type ConnectedApp = DiscoveryConnectedApp | WCConnectedApp | ExternalConnectedApp
 
 export const mapConnectedApps = (
     apps: ConnectedDiscoveryApp[],

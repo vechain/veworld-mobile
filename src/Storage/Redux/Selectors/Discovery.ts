@@ -88,6 +88,8 @@ export const selectTabs = createSelector(getDiscoveryState, discovery => discove
 
 export const selectCurrentTabId = createSelector(getDiscoveryState, discovery => discovery.tabsManager.currentTabId)
 
+export const selectLastNavigationSource = createSelector(getDiscoveryState, discovery => discovery.lastNavigationSource)
+
 export const selectCurrentTab = createSelector(selectTabs, selectCurrentTabId, (tabs, currentTabId) =>
     tabs.find(tab => tab.id === currentTabId),
 )
