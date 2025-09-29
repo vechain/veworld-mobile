@@ -14,15 +14,15 @@ import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { DAppUtils } from "~Utils/DAppUtils"
-import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
-import { BrowserBottomSheet } from "./BrowserBottomSheet"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { Spinner } from "../Spinner"
+import { BrowserBottomSheet } from "./BrowserBottomSheet"
 
 type Props = {
     navigationUrl: string
     onNavigate?: () => void | Promise<void>
-    returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
+    returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS | Routes.SWAP
     isLoading?: boolean
 }
 

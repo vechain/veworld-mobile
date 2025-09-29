@@ -909,4 +909,5 @@ export const designSystemIconMap = {
     "icon-radio-default": 60813,
     "icon-radio-selected": 60814,
     "icon-thunder": 60815,
+    "icon-leafs": 60816,
 }

@@ -9,8 +9,11 @@ import {
     deleteSession,
     removeConnectedDiscoveryApp,
     selectConnectedDiscoverDApps,
+    selectExternalDappSessions,
     selectFeaturedDapps,
+    selectSelectedNetwork,
     selectSessions,
+    deleteExternalDappSession,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -22,6 +25,10 @@ const generateAppKey = (app: ConnectedApp) => {
         return app.app.href
     }
 
+    if (app.type === "external-app") {
+        return app.session.sharedSecret
+    }
+
     return app.session.topic
 }
 
@@ -30,6 +37,8 @@ export const ConnectedAppsScreen = () => {
     const { disconnectSession, activeSessions } = useWalletConnect()
     const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
     const appSessions = useAppSelector(selectSessions)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const externalSessions = useAppSelector(state => selectExternalDappSessions(state, selectedNetwork.genesis.id))
     const allApps = useAppSelector(selectFeaturedDapps)
     const [selectedApp, setSelectedApp] = useState<ConnectedApp>()
 
@@ -53,8 +62,15 @@ export const ConnectedAppsScreen = () => {
             }
         })
 
-        return [...uniqueSessions, ...wcApps]
-    }, [activeSessions, connectedDiscoveryApps, allApps, appSessions])
+        const externalApps: ConnectedApp[] = Object.entries(externalSessions || {}).map(([publicKey, session]) => {
+            return {
+                type: "external-app" as const,
+                session: { ...session, publicKey },
+            }
+        })
+
+        return [...uniqueSessions, ...wcApps, ...externalApps]
+    }, [activeSessions, connectedDiscoveryApps, allApps, appSessions, externalSessions])
 
     const {
         ref: confirmDisconnectBottomSheetRef,
@@ -73,12 +89,19 @@ export const ConnectedAppsScreen = () => {
                 }),
             )
             dispatch(deleteSession(selectedApp.app.href))
+        } else if (selectedApp.type === "external-app") {
+            dispatch(
+                deleteExternalDappSession({
+                    genesisId: selectedNetwork.genesis.id,
+                    appPublicKey: selectedApp.session.publicKey,
+                }),
+            )
         } else {
             await disconnectSession(selectedApp.session.topic)
         }
 
         closeConfirmDisconnectDetailsSheet()
-    }, [selectedApp, closeConfirmDisconnectDetailsSheet, dispatch, disconnectSession])
+    }, [selectedApp, closeConfirmDisconnectDetailsSheet, dispatch, disconnectSession, selectedNetwork.genesis.id])
 
     const onClick = useCallback(
         (connectedApp: ConnectedApp) => {
