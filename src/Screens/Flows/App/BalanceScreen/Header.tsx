@@ -12,7 +12,7 @@ import { useI18nContext } from "~i18n"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
-import { AccountUtils } from "~Utils"
+import { AccountUtils, AddressUtils } from "~Utils"
 
 type Props = {
     scrollY: SharedValue<number>
@@ -88,10 +88,14 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
     }, [account])
 
     const displayUsername = useMemo(() => {
-        if (!vnsName) return account.alias
+        if (!vnsName) {
+            //Name has not been changed, humanize address
+            if (/^Account \d+$/.test(account.alias)) return AddressUtils.humanAddress(account.address)
+            return account.alias
+        }
         if (vnsName.endsWith(".veworld.vet")) return vnsName.split(".veworld.vet")[0]
         return vnsName
-    }, [account.alias, vnsName])
+    }, [account.address, account.alias, vnsName])
 
     return (
         <BaseView style={styles.root} onLayout={onLayout}>
