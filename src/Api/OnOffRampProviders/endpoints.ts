@@ -4,7 +4,7 @@ import { error } from "~Utils"
 import { GenerateUrlResponse } from "./types"
 
 const axiosInstance = axios.create({
-    baseURL: "https://h202ensk18.execute-api.eu-west-1.amazonaws.com/veworld-onramp-proxy-dev-api",
+    baseURL: "https://fskkwvmazl.execute-api.eu-west-1.amazonaws.com/veworld-onramp-proxy-dev-api-1",
 })
 
 export const generateCoinbaseOnRampURL = async (address: string) => {
