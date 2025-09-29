@@ -8,7 +8,7 @@ import { useAppLogo } from "~Hooks/useAppLogo"
 
 type DAppCardProps = {
     dapp: DiscoveryDApp
-    showDappTitle: boolean
+    showDappTitle?: boolean
     onPress: () => void
 }
 
