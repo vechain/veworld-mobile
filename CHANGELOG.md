@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.5 (2025-09-29)</small>
+
+* build: init ([01aa049](https://github.com/vechain/veworld-mobile/commit/01aa049))
+* 373 - fix sign with different session error (#3325) ([df1fff1](https://github.com/vechain/veworld-mobile/commit/df1fff1)), closes [#3325](https://github.com/vechain/veworld-mobile/issues/3325)
+
 ## <small>2.4.4 (2025-09-25)</small>
 
 * build: init ([a565bd2](https://github.com/vechain/veworld-mobile/commit/a565bd2))
