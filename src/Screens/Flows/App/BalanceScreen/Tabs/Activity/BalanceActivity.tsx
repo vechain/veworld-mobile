@@ -9,8 +9,8 @@ import { Activity, FungibleToken, TransactionOutcomes } from "~Model"
 import { Routes } from "~Navigation"
 import { ActivityItemRenderer } from "~Screens/Flows/App/ActivityScreen/Components/ActivityItemRenderer"
 import { SkeletonActivity } from "../../Components/Activity/SkeletonActivity"
+import { useActivityTimestampRenderer } from "../../Hooks/useActivityTimestampRenderer"
 import { useBalanceActivities } from "../../Hooks/useBalanceActivities"
-import { useActivityTimestampRenderer } from "../../Hooks/useTimestampRenderer"
 import { BalanceTab } from "../types"
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />

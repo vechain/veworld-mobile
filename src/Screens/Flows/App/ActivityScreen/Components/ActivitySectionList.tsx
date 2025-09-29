@@ -139,12 +139,11 @@ export const ActivitySectionList = ({
                 const date = moment(section.title)
                 const year = date.format("YYYY")
                 const monthDay = StringUtils.toTitleCase(DateUtils.formatDate(date, locale))
+                const isDiffYear = moment().year() !== date.year()
 
                 return (
                     <>
-                        {moment().diff(date, "year") >= 1 && (
-                            <BaseText typographyFont="captionSemiBold">{year}</BaseText>
-                        )}
+                        {isDiffYear && <BaseText typographyFont="captionSemiBold">{year}</BaseText>}
                         <BaseSpacer height={2} />
                         <BaseText typographyFont="bodySemiBold">{monthDay}</BaseText>
                     </>
