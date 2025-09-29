@@ -31,7 +31,6 @@ import {
 } from "~Model"
 import { Routes } from "~Navigation"
 import {
-    addSession,
     changeSelectedNetwork,
     deleteSession,
     selectAccounts,
@@ -421,18 +420,19 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 return
             }
 
-            const session = getLoginSession(appUrl, request.genesisId)
+            // const session = getLoginSession(appUrl, request.genesisId)
 
-            if (!session && request.options.signer)
-                dispatch(
-                    addSession({
-                        address: request.options.signer,
-                        genesisId: request.genesisId,
-                        kind: "temporary",
-                        url: appUrl,
-                        name: appName,
-                    }),
-                )
+            // if (!session && request.options.signer)
+            //    dispatch(
+            //        addSession({
+            //            address: request.options.signer,
+            //            genesisId: request.genesisId,
+            //             kind: "temporary",
+            //             url: appUrl,
+            //             name: appName,
+            //             replaceable: true,
+            //         }),
+            //     )
 
             const req: TransactionRequest = {
                 method: request.method,
@@ -447,7 +447,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setTransactionBsData(req)
             transactionBsRef.current?.present()
         },
-        [dispatch, getLoginSession, setTransactionBsData, switchAccount, switchNetwork, transactionBsRef],
+        [setTransactionBsData, switchAccount, switchNetwork, transactionBsRef],
     )
 
     const navigateToCertificateScreen = useCallback(
@@ -459,18 +459,19 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 return
             }
 
-            const session = getLoginSession(appUrl, request.genesisId)
+            // const session = getLoginSession(appUrl, request.genesisId)
 
-            if (!session && request.options.signer)
-                dispatch(
-                    addSession({
-                        address: request.options.signer,
-                        genesisId: request.genesisId,
-                        kind: "temporary",
-                        url: appUrl,
-                        name: appName,
-                    }),
-                )
+            // if (!session && request.options.signer)
+            //     dispatch(
+            //         addSession({
+            //             address: request.options.signer,
+            //             genesisId: request.genesisId,
+            //             kind: "temporary",
+            //             url: appUrl,
+            //             name: appName,
+            //             replaceable: true,
+            //         }),
+            //     )
 
             const message = request.message as Connex.Vendor.CertMessage
 
@@ -487,7 +488,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setCertificateBsData(req)
             certificateBsRef.current?.present()
         },
-        [getLoginSession, dispatch, setCertificateBsData, certificateBsRef, switchAccount, switchNetwork],
+        [setCertificateBsData, certificateBsRef, switchAccount, switchNetwork],
     )
 
     const navigateToSignedDataScreen = useCallback(
@@ -499,18 +500,19 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 return
             }
 
-            const session = getLoginSession(appUrl, request.genesisId)
+            // const session = getLoginSession(appUrl, request.genesisId)
 
-            if (!session && request.options.signer)
-                dispatch(
-                    addSession({
-                        address: request.options.signer,
-                        genesisId: request.genesisId,
-                        kind: "temporary",
-                        url: appUrl,
-                        name: appName,
-                    }),
-                )
+            // if (!session && request.options.signer)
+            //     dispatch(
+            //         addSession({
+            //             address: request.options.signer,
+            //             genesisId: request.genesisId,
+            //             kind: "temporary",
+            //             url: appUrl,
+            //             name: appName,
+            //             replaceable: true,
+            //         }),
+            //     )
 
             const req: TypeDataRequest = {
                 method: request.method,
@@ -528,7 +530,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setTypedDataBsData(req)
             typedDataBsRef.current?.present()
         },
-        [dispatch, getLoginSession, setTypedDataBsData, switchAccount, switchNetwork, typedDataBsRef],
+        [setTypedDataBsData, switchAccount, switchNetwork, typedDataBsRef],
     )
 
     const navigateToLoginScreen = useCallback(
