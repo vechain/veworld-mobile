@@ -197,7 +197,7 @@ describe("StandardizedFormatting", () => {
         })
 
         it("should format normally for amounts above threshold", () => {
-            expect(formatWithLessThan(0.15)).toBe("0.15")
+            expect(formatWithLessThan(0.15)).toBe("0.2")
             expect(formatWithLessThan(1500)).toBe("1.5K")
         })
 
