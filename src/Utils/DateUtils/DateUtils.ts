@@ -129,15 +129,21 @@ type FormatDateArgs = {
      * @default false
      */
     includeYear?: boolean
+    /**
+     * Decide on how to display the month.
+     * `short` will show `Sep` for September, `long` will show `September`
+     * @default short
+     */
+    monthDisplay?: "short" | "long"
 }
 export const formatDate = (
     value: string | number | Moment | Date,
     locale: string,
-    { includeYear }: FormatDateArgs = {},
+    { includeYear, monthDisplay = "short" }: FormatDateArgs = {},
 ) => {
     const parsedLocale = locale.includes("zh") ? "zh" : locale
     const formatter = new Intl.DateTimeFormat(parsedLocale, {
-        month: "long",
+        month: monthDisplay,
         day: "2-digit",
         ...(includeYear && { year: "numeric" }),
     })

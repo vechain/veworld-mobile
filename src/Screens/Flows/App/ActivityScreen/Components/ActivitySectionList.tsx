@@ -138,9 +138,7 @@ export const ActivitySectionList = ({
             } else {
                 const date = moment(section.title)
                 const year = date.format("YYYY")
-                const monthDay = StringUtils.toTitleCase(
-                    date.locale(locale).format(`HH:mm - [${DateUtils.formatDate(date, locale)}]`),
-                )
+                const monthDay = StringUtils.toTitleCase(DateUtils.formatDate(date, locale))
 
                 return (
                     <>

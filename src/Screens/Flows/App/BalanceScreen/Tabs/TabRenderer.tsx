@@ -26,7 +26,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                 selectedKey={selectedTab}
                 setSelectedKey={setSelectedTab}
             />
-            <BaseView>
+            <BaseView flexDirection="column" gap={40}>
                 <>
                     {selectedTab === "TOKENS" ? <Tokens /> : null}
                     <BalanceActivity tab={selectedTab} />
