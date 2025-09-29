@@ -5,11 +5,11 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { Tokens } from "./Tokens"
-import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
-import { selectBookmarkedDapps } from "~Storage/Redux/Selectors"
 import { useAppSelector } from "~Storage/Redux/Hooks"
+import { selectBookmarkedDapps } from "~Storage/Redux/Selectors"
+import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
+import { Tokens } from "./Tokens"
 
 const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
 
