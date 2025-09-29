@@ -41,19 +41,21 @@ const generateColorHash = (input: string): string => {
 }
 
 /**
- * Get the RGB values from a color
+ * Get the RGBA values from a color
  * @param color Color in hexadecimal format or rgb(a) format
  * @returns An object with the rgb values.
  * @throws "Invalid color format" if the format is invalid
  */
-const getRgbFromColor = (color: string) => {
+const getRgbaFromColor = (color: string) => {
     if (/^rgb/.test(color)) {
-        const rgb = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/)
+        const rgb = color.match(/^rgb(a)?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/)
         if (!rgb) throw new Error("Invalid color format")
+        //rgb[0] is the full string
         return {
-            r: parseInt(rgb[0], 10),
-            g: parseInt(rgb[1], 10),
-            b: parseInt(rgb[2], 10),
+            r: parseInt(rgb[2], 10),
+            g: parseInt(rgb[3], 10),
+            b: parseInt(rgb[4], 10),
+            a: parseInt(rgb[1] ?? "1", 10),
         }
     }
 
@@ -71,6 +73,7 @@ const getRgbFromColor = (color: string) => {
         g: (hexColor >> 8) & 255,
         // eslint-disable-next-line no-bitwise
         b: hexColor & 255,
+        a: 1,
     }
 }
 
@@ -81,7 +84,7 @@ const getRgbFromColor = (color: string) => {
  * @throws Will throw an error if the color format is invalid.
  */
 const isLightColor = (color: string): boolean => {
-    const { r, g, b } = getRgbFromColor(color)
+    const { r, g, b } = getRgbaFromColor(color)
 
     // HSP equation from http://alienryderflex.com/hsp.html
     const hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b))

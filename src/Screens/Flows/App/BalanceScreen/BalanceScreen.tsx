@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { default as React, useCallback } from "react"
+import React, { useCallback } from "react"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import LinearGradient from "react-native-linear-gradient"
@@ -44,7 +44,11 @@ export const BalanceScreen = () => {
             fixedBody={
                 <ScrollView refreshControl={<PullToRefresh />} onScroll={onScroll}>
                     <LinearGradient
-                        colors={[COLORS.BALANCE_BACKGROUND, "#1D173A80", "#423483"]}
+                        colors={[
+                            COLORS.BALANCE_BACKGROUND,
+                            COLORS.BALANCE_BACKGROUND_50,
+                            COLORS.BALANCE_BACKGROUND_GRADIENT_END,
+                        ]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 0, y: 1 }}
                         style={{ position: "relative", marginTop: 16 }}
