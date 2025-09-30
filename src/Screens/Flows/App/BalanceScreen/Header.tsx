@@ -8,7 +8,6 @@ import { AccountIcon, BaseIcon, BaseText, BaseView, SelectAccountBottomSheet } f
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
 import { useVns } from "~Hooks/useVns"
-import { useI18nContext } from "~i18n"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
@@ -23,7 +22,6 @@ type Props = {
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
 export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props) => {
-    const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
     const account = useAppSelector(selectSelectedAccount)
 
@@ -130,17 +128,7 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
             </TouchableOpacity>
 
             <BaseView flexDirection="row" gap={12}>
-                {isObservedAccount ? (
-                    <BaseView borderRadius={99} p={8} gap={8} flexDirection="row">
-                        <BaseText
-                            color={COLORS.DARK_PURPLE_DISABLED}
-                            typographyFont="captionMedium"
-                            testID="BALANCE_HEADER_VIEW_ONLY">
-                            {LL.VIEW_ONLY()}
-                        </BaseText>
-                        <BaseIcon name="icon-eye" color={COLORS.DARK_PURPLE_DISABLED} size={16} />
-                    </BaseView>
-                ) : (
+                {!isObservedAccount && (
                     <TouchableOpacity onPress={onWalletManagementPress}>
                         <BaseView borderRadius={99} p={8} gap={8} flexDirection="row">
                             <BaseIcon name="icon-wallet" color={COLORS.PURPLE_LABEL} size={24} />
