@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { FlatList, ListRenderItemInfo } from "react-native"
-import { BaseSpacer, BaseText, BaseView } from "~Components"
+import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
-import { useTheme } from "~Hooks"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Activity, FungibleToken, TransactionOutcomes } from "~Model"
 import { Routes } from "~Navigation"
@@ -14,6 +14,32 @@ import { useBalanceActivities } from "../../Hooks/useBalanceActivities"
 import { BalanceTab } from "../types"
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />
+const ListFooterComponent = () => {
+    const nav = useNavigation()
+    const { LL } = useI18nContext()
+    const { styles } = useThemedStyles(footerStyles)
+    const onNavigate = useCallback(() => {
+        nav.navigate(Routes.HISTORY)
+    }, [nav])
+    return (
+        <BaseButton
+            variant="ghost"
+            p={0}
+            px={0}
+            action={onNavigate}
+            typographyFont="bodyMedium"
+            rightIcon={<BaseIcon name="icon-arrow-right" size={12} style={styles.icon} />}>
+            {LL.ACTIVITY_SEE_ALL()}
+        </BaseButton>
+    )
+}
+
+const footerStyles = () =>
+    StyleSheet.create({
+        icon: {
+            marginLeft: 2,
+        },
+    })
 
 const LOADING_ITEMS = [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }]
 
@@ -72,6 +98,7 @@ export const BalanceActivity = ({ tab }: { tab: BalanceTab }) => {
                     data={data ?? []}
                     ItemSeparatorComponent={ItemSeparatorComponent}
                     keyExtractor={item => item.id}
+                    ListFooterComponent={ListFooterComponent}
                 />
             )}
         </BaseView>
