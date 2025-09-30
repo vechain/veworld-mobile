@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.5 (2025-09-30)</small>
+
+* build: init ([5bbd17d](https://github.com/vechain/veworld-mobile/commit/5bbd17d))
+* 342 balance   token   vbd info component (#3312) ([5778820](https://github.com/vechain/veworld-mobile/commit/5778820)), closes [#3312](https://github.com/vechain/veworld-mobile/issues/3312)
+
 ## <small>2.4.4 (2025-09-25)</small>
 
 * build: init ([a565bd2](https://github.com/vechain/veworld-mobile/commit/a565bd2))
