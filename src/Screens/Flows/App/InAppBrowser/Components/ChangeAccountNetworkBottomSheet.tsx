@@ -1,102 +1,75 @@
-import React, { useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { AccountCard, BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView, NetworkBox } from "~Components"
+import React from "react"
+import {
+    BaseBottomSheet,
+    BaseButton,
+    BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    TargetEvent,
+    useInAppBrowser,
+} from "~Components"
+import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCard"
+import { useTheme } from "~Hooks/useTheme"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, Network } from "~Model"
 
-type Props = {
-    targetAccount?: AccountWithDevice
-    targetNetwork?: Network
-    onConfirm: () => void
-    onClose: () => void
-}
+type Props = {}
 
-export const ChangeAccountNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ onConfirm, onClose, targetAccount, targetNetwork }, ref) => {
-        const { LL } = useI18nContext()
+export const ChangeAccountNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({}, ref) => {
+    const { LL } = useI18nContext()
+    const theme = useTheme()
 
-        const title = useMemo(() => {
-            if (targetAccount && targetNetwork) {
-                return LL.BROWSER_CHANGE_ACCOUNT_NETWORK_TITLE()
-            }
-            if (targetAccount) {
-                return LL.BROWSER_CHANGE_ACCOUNT_TITLE()
-            }
-            if (targetNetwork) {
-                return LL.BROWSER_CHANGE_NETWORK_TITLE()
-            }
-        }, [LL, targetAccount, targetNetwork])
+    const { handleCloseChangeAccountNetworkBottomSheet, handleConfirmChangeAccountNetworkBottomSheet } =
+        useInAppBrowser()
 
-        const body = useMemo(() => {
-            if (targetAccount && targetNetwork) {
-                return (
+    return (
+        <BaseBottomSheet<TargetEvent>
+            dynamicHeight
+            ref={ref}
+            enableDismissOnClose={false}
+            enablePanDownToClose={false}
+            onPressOutside={"none"}>
+            {event => (
+                <BaseView mt={16}>
+                    <BaseView
+                        flexDirection="row"
+                        gap={12}
+                        justifyContent="space-between"
+                        testID="SWITCH_WALLET_REQUEST_TITLE">
+                        <BaseView flex={1} flexDirection="row" gap={12}>
+                            <BaseIcon name="icon-user-cog" size={20} color={theme.colors.editSpeedBs.title} />
+                            <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                                {LL.BROWSER_CHANGE_ACCOUNT_TITLE()}
+                            </BaseText>
+                        </BaseView>
+                    </BaseView>
+                    <BaseSpacer height={8} />
                     <BaseView>
-                        <BaseText typographyFont="subSubTitleLight" pt={12}>
+                        <BaseText typographyFont="buttonSecondary" color={theme.colors.editSpeedBs.subtitle}>
                             {LL.BROWSER_CHANGE_ACCOUNT_DESC()}
                         </BaseText>
-                        <BaseSpacer height={16} />
-                        <AccountCard account={targetAccount} showOpacityWhenDisabled={false} />
-                        <BaseSpacer height={24} />
-                        <BaseText typographyFont="subSubTitleLight" pt={12}>
-                            {LL.BROWSER_CHANGE_NETWORK_DESC()}
-                        </BaseText>
-                        <BaseSpacer height={16} />
-                        <NetworkBox network={targetNetwork} />
+                        <BaseSpacer height={8} />
+                        <SelectableAccountCard account={event.targetAccount} balanceToken="FIAT" disabled />
                     </BaseView>
-                )
-            }
-            if (targetAccount) {
-                return (
-                    <BaseView>
-                        <BaseText typographyFont="subSubTitleLight" pt={12}>
-                            {LL.BROWSER_CHANGE_ACCOUNT_DESC()}
-                        </BaseText>
-                        <BaseSpacer height={16} />
-                        <AccountCard account={targetAccount} showOpacityWhenDisabled={false} />
-                    </BaseView>
-                )
-            }
-            if (targetNetwork) {
-                return (
-                    <BaseView>
-                        <BaseText typographyFont="subSubTitleLight" pt={12}>
-                            {LL.BROWSER_CHANGE_NETWORK_DESC()}
-                        </BaseText>
-                        <BaseSpacer height={16} />
-                        <NetworkBox network={targetNetwork} />
-                    </BaseView>
-                )
-            }
-        }, [LL, targetAccount, targetNetwork])
-
-        return (
-            <BaseBottomSheet dynamicHeight ref={ref}>
-                <BaseView>
-                    <BaseText typographyFont="subTitleBold" mt={22}>
-                        {title}
-                    </BaseText>
-                    <BaseSpacer height={16} />
-                    {body}
-                    <BaseSpacer height={16} />
-                    <BaseView mb={40}>
-                        <BaseSpacer height={16} />
+                    <BaseSpacer height={24} />
+                    <BaseView flexDirection="row" justifyContent="space-between" gap={16} mb={16}>
                         <BaseButton
-                            w={100}
-                            haptics="Light"
-                            title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                            action={onConfirm}
-                        />
-                        <BaseSpacer height={16} />
-                        <BaseButton
-                            w={100}
+                            flex={1}
                             haptics="Light"
                             variant="outline"
                             title={LL.COMMON_BTN_CANCEL().toUpperCase()}
-                            action={onClose}
+                            action={() => handleCloseChangeAccountNetworkBottomSheet(event)}
+                        />
+                        <BaseButton
+                            flex={1}
+                            haptics="Light"
+                            title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
+                            action={() => handleConfirmChangeAccountNetworkBottomSheet(event)}
                         />
                     </BaseView>
                 </BaseView>
-            </BaseBottomSheet>
-        )
-    },
-)
+            )}
+        </BaseBottomSheet>
+    )
+})
