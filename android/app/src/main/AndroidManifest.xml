@@ -48,6 +48,11 @@
         <data android:host="www.veworld.net"/>
         <data android:host="veworld.net"/>
         <data android:pathPrefix="/discover/browser"/>
+        <data android:pathPrefix="/api/v1/connect"/>
+        <data android:pathPrefix="/api/v1/signTransaction"/>
+        <data android:pathPrefix="/api/v1/signCertificate"/>
+        <data android:pathPrefix="/api/v1/signTypedData"/>
+        <data android:pathPrefix="/api/v1/disconnect"/>
         <data android:pathPrefix="/nfts"/>
       </intent-filter>
       <intent-filter android:autoVerify="true">
@@ -61,6 +66,11 @@
         <data android:host="www.veworld.net"/>
         <data android:host="veworld.net"/>
         <data android:pathPrefix="/discover/browser"/>
+        <data android:pathPrefix="/api/v1/connect"/>
+        <data android:pathPrefix="/api/v1/signTransaction"/>
+        <data android:pathPrefix="/api/v1/signCertificate"/>
+        <data android:pathPrefix="/api/v1/signTypedData"/>
+        <data android:pathPrefix="/api/v1/disconnect"/>
         <data android:pathPrefix="/nfts"/>
       </intent-filter>
     </activity>
