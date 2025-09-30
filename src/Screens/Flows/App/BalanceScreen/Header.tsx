@@ -1,17 +1,24 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
-import React, { RefObject, useCallback, useMemo } from "react"
+import { default as React, default as React, RefObject, useCallback, useMemo } from "react"
 import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { clamp, interpolate, SharedValue, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
-import { AccountIcon, BaseIcon, BaseText, BaseView, SelectAccountBottomSheet } from "~Components"
+import {
+    AccountIcon,
+    BaseIcon,
+    BaseText,
+    BaseView,
+    NetworkSwitcherContextMenu,
+    SelectAccountBottomSheet,
+} from "~Components"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
 import { useVns } from "~Hooks/useVns"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, WatchedAccount } from "~Model"
+import { AccountWithDevice, NETWORK_TYPE, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
-import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccount, selectSelectedNetwork, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { AccountUtils, AddressUtils } from "~Utils"
 
 type Props = {
@@ -26,6 +33,7 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
     const account = useAppSelector(selectSelectedAccount)
+    const network = useAppSelector(selectSelectedNetwork)
 
     const nav = useNavigation()
 
@@ -97,6 +105,10 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
         return vnsName
     }, [account.address, account.alias, vnsName])
 
+    const onSwitchNetwork = useCallback(() => {
+        nav.navigate(Routes.SETTINGS_NETWORK)
+    }, [nav])
+
     return (
         <BaseView style={styles.root} onLayout={onLayout}>
             {!isObservedAccount && (
@@ -152,6 +164,15 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
                         <BaseIcon name="icon-scan-line" color={COLORS.PURPLE_LABEL} size={24} />
                     </BaseView>
                 </TouchableOpacity>
+                {network.type !== NETWORK_TYPE.MAIN && (
+                    <NetworkSwitcherContextMenu>
+                        <TouchableOpacity onPress={onSwitchNetwork}>
+                            <BaseView borderRadius={99} p={8}>
+                                <BaseIcon name="icon-globe" color={COLORS.LIME_GREEN} size={24} />
+                            </BaseView>
+                        </TouchableOpacity>
+                    </NetworkSwitcherContextMenu>
+                )}
             </BaseView>
 
             <SelectAccountBottomSheet
