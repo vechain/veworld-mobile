@@ -17,18 +17,20 @@ const ItemSeparatorComponent = () => <BaseSpacer height={8} />
 const ListFooterComponent = () => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const { styles } = useThemedStyles(footerStyles)
+    const { styles, theme } = useThemedStyles(footerStyles)
     const onNavigate = useCallback(() => {
         nav.navigate(Routes.HISTORY)
     }, [nav])
     return (
         <BaseButton
             variant="ghost"
-            p={0}
             px={0}
+            py={4}
             action={onNavigate}
             typographyFont="bodyMedium"
-            rightIcon={<BaseIcon name="icon-arrow-right" size={12} style={styles.icon} />}>
+            style={styles.btn}
+            textColor={theme.colors.text}
+            rightIcon={<BaseIcon name="icon-arrow-right" size={12} style={styles.icon} color={theme.colors.text} />}>
             {LL.ACTIVITY_SEE_ALL()}
         </BaseButton>
     )
@@ -38,6 +40,9 @@ const footerStyles = () =>
     StyleSheet.create({
         icon: {
             marginLeft: 2,
+        },
+        btn: {
+            marginTop: 16,
         },
     })
 
