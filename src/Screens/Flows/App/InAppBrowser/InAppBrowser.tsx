@@ -29,10 +29,6 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         injectVechainScript,
         onNavigationStateChange,
         resetWebViewState,
-        targetAccount,
-        targetNetwork,
-        handleCloseChangeAccountNetworkBottomSheet,
-        handleConfirmChangeAccountNetworkBottomSheet,
         ChangeAccountNetworkBottomSheetRef,
         originWhitelist,
         isLoading,
@@ -178,13 +174,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                         </Animated.View>
                     )}
 
-                    <ChangeAccountNetworkBottomSheet
-                        targetAccount={targetAccount}
-                        targetNetwork={targetNetwork}
-                        ref={ChangeAccountNetworkBottomSheetRef}
-                        onClose={handleCloseChangeAccountNetworkBottomSheet}
-                        onConfirm={handleConfirmChangeAccountNetworkBottomSheet}
-                    />
+                    <ChangeAccountNetworkBottomSheet ref={ChangeAccountNetworkBottomSheetRef} />
                 </View>
             }
         />

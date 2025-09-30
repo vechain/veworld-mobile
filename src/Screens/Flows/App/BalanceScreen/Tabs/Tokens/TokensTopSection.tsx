@@ -22,7 +22,9 @@ export const TokensTopSection = () => {
 
     const vechainTokenWithBalances = useMemo(() => {
         if (!vechainTokenBalances) return []
-        return [VET, VTHO, B3TR, VOT3].map((tk, idx) => ({ ...tk, balance: vechainTokenBalances?.[idx] }))
+        return [VET, VTHO, B3TR, VOT3]
+            .map((tk, idx) => ({ ...tk, balance: vechainTokenBalances?.[idx] }))
+            .filter(tk => Boolean(tk.balance))
     }, [B3TR, VOT3, vechainTokenBalances])
 
     const tokenBalances = useMemo(
