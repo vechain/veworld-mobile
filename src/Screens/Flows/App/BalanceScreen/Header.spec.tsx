@@ -106,7 +106,7 @@ describe("BalanceScreen -> Header", () => {
 
         expect(screen.getByTestId("BALANCE_HEADER_DISPLAY_USERNAME")).toHaveTextContent("test")
     })
-    it("should show view only when observed account", () => {
+    it("should not show the wallet icon when account is observed", () => {
         ;(useVns as jest.Mock).mockReturnValue({ name: "test.veworld.vet" })
         const qrCodeBottomSheetRef = {
             current: {
@@ -132,6 +132,6 @@ describe("BalanceScreen -> Header", () => {
             },
         )
 
-        expect(screen.getByTestId("BALANCE_HEADER_VIEW_ONLY")).toBeVisible()
+        expect(screen.queryByTestId("BALANCE_HEADER_WALLET_ICON")).toBeNull()
     })
 })

@@ -30,7 +30,6 @@ type Props = {
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
 export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props) => {
-    const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
     const account = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
@@ -142,20 +141,15 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
             </TouchableOpacity>
 
             <BaseView flexDirection="row" gap={12}>
-                {isObservedAccount ? (
-                    <BaseView borderRadius={99} p={8} gap={8} flexDirection="row">
-                        <BaseText
-                            color={COLORS.DARK_PURPLE_DISABLED}
-                            typographyFont="captionMedium"
-                            testID="BALANCE_HEADER_VIEW_ONLY">
-                            {LL.VIEW_ONLY()}
-                        </BaseText>
-                        <BaseIcon name="icon-eye" color={COLORS.DARK_PURPLE_DISABLED} size={16} />
-                    </BaseView>
-                ) : (
+                {!isObservedAccount && (
                     <TouchableOpacity onPress={onWalletManagementPress}>
                         <BaseView borderRadius={99} p={8} gap={8} flexDirection="row">
-                            <BaseIcon name="icon-wallet" color={COLORS.PURPLE_LABEL} size={24} />
+                            <BaseIcon
+                                name="icon-wallet"
+                                color={COLORS.PURPLE_LABEL}
+                                size={24}
+                                testID="BALANCE_HEADER_WALLET_ICON"
+                            />
                         </BaseView>
                     </TouchableOpacity>
                 )}

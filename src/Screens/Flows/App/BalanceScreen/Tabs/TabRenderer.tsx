@@ -7,7 +7,8 @@ import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux/Hooks"
-import { selectBookmarkedDapps } from "~Storage/Redux/Selectors"
+import { selectBookmarkedDapps, selectSelectedAccount } from "~Storage/Redux/Selectors"
+import { AccountUtils } from "~Utils"
 import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
 import { Tokens } from "./Tokens"
@@ -23,8 +24,11 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const [selectedTab, setSelectedTab] = useState<(typeof TABS)[number]>("TOKENS")
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     const { onDAppPress } = useDAppActions(Routes.HOME)
-    const showFavorites = bookmarkedDApps.length > 0
+    const showFavorites = useMemo(() => {
+        return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount)
+    }, [bookmarkedDApps.length, selectedAccount])
     const labels = useMemo(() => TABS.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL])
     return (
         <Animated.View style={styles.root} onLayout={onLayout}>
