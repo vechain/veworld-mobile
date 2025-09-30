@@ -94,6 +94,9 @@ const mockedFeatureFlags: FeatureFlags = {
         appsScreen: {
             enabled: false,
         },
+        balanceScreen: {
+            enabled: false,
+        },
     },
     smartWalletFeature: {
         enabled: false,
@@ -111,11 +114,6 @@ jest.mock("@react-navigation/native", () => ({
     useNavigationState: jest.fn(),
 }))
 
-jest.mock("~Hooks/Staking", () => ({
-    useUserNodes: jest.fn(),
-    useUserStargateNfts: jest.fn(),
-}))
-
 jest.mock("~Hooks/useNFTMetadata", () => ({
     useNFTMetadata: jest.fn().mockReturnValue({ fetchMetadata: jest.fn() }),
 }))
@@ -130,8 +128,6 @@ describe("AssetDetailScreen", () => {
         ;(useRoute as jest.Mock).mockReturnValue({
             name: Routes.HOME,
         })
-        ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
-        ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
         render(
             <AssetDetailScreen
                 navigation={navigationMock}
@@ -150,8 +146,6 @@ describe("AssetDetailScreen", () => {
         ;(useRoute as jest.Mock).mockReturnValue({
             name: Routes.HOME,
         })
-        ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
-        ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
         render(
             <AssetDetailScreen
                 navigation={navigationMock}
