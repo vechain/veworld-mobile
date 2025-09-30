@@ -1,19 +1,9 @@
-import { default as React, useCallback, useEffect, useMemo, useState } from "react"
-import { LayoutChangeEvent, StyleSheet } from "react-native"
-import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
-    interpolate,
-    Extrapolation,
-    useAnimatedScrollHandler,
-    useAnimatedRef,
-    useDerivedValue,
-    scrollTo,
-} from "react-native-reanimated"
+import { default as React, useCallback } from "react"
+import { StyleSheet } from "react-native"
+import Animated from "react-native-reanimated"
 import { BaseText, BaseTouchable, BaseView } from "~Components"
 import { COLORS } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useAnimatedHorizontalFilters, useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 import { X2ECategoryType } from "~Model/DApp"
 import { useCategories } from "./Hooks/useCategories"
@@ -29,6 +19,15 @@ export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange 
     const categories = useCategories()
     const { styles, theme } = useThemedStyles(baseStyles)
 
+    const selectedCategoryObject = categories.find(cat => cat.id === selectedCategory.id) || categories[0]
+
+    const { scrollViewRef, handleChipLayout, handleScrollViewLayout, handleScroll, indicatorAnimatedStyle } =
+        useAnimatedHorizontalFilters({
+            items: categories,
+            selectedItem: selectedCategoryObject,
+            keyExtractor: (item: { id: X2ECategoryType; displayName: string; icon: IconKey }) => item.id,
+        })
+
     const textColor = useCallback(
         (category: { id: X2ECategoryType; displayName: string; icon: IconKey }) => {
             const active = selectedCategory.id === category.id
@@ -39,124 +38,6 @@ export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange 
         },
         [selectedCategory.id, theme.isDark],
     )
-
-    const scrollViewRef = useAnimatedRef<Animated.ScrollView>()
-
-    const [measurements, setMeasurements] = useState<{
-        chipPositions: number[]
-        chipWidths: number[]
-        scrollViewWidth: number
-    }>({
-        chipPositions: [],
-        chipWidths: [],
-        scrollViewWidth: 0,
-    })
-
-    const scrollValue = useSharedValue(0)
-    const scrollOffset = useSharedValue(0)
-    const targetScrollX = useSharedValue(0)
-
-    const selectedIndex = useMemo(
-        () => categories.findIndex(category => category.id === selectedCategory.id),
-        [selectedCategory.id, categories],
-    )
-
-    const isReady = useMemo(
-        () =>
-            measurements.chipPositions.length === categories.length &&
-            measurements.chipWidths.length === categories.length,
-        [measurements.chipPositions.length, measurements.chipWidths.length, categories.length],
-    )
-
-    const contentBounds = useMemo(() => {
-        if (!isReady) return { totalWidth: 0, maxScroll: 0 }
-
-        const totalWidth = Math.max(...measurements.chipPositions) + Math.max(...measurements.chipWidths) + 20
-        const maxScroll = Math.max(0, totalWidth - measurements.scrollViewWidth)
-
-        return { totalWidth, maxScroll }
-    }, [isReady, measurements])
-
-    useDerivedValue(() => {
-        scrollTo(scrollViewRef, targetScrollX.value, 0, true)
-    })
-
-    useEffect(() => {
-        if (selectedIndex < 0 || !isReady) return
-
-        scrollValue.value = withTiming(selectedIndex, { duration: 150 })
-
-        const chipPosition = measurements.chipPositions[selectedIndex]
-        const chipWidth = measurements.chipWidths[selectedIndex]
-        const chipCenter = chipPosition + chipWidth / 2
-        const viewportCenter = measurements.scrollViewWidth / 2
-
-        let scrollToX = chipCenter - viewportCenter
-        scrollToX = Math.max(0, Math.min(scrollToX, contentBounds.maxScroll))
-
-        targetScrollX.value = withTiming(scrollToX, { duration: 150 })
-    }, [selectedIndex, isReady, measurements, contentBounds.maxScroll, scrollValue, targetScrollX])
-
-    const handleChipLayout = useCallback((event: LayoutChangeEvent, index: number) => {
-        const { x, width } = event.nativeEvent.layout
-
-        setMeasurements(prev => {
-            if (prev.chipPositions[index] === x && prev.chipWidths[index] === width) {
-                return prev
-            }
-
-            const newPositions = [...prev.chipPositions]
-            const newWidths = [...prev.chipWidths]
-            newPositions[index] = x
-            newWidths[index] = width
-
-            return {
-                ...prev,
-                chipPositions: newPositions,
-                chipWidths: newWidths,
-            }
-        })
-    }, [])
-
-    const handleScrollViewLayout = useCallback((event: LayoutChangeEvent) => {
-        const { width } = event.nativeEvent.layout
-        setMeasurements(prev => (prev.scrollViewWidth === width ? prev : { ...prev, scrollViewWidth: width }))
-    }, [])
-
-    const scrollHandler = useAnimatedScrollHandler(event => {
-        scrollOffset.value = event.contentOffset.x
-    }, [])
-
-    const indicatorAnimatedStyle = useAnimatedStyle(() => {
-        "worklet"
-
-        if (!isReady) {
-            return {
-                width: 0,
-                transform: [{ translateX: 0 }],
-            }
-        }
-
-        const width = interpolate(
-            scrollValue.value,
-            categories.map((_, index) => index),
-            measurements.chipWidths,
-            Extrapolation.CLAMP,
-        )
-
-        const translateX =
-            interpolate(
-                scrollValue.value,
-                categories.map((_, index) => index),
-                measurements.chipPositions,
-                Extrapolation.CLAMP,
-            ) - scrollOffset.value
-
-        return {
-            width,
-            transform: [{ translateX }],
-        }
-    }, [isReady, categories, measurements.chipWidths, measurements.chipPositions])
 
     return (
         <BaseView style={styles.container}>
@@ -176,8 +57,8 @@ export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange 
                 contentContainerStyle={styles.root}
                 showsHorizontalScrollIndicator={false}
                 onLayout={handleScrollViewLayout}
-                onScroll={scrollHandler}
-                scrollEventThrottle={1}>
+                onScroll={handleScroll}
+                scrollEventThrottle={16}>
                 {categories.map((category, index) => (
                     <BaseView
                         key={category.id}

@@ -5,19 +5,6 @@ import { CategoryFilters } from "./CategoryFilters"
 import { X2ECategoryType } from "~Model/DApp"
 import { IconKey } from "~Model/Icon"
 
-jest.mock("react-native-reanimated", () => {
-    const Reanimated = require("react-native-reanimated/mock")
-
-    Reanimated.useSharedValue = jest.fn(() => ({ value: 0 }))
-    Reanimated.useAnimatedStyle = jest.fn(() => ({}))
-    Reanimated.useAnimatedScrollHandler = jest.fn(() => jest.fn())
-    Reanimated.withTiming = jest.fn(value => value)
-    Reanimated.interpolate = jest.fn(() => 0)
-    Reanimated.Extrapolation = { CLAMP: "clamp" }
-
-    return Reanimated
-})
-
 const mockCategories = [
     {
         id: X2ECategoryType.NUTRITION,
