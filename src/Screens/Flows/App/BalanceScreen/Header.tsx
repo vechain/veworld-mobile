@@ -131,7 +131,12 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
                 {!isObservedAccount && (
                     <TouchableOpacity onPress={onWalletManagementPress}>
                         <BaseView borderRadius={99} p={8} gap={8} flexDirection="row">
-                            <BaseIcon name="icon-wallet" color={COLORS.PURPLE_LABEL} size={24} />
+                            <BaseIcon
+                                name="icon-wallet"
+                                color={COLORS.PURPLE_LABEL}
+                                size={24}
+                                testID="BALANCE_HEADER_WALLET_ICON"
+                            />
                         </BaseView>
                     </TouchableOpacity>
                 )}
