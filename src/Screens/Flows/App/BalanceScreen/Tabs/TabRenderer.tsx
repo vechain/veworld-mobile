@@ -10,6 +10,7 @@ import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV
 import { selectBookmarkedDapps } from "~Storage/Redux/Selectors"
 import { useAppSelector } from "~Storage/Redux/Hooks"
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
+import { Staking } from "./Staking"
 
 const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
 
@@ -39,7 +40,11 @@ export const TabRenderer = ({ onLayout }: Props) => {
                 </>
             )}
             <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
-            <BaseView>{selectedTab === "TOKENS" ? <Tokens /> : null}</BaseView>
+            <BaseView>
+                {selectedTab === "TOKENS" && <Tokens />}
+                {selectedTab === "STAKING" && <Staking />}
+                {selectedTab === "COLLECTIBLES" && <></>}
+            </BaseView>
         </BaseView>
     )
 }

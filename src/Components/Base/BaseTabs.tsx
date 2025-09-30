@@ -11,6 +11,7 @@ type Props<TKeys extends string[] | readonly string[]> = {
     labels: string[]
     selectedKey: TKeys[number]
     setSelectedKey: (key: TKeys[number]) => void
+    showBorder?: boolean
 }
 
 export const BaseTabs = <TKeys extends string[] | readonly string[]>({
@@ -18,6 +19,7 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
     labels,
     selectedKey,
     setSelectedKey,
+    showBorder = true,
 }: Props<TKeys>) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const [tabOffsets, setTabOffsets] = useState<{ offsetX: number; width: number }[]>([])
@@ -49,7 +51,7 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
     }, [tabOffsets, selectedIndex, keys.length])
     if (keys.length !== labels.length) throw new Error("Keys and Labels should have the same length")
     return (
-        <BaseView style={styles.root} flexDirection="row" gap={4}>
+        <BaseView style={[styles.root, showBorder && styles.withBorder]} flexDirection="row" gap={4}>
             {keys.map((key, index) => {
                 const isSelected = selectedKey === key
                 const textColor = getTextColor(isSelected)
@@ -77,11 +79,14 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
-            borderWidth: 1,
+            borderWidth: 0,
             borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
             padding: 4,
             position: "relative",
             borderRadius: 8,
+        },
+        withBorder: {
+            borderWidth: 1,
         },
         tab: {
             flex: 1,
