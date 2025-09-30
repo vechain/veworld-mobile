@@ -1,4 +1,4 @@
-import { default as React, useCallback } from "react"
+import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseText, BaseTouchable, BaseView } from "~Components"
