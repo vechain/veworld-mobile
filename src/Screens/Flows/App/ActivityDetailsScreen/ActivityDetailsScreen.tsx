@@ -66,6 +66,8 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
 
     const activityFromStore = useAppSelector(state => selectActivity(state, activity.id))
 
+    const currentActivity = useMemo(() => activityFromStore ?? activity, [activityFromStore, activity])
+
     const queryFn = useCallback(async () => {
         return await getTransaction(activity.txId ?? "", network)
     }, [activity.txId, network])
@@ -137,20 +139,17 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
     }, [transaction?.reverted])
 
     const activityStatus = useMemo(() => {
-        return (
-            (activityFromStore ?? activity).status ??
-            (isPendingOrFailedActivity ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS)
-        )
-    }, [activityFromStore, activity, isPendingOrFailedActivity])
+        return currentActivity.status ?? (isPendingOrFailedActivity ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS)
+    }, [currentActivity, isPendingOrFailedActivity])
 
     const isNFTtransfer = useMemo(() => {
         return activity.type === ActivityType.TRANSFER_NFT || activity.type === ActivityType.NFT_SALE
     }, [activity.type])
 
     const explorerUrl = useMemo(() => {
-        if (activity.txId && (activityFromStore ?? activity).blockNumber)
+        if (activity.txId && currentActivity.blockNumber)
             return `${getExplorerLink(network, ExplorerLinkType.TRANSACTION)}/${HexUtils.addPrefix(activity.txId)}`
-    }, [activity, activityFromStore, network])
+    }, [activity.txId, currentActivity.blockNumber, network])
 
     const renderActivityDetails = useMemo(() => {
         switch (activity.type) {
@@ -159,7 +158,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             case ActivityType.TRANSFER_SF: {
                 return (
                     <FungibleTokenTransferDetails
-                        activity={(activityFromStore ?? activity) as FungibleTokenActivity}
+                        activity={currentActivity as FungibleTokenActivity}
                         token={token}
                         paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
@@ -182,7 +181,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             case ActivityType.DAPP_TRANSACTION: {
                 return (
                     <DappTransactionDetails
-                        activity={(activityFromStore ?? activity) as DappTxActivity}
+                        activity={currentActivity as DappTxActivity}
                         clauses={transaction?.clauses}
                         status={activityStatus}
                         paid={transaction?.paid}
@@ -193,7 +192,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             case ActivityType.NFT_SALE: {
                 return (
                     <NonFungibleTokenMarketplaceDetails
-                        activity={(activityFromStore ?? activity) as NFTMarketplaceActivity}
+                        activity={currentActivity as NFTMarketplaceActivity}
                         paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
@@ -202,7 +201,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             case ActivityType.TRANSFER_NFT: {
                 return (
                     <NonFungibleTokenTransferDetails
-                        activity={(activityFromStore ?? activity) as NonFungibleTokenActivity}
+                        activity={currentActivity as NonFungibleTokenActivity}
                         paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
@@ -217,29 +216,29 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             case ActivityType.STARGATE_UNSTAKE:
                 return (
                     <StargateActivityDetails
-                        activity={(activityFromStore ?? activity) as StargateActivity}
+                        activity={currentActivity as StargateActivity}
                         paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
                 )
             case ActivityType.CONNECTED_APP_TRANSACTION: {
-                return <ConnectedAppDetails activity={(activityFromStore ?? activity) as ConnectedAppActivity} />
+                return <ConnectedAppDetails activity={currentActivity as ConnectedAppActivity} />
             }
             case ActivityType.SIGN_CERT: {
-                return <SignCertificateDetails activity={(activityFromStore ?? activity) as SignCertActivity} />
+                return <SignCertificateDetails activity={currentActivity as SignCertActivity} />
             }
             case ActivityType.SIGN_TYPED_DATA: {
-                return <TypedDataTransactionDetails activity={(activityFromStore ?? activity) as TypedDataActivity} />
+                return <TypedDataTransactionDetails activity={currentActivity as TypedDataActivity} />
             }
             case ActivityType.DAPP_LOGIN: {
-                return <DappLoginDetails activity={(activityFromStore ?? activity) as LoginActivity} />
+                return <DappLoginDetails activity={currentActivity as LoginActivity} />
             }
             default:
                 return <></>
         }
     }, [
-        activity,
-        activityFromStore,
+        activity.type,
+        currentActivity,
         activityStatus,
         isloadingTxDetails,
         token,
