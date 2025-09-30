@@ -1,20 +1,12 @@
 import { useScrollToTop } from "@react-navigation/native"
-import React, { useCallback, useEffect, useRef } from "react"
-import { FlatList, ListRenderItemInfo, StyleSheet, Dimensions } from "react-native"
-import Animated, {
-    useSharedValue,
-    useAnimatedStyle,
-    withTiming,
-    withDelay,
-    Easing,
-    runOnJS,
-} from "react-native-reanimated"
+import React, { useCallback, useRef } from "react"
+import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
+import Animated from "react-native-reanimated"
 import { BaseSpacer } from "~Components"
 import { DiscoveryDApp } from "~Constants"
+import { useContentSwipeAnimation } from "~Hooks"
 import { DappHorizontalCardSkeleton } from "~Screens/Flows/App/DiscoverScreen/Components/DappHorizontalCardSkeleton"
 import { DAppHorizontalCardV2 } from "./DAppHorizontalCardV2"
-
-const SCREEN_WIDTH = Dimensions.get("window").width
 
 type Props = {
     items: DiscoveryDApp[]
@@ -38,48 +30,9 @@ export const DAppsList = ({
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
 
-    const translateX = useSharedValue(0)
-    const opacity = useSharedValue(1)
-
-    useEffect(() => {
-        if (!animationDirection) return
-
-        const startTranslateX = animationDirection === "left" ? SCREEN_WIDTH : -SCREEN_WIDTH
-        const exitTranslateX = animationDirection === "left" ? -SCREEN_WIDTH : SCREEN_WIDTH
-
-        translateX.value = 0
-        opacity.value = 1
-
-        translateX.value = withTiming(exitTranslateX, {
-            duration: 100,
-            easing: Easing.out(Easing.quad),
-        })
-        opacity.value = withTiming(0.4, { duration: 90 })
-
-        translateX.value = startTranslateX
-        translateX.value = withDelay(
-            60,
-            withTiming(
-                0,
-                {
-                    duration: 130,
-                    easing: Easing.out(Easing.quad),
-                },
-                finished => {
-                    if (finished && onAnimationComplete) {
-                        runOnJS(onAnimationComplete)()
-                    }
-                },
-            ),
-        )
-        opacity.value = withDelay(60, withTiming(1, { duration: 140 }))
-    }, [animationDirection, translateX, opacity, onAnimationComplete])
-
-    const animatedStyle = useAnimatedStyle(() => {
-        return {
-            transform: [{ translateX: translateX.value }],
-            opacity: opacity.value,
-        }
+    const { animatedStyle } = useContentSwipeAnimation({
+        animationDirection,
+        onAnimationComplete,
     })
 
     const renderItem = useCallback(

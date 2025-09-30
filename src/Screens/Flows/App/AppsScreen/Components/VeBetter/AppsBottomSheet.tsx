@@ -1,18 +1,11 @@
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
-import { ListRenderItemInfo, StyleSheet, Dimensions } from "react-native"
+import { ListRenderItemInfo, StyleSheet } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
-import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
-    withDelay,
-    Easing,
-    runOnJS,
-} from "react-native-reanimated"
+import Animated from "react-native-reanimated"
 import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useBatchAppOverviews, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
+import { useBatchAppOverviews, useContentSwipeAnimation, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps/useVeBetterDaoActiveApps"
 import { useI18nContext } from "~i18n"
 import { VeBetterDaoDapp, VeBetterDaoDAppMetadata, X2ECategoryType, IconKey } from "~Model"
@@ -21,8 +14,6 @@ import { CategoryFilters, RowDetails, RowExpandableDetails } from "~Screens/Flow
 import { useCategories, useCategoryFiltering } from "~Screens/Flows/App/AppsScreen/Components/VeBetter/Hooks"
 import { useDAppActions } from "~Screens/Flows/App/AppsScreen/Hooks"
 import { URIUtils } from "~Utils"
-
-const SCREEN_WIDTH = Dimensions.get("window").width
 
 type X2EDapp = VeBetterDaoDapp & VeBetterDaoDAppMetadata
 
@@ -243,15 +234,19 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
             filteredApps,
         } = useCategoryFiltering(allApps, initialCategoryId)
 
-        const translateX = useSharedValue(0)
-        const opacity = useSharedValue(1)
-
         const allCategories = useCategories()
 
-        useEffect(() => {
-            translateX.value = 0
-            opacity.value = 1
-        }, [translateX, opacity])
+        const handleAnimationComplete = useCallback(() => {
+            setAnimationDirection(null)
+        }, [])
+
+        const { animatedStyle } = useContentSwipeAnimation({
+            animationDirection,
+            onAnimationComplete: handleAnimationComplete,
+            fadeOpacity: 0.1,
+        })
+
+        const contentAnimatedStyle = [{ flex: 1 }, animatedStyle]
 
         const setSelectedCategory = useCallback(
             (category: { id: X2ECategoryType; displayName: string; icon: IconKey }) => {
@@ -276,53 +271,6 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
             [selectedCategory.id, allCategories, animationDirection, originalSetSelectedCategory],
         )
 
-        const handleAnimationComplete = useCallback(() => {
-            setAnimationDirection(null)
-        }, [])
-
-        useEffect(() => {
-            if (!animationDirection) return
-
-            const startTranslateX = animationDirection === "left" ? SCREEN_WIDTH : -SCREEN_WIDTH
-            const exitTranslateX = animationDirection === "left" ? -SCREEN_WIDTH : SCREEN_WIDTH
-
-            translateX.value = 0
-            opacity.value = 1
-
-            translateX.value = withTiming(exitTranslateX, {
-                duration: 100,
-                easing: Easing.out(Easing.quad),
-            })
-            opacity.value = withTiming(0.1, {
-                duration: 90,
-                easing: Easing.out(Easing.quad),
-            })
-
-            translateX.value = startTranslateX
-            translateX.value = withDelay(
-                60,
-                withTiming(
-                    0,
-                    {
-                        duration: 130,
-                        easing: Easing.out(Easing.quad),
-                    },
-                    finished => {
-                        if (finished && handleAnimationComplete) {
-                            runOnJS(handleAnimationComplete)()
-                        }
-                    },
-                ),
-            )
-            opacity.value = withDelay(
-                60,
-                withTiming(1, {
-                    duration: 140,
-                    easing: Easing.out(Easing.quad),
-                }),
-            )
-        }, [animationDirection, translateX, opacity, handleAnimationComplete])
-
         useEffect(() => {
             return () => {
                 if (animationDirection) {
@@ -330,14 +278,6 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
                 }
             }
         }, [animationDirection])
-
-        const contentAnimatedStyle = useAnimatedStyle(() => {
-            return {
-                flex: 1,
-                transform: [{ translateX: translateX.value }],
-                opacity: opacity.value,
-            }
-        }, [translateX, opacity])
 
         const appIds = useMemo(() => filteredApps.map(app => app.id), [filteredApps])
         const { overviews: appOverviews, isLoading: isOverviewsLoading } = useBatchAppOverviews(
