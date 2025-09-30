@@ -15,7 +15,6 @@ import {
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
 import { useVns } from "~Hooks/useVns"
-import { useI18nContext } from "~i18n"
 import { AccountWithDevice, NETWORK_TYPE, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectSelectedNetwork, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
