@@ -33,6 +33,7 @@ export const BalanceActivity = ({ tab }: { tab: BalanceTab }) => {
                 token,
                 isSwap,
                 decodedClauses,
+                returnScreen: Routes.HOME,
             })
         },
         [nav],
