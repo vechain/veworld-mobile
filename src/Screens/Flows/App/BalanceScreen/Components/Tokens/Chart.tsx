@@ -10,7 +10,7 @@ import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import ChartUtils from "~Utils/ChartUtils"
 
 // Chart configuration constants
-const CHART_WIDTH = 60
+export const CHART_WIDTH = 60
 const CHART_HEIGHT = 32
 const CHART_STROKE_WIDTH = 2
 
@@ -70,7 +70,7 @@ export const Chart = ({ token, setShowChart, showChart }: Props) => {
     if (!shouldDisplayChart) return null
 
     return (
-        <Animated.View style={[styles.root, animatedStyles]} onLayout={onLayout}>
+        <Animated.View style={[styles.root, animatedStyles]} onLayout={onLayout} testID="TOKEN_CARD_CHART">
             <LineChart.Provider data={downsampled ?? DEFAULT_LINE_CHART_DATA}>
                 <LineChart width={CHART_WIDTH} height={CHART_HEIGHT} yGutter={1}>
                     <LineChart.Path
