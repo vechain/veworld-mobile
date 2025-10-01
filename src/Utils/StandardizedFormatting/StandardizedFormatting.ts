@@ -4,9 +4,10 @@
  * This module provides consistent number formatting across the entire app
  * following these rules:
  * - Short precision: K/M notation with max 1 decimal for numbers >= 1000
- * - Zero balances: Always display as "0.00"
+ * - Zero balances: Locale-aware formatting (e.g., "0.00" or "0,00")
+ * - Near-zero values: Locale-aware "< 0.01" or "< 0,01" notation
  * - Max 1 decimal for all display values
- * - Locale-aware formatting
+ * - Locale-aware formatting respecting user settings
  */
 
 import BigNutils from "~Utils/BigNumberUtils"
@@ -26,18 +27,22 @@ export interface StandardFormatOptions {
  * @returns Formatted string following app standards
  */
 export const formatDisplayNumber = (value: string | number, options: StandardFormatOptions = {}): string => {
-    const { locale = "en-US", useCompactNotation = true, forceDecimals, showZeroAs = "0.00" } = options
+    const { locale = "en-US", useCompactNotation = true, forceDecimals, showZeroAs } = options
 
     const bigNum = BigNutils(value)
 
     if (bigNum.isZero) {
-        return showZeroAs
+        return (
+            showZeroAs ?? getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(0)
+        )
     }
 
     const numValue = bigNum.toNumber
 
     if (!Number.isFinite(numValue) || Number.isNaN(numValue)) {
-        return showZeroAs
+        return (
+            showZeroAs ?? getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(0)
+        )
     }
 
     if (useCompactNotation && Math.abs(numValue) >= 1000) {
@@ -55,8 +60,19 @@ export const formatDisplayNumber = (value: string | number, options: StandardFor
 
     const formatted = formatter.format(numValue)
 
-    if ((formatted === "0" || formatted === "0.0") && !bigNum.isZero) {
-        return "< 0.01"
+    // Check if the formatted value rounds to zero but the actual value is not zero
+    const zeroFormatted = getNumberFormatter({ locale, precision: 0, style: "decimal", useGrouping: false }).format(0)
+    const zeroFormattedWithOneDecimal = getNumberFormatter({
+        locale,
+        precision: 1,
+        style: "decimal",
+        useGrouping: false,
+    }).format(0)
+    if ((formatted === zeroFormatted || formatted === zeroFormattedWithOneDecimal) && !bigNum.isZero) {
+        const threshold = getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(
+            0.01,
+        )
+        return `< ${threshold}`
     }
 
     return formatted
@@ -69,15 +85,16 @@ export const formatDisplayNumber = (value: string | number, options: StandardFor
  * @returns Formatted balance string
  */
 export const formatBalance = (balance: string | number, options: StandardFormatOptions = {}): string => {
+    const { locale = "en-US" } = options
     const bigNum = BigNutils(balance)
 
     if (bigNum.isZero) {
-        return "0.00"
+        return getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(0)
     }
 
     return formatDisplayNumber(balance, {
         ...options,
-        showZeroAs: "0.00",
+        showZeroAs: getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(0),
     })
 }
 
@@ -130,7 +147,10 @@ export const formatPercentage = (value: string | number, options: StandardFormat
     const percentValue = BigNutils(value).times(100).toNumber
 
     if (percentValue === 0) {
-        return "0.0%"
+        const zeroFormatted = getNumberFormatter({ locale, precision: 1, style: "decimal", useGrouping: false }).format(
+            0,
+        )
+        return `${zeroFormatted}%`
     }
 
     const formatter = getNumberFormatter({
@@ -178,12 +198,14 @@ export const shouldShowLessThan = (value: string | number, threshold: number = 0
  * @returns Formatted full precision string
  */
 export const formatFullPrecision = (value: string | number, options: StandardFormatOptions = {}): string => {
-    const { locale = "en-US", showZeroAs = "0.00" } = options
+    const { locale = "en-US", showZeroAs } = options
 
     const bigNum = BigNutils(value)
 
     if (bigNum.isZero) {
-        return showZeroAs
+        return (
+            showZeroAs ?? getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(0)
+        )
     }
 
     const numValue = bigNum.toNumber
@@ -210,7 +232,10 @@ export const formatFullPrecision = (value: string | number, options: StandardFor
     const formatted = formatter.format(numValue)
 
     if (Math.abs(numValue) < 1 && Math.abs(numValue) > 0 && Math.abs(numValue) < 0.01) {
-        return "< 0.01"
+        const threshold = getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(
+            0.01,
+        )
+        return `< ${threshold}`
     }
 
     return formatted
@@ -228,17 +253,20 @@ export const formatWithLessThan = (
     threshold: number = 0.01,
     options: StandardFormatOptions = {},
 ): string => {
+    const { locale = "en-US" } = options
+
     if (shouldShowLessThan(value, threshold)) {
-        const formattedThreshold = formatDisplayNumber(threshold, {
-            ...options,
-            useCompactNotation: false,
-            forceDecimals: 2,
-        })
+        const formattedThreshold = getNumberFormatter({
+            locale,
+            precision: 2,
+            style: "decimal",
+            useGrouping: false,
+        }).format(threshold)
         return `< ${formattedThreshold}`
     }
 
     return formatDisplayNumber(value, {
         ...options,
-        showZeroAs: "0.00",
+        showZeroAs: getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(0),
     })
 }
