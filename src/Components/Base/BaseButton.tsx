@@ -1,7 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
 import Lottie from "lottie-react-native"
 import React, { useCallback, useMemo } from "react"
-import { FlexAlignType, StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps } from "react-native"
+import {
+    FlexAlignType,
+    StyleProp,
+    StyleSheet,
+    TextStyle,
+    TouchableOpacity,
+    TouchableOpacityProps,
+    ViewStyle,
+} from "react-native"
 import { StyleProps } from "react-native-reanimated"
 import { LoaderDark, LoaderLight } from "~Assets"
 import { ColorThemeType, TFonts } from "~Constants"
@@ -50,6 +58,8 @@ type Props = {
     numberOfLines?: number
     textTestID?: string
     textTransform?: TextStyle["textTransform"]
+    textStyle?: StyleProp<TextStyle>
+    textContainerStyle?: ViewStyle
 } & TouchableOpacityProps
 
 export const BaseButton = ({
@@ -72,6 +82,8 @@ export const BaseButton = ({
     numberOfLines,
     textTestID,
     textTransform,
+    textStyle,
+    textContainerStyle,
     ...otherProps
 }: Props) => {
     const {
@@ -201,9 +213,10 @@ export const BaseButton = ({
                     fontFamily={fontFamily}
                     fontWeight={fontWeight}
                     fontSize={fontSize}
-                    style={themedStyles.text}
+                    style={[themedStyles.text, textStyle]}
                     numberOfLines={numberOfLines}
                     textTransform={textTransform}
+                    containerStyle={textContainerStyle}
                     testID={textTestID}>
                     {title}
                     {children}
