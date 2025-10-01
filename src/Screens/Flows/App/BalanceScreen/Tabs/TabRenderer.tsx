@@ -9,7 +9,6 @@ import { useAppSelector } from "~Storage/Redux/Hooks"
 import { selectBookmarkedDapps } from "~Storage/Redux/Selectors"
 import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
-import { BalanceActivity } from "./Activity/BalanceActivity"
 import { Tokens } from "./Tokens"
 
 const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
@@ -40,12 +39,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                 </>
             )}
             <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
-            <BaseView flexDirection="column" gap={40}>
-                <>
-                    {selectedTab === "TOKENS" ? <Tokens /> : null}
-                    <BalanceActivity tab={selectedTab} />
-                </>
-            </BaseView>
+            <BaseView flexDirection="column">{selectedTab === "TOKENS" ? <Tokens /> : null}</BaseView>
         </BaseView>
     )
 }

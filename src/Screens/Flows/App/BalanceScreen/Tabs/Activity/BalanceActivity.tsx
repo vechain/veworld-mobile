@@ -19,7 +19,7 @@ const ListFooterComponent = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(footerStyles)
     const onNavigate = useCallback(() => {
-        nav.navigate(Routes.HISTORY)
+        nav.navigate(Routes.HISTORY_STACK, { screen: Routes.HISTORY })
     }, [nav])
     return (
         <BaseButton
@@ -30,7 +30,7 @@ const ListFooterComponent = () => {
             typographyFont="bodyMedium"
             style={styles.btn}
             textColor={theme.colors.text}
-            rightIcon={<BaseIcon name="icon-arrow-right" size={12} style={styles.icon} color={theme.colors.text} />}>
+            rightIcon={<BaseIcon name="icon-arrow-right" size={14} style={styles.icon} color={theme.colors.text} />}>
             {LL.ACTIVITY_SEE_ALL()}
         </BaseButton>
     )

@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
-import { B3TR, COLORS, DIRECTIONS, VET, VOT3, VTHO } from "~Constants"
+import { B3TR, COLORS, DIRECTIONS, typography, VET, VOT3, VTHO } from "~Constants"
 import { useFormatFiat, useTheme, useThemedStyles, useVns } from "~Hooks"
 import { useNFTInfo } from "~Hooks/useNFTInfo"
 import { useI18nContext } from "~i18n"
@@ -172,12 +172,22 @@ const BaseActivityBox = ({
     }
 
     return (
-        <BaseCard testID={testID} style={styles.rootContainer} onPress={onPress}>
+        <BaseCard
+            testID={testID}
+            style={[
+                styles.rootContainer,
+                //Make sure that without any description, the height stays the same.
+                !showDescription && {
+                    paddingVertical:
+                        12 + (invertedStyles ? typography.lineHeight.bodySemiBold : typography.lineHeight.body) / 2,
+                },
+            ]}
+            onPress={onPress}>
             {renderIconContainer()}
 
             <BaseSpacer width={16} />
 
-            <BaseView style={styles.textContainer} flexDirection="column">
+            <BaseView flexDirection="column" flex={1}>
                 <BaseText typographyFont="captionRegular" color={theme.colors.activityCard.time}>
                     {timestampRenderer(timestamp)}
                 </BaseText>
@@ -188,7 +198,8 @@ const BaseActivityBox = ({
                         numberOfLines={1}
                         color={
                             invertedStyles ? theme.colors.activityCard.subtitleBold : theme.colors.activityCard.title
-                        }>
+                        }
+                        flexDirection="row">
                         {title}
                     </BaseText>
                     {showActivityStatus && <ActivityStatusIndicator activityStatus={ActivityStatus.REVERTED} />}
@@ -225,6 +236,7 @@ const baseStyles = () =>
             borderRadius: 12,
             paddingVertical: 12,
             paddingHorizontal: 16,
+            // height: 80,
         },
         iconContainer: {
             justifyContent: "center",
@@ -236,13 +248,13 @@ const baseStyles = () =>
         titleContainer: {
             flexDirection: "row",
             alignItems: "center",
-            flex: 1,
+            // flex: 1,
             width: "100%",
         },
         textContainer: {
             flex: 1,
             height: "100%",
-            alignContent: "center",
+            // alignContent: "center",
         },
         rightTextContainer: {
             alignItems: "flex-end",
