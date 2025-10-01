@@ -74,6 +74,11 @@ describe("ActivityDetailsScreen Logic Tests", () => {
 
             expect(screen.getByTestId("Activity_Details_Screen")).toBeTruthy()
             expect(screen.getByText("Details")).toBeTruthy()
+
+            expect(screen.queryByText("Failed")).toBeNull()
+            expect(screen.queryByText("Pending")).toBeNull()
+
+            expect(screen.getByText("Status")).toBeTruthy()
         })
 
         it("should render ActivityDetailsScreen and test activityStatus logic with REVERTED status", () => {
@@ -88,6 +93,28 @@ describe("ActivityDetailsScreen Logic Tests", () => {
 
             expect(screen.getByTestId("Activity_Details_Screen")).toBeTruthy()
             expect(screen.getByText("Details")).toBeTruthy()
+
+            expect(screen.getByText("Failed")).toBeTruthy()
+
+            expect(screen.getByText("Status")).toBeTruthy()
+        })
+
+        it("should render ActivityDetailsScreen and test activityStatus logic with PENDING status", () => {
+            const activity = { ...mockDappTxActivity, status: ActivityStatus.PENDING }
+            const route = createMockRoute(activity)
+
+            render(
+                <TestWrapper preloadedState={createPreloadedState()}>
+                    <ActivityDetailsScreen route={route} navigation={mockNavigation} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId("Activity_Details_Screen")).toBeTruthy()
+            expect(screen.getByText("Details")).toBeTruthy()
+
+            expect(screen.getByText("Pending")).toBeTruthy()
+
+            expect(screen.getByText("Status")).toBeTruthy()
         })
 
         it("should render ActivityDetailsScreen and test explorer button logic with txId and blockNumber", () => {
@@ -259,6 +286,38 @@ describe("ActivityDetailsScreen Logic Tests", () => {
             )
 
             expect(screen.getByText("Reverted")).toBeTruthy()
+        })
+
+        it("should show 'Success' when status is SUCCESS", () => {
+            const activity = { ...mockDappTxActivity, status: ActivityStatus.SUCCESS }
+
+            render(
+                <TestWrapper preloadedState={createPreloadedState()}>
+                    <DappTransactionDetails
+                        activity={activity}
+                        status={ActivityStatus.SUCCESS}
+                        paid="1000000000000000000"
+                    />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByText("Success")).toBeTruthy()
+        })
+
+        it("should show 'Pending' when status is PENDING", () => {
+            const activity = { ...mockDappTxActivity, status: ActivityStatus.PENDING }
+
+            render(
+                <TestWrapper preloadedState={createPreloadedState()}>
+                    <DappTransactionDetails
+                        activity={activity}
+                        status={ActivityStatus.PENDING}
+                        paid="1000000000000000000"
+                    />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByText("Pending")).toBeTruthy()
         })
     })
 
