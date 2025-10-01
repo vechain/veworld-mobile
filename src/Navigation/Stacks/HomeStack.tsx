@@ -47,6 +47,7 @@ import {
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import { BuyStack } from "./BuyStack"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -142,6 +143,7 @@ export type RootStackParamListHome = {
     [Routes.APPS_TABS_MANAGER]: undefined
     [Routes.APPS_SEARCH]: undefined
     [Routes.DISCOVER_SEARCH]: undefined
+    [Routes.BUY_FLOW]: undefined
 }
 
 const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome>()
@@ -285,6 +287,13 @@ export const HomeStack = () => {
                         transitionSpec: TRANSITION_SPECS,
                         gestureDirection: "vertical",
                         gestureEnabled: true,
+                    }}
+                />
+                <Screen
+                    name={Routes.BUY_FLOW}
+                    component={BuyStack}
+                    options={{
+                        presentation: "modal",
                     }}
                 />
             </Group>
