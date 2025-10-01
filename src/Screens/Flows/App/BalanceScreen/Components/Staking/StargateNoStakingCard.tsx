@@ -1,17 +1,17 @@
+import { ethers } from "ethers"
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
+import Markdown from "react-native-markdown-display"
 import { StargateDappBannerB3MO, StargateLogo } from "~Assets"
-import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import { BaseButton, BaseIcon, BaseSpacer, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType, STARGATE_DAPP_URL_HOME_BANNER } from "~Constants"
 import { useBrowserNavigation, useFormatFiat, useThemedStyles } from "~Hooks"
-import { useI18nContext } from "~i18n"
-import { StargateStatsCard } from "./StargateStatsCard"
-import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
-import Markdown from "react-native-markdown-display"
 import { useStargateStats } from "~Hooks/useStargateStats"
+import { useI18nContext } from "~i18n"
 import { BigNutils } from "~Utils"
-import { ethers } from "ethers"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
+import { StargateStatsCard } from "./StargateStatsCard"
 
 export const StargateNoStakingCard = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -56,20 +56,19 @@ export const StargateNoStakingCard = () => {
                     style={styles.b3moImage as ImageStyle}
                 />
             </BaseView>
-            <BaseView flexDirection="column" gap={24} w={55}>
+            <BaseView flexDirection="column" gap={24} w={50}>
                 <StargateLogo color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE} width={129} height={24} />
-                <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="body">
-                    <Markdown
-                        style={{
-                            body: styles.text,
-                            strong: isAndroid() ? styles.strongAndroid : styles.strongIOS,
-                        }}>
-                        {LL.STARGATE_STAT_DESCRIPTION()}
-                    </Markdown>
-                </BaseText>
+                <Markdown
+                    style={{
+                        paragraph: styles.paragraph,
+                        body: styles.text,
+                        strong: isAndroid() ? styles.strongAndroid : styles.strongIOS,
+                    }}>
+                    {LL.STARGATE_STAT_DESCRIPTION()}
+                </Markdown>
             </BaseView>
 
-            <BaseSpacer height={16} />
+            <BaseSpacer height={32} />
 
             <BaseView w={100} flexDirection="column" gap={8}>
                 <BaseView flexDirection="row" gap={8}>
@@ -149,11 +148,16 @@ const baseStyles = (theme: ColorThemeType) =>
             fontWeight: "700",
             fontFamily: "Inter-Bold",
         },
+        paragraph: {
+            marginTop: 0,
+            marginBottom: 0,
+        },
         text: {
-            fontSize: 16,
+            fontSize: 14,
+            flex: 1,
             fontFamily: "Inter-Regular",
-            lineHeight: 24,
-            color: theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500,
+            lineHeight: 20,
+            color: theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500,
         },
         b3mo: {
             position: "absolute",

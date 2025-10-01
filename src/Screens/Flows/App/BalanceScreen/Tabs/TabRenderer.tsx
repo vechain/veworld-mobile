@@ -37,7 +37,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
     return (
         <Animated.View style={styles.root} onLayout={onLayout}>
             {showFavorites && (
-                <>
+                <BaseView>
                     <FavouritesV2
                         bookmarkedDApps={bookmarkedDApps}
                         onDAppPress={onDAppPress}
@@ -45,7 +45,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                         style={styles.favorites}
                     />
                     <BaseSpacer height={24} />
-                </>
+                </BaseView>
             )}
             <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
             <BaseView flex={1} pb={tabBarBottomMargin}>
