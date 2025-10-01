@@ -47,7 +47,7 @@ export const TokenBox = ({
         <DropShadow style={[theme.shadows.card]}>
             <BaseView flexDirection="column" alignItems="center">
                 {token?.icon ? (
-                    <TokenImage icon={token.icon} isVechainToken={isVechainToken(token.symbol)} iconSize={30} />
+                    <TokenImage icon={token.icon} isVechainToken={isVechainToken(token.symbol)} iconSize={30} rounded />
                 ) : (
                     <BaseIcon
                         name="icon-help-circle"
