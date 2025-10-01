@@ -5,7 +5,7 @@ import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } 
 import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { B3TR, COLORS, VET, VOT3, VTHO } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles, useTheme } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { FungibleTokenWithBalance } from "~Model"
@@ -22,6 +22,7 @@ type Props = {
 export const TokenCard = ({ token }: Props) => {
     const navigation = useNavigation()
     const currency = useAppSelector(selectCurrency)
+    const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
     const [showChart, setShowChart] = useState(true)
     const name = useMemo(() => {
@@ -69,11 +70,21 @@ export const TokenCard = ({ token }: Props) => {
             case "B3TR":
                 return (
                     <BaseView flexDirection="row" gap={4}>
-                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500} testID="TOKEN_CARD_SYMBOL_1">
+                        <BaseText
+                            typographyFont="bodySemiBold"
+                            color={theme.colors.activityCard.subtitleLight}
+                            testID="TOKEN_CARD_SYMBOL_1">
                             {B3TR.symbol}
                         </BaseText>
-                        <BaseIcon name="icon-arrow-left-right" size={12} color={COLORS.GREY_300} />
-                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500} testID="TOKEN_CARD_SYMBOL_2">
+                        <BaseIcon
+                            name="icon-arrow-left-right"
+                            size={12}
+                            color={theme.colors.activityCard.subtitleLight}
+                        />
+                        <BaseText
+                            typographyFont="bodySemiBold"
+                            color={theme.colors.activityCard.subtitleLight}
+                            testID="TOKEN_CARD_SYMBOL_2">
                             {VOT3.symbol}
                         </BaseText>
                         {chartIcon}
@@ -82,14 +93,17 @@ export const TokenCard = ({ token }: Props) => {
             default:
                 return (
                     <BaseView flexDirection="row" gap={4}>
-                        <BaseText typographyFont="bodySemiBold" color={COLORS.GREY_500} testID="TOKEN_CARD_SYMBOL">
+                        <BaseText
+                            typographyFont="bodySemiBold"
+                            color={theme.colors.activityCard.subtitleLight}
+                            testID="TOKEN_CARD_SYMBOL">
                             {token.symbol}
                         </BaseText>
                         {chartIcon}
                     </BaseView>
                 )
         }
-    }, [chartIcon, token.symbol])
+    }, [chartIcon, token.symbol, theme.colors.activityCard.subtitleLight])
 
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
@@ -114,7 +128,7 @@ export const TokenCard = ({ token }: Props) => {
             action={supportsDetailNavigation ? handlePress : undefined}
             py={24}
             flexDirection="row"
-            bg={COLORS.WHITE}
+            bg={theme.colors.card as string}
             containerStyle={styles.root}>
             <BaseView flexDirection="row" gap={16} flex={1}>
                 <TokenImage
@@ -129,7 +143,7 @@ export const TokenCard = ({ token }: Props) => {
                     <BaseView flexDirection="column" flex={1}>
                         <BaseText
                             typographyFont="subSubTitleSemiBold"
-                            color={COLORS.GREY_800}
+                            color={theme.colors.activityCard.title}
                             flexDirection="row"
                             numberOfLines={1}
                             flex={1}
@@ -139,7 +153,10 @@ export const TokenCard = ({ token }: Props) => {
                         {symbol}
                     </BaseView>
                 ) : (
-                    <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.GREY_800} flexDirection="row">
+                    <BaseText
+                        typographyFont="subSubTitleSemiBold"
+                        color={theme.colors.activityCard.title}
+                        flexDirection="row">
                         {name}
                     </BaseText>
                 )}
@@ -152,7 +169,7 @@ export const TokenCard = ({ token }: Props) => {
                     <>
                         <BaseText
                             typographyFont="subSubTitleSemiBold"
-                            color={COLORS.GREY_800}
+                            color={theme.colors.activityCard.title}
                             align="right"
                             numberOfLines={1}
                             flexDirection="row"
@@ -161,7 +178,7 @@ export const TokenCard = ({ token }: Props) => {
                         </BaseText>
                         <BaseText
                             typographyFont="bodyMedium"
-                            color={COLORS.GREY_500}
+                            color={theme.colors.activityCard.subtitleLight}
                             align="right"
                             numberOfLines={1}
                             flexDirection="row"
@@ -172,7 +189,7 @@ export const TokenCard = ({ token }: Props) => {
                 ) : (
                     <BaseText
                         typographyFont="subSubTitleSemiBold"
-                        color={COLORS.GREY_800}
+                        color={theme.colors.activityCard.title}
                         align="right"
                         numberOfLines={1}
                         flexDirection="row"
