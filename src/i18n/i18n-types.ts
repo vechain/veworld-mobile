@@ -4586,6 +4586,14 @@ type RootTranslation = {
 	 */
 	THEM: string
 	/**
+	 * T​h​i​s​ ​m​o​n​t​h
+	 */
+	THIS_MONTH: string
+	/**
+	 * T​h​i​s​ ​w​e​e​k
+	 */
+	THIS_WEEK: string
+	/**
 	 * A​b​o​u​t
 	 */
 	TITLE_ABOUT: string
@@ -4859,6 +4867,10 @@ type RootTranslation = {
 	 */
 	TOKEN_TRANSFER_SENT: string
 	/**
+	 * T​o​t​a​l
+	 */
+	TOTAL: string
+	/**
 	 * T​o​u​c​h​ ​I​D
 	 */
 	TOUCH_ID: string
@@ -4907,6 +4919,58 @@ type RootTranslation = {
 	 * V​a​l​u​e
 	 */
 	VALUE_TITLE: string
+	/**
+	 * R​e​w​a​r​d​s​ ​e​a​r​n​e​d
+	 */
+	VBD_REWARDS_EARNED: string
+	/**
+	 * S​e​e​ ​V​e​B​e​t​t​e​r​ ​p​r​o​f​i​l​e
+	 */
+	VBD_SEE_PROFILE: string
+	/**
+	 * C​O​2
+	 */
+	VBD_STAT_CO2: string
+	/**
+	 * T​r​e​e​s
+	 */
+	VBD_STAT_TREES: string
+	/**
+	 * W​a​t​e​r
+	 */
+	VBD_STAT_WATER: string
+	/**
+	 * E​n​e​r​g​y
+	 */
+	VBD_STAT_ENERGY: string
+	/**
+	 * P​l​a​s​t​i​c
+	 */
+	VBD_STAT_PLASTIC: string
+	/**
+	 * R​e​d​u​c​e​d
+	 */
+	VBD_STAT_REDUCED: string
+	/**
+	 * S​a​v​e​d
+	 */
+	VBD_STAT_SAVED: string
+	/**
+	 * C​o​n​s​e​r​v​e​d
+	 */
+	VBD_STAT_CONSERVED: string
+	/**
+	 * A​v​o​i​d​e​d
+	 */
+	VBD_STAT_AVOIDED: string
+	/**
+	 * Y​o​u​r​ ​o​f​f​s​e​t
+	 */
+	VBD_YOUR_OFFSET: string
+	/**
+	 * Y​o​u​r​ ​B​e​t​t​e​r​ ​A​c​t​i​o​n​s
+	 */
+	VBD_YOUR_BETTER_ACTIONS: string
 	/**
 	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
@@ -9615,6 +9679,14 @@ Here's what it's all about:
 	 */
 	THEM: () => LocalizedString
 	/**
+	 * This month
+	 */
+	THIS_MONTH: () => LocalizedString
+	/**
+	 * This week
+	 */
+	THIS_WEEK: () => LocalizedString
+	/**
 	 * About
 	 */
 	TITLE_ABOUT: () => LocalizedString
@@ -9887,6 +9959,10 @@ Here's what it's all about:
 	 */
 	TOKEN_TRANSFER_SENT: () => LocalizedString
 	/**
+	 * Total
+	 */
+	TOTAL: () => LocalizedString
+	/**
 	 * Touch ID
 	 */
 	TOUCH_ID: () => LocalizedString
@@ -9934,6 +10010,58 @@ Here's what it's all about:
 	 * Value
 	 */
 	VALUE_TITLE: () => LocalizedString
+	/**
+	 * Rewards earned
+	 */
+	VBD_REWARDS_EARNED: () => LocalizedString
+	/**
+	 * See VeBetter profile
+	 */
+	VBD_SEE_PROFILE: () => LocalizedString
+	/**
+	 * CO2
+	 */
+	VBD_STAT_CO2: () => LocalizedString
+	/**
+	 * Trees
+	 */
+	VBD_STAT_TREES: () => LocalizedString
+	/**
+	 * Water
+	 */
+	VBD_STAT_WATER: () => LocalizedString
+	/**
+	 * Energy
+	 */
+	VBD_STAT_ENERGY: () => LocalizedString
+	/**
+	 * Plastic
+	 */
+	VBD_STAT_PLASTIC: () => LocalizedString
+	/**
+	 * Reduced
+	 */
+	VBD_STAT_REDUCED: () => LocalizedString
+	/**
+	 * Saved
+	 */
+	VBD_STAT_SAVED: () => LocalizedString
+	/**
+	 * Conserved
+	 */
+	VBD_STAT_CONSERVED: () => LocalizedString
+	/**
+	 * Avoided
+	 */
+	VBD_STAT_AVOIDED: () => LocalizedString
+	/**
+	 * Your offset
+	 */
+	VBD_YOUR_OFFSET: () => LocalizedString
+	/**
+	 * Your Better Actions
+	 */
+	VBD_YOUR_BETTER_ACTIONS: () => LocalizedString
 	/**
 	 * Vechain news & updates
 	 */
