@@ -47,6 +47,7 @@ import {
 import { AddressUtils, BigNutils, URIUtils } from "~Utils"
 import { getTokenLevelName } from "~Utils/StargateUtils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
+import { StackedApps } from "./StackedApps"
 
 type GradientConfig = {
     colors: string[]
@@ -686,6 +687,7 @@ const B3trXAllocationVote = ({
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             timestamp={activity.timestamp}
             title={LL.B3TR_XALLOCATION_VOTE({ number: parseInt(activity.roundId, 10) })}
+            rightAmountDescription={<StackedApps appVotes={activity.appVotes} roundId={activity.roundId} />}
             onPress={onPressHandler}
             {...props}
         />
