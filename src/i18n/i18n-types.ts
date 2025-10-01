@@ -4985,6 +4985,10 @@ type RootTranslation = {
 	 */
 	VIEW_ON_EXPLORER: string
 	/**
+	 * V​i​e​w​ ​o​n​l​y
+	 */
+	VIEW_ONLY: string
+	/**
 	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.
 	 */
 	WALLETS_SAVED_ON_DRIVE: string
@@ -10067,6 +10071,10 @@ Here's what it's all about:
 	 * View on explorer
 	 */
 	VIEW_ON_EXPLORER: () => LocalizedString
+	/**
+	 * View only
+	 */
+	VIEW_ONLY: () => LocalizedString
 	/**
 	 * wallets saved on Google Drive.
 	 */

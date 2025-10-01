@@ -1,15 +1,17 @@
 import React, { useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
+import Animated from "react-native-reanimated"
 import { BaseSimpleTabs, BaseSpacer, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { Tokens } from "./Tokens"
-import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
-import { selectBookmarkedDapps } from "~Storage/Redux/Selectors"
 import { useAppSelector } from "~Storage/Redux/Hooks"
+import { selectBookmarkedDapps, selectSelectedAccount } from "~Storage/Redux/Selectors"
+import { AccountUtils } from "~Utils"
+import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
+import { Tokens } from "./Tokens"
 import { Staking } from "./Staking"
 
 const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
@@ -23,11 +25,14 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const [selectedTab, setSelectedTab] = useState<(typeof TABS)[number]>("TOKENS")
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     const { onDAppPress } = useDAppActions(Routes.HOME)
-    const showFavorites = bookmarkedDApps.length > 0
+    const showFavorites = useMemo(() => {
+        return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount)
+    }, [bookmarkedDApps.length, selectedAccount])
     const labels = useMemo(() => TABS.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL])
     return (
-        <BaseView style={styles.root} gap={16} onLayout={onLayout}>
+        <Animated.View style={styles.root} onLayout={onLayout}>
             {showFavorites && (
                 <>
                     <FavouritesV2
@@ -45,7 +50,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                 {selectedTab === "STAKING" && <Staking />}
                 {selectedTab === "COLLECTIBLES" && <></>}
             </BaseView>
-        </BaseView>
+        </Animated.View>
     )
 }
 
@@ -58,6 +63,9 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 16,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
+            flex: 1,
+            gap: 16,
+            flexDirection: "column",
         },
         favorites: {
             marginLeft: -16,
