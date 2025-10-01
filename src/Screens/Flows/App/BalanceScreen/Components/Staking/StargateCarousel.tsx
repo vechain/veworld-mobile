@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native"
 import { BaseButton, BaseCarousel, BaseSpacer, BaseView, CarouselSlideItem } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
 import {
+    COLORS,
     ColorThemeType,
     STARGATE_DAPP_URL,
     STARGATE_DAPP_URL_MANAGE_STAKING_BANNER,
@@ -118,6 +119,12 @@ export const StargateCarousel = () => {
         [LL],
     )
 
+    const indicatorBackgroundColor = useMemo(() => (theme.isDark ? COLORS.PURPLE : COLORS.GREY_100), [theme.isDark])
+    const containerBackgroundColor = useMemo(
+        () => (theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.WHITE),
+        [theme.isDark],
+    )
+
     if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return <StargateNoStakingCard />
 
     return (
@@ -131,6 +138,8 @@ export const StargateCarousel = () => {
                             selectedKey={filter}
                             setSelectedKey={setFilter}
                             showBorder={false}
+                            indicatorBackgroundColor={indicatorBackgroundColor}
+                            containerBackgroundColor={containerBackgroundColor}
                         />
                     </BaseView>
                 )}
