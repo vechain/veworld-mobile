@@ -17,6 +17,7 @@ import { useCheckWalletBackup, useClaimableUsernames, useThemedStyles } from "~H
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils } from "~Utils"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
 import SettingsRowDivider, { RowDividerProps } from "./Components/SettingsRowDivider"
 
@@ -61,8 +62,14 @@ export const SettingsScreen = () => {
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
 
     const { settingsList } = useMemo(
-        () => getLists(LL, devFeaturesEnabled, notificationFeatureEnabled),
-        [LL, devFeaturesEnabled, notificationFeatureEnabled],
+        () =>
+            getLists(
+                LL,
+                devFeaturesEnabled,
+                notificationFeatureEnabled,
+                AccountUtils.isObservedAccount(selectedAccount),
+            ),
+        [LL, devFeaturesEnabled, notificationFeatureEnabled, selectedAccount],
     )
 
     const renderBackupWarning = useMemo(() => {
@@ -144,7 +151,61 @@ const baseStyles = () =>
         },
     })
 
-const getLists = (LL: TranslationFunctions, devEnabled: boolean, notificationFeatureEnabled: boolean) => {
+const getLists = (
+    LL: TranslationFunctions,
+    devEnabled: boolean,
+    notificationFeatureEnabled: boolean,
+    isObservedAccount: boolean,
+): { settingsList: (SettingsRowItem | DividerItem | BackupBannerItem)[] } => {
+    if (isObservedAccount) {
+        return {
+            settingsList: [
+                {
+                    element: "settingsRow",
+                    title: LL.TITLE_GENERAL_SETTINGS(),
+                    screenName: Routes.SETTINGS_GENERAL,
+                    icon: "icon-settings",
+                },
+                {
+                    element: "settingsRow",
+                    title: LL.TITLE_MANAGE_WALLET(),
+                    screenName: Routes.WALLET_MANAGEMENT,
+                    icon: "icon-wallet",
+                },
+                {
+                    element: "settingsRow",
+                    title: LL.TITLE_NETWORKS(),
+                    screenName: Routes.SETTINGS_NETWORK,
+                    icon: "icon-globe",
+                },
+                {
+                    element: "divider",
+                    title: "Support_divider",
+                    height: 1,
+                },
+                {
+                    element: "settingsRow",
+                    title: LL.TITLE_GET_SUPPORT(),
+                    screenName: Routes.BROWSER,
+                    icon: "icon-help-circle",
+                    url: "https://support.veworld.com",
+                },
+                {
+                    element: "settingsRow",
+                    title: LL.TITLE_GIVE_FEEDBACK(),
+                    screenName: Routes.BROWSER,
+                    icon: "icon-message-square",
+                    url: "https://forms.office.com/e/Vq1CUJD9Vy",
+                },
+                {
+                    element: "settingsRow",
+                    title: LL.TITLE_ABOUT(),
+                    screenName: Routes.SETTINGS_ABOUT,
+                    icon: "icon-info",
+                },
+            ],
+        }
+    }
     const settingsList: (SettingsRowItem | DividerItem | BackupBannerItem)[] = [
         {
             element: "settingsRow",
