@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { StyleSheet, Text } from "react-native"
+import { StyleSheet } from "react-native"
 import { BaseButton, BaseCarousel, BaseSpacer, BaseView, CarouselSlideItem } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
 import {
@@ -19,6 +19,7 @@ import { AddressUtils } from "~Utils"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
 import { StargateCarouselItem } from "./StargateCarouselItem"
 import { BaseTabs } from "~Components/Base/BaseTabs"
+import { StargateNoStakingCard } from "./StargateNoStakingCard"
 
 enum StakingFilter {
     OWN = "own",
@@ -117,7 +118,7 @@ export const StargateCarousel = () => {
         [LL],
     )
 
-    if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return <Text>{"No staking nodes"}</Text>
+    if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return <StargateNoStakingCard />
 
     return (
         <BaseView flexDirection="column" gap={12} w={100} mb={40}>

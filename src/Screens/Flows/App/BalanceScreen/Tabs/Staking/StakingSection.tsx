@@ -1,11 +1,12 @@
-import { View } from "react-native"
 import React from "react"
 import { StargateCarousel } from "../../Components/Staking/StargateCarousel"
+import { BaseSpacer } from "~Components"
 
-export const StakingTopSection = () => {
+export const StakingSection = () => {
     return (
-        <View>
+        <>
             <StargateCarousel />
-        </View>
+            <BaseSpacer height={40} />
+        </>
     )
 }

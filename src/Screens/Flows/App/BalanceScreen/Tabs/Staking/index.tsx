@@ -1,6 +1,6 @@
 import React from "react"
-import { StakingTopSection } from "./StakingTopSection"
+import { StakingSection } from "./StakingSection"
 
 export const Staking = () => {
-    return <StakingTopSection />
+    return <StakingSection />
 }

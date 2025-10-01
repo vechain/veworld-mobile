@@ -3,7 +3,7 @@ import { LayoutChangeEvent, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseSimpleTabs, BaseSpacer, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux/Hooks"
@@ -27,10 +27,13 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const { onDAppPress } = useDAppActions(Routes.HOME)
+    const { tabBarBottomMargin } = useTabBarBottomMargin()
+
     const showFavorites = useMemo(() => {
         return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount)
     }, [bookmarkedDApps.length, selectedAccount])
     const labels = useMemo(() => TABS.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL])
+
     return (
         <Animated.View style={styles.root} onLayout={onLayout}>
             {showFavorites && (
@@ -45,7 +48,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                 </>
             )}
             <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
-            <BaseView>
+            <BaseView flex={1} pb={tabBarBottomMargin}>
                 {selectedTab === "TOKENS" && <Tokens />}
                 {selectedTab === "STAKING" && <Staking />}
                 {selectedTab === "COLLECTIBLES" && <></>}
