@@ -2,7 +2,7 @@ import { useMemo } from "react"
 import { VET, VTHO } from "~Constants"
 import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
-import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
+import { useTokenWithCompleteInfo, TokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { useMultipleTokensBalance } from "~Hooks/useTokenBalance"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectNetworkVBDTokens, selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
@@ -23,9 +23,9 @@ const extractFiatValue = (fiatBalanceString: string): number => {
  * Pre-calculate all fiat values once instead of during every sort comparison
  */
 const createFiatBalanceMap = (
-    vetInfo: any,
-    vthoInfo: any,
-    b3trInfo: any,
+    vetInfo: TokenWithCompleteInfo,
+    vthoInfo: TokenWithCompleteInfo,
+    b3trInfo: TokenWithCompleteInfo,
     nonVechainTokensFiat: string[],
     nonVechainTokenWithBalances: FungibleTokenWithBalance[],
 ): Map<string, number> => {
