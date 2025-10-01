@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native"
 import "react-native-url-polyfill/auto"
 import { WebView, WebViewMessageEvent } from "react-native-webview"
 import { generateCoinbaseOnRampURL } from "~Api/OnOffRampProviders"
-import { BaseActivityIndicator, BaseStatusBar, BaseView, useInAppBrowser } from "~Components"
+import { BaseActivityIndicator, BaseStatusBar, BaseView, useFeatureFlags, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -25,10 +25,11 @@ export const CoinbasePayWebView = ({
     const styles = baseStyles(isLoading)
     const track = useAnalyticTracking()
     const { originWhitelist } = useInAppBrowser()
+    const { paymentProvidersFeature } = useFeatureFlags()
 
     const { data: coinbaseURL, isFetching: isCoinbaseLoading } = useQuery({
         queryKey: ["COINBASE", "ONRAMP", destinationAddress, currentAmount],
-        queryFn: () => generateCoinbaseOnRampURL(destinationAddress),
+        queryFn: () => generateCoinbaseOnRampURL(destinationAddress, paymentProvidersFeature["coinbase-pay"].url),
         staleTime: 0,
         gcTime: 0,
     })

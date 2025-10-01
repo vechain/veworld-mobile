@@ -20,6 +20,7 @@ export const initialState: FeatureFlags = {
         "coinbase-pay": {
             android: true,
             iOS: false,
+            url: "https://onramp-proxy.vechain.org",
         },
         transak: {
             android: true,
