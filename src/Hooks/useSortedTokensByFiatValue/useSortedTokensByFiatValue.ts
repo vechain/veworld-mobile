@@ -4,7 +4,7 @@ import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
 import { useTokenWithCompleteInfo, TokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { useMultipleTokensBalance } from "~Hooks/useTokenBalance"
-import { FungibleTokenWithBalance } from "~Model"
+import { FungibleToken, FungibleTokenWithBalance } from "~Model"
 import { selectNetworkVBDTokens, selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 
@@ -26,21 +26,21 @@ const createFiatBalanceMap = (
     vetInfo: TokenWithCompleteInfo,
     vthoInfo: TokenWithCompleteInfo,
     b3trInfo: TokenWithCompleteInfo,
+    b3trToken: FungibleToken,
     nonVechainTokensFiat: string[],
     nonVechainTokenWithBalances: FungibleTokenWithBalance[],
 ): Map<string, number> => {
     const fiatMap = new Map<string, number>()
 
     // VeChain ecosystem tokens
-    fiatMap.set(VET.symbol, extractFiatValue(vetInfo.fiatBalance))
-    fiatMap.set(VTHO.symbol, extractFiatValue(vthoInfo.fiatBalance))
-    fiatMap.set("B3TR", extractFiatValue(b3trInfo.fiatBalance))
+    fiatMap.set(VET.address, extractFiatValue(vetInfo.fiatBalance))
+    fiatMap.set(VTHO.address, extractFiatValue(vthoInfo.fiatBalance))
+    fiatMap.set(b3trToken.address, extractFiatValue(b3trInfo.fiatBalance))
 
     // Non-VeChain tokens (including VeDelegate)
     for (const [index, token] of nonVechainTokenWithBalances.entries()) {
         if (nonVechainTokensFiat[index]) {
-            const key = `${token.address}_${token.symbol}`
-            fiatMap.set(key, extractFiatValue(nonVechainTokensFiat[index]))
+            fiatMap.set(token.address, extractFiatValue(nonVechainTokensFiat[index]))
         }
     }
 
@@ -51,15 +51,8 @@ const createFiatBalanceMap = (
  * Get fiat balance
  */
 const getTokenFiatBalance = (token: FungibleTokenWithBalance, fiatMap: Map<string, number>): number => {
-    // Try symbol first (for VeChain tokens)
-    const symbolValue = fiatMap.get(token.symbol)
-    if (symbolValue !== undefined) return symbolValue
-
-    // Try address+symbol combination (for non-VeChain tokens)
-    const addressSymbolValue = fiatMap.get(`${token.address}_${token.symbol}`)
-    if (addressSymbolValue !== undefined) return addressSymbolValue
-
-    return 0
+    // Use address as key for consistent lookup
+    return fiatMap.get(token.address) ?? 0
 }
 
 /**
@@ -132,6 +125,7 @@ export const useSortedTokensByFiatValue = (accountAddress?: string) => {
             vetInfo,
             vthoInfo,
             b3trInfo,
+            B3TRToken,
             nonVechainTokensFiat,
             nonVechainTokenWithBalances,
         )
