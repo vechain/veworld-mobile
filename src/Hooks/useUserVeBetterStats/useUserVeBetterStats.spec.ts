@@ -21,9 +21,9 @@ describe("useUserVeBetterStats", () => {
                 carbon: 1000,
             },
         })
-        ;(fetchVeBetterUserOverview as jest.Mock).mockImplementation((_address, startDate) => {
-            //It is a monthly overview request
-            if (moment(startDate).isBefore(moment().utc().startOf("week")))
+        ;(fetchVeBetterUserOverview as jest.Mock).mockImplementation((_address, startDate, endDate) => {
+            //It is a monthly overview request. 10 is > 7, which is a week.
+            if (moment(endDate).diff(startDate, "day") > 10)
                 return {
                     data: [
                         {
@@ -56,9 +56,9 @@ describe("useUserVeBetterStats", () => {
 
     it("should return totalImpact if not returned by the first call", async () => {
         ;(fetchVeBetterUserGeneralOverview as jest.Mock).mockResolvedValue({})
-        ;(fetchVeBetterUserOverview as jest.Mock).mockImplementation((_address, startDate) => {
+        ;(fetchVeBetterUserOverview as jest.Mock).mockImplementation((_address, startDate, endDate) => {
             //It is a monthly overview request
-            if (moment(startDate).isBefore(moment().utc().startOf("week")))
+            if (moment(endDate).diff(startDate, "day") > 10)
                 return {
                     data: [
                         {
