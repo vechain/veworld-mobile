@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.5 (2025-10-01)</small>
+
+* build: init ([b1261ec](https://github.com/vechain/veworld-mobile/commit/b1261ec))
+* 370 coinbase   get working on mobile (#3339) ([2b10681](https://github.com/vechain/veworld-mobile/commit/2b10681)), closes [#3339](https://github.com/vechain/veworld-mobile/issues/3339)
+
 ## <small>2.4.4 (2025-09-25)</small>
 
 * build: init ([a565bd2](https://github.com/vechain/veworld-mobile/commit/a565bd2))
