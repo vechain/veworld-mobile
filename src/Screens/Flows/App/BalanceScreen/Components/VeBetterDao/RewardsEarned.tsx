@@ -6,7 +6,7 @@ import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { B3TR, COLORS, ColorThemeType } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { BigNutils } from "~Utils"
+import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
 
 type Props = {
     total: number | string | undefined
@@ -38,7 +38,7 @@ export const RewardsEarned = ({ week, month, total }: Props) => {
                                 color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
                                 typographyFont="bodySemiBold"
                                 testID="REWARDS_EARNED_WEEK_VALUE">
-                                {BigNutils(week ?? "0").toTokenFormatFull_string(2, formatLocale)}
+                                {formatDisplayNumber(week ?? "0", { locale: formatLocale })}
                             </BaseText>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
@@ -56,7 +56,7 @@ export const RewardsEarned = ({ week, month, total }: Props) => {
                                 color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
                                 typographyFont="bodySemiBold"
                                 testID="REWARDS_EARNED_MONTH_VALUE">
-                                {BigNutils(month ?? "0").toTokenFormatFull_string(2, formatLocale)}
+                                {formatDisplayNumber(month ?? "0", { locale: formatLocale })}
                             </BaseText>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
@@ -76,7 +76,7 @@ export const RewardsEarned = ({ week, month, total }: Props) => {
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
                             typographyFont="subSubTitleSemiBold"
                             testID="REWARDS_EARNED_TOTAL_VALUE">
-                            {BigNutils(total ?? "0").toTokenFormatFull_string(2, formatLocale)}
+                            {formatDisplayNumber(total ?? "0", { locale: formatLocale })}
                         </BaseText>
                         <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="bodyMedium">
                             {B3TR.symbol}
