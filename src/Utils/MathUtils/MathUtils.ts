@@ -12,11 +12,12 @@ const getEven = (num: number) => {
  * @returns A function that creates a deterministic number
  */
 const deterministicRNG = (seed: number) => {
-    var m = 2 ** 35 - 31
-    var a = 185852
-    var s = seed % m
+    const m = 2 ** 35 - 31
+    const a = 185852
+    let s = seed % m
     return function () {
-        return (s = (s * a) % m) / m
+        s = (s * a) % m
+        return s / m
     }
 }
 
