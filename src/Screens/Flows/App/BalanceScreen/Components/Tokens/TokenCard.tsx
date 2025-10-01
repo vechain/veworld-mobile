@@ -1,10 +1,10 @@
 import { useNavigation } from "@react-navigation/native"
 import { default as React, useCallback, useMemo, useState } from "react"
-import { LayoutChangeEvent, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, VET, VTHO, VOT3 } from "~Constants"
+import { B3TR, COLORS, VET, VOT3, VTHO } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
@@ -23,7 +23,7 @@ export const TokenCard = ({ token }: Props) => {
     const navigation = useNavigation()
     const currency = useAppSelector(selectCurrency)
     const { styles } = useThemedStyles(baseStyles)
-    const [availableChartWidth, setAvailableChartWidth] = useState<number>()
+    const [showChart, setShowChart] = useState(true)
     const name = useMemo(() => {
         switch (token.symbol) {
             case "VET":
@@ -52,14 +52,7 @@ export const TokenCard = ({ token }: Props) => {
     const tokenWithCompleteInfo = useTokenWithCompleteInfo(token)
 
     const chartIcon = useMemo(() => {
-        if (!chartData || !showFiatBalance) return null
-
-        const hasSpaceForChart = availableChartWidth ? availableChartWidth >= 110 : true
-
-        // Show icon if there's no space for chart (since any token with fiat balance supports charts)
-        const shouldShowIcon = !hasSpaceForChart
-
-        if (!shouldShowIcon) return null
+        if (!chartData || !showFiatBalance || showChart) return null
 
         return (
             <BaseIcon
@@ -69,7 +62,7 @@ export const TokenCard = ({ token }: Props) => {
                 testID="TOKEN_CARD_CHART_ICON"
             />
         )
-    }, [isGoingUp, availableChartWidth, chartData, showFiatBalance])
+    }, [chartData, showFiatBalance, showChart, isGoingUp])
 
     const symbol = useMemo(() => {
         switch (token.symbol) {
@@ -100,20 +93,6 @@ export const TokenCard = ({ token }: Props) => {
 
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
-    const onLayoutChange = useCallback(
-        (event: LayoutChangeEvent) => {
-            const { width } = event.nativeEvent.layout
-            // p={16}*2 + iconSize={40} + gap={16} + gap={8} + balance(~100px estimated)
-            const estimatedFixedSpace = 32 + 40 + 16 + 8 + 100 // ~196px
-            const availableSpace = width - estimatedFixedSpace
-
-            if (Math.abs((availableChartWidth || 0) - availableSpace) > 5) {
-                setAvailableChartWidth(availableSpace)
-            }
-        },
-        [availableChartWidth],
-    )
-
     // Only allow navigation for tokens with detailed information available
     const supportsDetailNavigation = useMemo(
         () => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol),
@@ -136,8 +115,7 @@ export const TokenCard = ({ token }: Props) => {
             py={24}
             flexDirection="row"
             bg={COLORS.WHITE}
-            containerStyle={styles.root}
-            onLayout={onLayoutChange}>
+            containerStyle={styles.root}>
             <BaseView flexDirection="row" gap={16} flex={1}>
                 <TokenImage
                     icon={token.icon}
@@ -167,7 +145,7 @@ export const TokenCard = ({ token }: Props) => {
                 )}
             </BaseView>
 
-            <Chart token={token} availableWidth={availableChartWidth} />
+            <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
 
             <BaseView flexDirection="column" alignItems="flex-end" flexShrink={0}>
                 {showFiatBalance ? (
@@ -211,5 +189,6 @@ const baseStyles = () =>
     StyleSheet.create({
         root: {
             height: 80,
+            gap: 16,
         },
     })

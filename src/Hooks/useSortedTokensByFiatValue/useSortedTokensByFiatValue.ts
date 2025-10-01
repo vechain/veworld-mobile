@@ -83,7 +83,9 @@ export const useSortedTokensByFiatValue = (accountAddress?: string) => {
 
     const vechainTokenWithBalances = useMemo(() => {
         if (!vechainTokenBalances) return []
-        return [VET, VTHO, B3TRToken, VOT3Token].map((tk, idx) => ({ ...tk, balance: vechainTokenBalances?.[idx] }))
+        return [VET, VTHO, B3TRToken, VOT3Token]
+            .map((tk, idx) => ({ ...tk, balance: vechainTokenBalances?.[idx] }))
+            .filter(tk => Boolean(tk.balance))
     }, [B3TRToken, VOT3Token, vechainTokenBalances])
 
     const tokenBalances = useMemo(

@@ -1,33 +1,33 @@
-import React, { useMemo } from "react"
-import { StyleSheet, View } from "react-native"
+import React, { useCallback, useMemo, useRef } from "react"
+import { LayoutChangeEvent, StyleSheet } from "react-native"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { LineChart } from "react-native-wagmi-charts"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
-import { B3TR, COLORS, SCREEN_WIDTH } from "~Constants"
+import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { FungibleToken } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import ChartUtils from "~Utils/ChartUtils"
 
 // Chart configuration constants
-const CHART_WIDTH = 60
+export const CHART_WIDTH = 60
 const CHART_HEIGHT = 32
-const CHART_PADDING = 12
 const CHART_STROKE_WIDTH = 2
 
-const MIN_CHART_SPACE = CHART_WIDTH + CHART_PADDING
-const B3TR_EXTRA_SPACE = 20
-const FALLBACK_SCREEN_THRESHOLD = 450
 // Supported chart tokens (any token with CoinGecko ID supports charts)
 const SUPPORTED_CHART_TOKENS = new Set(Object.keys(getCoinGeckoIdBySymbol))
 
 type Props = {
     token: FungibleToken
-    availableWidth?: number
+    setShowChart: (value: boolean) => void
+    showChart: boolean
 }
 
-export const Chart = ({ token, availableWidth }: Props) => {
+export const Chart = ({ token, setShowChart, showChart }: Props) => {
     const currency = useAppSelector(selectCurrency)
     const { styles } = useThemedStyles(baseStyles)
+    const opacity = useSharedValue(0)
+    const rendered = useRef(false)
 
     // Early check for supported tokens to optimize API calls
     const isTokenSupported = SUPPORTED_CHART_TOKENS.has(token.symbol)
@@ -47,19 +47,30 @@ export const Chart = ({ token, availableWidth }: Props) => {
             return false
         }
 
-        // Use available width if provided, otherwise fallback to screen width
-        if (availableWidth !== undefined) {
-            const requiredSpace = token.symbol === B3TR.symbol ? MIN_CHART_SPACE + B3TR_EXTRA_SPACE : MIN_CHART_SPACE
-            return availableWidth >= requiredSpace
-        }
+        return showChart
+    }, [isTokenSupported, showChart])
 
-        return SCREEN_WIDTH >= FALLBACK_SCREEN_THRESHOLD
-    }, [isTokenSupported, availableWidth, token.symbol])
+    const animatedStyles = useAnimatedStyle(() => {
+        return {
+            opacity: opacity.value,
+        }
+    }, [opacity.value])
+
+    const onLayout = useCallback(
+        (e: LayoutChangeEvent) => {
+            if (rendered.current) return
+            rendered.current = true
+            if (e.nativeEvent.layout.width < CHART_WIDTH) {
+                setShowChart(false)
+            } else opacity.value = withTiming(1)
+        },
+        [opacity, setShowChart],
+    )
 
     if (!shouldDisplayChart) return null
 
     return (
-        <View style={styles.root}>
+        <Animated.View style={[styles.root, animatedStyles]} onLayout={onLayout} testID="TOKEN_CARD_CHART">
             <LineChart.Provider data={downsampled ?? DEFAULT_LINE_CHART_DATA}>
                 <LineChart width={CHART_WIDTH} height={CHART_HEIGHT} yGutter={1}>
                     <LineChart.Path
@@ -69,7 +80,7 @@ export const Chart = ({ token, availableWidth }: Props) => {
                     />
                 </LineChart>
             </LineChart.Provider>
-        </View>
+        </Animated.View>
     )
 }
 
