@@ -13,6 +13,8 @@ import { useBottomSheetModal, useGetDappMetadataFromUrl } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
+import { useAppSelector } from "~Storage/Redux/Hooks"
+import { selectLastNavigationSource } from "~Storage/Redux/Selectors"
 import { DAppUtils } from "~Utils/DAppUtils"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
@@ -37,6 +39,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
     const { betterWorldFeature } = useFeatureFlags()
     const dappMetadata = useGetDappMetadataFromUrl(navigationUrl)
     const fetchDynamicLogo = useDynamicAppLogo({})
+    const lastNavigationSource = useAppSelector(selectLastNavigationSource)
 
     const nav =
         useNavigation<
@@ -47,9 +50,14 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
 
     const _returnScreen = useMemo(() => {
         if (returnScreen) return returnScreen
+
+        const validNavigationSources = [Routes.HOME, Routes.APPS, Routes.DISCOVER]
+        if (lastNavigationSource && validNavigationSources.includes(lastNavigationSource as Routes)) {
+            return lastNavigationSource as Routes.HOME | Routes.APPS | Routes.DISCOVER
+        }
         if (betterWorldFeature.appsScreen.enabled) return Routes.APPS
         return Routes.DISCOVER
-    }, [betterWorldFeature.appsScreen.enabled, returnScreen])
+    }, [betterWorldFeature.appsScreen.enabled, returnScreen, lastNavigationSource])
 
     const { onOpen: openBottomSheet, ref: bottomSheetRef, onClose: closeBottomSheet } = useBottomSheetModal()
 

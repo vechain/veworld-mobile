@@ -24,6 +24,7 @@ type Props = {
     selected?: boolean
     containerStyle?: StyleProp<ViewStyle>
     balanceToken?: "VTHO" | "VET" | "FIAT"
+    disabled?: boolean
     onAnimationFinished?: () => void
 } & Pick<ViewProps, "testID" | "children">
 
@@ -38,6 +39,7 @@ export const SelectableAccountCard = memo(
         testID,
         children,
         balanceToken = "VET",
+        disabled,
         onAnimationFinished,
     }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
@@ -145,6 +147,7 @@ export const SelectableAccountCard = memo(
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
                 <AnimatedTouchableOpacity
+                    disabled={disabled}
                     testID={testID}
                     onPress={_onPress}
                     style={[styles.container, rootAnimatedStyles, containerStyle]}
