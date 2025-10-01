@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, VET, VOT3 } from "~Constants"
+import { B3TR, COLORS, VOT3 } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { FungibleTokenWithBalance } from "~Model"
@@ -91,7 +91,7 @@ export const TokenCard = ({ token }: Props) => {
             <BaseView flexDirection="row" gap={16} flex={1}>
                 <TokenImage
                     icon={token.icon}
-                    isVechainToken={AddressUtils.compareAddresses(VET.address, token.address)}
+                    isVechainToken={AddressUtils.isVechainToken(token.address)}
                     iconSize={40}
                     isCrossChainToken={isCrossChainToken}
                     rounded={!isCrossChainToken}
