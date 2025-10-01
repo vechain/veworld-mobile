@@ -138,4 +138,23 @@ describe("AssetDetailScreen", () => {
 
         expect(screen.getByText("Vechain")).toBeOnTheScreen()
     })
+
+    it("should render stargate banner if token is VET and there are no nodes", () => {
+        ;(useFeatureFlags as jest.Mock).mockReturnValue(mockedFeatureFlags)
+        ;(useRoute as jest.Mock).mockReturnValue({
+            name: Routes.HOME,
+        })
+        render(
+            <AssetDetailScreen
+                navigation={navigationMock}
+                route={{ params: { token: VETWithCompleteInfo }, key: "test", name: Routes.TOKEN_DETAILS }}
+            />,
+            {
+                wrapper: createWrapper({}),
+            },
+        )
+
+        expect(screen.getByText("Vechain")).toBeOnTheScreen()
+        expect(screen.getByTestId("token_screen_carousel")).toBeOnTheScreen()
+    })
 })

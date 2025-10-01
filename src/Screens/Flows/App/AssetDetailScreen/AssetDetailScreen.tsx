@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import striptags from "striptags"
 import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
-import { B3TR } from "~Constants"
+import { B3TR, VET } from "~Constants"
 import { typography } from "~Constants/Theme"
 import { useBottomSheetModal, useBottomSheetRef, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -14,6 +14,7 @@ import { selectBalanceVisible, selectSelectedAccount, useAppSelector } from "~St
 import { AccountUtils } from "~Utils"
 import { AssetChart, ConvertedBetterBottomSheet, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
+import { BannersCarousel } from "~Screens"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -94,6 +95,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
                                 <AlertInline status="info" variant="inline" message={LL.ALERT_MSG_VOT3_BALANCE()} />
                             </BaseView>
                         )}
+
+                        {token.symbol === VET.symbol && <BannersCarousel location="token_screen" />}
 
                         <BaseSpacer height={40} />
 
