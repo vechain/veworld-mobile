@@ -237,7 +237,6 @@ const baseStyles = () =>
             borderRadius: 12,
             paddingVertical: 12,
             paddingHorizontal: 16,
-            // height: 80,
         },
         iconContainer: {
             justifyContent: "center",
