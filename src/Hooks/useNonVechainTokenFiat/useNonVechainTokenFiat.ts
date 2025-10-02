@@ -12,7 +12,10 @@ export const useNonVechainTokenFiat = ({
     accountAddress?: string
     enabled?: boolean
 } = {}) => {
-    const { data: visibleTokens } = useNonVechainTokensBalance({ accountAddress, enabled })
+    const { data: visibleTokens, isLoading } = useNonVechainTokensBalance({
+        accountAddress,
+        enabled,
+    })
     const currency = useAppSelector(selectCurrency).toLowerCase()
 
     const { data: nonVeChainTokens } = useVechainStatsTokensInfo()
@@ -37,5 +40,8 @@ export const useNonVechainTokenFiat = ({
         })
     }, [currency, nonVeChainTokens, visibleTokens])
 
-    return nonVechainTokensFiat
+    return {
+        data: nonVechainTokensFiat,
+        isLoading,
+    }
 }
