@@ -7,7 +7,7 @@ export const StakingSection = () => {
     return (
         <>
             <StargateCarousel />
-            <BaseSpacer height={40} />
+            <BaseSpacer height={32} />
             <BalanceActivity tab="STAKING" />
         </>
     )
