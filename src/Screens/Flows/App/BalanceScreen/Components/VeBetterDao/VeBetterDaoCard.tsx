@@ -11,7 +11,7 @@ import { useIsVeBetterUser } from "~Hooks/useIsVeBetterUser"
 import { useUserVeBetterStats } from "~Hooks/useUserVeBetterStats"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
+import { BigNutils } from "~Utils"
 import { RewardsEarned } from "./RewardsEarned"
 import { StatsCard } from "./StatsCard"
 
@@ -64,7 +64,7 @@ export const VeBetterDaoCard = () => {
                     {LL.VBD_YOUR_BETTER_ACTIONS()}
                 </BaseText>
                 <BaseText color={theme.isDark ? COLORS.WHITE : COLORS.GREY_700} style={styles.actionsText}>
-                    {formatDisplayNumber(data?.actionsRewarded ?? "0", { locale: formatLocale, forceDecimals: 0 })}
+                    {BigNutils(data?.actionsRewarded ?? "0").toCurrencyFormat_string(0, formatLocale)}
                 </BaseText>
             </BaseView>
 

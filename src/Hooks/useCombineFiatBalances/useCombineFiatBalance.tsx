@@ -1,11 +1,7 @@
 import { useCallback } from "react"
 
 export const useCombineFiatBalances = () => {
-    const isAlmostZero = useCallback((b: string) => {
-        if (b?.includes("<")) return true
-        const numValue = Number(b)
-        return !Number.isNaN(numValue) && numValue > 0 && numValue < 0.01
-    }, [])
+    const isAlmostZero = useCallback((b: string) => b?.includes("<"), [])
 
     const combineFiatBalances = useCallback(
         (balances: string[]) => {

@@ -10,13 +10,12 @@ import Animated, {
 } from "react-native-reanimated"
 import { AccountIcon, BaseSkeleton, BaseText, BaseView, LedgerBadge } from "~Components"
 import { COLORS, ColorThemeType, typography, VET, VTHO } from "~Constants"
-import { useFormatFiat, useThemedStyles, useVns } from "~Hooks"
+import { useThemedStyles, useVns } from "~Hooks"
 import { useSimplifiedTokenBalance } from "~Hooks/useTokenBalance"
 import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
 import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
-import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
 
 type Props = {
     account: AccountWithDevice
@@ -59,7 +58,6 @@ export const SelectableAccountCard = memo(
             enabled: balanceToken === "FIAT",
         })
         const isBalanceVisible = useAppSelector(selectBalanceVisible)
-        const { formatLocale } = useFormatFiat()
         const { name: vnsName, address: vnsAddress } = useVns({
             name: "",
             address: account.address,
@@ -86,10 +84,10 @@ export const SelectableAccountCard = memo(
 
             if (balanceToken === "FIAT") return renderedFiatBalance
 
-            const tokenBalance = balanceToken === "VET" ? vetBalance : vthoBalance
-            const humanBalance = BigNutils(tokenBalance).toHuman(VET.decimals).toString
-            return formatDisplayNumber(humanBalance, { locale: formatLocale })
-        }, [balanceToken, formatLocale, isBalanceVisible, renderedFiatBalance, vetBalance, vthoBalance])
+            return BigNutils(balanceToken === "VET" ? vetBalance : vthoBalance)
+                .toHuman(VET.decimals)
+                .toTokenFormat_string(2)
+        }, [balanceToken, isBalanceVisible, renderedFiatBalance, vetBalance, vthoBalance])
 
         const rootAnimatedStyles = useAnimatedStyle(() => {
             const selectedColor = theme.isDark ? COLORS.LIME_GREEN : COLORS.PRIMARY_800
