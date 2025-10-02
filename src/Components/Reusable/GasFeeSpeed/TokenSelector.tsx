@@ -70,7 +70,10 @@ const baseStyles = (theme: ColorThemeType) =>
             borderWidth: theme.isDark ? 0 : 1,
             backgroundColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.WHITE,
             gap: 4,
+        },
+        textContainer: {
+            flex: 1,
+            flexDirection: "row",
             justifyContent: "center",
         },
-        textContainer: { flex: 1, flexDirection: "row" },
     })
