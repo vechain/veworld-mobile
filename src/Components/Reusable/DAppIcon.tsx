@@ -1,91 +1,123 @@
 import React, { useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import FastImage from "react-native-fast-image"
+import FastImage, { Source } from "react-native-fast-image"
 import { BaseIcon, BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 
+export type DappIconSize = 16 | 24 | 32 | 48 | 64 | 72 | 88
+
 type Props = {
     /**
-     * Size of the image
+     * Size of the image.
+     * @default 48
      */
-    size: number
+    size?: DappIconSize
     /**
-     * URI of the app icon
+     * URI of the app. Use `useAppLogo` or `useDynamicAppLogo` to get it
      */
-    iconUri: string | undefined
+    uri: string | undefined
     /**
-     * Fallback icon
-     * @default 'icon-globe'
+     * testID for the fallback icon
+     * @default DAPP_LOGO_FALLBACK_ICON
      */
-    fallbackIcon?: IconKey
+    fallbackTestID?: string
     /**
-     * Background color on fallback.
+     * testID for the image
+     * @default DAPP_LOGO_IMAGE
+     */
+    imageTestID?: string
+    /**
+     * Background color for the fallback icon
      * @default theme.colors.history.historyItem.iconBackground
      */
     fallbackBg?: string
     /**
-     * Icon color on fallback.
+     * Icon color for the fallback icon
      * @default theme.colors.history.historyItem.iconColor
      */
     fallbackIconColor?: string
+    /**
+     * Fallback icon
+     * @default icon-image
+     */
+    fallbackIcon?: IconKey
+    /**
+     * Caching strategy for the logo.
+     * @default FastImage.cacheControl.web
+     */
+    cachingStrategy?: Source["cache"]
 }
 
-/**
- * Known mapping for fallback sizes.
- * Key is the size of the whole image (which is passed in props)
- * Value is the size of the fallback icon
- */
-const KNOWN_FALLBACK_SIZE = {
-    16: 8,
-    24: 12,
-    32: 16,
-    48: 20,
-    64: 24,
-    72: 24,
-    88: 32,
-} as Record<number, number>
+const sizeDetails: Record<DappIconSize, { borderRadius: number; fallbackIconSize: number }> = {
+    "16": {
+        borderRadius: 2,
+        fallbackIconSize: 8,
+    },
+    "24": {
+        borderRadius: 4,
+        fallbackIconSize: 12,
+    },
+    "32": {
+        borderRadius: 4,
+        fallbackIconSize: 16,
+    },
+    "48": {
+        borderRadius: 8,
+        fallbackIconSize: 20,
+    },
+    "64": {
+        borderRadius: 8,
+        fallbackIconSize: 24,
+    },
+    "72": {
+        borderRadius: 8,
+        fallbackIconSize: 24,
+    },
+    "88": {
+        borderRadius: 8,
+        fallbackIconSize: 32,
+    },
+}
 
 export const DAppIcon = ({
-    size,
-    iconUri,
-    fallbackIcon = "icon-globe",
+    size = 48,
+    uri,
     fallbackBg: _fallbackBg,
     fallbackIconColor: _fallbackIconColor,
+    fallbackIcon = "icon-globe",
+    imageTestID = "DAPP_LOGO_IMAGE",
+    fallbackTestID = "DAPP_LOGO_FALLBACK_ICON",
 }: Props) => {
     const [loadFallback, setLoadFallback] = useState(false)
-
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const fallbackBg = useMemo(
         () => _fallbackBg ?? theme.colors.history.historyItem.iconBackground,
         [_fallbackBg, theme.colors.history.historyItem.iconBackground],
     )
-    const fallbackIconColor = useMemo(
-        () => _fallbackIconColor ?? theme.colors.history.historyItem.iconColor,
-        [_fallbackIconColor, theme.colors.history.historyItem.iconColor],
-    )
 
     return (
         <BaseView
-            style={[styles.iconContainer, { width: size, height: size }]}
-            bg={loadFallback || !iconUri ? fallbackBg : "transparent"}>
-            {loadFallback || !iconUri ? (
+            style={[styles.iconContainer, { width: size, height: size, borderRadius: sizeDetails[size].borderRadius }]}
+            bg={loadFallback || !uri ? fallbackBg : "transparent"}>
+            {loadFallback || !uri ? (
                 <BaseIcon
                     name={fallbackIcon}
-                    size={KNOWN_FALLBACK_SIZE[size] ?? 20}
-                    color={fallbackIconColor}
-                    testID="DAPP_ICON_FALLBACK_ICON"
+                    size={sizeDetails[size].fallbackIconSize}
+                    color={theme.colors.history.historyItem.iconColor}
+                    testID={fallbackTestID}
                 />
             ) : (
                 <FastImage
                     source={{
-                        uri: iconUri,
+                        uri: uri,
+                        cache: FastImage.cacheControl.web,
                     }}
-                    style={[{ width: size, height: size }]}
+                    style={{ width: size, height: size }}
                     onError={() => setLoadFallback(true)}
                     resizeMode="contain"
-                    testID="DAPP_ICON_IMAGE"
+                    testID={imageTestID}
                 />
             )}
         </BaseView>
@@ -94,8 +126,11 @@ export const DAppIcon = ({
 
 const baseStyles = () =>
     StyleSheet.create({
-        iconContainer: {
+        icon: {
             borderRadius: 8,
+            overflow: "hidden",
+        },
+        iconContainer: {
             overflow: "hidden",
             alignItems: "center",
             justifyContent: "center",
