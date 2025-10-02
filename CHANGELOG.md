@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.5 (2025-10-02)</small>
+
+* build: init ([58ef812](https://github.com/vechain/veworld-mobile/commit/58ef812))
+* Fix token selector width (#3345) ([c33bb44](https://github.com/vechain/veworld-mobile/commit/c33bb44)), closes [#3345](https://github.com/vechain/veworld-mobile/issues/3345)
+
 ## <small>2.4.4 (2025-09-25)</small>
 
 * build: init ([a565bd2](https://github.com/vechain/veworld-mobile/commit/a565bd2))
