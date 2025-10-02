@@ -867,6 +867,8 @@
   "PUSH_NOTIFICATIONS_UPDATES": "Mises à jour",
   "PUSH_NOTIFICATIONS_VEBETTERDAO": "VeBetter",
   "PUSH_NOTIFICATIONS_VOTE_REMINDER": "Rappel de vote",
+  "QR_CODE_DESCRIPTION": "Utilisez votre code QR pour recevoir des transferts",
+  "QR_CODE_TITLE": "Votre code QR",
   "RECAP": "Récapitulatif",
   "RECEIPT_OUTPUT_B3TR_ACTION": "Action VeBetter",
   "RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS": "Récompenses de vote",

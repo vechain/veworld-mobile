@@ -867,6 +867,8 @@
   "PUSH_NOTIFICATIONS_UPDATES": "Güncellemeler",
   "PUSH_NOTIFICATIONS_VEBETTERDAO": "VeBetter",
   "PUSH_NOTIFICATIONS_VOTE_REMINDER": "Oy hatırlatıcısı",
+  "QR_CODE_DESCRIPTION": "Transfer almak için QR kodunuzu kullanın",
+  "QR_CODE_TITLE": "QR kodunuz",
   "RECAP": "Özet",
   "RECEIPT_OUTPUT_B3TR_ACTION": "VeBetter eylemi",
   "RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS": "Oylama ödülleri",
