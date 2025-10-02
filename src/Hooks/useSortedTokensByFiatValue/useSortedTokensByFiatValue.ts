@@ -3,10 +3,10 @@ import { VET, VTHO } from "~Constants"
 import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
 import { useTokenWithCompleteInfo, TokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
-import { useMultipleTokensBalance } from "~Hooks/useTokenBalance"
+import { useMultipleTokensBalance, useTokenBalance } from "~Hooks/useTokenBalance"
 import { FungibleToken, FungibleTokenWithBalance } from "~Model"
 import { selectNetworkVBDTokens, selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
-import { BigNutils } from "~Utils"
+import { BigNutils, BalanceUtils } from "~Utils"
 
 /**
  * Extract numeric value from formatted fiat balance string
@@ -21,21 +21,35 @@ const extractFiatValue = (fiatBalanceString: string): number => {
 
 /**
  * Pre-calculate all fiat values once instead of during every sort comparison
+ * Extracts numeric values from formatted fiat strings for efficient sorting
  */
 const createFiatBalanceMap = (
     vetInfo: TokenWithCompleteInfo,
     vthoInfo: TokenWithCompleteInfo,
     b3trInfo: TokenWithCompleteInfo,
     b3trToken: FungibleToken,
+    vot3Token: FungibleToken,
+    vot3RawBalance: string,
     nonVechainTokensFiat: string[],
     nonVechainTokenWithBalances: FungibleTokenWithBalance[],
 ): Map<string, number> => {
     const fiatMap = new Map<string, number>()
 
-    // VeChain ecosystem tokens
+    // VeChain ecosystem tokens - parse fiat balance strings
     fiatMap.set(VET.address, extractFiatValue(vetInfo.fiatBalance))
     fiatMap.set(VTHO.address, extractFiatValue(vthoInfo.fiatBalance))
-    fiatMap.set(b3trToken.address, extractFiatValue(b3trInfo.fiatBalance))
+
+    // Calculate combined B3TR + VOT3 fiat balance using numeric exchange rate
+    // B3TR fiat is already calculated by useTokenWithCompleteInfo
+    const b3trFiatValue = extractFiatValue(b3trInfo.fiatBalance)
+
+    // VOT3 uses same exchange rate as B3TR (they're the same token)
+    // Calculate VOT3 fiat directly from raw balance and exchange rate
+    const vot3FiatRaw = BalanceUtils.getFiatBalance(vot3RawBalance, b3trInfo.exchangeRate ?? 0, vot3Token.decimals)
+    const vot3FiatValue = extractFiatValue(vot3FiatRaw)
+
+    // Combine both B3TR and VOT3 for sorting
+    fiatMap.set(b3trToken.address, b3trFiatValue + vot3FiatValue)
 
     // Non-VeChain tokens (including VeDelegate)
     for (const [index, token] of nonVechainTokenWithBalances.entries()) {
@@ -90,6 +104,10 @@ export const useSortedTokensByFiatValue = (accountAddress?: string) => {
     const vetInfo = useTokenWithCompleteInfo(VET, address)
     const vthoInfo = useTokenWithCompleteInfo(VTHO, address)
     const b3trInfo = useTokenWithCompleteInfo(B3TRToken, address)
+    const { data: vot3Balance } = useTokenBalance({
+        tokenAddress: VOT3Token.address,
+        address,
+    })
     const { data: nonVechainTokensFiat, isLoading: isLoadingNonVechainTokensFiat } = useNonVechainTokenFiat({
         accountAddress: address,
     })
@@ -126,6 +144,8 @@ export const useSortedTokensByFiatValue = (accountAddress?: string) => {
             vthoInfo,
             b3trInfo,
             B3TRToken,
+            VOT3Token,
+            vot3Balance?.balance ?? "0",
             nonVechainTokensFiat,
             nonVechainTokenWithBalances,
         )
@@ -141,10 +161,11 @@ export const useSortedTokensByFiatValue = (accountAddress?: string) => {
         vetInfo,
         vthoInfo,
         b3trInfo,
+        vot3Balance,
         nonVechainTokensFiat,
         nonVechainTokenWithBalances,
         B3TRToken,
-        VOT3Token.symbol,
+        VOT3Token,
     ])
 
     const isLoading =
