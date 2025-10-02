@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.5 (2025-10-02)</small>
+
+* build: init ([cadb517](https://github.com/vechain/veworld-mobile/commit/cadb517))
+* fix: hide tabbar on buy (#3344) ([92633b0](https://github.com/vechain/veworld-mobile/commit/92633b0)), closes [#3344](https://github.com/vechain/veworld-mobile/issues/3344)
+
 ## <small>2.4.4 (2025-09-25)</small>
 
 * build: init ([a565bd2](https://github.com/vechain/veworld-mobile/commit/a565bd2))
