@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
-import { formatMarketData, formatFiatAmount } from "~Utils/StandardizedFormatting"
+import { BigNutils } from "~Utils"
 
 export type MarketInfo = {
     marketCap: number
@@ -10,7 +10,7 @@ export type MarketInfo = {
 }
 
 export const useFormattedMarketInfo = ({ marketInfo }: { marketInfo?: MarketInfo }) => {
-    const { formatLocale } = useFormatFiat({ minimumFractionDigits: 0, maximumFractionDigits: 0 })
+    const { formatFiat } = useFormatFiat({ minimumFractionDigits: 0, maximumFractionDigits: 0 })
     const {
         totalVolume: _totalVolume,
         marketCap: _marketCap,
@@ -18,20 +18,15 @@ export const useFormattedMarketInfo = ({ marketInfo }: { marketInfo?: MarketInfo
         circulatingSupply: _circulatingSupply,
     } = marketInfo || {}
 
-    const marketCap = useMemo(() => {
-        return formatFiatAmount(_marketCap ?? 0, undefined, { locale: formatLocale })
-    }, [_marketCap, formatLocale])
-
-    const totalVolume = useMemo(() => {
-        return formatFiatAmount(_totalVolume ?? 0, undefined, { locale: formatLocale })
-    }, [_totalVolume, formatLocale])
+    const marketCap = useMemo(() => formatFiat({ amount: _marketCap }), [formatFiat, _marketCap])
+    const totalVolume = useMemo(() => formatFiat({ amount: _totalVolume }), [formatFiat, _totalVolume])
 
     const totalSupply = useMemo(() => {
-        return formatMarketData(_totalSupply ?? 0)
+        return BigNutils(_totalSupply ?? 0).toTokenFormat_string(0)
     }, [_totalSupply])
 
     const circulatingSupply = useMemo(() => {
-        return formatMarketData(_circulatingSupply ?? 0)
+        return BigNutils(_circulatingSupply ?? 0).toCurrencyFormat_string(0)
     }, [_circulatingSupply])
 
     return {

@@ -12,10 +12,10 @@ const marketInfo: MarketInfo = {
 }
 
 const results = {
-    circulatingSupply: "72.7B",
-    marketCap: "$1.4B",
-    totalSupply: "86B",
-    totalVolume: "$34.7M",
+    circulatingSupply: "72,714,516,834",
+    marketCap: "1,429,387,590",
+    totalSupply: "85,985,041,177",
+    totalVolume: "34,734,564",
 }
 
 jest.mock("~Storage/Redux/Selectors", () => ({
@@ -36,9 +36,9 @@ describe("useFormattedMarketInfo", () => {
 
         expect(result.current).toEqual({
             circulatingSupply: null,
-            marketCap: "$0.00",
+            marketCap: "$0",
             totalSupply: null,
-            totalVolume: "$0.00",
+            totalVolume: "$0",
         })
     })
 
@@ -59,7 +59,7 @@ describe("useFormattedMarketInfo", () => {
             wrapper: TestWrapper,
         })
 
-        expect(result.current.marketCap).toBe(results.marketCap)
+        expect(result.current.marketCap).toBe(`$${results.marketCap}`)
     })
 
     it("should display the correct totalSupply", async () => {
@@ -79,6 +79,6 @@ describe("useFormattedMarketInfo", () => {
             wrapper: TestWrapper,
         })
 
-        expect(result.current.totalVolume).toBe(results.totalVolume)
+        expect(result.current.totalVolume).toBe(`$${results.totalVolume}`)
     })
 })
