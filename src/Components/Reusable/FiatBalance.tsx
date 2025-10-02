@@ -3,8 +3,6 @@ import { BaseSkeleton, BaseText, BaseTextProps, BaseView, BaseViewProps } from "
 import { COLORS } from "~Constants"
 import { useCombineFiatBalances, useTheme } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
-import { formatWithLessThan } from "~Utils/StandardizedFormatting"
-import { BigNutils } from "~Utils"
 
 type FiatBalanceProps = {
     isVisible?: boolean
@@ -59,22 +57,7 @@ export const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps)
     const { amount, areAlmostZero } = useMemo(() => combineFiatBalances(balances), [balances, combineFiatBalances])
 
     const { formatFiat } = useFormatFiat()
-    const renderBalance = useMemo(() => {
-        if (!isVisible) {
-            return formatFiat({ amount, cover: true })
-        }
-
-        const isZero = BigNutils(amount).isZero
-        if (isZero) {
-            return formatFiat({ amount: 0, cover: false })
-        }
-
-        if (areAlmostZero) {
-            return formatWithLessThan(amount)
-        }
-
-        return formatFiat({ amount, cover: false })
-    }, [formatFiat, amount, isVisible, areAlmostZero])
+    const renderBalance = useMemo(() => formatFiat({ amount, cover: !isVisible }), [formatFiat, amount, isVisible])
 
     return isLoading ? (
         <BaseView testID="fiat-balance-skeleton" pt={4} {...baseviewProps}>
@@ -90,7 +73,7 @@ export const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps)
         <BaseView testID="fiat-balance" {...baseviewProps}>
             <BaseView flexDirection="row">
                 <BaseText typographyFont={typographyFont} color={color}>
-                    {prefix}
+                    {areAlmostZero && isVisible ? "< " : prefix}
                     {renderBalance}
                 </BaseText>
             </BaseView>

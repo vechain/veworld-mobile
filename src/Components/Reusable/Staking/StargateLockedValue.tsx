@@ -9,7 +9,6 @@ import { useI18nContext } from "~i18n"
 import { NftData } from "~Model"
 import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 import { BalanceUtils, BigNutils } from "~Utils"
-import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
 import { FiatBalance } from "../FiatBalance"
 
 type Props = {
@@ -34,9 +33,7 @@ export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle, isNodeOwn
     }, [nfts])
 
     const formattedLockedVet = useMemo(() => {
-        const humanBalance = BigNutils(totalLockedVet.toBN).toHuman(VET.decimals).toString
-
-        return formatDisplayNumber(humanBalance, { locale: formatLocale })
+        return BigNutils(totalLockedVet.toBN).toHuman(VET.decimals).toTokenFormatFull_string(2, formatLocale)
     }, [totalLockedVet, formatLocale])
 
     const fiatBalance = useMemo(() => {
