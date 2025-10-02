@@ -128,7 +128,7 @@ export const TokenCard = ({ token }: Props) => {
             action={supportsDetailNavigation ? handlePress : undefined}
             py={24}
             flexDirection="row"
-            bg={theme.colors.card as string}
+            bg={theme.colors.card}
             containerStyle={styles.root}>
             <BaseView flexDirection="row" gap={16} flex={1}>
                 <TokenImage
