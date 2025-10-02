@@ -1,4 +1,5 @@
-import { formatDateTime, isValidDateLocale, DEFAULT_TIMEZONE } from "./DateUtils"
+import { Locales } from "~i18n"
+import { formatDateTime, isValidDateLocale, DEFAULT_TIMEZONE, formatDate, getMomentLocale } from "./DateUtils"
 
 describe("isValidLocale", () => {
     beforeAll(() => {
@@ -47,5 +48,46 @@ describe("formatDateTime", () => {
     it("should format the timestamp correctly in German", () => {
         const timestamp = 1678689944000
         expect(formatDateTime(timestamp, "de", DEFAULT_TIMEZONE)).toBe("13. März 2023 - 6:45 vorm.")
+    })
+})
+
+describe("formatDate", () => {
+    const DEFAULT_DATE = new Date(2025, 10, 10)
+    it("should display a date with default settings", () => {
+        expect(formatDate(DEFAULT_DATE, "en")).toBe("Nov 10")
+    })
+    it("should display a date with includeYear set to true", () => {
+        expect(formatDate(DEFAULT_DATE, "en", { includeYear: true })).toBe("Nov 10, 2025")
+    })
+    it("should display a date with long month display", () => {
+        expect(formatDate(DEFAULT_DATE, "en", { monthDisplay: "long" })).toBe("November 10")
+    })
+    it("should display a date in Italian with default settings", () => {
+        expect(formatDate(DEFAULT_DATE, "it")).toBe("10 nov")
+    })
+})
+
+describe("getMomentLocale", () => {
+    it.each([
+        ["tw", "zh-tw"],
+        ["zh", "zh-cn"],
+        ["de", "de"],
+        ["en", "en"],
+        ["es", "es"],
+        ["fr", "fr"],
+        ["hi", "hi"],
+        ["it", "it"],
+        ["ja", "ja"],
+        ["ko", "ko"],
+        ["nl", "nl"],
+        ["pl", "pl"],
+        ["pt", "pt"],
+        ["ru", "ru"],
+        ["sv", "sv"],
+        ["tr", "tr"],
+        ["vi", "vi"],
+        ["unknown", "en"],
+    ])("should get moment locale from %s to %s", (value, expected) => {
+        expect(getMomentLocale(value as Locales)).toBe(expected)
     })
 })

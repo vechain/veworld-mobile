@@ -22,11 +22,18 @@ export type HistoryStackParamList = {
         token?: FungibleToken
         isSwap?: boolean
         decodedClauses?: TransactionOutcomes
+        returnScreen?: Routes.HOME | Routes.HISTORY
     }
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
-        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
+        returnScreen?:
+            | Routes.DISCOVER
+            | Routes.SETTINGS
+            | Routes.HOME
+            | Routes.ACTIVITY_STAKING
+            | Routes.APPS
+            | Routes.SWAP
     }
     [Routes.DISCOVER_TABS_MANAGER]: undefined
     [Routes.DISCOVER_SEARCH]: undefined

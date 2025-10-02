@@ -44,7 +44,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                 </>
             )}
             <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
-            <BaseView>{selectedTab === "TOKENS" ? <Tokens /> : null}</BaseView>
+            <BaseView flexDirection="column">{selectedTab === "TOKENS" ? <Tokens /> : null}</BaseView>
         </Animated.View>
     )
 }

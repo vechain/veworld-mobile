@@ -117,6 +117,14 @@ type RootTranslation = {
 	 */
 	ACTIVITIES_STATUS_success: string
 	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	ACTIVITY: string
+	/**
+	 * S​e​e​ ​a​l​l
+	 */
+	ACTIVITY_SEE_ALL: string
+	/**
 	 * N​o​ ​A​c​t​i​v​i​t​i​e​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: string
@@ -2050,19 +2058,6 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_ASKING_FOR_ACCESS_2: string
 	/**
-	 * {​d​a​p​p​N​a​m​e​}​ ​w​i​l​l​ ​n​o​ ​l​o​n​g​e​r​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​:
-	 * @param {string} dappName
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS: RequiredParams<'dappName'>
-	/**
-	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​e​n​d​ ​t​o​ ​V​e​C​h​a​i​n​ ​T​h​o​r​.
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: string
-	/**
-	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s​.
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: string
-	/**
 	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​ ​w​i​t​h​ ​a​ ​d​i​f​f​e​r​e​n​t​ ​a​c​c​o​u​n​t​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​w​i​t​c​h​ ​t​o​ ​t​h​e​ ​a​c​c​o​u​n​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​?
 	 * @param {string} dapp
 	 */
@@ -2075,10 +2070,6 @@ type RootTranslation = {
 	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t​s
 	 */
 	CONNECTED_APP_CONNECTION_REQUESTS: string
-	/**
-	 * D​i​s​c​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
-	 */
-	DISCONNECTION_REQUEST: string
 	/**
 	 * C​o​n​t​r​a​c​t
 	 */
@@ -2448,6 +2439,23 @@ type RootTranslation = {
 	 * D​e​v​i​c​e​ ​P​i​n
 	 */
 	DEVICE_PIN: string
+	/**
+	 * {​d​a​p​p​N​a​m​e​}​ ​w​i​l​l​ ​n​o​ ​l​o​n​g​e​r​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​:
+	 * @param {string} dappName
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS: RequiredParams<'dappName'>
+	/**
+	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​e​n​d​ ​t​o​ ​V​e​C​h​a​i​n​ ​T​h​o​r​.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: string
+	/**
+	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s​.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: string
+	/**
+	 * D​i​s​c​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
+	 */
+	DISCONNECTION_REQUEST: string
 	/**
 	 * M​a​k​e​ ​y​o​u​r​ ​o​w​n​ ​D​A​p​p​ ​o​n​ ​V​e​c​h​a​i​n
 	 */
@@ -4495,7 +4503,6 @@ type RootTranslation = {
 	 * S​u​c​c​e​s​s​!
 	 */
 	SUCCESS_GENERIC: string
-
 	/**
 	 * V​i​e​w​ ​o​p​e​r​a​t​i​o​n​ ​d​e​t​a​i​l​.
 	 */
@@ -5263,6 +5270,14 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Success
 	 */
 	ACTIVITIES_STATUS_success: () => LocalizedString
+	/**
+	 * Activity
+	 */
+	ACTIVITY: () => LocalizedString
+	/**
+	 * See all
+	 */
+	ACTIVITY_SEE_ALL: () => LocalizedString
 	/**
 	 * No Activities to show yet
 	 */
@@ -7179,18 +7194,6 @@ Thanks for your patience!
 	 */
 	CONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
 	/**
-	 * {dappName} will no longer have access to:
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS: (arg: { dappName: string }) => LocalizedString
-	/**
-	 * No longer request transactions to send to VeChain Thor.
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: () => LocalizedString
-	/**
-	 * No longer request your signature on certificates or identification and agreements.
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
-	/**
 	 * You have previously connected to {dapp} with a different account. Do you want to switch to the account connected to {dapp}?
 	 */
 	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: (arg: { dapp: string }) => LocalizedString
@@ -7202,10 +7205,6 @@ Thanks for your patience!
 	 * Connection requests
 	 */
 	CONNECTED_APP_CONNECTION_REQUESTS: () => LocalizedString
-	/**
-	 * Disconnection request
-	 */
-	DISCONNECTION_REQUEST: () => LocalizedString
 	/**
 	 * Contract
 	 */
@@ -7574,6 +7573,22 @@ Thanks for your patience!
 	 * Device Pin
 	 */
 	DEVICE_PIN: () => LocalizedString
+	/**
+	 * {dappName} will no longer have access to:
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS: (arg: { dappName: string }) => LocalizedString
+	/**
+	 * No longer request transactions to send to VeChain Thor.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: () => LocalizedString
+	/**
+	 * No longer request your signature on certificates or identification and agreements.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
+	/**
+	 * Disconnection request
+	 */
+	DISCONNECTION_REQUEST: () => LocalizedString
 	/**
 	 * Make your own DApp on Vechain
 	 */
