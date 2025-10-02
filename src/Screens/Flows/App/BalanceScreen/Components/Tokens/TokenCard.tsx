@@ -5,7 +5,7 @@ import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } 
 import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { B3TR, COLORS, VET, VOT3, VTHO } from "~Constants"
-import { useThemedStyles, useTheme } from "~Hooks"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { FungibleTokenWithBalance } from "~Model"
@@ -133,7 +133,7 @@ export const TokenCard = ({ token }: Props) => {
             <BaseView flexDirection="row" gap={16} flex={1}>
                 <TokenImage
                     icon={token.icon}
-                    isVechainToken={AddressUtils.compareAddresses(VET.address, token.address)}
+                    isVechainToken={AddressUtils.isVechainToken(token.address)}
                     iconSize={40}
                     isCrossChainToken={isCrossChainToken}
                     rounded={!isCrossChainToken}
