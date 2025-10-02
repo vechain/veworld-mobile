@@ -16,12 +16,13 @@ jest.mock("~Hooks/useTokenWithCompleteInfo", () => ({
 
 jest.mock("~Hooks/useTokenBalance", () => ({
     useMultipleTokensBalance: jest.fn(),
+    useTokenBalance: jest.fn(),
 }))
 
 import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
-import { useMultipleTokensBalance } from "~Hooks/useTokenBalance"
+import { useMultipleTokensBalance, useTokenBalance } from "~Hooks/useTokenBalance"
 
 describe("useSortedTokensByFiatValue", () => {
     beforeEach(() => {
@@ -48,6 +49,14 @@ describe("useSortedTokensByFiatValue", () => {
     const mockB3trInfo = {
         fiatBalance: "$200.00",
         tokenInfoLoading: false,
+        exchangeRate: 2.0,
+    }
+
+    const mockVot3Balance = {
+        balance: "500000000000000000000", // 500 tokens
+        isHidden: false,
+        timeUpdated: "123456789",
+        tokenAddress: "0xvot3",
     }
 
     it("should return correct interface structure", () => {
@@ -60,6 +69,9 @@ describe("useSortedTokensByFiatValue", () => {
             isLoading: false,
         })
         ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue(mockVetInfo)
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: mockVot3Balance,
+        })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
             data: [],
             isLoading: false,
@@ -88,6 +100,9 @@ describe("useSortedTokensByFiatValue", () => {
             ...mockVetInfo,
             tokenInfoLoading: false,
         })
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: mockVot3Balance,
+        })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
             data: [],
             isLoading: false,
@@ -110,6 +125,9 @@ describe("useSortedTokensByFiatValue", () => {
             isLoading: false,
         })
         ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue(mockVetInfo)
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: mockVot3Balance,
+        })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
             data: [],
             isLoading: false,
@@ -143,6 +161,9 @@ describe("useSortedTokensByFiatValue", () => {
             isLoading: false,
         })
         ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue(mockVetInfo)
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: mockVot3Balance,
+        })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
             data: ["$300.00"],
             isLoading: false,
@@ -170,6 +191,9 @@ describe("useSortedTokensByFiatValue", () => {
             isLoading: false,
         })
         ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue(mockVetInfo)
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: vot3Balance,
+        })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
             data: [],
             isLoading: false,
@@ -205,6 +229,9 @@ describe("useSortedTokensByFiatValue", () => {
             isLoading: false,
         })
         ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue(mockVetInfo)
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: vot3Balance,
+        })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
             data: [],
             isLoading: false,
@@ -240,9 +267,12 @@ describe("useSortedTokensByFiatValue", () => {
             isLoading: false,
         })
         ;(useTokenWithCompleteInfo as jest.Mock)
-            .mockReturnValueOnce({ fiatBalance: "$100.00", tokenInfoLoading: false }) // VET
-            .mockReturnValueOnce({ fiatBalance: "$50.00", tokenInfoLoading: false }) // VTHO
-            .mockReturnValueOnce({ fiatBalance: "$200.00", tokenInfoLoading: false }) // B3TR
+            .mockReturnValueOnce({ fiatBalance: "$100.00", tokenInfoLoading: false, exchangeRate: 1.0 }) // VET
+            .mockReturnValueOnce({ fiatBalance: "$50.00", tokenInfoLoading: false, exchangeRate: 0.5 }) // VTHO
+            .mockReturnValueOnce({ fiatBalance: "$200.00", tokenInfoLoading: false, exchangeRate: 2.0 }) // B3TR
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: mockVot3Balance,
+        })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
             data: ["$300.00"], // TOKEN1
             isLoading: false,
@@ -253,9 +283,10 @@ describe("useSortedTokensByFiatValue", () => {
         })
 
         const tokenSymbols = result.current.tokens.map(token => token.symbol)
-        // Should be sorted by fiat value: TOKEN1 ($300) > B3TR ($200) > VET ($100) > VTHO ($50)
-        expect(tokenSymbols[0]).toBe("TOKEN1")
-        expect(tokenSymbols[1]).toBe("B3TR")
+        // Should be sorted by fiat value: B3TR+VOT3 ($200 + $1000 = $1200) > TOKEN1 ($300) > VET ($100) > VTHO ($50)
+        // Note: VOT3 has 500 tokens * $2.0 exchange rate = $1000, combined with B3TR $200 = $1200 total
+        expect(tokenSymbols[0]).toBe("B3TR") // Combined B3TR+VOT3 fiat value
+        expect(tokenSymbols[1]).toBe("TOKEN1")
         expect(tokenSymbols[2]).toBe("VET")
         expect(tokenSymbols[3]).toBe("VTHO")
     })
@@ -278,6 +309,10 @@ describe("useSortedTokensByFiatValue", () => {
         ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue({
             fiatBalance: "$100.00",
             tokenInfoLoading: false,
+            exchangeRate: 1.0,
+        })
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: mockVot3Balance,
         })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
             data: [], // No fiat data for UNKNOWN token
@@ -305,6 +340,9 @@ describe("useSortedTokensByFiatValue", () => {
             isLoading: false,
         })
         ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue(mockVetInfo)
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: mockVot3Balance,
+        })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
             data: [],
             isLoading: false,
@@ -337,6 +375,9 @@ describe("useSortedTokensByFiatValue", () => {
             .mockReturnValueOnce({ ...mockVetInfo, tokenInfoLoading: true }) // VET loading
             .mockReturnValueOnce({ ...mockVthoInfo, tokenInfoLoading: false }) // VTHO not loading
             .mockReturnValueOnce({ ...mockB3trInfo, tokenInfoLoading: false }) // B3TR not loading
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: mockVot3Balance,
+        })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
             data: [],
             isLoading: false,
@@ -362,6 +403,9 @@ describe("useSortedTokensByFiatValue", () => {
         ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue({
             ...mockVetInfo,
             tokenInfoLoading: false,
+        })
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: mockVot3Balance,
         })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
             data: [],
@@ -390,6 +434,9 @@ describe("useSortedTokensByFiatValue", () => {
             isLoading: false,
         })
         ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue(mockVetInfo)
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: { ...mockVot3Balance, balance: "0" },
+        })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
             data: [],
             isLoading: false,
