@@ -128,7 +128,7 @@ export const StargateCarousel = () => {
     if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return <StargateNoStakingCard />
 
     return (
-        <BaseView flexDirection="column" gap={12} w={100} mb={40}>
+        <BaseView flexDirection="column" gap={12} w={100}>
             <BaseView style={styles.card}>
                 {hasOwnedNodes && hasManagedNodes && (
                     <BaseView px={16}>
