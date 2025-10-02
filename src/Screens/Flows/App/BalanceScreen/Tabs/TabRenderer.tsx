@@ -13,6 +13,7 @@ import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
 import { Tokens } from "./Tokens"
 import { Staking } from "./Staking"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
 
@@ -34,8 +35,12 @@ export const TabRenderer = ({ onLayout }: Props) => {
     }, [bookmarkedDApps.length, selectedAccount])
     const labels = useMemo(() => TABS.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL])
 
+    const paddingBottom = useMemo(() => {
+        return isAndroid() ? tabBarBottomMargin + 24 : 0
+    }, [tabBarBottomMargin])
+
     return (
-        <Animated.View style={styles.root} onLayout={onLayout}>
+        <Animated.View style={[styles.root, { paddingBottom: tabBarBottomMargin }]} onLayout={onLayout}>
             {showFavorites && (
                 <BaseView>
                     <FavouritesV2
@@ -48,7 +53,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                 </BaseView>
             )}
             <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
-            <BaseView flex={1} pb={tabBarBottomMargin}>
+            <BaseView flex={1} pb={paddingBottom}>
                 {selectedTab === "TOKENS" && <Tokens />}
                 {selectedTab === "STAKING" && <Staking />}
                 {selectedTab === "COLLECTIBLES" && <></>}
