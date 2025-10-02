@@ -6,7 +6,8 @@ import Markdown from "react-native-markdown-display"
 import { StargateDappBannerB3MO, StargateLogo } from "~Assets"
 import { BaseButton, BaseIcon, BaseSpacer, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType, STARGATE_DAPP_URL_HOME_BANNER } from "~Constants"
-import { useBrowserNavigation, useFormatFiat, useThemedStyles } from "~Hooks"
+import { useFormatFiat, useThemedStyles } from "~Hooks"
+import { useBrowserNavigation } from "~Hooks/useBrowserSearch"
 import { useStargateStats } from "~Hooks/useStargateStats"
 import { useI18nContext } from "~i18n"
 import { BigNutils } from "~Utils"
@@ -48,7 +49,7 @@ export const StargateNoStakingCard = () => {
     }, [stargateStats?.vthoPerDay, formatLocale])
 
     return (
-        <BaseView style={styles.root}>
+        <BaseView style={styles.root} testID="STARGATE_NO_STAKING_CARD">
             <BaseView style={styles.b3mo}>
                 <FastImage
                     source={StargateDappBannerB3MO}
@@ -100,6 +101,7 @@ export const StargateNoStakingCard = () => {
             <BaseSpacer height={16} />
 
             <BaseButton
+                testID="STARGATE_START_STAKING_BUTTON"
                 action={() => {
                     navigateToBrowser(STARGATE_DAPP_URL_HOME_BANNER)
                 }}
