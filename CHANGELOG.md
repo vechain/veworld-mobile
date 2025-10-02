@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.5 (2025-10-02)</small>
+
+* build: init ([5e995ab](https://github.com/vechain/veworld-mobile/commit/5e995ab))
+* Revert "feat: standardized formatting" (#3341) ([85d5ecc](https://github.com/vechain/veworld-mobile/commit/85d5ecc)), closes [#3341](https://github.com/vechain/veworld-mobile/issues/3341)
+
 ## <small>2.4.4 (2025-09-25)</small>
 
 * build: init ([a565bd2](https://github.com/vechain/veworld-mobile/commit/a565bd2))
