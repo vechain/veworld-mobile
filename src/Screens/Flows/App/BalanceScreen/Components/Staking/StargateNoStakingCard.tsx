@@ -22,31 +22,28 @@ export const StargateNoStakingCard = () => {
 
     const { data: stargateStats } = useStargateStats()
 
-    const formattedTotalVetStaked = useMemo(() => {
-        return (
-            BigNutils(ethers.utils.formatEther(stargateStats?.totalVetStaked?.total ?? "0")).toCompactString(
-                formatLocale,
-                1,
-            ) ?? "0"
-        )
-    }, [stargateStats?.totalVetStaked?.total, formatLocale])
-
-    const formattedRewardsDistributed = useMemo(() => {
-        return (
-            BigNutils(ethers.utils.formatEther(stargateStats?.rewardsDistributed ?? "0")).toCompactString(
-                formatLocale,
-                1,
-            ) ?? "0"
-        )
-    }, [stargateStats?.rewardsDistributed, formatLocale])
-
-    const formattedTotalSupply = useMemo(() => {
-        return BigNutils(stargateStats?.totalSupply?.total ?? "0").toCompactString(formatLocale, 1) ?? "0"
-    }, [stargateStats?.totalSupply?.total, formatLocale])
-
-    const formattedVthoPerDay = useMemo(() => {
-        return BigNutils(stargateStats?.vthoPerDay ?? "0").toCompactString(formatLocale, 1) ?? "0"
-    }, [stargateStats?.vthoPerDay, formatLocale])
+    const formattedStargateStats = useMemo(() => {
+        return {
+            totalSupply: BigNutils(stargateStats?.totalSupply?.total ?? "0").toCompactString(formatLocale, 1) ?? "0",
+            totalVetStaked:
+                BigNutils(ethers.utils.formatEther(stargateStats?.totalVetStaked?.total ?? "0")).toCompactString(
+                    formatLocale,
+                    1,
+                ) ?? "0",
+            rewardsDistributed:
+                BigNutils(ethers.utils.formatEther(stargateStats?.rewardsDistributed ?? "0")).toCompactString(
+                    formatLocale,
+                    1,
+                ) ?? "0",
+            vthoPerDay: BigNutils(stargateStats?.vthoPerDay ?? "0").toCompactString(formatLocale, 1) ?? "0",
+        }
+    }, [
+        stargateStats?.totalSupply?.total,
+        stargateStats?.totalVetStaked?.total,
+        stargateStats?.rewardsDistributed,
+        stargateStats?.vthoPerDay,
+        formatLocale,
+    ])
 
     return (
         <BaseView style={styles.root} testID="STARGATE_NO_STAKING_CARD">
@@ -75,24 +72,24 @@ export const StargateNoStakingCard = () => {
                 <BaseView flexDirection="row" gap={8}>
                     <StargateStatsCard
                         title={LL.STARGATE_STAT_TOTAL_SUPPLY()}
-                        parsedValue={formattedTotalSupply}
+                        parsedValue={formattedStargateStats.totalSupply}
                         unit="NFTs"
                     />
                     <StargateStatsCard
                         title={LL.STARGATE_STAT_TOTAL_STAKED()}
-                        parsedValue={formattedTotalVetStaked}
+                        parsedValue={formattedStargateStats.totalVetStaked}
                         unit="VET"
                     />
                 </BaseView>
                 <BaseView flexDirection="row" gap={8}>
                     <StargateStatsCard
                         title={LL.STARGATE_STAT_REWARDS_GENERATION()}
-                        parsedValue={formattedVthoPerDay}
+                        parsedValue={formattedStargateStats.vthoPerDay}
                         unit={`VTHO/${LL.COMMOMN_DAY()}`}
                     />
                     <StargateStatsCard
                         title={LL.STARGATE_STAT_REWARDS_DISTRIBUTED()}
-                        parsedValue={formattedRewardsDistributed}
+                        parsedValue={formattedStargateStats.rewardsDistributed}
                         unit="VTHO"
                     />
                 </BaseView>

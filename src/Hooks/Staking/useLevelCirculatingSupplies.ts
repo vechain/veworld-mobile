@@ -18,7 +18,7 @@ export const useLevelCirculatingSupplies = () => {
         queryKey: getLevelCirculatingSuppliesQueryKey(),
         queryFn: async () => await getLevelCirculatingSupplies(thor),
         staleTime: 60 * 5 * 1000,
-        gcTime: 60 * 5 * 1000,
+        gcTime: 60 * 30 * 1000,
         enabled: !!thor,
         select: data => {
             return data ? data.flat().map((supply: bigint) => Number(supply)) : []
