@@ -2050,19 +2050,6 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_ASKING_FOR_ACCESS_2: string
 	/**
-	 * {​d​a​p​p​N​a​m​e​}​ ​w​i​l​l​ ​n​o​ ​l​o​n​g​e​r​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​:
-	 * @param {string} dappName
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS: RequiredParams<'dappName'>
-	/**
-	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​e​n​d​ ​t​o​ ​V​e​C​h​a​i​n​ ​T​h​o​r​.
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: string
-	/**
-	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s​.
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: string
-	/**
 	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​ ​w​i​t​h​ ​a​ ​d​i​f​f​e​r​e​n​t​ ​a​c​c​o​u​n​t​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​w​i​t​c​h​ ​t​o​ ​t​h​e​ ​a​c​c​o​u​n​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​?
 	 * @param {string} dapp
 	 */
@@ -2075,10 +2062,6 @@ type RootTranslation = {
 	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t​s
 	 */
 	CONNECTED_APP_CONNECTION_REQUESTS: string
-	/**
-	 * D​i​s​c​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
-	 */
-	DISCONNECTION_REQUEST: string
 	/**
 	 * C​o​n​t​r​a​c​t
 	 */
@@ -2448,6 +2431,23 @@ type RootTranslation = {
 	 * D​e​v​i​c​e​ ​P​i​n
 	 */
 	DEVICE_PIN: string
+	/**
+	 * {​d​a​p​p​N​a​m​e​}​ ​w​i​l​l​ ​n​o​ ​l​o​n​g​e​r​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​:
+	 * @param {string} dappName
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS: RequiredParams<'dappName'>
+	/**
+	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​e​n​d​ ​t​o​ ​V​e​C​h​a​i​n​ ​T​h​o​r​.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: string
+	/**
+	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s​.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: string
+	/**
+	 * D​i​s​c​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
+	 */
+	DISCONNECTION_REQUEST: string
 	/**
 	 * M​a​k​e​ ​y​o​u​r​ ​o​w​n​ ​D​A​p​p​ ​o​n​ ​V​e​c​h​a​i​n
 	 */
@@ -3565,6 +3565,14 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
 	/**
+	 * Y​o​u​r​ ​Q​R​ ​c​o​d​e
+	 */
+	QR_CODE_TITLE: string
+	/**
+	 * U​s​e​ ​y​o​u​r​ ​Q​R​ ​c​o​d​e​ ​t​o​ ​r​e​c​e​i​v​e​ ​t​r​a​n​s​f​e​r​s
+	 */
+	QR_CODE_DESCRIPTION: string
+	/**
 	 * R​e​c​a​p
 	 */
 	RECAP: string
@@ -4495,7 +4503,6 @@ type RootTranslation = {
 	 * S​u​c​c​e​s​s​!
 	 */
 	SUCCESS_GENERIC: string
-
 	/**
 	 * V​i​e​w​ ​o​p​e​r​a​t​i​o​n​ ​d​e​t​a​i​l​.
 	 */
@@ -4921,17 +4928,17 @@ type RootTranslation = {
 	 */
 	VBD_SEE_PROFILE: string
 	/**
+	 * A​v​o​i​d​e​d
+	 */
+	VBD_STAT_AVOIDED: string
+	/**
 	 * C​O​2
 	 */
 	VBD_STAT_CO2: string
 	/**
-	 * T​r​e​e​s
+	 * C​o​n​s​e​r​v​e​d
 	 */
-	VBD_STAT_TREES: string
-	/**
-	 * W​a​t​e​r
-	 */
-	VBD_STAT_WATER: string
+	VBD_STAT_CONSERVED: string
 	/**
 	 * E​n​e​r​g​y
 	 */
@@ -4949,21 +4956,21 @@ type RootTranslation = {
 	 */
 	VBD_STAT_SAVED: string
 	/**
-	 * C​o​n​s​e​r​v​e​d
+	 * T​r​e​e​s
 	 */
-	VBD_STAT_CONSERVED: string
+	VBD_STAT_TREES: string
 	/**
-	 * A​v​o​i​d​e​d
+	 * W​a​t​e​r
 	 */
-	VBD_STAT_AVOIDED: string
-	/**
-	 * Y​o​u​r​ ​o​f​f​s​e​t
-	 */
-	VBD_YOUR_OFFSET: string
+	VBD_STAT_WATER: string
 	/**
 	 * Y​o​u​r​ ​B​e​t​t​e​r​ ​A​c​t​i​o​n​s
 	 */
 	VBD_YOUR_BETTER_ACTIONS: string
+	/**
+	 * Y​o​u​r​ ​o​f​f​s​e​t
+	 */
+	VBD_YOUR_OFFSET: string
 	/**
 	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
@@ -4981,13 +4988,13 @@ type RootTranslation = {
 	 */
 	VEWORLD: string
 	/**
-	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
-	 */
-	VIEW_ON_EXPLORER: string
-	/**
 	 * V​i​e​w​ ​o​n​l​y
 	 */
 	VIEW_ONLY: string
+	/**
+	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
+	 */
+	VIEW_ON_EXPLORER: string
 	/**
 	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.
 	 */
@@ -7179,18 +7186,6 @@ Thanks for your patience!
 	 */
 	CONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
 	/**
-	 * {dappName} will no longer have access to:
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS: (arg: { dappName: string }) => LocalizedString
-	/**
-	 * No longer request transactions to send to VeChain Thor.
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: () => LocalizedString
-	/**
-	 * No longer request your signature on certificates or identification and agreements.
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
-	/**
 	 * You have previously connected to {dapp} with a different account. Do you want to switch to the account connected to {dapp}?
 	 */
 	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: (arg: { dapp: string }) => LocalizedString
@@ -7202,10 +7197,6 @@ Thanks for your patience!
 	 * Connection requests
 	 */
 	CONNECTED_APP_CONNECTION_REQUESTS: () => LocalizedString
-	/**
-	 * Disconnection request
-	 */
-	DISCONNECTION_REQUEST: () => LocalizedString
 	/**
 	 * Contract
 	 */
@@ -7574,6 +7565,22 @@ Thanks for your patience!
 	 * Device Pin
 	 */
 	DEVICE_PIN: () => LocalizedString
+	/**
+	 * {dappName} will no longer have access to:
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS: (arg: { dappName: string }) => LocalizedString
+	/**
+	 * No longer request transactions to send to VeChain Thor.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: () => LocalizedString
+	/**
+	 * No longer request your signature on certificates or identification and agreements.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
+	/**
+	 * Disconnection request
+	 */
+	DISCONNECTION_REQUEST: () => LocalizedString
 	/**
 	 * Make your own DApp on Vechain
 	 */
@@ -8671,6 +8678,14 @@ Thanks for your patience!
 	 * Vote reminder
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
+	/**
+	 * Your QR code
+	 */
+	QR_CODE_TITLE: () => LocalizedString
+	/**
+	 * Use your QR code to receive transfers
+	 */
+	QR_CODE_DESCRIPTION: () => LocalizedString
 	/**
 	 * Recap
 	 */
@@ -10008,17 +10023,17 @@ Here's what it's all about:
 	 */
 	VBD_SEE_PROFILE: () => LocalizedString
 	/**
+	 * Avoided
+	 */
+	VBD_STAT_AVOIDED: () => LocalizedString
+	/**
 	 * CO2
 	 */
 	VBD_STAT_CO2: () => LocalizedString
 	/**
-	 * Trees
+	 * Conserved
 	 */
-	VBD_STAT_TREES: () => LocalizedString
-	/**
-	 * Water
-	 */
-	VBD_STAT_WATER: () => LocalizedString
+	VBD_STAT_CONSERVED: () => LocalizedString
 	/**
 	 * Energy
 	 */
@@ -10036,21 +10051,21 @@ Here's what it's all about:
 	 */
 	VBD_STAT_SAVED: () => LocalizedString
 	/**
-	 * Conserved
+	 * Trees
 	 */
-	VBD_STAT_CONSERVED: () => LocalizedString
+	VBD_STAT_TREES: () => LocalizedString
 	/**
-	 * Avoided
+	 * Water
 	 */
-	VBD_STAT_AVOIDED: () => LocalizedString
-	/**
-	 * Your offset
-	 */
-	VBD_YOUR_OFFSET: () => LocalizedString
+	VBD_STAT_WATER: () => LocalizedString
 	/**
 	 * Your Better Actions
 	 */
 	VBD_YOUR_BETTER_ACTIONS: () => LocalizedString
+	/**
+	 * Your offset
+	 */
+	VBD_YOUR_OFFSET: () => LocalizedString
 	/**
 	 * Vechain news & updates
 	 */
@@ -10068,13 +10083,13 @@ Here's what it's all about:
 	 */
 	VEWORLD: () => LocalizedString
 	/**
-	 * View on explorer
-	 */
-	VIEW_ON_EXPLORER: () => LocalizedString
-	/**
 	 * View only
 	 */
 	VIEW_ONLY: () => LocalizedString
+	/**
+	 * View on explorer
+	 */
+	VIEW_ON_EXPLORER: () => LocalizedString
 	/**
 	 * wallets saved on Google Drive.
 	 */
