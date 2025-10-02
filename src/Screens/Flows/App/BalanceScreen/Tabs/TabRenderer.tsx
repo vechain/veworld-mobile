@@ -53,7 +53,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                 </BaseView>
             )}
             <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
-            <BaseView flex={1} pb={paddingBottom}>
+            <BaseView flexDirection="column" flex={1} pb={paddingBottom}>
                 {selectedTab === "TOKENS" && <Tokens />}
                 {selectedTab === "STAKING" && <Staking />}
                 {selectedTab === "COLLECTIBLES" && <></>}

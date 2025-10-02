@@ -308,8 +308,8 @@ describe("useNonVechainTokenFiat", () => {
             wrapper: TestWrapper,
         })
 
-        expect(result.current.length).toBe(2)
-        expect(result.current[0]).toBe("< < 0.01")
-        expect(result.current[1]).toBe("1.4347")
+        expect(result.current.data.length).toBe(2)
+        expect(result.current.data[0]).toBe("< < 0.01")
+        expect(result.current.data[1]).toBe("1.4347")
     })
 })

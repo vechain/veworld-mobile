@@ -4,7 +4,7 @@ import { VeBetterDaoDAppMetadata } from "~Model"
 import { useDynamicAppLogo } from "./useDynamicAppLogo"
 
 type UseAppLogoArgs = {
-    app: VeBetterDaoDAppMetadata | DiscoveryDApp
+    app: VeBetterDaoDAppMetadata | DiscoveryDApp | undefined
     /**
      * Size of the favicon, if there's no logo
      * @default 64

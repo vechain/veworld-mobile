@@ -117,6 +117,14 @@ type RootTranslation = {
 	 */
 	ACTIVITIES_STATUS_success: string
 	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	ACTIVITY: string
+	/**
+	 * S​e​e​ ​a​l​l
+	 */
+	ACTIVITY_SEE_ALL: string
+	/**
 	 * N​o​ ​A​c​t​i​v​i​t​i​e​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: string
@@ -5290,6 +5298,14 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Success
 	 */
 	ACTIVITIES_STATUS_success: () => LocalizedString
+	/**
+	 * Activity
+	 */
+	ACTIVITY: () => LocalizedString
+	/**
+	 * See all
+	 */
+	ACTIVITY_SEE_ALL: () => LocalizedString
 	/**
 	 * No Activities to show yet
 	 */
