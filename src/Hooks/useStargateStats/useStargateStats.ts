@@ -3,11 +3,7 @@ import { BigNumber, ethers } from "ethers"
 import { useMemo } from "react"
 import { getVTHORewardPerBlockPerNFTLevel } from "~Constants"
 import { useLevelCirculatingSupplies } from "~Hooks/Staking"
-import {
-    fetchStargateRewardsDistributed,
-    fetchStargateTotalSupply,
-    fetchStargateTotalVetStaked,
-} from "~Networking/Stargate"
+import { fetchStargateRewardsDistributed, fetchStargateTotalSupply, fetchStargateTotalVetStaked } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
 export const getStargateTotalSupplyKey = () => ["STARGATE_TOTAL_SUPPLY"]
