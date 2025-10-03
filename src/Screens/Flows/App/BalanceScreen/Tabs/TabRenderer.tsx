@@ -33,7 +33,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
     return (
         <Animated.View style={styles.root} onLayout={onLayout}>
             {showFavorites && (
-                <>
+                <BaseView flexDirection="column">
                     <FavouritesV2
                         bookmarkedDApps={bookmarkedDApps}
                         onDAppPress={onDAppPress}
@@ -42,7 +42,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                         iconBg={theme.isDark ? COLORS.DARK_PURPLE : undefined}
                     />
                     <BaseSpacer height={24} />
-                </>
+                </BaseView>
             )}
             <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
             <BaseView flexDirection="column">{selectedTab === "TOKENS" ? <Tokens /> : null}</BaseView>
