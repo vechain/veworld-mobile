@@ -12,6 +12,7 @@ import { AccountUtils } from "~Utils"
 import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
 import { Tokens } from "./Tokens"
+import { Collectibles } from "./Collectibles"
 
 const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
 
@@ -44,7 +45,11 @@ export const TabRenderer = ({ onLayout }: Props) => {
                 </>
             )}
             <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
-            <BaseView flexDirection="column">{selectedTab === "TOKENS" ? <Tokens /> : null}</BaseView>
+            <BaseView flexDirection="column">
+                {selectedTab === "TOKENS" && <Tokens />}
+                {selectedTab === "STAKING" && null}
+                {selectedTab === "COLLECTIBLES" && <Collectibles />}
+            </BaseView>
         </Animated.View>
     )
 }
