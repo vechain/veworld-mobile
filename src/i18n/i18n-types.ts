@@ -117,6 +117,14 @@ type RootTranslation = {
 	 */
 	ACTIVITIES_STATUS_success: string
 	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	ACTIVITY: string
+	/**
+	 * S​e​e​ ​a​l​l
+	 */
+	ACTIVITY_SEE_ALL: string
+	/**
 	 * N​o​ ​A​c​t​i​v​i​t​i​e​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: string
@@ -596,6 +604,22 @@ type RootTranslation = {
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
 	/**
+	 * B​u​y
+	 */
+	BALANCE_ACTION_BUY: string
+	/**
+	 * O​t​h​e​r
+	 */
+	BALANCE_ACTION_OTHER: string
+	/**
+	 * R​e​c​e​i​v​e
+	 */
+	BALANCE_ACTION_RECEIVE: string
+	/**
+	 * S​e​n​d
+	 */
+	BALANCE_ACTION_SEND: string
+	/**
 	 * C​o​l​l​e​c​t​i​b​l​e​s
 	 */
 	BALANCE_TAB_COLLECTIBLES: string
@@ -607,22 +631,6 @@ type RootTranslation = {
 	 * T​o​k​e​n​s
 	 */
 	BALANCE_TAB_TOKENS: string
-	/**
-	 * B​u​y
-	 */
-	BALANCE_ACTION_BUY: string
-	/**
-	 * R​e​c​e​i​v​e
-	 */
-	BALANCE_ACTION_RECEIVE: string
-	/**
-	 * S​e​n​d
-	 */
-	BALANCE_ACTION_SEND: string
-	/**
-	 * O​t​h​e​r
-	 */
-	BALANCE_ACTION_OTHER: string
 	/**
 	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
 	 */
@@ -2050,19 +2058,6 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_ASKING_FOR_ACCESS_2: string
 	/**
-	 * {​d​a​p​p​N​a​m​e​}​ ​w​i​l​l​ ​n​o​ ​l​o​n​g​e​r​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​:
-	 * @param {string} dappName
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS: RequiredParams<'dappName'>
-	/**
-	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​e​n​d​ ​t​o​ ​V​e​C​h​a​i​n​ ​T​h​o​r​.
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: string
-	/**
-	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s​.
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: string
-	/**
 	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​ ​w​i​t​h​ ​a​ ​d​i​f​f​e​r​e​n​t​ ​a​c​c​o​u​n​t​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​w​i​t​c​h​ ​t​o​ ​t​h​e​ ​a​c​c​o​u​n​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​?
 	 * @param {string} dapp
 	 */
@@ -2075,10 +2070,6 @@ type RootTranslation = {
 	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t​s
 	 */
 	CONNECTED_APP_CONNECTION_REQUESTS: string
-	/**
-	 * D​i​s​c​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
-	 */
-	DISCONNECTION_REQUEST: string
 	/**
 	 * C​o​n​t​r​a​c​t
 	 */
@@ -2448,6 +2439,23 @@ type RootTranslation = {
 	 * D​e​v​i​c​e​ ​P​i​n
 	 */
 	DEVICE_PIN: string
+	/**
+	 * {​d​a​p​p​N​a​m​e​}​ ​w​i​l​l​ ​n​o​ ​l​o​n​g​e​r​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​:
+	 * @param {string} dappName
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS: RequiredParams<'dappName'>
+	/**
+	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​e​n​d​ ​t​o​ ​V​e​C​h​a​i​n​ ​T​h​o​r​.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: string
+	/**
+	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s​.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: string
+	/**
+	 * D​i​s​c​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
+	 */
+	DISCONNECTION_REQUEST: string
 	/**
 	 * M​a​k​e​ ​y​o​u​r​ ​o​w​n​ ​D​A​p​p​ ​o​n​ ​V​e​c​h​a​i​n
 	 */
@@ -4495,7 +4503,6 @@ type RootTranslation = {
 	 * S​u​c​c​e​s​s​!
 	 */
 	SUCCESS_GENERIC: string
-
 	/**
 	 * V​i​e​w​ ​o​p​e​r​a​t​i​o​n​ ​d​e​t​a​i​l​.
 	 */
@@ -4578,6 +4585,14 @@ type RootTranslation = {
 	 * t​h​e​m​?
 	 */
 	THEM: string
+	/**
+	 * T​h​i​s​ ​m​o​n​t​h
+	 */
+	THIS_MONTH: string
+	/**
+	 * T​h​i​s​ ​w​e​e​k
+	 */
+	THIS_WEEK: string
 	/**
 	 * A​b​o​u​t
 	 */
@@ -4852,6 +4867,10 @@ type RootTranslation = {
 	 */
 	TOKEN_TRANSFER_SENT: string
 	/**
+	 * T​o​t​a​l
+	 */
+	TOTAL: string
+	/**
 	 * T​o​u​c​h​ ​I​D
 	 */
 	TOUCH_ID: string
@@ -4901,6 +4920,58 @@ type RootTranslation = {
 	 */
 	VALUE_TITLE: string
 	/**
+	 * R​e​w​a​r​d​s​ ​e​a​r​n​e​d
+	 */
+	VBD_REWARDS_EARNED: string
+	/**
+	 * S​e​e​ ​V​e​B​e​t​t​e​r​ ​p​r​o​f​i​l​e
+	 */
+	VBD_SEE_PROFILE: string
+	/**
+	 * C​O​2
+	 */
+	VBD_STAT_CO2: string
+	/**
+	 * T​r​e​e​s
+	 */
+	VBD_STAT_TREES: string
+	/**
+	 * W​a​t​e​r
+	 */
+	VBD_STAT_WATER: string
+	/**
+	 * E​n​e​r​g​y
+	 */
+	VBD_STAT_ENERGY: string
+	/**
+	 * P​l​a​s​t​i​c
+	 */
+	VBD_STAT_PLASTIC: string
+	/**
+	 * R​e​d​u​c​e​d
+	 */
+	VBD_STAT_REDUCED: string
+	/**
+	 * S​a​v​e​d
+	 */
+	VBD_STAT_SAVED: string
+	/**
+	 * C​o​n​s​e​r​v​e​d
+	 */
+	VBD_STAT_CONSERVED: string
+	/**
+	 * A​v​o​i​d​e​d
+	 */
+	VBD_STAT_AVOIDED: string
+	/**
+	 * Y​o​u​r​ ​o​f​f​s​e​t
+	 */
+	VBD_YOUR_OFFSET: string
+	/**
+	 * Y​o​u​r​ ​B​e​t​t​e​r​ ​A​c​t​i​o​n​s
+	 */
+	VBD_YOUR_BETTER_ACTIONS: string
+	/**
 	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
 	VECHAIN_NEWS_AND_UPDATES: string
@@ -4920,6 +4991,10 @@ type RootTranslation = {
 	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
 	 */
 	VIEW_ON_EXPLORER: string
+	/**
+	 * V​i​e​w​ ​o​n​l​y
+	 */
+	VIEW_ONLY: string
 	/**
 	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.
 	 */
@@ -5195,6 +5270,14 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Success
 	 */
 	ACTIVITIES_STATUS_success: () => LocalizedString
+	/**
+	 * Activity
+	 */
+	ACTIVITY: () => LocalizedString
+	/**
+	 * See all
+	 */
+	ACTIVITY_SEE_ALL: () => LocalizedString
 	/**
 	 * No Activities to show yet
 	 */
@@ -5669,6 +5752,22 @@ Try reconnect your device to the internet.
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
 	/**
+	 * Buy
+	 */
+	BALANCE_ACTION_BUY: () => LocalizedString
+	/**
+	 * Other
+	 */
+	BALANCE_ACTION_OTHER: () => LocalizedString
+	/**
+	 * Receive
+	 */
+	BALANCE_ACTION_RECEIVE: () => LocalizedString
+	/**
+	 * Send
+	 */
+	BALANCE_ACTION_SEND: () => LocalizedString
+	/**
 	 * Collectibles
 	 */
 	BALANCE_TAB_COLLECTIBLES: () => LocalizedString
@@ -5680,22 +5779,6 @@ Try reconnect your device to the internet.
 	 * Tokens
 	 */
 	BALANCE_TAB_TOKENS: () => LocalizedString
-	/**
-	 * Buy
-	 */
-	BALANCE_ACTION_BUY: () => LocalizedString
-	/**
-	 * Receive
-	 */
-	BALANCE_ACTION_RECEIVE: () => LocalizedString
-	/**
-	 * Send
-	 */
-	BALANCE_ACTION_SEND: () => LocalizedString
-	/**
-	 * Other
-	 */
-	BALANCE_ACTION_OTHER: () => LocalizedString
 	/**
 	 * Get **VTHO** by staking your **VET tokens**
 	 */
@@ -7111,18 +7194,6 @@ Thanks for your patience!
 	 */
 	CONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
 	/**
-	 * {dappName} will no longer have access to:
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS: (arg: { dappName: string }) => LocalizedString
-	/**
-	 * No longer request transactions to send to VeChain Thor.
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: () => LocalizedString
-	/**
-	 * No longer request your signature on certificates or identification and agreements.
-	 */
-	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
-	/**
 	 * You have previously connected to {dapp} with a different account. Do you want to switch to the account connected to {dapp}?
 	 */
 	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: (arg: { dapp: string }) => LocalizedString
@@ -7134,10 +7205,6 @@ Thanks for your patience!
 	 * Connection requests
 	 */
 	CONNECTED_APP_CONNECTION_REQUESTS: () => LocalizedString
-	/**
-	 * Disconnection request
-	 */
-	DISCONNECTION_REQUEST: () => LocalizedString
 	/**
 	 * Contract
 	 */
@@ -7506,6 +7573,22 @@ Thanks for your patience!
 	 * Device Pin
 	 */
 	DEVICE_PIN: () => LocalizedString
+	/**
+	 * {dappName} will no longer have access to:
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS: (arg: { dappName: string }) => LocalizedString
+	/**
+	 * No longer request transactions to send to VeChain Thor.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: () => LocalizedString
+	/**
+	 * No longer request your signature on certificates or identification and agreements.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
+	/**
+	 * Disconnection request
+	 */
+	DISCONNECTION_REQUEST: () => LocalizedString
 	/**
 	 * Make your own DApp on Vechain
 	 */
@@ -9600,6 +9683,14 @@ Here's what it's all about:
 	 */
 	THEM: () => LocalizedString
 	/**
+	 * This month
+	 */
+	THIS_MONTH: () => LocalizedString
+	/**
+	 * This week
+	 */
+	THIS_WEEK: () => LocalizedString
+	/**
 	 * About
 	 */
 	TITLE_ABOUT: () => LocalizedString
@@ -9872,6 +9963,10 @@ Here's what it's all about:
 	 */
 	TOKEN_TRANSFER_SENT: () => LocalizedString
 	/**
+	 * Total
+	 */
+	TOTAL: () => LocalizedString
+	/**
 	 * Touch ID
 	 */
 	TOUCH_ID: () => LocalizedString
@@ -9920,6 +10015,58 @@ Here's what it's all about:
 	 */
 	VALUE_TITLE: () => LocalizedString
 	/**
+	 * Rewards earned
+	 */
+	VBD_REWARDS_EARNED: () => LocalizedString
+	/**
+	 * See VeBetter profile
+	 */
+	VBD_SEE_PROFILE: () => LocalizedString
+	/**
+	 * CO2
+	 */
+	VBD_STAT_CO2: () => LocalizedString
+	/**
+	 * Trees
+	 */
+	VBD_STAT_TREES: () => LocalizedString
+	/**
+	 * Water
+	 */
+	VBD_STAT_WATER: () => LocalizedString
+	/**
+	 * Energy
+	 */
+	VBD_STAT_ENERGY: () => LocalizedString
+	/**
+	 * Plastic
+	 */
+	VBD_STAT_PLASTIC: () => LocalizedString
+	/**
+	 * Reduced
+	 */
+	VBD_STAT_REDUCED: () => LocalizedString
+	/**
+	 * Saved
+	 */
+	VBD_STAT_SAVED: () => LocalizedString
+	/**
+	 * Conserved
+	 */
+	VBD_STAT_CONSERVED: () => LocalizedString
+	/**
+	 * Avoided
+	 */
+	VBD_STAT_AVOIDED: () => LocalizedString
+	/**
+	 * Your offset
+	 */
+	VBD_YOUR_OFFSET: () => LocalizedString
+	/**
+	 * Your Better Actions
+	 */
+	VBD_YOUR_BETTER_ACTIONS: () => LocalizedString
+	/**
 	 * Vechain news & updates
 	 */
 	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
@@ -9939,6 +10086,10 @@ Here's what it's all about:
 	 * View on explorer
 	 */
 	VIEW_ON_EXPLORER: () => LocalizedString
+	/**
+	 * View only
+	 */
+	VIEW_ONLY: () => LocalizedString
 	/**
 	 * wallets saved on Google Drive.
 	 */

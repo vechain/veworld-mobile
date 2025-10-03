@@ -47,6 +47,7 @@ export const BaseTokenCard = ({
                     isVechainToken={isVetToken}
                     iconSize={26}
                     isCrossChainToken={isCrossChainToken}
+                    rounded={!isCrossChainToken}
                 />
                 <BaseView alignItems="center" justifyContent="center" flexDirection="row" gap={4}>
                     <BaseText typographyFont="subSubTitleSemiBold">{symbol}</BaseText>

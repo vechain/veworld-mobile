@@ -336,6 +336,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                             symbol={token.symbol}
                                                             isVechainToken={isVechainToken(token.symbol)}
                                                             isCrossChainToken={!!token.crossChainProvider}
+                                                            rounded={!token.crossChainProvider}
                                                             iconSize={24}
                                                         />
                                                         <BaseSpacer width={12} />

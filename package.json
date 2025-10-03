@@ -3,7 +3,7 @@
   "version": "2.4.4",
   "private": true,
   "scripts": {
-    "purge": "rm -rf node_modules && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
+    "purge": "rm -rf node_modules && rm -rf android/app/build && cd ios && pod deintegrate && cd ..",
     "purge:android": "rm -rf node_modules && rm -rf android/app/build",
     "install:all": "yarn abi:install && yarn abi:build && yarn install && yarn abi:generate && npx pod-install",
     "install:android": "yarn abi:install && yarn abi:build && yarn install && yarn abi:generate",
@@ -90,7 +90,6 @@
     "@reown/walletkit": "1.1.0",
     "@sentry/react-native": "^6.9.1",
     "@shopify/flash-list": "1.6.4",
-    "@shopify/react-native-skia": "1.12.4",
     "@tanstack/query-sync-storage-persister": "^5.59.9",
     "@tanstack/react-query": "^5.59.9",
     "@tanstack/react-query-persist-client": "^5.59.9",

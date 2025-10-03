@@ -1,25 +1,27 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, { useCallback } from "react"
-import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { ScrollView } from "react-native-gesture-handler"
+import React, { useCallback, useMemo } from "react"
+import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
-import { useSharedValue } from "react-native-reanimated"
-import { BaseSpacer, BaseText, BaseView, Layout } from "~Components"
+import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
+import { BaseSpacer, Layout, QRCodeBottomSheet } from "~Components"
 import { COLORS } from "~Constants"
-import { useI18nContext } from "~i18n"
-import { selectCurrencySymbol, useAppSelector } from "~Storage/Redux"
-import { GlassButtonWithLabel } from "./Components/GlassButton"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils } from "~Utils"
+import { BalanceActions } from "./Components/Actions/BalanceActions"
+import { CurrentBalance } from "./Components/Balance/CurrentBalance"
 import { PullToRefresh } from "./Components/PullToRefresh"
-import { RollingFadingText } from "./Components/RollingFadingText"
 import { Header } from "./Header"
 import { TabRenderer } from "./Tabs/TabRenderer"
 
-export const BalanceScreen = () => {
-    const { LL } = useI18nContext()
-    const currencySymbol = useAppSelector(selectCurrencySymbol)
+const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
+export const BalanceScreen = () => {
     const scrollY = useSharedValue(0)
     const contentOffsetY = useSharedValue(0)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const { styles } = useThemedStyles(baseStyles)
+
+    const { ref: qrCodeBottomSheetRef } = useBottomSheetModal()
 
     const onLayout = useCallback(
         (e: LayoutChangeEvent) => {
@@ -35,63 +37,69 @@ export const BalanceScreen = () => {
         [scrollY],
     )
 
+    const isObservedAccount = useMemo(() => {
+        return AccountUtils.isObservedAccount(selectedAccount)
+    }, [selectedAccount])
+
+    const colors = useMemo(() => {
+        if (isObservedAccount) return [COLORS.BALANCE_BACKGROUND, COLORS.BALANCE_BACKGROUND, COLORS.BALANCE_BACKGROUND]
+        return [COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.5)", "#423483"]
+    }, [isObservedAccount])
+
+    const balanceActionsAnimatedStyles = useAnimatedStyle(() => {
+        return {
+            marginTop: 12,
+        }
+    }, [isObservedAccount])
+
     return (
         <Layout
             bg={COLORS.BALANCE_BACKGROUND}
             noBackButton
-            fixedHeader={<Header scrollY={scrollY} contentOffsetY={contentOffsetY} />}
+            fixedHeader={
+                <Header scrollY={scrollY} contentOffsetY={contentOffsetY} qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
+            }
             noMargin
             fixedBody={
-                <ScrollView refreshControl={<PullToRefresh />} onScroll={onScroll}>
-                    <LinearGradient
-                        colors={[
-                            COLORS.BALANCE_BACKGROUND,
-                            COLORS.BALANCE_BACKGROUND_50,
-                            COLORS.BALANCE_BACKGROUND_GRADIENT_END,
-                        ]}
+                <Animated.ScrollView
+                    refreshControl={<PullToRefresh />}
+                    onScroll={onScroll}
+                    style={styles.scrollViewRoot}
+                    contentContainerStyle={styles.scrollViewContent}>
+                    <AnimatedLinearGradient
+                        colors={colors}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 0, y: 1 }}
-                        style={{ position: "relative", marginTop: 16 }}
+                        style={styles.gradient}
                         locations={[0, 0.55, 1]}
-                        angle={180}>
-                        <BaseView flexDirection="row" gap={4} alignSelf="center">
-                            <BaseText typographyFont="headerTitle" fontWeight="400" color={COLORS.PURPLE_LABEL}>
-                                {currencySymbol}
-                            </BaseText>
-                            {/* This is just a placeholder for the loading state. Update it accordingly */}
-                            <RollingFadingText text="99.999" />
-                        </BaseView>
+                        angle={180}
+                        useAngle>
+                        <CurrentBalance />
 
-                        <BaseSpacer height={12} />
-                        {/* The 24px container should be the pagination */}
+                        <BaseSpacer height={6} />
                         <BaseSpacer height={24} />
-                        <BaseSpacer height={12} />
 
-                        <BaseView alignSelf="center" flexDirection="row" gap={24}>
-                            <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} icon="icon-plus" onPress={() => {}} />
-                            <GlassButtonWithLabel
-                                label={LL.BALANCE_ACTION_RECEIVE()}
-                                icon="icon-arrow-down"
-                                onPress={() => {}}
+                        {!isObservedAccount && (
+                            <BalanceActions
+                                qrCodeBottomSheetRef={qrCodeBottomSheetRef}
+                                style={balanceActionsAnimatedStyles}
                             />
-                            <GlassButtonWithLabel
-                                label={LL.BALANCE_ACTION_SEND()}
-                                icon="icon-arrow-up"
-                                onPress={() => {}}
-                            />
-                            <GlassButtonWithLabel
-                                label={LL.BALANCE_ACTION_OTHER()}
-                                icon="icon-more-vertical"
-                                onPress={() => {}}
-                            />
-                        </BaseView>
+                        )}
 
                         <BaseSpacer height={64} />
-                    </LinearGradient>
+                    </AnimatedLinearGradient>
 
                     <TabRenderer onLayout={onLayout} />
-                </ScrollView>
+                    <QRCodeBottomSheet ref={qrCodeBottomSheetRef} />
+                </Animated.ScrollView>
             }
         />
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        scrollViewRoot: { minHeight: "100%" },
+        scrollViewContent: { flexGrow: 1 },
+        gradient: { position: "relative", marginTop: 16 },
+    })

@@ -4,7 +4,7 @@ const { defaults: tsjPreset } = require("ts-jest/presets")
 module.exports = {
     ...tsjPreset,
     preset: "react-native",
-    setupFiles: ["./node_modules/react-native-gesture-handler/jestSetup.js", "@shopify/react-native-skia/jestSetup.js"],
+    setupFiles: ["./node_modules/react-native-gesture-handler/jestSetup.js"],
     setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
     coverageReporters: ["json", "lcov", "text", "text-summary", "clover", "json-summary"],
     testTimeout: 10000,

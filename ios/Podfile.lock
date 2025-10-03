@@ -117,9 +117,9 @@ PODS:
   - MixpanelReactNative (3.0.8):
     - Mixpanel-swift (= 4.3.0)
     - React-Core
-  - MMKV (2.2.2):
-    - MMKVCore (~> 2.2.2)
-  - MMKVCore (2.2.2)
+  - MMKV (2.2.4):
+    - MMKVCore (~> 2.2.4)
+  - MMKVCore (2.2.4)
   - MultiplatformBleAdapter (0.2.0)
   - OneSignalXCFramework (5.2.10):
     - OneSignalXCFramework/OneSignalComplete (= 5.2.10)
@@ -1311,29 +1311,6 @@ PODS:
     - React-Core
   - react-native-safe-area-context (5.0.0):
     - React-Core
-  - react-native-skia (1.12.4):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React
-    - React-callinvoker
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - react-native-slider (4.5.6):
     - DoubleConversion
     - glog
@@ -1901,7 +1878,6 @@ DEPENDENCIES:
   - react-native-quick-crypto (from `../node_modules/react-native-quick-crypto`)
   - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
-  - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-view-shot (from `../node_modules/react-native-view-shot`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -2113,8 +2089,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-restart"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
-  react-native-skia:
-    :path: "../node_modules/@shopify/react-native-skia"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   react-native-view-shot:
@@ -2241,9 +2215,9 @@ SPEC CHECKSUMS:
   lottie-ios: fcb5e73e17ba4c983140b7d21095c834b3087418
   lottie-react-native: f26bf46e376a20620da39b1e74d9f0972bfeb0e8
   Mixpanel-swift: 2192b9a24cf41b870749e4e0e10fbc9822bb2b4a
-  MixpanelReactNative: 76314cf184a17d493e2dd8a3e367c81d91361eea
-  MMKV: b4802ebd5a7c68fc0c4a5ccb4926fbdfb62d68e0
-  MMKVCore: a255341a3746955f50da2ad9121b18cb2b346e61
+  MixpanelReactNative: cd3d7129cfc77d796d07e117846f1f2a9d2fe02d
+  MMKV: 1a8e7dbce7f9cad02c52e1b1091d07bd843aefaf
+  MMKVCore: f2dd4c9befea04277a55e84e7812f930537993df
   MultiplatformBleAdapter: b1fddd0d499b96b607e00f0faa8e60648343dc1d
   OneSignalXCFramework: 1a3b28dfbff23aabce585796d23c1bef37772774
   OpenSSL-Universal: ca89c20240633a77c776082ba76b7d90f992bf77
@@ -2285,15 +2259,14 @@ SPEC CHECKSUMS:
   react-native-mmkv: f8155c2efbe795cb0c7586d00ff484b1c9388af0
   react-native-netinfo: 2e3c27627db7d49ba412bfab25834e679db41e21
   react-native-onesignal: 33ade92bd91578374c31c5a5a91f45f49c2d6614
-  react-native-pager-view: 176db81d66a35119ec1b512a59bc94a47f73a68f
-  react-native-quick-base64: 8c24a0be99640ff5c0d1cc765c8ddf7e0ece352e
-  react-native-quick-crypto: eff065b704d3f1c6e336cfc612dce63228ab3482
-  react-native-restart: 0bc732f4461709022a742bb29bcccf6bbc5b4863
-  react-native-safe-area-context: 314537f8fca6fe2c06bd53fc8905efa9e6aaaf59
-  react-native-skia: 4b9b729a5280ca399f86d108b0e73ee7bb770574
-  react-native-slider: bcfc4f2683c072497b157a3c3f00e514a05feec5
-  react-native-view-shot: d1a99d3a2b59689c7b6c0f88a249b2a7125bdd2f
-  react-native-webview: a4483a25c71098e407df1c1d9056ab907647d7c7
+  react-native-pager-view: 08a2230db2a7393ead43299b160d17337837a15e
+  react-native-quick-base64: a74c4b2607b9de016877a8edb776b6ac59785809
+  react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
+  react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
+  react-native-safe-area-context: ab7beb734b0f9f79f55ae144a6c946a6422f55d6
+  react-native-slider: 04b00ccd4b9fa0882004ea22f9e753244f1a48dc
+  react-native-view-shot: a6308bd6bab513b43cd86293b9ea4aa9393eb5f6
+  react-native-webview: 05bae3a03a1e4f59568dfc05286c0ebf8954106c
   React-nativeconfig: 3b359be06d9ee8d64c1eacbca4f1040f331573fd
   React-NativeModulesApple: 8fa1db4855dbc1d437d017bc080e75535c85d2d2
   React-perflogger: e9ebfc705cb9f60ef5d471637350ccab7abd0444
