@@ -43,10 +43,11 @@ jobs:
     report:
         runs-on: ubuntu-latest
         needs: [build-and-test-ios, build-and-test-android, scan]
-        if: >
-            always() && (needs.scan.result == 'success' || needs.scan.result == 'failure') &&
-            (needs.build-and-test-ios.result == 'success' || needs.build-and-test-ios.result == 'failure') && 
-            (needs.build-and-test-android.result == 'success' || needs.build-and-test-android.result == 'failure')
+        if: false
+        # if: >
+        #     always() && (needs.scan.result == 'success' || needs.scan.result == 'failure') &&
+        #     (needs.build-and-test-ios.result == 'success' || needs.build-and-test-ios.result == 'failure') &&
+        #     (needs.build-and-test-android.result == 'success' || needs.build-and-test-android.result == 'failure')
         steps:
             - name: NightlyReportE2E2Slack
               if: ${{ github.event_name == 'schedule' }}
