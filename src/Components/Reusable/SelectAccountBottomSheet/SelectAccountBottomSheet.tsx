@@ -235,6 +235,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                     key={selectedKey}
                     showsVerticalScrollIndicator={false}
                     layout={LinearTransition.duration(500)}
+                    initialNumToRender={15}
                     {...scrollableListProps}
                     scrollEnabled
                 />
