@@ -31,6 +31,19 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
         await dispatch(invalidateUserTokens(selectedAccountAddress!, queryClient))
     }, [dispatch, queryClient, selectedAccountAddress])
 
+    const invalidateActivity = useCallback(() => {
+        return queryClient.invalidateQueries({
+            predicate(query) {
+                if (query.queryKey[0] !== "BALANCE_ACTIVITIES") return false
+                if (query.queryKey.length !== 4) return false
+                if (query.queryKey[2] !== selectedNetwork.genesis.id) return false
+                if (!AddressUtils.compareAddresses(query.queryKey[3] as string | undefined, selectedAccountAddress!))
+                    return false
+                return true
+            },
+        })
+    }, [queryClient, selectedAccountAddress, selectedNetwork.genesis.id])
+
     const invalidateStargateQueries = useCallback(async () => {
         await queryClient.invalidateQueries({
             predicate(query) {
@@ -47,10 +60,15 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
 
-        await Promise.all([invalidateStargateQueries(), invalidateBalanceQueries(), invalidateTokens()])
+        await Promise.all([
+            invalidateStargateQueries(),
+            invalidateBalanceQueries(),
+            invalidateTokens(),
+            invalidateActivity(),
+        ])
 
         setRefreshing(false)
-    }, [invalidateBalanceQueries, invalidateStargateQueries, invalidateTokens])
+    }, [invalidateActivity, invalidateBalanceQueries, invalidateStargateQueries, invalidateTokens])
     return (
         <RefreshControl
             onRefresh={onRefresh}

@@ -4,6 +4,7 @@ import React from "react"
 import { useFeatureFlags } from "~Components"
 import { TokenWithCompleteInfo } from "~Hooks"
 import {
+    Activity,
     CloudKitWallet,
     ConnectedLedgerDevice,
     Device,
@@ -11,10 +12,12 @@ import {
     FungibleToken,
     FungibleTokenWithBalance,
     LedgerAccountWithDevice,
+    TransactionOutcomes,
 } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import {
+    ActivityDetailsScreen,
     AddCustomNodeScreen,
     AssetDetailScreen,
     BridgeAssetDetailScreen,
@@ -143,6 +146,13 @@ export type RootStackParamListHome = {
     [Routes.APPS_TABS_MANAGER]: undefined
     [Routes.APPS_SEARCH]: undefined
     [Routes.DISCOVER_SEARCH]: undefined
+    [Routes.ACTIVITY_DETAILS]: {
+        activity: Activity
+        token?: FungibleToken
+        isSwap?: boolean
+        decodedClauses?: TransactionOutcomes
+        returnScreen?: Routes.HOME | Routes.HISTORY
+    }
     [Routes.BUY_FLOW]: undefined
 }
 
@@ -288,6 +298,11 @@ export const HomeStack = () => {
                         gestureDirection: "vertical",
                         gestureEnabled: true,
                     }}
+                />
+                <Screen
+                    name={Routes.ACTIVITY_DETAILS}
+                    component={ActivityDetailsScreen}
+                    options={{ headerShown: false }}
                 />
                 <Screen
                     name={Routes.BUY_FLOW}
