@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.5 (2025-10-03)</small>
+
+* build: init ([55bcb10](https://github.com/vechain/veworld-mobile/commit/55bcb10))
+* 387 Fix iCloud not available (#3348) ([bacf719](https://github.com/vechain/veworld-mobile/commit/bacf719)), closes [#3348](https://github.com/vechain/veworld-mobile/issues/3348)
+
 ## <small>2.4.4 (2025-09-25)</small>
 
 * build: init ([a565bd2](https://github.com/vechain/veworld-mobile/commit/a565bd2))
