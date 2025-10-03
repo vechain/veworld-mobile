@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.5 (2025-10-03)</small>
+
+* build: init ([f309c43](https://github.com/vechain/veworld-mobile/commit/f309c43))
+* chore: temporary disabled e2e tests (#3355) ([ff3f817](https://github.com/vechain/veworld-mobile/commit/ff3f817)), closes [#3355](https://github.com/vechain/veworld-mobile/issues/3355)
+
 ## <small>2.4.4 (2025-09-25)</small>
 
 * build: init ([a565bd2](https://github.com/vechain/veworld-mobile/commit/a565bd2))
