@@ -4,6 +4,7 @@ import FastImage, { Source } from "react-native-fast-image"
 import { BaseIcon, BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
+import { URIUtils } from "~Utils"
 
 export type DappIconSize = 16 | 24 | 32 | 48 | 64 | 72 | 88
 
@@ -88,6 +89,7 @@ export const DAppIcon = ({
     fallbackIcon = "icon-globe",
     imageTestID = "DAPP_LOGO_IMAGE",
     fallbackTestID = "DAPP_LOGO_FALLBACK_ICON",
+    cachingStrategy,
 }: Props) => {
     const [loadFallback, setLoadFallback] = useState(false)
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -96,6 +98,13 @@ export const DAppIcon = ({
         () => _fallbackBg ?? theme.colors.history.historyItem.iconBackground,
         [_fallbackBg, theme.colors.history.historyItem.iconBackground],
     )
+
+    const cache = useMemo(() => {
+        if (cachingStrategy) return cachingStrategy
+        if (!uri) return FastImage.cacheControl.web
+        if (uri.startsWith(URIUtils.IPFS_GATEWAY)) return FastImage.cacheControl.immutable
+        return FastImage.cacheControl.web
+    }, [cachingStrategy, uri])
 
     return (
         <BaseView
@@ -112,7 +121,7 @@ export const DAppIcon = ({
                 <FastImage
                     source={{
                         uri: uri,
-                        cache: FastImage.cacheControl.web,
+                        cache,
                     }}
                     style={{ width: size, height: size }}
                     onError={() => setLoadFallback(true)}
