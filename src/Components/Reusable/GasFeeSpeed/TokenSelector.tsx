@@ -41,6 +41,7 @@ export const TokenSelector = ({ token, onPress, style }: Props) => {
                     isVechainToken={isVechainToken(token)}
                     isCrossChainToken={isCrossChainToken}
                     iconSize={16}
+                    rounded={!isCrossChainToken}
                 />
             }
             rightIcon={

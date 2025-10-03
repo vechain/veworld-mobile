@@ -92,6 +92,7 @@ export const BalanceView = ({
         change24h,
     ])
 
+    const isCrossChainToken = useMemo(() => !!tokenWithInfo.crossChainProvider, [tokenWithInfo.crossChainProvider])
     return (
         <BaseView style={containerStyle ?? styles.layout}>
             <BaseView style={styles.balanceContainer}>
@@ -99,7 +100,8 @@ export const BalanceView = ({
                     icon={tokenWithInfo.icon}
                     isVechainToken={isVetToken}
                     iconSize={26}
-                    isCrossChainToken={!!tokenWithInfo.crossChainProvider}
+                    isCrossChainToken={isCrossChainToken}
+                    rounded={!isCrossChainToken}
                 />
                 <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                     {symbol}
