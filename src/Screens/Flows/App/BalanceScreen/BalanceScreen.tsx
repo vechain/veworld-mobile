@@ -4,7 +4,7 @@ import LinearGradient from "react-native-linear-gradient"
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { BaseSpacer, Layout, QRCodeBottomSheet } from "~Components"
 import { COLORS } from "~Constants"
-import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { BalanceActions } from "./Components/Actions/BalanceActions"
@@ -16,6 +16,8 @@ import { TabRenderer } from "./Tabs/TabRenderer"
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
 export const BalanceScreen = () => {
+    useFetchFeaturedDApps()
+
     const scrollY = useSharedValue(0)
     const contentOffsetY = useSharedValue(0)
     const selectedAccount = useAppSelector(selectSelectedAccount)

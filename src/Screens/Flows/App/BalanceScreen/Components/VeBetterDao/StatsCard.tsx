@@ -6,6 +6,7 @@ import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
 import { BigNutils, StringUtils } from "~Utils"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {
     label: "co2" | "water" | "energy" | "plastic"
@@ -99,8 +100,9 @@ export const StatsCard = ({ label, value }: Props) => {
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
+const baseStyles = (theme: ColorThemeType) => {
+    const blurDarkBg = isAndroid() ? "rgba(89, 82, 127, 0.65)" : "rgba(3, 3, 4, 0.4)"
+    return StyleSheet.create({
         root: {
             flex: 1,
             borderWidth: 1,
@@ -110,6 +112,7 @@ const baseStyles = (theme: ColorThemeType) =>
             overflow: "hidden",
         },
         blur: {
-            backgroundColor: theme.isDark ? "rgba(89, 82, 127, 0.25)" : theme.colors.transparent,
+            backgroundColor: theme.isDark ? blurDarkBg : theme.colors.transparent,
         },
     })
+}

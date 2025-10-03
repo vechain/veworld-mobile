@@ -4928,17 +4928,17 @@ type RootTranslation = {
 	 */
 	VBD_SEE_PROFILE: string
 	/**
+	 * A​v​o​i​d​e​d
+	 */
+	VBD_STAT_AVOIDED: string
+	/**
 	 * C​O​2
 	 */
 	VBD_STAT_CO2: string
 	/**
-	 * T​r​e​e​s
+	 * C​o​n​s​e​r​v​e​d
 	 */
-	VBD_STAT_TREES: string
-	/**
-	 * W​a​t​e​r
-	 */
-	VBD_STAT_WATER: string
+	VBD_STAT_CONSERVED: string
 	/**
 	 * E​n​e​r​g​y
 	 */
@@ -4956,21 +4956,21 @@ type RootTranslation = {
 	 */
 	VBD_STAT_SAVED: string
 	/**
-	 * C​o​n​s​e​r​v​e​d
+	 * T​r​e​e​s
 	 */
-	VBD_STAT_CONSERVED: string
+	VBD_STAT_TREES: string
 	/**
-	 * A​v​o​i​d​e​d
+	 * W​a​t​e​r
 	 */
-	VBD_STAT_AVOIDED: string
-	/**
-	 * Y​o​u​r​ ​o​f​f​s​e​t
-	 */
-	VBD_YOUR_OFFSET: string
+	VBD_STAT_WATER: string
 	/**
 	 * Y​o​u​r​ ​B​e​t​t​e​r​ ​A​c​t​i​o​n​s
 	 */
 	VBD_YOUR_BETTER_ACTIONS: string
+	/**
+	 * Y​o​u​r​ ​o​f​f​s​e​t
+	 */
+	VBD_YOUR_OFFSET: string
 	/**
 	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
@@ -4988,13 +4988,13 @@ type RootTranslation = {
 	 */
 	VEWORLD: string
 	/**
-	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
-	 */
-	VIEW_ON_EXPLORER: string
-	/**
 	 * V​i​e​w​ ​o​n​l​y
 	 */
 	VIEW_ONLY: string
+	/**
+	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
+	 */
+	VIEW_ON_EXPLORER: string
 	/**
 	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.
 	 */
@@ -5189,6 +5189,34 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * T​o​t​a​l​ ​s​u​p​p​l​y
+	 */
+	STARGATE_STAT_TOTAL_SUPPLY: string
+	/**
+	 * T​o​t​a​l​ ​s​t​a​k​e​d
+	 */
+	STARGATE_STAT_TOTAL_STAKED: string
+	/**
+	 * R​e​w​a​r​d​s​ ​g​e​n​e​r​a​t​i​o​n
+	 */
+	STARGATE_STAT_REWARDS_GENERATION: string
+	/**
+	 * R​e​w​a​r​d​s​ ​d​i​s​t​r​i​b​u​t​e​d
+	 */
+	STARGATE_STAT_REWARDS_DISTRIBUTED: string
+	/**
+	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​*​*​ ​t​o​k​e​n​s
+	 */
+	STARGATE_STAT_DESCRIPTION: string
+	/**
+	 * S​t​a​r​t​ ​s​t​a​k​i​n​g
+	 */
+	STARGATE_START_STAKING: string
+	/**
+	 * d​a​y
+	 */
+	COMMOMN_DAY: string
 }
 
 export type TranslationFunctions = {
@@ -10023,17 +10051,17 @@ Here's what it's all about:
 	 */
 	VBD_SEE_PROFILE: () => LocalizedString
 	/**
+	 * Avoided
+	 */
+	VBD_STAT_AVOIDED: () => LocalizedString
+	/**
 	 * CO2
 	 */
 	VBD_STAT_CO2: () => LocalizedString
 	/**
-	 * Trees
+	 * Conserved
 	 */
-	VBD_STAT_TREES: () => LocalizedString
-	/**
-	 * Water
-	 */
-	VBD_STAT_WATER: () => LocalizedString
+	VBD_STAT_CONSERVED: () => LocalizedString
 	/**
 	 * Energy
 	 */
@@ -10051,21 +10079,21 @@ Here's what it's all about:
 	 */
 	VBD_STAT_SAVED: () => LocalizedString
 	/**
-	 * Conserved
+	 * Trees
 	 */
-	VBD_STAT_CONSERVED: () => LocalizedString
+	VBD_STAT_TREES: () => LocalizedString
 	/**
-	 * Avoided
+	 * Water
 	 */
-	VBD_STAT_AVOIDED: () => LocalizedString
-	/**
-	 * Your offset
-	 */
-	VBD_YOUR_OFFSET: () => LocalizedString
+	VBD_STAT_WATER: () => LocalizedString
 	/**
 	 * Your Better Actions
 	 */
 	VBD_YOUR_BETTER_ACTIONS: () => LocalizedString
+	/**
+	 * Your offset
+	 */
+	VBD_YOUR_OFFSET: () => LocalizedString
 	/**
 	 * Vechain news & updates
 	 */
@@ -10083,13 +10111,13 @@ Here's what it's all about:
 	 */
 	VEWORLD: () => LocalizedString
 	/**
-	 * View on explorer
-	 */
-	VIEW_ON_EXPLORER: () => LocalizedString
-	/**
 	 * View only
 	 */
 	VIEW_ONLY: () => LocalizedString
+	/**
+	 * View on explorer
+	 */
+	VIEW_ON_EXPLORER: () => LocalizedString
 	/**
 	 * wallets saved on Google Drive.
 	 */
@@ -10282,6 +10310,34 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Total supply
+	 */
+	STARGATE_STAT_TOTAL_SUPPLY: () => LocalizedString
+	/**
+	 * Total staked
+	 */
+	STARGATE_STAT_TOTAL_STAKED: () => LocalizedString
+	/**
+	 * Rewards generation
+	 */
+	STARGATE_STAT_REWARDS_GENERATION: () => LocalizedString
+	/**
+	 * Rewards distributed
+	 */
+	STARGATE_STAT_REWARDS_DISTRIBUTED: () => LocalizedString
+	/**
+	 * Get **VTHO** by staking your **VET** tokens
+	 */
+	STARGATE_STAT_DESCRIPTION: () => LocalizedString
+	/**
+	 * Start staking
+	 */
+	STARGATE_START_STAKING: () => LocalizedString
+	/**
+	 * day
+	 */
+	COMMOMN_DAY: () => LocalizedString
 }
 
 export type Formatters = {

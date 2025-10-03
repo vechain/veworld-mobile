@@ -3,7 +3,7 @@ import { LayoutChangeEvent, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseSimpleTabs, BaseSpacer, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux/Hooks"
@@ -12,6 +12,8 @@ import { AccountUtils } from "~Utils"
 import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
 import { Tokens } from "./Tokens"
+import { Staking } from "./Staking"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
 
@@ -26,14 +28,21 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const { onDAppPress } = useDAppActions(Routes.HOME)
+    const { tabBarBottomMargin } = useTabBarBottomMargin()
+
     const showFavorites = useMemo(() => {
         return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount)
     }, [bookmarkedDApps.length, selectedAccount])
     const labels = useMemo(() => TABS.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL])
+
+    const paddingBottom = useMemo(() => {
+        return isAndroid() ? tabBarBottomMargin + 24 : 0
+    }, [tabBarBottomMargin])
+
     return (
-        <Animated.View style={styles.root} onLayout={onLayout}>
+        <Animated.View style={[styles.root, { paddingBottom: tabBarBottomMargin }]} onLayout={onLayout}>
             {showFavorites && (
-                <>
+                <BaseView>
                     <FavouritesV2
                         bookmarkedDApps={bookmarkedDApps}
                         onDAppPress={onDAppPress}
@@ -41,10 +50,14 @@ export const TabRenderer = ({ onLayout }: Props) => {
                         style={styles.favorites}
                     />
                     <BaseSpacer height={24} />
-                </>
+                </BaseView>
             )}
             <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
-            <BaseView flexDirection="column">{selectedTab === "TOKENS" ? <Tokens /> : null}</BaseView>
+            <BaseView flexDirection="column" flex={1} pb={paddingBottom}>
+                {selectedTab === "TOKENS" && <Tokens />}
+                {selectedTab === "STAKING" && <Staking />}
+                {selectedTab === "COLLECTIBLES" && <></>}
+            </BaseView>
         </Animated.View>
     )
 }
