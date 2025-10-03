@@ -102,6 +102,7 @@ export const DAppIcon = ({
     const cache = useMemo(() => {
         if (cachingStrategy) return cachingStrategy
         if (!uri) return FastImage.cacheControl.web
+        //It doesn't make sense to use HTTP headers for IPFS, given that if the image changes, the URL changes
         if (uri.startsWith(URIUtils.IPFS_GATEWAY)) return FastImage.cacheControl.immutable
         return FastImage.cacheControl.web
     }, [cachingStrategy, uri])
