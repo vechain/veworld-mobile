@@ -119,7 +119,12 @@ export const RowDetails = React.memo(
                             style={[animatedStyles.padding]}
                             layout={LinearTransition.springify().damping(20).stiffness(100).mass(0.6)}>
                             <BaseView flexDirection="row" flex={1} alignItems="flex-start">
-                                <DAppIcon uri={icon} size={64} />
+                                <DAppIcon
+                                    uri={icon}
+                                    size={64}
+                                    imageTestID="ROW_DETAILS_IMAGE"
+                                    fallbackTestID="ROW_DETAILS_IMAGE_FALLBACK"
+                                />
                                 <Animated.View style={animatedStyles.spacerStyle} />
                                 <BaseView flexDirection="column" gap={10} overflow="hidden" pr={16} flex={1}>
                                     <BaseText
