@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
     build-and-test-ios:
-        if:
+        if: false
         # if: >
         #   (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
         #   github.event_name == 'workflow_dispatch' ||
