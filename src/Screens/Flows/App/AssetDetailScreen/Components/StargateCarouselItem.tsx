@@ -36,7 +36,7 @@ const RowItem = ({ label, value, icon, testID }: { label: string; value: string;
                 <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800} typographyFont="bodyMedium">
                     {formattedValue}
                 </BaseText>
-                <TokenImage icon={icon} isVechainToken iconSize={16} />
+                <TokenImage icon={icon} isVechainToken iconSize={16} rounded={true} />
             </BaseView>
         </BaseView>
     )
