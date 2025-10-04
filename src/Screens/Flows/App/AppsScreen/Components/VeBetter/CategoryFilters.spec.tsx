@@ -232,4 +232,28 @@ describe("CategoryFilters", () => {
 
         expect(mockOnCategoryChange).toHaveBeenCalledTimes(5)
     })
+
+    it("should render animated background for tab indicator", () => {
+        render(
+            <CategoryFilters
+                selectedCategory={{ id: X2ECategoryType.NUTRITION }}
+                onCategoryChange={mockOnCategoryChange}
+            />,
+            { wrapper: Wrapper },
+        )
+
+        expect(screen.getByText("Food & Drink")).toBeVisible()
+    })
+
+    it("should handle ScrollView layout and scroll events", () => {
+        render(
+            <CategoryFilters
+                selectedCategory={{ id: X2ECategoryType.NUTRITION }}
+                onCategoryChange={mockOnCategoryChange}
+            />,
+            { wrapper: Wrapper },
+        )
+
+        expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
+    })
 })

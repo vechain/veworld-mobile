@@ -1,7 +1,9 @@
-import React, { useMemo, useRef, useEffect, useCallback } from "react"
+import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { ScrollView } from "react-native-gesture-handler"
-import { BaseChip, BaseView } from "~Components"
+import Animated from "react-native-reanimated"
+import { BaseText, BaseTouchable, BaseView } from "~Components"
+import { COLORS } from "~Constants"
+import { useAnimatedHorizontalFilters, useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 import { X2ECategoryType } from "~Model/DApp"
 import { useCategories } from "./Hooks/useCategories"
@@ -15,66 +17,94 @@ interface CategoryFiltersProps {
 
 export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange }: CategoryFiltersProps) => {
     const categories = useCategories()
-    const scrollViewRef = useRef<ScrollView>(null)
-    const hasScrolledRef = useRef(false)
+    const { styles, theme } = useThemedStyles(baseStyles)
 
-    const filterOptions = useMemo(() => {
-        return categories.map(category => {
-            return {
-                key: category.id,
-                title: category.displayName,
-                isSelected: selectedCategory.id === category.id,
-                onPress: () => onCategoryChange(category),
-            }
+    const selectedCategoryObject = categories.find(cat => cat.id === selectedCategory.id) || categories[0]
+
+    const { scrollViewRef, handleChipLayout, handleScrollViewLayout, handleScroll, indicatorAnimatedStyle } =
+        useAnimatedHorizontalFilters({
+            items: categories,
+            selectedItem: selectedCategoryObject,
+            keyExtractor: (item: { id: X2ECategoryType; displayName: string; icon: IconKey }) => item.id,
         })
-    }, [selectedCategory.id, categories, onCategoryChange])
 
-    const filterChips = useMemo(() => {
-        return filterOptions.map(({ key, isSelected, title, onPress }) => (
-            <BaseView key={key} mx={6}>
-                <BaseChip label={title} active={isSelected} onPress={onPress} />
-            </BaseView>
-        ))
-    }, [filterOptions])
-
-    const scrollToSelectedCategory = useCallback(() => {
-        const selectedIndex = categories.findIndex(cat => cat.id === selectedCategory.id)
-        if (selectedIndex !== -1 && scrollViewRef.current && !hasScrolledRef.current) {
-            const chipWidth = 110
-            const scrollPosition = Math.max(0, selectedIndex * chipWidth - 100)
-
-            scrollViewRef.current.scrollTo({
-                x: scrollPosition,
-                animated: false,
-            })
-            hasScrolledRef.current = true
-        }
-    }, [selectedCategory.id, categories])
-
-    useEffect(() => {
-        hasScrolledRef.current = false
-    }, [selectedCategory.id])
+    const textColor = useCallback(
+        (category: { id: X2ECategoryType; displayName: string; icon: IconKey }) => {
+            const active = selectedCategory.id === category.id
+            if (active) {
+                return theme.isDark ? COLORS.PURPLE : COLORS.WHITE
+            }
+            return theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600
+        },
+        [selectedCategory.id, theme.isDark],
+    )
 
     return (
-        <BaseView style={styles.filtersContainer}>
-            <ScrollView
+        <BaseView style={styles.container}>
+            <Animated.View
+                style={[
+                    styles.animatedBackground,
+                    {
+                        backgroundColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
+                    },
+                    indicatorAnimatedStyle,
+                ]}
+            />
+
+            <Animated.ScrollView
                 ref={scrollViewRef}
                 horizontal
+                contentContainerStyle={styles.root}
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.filtersScrollContainer}
-                onLayout={scrollToSelectedCategory}>
-                {filterChips}
-            </ScrollView>
+                onLayout={handleScrollViewLayout}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}>
+                {categories.map((category, index) => (
+                    <BaseView
+                        key={category.id}
+                        onLayout={event => handleChipLayout(event, index)}
+                        style={styles.chipWrapper}>
+                        <BaseTouchable
+                            style={styles.transparentChip}
+                            onPress={() => onCategoryChange(category)}
+                            activeOpacity={0.8}>
+                            <BaseText style={{ color: textColor(category) }} typographyFont="bodyMedium">
+                                {category.displayName}
+                            </BaseText>
+                        </BaseTouchable>
+                    </BaseView>
+                ))}
+            </Animated.ScrollView>
         </BaseView>
     )
 })
 
-const styles = StyleSheet.create({
-    filtersContainer: {
-        height: 48,
-    },
-    filtersScrollContainer: {
-        paddingHorizontal: 16,
-        alignItems: "center",
-    },
-})
+const baseStyles = () =>
+    StyleSheet.create({
+        container: {
+            position: "relative",
+            height: 64,
+        },
+        root: {
+            gap: 4,
+            paddingVertical: 8,
+            paddingHorizontal: 16,
+            alignItems: "center",
+        },
+        chipWrapper: {
+            position: "relative",
+        },
+        transparentChip: {
+            minWidth: 64,
+            paddingHorizontal: 12,
+            paddingVertical: 8,
+            borderRadius: 20,
+            alignItems: "center",
+        },
+        animatedBackground: {
+            position: "absolute",
+            top: 14,
+            height: 36,
+            borderRadius: 20,
+        },
+    })

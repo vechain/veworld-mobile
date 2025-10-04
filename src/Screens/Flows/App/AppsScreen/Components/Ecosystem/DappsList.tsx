@@ -4,6 +4,7 @@ import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseSpacer } from "~Components"
 import { DiscoveryDApp } from "~Constants"
+import { useContentSwipeAnimation } from "~Hooks"
 import { DappHorizontalCardSkeleton } from "~Screens/Flows/App/DiscoverScreen/Components/DappHorizontalCardSkeleton"
 import { DAppHorizontalCardV2 } from "./DAppHorizontalCardV2"
 
@@ -12,13 +13,27 @@ type Props = {
     onOpenDApp: (dapp: DiscoveryDApp) => void
     onMorePress: (dapp: DiscoveryDApp) => void
     isLoading: boolean
+    animationDirection?: "left" | "right" | null
+    onAnimationComplete?: () => void
 }
 
 const keyExtractor = (dapp: DiscoveryDApp) => dapp.href
 
-export const DAppsList = ({ items, onMorePress, onOpenDApp, isLoading }: Props) => {
+export const DAppsList = ({
+    items,
+    onMorePress,
+    onOpenDApp,
+    isLoading,
+    animationDirection,
+    onAnimationComplete,
+}: Props) => {
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
+
+    const { animatedStyle } = useContentSwipeAnimation({
+        animationDirection,
+        onAnimationComplete,
+    })
 
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
@@ -43,34 +58,38 @@ export const DAppsList = ({ items, onMorePress, onOpenDApp, isLoading }: Props) 
         return <DappHorizontalCardSkeleton />
     }, [])
 
-    if (isLoading && items.length === 0) {
+    if (isLoading) {
         return (
-            <FlatList
-                renderItem={renderSkeletonItem}
-                data={[1, 2, 3, 4, 5, 6, 7]}
-                keyExtractor={item => item.toString()}
-                scrollEnabled={false}
-                shouldRasterizeIOS
-                windowSize={5}
-                ItemSeparatorComponent={renderItemSeparator}
-                contentContainerStyle={styles.flatListPadding}
-            />
+            <Animated.View style={animatedStyle}>
+                <FlatList
+                    renderItem={renderSkeletonItem}
+                    data={[1, 2, 3, 4, 5, 6, 7]}
+                    keyExtractor={item => item.toString()}
+                    scrollEnabled={false}
+                    shouldRasterizeIOS
+                    windowSize={5}
+                    ItemSeparatorComponent={renderItemSeparator}
+                    contentContainerStyle={styles.flatListPadding}
+                />
+            </Animated.View>
         )
     }
 
     return (
-        <Animated.FlatList
-            ref={flatListRef}
-            data={items}
-            scrollEnabled={true}
-            keyExtractor={keyExtractor}
-            contentContainerStyle={styles.flatListPadding}
-            ItemSeparatorComponent={renderItemSeparator}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            renderItem={renderItem}
-            windowSize={5}
-        />
+        <Animated.View style={animatedStyle}>
+            <Animated.FlatList
+                ref={flatListRef}
+                data={items}
+                scrollEnabled={true}
+                keyExtractor={keyExtractor}
+                contentContainerStyle={styles.flatListPadding}
+                ItemSeparatorComponent={renderItemSeparator}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                renderItem={renderItem}
+                windowSize={5}
+            />
+        </Animated.View>
     )
 }
 
