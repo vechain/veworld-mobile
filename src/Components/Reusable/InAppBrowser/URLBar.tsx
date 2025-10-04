@@ -2,12 +2,10 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import FastImage from "react-native-fast-image"
-import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
+import Animated from "react-native-reanimated"
 import { BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { BaseIcon } from "~Components/Base/BaseIcon"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal, useGetDappMetadataFromUrl } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
@@ -16,8 +14,8 @@ import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { useAppSelector } from "~Storage/Redux/Hooks"
 import { selectLastNavigationSource } from "~Storage/Redux/Selectors"
 import { DAppUtils } from "~Utils/DAppUtils"
-import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
+import { DAppIcon } from "../DAppIcon"
 import { Spinner } from "../Spinner"
 import { BrowserBottomSheet } from "./BrowserBottomSheet"
 
@@ -32,13 +30,11 @@ const AnimatedBaseIcon = Animated.createAnimatedComponent(BaseIcon)
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 const AnimatedBaseText = Animated.createAnimatedComponent(wrapFunctionComponent(BaseText))
 const AnimatedTouchable = Animated.createAnimatedComponent(wrapFunctionComponent(BaseTouchable))
-const AnimatedFavicon = Animated.createAnimatedComponent(FastImage)
 
 export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: Props) => {
-    const { showToolbars } = useInAppBrowser()
     const { betterWorldFeature } = useFeatureFlags()
     const dappMetadata = useGetDappMetadataFromUrl(navigationUrl)
-    const fetchDynamicLogo = useDynamicAppLogo({})
+    const fetchDynamicLogo = useDynamicAppLogo()
     const lastNavigationSource = useAppSelector(selectLastNavigationSource)
 
     const nav =
@@ -75,13 +71,6 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
         }
     }, [betterWorldFeature.appsScreen.enabled, nav, onNavigate])
 
-    const animatedFaviconStyles = useAnimatedStyle(
-        () => ({
-            transform: [{ scale: withTiming(showToolbars ? 1 : 0.6, { duration: 300 }) }],
-        }),
-        [showToolbars],
-    )
-
     const parsedDappMetadata = useMemo(() => {
         if (dappMetadata)
             return {
@@ -100,24 +89,15 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
     }, [dappMetadata, fetchDynamicLogo, navigationUrl])
 
     const websiteFavicon = useMemo(() => {
-        return parsedDappMetadata.icon ? (
-            <AnimatedFavicon
-                testID="URL-bar-dapp-favicon"
-                source={{ uri: parsedDappMetadata.icon, priority: FastImage.priority.high }}
-                style={isIOS() ? [animatedFaviconStyles, styles.favicon] : styles.favicon}
-            />
-        ) : (
-            <AnimatedBaseIcon
-                testID="URL-bar-website-favicon"
-                name="icon-globe"
-                color={COLORS.GREY_400}
-                bg={COLORS.GREY_600}
-                size={12}
-                p={6}
-                style={isIOS() ? [animatedFaviconStyles, styles.favicon] : styles.favicon}
+        return (
+            <DAppIcon
+                uri={parsedDappMetadata.icon}
+                fallbackTestID="URL-bar-website-favicon"
+                imageTestID="URL-bar-dapp-favicon"
+                size={24}
             />
         )
-    }, [parsedDappMetadata, animatedFaviconStyles])
+    }, [parsedDappMetadata])
 
     const websiteName = useMemo(() => {
         const url = new URL(navigationUrl)
@@ -238,12 +218,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         gap: 8,
-    },
-    favicon: {
-        width: 24,
-        height: 24,
-        borderRadius: 4,
-        transformOrigin: "center",
     },
     iconButton: {
         transformOrigin: "center",

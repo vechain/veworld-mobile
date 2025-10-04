@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react-native"
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react-native"
 import React, { PropsWithChildren } from "react"
 import { TestWrapper } from "~Test"
 import { RowDetails } from "./RowDetails"
@@ -268,15 +268,19 @@ describe("RowDetails", () => {
     })
 
     describe("Image Handling", () => {
-        it("should handle image load errors", () => {
+        it("should handle image load errors", async () => {
             render(<RowDetails name={mockApp.name} icon="https://invalid-url.com/image.png" desc={mockApp.desc} />, {
                 wrapper: Wrapper,
             })
 
-            const image = screen.UNSAFE_getByType(require("react-native").Image)
-            fireEvent(image, "error")
+            const image = screen.getByTestId("ROW_DETAILS_IMAGE")
+            await act(() => {
+                fireEvent(image, "error")
+            })
 
-            expect(image).toBeVisible()
+            await waitFor(() => {
+                expect(screen.getByTestId("ROW_DETAILS_IMAGE_FALLBACK")).toBeVisible()
+            })
         })
     })
 

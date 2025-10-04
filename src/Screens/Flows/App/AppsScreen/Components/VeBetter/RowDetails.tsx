@@ -1,7 +1,7 @@
-import React, { PropsWithChildren, useCallback, useMemo, useState } from "react"
-import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
+import React, { PropsWithChildren, useMemo } from "react"
+import { StyleSheet, TouchableOpacity } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
-import { BaseIcon, BaseSpacer, BaseText } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, DAppIcon } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -40,7 +40,6 @@ export const RowDetails = React.memo(
         onToggleOpen,
     }: AppRowDetailsProps) => {
         const { styles, theme } = useThemedStyles(baseStyles)
-        const [loadFallback, setLoadFallback] = useState(false)
 
         const {
             state,
@@ -55,14 +54,6 @@ export const RowDetails = React.memo(
 
         const { showDetails, isAnimating, contentVisible } = state
         const { toggleDetails, onPressIn, onPressOut } = handlers
-
-        const onImageError = useCallback(() => {
-            setLoadFallback(true)
-        }, [])
-
-        const imageSource = useMemo(() => {
-            return loadFallback ? require("~Assets/Img/dapp-fallback.png") : { uri: icon }
-        }, [loadFallback, icon])
 
         const categoryElements = useMemo(() => {
             return categories.map((category, index) => (
@@ -128,11 +119,11 @@ export const RowDetails = React.memo(
                             style={[animatedStyles.padding]}
                             layout={LinearTransition.springify().damping(20).stiffness(100).mass(0.6)}>
                             <BaseView flexDirection="row" flex={1} alignItems="flex-start">
-                                <Image
-                                    source={imageSource}
-                                    style={[{ height: 64, width: 64 }, styles.icon] as StyleProp<ImageStyle>}
-                                    onError={onImageError}
-                                    resizeMode="contain"
+                                <DAppIcon
+                                    uri={icon}
+                                    size={64}
+                                    imageTestID="ROW_DETAILS_IMAGE"
+                                    fallbackTestID="ROW_DETAILS_IMAGE_FALLBACK"
                                 />
                                 <Animated.View style={animatedStyles.spacerStyle} />
                                 <BaseView flexDirection="column" gap={10} overflow="hidden" pr={16} flex={1}>
@@ -189,10 +180,6 @@ const baseStyles = (theme: ColorThemeType) =>
         mainContainer: {
             backgroundColor: theme.colors.x2eAppOpenDetails.background,
             transformOrigin: "center",
-            overflow: "hidden",
-        },
-        icon: {
-            borderRadius: 8,
             overflow: "hidden",
         },
         iconWrapper: {

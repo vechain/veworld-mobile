@@ -16,7 +16,7 @@ type FnArgs = {
     app: VeBetterDaoDAppMetadata | DiscoveryDApp | undefined
 }
 
-export const useDynamicAppLogo = ({ size = 64 }: Args) => {
+export const useDynamicAppLogo = ({ size = 64 }: Args = {}) => {
     const { data: vbdApps } = useVeBetterDaoDapps()
 
     return useCallback(

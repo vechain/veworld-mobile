@@ -1,6 +1,6 @@
-import React, { useState } from "react"
-import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
-import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
+import React from "react"
+import { StyleSheet } from "react-native"
+import { BaseIcon, BaseText, BaseTouchable, BaseView, DAppIcon } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useAppLogo } from "~Hooks/useAppLogo"
@@ -11,11 +11,7 @@ type Props = {
     onPress: (dapp: DiscoveryDApp) => void
 }
 
-const IMAGE_SIZE = 64
-
 export const DAppHorizontalCardV2 = ({ dapp, onOpenDApp, onPress }: Props) => {
-    const [loadFallback, setLoadFallback] = useState(false)
-
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const iconUri = useAppLogo({ app: dapp })
@@ -24,18 +20,7 @@ export const DAppHorizontalCardV2 = ({ dapp, onOpenDApp, onPress }: Props) => {
         <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" style={[styles.rootContainer]}>
             {/* Image */}
             <BaseTouchable style={styles.touchableContainer} onPress={() => onOpenDApp(dapp)}>
-                <Image
-                    source={
-                        loadFallback
-                            ? require("~Assets/Img/dapp-fallback.png")
-                            : {
-                                  uri: iconUri,
-                              }
-                    }
-                    style={[{ height: IMAGE_SIZE, width: IMAGE_SIZE }, styles.icon] as StyleProp<ImageStyle>}
-                    onError={() => setLoadFallback(true)}
-                    resizeMode="contain"
-                />
+                <DAppIcon uri={iconUri} size={64} />
                 {/* Title & Desc */}
                 <BaseView flex={1} justifyContent="center" flexDirection="column" gap={4}>
                     <BaseText typographyFont="bodySemiBold" color={theme.colors.dappCard.name}>
@@ -73,9 +58,5 @@ const baseStyles = () =>
             alignItems: "center",
             justifyContent: "center",
             padding: 10,
-        },
-        icon: {
-            borderRadius: 8,
-            overflow: "hidden",
         },
     })

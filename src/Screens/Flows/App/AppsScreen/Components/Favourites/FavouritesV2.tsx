@@ -9,17 +9,29 @@ import { DAppCardV2 } from "./DAppCardV2"
 type BookmarkListProps = {
     bookmarkedDApps: DiscoveryDApp[]
     onDAppPress: (dapp: DiscoveryDApp) => void
+    /**
+     * Icon background for the dapp card
+     */
+    iconBg?: string
 }
 
 const ItemSeparatorComponent = () => <BaseSpacer width={8} />
 const FooterComponent = () => <BaseSpacer width={16} />
 
-const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps) => {
+const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress, iconBg }: BookmarkListProps) => {
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
-            return <DAppCardV2 dapp={item} onPress={() => onDAppPress(item)} showDappTitle={false} iconSize={72} />
+            return (
+                <DAppCardV2
+                    dapp={item}
+                    onPress={() => onDAppPress(item)}
+                    showDappTitle={false}
+                    iconSize={72}
+                    iconBg={iconBg}
+                />
+            )
         },
-        [onDAppPress],
+        [iconBg, onDAppPress],
     )
 
     return (
@@ -43,10 +55,10 @@ type FavouritesProps = {
     onActionLabelPress?: () => void
     renderCTASeeAll?: boolean
     style?: StyleProp<ViewStyle>
-}
+} & Pick<BookmarkListProps, "iconBg">
 
 export const FavouritesV2 = React.memo(
-    ({ bookmarkedDApps, onActionLabelPress, onDAppPress, renderCTASeeAll = true, style }: FavouritesProps) => {
+    ({ bookmarkedDApps, onActionLabelPress, onDAppPress, renderCTASeeAll = true, style, iconBg }: FavouritesProps) => {
         const { LL } = useI18nContext()
         const showBookmarkedDAppsList = bookmarkedDApps.length > 0
         const theme = useTheme()
@@ -93,6 +105,7 @@ export const FavouritesV2 = React.memo(
                     <BookmarkedDAppsList
                         bookmarkedDApps={renderCTASeeAll ? bookmarkedDApps.slice(0, 15) : bookmarkedDApps}
                         onDAppPress={onDAppPress}
+                        iconBg={iconBg}
                     />
                 )}
             </BaseView>

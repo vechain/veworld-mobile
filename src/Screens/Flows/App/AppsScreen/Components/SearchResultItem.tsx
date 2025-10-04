@@ -1,14 +1,14 @@
-import React, { MutableRefObject, useCallback, useMemo, useState } from "react"
-import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
-import { BaseIcon, BaseText, BaseView, SwipeableRow } from "~Components"
+import React, { MutableRefObject, useCallback, useMemo } from "react"
+import { StyleSheet } from "react-native"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import { BaseIcon, BaseText, BaseView, DAppIcon, SwipeableRow } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
-import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useVisitedUrls } from "~Hooks/useBrowserSearch"
+import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { DAppUtils } from "~Utils"
 import { HistoryItem, HistoryUrlKind } from "~Utils/HistoryUtils"
 import { useDAppActions } from "../Hooks"
-import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
 type Props = {
     item: HistoryItem
@@ -18,7 +18,6 @@ type Props = {
 const IMAGE_SIZE = 48
 
 export const SearchResultItem = ({ item, swipeableItemRefs }: Props) => {
-    const [loadFallback, setLoadFallback] = useState(false)
     const { styles, theme } = useThemedStyles(baseStyles)
     const { onDAppPress } = useDAppActions()
     const { navigateWithTab } = useBrowserTab()
@@ -74,28 +73,12 @@ export const SearchResultItem = ({ item, swipeableItemRefs }: Props) => {
                 swipeableItemRefs={swipeableItemRefs}
                 onPress={handleNavigate}>
                 <BaseView style={styles.touchableContainer}>
-                    <BaseView
-                        style={styles.iconContainer}
-                        bg={loadFallback || !iconUri ? theme.colors.history.historyItem.iconBackground : "transparent"}>
-                        {loadFallback || !iconUri ? (
-                            <BaseIcon
-                                name={item.type === HistoryUrlKind.DAPP ? "icon-image" : "icon-globe"}
-                                size={20}
-                                color={theme.colors.history.historyItem.iconColor}
-                                testID="SEARCH_RESULT_ITEM_FALLBACK_ICON"
-                            />
-                        ) : (
-                            <Image
-                                source={{
-                                    uri: iconUri,
-                                }}
-                                style={styles.dappImage as StyleProp<ImageStyle>}
-                                onError={() => setLoadFallback(true)}
-                                resizeMode="contain"
-                                testID="SEARCH_RESULT_ITEM_IMAGE"
-                            />
-                        )}
-                    </BaseView>
+                    <DAppIcon
+                        size={IMAGE_SIZE}
+                        uri={iconUri}
+                        fallbackTestID="SEARCH_RESULT_ITEM_FALLBACK_ICON"
+                        imageTestID="SEARCH_RESULT_ITEM_IMAGE"
+                    />
 
                     {/* Title & Desc */}
                     <BaseView flex={1} justifyContent="center">

@@ -3,11 +3,10 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { MutableRefObject, default as React, useCallback, useEffect, useMemo, useState } from "react"
 import { BackHandler, Platform, StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
-import FastImage, { ImageStyle } from "react-native-fast-image"
 import Animated, { Easing, FadeOut } from "react-native-reanimated"
 import WebView from "react-native-webview"
 import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
-import { BaseIcon, BaseStatusBar, BaseView, Layout, URLBar, useInAppBrowser } from "~Components"
+import { BaseStatusBar, DAppIcon, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
@@ -38,7 +37,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const track = useAnalyticTracking()
     const nav = useNavigation()
     const { locale } = useI18nContext()
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
     const [isLoadingWebView, setIsLoadingWebView] = useState(true)
     const { ref: webviewContainerRef, performScreenshot } = useBrowserScreenshot()
     const dispatch = useAppDispatch()
@@ -78,35 +77,14 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     }, [])
 
     const renderLoading = useCallback(() => {
-        if (!dappMetadata)
-            return (
-                <Animated.View exiting={isIOS() ? FadeOut.duration(400) : undefined} style={[styles.loadingWebView]}>
-                    <BaseView style={[styles.loadingIcon, styles.notDappLoadingIcon]}>
-                        <BaseIcon name="icon-globe" size={32} color={theme.colors.history.historyItem.iconColor} />
-                    </BaseView>
-                </Animated.View>
-            )
-
         return (
             <Animated.View
                 exiting={isIOS() ? FadeOut.duration(400).easing(Easing.out(Easing.ease)) : undefined}
                 style={[styles.loadingWebView]}>
-                <FastImage
-                    source={{
-                        uri: iconUri,
-                    }}
-                    style={styles.loadingIcon as ImageStyle}
-                />
+                <DAppIcon uri={iconUri} size={88} />
             </Animated.View>
         )
-    }, [
-        dappMetadata,
-        iconUri,
-        styles.loadingIcon,
-        styles.loadingWebView,
-        styles.notDappLoadingIcon,
-        theme.colors.history.historyItem.iconColor,
-    ])
+    }, [iconUri, styles.loadingWebView])
 
     const onNavigate = useCallback(async () => {
         await performScreenshot()
@@ -199,17 +177,6 @@ const baseStyles = (theme: ColorThemeType) => {
             flex: 1,
             borderTopStartRadius: 24,
             borderTopEndRadius: 24,
-        },
-        loadingIcon: {
-            width: 100,
-            height: 100,
-            alignSelf: "center",
-            borderRadius: 8,
-        },
-        notDappLoadingIcon: {
-            backgroundColor: theme.colors.history.historyItem.iconBackground,
-            alignItems: "center",
-            justifyContent: "center",
         },
         loadingWebView: {
             backgroundColor: theme.colors.tabsFooter.background,

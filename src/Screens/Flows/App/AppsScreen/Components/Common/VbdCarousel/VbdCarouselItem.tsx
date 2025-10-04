@@ -1,10 +1,10 @@
 import React, { useMemo } from "react"
 import { Pressable, StyleSheet } from "react-native"
-import FastImage, { ImageStyle } from "react-native-fast-image"
-import { BaseSpacer, BaseText, BaseView, BlurView } from "~Components"
+import { BaseSpacer, BaseText, BaseView, BlurView, DAppIcon } from "~Components"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { useAppLogo } from "~Hooks/useAppLogo"
 import { VbdDApp } from "~Model"
 import { URIUtils } from "~Utils"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
@@ -22,7 +22,8 @@ export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {
         const uri = app.ve_world?.featured_image ?? app.ve_world?.banner
         return uri ? URIUtils.convertUriToUrl(uri) : undefined
     }, [app])
-    const iconUri = useMemo(() => (app.logo ? URIUtils.convertUriToUrl(app.logo) : undefined), [app])
+
+    const iconUri = useAppLogo({ app, size: 24 })
 
     const category = useMemo(() => {
         return app.categories?.find(cat => AVAILABLE_CATEGORIES.includes(cat as any)) as
@@ -36,7 +37,7 @@ export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {
                 <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={18}>
                     <BaseView px={16} py={12} flexDirection="column" gap={8}>
                         <BaseView flexDirection="row">
-                            <FastImage source={{ uri: iconUri }} style={styles.logo as ImageStyle} />
+                            <DAppIcon size={24} uri={iconUri} />
                             <BaseSpacer width={12} flexShrink={0} />
                             <BaseText
                                 flex={1}
@@ -80,10 +81,5 @@ const baseStyles = () =>
         },
         blurView: {
             backgroundColor: "rgba(0, 0, 0, 0.30)",
-        },
-        logo: {
-            width: 24,
-            height: 24,
-            borderRadius: 4,
         },
     })
