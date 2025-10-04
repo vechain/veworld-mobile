@@ -6,13 +6,14 @@ import { usePrevious } from "~Hooks/usePrevious"
 type Args = {
     onResize: (value: boolean) => void
     initialLayout: MutableRefObject<boolean>
+    bottomSpacing?: number
 }
 
 /**
  * Hook for creating nested scrollable components inside a BottomSheet.
  * Do not use @gorhom/bottom-sheet components, just use these
  */
-export const useScrollableBottomSheetList = ({ onResize, initialLayout }: Args) => {
+export const useScrollableBottomSheetList = ({ onResize, initialLayout, bottomSpacing = 24 }: Args) => {
     const { height: windowHeight } = useWindowDimensions()
     const { bottom: bottomSafeAreaSize } = useSafeAreaInsets()
 
@@ -29,7 +30,7 @@ export const useScrollableBottomSheetList = ({ onResize, initialLayout }: Args) 
             if (contentHeight <= height) {
                 const overflows = contentHeight + offsetY.current >= height
                 //32 is the size of the handle + 4px of offset
-                const minValue = overflows ? maxHeight - offsetY.current - 32 : contentHeight
+                const minValue = overflows ? maxHeight - offsetY.current - 32 - bottomSpacing : contentHeight
                 setHeight(minValue)
                 //If the height increased, just set it as a small viewport to set the correct size
                 if ((previousHeight ?? 0) < contentHeight) onResize(true)
@@ -39,7 +40,7 @@ export const useScrollableBottomSheetList = ({ onResize, initialLayout }: Args) 
                 onResize(false)
             }
         },
-        [height, maxHeight, offsetY, onResize, previousHeight],
+        [bottomSpacing, height, maxHeight, onResize, previousHeight],
     )
 
     const onLayout = useCallback(
@@ -56,7 +57,7 @@ export const useScrollableBottomSheetList = ({ onResize, initialLayout }: Args) 
         [initialLayout, maxHeight],
     )
 
-    const style = useMemo(() => ({ maxHeight: height, height, minHeight: height } as ViewStyle), [height])
+    const style = useMemo(() => ({ height } as ViewStyle), [height])
 
     const resetHeight = useCallback(() => setHeight(maxHeight), [maxHeight])
 
