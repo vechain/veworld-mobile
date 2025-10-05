@@ -624,6 +624,10 @@ type RootTranslation = {
 	 */
 	BALANCE_TAB_TOKENS: string
 	/**
+	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​t​o​k​e​n​s​ ​y​e​t
+	 */
+	BALANCE_TAB_NO_TOKENS: string
+	/**
 	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
 	 */
 	BANNER_STARGATE_DESC: string
@@ -4859,6 +4863,30 @@ type RootTranslation = {
 	 */
 	TOKEN_TRANSFER_SENT: string
 	/**
+	 * B​u​y​ ​t​o​k​e​n
+	 */
+	TOKEN_BUY: string
+	/**
+	 * A​d​d​ ​b​a​l​a​n​c​e​ ​b​u​y​i​n​g​ ​w​i​t​h​ ​f​i​a​t
+	 */
+	TOKEN_BUY_SUBTITLE: string
+	/**
+	 * R​e​c​e​i​v​e​ ​t​o​k​e​n
+	 */
+	TOKEN_RECEIVE: string
+	/**
+	 * U​s​e​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​r​e​c​e​i​v​e
+	 */
+	TOKEN_RECEIVE_SUBTITLE: string
+	/**
+	 * C​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	TOKEN_CUSTOM: string
+	/**
+	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​t​o​k​e​n​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 */
+	TOKEN_CUSTOM_SUBTITLE: string
+	/**
 	 * T​o​t​a​l
 	 */
 	TOTAL: string
@@ -5791,6 +5819,10 @@ Try reconnect your device to the internet.
 	 * Tokens
 	 */
 	BALANCE_TAB_TOKENS: () => LocalizedString
+	/**
+	 * You don't have any tokens yet
+	 */
+	BALANCE_TAB_NO_TOKENS: () => LocalizedString
 	/**
 	 * Get **VTHO** by staking your **VET tokens**
 	 */
@@ -9974,6 +10006,30 @@ Here's what it's all about:
 	 * Sent tokens
 	 */
 	TOKEN_TRANSFER_SENT: () => LocalizedString
+	/**
+	 * Buy token
+	 */
+	TOKEN_BUY: () => LocalizedString
+	/**
+	 * Add balance buying with fiat
+	 */
+	TOKEN_BUY_SUBTITLE: () => LocalizedString
+	/**
+	 * Receive token
+	 */
+	TOKEN_RECEIVE: () => LocalizedString
+	/**
+	 * Use your wallet address to receive
+	 */
+	TOKEN_RECEIVE_SUBTITLE: () => LocalizedString
+	/**
+	 * Custom token
+	 */
+	TOKEN_CUSTOM: () => LocalizedString
+	/**
+	 * Add a custom token to your wallet
+	 */
+	TOKEN_CUSTOM_SUBTITLE: () => LocalizedString
 	/**
 	 * Total
 	 */

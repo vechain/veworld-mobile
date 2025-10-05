@@ -208,6 +208,14 @@ export const getFungibleTokensContracts = (
 }
 
 /**
+ * Get the global VeBetter actions overview
+ * @returns Global VeBetter actions overview
+ */
+export const getVeBetterGlobalOverview = () => {
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/b3tr/actions/global/overview`
+}
+
+/**
  * Get the VeBetter general overview for a user
  * @param address Address of the user
  * @returns The general overview for a user
