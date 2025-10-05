@@ -10,13 +10,13 @@ import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
-interface AddTokenBottomSheetProps {
+type AddTokenBottomSheetProps = {
     onClose: () => void
     bottomSheetRef?: React.RefObject<BottomSheetModal>
     qrCodeBottomSheetRef?: RefObject<BottomSheetModalMethods>
 }
 
-interface TokenListItemData {
+type TokenListItemData = {
     id: string
     iconName: IconKey
     title: string
@@ -24,7 +24,7 @@ interface TokenListItemData {
     onPress?: () => void
 }
 
-interface TokenListItemProps {
+type TokenListItemProps = {
     item: TokenListItemData
 }
 
@@ -92,7 +92,8 @@ export const AddTokenBottomSheet = ({ onClose, bottomSheetRef, qrCodeBottomSheet
             title: LL.TOKEN_CUSTOM(),
             subtitle: LL.TOKEN_CUSTOM_SUBTITLE(),
             onPress: () => {
-                // Handle custom token action
+                onClose()
+                nav.navigate(Routes.MANAGE_TOKEN)
             },
         },
     ]
