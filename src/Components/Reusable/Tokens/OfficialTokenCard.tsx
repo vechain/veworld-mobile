@@ -36,6 +36,7 @@ export const OfficialTokenCard = memo(
                             isVechainToken={isVetToken}
                             iconSize={iconSize ?? 26}
                             isCrossChainToken={isCrossChainToken}
+                            rounded={!isCrossChainToken}
                         />
                         <BaseSpacer width={12} />
                         <BaseView flexDirection="row">

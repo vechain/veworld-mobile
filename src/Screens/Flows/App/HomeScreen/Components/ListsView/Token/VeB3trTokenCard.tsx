@@ -4,11 +4,10 @@ import Animated from "react-native-reanimated"
 import { BaseSkeleton, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { COLORS } from "~Constants/Theme"
-import { useCombineFiatBalances, useFormatFiat, useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
+import { useCombineFiatBalances, useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
-import { BalanceUtils, BigNutils } from "~Utils"
-import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
+import { BalanceUtils } from "~Utils"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
 type Props = {
@@ -22,7 +21,6 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
 
     const theme = useTheme()
     const { LL } = useI18nContext()
-    const { formatLocale } = useFormatFiat()
 
     const vot3Token = useTokenWithCompleteInfo(VOT3)
     const b3trToken = useTokenWithCompleteInfo(B3TR)
@@ -50,16 +48,6 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
         () => combineFiatBalances([b3trFiat, vot3FiatBalance]),
         [b3trFiat, combineFiatBalances, vot3FiatBalance],
     )
-
-    const b3trTokenBalance = useMemo(() => {
-        const humanBalance = BigNutils(b3trToken.balance?.balance ?? "0").toHuman(B3TR.decimals ?? 0).toString
-        return formatDisplayNumber(humanBalance, { locale: formatLocale })
-    }, [b3trToken.balance?.balance, B3TR.decimals, formatLocale])
-
-    const vot3TokenBalance = useMemo(() => {
-        const humanBalance = BigNutils(vot3Token.balance?.balance ?? "0").toHuman(VOT3.decimals ?? 0).toString
-        return formatDisplayNumber(humanBalance, { locale: formatLocale })
-    }, [VOT3.decimals, formatLocale, vot3Token.balance?.balance])
 
     const renderFiatBalance = useMemo(() => {
         if (isTokensOwnedLoading)
@@ -99,7 +87,13 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
     return (
         <Animated.View style={[baseStyles.innerRow]}>
             <BaseView flexDirection="row" alignItems="flex-start" gap={12}>
-                <TokenImage isVechainToken iconSize={26} icon={B3TR.icon} />
+                <TokenImage
+                    isVechainToken
+                    iconSize={26}
+                    icon={B3TR.icon}
+                    isCrossChainToken={!!b3trToken.crossChainProvider}
+                    rounded={!b3trToken.crossChainProvider}
+                />
                 <BaseView flexDirection="column" alignItems="flex-start">
                     <BaseView flexDirection="row" gap={4}>
                         <BaseText typographyFont="subSubTitleSemiBold" style={{ width }}>
@@ -115,7 +109,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                             />
                         ) : (
                             <BaseText typographyFont="subSubTitleSemiBold" align="right" lineHeight={24}>
-                                {isBalanceVisible ? b3trTokenBalance : "•••••"}
+                                {isBalanceVisible ? b3trToken.tokenUnitBalance : "•••••"}
                             </BaseText>
                         )}
                     </BaseView>
@@ -138,7 +132,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                             />
                         ) : (
                             <BaseText typographyFont="subSubTitleSemiBold" align="right" lineHeight={24}>
-                                {isBalanceVisible ? vot3TokenBalance : "•••••"}
+                                {isBalanceVisible ? vot3Token.tokenUnitBalance : "•••••"}
                             </BaseText>
                         )}
                     </BaseView>

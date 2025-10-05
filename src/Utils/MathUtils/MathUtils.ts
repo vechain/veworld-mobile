@@ -6,4 +6,19 @@ const getEven = (num: number) => {
     return num % 2 === 0
 }
 
-export default { getOdd, getEven }
+/**
+ * Create a deterministic random number generator from a seed.
+ * @param seed Seed for the random number generator
+ * @returns A function that creates a deterministic number
+ */
+const deterministicRNG = (seed: number) => {
+    const m = 2 ** 35 - 31
+    const a = 185852
+    let s = seed % m
+    return function () {
+        s = (s * a) % m
+        return s / m
+    }
+}
+
+export default { getOdd, getEven, deterministicRNG }

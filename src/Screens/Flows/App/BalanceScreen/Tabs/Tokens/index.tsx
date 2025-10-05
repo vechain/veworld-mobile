@@ -1,6 +1,7 @@
 import React from "react"
 import { BaseSpacer, BaseText, BaseTouchable, BaseView, Icon, QRCodeBottomSheet } from "~Components"
 import { VeBetterDaoCard } from "../../Components/VeBetterDao/VeBetterDaoCard"
+import { BalanceActivity } from "../Activity/BalanceActivity"
 import { TokensTopSection } from "./TokensTopSection"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -58,12 +59,13 @@ const baseStyles = (theme: ColorThemeType) =>
 
 export const Tokens = () => {
     return (
-        <>
+        <BaseView flexDirection="column">
             <TokensTopSection />
-            <BaseSpacer height={8} />
+            <BaseSpacer height={32} />
             <AddTokensCard />
-            <BaseSpacer height={80} />
+            <BalanceActivity tab="TOKENS" />
+            <BaseSpacer height={40} />
             <VeBetterDaoCard />
-        </>
+        </BaseView>
     )
 }

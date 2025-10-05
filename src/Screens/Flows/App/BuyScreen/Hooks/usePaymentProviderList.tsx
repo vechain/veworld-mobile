@@ -1,13 +1,13 @@
 import React, { useMemo } from "react"
-import { useThemedStyles } from "~Hooks"
-import { useI18nContext } from "~i18n"
-import { COLORS } from "~Constants"
-import { PaymentMethodsIds } from "./constants"
+import { Image, ImageStyle, StyleSheet } from "react-native"
 import { CoinbaseLogoSmallSvg, CoinifyLogo } from "~Assets"
 import { TransakLogoSmallSvg } from "~Assets/Img/TransakLogoSmallSvg"
 import { useFeatureFlags } from "~Components"
+import { COLORS } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
-import { Image, ImageStyle, StyleSheet } from "react-native"
+import { PaymentMethodsIds } from "./constants"
 
 export enum PaymentProvidersEnum {
     CoinbasePay = "coinbase-pay",
@@ -31,19 +31,6 @@ export const usePaymentProviderList = () => {
     const providers = useMemo(() => {
         const availableProviders: PaymentProvider[] = [
             {
-                id: PaymentProvidersEnum.Transak,
-                name: "Transak",
-                description: LL.BD_BUY_DESCRIPTION_TRANSAK(),
-                img: (
-                    <TransakLogoSmallSvg
-                        fill={theme.isDark ? COLORS.COINBASE_BACKGROUND_DARK : COLORS.COINBASE_BACKGROUND_BLUE}
-                        width={32}
-                    />
-                ),
-                paymentMethods: [isIOS() ? PaymentMethodsIds.ApplePay : PaymentMethodsIds.GoolePay],
-                fees: "1.0%",
-            },
-            {
                 id: PaymentProvidersEnum.CoinbasePay,
                 name: "Coinbase",
                 description: LL.BD_BUY_DESCRIPTION_COINBASE(),
@@ -55,6 +42,19 @@ export const usePaymentProviderList = () => {
                 ),
                 paymentMethods: [PaymentMethodsIds.CreditCard, PaymentMethodsIds.BankAccount],
                 fees: "0.5 - 2.85%",
+            },
+            {
+                id: PaymentProvidersEnum.Transak,
+                name: "Transak",
+                description: LL.BD_BUY_DESCRIPTION_TRANSAK(),
+                img: (
+                    <TransakLogoSmallSvg
+                        fill={theme.isDark ? COLORS.COINBASE_BACKGROUND_DARK : COLORS.COINBASE_BACKGROUND_BLUE}
+                        width={32}
+                    />
+                ),
+                paymentMethods: [isIOS() ? PaymentMethodsIds.ApplePay : PaymentMethodsIds.GoolePay],
+                fees: "1.0%",
             },
             {
                 id: PaymentProvidersEnum.Coinify,
