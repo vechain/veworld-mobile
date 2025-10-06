@@ -1,13 +1,18 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { forwardRef, useCallback, useState } from "react"
+import picasso from "@vechain/picasso"
+import React, { forwardRef, RefObject, useCallback, useMemo, useState } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import QRCode from "react-native-qrcode-svg"
-import { veworldLogo } from "~Assets"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import { BaseTabs } from "~Components/Base/BaseTabs"
 import { COLORS } from "~Constants"
-import { useCopyClipboard, useThemedStyles, useVns } from "~Hooks"
+import { useBottomSheetModal, useCopyClipboard, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
+import { OnlyVechainNetworkAlert } from "./OnlyVechainNetworkAlert"
+
+const TABS = ["scan", "receive"] as const
 
 export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(function SendReceiveBottomSheet(
     props,
@@ -15,7 +20,9 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
 ) {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
+    const [tab, setTab] = useState<(typeof TABS)[number]>("receive")
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModalMethods> })
 
     const { name: vnsName } = useVns({
         name: "",
@@ -23,7 +30,6 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
     })
 
     const [accountCopied, setAccountCopied] = useState(false)
-    const [vnsCopied, setVnsCopied] = useState(false)
 
     const { onCopyToClipboard } = useCopyClipboard()
 
@@ -35,37 +41,38 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
         }, 3000)
     }, [onCopyToClipboard, selectedAccount.address])
 
-    const onCopyVns = useCallback(async () => {
-        onCopyToClipboard(vnsName, "", false)
-        setVnsCopied(true)
-        setTimeout(() => {
-            setVnsCopied(false)
-        }, 3000)
-    }, [onCopyToClipboard, vnsName])
+    const onShare = useCallback(async () => {}, [])
+
+    const labels = useMemo(() => {
+        return [LL.SEND_RECEIVE_TAB_SCAN(), LL.SEND_RECEIVE_TAB_RECEIVE()]
+    }, [LL])
 
     return (
-        <BaseBottomSheet snapPoints={["100%"]} noMargins ref={ref} backgroundStyle={styles.rootBg}>
-            <BaseView p={16} justifyContent="space-between" flexDirection="row">
-                <TouchableOpacity style={styles.iconContainer}>
-                    <BaseIcon name="icon-share-2" color={COLORS.WHITE} size={20} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.iconContainer}>
-                    <BaseIcon name="icon-x" color={COLORS.WHITE} size={20} />
-                </TouchableOpacity>
-            </BaseView>
-            <BaseView pt={48} pb={64} px={24} alignItems="center">
+        <BaseBottomSheet
+            snapPoints={["100%"]}
+            noMargins
+            ref={ref}
+            backgroundStyle={styles.rootBg}
+            enablePanDownToClose={false}
+            rounded={false}>
+            <BaseView py={24} px={16} justifyContent="center" flexDirection="row" position="relative">
                 <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.WHITE}>
                     {LL.QR_CODE_TITLE()}
                 </BaseText>
-                <BaseSpacer height={8} />
-                <BaseText typographyFont="captionMedium" color={COLORS.WHITE}>
-                    {LL.QR_CODE_DESCRIPTION()}
-                </BaseText>
-                <BaseSpacer height={40} />
+                <BaseView style={styles.closeIconContainer}>
+                    <TouchableOpacity style={[styles.iconContainer]} onPress={onClose}>
+                        <BaseIcon name="icon-x" color={COLORS.WHITE} size={20} />
+                    </TouchableOpacity>
+                </BaseView>
+            </BaseView>
+            <BaseText typographyFont="captionMedium" color={COLORS.WHITE} align="center">
+                {LL.QR_CODE_DESCRIPTION()}
+            </BaseText>
+            <BaseView flex={1} justifyContent="center" px={24}>
                 <BaseView
                     bg="rgba(255, 255, 255, 0.05)"
                     borderRadius={16}
-                    pt={40}
+                    pt={32}
                     pb={24}
                     px={24}
                     w={100}
@@ -80,44 +87,58 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
                             value={selectedAccount.address}
                             size={200}
                             quietZone={10}
-                            logo={{ uri: veworldLogo }}
                             logoSize={56}
                             logoBackgroundColor="transparent"
+                            logoSVG={picasso(selectedAccount.address.toLowerCase())}
                         />
                     </BaseView>
-                    <BaseSpacer height={32} />
-                    <BaseView flexDirection="row">
+                    <BaseSpacer height={16} />
+                    <BaseView flexDirection="column" gap={8}>
+                        <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.WHITE} align="center">
+                            {vnsName || selectedAccount.alias}
+                        </BaseText>
+                        <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE} align="center">
+                            {AddressUtils.humanAddress(selectedAccount.address)}
+                        </BaseText>
+                    </BaseView>
+                    <BaseSpacer height={24} />
+                    <BaseView flexDirection="row" gap={16}>
+                        <BaseButton
+                            flex={1}
+                            px={12}
+                            py={8}
+                            rightIcon={<BaseIcon name="icon-upload" size={16} color={COLORS.WHITE} />}
+                            action={onShare}
+                            variant="outline"
+                            style={styles.btnStyle}
+                            textColor={COLORS.WHITE}>
+                            {LL.SHARE()}
+                        </BaseButton>
                         <BaseButton
                             flex={1}
                             px={12}
                             py={8}
                             rightIcon={<BaseIcon name="icon-copy" size={16} color={COLORS.WHITE} />}
-                            numberOfLines={1}
-                            textProps={{ ellipsizeMode: "middle", flexDirection: "row", flex: 1, align: "center" }}
                             action={onCopyAccount}
                             disabled={accountCopied}
                             variant="outline"
                             style={styles.btnStyle}
                             textColor={COLORS.WHITE}>
-                            {accountCopied ? LL.COPIED_QR_CODE_FOR_ACCOUNT() : selectedAccount.address}
+                            {accountCopied ? LL.COPIED_QR_CODE_FOR_ACCOUNT() : LL.COPY()}
                         </BaseButton>
-                        {vnsName && (
-                            <BaseButton
-                                flex={1}
-                                px={12}
-                                py={8}
-                                rightIcon={<BaseIcon name="icon-copy" size={16} color={COLORS.WHITE} />}
-                                numberOfLines={1}
-                                textProps={{ ellipsizeMode: "tail" }}
-                                action={onCopyVns}
-                                disabled={vnsCopied}
-                                textColor={COLORS.WHITE}>
-                                {vnsCopied ? LL.COPIED_QR_CODE_FOR_ACCOUNT() : vnsName}
-                            </BaseButton>
-                        )}
                     </BaseView>
+                    <BaseSpacer height={24} />
+                    <OnlyVechainNetworkAlert />
                 </BaseView>
             </BaseView>
+            <BaseTabs
+                keys={TABS}
+                selectedKey={tab}
+                setSelectedKey={setTab}
+                labels={labels}
+                rootStyle={styles.tabElement}
+            />
+            <BaseSpacer height={64} />
         </BaseBottomSheet>
     )
 })
@@ -132,6 +153,14 @@ const baseStyles = () =>
             backgroundColor: "rgba(0, 0, 0, 0.30)",
             borderRadius: 99,
         },
+        closeIconContainer: {
+            position: "absolute",
+            top: 16,
+            right: 16,
+            flexDirection: "column",
+            justifyContent: "center",
+        },
+
         qrCodeWrapper: {
             width: 200,
             height: 200,
@@ -143,5 +172,12 @@ const baseStyles = () =>
             borderRadius: 8,
             borderColor: COLORS.WHITE_RGBA_30,
             gap: 12,
+            alignItems: "center",
+            justifyContent: "center",
+        },
+        tabElement: {
+            marginHorizontal: 24,
+            alignSelf: "center",
+            maxWidth: "75%",
         },
     })

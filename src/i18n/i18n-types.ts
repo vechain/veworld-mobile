@@ -121,10 +121,6 @@ type RootTranslation = {
 	 */
 	ACTIVITY: string
 	/**
-	 * S​e​e​ ​a​l​l
-	 */
-	ACTIVITY_SEE_ALL: string
-	/**
 	 * N​o​ ​A​c​t​i​v​i​t​i​e​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: string
@@ -176,6 +172,10 @@ type RootTranslation = {
 	 * O​t​h​e​r
 	 */
 	ACTIVITY_OTHER_LABEL: string
+	/**
+	 * S​e​e​ ​a​l​l
+	 */
+	ACTIVITY_SEE_ALL: string
 	/**
 	 * S​t​a​r​t​ ​e​a​r​n​i​n​g
 	 */
@@ -2248,6 +2248,14 @@ type RootTranslation = {
 	 */
 	CONTRACT_DATA: string
 	/**
+	 * C​o​p​y
+	 */
+	COPY: string
+	/**
+	 * S​h​a​r​e
+	 */
+	SHARE: string
+	/**
 	 * C​o​p​i​e​d
 	 */
 	COPIED_QR_CODE_FOR_ACCOUNT: string
@@ -3573,13 +3581,21 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
 	/**
+	 * U​s​e​ ​y​o​u​r​ ​Q​R​ ​c​o​d​e​ ​t​o​ ​r​e​c​e​i​v​e​ ​t​r​a​n​s​f​e​r​s
+	 */
+	QR_CODE_DESCRIPTION: string
+	/**
 	 * Y​o​u​r​ ​Q​R​ ​c​o​d​e
 	 */
 	QR_CODE_TITLE: string
 	/**
-	 * U​s​e​ ​y​o​u​r​ ​Q​R​ ​c​o​d​e​ ​t​o​ ​r​e​c​e​i​v​e​ ​t​r​a​n​s​f​e​r​s
+	 * S​c​a​n
 	 */
-	QR_CODE_DESCRIPTION: string
+	SEND_RECEIVE_TAB_SCAN: string
+	/**
+	 * R​e​c​e​i​v​e
+	 */
+	SEND_RECEIVE_TAB_RECEIVE: string
 	/**
 	 * R​e​c​a​p
 	 */
@@ -5283,10 +5299,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY: () => LocalizedString
 	/**
-	 * See all
-	 */
-	ACTIVITY_SEE_ALL: () => LocalizedString
-	/**
 	 * No Activities to show yet
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: () => LocalizedString
@@ -5338,6 +5350,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Other
 	 */
 	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
+	 * See all
+	 */
+	ACTIVITY_SEE_ALL: () => LocalizedString
 	/**
 	 * Start earning
 	 */
@@ -7390,6 +7406,14 @@ Thanks for your patience!
 	 */
 	CONTRACT_DATA: () => LocalizedString
 	/**
+	 * Copy
+	 */
+	COPY: () => LocalizedString
+	/**
+	 * Share
+	 */
+	SHARE: () => LocalizedString
+	/**
 	 * Copied
 	 */
 	COPIED_QR_CODE_FOR_ACCOUNT: () => LocalizedString
@@ -8695,13 +8719,21 @@ Thanks for your patience!
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
 	/**
+	 * Use your QR code to receive transfers
+	 */
+	QR_CODE_DESCRIPTION: () => LocalizedString
+	/**
 	 * Your QR code
 	 */
 	QR_CODE_TITLE: () => LocalizedString
 	/**
-	 * Use your QR code to receive transfers
+	 * Scan
 	 */
-	QR_CODE_DESCRIPTION: () => LocalizedString
+	SEND_RECEIVE_TAB_SCAN: () => LocalizedString
+	/**
+	 * Receive
+	 */
+	SEND_RECEIVE_TAB_RECEIVE: () => LocalizedString
 	/**
 	 * Recap
 	 */
