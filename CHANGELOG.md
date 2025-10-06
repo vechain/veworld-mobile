@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.6 (2025-10-06)</small>
+
+* build: init ([7e78e44](https://github.com/vechain/veworld-mobile/commit/7e78e44))
+* 390 balance   update all avatar logos to be circular (#3363) ([5dffadf](https://github.com/vechain/veworld-mobile/commit/5dffadf)), closes [#3363](https://github.com/vechain/veworld-mobile/issues/3363)
+
 ## <small>2.4.5 (2025-10-03)</small>
 
 * build: init ([58131c2](https://github.com/vechain/veworld-mobile/commit/58131c2))
