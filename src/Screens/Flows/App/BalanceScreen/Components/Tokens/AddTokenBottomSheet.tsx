@@ -122,10 +122,10 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
         },
         bg: {
-            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.LIGHT_GRAY,
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
         },
         listItem: {
-            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.LIGHT_GRAY,
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
             flexDirection: "row",
             justifyContent: "space-between",
             paddingVertical: 24,
