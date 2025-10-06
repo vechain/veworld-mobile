@@ -14,8 +14,9 @@ import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
 import { Tokens } from "./Tokens"
 import { Staking } from "./Staking"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
+import { useShowStakingTab } from "../Hooks/useShowStakingTab"
 
-const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
+const TABS = ["TOKENS", "STAKING"] as const
 
 type Props = {
     onLayout: (e: LayoutChangeEvent) => void
@@ -29,6 +30,17 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const { onDAppPress } = useDAppActions(Routes.HOME)
     const { tabBarBottomMargin } = useTabBarBottomMargin()
+    const showStakingTab = useShowStakingTab()
+
+    const filteredTabs = useMemo(() => {
+        return TABS.filter(tab => {
+            if (tab === "STAKING") {
+                return showStakingTab
+            }
+
+            return true
+        }) as (typeof TABS)[number][]
+    }, [showStakingTab])
 
     const showFavorites = useMemo(() => {
         return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount)
@@ -52,11 +64,16 @@ export const TabRenderer = ({ onLayout }: Props) => {
                     <BaseSpacer height={24} />
                 </BaseView>
             )}
-            <BaseSimpleTabs keys={TABS} labels={labels} selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
+            <BaseSimpleTabs
+                keys={filteredTabs}
+                labels={labels}
+                selectedKey={selectedTab}
+                setSelectedKey={setSelectedTab}
+            />
             <BaseView flexDirection="column" flex={1} pb={paddingBottom}>
                 {selectedTab === "TOKENS" && <Tokens />}
                 {selectedTab === "STAKING" && <Staking />}
-                {selectedTab === "COLLECTIBLES" && <></>}
+                {/* {selectedTab === "COLLECTIBLES" && <></>} */}
             </BaseView>
         </Animated.View>
     )
