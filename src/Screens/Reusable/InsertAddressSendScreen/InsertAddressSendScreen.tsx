@@ -189,6 +189,8 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                                             balanceToken="VET"
                                             selected={AddressUtils.compareAddresses(account.address, selectedAddress)}
                                             onPress={onAccountPress}
+                                            key={account.address}
+                                            testID="selectAccount"
                                         />
                                     ))}
                                 </BaseView>
@@ -244,6 +246,5 @@ const baseStyles = StyleSheet.create({
         marginBottom: 70,
     },
     skeletonContact: { width: 50, paddingVertical: 2 },
-    accountCard: { marginVertical: 5, height: 74, justifyContent: "center" },
     contactCard: { marginVertical: 5, height: 64, justifyContent: "center" },
 })
