@@ -11,6 +11,7 @@ import { CurrentBalance } from "./Components/Balance/CurrentBalance"
 import { PullToRefresh } from "./Components/PullToRefresh"
 import { Header } from "./Header"
 import { TabRenderer } from "./Tabs/TabRenderer"
+import { COLORS } from "~Constants"
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
@@ -18,7 +19,7 @@ export const BalanceScreen = () => {
     const scrollY = useSharedValue(0)
     const contentOffsetY = useSharedValue(0)
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
 
     useFetchFeaturedDApps()
 
@@ -43,9 +44,10 @@ export const BalanceScreen = () => {
     }, [selectedAccount])
 
     const colors = useMemo(() => {
-        if (isObservedAccount) return [theme.colors.background, theme.colors.background, theme.colors.background]
-        return [theme.colors.background, "rgba(29, 23, 58, 0.5)", "#423483"]
-    }, [isObservedAccount, theme.colors.background])
+        if (isObservedAccount)
+            return [COLORS.APP_BACKGROUND_DARK, COLORS.APP_BACKGROUND_DARK, COLORS.APP_BACKGROUND_DARK]
+        return [COLORS.APP_BACKGROUND_DARK, "rgba(29, 23, 58, 0.5)", "#423483"]
+    }, [isObservedAccount])
 
     const balanceActionsAnimatedStyles = useAnimatedStyle(() => {
         return {
@@ -55,7 +57,7 @@ export const BalanceScreen = () => {
 
     return (
         <Layout
-            bg={theme.colors.background}
+            bg={COLORS.APP_BACKGROUND_DARK}
             noBackButton
             fixedHeader={
                 <Header scrollY={scrollY} contentOffsetY={contentOffsetY} qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
