@@ -51,7 +51,7 @@ export const StackedApps = ({ appVotes, roundId }: Pick<B3trXAllocationVoteActiv
                         typographyFont="smallCaptionSemiBold"
                         color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
                         flexDirection="row">
-                        +{appVotes.length - 4}
+                        +{appVotes.length - 3}
                     </BaseText>
                 </BaseView>
             )}
