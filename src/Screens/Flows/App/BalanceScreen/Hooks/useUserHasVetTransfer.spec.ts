@@ -38,9 +38,8 @@ describe("useUserHasVetTransfer", () => {
 
         await waitFor(() => {
             expect(result.current.isLoading).toBe(false)
+            expect(result.current.data).toBe(true)
         })
-
-        expect(result.current.data).toBe(true)
     })
 
     it("should return false if the user has not a vet transfer", async () => {
@@ -56,8 +55,7 @@ describe("useUserHasVetTransfer", () => {
 
         await waitFor(() => {
             expect(result.current.isLoading).toBe(false)
+            expect(result.current.data).toBe(false)
         })
-
-        expect(result.current.data).toBe(false)
     })
 })
