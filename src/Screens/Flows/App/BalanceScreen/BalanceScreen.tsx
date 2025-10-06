@@ -3,7 +3,6 @@ import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleSheet 
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { BaseSpacer, Layout, QRCodeBottomSheet } from "~Components"
-import { COLORS } from "~Constants"
 import { useBottomSheetModal, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
@@ -19,7 +18,7 @@ export const BalanceScreen = () => {
     const scrollY = useSharedValue(0)
     const contentOffsetY = useSharedValue(0)
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
 
     useFetchFeaturedDApps()
 
@@ -44,9 +43,9 @@ export const BalanceScreen = () => {
     }, [selectedAccount])
 
     const colors = useMemo(() => {
-        if (isObservedAccount) return [COLORS.BALANCE_BACKGROUND, COLORS.BALANCE_BACKGROUND, COLORS.BALANCE_BACKGROUND]
-        return [COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.5)", "#423483"]
-    }, [isObservedAccount])
+        if (isObservedAccount) return [theme.colors.background, theme.colors.background, theme.colors.background]
+        return [theme.colors.background, "rgba(29, 23, 58, 0.5)", "#423483"]
+    }, [isObservedAccount, theme.colors.background])
 
     const balanceActionsAnimatedStyles = useAnimatedStyle(() => {
         return {
@@ -56,7 +55,7 @@ export const BalanceScreen = () => {
 
     return (
         <Layout
-            bg={COLORS.BALANCE_BACKGROUND}
+            bg={theme.colors.background}
             noBackButton
             fixedHeader={
                 <Header scrollY={scrollY} contentOffsetY={contentOffsetY} qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
