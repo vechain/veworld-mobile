@@ -64,7 +64,7 @@ export const AppsScreen = () => {
 
     return (
         <Layout
-            bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
+            bg={theme.colors.background}
             noBackButton
             noMargin
             fixedHeader={
