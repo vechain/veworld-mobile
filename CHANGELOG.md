@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.5 (2025-10-03)</small>
+
+* build: init ([58131c2](https://github.com/vechain/veworld-mobile/commit/58131c2))
+* Refactor components to be aware of a new conditional to define icon roundness (#3351) ([d34dedc](https://github.com/vechain/veworld-mobile/commit/d34dedc)), closes [#3351](https://github.com/vechain/veworld-mobile/issues/3351)
+
 ## <small>2.4.4 (2025-09-25)</small>
 
 * build: init ([a565bd2](https://github.com/vechain/veworld-mobile/commit/a565bd2))
