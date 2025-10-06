@@ -126,7 +126,7 @@ export const TokenCard = ({ token }: Props) => {
     return (
         <BaseTouchableBox
             action={supportsDetailNavigation ? handlePress : undefined}
-            py={24}
+            py={18}
             flexDirection="row"
             bg={theme.colors.card}
             containerStyle={styles.root}>
