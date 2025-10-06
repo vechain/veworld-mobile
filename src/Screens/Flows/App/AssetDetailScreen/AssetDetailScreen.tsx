@@ -14,7 +14,7 @@ import { selectBalanceVisible, selectSelectedAccount, useAppSelector } from "~St
 import { AccountUtils } from "~Utils"
 import { AssetChart, ConvertedBetterBottomSheet, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
-import { StargateCarousel } from "./Components/StargateCarousel"
+import { BannersCarousel } from "~Screens"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -96,10 +96,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             </BaseView>
                         )}
 
-                        <BaseSpacer height={40} />
-                        {token.symbol === VET.symbol && <StargateCarousel />}
+                        {token.symbol === VET.symbol && <BannersCarousel location="token_screen" />}
 
-                        {/* TODO: handle loading/skeleton */}
+                        <BaseSpacer height={40} />
+
                         {!!description && (
                             <>
                                 <BaseText

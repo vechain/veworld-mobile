@@ -1,9 +1,10 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { BaseButton, BaseCarousel, BaseChip, BaseSpacer, BaseText, BaseView, CarouselSlideItem } from "~Components"
+import { BaseButton, BaseCarousel, BaseSpacer, BaseView, CarouselSlideItem } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
 import {
+    COLORS,
     ColorThemeType,
     STARGATE_DAPP_URL,
     STARGATE_DAPP_URL_MANAGE_STAKING_BANNER,
@@ -16,9 +17,10 @@ import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
-import { BannersCarousel } from "../../HomeScreen/Components"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
 import { StargateCarouselItem } from "./StargateCarouselItem"
+import { BaseTabs } from "~Components/Base/BaseTabs"
+import { StargateNoStakingCard } from "./StargateNoStakingCard"
 
 enum StakingFilter {
     OWN = "own",
@@ -117,27 +119,30 @@ export const StargateCarousel = () => {
         [LL],
     )
 
-    if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0)
-        return <BannersCarousel location="token_screen" />
+    const indicatorBackgroundColor = useMemo(() => (theme.isDark ? COLORS.PURPLE : COLORS.GREY_100), [theme.isDark])
+    const containerBackgroundColor = useMemo(
+        () => (theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.WHITE),
+        [theme.isDark],
+    )
+
+    if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return <StargateNoStakingCard />
 
     return (
-        <BaseView flexDirection="column" gap={12} w={100} mb={40}>
-            <BaseView flexDirection="row" alignItems="center" justifyContent="space-between" py={8}>
-                <BaseText typographyFont="bodySemiBold">{LL.ACTIVITY_STAKING_LABEL()}</BaseText>
+        <BaseView flexDirection="column" gap={12} w={100}>
+            <BaseView style={styles.card}>
                 {hasOwnedNodes && hasManagedNodes && (
-                    <BaseView flexDirection="row" gap={12}>
-                        {filterButtons.map(button => (
-                            <BaseChip
-                                key={button.id}
-                                label={button.label}
-                                active={filter === button.id}
-                                onPress={() => setFilter(button.id)}
-                            />
-                        ))}
+                    <BaseView px={16}>
+                        <BaseTabs
+                            keys={filterButtons.map(button => button.id)}
+                            labels={filterButtons.map(button => button.label)}
+                            selectedKey={filter}
+                            setSelectedKey={setFilter}
+                            showBorder={false}
+                            indicatorBackgroundColor={indicatorBackgroundColor}
+                            containerBackgroundColor={containerBackgroundColor}
+                        />
                     </BaseView>
                 )}
-            </BaseView>
-            <BaseView style={styles.card}>
                 <StargateLockedValue
                     isLoading={isLoadingNodes || isLoadingNfts}
                     nfts={filteredNfts}
