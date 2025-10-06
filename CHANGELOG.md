@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.6 (2025-10-06)</small>
+
+* build: init ([9528f89](https://github.com/vechain/veworld-mobile/commit/9528f89))
+* 357 balance page staking section (#3338) ([57ef710](https://github.com/vechain/veworld-mobile/commit/57ef710)), closes [#3338](https://github.com/vechain/veworld-mobile/issues/3338)
+
 ## <small>2.4.5 (2025-10-03)</small>
 
 * build: init ([58131c2](https://github.com/vechain/veworld-mobile/commit/58131c2))
