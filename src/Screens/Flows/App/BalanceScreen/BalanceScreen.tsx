@@ -23,6 +23,8 @@ export const BalanceScreen = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const { styles } = useThemedStyles(baseStyles)
 
+    useFetchFeaturedDApps()
+
     const { ref: qrCodeBottomSheetRef } = useBottomSheetModal()
 
     const onLayout = useCallback(

@@ -24,7 +24,7 @@ type Props = {
 
 export const TabRenderer = ({ onLayout }: Props) => {
     const { LL } = useI18nContext()
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     const [selectedTab, setSelectedTab] = useState<(typeof TABS)[number]>("TOKENS")
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -54,12 +54,13 @@ export const TabRenderer = ({ onLayout }: Props) => {
     return (
         <Animated.View style={[styles.root, { paddingBottom: tabBarBottomMargin }]} onLayout={onLayout}>
             {showFavorites && (
-                <BaseView>
+                <BaseView flexDirection="column">
                     <FavouritesV2
                         bookmarkedDApps={bookmarkedDApps}
                         onDAppPress={onDAppPress}
                         renderCTASeeAll={false}
                         style={styles.favorites}
+                        iconBg={theme.isDark ? COLORS.DARK_PURPLE : undefined}
                     />
                     <BaseSpacer height={24} />
                 </BaseView>
