@@ -24,7 +24,7 @@ export const AccountIcon: React.FC<AccountIconProps> = memo(({ account, size, bo
         <BaseView style={styles.container}>
             <PicassoAddressIcon address={account.address} size={size} borderRadius={borderRadius} />
             {(account.type === DEVICE_TYPE.LEDGER || account.device?.type === DEVICE_TYPE.LEDGER) && (
-                <BaseView borderRadius={99} p={4} bg="black" style={styles.ledger}>
+                <BaseView borderRadius={99} p={4} style={styles.ledger}>
                     <NewLedgerLogo width={8} height={8} color={theme.isDark ? COLORS.GREY_700 : COLORS.WHITE} />
                 </BaseView>
             )}
