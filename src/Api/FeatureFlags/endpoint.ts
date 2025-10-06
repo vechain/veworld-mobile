@@ -48,6 +48,9 @@ export type FeatureFlags = {
         }
         balanceScreen: {
             enabled: boolean
+            collectibles: {
+                enabled: boolean
+            }
         }
     }
 }
