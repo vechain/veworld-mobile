@@ -421,6 +421,8 @@
   "CLOUD_ERR_WALLET_OPERATION": "Det uppstod ett fel vid denna iCloud plånboksoperation. Försök igen.",
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "Vi kunde inte hitta några säkerhetskopierade plånböcker i din {cloud: string}. Försök igen eller använd din återställningsfras.",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "Inga plånböcker tillgängliga",
+  "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "Överför ett samlarobjekt för att börja bygga din samling",
+  "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "eller köp ett samlarobjekt från en av våra ekosystemappar",
   "COLLECTIONS": "Samlingar",
   "COLLECTION_NAME": "Samlingens namn",
   "COMMOMN_DAY": "dag",

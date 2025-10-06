@@ -421,6 +421,8 @@
   "CLOUD_ERR_WALLET_OPERATION": "Il y a eu une erreur lors de la réalisation de cette opération iCloud Wallet. Veuillez réessayer.",
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "Nous n'avons trouvé aucun portefeuille sauvegardé dans votre {cloud : string}. Réessayez ou utilisez votre phrase de récupération.",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "Aucun portefeuille disponible",
+  "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "Transférez un objet de collection pour commencer à constituer votre collection",
+  "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "ou achetez un objet de collection dans l'une de nos applications de l'écosystème",
   "COLLECTIONS": "Collections",
   "COLLECTION_NAME": "Nom de la collection",
   "COMMOMN_DAY": "jour",

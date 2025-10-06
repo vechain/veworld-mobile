@@ -421,6 +421,8 @@
   "CLOUD_ERR_WALLET_OPERATION": "Er is een fout opgetreden bij het uitvoeren van deze iCloud-portemonneehandeling. Probeer het opnieuw.",
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "We konden geen geback-upte portemonnees vinden in uw {cloud: string}. Probeer het opnieuw of gebruik uw herstelzin.",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "Geen portemonnees beschikbaar",
+  "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "Verplaats een verzamelobject om je collectie te beginnen",
+  "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "of koop een verzamelobject van een van onze ecosysteem-apps",
   "COLLECTIONS": "Collecties",
   "COLLECTION_NAME": "Naam van collectie",
   "COMMOMN_DAY": "dag",
