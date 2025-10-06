@@ -110,6 +110,7 @@ export const AddTokenBottomSheet = ({ onClose, bottomSheetRef, qrCodeBottomSheet
                 keyExtractor={item => item.id}
                 ItemSeparatorComponent={ItemSeparator}
                 showsVerticalScrollIndicator={false}
+                testID="add-token-options-list"
             />
         </BaseBottomSheet>
     )

@@ -19,14 +19,22 @@ jest.mock("~Hooks/useTokenBalance", () => ({
     useTokenBalance: jest.fn(),
 }))
 
+jest.mock("~Hooks/useHasAnyVeBetterActions", () => ({
+    useHasAnyVeBetterActions: jest.fn(),
+}))
+
 import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { useMultipleTokensBalance, useTokenBalance } from "~Hooks/useTokenBalance"
+import { useHasAnyVeBetterActions } from "~Hooks/useHasAnyVeBetterActions"
 
 describe("useSortedTokensByFiatValue", () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        ;(useHasAnyVeBetterActions as jest.Mock).mockReturnValue({
+            data: true,
+        })
     })
 
     const mockTokenBalance = {
@@ -452,5 +460,153 @@ describe("useSortedTokensByFiatValue", () => {
         expect(tokenSymbols).toContain("VTHO")
         expect(tokenSymbols).toContain("B3TR") // Combined B3TR should exist
         expect(tokenSymbols).not.toContain("VOT3") // VOT3 should be combined into B3TR
+    })
+
+    it("should return default tokens for new users with no VeBetter actions and no token balances", () => {
+        ;(useHasAnyVeBetterActions as jest.Mock).mockReturnValue({
+            data: false,
+        })
+        ;(useNonVechainTokensBalance as jest.Mock).mockReturnValue({
+            data: [],
+            isLoading: false,
+        })
+        const zeroBalance = { ...mockTokenBalance, balance: "0" }
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue({
+            data: [zeroBalance, zeroBalance, zeroBalance, zeroBalance],
+            isLoading: false,
+        })
+        ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue({
+            fiatBalance: "$0.00",
+            tokenInfoLoading: false,
+            balance: zeroBalance,
+        })
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: { ...mockVot3Balance, balance: "0" },
+        })
+        ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
+            data: [],
+            isLoading: false,
+        })
+
+        const { result } = renderHook(() => useSortedTokensByFiatValue(), {
+            wrapper: TestWrapper,
+        })
+
+        expect(result.current.tokens).toHaveLength(2)
+        expect(result.current.tokens[0].symbol).toBe("B3TR")
+        expect(result.current.tokens[1].symbol).toBe("VET")
+        expect(result.current.isNewUserWithNoTokens).toBe(true)
+    })
+
+    it("should not return default tokens for new users if they have VeBetter actions", () => {
+        ;(useHasAnyVeBetterActions as jest.Mock).mockReturnValue({
+            data: true,
+        })
+        ;(useNonVechainTokensBalance as jest.Mock).mockReturnValue({
+            data: [],
+            isLoading: false,
+        })
+
+        const zeroBalance = { ...mockTokenBalance, balance: "0" }
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue({
+            data: [zeroBalance, zeroBalance, zeroBalance, zeroBalance],
+            isLoading: false,
+        })
+        ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue({
+            fiatBalance: "$0.00",
+            tokenInfoLoading: false,
+            balance: zeroBalance,
+        })
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: { ...mockVot3Balance, balance: "0" },
+        })
+        ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
+            data: [],
+            isLoading: false,
+        })
+
+        const { result } = renderHook(() => useSortedTokensByFiatValue(), {
+            wrapper: TestWrapper,
+        })
+
+        expect(result.current.isNewUserWithNoTokens).toBe(false)
+
+        const tokenSymbols = result.current.tokens.map(token => token.symbol)
+        expect(tokenSymbols).toContain("VET")
+        expect(tokenSymbols).toContain("VTHO")
+        expect(tokenSymbols).toContain("B3TR")
+    })
+
+    it("should not return default tokens for users with token balances but no VeBetter actions", () => {
+        ;(useHasAnyVeBetterActions as jest.Mock).mockReturnValue({
+            data: false,
+        })
+        ;(useNonVechainTokensBalance as jest.Mock).mockReturnValue({
+            data: [],
+            isLoading: false,
+        })
+        const vetBalance = { ...mockTokenBalance, balance: "1000000000000000000" }
+        const zeroBalance = { ...mockTokenBalance, balance: "0" }
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue({
+            data: [vetBalance, zeroBalance, zeroBalance, zeroBalance],
+            isLoading: false,
+        })
+        ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue({
+            fiatBalance: "$100.00",
+            tokenInfoLoading: false,
+            balance: vetBalance,
+        })
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: { ...mockVot3Balance, balance: "0" },
+        })
+        ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
+            data: [],
+            isLoading: false,
+        })
+
+        const { result } = renderHook(() => useSortedTokensByFiatValue(), {
+            wrapper: TestWrapper,
+        })
+
+        expect(result.current.isNewUserWithNoTokens).toBe(false)
+
+        const tokenSymbols = result.current.tokens.map(token => token.symbol)
+        expect(tokenSymbols).toContain("VET")
+        expect(tokenSymbols).toContain("VTHO")
+        expect(tokenSymbols).toContain("B3TR")
+    })
+
+    it("should return isNewUserWithNoTokens flag correctly", () => {
+        ;(useHasAnyVeBetterActions as jest.Mock).mockReturnValue({
+            data: false,
+        })
+        ;(useNonVechainTokensBalance as jest.Mock).mockReturnValue({
+            data: [],
+            isLoading: false,
+        })
+        const zeroBalance = { ...mockTokenBalance, balance: "0" }
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue({
+            data: [zeroBalance, zeroBalance, zeroBalance, zeroBalance],
+            isLoading: false,
+        })
+        ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue({
+            fiatBalance: "$0.00",
+            tokenInfoLoading: false,
+            balance: zeroBalance,
+        })
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: { ...mockVot3Balance, balance: "0" },
+        })
+        ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({
+            data: [],
+            isLoading: false,
+        })
+
+        const { result } = renderHook(() => useSortedTokensByFiatValue(), {
+            wrapper: TestWrapper,
+        })
+
+        expect(result.current).toHaveProperty("isNewUserWithNoTokens")
+        expect(result.current.isNewUserWithNoTokens).toBe(true)
     })
 })

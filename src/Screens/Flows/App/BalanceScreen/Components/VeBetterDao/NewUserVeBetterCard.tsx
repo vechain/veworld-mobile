@@ -52,7 +52,7 @@ export const NewUserVeBetterCard = () => {
 
     return (
         <BaseView style={styles.root} testID="VEBETTER_DAO_NEW_USER_CARD">
-            <BaseTouchable style={styles.closeIcon} action={closeCard} haptics="Light">
+            <BaseTouchable style={styles.closeIcon} action={closeCard} haptics="Light" testID="close-button">
                 <Icon name="icon-x" color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE} size={16} />
             </BaseTouchable>
             <BaseView flexDirection="column" gap={16}>

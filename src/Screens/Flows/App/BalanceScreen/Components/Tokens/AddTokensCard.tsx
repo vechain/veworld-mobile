@@ -26,7 +26,7 @@ export const AddTokensCard = () => {
                 {LL.BALANCE_TAB_NO_TOKENS()}
             </BaseText>
 
-            <BaseTouchable style={styles.addTokens} haptics="Light" onPress={onOpen}>
+            <BaseTouchable style={styles.addTokens} haptics="Light" onPress={onOpen} testID="add-tokens-button">
                 <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.PURPLE : COLORS.GREY_50}>
                     {LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}
                 </BaseText>
