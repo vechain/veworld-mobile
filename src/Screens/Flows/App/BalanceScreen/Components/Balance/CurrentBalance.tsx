@@ -36,7 +36,7 @@ export const CurrentBalance = () => {
 
     return (
         <TouchableOpacity onPress={onPress}>
-            <Animated.View style={styles.root} layout={LinearTransition}>
+            <Animated.View style={styles.root} layout={LinearTransition.duration(300)}>
                 <BaseText typographyFont="headerTitle" fontWeight="400" color={COLORS.PURPLE_LABEL}>
                     {currencySymbol}
                 </BaseText>
