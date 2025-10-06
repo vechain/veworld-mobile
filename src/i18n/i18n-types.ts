@@ -632,10 +632,6 @@ type RootTranslation = {
 	 */
 	BALANCE_TAB_TOKENS: string
 	/**
-	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​t​o​k​e​n​s​ ​y​e​t
-	 */
-	BALANCE_TAB_NO_TOKENS: string
-	/**
 	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
 	 */
 	BANNER_STARGATE_DESC: string
@@ -4871,30 +4867,6 @@ type RootTranslation = {
 	 */
 	TOKEN_TRANSFER_SENT: string
 	/**
-	 * B​u​y​ ​t​o​k​e​n
-	 */
-	TOKEN_BUY: string
-	/**
-	 * A​d​d​ ​b​a​l​a​n​c​e​ ​b​u​y​i​n​g​ ​w​i​t​h​ ​f​i​a​t
-	 */
-	TOKEN_BUY_SUBTITLE: string
-	/**
-	 * R​e​c​e​i​v​e​ ​t​o​k​e​n
-	 */
-	TOKEN_RECEIVE: string
-	/**
-	 * U​s​e​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​r​e​c​e​i​v​e
-	 */
-	TOKEN_RECEIVE_SUBTITLE: string
-	/**
-	 * C​u​s​t​o​m​ ​t​o​k​e​n
-	 */
-	TOKEN_CUSTOM: string
-	/**
-	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​t​o​k​e​n​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t
-	 */
-	TOKEN_CUSTOM_SUBTITLE: string
-	/**
 	 * T​o​t​a​l
 	 */
 	TOTAL: string
@@ -4948,22 +4920,6 @@ type RootTranslation = {
 	 */
 	VALUE_TITLE: string
 	/**
-	 * c​o​n​t​r​i​b​u​t​e​ ​t​o​ ​t​h​e​ ​o​f​f​s​e​t
-	 */
-	VBD_CONTRIBUTE_OFFSET: string
-	/**
-	 * g​e​t​ ​r​e​w​a​r​d​e​d​ ​f​o​r​ ​y​o​u​r​ ​a​c​t​i​o​n​s​ ​a​n​d
-	 */
-	VBD_GET_REWARDED: string
-	/**
-	 * J​o​i​n​ ​t​h​e
-	 */
-	VBD_JOIN_THE: string
-	/**
-	 * m​o​v​e​m​e​n​t
-	 */
-	VBD_MOVEMENT: string
-	/**
 	 * R​e​w​a​r​d​s​ ​e​a​r​n​e​d
 	 */
 	VBD_REWARDS_EARNED: string
@@ -4971,10 +4927,6 @@ type RootTranslation = {
 	 * S​e​e​ ​V​e​B​e​t​t​e​r​ ​p​r​o​f​i​l​e
 	 */
 	VBD_SEE_PROFILE: string
-	/**
-	 * S​t​a​r​t​ ​y​o​u​r​ ​i​m​p​a​c​t
-	 */
-	VBD_START_YOUR_IMPACT: string
 	/**
 	 * A​v​o​i​d​e​d
 	 */
@@ -5011,14 +4963,6 @@ type RootTranslation = {
 	 * W​a​t​e​r
 	 */
 	VBD_STAT_WATER: string
-	/**
-	 * T​o​t​a​l​ ​B​e​t​t​e​r​ ​a​c​t​i​o​n​s
-	 */
-	VBD_TOTAL_ACTIONS: string
-	/**
-	 * T​o​t​a​l​ ​B​3​T​R​ ​r​e​w​a​r​d​e​d
-	 */
-	VBD_TOTAL_REWARDED: string
 	/**
 	 * Y​o​u​r​ ​B​e​t​t​e​r​ ​A​c​t​i​o​n​s
 	 */
@@ -5245,6 +5189,34 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * T​o​t​a​l​ ​s​u​p​p​l​y
+	 */
+	STARGATE_STAT_TOTAL_SUPPLY: string
+	/**
+	 * T​o​t​a​l​ ​s​t​a​k​e​d
+	 */
+	STARGATE_STAT_TOTAL_STAKED: string
+	/**
+	 * R​e​w​a​r​d​s​ ​g​e​n​e​r​a​t​i​o​n
+	 */
+	STARGATE_STAT_REWARDS_GENERATION: string
+	/**
+	 * R​e​w​a​r​d​s​ ​d​i​s​t​r​i​b​u​t​e​d
+	 */
+	STARGATE_STAT_REWARDS_DISTRIBUTED: string
+	/**
+	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​*​*​ ​t​o​k​e​n​s
+	 */
+	STARGATE_STAT_DESCRIPTION: string
+	/**
+	 * S​t​a​r​t​ ​s​t​a​k​i​n​g
+	 */
+	STARGATE_START_STAKING: string
+	/**
+	 * d​a​y
+	 */
+	COMMOMN_DAY: string
 }
 
 export type TranslationFunctions = {
@@ -5835,10 +5807,6 @@ Try reconnect your device to the internet.
 	 * Tokens
 	 */
 	BALANCE_TAB_TOKENS: () => LocalizedString
-	/**
-	 * You don't have any tokens yet
-	 */
-	BALANCE_TAB_NO_TOKENS: () => LocalizedString
 	/**
 	 * Get **VTHO** by staking your **VET tokens**
 	 */
@@ -10023,30 +9991,6 @@ Here's what it's all about:
 	 */
 	TOKEN_TRANSFER_SENT: () => LocalizedString
 	/**
-	 * Buy token
-	 */
-	TOKEN_BUY: () => LocalizedString
-	/**
-	 * Add balance buying with fiat
-	 */
-	TOKEN_BUY_SUBTITLE: () => LocalizedString
-	/**
-	 * Receive token
-	 */
-	TOKEN_RECEIVE: () => LocalizedString
-	/**
-	 * Use your wallet address to receive
-	 */
-	TOKEN_RECEIVE_SUBTITLE: () => LocalizedString
-	/**
-	 * Custom token
-	 */
-	TOKEN_CUSTOM: () => LocalizedString
-	/**
-	 * Add a custom token to your wallet
-	 */
-	TOKEN_CUSTOM_SUBTITLE: () => LocalizedString
-	/**
 	 * Total
 	 */
 	TOTAL: () => LocalizedString
@@ -10099,22 +10043,6 @@ Here's what it's all about:
 	 */
 	VALUE_TITLE: () => LocalizedString
 	/**
-	 * contribute to the offset
-	 */
-	VBD_CONTRIBUTE_OFFSET: () => LocalizedString
-	/**
-	 * get rewarded for your actions and
-	 */
-	VBD_GET_REWARDED: () => LocalizedString
-	/**
-	 * Join the
-	 */
-	VBD_JOIN_THE: () => LocalizedString
-	/**
-	 * movement
-	 */
-	VBD_MOVEMENT: () => LocalizedString
-	/**
 	 * Rewards earned
 	 */
 	VBD_REWARDS_EARNED: () => LocalizedString
@@ -10122,10 +10050,6 @@ Here's what it's all about:
 	 * See VeBetter profile
 	 */
 	VBD_SEE_PROFILE: () => LocalizedString
-	/**
-	 * Start your impact
-	 */
-	VBD_START_YOUR_IMPACT: () => LocalizedString
 	/**
 	 * Avoided
 	 */
@@ -10162,14 +10086,6 @@ Here's what it's all about:
 	 * Water
 	 */
 	VBD_STAT_WATER: () => LocalizedString
-	/**
-	 * Total Better actions
-	 */
-	VBD_TOTAL_ACTIONS: () => LocalizedString
-	/**
-	 * Total B3TR rewarded
-	 */
-	VBD_TOTAL_REWARDED: () => LocalizedString
 	/**
 	 * Your Better Actions
 	 */
@@ -10394,6 +10310,34 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Total supply
+	 */
+	STARGATE_STAT_TOTAL_SUPPLY: () => LocalizedString
+	/**
+	 * Total staked
+	 */
+	STARGATE_STAT_TOTAL_STAKED: () => LocalizedString
+	/**
+	 * Rewards generation
+	 */
+	STARGATE_STAT_REWARDS_GENERATION: () => LocalizedString
+	/**
+	 * Rewards distributed
+	 */
+	STARGATE_STAT_REWARDS_DISTRIBUTED: () => LocalizedString
+	/**
+	 * Get **VTHO** by staking your **VET** tokens
+	 */
+	STARGATE_STAT_DESCRIPTION: () => LocalizedString
+	/**
+	 * Start staking
+	 */
+	STARGATE_START_STAKING: () => LocalizedString
+	/**
+	 * day
+	 */
+	COMMOMN_DAY: () => LocalizedString
 }
 
 export type Formatters = {

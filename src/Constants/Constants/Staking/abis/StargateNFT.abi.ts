@@ -1,6 +1,6 @@
 import { abi } from "thor-devkit"
 
-type StargateInfoKeys = "getToken" | "claimableVetGeneratedVtho"
+type StargateInfoKeys = "getToken" | "claimableVetGeneratedVtho" | "getLevelsCirculatingSupplies"
 
 export const StargateInfo = {
     getToken: {
@@ -37,6 +37,19 @@ export const StargateInfo = {
                 internalType: "uint256",
                 name: "",
                 type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    getLevelsCirculatingSupplies: {
+        inputs: [],
+        name: "getLevelsCirculatingSupplies",
+        outputs: [
+            {
+                internalType: "uint208[]",
+                name: "",
+                type: "uint208[]",
             },
         ],
         stateMutability: "view",

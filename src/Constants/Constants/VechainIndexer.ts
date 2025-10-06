@@ -258,3 +258,27 @@ export const getVeBetterActions = (
     params.append("size", pageSize.toString())
     return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/b3tr/actions/users/${address}?${params.toString()}`
 }
+
+/**
+ * Get the total supply of Stargate NFTs
+ * @returns The total supply of Stargate NFTs
+ */
+export const getStargateTotalSupply = () => {
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/nft-holders`
+}
+
+/**
+ * Get the total VET staked in Stargate
+ * @returns The total VET staked in Stargate
+ */
+export const getStargateTotalVetStaked = () => {
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/total-vet-staked`
+}
+
+/**
+ * Get the total VTHO claimed in Stargate
+ * @returns The total VTHO claimed in Stargate
+ */
+export const getStargateRewardsDistributed = () => {
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/total-vtho-claimed`
+}
