@@ -5213,6 +5213,34 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * T​o​t​a​l​ ​s​u​p​p​l​y
+	 */
+	STARGATE_STAT_TOTAL_SUPPLY: string
+	/**
+	 * T​o​t​a​l​ ​s​t​a​k​e​d
+	 */
+	STARGATE_STAT_TOTAL_STAKED: string
+	/**
+	 * R​e​w​a​r​d​s​ ​g​e​n​e​r​a​t​i​o​n
+	 */
+	STARGATE_STAT_REWARDS_GENERATION: string
+	/**
+	 * R​e​w​a​r​d​s​ ​d​i​s​t​r​i​b​u​t​e​d
+	 */
+	STARGATE_STAT_REWARDS_DISTRIBUTED: string
+	/**
+	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​*​*​ ​t​o​k​e​n​s
+	 */
+	STARGATE_STAT_DESCRIPTION: string
+	/**
+	 * S​t​a​r​t​ ​s​t​a​k​i​n​g
+	 */
+	STARGATE_START_STAKING: string
+	/**
+	 * d​a​y
+	 */
+	COMMOMN_DAY: string
 }
 
 export type TranslationFunctions = {
@@ -10330,6 +10358,34 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Total supply
+	 */
+	STARGATE_STAT_TOTAL_SUPPLY: () => LocalizedString
+	/**
+	 * Total staked
+	 */
+	STARGATE_STAT_TOTAL_STAKED: () => LocalizedString
+	/**
+	 * Rewards generation
+	 */
+	STARGATE_STAT_REWARDS_GENERATION: () => LocalizedString
+	/**
+	 * Rewards distributed
+	 */
+	STARGATE_STAT_REWARDS_DISTRIBUTED: () => LocalizedString
+	/**
+	 * Get **VTHO** by staking your **VET** tokens
+	 */
+	STARGATE_STAT_DESCRIPTION: () => LocalizedString
+	/**
+	 * Start staking
+	 */
+	STARGATE_START_STAKING: () => LocalizedString
+	/**
+	 * day
+	 */
+	COMMOMN_DAY: () => LocalizedString
 }
 
 export type Formatters = {
