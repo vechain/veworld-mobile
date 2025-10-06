@@ -25,7 +25,7 @@ type PicassoAddressIconProps = {
 } & ViewProps
 
 export const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = memo(
-    ({ address, size = 50, borderRadius = 8, style, ...otherProps }) => {
+    ({ address, size = 50, borderRadius = 99, style, ...otherProps }) => {
         const uri = PicassoUtils.getPicassoImgSrc(address).toString()
 
         return (
