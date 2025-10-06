@@ -1273,5 +1273,7 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "Transfer a collectible to start building your collection",
+  "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "or buy a collectible from one of our ecosystem apps"
 }

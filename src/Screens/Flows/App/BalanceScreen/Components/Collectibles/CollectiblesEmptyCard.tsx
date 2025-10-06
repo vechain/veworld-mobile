@@ -57,7 +57,7 @@ export const CollectiblesEmptyCard = () => {
                         color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}
                         typographyFont="body"
                         align="center">
-                        {"Transfer a collectible to start building your collection"}
+                        {LL.COLLECTIBLES_EMPTY_CARD_DESCRIPTION()}
                     </BaseText>
                     <BaseButton
                         action={openQRCodeSheet}
@@ -87,7 +87,7 @@ export const CollectiblesEmptyCard = () => {
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}
                             typographyFont="captionMedium"
                             align="center">
-                            {"or buy a collectible from one of our ecosystem apps"}
+                            {LL.COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION()}
                         </BaseText>
                     </BaseView>
                     <FlatList
