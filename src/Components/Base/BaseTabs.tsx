@@ -11,6 +11,9 @@ type Props<TKeys extends string[] | readonly string[]> = {
     labels: string[]
     selectedKey: TKeys[number]
     setSelectedKey: (key: TKeys[number]) => void
+    showBorder?: boolean
+    indicatorBackgroundColor?: string
+    containerBackgroundColor?: string
 }
 
 export const BaseTabs = <TKeys extends string[] | readonly string[]>({
@@ -18,8 +21,11 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
     labels,
     selectedKey,
     setSelectedKey,
+    showBorder = true,
+    indicatorBackgroundColor,
+    containerBackgroundColor,
 }: Props<TKeys>) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles(indicatorBackgroundColor, containerBackgroundColor))
     const [tabOffsets, setTabOffsets] = useState<{ offsetX: number; width: number }[]>([])
     const selectedIndex = useMemo(() => keys.indexOf(selectedKey), [keys, selectedKey])
     const getTextColor = useCallback(
@@ -49,7 +55,7 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
     }, [tabOffsets, selectedIndex, keys.length])
     if (keys.length !== labels.length) throw new Error("Keys and Labels should have the same length")
     return (
-        <BaseView style={styles.root} flexDirection="row" gap={4}>
+        <BaseView style={[styles.root, showBorder && styles.withBorder]} flexDirection="row" gap={4}>
             {keys.map((key, index) => {
                 const isSelected = selectedKey === key
                 const textColor = getTextColor(isSelected)
@@ -73,15 +79,18 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = (indicatorBackgroundColor?: string, containerBackgroundColor?: string) => (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
-            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
-            borderWidth: 1,
+            backgroundColor: containerBackgroundColor ?? (theme.isDark ? COLORS.PURPLE : COLORS.WHITE),
+            borderWidth: 0,
             borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
             padding: 4,
             position: "relative",
             borderRadius: 8,
+        },
+        withBorder: {
+            borderWidth: 1,
         },
         tab: {
             flex: 1,
@@ -91,7 +100,7 @@ const baseStyles = (theme: ColorThemeType) =>
             justifyContent: "center",
         },
         indicator: {
-            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100,
+            backgroundColor: indicatorBackgroundColor ?? (theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100),
             pointerEvents: "none",
             borderRadius: 4,
             position: "absolute",

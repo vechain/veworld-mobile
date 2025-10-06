@@ -15,6 +15,8 @@ import { TabRenderer } from "./Tabs/TabRenderer"
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
 export const BalanceScreen = () => {
+    useFetchFeaturedDApps()
+
     const scrollY = useSharedValue(0)
     const contentOffsetY = useSharedValue(0)
     const selectedAccount = useAppSelector(selectSelectedAccount)

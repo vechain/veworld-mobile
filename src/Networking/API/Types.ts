@@ -165,3 +165,30 @@ export interface FetchVeBetterActionsResponseItem {
         }
     }
 }
+
+export enum StargateNFTLevel {
+    Strength,
+    Thunder,
+    Mjolnir,
+    VeThorX,
+    StrengthX,
+    ThunderX,
+    MjolnirX,
+    Dawn,
+    Lightning,
+    Flash,
+}
+
+export interface FetchStargateTotalVetStakedResponse {
+    total: string
+    byLevel: {
+        [key in StargateNFTLevel]: string
+    }
+}
+
+export interface FetchStargateTotalSupplyResponse {
+    total: string
+    byLevel: {
+        [key in StargateNFTLevel]: number
+    }
+}
