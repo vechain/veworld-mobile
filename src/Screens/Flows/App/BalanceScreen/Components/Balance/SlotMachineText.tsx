@@ -77,7 +77,7 @@ export const SlotMachineText = ({ value }: Props) => {
     return (
         <Animated.View style={[styles.root]} layout={LinearTransition.duration(300)}>
             <LinearGradient
-                colors={[COLORS.BALANCE_BACKGROUND, "rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0)", COLORS.BALANCE_BACKGROUND]}
+                colors={["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0)"]}
                 angle={180}
                 useAngle
                 locations={[0, 0.2, 0.7, 1]}
