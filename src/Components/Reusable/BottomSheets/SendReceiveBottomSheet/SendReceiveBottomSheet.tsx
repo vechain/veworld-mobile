@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import picasso from "@vechain/picasso"
 import React, { forwardRef, RefObject, useCallback, useMemo, useState } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { Share, StyleSheet, TouchableOpacity } from "react-native"
 import QRCode from "react-native-qrcode-svg"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { BaseTabs } from "~Components/Base/BaseTabs"
@@ -41,7 +41,11 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
         }, 3000)
     }, [onCopyToClipboard, selectedAccount.address])
 
-    const onShare = useCallback(async () => {}, [])
+    const onShare = useCallback(async () => {
+        Share.share({
+            message: selectedAccount.address,
+        })
+    }, [selectedAccount.address])
 
     const labels = useMemo(() => {
         return [LL.SEND_RECEIVE_TAB_SCAN(), LL.SEND_RECEIVE_TAB_RECEIVE()]
@@ -137,6 +141,8 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
                 setSelectedKey={setTab}
                 labels={labels}
                 rootStyle={styles.tabElement}
+                indicatorBackgroundColor="rgba(255, 255, 255, 0.15)"
+                containerBackgroundColor="rgba(0, 0, 0, 0.30)"
             />
             <BaseSpacer height={64} />
         </BaseBottomSheet>
