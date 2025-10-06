@@ -1,3 +1,4 @@
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { VET, VTHO } from "~Constants"
 import { useUserNodes, useUserStargateNfts } from "~Hooks/Staking"
@@ -34,7 +35,7 @@ export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
         VOT3.decimals,
     )
 
-    const nonVechainTokensFiat = useNonVechainTokenFiat({ accountAddress: address, enabled })
+    const { data: nonVechainTokensFiat } = useNonVechainTokenFiat({ accountAddress: address, enabled })
 
     const { stargateNodes, isLoading: loadingNodes } = useUserNodes(address, enabled)
 
@@ -97,11 +98,24 @@ export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
 
     const { amount, areAlmostZero } = useMemo(() => combineFiatBalances(balances), [balances, combineFiatBalances])
 
+    const { data: previousBalance } = useQuery({
+        queryKey: ["BALANCE", "TOTAL", address.toLowerCase()],
+        queryFn: () => amount,
+        placeholderData: keepPreviousData,
+        enabled: !isLoading,
+    })
+
     const { formatFiat } = useFormatFiat()
     const renderedBalance = useMemo(() => {
+        if (isLoading) {
+            return formatFiat({ amount: previousBalance ?? 0, cover: !isVisible })
+        }
         const balance = formatFiat({ amount, cover: !isVisible })
         return areAlmostZero ? `< ${balance}` : balance
-    }, [formatFiat, amount, isVisible, areAlmostZero])
+    }, [isLoading, formatFiat, amount, isVisible, areAlmostZero, previousBalance])
 
-    return useMemo(() => ({ balances, isLoading, renderedBalance }), [balances, isLoading, renderedBalance])
+    return useMemo(
+        () => ({ balances, isLoading, renderedBalance, rawAmount: amount }),
+        [amount, balances, isLoading, renderedBalance],
+    )
 }

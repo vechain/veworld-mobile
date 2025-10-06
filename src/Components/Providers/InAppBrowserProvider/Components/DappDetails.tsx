@@ -57,6 +57,28 @@ const NotVerifiedWarning = () => {
     )
 }
 
+const NotVerifiedWatchedAccountWarning = () => {
+    const { LL } = useI18nContext()
+    const theme = useTheme()
+    return (
+        <BaseView
+            flexDirection="row"
+            alignItems="center"
+            bg={theme.colors.warningAlert.background}
+            gap={12}
+            py={8}
+            px={12}
+            borderRadius={6}
+            mt={8}
+            testID="DAPP_DETAILS_NOT_VERIFIED_WATCHED_ACCOUNT_WARNING">
+            <BaseIcon size={16} color={theme.colors.warningAlert.icon} name="icon-alert-triangle" />
+            <BaseText typographyFont="body" color={theme.colors.warningAlert.text} flex={1} flexDirection="row">
+                {LL.NOT_VERIFIED_WATCHED_ACCOUNT()}
+            </BaseText>
+        </BaseView>
+    )
+}
+
 type Props = PropsWithChildren<{
     show: boolean
     style?: StyleProp<ViewStyle>
@@ -85,6 +107,7 @@ DappDetails.Title = Title
 DappDetails.CheckItem = CheckItem
 DappDetails.Container = Container
 DappDetails.NotVerifiedWarning = NotVerifiedWarning
+DappDetails.NotVerifiedWatchedAccountWarning = NotVerifiedWatchedAccountWarning
 
 export { DappDetails }
 

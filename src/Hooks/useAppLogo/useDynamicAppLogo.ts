@@ -13,7 +13,7 @@ type Args = {
 }
 
 type FnArgs = {
-    app: VeBetterDaoDAppMetadata | DiscoveryDApp
+    app: VeBetterDaoDAppMetadata | DiscoveryDApp | undefined
 }
 
 export const useDynamicAppLogo = ({ size = 64 }: Args) => {

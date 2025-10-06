@@ -413,6 +413,13 @@ export enum COLORS {
     B3TR_ICON_BACKGROUND = "#74E291",
     WHITE_RGBA_85 = "rgba(255,255,255,0.85)",
     WHITE_RGBA_15 = "rgba(255,255,255,0.15)",
+    WHITE_RGBA_05 = "rgba(255, 255, 255, 0.05)",
+    PURPLE_LABEL = "#B9B5CF",
+    PURPLE_LABEL_5 = "rgba(185, 181, 207, 0.05)",
+    PURPLE_LABEL_10 = "rgba(185, 181, 207, 0.10)",
+    BALANCE_BACKGROUND = "#1D173A",
+    BALANCE_BACKGROUND_50 = "rgba(29, 23, 58, 0.50)",
+    BALANCE_BACKGROUND_GRADIENT_END = "#423483",
 }
 
 const light: Colors = {

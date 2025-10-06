@@ -1,17 +1,15 @@
-import { generateOnRampURL } from "@coinbase/cbpay-js"
 import { useNavigation } from "@react-navigation/native"
+import { useQuery } from "@tanstack/react-query"
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import "react-native-url-polyfill/auto"
 import { WebView, WebViewMessageEvent } from "react-native-webview"
-import { BaseActivityIndicator, BaseStatusBar, BaseView, useInAppBrowser } from "~Components"
-import { AnalyticsEvent, ERROR_EVENTS, VET, VTHO } from "~Constants"
+import { generateCoinbaseOnRampURL } from "~Api/OnOffRampProviders"
+import { BaseActivityIndicator, BaseStatusBar, BaseView, useFeatureFlags, useInAppBrowser } from "~Components"
+import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { Routes } from "~Navigation"
 import { ErrorMessageUtils, PlatformUtils, debug } from "~Utils"
-import { VECHAIN_BLOCKCHAIN } from "./Constants"
-
-type GenerateOnRampURLOptions = Parameters<typeof generateOnRampURL>[0]
 
 const isAndroid = PlatformUtils.isAndroid()
 
@@ -27,20 +25,14 @@ export const CoinbasePayWebView = ({
     const styles = baseStyles(isLoading)
     const track = useAnalyticTracking()
     const { originWhitelist } = useInAppBrowser()
+    const { paymentProvidersFeature } = useFeatureFlags()
 
-    const coinbaseURL = useMemo(() => {
-        const options: GenerateOnRampURLOptions = {
-            appId: process.env.REACT_APP_COINBASE_APP_ID as string,
-            addresses: {
-                [destinationAddress]: [VECHAIN_BLOCKCHAIN],
-            },
-            assets: [VET.symbol, VTHO.symbol],
-            handlingRequestedUrls: true,
-            presetCryptoAmount: currentAmount,
-        }
-
-        return generateOnRampURL(options)
-    }, [currentAmount, destinationAddress])
+    const { data: coinbaseURL, isFetching: isCoinbaseLoading } = useQuery({
+        queryKey: ["COINBASE", "ONRAMP", destinationAddress, currentAmount],
+        queryFn: () => generateCoinbaseOnRampURL(destinationAddress, paymentProvidersFeature["coinbase-pay"].url),
+        staleTime: 0,
+        gcTime: 0,
+    })
 
     const handleLoadEnd = useCallback(() => {
         setTimeout(() => {
@@ -90,17 +82,23 @@ export const CoinbasePayWebView = ({
         [nav, track],
     )
 
+    const url = useMemo(() => {
+        return isCoinbaseLoading ? undefined : coinbaseURL
+    }, [coinbaseURL, isCoinbaseLoading])
+
     return (
         <BaseView flex={1}>
             {!isLoading && isAndroid && <BaseStatusBar />}
             <BaseActivityIndicator isVisible={isLoading} />
-            <WebView
-                source={{ uri: coinbaseURL }}
-                onLoadEnd={handleLoadEnd}
-                onMessage={onMessage}
-                style={styles.webView}
-                originWhitelist={originWhitelist}
-            />
+            {url && (
+                <WebView
+                    source={{ uri: url }}
+                    onLoadEnd={handleLoadEnd}
+                    onMessage={onMessage}
+                    style={styles.webView}
+                    originWhitelist={originWhitelist}
+                />
+            )}
         </BaseView>
     )
 }

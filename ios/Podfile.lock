@@ -1738,7 +1738,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Sentry/HybridSDK (= 8.45.0)
     - Yoga
-  - RNSVG (15.2.0):
+  - RNSVG (15.10.0):
     - React-Core
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
@@ -2263,7 +2263,7 @@ SPEC CHECKSUMS:
   RNScreenshotPrevent: 105cddf74799cbd81aac76e56a4025a345db8967
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
   RNSentry: cb6ff1c2e8547a559c7916ffbb53341b92a49e9c
-  RNSVG: 43b64ed39c14ce830d840903774154ca0c1f27ec
+  RNSVG: 58bad41c581b62cac6265c2899f8f943db527159
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   Sentry: f7c0c4b82e2f7e5909a660544dfaff84e35d5e03

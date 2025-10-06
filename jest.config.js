@@ -39,6 +39,7 @@ module.exports = {
             "|expo/.*" +
             "|@privy-io/.*" +
             "|uuid" +
+            "|@shopify/react-native-skia" +
             ")",
     ],
     moduleNameMapper: {
