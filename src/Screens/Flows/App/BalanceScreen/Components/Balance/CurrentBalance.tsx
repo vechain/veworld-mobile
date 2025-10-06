@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
-import Animated, { LinearTransition } from "react-native-reanimated"
+import Animated, { FadeIn, FadeOut, LinearTransition } from "react-native-reanimated"
 import { BaseText } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -41,9 +41,16 @@ export const CurrentBalance = () => {
                     {currencySymbol}
                 </BaseText>
                 <Animated.View style={styles.balance}>
-                    {splittedText.map((value, idx) => (
-                        <SlotMachineText key={idx} value={value} />
-                    ))}
+                    {splittedText.includes("•") ? (
+                        <Animated.Text
+                            entering={FadeIn.duration(300)}
+                            exiting={FadeOut.duration(300)}
+                            style={styles.text}>
+                            {splittedText.join("")}
+                        </Animated.Text>
+                    ) : (
+                        splittedText.map((value, idx) => <SlotMachineText key={idx} value={value} />)
+                    )}
                 </Animated.View>
             </Animated.View>
         </TouchableOpacity>
