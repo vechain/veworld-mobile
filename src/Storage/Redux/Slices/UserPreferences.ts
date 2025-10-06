@@ -47,6 +47,7 @@ export interface UserPreferenceState {
     showJailbrokeWarning?: boolean
     hideStargateBannerHomeScreen?: boolean
     hideStargateBannerVETScreen?: boolean
+    hideNewUserVeBetterCard?: boolean
     signKeyPair?: KeyPair
 }
 
@@ -71,6 +72,7 @@ export const initialUserPreferencesState: UserPreferenceState = {
     showJailbrokeWarning: true,
     hideStargateBannerHomeScreen: false,
     hideStargateBannerVETScreen: false,
+    hideNewUserVeBetterCard: false,
     signKeyPair: undefined,
 }
 
@@ -184,6 +186,10 @@ export const UserPreferencesSlice = createSlice({
             state.hideStargateBannerVETScreen = action.payload
         },
 
+        setHideNewUserVeBetterCard: (state, action: PayloadAction<boolean>) => {
+            state.hideNewUserVeBetterCard = action.payload
+        },
+
         setSignKeyPair: (state, action: PayloadAction<KeyPair>) => {
             state.signKeyPair = action.payload
         },
@@ -212,5 +218,6 @@ export const {
     setShowJailbrokeDeviceWarning,
     setHideStargateBannerHomeScreen,
     setHideStargateBannerVETScreen,
+    setHideNewUserVeBetterCard,
     setSignKeyPair,
 } = UserPreferencesSlice.actions

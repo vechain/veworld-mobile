@@ -8,6 +8,7 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { useFormatFiat, useThemedStyles, useVeBetterGlobalOverview } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import { setHideNewUserVeBetterCard, useAppDispatch } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { StatsCard } from "./StatsCard"
 
@@ -15,6 +16,7 @@ export const NewUserVeBetterCard = () => {
     const { styles, theme } = useThemedStyles(style)
     const { LL } = useI18nContext()
     const nav = useNavigation()
+    const dispatch = useAppDispatch()
     const { formatLocale } = useFormatFiat()
     const { data: globalOverview } = useVeBetterGlobalOverview()
 
@@ -27,6 +29,10 @@ export const NewUserVeBetterCard = () => {
             nav.navigate(Routes.DISCOVER_STACK, { screen: Routes.DISCOVER })
         }
     }, [betterWorldFeature.appsScreen.enabled, nav])
+
+    const closeCard = useCallback(() => {
+        dispatch(setHideNewUserVeBetterCard(true))
+    }, [dispatch])
 
     const StatItem = useMemo(() => {
         return ({ icon, label, value }: { icon: React.ReactNode; label: string; value: string | number }) => (
@@ -46,7 +52,7 @@ export const NewUserVeBetterCard = () => {
 
     return (
         <BaseView style={styles.root} testID="VEBETTER_DAO_NEW_USER_CARD">
-            <BaseTouchable style={styles.closeIcon} action={navigateToAppScreen} haptics="Light">
+            <BaseTouchable style={styles.closeIcon} action={closeCard} haptics="Light">
                 <Icon name="icon-x" color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE} size={16} />
             </BaseTouchable>
             <BaseView flexDirection="column" gap={16}>

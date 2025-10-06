@@ -9,8 +9,8 @@ export const Tokens = () => {
     return (
         <BaseView flexDirection="column">
             <TokensTopSection />
-            <BaseSpacer height={32} />
             <AddTokensCard />
+            <BaseSpacer height={32} />
             <BalanceActivity tab="TOKENS" />
             <BaseSpacer height={40} />
             <VeBetterDaoCard />

@@ -32,7 +32,7 @@ export const TokensTopSection = () => {
             ItemSeparatorComponent={ItemSeparator}
             // Mobile performance optimizations
             getItemLayout={getItemLayout}
-            removeClippedSubviews={true}
+            removeClippedSubviews={false}
             windowSize={10}
             maxToRenderPerBatch={5}
             initialNumToRender={10}
