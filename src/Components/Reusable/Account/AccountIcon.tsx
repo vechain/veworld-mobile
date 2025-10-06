@@ -1,19 +1,28 @@
 import React, { memo } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import { SvgXml } from "react-native-svg"
+import { NewLedgerLogo } from "~Assets"
 import { BaseView } from "~Components/Base"
+import { Device, DEVICE_TYPE } from "~Model"
 import { PicassoUtils } from "~Utils"
 
 type AccountIconProps = {
-    address: string
+    account: {
+        type?: DEVICE_TYPE
+        device?: Device
+        address: string
+    }
     size?: number
     borderRadius?: number
 }
 
-export const AccountIcon: React.FC<AccountIconProps> = memo(({ address, size, borderRadius }) => {
+export const AccountIcon: React.FC<AccountIconProps> = memo(({ account, size, borderRadius }) => {
     return (
-        <BaseView>
-            <PicassoAddressIcon address={address} size={size} borderRadius={borderRadius} />
+        <BaseView style={accountIconStyles.container}>
+            <PicassoAddressIcon address={account.address} size={size} borderRadius={borderRadius} />
+            {(account.type === DEVICE_TYPE.LEDGER || account.device?.type === DEVICE_TYPE.LEDGER) && (
+                <NewLedgerLogo style={accountIconStyles.ledger} width={12} height={12} />
+            )}
         </BaseView>
     )
 })
@@ -38,4 +47,9 @@ export const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = memo(
 
 const picassoIconStyles = StyleSheet.create({
     view: { overflow: "hidden" },
+})
+
+const accountIconStyles = StyleSheet.create({
+    container: { position: "relative" },
+    ledger: { position: "absolute", bottom: -2, right: -2, width: 12, height: 12 },
 })
