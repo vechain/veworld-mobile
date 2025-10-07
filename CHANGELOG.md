@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.6 (2025-10-07)</small>
+
+* build: init ([2ebf4bb](https://github.com/vechain/veworld-mobile/commit/2ebf4bb))
+* 381 refactor background change color (#3364) ([d7a4333](https://github.com/vechain/veworld-mobile/commit/d7a4333)), closes [#3364](https://github.com/vechain/veworld-mobile/issues/3364)
+
 ## <small>2.4.5 (2025-10-03)</small>
 
 * build: init ([58131c2](https://github.com/vechain/veworld-mobile/commit/58131c2))
