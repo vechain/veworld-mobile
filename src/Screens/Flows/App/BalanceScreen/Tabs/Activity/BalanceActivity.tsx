@@ -21,7 +21,7 @@ const ListFooterComponent = ({ tab }: { tab: BalanceTab }) => {
 
     const tabRoute = useMemo(() => {
         if (tab === "TOKENS") {
-            return Routes.ACTIVITY_TRANSFER
+            return Routes.ACTIVITY_B3TR
         }
         if (tab === "STAKING") {
             return Routes.ACTIVITY_STAKING
