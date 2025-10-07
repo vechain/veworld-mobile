@@ -85,7 +85,7 @@ export const FavouritesV2 = React.memo(
 
         return (
             <BaseView gap={16} flexDirection="column" style={style}>
-                <BaseView flexDirection="row" justifyContent="space-between" px={16} alignItems="center">
+                <BaseView flexDirection="row" justifyContent="space-between" px={padding} alignItems="center">
                     <BaseText typographyFont="subSubTitleSemiBold" color={titleColor}>
                         {LL.DISCOVER_TAB_FAVOURITES()}
                     </BaseText>

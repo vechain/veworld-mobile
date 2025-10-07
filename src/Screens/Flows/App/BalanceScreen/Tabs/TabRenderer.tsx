@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
-import Animated from "react-native-reanimated"
-import { BaseSimpleTabs, BaseSpacer, BaseView } from "~Components"
+import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated"
+import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -13,6 +13,8 @@ import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
 import { useShowStakingTab } from "../Hooks/useShowStakingTab"
+import { useNavigation } from "@react-navigation/native"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { Staking } from "./Staking"
 import { Tokens } from "./Tokens"
 
@@ -21,6 +23,8 @@ const TABS = ["TOKENS", "STAKING"] as const
 type Props = {
     onLayout: (e: LayoutChangeEvent) => void
 }
+
+const AnimatedTouchable = Animated.createAnimatedComponent(wrapFunctionComponent(BaseTouchable))
 
 export const TabRenderer = ({ onLayout }: Props) => {
     const { LL } = useI18nContext()
@@ -31,6 +35,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const { onDAppPress } = useDAppActions(Routes.HOME)
     const { tabBarBottomMargin } = useTabBarBottomMargin()
     const showStakingTab = useShowStakingTab()
+    const nav = useNavigation()
 
     const filteredTabs = useMemo(() => {
         return TABS.filter(tab => {
@@ -50,6 +55,26 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const paddingBottom = useMemo(() => {
         return isAndroid() ? tabBarBottomMargin + 24 : 0
     }, [tabBarBottomMargin])
+
+    const rightIcon = useMemo(() => {
+        if (selectedTab === "TOKENS") {
+            return (
+                <AnimatedTouchable
+                    style={styles.manageTokens}
+                    entering={ZoomIn.duration(100)}
+                    exiting={ZoomOut.duration(100)}
+                    onPress={() => nav.navigate(Routes.MANAGE_TOKEN)}>
+                    <BaseIcon
+                        name="icon-settings-2"
+                        size={20}
+                        color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
+                    />
+                </AnimatedTouchable>
+            )
+        }
+
+        return null
+    }, [theme.isDark, selectedTab, styles.manageTokens, nav])
 
     return (
         <Animated.View style={[styles.root, { paddingBottom: tabBarBottomMargin }]} onLayout={onLayout}>
@@ -71,6 +96,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                 selectedKey={selectedTab}
                 setSelectedKey={setSelectedTab}
                 rootStyle={styles.tabs}
+                rightIcon={rightIcon}
             />
             <BaseView flexDirection="column" flex={1} pb={paddingBottom} px={24}>
                 {selectedTab === "TOKENS" && <Tokens />}
@@ -95,5 +121,11 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         tabs: {
             marginHorizontal: 24,
+        },
+        manageTokens: {
+            paddingHorizontal: 16,
+            paddingVertical: 8,
+            justifyContent: "center",
+            alignItems: "center",
         },
     })
