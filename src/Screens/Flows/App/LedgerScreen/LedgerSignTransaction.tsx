@@ -23,6 +23,7 @@ import {
 } from "~Components"
 import { AnalyticsEvent, creteAnalyticsEvent, ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useSendTransaction } from "~Hooks"
+import { useLoginSession } from "~Hooks/useLoginSession"
 import { ActivityType } from "~Model"
 import { RootStackParamListHome, RootStackParamListSwitch, Routes } from "~Navigation"
 import {
@@ -58,6 +59,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const { LL } = useI18nContext()
     const { processRequest } = useWalletConnect()
     const { postMessage } = useInAppBrowser()
+    const { createSessionIfNotExists } = useLoginSession()
+
     const network = useAppSelector(selectSelectedNetwork)
 
     const [signature, setSignature] = useState<Buffer>()
@@ -224,6 +227,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
             if (res.success) {
                 setSignature(res.payload)
+                if (dappRequest) createSessionIfNotExists(dappRequest)
             } else {
                 if (res.err === LEDGER_ERROR_CODES.USER_REJECTED) {
                     setUserRejected(true)
@@ -237,7 +241,14 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         } finally {
             setIsAwaitingSignature(false)
         }
-    }, [accountWithDevice, withTransport, transaction])
+    }, [
+        withTransport,
+        accountWithDevice.index,
+        accountWithDevice.device,
+        transaction,
+        dappRequest,
+        createSessionIfNotExists,
+    ])
 
     /** Effects */
 
@@ -290,12 +301,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         dispatch(setIsAppLoading(false))
 
         if (dappRequest) {
-            // Requires an extra goBack if it's the first request from the dapp
-            if (dappRequest.type === "in-app" && dappRequest.isFirstRequest) nav.goBack()
-
-            // nav back to SendTransaction Screen
-            nav.goBack()
-            // nav back to original screen
             nav.goBack()
         } else {
             if (initialRoute) {

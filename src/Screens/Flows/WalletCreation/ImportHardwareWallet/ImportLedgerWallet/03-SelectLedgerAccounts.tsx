@@ -157,7 +157,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
         const getLedgerAccounts = async () => {
             if (rootAccount) {
                 setLedgerAccountsLoading(true)
-                const accounts = await LedgerUtils.getAccountsWithBalances(rootAccount, selectedNetwork, 10)
+                const accounts = await LedgerUtils.getAccountsWithBalances(rootAccount, selectedNetwork, 20)
                 setLedgerAccounts(accounts)
             }
             setLedgerAccountsLoading(false)

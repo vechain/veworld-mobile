@@ -6,6 +6,7 @@ import { Routes } from "~Navigation"
 import { TestHelpers, TestWrapper } from "~Test"
 import { BigNutils } from "~Utils"
 import { useConvertBetterTokens } from "./useConvertBetterTokens"
+import { useTokenBalance } from "~Hooks/useTokenBalance"
 
 const mockedNavigate = jest.fn()
 const mockedReplace = jest.fn()
@@ -21,11 +22,18 @@ jest.mock("@react-navigation/native", () => {
     }
 })
 
+jest.mock("~Hooks/useTokenBalance", () => ({
+    useTokenBalance: jest.fn(),
+}))
+
 describe("useConvertBetterTokens", () => {
     beforeEach(() => {
         jest.clearAllMocks()
     })
     it("navigate to convert B3TR token to VOT3", async () => {
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: TestHelpers.data.B3TRWithBalance.balance,
+        })
         const amount = "1"
         const formattedAmount = ethers.utils.parseEther(amount.toString()).toString()
         const { result } = renderHook(() => useConvertBetterTokens(), { wrapper: TestWrapper })
@@ -59,6 +67,9 @@ describe("useConvertBetterTokens", () => {
     })
 
     it("navigate to convert VOT3 to B3TR", async () => {
+        ;(useTokenBalance as jest.Mock).mockReturnValue({
+            data: TestHelpers.data.B3TRWithBalance.balance,
+        })
         const amount = "1"
         const formattedAmount = ethers.utils.parseEther(amount.toString()).toString()
         const { result } = renderHook(() => useConvertBetterTokens(), { wrapper: TestWrapper })

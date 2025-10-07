@@ -12,6 +12,7 @@ export enum Routes {
     BROWSER = "Browser",
     HOME_STACK = "HomeStack",
     DISCOVER_STACK = "DiscoverStack",
+    APPS_STACK = "AppsStack",
 
     IMPORT_FROM_CLOUD = "Import_From_Cloud",
     IMPORT_MNEMONIC_BACKUP_PASSWORD = "Import_Mnemonic_Backup_Password",
@@ -26,7 +27,6 @@ export enum Routes {
     WALLET_SUCCESS = "Wallet_Success",
     HOME = "Home",
     MANAGE_TOKEN = "Manage_Token",
-    MANAGE_CUSTOM_TOKEN = "Manage_Custom_Token",
     BUY_FLOW = "Buy_Flow",
     BUY = "Buy",
     BUY_WEBVIEW = "Buy_Webview",
@@ -86,15 +86,17 @@ export enum Routes {
     ACTIVITY_DETAILS = "Activity_Details",
     RESET_APP = "Reset_App",
     BLACKLISTED_COLLECTIONS = "Blacklisted_Collections",
-    CONNECTED_APP_SEND_TRANSACTION_SCREEN = "Connected_App_Send_Transaction_Screen",
-    CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN = "Connected_App_Sign_Typed_Message_Screen",
     CONNECTED_APP_SIGN_MESSAGE_SCREEN = "Connected_App_Sign_Message_Screen",
     BLOCKED_APP_SCREEN = "Blocked_App_Screen",
     OBSERVE_WALLET = "Observe_Wallet",
     OBSERVE_WALLET_CONFIRMATION = "Observe_Wallet_Confirmation",
-    DAPP_CHANGE_ACCOUNT_SCREEN = "Dapp_Change_Account_Screen",
     SECURITY_UPGRADE_V2 = "Security_Upgrade_V2",
     SECURITY_UPGRADE_V2_HOME = "Security_Upgrade_V2_Home",
     SECURITY_UPGRADE_V2_MNEMONIC_BACKUP = "Security_Upgrade_V2_Mnemonic_Backup",
     DISCOVER_TABS_MANAGER = "Discover_Tabs_Manager",
+
+    // BetterWorld
+    APPS = "Apps",
+    APPS_SEARCH = "Apps_Search",
+    APPS_TABS_MANAGER = "Apps_Tabs_Manager",
 }

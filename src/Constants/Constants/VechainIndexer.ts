@@ -181,6 +181,9 @@ export const getBlock = (thor: Connex.Thor, blockId: string) => {
         : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/blocks?revision=${blockId}`
 }
 
+export const getAppOverview = (appId: string) =>
+    `${process.env.REACT_APP_INDEXER_MAINNET_URL}/b3tr/actions/apps/${appId}/overview`
+
 /**
  * Get the contract addresses of fungible tokens owned by the given address
  *
@@ -202,4 +205,72 @@ export const getFungibleTokensContracts = (
     return network.type === NETWORK_TYPE.MAIN
         ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/transfers/fungible-tokens-contracts?address=${address}&officialTokensOnly=${officialTokensOnly}&size=${pageSize}&page=${page}&direction=${direction}`
         : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/transfers/fungible-tokens-contracts?address=${address}&officialTokensOnly=${officialTokensOnly}&size=${pageSize}&page=${page}&direction=${direction}`
+}
+
+/**
+ * Get the VeBetter general overview for a user
+ * @param address Address of the user
+ * @returns The general overview for a user
+ */
+export const getVeBetterUserGeneralOverview = (address: string) => {
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/b3tr/actions/users/${address}/overview`
+}
+
+/**
+ * Get the VeBetter overview for a user in a timeframe
+ * @param address Address of the user
+ * @param fromDate Initial date (inclusive) in ISO String
+ * @param toDate End date (inclusive) in ISO String
+ * @returns The overview for a user for that timeframe
+ */
+export const getVeBetterUserOverview = (address: string, fromDate: string, toDate: string) => {
+    const from = moment(fromDate).utc().format("YYYY-MM-DD")
+    const to = moment(toDate).utc().format("YYYY-MM-DD")
+    const params = new URLSearchParams()
+    params.append("startDate", from)
+    params.append("endDate", to)
+    params.append("size", Math.ceil(moment(toDate).diff(fromDate, "day")).toString())
+    return `${
+        process.env.REACT_APP_INDEXER_MAINNET_URL
+    }/b3tr/actions/users/${address}/daily-summaries?${params.toString()}`
+}
+
+/**
+ * Get the VeBetter actions of a user
+ * @param address Address of the user
+ * @param param1 Options
+ * @returns Return the VeBetter actions
+ */
+export const getVeBetterActions = (
+    address: string,
+    { page = 0, pageSize = 20 }: { page?: number; pageSize?: number } = {},
+) => {
+    const params = new URLSearchParams()
+    params.append("page", page.toString())
+    params.append("size", pageSize.toString())
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/b3tr/actions/users/${address}?${params.toString()}`
+}
+
+/**
+ * Get the total supply of Stargate NFTs
+ * @returns The total supply of Stargate NFTs
+ */
+export const getStargateTotalSupply = () => {
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/nft-holders`
+}
+
+/**
+ * Get the total VET staked in Stargate
+ * @returns The total VET staked in Stargate
+ */
+export const getStargateTotalVetStaked = () => {
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/total-vet-staked`
+}
+
+/**
+ * Get the total VTHO claimed in Stargate
+ * @returns The total VTHO claimed in Stargate
+ */
+export const getStargateRewardsDistributed = () => {
+    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/total-vtho-claimed`
 }

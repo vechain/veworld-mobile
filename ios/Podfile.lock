@@ -117,9 +117,9 @@ PODS:
   - MixpanelReactNative (3.0.8):
     - Mixpanel-swift (= 4.3.0)
     - React-Core
-  - MMKV (2.2.2):
-    - MMKVCore (~> 2.2.2)
-  - MMKVCore (2.2.2)
+  - MMKV (2.2.4):
+    - MMKVCore (~> 2.2.4)
+  - MMKVCore (2.2.4)
   - MultiplatformBleAdapter (0.2.0)
   - OneSignalXCFramework (5.2.10):
     - OneSignalXCFramework/OneSignalComplete (= 5.2.10)
@@ -1212,6 +1212,27 @@ PODS:
     - React-Core
   - react-native-in-app-review (4.3.5):
     - React-Core
+  - react-native-keyboard-controller (1.18.3):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-mmkv (2.12.2):
     - DoubleConversion
     - glog
@@ -1717,7 +1738,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Sentry/HybridSDK (= 8.45.0)
     - Yoga
-  - RNSVG (15.2.0):
+  - RNSVG (15.10.0):
     - React-Core
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
@@ -1804,6 +1825,7 @@ DEPENDENCIES:
   - react-native-fast-url (from `../node_modules/react-native-fast-url`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-in-app-review (from `../node_modules/react-native-in-app-review`)
+  - react-native-keyboard-controller (from `../node_modules/react-native-keyboard-controller`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
@@ -2005,6 +2027,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-get-random-values"
   react-native-in-app-review:
     :path: "../node_modules/react-native-in-app-review"
+  react-native-keyboard-controller:
+    :path: "../node_modules/react-native-keyboard-controller"
   react-native-mmkv:
     :path: "../node_modules/react-native-mmkv"
   react-native-netinfo:
@@ -2148,8 +2172,8 @@ SPEC CHECKSUMS:
   lottie-react-native: f851c0e235f171d99083c803f728f644be1dcf65
   Mixpanel-swift: 2192b9a24cf41b870749e4e0e10fbc9822bb2b4a
   MixpanelReactNative: cd3d7129cfc77d796d07e117846f1f2a9d2fe02d
-  MMKV: b4802ebd5a7c68fc0c4a5ccb4926fbdfb62d68e0
-  MMKVCore: a255341a3746955f50da2ad9121b18cb2b346e61
+  MMKV: 1a8e7dbce7f9cad02c52e1b1091d07bd843aefaf
+  MMKVCore: f2dd4c9befea04277a55e84e7812f930537993df
   MultiplatformBleAdapter: b1fddd0d499b96b607e00f0faa8e60648343dc1d
   OneSignalXCFramework: 1a3b28dfbff23aabce585796d23c1bef37772774
   OpenSSL-Universal: ca89c20240633a77c776082ba76b7d90f992bf77
@@ -2187,6 +2211,7 @@ SPEC CHECKSUMS:
   react-native-fast-url: 2c8fa03f7518a806ba2365636d7922d3462b7a30
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-in-app-review: cf4a29c5a1d6bb28dd0d15f1fb1faa25e265bfb5
+  react-native-keyboard-controller: 5ee84d406ea84aa2bd00229b85e0e932468ef804
   react-native-mmkv: 8c9a677e64a1ac89b0c6cf240feea528318b3074
   react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
   react-native-onesignal: 33ade92bd91578374c31c5a5a91f45f49c2d6614
@@ -2238,7 +2263,7 @@ SPEC CHECKSUMS:
   RNScreenshotPrevent: 105cddf74799cbd81aac76e56a4025a345db8967
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
   RNSentry: cb6ff1c2e8547a559c7916ffbb53341b92a49e9c
-  RNSVG: 43b64ed39c14ce830d840903774154ca0c1f27ec
+  RNSVG: 58bad41c581b62cac6265c2899f8f943db527159
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   Sentry: f7c0c4b82e2f7e5909a660544dfaff84e35d5e03

@@ -5,19 +5,11 @@ import { PendingRequestTypes } from "@walletconnect/types"
 import React, { useMemo } from "react"
 import { Certificate } from "thor-devkit"
 import { useWalletStatus } from "~Components"
-import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
 import { CertificateRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
-import { TransactionRequest, TypeDataRequest } from "~Model/DApp"
+import { LoginRequest, TransactionRequest } from "~Model/DApp"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import { TabStack, TabStackParamList } from "~Navigation/Tabs"
-import {
-    BlackListedCollectionsScreen,
-    ChooseBackupDetailsPassword,
-    DappChangeAccountScreen,
-    DetailsBackupScreen,
-    SendTransactionScreen,
-    SignDataMessageScreen,
-} from "~Screens"
+import { BlackListedCollectionsScreen, ChooseBackupDetailsPassword, DetailsBackupScreen } from "~Screens"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { LedgerSignCertificate, LedgerSignTransaction } from "~Screens/Flows/App/LedgerScreen"
 import { LedgerSignMessage } from "~Screens/Flows/App/LedgerScreen/LedgerSignMessage"
@@ -34,21 +26,15 @@ export type RootStackParamListSwitch = {
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
     [Routes.BUY_FLOW]: undefined
-    [Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN]: {
-        request: TransactionRequest
-        isInjectedWallet?: boolean
-    }
-    [Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN]: {
-        request: TypeDataRequest
-    }
     [Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN]: {
         requestEvent: PendingRequestTypes.Struct
         message: string
     }
     [Routes.LEDGER_SIGN_CERTIFICATE]: {
-        request: CertificateRequest
+        request: CertificateRequest | Extract<LoginRequest, { kind: "certificate" }>
         certificate: Certificate
         accountWithDevice: LedgerAccountWithDevice
+        keepMeLoggedIn?: boolean
     }
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice
@@ -63,9 +49,6 @@ export type RootStackParamListSwitch = {
         accountWithDevice: LedgerAccountWithDevice
     }
     [Routes.BLOCKED_APP_SCREEN]: undefined
-    [Routes.DAPP_CHANGE_ACCOUNT_SCREEN]: {
-        request: WindowRequest
-    }
 
     [Routes.ICLOUD_DETAILS_BACKUP]: { deviceToBackup?: LocalDevice; backupDetails: string[] | string }
     [Routes.CHOOSE_DETAILS_BACKUP_PASSWORD]: { backupDetails: string[] | string; device: LocalDevice }
@@ -99,16 +82,6 @@ export const SwitchStack = () => {
                             }}
                         />
 
-                        <Switch.Screen
-                            name={Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN}
-                            component={SendTransactionScreen}
-                        />
-
-                        <Switch.Screen
-                            name={Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN}
-                            component={SignDataMessageScreen}
-                        />
-
                         <Switch.Screen name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN} component={SignMessageScreen} />
 
                         <Switch.Screen name={Routes.BLOCKED_APP_SCREEN} component={AppBlockedScreen} />
@@ -118,8 +91,6 @@ export const SwitchStack = () => {
                         <Switch.Screen name={Routes.LEDGER_SIGN_TRANSACTION} component={LedgerSignTransaction} />
 
                         <Switch.Screen name={Routes.LEDGER_SIGN_MESSAGE} component={LedgerSignMessage} />
-
-                        <Switch.Screen name={Routes.DAPP_CHANGE_ACCOUNT_SCREEN} component={DappChangeAccountScreen} />
 
                         <Switch.Screen
                             name={Routes.ICLOUD_DETAILS_BACKUP}

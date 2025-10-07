@@ -1,7 +1,7 @@
 import { ComponentProps, default as React } from "react"
 import { ViewProps } from "react-native"
 import Animated from "react-native-reanimated"
-import { BaseIcon } from "~Components/Base"
+import { BaseIcon } from "~Components/Base/BaseIcon"
 import { Stroke } from "./Stroke"
 import { useSpinAnimation } from "./useSpinAnimation"
 
@@ -9,16 +9,18 @@ export const Spinner = ({
     style,
     color,
     duration = 1000,
+    size = 16,
 }: {
     style?: ViewProps["style"]
     color?: string
     duration?: number
+    size?: number
 }) => {
     const spinStyle = useSpinAnimation({ duration })
 
     return (
         <Animated.View style={[spinStyle, style]}>
-            <Stroke color={color} />
+            <Stroke color={color} size={size} />
         </Animated.View>
     )
 }

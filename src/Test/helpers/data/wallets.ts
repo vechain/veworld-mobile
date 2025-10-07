@@ -29,3 +29,8 @@ export const wallet2: Wallet = {
 
 export const hdnode2 = HDNode.fromMnemonic(mnemonicPhrase2)
 export const hdnode3 = HDNode.fromMnemonic(mnemonic.generate())
+
+export const smartWallet: Wallet = {
+    nonce: "nonce",
+    rootAddress: "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+}

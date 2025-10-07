@@ -18,7 +18,6 @@ import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
     addNavigationToDApp,
-    selectBalanceVisible,
     selectBookmarkedDapps,
     selectSelectedAccount,
     selectSwapFeaturedDapps,
@@ -38,7 +37,6 @@ export const SwapScreen = () => {
     const dispatch = useAppDispatch()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    const isBalanceVisible = useAppSelector(selectBalanceVisible)
     const accounts = useAppSelector(selectVisibleAccounts)
     const swappDApps = useAppSelector(selectSwapFeaturedDapps)
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
@@ -72,7 +70,7 @@ export const SwapScreen = () => {
 
     const onDAppPress = useCallback(
         ({ href, custom }: { href: string; custom?: boolean }) => {
-            nav.navigate(Routes.BROWSER, { url: href })
+            nav.navigate(Routes.BROWSER, { url: href, returnScreen: Routes.SWAP })
 
             track(AnalyticsEvent.SWAPP_USER_OPENED_DAPP, {
                 url: href,
@@ -134,7 +132,6 @@ export const SwapScreen = () => {
                         accounts={accounts}
                         setSelectedAccount={onSetSelectedAccount}
                         selectedAccount={selectedAccount}
-                        isBalanceVisible={isBalanceVisible}
                         ref={selectAccountBottomSheetRef}
                     />
                 </BaseView>

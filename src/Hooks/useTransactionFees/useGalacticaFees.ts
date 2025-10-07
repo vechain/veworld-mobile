@@ -18,32 +18,35 @@ type FeeHistoryResponse = Awaited<ReturnType<typeof ethFeeHistory>>
 const calculateFeeHistory = (res: FeeHistoryResponse, maxPriorityFee: string) => {
     //It should never happen
     if (!res.reward) return
-    const latestBlockRewards = res.reward[res.reward.length - 1]
-    const equalRewardsOnLastBlock = new Set(latestBlockRewards).size === 3
+    //Slicing because the last reward will always be 0, since it's targeting `next`
+    const allRewards = res.reward.slice(0, -1)
+    const latestBlockRewards = allRewards[allRewards.length - 1]
+    const differentRewardsOnLastBlock = new Set(latestBlockRewards).size === 3
+    //Base fees, on the other hand, are correct. The latest value is the value of the next block
     const latestBaseFee = HexUInt.of(res.baseFeePerGas[res.baseFeePerGas.length - 1]).bi
 
     const rewardRegular = BigNumberUtils.min(
-        equalRewardsOnLastBlock
+        differentRewardsOnLastBlock
             ? HexUInt.of(latestBlockRewards[0]).bi
-            : BigNumberUtils.average(res.reward.map(rewards => rewards[0])).toBigInt,
+            : BigNumberUtils.average(allRewards.map(rewards => rewards[0])).toBigInt,
         HexUInt.of(maxPriorityFee).bi,
     ).toBigInt
     const rewardMedium = BigNumberUtils.min(
-        equalRewardsOnLastBlock
+        differentRewardsOnLastBlock
             ? HexUInt.of(latestBlockRewards[1]).bi
-            : BigNumberUtils.average(res.reward.map(rewards => rewards[1])).toBigInt,
+            : BigNumberUtils.average(allRewards.map(rewards => rewards[1])).toBigInt,
         HexUInt.of(maxPriorityFee).bi,
     ).toBigInt
     const rewardHigh = BigNumberUtils.min(
-        equalRewardsOnLastBlock
+        differentRewardsOnLastBlock
             ? HexUInt.of(latestBlockRewards[2]).bi
-            : BigNumberUtils.average(res.reward.map(rewards => rewards[2])).toBigInt,
+            : BigNumberUtils.average(allRewards.map(rewards => rewards[2])).toBigInt,
         HexUInt.of(maxPriorityFee).bi,
     ).toBigInt
 
-    const baseFeeRegular = BigNutils(latestBaseFee.toString()).multiply(1.02).toBigInt
-    const baseFeeMedium = BigNutils(latestBaseFee.toString()).multiply(1.03).toBigInt
-    const baseFeeHigh = BigNutils(latestBaseFee.toString()).multiply(1.046).toBigInt
+    const baseFeeRegular = BigNutils(latestBaseFee.toString()).multiply(1.14).toBigInt
+    const baseFeeMedium = BigNutils(latestBaseFee.toString()).multiply(1.15).toBigInt
+    const baseFeeHigh = BigNutils(latestBaseFee.toString()).multiply(1.166).toBigInt
 
     return {
         [GasPriceCoefficient.REGULAR]: {
@@ -68,8 +71,8 @@ const getFees = async (thorClient: ThorClient) => {
     const [maxPriorityFee, feeHistory] = await Promise.all([
         thorClient.gas.getMaxPriorityFeePerGas(),
         thorClient.gas.getFeeHistory({
-            blockCount: 8,
-            newestBlock: "best",
+            blockCount: 9,
+            newestBlock: "next",
             rewardPercentiles: [20, 40, 75],
         }),
     ])

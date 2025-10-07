@@ -28,6 +28,8 @@ import {
     ContactType,
     DappTxActivity,
     FungibleTokenActivity,
+    LoginActivity,
+    NFTMarketplaceActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
     StargateActivity,
@@ -43,16 +45,18 @@ import {
     ConnectedAppDetails,
     DappTransactionDetails,
     FungibleTokenTransferDetails,
+    NonFungibleTokenMarketplaceDetails,
     NonFungibleTokenTransferDetails,
     SignCertificateDetails,
 } from "./Components"
-import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
+import DappLoginDetails from "./Components/DappLoginDetails"
 import { StargateActivityDetails } from "./Components/StakingDetails"
+import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
 
 type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
 export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
-    const { activity, token, isSwap } = route.params
+    const { activity, token, isSwap, returnScreen = Routes.HISTORY } = route.params
 
     const network = useAppSelector(selectSelectedNetwork)
 
@@ -133,7 +137,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
     }, [transaction?.reverted])
 
     const isNFTtransfer = useMemo(() => {
-        return activity.type === ActivityType.TRANSFER_NFT
+        return activity.type === ActivityType.TRANSFER_NFT || activity.type === ActivityType.NFT_SALE
     }, [activity.type])
 
     const explorerUrl = useMemo(() => {
@@ -167,12 +171,22 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             case ActivityType.SWAP_FT_TO_VET:
             case ActivityType.SWAP_VET_TO_FT:
             case ActivityType.UNKNOWN_TX:
+            case ActivityType.VEVOTE_VOTE_CAST:
             case ActivityType.DAPP_TRANSACTION: {
                 return (
                     <DappTransactionDetails
                         activity={(activityFromStore ?? activity) as DappTxActivity}
                         clauses={transaction?.clauses}
                         status={isPendingOrFailedActivity ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS}
+                        paid={transaction?.paid}
+                        isLoading={isloadingTxDetails}
+                    />
+                )
+            }
+            case ActivityType.NFT_SALE: {
+                return (
+                    <NonFungibleTokenMarketplaceDetails
+                        activity={(activityFromStore ?? activity) as NFTMarketplaceActivity}
                         paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
@@ -210,6 +224,9 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             case ActivityType.SIGN_TYPED_DATA: {
                 return <TypedDataTransactionDetails activity={(activityFromStore ?? activity) as TypedDataActivity} />
             }
+            case ActivityType.DAPP_LOGIN: {
+                return <DappLoginDetails activity={(activityFromStore ?? activity) as LoginActivity} />
+            }
             default:
                 return <></>
         }
@@ -224,8 +241,8 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
     ])
 
     const onGoBack = useCallback(() => {
-        navigation.navigate(Routes.HISTORY)
-    }, [navigation])
+        navigation.navigate(returnScreen as any)
+    }, [navigation, returnScreen])
 
     const onAddCustomToken = useCallback(
         (tokenAddress: string) => {

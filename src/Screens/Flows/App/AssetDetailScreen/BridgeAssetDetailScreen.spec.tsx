@@ -1,8 +1,9 @@
-import React from "react"
 import { render } from "@testing-library/react-native"
-import { BridgeAssetDetailScreen } from "./BridgeAssetDetailScreen"
-import { TestWrapper, TestHelpers } from "~Test"
+import React from "react"
+import { FungibleTokenWithBalance, TokenWithCompleteInfo } from "~Model"
 import { Routes } from "~Navigation"
+import { TestHelpers, TestWrapper } from "~Test"
+import { BridgeAssetDetailScreen } from "./BridgeAssetDetailScreen"
 
 const { VeBitcoinWithBalance } = TestHelpers.data
 
@@ -36,6 +37,25 @@ const navigationMock = {
     popToTop: jest.fn(),
 }
 
+jest.mock("~Hooks/useTokenWithCompleteInfo", () => ({
+    useTokenWithCompleteInfo: jest.fn().mockImplementation((token: FungibleTokenWithBalance) => {
+        return {
+            ...token,
+        } satisfies TokenWithCompleteInfo
+    }),
+}))
+
+jest.mock("~Hooks/useTokenCardFiatInfo", () => ({
+    useTokenCardFiatInfo: jest.fn().mockImplementation(() => {
+        return {
+            change24h: 1,
+            exchangeRate: 1,
+            isPositive24hChange: true,
+            isLoading: false,
+        }
+    }),
+}))
+
 describe("BridgeAssetDetailScreen", () => {
     it("should render the screen", async () => {
         const { findAllByText } = render(
@@ -53,6 +73,6 @@ describe("BridgeAssetDetailScreen", () => {
         )
 
         const title = await findAllByText("BTC@vechain")
-        await expect(title[0]).toBeTruthy()
+        expect(title[0]).toBeTruthy()
     })
 })

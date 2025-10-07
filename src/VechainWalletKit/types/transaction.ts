@@ -1,4 +1,5 @@
 import { TypedDataDomain } from "ethers"
+import { BigNumberUtils } from "../../Utils"
 
 export interface TypedDataPayload {
     domain: TypedDataDomain
@@ -15,4 +16,13 @@ export interface TransactionOptions {
     isDelegated?: boolean
     dependsOn?: string
     gasPriceCoef?: number
+    maxFeePerGas?: string
+    maxPriorityFeePerGas?: string
+}
+
+export interface GenericDelegationDetails {
+    token: string
+    tokenAddress: string
+    fee: BigNumberUtils | undefined
+    depositAccount: string
 }

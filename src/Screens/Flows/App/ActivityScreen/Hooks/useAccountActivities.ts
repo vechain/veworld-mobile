@@ -33,7 +33,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
         queryFn: fetchActivities,
         initialPageParam: 0,
         getNextPageParam: (lastPage, pages) => {
-            return lastPage.pagination.hasNext ? pages.length + 1 : undefined
+            return lastPage.pagination.hasNext ? pages.length : undefined
         },
         enabled: isFocused && filters.length > 0,
         gcTime: 1000 * 60 * 2, // 2 minutes
@@ -80,8 +80,12 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
                 //Show `Dapp Transaction` only if there are no events associated to that transaction
                 const uniqueRemoteIds = new Set(remoteActivities.map(ra => ra.txId).filter(Boolean))
                 const filteredLocalActivities = localActivitiesByTimsstamp.filter(activity => {
-                    if ((activity.type as ActivityType) === ActivityType.SIGN_CERT) return false
-                    if ((activity.type as ActivityType) === ActivityType.SIGN_TYPED_DATA) return false
+                    if (
+                        [ActivityType.SIGN_CERT, ActivityType.SIGN_TYPED_DATA, ActivityType.DAPP_LOGIN].includes(
+                            activity.type as ActivityType,
+                        )
+                    )
+                        return false
                     if (!activity.txId) return true
                     if (uniqueRemoteIds.has(activity.txId)) return false
 
@@ -101,6 +105,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
                     ActivityType.SIGN_CERT,
                     ActivityType.SIGN_TYPED_DATA,
                     ActivityType.CONNECTED_APP_TRANSACTION,
+                    ActivityType.DAPP_LOGIN,
                 ].includes(activity.type as ActivityType),
             )
             sortActivitiesByTimestamp(returnValue)

@@ -39,4 +39,15 @@ export type ReceiptOutput = {
               amount: bigint
           }
       }
+    | {
+          name: "___INTERNAL_UNKNOWN___"
+          params: {}
+      }
 )
+
+const FAKE_SIGNATURE_REGEX = /(.*)\(/
+
+export const stripFakeSignature = (signature: string) => {
+    if (!FAKE_SIGNATURE_REGEX.test(signature)) return signature
+    return FAKE_SIGNATURE_REGEX.exec(signature)?.[1]
+}

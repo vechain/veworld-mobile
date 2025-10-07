@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import { Blake2b256, Certificate } from "@vechain/sdk-core"
-import { default as React, useCallback, useMemo, useRef, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
@@ -10,21 +10,23 @@ import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { AnalyticsEvent, COLORS, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
+import { useLoginSession } from "~Hooks/useLoginSession"
 import { useI18nContext } from "~i18n"
 import { CertificateRequest, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { Routes } from "~Navigation"
 import {
     addSignCertificateActivity,
-    selectFeaturedDapps,
     selectSelectedAccountOrNull,
     selectVerifyContext,
     selectVisibleAccountsWithoutObserved,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountUtils, DAppUtils, error, HexUtils } from "~Utils"
+import { AccountUtils, error, HexUtils } from "~Utils"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { DappWithDetails } from "../DappWithDetails"
 import { Signable } from "../Signable"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 
 type Request = {
     request: CertificateRequest
@@ -44,8 +46,6 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
     const theme = useTheme()
     const track = useAnalyticTracking()
 
-    const allApps = useAppSelector(selectFeaturedDapps)
-
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
     const { onClose: onCloseSelectAccountBs, onOpen: onOpenSelectAccountBs } = useBottomSheetModal({
@@ -63,24 +63,6 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
 
         return sessionContext.verifyContext.validation === "VALID"
     }, [sessionContext])
-
-    const { icon, name, url } = useMemo(() => {
-        const foundDapp = allApps.find(app => new URL(app.href).origin === new URL(request.appUrl).origin)
-        if (foundDapp)
-            return {
-                icon: foundDapp.id
-                    ? DAppUtils.getAppHubIconUrl(foundDapp.id)
-                    : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(foundDapp.href).origin}`,
-                name: foundDapp.name,
-                url: request.appUrl,
-            }
-
-        return {
-            name: request.appName,
-            url: request.appUrl,
-            icon: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(request.appUrl).origin}`,
-        }
-    }, [allApps, request.appName, request.appUrl])
 
     const signableArgs = useMemo(() => ({ request }), [request])
 
@@ -103,17 +85,22 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                     </BaseText>
                 </BaseView>
                 {selectedAccount && (
-                    <AccountSelector account={selectedAccount} onPress={onChangeAccountPress} variant="short" />
+                    <AccountSelector
+                        account={selectedAccount}
+                        onPress={onChangeAccountPress}
+                        variant="short"
+                        changeable
+                    />
                 )}
             </BaseView>
             <BaseSpacer height={12} />
-            <DappWithDetails name={name} icon={icon} url={url}>
+            <DappWithDetails appName={request.appName} appUrl={request.appUrl}>
                 <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="captionRegular">
                     {request.message.payload.content}
                 </BaseText>
             </DappWithDetails>
             <BaseSpacer height={24} />
-            <BaseView flexDirection="row" gap={16}>
+            <BaseView flexDirection="row" gap={16} mb={isIOS() ? 16 : 0}>
                 <BaseButton
                     action={onCancel.bind(null, request)}
                     variant="outline"
@@ -147,7 +134,6 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 setSelectedAccount={onSetSelectedAccount}
                 selectedAccount={selectedAccount}
                 ref={selectAccountBsRef}
-                cardVersion="v2"
             />
         </>
     )
@@ -162,8 +148,11 @@ export const CertificateBottomSheet = () => {
     const track = useAnalyticTracking()
 
     const { postMessage } = useInAppBrowser()
+    const { createSessionIfNotExists } = useLoginSession()
 
     const { failRequest, processRequest } = useWalletConnect()
+
+    const { onSuccess, onFailure, onRejectRequest } = useExternalDappConnection()
 
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
 
@@ -231,6 +220,12 @@ export const CertificateBottomSheet = () => {
 
                 if (request.type === "wallet-connect") {
                     await processRequest(request.requestEvent, res)
+                } else if (request.type === "external-app") {
+                    await onSuccess({
+                        redirectUrl: request.redirectUrl,
+                        data: res,
+                        publicKey: request.publicKey,
+                    })
                 } else {
                     postMessage({ id: request.id, data: res, method: RequestMethods.SIGN_CERTIFICATE })
                 }
@@ -244,6 +239,8 @@ export const CertificateBottomSheet = () => {
                     ),
                 )
 
+                createSessionIfNotExists(request)
+
                 track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
                 isUserAction.current = true
             } catch (err: unknown) {
@@ -253,6 +250,8 @@ export const CertificateBottomSheet = () => {
 
                 if (request.type === "wallet-connect") {
                     await failRequest(request.requestEvent, getRpcError("internal"))
+                } else if (request.type === "external-app") {
+                    await onFailure(request.redirectUrl)
                 } else {
                     postMessage({
                         id: request.id,
@@ -265,10 +264,13 @@ export const CertificateBottomSheet = () => {
         },
         [
             buildCertificate,
+            createSessionIfNotExists,
             dispatch,
             failRequest,
             nav,
             onCloseBs,
+            onFailure,
+            onSuccess,
             postMessage,
             processRequest,
             selectedAccount,
@@ -282,6 +284,8 @@ export const CertificateBottomSheet = () => {
             setIsLoading(true)
             if (request.type === "wallet-connect") {
                 await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
+            } else if (request.type === "external-app") {
+                await onRejectRequest(request.redirectUrl)
             } else {
                 postMessage({
                     id: request.id,
@@ -292,7 +296,7 @@ export const CertificateBottomSheet = () => {
 
             track(AnalyticsEvent.DAPP_CERTIFICATE_REJECTED)
         },
-        [failRequest, postMessage, track],
+        [failRequest, postMessage, track, onRejectRequest],
     )
 
     const onCancel = useCallback(

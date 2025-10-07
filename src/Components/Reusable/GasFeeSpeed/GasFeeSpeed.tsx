@@ -1,6 +1,6 @@
 import moment from "moment"
 import { PropsWithChildren, default as React, useCallback, useState } from "react"
-import { StyleSheet } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { useInterval } from "usehooks-ts"
 import { BaseCard } from "~Components/Base"
@@ -31,6 +31,7 @@ type Props = {
     hasEnoughBalanceOnToken: {
         [token: string]: boolean
     }
+    containerStyle?: StyleProp<ViewStyle>
     sendingTokenSymbol?: string
 }
 
@@ -52,6 +53,7 @@ export const GasFeeSpeed = ({
     hasEnoughBalanceOnAny,
     isFirstTimeLoadingFees,
     hasEnoughBalanceOnToken,
+    containerStyle,
     sendingTokenSymbol,
 }: PropsWithChildren<Props>) => {
     const { styles } = useThemedStyles(baseStyles)
@@ -70,7 +72,7 @@ export const GasFeeSpeed = ({
 
     return (
         <AnimatedBaseCard
-            containerStyle={styles.cardContainer}
+            containerStyle={[styles.cardContainer, containerStyle]}
             style={styles.card}
             layout={LinearTransition.duration(300)}>
             {isGalactica ? (

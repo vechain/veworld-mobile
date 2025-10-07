@@ -43,7 +43,10 @@ export const filterValues = {
         type: FilterType.TRANSFER,
         value: [ActivityEvent.TRANSFER_FT, ActivityEvent.TRANSFER_SF, ActivityEvent.TRANSFER_VET],
     },
-    nfts: { type: FilterType.NFTS, value: [ActivityEvent.TRANSFER_NFT] },
+    nfts: {
+        type: FilterType.NFTS,
+        value: [ActivityEvent.TRANSFER_NFT, ActivityEvent.NFT_SALE],
+    },
     dapps: { type: FilterType.DAPPS, value: [] },
     staking: {
         type: FilterType.STAKING,
@@ -57,5 +60,5 @@ export const filterValues = {
             ActivityEvent.STARGATE_DELEGATE_ONLY,
         ],
     },
-    other: { type: FilterType.OTHER, value: [ActivityEvent.UNKNOWN_TX] },
+    other: { type: FilterType.OTHER, value: [ActivityEvent.UNKNOWN_TX, ActivityEvent.VEVOTE_VOTE_CAST] },
 } as const

@@ -16,6 +16,7 @@ export type FeatureFlags = {
         [PaymentProvidersEnum.CoinbasePay]: {
             android: boolean
             iOS: boolean
+            url: string
         }
         [PaymentProvidersEnum.Transak]: {
             android: boolean
@@ -38,12 +39,26 @@ export type FeatureFlags = {
             }
         }
     }
+    smartWalletFeature: {
+        enabled: boolean
+    }
+    betterWorldFeature: {
+        appsScreen: {
+            enabled: boolean
+        }
+        balanceScreen: {
+            enabled: boolean
+            collectibles: {
+                enabled: boolean
+            }
+        }
+    }
 }
 
 export const getFeatureFlags = async () => {
     const featureFlagsUrl = __DEV__
-        ? "https://vechain.github.io/veworld-feature-flags/dev/mobile-feature-flags.json"
-        : "https://vechain.github.io/veworld-feature-flags/mobile-feature-flags.json"
+        ? "https://vechain.github.io/veworld-feature-flags/dev/mobile-versioned-feature-flags.json"
+        : "https://vechain.github.io/veworld-feature-flags/mobile-versioned-feature-flags.json"
 
     const req = await fetch(featureFlagsUrl, {
         method: "GET",
@@ -54,6 +69,6 @@ export const getFeatureFlags = async () => {
         },
     })
 
-    const response: FeatureFlags = await req.json()
+    const response = await req.json()
     return response
 }

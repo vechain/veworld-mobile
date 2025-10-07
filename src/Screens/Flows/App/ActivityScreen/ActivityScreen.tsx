@@ -4,15 +4,17 @@ import {
     BaseSpacer,
     BaseView,
     ChangeAccountButtonPill,
-    HeaderStyle,
+    HeaderStyleV2,
     HeaderTitle,
     Layout,
     SelectAccountBottomSheet,
     SelectedNetworkViewer,
 } from "~Components"
+import { NetworkSwitcherContextMenu } from "~Components/Reusable/ContextMenu"
 import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
-import { selectBalanceVisible, selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
+import { Routes } from "~Navigation"
+import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useResetActivityStack } from "./Hooks"
 import { ActivityTabBar } from "./navigation"
@@ -21,11 +23,10 @@ import {
     ActivityB3trScreen,
     ActivityNftScreen,
     ActivityOtherScreen,
+    ActivityStakingScreen,
     ActivitySwapScreen,
     ActivityTransferScreen,
-    ActivityStakingScreen,
 } from "./screens"
-import { Routes } from "~Navigation"
 import { ActivityDappsScreen } from "./screens/ActivityDappsScreen"
 
 const Tab = createMaterialTopTabNavigator()
@@ -33,8 +34,6 @@ const Tab = createMaterialTopTabNavigator()
 export const ActivityScreen = () => {
     const { LL } = useI18nContext()
     useResetActivityStack()
-
-    const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
@@ -56,10 +55,12 @@ export const ActivityScreen = () => {
             safeAreaTestID="History_Screen"
             noBackButton
             fixedHeader={
-                <BaseView style={HeaderStyle}>
-                    <HeaderTitle title={LL.BTN_HISTORY()} />
+                <BaseView style={HeaderStyleV2}>
+                    <HeaderTitle title={LL.BTN_HISTORY()} leftIconName="icon-history" />
                     <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
-                        <SelectedNetworkViewer />
+                        <NetworkSwitcherContextMenu>
+                            <SelectedNetworkViewer />
+                        </NetworkSwitcherContextMenu>
                         <BaseSpacer width={8} />
                         <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
                     </BaseView>
@@ -120,7 +121,6 @@ export const ActivityScreen = () => {
                         accounts={accounts}
                         setSelectedAccount={setSelectedAccount}
                         selectedAccount={selectedAccount}
-                        isBalanceVisible={isBalanceVisible}
                         ref={selectAccountBottomSheetRef}
                     />
                 </>

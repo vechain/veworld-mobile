@@ -3,7 +3,7 @@ import { FungibleToken, TokenWithCompleteInfo } from "~Model"
 import { NETWORK_TYPE } from "~Model/Network/enums"
 import { TokensState } from "../Types"
 import { mergeArrays } from "~Utils/MergeUtils/MergeUtils"
-import { HexUtils } from "~Utils"
+import { AddressUtils, HexUtils } from "~Utils"
 import { compareListOfAddresses } from "~Utils/AddressUtils/AddressUtils"
 
 const normaliseAddresses = (tokens: FungibleToken[]) => {
@@ -53,6 +53,21 @@ export const TokenSlice = createSlice({
             state.tokens[network].custom[accountAddress] = mergedTokens
         },
 
+        removeCustomToken: (
+            state,
+            action: PayloadAction<{ network: NETWORK_TYPE; accountAddress: string; tokenAddress: string }>,
+        ) => {
+            const { network, accountAddress, tokenAddress } = action.payload
+            if (!state.tokens[network].custom[accountAddress]) {
+                state.tokens[network].custom[accountAddress] = []
+                return
+            }
+
+            state.tokens[network].custom[accountAddress] = state.tokens[network].custom[accountAddress].filter(
+                cToken => !AddressUtils.compareAddresses(tokenAddress, cToken.address),
+            )
+        },
+
         addOfficialTokens: (
             state,
             action: PayloadAction<{
@@ -88,4 +103,5 @@ export const TokenSlice = createSlice({
     },
 })
 
-export const { addOrUpdateCustomTokens, addOfficialTokens, setSuggestedTokens, resetTokensState } = TokenSlice.actions
+export const { addOrUpdateCustomTokens, addOfficialTokens, setSuggestedTokens, resetTokensState, removeCustomToken } =
+    TokenSlice.actions

@@ -37,10 +37,18 @@ import {
 import { ERROR_EVENTS, typography } from "~Constants"
 import { AnalyticsUtils, info, URIUtils } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import { NotificationsProvider, PersistedThemeProvider, StoreContextProvider } from "~Components/Providers"
 import {
+    NotificationsProvider,
+    PersistedThemeProvider,
+    StoreContextProvider,
+    useFeatureFlags,
+} from "~Components/Providers"
+import {
+    clearTemporarySessions,
     selectAnalyticsTrackingEnabled,
+    selectExternalDappSessions,
     selectLanguage,
+    selectSelectedNetwork,
     selectSentryTrackingEnabled,
     setCurrentMountedScreen,
     useAppDispatch,
@@ -57,6 +65,9 @@ import { Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
 import { InteractionProvider } from "~Components/Providers/InteractionProvider"
+import { FeatureFlaggedSmartWallet } from "./src/Components/Providers/FeatureFlaggedSmartWallet"
+import { KeyboardProvider } from "react-native-keyboard-controller"
+import { DeepLinksProvider } from "~Components/Providers/DeepLinksProvider"
 
 const { fontFamily } = typography
 
@@ -86,6 +97,8 @@ const Main = () => {
         [fontFamily["Rubik-Light"]]: Rubik_Light,
         [fontFamily.DesignSystemIcons]: DesignSystemIcons,
     })
+
+    const dispatch = useAppDispatch()
 
     // Online status management
     // https://tanstack.com/query/v4/docs/react/react-native#online-status-management
@@ -119,71 +132,115 @@ const Main = () => {
         }
     }, [isAnalyticsEnabled])
 
-    if (!fontsLoaded) return
+    const mounted = useRef(false)
 
+    useEffect(() => {
+        if (mounted.current) return
+        mounted.current = true
+        dispatch(clearTemporarySessions())
+    }, [dispatch])
+
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const networkType = selectedNetwork.type
+    const nodeUrl = selectedNetwork.currentUrl
+
+    if (!fontsLoaded) return
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <ConnexContextProvider>
-                <PersistQueryClientProvider
-                    client={queryClient}
-                    persistOptions={{
-                        persister: clientPersister,
-                    }}>
-                    <FeatureFlagsProvider>
-                        <NavigationProvider>
-                            <InteractionProvider>
-                                <WalletConnectContextProvider>
-                                    <BottomSheetModalProvider>
-                                        <InAppBrowserProvider>
-                                            <NotificationsProvider>
-                                                <EntryPoint />
-                                            </NotificationsProvider>
-                                        </InAppBrowserProvider>
-                                    </BottomSheetModalProvider>
-                                </WalletConnectContextProvider>
-                            </InteractionProvider>
-                        </NavigationProvider>
-                        <BaseToast />
-                    </FeatureFlagsProvider>
-                </PersistQueryClientProvider>
-            </ConnexContextProvider>
+            <KeyboardProvider>
+                <ConnexContextProvider>
+                    <PersistQueryClientProvider
+                        client={queryClient}
+                        persistOptions={{
+                            persister: clientPersister,
+                        }}>
+                        <FeatureFlagsProvider>
+                            <FeatureFlaggedSmartWallet nodeUrl={nodeUrl} networkType={networkType}>
+                                <NavigationProvider>
+                                    <InteractionProvider>
+                                        <DeepLinksProvider>
+                                            <WalletConnectContextProvider>
+                                                <BottomSheetModalProvider>
+                                                    <InAppBrowserProvider>
+                                                        <NotificationsProvider>
+                                                            <EntryPoint />
+                                                        </NotificationsProvider>
+                                                    </InAppBrowserProvider>
+                                                </BottomSheetModalProvider>
+                                            </WalletConnectContextProvider>
+                                        </DeepLinksProvider>
+                                    </InteractionProvider>
+                                </NavigationProvider>
+                                <BaseToast />
+                            </FeatureFlaggedSmartWallet>
+                        </FeatureFlagsProvider>
+                    </PersistQueryClientProvider>
+                </ConnexContextProvider>
+            </KeyboardProvider>
         </GestureHandlerRootView>
     )
 }
 
-const linking = {
-    prefixes: [
-        "https://www.veworld.com/",
-        "veworld://",
-        "https://veworld.com/",
-        "https://veworld.net/",
-        "https://www.veworld.net/",
-    ],
-    config: {
-        screens: {
-            TabStack: {
-                screens: {
-                    NFTStack: {
-                        path: "nfts",
-                        initialRouteName: Routes.NFTS,
-                    },
-                    DiscoverStack: {
-                        path: "discover",
-                        initialRouteName: "Discover",
-                        screens: {
-                            Browser: {
-                                path: "browser/:redirect?/:ul/:url",
-                                parse: {
-                                    ul: () => true,
-                                    url: url => URIUtils.decodeUrl_HACK(url),
-                                },
-                            },
-                        },
+/**
+ * @param {import ('~Api/FeatureFlags').FeatureFlags} featureFlags
+ * @param {import ('~Storage/Redux').ExternalDappSession[]} externalDappSessions
+ * @returns
+ */
+const generateLinkingConfig = featureFlags => {
+    const appsStack = {
+        AppsStack: {
+            path: "discover",
+            initialRouteName: "Apps",
+            screens: {
+                Browser: {
+                    path: "browser/:redirect?/:ul/:url",
+                    parse: {
+                        ul: () => true,
+                        url: url => URIUtils.decodeUrl_HACK(url),
                     },
                 },
             },
         },
-    },
+    }
+
+    const discoverStack = {
+        DiscoverStack: {
+            path: "discover",
+            initialRouteName: "Discover",
+            screens: {
+                Browser: {
+                    path: "browser/:redirect?/:ul/:url",
+                    parse: {
+                        ul: () => true,
+                        url: url => URIUtils.decodeUrl_HACK(url),
+                    },
+                },
+            },
+        },
+    }
+
+    return {
+        prefixes: [
+            "https://www.veworld.com/",
+            "veworld://",
+            "https://veworld.com/",
+            "https://veworld.net/",
+            "https://www.veworld.net/",
+        ],
+        config: {
+            screens: {
+                TabStack: {
+                    screens: {
+                        NFTStack: {
+                            path: "nfts",
+                            initialRouteName: Routes.NFTS,
+                        },
+                        ...(featureFlags.betterWorldFeature.appsScreen.enabled ? appsStack : discoverStack),
+                    },
+                },
+            },
+        },
+    }
 }
 
 const NavigationProvider = ({ children }) => {
@@ -198,10 +255,12 @@ const NavigationProvider = ({ children }) => {
         }),
         [theme],
     )
+    const externalDappSessions = useAppSelector(selectExternalDappSessions)
 
     const navigationRef = useNavigationContainerRef()
     const routeNameRef = useRef(null)
     const dispatch = useAppDispatch()
+    const featureFlags = useFeatureFlags()
 
     return (
         <NavigationContainer
@@ -224,7 +283,7 @@ const NavigationProvider = ({ children }) => {
                 }
             }}
             theme={navigationTheme}
-            linking={linking}>
+            linking={generateLinkingConfig(featureFlags, externalDappSessions)}>
             {ready ? children : null}
         </NavigationContainer>
     )

@@ -30,7 +30,7 @@ export const BaseTokenCard = ({
     isCrossChainToken,
 }: BaseTokenCardProps) => {
     const theme = useTheme()
-    const tokenValueLabelColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
+    const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
 
     const alignTokenBalance = useMemo(() => {
         if (alignWithFiatBalance) return alignWithFiatBalance
@@ -47,6 +47,7 @@ export const BaseTokenCard = ({
                     isVechainToken={isVetToken}
                     iconSize={26}
                     isCrossChainToken={isCrossChainToken}
+                    rounded={!isCrossChainToken}
                 />
                 <BaseView alignItems="center" justifyContent="center" flexDirection="row" gap={4}>
                     <BaseText typographyFont="subSubTitleSemiBold">{symbol}</BaseText>
@@ -65,7 +66,7 @@ export const BaseTokenCard = ({
                         ) : (
                             <BaseView flexDirection="row">
                                 <BaseText
-                                    typographyFont="subSubTitleMedium"
+                                    typographyFont="subSubTitleSemiBold"
                                     color={tokenValueLabelColor}
                                     lineHeight={24}>
                                     {isBalanceVisible ? tokenBalance : "•••••"}{" "}

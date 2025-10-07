@@ -7,7 +7,7 @@ import { useTheme } from "~Hooks"
 import { IconKey } from "~Model"
 import HapticsService from "~Services/HapticsService"
 
-type Props =
+export type BaseIconProps =
     | {
           size?: number
           bg?: string
@@ -27,7 +27,7 @@ type Props =
           TouchableOpacityProps &
           ViewProps
 
-const BaseIconWithRef = forwardRef<View | TouchableOpacity, Props>(function BaseIconWithRef(props, ref) {
+const BaseIconWithRef = forwardRef<View | TouchableOpacity, BaseIconProps>(function BaseIconWithRef(props, ref) {
     const { color, style, borderRadius, testID, haptics, name, ...otherProps } = props
     const theme = useTheme()
 
@@ -60,7 +60,7 @@ const BaseIconWithRef = forwardRef<View | TouchableOpacity, Props>(function Base
 
 export const BaseIcon = memo(BaseIconWithRef)
 
-type BaseIconWrapperProps = Props & { children: React.ReactNode }
+type BaseIconWrapperProps = BaseIconProps & { children: React.ReactNode }
 
 const BaseIconWrapperWithRef = forwardRef<View | TouchableOpacity, BaseIconWrapperProps>(
     function BaseIconWrapperWithRef({ style, bg, borderRadius, size, children, action, haptics, ...props }, ref) {

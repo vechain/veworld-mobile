@@ -1,5 +1,5 @@
 import { DIRECTIONS } from "~Constants"
-import { TypedData } from "~Model"
+import { TypedData, TypedDataMessage } from "~Model"
 import { ActivityEvent, ActivityStatus, ActivitySupport, ActivityType } from "./enum"
 import { TokenLevelId } from "~Utils/StargateUtils"
 
@@ -41,6 +41,7 @@ export interface IndexedHistoryEvent {
     gasPayer?: string
     tokenId?: string
     contractAddress?: string
+    tokenAddress?: string // Payment token address for NFT sales
     eventName: ActivityEvent
     to?: string
     from?: string
@@ -89,6 +90,17 @@ export interface NonFungibleTokenActivity extends Activity {
     contractAddress: string
     type: ActivityType.TRANSFER_NFT
     direction: DIRECTIONS
+}
+
+export interface NFTMarketplaceActivity extends Activity {
+    tokenId: string
+    contractAddress: string
+    type: ActivityType.NFT_SALE
+    direction: DIRECTIONS
+    price: string
+    tokenAddress?: string
+    buyer: string
+    seller: string
 }
 
 export interface SwapActivity extends Activity {
@@ -140,6 +152,26 @@ export interface TypedDataActivity extends Activity {
     typedData: TypedData
     sender: string
 }
+
+/**
+ * Type for describing the activity value
+ */
+export type LoginActivityValue =
+    | { kind: "simple"; value: null }
+    | { kind: "certificate"; value: Connex.Vendor.CertMessage }
+    | {
+          kind: "typed-data"
+          value: TypedDataMessage
+      }
+
+/**
+ * The LoginActivity type represents a dapp login from the in app browser.
+ */
+export type LoginActivity = Activity & {
+    type: ActivityType.DAPP_LOGIN
+    linkUrl: string
+} & LoginActivityValue
+
 export interface B3trActionActivity extends Activity {
     type: ActivityType.B3TR_ACTION
     value: string
@@ -220,8 +252,8 @@ export interface TransferVetEvent extends IndexedHistoryEvent {
 }
 
 export interface TransferNftEvent extends IndexedHistoryEvent {
-    eventName: ActivityEvent.TRANSFER_NFT
-    tokendId: string
+    eventName: ActivityEvent.TRANSFER_NFT | ActivityEvent.NFT_SALE
+    tokenId: string
     to: string
     from: string
 }
@@ -317,6 +349,14 @@ export interface B3trProposalSupportEvent extends IndexedHistoryEvent {
     proposalId: string
 }
 
+export interface B3trProposalSupportEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.B3TR_PROPOSAL_SUPPORT
+    to: string
+    from: string
+    value: string
+    proposalId: string
+}
+
 export interface StargateActivity extends Activity {
     eventName:
         | ActivityEvent.STARGATE_DELEGATE
@@ -334,4 +374,9 @@ export interface StargateActivity extends Activity {
     delegationRewards?: string
     migrated?: boolean
     autorenew?: boolean
+}
+
+export interface VeVoteCastActivity extends Activity {
+    eventName: ActivityEvent.VEVOTE_VOTE_CAST
+    proposalId: string
 }

@@ -41,6 +41,7 @@ export const TokenSelector = ({ token, onPress, style }: Props) => {
                     isVechainToken={isVechainToken(token)}
                     isCrossChainToken={isCrossChainToken}
                     iconSize={16}
+                    rounded={!isCrossChainToken}
                 />
             }
             rightIcon={
@@ -52,10 +53,12 @@ export const TokenSelector = ({ token, onPress, style }: Props) => {
             }
             action={onPress}
             variant="solid"
-            px={12}
+            px={8}
             py={8}
             style={[styles.root, style]}
-            textColor={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}>
+            textContainerStyle={styles.textContainer}
+            textColor={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}
+            numberOfLines={1}>
             {token}
         </BaseButton>
     )
@@ -64,9 +67,14 @@ export const TokenSelector = ({ token, onPress, style }: Props) => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
-            gap: 8,
             borderColor: theme.isDark ? theme.colors.transparent : COLORS.GREY_200,
             borderWidth: theme.isDark ? 0 : 1,
             backgroundColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.WHITE,
+            gap: 4,
+        },
+        textContainer: {
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center",
         },
     })

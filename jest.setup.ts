@@ -9,8 +9,11 @@ import { SecurityLevelType } from "~Model/Biometrics"
 import { WALLET_STATUS } from "~Model/Wallet"
 import { MMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
+import * as dotenv from "dotenv"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
+
+dotenv.config({ path: "./.env" })
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
@@ -32,6 +35,8 @@ jest.mock("react-native-quick-crypto", () => ({
         }),
     })),
 }))
+
+jest.mock("react-native-keyboard-controller", () => require("react-native-keyboard-controller/jest"))
 
 jest.mock("react-native-onesignal", () => ({
     ...jest.requireActual("react-native-onesignal"),
@@ -116,6 +121,19 @@ jest.mock("expo-local-authentication", () => ({
 jest.mock("expo-av", () => {})
 jest.mock("expo-background-fetch", () => {})
 
+jest.mock("expo-file-system", () => ({
+    documentDirectory: "file:///test/documents/",
+    getInfoAsync: jest.fn().mockResolvedValue({ exists: false }),
+    makeDirectoryAsync: jest.fn().mockResolvedValue(undefined),
+    deleteAsync: jest.fn().mockResolvedValue(undefined),
+    copyAsync: jest.fn().mockResolvedValue(undefined),
+}))
+
+jest.mock("react-native-view-shot", () => ({
+    captureRef: jest.fn().mockResolvedValue("file:///test/screenshot.jpg"),
+    releaseCapture: jest.fn(),
+}))
+
 jest.mock("expo-haptics", () => ({
     ImpactFeedbackStyle: {
         Light: "light",
@@ -184,12 +202,7 @@ jest.mock("@react-navigation/bottom-tabs", () => ({
 jest.mock("@gorhom/bottom-sheet", () => ({
     __esModule: true,
     ...require("@gorhom/bottom-sheet/mock"),
-    BottomSheetFlatList: ({ data, renderItem }: any) => {
-        return data.map((row: any) => renderItem({ item: row }))
-    },
-    BottomSheetSectionList: ({ sections, renderItem }: any) => {
-        return sections.flatMap((s: any) => s.data).map((row: any) => renderItem({ item: row }))
-    },
+    ...require("./src/Test/mocks/bottom-sheet-mock"),
 }))
 
 jest.mock("react-native-reanimated-skeleton", () => "Skeleton")
@@ -259,9 +272,16 @@ jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
             if (name === "RNViewShot") {
                 return null
             }
+            if (name === "SettingsManager") {
+                return null
+            }
             return turboModuleRegistry.getEnforcing(name)
         },
     }
 })
 
 require("react-native-reanimated").setUpTests()
+
+jest.mock("~Hooks/useFetchFeaturedDApps/useVeBetterDaoDapps", () => ({
+    useVeBetterDaoDapps: jest.fn().mockReturnValue({ data: [] }),
+}))

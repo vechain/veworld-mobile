@@ -2,12 +2,12 @@ import React, { useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
-import { useThemedStyles, useBlockchainNetwork } from "~Hooks"
+import { useBlockchainNetwork, useThemedStyles } from "~Hooks"
 
-import { capitalize, truncateTextIfSizeIsGreaterThan } from "~Utils/StringUtils/StringUtils"
 import { useNavigation } from "@react-navigation/native"
-import HapticsService from "~Services/HapticsService"
 import { Routes } from "~Navigation"
+import HapticsService from "~Services/HapticsService"
+import { capitalize, truncateTextIfSizeIsGreaterThan } from "~Utils/StringUtils/StringUtils"
 
 type Props = {
     showEvenIfMainnet?: boolean

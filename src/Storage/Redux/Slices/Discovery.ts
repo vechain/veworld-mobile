@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { DiscoveryDApp } from "~Constants"
+import { VbdDApp } from "~Model"
 import { URIUtils } from "~Utils"
 
 export type ConnectedDiscoveryApp = {
@@ -8,10 +9,22 @@ export type ConnectedDiscoveryApp = {
     connectedTime: number
 }
 
+export type LoginSession = {
+    genesisId: string
+    url: string
+    name: string
+    /**
+     * If the login session is marked as `replaceable`, it means that it can be replaced by another session with the same parameters.
+     * This is needed for backwards-compatibility with the old methods, which won't have a session
+     */
+    replaceable?: boolean
+} & ({ kind: "external"; address: string } | { kind: "temporary"; address: string } | { kind: "permanent" })
+
 export type Tab = {
     id: string
     href: string
-    preview?: string
+    previewPath?: string
+    favicon?: string
     title: string
 }
 
@@ -32,6 +45,12 @@ export type DiscoveryState = {
     bannerInteractions: {
         [bannerName: string]: BannerInteractionDetails
     }
+    sessions?: {
+        [appOrigin: string]: LoginSession
+    }
+    isNormalUser?: boolean
+    suggestedAppIds?: string[]
+    lastNavigationSource?: string
 }
 
 export const initialDiscoverState: DiscoveryState = {
@@ -45,6 +64,7 @@ export const initialDiscoverState: DiscoveryState = {
         tabs: [],
     },
     bannerInteractions: {},
+    isNormalUser: false,
 }
 
 const findByHref = (dapps: DiscoveryDApp[], href: string) => {
@@ -55,15 +75,33 @@ export const DiscoverySlice = createSlice({
     name: "discovery",
     initialState: initialDiscoverState,
     reducers: {
-        addBookmark: (state, action: PayloadAction<DiscoveryDApp>) => {
+        addBookmark: (state, action: PayloadAction<DiscoveryDApp | VbdDApp>) => {
             const { payload } = action
-            if (payload.isCustom) {
-                state.custom.push(payload)
+            let bookmark: DiscoveryDApp
+            if ("external_url" in payload) {
+                //Treat the app as a VBD app
+                bookmark = {
+                    name: payload.name,
+                    href: payload.external_url,
+                    desc: payload.description,
+                    isCustom: false,
+                    createAt: parseInt(payload.createdAtTimestamp, 10),
+                    amountOfNavigations: 1,
+                    veBetterDaoId: payload.id,
+                }
             } else {
-                state.favorites.push(payload)
+                bookmark = {
+                    ...payload,
+                }
+            }
+
+            if (bookmark.isCustom) {
+                state.custom.push(bookmark)
+            } else {
+                state.favorites.push(bookmark)
             }
         },
-        removeBookmark: (state, action: PayloadAction<DiscoveryDApp>) => {
+        removeBookmark: (state, action: PayloadAction<{ href: string; isCustom?: boolean }>) => {
             const { isCustom, href } = action.payload
             if (isCustom) {
                 state.custom = state.custom.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
@@ -77,8 +115,16 @@ export const DiscoverySlice = createSlice({
         setFeaturedDApps: (state, action: PayloadAction<DiscoveryDApp[]>) => {
             state.featured = action.payload
         },
-        addNavigationToDApp: (state, action: PayloadAction<{ href: string; isCustom: boolean }>) => {
+        addNavigationToDApp: (
+            state,
+            action: PayloadAction<{ href: string; isCustom: boolean; sourceScreen?: string }>,
+        ) => {
             const { payload } = action
+
+            // Store the source screen for back navigation
+            if (payload.sourceScreen) {
+                state.lastNavigationSource = payload.sourceScreen
+            }
 
             if (payload.isCustom) {
                 const existingDApp = findByHref(state.custom, payload.href)
@@ -122,11 +168,7 @@ export const DiscoverySlice = createSlice({
             const { id, ...otherProps } = action.payload
             const tabIndex = state.tabsManager.tabs.findIndex(tab => tab.id === id)
             if (tabIndex !== -1) {
-                Object.entries(otherProps)
-                    .filter(([_, value]) => typeof value !== "undefined")
-                    .forEach(
-                        ([key, value]) => (state.tabsManager.tabs[tabIndex][key as keyof typeof otherProps] = value),
-                    )
+                state.tabsManager.tabs[tabIndex] = { ...state.tabsManager.tabs[tabIndex], ...otherProps }
             }
         },
         setCurrentTab: (state, action: PayloadAction<string>) => {
@@ -145,6 +187,28 @@ export const DiscoverySlice = createSlice({
             state.bannerInteractions[action.payload] = {
                 amountOfInteractions: (state.bannerInteractions[action.payload]?.amountOfInteractions ?? 0) + 1,
             }
+        },
+        clearTemporarySessions: state => {
+            state.sessions = Object.fromEntries(
+                Object.entries(state.sessions ?? {}).filter(([_, session]) => {
+                    if (session.kind === "temporary") return false
+                    return true
+                }),
+            )
+        },
+        deleteSession(state, action: PayloadAction<string>) {
+            delete state.sessions?.[new URL(action.payload).origin]
+        },
+        addSession(state, action: PayloadAction<LoginSession>) {
+            const parsedUrl = new URL(action.payload.url)
+            if (!state.sessions) state.sessions = {}
+            state.sessions[parsedUrl.origin] = { ...action.payload, url: parsedUrl.origin }
+        },
+        setIsNormalUser: state => {
+            state.isNormalUser = true
+        },
+        setSuggestedAppIds: (state, action: PayloadAction<string[]>) => {
+            state.suggestedAppIds = action.payload
         },
     },
 })
@@ -165,4 +229,9 @@ export const {
     closeTab,
     closeAllTabs,
     incrementBannerInteractions,
+    clearTemporarySessions,
+    deleteSession,
+    addSession,
+    setIsNormalUser,
+    setSuggestedAppIds,
 } = DiscoverySlice.actions

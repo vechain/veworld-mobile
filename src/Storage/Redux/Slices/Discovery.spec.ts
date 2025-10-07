@@ -1,13 +1,20 @@
+import { ethers } from "ethers"
 import {
+    addNavigationToDApp,
+    addSession,
+    clearTemporarySessions,
     closeAllTabs,
     closeTab,
+    deleteSession,
     DiscoverySlice,
     DiscoveryState,
     incrementBannerInteractions,
+    LoginSession,
     openTab,
     Tab,
     updateTab,
 } from "./Discovery"
+import { HexUInt } from "@vechain/sdk-core"
 
 describe("DiscoverySlice", () => {
     describe("bannerInteractions", () => {
@@ -106,6 +113,248 @@ describe("DiscoverySlice", () => {
             )
             expect(newState.tabsManager.tabs).toHaveLength(0)
             expect(newState.tabsManager.currentTabId).toBeNull()
+        })
+    })
+    describe("sessions", () => {
+        const mockSessions = (...sessions: [string, LoginSession][]): DiscoveryState => {
+            return {
+                connectedApps: [],
+                custom: [],
+                favorites: [],
+                featured: [],
+                hasOpenedDiscovery: true,
+                bannerInteractions: {},
+                tabsManager: {
+                    currentTabId: null,
+                    tabs: [],
+                },
+                sessions: sessions.length === 0 ? undefined : Object.fromEntries(sessions),
+            }
+        }
+        it("clearTemporarySessions", () => {
+            const externalSession = {
+                kind: "external",
+                address: ethers.Wallet.createRandom().address,
+                genesisId: HexUInt.random(32).toString(),
+                url: "https://vechain.org",
+                name: "test",
+            } as const
+            const newState = DiscoverySlice.reducer(
+                mockSessions(
+                    ["https://vechain.org", externalSession],
+                    [
+                        "https://docs.vechain.org",
+                        {
+                            kind: "temporary",
+                            address: ethers.Wallet.createRandom().address,
+                            genesisId: HexUInt.random(32).toString(),
+                            url: "https://docs.vechain.org",
+                            name: "test",
+                        },
+                    ],
+                ),
+                clearTemporarySessions(),
+            )
+            expect(Object.keys(newState.sessions ?? {}).length).toBe(1)
+            expect(newState.sessions).toStrictEqual({
+                "https://vechain.org": externalSession,
+            })
+        })
+        it("deleteSession", () => {
+            const newState = DiscoverySlice.reducer(
+                mockSessions([
+                    "https://docs.vechain.org",
+                    {
+                        kind: "temporary",
+                        address: ethers.Wallet.createRandom().address,
+                        genesisId: HexUInt.random(32).toString(),
+                        url: "https://docs.vechain.org",
+                        name: "test",
+                    },
+                ]),
+                deleteSession("https://docs.vechain.org/test"),
+            )
+            expect(Object.keys(newState.sessions ?? {}).length).toBe(0)
+            const stateWithoutSessions = DiscoverySlice.reducer(
+                mockSessions(),
+                deleteSession("https://docs.vechain.org/test"),
+            )
+            expect(Object.keys(stateWithoutSessions.sessions ?? {}).length).toBe(0)
+            const stateWithNotFoundSession = DiscoverySlice.reducer(
+                mockSessions([
+                    "https://docs.vechain.org",
+                    {
+                        kind: "temporary",
+                        address: ethers.Wallet.createRandom().address,
+                        genesisId: HexUInt.random(32).toString(),
+                        url: "https://docs.vechain.org",
+                        name: "test",
+                    },
+                ]),
+                deleteSession("https://docs.vebetterdao.org/test"),
+            )
+            expect(Object.keys(stateWithNotFoundSession.sessions ?? {}).length).toBe(1)
+        })
+        it("addSession", () => {
+            const newState = DiscoverySlice.reducer(
+                mockSessions([
+                    "https://docs.vechain.org",
+                    {
+                        kind: "temporary",
+                        address: ethers.Wallet.createRandom().address,
+                        genesisId: HexUInt.random(32).toString(),
+                        url: "https://docs.vechain.org",
+                        name: "test",
+                    },
+                ]),
+                addSession({
+                    url: "https://docs.vebetterdao.org/test",
+                    address: "0x0",
+                    genesisId: "0x0",
+                    kind: "temporary",
+                    name: "test",
+                }),
+            )
+            expect(Object.keys(newState.sessions ?? {}).length).toBe(2)
+            expect(newState.sessions?.["https://docs.vebetterdao.org"]).toStrictEqual({
+                url: "https://docs.vebetterdao.org",
+                address: "0x0",
+                genesisId: "0x0",
+                kind: "temporary",
+                name: "test",
+            })
+            const stateWithoutSessions = DiscoverySlice.reducer(
+                mockSessions(),
+                addSession({
+                    url: "https://docs.vebetterdao.org/test",
+                    address: "0x0",
+                    genesisId: "0x0",
+                    kind: "temporary",
+                    name: "test",
+                }),
+            )
+            expect(Object.keys(stateWithoutSessions.sessions ?? {}).length).toBe(1)
+            expect(stateWithoutSessions.sessions?.["https://docs.vebetterdao.org"]).toStrictEqual({
+                url: "https://docs.vebetterdao.org",
+                address: "0x0",
+                genesisId: "0x0",
+                kind: "temporary",
+                name: "test",
+            })
+        })
+    })
+    describe("addNavigationToDApp", () => {
+        const mockDAppsState = (
+            favorites: any[] = [],
+            featured: any[] = [],
+            custom: any[] = [],
+            lastNavigationSource?: string,
+        ): DiscoveryState => {
+            return {
+                connectedApps: [],
+                custom,
+                favorites,
+                featured,
+                hasOpenedDiscovery: true,
+                bannerInteractions: {},
+                tabsManager: {
+                    currentTabId: null,
+                    tabs: [],
+                },
+                lastNavigationSource,
+            }
+        }
+
+        it("should store the source screen when provided", () => {
+            const initialState = mockDAppsState()
+            const newState = DiscoverySlice.reducer(
+                initialState,
+                addNavigationToDApp({ href: "https://example.com", isCustom: false, sourceScreen: "HOME" }),
+            )
+            expect(newState.lastNavigationSource).toBe("HOME")
+        })
+
+        it("should not modify lastNavigationSource when sourceScreen is not provided", () => {
+            const initialState = mockDAppsState([], [], [], "APPS")
+            const newState = DiscoverySlice.reducer(
+                initialState,
+                addNavigationToDApp({ href: "https://example.com", isCustom: false }),
+            )
+            expect(newState.lastNavigationSource).toBe("APPS")
+        })
+
+        it("should update lastNavigationSource when a new sourceScreen is provided", () => {
+            const initialState = mockDAppsState([], [], [], "HOME")
+            const newState = DiscoverySlice.reducer(
+                initialState,
+                addNavigationToDApp({ href: "https://example.com", isCustom: false, sourceScreen: "DISCOVER" }),
+            )
+            expect(newState.lastNavigationSource).toBe("DISCOVER")
+        })
+
+        it("should increment navigation count for favorite dApp and store source", () => {
+            const favoriteDApp = {
+                name: "Test DApp",
+                href: "https://example.com",
+                desc: "Test description",
+                isCustom: false,
+                createAt: Date.now(),
+                amountOfNavigations: 1,
+            }
+            const initialState = mockDAppsState([favoriteDApp])
+            const newState = DiscoverySlice.reducer(
+                initialState,
+                addNavigationToDApp({ href: "https://example.com", isCustom: false, sourceScreen: "APPS" }),
+            )
+            expect(newState.favorites[0].amountOfNavigations).toBe(2)
+            expect(newState.lastNavigationSource).toBe("APPS")
+        })
+
+        it("should increment navigation count for featured dApp and store source", () => {
+            const featuredDApp = {
+                name: "Featured DApp",
+                href: "https://featured.com",
+                desc: "Featured description",
+                isCustom: false,
+                createAt: Date.now(),
+                amountOfNavigations: 3,
+            }
+            const initialState = mockDAppsState([], [featuredDApp])
+            const newState = DiscoverySlice.reducer(
+                initialState,
+                addNavigationToDApp({ href: "https://featured.com", isCustom: false, sourceScreen: "DISCOVER" }),
+            )
+            expect(newState.featured[0].amountOfNavigations).toBe(4)
+            expect(newState.lastNavigationSource).toBe("DISCOVER")
+        })
+
+        it("should increment navigation count for custom dApp and store source", () => {
+            const customDApp = {
+                name: "Custom DApp",
+                href: "https://custom.com",
+                desc: "Custom description",
+                isCustom: true,
+                createAt: Date.now(),
+                amountOfNavigations: 0,
+            }
+            const initialState = mockDAppsState([], [], [customDApp])
+            const newState = DiscoverySlice.reducer(
+                initialState,
+                addNavigationToDApp({ href: "https://custom.com", isCustom: true, sourceScreen: "HOME" }),
+            )
+            expect(newState.custom[0].amountOfNavigations).toBe(1)
+            expect(newState.lastNavigationSource).toBe("HOME")
+        })
+
+        it("should handle navigation for non-existent dApp but still store source", () => {
+            const initialState = mockDAppsState()
+            const newState = DiscoverySlice.reducer(
+                initialState,
+                addNavigationToDApp({ href: "https://nonexistent.com", isCustom: false, sourceScreen: "APPS" }),
+            )
+            expect(newState.lastNavigationSource).toBe("APPS")
+            expect(newState.favorites).toHaveLength(0)
+            expect(newState.featured).toHaveLength(0)
         })
     })
 })

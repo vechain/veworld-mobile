@@ -1,7 +1,12 @@
 import { PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { ethers } from "ethers"
 
-export type DAppSourceType = "wallet-connect" | "in-app"
+export type DAppSourceType = "wallet-connect" | "in-app" | "external-app"
+export type TypedDataMessage = {
+    domain: ethers.TypedDataDomain
+    types: Record<string, ethers.TypedDataField[]>
+    value: Record<string, unknown>
+}
 
 type BaseRequest = {
     type: DAppSourceType
@@ -20,7 +25,15 @@ type BaseWcRequest = BaseRequest & {
 type BaseInAppRequest = BaseRequest & {
     type: "in-app"
     id: string
-    isFirstRequest: boolean
+}
+
+export type BaseExternalAppRequest = BaseRequest & {
+    type: "external-app"
+    publicKey: string
+    nonce: string
+    redirectUrl: string
+    genesisId: string
+    session: string
 }
 
 type BaseCertificateRequest = {
@@ -29,19 +42,23 @@ type BaseCertificateRequest = {
     method: "thor_signCertificate"
 }
 
-type BaseTransactionRequest = {
+export type BaseTransactionRequest = {
     message: Connex.Vendor.TxMessage
     options: Connex.Signer.TxOptions
     method: "thor_sendTransaction"
 }
 
 type BaseTypedDataRequest = {
-    domain: ethers.TypedDataDomain
-    origin: string
     options: Connex.Signer.CertOptions
-    types: Record<string, ethers.TypedDataField[]>
-    value: Record<string, unknown>
     method: "thor_signTypedData"
+    origin: string
+} & TypedDataMessage
+
+type BaseExternalConnectAppRequest = BaseRequest & {
+    type: "external-app"
+    publicKey: string
+    redirectUrl: string
+    genesisId: string
 }
 
 type WcConnectAppRequest = BaseRequest & {
@@ -54,33 +71,92 @@ type InAppConnectAppRequest = BaseRequest & {
     initialRequest: InAppCertRequest | InAppTxRequest | InAppTypedDataRequest
 }
 
+type InAppLoginRequest = BaseInAppRequest & {
+    method: "thor_connect"
+    external: boolean | undefined
+    genesisId: string
+} & (
+        | { kind: "simple"; value: null }
+        | { kind: "certificate"; value: Connex.Vendor.CertMessage }
+        | {
+              kind: "typed-data"
+              value: TypedDataMessage
+          }
+    )
+
+type InAppSwitchWalletRequest = BaseInAppRequest & {
+    method: "thor_switchWallet"
+    genesisId: string
+}
+
+type InAppWalletRequest = BaseInAppRequest & {
+    method: "thor_wallet"
+    genesisId: string
+}
+
 type WcCertRequest = BaseCertificateRequest & BaseWcRequest
 
 type InAppCertRequest = BaseCertificateRequest & BaseInAppRequest
+
+type ExternalAppCertRequest = BaseCertificateRequest & BaseExternalAppRequest
 
 type WcTxRequest = BaseTransactionRequest & BaseWcRequest
 
 type InAppTxRequest = BaseTransactionRequest & BaseInAppRequest
 
+type ExternalAppTxRequest = BaseTransactionRequest & BaseExternalAppRequest
+
 type WcSignDataRequest = BaseTypedDataRequest & BaseWcRequest
 
 type InAppTypedDataRequest = BaseTypedDataRequest & BaseInAppRequest
 
-export type CertificateRequest = WcCertRequest | InAppCertRequest
+type ExternalAppTypedDataRequest = BaseTypedDataRequest & BaseExternalAppRequest
 
-export type TransactionRequest = WcTxRequest | InAppTxRequest
+export type CertificateRequest = WcCertRequest | InAppCertRequest | ExternalAppCertRequest
 
-export type TypeDataRequest = WcSignDataRequest | InAppTypedDataRequest
+export type TransactionRequest = WcTxRequest | InAppTxRequest | ExternalAppTxRequest
 
-export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest
+export type TypeDataRequest = WcSignDataRequest | InAppTypedDataRequest | ExternalAppTypedDataRequest
 
-export type InAppRequest = InAppCertRequest | InAppTxRequest | InAppTypedDataRequest
+export type DisconnectAppRequest = BaseExternalAppRequest & {
+    genesisId: string
+}
+
+/**
+ * Login request. WC doesn't support it, so it'll be only in-app
+ */
+export type LoginRequest = InAppLoginRequest
+
+export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest | BaseExternalConnectAppRequest
+
+export type SwitchWalletRequest = InAppSwitchWalletRequest
+export type WalletRequest = InAppWalletRequest
+
+export type InAppRequest =
+    | InAppCertRequest
+    | InAppTxRequest
+    | InAppTypedDataRequest
+    | InAppLoginRequest
+    | InAppSwitchWalletRequest
 
 export enum DAppType {
     ALL = "all",
     SUSTAINABILTY = "sustainability",
     NFT = "NFT",
     DAPPS = "DAPPS",
+}
+
+export enum X2ECategoryType {
+    OTHERS = "others",
+    EDUCATION_LEARNING = "education-learning",
+    FITNESS_WELLNESS = "fitness-wellness",
+    GREEN_FINANCE_DEFI = "green-finance-defi",
+    GREEN_MOBILITY_TRAVEL = "green-mobility-travel",
+    NUTRITION = "nutrition",
+    PLASTIC_WASTE_RECYCLING = "plastic-waste-recycling",
+    RENEWABLE_ENERGY_EFFICIENCY = "renewable-energy-efficiency",
+    SUSTAINABLE_SHOPPING = "sustainable-shopping",
+    PETS = "pets",
 }
 
 export type VeBetterDaoDapp = {
@@ -90,6 +166,7 @@ export type VeBetterDaoDapp = {
     metadataURI: string
     createdAtTimestamp: string
     appAvailableForAllocationVoting?: boolean
+    categories?: X2ECategoryType[]
 }
 
 export type VeBetterDaoDAppMetadata = {
@@ -109,6 +186,40 @@ export type VeBetterDaoDAppMetadata = {
     }[]
     tweets?: string[]
     ve_world?: {
-        banner: string | number
+        banner: string
+        featured_image?: string
     }
+    categories?: string[]
 }
+
+export type VbdDApp = VeBetterDaoDapp & VeBetterDaoDAppMetadata
+
+export type ExternalAppRequest = BaseExternalAppRequest & {
+    /**
+     * The payload is the encrypted and base64 encoded payload from the external app
+     * It is encrypted with the public key of the session
+     * It is decrypted with the private key of the session
+     * It is then parsed into a TransactionRequest
+     */
+    payload: string
+}
+
+type ExternalRequestParsedPayload<T> = {
+    transaction?: T
+    typedData?: T
+    certificate?: T
+    session: string
+}
+
+/**
+ * Request parsed from the external app encrypted payload
+ */
+export type ParsedRequest<T> = {
+    payload: ExternalRequestParsedPayload<T>
+    request: BaseExternalAppRequest
+}
+
+/**
+ * Request decoded from the external app
+ */
+export type DecodedRequest = Omit<BaseExternalAppRequest, "session" | "redirectUrl"> & { payload: string }

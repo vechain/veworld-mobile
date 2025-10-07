@@ -37,6 +37,16 @@ export const selectCustomTokens = createSelector(
     },
 )
 
+export const selectCustomTokensByAccount = createSelector(
+    selectTokenState,
+    selectSelectedNetwork,
+    (_state: RootState, accountAddress: string) => accountAddress,
+    (state, network, accountAddress) => {
+        const normAccountAddress = HexUtils.normalize(accountAddress)
+        return state.tokens[network.type].custom[normAccountAddress] ?? []
+    },
+)
+
 export const selectOfficialTokens = createSelector(
     [selectTokensForNetwork, selectNetworkVBDTokens],
     (state, networkVBDTokens) =>

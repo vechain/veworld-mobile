@@ -7,6 +7,7 @@ export * from "./NFTStack"
 export * from "./BuyStack"
 export * from "./DiscoverStack"
 export * from "./HistoryStack"
+export * from "./AppsStack"
 
 import { RootStackParamListOnboarding } from "./OnboardingStack"
 import { RootStackParamListHome } from "./HomeStack"
@@ -18,6 +19,8 @@ import { RootStackParamListBuy } from "./BuyStack"
 import { RootStackParamListBrowser } from "./DiscoverStack"
 import { HistoryStackParamList } from "./HistoryStack"
 import { RootStackParamListBackupWallet } from "~Screens/Flows/App/SecurityUpgrade_V2/Navigation.standalone"
+import { RootStackParamListApps } from "./AppsStack"
+import { TabStackParamList } from "~Navigation/Tabs"
 
 export type ScreenRootParams = RootStackParamListSwitch &
     RootStackParamListOnboarding &
@@ -28,7 +31,9 @@ export type ScreenRootParams = RootStackParamListSwitch &
     RootStackParamListBuy &
     RootStackParamListBrowser &
     HistoryStackParamList &
-    RootStackParamListBackupWallet
+    RootStackParamListBackupWallet &
+    RootStackParamListApps &
+    TabStackParamList
 
 declare global {
     namespace ReactNavigation {

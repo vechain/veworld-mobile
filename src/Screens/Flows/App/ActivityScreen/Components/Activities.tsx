@@ -28,7 +28,8 @@ export const Activities = ({ filter, emptyComponent }: ActivitiesProps) => {
         filter.type,
         filter.value,
     )
-    const { data: daoDapps, isPending } = useVeBetterDaoDapps()
+
+    const { isPending } = useVeBetterDaoDapps()
 
     const renderActivitiesList = useMemo(() => {
         return (
@@ -38,10 +39,9 @@ export const Activities = ({ filter, emptyComponent }: ActivitiesProps) => {
                 refreshActivities={refreshActivities}
                 isFetching={isFetching || isPending}
                 isRefreshing={isRefreshing}
-                veBetterDaoDapps={daoDapps ?? []}
             />
         )
-    }, [activities, daoDapps, fetchActivities, isFetching, isPending, isRefreshing, refreshActivities])
+    }, [activities, fetchActivities, isFetching, isPending, isRefreshing, refreshActivities])
 
     const renderSkeletonList = useMemo(() => {
         return (

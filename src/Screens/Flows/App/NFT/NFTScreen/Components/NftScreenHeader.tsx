@@ -5,8 +5,9 @@ import {
     ChangeAccountButtonPill,
     HeaderTitle,
     SelectedNetworkViewer,
-    HeaderStyle,
+    HeaderStyleV2,
 } from "~Components"
+import { NetworkSwitcherContextMenu } from "~Components/Reusable/ContextMenu"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -17,10 +18,12 @@ export const NftScreenHeader = ({ openSelectAccountBottomSheet }: Props) => {
     const { LL } = useI18nContext()
 
     return (
-        <BaseView style={HeaderStyle}>
-            <HeaderTitle testID="nfts_title" title={LL.TITLE_NFTS()} />
+        <BaseView style={HeaderStyleV2}>
+            <HeaderTitle testID="nfts_title" title={LL.TITLE_NFTS()} leftIconName="icon-image" />
             <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
-                <SelectedNetworkViewer />
+                <NetworkSwitcherContextMenu>
+                    <SelectedNetworkViewer />
+                </NetworkSwitcherContextMenu>
                 <BaseSpacer width={8} />
                 <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
             </BaseView>

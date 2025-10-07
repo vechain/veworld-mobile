@@ -1,7 +1,7 @@
 import { RootState } from "../Types"
 import { createSelector } from "@reduxjs/toolkit"
+import _ from "lodash"
 import { DiscoveryDApp } from "~Constants"
-import { URIUtils } from "~Utils"
 
 const getDiscoveryState = (state: RootState) => state.discovery
 
@@ -16,16 +16,11 @@ export const selectCustomDapps = createSelector(getDiscoveryState, (discovery): 
 
 export const selectBookmarkedDapps = createSelector(
     selectFavoritesDapps,
-    (favorites: DiscoveryDApp[]): DiscoveryDApp[] => {
-        const dapps: DiscoveryDApp[] = []
+    selectCustomDapps,
+    (favorites, custom): DiscoveryDApp[] => {
+        const dapps: DiscoveryDApp[] = [...favorites, ...custom]
 
-        for (const dapp of favorites) {
-            if (!dapps.find(d => URIUtils.compareURLs(d.href, dapp.href))) {
-                dapps.push(dapp)
-            }
-        }
-
-        return dapps
+        return _.uniqBy(dapps, value => value.href)
     },
 )
 
@@ -34,21 +29,47 @@ export const selectAllDapps = createSelector(
     selectFeaturedDapps,
     selectCustomDapps,
     (favorites, featured, custom) => {
-        const dapps = [...favorites]
+        // Use a Set to track normalized URLs for O(1) lookups
+        const seenUrls = new Set<string>()
+        const result: DiscoveryDApp[] = []
 
+        // Helper to normalize URL for comparison
+        const normalizeUrl = (url: string) => {
+            try {
+                const parsed = new URL(url.toLowerCase())
+                parsed.hostname = parsed.hostname.replace("www.", "")
+                return parsed.origin + parsed.pathname
+            } catch {
+                return url.toLowerCase()
+            }
+        }
+
+        // Add favorites first (highest priority)
+        for (const dapp of favorites) {
+            const normalized = normalizeUrl(dapp.href)
+            seenUrls.add(normalized)
+            result.push(dapp)
+        }
+
+        // Add custom dapps (skip if URL already seen)
         for (const dapp of custom) {
-            if (!dapps.find(d => URIUtils.compareURLs(d.href, dapp.href))) {
-                dapps.push(dapp)
+            const normalized = normalizeUrl(dapp.href)
+            if (!seenUrls.has(normalized)) {
+                seenUrls.add(normalized)
+                result.push(dapp)
             }
         }
 
+        // Add all apps (skip if URL already seen)
         for (const dapp of featured) {
-            if (!dapps.find(d => URIUtils.compareURLs(d.href, dapp.href))) {
-                dapps.push(dapp)
+            const normalized = normalizeUrl(dapp.href)
+            if (!seenUrls.has(normalized)) {
+                seenUrls.add(normalized)
+                result.push(dapp)
             }
         }
 
-        return dapps
+        return result
     },
 )
 
@@ -59,21 +80,6 @@ export const selectHasUserOpenedDiscovery = createSelector(
 
 export const selectConnectedDiscoverDApps = createSelector(getDiscoveryState, discovery => discovery.connectedApps)
 
-export const selectFeaturedImages = createSelector(getDiscoveryState, discovery => {
-    // domain -> image
-    const images: Record<string, object | undefined> = {}
-
-    for (const dapp of discovery.featured) {
-        if (!dapp.image) continue
-
-        try {
-            images[new URL(dapp.href).host] = dapp.image
-        } catch {}
-    }
-
-    return images
-})
-
 export const selectSwapFeaturedDapps = createSelector(selectFeaturedDapps, dapps =>
     dapps.filter(dapp => dapp?.tags?.map(t => t.toLowerCase())?.includes("swap")),
 )
@@ -82,7 +88,28 @@ export const selectTabs = createSelector(getDiscoveryState, discovery => discove
 
 export const selectCurrentTabId = createSelector(getDiscoveryState, discovery => discovery.tabsManager.currentTabId)
 
+export const selectLastNavigationSource = createSelector(getDiscoveryState, discovery => discovery.lastNavigationSource)
+
 export const selectCurrentTab = createSelector(selectTabs, selectCurrentTabId, (tabs, currentTabId) =>
     tabs.find(tab => tab.id === currentTabId),
 )
 export const selectBannerInteractions = createSelector(getDiscoveryState, discovery => discovery.bannerInteractions)
+
+export const selectSession = createSelector(
+    getDiscoveryState,
+    (__: RootState, url: string, genesisId?: string) => ({ url, genesisId }),
+    (state, { url, genesisId }) => {
+        if (!url) return undefined
+        const session = state.sessions?.[new URL(url).origin]
+        if (!genesisId) return session
+        if (session?.genesisId?.toLowerCase() === genesisId) return session
+        return undefined
+    },
+)
+
+export const selectSessions = createSelector(getDiscoveryState, state => {
+    return state.sessions ?? {}
+})
+export const selectIsNormalUser = createSelector(getDiscoveryState, state => state.isNormalUser ?? false)
+
+export const selectSuggestedAppIds = createSelector(getDiscoveryState, state => state.suggestedAppIds)

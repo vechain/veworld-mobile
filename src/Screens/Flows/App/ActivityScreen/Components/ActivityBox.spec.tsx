@@ -1,9 +1,15 @@
 import { render, screen } from "@testing-library/react-native"
-import { ActivityBox } from "./ActivityBox"
 import React from "react"
+import LinearGradient from "react-native-linear-gradient"
+import { ActivityBox } from "./ActivityBox"
+
 import { TestWrapper } from "~Test"
+
+import { BaseIcon } from "~Components/Base/BaseIcon"
+import { DIRECTIONS } from "~Constants"
 import {
     Activity,
+    ActivityStatus,
     ActivityType,
     B3trActionActivity,
     B3trClaimRewardActivity,
@@ -14,30 +20,16 @@ import {
     B3trUpgradeGmActivity,
     B3trXAllocationVoteActivity,
     FungibleTokenActivity,
-    SwapActivity,
-    UnknownTxActivity,
+    LoginActivity,
     NETWORK_TYPE,
     NonFungibleTokenActivity,
-    ActivityStatus,
+    NFTMarketplaceActivity,
+    SwapActivity,
+    UnknownTxActivity,
+    VeVoteCastActivity,
 } from "~Model"
-import { DIRECTIONS } from "~Constants"
-import LinearGradient from "react-native-linear-gradient"
-import { BaseIcon } from "~Components/Base/BaseIcon"
 
-const mockTheme = {
-    colors: {
-        activityCard: {
-            time: "#666",
-            title: "#000",
-            subtitleBold: "#333",
-            subtitleLight: "#999",
-            swap: "#444",
-        },
-    },
-}
-
-jest.mock("~Hooks", () => ({
-    ...jest.requireActual("~Hooks"),
+jest.mock("~Hooks/useNFTInfo", () => ({
     useNFTInfo: () => ({
         tokenMetadata: {
             image: "https://example.com/nft.jpg",
@@ -45,33 +37,15 @@ jest.mock("~Hooks", () => ({
         collectionName: "Test Collection",
         isMediaLoading: false,
     }),
-    useThemedStyles: () => ({
-        styles: {
-            rootContainer: {},
-            iconContainer: {},
-            titleContainer: {},
-            textContainer: {},
-            rightTextContainer: {},
-            rightImageContainer: {},
-        },
-        theme: mockTheme,
-    }),
-    useTheme: () => mockTheme,
+}))
+
+jest.mock("~Hooks/useNFTMedia", () => ({
     useNFTMedia: () => ({
         fetchMedia: async () => ({
             image: "https://example.com/nft.jpg",
             mime: "image/jpeg",
             mediaType: "IMAGE",
         }),
-    }),
-}))
-
-jest.mock("~Components/Providers/PersistedCacheProvider", () => ({
-    usePersistedCache: () => ({
-        mediaCache: {
-            getItem: () => null,
-            setItem: () => {},
-        },
     }),
 }))
 
@@ -306,6 +280,35 @@ const activities: Activity[] = [
         status: "REVERTED",
         eventName: "UNKNOWN_TX",
     } as UnknownTxActivity,
+    {
+        eventName: "VEVOTE_VOTE_CAST",
+        from: "0xf6EDf674a43F725EBa52915f0a3A49A2AF4580E6",
+        to: ["0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"],
+        id: "0x6a05ecf6a1305ec61fb8ea65bf077589998149fa10d44c80464df6d93cffaz03",
+        isTransaction: true,
+        proposalId: "",
+        timestamp: 1482337919000,
+        type: "VEVOTE_VOTE_CAST",
+        blockNumber: 21412814,
+        genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
+        gasPayer: "0xfc5a8bbff0cfc616472772167024e7cd977f27f6",
+        delegated: true,
+    } as VeVoteCastActivity,
+    {
+        from: "0xf6EDf674a43F725EBa52915f0a3A49A2AF4580E6",
+        to: ["0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"],
+        id: "0x6a05ecf6a1305ec61fb8ea65bf077589998149fa10d44c80464df6d93cffaz04",
+        isTransaction: true,
+        timestamp: 1482337929999,
+        type: ActivityType.DAPP_LOGIN,
+        blockNumber: 21412814,
+        genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
+        gasPayer: "0xfc5a8bbff0cfc616472772167024e7cd977f27f6",
+        delegated: true,
+        linkUrl: "https://vechain.org",
+        kind: "simple",
+        value: null,
+    } as LoginActivity,
 ]
 
 describe("ActivityBox", () => {
@@ -334,9 +337,6 @@ describe("ActivityBox", () => {
                     suggestedTokens: [],
                 },
             },
-        },
-        veBetterDao: {
-            dapps: [],
         },
     }
 
@@ -521,6 +521,45 @@ describe("ActivityBox", () => {
         })
     })
 
+    describe("NFT Sale", () => {
+        const nftSaleActivity: NFTMarketplaceActivity = {
+            id: "test-nft-sale-id",
+            blockNumber: 123,
+            timestamp: Date.now(),
+            type: ActivityType.NFT_SALE,
+            tokenId: "12345",
+            contractAddress: "0x123",
+            direction: DIRECTIONS.UP,
+            from: "0x0e73ea",
+            to: ["0x3ca506"],
+            status: ActivityStatus.SUCCESS,
+            isTransaction: false,
+            delegated: false,
+            price: "2500000000000000000",
+            buyer: "0x3ca506",
+            seller: "0x0e73ea",
+            tokenAddress: "VET",
+        }
+
+        it("renders NFT sale correctly", () => {
+            const { getByTestId } = render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.NFTSale activity={nftSaleActivity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+            expect(getByTestId(`NFT-SALE-${nftSaleActivity.id}`)).toBeTruthy()
+        })
+
+        it("renders NFTMedia when NFT metadata is available for sale", () => {
+            const { getByTestId } = render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.NFTSale activity={nftSaleActivity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+            expect(getByTestId("nft-media")).toBeTruthy()
+        })
+    })
+
     describe("Gradient Background Icon Rendering", () => {
         it("renders LinearGradient and BaseIcon with testID 'magnify' when isGradient is true", () => {
             const gradientConfig = {
@@ -549,6 +588,31 @@ describe("ActivityBox", () => {
 
             expect(screen.getByTestId("magnify")).toBeTruthy()
             expect(screen.UNSAFE_queryAllByType(LinearGradient).length).toBeGreaterThan(0)
+        })
+    })
+
+    describe("VeVote", () => {
+        it("should render vevote cast correctly", () => {
+            const activity = activities[13] as VeVoteCastActivity
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.VeVoteCast activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^VEVOTE-CAST-/i)).toBeTruthy()
+        })
+    })
+    describe("dApps", () => {
+        it("should render dapp login correctly", () => {
+            const activity = activities[14] as LoginActivity
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.DappLogin activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^DAPP-LOGIN-/i)).toBeTruthy()
         })
     })
 })
