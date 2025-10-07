@@ -16,7 +16,19 @@ import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 export type HistoryStackParamList = {
-    [Routes.HISTORY]: undefined
+    [Routes.HISTORY]:
+        | {
+              screen?:
+                  | Routes.ACTIVITY_ALL
+                  | Routes.ACTIVITY_B3TR
+                  | Routes.ACTIVITY_TRANSFER
+                  | Routes.ACTIVITY_STAKING
+                  | Routes.ACTIVITY_SWAP
+                  | Routes.ACTIVITY_NFT
+                  | Routes.ACTIVITY_DAPPS
+                  | Routes.ACTIVITY_OTHER
+          }
+        | undefined
     [Routes.ACTIVITY_DETAILS]: {
         activity: Activity
         token?: FungibleToken
