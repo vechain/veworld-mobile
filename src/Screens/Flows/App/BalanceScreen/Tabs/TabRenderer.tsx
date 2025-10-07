@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseSimpleTabs, BaseSpacer, BaseView } from "~Components"
+import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -32,16 +33,20 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const { onDAppPress } = useDAppActions(Routes.HOME)
     const { tabBarBottomMargin } = useTabBarBottomMargin()
     const showStakingTab = useShowStakingTab()
+    const { betterWorldFeature } = useFeatureFlags()
 
     const filteredTabs = useMemo(() => {
         return TABS.filter(tab => {
             if (tab === "STAKING") {
                 return showStakingTab
             }
+            if (tab === "COLLECTIBLES") {
+                return betterWorldFeature.balanceScreen?.collectibles?.enabled
+            }
 
             return true
         }) as (typeof TABS)[number][]
-    }, [showStakingTab])
+    }, [showStakingTab, betterWorldFeature.balanceScreen?.collectibles?.enabled])
 
     const showFavorites = useMemo(() => {
         return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount)
