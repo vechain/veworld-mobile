@@ -64,7 +64,7 @@ export const FavouritesV2 = React.memo(
         const theme = useTheme()
 
         const titleColor = useMemo(() => {
-            if (theme.isDark) return renderCTASeeAll ? COLORS.GREY_100 : COLORS.GREY_50
+            if (theme.isDark) return COLORS.GREY_100
             return renderCTASeeAll ? COLORS.GREY_800 : COLORS.DARK_PURPLE
         }, [theme.isDark, renderCTASeeAll])
 
