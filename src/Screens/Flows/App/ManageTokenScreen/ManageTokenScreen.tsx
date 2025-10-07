@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import {
     BaseSearchInput,
     BaseSpacer,
@@ -48,12 +48,9 @@ export const ManageTokenScreen = () => {
         return tokenBalances.filter(tk => !tk.balance.isHidden).map(tokenWithBalance => tokenWithBalance.symbol)
     }, [tokenBalances])
 
-    const selectableTokens = useCallback(
-        (token: FungibleToken) => {
-            return tokenBalances.some(tk => !BigNutils(tk.balance.balance).isZero && tk.symbol === token.symbol)
-        },
-        [tokenBalances],
-    )
+    const selectableTokens = useMemo(() => {
+        return tokenBalances.map(tk => (!BigNutils(tk.balance.balance).isZero ? tk.symbol : undefined)).filter(Boolean)
+    }, [tokenBalances])
 
     const filteredTokens = useMemo(
         () =>
@@ -72,8 +69,8 @@ export const ManageTokenScreen = () => {
         const unselected = filteredTokens.filter(token => !selectedTokenSymbols.includes(token.symbol))
 
         return unselected.sort((a, b) => {
-            const aIsSelectable = selectableTokens(a)
-            const bIsSelectable = selectableTokens(b)
+            const aIsSelectable = selectableTokens.includes(a.symbol)
+            const bIsSelectable = selectableTokens.includes(b.symbol)
 
             // First, prioritize selectable tokens (those with non-zero balance)
             if (aIsSelectable && !bIsSelectable) return -1
@@ -171,7 +168,7 @@ export const ManageTokenScreen = () => {
                                                 iconSize={26}
                                                 key={token.address}
                                                 token={token}
-                                                disabled={!selectableTokens(token)}
+                                                disabled={!selectableTokens.includes(token.symbol)}
                                                 action={handleClickToken(token)}
                                             />
                                         ))}
