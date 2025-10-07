@@ -62,10 +62,11 @@ type VeBetterSectionProps = {
 export const VeBetterSection = ({ onPressCategory }: VeBetterSectionProps) => {
     const { LL } = useI18nContext()
     const categories = useCategories()
+    const theme = useTheme()
 
     return (
         <BaseView gap={16} justifyContent="flex-start" alignItems="flex-start">
-            <BaseText mx={16} typographyFont="subSubTitleSemiBold">
+            <BaseText mx={16} typographyFont="subSubTitleSemiBold" color={theme.colors.dappTitle}>
                 {LL.TITLE_VEBETTER()}
             </BaseText>
             <VeBetterCategoryList categories={categories} onPressCategory={onPressCategory} />
