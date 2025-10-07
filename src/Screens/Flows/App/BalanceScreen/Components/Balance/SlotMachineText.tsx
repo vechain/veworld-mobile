@@ -72,14 +72,6 @@ export const SlotMachineText = ({ value }: Props) => {
 
     return (
         <Animated.View style={[styles.root]} layout={LinearTransition.duration(300)}>
-            <LinearGradient
-                colors={["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0)"]}
-                angle={180}
-                useAngle
-                locations={[0, 0.2, 0.7, 1]}
-                style={[StyleSheet.absoluteFill, styles.gradient]}
-            />
-
             <Animated.View style={[styles.innerContainer]} layout={LinearTransition.duration(300)}>
                 <Animated.Text style={[styles.text, styles.hiddenText]}>{value}</Animated.Text>
                 {VALUE_ARRAY.map((item, idx) => (
