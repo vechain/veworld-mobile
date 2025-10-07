@@ -105,8 +105,8 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
                         barcodeTypes: ["qr"],
                     }}
                     style={styles.cameraView}>
-                    {children}
                     <BlurView blurAmount={25} overlayColor="transparent" style={styles.blurView} />
+                    {children}
                 </CameraView>
             ) : (
                 children
