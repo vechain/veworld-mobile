@@ -6,8 +6,8 @@ import Animated from "react-native-reanimated"
 import { BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { BaseIcon } from "~Components/Base/BaseIcon"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
-import { COLORS } from "~Constants"
-import { useBottomSheetModal, useGetDappMetadataFromUrl } from "~Hooks"
+import { COLORS, ColorThemeType } from "~Constants"
+import { useBottomSheetModal, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
@@ -32,6 +32,7 @@ const AnimatedBaseText = Animated.createAnimatedComponent(wrapFunctionComponent(
 const AnimatedTouchable = Animated.createAnimatedComponent(wrapFunctionComponent(BaseTouchable))
 
 export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: Props) => {
+    const { styles } = useThemedStyles(baseStyles)
     const { betterWorldFeature } = useFeatureFlags()
     const dappMetadata = useGetDappMetadataFromUrl(navigationUrl)
     const fetchDynamicLogo = useDynamicAppLogo()
@@ -165,64 +166,64 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    animatedContainer: {
-        opacity: 1,
-        alignItems: "center",
-        flexDirection: "row",
-        // backgroundColor: COLORS.DARK_PURPLE,
-        paddingVertical: 8,
-    },
-    inputContainer: {
-        width: "100%",
-        height: 40,
-        paddingHorizontal: 16,
-        alignItems: "center",
-        flexDirection: "row",
-        gap: 16,
-    },
-    noToolbarContainer: {
-        height: 24,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        flex: 1,
-        paddingHorizontal: 16,
-        marginVertical: 8,
-    },
-    dappContainer: {
-        gap: 8,
-    },
-    appName: {
-        textAlign: "center", // centers the text
-        transformOrigin: "center",
-        fontSize: 14,
-        fontWeight: "700",
-    },
-    textInput: {
-        fontSize: 12,
-        paddingVertical: 8,
-    },
-    textInputContainer: {
-        height: 32,
-        paddingVertical: 0,
-        width: "100%",
-    },
-    textInputContainerRoot: {
-        width: "100%",
-    },
-    urlContainer: {
-        flex: 1,
-        alignItems: "center",
-        flexDirection: "row",
-        justifyContent: "center",
-        gap: 8,
-    },
-    iconButton: {
-        transformOrigin: "center",
-    },
-    spinner: {
-        padding: 2,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        animatedContainer: {
+            opacity: 1,
+            alignItems: "center",
+            flexDirection: "row",
+            backgroundColor: theme.colors.background,
+            paddingVertical: 8,
+        },
+        inputContainer: {
+            width: "100%",
+            height: 40,
+            paddingHorizontal: 16,
+            alignItems: "center",
+            flexDirection: "row",
+            gap: 16,
+        },
+        noToolbarContainer: {
+            height: 24,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            flex: 1,
+            paddingHorizontal: 16,
+            marginVertical: 8,
+        },
+        dappContainer: {
+            gap: 8,
+        },
+        appName: {
+            textAlign: "center", // centers the text
+            transformOrigin: "center",
+            fontSize: 14,
+            fontWeight: "700",
+        },
+        textInput: {
+            fontSize: 12,
+            paddingVertical: 8,
+        },
+        textInputContainer: {
+            height: 32,
+            paddingVertical: 0,
+            width: "100%",
+        },
+        textInputContainerRoot: {
+            width: "100%",
+        },
+        urlContainer: {
+            flex: 1,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 8,
+        },
+        iconButton: {
+            transformOrigin: "center",
+        },
+        spinner: {
+            padding: 2,
+        },
+    })
