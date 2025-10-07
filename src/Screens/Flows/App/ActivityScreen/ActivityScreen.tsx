@@ -13,6 +13,7 @@ import {
 import { NetworkSwitcherContextMenu } from "~Components/Reusable/ContextMenu"
 import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
+import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useResetActivityStack } from "./Hooks"
@@ -22,11 +23,10 @@ import {
     ActivityB3trScreen,
     ActivityNftScreen,
     ActivityOtherScreen,
+    ActivityStakingScreen,
     ActivitySwapScreen,
     ActivityTransferScreen,
-    ActivityStakingScreen,
 } from "./screens"
-import { Routes } from "~Navigation"
 import { ActivityDappsScreen } from "./screens/ActivityDappsScreen"
 
 const Tab = createMaterialTopTabNavigator()
