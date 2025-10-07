@@ -13,10 +13,19 @@ type OfficialTokenCardProps = {
     action: () => void
     selected?: boolean
     iconSize?: number
+    disabled?: boolean
 }
 
 export const OfficialTokenCard = memo(
-    ({ token, tokenWithInfo = {}, style, action, selected, iconSize }: OfficialTokenCardProps & ViewProps) => {
+    ({
+        token,
+        tokenWithInfo = {},
+        style,
+        action,
+        selected,
+        iconSize,
+        disabled,
+    }: OfficialTokenCardProps & ViewProps) => {
         const { styles } = useThemedStyles(baseStyles(selected))
         const isVetToken = isVechainToken(token.symbol)
 
@@ -27,7 +36,11 @@ export const OfficialTokenCard = memo(
         }, [token.crossChainProvider])
 
         return (
-            <TouchableOpacity onPress={action} style={[styles.container, style]} testID={symbol}>
+            <TouchableOpacity
+                onPress={action}
+                style={[styles.container, disabled && styles.disabled, style]}
+                testID={symbol}
+                disabled={disabled}>
                 <BaseView flexDirection="row" justifyContent="space-between" w={100}>
                     <BaseView flexDirection="row" justifyContent="flex-start">
                         <TokenImage
@@ -63,6 +76,9 @@ const baseStyles = (selected?: boolean) => (theme: ColorThemeType) =>
             borderRadius: 12,
             backgroundColor: theme.colors.card,
             borderColor: theme.colors.text,
+        },
+        disabled: {
+            opacity: 0.6,
         },
         balanceInfo: {
             alignItems: "flex-end",

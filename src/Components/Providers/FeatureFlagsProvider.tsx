@@ -51,7 +51,10 @@ export const initialState: FeatureFlags = {
             enabled: true,
         },
         balanceScreen: {
-            enabled: false,
+            enabled: true,
+            collectibles: {
+                enabled: false,
+            },
         },
     },
 }

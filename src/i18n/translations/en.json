@@ -421,6 +421,8 @@
   "CLOUD_ERR_WALLET_OPERATION": "There was an error performing this iCloud wallet operation. Please try again.",
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "We couldn't find any backed-up wallets in your {cloud: string}. Try again or use your recovery phrase.",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "No wallets available",
+  "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "Transfer a collectible to start building your collection",
+  "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "or buy a collectible from one of our ecosystem apps",
   "COLLECTIONS": "Collections",
   "COLLECTION_NAME": "Collection name",
   "COMMOMN_DAY": "day",

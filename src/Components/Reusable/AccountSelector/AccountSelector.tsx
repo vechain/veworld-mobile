@@ -35,7 +35,7 @@ export const AccountSelector = ({ account, variant = "short", disabled, ...restP
 
     return (
         <BaseTouchable style={[styles.root, disabled ? styles.disabled : styles.enabled]} {...additionalProps}>
-            <AccountIcon address={account.address} size={24} />
+            <AccountIcon account={account} size={24} />
             {variant === "long" && (
                 <BaseText typographyFont="bodyMedium" color={COLORS.GREY_800} testID="ACCOUNT_SELECTOR_TEXT">
                     {vnsName || AddressUtils.humanAddress(vnsAddress || account.address)}

@@ -96,7 +96,7 @@ export const AccountCard: React.FC<Props> = memo(
                     showOpacityWhenDisabled={showOpacityWhenDisabled}
                     containerStyle={[styles.container, selected ? styles.selectedContainer : {}]}>
                     <BaseView flexDirection="row" flex={1} pr={10}>
-                        <AccountIcon address={account.address} />
+                        <AccountIcon account={account} />
                         <BaseSpacer width={12} />
                         <BaseView flex={1}>
                             <BaseText ellipsizeMode="tail" numberOfLines={1}>
