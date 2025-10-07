@@ -8,12 +8,12 @@ import Animated, {
     useSharedValue,
     withTiming,
 } from "react-native-reanimated"
-import { AccountIcon, BaseSkeleton, BaseText, BaseView, LedgerBadge } from "~Components"
+import { AccountIcon, BaseSkeleton, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType, typography, VET, VTHO } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
 import { useSimplifiedTokenBalance } from "~Hooks/useTokenBalance"
 import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
-import { AccountWithDevice, DEVICE_TYPE } from "~Model"
+import { AccountWithDevice } from "~Model"
 import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
 
@@ -156,14 +156,11 @@ export const SelectableAccountCard = memo(
                             <Animated.Text numberOfLines={1} style={textAnimatedStyles}>
                                 {vnsName || account.alias}
                             </Animated.Text>
-                            <BaseView flexDirection="row" gap={8}>
-                                {account?.device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge mr={8} />}
-                                <BaseText
-                                    typographyFont="captionRegular"
-                                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
-                                    {AddressUtils.humanAddress(vnsAddress || account.address)}
-                                </BaseText>
-                            </BaseView>
+                            <BaseText
+                                typographyFont="captionRegular"
+                                color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
+                                {AddressUtils.humanAddress(vnsAddress || account.address)}
+                            </BaseText>
                         </BaseView>
                     </BaseView>
                     <BaseView flexDirection="column">
