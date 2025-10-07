@@ -63,20 +63,15 @@ export const FavouritesV2 = React.memo(
         const showBookmarkedDAppsList = bookmarkedDApps.length > 0
         const theme = useTheme()
 
-        const titleTypography = useMemo(
-            () => (renderCTASeeAll ? "subSubTitleSemiBold" : ("bodySemiBold" as const)),
-            [renderCTASeeAll],
-        )
-
         const titleColor = useMemo(() => {
             if (theme.isDark) return COLORS.GREY_100
-            return renderCTASeeAll ? COLORS.GREY_800 : COLORS.PURPLE
+            return renderCTASeeAll ? COLORS.GREY_800 : COLORS.DARK_PURPLE
         }, [theme.isDark, renderCTASeeAll])
 
         return (
             <BaseView gap={16} flexDirection="column" style={style}>
                 <BaseView flexDirection="row" justifyContent="space-between" px={16} alignItems="center">
-                    <BaseText typographyFont={titleTypography} color={titleColor}>
+                    <BaseText typographyFont="subSubTitleSemiBold" color={titleColor}>
                         {LL.DISCOVER_TAB_FAVOURITES()}
                     </BaseText>
 

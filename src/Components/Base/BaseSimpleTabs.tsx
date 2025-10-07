@@ -62,7 +62,7 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
                             e.persist()
                             onLayout(index)(e)
                         }}>
-                        <BaseText color={textColor} typographyFont="bodySemiBold">
+                        <BaseText color={textColor} typographyFont="subSubTitleSemiBold">
                             {labels[index]}
                         </BaseText>
                     </TouchableOpacity>
@@ -79,6 +79,7 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: COLORS.TRANSPARENT,
             position: "relative",
             borderRadius: 8,
+            gap: 8,
         },
         tab: {
             padding: 8,
@@ -89,7 +90,6 @@ const baseStyles = (theme: ColorThemeType) =>
         indicator: {
             backgroundColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
             pointerEvents: "none",
-            borderRadius: 4,
             position: "absolute",
             height: 2,
             zIndex: -1,

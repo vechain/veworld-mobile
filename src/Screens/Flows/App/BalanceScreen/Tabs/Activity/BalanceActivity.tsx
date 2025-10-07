@@ -87,7 +87,7 @@ export const BalanceActivity = ({ tab }: { tab: BalanceTab }) => {
 
     return (
         <BaseView flexDirection="column" gap={16}>
-            <BaseText typographyFont="subSubTitleSemiBold" color={theme.isDark ? COLORS.GREY_50 : COLORS.DARK_PURPLE}>
+            <BaseText typographyFont="subSubTitleSemiBold" color={theme.isDark ? COLORS.GREY_100 : COLORS.DARK_PURPLE}>
                 {LL.ACTIVITY()}
             </BaseText>
             {isLoading ? (
