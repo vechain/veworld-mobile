@@ -1,6 +1,6 @@
 import React from "react"
-import { useTheme } from "~Hooks"
 import { BaseText, BaseView } from "~Components/Base"
+import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -15,7 +15,10 @@ export const WatchedAccountBadge: React.FC<Props> = ({ mr, bg, textColor }) => {
 
     return (
         <BaseView bg={bg ? bg : theme.colors.text} px={5} py={3.5} borderRadius={6} mr={mr}>
-            <BaseText typographyFont="caption" style={{ color: textColor ? textColor : theme.colors.textReversed }}>
+            <BaseText
+                typographyFont="smallCaption"
+                lineHeight={12}
+                style={{ color: textColor ? textColor : theme.colors.textReversed }}>
                 {LL.BTN_OBSERVED()}
             </BaseText>
         </BaseView>

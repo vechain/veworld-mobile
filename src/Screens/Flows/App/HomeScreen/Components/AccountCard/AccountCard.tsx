@@ -55,7 +55,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                 style={styles.container}>
                 <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                     <BaseView flexDirection="row" alignItems="center" flex={1}>
-                        <AccountIcon account={account} size={45} />
+                        <AccountIcon account={account} size={45} hideLedger />
                         <BaseView px={8} alignItems="flex-start" flex={1}>
                             <BaseText
                                 ellipsizeMode="tail"
