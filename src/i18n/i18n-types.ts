@@ -1753,6 +1753,14 @@ type RootTranslation = {
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: string
 	/**
+	 * T​r​a​n​s​f​e​r​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​t​o​ ​s​t​a​r​t​ ​b​u​i​l​d​i​n​g​ ​y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: string
+	/**
+	 * o​r​ ​b​u​y​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​f​r​o​m​ ​o​n​e​ ​o​f​ ​o​u​r​ ​e​c​o​s​y​s​t​e​m​ ​a​p​p​s
+	 */
+	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
+	/**
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
 	COLLECTIONS: string
@@ -2252,17 +2260,13 @@ type RootTranslation = {
 	 */
 	CONTRACT_DATA: string
 	/**
-	 * C​o​p​y
-	 */
-	COPY: string
-	/**
-	 * S​h​a​r​e
-	 */
-	SHARE: string
-	/**
 	 * C​o​p​i​e​d
 	 */
 	COPIED_QR_CODE_FOR_ACCOUNT: string
+	/**
+	 * C​o​p​y
+	 */
+	COPY: string
 	/**
 	 * C​l​i​c​k​ ​t​o​ ​c​o​p​y​ ​A​B​I
 	 */
@@ -3587,19 +3591,27 @@ type RootTranslation = {
 	/**
 	 * U​s​e​ ​y​o​u​r​ ​Q​R​ ​c​o​d​e​ ​t​o​ ​r​e​c​e​i​v​e​ ​t​r​a​n​s​f​e​r​s
 	 */
-	QR_CODE_DESCRIPTION: string
+	QR_CODE_RECEIVE_DESCRIPTION: string
 	/**
 	 * Y​o​u​r​ ​Q​R​ ​c​o​d​e
 	 */
-	QR_CODE_TITLE: string
+	QR_CODE_RECEIVE_TITLE: string
 	/**
-	 * S​c​a​n
+	 * S​c​a​n​ ​a​ ​c​o​d​e​ ​t​o​ ​t​r​a​n​s​f​e​r​ ​f​u​n​d​s​ ​o​r​ ​c​o​n​n​e​c​t​ ​a​ ​d​A​p​p
 	 */
-	SEND_RECEIVE_TAB_SCAN: string
+	QR_CODE_SCAN_DESCRIPTION: string
 	/**
-	 * R​e​c​e​i​v​e
+	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
 	 */
-	SEND_RECEIVE_TAB_RECEIVE: string
+	QR_CODE_SCAN_TITLE: string
+	/**
+	 * E​n​a​b​l​e​ ​y​o​u​r​ ​c​a​m​e​r​a​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​s​c​a​n​ ​a​ ​Q​R​ ​c​o​d​e
+	 */
+	QR_CODE_CAMERA_PERMS: string
+	/**
+	 * E​n​a​b​l​e​ ​p​e​r​m​i​s​s​i​o​n​s
+	 */
+	QR_CODE_CAMERA_PERMS_CTA: string
 	/**
 	 * R​e​c​a​p
 	 */
@@ -4281,6 +4293,14 @@ type RootTranslation = {
 	 */
 	SEND_RANGE_ZERO: string
 	/**
+	 * R​e​c​e​i​v​e
+	 */
+	SEND_RECEIVE_TAB_RECEIVE: string
+	/**
+	 * S​c​a​n
+	 */
+	SEND_RECEIVE_TAB_SCAN: string
+	/**
 	 * T​o
 	 */
 	SEND_TO: string
@@ -4417,6 +4437,10 @@ type RootTranslation = {
 	 * T​r​a​n​s​a​c​t​i​o​n​s
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: string
+	/**
+	 * S​h​a​r​e
+	 */
+	SHARE: string
 	/**
 	 * D​i​s​c​o​v​e​r​e​d​ ​{​n​a​m​e​}​ ​o​n​ ​V​e​W​o​r​l​d​ ​—​ ​d​e​f​i​n​i​t​e​l​y​ ​w​o​r​t​h​ ​a​ ​l​o​o​k​.​
 ​H​e​r​e​'​s​ ​w​h​a​t​ ​i​t​'​s​ ​a​l​l​ ​a​b​o​u​t​:​
@@ -5241,14 +5265,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * T​r​a​n​s​f​e​r​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​t​o​ ​s​t​a​r​t​ ​b​u​i​l​d​i​n​g​ ​y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n
-	 */
-	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: string
-	/**
-	 * o​r​ ​b​u​y​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​f​r​o​m​ ​o​n​e​ ​o​f​ ​o​u​r​ ​e​c​o​s​y​s​t​e​m​ ​a​p​p​s
-	 */
-	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
 }
 
 export type TranslationFunctions = {
@@ -6954,6 +6970,14 @@ Thanks for your patience!
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: () => LocalizedString
 	/**
+	 * Transfer a collectible to start building your collection
+	 */
+	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: () => LocalizedString
+	/**
+	 * or buy a collectible from one of our ecosystem apps
+	 */
+	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: () => LocalizedString
+	/**
 	 * Collections
 	 */
 	COLLECTIONS: () => LocalizedString
@@ -7446,17 +7470,13 @@ Thanks for your patience!
 	 */
 	CONTRACT_DATA: () => LocalizedString
 	/**
-	 * Copy
-	 */
-	COPY: () => LocalizedString
-	/**
-	 * Share
-	 */
-	SHARE: () => LocalizedString
-	/**
 	 * Copied
 	 */
 	COPIED_QR_CODE_FOR_ACCOUNT: () => LocalizedString
+	/**
+	 * Copy
+	 */
+	COPY: () => LocalizedString
 	/**
 	 * Click to copy ABI
 	 */
@@ -8761,19 +8781,27 @@ Thanks for your patience!
 	/**
 	 * Use your QR code to receive transfers
 	 */
-	QR_CODE_DESCRIPTION: () => LocalizedString
+	QR_CODE_RECEIVE_DESCRIPTION: () => LocalizedString
 	/**
 	 * Your QR code
 	 */
-	QR_CODE_TITLE: () => LocalizedString
+	QR_CODE_RECEIVE_TITLE: () => LocalizedString
 	/**
-	 * Scan
+	 * Scan a code to transfer funds or connect a dApp
 	 */
-	SEND_RECEIVE_TAB_SCAN: () => LocalizedString
+	QR_CODE_SCAN_DESCRIPTION: () => LocalizedString
 	/**
-	 * Receive
+	 * Scan QR Code
 	 */
-	SEND_RECEIVE_TAB_RECEIVE: () => LocalizedString
+	QR_CODE_SCAN_TITLE: () => LocalizedString
+	/**
+	 * Enable your camera permissions to scan a QR code
+	 */
+	QR_CODE_CAMERA_PERMS: () => LocalizedString
+	/**
+	 * Enable permissions
+	 */
+	QR_CODE_CAMERA_PERMS_CTA: () => LocalizedString
 	/**
 	 * Recap
 	 */
@@ -9447,6 +9475,14 @@ Thanks for your patience!
 	 */
 	SEND_RANGE_ZERO: () => LocalizedString
 	/**
+	 * Receive
+	 */
+	SEND_RECEIVE_TAB_RECEIVE: () => LocalizedString
+	/**
+	 * Scan
+	 */
+	SEND_RECEIVE_TAB_SCAN: () => LocalizedString
+	/**
 	 * To
 	 */
 	SEND_TO: () => LocalizedString
@@ -9579,6 +9615,10 @@ Are you sure you want to continue?
 	 * Transactions
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: () => LocalizedString
+	/**
+	 * Share
+	 */
+	SHARE: () => LocalizedString
 	/**
 	 * Discovered {name} on VeWorld — definitely worth a look.
 Here's what it's all about:
@@ -10394,14 +10434,6 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Transfer a collectible to start building your collection
-	 */
-	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: () => LocalizedString
-	/**
-	 * or buy a collectible from one of our ecosystem apps
-	 */
-	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: () => LocalizedString
 }
 
 export type Formatters = {

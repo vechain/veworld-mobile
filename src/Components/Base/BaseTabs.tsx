@@ -15,6 +15,8 @@ type Props<TKeys extends string[] | readonly string[]> = {
     showBorder?: boolean
     indicatorBackgroundColor?: string
     containerBackgroundColor?: string
+    selectedTextColor?: string
+    unselectedTextColor?: string
 }
 
 export const BaseTabs = <TKeys extends string[] | readonly string[]>({
@@ -26,16 +28,18 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
     showBorder = true,
     indicatorBackgroundColor,
     containerBackgroundColor,
+    selectedTextColor,
+    unselectedTextColor,
 }: Props<TKeys>) => {
     const { styles, theme } = useThemedStyles(baseStyles(indicatorBackgroundColor, containerBackgroundColor))
     const [tabOffsets, setTabOffsets] = useState<{ offsetX: number; width: number }[]>([])
     const selectedIndex = useMemo(() => keys.indexOf(selectedKey), [keys, selectedKey])
     const getTextColor = useCallback(
         (isSelected: boolean) => {
-            if (isSelected) return theme.isDark ? COLORS.WHITE : COLORS.GREY_700
-            return theme.isDark ? COLORS.WHITE : COLORS.GREY_600
+            if (isSelected) return selectedTextColor ?? (theme.isDark ? COLORS.WHITE : COLORS.GREY_700)
+            return unselectedTextColor ?? (theme.isDark ? COLORS.WHITE : COLORS.GREY_600)
         },
-        [theme.isDark],
+        [selectedTextColor, theme.isDark, unselectedTextColor],
     )
     const onLayout = useCallback(
         (index: number) => (e: LayoutChangeEvent) => {
