@@ -72,22 +72,12 @@ export const DeviceBox: React.FC<Props> = ({
                         </BaseText>
                         <BaseText typographyFont="captionRegular">{`${deviceAccounts.length} accounts`}</BaseText>
                     </BaseView>
-                    {device?.type === DEVICE_TYPE.LEDGER && (
-                        <>
-                            <LedgerBadge />
-                        </>
-                    )}
+                    {device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
                     {device?.derivationPath === DerivationPath.ETH && (
-                        <>
-                            <BaseIcon name="icon-ethereum" size={20} color={theme.colors.textDisabled} />
-                        </>
+                        <BaseIcon name="icon-ethereum" size={20} color={theme.colors.textDisabled} />
                     )}
 
-                    {device?.type === DEVICE_TYPE.LOCAL_WATCHED && (
-                        <>
-                            <WatchedAccountBadge />
-                        </>
-                    )}
+                    {device?.type === DEVICE_TYPE.LOCAL_WATCHED && <WatchedAccountBadge />}
                 </BaseView>
                 <BaseSpacer width={12} />
 

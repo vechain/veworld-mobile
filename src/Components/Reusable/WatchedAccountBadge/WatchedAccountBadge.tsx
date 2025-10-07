@@ -18,7 +18,7 @@ export const WatchedAccountBadge: React.FC<Props> = ({ mr, bg, textColor }) => {
             <BaseText
                 typographyFont="smallCaption"
                 lineHeight={12}
-                style={{ color: textColor ? textColor : theme.colors.textReversed }}>
+                style={{ color: textColor ?? theme.colors.textReversed }}>
                 {LL.BTN_OBSERVED()}
             </BaseText>
         </BaseView>
