@@ -4,6 +4,7 @@ import { useTheme } from "~Hooks"
 import { Routes } from "~Navigation"
 import { selectCurrentScreen, useAppSelector } from "~Storage/Redux"
 import { computeBarStyle } from "./Helpers/ComputeBarStyle"
+import { COLORS } from "~Constants"
 
 type Props = {
     hero?: boolean
@@ -33,7 +34,7 @@ export const BaseStatusBar = memo((props: Props) => {
         if (!props.root) return props.transparent ? theme.colors.transparent : theme.colors.background
         switch (routeName) {
             case Routes.HOME:
-                return theme.colors.background
+                return COLORS.BALANCE_BACKGROUND
             default:
                 return props.transparent ? theme.colors.transparent : theme.colors.background
         }
