@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
 import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated"
-import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseView } from "~Components"
+import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -16,6 +16,7 @@ import { Staking } from "./Staking"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { useShowStakingTab } from "../Hooks/useShowStakingTab"
 import { useNavigation } from "@react-navigation/native"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 
 const TABS = ["TOKENS", "STAKING"] as const
 
@@ -23,7 +24,7 @@ type Props = {
     onLayout: (e: LayoutChangeEvent) => void
 }
 
-const AnimatedIcon = Animated.createAnimatedComponent(BaseIcon)
+const AnimatedTouchable = Animated.createAnimatedComponent(wrapFunctionComponent(BaseTouchable))
 
 export const TabRenderer = ({ onLayout }: Props) => {
     const { LL } = useI18nContext()
@@ -58,15 +59,17 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const rightIcon = useMemo(() => {
         if (selectedTab === "TOKENS") {
             return (
-                <AnimatedIcon
-                    name="icon-settings-2"
-                    size={20}
+                <AnimatedTouchable
                     style={styles.manageTokens}
-                    color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
                     entering={ZoomIn.duration(100)}
                     exiting={ZoomOut.duration(100)}
-                    onPress={() => nav.navigate(Routes.MANAGE_TOKEN)}
-                />
+                    onPress={() => nav.navigate(Routes.MANAGE_TOKEN)}>
+                    <BaseIcon
+                        name="icon-settings-2"
+                        size={20}
+                        color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
+                    />
+                </AnimatedTouchable>
             )
         }
 
@@ -120,8 +123,9 @@ const baseStyles = (theme: ColorThemeType) =>
             marginLeft: -16,
         },
         manageTokens: {
-            alignSelf: "center",
             paddingHorizontal: 16,
             paddingVertical: 8,
+            justifyContent: "center",
+            alignItems: "center",
         },
     })

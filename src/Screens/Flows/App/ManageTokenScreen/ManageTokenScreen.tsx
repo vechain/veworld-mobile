@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
     BaseSearchInput,
     BaseSpacer,
@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectNonVechainFungibleTokens, selectSelectedAccount, selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { setIsAppLoading, toggleTokenVisibility } from "~Storage/Redux/Slices"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
+import { BigNutils } from "~Utils"
 
 export const ManageTokenScreen = () => {
     const { LL } = useI18nContext()
@@ -47,6 +48,13 @@ export const ManageTokenScreen = () => {
         return tokenBalances.filter(tk => !tk.balance.isHidden).map(tokenWithBalance => tokenWithBalance.symbol)
     }, [tokenBalances])
 
+    const selectableTokens = useCallback(
+        (token: FungibleToken) => {
+            return tokenBalances.some(tk => !BigNutils(tk.balance.balance).isZero && tk.symbol === token.symbol)
+        },
+        [tokenBalances],
+    )
+
     const filteredTokens = useMemo(
         () =>
             tokens.filter(
@@ -60,10 +68,21 @@ export const ManageTokenScreen = () => {
         () => filteredTokens.filter(token => selectedTokenSymbols.includes(token.symbol)),
         [filteredTokens, selectedTokenSymbols],
     )
-    const unselectedTokens = useMemo(
-        () => filteredTokens.filter(token => !selectedTokenSymbols.includes(token.symbol)),
-        [filteredTokens, selectedTokenSymbols],
-    )
+    const unselectedTokens = useMemo(() => {
+        const unselected = filteredTokens.filter(token => !selectedTokenSymbols.includes(token.symbol))
+
+        return unselected.sort((a, b) => {
+            const aIsSelectable = selectableTokens(a)
+            const bIsSelectable = selectableTokens(b)
+
+            // First, prioritize selectable tokens (those with non-zero balance)
+            if (aIsSelectable && !bIsSelectable) return -1
+            if (!aIsSelectable && bIsSelectable) return 1
+
+            // If both have zero balance or same balance, sort alphabetically by symbol
+            return a.symbol.localeCompare(b.symbol)
+        })
+    }, [filteredTokens, selectedTokenSymbols, selectableTokens])
 
     const selectToken = async (token: FungibleToken) => {
         dispatch(
@@ -152,6 +171,7 @@ export const ManageTokenScreen = () => {
                                                 iconSize={26}
                                                 key={token.address}
                                                 token={token}
+                                                disabled={!selectableTokens(token)}
                                                 action={handleClickToken(token)}
                                             />
                                         ))}
