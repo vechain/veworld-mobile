@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.6 (2025-10-07)</small>
+
+* build: init ([7529e88](https://github.com/vechain/veworld-mobile/commit/7529e88))
+* fix(TabRenderer): update labels computation to use filteredTabs for better accuracy (#3376) ([01b3962](https://github.com/vechain/veworld-mobile/commit/01b3962)), closes [#3376](https://github.com/vechain/veworld-mobile/issues/3376)
+
 ## <small>2.4.5 (2025-10-03)</small>
 
 * build: init ([58131c2](https://github.com/vechain/veworld-mobile/commit/58131c2))
