@@ -62,7 +62,7 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
                             e.persist()
                             onLayout(index)(e)
                         }}>
-                        <BaseText color={textColor} typographyFont="bodySemiBold">
+                        <BaseText color={textColor} typographyFont="subSubTitleSemiBold">
                             {labels[index]}
                         </BaseText>
                     </TouchableOpacity>
