@@ -10,6 +10,7 @@ type Props<TKeys extends string[] | readonly string[]> = {
     keys: TKeys
     labels: string[]
     selectedKey: TKeys[number]
+    rightIcon?: React.ReactNode
     setSelectedKey: (key: TKeys[number]) => void
 }
 
@@ -17,6 +18,7 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
     keys,
     labels,
     selectedKey,
+    rightIcon,
     setSelectedKey,
 }: Props<TKeys>) => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -49,26 +51,30 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
     }, [tabOffsets, selectedIndex, keys.length])
     if (keys.length !== labels.length) throw new Error("Keys and Labels should have the same length")
     return (
-        <BaseView style={styles.root} flexDirection="row">
-            {keys.map((key, index) => {
-                const isSelected = selectedKey === key
-                const textColor = getTextColor(isSelected)
-                return (
-                    <TouchableOpacity
-                        key={key}
-                        style={styles.tab}
-                        onPress={() => setSelectedKey(key)}
-                        onLayout={e => {
-                            e.persist()
-                            onLayout(index)(e)
-                        }}>
-                        <BaseText color={textColor} typographyFont="bodySemiBold">
-                            {labels[index]}
-                        </BaseText>
-                    </TouchableOpacity>
-                )
-            })}
-            <Animated.View style={[indicatorStyles, styles.indicator]} />
+        <BaseView style={styles.root} flexDirection="row" justifyContent="space-between">
+            <BaseView flexDirection="row">
+                {keys.map((key, index) => {
+                    const isSelected = selectedKey === key
+                    const textColor = getTextColor(isSelected)
+                    return (
+                        <TouchableOpacity
+                            key={key}
+                            style={styles.tab}
+                            onPress={() => setSelectedKey(key)}
+                            onLayout={e => {
+                                e.persist()
+                                onLayout(index)(e)
+                            }}>
+                            <BaseText color={textColor} typographyFont="bodySemiBold">
+                                {labels[index]}
+                            </BaseText>
+                        </TouchableOpacity>
+                    )
+                })}
+                <Animated.View style={[indicatorStyles, styles.indicator]} />
+            </BaseView>
+
+            {rightIcon}
         </BaseView>
     )
 }
