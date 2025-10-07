@@ -9,6 +9,9 @@ jest.mock("~Networking", () => ({
 }))
 
 describe("useUserHasVetTransfer", () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
     it("should return true if the user has a vet transfer", async () => {
         ;(fetchIndexedHistoryEvent as jest.Mock).mockResolvedValue({
             data: [

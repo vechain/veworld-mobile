@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
 import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated"
 import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
+import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -17,8 +18,9 @@ import { useNavigation } from "@react-navigation/native"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { Staking } from "./Staking"
 import { Tokens } from "./Tokens"
+import { Collectibles } from "./Collectibles"
 
-const TABS = ["TOKENS", "STAKING"] as const
+const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
 
 type Props = {
     onLayout: (e: LayoutChangeEvent) => void
@@ -36,16 +38,20 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const { tabBarBottomMargin } = useTabBarBottomMargin()
     const showStakingTab = useShowStakingTab()
     const nav = useNavigation()
+    const { betterWorldFeature } = useFeatureFlags()
 
     const filteredTabs = useMemo(() => {
         return TABS.filter(tab => {
             if (tab === "STAKING") {
                 return showStakingTab
             }
+            if (tab === "COLLECTIBLES") {
+                return betterWorldFeature.balanceScreen?.collectibles?.enabled
+            }
 
             return true
         }) as (typeof TABS)[number][]
-    }, [showStakingTab])
+    }, [showStakingTab, betterWorldFeature.balanceScreen?.collectibles?.enabled])
 
     const showFavorites = useMemo(() => {
         return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount)
@@ -101,7 +107,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
             <BaseView flexDirection="column" flex={1} pb={paddingBottom} px={24}>
                 {selectedTab === "TOKENS" && <Tokens />}
                 {selectedTab === "STAKING" && <Staking />}
-                {/* {selectedTab === "COLLECTIBLES" && <></>} */}
+                {selectedTab === "COLLECTIBLES" && <Collectibles />}
             </BaseView>
         </Animated.View>
     )

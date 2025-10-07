@@ -103,15 +103,17 @@ export const TabStack = () => {
                 }}
             />
 
-            <Tab.Screen
-                name="NFTStack"
-                component={NFTStack}
-                options={{
-                    tabBarLabel: "NFT",
-                    tabBarTestID: "nft-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image", LL.TAB_TITLE_NFT()),
-                }}
-            />
+            {!betterWorldFeature?.balanceScreen?.collectibles?.enabled && (
+                <Tab.Screen
+                    name="NFTStack"
+                    component={NFTStack}
+                    options={{
+                        tabBarLabel: "NFT",
+                        tabBarTestID: "nft-tab",
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image", LL.TAB_TITLE_NFT()),
+                    }}
+                />
+            )}
 
             {!AccountUtils.isObservedAccount(selectedAccount) &&
                 (betterWorldFeature?.appsScreen?.enabled ? (

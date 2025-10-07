@@ -121,10 +121,6 @@ type RootTranslation = {
 	 */
 	ACTIVITY: string
 	/**
-	 * S​e​e​ ​a​l​l
-	 */
-	ACTIVITY_SEE_ALL: string
-	/**
 	 * N​o​ ​A​c​t​i​v​i​t​i​e​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: string
@@ -176,6 +172,10 @@ type RootTranslation = {
 	 * O​t​h​e​r
 	 */
 	ACTIVITY_OTHER_LABEL: string
+	/**
+	 * S​e​e​ ​a​l​l
+	 */
+	ACTIVITY_SEE_ALL: string
 	/**
 	 * S​t​a​r​t​ ​e​a​r​n​i​n​g
 	 */
@@ -1760,6 +1760,10 @@ type RootTranslation = {
 	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
 	 */
 	COLLECTION_NAME: string
+	/**
+	 * d​a​y
+	 */
+	COMMOMN_DAY: string
 	/**
 	 * 2​4​ ​H​R​s
 	 */
@@ -4492,6 +4496,30 @@ type RootTranslation = {
 	 */
 	STARGATE_REWARDS: string
 	/**
+	 * S​t​a​r​t​ ​s​t​a​k​i​n​g
+	 */
+	STARGATE_START_STAKING: string
+	/**
+	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​*​*​ ​t​o​k​e​n​s
+	 */
+	STARGATE_STAT_DESCRIPTION: string
+	/**
+	 * R​e​w​a​r​d​s​ ​d​i​s​t​r​i​b​u​t​e​d
+	 */
+	STARGATE_STAT_REWARDS_DISTRIBUTED: string
+	/**
+	 * R​e​w​a​r​d​s​ ​g​e​n​e​r​a​t​i​o​n
+	 */
+	STARGATE_STAT_REWARDS_GENERATION: string
+	/**
+	 * T​o​t​a​l​ ​s​t​a​k​e​d
+	 */
+	STARGATE_STAT_TOTAL_STAKED: string
+	/**
+	 * T​o​t​a​l​ ​s​u​p​p​l​y
+	 */
+	STARGATE_STAT_TOTAL_SUPPLY: string
+	/**
 	 * S​t​a​t​u​s
 	 */
 	STATUS: string
@@ -5190,33 +5218,13 @@ type RootTranslation = {
 	 */
 	YESTERDAY: string
 	/**
-	 * T​o​t​a​l​ ​s​u​p​p​l​y
+	 * T​r​a​n​s​f​e​r​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​t​o​ ​s​t​a​r​t​ ​b​u​i​l​d​i​n​g​ ​y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n
 	 */
-	STARGATE_STAT_TOTAL_SUPPLY: string
+	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: string
 	/**
-	 * T​o​t​a​l​ ​s​t​a​k​e​d
+	 * o​r​ ​b​u​y​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​f​r​o​m​ ​o​n​e​ ​o​f​ ​o​u​r​ ​e​c​o​s​y​s​t​e​m​ ​a​p​p​s
 	 */
-	STARGATE_STAT_TOTAL_STAKED: string
-	/**
-	 * R​e​w​a​r​d​s​ ​g​e​n​e​r​a​t​i​o​n
-	 */
-	STARGATE_STAT_REWARDS_GENERATION: string
-	/**
-	 * R​e​w​a​r​d​s​ ​d​i​s​t​r​i​b​u​t​e​d
-	 */
-	STARGATE_STAT_REWARDS_DISTRIBUTED: string
-	/**
-	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​*​*​ ​t​o​k​e​n​s
-	 */
-	STARGATE_STAT_DESCRIPTION: string
-	/**
-	 * S​t​a​r​t​ ​s​t​a​k​i​n​g
-	 */
-	STARGATE_START_STAKING: string
-	/**
-	 * d​a​y
-	 */
-	COMMOMN_DAY: string
+	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
 }
 
 export type TranslationFunctions = {
@@ -5303,10 +5311,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY: () => LocalizedString
 	/**
-	 * See all
-	 */
-	ACTIVITY_SEE_ALL: () => LocalizedString
-	/**
 	 * No Activities to show yet
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: () => LocalizedString
@@ -5358,6 +5362,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Other
 	 */
 	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
+	 * See all
+	 */
+	ACTIVITY_SEE_ALL: () => LocalizedString
 	/**
 	 * Start earning
 	 */
@@ -6929,6 +6937,10 @@ Thanks for your patience!
 	 * Collection name
 	 */
 	COLLECTION_NAME: () => LocalizedString
+	/**
+	 * day
+	 */
+	COMMOMN_DAY: () => LocalizedString
 	/**
 	 * 24 HRs
 	 */
@@ -9619,6 +9631,30 @@ Here's what it's all about:
 	 */
 	STARGATE_REWARDS: () => LocalizedString
 	/**
+	 * Start staking
+	 */
+	STARGATE_START_STAKING: () => LocalizedString
+	/**
+	 * Get **VTHO** by staking your **VET** tokens
+	 */
+	STARGATE_STAT_DESCRIPTION: () => LocalizedString
+	/**
+	 * Rewards distributed
+	 */
+	STARGATE_STAT_REWARDS_DISTRIBUTED: () => LocalizedString
+	/**
+	 * Rewards generation
+	 */
+	STARGATE_STAT_REWARDS_GENERATION: () => LocalizedString
+	/**
+	 * Total staked
+	 */
+	STARGATE_STAT_TOTAL_STAKED: () => LocalizedString
+	/**
+	 * Total supply
+	 */
+	STARGATE_STAT_TOTAL_SUPPLY: () => LocalizedString
+	/**
 	 * Status
 	 */
 	STATUS: () => LocalizedString
@@ -10311,33 +10347,13 @@ Here's what it's all about:
 	 */
 	YESTERDAY: () => LocalizedString
 	/**
-	 * Total supply
+	 * Transfer a collectible to start building your collection
 	 */
-	STARGATE_STAT_TOTAL_SUPPLY: () => LocalizedString
+	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: () => LocalizedString
 	/**
-	 * Total staked
+	 * or buy a collectible from one of our ecosystem apps
 	 */
-	STARGATE_STAT_TOTAL_STAKED: () => LocalizedString
-	/**
-	 * Rewards generation
-	 */
-	STARGATE_STAT_REWARDS_GENERATION: () => LocalizedString
-	/**
-	 * Rewards distributed
-	 */
-	STARGATE_STAT_REWARDS_DISTRIBUTED: () => LocalizedString
-	/**
-	 * Get **VTHO** by staking your **VET** tokens
-	 */
-	STARGATE_STAT_DESCRIPTION: () => LocalizedString
-	/**
-	 * Start staking
-	 */
-	STARGATE_START_STAKING: () => LocalizedString
-	/**
-	 * day
-	 */
-	COMMOMN_DAY: () => LocalizedString
+	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: () => LocalizedString
 }
 
 export type Formatters = {
