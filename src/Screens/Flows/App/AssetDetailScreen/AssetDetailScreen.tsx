@@ -88,11 +88,12 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             isObserved={isObserved}
                             convertB3trBottomSheetRef={convertB3trBsRef}
                         />
+                        <BaseSpacer height={16} />
 
                         {token.symbol === B3TR.symbol && (
                             <BaseView w={100}>
-                                <BaseSpacer height={16} />
                                 <AlertInline status="info" variant="inline" message={LL.ALERT_MSG_VOT3_BALANCE()} />
+                                <BaseSpacer height={16} />
                             </BaseView>
                         )}
 
