@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
@@ -14,13 +14,34 @@ import { useBalanceActivities } from "../../Hooks/useBalanceActivities"
 import { BalanceTab } from "../types"
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />
-const ListFooterComponent = () => {
+const ListFooterComponent = ({ tab }: { tab: BalanceTab }) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(footerStyles)
+
+    const tabRoute = useMemo(() => {
+        if (tab === "TOKENS") {
+            return Routes.ACTIVITY_B3TR
+        }
+        if (tab === "STAKING") {
+            return Routes.ACTIVITY_STAKING
+        }
+        if (tab === "COLLECTIBLES") {
+            return Routes.ACTIVITY_NFT
+        }
+
+        return Routes.ACTIVITY_ALL
+    }, [tab])
+
     const onNavigate = useCallback(() => {
-        nav.navigate(Routes.HISTORY_STACK, { screen: Routes.HISTORY })
-    }, [nav])
+        nav.navigate(Routes.HISTORY_STACK, {
+            screen: Routes.HISTORY,
+            params: {
+                screen: tabRoute,
+            },
+        })
+    }, [nav, tabRoute])
+
     return (
         <BaseButton
             variant="ghost"
@@ -87,7 +108,7 @@ export const BalanceActivity = ({ tab }: { tab: BalanceTab }) => {
 
     return (
         <BaseView flexDirection="column" gap={16}>
-            <BaseText typographyFont="subSubTitleSemiBold" color={theme.isDark ? COLORS.GREY_50 : COLORS.DARK_PURPLE}>
+            <BaseText typographyFont="subSubTitleSemiBold" color={theme.isDark ? COLORS.GREY_100 : COLORS.DARK_PURPLE}>
                 {LL.ACTIVITY()}
             </BaseText>
             {isLoading ? (
@@ -103,7 +124,7 @@ export const BalanceActivity = ({ tab }: { tab: BalanceTab }) => {
                     data={data ?? []}
                     ItemSeparatorComponent={ItemSeparatorComponent}
                     keyExtractor={item => item.id}
-                    ListFooterComponent={ListFooterComponent}
+                    ListFooterComponent={<ListFooterComponent tab={tab} />}
                 />
             )}
         </BaseView>

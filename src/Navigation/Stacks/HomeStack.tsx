@@ -83,7 +83,19 @@ export type RootStackParamListHome = {
         initialRoute?: Routes.HOME | Routes.NFTS
     }
     [Routes.SWAP]: undefined
-    [Routes.HISTORY]: undefined
+    [Routes.HISTORY]:
+        | {
+              screen?:
+                  | Routes.ACTIVITY_ALL
+                  | Routes.ACTIVITY_B3TR
+                  | Routes.ACTIVITY_TRANSFER
+                  | Routes.ACTIVITY_STAKING
+                  | Routes.ACTIVITY_SWAP
+                  | Routes.ACTIVITY_NFT
+                  | Routes.ACTIVITY_DAPPS
+                  | Routes.ACTIVITY_OTHER
+          }
+        | undefined
     [Routes.MANAGE_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }

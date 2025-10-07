@@ -9,14 +9,14 @@ import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux/Hooks"
 import { selectBookmarkedDapps, selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { AccountUtils } from "~Utils"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
-import { Tokens } from "./Tokens"
-import { Staking } from "./Staking"
-import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { useShowStakingTab } from "../Hooks/useShowStakingTab"
 import { useNavigation } from "@react-navigation/native"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
+import { Staking } from "./Staking"
+import { Tokens } from "./Tokens"
 
 const TABS = ["TOKENS", "STAKING"] as const
 
@@ -84,7 +84,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                         bookmarkedDApps={bookmarkedDApps}
                         onDAppPress={onDAppPress}
                         renderCTASeeAll={false}
-                        style={styles.favorites}
+                        padding={24}
                         iconBg={theme.isDark ? COLORS.DARK_PURPLE : undefined}
                     />
                     <BaseSpacer height={24} />
@@ -95,9 +95,10 @@ export const TabRenderer = ({ onLayout }: Props) => {
                 labels={labels}
                 selectedKey={selectedTab}
                 setSelectedKey={setSelectedTab}
+                rootStyle={styles.tabs}
                 rightIcon={rightIcon}
             />
-            <BaseView flexDirection="column" flex={1} pb={paddingBottom}>
+            <BaseView flexDirection="column" flex={1} pb={paddingBottom} px={24}>
                 {selectedTab === "TOKENS" && <Tokens />}
                 {selectedTab === "STAKING" && <Staking />}
                 {/* {selectedTab === "COLLECTIBLES" && <></>} */}
@@ -110,17 +111,16 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
             marginTop: -24,
-            paddingBottom: 24,
+            paddingTop: 24,
             backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.LIGHT_GRAY,
-            padding: 16,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
             flex: 1,
             gap: 16,
             flexDirection: "column",
         },
-        favorites: {
-            marginLeft: -16,
+        tabs: {
+            marginHorizontal: 24,
         },
         manageTokens: {
             paddingHorizontal: 16,
