@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from "react"
 import { FlatList, ListRenderItemInfo, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { COLORS, DiscoveryDApp } from "~Constants"
-import { useTheme } from "~Hooks"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DAppCardV2 } from "./DAppCardV2"
 
@@ -13,12 +13,17 @@ type BookmarkListProps = {
      * Icon background for the dapp card
      */
     iconBg?: string
+    /**
+     * Padding from the left.
+     * @default 16
+     */
+    padding?: number
 }
 
 const ItemSeparatorComponent = () => <BaseSpacer width={8} />
-const FooterComponent = () => <BaseSpacer width={16} />
 
-const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress, iconBg }: BookmarkListProps) => {
+const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress, iconBg, padding }: BookmarkListProps) => {
+    const { styles } = useThemedStyles(baseStyles({ padding }))
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
             return (
@@ -33,6 +38,8 @@ const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress, iconBg }: BookmarkL
         },
         [iconBg, onDAppPress],
     )
+
+    const FooterComponent = useCallback(() => <BaseSpacer width={padding} />, [padding])
 
     return (
         <FlatList
@@ -55,10 +62,18 @@ type FavouritesProps = {
     onActionLabelPress?: () => void
     renderCTASeeAll?: boolean
     style?: StyleProp<ViewStyle>
-} & Pick<BookmarkListProps, "iconBg">
+} & Pick<BookmarkListProps, "iconBg" | "padding">
 
 export const FavouritesV2 = React.memo(
-    ({ bookmarkedDApps, onActionLabelPress, onDAppPress, renderCTASeeAll = true, style, iconBg }: FavouritesProps) => {
+    ({
+        bookmarkedDApps,
+        onActionLabelPress,
+        onDAppPress,
+        renderCTASeeAll = true,
+        style,
+        iconBg,
+        padding = 16,
+    }: FavouritesProps) => {
         const { LL } = useI18nContext()
         const showBookmarkedDAppsList = bookmarkedDApps.length > 0
         const theme = useTheme()
@@ -75,7 +90,7 @@ export const FavouritesV2 = React.memo(
 
         return (
             <BaseView gap={16} flexDirection="column" style={style}>
-                <BaseView flexDirection="row" justifyContent="space-between" px={16} alignItems="center">
+                <BaseView flexDirection="row" justifyContent="space-between" px={padding} alignItems="center">
                     <BaseText typographyFont={titleTypography} color={titleColor}>
                         {LL.DISCOVER_TAB_FAVOURITES()}
                     </BaseText>
@@ -106,6 +121,7 @@ export const FavouritesV2 = React.memo(
                         bookmarkedDApps={renderCTASeeAll ? bookmarkedDApps.slice(0, 15) : bookmarkedDApps}
                         onDAppPress={onDAppPress}
                         iconBg={iconBg}
+                        padding={padding}
                     />
                 )}
             </BaseView>
@@ -113,8 +129,11 @@ export const FavouritesV2 = React.memo(
     },
 )
 
-const styles = StyleSheet.create({
-    flatListContainer: {
-        paddingLeft: 16,
-    },
-})
+const baseStyles =
+    ({ padding }: Pick<FavouritesProps, "padding">) =>
+    () =>
+        StyleSheet.create({
+            flatListContainer: {
+                paddingLeft: padding,
+            },
+        })
