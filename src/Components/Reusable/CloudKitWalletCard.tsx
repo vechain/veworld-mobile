@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components/Base"
@@ -65,6 +65,8 @@ export const CloudKitWalletCard = ({
         setCreationDate(date)
     }, [locale, wallet.creationDate])
 
+    const iconWallet = useMemo(() => ({ address: wallet.firstAccountAddress }), [wallet.firstAccountAddress])
+
     return (
         <BaseView w={100} flexDirection="row">
             <BaseTouchableBox
@@ -76,7 +78,7 @@ export const CloudKitWalletCard = ({
                     selected?.rootAddress === wallet.rootAddress ? styles.selectedContainer : {},
                 ]}>
                 <BaseView flexDirection="row" pr={10} alignItems="center">
-                    <AccountIcon address={wallet.firstAccountAddress} />
+                    <AccountIcon account={iconWallet} />
                     <BaseSpacer width={12} />
 
                     <BaseView justifyContent="space-between">

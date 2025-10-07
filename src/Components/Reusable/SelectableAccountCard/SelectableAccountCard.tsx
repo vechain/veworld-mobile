@@ -151,7 +151,7 @@ export const SelectableAccountCard = memo(
                     style={[styles.container, rootAnimatedStyles, containerStyle]}
                     accessibilityValue={{ text: selected ? "selected" : "not selected" }}>
                     <BaseView flexDirection="row" gap={12} alignItems="center" flex={1}>
-                        <AccountIcon address={account.address} size={40} />
+                        <AccountIcon account={account} size={40} />
                         <BaseView flexDirection="column" gap={4}>
                             <Animated.Text numberOfLines={1} style={textAnimatedStyles}>
                                 {vnsName || account.alias}

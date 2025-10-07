@@ -24,6 +24,7 @@ import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
 import { addBookmark, removeBookmark, useAppDispatch } from "~Storage/Redux"
 import { BigNutils, DateUtils } from "~Utils"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
+import { Routes } from "~Navigation"
 
 export type VbdCarouselBottomSheetMetadata = {
     bannerUri?: string
@@ -90,7 +91,7 @@ const VbdCarouselBottomSheetContent = ({
     const { styles } = useThemedStyles(baseStyles)
 
     const dispatch = useAppDispatch()
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.APPS)
     const { data: appOverview, isLoading } = useAppOverview(app.id)
 
     const { isBookMarked } = useDappBookmarking(app?.external_url, app.name)

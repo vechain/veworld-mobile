@@ -1,14 +1,14 @@
 import React, { memo, useCallback, useMemo } from "react"
-import { ViewProps, StyleSheet } from "react-native"
+import { StyleSheet, ViewProps } from "react-native"
+import { AccountIcon, BaseSpacer, BaseText, BaseView, LedgerBadge, WatchedAccountBadge } from "~Components"
 import { CURRENCY, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { AccountUtils } from "~Utils"
-import { AccountIcon, BaseSpacer, BaseText, BaseView, LedgerBadge, WatchedAccountBadge } from "~Components"
 import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
 import { useAppDispatch } from "~Storage/Redux"
 import { setBalanceVisible } from "~Storage/Redux/Actions"
-import { Balance } from "./Balance"
+import { AccountUtils } from "~Utils"
 import { AccountAddressButtonPill } from "./AccountAddressButtonPill"
+import { Balance } from "./Balance"
 
 interface Props extends ViewProps {
     account: AccountWithDevice
@@ -55,7 +55,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                 style={styles.container}>
                 <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                     <BaseView flexDirection="row" alignItems="center" flex={1}>
-                        <AccountIcon address={account.address} size={45} />
+                        <AccountIcon account={account} size={45} />
                         <BaseView px={8} alignItems="flex-start" flex={1}>
                             <BaseText
                                 ellipsizeMode="tail"

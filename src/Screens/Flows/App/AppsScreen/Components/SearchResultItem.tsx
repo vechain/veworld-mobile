@@ -9,6 +9,7 @@ import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { DAppUtils } from "~Utils"
 import { HistoryItem, HistoryUrlKind } from "~Utils/HistoryUtils"
 import { useDAppActions } from "../Hooks"
+import { Routes } from "~Navigation"
 
 type Props = {
     item: HistoryItem
@@ -19,7 +20,7 @@ const IMAGE_SIZE = 48
 
 export const SearchResultItem = ({ item, swipeableItemRefs }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.APPS)
     const { navigateWithTab } = useBrowserTab()
     const fetchDynamicAppLogo = useDynamicAppLogo({ size: IMAGE_SIZE })
     const { removeVisitedUrl } = useVisitedUrls()
