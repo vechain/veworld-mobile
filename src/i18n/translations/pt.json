@@ -422,7 +422,7 @@
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "Não conseguimos encontrar nenhuma carteira em backup no seu {cloud: string}. Tente novamente ou use sua frase de recuperação.",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "Nenhuma carteira disponível",
   "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "Transfira um colecionável para começar a construir sua coleção",
-  "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "ou compre um colecionável de um dos nossos apps do ecossistema",
+  "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "ou compre um colecionável em um dos nossos aplicativos do ecossistema",
   "COLLECTIONS": "Coleções",
   "COLLECTION_NAME": "Nome da coleção",
   "COMMOMN_DAY": "dia",

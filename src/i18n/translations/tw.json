@@ -422,7 +422,7 @@
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "我們無法在您的 {cloud: string} 中找到任何備份的錢包。請再試一次或使用您的恢復短語。",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "沒有可用錢包",
   "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "轉移收藏品以開始建立您的收藏",
-  "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "或從我們的生態系統應用程序之一購買收藏品",
+  "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "或從我們的生態系統應用程式中購買收藏品",
   "COLLECTIONS": "收藏",
   "COLLECTION_NAME": "收藏名稱",
   "COMMOMN_DAY": "天",
