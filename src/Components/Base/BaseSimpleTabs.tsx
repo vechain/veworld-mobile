@@ -79,6 +79,7 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: COLORS.TRANSPARENT,
             position: "relative",
             borderRadius: 8,
+            gap: 8,
         },
         tab: {
             padding: 8,
@@ -89,7 +90,6 @@ const baseStyles = (theme: ColorThemeType) =>
         indicator: {
             backgroundColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
             pointerEvents: "none",
-            borderRadius: 4,
             position: "absolute",
             height: 2,
             zIndex: -1,
