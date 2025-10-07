@@ -6,7 +6,7 @@ import Animated from "react-native-reanimated"
 import { BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { BaseIcon } from "~Components/Base/BaseIcon"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
-import { COLORS, ColorThemeType } from "~Constants"
+import { COLORS } from "~Constants"
 import { useBottomSheetModal, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
@@ -166,13 +166,13 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
         </>
     )
 }
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
         animatedContainer: {
             opacity: 1,
             alignItems: "center",
             flexDirection: "row",
-            backgroundColor: theme.colors.background,
+            backgroundColor: COLORS.BALANCE_BACKGROUND,
             paddingVertical: 8,
         },
         inputContainer: {
