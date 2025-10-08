@@ -624,6 +624,10 @@ type RootTranslation = {
 	 */
 	BALANCE_TAB_COLLECTIBLES: string
 	/**
+	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​t​o​k​e​n​s​ ​y​e​t
+	 */
+	BALANCE_TAB_NO_TOKENS: string
+	/**
 	 * S​t​a​k​i​n​g
 	 */
 	BALANCE_TAB_STAKING: string
@@ -4923,13 +4927,37 @@ type RootTranslation = {
 	 */
 	TODAY: string
 	/**
+	 * B​u​y​ ​t​o​k​e​n
+	 */
+	TOKEN_BUY: string
+	/**
+	 * A​d​d​ ​b​a​l​a​n​c​e​ ​b​u​y​i​n​g​ ​w​i​t​h​ ​f​i​a​t
+	 */
+	TOKEN_BUY_SUBTITLE: string
+	/**
 	 * T​o​k​e​n​ ​C​o​n​v​e​r​s​i​o​n
 	 */
 	TOKEN_CONVERSION: string
 	/**
+	 * C​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	TOKEN_CUSTOM: string
+	/**
+	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​t​o​k​e​n​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 */
+	TOKEN_CUSTOM_SUBTITLE: string
+	/**
 	 * T​o​k​e​n​ ​I​D
 	 */
 	TOKEN_ID: string
+	/**
+	 * R​e​c​e​i​v​e​ ​t​o​k​e​n
+	 */
+	TOKEN_RECEIVE: string
+	/**
+	 * U​s​e​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​r​e​c​e​i​v​e
+	 */
+	TOKEN_RECEIVE_SUBTITLE: string
 	/**
 	 * T​o​k​e​n​ ​s​y​m​b​o​l
 	 */
@@ -4996,6 +5024,22 @@ type RootTranslation = {
 	 */
 	VALUE_TITLE: string
 	/**
+	 * c​o​n​t​r​i​b​u​t​e​ ​t​o​ ​t​h​e​ ​o​f​f​s​e​t
+	 */
+	VBD_CONTRIBUTE_OFFSET: string
+	/**
+	 * g​e​t​ ​r​e​w​a​r​d​e​d​ ​f​o​r​ ​y​o​u​r​ ​a​c​t​i​o​n​s​ ​a​n​d
+	 */
+	VBD_GET_REWARDED: string
+	/**
+	 * J​o​i​n​ ​t​h​e
+	 */
+	VBD_JOIN_THE: string
+	/**
+	 * m​o​v​e​m​e​n​t
+	 */
+	VBD_MOVEMENT: string
+	/**
 	 * R​e​w​a​r​d​s​ ​e​a​r​n​e​d
 	 */
 	VBD_REWARDS_EARNED: string
@@ -5003,6 +5047,10 @@ type RootTranslation = {
 	 * S​e​e​ ​V​e​B​e​t​t​e​r​ ​p​r​o​f​i​l​e
 	 */
 	VBD_SEE_PROFILE: string
+	/**
+	 * S​t​a​r​t​ ​y​o​u​r​ ​i​m​p​a​c​t
+	 */
+	VBD_START_YOUR_IMPACT: string
 	/**
 	 * A​v​o​i​d​e​d
 	 */
@@ -5039,6 +5087,14 @@ type RootTranslation = {
 	 * W​a​t​e​r
 	 */
 	VBD_STAT_WATER: string
+	/**
+	 * T​o​t​a​l​ ​B​e​t​t​e​r​ ​a​c​t​i​o​n​s
+	 */
+	VBD_TOTAL_ACTIONS: string
+	/**
+	 * T​o​t​a​l​ ​B​3​T​R​ ​r​e​w​a​r​d​e​d
+	 */
+	VBD_TOTAL_REWARDED: string
 	/**
 	 * Y​o​u​r​ ​B​e​t​t​e​r​ ​A​c​t​i​o​n​s
 	 */
@@ -5847,6 +5903,10 @@ Try reconnect your device to the internet.
 	 * Collectibles
 	 */
 	BALANCE_TAB_COLLECTIBLES: () => LocalizedString
+	/**
+	 * You don't have any tokens yet
+	 */
+	BALANCE_TAB_NO_TOKENS: () => LocalizedString
 	/**
 	 * Staking
 	 */
@@ -10095,13 +10155,37 @@ Here's what it's all about:
 	 */
 	TODAY: () => LocalizedString
 	/**
+	 * Buy token
+	 */
+	TOKEN_BUY: () => LocalizedString
+	/**
+	 * Add balance buying with fiat
+	 */
+	TOKEN_BUY_SUBTITLE: () => LocalizedString
+	/**
 	 * Token Conversion
 	 */
 	TOKEN_CONVERSION: () => LocalizedString
 	/**
+	 * Custom token
+	 */
+	TOKEN_CUSTOM: () => LocalizedString
+	/**
+	 * Add a custom token to your wallet
+	 */
+	TOKEN_CUSTOM_SUBTITLE: () => LocalizedString
+	/**
 	 * Token ID
 	 */
 	TOKEN_ID: () => LocalizedString
+	/**
+	 * Receive token
+	 */
+	TOKEN_RECEIVE: () => LocalizedString
+	/**
+	 * Use your wallet address to receive
+	 */
+	TOKEN_RECEIVE_SUBTITLE: () => LocalizedString
 	/**
 	 * Token symbol
 	 */
@@ -10167,6 +10251,22 @@ Here's what it's all about:
 	 */
 	VALUE_TITLE: () => LocalizedString
 	/**
+	 * contribute to the offset
+	 */
+	VBD_CONTRIBUTE_OFFSET: () => LocalizedString
+	/**
+	 * get rewarded for your actions and
+	 */
+	VBD_GET_REWARDED: () => LocalizedString
+	/**
+	 * Join the
+	 */
+	VBD_JOIN_THE: () => LocalizedString
+	/**
+	 * movement
+	 */
+	VBD_MOVEMENT: () => LocalizedString
+	/**
 	 * Rewards earned
 	 */
 	VBD_REWARDS_EARNED: () => LocalizedString
@@ -10174,6 +10274,10 @@ Here's what it's all about:
 	 * See VeBetter profile
 	 */
 	VBD_SEE_PROFILE: () => LocalizedString
+	/**
+	 * Start your impact
+	 */
+	VBD_START_YOUR_IMPACT: () => LocalizedString
 	/**
 	 * Avoided
 	 */
@@ -10210,6 +10314,14 @@ Here's what it's all about:
 	 * Water
 	 */
 	VBD_STAT_WATER: () => LocalizedString
+	/**
+	 * Total Better actions
+	 */
+	VBD_TOTAL_ACTIONS: () => LocalizedString
+	/**
+	 * Total B3TR rewarded
+	 */
+	VBD_TOTAL_REWARDED: () => LocalizedString
 	/**
 	 * Your Better Actions
 	 */

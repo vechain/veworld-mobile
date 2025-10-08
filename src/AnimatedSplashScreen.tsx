@@ -131,12 +131,10 @@ const baseStyles = (theme: ColorThemeType) =>
             left: 0,
             right: 0,
             bottom: 0,
-            //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
             backgroundColor: theme.colors.splashBackground,
         },
         containerFadeOut: {
             flex: 1,
-            //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
             backgroundColor: theme.colors.background,
         },
         innerContainer: {
@@ -148,7 +146,6 @@ const baseStyles = (theme: ColorThemeType) =>
             justifyContent: "center",
         },
         colorLayer: {
-            //TODO: Use themed background color instead (https://github.com/vechainfoundation/veworld-mobile/issues/1335)
             backgroundColor: theme.colors.splashColorLayer,
         },
         whiteLayer: { backgroundColor: COLORS.WHITE },

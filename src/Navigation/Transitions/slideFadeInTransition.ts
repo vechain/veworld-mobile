@@ -31,7 +31,7 @@ export const slideFadeInTransition: StackCardStyleInterpolator = ({
 
     const backgroundColor = current.progress.interpolate({
         inputRange: [0, 0.5, 1],
-        outputRange: [COLORS.TRANSPARENT, COLORS.DARK_PURPLE, COLORS.DARK_PURPLE],
+        outputRange: [COLORS.TRANSPARENT, COLORS.APP_BACKGROUND_DARK, COLORS.APP_BACKGROUND_DARK],
         extrapolate: "clamp",
     })
 

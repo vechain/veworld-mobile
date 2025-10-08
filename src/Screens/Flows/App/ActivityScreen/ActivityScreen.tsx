@@ -1,16 +1,13 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import React from "react"
 import {
-    BaseSpacer,
     BaseView,
     ChangeAccountButtonPill,
     HeaderStyleV2,
     HeaderTitle,
     Layout,
     SelectAccountBottomSheet,
-    SelectedNetworkViewer,
 } from "~Components"
-import { NetworkSwitcherContextMenu } from "~Components/Reusable/ContextMenu"
 import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
@@ -57,13 +54,7 @@ export const ActivityScreen = () => {
             fixedHeader={
                 <BaseView style={HeaderStyleV2}>
                     <HeaderTitle title={LL.BTN_HISTORY()} leftIconName="icon-history" />
-                    <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
-                        <NetworkSwitcherContextMenu>
-                            <SelectedNetworkViewer />
-                        </NetworkSwitcherContextMenu>
-                        <BaseSpacer width={8} />
-                        <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
-                    </BaseView>
+                    <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
                 </BaseView>
             }
             fixedBody={

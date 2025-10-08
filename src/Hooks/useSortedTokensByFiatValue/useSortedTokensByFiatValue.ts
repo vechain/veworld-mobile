@@ -4,6 +4,7 @@ import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
 import { useTokenWithCompleteInfo, TokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { useMultipleTokensBalance, useTokenBalance } from "~Hooks/useTokenBalance"
+import { useHasAnyVeBetterActions } from "~Hooks/useHasAnyVeBetterActions"
 import { FungibleToken, FungibleTokenWithBalance } from "~Model"
 import { selectNetworkVBDTokens, selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { BigNutils, BalanceUtils } from "~Utils"
@@ -77,6 +78,7 @@ export const useSortedTokensByFiatValue = (accountAddress?: string) => {
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const address = accountAddress ?? selectedAccountAddress
 
+    const { data: hasAnyVeBetterActions } = useHasAnyVeBetterActions()
     const { data: nonVechainTokenWithBalances, isLoading: isLoadingNonVechain } = useNonVechainTokensBalance({
         accountAddress: address,
     })
@@ -112,7 +114,41 @@ export const useSortedTokensByFiatValue = (accountAddress?: string) => {
         accountAddress: address,
     })
 
+    const hasTokensWithBalance = useMemo(
+        () => tokenBalances.some(token => !BigNutils(token.balance.balance).isZero),
+        [tokenBalances],
+    )
+
+    const isNewUserWithNoTokens = useMemo(
+        () => !hasAnyVeBetterActions && !hasTokensWithBalance,
+        [hasAnyVeBetterActions, hasTokensWithBalance],
+    )
+
     const sortedTokens = useMemo(() => {
+        if (isNewUserWithNoTokens) {
+            const vetToken: FungibleTokenWithBalance = {
+                ...VET,
+                balance: vetInfo.balance || {
+                    balance: "0",
+                    isHidden: false,
+                    timeUpdated: Date.now().toString(),
+                    tokenAddress: VET.address,
+                },
+            }
+
+            const b3trToken: FungibleTokenWithBalance = {
+                ...B3TRToken,
+                balance: b3trInfo.balance || {
+                    balance: "0",
+                    isHidden: false,
+                    timeUpdated: Date.now().toString(),
+                    tokenAddress: B3TRToken.address,
+                },
+            }
+
+            return [b3trToken, vetToken]
+        }
+
         const notVBDBalances = tokenBalances.filter(tb => ![B3TRToken.symbol, VOT3Token.symbol].includes(tb.symbol))
         const vbdBalances = tokenBalances.filter(tb => [B3TRToken.symbol, VOT3Token.symbol].includes(tb.symbol))
 
@@ -157,15 +193,16 @@ export const useSortedTokensByFiatValue = (accountAddress?: string) => {
             return fiatValueB - fiatValueA
         })
     }, [
+        isNewUserWithNoTokens,
         tokenBalances,
         vetInfo,
         vthoInfo,
         b3trInfo,
-        vot3Balance,
-        nonVechainTokensFiat,
-        nonVechainTokenWithBalances,
         B3TRToken,
         VOT3Token,
+        vot3Balance?.balance,
+        nonVechainTokensFiat,
+        nonVechainTokenWithBalances,
     ])
 
     const isLoading =
@@ -179,5 +216,6 @@ export const useSortedTokensByFiatValue = (accountAddress?: string) => {
     return {
         tokens: sortedTokens,
         isLoading,
+        isNewUserWithNoTokens,
     }
 }

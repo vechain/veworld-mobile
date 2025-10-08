@@ -87,7 +87,7 @@ const baseStyles = () =>
         text: {
             color: COLORS.GREY_50,
             fontWeight: "600",
-            fontSize: 38,
+            fontSize: 40,
             fontFamily: "Inter-SemiBold",
             lineHeight: 40,
             alignSelf: "center",

@@ -4,6 +4,7 @@ import { TestHelpers, TestWrapper } from "~Test"
 import { useExchangeRate } from "~Api/Coingecko"
 import { useTokenCardBalance } from "./useTokenCardBalance"
 import { ethers } from "ethers"
+import { CURRENCY, ThemeEnum, CURRENCY_FORMATS, SYMBOL_POSITIONS } from "~Constants"
 
 jest.mock("~Api/Coingecko", () => ({
     ...jest.requireActual("~Api/Coingecko"),
@@ -37,7 +38,29 @@ describe("useTokenCardBalance", () => {
                         balance: { ...TestHelpers.data.VETWithBalance.balance, isHidden: true },
                     },
                 }),
-            { wrapper: TestWrapper },
+            {
+                wrapper: TestWrapper,
+                initialProps: {
+                    preloadedState: {
+                        userPreferences: {
+                            balanceVisible: false,
+                            theme: ThemeEnum.LIGHT,
+                            hideTokensWithNoBalance: false,
+                            isPinCodeRequired: false,
+                            currency: CURRENCY.USD,
+                            currencyFormat: CURRENCY_FORMATS.COMMA,
+                            symbolPosition: SYMBOL_POSITIONS.BEFORE,
+                            language: "de",
+                            isAnalyticsTrackingEnabled: false,
+                            isSentryTrackingEnabled: false,
+                            devFeaturesEnabled: false,
+                            lastReviewTimestamp: "",
+                            lastVersionCheck: "",
+                            lastNotificationReminder: null,
+                        },
+                    },
+                },
+            },
         )
 
         expect(result.current.fiatBalance).toBe("$••••••")

@@ -10,8 +10,8 @@ import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
+import { AddressUtils, BalanceUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
 import { Chart } from "./Chart"
 
@@ -22,6 +22,7 @@ type Props = {
 export const TokenCard = ({ token }: Props) => {
     const navigation = useNavigation()
     const currency = useAppSelector(selectCurrency)
+    const isBalanceVisible = useAppSelector(selectBalanceVisible)
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
     const [showChart, setShowChart] = useState(true)
@@ -52,6 +53,14 @@ export const TokenCard = ({ token }: Props) => {
     const { fiatBalance, showFiatBalance, tokenBalance } = useTokenCardBalance({ token })
     const tokenWithCompleteInfo = useTokenWithCompleteInfo(token)
 
+    const balance = useMemo(() => {
+        if (!isBalanceVisible) {
+            return "••••••"
+        }
+
+        return tokenBalance
+    }, [isBalanceVisible, tokenBalance])
+
     const chartIcon = useMemo(() => {
         if (!chartData || !showFiatBalance || showChart) return null
 
@@ -69,9 +78,10 @@ export const TokenCard = ({ token }: Props) => {
         switch (token.symbol) {
             case "B3TR":
                 return (
-                    <BaseView flexDirection="row" gap={4}>
+                    <BaseView flexDirection="row" gap={4} overflow="hidden">
                         <BaseText
                             typographyFont="bodySemiBold"
+                            numberOfLines={1}
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL_1">
                             {B3TR.symbol}
@@ -83,10 +93,12 @@ export const TokenCard = ({ token }: Props) => {
                         />
                         <BaseText
                             typographyFont="bodySemiBold"
+                            numberOfLines={1}
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL_2">
                             {VOT3.symbol}
                         </BaseText>
+
                         {chartIcon}
                     </BaseView>
                 )
@@ -108,29 +120,40 @@ export const TokenCard = ({ token }: Props) => {
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
     // Only allow navigation for tokens with detailed information available
-    const supportsDetailNavigation = useMemo(
-        () => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol),
-        [token.symbol],
-    )
+    const isVechainToken = useMemo(() => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol), [token.symbol])
 
     const handlePress = useCallback(() => {
-        if (!supportsDetailNavigation) {
+        if (!isVechainToken) {
+            if (isCrossChainToken) {
+                navigation.navigate(Routes.BRIDGE_TOKEN_DETAILS, {
+                    token,
+                })
+                return
+            }
+
+            const isTokenBalance = BalanceUtils.getIsTokenWithBalance(token)
+
+            if (!isTokenBalance) return
+
+            navigation.navigate(Routes.INSERT_ADDRESS_SEND, {
+                token,
+            })
             return
         }
 
         navigation.navigate(Routes.TOKEN_DETAILS, {
             token: tokenWithCompleteInfo,
         })
-    }, [navigation, tokenWithCompleteInfo, supportsDetailNavigation])
+    }, [navigation, tokenWithCompleteInfo, isVechainToken, token, isCrossChainToken])
 
     return (
         <BaseTouchableBox
-            action={supportsDetailNavigation ? handlePress : undefined}
+            action={handlePress}
             py={symbol ? typography.lineHeight.body : typography.lineHeight.bodySemiBold}
             flexDirection="row"
             bg={theme.colors.card}
             innerContainerStyle={styles.root}>
-            <BaseView flexDirection="row" gap={16} flex={1}>
+            <BaseView flexDirection="row" gap={16} flexGrow={1} flexShrink={1}>
                 <TokenImage
                     icon={token.icon}
                     isVechainToken={AddressUtils.isVechainToken(token.address)}
@@ -140,13 +163,12 @@ export const TokenCard = ({ token }: Props) => {
                 />
 
                 {symbol ? (
-                    <BaseView flexDirection="column" flex={1}>
+                    <BaseView flexDirection="column" flexGrow={0} flexShrink={1}>
                         <BaseText
                             typographyFont="subSubTitleSemiBold"
                             color={theme.colors.activityCard.title}
                             flexDirection="row"
                             numberOfLines={1}
-                            flex={1}
                             testID="TOKEN_CARD_NAME">
                             {name}
                         </BaseText>
@@ -154,9 +176,11 @@ export const TokenCard = ({ token }: Props) => {
                     </BaseView>
                 ) : (
                     <BaseText
+                        flex={1}
                         typographyFont="subSubTitleSemiBold"
                         color={theme.colors.activityCard.title}
-                        flexDirection="row">
+                        flexDirection="row"
+                        numberOfLines={1}>
                         {name}
                     </BaseText>
                 )}
@@ -164,7 +188,7 @@ export const TokenCard = ({ token }: Props) => {
 
             <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
 
-            <BaseView flexDirection="column" alignItems="flex-end" flexShrink={0}>
+            <BaseView flexDirection="column" alignItems="flex-end" flexGrow={1} flexShrink={0}>
                 {showFiatBalance ? (
                     <>
                         <BaseText
@@ -183,7 +207,7 @@ export const TokenCard = ({ token }: Props) => {
                             numberOfLines={1}
                             flexDirection="row"
                             testID="TOKEN_CARD_TOKEN_BALANCE">
-                            {tokenBalance}
+                            {balance}
                         </BaseText>
                     </>
                 ) : (
@@ -194,7 +218,7 @@ export const TokenCard = ({ token }: Props) => {
                         numberOfLines={1}
                         flexDirection="row"
                         testID="TOKEN_CARD_TOKEN_BALANCE">
-                        {tokenBalance}
+                        {balance}
                     </BaseText>
                 )}
             </BaseView>
@@ -207,5 +231,6 @@ const baseStyles = () =>
         root: {
             gap: 16,
             alignItems: "center",
+            justifyContent: "space-between",
         },
     })
