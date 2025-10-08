@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useCallback, useEffect, useState } from "react"
 import DeviceInfo from "react-native-device-info"
 import { VersionManifest } from "~Model/AppVersion"
 import { selectUpdatePromptStatus, useAppDispatch, useAppSelector, VersionUpdateSlice } from "~Storage/Redux"
@@ -27,7 +27,11 @@ const fetchVersionInfo = async (): Promise<VersionManifest> => {
 export const useVersionInfo = () => {
     const versionUpdateStatus = useAppSelector(selectUpdatePromptStatus)
     const dispatch = useAppDispatch()
+    const queryClient = useQueryClient()
     const [versionCheckComplete, setVersionCheckComplete] = useState(false)
+
+    const installedVersion = DeviceInfo.getVersion()
+    const versionChanged = installedVersion !== versionUpdateStatus.installedVersion
 
     const {
         data: versionInfo,
@@ -41,36 +45,48 @@ export const useVersionInfo = () => {
         retry: 3,
     })
 
-    useEffect(() => {
-        if (versionInfo) {
-            const installedVersion = DeviceInfo.getVersion()
+    const invalidateManifestForNewVersion = useCallback(async () => {
+        if (versionChanged && versionInfo) {
+            const isVersionInManifest = versionInfo.history?.some(v => v.version === installedVersion)
 
-            if (installedVersion !== versionUpdateStatus.installedVersion) {
-                dispatch(VersionUpdateSlice.actions.setInstalledVersion(installedVersion))
-                dispatch(VersionUpdateSlice.actions.resetDismissCount())
+            if (!isVersionInManifest) {
+                await queryClient.invalidateQueries({ queryKey: ["versionManifest"] })
             }
-
-            const needsUpdate = SemanticVersionUtils.moreThan(versionInfo.major, installedVersion)
-
-            dispatch(VersionUpdateSlice.actions.setIsUpToDate(!needsUpdate))
-
-            if (needsUpdate && versionInfo.major !== versionUpdateStatus.majorVersion) {
-                dispatch(VersionUpdateSlice.actions.setMajorVersion(versionInfo.major))
-            }
-
-            if (versionInfo.latest !== versionUpdateStatus.latestVersion) {
-                dispatch(VersionUpdateSlice.actions.setLatestVersion(versionInfo.latest))
-            }
-
-            setVersionCheckComplete(true)
         }
+    }, [versionChanged, versionInfo, installedVersion, queryClient])
+
+    const updateVersionState = useCallback(() => {
+        if (!versionInfo) return
+        if (versionChanged) {
+            dispatch(VersionUpdateSlice.actions.setInstalledVersion(installedVersion))
+            dispatch(VersionUpdateSlice.actions.resetDismissCount())
+        }
+
+        const needsUpdate = SemanticVersionUtils.moreThan(versionInfo.major, installedVersion)
+        dispatch(VersionUpdateSlice.actions.setIsUpToDate(!needsUpdate))
+
+        if (needsUpdate && versionInfo.major !== versionUpdateStatus.majorVersion) {
+            dispatch(VersionUpdateSlice.actions.setMajorVersion(versionInfo.major))
+        }
+
+        if (versionInfo.latest !== versionUpdateStatus.latestVersion) {
+            dispatch(VersionUpdateSlice.actions.setLatestVersion(versionInfo.latest))
+        }
+
+        setVersionCheckComplete(true)
     }, [
-        dispatch,
         versionInfo,
-        versionUpdateStatus.installedVersion,
+        versionChanged,
+        installedVersion,
+        dispatch,
         versionUpdateStatus.majorVersion,
         versionUpdateStatus.latestVersion,
     ])
+
+    useEffect(() => {
+        invalidateManifestForNewVersion()
+        updateVersionState()
+    }, [invalidateManifestForNewVersion, updateVersionState])
 
     return {
         versionInfo,
