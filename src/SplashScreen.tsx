@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { Image, StyleSheet } from "react-native"
 import { useApplicationSecurity } from "~Components/Providers"
-import { SCREEN_HEIGHT } from "~Constants"
+import { COLORS, SCREEN_HEIGHT } from "~Constants"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 
 type Props = {
@@ -47,7 +47,7 @@ export const SplashScreen = ({ children }: Props): React.ReactElement => {
 const styles = StyleSheet.create({
     container: {
         height: "100%",
-        backgroundColor: "#090230",
+        backgroundColor: COLORS.APP_BACKGROUND_DARK,
         alignItems: "center",
         justifyContent: "center",
     },
