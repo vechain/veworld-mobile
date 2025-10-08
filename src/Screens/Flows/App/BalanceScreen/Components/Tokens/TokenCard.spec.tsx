@@ -275,7 +275,7 @@ describe("TokenCard", () => {
     })
 
     describe("Navigation behavior", () => {
-        it("should not navigate when token does not support detail navigation", () => {
+        it("should navigate to send screenwhen token is not vechain token", () => {
             ;(useSmartMarketChart as jest.Mock).mockReturnValue({ data: [] })
             ;(useTokenCardBalance as jest.Mock).mockReturnValue({
                 fiatBalance: "$1.00",
@@ -291,7 +291,12 @@ describe("TokenCard", () => {
             const tokenCard = getByTestId("TOKEN_CARD_NAME").parent?.parent?.parent?.parent
             fireEvent.press(tokenCard!)
 
-            expect(mockedNavigate).not.toHaveBeenCalled()
+            expect(mockedNavigate).toHaveBeenCalledWith(Routes.INSERT_ADDRESS_SEND, {
+                token: expect.objectContaining({
+                    symbol: "PLA",
+                    address: "0x89827f7bb951fd8a56f8ef13c5bfee38522f2e1f",
+                }),
+            })
         })
 
         it("should navigate to token details when token supports detail navigation", () => {
