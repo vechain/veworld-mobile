@@ -1,5 +1,5 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { Canvas, Fill } from "@shopify/react-native-skia"
+import { Canvas, Fill, Skia } from "@shopify/react-native-skia"
 import { Camera, CameraView } from "expo-camera"
 import React, { forwardRef, RefObject, useCallback, useEffect, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
@@ -133,18 +133,16 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
                         barcodeScannerSettings={{
                             barcodeTypes: ["qr"],
                         }}
-                        style={styles.cameraView}>
-                        {/* <BlurView blurAmount={25} overlayColor="transparent" style={styles.blurView} /> */}
-                    </CameraView>
+                        style={styles.cameraView}
+                    />
                     <Canvas style={StyleSheet.absoluteFill}>
                         <Fill
                             color={"rgba(0,0,0,0.65)"}
-                            clip={{
-                                x: rootX.value + cameraX.value,
-                                y: rootY.value + cameraY.value,
-                                width: 200,
-                                height: 200,
-                            }}
+                            clip={Skia.RRectXY(
+                                Skia.XYWHRect(rootX.value + cameraX.value, rootY.value + cameraY.value, 200, 200),
+                                16,
+                                16,
+                            )}
                             invertClip
                         />
                     </Canvas>
