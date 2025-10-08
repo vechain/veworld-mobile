@@ -129,7 +129,7 @@ export const TokenCard = ({ token }: Props) => {
             py={symbol ? typography.lineHeight.body : typography.lineHeight.bodySemiBold}
             flexDirection="row"
             bg={theme.colors.card}
-            containerStyle={styles.root}>
+            innerContainerStyle={styles.root}>
             <BaseView flexDirection="row" gap={16} flex={1}>
                 <TokenImage
                     icon={token.icon}

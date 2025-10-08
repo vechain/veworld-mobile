@@ -3,12 +3,14 @@ import { FlatList, ListRenderItemInfo } from "react-native"
 import { BaseSpacer } from "~Components"
 import { useSortedTokensByFiatValue } from "~Hooks/useSortedTokensByFiatValue"
 import { FungibleTokenWithBalance } from "~Model"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { TokenCard } from "../../Components/Tokens/TokenCard"
 
 const ItemSeparator = () => <BaseSpacer height={8} />
 
 export const TokensTopSection = () => {
     const { tokens } = useSortedTokensByFiatValue()
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<FungibleTokenWithBalance>) => <TokenCard token={item} />,
@@ -27,7 +29,7 @@ export const TokensTopSection = () => {
     return (
         <FlatList
             data={tokens}
-            keyExtractor={item => item.address}
+            keyExtractor={item => `${selectedAccount.address}_${item.address}`}
             renderItem={renderItem}
             ItemSeparatorComponent={ItemSeparator}
             // Mobile performance optimizations
