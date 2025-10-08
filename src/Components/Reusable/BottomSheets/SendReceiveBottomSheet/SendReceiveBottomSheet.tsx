@@ -1,12 +1,14 @@
+/* eslint-disable react-native/no-inline-styles */
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { Canvas, Fill, Skia } from "@shopify/react-native-skia"
-import { Camera, CameraView } from "expo-camera"
+import { Canvas, Fill, Rect, Skia } from "@shopify/react-native-skia"
+import { BarcodeScanningResult, Camera, CameraView } from "expo-camera"
 import React, { forwardRef, RefObject, useCallback, useEffect, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
-import { useSharedValue } from "react-native-reanimated"
+import Animated, { useAnimatedProps, useDerivedValue, useSharedValue } from "react-native-reanimated"
+import Svg, { Polygon } from "react-native-svg"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { BaseTabs } from "~Components/Base/BaseTabs"
-import { COLORS } from "~Constants"
+import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useCameraPermissions, useDisclosure, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { StringUtils } from "~Utils"
@@ -14,6 +16,15 @@ import { ReceiveTab } from "./ReceiveTab"
 import { ScanTab } from "./ScanTab"
 
 const TABS = ["scan", "receive"] as const
+
+/**
+ * Type for the QRCode Scan. Apparently expo-camera has wrong types
+ */
+type QrCodeScanningResult = Omit<BarcodeScanningResult, "bounds"> & {
+    boundingBox: BarcodeScanningResult["bounds"]
+}
+
+const AnimatedPolygon = Animated.createAnimatedComponent(Polygon)
 
 export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(function SendReceiveBottomSheet(
     props,
@@ -64,6 +75,50 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
         [cameraX, cameraY],
     )
 
+    const cameraBounds = useDerivedValue(
+        () => ({ x: cameraX.value + rootX.value, y: cameraY.value + rootY.value }),
+        [rootX.value, rootY.value, cameraX.value, cameraY.value],
+    )
+
+    const points = useSharedValue([
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+    ])
+
+    const animatedProps = useAnimatedProps(
+        () => ({ points: points.value.map(p => `${p.x},${p.y}`).join(" ") }),
+        [points.value],
+    )
+
+    const onQrScanned = useCallback(
+        (result: QrCodeScanningResult) => {
+            points.value = [...result.cornerPoints].map(({ x, y }) => ({ x: SCREEN_WIDTH - x, y: y }))
+
+            const biggerRect = {
+                x: cameraBounds.value.x * 0.9,
+                y: cameraBounds.value.y * 0.9,
+                width: 200 * 1.2,
+                height: 200 * 1.2,
+            }
+
+            if (
+                result.cornerPoints.every(point => {
+                    return (
+                        point.x >= biggerRect.x &&
+                        point.x <= biggerRect.x + biggerRect.width &&
+                        point.y >= biggerRect.y &&
+                        point.y <= biggerRect.y + biggerRect.height
+                    )
+                })
+            ) {
+                //TEST PASSED
+            }
+        },
+        [cameraBounds.value.x, cameraBounds.value.y, points],
+    )
+
     const children = useMemo(() => {
         return (
             <>
@@ -97,7 +152,7 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
                     labels={labels}
                     rootStyle={styles.tabElement}
                     indicatorBackgroundColor="rgba(255, 255, 255, 0.15)"
-                    containerBackgroundColor="rgba(0, 0, 0, 0.30)"
+                    containerBackgroundColor={COLORS.PURPLE_DISABLED}
                     selectedTextColor={COLORS.WHITE}
                     unselectedTextColor={COLORS.WHITE}
                 />
@@ -134,10 +189,11 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
                             barcodeTypes: ["qr"],
                         }}
                         style={styles.cameraView}
+                        onBarcodeScanned={onQrScanned as any}
                     />
                     <Canvas style={StyleSheet.absoluteFill}>
                         <Fill
-                            color={"rgba(0,0,0,0.65)"}
+                            color={COLORS.BALANCE_BACKGROUND_80}
                             clip={Skia.RRectXY(
                                 Skia.XYWHRect(rootX.value + cameraX.value, rootY.value + cameraY.value, 200, 200),
                                 16,
@@ -145,8 +201,54 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
                             )}
                             invertClip
                         />
+                        <Rect
+                            color="green"
+                            // clip={Skia.RRectXY(
+                            //     Skia.XYWHRect(
+                            //         cameraBounds.value.x * 0.9,
+                            //         cameraBounds.value.y * 0.9,
+                            //         200 * 1.2,
+                            //         200 * 1.2,
+                            //     ),
+                            //     16,
+                            //     16,
+                            // )}
+                            rect={Skia.XYWHRect(
+                                (rootX.value + cameraX.value) * 0.9,
+                                (rootY.value + cameraY.value) * 0.9,
+                                200 + (rootX.value + cameraX.value) * 0.2,
+                                200 + (rootY.value + cameraY.value) * 0.2,
+                            )}
+                            style="stroke"
+                            invertClip
+                        />
                     </Canvas>
                     <BaseView style={[StyleSheet.absoluteFill, styles.cameraChildren]}>{children}</BaseView>
+                    {/* <Canvas style={[StyleSheet.absoluteFill, { zIndex: 2 }]}>
+                        <Points
+                            color={"red"}
+                            style={"stroke"}
+                            points={[point1.value, point2.value, point3.value, point4.value, point1.value]}
+                            strokeWidth={10}
+                            mode="polygon"
+                        />
+                    </Canvas> */}
+                    <Svg style={[StyleSheet.absoluteFill, { zIndex: 2 }]}>
+                        <AnimatedPolygon stroke="green" strokeWidth={2} animatedProps={animatedProps} />
+                    </Svg>
+                    {/* <BaseView
+                        style={[
+                            {
+                                zIndex: 2,
+                                top: 0,
+                                left: 0,
+                                width: 90,
+                                height: 50,
+                                position: "absolute",
+                                backgroundColor: "green",
+                            },
+                        ]}
+                    /> */}
                 </BaseView>
             ) : (
                 children
