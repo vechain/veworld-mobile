@@ -18,26 +18,33 @@ jest.mock("@react-navigation/native", () => {
 })
 
 const mockOpenQRCodeSheet = jest.fn()
+const mockCloseBottomSheet = jest.fn()
 jest.mock("~Hooks/useBottomSheet", () => ({
     ...jest.requireActual("~Hooks/useBottomSheet"),
     useBottomSheetModal: jest.fn(),
 }))
 
 describe("AddTokenBottomSheet", () => {
-    const mockOnClose = jest.fn()
     const mockBottomSheetRef = { current: null }
     const mockQrCodeBottomSheetRef = { current: null }
 
     beforeEach(() => {
-        jest.clearAllMocks()
+        mockNavigate.mockClear()
+        mockOpenQRCodeSheet.mockClear()
+        mockCloseBottomSheet.mockClear()
+
         const { useBottomSheetModal } = require("~Hooks/useBottomSheet")
-        ;(useBottomSheetModal as jest.Mock).mockReturnValue({
-            onOpen: mockOpenQRCodeSheet,
-        })
+        ;(useBottomSheetModal as jest.Mock).mockClear()
+        ;(useBottomSheetModal as jest.Mock)
+            .mockReturnValueOnce({
+                onClose: mockCloseBottomSheet,
+            })
+            .mockReturnValueOnce({
+                onOpen: mockOpenQRCodeSheet,
+            })
     })
 
     const defaultProps = {
-        onClose: mockOnClose,
         bottomSheetRef: mockBottomSheetRef,
         qrCodeBottomSheetRef: mockQrCodeBottomSheetRef,
     }
@@ -50,12 +57,13 @@ describe("AddTokenBottomSheet", () => {
         }).not.toThrow()
     })
 
-    it("sets up bottom sheet modal hook correctly", () => {
+    it("sets up bottom sheet modal hooks correctly", () => {
         render(<AddTokenBottomSheet {...defaultProps} />, {
             wrapper: TestWrapper,
         })
 
         const { useBottomSheetModal } = require("~Hooks/useBottomSheet")
+        expect(useBottomSheetModal).toHaveBeenCalledWith({ externalRef: mockBottomSheetRef })
         expect(useBottomSheetModal).toHaveBeenCalledWith({ externalRef: mockQrCodeBottomSheetRef })
     })
 
@@ -69,7 +77,7 @@ describe("AddTokenBottomSheet", () => {
 
         fireEvent.press(buyButton)
 
-        expect(mockOnClose).toHaveBeenCalledTimes(1)
+        expect(mockCloseBottomSheet).toHaveBeenCalled()
         expect(mockNavigate).toHaveBeenCalledWith(Routes.BUY_FLOW)
     })
 
@@ -83,8 +91,8 @@ describe("AddTokenBottomSheet", () => {
 
         fireEvent.press(receiveButton)
 
-        expect(mockOnClose).toHaveBeenCalledTimes(1)
-        expect(mockOpenQRCodeSheet).toHaveBeenCalledTimes(1)
+        expect(mockCloseBottomSheet).toHaveBeenCalled()
+        expect(mockOpenQRCodeSheet).toHaveBeenCalled()
     })
 
     it("renders custom token button and handles press", async () => {
@@ -97,7 +105,7 @@ describe("AddTokenBottomSheet", () => {
 
         fireEvent.press(customButton)
 
-        expect(mockOnClose).toHaveBeenCalledTimes(1)
+        expect(mockCloseBottomSheet).toHaveBeenCalled()
         expect(mockNavigate).toHaveBeenCalledWith(Routes.MANAGE_TOKEN)
     })
 

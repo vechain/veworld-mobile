@@ -62,6 +62,7 @@ export const AddTokenBottomSheet = ({ bottomSheetRef, qrCodeBottomSheetRef }: Ad
     const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
 
+    const { onClose: closeBottomSheet } = useBottomSheetModal({ externalRef: bottomSheetRef })
     const { onOpen: openQRCodeSheet } = useBottomSheetModal({ externalRef: qrCodeBottomSheetRef })
 
     const tokenListData: TokenListItemData[] = [
@@ -71,7 +72,7 @@ export const AddTokenBottomSheet = ({ bottomSheetRef, qrCodeBottomSheetRef }: Ad
             title: LL.TOKEN_BUY(),
             subtitle: LL.TOKEN_BUY_SUBTITLE(),
             onPress: () => {
-                bottomSheetRef?.current?.close()
+                closeBottomSheet()
                 nav.navigate(Routes.BUY_FLOW)
             },
         },
@@ -81,7 +82,7 @@ export const AddTokenBottomSheet = ({ bottomSheetRef, qrCodeBottomSheetRef }: Ad
             title: LL.TOKEN_RECEIVE(),
             subtitle: LL.TOKEN_RECEIVE_SUBTITLE(),
             onPress: () => {
-                bottomSheetRef?.current?.close()
+                closeBottomSheet()
                 openQRCodeSheet()
             },
         },
@@ -91,7 +92,7 @@ export const AddTokenBottomSheet = ({ bottomSheetRef, qrCodeBottomSheetRef }: Ad
             title: LL.TOKEN_CUSTOM(),
             subtitle: LL.TOKEN_CUSTOM_SUBTITLE(),
             onPress: () => {
-                bottomSheetRef?.current?.close()
+                closeBottomSheet()
                 nav.navigate(Routes.MANAGE_TOKEN)
             },
         },
