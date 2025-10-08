@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import DeviceInfo from "react-native-device-info"
 import {
     selectLanguage,
@@ -61,7 +61,7 @@ export const useVersionChangelog = ({ versionInfo, versionCheckComplete }: UseVe
         },
     })
 
-    useEffect(() => {
+    const triggerChangelogDisplay = useCallback(() => {
         if (!versionInfo || !versionCheckComplete) return
 
         const installedVersion = DeviceInfo.getVersion()
@@ -85,13 +85,6 @@ export const useVersionChangelog = ({ versionInfo, versionCheckComplete }: UseVe
                     changelogKey: userVersionInfo.key,
                 }),
             )
-            return
-        }
-
-        if (isAlreadyShowing && versionUpdateStatus.changelogKey && !changelogLoading && !changelogFetching) {
-            if (changelogError || (changelog && changelog.length === 0)) {
-                dispatch(setChangelogToShow({ shouldShow: false, changelogKey: null }))
-            }
         }
     }, [
         versionInfo,
@@ -100,12 +93,32 @@ export const useVersionChangelog = ({ versionInfo, versionCheckComplete }: UseVe
         changelogDismissed,
         versionUpdateStatus.shouldShowChangelog,
         versionUpdateStatus.changelogKey,
+        dispatch,
+    ])
+
+    const hideChangelogOnError = useCallback(() => {
+        const isAlreadyShowing = versionUpdateStatus.shouldShowChangelog
+        const hasChangelogKey = !!versionUpdateStatus.changelogKey
+        const isNotLoading = !changelogLoading && !changelogFetching
+        const hasError = changelogError || (changelog && changelog.length === 0)
+
+        if (isAlreadyShowing && hasChangelogKey && isNotLoading && hasError) {
+            dispatch(setChangelogToShow({ shouldShow: false, changelogKey: null }))
+        }
+    }, [
+        versionUpdateStatus.shouldShowChangelog,
+        versionUpdateStatus.changelogKey,
         changelogLoading,
         changelogFetching,
         changelogError,
         changelog,
         dispatch,
     ])
+
+    useEffect(() => {
+        triggerChangelogDisplay()
+        hideChangelogOnError()
+    }, [triggerChangelogDisplay, hideChangelogOnError])
 
     return {
         shouldShowChangelog: versionUpdateStatus.shouldShowChangelog,
