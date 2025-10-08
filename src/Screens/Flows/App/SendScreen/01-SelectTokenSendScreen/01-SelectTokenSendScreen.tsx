@@ -10,7 +10,7 @@ import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalanc
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { selectBalanceVisible, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
+import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { BridgeTokenCard, TokenCard, VechainTokenCard } from "../../HomeScreen/Components"
 
@@ -19,7 +19,6 @@ type Props = NativeStackNavigationProp<RootStackParamListHome, Routes.SELECT_TOK
 export const SelectTokenSendScreen = () => {
     const { LL } = useI18nContext()
     const tokens = useSendableTokensWithBalance()
-    const isBalanceVisible = useAppSelector(selectBalanceVisible)
     const { VOT3, B3TR } = useAppSelector(state => selectNetworkVBDTokens(state))
     const { ref: vot3WarningRef, onOpen: openVot3Warning, onClose: closeVot3Warning } = useBottomSheetModal()
 
@@ -64,55 +63,29 @@ export const SelectTokenSendScreen = () => {
         (item: FungibleTokenWithBalance) => {
             switch (item.address.toLowerCase()) {
                 case VTHO.address.toLowerCase():
-                    return (
-                        <VechainTokenCard
-                            isAnimation={false}
-                            isBalanceVisible={isBalanceVisible}
-                            tokenWithInfo={tokenWithInfoVTHO}
-                        />
-                    )
+                    return <VechainTokenCard isAnimation={false} isBalanceVisible tokenWithInfo={tokenWithInfoVTHO} />
                 case VET.address.toLowerCase():
                     return (
                         <VechainTokenCard
                             isAnimation={false}
-                            isBalanceVisible={isBalanceVisible}
+                            isBalanceVisible
                             tokenWithInfo={tokenWithInfoVET}
                             alignWithFiatBalance="center"
                         />
                     )
                 case B3TR.address.toLowerCase():
-                    return (
-                        <VechainTokenCard
-                            isAnimation={false}
-                            isBalanceVisible={isBalanceVisible}
-                            tokenWithInfo={tokenWithInfoB3TR}
-                        />
-                    )
+                    return <VechainTokenCard isAnimation={false} isBalanceVisible tokenWithInfo={tokenWithInfoB3TR} />
                 case VOT3.address.toLowerCase():
-                    return (
-                        <VechainTokenCard
-                            isAnimation={false}
-                            isBalanceVisible={isBalanceVisible}
-                            tokenWithInfo={tokenWithInfoVOT3}
-                        />
-                    )
+                    return <VechainTokenCard isAnimation={false} isBalanceVisible tokenWithInfo={tokenWithInfoVOT3} />
                 default:
                     return item.crossChainProvider ? (
-                        <BridgeTokenCard tokenWithBalance={item} isBalanceVisible={isBalanceVisible} isEdit={false} />
+                        <BridgeTokenCard tokenWithBalance={item} isBalanceVisible isEdit={false} />
                     ) : (
-                        <TokenCard tokenWithBalance={item} isEdit={false} isBalanceVisible={isBalanceVisible} />
+                        <TokenCard tokenWithBalance={item} isEdit={false} isBalanceVisible />
                     )
             }
         },
-        [
-            B3TR.address,
-            VOT3.address,
-            tokenWithInfoB3TR,
-            tokenWithInfoVET,
-            tokenWithInfoVOT3,
-            tokenWithInfoVTHO,
-            isBalanceVisible,
-        ],
+        [B3TR.address, VOT3.address, tokenWithInfoB3TR, tokenWithInfoVET, tokenWithInfoVOT3, tokenWithInfoVTHO],
     )
 
     const renderItem = useCallback(
