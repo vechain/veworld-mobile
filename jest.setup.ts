@@ -4,7 +4,7 @@ import "whatwg-fetch"
 import mockSafeAreaContext from "react-native-safe-area-context/jest/mock"
 // @ts-ignore
 import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock"
-import { Component, ReactNode } from "react"
+import { Component, PropsWithChildren, ReactNode } from "react"
 import { SecurityLevelType } from "~Model/Biometrics"
 import { WALLET_STATUS } from "~Model/Wallet"
 import { MMKV } from "react-native-mmkv"
@@ -163,9 +163,9 @@ jest.mock("expo-clipboard", () => {})
 jest.mock(
     "react-native-linear-gradient",
     () =>
-        class LinearGradient extends Component {
+        class LinearGradient extends Component<PropsWithChildren> {
             render() {
-                return "test"
+                return this.props.children
             }
         },
 )
