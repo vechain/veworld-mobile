@@ -20,6 +20,7 @@ import { RootStackParamListBrowser } from "./DiscoverStack"
 import { HistoryStackParamList } from "./HistoryStack"
 import { RootStackParamListBackupWallet } from "~Screens/Flows/App/SecurityUpgrade_V2/Navigation.standalone"
 import { RootStackParamListApps } from "./AppsStack"
+import { TabStackParamList } from "~Navigation/Tabs"
 
 export type ScreenRootParams = RootStackParamListSwitch &
     RootStackParamListOnboarding &
@@ -31,7 +32,8 @@ export type ScreenRootParams = RootStackParamListSwitch &
     RootStackParamListBrowser &
     HistoryStackParamList &
     RootStackParamListBackupWallet &
-    RootStackParamListApps
+    RootStackParamListApps &
+    TabStackParamList
 
 declare global {
     namespace ReactNavigation {

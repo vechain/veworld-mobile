@@ -1,7 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { ElementType, useCallback, useMemo } from "react"
-import { ImageBackground, StyleSheet } from "react-native"
-import FastImage, { ImageStyle } from "react-native-fast-image"
+import { StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
 import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
 import {
@@ -14,7 +13,9 @@ import {
     BaseText,
     BaseView,
     BlurView,
+    DAppIcon,
 } from "~Components"
+import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
 import { useAppOverview, useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -23,18 +24,18 @@ import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
 import { addBookmark, removeBookmark, useAppDispatch } from "~Storage/Redux"
 import { BigNutils, DateUtils } from "~Utils"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
+import { Routes } from "~Navigation"
 
 export type VbdCarouselBottomSheetMetadata = {
     bannerUri?: string
     iconUri?: string
     category?: (typeof AVAILABLE_CATEGORIES)[number]
-    app?: VbdDApp
+    app: VbdDApp
 }
 
 type VbdCarouselBottomSheetProps = {
     bsRef: React.RefObject<BottomSheetModalMethods>
-    onClose: () => void
-} & VbdCarouselBottomSheetMetadata
+}
 
 const VbdInfoColumn = ({
     Icon,
@@ -78,31 +79,22 @@ const VbdInfoColumn = ({
 const UsersIcon = (props: Partial<BaseIconProps>) => <BaseIcon name="icon-users" {...props} />
 const LeafIcon = (props: Partial<BaseIconProps>) => <BaseIcon name="icon-leaf" {...props} />
 
-export const VbdCarouselBottomSheet = ({
-    bsRef,
-    bannerUri,
-    iconUri,
-    category,
+const VbdCarouselBottomSheetContent = ({
     app,
+    bannerUri,
+    category,
+    iconUri,
     onClose,
-}: VbdCarouselBottomSheetProps) => {
+}: VbdCarouselBottomSheetMetadata & { onClose: () => void }) => {
     const { LL, locale } = useI18nContext()
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
-    const { ref, onClose: onCloseBS } = useBottomSheetModal({
-        externalRef: bsRef,
-    })
 
     const dispatch = useAppDispatch()
-    const { onDAppPress } = useDAppActions()
-    const { data: appOverview, isLoading } = useAppOverview(app?.id)
+    const { onDAppPress } = useDAppActions(Routes.APPS)
+    const { data: appOverview, isLoading } = useAppOverview(app.id)
 
-    const { isBookMarked } = useDappBookmarking(app?.external_url, app?.name)
-
-    const handleClose = useCallback(() => {
-        onClose()
-        onCloseBS()
-    }, [onClose, onCloseBS])
+    const { isBookMarked } = useDappBookmarking(app?.external_url, app.name)
 
     const onToggleFavorite = useCallback(() => {
         if (!isBookMarked && app) {
@@ -113,11 +105,9 @@ export const VbdCarouselBottomSheet = ({
     }, [app, dispatch, isBookMarked])
 
     const onOpenApp = useCallback(() => {
-        if (app) {
-            handleClose()
-            onDAppPress(app)
-        }
-    }, [app, handleClose, onDAppPress])
+        onClose()
+        onDAppPress(app)
+    }, [app, onClose, onDAppPress])
 
     const date = useMemo(
         () =>
@@ -173,29 +163,22 @@ export const VbdCarouselBottomSheet = ({
     }, [isBookMarked, theme.isDark])
 
     return (
-        <BaseBottomSheet
-            ref={ref}
-            dynamicHeight
-            backgroundStyle={styles.backgroundStyle}
-            onDismiss={handleClose}
-            enablePanDownToClose={false}
-            noMargins
-            floating>
+        <>
             {bannerUri ? (
-                <ImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_BS">
+                <FastImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_BS">
                     <BaseIcon
                         style={styles.closeBtn}
                         color={COLORS.WHITE}
                         size={22}
                         name="icon-x"
-                        action={handleClose}
+                        action={onClose}
                         testID="bottom-sheet-close-btn"
                     />
                     <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={18}>
                         <BaseView flexDirection="column" gap={16} px={24} py={16}>
                             <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
                                 <BaseView flexDirection="row" alignItems="center" flex={1}>
-                                    <FastImage source={{ uri: iconUri }} style={styles.logo as ImageStyle} />
+                                    <DAppIcon size={24} uri={iconUri} />
                                     <BaseSpacer width={12} flexShrink={0} />
                                     <BaseText
                                         numberOfLines={1}
@@ -226,7 +209,7 @@ export const VbdCarouselBottomSheet = ({
                             </BaseText>
                         </BaseView>
                     </BlurView>
-                </ImageBackground>
+                </FastImageBackground>
             ) : null}
 
             <BaseView style={styles.infoContainer} bg={theme.colors.actionBottomSheet.background}>
@@ -266,6 +249,25 @@ export const VbdCarouselBottomSheet = ({
                     />
                 </BaseView>
             </BaseView>
+        </>
+    )
+}
+
+export const VbdCarouselBottomSheet = ({ bsRef }: VbdCarouselBottomSheetProps) => {
+    const { styles } = useThemedStyles(baseStyles)
+    const { ref, onClose: onCloseBS } = useBottomSheetModal({
+        externalRef: bsRef,
+    })
+
+    return (
+        <BaseBottomSheet<VbdCarouselBottomSheetMetadata>
+            ref={ref}
+            dynamicHeight
+            backgroundStyle={styles.backgroundStyle}
+            enablePanDownToClose={false}
+            noMargins
+            floating>
+            {data => <VbdCarouselBottomSheetContent {...data} onClose={onCloseBS} />}
         </BaseBottomSheet>
     )
 }
@@ -280,11 +282,6 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         blurView: {
             backgroundColor: "rgba(0, 0, 0, 0.30)",
-        },
-        logo: {
-            width: 32,
-            height: 32,
-            borderRadius: 4,
         },
         backgroundStyle: {
             backgroundColor: theme.colors.actionBottomSheet.background,

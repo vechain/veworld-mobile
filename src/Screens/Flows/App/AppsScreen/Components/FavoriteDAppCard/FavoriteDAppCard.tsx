@@ -48,7 +48,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                         onPress={() => onPress(dapp)}
                         onLongPress={() => onLongPress?.(dapp)}>
                         <BaseView flexDirection="row" alignItems="flex-start" flex={1} pr={10}>
-                            <DAppIcon size={IMAGE_SIZE} fallbackIcon="icon-globe" iconUri={iconUri} />
+                            <DAppIcon size={IMAGE_SIZE} uri={iconUri} />
                             <BaseSpacer width={24} />
                             <BaseView flex={1}>
                                 <BaseText

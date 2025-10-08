@@ -117,6 +117,10 @@ type RootTranslation = {
 	 */
 	ACTIVITIES_STATUS_success: string
 	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	ACTIVITY: string
+	/**
 	 * N​o​ ​A​c​t​i​v​i​t​i​e​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: string
@@ -168,6 +172,10 @@ type RootTranslation = {
 	 * O​t​h​e​r
 	 */
 	ACTIVITY_OTHER_LABEL: string
+	/**
+	 * S​e​e​ ​a​l​l
+	 */
+	ACTIVITY_SEE_ALL: string
 	/**
 	 * S​t​a​r​t​ ​e​a​r​n​i​n​g
 	 */
@@ -595,6 +603,38 @@ type RootTranslation = {
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​w​a​l​l​e​t
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
+	/**
+	 * B​u​y
+	 */
+	BALANCE_ACTION_BUY: string
+	/**
+	 * O​t​h​e​r
+	 */
+	BALANCE_ACTION_OTHER: string
+	/**
+	 * R​e​c​e​i​v​e
+	 */
+	BALANCE_ACTION_RECEIVE: string
+	/**
+	 * S​e​n​d
+	 */
+	BALANCE_ACTION_SEND: string
+	/**
+	 * C​o​l​l​e​c​t​i​b​l​e​s
+	 */
+	BALANCE_TAB_COLLECTIBLES: string
+	/**
+	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​t​o​k​e​n​s​ ​y​e​t
+	 */
+	BALANCE_TAB_NO_TOKENS: string
+	/**
+	 * S​t​a​k​i​n​g
+	 */
+	BALANCE_TAB_STAKING: string
+	/**
+	 * T​o​k​e​n​s
+	 */
+	BALANCE_TAB_TOKENS: string
 	/**
 	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
 	 */
@@ -1717,6 +1757,14 @@ type RootTranslation = {
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: string
 	/**
+	 * T​r​a​n​s​f​e​r​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​t​o​ ​s​t​a​r​t​ ​b​u​i​l​d​i​n​g​ ​y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: string
+	/**
+	 * o​r​ ​b​u​y​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​f​r​o​m​ ​o​n​e​ ​o​f​ ​o​u​r​ ​e​c​o​s​y​s​t​e​m​ ​a​p​p​s
+	 */
+	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
+	/**
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
 	COLLECTIONS: string
@@ -1724,6 +1772,10 @@ type RootTranslation = {
 	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
 	 */
 	COLLECTION_NAME: string
+	/**
+	 * d​a​y
+	 */
+	COMMOMN_DAY: string
 	/**
 	 * 2​4​ ​H​R​s
 	 */
@@ -2404,6 +2456,23 @@ type RootTranslation = {
 	 */
 	DEVICE_PIN: string
 	/**
+	 * {​d​a​p​p​N​a​m​e​}​ ​w​i​l​l​ ​n​o​ ​l​o​n​g​e​r​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​:
+	 * @param {string} dappName
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS: RequiredParams<'dappName'>
+	/**
+	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​e​n​d​ ​t​o​ ​V​e​C​h​a​i​n​ ​T​h​o​r​.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: string
+	/**
+	 * N​o​ ​l​o​n​g​e​r​ ​r​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s​.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: string
+	/**
+	 * D​i​s​c​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
+	 */
+	DISCONNECTION_REQUEST: string
+	/**
 	 * M​a​k​e​ ​y​o​u​r​ ​o​w​n​ ​D​A​p​p​ ​o​n​ ​V​e​c​h​a​i​n
 	 */
 	DISCOVER_CREATE_YOUR_DAPP: string
@@ -2912,6 +2981,10 @@ type RootTranslation = {
 	 */
 	LOADING_MORE: string
 	/**
+	 * L​o​a​d​i​n​g​ ​p​a​g​e​ ​c​o​n​t​e​n​t
+	 */
+	LOADING_PAGE_CONTENT: string
+	/**
 	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: string
@@ -2923,10 +2996,6 @@ type RootTranslation = {
 	 * L​o​g​i​n
 	 */
 	LOGIN_REQUEST_TITLE: string
-	/**
-	 * L​o​a​d​i​n​g​ ​p​a​g​e​ ​c​o​n​t​e​n​t
-	 */
-	LOADING_PAGE_CONTENT: string
 	/**
 	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​t​o​k​e​n​?
 	 */
@@ -3397,6 +3466,10 @@ type RootTranslation = {
 	 * T​h​i​s​ ​d​A​p​p​ ​i​s​n​'​t​ ​v​e​r​i​f​i​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.
 	 */
 	NOT_VERIFIED_DAPP: string
+	/**
+	 * Y​o​u​ ​c​a​n​'​t​ ​c​o​n​n​e​c​t​ ​t​o​ ​t​h​i​s​ ​d​A​p​p​ ​w​i​t​h​ ​a​ ​v​i​e​w​ ​o​n​l​y​ ​a​c​c​o​u​n​t​.
+	 */
+	NOT_VERIFIED_WATCHED_ACCOUNT: string
 	/**
 	 * N​o​v​e​m​b​e​r
 	 */
@@ -4435,6 +4508,30 @@ type RootTranslation = {
 	 */
 	STARGATE_REWARDS: string
 	/**
+	 * S​t​a​r​t​ ​s​t​a​k​i​n​g
+	 */
+	STARGATE_START_STAKING: string
+	/**
+	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​*​*​ ​t​o​k​e​n​s
+	 */
+	STARGATE_STAT_DESCRIPTION: string
+	/**
+	 * R​e​w​a​r​d​s​ ​d​i​s​t​r​i​b​u​t​e​d
+	 */
+	STARGATE_STAT_REWARDS_DISTRIBUTED: string
+	/**
+	 * R​e​w​a​r​d​s​ ​g​e​n​e​r​a​t​i​o​n
+	 */
+	STARGATE_STAT_REWARDS_GENERATION: string
+	/**
+	 * T​o​t​a​l​ ​s​t​a​k​e​d
+	 */
+	STARGATE_STAT_TOTAL_STAKED: string
+	/**
+	 * T​o​t​a​l​ ​s​u​p​p​l​y
+	 */
+	STARGATE_STAT_TOTAL_SUPPLY: string
+	/**
 	 * S​t​a​t​u​s
 	 */
 	STATUS: string
@@ -4446,10 +4543,6 @@ type RootTranslation = {
 	 * S​u​c​c​e​s​s​!
 	 */
 	SUCCESS_GENERIC: string
-	/**
-	 * T​h​e​ ​o​p​e​r​a​t​i​o​n​ ​w​e​n​t​ ​w​e​l​l​!
-	 */
-	SUCCESS_GENERIC_OPERATION: string
 	/**
 	 * V​i​e​w​ ​o​p​e​r​a​t​i​o​n​ ​d​e​t​a​i​l​.
 	 */
@@ -4532,6 +4625,14 @@ type RootTranslation = {
 	 * t​h​e​m​?
 	 */
 	THEM: string
+	/**
+	 * T​h​i​s​ ​m​o​n​t​h
+	 */
+	THIS_MONTH: string
+	/**
+	 * T​h​i​s​ ​w​e​e​k
+	 */
+	THIS_WEEK: string
 	/**
 	 * A​b​o​u​t
 	 */
@@ -4786,13 +4887,37 @@ type RootTranslation = {
 	 */
 	TODAY: string
 	/**
+	 * B​u​y​ ​t​o​k​e​n
+	 */
+	TOKEN_BUY: string
+	/**
+	 * A​d​d​ ​b​a​l​a​n​c​e​ ​b​u​y​i​n​g​ ​w​i​t​h​ ​f​i​a​t
+	 */
+	TOKEN_BUY_SUBTITLE: string
+	/**
 	 * T​o​k​e​n​ ​C​o​n​v​e​r​s​i​o​n
 	 */
 	TOKEN_CONVERSION: string
 	/**
+	 * C​u​s​t​o​m​ ​t​o​k​e​n
+	 */
+	TOKEN_CUSTOM: string
+	/**
+	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​t​o​k​e​n​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t
+	 */
+	TOKEN_CUSTOM_SUBTITLE: string
+	/**
 	 * T​o​k​e​n​ ​I​D
 	 */
 	TOKEN_ID: string
+	/**
+	 * R​e​c​e​i​v​e​ ​t​o​k​e​n
+	 */
+	TOKEN_RECEIVE: string
+	/**
+	 * U​s​e​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​r​e​c​e​i​v​e
+	 */
+	TOKEN_RECEIVE_SUBTITLE: string
 	/**
 	 * T​o​k​e​n​ ​s​y​m​b​o​l
 	 */
@@ -4805,6 +4930,10 @@ type RootTranslation = {
 	 * S​e​n​t​ ​t​o​k​e​n​s
 	 */
 	TOKEN_TRANSFER_SENT: string
+	/**
+	 * T​o​t​a​l
+	 */
+	TOTAL: string
 	/**
 	 * T​o​u​c​h​ ​I​D
 	 */
@@ -4855,6 +4984,86 @@ type RootTranslation = {
 	 */
 	VALUE_TITLE: string
 	/**
+	 * c​o​n​t​r​i​b​u​t​e​ ​t​o​ ​t​h​e​ ​o​f​f​s​e​t
+	 */
+	VBD_CONTRIBUTE_OFFSET: string
+	/**
+	 * g​e​t​ ​r​e​w​a​r​d​e​d​ ​f​o​r​ ​y​o​u​r​ ​a​c​t​i​o​n​s​ ​a​n​d
+	 */
+	VBD_GET_REWARDED: string
+	/**
+	 * J​o​i​n​ ​t​h​e
+	 */
+	VBD_JOIN_THE: string
+	/**
+	 * m​o​v​e​m​e​n​t
+	 */
+	VBD_MOVEMENT: string
+	/**
+	 * R​e​w​a​r​d​s​ ​e​a​r​n​e​d
+	 */
+	VBD_REWARDS_EARNED: string
+	/**
+	 * S​e​e​ ​V​e​B​e​t​t​e​r​ ​p​r​o​f​i​l​e
+	 */
+	VBD_SEE_PROFILE: string
+	/**
+	 * S​t​a​r​t​ ​y​o​u​r​ ​i​m​p​a​c​t
+	 */
+	VBD_START_YOUR_IMPACT: string
+	/**
+	 * A​v​o​i​d​e​d
+	 */
+	VBD_STAT_AVOIDED: string
+	/**
+	 * C​O​2
+	 */
+	VBD_STAT_CO2: string
+	/**
+	 * C​o​n​s​e​r​v​e​d
+	 */
+	VBD_STAT_CONSERVED: string
+	/**
+	 * E​n​e​r​g​y
+	 */
+	VBD_STAT_ENERGY: string
+	/**
+	 * P​l​a​s​t​i​c
+	 */
+	VBD_STAT_PLASTIC: string
+	/**
+	 * R​e​d​u​c​e​d
+	 */
+	VBD_STAT_REDUCED: string
+	/**
+	 * S​a​v​e​d
+	 */
+	VBD_STAT_SAVED: string
+	/**
+	 * T​r​e​e​s
+	 */
+	VBD_STAT_TREES: string
+	/**
+	 * W​a​t​e​r
+	 */
+	VBD_STAT_WATER: string
+	/**
+	 * T​o​t​a​l​ ​B​e​t​t​e​r​ ​a​c​t​i​o​n​s
+	 */
+	VBD_TOTAL_ACTIONS: string
+	/**
+	 * T​o​t​a​l​ ​B​3​T​R​ ​r​e​w​a​r​d​e​d
+	 */
+	VBD_TOTAL_REWARDED: string
+	/**
+	 * Y​o​u​r​ ​B​e​t​t​e​r​ ​A​c​t​i​o​n​s
+	 */
+	VBD_YOUR_BETTER_ACTIONS: string
+	/**
+	 * Y​o​u​r​ ​o​f​f​s​e​t
+	 */
+	VBD_YOUR_OFFSET: string
+	/**
 	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
 	VECHAIN_NEWS_AND_UPDATES: string
@@ -4870,6 +5079,10 @@ type RootTranslation = {
 	 * V​e​W​o​r​l​d
 	 */
 	VEWORLD: string
+	/**
+	 * V​i​e​w​ ​o​n​l​y
+	 */
+	VIEW_ONLY: string
 	/**
 	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
 	 */
@@ -5150,6 +5363,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITIES_STATUS_success: () => LocalizedString
 	/**
+	 * Activity
+	 */
+	ACTIVITY: () => LocalizedString
+	/**
 	 * No Activities to show yet
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: () => LocalizedString
@@ -5201,6 +5418,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Other
 	 */
 	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
+	 * See all
+	 */
+	ACTIVITY_SEE_ALL: () => LocalizedString
 	/**
 	 * Start earning
 	 */
@@ -5622,6 +5843,38 @@ Try reconnect your device to the internet.
 	 * Backup your wallet
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
+	/**
+	 * Buy
+	 */
+	BALANCE_ACTION_BUY: () => LocalizedString
+	/**
+	 * Other
+	 */
+	BALANCE_ACTION_OTHER: () => LocalizedString
+	/**
+	 * Receive
+	 */
+	BALANCE_ACTION_RECEIVE: () => LocalizedString
+	/**
+	 * Send
+	 */
+	BALANCE_ACTION_SEND: () => LocalizedString
+	/**
+	 * Collectibles
+	 */
+	BALANCE_TAB_COLLECTIBLES: () => LocalizedString
+	/**
+	 * You don't have any tokens yet
+	 */
+	BALANCE_TAB_NO_TOKENS: () => LocalizedString
+	/**
+	 * Staking
+	 */
+	BALANCE_TAB_STAKING: () => LocalizedString
+	/**
+	 * Tokens
+	 */
+	BALANCE_TAB_TOKENS: () => LocalizedString
 	/**
 	 * Get **VTHO** by staking your **VET tokens**
 	 */
@@ -6737,6 +6990,14 @@ Thanks for your patience!
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: () => LocalizedString
 	/**
+	 * Transfer a collectible to start building your collection
+	 */
+	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: () => LocalizedString
+	/**
+	 * or buy a collectible from one of our ecosystem apps
+	 */
+	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: () => LocalizedString
+	/**
 	 * Collections
 	 */
 	COLLECTIONS: () => LocalizedString
@@ -6744,6 +7005,10 @@ Thanks for your patience!
 	 * Collection name
 	 */
 	COLLECTION_NAME: () => LocalizedString
+	/**
+	 * day
+	 */
+	COMMOMN_DAY: () => LocalizedString
 	/**
 	 * 24 HRs
 	 */
@@ -7417,6 +7682,22 @@ Thanks for your patience!
 	 */
 	DEVICE_PIN: () => LocalizedString
 	/**
+	 * {dappName} will no longer have access to:
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS: (arg: { dappName: string }) => LocalizedString
+	/**
+	 * No longer request transactions to send to VeChain Thor.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_1: () => LocalizedString
+	/**
+	 * No longer request your signature on certificates or identification and agreements.
+	 */
+	DISCONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
+	/**
+	 * Disconnection request
+	 */
+	DISCONNECTION_REQUEST: () => LocalizedString
+	/**
 	 * Make your own DApp on Vechain
 	 */
 	DISCOVER_CREATE_YOUR_DAPP: () => LocalizedString
@@ -7925,6 +8206,10 @@ Thanks for your patience!
 	 */
 	LOADING_MORE: () => LocalizedString
 	/**
+	 * Loading page content
+	 */
+	LOADING_PAGE_CONTENT: () => LocalizedString
+	/**
 	 * Keep me signed in for future sessions
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
@@ -7936,10 +8221,6 @@ Thanks for your patience!
 	 * Login
 	 */
 	LOGIN_REQUEST_TITLE: () => LocalizedString
-	/**
-	 * Loading page content
-	 */
-	LOADING_PAGE_CONTENT: () => LocalizedString
 	/**
 	 * Are you sure you want to add the selected token?
 	 */
@@ -8393,6 +8674,10 @@ Thanks for your patience!
 	 * This dApp isn't verified by VeWorld.
 	 */
 	NOT_VERIFIED_DAPP: () => LocalizedString
+	/**
+	 * You can't connect to this dApp with a view only account.
+	 */
+	NOT_VERIFIED_WATCHED_ACCOUNT: () => LocalizedString
 	/**
 	 * November
 	 */
@@ -9414,6 +9699,30 @@ Here's what it's all about:
 	 */
 	STARGATE_REWARDS: () => LocalizedString
 	/**
+	 * Start staking
+	 */
+	STARGATE_START_STAKING: () => LocalizedString
+	/**
+	 * Get **VTHO** by staking your **VET** tokens
+	 */
+	STARGATE_STAT_DESCRIPTION: () => LocalizedString
+	/**
+	 * Rewards distributed
+	 */
+	STARGATE_STAT_REWARDS_DISTRIBUTED: () => LocalizedString
+	/**
+	 * Rewards generation
+	 */
+	STARGATE_STAT_REWARDS_GENERATION: () => LocalizedString
+	/**
+	 * Total staked
+	 */
+	STARGATE_STAT_TOTAL_STAKED: () => LocalizedString
+	/**
+	 * Total supply
+	 */
+	STARGATE_STAT_TOTAL_SUPPLY: () => LocalizedString
+	/**
 	 * Status
 	 */
 	STATUS: () => LocalizedString
@@ -9425,10 +9734,6 @@ Here's what it's all about:
 	 * Success!
 	 */
 	SUCCESS_GENERIC: () => LocalizedString
-	/**
-	 * The operation went well!
-	 */
-	SUCCESS_GENERIC_OPERATION: () => LocalizedString
 	/**
 	 * View operation detail.
 	 */
@@ -9509,6 +9814,14 @@ Here's what it's all about:
 	 * them?
 	 */
 	THEM: () => LocalizedString
+	/**
+	 * This month
+	 */
+	THIS_MONTH: () => LocalizedString
+	/**
+	 * This week
+	 */
+	THIS_WEEK: () => LocalizedString
 	/**
 	 * About
 	 */
@@ -9762,13 +10075,37 @@ Here's what it's all about:
 	 */
 	TODAY: () => LocalizedString
 	/**
+	 * Buy token
+	 */
+	TOKEN_BUY: () => LocalizedString
+	/**
+	 * Add balance buying with fiat
+	 */
+	TOKEN_BUY_SUBTITLE: () => LocalizedString
+	/**
 	 * Token Conversion
 	 */
 	TOKEN_CONVERSION: () => LocalizedString
 	/**
+	 * Custom token
+	 */
+	TOKEN_CUSTOM: () => LocalizedString
+	/**
+	 * Add a custom token to your wallet
+	 */
+	TOKEN_CUSTOM_SUBTITLE: () => LocalizedString
+	/**
 	 * Token ID
 	 */
 	TOKEN_ID: () => LocalizedString
+	/**
+	 * Receive token
+	 */
+	TOKEN_RECEIVE: () => LocalizedString
+	/**
+	 * Use your wallet address to receive
+	 */
+	TOKEN_RECEIVE_SUBTITLE: () => LocalizedString
 	/**
 	 * Token symbol
 	 */
@@ -9781,6 +10118,10 @@ Here's what it's all about:
 	 * Sent tokens
 	 */
 	TOKEN_TRANSFER_SENT: () => LocalizedString
+	/**
+	 * Total
+	 */
+	TOTAL: () => LocalizedString
 	/**
 	 * Touch ID
 	 */
@@ -9830,6 +10171,86 @@ Here's what it's all about:
 	 */
 	VALUE_TITLE: () => LocalizedString
 	/**
+	 * contribute to the offset
+	 */
+	VBD_CONTRIBUTE_OFFSET: () => LocalizedString
+	/**
+	 * get rewarded for your actions and
+	 */
+	VBD_GET_REWARDED: () => LocalizedString
+	/**
+	 * Join the
+	 */
+	VBD_JOIN_THE: () => LocalizedString
+	/**
+	 * movement
+	 */
+	VBD_MOVEMENT: () => LocalizedString
+	/**
+	 * Rewards earned
+	 */
+	VBD_REWARDS_EARNED: () => LocalizedString
+	/**
+	 * See VeBetter profile
+	 */
+	VBD_SEE_PROFILE: () => LocalizedString
+	/**
+	 * Start your impact
+	 */
+	VBD_START_YOUR_IMPACT: () => LocalizedString
+	/**
+	 * Avoided
+	 */
+	VBD_STAT_AVOIDED: () => LocalizedString
+	/**
+	 * CO2
+	 */
+	VBD_STAT_CO2: () => LocalizedString
+	/**
+	 * Conserved
+	 */
+	VBD_STAT_CONSERVED: () => LocalizedString
+	/**
+	 * Energy
+	 */
+	VBD_STAT_ENERGY: () => LocalizedString
+	/**
+	 * Plastic
+	 */
+	VBD_STAT_PLASTIC: () => LocalizedString
+	/**
+	 * Reduced
+	 */
+	VBD_STAT_REDUCED: () => LocalizedString
+	/**
+	 * Saved
+	 */
+	VBD_STAT_SAVED: () => LocalizedString
+	/**
+	 * Trees
+	 */
+	VBD_STAT_TREES: () => LocalizedString
+	/**
+	 * Water
+	 */
+	VBD_STAT_WATER: () => LocalizedString
+	/**
+	 * Total Better actions
+	 */
+	VBD_TOTAL_ACTIONS: () => LocalizedString
+	/**
+	 * Total B3TR rewarded
+	 */
+	VBD_TOTAL_REWARDED: () => LocalizedString
+	/**
+	 * Your Better Actions
+	 */
+	VBD_YOUR_BETTER_ACTIONS: () => LocalizedString
+	/**
+	 * Your offset
+	 */
+	VBD_YOUR_OFFSET: () => LocalizedString
+	/**
 	 * Vechain news & updates
 	 */
 	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
@@ -9845,6 +10266,10 @@ Here's what it's all about:
 	 * VeWorld
 	 */
 	VEWORLD: () => LocalizedString
+	/**
+	 * View only
+	 */
+	VIEW_ONLY: () => LocalizedString
 	/**
 	 * View on explorer
 	 */

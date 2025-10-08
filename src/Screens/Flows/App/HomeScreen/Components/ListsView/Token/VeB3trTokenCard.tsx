@@ -6,7 +6,7 @@ import { TokenImage } from "~Components/Reusable/TokenImage"
 import { COLORS } from "~Constants/Theme"
 import { useCombineFiatBalances, useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { selectBalanceForToken, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
+import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { BalanceUtils } from "~Utils"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
@@ -17,7 +17,6 @@ type Props = {
 
 export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) => {
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
-    const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
     const [width, setWidth] = useState<"auto" | number>("auto")
 
     const theme = useTheme()
@@ -40,7 +39,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
     } = useTokenCardFiatInfo(b3trToken)
 
     const vot3FiatBalance = BalanceUtils.getFiatBalance(
-        vot3RawBalance?.balance ?? "0",
+        vot3Token?.balance?.balance ?? "0",
         exchangeRate ?? 0,
         VOT3.decimals,
     )
@@ -88,7 +87,13 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
     return (
         <Animated.View style={[baseStyles.innerRow]}>
             <BaseView flexDirection="row" alignItems="flex-start" gap={12}>
-                <TokenImage isVechainToken iconSize={26} icon={B3TR.icon} />
+                <TokenImage
+                    isVechainToken
+                    iconSize={26}
+                    icon={B3TR.icon}
+                    isCrossChainToken={!!b3trToken.crossChainProvider}
+                    rounded={!b3trToken.crossChainProvider}
+                />
                 <BaseView flexDirection="column" alignItems="flex-start">
                     <BaseView flexDirection="row" gap={4}>
                         <BaseText typographyFont="subSubTitleSemiBold" style={{ width }}>

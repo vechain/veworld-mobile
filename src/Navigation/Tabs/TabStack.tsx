@@ -18,6 +18,7 @@ import { AppsStack, RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { selectCurrentScreen, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils } from "~Utils"
 import PlatformUtils from "~Utils/PlatformUtils"
 import { useI18nContext } from "~i18n"
 
@@ -69,6 +70,7 @@ export const TabStack = () => {
             case Routes.APPS_TABS_MANAGER:
             case Routes.APPS_SEARCH:
             case Routes.DISCOVER_SEARCH:
+            case Routes.BUY_WEBVIEW:
                 return "none"
 
             case "":
@@ -101,38 +103,41 @@ export const TabStack = () => {
                 }}
             />
 
-            <Tab.Screen
-                name="NFTStack"
-                component={NFTStack}
-                options={{
-                    tabBarLabel: "NFT",
-                    tabBarTestID: "nft-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image", LL.TAB_TITLE_NFT()),
-                }}
-            />
-
-            {betterWorldFeature?.appsScreen?.enabled ? (
+            {!betterWorldFeature?.balanceScreen?.collectibles?.enabled && (
                 <Tab.Screen
-                    name="AppsStack"
-                    component={AppsStack}
+                    name="NFTStack"
+                    component={NFTStack}
                     options={{
-                        tabBarLabel: "Apps",
-                        tabBarTestID: "apps-tab",
-                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-apps", LL.TAB_TITLE_APPS()),
-                    }}
-                />
-            ) : (
-                <Tab.Screen
-                    name="DiscoverStack"
-                    component={DiscoverStack}
-                    options={{
-                        tabBarLabel: "Discover",
-                        tabBarTestID: "discover-tab",
-                        tabBarIcon: ({ focused }) =>
-                            renderTabBarIcon(focused, "icon-explorer", LL.TAB_TITLE_DISCOVER()),
+                        tabBarLabel: "NFT",
+                        tabBarTestID: "nft-tab",
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image", LL.TAB_TITLE_NFT()),
                     }}
                 />
             )}
+
+            {!AccountUtils.isObservedAccount(selectedAccount) &&
+                (betterWorldFeature?.appsScreen?.enabled ? (
+                    <Tab.Screen
+                        name="AppsStack"
+                        component={AppsStack}
+                        options={{
+                            tabBarLabel: "Apps",
+                            tabBarTestID: "apps-tab",
+                            tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-apps", LL.TAB_TITLE_APPS()),
+                        }}
+                    />
+                ) : (
+                    <Tab.Screen
+                        name="DiscoverStack"
+                        component={DiscoverStack}
+                        options={{
+                            tabBarLabel: "Discover",
+                            tabBarTestID: "discover-tab",
+                            tabBarIcon: ({ focused }) =>
+                                renderTabBarIcon(focused, "icon-explorer", LL.TAB_TITLE_DISCOVER()),
+                        }}
+                    />
+                ))}
 
             <Tab.Screen
                 name={Routes.HISTORY_STACK}

@@ -1,6 +1,5 @@
 import { TestHelpers } from "~Test"
 import AccountUtils from "./index"
-import { updateAccountVns } from "./AccountUtils"
 import { Vns } from "~Hooks"
 import { Contact, ContactType, WalletAccount } from "~Model"
 
@@ -25,7 +24,10 @@ describe("AccountUtils", () => {
     })
 
     it("getAccountForIndex - should return the correct account", () => {
-        expect(AccountUtils.getAccountForIndex(0, TestHelpers.data.device1, 0)).toEqual(TestHelpers.data.account1D1)
+        expect(AccountUtils.getAccountForIndex(0, TestHelpers.data.device1, 0)).toEqual({
+            ...TestHelpers.data.account1D1,
+            alias: "Device 1 0",
+        })
     })
 
     it("getAccountForIndex - should throw when no xPub", () => {
@@ -35,17 +37,17 @@ describe("AccountUtils", () => {
     })
 
     it("updateAccountVns - should return an account with the vnsName property", () => {
-        const account = updateAccountVns(TestHelpers.data.account1D1, vnsData) as WalletAccount
+        const account = AccountUtils.updateAccountVns(TestHelpers.data.account1D1, vnsData) as WalletAccount
         expect(account.vnsName).toBe("test-dev.vet")
     })
 
     it("updateAccountVns - should return a contact with the vnsName property", () => {
-        const contact = updateAccountVns(contact1, vnsData) as Contact
+        const contact = AccountUtils.updateAccountVns(contact1, vnsData) as Contact
         expect(contact.vnsName).toBe("doublemme.vet")
     })
 
     it("updateAccountVns - should return undefined if no address found in vnsData", () => {
-        const contact = updateAccountVns(TestHelpers.data.account2D1, vnsData) as WalletAccount
+        const contact = AccountUtils.updateAccountVns(TestHelpers.data.account2D1, vnsData) as WalletAccount
         expect(contact.vnsName).toBeUndefined()
     })
 

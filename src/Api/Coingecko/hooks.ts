@@ -7,13 +7,14 @@ import {
     getVechainStatsTokensInfo,
 } from "./endpoints"
 import { max } from "lodash"
-import { marketChartTimeframes } from "./constants"
+import { getSymbolByCoingeckoId, marketChartTimeframes } from "./constants"
 import { VETHOR_COINGECKO_ID, VET_COINGECKO_ID } from "~Constants"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import BigNumber from "bignumber.js"
 import { queryClient } from "~Api/QueryProvider"
 import { FeatureFlags } from "~Api/FeatureFlags"
 import { featureFlagsQueryKey } from "~Components/Providers"
+import { useMemo } from "react"
 
 // Enable it if we are switching back to a direct call to coingecko instead of using the proxy
 const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000").toNumber()
@@ -152,7 +153,7 @@ export const useVechainStatsTokensInfo = () => {
 
 export const getVechainStatsTokenQueryKey = (tokenSymbol: string) => ["VechainStats", "TOKENS_INFO", tokenSymbol]
 
-export const useVechainStatsTokenInfo = (tokenSymbol: string) => {
+export const useVechainStatsTokenInfo = (tokenSymbol: string, enabled: boolean = true) => {
     const currency = useAppSelector(selectCurrency)
 
     return useQuery({
@@ -165,6 +166,7 @@ export const useVechainStatsTokenInfo = (tokenSymbol: string) => {
         },
         staleTime: getQueryCacheTime(),
         refetchInterval: getRefetchIntevalTime(),
+        enabled,
     })
 }
 
@@ -181,13 +183,30 @@ const getExchangeRateQueryKey = ({ id, vs_currency }: { id?: string; vs_currency
  * @returns  the exchange rate
  */
 export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency: string }) => {
-    const { data: tokenInfo } = useTokenInfo({ id })
-    const currency = vs_currency.toLowerCase()
+    const isCoingecko = useMemo(() => getSymbolByCoingeckoId[id ?? ""], [id])
+    const { data: tokenInfo, status: tokenInfoStatus } = useTokenInfo({ id: isCoingecko ? id : undefined })
+    const currency = useMemo(() => vs_currency.toLowerCase(), [vs_currency])
+    const symbol = useMemo(() => getSymbolByCoingeckoId[id ?? ""] ?? id, [id])
+
+    const { data: vechainStatsExchangeRate, status: vechainStatsStatus } = useVechainStatsTokenInfo(
+        symbol,
+        !isCoingecko,
+    )
+
+    const enabled = useMemo(() => {
+        if (isCoingecko) return Boolean(tokenInfoStatus === "success" && id)
+        return Boolean(vechainStatsStatus === "success" && id)
+    }, [id, isCoingecko, tokenInfoStatus, vechainStatsStatus])
 
     return useQuery({
         queryKey: getExchangeRateQueryKey({ id, vs_currency }),
-        queryFn: () => tokenInfo?.market_data.current_price[currency],
-        enabled: !!tokenInfo,
+        queryFn: () => {
+            if (!id) return
+            if (Object.keys(getSymbolByCoingeckoId).includes(id)) return tokenInfo?.market_data.current_price[currency]
+            if (!vechainStatsExchangeRate) return null
+            return parseFloat(vechainStatsExchangeRate)
+        },
+        enabled,
         staleTime: getQueryCacheTime(),
         refetchInterval: getRefetchIntevalTime(),
     })

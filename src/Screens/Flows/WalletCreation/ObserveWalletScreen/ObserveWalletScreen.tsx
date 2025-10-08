@@ -1,4 +1,6 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useState } from "react"
+import { Keyboard } from "react-native"
 import {
     BaseButton,
     BaseSpacer,
@@ -9,24 +11,14 @@ import {
     Layout,
     SelectWatchedAccountBottomSheet,
     showErrorToast,
-    useThor,
 } from "~Components"
-import { useI18nContext } from "~i18n"
-import {
-    addAccount,
-    selectAccounts,
-    selectBalanceVisible,
-    selectSelectedNetwork,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import { useNavigation } from "@react-navigation/native"
-import { Keyboard } from "react-native"
+import { ScanTarget } from "~Constants"
 import { useBottomSheetModal, useCameraBottomSheet, useVns, ZERO_ADDRESS } from "~Hooks"
-import HapticsService from "~Services/HapticsService"
-import { AccountUtils, AddressUtils, BalanceUtils, BigNutils } from "~Utils"
-import { ScanTarget, VET } from "~Constants"
+import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, WatchedAccount } from "~Model"
+import HapticsService from "~Services/HapticsService"
+import { addAccount, selectAccounts, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { AccountUtils, AddressUtils } from "~Utils"
 
 export const ObserveWalletScreen = () => {
     const { LL } = useI18nContext()
@@ -34,9 +26,6 @@ export const ObserveWalletScreen = () => {
     const dispatch = useAppDispatch()
 
     const accounts = useAppSelector(selectAccounts)
-    const isBalanceVisible = useAppSelector(selectBalanceVisible)
-    const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    const thor = useThor()
 
     const [inputValue, setInputValue] = useState("")
     const [underlyingAddress, setUnderlyingAddress] = useState("")
@@ -44,7 +33,6 @@ export const ObserveWalletScreen = () => {
 
     const [error, setError] = useState<string | undefined>()
     const [_watchedAccount, setWatchedAccount] = useState<WatchedAccount | undefined>()
-    const [formattedBalance, setFormattedBalance] = useState("0")
 
     const [btnTitle, setBtnTitle] = useState(LL.COMMON_IMPORT().toUpperCase())
 
@@ -73,15 +61,10 @@ export const ObserveWalletScreen = () => {
                 index: -1,
             }
 
-            // get balance
-            const balance = await BalanceUtils.getBalanceFromBlockchain(VET.address, _address, selectedNetwork, thor)
-            const _formattedBalance = BigNutils(balance?.balance).toHuman(VET.decimals).toTokenFormat_string(2)
-            setFormattedBalance(_formattedBalance)
-
             setWatchedAccount(account)
             openSelectAccountBottomSheet()
         },
-        [accounts, openSelectAccountBottomSheet, selectedNetwork, thor],
+        [accounts, openSelectAccountBottomSheet],
     )
 
     const handleConfirmAccount = useCallback(() => {
@@ -196,11 +179,9 @@ export const ObserveWalletScreen = () => {
                         </BaseView>
 
                         <SelectWatchedAccountBottomSheet
-                            formattedBalance={formattedBalance}
                             closeBottomSheet={closeSelectAccountBottonSheet}
                             account={_watchedAccount}
                             confirmAccount={handleConfirmAccount}
-                            isBalanceVisible={isBalanceVisible}
                             ref={selectAccountBottomSheetRef}
                         />
                     </>

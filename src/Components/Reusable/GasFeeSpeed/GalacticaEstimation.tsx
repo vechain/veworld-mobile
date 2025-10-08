@@ -134,7 +134,8 @@ const baseStyles = (theme: ColorThemeType) => {
             paddingBottom: 12,
         },
         selector: {
-            flex: 0.35,
+            flexBasis: "35%",
+            flexShrink: 1,
         },
     })
 }

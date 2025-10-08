@@ -4,6 +4,7 @@ import React from "react"
 import { useFeatureFlags } from "~Components"
 import { TokenWithCompleteInfo } from "~Hooks"
 import {
+    Activity,
     CloudKitWallet,
     ConnectedLedgerDevice,
     Device,
@@ -11,10 +12,12 @@ import {
     FungibleToken,
     FungibleTokenWithBalance,
     LedgerAccountWithDevice,
+    TransactionOutcomes,
 } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import {
+    ActivityDetailsScreen,
     AddCustomNodeScreen,
     AssetDetailScreen,
     BridgeAssetDetailScreen,
@@ -31,7 +34,6 @@ import {
     InsertAddressSendScreen,
     LedgerSignTransaction,
     ManageCustomNodesScreen,
-    ManageCustomTokenScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
     SelectAmountSendScreen,
@@ -46,7 +48,9 @@ import {
     WalletManagementScreen,
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import { BuyStack } from "./BuyStack"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -79,9 +83,20 @@ export type RootStackParamListHome = {
         initialRoute?: Routes.HOME | Routes.NFTS
     }
     [Routes.SWAP]: undefined
-    [Routes.HISTORY]: undefined
+    [Routes.HISTORY]:
+        | {
+              screen?:
+                  | Routes.ACTIVITY_ALL
+                  | Routes.ACTIVITY_B3TR
+                  | Routes.ACTIVITY_TRANSFER
+                  | Routes.ACTIVITY_STAKING
+                  | Routes.ACTIVITY_SWAP
+                  | Routes.ACTIVITY_NFT
+                  | Routes.ACTIVITY_DAPPS
+                  | Routes.ACTIVITY_OTHER
+          }
+        | undefined
     [Routes.MANAGE_TOKEN]: undefined
-    [Routes.MANAGE_CUSTOM_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.CREATE_WALLET_FLOW]: undefined
@@ -143,6 +158,14 @@ export type RootStackParamListHome = {
     [Routes.APPS_TABS_MANAGER]: undefined
     [Routes.APPS_SEARCH]: undefined
     [Routes.DISCOVER_SEARCH]: undefined
+    [Routes.ACTIVITY_DETAILS]: {
+        activity: Activity
+        token?: FungibleToken
+        isSwap?: boolean
+        decodedClauses?: TransactionOutcomes
+        returnScreen?: Routes.HOME | Routes.HISTORY
+    }
+    [Routes.BUY_FLOW]: undefined
 }
 
 const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome>()
@@ -153,7 +176,11 @@ export const HomeStack = () => {
     return (
         <Navigator id="HomeStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
-                <Screen name={Routes.HOME} component={HomeScreen} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.HOME}
+                    component={betterWorldFeature.balanceScreen?.enabled ? BalanceScreen : HomeScreen}
+                    options={{ headerShown: false }}
+                />
                 <Screen
                     name={Routes.SELECT_TOKEN_SEND}
                     component={SelectTokenSendScreen}
@@ -186,11 +213,6 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen name={Routes.MANAGE_TOKEN} component={ManageTokenScreen} options={{ headerShown: false }} />
-                <Screen
-                    name={Routes.MANAGE_CUSTOM_TOKEN}
-                    component={ManageCustomTokenScreen}
-                    options={{ headerShown: false }}
-                />
 
                 <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
                 <Screen
@@ -287,6 +309,18 @@ export const HomeStack = () => {
                         transitionSpec: TRANSITION_SPECS,
                         gestureDirection: "vertical",
                         gestureEnabled: true,
+                    }}
+                />
+                <Screen
+                    name={Routes.ACTIVITY_DETAILS}
+                    component={ActivityDetailsScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.BUY_FLOW}
+                    component={BuyStack}
+                    options={{
+                        presentation: "modal",
                     }}
                 />
             </Group>

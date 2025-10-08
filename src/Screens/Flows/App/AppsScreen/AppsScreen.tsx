@@ -34,7 +34,7 @@ export const AppsScreen = () => {
     } = useBottomSheetModal()
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.APPS)
 
     const showFavorites = bookmarkedDApps.length > 0
 
@@ -64,7 +64,7 @@ export const AppsScreen = () => {
 
     return (
         <Layout
-            bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
+            bg={theme.colors.background}
             noBackButton
             noMargin
             fixedHeader={

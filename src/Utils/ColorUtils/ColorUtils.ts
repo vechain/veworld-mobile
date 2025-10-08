@@ -41,27 +41,58 @@ const generateColorHash = (input: string): string => {
 }
 
 /**
+ * Get the RGBA values from a color
+ * @param color Color in hexadecimal format or rgb(a) format
+ * @returns An object with the rgb values.
+ * @throws "Invalid color format" if the format is invalid
+ */
+const getRgbaFromColor = (color: string) => {
+    if (/^rgb/.test(color)) {
+        const rgb = color.match(/^rgb(a)?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/)
+        if (!rgb) throw new Error("Invalid color format")
+        //rgb[0] is the full string
+        return {
+            r: parseInt(rgb[2], 10),
+            g: parseInt(rgb[3], 10),
+            b: parseInt(rgb[4], 10),
+            a: parseInt(rgb[1] ?? "1", 10),
+        }
+    }
+
+    const matchHex = color.match("#[a-fA-F0-9]{6}")
+    if (!matchHex) throw new Error("Invalid color format")
+    let hexColor: number
+    const slicedColor = color.slice(1)
+    if (color.length < 5) hexColor = Number(`0x${slicedColor.replace(/./, "$&$&")}`)
+    else hexColor = Number(`0x${slicedColor}`)
+
+    return {
+        // eslint-disable-next-line no-bitwise
+        r: hexColor >> 16,
+        // eslint-disable-next-line no-bitwise
+        g: (hexColor >> 8) & 255,
+        // eslint-disable-next-line no-bitwise
+        b: hexColor & 255,
+        a: 1,
+    }
+}
+
+/**
  * Determines if a color is light or dark.
- * @param color The color in hexadecimal format to check.
+ * @param color The color in hexadecimal or rgb(a) format to check.
  * @returns A boolean value where true indicates the color is light, and false indicates the color is dark.
  * @throws Will throw an error if the color format is invalid.
  */
 const isLightColor = (color: string): boolean => {
-    // Check if color is valid hex color
-    if (!/^#([0-9a-f]{3}){1,2}$/i.test(color)) {
-        throw new Error("Invalid color format")
-    }
+    const { r, g, b } = getRgbaFromColor(color)
 
-    let r = parseInt(color.slice(1, 3), 16),
-        g = parseInt(color.slice(3, 5), 16),
-        b = parseInt(color.slice(5, 7), 16)
+    // HSP equation from http://alienryderflex.com/hsp.html
+    const hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b))
 
-    // Calculate brightness according to the algorithm:
-    // https://www.w3.org/TR/AERT/#color-contrast
-    let brightness = Math.round((r * 299 + g * 587 + b * 114) / 1000)
+    // Using the HSP value, determine whether the color is light or dark
+    // > 127.5 is 'light', <= 127.5 is 'dark'
 
-    // Return true if the color is light (brightness is more than 128)
-    return brightness > 128
+    return hsp > 127.5
 }
 
 /**

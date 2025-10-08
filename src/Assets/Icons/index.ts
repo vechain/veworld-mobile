@@ -15,6 +15,7 @@ const GooglePayIcon = require("./googlePay.svg")
 const TabIcon = require("./icon-tabs.svg")
 const StellaPayLogo = require("./stella_pay_logo.svg")
 const VeChainTokenBadge = require("./vechain_token_badge.png")
+const VeBetterFullLogo = require("./VeBetter-full-logo.svg")
 
 export {
     VeChainVetLogo,
@@ -34,4 +35,5 @@ export {
     TabIcon,
     StellaPayLogo,
     VeChainTokenBadge,
+    VeBetterFullLogo,
 }
