@@ -9,6 +9,7 @@ import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Comp
 import { BaseTabs } from "~Components/Base/BaseTabs"
 import { COLORS } from "~Constants"
 import { useAppState, useBottomSheetModal, useCameraPermissions, useThemedStyles } from "~Hooks"
+import { useQrScanDetection } from "~Hooks/useQrScanDetection"
 import { useI18nContext } from "~i18n"
 import { StringUtils } from "~Utils"
 import { ReceiveTab } from "./ReceiveTab"
@@ -65,18 +66,6 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
         [cameraX, cameraY],
     )
 
-    const cameraBounds = useDerivedValue(
-        () => ({ x: cameraX.value + rootX.value, y: cameraY.value + rootY.value }),
-        [rootX.value, rootY.value, cameraX.value, cameraY.value],
-    )
-
-    const points = useSharedValue([
-        { x: 0, y: 0 },
-        { x: 0, y: 0 },
-        { x: 0, y: 0 },
-        { x: 0, y: 0 },
-    ])
-
     const children = useMemo(() => {
         return (
             <>
@@ -132,54 +121,15 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
     ])
 
     const device = useCameraDevice("back")
+    const offsetX = useDerivedValue(() => rootX.value + cameraX.value, [rootX.value, cameraX.value])
+    const offsetY = useDerivedValue(() => rootY.value + cameraY.value, [rootY.value, cameraY.value])
+    const onScan = useCallback(() => {}, [])
+
+    const onCodeScanned = useQrScanDetection({ offsetX, offsetY, size: 200, onScan })
 
     const codeScanner = useCodeScanner({
         codeTypes: ["qr"],
-        onCodeScanned: codes => {
-            for (const code of codes) {
-                if (!code.frame) return
-                const n = [
-                    {
-                        x: code.frame!.x - code.frame!.width / 2,
-                        y: code.frame!.y + code.frame!.height / 5,
-                    },
-                    {
-                        x: code.frame!.x + code.frame!.width,
-                        y: code.frame!.y + code.frame!.height / 5,
-                    },
-                    {
-                        x: code.frame!.x + code.frame!.width,
-                        y: code.frame!.y + code.frame!.height * 1.5,
-                    },
-                    {
-                        x: code.frame!.x - code.frame!.width / 2,
-                        y: code.frame!.y + code.frame!.height * 1.5,
-                    },
-                ]
-                points.value = [...n]
-
-                const biggerRect = {
-                    x: cameraBounds.value.x * 0.8,
-                    y: cameraBounds.value.y * 0.8,
-                    width: 200 + cameraBounds.value.x * 0.4,
-                    height: 200 + cameraBounds.value.y * 0.4,
-                }
-
-                //Outside of detection area
-                if (
-                    !n.every(point => {
-                        return (
-                            point.x >= biggerRect.x &&
-                            point.x <= biggerRect.x + biggerRect.width &&
-                            point.y >= biggerRect.y &&
-                            point.y <= biggerRect.y + biggerRect.height
-                        )
-                    })
-                ) {
-                    return
-                }
-            }
-        },
+        onCodeScanned,
     })
 
     const skiaClip = useDerivedValue(() =>
