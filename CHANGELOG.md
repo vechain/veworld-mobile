@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.6 (2025-10-08)</small>
+
+* build: init ([c514617](https://github.com/vechain/veworld-mobile/commit/c514617))
+* fix: add back qr scan from home (#3388) ([5f4671c](https://github.com/vechain/veworld-mobile/commit/5f4671c)), closes [#3388](https://github.com/vechain/veworld-mobile/issues/3388)
+
 ## <small>2.4.5 (2025-10-03)</small>
 
 * build: init ([58131c2](https://github.com/vechain/veworld-mobile/commit/58131c2))
