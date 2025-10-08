@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { BaseText, BaseTouchable, BaseView, Icon, QRCodeBottomSheet } from "~Components"
 import { AddTokenBottomSheet } from "./AddTokenBottomSheet"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -11,14 +11,18 @@ import { useSortedTokensByFiatValue } from "~Hooks/useSortedTokensByFiatValue"
 export const AddTokensCard = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { ref, onOpen, onClose } = useBottomSheetModal()
+    const { ref, onOpen } = useBottomSheetModal()
     const { ref: qrCodeBottomSheetRef } = useBottomSheetModal()
 
     const { data: hasAnyVeBetterActions } = useHasAnyVeBetterActions()
     const { tokens } = useSortedTokensByFiatValue()
 
-    const hasTokensWithBalance = tokens.some(token => !BigNutils(token.balance.balance).isZero)
-    const isNewUserWithNoTokens = !hasAnyVeBetterActions && !hasTokensWithBalance
+    const hasTokensWithBalance = useMemo(() => tokens.some(token => !BigNutils(token.balance.balance).isZero), [tokens])
+
+    const isNewUserWithNoTokens = useMemo(
+        () => !hasAnyVeBetterActions && !hasTokensWithBalance,
+        [hasAnyVeBetterActions, hasTokensWithBalance],
+    )
 
     return isNewUserWithNoTokens ? (
         <BaseView style={styles.root}>
@@ -33,7 +37,7 @@ export const AddTokensCard = () => {
                 <Icon name="icon-plus-circle" color={theme.isDark ? COLORS.PURPLE : COLORS.GREY_50} size={20} />
             </BaseTouchable>
 
-            <AddTokenBottomSheet onClose={onClose} bottomSheetRef={ref} qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
+            <AddTokenBottomSheet bottomSheetRef={ref} qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
             <QRCodeBottomSheet ref={qrCodeBottomSheetRef} />
         </BaseView>
     ) : null

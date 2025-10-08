@@ -11,7 +11,6 @@ import { useNavigation } from "@react-navigation/native"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 type AddTokenBottomSheetProps = {
-    onClose: () => void
     bottomSheetRef?: React.RefObject<BottomSheetModal>
     qrCodeBottomSheetRef?: RefObject<BottomSheetModalMethods>
 }
@@ -58,7 +57,7 @@ const TokenListItem = ({ item }: TokenListItemProps) => {
 
 const ItemSeparator = () => <BaseSpacer height={8} />
 
-export const AddTokenBottomSheet = ({ onClose, bottomSheetRef, qrCodeBottomSheetRef }: AddTokenBottomSheetProps) => {
+export const AddTokenBottomSheet = ({ bottomSheetRef, qrCodeBottomSheetRef }: AddTokenBottomSheetProps) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
@@ -72,7 +71,7 @@ export const AddTokenBottomSheet = ({ onClose, bottomSheetRef, qrCodeBottomSheet
             title: LL.TOKEN_BUY(),
             subtitle: LL.TOKEN_BUY_SUBTITLE(),
             onPress: () => {
-                onClose()
+                qrCodeBottomSheetRef?.current?.close()
                 nav.navigate(Routes.BUY_FLOW)
             },
         },
@@ -82,7 +81,7 @@ export const AddTokenBottomSheet = ({ onClose, bottomSheetRef, qrCodeBottomSheet
             title: LL.TOKEN_RECEIVE(),
             subtitle: LL.TOKEN_RECEIVE_SUBTITLE(),
             onPress: () => {
-                onClose()
+                qrCodeBottomSheetRef?.current?.close()
                 openQRCodeSheet()
             },
         },
@@ -92,7 +91,7 @@ export const AddTokenBottomSheet = ({ onClose, bottomSheetRef, qrCodeBottomSheet
             title: LL.TOKEN_CUSTOM(),
             subtitle: LL.TOKEN_CUSTOM_SUBTITLE(),
             onPress: () => {
-                onClose()
+                qrCodeBottomSheetRef?.current?.close()
                 nav.navigate(Routes.MANAGE_TOKEN)
             },
         },

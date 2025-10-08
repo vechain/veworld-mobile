@@ -114,8 +114,15 @@ export const useSortedTokensByFiatValue = (accountAddress?: string) => {
         accountAddress: address,
     })
 
-    const hasTokensWithBalance = tokenBalances.some(token => !BigNutils(token.balance.balance).isZero)
-    const isNewUserWithNoTokens = !hasAnyVeBetterActions && !hasTokensWithBalance
+    const hasTokensWithBalance = useMemo(
+        () => tokenBalances.some(token => !BigNutils(token.balance.balance).isZero),
+        [tokenBalances],
+    )
+
+    const isNewUserWithNoTokens = useMemo(
+        () => !hasAnyVeBetterActions && !hasTokensWithBalance,
+        [hasAnyVeBetterActions, hasTokensWithBalance],
+    )
 
     const sortedTokens = useMemo(() => {
         if (isNewUserWithNoTokens) {

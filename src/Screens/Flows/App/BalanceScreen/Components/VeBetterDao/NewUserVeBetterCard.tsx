@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { b3moEmpty, B3trLogoSVG, VeBetterFullLogoSVG } from "~Assets"
@@ -11,6 +11,27 @@ import { Routes } from "~Navigation"
 import { setHideNewUserVeBetterCard, useAppDispatch } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { StatsCard } from "./StatsCard"
+
+type StatItemProps = {
+    icon: React.ReactNode
+    label: string
+    value: string | number
+    isDark: boolean
+}
+
+const StatItem: React.FC<StatItemProps> = ({ icon, label, value, isDark }) => (
+    <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
+        <BaseView flexDirection="row" gap={12} alignItems="center">
+            {icon}
+            <BaseText typographyFont="captionMedium" color={isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
+                {label}
+            </BaseText>
+        </BaseView>
+        <BaseText typographyFont="bodySemiBold" color={isDark ? COLORS.GREY_100 : COLORS.GREY_700}>
+            {value}
+        </BaseText>
+    </BaseView>
+)
 
 export const NewUserVeBetterCard = () => {
     const { styles, theme } = useThemedStyles(style)
@@ -34,22 +55,6 @@ export const NewUserVeBetterCard = () => {
         dispatch(setHideNewUserVeBetterCard(true))
     }, [dispatch])
 
-    const StatItem = useMemo(() => {
-        return ({ icon, label, value }: { icon: React.ReactNode; label: string; value: string | number }) => (
-            <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
-                <BaseView flexDirection="row" gap={12} alignItems="center">
-                    {icon}
-                    <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
-                        {label}
-                    </BaseText>
-                </BaseView>
-                <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}>
-                    {value}
-                </BaseText>
-            </BaseView>
-        )
-    }, [theme.isDark])
-
     return (
         <BaseView style={styles.root} testID="VEBETTER_DAO_NEW_USER_CARD">
             <BaseTouchable style={styles.closeIcon} action={closeCard} haptics="Light" testID="close-button">
@@ -71,11 +76,13 @@ export const NewUserVeBetterCard = () => {
                         icon={<Icon name="icon-leafs" color={COLORS.LIGHT_GREEN} size={24} />}
                         label={LL.VBD_TOTAL_ACTIONS()}
                         value={BigNutils(globalOverview?.actionsRewarded ?? 0).toCompactString(formatLocale, 1)}
+                        isDark={theme.isDark}
                     />
                     <StatItem
                         icon={<B3trLogoSVG color={COLORS.LIGHT_GREEN} width={24} height={20} />}
                         label={LL.VBD_TOTAL_REWARDED()}
                         value={BigNutils(globalOverview?.totalRewardAmount ?? 0).toCompactString(formatLocale, 1)}
+                        isDark={theme.isDark}
                     />
                 </BaseView>
             </BaseView>
