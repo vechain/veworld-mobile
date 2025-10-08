@@ -30,7 +30,7 @@ describe("BalanceScreen -> Header", () => {
             { wrapper: TestWrapper },
         )
 
-        expect(screen.getByTestId("BALANCE_HEADER_DISPLAY_USERNAME")).toHaveTextContent("0xCF13…2957")
+        expect(screen.getByTestId("BALANCE_HEADER_DISPLAY_USERNAME")).toHaveTextContent("0xCF1…957")
         expect(screen.queryByTestId("BALANCE_HEADER_VIEW_ONLY")).toBeNull()
     })
     it("should show the account alias if it is not standard", () => {

@@ -7,7 +7,7 @@ import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
 import { useTokenBalance } from "~Hooks/useTokenBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
-import { selectBalanceVisible, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
+import { selectBalanceVisible, selectNetworkVBDTokens, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BalanceUtils, BigNutils } from "~Utils"
 
 type Args = {
@@ -21,6 +21,7 @@ export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
 
     const tokenWithInfoVET = useTokenWithCompleteInfo(VET, address, { enabled })
     const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO, address, { enabled })
+    const network = useAppSelector(selectSelectedNetwork)
 
     const tokenWithInfoB3TR = useTokenWithCompleteInfo(B3TR, address, { enabled })
     const { data: vot3RawBalance, isLoading: loadingVot3Balance } = useTokenBalance({
@@ -99,10 +100,12 @@ export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
     const { amount, areAlmostZero } = useMemo(() => combineFiatBalances(balances), [balances, combineFiatBalances])
 
     const { data: previousBalance } = useQuery({
-        queryKey: ["BALANCE", "TOTAL", address.toLowerCase()],
+        queryKey: ["BALANCE", "TOTAL", network.genesis.id, address.toLowerCase()],
         queryFn: () => amount,
         placeholderData: keepPreviousData,
         enabled: !isLoading,
+        staleTime: 5 * 60 * 1000,
+        gcTime: 5 * 60 * 1000,
     })
 
     const { formatFiat } = useFormatFiat()
