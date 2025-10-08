@@ -1,6 +1,5 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
-import React, { RefObject, useCallback, useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { clamp, interpolate, SharedValue, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
@@ -12,23 +11,23 @@ import {
     NetworkSwitcherContextMenu,
     SelectAccountBottomSheet,
 } from "~Components"
-import { COLORS, SCREEN_WIDTH } from "~Constants"
-import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
+import { useBottomSheetModal, useCameraBottomSheet, useSetSelectedAccount, useThemedStyles } from "~Hooks"
 import { useVns } from "~Hooks/useVns"
 import { AccountWithDevice, NETWORK_TYPE, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectSelectedNetwork, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { AccountUtils, AddressUtils } from "~Utils"
+import { useHomeQrScan } from "./Hooks/useHomeQrScan"
 
 type Props = {
     scrollY: SharedValue<number>
     contentOffsetY: SharedValue<number>
-    qrCodeBottomSheetRef: RefObject<BottomSheetModalMethods>
 }
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
-export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props) => {
+export const Header = ({ scrollY, contentOffsetY }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const account = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
@@ -65,9 +64,14 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const { onOpen: openQRCodeSheet } = useBottomSheetModal({ externalRef: qrCodeBottomSheetRef })
+    const onScan = useHomeQrScan()
 
-    const handleOpenQRCode = useCallback(() => openQRCodeSheet(), [openQRCodeSheet])
+    const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
+        onScan,
+        targets: [ScanTarget.WALLET_CONNECT, ScanTarget.ADDRESS, ScanTarget.HTTPS_URL],
+    })
+
+    const handleOpenQRCode = useCallback(() => handleOpenCamera(), [handleOpenCamera])
     const handleOpenWalletSwitcher = useCallback(() => openSelectAccountBottomSheet(), [openSelectAccountBottomSheet])
 
     const accounts = useAppSelector(selectVisibleAccounts)
@@ -160,6 +164,7 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
                 ref={selectAccountBottomSheetRef}
                 goToWalletEnabled
             />
+            {RenderCameraModal}
         </BaseView>
     )
 }
