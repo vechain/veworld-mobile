@@ -462,7 +462,7 @@ describe("ReceiptOutputRenderer", () => {
                     },
                 )
 
-                expect(screen.getByTestId("TOKEN_SEND_RECEIVER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("TOKEN_SEND_RECEIVER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("TOKEN_SEND_VALUE")).toHaveTextContent("- 1.00 B3TR")
             })
             it("Token receive", () => {
@@ -486,7 +486,7 @@ describe("ReceiptOutputRenderer", () => {
                     },
                 )
 
-                expect(screen.getByTestId("TOKEN_RECEIVE_SENDER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("TOKEN_RECEIVE_SENDER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("TOKEN_RECEIVE_VALUE")).toHaveTextContent("+ 1.00 B3TR")
             })
             it("Token approval", () => {
@@ -510,7 +510,7 @@ describe("ReceiptOutputRenderer", () => {
                     },
                 )
 
-                expect(screen.getByTestId("TOKEN_APPROVAL_SPENDER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("TOKEN_APPROVAL_SPENDER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("TOKEN_APPROVAL_VALUE")).toHaveTextContent("1.00 B3TR")
             })
             describe("Swap", () => {
@@ -639,7 +639,7 @@ describe("ReceiptOutputRenderer", () => {
                     },
                 )
 
-                expect(screen.getByTestId("TOKEN_SEND_RECEIVER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("TOKEN_SEND_RECEIVER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("TOKEN_SEND_VALUE")).toHaveTextContent("- 1.00 VET")
             })
             it("Token receive", () => {
@@ -663,7 +663,7 @@ describe("ReceiptOutputRenderer", () => {
                     },
                 )
 
-                expect(screen.getByTestId("TOKEN_RECEIVE_SENDER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("TOKEN_RECEIVE_SENDER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("TOKEN_RECEIVE_VALUE")).toHaveTextContent("+ 1.00 VET")
             })
         })
@@ -688,7 +688,7 @@ describe("ReceiptOutputRenderer", () => {
                     },
                 )
 
-                expect(screen.getByTestId("NFT_SEND_RECEIVER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("NFT_SEND_RECEIVER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("NFT_SEND_TOKEN_ID")).toHaveTextContent("#1")
             })
             it("Token receive", () => {
@@ -711,7 +711,7 @@ describe("ReceiptOutputRenderer", () => {
                     },
                 )
 
-                expect(screen.getByTestId("NFT_SEND_SENDER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("NFT_SEND_SENDER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("NFT_SEND_TOKEN_ID")).toHaveTextContent("#1")
             })
             it("Token approval", () => {
@@ -735,7 +735,7 @@ describe("ReceiptOutputRenderer", () => {
                     },
                 )
 
-                expect(screen.getByTestId("NFT_APPROVAL_SPENDER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("NFT_APPROVAL_SPENDER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("NFT_APPROVAL_VALUE")).toHaveTextContent("#1")
             })
             it("Token approval for all", () => {
@@ -758,7 +758,7 @@ describe("ReceiptOutputRenderer", () => {
                     },
                 )
 
-                expect(screen.getByTestId("NFT_APPROVAL_SPENDER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("NFT_APPROVAL_SPENDER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("NFT_APPROVAL_VALUE")).toHaveTextContent("ALL")
             })
         })
@@ -812,7 +812,7 @@ describe("ReceiptOutputRenderer", () => {
         )
 
         expect(screen.getByTestId("BASE_RECEIPT_CLAUSE_INDEX")).toHaveTextContent("#1")
-        expect(screen.getByTestId("BASE_RECEIPT_TO")).toHaveTextContent("0x73Cb…1050")
+        expect(screen.getByTestId("BASE_RECEIPT_TO")).toHaveTextContent("0x73C…050")
         expect(screen.getByTestId("BASE_RECEIPT_CONTRACT_DATA")).toHaveTextContent("0x0")
     })
 })

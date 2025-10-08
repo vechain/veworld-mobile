@@ -24,7 +24,10 @@ describe("AccountUtils", () => {
     })
 
     it("getAccountForIndex - should return the correct account", () => {
-        expect(AccountUtils.getAccountForIndex(0, TestHelpers.data.device1, 0)).toEqual(TestHelpers.data.account1D1)
+        expect(AccountUtils.getAccountForIndex(0, TestHelpers.data.device1, 0)).toEqual({
+            ...TestHelpers.data.account1D1,
+            alias: "Device 1 0",
+        })
     })
 
     it("getAccountForIndex - should throw when no xPub", () => {

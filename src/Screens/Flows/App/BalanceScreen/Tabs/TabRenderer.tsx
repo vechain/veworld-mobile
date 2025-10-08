@@ -59,7 +59,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const showFavorites = useMemo(() => {
         return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount)
     }, [bookmarkedDApps.length, selectedAccount])
-    const labels = useMemo(() => TABS.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL])
+    const labels = useMemo(() => filteredTabs.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL, filteredTabs])
 
     const paddingBottom = useMemo(() => {
         return isAndroid() ? tabBarBottomMargin + 24 : 0

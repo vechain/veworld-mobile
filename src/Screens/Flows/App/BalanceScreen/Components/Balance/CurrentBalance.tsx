@@ -37,7 +37,11 @@ export const CurrentBalance = () => {
     return (
         <TouchableOpacity onPress={onPress}>
             <Animated.View style={styles.root} layout={LinearTransition.duration(300)}>
-                <BaseText typographyFont="headerTitle" fontWeight="400" color={COLORS.PURPLE_LABEL}>
+                <BaseText
+                    typographyFont="biggerTitleMedium"
+                    fontWeight="400"
+                    color={COLORS.PURPLE_LABEL}
+                    style={styles.currency}>
                     {currencySymbol}
                 </BaseText>
                 <Animated.View style={styles.balance}>
@@ -62,7 +66,7 @@ const baseStyles = () =>
         text: {
             color: COLORS.GREY_50,
             fontWeight: 600,
-            fontSize: 36,
+            fontSize: 40,
             fontFamily: "Inter-SemiBold",
             lineHeight: 40,
         },
@@ -77,5 +81,9 @@ const baseStyles = () =>
         },
         balance: {
             flexDirection: "row",
+        },
+        currency: {
+            height: 40,
+            alignItems: "center",
         },
     })

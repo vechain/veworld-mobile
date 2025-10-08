@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React, { memo, useMemo } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import { SvgXml } from "react-native-svg"
 import { NewLedgerLogo } from "~Assets"
@@ -16,14 +16,27 @@ type AccountIconProps = {
     }
     size?: number
     borderRadius?: number
+    /**
+     * Hide the new Ledger Badge
+     * @default false
+     */
+    hideLedger?: boolean
 }
 
-export const AccountIcon: React.FC<AccountIconProps> = memo(({ account, size, borderRadius }) => {
+export const AccountIcon: React.FC<AccountIconProps> = memo(({ account, size, borderRadius, hideLedger }) => {
     const { theme, styles } = useThemedStyles(accountIconStyles)
+
+    const showLedger = useMemo(() => {
+        if (hideLedger) return false
+        if (account.type === DEVICE_TYPE.LEDGER) return true
+        if (account.device?.type === DEVICE_TYPE.LEDGER) return true
+        return false
+    }, [account.device?.type, account.type, hideLedger])
+
     return (
         <BaseView style={styles.container}>
             <PicassoAddressIcon address={account.address} size={size} borderRadius={borderRadius} />
-            {(account.type === DEVICE_TYPE.LEDGER || account.device?.type === DEVICE_TYPE.LEDGER) && (
+            {showLedger && (
                 <BaseView borderRadius={99} p={4} style={styles.ledger}>
                     <NewLedgerLogo width={8} height={8} color={theme.isDark ? COLORS.GREY_700 : COLORS.WHITE} />
                 </BaseView>
