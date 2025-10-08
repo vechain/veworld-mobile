@@ -3,6 +3,7 @@ import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleSheet 
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { BaseSpacer, Layout, QRCodeBottomSheet } from "~Components"
+import { COLORS } from "~Constants"
 import { useBottomSheetModal, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
@@ -11,7 +12,6 @@ import { CurrentBalance } from "./Components/Balance/CurrentBalance"
 import { PullToRefresh } from "./Components/PullToRefresh"
 import { Header } from "./Header"
 import { TabRenderer } from "./Tabs/TabRenderer"
-import { COLORS } from "~Constants"
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
@@ -61,9 +61,7 @@ export const BalanceScreen = () => {
         <Layout
             bg={COLORS.APP_BACKGROUND_DARK}
             noBackButton
-            fixedHeader={
-                <Header scrollY={scrollY} contentOffsetY={contentOffsetY} qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
-            }
+            fixedHeader={<Header scrollY={scrollY} contentOffsetY={contentOffsetY} />}
             noMargin
             fixedBody={
                 <Animated.ScrollView
