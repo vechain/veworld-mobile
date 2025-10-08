@@ -10,7 +10,7 @@ import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BalanceUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
 import { Chart } from "./Chart"
@@ -22,6 +22,7 @@ type Props = {
 export const TokenCard = ({ token }: Props) => {
     const navigation = useNavigation()
     const currency = useAppSelector(selectCurrency)
+    const isBalanceVisible = useAppSelector(selectBalanceVisible)
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
     const [showChart, setShowChart] = useState(true)
@@ -51,6 +52,22 @@ export const TokenCard = ({ token }: Props) => {
 
     const { fiatBalance, showFiatBalance, tokenBalance } = useTokenCardBalance({ token })
     const tokenWithCompleteInfo = useTokenWithCompleteInfo(token)
+
+    const balance = useMemo(() => {
+        if (!isBalanceVisible) {
+            return "••••••"
+        }
+
+        return tokenBalance
+    }, [isBalanceVisible, tokenBalance])
+
+    // const fiatBalance = useMemo(() => {
+    //     if (!isBalanceVisible) {
+    //         return "••••••"
+    //     }
+
+    //     return fiatBalanceRaw
+    // }, [isBalanceVisible, fiatBalanceRaw])
 
     const chartIcon = useMemo(() => {
         if (!chartData || !showFiatBalance || showChart) return null
@@ -198,7 +215,7 @@ export const TokenCard = ({ token }: Props) => {
                             numberOfLines={1}
                             flexDirection="row"
                             testID="TOKEN_CARD_TOKEN_BALANCE">
-                            {tokenBalance}
+                            {balance}
                         </BaseText>
                     </>
                 ) : (
@@ -209,7 +226,7 @@ export const TokenCard = ({ token }: Props) => {
                         numberOfLines={1}
                         flexDirection="row"
                         testID="TOKEN_CARD_TOKEN_BALANCE">
-                        {tokenBalance}
+                        {balance}
                     </BaseText>
                 )}
             </BaseView>
