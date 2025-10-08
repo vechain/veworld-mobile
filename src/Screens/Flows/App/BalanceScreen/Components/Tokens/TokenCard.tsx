@@ -11,7 +11,7 @@ import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { AddressUtils, BalanceUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
 import { Chart } from "./Chart"
 
@@ -111,24 +111,35 @@ export const TokenCard = ({ token }: Props) => {
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
     // Only allow navigation for tokens with detailed information available
-    const supportsDetailNavigation = useMemo(
-        () => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol),
-        [token.symbol],
-    )
+    const isVechainToken = useMemo(() => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol), [token.symbol])
 
     const handlePress = useCallback(() => {
-        if (!supportsDetailNavigation) {
+        if (!isVechainToken) {
+            if (isCrossChainToken) {
+                navigation.navigate(Routes.BRIDGE_TOKEN_DETAILS, {
+                    token,
+                })
+                return
+            }
+
+            const isTokenBalance = BalanceUtils.getIsTokenWithBalance(token)
+
+            if (!isTokenBalance) return
+
+            navigation.navigate(Routes.INSERT_ADDRESS_SEND, {
+                token,
+            })
             return
         }
 
         navigation.navigate(Routes.TOKEN_DETAILS, {
             token: tokenWithCompleteInfo,
         })
-    }, [navigation, tokenWithCompleteInfo, supportsDetailNavigation])
+    }, [navigation, tokenWithCompleteInfo, isVechainToken, token, isCrossChainToken])
 
     return (
         <BaseTouchableBox
-            action={supportsDetailNavigation ? handlePress : undefined}
+            action={handlePress}
             py={symbol ? typography.lineHeight.body : typography.lineHeight.bodySemiBold}
             flexDirection="row"
             bg={theme.colors.card}
