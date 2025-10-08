@@ -69,7 +69,7 @@ export const TokenCard = ({ token }: Props) => {
         switch (token.symbol) {
             case "B3TR":
                 return (
-                    <BaseView flexDirection="row" gap={4}>
+                    <BaseView flexDirection="row" gap={4} overflow="hidden">
                         <BaseText
                             typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.subtitleLight}
@@ -130,7 +130,7 @@ export const TokenCard = ({ token }: Props) => {
             flexDirection="row"
             bg={theme.colors.card}
             innerContainerStyle={styles.root}>
-            <BaseView flexDirection="row" gap={16} flex={1}>
+            <BaseView flexDirection="row" gap={16} flexGrow={0} flexShrink={1}>
                 <TokenImage
                     icon={token.icon}
                     isVechainToken={AddressUtils.isVechainToken(token.address)}
@@ -140,13 +140,12 @@ export const TokenCard = ({ token }: Props) => {
                 />
 
                 {symbol ? (
-                    <BaseView flexDirection="column" flex={1}>
+                    <BaseView flexDirection="column" flexGrow={0} flexShrink={1}>
                         <BaseText
                             typographyFont="subSubTitleSemiBold"
                             color={theme.colors.activityCard.title}
                             flexDirection="row"
                             numberOfLines={1}
-                            flex={1}
                             testID="TOKEN_CARD_NAME">
                             {name}
                         </BaseText>
@@ -154,9 +153,11 @@ export const TokenCard = ({ token }: Props) => {
                     </BaseView>
                 ) : (
                     <BaseText
+                        flex={1}
                         typographyFont="subSubTitleSemiBold"
                         color={theme.colors.activityCard.title}
-                        flexDirection="row">
+                        flexDirection="row"
+                        numberOfLines={1}>
                         {name}
                     </BaseText>
                 )}
