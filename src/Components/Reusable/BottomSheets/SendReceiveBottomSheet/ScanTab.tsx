@@ -1,5 +1,5 @@
 import React from "react"
-import { StyleSheet, View } from "react-native"
+import { LayoutChangeEvent, StyleSheet, View } from "react-native"
 import { BaseButton, BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -49,21 +49,32 @@ const borderStyles = () =>
 export const ScanTab = ({
     hasCameraPerms,
     onPermissionPress,
+    onRootLayout,
+    onCameraWrapperLayout,
 }: {
     onPermissionPress: () => void | Promise<void>
     hasCameraPerms: boolean
+    onRootLayout: (e: LayoutChangeEvent) => void
+    onCameraWrapperLayout: (e: LayoutChangeEvent) => void
 }) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
 
     return (
-        <BaseView flex={1} flexDirection="column" alignItems="center" justifyContent="center" gap={24}>
+        <BaseView
+            flex={1}
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            gap={24}
+            onLayout={onRootLayout}>
             {hasCameraPerms ? (
                 <BaseView
                     style={styles.cameraPermsDisabledContainer}
                     flexDirection="column"
                     alignItems="center"
-                    justifyContent="center">
+                    justifyContent="center"
+                    onLayout={onCameraWrapperLayout}>
                     <BorderElement anchor="top_left" />
                     <BorderElement anchor="top_right" />
                     <BorderElement anchor="bottom_right" />

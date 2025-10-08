@@ -1,10 +1,11 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { Canvas, Fill } from "@shopify/react-native-skia"
 import { Camera, CameraView } from "expo-camera"
 import React, { forwardRef, RefObject, useCallback, useEffect, useMemo, useState } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
+import { useSharedValue } from "react-native-reanimated"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { BaseTabs } from "~Components/Base/BaseTabs"
-import { BlurView } from "~Components/Reusable/BlurView"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal, useCameraPermissions, useDisclosure, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -25,6 +26,11 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
     const [hasCameraPerms, setCameraPerms] = useState(false)
     const { onOpen: onCameraReady } = useDisclosure(false)
 
+    const rootX = useSharedValue(0)
+    const rootY = useSharedValue(0)
+    const cameraX = useSharedValue(0)
+    const cameraY = useSharedValue(0)
+
     const labels = useMemo(() => {
         return [LL.SEND_RECEIVE_TAB_SCAN(), LL.SEND_RECEIVE_TAB_RECEIVE()]
     }, [LL])
@@ -41,6 +47,22 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
     useEffect(() => {
         Camera.getCameraPermissionsAsync().then(res => setCameraPerms(res.granted))
     }, [])
+
+    const onScanRootLayout = useCallback(
+        (e: LayoutChangeEvent) => {
+            rootX.value = e.nativeEvent.layout.x
+            rootY.value = e.nativeEvent.layout.y
+        },
+        [rootX, rootY],
+    )
+
+    const onScanCameraLayout = useCallback(
+        (e: LayoutChangeEvent) => {
+            cameraX.value = e.nativeEvent.layout.x
+            cameraY.value = e.nativeEvent.layout.y
+        },
+        [cameraX, cameraY],
+    )
 
     const children = useMemo(() => {
         return (
@@ -61,7 +83,12 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
                 {tab === "receive" ? (
                     <ReceiveTab />
                 ) : (
-                    <ScanTab onPermissionPress={handleCheckPermissions} hasCameraPerms={hasCameraPerms} />
+                    <ScanTab
+                        onPermissionPress={handleCheckPermissions}
+                        hasCameraPerms={hasCameraPerms}
+                        onRootLayout={onScanRootLayout}
+                        onCameraWrapperLayout={onScanCameraLayout}
+                    />
                 )}
                 <BaseTabs
                     keys={TABS}
@@ -83,6 +110,8 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
         hasCameraPerms,
         labels,
         onClose,
+        onScanCameraLayout,
+        onScanRootLayout,
         styles.closeIconContainer,
         styles.iconContainer,
         styles.tabElement,
@@ -98,16 +127,29 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
             enablePanDownToClose={false}
             rounded={false}>
             {tab === "scan" && hasCameraPerms ? (
-                <CameraView
-                    ratio="16:9"
-                    onCameraReady={onCameraReady}
-                    barcodeScannerSettings={{
-                        barcodeTypes: ["qr"],
-                    }}
-                    style={styles.cameraView}>
-                    <BlurView blurAmount={25} overlayColor="transparent" style={styles.blurView} />
-                    {children}
-                </CameraView>
+                <BaseView flex={1} position="relative">
+                    <CameraView
+                        onCameraReady={onCameraReady}
+                        barcodeScannerSettings={{
+                            barcodeTypes: ["qr"],
+                        }}
+                        style={styles.cameraView}>
+                        {/* <BlurView blurAmount={25} overlayColor="transparent" style={styles.blurView} /> */}
+                    </CameraView>
+                    <Canvas style={StyleSheet.absoluteFill}>
+                        <Fill
+                            color={"rgba(0,0,0,0.65)"}
+                            clip={{
+                                x: rootX.value + cameraX.value,
+                                y: rootY.value + cameraY.value,
+                                width: 200,
+                                height: 200,
+                            }}
+                            invertClip
+                        />
+                    </Canvas>
+                    <BaseView style={[StyleSheet.absoluteFill, styles.cameraChildren]}>{children}</BaseView>
+                </BaseView>
             ) : (
                 children
             )}
@@ -147,4 +189,5 @@ const baseStyles = () =>
         },
         blurView: { height: "100%", width: "100%", position: "absolute", top: 0, left: 0 },
         cameraView: { flex: 1, position: "relative" },
+        cameraChildren: { zIndex: 1 },
     })
