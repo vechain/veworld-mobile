@@ -47,8 +47,9 @@ export const BalanceScreen = () => {
     }, [selectedAccount])
 
     const colors = useMemo(() => {
-        if (isObservedAccount) return [COLORS.BALANCE_BACKGROUND, COLORS.BALANCE_BACKGROUND, COLORS.BALANCE_BACKGROUND]
-        return [COLORS.BALANCE_BACKGROUND, "rgba(29, 23, 58, 0.5)", "#423483"]
+        if (isObservedAccount)
+            return [COLORS.APP_BACKGROUND_DARK, COLORS.APP_BACKGROUND_DARK, COLORS.APP_BACKGROUND_DARK]
+        return [COLORS.APP_BACKGROUND_DARK, "rgba(29, 23, 58, 0.5)", "#423483"]
     }, [isObservedAccount])
 
     const balanceActionsAnimatedStyles = useAnimatedStyle(() => {
@@ -59,7 +60,7 @@ export const BalanceScreen = () => {
 
     return (
         <Layout
-            bg={COLORS.BALANCE_BACKGROUND}
+            bg={COLORS.APP_BACKGROUND_DARK}
             noBackButton
             fixedHeader={
                 <Header scrollY={scrollY} contentOffsetY={contentOffsetY} qrCodeBottomSheetRef={qrCodeBottomSheetRef} />

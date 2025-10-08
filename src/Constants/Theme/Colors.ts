@@ -428,6 +428,9 @@ export enum COLORS {
     BALANCE_BACKGROUND = "#1D173A",
     BALANCE_BACKGROUND_50 = "rgba(29, 23, 58, 0.50)",
     BALANCE_BACKGROUND_GRADIENT_END = "#423483",
+    // App-level background tokens (do not reuse for non-background surfaces)
+    APP_BACKGROUND_LIGHT = "#f2f2f7",
+    APP_BACKGROUND_DARK = "#1D173A",
 }
 
 const light: Colors = {
@@ -457,7 +460,7 @@ const light: Colors = {
     numberPad: COLORS.GREY_600,
     textLight: COLORS.GREY_500,
     textLightish: COLORS.GREY_500,
-    background: COLORS.LIGHT_GRAY,
+    background: COLORS.APP_BACKGROUND_LIGHT,
     backgroundReversed: COLORS.DARK_PURPLE,
     backgroundTransparent: COLORS.LIGHT_GRAY_TRANSPARENT,
     splashColorLayer: COLORS.DARK_PURPLE,
@@ -775,7 +778,7 @@ const dark: Colors = {
     numberPad: COLORS.GREY_300,
     textLight: COLORS.WHITE,
     textLightish: COLORS.GREY_300,
-    background: COLORS.DARK_PURPLE,
+    background: COLORS.APP_BACKGROUND_DARK,
     backgroundReversed: COLORS.GRAY,
     backgroundTransparent: COLORS.DARK_PURPLE_TRANSPARENT,
     splashColorLayer: COLORS.LIME_GREEN,

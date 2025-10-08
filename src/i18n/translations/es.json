@@ -422,7 +422,7 @@
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "No pudimos encontrar ninguna billetera respaldada en tu {cloud: string}. Intenta de nuevo o usa tu frase de recuperación.",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "No hay billeteras disponibles",
   "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "Transfiere un coleccionable para comenzar a construir tu colección",
-  "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "o compra un coleccionable de una de nuestras aplicaciones del ecosistema",
+  "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "o compra un coleccionable en una de nuestras aplicaciones del ecosistema",
   "COLLECTIONS": "Colecciones",
   "COLLECTION_NAME": "Nombre de la colección",
   "COMMOMN_DAY": "día",

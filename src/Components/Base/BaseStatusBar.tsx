@@ -1,10 +1,10 @@
 import React, { memo, useMemo } from "react"
 import { StatusBar, StatusBarProps } from "react-native"
-import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { Routes } from "~Navigation"
 import { selectCurrentScreen, useAppSelector } from "~Storage/Redux"
 import { computeBarStyle } from "./Helpers/ComputeBarStyle"
+import { COLORS } from "~Constants"
 
 type Props = {
     hero?: boolean

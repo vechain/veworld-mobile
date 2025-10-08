@@ -7,7 +7,7 @@ import Animated, { Easing, FadeOut } from "react-native-reanimated"
 import WebView from "react-native-webview"
 import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
 import { BaseStatusBar, DAppIcon, Layout, URLBar, useInAppBrowser } from "~Components"
-import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
+import { AnalyticsEvent, ColorThemeType, COLORS } from "~Constants"
 import { useAnalyticTracking, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
@@ -111,7 +111,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
     return (
         <Layout
-            bg={COLORS.DARK_PURPLE}
+            bg={COLORS.BALANCE_BACKGROUND}
             fixedHeader={
                 <URLBar
                     navigationUrl={route.params.url}
