@@ -106,32 +106,4 @@ describe("BalanceScreen -> Header", () => {
 
         expect(screen.getByTestId("BALANCE_HEADER_DISPLAY_USERNAME")).toHaveTextContent("test")
     })
-    it("should not show the wallet icon when account is observed", () => {
-        ;(useVns as jest.Mock).mockReturnValue({ name: "test.veworld.vet" })
-        const qrCodeBottomSheetRef = {
-            current: {
-                present: jest.fn(),
-            },
-        }
-        TestHelpers.render.renderComponentWithProps(
-            <Header
-                scrollY={{ value: 0 } as any}
-                contentOffsetY={{ value: 0 } as any}
-                qrCodeBottomSheetRef={qrCodeBottomSheetRef as any}
-            />,
-            {
-                wrapper: TestWrapper,
-                initialProps: {
-                    preloadedState: {
-                        accounts: {
-                            accounts: [TestHelpers.data.account5D1Observed],
-                            selectedAccount: TestHelpers.data.account5D1Observed.address,
-                        },
-                    },
-                },
-            },
-        )
-
-        expect(screen.queryByTestId("BALANCE_HEADER_WALLET_ICON")).toBeNull()
-    })
 })

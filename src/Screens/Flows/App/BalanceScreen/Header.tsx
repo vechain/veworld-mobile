@@ -37,10 +37,6 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
 
     const height = useSharedValue(90)
 
-    const onWalletManagementPress = useCallback(() => {
-        nav.navigate(Routes.WALLET_MANAGEMENT)
-    }, [nav])
-
     const gradientStyle = useAnimatedStyle(() => {
         return {
             height: height.value * 2,
@@ -140,18 +136,6 @@ export const Header = ({ scrollY, contentOffsetY, qrCodeBottomSheetRef }: Props)
             </TouchableOpacity>
 
             <BaseView flexDirection="row" gap={12}>
-                {!isObservedAccount && (
-                    <TouchableOpacity onPress={onWalletManagementPress}>
-                        <BaseView borderRadius={99} p={8} gap={8} flexDirection="row">
-                            <BaseIcon
-                                name="icon-wallet"
-                                color={COLORS.PURPLE_LABEL}
-                                size={24}
-                                testID="BALANCE_HEADER_WALLET_ICON"
-                            />
-                        </BaseView>
-                    </TouchableOpacity>
-                )}
                 <TouchableOpacity onPress={handleOpenQRCode}>
                     <BaseView borderRadius={99} p={8}>
                         <BaseIcon name="icon-scan-line" color={COLORS.PURPLE_LABEL} size={24} />
