@@ -88,7 +88,7 @@ const baseStyles = () =>
     StyleSheet.create({
         root: {
             height: CHART_HEIGHT,
-            flex: 1,
+            flex: 0.5,
             alignItems: "center",
         },
     })
