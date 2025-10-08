@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.6 (2025-10-08)</small>
+
+* build: init ([d461a04](https://github.com/vechain/veworld-mobile/commit/d461a04))
+* Remove entrance for wallet from Home page (#3385) ([9dc43d5](https://github.com/vechain/veworld-mobile/commit/9dc43d5)), closes [#3385](https://github.com/vechain/veworld-mobile/issues/3385)
+
 ## <small>2.4.5 (2025-10-03)</small>
 
 * build: init ([58131c2](https://github.com/vechain/veworld-mobile/commit/58131c2))
