@@ -179,7 +179,7 @@ const baseStyles = (theme: ColorThemeType) => {
             borderTopEndRadius: 24,
         },
         loadingWebView: {
-            backgroundColor: theme.colors.tabsFooter.background,
+            backgroundColor: theme.colors.background,
             position: "absolute",
             top: 0,
             left: 0,
