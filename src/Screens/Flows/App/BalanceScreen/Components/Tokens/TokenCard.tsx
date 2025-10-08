@@ -61,14 +61,6 @@ export const TokenCard = ({ token }: Props) => {
         return tokenBalance
     }, [isBalanceVisible, tokenBalance])
 
-    // const fiatBalance = useMemo(() => {
-    //     if (!isBalanceVisible) {
-    //         return "••••••"
-    //     }
-
-    //     return fiatBalanceRaw
-    // }, [isBalanceVisible, fiatBalanceRaw])
-
     const chartIcon = useMemo(() => {
         if (!chartData || !showFiatBalance || showChart) return null
 

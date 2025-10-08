@@ -20,6 +20,7 @@ type Args = {
 export const useTokenCardBalance = ({ token }: Args) => {
     const currency = useAppSelector(selectCurrency)
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
+
     const exchangeRateId = useMemo(() => {
         const coingeckoId = getCoinGeckoIdBySymbol[token.symbol]
         if (coingeckoId) return coingeckoId
