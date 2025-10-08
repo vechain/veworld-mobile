@@ -4,7 +4,7 @@ import "whatwg-fetch"
 import mockSafeAreaContext from "react-native-safe-area-context/jest/mock"
 // @ts-ignore
 import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock"
-import { ReactNode } from "react"
+import { Component, ReactNode } from "react"
 import { SecurityLevelType } from "~Model/Biometrics"
 import { WALLET_STATUS } from "~Model/Wallet"
 import { MMKV } from "react-native-mmkv"
@@ -160,7 +160,15 @@ jest.mock("react-native-webview", () => ({
 }))
 
 jest.mock("expo-clipboard", () => {})
-jest.mock("react-native-linear-gradient", () => "LinearGradient")
+jest.mock(
+    "react-native-linear-gradient",
+    () =>
+        class LinearGradient extends Component {
+            render() {
+                return "test"
+            }
+        },
+)
 jest.mock("react-native-draggable-flatlist", () => ({
     NestableScrollContainer: componentMock,
     NestableDraggableFlatList: componentMock,

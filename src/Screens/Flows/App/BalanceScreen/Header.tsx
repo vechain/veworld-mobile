@@ -12,7 +12,8 @@ import {
     SelectAccountBottomSheet,
 } from "~Components"
 import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
-import { useBottomSheetModal, useCameraBottomSheet, useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import { useCameraBottomSheet } from "~Hooks/useCameraBottomSheet"
 import { useVns } from "~Hooks/useVns"
 import { AccountWithDevice, NETWORK_TYPE, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
