@@ -8,7 +8,7 @@ import { Camera as RNVCamera, useCameraDevice, useCodeScanner } from "react-nati
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { BaseTabs } from "~Components/Base/BaseTabs"
 import { COLORS } from "~Constants"
-import { useBottomSheetModal, useCameraPermissions, useThemedStyles } from "~Hooks"
+import { useAppState, useBottomSheetModal, useCameraPermissions, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { StringUtils } from "~Utils"
 import { ReceiveTab } from "./ReceiveTab"
@@ -25,6 +25,7 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
     const [tab, setTab] = useState<(typeof TABS)[number]>("receive")
     const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModalMethods> })
     const [hasCameraPerms, setCameraPerms] = useState(false)
+    const { currentState } = useAppState()
 
     const rootX = useSharedValue(0)
     const rootY = useSharedValue(0)
@@ -197,7 +198,12 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
             {tab === "scan" && hasCameraPerms ? (
                 <BaseView flex={1} position="relative">
                     {device && (
-                        <RNVCamera style={styles.cameraView} device={device} isActive codeScanner={codeScanner} />
+                        <RNVCamera
+                            style={styles.cameraView}
+                            device={device}
+                            isActive={currentState === "active"}
+                            codeScanner={codeScanner}
+                        />
                     )}
 
                     <Canvas style={StyleSheet.absoluteFill}>
