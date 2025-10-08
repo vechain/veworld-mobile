@@ -165,7 +165,7 @@ jest.mock(
     () =>
         class LinearGradient extends Component<PropsWithChildren> {
             render() {
-                return this.props.children
+                return this.props.children ?? "TEST"
             }
         },
 )
