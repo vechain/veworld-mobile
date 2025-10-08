@@ -165,8 +165,9 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
                     height: 200 + cameraBounds.value.y * 0.4,
                 }
 
+                //Outside of detection area
                 if (
-                    n.every(point => {
+                    !n.every(point => {
                         return (
                             point.x >= biggerRect.x &&
                             point.x <= biggerRect.x + biggerRect.width &&
@@ -175,9 +176,7 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
                         )
                     })
                 ) {
-                    //DETECT SUCCESSFUL
-                } else {
-                    //DETECT NOT SUCCESSFUL
+                    return
                 }
             }
         },
