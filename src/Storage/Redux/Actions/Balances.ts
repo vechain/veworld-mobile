@@ -15,7 +15,7 @@ export const updateAccountBalances =
         await queryClient.invalidateQueries({
             predicate(query) {
                 const queryKey = query.queryKey as string[]
-                if (!["TOKENS"].includes(queryKey[0])) return false
+                if (!["TOKENS", "BALANCE"].includes(queryKey[0])) return false
                 if (!["SINGLE", "MULTIPLE", "TOTAL"].includes(queryKey[1])) return false
                 if (!AddressUtils.compareAddresses(queryKey[2], accountAddress)) return false
                 if (queryKey[3] !== network.genesis.id) return false
