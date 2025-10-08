@@ -8,7 +8,8 @@ import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView
 import { useBatchAppOverviews, useContentSwipeAnimation, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps/useVeBetterDaoActiveApps"
 import { useI18nContext } from "~i18n"
-import { VeBetterDaoDapp, VeBetterDaoDAppMetadata, X2ECategoryType, IconKey } from "~Model"
+import { IconKey, VeBetterDaoDapp, VeBetterDaoDAppMetadata, X2ECategoryType } from "~Model"
+import { Routes } from "~Navigation"
 import { FetchAppOverviewResponse } from "~Networking/API/Types"
 import { CategoryFilters, RowDetails, RowExpandableDetails } from "~Screens/Flows/App/AppsScreen/Components"
 import { useCategories, useCategoryFiltering } from "~Screens/Flows/App/AppsScreen/Components/VeBetter/Hooks"
@@ -44,7 +45,7 @@ type X2EAppsBottomSheetProps = {
 const AppListItem = React.memo(
     ({ dapp, onDismiss, openItemId, onToggleOpenItem, appOverview, isOverviewLoading = false }: X2EAppItemProps) => {
         const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.external_url, dapp.name)
-        const { onDAppPress } = useDAppActions()
+        const { onDAppPress } = useDAppActions(Routes.APPS)
         const { LL } = useI18nContext()
 
         const allCategories = useCategories()

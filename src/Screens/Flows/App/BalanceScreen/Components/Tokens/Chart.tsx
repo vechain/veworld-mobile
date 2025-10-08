@@ -60,7 +60,7 @@ export const Chart = ({ token, setShowChart, showChart }: Props) => {
         (e: LayoutChangeEvent) => {
             if (rendered.current) return
             rendered.current = true
-            if (e.nativeEvent.layout.width < CHART_WIDTH) {
+            if (Math.floor(e.nativeEvent.layout.width) < CHART_WIDTH) {
                 setShowChart(false)
             } else opacity.value = withTiming(1)
         },

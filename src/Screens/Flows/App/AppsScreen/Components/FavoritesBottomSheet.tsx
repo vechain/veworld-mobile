@@ -18,6 +18,7 @@ import { removeBookmark, reorderBookmarks, selectBookmarkedDapps, useAppDispatch
 import { useI18nContext } from "~i18n"
 import { useDAppActions } from "../Hooks"
 import { FavoriteDAppCard } from "./FavoriteDAppCard"
+import { Routes } from "~Navigation"
 
 type Props = {
     onClose: () => void
@@ -28,7 +29,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     const { styles } = useThemedStyles(baseStyles)
     const theme = useTheme()
     const { LL } = useI18nContext()
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.APPS)
     const dispatch = useAppDispatch()
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)

@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, VET, VOT3, VTHO } from "~Constants"
+import { B3TR, COLORS, typography, VET, VOT3, VTHO } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
@@ -126,10 +126,10 @@ export const TokenCard = ({ token }: Props) => {
     return (
         <BaseTouchableBox
             action={supportsDetailNavigation ? handlePress : undefined}
-            py={24}
+            py={symbol ? typography.lineHeight.body : typography.lineHeight.bodySemiBold}
             flexDirection="row"
             bg={theme.colors.card}
-            containerStyle={styles.root}>
+            innerContainerStyle={styles.root}>
             <BaseView flexDirection="row" gap={16} flex={1}>
                 <TokenImage
                     icon={token.icon}
@@ -205,7 +205,7 @@ export const TokenCard = ({ token }: Props) => {
 const baseStyles = () =>
     StyleSheet.create({
         root: {
-            height: 80,
             gap: 16,
+            alignItems: "center",
         },
     })

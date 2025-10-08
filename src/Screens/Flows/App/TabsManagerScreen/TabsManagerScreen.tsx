@@ -130,7 +130,7 @@ const baseStyles = (theme: ColorThemeType) =>
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            backgroundColor: theme.colors.tabsFooter.background,
+            backgroundColor: theme.colors.background,
             paddingBottom: PlatformUtils.isIOS() ? 32 : 8,
         },
         footerButton: {

@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BaseChip, BaseText, BaseView } from "~Components"
-import { COLORS } from "~Constants"
 import { useNewDAppsV2, useTheme, useTrendingDAppsV2 } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VbdCarousel } from "../Common/VbdCarousel/VbdCarousel"
@@ -29,7 +28,7 @@ export const ForYouCarousel = () => {
     return (
         <BaseView flexDirection="column" gap={16}>
             <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" px={16}>
-                <BaseText typographyFont="subSubTitleSemiBold" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}>
+                <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.dappTitle}>
                     {LL.DISCOVER_FOR_YOU()}
                 </BaseText>
                 <BaseView flexDirection="row" gap={12}>

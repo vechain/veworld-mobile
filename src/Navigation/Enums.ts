@@ -90,7 +90,6 @@ export enum Routes {
     BLOCKED_APP_SCREEN = "Blocked_App_Screen",
     OBSERVE_WALLET = "Observe_Wallet",
     OBSERVE_WALLET_CONFIRMATION = "Observe_Wallet_Confirmation",
-    DAPP_CHANGE_ACCOUNT_SCREEN = "Dapp_Change_Account_Screen",
     SECURITY_UPGRADE_V2 = "Security_Upgrade_V2",
     SECURITY_UPGRADE_V2_HOME = "Security_Upgrade_V2_Home",
     SECURITY_UPGRADE_V2_MNEMONIC_BACKUP = "Security_Upgrade_V2_Mnemonic_Backup",

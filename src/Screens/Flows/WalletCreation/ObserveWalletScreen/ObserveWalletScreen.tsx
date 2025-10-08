@@ -17,7 +17,7 @@ import { useBottomSheetModal, useCameraBottomSheet, useVns, ZERO_ADDRESS } from 
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, WatchedAccount } from "~Model"
 import HapticsService from "~Services/HapticsService"
-import { addAccount, selectAccounts, selectBalanceVisible, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { addAccount, selectAccounts, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { AccountUtils, AddressUtils } from "~Utils"
 
 export const ObserveWalletScreen = () => {
@@ -26,7 +26,6 @@ export const ObserveWalletScreen = () => {
     const dispatch = useAppDispatch()
 
     const accounts = useAppSelector(selectAccounts)
-    const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     const [inputValue, setInputValue] = useState("")
     const [underlyingAddress, setUnderlyingAddress] = useState("")
@@ -183,7 +182,6 @@ export const ObserveWalletScreen = () => {
                             closeBottomSheet={closeSelectAccountBottonSheet}
                             account={_watchedAccount}
                             confirmAccount={handleConfirmAccount}
-                            isBalanceVisible={isBalanceVisible}
                             ref={selectAccountBottomSheetRef}
                         />
                     </>

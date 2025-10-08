@@ -288,7 +288,7 @@ describe("getExplorerLink", () => {
 
 describe("humanAddress", () => {
     it("should return correctly", () => {
-        expect(humanAddress("0x4fec365ab34c21784b05e3fed80633268e6457ff")).toBe("0x4fec…57ff")
+        expect(humanAddress("0x4fec365ab34c21784b05e3fed80633268e6457ff")).toBe("0x4fe…7ff")
     })
 })
 

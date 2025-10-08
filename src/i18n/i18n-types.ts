@@ -121,10 +121,6 @@ type RootTranslation = {
 	 */
 	ACTIVITY: string
 	/**
-	 * S​e​e​ ​a​l​l
-	 */
-	ACTIVITY_SEE_ALL: string
-	/**
 	 * N​o​ ​A​c​t​i​v​i​t​i​e​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: string
@@ -176,6 +172,10 @@ type RootTranslation = {
 	 * O​t​h​e​r
 	 */
 	ACTIVITY_OTHER_LABEL: string
+	/**
+	 * S​e​e​ ​a​l​l
+	 */
+	ACTIVITY_SEE_ALL: string
 	/**
 	 * S​t​a​r​t​ ​e​a​r​n​i​n​g
 	 */
@@ -1760,6 +1760,10 @@ type RootTranslation = {
 	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
 	 */
 	COLLECTION_NAME: string
+	/**
+	 * d​a​y
+	 */
+	COMMOMN_DAY: string
 	/**
 	 * 2​4​ ​H​R​s
 	 */
@@ -4492,6 +4496,30 @@ type RootTranslation = {
 	 */
 	STARGATE_REWARDS: string
 	/**
+	 * S​t​a​r​t​ ​s​t​a​k​i​n​g
+	 */
+	STARGATE_START_STAKING: string
+	/**
+	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​*​*​ ​t​o​k​e​n​s
+	 */
+	STARGATE_STAT_DESCRIPTION: string
+	/**
+	 * R​e​w​a​r​d​s​ ​d​i​s​t​r​i​b​u​t​e​d
+	 */
+	STARGATE_STAT_REWARDS_DISTRIBUTED: string
+	/**
+	 * R​e​w​a​r​d​s​ ​g​e​n​e​r​a​t​i​o​n
+	 */
+	STARGATE_STAT_REWARDS_GENERATION: string
+	/**
+	 * T​o​t​a​l​ ​s​t​a​k​e​d
+	 */
+	STARGATE_STAT_TOTAL_STAKED: string
+	/**
+	 * T​o​t​a​l​ ​s​u​p​p​l​y
+	 */
+	STARGATE_STAT_TOTAL_SUPPLY: string
+	/**
 	 * S​t​a​t​u​s
 	 */
 	STATUS: string
@@ -4928,17 +4956,17 @@ type RootTranslation = {
 	 */
 	VBD_SEE_PROFILE: string
 	/**
+	 * A​v​o​i​d​e​d
+	 */
+	VBD_STAT_AVOIDED: string
+	/**
 	 * C​O​2
 	 */
 	VBD_STAT_CO2: string
 	/**
-	 * T​r​e​e​s
+	 * C​o​n​s​e​r​v​e​d
 	 */
-	VBD_STAT_TREES: string
-	/**
-	 * W​a​t​e​r
-	 */
-	VBD_STAT_WATER: string
+	VBD_STAT_CONSERVED: string
 	/**
 	 * E​n​e​r​g​y
 	 */
@@ -4956,21 +4984,21 @@ type RootTranslation = {
 	 */
 	VBD_STAT_SAVED: string
 	/**
-	 * C​o​n​s​e​r​v​e​d
+	 * T​r​e​e​s
 	 */
-	VBD_STAT_CONSERVED: string
+	VBD_STAT_TREES: string
 	/**
-	 * A​v​o​i​d​e​d
+	 * W​a​t​e​r
 	 */
-	VBD_STAT_AVOIDED: string
-	/**
-	 * Y​o​u​r​ ​o​f​f​s​e​t
-	 */
-	VBD_YOUR_OFFSET: string
+	VBD_STAT_WATER: string
 	/**
 	 * Y​o​u​r​ ​B​e​t​t​e​r​ ​A​c​t​i​o​n​s
 	 */
 	VBD_YOUR_BETTER_ACTIONS: string
+	/**
+	 * Y​o​u​r​ ​o​f​f​s​e​t
+	 */
+	VBD_YOUR_OFFSET: string
 	/**
 	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
@@ -4988,13 +5016,13 @@ type RootTranslation = {
 	 */
 	VEWORLD: string
 	/**
-	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
-	 */
-	VIEW_ON_EXPLORER: string
-	/**
 	 * V​i​e​w​ ​o​n​l​y
 	 */
 	VIEW_ONLY: string
+	/**
+	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
+	 */
+	VIEW_ON_EXPLORER: string
 	/**
 	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.
 	 */
@@ -5189,6 +5217,14 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * T​r​a​n​s​f​e​r​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​t​o​ ​s​t​a​r​t​ ​b​u​i​l​d​i​n​g​ ​y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: string
+	/**
+	 * o​r​ ​b​u​y​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​f​r​o​m​ ​o​n​e​ ​o​f​ ​o​u​r​ ​e​c​o​s​y​s​t​e​m​ ​a​p​p​s
+	 */
+	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
 }
 
 export type TranslationFunctions = {
@@ -5275,10 +5311,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY: () => LocalizedString
 	/**
-	 * See all
-	 */
-	ACTIVITY_SEE_ALL: () => LocalizedString
-	/**
 	 * No Activities to show yet
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: () => LocalizedString
@@ -5330,6 +5362,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Other
 	 */
 	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
+	 * See all
+	 */
+	ACTIVITY_SEE_ALL: () => LocalizedString
 	/**
 	 * Start earning
 	 */
@@ -6901,6 +6937,10 @@ Thanks for your patience!
 	 * Collection name
 	 */
 	COLLECTION_NAME: () => LocalizedString
+	/**
+	 * day
+	 */
+	COMMOMN_DAY: () => LocalizedString
 	/**
 	 * 24 HRs
 	 */
@@ -9591,6 +9631,30 @@ Here's what it's all about:
 	 */
 	STARGATE_REWARDS: () => LocalizedString
 	/**
+	 * Start staking
+	 */
+	STARGATE_START_STAKING: () => LocalizedString
+	/**
+	 * Get **VTHO** by staking your **VET** tokens
+	 */
+	STARGATE_STAT_DESCRIPTION: () => LocalizedString
+	/**
+	 * Rewards distributed
+	 */
+	STARGATE_STAT_REWARDS_DISTRIBUTED: () => LocalizedString
+	/**
+	 * Rewards generation
+	 */
+	STARGATE_STAT_REWARDS_GENERATION: () => LocalizedString
+	/**
+	 * Total staked
+	 */
+	STARGATE_STAT_TOTAL_STAKED: () => LocalizedString
+	/**
+	 * Total supply
+	 */
+	STARGATE_STAT_TOTAL_SUPPLY: () => LocalizedString
+	/**
 	 * Status
 	 */
 	STATUS: () => LocalizedString
@@ -10023,17 +10087,17 @@ Here's what it's all about:
 	 */
 	VBD_SEE_PROFILE: () => LocalizedString
 	/**
+	 * Avoided
+	 */
+	VBD_STAT_AVOIDED: () => LocalizedString
+	/**
 	 * CO2
 	 */
 	VBD_STAT_CO2: () => LocalizedString
 	/**
-	 * Trees
+	 * Conserved
 	 */
-	VBD_STAT_TREES: () => LocalizedString
-	/**
-	 * Water
-	 */
-	VBD_STAT_WATER: () => LocalizedString
+	VBD_STAT_CONSERVED: () => LocalizedString
 	/**
 	 * Energy
 	 */
@@ -10051,21 +10115,21 @@ Here's what it's all about:
 	 */
 	VBD_STAT_SAVED: () => LocalizedString
 	/**
-	 * Conserved
+	 * Trees
 	 */
-	VBD_STAT_CONSERVED: () => LocalizedString
+	VBD_STAT_TREES: () => LocalizedString
 	/**
-	 * Avoided
+	 * Water
 	 */
-	VBD_STAT_AVOIDED: () => LocalizedString
-	/**
-	 * Your offset
-	 */
-	VBD_YOUR_OFFSET: () => LocalizedString
+	VBD_STAT_WATER: () => LocalizedString
 	/**
 	 * Your Better Actions
 	 */
 	VBD_YOUR_BETTER_ACTIONS: () => LocalizedString
+	/**
+	 * Your offset
+	 */
+	VBD_YOUR_OFFSET: () => LocalizedString
 	/**
 	 * Vechain news & updates
 	 */
@@ -10083,13 +10147,13 @@ Here's what it's all about:
 	 */
 	VEWORLD: () => LocalizedString
 	/**
-	 * View on explorer
-	 */
-	VIEW_ON_EXPLORER: () => LocalizedString
-	/**
 	 * View only
 	 */
 	VIEW_ONLY: () => LocalizedString
+	/**
+	 * View on explorer
+	 */
+	VIEW_ON_EXPLORER: () => LocalizedString
 	/**
 	 * wallets saved on Google Drive.
 	 */
@@ -10282,6 +10346,14 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Transfer a collectible to start building your collection
+	 */
+	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: () => LocalizedString
+	/**
+	 * or buy a collectible from one of our ecosystem apps
+	 */
+	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: () => LocalizedString
 }
 
 export type Formatters = {
