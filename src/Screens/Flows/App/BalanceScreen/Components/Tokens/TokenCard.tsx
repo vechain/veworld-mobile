@@ -69,9 +69,10 @@ export const TokenCard = ({ token }: Props) => {
         switch (token.symbol) {
             case "B3TR":
                 return (
-                    <BaseView flexDirection="row" gap={4}>
+                    <BaseView flexDirection="row" gap={4} overflow="hidden">
                         <BaseText
                             typographyFont="bodySemiBold"
+                            numberOfLines={1}
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL_1">
                             {B3TR.symbol}
@@ -83,10 +84,12 @@ export const TokenCard = ({ token }: Props) => {
                         />
                         <BaseText
                             typographyFont="bodySemiBold"
+                            numberOfLines={1}
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL_2">
                             {VOT3.symbol}
                         </BaseText>
+
                         {chartIcon}
                     </BaseView>
                 )
@@ -130,7 +133,7 @@ export const TokenCard = ({ token }: Props) => {
             flexDirection="row"
             bg={theme.colors.card}
             innerContainerStyle={styles.root}>
-            <BaseView flexDirection="row" gap={16} flex={1}>
+            <BaseView flexDirection="row" gap={16} flexGrow={1} flexShrink={1}>
                 <TokenImage
                     icon={token.icon}
                     isVechainToken={AddressUtils.isVechainToken(token.address)}
@@ -140,13 +143,12 @@ export const TokenCard = ({ token }: Props) => {
                 />
 
                 {symbol ? (
-                    <BaseView flexDirection="column" flex={1}>
+                    <BaseView flexDirection="column" flexGrow={0} flexShrink={1}>
                         <BaseText
                             typographyFont="subSubTitleSemiBold"
                             color={theme.colors.activityCard.title}
                             flexDirection="row"
                             numberOfLines={1}
-                            flex={1}
                             testID="TOKEN_CARD_NAME">
                             {name}
                         </BaseText>
@@ -154,9 +156,11 @@ export const TokenCard = ({ token }: Props) => {
                     </BaseView>
                 ) : (
                     <BaseText
+                        flex={1}
                         typographyFont="subSubTitleSemiBold"
                         color={theme.colors.activityCard.title}
-                        flexDirection="row">
+                        flexDirection="row"
+                        numberOfLines={1}>
                         {name}
                     </BaseText>
                 )}
@@ -164,7 +168,7 @@ export const TokenCard = ({ token }: Props) => {
 
             <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
 
-            <BaseView flexDirection="column" alignItems="flex-end" flexShrink={0}>
+            <BaseView flexDirection="column" alignItems="flex-end" flexGrow={1} flexShrink={0}>
                 {showFiatBalance ? (
                     <>
                         <BaseText
@@ -207,5 +211,6 @@ const baseStyles = () =>
         root: {
             gap: 16,
             alignItems: "center",
+            justifyContent: "space-between",
         },
     })

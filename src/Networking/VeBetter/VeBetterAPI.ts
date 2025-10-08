@@ -1,12 +1,33 @@
-import { ERROR_EVENTS, getVeBetterActions, getVeBetterUserGeneralOverview, getVeBetterUserOverview } from "~Constants"
+import {
+    ERROR_EVENTS,
+    getVeBetterActions,
+    getVeBetterGlobalOverview,
+    getVeBetterUserGeneralOverview,
+    getVeBetterUserOverview,
+} from "~Constants"
 import {
     fetchFromEndpoint,
     FetchVeBetterActionsResponseItem,
+    FetchVeBetterGlobalOverviewResponse,
     FetchVeBetterUserGeneralOverviewResponse,
     FetchVeBetterUserOverviewResponseItem,
 } from "~Networking/API"
 import { PaginationResponse } from "~Networking/NFT"
 import { debug } from "~Utils"
+
+/**
+ * Get the global VeBetter actions overview
+ * @returns Global VeBetter actions overview
+ */
+export const fetchVeBetterGlobalOverview = async () => {
+    debug(ERROR_EVENTS.VEBETTER, "Fetching VeBetter actions global overview")
+
+    try {
+        return await fetchFromEndpoint<FetchVeBetterGlobalOverviewResponse>(getVeBetterGlobalOverview())
+    } catch (error) {
+        throw new Error(`Failed to fetch VeBetter global overview: ${error}`)
+    }
+}
 
 /**
  * Get the VeBetter general overview for a user

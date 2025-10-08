@@ -192,3 +192,12 @@ export interface FetchStargateTotalSupplyResponse {
         [key in StargateNFTLevel]: number
     }
 }
+
+export interface FetchVeBetterGlobalOverviewResponse {
+    roundId: number
+    date: string
+    totalRewardAmount: number
+    actionsRewarded: number
+    totalImpact: VeBetterTotalImpact
+    totalUniqueUserInteractions: number
+}

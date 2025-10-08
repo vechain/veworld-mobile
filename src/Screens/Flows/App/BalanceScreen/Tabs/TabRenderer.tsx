@@ -1,14 +1,14 @@
 import React, { useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
-import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated"
+import Animated, { ZoomIn, ZoomOut, LinearTransition } from "react-native-reanimated"
 import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
+import { useTabBarBottomMargin, useThemedStyles, useHasAnyVeBetterActions } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux/Hooks"
-import { selectBookmarkedDapps, selectSelectedAccount } from "~Storage/Redux/Selectors"
+import { selectBookmarkedDapps, selectHideNewUserVeBetterCard, selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { AccountUtils } from "~Utils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
@@ -16,8 +16,9 @@ import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
 import { useShowStakingTab } from "../Hooks/useShowStakingTab"
 import { useNavigation } from "@react-navigation/native"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
-import { Staking } from "./Staking"
+import { NewUserVeBetterCard } from "../Components/VeBetterDao/NewUserVeBetterCard"
 import { Tokens } from "./Tokens"
+import { Staking } from "./Staking"
 import { Collectibles } from "./Collectibles"
 
 const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
@@ -34,6 +35,8 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const [selectedTab, setSelectedTab] = useState<(typeof TABS)[number]>("TOKENS")
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const hideNewUserVeBetterCard = useAppSelector(selectHideNewUserVeBetterCard)
+    const { data: hasAnyVeBetterActions } = useHasAnyVeBetterActions()
     const { onDAppPress } = useDAppActions(Routes.HOME)
     const { tabBarBottomMargin } = useTabBarBottomMargin()
     const showStakingTab = useShowStakingTab()
@@ -62,6 +65,10 @@ export const TabRenderer = ({ onLayout }: Props) => {
         return isAndroid() ? tabBarBottomMargin + 24 : 0
     }, [tabBarBottomMargin])
 
+    const showNewUserVeBetterCard = useMemo(() => {
+        return !hideNewUserVeBetterCard && !hasAnyVeBetterActions && selectedTab === "TOKENS"
+    }, [hideNewUserVeBetterCard, hasAnyVeBetterActions, selectedTab])
+
     const rightIcon = useMemo(() => {
         if (selectedTab === "TOKENS") {
             return (
@@ -84,31 +91,39 @@ export const TabRenderer = ({ onLayout }: Props) => {
 
     return (
         <Animated.View style={[styles.root, { paddingBottom: tabBarBottomMargin }]} onLayout={onLayout}>
-            {showFavorites && (
-                <BaseView flexDirection="column">
-                    <FavouritesV2
-                        bookmarkedDApps={bookmarkedDApps}
-                        onDAppPress={onDAppPress}
-                        renderCTASeeAll={false}
-                        padding={24}
-                        iconBg={theme.isDark ? COLORS.DARK_PURPLE : undefined}
-                    />
-                    <BaseSpacer height={24} />
-                </BaseView>
+            {showNewUserVeBetterCard && (
+                <Animated.View layout={LinearTransition.duration(400)}>
+                    <NewUserVeBetterCard />
+                    <BaseSpacer height={18} />
+                </Animated.View>
             )}
-            <BaseSimpleTabs
-                keys={filteredTabs}
-                labels={labels}
-                selectedKey={selectedTab}
-                setSelectedKey={setSelectedTab}
-                rootStyle={styles.tabs}
-                rightIcon={rightIcon}
-            />
-            <BaseView flexDirection="column" flex={1} pb={paddingBottom} px={24}>
-                {selectedTab === "TOKENS" && <Tokens />}
-                {selectedTab === "STAKING" && <Staking />}
-                {selectedTab === "COLLECTIBLES" && <Collectibles />}
-            </BaseView>
+            <Animated.View layout={LinearTransition.duration(400)} style={styles.animatedContent}>
+                {showFavorites && (
+                    <BaseView flexDirection="column">
+                        <FavouritesV2
+                            bookmarkedDApps={bookmarkedDApps}
+                            onDAppPress={onDAppPress}
+                            renderCTASeeAll={false}
+                            padding={24}
+                            iconBg={theme.isDark ? COLORS.DARK_PURPLE : undefined}
+                        />
+                        <BaseSpacer height={24} />
+                    </BaseView>
+                )}
+                <BaseSimpleTabs
+                    keys={filteredTabs}
+                    labels={labels}
+                    selectedKey={selectedTab}
+                    setSelectedKey={setSelectedTab}
+                    rootStyle={styles.tabs}
+                    rightIcon={rightIcon}
+                />
+                <BaseView flexDirection="column" flex={1} pb={paddingBottom} px={24}>
+                    {selectedTab === "TOKENS" && <Tokens />}
+                    {selectedTab === "STAKING" && <Staking />}
+                    {selectedTab === "COLLECTIBLES" && <Collectibles />}
+                </BaseView>
+            </Animated.View>
         </Animated.View>
     )
 }
@@ -124,6 +139,10 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
             gap: 16,
             flexDirection: "column",
+        },
+        animatedContent: {
+            flexDirection: "column",
+            gap: 16,
         },
         tabs: {
             marginHorizontal: 24,
