@@ -68,8 +68,8 @@ export const StargateNoStakingCard = () => {
 
             <BaseSpacer height={32} />
 
-            <BaseView w={100} flexDirection="column" gap={8}>
-                <BaseView flexDirection="row" gap={8}>
+            <BaseView w={100} flexDirection="column" gap={8} flex={1}>
+                <BaseView flexDirection="row" gap={8} flex={1}>
                     <StargateStatsCard
                         title={LL.STARGATE_STAT_TOTAL_SUPPLY()}
                         parsedValue={formattedStargateStats.totalSupply}
@@ -81,7 +81,7 @@ export const StargateNoStakingCard = () => {
                         unit="VET"
                     />
                 </BaseView>
-                <BaseView flexDirection="row" gap={8}>
+                <BaseView flexDirection="row" gap={8} flex={1}>
                     <StargateStatsCard
                         title={LL.STARGATE_STAT_REWARDS_GENERATION()}
                         parsedValue={formattedStargateStats.vthoPerDay}

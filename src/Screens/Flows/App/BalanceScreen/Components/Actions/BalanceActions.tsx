@@ -39,6 +39,8 @@ export const BalanceActions = ({ qrCodeBottomSheetRef, style }: Props) => {
 
     const onReceive = useCallback(() => openQRCodeSheet(), [openQRCodeSheet])
 
+    const onSwap = useCallback(() => nav.navigate(Routes.SWAP), [nav])
+
     const isSendDisabled = useMemo(() => rawAmount === 0, [rawAmount])
 
     return (
@@ -47,7 +49,6 @@ export const BalanceActions = ({ qrCodeBottomSheetRef, style }: Props) => {
             layout={LinearTransition.duration(1000)}
             exiting={FadeOut.duration(300)}
             entering={FadeIn.duration(300)}>
-            <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} icon="icon-plus" onPress={onBuy} />
             <GlassButtonWithLabel label={LL.BALANCE_ACTION_RECEIVE()} icon="icon-arrow-down" onPress={onReceive} />
             <GlassButtonWithLabel
                 label={LL.BALANCE_ACTION_SEND()}
@@ -55,7 +56,8 @@ export const BalanceActions = ({ qrCodeBottomSheetRef, style }: Props) => {
                 onPress={onSend}
                 disabled={isSendDisabled}
             />
-            <GlassButtonWithLabel label={LL.BALANCE_ACTION_OTHER()} icon="icon-more-vertical" onPress={() => {}} />
+            <GlassButtonWithLabel label={LL.SWAP()} icon="icon-arrow-left-right" onPress={onSwap} />
+            <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} icon="icon-plus" onPress={onBuy} />
         </Animated.View>
     )
 }

@@ -10,6 +10,7 @@ import { FiltersSection } from "./FiltersSection"
 import { SortDAppsBottomSheetV2 } from "./SortDAppsBottomSheetV2"
 import { TopSection } from "./TopSection"
 import { DappTypeV2 } from "./types"
+import { Routes } from "~Navigation"
 
 export const EcosystemSection = () => {
     const [selectedFilter, setSelectedFilter] = useState(DappTypeV2.ALL)
@@ -17,7 +18,7 @@ export const EcosystemSection = () => {
 
     const { ref: sortBs, onOpen: onOpenSortBs } = useBottomSheetModal()
     const { ref: dappOptionsBs, onOpen: onOpenDappOptionsBs } = useBottomSheetModal()
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.APPS)
     const { dependencyLoading, sortedDapps } = useAppHubDapps({
         filter: selectedFilter,
         kind: "v2",

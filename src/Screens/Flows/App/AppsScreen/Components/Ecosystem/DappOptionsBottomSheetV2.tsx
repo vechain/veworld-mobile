@@ -8,13 +8,14 @@ import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useDappBookmarking } from "~Hooks/useDappBookmarking"
 import { useI18nContext } from "~i18n"
 import { useDAppActions } from "../../Hooks"
+import { Routes } from "~Navigation"
 
 const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.href)
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.APPS)
 
     const onBookmarkPress = useCallback(() => toggleBookmark(), [toggleBookmark])
     const onOpenDappPress = useCallback(async () => {

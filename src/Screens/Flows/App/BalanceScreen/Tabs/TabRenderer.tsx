@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
-import Animated, { LinearTransition } from "react-native-reanimated"
-import { BaseSimpleTabs, BaseSpacer, BaseView } from "~Components"
+import Animated, { ZoomIn, ZoomOut, LinearTransition } from "react-native-reanimated"
+import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
+import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useTabBarBottomMargin, useThemedStyles, useHasAnyVeBetterActions } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -9,19 +10,24 @@ import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux/Hooks"
 import { selectBookmarkedDapps, selectHideNewUserVeBetterCard, selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { AccountUtils } from "~Utils"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
+import { useShowStakingTab } from "../Hooks/useShowStakingTab"
+import { useNavigation } from "@react-navigation/native"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { NewUserVeBetterCard } from "../Components/VeBetterDao/NewUserVeBetterCard"
 import { Tokens } from "./Tokens"
 import { Staking } from "./Staking"
-import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
-import { useShowStakingTab } from "../Hooks/useShowStakingTab"
+import { Collectibles } from "./Collectibles"
 
-const TABS = ["TOKENS", "STAKING"] as const
+const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
 
 type Props = {
     onLayout: (e: LayoutChangeEvent) => void
 }
+
+const AnimatedTouchable = Animated.createAnimatedComponent(wrapFunctionComponent(BaseTouchable))
 
 export const TabRenderer = ({ onLayout }: Props) => {
     const { LL } = useI18nContext()
@@ -34,16 +40,21 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const { onDAppPress } = useDAppActions(Routes.HOME)
     const { tabBarBottomMargin } = useTabBarBottomMargin()
     const showStakingTab = useShowStakingTab()
+    const nav = useNavigation()
+    const { betterWorldFeature } = useFeatureFlags()
 
     const filteredTabs = useMemo(() => {
         return TABS.filter(tab => {
             if (tab === "STAKING") {
                 return showStakingTab
             }
+            if (tab === "COLLECTIBLES") {
+                return betterWorldFeature.balanceScreen?.collectibles?.enabled
+            }
 
             return true
         }) as (typeof TABS)[number][]
-    }, [showStakingTab])
+    }, [showStakingTab, betterWorldFeature.balanceScreen?.collectibles?.enabled])
 
     const showFavorites = useMemo(() => {
         return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount)
@@ -57,6 +68,27 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const showNewUserVeBetterCard = useMemo(() => {
         return !hideNewUserVeBetterCard && !hasAnyVeBetterActions && selectedTab === "TOKENS"
     }, [hideNewUserVeBetterCard, hasAnyVeBetterActions, selectedTab])
+
+    const rightIcon = useMemo(() => {
+        if (selectedTab === "TOKENS") {
+            return (
+                <AnimatedTouchable
+                    style={styles.manageTokens}
+                    entering={ZoomIn.duration(100)}
+                    exiting={ZoomOut.duration(100)}
+                    onPress={() => nav.navigate(Routes.MANAGE_TOKEN)}>
+                    <BaseIcon
+                        name="icon-settings-2"
+                        size={20}
+                        color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
+                    />
+                </AnimatedTouchable>
+            )
+        }
+
+        return null
+    }, [theme.isDark, selectedTab, styles.manageTokens, nav])
+
     return (
         <Animated.View style={[styles.root, { paddingBottom: tabBarBottomMargin }]} onLayout={onLayout}>
             {showNewUserVeBetterCard && (
@@ -72,7 +104,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                             bookmarkedDApps={bookmarkedDApps}
                             onDAppPress={onDAppPress}
                             renderCTASeeAll={false}
-                            style={styles.favorites}
+                            padding={24}
                             iconBg={theme.isDark ? COLORS.DARK_PURPLE : undefined}
                         />
                         <BaseSpacer height={24} />
@@ -83,11 +115,13 @@ export const TabRenderer = ({ onLayout }: Props) => {
                     labels={labels}
                     selectedKey={selectedTab}
                     setSelectedKey={setSelectedTab}
+                    rootStyle={styles.tabs}
+                    rightIcon={rightIcon}
                 />
-                <BaseView flexDirection="column" flex={1} pb={paddingBottom}>
+                <BaseView flexDirection="column" flex={1} pb={paddingBottom} px={24}>
                     {selectedTab === "TOKENS" && <Tokens />}
                     {selectedTab === "STAKING" && <Staking />}
-                    {/* {selectedTab === "COLLECTIBLES" && <></>} */}
+                    {selectedTab === "COLLECTIBLES" && <Collectibles />}
                 </BaseView>
             </Animated.View>
         </Animated.View>
@@ -98,9 +132,8 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
             marginTop: -24,
-            paddingBottom: 24,
+            paddingTop: 24,
             backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.LIGHT_GRAY,
-            padding: 16,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
             flex: 1,
@@ -111,7 +144,13 @@ const baseStyles = (theme: ColorThemeType) =>
             flexDirection: "column",
             gap: 16,
         },
-        favorites: {
-            marginLeft: -16,
+        tabs: {
+            marginHorizontal: 24,
+        },
+        manageTokens: {
+            paddingHorizontal: 16,
+            paddingVertical: 8,
+            justifyContent: "center",
+            alignItems: "center",
         },
     })
