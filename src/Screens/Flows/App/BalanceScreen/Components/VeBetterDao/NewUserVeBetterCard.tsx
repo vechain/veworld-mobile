@@ -148,6 +148,7 @@ const style = (theme: ColorThemeType) =>
             paddingTop: 32,
             paddingBottom: 24,
             paddingHorizontal: 24,
+            marginHorizontal: 24,
             position: "relative",
             flexDirection: "column",
             borderRadius: 16,

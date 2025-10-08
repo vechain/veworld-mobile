@@ -71,7 +71,7 @@ export const AddTokenBottomSheet = ({ bottomSheetRef, qrCodeBottomSheetRef }: Ad
             title: LL.TOKEN_BUY(),
             subtitle: LL.TOKEN_BUY_SUBTITLE(),
             onPress: () => {
-                qrCodeBottomSheetRef?.current?.close()
+                bottomSheetRef?.current?.close()
                 nav.navigate(Routes.BUY_FLOW)
             },
         },
@@ -81,7 +81,7 @@ export const AddTokenBottomSheet = ({ bottomSheetRef, qrCodeBottomSheetRef }: Ad
             title: LL.TOKEN_RECEIVE(),
             subtitle: LL.TOKEN_RECEIVE_SUBTITLE(),
             onPress: () => {
-                qrCodeBottomSheetRef?.current?.close()
+                bottomSheetRef?.current?.close()
                 openQRCodeSheet()
             },
         },
@@ -91,7 +91,7 @@ export const AddTokenBottomSheet = ({ bottomSheetRef, qrCodeBottomSheetRef }: Ad
             title: LL.TOKEN_CUSTOM(),
             subtitle: LL.TOKEN_CUSTOM_SUBTITLE(),
             onPress: () => {
-                qrCodeBottomSheetRef?.current?.close()
+                bottomSheetRef?.current?.close()
                 nav.navigate(Routes.MANAGE_TOKEN)
             },
         },
@@ -100,7 +100,12 @@ export const AddTokenBottomSheet = ({ bottomSheetRef, qrCodeBottomSheetRef }: Ad
     const renderItem = ({ item }: { item: TokenListItemData }) => <TokenListItem item={item} />
 
     return (
-        <BaseBottomSheet dynamicHeight backgroundStyle={styles.bg} ref={bottomSheetRef} onDismiss={onClose} floating>
+        <BaseBottomSheet
+            dynamicHeight
+            backgroundStyle={styles.bg}
+            ref={bottomSheetRef}
+            onDismiss={bottomSheetRef?.current?.close}
+            floating>
             <BaseText typographyFont="subSubTitleSemiBold">{LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}</BaseText>
             <BaseSpacer height={12} />
             <FlatList
