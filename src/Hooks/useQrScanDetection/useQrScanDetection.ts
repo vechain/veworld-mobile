@@ -18,16 +18,16 @@ type Args = {
     /**
      * Function triggered when the scan is successful
      */
-    onScan: () => void
+    onScan: (data: string) => Promise<void>
 }
 
 export const useQrScanDetection = ({ offsetX, offsetY, size, onScan }: Args) => {
     return useCallback(
-        (codes: Code[]) => {
+        async (codes: Code[]) => {
             if (codes.length === 0) return
             //We'll read just the first code
             const code = codes[0]
-            if (!code.frame) return
+            if (!code.frame || !code.value) return
             const points = [
                 //Top left
                 {
@@ -69,8 +69,7 @@ export const useQrScanDetection = ({ offsetX, offsetY, size, onScan }: Args) => 
                     )
                 })
             ) {
-                onScan()
-                return
+                return onScan(code.value)
             }
         },
         [offsetX.value, offsetY.value, onScan, size],

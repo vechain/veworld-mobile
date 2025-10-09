@@ -17,8 +17,22 @@ import { ScanTab } from "./ScanTab"
 
 const TABS = ["scan", "receive"] as const
 
-export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(function SendReceiveBottomSheet(
-    props,
+type Props = {
+    onScan: (data: string) => Promise<boolean>
+    /**
+     * Title of the BS.
+     * @default QR_CODE_<tab>_TITLE
+     */
+    title?: string
+    /**
+     * Title of the BS.
+     * @default QR_CODE_<tab>_DESCRIPTION
+     */
+    description?: string
+}
+
+export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function SendReceiveBottomSheet(
+    { onScan, title, description },
     ref,
 ) {
     const { LL } = useI18nContext()
@@ -71,7 +85,7 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
             <>
                 <BaseView py={24} px={16} justifyContent="center" flexDirection="row" position="relative">
                     <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.WHITE}>
-                        {LL[`QR_CODE_${StringUtils.toUppercase(tab)}_TITLE`]()}
+                        {title ?? LL[`QR_CODE_${StringUtils.toUppercase(tab)}_TITLE`]()}
                     </BaseText>
                     <BaseView style={styles.closeIconContainer}>
                         <TouchableOpacity style={[styles.iconContainer]} onPress={onClose}>
@@ -80,7 +94,7 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
                     </BaseView>
                 </BaseView>
                 <BaseText typographyFont="captionMedium" color={COLORS.WHITE} align="center">
-                    {LL[`QR_CODE_${StringUtils.toUppercase(tab)}_DESCRIPTION`]()}
+                    {description ?? LL[`QR_CODE_${StringUtils.toUppercase(tab)}_DESCRIPTION`]()}
                 </BaseText>
                 {tab === "receive" ? (
                     <ReceiveTab />
@@ -108,6 +122,7 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
         )
     }, [
         LL,
+        description,
         handleCheckPermissions,
         hasCameraPerms,
         labels,
@@ -118,23 +133,28 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, {}>(fu
         styles.iconContainer,
         styles.tabElement,
         tab,
+        title,
     ])
 
     const device = useCameraDevice("back")
     const offsetX = useDerivedValue(() => rootX.value + cameraX.value, [rootX.value, cameraX.value])
     const offsetY = useDerivedValue(() => rootY.value + cameraY.value, [rootY.value, cameraY.value])
-    const onScan = useCallback(() => {}, [])
+    const handleScan = useCallback(
+        async (data: string) => {
+            const result = await onScan(data)
+            if (result) onClose()
+        },
+        [onClose, onScan],
+    )
 
-    const onCodeScanned = useQrScanDetection({ offsetX, offsetY, size: 200, onScan })
+    const onCodeScanned = useQrScanDetection({ offsetX, offsetY, size: 200, onScan: handleScan })
 
     const codeScanner = useCodeScanner({
         codeTypes: ["qr"],
         onCodeScanned,
     })
 
-    const skiaClip = useDerivedValue(() =>
-        Skia.RRectXY(Skia.XYWHRect(rootX.value + cameraX.value, rootY.value + cameraY.value, 200, 200), 16, 16),
-    )
+    const skiaClip = useDerivedValue(() => Skia.RRectXY(Skia.XYWHRect(offsetX.value, offsetY.value, 200, 200), 16, 16))
 
     return (
         <BaseBottomSheet
