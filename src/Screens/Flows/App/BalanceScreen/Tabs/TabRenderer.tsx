@@ -20,6 +20,7 @@ import { NewUserVeBetterCard } from "../Components/VeBetterDao/NewUserVeBetterCa
 import { Tokens } from "./Tokens"
 import { Staking } from "./Staking"
 import { Collectibles } from "./Collectibles"
+import { BannersCarousel } from "../Components/BannerCarousel"
 
 const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
 
@@ -91,12 +92,6 @@ export const TabRenderer = ({ onLayout }: Props) => {
 
     return (
         <Animated.View style={[styles.root, { paddingBottom: tabBarBottomMargin }]} onLayout={onLayout}>
-            {showNewUserVeBetterCard && (
-                <Animated.View layout={LinearTransition.duration(400)}>
-                    <NewUserVeBetterCard />
-                    <BaseSpacer height={18} />
-                </Animated.View>
-            )}
             <Animated.View layout={LinearTransition.duration(400)} style={styles.animatedContent}>
                 {showFavorites && (
                     <BaseView flexDirection="column">
@@ -110,6 +105,14 @@ export const TabRenderer = ({ onLayout }: Props) => {
                         <BaseSpacer height={24} />
                     </BaseView>
                 )}
+
+                {showNewUserVeBetterCard && (
+                    <Animated.View layout={LinearTransition.duration(400)}>
+                        <NewUserVeBetterCard />
+                        <BaseSpacer height={18} />
+                    </Animated.View>
+                )}
+
                 <BaseSimpleTabs
                     keys={filteredTabs}
                     labels={labels}
@@ -119,11 +122,12 @@ export const TabRenderer = ({ onLayout }: Props) => {
                     rightIcon={rightIcon}
                 />
                 <BaseView flexDirection="column" flex={1} pb={paddingBottom} px={24}>
-                    {selectedTab === "TOKENS" && <Tokens />}
+                    {selectedTab === "TOKENS" && <Tokens isEmptyStateShown={showNewUserVeBetterCard} />}
                     {selectedTab === "STAKING" && <Staking />}
                     {selectedTab === "COLLECTIBLES" && <Collectibles />}
                 </BaseView>
             </Animated.View>
+            {showNewUserVeBetterCard && <BannersCarousel location="home_screen" />}
         </Animated.View>
     )
 }

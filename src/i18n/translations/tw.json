@@ -137,6 +137,7 @@
   "BACKUP_YOUR_DEVICES_DESCRIPTION": "在繼續進行交易之前，我們建議您備份此帳戶的恢復短語。",
   "BACKUP_YOUR_DEVICES_TITLE": "備份您的錢包",
   "BALANCE_ACTION_BUY": "購買",
+  "BALANCE_ACTION_EARN": "賺取",
   "BALANCE_ACTION_OTHER": "其他",
   "BALANCE_ACTION_RECEIVE": "接收",
   "BALANCE_ACTION_SEND": "發送",
