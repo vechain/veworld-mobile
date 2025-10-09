@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 import { useBottomSheetModal, useCameraPermissions } from "~Hooks"
-import { ScanBottomSheet } from "~Components"
+import { ScanBottomSheet } from "~Components/Reusable/BottomSheets"
 import { ScanTarget } from "~Constants"
 import { Keyboard } from "react-native"
 

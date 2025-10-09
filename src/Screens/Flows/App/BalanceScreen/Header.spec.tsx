@@ -10,23 +10,21 @@ jest.mock("~Hooks/useVns", () => ({
     useVns: jest.fn(),
 }))
 
+jest.mock("~Hooks/useCameraBottomSheet", () => ({
+    useCameraBottomSheet: jest.fn().mockReturnValue({
+        RenderCameraModal: jest.fn().mockReturnValue("TEST"),
+        handleOpenCamera: jest.fn(),
+    }),
+}))
+
 describe("BalanceScreen -> Header", () => {
     beforeEach(() => {
         jest.clearAllMocks()
     })
     it("should show the humanized address if the alias is the standard alias", () => {
         ;(useVns as jest.Mock).mockReturnValue({ name: undefined })
-        const qrCodeBottomSheetRef = {
-            current: {
-                present: jest.fn(),
-            },
-        }
         TestHelpers.render.renderComponentWithProps(
-            <Header
-                scrollY={{ value: 0 } as any}
-                contentOffsetY={{ value: 0 } as any}
-                qrCodeBottomSheetRef={qrCodeBottomSheetRef as any}
-            />,
+            <Header scrollY={{ value: 0 } as any} contentOffsetY={{ value: 0 } as any} />,
             { wrapper: TestWrapper },
         )
 
@@ -35,17 +33,8 @@ describe("BalanceScreen -> Header", () => {
     })
     it("should show the account alias if it is not standard", () => {
         ;(useVns as jest.Mock).mockReturnValue({ name: undefined })
-        const qrCodeBottomSheetRef = {
-            current: {
-                present: jest.fn(),
-            },
-        }
         TestHelpers.render.renderComponentWithProps(
-            <Header
-                scrollY={{ value: 0 } as any}
-                contentOffsetY={{ value: 0 } as any}
-                qrCodeBottomSheetRef={qrCodeBottomSheetRef as any}
-            />,
+            <Header scrollY={{ value: 0 } as any} contentOffsetY={{ value: 0 } as any} />,
             {
                 wrapper: TestWrapper,
                 initialProps: {
@@ -72,17 +61,8 @@ describe("BalanceScreen -> Header", () => {
     })
     it("should show the vet domain if it is not veworld.vet", () => {
         ;(useVns as jest.Mock).mockReturnValue({ name: "test.vet" })
-        const qrCodeBottomSheetRef = {
-            current: {
-                present: jest.fn(),
-            },
-        }
         TestHelpers.render.renderComponentWithProps(
-            <Header
-                scrollY={{ value: 0 } as any}
-                contentOffsetY={{ value: 0 } as any}
-                qrCodeBottomSheetRef={qrCodeBottomSheetRef as any}
-            />,
+            <Header scrollY={{ value: 0 } as any} contentOffsetY={{ value: 0 } as any} />,
             { wrapper: TestWrapper },
         )
 
@@ -90,17 +70,8 @@ describe("BalanceScreen -> Header", () => {
     })
     it("should show the subdomain if username contains veworld.vet", () => {
         ;(useVns as jest.Mock).mockReturnValue({ name: "test.veworld.vet" })
-        const qrCodeBottomSheetRef = {
-            current: {
-                present: jest.fn(),
-            },
-        }
         TestHelpers.render.renderComponentWithProps(
-            <Header
-                scrollY={{ value: 0 } as any}
-                contentOffsetY={{ value: 0 } as any}
-                qrCodeBottomSheetRef={qrCodeBottomSheetRef as any}
-            />,
+            <Header scrollY={{ value: 0 } as any} contentOffsetY={{ value: 0 } as any} />,
             { wrapper: TestWrapper },
         )
 
