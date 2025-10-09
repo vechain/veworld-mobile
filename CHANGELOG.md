@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.6 (2025-10-09)</small>
+
+* build: init ([009f8b6](https://github.com/vechain/veworld-mobile/commit/009f8b6))
+* Revert "Version control logic (#3302)" (#3393) ([073512b](https://github.com/vechain/veworld-mobile/commit/073512b)), closes [#3302](https://github.com/vechain/veworld-mobile/issues/3302) [#3393](https://github.com/vechain/veworld-mobile/issues/3393) [#3302](https://github.com/vechain/veworld-mobile/issues/3302)
+
 ## <small>2.4.5 (2025-10-03)</small>
 
 * build: init ([58131c2](https://github.com/vechain/veworld-mobile/commit/58131c2))
