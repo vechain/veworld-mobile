@@ -31,14 +31,26 @@ type Props = {
     description?: string
 }
 
-export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function SendReceiveBottomSheet(
-    { onScan, title, description },
-    ref,
-) {
+export type SendReceiveBottomSheetOpenProps<TTabs extends (typeof TABS)[number][] | readonly (typeof TABS)[number][]> =
+    {
+        tabs: TTabs
+        defaultTab: TTabs[number]
+    }
+
+const SendReceiveBottomSheetContent = <TTabs extends (typeof TABS)[number][] | readonly (typeof TABS)[number][]>({
+    tabs,
+    defaultTab,
+    title,
+    description,
+    onScan,
+    onClose,
+}: Props &
+    SendReceiveBottomSheetOpenProps<TTabs> & {
+        onClose: () => void
+    }) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
-    const [tab, setTab] = useState<(typeof TABS)[number]>("receive")
-    const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModalMethods> })
+    const [selectedTab, setSelectedTab] = useState<TTabs[number]>(defaultTab)
     const [hasCameraPerms, setCameraPerms] = useState(false)
     const { currentState } = useAppState()
 
@@ -48,8 +60,8 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     const cameraY = useSharedValue(0)
 
     const labels = useMemo(() => {
-        return [LL.SEND_RECEIVE_TAB_SCAN(), LL.SEND_RECEIVE_TAB_RECEIVE()]
-    }, [LL])
+        return tabs.map(tab => LL[`SEND_RECEIVE_TAB_${StringUtils.toUppercase(tab)}`]())
+    }, [LL, tabs])
 
     const onCanceled = useCallback(() => {}, [])
 
@@ -85,7 +97,7 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             <>
                 <BaseView py={24} px={16} justifyContent="center" flexDirection="row" position="relative">
                     <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.WHITE}>
-                        {title ?? LL[`QR_CODE_${StringUtils.toUppercase(tab)}_TITLE`]()}
+                        {title ?? LL[`QR_CODE_${StringUtils.toUppercase(selectedTab)}_TITLE`]()}
                     </BaseText>
                     <BaseView style={styles.closeIconContainer}>
                         <TouchableOpacity style={[styles.iconContainer]} onPress={onClose}>
@@ -94,9 +106,9 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                     </BaseView>
                 </BaseView>
                 <BaseText typographyFont="captionMedium" color={COLORS.WHITE} align="center">
-                    {description ?? LL[`QR_CODE_${StringUtils.toUppercase(tab)}_DESCRIPTION`]()}
+                    {description ?? LL[`QR_CODE_${StringUtils.toUppercase(selectedTab)}_DESCRIPTION`]()}
                 </BaseText>
-                {tab === "receive" ? (
+                {selectedTab === "receive" ? (
                     <ReceiveTab />
                 ) : (
                     <ScanTab
@@ -107,9 +119,9 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                     />
                 )}
                 <BaseTabs
-                    keys={TABS}
-                    selectedKey={tab}
-                    setSelectedKey={setTab}
+                    keys={tabs}
+                    selectedKey={selectedTab}
+                    setSelectedKey={setSelectedTab}
                     labels={labels}
                     rootStyle={styles.tabElement}
                     indicatorBackgroundColor="rgba(255, 255, 255, 0.15)"
@@ -121,19 +133,20 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             </>
         )
     }, [
+        title,
         LL,
-        description,
-        handleCheckPermissions,
-        hasCameraPerms,
-        labels,
-        onClose,
-        onScanCameraLayout,
-        onScanRootLayout,
+        selectedTab,
         styles.closeIconContainer,
         styles.iconContainer,
         styles.tabElement,
-        tab,
-        title,
+        onClose,
+        description,
+        handleCheckPermissions,
+        hasCameraPerms,
+        onScanRootLayout,
+        onScanCameraLayout,
+        tabs,
+        labels,
     ])
 
     const device = useCameraDevice("back")
@@ -155,33 +168,51 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     })
 
     const skiaClip = useDerivedValue(() => Skia.RRectXY(Skia.XYWHRect(offsetX.value, offsetY.value, 200, 200), 16, 16))
+    return selectedTab === "scan" && hasCameraPerms ? (
+        <BaseView flex={1} position="relative">
+            {device && (
+                <RNVCamera
+                    style={styles.cameraView}
+                    device={device}
+                    isActive={currentState === "active"}
+                    codeScanner={codeScanner}
+                />
+            )}
+
+            <Canvas style={StyleSheet.absoluteFill}>
+                <Fill color={COLORS.BALANCE_BACKGROUND_80} clip={skiaClip} invertClip />
+            </Canvas>
+            <BaseView style={[StyleSheet.absoluteFill, styles.cameraChildren]}>{children}</BaseView>
+        </BaseView>
+    ) : (
+        children
+    )
+}
+
+export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function SendReceiveBottomSheet(
+    { onScan, title, description },
+    ref,
+) {
+    const { styles } = useThemedStyles(baseStyles)
+    const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModalMethods> })
 
     return (
-        <BaseBottomSheet
+        <BaseBottomSheet<SendReceiveBottomSheetOpenProps<typeof TABS>>
             snapPoints={["100%"]}
             noMargins
             ref={ref}
             backgroundStyle={styles.rootBg}
             enablePanDownToClose={false}
             rounded={false}>
-            {tab === "scan" && hasCameraPerms ? (
-                <BaseView flex={1} position="relative">
-                    {device && (
-                        <RNVCamera
-                            style={styles.cameraView}
-                            device={device}
-                            isActive={currentState === "active"}
-                            codeScanner={codeScanner}
-                        />
-                    )}
-
-                    <Canvas style={StyleSheet.absoluteFill}>
-                        <Fill color={COLORS.BALANCE_BACKGROUND_80} clip={skiaClip} invertClip />
-                    </Canvas>
-                    <BaseView style={[StyleSheet.absoluteFill, styles.cameraChildren]}>{children}</BaseView>
-                </BaseView>
-            ) : (
-                children
+            {data => (
+                <SendReceiveBottomSheetContent
+                    defaultTab={data.defaultTab}
+                    onClose={onClose}
+                    tabs={data.tabs}
+                    onScan={onScan}
+                    title={title}
+                    description={description}
+                />
             )}
         </BaseBottomSheet>
     )
