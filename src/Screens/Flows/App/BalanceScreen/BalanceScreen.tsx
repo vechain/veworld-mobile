@@ -62,9 +62,7 @@ export const BalanceScreen = () => {
         <Layout
             bg={COLORS.APP_BACKGROUND_DARK}
             noBackButton
-            fixedHeader={
-                <Header scrollY={scrollY} contentOffsetY={contentOffsetY} qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
-            }
+            fixedHeader={<Header scrollY={scrollY} contentOffsetY={contentOffsetY} />}
             noMargin
             fixedBody={
                 <Animated.ScrollView
