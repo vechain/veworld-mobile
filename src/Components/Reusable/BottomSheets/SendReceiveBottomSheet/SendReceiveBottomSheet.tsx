@@ -15,7 +15,8 @@ import { StringUtils } from "~Utils"
 import { ReceiveTab } from "./ReceiveTab"
 import { ScanTab } from "./ScanTab"
 
-const TABS = ["scan", "receive"] as const
+const SEND_RECEIVE_BS_TABS = ["scan", "receive"] as const
+export type SendReceiveBsTab = (typeof SEND_RECEIVE_BS_TABS)[number]
 
 type Props = {
     onScan: (data: string) => Promise<boolean>
@@ -31,13 +32,12 @@ type Props = {
     description?: string
 }
 
-export type SendReceiveBottomSheetOpenProps<TTabs extends (typeof TABS)[number][] | readonly (typeof TABS)[number][]> =
-    {
-        tabs: TTabs
-        defaultTab: TTabs[number]
-    }
+export type SendReceiveBottomSheetOpenProps<TTabs extends SendReceiveBsTab[] | readonly SendReceiveBsTab[]> = {
+    tabs: TTabs
+    defaultTab: TTabs[number]
+}
 
-const SendReceiveBottomSheetContent = <TTabs extends (typeof TABS)[number][] | readonly (typeof TABS)[number][]>({
+const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readonly SendReceiveBsTab[]>({
     tabs,
     defaultTab,
     title,
@@ -197,7 +197,7 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModalMethods> })
 
     return (
-        <BaseBottomSheet<SendReceiveBottomSheetOpenProps<typeof TABS>>
+        <BaseBottomSheet<SendReceiveBottomSheetOpenProps<typeof SEND_RECEIVE_BS_TABS>>
             snapPoints={["100%"]}
             noMargins
             ref={ref}

@@ -8,7 +8,7 @@ import { useUriScanTarget } from "./useUriScanTarget"
 import { useVnsScanTarget } from "./useVnsScanTarget"
 import { useWalletConnectScanTarget } from "./useWalletConnectScanTarget"
 
-type Props = {
+export type UseScanTargetArgs = {
     /**
      * List of targets that should be scanned
      */
@@ -28,7 +28,7 @@ type Props = {
  * @param param0 options
  * @returns Function to pass to SendReceiveBottomSheet
  */
-export const useScanTargets = ({ targets, overrides = {}, sourceScreen }: Props) => {
+export const useScanTargets = ({ targets, overrides = {}, sourceScreen }: UseScanTargetArgs) => {
     const onVnsScan = useVnsScanTarget()
     const onAddressScan = useAddressScanTarget()
     const onWcScan = useWalletConnectScanTarget()
