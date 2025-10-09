@@ -1,12 +1,13 @@
+import { isEmpty } from "lodash"
 import React, { memo, useCallback, useMemo, useState } from "react"
-import { useCameraBottomSheet, useVns, ZERO_ADDRESS } from "~Hooks"
+import { Keyboard } from "react-native"
 import { BaseBottomSheetTextInput, BaseSpacer, BaseTextInput, showWarningToast } from "~Components"
 import { ScanTarget } from "~Constants"
-import { Keyboard } from "react-native"
-import HapticsService from "~Services/HapticsService"
-import { isEmpty } from "lodash"
+import { useCameraBottomSheet, useVns, ZERO_ADDRESS } from "~Hooks"
+import { ScanFunctionRegistry } from "~Hooks/useScanTargets"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     titleName: string
@@ -50,27 +51,29 @@ export const ContactForm: React.FC<Props> = memo(
 
         const { getVnsAddress } = useVns()
 
-        const onScan = useCallback(
-            async (uri: string) => {
+        const onScanAddress = useCallback<ScanFunctionRegistry["address"]>(
+            async data => {
                 HapticsService.triggerImpact({ level: "Light" })
-
-                let address = ""
-
-                if (uri.includes(".vet")) {
-                    const vnsAddress = await getVnsAddress(uri)
-                    address = vnsAddress ?? ""
-                    if (address === ZERO_ADDRESS) return
-
-                    setAddress(address)
-                } else {
-                    setAddress(uri)
-                }
+                setAddress(data)
+                return true
             },
-            [getVnsAddress, setAddress],
+            [setAddress],
+        )
+
+        const onScanVns = useCallback<ScanFunctionRegistry["vns"]>(
+            async (data, defaultFn) => {
+                HapticsService.triggerImpact({ level: "Light" })
+                const res = await defaultFn(data)
+                if (!res) return false
+                setAddress(res.address)
+                return true
+            },
+            [setAddress],
         )
 
         const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
-            onScan,
+            onScanAddress,
+            onScanVns,
             targets: [ScanTarget.ADDRESS, ScanTarget.VNS],
         })
 
@@ -78,7 +81,7 @@ export const ContactForm: React.FC<Props> = memo(
             if (!isEmpty(valueAddress)) {
                 setAddress("")
             } else {
-                handleOpenCamera()
+                handleOpenCamera({ tabs: ["scan"], defaultTab: "scan" })
             }
 
             Keyboard.dismiss()

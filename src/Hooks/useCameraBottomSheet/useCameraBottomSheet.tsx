@@ -13,7 +13,7 @@ type Args = UseScanTargetArgs & {
     description?: string
 }
 
-export const useCameraBottomSheet = ({ targets, overrides, sourceScreen, title, description }: Args) => {
+export const useCameraBottomSheet = ({ targets, sourceScreen, title, description, ...rest }: Args) => {
     const { ref: scanAddressSheetRef, onOpen: openScanAddressSheet } = useBottomSheetModal()
 
     const handleOpenCamera = useCallback(
@@ -24,7 +24,7 @@ export const useCameraBottomSheet = ({ targets, overrides, sourceScreen, title, 
         [openScanAddressSheet],
     )
 
-    const onScan = useScanTargets({ targets, overrides, sourceScreen })
+    const onScan = useScanTargets({ targets, sourceScreen, ...rest })
 
     const RenderCameraModal = useMemo(
         () => (

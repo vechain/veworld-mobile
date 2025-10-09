@@ -14,21 +14,24 @@ export type UseScanTargetArgs = {
      */
     targets: ScanTarget[]
     /**
-     * Overrides for the default functions. For VNS it's mandatory to have the fn, otherwise it won't do anything.
-     */
-    overrides?: Partial<ScanFunctionRegistry>
-    /**
      * Current screen. Used only if `targets` include `ScanTarget.HTTPS_URL`
      */
     sourceScreen?: Routes
-}
+} & Partial<{ [key in keyof ScanFunctionRegistry as `onScan${Capitalize<key>}`]: ScanFunctionRegistry[key] }>
 
 /**
  * Build the function to pas to SendReceiveBottomSheet
  * @param param0 options
  * @returns Function to pass to SendReceiveBottomSheet
  */
-export const useScanTargets = ({ targets, overrides = {}, sourceScreen }: UseScanTargetArgs) => {
+export const useScanTargets = ({
+    targets,
+    sourceScreen,
+    onScanAddress,
+    onScanUrl,
+    onScanVns,
+    onScanWalletConnect,
+}: UseScanTargetArgs) => {
     const onVnsScan = useVnsScanTarget()
     const onAddressScan = useAddressScanTarget()
     const onWcScan = useWalletConnectScanTarget()
@@ -42,7 +45,7 @@ export const useScanTargets = ({ targets, overrides = {}, sourceScreen }: UseSca
 
             if (isVnsTarget && data.endsWith(".vet")) {
                 //Only call override for VNS
-                if (overrides[ScanTarget.VNS]) return overrides[ScanTarget.VNS](data, onVnsScan)
+                if (onScanVns) return onScanVns(data, onVnsScan)
             }
 
             //Make sure the address is clean, without any vechain: prefix
@@ -53,22 +56,32 @@ export const useScanTargets = ({ targets, overrides = {}, sourceScreen }: UseSca
             const isValidHttpsUrl = isUrlTarget && URIUtils.isValid(data) && URIUtils.isHttps(data)
 
             if (isAddressTarget && isValidAddress) {
-                if (overrides[ScanTarget.ADDRESS]) return overrides[ScanTarget.ADDRESS](cleanedAddress, onAddressScan)
+                if (onScanAddress) return onScanAddress(cleanedAddress, onAddressScan)
                 onAddressScan(cleanedAddress)
                 return true
             }
             if (isWalletConnectTarget && isValidWalletConnectUri) {
-                if (overrides[ScanTarget.WALLET_CONNECT]) return overrides[ScanTarget.WALLET_CONNECT](data, onWcScan)
+                if (onScanWalletConnect) return onScanWalletConnect(data, onWcScan)
                 onWcScan(data)
                 return true
             }
             if (isUrlTarget && isValidHttpsUrl) {
-                if (overrides[ScanTarget.HTTPS_URL]) return overrides[ScanTarget.HTTPS_URL](cleanedAddress, onUriScan)
+                if (onScanUrl) return onScanUrl(cleanedAddress, onUriScan)
                 onUriScan(data)
                 return true
             }
             return false
         },
-        [onAddressScan, onUriScan, onVnsScan, onWcScan, overrides, targets],
+        [
+            onAddressScan,
+            onScanAddress,
+            onScanUrl,
+            onScanVns,
+            onScanWalletConnect,
+            onUriScan,
+            onVnsScan,
+            onWcScan,
+            targets,
+        ],
     )
 }
