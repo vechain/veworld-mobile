@@ -11,6 +11,7 @@ import {
 } from "~Components"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
+import { useOfficialTokens } from "~Hooks/useOfficialTokens"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { BalanceActions } from "./Components/Actions/BalanceActions"
@@ -22,14 +23,13 @@ import { TabRenderer } from "./Tabs/TabRenderer"
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
 export const BalanceScreen = () => {
-    useFetchFeaturedDApps()
-
     const scrollY = useSharedValue(0)
     const contentOffsetY = useSharedValue(0)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const { styles } = useThemedStyles(baseStyles)
 
     useFetchFeaturedDApps()
+    useOfficialTokens()
 
     const { ref: qrCodeBottomSheetRef } = useBottomSheetModal()
 
