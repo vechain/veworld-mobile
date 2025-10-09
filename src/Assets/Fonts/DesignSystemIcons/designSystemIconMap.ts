@@ -910,4 +910,5 @@ export const designSystemIconMap = {
     "icon-radio-selected": 60814,
     "icon-thunder": 60815,
     "icon-leafs": 60816,
+    "icon-stargate": 60817,
 }

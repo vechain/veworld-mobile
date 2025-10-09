@@ -21,8 +21,10 @@ export const RewardsEarned = ({ week, month, total }: Props) => {
     return (
         <BaseView style={styles.root} gap={8}>
             <BaseView flexDirection="row" gap={8}>
-                <BaseIcon name="icon-gift" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} size={16} />
-                <BaseText color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} typographyFont="subSubTitleSemiBold">
+                <BaseIcon name="icon-gift" color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE} size={16} />
+                <BaseText
+                    color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE}
+                    typographyFont="subSubTitleSemiBold">
                     {LL.VBD_REWARDS_EARNED()}
                 </BaseText>
             </BaseView>
