@@ -10,10 +10,11 @@ type GlassButtonProps = {
     icon: IconKey
     onPress: () => void
     disabled?: boolean
+    size?: "sm" | "md"
 }
 
-const GlassButton = ({ icon, onPress, disabled }: GlassButtonProps) => {
-    const { styles } = useThemedStyles(baseStyles)
+const GlassButton = ({ icon, onPress, disabled, size = "md" }: GlassButtonProps) => {
+    const { styles } = useThemedStyles(baseStyles(size))
 
     const [pressed, setPressed] = useState(false)
 
@@ -32,24 +33,34 @@ const GlassButton = ({ icon, onPress, disabled }: GlassButtonProps) => {
     return (
         <Pressable onPress={onPress} disabled={disabled} onPressIn={onPressIn} onPressOut={onPressOut}>
             {disabled ? (
-                <BaseView p={16} borderRadius={99} bg={COLORS.PURPLE_LABEL_5}>
-                    <BaseIcon name={icon} size={24} color={COLORS.DARK_PURPLE_DISABLED} />
+                <BaseView p={size === "sm" ? 10 : 16} borderRadius={99} bg={COLORS.PURPLE_LABEL_5}>
+                    <BaseIcon
+                        name={icon as IconKey}
+                        size={size === "sm" ? 20 : 24}
+                        color={COLORS.DARK_PURPLE_DISABLED}
+                    />
                 </BaseView>
             ) : (
                 <LinearGradient colors={colors} angle={0} useAngle style={[styles.gradientBtnContainer, borderStyle]}>
-                    <BaseIcon name={icon} size={24} color={COLORS.PURPLE_LABEL} />
+                    <BaseIcon name={icon as IconKey} size={size === "sm" ? 20 : 24} color={COLORS.PURPLE_LABEL} />
                 </LinearGradient>
             )}
         </Pressable>
     )
 }
 
-type Props = { label: string; icon: IconKey; onPress: () => void; disabled?: boolean }
+type Props = {
+    label: string
+    icon: IconKey
+    onPress: () => void
+    disabled?: boolean
+    size?: "sm" | "md"
+}
 
-export const GlassButtonWithLabel = ({ label, icon, onPress, disabled }: Props) => {
+export const GlassButtonWithLabel = ({ label, icon, onPress, disabled, size }: Props) => {
     return (
         <BaseView flexDirection="column" gap={8} alignItems="center">
-            <GlassButton icon={icon} onPress={onPress} disabled={disabled} />
+            <GlassButton icon={icon} onPress={onPress} disabled={disabled} size={size} />
             <BaseText
                 typographyFont="captionSemiBold"
                 color={disabled ? COLORS.DARK_PURPLE_DISABLED : COLORS.PURPLE_LABEL}>
@@ -59,7 +70,12 @@ export const GlassButtonWithLabel = ({ label, icon, onPress, disabled }: Props) 
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (size: "sm" | "md") => () =>
     StyleSheet.create({
-        gradientBtnContainer: { padding: 16, borderRadius: 99, borderWidth: 1, borderColor: COLORS.PURPLE_LABEL_5 },
+        gradientBtnContainer: {
+            padding: size === "sm" ? 10 : 16,
+            borderRadius: 99,
+            borderWidth: 1,
+            borderColor: COLORS.PURPLE_LABEL_5,
+        },
     })

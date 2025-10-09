@@ -49,15 +49,22 @@ export const BalanceActions = ({ qrCodeBottomSheetRef, style }: Props) => {
             layout={LinearTransition.duration(1000)}
             exiting={FadeOut.duration(300)}
             entering={FadeIn.duration(300)}>
-            <GlassButtonWithLabel label={LL.BALANCE_ACTION_RECEIVE()} icon="icon-arrow-down" onPress={onReceive} />
+            <GlassButtonWithLabel
+                label={LL.BALANCE_ACTION_RECEIVE()}
+                size="sm"
+                icon="icon-arrow-down"
+                onPress={onReceive}
+            />
             <GlassButtonWithLabel
                 label={LL.BALANCE_ACTION_SEND()}
+                size="sm"
                 icon="icon-arrow-up"
                 onPress={onSend}
                 disabled={isSendDisabled}
             />
-            <GlassButtonWithLabel label={LL.SWAP()} icon="icon-arrow-left-right" onPress={onSwap} />
-            <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} icon="icon-plus" onPress={onBuy} />
+            <GlassButtonWithLabel label={LL.SWAP()} size="sm" icon="icon-arrow-left-right" onPress={onSwap} />
+            <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} size="sm" icon="icon-plus" onPress={onBuy} />
+            <GlassButtonWithLabel label={LL.BALANCE_ACTION_EARN()} size="sm" icon={"icon-stargate"} onPress={onBuy} />
         </Animated.View>
     )
 }

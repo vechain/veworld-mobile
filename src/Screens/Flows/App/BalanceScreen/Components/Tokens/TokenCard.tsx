@@ -231,6 +231,7 @@ const baseStyles = () =>
         root: {
             gap: 16,
             alignItems: "center",
+            borderRadius: 12,
             justifyContent: "space-between",
         },
     })

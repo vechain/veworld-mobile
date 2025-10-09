@@ -5281,6 +5281,10 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * E​a​r​n
+	 */
+	BALANCE_ACTION_EARN: string
 }
 
 export type TranslationFunctions = {
@@ -10466,6 +10470,10 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Earn
+	 */
+	BALANCE_ACTION_EARN: () => LocalizedString
 }
 
 export type Formatters = {
