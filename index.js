@@ -35,7 +35,7 @@ import {
     Rubik_Light,
 } from "~Assets"
 import { ERROR_EVENTS, typography } from "~Constants"
-import { AnalyticsUtils, info, URIUtils, DeviceUtils } from "~Utils"
+import { AnalyticsUtils, info, URIUtils } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import {
     NotificationsProvider,
@@ -68,8 +68,7 @@ import { InteractionProvider } from "~Components/Providers/InteractionProvider"
 import { FeatureFlaggedSmartWallet } from "./src/Components/Providers/FeatureFlaggedSmartWallet"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { DeepLinksProvider } from "~Components/Providers/DeepLinksProvider"
-import { ReducedMotionConfig, ReduceMotion } from "react-native-reanimated"
-import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
+import { DeviceProvider } from "~Components/Providers/DeviceProvider"
 
 const { fontFamily } = typography
 
@@ -146,17 +145,6 @@ const Main = () => {
     const networkType = selectedNetwork.type
     const nodeUrl = selectedNetwork.currentUrl
 
-    const [isLowEndDevice, setIsLowEndDevice] = useState(false)
-
-    useEffect(() => {
-        const checkDevicePerformance = async () => {
-            const isSlowDevice = isAndroid() && (await DeviceUtils.isSlowDevice())
-            setIsLowEndDevice(isSlowDevice)
-        }
-
-        checkDevicePerformance()
-    }, [])
-
     if (!fontsLoaded) return
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -175,15 +163,10 @@ const Main = () => {
                                             <WalletConnectContextProvider>
                                                 <BottomSheetModalProvider>
                                                     <InAppBrowserProvider>
-                                                        <ReducedMotionConfig
-                                                            mode={
-                                                                isLowEndDevice
-                                                                    ? ReduceMotion.Always
-                                                                    : ReduceMotion.System
-                                                            }
-                                                        />
                                                         <NotificationsProvider>
-                                                            <EntryPoint />
+                                                            <DeviceProvider>
+                                                                <EntryPoint />
+                                                            </DeviceProvider>
                                                         </NotificationsProvider>
                                                     </InAppBrowserProvider>
                                                 </BottomSheetModalProvider>

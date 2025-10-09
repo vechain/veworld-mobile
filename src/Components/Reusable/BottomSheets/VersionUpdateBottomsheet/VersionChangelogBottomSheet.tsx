@@ -3,7 +3,7 @@ import { FlatList, ListRenderItemInfo } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useBottomSheetModal, useTheme, useCheckAppVersion } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { useAppDispatch, selectInstalledAppVersion, useAppSelector, setChangelogToShow } from "~Storage/Redux"
+import { useAppDispatch, selectInstalledAppVersion, useAppSelector, setChangelogDismissed } from "~Storage/Redux"
 
 const ItemSeparatorComponent = () => <BaseSpacer height={14} />
 
@@ -18,23 +18,11 @@ export const VersionChangelogBottomSheet = () => {
     useEffect(() => {
         if (shouldShowChangelog && changelog.length > 0) {
             onOpen()
-        } else if (shouldShowChangelog) {
-            dispatch(
-                setChangelogToShow({
-                    shouldShow: false,
-                    changelogKey: null,
-                }),
-            )
         }
-    }, [shouldShowChangelog, onOpen, changelog, dispatch])
+    }, [shouldShowChangelog, onOpen, changelog])
 
     const handleDismiss = useCallback(() => {
-        dispatch(
-            setChangelogToShow({
-                shouldShow: false,
-                changelogKey: null,
-            }),
-        )
+        dispatch(setChangelogDismissed(true))
         onClose()
     }, [dispatch, onClose])
 

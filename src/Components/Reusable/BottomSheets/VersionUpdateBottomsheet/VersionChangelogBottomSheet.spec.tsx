@@ -14,6 +14,7 @@ jest.mock("~Storage/Redux", () => ({
     ...jest.requireActual("~Storage/Redux"),
     useAppDispatch: () => mockDispatch,
     setChangelogToShow: jest.fn(payload => ({ type: "SET_CHANGELOG_TO_SHOW", payload })),
+    setChangelogDismissed: jest.fn(payload => ({ type: "SET_CHANGELOG_DISMISSED", payload })),
 }))
 
 describe("VersionChangelogBottomSheet", () => {
@@ -68,7 +69,7 @@ describe("VersionChangelogBottomSheet", () => {
         expect(dismissButton).toBeTruthy()
     })
 
-    it("should reset changelog state when changelog is empty", async () => {
+    it("should not open bottom sheet when changelog is empty", async () => {
         ;(useCheckAppVersion as jest.Mock).mockReturnValue({
             shouldShowChangelog: true,
             changelog: [],
@@ -78,8 +79,9 @@ describe("VersionChangelogBottomSheet", () => {
             wrapper: TestWrapper,
         })
 
-        // Verify the dispatch was called with the right parameters
-        expect(mockDispatch).toHaveBeenCalledWith(
+        // Verify that the component doesn't try to reset state
+        // (that's now handled by useVersionChangelog hook)
+        expect(mockDispatch).not.toHaveBeenCalledWith(
             expect.objectContaining({
                 payload: {
                     shouldShow: false,
