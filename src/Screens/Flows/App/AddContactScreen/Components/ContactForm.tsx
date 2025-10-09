@@ -71,7 +71,7 @@ export const ContactForm: React.FC<Props> = memo(
             [setAddress],
         )
 
-        const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
+        const { RenderCameraModal, handleOpenOnlyScanCamera } = useCameraBottomSheet({
             onScanAddress,
             onScanVns,
             targets: [ScanTarget.ADDRESS, ScanTarget.VNS],
@@ -81,12 +81,12 @@ export const ContactForm: React.FC<Props> = memo(
             if (!isEmpty(valueAddress)) {
                 setAddress("")
             } else {
-                handleOpenCamera({ tabs: ["scan"], defaultTab: "scan" })
+                handleOpenOnlyScanCamera()
             }
 
             Keyboard.dismiss()
             setAddressTouched(true)
-        }, [handleOpenCamera, setAddress, valueAddress])
+        }, [handleOpenOnlyScanCamera, setAddress, valueAddress])
 
         const canShowNameError = checkTouched ? nameTouched : true
 

@@ -17,12 +17,17 @@ export const useCameraBottomSheet = ({ targets, sourceScreen, title, description
     const { ref: scanAddressSheetRef, onOpen: openScanAddressSheet } = useBottomSheetModal()
 
     const handleOpenCamera = useCallback(
-        async <TTabs extends SendReceiveBsTab[]>(args: SendReceiveBottomSheetOpenProps<TTabs>) => {
+        <TTabs extends SendReceiveBsTab[]>(args: SendReceiveBottomSheetOpenProps<TTabs>) => {
             Keyboard.dismiss()
             openScanAddressSheet(args)
         },
         [openScanAddressSheet],
     )
+
+    const handleOpenOnlyScanCamera = useCallback(() => {
+        Keyboard.dismiss()
+        openScanAddressSheet({ tabs: ["scan"], defaultTab: "scan" })
+    }, [openScanAddressSheet])
 
     const onScan = useScanTargets({ targets, sourceScreen, ...rest })
 
@@ -33,5 +38,5 @@ export const useCameraBottomSheet = ({ targets, sourceScreen, title, description
         [scanAddressSheetRef, onScan, title, description],
     )
 
-    return { RenderCameraModal, handleOpenCamera }
+    return { RenderCameraModal, handleOpenCamera, handleOpenOnlyScanCamera }
 }

@@ -118,17 +118,20 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
                         onCameraWrapperLayout={onScanCameraLayout}
                     />
                 )}
-                <BaseTabs
-                    keys={tabs}
-                    selectedKey={selectedTab}
-                    setSelectedKey={setSelectedTab}
-                    labels={labels}
-                    rootStyle={styles.tabElement}
-                    indicatorBackgroundColor="rgba(255, 255, 255, 0.15)"
-                    containerBackgroundColor={COLORS.PURPLE_DISABLED}
-                    selectedTextColor={COLORS.WHITE}
-                    unselectedTextColor={COLORS.WHITE}
-                />
+                {tabs.length > 1 && (
+                    <BaseTabs
+                        keys={tabs}
+                        selectedKey={selectedTab}
+                        setSelectedKey={setSelectedTab}
+                        labels={labels}
+                        rootStyle={styles.tabElement}
+                        indicatorBackgroundColor="rgba(255, 255, 255, 0.15)"
+                        containerBackgroundColor={COLORS.PURPLE_DISABLED}
+                        selectedTextColor={COLORS.WHITE}
+                        unselectedTextColor={COLORS.WHITE}
+                    />
+                )}
+
                 <BaseSpacer height={64} />
             </>
         )

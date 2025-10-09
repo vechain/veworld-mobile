@@ -3,9 +3,8 @@ import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleSheet 
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { BaseSpacer, Layout } from "~Components"
-import { SendReceiveBottomSheet } from "~Components/Reusable/BottomSheets/SendReceiveBottomSheet"
 import { COLORS } from "~Constants"
-import { useBottomSheetModal, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
+import { useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { BalanceActions } from "./Components/Actions/BalanceActions"
@@ -25,8 +24,6 @@ export const BalanceScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
 
     useFetchFeaturedDApps()
-
-    const { ref: qrCodeBottomSheetRef } = useBottomSheetModal()
 
     const onLayout = useCallback(
         (e: LayoutChangeEvent) => {
@@ -83,18 +80,12 @@ export const BalanceScreen = () => {
                         <BaseSpacer height={6} />
                         <BaseSpacer height={24} />
 
-                        {!isObservedAccount && (
-                            <BalanceActions
-                                qrCodeBottomSheetRef={qrCodeBottomSheetRef}
-                                style={balanceActionsAnimatedStyles}
-                            />
-                        )}
+                        {!isObservedAccount && <BalanceActions style={balanceActionsAnimatedStyles} />}
 
                         <BaseSpacer height={64} />
                     </AnimatedLinearGradient>
 
                     <TabRenderer onLayout={onLayout} />
-                    <SendReceiveBottomSheet ref={qrCodeBottomSheetRef} />
                 </Animated.ScrollView>
             }
         />

@@ -19,7 +19,6 @@ import { AccountWithDevice, NETWORK_TYPE, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectSelectedNetwork, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { AccountUtils, AddressUtils } from "~Utils"
-import { useHomeQrScan } from "./Hooks/useHomeQrScan"
 
 type Props = {
     scrollY: SharedValue<number>
@@ -65,14 +64,12 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const onScan = useHomeQrScan()
-
-    const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
-        onScan,
+    const { RenderCameraModal, handleOpenOnlyScanCamera } = useCameraBottomSheet({
+        sourceScreen: Routes.HOME,
         targets: [ScanTarget.WALLET_CONNECT, ScanTarget.ADDRESS, ScanTarget.HTTPS_URL],
     })
 
-    const handleOpenQRCode = useCallback(() => handleOpenCamera(), [handleOpenCamera])
+    const handleOpenQRCode = useCallback(() => handleOpenOnlyScanCamera(), [handleOpenOnlyScanCamera])
     const handleOpenWalletSwitcher = useCallback(() => openSelectAccountBottomSheet(), [openSelectAccountBottomSheet])
 
     const accounts = useAppSelector(selectVisibleAccounts)

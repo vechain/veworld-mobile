@@ -76,13 +76,14 @@ export const ObserveWalletScreen = () => {
     }, [LL, _watchedAccount, dispatch, nav])
 
     const onImport = useCallback(
-        (_address?: string) => {
+        async (_address?: string) => {
             // Try to close the keyboard. Might come in handy if the user is using the camera to scan a QR code
             Keyboard.dismiss()
 
             const addressIsValid = AddressUtils.isValid(_address ?? underlyingAddress)
             if (!addressIsValid) {
                 showErrorToast({ text1: LL.ERROR_INVALID_ADDRESS() })
+                return false
             }
 
             // check if wallet is already observed - imported - if so, show error message
@@ -97,16 +98,17 @@ export const ObserveWalletScreen = () => {
 
             if (isWalletAlreadyImported) {
                 showErrorToast({ text1: LL.ERROR_WALLET_ALREADY_EXISTS() })
-            } else {
-                // find wallet in the network and present the wallet details
-                findWalletOnChain(_address ?? underlyingAddress)
+                return false
             }
+            // find wallet in the network and present the wallet details
+            findWalletOnChain(_address ?? underlyingAddress)
+            return true
         },
         [LL, accounts, underlyingAddress, findWalletOnChain],
     )
 
-    const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
-        onScan: onImport,
+    const { RenderCameraModal, handleOpenOnlyScanCamera } = useCameraBottomSheet({
+        onScanAddress: onImport,
         targets: [ScanTarget.ADDRESS],
     })
 
@@ -145,10 +147,6 @@ export const ObserveWalletScreen = () => {
         setError(undefined)
     }, [])
 
-    const handleOnIconPress = useCallback(() => {
-        handleOpenCamera()
-    }, [handleOpenCamera])
-
     return (
         <DismissKeyboardView>
             <Layout
@@ -171,7 +169,7 @@ export const ObserveWalletScreen = () => {
                                 setValue={handleOnSetAddress}
                                 value={inputValue}
                                 autoFocus
-                                onIconPress={() => (inputValue ? onClearAddress() : handleOnIconPress())}
+                                onIconPress={() => (inputValue ? onClearAddress() : handleOpenOnlyScanCamera())}
                                 rightIcon={inputValue ? "icon-x" : "icon-qr-code"}
                             />
 
