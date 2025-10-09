@@ -72,19 +72,17 @@ export const BannersCarousel = ({ location, baseWidth = SCREEN_WIDTH - 32, paddi
     if (filteredBanners.length === 0) return null
 
     return (
-        <>
-            <FullscreenBaseCarousel
-                itemHeight={88}
-                data={filteredBanners}
-                showPagination={false}
-                testID={`${location}_carousel`}
-                onSlidePressActivation="before"
-                onSlidePress={onSlidePress}
-                gap={0}
-                // Remove the -16 if you need to have another item
-                baseWidth={baseWidth}
-                padding={padding}
-            />
-        </>
+        <FullscreenBaseCarousel
+            itemHeight={88}
+            data={filteredBanners}
+            showPagination={false}
+            testID={`${location}_carousel`}
+            onSlidePressActivation="before"
+            onSlidePress={onSlidePress}
+            gap={0}
+            // Remove the -16 if you need to have another item
+            baseWidth={baseWidth}
+            padding={padding}
+        />
     )
 }

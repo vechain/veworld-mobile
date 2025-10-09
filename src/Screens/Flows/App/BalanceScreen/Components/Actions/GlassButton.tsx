@@ -34,15 +34,11 @@ const GlassButton = ({ icon, onPress, disabled, size = "md" }: GlassButtonProps)
         <Pressable onPress={onPress} disabled={disabled} onPressIn={onPressIn} onPressOut={onPressOut}>
             {disabled ? (
                 <BaseView p={size === "sm" ? 10 : 16} borderRadius={99} bg={COLORS.PURPLE_LABEL_5}>
-                    <BaseIcon
-                        name={icon as IconKey}
-                        size={size === "sm" ? 20 : 24}
-                        color={COLORS.DARK_PURPLE_DISABLED}
-                    />
+                    <BaseIcon name={icon} size={size === "sm" ? 20 : 24} color={COLORS.DARK_PURPLE_DISABLED} />
                 </BaseView>
             ) : (
                 <LinearGradient colors={colors} angle={0} useAngle style={[styles.gradientBtnContainer, borderStyle]}>
-                    <BaseIcon name={icon as IconKey} size={size === "sm" ? 20 : 24} color={COLORS.PURPLE_LABEL} />
+                    <BaseIcon name={icon} size={size === "sm" ? 20 : 24} color={COLORS.PURPLE_LABEL} />
                 </LinearGradient>
             )}
         </Pressable>
