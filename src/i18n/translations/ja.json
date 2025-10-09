@@ -137,7 +137,7 @@
   "BACKUP_YOUR_DEVICES_DESCRIPTION": "トランザクションを進める前に、このアカウントのリカバリーフレーズをバックアップすることをお勧めします。",
   "BACKUP_YOUR_DEVICES_TITLE": "ウォレットをバックアップ",
   "BALANCE_ACTION_BUY": "購入",
-  "BALANCE_ACTION_EARN": "獲得する",
+  "BALANCE_ACTION_EARN": "獲得",
   "BALANCE_ACTION_OTHER": "その他",
   "BALANCE_ACTION_RECEIVE": "受け取る",
   "BALANCE_ACTION_SEND": "送信",
