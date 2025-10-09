@@ -2,13 +2,7 @@ import React, { useCallback, useMemo } from "react"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
-import {
-    BaseSpacer,
-    Layout,
-    QRCodeBottomSheet,
-    VersionChangelogBottomSheet,
-    VersionUpdateAvailableBottomSheet,
-} from "~Components"
+import { BaseSpacer, Layout, QRCodeBottomSheet } from "~Components"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -100,8 +94,6 @@ export const BalanceScreen = () => {
 
                     <TabRenderer onLayout={onLayout} />
                     <QRCodeBottomSheet ref={qrCodeBottomSheetRef} />
-                    <VersionUpdateAvailableBottomSheet />
-                    <VersionChangelogBottomSheet />
                 </Animated.ScrollView>
             }
         />
