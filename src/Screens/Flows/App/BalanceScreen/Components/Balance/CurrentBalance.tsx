@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import Animated, { FadeIn, FadeOut, LinearTransition } from "react-native-reanimated"
 import { BaseText } from "~Components"
+import { useDevice } from "~Components/Providers/DeviceProvider"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
@@ -24,6 +25,7 @@ export const CurrentBalance = () => {
 
     const { styles } = useThemedStyles(baseStyles)
     const { renderedBalance } = useTotalFiatBalance({ address: account.address, enabled: true })
+    const { isLowEndDevice } = useDevice()
 
     const onPress = useCallback(() => {
         dispatch(setBalanceVisible(!isBalanceVisible))
@@ -45,7 +47,7 @@ export const CurrentBalance = () => {
                     {currencySymbol}
                 </BaseText>
                 <Animated.View style={styles.balance}>
-                    {splittedText.includes("•") ? (
+                    {splittedText.includes("•") || isLowEndDevice ? (
                         <Animated.Text
                             entering={FadeIn.duration(300)}
                             exiting={FadeOut.duration(300)}
@@ -81,6 +83,7 @@ const baseStyles = () =>
         },
         balance: {
             flexDirection: "row",
+            minHeight: 46,
         },
         currency: {
             height: 40,
