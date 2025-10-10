@@ -12,6 +12,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { error, info } from "~Utils"
+import { ERROR_EVENTS } from "../../Constants"
 
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
 const MAX_RETRIES = 3
@@ -46,13 +47,16 @@ export const usePushRegistration = () => {
     const lastWalletAddresses = useAppSelector(selectLastWalletAddresses)
 
     const registerPush = useCallback(
-        async ({ subscriptionId, oneSignalId }: PushRegistrationParams) => {
-            const webhookUrl =
-                process.env.ONE_SIGNAL_WEBHOOK_URL || "http://192.168.86.20:8085/api/v1/push-registrations"
+        async ({ subscriptionId }: PushRegistrationParams) => {
+            const registerBaseUrl = __DEV__
+                ? process.env.NOTIFICATION_CENTER_REGISTER_DEV
+                : process.env.NOTIFICATION_CENTER_REGISTER_PROD
+
+            const registerUrl = registerBaseUrl + "/api/v1/push-registrations"
             const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
 
-            if (!webhookUrl) {
-                throw new Error("Webhook URL is not configured")
+            if (!registerUrl) {
+                throw new Error("Notification center URL is not configured")
             }
 
             const walletAddresses = accounts.map(account => account.address)
@@ -70,13 +74,7 @@ export const usePushRegistration = () => {
                 },
             }
 
-            info("APP", "Registering push notification", {
-                walletCount: walletAddresses.length,
-                subscriptionId,
-                oneSignalId,
-            })
-
-            const response = await fetch(webhookUrl, {
+            const response = await fetch(registerUrl, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -122,7 +120,7 @@ export const usePushRegistration = () => {
             return delayMs
         },
         onError: (err: any) => {
-            error("ONE_SIGNAL", err)
+            error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
         },
     })
 
