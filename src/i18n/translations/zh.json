@@ -59,6 +59,7 @@
   "ADDITIONAL_DETAIL_TOKEN_ID": "代币ID",
   "ADD_ACCOUNT": "添加账户",
   "ADD_APP": "添加应用",
+  "ADD_CONTACT_QR_DESCRIPTION": "扫描钱包二维码以添加为联系人",
   "ADD_WALLET": "添加钱包",
   "ALERT_CANT_BACKUP_LEDGER": "您无法查看分类账助记码",
   "ALERT_DONT_SCREENSHOT_MNEMONIC": "避免截屏您的恢复短语。将其脱机存储或在网上安全备份。",

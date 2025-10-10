@@ -59,6 +59,7 @@
   "ADDITIONAL_DETAIL_TOKEN_ID": "Token-ID",
   "ADD_ACCOUNT": "Lägg till konto",
   "ADD_APP": "Lägg till app",
+  "ADD_CONTACT_QR_DESCRIPTION": "Skanna en plånboks QR-kod för att lägga till som kontakt",
   "ADD_WALLET": "Lägg till plånbok",
   "ALERT_CANT_BACKUP_LEDGER": "Du kan inte visa en ledger-mnemonik",
   "ALERT_DONT_SCREENSHOT_MNEMONIC": "Undvik att ta en skärmdump av din återställningsfras. Förvara den offline eller säkerhetskopiera den säkert online.",

@@ -59,6 +59,7 @@
   "ADDITIONAL_DETAIL_TOKEN_ID": "ID Token",
   "ADD_ACCOUNT": "Thêm tài khoản",
   "ADD_APP": "Thêm ứng dụng",
+  "ADD_CONTACT_QR_DESCRIPTION": "Quét mã QR của ví để thêm làm liên hệ",
   "ADD_WALLET": "Thêm ví",
   "ALERT_CANT_BACKUP_LEDGER": "Bạn không thể xem mnemonic sổ cái",
   "ALERT_DONT_SCREENSHOT_MNEMONIC": "Tránh chụp màn hình cụm từ khôi phục của bạn. Lưu trữ nó ngoại tuyến hoặc sao lưu an toàn trực tuyến.",

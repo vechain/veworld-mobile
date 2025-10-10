@@ -59,6 +59,7 @@
   "ADDITIONAL_DETAIL_TOKEN_ID": "ID de token",
   "ADD_ACCOUNT": "Agregar cuenta",
   "ADD_APP": "Agregar aplicación",
+  "ADD_CONTACT_QR_DESCRIPTION": "Escanear un código QR de monedero para agregar como contacto",
   "ADD_WALLET": "Agregar billetera",
   "ALERT_CANT_BACKUP_LEDGER": "No puedes ver un mnemotécnico del libro mayor",
   "ALERT_DONT_SCREENSHOT_MNEMONIC": "Evita tomar capturas de pantalla de tu frase de recuperación. Guárdala offline o haz una copia de seguridad segura en línea.",

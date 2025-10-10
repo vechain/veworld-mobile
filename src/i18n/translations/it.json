@@ -59,6 +59,7 @@
   "ADDITIONAL_DETAIL_TOKEN_ID": "ID Token",
   "ADD_ACCOUNT": "Aggiungi Account",
   "ADD_APP": "Aggiungi App",
+  "ADD_CONTACT_QR_DESCRIPTION": "Scansiona un codice QR del portafoglio per aggiungerlo come contatto",
   "ADD_WALLET": "Aggiungi Portafoglio",
   "ALERT_CANT_BACKUP_LEDGER": "Non puoi visualizzare un mnemonic del ledger",
   "ALERT_DONT_SCREENSHOT_MNEMONIC": "Evita di fare uno screenshot della tua frase di recupero. Conservala offline o esegui un backup sicuro online.",

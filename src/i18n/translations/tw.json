@@ -59,6 +59,7 @@
   "ADDITIONAL_DETAIL_TOKEN_ID": "代幣編號",
   "ADD_ACCOUNT": "新增帳戶",
   "ADD_APP": "新增應用程式",
+  "ADD_CONTACT_QR_DESCRIPTION": "掃描錢包二維碼以添加為聯絡人",
   "ADD_WALLET": "新增錢包",
   "ALERT_CANT_BACKUP_LEDGER": "你不能查看分類帳助記符",
   "ALERT_DONT_SCREENSHOT_MNEMONIC": "避免截圖您的恢復短語。請將其離線儲存或安全地在線備份。",

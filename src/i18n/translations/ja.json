@@ -59,6 +59,7 @@
   "ADDITIONAL_DETAIL_TOKEN_ID": "トークンID",
   "ADD_ACCOUNT": "アカウントを追加",
   "ADD_APP": "アプリを追加",
+  "ADD_CONTACT_QR_DESCRIPTION": "連絡先として追加するためにウォレットのQRコードをスキャン",
   "ADD_WALLET": "ウォレットを追加",
   "ALERT_CANT_BACKUP_LEDGER": "台帳のニーモニックを表示できません",
   "ALERT_DONT_SCREENSHOT_MNEMONIC": "リカバリーフレーズのスクリーンショットを避けてください。オフラインで保存するか、安全にオンラインでバックアップしてください。",

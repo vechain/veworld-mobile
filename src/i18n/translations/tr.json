@@ -59,6 +59,7 @@
   "ADDITIONAL_DETAIL_TOKEN_ID": "Token Kimliği",
   "ADD_ACCOUNT": "Hesap Ekle",
   "ADD_APP": "Uygulama Ekle",
+  "ADD_CONTACT_QR_DESCRIPTION": "Kişi olarak eklemek için bir cüzdan QR kodu taratın",
   "ADD_WALLET": "Cüzdan Ekle",
   "ALERT_CANT_BACKUP_LEDGER": "Bir defter mnemonicini görüntüleyemezsiniz",
   "ALERT_DONT_SCREENSHOT_MNEMONIC": "Kurtarma ifadenizin ekran görüntüsünü almaktan kaçının. Onu çevrimdışı olarak saklayın veya çevrimiçi olarak güvenli bir şekilde yedekleyin.",

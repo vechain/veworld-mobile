@@ -59,6 +59,7 @@
   "ADDITIONAL_DETAIL_TOKEN_ID": "Token-ID",
   "ADD_ACCOUNT": "Konto hinzufügen",
   "ADD_APP": "App hinzufügen",
+  "ADD_CONTACT_QR_DESCRIPTION": "Scanne einen Wallet-QR-Code, um als Kontakt hinzuzufügen",
   "ADD_WALLET": "Wallet hinzufügen",
   "ALERT_CANT_BACKUP_LEDGER": "Sie können keine Ledger-Mnemonik anzeigen",
   "ALERT_DONT_SCREENSHOT_MNEMONIC": "Vermeiden Sie, Ihren Wiederherstellungssatz zu screenshotten. Speichern Sie ihn offline oder sichern Sie ihn sicher online.",

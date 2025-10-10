@@ -59,6 +59,7 @@
   "ADDITIONAL_DETAIL_TOKEN_ID": "ID Tokena",
   "ADD_ACCOUNT": "Dodaj konto",
   "ADD_APP": "Dodaj aplikację",
+  "ADD_CONTACT_QR_DESCRIPTION": "Zeskanuj kod QR portfela, aby dodać jako kontakt",
   "ADD_WALLET": "Dodaj portfel",
   "ALERT_CANT_BACKUP_LEDGER": "Nie można wyświetlić mnemonic ledger",
   "ALERT_DONT_SCREENSHOT_MNEMONIC": "Unikaj robienia zrzutów ekranu swojej frazy odzyskiwania. Przechowuj ją offline lub bezpiecznie zarchiwizuj online.",

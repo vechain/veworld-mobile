@@ -59,6 +59,7 @@
   "ADDITIONAL_DETAIL_TOKEN_ID": "Token ID",
   "ADD_ACCOUNT": "Account toevoegen",
   "ADD_APP": "App toevoegen",
+  "ADD_CONTACT_QR_DESCRIPTION": "Scan een wallet QR-code om als contact toe te voegen",
   "ADD_WALLET": "Portemonnee toevoegen",
   "ALERT_CANT_BACKUP_LEDGER": "U kunt geen grootboek-mnemonic bekijken",
   "ALERT_DONT_SCREENSHOT_MNEMONIC": "Vermijd het maken van screenshots van je herstelzin. Bewaar deze offline of maak er een veilige online back-up van.",
