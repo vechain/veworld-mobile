@@ -5,11 +5,13 @@ import { vechainNewsAndUpdates } from "~Constants"
 import { useAppState } from "~Hooks"
 import { AppStateType, NETWORK_TYPE } from "~Model"
 import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
+import { usePushRegistration } from "~Hooks/usePushRegistration"
 import {
     addRemovedNotificationTag,
     increaseDappVisitCounter,
     removeDappVisitCounter,
     removeRemovedNotificationTag,
+    selectAccounts,
     selectDappNotifications,
     selectDappVisitCounter,
     selectNotificationFeautureEnabled,
@@ -25,7 +27,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useFeatureFlags } from "../FeatureFlagsProvider"
-import { error } from "~Utils"
+import { error, info } from "~Utils"
 
 type ContextType = {
     featureEnabled: boolean
@@ -62,22 +64,72 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const featureEnabled = useAppSelector(selectNotificationFeautureEnabled)
     const dappsNotifications = useAppSelector(selectDappNotifications)
+    const accounts = useAppSelector(selectAccounts)
     const isFetcingTags = useRef(false)
+    const isRegistering = useRef(false)
 
     const { currentState, previousState } = useAppState()
 
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
 
-    const initializeOneSignal = useCallback(() => {
+    const { registerAsync, shouldRegister } = usePushRegistration()
+
+    const attemptPushRegistration = useCallback(async () => {
+        // If already registering, skip this call
+        if (isRegistering.current) {
+            info("APP", "Registration already in progress, skipping duplicate call")
+            return
+        }
+
+        // Set flag immediately to block concurrent calls
+        isRegistering.current = true
+
+        try {
+            const oneSignalId = await OneSignal.User.getOnesignalId()
+
+            if (!oneSignalId) {
+                info("APP", "No OneSignal ID available, skipping registration")
+                return
+            }
+
+            const [subId, token, opted] = await Promise.all([
+                OneSignal.User.pushSubscription.getIdAsync(),
+                OneSignal.User.pushSubscription.getTokenAsync(),
+                OneSignal.User.pushSubscription.getOptedInAsync(),
+            ])
+
+            info("APP", "OneSignal subscription info:", { subId, hasToken: !!token, opted })
+
+            if (accounts.length === 0) {
+                info("APP", "No wallet addresses available, skipping registration")
+                return
+            }
+
+            if (!shouldRegister(subId)) {
+                info("APP", "Skipping push registration - conditions not met")
+                return
+            }
+
+            info("APP", "Triggering push registration...")
+            await registerAsync({ subscriptionId: subId, oneSignalId })
+        } catch (err) {
+            error("ONE_SIGNAL", err)
+        } finally {
+            isRegistering.current = false
+        }
+    }, [accounts, registerAsync, shouldRegister])
+
+    const initializeOneSignal = useCallback(async () => {
         const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
 
         try {
             OneSignal.initialize(appId as string)
+            await attemptPushRegistration()
         } catch (err) {
             error("ONE_SIGNAL", err)
             throw err
         }
-    }, [])
+    }, [attemptPushRegistration])
 
     const getOptInStatus = useCallback(async () => {
         let _optInStatus = false
@@ -158,14 +210,19 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
     const onOptInStatusChanged = useCallback(
         (event: PushSubscriptionChangedState) => {
-            const { optedIn: previousOptedInStatuse } = event.previous
-            const { optedIn: currentOptedInStatuse } = event.current
+            const { optedIn: previousOptedInStatuse, id: previousSubId } = event.previous
+            const { optedIn: currentOptedInStatuse, id: currentSubId } = event.current
 
             if (previousOptedInStatuse !== currentOptedInStatuse) {
                 dispatch(updateNotificationOptedIn(currentOptedInStatuse))
             }
+
+            if (previousSubId !== currentSubId) {
+                info("APP", "Subscription ID changed, triggering re-registration")
+                attemptPushRegistration()
+            }
         },
-        [dispatch],
+        [dispatch, attemptPushRegistration],
     )
 
     const getTags = useCallback(() => {
@@ -258,6 +315,13 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     useEffect(() => {
         featureEnabled && init()
     }, [init, featureEnabled])
+
+    // Attempt registration whenever accounts change
+    useEffect(() => {
+        if (featureEnabled && accounts.length > 0) {
+            attemptPushRegistration()
+        }
+    }, [accounts, featureEnabled, attemptPushRegistration])
 
     useEffect(() => {
         if (!featureEnabled) {
