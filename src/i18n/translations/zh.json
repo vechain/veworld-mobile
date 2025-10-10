@@ -971,6 +971,7 @@
   "SB_YOUR_TOKENS": "您的代币",
   "SB_YOUR_TOKENS_EMPTY": "您的代币将出现在这里",
   "SB_YOUR_WALLETS": "您的钱包",
+  "SCAN_QR_CODE": "扫描二维码",
   "SECURITY_BACKUP_BTN": "立即备份",
   "SECURITY_BACKUP_DESC": "在进行升级之前，如果您还没有备份您的恢复短语，请立即备份。",
   "SECURITY_BACKUP_TITLE": "备份短语",

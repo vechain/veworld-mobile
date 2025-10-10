@@ -971,6 +971,7 @@
   "SB_YOUR_TOKENS": "I tuoi token",
   "SB_YOUR_TOKENS_EMPTY": "I tuoi token appariranno qui",
   "SB_YOUR_WALLETS": "I tuoi portafogli",
+  "SCAN_QR_CODE": "Scansiona un codice QR",
   "SECURITY_BACKUP_BTN": "Esegui il backup ora",
   "SECURITY_BACKUP_DESC": "Prima di procedere con l'aggiornamento, esegui il backup della tua frase di recupero se non l'hai ancora fatto.",
   "SECURITY_BACKUP_TITLE": "Frase di backup",

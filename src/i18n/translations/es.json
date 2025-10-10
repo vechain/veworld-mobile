@@ -971,6 +971,7 @@
   "SB_YOUR_TOKENS": "Sus tokens",
   "SB_YOUR_TOKENS_EMPTY": "Sus tokens aparecerán aquí",
   "SB_YOUR_WALLETS": "Tus billeteras",
+  "SCAN_QR_CODE": "Escanear un código QR",
   "SECURITY_BACKUP_BTN": "Hacer copia ahora",
   "SECURITY_BACKUP_DESC": "Antes de continuar con la actualización, por favor haz una copia de seguridad de tu frase de recuperación si aún no la has hecho.",
   "SECURITY_BACKUP_TITLE": "Frase de respaldo",
