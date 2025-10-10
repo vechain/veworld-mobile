@@ -88,10 +88,10 @@ export const NewUserVeBetterCard = () => {
             </BaseView>
 
             <BaseView flexDirection="column" gap={6}>
-                <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE}>
+                <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE}>
                     {LL.VBD_GET_REWARDED()}
                 </BaseText>
-                <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE}>
+                <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE}>
                     {LL.VBD_CONTRIBUTE_OFFSET()}
                 </BaseText>
             </BaseView>

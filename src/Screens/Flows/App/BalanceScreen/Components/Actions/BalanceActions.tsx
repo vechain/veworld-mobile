@@ -2,8 +2,8 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, { AnimatedStyle, FadeIn, FadeOut, LinearTransition } from "react-native-reanimated"
-import { AnalyticsEvent, ScanTarget } from "~Constants"
-import { useAnalyticTracking, useCameraBottomSheet, useThemedStyles } from "~Hooks"
+import { AnalyticsEvent, ScanTarget, STARGATE_DAPP_URL } from "~Constants"
+import { useAnalyticTracking, useBrowserNavigation, useCameraBottomSheet, useThemedStyles } from "~Hooks"
 import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -18,6 +18,7 @@ export const BalanceActions = ({ style }: Props) => {
     const { LL } = useI18nContext()
 
     const { styles } = useThemedStyles(baseStyles)
+    const { navigateToBrowser } = useBrowserNavigation()
 
     const nav = useNavigation()
     const track = useAnalyticTracking()
@@ -44,6 +45,14 @@ export const BalanceActions = ({ style }: Props) => {
 
     const onSwap = useCallback(() => nav.navigate(Routes.SWAP), [nav])
 
+    const onEarn = useCallback(
+        () =>
+            navigateToBrowser(STARGATE_DAPP_URL, url =>
+                nav.navigate(Routes.BROWSER, { url, returnScreen: Routes.HOME }),
+            ),
+        [navigateToBrowser, nav],
+    )
+
     const isSendDisabled = useMemo(() => rawAmount === 0, [rawAmount])
 
     return (
@@ -52,15 +61,22 @@ export const BalanceActions = ({ style }: Props) => {
             layout={LinearTransition.duration(1000)}
             exiting={FadeOut.duration(300)}
             entering={FadeIn.duration(300)}>
-            <GlassButtonWithLabel label={LL.BALANCE_ACTION_RECEIVE()} icon="icon-arrow-down" onPress={onReceive} />
+            <GlassButtonWithLabel
+                label={LL.BALANCE_ACTION_RECEIVE()}
+                size="sm"
+                icon="icon-arrow-down"
+                onPress={onReceive}
+            />
             <GlassButtonWithLabel
                 label={LL.BALANCE_ACTION_SEND()}
+                size="sm"
                 icon="icon-arrow-up"
                 onPress={onSend}
                 disabled={isSendDisabled}
             />
-            <GlassButtonWithLabel label={LL.SWAP()} icon="icon-arrow-left-right" onPress={onSwap} />
-            <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} icon="icon-plus" onPress={onBuy} />
+            <GlassButtonWithLabel label={LL.SWAP()} size="sm" icon="icon-arrow-left-right" onPress={onSwap} />
+            <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} size="sm" icon="icon-plus" onPress={onBuy} />
+            <GlassButtonWithLabel label={LL.BALANCE_ACTION_EARN()} size="sm" icon={"icon-stargate"} onPress={onEarn} />
             {RenderCameraModal}
         </Animated.View>
     )

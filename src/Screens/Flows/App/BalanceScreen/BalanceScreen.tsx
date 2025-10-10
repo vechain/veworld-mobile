@@ -1,11 +1,18 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { BaseSpacer, Layout } from "~Components"
 import { COLORS } from "~Constants"
 import { useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { useOfficialTokens } from "~Hooks/useOfficialTokens"
+import {
+    addOfficialTokens,
+    selectSelectedAccount,
+    selectSelectedNetwork,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { BalanceActions } from "./Components/Actions/BalanceActions"
 import { CurrentBalance } from "./Components/Balance/CurrentBalance"
@@ -16,6 +23,7 @@ import { TabRenderer } from "./Tabs/TabRenderer"
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
 export const BalanceScreen = () => {
+    //DO NOT REMOVE THIS FROM HERE, OTHERWISE APPS WON'T BE LOADED
     useFetchFeaturedDApps()
 
     const scrollY = useSharedValue(0)
@@ -23,7 +31,14 @@ export const BalanceScreen = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const { styles } = useThemedStyles(baseStyles)
 
-    useFetchFeaturedDApps()
+    const { data: officialTokens } = useOfficialTokens()
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (officialTokens?.length)
+            dispatch(addOfficialTokens({ network: selectedNetwork.type, tokens: officialTokens }))
+    }, [dispatch, officialTokens, selectedNetwork.type])
 
     const onLayout = useCallback(
         (e: LayoutChangeEvent) => {
