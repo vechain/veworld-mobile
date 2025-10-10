@@ -87,6 +87,11 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         // Set flag immediately to block concurrent calls
         isRegistering.current = true
 
+        if (accounts.length === 0) {
+            info("APP", "No wallet addresses available, skipping registration")
+            return
+        }
+
         try {
             const oneSignalId = await OneSignal.User.getOnesignalId()
 
@@ -95,25 +100,13 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
                 return
             }
 
-            const [subId, token, opted] = await Promise.all([
-                OneSignal.User.pushSubscription.getIdAsync(),
-                OneSignal.User.pushSubscription.getTokenAsync(),
-                OneSignal.User.pushSubscription.getOptedInAsync(),
-            ])
-
-            info("APP", "OneSignal subscription info:", { subId, hasToken: !!token, opted })
-
-            if (accounts.length === 0) {
-                info("APP", "No wallet addresses available, skipping registration")
-                return
-            }
-
+            const subId = await OneSignal.User.pushSubscription.getIdAsync()
             if (!shouldRegister(subId)) {
                 info("APP", "Skipping push registration - conditions not met")
                 return
             }
 
-            info("APP", "Triggering push registration...")
+            info("APP", "registering with notification center")
             await registerAsync({ subscriptionId: subId, oneSignalId })
         } catch (err) {
             error("ONE_SIGNAL", err)
