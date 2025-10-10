@@ -18,6 +18,7 @@ type Args = {
     isLoadingFees: boolean
     transactionOutputs: InspectableOutput[] | undefined
     origin: string
+    enableSameTokenFeeHandling?: boolean
 }
 
 const calculateClausesValue = ({
@@ -64,6 +65,7 @@ export const useIsEnoughGas = ({
     isLoadingFees,
     transactionOutputs,
     origin,
+    enableSameTokenFeeHandling = false,
 }: Args) => {
     const officialTokens = useAppSelector(selectOfficialTokens)
     const { B3TR: networkB3TR } = useAppSelector(selectNetworkVBDTokens)
@@ -94,16 +96,36 @@ export const useIsEnoughGas = ({
                     network: network.type,
                     origin,
                 })
+
                 //Delegation with VTHO should count as "0" for fees
                 if (tokenSymbol === VTHO.symbol && isDelegated)
                     return [tokenSymbol, BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual("0")] as const
+
+                if (enableSameTokenFeeHandling && tokenSymbol === selectedToken && tokenSymbol !== VTHO.symbol) {
+                    return [
+                        tokenSymbol,
+                        BigNutils(balance).isBiggerThanOrEqual(allFeeOptions[tokenSymbol].toBN),
+                    ] as const
+                }
+
                 return [
                     tokenSymbol,
                     BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual(allFeeOptions[tokenSymbol].toBN),
                 ] as const
             }),
         )
-    }, [isLoadingFees, allFeeOptions, transactionOutputs, officialTokens, balances, network.type, origin, isDelegated])
+    }, [
+        isLoadingFees,
+        allFeeOptions,
+        transactionOutputs,
+        officialTokens,
+        balances,
+        network.type,
+        origin,
+        isDelegated,
+        enableSameTokenFeeHandling,
+        selectedToken,
+    ])
 
     const hasEnoughBalanceOnAny = useMemo(() => {
         return Object.values(hasEnoughBalanceOnToken).some(Boolean)

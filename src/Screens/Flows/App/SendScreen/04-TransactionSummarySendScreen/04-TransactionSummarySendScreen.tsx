@@ -54,6 +54,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const pendingTransaction = useAppSelector(state => selectPendingTx(state, token.address))
     const accounts = useAppSelector(selectAccounts)
 
+    const [enableSameTokenFeeHandling, setEnableSameTokenFeeHandling] = useState(false)
+
     const [finalAmount, setFinalAmount] = useState(amount)
 
     const receiverIsAccount = accounts.find(_account => AddressUtils.compareAddresses(_account.address, address))
@@ -145,12 +147,12 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         onTransactionSuccess,
         onTransactionFailure,
         autoVTHOFallback: false,
+        enableSameTokenFeeHandling,
     })
 
-    /**
-     * If user is sending a token and gas is not enough, we will adjust the amount to send.
-     */
     useEffect(() => {
+        setEnableSameTokenFeeHandling(selectedDelegationToken.toLowerCase() === token.symbol.toLowerCase())
+
         if (isDelegated && selectedDelegationToken === VTHO.symbol) {
             return
         }
@@ -242,7 +244,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         isEnoughBalance={isEnoughGas}
                         hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
                         isFirstTimeLoadingFees={isFirstTimeLoadingFees}
-                        hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}>
+                        hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}
+                        sendingTokenSymbol={token.symbol}>
                         <DelegationView
                             setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}
