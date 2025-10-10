@@ -4,7 +4,7 @@ import DeviceInfo from "react-native-device-info"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useBottomSheetModal, useTheme, useCheckAppVersion } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { useAppDispatch, selectInstalledAppVersion, useAppSelector, setInstalledVersion } from "~Storage/Redux"
+import { useAppDispatch, setInstalledVersion } from "~Storage/Redux"
 
 const ItemSeparatorComponent = () => <BaseSpacer height={14} />
 
@@ -14,7 +14,7 @@ export const VersionChangelogBottomSheet = () => {
     const { ref, onOpen, onClose } = useBottomSheetModal()
     const dispatch = useAppDispatch()
     const { shouldShowChangelog, changelog } = useCheckAppVersion()
-    const installedVersion = useAppSelector(selectInstalledAppVersion)
+    const deviceVersion = DeviceInfo.getVersion()
 
     useEffect(() => {
         if (shouldShowChangelog && changelog.length > 0) {
@@ -23,10 +23,9 @@ export const VersionChangelogBottomSheet = () => {
     }, [shouldShowChangelog, onOpen, changelog])
 
     const handleDismiss = useCallback(() => {
-        const deviceVersion = DeviceInfo.getVersion()
         dispatch(setInstalledVersion(deviceVersion))
         onClose()
-    }, [dispatch, onClose])
+    }, [deviceVersion, dispatch, onClose])
 
     const renderListItems = useCallback(
         ({ item }: ListRenderItemInfo<string>) => {
@@ -57,7 +56,7 @@ export const VersionChangelogBottomSheet = () => {
                     </BaseText>
                     <BaseView px={8} py={4} borderRadius={4} bg={theme.colors.label.background}>
                         <BaseText typographyFont="bodyMedium" color={theme.colors.label.text}>
-                            {LL.APP_VERSION({ version: installedVersion })}
+                            {LL.APP_VERSION({ version: deviceVersion })}
                         </BaseText>
                     </BaseView>
                 </BaseView>

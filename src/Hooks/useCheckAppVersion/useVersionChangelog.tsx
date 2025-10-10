@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import DeviceInfo from "react-native-device-info"
-import { selectLanguage, useAppSelector } from "~Storage/Redux"
+import { selectLanguage, useAppSelector, useAppDispatch, setInstalledVersion } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
 
 const VERSION_INFO_URL = process.env.REACT_APP_VERSIONINFO_PROD_URL
@@ -27,6 +27,7 @@ const fetchChangelog = async (): Promise<{
 export const useVersionChangelog = () => {
     const language = useAppSelector(selectLanguage)
     const storedVersion = useAppSelector(state => state.versionUpdate.installedVersion)
+    const dispatch = useAppDispatch()
 
     const deviceVersion = DeviceInfo.getVersion()
     const versionChanged = storedVersion !== deviceVersion
@@ -48,6 +49,14 @@ export const useVersionChangelog = () => {
             return data.descriptions[language] ?? data.descriptions.en ?? []
         },
     })
+
+    useEffect(() => {
+        if (versionChanged && !changelogLoading && !changelogFetching) {
+            if (changelogError || !changelog || changelog.length === 0) {
+                dispatch(setInstalledVersion(deviceVersion))
+            }
+        }
+    }, [versionChanged, changelogLoading, changelogFetching, changelogError, changelog, deviceVersion, dispatch])
 
     const shouldShowChangelog = useMemo(() => {
         if (!versionChanged) {

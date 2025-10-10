@@ -15,7 +15,6 @@ interface UseVersionUpdatePromptOptions {
 
 export const useVersionUpdatePrompt = ({ versionCheckComplete }: UseVersionUpdatePromptOptions) => {
     const versionUpdateStatus = useAppSelector(selectUpdatePromptStatus)
-
     const shouldShowUpdatePrompt = useMemo(() => {
         if (!versionUpdateStatus.majorVersion || !versionUpdateStatus.installedVersion || !versionCheckComplete) {
             return false

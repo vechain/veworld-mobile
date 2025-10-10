@@ -28,7 +28,6 @@ export const useVersionInfo = () => {
     const versionUpdateStatus = useAppSelector(selectUpdatePromptStatus)
     const dispatch = useAppDispatch()
     const [versionCheckComplete, setVersionCheckComplete] = useState(false)
-
     const {
         data: versionInfo,
         isLoading,
