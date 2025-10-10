@@ -153,11 +153,12 @@ export const TokenCard = ({ token }: Props) => {
             flexDirection="row"
             bg={theme.colors.card}
             innerContainerStyle={styles.root}>
-            <BaseView flexDirection="row" gap={16} flexGrow={1} flexShrink={1}>
+            {/* Left Section: Token Info - Fixed Width */}
+            <BaseView style={styles.leftSection}>
                 <TokenImage
                     icon={token.icon}
                     isVechainToken={AddressUtils.isVechainToken(token.address)}
-                    iconSize={40}
+                    iconSize={32}
                     isCrossChainToken={isCrossChainToken}
                     rounded={!isCrossChainToken}
                 />
@@ -186,9 +187,13 @@ export const TokenCard = ({ token }: Props) => {
                 )}
             </BaseView>
 
-            <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
+            {/* Middle Section: Chart - Fixed Position */}
+            <BaseView style={styles.chartSection}>
+                <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
+            </BaseView>
 
-            <BaseView flexDirection="column" alignItems="flex-end" flexGrow={1} flexShrink={0}>
+            {/* Right Section: Balances - Fixed Width */}
+            <BaseView style={styles.rightSection}>
                 {showFiatBalance ? (
                     <>
                         <BaseText
@@ -233,5 +238,27 @@ const baseStyles = () =>
             alignItems: "center",
             borderRadius: 12,
             justifyContent: "space-between",
+        },
+        leftSection: {
+            flexDirection: "row",
+            gap: 16,
+            flexBasis: "75%",
+            flexShrink: 1,
+            flexGrow: 0,
+            alignItems: "center",
+        },
+        chartSection: {
+            flexBasis: "auto",
+            flexShrink: 0,
+            flexGrow: 0,
+            alignItems: "center",
+            justifyContent: "center",
+        },
+        rightSection: {
+            flexDirection: "column",
+            alignItems: "flex-end",
+            flexBasis: "25%",
+            flexShrink: 0,
+            flexGrow: 0,
         },
     })
