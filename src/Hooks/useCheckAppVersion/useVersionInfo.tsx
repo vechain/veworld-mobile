@@ -45,11 +45,6 @@ export const useVersionInfo = () => {
         if (versionInfo) {
             const installedVersion = DeviceInfo.getVersion()
 
-            if (installedVersion !== versionUpdateStatus.installedVersion) {
-                dispatch(VersionUpdateSlice.actions.setInstalledVersion(installedVersion))
-                dispatch(VersionUpdateSlice.actions.resetDismissCount())
-            }
-
             const needsUpdate = SemanticVersionUtils.moreThan(versionInfo.major, installedVersion)
 
             dispatch(VersionUpdateSlice.actions.setIsUpToDate(!needsUpdate))
@@ -64,13 +59,7 @@ export const useVersionInfo = () => {
 
             setVersionCheckComplete(true)
         }
-    }, [
-        dispatch,
-        versionInfo,
-        versionUpdateStatus.installedVersion,
-        versionUpdateStatus.majorVersion,
-        versionUpdateStatus.latestVersion,
-    ])
+    }, [dispatch, versionInfo, versionUpdateStatus.majorVersion, versionUpdateStatus.latestVersion])
 
     return {
         versionInfo,

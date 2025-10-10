@@ -552,8 +552,8 @@ describe("useCheckAppVersion", () => {
             })
         })
 
-        it("should NOT show changelog when app version changes but version doesn't exist in history", () => {
-            jest.mocked(DeviceInfo.getVersion).mockReturnValue("2.4.0") // Version not in history
+        it("should NOT show changelog when app version changes but changelog fetch fails", () => {
+            jest.mocked(DeviceInfo.getVersion).mockReturnValue("2.4.0") // Version that doesn't exist
 
             const preloadedState = {
                 versionUpdate: {
@@ -564,16 +564,25 @@ describe("useCheckAppVersion", () => {
                 },
             }
 
-            jest.mocked(useQuery).mockReturnValue({
-                data: {
-                    major: "2.2.6",
-                    latest: "2.3.0",
-                    history: [
-                        { version: "2.2.6", key: "releases/ios/versions/2.2.6", major: true },
-                        { version: "2.3.0", key: "releases/ios/versions/2.3.0", major: false },
-                    ],
-                },
-            } as any)
+            jest.mocked(useQuery).mockImplementation((options: any) => {
+                if (options.queryKey[0] === "changelog") {
+                    return {
+                        data: undefined,
+                        error: new Error("Changelog fetch failed (status 404)"),
+                        isLoading: false,
+                        isFetching: false,
+                    } as any
+                }
+
+                return {
+                    data: {
+                        major: "2.2.6",
+                        latest: "2.3.0",
+                    },
+                    isLoading: false,
+                    error: null,
+                } as any
+            })
 
             const { result } = renderHook(() => useCheckAppVersion(), {
                 wrapper: ({ children }) =>

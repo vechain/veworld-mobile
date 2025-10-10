@@ -5,10 +5,7 @@ import { useVersionUpdatePrompt } from "./useVersionUpdatePrompt"
 export const useCheckAppVersion = () => {
     const versionInfo = useVersionInfo()
 
-    const changelogInfo = useVersionChangelog({
-        versionInfo: versionInfo.versionInfo,
-        versionCheckComplete: versionInfo.versionCheckComplete,
-    })
+    const changelogInfo = useVersionChangelog()
 
     const updatePromptInfo = useVersionUpdatePrompt({
         versionCheckComplete: versionInfo.versionCheckComplete,

@@ -1,24 +1,19 @@
 import { useQuery } from "@tanstack/react-query"
-import { useEffect } from "react"
+import { useMemo } from "react"
 import DeviceInfo from "react-native-device-info"
-import {
-    selectLanguage,
-    selectUpdatePromptStatus,
-    setChangelogToShow,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectLanguage, useAppSelector } from "~Storage/Redux"
+import { PlatformUtils } from "~Utils"
 
 const VERSION_INFO_URL = process.env.REACT_APP_VERSIONINFO_PROD_URL
 
-const fetchChangelog = async (
-    changelogKey: string | null,
-): Promise<{
+const fetchChangelog = async (): Promise<{
     version: string
     major: boolean
     descriptions: Record<string, string[]>
 }> => {
-    const url = `${VERSION_INFO_URL}/${changelogKey}.json`
+    const system = PlatformUtils.isIOS() ? "ios" : "android"
+    const version = DeviceInfo.getVersion()
+    const url = `${VERSION_INFO_URL}/releases/${system}/versions/${version}.json`
 
     const response = await fetch(url)
     if (!response.ok) {
@@ -29,19 +24,12 @@ const fetchChangelog = async (
     return data
 }
 
-interface UseVersionChangelogOptions {
-    versionInfo?: {
-        history: Array<{ version: string; key: string }>
-    }
-    versionCheckComplete: boolean
-}
-
-export const useVersionChangelog = ({ versionInfo, versionCheckComplete }: UseVersionChangelogOptions) => {
-    const versionUpdateStatus = useAppSelector(selectUpdatePromptStatus)
+export const useVersionChangelog = () => {
     const language = useAppSelector(selectLanguage)
-    const changelogDismissed = useAppSelector(state => state.versionUpdate.changelogDismissed)
     const storedVersion = useAppSelector(state => state.versionUpdate.installedVersion)
-    const dispatch = useAppDispatch()
+
+    const deviceVersion = DeviceInfo.getVersion()
+    const versionChanged = storedVersion !== deviceVersion
 
     const {
         data: changelog,
@@ -49,9 +37,9 @@ export const useVersionChangelog = ({ versionInfo, versionCheckComplete }: UseVe
         error: changelogError,
         isFetching: changelogFetching,
     } = useQuery({
-        queryKey: ["changelog", versionUpdateStatus.changelogKey],
-        queryFn: () => fetchChangelog(versionUpdateStatus.changelogKey),
-        enabled: !!versionUpdateStatus.changelogKey && versionUpdateStatus.shouldShowChangelog,
+        queryKey: ["changelog", deviceVersion],
+        queryFn: fetchChangelog,
+        enabled: versionChanged,
         select: data => {
             if (!data?.descriptions) {
                 return []
@@ -61,54 +49,24 @@ export const useVersionChangelog = ({ versionInfo, versionCheckComplete }: UseVe
         },
     })
 
-    useEffect(() => {
-        if (!versionInfo || !versionCheckComplete) return
-
-        const installedVersion = DeviceInfo.getVersion()
-        const versionChanged = storedVersion !== installedVersion
-
-        if (!versionChanged && changelogDismissed) {
-            return
+    const shouldShowChangelog = useMemo(() => {
+        if (!versionChanged) {
+            return false
         }
 
-        const userVersionInfo = versionInfo.history.find(v => v.version === installedVersion)
-        const isAlreadyShowing = versionUpdateStatus.shouldShowChangelog
-        const isDifferentKey = versionUpdateStatus.changelogKey !== userVersionInfo?.key
-        const isNotDismissed = !changelogDismissed
-
-        const shouldTriggerChangelog = userVersionInfo?.key && !isAlreadyShowing && isDifferentKey && isNotDismissed
-
-        if (shouldTriggerChangelog) {
-            dispatch(
-                setChangelogToShow({
-                    shouldShow: true,
-                    changelogKey: userVersionInfo.key,
-                }),
-            )
-            return
+        if (changelogLoading || changelogFetching) {
+            return false
         }
 
-        if (isAlreadyShowing && versionUpdateStatus.changelogKey && !changelogLoading && !changelogFetching) {
-            if (changelogError || (changelog && changelog.length === 0)) {
-                dispatch(setChangelogToShow({ shouldShow: false, changelogKey: null }))
-            }
+        if (changelogError || !changelog || changelog.length === 0) {
+            return false
         }
-    }, [
-        versionInfo,
-        versionCheckComplete,
-        storedVersion,
-        changelogDismissed,
-        versionUpdateStatus.shouldShowChangelog,
-        versionUpdateStatus.changelogKey,
-        changelogLoading,
-        changelogFetching,
-        changelogError,
-        changelog,
-        dispatch,
-    ])
+
+        return true
+    }, [versionChanged, changelogLoading, changelogFetching, changelogError, changelog])
 
     return {
-        shouldShowChangelog: versionUpdateStatus.shouldShowChangelog,
+        shouldShowChangelog,
         changelog: changelog ?? [],
         changelogFetching,
     }

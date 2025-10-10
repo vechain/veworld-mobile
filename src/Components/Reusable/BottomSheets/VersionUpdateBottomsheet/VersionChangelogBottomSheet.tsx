@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect } from "react"
 import { FlatList, ListRenderItemInfo } from "react-native"
+import DeviceInfo from "react-native-device-info"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useBottomSheetModal, useTheme, useCheckAppVersion } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { useAppDispatch, selectInstalledAppVersion, useAppSelector, setChangelogDismissed } from "~Storage/Redux"
+import { useAppDispatch, selectInstalledAppVersion, useAppSelector, setInstalledVersion } from "~Storage/Redux"
 
 const ItemSeparatorComponent = () => <BaseSpacer height={14} />
 
@@ -22,7 +23,8 @@ export const VersionChangelogBottomSheet = () => {
     }, [shouldShowChangelog, onOpen, changelog])
 
     const handleDismiss = useCallback(() => {
-        dispatch(setChangelogDismissed(true))
+        const deviceVersion = DeviceInfo.getVersion()
+        dispatch(setInstalledVersion(deviceVersion))
         onClose()
     }, [dispatch, onClose])
 
