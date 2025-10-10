@@ -608,6 +608,10 @@ type RootTranslation = {
 	 */
 	BALANCE_ACTION_BUY: string
 	/**
+	 * E​a​r​n
+	 */
+	BALANCE_ACTION_EARN: string
+	/**
 	 * O​t​h​e​r
 	 */
 	BALANCE_ACTION_OTHER: string
@@ -667,6 +671,10 @@ type RootTranslation = {
 	 * I​n​s​e​r​t​ ​t​h​e​ ​r​e​q​u​i​r​e​d​ ​d​a​t​a​ ​t​o​ ​a​d​d​ ​a​ ​n​e​w​ ​c​o​n​t​a​c​t
 	 */
 	BD_ADD_CONTACT_DISCLAIMER: string
+	/**
+	 * S​c​a​n​ ​a​ ​w​a​l​l​e​t​ ​Q​R​ ​c​o​d​e​ ​t​o​ ​a​d​d​ ​a​s​ ​c​o​n​t​a​c​t
+	 */
+	ADD_CONTACT_QR_DESCRIPTION: string
 	/**
 	 * Y​o​u​ ​c​a​n​c​e​l​l​e​d​ ​u​s​i​n​g​ ​B​i​o​m​e​t​r​i​c​s​ ​t​o​ ​a​u​t​h​e​n​t​i​c​a​t​e​.​ ​Y​o​u​ ​m​u​s​t​ ​b​e​ ​a​u​t​h​e​n​t​i​c​a​t​e​d​ ​t​o​ ​u​s​e​ ​V​e​W​o​r​l​d​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​R​e​s​e​t​ ​t​h​e​ ​W​a​l​l​e​t​,​ ​o​r​ ​R​e​t​r​y​ ​a​u​t​h​e​n​t​i​c​a​t​i​n​g​?
 	 */
@@ -3593,6 +3601,14 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
 	/**
+	 * E​n​a​b​l​e​ ​y​o​u​r​ ​c​a​m​e​r​a​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​s​c​a​n​ ​a​ ​Q​R​ ​c​o​d​e
+	 */
+	QR_CODE_CAMERA_PERMS: string
+	/**
+	 * E​n​a​b​l​e​ ​p​e​r​m​i​s​s​i​o​n​s
+	 */
+	QR_CODE_CAMERA_PERMS_CTA: string
+	/**
 	 * U​s​e​ ​y​o​u​r​ ​Q​R​ ​c​o​d​e​ ​t​o​ ​r​e​c​e​i​v​e​ ​t​r​a​n​s​f​e​r​s
 	 */
 	QR_CODE_RECEIVE_DESCRIPTION: string
@@ -3608,14 +3624,6 @@ type RootTranslation = {
 	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
 	 */
 	QR_CODE_SCAN_TITLE: string
-	/**
-	 * E​n​a​b​l​e​ ​y​o​u​r​ ​c​a​m​e​r​a​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​s​c​a​n​ ​a​ ​Q​R​ ​c​o​d​e
-	 */
-	QR_CODE_CAMERA_PERMS: string
-	/**
-	 * E​n​a​b​l​e​ ​p​e​r​m​i​s​s​i​o​n​s
-	 */
-	QR_CODE_CAMERA_PERMS_CTA: string
 	/**
 	 * R​e​c​a​p
 	 */
@@ -5321,10 +5329,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * E​a​r​n
-	 */
-	BALANCE_ACTION_EARN: string
 }
 
 export type TranslationFunctions = {
@@ -5892,6 +5896,10 @@ Try reconnect your device to the internet.
 	 */
 	BALANCE_ACTION_BUY: () => LocalizedString
 	/**
+	 * Earn
+	 */
+	BALANCE_ACTION_EARN: () => LocalizedString
+	/**
 	 * Other
 	 */
 	BALANCE_ACTION_OTHER: () => LocalizedString
@@ -5951,6 +5959,10 @@ Try reconnect your device to the internet.
 	 * Insert the required data to add a new contact
 	 */
 	BD_ADD_CONTACT_DISCLAIMER: () => LocalizedString
+	/**
+	 * Scan a wallet QR code to add as contact
+	 */
+	ADD_CONTACT_QR_DESCRIPTION: () => LocalizedString
 	/**
 	 * You cancelled using Biometrics to authenticate. You must be authenticated to use VeWorld. Do you want to Reset the Wallet, or Retry authenticating?
 	 */
@@ -8843,6 +8855,14 @@ Thanks for your patience!
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
 	/**
+	 * Enable your camera permissions to scan a QR code
+	 */
+	QR_CODE_CAMERA_PERMS: () => LocalizedString
+	/**
+	 * Enable permissions
+	 */
+	QR_CODE_CAMERA_PERMS_CTA: () => LocalizedString
+	/**
 	 * Use your QR code to receive transfers
 	 */
 	QR_CODE_RECEIVE_DESCRIPTION: () => LocalizedString
@@ -8858,14 +8878,6 @@ Thanks for your patience!
 	 * Scan QR Code
 	 */
 	QR_CODE_SCAN_TITLE: () => LocalizedString
-	/**
-	 * Enable your camera permissions to scan a QR code
-	 */
-	QR_CODE_CAMERA_PERMS: () => LocalizedString
-	/**
-	 * Enable permissions
-	 */
-	QR_CODE_CAMERA_PERMS_CTA: () => LocalizedString
 	/**
 	 * Recap
 	 */
@@ -10550,10 +10562,6 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Earn
-	 */
-	BALANCE_ACTION_EARN: () => LocalizedString
 }
 
 export type Formatters = {

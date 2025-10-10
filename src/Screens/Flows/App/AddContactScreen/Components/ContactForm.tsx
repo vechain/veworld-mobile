@@ -75,6 +75,7 @@ export const ContactForm: React.FC<Props> = memo(
             onScanAddress,
             onScanVns,
             targets: [ScanTarget.ADDRESS, ScanTarget.VNS],
+            description: LL.ADD_CONTACT_QR_DESCRIPTION(),
         })
 
         const onHandleIconTap = useCallback(() => {
