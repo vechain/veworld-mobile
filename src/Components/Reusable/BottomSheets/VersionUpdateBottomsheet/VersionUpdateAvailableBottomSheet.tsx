@@ -38,10 +38,7 @@ export const VersionUpdateAvailableBottomSheet = () => {
             })
             onOpen()
         }
-        return () => {
-            onClose()
-        }
-    }, [shouldShowUpdatePrompt, majorVersion, latestVersion, track, onOpen, onClose, dismissCount])
+    }, [shouldShowUpdatePrompt, majorVersion, latestVersion, track, onOpen, dismissCount])
 
     const handleUpdateApp = useCallback(async () => {
         track(AnalyticsEvent.VERSION_UPGRADE_MODAL_SUCCESS, {
