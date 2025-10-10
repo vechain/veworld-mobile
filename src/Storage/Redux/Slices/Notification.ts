@@ -8,6 +8,9 @@ export const initialNotificationState: NotificationState = {
     dappVisitCounter: {},
     userTags: {},
     dappNotifications: true,
+    lastSuccessfulRegistration: null,
+    lastSubscriptionId: null,
+    lastWalletAddresses: null,
 }
 
 export const Notification = createSlice({
@@ -45,6 +48,15 @@ export const Notification = createSlice({
         setDappNotifications: (state, action: PayloadAction<boolean>) => {
             state.dappNotifications = action.payload
         },
+        updateLastSuccessfulRegistration: (state, action: PayloadAction<number>) => {
+            state.lastSuccessfulRegistration = action.payload
+        },
+        updateLastSubscriptionId: (state, action: PayloadAction<string | null>) => {
+            state.lastSubscriptionId = action.payload
+        },
+        updateLastWalletAddresses: (state, action: PayloadAction<string[] | null>) => {
+            state.lastWalletAddresses = action.payload
+        },
     },
 })
 
@@ -56,4 +68,7 @@ export const {
     setDappVisitCounter,
     setDappNotifications,
     removeDappVisitCounter,
+    updateLastSuccessfulRegistration,
+    updateLastSubscriptionId,
+    updateLastWalletAddresses,
 } = Notification.actions

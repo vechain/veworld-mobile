@@ -53,6 +53,11 @@ export type FeatureFlags = {
             }
         }
     }
+    notificationCenter: {
+        registration: {
+            enabled: boolean
+        }
+    }
 }
 
 export const getFeatureFlags = async () => {
