@@ -5,7 +5,7 @@ import { ERROR_EVENTS, vechainNewsAndUpdates } from "~Constants"
 import { useAppState } from "~Hooks"
 import { AppStateType, NETWORK_TYPE } from "~Model"
 import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
-import { usePushRegistration } from "~Hooks/usePushRegistration"
+import { useNotificationCenter } from "~Hooks/useNotificationCenter"
 import {
     addRemovedNotificationTag,
     increaseDappVisitCounter,
@@ -27,7 +27,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useFeatureFlags } from "../FeatureFlagsProvider"
-import { error, info } from "~Utils"
+import { error } from "~Utils"
 
 type ContextType = {
     featureEnabled: boolean
@@ -66,54 +66,21 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const dappsNotifications = useAppSelector(selectDappNotifications)
     const accounts = useAppSelector(selectAccounts)
     const isFetcingTags = useRef(false)
-    const isRegistering = useRef(false)
 
     const { currentState, previousState } = useAppState()
 
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
 
-    const { registerAsync, shouldRegister } = usePushRegistration()
+    const { register } = useNotificationCenter()
 
     const attemptPushRegistration = useCallback(async () => {
         if (!notificationCenter.registration.enabled) {
             return
         }
-        // If already registering, skip this call
-        if (isRegistering.current) {
-            info("APP", "Registration already in progress, skipping duplicate call")
-            return
-        }
 
-        // Set flag immediately to block concurrent calls
-        isRegistering.current = true
-
-        if (accounts.length === 0) {
-            info("APP", "No wallet addresses available, skipping registration")
-            return
-        }
-
-        try {
-            const oneSignalId = await OneSignal.User.getOnesignalId()
-
-            if (!oneSignalId) {
-                info("APP", "No OneSignal ID available, skipping registration")
-                return
-            }
-
-            const subId = await OneSignal.User.pushSubscription.getIdAsync()
-            if (!shouldRegister(subId)) {
-                info("APP", "Skipping push registration - conditions not met")
-                return
-            }
-
-            info("APP", "registering with notification center")
-            await registerAsync({ subscriptionId: subId, oneSignalId })
-        } catch (err) {
-            error(ERROR_EVENTS.ONE_SIGNAL, err)
-        } finally {
-            isRegistering.current = false
-        }
-    }, [accounts, registerAsync, shouldRegister, notificationCenter.registration.enabled])
+        // All logic (locking, OneSignal checks, shouldRegister) is now in the hook
+        await register()
+    }, [register, notificationCenter.registration.enabled])
 
     const initializeOneSignal = useCallback(async () => {
         const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
