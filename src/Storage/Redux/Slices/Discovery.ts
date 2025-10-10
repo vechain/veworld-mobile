@@ -115,16 +115,8 @@ export const DiscoverySlice = createSlice({
         setFeaturedDApps: (state, action: PayloadAction<DiscoveryDApp[]>) => {
             state.featured = action.payload
         },
-        addNavigationToDApp: (
-            state,
-            action: PayloadAction<{ href: string; isCustom: boolean; sourceScreen?: string }>,
-        ) => {
+        addNavigationToDApp: (state, action: PayloadAction<{ href: string; isCustom: boolean }>) => {
             const { payload } = action
-
-            // Store the source screen for back navigation
-            if (payload.sourceScreen) {
-                state.lastNavigationSource = payload.sourceScreen
-            }
 
             if (payload.isCustom) {
                 const existingDApp = findByHref(state.custom, payload.href)
@@ -145,6 +137,10 @@ export const DiscoverySlice = createSlice({
                     featured.amountOfNavigations += 1
                 }
             }
+        },
+        // Store the source screen for back navigation
+        setLastNavigationSource: (state, action: PayloadAction<{ screen: string }>) => {
+            state.lastNavigationSource = action.payload.screen
         },
         addConnectedDiscoveryApp: (state, action: PayloadAction<ConnectedDiscoveryApp>) => {
             if (!state.connectedApps) state.connectedApps = [action.payload]
@@ -234,4 +230,5 @@ export const {
     addSession,
     setIsNormalUser,
     setSuggestedAppIds,
+    setLastNavigationSource,
 } = DiscoverySlice.actions

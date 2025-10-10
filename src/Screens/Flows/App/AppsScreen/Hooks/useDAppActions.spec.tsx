@@ -1,4 +1,4 @@
-import { renderHook, act } from "@testing-library/react-hooks"
+import { act, renderHook } from "@testing-library/react-hooks"
 import { DiscoveryDApp } from "~Constants"
 import { NETWORK_TYPE } from "~Model"
 import { useDAppActions } from "./useDAppActions"
@@ -27,6 +27,7 @@ jest.mock("~Storage/Redux", () => ({
     useAppSelector: jest.fn(),
 }))
 
+import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux"
 
 describe("useDAppActions", () => {
@@ -54,7 +55,7 @@ describe("useDAppActions", () => {
             amountOfNavigations: 0,
         }
 
-        const { result } = renderHook(() => useDAppActions("test-screen"))
+        const { result } = renderHook(() => useDAppActions(Routes.HOME))
 
         await act(async () => {
             await result.current.onDAppPress(mockDapp)
@@ -72,7 +73,6 @@ describe("useDAppActions", () => {
                 payload: {
                     href: "https://test.com",
                     isCustom: false,
-                    sourceScreen: "test-screen",
                 },
             }),
         )

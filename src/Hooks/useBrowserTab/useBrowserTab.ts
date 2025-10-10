@@ -2,7 +2,15 @@ import { useNavigation } from "@react-navigation/native"
 import { uuidv4 } from "@walletconnect/utils"
 import { useCallback, useMemo } from "react"
 import { Routes } from "~Navigation"
-import { openTab, selectTabs, setCurrentTab, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    openTab,
+    selectCurrentScreen,
+    selectTabs,
+    setCurrentTab,
+    setLastNavigationSource,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 
 type NavigateWithTabArgs = {
     url: string
@@ -10,10 +18,11 @@ type NavigateWithTabArgs = {
     navigationFn?: (url: string) => void
 }
 
-export const useBrowserTab = () => {
+export const useBrowserTab = (sourceScreen?: Routes) => {
     const dispatch = useAppDispatch()
     const tabs = useAppSelector(selectTabs)
     const nav = useNavigation()
+    const currentScreen = useAppSelector(selectCurrentScreen)
 
     const navigateWithTab = useCallback(
         ({ url, title, navigationFn = u => nav.navigate(Routes.BROWSER, { url: u }) }: NavigateWithTabArgs) => {
@@ -26,10 +35,12 @@ export const useBrowserTab = () => {
                 dispatch(setCurrentTab(tabs[hasActiveTab].id))
             }
 
+            dispatch(setLastNavigationSource({ screen: sourceScreen ?? currentScreen }))
+
             //Navigate to the tab
             navigationFn(url)
         },
-        [dispatch, nav, tabs],
+        [currentScreen, dispatch, nav, sourceScreen, tabs],
     )
 
     const memoized = useMemo(() => ({ navigateWithTab }), [navigateWithTab])
