@@ -79,6 +79,9 @@ export const ScanTab = ({
                     <BorderElement anchor="top_right" />
                     <BorderElement anchor="bottom_right" />
                     <BorderElement anchor="bottom_left" />
+                    <BaseText typographyFont="bodySemiBold" color={COLORS.WHITE}>
+                        {LL.SCAN_QR_CODE()}
+                    </BaseText>
                 </BaseView>
             ) : (
                 <>

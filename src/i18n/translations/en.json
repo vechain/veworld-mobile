@@ -388,6 +388,7 @@
   "BTN_SAVE": "Save",
   "BTN_SAVED": "Saved!",
   "BTN_SCAN_QR_CODE": "Scan QR Code",
+  "SCAN_QR_CODE": "Scan a QR code",
   "BTN_SECURITY_CREATE_PASSWORD": "Create password",
   "BTN_SECURITY_CREATE_PASSWORD_BACKUP": "Create password to backup",
   "BTN_SECURITY_OPERATION_CHECKBOX": "I state that I have backed up my secret phrase",

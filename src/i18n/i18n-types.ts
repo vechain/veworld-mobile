@@ -1619,6 +1619,10 @@ type RootTranslation = {
 	 */
 	BTN_SCAN_QR_CODE: string
 	/**
+	 * S​c​a​n​ ​a​ ​Q​R​ ​c​o​d​e
+	 */
+	SCAN_QR_CODE: string
+	/**
 	 * C​r​e​a​t​e​ ​p​a​s​s​w​o​r​d
 	 */
 	BTN_SECURITY_CREATE_PASSWORD: string
@@ -6901,6 +6905,10 @@ Thanks for your patience!
 	 * Scan QR Code
 	 */
 	BTN_SCAN_QR_CODE: () => LocalizedString
+	/**
+	 * Scan a QR code
+	 */
+	SCAN_QR_CODE: () => LocalizedString
 	/**
 	 * Create password
 	 */
