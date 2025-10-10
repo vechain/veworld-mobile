@@ -54,7 +54,7 @@ OneSignal.Debug.setLogLevel(logLevel)
 const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const dispatch = useAppDispatch()
     const navigation = useNavigation()
-    const { pushNotificationFeature } = useFeatureFlags()
+    const { notificationCenter, pushNotificationFeature } = useFeatureFlags()
     const { data: dapps = [] } = useVeBetterDaoDapps()
 
     const permissionEnabled = useAppSelector(selectNotificationPermissionEnabled)
@@ -75,6 +75,9 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const { registerAsync, shouldRegister } = usePushRegistration()
 
     const attemptPushRegistration = useCallback(async () => {
+        if (!notificationCenter.registration.enabled) {
+            return
+        }
         // If already registering, skip this call
         if (isRegistering.current) {
             info("APP", "Registration already in progress, skipping duplicate call")
@@ -117,7 +120,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         } finally {
             isRegistering.current = false
         }
-    }, [accounts, registerAsync, shouldRegister])
+    }, [accounts, registerAsync, shouldRegister, notificationCenter.registration.enabled])
 
     const initializeOneSignal = useCallback(async () => {
         const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
@@ -210,19 +213,14 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
     const onOptInStatusChanged = useCallback(
         (event: PushSubscriptionChangedState) => {
-            const { optedIn: previousOptedInStatuse, id: previousSubId } = event.previous
-            const { optedIn: currentOptedInStatuse, id: currentSubId } = event.current
+            const { optedIn: previousOptedInStatuse } = event.previous
+            const { optedIn: currentOptedInStatuse } = event.current
 
             if (previousOptedInStatuse !== currentOptedInStatuse) {
                 dispatch(updateNotificationOptedIn(currentOptedInStatuse))
             }
-
-            if (previousSubId !== currentSubId) {
-                info("APP", "Subscription ID changed, triggering re-registration")
-                attemptPushRegistration()
-            }
         },
-        [dispatch, attemptPushRegistration],
+        [dispatch],
     )
 
     const getTags = useCallback(() => {
@@ -318,7 +316,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
     // Attempt registration whenever accounts change
     useEffect(() => {
-        if (featureEnabled && accounts.length > 0) {
+        if (accounts.length > 0) {
             attemptPushRegistration()
         }
     }, [accounts, featureEnabled, attemptPushRegistration])
@@ -330,7 +328,6 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
         OneSignal.Notifications.addEventListener("click", onNotificationClicked)
         OneSignal.Notifications.addEventListener("permissionChange", onPermissionChanged)
-        OneSignal.User.pushSubscription.addEventListener("change", onOptInStatusChanged)
 
         return () => {
             if (!featureEnabled) {

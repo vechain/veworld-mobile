@@ -57,6 +57,11 @@ export const initialState: FeatureFlags = {
             },
         },
     },
+    notificationCenter: {
+        registration: {
+            enabled: false,
+        },
+    },
 }
 
 export const FeatureFlagsContext = React.createContext<FeatureFlags | undefined>(initialState)
