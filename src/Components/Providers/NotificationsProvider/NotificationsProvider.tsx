@@ -276,10 +276,14 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
     // Attempt registration whenever accounts change
     useEffect(() => {
+        if (!featureEnabled) {
+            return
+        }
+
         if (accounts.length > 0) {
             attemptPushRegistration()
         }
-    }, [accounts, featureEnabled, attemptPushRegistration])
+    }, [accounts.length, featureEnabled, attemptPushRegistration])
 
     useEffect(() => {
         if (!featureEnabled) {

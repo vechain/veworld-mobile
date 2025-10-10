@@ -144,7 +144,7 @@ export const useNotificationCenter = () => {
         [dispatch, walletAddresses],
     )
 
-    const mutation = useMutation({
+    const { mutateAsync } = useMutation({
         mutationFn: sendRegistration,
         retry: (failureCount, err) => {
             if (failureCount >= MAX_RETRIES) {
@@ -190,13 +190,13 @@ export const useNotificationCenter = () => {
                 return null
             }
             info("APP", "Attempting push notification registration")
-            await mutation.mutateAsync(subId)
+            await mutateAsync(subId)
         } catch (err) {
             error(ERROR_EVENTS.ONE_SIGNAL, err)
         } finally {
             isRegistering.current = false
         }
-    }, [mutation, walletAddresses.length, shouldRegister])
+    }, [mutateAsync, walletAddresses.length, shouldRegister])
 
     return {
         register,
