@@ -40,6 +40,7 @@ export const CurrentBalance = () => {
         <TouchableOpacity onPress={onPress}>
             <Animated.View style={styles.root} layout={LinearTransition.duration(300)}>
                 <BaseText
+                    adjustsFontSizeToFit
                     typographyFont="biggerTitleMedium"
                     fontWeight="400"
                     color={COLORS.PURPLE_LABEL}
