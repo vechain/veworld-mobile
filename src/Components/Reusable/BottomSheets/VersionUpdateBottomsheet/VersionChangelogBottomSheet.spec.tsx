@@ -14,7 +14,6 @@ jest.mock("~Storage/Redux", () => ({
     ...jest.requireActual("~Storage/Redux"),
     useAppDispatch: () => mockDispatch,
     setChangelogToShow: jest.fn(payload => ({ type: "SET_CHANGELOG_TO_SHOW", payload })),
-    setChangelogDismissed: jest.fn(payload => ({ type: "SET_CHANGELOG_DISMISSED", payload })),
 }))
 
 describe("VersionChangelogBottomSheet", () => {
