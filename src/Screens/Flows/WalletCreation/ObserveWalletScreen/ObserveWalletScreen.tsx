@@ -14,6 +14,7 @@ import {
 } from "~Components"
 import { ScanTarget } from "~Constants"
 import { useBottomSheetModal, useCameraBottomSheet, useVns, ZERO_ADDRESS } from "~Hooks"
+import { ScanFunctionRegistry } from "~Hooks/useScanTargets"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, WatchedAccount } from "~Model"
 import HapticsService from "~Services/HapticsService"
@@ -75,7 +76,7 @@ export const ObserveWalletScreen = () => {
         nav.goBack()
     }, [LL, _watchedAccount, dispatch, nav])
 
-    const onImport = useCallback(
+    const onImportAddress = useCallback(
         async (_address?: string) => {
             // Try to close the keyboard. Might come in handy if the user is using the camera to scan a QR code
             Keyboard.dismiss()
@@ -83,7 +84,7 @@ export const ObserveWalletScreen = () => {
             const addressIsValid = AddressUtils.isValid(_address ?? underlyingAddress)
             if (!addressIsValid) {
                 showErrorToast({ text1: LL.ERROR_INVALID_ADDRESS() })
-                return false
+                return true
             }
 
             // check if wallet is already observed - imported - if so, show error message
@@ -98,7 +99,7 @@ export const ObserveWalletScreen = () => {
 
             if (isWalletAlreadyImported) {
                 showErrorToast({ text1: LL.ERROR_WALLET_ALREADY_EXISTS() })
-                return false
+                return true
             }
             // find wallet in the network and present the wallet details
             findWalletOnChain(_address ?? underlyingAddress)
@@ -107,9 +108,19 @@ export const ObserveWalletScreen = () => {
         [LL, accounts, underlyingAddress, findWalletOnChain],
     )
 
+    const onScanVns = useCallback<ScanFunctionRegistry["vns"]>(
+        async (data, defaultFn) => {
+            const res = await defaultFn(data)
+            if (!res) return false
+            return onImportAddress(res.address)
+        },
+        [onImportAddress],
+    )
+
     const { RenderCameraModal, handleOpenOnlyScanCamera } = useCameraBottomSheet({
-        onScanAddress: onImport,
-        targets: [ScanTarget.ADDRESS],
+        onScanAddress: onImportAddress,
+        onScanVns,
+        targets: [ScanTarget.ADDRESS, ScanTarget.VNS],
     })
 
     const handleOnSetAddress = useCallback(
@@ -190,7 +201,7 @@ export const ObserveWalletScreen = () => {
                             <BaseButton
                                 isLoading={isLoading}
                                 testID="observe-wallet-confirm-button"
-                                action={onImport}
+                                action={onImportAddress}
                                 disabled={!underlyingAddress || !!error}
                                 w={100}
                                 title={btnTitle}

@@ -78,6 +78,7 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
 
     const onScanRootLayout = useCallback(
         (e: LayoutChangeEvent) => {
+            "worklet"
             rootX.value = e.nativeEvent.layout.x
             rootY.value = e.nativeEvent.layout.y
         },
@@ -86,6 +87,7 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
 
     const onScanCameraLayout = useCallback(
         (e: LayoutChangeEvent) => {
+            "worklet"
             cameraX.value = e.nativeEvent.layout.x
             cameraY.value = e.nativeEvent.layout.y
         },
