@@ -12,12 +12,12 @@ export const useBrowserNavigation = () => {
     const { navigateWithTab } = useBrowserTab()
 
     const navigateToBrowser = useCallback(
-        async (value: string) => {
+        async (value: string, navigationFn?: (url: string) => void) => {
             const valueLower = value.toLowerCase()
             const isValid = await URIUtils.isValidBrowserUrl(valueLower)
             if (isValid) {
                 const url = URIUtils.parseUrl(valueLower)
-                navigateWithTab({ url, title: url })
+                navigateWithTab({ url, title: url, navigationFn })
                 addVisitedUrl(url)
                 return
             }

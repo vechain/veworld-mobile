@@ -10,8 +10,8 @@ import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
+import { AddressUtils, BalanceUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
 import { Chart } from "./Chart"
 
@@ -22,6 +22,7 @@ type Props = {
 export const TokenCard = ({ token }: Props) => {
     const navigation = useNavigation()
     const currency = useAppSelector(selectCurrency)
+    const isBalanceVisible = useAppSelector(selectBalanceVisible)
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
     const [showChart, setShowChart] = useState(true)
@@ -51,6 +52,14 @@ export const TokenCard = ({ token }: Props) => {
 
     const { fiatBalance, showFiatBalance, tokenBalance } = useTokenCardBalance({ token })
     const tokenWithCompleteInfo = useTokenWithCompleteInfo(token)
+
+    const balance = useMemo(() => {
+        if (!isBalanceVisible) {
+            return "••••••"
+        }
+
+        return tokenBalance
+    }, [isBalanceVisible, tokenBalance])
 
     const chartIcon = useMemo(() => {
         if (!chartData || !showFiatBalance || showChart) return null
@@ -111,24 +120,35 @@ export const TokenCard = ({ token }: Props) => {
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
     // Only allow navigation for tokens with detailed information available
-    const supportsDetailNavigation = useMemo(
-        () => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol),
-        [token.symbol],
-    )
+    const isVechainToken = useMemo(() => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol), [token.symbol])
 
     const handlePress = useCallback(() => {
-        if (!supportsDetailNavigation) {
+        if (!isVechainToken) {
+            if (isCrossChainToken) {
+                navigation.navigate(Routes.BRIDGE_TOKEN_DETAILS, {
+                    token,
+                })
+                return
+            }
+
+            const isTokenBalance = BalanceUtils.getIsTokenWithBalance(token)
+
+            if (!isTokenBalance) return
+
+            navigation.navigate(Routes.INSERT_ADDRESS_SEND, {
+                token,
+            })
             return
         }
 
         navigation.navigate(Routes.TOKEN_DETAILS, {
             token: tokenWithCompleteInfo,
         })
-    }, [navigation, tokenWithCompleteInfo, supportsDetailNavigation])
+    }, [navigation, tokenWithCompleteInfo, isVechainToken, token, isCrossChainToken])
 
     return (
         <BaseTouchableBox
-            action={supportsDetailNavigation ? handlePress : undefined}
+            action={handlePress}
             py={symbol ? typography.lineHeight.body : typography.lineHeight.bodySemiBold}
             flexDirection="row"
             bg={theme.colors.card}
@@ -187,7 +207,7 @@ export const TokenCard = ({ token }: Props) => {
                             numberOfLines={1}
                             flexDirection="row"
                             testID="TOKEN_CARD_TOKEN_BALANCE">
-                            {tokenBalance}
+                            {balance}
                         </BaseText>
                     </>
                 ) : (
@@ -198,7 +218,7 @@ export const TokenCard = ({ token }: Props) => {
                         numberOfLines={1}
                         flexDirection="row"
                         testID="TOKEN_CARD_TOKEN_BALANCE">
-                        {tokenBalance}
+                        {balance}
                     </BaseText>
                 )}
             </BaseView>
@@ -211,6 +231,7 @@ const baseStyles = () =>
         root: {
             gap: 16,
             alignItems: "center",
+            borderRadius: 12,
             justifyContent: "space-between",
         },
     })

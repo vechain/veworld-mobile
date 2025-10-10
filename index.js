@@ -68,6 +68,7 @@ import { InteractionProvider } from "~Components/Providers/InteractionProvider"
 import { FeatureFlaggedSmartWallet } from "./src/Components/Providers/FeatureFlaggedSmartWallet"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { DeepLinksProvider } from "~Components/Providers/DeepLinksProvider"
+import { DeviceProvider } from "~Components/Providers/DeviceProvider"
 
 const { fontFamily } = typography
 
@@ -163,7 +164,9 @@ const Main = () => {
                                                 <BottomSheetModalProvider>
                                                     <InAppBrowserProvider>
                                                         <NotificationsProvider>
-                                                            <EntryPoint />
+                                                            <DeviceProvider>
+                                                                <EntryPoint />
+                                                            </DeviceProvider>
                                                         </NotificationsProvider>
                                                     </InAppBrowserProvider>
                                                 </BottomSheetModalProvider>

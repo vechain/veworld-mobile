@@ -137,6 +137,7 @@
   "BACKUP_YOUR_DEVICES_DESCRIPTION": "Before proceeding with the transaction, we suggest to backup the recovery phrase for this account.",
   "BACKUP_YOUR_DEVICES_TITLE": "Backup your wallet",
   "BALANCE_ACTION_BUY": "Buy",
+  "BALANCE_ACTION_EARN": "Earn",
   "BALANCE_ACTION_OTHER": "Other",
   "BALANCE_ACTION_RECEIVE": "Receive",
   "BALANCE_ACTION_SEND": "Send",

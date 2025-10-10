@@ -66,7 +66,7 @@ export const StatsCard = ({ label, value }: Props) => {
 
     return (
         <BaseView style={styles.root} testID={`STATS_CARD_${label}`}>
-            <BlurView overlayColor="transparent" blurAmount={10} style={styles.blur}>
+            <BlurView blurAmount={7} style={styles.blur}>
                 <BaseView flexDirection="column" p={16} justifyContent="center" alignItems="center">
                     <BaseIcon color={COLORS.LIGHT_GREEN} size={24} name={icon} />
                     <BaseSpacer height={8} />
