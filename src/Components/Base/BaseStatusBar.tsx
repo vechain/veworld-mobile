@@ -24,6 +24,9 @@ export const BaseStatusBar = memo((props: Props) => {
         if (!props.root) return computeBarStyle(props.hero, theme.isDark)
         switch (routeName) {
             case Routes.HOME:
+            case Routes.APPS_SEARCH:
+            case Routes.APPS_TABS_MANAGER:
+            case Routes.BROWSER:
                 return "light-content"
             default:
                 return computeBarStyle(props.hero, theme.isDark)
@@ -34,6 +37,9 @@ export const BaseStatusBar = memo((props: Props) => {
         if (!props.root) return props.transparent ? theme.colors.transparent : theme.colors.background
         switch (routeName) {
             case Routes.HOME:
+            case Routes.APPS_SEARCH:
+            case Routes.APPS_TABS_MANAGER:
+            case Routes.BROWSER:
                 return COLORS.BALANCE_BACKGROUND
             default:
                 return props.transparent ? theme.colors.transparent : theme.colors.background
