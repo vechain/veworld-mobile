@@ -236,14 +236,14 @@ export const TokenCard = ({ token }: Props) => {
 const baseStyles = () =>
     StyleSheet.create({
         root: {
-            gap: 16,
+            gap: 8,
             alignItems: "center",
             borderRadius: 12,
             justifyContent: "space-between",
         },
         leftSection: {
             flexDirection: "row",
-            gap: 16,
+            gap: 8,
             flex: 1,
             flexShrink: 1,
             alignItems: "center",
