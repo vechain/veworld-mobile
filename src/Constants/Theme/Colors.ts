@@ -322,6 +322,18 @@ export type Colors = {
         }
         text: string
     }
+    feedbackChip: {
+        background: string
+        text: string
+        icon: {
+            success: string
+            warning: string
+            error: string
+            info: string
+            loading: string
+        }
+        closeButton: string
+    }
 }
 
 export enum COLORS {
@@ -758,6 +770,18 @@ const light: Colors = {
         },
         text: COLORS.BLACK,
     },
+    feedbackChip: {
+        background: "#E7E9EBE5",
+        text: COLORS.PURPLE,
+        icon: {
+            success: COLORS.GREEN_600,
+            warning: COLORS.RED_600,
+            error: COLORS.RED_600,
+            info: COLORS.DARK_PURPLE_DISABLED,
+            loading: COLORS.DARK_PURPLE_DISABLED,
+        },
+        closeButton: COLORS.DARK_PURPLE_DISABLED,
+    },
 }
 
 const dark: Colors = {
@@ -1083,6 +1107,18 @@ const dark: Colors = {
             text: COLORS.WHITE,
         },
         text: COLORS.WHITE,
+    },
+    feedbackChip: {
+        background: "#261E4CE5",
+        text: COLORS.GREEN_50,
+        icon: {
+            success: COLORS.GREEN_200,
+            warning: COLORS.RED_400,
+            error: COLORS.RED_400,
+            info: COLORS.GREY_300,
+            loading: COLORS.GREY_300,
+        },
+        closeButton: COLORS.PURPLE_LABEL,
     },
 }
 

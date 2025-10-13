@@ -11,6 +11,8 @@ import {
     NetworkSwitcherContextMenu,
     SelectAccountBottomSheet,
 } from "~Components"
+import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
 import { useCameraBottomSheet } from "~Hooks/useCameraBottomSheet"
@@ -126,9 +128,18 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                 />
             )}
 
-            <TouchableOpacity onPress={handleOpenWalletSwitcher}>
-                <BaseView flexDirection="row" gap={12} py={4} px={8} borderRadius={99} style={styles.account}>
+            <BaseView flexDirection="row" gap={12} py={4} px={8} borderRadius={99} style={styles.account}>
+                <TouchableOpacity onPress={handleOpenWalletSwitcher}>
                     <AccountIcon account={account} size={32} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        Feedback.show({
+                            severity: FeedbackSeverity.WARNING,
+                            type: FeedbackType.PERMANENT,
+                            message: "Test",
+                        })
+                    }}>
                     <BaseText
                         typographyFont="bodySemiBold"
                         color={COLORS.PURPLE_LABEL}
@@ -137,8 +148,8 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                         testID="BALANCE_HEADER_DISPLAY_USERNAME">
                         {displayUsername}
                     </BaseText>
-                </BaseView>
-            </TouchableOpacity>
+                </TouchableOpacity>
+            </BaseView>
 
             <BaseView flexDirection="row" gap={12}>
                 <TouchableOpacity onPress={handleOpenQRCode}>
