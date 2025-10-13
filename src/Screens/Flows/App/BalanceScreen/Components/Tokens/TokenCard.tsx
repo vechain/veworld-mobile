@@ -243,7 +243,7 @@ const baseStyles = () =>
         },
         leftSection: {
             flexDirection: "row",
-            gap: 8,
+            gap: 16,
             flex: 1,
             flexShrink: 1,
             alignItems: "center",
