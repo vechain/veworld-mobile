@@ -119,6 +119,9 @@ export const TokenCard = ({ token }: Props) => {
 
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
+    // Check if token supports chart display
+    const isChartSupported = useMemo(() => !!getCoinGeckoIdBySymbol[token.symbol], [token.symbol])
+
     // Only allow navigation for tokens with detailed information available
     const isVechainToken = useMemo(() => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol), [token.symbol])
 
@@ -153,7 +156,6 @@ export const TokenCard = ({ token }: Props) => {
             flexDirection="row"
             bg={theme.colors.card}
             innerContainerStyle={styles.root}>
-            {/* Left Section: Token Info - Fixed Width */}
             <BaseView style={styles.leftSection}>
                 <TokenImage
                     icon={token.icon}
@@ -187,12 +189,12 @@ export const TokenCard = ({ token }: Props) => {
                 )}
             </BaseView>
 
-            {/* Middle Section: Chart - Fixed Position */}
-            <BaseView style={styles.chartSection}>
-                <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
-            </BaseView>
+            {isChartSupported && showChart && (
+                <BaseView style={styles.chartSection}>
+                    <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
+                </BaseView>
+            )}
 
-            {/* Right Section: Balances - Fixed Width */}
             <BaseView style={styles.rightSection}>
                 {showFiatBalance ? (
                     <>
@@ -242,22 +244,22 @@ const baseStyles = () =>
         leftSection: {
             flexDirection: "row",
             gap: 16,
-            flexBasis: "75%",
+            flex: 1,
             flexShrink: 1,
-            flexGrow: 0,
             alignItems: "center",
         },
         chartSection: {
-            flexBasis: "auto",
+            minWidth: 60,
             flexShrink: 0,
             flexGrow: 0,
             alignItems: "center",
             justifyContent: "center",
+            marginHorizontal: 8,
         },
         rightSection: {
             flexDirection: "column",
             alignItems: "flex-end",
-            flexBasis: "25%",
+            minWidth: 80,
             flexShrink: 0,
             flexGrow: 0,
         },
