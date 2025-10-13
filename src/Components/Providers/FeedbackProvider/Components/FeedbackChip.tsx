@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
-import { Pressable, StyleSheet, View } from "react-native"
-import Animated, { ZoomInEasyUp, ZoomOutEasyUp } from "react-native-reanimated"
+import { Pressable, StyleSheet, TouchableOpacity } from "react-native"
+import Animated, { FadeIn, FadeOut, ZoomInEasyUp, ZoomOutEasyUp } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BaseIcon } from "~Components/Base"
 import { BaseText } from "~Components/Base/BaseText"
@@ -37,7 +37,7 @@ export const FeedbackChip = ({ show, feedbackData, onHide }: Props) => {
     }, [feedbackData])
 
     return show && feedbackData ? (
-        <View style={styles.container} focusable>
+        <Animated.View style={styles.container} entering={FadeIn} exiting={FadeOut}>
             <AnimatedPressable
                 pointerEvents={"auto"}
                 entering={ZoomInEasyUp}
@@ -53,17 +53,18 @@ export const FeedbackChip = ({ show, feedbackData, onHide }: Props) => {
                         {feedbackData.message}
                     </BaseText>
                     {feedbackData.type === FeedbackType.PERMANENT && (
-                        <BaseIcon
-                            name="icon-x"
-                            size={16}
-                            style={styles.closeButton}
-                            onPress={onHide}
-                            color={theme.colors.feedbackChip.closeButton}
-                        />
+                        <TouchableOpacity onPress={onHide}>
+                            <BaseIcon
+                                name="icon-x"
+                                size={16}
+                                borderRadius={20}
+                                color={theme.colors.feedbackChip.closeButton}
+                            />
+                        </TouchableOpacity>
                     )}
                 </Animated.View>
             </AnimatedPressable>
-        </View>
+        </Animated.View>
     ) : null
 }
 
@@ -99,8 +100,5 @@ const baseStyle =
                 justifyContent: "space-between",
                 alignItems: "center",
                 gap: 8,
-            },
-            closeButton: {
-                borderRadius: 99,
             },
         })

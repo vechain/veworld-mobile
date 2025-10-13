@@ -1,5 +1,5 @@
 import EventEmitter from "events"
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { FeedbackChip } from "./Components/FeedbackChip"
 import { FeedbackShowArgs, FeedbackType } from "./Model"
 
@@ -15,9 +15,14 @@ export const FeedbackProvider = ({ children }: { children: React.ReactNode }) =>
     const [show, setShow] = useState(false)
     const [feedbackData, setFeedbackData] = useState<FeedbackShowArgs | null>(null)
 
+    const onDismiss = useCallback(() => {
+        setShow(false)
+        setFeedbackData(null)
+    }, [])
+
     useEffect(() => {
         FeedbackEmitter.on("show", (args: FeedbackShowArgs) => {
-            if (show) return
+            if (show && feedbackData) return
             setShow(true)
             setFeedbackData(args)
         })
@@ -25,16 +30,15 @@ export const FeedbackProvider = ({ children }: { children: React.ReactNode }) =>
         return () => {
             FeedbackEmitter.removeAllListeners()
         }
-    }, [show])
+    }, [show, feedbackData])
 
     useEffect(() => {
         let timeout: NodeJS.Timeout | null = null
         if (show) {
             if (feedbackData?.type === FeedbackType.ALERT) {
                 timeout = setTimeout(() => {
-                    setShow(false)
-                    setFeedbackData(null)
-                }, 2000)
+                    onDismiss()
+                }, feedbackData?.duration || 2000)
             }
         }
         return () => {
@@ -42,7 +46,7 @@ export const FeedbackProvider = ({ children }: { children: React.ReactNode }) =>
                 clearTimeout(timeout)
             }
         }
-    }, [show, feedbackData?.type])
+    }, [show, feedbackData?.type, feedbackData?.duration, onDismiss])
 
     return (
         <>
@@ -51,8 +55,7 @@ export const FeedbackProvider = ({ children }: { children: React.ReactNode }) =>
                 show={show}
                 feedbackData={feedbackData}
                 onHide={() => {
-                    setShow(false)
-                    setFeedbackData(null)
+                    onDismiss()
                 }}
             />
         </>

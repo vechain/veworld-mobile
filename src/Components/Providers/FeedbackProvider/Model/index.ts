@@ -16,6 +16,7 @@ export enum FeedbackType {
 export type FeedbackShowArgs = {
     severity: FeedbackSeverity
     type: FeedbackType
-    icon?: IconKey
     message: string
+    icon?: IconKey
+    duration?: number
 }
