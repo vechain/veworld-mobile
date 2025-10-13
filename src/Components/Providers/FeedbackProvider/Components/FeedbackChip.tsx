@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { Pressable, StyleSheet, TouchableOpacity } from "react-native"
+import { StyleSheet, TouchableOpacity } from "react-native"
 import Animated, { FadeIn, FadeOut, ZoomInEasyUp, ZoomOutEasyUp } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BaseIcon } from "~Components/Base"
@@ -7,9 +7,7 @@ import { BaseText } from "~Components/Base/BaseText"
 import { Spinner } from "~Components/Reusable/Spinner"
 import { ColorThemeType, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { FeedbackShowArgs, FeedbackSeverity, FeedbackType } from "../Model"
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+import { FeedbackSeverity, FeedbackShowArgs, FeedbackType } from "../Model"
 
 type Props = {
     show: boolean
@@ -23,6 +21,8 @@ export const FeedbackChip = ({ show, feedbackData, onHide }: Props) => {
 
     const icon = useMemo(() => {
         if (!feedbackData) return "icon-info"
+        if (feedbackData.icon) return feedbackData.icon
+
         switch (feedbackData.severity) {
             case FeedbackSeverity.SUCCESS:
                 return "icon-check-circle-2"
@@ -38,23 +38,28 @@ export const FeedbackChip = ({ show, feedbackData, onHide }: Props) => {
 
     return show && feedbackData ? (
         <Animated.View style={styles.container} entering={FadeIn} exiting={FadeOut}>
-            <AnimatedPressable
-                pointerEvents={"auto"}
-                entering={ZoomInEasyUp}
-                exiting={ZoomOutEasyUp}
-                style={[styles.chip]}>
+            <Animated.View testID="FEEDBACK_CHIP" entering={ZoomInEasyUp} exiting={ZoomOutEasyUp} style={[styles.chip]}>
                 <Animated.View style={styles.innerContainer}>
                     {feedbackData.severity !== FeedbackSeverity.LOADING ? (
-                        <BaseIcon name={icon} size={16} color={theme.colors.feedbackChip.icon[feedbackData.severity]} />
+                        <BaseIcon
+                            testID="FEEDBACK_CHIP_ICON"
+                            name={icon}
+                            size={16}
+                            color={theme.colors.feedbackChip.icon[feedbackData.severity]}
+                        />
                     ) : (
                         <Spinner size={16} color={theme.colors.feedbackChip.icon[feedbackData.severity]} />
                     )}
-                    <BaseText typographyFont="bodySemiBold" color={theme.colors.feedbackChip.text}>
+                    <BaseText
+                        testID="FEEDBACK_CHIP_MESSAGE"
+                        typographyFont="bodySemiBold"
+                        color={theme.colors.feedbackChip.text}>
                         {feedbackData.message}
                     </BaseText>
                     {feedbackData.type === FeedbackType.PERMANENT && (
                         <TouchableOpacity onPress={onHide}>
                             <BaseIcon
+                                testID="FEEDBACK_CHIP_CLOSE_BUTTON"
                                 name="icon-x"
                                 size={16}
                                 borderRadius={20}
@@ -63,7 +68,7 @@ export const FeedbackChip = ({ show, feedbackData, onHide }: Props) => {
                         </TouchableOpacity>
                     )}
                 </Animated.View>
-            </AnimatedPressable>
+            </Animated.View>
         </Animated.View>
     ) : null
 }

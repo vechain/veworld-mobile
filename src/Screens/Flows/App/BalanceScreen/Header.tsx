@@ -135,9 +135,10 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                 <TouchableOpacity
                     onPress={() => {
                         Feedback.show({
-                            severity: FeedbackSeverity.WARNING,
-                            type: FeedbackType.PERMANENT,
-                            message: "Test",
+                            severity: FeedbackSeverity.INFO,
+                            type: FeedbackType.ALERT,
+                            message: "Address copied!",
+                            icon: "icon-wallet",
                         })
                     }}>
                     <BaseText
