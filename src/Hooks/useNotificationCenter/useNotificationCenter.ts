@@ -12,7 +12,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, info } from "~Utils"
+import { AddressUtils, error, info } from "~Utils"
 import { ERROR_EVENTS } from "../../Constants"
 
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
@@ -40,13 +40,16 @@ const isRetryableError = (err: any): boolean => {
 export const useNotificationCenter = () => {
     const dispatch = useAppDispatch()
     const accounts = useAppSelector(selectAccounts)
+
     const lastSuccessfulRegistration = useAppSelector(selectLastSuccessfulRegistration)
     const lastSubscriptionId = useAppSelector(selectLastSubscriptionId)
     const lastWalletAddresses = useAppSelector(selectLastWalletAddresses)
-    const isRegistering = useRef(false)
+
     const walletAddresses = useMemo(() => accounts.map(account => account.address), [accounts])
     const sortedWalletAddresses = useMemo(() => [...walletAddresses].sort(), [walletAddresses])
     const sortedLastWalletAddresses = useMemo(() => [...(lastWalletAddresses ?? [])].sort(), [lastWalletAddresses])
+
+    const isRegistering = useRef(false)
 
     const shouldRegister = useCallback(
         (currentSubscriptionId: string | null): boolean => {
@@ -75,7 +78,9 @@ export const useNotificationCenter = () => {
             // Check if wallet addresses have changed
             if (
                 sortedWalletAddresses.length !== sortedLastWalletAddresses.length ||
-                !sortedWalletAddresses.every((addr, idx) => addr === sortedLastWalletAddresses[idx])
+                !sortedWalletAddresses.every((addr, idx) =>
+                    AddressUtils.compareAddresses(addr, sortedLastWalletAddresses[idx]),
+                )
             ) {
                 info(NOTIFICATION_CENTER_EVENT, "Should register: wallet addresses changed")
                 return true
@@ -123,7 +128,7 @@ export const useNotificationCenter = () => {
 
             info(NOTIFICATION_CENTER_EVENT, "Registering push notification", {
                 walletCount: walletAddresses.length,
-                subscriptionId,
+                registerUrl,
             })
 
             const response = await fetch(registerUrl, {
