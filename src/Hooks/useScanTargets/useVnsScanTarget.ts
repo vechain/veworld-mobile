@@ -20,8 +20,8 @@ export const useVnsScanTarget = () => {
 
     const fetchVnsNameFromAddress = useCallback(
         async (address: string) => {
-            const [{ name }] = await getVnsName(address)
-            return name || undefined
+            const [result] = await getVnsName(address)
+            return result?.name || undefined
         },
         [getVnsName],
     )
