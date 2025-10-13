@@ -80,7 +80,7 @@ export const TokenCard = ({ token }: Props) => {
                 return (
                     <BaseView flexDirection="row" gap={4} overflow="hidden">
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="smallCaptionSemiBold"
                             numberOfLines={1}
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL_1">
@@ -92,7 +92,7 @@ export const TokenCard = ({ token }: Props) => {
                             color={theme.colors.activityCard.subtitleLight}
                         />
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="smallCaptionSemiBold"
                             numberOfLines={1}
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL_2">
@@ -106,7 +106,7 @@ export const TokenCard = ({ token }: Props) => {
                 return (
                     <BaseView flexDirection="row" gap={4}>
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="smallCaptionSemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL">
                             {token.symbol}
@@ -168,7 +168,7 @@ export const TokenCard = ({ token }: Props) => {
                 {symbol ? (
                     <BaseView flexDirection="column" flexGrow={0} flexShrink={1}>
                         <BaseText
-                            typographyFont="subSubTitleSemiBold"
+                            typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.title}
                             flexDirection="row"
                             numberOfLines={1}
@@ -180,7 +180,7 @@ export const TokenCard = ({ token }: Props) => {
                 ) : (
                     <BaseText
                         flex={1}
-                        typographyFont="subSubTitleSemiBold"
+                        typographyFont="bodySemiBold"
                         color={theme.colors.activityCard.title}
                         flexDirection="row"
                         numberOfLines={1}>
@@ -199,7 +199,7 @@ export const TokenCard = ({ token }: Props) => {
                 {showFiatBalance ? (
                     <>
                         <BaseText
-                            typographyFont="subSubTitleSemiBold"
+                            typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.title}
                             align="right"
                             numberOfLines={1}
@@ -208,7 +208,7 @@ export const TokenCard = ({ token }: Props) => {
                             {fiatBalance}
                         </BaseText>
                         <BaseText
-                            typographyFont="bodyMedium"
+                            typographyFont="captionSemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             align="right"
                             numberOfLines={1}
