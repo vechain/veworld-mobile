@@ -12,10 +12,10 @@ import { FeedbackSeverity, FeedbackShowArgs, FeedbackType } from "../Model"
 type Props = {
     show: boolean
     feedbackData: FeedbackShowArgs | null
-    onHide: () => void
+    onDismiss: () => void
 }
 
-export const FeedbackChip = ({ show, feedbackData, onHide }: Props) => {
+export const FeedbackChip = ({ show, feedbackData, onDismiss }: Props) => {
     const inset = useSafeAreaInsets()
     const { styles, theme } = useThemedStyles(baseStyle({ top: inset.top + 8 }))
 
@@ -57,7 +57,7 @@ export const FeedbackChip = ({ show, feedbackData, onHide }: Props) => {
                         {feedbackData.message}
                     </BaseText>
                     {feedbackData.type === FeedbackType.PERMANENT && (
-                        <TouchableOpacity onPress={onHide}>
+                        <TouchableOpacity onPress={onDismiss}>
                             <BaseIcon
                                 testID="FEEDBACK_CHIP_CLOSE_BUTTON"
                                 name="icon-x"

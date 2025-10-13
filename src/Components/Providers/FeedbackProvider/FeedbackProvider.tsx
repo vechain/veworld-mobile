@@ -51,13 +51,7 @@ export const FeedbackProvider = ({ children }: { children: React.ReactNode }) =>
     return (
         <>
             {children}
-            <FeedbackChip
-                show={show}
-                feedbackData={feedbackData}
-                onHide={() => {
-                    onDismiss()
-                }}
-            />
+            <FeedbackChip show={show} feedbackData={feedbackData} onDismiss={onDismiss} />
         </>
     )
 }
