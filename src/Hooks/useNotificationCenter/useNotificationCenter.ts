@@ -205,7 +205,7 @@ export const useNotificationCenter = () => {
             info(NOTIFICATION_CENTER_EVENT, "Attempting push notification registration")
             await mutateAsync(subId)
         } catch (err) {
-            error(ERROR_EVENTS.ONE_SIGNAL, err)
+            error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
         } finally {
             isRegistering.current = false
         }
