@@ -5,6 +5,7 @@ import {
     SendReceiveBottomSheetOpenProps,
     SendReceiveBsTab,
 } from "~Components/Reusable/BottomSheets/SendReceiveBottomSheet"
+import { ScanTarget } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
 import { UseScanTargetArgs, useScanTargets } from "~Hooks/useScanTargets"
 
@@ -33,9 +34,15 @@ export const useCameraBottomSheet = ({ targets, sourceScreen, title, description
 
     const RenderCameraModal = useMemo(
         () => (
-            <SendReceiveBottomSheet ref={scanAddressSheetRef} onScan={onScan} title={title} description={description} />
+            <SendReceiveBottomSheet
+                ref={scanAddressSheetRef}
+                onScan={onScan}
+                title={title}
+                description={description}
+                hasWCTarget={targets.includes(ScanTarget.WALLET_CONNECT)}
+            />
         ),
-        [scanAddressSheetRef, onScan, title, description],
+        [scanAddressSheetRef, onScan, title, description, targets],
     )
 
     return { RenderCameraModal, handleOpenCamera, handleOpenOnlyScanCamera }

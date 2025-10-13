@@ -1257,6 +1257,7 @@
   "VIEW_ON_EXPLORER": "View on explorer",
   "WALLETS_SAVED_ON_DRIVE": "wallets saved on Google Drive.",
   "WALLETS_SAVED_ON_ICLOUD": "wallets saved on iCloud.",
+  "WALLET_CONNECT_SUPPORTED": "WalletConnect supported",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} accounts",
   "WALLET_LABEL_ACCOUNT": "Account",
   "WALLET_LABEL_WALLET": "Wallet",

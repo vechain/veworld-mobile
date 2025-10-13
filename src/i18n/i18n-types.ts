@@ -289,6 +289,10 @@ type RootTranslation = {
 	 */
 	ADD_APP: string
 	/**
+	 * S​c​a​n​ ​a​ ​w​a​l​l​e​t​ ​Q​R​ ​c​o​d​e​ ​t​o​ ​a​d​d​ ​a​s​ ​c​o​n​t​a​c​t
+	 */
+	ADD_CONTACT_QR_DESCRIPTION: string
+	/**
 	 * A​d​d​ ​W​a​l​l​e​t
 	 */
 	ADD_WALLET: string
@@ -671,10 +675,6 @@ type RootTranslation = {
 	 * I​n​s​e​r​t​ ​t​h​e​ ​r​e​q​u​i​r​e​d​ ​d​a​t​a​ ​t​o​ ​a​d​d​ ​a​ ​n​e​w​ ​c​o​n​t​a​c​t
 	 */
 	BD_ADD_CONTACT_DISCLAIMER: string
-	/**
-	 * S​c​a​n​ ​a​ ​w​a​l​l​e​t​ ​Q​R​ ​c​o​d​e​ ​t​o​ ​a​d​d​ ​a​s​ ​c​o​n​t​a​c​t
-	 */
-	ADD_CONTACT_QR_DESCRIPTION: string
 	/**
 	 * Y​o​u​ ​c​a​n​c​e​l​l​e​d​ ​u​s​i​n​g​ ​B​i​o​m​e​t​r​i​c​s​ ​t​o​ ​a​u​t​h​e​n​t​i​c​a​t​e​.​ ​Y​o​u​ ​m​u​s​t​ ​b​e​ ​a​u​t​h​e​n​t​i​c​a​t​e​d​ ​t​o​ ​u​s​e​ ​V​e​W​o​r​l​d​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​R​e​s​e​t​ ​t​h​e​ ​W​a​l​l​e​t​,​ ​o​r​ ​R​e​t​r​y​ ​a​u​t​h​e​n​t​i​c​a​t​i​n​g​?
 	 */
@@ -1618,10 +1618,6 @@ type RootTranslation = {
 	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
 	 */
 	BTN_SCAN_QR_CODE: string
-	/**
-	 * S​c​a​n​ ​a​ ​Q​R​ ​c​o​d​e
-	 */
-	SCAN_QR_CODE: string
 	/**
 	 * C​r​e​a​t​e​ ​p​a​s​s​w​o​r​d
 	 */
@@ -3991,6 +3987,10 @@ type RootTranslation = {
 	 */
 	SB_YOUR_WALLETS: string
 	/**
+	 * S​c​a​n​ ​a​ ​Q​R​ ​c​o​d​e
+	 */
+	SCAN_QR_CODE: string
+	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
 	SECURITY_BACKUP_BTN: string
@@ -5148,6 +5148,10 @@ type RootTranslation = {
 	 */
 	WALLETS_SAVED_ON_ICLOUD: string
 	/**
+	 * W​a​l​l​e​t​C​o​n​n​e​c​t​ ​s​u​p​p​o​r​t​e​d
+	 */
+	WALLET_CONNECT_SUPPORTED: string
+	/**
 	 * {​c​o​u​n​t​}​ ​a​c​c​o​u​n​t​s
 	 * @param {number} count
 	 */
@@ -5587,6 +5591,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ADD_APP: () => LocalizedString
 	/**
+	 * Scan a wallet QR code to add as contact
+	 */
+	ADD_CONTACT_QR_DESCRIPTION: () => LocalizedString
+	/**
 	 * Add Wallet
 	 */
 	ADD_WALLET: () => LocalizedString
@@ -5963,10 +5971,6 @@ Try reconnect your device to the internet.
 	 * Insert the required data to add a new contact
 	 */
 	BD_ADD_CONTACT_DISCLAIMER: () => LocalizedString
-	/**
-	 * Scan a wallet QR code to add as contact
-	 */
-	ADD_CONTACT_QR_DESCRIPTION: () => LocalizedString
 	/**
 	 * You cancelled using Biometrics to authenticate. You must be authenticated to use VeWorld. Do you want to Reset the Wallet, or Retry authenticating?
 	 */
@@ -6905,10 +6909,6 @@ Thanks for your patience!
 	 * Scan QR Code
 	 */
 	BTN_SCAN_QR_CODE: () => LocalizedString
-	/**
-	 * Scan a QR code
-	 */
-	SCAN_QR_CODE: () => LocalizedString
 	/**
 	 * Create password
 	 */
@@ -9243,6 +9243,10 @@ Thanks for your patience!
 	 */
 	SB_YOUR_WALLETS: () => LocalizedString
 	/**
+	 * Scan a QR code
+	 */
+	SCAN_QR_CODE: () => LocalizedString
+	/**
 	 * Backup now
 	 */
 	SECURITY_BACKUP_BTN: () => LocalizedString
@@ -10386,6 +10390,10 @@ Here's what it's all about:
 	 * wallets saved on iCloud.
 	 */
 	WALLETS_SAVED_ON_ICLOUD: () => LocalizedString
+	/**
+	 * WalletConnect supported
+	 */
+	WALLET_CONNECT_SUPPORTED: () => LocalizedString
 	/**
 	 * {count} accounts
 	 */

@@ -428,6 +428,7 @@ export enum COLORS {
     BALANCE_BACKGROUND = "#1D173A",
     BALANCE_BACKGROUND_50 = "rgba(29, 23, 58, 0.50)",
     BALANCE_BACKGROUND_80 = "rgba(29, 23, 58, 0.80)",
+    BALANCE_BACKGROUND_95 = "rgba(29, 23, 58, 0.95)",
     BALANCE_BACKGROUND_GRADIENT_END = "#423483",
     // App-level background tokens (do not reuse for non-background surfaces)
     APP_BACKGROUND_LIGHT = "#f2f2f7",

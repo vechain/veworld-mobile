@@ -2,11 +2,12 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { Canvas, Fill, Skia } from "@shopify/react-native-skia"
 import { Camera } from "expo-camera"
 import React, { forwardRef, RefObject, useCallback, useEffect, useMemo, useState } from "react"
-import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
+import { LayoutChangeEvent, StyleSheet, TouchableOpacity, View } from "react-native"
 import { useDerivedValue, useSharedValue } from "react-native-reanimated"
 import { Camera as RNVCamera, useCameraDevice, useCodeScanner } from "react-native-vision-camera"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { BaseTabs } from "~Components/Base/BaseTabs"
+import { WalletConnectIcon } from "~Components/Reusable/WalletConnectIcon"
 import { COLORS } from "~Constants"
 import { useAppState, useBottomSheetModal, useCameraPermissions, useThemedStyles } from "~Hooks"
 import { useQrScanDetection } from "~Hooks/useQrScanDetection"
@@ -30,6 +31,11 @@ type Props = {
      * @default QR_CODE_<tab>_DESCRIPTION
      */
     description?: string
+    /**
+     * Boolean to indicate if it has a WC target.
+     * @default false
+     */
+    hasWCTarget?: boolean
 }
 
 export type SendReceiveBottomSheetOpenProps<TTabs extends SendReceiveBsTab[] | readonly SendReceiveBsTab[]> = {
@@ -44,6 +50,7 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
     description,
     onScan,
     onClose,
+    hasWCTarget,
 }: Props &
     SendReceiveBottomSheetOpenProps<TTabs> & {
         onClose: () => void
@@ -97,19 +104,45 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
     const children = useMemo(() => {
         return (
             <>
-                <BaseView py={24} px={16} justifyContent="center" flexDirection="row" position="relative">
-                    <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.WHITE}>
-                        {title ?? LL[`QR_CODE_${StringUtils.toUppercase(selectedTab)}_TITLE`]()}
-                    </BaseText>
-                    <BaseView style={styles.closeIconContainer}>
+                <BaseView flexDirection="column" gap={16} pt={16} px={16} position="relative">
+                    <BaseView justifyContent="space-between" flexDirection="row" alignItems="center">
+                        {/* This is an hidden element, used to simply put the title right in the middle */}
+                        <BaseView style={[styles.iconContainer, styles.hiddenElement]}>
+                            <BaseIcon name="icon-x" color={COLORS.WHITE} size={20} />
+                        </BaseView>
+                        <BaseText
+                            typographyFont="subSubTitleSemiBold"
+                            color={COLORS.WHITE}
+                            flex={1}
+                            align="center"
+                            style={styles.title}>
+                            {title ?? LL[`QR_CODE_${StringUtils.toUppercase(selectedTab)}_TITLE`]()}
+                        </BaseText>
                         <TouchableOpacity style={[styles.iconContainer]} onPress={onClose}>
                             <BaseIcon name="icon-x" color={COLORS.WHITE} size={20} />
                         </TouchableOpacity>
                     </BaseView>
+                    <BaseText typographyFont="captionMedium" color={COLORS.WHITE} align="center">
+                        {description ?? LL[`QR_CODE_${StringUtils.toUppercase(selectedTab)}_DESCRIPTION`]()}
+                    </BaseText>
+                    {hasWCTarget && (
+                        <View style={styles.walletConnectWrapper}>
+                            <BaseView
+                                flexDirection="row"
+                                gap={12}
+                                borderRadius={99}
+                                py={2}
+                                px={8}
+                                mt={24}
+                                bg={COLORS.BALANCE_BACKGROUND_95}>
+                                <WalletConnectIcon color={COLORS.WHITE} />
+                                <BaseText typographyFont="captionMedium" color={COLORS.WHITE}>
+                                    {LL.WALLET_CONNECT_SUPPORTED()}
+                                </BaseText>
+                            </BaseView>
+                        </View>
+                    )}
                 </BaseView>
-                <BaseText typographyFont="captionMedium" color={COLORS.WHITE} align="center">
-                    {description ?? LL[`QR_CODE_${StringUtils.toUppercase(selectedTab)}_DESCRIPTION`]()}
-                </BaseText>
                 {selectedTab === "receive" ? (
                     <ReceiveTab />
                 ) : (
@@ -138,14 +171,17 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
             </>
         )
     }, [
+        styles.iconContainer,
+        styles.hiddenElement,
+        styles.title,
+        styles.walletConnectWrapper,
+        styles.tabElement,
         title,
         LL,
         selectedTab,
-        styles.closeIconContainer,
-        styles.iconContainer,
-        styles.tabElement,
         onClose,
         description,
+        hasWCTarget,
         handleCheckPermissions,
         hasCameraPerms,
         onScanRootLayout,
@@ -195,7 +231,7 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
 }
 
 export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function SendReceiveBottomSheet(
-    { onScan, title, description },
+    { onScan, title, description, hasWCTarget },
     ref,
 ) {
     const { styles } = useThemedStyles(baseStyles)
@@ -217,6 +253,7 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                     onScan={onScan}
                     title={title}
                     description={description}
+                    hasWCTarget={hasWCTarget}
                 />
             )}
         </BaseBottomSheet>
@@ -233,12 +270,21 @@ const baseStyles = () =>
             backgroundColor: "rgba(0, 0, 0, 0.30)",
             borderRadius: 99,
         },
-        closeIconContainer: {
-            position: "absolute",
-            top: 16,
-            right: 16,
+        title: {
+            verticalAlign: "middle",
+        },
+        hiddenElement: {
+            opacity: 0,
+            pointerEvents: "none",
+        },
+        walletConnectWrapper: {
+            top: "100%",
+            left: 16,
+            width: "100%",
             flexDirection: "column",
+            alignItems: "center",
             justifyContent: "center",
+            position: "absolute",
         },
 
         qrCodeWrapper: {
