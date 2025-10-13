@@ -1257,6 +1257,7 @@
   "VIEW_ON_EXPLORER": "Gezginde görüntüle",
   "WALLETS_SAVED_ON_DRIVE": "cüzdanlar Google Drive'da kaydedildi.",
   "WALLETS_SAVED_ON_ICLOUD": "cüzdanlar iCloud'da kaydedildi.",
+  "WALLET_CONNECT_SUPPORTED": "WalletConnect destekleniyor",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} hesap",
   "WALLET_LABEL_ACCOUNT": "Hesap",
   "WALLET_LABEL_WALLET": "Cüzdan",

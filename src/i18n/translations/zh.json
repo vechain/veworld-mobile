@@ -1257,6 +1257,7 @@
   "VIEW_ON_EXPLORER": "在浏览器上查看",
   "WALLETS_SAVED_ON_DRIVE": "钱包保存在谷歌云端硬盘上。",
   "WALLETS_SAVED_ON_ICLOUD": "钱包保存在iCloud上。",
+  "WALLET_CONNECT_SUPPORTED": "支持WalletConnect",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} 个账户",
   "WALLET_LABEL_ACCOUNT": "账户",
   "WALLET_LABEL_WALLET": "钱包",

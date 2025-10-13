@@ -1257,6 +1257,7 @@
   "VIEW_ON_EXPLORER": "在瀏覽器中查看",
   "WALLETS_SAVED_ON_DRIVE": "錢包已保存在 Google 雲端硬碟。",
   "WALLETS_SAVED_ON_ICLOUD": "錢包已保存在 iCloud。",
+  "WALLET_CONNECT_SUPPORTED": "支持 WalletConnect",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} 個帳戶",
   "WALLET_LABEL_ACCOUNT": "帳戶",
   "WALLET_LABEL_WALLET": "錢包",

@@ -1257,6 +1257,7 @@
   "VIEW_ON_EXPLORER": "탐색기에서 보기",
   "WALLETS_SAVED_ON_DRIVE": "Google 드라이브에 저장된 지갑.",
   "WALLETS_SAVED_ON_ICLOUD": "iCloud에 저장된 지갑.",
+  "WALLET_CONNECT_SUPPORTED": "WalletConnect 지원됨",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} 계정",
   "WALLET_LABEL_ACCOUNT": "계정",
   "WALLET_LABEL_WALLET": "지갑",

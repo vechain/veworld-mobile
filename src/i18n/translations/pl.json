@@ -1257,6 +1257,7 @@
   "VIEW_ON_EXPLORER": "Zobacz w eksploratorze",
   "WALLETS_SAVED_ON_DRIVE": "portfele zapisane na Dysku Google.",
   "WALLETS_SAVED_ON_ICLOUD": "portfele zapisane na iCloud.",
+  "WALLET_CONNECT_SUPPORTED": "Obsługiwany WalletConnect",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} kont",
   "WALLET_LABEL_ACCOUNT": "Konto",
   "WALLET_LABEL_WALLET": "Portfel",

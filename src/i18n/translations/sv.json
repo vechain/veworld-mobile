@@ -1257,6 +1257,7 @@
   "VIEW_ON_EXPLORER": "Visa på utforskaren",
   "WALLETS_SAVED_ON_DRIVE": "plånböcker sparade på Google Drive.",
   "WALLETS_SAVED_ON_ICLOUD": "plånböcker sparade på iCloud.",
+  "WALLET_CONNECT_SUPPORTED": "WalletConnect stöds",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} konton",
   "WALLET_LABEL_ACCOUNT": "Konto",
   "WALLET_LABEL_WALLET": "Plånbok",

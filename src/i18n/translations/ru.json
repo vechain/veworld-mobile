@@ -1257,6 +1257,7 @@
   "VIEW_ON_EXPLORER": "Просмотреть в проводнике",
   "WALLETS_SAVED_ON_DRIVE": "кошельки сохранены на Google Drive.",
   "WALLETS_SAVED_ON_ICLOUD": "кошельки сохранены на iCloud.",
+  "WALLET_CONNECT_SUPPORTED": "Поддерживается WalletConnect",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} аккаунтов",
   "WALLET_LABEL_ACCOUNT": "Аккаунт",
   "WALLET_LABEL_WALLET": "Кошелек",

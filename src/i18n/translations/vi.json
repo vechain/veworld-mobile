@@ -1257,6 +1257,7 @@
   "VIEW_ON_EXPLORER": "Xem trên trình khám phá",
   "WALLETS_SAVED_ON_DRIVE": "ví được lưu trên Google Drive.",
   "WALLETS_SAVED_ON_ICLOUD": "ví được lưu trên iCloud.",
+  "WALLET_CONNECT_SUPPORTED": "Hỗ trợ WalletConnect",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} tài khoản",
   "WALLET_LABEL_ACCOUNT": "Tài khoản",
   "WALLET_LABEL_WALLET": "Ví",

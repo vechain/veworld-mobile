@@ -1257,6 +1257,7 @@
   "VIEW_ON_EXPLORER": "Bekijk op verkenner",
   "WALLETS_SAVED_ON_DRIVE": "portefeuilles opgeslagen op Google Drive.",
   "WALLETS_SAVED_ON_ICLOUD": "portefeuilles opgeslagen op iCloud.",
+  "WALLET_CONNECT_SUPPORTED": "WalletConnect ondersteund",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} accounts",
   "WALLET_LABEL_ACCOUNT": "Account",
   "WALLET_LABEL_WALLET": "Portemonnee",

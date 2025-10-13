@@ -1257,6 +1257,7 @@
   "VIEW_ON_EXPLORER": "Ver en el explorador",
   "WALLETS_SAVED_ON_DRIVE": "monederos guardados en Google Drive.",
   "WALLETS_SAVED_ON_ICLOUD": "monederos guardados en iCloud.",
+  "WALLET_CONNECT_SUPPORTED": "Compatible con WalletConnect",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} cuentas",
   "WALLET_LABEL_ACCOUNT": "Cuenta",
   "WALLET_LABEL_WALLET": "Cartera",

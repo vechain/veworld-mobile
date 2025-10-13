@@ -1257,6 +1257,7 @@
   "VIEW_ON_EXPLORER": "एक्सप्लोरर पर देखें",
   "WALLETS_SAVED_ON_DRIVE": "वॉलेट्स गूगल ड्राइव पर सहेजे गए।",
   "WALLETS_SAVED_ON_ICLOUD": "वॉलेट्स iCloud पर सहेजे गए।",
+  "WALLET_CONNECT_SUPPORTED": "वॉलेट कनेक्ट समर्थित है",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} खाते",
   "WALLET_LABEL_ACCOUNT": "खाता",
   "WALLET_LABEL_WALLET": "वॉलेट",

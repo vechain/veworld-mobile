@@ -1257,6 +1257,7 @@
   "VIEW_ON_EXPLORER": "エクスプローラで表示",
   "WALLETS_SAVED_ON_DRIVE": "Googleドライブに保存されたウォレット。",
   "WALLETS_SAVED_ON_ICLOUD": "iCloudに保存されたウォレット。",
+  "WALLET_CONNECT_SUPPORTED": "WalletConnectに対応",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} アカウント",
   "WALLET_LABEL_ACCOUNT": "アカウント",
   "WALLET_LABEL_WALLET": "ウォレット",
