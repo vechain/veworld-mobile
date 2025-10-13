@@ -74,13 +74,13 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const { register } = useNotificationCenter()
 
     const attemptPushRegistration = useCallback(async () => {
-        if (!notificationCenter.registration.enabled) {
+        if (!notificationCenter?.registration?.enabled) {
             return
         }
 
         // All logic (locking, OneSignal checks, shouldRegister) is now in the hook
         await register()
-    }, [register, notificationCenter.registration.enabled])
+    }, [register, notificationCenter?.registration?.enabled])
 
     const initializeOneSignal = useCallback(async () => {
         const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
