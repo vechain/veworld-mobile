@@ -10,6 +10,7 @@ import { WALLET_STATUS } from "~Model/Wallet"
 import { MMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
 import * as dotenv from "dotenv"
+import { View } from "react-native"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
 
@@ -37,6 +38,11 @@ jest.mock("react-native-quick-crypto", () => ({
 }))
 
 jest.mock("react-native-keyboard-controller", () => require("react-native-keyboard-controller/jest"))
+jest.mock("react-native-vision-camera", () => ({
+    Camera: View,
+    useCameraDevice: jest.fn(),
+    useCodeScanner: jest.fn(),
+}))
 
 jest.mock("react-native-onesignal", () => ({
     ...jest.requireActual("react-native-onesignal"),
