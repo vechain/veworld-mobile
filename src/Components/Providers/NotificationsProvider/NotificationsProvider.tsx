@@ -78,8 +78,11 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
             return
         }
 
-        // All logic (locking, OneSignal checks, shouldRegister) is now in the hook
-        await register()
+        try {
+            await register()
+        } catch (err) {
+            error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
+        }
     }, [register, notificationCenter?.registration?.enabled])
 
     const initializeOneSignal = useCallback(async () => {
