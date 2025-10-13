@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { PixelRatio, StyleSheet, TouchableOpacity } from "react-native"
 import Animated, { FadeIn, FadeOut, LinearTransition } from "react-native-reanimated"
 import { BaseText } from "~Components"
 import { useDevice } from "~Components/Providers/DeviceProvider"
@@ -40,7 +40,6 @@ export const CurrentBalance = () => {
         <TouchableOpacity onPress={onPress}>
             <Animated.View style={styles.root} layout={LinearTransition.duration(300)}>
                 <BaseText
-                    adjustsFontSizeToFit
                     typographyFont="biggerTitleMedium"
                     fontWeight="400"
                     color={COLORS.PURPLE_LABEL}
@@ -84,10 +83,10 @@ const baseStyles = () =>
         },
         balance: {
             flexDirection: "row",
-            minHeight: 46,
+            minHeight: 46 * PixelRatio.getFontScale(),
         },
         currency: {
-            height: 40,
+            height: 40 * PixelRatio.getFontScale(),
             alignItems: "center",
         },
     })
