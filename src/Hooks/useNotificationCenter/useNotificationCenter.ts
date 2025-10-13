@@ -18,6 +18,8 @@ import { ERROR_EVENTS } from "../../Constants"
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
 const MAX_RETRIES = 3
 
+const NOTIFICATION_CENTER_EVENT = ERROR_EVENTS.NOTIFICATION_CENTER
+
 interface RegistrationPayload {
     walletAddresses: string[]
     provider: string
@@ -49,18 +51,24 @@ export const useNotificationCenter = () => {
     const shouldRegister = useCallback(
         (currentSubscriptionId: string | null): boolean => {
             if (!lastSuccessfulRegistration) {
-                info("APP", "Should register: never registered before")
+                info(NOTIFICATION_CENTER_EVENT, "Should register: never registered before")
                 return true
             }
 
             const timeSinceLastSuccess = Date.now() - lastSuccessfulRegistration
             if (timeSinceLastSuccess >= THIRTY_DAYS_MS) {
-                info("APP", "Should register: more than 30 days since last success")
+                info(NOTIFICATION_CENTER_EVENT, "Should register: more than 30 days since last success")
                 return true
             }
 
             if (currentSubscriptionId !== lastSubscriptionId) {
-                info("APP", "Should register: subscription ID changed", lastSubscriptionId, "->", currentSubscriptionId)
+                info(
+                    NOTIFICATION_CENTER_EVENT,
+                    "Should register: subscription ID changed",
+                    lastSubscriptionId,
+                    "->",
+                    currentSubscriptionId,
+                )
                 return true
             }
 
@@ -69,12 +77,12 @@ export const useNotificationCenter = () => {
                 sortedWalletAddresses.length !== sortedLastWalletAddresses.length ||
                 !sortedWalletAddresses.every((addr, idx) => addr === sortedLastWalletAddresses[idx])
             ) {
-                info("APP", "Should register: wallet addresses changed")
+                info(NOTIFICATION_CENTER_EVENT, "Should register: wallet addresses changed")
                 return true
             }
 
             info(
-                "APP",
+                NOTIFICATION_CENTER_EVENT,
                 "Should NOT register: recent successful registration with same subscription ID and wallet addresses",
             )
             return false
@@ -100,7 +108,7 @@ export const useNotificationCenter = () => {
             }
 
             if (walletAddresses.length === 0) {
-                info("APP", "No wallet addresses available, skipping registration")
+                info(NOTIFICATION_CENTER_EVENT, "No wallet addresses available, skipping registration")
                 return null
             }
 
@@ -113,7 +121,7 @@ export const useNotificationCenter = () => {
                 },
             }
 
-            info("APP", "Registering push notification", {
+            info(NOTIFICATION_CENTER_EVENT, "Registering push notification", {
                 walletCount: walletAddresses.length,
                 subscriptionId,
             })
@@ -138,7 +146,7 @@ export const useNotificationCenter = () => {
             dispatch(updateLastSubscriptionId(subscriptionId))
             dispatch(updateLastWalletAddresses(walletAddresses))
 
-            info("APP", "Push registration successful at", new Date(now).toISOString())
+            info(NOTIFICATION_CENTER_EVENT, "Push registration successful at", new Date(now).toISOString())
             return response
         },
         [dispatch, walletAddresses],
@@ -157,7 +165,7 @@ export const useNotificationCenter = () => {
             // Exponential backoff: 1s, 2s, 4s
             const delayMs = 1000 * Math.pow(2, attemptIndex)
             info(
-                "APP",
+                NOTIFICATION_CENTER_EVENT,
                 `Push registration failed, retrying in ${delayMs}ms (attempt ${attemptIndex + 1}/${MAX_RETRIES})`,
             )
             return delayMs
@@ -170,12 +178,12 @@ export const useNotificationCenter = () => {
     // Wrapper function that handles all pre-flight checks and locking
     const register = useCallback(async () => {
         if (isRegistering.current) {
-            info("APP", "Registration already in progress, skipping duplicate call")
+            info(NOTIFICATION_CENTER_EVENT, "Registration already in progress, skipping duplicate call")
             return
         }
 
         if (walletAddresses.length === 0) {
-            info("APP", "No wallet addresses available, skipping registration")
+            info(NOTIFICATION_CENTER_EVENT, "No wallet addresses available, skipping registration")
             return
         }
 
@@ -186,10 +194,10 @@ export const useNotificationCenter = () => {
             const subId = await OneSignal.User.pushSubscription.getIdAsync()
 
             if (!shouldRegister(subId)) {
-                info("APP", "Registration skipped - conditions not met")
+                info(NOTIFICATION_CENTER_EVENT, "Registration skipped - conditions not met")
                 return null
             }
-            info("APP", "Attempting push notification registration")
+            info(NOTIFICATION_CENTER_EVENT, "Attempting push notification registration")
             await mutateAsync(subId)
         } catch (err) {
             error(ERROR_EVENTS.ONE_SIGNAL, err)
