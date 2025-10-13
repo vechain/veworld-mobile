@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { PixelRatio, StyleSheet } from "react-native"
 import Animated, {
     FadeIn,
     FadeOut,
@@ -44,7 +44,7 @@ const SlotMachineTextElement = ({
     }, [translate.value])
     return (
         <Animated.Text
-            style={[styles.text, styles.absolute, animatedStyles, { top: 40 * index }]}
+            style={[styles.text, styles.absolute, animatedStyles, { top: 40 * index * PixelRatio.getFontScale() }]}
             key={item.id}
             exiting={FadeOut.duration(300)}
             entering={FadeIn.duration(300)}>
@@ -67,7 +67,7 @@ export const SlotMachineText = ({ value }: Props) => {
     }, [value])
 
     useLayoutEffect(() => {
-        translateY.value = withSpring(40 * parsedValue, undefined)
+        translateY.value = withSpring(40 * parsedValue * PixelRatio.getFontScale(), undefined)
     }, [parsedValue, translateY, value])
 
     return (
@@ -103,10 +103,10 @@ const baseStyles = () =>
             overflow: "hidden",
             flexDirection: "column",
             justifyContent: "center",
-            height: 46,
+            height: 46 * PixelRatio.getFontScale(),
         },
         innerContainer: {
-            height: 40,
+            height: 40 * PixelRatio.getFontScale(),
             position: "relative",
             overflow: "hidden",
         },
