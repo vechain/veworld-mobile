@@ -88,8 +88,10 @@ const baseStyles = () =>
     StyleSheet.create({
         root: {
             height: CHART_HEIGHT,
-            flexGrow: 0.5,
-            flexShrink: 1,
+            width: CHART_WIDTH,
+            flexGrow: 0,
+            flexShrink: 0,
             alignItems: "center",
+            marginHorizontal: 8,
         },
     })

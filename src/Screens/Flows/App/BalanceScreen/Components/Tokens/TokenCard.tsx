@@ -119,9 +119,6 @@ export const TokenCard = ({ token }: Props) => {
 
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
-    // Check if token supports chart display
-    const isChartSupported = useMemo(() => !!getCoinGeckoIdBySymbol[token.symbol], [token.symbol])
-
     // Only allow navigation for tokens with detailed information available
     const isVechainToken = useMemo(() => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol), [token.symbol])
 
@@ -189,11 +186,7 @@ export const TokenCard = ({ token }: Props) => {
                 )}
             </BaseView>
 
-            {isChartSupported && showChart && (
-                <BaseView style={styles.chartSection}>
-                    <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
-                </BaseView>
-            )}
+            <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
 
             <BaseView style={styles.rightSection}>
                 {showFiatBalance ? (
@@ -247,14 +240,6 @@ const baseStyles = () =>
             flex: 1,
             flexShrink: 1,
             alignItems: "center",
-        },
-        chartSection: {
-            minWidth: 60,
-            flexShrink: 0,
-            flexGrow: 0,
-            alignItems: "center",
-            justifyContent: "center",
-            marginHorizontal: 8,
         },
         rightSection: {
             flexDirection: "column",
