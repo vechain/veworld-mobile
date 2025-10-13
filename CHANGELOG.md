@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.7 (2025-10-13)</small>
+
+* build: init ([560f495](https://github.com/vechain/veworld-mobile/commit/560f495))
+* fix: fix navigation with source screen (#3396) ([aa11484](https://github.com/vechain/veworld-mobile/commit/aa11484)), closes [#3396](https://github.com/vechain/veworld-mobile/issues/3396)
+
 ## <small>2.4.6 (2025-10-09)</small>
 
 * build: init ([009f8b6](https://github.com/vechain/veworld-mobile/commit/009f8b6))
