@@ -11,12 +11,11 @@ import {
     NetworkSwitcherContextMenu,
     SelectAccountBottomSheet,
 } from "~Components"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
-import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
-import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useCopyClipboard, useSetSelectedAccount, useThemedStyles } from "~Hooks"
 import { useCameraBottomSheet } from "~Hooks/useCameraBottomSheet"
 import { useVns } from "~Hooks/useVns"
+import { useI18nContext } from "~i18n"
 import { AccountWithDevice, NETWORK_TYPE, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectSelectedNetwork, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
@@ -36,6 +35,8 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
     const network = useAppSelector(selectSelectedNetwork)
 
     const nav = useNavigation()
+    const { LL } = useI18nContext()
+    const { onCopyToClipboard } = useCopyClipboard()
 
     const height = useSharedValue(90)
 
@@ -134,12 +135,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
-                        Feedback.show({
-                            severity: FeedbackSeverity.INFO,
-                            type: FeedbackType.ALERT,
-                            message: "Address copied!",
-                            icon: "icon-wallet",
-                        })
+                        onCopyToClipboard(account.address, LL.COMMON_LBL_ADDRESS(), true, "icon-wallet")
                     }}>
                     <BaseText
                         typographyFont="bodySemiBold"

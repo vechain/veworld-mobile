@@ -608,6 +608,10 @@ type RootTranslation = {
 	 */
 	BALANCE_ACTION_BUY: string
 	/**
+	 * E​a​r​n
+	 */
+	BALANCE_ACTION_EARN: string
+	/**
 	 * O​t​h​e​r
 	 */
 	BALANCE_ACTION_OTHER: string
@@ -3293,7 +3297,7 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: string
 	/**
-	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
+	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​!
 	 * @param {string} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
@@ -5281,10 +5285,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * E​a​r​n
-	 */
-	BALANCE_ACTION_EARN: string
 }
 
 export type TranslationFunctions = {
@@ -5851,6 +5851,10 @@ Try reconnect your device to the internet.
 	 * Buy
 	 */
 	BALANCE_ACTION_BUY: () => LocalizedString
+	/**
+	 * Earn
+	 */
+	BALANCE_ACTION_EARN: () => LocalizedString
 	/**
 	 * Other
 	 */
@@ -8519,7 +8523,7 @@ Thanks for your patience!
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: () => LocalizedString
 	/**
-	 * {name} copied to clipboard!
+	 * {name} copied!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: string }) => LocalizedString
 	/**
@@ -10470,10 +10474,6 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Earn
-	 */
-	BALANCE_ACTION_EARN: () => LocalizedString
 }
 
 export type Formatters = {

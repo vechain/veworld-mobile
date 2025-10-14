@@ -66,7 +66,9 @@ export const AccountDetailBox: React.FC<Props> = memo(
                     <BaseView style={(styles.leftSubContainer, { opacity: cardOpacity })}>
                         <BaseTouchable
                             style={styles.addressContainer}
-                            action={() => onCopyToClipboard(account.address, LL.COMMON_LBL_ADDRESS())}>
+                            action={() =>
+                                onCopyToClipboard(account.address, LL.COMMON_LBL_ADDRESS(), true, "icon-wallet")
+                            }>
                             <BaseText style={styles.address} typographyFont="captionRegular">
                                 {nameOrAddressFrom}
                             </BaseText>

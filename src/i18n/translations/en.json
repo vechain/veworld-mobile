@@ -804,7 +804,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "Go to NFTs",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} was successfully sent to {to: string}.",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "The associated wallet only has 1 account. Please remove the wallet to remove this account",
-  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} copied to clipboard!",
+  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} copied!",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "The DApp made an invalid request",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "The DApp requested an account that was not found",
   "NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT": "The DApp requested an invalid account",

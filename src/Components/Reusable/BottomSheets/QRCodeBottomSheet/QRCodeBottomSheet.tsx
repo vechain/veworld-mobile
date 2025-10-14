@@ -41,7 +41,7 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
         (text: string, labelName: string) => {
             if (showAddressCheckIcon) return
 
-            onCopyToClipboard(text, labelName, false)
+            onCopyToClipboard(text, labelName, false, "icon-wallet")
             setAddress(LL.COPIED_QR_CODE_FOR_ACCOUNT())
             setTimeout(() => {
                 setAddress(humanAddress)
