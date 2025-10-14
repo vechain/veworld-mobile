@@ -19,7 +19,7 @@ export const CopyToClipboardAddress: React.FC<Props> = ({ address, lenghtBefore,
 
     return (
         <BaseTouchable
-            action={() => onCopyToClipboard(address, LL.COMMON_LBL_ADDRESS(), true, "icon-wallet")}
+            action={() => onCopyToClipboard(address, LL.COMMON_LBL_ADDRESS(), { icon: "icon-wallet" })}
             haptics="Light"
             style={styles.addressValue}>
             <BaseText typographyFont="bodyMedium" style={styles.addressValueLabel}>

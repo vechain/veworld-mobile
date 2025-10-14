@@ -24,7 +24,7 @@ export const TransferClause: React.FC<Props> = memo(({ clause }) => {
                     title={LL.TO()}
                     value={AddressUtils.humanAddress(clause.to)}
                     onValuePress={() =>
-                        onCopyToClipboard(clause.to ?? "", LL.COMMON_LBL_ADDRESS(), true, "icon-wallet")
+                        onCopyToClipboard(clause.to ?? "", LL.COMMON_LBL_ADDRESS(), { icon: "icon-wallet" })
                     }
                     valueIcon="icon-copy"
                 />

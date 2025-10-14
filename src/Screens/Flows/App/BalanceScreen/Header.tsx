@@ -135,7 +135,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
-                        onCopyToClipboard(account.address, LL.COMMON_LBL_ADDRESS(), true, "icon-wallet")
+                        onCopyToClipboard(account.address, LL.COMMON_LBL_ADDRESS(), { icon: "icon-wallet" })
                     }}>
                     <BaseText
                         typographyFont="bodySemiBold"

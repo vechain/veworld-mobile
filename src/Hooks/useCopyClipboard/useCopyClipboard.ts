@@ -8,6 +8,11 @@ import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackPr
 import { Feedback } from "~Components/Providers/FeedbackProvider"
 import { IconKey } from "~Model"
 
+type CopyToClipboardOptions = {
+    icon?: IconKey
+    showNotification?: boolean
+}
+
 /**
  * `useCopyClipboard` is a custom React Hook that provides the ability to copy a string to the system clipboard.
  *
@@ -24,18 +29,22 @@ export const useCopyClipboard = () => {
     const { LL } = useI18nContext()
 
     const onCopyToClipboard = useCallback(
-        (text: string, labelName: string, showNotification = true, icon?: IconKey) => {
+        (
+            text: string,
+            labelName: string,
+            options: CopyToClipboardOptions = { icon: "icon-copy", showNotification: true },
+        ) => {
             Clipboard.setStringAsync(text.toLowerCase())
                 .then(async () => {
                     await HapticsService.triggerImpact({ level: "Light" })
-                    if (showNotification) {
+                    if (options.showNotification) {
                         Feedback.show({
                             severity: FeedbackSeverity.INFO,
                             type: FeedbackType.ALERT,
                             message: LL.NOTIFICATION_COPIED_CLIPBOARD({
                                 name: labelName,
                             }),
-                            icon,
+                            icon: options.icon,
                         })
                     }
                 })
