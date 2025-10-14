@@ -1,6 +1,6 @@
 import React from "react"
 import { TestWrapper } from "~Test"
-import { render, screen } from "@testing-library/react-native"
+import { fireEvent, render, screen } from "@testing-library/react-native"
 import { FeedbackChip } from "./FeedbackChip"
 import { FeedbackSeverity, FeedbackType } from "../Model"
 
@@ -90,5 +90,23 @@ describe("FeedbackChip", () => {
         const closeButton = screen.getByTestId("FEEDBACK_CHIP_CLOSE_BUTTON")
         expect(chip).toBeVisible()
         expect(closeButton).toBeVisible()
+    })
+
+    it("should call onDismiss when the close button is pressed", () => {
+        const onDismissMock = jest.fn()
+        render(
+            <FeedbackChip
+                feedbackData={{ severity: FeedbackSeverity.ERROR, type: FeedbackType.PERMANENT, message: "Test" }}
+                onDismiss={onDismissMock}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
+
+        const closeButton = screen.getByTestId("FEEDBACK_CHIP_CLOSE_BUTTON")
+        fireEvent.press(closeButton)
+
+        expect(onDismissMock).toHaveBeenCalledTimes(1)
     })
 })
