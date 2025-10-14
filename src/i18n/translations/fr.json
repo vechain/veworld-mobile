@@ -878,7 +878,7 @@
   "PUSH_NOTIFICATIONS_VOTE_REMINDER": "Rappel de vote",
   "QR_CODE_CAMERA_PERMS": "Activez les autorisations de votre caméra pour scanner un code QR",
   "QR_CODE_CAMERA_PERMS_CTA": "Activer les autorisations",
-  "QR_CODE_RECEIVE_DESCRIPTION": "Utilisez votre code QR pour recevoir des transferts",
+  "QR_CODE_RECEIVE_DESCRIPTION": "Utilisez votre code pour recevoir des transferts",
   "QR_CODE_RECEIVE_TITLE": "Votre code QR",
   "QR_CODE_SCAN_DESCRIPTION": "Scannez un code pour transférer des fonds ou connecter une dApp",
   "QR_CODE_SCAN_TITLE": "Scanner un code QR",

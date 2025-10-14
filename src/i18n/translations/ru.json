@@ -878,7 +878,7 @@
   "PUSH_NOTIFICATIONS_VOTE_REMINDER": "Напоминание о голосовании",
   "QR_CODE_CAMERA_PERMS": "Разрешите доступ к камере, чтобы сканировать QR-код",
   "QR_CODE_CAMERA_PERMS_CTA": "Разрешить доступ",
-  "QR_CODE_RECEIVE_DESCRIPTION": "Используйте свой QR-код для получения переводов",
+  "QR_CODE_RECEIVE_DESCRIPTION": "Используйте ваш код для получения переводов",
   "QR_CODE_RECEIVE_TITLE": "Ваш QR-код",
   "QR_CODE_SCAN_DESCRIPTION": "Сканируйте код для перевода средств или подключения к dApp",
   "QR_CODE_SCAN_TITLE": "Сканировать QR-код",
