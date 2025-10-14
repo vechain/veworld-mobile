@@ -14,7 +14,6 @@ export const StackedApps = ({ appVotes, roundId }: Pick<B3trXAllocationVoteActiv
         return appVotes
             .map(vote => ({ ...vote, randomValue: randomFn() }))
             .sort((a, b) => a.randomValue - b.randomValue)
-            .slice(0, 3)
     }, [appVotes, roundId])
 
     const appLogoUris = useMemo(() => {

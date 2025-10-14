@@ -45,7 +45,7 @@ export const StackedImages = ({ uris, maxImagesBeforeCompression = 3 }: Props) =
                         typographyFont="smallCaptionSemiBold"
                         color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
                         flexDirection="row">
-                        +{uris.length - maxImagesBeforeCompression - 3}
+                        +{uris.length - maxImagesBeforeCompression}
                     </BaseText>
                 </BaseView>
             )}
