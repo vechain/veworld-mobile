@@ -1,10 +1,9 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
-import React, { RefObject, useCallback, useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, { AnimatedStyle, FadeIn, FadeOut, LinearTransition } from "react-native-reanimated"
-import { AnalyticsEvent, STARGATE_DAPP_URL } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useBrowserNavigation, useThemedStyles } from "~Hooks"
+import { AnalyticsEvent, ScanTarget, STARGATE_DAPP_URL } from "~Constants"
+import { useAnalyticTracking, useBrowserNavigation, useCameraBottomSheet, useThemedStyles } from "~Hooks"
 import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -12,11 +11,10 @@ import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { GlassButtonWithLabel } from "./GlassButton"
 
 type Props = {
-    qrCodeBottomSheetRef: RefObject<BottomSheetModalMethods>
     style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
 }
 
-export const BalanceActions = ({ qrCodeBottomSheetRef, style }: Props) => {
+export const BalanceActions = ({ style }: Props) => {
     const { LL } = useI18nContext()
 
     const { styles } = useThemedStyles(baseStyles)
@@ -27,7 +25,9 @@ export const BalanceActions = ({ qrCodeBottomSheetRef, style }: Props) => {
 
     const account = useAppSelector(selectSelectedAccount)
 
-    const { onOpen: openQRCodeSheet } = useBottomSheetModal({ externalRef: qrCodeBottomSheetRef })
+    const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
+        targets: [ScanTarget.ADDRESS, ScanTarget.VNS],
+    })
 
     const { rawAmount } = useTotalFiatBalance({ address: account.address, enabled: true })
 
@@ -38,7 +38,10 @@ export const BalanceActions = ({ qrCodeBottomSheetRef, style }: Props) => {
 
     const onSend = useCallback(() => nav.navigate(Routes.SELECT_TOKEN_SEND), [nav])
 
-    const onReceive = useCallback(() => openQRCodeSheet(), [openQRCodeSheet])
+    const onReceive = useCallback(
+        () => handleOpenCamera({ tabs: ["scan", "receive"], defaultTab: "receive" }),
+        [handleOpenCamera],
+    )
 
     const onSwap = useCallback(() => nav.navigate(Routes.SWAP), [nav])
 
@@ -74,6 +77,7 @@ export const BalanceActions = ({ qrCodeBottomSheetRef, style }: Props) => {
             <GlassButtonWithLabel label={LL.SWAP()} size="sm" icon="icon-arrow-left-right" onPress={onSwap} />
             <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} size="sm" icon="icon-plus" onPress={onBuy} />
             <GlassButtonWithLabel label={LL.BALANCE_ACTION_EARN()} size="sm" icon={"icon-stargate"} onPress={onEarn} />
+            {RenderCameraModal}
         </Animated.View>
     )
 }
