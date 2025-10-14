@@ -804,7 +804,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "Aller aux NFTs",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} a été envoyé avec succès à {to: string}.",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "Le portefeuille associé ne possède qu'un seul compte. Veuillez supprimer le portefeuille pour supprimer ce compte.",
-  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} copié dans le presse-papiers !",
+  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} copié(e) !",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "La DApp a fait une demande invalide.",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "La DApp a demandé un compte qui n'a pas été trouvé.",
   "NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT": "La DApp a demandé un compte invalide.",

@@ -20,7 +20,7 @@ export const useHomeQrScan = () => {
                 HapticsService.triggerImpact({ level: "Light" })
                 onPair(qrData)
             } else if (AddressUtils.isValid(qrData)) {
-                onCopyToClipboard(qrData, LL.COMMON_LBL_ADDRESS())
+                onCopyToClipboard(qrData, LL.COMMON_LBL_ADDRESS(), { icon: "icon-wallet" })
             } else if (URIUtils.isValid(qrData) && URIUtils.isHttps(qrData)) {
                 onDAppPress({
                     amountOfNavigations: 0,

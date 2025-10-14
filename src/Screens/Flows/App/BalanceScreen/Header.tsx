@@ -12,9 +12,10 @@ import {
     SelectAccountBottomSheet,
 } from "~Components"
 import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
-import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useCopyClipboard, useSetSelectedAccount, useThemedStyles } from "~Hooks"
 import { useCameraBottomSheet } from "~Hooks/useCameraBottomSheet"
 import { useVns } from "~Hooks/useVns"
+import { useI18nContext } from "~i18n"
 import { AccountWithDevice, NETWORK_TYPE, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectSelectedNetwork, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
@@ -34,6 +35,8 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
     const network = useAppSelector(selectSelectedNetwork)
 
     const nav = useNavigation()
+    const { LL } = useI18nContext()
+    const { onCopyToClipboard } = useCopyClipboard()
 
     const height = useSharedValue(90)
 
@@ -84,7 +87,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
     })
 
     const setSelectedAccount = useCallback(
-        (_account: AccountWithDevice | WatchedAccount) => {
+        async (_account: AccountWithDevice | WatchedAccount) => {
             onSetSelectedAccount({ address: _account.address })
         },
         [onSetSelectedAccount],
@@ -126,9 +129,16 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                 />
             )}
 
-            <TouchableOpacity onPress={handleOpenWalletSwitcher}>
-                <BaseView flexDirection="row" gap={12} py={4} px={8} borderRadius={99} style={styles.account}>
+            <BaseView flexDirection="row" gap={12} py={4} px={8} borderRadius={99} style={styles.account}>
+                <TouchableOpacity onPress={handleOpenWalletSwitcher}>
                     <AccountIcon account={account} size={32} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        onCopyToClipboard(account.address, LL.COMMON_LBL_ADDRESS(), {
+                            icon: "icon-wallet",
+                        })
+                    }}>
                     <BaseText
                         typographyFont="bodySemiBold"
                         color={COLORS.PURPLE_LABEL}
@@ -137,8 +147,8 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                         testID="BALANCE_HEADER_DISPLAY_USERNAME">
                         {displayUsername}
                     </BaseText>
-                </BaseView>
-            </TouchableOpacity>
+                </TouchableOpacity>
+            </BaseView>
 
             <BaseView flexDirection="row" gap={12}>
                 <TouchableOpacity onPress={handleOpenQRCode}>

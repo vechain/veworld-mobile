@@ -23,7 +23,7 @@ export const AddressButton: React.FC<Props> = memo(({ address }) => {
             fontSize={10}
             bgColor={theme.colors.primaryReversed}
             title={AddressUtils.humanAddress(address)}
-            action={() => onCopyToClipboard(address, LL.COMMON_LBL_ADDRESS())}
+            action={() => onCopyToClipboard(address, LL.COMMON_LBL_ADDRESS(), { icon: "icon-wallet" })}
             rightIcon={<BaseIcon name="icon-copy" color={color} size={12} style={baseStyles.marginLeft} />}
         />
     )

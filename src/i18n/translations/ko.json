@@ -804,7 +804,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "NFT로 이동",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string}이(가) {to: string}에게 성공적으로 전송되었습니다.",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "연결된 지갑에 계정이 하나만 있습니다. 이 계정을 제거하려면 지갑을 제거하세요.",
-  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string}이(가) 클립보드에 복사되었습니다!",
+  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} 복사되었습니다!",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "DApp에서 잘못된 요청을 했습니다",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "DApp에서 찾을 수 없는 계정을 요청했습니다",
   "NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT": "DApp에서 잘못된 계정을 요청했습니다",

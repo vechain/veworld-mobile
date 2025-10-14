@@ -804,7 +804,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "एनएफटी पर जाएं",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} को सफलतापूर्वक {to: string} को भेजा गया।",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "संबद्ध वॉलेट में केवल 1 खाता है। कृपया इस खाते को हटाने के लिए वॉलेट को हटाएँ",
-  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} क्लिपबोर्ड में कॉपी किया गया!",
+  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} कॉपी किया गया!",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "DApp ने एक अवैध अनुरोध किया",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "DApp ने जिस खाते का अनुरोध किया वह नहीं मिला",
   "NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT": "DApp ने एक अवैध खाता अनुरोध किया",
