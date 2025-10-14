@@ -69,6 +69,7 @@ export const useFormatFiat = (intlOptions?: FormatFiatConfig) => {
                 // Move symbol after
                 res = `${formattedAmount} ${symbol}`
             } else {
+                // Move symbol before
                 res = `${symbol}${formattedAmount}`
             }
 
