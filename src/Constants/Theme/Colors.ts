@@ -325,6 +325,7 @@ export type Colors = {
     feedbackChip: {
         background: string
         text: string
+        borderColor: string
         icon: {
             success: string
             warning: string
@@ -771,8 +772,9 @@ const light: Colors = {
         text: COLORS.BLACK,
     },
     feedbackChip: {
-        background: "#E7E9EBE5",
+        background: COLORS.GREY_200,
         text: COLORS.PURPLE,
+        borderColor: COLORS.GREY_300,
         icon: {
             success: COLORS.GREEN_600,
             warning: COLORS.RED_600,
@@ -1109,8 +1111,9 @@ const dark: Colors = {
         text: COLORS.WHITE,
     },
     feedbackChip: {
-        background: "#261E4CE5",
+        background: COLORS.PURPLE_DISABLED,
         text: COLORS.GREEN_50,
+        borderColor: COLORS.PURPLE_LABEL_10,
         icon: {
             success: COLORS.GREEN_200,
             warning: COLORS.RED_400,

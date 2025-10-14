@@ -98,6 +98,8 @@ const baseStyle =
                 transformOrigin: "center",
                 paddingHorizontal: 12,
                 paddingVertical: 8,
+                borderWidth: 1,
+                borderColor: theme.colors.feedbackChip.borderColor,
             },
             innerContainer: {
                 flex: 1,
