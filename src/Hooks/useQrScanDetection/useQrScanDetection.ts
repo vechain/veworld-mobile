@@ -31,23 +31,23 @@ export const useQrScanDetection = ({ offsetX, offsetY, size, onScan }: Args) => 
             const points = [
                 //Top left
                 {
-                    x: code.frame!.x - code.frame!.width / 2,
-                    y: code.frame!.y + code.frame!.height / 5,
+                    x: code.frame.x - code.frame.width / 2,
+                    y: code.frame.y + code.frame.height / 5,
                 },
                 //Top right
                 {
-                    x: code.frame!.x + code.frame!.width,
-                    y: code.frame!.y + code.frame!.height / 5,
+                    x: code.frame.x + code.frame.width,
+                    y: code.frame.y + code.frame.height / 5,
                 },
                 //Bottom right
                 {
-                    x: code.frame!.x + code.frame!.width,
-                    y: code.frame!.y + code.frame!.height * 1.5,
+                    x: code.frame.x + code.frame.width,
+                    y: code.frame.y + code.frame.height * 1.5,
                 },
                 //Bottom left
                 {
-                    x: code.frame!.x - code.frame!.width / 2,
-                    y: code.frame!.y + code.frame!.height * 1.5,
+                    x: code.frame.x - code.frame.width / 2,
+                    y: code.frame.y + code.frame.height * 1.5,
                 },
             ]
 
