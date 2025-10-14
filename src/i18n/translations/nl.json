@@ -804,7 +804,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "Ga naar NFTs",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} is succesvol verzonden naar {to: string}.",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "De gekoppelde wallet heeft slechts 1 account. Verwijder de wallet om dit account te verwijderen.",
-  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} gekopieerd naar klembord!",
+  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} gekopieerd!",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "De DApp heeft een ongeldig verzoek gedaan",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "De DApp heeft om een account gevraagd dat niet gevonden is",
   "NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT": "De DApp heeft een ongeldig account gevraagd",

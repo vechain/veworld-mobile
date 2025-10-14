@@ -804,7 +804,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "前往NFT",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} 已成功發送至 {to: string}。",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "關聯的錢包中只有一個賬戶。請移除錢包以刪除此賬戶。",
-  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} 已複製到剪貼板！",
+  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} 已複製！",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "DApp 發出無效請求",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "DApp 請求的賬戶未找到",
   "NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT": "DApp 請求了無效賬戶",

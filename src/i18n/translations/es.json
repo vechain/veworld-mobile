@@ -804,7 +804,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "Ir a NFTs",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} se envió con éxito a {to: string}.",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "La billetera asociada solo tiene 1 cuenta. Por favor, elimine la billetera para remover esta cuenta.",
-  "NOTIFICATION_COPIED_CLIPBOARD": "¡{name : string} copiado al portapapeles!",
+  "NOTIFICATION_COPIED_CLIPBOARD": "¡{name : string} copiado!",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "La DApp hizo una solicitud no válida",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "La DApp solicitó una cuenta que no fue encontrada",
   "NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT": "La DApp solicitó una cuenta no válida",

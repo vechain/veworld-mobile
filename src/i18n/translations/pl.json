@@ -804,7 +804,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "Przejdź do NFT",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} został pomyślnie wysłany do {to: string}.",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "Powiązany portfel ma tylko 1 konto. Usuń portfel, aby usunąć to konto",
-  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} skopiowano do schowka!",
+  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} skopiowano!",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "DApp złożył nieprawidłowe żądanie",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "DApp zażądał konta, które nie zostało znalezione",
   "NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT": "DApp zażądał nieprawidłowego konta",

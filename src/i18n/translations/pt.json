@@ -804,7 +804,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "Ir para NFTs",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} foi enviado com sucesso para {to: string}.",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "A carteira associada tem apenas 1 conta. Por favor, remova a carteira para remover esta conta",
-  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} copiado para a área de transferência!",
+  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} copiado!",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "O DApp fez uma solicitação inválida",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "O DApp solicitou uma conta que não foi encontrada",
   "NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT": "O DApp solicitou uma conta inválida",
