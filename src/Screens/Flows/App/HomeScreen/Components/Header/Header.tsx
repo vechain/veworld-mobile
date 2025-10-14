@@ -2,15 +2,13 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { memo, useCallback } from "react"
 import { VeWorldLogoSVG } from "~Assets"
-import { BaseIcon, BaseSpacer, BaseText, BaseView, HeaderStyleV2, useWalletConnect } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseView, HeaderStyleV2 } from "~Components"
 import { NetworkSwitcherContextMenu } from "~Components/Reusable/ContextMenu"
 import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
-import { ERROR_EVENTS, ScanTarget } from "~Constants"
-import { useBlockchainNetwork, useCameraBottomSheet, useCopyClipboard, useTheme, useVisitedUrls } from "~Hooks"
+import { ScanTarget } from "~Constants"
+import { useBlockchainNetwork, useCameraBottomSheet, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes, TabStackParamList } from "~Navigation"
-import HapticsService from "~Services/HapticsService"
-import { AddressUtils, debug, URIUtils, WalletConnectUtils } from "~Utils"
 
 type Navigation = NativeStackNavigationProp<TabStackParamList, "HomeStack"> &
     NativeStackNavigationProp<RootStackParamListHome, Routes.HOME>
@@ -19,49 +17,9 @@ export const Header = memo(() => {
     const theme = useTheme()
     const nav = useNavigation<Navigation>()
     const { LL } = useI18nContext()
-    const { addVisitedUrl } = useVisitedUrls()
     const { isMainnet } = useBlockchainNetwork()
-    const { onPair } = useWalletConnect()
 
-    const { onCopyToClipboard } = useCopyClipboard()
-
-    const goToInAppBrowser = useCallback(
-        (url: string) => {
-            nav.reset({
-                routes: [
-                    {
-                        name: "DiscoverStack",
-                        params: {
-                            state: {
-                                routes: [{ name: Routes.APPS }, { name: Routes.BROWSER, params: { url } }],
-                            },
-                        },
-                    },
-                ],
-            })
-        },
-        [nav],
-    )
-
-    const onScan = useCallback(
-        (qrData: string) => {
-            if (WalletConnectUtils.validateUri(qrData).isValid) {
-                HapticsService.triggerImpact({ level: "Light" })
-                onPair(qrData)
-            } else if (AddressUtils.isValid(qrData)) {
-                onCopyToClipboard(qrData, LL.COMMON_LBL_ADDRESS())
-            } else if (URIUtils.isValid(qrData) && URIUtils.isHttps(qrData)) {
-                addVisitedUrl(qrData)
-                goToInAppBrowser(qrData)
-            } else {
-                debug(ERROR_EVENTS.APP, qrData)
-            }
-        },
-        [LL, addVisitedUrl, goToInAppBrowser, onCopyToClipboard, onPair],
-    )
-
-    const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
-        onScan,
+    const { RenderCameraModal, handleOpenOnlyScanCamera } = useCameraBottomSheet({
         targets: [ScanTarget.WALLET_CONNECT, ScanTarget.ADDRESS, ScanTarget.HTTPS_URL],
     })
 
@@ -89,7 +47,7 @@ export const Header = memo(() => {
                     name={"icon-qr-code"}
                     size={22}
                     color={theme.colors.text}
-                    action={handleOpenCamera}
+                    action={handleOpenOnlyScanCamera}
                     haptics="Light"
                 />
                 <BaseSpacer width={8} />
