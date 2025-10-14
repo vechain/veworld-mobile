@@ -58,8 +58,6 @@ export const useFormatFiat = (intlOptions?: FormatFiatConfig) => {
 
     const formatFiat = useCallback(
         ({ amount = 0, cover, symbolPosition: _spOverride }: FormatFiatFuncArgs) => {
-            "worklet"
-
             const symbolPosition = _spOverride ?? mainSymbolPosition
 
             // If covered, return covered balance
