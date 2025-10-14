@@ -4,7 +4,9 @@ import { Share, StyleSheet } from "react-native"
 import QRCode from "react-native-qrcode-svg"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { COLORS } from "~Constants"
-import { useCopyClipboard, useThemedStyles, useVns } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
+import { useCopyClipboard } from "~Hooks/useCopyClipboard"
+import { useVns } from "~Hooks/useVns"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
@@ -60,10 +62,18 @@ export const ReceiveTab = () => {
                 </BaseView>
                 <BaseSpacer height={16} />
                 <BaseView flexDirection="column" gap={8}>
-                    <BaseText typographyFont="subSubTitleSemiBold" color={COLORS.WHITE} align="center">
+                    <BaseText
+                        typographyFont="subSubTitleSemiBold"
+                        color={COLORS.WHITE}
+                        align="center"
+                        testID="RECEIVE_TAB_ACCOUNT_ALIAS">
                         {vnsName || selectedAccount.alias}
                     </BaseText>
-                    <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE} align="center">
+                    <BaseText
+                        typographyFont="captionSemiBold"
+                        color={COLORS.WHITE}
+                        align="center"
+                        testID="RECEIVE_TAB_ACCOUNT_ADDRESS">
                         {AddressUtils.humanAddress(selectedAccount.address)}
                     </BaseText>
                 </BaseView>
@@ -77,7 +87,8 @@ export const ReceiveTab = () => {
                         action={onShare}
                         variant="outline"
                         style={styles.btnStyle}
-                        textColor={COLORS.WHITE}>
+                        textColor={COLORS.WHITE}
+                        testID="RECEIVE_TAB_SHARE">
                         {LL.SHARE()}
                     </BaseButton>
                     <BaseButton
@@ -89,7 +100,8 @@ export const ReceiveTab = () => {
                         disabled={accountCopied}
                         variant="outline"
                         style={styles.btnStyle}
-                        textColor={COLORS.WHITE}>
+                        textColor={COLORS.WHITE}
+                        testID="RECEIVE_TAB_COPY">
                         {accountCopied ? LL.COPIED_QR_CODE_FOR_ACCOUNT() : LL.COPY()}
                     </BaseButton>
                 </BaseView>
