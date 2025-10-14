@@ -87,7 +87,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
     })
 
     const setSelectedAccount = useCallback(
-        (_account: AccountWithDevice | WatchedAccount) => {
+        async (_account: AccountWithDevice | WatchedAccount) => {
             onSetSelectedAccount({ address: _account.address })
         },
         [onSetSelectedAccount],
