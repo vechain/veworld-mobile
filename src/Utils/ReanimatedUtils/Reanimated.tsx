@@ -64,6 +64,57 @@ export function numberToPercentWorklet(
     return `${formatter.format(shapedValue)}%`
 }
 
+/**
+ * Worklet-safe function to format fiat amounts for use in Reanimated contexts
+ * All parameters are explicit to avoid closure issues
+ *
+ * @param amount - Amount to format
+ * @param currencySymbol - Currency symbol (e.g., "$", "€")
+ * @param locale - Locale for number formatting (e.g., "en-US", "nl-BE")
+ * @param symbolPosition - Where to place the symbol
+ * @param minFractionDigits - Minimum decimal places
+ * @param maxFractionDigits - Maximum decimal places
+ * @returns Formatted currency string
+ *
+ * @example
+ * // In useDerivedValue
+ * const formatted = useDerivedValue(() =>
+ *   formatFiatWorklet(price.value, "$", "en-US", "before", 2, 5)
+ * , [price.value])
+ */
+export function formatFiatWorklet(
+    amount: number,
+    currencySymbol: string,
+    locale: string,
+    symbolPosition: "before" | "after",
+    minFractionDigits: number,
+    maxFractionDigits: number,
+): string {
+    "worklet"
+
+    // Handle invalid values
+    if (amount === undefined || isNaN(amount) || !isFinite(amount)) {
+        const formatter = new Intl.NumberFormat(locale, {
+            style: "decimal",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+        })
+        const formatted = formatter.format(0)
+        return symbolPosition === "after" ? `${formatted} ${currencySymbol}` : `${currencySymbol}${formatted}`
+    }
+
+    const formatter = new Intl.NumberFormat(locale, {
+        style: "decimal",
+        minimumFractionDigits: minFractionDigits,
+        maximumFractionDigits: maxFractionDigits,
+        useGrouping: true,
+    })
+
+    const formatted = formatter.format(amount)
+    return symbolPosition === "after" ? `${formatted} ${currencySymbol}` : `${currencySymbol}${formatted}`
+}
+
 export const wrapFunctionComponent = <TProps,>(Component: FC<TProps>): ComponentClass<TProps> =>
     class extends React.Component<TProps> {
         constructor(props: TProps) {
