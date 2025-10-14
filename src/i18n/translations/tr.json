@@ -878,7 +878,7 @@
   "PUSH_NOTIFICATIONS_VOTE_REMINDER": "Oy hatırlatıcısı",
   "QR_CODE_CAMERA_PERMS": "Bir QR kodunu taramak için kamera izinlerinizi etkinleştirin",
   "QR_CODE_CAMERA_PERMS_CTA": "İzinleri etkinleştir",
-  "QR_CODE_RECEIVE_DESCRIPTION": "Transfer almak için QR kodunuzu kullanın",
+  "QR_CODE_RECEIVE_DESCRIPTION": "Transfer almak için kodunuzu kullanın",
   "QR_CODE_RECEIVE_TITLE": "QR kodunuz",
   "QR_CODE_SCAN_DESCRIPTION": "Fon transfer etmek veya bir dApp'e bağlanmak için bir kod tarayın",
   "QR_CODE_SCAN_TITLE": "QR Kodunu Tara",
