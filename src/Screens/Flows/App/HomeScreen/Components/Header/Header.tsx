@@ -49,7 +49,7 @@ export const Header = memo(() => {
                 HapticsService.triggerImpact({ level: "Light" })
                 onPair(qrData)
             } else if (AddressUtils.isValid(qrData)) {
-                onCopyToClipboard(qrData, LL.COMMON_LBL_ADDRESS(), true, "icon-copy")
+                onCopyToClipboard(qrData, LL.COMMON_LBL_ADDRESS())
             } else if (URIUtils.isValid(qrData) && URIUtils.isHttps(qrData)) {
                 addVisitedUrl(qrData)
                 goToInAppBrowser(qrData)

@@ -29,11 +29,10 @@ export const useCopyClipboard = () => {
     const { LL } = useI18nContext()
 
     const onCopyToClipboard = useCallback(
-        (
-            text: string,
-            labelName: string,
-            options: CopyToClipboardOptions = { icon: "icon-copy", showNotification: true },
-        ) => {
+        (text: string, labelName: string, options?: CopyToClipboardOptions) => {
+            // Default options
+            options = { icon: "icon-copy", showNotification: true, ...options }
+
             Clipboard.setStringAsync(text.toLowerCase())
                 .then(async () => {
                     await HapticsService.triggerImpact({ level: "Light" })
