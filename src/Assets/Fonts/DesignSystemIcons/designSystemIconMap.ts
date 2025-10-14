@@ -911,4 +911,5 @@ export const designSystemIconMap = {
     "icon-thunder": 60815,
     "icon-leafs": 60816,
     "icon-stargate": 60817,
+    "icon-qr-code-2": 60818,
 }
