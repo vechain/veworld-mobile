@@ -2,7 +2,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { Canvas, Fill, Skia } from "@shopify/react-native-skia"
 import { Camera } from "expo-camera"
 import React, { forwardRef, RefObject, useCallback, useEffect, useMemo, useState } from "react"
-import { LayoutChangeEvent, StyleSheet, TouchableOpacity, View } from "react-native"
+import { LayoutChangeEvent, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useDerivedValue, useSharedValue } from "react-native-reanimated"
 import { Camera as RNVCamera, useCameraDevice, useCodeScanner } from "react-native-vision-camera"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
@@ -12,9 +12,10 @@ import { COLORS } from "~Constants"
 import { useAppState, useBottomSheetModal, useCameraPermissions, useThemedStyles } from "~Hooks"
 import { useQrScanDetection } from "~Hooks/useQrScanDetection"
 import { useI18nContext } from "~i18n"
-import { StringUtils } from "~Utils"
+import { PlatformUtils, StringUtils } from "~Utils"
 import { ReceiveTab } from "./ReceiveTab"
 import { ScanTab } from "./ScanTab"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const SEND_RECEIVE_BS_TABS = ["scan", "receive"] as const
 export type SendReceiveBsTab = (typeof SEND_RECEIVE_BS_TABS)[number]
@@ -60,6 +61,7 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
     const [selectedTab, setSelectedTab] = useState<TTabs[number]>(defaultTab)
     const [hasCameraPerms, setCameraPerms] = useState(false)
     const { currentState } = useAppState()
+    const inset = useSafeAreaInsets()
 
     const rootX = useSharedValue(0)
     const rootY = useSharedValue(0)
@@ -103,21 +105,16 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
 
     const children = useMemo(() => {
         return (
-            <>
+            <BaseView flex={1} pt={PlatformUtils.isIOS() ? inset.top : 0}>
                 <BaseView flexDirection="column" gap={16} pt={16} px={16} position="relative">
                     <BaseView justifyContent="space-between" flexDirection="row" alignItems="center">
                         {/* This is an hidden element, used to simply put the title right in the middle */}
                         <BaseView style={[styles.iconContainer, styles.hiddenElement]}>
                             <BaseIcon name="icon-x" color={COLORS.WHITE} size={20} />
                         </BaseView>
-                        <BaseText
-                            typographyFont="subSubTitleSemiBold"
-                            color={COLORS.WHITE}
-                            flex={1}
-                            align="center"
-                            style={styles.title}>
+                        <Text style={styles.title}>
                             {title ?? LL[`QR_CODE_${StringUtils.toUppercase(selectedTab)}_TITLE`]()}
-                        </BaseText>
+                        </Text>
                         <TouchableOpacity style={[styles.iconContainer]} onPress={onClose}>
                             <BaseIcon name="icon-x" color={COLORS.WHITE} size={20} />
                         </TouchableOpacity>
@@ -168,9 +165,10 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
                 )}
 
                 <BaseSpacer height={64} />
-            </>
+            </BaseView>
         )
     }, [
+        inset.top,
         styles.iconContainer,
         styles.hiddenElement,
         styles.title,
@@ -272,6 +270,12 @@ const baseStyles = () =>
         },
         title: {
             verticalAlign: "middle",
+            alignSelf: "center",
+            color: COLORS.WHITE,
+            fontSize: 16,
+            fontWeight: "600",
+            lineHeight: 24,
+            textAlign: "center",
         },
         hiddenElement: {
             opacity: 0,
