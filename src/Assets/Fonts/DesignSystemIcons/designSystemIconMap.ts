@@ -901,7 +901,6 @@ export const designSystemIconMap = {
     "icon-file-key": 60805,
     "icon-file-signature": 60806,
     "icon-folder-key": 60807,
-    "icon-qr-code": 60808,
     "icon-google-drive": 60809,
     "icon-pincode": 60810,
     "icon-x-circle": 60811,
@@ -911,5 +910,5 @@ export const designSystemIconMap = {
     "icon-thunder": 60815,
     "icon-leafs": 60816,
     "icon-stargate": 60817,
-    "icon-qr-code-2": 60818,
+    "icon-qr-code": 60818,
 }
