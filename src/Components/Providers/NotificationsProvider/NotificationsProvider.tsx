@@ -1,15 +1,17 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef } from "react"
 import { LogLevel, NotificationClickEvent, OneSignal, PushSubscriptionChangedState } from "react-native-onesignal"
-import { vechainNewsAndUpdates } from "~Constants"
+import { ERROR_EVENTS, vechainNewsAndUpdates } from "~Constants"
 import { useAppState } from "~Hooks"
 import { AppStateType, NETWORK_TYPE } from "~Model"
 import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
+import { useNotificationCenter } from "~Hooks/useNotificationCenter"
 import {
     addRemovedNotificationTag,
     increaseDappVisitCounter,
     removeDappVisitCounter,
     removeRemovedNotificationTag,
+    selectAccounts,
     selectDappNotifications,
     selectDappVisitCounter,
     selectNotificationFeautureEnabled,
@@ -52,7 +54,7 @@ OneSignal.Debug.setLogLevel(logLevel)
 const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const dispatch = useAppDispatch()
     const navigation = useNavigation()
-    const { pushNotificationFeature } = useFeatureFlags()
+    const { notificationCenter, pushNotificationFeature } = useFeatureFlags()
     const { data: dapps = [] } = useVeBetterDaoDapps()
 
     const permissionEnabled = useAppSelector(selectNotificationPermissionEnabled)
@@ -62,22 +64,38 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const featureEnabled = useAppSelector(selectNotificationFeautureEnabled)
     const dappsNotifications = useAppSelector(selectDappNotifications)
+    const accounts = useAppSelector(selectAccounts)
     const isFetcingTags = useRef(false)
 
     const { currentState, previousState } = useAppState()
 
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
 
-    const initializeOneSignal = useCallback(() => {
+    const { register } = useNotificationCenter()
+
+    const attemptPushRegistration = useCallback(async () => {
+        if (!notificationCenter?.registration?.enabled) {
+            return
+        }
+
+        try {
+            await register()
+        } catch (err) {
+            error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
+        }
+    }, [register, notificationCenter?.registration?.enabled])
+
+    const initializeOneSignal = useCallback(async () => {
         const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
 
         try {
             OneSignal.initialize(appId as string)
+            await attemptPushRegistration()
         } catch (err) {
-            error("ONE_SIGNAL", err)
+            error(ERROR_EVENTS.ONE_SIGNAL, err)
             throw err
         }
-    }, [])
+    }, [attemptPushRegistration])
 
     const getOptInStatus = useCallback(async () => {
         let _optInStatus = false
@@ -259,6 +277,17 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         featureEnabled && init()
     }, [init, featureEnabled])
 
+    // Attempt registration whenever accounts change
+    useEffect(() => {
+        if (!featureEnabled) {
+            return
+        }
+
+        if (accounts.length > 0) {
+            attemptPushRegistration()
+        }
+    }, [accounts.length, featureEnabled, attemptPushRegistration])
+
     useEffect(() => {
         if (!featureEnabled) {
             return
@@ -266,7 +295,6 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
         OneSignal.Notifications.addEventListener("click", onNotificationClicked)
         OneSignal.Notifications.addEventListener("permissionChange", onPermissionChanged)
-        OneSignal.User.pushSubscription.addEventListener("change", onOptInStatusChanged)
 
         return () => {
             if (!featureEnabled) {
