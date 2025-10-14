@@ -314,11 +314,20 @@ export type Colors = {
         true: string
         false: string
     }
+    veBetterDaoBanner: {
+        background: string[]
+        vbdLogo: {
+            symbol: string
+            text: string
+        }
+        text: string
+    }
 }
 
 export enum COLORS {
     TRANSPARENT = "transparent",
     WHITE = "#FFFFFF",
+    BLACK = "#000000",
     WHITE_DISABLED = "rgba(255, 255, 255, 0.7)",
     GRAY = "#A6A6A6",
     LIGHT_GRAY = "#f2f2f7",
@@ -751,6 +760,14 @@ const light: Colors = {
         true: COLORS.LIGHT_GREEN,
         false: COLORS.GREY_300,
     },
+    veBetterDaoBanner: {
+        background: ["#E6EEFF", "#B3CCFF"],
+        vbdLogo: {
+            symbol: "#004CFC",
+            text: COLORS.BLACK,
+        },
+        text: COLORS.BLACK,
+    },
 }
 
 const dark: Colors = {
@@ -1068,6 +1085,14 @@ const dark: Colors = {
     switch: {
         true: COLORS.LIGHT_GREEN,
         false: COLORS.DARK_PURPLE_DISABLED,
+    },
+    veBetterDaoBanner: {
+        background: ["#003199", "#002466"],
+        vbdLogo: {
+            symbol: "#B1F16C",
+            text: COLORS.WHITE,
+        },
+        text: COLORS.WHITE,
     },
 }
 

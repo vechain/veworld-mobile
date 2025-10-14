@@ -60,7 +60,7 @@ export const TabsManagerScreen = () => {
 
     return (
         <Layout
-            bg={COLORS.DARK_PURPLE}
+            bg={COLORS.BALANCE_BACKGROUND}
             noBackButton
             noMargin
             footer={
