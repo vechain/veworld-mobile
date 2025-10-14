@@ -5,4 +5,7 @@ export interface NotificationState {
     dappVisitCounter: Record<string, number>
     userTags: Record<string, string>
     dappNotifications: boolean
+    lastSuccessfulRegistration: number | null
+    lastSubscriptionId: string | null
+    lastWalletAddresses: string[] | null
 }
