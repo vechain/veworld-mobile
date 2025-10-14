@@ -44,7 +44,8 @@ export const StackedImages = ({ uris, maxImagesBeforeCompression = 3 }: Props) =
                     <BaseText
                         typographyFont="smallCaptionSemiBold"
                         color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
-                        flexDirection="row">
+                        flexDirection="row"
+                        testID="STACKED_IMAGES_REMAINING_COUNT">
                         +{uris.length - maxImagesBeforeCompression}
                     </BaseText>
                 </BaseView>
