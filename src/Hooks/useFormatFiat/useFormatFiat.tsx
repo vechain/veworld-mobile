@@ -1,10 +1,10 @@
 import { useCallback, useMemo } from "react"
-import { CURRENCY_FORMATS, CURRENCY_SYMBOLS, SYMBOL_POSITIONS } from "~Constants"
+import { getLocales } from "react-native-localize"
+import { CURRENCY_FORMATS, CURRENCY_SYMBOLS, getNumberFormatter, SYMBOL_POSITIONS } from "~Constants"
 import CurrencyConfig from "~Constants/Constants/CurrencyConfig/CurrencyConfig"
 import { selectCurrency, selectCurrencyFormat, selectSymbolPosition, useAppSelector } from "~Storage/Redux"
-import { getLocales } from "react-native-localize"
 
-type FormatFiatConfig = Omit<Intl.NumberFormatOptions, "style" | "currency">
+type FormatFiatConfig = Pick<Intl.NumberFormatOptions, "maximumFractionDigits" | "minimumFractionDigits">
 type FormatFiatFuncArgs = {
     amount?: number
     cover?: boolean
@@ -46,6 +46,38 @@ export const useFormatFiat = (intlOptions?: FormatFiatConfig) => {
     }, [])
 
     const formatFiat = useCallback(
+        ({ amount = 0, cover, symbolPosition: _spOverride }: FormatFiatFuncArgs) => {
+            const symbolPosition = _spOverride ?? mainSymbolPosition
+            let formattedAmount = getNumberFormatter({
+                locale,
+                precision: 2,
+                currency,
+                style: "decimal",
+                ...intlOptions,
+            })
+                .format(amount)
+                .trim()
+
+            const isAfter = symbolPosition === SYMBOL_POSITIONS.AFTER
+
+            if (cover) {
+                formattedAmount = renderCoveredBalances(formattedAmount)
+            }
+
+            let res: string
+            if (isAfter) {
+                // Move symbol after
+                res = `${formattedAmount} ${symbol}`
+            } else {
+                res = `${symbol}${formattedAmount}`
+            }
+
+            return res
+        },
+        [mainSymbolPosition, locale, currency, intlOptions, symbol, renderCoveredBalances],
+    )
+
+    const workletFormatFiat = useCallback(
         ({ amount = 0, cover, symbolPosition: _spOverride }: FormatFiatFuncArgs) => {
             "worklet"
 
@@ -92,5 +124,5 @@ export const useFormatFiat = (intlOptions?: FormatFiatConfig) => {
         [locale],
     )
 
-    return { formatLocale: locale, formatFiat, formatValue }
+    return { formatLocale: locale, formatFiat, formatValue, workletFormatFiat }
 }

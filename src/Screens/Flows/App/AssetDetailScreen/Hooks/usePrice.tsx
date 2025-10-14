@@ -25,7 +25,7 @@ export function useLineChartPrice(): ValueAndFormatted {
         precision: 18,
     })
     const { data } = useLineChart()
-    const { formatFiat } = useFormatFiat({ maximumFractionDigits: 5, minimumFractionDigits: 5 })
+    const { workletFormatFiat } = useFormatFiat({ maximumFractionDigits: 5, minimumFractionDigits: 5 })
 
     const price = useDerivedValue(() => {
         if (activeCursorPrice.value) {
@@ -38,7 +38,10 @@ export function useLineChartPrice(): ValueAndFormatted {
         return data[data.length - 1]?.value ?? 0
     }, [activeCursorPrice.value, data])
 
-    const priceFormatted = useDerivedValue(() => formatFiat({ amount: price.value }), [formatFiat, price.value])
+    const priceFormatted = useDerivedValue(
+        () => workletFormatFiat({ amount: price.value }),
+        [workletFormatFiat, price.value],
+    )
 
     return {
         value: price,
