@@ -299,3 +299,13 @@ require("react-native-reanimated").setUpTests()
 jest.mock("~Hooks/useFetchFeaturedDApps/useVeBetterDaoDapps", () => ({
     useVeBetterDaoDapps: jest.fn().mockReturnValue({ data: [] }),
 }))
+
+jest.mock("@tanstack/react-query", () => ({
+    ...jest.requireActual("@tanstack/react-query"),
+    useQuery: (...args: any[]) =>
+        jest.requireActual("@tanstack/react-query").useQuery({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+    useInfiniteQuery: (...args: any[]) =>
+        jest
+            .requireActual("@tanstack/react-query")
+            .useInfiniteQuery({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+}))
