@@ -4,6 +4,7 @@ import { Camera } from "expo-camera"
 import React, { forwardRef, RefObject, useCallback, useEffect, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useDerivedValue, useSharedValue } from "react-native-reanimated"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Camera as RNVCamera, useCameraDevice, useCodeScanner } from "react-native-vision-camera"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { BaseTabs } from "~Components/Base/BaseTabs"
@@ -15,7 +16,6 @@ import { useI18nContext } from "~i18n"
 import { PlatformUtils, StringUtils } from "~Utils"
 import { ReceiveTab } from "./ReceiveTab"
 import { ScanTab } from "./ScanTab"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const SEND_RECEIVE_BS_TABS = ["scan", "receive"] as const
 export type SendReceiveBsTab = (typeof SEND_RECEIVE_BS_TABS)[number]
@@ -206,7 +206,12 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
         onCodeScanned,
     })
 
-    const skiaClip = useDerivedValue(() => Skia.RRectXY(Skia.XYWHRect(offsetX.value, offsetY.value, 200, 200), 16, 16))
+    const skiaClip = useDerivedValue(() => {
+        if (offsetX.value === 0 || offsetY.value === 0)
+            return Skia.RRectXY(Skia.XYWHRect(offsetX.value, offsetY.value, 0, 0), 16, 16)
+        return Skia.RRectXY(Skia.XYWHRect(offsetX.value, offsetY.value, 200, 200), 16, 16)
+    })
+
     return selectedTab === "scan" && hasCameraPerms ? (
         <BaseView flex={1} position="relative">
             {device && (

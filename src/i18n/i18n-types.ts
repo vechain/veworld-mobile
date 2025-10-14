@@ -3609,7 +3609,7 @@ type RootTranslation = {
 	 */
 	QR_CODE_CAMERA_PERMS_CTA: string
 	/**
-	 * U​s​e​ ​y​o​u​r​ ​Q​R​ ​c​o​d​e​ ​t​o​ ​r​e​c​e​i​v​e​ ​t​r​a​n​s​f​e​r​s
+	 * U​s​e​ ​y​o​u​r​ ​c​o​d​e​ ​t​o​ ​r​e​c​e​i​v​e​ ​t​r​a​n​s​f​e​r​s
 	 */
 	QR_CODE_RECEIVE_DESCRIPTION: string
 	/**
@@ -8871,7 +8871,7 @@ Thanks for your patience!
 	 */
 	QR_CODE_CAMERA_PERMS_CTA: () => LocalizedString
 	/**
-	 * Use your QR code to receive transfers
+	 * Use your code to receive transfers
 	 */
 	QR_CODE_RECEIVE_DESCRIPTION: () => LocalizedString
 	/**
