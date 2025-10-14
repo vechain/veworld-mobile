@@ -87,9 +87,8 @@ export const Chart = ({ token, setShowChart, showChart }: Props) => {
 const baseStyles = () =>
     StyleSheet.create({
         root: {
+            width: CHART_WIDTH,
             height: CHART_HEIGHT,
-            flexGrow: 0.5,
-            flexShrink: 1,
             alignItems: "center",
         },
     })

@@ -13,7 +13,7 @@ import { Routes } from "~Navigation"
 import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BalanceUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
-import { Chart } from "./Chart"
+import { Chart, CHART_WIDTH } from "./Chart"
 
 type Props = {
     token: FungibleTokenWithBalance
@@ -80,7 +80,7 @@ export const TokenCard = ({ token }: Props) => {
                 return (
                     <BaseView flexDirection="row" gap={4} overflow="hidden">
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="smallCaptionSemiBold"
                             numberOfLines={1}
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL_1">
@@ -92,7 +92,7 @@ export const TokenCard = ({ token }: Props) => {
                             color={theme.colors.activityCard.subtitleLight}
                         />
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="smallCaptionSemiBold"
                             numberOfLines={1}
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL_2">
@@ -106,7 +106,7 @@ export const TokenCard = ({ token }: Props) => {
                 return (
                     <BaseView flexDirection="row" gap={4}>
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="smallCaptionSemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL">
                             {token.symbol}
@@ -149,15 +149,15 @@ export const TokenCard = ({ token }: Props) => {
     return (
         <BaseTouchableBox
             action={handlePress}
-            py={symbol ? typography.lineHeight.body : typography.lineHeight.bodySemiBold}
+            py={symbol ? typography.lineHeight.body : typography.lineHeight.captionSemiBold}
             flexDirection="row"
             bg={theme.colors.card}
             innerContainerStyle={styles.root}>
-            <BaseView flexDirection="row" gap={16} flexGrow={1} flexShrink={1}>
+            <BaseView flexDirection="row" gap={16} style={styles.leftSection}>
                 <TokenImage
                     icon={token.icon}
                     isVechainToken={AddressUtils.isVechainToken(token.address)}
-                    iconSize={40}
+                    iconSize={32}
                     isCrossChainToken={isCrossChainToken}
                     rounded={!isCrossChainToken}
                 />
@@ -165,7 +165,7 @@ export const TokenCard = ({ token }: Props) => {
                 {symbol ? (
                     <BaseView flexDirection="column" flexGrow={0} flexShrink={1}>
                         <BaseText
-                            typographyFont="subSubTitleSemiBold"
+                            typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.title}
                             flexDirection="row"
                             numberOfLines={1}
@@ -177,7 +177,7 @@ export const TokenCard = ({ token }: Props) => {
                 ) : (
                     <BaseText
                         flex={1}
-                        typographyFont="subSubTitleSemiBold"
+                        typographyFont="bodySemiBold"
                         color={theme.colors.activityCard.title}
                         flexDirection="row"
                         numberOfLines={1}>
@@ -186,13 +186,15 @@ export const TokenCard = ({ token }: Props) => {
                 )}
             </BaseView>
 
-            <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
+            <BaseView style={styles.chartContainer}>
+                <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
+            </BaseView>
 
-            <BaseView flexDirection="column" alignItems="flex-end" flexGrow={1} flexShrink={0}>
+            <BaseView flexDirection="column" alignItems="flex-end" style={styles.balanceSection}>
                 {showFiatBalance ? (
                     <>
                         <BaseText
-                            typographyFont="subSubTitleSemiBold"
+                            typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.title}
                             align="right"
                             numberOfLines={1}
@@ -201,7 +203,7 @@ export const TokenCard = ({ token }: Props) => {
                             {fiatBalance}
                         </BaseText>
                         <BaseText
-                            typographyFont="bodyMedium"
+                            typographyFont="captionSemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             align="right"
                             numberOfLines={1}
@@ -212,7 +214,7 @@ export const TokenCard = ({ token }: Props) => {
                     </>
                 ) : (
                     <BaseText
-                        typographyFont="subSubTitleSemiBold"
+                        typographyFont="bodySemiBold"
                         color={theme.colors.activityCard.title}
                         align="right"
                         numberOfLines={1}
@@ -233,5 +235,22 @@ const baseStyles = () =>
             alignItems: "center",
             borderRadius: 12,
             justifyContent: "space-between",
+        },
+        leftSection: {
+            flexGrow: 1,
+            flexShrink: 1,
+            minWidth: 0,
+        },
+        chartContainer: {
+            width: CHART_WIDTH,
+            flexShrink: 0,
+            flexGrow: 0,
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        balanceSection: {
+            flexGrow: 0,
+            flexShrink: 0,
+            minWidth: 80,
         },
     })
