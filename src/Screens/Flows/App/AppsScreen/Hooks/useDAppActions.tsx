@@ -3,6 +3,7 @@ import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useCameraPermissions, useVisitedUrls } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { NETWORK_TYPE } from "~Model"
+import { Routes } from "~Navigation"
 import {
     addNavigationToDApp,
     increaseDappVisitCounter,
@@ -12,7 +13,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 
-export const useDAppActions = (sourceScreen?: string) => {
+export const useDAppActions = (sourceScreen?: Routes) => {
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
@@ -21,7 +22,7 @@ export const useDAppActions = (sourceScreen?: string) => {
     const { checkPermissions } = useCameraPermissions({
         onCanceled: () => {},
     })
-    const { navigateWithTab } = useBrowserTab()
+    const { navigateWithTab } = useBrowserTab(sourceScreen)
     const isMainnet = useMemo(() => network.type === NETWORK_TYPE.MAIN, [network.type])
     const notificationFeatureEnabled = useAppSelector(selectNotificationFeautureEnabled)
 
@@ -52,12 +53,12 @@ export const useDAppActions = (sourceScreen?: string) => {
             addVisitedUrl(dapp.href)
 
             setTimeout(() => {
-                dispatch(addNavigationToDApp({ href: dapp.href, isCustom: dapp.isCustom ?? false, sourceScreen }))
+                dispatch(addNavigationToDApp({ href: dapp.href, isCustom: dapp.isCustom ?? false }))
             }, 1000)
 
             navigateWithTab({ url: dapp.href, title: dapp.name })
         },
-        [track, addVisitedUrl, navigateWithTab, increaseDappCounter, checkPermissions, dispatch, sourceScreen],
+        [track, addVisitedUrl, navigateWithTab, increaseDappCounter, checkPermissions, dispatch],
     )
 
     return { onDAppPress }
