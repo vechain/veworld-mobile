@@ -18,6 +18,10 @@ jest.mock("react-native", () => ({
 describe("ReceiveTab", () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        jest.useFakeTimers()
+    })
+    afterEach(() => {
+        jest.useRealTimers()
     })
     it("should render the account correctly", () => {
         ;(useVns as jest.Mock).mockReturnValue({
@@ -47,9 +51,12 @@ describe("ReceiveTab", () => {
 
         await act(() => {
             fireEvent.press(screen.getByTestId("RECEIVE_TAB_COPY"))
+            jest.advanceTimersByTime(4000)
         })
 
-        expect(onCopyToClipboard).toHaveBeenCalledWith("0xCF130b42Ae33C5531277B4B7c0F1D994B8732957", "", false)
+        expect(onCopyToClipboard).toHaveBeenCalledWith("0xCF130b42Ae33C5531277B4B7c0F1D994B8732957", "", {
+            showNotification: false,
+        })
 
         await act(() => {
             fireEvent.press(screen.getByTestId("RECEIVE_TAB_SHARE"))

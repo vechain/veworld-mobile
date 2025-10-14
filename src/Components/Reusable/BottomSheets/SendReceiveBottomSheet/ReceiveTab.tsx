@@ -27,7 +27,7 @@ export const ReceiveTab = () => {
     const { onCopyToClipboard } = useCopyClipboard()
 
     const onCopyAccount = useCallback(async () => {
-        onCopyToClipboard(selectedAccount.address, "", false)
+        onCopyToClipboard(selectedAccount.address, "", { showNotification: false })
         setAccountCopied(true)
         setTimeout(() => {
             setAccountCopied(false)
