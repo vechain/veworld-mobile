@@ -41,13 +41,17 @@ export const FeedbackChip = ({ feedbackData, onDismiss }: Props) => {
                 <Animated.View style={styles.innerContainer}>
                     {feedbackData.severity !== FeedbackSeverity.LOADING ? (
                         <BaseIcon
-                            testID="FEEDBACK_CHIP_ICON"
+                            testID={`FEEDBACK_CHIP_ICON_${feedbackData.severity}`}
                             name={icon}
                             size={16}
                             color={theme.colors.feedbackChip.icon[feedbackData.severity]}
                         />
                     ) : (
-                        <Spinner size={16} color={theme.colors.feedbackChip.icon[feedbackData.severity]} />
+                        <Spinner
+                            testID="FEEDBACK_CHIP_LOADING_ICON"
+                            size={16}
+                            color={theme.colors.feedbackChip.icon[feedbackData.severity]}
+                        />
                     )}
                     <BaseText
                         testID="FEEDBACK_CHIP_MESSAGE"
@@ -55,7 +59,8 @@ export const FeedbackChip = ({ feedbackData, onDismiss }: Props) => {
                         color={theme.colors.feedbackChip.text}>
                         {feedbackData.message}
                     </BaseText>
-                    {feedbackData.type === FeedbackType.PERMANENT && (
+                    {(feedbackData.type === FeedbackType.PERMANENT ||
+                        feedbackData.severity === FeedbackSeverity.LOADING) && (
                         <TouchableOpacity onPress={onDismiss}>
                             <BaseIcon
                                 testID="FEEDBACK_CHIP_CLOSE_BUTTON"
