@@ -64,7 +64,7 @@ export const BalanceActions = ({ style }: Props) => {
             <GlassButtonWithLabel
                 label={LL.BALANCE_ACTION_RECEIVE()}
                 size="sm"
-                icon="icon-arrow-down"
+                icon="icon-qr-code"
                 onPress={onReceive}
             />
             <GlassButtonWithLabel
