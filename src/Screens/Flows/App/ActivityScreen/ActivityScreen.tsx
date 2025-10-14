@@ -25,6 +25,7 @@ import {
     ActivityTransferScreen,
 } from "./screens"
 import { ActivityDappsScreen } from "./screens/ActivityDappsScreen"
+import { DeviceUtils, PlatformUtils } from "~Utils"
 
 const Tab = createMaterialTopTabNavigator()
 
@@ -61,7 +62,8 @@ export const ActivityScreen = () => {
                 <>
                     <Tab.Navigator
                         screenOptions={{
-                            animationEnabled: false,
+                            animationEnabled:
+                                PlatformUtils.isIOS() || (PlatformUtils.isAndroid() && !DeviceUtils.isSlowDevice()),
                             lazy: true,
                             swipeEnabled: false,
                         }}
