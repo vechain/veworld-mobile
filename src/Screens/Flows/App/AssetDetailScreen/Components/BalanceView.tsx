@@ -120,7 +120,10 @@ export const BalanceView = ({
                         {isBalanceVisible
                             ? (() => {
                                   const humanBalance = BigNutils(balance?.balance).toHuman(decimals).toString
-                                  return formatFullPrecision(humanBalance, { locale: formatLocale })
+                                  return formatFullPrecision(humanBalance, {
+                                      locale: formatLocale,
+                                      tokenSymbol: symbol,
+                                  })
                               })()
                             : "•••••"}
                     </BaseText>

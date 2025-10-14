@@ -24,6 +24,10 @@ export interface StandardFormatOptions {
     includeSymbol?: boolean
 }
 
+export interface TokenAwareFormatOptions extends StandardFormatOptions {
+    tokenSymbol?: string
+}
+
 /**
  * Special tokens that require 4 decimal places precision
  */
@@ -258,36 +262,47 @@ export const shouldShowLessThan = (value: string | number, threshold: number = 0
 
 /**
  * Formats numbers with full precision for detail screens
- * - For values > 1: Shows 2 decimal places (e.g., 300,000.24)
- * - For values < 1: Shows 5 decimal places (e.g., 0.47392)
+ * - Token-aware precision: BTC/ETH/SOL use 4 decimals, others use 2 decimals
+ * - Can be overridden with forceDecimals option
+ * - Shows "< threshold" notation for very small amounts
  * @param value - Value to format
- * @param options - Formatting options
+ * @param options - Formatting options (including optional tokenSymbol for smart precision)
  * @returns Formatted full precision string
  */
-export const formatFullPrecision = (value: string | number, options: StandardFormatOptions = {}): string => {
-    const { locale = "en-US", showZeroAs } = options
+export const formatFullPrecision = (value: string | number, options: TokenAwareFormatOptions = {}): string => {
+    const { locale = "en-US", showZeroAs, tokenSymbol, forceDecimals } = options
 
     const bigNum = BigNutils(value)
 
     if (bigNum.isZero) {
+        // Use smart precision for zero values too
+        const zeroPrecision =
+            forceDecimals ?? (tokenSymbol && HIGH_PRECISION_TOKENS.includes(tokenSymbol.toUpperCase()) ? 4 : 2)
         return (
-            showZeroAs ?? getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(0)
+            showZeroAs ??
+            getNumberFormatter({ locale, precision: zeroPrecision, style: "decimal", useGrouping: false }).format(0)
         )
     }
 
     const numValue = bigNum.toNumber
 
-    let precision: number
-    if (Math.abs(numValue) >= 1) {
-        precision = 2
-    } else {
-        const rounded2 = Math.round(numValue * 100) / 100
-        if (Math.abs(rounded2 - numValue) < 0.0001) {
-            precision = 2
-        } else {
-            precision = 5
-        }
+    if (!Number.isFinite(numValue) || Number.isNaN(numValue)) {
+        return (
+            showZeroAs ?? getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(0)
+        )
     }
+
+    // Smart precision based on token type
+    // BTC/ETH/SOL: 4 decimals, others: 2 decimals
+    let smartPrecision: number
+    if (tokenSymbol && HIGH_PRECISION_TOKENS.includes(tokenSymbol.toUpperCase())) {
+        smartPrecision = 4
+    } else {
+        smartPrecision = 2
+    }
+
+    // Use forceDecimals if provided, otherwise use smart precision
+    const precision = forceDecimals ?? smartPrecision
 
     const formatter = getNumberFormatter({
         locale,
@@ -298,11 +313,16 @@ export const formatFullPrecision = (value: string | number, options: StandardFor
 
     const formatted = formatter.format(numValue)
 
-    if (Math.abs(numValue) < 1 && Math.abs(numValue) > 0 && Math.abs(numValue) < 0.01) {
-        const threshold = getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(
-            0.01,
-        )
-        return `< ${threshold}`
+    // Use appropriate threshold based on precision
+    const threshold = precision >= 4 ? 0.0001 : 0.01
+    if (Math.abs(numValue) < threshold && Math.abs(numValue) > 0) {
+        const thresholdStr = getNumberFormatter({
+            locale,
+            precision,
+            style: "decimal",
+            useGrouping: false,
+        }).format(threshold)
+        return `< ${thresholdStr}`
     }
 
     return formatted

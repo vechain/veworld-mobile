@@ -25,31 +25,113 @@ describe("StandardizedFormatting", () => {
     })
 
     describe("formatFullPrecision", () => {
-        it("should format values >= 1 with 2 decimal places", () => {
-            expect(formatFullPrecision(300000.24)).toBe("300,000.24")
-            expect(formatFullPrecision(1.5)).toBe("1.50")
-            expect(formatFullPrecision(1234.567)).toBe("1,234.57")
-            expect(formatFullPrecision(1)).toBe("1.00")
-            expect(formatFullPrecision(99.99)).toBe("99.99")
-            expect(formatFullPrecision(113575.91)).toBe("113,575.91")
+        describe("default behavior (without tokenSymbol)", () => {
+            it("should format values >= 1 with 2 decimal places", () => {
+                expect(formatFullPrecision(300000.24)).toBe("300,000.24")
+                expect(formatFullPrecision(1.5)).toBe("1.50")
+                expect(formatFullPrecision(1234.567)).toBe("1,234.57")
+                expect(formatFullPrecision(1)).toBe("1.00")
+                expect(formatFullPrecision(99.99)).toBe("99.99")
+                expect(formatFullPrecision(113575.91)).toBe("113,575.91")
+            })
+
+            it("should format values < 1 with 2 decimal places by default", () => {
+                expect(formatFullPrecision(0.1)).toBe("0.10")
+                expect(formatFullPrecision(0.25)).toBe("0.25")
+                expect(formatFullPrecision(0.47)).toBe("0.47")
+            })
+
+            it("should show very small amounts as < 0.01", () => {
+                expect(formatFullPrecision(0.001)).toBe("< 0.01")
+                expect(formatFullPrecision(0.0001)).toBe("< 0.01")
+                expect(formatFullPrecision(0.009)).toBe("< 0.01")
+            })
+
+            it("should format zero as 0.00", () => {
+                expect(formatFullPrecision(0)).toBe("0.00")
+                expect(formatFullPrecision("0")).toBe("0.00")
+            })
         })
 
-        it("should format values < 1 with appropriate precision", () => {
-            expect(formatFullPrecision(0.1)).toBe("0.10")
-            expect(formatFullPrecision(0.25)).toBe("0.25")
-            expect(formatFullPrecision(0.47392)).toBe("0.47392")
-            expect(formatFullPrecision(0.123456789)).toBe("0.12346")
-        })
+        describe("token-aware precision", () => {
+            describe("standard tokens (2 decimals)", () => {
+                it("should use 2 decimals for VET", () => {
+                    expect(formatFullPrecision(1234.567, { tokenSymbol: "VET" })).toBe("1,234.57")
+                    expect(formatFullPrecision(0.47392, { tokenSymbol: "VET" })).toBe("0.47")
+                    expect(formatFullPrecision(100, { tokenSymbol: "VET" })).toBe("100.00")
+                })
 
-        it("should show very small amounts as < 0.01", () => {
-            expect(formatFullPrecision(0.001)).toBe("< 0.01")
-            expect(formatFullPrecision(0.0001)).toBe("< 0.01")
-            expect(formatFullPrecision(0.009)).toBe("< 0.01")
-        })
+                it("should use 2 decimals for VTHO", () => {
+                    expect(formatFullPrecision(1234.567, { tokenSymbol: "VTHO" })).toBe("1,234.57")
+                    expect(formatFullPrecision(0.25, { tokenSymbol: "VTHO" })).toBe("0.25")
+                })
 
-        it("should format zero as 0.00", () => {
-            expect(formatFullPrecision(0)).toBe("0.00")
-            expect(formatFullPrecision("0")).toBe("0.00")
+                it("should use 2 decimals for USDT", () => {
+                    expect(formatFullPrecision(1234.567, { tokenSymbol: "USDT" })).toBe("1,234.57")
+                    expect(formatFullPrecision(0.99, { tokenSymbol: "USDT" })).toBe("0.99")
+                })
+
+                it("should show < 0.01 for very small amounts with standard tokens", () => {
+                    expect(formatFullPrecision(0.001, { tokenSymbol: "VET" })).toBe("< 0.01")
+                    expect(formatFullPrecision(0.009, { tokenSymbol: "VTHO" })).toBe("< 0.01")
+                })
+
+                it("should format zero with 2 decimals for standard tokens", () => {
+                    expect(formatFullPrecision(0, { tokenSymbol: "VET" })).toBe("0.00")
+                    expect(formatFullPrecision("0", { tokenSymbol: "USDT" })).toBe("0.00")
+                })
+            })
+
+            describe("high-precision tokens (4 decimals)", () => {
+                it("should use 4 decimals for BTC", () => {
+                    expect(formatFullPrecision(1.23456789, { tokenSymbol: "BTC" })).toBe("1.2346")
+                    expect(formatFullPrecision(0.00047392, { tokenSymbol: "BTC" })).toBe("0.0005")
+                    expect(formatFullPrecision(0.12345, { tokenSymbol: "BTC" })).toBe("0.1235")
+                    expect(formatFullPrecision(100, { tokenSymbol: "BTC" })).toBe("100.0000")
+                })
+
+                it("should use 4 decimals for ETH", () => {
+                    expect(formatFullPrecision(1.23456789, { tokenSymbol: "ETH" })).toBe("1.2346")
+                    expect(formatFullPrecision(0.001234, { tokenSymbol: "ETH" })).toBe("0.0012")
+                    expect(formatFullPrecision(32.56789, { tokenSymbol: "ETH" })).toBe("32.5679")
+                })
+
+                it("should use 4 decimals for SOL", () => {
+                    expect(formatFullPrecision(1.23456789, { tokenSymbol: "SOL" })).toBe("1.2346")
+                    expect(formatFullPrecision(0.001234, { tokenSymbol: "SOL" })).toBe("0.0012")
+                    expect(formatFullPrecision(100, { tokenSymbol: "SOL" })).toBe("100.0000")
+                })
+
+                it("should show < 0.0001 for very small amounts with high-precision tokens", () => {
+                    expect(formatFullPrecision(0.00001, { tokenSymbol: "BTC" })).toBe("< 0.0001")
+                    expect(formatFullPrecision(0.000099, { tokenSymbol: "ETH" })).toBe("< 0.0001")
+                    expect(formatFullPrecision(0.000001, { tokenSymbol: "SOL" })).toBe("< 0.0001")
+                })
+
+                it("should format zero with 4 decimals for high-precision tokens", () => {
+                    expect(formatFullPrecision(0, { tokenSymbol: "BTC" })).toBe("0.0000")
+                    expect(formatFullPrecision("0", { tokenSymbol: "ETH" })).toBe("0.0000")
+                    expect(formatFullPrecision(0, { tokenSymbol: "SOL" })).toBe("0.0000")
+                })
+
+                it("should be case-insensitive for token symbols", () => {
+                    expect(formatFullPrecision(1.2345, { tokenSymbol: "btc" })).toBe("1.2345")
+                    expect(formatFullPrecision(1.2345, { tokenSymbol: "Eth" })).toBe("1.2345")
+                    expect(formatFullPrecision(1.2345, { tokenSymbol: "SOL" })).toBe("1.2345")
+                })
+            })
+
+            describe("forceDecimals override", () => {
+                it("should override smart precision with forceDecimals for standard tokens", () => {
+                    expect(formatFullPrecision(1.23456, { tokenSymbol: "VET", forceDecimals: 4 })).toBe("1.2346")
+                    expect(formatFullPrecision(1.23456, { tokenSymbol: "VTHO", forceDecimals: 0 })).toBe("1")
+                })
+
+                it("should override smart precision with forceDecimals for high-precision tokens", () => {
+                    expect(formatFullPrecision(1.23456, { tokenSymbol: "BTC", forceDecimals: 2 })).toBe("1.23")
+                    expect(formatFullPrecision(1.23456, { tokenSymbol: "ETH", forceDecimals: 6 })).toBe("1.234560")
+                })
+            })
         })
 
         it("should use compact notation for numbers >= 10,000", () => {

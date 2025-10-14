@@ -42,8 +42,8 @@ export const ConvertBetterCard: React.FC<Props> = ({
     const tokenTotalToHuman = useMemo(() => {
         const humanBalance = BigNutils(tokenTotalBalance).toHuman(token?.decimals ?? 18).toString
 
-        return formatFullPrecision(humanBalance, { locale: formatLocale })
-    }, [formatLocale, token?.decimals, tokenTotalBalance])
+        return formatFullPrecision(humanBalance, { locale: formatLocale, tokenSymbol: token?.symbol })
+    }, [formatLocale, token?.decimals, token?.symbol, tokenTotalBalance])
 
     const computedTotalBalanceStyle = useMemo(() => {
         return error ? [styles.totalBalanceError] : []
