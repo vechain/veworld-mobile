@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.7 (2025-10-14)</small>
+
+* build: init ([cf11e9b](https://github.com/vechain/veworld-mobile/commit/cf11e9b))
+* 385 balance   qr code bs (#3404) ([2cd6f19](https://github.com/vechain/veworld-mobile/commit/2cd6f19)), closes [#3404](https://github.com/vechain/veworld-mobile/issues/3404)
+
 ## <small>2.4.6 (2025-10-09)</small>
 
 * build: init ([009f8b6](https://github.com/vechain/veworld-mobile/commit/009f8b6))
