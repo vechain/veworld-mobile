@@ -4,7 +4,7 @@ import LinearGradient from "react-native-linear-gradient"
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { BaseSpacer, Layout } from "~Components"
 import { COLORS } from "~Constants"
-import { useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
+import { useFetchFeaturedDApps, usePrefetchAllVns, useThemedStyles } from "~Hooks"
 import { useOfficialTokens } from "~Hooks/useOfficialTokens"
 import {
     addOfficialTokens,
@@ -23,6 +23,8 @@ import { TabRenderer } from "./Tabs/TabRenderer"
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
 export const BalanceScreen = () => {
+    //Pre fetch all VNS names and addresses
+    usePrefetchAllVns()
     //DO NOT REMOVE THIS FROM HERE, OTHERWISE APPS WON'T BE LOADED
     useFetchFeaturedDApps()
 

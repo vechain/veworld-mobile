@@ -8,7 +8,7 @@ export const useAddressScanTarget = () => {
 
     return useCallback(
         (data: string) => {
-            return onCopyToClipboard(data, LL.COMMON_LBL_ADDRESS())
+            return onCopyToClipboard(data, LL.COMMON_LBL_ADDRESS(), { icon: "icon-wallet" })
         },
         [LL, onCopyToClipboard],
     )

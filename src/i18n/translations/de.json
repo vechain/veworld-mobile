@@ -806,7 +806,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "Zu NFTs gehen",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} wurde erfolgreich an {to: string} gesendet.",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "Das zugehörige Wallet hat nur 1 Konto. Bitte entfernen Sie das Wallet, um dieses Konto zu entfernen.",
-  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} in die Zwischenablage kopiert!",
+  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} kopiert!",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "Die DApp hat eine ungültige Anfrage gestellt.",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "Die DApp hat ein Konto angefordert, das nicht gefunden wurde.",
   "NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT": "Die DApp hat ein ungültiges Konto angefordert.",

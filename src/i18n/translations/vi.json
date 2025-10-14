@@ -806,7 +806,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "Đi đến NFTs",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} đã được gửi thành công đến {to: string}.",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "Ví liên kết chỉ có 1 tài khoản. Vui lòng xóa ví để xóa tài khoản này",
-  "NOTIFICATION_COPIED_CLIPBOARD": "{name: string} đã được sao chép vào clipboard!",
+  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} đã được sao chép!",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "Ứng dụng phi tập trung đã thực hiện một yêu cầu không hợp lệ",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "Ứng dụng phi tập trung yêu cầu một tài khoản không được tìm thấy",
   "NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT": "Ứng dụng phi tập trung yêu cầu một tài khoản không hợp lệ",

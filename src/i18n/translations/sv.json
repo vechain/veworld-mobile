@@ -806,7 +806,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "Gå till NFTs",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} skickades framgångsrikt till {to: string}.",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "Den associerade plånboken har bara 1 konto. Ta bort plånboken för att ta bort detta konto",
-  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} kopierades till urklippet!",
+  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} kopierad!",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "DApp gjorde en ogiltig begäran",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "DApp begärde ett konto som inte hittades",
   "NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT": "DApp begärde ett ogiltigt konto",

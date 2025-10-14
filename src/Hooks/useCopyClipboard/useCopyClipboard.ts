@@ -2,9 +2,16 @@ import { useCallback } from "react"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { debug } from "~Utils"
-import { showSuccessToast } from "~Components"
 import HapticsService from "~Services/HapticsService"
 import { ERROR_EVENTS } from "~Constants"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { IconKey } from "~Model"
+
+type CopyToClipboardOptions = {
+    icon?: IconKey
+    showNotification?: boolean
+}
 
 /**
  * `useCopyClipboard` is a custom React Hook that provides the ability to copy a string to the system clipboard.
@@ -22,15 +29,21 @@ export const useCopyClipboard = () => {
     const { LL } = useI18nContext()
 
     const onCopyToClipboard = useCallback(
-        (text: string, labelName: string, showNotification = true) => {
+        (text: string, labelName: string, options?: CopyToClipboardOptions) => {
+            // Default options
+            options = { icon: "icon-copy", showNotification: true, ...options }
+
             Clipboard.setStringAsync(text.toLowerCase())
                 .then(async () => {
                     await HapticsService.triggerImpact({ level: "Light" })
-                    if (showNotification) {
-                        showSuccessToast({
-                            text1: LL.NOTIFICATION_COPIED_CLIPBOARD({
+                    if (options.showNotification) {
+                        Feedback.show({
+                            severity: FeedbackSeverity.INFO,
+                            type: FeedbackType.ALERT,
+                            message: LL.NOTIFICATION_COPIED_CLIPBOARD({
                                 name: labelName,
                             }),
+                            icon: options.icon,
                         })
                     }
                 })

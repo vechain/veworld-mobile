@@ -806,7 +806,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "NFT'lere Git",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string}, başarıyla {to: string} adresine gönderildi.",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "İlişkili cüzdan yalnızca 1 hesaba sahip. Bu hesabı kaldırmak için lütfen cüzdanı kaldırın.",
-  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} panoya kopyalandı!",
+  "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} kopyalandı!",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "DApp geçersiz bir istek yaptı",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "DApp, bulunamayan bir hesap talep etti",
   "NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT": "DApp, geçersiz bir hesap talep etti",

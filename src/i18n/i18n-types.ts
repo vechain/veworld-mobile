@@ -3305,7 +3305,7 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: string
 	/**
-	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
+	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​!
 	 * @param {string} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
@@ -8583,7 +8583,7 @@ Thanks for your patience!
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: () => LocalizedString
 	/**
-	 * {name} copied to clipboard!
+	 * {name} copied!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: string }) => LocalizedString
 	/**
