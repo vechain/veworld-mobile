@@ -92,6 +92,5 @@ const baseStyles = () =>
             flexGrow: 0,
             flexShrink: 0,
             alignItems: "center",
-            marginHorizontal: 8,
         },
     })

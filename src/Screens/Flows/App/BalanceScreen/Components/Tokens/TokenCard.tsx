@@ -229,7 +229,7 @@ export const TokenCard = ({ token }: Props) => {
 const baseStyles = () =>
     StyleSheet.create({
         root: {
-            gap: 8,
+            gap: 16,
             alignItems: "center",
             borderRadius: 12,
             justifyContent: "space-between",
