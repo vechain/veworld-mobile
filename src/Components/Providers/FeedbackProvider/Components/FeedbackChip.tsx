@@ -10,12 +10,11 @@ import { useThemedStyles } from "~Hooks"
 import { FeedbackSeverity, FeedbackShowArgs, FeedbackType } from "../Model"
 
 type Props = {
-    show: boolean
     feedbackData: FeedbackShowArgs | null
     onDismiss: () => void
 }
 
-export const FeedbackChip = ({ show, feedbackData, onDismiss }: Props) => {
+export const FeedbackChip = ({ feedbackData, onDismiss }: Props) => {
     const inset = useSafeAreaInsets()
     const { styles, theme } = useThemedStyles(baseStyle({ top: inset.top + 8 }))
 
@@ -36,7 +35,7 @@ export const FeedbackChip = ({ show, feedbackData, onDismiss }: Props) => {
         }
     }, [feedbackData])
 
-    return show && feedbackData ? (
+    return feedbackData ? (
         <Animated.View style={styles.container} entering={FadeIn} exiting={FadeOut}>
             <Animated.View testID="FEEDBACK_CHIP" entering={ZoomInEasyUp} exiting={ZoomOutEasyUp} style={[styles.chip]}>
                 <Animated.View style={styles.innerContainer}>

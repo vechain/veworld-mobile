@@ -12,33 +12,30 @@ export const Feedback = {
 }
 
 export const FeedbackProvider = ({ children }: { children: React.ReactNode }) => {
-    const [show, setShow] = useState(false)
     const [feedbackData, setFeedbackData] = useState<FeedbackShowArgs | null>(null)
 
     const onDismiss = useCallback(() => {
-        setShow(false)
         setFeedbackData(null)
     }, [])
 
     useEffect(() => {
         FeedbackEmitter.on("show", (args: FeedbackShowArgs) => {
-            if (show && feedbackData) return
-            setShow(true)
+            if (feedbackData) return
             setFeedbackData(args)
         })
 
         return () => {
             FeedbackEmitter.removeAllListeners()
         }
-    }, [show, feedbackData])
+    }, [feedbackData])
 
     useEffect(() => {
         let timeout: NodeJS.Timeout | null = null
-        if (show) {
-            if (feedbackData?.type === FeedbackType.ALERT && feedbackData?.severity !== FeedbackSeverity.LOADING) {
+        if (feedbackData) {
+            if (feedbackData.type === FeedbackType.ALERT && feedbackData.severity !== FeedbackSeverity.LOADING) {
                 timeout = setTimeout(() => {
                     onDismiss()
-                }, feedbackData?.duration || 2000)
+                }, feedbackData.duration || 2000)
             }
         }
         return () => {
@@ -46,12 +43,12 @@ export const FeedbackProvider = ({ children }: { children: React.ReactNode }) =>
                 clearTimeout(timeout)
             }
         }
-    }, [show, feedbackData?.type, feedbackData?.duration, onDismiss, feedbackData?.severity])
+    }, [onDismiss, feedbackData])
 
     return (
         <>
             {children}
-            <FeedbackChip show={show} feedbackData={feedbackData} onDismiss={onDismiss} />
+            <FeedbackChip feedbackData={feedbackData} onDismiss={onDismiss} />
         </>
     )
 }
