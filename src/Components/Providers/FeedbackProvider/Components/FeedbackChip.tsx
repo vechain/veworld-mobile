@@ -39,16 +39,16 @@ export const FeedbackChip = ({ feedbackData, onDismiss }: Props) => {
         <Animated.View style={styles.container} entering={FadeIn} exiting={FadeOut}>
             <Animated.View testID="FEEDBACK_CHIP" entering={ZoomInEasyUp} exiting={ZoomOutEasyUp} style={[styles.chip]}>
                 <Animated.View style={styles.innerContainer}>
-                    {feedbackData.severity !== FeedbackSeverity.LOADING ? (
-                        <BaseIcon
-                            testID={`FEEDBACK_CHIP_ICON_${feedbackData.severity}`}
-                            name={icon}
+                    {feedbackData.severity === FeedbackSeverity.LOADING ? (
+                        <Spinner
+                            testID="FEEDBACK_CHIP_LOADING_ICON"
                             size={16}
                             color={theme.colors.feedbackChip.icon[feedbackData.severity]}
                         />
                     ) : (
-                        <Spinner
-                            testID="FEEDBACK_CHIP_LOADING_ICON"
+                        <BaseIcon
+                            testID={`FEEDBACK_CHIP_ICON_${feedbackData.severity}`}
+                            name={icon}
                             size={16}
                             color={theme.colors.feedbackChip.icon[feedbackData.severity]}
                         />
