@@ -5,7 +5,9 @@ import CurrencyConfig from "~Constants/Constants/CurrencyConfig/CurrencyConfig"
 import { selectCurrency, selectCurrencyFormat, selectSymbolPosition, useAppSelector } from "~Storage/Redux"
 import { formatFiatAmount } from "~Utils/StandardizedFormatting"
 
-type FormatFiatConfig = Omit<Intl.NumberFormatOptions, "style" | "currency">
+type FormatFiatConfig = Omit<Intl.NumberFormatOptions, "style" | "currency"> & {
+    useCompactNotation?: boolean
+}
 type FormatFiatFuncArgs = {
     amount?: number
     cover?: boolean
@@ -13,6 +15,7 @@ type FormatFiatFuncArgs = {
 }
 
 export const useFormatFiat = (intlOptions?: FormatFiatConfig) => {
+    const { useCompactNotation, ...restIntlOptions } = intlOptions ?? {}
     const c = useAppSelector(selectCurrency)
     const currencyFormat = useAppSelector(selectCurrencyFormat)
     const mainSymbolPosition = useAppSelector(selectSymbolPosition)
@@ -71,10 +74,11 @@ export const useFormatFiat = (intlOptions?: FormatFiatConfig) => {
                 locale,
                 symbolPosition: isAfter ? "after" : "before",
                 forceDecimals: 2, // Always show 2 decimals for fiat amounts
-                ...intlOptions,
+                useCompactNotation,
+                ...restIntlOptions,
             })
         },
-        [mainSymbolPosition, locale, symbol, renderCoveredBalances, intlOptions],
+        [mainSymbolPosition, locale, symbol, renderCoveredBalances, useCompactNotation, restIntlOptions],
     )
 
     const formatValue = useCallback(
