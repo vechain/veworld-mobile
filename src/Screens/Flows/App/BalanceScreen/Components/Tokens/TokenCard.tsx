@@ -28,9 +28,16 @@ export const TokenCard = ({ token }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { isLowEndDevice } = useDevice()
 
-    // Decide chart visibility based on device/screen size BEFORE rendering
+    // Check if token supports charts (has CoinGecko ID)
+    const isTokenSupported = useMemo(() => !!getCoinGeckoIdBySymbol[token.symbol], [token.symbol])
+
+    // Decide chart visibility based on device/screen size AND token support
     // This ensures ALL token cards show either charts OR indicators consistently
-    const shouldShowCharts = useMemo(() => !isSmallScreen && !isLowEndDevice, [isLowEndDevice])
+    const shouldShowCharts = useMemo(
+        () => !isSmallScreen && !isLowEndDevice && isTokenSupported,
+        [isLowEndDevice, isTokenSupported],
+    )
+
     const name = useMemo(() => {
         switch (token.symbol) {
             case "VET":
@@ -67,7 +74,11 @@ export const TokenCard = ({ token }: Props) => {
     }, [isBalanceVisible, tokenBalance])
 
     const chartIcon = useMemo(() => {
-        if (!chartData || !showFiatBalance || shouldShowCharts) return null
+        // Only show icon on small screens/low-end devices when:
+        // 1. Token supports charts (has price data)
+        // 2. Fiat balance is visible
+        // 3. Chart data is available
+        if (!isTokenSupported || !chartData || !showFiatBalance || shouldShowCharts) return null
 
         return (
             <BaseIcon
@@ -77,7 +88,7 @@ export const TokenCard = ({ token }: Props) => {
                 testID="TOKEN_CARD_CHART_ICON"
             />
         )
-    }, [chartData, showFiatBalance, shouldShowCharts, isGoingUp])
+    }, [isTokenSupported, chartData, showFiatBalance, shouldShowCharts, isGoingUp])
 
     const symbol = useMemo(() => {
         switch (token.symbol) {
