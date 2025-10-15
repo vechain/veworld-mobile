@@ -1,12 +1,15 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { BaseChip, BaseText, BaseView } from "~Components"
-import { useNewDAppsV2, useTheme, useTrendingDAppsV2 } from "~Hooks"
+import { AnimatedFilterChips, BaseText, BaseView } from "~Components"
+import { useNewDAppsV2, useTheme, useThemedStyles, useTrendingDAppsV2 } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VbdCarousel } from "../Common/VbdCarousel/VbdCarousel"
+import { StringUtils } from "~Utils"
+import { StyleSheet } from "react-native"
 
 export const ForYouCarousel = () => {
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const { styles } = useThemedStyles(baseStyles)
     const [filter, setFilter] = useState<"new" | "popular">("popular")
 
     const onFilterPress = useCallback((value: "new" | "popular") => setFilter(value), [])
@@ -31,20 +34,29 @@ export const ForYouCarousel = () => {
                 <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.dappTitle}>
                     {LL.DISCOVER_FOR_YOU()}
                 </BaseText>
-                <BaseView flexDirection="row" gap={12}>
-                    <BaseChip
-                        label={LL.DISCOVER_FOR_YOU_POPULAR()}
-                        active={filter === "popular"}
-                        onPress={() => onFilterPress("popular")}
-                    />
-                    <BaseChip
-                        label={LL.DISCOVER_FOR_YOU_NEW()}
-                        active={filter === "new"}
-                        onPress={() => onFilterPress("new")}
-                    />
-                </BaseView>
+                <AnimatedFilterChips
+                    items={["popular", "new"]}
+                    selectedItem={filter}
+                    keyExtractor={(item: "new" | "popular") => item}
+                    getItemLabel={(item: "new" | "popular") =>
+                        LL[`DISCOVER_FOR_YOU_${StringUtils.toUppercase(item)}`]()
+                    }
+                    onItemPress={onFilterPress}
+                    containerStyle={styles.container}
+                    contentContainerStyle={styles.filterContainer}
+                />
             </BaseView>
             <VbdCarousel appIds={appIds} isLoading={isLoading} />
         </BaseView>
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        container: {
+            marginTop: -15,
+        },
+        filterContainer: {
+            paddingHorizontal: 0,
+        },
+    })

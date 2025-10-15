@@ -61,6 +61,7 @@ export const ActivityScreen = () => {
             fixedBody={
                 <>
                     <Tab.Navigator
+                        tabBarPosition="top"
                         screenOptions={{
                             animationEnabled:
                                 PlatformUtils.isIOS() || (PlatformUtils.isAndroid() && !DeviceUtils.isSlowDevice()),
