@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.7 (2025-10-15)</small>
+
+* build: init ([430d731](https://github.com/vechain/veworld-mobile/commit/430d731))
+* refactor(decimals): use proper attrs (#3411) ([e82bb0c](https://github.com/vechain/veworld-mobile/commit/e82bb0c)), closes [#3411](https://github.com/vechain/veworld-mobile/issues/3411)
+
 ## <small>2.4.6 (2025-10-09)</small>
 
 * build: init ([009f8b6](https://github.com/vechain/veworld-mobile/commit/009f8b6))
