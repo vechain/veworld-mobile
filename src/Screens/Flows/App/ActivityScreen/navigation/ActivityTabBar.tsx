@@ -1,8 +1,11 @@
 import { MaterialTopTabBarProps } from "@react-navigation/material-top-tabs"
 import React, { useCallback } from "react"
+import { StyleSheet } from "react-native"
 import { AnimatedFilterChips } from "~Components"
+import { useThemedStyles } from "~Hooks"
 
 export const ActivityTabBar = ({ state, descriptors, navigation }: MaterialTopTabBarProps) => {
+    const { styles } = useThemedStyles(baseStyles)
     const getItemLabel = useCallback(
         (route: (typeof state.routes)[0]) => {
             const label = descriptors[route.key]?.options.title
@@ -34,6 +37,15 @@ export const ActivityTabBar = ({ state, descriptors, navigation }: MaterialTopTa
             keyExtractor={(item: (typeof state.routes)[0]) => item.key}
             getItemLabel={getItemLabel}
             onItemPress={onPress}
+            contentContainerStyle={styles.container}
         />
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        container: {
+            paddingHorizontal: 16,
+            marginBottom: 24,
+        },
+    })
