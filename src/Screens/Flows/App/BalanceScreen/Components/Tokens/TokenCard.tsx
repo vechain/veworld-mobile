@@ -259,6 +259,6 @@ const baseStyles = () =>
         balanceSection: {
             flexGrow: 0,
             flexShrink: 0,
-            minWidth: 80,
+            minWidth: 88,
         },
     })
