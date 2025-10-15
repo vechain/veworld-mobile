@@ -1,5 +1,5 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { Canvas, Fill, Skia } from "@shopify/react-native-skia"
+import { Canvas, Fill, Points, Skia, vec } from "@shopify/react-native-skia"
 import { Camera } from "expo-camera"
 import React, { forwardRef, RefObject, useCallback, useEffect, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet, Text, TouchableOpacity, View } from "react-native"
@@ -193,13 +193,15 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
     const offsetY = useDerivedValue(() => rootY.value + cameraY.value, [rootY.value, cameraY.value])
     const handleScan = useCallback(
         async (data: string) => {
-            const result = await onScan(data)
-            if (result) onClose()
+            // const result = await onScan(data)
+            // if (result) onClose()
         },
         [onClose, onScan],
     )
 
-    const onCodeScanned = useQrScanDetection({ offsetX, offsetY, size: 200, onScan: handleScan })
+    const points = useSharedValue<{ x: number; y: number }[]>([])
+
+    const onCodeScanned = useQrScanDetection({ offsetX, offsetY, size: 200, onScan: handleScan, points })
 
     const codeScanner = useCodeScanner({
         codeTypes: ["qr"],
@@ -210,6 +212,11 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
         if (offsetX.value === 0 || offsetY.value === 0)
             return Skia.RRectXY(Skia.XYWHRect(offsetX.value, offsetY.value, 0, 0), 16, 16)
         return Skia.RRectXY(Skia.XYWHRect(offsetX.value, offsetY.value, 200, 200), 16, 16)
+    })
+
+    const pointsV = useDerivedValue(() => {
+        return points.value.map(p => vec(p.x, p.y))
+        // return [vec(100, 100), vec(150, 100), vec(150, 150), vec(100, 150)]
     })
 
     return selectedTab === "scan" && hasCameraPerms ? (
@@ -224,6 +231,7 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
             )}
 
             <Canvas style={StyleSheet.absoluteFill}>
+                <Points points={pointsV} style="fill" strokeWidth={2} color={"green"} mode="polygon" />
                 <Fill color={COLORS.BALANCE_BACKGROUND_80} clip={skiaClip} invertClip />
             </Canvas>
             <BaseView style={[StyleSheet.absoluteFill, styles.cameraChildren]}>{children}</BaseView>

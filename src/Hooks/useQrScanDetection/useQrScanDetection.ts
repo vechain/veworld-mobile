@@ -19,9 +19,10 @@ type Args = {
      * Function triggered when the scan is successful
      */
     onScan: (data: string) => Promise<void>
+    points: SharedValue<{ x: number; y: number }[]>
 }
 
-export const useQrScanDetection = ({ offsetX, offsetY, size, onScan }: Args) => {
+export const useQrScanDetection = ({ offsetX, offsetY, size, onScan, points: _points }: Args) => {
     return useCallback(
         async (codes: Code[]) => {
             if (codes.length === 0) return
@@ -51,6 +52,8 @@ export const useQrScanDetection = ({ offsetX, offsetY, size, onScan }: Args) => 
                 },
             ]
 
+            _points.value = [...points]
+
             const biggerRect = {
                 x: offsetX.value * 0.8,
                 y: offsetY.value * 0.8,
@@ -72,6 +75,6 @@ export const useQrScanDetection = ({ offsetX, offsetY, size, onScan }: Args) => 
                 return onScan(code.value)
             }
         },
-        [offsetX.value, offsetY.value, onScan, size],
+        [_points, offsetX.value, offsetY.value, onScan, size],
     )
 }
