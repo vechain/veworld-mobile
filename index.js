@@ -69,6 +69,7 @@ import { FeatureFlaggedSmartWallet } from "./src/Components/Providers/FeatureFla
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { DeepLinksProvider } from "~Components/Providers/DeepLinksProvider"
 import { DeviceProvider } from "~Components/Providers/DeviceProvider"
+import { FeedbackProvider } from "~Components/Providers/FeedbackProvider"
 
 const { fontFamily } = typography
 
@@ -157,24 +158,26 @@ const Main = () => {
                         }}>
                         <FeatureFlagsProvider>
                             <FeatureFlaggedSmartWallet nodeUrl={nodeUrl} networkType={networkType}>
-                                <NavigationProvider>
-                                    <InteractionProvider>
-                                        <DeepLinksProvider>
-                                            <WalletConnectContextProvider>
-                                                <BottomSheetModalProvider>
-                                                    <InAppBrowserProvider>
-                                                        <NotificationsProvider>
-                                                            <DeviceProvider>
-                                                                <EntryPoint />
-                                                            </DeviceProvider>
-                                                        </NotificationsProvider>
-                                                    </InAppBrowserProvider>
-                                                </BottomSheetModalProvider>
-                                            </WalletConnectContextProvider>
-                                        </DeepLinksProvider>
-                                    </InteractionProvider>
-                                </NavigationProvider>
-                                <BaseToast />
+                                <FeedbackProvider>
+                                    <NavigationProvider>
+                                        <InteractionProvider>
+                                            <DeepLinksProvider>
+                                                <WalletConnectContextProvider>
+                                                    <BottomSheetModalProvider>
+                                                        <InAppBrowserProvider>
+                                                            <NotificationsProvider>
+                                                                <DeviceProvider>
+                                                                    <EntryPoint />
+                                                                </DeviceProvider>
+                                                            </NotificationsProvider>
+                                                        </InAppBrowserProvider>
+                                                    </BottomSheetModalProvider>
+                                                </WalletConnectContextProvider>
+                                            </DeepLinksProvider>
+                                        </InteractionProvider>
+                                    </NavigationProvider>
+                                    <BaseToast />
+                                </FeedbackProvider>
                             </FeatureFlaggedSmartWallet>
                         </FeatureFlagsProvider>
                     </PersistQueryClientProvider>
