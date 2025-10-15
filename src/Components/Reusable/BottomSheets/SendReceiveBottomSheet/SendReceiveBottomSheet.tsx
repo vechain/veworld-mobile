@@ -122,7 +122,7 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
                     <BaseText typographyFont="captionMedium" color={COLORS.WHITE} align="center">
                         {description ?? LL[`QR_CODE_${StringUtils.toUppercase(selectedTab)}_DESCRIPTION`]()}
                     </BaseText>
-                    {hasWCTarget && (
+                    {hasWCTarget && selectedTab === "scan" && (
                         <View style={styles.walletConnectWrapper}>
                             <BaseView
                                 flexDirection="row"
