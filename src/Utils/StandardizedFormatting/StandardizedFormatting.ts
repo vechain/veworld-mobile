@@ -70,13 +70,13 @@ export const formatDisplayNumber = (value: string | number, options: StandardFor
         if (absValue < 1000000) {
             const compactString = absNum.toCompactString(locale, 2)
             // Remove trailing .00K
-            const formatted = compactString.replace(/\.00([K])/g, "$1")
+            const formatted = compactString.replaceAll(/\.00([K])/g, "$1")
             return isNegative ? `-${formatted}` : formatted
         }
         // For M, B, T notation: use 1 decimal
         const compactString = absNum.toCompactString(locale, 1)
         // Remove trailing .0M, .0B, etc.
-        const formatted = compactString.replace(/\.0([MBTQ])/g, "$1")
+        const formatted = compactString.replaceAll(/\.0([MBTQ])/g, "$1")
         return isNegative ? `-${formatted}` : formatted
     }
 
