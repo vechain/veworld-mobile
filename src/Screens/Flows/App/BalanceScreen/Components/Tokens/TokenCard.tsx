@@ -91,11 +91,7 @@ export const TokenCard = ({ token }: Props) => {
                             testID="TOKEN_CARD_SYMBOL_1">
                             {B3TR.symbol}
                         </BaseText>
-                        <BaseIcon
-                            name="icon-arrow-left-right"
-                            size={12}
-                            color={theme.colors.activityCard.subtitleLight}
-                        />
+                        <BaseIcon name="icon-refresh-cw" size={12} color={theme.colors.activityCard.subtitleLight} />
                         <BaseText
                             typographyFont="bodySemiBold"
                             numberOfLines={1}
