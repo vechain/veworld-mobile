@@ -143,7 +143,6 @@ export const formatFiatAmount = (
 ): string => {
     const { symbolPosition = "before", ...formatOptions } = options
     const formattedAmount = formatDisplayNumber(amount, formatOptions)
-
     return symbolPosition === "after" ? `${formattedAmount} ${currencySymbol}` : `${currencySymbol}${formattedAmount}`
 }
 
@@ -202,8 +201,8 @@ export const formatTokenAmount = (
         return includeSymbol ? `${formattedValue} ${tokenSymbol}` : formattedValue
     }
 
-    // Standard token formatting
-    const formattedAmount = formatDisplayNumber(humanAmount.toString, options)
+    // Standard token formatting - always use 2 decimals for consistency
+    const formattedAmount = formatDisplayNumber(humanAmount.toString, { ...options, forceDecimals: 2 })
     return includeSymbol ? `${formattedAmount} ${tokenSymbol}` : formattedAmount
 }
 

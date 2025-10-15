@@ -205,9 +205,11 @@ describe("StandardizedFormatting", () => {
     })
 
     describe("formatTokenAmount", () => {
-        it("should format token amounts with symbol", () => {
-            expect(formatTokenAmount("1000000000000000000", "VET", 18)).toBe("1 VET")
+        it("should format token amounts with symbol and 2 decimals", () => {
+            expect(formatTokenAmount("1000000000000000000", "VET", 18)).toBe("1.00 VET")
             expect(formatTokenAmount("1500000000000000000", "VET", 18)).toBe("1.50 VET")
+            expect(formatTokenAmount("2000000000000000000", "VET", 18)).toBe("2.00 VET")
+            expect(formatTokenAmount("3000000000000000000", "VET", 18)).toBe("3.00 VET")
         })
 
         it("should use compact notation for large amounts", () => {
