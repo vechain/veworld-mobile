@@ -5,7 +5,7 @@ import { B3TR, COLORS, VeDelegate } from "~Constants"
 import { useBalances, useFormatFiat, useTheme } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import { BalanceUtils } from "~Utils"
+import { formatTokenAmount } from "~Utils/StandardizedFormatting"
 import { BaseTokenCard } from "./BaseTokenCard"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
@@ -34,16 +34,14 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
         exchangeRate: parseFloat(exchangeRate ?? "0"),
     })
 
-    const tokenBalance = useMemo(
-        () =>
-            BalanceUtils.getTokenUnitBalance(
-                tokenWithBalance.balance.balance,
-                tokenWithBalance.decimals ?? 0,
-                2,
-                formatLocale,
-            ),
-        [formatLocale, tokenWithBalance.balance.balance, tokenWithBalance.decimals],
-    )
+    const tokenBalance = useMemo(() => {
+        return formatTokenAmount(
+            tokenWithBalance.balance.balance,
+            tokenWithBalance.symbol,
+            tokenWithBalance.decimals ?? 0,
+            { locale: formatLocale, includeSymbol: false },
+        )
+    }, [formatLocale, tokenWithBalance.balance.balance, tokenWithBalance.decimals, tokenWithBalance.symbol])
 
     const showFiatBalance = useMemo(() => {
         return !!exchangeRate

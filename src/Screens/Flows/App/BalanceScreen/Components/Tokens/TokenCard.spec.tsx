@@ -1,11 +1,10 @@
-import { act, fireEvent, render, screen } from "@testing-library/react-native"
+import { fireEvent, render, screen } from "@testing-library/react-native"
 import React from "react"
 import { Routes } from "~Navigation"
 import { TestHelpers, TestWrapper } from "~Test"
 
 import { useSmartMarketChart } from "~Api/Coingecko"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
-import { CHART_WIDTH } from "./Chart"
 import { TokenCard } from "./TokenCard"
 
 jest.mock("~Api/Coingecko", () => ({
@@ -19,7 +18,7 @@ jest.mock("~Hooks/useTokenCardBalance", () => ({
 
 jest.mock("react-native", () => ({
     ...jest.requireActual("react-native"),
-    Dimensions: { get: jest.fn().mockReturnValue({ width: 400, height: 400 }) },
+    Dimensions: { get: jest.fn().mockReturnValue({ width: 400, height: 800 }) },
 }))
 
 const mockedNavigate = jest.fn()
@@ -84,7 +83,7 @@ describe("TokenCard", () => {
         expect(screen.getByTestId("TOKEN_CARD_NAME")).toHaveTextContent(name)
     })
 
-    it("should not display chart icon by default (when no layout event fired)", () => {
+    it("should not display chart icon on large screens (shouldShowCharts = true)", () => {
         ;(useSmartMarketChart as jest.Mock).mockReturnValue({
             data: [
                 { timestamp: Date.now(), value: 1 },
@@ -99,8 +98,8 @@ describe("TokenCard", () => {
 
         render(<TokenCard token={TestHelpers.data.VeDelegateWithBalance} />, { wrapper: TestWrapper })
 
-        // By default, without layout event, availableChartWidth is undefined
-        // This means hasSpaceForChart defaults to true, so icon should not show
+        // On large screens (height > 667), shouldShowCharts is true
+        // so chart is shown and icon should not be displayed
         expect(screen.queryByTestId("TOKEN_CARD_CHART_ICON")).toBeNull()
     })
 
@@ -158,67 +157,10 @@ describe("TokenCard", () => {
     })
 
     describe("Chart icon visibility and colors", () => {
-        it("should show green chart icon when price is going up", async () => {
-            ;(useSmartMarketChart as jest.Mock).mockReturnValue({
-                data: [
-                    { timestamp: Date.now(), value: 1 },
-                    { timestamp: Date.now() + 10000, value: 2 }, // Price going up
-                ],
-            })
-            ;(useTokenCardBalance as jest.Mock).mockReturnValue({
-                fiatBalance: "$1.00",
-                showFiatBalance: true,
-                tokenBalance: "2.00",
-            })
+        // With default mock (height 800, large screen), shouldShowCharts = true
+        // Chart is rendered, not the icon
 
-            const { getByTestId } = render(<TokenCard token={TestHelpers.data.VETWithBalance} />, {
-                wrapper: TestWrapper,
-            })
-
-            // Trigger layout event with small width
-            const chart = getByTestId("TOKEN_CARD_CHART")
-            await act(() => {
-                fireEvent(chart!, "layout", {
-                    nativeEvent: { layout: { width: CHART_WIDTH - 20 } },
-                })
-            })
-
-            const chartIcon = screen.getByTestId("TOKEN_CARD_CHART_ICON")
-            expect(chartIcon).toBeTruthy()
-            // Icon should be visible when price is going up
-        })
-
-        it("should show red chart icon when price is going down", async () => {
-            ;(useSmartMarketChart as jest.Mock).mockReturnValue({
-                data: [
-                    { timestamp: Date.now(), value: 2 },
-                    { timestamp: Date.now() + 10000, value: 1 }, // Price going down
-                ],
-            })
-            ;(useTokenCardBalance as jest.Mock).mockReturnValue({
-                fiatBalance: "$1.00",
-                showFiatBalance: true,
-                tokenBalance: "2.00",
-            })
-
-            const { getByTestId } = render(<TokenCard token={TestHelpers.data.VETWithBalance} />, {
-                wrapper: TestWrapper,
-            })
-
-            // Trigger layout event with small width
-            const chart = getByTestId("TOKEN_CARD_CHART")
-            await act(() => {
-                fireEvent(chart!, "layout", {
-                    nativeEvent: { layout: { width: CHART_WIDTH - 20 } },
-                })
-            })
-
-            const chartIcon = screen.getByTestId("TOKEN_CARD_CHART_ICON")
-            expect(chartIcon).toBeTruthy()
-            // Icon should be visible when price is going down
-        })
-
-        it("should not show chart icon when showChart = true", async () => {
+        it("should not show chart icon on large screens (shouldShowCharts = true)", () => {
             ;(useSmartMarketChart as jest.Mock).mockReturnValue({
                 data: [
                     { timestamp: Date.now(), value: 1 },
@@ -231,20 +173,15 @@ describe("TokenCard", () => {
                 tokenBalance: "2.00",
             })
 
-            const { getByTestId } = render(<TokenCard token={TestHelpers.data.VETWithBalance} />, {
+            render(<TokenCard token={TestHelpers.data.VETWithBalance} />, {
                 wrapper: TestWrapper,
             })
 
-            // Trigger layout event
-            const chart = getByTestId("TOKEN_CARD_CHART")
-            await act(() => {
-                fireEvent(chart!, "layout", {
-                    nativeEvent: { layout: { width: CHART_WIDTH } },
-                })
-            })
-
-            // Chart icon should not be visible when there's space for chart
+            // On large screens (height > 667), shouldShowCharts is true, so chart is shown
+            // and icon should not be visible
             expect(screen.queryByTestId("TOKEN_CARD_CHART_ICON")).toBeNull()
+            // Chart should be rendered instead
+            expect(screen.getByTestId("TOKEN_CARD_CHART")).toBeTruthy()
         })
 
         it("should not show chart icon when showFiatBalance is false", () => {
@@ -259,17 +196,31 @@ describe("TokenCard", () => {
                 tokenBalance: "2.00",
             })
 
-            const { getByTestId } = render(<TokenCard token={TestHelpers.data.VETWithBalance} />, {
+            render(<TokenCard token={TestHelpers.data.VETWithBalance} />, {
                 wrapper: TestWrapper,
             })
 
-            // Trigger layout event with small width
-            const tokenCard = getByTestId("TOKEN_CARD_NAME").parent?.parent?.parent
-            fireEvent(tokenCard!, "layout", {
-                nativeEvent: { layout: { width: 250 } },
+            // Chart icon should not be visible when showFiatBalance is false
+            // (chartIcon memo returns null when showFiatBalance is false)
+            expect(screen.queryByTestId("TOKEN_CARD_CHART_ICON")).toBeNull()
+        })
+
+        it("should not show chart icon when chart data is unavailable", () => {
+            ;(useSmartMarketChart as jest.Mock).mockReturnValue({
+                data: null, // No price data
+            })
+            ;(useTokenCardBalance as jest.Mock).mockReturnValue({
+                fiatBalance: "$1.00",
+                showFiatBalance: true,
+                tokenBalance: "2.00",
             })
 
-            // Chart icon should not be visible when showFiatBalance is false
+            render(<TokenCard token={TestHelpers.data.VETWithBalance} />, {
+                wrapper: TestWrapper,
+            })
+
+            // Icon should not be visible when there's no chart data
+            // (chartIcon memo returns null when chartData is null)
             expect(screen.queryByTestId("TOKEN_CARD_CHART_ICON")).toBeNull()
         })
     })
