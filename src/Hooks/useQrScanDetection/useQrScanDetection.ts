@@ -22,10 +22,9 @@ type Args = {
      * Function triggered when the scan is successful
      */
     onScan: (data: string) => Promise<void>
-    points: SharedValue<{ x: number; y: number }[]>
 }
 
-export const useQrScanDetection = ({ offsetX, offsetY, size, onScan, points: _points }: Args) => {
+export const useQrScanDetection = ({ offsetX, offsetY, size, onScan }: Args) => {
     const { bottom } = useSafeAreaInsets()
     return useCallback(
         async (codes: Code[], frame: CodeScannerFrame) => {
@@ -63,8 +62,6 @@ export const useQrScanDetection = ({ offsetX, offsetY, size, onScan, points: _po
                 },
             ]
 
-            _points.value = [...points]
-
             const biggerRect = {
                 x: offsetX.value * 0.8,
                 y: offsetY.value * 0.8,
@@ -86,6 +83,6 @@ export const useQrScanDetection = ({ offsetX, offsetY, size, onScan, points: _po
                 return onScan(code.value)
             }
         },
-        [bottom, _points, offsetX.value, offsetY.value, size, onScan],
+        [bottom, offsetX.value, offsetY.value, size, onScan],
     )
 }
