@@ -14,7 +14,7 @@ import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useResetActivityStack } from "./Hooks"
-import { ActivityTabBar } from "./navigation"
+import { OldActivityTabBar } from "./navigation"
 import {
     ActivityAllScreen,
     ActivityB3trScreen,
@@ -66,9 +66,11 @@ export const ActivityScreen = () => {
                             animationEnabled:
                                 PlatformUtils.isIOS() || (PlatformUtils.isAndroid() && !DeviceUtils.isSlowDevice()),
                             lazy: true,
-                            swipeEnabled: false,
+                            tabBarScrollEnabled: true,
+                            swipeEnabled: true,
+                            tabBarBounces: false,
                         }}
-                        tabBar={ActivityTabBar}>
+                        tabBar={OldActivityTabBar}>
                         <Tab.Screen
                             name={Routes.ACTIVITY_ALL}
                             component={ActivityAllScreen}
