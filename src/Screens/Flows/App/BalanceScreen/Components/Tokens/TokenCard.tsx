@@ -214,7 +214,7 @@ export const TokenCard = ({ token }: Props) => {
                     </>
                 ) : (
                     <BaseText
-                        typographyFont="bodySemiBold"
+                        typographyFont="captionSemiBold"
                         color={theme.colors.activityCard.title}
                         align="right"
                         numberOfLines={1}
