@@ -10,7 +10,7 @@ import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import ChartUtils from "~Utils/ChartUtils"
 
 // Chart configuration constants
-export const CHART_WIDTH = 60
+export const CHART_WIDTH = 48
 const CHART_HEIGHT = 32
 const CHART_STROKE_WIDTH = 2
 
@@ -62,7 +62,9 @@ export const Chart = ({ token, setShowChart, showChart }: Props) => {
             rendered.current = true
             if (Math.floor(e.nativeEvent.layout.width) < CHART_WIDTH) {
                 setShowChart(false)
-            } else opacity.value = withTiming(1)
+            } else {
+                opacity.value = withTiming(1)
+            }
         },
         [opacity, setShowChart],
     )
