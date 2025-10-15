@@ -1,7 +1,10 @@
 import { useCallback } from "react"
 import { PixelRatio } from "react-native"
 import { SharedValue } from "react-native-reanimated"
-import { Code, DrawableFrame, runAtTargetFps } from "react-native-vision-camera"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { Code, CodeScannerFrame, DrawableFrame, runAtTargetFps } from "react-native-vision-camera"
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
+import { PlatformUtils } from "~Utils"
 
 type Args = {
     /**
@@ -20,7 +23,7 @@ type Args = {
      * Function triggered when the scan is successful
      */
     onScan: (data: string) => Promise<void>
-    points: SharedValue<{ d: string }[]>
+    points: SharedValue<{ x: number; y: number }[]>
     codes: SharedValue<Code[]>
     frame: SharedValue<DrawableFrame>
     setCodes: (codes: Code[]) => void
@@ -38,47 +41,61 @@ export const useQrScanDetection = ({
     setCodes: _setCodes,
     setFrame: _setFrame,
 }: Args) => {
+    const { bottom } = useSafeAreaInsets()
     return useCallback(
-        async (codes: Code[], frame: DrawableFrame) => {
+        async (codes: Code[], frame: CodeScannerFrame) => {
             if (codes.length === 0) return
-            if (codes[0].frame) {
-                _codes.value = codes
-                _frame.value = frame
-                _setCodes(codes)
-                _setFrame(frame)
-                const codesFrame = codes[0].frame
-                const topLeftX = codesFrame.x
-                const topLeftY = codesFrame.y
-                const topRightX = codesFrame.x + codesFrame.width
-                const topRightY = codesFrame.y
-                const bottomRightX = codesFrame.x + codesFrame.width
-                const bottomRightY = codesFrame.y + codesFrame.height
-                const bottomLeftX = codesFrame.x
-                const bottomLeftY = codesFrame.y + codesFrame.height
+            const code = codes[0]
+            if (!code.frame || !code.value) return
+            const offset = PlatformUtils.isIOS() ? 100 : 0
+            const topLeftX =
+                ((100 - ((code.frame.y + code.frame.width / 2) / frame.height || 0) * 100) / 100) * SCREEN_WIDTH -
+                offset
+            const topLeftY =
+                ((code.frame.x + code.frame.height / 2) / (frame.width || 0)) * (SCREEN_HEIGHT - bottom) - offset
+            const points = [
+                // {
+                //     // x: (parseFloat(
+                //     //     `${100 - ((code.frame.y + code.frame.width / 2) / frame.height || 0) * 100}`,
+                //     // ) /
+                //     //     100) *
+                //     // SCREEN_WIDTH - offset,
+                //     x: ((100 - ((code.frame.y + code.frame.width / 2) / frame.height || 0) * 100) /
+                //         100) *
+                //     SCREEN_WIDTH - offset,
+                //     // y:
+                //     // (parseFloat(`${((code.frame.x + code.frame.height / 2) / (frame.width || 0)) * 100}`) /
+                //     //     100) *
+                //     // (SCREEN_HEIGHT - bottom) - offset
+                //     y:
+                //     ((code.frame.x + code.frame.height / 2) / (frame.width || 0)) *
+                //     (SCREEN_HEIGHT - bottom) - offset
+                // }
+                {
+                    x: topLeftX,
+                    y: topLeftY,
+                },
+                {
+                    x: topLeftX + 200,
+                    y: topLeftY,
+                },
+                {
+                    x: topLeftX + 200,
+                    y: topLeftY + 200,
+                },
+                {
+                    x: topLeftX,
+                    y: topLeftY + 200,
+                },
+            ]
+            // return {
+            //     x: 100 - ((code.frame.y + code.frame.width / 2) / sharedFrame.value.height) * SCREEN_HEIGHT + 100,
+            //     y: ((code.frame.x + code.frame.height / 2) / sharedFrame.value.width) * SCREEN_WIDTH + 100,
+            // }
 
-                _points.value = [
-                    {
-                        d: `M${topLeftX + codesFrame.width / 3} ${topLeftY} H${topLeftX} V${
-                            topLeftY + codesFrame.height / 3
-                        }`,
-                    },
-                    {
-                        d: `M${topRightX - codesFrame.width / 3} ${topRightY} H${topRightX} V${
-                            topRightY + codesFrame.height / 3
-                        }`,
-                    },
-                    {
-                        d: `M${bottomRightX - codesFrame.width / 3} ${bottomRightY} H${bottomRightX} V${
-                            bottomRightY - codesFrame.height / 3
-                        }`,
-                    },
-                    {
-                        d: `M${bottomLeftX + codesFrame.width / 3} ${bottomLeftY} H${bottomLeftX} V${
-                            bottomLeftY - codesFrame.height / 3
-                        }`,
-                    },
-                ]
-            }
+            console.log(points)
+
+            _points.value = [...points]
 
             const biggerRect = {
                 x: offsetX.value * 0.8,
@@ -87,20 +104,20 @@ export const useQrScanDetection = ({
                 height: size + offsetY.value * 0.4,
             }
 
-            //Outside of detection area
-            // if (
-            //     points.every(point => {
-            //         return (
-            //             point.x >= biggerRect.x &&
-            //             point.x <= biggerRect.x + biggerRect.width &&
-            //             point.y >= biggerRect.y &&
-            //             point.y <= biggerRect.y + biggerRect.height
-            //         )
-            //     })
-            // ) {
-            //     return onScan(code.value)
-            // }
+            // Outside of detection area
+            if (
+                points.every(point => {
+                    return (
+                        point.x >= biggerRect.x &&
+                        point.x <= biggerRect.x + biggerRect.width &&
+                        point.y >= biggerRect.y &&
+                        point.y <= biggerRect.y + biggerRect.height
+                    )
+                })
+            ) {
+                return onScan(code.value)
+            }
         },
-        [_points, offsetX.value, offsetY.value, size, _setCodes, _setFrame],
+        [bottom, offsetX.value, offsetY.value, size, onScan],
     )
 }

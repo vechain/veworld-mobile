@@ -1,17 +1,9 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { Canvas, Circle, Fill, Path, Points, Rect, RoundedRect, Skia, vec } from "@shopify/react-native-skia"
+import { Canvas, Fill, Points, Skia, vec } from "@shopify/react-native-skia"
 import { Camera } from "expo-camera"
-import React, { forwardRef, RefObject, useCallback, useEffect, useMemo, useRef, useState } from "react"
-import {
-    LayoutChangeEvent,
-    PixelRatio,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    useWindowDimensions,
-    View,
-} from "react-native"
-import Animated, { runOnJS, useDerivedValue, useSharedValue } from "react-native-reanimated"
+import React, { forwardRef, RefObject, useCallback, useEffect, useMemo, useState } from "react"
+import { LayoutChangeEvent, PixelRatio, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { useDerivedValue, useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Code, DrawableFrame, Camera as RNVCamera, useCameraDevice, useCodeScanner } from "react-native-vision-camera"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
@@ -211,7 +203,7 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
 
     const insets = useSafeAreaInsets()
 
-    const points = useSharedValue<{ d: string }[]>([])
+    const points = useSharedValue<{ x: number; y: number }[]>([])
 
     const [codes, setCodes] = useState<Code[]>([])
     const [frame, setFrame] = useState<DrawableFrame>(null!)
@@ -251,30 +243,23 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
                         `${100 - ((code.frame.y + code.frame.width / 2) / sharedFrame.value?.height || 0) * 100}`,
                     ) /
                         100) *
-                        SCREEN_WIDTH -
-                    100,
+                    SCREEN_WIDTH,
                 y:
                     (parseFloat(`${((code.frame.x + code.frame.height / 2) / (sharedFrame.value?.width || 0)) * 100}`) /
                         100) *
-                        (SCREEN_HEIGHT - insets.bottom) -
-                    100,
+                    (SCREEN_HEIGHT - insets.bottom),
             }
             // return {
             //     x: 100 - ((code.frame.y + code.frame.width / 2) / sharedFrame.value.height) * SCREEN_HEIGHT + 100,
             //     y: ((code.frame.x + code.frame.height / 2) / sharedFrame.value.width) * SCREEN_WIDTH + 100,
             // }
         })
-        console.log("frames", frames)
+        // console.log("frames", frames)
         return frames
     }, [sharedCodes.value, sharedFrame.value, insets.bottom])
 
     const pointsV = useDerivedValue(() => {
-        console.log("points", points.value)
-        console.log("W", SCREEN_WIDTH)
-        console.log("H", SCREEN_HEIGHT)
-
-        return points.value.map(p => p.d)
-        // return points.value.map(p => vec(p.x / 2, p.y / 2))
+        return points.value.map(p => vec(p.x, p.y))
         // return [vec(100, 100), vec(150, 100), vec(150, 150), vec(100, 150)]
     })
 
@@ -290,10 +275,11 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
             )}
 
             <Canvas style={StyleSheet.absoluteFill}>
+                <Points style={"stroke"} strokeWidth={2} points={pointsV} color={"green"} mode="polygon" />
                 <Fill color={COLORS.BALANCE_BACKGROUND_80} clip={skiaClip} invertClip />
             </Canvas>
 
-            {derivedCodeFrame.value.map((code, index) => {
+            {/* {derivedCodeFrame.value.map((code, index) => {
                 // if (code.frame === undefined) return <></>
                 return (
                     <Animated.View
@@ -311,7 +297,7 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
                         }}
                     />
                 )
-            })}
+            })} */}
             <BaseView style={[StyleSheet.absoluteFill, styles.cameraChildren]}>{children}</BaseView>
         </BaseView>
     ) : (
