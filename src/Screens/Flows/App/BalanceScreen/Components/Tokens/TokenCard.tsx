@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native"
-import { default as React, useCallback, useMemo, useState } from "react"
+import { default as React, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { useDevice } from "~Components/Providers/DeviceProvider"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, typography, VET, VOT3, VTHO } from "~Constants"
+import { B3TR, COLORS, isSmallScreen, typography, VET, VOT3, VTHO } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
@@ -25,7 +26,11 @@ export const TokenCard = ({ token }: Props) => {
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
-    const [showChart, setShowChart] = useState(true)
+    const { isLowEndDevice } = useDevice()
+
+    // Decide chart visibility based on device/screen size BEFORE rendering
+    // This ensures ALL token cards show either charts OR indicators consistently
+    const shouldShowCharts = useMemo(() => !isSmallScreen && !isLowEndDevice, [isLowEndDevice])
     const name = useMemo(() => {
         switch (token.symbol) {
             case "VET":
@@ -62,7 +67,7 @@ export const TokenCard = ({ token }: Props) => {
     }, [isBalanceVisible, tokenBalance])
 
     const chartIcon = useMemo(() => {
-        if (!chartData || !showFiatBalance || showChart) return null
+        if (!chartData || !showFiatBalance || shouldShowCharts) return null
 
         return (
             <BaseIcon
@@ -72,7 +77,7 @@ export const TokenCard = ({ token }: Props) => {
                 testID="TOKEN_CARD_CHART_ICON"
             />
         )
-    }, [chartData, showFiatBalance, showChart, isGoingUp])
+    }, [chartData, showFiatBalance, shouldShowCharts, isGoingUp])
 
     const symbol = useMemo(() => {
         switch (token.symbol) {
@@ -80,7 +85,7 @@ export const TokenCard = ({ token }: Props) => {
                 return (
                     <BaseView flexDirection="row" gap={4} overflow="hidden">
                         <BaseText
-                            typographyFont="smallCaptionSemiBold"
+                            typographyFont="bodySemiBold"
                             numberOfLines={1}
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL_1">
@@ -92,7 +97,7 @@ export const TokenCard = ({ token }: Props) => {
                             color={theme.colors.activityCard.subtitleLight}
                         />
                         <BaseText
-                            typographyFont="smallCaptionSemiBold"
+                            typographyFont="bodySemiBold"
                             numberOfLines={1}
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL_2">
@@ -106,7 +111,7 @@ export const TokenCard = ({ token }: Props) => {
                 return (
                     <BaseView flexDirection="row" gap={4}>
                         <BaseText
-                            typographyFont="smallCaptionSemiBold"
+                            typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL">
                             {token.symbol}
@@ -163,12 +168,13 @@ export const TokenCard = ({ token }: Props) => {
                 />
 
                 {symbol ? (
-                    <BaseView flexDirection="column" flexGrow={0} flexShrink={1}>
+                    <BaseView flexDirection="column" flexGrow={0} flexShrink={1} style={styles.tokenInfo}>
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="subSubTitleBold"
                             color={theme.colors.activityCard.title}
                             flexDirection="row"
                             numberOfLines={1}
+                            ellipsizeMode="tail"
                             testID="TOKEN_CARD_NAME">
                             {name}
                         </BaseText>
@@ -177,24 +183,27 @@ export const TokenCard = ({ token }: Props) => {
                 ) : (
                     <BaseText
                         flex={1}
-                        typographyFont="bodySemiBold"
+                        typographyFont="subSubTitleBold"
                         color={theme.colors.activityCard.title}
                         flexDirection="row"
-                        numberOfLines={1}>
+                        numberOfLines={1}
+                        ellipsizeMode="tail">
                         {name}
                     </BaseText>
                 )}
             </BaseView>
 
-            <BaseView style={styles.chartContainer}>
-                <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
-            </BaseView>
+            {shouldShowCharts && (
+                <BaseView style={styles.chartContainer}>
+                    <Chart token={token} />
+                </BaseView>
+            )}
 
             <BaseView flexDirection="column" alignItems="flex-end" style={styles.balanceSection}>
                 {showFiatBalance ? (
                     <>
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="subSubTitleBold"
                             color={theme.colors.activityCard.title}
                             align="right"
                             numberOfLines={1}
@@ -203,7 +212,7 @@ export const TokenCard = ({ token }: Props) => {
                             {fiatBalance}
                         </BaseText>
                         <BaseText
-                            typographyFont="captionSemiBold"
+                            typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             align="right"
                             numberOfLines={1}
@@ -214,7 +223,7 @@ export const TokenCard = ({ token }: Props) => {
                     </>
                 ) : (
                     <BaseText
-                        typographyFont="bodySemiBold"
+                        typographyFont="subSubTitleBold"
                         color={theme.colors.activityCard.title}
                         align="right"
                         numberOfLines={1}
@@ -239,6 +248,9 @@ const baseStyles = () =>
         leftSection: {
             flexGrow: 1,
             flexShrink: 1,
+            minWidth: 0,
+        },
+        tokenInfo: {
             minWidth: 0,
         },
         chartContainer: {
