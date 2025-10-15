@@ -289,6 +289,10 @@ type RootTranslation = {
 	 */
 	ADD_APP: string
 	/**
+	 * S​c​a​n​ ​a​ ​w​a​l​l​e​t​ ​Q​R​ ​c​o​d​e​ ​t​o​ ​a​d​d​ ​a​s​ ​c​o​n​t​a​c​t
+	 */
+	ADD_CONTACT_QR_DESCRIPTION: string
+	/**
 	 * A​d​d​ ​W​a​l​l​e​t
 	 */
 	ADD_WALLET: string
@@ -607,6 +611,10 @@ type RootTranslation = {
 	 * B​u​y
 	 */
 	BALANCE_ACTION_BUY: string
+	/**
+	 * E​a​r​n
+	 */
+	BALANCE_ACTION_EARN: string
 	/**
 	 * O​t​h​e​r
 	 */
@@ -2268,6 +2276,10 @@ type RootTranslation = {
 	 */
 	COPIED_QR_CODE_FOR_ACCOUNT: string
 	/**
+	 * C​o​p​y
+	 */
+	COPY: string
+	/**
 	 * C​l​i​c​k​ ​t​o​ ​c​o​p​y​ ​A​B​I
 	 */
 	COPY_ABI: string
@@ -3293,7 +3305,7 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: string
 	/**
-	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d​!
+	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​!
 	 * @param {string} name
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: RequiredParams<'name'>
@@ -3588,6 +3600,30 @@ type RootTranslation = {
 	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
+	/**
+	 * E​n​a​b​l​e​ ​y​o​u​r​ ​c​a​m​e​r​a​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​s​c​a​n​ ​a​ ​Q​R​ ​c​o​d​e
+	 */
+	QR_CODE_CAMERA_PERMS: string
+	/**
+	 * E​n​a​b​l​e​ ​p​e​r​m​i​s​s​i​o​n​s
+	 */
+	QR_CODE_CAMERA_PERMS_CTA: string
+	/**
+	 * U​s​e​ ​y​o​u​r​ ​c​o​d​e​ ​t​o​ ​r​e​c​e​i​v​e​ ​t​r​a​n​s​f​e​r​s
+	 */
+	QR_CODE_RECEIVE_DESCRIPTION: string
+	/**
+	 * Y​o​u​r​ ​Q​R​ ​c​o​d​e
+	 */
+	QR_CODE_RECEIVE_TITLE: string
+	/**
+	 * S​c​a​n​ ​a​ ​c​o​d​e​ ​t​o​ ​t​r​a​n​s​f​e​r​ ​f​u​n​d​s​ ​o​r​ ​c​o​n​n​e​c​t​ ​a​ ​d​A​p​p
+	 */
+	QR_CODE_SCAN_DESCRIPTION: string
+	/**
+	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
+	 */
+	QR_CODE_SCAN_TITLE: string
 	/**
 	 * R​e​c​a​p
 	 */
@@ -3951,6 +3987,10 @@ type RootTranslation = {
 	 */
 	SB_YOUR_WALLETS: string
 	/**
+	 * S​c​a​n​ ​a​ ​Q​R​ ​c​o​d​e
+	 */
+	SCAN_QR_CODE: string
+	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
 	SECURITY_BACKUP_BTN: string
@@ -4269,6 +4309,14 @@ type RootTranslation = {
 	 */
 	SEND_RANGE_ZERO: string
 	/**
+	 * R​e​c​e​i​v​e
+	 */
+	SEND_RECEIVE_TAB_RECEIVE: string
+	/**
+	 * S​c​a​n
+	 */
+	SEND_RECEIVE_TAB_SCAN: string
+	/**
 	 * T​o
 	 */
 	SEND_TO: string
@@ -4405,6 +4453,10 @@ type RootTranslation = {
 	 * T​r​a​n​s​a​c​t​i​o​n​s
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: string
+	/**
+	 * S​h​a​r​e
+	 */
+	SHARE: string
 	/**
 	 * D​i​s​c​o​v​e​r​e​d​ ​{​n​a​m​e​}​ ​o​n​ ​V​e​W​o​r​l​d​ ​—​ ​d​e​f​i​n​i​t​e​l​y​ ​w​o​r​t​h​ ​a​ ​l​o​o​k​.​
 ​H​e​r​e​'​s​ ​w​h​a​t​ ​i​t​'​s​ ​a​l​l​ ​a​b​o​u​t​:​
@@ -5096,6 +5148,10 @@ type RootTranslation = {
 	 */
 	WALLETS_SAVED_ON_ICLOUD: string
 	/**
+	 * W​a​l​l​e​t​C​o​n​n​e​c​t​ ​s​u​p​p​o​r​t​e​d
+	 */
+	WALLET_CONNECT_SUPPORTED: string
+	/**
 	 * {​c​o​u​n​t​}​ ​a​c​c​o​u​n​t​s
 	 * @param {number} count
 	 */
@@ -5281,10 +5337,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * E​a​r​n
-	 */
-	BALANCE_ACTION_EARN: string
 }
 
 export type TranslationFunctions = {
@@ -5538,6 +5590,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Add app
 	 */
 	ADD_APP: () => LocalizedString
+	/**
+	 * Scan a wallet QR code to add as contact
+	 */
+	ADD_CONTACT_QR_DESCRIPTION: () => LocalizedString
 	/**
 	 * Add Wallet
 	 */
@@ -5851,6 +5907,10 @@ Try reconnect your device to the internet.
 	 * Buy
 	 */
 	BALANCE_ACTION_BUY: () => LocalizedString
+	/**
+	 * Earn
+	 */
+	BALANCE_ACTION_EARN: () => LocalizedString
 	/**
 	 * Other
 	 */
@@ -7498,6 +7558,10 @@ Thanks for your patience!
 	 */
 	COPIED_QR_CODE_FOR_ACCOUNT: () => LocalizedString
 	/**
+	 * Copy
+	 */
+	COPY: () => LocalizedString
+	/**
 	 * Click to copy ABI
 	 */
 	COPY_ABI: () => LocalizedString
@@ -8519,7 +8583,7 @@ Thanks for your patience!
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: () => LocalizedString
 	/**
-	 * {name} copied to clipboard!
+	 * {name} copied!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: string }) => LocalizedString
 	/**
@@ -8798,6 +8862,30 @@ Thanks for your patience!
 	 * Vote reminder
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
+	/**
+	 * Enable your camera permissions to scan a QR code
+	 */
+	QR_CODE_CAMERA_PERMS: () => LocalizedString
+	/**
+	 * Enable permissions
+	 */
+	QR_CODE_CAMERA_PERMS_CTA: () => LocalizedString
+	/**
+	 * Use your code to receive transfers
+	 */
+	QR_CODE_RECEIVE_DESCRIPTION: () => LocalizedString
+	/**
+	 * Your QR code
+	 */
+	QR_CODE_RECEIVE_TITLE: () => LocalizedString
+	/**
+	 * Scan a code to transfer funds or connect a dApp
+	 */
+	QR_CODE_SCAN_DESCRIPTION: () => LocalizedString
+	/**
+	 * Scan QR Code
+	 */
+	QR_CODE_SCAN_TITLE: () => LocalizedString
 	/**
 	 * Recap
 	 */
@@ -9155,6 +9243,10 @@ Thanks for your patience!
 	 */
 	SB_YOUR_WALLETS: () => LocalizedString
 	/**
+	 * Scan a QR code
+	 */
+	SCAN_QR_CODE: () => LocalizedString
+	/**
 	 * Backup now
 	 */
 	SECURITY_BACKUP_BTN: () => LocalizedString
@@ -9471,6 +9563,14 @@ Thanks for your patience!
 	 */
 	SEND_RANGE_ZERO: () => LocalizedString
 	/**
+	 * Receive
+	 */
+	SEND_RECEIVE_TAB_RECEIVE: () => LocalizedString
+	/**
+	 * Scan
+	 */
+	SEND_RECEIVE_TAB_SCAN: () => LocalizedString
+	/**
 	 * To
 	 */
 	SEND_TO: () => LocalizedString
@@ -9603,6 +9703,10 @@ Are you sure you want to continue?
 	 * Transactions
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: () => LocalizedString
+	/**
+	 * Share
+	 */
+	SHARE: () => LocalizedString
 	/**
 	 * Discovered {name} on VeWorld — definitely worth a look.
 Here's what it's all about:
@@ -10287,6 +10391,10 @@ Here's what it's all about:
 	 */
 	WALLETS_SAVED_ON_ICLOUD: () => LocalizedString
 	/**
+	 * WalletConnect supported
+	 */
+	WALLET_CONNECT_SUPPORTED: () => LocalizedString
+	/**
 	 * {count} accounts
 	 */
 	WALLET_DETAIL_ACCOUNTS_NUMER: (arg: { count: number }) => LocalizedString
@@ -10470,10 +10578,6 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Earn
-	 */
-	BALANCE_ACTION_EARN: () => LocalizedString
 }
 
 export type Formatters = {

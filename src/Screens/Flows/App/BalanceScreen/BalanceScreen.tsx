@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
-import { BaseSpacer, Layout, QRCodeBottomSheet } from "~Components"
+import { BaseSpacer, Layout } from "~Components"
 import { COLORS } from "~Constants"
-import { useBottomSheetModal, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
+import { useFetchFeaturedDApps, usePrefetchAllVns, useThemedStyles } from "~Hooks"
 import { useOfficialTokens } from "~Hooks/useOfficialTokens"
 import {
     addOfficialTokens,
@@ -23,6 +23,8 @@ import { TabRenderer } from "./Tabs/TabRenderer"
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
 export const BalanceScreen = () => {
+    //Pre fetch all VNS names and addresses
+    usePrefetchAllVns()
     //DO NOT REMOVE THIS FROM HERE, OTHERWISE APPS WON'T BE LOADED
     useFetchFeaturedDApps()
 
@@ -39,8 +41,6 @@ export const BalanceScreen = () => {
         if (officialTokens?.length)
             dispatch(addOfficialTokens({ network: selectedNetwork.type, tokens: officialTokens }))
     }, [dispatch, officialTokens, selectedNetwork.type])
-
-    const { ref: qrCodeBottomSheetRef } = useBottomSheetModal()
 
     const onLayout = useCallback(
         (e: LayoutChangeEvent) => {
@@ -97,18 +97,12 @@ export const BalanceScreen = () => {
                         <BaseSpacer height={6} />
                         <BaseSpacer height={24} />
 
-                        {!isObservedAccount && (
-                            <BalanceActions
-                                qrCodeBottomSheetRef={qrCodeBottomSheetRef}
-                                style={balanceActionsAnimatedStyles}
-                            />
-                        )}
+                        {!isObservedAccount && <BalanceActions style={balanceActionsAnimatedStyles} />}
 
                         <BaseSpacer height={64} />
                     </AnimatedLinearGradient>
 
                     <TabRenderer onLayout={onLayout} />
-                    <QRCodeBottomSheet ref={qrCodeBottomSheetRef} />
                 </Animated.ScrollView>
             }
         />
