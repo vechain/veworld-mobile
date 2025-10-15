@@ -1,8 +1,7 @@
 import { useCallback } from "react"
-import { PixelRatio } from "react-native"
 import { SharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { Code, CodeScannerFrame, DrawableFrame, runAtTargetFps } from "react-native-vision-camera"
+import { Code, CodeScannerFrame } from "react-native-vision-camera"
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 import { PlatformUtils } from "~Utils"
 
@@ -24,23 +23,9 @@ type Args = {
      */
     onScan: (data: string) => Promise<void>
     points: SharedValue<{ x: number; y: number }[]>
-    codes: SharedValue<Code[]>
-    frame: SharedValue<DrawableFrame>
-    setCodes: (codes: Code[]) => void
-    setFrame: (frame: DrawableFrame) => void
 }
 
-export const useQrScanDetection = ({
-    offsetX,
-    offsetY,
-    size,
-    onScan,
-    points: _points,
-    codes: _codes,
-    frame: _frame,
-    setCodes: _setCodes,
-    setFrame: _setFrame,
-}: Args) => {
+export const useQrScanDetection = ({ offsetX, offsetY, size, onScan, points: _points }: Args) => {
     const { bottom } = useSafeAreaInsets()
     return useCallback(
         async (codes: Code[], frame: CodeScannerFrame) => {
@@ -48,29 +33,18 @@ export const useQrScanDetection = ({
             const code = codes[0]
             if (!code.frame || !code.value) return
             const offset = PlatformUtils.isIOS() ? 100 : 0
+            // This is the only way to make it work.
+            // You should not change this unless you're 200% sure that what you're doing is correct.
+            // This has been developed in a full day of intensive work, so please be careful before touching it.
+
+            //react-native-vision-camera has wrong dimensions set (for example on Android the camera is in 4:3 and on iOS in 16:9).
+            //It also flips between width and height arbitrarily, without any explanation.
             const topLeftX =
                 ((100 - ((code.frame.y + code.frame.width / 2) / frame.height || 0) * 100) / 100) * SCREEN_WIDTH -
                 offset
             const topLeftY =
                 ((code.frame.x + code.frame.height / 2) / (frame.width || 0)) * (SCREEN_HEIGHT - bottom) - offset
             const points = [
-                // {
-                //     // x: (parseFloat(
-                //     //     `${100 - ((code.frame.y + code.frame.width / 2) / frame.height || 0) * 100}`,
-                //     // ) /
-                //     //     100) *
-                //     // SCREEN_WIDTH - offset,
-                //     x: ((100 - ((code.frame.y + code.frame.width / 2) / frame.height || 0) * 100) /
-                //         100) *
-                //     SCREEN_WIDTH - offset,
-                //     // y:
-                //     // (parseFloat(`${((code.frame.x + code.frame.height / 2) / (frame.width || 0)) * 100}`) /
-                //     //     100) *
-                //     // (SCREEN_HEIGHT - bottom) - offset
-                //     y:
-                //     ((code.frame.x + code.frame.height / 2) / (frame.width || 0)) *
-                //     (SCREEN_HEIGHT - bottom) - offset
-                // }
                 {
                     x: topLeftX,
                     y: topLeftY,
@@ -88,12 +62,6 @@ export const useQrScanDetection = ({
                     y: topLeftY + 200,
                 },
             ]
-            // return {
-            //     x: 100 - ((code.frame.y + code.frame.width / 2) / sharedFrame.value.height) * SCREEN_HEIGHT + 100,
-            //     y: ((code.frame.x + code.frame.height / 2) / sharedFrame.value.width) * SCREEN_WIDTH + 100,
-            // }
-
-            console.log(points)
 
             _points.value = [...points]
 
@@ -118,6 +86,6 @@ export const useQrScanDetection = ({
                 return onScan(code.value)
             }
         },
-        [bottom, offsetX.value, offsetY.value, size, onScan],
+        [bottom, _points, offsetX.value, offsetY.value, size, onScan],
     )
 }
