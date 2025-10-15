@@ -24,7 +24,11 @@ export const CurrentBalance = () => {
     const dispatch = useAppDispatch()
 
     const { styles } = useThemedStyles(baseStyles)
-    const { renderedBalance } = useTotalFiatBalance({ address: account.address, enabled: true })
+    const { renderedBalance } = useTotalFiatBalance({
+        address: account.address,
+        enabled: true,
+        useCompactNotation: false,
+    })
     const { isLowEndDevice } = useDevice()
 
     const onPress = useCallback(() => {
