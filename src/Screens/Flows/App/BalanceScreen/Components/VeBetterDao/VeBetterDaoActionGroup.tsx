@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
@@ -8,6 +8,8 @@ import { useBrowserTab } from "~Hooks/useBrowserTab"
 
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils } from "~Utils"
 
 const VBD_URL = "https://governance.vebetterdao.org"
 
@@ -19,6 +21,11 @@ interface VeBetterDaoActionGroupProps {
 export const VeBetterDaoActionGroup = ({ onShareCard, isSharing = false }: VeBetterDaoActionGroupProps) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+
+    const isObservedAccount = useMemo(() => {
+        return AccountUtils.isObservedAccount(selectedAccount)
+    }, [selectedAccount])
 
     const nav = useNavigation()
     const { navigateWithTab } = useBrowserTab()
@@ -32,6 +39,8 @@ export const VeBetterDaoActionGroup = ({ onShareCard, isSharing = false }: VeBet
             },
         })
     }, [nav, navigateWithTab])
+
+    if (isObservedAccount) return null
 
     return (
         <BaseView

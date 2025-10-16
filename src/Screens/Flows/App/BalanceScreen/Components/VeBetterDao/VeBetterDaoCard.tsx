@@ -82,11 +82,14 @@ export const VeBetterDaoCard = forwardRef<View>((_, ref) => {
 
             <BaseSpacer height={16} />
             <BaseView flexDirection="row" alignItems="center" justifyContent="center">
-                <BaseText color={COLORS.GREY_400} typographyFont="buttonMedium" style={styles.poweredByText}>
+                <BaseText
+                    color={theme.isDark ? COLORS.GREY_400 : COLORS.GREY_500}
+                    typographyFont="buttonMedium"
+                    style={styles.poweredByText}>
                     {LL.VBD_POWERED_BY()}
                 </BaseText>
-                <VeBetterPoweredSvg width={79} height={16} />
-                <BaseText color={COLORS.GREY_400} typographyFont="buttonMedium">
+                <VeBetterPoweredSvg width={79} height={16} color={theme.isDark ? COLORS.GREY_400 : COLORS.GREY_500} />
+                <BaseText color={theme.isDark ? COLORS.GREY_400 : COLORS.GREY_500} typographyFont="buttonMedium">
                     {LL.VBD_POWERED_BY_COM()}
                 </BaseText>
             </BaseView>
