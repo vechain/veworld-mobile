@@ -30,6 +30,11 @@ export const useCameraBottomSheet = ({ targets, sourceScreen, title, description
         openScanAddressSheet({ tabs: ["scan"], defaultTab: "scan" })
     }, [openScanAddressSheet])
 
+    const handleOpenOnlyReceiveCamera = useCallback(() => {
+        Keyboard.dismiss()
+        openScanAddressSheet({ tabs: ["receive"], defaultTab: "receive" })
+    }, [openScanAddressSheet])
+
     const onScan = useScanTargets({ targets, sourceScreen, ...rest })
 
     const RenderCameraModal = useMemo(
@@ -45,5 +50,5 @@ export const useCameraBottomSheet = ({ targets, sourceScreen, title, description
         [scanAddressSheetRef, onScan, title, description, targets],
     )
 
-    return { RenderCameraModal, handleOpenCamera, handleOpenOnlyScanCamera }
+    return { RenderCameraModal, handleOpenCamera, handleOpenOnlyScanCamera, handleOpenOnlyReceiveCamera }
 }

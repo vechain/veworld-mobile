@@ -1,8 +1,10 @@
-import React from "react"
 import { render, screen } from "@testing-library/react-native"
-import { TokenCard } from "./TokenCard"
-import { TestWrapper, TestHelpers } from "~Test"
+import React from "react"
+import { TestHelpers, TestWrapper } from "~Test"
+
 import { useVechainStatsTokenInfo } from "~Api/Coingecko"
+
+import { TokenCard } from "./TokenCard"
 
 const { VETWithBalance, CustomTokenWithBalance } = TestHelpers.data
 

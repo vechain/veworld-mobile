@@ -26,7 +26,8 @@ export const BalanceActions = ({ style }: Props) => {
     const account = useAppSelector(selectSelectedAccount)
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
-        targets: [ScanTarget.ADDRESS, ScanTarget.VNS],
+        targets: [ScanTarget.ADDRESS, ScanTarget.WALLET_CONNECT, ScanTarget.HTTPS_URL],
+        sourceScreen: Routes.HOME,
     })
 
     const { rawAmount } = useTotalFiatBalance({ address: account.address, enabled: true })

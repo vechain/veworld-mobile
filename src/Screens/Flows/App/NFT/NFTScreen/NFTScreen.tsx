@@ -1,12 +1,10 @@
-import React, { useCallback, useMemo, useRef, useState } from "react"
-import { BaseView, Layout, QRCodeBottomSheet, SelectAccountBottomSheet } from "~Components"
-import { NftScreenHeader } from "./Components"
-import { AccountWithDevice, WatchedAccount } from "~Model"
-import { isEmpty } from "lodash"
-import { NftLoader } from "./Components/NftLoader"
-import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
-import { useFetchCollections } from "./useFetchCollections"
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
+import { isEmpty } from "lodash"
+import React, { useCallback, useMemo, useRef, useState } from "react"
+import { BaseView, Layout, SelectAccountBottomSheet } from "~Components"
+import { useBottomSheetModal, useCameraBottomSheet, useSetSelectedAccount } from "~Hooks"
+import { useNFTRegistry } from "~Hooks/useNft/useNFTRegistry"
+import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import {
     selectBlackListedCollections,
@@ -15,10 +13,12 @@ import {
     selectVisibleAccounts,
     useAppSelector,
 } from "~Storage/Redux"
+import { NftScreenHeader } from "./Components"
 import { ImportNFTView } from "./Components/ImportNFTView"
 import { NetworkErrorView } from "./Components/NetworkErrorView"
 import { NFTList } from "./Components/NFTList"
-import { useNFTRegistry } from "~Hooks/useNft/useNFTRegistry"
+import { NftLoader } from "./Components/NftLoader"
+import { useFetchCollections } from "./useFetchCollections"
 
 export const NFTScreen = () => {
     const nav = useNavigation()
@@ -56,11 +56,11 @@ export const NFTScreen = () => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
+    const { RenderCameraModal, handleOpenOnlyReceiveCamera } = useCameraBottomSheet({ targets: [] })
 
     const renderImportNftView = useMemo(() => {
-        if (isShowImportNFTs) return <ImportNFTView onImportPress={openQRCodeSheet} />
-    }, [isShowImportNFTs, openQRCodeSheet])
+        if (isShowImportNFTs) return <ImportNFTView onImportPress={handleOpenOnlyReceiveCamera} />
+    }, [handleOpenOnlyReceiveCamera, isShowImportNFTs])
 
     const flatListRef = useRef(null)
 
@@ -123,7 +123,7 @@ export const NFTScreen = () => {
                         ref={selectAccountBottomSheetRef}
                     />
 
-                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+                    {RenderCameraModal}
                 </>
             }
         />
