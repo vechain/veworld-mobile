@@ -1,18 +1,17 @@
-import React, { RefObject } from "react"
-import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useI18nContext } from "~i18n"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import { useNavigation } from "@react-navigation/native"
+import React from "react"
+import { FlatList, StyleSheet, TouchableOpacity } from "react-native"
+import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { StyleSheet, FlatList, TouchableOpacity } from "react-native"
-import { useThemedStyles, useBottomSheetModal } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 type AddTokenBottomSheetProps = {
     bottomSheetRef?: React.RefObject<BottomSheetModal>
-    qrCodeBottomSheetRef?: RefObject<BottomSheetModalMethods>
+    onQrCodePress: () => void
 }
 
 type TokenListItemData = {
@@ -57,13 +56,12 @@ const TokenListItem = ({ item }: TokenListItemProps) => {
 
 const ItemSeparator = () => <BaseSpacer height={8} />
 
-export const AddTokenBottomSheet = ({ bottomSheetRef, qrCodeBottomSheetRef }: AddTokenBottomSheetProps) => {
+export const AddTokenBottomSheet = ({ bottomSheetRef, onQrCodePress }: AddTokenBottomSheetProps) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
 
     const { onClose: closeBottomSheet } = useBottomSheetModal({ externalRef: bottomSheetRef })
-    const { onOpen: openQRCodeSheet } = useBottomSheetModal({ externalRef: qrCodeBottomSheetRef })
 
     const tokenListData: TokenListItemData[] = [
         {
@@ -83,7 +81,7 @@ export const AddTokenBottomSheet = ({ bottomSheetRef, qrCodeBottomSheetRef }: Ad
             subtitle: LL.TOKEN_RECEIVE_SUBTITLE(),
             onPress: () => {
                 closeBottomSheet()
-                openQRCodeSheet()
+                onQrCodePress()
             },
         },
         {
