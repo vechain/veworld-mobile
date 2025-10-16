@@ -98,15 +98,19 @@ export const TokenCard = ({ token }: Props) => {
                         <BaseText
                             typographyFont="bodySemiBold"
                             numberOfLines={1}
-                            color={theme.colors.activityCard.subtitleLight}
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
                             testID="TOKEN_CARD_SYMBOL_1">
                             {B3TR.symbol}
                         </BaseText>
-                        <BaseIcon name="icon-refresh-cw" size={12} color={theme.colors.activityCard.subtitleLight} />
+                        <BaseIcon
+                            name="icon-refresh-cw"
+                            size={12}
+                            color={theme.isDark ? COLORS.GREY_500 : COLORS.GREY_400}
+                        />
                         <BaseText
                             typographyFont="bodySemiBold"
                             numberOfLines={1}
-                            color={theme.colors.activityCard.subtitleLight}
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
                             testID="TOKEN_CARD_SYMBOL_2">
                             {VOT3.symbol}
                         </BaseText>
@@ -127,7 +131,7 @@ export const TokenCard = ({ token }: Props) => {
                     </BaseView>
                 )
         }
-    }, [chartIcon, token.symbol, theme.colors.activityCard.subtitleLight])
+    }, [chartIcon, token.symbol, theme.colors.activityCard.subtitleLight, theme.isDark])
 
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
@@ -177,7 +181,7 @@ export const TokenCard = ({ token }: Props) => {
                 {symbol ? (
                     <BaseView flexDirection="column" flexGrow={0} flexShrink={1} style={styles.tokenInfo}>
                         <BaseText
-                            typographyFont="subSubTitleBold"
+                            typographyFont="subSubTitleSemiBold"
                             color={theme.colors.activityCard.title}
                             flexDirection="row"
                             numberOfLines={1}
@@ -190,7 +194,7 @@ export const TokenCard = ({ token }: Props) => {
                 ) : (
                     <BaseText
                         flex={1}
-                        typographyFont="subSubTitleBold"
+                        typographyFont="subSubTitleSemiBold"
                         color={theme.colors.activityCard.title}
                         flexDirection="row"
                         numberOfLines={1}
@@ -210,7 +214,7 @@ export const TokenCard = ({ token }: Props) => {
                 {showFiatBalance ? (
                     <>
                         <BaseText
-                            typographyFont="subSubTitleBold"
+                            typographyFont="subSubTitleSemiBold"
                             color={theme.colors.activityCard.title}
                             align="right"
                             numberOfLines={1}
@@ -230,7 +234,7 @@ export const TokenCard = ({ token }: Props) => {
                     </>
                 ) : (
                     <BaseText
-                        typographyFont="subSubTitleBold"
+                        typographyFont="subSubTitleSemiBold"
                         color={theme.colors.activityCard.title}
                         align="right"
                         numberOfLines={1}
@@ -251,6 +255,7 @@ const baseStyles = () =>
             alignItems: "center",
             borderRadius: 12,
             justifyContent: "space-between",
+            minHeight: 80,
         },
         leftSection: {
             flexGrow: 1,
