@@ -79,7 +79,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderWidth: 1,
             borderRadius: 6,
             paddingHorizontal: 4,
-            flexGrow: 1,
+            flex: 1,
             height: 42,
             justifyContent: "center",
             alignItems: "center",
