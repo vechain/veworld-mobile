@@ -66,6 +66,7 @@ export const AnimatedFilterChips = <T,>({
                 {items.map((item, index) => (
                     <BaseView key={index} onLayout={event => handleChipLayout(event, index)} style={styles.chipWrapper}>
                         <BaseTouchable
+                            testID={`AnimatedFilterChips-${keyExtractor(item)}`}
                             style={styles.transparentChip}
                             onPress={() => onItemPress(item, index)}
                             activeOpacity={0.8}>
