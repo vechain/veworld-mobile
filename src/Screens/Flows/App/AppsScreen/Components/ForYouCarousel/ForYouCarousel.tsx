@@ -35,12 +35,10 @@ export const ForYouCarousel = () => {
                     {LL.DISCOVER_FOR_YOU()}
                 </BaseText>
                 <AnimatedFilterChips
-                    items={["popular", "new"]}
+                    items={["popular", "new"] as const}
                     selectedItem={filter}
-                    keyExtractor={(item: "new" | "popular") => item}
-                    getItemLabel={(item: "new" | "popular") =>
-                        LL[`DISCOVER_FOR_YOU_${StringUtils.toUppercase(item)}`]()
-                    }
+                    keyExtractor={item => item}
+                    getItemLabel={item => LL[`DISCOVER_FOR_YOU_${StringUtils.toUppercase(item)}`]()}
                     onItemPress={onFilterPress}
                     containerStyle={styles.container}
                     contentContainerStyle={styles.filterContainer}
