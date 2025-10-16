@@ -13,9 +13,10 @@ import { AddressUtils, BalanceUtils, BigNutils } from "~Utils"
 type Args = {
     address: string
     enabled?: boolean
+    useCompactNotation?: boolean
 }
 
-export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
+export const useTotalFiatBalance = ({ address, enabled = true, useCompactNotation }: Args) => {
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
     const isVisible = useAppSelector(selectBalanceVisible)
 
@@ -108,7 +109,7 @@ export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
         gcTime: 5 * 60 * 1000,
     })
 
-    const { formatFiat } = useFormatFiat()
+    const { formatFiat } = useFormatFiat({ useCompactNotation })
     const renderedBalance = useMemo(() => {
         if (isLoading) {
             return formatFiat({ amount: previousBalance ?? 0, cover: !isVisible })

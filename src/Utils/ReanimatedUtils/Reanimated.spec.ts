@@ -1,4 +1,4 @@
-import { convertSmallSciNotationToDecimal, numberToPercentWorklet } from "./Reanimated"
+import { convertSmallSciNotationToDecimal, numberToPercentWorklet, formatFiatWorklet } from "./Reanimated"
 
 describe("Reanimated convertSmallSciNotationToDecimal function", function () {
     it("should correctly convert small scientific notation numbers", function () {
@@ -47,5 +47,52 @@ describe("Reanimated numberToPercentWorklet function", function () {
     it("should handle edge cases for undefined or NaN values", function () {
         expect(numberToPercentWorklet(undefined)).toBe("-")
         expect(numberToPercentWorklet(NaN)).toBe("-")
+    })
+})
+
+describe("Reanimated formatFiatWorklet function", function () {
+    it("should format fiat amount with all explicit parameters", function () {
+        expect(formatFiatWorklet(1234.56, "$", "en-US", "before", 2, 2)).toBe("$1,234.56")
+    })
+
+    it("should format fiat amount with symbol after", function () {
+        expect(formatFiatWorklet(1234.56, "€", "en-US", "after", 2, 2)).toBe("1,234.56 €")
+    })
+
+    it("should respect locale formatting (comma decimal separator)", function () {
+        expect(formatFiatWorklet(1234.56, "€", "nl-BE", "after", 2, 2)).toBe("1.234,56 €")
+    })
+
+    it("should handle zero values with 2 decimals", function () {
+        expect(formatFiatWorklet(0, "$", "en-US", "before", 2, 2)).toBe("$0.00")
+    })
+
+    it("should handle invalid values (NaN, Infinity)", function () {
+        expect(formatFiatWorklet(NaN, "$", "en-US", "before", 2, 5)).toBe("$0.00")
+        expect(formatFiatWorklet(Infinity, "$", "en-US", "before", 2, 5)).toBe("$0.00")
+    })
+
+    it("should handle custom precision with explicit params", function () {
+        expect(formatFiatWorklet(1234.56789, "$", "en-US", "before", 5, 5)).toBe("$1,234.56789")
+    })
+
+    it("should handle small amounts with high precision", function () {
+        expect(formatFiatWorklet(0.00123, "$", "en-US", "before", 5, 5)).toBe("$0.00123")
+    })
+
+    it("should handle negative amounts", function () {
+        expect(formatFiatWorklet(-1234.56, "$", "en-US", "before", 2, 2)).toBe("$-1,234.56")
+    })
+
+    it("should work with all parameters explicit (no closure issues)", function () {
+        // This pattern avoids closure issues in useDerivedValue
+        const amount = 999.99
+        const symbol = "£"
+        const locale = "en-GB"
+        const position = "before"
+        const min = 2
+        const max = 2
+
+        expect(formatFiatWorklet(amount, symbol, locale, position, min, max)).toBe("£999.99")
     })
 })

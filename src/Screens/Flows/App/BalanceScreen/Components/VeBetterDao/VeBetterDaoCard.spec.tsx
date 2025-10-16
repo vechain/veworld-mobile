@@ -54,9 +54,9 @@ describe("VeBetterDaoCard", () => {
         expect(within(screen.getByTestId("STATS_CARD_energy")).getByTestId("STATS_CARD_UNIT")).toHaveTextContent("KWh")
         expect(within(screen.getByTestId("STATS_CARD_plastic")).getByTestId("STATS_CARD_VALUE")).toHaveTextContent("4")
         expect(within(screen.getByTestId("STATS_CARD_plastic")).getByTestId("STATS_CARD_UNIT")).toHaveTextContent("Kg")
-        expect(screen.getByTestId("REWARDS_EARNED_WEEK_VALUE")).toHaveTextContent("3.00")
-        expect(screen.getByTestId("REWARDS_EARNED_MONTH_VALUE")).toHaveTextContent("5.00")
-        expect(screen.getByTestId("REWARDS_EARNED_TOTAL_VALUE")).toHaveTextContent("1.00")
+        expect(screen.getByTestId("REWARDS_EARNED_WEEK_VALUE")).toHaveTextContent("3")
+        expect(screen.getByTestId("REWARDS_EARNED_MONTH_VALUE")).toHaveTextContent("5")
+        expect(screen.getByTestId("REWARDS_EARNED_TOTAL_VALUE")).toHaveTextContent("1")
     })
 
     it("should not show anything if is not VeBetter user", () => {

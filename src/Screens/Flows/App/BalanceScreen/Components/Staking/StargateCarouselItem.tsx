@@ -13,6 +13,7 @@ import { getTokenURI } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { getTokenLevelName, TokenLevelId } from "~Utils/StargateUtils"
+import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
 import { StargateImage } from "./StargateImage"
 
 type Props = {
@@ -24,7 +25,9 @@ const RowItem = ({ label, value, icon, testID }: { label: string; value: string;
     const { formatLocale } = useFormatFiat()
 
     const formattedValue = useMemo(() => {
-        return BigNutils(value).toHuman(VET.decimals).toTokenFormatFull_string(2, formatLocale)
+        const humanBalance = BigNutils(value).toHuman(VET.decimals).toString
+
+        return formatDisplayNumber(humanBalance, { locale: formatLocale })
     }, [value, formatLocale])
 
     return (
