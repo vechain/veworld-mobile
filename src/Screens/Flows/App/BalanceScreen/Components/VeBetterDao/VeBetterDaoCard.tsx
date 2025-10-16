@@ -1,7 +1,7 @@
 import React, { forwardRef, useMemo } from "react"
 import { StyleSheet, View } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
-import { b3mo, PoweredByVeBetter } from "~Assets"
+import { b3mo } from "~Assets"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
@@ -10,6 +10,7 @@ import { useI18nContext } from "~i18n"
 import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
 import { RewardsEarned } from "./RewardsEarned"
 import { StatsCard } from "./StatsCard"
+import { VeBetterPoweredSvg } from "~Assets/Img/VeBetterPoweredSvg"
 
 export const VeBetterDaoCard = forwardRef<View>((_, ref) => {
     const { LL } = useI18nContext()
@@ -81,7 +82,13 @@ export const VeBetterDaoCard = forwardRef<View>((_, ref) => {
 
             <BaseSpacer height={16} />
             <BaseView flexDirection="row" alignItems="center" justifyContent="center">
-                <FastImage source={PoweredByVeBetter} style={styles.image as ImageStyle} />
+                <BaseText color={COLORS.GREY_400} typographyFont="buttonMedium" style={styles.poweredByText}>
+                    {LL.VBD_POWERED_BY()}
+                </BaseText>
+                <VeBetterPoweredSvg width={79} height={16} />
+                <BaseText color={COLORS.GREY_400} typographyFont="buttonMedium">
+                    {LL.VBD_POWERED_BY_COM()}
+                </BaseText>
             </BaseView>
         </View>
     )
@@ -115,8 +122,7 @@ const baseStyles = (theme: ColorThemeType) =>
             width: "100%",
             height: "100%",
         },
-        image: {
-            width: 279,
-            height: 24,
+        poweredByText: {
+            marginRight: 6,
         },
     })

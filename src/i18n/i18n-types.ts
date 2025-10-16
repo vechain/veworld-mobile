@@ -5104,9 +5104,17 @@ type RootTranslation = {
 	 */
 	VBD_STAT_WATER: string
 	/**
+	 * P​o​w​e​r​e​d​ ​b​y
+	 */
+	VBD_POWERED_BY: string
+	/**
 	 * T​o​t​a​l​ ​B​e​t​t​e​r​ ​a​c​t​i​o​n​s
 	 */
 	VBD_TOTAL_ACTIONS: string
+	/**
+	 * .com
+	 */
+	VBD_POWERED_BY_COM: string
 	/**
 	 * T​o​t​a​l​ ​B​3​T​R​ ​r​e​w​a​r​d​e​d
 	 */
@@ -10354,6 +10362,14 @@ Here's what it's all about:
 	 * Total Better actions
 	 */
 	VBD_TOTAL_ACTIONS: () => LocalizedString
+	/**
+	 * .com
+	 */
+	VBD_POWERED_BY_COM: () => LocalizedString
+	/**
+	 * Powered by
+	 */
+	VBD_POWERED_BY: () => LocalizedString
 	/**
 	 * Total B3TR rewarded
 	 */
