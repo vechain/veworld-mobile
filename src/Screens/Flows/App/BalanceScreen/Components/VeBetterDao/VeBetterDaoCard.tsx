@@ -1,11 +1,10 @@
 import React, { forwardRef, useMemo } from "react"
 import { StyleSheet, View } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
-import { b3mo } from "~Assets"
+import { b3mo, PoweredByVeBetter } from "~Assets"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
-import { useIsVeBetterUser } from "~Hooks/useIsVeBetterUser"
 import { useUserVeBetterStats } from "~Hooks/useUserVeBetterStats"
 import { useI18nContext } from "~i18n"
 import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
@@ -17,7 +16,6 @@ export const VeBetterDaoCard = forwardRef<View>((_, ref) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const { data } = useUserVeBetterStats()
-    const { data: isVeBetterUser } = useIsVeBetterUser()
     const { formatLocale } = useFormatFiat()
 
     const stats = useMemo(() => {
@@ -29,8 +27,6 @@ export const VeBetterDaoCard = forwardRef<View>((_, ref) => {
             plastic: data.totalImpact.plastic ?? 0,
         }
     }, [data])
-
-    if (!isVeBetterUser) return null
 
     return (
         <View ref={ref} style={styles.root} testID="VEBETTER_DAO_CARD">
@@ -84,6 +80,9 @@ export const VeBetterDaoCard = forwardRef<View>((_, ref) => {
             <RewardsEarned week={data?.week} month={data?.month} total={data?.totalRewardAmount} />
 
             <BaseSpacer height={16} />
+            <BaseView flexDirection="row" alignItems="center" justifyContent="center">
+                <FastImage source={PoweredByVeBetter} style={styles.image as ImageStyle} />
+            </BaseView>
         </View>
     )
 })
@@ -115,5 +114,9 @@ const baseStyles = (theme: ColorThemeType) =>
         b3moImage: {
             width: "100%",
             height: "100%",
+        },
+        image: {
+            width: 279,
+            height: 24,
         },
     })
