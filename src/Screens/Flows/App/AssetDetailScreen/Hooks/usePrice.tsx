@@ -8,9 +8,9 @@ import { LocaleUtils, ReanimatedUtils } from "~Utils"
 
 import "intl"
 import "intl/locale-data/jsonp/en"
+import { CURRENCY_SYMBOLS } from "~Constants"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { CURRENCY_SYMBOLS } from "~Constants"
 
 export type ValueAndFormatted<U = number, V = string> = {
     value: Readonly<SharedValue<U>>
