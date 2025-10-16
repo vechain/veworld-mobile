@@ -8,6 +8,7 @@ import { TokenWithCompleteInfo, useFormatFiat, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Balance } from "~Model"
 import { BigNutils } from "~Utils"
+import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 
 type Props = {
     token?: TokenWithCompleteInfo
@@ -39,10 +40,10 @@ export const ConvertBetterCard: React.FC<Props> = ({
     }, [balance?.balance])
 
     const tokenTotalToHuman = useMemo(() => {
-        return BigNutils(tokenTotalBalance)
-            .toHuman(token?.decimals ?? 18)
-            .toTokenFormat_string(2, formatLocale)
-    }, [formatLocale, token?.decimals, tokenTotalBalance])
+        const humanBalance = BigNutils(tokenTotalBalance).toHuman(token?.decimals ?? 18).toString
+
+        return formatFullPrecision(humanBalance, { locale: formatLocale, tokenSymbol: token?.symbol })
+    }, [formatLocale, token?.decimals, token?.symbol, tokenTotalBalance])
 
     const computedTotalBalanceStyle = useMemo(() => {
         return error ? [styles.totalBalanceError] : []

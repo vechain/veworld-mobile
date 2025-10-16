@@ -1,36 +1,49 @@
 import React, { useCallback, useMemo } from "react"
-import { useBottomSheetModal, useCameraPermissions } from "~Hooks"
-import { ScanBottomSheet } from "~Components/Reusable/BottomSheets"
-import { ScanTarget } from "~Constants"
 import { Keyboard } from "react-native"
+import {
+    SendReceiveBottomSheet,
+    SendReceiveBottomSheetOpenProps,
+    SendReceiveBsTab,
+} from "~Components/Reusable/BottomSheets/SendReceiveBottomSheet"
+import { ScanTarget } from "~Constants"
+import { useBottomSheetModal } from "~Hooks"
+import { UseScanTargetArgs, useScanTargets } from "~Hooks/useScanTargets"
 
-export const useCameraBottomSheet = ({ onScan, targets }: { onScan: (uri: string) => void; targets: ScanTarget[] }) => {
-    const {
-        ref: scanAddressSheetRef,
-        onOpen: openScanAddressSheet,
-        onClose: closeScanAddressSheetRef,
-    } = useBottomSheetModal()
+type Args = UseScanTargetArgs & {
+    title?: string
+    description?: string
+}
 
-    const { checkPermissions } = useCameraPermissions({
-        onCanceled: closeScanAddressSheetRef,
-    })
+export const useCameraBottomSheet = ({ targets, sourceScreen, title, description, ...rest }: Args) => {
+    const { ref: scanAddressSheetRef, onOpen: openScanAddressSheet } = useBottomSheetModal()
 
-    const handleOpenCamera = useCallback(async () => {
+    const handleOpenCamera = useCallback(
+        <TTabs extends SendReceiveBsTab[]>(args: SendReceiveBottomSheetOpenProps<TTabs>) => {
+            Keyboard.dismiss()
+            openScanAddressSheet(args)
+        },
+        [openScanAddressSheet],
+    )
+
+    const handleOpenOnlyScanCamera = useCallback(() => {
         Keyboard.dismiss()
-        if (await checkPermissions()) openScanAddressSheet()
-    }, [checkPermissions, openScanAddressSheet])
+        openScanAddressSheet({ tabs: ["scan"], defaultTab: "scan" })
+    }, [openScanAddressSheet])
+
+    const onScan = useScanTargets({ targets, sourceScreen, ...rest })
 
     const RenderCameraModal = useMemo(
         () => (
-            <ScanBottomSheet
+            <SendReceiveBottomSheet
                 ref={scanAddressSheetRef}
-                onClose={closeScanAddressSheetRef}
                 onScan={onScan}
-                target={targets}
+                title={title}
+                description={description}
+                hasWCTarget={targets.includes(ScanTarget.WALLET_CONNECT)}
             />
         ),
-        [scanAddressSheetRef, closeScanAddressSheetRef, onScan, targets],
+        [scanAddressSheetRef, onScan, title, description, targets],
     )
 
-    return { RenderCameraModal, handleOpenCamera }
+    return { RenderCameraModal, handleOpenCamera, handleOpenOnlyScanCamera }
 }

@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native"
-import { default as React, useCallback, useMemo, useState } from "react"
+import { default as React, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { useDevice } from "~Components/Providers/DeviceProvider"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, typography, VET, VOT3, VTHO } from "~Constants"
+import { B3TR, COLORS, isSmallScreen, typography, VET, VOT3, VTHO } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
@@ -13,7 +14,7 @@ import { Routes } from "~Navigation"
 import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BalanceUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
-import { Chart } from "./Chart"
+import { Chart, CHART_WIDTH } from "./Chart"
 
 type Props = {
     token: FungibleTokenWithBalance
@@ -25,7 +26,18 @@ export const TokenCard = ({ token }: Props) => {
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
-    const [showChart, setShowChart] = useState(true)
+    const { isLowEndDevice } = useDevice()
+
+    // Check if token supports charts (has CoinGecko ID)
+    const isTokenSupported = useMemo(() => !!getCoinGeckoIdBySymbol[token.symbol], [token.symbol])
+
+    // Decide chart visibility based on device/screen size AND token support
+    // This ensures ALL token cards show either charts OR indicators consistently
+    const shouldShowCharts = useMemo(
+        () => !isSmallScreen && !isLowEndDevice && isTokenSupported,
+        [isLowEndDevice, isTokenSupported],
+    )
+
     const name = useMemo(() => {
         switch (token.symbol) {
             case "VET":
@@ -62,7 +74,11 @@ export const TokenCard = ({ token }: Props) => {
     }, [isBalanceVisible, tokenBalance])
 
     const chartIcon = useMemo(() => {
-        if (!chartData || !showFiatBalance || showChart) return null
+        // Only show icon on small screens/low-end devices when:
+        // 1. Token supports charts (has price data)
+        // 2. Fiat balance is visible
+        // 3. Chart data is available
+        if (!isTokenSupported || !chartData || !showFiatBalance || shouldShowCharts) return null
 
         return (
             <BaseIcon
@@ -72,7 +88,7 @@ export const TokenCard = ({ token }: Props) => {
                 testID="TOKEN_CARD_CHART_ICON"
             />
         )
-    }, [chartData, showFiatBalance, showChart, isGoingUp])
+    }, [isTokenSupported, chartData, showFiatBalance, shouldShowCharts, isGoingUp])
 
     const symbol = useMemo(() => {
         switch (token.symbol) {
@@ -80,19 +96,15 @@ export const TokenCard = ({ token }: Props) => {
                 return (
                     <BaseView flexDirection="row" gap={4} overflow="hidden">
                         <BaseText
-                            typographyFont="smallCaptionSemiBold"
+                            typographyFont="bodySemiBold"
                             numberOfLines={1}
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL_1">
                             {B3TR.symbol}
                         </BaseText>
-                        <BaseIcon
-                            name="icon-arrow-left-right"
-                            size={12}
-                            color={theme.colors.activityCard.subtitleLight}
-                        />
+                        <BaseIcon name="icon-refresh-cw" size={12} color={theme.colors.activityCard.subtitleLight} />
                         <BaseText
-                            typographyFont="smallCaptionSemiBold"
+                            typographyFont="bodySemiBold"
                             numberOfLines={1}
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL_2">
@@ -106,7 +118,7 @@ export const TokenCard = ({ token }: Props) => {
                 return (
                     <BaseView flexDirection="row" gap={4}>
                         <BaseText
-                            typographyFont="smallCaptionSemiBold"
+                            typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL">
                             {token.symbol}
@@ -149,11 +161,11 @@ export const TokenCard = ({ token }: Props) => {
     return (
         <BaseTouchableBox
             action={handlePress}
-            py={symbol ? typography.lineHeight.body : typography.lineHeight.bodySemiBold}
+            py={symbol ? typography.lineHeight.body : typography.lineHeight.captionSemiBold}
             flexDirection="row"
             bg={theme.colors.card}
             innerContainerStyle={styles.root}>
-            <BaseView style={styles.leftSection}>
+            <BaseView flexDirection="row" gap={16} style={styles.leftSection}>
                 <TokenImage
                     icon={token.icon}
                     isVechainToken={AddressUtils.isVechainToken(token.address)}
@@ -163,12 +175,13 @@ export const TokenCard = ({ token }: Props) => {
                 />
 
                 {symbol ? (
-                    <BaseView flexDirection="column" flexGrow={0} flexShrink={1}>
+                    <BaseView flexDirection="column" flexGrow={0} flexShrink={1} style={styles.tokenInfo}>
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="subSubTitleBold"
                             color={theme.colors.activityCard.title}
                             flexDirection="row"
                             numberOfLines={1}
+                            ellipsizeMode="tail"
                             testID="TOKEN_CARD_NAME">
                             {name}
                         </BaseText>
@@ -177,22 +190,27 @@ export const TokenCard = ({ token }: Props) => {
                 ) : (
                     <BaseText
                         flex={1}
-                        typographyFont="bodySemiBold"
+                        typographyFont="subSubTitleBold"
                         color={theme.colors.activityCard.title}
                         flexDirection="row"
-                        numberOfLines={1}>
+                        numberOfLines={1}
+                        ellipsizeMode="tail">
                         {name}
                     </BaseText>
                 )}
             </BaseView>
 
-            <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
+            {shouldShowCharts && (
+                <BaseView style={styles.chartContainer}>
+                    <Chart token={token} />
+                </BaseView>
+            )}
 
-            <BaseView style={styles.rightSection}>
+            <BaseView flexDirection="column" alignItems="flex-end" style={styles.balanceSection}>
                 {showFiatBalance ? (
                     <>
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="subSubTitleBold"
                             color={theme.colors.activityCard.title}
                             align="right"
                             numberOfLines={1}
@@ -201,7 +219,7 @@ export const TokenCard = ({ token }: Props) => {
                             {fiatBalance}
                         </BaseText>
                         <BaseText
-                            typographyFont="captionSemiBold"
+                            typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             align="right"
                             numberOfLines={1}
@@ -212,7 +230,7 @@ export const TokenCard = ({ token }: Props) => {
                     </>
                 ) : (
                     <BaseText
-                        typographyFont="subSubTitleSemiBold"
+                        typographyFont="subSubTitleBold"
                         color={theme.colors.activityCard.title}
                         align="right"
                         numberOfLines={1}
@@ -235,17 +253,23 @@ const baseStyles = () =>
             justifyContent: "space-between",
         },
         leftSection: {
-            flexDirection: "row",
-            gap: 16,
-            flex: 1,
+            flexGrow: 1,
             flexShrink: 1,
-            alignItems: "center",
+            minWidth: 0,
         },
-        rightSection: {
-            flexDirection: "column",
-            alignItems: "flex-end",
-            minWidth: 80,
+        tokenInfo: {
+            minWidth: 0,
+        },
+        chartContainer: {
+            width: CHART_WIDTH,
             flexShrink: 0,
             flexGrow: 0,
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        balanceSection: {
+            flexGrow: 0,
+            flexShrink: 0,
+            minWidth: 88,
         },
     })

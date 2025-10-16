@@ -27,7 +27,7 @@ describe("BridgeTokenCard", () => {
         )
 
         const tokenSymbol = await findByText("BTC")
-        const balance = await findByText("< 0.01")
+        const balance = await findByText("< 0.0001")
 
         await expect(tokenSymbol).toBeOnTheScreen()
         await expect(balance).toBeOnTheScreen()

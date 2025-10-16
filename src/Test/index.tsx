@@ -137,6 +137,7 @@ export const TestWrapper = ({
             queries: {
                 // ✅ turns retries off
                 retry: false,
+                gcTime: Infinity,
             },
         },
     })
