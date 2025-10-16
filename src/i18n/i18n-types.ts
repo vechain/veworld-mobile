@@ -5040,6 +5040,10 @@ type RootTranslation = {
 	 */
 	VBD_CONTRIBUTE_OFFSET: string
 	/**
+	 * C​h​e​c​k​ ​o​u​t​ ​m​y​ ​V​e​B​e​t​t​e​r​D​A​O​ ​i​m​p​a​c​t​!​ ​🌱
+	 */
+	VBD_SHARE_CARD_MESSAGE: string
+	/**
 	 * g​e​t​ ​r​e​w​a​r​d​e​d​ ​f​o​r​ ​y​o​u​r​ ​a​c​t​i​o​n​s​ ​a​n​d
 	 */
 	VBD_GET_REWARDED: string
@@ -10282,6 +10286,10 @@ Here's what it's all about:
 	 * contribute to the offset
 	 */
 	VBD_CONTRIBUTE_OFFSET: () => LocalizedString
+	/**
+	 * Check out my VeBetterDAO impact! 🌱
+	 */
+	VBD_SHARE_CARD_MESSAGE: () => LocalizedString
 	/**
 	 * get rewarded for your actions and
 	 */
