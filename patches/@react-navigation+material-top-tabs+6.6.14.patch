@@ -1,0 +1,108 @@
+diff --git a/node_modules/@react-navigation/material-top-tabs/src/index.tsx b/node_modules/@react-navigation/material-top-tabs/src/index.tsx
+index ae02811..b735f30 100644
+--- a/node_modules/@react-navigation/material-top-tabs/src/index.tsx
++++ b/node_modules/@react-navigation/material-top-tabs/src/index.tsx
+@@ -9,6 +9,11 @@ export { default as createMaterialTopTabNavigator } from './navigators/createMat
+ export { default as MaterialTopTabBar } from './views/MaterialTopTabBar';
+ export { default as MaterialTopTabView } from './views/MaterialTopTabView';
+ 
++/**
++ * Utilities
++ */
++export { useTabAnimation } from './utils/useTabAnimation';
++
+ /**
+  * Types
+  */
+diff --git a/node_modules/@react-navigation/material-top-tabs/src/types.tsx b/node_modules/@react-navigation/material-top-tabs/src/types.tsx
+index 7556275..f317f8a 100644
+--- a/node_modules/@react-navigation/material-top-tabs/src/types.tsx
++++ b/node_modules/@react-navigation/material-top-tabs/src/types.tsx
+@@ -10,6 +10,7 @@ import type {
+ } from '@react-navigation/native';
+ import type React from 'react';
+ import type {
++  Animated,
+   PressableAndroidRippleConfig,
+   StyleProp,
+   TextStyle,
+@@ -291,6 +292,10 @@ export type MaterialTopTabNavigationConfig = Omit<
+   tabBar?: (props: MaterialTopTabBarProps) => React.ReactNode;
+ };
+ 
++export type MaterialTopTabAnimationContext = {
++  position: Animated.AnimatedInterpolation<number>;
++};
++
+ export type MaterialTopTabBarProps = SceneRendererProps & {
+   state: TabNavigationState<ParamListBase>;
+   navigation: NavigationHelpers<
+diff --git a/node_modules/@react-navigation/material-top-tabs/src/utils/TabAnimationContext.tsx b/node_modules/@react-navigation/material-top-tabs/src/utils/TabAnimationContext.tsx
+new file mode 100644
+index 0000000..98c4896
+--- /dev/null
++++ b/node_modules/@react-navigation/material-top-tabs/src/utils/TabAnimationContext.tsx
+@@ -0,0 +1,7 @@
++import * as React from 'react';
++
++import type { MaterialTopTabAnimationContext } from '../types';
++
++export const TabAnimationContext = React.createContext<
++  MaterialTopTabAnimationContext | undefined
++>(undefined);
+\ No newline at end of file
+diff --git a/node_modules/@react-navigation/material-top-tabs/src/utils/useTabAnimation.tsx b/node_modules/@react-navigation/material-top-tabs/src/utils/useTabAnimation.tsx
+new file mode 100644
+index 0000000..c23af19
+--- /dev/null
++++ b/node_modules/@react-navigation/material-top-tabs/src/utils/useTabAnimation.tsx
+@@ -0,0 +1,15 @@
++import * as React from 'react';
++
++import { TabAnimationContext } from './TabAnimationContext';
++
++export function useTabAnimation() {
++  const animation = React.useContext(TabAnimationContext);
++
++  if (animation === undefined) {
++    throw new Error(
++      "Couldn't find values for tab animation. Are you inside a screen in Material Top Tab navigator?"
++    );
++  }
++
++  return animation;
++}
+\ No newline at end of file
+diff --git a/node_modules/@react-navigation/material-top-tabs/src/views/MaterialTopTabView.tsx b/node_modules/@react-navigation/material-top-tabs/src/views/MaterialTopTabView.tsx
+index 1282698..1730a89 100644
+--- a/node_modules/@react-navigation/material-top-tabs/src/views/MaterialTopTabView.tsx
++++ b/node_modules/@react-navigation/material-top-tabs/src/views/MaterialTopTabView.tsx
+@@ -15,6 +15,7 @@ import type {
+   MaterialTopTabNavigationHelpers,
+ } from '../types';
+ import MaterialTopTabBar from './MaterialTopTabBar';
++import { TabAnimationContext } from '../utils/TabAnimationContext';
+ 
+ type Props = MaterialTopTabNavigationConfig & {
+   state: TabNavigationState<ParamListBase>;
+@@ -55,7 +56,11 @@ export default function MaterialTopTabView({
+           target: state.key,
+         })
+       }
+-      renderScene={({ route }) => descriptors[route.key].render()}
++      renderScene={({ route, position }) => (
++        <TabAnimationContext.Provider value={{ position }}>
++          {descriptors[route.key].render()}
++        </TabAnimationContext.Provider>
++      )}
+       navigationState={state}
+       renderTabBar={renderTabBar}
+       renderLazyPlaceholder={({ route }) =>
+@@ -70,6 +75,7 @@ export default function MaterialTopTabView({
+       sceneContainerStyle={[
+         { backgroundColor: colors.background },
+         sceneContainerStyle,
++
+       ]}
+     />
+   );

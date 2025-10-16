@@ -1,82 +1,75 @@
 import { MaterialTopTabBarProps } from "@react-navigation/material-top-tabs"
-import React, { useState, useCallback } from "react"
+import React, { useState, useCallback, useRef, useMemo } from "react"
 import { Animated, StyleSheet, LayoutChangeEvent, ScrollView } from "react-native"
 import { BaseTouchable, BaseView } from "~Components"
-import { COLORS } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
 export const OldActivityTabBar = ({ state, descriptors, navigation, position }: MaterialTopTabBarProps) => {
     const { styles, theme } = useThemedStyles(baseStyle)
+    const scrollViewRef = useRef<ScrollView>(null)
 
     const [measurements, setMeasurements] = useState<{
         positions: number[]
         widths: number[]
+        heights: number[]
     }>({
         positions: [],
         widths: [],
+        heights: [],
     })
 
-    const [scrollOffset, setScrollOffset] = useState(0)
-
     const handleLayout = useCallback((event: LayoutChangeEvent, index: number) => {
-        const { x, width } = event.nativeEvent.layout
-
+        const { x, width, height } = event.nativeEvent.layout
         setMeasurements(prev => {
             const newPositions = [...prev.positions]
             const newWidths = [...prev.widths]
+            const newHeights = [...prev.heights]
             newPositions[index] = x
             newWidths[index] = width
+            newHeights[index] = height
 
             return {
                 positions: newPositions,
                 widths: newWidths,
+                heights: newHeights,
             }
         })
-    }, [])
-
-    const handleScroll = useCallback((event: any) => {
-        setScrollOffset(event.nativeEvent.contentOffset.x)
     }, [])
 
     // Check if measurements are ready
     const isReady = measurements.positions.length === state.routes.length
 
-    // Use the widest tab as the base width for scaling
-    const maxWidth = isReady ? Math.max(...measurements.widths) : 0
-
-    // Calculate scale values for each tab
-    const scaleOutputs = isReady ? measurements.widths.map(width => width / maxWidth) : []
-
-    // Interpolate scale
-    const indicatorScale = isReady
-        ? position.interpolate({
-              inputRange: state.routes.map((_, i) => i),
-              outputRange: scaleOutputs,
-          })
-        : 1
-
     // Calculate translateX considering the scaling AND scroll offset
-    const translateXOutputs = isReady
-        ? measurements.positions.map((pos, i) => {
-              const scaleDiff = (maxWidth - measurements.widths[i]) / 2
-              return pos + scaleDiff
-          })
-        : []
+    const translateXOutputs = useMemo(
+        () =>
+            isReady
+                ? measurements.positions.map(pos => {
+                      return pos + 16
+                  })
+                : [],
+        [isReady, measurements.positions],
+    )
 
-    const indicatorTranslateX = isReady
-        ? position.interpolate({
-              inputRange: state.routes.map((_, i) => i),
-              outputRange: translateXOutputs,
-          })
-        : 0
+    const indicatorTranslateX = useMemo(
+        () =>
+            isReady
+                ? position.interpolate({
+                      inputRange: state.routes.map((_, i) => i),
+                      outputRange: translateXOutputs,
+                      extrapolate: "clamp",
+                  })
+                : 0,
+        [isReady, position, state.routes, translateXOutputs],
+    )
 
     return (
         <BaseView style={styles.wrapper}>
             <ScrollView
+                ref={scrollViewRef}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                scrollEventThrottle={18}
-                onScroll={handleScroll}
+                scrollEventThrottle={16}
                 contentContainerStyle={styles.scrollContent}>
                 {/* Animated Background Indicator */}
                 {isReady && (
@@ -84,12 +77,9 @@ export const OldActivityTabBar = ({ state, descriptors, navigation, position }: 
                         style={[
                             styles.indicator,
                             {
-                                backgroundColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
-                                width: maxWidth,
-                                transform: [
-                                    { translateX: Animated.subtract(indicatorTranslateX, scrollOffset) },
-                                    { scaleX: indicatorScale },
-                                ],
+                                width: measurements.widths[state.index],
+                                height: measurements.heights[state.index],
+                                transform: [{ translateX: indicatorTranslateX }],
                             },
                         ]}
                     />
@@ -117,6 +107,11 @@ export const OldActivityTabBar = ({ state, descriptors, navigation, position }: 
 
                             if (!isFocused && !event.defaultPrevented) {
                                 navigation.navigate(route.name, route.params)
+                                // scrollViewRef.current?.scrollTo({
+                                //     x: index * 64,
+                                //     y: 0,
+                                //     animated: true,
+                                // })
                             }
                         }
 
@@ -132,6 +127,7 @@ export const OldActivityTabBar = ({ state, descriptors, navigation, position }: 
                         const textColor = position.interpolate({
                             inputRange,
                             outputRange: colorOutputRange,
+                            extrapolate: "clamp",
                         })
 
                         return (
@@ -145,8 +141,12 @@ export const OldActivityTabBar = ({ state, descriptors, navigation, position }: 
                                     accessibilityLabel={options.tabBarAccessibilityLabel}
                                     onPress={onPress}
                                     style={styles.chip}
-                                    activeOpacity={0.8}>
-                                    <Animated.Text style={[styles.label, { color: textColor }]}>
+                                    activeOpacity={1}>
+                                    <Animated.Text
+                                        style={[
+                                            styles.label,
+                                            { color: textColor, backgroundColor: isFocused ? "red" : "transparent" },
+                                        ]}>
                                         {typeof label === "function"
                                             ? label({ focused: isFocused, color: COLORS.WHITE, children: "" })
                                             : label}
@@ -161,7 +161,7 @@ export const OldActivityTabBar = ({ state, descriptors, navigation, position }: 
     )
 }
 
-const baseStyle = () =>
+const baseStyle = (theme: ColorThemeType) =>
     StyleSheet.create({
         wrapper: {
             paddingTop: 16,
@@ -189,8 +189,8 @@ const baseStyle = () =>
         indicator: {
             position: "absolute",
             top: 0,
-            height: 36,
             borderRadius: 20,
+            backgroundColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
         },
         label: {
             fontSize: 14,

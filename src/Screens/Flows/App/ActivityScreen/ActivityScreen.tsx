@@ -66,9 +66,9 @@ export const ActivityScreen = () => {
                             animationEnabled:
                                 PlatformUtils.isIOS() || (PlatformUtils.isAndroid() && !DeviceUtils.isSlowDevice()),
                             lazy: true,
-                            tabBarScrollEnabled: true,
-                            swipeEnabled: true,
+                            swipeEnabled: false,
                             tabBarBounces: false,
+                            lazyPreloadDistance: 1,
                         }}
                         tabBar={OldActivityTabBar}>
                         <Tab.Screen
