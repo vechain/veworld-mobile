@@ -38,6 +38,7 @@ import {
 import { AccountUtils, AddressUtils, BigNutils, error, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
@@ -414,7 +415,7 @@ function TotalSendAmountView({
 const baseStyles = StyleSheet.create({
     coloredText: {
         fontFamily: "Inter-Bold",
-        fontSize: 16,
+        fontSize: FontUtils.font(16),
         fontWeight: "700",
     },
 })

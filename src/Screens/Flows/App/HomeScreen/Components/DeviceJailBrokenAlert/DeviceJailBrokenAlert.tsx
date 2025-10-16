@@ -5,6 +5,7 @@ import { useThemedStyles } from "~Hooks"
 import { StyleSheet, Text } from "react-native"
 import { ColorThemeType } from "~Constants"
 import { useI18nContext } from "~i18n"
+import FontUtils from "~Utils/FontUtils"
 
 export const DeviceJailBrokenAlert = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -47,7 +48,7 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.colors.errorVariant.background,
         },
         alertTitle: {
-            fontSize: 14,
+            fontSize: FontUtils.font(12),
             fontWeight: "600",
             fontFamily: "Inter-SemiBold",
             color: theme.colors.errorVariant.title,

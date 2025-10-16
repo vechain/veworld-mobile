@@ -8,6 +8,7 @@ import { TokenWithCompleteInfo, useFormatFiat, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Balance } from "~Model"
 import { BigNutils } from "~Utils"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     token?: TokenWithCompleteInfo
@@ -72,7 +73,7 @@ export const ConvertBetterCard: React.FC<Props> = ({
                 <BaseView flexDirection="row" flex={1} justifyContent="space-between">
                     <BaseView flex={1}>
                         <BaseText
-                            typographyFont="captionSemiBold"
+                            typographyFont="smallCaptionSemiBold"
                             color={theme.colors.convertBetterCard.convertValueText}>
                             {isSender ? LL.FROM() : LL.TO()}
                         </BaseText>
@@ -97,7 +98,7 @@ export const ConvertBetterCard: React.FC<Props> = ({
                                     {tokenTotalToHuman}
                                 </BaseText>
                                 <BaseButton
-                                    typographyFont="captionSemiBold"
+                                    typographyFont="smallCaptionSemiBold"
                                     disabled={BigNutils(tokenTotalBalance).isZero}
                                     variant="outline"
                                     textColor={theme.colors.actionBanner.buttonText}
@@ -152,7 +153,7 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
             color: theme.colors.convertBetterCard.inputText,
             fontWeight: "600",
-            fontSize: 20,
+            fontSize: FontUtils.font(20),
             padding: 0,
         },
         disabledInput: {

@@ -6,6 +6,7 @@ import { StargateB3MO, StargateBannerBackground, StargateLogo } from "~Assets"
 import { BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import FontUtils from "~Utils/FontUtils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export const StargateBanner = () => {
@@ -57,7 +58,7 @@ const baseStyles = () =>
         },
         text: {
             fontFamily: "Rubik",
-            fontSize: 15,
+            fontSize: FontUtils.font(13),
             color: "#EEF3F7",
             margin: 0,
         },

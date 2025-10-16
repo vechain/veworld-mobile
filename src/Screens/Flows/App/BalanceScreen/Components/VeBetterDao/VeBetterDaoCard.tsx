@@ -14,6 +14,7 @@ import { Routes } from "~Navigation"
 import { BigNutils } from "~Utils"
 import { RewardsEarned } from "./RewardsEarned"
 import { StatsCard } from "./StatsCard"
+import FontUtils from "~Utils/FontUtils"
 
 const PROFILE_URL = "https://governance.vebetterdao.org/profile"
 
@@ -60,7 +61,7 @@ export const VeBetterDaoCard = () => {
                 />
             </BaseView>
             <BaseView pb={16} flexDirection="column" gap={8}>
-                <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="subSubTitleSemiBold">
+                <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="bodySemiBold">
                     {LL.VBD_YOUR_BETTER_ACTIONS()}
                 </BaseText>
                 <BaseText color={theme.isDark ? COLORS.WHITE : COLORS.GREY_700} style={styles.actionsText}>
@@ -77,9 +78,7 @@ export const VeBetterDaoCard = () => {
                     size={16}
                     py={4}
                 />
-                <BaseText
-                    color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE}
-                    typographyFont="subSubTitleSemiBold">
+                <BaseText color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE} typographyFont="bodySemiBold">
                     {LL.VBD_YOUR_OFFSET()}
                 </BaseText>
             </BaseView>
@@ -113,7 +112,7 @@ export const VeBetterDaoCard = () => {
                         size={20}
                     />
                 }
-                typographyFont="subSubTitleMedium"
+                typographyFont="bodyMedium"
                 textColor={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE}
                 selfAlign="center"
                 py={0}>
@@ -136,7 +135,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         actionsText: {
             fontWeight: 600,
-            fontSize: 40,
+            fontSize: FontUtils.font(40),
             fontFamily: "Inter-SemiBold",
             lineHeight: 40,
         },

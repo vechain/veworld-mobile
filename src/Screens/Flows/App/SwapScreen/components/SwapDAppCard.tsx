@@ -4,6 +4,7 @@ import { BaseSpacer, BaseText, BaseTouchable, BaseView, DAppIcon } from "~Compon
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useAppLogo } from "~Hooks/useAppLogo"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     dapp: DiscoveryDApp
@@ -70,9 +71,9 @@ const baseStyles = () =>
         },
         nameText: {
             fontWeight: "bold",
-            fontSize: 16,
+            fontSize: FontUtils.font(14),
         },
         description: {
-            fontSize: 12,
+            fontSize: FontUtils.font(10),
         },
     })

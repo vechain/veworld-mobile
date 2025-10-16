@@ -70,12 +70,12 @@ export const StatsCard = ({ label, value }: Props) => {
                 <BaseView flexDirection="column" p={16} justifyContent="center" alignItems="center">
                     <BaseIcon color={COLORS.LIGHT_GREEN} size={24} name={icon} />
                     <BaseSpacer height={8} />
-                    <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="bodySemiBold">
+                    <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="captionSemiBold">
                         {LL[`VBD_STAT_${StringUtils.toUppercase(label)}`]()}
                     </BaseText>
                     <BaseText
                         color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                        typographyFont="captionMedium"
+                        typographyFont="smallCaptionMedium"
                         textTransform="lowercase">
                         {description}
                     </BaseText>
@@ -83,13 +83,13 @@ export const StatsCard = ({ label, value }: Props) => {
                     <BaseView flexDirection="row" alignItems="center" gap={2}>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                            typographyFont="subTitleSemiBold"
+                            typographyFont="subSubTitleSemiBold"
                             testID="STATS_CARD_VALUE">
                             {parsedValue}
                         </BaseText>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                            typographyFont="captionMedium"
+                            typographyFont="smallCaptionMedium"
                             testID="STATS_CARD_UNIT">
                             {unit}
                         </BaseText>

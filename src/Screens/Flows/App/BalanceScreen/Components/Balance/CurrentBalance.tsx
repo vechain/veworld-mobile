@@ -15,6 +15,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { SlotMachineText } from "./SlotMachineText"
+import FontUtils from "~Utils/FontUtils"
 
 export const CurrentBalance = () => {
     const currencySymbol = useAppSelector(selectCurrencySymbol)
@@ -40,7 +41,7 @@ export const CurrentBalance = () => {
         <TouchableOpacity onPress={onPress}>
             <Animated.View style={styles.root} layout={LinearTransition.duration(300)}>
                 <BaseText
-                    typographyFont="biggerTitleMedium"
+                    typographyFont="headerTitle"
                     fontWeight="400"
                     color={COLORS.PURPLE_LABEL}
                     style={styles.currency}>
@@ -68,7 +69,7 @@ const baseStyles = () =>
         text: {
             color: COLORS.GREY_50,
             fontWeight: 600,
-            fontSize: 40,
+            fontSize: FontUtils.font(36),
             fontFamily: "Inter-SemiBold",
             lineHeight: 40,
         },

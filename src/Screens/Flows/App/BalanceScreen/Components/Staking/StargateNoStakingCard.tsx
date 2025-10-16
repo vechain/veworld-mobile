@@ -13,6 +13,7 @@ import { useI18nContext } from "~i18n"
 import { BigNutils } from "~Utils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { StargateStatsCard } from "./StargateStatsCard"
+import FontUtils from "~Utils/FontUtils"
 
 export const StargateNoStakingCard = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -133,12 +134,6 @@ const baseStyles = (theme: ColorThemeType) =>
             flexDirection: "column",
             borderRadius: 16,
         },
-        actionsText: {
-            fontWeight: 600,
-            fontSize: 40,
-            fontFamily: "Inter-SemiBold",
-            lineHeight: 40,
-        },
         strongIOS: {
             fontWeight: "600",
             fontFamily: "Inter-SemiBold",
@@ -152,7 +147,7 @@ const baseStyles = (theme: ColorThemeType) =>
             marginBottom: 0,
         },
         text: {
-            fontSize: 14,
+            fontSize: FontUtils.font(14),
             flex: 1,
             fontFamily: "Inter-Regular",
             lineHeight: 20,
