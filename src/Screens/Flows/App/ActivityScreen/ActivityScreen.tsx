@@ -12,9 +12,10 @@ import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
+import { DeviceUtils, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useResetActivityStack } from "./Hooks"
-import { OldActivityTabBar } from "./navigation"
+import { ActivityTabBar } from "./navigation"
 import {
     ActivityAllScreen,
     ActivityB3trScreen,
@@ -25,7 +26,6 @@ import {
     ActivityTransferScreen,
 } from "./screens"
 import { ActivityDappsScreen } from "./screens/ActivityDappsScreen"
-import { DeviceUtils, PlatformUtils } from "~Utils"
 
 const Tab = createMaterialTopTabNavigator()
 
@@ -66,11 +66,10 @@ export const ActivityScreen = () => {
                             animationEnabled:
                                 PlatformUtils.isIOS() || (PlatformUtils.isAndroid() && !DeviceUtils.isSlowDevice()),
                             lazy: true,
-                            swipeEnabled: false,
+                            swipeEnabled: true,
                             tabBarBounces: false,
-                            lazyPreloadDistance: 1,
                         }}
-                        tabBar={OldActivityTabBar}>
+                        tabBar={ActivityTabBar}>
                         <Tab.Screen
                             name={Routes.ACTIVITY_ALL}
                             component={ActivityAllScreen}
