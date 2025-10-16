@@ -184,7 +184,10 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
                                     mt={24}
                                     bg={COLORS.BALANCE_BACKGROUND_95}>
                                     <WalletConnectIcon color={COLORS.WHITE} />
-                                    <BaseText typographyFont="captionMedium" color={COLORS.WHITE}>
+                                    <BaseText
+                                        typographyFont="captionMedium"
+                                        color={COLORS.WHITE}
+                                        testID="SEND_RECEIVE_BS_WC_SUPPORTED">
                                         {LL.WALLET_CONNECT_SUPPORTED()}
                                     </BaseText>
                                 </BaseView>

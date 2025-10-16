@@ -41,7 +41,7 @@ jest.mock("react-native-keyboard-controller", () => require("react-native-keyboa
 jest.mock("react-native-vision-camera", () => ({
     Camera: View,
     useCameraDevice: jest.fn(),
-    useCodeScanner: jest.fn(),
+    useCodeScanner: jest.fn().mockImplementation(args => args),
 }))
 
 jest.mock("react-native-onesignal", () => ({
