@@ -6,12 +6,16 @@ import { TokensTopSection } from "./TokensTopSection"
 import { AddTokensCard } from "../../Components/Tokens/AddTokensCard"
 import { BannersCarousel } from "../../Components/BannerCarousel"
 import { SCREEN_WIDTH } from "~Constants"
+import { VeBetterDaoActionGroup } from "../../Components/VeBetterDao/VeBetterDaoActionGroup"
+import { useShareVeBetterCard } from "~Hooks/useShareVeBetterCard"
 
 type Props = {
     isEmptyStateShown?: boolean
 }
 
 export const Tokens = ({ isEmptyStateShown = false }: Props) => {
+    const { cardRef, shareCard, isSharing } = useShareVeBetterCard()
+
     return (
         <BaseView flexDirection="column">
             <TokensTopSection />
@@ -24,7 +28,8 @@ export const Tokens = ({ isEmptyStateShown = false }: Props) => {
                     <BannersCarousel location="home_screen" baseWidth={SCREEN_WIDTH - 48} padding={0} />
 
                     <BaseSpacer height={40} />
-                    <VeBetterDaoCard />
+                    <VeBetterDaoCard ref={cardRef} />
+                    <VeBetterDaoActionGroup onShareCard={shareCard} isSharing={isSharing} />
                 </>
             )}
         </BaseView>
