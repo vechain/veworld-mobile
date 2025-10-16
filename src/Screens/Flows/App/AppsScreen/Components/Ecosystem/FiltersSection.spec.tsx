@@ -55,7 +55,7 @@ describe("FiltersSection", () => {
         fireEvent.press(nftChip)
 
         expect(mockOnPress).toHaveBeenCalledTimes(1)
-        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.NFTS)
+        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.NFTS, 2)
     })
 
     it("should call onPress with correct filter type for different chips", () => {
@@ -64,7 +64,7 @@ describe("FiltersSection", () => {
         const governanceChip = screen.getByText("Governance")
         fireEvent.press(governanceChip)
 
-        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.GOVERNANCE)
+        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.GOVERNANCE, 3)
     })
 
     it("should handle multiple filter presses correctly", () => {
@@ -77,8 +77,8 @@ describe("FiltersSection", () => {
         fireEvent.press(toolsChip)
 
         expect(mockOnPress).toHaveBeenCalledTimes(2)
-        expect(mockOnPress).toHaveBeenNthCalledWith(1, DappTypeV2.DEFI)
-        expect(mockOnPress).toHaveBeenNthCalledWith(2, DappTypeV2.TOOLS)
+        expect(mockOnPress).toHaveBeenNthCalledWith(1, DappTypeV2.DEFI, 1)
+        expect(mockOnPress).toHaveBeenNthCalledWith(2, DappTypeV2.TOOLS, 4)
     })
 
     it("should update selected filter when props change", () => {
@@ -151,7 +151,7 @@ describe("FiltersSection", () => {
         const allChip = screen.getByText("All")
         fireEvent.press(allChip)
 
-        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.ALL)
+        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.ALL, 0)
     })
 
     it("should call onPress with DEFI filter type", () => {
@@ -160,7 +160,7 @@ describe("FiltersSection", () => {
         const defiChip = screen.getByText("DeFi")
         fireEvent.press(defiChip)
 
-        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.DEFI)
+        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.DEFI, 1)
     })
 
     it("should call onPress with NFTS filter type", () => {
@@ -169,7 +169,7 @@ describe("FiltersSection", () => {
         const nftChip = screen.getByText("NFTs")
         fireEvent.press(nftChip)
 
-        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.NFTS)
+        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.NFTS, 2)
     })
 
     it("should call onPress with GOVERNANCE filter type", () => {
@@ -178,7 +178,7 @@ describe("FiltersSection", () => {
         const governanceChip = screen.getByText("Governance")
         fireEvent.press(governanceChip)
 
-        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.GOVERNANCE)
+        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.GOVERNANCE, 3)
     })
 
     it("should call onPress with TOOLS filter type", () => {
@@ -187,7 +187,7 @@ describe("FiltersSection", () => {
         const toolsChip = screen.getByText("Tools")
         fireEvent.press(toolsChip)
 
-        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.TOOLS)
+        expect(mockOnPress).toHaveBeenCalledWith(DappTypeV2.TOOLS, 4)
     })
 
     it("should handle different selected filter states", () => {

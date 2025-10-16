@@ -1051,7 +1051,7 @@
   "SEND_PLEASE_TYPE_ADDRESS": "Geben Sie eine Adresse oder einen .vet-Domainnamen ein.",
   "SEND_RANGE_MAX": "MAX",
   "SEND_RANGE_ZERO": "0%",
-  "SEND_RECEIVE_TAB_RECEIVE": "Empfangen",
+  "SEND_RECEIVE_TAB_RECEIVE": "Erhalten",
   "SEND_RECEIVE_TAB_SCAN": "Scannen",
   "SEND_TO": "An",
   "SEND_TOKEN_SELECT_ASSET": "Wählen Sie das Token-Asset aus, das Sie senden möchten:",
