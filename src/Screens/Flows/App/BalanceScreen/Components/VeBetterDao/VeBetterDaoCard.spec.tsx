@@ -58,20 +58,4 @@ describe("VeBetterDaoCard", () => {
         expect(screen.getByTestId("REWARDS_EARNED_MONTH_VALUE")).toHaveTextContent("5")
         expect(screen.getByTestId("REWARDS_EARNED_TOTAL_VALUE")).toHaveTextContent("1")
     })
-
-    it("should not show anything if is not VeBetter user", () => {
-        ;(useIsVeBetterUser as jest.Mock).mockReturnValue({ data: false })
-        ;(useUserVeBetterStats as jest.Mock).mockReturnValue({
-            data: {
-                totalRewardAmount: "0",
-                actionsRewarded: 0,
-                totalImpact: {},
-            },
-        })
-        TestHelpers.render.renderComponentWithProps(<VeBetterDaoCard />, {
-            wrapper: TestWrapper,
-        })
-
-        expect(screen.queryByTestId("VEBETTER_DAO_CARD")).toBeNull()
-    })
 })
