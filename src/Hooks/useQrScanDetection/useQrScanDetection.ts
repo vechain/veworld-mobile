@@ -1,6 +1,9 @@
 import { useCallback } from "react"
 import { SharedValue } from "react-native-reanimated"
-import { Code } from "react-native-vision-camera"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { Code, CodeScannerFrame } from "react-native-vision-camera"
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
+import { PlatformUtils } from "~Utils"
 
 type Args = {
     /**
@@ -22,32 +25,40 @@ type Args = {
 }
 
 export const useQrScanDetection = ({ offsetX, offsetY, size, onScan }: Args) => {
+    const { bottom } = useSafeAreaInsets()
     return useCallback(
-        async (codes: Code[]) => {
+        async (codes: Code[], frame: CodeScannerFrame) => {
             if (codes.length === 0) return
-            //We'll read just the first code
             const code = codes[0]
             if (!code.frame || !code.value) return
+            const offset = PlatformUtils.isIOS() ? 100 : 0
+            // This is the only way to make it work.
+            // You should not change this unless you're 200% sure that what you're doing is correct.
+            // This has been developed in a full day of intensive work, so please be careful before touching it.
+
+            //react-native-vision-camera has wrong dimensions set (for example on Android the camera is in 4:3 and on iOS in 16:9).
+            //It also flips between width and height arbitrarily, without any explanation.
+            const topLeftX =
+                ((100 - ((code.frame.y + code.frame.width / 2) / frame.height || 0) * 100) / 100) * SCREEN_WIDTH -
+                offset
+            const topLeftY =
+                ((code.frame.x + code.frame.height / 2) / (frame.width || 0)) * (SCREEN_HEIGHT - bottom) - offset
             const points = [
-                //Top left
                 {
-                    x: code.frame.x - code.frame.width / 2,
-                    y: code.frame.y + code.frame.height / 5,
+                    x: topLeftX,
+                    y: topLeftY,
                 },
-                //Top right
                 {
-                    x: code.frame.x + code.frame.width,
-                    y: code.frame.y + code.frame.height / 5,
+                    x: topLeftX + 200,
+                    y: topLeftY,
                 },
-                //Bottom right
                 {
-                    x: code.frame.x + code.frame.width,
-                    y: code.frame.y + code.frame.height * 1.5,
+                    x: topLeftX + 200,
+                    y: topLeftY + 200,
                 },
-                //Bottom left
                 {
-                    x: code.frame.x - code.frame.width / 2,
-                    y: code.frame.y + code.frame.height * 1.5,
+                    x: topLeftX,
+                    y: topLeftY + 200,
                 },
             ]
 
@@ -58,7 +69,7 @@ export const useQrScanDetection = ({ offsetX, offsetY, size, onScan }: Args) => 
                 height: size + offsetY.value * 0.4,
             }
 
-            //Outside of detection area
+            // Outside of detection area
             if (
                 points.every(point => {
                     return (
@@ -72,6 +83,6 @@ export const useQrScanDetection = ({ offsetX, offsetY, size, onScan }: Args) => 
                 return onScan(code.value)
             }
         },
-        [offsetX.value, offsetY.value, onScan, size],
+        [bottom, offsetX.value, offsetY.value, size, onScan],
     )
 }

@@ -103,91 +103,6 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
         [cameraX, cameraY],
     )
 
-    const children = useMemo(() => {
-        return (
-            <BaseView flex={1} pt={PlatformUtils.isIOS() ? inset.top : 0}>
-                <BaseView flexDirection="column" gap={16} pt={16} px={16} position="relative">
-                    <BaseView justifyContent="space-between" flexDirection="row" alignItems="center">
-                        {/* This is an hidden element, used to simply put the title right in the middle */}
-                        <BaseView style={[styles.iconContainer, styles.hiddenElement]}>
-                            <BaseIcon name="icon-x" color={COLORS.WHITE} size={20} />
-                        </BaseView>
-                        <Text style={styles.title}>
-                            {title ?? LL[`QR_CODE_${StringUtils.toUppercase(selectedTab)}_TITLE`]()}
-                        </Text>
-                        <TouchableOpacity style={[styles.iconContainer]} onPress={onClose}>
-                            <BaseIcon name="icon-x" color={COLORS.WHITE} size={20} />
-                        </TouchableOpacity>
-                    </BaseView>
-                    <BaseText typographyFont="captionMedium" color={COLORS.WHITE} align="center">
-                        {description ?? LL[`QR_CODE_${StringUtils.toUppercase(selectedTab)}_DESCRIPTION`]()}
-                    </BaseText>
-                    {hasWCTarget && (
-                        <View style={styles.walletConnectWrapper}>
-                            <BaseView
-                                flexDirection="row"
-                                gap={12}
-                                borderRadius={99}
-                                py={2}
-                                px={8}
-                                mt={24}
-                                bg={COLORS.BALANCE_BACKGROUND_95}>
-                                <WalletConnectIcon color={COLORS.WHITE} />
-                                <BaseText typographyFont="captionMedium" color={COLORS.WHITE}>
-                                    {LL.WALLET_CONNECT_SUPPORTED()}
-                                </BaseText>
-                            </BaseView>
-                        </View>
-                    )}
-                </BaseView>
-                {selectedTab === "receive" ? (
-                    <ReceiveTab />
-                ) : (
-                    <ScanTab
-                        onPermissionPress={handleCheckPermissions}
-                        hasCameraPerms={hasCameraPerms}
-                        onRootLayout={onScanRootLayout}
-                        onCameraWrapperLayout={onScanCameraLayout}
-                    />
-                )}
-                {tabs.length > 1 && (
-                    <BaseTabs
-                        keys={tabs}
-                        selectedKey={selectedTab}
-                        setSelectedKey={setSelectedTab}
-                        labels={labels}
-                        rootStyle={styles.tabElement}
-                        indicatorBackgroundColor="rgba(255, 255, 255, 0.15)"
-                        containerBackgroundColor={COLORS.PURPLE_DISABLED}
-                        selectedTextColor={COLORS.WHITE}
-                        unselectedTextColor={COLORS.WHITE}
-                    />
-                )}
-
-                <BaseSpacer height={64} />
-            </BaseView>
-        )
-    }, [
-        inset.top,
-        styles.iconContainer,
-        styles.hiddenElement,
-        styles.title,
-        styles.walletConnectWrapper,
-        styles.tabElement,
-        title,
-        LL,
-        selectedTab,
-        onClose,
-        description,
-        hasWCTarget,
-        handleCheckPermissions,
-        hasCameraPerms,
-        onScanRootLayout,
-        onScanCameraLayout,
-        tabs,
-        labels,
-    ])
-
     const device = useCameraDevice("back")
     const offsetX = useDerivedValue(() => rootX.value + cameraX.value, [rootX.value, cameraX.value])
     const offsetY = useDerivedValue(() => rootY.value + cameraY.value, [rootY.value, cameraY.value])
@@ -199,7 +114,12 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
         [onClose, onScan],
     )
 
-    const onCodeScanned = useQrScanDetection({ offsetX, offsetY, size: 200, onScan: handleScan })
+    const onCodeScanned = useQrScanDetection({
+        offsetX,
+        offsetY,
+        size: 200,
+        onScan: handleScan,
+    })
 
     const codeScanner = useCodeScanner({
         codeTypes: ["qr"],
@@ -212,24 +132,96 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
         return Skia.RRectXY(Skia.XYWHRect(offsetX.value, offsetY.value, 200, 200), 16, 16)
     })
 
-    return selectedTab === "scan" && hasCameraPerms ? (
+    const showCamera = useMemo(
+        () => selectedTab === "scan" && hasCameraPerms && device,
+        [device, hasCameraPerms, selectedTab],
+    )
+
+    return (
         <BaseView flex={1} position="relative">
-            {device && (
+            {showCamera && (
                 <RNVCamera
                     style={styles.cameraView}
-                    device={device}
+                    device={device!}
                     isActive={currentState === "active"}
                     codeScanner={codeScanner}
                 />
             )}
 
-            <Canvas style={StyleSheet.absoluteFill}>
-                <Fill color={COLORS.BALANCE_BACKGROUND_80} clip={skiaClip} invertClip />
-            </Canvas>
-            <BaseView style={[StyleSheet.absoluteFill, styles.cameraChildren]}>{children}</BaseView>
+            {selectedTab === "scan" && (
+                <Canvas style={StyleSheet.absoluteFill}>
+                    <Fill color={COLORS.BALANCE_BACKGROUND_80} clip={skiaClip} invertClip />
+                </Canvas>
+            )}
+
+            <BaseView
+                style={[selectedTab === "scan" ? StyleSheet.absoluteFill : styles.children, styles.cameraChildren]}>
+                <BaseView flex={1} pt={PlatformUtils.isIOS() ? inset.top : 0}>
+                    <BaseView flexDirection="column" gap={16} pt={16} px={16} position="relative">
+                        <BaseView justifyContent="space-between" flexDirection="row" alignItems="center">
+                            {/* This is an hidden element, used to simply put the title right in the middle */}
+                            <BaseView style={[styles.iconContainer, styles.hiddenElement]}>
+                                <BaseIcon name="icon-x" color={COLORS.WHITE} size={20} />
+                            </BaseView>
+                            <Text style={styles.title}>
+                                {title ?? LL[`QR_CODE_${StringUtils.toUppercase(selectedTab)}_TITLE`]()}
+                            </Text>
+                            <TouchableOpacity style={[styles.iconContainer]} onPress={onClose}>
+                                <BaseIcon name="icon-x" color={COLORS.WHITE} size={20} />
+                            </TouchableOpacity>
+                        </BaseView>
+                        <BaseText typographyFont="captionMedium" color={COLORS.WHITE} align="center">
+                            {description ?? LL[`QR_CODE_${StringUtils.toUppercase(selectedTab)}_DESCRIPTION`]()}
+                        </BaseText>
+                        {hasWCTarget && selectedTab === "scan" && (
+                            <View style={styles.walletConnectWrapper}>
+                                <BaseView
+                                    flexDirection="row"
+                                    gap={12}
+                                    borderRadius={99}
+                                    py={2}
+                                    px={8}
+                                    mt={24}
+                                    bg={COLORS.BALANCE_BACKGROUND_95}>
+                                    <WalletConnectIcon color={COLORS.WHITE} />
+                                    <BaseText
+                                        typographyFont="captionMedium"
+                                        color={COLORS.WHITE}
+                                        testID="SEND_RECEIVE_BS_WC_SUPPORTED">
+                                        {LL.WALLET_CONNECT_SUPPORTED()}
+                                    </BaseText>
+                                </BaseView>
+                            </View>
+                        )}
+                    </BaseView>
+                    {selectedTab === "receive" ? (
+                        <ReceiveTab />
+                    ) : (
+                        <ScanTab
+                            onPermissionPress={handleCheckPermissions}
+                            hasCameraPerms={hasCameraPerms}
+                            onRootLayout={onScanRootLayout}
+                            onCameraWrapperLayout={onScanCameraLayout}
+                        />
+                    )}
+                    {tabs.length > 1 && (
+                        <BaseTabs
+                            keys={tabs}
+                            selectedKey={selectedTab}
+                            setSelectedKey={setSelectedTab}
+                            labels={labels}
+                            rootStyle={styles.tabElement}
+                            indicatorBackgroundColor="rgba(255, 255, 255, 0.15)"
+                            containerBackgroundColor={COLORS.PURPLE_DISABLED}
+                            selectedTextColor={COLORS.WHITE}
+                            unselectedTextColor={COLORS.WHITE}
+                        />
+                    )}
+
+                    <BaseSpacer height={64} />
+                </BaseView>
+            </BaseView>
         </BaseView>
-    ) : (
-        children
     )
 }
 
@@ -311,4 +303,5 @@ const baseStyles = () =>
         blurView: { height: "100%", width: "100%", position: "absolute", top: 0, left: 0 },
         cameraView: { flex: 1, position: "relative" },
         cameraChildren: { zIndex: 1 },
+        children: { flex: 1 },
     })

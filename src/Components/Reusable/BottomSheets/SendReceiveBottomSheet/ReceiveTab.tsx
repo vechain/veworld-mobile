@@ -58,6 +58,7 @@ export const ReceiveTab = () => {
                         logoSize={56}
                         logoBackgroundColor="transparent"
                         logoSVG={picasso(selectedAccount.address.toLowerCase())}
+                        logoBorderRadius={8}
                     />
                 </BaseView>
                 <BaseSpacer height={16} />

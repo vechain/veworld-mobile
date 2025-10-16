@@ -4,10 +4,10 @@ import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import Markdown from "react-native-markdown-display"
-import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
+import { AlertInline, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { B3TR } from "~Constants"
 import { ColorThemeType, typography } from "~Constants/Theme"
-import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useCameraBottomSheet, useThemedStyles } from "~Hooks"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -29,7 +29,7 @@ export const BridgeAssetDetailScreen = ({ route }: Props) => {
 
     const tokenWithCompleteInfo = useTokenWithCompleteInfo(token)
 
-    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
+    const { RenderCameraModal, handleOpenOnlyReceiveCamera } = useCameraBottomSheet({ targets: [] })
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
@@ -87,7 +87,7 @@ export const BridgeAssetDetailScreen = ({ route }: Props) => {
                             tokenWithInfo={tokenWithCompleteInfo}
                             foundToken={token}
                             isBalanceVisible={isBalanceVisible}
-                            openQRCodeSheet={openQRCodeSheet}
+                            openQRCodeSheet={handleOpenOnlyReceiveCamera}
                             isObserved={isObserved}
                         />
 
@@ -123,7 +123,7 @@ export const BridgeAssetDetailScreen = ({ route }: Props) => {
                         <MarketInfoView tokenSymbol={token.symbol} />
                         <BaseSpacer height={16} />
                     </BaseView>
-                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+                    {RenderCameraModal}
                 </ScrollView>
             }
         />
