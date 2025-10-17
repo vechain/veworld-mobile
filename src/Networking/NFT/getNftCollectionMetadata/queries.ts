@@ -63,7 +63,7 @@ export const getNftTotalSupplyOptions = (address: string, genesisId: string, tho
     queryOptions({
         queryKey: ["NFT", "DETAILS", "SUPPLY", genesisId, address],
         queryFn: () => getNftTotalSupply(address, thorClient),
-        staleTime: 24 * 60 * 60 * 1000,
-        gcTime: 24 * 60 * 60 * 1000,
+        staleTime: 60 * 60 * 1000,
+        gcTime: 60 * 60 * 1000,
         retry: 3,
     })
