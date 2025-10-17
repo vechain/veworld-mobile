@@ -25,7 +25,6 @@ export const useNFTMetadata = () => {
 
                 case URIProtocol.HTTPS:
                 case URIProtocol.HTTP: {
-                    debug(ERROR_EVENTS.NFT, `Fetching metadata for ${uri}`)
                     tokenMetadata =
                         (
                             await axios.get<NFTMetadata>(uri, {

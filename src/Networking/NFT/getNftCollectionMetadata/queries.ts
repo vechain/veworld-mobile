@@ -17,7 +17,7 @@ const getNftNameAndSymbol = async (address: string, thor: ThorClient) => {
     const results = await thor.contracts.executeMultipleClausesCall(clauses)
 
     if (results.some(result => !result.success)) {
-        throw new Error("Failed to get NFT collection metadata")
+        throw new Error("Failed to get NFT collection name and symbol")
     }
 
     return {
@@ -26,10 +26,44 @@ const getNftNameAndSymbol = async (address: string, thor: ThorClient) => {
     }
 }
 
+const getNftTotalSupply = async (address: string, thor: ThorClient) => {
+    const [supply] = await thor.contracts
+        .load(address, [
+            {
+                inputs: [],
+                name: "totalSupply",
+                outputs: [
+                    {
+                        internalType: "uint256",
+                        name: "",
+                        type: "uint256",
+                    },
+                ],
+                stateMutability: "view",
+                type: "function",
+            },
+        ])
+        .read.totalSupply()
+
+    return {
+        totalSupply: supply ?? undefined,
+    }
+}
+
 export const getNftNameAndSymbolOptions = (address: string, genesisId: string, thorClient: ThorClient) =>
     queryOptions({
-        queryKey: ["NFT", "NAME_SYMBOL", genesisId, address],
+        queryKey: ["NFT", "DETAILS", "NAME_SYMBOL", genesisId, address],
         queryFn: () => getNftNameAndSymbol(address, thorClient),
         staleTime: 24 * 60 * 60 * 1000,
         gcTime: 24 * 60 * 60 * 1000,
+        retry: 3,
+    })
+
+export const getNftTotalSupplyOptions = (address: string, genesisId: string, thorClient: ThorClient) =>
+    queryOptions({
+        queryKey: ["NFT", "DETAILS", "SUPPLY", genesisId, address],
+        queryFn: () => getNftTotalSupply(address, thorClient),
+        staleTime: 24 * 60 * 60 * 1000,
+        gcTime: 24 * 60 * 60 * 1000,
+        retry: 3,
     })

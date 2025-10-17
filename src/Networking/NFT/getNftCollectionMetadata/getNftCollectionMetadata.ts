@@ -1,63 +1,20 @@
-import { ABIContract, Address, Clause, VIP181_ABI } from "@vechain/sdk-core"
-import { ContractClause, ThorClient } from "@vechain/sdk-network"
+import { ThorClient } from "@vechain/sdk-network"
+import { queryClient } from "~Api/QueryProvider"
+import { getNftNameAndSymbolOptions, getNftTotalSupplyOptions } from "./queries"
 
-export const getNftCollectionMetadata = async (address: string, thor: ThorClient) => {
-    const clauses: ContractClause[] = [
-        {
-            clause: Clause.callFunction(Address.of(address), ABIContract.ofAbi(VIP181_ABI).getFunction("name"), []),
-            functionAbi: ABIContract.ofAbi(VIP181_ABI).getFunction("name"),
-        },
-        {
-            clause: Clause.callFunction(Address.of(address), ABIContract.ofAbi(VIP181_ABI).getFunction("symbol"), []),
-            functionAbi: ABIContract.ofAbi(VIP181_ABI).getFunction("symbol"),
-        },
-        {
-            clause: Clause.callFunction(
-                Address.of(address),
-                ABIContract.ofAbi([
-                    {
-                        inputs: [],
-                        name: "totalSupply",
-                        outputs: [
-                            {
-                                internalType: "uint256",
-                                name: "",
-                                type: "uint256",
-                            },
-                        ],
-                        stateMutability: "view",
-                        type: "function",
-                    },
-                ]).getFunction("totalSupply"),
-                [],
-            ),
-            functionAbi: ABIContract.ofAbi([
-                {
-                    inputs: [],
-                    name: "totalSupply",
-                    outputs: [
-                        {
-                            internalType: "uint256",
-                            name: "",
-                            type: "uint256",
-                        },
-                    ],
-                    stateMutability: "view",
-                    type: "function",
-                },
-            ]).getFunction("totalSupply"),
-        },
-    ]
+export const getNftCollectionMetadata = async (address: string, genesisId: string, thor: ThorClient) => {
+    const [nameAndSymbol, totalSupply] = await Promise.allSettled([
+        queryClient.fetchQuery(getNftNameAndSymbolOptions(address, genesisId, thor)),
+        queryClient.fetchQuery(getNftTotalSupplyOptions(address, genesisId, thor)),
+    ])
 
-    const results = await thor.contracts.executeMultipleClausesCall(clauses)
-
-    if (results.slice(0, 2).some(result => !result.success)) {
+    if (nameAndSymbol.status === "rejected") {
         throw new Error("Failed to get NFT collection metadata")
     }
 
     return {
-        name: results[0].result.plain as string,
-        symbol: results[1].result.plain as string,
-        totalSupply: results[2].success ? Number(results[2].result.plain) : undefined,
+        name: nameAndSymbol.value.name,
+        symbol: nameAndSymbol.value.symbol,
+        totalSupply: totalSupply.status === "rejected" ? undefined : totalSupply.value.totalSupply.toString(),
     }
 }
