@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query"
 import { ABIContract, Address, Clause, VIP181_ABI } from "@vechain/sdk-core"
+import { ContractCallError } from "@vechain/sdk-errors"
 import { ContractClause, ThorClient } from "@vechain/sdk-network"
 
 const getNftNameAndSymbol = async (address: string, thor: ThorClient) => {
@@ -27,26 +28,36 @@ const getNftNameAndSymbol = async (address: string, thor: ThorClient) => {
 }
 
 const getNftTotalSupply = async (address: string, thor: ThorClient) => {
-    const [supply] = await thor.contracts
-        .load(address, [
-            {
-                inputs: [],
-                name: "totalSupply",
-                outputs: [
-                    {
-                        internalType: "uint256",
-                        name: "",
-                        type: "uint256",
-                    },
-                ],
-                stateMutability: "view",
-                type: "function",
-            },
-        ])
-        .read.totalSupply()
+    try {
+        const [supply] = await thor.contracts
+            .load(address, [
+                {
+                    inputs: [],
+                    name: "totalSupply",
+                    outputs: [
+                        {
+                            internalType: "uint256",
+                            name: "",
+                            type: "uint256",
+                        },
+                    ],
+                    stateMutability: "view",
+                    type: "function",
+                },
+            ])
+            .read.totalSupply()
 
-    return {
-        totalSupply: supply ?? undefined,
+        return {
+            totalSupply: supply,
+        }
+    } catch (e) {
+        //errorMessage = '' means that the method probably reverted because it wasn't found
+        if (e instanceof ContractCallError && e.errorMessage === "") {
+            return {
+                totalSupply: undefined,
+            }
+        }
+        throw e
     }
 }
 

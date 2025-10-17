@@ -15,6 +15,6 @@ export const getNftCollectionMetadata = async (address: string, genesisId: strin
     return {
         name: nameAndSymbol.value.name,
         symbol: nameAndSymbol.value.symbol,
-        totalSupply: totalSupply.status === "rejected" ? undefined : totalSupply.value.totalSupply.toString(),
+        totalSupply: totalSupply.status === "rejected" ? undefined : totalSupply.value.totalSupply?.toString(),
     }
 }
