@@ -112,7 +112,7 @@ export const SelectTokenSendScreen = () => {
             body={
                 <BaseView>
                     <BaseView>
-                        <BaseText typographyFont="subSubTitleLight">{LL.SEND_TOKEN_SELECT_ASSET()}</BaseText>
+                        <BaseText typographyFont="body">{LL.SEND_TOKEN_SELECT_ASSET()}</BaseText>
                         <BaseSpacer height={24} />
                     </BaseView>
                     {filteredTokens.length ? (

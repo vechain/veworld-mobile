@@ -48,8 +48,7 @@ export const useUI = ({
 
     const animatedFontStyle = useAnimatedStyle(() => {
         return {
-            //TODO: Fix this throws because not in a worklet
-            fontSize: FontUtils.font(inputTextSize.value),
+            fontSize: FontUtils.fontWorklet(inputTextSize.value),
         }
     }, [])
 

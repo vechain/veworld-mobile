@@ -156,21 +156,23 @@ export const NotificationScreen = () => {
 
                 {areNotificationsEnabled && (
                     <>
-                        <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_UPDATES()}</BaseText>
+                        <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_UPDATES()}</BaseText>
                         <BaseSpacer height={16} />
                         <EnableFeature
                             title={LL.VECHAIN_NEWS_AND_UPDATES()}
+                            typographyFont="bodyMedium"
                             onValueChange={toogleSubscriptionSwitch(vechainNewsAndUpdates)}
                             value={!!tags[vechainNewsAndUpdates]}
                         />
                         <BaseSpacer height={40} />
 
-                        <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_VEBETTERDAO()}</BaseText>
+                        <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_VEBETTERDAO()}</BaseText>
                         <BaseSpacer height={16} />
                         {isMainnet && (
                             <>
                                 <EnableFeature
                                     title={LL.PUSH_NOTIFICATIONS_DAPPS_DESC()}
+                                    typographyFont="bodyMedium"
                                     onValueChange={toogleDAppSubscriptionSwitch}
                                     value={dappNotifications}
                                 />
@@ -179,6 +181,7 @@ export const NotificationScreen = () => {
                         )}
                         <EnableFeature
                             title={LL.PUSH_NOTIFICATIONS_VOTE_REMINDER()}
+                            typographyFont="bodyMedium"
                             onValueChange={toogleSubscriptionSwitch(voteReminderTagKey)}
                             value={!!tags[voteReminderTagKey]}
                         />

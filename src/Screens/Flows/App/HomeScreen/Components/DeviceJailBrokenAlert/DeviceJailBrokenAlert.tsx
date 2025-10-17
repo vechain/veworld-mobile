@@ -25,7 +25,7 @@ export const DeviceJailBrokenAlert = () => {
             my={8}>
             <BaseIcon name="icon-shield-alert" size={18} color={theme.colors.errorVariant.title} />
             <BaseView flex={1}>
-                <BaseText color={theme.colors.errorVariant.title} typographyFont="body">
+                <BaseText color={theme.colors.errorVariant.title} typographyFont="captionSemiBold">
                     <WrapTranslation
                         message={LL.ALERT_TITLE_JAILBROKEN_DEVICE_2()}
                         renderComponent={() => (

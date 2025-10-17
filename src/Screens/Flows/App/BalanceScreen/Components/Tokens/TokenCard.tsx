@@ -168,6 +168,7 @@ export const TokenCard = ({ token }: Props) => {
             py={symbol ? typography.lineHeight.body : typography.lineHeight.captionSemiBold}
             flexDirection="row"
             bg={theme.colors.card}
+            containerStyle={styles.container}
             innerContainerStyle={styles.root}>
             <BaseView flexDirection="row" gap={16} style={styles.leftSection}>
                 <TokenImage
@@ -256,6 +257,9 @@ const baseStyles = () =>
             borderRadius: 12,
             justifyContent: "space-between",
             minHeight: 80,
+        },
+        container: {
+            borderRadius: 12,
         },
         leftSection: {
             flexGrow: 1,

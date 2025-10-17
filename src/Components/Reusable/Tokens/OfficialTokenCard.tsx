@@ -53,7 +53,7 @@ export const OfficialTokenCard = memo(
                         />
                         <BaseSpacer width={12} />
                         <BaseView flexDirection="row">
-                            <BaseText typographyFont="bodyBold" ellipsizeMode="tail" numberOfLines={1}>
+                            <BaseText typographyFont="bodySemiBold" ellipsizeMode="tail" numberOfLines={1}>
                                 {token.symbol}
                             </BaseText>
                             <BaseSpacer width={8} />

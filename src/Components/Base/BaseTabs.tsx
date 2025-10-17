@@ -79,7 +79,7 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
                             e.persist()
                             onLayout(index)(e)
                         }}>
-                        <BaseText color={textColor} typographyFont="bodyMedium">
+                        <BaseText color={textColor} typographyFont="captionMedium">
                             {labels[index]}
                         </BaseText>
                     </TouchableOpacity>

@@ -140,7 +140,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                         })
                     }}>
                     <BaseText
-                        typographyFont="bodySemiBold"
+                        typographyFont="captionSemiBold"
                         color={COLORS.PURPLE_LABEL}
                         numberOfLines={1}
                         flexDirection="row"

@@ -165,7 +165,7 @@ export const StargateCarousel = () => {
                     py={8}
                     textColor={theme.colors.actionBanner.buttonTextSecondary}
                     bgColor={theme.colors.actionBanner.buttonBackground}
-                    typographyFont="bodySemiBold">
+                    typographyFont="captionSemiBold">
                     {LL.STARGATE_MANAGE_STAKING()}
                 </BaseButton>
             </BaseView>
