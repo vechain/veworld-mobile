@@ -83,7 +83,7 @@ const baseStyle = (theme: ColorThemeType) =>
             fontWeight: "500",
         },
         selectedLabel: {
-            color: theme.isDark ? COLORS.LIME_GREEN : COLORS.WHITE,
+            color: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
         },
         unselectedLabel: {
             color: theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600,
