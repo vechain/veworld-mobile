@@ -1,9 +1,10 @@
 import React, { memo, useMemo } from "react"
 import FastImage, { FastImageProps } from "react-native-fast-image"
-import { useTheme } from "~Hooks"
-import { BaseView } from "~Components/Base"
-import { NFTPlaceholderDark, NFTPlaceholderLight } from "~Assets"
 import { SvgUri } from "react-native-svg"
+import { NFTPlaceholderDark, NFTPlaceholderLight } from "~Assets"
+import { BaseView } from "~Components/Base"
+import { useTheme } from "~Hooks"
+import { URIUtils } from "~Utils"
 
 type Props = {
     uri?: string
@@ -18,6 +19,18 @@ export const NFTImage = memo((props: Props) => {
     const placeholderImg = useMemo(() => {
         return theme.isDark ? NFTPlaceholderDark : NFTPlaceholderLight
     }, [theme.isDark])
+
+    const cacheControl = useMemo(() => {
+        //Return default value (it won't be used)
+        if (mime === "image/svg+xml") return FastImage.cacheControl.immutable
+        if (!uri) return FastImage.cacheControl.immutable
+        const parsedUrl = new URL(uri)
+        //If the URL is for an ArWeave resource or IPFS, then it's technically immutable
+        //Otherwise respect HTTP headers
+        if ([URIUtils.IPFS_GATEWAY_HOSTNAME, URIUtils.ARWEAVE_GATEWAY_HOSTNAME].includes(parsedUrl.hostname))
+            return FastImage.cacheControl.immutable
+        return FastImage.cacheControl.web
+    }, [mime, uri])
 
     const renderImageComponent = useMemo(() => {
         if (mime && mime === "image/svg+xml") {
@@ -70,13 +83,13 @@ export const NFTImage = memo((props: Props) => {
                 source={{
                     uri,
                     priority: FastImage.priority.low,
-                    cache: FastImage.cacheControl.immutable,
+                    cache: cacheControl,
                 }}
                 {...rest}
                 resizeMode={FastImage.resizeMode.cover}
             />
         )
-    }, [mime, placeholderImg, rest, style, testID, theme.colors.placeholder, uri])
+    }, [cacheControl, mime, placeholderImg, rest, style, testID, theme.colors.placeholder, uri])
 
     return <BaseView>{renderImageComponent}</BaseView>
 })

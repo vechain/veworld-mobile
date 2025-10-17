@@ -86,7 +86,11 @@ export const useNFTCollections = () => {
                     }
                 }
 
-                const { name, symbol, totalSupply } = await getNftCollectionMetadata(collection.address, thor)
+                const { name, symbol, totalSupply } = await getNftCollectionMetadata(
+                    collection.address,
+                    network.genesis.id,
+                    thor,
+                )
 
                 const updated: NftCollection = {
                     ...collection,
@@ -108,7 +112,7 @@ export const useNFTCollections = () => {
                 warn(ERROR_EVENTS.NFT, e)
             }
         },
-        [currentAddress, dispatch, fetchMetadata, network.type, thor],
+        [currentAddress, dispatch, fetchMetadata, network.genesis.id, network.type, thor],
     )
 
     useLazyLoader({
