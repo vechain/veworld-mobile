@@ -5040,10 +5040,6 @@ type RootTranslation = {
 	 */
 	VBD_CONTRIBUTE_OFFSET: string
 	/**
-	 * C​h​e​c​k​ ​o​u​t​ ​m​y​ ​V​e​B​e​t​t​e​r​D​A​O​ ​i​m​p​a​c​t​!​ ​🌱
-	 */
-	VBD_SHARE_CARD_MESSAGE: string
-	/**
 	 * g​e​t​ ​r​e​w​a​r​d​e​d​ ​f​o​r​ ​y​o​u​r​ ​a​c​t​i​o​n​s​ ​a​n​d
 	 */
 	VBD_GET_REWARDED: string
@@ -5056,6 +5052,14 @@ type RootTranslation = {
 	 */
 	VBD_MOVEMENT: string
 	/**
+	 * P​o​w​e​r​e​d​ ​b​y
+	 */
+	VBD_POWERED_BY: string
+	/**
+	 * .​c​o​m
+	 */
+	VBD_POWERED_BY_COM: string
+	/**
 	 * R​e​w​a​r​d​s​ ​e​a​r​n​e​d
 	 */
 	VBD_REWARDS_EARNED: string
@@ -5063,6 +5067,10 @@ type RootTranslation = {
 	 * S​e​e​ ​V​e​B​e​t​t​e​r​ ​p​r​o​f​i​l​e
 	 */
 	VBD_SEE_PROFILE: string
+	/**
+	 * C​h​e​c​k​ ​o​u​t​ ​m​y​ ​V​e​B​e​t​t​e​r​ ​i​m​p​a​c​t​!​ ​�​�
+	 */
+	VBD_SHARE_CARD_MESSAGE: string
 	/**
 	 * S​t​a​r​t​ ​y​o​u​r​ ​i​m​p​a​c​t
 	 */
@@ -5104,17 +5112,9 @@ type RootTranslation = {
 	 */
 	VBD_STAT_WATER: string
 	/**
-	 * P​o​w​e​r​e​d​ ​b​y
-	 */
-	VBD_POWERED_BY: string
-	/**
 	 * T​o​t​a​l​ ​B​e​t​t​e​r​ ​a​c​t​i​o​n​s
 	 */
 	VBD_TOTAL_ACTIONS: string
-	/**
-	 * .com
-	 */
-	VBD_POWERED_BY_COM: string
 	/**
 	 * T​o​t​a​l​ ​B​3​T​R​ ​r​e​w​a​r​d​e​d
 	 */
@@ -10295,10 +10295,6 @@ Here's what it's all about:
 	 */
 	VBD_CONTRIBUTE_OFFSET: () => LocalizedString
 	/**
-	 * Check out my VeBetterDAO impact! 🌱
-	 */
-	VBD_SHARE_CARD_MESSAGE: () => LocalizedString
-	/**
 	 * get rewarded for your actions and
 	 */
 	VBD_GET_REWARDED: () => LocalizedString
@@ -10311,6 +10307,14 @@ Here's what it's all about:
 	 */
 	VBD_MOVEMENT: () => LocalizedString
 	/**
+	 * Powered by
+	 */
+	VBD_POWERED_BY: () => LocalizedString
+	/**
+	 * .com
+	 */
+	VBD_POWERED_BY_COM: () => LocalizedString
+	/**
 	 * Rewards earned
 	 */
 	VBD_REWARDS_EARNED: () => LocalizedString
@@ -10318,6 +10322,10 @@ Here's what it's all about:
 	 * See VeBetter profile
 	 */
 	VBD_SEE_PROFILE: () => LocalizedString
+	/**
+	 * Check out my VeBetter impact! 🌱
+	 */
+	VBD_SHARE_CARD_MESSAGE: () => LocalizedString
 	/**
 	 * Start your impact
 	 */
@@ -10362,14 +10370,6 @@ Here's what it's all about:
 	 * Total Better actions
 	 */
 	VBD_TOTAL_ACTIONS: () => LocalizedString
-	/**
-	 * .com
-	 */
-	VBD_POWERED_BY_COM: () => LocalizedString
-	/**
-	 * Powered by
-	 */
-	VBD_POWERED_BY: () => LocalizedString
 	/**
 	 * Total B3TR rewarded
 	 */
