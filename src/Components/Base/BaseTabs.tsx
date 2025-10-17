@@ -1,10 +1,9 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
-import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
+import Animated, { useAnimatedStyle, withDelay, withTiming } from "react-native-reanimated"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseText } from "./BaseText"
-import { BaseView } from "./BaseView"
 
 type Props<TKeys extends string[] | readonly string[]> = {
     keys: TKeys
@@ -59,9 +58,15 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
             left: withTiming(offset.offsetX),
         }
     }, [tabOffsets, selectedIndex, keys.length])
+
+    const rootAnimatedStyles = useAnimatedStyle(() => {
+        if (tabOffsets.length !== keys.length) return { opacity: 0 }
+        return { opacity: withDelay(300, withTiming(1)) }
+    }, [tabOffsets.length, keys.length])
+
     if (keys.length !== labels.length) throw new Error("Keys and Labels should have the same length")
     return (
-        <BaseView style={[styles.root, showBorder && styles.withBorder, rootStyle]} flexDirection="row" gap={4}>
+        <Animated.View style={[styles.root, showBorder && styles.withBorder, rootStyle, rootAnimatedStyles]}>
             {keys.map((key, index) => {
                 const isSelected = selectedKey === key
                 const textColor = getTextColor(isSelected)
@@ -81,7 +86,7 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
                 )
             })}
             <Animated.View style={[indicatorStyles, styles.indicator]} />
-        </BaseView>
+        </Animated.View>
     )
 }
 
@@ -94,6 +99,8 @@ const baseStyles = (indicatorBackgroundColor?: string, containerBackgroundColor?
             padding: 4,
             position: "relative",
             borderRadius: 8,
+            flexDirection: "row",
+            gap: 4,
         },
         withBorder: {
             borderWidth: 1,

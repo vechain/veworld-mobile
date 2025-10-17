@@ -5052,6 +5052,14 @@ type RootTranslation = {
 	 */
 	VBD_MOVEMENT: string
 	/**
+	 * P​o​w​e​r​e​d​ ​b​y
+	 */
+	VBD_POWERED_BY: string
+	/**
+	 * .​c​o​m
+	 */
+	VBD_POWERED_BY_COM: string
+	/**
 	 * R​e​w​a​r​d​s​ ​e​a​r​n​e​d
 	 */
 	VBD_REWARDS_EARNED: string
@@ -5059,6 +5067,10 @@ type RootTranslation = {
 	 * S​e​e​ ​V​e​B​e​t​t​e​r​ ​p​r​o​f​i​l​e
 	 */
 	VBD_SEE_PROFILE: string
+	/**
+	 * C​h​e​c​k​ ​o​u​t​ ​m​y​ ​V​e​B​e​t​t​e​r​ ​i​m​p​a​c​t​!​ ​�​�
+	 */
+	VBD_SHARE_CARD_MESSAGE: string
 	/**
 	 * S​t​a​r​t​ ​y​o​u​r​ ​i​m​p​a​c​t
 	 */
@@ -10295,6 +10307,14 @@ Here's what it's all about:
 	 */
 	VBD_MOVEMENT: () => LocalizedString
 	/**
+	 * Powered by
+	 */
+	VBD_POWERED_BY: () => LocalizedString
+	/**
+	 * .com
+	 */
+	VBD_POWERED_BY_COM: () => LocalizedString
+	/**
 	 * Rewards earned
 	 */
 	VBD_REWARDS_EARNED: () => LocalizedString
@@ -10302,6 +10322,10 @@ Here's what it's all about:
 	 * See VeBetter profile
 	 */
 	VBD_SEE_PROFILE: () => LocalizedString
+	/**
+	 * Check out my VeBetter impact! 🌱
+	 */
+	VBD_SHARE_CARD_MESSAGE: () => LocalizedString
 	/**
 	 * Start your impact
 	 */

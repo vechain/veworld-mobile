@@ -1,28 +1,22 @@
-import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import React, { forwardRef, useMemo } from "react"
+import { StyleSheet, View } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { b3mo } from "~Assets"
-import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
-import { useBrowserTab } from "~Hooks/useBrowserTab"
-import { useIsVeBetterUser } from "~Hooks/useIsVeBetterUser"
 import { useUserVeBetterStats } from "~Hooks/useUserVeBetterStats"
 import { useI18nContext } from "~i18n"
-import { Routes } from "~Navigation"
-import { BigNutils } from "~Utils"
+import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
 import { RewardsEarned } from "./RewardsEarned"
 import { StatsCard } from "./StatsCard"
+import { VeBetterPoweredSvg } from "~Assets/Img/VeBetterPoweredSvg"
 
-const PROFILE_URL = "https://governance.vebetterdao.org/profile"
-
-export const VeBetterDaoCard = () => {
+export const VeBetterDaoCard = forwardRef<View>((_, ref) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const { data } = useUserVeBetterStats()
-    const { data: isVeBetterUser } = useIsVeBetterUser()
     const { formatLocale } = useFormatFiat()
 
     const stats = useMemo(() => {
@@ -35,23 +29,8 @@ export const VeBetterDaoCard = () => {
         }
     }, [data])
 
-    const nav = useNavigation()
-    const { navigateWithTab } = useBrowserTab()
-
-    const onVeBetterNavigate = useCallback(() => {
-        navigateWithTab({
-            url: PROFILE_URL,
-            title: PROFILE_URL,
-            navigationFn(url) {
-                nav.navigate(Routes.BROWSER, { url, returnScreen: Routes.HOME })
-            },
-        })
-    }, [nav, navigateWithTab])
-
-    if (!isVeBetterUser) return null
-
     return (
-        <BaseView style={styles.root} testID="VEBETTER_DAO_CARD">
+        <View ref={ref} style={styles.root} testID="VEBETTER_DAO_CARD">
             <BaseView style={styles.b3mo}>
                 <FastImage
                     source={b3mo}
@@ -64,7 +43,7 @@ export const VeBetterDaoCard = () => {
                     {LL.VBD_YOUR_BETTER_ACTIONS()}
                 </BaseText>
                 <BaseText color={theme.isDark ? COLORS.WHITE : COLORS.GREY_700} style={styles.actionsText}>
-                    {BigNutils(data?.actionsRewarded ?? "0").toCurrencyFormat_string(0, formatLocale)}
+                    {formatDisplayNumber(data?.actionsRewarded ?? "0", { locale: formatLocale, forceDecimals: 0 })}
                 </BaseText>
             </BaseView>
 
@@ -102,26 +81,21 @@ export const VeBetterDaoCard = () => {
             <RewardsEarned week={data?.week} month={data?.month} total={data?.totalRewardAmount} />
 
             <BaseSpacer height={16} />
-
-            <BaseButton
-                action={onVeBetterNavigate}
-                variant="ghost"
-                rightIcon={
-                    <BaseIcon
-                        name="icon-arrow-link"
-                        color={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE}
-                        size={20}
-                    />
-                }
-                typographyFont="subSubTitleMedium"
-                textColor={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE}
-                selfAlign="center"
-                py={0}>
-                {LL.VBD_SEE_PROFILE()}
-            </BaseButton>
-        </BaseView>
+            <BaseView flexDirection="row" alignItems="center" justifyContent="center">
+                <BaseText
+                    color={theme.isDark ? COLORS.GREY_400 : COLORS.GREY_500}
+                    typographyFont="buttonMedium"
+                    style={styles.poweredByText}>
+                    {LL.VBD_POWERED_BY()}
+                </BaseText>
+                <VeBetterPoweredSvg width={79} height={16} color={theme.isDark ? COLORS.GREY_400 : COLORS.GREY_500} />
+                <BaseText color={theme.isDark ? COLORS.GREY_400 : COLORS.GREY_500} typographyFont="buttonMedium">
+                    {LL.VBD_POWERED_BY_COM()}
+                </BaseText>
+            </BaseView>
+        </View>
     )
-}
+})
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
@@ -150,5 +124,8 @@ const baseStyles = (theme: ColorThemeType) =>
         b3moImage: {
             width: "100%",
             height: "100%",
+        },
+        poweredByText: {
+            marginRight: 6,
         },
     })

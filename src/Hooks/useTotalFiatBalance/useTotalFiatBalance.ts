@@ -1,4 +1,4 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { VET, VTHO } from "~Constants"
 import { useUserNodes, useUserStargateNfts } from "~Hooks/Staking"
@@ -13,9 +13,10 @@ import { AddressUtils, BalanceUtils, BigNutils } from "~Utils"
 type Args = {
     address: string
     enabled?: boolean
+    useCompactNotation?: boolean
 }
 
-export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
+export const useTotalFiatBalance = ({ address, enabled = true, useCompactNotation }: Args) => {
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
     const isVisible = useAppSelector(selectBalanceVisible)
 
@@ -102,13 +103,12 @@ export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
     const { data: previousBalance } = useQuery({
         queryKey: ["BALANCE", "TOTAL", network.genesis.id, address.toLowerCase()],
         queryFn: () => amount,
-        placeholderData: keepPreviousData,
         enabled: !isLoading,
         staleTime: 5 * 60 * 1000,
-        gcTime: 5 * 60 * 1000,
+        gcTime: Infinity,
     })
 
-    const { formatFiat } = useFormatFiat()
+    const { formatFiat } = useFormatFiat({ useCompactNotation })
     const renderedBalance = useMemo(() => {
         if (isLoading) {
             return formatFiat({ amount: previousBalance ?? 0, cover: !isVisible })

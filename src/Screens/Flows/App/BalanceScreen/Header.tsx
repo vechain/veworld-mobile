@@ -67,12 +67,15 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const { RenderCameraModal, handleOpenOnlyScanCamera } = useCameraBottomSheet({
+    const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         sourceScreen: Routes.HOME,
         targets: [ScanTarget.WALLET_CONNECT, ScanTarget.ADDRESS, ScanTarget.HTTPS_URL],
     })
 
-    const handleOpenQRCode = useCallback(() => handleOpenOnlyScanCamera(), [handleOpenOnlyScanCamera])
+    const handleOpenQRCode = useCallback(
+        () => handleOpenCamera({ tabs: ["scan", "receive"], defaultTab: "scan" }),
+        [handleOpenCamera],
+    )
     const handleOpenWalletSwitcher = useCallback(() => openSelectAccountBottomSheet(), [openSelectAccountBottomSheet])
 
     const accounts = useAppSelector(selectVisibleAccounts)

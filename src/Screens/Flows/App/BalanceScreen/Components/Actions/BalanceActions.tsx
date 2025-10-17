@@ -26,34 +26,38 @@ export const BalanceActions = ({ style }: Props) => {
     const account = useAppSelector(selectSelectedAccount)
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
-        targets: [ScanTarget.ADDRESS, ScanTarget.VNS],
+        targets: [ScanTarget.ADDRESS, ScanTarget.WALLET_CONNECT, ScanTarget.HTTPS_URL],
+        sourceScreen: Routes.HOME,
     })
 
     const { rawAmount } = useTotalFiatBalance({ address: account.address, enabled: true })
 
     const onBuy = useCallback(() => {
         nav.navigate(Routes.BUY_FLOW)
-        track(AnalyticsEvent.BUY_CRYPTO_BUTTON_CLICKED)
+        track(AnalyticsEvent.DASHBOARD_BUY_CLICK)
     }, [nav, track])
 
-    const onSend = useCallback(() => nav.navigate(Routes.SELECT_TOKEN_SEND), [nav])
+    const onSend = useCallback(() => {
+        nav.navigate(Routes.SELECT_TOKEN_SEND)
+        track(AnalyticsEvent.DASHBOARD_SEND_CLICK)
+    }, [nav, track])
 
-    const onReceive = useCallback(
-        () => handleOpenCamera({ tabs: ["scan", "receive"], defaultTab: "receive" }),
-        [handleOpenCamera],
-    )
+    const onReceive = useCallback(() => {
+        handleOpenCamera({ tabs: ["scan", "receive"], defaultTab: "receive" })
+        track(AnalyticsEvent.DASHBOARD_RECEIVE_CLICK)
+    }, [handleOpenCamera, track])
 
-    const onSwap = useCallback(() => nav.navigate(Routes.SWAP), [nav])
-
-    const onEarn = useCallback(
-        () =>
-            navigateToBrowser(STARGATE_DAPP_URL, url =>
-                nav.navigate(Routes.BROWSER, { url, returnScreen: Routes.HOME }),
-            ),
-        [navigateToBrowser, nav],
-    )
+    const onSwap = useCallback(() => {
+        nav.navigate(Routes.SWAP)
+        track(AnalyticsEvent.DASHBOARD_SWAP_CLICK)
+    }, [nav, track])
 
     const isSendDisabled = useMemo(() => rawAmount === 0, [rawAmount])
+
+    const onEarn = useCallback(() => {
+        navigateToBrowser(STARGATE_DAPP_URL, url => nav.navigate(Routes.BROWSER, { url, returnScreen: Routes.HOME }))
+        track(AnalyticsEvent.DASHBOARD_EARN_CLICK)
+    }, [navigateToBrowser, nav, track])
 
     return (
         <Animated.View
