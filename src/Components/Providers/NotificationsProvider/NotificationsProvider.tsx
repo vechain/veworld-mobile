@@ -28,6 +28,7 @@ import {
 } from "~Storage/Redux"
 import { useFeatureFlags } from "../FeatureFlagsProvider"
 import { error } from "~Utils"
+import { Routes } from "../../../Navigation"
 
 type ContextType = {
     featureEnabled: boolean
@@ -159,7 +160,14 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
                     }
 
                     if (route) {
-                        navigation.navigate(route as any, navParams ? JSON.parse(navParams) : undefined)
+                        const parsedParams = navParams ? JSON.parse(navParams) : undefined
+
+                        // If navigating to browser and no returnScreen is specified, provide a safe default
+                        if (route === "Browser" && parsedParams && !parsedParams.returnScreen) {
+                            parsedParams.returnScreen = Routes.HOME
+                        }
+
+                        navigation.navigate(route as any, parsedParams)
                     }
                 }
             } catch {}
