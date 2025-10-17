@@ -3,22 +3,43 @@ import { useCallback, useMemo, useRef } from "react"
 import { OneSignal } from "react-native-onesignal"
 import {
     selectAccounts,
+    selectLastFullRegistration,
     selectLastSubscriptionId,
-    selectLastSuccessfulRegistration,
-    selectLastWalletAddresses,
+    selectWalletRegistrations,
+    updateLastFullRegistration,
     updateLastSubscriptionId,
-    updateLastSuccessfulRegistration,
-    updateLastWalletAddresses,
+    updateWalletRegistrations,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AddressUtils, error, info } from "~Utils"
+import { error, info } from "~Utils"
+import HexUtils from "~Utils/HexUtils"
 import { ERROR_EVENTS } from "../../Constants"
 
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
 const MAX_RETRIES = 3
+const BATCH_SIZE = 5
 
 const NOTIFICATION_CENTER_EVENT = ERROR_EVENTS.NOTIFICATION_CENTER
+
+const chunkArray = <T>(array: T[], size: number): T[][] => {
+    const chunks: T[][] = []
+    for (let i = 0; i < array.length; i += size) {
+        chunks.push(array.slice(i, i + size))
+    }
+    return chunks
+}
+
+const getRegistrationTimestamp = (
+    walletRegistrations: Record<string, number> | null,
+    address: string,
+): number | undefined => {
+    if (!walletRegistrations) return undefined
+
+    // Addresses are stored normalized, so normalize the lookup key
+    const normalizedAddress = HexUtils.normalize(address)
+    return walletRegistrations[normalizedAddress]
+}
 
 interface RegistrationPayload {
     walletAddresses: string[]
@@ -41,64 +62,69 @@ export const useNotificationCenter = () => {
     const dispatch = useAppDispatch()
     const accounts = useAppSelector(selectAccounts)
 
-    const lastSuccessfulRegistration = useAppSelector(selectLastSuccessfulRegistration)
+    const walletRegistrations = useAppSelector(selectWalletRegistrations)
+    const lastFullRegistration = useAppSelector(selectLastFullRegistration)
     const lastSubscriptionId = useAppSelector(selectLastSubscriptionId)
-    const lastWalletAddresses = useAppSelector(selectLastWalletAddresses)
 
     const walletAddresses = useMemo(() => accounts.map(account => account.address), [accounts])
-    const sortedWalletAddresses = useMemo(() => [...walletAddresses].sort(), [walletAddresses])
-    const sortedLastWalletAddresses = useMemo(() => [...(lastWalletAddresses ?? [])].sort(), [lastWalletAddresses])
 
     const isRegistering = useRef(false)
 
-    const shouldRegister = useCallback(
-        (currentSubscriptionId: string | null): boolean => {
-            if (!lastSuccessfulRegistration) {
-                info(NOTIFICATION_CENTER_EVENT, "Should register: never registered before")
-                return true
-            }
+    const getWalletsNeedingRegistration = useCallback(
+        (currentSubscriptionId: string | null): string[] => {
+            const now = Date.now()
 
-            const timeSinceLastSuccess = Date.now() - lastSuccessfulRegistration
-            if (timeSinceLastSuccess >= THIRTY_DAYS_MS) {
-                info(NOTIFICATION_CENTER_EVENT, "Should register: more than 30 days since last success")
-                return true
-            }
-
+            // If subscription ID changed, re-register all wallets
             if (currentSubscriptionId !== lastSubscriptionId) {
                 info(
                     NOTIFICATION_CENTER_EVENT,
-                    "Should register: subscription ID changed",
+                    "Re-registering all wallets: subscription ID changed",
                     lastSubscriptionId,
                     "->",
                     currentSubscriptionId,
                 )
-                return true
+                return walletAddresses
             }
 
-            // Check if wallet addresses have changed
-            if (
-                sortedWalletAddresses.length !== sortedLastWalletAddresses.length ||
-                !sortedWalletAddresses.every((addr, idx) =>
-                    AddressUtils.compareAddresses(addr, sortedLastWalletAddresses[idx]),
+            // If no full registration has happened, register all
+            if (!lastFullRegistration) {
+                info(NOTIFICATION_CENTER_EVENT, "Registering all wallets: no previous full registration")
+                return walletAddresses
+            }
+
+            // If last full registration was >30 days ago, re-register all
+            const timeSinceFullRegistration = now - lastFullRegistration
+            if (timeSinceFullRegistration >= THIRTY_DAYS_MS) {
+                info(NOTIFICATION_CENTER_EVENT, "Re-registering all wallets: 30 days since last full registration")
+                return walletAddresses
+            }
+
+            // Otherwise, only register wallets that are new or haven't been registered in 30 days
+            const walletsToRegister = walletAddresses.filter(address => {
+                const lastRegistered = getRegistrationTimestamp(walletRegistrations, address)
+                if (!lastRegistered) {
+                    return true // New wallet
+                }
+                const timeSinceRegistration = now - lastRegistered
+                return timeSinceRegistration >= THIRTY_DAYS_MS
+            })
+
+            if (walletsToRegister.length > 0) {
+                info(
+                    NOTIFICATION_CENTER_EVENT,
+                    `Registering ${walletsToRegister.length} wallet(s): new or >30 days old`,
                 )
-            ) {
-                info(NOTIFICATION_CENTER_EVENT, "Should register: wallet addresses changed")
-                return true
             }
 
-            info(
-                NOTIFICATION_CENTER_EVENT,
-                "Should NOT register: recent successful registration with same subscription ID and wallet addresses",
-            )
-            return false
+            return walletsToRegister
         },
-        [lastSuccessfulRegistration, lastSubscriptionId, sortedLastWalletAddresses, sortedWalletAddresses],
+        [lastFullRegistration, lastSubscriptionId, walletAddresses, walletRegistrations],
     )
 
     const sendRegistration = useCallback(
-        async (subscriptionId: string | null) => {
+        async (subscriptionId: string | null, addressesToRegister: string[]) => {
             const registerBaseUrl = __DEV__
-                ? process.env.NOTIFICATION_CENTER_REGISTER_DEV
+                ? "http://192.168.86.24:8085"
                 : process.env.NOTIFICATION_CENTER_REGISTER_PROD
 
             if (!registerBaseUrl) {
@@ -112,13 +138,13 @@ export const useNotificationCenter = () => {
                 throw new Error("OneSignal app ID is not configured")
             }
 
-            if (walletAddresses.length === 0) {
-                info(NOTIFICATION_CENTER_EVENT, "No wallet addresses available, skipping registration")
+            if (addressesToRegister.length === 0) {
+                info(NOTIFICATION_CENTER_EVENT, "No wallet addresses to register, skipping")
                 return null
             }
 
             const payload: RegistrationPayload = {
-                walletAddresses,
+                walletAddresses: addressesToRegister,
                 provider: "onesignal",
                 providerDetails: {
                     appId,
@@ -127,7 +153,7 @@ export const useNotificationCenter = () => {
             }
 
             info(NOTIFICATION_CENTER_EVENT, "Registering push notification", {
-                walletCount: walletAddresses.length,
+                walletCount: addressesToRegister.length,
                 registerUrl,
             })
 
@@ -147,18 +173,18 @@ export const useNotificationCenter = () => {
             }
 
             const now = Date.now()
-            dispatch(updateLastSuccessfulRegistration(now))
+            dispatch(updateWalletRegistrations({ addresses: addressesToRegister, timestamp: now }))
             dispatch(updateLastSubscriptionId(subscriptionId))
-            dispatch(updateLastWalletAddresses(walletAddresses))
 
             info(NOTIFICATION_CENTER_EVENT, "Push registration successful at", new Date(now).toISOString())
             return response
         },
-        [dispatch, walletAddresses],
+        [dispatch],
     )
 
     const { mutateAsync } = useMutation({
-        mutationFn: sendRegistration,
+        mutationFn: (params: { subscriptionId: string | null; addresses: string[] }) =>
+            sendRegistration(params.subscriptionId, params.addresses),
         retry: (failureCount, err) => {
             if (failureCount >= MAX_RETRIES) {
                 return false
@@ -198,18 +224,49 @@ export const useNotificationCenter = () => {
         try {
             const subId = await OneSignal.User.pushSubscription.getIdAsync()
 
-            if (!shouldRegister(subId)) {
-                info(NOTIFICATION_CENTER_EVENT, "Registration skipped - conditions not met")
+            const walletsToRegister = getWalletsNeedingRegistration(subId)
+
+            if (walletsToRegister.length === 0) {
+                info(NOTIFICATION_CENTER_EVENT, "Registration skipped - no wallets need registration")
                 return null
             }
-            info(NOTIFICATION_CENTER_EVENT, "Attempting push notification registration")
-            await mutateAsync(subId)
+
+            info(
+                NOTIFICATION_CENTER_EVENT,
+                `Attempting push notification registration for ${walletsToRegister.length} wallet(s)`,
+            )
+
+            // Split into batches of 5
+            const batches = chunkArray(walletsToRegister, BATCH_SIZE)
+            const isFullRegistration = walletsToRegister.length === walletAddresses.length
+
+            info(NOTIFICATION_CENTER_EVENT, `Sending ${batches.length} batch(es) of up to ${BATCH_SIZE} wallets`)
+
+            // Send batches sequentially
+            for (let i = 0; i < batches.length; i++) {
+                const batch = batches[i]
+                info(
+                    NOTIFICATION_CENTER_EVENT,
+                    `Sending batch ${i + 1}/${batches.length} with ${batch.length} wallet(s)`,
+                )
+
+                await mutateAsync({ subscriptionId: subId, addresses: batch })
+            }
+
+            // If we registered all wallets, update lastFullRegistration
+            if (isFullRegistration) {
+                const now = Date.now()
+                dispatch(updateLastFullRegistration(now))
+                info(NOTIFICATION_CENTER_EVENT, "Full registration completed at", new Date(now).toISOString())
+            }
+
+            info(NOTIFICATION_CENTER_EVENT, "All batches registered successfully")
         } catch (err) {
             error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
         } finally {
             isRegistering.current = false
         }
-    }, [mutateAsync, walletAddresses.length, shouldRegister])
+    }, [dispatch, getWalletsNeedingRegistration, mutateAsync, walletAddresses.length])
 
     return {
         register,

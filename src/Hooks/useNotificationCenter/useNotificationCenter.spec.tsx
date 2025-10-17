@@ -4,9 +4,9 @@ import { renderHook, act } from "@testing-library/react-hooks"
 import { useNotificationCenter } from "./useNotificationCenter"
 import {
     initialNotificationState,
-    updateLastSuccessfulRegistration,
+    updateWalletRegistrations,
+    updateLastFullRegistration,
     updateLastSubscriptionId,
-    updateLastWalletAddresses,
 } from "~Storage/Redux/Slices/Notification"
 import { DEVICE_TYPE } from "~Model"
 import { OneSignal } from "react-native-onesignal"
@@ -26,12 +26,12 @@ jest.mock("~Storage/Redux", () => {
         useAppSelector: (selector: any) => selector(mockState),
         useAppDispatch: () => mockDispatch,
         selectAccounts: (state: any) => state.accounts?.accounts ?? [],
-        selectLastSuccessfulRegistration: (state: any) => state.notification?.lastSuccessfulRegistration ?? null,
+        selectWalletRegistrations: (state: any) => state.notification?.walletRegistrations ?? null,
+        selectLastFullRegistration: (state: any) => state.notification?.lastFullRegistration ?? null,
         selectLastSubscriptionId: (state: any) => state.notification?.lastSubscriptionId ?? null,
-        selectLastWalletAddresses: (state: any) => state.notification?.lastWalletAddresses ?? null,
-        updateLastSuccessfulRegistration: notificationSlice.updateLastSuccessfulRegistration,
+        updateWalletRegistrations: notificationSlice.updateWalletRegistrations,
+        updateLastFullRegistration: notificationSlice.updateLastFullRegistration,
         updateLastSubscriptionId: notificationSlice.updateLastSubscriptionId,
-        updateLastWalletAddresses: notificationSlice.updateLastWalletAddresses,
     }
 })
 
@@ -75,13 +75,19 @@ jest.mock("react-native-onesignal", () => {
 })
 
 const ACCOUNT_ADDRESS = "0x1111111111111111111111111111111111111111"
-const ROOT_ADDRESS = "0x2222222222222222222222222222222222222222"
+const ACCOUNT_ADDRESS_2 = "0x2222222222222222222222222222222222222222"
+const ACCOUNT_ADDRESS_3 = "0x3333333333333333333333333333333333333333"
+const ACCOUNT_ADDRESS_4 = "0x4444444444444444444444444444444444444444"
+const ACCOUNT_ADDRESS_5 = "0x5555555555555555555555555555555555555555"
+const ACCOUNT_ADDRESS_6 = "0x6666666666666666666666666666666666666666"
+const ACCOUNT_ADDRESS_7 = "0x7777777777777777777777777777777777777777"
+const ROOT_ADDRESS = "0x9999999999999999999999999999999999999999"
 
-const createAccount = () => ({
-    alias: "Account 0",
+const createAccount = (address = ACCOUNT_ADDRESS, index = 0) => ({
+    alias: `Account ${index}`,
     rootAddress: ROOT_ADDRESS,
-    address: ACCOUNT_ADDRESS,
-    index: 0,
+    address,
+    index,
     visible: true,
 })
 
@@ -190,9 +196,11 @@ describe("useNotificationCenter", () => {
 
         mockState = buildState({
             notification: {
-                lastSuccessfulRegistration: now - 1000,
+                walletRegistrations: {
+                    [ACCOUNT_ADDRESS]: now - 1000, // Recently registered
+                },
+                lastFullRegistration: now - 1000,
                 lastSubscriptionId: SUBSCRIPTION_ID,
-                lastWalletAddresses: [ACCOUNT_ADDRESS],
             },
         })
 
@@ -232,7 +240,7 @@ describe("useNotificationCenter", () => {
 
         expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
         const [url, options] = (global.fetch as jest.Mock).mock.calls[0]
-        expect(url).toBe("https://notifications.dev/api/v1/push-registrations")
+        expect(url).toBe("http://192.168.86.24:8085/api/v1/push-registrations")
         expect(options).toMatchObject({
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -251,8 +259,8 @@ describe("useNotificationCenter", () => {
         expect(mockDispatch).toHaveBeenNthCalledWith(
             1,
             expect.objectContaining({
-                type: updateLastSuccessfulRegistration.type,
-                payload: now,
+                type: updateWalletRegistrations.type,
+                payload: { addresses: [ACCOUNT_ADDRESS], timestamp: now },
             }),
         )
         expect(mockDispatch).toHaveBeenNthCalledWith(
@@ -265,12 +273,490 @@ describe("useNotificationCenter", () => {
         expect(mockDispatch).toHaveBeenNthCalledWith(
             3,
             expect.objectContaining({
-                type: updateLastWalletAddresses.type,
-                payload: [ACCOUNT_ADDRESS],
+                type: updateLastFullRegistration.type,
+                payload: now,
             }),
         )
 
         unmount()
         ;(queryClient as any).clear?.()
+    })
+
+    describe("batching", () => {
+        it("registers 7 wallets in 2 batches (5 + 2)", async () => {
+            const now = 1700000100000
+            dateNowSpy = jest.spyOn(Date, "now").mockReturnValue(now)
+
+            const accounts = [
+                createAccount(ACCOUNT_ADDRESS, 0),
+                createAccount(ACCOUNT_ADDRESS_2, 1),
+                createAccount(ACCOUNT_ADDRESS_3, 2),
+                createAccount(ACCOUNT_ADDRESS_4, 3),
+                createAccount(ACCOUNT_ADDRESS_5, 4),
+                createAccount(ACCOUNT_ADDRESS_6, 5),
+                createAccount(ACCOUNT_ADDRESS_7, 6),
+            ]
+
+            mockState = buildState({ accounts })
+
+            mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
+            ;(global.fetch as jest.Mock).mockResolvedValue({
+                ok: true,
+                json: jest.fn(),
+            })
+
+            const { result, unmount, queryClient } = renderUseNotificationCenter()
+
+            await act(async () => {
+                await result.current.register()
+            })
+
+            // Should send 2 requests (batches)
+            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(2)
+
+            // First batch: 5 wallets
+            const [url1, options1] = (global.fetch as jest.Mock).mock.calls[0]
+            expect(url1).toBe("http://192.168.86.24:8085/api/v1/push-registrations")
+            const parsedBody1 = JSON.parse(options1.body as string)
+            expect(parsedBody1.walletAddresses).toEqual([
+                ACCOUNT_ADDRESS,
+                ACCOUNT_ADDRESS_2,
+                ACCOUNT_ADDRESS_3,
+                ACCOUNT_ADDRESS_4,
+                ACCOUNT_ADDRESS_5,
+            ])
+
+            // Second batch: 2 wallets
+            const [url2, options2] = (global.fetch as jest.Mock).mock.calls[1]
+            expect(url2).toBe("http://192.168.86.24:8085/api/v1/push-registrations")
+            const parsedBody2 = JSON.parse(options2.body as string)
+            expect(parsedBody2.walletAddresses).toEqual([ACCOUNT_ADDRESS_6, ACCOUNT_ADDRESS_7])
+
+            // Should dispatch 5 times:
+            // 2 x updateWalletRegistrations (one per batch)
+            // 2 x updateLastSubscriptionId (one per batch)
+            // 1 x updateLastFullRegistration
+            expect(mockDispatch).toHaveBeenCalledTimes(5)
+
+            // First batch registration
+            expect(mockDispatch).toHaveBeenNthCalledWith(
+                1,
+                expect.objectContaining({
+                    type: updateWalletRegistrations.type,
+                    payload: {
+                        addresses: [
+                            ACCOUNT_ADDRESS,
+                            ACCOUNT_ADDRESS_2,
+                            ACCOUNT_ADDRESS_3,
+                            ACCOUNT_ADDRESS_4,
+                            ACCOUNT_ADDRESS_5,
+                        ],
+                        timestamp: now,
+                    },
+                }),
+            )
+
+            // Second batch registration
+            expect(mockDispatch).toHaveBeenNthCalledWith(
+                3,
+                expect.objectContaining({
+                    type: updateWalletRegistrations.type,
+                    payload: { addresses: [ACCOUNT_ADDRESS_6, ACCOUNT_ADDRESS_7], timestamp: now },
+                }),
+            )
+
+            // Last full registration timestamp (after all batches)
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: updateLastFullRegistration.type,
+                    payload: now,
+                }),
+            )
+
+            unmount()
+            ;(queryClient as any).clear?.()
+        })
+
+        it("only registers new wallet when one is added", async () => {
+            const now = 1700000100000
+            dateNowSpy = jest.spyOn(Date, "now").mockReturnValue(now)
+
+            const accounts = [createAccount(ACCOUNT_ADDRESS, 0), createAccount(ACCOUNT_ADDRESS_2, 1)]
+
+            mockState = buildState({
+                accounts,
+                notification: {
+                    walletRegistrations: {
+                        [ACCOUNT_ADDRESS]: now - 1000, // Already registered
+                    },
+                    lastFullRegistration: now - 1000,
+                    lastSubscriptionId: SUBSCRIPTION_ID,
+                },
+            })
+
+            mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
+            ;(global.fetch as jest.Mock).mockResolvedValue({
+                ok: true,
+                json: jest.fn(),
+            })
+
+            const { result, unmount, queryClient } = renderUseNotificationCenter()
+
+            await act(async () => {
+                await result.current.register()
+            })
+
+            // Should only send 1 request for the new wallet
+            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
+
+            const [options] = (global.fetch as jest.Mock).mock.calls[0]
+            const parsedBody = JSON.parse(options.body as string)
+            expect(parsedBody.walletAddresses).toEqual([ACCOUNT_ADDRESS_2])
+
+            // Should dispatch 2 times:
+            // 1 x updateWalletRegistrations (just the new wallet)
+            // 1 x updateLastSubscriptionId
+            // No updateLastFullRegistration (not a full registration)
+            expect(mockDispatch).toHaveBeenCalledTimes(2)
+
+            expect(mockDispatch).toHaveBeenNthCalledWith(
+                1,
+                expect.objectContaining({
+                    type: updateWalletRegistrations.type,
+                    payload: { addresses: [ACCOUNT_ADDRESS_2], timestamp: now },
+                }),
+            )
+
+            unmount()
+            ;(queryClient as any).clear?.()
+        })
+
+        it("re-registers all wallets after 30 days in batches", async () => {
+            const now = 1700000100000
+            const thirtyOneDaysAgo = now - 31 * 24 * 60 * 60 * 1000
+            dateNowSpy = jest.spyOn(Date, "now").mockReturnValue(now)
+
+            const accounts = [
+                createAccount(ACCOUNT_ADDRESS, 0),
+                createAccount(ACCOUNT_ADDRESS_2, 1),
+                createAccount(ACCOUNT_ADDRESS_3, 2),
+                createAccount(ACCOUNT_ADDRESS_4, 3),
+                createAccount(ACCOUNT_ADDRESS_5, 4),
+                createAccount(ACCOUNT_ADDRESS_6, 5),
+            ]
+
+            mockState = buildState({
+                accounts,
+                notification: {
+                    walletRegistrations: {
+                        [ACCOUNT_ADDRESS]: thirtyOneDaysAgo,
+                        [ACCOUNT_ADDRESS_2]: thirtyOneDaysAgo,
+                        [ACCOUNT_ADDRESS_3]: thirtyOneDaysAgo,
+                        [ACCOUNT_ADDRESS_4]: thirtyOneDaysAgo,
+                        [ACCOUNT_ADDRESS_5]: thirtyOneDaysAgo,
+                        [ACCOUNT_ADDRESS_6]: thirtyOneDaysAgo,
+                    },
+                    lastFullRegistration: thirtyOneDaysAgo,
+                    lastSubscriptionId: SUBSCRIPTION_ID,
+                },
+            })
+
+            mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
+            ;(global.fetch as jest.Mock).mockResolvedValue({
+                ok: true,
+                json: jest.fn(),
+            })
+
+            const { result, unmount, queryClient } = renderUseNotificationCenter()
+
+            await act(async () => {
+                await result.current.register()
+            })
+
+            // Should send 2 requests (5 + 1)
+            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(2)
+
+            // First batch: 5 wallets
+            const [, options1] = (global.fetch as jest.Mock).mock.calls[0]
+            const parsedBody1 = JSON.parse(options1.body as string)
+            expect(parsedBody1.walletAddresses).toHaveLength(5)
+
+            // Second batch: 1 wallet
+            const [, options2] = (global.fetch as jest.Mock).mock.calls[1]
+            const parsedBody2 = JSON.parse(options2.body as string)
+            expect(parsedBody2.walletAddresses).toHaveLength(1)
+
+            // Should update lastFullRegistration
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: updateLastFullRegistration.type,
+                    payload: now,
+                }),
+            )
+
+            unmount()
+            ;(queryClient as any).clear?.()
+        })
+
+        it("re-registers all wallets when subscription ID changes", async () => {
+            const now = 1700000100000
+            dateNowSpy = jest.spyOn(Date, "now").mockReturnValue(now)
+            const NEW_SUBSCRIPTION_ID = "new-subscription-456"
+
+            const accounts = [
+                createAccount(ACCOUNT_ADDRESS, 0),
+                createAccount(ACCOUNT_ADDRESS_2, 1),
+                createAccount(ACCOUNT_ADDRESS_3, 2),
+                createAccount(ACCOUNT_ADDRESS_4, 3),
+                createAccount(ACCOUNT_ADDRESS_5, 4),
+                createAccount(ACCOUNT_ADDRESS_6, 5),
+            ]
+
+            mockState = buildState({
+                accounts,
+                notification: {
+                    walletRegistrations: {
+                        [ACCOUNT_ADDRESS]: now - 1000,
+                        [ACCOUNT_ADDRESS_2]: now - 1000,
+                        [ACCOUNT_ADDRESS_3]: now - 1000,
+                        [ACCOUNT_ADDRESS_4]: now - 1000,
+                        [ACCOUNT_ADDRESS_5]: now - 1000,
+                        [ACCOUNT_ADDRESS_6]: now - 1000,
+                    },
+                    lastFullRegistration: now - 1000,
+                    lastSubscriptionId: SUBSCRIPTION_ID, // Old subscription ID
+                },
+            })
+
+            mockGetIdAsync.mockResolvedValue(NEW_SUBSCRIPTION_ID) // New subscription ID
+            ;(global.fetch as jest.Mock).mockResolvedValue({
+                ok: true,
+                json: jest.fn(),
+            })
+
+            const { result, unmount, queryClient } = renderUseNotificationCenter()
+
+            await act(async () => {
+                await result.current.register()
+            })
+
+            // Should re-register all wallets in 2 batches despite recent registration
+            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(2)
+
+            // Should update subscription ID
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: updateLastSubscriptionId.type,
+                    payload: NEW_SUBSCRIPTION_ID,
+                }),
+            )
+
+            unmount()
+            ;(queryClient as any).clear?.()
+        })
+
+        it("stops processing batches if one fails", async () => {
+            const now = 1700000100000
+            dateNowSpy = jest.spyOn(Date, "now").mockReturnValue(now)
+
+            const accounts = [
+                createAccount(ACCOUNT_ADDRESS, 0),
+                createAccount(ACCOUNT_ADDRESS_2, 1),
+                createAccount(ACCOUNT_ADDRESS_3, 2),
+                createAccount(ACCOUNT_ADDRESS_4, 3),
+                createAccount(ACCOUNT_ADDRESS_5, 4),
+                createAccount(ACCOUNT_ADDRESS_6, 5),
+                createAccount(ACCOUNT_ADDRESS_7, 6),
+            ]
+
+            mockState = buildState({ accounts })
+
+            mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
+            // First batch succeeds, second batch fails (with retries)
+            ;(global.fetch as jest.Mock)
+                .mockResolvedValueOnce({
+                    ok: true,
+                    json: jest.fn(),
+                })
+                // Second batch fails on first attempt
+                .mockResolvedValueOnce({
+                    ok: false,
+                    status: 500,
+                    json: jest.fn().mockResolvedValue({ error: "Server error" }),
+                })
+                // Retry 1
+                .mockResolvedValueOnce({
+                    ok: false,
+                    status: 500,
+                    json: jest.fn().mockResolvedValue({ error: "Server error" }),
+                })
+                // Retry 2
+                .mockResolvedValueOnce({
+                    ok: false,
+                    status: 500,
+                    json: jest.fn().mockResolvedValue({ error: "Server error" }),
+                })
+                // Retry 3
+                .mockResolvedValueOnce({
+                    ok: false,
+                    status: 500,
+                    json: jest.fn().mockResolvedValue({ error: "Server error" }),
+                })
+
+            const { result, unmount, queryClient } = renderUseNotificationCenter()
+
+            await act(async () => {
+                await result.current.register()
+            })
+
+            // Should send 5 requests (1 for first batch + 4 for second batch with retries)
+            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(5)
+
+            // First batch should be registered
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: updateWalletRegistrations.type,
+                    payload: {
+                        addresses: [
+                            ACCOUNT_ADDRESS,
+                            ACCOUNT_ADDRESS_2,
+                            ACCOUNT_ADDRESS_3,
+                            ACCOUNT_ADDRESS_4,
+                            ACCOUNT_ADDRESS_5,
+                        ],
+                        timestamp: now,
+                    },
+                }),
+            )
+
+            // Should NOT update lastFullRegistration since not all wallets were registered
+            expect(mockDispatch).not.toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: updateLastFullRegistration.type,
+                }),
+            )
+
+            unmount()
+            ;(queryClient as any).clear?.()
+        })
+
+        it("retries failed wallets on next registration attempt", async () => {
+            const now = 1700000100000
+            dateNowSpy = jest.spyOn(Date, "now").mockReturnValue(now)
+
+            const accounts = [
+                createAccount(ACCOUNT_ADDRESS, 0),
+                createAccount(ACCOUNT_ADDRESS_2, 1),
+                createAccount(ACCOUNT_ADDRESS_3, 2),
+            ]
+
+            // Simulate scenario where first wallet succeeded but others failed previously
+            // lastFullRegistration exists so it won't re-register all wallets
+            mockState = buildState({
+                accounts,
+                notification: {
+                    walletRegistrations: {
+                        // Only first wallet was registered
+                        [ACCOUNT_ADDRESS]: now - 1000,
+                        // Wallets 2 and 3 have no timestamps (failed previously)
+                    },
+                    lastFullRegistration: now - 100000, // Had attempted full registration before
+                    lastSubscriptionId: SUBSCRIPTION_ID,
+                },
+            })
+
+            mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
+            ;(global.fetch as jest.Mock).mockResolvedValue({
+                ok: true,
+                json: jest.fn(),
+            })
+
+            const { result, unmount, queryClient } = renderUseNotificationCenter()
+
+            await act(async () => {
+                await result.current.register()
+            })
+
+            // Should only try to register the 2 failed wallets
+            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
+
+            const [, options] = (global.fetch as jest.Mock).mock.calls[0]
+            const parsedBody = JSON.parse(options.body as string)
+            expect(parsedBody.walletAddresses).toEqual([ACCOUNT_ADDRESS_2, ACCOUNT_ADDRESS_3])
+
+            // Should NOT mark as full registration since we only registered 2 wallets, not all 3
+            // (wallet 1 was already registered)
+            expect(mockDispatch).not.toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: updateLastFullRegistration.type,
+                }),
+            )
+
+            unmount()
+            ;(queryClient as any).clear?.()
+        })
+
+        it("handles address case-insensitivity correctly", async () => {
+            const now = 1700000100000
+            dateNowSpy = jest.spyOn(Date, "now").mockReturnValue(now)
+
+            const LOWERCASE_ADDRESS = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            const UPPERCASE_ADDRESS = "0xBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+            const MIXED_CASE_ADDRESS = "0xCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCcCc"
+
+            const accounts = [
+                createAccount(LOWERCASE_ADDRESS, 0),
+                createAccount(UPPERCASE_ADDRESS, 1),
+                createAccount(MIXED_CASE_ADDRESS, 2),
+            ]
+
+            // Simulate that addresses were previously stored (with different casing)
+            mockState = buildState({
+                accounts,
+                notification: {
+                    walletRegistrations: {
+                        // Stored in normalized (lowercase) form
+                        "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": now - 1000,
+                        "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": now - 1000,
+                        // This one is missing (will need to be registered)
+                    },
+                    lastFullRegistration: now - 1000,
+                    lastSubscriptionId: SUBSCRIPTION_ID,
+                },
+            })
+
+            mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
+            ;(global.fetch as jest.Mock).mockResolvedValue({
+                ok: true,
+                json: jest.fn(),
+            })
+
+            const { result, unmount, queryClient } = renderUseNotificationCenter()
+
+            await act(async () => {
+                await result.current.register()
+            })
+
+            // Should only register the one missing address (MIXED_CASE_ADDRESS)
+            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
+
+            const [, options] = (global.fetch as jest.Mock).mock.calls[0]
+            const parsedBody = JSON.parse(options.body as string)
+            expect(parsedBody.walletAddresses).toEqual([MIXED_CASE_ADDRESS])
+
+            // Should store the address in normalized (lowercase) form
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: updateWalletRegistrations.type,
+                    payload: {
+                        addresses: [MIXED_CASE_ADDRESS],
+                        timestamp: now,
+                    },
+                }),
+            )
+
+            unmount()
+            ;(queryClient as any).clear?.()
+        })
     })
 })
