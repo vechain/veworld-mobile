@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.7 (2025-10-17)</small>
+
+* build: init ([71ff7f2](https://github.com/vechain/veworld-mobile/commit/71ff7f2))
+* fix: push notification close browser (#3424) ([82c9e40](https://github.com/vechain/veworld-mobile/commit/82c9e40)), closes [#3424](https://github.com/vechain/veworld-mobile/issues/3424)
+
 ## <small>2.4.6 (2025-10-09)</small>
 
 * build: init ([009f8b6](https://github.com/vechain/veworld-mobile/commit/009f8b6))
