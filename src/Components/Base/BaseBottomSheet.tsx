@@ -219,9 +219,16 @@ const _BaseBottomSheet = <TData,>(
 
     const renderBackdrop = useCallback(
         (props_: BottomSheetBackdropProps) => (
-            <BottomSheetBackdrop {...props_} pressBehavior={onPressOutside} opacity={0.8} disappearsOnIndex={-1} />
+            <BottomSheetBackdrop
+                {...props_}
+                pressBehavior={onPressOutside}
+                opacity={0.85}
+                disappearsOnIndex={-1}
+                appearsOnIndex={0}
+                style={styles.backdrop}
+            />
         ),
-        [onPressOutside],
+        [onPressOutside, styles.backdrop],
     )
 
     const renderHandle = useCallback(
@@ -386,6 +393,9 @@ const baseStyles = (theme: ColorThemeType) =>
             justifyContent: "center",
             alignItems: "center",
             opacity: 0.5,
+        },
+        backdrop: {
+            backgroundColor: COLORS.BLACK,
         },
         floating: {
             marginHorizontal: 8,
