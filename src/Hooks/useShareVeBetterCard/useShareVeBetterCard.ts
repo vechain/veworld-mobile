@@ -1,12 +1,14 @@
 import { useCallback, useRef, useState } from "react"
 import { Share, View } from "react-native"
 import { captureRef, releaseCapture } from "react-native-view-shot"
-import { ERROR_EVENTS } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
+import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 import { debug, ErrorMessageUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
 export const useShareVeBetterCard = () => {
     const { LL } = useI18nContext()
+    const track = useAnalyticTracking()
     const cardRef = useRef<View>(null)
     const [isSharing, setIsSharing] = useState(false)
 
@@ -15,6 +17,7 @@ export const useShareVeBetterCard = () => {
             return
         }
 
+        track(AnalyticsEvent.VBD_SHARE_CLICK)
         setIsSharing(true)
         let tempUri: string | null = null
 
@@ -25,10 +28,18 @@ export const useShareVeBetterCard = () => {
                 result: "tmpfile",
             })
 
-            await Share.share({
+            const result = await Share.share({
                 url: tempUri,
                 message: LL.VBD_SHARE_CARD_MESSAGE(),
             })
+
+            if (result.action === "sharedAction") {
+                track(AnalyticsEvent.VBD_SHARE_SUCCESS, {
+                    activityType: result.activityType,
+                })
+            } else {
+                track(AnalyticsEvent.VBD_SHARE_DISMISSED)
+            }
         } catch (error) {
             const errorMessage = ErrorMessageUtils.getErrorMessage(error)
             if (!errorMessage.includes("User did not share")) {
@@ -40,7 +51,7 @@ export const useShareVeBetterCard = () => {
             }
             setIsSharing(false)
         }
-    }, [isSharing, LL, cardRef])
+    }, [isSharing, LL, cardRef, track])
 
     return { cardRef, shareCard, isSharing }
 }
