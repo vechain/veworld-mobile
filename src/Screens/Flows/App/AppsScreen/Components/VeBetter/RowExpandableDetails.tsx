@@ -22,7 +22,7 @@ const Description = React.memo(({ children }: { children: string }) => {
             <BaseView>
                 <BaseText
                     color={theme.colors.x2eAppOpenDetails.description}
-                    typographyFont="captionMedium"
+                    typographyFont="smallCaptionMedium"
                     lineHeight={16}>
                     {children}
                 </BaseText>
@@ -44,7 +44,7 @@ const StatItem = React.memo(({ value, label, icon, isLoading = false }: StatItem
         <BaseView flexDirection="column" alignItems="center" justifyContent="center">
             <BaseIcon name={icon} size={20} color={theme.colors.x2eAppOpenDetails.favoriteBtn.borderActive} />
             <BaseSpacer height={8} />
-            <BaseText typographyFont="captionMedium" color={theme.colors.x2eAppOpenDetails.stats.caption}>
+            <BaseText typographyFont="smallCaptionMedium" color={theme.colors.x2eAppOpenDetails.stats.caption}>
                 {label}
             </BaseText>
             <BaseSpacer height={2} />
@@ -57,7 +57,7 @@ const StatItem = React.memo(({ value, label, icon, isLoading = false }: StatItem
                     height={16}
                 />
             ) : (
-                <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.x2eAppOpenDetails.stats.value}>
+                <BaseText typographyFont="bodySemiBold" color={theme.colors.x2eAppOpenDetails.stats.value}>
                     {value}
                 </BaseText>
             )}

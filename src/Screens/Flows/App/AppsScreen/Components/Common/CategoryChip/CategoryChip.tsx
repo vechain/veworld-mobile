@@ -26,7 +26,7 @@ export const CategoryChip = ({ category }: { category: (typeof AVAILABLE_CATEGOR
         <BaseText
             px={8}
             py={4}
-            typographyFont="captionMedium"
+            typographyFont="smallCaptionMedium"
             color={COLORS.WHITE}
             bg={COLORS.WHITE_RGBA_15}
             containerStyle={styles.root}

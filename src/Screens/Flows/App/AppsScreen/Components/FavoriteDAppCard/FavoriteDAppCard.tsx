@@ -55,7 +55,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                                 <BaseText
                                     ellipsizeMode="tail"
                                     numberOfLines={1}
-                                    typographyFont="subSubTitleSemiBold"
+                                    typographyFont="bodySemiBold"
                                     color={theme.colors.assetDetailsCard.title}>
                                     {dapp.name}
                                 </BaseText>
@@ -63,7 +63,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                                 <BaseText
                                     numberOfLines={2}
                                     ellipsizeMode="tail"
-                                    typographyFont="captionMedium"
+                                    typographyFont="smallCaptionMedium"
                                     color={theme.colors.assetDetailsCard.text}>
                                     {dapp.desc ? dapp.desc : dapp.href}
                                 </BaseText>

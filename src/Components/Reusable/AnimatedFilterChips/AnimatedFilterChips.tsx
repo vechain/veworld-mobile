@@ -70,7 +70,7 @@ export const AnimatedFilterChips = <T,>({
                             style={styles.transparentChip}
                             onPress={() => onItemPress(item, index)}
                             activeOpacity={0.8}>
-                            <BaseText style={{ color: textColor(item) }} typographyFont="bodyMedium">
+                            <BaseText style={{ color: textColor(item) }} typographyFont="captionMedium">
                                 {getItemLabel(item)}
                             </BaseText>
                         </BaseTouchable>
@@ -100,11 +100,12 @@ const baseStyle = () =>
             paddingVertical: 8,
             borderRadius: 20,
             alignItems: "center",
+            justifyContent: "center",
         },
         animatedBackground: {
             position: "absolute",
-            top: 16,
-            height: 36,
+            top: 16.5,
+            height: 32,
             borderRadius: 20,
         },
     })
