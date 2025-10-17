@@ -3,7 +3,7 @@ import React, { ComponentClass, FC } from "react"
 // need this function because JS will auto convert very small numbers to scientific notation
 export function convertSmallSciNotationToDecimal(value: number): string {
     "worklet"
-    const isNAN = isNaN(value)
+    const isNAN = Number.isNaN(value)
     if (isNAN) return "-"
     const num = value.toPrecision(4)
     if (!num.includes("e-")) return num
@@ -46,7 +46,7 @@ export function numberToPercentWorklet(
         useGrouping: true,
     })
 
-    if (value === undefined || isNaN(value)) {
+    if (value === undefined || Number.isNaN(value)) {
         return "-"
     }
 
@@ -62,6 +62,57 @@ export function numberToPercentWorklet(
     }
 
     return `${formatter.format(shapedValue)}%`
+}
+
+/**
+ * Worklet-safe function to format fiat amounts for use in Reanimated contexts
+ * All parameters are explicit to avoid closure issues
+ *
+ * @param amount - Amount to format
+ * @param currencySymbol - Currency symbol (e.g., "$", "€")
+ * @param locale - Locale for number formatting (e.g., "en-US", "nl-BE")
+ * @param symbolPosition - Where to place the symbol
+ * @param minFractionDigits - Minimum decimal places
+ * @param maxFractionDigits - Maximum decimal places
+ * @returns Formatted currency string
+ *
+ * @example
+ * // In useDerivedValue
+ * const formatted = useDerivedValue(() =>
+ *   formatFiatWorklet(price.value, "$", "en-US", "before", 2, 5)
+ * , [price.value])
+ */
+export function formatFiatWorklet(
+    amount: number,
+    currencySymbol: string,
+    locale: string,
+    symbolPosition: "before" | "after",
+    minFractionDigits: number,
+    maxFractionDigits: number,
+): string {
+    "worklet"
+
+    // Handle invalid values
+    if (amount === undefined || Number.isNaN(amount) || !Number.isFinite(amount)) {
+        const formatter = new Intl.NumberFormat(locale, {
+            style: "decimal",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+            useGrouping: true,
+        })
+        const formatted = formatter.format(0)
+        return symbolPosition === "after" ? `${formatted} ${currencySymbol}` : `${currencySymbol}${formatted}`
+    }
+
+    const formatter = new Intl.NumberFormat(locale, {
+        style: "decimal",
+        minimumFractionDigits: minFractionDigits,
+        maximumFractionDigits: maxFractionDigits,
+        useGrouping: true,
+    })
+
+    const formatted = formatter.format(amount)
+    return symbolPosition === "after" ? `${formatted} ${currencySymbol}` : `${currencySymbol}${formatted}`
 }
 
 export const wrapFunctionComponent = <TProps,>(Component: FC<TProps>): ComponentClass<TProps> =>

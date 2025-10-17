@@ -15,15 +15,13 @@ export const useBalances = ({ token, exchangeRate }: Props) => {
         [token?.balance?.balance, token.decimals, exchangeRate],
     )
 
-    const tokenUnitBalance = useMemo(
-        () => BalanceUtils.getTokenUnitBalance(token?.balance?.balance ?? "0", token.decimals, 2, formatLocale),
-        [token?.balance?.balance, token.decimals, formatLocale],
-    )
+    const tokenUnitBalance = useMemo(() => {
+        return BalanceUtils.getTokenUnitBalance(token?.balance?.balance ?? "0", token.decimals, 2, formatLocale)
+    }, [token?.balance?.balance, token.decimals, formatLocale])
 
-    const tokenUnitFullBalance = useMemo(
-        () => BalanceUtils.getTokenUnitBalance(token?.balance?.balance ?? "0", token.decimals, 10, formatLocale),
-        [token?.balance?.balance, token.decimals, formatLocale],
-    )
+    const tokenUnitFullBalance = useMemo(() => {
+        return BalanceUtils.getTokenUnitBalance(token?.balance?.balance ?? "0", token.decimals, 10, formatLocale)
+    }, [token?.balance?.balance, token.decimals, formatLocale])
 
     return { fiatBalance, tokenUnitBalance, tokenUnitFullBalance }
 }

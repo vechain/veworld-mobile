@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native"
-import { default as React, useCallback, useMemo, useState } from "react"
+import { default as React, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { useDevice } from "~Components/Providers/DeviceProvider"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, typography, VET, VOT3, VTHO } from "~Constants"
+import { B3TR, COLORS, isSmallScreen, typography, VET, VOT3, VTHO } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
@@ -13,7 +14,7 @@ import { Routes } from "~Navigation"
 import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BalanceUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
-import { Chart } from "./Chart"
+import { Chart, CHART_WIDTH } from "./Chart"
 
 type Props = {
     token: FungibleTokenWithBalance
@@ -25,7 +26,18 @@ export const TokenCard = ({ token }: Props) => {
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
-    const [showChart, setShowChart] = useState(true)
+    const { isLowEndDevice } = useDevice()
+
+    // Check if token supports charts (has CoinGecko ID)
+    const isTokenSupported = useMemo(() => !!getCoinGeckoIdBySymbol[token.symbol], [token.symbol])
+
+    // Decide chart visibility based on device/screen size AND token support
+    // This ensures ALL token cards show either charts OR indicators consistently
+    const shouldShowCharts = useMemo(
+        () => !isSmallScreen && !isLowEndDevice && isTokenSupported,
+        [isLowEndDevice, isTokenSupported],
+    )
+
     const name = useMemo(() => {
         switch (token.symbol) {
             case "VET":
@@ -62,7 +74,11 @@ export const TokenCard = ({ token }: Props) => {
     }, [isBalanceVisible, tokenBalance])
 
     const chartIcon = useMemo(() => {
-        if (!chartData || !showFiatBalance || showChart) return null
+        // Only show icon on small screens/low-end devices when:
+        // 1. Token supports charts (has price data)
+        // 2. Fiat balance is visible
+        // 3. Chart data is available
+        if (!isTokenSupported || !chartData || !showFiatBalance || shouldShowCharts) return null
 
         return (
             <BaseIcon
@@ -72,7 +88,7 @@ export const TokenCard = ({ token }: Props) => {
                 testID="TOKEN_CARD_CHART_ICON"
             />
         )
-    }, [chartData, showFiatBalance, showChart, isGoingUp])
+    }, [isTokenSupported, chartData, showFiatBalance, shouldShowCharts, isGoingUp])
 
     const symbol = useMemo(() => {
         switch (token.symbol) {
@@ -82,19 +98,19 @@ export const TokenCard = ({ token }: Props) => {
                         <BaseText
                             typographyFont="smallCaptionSemiBold"
                             numberOfLines={1}
-                            color={theme.colors.activityCard.subtitleLight}
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
                             testID="TOKEN_CARD_SYMBOL_1">
                             {B3TR.symbol}
                         </BaseText>
                         <BaseIcon
-                            name="icon-arrow-left-right"
+                            name="icon-refresh-cw"
                             size={12}
-                            color={theme.colors.activityCard.subtitleLight}
+                            color={theme.isDark ? COLORS.GREY_500 : COLORS.GREY_400}
                         />
                         <BaseText
                             typographyFont="smallCaptionSemiBold"
                             numberOfLines={1}
-                            color={theme.colors.activityCard.subtitleLight}
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
                             testID="TOKEN_CARD_SYMBOL_2">
                             {VOT3.symbol}
                         </BaseText>
@@ -115,7 +131,7 @@ export const TokenCard = ({ token }: Props) => {
                     </BaseView>
                 )
         }
-    }, [chartIcon, token.symbol, theme.colors.activityCard.subtitleLight])
+    }, [chartIcon, token.symbol, theme.colors.activityCard.subtitleLight, theme.isDark])
 
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
@@ -149,26 +165,27 @@ export const TokenCard = ({ token }: Props) => {
     return (
         <BaseTouchableBox
             action={handlePress}
-            py={symbol ? typography.lineHeight.body : typography.lineHeight.bodySemiBold}
+            py={symbol ? typography.lineHeight.body : typography.lineHeight.captionSemiBold}
             flexDirection="row"
             bg={theme.colors.card}
             innerContainerStyle={styles.root}>
-            <BaseView flexDirection="row" gap={16} flexGrow={1} flexShrink={1}>
+            <BaseView flexDirection="row" gap={16} style={styles.leftSection}>
                 <TokenImage
                     icon={token.icon}
                     isVechainToken={AddressUtils.isVechainToken(token.address)}
-                    iconSize={40}
+                    iconSize={32}
                     isCrossChainToken={isCrossChainToken}
                     rounded={!isCrossChainToken}
                 />
 
                 {symbol ? (
-                    <BaseView flexDirection="column" flexGrow={0} flexShrink={1}>
+                    <BaseView flexDirection="column" flexGrow={0} flexShrink={1} style={styles.tokenInfo}>
                         <BaseText
                             typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.title}
                             flexDirection="row"
                             numberOfLines={1}
+                            ellipsizeMode="tail"
                             testID="TOKEN_CARD_NAME">
                             {name}
                         </BaseText>
@@ -180,15 +197,20 @@ export const TokenCard = ({ token }: Props) => {
                         typographyFont="bodySemiBold"
                         color={theme.colors.activityCard.title}
                         flexDirection="row"
-                        numberOfLines={1}>
+                        numberOfLines={1}
+                        ellipsizeMode="tail">
                         {name}
                     </BaseText>
                 )}
             </BaseView>
 
-            <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
+            {shouldShowCharts && (
+                <BaseView style={styles.chartContainer}>
+                    <Chart token={token} />
+                </BaseView>
+            )}
 
-            <BaseView flexDirection="column" alignItems="flex-end" flexGrow={1} flexShrink={0}>
+            <BaseView flexDirection="column" alignItems="flex-end" style={styles.balanceSection}>
                 {showFiatBalance ? (
                     <>
                         <BaseText
@@ -201,7 +223,7 @@ export const TokenCard = ({ token }: Props) => {
                             {fiatBalance}
                         </BaseText>
                         <BaseText
-                            typographyFont="captionMedium"
+                            typographyFont="captionSemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             align="right"
                             numberOfLines={1}
@@ -233,5 +255,26 @@ const baseStyles = () =>
             alignItems: "center",
             borderRadius: 12,
             justifyContent: "space-between",
+            minHeight: 80,
+        },
+        leftSection: {
+            flexGrow: 1,
+            flexShrink: 1,
+            minWidth: 0,
+        },
+        tokenInfo: {
+            minWidth: 0,
+        },
+        chartContainer: {
+            width: CHART_WIDTH,
+            flexShrink: 0,
+            flexGrow: 0,
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        balanceSection: {
+            flexGrow: 0,
+            flexShrink: 0,
+            minWidth: 88,
         },
     })

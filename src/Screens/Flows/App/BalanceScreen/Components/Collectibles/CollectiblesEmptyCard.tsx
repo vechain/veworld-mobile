@@ -2,18 +2,17 @@ import React, { useCallback } from "react"
 import { FlatList, StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType, DiscoveryDApp } from "~Constants"
-import { useBottomSheetModal, useBrowserNavigation, useThemedStyles } from "~Hooks"
+import { useBrowserNavigation, useCameraBottomSheet, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { useVerifiedNFTApps } from "../../Hooks/useVerifiedNFTApps"
 import { DAppCardV2 } from "~Screens/Flows/App/AppsScreen/Components/Favourites/DAppCardV2"
-import { QRCodeBottomSheet } from "~Components/Reusable/BottomSheets/QRCodeBottomSheet"
+import { useVerifiedNFTApps } from "../../Hooks/useVerifiedNFTApps"
 
 export const CollectiblesEmptyCard = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const verifiedNFTApps = useVerifiedNFTApps()
     const { navigateToBrowser } = useBrowserNavigation()
-    const { ref: qrCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
+    const { handleOpenOnlyReceiveCamera, RenderCameraModal } = useCameraBottomSheet({ targets: [] })
 
     const renderItem = useCallback(
         ({ item }: { item: DiscoveryDApp }) => {
@@ -60,7 +59,7 @@ export const CollectiblesEmptyCard = () => {
                         {LL.COLLECTIBLES_EMPTY_CARD_DESCRIPTION()}
                     </BaseText>
                     <BaseButton
-                        action={openQRCodeSheet}
+                        action={handleOpenOnlyReceiveCamera}
                         variant="solid"
                         rightIcon={
                             <BaseIcon
@@ -101,7 +100,7 @@ export const CollectiblesEmptyCard = () => {
                     />
                 </BaseView>
             </BaseView>
-            <QRCodeBottomSheet ref={qrCodeBottomSheetRef} />
+            {RenderCameraModal}
         </>
     )
 }

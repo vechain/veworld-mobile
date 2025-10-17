@@ -12,6 +12,7 @@ import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
+import { PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useResetActivityStack } from "./Hooks"
 import { ActivityTabBar } from "./navigation"
@@ -25,6 +26,7 @@ import {
     ActivityTransferScreen,
 } from "./screens"
 import { ActivityDappsScreen } from "./screens/ActivityDappsScreen"
+import { useDevice } from "~Components/Providers/DeviceProvider"
 
 const Tab = createMaterialTopTabNavigator()
 
@@ -33,6 +35,7 @@ export const ActivityScreen = () => {
     useResetActivityStack()
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
+    const { isLowEndDevice } = useDevice()
 
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -60,10 +63,12 @@ export const ActivityScreen = () => {
             fixedBody={
                 <>
                     <Tab.Navigator
+                        tabBarPosition="top"
                         screenOptions={{
-                            animationEnabled: false,
+                            animationEnabled: !isLowEndDevice || PlatformUtils.isIOS(),
                             lazy: true,
-                            swipeEnabled: false,
+                            swipeEnabled: true,
+                            tabBarBounces: false,
                         }}
                         tabBar={ActivityTabBar}>
                         <Tab.Screen

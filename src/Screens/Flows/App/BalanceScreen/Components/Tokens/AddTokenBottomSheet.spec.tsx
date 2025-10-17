@@ -1,8 +1,8 @@
+import { fireEvent, render, screen } from "@testing-library/react-native"
 import React from "react"
-import { render, screen, fireEvent } from "@testing-library/react-native"
+import { Routes } from "~Navigation"
 import { TestWrapper } from "~Test"
 import { AddTokenBottomSheet } from "./AddTokenBottomSheet"
-import { Routes } from "~Navigation"
 
 const mockNavigate = jest.fn()
 jest.mock("@react-navigation/native", () => {
@@ -17,7 +17,6 @@ jest.mock("@react-navigation/native", () => {
     }
 })
 
-const mockOpenQRCodeSheet = jest.fn()
 const mockCloseBottomSheet = jest.fn()
 jest.mock("~Hooks/useBottomSheet", () => ({
     ...jest.requireActual("~Hooks/useBottomSheet"),
@@ -26,27 +25,22 @@ jest.mock("~Hooks/useBottomSheet", () => ({
 
 describe("AddTokenBottomSheet", () => {
     const mockBottomSheetRef = { current: null }
-    const mockQrCodeBottomSheetRef = { current: null }
+    const onQrCodePress = jest.fn()
 
     beforeEach(() => {
         mockNavigate.mockClear()
-        mockOpenQRCodeSheet.mockClear()
         mockCloseBottomSheet.mockClear()
 
         const { useBottomSheetModal } = require("~Hooks/useBottomSheet")
         ;(useBottomSheetModal as jest.Mock).mockClear()
-        ;(useBottomSheetModal as jest.Mock)
-            .mockReturnValueOnce({
-                onClose: mockCloseBottomSheet,
-            })
-            .mockReturnValueOnce({
-                onOpen: mockOpenQRCodeSheet,
-            })
+        ;(useBottomSheetModal as jest.Mock).mockReturnValueOnce({
+            onClose: mockCloseBottomSheet,
+        })
     })
 
     const defaultProps = {
         bottomSheetRef: mockBottomSheetRef,
-        qrCodeBottomSheetRef: mockQrCodeBottomSheetRef,
+        onQrCodePress,
     }
 
     it("renders without crashing", () => {
@@ -55,16 +49,6 @@ describe("AddTokenBottomSheet", () => {
                 wrapper: TestWrapper,
             })
         }).not.toThrow()
-    })
-
-    it("sets up bottom sheet modal hooks correctly", () => {
-        render(<AddTokenBottomSheet {...defaultProps} />, {
-            wrapper: TestWrapper,
-        })
-
-        const { useBottomSheetModal } = require("~Hooks/useBottomSheet")
-        expect(useBottomSheetModal).toHaveBeenCalledWith({ externalRef: mockBottomSheetRef })
-        expect(useBottomSheetModal).toHaveBeenCalledWith({ externalRef: mockQrCodeBottomSheetRef })
     })
 
     it("renders buy token button and handles press", async () => {
@@ -92,7 +76,7 @@ describe("AddTokenBottomSheet", () => {
         fireEvent.press(receiveButton)
 
         expect(mockCloseBottomSheet).toHaveBeenCalled()
-        expect(mockOpenQRCodeSheet).toHaveBeenCalled()
+        expect(onQrCodePress).toHaveBeenCalled()
     })
 
     it("renders custom token button and handles press", async () => {

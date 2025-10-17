@@ -25,7 +25,11 @@ export const CurrentBalance = () => {
     const dispatch = useAppDispatch()
 
     const { styles } = useThemedStyles(baseStyles)
-    const { renderedBalance } = useTotalFiatBalance({ address: account.address, enabled: true })
+    const { renderedBalance } = useTotalFiatBalance({
+        address: account.address,
+        enabled: true,
+        useCompactNotation: false,
+    })
     const { isLowEndDevice } = useDevice()
 
     const onPress = useCallback(() => {
@@ -36,6 +40,10 @@ export const CurrentBalance = () => {
         () => renderedBalance.replace(currencySymbol, "").split(""),
         [currencySymbol, renderedBalance],
     )
+
+    // Check if balance uses compact notation (K, M, B, T) or less-than notation (<)
+    // These are not suitable for slot machine animation
+    const hasCompactOrSpecialNotation = useMemo(() => /[KMBT<]/.test(renderedBalance), [renderedBalance])
 
     return (
         <TouchableOpacity onPress={onPress}>
@@ -48,7 +56,7 @@ export const CurrentBalance = () => {
                     {currencySymbol}
                 </BaseText>
                 <Animated.View style={styles.balance}>
-                    {splittedText.includes("•") || isLowEndDevice ? (
+                    {splittedText.includes("•") || isLowEndDevice || hasCompactOrSpecialNotation ? (
                         <Animated.Text
                             entering={FadeIn.duration(300)}
                             exiting={FadeOut.duration(300)}

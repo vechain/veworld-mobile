@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { LayoutChangeEvent } from "react-native"
+import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import Animated, {
     useAnimatedRef,
     useAnimatedStyle,
@@ -59,7 +59,7 @@ export const useAnimatedHorizontalFilters = <T>({
 
     useDerivedValue(() => {
         scrollTo(scrollViewRef, targetScrollX.value, 0, true)
-    })
+    }, [scrollViewRef, targetScrollX])
 
     useEffect(() => {
         if (selectedIndex < 0 || !isReady) return
@@ -104,7 +104,7 @@ export const useAnimatedHorizontalFilters = <T>({
     }, [])
 
     const handleScroll = useCallback(
-        (event: any) => {
+        (event: NativeSyntheticEvent<NativeScrollEvent>) => {
             scrollOffset.value = event.nativeEvent.contentOffset.x
         },
         [scrollOffset],
