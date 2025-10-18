@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.7 (2025-10-17)</small>
+
+* build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
+* fix: fix total balance (#3420) ([6c29b81](https://github.com/vechain/veworld-mobile/commit/6c29b81)), closes [#3420](https://github.com/vechain/veworld-mobile/issues/3420)
+
 ## <small>2.4.6 (2025-10-09)</small>
 
 * build: init ([009f8b6](https://github.com/vechain/veworld-mobile/commit/009f8b6))
