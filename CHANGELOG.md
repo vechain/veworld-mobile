@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.7 (2025-10-16)</small>
+
+* build: init ([7408e28](https://github.com/vechain/veworld-mobile/commit/7408e28))
+* refactor(token-card): style adjustments (#3417) ([69b1937](https://github.com/vechain/veworld-mobile/commit/69b1937)), closes [#3417](https://github.com/vechain/veworld-mobile/issues/3417)
+
 ## <small>2.4.6 (2025-10-09)</small>
 
 * build: init ([009f8b6](https://github.com/vechain/veworld-mobile/commit/009f8b6))
