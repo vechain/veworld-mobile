@@ -204,3 +204,19 @@ export const isReportedCollection = createSelector(
         return reportedAddresses.findIndex(address => AddressUtils.compareAddresses(address, collectionAddress)) !== -1
     },
 )
+
+const selectFavoriteNfts = createSelector(selectNftState, state => state.favorites ?? {})
+const selectCurrentAccountFavoriteNfts = createSelector(
+    [selectFavoriteNfts, selectSelectedAccount],
+    (favorites, selectedAccount) => favorites[HexUtils.normalize(selectedAccount.address)] ?? {},
+)
+
+export const isNftFavorite = createSelector(
+    [selectCurrentAccountFavoriteNfts, (_state: RootState, address: string, tokenId: string) => ({ address, tokenId })],
+    (favorites, nft) => {
+        const normalizedAddress = HexUtils.normalize(nft.address)
+        return Boolean(favorites[`${normalizedAddress}_${nft.tokenId}`])
+    },
+)
+
+export const selectAllFavoriteNfts = createSelector(selectCurrentAccountFavoriteNfts, nfts => Object.values(nfts))

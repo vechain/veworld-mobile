@@ -63,6 +63,30 @@ export const NFTS_OWNED_PER_CONTRACT = (
     }/nfts?address=${ownerAddress}&contractAddress=${contractAddress}&size=${resultsPerPage}&page=${page}&direction=${direction}`
 
 /**
+ * Get NFTs owned given an owner address
+ *
+ * @param networkType - Mainnet or Testnet
+ * @param ownerAddress - Address to get NFTs for
+ * @param resultsPerPage - Number of results per page
+ * @param page - Page number
+ * @param direction - Direction of results
+ *
+ * @returns URL to fetch NFTs owned given an owner address
+ */
+export const NFTS_OWNED_PER_OWNER = (
+    networkType: NETWORK_TYPE,
+    ownerAddress: string,
+    resultsPerPage: number = 20,
+    page: number = 0,
+    direction: ORDER = ORDER.DESC,
+) =>
+    `${
+        networkType === NETWORK_TYPE.MAIN
+            ? process.env.REACT_APP_INDEXER_MAINNET_URL
+            : process.env.REACT_APP_INDEXER_TESTNET_URL
+    }/nfts?address=${ownerAddress}&size=${resultsPerPage}&page=${page}&direction=${direction}`
+
+/**
  * Retrieve all activities associated with a specified address
  *
  * @param networkType - Mainnet or Testnet
