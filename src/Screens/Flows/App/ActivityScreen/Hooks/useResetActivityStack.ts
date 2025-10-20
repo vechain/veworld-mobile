@@ -4,7 +4,7 @@ import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
-export const useResetActivityStack = () => {
+export const useResetActivityStack = (): void => {
     const navigation = useNavigation()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
@@ -37,5 +37,11 @@ export const useResetActivityStack = () => {
                 })
             })
         }
-    }, [hasAccountChanged, hasNetworkChanged, navigation, selectedAccount.address, selectedNetwork])
+        /**
+         * Note: We intentionally use selectedNetwork.id instead of selectedNetwork object to prevent
+         * false-positive triggers from object reference changes. This fixes an Android-specific bug
+         * where navigation resets during screen transitions due to Redux emitting new object references.
+         */
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [hasAccountChanged, hasNetworkChanged, navigation, selectedAccount.address, selectedNetwork.id])
 }
