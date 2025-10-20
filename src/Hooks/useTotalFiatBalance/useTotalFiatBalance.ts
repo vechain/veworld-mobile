@@ -1,4 +1,4 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { VET, VTHO } from "~Constants"
 import { useUserNodes, useUserStargateNfts } from "~Hooks/Staking"
@@ -103,10 +103,9 @@ export const useTotalFiatBalance = ({ address, enabled = true, useCompactNotatio
     const { data: previousBalance } = useQuery({
         queryKey: ["BALANCE", "TOTAL", network.genesis.id, address.toLowerCase()],
         queryFn: () => amount,
-        placeholderData: keepPreviousData,
         enabled: !isLoading,
         staleTime: 5 * 60 * 1000,
-        gcTime: 5 * 60 * 1000,
+        gcTime: Infinity,
     })
 
     const { formatFiat } = useFormatFiat({ useCompactNotation })
