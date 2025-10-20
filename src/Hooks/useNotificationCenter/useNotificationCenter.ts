@@ -19,6 +19,7 @@ import { ERROR_EVENTS } from "../../Constants"
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
 const MAX_RETRIES = 3
 const BATCH_SIZE = 5
+const REQUEST_TIMEOUT_MS = 15000 // 15 seconds
 
 const NOTIFICATION_CENTER_EVENT = ERROR_EVENTS.NOTIFICATION_CENTER
 
@@ -147,27 +148,41 @@ export const useNotificationCenter = ({ enabled = true }: { enabled?: boolean } 
                 addressesToRegister,
             })
 
-            const response = await fetch(registerUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            })
+            const httpTimeoutController = new AbortController()
+            const timeoutId = setTimeout(() => httpTimeoutController.abort(), REQUEST_TIMEOUT_MS)
 
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}))
-                const err = new Error(`Push registration failed with status ${response.status}`)
-                ;(err as any).response = { status: response.status, data: errorData }
+            try {
+                const response = await fetch(registerUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                    signal: httpTimeoutController.signal,
+                })
+
+                clearTimeout(timeoutId)
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}))
+                    const err = new Error(`Push registration failed with status ${response.status}`)
+                    ;(err as any).response = { status: response.status, data: errorData }
+                    throw err
+                }
+
+                const now = Date.now()
+                dispatch(updateWalletRegistrations({ addresses: addressesToRegister, timestamp: now }))
+                dispatch(updateLastSubscriptionId(subscriptionId))
+
+                info(NOTIFICATION_CENTER_EVENT, "Push registration successful at", new Date(now).toISOString())
+                return response
+            } catch (err) {
+                clearTimeout(timeoutId)
+                if ((err as Error).name === "AbortError") {
+                    throw new Error("Push registration request timed out")
+                }
                 throw err
             }
-
-            const now = Date.now()
-            dispatch(updateWalletRegistrations({ addresses: addressesToRegister, timestamp: now }))
-            dispatch(updateLastSubscriptionId(subscriptionId))
-
-            info(NOTIFICATION_CENTER_EVENT, "Push registration successful at", new Date(now).toISOString())
-            return response
         },
         [dispatch],
     )
@@ -177,6 +192,7 @@ export const useNotificationCenter = ({ enabled = true }: { enabled?: boolean } 
             sendRegistration(params.subscriptionId, params.addresses),
         retry: (failureCount, err) => {
             if (failureCount >= MAX_RETRIES) {
+                error(NOTIFICATION_CENTER_EVENT, "Push registration failed, max retries reached")
                 return false
             }
             // Only retry on 5xx errors or network errors

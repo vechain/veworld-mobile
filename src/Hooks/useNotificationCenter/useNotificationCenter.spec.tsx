@@ -243,7 +243,7 @@ describe("useNotificationCenter", () => {
 
         expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
         const [url, options] = (global.fetch as jest.Mock).mock.calls[0]
-        expect(url).toBe("http://192.168.86.20:8085/api/v1/push-registrations")
+        expect(url).toBe("https://notifications.dev/api/v1/push-registrations")
         expect(options).toMatchObject({
             method: "POST",
             headers: { "Content-Type": "application/json" },
