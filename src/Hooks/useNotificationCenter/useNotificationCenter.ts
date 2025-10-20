@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import { useCallback, useMemo, useRef } from "react"
 import { OneSignal } from "react-native-onesignal"
+import { useDebounceCallback } from "usehooks-ts"
 import {
     selectAccounts,
     selectLastFullRegistration,
@@ -69,6 +70,7 @@ export const useNotificationCenter = () => {
     const walletAddresses = useMemo(() => accounts.map(account => account.address), [accounts])
 
     const isRegistering = useRef(false)
+    const registeredWallets = useRef<Set<string>>(new Set())
 
     const getWalletsNeedingRegistration = useCallback(
         (currentSubscriptionId: string | null): string[] => {
@@ -100,7 +102,7 @@ export const useNotificationCenter = () => {
             }
 
             // Otherwise, only register wallets that are new or haven't been registered in 30 days
-            const walletsToRegister = walletAddresses.filter(address => {
+            const dueWallets = walletAddresses.filter(address => {
                 const lastRegistered = getRegistrationTimestamp(walletRegistrations, address)
                 if (!lastRegistered) {
                     return true // New wallet
@@ -108,13 +110,15 @@ export const useNotificationCenter = () => {
                 const timeSinceRegistration = now - lastRegistered
                 return timeSinceRegistration >= THIRTY_DAYS_MS
             })
+            // As redux is async, there is a race condition where we write the new registered address to it
+            // but get another call to register which reads teh old state.  Therefore we have a local cache
+            // to filter out any already in-flight
+            const walletsToRegister = dueWallets.filter(
+                address => !registeredWallets.current.has(HexUtils.normalize(address)),
+            )
 
-            if (walletsToRegister.length > 0) {
-                info(
-                    NOTIFICATION_CENTER_EVENT,
-                    `Registering ${walletsToRegister.length} wallet(s): new or >30 days old`,
-                )
-            }
+            // Mark these wallets as being registered (optimistic local tracking)
+            walletsToRegister.forEach(address => registeredWallets.current.add(HexUtils.normalize(address)))
 
             return walletsToRegister
         },
@@ -124,7 +128,7 @@ export const useNotificationCenter = () => {
     const sendRegistration = useCallback(
         async (subscriptionId: string | null, addressesToRegister: string[]) => {
             const registerBaseUrl = __DEV__
-                ? "http://192.168.86.24:8085"
+                ? "http://192.168.86.20:8085"
                 : process.env.NOTIFICATION_CENTER_REGISTER_PROD
 
             if (!registerBaseUrl) {
@@ -155,6 +159,7 @@ export const useNotificationCenter = () => {
             info(NOTIFICATION_CENTER_EVENT, "Registering push notification", {
                 walletCount: addressesToRegister.length,
                 registerUrl,
+                addressesToRegister,
             })
 
             const response = await fetch(registerUrl, {
@@ -207,66 +212,73 @@ export const useNotificationCenter = () => {
     })
 
     // Wrapper function that handles all pre-flight checks and locking
-    const register = useCallback(async () => {
-        if (isRegistering.current) {
-            info(NOTIFICATION_CENTER_EVENT, "Registration already in progress, skipping duplicate call")
-            return
-        }
-
-        if (walletAddresses.length === 0) {
-            info(NOTIFICATION_CENTER_EVENT, "No wallet addresses available, skipping registration")
-            return
-        }
-
-        // Set lock
-        isRegistering.current = true
-
-        try {
-            const subId = await OneSignal.User.pushSubscription.getIdAsync()
-
-            const walletsToRegister = getWalletsNeedingRegistration(subId)
-
-            if (walletsToRegister.length === 0) {
-                info(NOTIFICATION_CENTER_EVENT, "Registration skipped - no wallets need registration")
-                return null
+    const register = useDebounceCallback(
+        async () => {
+            if (isRegistering.current) {
+                info(NOTIFICATION_CENTER_EVENT, "Registration already in progress, skipping duplicate call")
+                return
             }
 
-            info(
-                NOTIFICATION_CENTER_EVENT,
-                `Attempting push notification registration for ${walletsToRegister.length} wallet(s)`,
-            )
+            if (walletAddresses.length === 0) {
+                info(NOTIFICATION_CENTER_EVENT, "No wallet addresses available, skipping registration")
+                return
+            }
 
-            // Split into batches of 5
-            const batches = chunkArray(walletsToRegister, BATCH_SIZE)
-            const isFullRegistration = walletsToRegister.length === walletAddresses.length
+            // Set lock
+            isRegistering.current = true
 
-            info(NOTIFICATION_CENTER_EVENT, `Sending ${batches.length} batch(es) of up to ${BATCH_SIZE} wallets`)
+            try {
+                const subId = await OneSignal.User.pushSubscription.getIdAsync()
 
-            // Send batches sequentially
-            for (let i = 0; i < batches.length; i++) {
-                const batch = batches[i]
+                // Get wallets that need registration, filtering out any already in-flight
+                const walletsToRegister = getWalletsNeedingRegistration(subId)
+
+                if (walletsToRegister.length === 0) {
+                    info(NOTIFICATION_CENTER_EVENT, "Registration skipped - no wallets need registration")
+                    return null
+                }
+
                 info(
                     NOTIFICATION_CENTER_EVENT,
-                    `Sending batch ${i + 1}/${batches.length} with ${batch.length} wallet(s)`,
+                    `Attempting push notification registration for ${walletsToRegister.length} wallet(s)`,
                 )
 
-                await mutateAsync({ subscriptionId: subId, addresses: batch })
-            }
+                // Split into batches of 5
+                const batches = chunkArray(walletsToRegister, BATCH_SIZE)
+                const isFullRegistration = walletsToRegister.length === walletAddresses.length
 
-            // If we registered all wallets, update lastFullRegistration
-            if (isFullRegistration) {
-                const now = Date.now()
-                dispatch(updateLastFullRegistration(now))
-                info(NOTIFICATION_CENTER_EVENT, "Full registration completed at", new Date(now).toISOString())
-            }
+                info(NOTIFICATION_CENTER_EVENT, `Sending ${batches.length} batch(es) of up to ${BATCH_SIZE} wallets`)
 
-            info(NOTIFICATION_CENTER_EVENT, "All batches registered successfully")
-        } catch (err) {
-            error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
-        } finally {
-            isRegistering.current = false
-        }
-    }, [dispatch, getWalletsNeedingRegistration, mutateAsync, walletAddresses.length])
+                // Send batches sequentially
+                for (let i = 0; i < batches.length; i++) {
+                    const batch = batches[i]
+                    info(
+                        NOTIFICATION_CENTER_EVENT,
+                        `Sending batch ${i + 1}/${batches.length} with ${batch.length} wallet(s)`,
+                    )
+
+                    await mutateAsync({ subscriptionId: subId, addresses: batch })
+                }
+
+                // If we registered all wallets, update lastFullRegistration
+                if (isFullRegistration) {
+                    const now = Date.now()
+                    dispatch(updateLastFullRegistration(now))
+                    info(NOTIFICATION_CENTER_EVENT, "Full registration completed at", new Date(now).toISOString())
+                }
+
+                info(NOTIFICATION_CENTER_EVENT, "All batches registered successfully")
+            } catch (err) {
+                error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
+                // Clear the local cache so we can retry the registrations next time
+                registeredWallets.current.clear()
+            } finally {
+                isRegistering.current = false
+            }
+        },
+        500,
+        { leading: false, trailing: true },
+    )
 
     return {
         register,

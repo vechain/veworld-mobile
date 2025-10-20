@@ -290,7 +290,6 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         if (!featureEnabled) {
             return
         }
-
         if (accounts.length > 0) {
             attemptPushRegistration()
         }
