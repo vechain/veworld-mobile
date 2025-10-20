@@ -48,9 +48,9 @@ export const CollectibleCard = ({ address, tokenId }: Props) => {
             )}
 
             <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
-                <LinearGradient colors={["rgba(66, 52, 131, 0.50)", "rgba(29, 23, 58, 0.50)"]}>
+                <LinearGradient colors={[COLORS.BALANCE_BACKGROUND_GRADIENT_END_50, COLORS.BALANCE_BACKGROUND_50]}>
                     <BaseView flexDirection="row" alignItems="center" p={8}>
-                        <BaseText typographyFont="captionSemiBold" color="rgba(255,255,255,0.9)" flexDirection="row">
+                        <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE_RGBA_90} flexDirection="row">
                             {name}
                         </BaseText>
                     </BaseView>
