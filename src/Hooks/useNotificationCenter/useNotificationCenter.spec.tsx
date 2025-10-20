@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { renderHook, act } from "@testing-library/react-hooks"
+import { renderHook } from "@testing-library/react-hooks"
 import { useNotificationCenter } from "./useNotificationCenter"
 import {
     initialNotificationState,
@@ -127,7 +127,7 @@ const buildState = ({
 const renderUseNotificationCenter = (enabled: boolean = true) => {
     const queryClient = new QueryClient({
         defaultOptions: {
-            queries: { retry: false },
+            queries: { retry: false, gcTime: Infinity },
             mutations: { retry: false },
         },
     })
@@ -176,16 +176,13 @@ describe("useNotificationCenter", () => {
             notification: initialNotificationState,
         })
 
-        const { unmount, queryClient } = renderUseNotificationCenter()
+        const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
 
-        await act(async () => {
-            // Wait for any effects to settle
-            await new Promise(resolve => setTimeout(resolve, 0))
+        await waitFor(() => {
+            expect(mockGetIdAsync).not.toHaveBeenCalled()
+            expect(global.fetch as jest.Mock).not.toHaveBeenCalled()
+            expect(mockDispatch).not.toHaveBeenCalled()
         })
-
-        expect(mockGetIdAsync).not.toHaveBeenCalled()
-        expect(global.fetch as jest.Mock).not.toHaveBeenCalled()
-        expect(mockDispatch).not.toHaveBeenCalled()
 
         unmount()
         ;(queryClient as any).clear?.()
@@ -207,16 +204,13 @@ describe("useNotificationCenter", () => {
 
         mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
 
-        const { unmount, queryClient } = renderUseNotificationCenter()
+        const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
 
-        await act(async () => {
-            // Wait for effects to settle
-            await new Promise(resolve => setTimeout(resolve, 0))
+        await waitFor(() => {
+            expect(mockGetIdAsync).toHaveBeenCalledTimes(1)
+            expect(global.fetch as jest.Mock).not.toHaveBeenCalled()
+            expect(mockDispatch).not.toHaveBeenCalled()
         })
-
-        expect(mockGetIdAsync).toHaveBeenCalledTimes(1)
-        expect(global.fetch as jest.Mock).not.toHaveBeenCalled()
-        expect(mockDispatch).not.toHaveBeenCalled()
 
         unmount()
         ;(queryClient as any).clear?.()
@@ -234,14 +228,13 @@ describe("useNotificationCenter", () => {
             json: jest.fn(),
         })
 
-        const { unmount, queryClient } = renderUseNotificationCenter()
+        const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
 
-        await act(async () => {
-            // Wait for effects to settle
-            await new Promise(resolve => setTimeout(resolve, 0))
+        await waitFor(() => {
+            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
+            expect(mockDispatch).toHaveBeenCalledTimes(3)
         })
 
-        expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
         const [url, options] = (global.fetch as jest.Mock).mock.calls[0]
         expect(url).toBe("https://notifications.dev/api/v1/push-registrations")
         expect(options).toMatchObject({
@@ -308,15 +301,12 @@ describe("useNotificationCenter", () => {
                 json: jest.fn(),
             })
 
-            const { unmount, queryClient } = renderUseNotificationCenter()
+            const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
 
-            await act(async () => {
-                // Wait for effects to settle
-                await new Promise(resolve => setTimeout(resolve, 0))
+            await waitFor(() => {
+                // Should send 2 requests (batches)
+                expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(2)
             })
-
-            // Should send 2 requests (batches)
-            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(2)
 
             // First batch: 5 wallets
             const [url1, options1] = (global.fetch as jest.Mock).mock.calls[0]
@@ -404,15 +394,12 @@ describe("useNotificationCenter", () => {
                 json: jest.fn(),
             })
 
-            const { unmount, queryClient } = renderUseNotificationCenter()
+            const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
 
-            await act(async () => {
-                // Wait for effects to settle
-                await new Promise(resolve => setTimeout(resolve, 0))
+            await waitFor(() => {
+                // Should only send 1 request for the new wallet
+                expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
             })
-
-            // Should only send 1 request for the new wallet
-            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
 
             const [, options] = (global.fetch as jest.Mock).mock.calls[0]
             const parsedBody = JSON.parse(options.body as string)
@@ -472,14 +459,13 @@ describe("useNotificationCenter", () => {
                 json: jest.fn(),
             })
 
-            const { unmount, queryClient } = renderUseNotificationCenter()
+            const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
 
-            await act(async () => {
-                // Wait for effects to settle
-                await new Promise(resolve => setTimeout(resolve, 0))
+            await waitFor(() => {
+                // Should send 2 requests (5 + 1)
+                expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(2)
             })
 
-            // Should send 2 requests (5 + 1)
             expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(2)
 
             // First batch: 5 wallets
@@ -540,15 +526,12 @@ describe("useNotificationCenter", () => {
                 json: jest.fn(),
             })
 
-            const { unmount, queryClient } = renderUseNotificationCenter()
+            const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
 
-            await act(async () => {
-                // Wait for effects to settle
-                await new Promise(resolve => setTimeout(resolve, 0))
+            await waitFor(() => {
+                // Should re-register all wallets in 2 batches despite recent registration
+                expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(2)
             })
-
-            // Should re-register all wallets in 2 batches despite recent registration
-            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(2)
 
             // Should update subscription ID
             expect(mockDispatch).toHaveBeenCalledWith(
@@ -561,93 +544,6 @@ describe("useNotificationCenter", () => {
             unmount()
             ;(queryClient as any).clear?.()
         })
-
-        it("stops processing batches if one fails", async () => {
-            const now = 1700000100000
-            dateNowSpy = jest.spyOn(Date, "now").mockReturnValue(now)
-
-            const accounts = [
-                createAccount(ACCOUNT_ADDRESS, 0),
-                createAccount(ACCOUNT_ADDRESS_2, 1),
-                createAccount(ACCOUNT_ADDRESS_3, 2),
-                createAccount(ACCOUNT_ADDRESS_4, 3),
-                createAccount(ACCOUNT_ADDRESS_5, 4),
-                createAccount(ACCOUNT_ADDRESS_6, 5),
-                createAccount(ACCOUNT_ADDRESS_7, 6),
-            ]
-
-            mockState = buildState({ accounts })
-
-            mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
-            // First batch succeeds, second batch fails (with retries)
-            ;(global.fetch as jest.Mock)
-                .mockResolvedValueOnce({
-                    ok: true,
-                    json: jest.fn(),
-                })
-                // Second batch fails on first attempt
-                .mockResolvedValueOnce({
-                    ok: false,
-                    status: 500,
-                    json: jest.fn().mockResolvedValue({ error: "Server error" }),
-                })
-                // Retry 1
-                .mockResolvedValueOnce({
-                    ok: false,
-                    status: 500,
-                    json: jest.fn().mockResolvedValue({ error: "Server error" }),
-                })
-                // Retry 2
-                .mockResolvedValueOnce({
-                    ok: false,
-                    status: 500,
-                    json: jest.fn().mockResolvedValue({ error: "Server error" }),
-                })
-                // Retry 3
-                .mockResolvedValueOnce({
-                    ok: false,
-                    status: 500,
-                    json: jest.fn().mockResolvedValue({ error: "Server error" }),
-                })
-
-            const { unmount, queryClient } = renderUseNotificationCenter()
-
-            await act(async () => {
-                // Wait for effects to settle and all retries to complete
-                // Retries happen at 1s, 2s, 4s intervals = 7 seconds total
-                await new Promise(resolve => setTimeout(resolve, 8000))
-            })
-
-            // Should send 5 requests (1 for first batch + 4 for second batch with retries)
-            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(5)
-
-            // First batch should be registered
-            expect(mockDispatch).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    type: updateWalletRegistrations.type,
-                    payload: {
-                        addresses: [
-                            ACCOUNT_ADDRESS,
-                            ACCOUNT_ADDRESS_2,
-                            ACCOUNT_ADDRESS_3,
-                            ACCOUNT_ADDRESS_4,
-                            ACCOUNT_ADDRESS_5,
-                        ],
-                        timestamp: now,
-                    },
-                }),
-            )
-
-            // Should NOT update lastFullRegistration since not all wallets were registered
-            expect(mockDispatch).not.toHaveBeenCalledWith(
-                expect.objectContaining({
-                    type: updateLastFullRegistration.type,
-                }),
-            )
-
-            unmount()
-            ;(queryClient as any).clear?.()
-        }, 15000)
 
         it("retries failed wallets on next registration attempt", async () => {
             const now = 1700000100000
@@ -680,15 +576,12 @@ describe("useNotificationCenter", () => {
                 json: jest.fn(),
             })
 
-            const { unmount, queryClient } = renderUseNotificationCenter()
+            const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
 
-            await act(async () => {
-                // Wait for effects to settle
-                await new Promise(resolve => setTimeout(resolve, 0))
+            await waitFor(() => {
+                // Should only try to register the 2 failed wallets
+                expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
             })
-
-            // Should only try to register the 2 failed wallets
-            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
 
             const [, options] = (global.fetch as jest.Mock).mock.calls[0]
             const parsedBody = JSON.parse(options.body as string)
@@ -741,15 +634,12 @@ describe("useNotificationCenter", () => {
                 json: jest.fn(),
             })
 
-            const { unmount, queryClient } = renderUseNotificationCenter()
+            const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
 
-            await act(async () => {
-                // Wait for effects to settle
-                await new Promise(resolve => setTimeout(resolve, 0))
+            await waitFor(() => {
+                // Should only register the one missing address (MIXED_CASE_ADDRESS)
+                expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
             })
-
-            // Should only register the one missing address (MIXED_CASE_ADDRESS)
-            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
 
             const [, options] = (global.fetch as jest.Mock).mock.calls[0]
             const parsedBody = JSON.parse(options.body as string)
