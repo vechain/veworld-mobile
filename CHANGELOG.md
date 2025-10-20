@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-20)</small>
+
+* build: init ([fc30e82](https://github.com/vechain/veworld-mobile/commit/fc30e82))
+* 445 - Fix fonts (#3429) ([2802f2b](https://github.com/vechain/veworld-mobile/commit/2802f2b)), closes [#3429](https://github.com/vechain/veworld-mobile/issues/3429)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
