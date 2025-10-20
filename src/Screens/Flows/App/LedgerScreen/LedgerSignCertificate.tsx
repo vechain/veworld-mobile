@@ -22,6 +22,7 @@ import {
 } from "~Components"
 import { ERROR_EVENTS, LEDGER_ERROR_CODES } from "~Constants"
 import { useBottomSheetModal, useLedgerDevice } from "~Hooks"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { LoginActivityValue } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
@@ -72,6 +73,8 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     } = useLedgerDevice({
         deviceId: accountWithDevice.device.deviceId,
     })
+
+    const { onSuccess, onFailure, onRejectRequest } = useExternalDappConnection()
 
     useEffect(() => {
         if (errorCode) {
@@ -138,8 +141,14 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
             } else {
                 if (res.err === LEDGER_ERROR_CODES.USER_REJECTED) {
                     setUserRejected(true)
+                    if (request.type === "external-app") {
+                        await onRejectRequest(request.redirectUrl)
+                    }
                 } else {
                     setSigningError(true)
+                    if (request.type === "external-app") {
+                        await onFailure(request.redirectUrl)
+                    }
                 }
             }
         } catch (e) {
@@ -148,7 +157,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         } finally {
             setIsAwaitingSignature(false)
         }
-    }, [accountWithDevice, certificate, withTransport])
+    }, [accountWithDevice, certificate, withTransport, request, onRejectRequest, onFailure])
 
     /** Effects */
 
@@ -197,6 +206,12 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
 
             if (request.type === "wallet-connect") {
                 await processRequest(request.requestEvent, certResponse)
+            } else if (request.type === "external-app") {
+                await onSuccess({
+                    redirectUrl: request.redirectUrl,
+                    data: certResponse,
+                    publicKey: request.publicKey,
+                })
             } else {
                 postMessage({
                     id: request.id,
@@ -278,6 +293,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         disconnectLedger,
         navigateOnFinish,
         processRequest,
+        onSuccess,
         postMessage,
         createSessionIfNotExists,
         dispatch,

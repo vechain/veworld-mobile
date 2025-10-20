@@ -47,7 +47,6 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
     const [signingError, setSigningError] = useState<boolean>()
     const [isSending, setIsSending] = useState(false)
-
     const {
         ref: connectionErrorSheetRef,
         onOpen: openConnectionErrorSheet,

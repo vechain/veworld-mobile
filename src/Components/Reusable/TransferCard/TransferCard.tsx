@@ -304,11 +304,11 @@ const AccountCard = ({
 
     return (
         <BaseView py={12} px={16} key={_address} style={{ width: SCREEN_WIDTH - 40 }} alignItems="flex-start">
-            <BaseText typographyFont="buttonPrimary">{provenanceText}</BaseText>
+            <BaseText typographyFont="smallCaptionSemiBold">{provenanceText}</BaseText>
             <BaseView flexDirection="row" py={8}>
-                <PicassoAddressIcon address={_address} size={40} />
+                <PicassoAddressIcon address={_address} size={32} />
                 <BaseView flexDirection="column" pl={12}>
-                    {contactName && <BaseText typographyFont="subSubTitle">{contactName}</BaseText>}
+                    {contactName && <BaseText typographyFont="bodySemiBold">{contactName}</BaseText>}
                     <BaseView flexDirection="row" mt={3}>
                         {isLedger && (
                             <>
@@ -322,7 +322,7 @@ const AccountCard = ({
                                 <BaseSpacer width={8} />
                             </>
                         )}
-                        <BaseText typographyFont={contactName ? "captionRegular" : "button"}>{vnsName}</BaseText>
+                        <BaseText typographyFont={"smallCaptionRegular"}>{vnsName}</BaseText>
                     </BaseView>
                 </BaseView>
                 {!contactName && onAddContactPress && (

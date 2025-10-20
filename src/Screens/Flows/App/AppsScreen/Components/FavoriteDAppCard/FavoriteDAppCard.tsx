@@ -5,6 +5,7 @@ import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, DAppIcon } fro
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useAppLogo } from "~Hooks/useAppLogo"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     dapp: DiscoveryDApp
@@ -54,7 +55,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                                 <BaseText
                                     ellipsizeMode="tail"
                                     numberOfLines={1}
-                                    typographyFont="subSubTitleSemiBold"
+                                    typographyFont="bodySemiBold"
                                     color={theme.colors.assetDetailsCard.title}>
                                     {dapp.name}
                                 </BaseText>
@@ -62,7 +63,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                                 <BaseText
                                     numberOfLines={2}
                                     ellipsizeMode="tail"
-                                    typographyFont="captionMedium"
+                                    typographyFont="smallCaptionMedium"
                                     color={theme.colors.assetDetailsCard.text}>
                                     {dapp.desc ? dapp.desc : dapp.href}
                                 </BaseText>
@@ -124,9 +125,9 @@ const baseStyles = () =>
         },
         nameText: {
             fontWeight: "bold",
-            fontSize: 16,
+            fontSize: FontUtils.font(14),
         },
         description: {
-            fontSize: 12,
+            fontSize: FontUtils.font(10),
         },
     })

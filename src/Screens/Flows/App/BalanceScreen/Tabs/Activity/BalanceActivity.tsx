@@ -48,7 +48,7 @@ const ListFooterComponent = ({ tab }: { tab: BalanceTab }) => {
             px={0}
             py={4}
             action={onNavigate}
-            typographyFont="bodyMedium"
+            typographyFont="captionMedium"
             style={styles.btn}
             textColor={theme.colors.text}
             rightIcon={<BaseIcon name="icon-arrow-right" size={14} style={styles.icon} color={theme.colors.text} />}>

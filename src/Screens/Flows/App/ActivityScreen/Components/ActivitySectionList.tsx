@@ -132,9 +132,17 @@ export const ActivitySectionList = ({
             const isYesterdaySection = section.title === SectionName.YESTERDAY
 
             if (isTodaySection) {
-                return <BaseText typographyFont="bodySemiBold">{LL.TODAY()}</BaseText>
+                return (
+                    <BaseText typographyFont="bodyMedium" color={theme.colors.activitySectionSeparator.text}>
+                        {LL.TODAY()}
+                    </BaseText>
+                )
             } else if (isYesterdaySection) {
-                return <BaseText typographyFont="bodySemiBold">{LL.YESTERDAY()}</BaseText>
+                return (
+                    <BaseText typographyFont="bodyMedium" color={theme.colors.activitySectionSeparator.text}>
+                        {LL.YESTERDAY()}
+                    </BaseText>
+                )
             } else {
                 const date = moment(section.title)
                 const year = date.format("YYYY")
@@ -143,14 +151,20 @@ export const ActivitySectionList = ({
 
                 return (
                     <>
-                        {isDiffYear && <BaseText typographyFont="captionSemiBold">{year}</BaseText>}
+                        {isDiffYear && (
+                            <BaseText typographyFont="captionMedium" color={theme.colors.activitySectionSeparator.text}>
+                                {year}
+                            </BaseText>
+                        )}
                         <BaseSpacer height={2} />
-                        <BaseText typographyFont="bodySemiBold">{monthDay}</BaseText>
+                        <BaseText typographyFont="bodyMedium" color={theme.colors.activitySectionSeparator.text}>
+                            {monthDay}
+                        </BaseText>
                     </>
                 )
             }
         },
-        [LL, locale],
+        [LL, locale, theme.colors.activitySectionSeparator.text],
     )
 
     const renderSectionFooter = useCallback(() => {

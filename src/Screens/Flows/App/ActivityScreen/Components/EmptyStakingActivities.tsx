@@ -1,6 +1,6 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { B3trLogoSVG, VeBetterSVG } from "~Assets"
+import { StargateSVG } from "~Assets"
 import { BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -10,7 +10,7 @@ type EmptyB3trActivitiesProps = {
     onPress: () => void
 }
 
-export const EmptyB3trActivities = ({ onPress }: EmptyB3trActivitiesProps) => {
+export const EmptyStakingActivities = ({ onPress }: EmptyB3trActivitiesProps) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -19,28 +19,26 @@ export const EmptyB3trActivities = ({ onPress }: EmptyB3trActivitiesProps) => {
     return (
         <BaseView style={[styles.rootContainer, { backgroundColor: theme.colors.card, borderColor: borderColor }]}>
             <BaseView flexDirection="row" justifyContent="center" alignItems="center">
-                <B3trLogoSVG />
-                <BaseSpacer width={10} />
-                <VeBetterSVG />
+                <StargateSVG currentColor={theme.isDark ? COLORS.WHITE : COLORS.PURPLE} />
             </BaseView>
             <BaseSpacer height={24} />
             <BaseText
                 style={styles.description}
                 typographyFont="captionSemiBold"
                 color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_800}>
-                {LL.ACTIVITY_B3TR_EMPTY_LABEL()}
+                {LL.ACTIVITY_ALL_EMPTY_LABEL()}
             </BaseText>
             <BaseSpacer height={16} />
             <BaseText
                 style={styles.description}
                 typographyFont="captionRegular"
                 color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}>
-                {LL.ACTIVITY_B3TR_EMPTY_DESCRIPTION()}
+                {LL.ACTIVITY_STAKING_EMPTY_LABEL()}
             </BaseText>
             <BaseSpacer height={24} />
             <BaseButton
                 variant="solid"
-                title={LL.ACTIVITY_B3TR_EMPTY_BUTTON()}
+                title={LL.ACTIVITY_STAKING_EMPTY_BUTTON()}
                 action={onPress}
                 typographyFont="bodySemiBold"
             />

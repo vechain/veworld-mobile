@@ -63,7 +63,7 @@ export const RowDetails = React.memo(
                     px={8}
                     py={4}
                     borderRadius={4}
-                    typographyFont="captionMedium"
+                    typographyFont="smallCaptionMedium"
                     color={theme.colors.x2eAppOpenDetails.label.text}
                     testID={`DAPP_WITH_DETAILS_CATEGORY_${index}`}>
                     {category}
@@ -145,7 +145,7 @@ export const RowDetails = React.memo(
                                     ) : (
                                         <Animated.View style={animatedStyles.descriptionStyle}>
                                             <BaseText
-                                                typographyFont="captionRegular"
+                                                typographyFont="smallCaptionRegular"
                                                 numberOfLines={2}
                                                 ellipsizeMode="tail"
                                                 color={theme.colors.x2eAppOpenDetails.description}

@@ -11,6 +11,7 @@ import Animated, {
 } from "react-native-reanimated"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     value: string
@@ -87,7 +88,7 @@ const baseStyles = () =>
         text: {
             color: COLORS.GREY_50,
             fontWeight: "600",
-            fontSize: 40,
+            fontSize: FontUtils.font(36),
             fontFamily: "Inter-SemiBold",
             lineHeight: 40,
             alignSelf: "center",

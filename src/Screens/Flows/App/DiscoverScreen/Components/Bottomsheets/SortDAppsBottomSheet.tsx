@@ -45,7 +45,7 @@ export const SortDAppsBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 <BaseView style={[styles.container]}>
                     <BaseView flexDirection="row" style={[styles.titleContainer]}>
                         <BaseIcon name="icon-sort-desc" size={18} color={theme.colors.text} />
-                        <BaseText typographyFont="bodySemiBold">{LL.DISCOVER_SORT_BY()}</BaseText>
+                        <BaseText typographyFont="subSubTitleSemiBold">{LL.DISCOVER_SORT_BY()}</BaseText>
                     </BaseView>
                     <BaseRadioGroup
                         buttons={buttons}

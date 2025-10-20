@@ -49,7 +49,7 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
                                 <BaseIcon name="icon-globe" size={8} color={COLORS.GREY_400} />
                             </BaseView>
                         )}
-                        <BaseText typographyFont="bodySemiBold" color={"white"} numberOfLines={1}>
+                        <BaseText typographyFont="captionMedium" color={"white"} numberOfLines={1}>
                             {tab.title}
                         </BaseText>
                     </View>

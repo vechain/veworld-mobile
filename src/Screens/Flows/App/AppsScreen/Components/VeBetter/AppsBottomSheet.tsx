@@ -303,8 +303,8 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
             () => (
                 <BaseView>
                     <BaseView flexDirection="row" gap={16} alignItems="center" px={24} mt={16}>
-                        <BaseIcon name={selectedCategory.icon} size={32} color={theme.colors.editSpeedBs.title} />
-                        <BaseText typographyFont="biggerTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                        <BaseIcon name={selectedCategory.icon} size={24} color={theme.colors.editSpeedBs.title} />
+                        <BaseText typographyFont="headerTitle" color={theme.colors.editSpeedBs.title}>
                             {selectedCategory.displayName}
                         </BaseText>
                     </BaseView>

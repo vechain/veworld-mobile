@@ -23,6 +23,7 @@ import { reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector
 import { useI18nContext } from "~i18n"
 import { DAppOptionsBottomSheet } from "./Components/Bottomsheets"
 import { useDAppActions } from "./Hooks"
+import FontUtils from "~Utils/FontUtils"
 
 export const FavouritesScreen = () => {
     const [isEditingMode, setIsEditingMode] = useState(false)
@@ -146,10 +147,10 @@ const baseStyles = () =>
         },
         nameText: {
             fontWeight: "bold",
-            fontSize: 16,
+            fontSize: FontUtils.font(14),
         },
         description: {
-            fontSize: 12,
+            fontSize: FontUtils.font(10),
         },
         listContentContainer: {
             flexGrow: 1,

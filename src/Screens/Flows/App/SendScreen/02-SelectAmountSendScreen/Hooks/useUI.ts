@@ -9,6 +9,7 @@ import {
 } from "react-native-reanimated"
 import { COLORS, ColorThemeType } from "~Constants"
 import { FungibleTokenWithBalance } from "~Model"
+import FontUtils from "~Utils/FontUtils"
 
 export const useUI = ({
     token,
@@ -47,7 +48,7 @@ export const useUI = ({
 
     const animatedFontStyle = useAnimatedStyle(() => {
         return {
-            fontSize: inputTextSize.value,
+            fontSize: FontUtils.fontWorklet(inputTextSize.value),
         }
     }, [])
 
@@ -66,7 +67,7 @@ export const useUI = ({
     return {
         placeholderColor,
         shortenedTokenName,
-        computeFonts,
+        computeFonts: FontUtils.font(computeFonts),
         animatedFontStyle,
         animatedStyleInputColor,
         inputColorNotAnimated,

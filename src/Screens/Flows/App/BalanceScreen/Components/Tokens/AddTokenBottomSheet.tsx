@@ -40,7 +40,9 @@ const TokenListItem = ({ item }: TokenListItemProps) => {
                 />
                 <BaseView flexDirection="column" gap={4}>
                     <BaseText typographyFont="bodySemiBold">{item.title}</BaseText>
-                    <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
+                    <BaseText
+                        typographyFont="smallCaptionMedium"
+                        color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
                         {item.subtitle}
                     </BaseText>
                 </BaseView>

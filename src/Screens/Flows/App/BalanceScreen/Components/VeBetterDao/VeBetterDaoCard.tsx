@@ -11,6 +11,7 @@ import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
 import { RewardsEarned } from "./RewardsEarned"
 import { StatsCard } from "./StatsCard"
 import { VeBetterPoweredSvg } from "~Assets/Img/VeBetterPoweredSvg"
+import FontUtils from "~Utils/FontUtils"
 
 export const VeBetterDaoCard = forwardRef<View>((_, ref) => {
     const { LL } = useI18nContext()
@@ -39,7 +40,7 @@ export const VeBetterDaoCard = forwardRef<View>((_, ref) => {
                 />
             </BaseView>
             <BaseView pb={16} flexDirection="column" gap={8}>
-                <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="subSubTitleSemiBold">
+                <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="bodySemiBold">
                     {LL.VBD_YOUR_BETTER_ACTIONS()}
                 </BaseText>
                 <BaseText color={theme.isDark ? COLORS.WHITE : COLORS.GREY_700} style={styles.actionsText}>
@@ -56,9 +57,7 @@ export const VeBetterDaoCard = forwardRef<View>((_, ref) => {
                     size={16}
                     py={4}
                 />
-                <BaseText
-                    color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE}
-                    typographyFont="subSubTitleSemiBold">
+                <BaseText color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE} typographyFont="bodySemiBold">
                     {LL.VBD_YOUR_OFFSET()}
                 </BaseText>
             </BaseView>
@@ -110,7 +109,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         actionsText: {
             fontWeight: 600,
-            fontSize: 40,
+            fontSize: FontUtils.font(40),
             fontFamily: "Inter-SemiBold",
             lineHeight: 40,
         },

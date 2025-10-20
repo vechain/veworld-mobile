@@ -69,9 +69,9 @@ export const AddUrl = ({
     return (
         <BaseView w={100} h={100} flexGrow={1} justifyContent="space-between">
             <BaseView>
-                <BaseText typographyFont="subTitleBold">{LL.SEND_DELEGATION_ADD_URL()}</BaseText>
+                <BaseText typographyFont="subTitleSemiBold">{LL.SEND_DELEGATION_ADD_URL()}</BaseText>
                 <BaseSpacer height={16} />
-                <BaseText typographyFont="subSubTitleLight">{LL.SEND_DELEGATION_ADD_URL_SUBTITLE()}</BaseText>
+                <BaseText typographyFont="body">{LL.SEND_DELEGATION_ADD_URL_SUBTITLE()}</BaseText>
                 <BaseSpacer height={24} />
                 <BaseBottomSheetTextInput
                     value={newUrl}

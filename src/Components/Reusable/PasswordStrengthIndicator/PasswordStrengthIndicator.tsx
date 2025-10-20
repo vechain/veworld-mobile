@@ -5,6 +5,7 @@ import { BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseAnimatedText } from "../AnimatedTextInput"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     strength: SharedValue<number>
@@ -67,7 +68,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         securityText: {
             fontFamily: "Inter-Regular",
-            fontSize: 11,
+            fontSize: FontUtils.font(11),
             lineHeight: 13,
             color: theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE,
         },

@@ -96,7 +96,7 @@ export const TokenCard = ({ token }: Props) => {
                 return (
                     <BaseView flexDirection="row" gap={4} overflow="hidden">
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="smallCaptionSemiBold"
                             numberOfLines={1}
                             color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
                             testID="TOKEN_CARD_SYMBOL_1">
@@ -108,7 +108,7 @@ export const TokenCard = ({ token }: Props) => {
                             color={theme.isDark ? COLORS.GREY_500 : COLORS.GREY_400}
                         />
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="smallCaptionSemiBold"
                             numberOfLines={1}
                             color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
                             testID="TOKEN_CARD_SYMBOL_2">
@@ -122,7 +122,7 @@ export const TokenCard = ({ token }: Props) => {
                 return (
                     <BaseView flexDirection="row" gap={4}>
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="smallCaptionSemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL">
                             {token.symbol}
@@ -168,6 +168,7 @@ export const TokenCard = ({ token }: Props) => {
             py={symbol ? typography.lineHeight.body : typography.lineHeight.captionSemiBold}
             flexDirection="row"
             bg={theme.colors.card}
+            containerStyle={styles.container}
             innerContainerStyle={styles.root}>
             <BaseView flexDirection="row" gap={16} style={styles.leftSection}>
                 <TokenImage
@@ -181,7 +182,7 @@ export const TokenCard = ({ token }: Props) => {
                 {symbol ? (
                     <BaseView flexDirection="column" flexGrow={0} flexShrink={1} style={styles.tokenInfo}>
                         <BaseText
-                            typographyFont="subSubTitleSemiBold"
+                            typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.title}
                             flexDirection="row"
                             numberOfLines={1}
@@ -194,7 +195,7 @@ export const TokenCard = ({ token }: Props) => {
                 ) : (
                     <BaseText
                         flex={1}
-                        typographyFont="subSubTitleSemiBold"
+                        typographyFont="bodySemiBold"
                         color={theme.colors.activityCard.title}
                         flexDirection="row"
                         numberOfLines={1}
@@ -214,7 +215,7 @@ export const TokenCard = ({ token }: Props) => {
                 {showFiatBalance ? (
                     <>
                         <BaseText
-                            typographyFont="subSubTitleSemiBold"
+                            typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.title}
                             align="right"
                             numberOfLines={1}
@@ -223,7 +224,7 @@ export const TokenCard = ({ token }: Props) => {
                             {fiatBalance}
                         </BaseText>
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="captionSemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             align="right"
                             numberOfLines={1}
@@ -234,7 +235,7 @@ export const TokenCard = ({ token }: Props) => {
                     </>
                 ) : (
                     <BaseText
-                        typographyFont="subSubTitleSemiBold"
+                        typographyFont="bodySemiBold"
                         color={theme.colors.activityCard.title}
                         align="right"
                         numberOfLines={1}
@@ -256,6 +257,9 @@ const baseStyles = () =>
             borderRadius: 12,
             justifyContent: "space-between",
             minHeight: 80,
+        },
+        container: {
+            borderRadius: 12,
         },
         leftSection: {
             flexGrow: 1,

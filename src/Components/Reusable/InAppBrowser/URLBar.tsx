@@ -141,7 +141,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                             )}
                             <AnimatedBaseText
                                 allowFontScaling={false}
-                                typographyFont="bodySemiBold"
+                                typographyFont="captionSemiBold"
                                 color={COLORS.GREY_50}
                                 style={[styles.appName]}>
                                 {websiteName}
@@ -198,13 +198,8 @@ const baseStyles = () =>
         appName: {
             textAlign: "center", // centers the text
             transformOrigin: "center",
-            fontSize: 14,
-            fontWeight: "700",
         },
-        textInput: {
-            fontSize: 12,
-            paddingVertical: 8,
-        },
+
         textInputContainer: {
             height: 32,
             paddingVertical: 0,

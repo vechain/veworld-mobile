@@ -23,6 +23,7 @@ import {
 } from "~Components"
 import { AnalyticsEvent, creteAnalyticsEvent, ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useSendTransaction } from "~Hooks"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { ActivityType } from "~Model"
 import { RootStackParamListHome, RootStackParamListSwitch, Routes } from "~Navigation"
@@ -68,6 +69,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const [signingError, setSigningError] = useState<boolean>()
     const [isSending, setIsSending] = useState(false)
     const [userRejected, setUserRejected] = useState<boolean>(false)
+
+    const { onSuccess, onFailure, onRejectRequest } = useExternalDappConnection()
 
     const {
         ref: connectionErrorSheetRef,
@@ -231,8 +234,14 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             } else {
                 if (res.err === LEDGER_ERROR_CODES.USER_REJECTED) {
                     setUserRejected(true)
+                    if (dappRequest && dappRequest.type === "external-app") {
+                        await onRejectRequest(dappRequest.redirectUrl)
+                    }
                 } else {
                     setSigningError(true)
+                    if (dappRequest && dappRequest.type === "external-app") {
+                        await onFailure(dappRequest.redirectUrl)
+                    }
                 }
             }
         } catch (e) {
@@ -248,6 +257,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         transaction,
         dappRequest,
         createSessionIfNotExists,
+        onRejectRequest,
+        onFailure,
     ])
 
     /** Effects */
@@ -338,6 +349,15 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         txid: txId,
                         signer: accountWithDevice.address,
                     })
+                } else if (dappRequest.type === "external-app") {
+                    await onSuccess({
+                        redirectUrl: dappRequest.redirectUrl,
+                        publicKey: dappRequest.publicKey,
+                        data: {
+                            txid: txId,
+                            signer: accountWithDevice.address,
+                        },
+                    })
                 } else {
                     postMessage({
                         id: dappRequest.id,
@@ -369,17 +389,18 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     }, [
         signature,
         dispatch,
-        transaction,
-        delegationSignature,
         sendTransaction,
+        transaction.body,
+        delegationSignature,
         disconnectLedger,
         dappRequest,
-        postMessage,
         navigateOnFinish,
+        processRequest,
+        accountWithDevice.address,
+        onSuccess,
+        postMessage,
         LL,
         nav,
-        accountWithDevice.address,
-        processRequest,
     ])
 
     const handleOnRetry = useCallback(() => {
