@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-20)</small>
+
+* build: init ([54eaaf0](https://github.com/vechain/veworld-mobile/commit/54eaaf0))
+* fix: update backdrop behavior for Android in BaseBottomSheet component (#3431) ([f3452df](https://github.com/vechain/veworld-mobile/commit/f3452df)), closes [#3431](https://github.com/vechain/veworld-mobile/issues/3431)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
