@@ -206,18 +206,11 @@ export const useNotificationCenter = ({ enabled = true }: { enabled?: boolean } 
             try {
                 const subId = await OneSignal.User.pushSubscription.getIdAsync()
 
-                // Get wallets that need registration
                 const walletsToRegister = getWalletsNeedingRegistration(subId)
-
                 if (walletsToRegister.length === 0) {
                     info(NOTIFICATION_CENTER_EVENT, "Registration skipped - no wallets need registration")
                     return
                 }
-
-                info(
-                    NOTIFICATION_CENTER_EVENT,
-                    `Attempting push notification registration for ${walletsToRegister.length} wallet(s)`,
-                )
 
                 // Split into batches of 5
                 const batches = chunkArray(walletsToRegister, BATCH_SIZE)
