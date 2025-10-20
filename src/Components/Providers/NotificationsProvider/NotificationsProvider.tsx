@@ -1,5 +1,14 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef } from "react"
+import React, {
+    createContext,
+    PropsWithChildren,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react"
 import { LogLevel, NotificationClickEvent, OneSignal, PushSubscriptionChangedState } from "react-native-onesignal"
 import { ERROR_EVENTS, vechainNewsAndUpdates } from "~Constants"
 import { useAppState } from "~Hooks"
@@ -11,7 +20,6 @@ import {
     increaseDappVisitCounter,
     removeDappVisitCounter,
     removeRemovedNotificationTag,
-    selectAccounts,
     selectDappNotifications,
     selectDappVisitCounter,
     selectNotificationFeautureEnabled,
@@ -65,38 +73,26 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const featureEnabled = useAppSelector(selectNotificationFeautureEnabled)
     const dappsNotifications = useAppSelector(selectDappNotifications)
-    const accounts = useAppSelector(selectAccounts)
     const isFetcingTags = useRef(false)
+    const [isInitialized, setIsInitialized] = useState(false)
 
     const { currentState, previousState } = useAppState()
 
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
 
-    const { register } = useNotificationCenter()
-
-    const attemptPushRegistration = useCallback(async () => {
-        if (!notificationCenter?.registration?.enabled) {
-            return
-        }
-
-        try {
-            await register()
-        } catch (err) {
-            error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
-        }
-    }, [register, notificationCenter?.registration?.enabled])
+    useNotificationCenter({ enabled: isInitialized && notificationCenter?.registration?.enabled === true })
 
     const initializeOneSignal = useCallback(async () => {
         const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
 
         try {
             OneSignal.initialize(appId as string)
-            await attemptPushRegistration()
+            setIsInitialized(true)
         } catch (err) {
             error(ERROR_EVENTS.ONE_SIGNAL, err)
             throw err
         }
-    }, [attemptPushRegistration])
+    }, [])
 
     const getOptInStatus = useCallback(async () => {
         let _optInStatus = false
@@ -284,16 +280,6 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     useEffect(() => {
         featureEnabled && init()
     }, [init, featureEnabled])
-
-    // Attempt registration whenever accounts change
-    useEffect(() => {
-        if (!featureEnabled) {
-            return
-        }
-        if (accounts.length > 0) {
-            attemptPushRegistration()
-        }
-    }, [accounts.length, featureEnabled, attemptPushRegistration])
 
     useEffect(() => {
         if (!featureEnabled) {

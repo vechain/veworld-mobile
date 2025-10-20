@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
-import { useCallback, useMemo, useRef } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import { OneSignal } from "react-native-onesignal"
-import { useDebounceCallback } from "usehooks-ts"
 import {
     selectAccounts,
     selectLastFullRegistration,
@@ -59,7 +58,7 @@ const isRetryableError = (err: any): boolean => {
     return err?.message?.toLowerCase().includes("network") || err?.code === "ECONNABORTED" || !err?.response
 }
 
-export const useNotificationCenter = () => {
+export const useNotificationCenter = ({ enabled = true }: { enabled?: boolean } = {}) => {
     const dispatch = useAppDispatch()
     const accounts = useAppSelector(selectAccounts)
 
@@ -68,9 +67,6 @@ export const useNotificationCenter = () => {
     const lastSubscriptionId = useAppSelector(selectLastSubscriptionId)
 
     const walletAddresses = useMemo(() => accounts.map(account => account.address), [accounts])
-
-    const isRegistering = useRef(false)
-    const registeredWallets = useRef<Set<string>>(new Set())
 
     const getWalletsNeedingRegistration = useCallback(
         (currentSubscriptionId: string | null): string[] => {
@@ -102,7 +98,7 @@ export const useNotificationCenter = () => {
             }
 
             // Otherwise, only register wallets that are new or haven't been registered in 30 days
-            const dueWallets = walletAddresses.filter(address => {
+            return walletAddresses.filter(address => {
                 const lastRegistered = getRegistrationTimestamp(walletRegistrations, address)
                 if (!lastRegistered) {
                     return true // New wallet
@@ -110,17 +106,6 @@ export const useNotificationCenter = () => {
                 const timeSinceRegistration = now - lastRegistered
                 return timeSinceRegistration >= THIRTY_DAYS_MS
             })
-            // As redux is async, there is a race condition where we write the new registered address to it
-            // but get another call to register which reads teh old state.  Therefore we have a local cache
-            // to filter out any already in-flight
-            const walletsToRegister = dueWallets.filter(
-                address => !registeredWallets.current.has(HexUtils.normalize(address)),
-            )
-
-            // Mark these wallets as being registered (optimistic local tracking)
-            walletsToRegister.forEach(address => registeredWallets.current.add(HexUtils.normalize(address)))
-
-            return walletsToRegister
         },
         [lastFullRegistration, lastSubscriptionId, walletAddresses, walletRegistrations],
     )
@@ -128,7 +113,7 @@ export const useNotificationCenter = () => {
     const sendRegistration = useCallback(
         async (subscriptionId: string | null, addressesToRegister: string[]) => {
             const registerBaseUrl = __DEV__
-                ? "http://192.168.86.20:8085"
+                ? process.env.NOTIFICATION_CENTER_REGISTER_DEV
                 : process.env.NOTIFICATION_CENTER_REGISTER_PROD
 
             if (!registerBaseUrl) {
@@ -211,31 +196,22 @@ export const useNotificationCenter = () => {
         },
     })
 
-    // Wrapper function that handles all pre-flight checks and locking
-    const register = useDebounceCallback(
-        async () => {
-            if (isRegistering.current) {
-                info(NOTIFICATION_CENTER_EVENT, "Registration already in progress, skipping duplicate call")
-                return
-            }
+    // Automatically register when wallet addresses change and hook is enabled
+    useEffect(() => {
+        if (!enabled || walletAddresses.length === 0) {
+            return
+        }
 
-            if (walletAddresses.length === 0) {
-                info(NOTIFICATION_CENTER_EVENT, "No wallet addresses available, skipping registration")
-                return
-            }
-
-            // Set lock
-            isRegistering.current = true
-
+        const register = async () => {
             try {
                 const subId = await OneSignal.User.pushSubscription.getIdAsync()
 
-                // Get wallets that need registration, filtering out any already in-flight
+                // Get wallets that need registration
                 const walletsToRegister = getWalletsNeedingRegistration(subId)
 
                 if (walletsToRegister.length === 0) {
                     info(NOTIFICATION_CENTER_EVENT, "Registration skipped - no wallets need registration")
-                    return null
+                    return
                 }
 
                 info(
@@ -270,17 +246,13 @@ export const useNotificationCenter = () => {
                 info(NOTIFICATION_CENTER_EVENT, "All batches registered successfully")
             } catch (err) {
                 error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
-                // Clear the local cache so we can retry the registrations next time
-                registeredWallets.current.clear()
-            } finally {
-                isRegistering.current = false
             }
-        },
-        500,
-        { leading: false, trailing: true },
-    )
+        }
 
-    return {
-        register,
-    }
+        register()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [enabled, walletAddresses])
+
+    // Return nothing - hook is fully self-contained
+    return {}
 }
