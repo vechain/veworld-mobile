@@ -1128,7 +1128,7 @@ const dark: Colors = {
     },
     feedbackChip: {
         background: COLORS.PURPLE_DISABLED,
-        text: COLORS.GREEN_50,
+        text: COLORS.GREY_50,
         borderColor: COLORS.PURPLE_LABEL_10,
         icon: {
             success: COLORS.GREEN_200,
