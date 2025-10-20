@@ -224,8 +224,7 @@ const _BaseBottomSheet = <TData,>(
                 pressBehavior={onPressOutside}
                 opacity={0.85}
                 disappearsOnIndex={-1}
-                appearsOnIndex={0}
-                style={styles.backdrop}
+                {...(Platform.OS === "android" ? { appearsOnIndex: 0, style: styles.backdrop } : {})}
             />
         ),
         [onPressOutside, styles.backdrop],
