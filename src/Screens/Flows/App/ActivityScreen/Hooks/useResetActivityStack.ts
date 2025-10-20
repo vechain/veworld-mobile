@@ -1,5 +1,5 @@
 import { CommonActions, useNavigation } from "@react-navigation/native"
-import { useEffect, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
@@ -11,12 +11,15 @@ export const useResetActivityStack = () => {
     const previousSelectedAccountAddress = useRef(selectedAccount?.address)
     const previousSelectedNetwork = useRef(selectedNetwork)
 
-    const hasAccountChanged = !AddressUtils.compareAddresses(
-        selectedAccount.address,
-        previousSelectedAccountAddress.current,
+    const hasAccountChanged = useMemo(
+        () => !AddressUtils.compareAddresses(selectedAccount.address, previousSelectedAccountAddress.current),
+        [selectedAccount.address],
     )
 
-    const hasNetworkChanged = selectedNetwork.id !== previousSelectedNetwork.current.id
+    const hasNetworkChanged = useMemo(
+        () => selectedNetwork.id !== previousSelectedNetwork.current.id,
+        [selectedNetwork.id],
+    )
 
     useEffect(() => {
         if (hasAccountChanged || hasNetworkChanged) {
