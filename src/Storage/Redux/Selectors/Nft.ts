@@ -205,7 +205,7 @@ export const isReportedCollection = createSelector(
     },
 )
 
-const selectFavoriteNfts = createSelector(selectNftState, state => state.favorites ?? {})
+const selectFavoriteNfts = createSelector(selectNftState, state => state.favoriteNfts ?? {})
 const selectCurrentAccountFavoriteNfts = createSelector(
     [selectFavoriteNfts, selectSelectedAccount],
     (favorites, selectedAccount) => favorites[HexUtils.normalize(selectedAccount.address)] ?? {},

@@ -21,7 +21,7 @@ export type NftSliceState = {
     reportedCollections: ReportedCollections
     isLoading: boolean
     error: string | undefined
-    favorites?: {
+    favoriteNfts?: {
         [owner: string]: {
             /**
              * Key will be `<address>_<tokenId>`
@@ -335,12 +335,12 @@ export const NftSlice = createSlice({
             const { address, tokenId, owner } = action.payload
             const normalizedOwner = HexUtils.normalize(owner)
             const normalizedAddress = HexUtils.normalize(address)
-            state.favorites ??= {}
-            state.favorites[normalizedOwner] ??= {}
+            state.favoriteNfts ??= {}
+            state.favoriteNfts[normalizedOwner] ??= {}
 
             const key = `${normalizedAddress}_${tokenId}`
-            if (state.favorites[normalizedOwner][key]) delete state.favorites[normalizedOwner][key]
-            state.favorites[normalizedOwner][key] = {
+            if (state.favoriteNfts[normalizedOwner][key]) delete state.favoriteNfts[normalizedOwner][key]
+            state.favoriteNfts[normalizedOwner][key] = {
                 address: normalizedAddress,
                 tokenId,
                 createdAt: Date.now(),
