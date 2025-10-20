@@ -48,7 +48,10 @@ export const CollectibleCard = ({ address, tokenId }: Props) => {
             )}
 
             <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
-                <LinearGradient colors={[COLORS.BALANCE_BACKGROUND_GRADIENT_END_50, COLORS.BALANCE_BACKGROUND_50]}>
+                <LinearGradient
+                    colors={[COLORS.BALANCE_BACKGROUND_GRADIENT_END_50, COLORS.BALANCE_BACKGROUND_50]}
+                    useAngle
+                    angle={0}>
                     <BaseView flexDirection="row" alignItems="center" p={8}>
                         <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE_RGBA_90} flexDirection="row">
                             {name}
