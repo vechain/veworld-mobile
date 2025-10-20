@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
 import Animated, { useAnimatedStyle, withDelay, withTiming } from "react-native-reanimated"
-import { COLORS, ColorThemeType } from "~Constants"
+import { COLORS, ColorThemeType, typography } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseText } from "./BaseText"
 
@@ -16,6 +16,7 @@ type Props<TKeys extends string[] | readonly string[]> = {
     containerBackgroundColor?: string
     selectedTextColor?: string
     unselectedTextColor?: string
+    typographyFont?: keyof typeof typography.defaults
 }
 
 export const BaseTabs = <TKeys extends string[] | readonly string[]>({
@@ -29,6 +30,7 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
     containerBackgroundColor,
     selectedTextColor,
     unselectedTextColor,
+    typographyFont = "captionMedium",
 }: Props<TKeys>) => {
     const { styles, theme } = useThemedStyles(baseStyles(indicatorBackgroundColor, containerBackgroundColor))
     const [tabOffsets, setTabOffsets] = useState<{ offsetX: number; width: number }[]>([])
@@ -79,7 +81,7 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
                             e.persist()
                             onLayout(index)(e)
                         }}>
-                        <BaseText color={textColor} typographyFont="captionMedium">
+                        <BaseText color={textColor} typographyFont={typographyFont}>
                             {labels[index]}
                         </BaseText>
                     </TouchableOpacity>

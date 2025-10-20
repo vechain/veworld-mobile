@@ -20,7 +20,7 @@ const CheckItem = ({ children }: { children: string }) => {
     return (
         <BaseView flexDirection="row" gap={8} alignItems="flex-start">
             <BaseIcon name="icon-check" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_400} size={12} />
-            <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="captionRegular">
+            <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="smallCaptionRegular">
                 {children}
             </BaseText>
         </BaseView>

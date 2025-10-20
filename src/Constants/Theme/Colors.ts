@@ -335,6 +335,9 @@ export type Colors = {
         }
         closeButton: string
     }
+    activitySectionSeparator: {
+        text: string
+    }
 }
 
 export enum COLORS {
@@ -794,6 +797,9 @@ const light: Colors = {
         },
         closeButton: COLORS.DARK_PURPLE_DISABLED,
     },
+    activitySectionSeparator: {
+        text: COLORS.GREY_600,
+    },
 }
 
 const dark: Colors = {
@@ -1132,6 +1138,9 @@ const dark: Colors = {
             loading: COLORS.GREY_300,
         },
         closeButton: COLORS.PURPLE_LABEL,
+    },
+    activitySectionSeparator: {
+        text: COLORS.GREY_300,
     },
 }
 

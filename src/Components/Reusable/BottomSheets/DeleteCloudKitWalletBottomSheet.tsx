@@ -24,7 +24,7 @@ export const DeleteCloudKitWalletBottomSheet = React.forwardRef<BottomSheetModal
                 <BaseView>
                     <BaseText typographyFont="subTitleBold">{LL.BTN_REMOVE_WALLET()}</BaseText>
                     <BaseSpacer height={16} />
-                    <BaseText>{LL.BD_WALLET_REMOVAL()}</BaseText>
+                    <BaseText typographyFont="body">{LL.BD_WALLET_REMOVAL()}</BaseText>
 
                     <BaseSpacer height={24} />
 
