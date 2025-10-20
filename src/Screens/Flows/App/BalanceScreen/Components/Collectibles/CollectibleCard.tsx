@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import React, { useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { Pressable, StyleSheet } from "react-native"
 import { ImageStyle } from "react-native-fast-image"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseIcon, BaseText, BaseView, BlurView, NFTImageComponent } from "~Components"
@@ -37,7 +37,7 @@ export const CollectibleCard = ({ address, tokenId }: Props) => {
     })
 
     return (
-        <BaseView style={styles.root}>
+        <Pressable style={styles.root}>
             <BaseIcon
                 name={isFavorite ? "icon-star-on" : "icon-star"}
                 color={COLORS.WHITE}
@@ -59,7 +59,7 @@ export const CollectibleCard = ({ address, tokenId }: Props) => {
                     </BaseView>
                 </LinearGradient>
             </BlurView>
-        </BaseView>
+        </Pressable>
     )
 }
 
