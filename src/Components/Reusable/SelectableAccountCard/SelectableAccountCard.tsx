@@ -154,9 +154,7 @@ export const SelectableAccountCard = <TAccountType extends AccountWithDevice | W
                         <Animated.Text numberOfLines={1} style={textAnimatedStyles}>
                             {vnsName || account.alias}
                         </Animated.Text>
-                        <BaseText
-                            typographyFont="captionRegular"
-                            color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
+                        <BaseText typographyFont="caption" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
                             {AddressUtils.humanAddress(vnsAddress || account.address)}
                         </BaseText>
                     </BaseView>
