@@ -84,7 +84,7 @@ export const CollectiblesEmptyCard = () => {
                     <BaseView alignSelf="center" flexDirection="row" justifyContent="center" px={24}>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}
-                            typographyFont="smallCaptionMedium"
+                            typographyFont="captionMedium"
                             align="center">
                             {LL.COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION()}
                         </BaseText>

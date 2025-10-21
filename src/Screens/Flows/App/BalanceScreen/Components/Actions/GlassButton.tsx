@@ -58,7 +58,7 @@ export const GlassButtonWithLabel = ({ label, icon, onPress, disabled, size }: P
         <BaseView flexDirection="column" gap={8} alignItems="center">
             <GlassButton icon={icon} onPress={onPress} disabled={disabled} size={size} />
             <BaseText
-                typographyFont="smallCaptionSemiBold"
+                typographyFont="captionSemiBold"
                 color={disabled ? COLORS.DARK_PURPLE_DISABLED : COLORS.PURPLE_LABEL}>
                 {label}
             </BaseText>

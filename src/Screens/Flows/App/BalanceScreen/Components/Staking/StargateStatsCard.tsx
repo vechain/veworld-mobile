@@ -39,7 +39,7 @@ export const StargateStatsCard = ({ title, parsedValue, unit }: Props) => {
                         </BaseText>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                            typographyFont="smallCaptionMedium"
+                            typographyFont="captionMedium"
                             testID="STATS_CARD_UNIT">
                             {unit}
                         </BaseText>

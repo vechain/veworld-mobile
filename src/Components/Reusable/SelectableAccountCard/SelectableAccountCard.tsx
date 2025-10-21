@@ -109,8 +109,8 @@ export const SelectableAccountCard = <TAccountType extends AccountWithDevice | W
     }, [selected, theme.isDark])
 
     const textAnimatedStyles = useAnimatedStyle(() => {
-        const baseTypography = typography.defaults.smallCaptionSemiBold
-        const selectedTypography = typography.defaults.captionSemiBold
+        const baseTypography = typography.defaults.captionSemiBold
+        const selectedTypography = typography.defaults.bodySemiBold
 
         const unselectedColor = theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800
 
@@ -155,7 +155,7 @@ export const SelectableAccountCard = <TAccountType extends AccountWithDevice | W
                             {vnsName || account.alias}
                         </Animated.Text>
                         <BaseText
-                            typographyFont="smallCaption"
+                            typographyFont="captionRegular"
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
                             {AddressUtils.humanAddress(vnsAddress || account.address)}
                         </BaseText>
@@ -173,7 +173,7 @@ export const SelectableAccountCard = <TAccountType extends AccountWithDevice | W
                     ) : (
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
-                            typographyFont="smallCaptionMedium"
+                            typographyFont="captionMedium"
                             align="right">
                             {balance}
                         </BaseText>
@@ -181,7 +181,7 @@ export const SelectableAccountCard = <TAccountType extends AccountWithDevice | W
 
                     <BaseText
                         color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                        typographyFont="smallCaptionMedium"
+                        typographyFont="captionMedium"
                         align="right">
                         {balanceToken === "FIAT" ? currency : balanceToken}
                     </BaseText>

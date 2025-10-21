@@ -63,7 +63,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                                 <BaseText
                                     numberOfLines={2}
                                     ellipsizeMode="tail"
-                                    typographyFont="smallCaptionMedium"
+                                    typographyFont="captionMedium"
                                     color={theme.colors.assetDetailsCard.text}>
                                     {dapp.desc ? dapp.desc : dapp.href}
                                 </BaseText>
@@ -128,6 +128,6 @@ const baseStyles = () =>
             fontSize: FontUtils.font(14),
         },
         description: {
-            fontSize: FontUtils.font(10),
+            fontSize: FontUtils.font(12),
         },
     })

@@ -44,7 +44,7 @@ export const RewardsEarned = ({ week, month, total }: Props) => {
                             </BaseText>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                                typographyFont="smallCaptionMedium">
+                                typographyFont="captionMedium">
                                 {B3TR.symbol}
                             </BaseText>
                         </BaseView>
@@ -64,7 +64,7 @@ export const RewardsEarned = ({ week, month, total }: Props) => {
                             </BaseText>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                                typographyFont="smallCaptionMedium">
+                                typographyFont="captionMedium">
                                 {B3TR.symbol}
                             </BaseText>
                         </BaseView>

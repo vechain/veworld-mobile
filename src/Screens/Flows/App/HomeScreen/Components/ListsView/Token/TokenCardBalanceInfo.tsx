@@ -61,7 +61,7 @@ export const TokenCardBalanceInfo = ({
                         </BaseView>
                     ) : (
                         <BaseText
-                            typographyFont="smallCaptionRegular"
+                            typographyFont="captionRegular"
                             color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
                             {change24h}
                         </BaseText>

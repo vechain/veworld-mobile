@@ -145,7 +145,7 @@ export const RowDetails = React.memo(
                                     ) : (
                                         <Animated.View style={animatedStyles.descriptionStyle}>
                                             <BaseText
-                                                typographyFont="smallCaptionRegular"
+                                                typographyFont="captionRegular"
                                                 numberOfLines={2}
                                                 ellipsizeMode="tail"
                                                 color={theme.colors.x2eAppOpenDetails.description}
