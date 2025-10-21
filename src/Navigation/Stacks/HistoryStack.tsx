@@ -62,7 +62,16 @@ export const HistoryStack = () => {
     return (
         <Navigator id="HistoryStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Screen name={Routes.HISTORY} component={ActivityScreen} options={{ headerShown: false }} />
-            <Screen name={Routes.ACTIVITY_DETAILS} component={ActivityDetailsScreen} options={{ headerShown: false }} />
+            <Screen
+                name={Routes.ACTIVITY_DETAILS}
+                component={ActivityDetailsScreen}
+                options={{
+                    headerShown: false,
+                    // Android-specific fix: Keeps HISTORY screen mounted to prevent Tab Navigator from unmounting
+                    // This preserves tab state when navigating to/from activity details
+                    detachPreviousScreen: isIOS() ? undefined : false,
+                }}
+            />
             <Screen
                 name={Routes.BROWSER}
                 component={InAppBrowser}
