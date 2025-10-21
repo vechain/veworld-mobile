@@ -310,7 +310,7 @@ describe("useNotificationCenter", () => {
 
             // First batch: 5 wallets
             const [url1, options1] = (global.fetch as jest.Mock).mock.calls[0]
-            expect(url1).toBe("http://192.168.86.20:8085/api/v1/push-registrations")
+            expect(url1).toBe("https://notifications.dev/api/v1/push-registrations")
             const parsedBody1 = JSON.parse(options1.body as string)
             expect(parsedBody1.walletAddresses).toEqual([
                 ACCOUNT_ADDRESS,
@@ -322,7 +322,7 @@ describe("useNotificationCenter", () => {
 
             // Second batch: 2 wallets
             const [url2, options2] = (global.fetch as jest.Mock).mock.calls[1]
-            expect(url2).toBe("http://192.168.86.20:8085/api/v1/push-registrations")
+            expect(url2).toBe("https://notifications.dev/api/v1/push-registrations")
             const parsedBody2 = JSON.parse(options2.body as string)
             expect(parsedBody2.walletAddresses).toEqual([ACCOUNT_ADDRESS_6, ACCOUNT_ADDRESS_7])
 
