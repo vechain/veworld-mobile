@@ -55,7 +55,7 @@ export const PaymentProviderList = () => {
                                 flex={1}
                                 style={[styles.subTitlesContainer]}>
                                 <BaseView flexDirection="row" justifyContent="flex-start">
-                                    <BaseText typographyFont="smallCaptionSemiBold" color={theme.colors.subtitle}>
+                                    <BaseText typographyFont="captionSemiBold" color={theme.colors.subtitle}>
                                         {LL.SB_PAY_WITH()}
                                     </BaseText>
                                     {item.paymentMethods.map(method => (
@@ -67,11 +67,11 @@ export const PaymentProviderList = () => {
                                 </BaseView>
                                 <BaseSpacer width={12} />
                                 <BaseView flexDirection="row">
-                                    <BaseText typographyFont="smallCaptionSemiBold" color={theme.colors.subtitle}>
+                                    <BaseText typographyFont="captionSemiBold" color={theme.colors.subtitle}>
                                         {LL.SB_FEES()}
                                     </BaseText>
                                     <BaseSpacer width={8} />
-                                    <BaseText typographyFont="smallCaptionSemiBold">{item.fees}</BaseText>
+                                    <BaseText typographyFont="captionSemiBold">{item.fees}</BaseText>
                                 </BaseView>
                             </BaseView>
                         </BaseView>

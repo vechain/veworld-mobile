@@ -96,7 +96,7 @@ export const TokenCard = ({ token }: Props) => {
                 return (
                     <BaseView flexDirection="row" gap={4} overflow="hidden">
                         <BaseText
-                            typographyFont="smallCaptionSemiBold"
+                            typographyFont="captionSemiBold"
                             numberOfLines={1}
                             color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
                             testID="TOKEN_CARD_SYMBOL_1">
@@ -108,7 +108,7 @@ export const TokenCard = ({ token }: Props) => {
                             color={theme.isDark ? COLORS.GREY_500 : COLORS.GREY_400}
                         />
                         <BaseText
-                            typographyFont="smallCaptionSemiBold"
+                            typographyFont="captionSemiBold"
                             numberOfLines={1}
                             color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
                             testID="TOKEN_CARD_SYMBOL_2">
@@ -122,7 +122,7 @@ export const TokenCard = ({ token }: Props) => {
                 return (
                     <BaseView flexDirection="row" gap={4}>
                         <BaseText
-                            typographyFont="smallCaptionSemiBold"
+                            typographyFont="captionSemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             testID="TOKEN_CARD_SYMBOL">
                             {token.symbol}

@@ -95,7 +95,7 @@ export const ConnectedAppBox: React.FC<Props> = memo(({ connectedApp }: Props) =
                         {name}
                     </BaseText>
                     <BaseText
-                        typographyFont="smallCaptionMedium"
+                        typographyFont="captionMedium"
                         numberOfLines={2}
                         testID="CONNECTED_APP_DESCRIPTION"
                         color={theme.isDark ? COLORS.GREY_400 : COLORS.GREY_500}>

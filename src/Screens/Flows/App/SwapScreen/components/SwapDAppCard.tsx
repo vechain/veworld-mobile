@@ -36,7 +36,7 @@ export const SwapDAppCard = ({ dapp, onDAppPress }: Props) => {
                         <BaseText
                             ellipsizeMode="tail"
                             numberOfLines={1}
-                            typographyFont="smallCaptionRegular"
+                            typographyFont="captionRegular"
                             color={theme.colors.assetDetailsCard.text}>
                             {dapp.desc || dapp.href}
                         </BaseText>
@@ -74,6 +74,6 @@ const baseStyles = () =>
             fontSize: FontUtils.font(14),
         },
         description: {
-            fontSize: FontUtils.font(10),
+            fontSize: FontUtils.font(12),
         },
     })

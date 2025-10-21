@@ -56,7 +56,7 @@ const VbdInfoColumn = ({
     return (
         <BaseView justifyContent="center" alignItems="center" w={33.33}>
             <Icon fill={color} color={color} size={20} />
-            <BaseText typographyFont="smallCaptionMedium" mt={8} mb={4} color={titleColor}>
+            <BaseText typographyFont="captionMedium" mt={8} mb={4} color={titleColor}>
                 {title}
             </BaseText>
             {isLoading ? (

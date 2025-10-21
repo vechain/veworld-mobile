@@ -90,7 +90,7 @@ export const SearchResultItem = ({ item, swipeableItemRefs }: Props) => {
                             {name}
                         </BaseText>
                         <BaseText
-                            typographyFont="smallCaptionMedium"
+                            typographyFont="captionMedium"
                             numberOfLines={1}
                             testID="SEARCH_RESULT_ITEM_DESCRIPTION"
                             color={theme.colors.history.historyItem.subtitle}>

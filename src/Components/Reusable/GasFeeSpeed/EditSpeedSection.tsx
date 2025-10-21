@@ -33,7 +33,7 @@ export const EditSpeedSection = ({ speedChangeEnabled, selectedFeeOption, onOpen
     return (
         <Animated.View style={[styles.section, animatedStyles, opacityStyles]} layout={LinearTransition.duration(300)}>
             <BaseView flexDirection="column" gap={4} flex={1}>
-                <BaseText color={theme.colors.textLightish} typographyFont="smallCaptionMedium">
+                <BaseText color={theme.colors.textLightish} typographyFont="captionMedium">
                     {LL.SEND_ESTIMATED_TIME()}
                 </BaseText>
                 <BaseView flexDirection="row" gap={8}>

@@ -75,7 +75,7 @@ export const StatsCard = ({ label, value }: Props) => {
                     </BaseText>
                     <BaseText
                         color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                        typographyFont="smallCaptionMedium"
+                        typographyFont="captionMedium"
                         textTransform="lowercase">
                         {description}
                     </BaseText>
@@ -89,7 +89,7 @@ export const StatsCard = ({ label, value }: Props) => {
                         </BaseText>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                            typographyFont="smallCaptionMedium"
+                            typographyFont="captionMedium"
                             testID="STATS_CARD_UNIT">
                             {unit}
                         </BaseText>
