@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-21)</small>
+
+* build: init ([76f6e44](https://github.com/vechain/veworld-mobile/commit/76f6e44))
+* fix: send push registrations in batches of 5 (#3426) ([9eec872](https://github.com/vechain/veworld-mobile/commit/9eec872)), closes [#3426](https://github.com/vechain/veworld-mobile/issues/3426)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
