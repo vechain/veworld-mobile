@@ -9,6 +9,7 @@ import { useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 import { PlatformUtils } from "~Utils"
 import { HitSlop } from "react-native-gesture-handler/lib/typescript/handlers/gestureHandlerCommon"
+import FontUtils from "~Utils/FontUtils"
 
 const { defaults: defaultTypography } = typography
 
@@ -246,7 +247,7 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             borderColor: theme.colors.transparent,
             borderWidth: 1,
             borderRadius: 7,
-            fontSize: defaultTypography.body.fontSize,
+            fontSize: FontUtils.font(defaultTypography.body.fontSize),
             fontFamily: defaultTypography.body.fontFamily,
             paddingVertical: 12,
             paddingLeft: 16,

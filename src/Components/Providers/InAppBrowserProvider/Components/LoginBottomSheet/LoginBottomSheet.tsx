@@ -132,7 +132,7 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
             <BaseView flexDirection="row" gap={12} justifyContent="space-between" testID="LOGIN_REQUEST_TITLE">
                 <BaseView flex={1} flexDirection="row" gap={12}>
                     <BaseIcon name="icon-user-check" size={20} color={theme.colors.editSpeedBs.title} />
-                    <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                    <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.editSpeedBs.title}>
                         {LL.LOGIN_REQUEST_TITLE()}
                     </BaseText>
                 </BaseView>

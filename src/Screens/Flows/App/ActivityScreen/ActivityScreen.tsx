@@ -56,7 +56,7 @@ export const ActivityScreen = () => {
             noBackButton
             fixedHeader={
                 <BaseView style={HeaderStyleV2}>
-                    <HeaderTitle title={LL.BTN_HISTORY()} leftIconName="icon-history" />
+                    <HeaderTitle title={LL.BTN_HISTORY()} leftIconName="icon-history" typographyFont="headerTitle" />
                     <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
                 </BaseView>
             }

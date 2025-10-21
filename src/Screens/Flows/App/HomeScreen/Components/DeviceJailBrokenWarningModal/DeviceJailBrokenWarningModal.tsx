@@ -45,7 +45,7 @@ export const DeviceJailBrokenWarningModal = () => {
             <BaseView style={styles.contentContainer}>
                 <SecurityAlertLight />
                 <BaseSpacer height={24} />
-                <BaseText typographyFont="button">{LL.DEVICE_JAILBROKE_MODAL_TITLE()}</BaseText>
+                <BaseText typographyFont="subTitleSemiBold">{LL.DEVICE_JAILBROKE_MODAL_TITLE()}</BaseText>
                 <BaseSpacer height={8} />
                 <BaseText typographyFont="body" align="center">
                     {LL.DEVICE_JAILBROKE_MODAL_SUBTITLE()}

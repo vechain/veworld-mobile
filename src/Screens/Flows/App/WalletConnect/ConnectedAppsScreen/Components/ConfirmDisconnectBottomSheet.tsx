@@ -4,7 +4,7 @@ import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView } from "~Co
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { ConnectedApp } from "~Screens"
+import { ConnectedApp } from "../ConnectedAppUtils"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { ConnectedAppBox } from "./ConnectedAppBox"
 

@@ -36,10 +36,10 @@ export const BackupWarningBottomSheet = React.forwardRef<BottomSheetModalMethods
             <BaseBottomSheet ref={ref} dynamicHeight onDismiss={onDismiss}>
                 <BaseView>
                     <BaseView>
-                        <BaseText typographyFont="subTitleBold">{LL.TITLE_BACKUP_YOUR_PHRASE()}</BaseText>
+                        <BaseText typographyFont="subSubTitleSemiBold">{LL.TITLE_BACKUP_YOUR_PHRASE()}</BaseText>
                         <BaseSpacer height={16} />
-                        <BaseText typographyFont="subSubTitleLight">{LL.SB_BACKUP_YOUR_PHRASE()}</BaseText>
-                        <BaseText typographyFont="subSubTitle">{LL.SB_BACKUP_YOUR_PHRASE_2()}</BaseText>
+                        <BaseText typographyFont="body">{LL.SB_BACKUP_YOUR_PHRASE()}</BaseText>
+                        <BaseText typographyFont="bodySemiBold">{LL.SB_BACKUP_YOUR_PHRASE_2()}</BaseText>
 
                         <BaseSpacer height={24} />
 
@@ -53,7 +53,7 @@ export const BackupWarningBottomSheet = React.forwardRef<BottomSheetModalMethods
                         <BaseSpacer height={24} />
 
                         {PlatformUtils.isAndroid() && isUpgradeSecurity && (
-                            <BaseText typographyFont="subSubTitle" pt={4}>
+                            <BaseText typographyFont="captionRegular" pt={4}>
                                 {LL.SB_UPGRADE_SECURITY_WARNING_ANDROID()}
                             </BaseText>
                         )}

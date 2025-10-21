@@ -77,7 +77,7 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                                     <BaseSpacer width={24} />
                                     <BaseText
                                         color={action.disabled ? iconColor.disabledText : iconColor.text}
-                                        typographyFont="subSubTitleSemiBold">
+                                        typographyFont="bodySemiBold">
                                         {action.name}
                                     </BaseText>
                                 </>

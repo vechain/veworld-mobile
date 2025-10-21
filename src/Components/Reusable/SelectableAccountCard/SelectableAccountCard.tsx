@@ -16,6 +16,7 @@ import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
+import FontUtils from "~Utils/FontUtils"
 
 type Props<TAccountType extends AccountWithDevice | WatchedAccount = AccountWithDevice> = {
     account: TAccountType
@@ -108,16 +109,14 @@ export const SelectableAccountCard = <TAccountType extends AccountWithDevice | W
     }, [selected, theme.isDark])
 
     const textAnimatedStyles = useAnimatedStyle(() => {
-        const baseTypography = typography.defaults.captionSemiBold
-        const selectedTypography = typography.defaults.bodySemiBold
+        const baseTypography = typography.defaults.smallCaptionSemiBold
+        const selectedTypography = typography.defaults.captionSemiBold
 
         const unselectedColor = theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800
 
         const color = interpolateColor(selectedAnimationValue.value, [0, 1], [unselectedColor, theme.colors.title])
-        const fontSize = interpolate(
-            selectedAnimationValue.value,
-            [0, 1],
-            [baseTypography.fontSize, selectedTypography.fontSize],
+        const fontSize = FontUtils.fontWorklet(
+            interpolate(selectedAnimationValue.value, [0, 1], [baseTypography.fontSize, selectedTypography.fontSize]),
         )
 
         if (selected)
@@ -150,13 +149,13 @@ export const SelectableAccountCard = <TAccountType extends AccountWithDevice | W
                 style={[styles.container, rootAnimatedStyles, containerStyle]}
                 accessibilityValue={{ text: selected ? "selected" : "not selected" }}>
                 <BaseView flexDirection="row" gap={12} alignItems="center" flex={1}>
-                    <AccountIcon account={account} size={40} />
+                    <AccountIcon account={account} size={32} />
                     <BaseView flexDirection="column" gap={4}>
                         <Animated.Text numberOfLines={1} style={textAnimatedStyles}>
                             {vnsName || account.alias}
                         </Animated.Text>
                         <BaseText
-                            typographyFont="captionRegular"
+                            typographyFont="smallCaption"
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
                             {AddressUtils.humanAddress(vnsAddress || account.address)}
                         </BaseText>
@@ -174,7 +173,7 @@ export const SelectableAccountCard = <TAccountType extends AccountWithDevice | W
                     ) : (
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
-                            typographyFont="captionMedium"
+                            typographyFont="smallCaptionMedium"
                             align="right">
                             {balance}
                         </BaseText>
@@ -182,7 +181,7 @@ export const SelectableAccountCard = <TAccountType extends AccountWithDevice | W
 
                     <BaseText
                         color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                        typographyFont="captionRegular"
+                        typographyFont="smallCaptionMedium"
                         align="right">
                         {balanceToken === "FIAT" ? currency : balanceToken}
                     </BaseText>

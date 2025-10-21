@@ -86,7 +86,7 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                 </BaseText>
             </BaseView>
             <BaseSpacer height={8} />
-            <BaseText typographyFont="buttonSecondary" color={theme.colors.editSpeedBs.subtitle}>
+            <BaseText typographyFont="caption" color={theme.colors.editSpeedBs.subtitle}>
                 {LL.EDIT_SPEED_DESC()}
             </BaseText>
             <BaseSpacer height={24} />
@@ -96,7 +96,7 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                 action={v => setInternalFeeOption(parseInt(v.id, 10) as GasPriceCoefficient)}
                 renderButton={(button, textColor) => (
                     <BaseView justifyContent="center" alignItems="center" flexDirection="row">
-                        <BaseText color={textColor} typographyFont="smallButtonPrimary">
+                        <BaseText color={textColor} typographyFont="captionMedium">
                             {button.label}
                         </BaseText>
                     </BaseView>
@@ -105,11 +105,11 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             <BaseSpacer height={24} />
             <BaseView style={styles.result} gap={8} flexDirection="column">
                 <BaseView flexDirection="row" w={100} justifyContent="space-between">
-                    <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
+                    <BaseText typographyFont="bodySemiBold" color={theme.colors.assetDetailsCard.title}>
                         {LL.SEND_ESTIMATED_TIME()}
                     </BaseText>
                     <BaseView flexDirection="row" gap={4} alignItems="center">
-                        <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
+                        <BaseText typographyFont="bodySemiBold" color={theme.colors.assetDetailsCard.title}>
                             {LL.UNDER_SECONDS({ seconds: SPEED_MAP[internalFeeOption].asSeconds() })}
                         </BaseText>
                         <BaseIcon name="icon-timer" size={16} color={theme.colors.textLight} />
@@ -118,11 +118,11 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                 {isGalactica ? (
                     <>
                         <BaseView flexDirection="row" w={100} justifyContent="space-between">
-                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                            <BaseText typographyFont="captionMedium" color={theme.colors.textLight}>
                                 {LL.ESTIMATED_FEE()}
                             </BaseText>
                             <BaseText
-                                typographyFont="bodyMedium"
+                                typographyFont="captionMedium"
                                 color={theme.colors.textLight}
                                 testID="GALACTICA_ESTIMATED_FEE_BS">
                                 {formatValue(estimatedFeeVtho)} {selectedDelegationToken}
@@ -130,11 +130,11 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                         </BaseView>
                         {!isGenericDelegator && (
                             <BaseView flexDirection="row" w={100} justifyContent="space-between">
-                                <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                                <BaseText typographyFont="captionMedium" color={theme.colors.textLight}>
                                     {LL.MAX_FEE()}
                                 </BaseText>
                                 <BaseText
-                                    typographyFont="bodyMedium"
+                                    typographyFont="captionMedium"
                                     color={theme.colors.textLight}
                                     testID="GALACTICA_MAX_FEE_BS">
                                     {formatValue(maxFeeVtho)} {VTHO.symbol}
@@ -153,7 +153,7 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                                 borderRadius={6}
                                 mt={8}>
                                 <BaseIcon size={16} color={theme.colors.warningAlert.icon} name="icon-alert-triangle" />
-                                <BaseText typographyFont="bodyMedium" color={theme.colors.warningAlert.text}>
+                                <BaseText typographyFont="caption" color={theme.colors.warningAlert.text}>
                                     {LL.BASE_FEE_RAMPING_UP()}
                                 </BaseText>
                             </BaseView>
@@ -161,11 +161,11 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                     </>
                 ) : (
                     <BaseView flexDirection="row" w={100} justifyContent="space-between">
-                        <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                        <BaseText typographyFont="captionMedium" color={theme.colors.textLight}>
                             {LL.GAS_FEE()}
                         </BaseText>
                         <BaseText
-                            typographyFont="bodyMedium"
+                            typographyFont="captionMedium"
                             color={theme.colors.textLight}
                             testID="LEGACY_ESTIMATED_FEE_BS">
                             {formatValue(estimatedFeeVtho)} {VTHO.symbol}

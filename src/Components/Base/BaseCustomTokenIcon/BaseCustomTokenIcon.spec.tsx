@@ -79,7 +79,7 @@ describe("BaseCustomTokenIcon", () => {
 
         let displayedText = await findByText(longTokenSymbol.substring(0, 4).toUpperCase())
 
-        expect(displayedText.props.style[0].fontSize).toBe(10)
+        expect(displayedText.props.style[0].fontSize).toBe(20)
         // Mock for isColorLight = true
         ;(ColorUtils.generateColor as jest.Mock).mockReturnValueOnce(["testString", true])
 
@@ -89,7 +89,7 @@ describe("BaseCustomTokenIcon", () => {
 
         displayedText = await findByText(shortTokenSymbol)
 
-        expect(displayedText.props.style[0].fontSize).toBe(14)
+        expect(displayedText.props.style[0].fontSize).toBe(28)
     })
 
     it("renders correctly with optional style prop", async () => {

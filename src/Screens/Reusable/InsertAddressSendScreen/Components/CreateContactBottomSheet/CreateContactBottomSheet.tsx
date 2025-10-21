@@ -72,18 +72,18 @@ export const CreateContactBottomSheet = React.forwardRef<BottomSheetModalMethods
                 {creationMode ? (
                     <BaseView>
                         <BaseView alignItems="stretch" w={100}>
-                            <BaseText typographyFont="subTitleBold">{LL.SEND_CREATE_CONTACT_TITLE()}</BaseText>
+                            <BaseText typographyFont="subSubTitleSemiBold">{LL.SEND_CREATE_CONTACT_TITLE()}</BaseText>
                             <BaseSpacer height={16} />
-                            <BaseText typographyFont="button">{LL.SEND_CREATE_CONTACT_NAME()}</BaseText>
-                            <BaseSpacer height={16} />
+                            <BaseText typographyFont="captionMedium">{LL.SEND_CREATE_CONTACT_NAME()}</BaseText>
+                            <BaseSpacer height={8} />
                             <BaseBottomSheetTextInput
                                 value={alias}
                                 setValue={setAlias}
                                 placeholder={LL.SEND_CREATE_CONTACT_NAME()}
                             />
                             <BaseSpacer height={24} />
-                            <BaseText typographyFont="button">{LL.SEND_CREATE_CONTACT_ADDRESS()}</BaseText>
-                            <BaseSpacer height={16} />
+                            <BaseText typographyFont="captionMedium">{LL.SEND_CREATE_CONTACT_ADDRESS()}</BaseText>
+                            <BaseSpacer height={8} />
                             <BaseBottomSheetTextInput disabled value={address} />
                         </BaseView>
 
@@ -109,9 +109,9 @@ export const CreateContactBottomSheet = React.forwardRef<BottomSheetModalMethods
                 ) : (
                     <BaseView justifyContent="space-between" flexGrow={1}>
                         <BaseView>
-                            <BaseText typographyFont="subTitleBold">{LL.SEND_CREATE_CONTACT_TITLE()}</BaseText>
+                            <BaseText typographyFont="subSubTitleSemiBold">{LL.SEND_CREATE_CONTACT_TITLE()}</BaseText>
                             <BaseSpacer height={16} />
-                            <BaseText typographyFont="subSubTitleLight">{LL.SEND_CREATE_CONTACT_SUBTITLE()}</BaseText>
+                            <BaseText typographyFont="caption">{LL.SEND_CREATE_CONTACT_SUBTITLE()}</BaseText>
                         </BaseView>
 
                         <BaseSpacer height={16} />

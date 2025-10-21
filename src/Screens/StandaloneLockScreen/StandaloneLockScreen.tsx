@@ -9,6 +9,7 @@ import { ColorThemeType, isSmallScreen } from "~Constants"
 import { StandaloneNumPad, StandalonePasswordPins } from "./components"
 import { useOnDigitPress, useThemedStyles } from "~Hooks"
 import RNBootSplash from "react-native-bootsplash"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     onPinInserted: (pin: string) => Promise<void>
@@ -110,14 +111,14 @@ const baseStyles = (theme: ColorThemeType) =>
             height: 48,
         },
         title: {
-            fontSize: 18,
+            fontSize: FontUtils.font(18),
             fontWeight: "600",
             lineHeight: 28,
             textAlign: "center",
             color: theme.colors.title,
         },
         subTitle: {
-            fontSize: 14,
+            fontSize: FontUtils.font(14),
             fontWeight: "400",
             color: theme.colors.subtitle,
         },

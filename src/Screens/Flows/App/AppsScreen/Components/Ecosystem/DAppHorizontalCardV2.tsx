@@ -27,7 +27,7 @@ export const DAppHorizontalCardV2 = ({ dapp, onOpenDApp, onPress }: Props) => {
                         {dapp.name}
                     </BaseText>
                     <BaseText
-                        typographyFont="captionMedium"
+                        typographyFont="smallCaptionMedium"
                         numberOfLines={2}
                         color={theme.colors.dappCard.description}>
                         {dapp.desc}
