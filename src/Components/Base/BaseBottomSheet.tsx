@@ -393,9 +393,6 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             opacity: 0.5,
         },
-        backdrop: {
-            backgroundColor: COLORS.BLACK,
-        },
         floating: {
             marginHorizontal: 8,
             overflow: "hidden",
