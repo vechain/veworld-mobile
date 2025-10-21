@@ -14,6 +14,8 @@ import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
 import { useInteraction } from "../InteractionProvider"
 import { useStore } from "../StoreProvider"
 import { ConnectionLinkParams, ExternalAppRequestParams } from "./types"
+import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
+import { AnalyticsEvent } from "~Constants"
 
 type DeepLinkEvent = "discover" | "connect" | "signTransaction" | "signCertificate" | "signTypedData" | "disconnect"
 
@@ -78,6 +80,8 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
     const { onSetSelectedAccount } = useSetSelectedAccount()
     const { store } = useStore()
 
+    const track = useAnalyticTracking()
+
     const getInitialStore = useCallback(() => {
         return store
     }, [store])
@@ -101,6 +105,12 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchResourceNotAvailableError(params.redirect_url ?? "")
                 return
             }
+
+            track(AnalyticsEvent.EXTERNAL_APP_WALLET_INTERACTION, {
+                event: "connect",
+                appName: params.app_name,
+                appUrl: params.app_url,
+            })
 
             const release = await mutex.current.acquire()
 
@@ -136,7 +146,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [setConnectBsData, connectBsRef, getInitialStore, LL],
+        [track, getInitialStore, LL, setConnectBsData, connectBsRef],
     )
 
     const handleSignAndSendTransaction = useCallback(
@@ -172,7 +182,13 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     externalSessions,
                     params.redirect_url,
                 )
+
                 if (request && request.type === "external-app") {
+                    track(AnalyticsEvent.EXTERNAL_APP_WALLET_INTERACTION, {
+                        event: "signTransaction",
+                        appName: request?.appName,
+                        appUrl: request?.appUrl,
+                    })
                     const isValid = initialStore.dispatch(
                         isValidSession(request.genesisId, request.publicKey, request.session, switchAccount),
                     )
@@ -197,7 +213,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [getInitialStore, switchAccount, setTransactionBsData, transactionBsRef, LL],
+        [getInitialStore, LL, track, switchAccount, setTransactionBsData, transactionBsRef],
     )
 
     const handleSignTypedData = useCallback(
@@ -234,6 +250,12 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
+                    track(AnalyticsEvent.EXTERNAL_APP_WALLET_INTERACTION, {
+                        event: "signTypedData",
+                        appName: request?.appName,
+                        appUrl: request?.appUrl,
+                    })
+
                     const isValid = initialStore.dispatch(
                         isValidSession(request.genesisId, request.publicKey, request.session, switchAccount),
                     )
@@ -259,7 +281,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [getInitialStore, switchAccount, setTypedDataBsData, typedDataBsRef, LL],
+        [getInitialStore, LL, track, switchAccount, setTypedDataBsData, typedDataBsRef],
     )
 
     const handleSignCertificate = useCallback(
@@ -298,6 +320,12 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 )
 
                 if (request && request.type === "external-app") {
+                    track(AnalyticsEvent.EXTERNAL_APP_WALLET_INTERACTION, {
+                        event: "signCertificate",
+                        appName: request?.appName,
+                        appUrl: request?.appUrl,
+                    })
+
                     const isValid = initialStore.dispatch(
                         isValidSession(request.genesisId, request.publicKey, request.session, switchAccount),
                     )
@@ -323,7 +351,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 }
             }
         },
-        [getInitialStore, switchAccount, setCertificateBsData, certificateBsRef, LL],
+        [getInitialStore, LL, track, switchAccount, setCertificateBsData, certificateBsRef],
     )
 
     const handleDisconnect = useCallback(
@@ -360,6 +388,12 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     params.redirect_url,
                 )
                 if (request && request.type === "external-app") {
+                    track(AnalyticsEvent.EXTERNAL_APP_WALLET_INTERACTION, {
+                        event: "disconnect",
+                        appName: request?.appName,
+                        appUrl: request?.appUrl,
+                    })
+
                     const isValid = initialStore.dispatch(
                         isValidSession(request.genesisId, request.publicKey, request.session, switchAccount),
                     )
@@ -385,7 +419,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 DAppUtils.dispatchInternalError(params.redirect_url)
             }
         },
-        [getInitialStore, switchAccount, setDisconnectBsData, disconnectBsRef, LL],
+        [getInitialStore, LL, track, switchAccount, setDisconnectBsData, disconnectBsRef],
     )
 
     useEffect(() => {
