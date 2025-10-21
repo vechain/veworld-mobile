@@ -12,7 +12,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, info } from "~Utils"
+import { AccountUtils, error, info } from "~Utils"
 import HexUtils from "~Utils/HexUtils"
 import { ERROR_EVENTS } from "../../Constants"
 
@@ -59,7 +59,7 @@ const isRetryableError = (err: any): boolean => {
     return err?.message?.toLowerCase().includes("network") || err?.code === "ECONNABORTED" || !err?.response
 }
 
-export const useNotificationCenter = ({ enabled = true }: { enabled?: boolean } = {}) => {
+export const useNotificationRegistration = ({ enabled = true }: { enabled?: boolean } = {}) => {
     const dispatch = useAppDispatch()
     const accounts = useAppSelector(selectAccounts)
 
@@ -67,7 +67,10 @@ export const useNotificationCenter = ({ enabled = true }: { enabled?: boolean } 
     const lastFullRegistration = useAppSelector(selectLastFullRegistration)
     const lastSubscriptionId = useAppSelector(selectLastSubscriptionId)
 
-    const walletAddresses = useMemo(() => accounts.map(account => account.address), [accounts])
+    const walletAddresses = useMemo(
+        () => accounts.filter(account => !AccountUtils.isObservedAccount(account)).map(account => account.address),
+        [accounts],
+    )
 
     const getWalletsNeedingRegistration = useCallback(
         (currentSubscriptionId: string | null): string[] => {

@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { renderHook } from "@testing-library/react-hooks"
-import { useNotificationCenter } from "./useNotificationCenter"
+import { useNotificationRegistration } from "./useNotificationRegistration"
 import {
     initialNotificationState,
     updateWalletRegistrations,
@@ -124,7 +124,7 @@ const buildState = ({
     },
 })
 
-const renderUseNotificationCenter = (enabled: boolean = true) => {
+const renderUseNotificationRegistration = (enabled: boolean = true) => {
     const queryClient = new QueryClient({
         defaultOptions: {
             queries: { retry: false, gcTime: Infinity },
@@ -136,7 +136,7 @@ const renderUseNotificationCenter = (enabled: boolean = true) => {
         <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     )
 
-    const hookResult = renderHook(() => useNotificationCenter({ enabled }), { wrapper })
+    const hookResult = renderHook(() => useNotificationRegistration({ enabled }), { wrapper })
 
     return {
         ...hookResult,
@@ -146,7 +146,7 @@ const renderUseNotificationCenter = (enabled: boolean = true) => {
 
 const mockGetIdAsync = OneSignal.User.pushSubscription.getIdAsync as jest.Mock
 
-describe("useNotificationCenter", () => {
+describe("useNotificationRegistration", () => {
     const SUBSCRIPTION_ID = "subscription-123"
     let dateNowSpy: jest.SpyInstance<number, []> | undefined
 
@@ -176,7 +176,7 @@ describe("useNotificationCenter", () => {
             notification: initialNotificationState,
         })
 
-        const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
+        const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
         await waitFor(() => {
             expect(mockGetIdAsync).not.toHaveBeenCalled()
@@ -204,7 +204,7 @@ describe("useNotificationCenter", () => {
 
         mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
 
-        const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
+        const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
         await waitFor(() => {
             expect(mockGetIdAsync).toHaveBeenCalledTimes(1)
@@ -228,7 +228,7 @@ describe("useNotificationCenter", () => {
             json: jest.fn(),
         })
 
-        const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
+        const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
         await waitFor(() => {
             expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
@@ -301,7 +301,7 @@ describe("useNotificationCenter", () => {
                 json: jest.fn(),
             })
 
-            const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
+            const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
             await waitFor(() => {
                 // Should send 2 requests (batches)
@@ -394,7 +394,7 @@ describe("useNotificationCenter", () => {
                 json: jest.fn(),
             })
 
-            const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
+            const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
             await waitFor(() => {
                 // Should only send 1 request for the new wallet
@@ -459,7 +459,7 @@ describe("useNotificationCenter", () => {
                 json: jest.fn(),
             })
 
-            const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
+            const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
             await waitFor(() => {
                 // Should send 2 requests (5 + 1)
@@ -526,7 +526,7 @@ describe("useNotificationCenter", () => {
                 json: jest.fn(),
             })
 
-            const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
+            const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
             await waitFor(() => {
                 // Should re-register all wallets in 2 batches despite recent registration
@@ -576,7 +576,7 @@ describe("useNotificationCenter", () => {
                 json: jest.fn(),
             })
 
-            const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
+            const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
             await waitFor(() => {
                 // Should only try to register the 2 failed wallets
@@ -634,7 +634,7 @@ describe("useNotificationCenter", () => {
                 json: jest.fn(),
             })
 
-            const { unmount, queryClient, waitFor } = renderUseNotificationCenter()
+            const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
             await waitFor(() => {
                 // Should only register the one missing address (MIXED_CASE_ADDRESS)
