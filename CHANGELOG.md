@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-21)</small>
+
+* build: init ([d9b1882](https://github.com/vechain/veworld-mobile/commit/d9b1882))
+* Refactor :: font sizes (#3440) ([0bd14bc](https://github.com/vechain/veworld-mobile/commit/0bd14bc)), closes [#3440](https://github.com/vechain/veworld-mobile/issues/3440)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
