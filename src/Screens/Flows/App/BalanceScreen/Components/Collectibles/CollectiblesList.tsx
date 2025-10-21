@@ -8,6 +8,7 @@ import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { getNFTs } from "~Networking"
 import { selectAllFavoriteNfts, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
 import { CollectibleCard } from "./CollectibleCard"
 import { CollectiblesEmptyCard } from "./CollectiblesEmptyCard"
 
@@ -61,7 +62,7 @@ export const CollectiblesList = () => {
     const account = useAppSelector(selectSelectedAccount)
     const favoriteNfts = useAppSelector(selectAllFavoriteNfts)
     const { data: allNfts } = useQuery({
-        queryKey: ["COLLECTIBLES", "NFTS", network.genesis.id, account.address, 0, 4],
+        queryKey: ["COLLECTIBLES", "NFTS", network.genesis.id, account.address, 4, 0],
         queryFn: () => getNFTs(network.type, account.address, 4, 0),
         staleTime: 5 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
@@ -69,14 +70,24 @@ export const CollectiblesList = () => {
     })
 
     const nfts = useMemo(() => {
-        return favoriteNfts
-            .sort((a, b) => b.createdAt - a.createdAt)
-            .map(({ createdAt: _createdAt, ...rest }) => rest)
-            .concat(
-                allNfts?.data
-                    .map(nft => ({ address: nft.contractAddress, tokenId: nft.tokenId }))
-                    .slice(0, 4 - favoriteNfts.length) ?? [],
-            )
+        return (
+            favoriteNfts
+                .sort((a, b) => b.createdAt - a.createdAt)
+                .map(({ createdAt: _createdAt, ...rest }) => rest)
+                .concat(allNfts?.data.map(nft => ({ address: nft.contractAddress, tokenId: nft.tokenId })) ?? [])
+                //Deduplicate items
+                .reduce((acc, curr) => {
+                    if (
+                        acc.find(
+                            v => AddressUtils.compareAddresses(curr.address, v.address) && curr.tokenId === v.tokenId,
+                        )
+                    )
+                        return acc
+                    acc.push(curr)
+                    return acc
+                }, [] as { address: string; tokenId: string }[])
+                .slice(0, 4)
+        )
     }, [allNfts?.data, favoriteNfts])
 
     const addresses = useMemo(() => nfts.map(nft => nft.address), [nfts])

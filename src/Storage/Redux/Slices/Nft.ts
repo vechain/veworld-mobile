@@ -22,18 +22,20 @@ export type NftSliceState = {
     isLoading: boolean
     error: string | undefined
     favoriteNfts?: {
-        [owner: string]: {
-            /**
-             * Key will be `<address>_<tokenId>`
-             */
-            [addressTokenId: string]: {
-                address: string
-                tokenId: string
+        [genesisId: string]: {
+            [owner: string]: {
                 /**
-                 * Date when the favorite was added.
-                 * Value is in milliseconds
+                 * Key will be `<address>_<tokenId>`
                  */
-                createdAt: number
+                [addressTokenId: string]: {
+                    address: string
+                    tokenId: string
+                    /**
+                     * Date when the favorite was added.
+                     * Value is in milliseconds
+                     */
+                    createdAt: number
+                }
             }
         }
     }
@@ -331,16 +333,21 @@ export const NftSlice = createSlice({
         },
 
         resetNftState: () => initialStateNft,
-        toggleFavorite: (state, action: PayloadAction<{ address: string; tokenId: string; owner: string }>) => {
-            const { address, tokenId, owner } = action.payload
+        toggleFavorite: (
+            state,
+            action: PayloadAction<{ address: string; tokenId: string; owner: string; genesisId: string }>,
+        ) => {
+            const { address, tokenId, owner, genesisId } = action.payload
             const normalizedOwner = HexUtils.normalize(owner)
             const normalizedAddress = HexUtils.normalize(address)
             state.favoriteNfts ??= {}
-            state.favoriteNfts[normalizedOwner] ??= {}
+            state.favoriteNfts[genesisId] ??= {}
+            state.favoriteNfts[genesisId][normalizedOwner] ??= {}
 
             const key = `${normalizedAddress}_${tokenId}`
-            if (state.favoriteNfts[normalizedOwner][key]) delete state.favoriteNfts[normalizedOwner][key]
-            state.favoriteNfts[normalizedOwner][key] = {
+            if (state.favoriteNfts[genesisId][normalizedOwner][key])
+                delete state.favoriteNfts[genesisId][normalizedOwner][key]
+            state.favoriteNfts[genesisId][normalizedOwner][key] = {
                 address: normalizedAddress,
                 tokenId,
                 createdAt: Date.now(),
