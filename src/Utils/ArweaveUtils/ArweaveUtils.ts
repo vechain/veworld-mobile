@@ -17,7 +17,11 @@ type ArweaveFetchConfig = RequestInit & {
     responseType?: "arraybuffer" | "json" | "text" | "webstream"
 }
 
-export const getArweaveValue = async <TData>(uri: string, config?: NoInfer<ArweaveFetchConfig>): Promise<TData> => {
+export const getArweaveValue = async <TData>(
+    uri: string | undefined,
+    config?: NoInfer<ArweaveFetchConfig>,
+): Promise<TData> => {
+    if (!uri) throw new Error("[getArweaveValue]: parameter `uri` is not defined")
     const url = URIUtils.convertUriToUrl(uri)
     const id = toArweaveID(url)
     let processedId
@@ -34,11 +38,12 @@ export const getArweaveValue = async <TData>(uri: string, config?: NoInfer<Arwea
     return response.data
 }
 
-export const getArweaveQueryKeyOptions = <TData>(uri: string, config?: NoInfer<ArweaveFetchConfig>) =>
+export const getArweaveQueryKeyOptions = <TData>(uri: string | undefined, config?: NoInfer<ArweaveFetchConfig>) =>
     queryOptions({
         queryKey: ["ARWEAVE_URI", "v1", uri],
         staleTime: Infinity,
         gcTime: Infinity,
         queryFn: () => getArweaveValue<TData>(uri, config),
         retry: 3,
+        enabled: !!uri,
     })

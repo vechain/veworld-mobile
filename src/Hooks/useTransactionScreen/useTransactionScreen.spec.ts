@@ -54,7 +54,7 @@ import { TestHelpers, TestWrapper } from "~Test"
 import { waitFor } from "@testing-library/react-native"
 import { Transaction } from "@vechain/sdk-core"
 
-import { useBiometrics, useTransactionScreen, useWalletSecurity } from "~Hooks"
+import { useBiometrics, useWalletSecurity } from "~Hooks"
 import { Routes } from "~Navigation"
 import { AccountWithDevice, BaseDevice, SecurityLevelType, TransactionRequest } from "~Model"
 import crypto from "react-native-quick-crypto"
@@ -68,6 +68,16 @@ import { showErrorToast } from "~Components/Base/BaseToast"
 import { loadLocale } from "~i18n/i18n-util.sync"
 import { setAuthenticatedUser, setMockPrivyProviderResp } from "../../Test/mocks/@privy-io/expo"
 import { useSmartWallet } from "~VechainWalletKit/providers/SmartWalletProvider"
+
+// Import the getSmartAccount mock so we can configure it
+import { getSmartAccount } from "~VechainWalletKit/utils/smartAccount"
+
+// Import the hooks we need to mock
+import { useGenericDelegationFees } from "~Hooks/useGenericDelegationFees"
+import { useGenericDelegationTokens } from "~Hooks/useGenericDelegationTokens"
+import { useDelegatorDepositAddress } from "~Hooks/useDelegatorDepositAddress"
+
+import { useTransactionScreen } from "./useTransactionScreen"
 
 const { vetTransaction1, account1D1, device1, firstLedgerAccount, ledgerDevice, wallet1, smartWalletDevice } =
     TestHelpers.data
@@ -146,14 +156,6 @@ jest.mock("~Hooks/useGenericDelegationFees")
 jest.mock("~Hooks/useGenericDelegationTokens")
 jest.mock("~Hooks/useDelegatorDepositAddress")
 
-// Import the getSmartAccount mock so we can configure it
-import { getSmartAccount } from "~VechainWalletKit/utils/smartAccount"
-
-// Import the hooks we need to mock
-import { useGenericDelegationFees } from "~Hooks/useGenericDelegationFees"
-import { useGenericDelegationTokens } from "~Hooks/useGenericDelegationTokens"
-import { useDelegatorDepositAddress } from "~Hooks/useDelegatorDepositAddress"
-
 jest.mock("~VechainWalletKit/utils/smartAccount", () => ({
     ...jest.requireActual("~VechainWalletKit/utils/smartAccount"),
     getSmartAccount: jest.fn(),
@@ -181,7 +183,7 @@ const mockDevice = (device: BaseDevice) => {
 
 describe("useTransactionScreen", () => {
     beforeEach(() => {
-        jest.resetAllMocks()
+        jest.clearAllMocks()
         // Mock the hooks to return loading states for testing
         mockedUseGenericDelegationFees.mockReturnValue({
             options: undefined,
@@ -340,7 +342,6 @@ describe("useTransactionScreen", () => {
                         onTransactionSuccess,
                         onTransactionFailure,
                         dappRequest: {
-                            isFirstRequest: true,
                             method: "thor_sendTransaction",
                             id: "1234",
                             type: "in-app",
@@ -419,7 +420,6 @@ describe("useTransactionScreen", () => {
                                 onTransactionSuccess,
                                 onTransactionFailure,
                                 dappRequest: {
-                                    isFirstRequest: true,
                                     method: "thor_sendTransaction",
                                     id: "1234",
                                     type: "in-app",
@@ -465,7 +465,6 @@ describe("useTransactionScreen", () => {
                         onTransactionSuccess,
                         onTransactionFailure,
                         dappRequest: {
-                            isFirstRequest: true,
                             method: "thor_sendTransaction",
                             id: "1234",
                             type: "in-app",
@@ -510,7 +509,6 @@ describe("useTransactionScreen", () => {
             mockDevice(ledgerDevice)
 
             const dappRequest: TransactionRequest = {
-                isFirstRequest: true,
                 method: "thor_sendTransaction",
                 id: "1234",
                 type: "in-app",
@@ -606,7 +604,6 @@ describe("useTransactionScreen", () => {
                         onTransactionSuccess,
                         onTransactionFailure,
                         dappRequest: {
-                            isFirstRequest: true,
                             method: "thor_sendTransaction",
                             id: "1234",
                             type: "in-app",
@@ -710,7 +707,6 @@ describe("useTransactionScreen", () => {
                         onTransactionSuccess,
                         onTransactionFailure,
                         dappRequest: {
-                            isFirstRequest: true,
                             method: "thor_sendTransaction",
                             id: "1234",
                             type: "in-app",

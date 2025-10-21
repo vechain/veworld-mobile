@@ -21,6 +21,24 @@ export type NftSliceState = {
     reportedCollections: ReportedCollections
     isLoading: boolean
     error: string | undefined
+    favoriteNfts?: {
+        [genesisId: string]: {
+            [owner: string]: {
+                /**
+                 * Key will be `<address>_<tokenId>`
+                 */
+                [addressTokenId: string]: {
+                    address: string
+                    tokenId: string
+                    /**
+                     * Date when the favorite was added.
+                     * Value is in milliseconds
+                     */
+                    createdAt: number
+                }
+            }
+        }
+    }
 }
 
 export const initialStateNft: NftSliceState = {
@@ -315,6 +333,26 @@ export const NftSlice = createSlice({
         },
 
         resetNftState: () => initialStateNft,
+        toggleFavorite: (
+            state,
+            action: PayloadAction<{ address: string; tokenId: string; owner: string; genesisId: string }>,
+        ) => {
+            const { address, tokenId, owner, genesisId } = action.payload
+            const normalizedOwner = HexUtils.normalize(owner)
+            const normalizedAddress = HexUtils.normalize(address)
+            state.favoriteNfts ??= {}
+            state.favoriteNfts[genesisId] ??= {}
+            state.favoriteNfts[genesisId][normalizedOwner] ??= {}
+
+            const key = `${normalizedAddress}_${tokenId}`
+            if (state.favoriteNfts[genesisId][normalizedOwner][key])
+                delete state.favoriteNfts[genesisId][normalizedOwner][key]
+            state.favoriteNfts[genesisId][normalizedOwner][key] = {
+                address: normalizedAddress,
+                tokenId,
+                createdAt: Date.now(),
+            }
+        },
     },
 })
 
@@ -330,4 +368,5 @@ export const {
     resetNftState,
     clearNFTCache,
     refreshNFTs,
+    toggleFavorite,
 } = NftSlice.actions
