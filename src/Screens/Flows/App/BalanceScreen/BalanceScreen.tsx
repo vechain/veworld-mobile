@@ -5,6 +5,7 @@ import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanima
 import { BaseSpacer, Layout } from "~Components"
 import { COLORS } from "~Constants"
 import { useFetchFeaturedDApps, usePrefetchAllVns, useThemedStyles } from "~Hooks"
+import { useHomeCollectibles } from "~Hooks/useHomeCollectibles"
 import { useOfficialTokens } from "~Hooks/useOfficialTokens"
 import {
     addOfficialTokens,
@@ -27,6 +28,8 @@ export const BalanceScreen = () => {
     usePrefetchAllVns()
     //DO NOT REMOVE THIS FROM HERE, OTHERWISE APPS WON'T BE LOADED
     useFetchFeaturedDApps()
+    //Prefetch the collectibles so that you don't see loading when going on the page
+    useHomeCollectibles()
 
     const scrollY = useSharedValue(0)
     const contentOffsetY = useSharedValue(0)

@@ -1,13 +1,12 @@
 import { useNavigation } from "@react-navigation/native"
-import { useQuery } from "@tanstack/react-query"
 import React, { useCallback, useMemo } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseSpacer } from "~Components"
 import { useThemedStyles } from "~Hooks"
+import { useHomeCollectibles } from "~Hooks/useHomeCollectibles"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { getNFTs } from "~Networking"
-import { selectAllFavoriteNfts, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { selectAllFavoriteNfts, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { CollectibleCard } from "./CollectibleCard"
 import { CollectiblesEmptyCard } from "./CollectiblesEmptyCard"
@@ -58,16 +57,8 @@ const footerStyles = () =>
 
 export const CollectiblesList = () => {
     const { styles } = useThemedStyles(baseStyles)
-    const network = useAppSelector(selectSelectedNetwork)
-    const account = useAppSelector(selectSelectedAccount)
     const favoriteNfts = useAppSelector(selectAllFavoriteNfts)
-    const { data: allNfts } = useQuery({
-        queryKey: ["COLLECTIBLES", "NFTS", network.genesis.id, account.address, 4, 0],
-        queryFn: () => getNFTs(network.type, account.address, 4, 0),
-        staleTime: 5 * 60 * 1000,
-        gcTime: 5 * 60 * 1000,
-        enabled: favoriteNfts.length < 4,
-    })
+    const { data: allNfts } = useHomeCollectibles()
 
     const nfts = useMemo(() => {
         return (
