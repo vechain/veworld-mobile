@@ -2,7 +2,8 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseSpacer } from "~Components"
-import { useThemedStyles } from "~Hooks"
+import { CollectibleBottomSheet } from "~Components/Collectibles/CollectibleBottomSheet"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useHomeCollectibles } from "~Hooks/useHomeCollectibles"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -59,6 +60,7 @@ export const CollectiblesList = () => {
     const { styles } = useThemedStyles(baseStyles)
     const favoriteNfts = useAppSelector(selectAllFavoriteNfts)
     const { data: allNfts } = useHomeCollectibles()
+    const { ref, onOpen } = useBottomSheetModal()
 
     const nfts = useMemo(() => {
         return (
@@ -83,22 +85,35 @@ export const CollectiblesList = () => {
 
     const addresses = useMemo(() => nfts.map(nft => nft.address), [nfts])
 
-    const renderItem = useCallback(({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
-        return <CollectibleCard address={item.address} tokenId={item.tokenId} />
-    }, [])
+    const onPress = useCallback(
+        ({ address, tokenId }: { address: string; tokenId: string }) => {
+            onOpen({ address, tokenId })
+        },
+        [onOpen],
+    )
+
+    const renderItem = useCallback(
+        ({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
+            return <CollectibleCard address={item.address} tokenId={item.tokenId} onPress={onPress} />
+        },
+        [onPress],
+    )
 
     return (
-        <FlatList
-            renderItem={renderItem}
-            data={nfts}
-            numColumns={2}
-            ItemSeparatorComponent={ItemSeparatorComponent}
-            ListEmptyComponent={CollectiblesEmptyCard}
-            horizontal={false}
-            keyExtractor={v => `${v.address}_${v.tokenId}`}
-            columnWrapperStyle={styles.listColumn}
-            ListFooterComponent={<ListFooterComponent addresses={addresses} />}
-        />
+        <>
+            <FlatList
+                renderItem={renderItem}
+                data={nfts}
+                numColumns={2}
+                ItemSeparatorComponent={ItemSeparatorComponent}
+                ListEmptyComponent={CollectiblesEmptyCard}
+                horizontal={false}
+                keyExtractor={v => `${v.address}_${v.tokenId}`}
+                columnWrapperStyle={styles.listColumn}
+                ListFooterComponent={<ListFooterComponent addresses={addresses} />}
+            />
+            <CollectibleBottomSheet bsRef={ref} />
+        </>
     )
 }
 

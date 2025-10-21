@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import React, { useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { ImageStyle } from "react-native-fast-image"
 import LinearGradient from "react-native-linear-gradient"
@@ -13,9 +13,10 @@ import { isNftFavorite, useAppSelector } from "~Storage/Redux"
 type Props = {
     address: string
     tokenId: string
+    onPress: (args: { address: string; tokenId: string }) => void
 }
 
-export const CollectibleCard = ({ address, tokenId }: Props) => {
+export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const isFavorite = useAppSelector(state => isNftFavorite(state, address, tokenId))
     const { data } = useCollectibleMetadata({ address, tokenId })
@@ -36,8 +37,12 @@ export const CollectibleCard = ({ address, tokenId }: Props) => {
         gcTime: 5 * 60 * 1000,
     })
 
+    const handlePress = useCallback(() => {
+        onPress({ address, tokenId })
+    }, [address, onPress, tokenId])
+
     return (
-        <Pressable style={styles.root}>
+        <Pressable style={styles.root} onPress={handlePress}>
             <BaseIcon
                 name={isFavorite ? "icon-star-on" : "icon-star"}
                 color={COLORS.WHITE}
