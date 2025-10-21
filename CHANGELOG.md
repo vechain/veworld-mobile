@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-21)</small>
+
+* build: init ([9cdf049](https://github.com/vechain/veworld-mobile/commit/9cdf049))
+* Fix ::  Adjust bg settings for bottomsheets (#3436) ([d921ae5](https://github.com/vechain/veworld-mobile/commit/d921ae5)), closes [#3436](https://github.com/vechain/veworld-mobile/issues/3436)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
