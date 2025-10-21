@@ -214,6 +214,11 @@ export enum AnalyticsEvent {
     VBD_SHARE_CLICK = "VBD_SHARE_CLICK",
     VBD_SHARE_SUCCESS = "VBD_SHARE_SUCCESS",
     VBD_SHARE_DISMISSED = "VBD_SHARE_DISMISSED",
+
+    /**
+     * DeepLinking wallet interactions
+     */
+    EXTERNAL_APP_WALLET_INTERACTION = "EXTERNAL_APP_WALLET_INTERACTION",
 }
 
 /**

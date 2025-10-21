@@ -22,12 +22,12 @@ export const scaleWorklet = (size: number) => {
 export const font = (size: number) => {
     const newSize = scale(size)
     const rounded = Math.round(PixelRatio.roundToNearestPixel(newSize))
-    return Platform.OS === "ios" ? rounded : rounded - 1
+    return Platform.OS === "ios" ? rounded + 0.5 : rounded - 0.5
 }
 
 export const fontWorklet = (size: number) => {
     "worklet"
     const newSize = scaleWorklet(size)
     const rounded = Math.round(roundToPixel(newSize, PIXEL_RATIO))
-    return IS_IOS ? rounded : rounded - 1
+    return IS_IOS ? rounded + 0.5 : rounded - 0.5
 }
