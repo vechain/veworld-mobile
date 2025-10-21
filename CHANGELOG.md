@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-21)</small>
+
+* build: init ([f5df581](https://github.com/vechain/veworld-mobile/commit/f5df581))
+* Fix bottomsheet ios (#3433) ([7a567fa](https://github.com/vechain/veworld-mobile/commit/7a567fa)), closes [#3433](https://github.com/vechain/veworld-mobile/issues/3433)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
