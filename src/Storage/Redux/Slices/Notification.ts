@@ -53,11 +53,11 @@ export const Notification = createSlice({
             if (!state.walletRegistrations) {
                 state.walletRegistrations = {}
             }
-            action.payload.addresses.forEach(address => {
+            for (const address of action.payload.addresses) {
                 // Normalize address for consistent storage
                 const normalizedAddress = HexUtils.normalize(address)
                 state.walletRegistrations![normalizedAddress] = action.payload.timestamp
-            })
+            }
         },
         updateLastFullRegistration: (state, action: PayloadAction<number>) => {
             state.lastFullRegistration = action.payload
