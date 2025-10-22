@@ -118,7 +118,7 @@ const baseStyles = (theme: ColorThemeType) =>
             color: theme.colors.title,
         },
         subTitle: {
-            fontSize: FontUtils.font(14),
+            fontSize: FontUtils.font(12),
             fontWeight: "400",
             color: theme.colors.subtitle,
         },
