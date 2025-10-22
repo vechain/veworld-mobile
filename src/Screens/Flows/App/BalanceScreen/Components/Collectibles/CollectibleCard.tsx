@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query"
-import React, { useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { ImageStyle } from "react-native-fast-image"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseIcon, BaseText, BaseView, BlurView, NFTImageComponent } from "~Components"
 import { COLORS } from "~Constants"
-import { useNFTMedia, useThemedStyles } from "~Hooks"
+import { useNftBookmarking, useNFTMedia, useThemedStyles } from "~Hooks"
 import { useCollectibleMetadata } from "~Hooks/useCollectibleMetadata"
 import { NFTMediaType } from "~Model"
-import { isNftFavorite, useAppSelector } from "~Storage/Redux"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     address: string
@@ -17,7 +17,7 @@ type Props = {
 
 export const CollectibleCard = ({ address, tokenId }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
-    const isFavorite = useAppSelector(state => isNftFavorite(state, address, tokenId))
+    const { isFavorite, toggleFavorite } = useNftBookmarking(address, tokenId)
     const { data } = useCollectibleMetadata({ address, tokenId })
 
     const { name } = useMemo(() => {
@@ -36,13 +36,16 @@ export const CollectibleCard = ({ address, tokenId }: Props) => {
         gcTime: 5 * 60 * 1000,
     })
 
+    const handleToggleFavorite = useCallback(() => {
+        HapticsService.triggerImpact({ level: "Light" })
+        toggleFavorite()
+    }, [toggleFavorite])
+
     return (
         <Pressable style={styles.root}>
-            <BaseIcon
-                name={isFavorite ? "icon-star-on" : "icon-star"}
-                color={COLORS.WHITE}
-                style={styles.favoriteIcon}
-            />
+            <Pressable onPress={handleToggleFavorite} style={styles.favoriteIconContainer} hitSlop={8}>
+                <BaseIcon name={isFavorite ? "icon-star-on" : "icon-star"} color={COLORS.WHITE} />
+            </Pressable>
             {media?.mediaType === NFTMediaType.IMAGE && (
                 <NFTImageComponent style={styles.image as ImageStyle} uri={media.image} />
             )}
@@ -76,7 +79,7 @@ const baseStyles = () =>
             height: "100%",
             width: "100%",
         },
-        favoriteIcon: {
+        favoriteIconContainer: {
             top: 8,
             right: 12,
             position: "absolute",
