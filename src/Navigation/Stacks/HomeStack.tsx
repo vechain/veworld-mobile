@@ -51,6 +51,7 @@ import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
+import { CollectionsScreen } from "~Screens/Flows/App/Collectibles"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -166,6 +167,10 @@ export type RootStackParamListHome = {
         returnScreen?: Routes.HOME | Routes.HISTORY
     }
     [Routes.BUY_FLOW]: undefined
+    [Routes.COLLECTIBLES_COLLECTIONS]: undefined
+    [Routes.COLLECTIBLES_COLLECTION_DETAILS]: {
+        collectionAddress: string
+    }
 }
 
 const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome>()
@@ -323,6 +328,20 @@ export const HomeStack = () => {
                         presentation: "modal",
                     }}
                 />
+                {betterWorldFeature.balanceScreen.collectibles.enabled && (
+                    <Screen
+                        name={Routes.COLLECTIBLES_COLLECTIONS}
+                        component={CollectionsScreen}
+                        options={{ headerShown: false }}
+                    />
+                )}
+                {betterWorldFeature.balanceScreen.collectibles.enabled && (
+                    <Screen
+                        name={Routes.COLLECTIBLES_COLLECTION_DETAILS}
+                        component={() => <></>}
+                        options={{ headerShown: false }}
+                    />
+                )}
             </Group>
 
             <Group>
