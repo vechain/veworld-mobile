@@ -1,13 +1,13 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useQuery } from "@tanstack/react-query"
-import React, { RefObject, useMemo } from "react"
+import React, { RefObject } from "react"
 import { StyleSheet } from "react-native"
 import { ImageStyle } from "react-native-fast-image"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView, NFTImageComponent } from "~Components/Reusable"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useNFTMedia, useThemedStyles } from "~Hooks"
-import { useCollectibleMetadata } from "~Hooks/useCollectibleMetadata"
+import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
@@ -27,21 +27,15 @@ type CollectibleBottomSheetContentProps = OpenProps & {
 const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: CollectibleBottomSheetContentProps) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { data } = useCollectibleMetadata({ address, tokenId })
+    const details = useCollectibleDetails({ address, tokenId })
     const account = useAppSelector(selectSelectedAccount)
-
-    const { name } = useMemo(() => {
-        return {
-            name: data?.name,
-        }
-    }, [data?.name])
 
     const { fetchMedia } = useNFTMedia()
 
     const { data: media } = useQuery({
-        queryKey: ["COLLECTIBLES", "MEDIA", data?.image],
-        queryFn: () => fetchMedia(data?.image!),
-        enabled: !!data?.image,
+        queryKey: ["COLLECTIBLES", "MEDIA", details.image],
+        queryFn: () => fetchMedia(details.image!),
+        enabled: !!details.image,
         staleTime: 5 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
     })
@@ -60,7 +54,7 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
                             justifyContent="space-between"
                             w={100}>
                             <BaseText typographyFont="bodySemiBold" color={COLORS.WHITE_RGBA_90} flexDirection="row">
-                                {name}
+                                {details.name}
                             </BaseText>
                             <BaseView borderRadius={99} px={8} py={4} bg={COLORS.WHITE_RGBA_15} style={styles.tokenId}>
                                 <BaseText
@@ -91,7 +85,7 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
                         <CollectiblesSendActionButton address={address} tokenId={tokenId} />
                     )}
                 </BaseView>
-                {data?.description && (
+                {details.description && (
                     <BaseView flexDirection="column" w={100} gap={8}>
                         <BaseText
                             typographyFont="captionSemiBold"
@@ -99,7 +93,7 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
                             {LL.COLLECTIBLES_DESCRIPTION()}
                         </BaseText>
                         <BaseText typographyFont="body" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}>
-                            {data?.description}
+                            {details.description}
                         </BaseText>
                     </BaseView>
                 )}
