@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-22)</small>
+
+* build: init ([a78d9a3](https://github.com/vechain/veworld-mobile/commit/a78d9a3))
+* Fix :: adjust missed font sizes (#3443) ([379ac5c](https://github.com/vechain/veworld-mobile/commit/379ac5c)), closes [#3443](https://github.com/vechain/veworld-mobile/issues/3443)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
