@@ -43,6 +43,8 @@ const baseStyles = (theme: ColorThemeType) =>
             gap: 12,
             borderColor: theme.isDark ? COLORS.TRANSPARENT : COLORS.GREY_100,
             flex: 1,
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+            alignItems: "center",
         },
         rootActive: {
             borderColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,

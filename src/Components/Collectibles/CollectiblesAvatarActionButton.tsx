@@ -2,6 +2,15 @@ import * as FileSystem from "expo-file-system"
 import React, { useCallback, useMemo } from "react"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
+import {
+    clearAccountPfp,
+    selectSelectedAccount,
+    selectSelectedNetwork,
+    setAccountPfp,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
 import { CollectiblesActionButton } from "./CollectiblesActionButton"
 
 type Props = {
@@ -9,11 +18,21 @@ type Props = {
     address: string
     tokenId: string
 }
-export const CollectiblesAvatarActionButton = ({ image }: Props) => {
+export const CollectiblesAvatarActionButton = ({ image, address, tokenId }: Props) => {
     const { LL } = useI18nContext()
 
-    //TODO fix
-    const isAvatar = false
+    const account = useAppSelector(selectSelectedAccount)
+    const network = useAppSelector(selectSelectedNetwork)
+
+    const dispatch = useAppDispatch()
+
+    const isAvatar = useMemo(() => {
+        if (!account.profileImage) return false
+        if (account.profileImage.genesisId !== network.genesis.id) return false
+        if (account.profileImage.tokenId !== tokenId) return false
+        if (!AddressUtils.compareAddresses(account.profileImage.address, address)) return false
+        return true
+    }, [account.profileImage, address, network.genesis.id, tokenId])
 
     const icon = useMemo<IconKey>(() => {
         if (isAvatar) return "icon-check-circle-2"
@@ -22,9 +41,35 @@ export const CollectiblesAvatarActionButton = ({ image }: Props) => {
 
     const onPress = useCallback(async () => {
         if (!image) return
+        const pfpDir = `${FileSystem.documentDirectory}pfp/`
+        const dirInfo = await FileSystem.getInfoAsync(pfpDir)
+        if (!dirInfo.exists) {
+            await FileSystem.makeDirectoryAsync(pfpDir, { intermediates: true })
+        }
+        const fileName = `${account.address}_${Date.now()}`
+        const persistentPath = `${pfpDir}${fileName}`
+
+        if (isAvatar) {
+            if (account.profileImage?.uri) {
+                //Clear old file
+                const oldFileInfo = await FileSystem.getInfoAsync(account.profileImage.uri)
+                if (oldFileInfo.exists) {
+                    await FileSystem.deleteAsync(account.profileImage.uri, { idempotent: true })
+                }
+            }
+            dispatch(clearAccountPfp({ accountAddress: account.address }))
+            return
+        }
+
         //Set account avatar with image
-        await FileSystem.downloadAsync(image, `${FileSystem.documentDirectory}pfp`)
-    }, [image])
+        const res = await FileSystem.downloadAsync(image, persistentPath)
+        dispatch(
+            setAccountPfp({
+                accountAddress: account.address,
+                pfp: { address, tokenId, genesisId: network.genesis.id, uri: res.uri },
+            }),
+        )
+    }, [account.address, account.profileImage?.uri, address, dispatch, image, isAvatar, network.genesis.id, tokenId])
 
     return (
         <CollectiblesActionButton

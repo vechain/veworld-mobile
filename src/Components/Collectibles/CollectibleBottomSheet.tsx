@@ -5,9 +5,12 @@ import { StyleSheet } from "react-native"
 import { ImageStyle } from "react-native-fast-image"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView, NFTImageComponent } from "~Components/Reusable"
-import { COLORS } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useNFTMedia, useThemedStyles } from "~Hooks"
 import { useCollectibleMetadata } from "~Hooks/useCollectibleMetadata"
+import { useI18nContext } from "~i18n"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils } from "~Utils"
 import { CollectiblesAvatarActionButton } from "./CollectiblesAvatarActionButton"
 import { CollectiblesFavoriteActionButton } from "./CollectiblesFavoriteActionButton"
 import { CollectiblesSendActionButton } from "./CollectiblesSendActionButton"
@@ -22,8 +25,10 @@ type CollectibleBottomSheetContentProps = OpenProps & {
 }
 
 const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: CollectibleBottomSheetContentProps) => {
+    const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { data } = useCollectibleMetadata({ address, tokenId })
+    const account = useAppSelector(selectSelectedAccount)
 
     const { name } = useMemo(() => {
         return {
@@ -78,30 +83,53 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
                     testID="bottom-sheet-close-btn"
                 />
             </BaseView>
-            <BaseView
-                flexDirection="column"
-                p={24}
-                w={100}
-                gap={32}
-                bg={theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.WHITE}>
+            <BaseView flexDirection="column" p={24} gap={32} bg={theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.WHITE}>
                 <BaseView flexDirection="row" gap={8}>
                     <CollectiblesFavoriteActionButton address={address} tokenId={tokenId} />
                     <CollectiblesAvatarActionButton address={address} tokenId={tokenId} image={media?.image} />
-                    <CollectiblesSendActionButton address={address} tokenId={tokenId} />
+                    {!AccountUtils.isObservedAccount(account) && (
+                        <CollectiblesSendActionButton address={address} tokenId={tokenId} />
+                    )}
                 </BaseView>
+                {data?.description && (
+                    <BaseView flexDirection="column" w={100} gap={8}>
+                        <BaseText
+                            typographyFont="captionSemiBold"
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_700}>
+                            {LL.COLLECTIBLES_DESCRIPTION()}
+                        </BaseText>
+                        <BaseText typographyFont="body" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}>
+                            {data?.description}
+                        </BaseText>
+                    </BaseView>
+                )}
             </BaseView>
         </BaseView>
     )
 }
 
 export const CollectibleBottomSheet = ({ bsRef }: { bsRef: RefObject<BottomSheetModalMethods> }) => {
+    const { styles } = useThemedStyles(bsStyles)
     const { onClose } = useBottomSheetModal({ externalRef: bsRef })
     return (
-        <BaseBottomSheet<OpenProps> ref={bsRef} floating enablePanDownToClose={false} noMargins>
+        <BaseBottomSheet<OpenProps>
+            ref={bsRef}
+            floating
+            enablePanDownToClose={false}
+            noMargins
+            dynamicHeight
+            backgroundStyle={styles.bg}>
             {data => <CollectibleBottomSheetContent address={data.address} tokenId={data.tokenId} onClose={onClose} />}
         </BaseBottomSheet>
     )
 }
+
+const bsStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        bg: {
+            backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.WHITE,
+        },
+    })
 
 const baseStyles = () =>
     StyleSheet.create({

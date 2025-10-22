@@ -1789,6 +1789,10 @@ type RootTranslation = {
 	 */
 	COLLECTIBLES_ACTION_SEND_INACTIVE: string
 	/**
+	 * D​e​s​c​r​i​p​t​i​o​n
+	 */
+	COLLECTIBLES_DESCRIPTION: string
+	/**
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
 	COLLECTIONS: string
@@ -7105,6 +7109,10 @@ Thanks for your patience!
 	 * Send
 	 */
 	COLLECTIBLES_ACTION_SEND_INACTIVE: () => LocalizedString
+	/**
+	 * Description
+	 */
+	COLLECTIBLES_DESCRIPTION: () => LocalizedString
 	/**
 	 * Collections
 	 */
