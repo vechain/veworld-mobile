@@ -59,9 +59,9 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         titleText: {
             textAlign: "left",
-            fontSize: FontUtils.font(22),
+            fontSize: FontUtils.font(18),
             fontWeight: "700",
-            lineHeight: 28,
+            lineHeight: FontUtils.font(24),
             color: theme.colors.text,
         },
         imageContainer: {
@@ -76,7 +76,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         bodyText: {
             textAlign: "center",
-            fontSize: FontUtils.font(15),
+            fontSize: FontUtils.font(12),
             fontWeight: "600",
             color: theme.colors.text,
             paddingVertical: 20,

@@ -141,7 +141,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                             )}
                             <AnimatedBaseText
                                 allowFontScaling={false}
-                                typographyFont="captionSemiBold"
+                                typographyFont="bodySemiBold"
                                 color={COLORS.GREY_50}
                                 style={[styles.appName]}>
                                 {websiteName}

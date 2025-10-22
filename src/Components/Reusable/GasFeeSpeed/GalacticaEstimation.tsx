@@ -80,7 +80,7 @@ export const GalacticaEstimation = ({
                     ) : (
                         <BaseView flexDirection="row" gap={8} testID="MAX_FEE_GALACTICA">
                             <BaseAnimatedText
-                                typographyFont="bodyMedium"
+                                typographyFont="subSubTitleSemiBold"
                                 color={theme.colors.assetDetailsCard.title}
                                 style={blinkStyles}
                                 testID="GALACTICA_ESTIMATED_FEE">
