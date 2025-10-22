@@ -26,6 +26,7 @@ export const CollectiblesSendActionButton = ({ address, tokenId }: Props) => {
             icon="icon-send"
             onPress={onPress}
             label={LL.COLLECTIBLES_ACTION_SEND_INACTIVE()}
+            testID="COLLECTIBLES_ACTION_SEND"
         />
     )
 }

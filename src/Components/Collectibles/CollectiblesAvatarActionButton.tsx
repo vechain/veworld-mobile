@@ -77,6 +77,7 @@ export const CollectiblesAvatarActionButton = ({ image, address, tokenId }: Prop
             icon={icon}
             onPress={onPress}
             label={LL[`COLLECTIBLES_ACTION_AVATAR_${isAvatar ? "ACTIVE" : "INACTIVE"}`]()}
+            testID="COLLECTIBLES_ACTION_AVATAR"
         />
     )
 }

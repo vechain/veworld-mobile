@@ -13,9 +13,10 @@ type Props = {
     active: boolean
     label: string
     onPress: () => void
+    testID?: string
 }
 
-export const CollectiblesActionButton = ({ icon, active, label, onPress }: Props) => {
+export const CollectiblesActionButton = ({ icon, active, label, onPress, testID }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const color = useMemo(() => {
@@ -24,7 +25,7 @@ export const CollectiblesActionButton = ({ icon, active, label, onPress }: Props
     }, [active, theme.isDark])
 
     return (
-        <Pressable onPress={onPress} style={[styles.root, active && styles.rootActive]}>
+        <Pressable onPress={onPress} style={[styles.root, active && styles.rootActive]} testID={testID}>
             <BaseIcon name={icon} color={color} size={24} />
             <BaseText color={color} typographyFont="smallCaptionSemiBold">
                 {label}

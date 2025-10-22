@@ -38,6 +38,7 @@ export const CollectiblesFavoriteActionButton = ({ address, tokenId }: Props) =>
             icon={icon}
             onPress={onPress}
             label={LL.COLLECTIBLES_ACTION_FAVORITE_INACTIVE()}
+            testID="COLLECTIBLES_ACTION_FAVORITE"
         />
     )
 }
