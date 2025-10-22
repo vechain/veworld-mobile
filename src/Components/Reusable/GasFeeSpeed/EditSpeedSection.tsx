@@ -38,7 +38,7 @@ export const EditSpeedSection = ({ speedChangeEnabled, selectedFeeOption, onOpen
                 </BaseText>
                 <BaseView flexDirection="row" gap={8}>
                     <BaseIcon name="icon-timer" size={16} color={theme.colors.textLight} />
-                    <BaseText typographyFont="bodyMedium" color={theme.colors.assetDetailsCard.title}>
+                    <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.assetDetailsCard.title}>
                         {LL.UNDER_SECONDS({ seconds: SPEED_MAP[selectedFeeOption].asSeconds() })}
                     </BaseText>
                 </BaseView>

@@ -105,11 +105,11 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             <BaseSpacer height={24} />
             <BaseView style={styles.result} gap={8} flexDirection="column">
                 <BaseView flexDirection="row" w={100} justifyContent="space-between">
-                    <BaseText typographyFont="bodySemiBold" color={theme.colors.assetDetailsCard.title}>
+                    <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.assetDetailsCard.title}>
                         {LL.SEND_ESTIMATED_TIME()}
                     </BaseText>
                     <BaseView flexDirection="row" gap={4} alignItems="center">
-                        <BaseText typographyFont="bodySemiBold" color={theme.colors.assetDetailsCard.title}>
+                        <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.assetDetailsCard.title}>
                             {LL.UNDER_SECONDS({ seconds: SPEED_MAP[internalFeeOption].asSeconds() })}
                         </BaseText>
                         <BaseIcon name="icon-timer" size={16} color={theme.colors.textLight} />

@@ -234,9 +234,9 @@ export const defaults: Record<TFonts, TypographyObject> = {
         lineHeight: lineHeight.body,
     },
     buttonPrimary: {
-        fontFamily: fontFamily["Inter-SemiBold"],
+        fontFamily: fontFamily["Inter-Bold"],
         fontSize: 14,
-        fontWeight: fontWeight[600],
+        fontWeight: fontWeight[700],
     },
     buttonMedium: {
         fontFamily: fontFamily["Inter-Medium"],
