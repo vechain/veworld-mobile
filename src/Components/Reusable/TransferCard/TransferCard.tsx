@@ -2,13 +2,13 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
 import {
+    AccountIcon,
     BaseIcon,
     BaseSpacer,
     BaseText,
     BaseView,
     LedgerBadge,
     PaginatedDot,
-    PicassoAddressIcon,
     WatchedAccountBadge,
 } from "~Components"
 import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
@@ -302,11 +302,17 @@ const AccountCard = ({
     const { LL } = useI18nContext()
     const provenanceText = provenance === PROVENANCE.FROM ? LL.FROM() : LL.TO()
 
+    const accounts = useAppSelector(selectVisibleAccounts)
+
+    const account = useMemo(() => {
+        return accounts.find(acc => AddressUtils.compareAddresses(acc.address, _address)) ?? { address: _address }
+    }, [_address, accounts])
+
     return (
         <BaseView py={12} px={16} key={_address} style={{ width: SCREEN_WIDTH - 40 }} alignItems="flex-start">
             <BaseText typographyFont="smallCaptionSemiBold">{provenanceText}</BaseText>
             <BaseView flexDirection="row" py={8}>
-                <PicassoAddressIcon address={_address} size={32} />
+                <AccountIcon account={account} size={32} />
                 <BaseView flexDirection="column" pl={12}>
                     {contactName && <BaseText typographyFont="bodySemiBold">{contactName}</BaseText>}
                     <BaseView flexDirection="row" mt={3}>
