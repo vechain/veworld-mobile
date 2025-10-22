@@ -428,6 +428,7 @@
   "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "Ställ in avatar",
   "COLLECTIBLES_ACTION_FAVORITE_INACTIVE": "Favorit",
   "COLLECTIBLES_ACTION_SEND_INACTIVE": "Skicka",
+  "COLLECTIBLES_DESCRIPTION": "Beskrivning",
   "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "Överför en samlarobjekt för att börja bygga din samling",
   "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "eller köp en samlarobjekt från en av våra ekosystemappar",
   "COLLECTIONS": "Samlingar",

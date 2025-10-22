@@ -428,6 +428,7 @@
   "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "Установить аватар",
   "COLLECTIBLES_ACTION_FAVORITE_INACTIVE": "Избранное",
   "COLLECTIBLES_ACTION_SEND_INACTIVE": "Отправить",
+  "COLLECTIBLES_DESCRIPTION": "Описание",
   "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "Переведите коллекционный предмет, чтобы начать собирать свою коллекцию",
   "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "или купите коллекционный предмет в одном из наших приложений экосистемы",
   "COLLECTIONS": "Коллекции",

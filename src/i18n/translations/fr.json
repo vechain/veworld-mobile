@@ -428,6 +428,7 @@
   "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "Définir l'avatar",
   "COLLECTIBLES_ACTION_FAVORITE_INACTIVE": "Favori",
   "COLLECTIBLES_ACTION_SEND_INACTIVE": "Envoyer",
+  "COLLECTIBLES_DESCRIPTION": "Description",
   "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "Transférez un objet de collection pour commencer à créer votre collection",
   "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "ou achetez un objet de collection dans l'une de nos applications de l'écosystème",
   "COLLECTIONS": "Collections",

@@ -428,6 +428,7 @@
   "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "Establecer avatar",
   "COLLECTIBLES_ACTION_FAVORITE_INACTIVE": "Favorito",
   "COLLECTIBLES_ACTION_SEND_INACTIVE": "Enviar",
+  "COLLECTIBLES_DESCRIPTION": "Descripción",
   "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "Transfiere un coleccionable para comenzar a construir tu colección",
   "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "o compra un coleccionable de una de nuestras aplicaciones del ecosistema",
   "COLLECTIONS": "Colecciones",
