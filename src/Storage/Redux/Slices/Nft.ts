@@ -345,12 +345,14 @@ export const NftSlice = createSlice({
             state.favoriteNfts[genesisId][normalizedOwner] ??= {}
 
             const key = `${normalizedAddress}_${tokenId}`
-            if (state.favoriteNfts[genesisId][normalizedOwner][key])
+            if (state.favoriteNfts[genesisId][normalizedOwner][key]) {
                 delete state.favoriteNfts[genesisId][normalizedOwner][key]
-            state.favoriteNfts[genesisId][normalizedOwner][key] = {
-                address: normalizedAddress,
-                tokenId,
-                createdAt: Date.now(),
+            } else {
+                state.favoriteNfts[genesisId][normalizedOwner][key] = {
+                    address: normalizedAddress,
+                    tokenId,
+                    createdAt: Date.now(),
+                }
             }
         },
     },
