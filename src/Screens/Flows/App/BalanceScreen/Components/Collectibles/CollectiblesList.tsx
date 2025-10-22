@@ -20,12 +20,12 @@ const ListFooterComponent = ({ addresses }: { addresses: string[] }) => {
 
     const onNavigate = useCallback(() => {
         if (new Set(addresses).size === 1) {
-            nav.navigate(Routes.NFT_COLLECTION_DETAILS, {
+            nav.navigate(Routes.COLLECTIBLES_COLLECTION_DETAILS, {
                 collectionAddress: addresses[0],
             })
             return
         }
-        nav.navigate(Routes.NFTS)
+        nav.navigate(Routes.COLLECTIBLES_COLLECTIONS)
     }, [addresses, nav])
 
     if (addresses.length === 0) return null

@@ -344,6 +344,7 @@ export enum COLORS {
     TRANSPARENT = "transparent",
     WHITE = "#FFFFFF",
     BLACK = "#000000",
+    BLACK_RGBA_30 = "rgba(0, 0, 0, 0.3)",
     WHITE_DISABLED = "rgba(255, 255, 255, 0.7)",
     GRAY = "#A6A6A6",
     LIGHT_GRAY = "#f2f2f7",

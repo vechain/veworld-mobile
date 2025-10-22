@@ -65,12 +65,6 @@ export const selectNftCollectionsWithoutMetadata = createSelector(
     collections => collections?.collections?.filter(col => !col.updated) ?? [],
 )
 
-export const selectCollectionRegistryInfo = createSelector(
-    selectNftState,
-    selectSelectedNetwork,
-    (state, network) => state.collectionRegistryInfo[network.type],
-)
-
 export const selectNftNetworkingSideEffects = createSelector(selectNftState, state => {
     return {
         isLoading: state.isLoading,

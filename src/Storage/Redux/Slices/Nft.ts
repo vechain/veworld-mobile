@@ -64,6 +64,7 @@ export const initialStateNft: NftSliceState = {
     },
     isLoading: true,
     error: undefined,
+    favoriteNfts: {},
 }
 
 const findExistingCollection = (

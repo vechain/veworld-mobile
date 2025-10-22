@@ -1,10 +1,10 @@
 import { useCallback } from "react"
 import { NftCollection } from "~Model"
 import {
+    getCachedNftBalanceOf,
+    getCachedTokenURI,
     getContractAddresses,
-    getNftBalanceOf,
     getNftsForContract,
-    getTokenURI,
     GithubCollectionResponse,
 } from "~Networking"
 import {
@@ -67,7 +67,7 @@ export const useNFTCollections = () => {
 
                 try {
                     // NFT_WHALE - replace here
-                    balanceOf = await getNftBalanceOf(currentAddress, collection.address, thor)
+                    balanceOf = await getCachedNftBalanceOf(currentAddress, collection.address, thor)
                 } catch (e) {
                     warn(ERROR_EVENTS.NFT, "failed to get balance", e)
                 }
@@ -77,7 +77,12 @@ export const useNFTCollections = () => {
                 if (!collection.fromRegistry) {
                     // NFT_WHALE - replace here
                     const { data } = await getNftsForContract(network.type, collection.address, currentAddress, 1, 0)
-                    const tokenURI = await getTokenURI(data[0].tokenId, collection.address, thor)
+                    const tokenURI = await getCachedTokenURI(
+                        data[0].tokenId,
+                        collection.address,
+                        network.genesis.id,
+                        thor,
+                    )
                     const tokenMetadata = await fetchMetadata(tokenURI)
 
                     if (tokenMetadata) {
