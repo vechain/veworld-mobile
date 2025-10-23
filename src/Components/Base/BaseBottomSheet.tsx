@@ -225,10 +225,8 @@ const _BaseBottomSheet = <TData,>(
 
     const handleColor = useMemo(() => {
         if (!theme.isDark) return COLORS.GREY_300
-        return flattenedBsStyle.backgroundColor === COLORS.BALANCE_BACKGROUND
-            ? COLORS.DARK_PURPLE_DISABLED
-            : COLORS.GREY_300
-    }, [flattenedBsStyle.backgroundColor, theme.isDark])
+        return flattenedBsStyle.backgroundColor === theme.colors.card ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300
+    }, [flattenedBsStyle.backgroundColor, theme.colors.card, theme.isDark])
 
     const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
         return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
