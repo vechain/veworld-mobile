@@ -219,6 +219,8 @@ export enum AnalyticsEvent {
      * DeepLinking wallet interactions
      */
     EXTERNAL_APP_WALLET_INTERACTION = "EXTERNAL_APP_WALLET_INTERACTION",
+
+    NFT_COLLECTIBLE_AVATAR_SET = "NFT_COLLECTIBLE_AVATAR_SET",
 }
 
 /**

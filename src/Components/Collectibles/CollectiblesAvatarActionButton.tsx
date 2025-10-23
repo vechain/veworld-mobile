@@ -1,5 +1,7 @@
 import * as FileSystem from "expo-file-system"
 import React, { useCallback, useMemo } from "react"
+import { AnalyticsEvent } from "~Constants"
+import { useAnalyticTracking } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
 import {
@@ -25,6 +27,7 @@ export const CollectiblesAvatarActionButton = ({ image, address, tokenId }: Prop
     const network = useAppSelector(selectSelectedNetwork)
 
     const dispatch = useAppDispatch()
+    const track = useAnalyticTracking()
 
     const isAvatar = useMemo(() => {
         if (!account.profileImage) return false
@@ -69,7 +72,20 @@ export const CollectiblesAvatarActionButton = ({ image, address, tokenId }: Prop
                 pfp: { address, tokenId, genesisId: network.genesis.id, uri: res.uri },
             }),
         )
-    }, [account.address, account.profileImage?.uri, address, dispatch, image, isAvatar, network.genesis.id, tokenId])
+        track(AnalyticsEvent.NFT_COLLECTIBLE_AVATAR_SET, {
+            collectionAddress: address,
+        })
+    }, [
+        account.address,
+        account.profileImage?.uri,
+        address,
+        dispatch,
+        image,
+        isAvatar,
+        network.genesis.id,
+        tokenId,
+        track,
+    ])
 
     return (
         <CollectiblesActionButton
