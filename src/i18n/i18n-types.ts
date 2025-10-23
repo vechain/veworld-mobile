@@ -1773,6 +1773,14 @@ type RootTranslation = {
 	 */
 	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
 	/**
+	 * D​e​t​a​i​l​s
+	 */
+	COLLECTIBLES_VIEW_DETAILS: string
+	/**
+	 * G​a​l​l​e​r​y
+	 */
+	COLLECTIBLES_VIEW_GALLERY: string
+	/**
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
 	COLLECTIONS: string
@@ -1888,6 +1896,14 @@ type RootTranslation = {
 	 * C​i​r​c​u​l​a​t​i​n​g​ ​S​u​p​p​l​y
 	 */
 	COMMON_CIRCULATING_SUPPLY: string
+	/**
+	 * C​o​l​l​e​c​t​i​b​l​e
+	 */
+	COMMON_COLLECTIBLE: string
+	/**
+	 * C​o​l​l​e​c​t​i​b​l​e​s
+	 */
+	COMMON_COLLECTIBLES: string
 	/**
 	 * D​A​p​p​s
 	 */
@@ -7074,6 +7090,14 @@ Thanks for your patience!
 	 */
 	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: () => LocalizedString
 	/**
+	 * Details
+	 */
+	COLLECTIBLES_VIEW_DETAILS: () => LocalizedString
+	/**
+	 * Gallery
+	 */
+	COLLECTIBLES_VIEW_GALLERY: () => LocalizedString
+	/**
 	 * Collections
 	 */
 	COLLECTIONS: () => LocalizedString
@@ -7189,6 +7213,14 @@ Thanks for your patience!
 	 * Circulating Supply
 	 */
 	COMMON_CIRCULATING_SUPPLY: () => LocalizedString
+	/**
+	 * Collectible
+	 */
+	COMMON_COLLECTIBLE: () => LocalizedString
+	/**
+	 * Collectibles
+	 */
+	COMMON_COLLECTIBLES: () => LocalizedString
 	/**
 	 * DApps
 	 */
