@@ -5,6 +5,7 @@ import { BaseIcon, BaseSpacer, BaseText, DAppIcon } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { VbdDApp } from "~Model"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { LAYOUT_TRANSITION } from "./constants"
 import { useX2EAppAnimation } from "./Hooks/useX2EAppAnimation"
@@ -23,7 +24,7 @@ type AppRowDetailsProps = PropsWithChildren<{
     itemId?: string
     isOpen?: boolean
     onToggleOpen?: (itemId: string) => void
-    scrollRef: AnimatedRef<Animated.FlatList<any>>
+    scrollRef: AnimatedRef<Animated.FlatList<VbdDApp>>
     index: number
 }>
 

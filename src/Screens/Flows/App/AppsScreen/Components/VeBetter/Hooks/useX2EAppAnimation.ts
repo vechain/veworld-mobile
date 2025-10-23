@@ -10,14 +10,14 @@ import Animated, {
 } from "react-native-reanimated"
 import { useTheme } from "~Hooks"
 import { ANIMATION_TIMING, CONTENT_TIMING_CONFIG, PRESS_SPRING_CONFIG, SMOOTH_EASING } from "../constants"
+import { VbdDApp } from "~Model"
 
 interface UseX2EAppAnimationProps {
     isDefaultVisible?: boolean
     itemId?: string
     isOpen?: boolean
     onToggleOpen?: (itemId: string) => void
-
-    scrollRef: AnimatedRef<Animated.FlatList<any>>
+    scrollRef: AnimatedRef<Animated.FlatList<VbdDApp>>
     index: number
 }
 

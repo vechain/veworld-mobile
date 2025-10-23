@@ -7,7 +7,7 @@ import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView
 import { useBatchAppOverviews, useContentSwipeAnimation, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps/useVeBetterDaoActiveApps"
 import { useI18nContext } from "~i18n"
-import { IconKey, VeBetterDaoDapp, VeBetterDaoDAppMetadata, X2ECategoryType } from "~Model"
+import { IconKey, VbdDApp, X2ECategoryType } from "~Model"
 import { Routes } from "~Navigation"
 import { FetchAppOverviewResponse } from "~Networking/API/Types"
 import { CategoryFilters, RowDetails, RowExpandableDetails } from "~Screens/Flows/App/AppsScreen/Components"
@@ -15,10 +15,8 @@ import { useCategories, useCategoryFiltering } from "~Screens/Flows/App/AppsScre
 import { useDAppActions } from "~Screens/Flows/App/AppsScreen/Hooks"
 import { URIUtils } from "~Utils"
 
-type X2EDapp = VeBetterDaoDapp & VeBetterDaoDAppMetadata
-
 type X2EAppsListProps = {
-    apps: X2EDapp[]
+    apps: VbdDApp[]
     isLoading?: boolean
     onDismiss?: () => void
     openItemId: string | null
@@ -28,7 +26,7 @@ type X2EAppsListProps = {
 }
 
 type X2EAppItemProps = {
-    dapp: X2EDapp
+    dapp: VbdDApp
     onDismiss?: () => void
     openItemId: string | null
     onToggleOpenItem: (itemId: string) => void
@@ -156,7 +154,7 @@ const AppList = React.memo(
         const ref = useAnimatedRef<Animated.FlatList<any>>()
 
         const renderItem = useCallback(
-            ({ item, index }: ListRenderItemInfo<X2EDapp>) => {
+            ({ item, index }: ListRenderItemInfo<VbdDApp>) => {
                 return (
                     <AppListItem
                         dapp={item}
@@ -206,7 +204,7 @@ const AppList = React.memo(
             return <BaseSpacer height={24} />
         }, [])
 
-        const keyExtractor = useCallback((item: X2EDapp) => item.id, [])
+        const keyExtractor = useCallback((item: VbdDApp) => item.id, [])
 
         if (isLoading) {
             return (
