@@ -1773,6 +1773,26 @@ type RootTranslation = {
 	 */
 	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
 	/**
+	 * F​a​v​o​r​i​t​e
+	 */
+	COLLECTIBLES_ACTION_FAVORITE_INACTIVE: string
+	/**
+	 * S​e​t​ ​a​v​a​t​a​r
+	 */
+	COLLECTIBLES_ACTION_AVATAR_INACTIVE: string
+	/**
+	 * A​v​a​t​a​r
+	 */
+	COLLECTIBLES_ACTION_AVATAR_ACTIVE: string
+	/**
+	 * S​e​n​d
+	 */
+	COLLECTIBLES_ACTION_SEND_INACTIVE: string
+	/**
+	 * D​e​s​c​r​i​p​t​i​o​n
+	 */
+	COLLECTIBLES_DESCRIPTION: string
+	/**
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
 	COLLECTIONS: string
@@ -7073,6 +7093,26 @@ Thanks for your patience!
 	 * or buy a collectible from one of our ecosystem apps
 	 */
 	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: () => LocalizedString
+	/**
+	 * Favorite
+	 */
+	COLLECTIBLES_ACTION_FAVORITE_INACTIVE: () => LocalizedString
+	/**
+	 * Set avatar
+	 */
+	COLLECTIBLES_ACTION_AVATAR_INACTIVE: () => LocalizedString
+	/**
+	 * Avatar
+	 */
+	COLLECTIBLES_ACTION_AVATAR_ACTIVE: () => LocalizedString
+	/**
+	 * Send
+	 */
+	COLLECTIBLES_ACTION_SEND_INACTIVE: () => LocalizedString
+	/**
+	 * Description
+	 */
+	COLLECTIBLES_DESCRIPTION: () => LocalizedString
 	/**
 	 * Collections
 	 */
