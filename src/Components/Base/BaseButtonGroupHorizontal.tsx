@@ -7,6 +7,19 @@ import { BaseButtonGroupHorizontalType } from "~Model"
 import HapticsService from "~Services/HapticsService"
 import { BaseView } from "./BaseView"
 
+type CustomButtonStyles = {
+    backgroundColor?: {
+        disabled?: string
+        selected?: string
+        default?: string
+    }
+    textColor?: {
+        disabled?: string
+        selected?: string
+        default?: string
+    }
+}
+
 type Props = {
     action: (button: BaseButtonGroupHorizontalType) => void
     buttons: BaseButtonGroupHorizontalType[]
@@ -18,6 +31,7 @@ type Props = {
     typographyFont?: BaseTextProps["typographyFont"]
     renderButton?: (button: BaseButtonGroupHorizontalType, textColor: string) => React.ReactNode
     style?: ViewStyle
+    customStyles?: CustomButtonStyles
 }
 
 export const BaseButtonGroupHorizontal = ({
@@ -28,6 +42,7 @@ export const BaseButtonGroupHorizontal = ({
     typographyFont = "buttonPrimary",
     renderButton,
     style,
+    customStyles,
 }: Props) => {
     const theme = useTheme()
 
@@ -46,27 +61,27 @@ export const BaseButtonGroupHorizontal = ({
     const calculateBGColor = useCallback(
         (selected: boolean, disabledStatus: boolean | undefined) => {
             if (disabledStatus && selected) {
-                return theme.colors.disabled
+                return customStyles?.backgroundColor?.disabled ?? theme.colors.disabled
             }
             if (selected) {
-                return theme.colors.horizontalButtonSelected
+                return customStyles?.backgroundColor?.selected ?? theme.colors.horizontalButtonSelected
             }
-            return theme.colors.card
+            return customStyles?.backgroundColor?.default ?? theme.colors.card
         },
-        [theme.colors.card, theme.colors.disabled, theme.colors.horizontalButtonSelected],
+        [theme.colors.card, theme.colors.disabled, theme.colors.horizontalButtonSelected, customStyles],
     )
 
     const calculateTextColor = useCallback(
         (selected: boolean, disabledStatus: boolean | undefined) => {
             if (disabledStatus) {
-                return theme.colors.horizontalButtonTextReversed
+                return customStyles?.textColor?.disabled ?? theme.colors.horizontalButtonTextReversed
             }
             if (selected) {
-                return theme.colors.textSecondary
+                return customStyles?.textColor?.selected ?? theme.colors.textSecondary
             }
-            return theme.colors.text
+            return customStyles?.textColor?.default ?? theme.colors.text
         },
-        [theme.colors.textSecondary, theme.colors.horizontalButtonTextReversed, theme.colors.text],
+        [theme.colors.textSecondary, theme.colors.horizontalButtonTextReversed, theme.colors.text, customStyles],
     )
 
     return (
