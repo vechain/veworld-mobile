@@ -26,7 +26,9 @@ export const Tokens = ({ isEmptyStateShown = false }: Props) => {
             <BalanceActivity tab="TOKENS" />
             {!isEmptyStateShown && (
                 <>
-                    <BannersCarousel location="home_screen" baseWidth={SCREEN_WIDTH - 48} padding={0} mt={40} />
+                    {/* 36 because the activity above may have a See all button that has a padding of 4px.
+                        Setting to 40 will look off compared to the card below when the banner is visible */}
+                    <BannersCarousel location="home_screen" baseWidth={SCREEN_WIDTH - 48} padding={0} mt={36} />
 
                     {isVeBetterUser && (
                         <>
