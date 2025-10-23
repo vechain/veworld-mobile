@@ -150,7 +150,7 @@ const baseStyles = () =>
             fontSize: FontUtils.font(14),
         },
         description: {
-            fontSize: FontUtils.font(10),
+            fontSize: FontUtils.font(12),
         },
         listContentContainer: {
             flexGrow: 1,

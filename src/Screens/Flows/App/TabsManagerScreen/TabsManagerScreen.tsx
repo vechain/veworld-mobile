@@ -71,7 +71,7 @@ export const TabsManagerScreen = () => {
                         style={[styles.footerButton, styles.footerButtonStart]}
                         onPress={onCloseAll}>
                         <BaseText
-                            typographyFont="captionMedium"
+                            typographyFont="bodyMedium"
                             color={tabs.length === 0 ? disabledTextColor : buttonTextColor}>
                             {LL.CLOSE_ALL()}
                         </BaseText>
@@ -86,7 +86,7 @@ export const TabsManagerScreen = () => {
                         />
                     </BaseTouchable>
                     <BaseTouchable style={[styles.footerButton, styles.footerButtonEnd]} onPress={onDone}>
-                        <BaseText typographyFont="captionMedium" color={buttonTextColor}>
+                        <BaseText typographyFont="bodyMedium" color={buttonTextColor}>
                             {LL.COMMON_BTN_DONE()}
                         </BaseText>
                     </BaseTouchable>

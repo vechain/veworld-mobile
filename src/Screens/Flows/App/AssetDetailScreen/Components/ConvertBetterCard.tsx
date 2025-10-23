@@ -74,7 +74,7 @@ export const ConvertBetterCard: React.FC<Props> = ({
                 <BaseView flexDirection="row" flex={1} justifyContent="space-between">
                     <BaseView flex={1}>
                         <BaseText
-                            typographyFont="smallCaptionSemiBold"
+                            typographyFont="captionSemiBold"
                             color={theme.colors.convertBetterCard.convertValueText}>
                             {isSender ? LL.FROM() : LL.TO()}
                         </BaseText>

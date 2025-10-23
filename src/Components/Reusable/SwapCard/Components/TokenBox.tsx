@@ -68,7 +68,7 @@ export const TokenBox = ({
 
     return (
         <BaseView py={12} px={16} style={{ width: SCREEN_WIDTH - 40 }} alignItems="flex-start">
-            <BaseText typographyFont="smallCaptionSemiBold">{provenanceText}</BaseText>
+            <BaseText typographyFont="captionSemiBold">{provenanceText}</BaseText>
             <BaseView flexDirection="row" py={8}>
                 {tokenIcon}
                 <BaseView flexDirection="column" pl={12}>

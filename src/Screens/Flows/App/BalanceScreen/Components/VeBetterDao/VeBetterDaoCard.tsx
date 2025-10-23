@@ -111,7 +111,7 @@ const baseStyles = (theme: ColorThemeType) =>
             fontWeight: 600,
             fontSize: FontUtils.font(40),
             fontFamily: "Inter-SemiBold",
-            lineHeight: 40,
+            lineHeight: FontUtils.font(40),
         },
         b3mo: {
             position: "absolute",

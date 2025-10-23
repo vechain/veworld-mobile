@@ -195,7 +195,7 @@ const BaseActivityBox = ({
                 <BaseSpacer height={2} />
                 <BaseView style={styles.titleContainer}>
                     <BaseText
-                        typographyFont={invertedStyles ? "caption" : "captionSemiBold"}
+                        typographyFont={invertedStyles ? "caption" : "bodySemiBold"}
                         numberOfLines={1}
                         color={
                             invertedStyles ? theme.colors.activityCard.subtitleBold : theme.colors.activityCard.title
@@ -209,7 +209,8 @@ const BaseActivityBox = ({
                 {showDescription &&
                     (typeof description === "string" ? (
                         <BaseText
-                            typographyFont={invertedStyles ? "captionSemiBold" : "caption"}
+                            typographyFont={invertedStyles ? "bodySemiBold" : "caption"}
+                            numberOfLines={1}
                             color={
                                 invertedStyles
                                     ? theme.colors.activityCard.title
@@ -237,6 +238,7 @@ const baseStyles = () =>
             borderRadius: 12,
             paddingVertical: 12,
             paddingHorizontal: 16,
+            height: 80,
         },
         iconContainer: {
             justifyContent: "center",

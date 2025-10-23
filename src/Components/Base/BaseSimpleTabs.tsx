@@ -86,7 +86,6 @@ const baseStyles = (theme: ColorThemeType) =>
         root: {
             backgroundColor: COLORS.TRANSPARENT,
             position: "relative",
-            borderRadius: 8,
             gap: 8,
         },
         tab: {
@@ -102,5 +101,6 @@ const baseStyles = (theme: ColorThemeType) =>
             height: 2,
             zIndex: -1,
             bottom: 0,
+            borderRadius: 0,
         },
     })

@@ -33,12 +33,12 @@ export const EditSpeedSection = ({ speedChangeEnabled, selectedFeeOption, onOpen
     return (
         <Animated.View style={[styles.section, animatedStyles, opacityStyles]} layout={LinearTransition.duration(300)}>
             <BaseView flexDirection="column" gap={4} flex={1}>
-                <BaseText color={theme.colors.textLightish} typographyFont="smallCaptionMedium">
+                <BaseText color={theme.colors.textLightish} typographyFont="captionMedium">
                     {LL.SEND_ESTIMATED_TIME()}
                 </BaseText>
                 <BaseView flexDirection="row" gap={8}>
                     <BaseIcon name="icon-timer" size={16} color={theme.colors.textLight} />
-                    <BaseText typographyFont="bodyMedium" color={theme.colors.assetDetailsCard.title}>
+                    <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.assetDetailsCard.title}>
                         {LL.UNDER_SECONDS({ seconds: SPEED_MAP[selectedFeeOption].asSeconds() })}
                     </BaseText>
                 </BaseView>

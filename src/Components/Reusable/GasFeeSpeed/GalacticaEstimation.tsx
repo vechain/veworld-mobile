@@ -66,7 +66,7 @@ export const GalacticaEstimation = ({
         <Animated.View layout={LinearTransition} style={styles.rootWithAlert}>
             <Animated.View layout={LinearTransition} style={styles.root}>
                 <Animated.View layout={LinearTransition} style={styles.section}>
-                    <BaseText color={theme.colors.textLightish} typographyFont="smallCaptionMedium" numberOfLines={1}>
+                    <BaseText color={theme.colors.textLightish} typographyFont="captionMedium" numberOfLines={1}>
                         {LL.MAX_FEE()}
                     </BaseText>
                     {isFirstTimeLoadingFees ? (
@@ -80,7 +80,7 @@ export const GalacticaEstimation = ({
                     ) : (
                         <BaseView flexDirection="row" gap={8} testID="MAX_FEE_GALACTICA">
                             <BaseAnimatedText
-                                typographyFont="bodyMedium"
+                                typographyFont="subSubTitleSemiBold"
                                 color={theme.colors.assetDetailsCard.title}
                                 style={blinkStyles}
                                 testID="GALACTICA_ESTIMATED_FEE">

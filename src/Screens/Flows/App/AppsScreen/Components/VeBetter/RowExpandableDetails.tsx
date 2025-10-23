@@ -22,7 +22,7 @@ const Description = React.memo(({ children }: { children: string }) => {
             <BaseView>
                 <BaseText
                     color={theme.colors.x2eAppOpenDetails.description}
-                    typographyFont="smallCaptionMedium"
+                    typographyFont="captionMedium"
                     lineHeight={16}>
                     {children}
                 </BaseText>

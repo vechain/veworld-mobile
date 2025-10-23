@@ -1,3 +1,5 @@
+import FontUtils from "~Utils/FontUtils"
+
 export type TFonts =
     | "hugeTitle"
     | "biggerTitle"
@@ -90,16 +92,16 @@ const fontSize = {
 }
 
 const lineHeight = {
-    biggerTitle: 32,
-    title: 28,
+    biggerTitle: FontUtils.font(32),
+    title: FontUtils.font(28),
     subSubtitle: 24,
-    subTitle: 20.8,
-    body: 18.2,
-    bodySemiBold: 20,
-    captionMedium: 16,
-    caption: 15.6,
-    captionSmall: 12,
-    captionSemiBold: 20,
+    subTitle: FontUtils.font(20.8),
+    body: FontUtils.font(18.2),
+    bodySemiBold: FontUtils.font(20),
+    captionMedium: FontUtils.font(16),
+    caption: FontUtils.font(15.6),
+    captionSmall: FontUtils.font(12),
+    captionSemiBold: FontUtils.font(20),
 }
 
 export type TypographyObject = {
@@ -232,9 +234,9 @@ export const defaults: Record<TFonts, TypographyObject> = {
         lineHeight: lineHeight.body,
     },
     buttonPrimary: {
-        fontFamily: fontFamily["Inter-SemiBold"],
+        fontFamily: fontFamily["Inter-Bold"],
         fontSize: 14,
-        fontWeight: fontWeight[600],
+        fontWeight: fontWeight[700],
     },
     buttonMedium: {
         fontFamily: fontFamily["Inter-Medium"],

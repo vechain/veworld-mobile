@@ -310,7 +310,7 @@ const AccountCard = ({
 
     return (
         <BaseView py={12} px={16} key={_address} style={{ width: SCREEN_WIDTH - 40 }} alignItems="flex-start">
-            <BaseText typographyFont="smallCaptionSemiBold">{provenanceText}</BaseText>
+            <BaseText typographyFont="captionSemiBold">{provenanceText}</BaseText>
             <BaseView flexDirection="row" py={8}>
                 <AccountIcon account={account} size={32} />
                 <BaseView flexDirection="column" pl={12}>
@@ -328,7 +328,7 @@ const AccountCard = ({
                                 <BaseSpacer width={8} />
                             </>
                         )}
-                        <BaseText typographyFont={"smallCaptionRegular"}>{vnsName}</BaseText>
+                        <BaseText typographyFont={"captionRegular"}>{vnsName}</BaseText>
                     </BaseView>
                 </BaseView>
                 {!contactName && onAddContactPress && (

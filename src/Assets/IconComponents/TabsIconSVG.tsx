@@ -4,7 +4,7 @@ import FontUtils from "~Utils/FontUtils"
 
 const defaultFont = {
     fontFamily: "Inter-SemiBold",
-    fontSize: FontUtils.font(10),
+    fontSize: FontUtils.font(12),
     fontWeight: "600",
 }
 

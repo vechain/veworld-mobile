@@ -27,7 +27,7 @@ export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
         <TouchableOpacity style={styles.networkViewer} onPress={onNetworkLabelPress}>
             <BaseView style={styles.networkViewerIconText}>
                 <BaseIcon name="icon-globe" color={theme.colors.testnetText} size={16} testID="web" />
-                <BaseText pl={5} typographyFont="smallCaptionSemiBold" color={theme.colors.testnetText}>
+                <BaseText pl={5} typographyFont="captionSemiBold" color={theme.colors.testnetText}>
                     {network.name.length > 0 && formatNetworkName(network.name).toLowerCase()}
                 </BaseText>
             </BaseView>

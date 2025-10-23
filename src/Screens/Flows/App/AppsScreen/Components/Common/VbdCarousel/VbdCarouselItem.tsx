@@ -56,7 +56,7 @@ export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {
                             )}
                         </BaseView>
                         <BaseText
-                            typographyFont="smallCaptionMedium"
+                            typographyFont="captionMedium"
                             color={COLORS.WHITE_RGBA_85}
                             numberOfLines={2}
                             flexDirection="row"
