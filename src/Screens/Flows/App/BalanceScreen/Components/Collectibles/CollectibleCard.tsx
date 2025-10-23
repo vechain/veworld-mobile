@@ -8,14 +8,17 @@ import { COLORS } from "~Constants"
 import { useNftBookmarking, useNFTMedia, useThemedStyles } from "~Hooks"
 import { useCollectibleMetadata } from "~Hooks/useCollectibleMetadata"
 import { NFTMediaType } from "~Model"
+import { URIUtils } from "~Utils"
 import HapticsService from "~Services/HapticsService"
 
 type Props = {
     address: string
     tokenId: string
+    isObservedAccount: boolean
+    onPress: () => void
 }
 
-export const CollectibleCard = ({ address, tokenId }: Props) => {
+export const CollectibleCard = ({ address, tokenId, isObservedAccount, onPress }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { isFavorite, toggleFavorite } = useNftBookmarking(address, tokenId)
     const { data } = useCollectibleMetadata({ address, tokenId })
@@ -36,18 +39,29 @@ export const CollectibleCard = ({ address, tokenId }: Props) => {
         gcTime: 5 * 60 * 1000,
     })
 
+    const imageUri = useMemo(() => {
+        if (!media?.image) return undefined
+        try {
+            return URIUtils.convertUriToUrl(media.image)
+        } catch {
+            return undefined
+        }
+    }, [media?.image])
+
     const handleToggleFavorite = useCallback(() => {
         HapticsService.triggerImpact({ level: "Light" })
         toggleFavorite()
     }, [toggleFavorite])
 
     return (
-        <Pressable style={styles.root}>
-            <Pressable onPress={handleToggleFavorite} style={styles.favoriteIconContainer} hitSlop={8}>
-                <BaseIcon name={isFavorite ? "icon-star-on" : "icon-star"} color={COLORS.WHITE} />
-            </Pressable>
-            {media?.mediaType === NFTMediaType.IMAGE && (
-                <NFTImageComponent style={styles.image as ImageStyle} uri={media.image} />
+        <Pressable style={styles.root} onPress={onPress}>
+            {!isObservedAccount && (
+                <Pressable onPress={handleToggleFavorite} style={styles.favoriteIconContainer} hitSlop={16}>
+                    <BaseIcon name={isFavorite ? "icon-star-on" : "icon-star"} color={COLORS.WHITE} />
+                </Pressable>
+            )}
+            {media?.mediaType === NFTMediaType.IMAGE && imageUri && (
+                <NFTImageComponent style={styles.image as ImageStyle} uri={imageUri} />
             )}
 
             <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
@@ -72,6 +86,7 @@ const baseStyles = () =>
             borderRadius: 12,
             position: "relative",
             flex: 1,
+            maxWidth: "48%",
             overflow: "hidden",
             aspectRatio: 0.8791,
         },
