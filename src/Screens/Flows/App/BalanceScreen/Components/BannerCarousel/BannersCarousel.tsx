@@ -18,9 +18,13 @@ type Props = {
     location: "home_screen" | "token_screen"
     baseWidth?: number
     padding?: number
+    /**
+     * Margin top.
+     */
+    mt?: number
 }
 
-export const BannersCarousel = ({ location, baseWidth = SCREEN_WIDTH - 32, padding = 24 }: Props) => {
+export const BannersCarousel = ({ location, baseWidth = SCREEN_WIDTH - 32, padding = 24, mt }: Props) => {
     const featureFlags = useFeatureFlags()
     const track = useAnalyticTracking()
     const hideStargateBannerHomeScreen = useAppSelector(selectHideStargateBannerHomeScreen)
@@ -83,6 +87,7 @@ export const BannersCarousel = ({ location, baseWidth = SCREEN_WIDTH - 32, paddi
             // Remove the -16 if you need to have another item
             baseWidth={baseWidth}
             padding={padding}
+            rootStyle={{ marginTop: mt }}
         />
     )
 }
