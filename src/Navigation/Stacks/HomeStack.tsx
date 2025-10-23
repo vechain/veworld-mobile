@@ -49,9 +49,9 @@ import {
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
+import { CollectionsListScreen, CollectionDetailsScreen } from "~Screens/Flows/App/Collectibles"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
-import { CollectionsScreen } from "~Screens/Flows/App/Collectibles"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -331,14 +331,14 @@ export const HomeStack = () => {
                 {betterWorldFeature.balanceScreen.collectibles.enabled && (
                     <Screen
                         name={Routes.COLLECTIBLES_COLLECTIONS}
-                        component={CollectionsScreen}
+                        component={CollectionsListScreen}
                         options={{ headerShown: false }}
                     />
                 )}
                 {betterWorldFeature.balanceScreen.collectibles.enabled && (
                     <Screen
                         name={Routes.COLLECTIBLES_COLLECTION_DETAILS}
-                        component={() => <></>}
+                        component={CollectionDetailsScreen}
                         options={{ headerShown: false }}
                     />
                 )}
