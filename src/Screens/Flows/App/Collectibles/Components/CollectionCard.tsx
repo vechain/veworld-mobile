@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
-import React from "react"
+import React, { useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { BaseText, BaseView, BlurView } from "~Components"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS } from "~Constants"
 import { useFormatFiat, useNFTMedia, useThemedStyles } from "~Hooks"
+import { URIUtils } from "~Utils"
 import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
 import { useCollectionMetadata } from "../Hooks/useCollectionMetadata"
 
@@ -27,10 +28,48 @@ export const CollectionCard = ({ collectionAddress, onPress }: Props) => {
         gcTime: 24 * 60 * 60 * 1000,
     })
 
+    const imageUri = useMemo(() => {
+        if (!media?.image) return undefined
+        try {
+            return URIUtils.convertUriToUrl(media.image)
+        } catch {
+            return undefined
+        }
+    }, [media?.image])
+
     return (
         <TouchableOpacity disabled={isLoading} activeOpacity={0.8} onPress={() => onPress(collectionAddress)}>
             <BaseView style={styles.card}>
-                <FastImageBackground source={{ uri: media?.image }} resizeMode="cover" style={styles.image}>
+                {imageUri ? (
+                    <FastImageBackground source={{ uri: imageUri }} resizeMode="cover" style={styles.image}>
+                        <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
+                            <BaseView
+                                flexDirection="row"
+                                alignItems="center"
+                                justifyContent="space-between"
+                                p={8}
+                                bg={COLORS.BLACK_RGBA_30}>
+                                <BaseText
+                                    typographyFont="captionSemiBold"
+                                    color={COLORS.WHITE_RGBA_90}
+                                    flexDirection="row">
+                                    {collectionMetadata?.name}
+                                </BaseText>
+                                {collectionMetadata?.totalSupply && (
+                                    <BaseView px={8} py={4} bg={COLORS.WHITE_RGBA_15} borderRadius={99}>
+                                        <BaseText typographyFont="smallCaptionMedium" color={COLORS.WHITE_RGBA_90}>
+                                            {formatDisplayNumber(collectionMetadata?.totalSupply, {
+                                                includeSymbol: false,
+                                                locale: formatLocale,
+                                                useCompactNotation: true,
+                                            })}
+                                        </BaseText>
+                                    </BaseView>
+                                )}
+                            </BaseView>
+                        </BlurView>
+                    </FastImageBackground>
+                ) : (
                     <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
                         <BaseView
                             flexDirection="row"
@@ -54,7 +93,7 @@ export const CollectionCard = ({ collectionAddress, onPress }: Props) => {
                             )}
                         </BaseView>
                     </BlurView>
-                </FastImageBackground>
+                )}
             </BaseView>
         </TouchableOpacity>
     )
