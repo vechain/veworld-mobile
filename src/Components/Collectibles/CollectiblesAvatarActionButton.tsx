@@ -72,9 +72,15 @@ export const CollectiblesAvatarActionButton = ({ image, address, tokenId }: Prop
                 pfp: { address, tokenId, genesisId: network.genesis.id, uri: res.uri },
             }),
         )
-        track(AnalyticsEvent.NFT_COLLECTIBLE_AVATAR_SET, {
-            collectionAddress: address,
-        })
+
+        track(
+            account.profileImage?.uri
+                ? AnalyticsEvent.NFT_COLLECTIBLE_AVATAR_CHANGED
+                : AnalyticsEvent.NFT_COLLECTIBLE_AVATAR_SET,
+            {
+                collectionAddress: address,
+            },
+        )
     }, [
         account.address,
         account.profileImage?.uri,
