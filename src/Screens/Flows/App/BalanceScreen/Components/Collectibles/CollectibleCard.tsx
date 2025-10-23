@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { ImageStyle } from "react-native-fast-image"
 import LinearGradient from "react-native-linear-gradient"
@@ -7,7 +7,7 @@ import Animated from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseView, BlurView, NFTImageComponent } from "~Components"
 import { COLORS } from "~Constants"
 import { useNftBookmarking, useNFTMedia, useThemedStyles } from "~Hooks"
-import { useCollectibleMetadata } from "~Hooks/useCollectibleMetadata"
+import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
 import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import { NFTMediaType } from "~Model"
 import HapticsService from "~Services/HapticsService"
@@ -16,31 +16,29 @@ import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 type Props = {
     address: string
     tokenId: string
+    onPress: (args: { address: string; tokenId: string }) => void
 }
 
 const AnimatedBaseIcon = Animated.createAnimatedComponent(wrapFunctionComponent(BaseIcon))
 
-export const CollectibleCard = ({ address, tokenId }: Props) => {
+export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { isFavorite, toggleFavorite } = useNftBookmarking(address, tokenId)
-    const { data } = useCollectibleMetadata({ address, tokenId })
     const { animatedStyles, favoriteIconAnimation } = useFavoriteAnimation()
-
-    const { name } = useMemo(() => {
-        return {
-            name: data?.name,
-        }
-    }, [data?.name])
-
+    const details = useCollectibleDetails({ address, tokenId })
     const { fetchMedia } = useNFTMedia()
 
     const { data: media } = useQuery({
-        queryKey: ["COLLECTIBLES", "MEDIA", data?.image],
-        queryFn: () => fetchMedia(data?.image!),
-        enabled: !!data?.image,
+        queryKey: ["COLLECTIBLES", "MEDIA", details.image],
+        queryFn: () => fetchMedia(details.image!),
+        enabled: !!details.image,
         staleTime: 5 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
     })
+
+    const handlePress = useCallback(() => {
+        onPress({ address, tokenId })
+    }, [address, onPress, tokenId])
 
     const handleToggleFavorite = useCallback(() => {
         HapticsService.triggerImpact({ level: "Light" })
@@ -52,11 +50,12 @@ export const CollectibleCard = ({ address, tokenId }: Props) => {
     }, [favoriteIconAnimation, toggleFavorite])
 
     return (
-        <Pressable style={styles.root}>
-            <Pressable onPress={handleToggleFavorite} style={styles.favoriteIconContainer} hitSlop={8}>
+        <Pressable style={styles.root} onPress={handlePress}>
+            <Pressable style={styles.favoriteContainerContainer} onPress={handleToggleFavorite}>
                 <AnimatedBaseIcon
                     name={isFavorite ? "icon-star-on" : "icon-star"}
                     color={COLORS.WHITE}
+                    size={16}
                     style={animatedStyles}
                 />
             </Pressable>
@@ -71,7 +70,7 @@ export const CollectibleCard = ({ address, tokenId }: Props) => {
                     angle={0}>
                     <BaseView flexDirection="row" alignItems="center" p={8}>
                         <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE_RGBA_90} flexDirection="row">
-                            {name}
+                            {details.name}
                         </BaseText>
                     </BaseView>
                 </LinearGradient>
@@ -88,15 +87,20 @@ const baseStyles = () =>
             flex: 1,
             overflow: "hidden",
             aspectRatio: 0.8791,
+            maxWidth: "50%",
         },
         image: {
             height: "100%",
             width: "100%",
         },
-        favoriteIconContainer: {
-            top: 8,
-            right: 12,
+        favoriteContainerContainer: {
             position: "absolute",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 8,
+            top: 0,
+            right: 0,
             zIndex: 1,
         },
         bottom: { position: "absolute", bottom: 0, left: 0, width: "100%" },

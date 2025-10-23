@@ -24,6 +24,20 @@ export interface WalletAccount extends Account {
     visible: boolean
     vnsName?: string
     hasAttemptedClaim?: boolean
+
+    profileImage?: {
+        /**
+         * Path on the filesystem for the profile image
+         */
+        uri: string
+        address: string
+        tokenId: string
+        /**
+         * Genesis ID of the network.
+         * This is needed to later confirm that it's set as an avatar
+         */
+        genesisId: string
+    }
 }
 
 export interface WatchedAccount extends WalletAccount {
