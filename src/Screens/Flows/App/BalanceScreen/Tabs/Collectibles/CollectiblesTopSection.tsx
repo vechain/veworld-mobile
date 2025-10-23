@@ -16,7 +16,7 @@ export const CollectiblesTopSection = () => {
     return (
         <>
             <ChangeCollectionsListView selectedView={viewMode} onViewChange={handleViewChange} />
-            <BaseSpacer height={16} />
+            <BaseSpacer height={24} />
             <CollectiblesListWithView viewMode={viewMode} />
         </>
     )
