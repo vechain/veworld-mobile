@@ -6,8 +6,8 @@ import { useThemedStyles } from "~Hooks"
 import { useHomeCollectibles } from "~Hooks/useHomeCollectibles"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { selectAllFavoriteNfts, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { selectAllFavoriteNfts, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils, AddressUtils } from "~Utils"
 import { CollectibleCard } from "./CollectibleCard"
 import { CollectibleDetailedCard } from "./CollectibleDetailedCard"
 import { CollectiblesEmptyCard } from "./CollectiblesEmptyCard"
@@ -63,8 +63,13 @@ const footerStyles = () =>
 
 export const CollectiblesListWithView: React.FC<Props> = ({ viewMode }) => {
     const { styles } = useThemedStyles(baseStyles)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     const favoriteNfts = useAppSelector(selectAllFavoriteNfts)
     const { data: allNfts } = useHomeCollectibles()
+
+    const isObservedAccount = useMemo(() => {
+        return AccountUtils.isObservedAccount(selectedAccount)
+    }, [selectedAccount])
 
     const nfts = useMemo(() => {
         return (
@@ -89,9 +94,14 @@ export const CollectiblesListWithView: React.FC<Props> = ({ viewMode }) => {
 
     const addresses = useMemo(() => nfts.map(nft => nft.address), [nfts])
 
-    const renderGalleryItem = useCallback(({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
-        return <CollectibleCard address={item.address} tokenId={item.tokenId} />
-    }, [])
+    const renderGalleryItem = useCallback(
+        ({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
+            return (
+                <CollectibleCard address={item.address} tokenId={item.tokenId} isObservedAccount={isObservedAccount} />
+            )
+        },
+        [isObservedAccount],
+    )
 
     const renderDetailsItem = useCallback(({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
         return <CollectibleDetailedCard address={item.address} tokenId={item.tokenId} />

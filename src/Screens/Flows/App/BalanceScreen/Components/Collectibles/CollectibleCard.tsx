@@ -13,9 +13,10 @@ import HapticsService from "~Services/HapticsService"
 type Props = {
     address: string
     tokenId: string
+    isObservedAccount: boolean
 }
 
-export const CollectibleCard = ({ address, tokenId }: Props) => {
+export const CollectibleCard = ({ address, tokenId, isObservedAccount }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { isFavorite, toggleFavorite } = useNftBookmarking(address, tokenId)
     const { data } = useCollectibleMetadata({ address, tokenId })
@@ -43,9 +44,11 @@ export const CollectibleCard = ({ address, tokenId }: Props) => {
 
     return (
         <Pressable style={styles.root}>
-            <Pressable onPress={handleToggleFavorite} style={styles.favoriteIconContainer} hitSlop={8}>
-                <BaseIcon name={isFavorite ? "icon-star-on" : "icon-star"} color={COLORS.WHITE} />
-            </Pressable>
+            {!isObservedAccount && (
+                <Pressable onPress={handleToggleFavorite} style={styles.favoriteIconContainer} hitSlop={8}>
+                    <BaseIcon name={isFavorite ? "icon-star-on" : "icon-star"} color={COLORS.WHITE} />
+                </Pressable>
+            )}
             {media?.mediaType === NFTMediaType.IMAGE && (
                 <NFTImageComponent style={styles.image as ImageStyle} uri={media.image} />
             )}
