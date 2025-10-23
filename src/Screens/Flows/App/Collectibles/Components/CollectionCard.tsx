@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import React, { useCallback, useState } from "react"
+import React, { useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import FastImage from "react-native-fast-image"
 import Animated from "react-native-reanimated"
@@ -8,6 +8,7 @@ import { BaseIcon, BaseText, BaseView, BlurView } from "~Components"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS } from "~Constants"
 import { useNFTMedia, useThemedStyles } from "~Hooks"
+import { useCollectionsBookmarking } from "~Hooks/useCollectionsBookmarking"
 import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import HapticsService from "~Services/HapticsService"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
@@ -24,8 +25,8 @@ export const CollectionCard = ({ collectionAddress, onPress }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { data: collectionMetadata, isLoading } = useCollectionMetadata(collectionAddress)
     const { fetchMedia } = useNFTMedia()
-    const [isFavorite, setIsFavorite] = useState(false)
     const { animatedStyles, favoriteIconAnimation } = useFavoriteAnimation()
+    const { toggleFavoriteCollection } = useCollectionsBookmarking()
 
     const { data: media } = useQuery({
         queryKey: ["COLLECTIBLES", "COLLECTION", "MEDIA", collectionMetadata?.image],
@@ -36,11 +37,12 @@ export const CollectionCard = ({ collectionAddress, onPress }: Props) => {
     })
 
     const handleToggleFavorite = useCallback(() => {
+        if (!collectionMetadata?.id) return
         HapticsService.triggerImpact({ level: "Light" })
         favoriteIconAnimation()
 
-        setIsFavorite(!isFavorite)
-    }, [favoriteIconAnimation, isFavorite])
+        toggleFavoriteCollection(collectionAddress, collectionMetadata?.id)
+    }, [collectionAddress, collectionMetadata?.id, favoriteIconAnimation, toggleFavoriteCollection])
 
     return (
         <TouchableOpacity disabled={isLoading} activeOpacity={0.8} onPress={() => onPress(collectionAddress)}>
@@ -53,7 +55,8 @@ export const CollectionCard = ({ collectionAddress, onPress }: Props) => {
                     defaultSource={NFTPlaceholderDark}>
                     <TouchableOpacity style={styles.favoriteIconContainer} onPress={handleToggleFavorite}>
                         <AnimatedBaseIcon
-                            name={isFavorite ? "icon-star-on" : "icon-star"}
+                            //TODO: Replace with favoriteCollections
+                            name={false ? "icon-star-on" : "icon-star"}
                             size={16}
                             color={COLORS.WHITE}
                             style={animatedStyles}

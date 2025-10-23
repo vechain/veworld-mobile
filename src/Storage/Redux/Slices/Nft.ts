@@ -39,6 +39,20 @@ export type NftSliceState = {
             }
         }
     }
+    favoriteCollections?: {
+        [genesisId: string]: {
+            [owner: string]: {
+                /**
+                 * Key will be `<address>_<collectionId>`
+                 */
+                [addressCollectionId: string]: {
+                    id: string
+                    address: string
+                    createdAt: number
+                }
+            }
+        }
+    }
 }
 
 export const initialStateNft: NftSliceState = {
@@ -65,6 +79,7 @@ export const initialStateNft: NftSliceState = {
     isLoading: true,
     error: undefined,
     favoriteNfts: {},
+    favoriteCollections: {},
 }
 
 const findExistingCollection = (
@@ -334,6 +349,7 @@ export const NftSlice = createSlice({
         },
 
         resetNftState: () => initialStateNft,
+
         toggleFavorite: (
             state,
             action: PayloadAction<{ address: string; tokenId: string; owner: string; genesisId: string }>,
@@ -356,6 +372,28 @@ export const NftSlice = createSlice({
                 }
             }
         },
+        toggleFavoriteCollection: (
+            state,
+            action: PayloadAction<{ address: string; collectionId: string; owner: string; genesisId: string }>,
+        ) => {
+            const { address, collectionId, owner, genesisId } = action.payload
+            const normalizedOwner = HexUtils.normalize(owner)
+            const normalizedAddress = HexUtils.normalize(address)
+            state.favoriteCollections ??= {}
+            state.favoriteCollections[genesisId] ??= {}
+            state.favoriteCollections[genesisId][normalizedOwner] ??= {}
+
+            const key = `${normalizedAddress}_${collectionId}`
+            if (state.favoriteCollections[genesisId][normalizedOwner][key]) {
+                delete state.favoriteCollections[genesisId][normalizedOwner][key]
+            } else {
+                state.favoriteCollections[genesisId][normalizedOwner][key] = {
+                    id: collectionId,
+                    address: normalizedAddress,
+                    createdAt: Date.now(),
+                }
+            }
+        },
     },
 })
 
@@ -372,4 +410,5 @@ export const {
     clearNFTCache,
     refreshNFTs,
     toggleFavorite,
+    toggleFavoriteCollection,
 } = NftSlice.actions
