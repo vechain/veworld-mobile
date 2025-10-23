@@ -66,7 +66,7 @@ export const TestTranslationProvider = ({ children }: { children: React.ReactNod
 const nftPersistence: PersistConfig<NftSliceState> = {
     key: NftSlice.name,
     storage: newStorage(new MMKV({ id: "test-nft-storage" })),
-    whitelist: ["blackListedCollections"],
+    whitelist: ["blackListedCollections", "reportedCollections", "favoriteNfts", "favoriteCollections"],
 }
 
 export const getStore = (preloadedState: Partial<RootState>) =>

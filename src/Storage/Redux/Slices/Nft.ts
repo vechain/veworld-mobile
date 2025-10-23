@@ -39,6 +39,23 @@ export type NftSliceState = {
             }
         }
     }
+    favoriteCollections?: {
+        [genesisId: string]: {
+            [owner: string]: {
+                /**
+                 * Key will be the collection address
+                 */
+                [collectionAddress: string]: {
+                    address: string
+                    /**
+                     * Date when the favorite was added.
+                     * Value is in milliseconds
+                     */
+                    createdAt: number
+                }
+            }
+        }
+    }
 }
 
 export const initialStateNft: NftSliceState = {
@@ -65,6 +82,7 @@ export const initialStateNft: NftSliceState = {
     isLoading: true,
     error: undefined,
     favoriteNfts: {},
+    favoriteCollections: {},
 }
 
 const findExistingCollection = (
@@ -356,6 +374,26 @@ export const NftSlice = createSlice({
                 }
             }
         },
+        toggleCollectionFavorite: (
+            state,
+            action: PayloadAction<{ address: string; owner: string; genesisId: string }>,
+        ) => {
+            const { address, owner, genesisId } = action.payload
+            const normalizedOwner = HexUtils.normalize(owner)
+            const normalizedAddress = HexUtils.normalize(address)
+            state.favoriteCollections ??= {}
+            state.favoriteCollections[genesisId] ??= {}
+            state.favoriteCollections[genesisId][normalizedOwner] ??= {}
+
+            if (state.favoriteCollections[genesisId][normalizedOwner][normalizedAddress]) {
+                delete state.favoriteCollections[genesisId][normalizedOwner][normalizedAddress]
+            } else {
+                state.favoriteCollections[genesisId][normalizedOwner][normalizedAddress] = {
+                    address: normalizedAddress,
+                    createdAt: Date.now(),
+                }
+            }
+        },
     },
 })
 
@@ -372,4 +410,5 @@ export const {
     clearNFTCache,
     refreshNFTs,
     toggleFavorite,
+    toggleCollectionFavorite,
 } = NftSlice.actions
