@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import Animated, { useAnimatedStyle, withSpring, withTiming } from "react-native-reanimated"
 import { getTimeZone } from "react-native-localize"
+import Animated, { useAnimatedStyle, withSpring, withTiming } from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSkeleton, BaseSpacer, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { useTheme, useThemedStyles } from "~Hooks"
@@ -23,7 +23,9 @@ const Description = React.memo(({ children }: { children: string }) => {
                 <BaseText
                     color={theme.colors.x2eAppOpenDetails.description}
                     typographyFont="captionMedium"
-                    lineHeight={16}>
+                    lineHeight={16}
+                    flexDirection="row"
+                    numberOfLines={5}>
                     {children}
                 </BaseText>
             </BaseView>

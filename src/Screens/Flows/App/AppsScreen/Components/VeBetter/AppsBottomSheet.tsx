@@ -2,8 +2,7 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
 import { ListRenderItemInfo, StyleSheet } from "react-native"
-import { FlatList } from "react-native-gesture-handler"
-import Animated from "react-native-reanimated"
+import Animated, { AnimatedRef, useAnimatedRef } from "react-native-reanimated"
 import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useBatchAppOverviews, useContentSwipeAnimation, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps/useVeBetterDaoActiveApps"
@@ -35,6 +34,8 @@ type X2EAppItemProps = {
     onToggleOpenItem: (itemId: string) => void
     appOverview?: FetchAppOverviewResponse
     isOverviewLoading?: boolean
+    scrollRef: AnimatedRef<Animated.FlatList<any>>
+    index: number
 }
 
 type X2EAppsBottomSheetProps = {
@@ -43,7 +44,16 @@ type X2EAppsBottomSheetProps = {
 }
 
 const AppListItem = React.memo(
-    ({ dapp, onDismiss, openItemId, onToggleOpenItem, appOverview, isOverviewLoading = false }: X2EAppItemProps) => {
+    ({
+        dapp,
+        onDismiss,
+        openItemId,
+        onToggleOpenItem,
+        appOverview,
+        isOverviewLoading = false,
+        scrollRef,
+        index,
+    }: X2EAppItemProps) => {
         const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.external_url, dapp.name)
         const { onDAppPress } = useDAppActions(Routes.APPS)
         const { LL } = useI18nContext()
@@ -122,7 +132,9 @@ const AppListItem = React.memo(
                 onToggleFavorite={toggleBookmark}
                 itemId={dapp.id}
                 isOpen={isOpen}
-                onToggleOpen={onToggleOpenItem}>
+                onToggleOpen={onToggleOpenItem}
+                scrollRef={scrollRef}
+                index={index}>
                 {detailsChildren}
             </RowDetails>
         )
@@ -141,9 +153,10 @@ const AppList = React.memo(
     }: X2EAppsListProps) => {
         const theme = useTheme()
         const { styles } = useThemedStyles(baseStyles)
+        const ref = useAnimatedRef<Animated.FlatList<any>>()
 
         const renderItem = useCallback(
-            ({ item }: ListRenderItemInfo<X2EDapp>) => {
+            ({ item, index }: ListRenderItemInfo<X2EDapp>) => {
                 return (
                     <AppListItem
                         dapp={item}
@@ -152,10 +165,12 @@ const AppList = React.memo(
                         onToggleOpenItem={onToggleOpenItem}
                         appOverview={appOverviews[item.id]}
                         isOverviewLoading={isOverviewsLoading}
+                        scrollRef={ref}
+                        index={index}
                     />
                 )
             },
-            [onDismiss, openItemId, onToggleOpenItem, appOverviews, isOverviewsLoading],
+            [onDismiss, openItemId, onToggleOpenItem, appOverviews, isOverviewsLoading, ref],
         )
 
         const renderSkeletonItem = useCallback(() => {
@@ -208,7 +223,7 @@ const AppList = React.memo(
         }
 
         return (
-            <FlatList
+            <Animated.FlatList
                 data={apps}
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
@@ -217,6 +232,7 @@ const AppList = React.memo(
                 contentContainerStyle={styles.flatListPadding}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
+                ref={ref}
             />
         )
     },
