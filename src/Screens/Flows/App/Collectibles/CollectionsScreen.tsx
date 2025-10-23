@@ -1,12 +1,15 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { BaseSpacer, DescSortIconHeaderButton, Layout } from "~Components"
-import { useNFTCollections } from "./Hooks"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { CollectionCard } from "./Components"
+import { BaseSpacer, Layout } from "~Components"
 import { useThemedStyles } from "~Hooks"
+import { Routes } from "~Navigation"
+import { CollectionCard } from "./Components"
+import { useNFTCollections } from "./Hooks"
 
 export const CollectionsScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
+    const nav = useNavigation()
     const { data: paginatedCollections, isLoading: isCollectionsLoading, fetchNextPage } = useNFTCollections()
 
     const collectionsData = useMemo(
@@ -14,9 +17,21 @@ export const CollectionsScreen = () => {
         [paginatedCollections],
     )
 
-    const renderItem = useCallback(({ item }: ListRenderItemInfo<string>) => {
-        return <CollectionCard collectionAddress={item} onPress={() => {}} />
-    }, [])
+    const renderItem = useCallback(
+        ({ item }: ListRenderItemInfo<string>) => {
+            return (
+                <CollectionCard
+                    collectionAddress={item}
+                    onPress={() => {
+                        nav.navigate(Routes.COLLECTIBLES_COLLECTION_DETAILS, {
+                            collectionAddress: item,
+                        })
+                    }}
+                />
+            )
+        },
+        [nav],
+    )
 
     const renderItemSeparator = useCallback(() => {
         return <BaseSpacer height={8} />
@@ -25,7 +40,6 @@ export const CollectionsScreen = () => {
     return (
         <Layout
             title={"Collections"}
-            headerRightElement={<DescSortIconHeaderButton testID="COLLECTIONS_SORT_BTN" action={() => {}} />}
             fixedBody={
                 !isCollectionsLoading && (
                     <FlatList
@@ -35,8 +49,6 @@ export const CollectionsScreen = () => {
                         ItemSeparatorComponent={renderItemSeparator}
                         style={styles.list}
                         contentContainerStyle={styles.listContentContainer}
-                        pagingEnabled
-                        onEndReachedThreshold={0.3}
                         onEndReached={() => {
                             fetchNextPage()
                         }}
@@ -54,6 +66,7 @@ const baseStyles = () =>
             paddingHorizontal: 16,
         },
         listContentContainer: {
-            paddingVertical: 24,
+            paddingTop: 16,
+            paddingBottom: 24,
         },
     })

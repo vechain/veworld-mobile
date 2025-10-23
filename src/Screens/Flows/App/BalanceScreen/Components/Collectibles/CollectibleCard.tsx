@@ -3,22 +3,28 @@ import React, { useCallback, useMemo } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { ImageStyle } from "react-native-fast-image"
 import LinearGradient from "react-native-linear-gradient"
+import Animated from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseView, BlurView, NFTImageComponent } from "~Components"
 import { COLORS } from "~Constants"
 import { useNftBookmarking, useNFTMedia, useThemedStyles } from "~Hooks"
 import { useCollectibleMetadata } from "~Hooks/useCollectibleMetadata"
+import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import { NFTMediaType } from "~Model"
 import HapticsService from "~Services/HapticsService"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 
 type Props = {
     address: string
     tokenId: string
 }
 
+const AnimatedBaseIcon = Animated.createAnimatedComponent(wrapFunctionComponent(BaseIcon))
+
 export const CollectibleCard = ({ address, tokenId }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { isFavorite, toggleFavorite } = useNftBookmarking(address, tokenId)
     const { data } = useCollectibleMetadata({ address, tokenId })
+    const { animatedStyles, favoriteIconAnimation } = useFavoriteAnimation()
 
     const { name } = useMemo(() => {
         return {
@@ -38,13 +44,21 @@ export const CollectibleCard = ({ address, tokenId }: Props) => {
 
     const handleToggleFavorite = useCallback(() => {
         HapticsService.triggerImpact({ level: "Light" })
-        toggleFavorite()
-    }, [toggleFavorite])
+        favoriteIconAnimation(finished => {
+            if (finished) {
+                toggleFavorite()
+            }
+        })
+    }, [favoriteIconAnimation, toggleFavorite])
 
     return (
         <Pressable style={styles.root}>
             <Pressable onPress={handleToggleFavorite} style={styles.favoriteIconContainer} hitSlop={8}>
-                <BaseIcon name={isFavorite ? "icon-star-on" : "icon-star"} color={COLORS.WHITE} />
+                <AnimatedBaseIcon
+                    name={isFavorite ? "icon-star-on" : "icon-star"}
+                    color={COLORS.WHITE}
+                    style={animatedStyles}
+                />
             </Pressable>
             {media?.mediaType === NFTMediaType.IMAGE && (
                 <NFTImageComponent style={styles.image as ImageStyle} uri={media.image} />
