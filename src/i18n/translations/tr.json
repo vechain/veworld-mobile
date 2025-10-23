@@ -425,7 +425,7 @@
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "{cloud: string} içinde yedeklenmiş cüzdan bulamadık. Tekrar deneyin veya kurtarma ifadenizi kullanın.",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "Mevcut cüzdan yok",
   "COLLECTIBLES_ACTION_AVATAR_ACTIVE": "Avatar",
-  "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "Avatar belirle",
+  "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "Avatar ayarla",
   "COLLECTIBLES_ACTION_FAVORITE_INACTIVE": "Favori",
   "COLLECTIBLES_ACTION_SEND_INACTIVE": "Gönder",
   "COLLECTIBLES_DESCRIPTION": "Açıklama",
