@@ -1,5 +1,5 @@
 import { PixelRatio, Platform } from "react-native"
-import { SCREEN_WIDTH } from "~Constants"
+import { SCREEN_WIDTH } from "~Constants/Constants/Screen"
 
 const GUIDELINE_WIDTH = 375
 

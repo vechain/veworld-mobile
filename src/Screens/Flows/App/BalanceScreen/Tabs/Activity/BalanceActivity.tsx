@@ -104,7 +104,7 @@ export const BalanceActivity = ({ tab }: { tab: BalanceTab }) => {
         return <SkeletonActivity />
     }, [])
 
-    if (!isLoading && data?.length === 0) return null
+    if (!isLoading && !data?.length) return null
 
     return (
         <BaseView flexDirection="column" gap={16}>

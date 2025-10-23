@@ -207,11 +207,26 @@ const _BaseBottomSheet = <TData,>(
     ref: React.ForwardedRef<BottomSheetModalMethods>,
 ) => {
     const { onChange, ...sheetProps } = props
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { height: windowHeight } = useWindowDimensions()
     const { bottom: bottomSafeAreaSize } = useSafeAreaInsets()
     const reducedMotion = useReducedMotion()
     const { handleSheetPositionChange } = useBottomSheetBackHandler(ref)
+
+    const bgRoundingStyle = useMemo(() => {
+        if (floating) return [styles.floatingRounding]
+        if (rounded) return [styles.notFloatingRounding]
+        return [styles.noRounding]
+    }, [floating, rounded, styles.floatingRounding, styles.noRounding, styles.notFloatingRounding])
+
+    const flattenedBsStyle = useMemo(() => {
+        return StyleSheet.flatten([bgRoundingStyle, backgroundStyle ?? styles.backgroundStyle])
+    }, [backgroundStyle, bgRoundingStyle, styles.backgroundStyle])
+
+    const handleColor = useMemo(() => {
+        if (!theme.isDark) return COLORS.GREY_300
+        return flattenedBsStyle.backgroundColor === theme.colors.card ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300
+    }, [flattenedBsStyle.backgroundColor, theme.colors.card, theme.isDark])
 
     const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
         return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
@@ -233,10 +248,10 @@ const _BaseBottomSheet = <TData,>(
     const renderHandle = useCallback(
         (props_: BottomSheetHandleProps) => (
             <BaseView style={styles.handleWrapper}>
-                <BaseView {...props_} style={styles.handleStyle} />
+                <BaseView {...props_} style={[styles.handleStyle, { backgroundColor: handleColor }]} />
             </BaseView>
         ),
-        [styles],
+        [handleColor, styles.handleStyle, styles.handleWrapper],
     )
 
     const onSheetPositionChange = useCallback(
@@ -307,12 +322,6 @@ const _BaseBottomSheet = <TData,>(
         if (rounded) return [styles.notFloatingRounding]
         return undefined
     }, [floating, rounded, styles.floating, styles.floatingRounding, styles.notFloatingRounding])
-
-    const bgRoundingStyle = useMemo(() => {
-        if (floating) return [styles.floatingRounding]
-        if (rounded) return [styles.notFloatingRounding]
-        return [styles.noRounding]
-    }, [floating, rounded, styles.floatingRounding, styles.noRounding, styles.notFloatingRounding])
 
     return (
         <BottomSheetModal

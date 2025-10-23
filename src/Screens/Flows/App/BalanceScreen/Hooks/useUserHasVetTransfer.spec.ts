@@ -1,7 +1,7 @@
-import { TestWrapper } from "~Test"
 import { renderHook } from "@testing-library/react-hooks"
-import { fetchIndexedHistoryEvent } from "~Networking"
 import { useUserHasVetTransfer } from "./useUserHasVetTransfer"
+import { TestWrapper } from "~Test"
+import { fetchIndexedHistoryEvent } from "~Networking"
 
 jest.mock("~Networking", () => ({
     ...jest.requireActual("~Networking"),
