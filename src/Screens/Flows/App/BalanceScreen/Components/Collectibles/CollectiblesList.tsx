@@ -1,34 +1,121 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseButton, BaseIcon, BaseSpacer } from "~Components"
-import { useThemedStyles } from "~Hooks"
-import { useHomeCollectibles } from "~Hooks/useHomeCollectibles"
+import { FlatList, ListRenderItemInfo, Pressable, StyleSheet } from "react-native"
+import { ImageStyle } from "react-native-fast-image"
+import LinearGradient from "react-native-linear-gradient"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, BlurView, NFTImageComponent } from "~Components"
+import { COLORS } from "~Constants"
+import { useCollectionBookmarking, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { selectAllFavoriteNfts, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
-import { CollectibleCard } from "./CollectibleCard"
+import { useNFTCollections } from "~Screens/Flows/App/Collectibles/Hooks"
+import { useCollectionMetadata } from "~Screens/Flows/App/Collectibles/Hooks/useCollectionMetadata"
+import HapticsService from "~Services/HapticsService"
+import { selectAllFavoriteCollections, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils, URIUtils } from "~Utils"
 import { CollectiblesEmptyCard } from "./CollectiblesEmptyCard"
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />
 
-const ListFooterComponent = ({ addresses }: { addresses: string[] }) => {
+const CollectionCard: React.FC<{ collectionAddress: string; isObservedAccount: boolean }> = ({
+    collectionAddress,
+    isObservedAccount,
+}) => {
+    const { styles } = useThemedStyles(cardStyles)
+    const { isFavorite, toggleFavorite } = useCollectionBookmarking(collectionAddress)
+    const { LL } = useI18nContext()
+    const nav = useNavigation()
+    const { data: collectionMetadata } = useCollectionMetadata(collectionAddress)
+
+    const handlePress = useCallback(() => {
+        nav.navigate(Routes.COLLECTIBLES_COLLECTION_DETAILS, {
+            collectionAddress,
+        })
+    }, [collectionAddress, nav])
+
+    const imageUri = useMemo(() => {
+        if (!collectionMetadata?.image) return undefined
+        try {
+            return URIUtils.convertUriToUrl(collectionMetadata.image)
+        } catch {
+            return undefined
+        }
+    }, [collectionMetadata?.image])
+
+    const handleToggleFavorite = useCallback(() => {
+        HapticsService.triggerImpact({ level: "Light" })
+        toggleFavorite()
+    }, [toggleFavorite])
+
+    return (
+        <Pressable style={styles.root} onPress={handlePress}>
+            {!isObservedAccount && (
+                <Pressable onPress={handleToggleFavorite} style={styles.favoriteIconContainer} hitSlop={16}>
+                    <BaseIcon name={isFavorite ? "icon-star-on" : "icon-star"} color={COLORS.WHITE} />
+                </Pressable>
+            )}
+            {imageUri ? (
+                <NFTImageComponent style={styles.image as ImageStyle} uri={imageUri} />
+            ) : (
+                <BaseView style={styles.image} />
+            )}
+
+            <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
+                <LinearGradient
+                    colors={[COLORS.BALANCE_BACKGROUND_GRADIENT_END_50, COLORS.BALANCE_BACKGROUND_50]}
+                    useAngle
+                    angle={0}>
+                    <BaseView flexDirection="column" alignItems="flex-start" p={8}>
+                        <BaseText
+                            typographyFont="captionSemiBold"
+                            color={COLORS.WHITE_RGBA_90}
+                            numberOfLines={1}
+                            ellipsizeMode="tail">
+                            {collectionMetadata?.name || collectionAddress}
+                        </BaseText>
+                        <BaseText typographyFont="captionRegular" color={COLORS.WHITE_RGBA_85} mt={2}>
+                            {collectionMetadata?.balanceOf || 0} {LL.TAB_TITLE_NFT()}
+                        </BaseText>
+                    </BaseView>
+                </LinearGradient>
+            </BlurView>
+        </Pressable>
+    )
+}
+
+const cardStyles = () =>
+    StyleSheet.create({
+        root: {
+            borderRadius: 12,
+            position: "relative",
+            flex: 1,
+            overflow: "hidden",
+            aspectRatio: 0.8791,
+            backgroundColor: COLORS.BALANCE_BACKGROUND,
+        },
+        image: {
+            height: "100%",
+            width: "100%",
+        },
+        bottom: { position: "absolute", bottom: 0, left: 0, width: "100%" },
+        favoriteIconContainer: {
+            top: 8,
+            right: 12,
+            position: "absolute",
+            zIndex: 1,
+        },
+    })
+
+const ListFooterComponent = ({ hasCollections }: { hasCollections: boolean }) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(footerStyles)
 
     const onNavigate = useCallback(() => {
-        if (new Set(addresses).size === 1) {
-            nav.navigate(Routes.COLLECTIBLES_COLLECTION_DETAILS, {
-                collectionAddress: addresses[0],
-            })
-            return
-        }
         nav.navigate(Routes.COLLECTIBLES_COLLECTIONS)
-    }, [addresses, nav])
+    }, [nav])
 
-    if (addresses.length === 0) return null
+    if (!hasCollections) return null
 
     return (
         <BaseButton
@@ -57,47 +144,50 @@ const footerStyles = () =>
 
 export const CollectiblesList = () => {
     const { styles } = useThemedStyles(baseStyles)
-    const favoriteNfts = useAppSelector(selectAllFavoriteNfts)
-    const { data: allNfts } = useHomeCollectibles()
+    const { data: paginatedCollections } = useNFTCollections()
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const favoriteCollections = useAppSelector(selectAllFavoriteCollections)
 
-    const nfts = useMemo(() => {
-        return (
-            favoriteNfts
-                .sort((a, b) => b.createdAt - a.createdAt)
-                .map(({ createdAt: _createdAt, ...rest }) => rest)
-                .concat(allNfts?.data.map(nft => ({ address: nft.contractAddress, tokenId: nft.tokenId })) ?? [])
-                //Deduplicate items
-                .reduce((acc, curr) => {
-                    if (
-                        acc.find(
-                            v => AddressUtils.compareAddresses(curr.address, v.address) && curr.tokenId === v.tokenId,
-                        )
-                    )
-                        return acc
-                    acc.push(curr)
-                    return acc
-                }, [] as { address: string; tokenId: string }[])
-                .slice(0, 4)
-        )
-    }, [allNfts?.data, favoriteNfts])
+    const isObservedAccount = useMemo(() => {
+        return AccountUtils.isObservedAccount(selectedAccount)
+    }, [selectedAccount])
 
-    const addresses = useMemo(() => nfts.map(nft => nft.address), [nfts])
+    const favoriteAddresses = useMemo(() => {
+        return new Set(favoriteCollections.map(fav => fav.address.toLowerCase()))
+    }, [favoriteCollections])
 
-    const renderItem = useCallback(({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
-        return <CollectibleCard address={item.address} tokenId={item.tokenId} />
-    }, [])
+    const collections = useMemo(() => {
+        const allCollections = paginatedCollections?.pages.flatMap(page => page.collections) ?? []
+
+        // Sort collections: favorites first, then by original order
+        return allCollections.sort((a, b) => {
+            const aIsFavorite = favoriteAddresses.has(a.toLowerCase())
+            const bIsFavorite = favoriteAddresses.has(b.toLowerCase())
+
+            if (aIsFavorite && !bIsFavorite) return -1
+            if (!aIsFavorite && bIsFavorite) return 1
+            return 0
+        })
+    }, [paginatedCollections, favoriteAddresses])
+
+    const renderItem = useCallback(
+        ({ item }: ListRenderItemInfo<string>) => {
+            return <CollectionCard collectionAddress={item} isObservedAccount={isObservedAccount} />
+        },
+        [isObservedAccount],
+    )
 
     return (
         <FlatList
             renderItem={renderItem}
-            data={nfts}
+            data={collections}
             numColumns={2}
             ItemSeparatorComponent={ItemSeparatorComponent}
             ListEmptyComponent={CollectiblesEmptyCard}
             horizontal={false}
-            keyExtractor={v => `${v.address}_${v.tokenId}`}
+            keyExtractor={v => v}
             columnWrapperStyle={styles.listColumn}
-            ListFooterComponent={<ListFooterComponent addresses={addresses} />}
+            ListFooterComponent={<ListFooterComponent hasCollections={collections.length > 0} />}
         />
     )
 }
