@@ -1769,6 +1769,14 @@ type RootTranslation = {
 	 */
 	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: string
 	/**
+	 * G​a​l​l​e​r​y
+	 */
+	COLLECTIBLES_VIEW_GALLERY: string
+	/**
+	 * D​e​t​a​i​l​s
+	 */
+	COLLECTIBLES_VIEW_DETAILS: string
+	/**
 	 * o​r​ ​b​u​y​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​f​r​o​m​ ​o​n​e​ ​o​f​ ​o​u​r​ ​e​c​o​s​y​s​t​e​m​ ​a​p​p​s
 	 */
 	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
@@ -7069,6 +7077,14 @@ Thanks for your patience!
 	 * Transfer a collectible to start building your collection
 	 */
 	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: () => LocalizedString
+	/**
+	 * Gallery
+	 */
+	COLLECTIBLES_VIEW_GALLERY: () => LocalizedString
+	/**
+	 * Details
+	 */
+	COLLECTIBLES_VIEW_DETAILS: () => LocalizedString
 	/**
 	 * or buy a collectible from one of our ecosystem apps
 	 */
