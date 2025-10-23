@@ -1,59 +1,132 @@
-import React, { useCallback, useMemo } from "react"
-import { BaseSpacer, DescSortIconHeaderButton, Layout } from "~Components"
-import { useNFTCollections } from "./Hooks"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { CollectionCard } from "./Components"
+import { useNavigation } from "@react-navigation/native"
+import { BaseSpacer } from "~Components"
 import { useThemedStyles } from "~Hooks"
+import { Routes } from "~Navigation"
+import { selectAllFavoriteNfts, useAppSelector } from "~Storage/Redux"
+import { CollectibleCard } from "../BalanceScreen/Components/Collectibles/CollectibleCard"
+import { CollectibleDetailedCard } from "../BalanceScreen/Components/Collectibles/CollectibleDetailedCard"
+import { CollectiblesEmptyCard } from "../BalanceScreen/Components/Collectibles/CollectiblesEmptyCard"
+import { CollectiblesViewMode } from "../BalanceScreen/Components/Collectibles/ChangeCollectionsListView"
+import { useNFTWithMetadata } from "../NFT/NFTCollectionDetailScreen/Hooks/useNFTWithMetadata"
 
-export const CollectionsScreen = () => {
+type Props = {
+    collectionAddress: string
+    viewMode: CollectiblesViewMode
+    isObservedAccount: boolean
+    onNftCountChange?: (count: number) => void
+}
+
+const ItemSeparatorComponent = () => <BaseSpacer height={8} />
+
+export const CollectionsScreen: React.FC<Props> = ({
+    collectionAddress,
+    viewMode,
+    isObservedAccount,
+    onNftCountChange,
+}) => {
     const { styles } = useThemedStyles(baseStyles)
-    const { data: paginatedCollections, isLoading: isCollectionsLoading, fetchNextPage } = useNFTCollections()
+    const nav = useNavigation()
+    const favoriteNfts = useAppSelector(selectAllFavoriteNfts)
+    const [onEndReachedCalledDuringMomentum, setEndReachedCalledDuringMomentum] = useState(true)
 
-    const collectionsData = useMemo(
-        () => paginatedCollections?.pages.flatMap(page => page.collections) ?? [],
-        [paginatedCollections],
+    const { nfts, fetchMoreNFTs } = useNFTWithMetadata(
+        collectionAddress,
+        onEndReachedCalledDuringMomentum,
+        setEndReachedCalledDuringMomentum,
     )
 
-    const renderItem = useCallback(({ item }: ListRenderItemInfo<string>) => {
-        return <CollectionCard collectionAddress={item} onPress={() => {}} />
+    const onMomentumScrollBegin = useCallback(() => {
+        setEndReachedCalledDuringMomentum(true)
     }, [])
 
-    const renderItemSeparator = useCallback(() => {
-        return <BaseSpacer height={8} />
-    }, [])
+    const favoriteNftKeys = useMemo(() => {
+        return new Set(favoriteNfts.map(fav => `${fav.address.toLowerCase()}_${fav.tokenId}`))
+    }, [favoriteNfts])
+
+    const renderGalleryItem = useCallback(
+        ({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
+            return (
+                <CollectibleCard
+                    address={collectionAddress}
+                    tokenId={item.tokenId}
+                    isObservedAccount={isObservedAccount}
+                    onPress={() => {
+                        nav.navigate(Routes.NFT_DETAILS, {
+                            nftTokenId: item.tokenId,
+                            collectionAddress: item.address,
+                        })
+                    }}
+                />
+            )
+        },
+        [collectionAddress, isObservedAccount, nav],
+    )
+
+    const renderDetailsItem = useCallback(
+        ({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
+            return <CollectibleDetailedCard address={collectionAddress} tokenId={item.tokenId} />
+        },
+        [collectionAddress],
+    )
+
+    const nftData = useMemo(() => {
+        const allNfts = nfts?.map(nft => ({ address: nft.address, tokenId: nft.tokenId })) ?? []
+
+        // Sort NFTs: favorites first, then by original order
+        return allNfts.sort((a, b) => {
+            const aIsFavorite = favoriteNftKeys.has(`${a.address.toLowerCase()}_${a.tokenId}`)
+            const bIsFavorite = favoriteNftKeys.has(`${b.address.toLowerCase()}_${b.tokenId}`)
+
+            if (aIsFavorite && !bIsFavorite) return -1
+            if (!aIsFavorite && bIsFavorite) return 1
+            return 0
+        })
+    }, [nfts, favoriteNftKeys])
+
+    useEffect(() => {
+        onNftCountChange?.(nftData.length)
+    }, [nftData.length, onNftCountChange])
+
+    if (viewMode === "GALLERY") {
+        return (
+            <FlatList
+                key="gallery-view"
+                renderItem={renderGalleryItem}
+                data={nftData}
+                numColumns={2}
+                ItemSeparatorComponent={ItemSeparatorComponent}
+                ListEmptyComponent={CollectiblesEmptyCard}
+                horizontal={false}
+                keyExtractor={v => `${v.address}_${v.tokenId}`}
+                columnWrapperStyle={styles.listColumn}
+                onEndReached={fetchMoreNFTs}
+                onEndReachedThreshold={0.5}
+                onMomentumScrollBegin={onMomentumScrollBegin}
+            />
+        )
+    }
 
     return (
-        <Layout
-            title={"Collections"}
-            headerRightElement={<DescSortIconHeaderButton testID="COLLECTIONS_SORT_BTN" action={() => {}} />}
-            fixedBody={
-                !isCollectionsLoading && (
-                    <FlatList
-                        keyExtractor={item => item}
-                        data={collectionsData}
-                        renderItem={renderItem}
-                        ItemSeparatorComponent={renderItemSeparator}
-                        style={styles.list}
-                        contentContainerStyle={styles.listContentContainer}
-                        pagingEnabled
-                        onEndReachedThreshold={0.3}
-                        onEndReached={() => {
-                            fetchNextPage()
-                        }}
-                        showsVerticalScrollIndicator={false}
-                    />
-                )
-            }
+        <FlatList
+            key="details-view"
+            renderItem={renderDetailsItem}
+            data={nftData}
+            ItemSeparatorComponent={ItemSeparatorComponent}
+            ListEmptyComponent={CollectiblesEmptyCard}
+            keyExtractor={v => `${v.address}_${v.tokenId}`}
+            onEndReached={fetchMoreNFTs}
+            onEndReachedThreshold={0.5}
+            onMomentumScrollBegin={onMomentumScrollBegin}
         />
     )
 }
 
 const baseStyles = () =>
     StyleSheet.create({
-        list: {
-            paddingHorizontal: 16,
-        },
-        listContentContainer: {
-            paddingVertical: 24,
+        listColumn: {
+            columnGap: 8,
+            justifyContent: "flex-start",
         },
     })
