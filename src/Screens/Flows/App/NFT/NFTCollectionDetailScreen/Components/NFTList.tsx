@@ -13,9 +13,18 @@ type Props = {
     fetchMoreNFTs: () => void
     onMomentumScrollBegin: () => void
     hasNext: boolean
+    openReportBottomSheet?: boolean
 }
 
-export const NFTList = ({ collection, nfts, fetchMoreNFTs, isLoading, onMomentumScrollBegin, hasNext }: Props) => {
+export const NFTList = ({
+    collection,
+    nfts,
+    fetchMoreNFTs,
+    isLoading,
+    onMomentumScrollBegin,
+    hasNext,
+    openReportBottomSheet,
+}: Props) => {
     const contactsListSeparator = useCallback(() => <BaseSpacer height={16} />, [])
 
     const renderItem = useCallback(
@@ -27,7 +36,9 @@ export const NFTList = ({ collection, nfts, fetchMoreNFTs, isLoading, onMomentum
 
     return (
         <FlashList
-            ListHeaderComponent={<HeaderComponent collection={collection} />}
+            ListHeaderComponent={
+                <HeaderComponent collection={collection} openReportBottomSheet={openReportBottomSheet} />
+            }
             data={nfts}
             ItemSeparatorComponent={contactsListSeparator}
             numColumns={2}

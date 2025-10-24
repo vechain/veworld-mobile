@@ -95,7 +95,7 @@ const baseStyles = (theme: ColorThemeType) =>
             color: theme.colors.text,
         },
         bottomSheet: {
-            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.LIGHT_GRAY,
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
             borderTopRightRadius: 24,
             borderTopLeftRadius: 24,
             paddingHorizontal: 24,
