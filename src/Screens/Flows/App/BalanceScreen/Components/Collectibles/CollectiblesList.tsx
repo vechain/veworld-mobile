@@ -79,7 +79,7 @@ export const CollectiblesList = ({ collectionAddress }: CollectiblesListProps) =
             selectedNetwork.genesis.id,
             selectedAccount.address,
         ],
-        queryFn: () => getNftsForContract(selectedNetwork.type, collectionAddress!, selectedAccount.address, 100, 0),
+        queryFn: () => getNftsForContract(selectedNetwork.type, collectionAddress!, selectedAccount.address, 10, 0),
         enabled: !!collectionAddress,
         staleTime: 5 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
