@@ -9,7 +9,7 @@ import { Network, NftCollection, NFTMetadata } from "~Model"
 import { getCachedNftBalanceOf, getCachedTokenURI, getNftsForContract, GithubCollectionResponse } from "~Networking"
 import { getNftCollectionMetadata } from "~Networking/NFT/getNftCollectionMetadata"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import AddressUtils from "~Utils/AddressUtils"
 import { warn } from "~Utils/Logger"
 
 const getCollectionMetadataQueryKey = (
@@ -26,7 +26,7 @@ const getCollectionMetadata = async (
     thor: ThorClient,
     fetchMetadata: (uri: string) => Promise<NFTMetadata | undefined>,
 ) => {
-    const regInfo = registryInfo.find(col => compareAddresses(col.address, collectionAddress))
+    const regInfo = registryInfo.find(col => AddressUtils.compareAddresses(col.address, collectionAddress))
 
     let collection: NftCollection
 

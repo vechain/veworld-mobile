@@ -13,7 +13,7 @@ import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import HapticsService from "~Services/HapticsService"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { useCollectionMetadata } from "../Hooks/useCollectionMetadata"
-import { AddressUtils } from "~Utils"
+import AddressUtils from "~Utils/AddressUtils"
 import { SkeletonCollectionCard } from "./SkeletonCollectionCard"
 
 type Props = {

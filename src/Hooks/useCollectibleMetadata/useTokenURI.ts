@@ -1,15 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { useThorClient } from "~Hooks/useThorClient"
-import { getTokenURI } from "~Networking"
+import { getTokenURI, getTokenURIQueryKey } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-
-export const getTokenURIQueryKey = (genesisId: string, address: string, tokenId: string) => [
-    "COLLECTIBLES",
-    genesisId,
-    address,
-    tokenId,
-]
 
 export const useTokenURI = ({ address, tokenId }: { address: string; tokenId: string }) => {
     const thor = useThorClient()

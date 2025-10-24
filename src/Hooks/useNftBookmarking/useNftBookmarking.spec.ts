@@ -78,6 +78,7 @@ const createMockNftState = (hasFavorite: boolean): NftSliceState => {
                   },
               }
             : {},
+        favoriteCollections: {},
     }
 }
 
