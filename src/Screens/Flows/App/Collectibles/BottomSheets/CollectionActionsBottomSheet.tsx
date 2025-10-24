@@ -13,7 +13,15 @@ import { Routes, RootStackParamListHome } from "~Navigation"
 
 const URL_SUPPORT = "https://support.veworld.com"
 
-const Content = ({ collectionAddress, onClose }: { collectionAddress: string; onClose: () => void }) => {
+const Content = ({
+    collectionAddress,
+    onClose,
+    onOpenReport,
+}: {
+    collectionAddress: string
+    onClose: () => void
+    onOpenReport: () => void
+}) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
@@ -39,7 +47,11 @@ const Content = ({ collectionAddress, onClose }: { collectionAddress: string; on
 
     const onBlockPress = useCallback(() => {
         onClose()
-    }, [onClose])
+        // Small delay to ensure the first bottom sheet closes before opening the next one
+        setTimeout(() => {
+            onOpenReport()
+        }, 300)
+    }, [onClose, onOpenReport])
 
     return (
         <BaseView px={24} gap={12} pb={16}>
@@ -68,7 +80,7 @@ const Content = ({ collectionAddress, onClose }: { collectionAddress: string; on
 
             <TouchableOpacity style={styles.button} onPress={onBlockPress}>
                 <BaseIcon
-                    name="icon-circle-slashed"
+                    name="icon-slash"
                     size={16}
                     style={styles.icon}
                     color={theme.isDark ? COLORS.RED_300 : COLORS.RED_600}
@@ -83,9 +95,10 @@ const Content = ({ collectionAddress, onClose }: { collectionAddress: string; on
 
 type Props = {
     bsRef: RefObject<BottomSheetModalMethods>
+    onOpenReport: () => void
 }
 
-export const CollectionActionsBottomSheet = ({ bsRef }: Props) => {
+export const CollectionActionsBottomSheet = ({ bsRef, onOpenReport }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { onClose } = useBottomSheetModal({ externalRef: bsRef })
 
@@ -98,7 +111,9 @@ export const CollectionActionsBottomSheet = ({ bsRef }: Props) => {
             backgroundStyle={styles.layout}
             noMargins
             floating>
-            {collectionAddress => <Content collectionAddress={collectionAddress} onClose={onClose} />}
+            {collectionAddress => (
+                <Content collectionAddress={collectionAddress} onClose={onClose} onOpenReport={onOpenReport} />
+            )}
         </BaseBottomSheet>
     )
 }

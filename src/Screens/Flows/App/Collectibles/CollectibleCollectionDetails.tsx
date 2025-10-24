@@ -12,6 +12,7 @@ import { CollectiblesDetailsCard } from "./Components/CollectiblesDetailsCard"
 import { CollectionNftsList } from "./Components/CollectionNftsList"
 import { ColorThemeType } from "~Constants"
 import { CollectionActionsBottomSheet } from "./BottomSheets/CollectionActionsBottomSheet"
+import { ReportCollectionBottomsheet } from "./BottomSheets/ReportCollectionBottomSheet"
 
 export enum CollectiblesViewMode {
     GALLERY = "GALLERY",
@@ -25,12 +26,22 @@ export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) 
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
     const { ref: collectionActionsBsRef, onOpen: onOpenCollectionActionsBs } = useBottomSheetModal()
+    const {
+        ref: reportCollectionBsRef,
+        onOpen: onOpenReportCollectionBs,
+        onClose: onCloseReportCollectionBs,
+    } = useBottomSheetModal()
     const [selectedKey, setSelectedKey] = useState<CollectiblesViewMode>(CollectiblesViewMode.GALLERY)
     const collectionAddress = route.params.collectionAddress
 
     const handleOpenActionsBottomSheet = useCallback(() => {
         onOpenCollectionActionsBs(collectionAddress)
     }, [onOpenCollectionActionsBs, collectionAddress])
+
+    const handleOpenReportCollectionBottomSheet = useCallback(() => {
+        onOpenReportCollectionBs()
+    }, [onOpenReportCollectionBs])
+
     const { data: collectionMetadata, isLoading: isLoadingCollectionMetadata } =
         useCollectionMetadata(collectionAddress)
 
@@ -115,7 +126,15 @@ export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) 
                             <CollectiblesDetailsCard collectionMetadata={collectionMetadata} />
                         )}
                     </BaseView>
-                    <CollectionActionsBottomSheet bsRef={collectionActionsBsRef} />
+                    <CollectionActionsBottomSheet
+                        bsRef={collectionActionsBsRef}
+                        onOpenReport={handleOpenReportCollectionBottomSheet}
+                    />
+                    <ReportCollectionBottomsheet
+                        ref={reportCollectionBsRef}
+                        collectionAddress={collectionAddress}
+                        onClose={onCloseReportCollectionBs}
+                    />
                 </>
             }
         />
