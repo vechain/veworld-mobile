@@ -1,8 +1,10 @@
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import React, { useCallback, useMemo, useState } from "react"
 import { FlatList, ListRenderItemInfo, RefreshControl, StyleSheet } from "react-native"
-import { BaseSpacer } from "~Components"
+import { BaseSpacer, BaseView } from "~Components"
 import { CollectibleBottomSheet } from "~Components/Collectibles/CollectibleBottomSheet"
+import { Spinner } from "~Components/Reusable/Spinner"
+import { COLORS } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { getNftsForContract } from "~Networking"
 import { selectAllFavoriteNfts, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
@@ -13,6 +15,16 @@ import { CollectiblesEmptyCard } from "../../BalanceScreen/Components/Collectibl
 const ITEMS_PER_PAGE = 10
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />
+
+const ListFooterComponent = ({ isLoading }: { isLoading: boolean }) => {
+    if (!isLoading) return null
+
+    return (
+        <BaseView py={16} alignItems="center" justifyContent="center">
+            <Spinner size={24} color={COLORS.PURPLE} />
+        </BaseView>
+    )
+}
 
 type Props = {
     collectionAddress: string
@@ -120,6 +132,7 @@ export const CollectionNftsList = ({ collectionAddress }: Props) => {
                 numColumns={2}
                 ItemSeparatorComponent={ItemSeparatorComponent}
                 ListEmptyComponent={CollectiblesEmptyCard}
+                ListFooterComponent={<ListFooterComponent isLoading={isFetchingNextPage} />}
                 horizontal={false}
                 keyExtractor={v => `${v.address}_${v.tokenId}`}
                 columnWrapperStyle={styles.listColumn}
