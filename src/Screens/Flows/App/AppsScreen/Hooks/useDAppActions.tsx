@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useCameraPermissions, useVisitedUrls } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
-import { NETWORK_TYPE } from "~Model"
+import { NETWORK_TYPE, VbdDApp } from "~Model"
 import { Routes } from "~Navigation"
 import {
     addNavigationToDApp,
@@ -40,23 +40,27 @@ export const useDAppActions = (sourceScreen?: Routes) => {
     )
 
     const onDAppPress = useCallback(
-        async (dapp: DiscoveryDApp) => {
+        async (dapp: DiscoveryDApp | VbdDApp) => {
+            const href = "external_url" in dapp ? dapp.external_url : dapp.href
+            const vbdId = "external_url" in dapp ? dapp.id : dapp.veBetterDaoId
+            const isCustom = "external_url" in dapp ? false : dapp.isCustom ?? false
+
             track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
-                url: dapp.href,
+                url: href,
             })
 
-            if (dapp.veBetterDaoId) {
-                increaseDappCounter(dapp.veBetterDaoId)
+            if (vbdId) {
+                increaseDappCounter(vbdId)
                 await checkPermissions()
             }
 
-            addVisitedUrl(dapp.href)
+            addVisitedUrl(href)
 
             setTimeout(() => {
-                dispatch(addNavigationToDApp({ href: dapp.href, isCustom: dapp.isCustom ?? false }))
+                dispatch(addNavigationToDApp({ href: href, isCustom: isCustom }))
             }, 1000)
 
-            navigateWithTab({ url: dapp.href, title: dapp.name })
+            navigateWithTab({ url: href, title: dapp.name })
         },
         [track, addVisitedUrl, navigateWithTab, increaseDappCounter, checkPermissions, dispatch],
     )
