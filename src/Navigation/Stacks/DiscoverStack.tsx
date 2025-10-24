@@ -29,6 +29,7 @@ export type RootStackParamListBrowser = {
             | Routes.ACTIVITY_STAKING
             | Routes.APPS
             | Routes.SWAP
+            | Routes.COLLECTIBLES_COLLECTION_DETAILS
     }
     [Routes.DISCOVER_TABS_MANAGER]: undefined
     [Routes.ACTIVITY_STAKING]: undefined

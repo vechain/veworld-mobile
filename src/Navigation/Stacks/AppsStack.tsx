@@ -20,6 +20,7 @@ export type RootStackParamListApps = {
             | Routes.ACTIVITY_STAKING
             | Routes.APPS
             | Routes.SWAP
+            | Routes.COLLECTIBLES_COLLECTION_DETAILS
     }
     [Routes.APPS_SEARCH]: undefined
     [Routes.APPS_TABS_MANAGER]: undefined

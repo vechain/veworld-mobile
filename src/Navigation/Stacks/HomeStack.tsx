@@ -148,6 +148,7 @@ export type RootStackParamListHome = {
             | Routes.ACTIVITY_STAKING
             | Routes.APPS
             | Routes.SWAP
+            | Routes.COLLECTIBLES_COLLECTION_DETAILS
     }
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
