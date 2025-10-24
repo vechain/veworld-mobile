@@ -24,7 +24,13 @@ export const CollectionsScreen = () => {
 
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
-    const { data: paginatedCollections, isLoading: isCollectionsLoading, fetchNextPage } = useNFTCollections()
+    const {
+        data: paginatedCollections,
+        isLoading: isCollectionsLoading,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useNFTCollections()
     const favoriteCollections = useAppSelector(selectAllFavoriteCollections)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -59,6 +65,10 @@ export const CollectionsScreen = () => {
         })
         setIsRefreshing(false)
     }, [queryClient, selectedAccount.address, selectedNetwork.genesis.id])
+
+    const handleEndReached = useCallback(() => {
+        if (hasNextPage && !isFetchingNextPage) fetchNextPage()
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<string>) => {
@@ -110,9 +120,7 @@ export const CollectionsScreen = () => {
                             />
                         }
                         contentContainerStyle={styles.listContentContainer}
-                        onEndReached={() => {
-                            fetchNextPage()
-                        }}
+                        onEndReached={handleEndReached}
                         showsVerticalScrollIndicator={false}
                         itemLayoutAnimation={SequencedTransition.reverse()}
                     />

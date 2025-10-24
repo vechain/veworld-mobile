@@ -88,6 +88,7 @@ const baseStyles = () =>
             overflow: "hidden",
             aspectRatio: 0.8791,
             maxWidth: "50%",
+            backgroundColor: COLORS.PURPLE,
         },
         image: {
             height: "100%",

@@ -3,10 +3,10 @@ import React, { useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import FastImage from "react-native-fast-image"
 import Animated from "react-native-reanimated"
-import { NFTPlaceholderDark } from "~Assets"
+import { NFTPlaceholderDarkV2 } from "~Assets"
 import { BaseIcon, BaseText, BaseView, BlurView } from "~Components"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
-import { COLORS } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useNFTMedia, useThemedStyles } from "~Hooks"
 import { useCollectionsBookmarking } from "~Hooks/useCollectionsBookmarking"
 import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
@@ -61,7 +61,7 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
                     resizeMode="cover"
                     style={styles.image}
                     fallback
-                    defaultSource={NFTPlaceholderDark}>
+                    defaultSource={NFTPlaceholderDarkV2}>
                     <TouchableOpacity
                         disabled={!collectionMetadata?.id}
                         style={styles.favoriteIconContainer}
@@ -101,14 +101,14 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         card: {
             width: "100%",
             height: 182,
             borderRadius: 12,
             overflow: "hidden",
-            backgroundColor: COLORS.PURPLE,
+            backgroundColor: theme.colors.placeholder,
             position: "relative",
         },
         image: {
