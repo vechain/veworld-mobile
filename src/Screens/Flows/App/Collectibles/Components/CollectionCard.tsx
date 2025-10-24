@@ -1,137 +1,146 @@
-import { useQuery } from "@tanstack/react-query"
-import React, { useMemo } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
-import FastImage from "react-native-fast-image"
+import { useNavigation } from "@react-navigation/native"
+import React, { useCallback, useMemo } from "react"
 import Animated from "react-native-reanimated"
-import { NFTPlaceholderDark } from "~Assets"
-import { BaseIcon, BaseText, BaseView, BlurView } from "~Components"
-import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
+import { Pressable, StyleSheet } from "react-native"
+import { ImageStyle } from "react-native-fast-image"
+import LinearGradient from "react-native-linear-gradient"
+import { BaseIcon, BaseText, BaseView, BlurView, NFTImageComponent } from "~Components"
 import { COLORS } from "~Constants"
-import { useFormatFiat, useNFTMedia, useThemedStyles } from "~Hooks"
+import { useCollectionBookmarking, useThemedStyles } from "~Hooks"
+import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
+import { useI18nContext } from "~i18n"
+import { Routes } from "~Navigation"
+import HapticsService from "~Services/HapticsService"
 import { URIUtils } from "~Utils"
-import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { useCollectionMetadata } from "../Hooks/useCollectionMetadata"
 
 type Props = {
     collectionAddress: string
-    onPress: (address: string) => void
+    name?: string
+    image?: string
+    count?: number
+    isObservedAccount?: boolean
+    onPress?: (address: string) => void
 }
 
 const AnimatedBaseIcon = Animated.createAnimatedComponent(wrapFunctionComponent(BaseIcon))
 
-export const CollectionCard = ({ collectionAddress, onPress }: Props) => {
-    const { styles } = useThemedStyles(baseStyles)
-    const { data: collectionMetadata, isLoading } = useCollectionMetadata(collectionAddress)
-    const { fetchMedia } = useNFTMedia()
-    const [isFavorite, setIsFavorite] = useState(false)
+export const CollectionCard: React.FC<Props> = ({
+    collectionAddress,
+    name: propName,
+    image: propImage,
+    count: propCount,
+    isObservedAccount = false,
+    onPress,
+}) => {
+    const { styles } = useThemedStyles(cardStyles)
+    const { LL } = useI18nContext()
+    const nav = useNavigation()
+    const { isFavorite, toggleFavorite } = useCollectionBookmarking(collectionAddress)
     const { animatedStyles, favoriteIconAnimation } = useFavoriteAnimation()
 
-    const { data: media } = useQuery({
-        queryKey: ["COLLECTIBLES", "COLLECTION", "MEDIA", collectionMetadata?.image],
-        queryFn: () => fetchMedia(collectionMetadata?.image!),
-        enabled: !!collectionMetadata?.image,
-        staleTime: 5 * 60 * 60 * 1000,
-        gcTime: 24 * 60 * 60 * 1000,
-    })
+    const { data: collectionMetadata, isLoading } = useCollectionMetadata(collectionAddress)
+
+    const name = propName ?? collectionMetadata?.name ?? collectionAddress
+    const count = propCount ?? collectionMetadata?.balanceOf ?? 0
+    const imageSource = propImage ?? collectionMetadata?.image
 
     const imageUri = useMemo(() => {
-        if (!media?.image) return undefined
+        if (!imageSource) return undefined
         try {
-            return URIUtils.convertUriToUrl(media.image)
+            return URIUtils.convertUriToUrl(imageSource)
         } catch {
             return undefined
         }
-    }, [media?.image])
+    }, [imageSource])
+
+    const handlePress = useCallback(() => {
+        if (onPress) {
+            onPress(collectionAddress)
+        } else {
+            nav.navigate(Routes.COLLECTIBLES_COLLECTION_DETAILS, { collectionAddress })
+        }
+    }, [collectionAddress, nav, onPress])
+
+    const handleToggleFavorite = useCallback(() => {
+        if (isObservedAccount) return
+        HapticsService.triggerImpact({ level: "Light" })
+        favoriteIconAnimation(finished => {
+            if (finished) {
+                toggleFavorite()
+            }
+        })
+    }, [isObservedAccount, toggleFavorite, favoriteIconAnimation])
 
     return (
-        <TouchableOpacity disabled={isLoading} activeOpacity={0.8} onPress={() => onPress(collectionAddress)}>
-            <BaseView style={styles.card}>
-                {imageUri ? (
-                    <FastImageBackground source={{ uri: imageUri }} resizeMode="cover" style={styles.image}>
-                        <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
-                            <BaseView
-                                flexDirection="row"
-                                alignItems="center"
-                                justifyContent="space-between"
-                                p={8}
-                                bg={COLORS.BLACK_RGBA_30}>
-                                <BaseText
-                                    typographyFont="captionSemiBold"
-                                    color={COLORS.WHITE_RGBA_90}
-                                    flexDirection="row">
-                                    {collectionMetadata?.name}
-                                </BaseText>
-                                {collectionMetadata?.totalSupply && (
-                                    <BaseView px={8} py={4} bg={COLORS.WHITE_RGBA_15} borderRadius={99}>
-                                        <BaseText typographyFont="smallCaptionMedium" color={COLORS.WHITE_RGBA_90}>
-                                            {formatDisplayNumber(collectionMetadata?.totalSupply, {
-                                                includeSymbol: false,
-                                                locale: formatLocale,
-                                                useCompactNotation: true,
-                                            })}
-                                        </BaseText>
-                                    </BaseView>
-                                )}
-                            </BaseView>
-                        </BlurView>
-                    </FastImageBackground>
-                ) : (
-                    <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
-                        <BaseView
-                            flexDirection="row"
-                            alignItems="center"
-                            justifyContent="space-between"
-                            p={8}
-                            bg={COLORS.BLACK_RGBA_30}>
-                            <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE_RGBA_90} flexDirection="row">
-                                {collectionMetadata?.name}
-                            </BaseText>
-                            {collectionMetadata?.balanceOf && (
-                                <BaseView px={8} py={4} bg={COLORS.WHITE_RGBA_15} borderRadius={99}>
-                                    <BaseText typographyFont="smallCaptionMedium" color={COLORS.WHITE_RGBA_90}>
-                                        {collectionMetadata?.balanceOf}
-                                    </BaseText>
-                                </BaseView>
-                            )}
-                        </BaseView>
-                    </BlurView>
-                )}
-            </BaseView>
-        </TouchableOpacity>
+        <Pressable
+            disabled={isLoading}
+            onPress={handlePress}
+            style={styles.root}
+            testID={`collection-card-${collectionAddress}`}>
+            {!isObservedAccount && (
+                <Pressable
+                    style={styles.favoriteIconContainer}
+                    onPress={handleToggleFavorite}
+                    testID={`collection-favorite-${collectionAddress}`}>
+                    <AnimatedBaseIcon
+                        name={isFavorite ? "icon-star-on" : "icon-star"}
+                        size={16}
+                        color={COLORS.WHITE}
+                        style={animatedStyles}
+                    />
+                </Pressable>
+            )}
+            {imageUri ? (
+                <NFTImageComponent style={styles.image as ImageStyle} uri={imageUri} />
+            ) : (
+                <BaseView style={styles.image} />
+            )}
+
+            <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
+                <LinearGradient
+                    colors={[COLORS.BALANCE_BACKGROUND_GRADIENT_END_50, COLORS.BALANCE_BACKGROUND_50]}
+                    useAngle
+                    angle={0}>
+                    <BaseView flexDirection="column" alignItems="flex-start" p={8}>
+                        <BaseText
+                            typographyFont="captionSemiBold"
+                            color={COLORS.WHITE_RGBA_90}
+                            numberOfLines={1}
+                            ellipsizeMode="tail">
+                            {name}
+                        </BaseText>
+                        <BaseText typographyFont="captionRegular" color={COLORS.WHITE_RGBA_85} mt={2}>
+                            {count} {LL.TAB_TITLE_NFT()}
+                        </BaseText>
+                    </BaseView>
+                </LinearGradient>
+            </BlurView>
+        </Pressable>
     )
 }
 
-const baseStyles = () =>
+const cardStyles = () =>
     StyleSheet.create({
-        card: {
-            width: "100%",
-            height: 182,
+        root: {
             borderRadius: 12,
-            overflow: "hidden",
-            backgroundColor: COLORS.PURPLE,
             position: "relative",
+            flex: 1,
+            overflow: "hidden",
+            aspectRatio: 0.8791,
+            maxWidth: "50%",
+            backgroundColor: COLORS.BALANCE_BACKGROUND,
         },
         image: {
-            width: "100%",
             height: "100%",
-            position: "relative",
+            width: "100%",
         },
         bottom: { position: "absolute", bottom: 0, left: 0, width: "100%" },
         favoriteIconContainer: {
-            top: 0,
-            right: 0,
-            padding: 8,
+            top: 8,
+            right: 12,
             position: "absolute",
             zIndex: 1,
-        },
-        imageErrorContainer: {
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
         },
     })
