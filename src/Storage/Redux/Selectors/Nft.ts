@@ -228,6 +228,14 @@ const selectCurrentAccountFavoriteCollections = createSelector(
     [selectCurrentNetworkFavoriteCollections, selectSelectedAccount],
     (favorites, selectedAccount) => favorites[HexUtils.normalize(selectedAccount.address)] ?? {},
 )
+
+export const isCollectionFavorite = createSelector(
+    [selectCurrentAccountFavoriteCollections, (_state: RootState, collectionAddress: string) => collectionAddress],
+    (favorites, collectionAddress) => {
+        return Boolean(favorites[HexUtils.normalize(collectionAddress)])
+    },
+)
+
 export const selectAllFavoriteCollections = createSelector(selectCurrentAccountFavoriteCollections, collections =>
     Object.values(collections),
 )

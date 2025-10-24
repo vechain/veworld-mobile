@@ -46,7 +46,6 @@ export type NftSliceState = {
                  * Key will be `<address>_<collectionId>`
                  */
                 [addressCollectionId: string]: {
-                    id: string
                     address: string
                     createdAt: number
                 }
@@ -374,21 +373,19 @@ export const NftSlice = createSlice({
         },
         toggleFavoriteCollection: (
             state,
-            action: PayloadAction<{ address: string; collectionId: string; owner: string; genesisId: string }>,
+            action: PayloadAction<{ address: string; owner: string; genesisId: string }>,
         ) => {
-            const { address, collectionId, owner, genesisId } = action.payload
+            const { address, owner, genesisId } = action.payload
             const normalizedOwner = HexUtils.normalize(owner)
             const normalizedAddress = HexUtils.normalize(address)
             state.favoriteCollections ??= {}
             state.favoriteCollections[genesisId] ??= {}
             state.favoriteCollections[genesisId][normalizedOwner] ??= {}
 
-            const key = `${normalizedAddress}_${collectionId}`
-            if (state.favoriteCollections[genesisId][normalizedOwner][key]) {
-                delete state.favoriteCollections[genesisId][normalizedOwner][key]
+            if (state.favoriteCollections[genesisId][normalizedOwner][normalizedAddress]) {
+                delete state.favoriteCollections[genesisId][normalizedOwner][normalizedAddress]
             } else {
-                state.favoriteCollections[genesisId][normalizedOwner][key] = {
-                    id: collectionId,
+                state.favoriteCollections[genesisId][normalizedOwner][normalizedAddress] = {
                     address: normalizedAddress,
                     createdAt: Date.now(),
                 }

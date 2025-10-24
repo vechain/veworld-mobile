@@ -1,32 +1,29 @@
-import { useCallback } from "react"
+import { useCallback, useMemo } from "react"
 import {
-    selectAllFavoriteCollections,
     selectSelectedAccount,
     selectSelectedNetwork,
     useAppDispatch,
     useAppSelector,
     toggleFavoriteCollection as toggleFavoriteCollectionAction,
+    isCollectionFavorite,
 } from "~Storage/Redux"
 
-export const useCollectionsBookmarking = () => {
+export const useCollectionsBookmarking = (address: string) => {
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    const favoriteCollections = useAppSelector(selectAllFavoriteCollections)
 
-    const toggleFavoriteCollection = useCallback(
-        (address: string, collectionId: string) => {
-            dispatch(
-                toggleFavoriteCollectionAction({
-                    address,
-                    collectionId,
-                    owner: selectedAccount.address,
-                    genesisId: selectedNetwork.genesis.id,
-                }),
-            )
-        },
-        [dispatch, selectedAccount.address, selectedNetwork.genesis.id],
-    )
+    const isFavorite = useAppSelector(state => isCollectionFavorite(state, address))
 
-    return { favoriteCollections, toggleFavoriteCollection }
+    const toggleFavoriteCollection = useCallback(() => {
+        dispatch(
+            toggleFavoriteCollectionAction({
+                address,
+                owner: selectedAccount.address,
+                genesisId: selectedNetwork.genesis.id,
+            }),
+        )
+    }, [dispatch, address, selectedAccount.address, selectedNetwork.genesis.id])
+
+    return useMemo(() => ({ isFavorite, toggleFavoriteCollection }), [isFavorite, toggleFavoriteCollection])
 }

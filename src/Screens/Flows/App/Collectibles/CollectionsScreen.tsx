@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useRef } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseSkeleton, BaseSpacer, BaseView, Layout } from "~Components"
 import { useThemedStyles } from "~Hooks"
@@ -7,14 +7,17 @@ import { Routes } from "~Navigation"
 import { CollectionCard } from "./Components"
 import { useNFTCollections } from "./Hooks"
 import { COLORS } from "~Constants"
-import { useCollectionsBookmarking } from "~Hooks/useCollectionsBookmarking"
 import { AddressUtils } from "~Utils"
+import { selectAllFavoriteCollections, useAppSelector } from "~Storage/Redux"
+import Animated, { SequencedTransition } from "react-native-reanimated"
 
 export const CollectionsScreen = () => {
+    const scrollRef = useRef<FlatList<string>>(null)
+
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
     const { data: paginatedCollections, isLoading: isCollectionsLoading, fetchNextPage } = useNFTCollections()
-    const { favoriteCollections } = useCollectionsBookmarking()
+    const favoriteCollections = useAppSelector(selectAllFavoriteCollections)
 
     const collectionsData = useMemo(
         () => paginatedCollections?.pages.flatMap(page => page.collections) ?? [],
@@ -22,15 +25,18 @@ export const CollectionsScreen = () => {
     )
 
     const collections = useMemo(() => {
-        return favoriteCollections
-            .sort((a, b) => b.createdAt - a.createdAt)
-            .map(collection => collection.address)
-            .concat(collectionsData)
-            .reduce((acc, curr) => {
-                if (acc.find(v => AddressUtils.compareAddresses(curr, v))) return acc
-                acc.push(curr)
-                return acc
-            }, [] as string[])
+        return (
+            favoriteCollections
+                .sort((a, b) => b.createdAt - a.createdAt)
+                .map(collection => collection.address)
+                .concat(collectionsData)
+                //Deduplicate items by address
+                .reduce((acc, curr) => {
+                    if (acc.find(v => AddressUtils.compareAddresses(curr, v))) return acc
+                    acc.push(curr)
+                    return acc
+                }, [] as string[])
+        )
     }, [collectionsData, favoriteCollections])
 
     const renderItem = useCallback(
@@ -42,6 +48,9 @@ export const CollectionsScreen = () => {
                         nav.navigate(Routes.COLLECTIBLES_COLLECTION_DETAILS, {
                             collectionAddress: item,
                         })
+                    }}
+                    onToggleFavorite={() => {
+                        scrollRef.current?.scrollToOffset({ animated: true, offset: 0 })
                     }}
                 />
             )
@@ -93,7 +102,8 @@ export const CollectionsScreen = () => {
             title={"Collections"}
             fixedBody={
                 !isCollectionsLoading ? (
-                    <FlatList
+                    <Animated.FlatList
+                        ref={scrollRef}
                         keyExtractor={item => item}
                         data={collections}
                         renderItem={renderItem}
@@ -104,6 +114,7 @@ export const CollectionsScreen = () => {
                             fetchNextPage()
                         }}
                         showsVerticalScrollIndicator={false}
+                        itemLayoutAnimation={SequencedTransition.delay(250).reverse()}
                     />
                 ) : (
                     <FlatList
