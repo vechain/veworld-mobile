@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
+import { StyleSheet } from "react-native"
 import { BaseSpacer, BaseSkeleton, BaseText, BaseView, Layout, BaseTouchable, BaseIcon } from "~Components"
 import { BaseTabs } from "~Components/Base/BaseTabs"
-import { useTheme, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { useCollectionMetadata } from "./Hooks/useCollectionMetadata"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -9,8 +10,8 @@ import { RootStackParamListHome } from "~Navigation/Stacks/HomeStack"
 import { Routes } from "~Navigation/Enums"
 import { CollectiblesDetailsCard } from "./Components/CollectiblesDetailsCard"
 import { CollectionNftsList } from "./Components/CollectionNftsList"
-import { StyleSheet } from "react-native"
 import { ColorThemeType } from "~Constants"
+import { CollectionActionsBottomSheet } from "./BottomSheets/CollectionActionsBottomSheet"
 
 export enum CollectiblesViewMode {
     GALLERY = "GALLERY",
@@ -23,8 +24,13 @@ export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) 
     const { LL } = useI18nContext()
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
+    const { ref: collectionActionsBsRef, onOpen: onOpenCollectionActionsBs } = useBottomSheetModal()
     const [selectedKey, setSelectedKey] = useState<CollectiblesViewMode>(CollectiblesViewMode.GALLERY)
     const collectionAddress = route.params.collectionAddress
+
+    const handleOpenActionsBottomSheet = useCallback(() => {
+        onOpenCollectionActionsBs(collectionAddress)
+    }, [onOpenCollectionActionsBs, collectionAddress])
     const { data: collectionMetadata, isLoading: isLoadingCollectionMetadata } =
         useCollectionMetadata(collectionAddress)
 
@@ -86,28 +92,31 @@ export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) 
         <Layout
             title={collectionMetadata?.name}
             headerRightElement={
-                <BaseTouchable style={styles.common} onPress={() => {}}>
+                <BaseTouchable style={styles.common} onPress={handleOpenActionsBottomSheet}>
                     <BaseIcon name="icon-more-horizontal" size={16} color={theme.colors.actionBottomSheet.text} />
                 </BaseTouchable>
             }
             safeAreaTestID="Collection_Details_Screen"
             fixedBody={
-                <BaseView flex={1} px={16} pt={16}>
-                    <BaseTabs
-                        keys={viewModes.map(mode => mode.id)}
-                        labels={viewModes.map(mode => mode.label)}
-                        selectedKey={selectedKey}
-                        setSelectedKey={setSelectedKey}
-                    />
-                    <BaseSpacer height={24} />
-                    {selectedKey !== CollectiblesViewMode.DETAILS && renderCountLabel}
-                    {selectedKey === CollectiblesViewMode.GALLERY && (
-                        <CollectionNftsList collectionAddress={collectionAddress} />
-                    )}
-                    {selectedKey === CollectiblesViewMode.DETAILS && (
-                        <CollectiblesDetailsCard collectionMetadata={collectionMetadata} />
-                    )}
-                </BaseView>
+                <>
+                    <BaseView flex={1} px={16} pt={16}>
+                        <BaseTabs
+                            keys={viewModes.map(mode => mode.id)}
+                            labels={viewModes.map(mode => mode.label)}
+                            selectedKey={selectedKey}
+                            setSelectedKey={setSelectedKey}
+                        />
+                        <BaseSpacer height={24} />
+                        {selectedKey !== CollectiblesViewMode.DETAILS && renderCountLabel}
+                        {selectedKey === CollectiblesViewMode.GALLERY && (
+                            <CollectionNftsList collectionAddress={collectionAddress} />
+                        )}
+                        {selectedKey === CollectiblesViewMode.DETAILS && (
+                            <CollectiblesDetailsCard collectionMetadata={collectionMetadata} />
+                        )}
+                    </BaseView>
+                    <CollectionActionsBottomSheet bsRef={collectionActionsBsRef} />
+                </>
             }
         />
     )
