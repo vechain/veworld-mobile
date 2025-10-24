@@ -7,10 +7,12 @@ import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useHomeCollectibles } from "~Hooks/useHomeCollectibles"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { selectAllFavoriteNfts, useAppSelector } from "~Storage/Redux"
+import { selectAllFavoriteNfts, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { CollectibleCard } from "./CollectibleCard"
 import { CollectiblesEmptyCard } from "./CollectiblesEmptyCard"
+import { useQuery } from "@tanstack/react-query"
+import { getNftsForContract } from "~Networking"
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />
 
@@ -56,18 +58,45 @@ const footerStyles = () =>
         },
     })
 
-export const CollectiblesList = () => {
+type CollectiblesListProps = {
+    collectionAddress?: string
+}
+
+export const CollectiblesList = ({ collectionAddress }: CollectiblesListProps) => {
     const { styles } = useThemedStyles(baseStyles)
     const favoriteNfts = useAppSelector(selectAllFavoriteNfts)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     const { data: allNfts } = useHomeCollectibles()
     const { ref, onOpen } = useBottomSheetModal()
 
+    // Fetch NFTs for specific collection when collectionAddress is provided
+    const { data: collectionNfts } = useQuery({
+        queryKey: [
+            "COLLECTIBLES",
+            "COLLECTION_NFTS",
+            collectionAddress,
+            selectedNetwork.genesis.id,
+            selectedAccount.address,
+        ],
+        queryFn: () => getNftsForContract(selectedNetwork.type, collectionAddress!, selectedAccount.address, 100, 0),
+        enabled: !!collectionAddress,
+        staleTime: 5 * 60 * 1000,
+        gcTime: 5 * 60 * 1000,
+    })
+
     const nfts = useMemo(() => {
+        const filteredFavorites = collectionAddress
+            ? favoriteNfts.filter(nft => AddressUtils.compareAddresses(nft.address, collectionAddress))
+            : favoriteNfts
+
+        const apiNfts = collectionAddress ? collectionNfts?.data ?? [] : allNfts?.data ?? []
+
         return (
-            favoriteNfts
+            filteredFavorites
                 .sort((a, b) => b.createdAt - a.createdAt)
                 .map(({ createdAt: _createdAt, ...rest }) => rest)
-                .concat(allNfts?.data.map(nft => ({ address: nft.contractAddress, tokenId: nft.tokenId })) ?? [])
+                .concat(apiNfts.map(nft => ({ address: nft.contractAddress, tokenId: nft.tokenId })))
                 //Deduplicate items
                 .reduce((acc, curr) => {
                     if (
@@ -79,9 +108,9 @@ export const CollectiblesList = () => {
                     acc.push(curr)
                     return acc
                 }, [] as { address: string; tokenId: string }[])
-                .slice(0, 4)
+                .slice(0, collectionAddress ? undefined : 4)
         )
-    }, [allNfts?.data, favoriteNfts])
+    }, [allNfts?.data, collectionNfts?.data, favoriteNfts, collectionAddress])
 
     const addresses = useMemo(() => nfts.map(nft => nft.address), [nfts])
 
@@ -110,7 +139,7 @@ export const CollectiblesList = () => {
                 horizontal={false}
                 keyExtractor={v => `${v.address}_${v.tokenId}`}
                 columnWrapperStyle={styles.listColumn}
-                ListFooterComponent={<ListFooterComponent addresses={addresses} />}
+                ListFooterComponent={!collectionAddress ? <ListFooterComponent addresses={addresses} /> : null}
             />
             <CollectibleBottomSheet bsRef={ref} />
         </>

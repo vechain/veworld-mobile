@@ -52,6 +52,7 @@ import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
 import { CollectionsScreen } from "~Screens/Flows/App/Collectibles"
+import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/CollectibleCollectionDetails"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -338,7 +339,7 @@ export const HomeStack = () => {
                 {betterWorldFeature.balanceScreen.collectibles.enabled && (
                     <Screen
                         name={Routes.COLLECTIBLES_COLLECTION_DETAILS}
-                        component={() => <></>}
+                        component={CollectibleCollectionDetails}
                         options={{ headerShown: false }}
                     />
                 )}
