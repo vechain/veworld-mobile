@@ -5,8 +5,8 @@ import Animated from "react-native-reanimated"
 import { BaseSpacer } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useContentSwipeAnimation } from "~Hooks"
-import { DappHorizontalCardSkeleton } from "~Screens/Flows/App/DiscoverScreen/Components/DappHorizontalCardSkeleton"
 import { DAppHorizontalCardV2 } from "./DAppHorizontalCardV2"
+import { DappHorizontalCardSkeleton } from "./DappHorizontalCardSkeleton"
 
 type Props = {
     items: DiscoveryDApp[]

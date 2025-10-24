@@ -5,7 +5,7 @@ import { BalanceUtils } from "~Utils"
 
 type Props = {
     token: FungibleToken & { balance?: Balance }
-    exchangeRate?: number
+    exchangeRate?: number | null
 }
 export const useBalances = ({ token, exchangeRate }: Props) => {
     const { formatLocale } = useFormatFiat()
