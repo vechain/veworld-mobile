@@ -10,11 +10,6 @@ import { URLBar } from "./URLBar"
 
 jest.mock("~Components/Providers/InAppBrowserProvider")
 
-jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
-    ...jest.requireActual("~Components/Providers/FeatureFlagsProvider"),
-    useFeatureFlags: jest.fn(),
-}))
-
 jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
     useNavigation: jest.fn(),
@@ -38,8 +33,6 @@ describe("URLBar", () => {
         render(<URLBar navigationUrl="https://vechain.org" isLoading={false} />, {
             wrapper: TestWrapper,
         })
-
-        screen.debug()
 
         const urlInput = await screen.findByTestId("URL-bar-website-name")
 
