@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react-native"
-import React, { PropsWithChildren } from "react"
+import React, { createRef, PropsWithChildren } from "react"
 import { TestWrapper } from "~Test"
 import { RowDetails } from "./RowDetails"
 import { RowExpandableDetails } from "./RowExpandableDetails"
@@ -101,6 +101,8 @@ describe("RowDetails", () => {
                     icon={mockApp.icon}
                     desc={mockApp.desc}
                     categories={mockApp.categories}
+                    index={0}
+                    scrollRef={createRef() as any}
                 />,
                 { wrapper: Wrapper },
             )
@@ -110,16 +112,28 @@ describe("RowDetails", () => {
         })
 
         it("should handle missing description", () => {
-            render(<RowDetails name={mockApp.name} icon={mockApp.icon} />, { wrapper: Wrapper })
+            render(<RowDetails name={mockApp.name} icon={mockApp.icon} index={0} scrollRef={createRef() as any} />, {
+                wrapper: Wrapper,
+            })
 
             expect(screen.getByText(mockApp.name)).toBeVisible()
             expect(screen.queryByText(mockApp.desc)).toBeNull()
         })
 
         it("should handle empty categories array", () => {
-            render(<RowDetails name={mockApp.name} icon={mockApp.icon} desc={mockApp.desc} categories={[]} />, {
-                wrapper: Wrapper,
-            })
+            render(
+                <RowDetails
+                    name={mockApp.name}
+                    icon={mockApp.icon}
+                    desc={mockApp.desc}
+                    categories={[]}
+                    index={0}
+                    scrollRef={createRef() as any}
+                />,
+                {
+                    wrapper: Wrapper,
+                },
+            )
 
             expect(screen.getByText(mockApp.name)).toBeVisible()
             expect(screen.getByText(mockApp.desc)).toBeVisible()
@@ -135,6 +149,8 @@ describe("RowDetails", () => {
                     desc={mockApp.desc}
                     isFavorite={false}
                     onToggleFavorite={mockOnToggleFavorite}
+                    index={0}
+                    scrollRef={createRef() as any}
                 />,
                 { wrapper: Wrapper },
             )
@@ -151,6 +167,8 @@ describe("RowDetails", () => {
                     desc={mockApp.desc}
                     isFavorite={false}
                     onToggleFavorite={mockOnToggleFavorite}
+                    index={0}
+                    scrollRef={createRef() as any}
                 />,
                 { wrapper: Wrapper },
             )
@@ -193,6 +211,8 @@ describe("RowDetails", () => {
                     desc={mockApp.desc}
                     isFavorite={false}
                     onToggleFavorite={mockOnToggleFavorite}
+                    index={0}
+                    scrollRef={createRef() as any}
                 />,
                 { wrapper: Wrapper },
             )
@@ -223,7 +243,13 @@ describe("RowDetails", () => {
             })
 
             render(
-                <RowDetails name={mockApp.name} icon={mockApp.icon} desc={mockApp.desc} categories={mockApp.categories}>
+                <RowDetails
+                    name={mockApp.name}
+                    icon={mockApp.icon}
+                    desc={mockApp.desc}
+                    categories={mockApp.categories}
+                    index={0}
+                    scrollRef={createRef() as any}>
                     <RowExpandableDetails.Container>
                         <RowExpandableDetails.Description>{testString}</RowExpandableDetails.Description>
                     </RowExpandableDetails.Container>
@@ -258,6 +284,8 @@ describe("RowDetails", () => {
                     icon={mockApp.icon}
                     desc={mockApp.desc}
                     categories={mockApp.categories}
+                    index={0}
+                    scrollRef={createRef() as any}
                 />,
                 { wrapper: Wrapper },
             )
@@ -269,9 +297,18 @@ describe("RowDetails", () => {
 
     describe("Image Handling", () => {
         it("should handle image load errors", async () => {
-            render(<RowDetails name={mockApp.name} icon="https://invalid-url.com/image.png" desc={mockApp.desc} />, {
-                wrapper: Wrapper,
-            })
+            render(
+                <RowDetails
+                    name={mockApp.name}
+                    icon="https://invalid-url.com/image.png"
+                    desc={mockApp.desc}
+                    index={0}
+                    scrollRef={createRef() as any}
+                />,
+                {
+                    wrapper: Wrapper,
+                },
+            )
 
             const image = screen.getByTestId("ROW_DETAILS_IMAGE")
             await act(() => {
@@ -294,6 +331,8 @@ describe("RowDetails", () => {
                     itemId="test-item-1"
                     isOpen={false}
                     onToggleOpen={mockOnToggleOpen}
+                    index={0}
+                    scrollRef={createRef() as any}
                 />,
                 { wrapper: Wrapper },
             )
@@ -334,7 +373,9 @@ describe("RowDetails", () => {
                     desc={mockApp.desc}
                     itemId="test-item-1"
                     isOpen={true}
-                    onToggleOpen={mockOnToggleOpen}>
+                    onToggleOpen={mockOnToggleOpen}
+                    index={0}
+                    scrollRef={createRef() as any}>
                     <RowExpandableDetails.Container>
                         {/* eslint-disable-next-line i18next/no-literal-string */}
                         <RowExpandableDetails.Description>External state content</RowExpandableDetails.Description>
@@ -355,6 +396,8 @@ describe("RowDetails", () => {
                     icon={mockApp.icon}
                     desc={mockApp.desc}
                     categories={mockApp.categories}
+                    index={0}
+                    scrollRef={createRef() as any}
                 />,
                 { wrapper: Wrapper },
             )
@@ -395,6 +438,8 @@ describe("RowDetails", () => {
                     icon={mockApp.icon}
                     desc={mockApp.desc}
                     categories={mockApp.categories}
+                    index={0}
+                    scrollRef={createRef() as any}
                 />,
                 { wrapper: Wrapper },
             )
