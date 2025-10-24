@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { ImageStyle } from "react-native-fast-image"
 import LinearGradient from "react-native-linear-gradient"
@@ -19,15 +19,12 @@ type Props = {
     tokenId: string
     isObservedAccount: boolean
     onPress: () => void
-}
-
-export const CollectibleCard = ({ address, tokenId, isObservedAccount, onPress }: Props) => {
-    onPress: (args: { address: string; tokenId: string }) => void
+    isLoading?: boolean
 }
 
 const AnimatedBaseIcon = Animated.createAnimatedComponent(wrapFunctionComponent(BaseIcon))
 
-export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
+export const CollectibleCard = ({ address, tokenId, isObservedAccount, onPress, isLoading }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { isFavorite, toggleFavorite } = useNftBookmarking(address, tokenId)
     const { animatedStyles, favoriteIconAnimation } = useFavoriteAnimation()
@@ -50,9 +47,6 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
             return undefined
         }
     }, [media?.image])
-    const handlePress = useCallback(() => {
-        onPress({ address, tokenId })
-    }, [address, onPress, tokenId])
 
     const handleToggleFavorite = useCallback(() => {
         HapticsService.triggerImpact({ level: "Light" })
@@ -64,19 +58,26 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
     }, [favoriteIconAnimation, toggleFavorite])
 
     return (
-        <Pressable style={styles.root} onPress={handlePress}>
-           {!isObservedAccount && (
-            <Pressable style={styles.favoriteContainerContainer} onPress={handleToggleFavorite}>
-                <AnimatedBaseIcon
-                    name={isFavorite ? "icon-star-on" : "icon-star"}
-                    color={COLORS.WHITE}
-                    size={16}
-                    style={animatedStyles}
-                />
-            </Pressable>
+        <Pressable
+            disabled={isLoading}
+            style={styles.root}
+            onPress={onPress}
+            testID={`collectible-card-${address}-${tokenId}`}>
+            {!isObservedAccount && (
+                <Pressable
+                    style={styles.favoriteIconContainer}
+                    onPress={handleToggleFavorite}
+                    testID={`collectible-favorite-${address}-${tokenId}`}>
+                    <AnimatedBaseIcon
+                        name={isFavorite ? "icon-star-on" : "icon-star"}
+                        color={COLORS.WHITE}
+                        size={16}
+                        style={animatedStyles}
+                    />
+                </Pressable>
             )}
             {media?.mediaType === NFTMediaType.IMAGE && (
-                <NFTImageComponent style={styles.image as ImageStyle} uri={media.image} />
+                <NFTImageComponent style={styles.image as ImageStyle} uri={imageUri} />
             )}
 
             <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
@@ -101,7 +102,6 @@ const baseStyles = () =>
             borderRadius: 12,
             position: "relative",
             flex: 1,
-            maxWidth: "48%",
             overflow: "hidden",
             aspectRatio: 0.8791,
             maxWidth: "50%",
@@ -110,7 +110,7 @@ const baseStyles = () =>
             height: "100%",
             width: "100%",
         },
-        favoriteContainerContainer: {
+        favoriteIconContainer: {
             position: "absolute",
             flexDirection: "row",
             alignItems: "center",
