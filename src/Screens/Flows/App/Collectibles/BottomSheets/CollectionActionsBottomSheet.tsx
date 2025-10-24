@@ -1,7 +1,6 @@
 import { TouchableOpacity } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { default as React, RefObject, useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components"
@@ -9,7 +8,7 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useCollectionsBookmarking, useThemedStyles } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
-import { Routes, RootStackParamListHome } from "~Navigation"
+import { Routes } from "~Navigation"
 
 const URL_SUPPORT = "https://support.veworld.com"
 
@@ -24,7 +23,7 @@ const Content = ({
 }) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
+    const navigation = useNavigation()
     const { navigateWithTab } = useBrowserTab()
     const { isFavorite, toggleFavoriteCollection } = useCollectionsBookmarking(collectionAddress)
 
@@ -38,16 +37,15 @@ const Content = ({
             url: URL_SUPPORT,
             title: LL.BTN_COLLECTION_ACTIONS_REPORT(),
             navigationFn(u) {
-                nav.navigate(Routes.BROWSER, { url: u })
+                navigation.navigate(Routes.BROWSER, { url: u })
             },
         })
 
         onClose()
-    }, [onClose, LL, navigateWithTab, nav])
+    }, [onClose, LL, navigateWithTab, navigation])
 
     const onBlockPress = useCallback(() => {
         onClose()
-        // Small delay to ensure the first bottom sheet closes before opening the next one
         setTimeout(() => {
             onOpenReport()
         }, 300)

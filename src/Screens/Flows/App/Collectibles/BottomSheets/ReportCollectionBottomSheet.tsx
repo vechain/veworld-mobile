@@ -1,10 +1,12 @@
 import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { useNavigation } from "@react-navigation/native"
 import { BaseButton, DefaultBottomSheet } from "~Components"
-import { useReportNFT } from "~Hooks/useReportNFT"
 import { useI18nContext } from "~i18n"
 import { AnalyticsEvent, COLORS } from "~Constants"
-import { useAnalyticTracking, useTheme } from "~Hooks"
+import { useAnalyticTracking, useNFTReportTransaction, useTheme } from "~Hooks"
+import { Routes } from "~Navigation"
+import { error as logError } from "~Utils/Logger"
 
 type Props = {
     onClose: () => void
@@ -14,17 +16,29 @@ type Props = {
 export const ReportCollectionBottomsheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ onClose, collectionAddress }, ref) => {
         const { LL } = useI18nContext()
-        const { reportNFTCollection } = useReportNFT()
         const track = useAnalyticTracking()
         const theme = useTheme()
+        const navigation = useNavigation()
+        const { buildReportClause } = useNFTReportTransaction()
 
-        const handleProceedToReport = useCallback(() => {
-            track(AnalyticsEvent.NFT_COLLECTION_REPORT_INITIATED, {
-                nftAddress: collectionAddress,
-            })
-            reportNFTCollection(collectionAddress)
-            onClose()
-        }, [onClose, reportNFTCollection, collectionAddress, track])
+        const handleProceedToReport = useCallback((): void => {
+            try {
+                const clause = buildReportClause(collectionAddress)
+
+                track(AnalyticsEvent.NFT_COLLECTION_REPORT_INITIATED, {
+                    nftAddress: collectionAddress,
+                })
+
+                onClose()
+
+                navigation.navigate(Routes.REPORT_NFT_TRANSACTION_SCREEN, {
+                    nftAddress: collectionAddress,
+                    transactionClauses: clause,
+                })
+            } catch (error) {
+                logError("NFT", "Failed to build report clause", error as Error)
+            }
+        }, [onClose, collectionAddress, track, buildReportClause, navigation])
 
         const mainButton = (
             <BaseButton
