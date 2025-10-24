@@ -6,7 +6,7 @@ import Animated from "react-native-reanimated"
 import { NFTPlaceholderDarkV2 } from "~Assets"
 import { BaseIcon, BaseText, BaseView, BlurView } from "~Components"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
-import { COLORS, ColorThemeType } from "~Constants"
+import { COLORS } from "~Constants"
 import { useNFTMedia, useThemedStyles } from "~Hooks"
 import { useCollectionsBookmarking } from "~Hooks/useCollectionsBookmarking"
 import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
@@ -101,14 +101,14 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
         card: {
             width: "100%",
             height: 182,
             borderRadius: 12,
             overflow: "hidden",
-            backgroundColor: theme.colors.placeholder,
+            backgroundColor: COLORS.PURPLE,
             position: "relative",
         },
         image: {
