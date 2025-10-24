@@ -49,8 +49,11 @@ export const CollectionsScreen = () => {
                             collectionAddress: item,
                         })
                     }}
-                    onToggleFavorite={() => {
-                        scrollRef.current?.scrollToOffset({ animated: true, offset: 0 })
+                    onToggleFavorite={isFavorite => {
+                        //Scroll to the top if the item is now favorite
+                        if (isFavorite) {
+                            scrollRef.current?.scrollToIndex({ animated: true, index: 0 })
+                        }
                     }}
                 />
             )
@@ -114,7 +117,7 @@ export const CollectionsScreen = () => {
                             fetchNextPage()
                         }}
                         showsVerticalScrollIndicator={false}
-                        itemLayoutAnimation={SequencedTransition.delay(250).reverse()}
+                        itemLayoutAnimation={SequencedTransition.delay(250)}
                     />
                 ) : (
                     <FlatList

@@ -17,7 +17,7 @@ import { useCollectionMetadata } from "../Hooks/useCollectionMetadata"
 type Props = {
     collectionAddress: string
     onPress: (address: string) => void
-    onToggleFavorite: () => void
+    onToggleFavorite: (isFavorite: boolean) => void
 }
 
 const AnimatedBaseIcon = Animated.createAnimatedComponent(wrapFunctionComponent(BaseIcon))
@@ -41,8 +41,8 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
         HapticsService.triggerImpact({ level: "Light" })
         favoriteIconAnimation()
         toggleFavoriteCollection()
-        onToggleFavorite()
-    }, [favoriteIconAnimation, toggleFavoriteCollection, onToggleFavorite])
+        onToggleFavorite(!isFavorite)
+    }, [favoriteIconAnimation, toggleFavoriteCollection, onToggleFavorite, isFavorite])
 
     return (
         <TouchableOpacity disabled={isLoading} activeOpacity={0.8} onPress={() => onPress(collectionAddress)}>
