@@ -4,11 +4,11 @@ import { BaseTabs } from "~Components/Base/BaseTabs"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { useCollectionMetadata } from "./Hooks/useCollectionMetadata"
-import { CollectiblesList } from "../BalanceScreen/Components/Collectibles/CollectiblesList"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListHome } from "~Navigation/Stacks/HomeStack"
 import { Routes } from "~Navigation/Enums"
 import { CollectiblesDetailsCard } from "./Components/CollectiblesDetailsCard"
+import { CollectionNftsList } from "./Components/CollectionNftsList"
 
 export enum CollectiblesViewMode {
     GALLERY = "GALLERY",
@@ -94,7 +94,7 @@ export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) 
                     <BaseSpacer height={24} />
                     {selectedKey !== CollectiblesViewMode.DETAILS && renderCountLabel}
                     {selectedKey === CollectiblesViewMode.GALLERY && (
-                        <CollectiblesList collectionAddress={collectionAddress} />
+                        <CollectionNftsList collectionAddress={collectionAddress} />
                     )}
                     {selectedKey === CollectiblesViewMode.DETAILS && (
                         <CollectiblesDetailsCard collectionMetadata={collectionMetadata} />
