@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react"
-import { BaseSpacer, BaseSkeleton, BaseText, BaseView, Layout } from "~Components"
+import { BaseSpacer, BaseSkeleton, BaseText, BaseView, Layout, BaseTouchable, BaseIcon } from "~Components"
 import { BaseTabs } from "~Components/Base/BaseTabs"
-import { useTheme } from "~Hooks"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { useCollectionMetadata } from "./Hooks/useCollectionMetadata"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -9,6 +9,8 @@ import { RootStackParamListHome } from "~Navigation/Stacks/HomeStack"
 import { Routes } from "~Navigation/Enums"
 import { CollectiblesDetailsCard } from "./Components/CollectiblesDetailsCard"
 import { CollectionNftsList } from "./Components/CollectionNftsList"
+import { StyleSheet } from "react-native"
+import { ColorThemeType } from "~Constants"
 
 export enum CollectiblesViewMode {
     GALLERY = "GALLERY",
@@ -20,6 +22,7 @@ type Props = NativeStackScreenProps<RootStackParamListHome, Routes.COLLECTIBLES_
 export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const { styles } = useThemedStyles(baseStyles)
     const [selectedKey, setSelectedKey] = useState<CollectiblesViewMode>(CollectiblesViewMode.GALLERY)
     const collectionAddress = route.params.collectionAddress
     const { data: collectionMetadata, isLoading: isLoadingCollectionMetadata } =
@@ -82,6 +85,11 @@ export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) 
     return (
         <Layout
             title={collectionMetadata?.name}
+            headerRightElement={
+                <BaseTouchable style={styles.common} onPress={() => {}}>
+                    <BaseIcon name="icon-more-horizontal" size={16} color={theme.colors.actionBottomSheet.text} />
+                </BaseTouchable>
+            }
             safeAreaTestID="Collection_Details_Screen"
             fixedBody={
                 <BaseView flex={1} px={16} pt={16}>
@@ -104,3 +112,19 @@ export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) 
         />
     )
 }
+
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        common: {
+            backgroundColor: theme.colors.tabsFooter.background,
+            borderColor: theme.colors.actionBanner.buttonBorder,
+            borderWidth: 1,
+            borderRadius: 6,
+            paddingVertical: 4,
+            paddingHorizontal: 8,
+            height: 32,
+            width: 32,
+            alignItems: "center",
+            justifyContent: "center",
+        },
+    })
