@@ -1765,34 +1765,17 @@ type RootTranslation = {
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: string
 	/**
-	 * T​r​a​n​s​f​e​r​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​t​o​ ​s​t​a​r​t​ ​b​u​i​l​d​i​n​g​ ​y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n
+	 * A​v​a​t​a​r
 	 */
-	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: string
-	/**
-	 * o​r​ ​b​u​y​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​f​r​o​m​ ​o​n​e​ ​o​f​ ​o​u​r​ ​e​c​o​s​y​s​t​e​m​ ​a​p​p​s
-	 */
-	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
-	/**
-
-	 * D​e​t​a​i​l​s
-	 */
-	COLLECTIBLES_VIEW_DETAILS: string
-	/**
-	 * G​a​l​l​e​r​y
-	 */
-	COLLECTIBLES_VIEW_GALLERY: string
-
-	 * F​a​v​o​r​i​t​e
-	 */
-	COLLECTIBLES_ACTION_FAVORITE_INACTIVE: string
+	COLLECTIBLES_ACTION_AVATAR_ACTIVE: string
 	/**
 	 * S​e​t​ ​a​v​a​t​a​r
 	 */
 	COLLECTIBLES_ACTION_AVATAR_INACTIVE: string
 	/**
-	 * A​v​a​t​a​r
+	 * F​a​v​o​r​i​t​e
 	 */
-	COLLECTIBLES_ACTION_AVATAR_ACTIVE: string
+	COLLECTIBLES_ACTION_FAVORITE_INACTIVE: string
 	/**
 	 * S​e​n​d
 	 */
@@ -1801,6 +1784,22 @@ type RootTranslation = {
 	 * D​e​s​c​r​i​p​t​i​o​n
 	 */
 	COLLECTIBLES_DESCRIPTION: string
+	/**
+	 * T​r​a​n​s​f​e​r​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​t​o​ ​s​t​a​r​t​ ​b​u​i​l​d​i​n​g​ ​y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: string
+	/**
+	 * o​r​ ​b​u​y​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​f​r​o​m​ ​o​n​e​ ​o​f​ ​o​u​r​ ​e​c​o​s​y​s​t​e​m​ ​a​p​p​s
+	 */
+	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
+	/**
+	 * D​e​t​a​i​l​s
+	 */
+	COLLECTIBLES_VIEW_DETAILS: string
+	/**
+	 * G​a​l​l​e​r​y
+	 */
+	COLLECTIBLES_VIEW_GALLERY: string
 	/**
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
@@ -7103,6 +7102,26 @@ Thanks for your patience!
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: () => LocalizedString
 	/**
+	 * Avatar
+	 */
+	COLLECTIBLES_ACTION_AVATAR_ACTIVE: () => LocalizedString
+	/**
+	 * Set avatar
+	 */
+	COLLECTIBLES_ACTION_AVATAR_INACTIVE: () => LocalizedString
+	/**
+	 * Favorite
+	 */
+	COLLECTIBLES_ACTION_FAVORITE_INACTIVE: () => LocalizedString
+	/**
+	 * Send
+	 */
+	COLLECTIBLES_ACTION_SEND_INACTIVE: () => LocalizedString
+	/**
+	 * Description
+	 */
+	COLLECTIBLES_DESCRIPTION: () => LocalizedString
+	/**
 	 * Transfer a collectible to start building your collection
 	 */
 	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: () => LocalizedString
@@ -7118,25 +7137,6 @@ Thanks for your patience!
 	 * Gallery
 	 */
 	COLLECTIBLES_VIEW_GALLERY: () => LocalizedString
-	 * Favorite
-	 */
-	COLLECTIBLES_ACTION_FAVORITE_INACTIVE: () => LocalizedString
-	/**
-	 * Set avatar
-	 */
-	COLLECTIBLES_ACTION_AVATAR_INACTIVE: () => LocalizedString
-	/**
-	 * Avatar
-	 */
-	COLLECTIBLES_ACTION_AVATAR_ACTIVE: () => LocalizedString
-	/**
-	 * Send
-	 */
-	COLLECTIBLES_ACTION_SEND_INACTIVE: () => LocalizedString
-	/**
-	 * Description
-	 */
-	COLLECTIBLES_DESCRIPTION: () => LocalizedString
 	/**
 	 * Collections
 	 */
