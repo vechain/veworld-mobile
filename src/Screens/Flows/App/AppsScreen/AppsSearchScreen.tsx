@@ -1,14 +1,14 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useState } from "react"
 import { Platform, StyleSheet } from "react-native"
-import { BaseIcon, BaseStatusBar, BaseText, BaseTouchable, BaseView, Layout, useFeatureFlags } from "~Components"
+import { KeyboardAvoidingView } from "react-native-keyboard-controller"
+import { BaseIcon, BaseStatusBar, BaseText, BaseTouchable, BaseView, Layout } from "~Components"
+import { COLORS, ColorThemeType } from "~Constants"
 import { SearchError, useBrowserNavigation, useBrowserSearch, useThemedStyles } from "~Hooks"
+import { Routes } from "~Navigation"
+import { selectTabs, useAppSelector } from "~Storage/Redux"
 import { SearchBar } from "./Components/SearchBar"
 import { SearchResults } from "./Components/SearchResults"
-import { COLORS, ColorThemeType } from "~Constants"
-import { selectTabs, useAppSelector } from "~Storage/Redux"
-import { useNavigation } from "@react-navigation/native"
-import { Routes } from "~Navigation"
-import { KeyboardAvoidingView } from "react-native-keyboard-controller"
 
 export const AppsSearchScreen = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -19,7 +19,6 @@ export const AppsSearchScreen = () => {
     const { navigateToBrowser } = useBrowserNavigation()
     const nav = useNavigation()
     const tabs = useAppSelector(selectTabs)
-    const { betterWorldFeature } = useFeatureFlags()
 
     const onSearchUpdated = useCallback(
         (value: string) => {
@@ -38,24 +37,18 @@ export const AppsSearchScreen = () => {
     )
 
     const onNavigateToTabs = useCallback(() => {
-        if (betterWorldFeature.appsScreen.enabled) {
-            nav.navigate(Routes.APPS_TABS_MANAGER)
-        } else {
-            nav.navigate(Routes.DISCOVER_TABS_MANAGER)
-        }
-    }, [betterWorldFeature.appsScreen.enabled, nav])
+        nav.navigate(Routes.APPS_TABS_MANAGER)
+    }, [nav])
 
     const onClose = useCallback(() => {
         const routes = nav.getState()?.routes
         const previousRoute = routes?.[routes.length - 2]
-        if (betterWorldFeature.appsScreen.enabled && previousRoute?.name === Routes.APPS_SEARCH) {
+        if (previousRoute?.name === Routes.APPS_SEARCH) {
             nav.navigate(Routes.APPS)
-        } else if (!betterWorldFeature.appsScreen.enabled && previousRoute?.name === Routes.DISCOVER_SEARCH) {
-            nav.navigate(Routes.DISCOVER)
         } else {
             nav.goBack()
         }
-    }, [betterWorldFeature.appsScreen.enabled, nav])
+    }, [nav])
 
     return (
         <Layout

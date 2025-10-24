@@ -6,14 +6,7 @@ import { TabIcon, useFeatureFlags } from "~Components"
 import { useCheckWalletBackup, useTheme } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
-import {
-    DiscoverStack,
-    HomeStack,
-    RootStackParamListBrowser,
-    RootStackParamListHome,
-    RootStackParamListSettings,
-    SettingsStack,
-} from "~Navigation/Stacks"
+import { HomeStack, RootStackParamListHome, RootStackParamListSettings, SettingsStack } from "~Navigation/Stacks"
 import { AppsStack, RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
@@ -25,7 +18,6 @@ import { useI18nContext } from "~i18n"
 export type TabStackParamList = {
     HomeStack: NavigatorScreenParams<RootStackParamListHome>
     NFTStack: NavigatorScreenParams<RootStackParamListNFT>
-    DiscoverStack: NavigatorScreenParams<RootStackParamListBrowser>
     SettingsStack: NavigatorScreenParams<RootStackParamListSettings>
     [Routes.HISTORY_STACK]: NavigatorScreenParams<HistoryStackParamList>
     AppsStack: NavigatorScreenParams<RootStackParamListApps>
@@ -66,10 +58,8 @@ export const TabStack = () => {
             case Routes.SETTINGS_GIVE_FEEDBACK:
             case Routes.BROWSER:
             case Routes.TOKEN_DETAILS:
-            case Routes.DISCOVER_TABS_MANAGER:
             case Routes.APPS_TABS_MANAGER:
             case Routes.APPS_SEARCH:
-            case Routes.DISCOVER_SEARCH:
             case Routes.BUY_WEBVIEW:
                 return "none"
 
@@ -115,29 +105,17 @@ export const TabStack = () => {
                 />
             )}
 
-            {!AccountUtils.isObservedAccount(selectedAccount) &&
-                (betterWorldFeature?.appsScreen?.enabled ? (
-                    <Tab.Screen
-                        name="AppsStack"
-                        component={AppsStack}
-                        options={{
-                            tabBarLabel: "Apps",
-                            tabBarTestID: "apps-tab",
-                            tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-apps", LL.TAB_TITLE_APPS()),
-                        }}
-                    />
-                ) : (
-                    <Tab.Screen
-                        name="DiscoverStack"
-                        component={DiscoverStack}
-                        options={{
-                            tabBarLabel: "Discover",
-                            tabBarTestID: "discover-tab",
-                            tabBarIcon: ({ focused }) =>
-                                renderTabBarIcon(focused, "icon-explorer", LL.TAB_TITLE_DISCOVER()),
-                        }}
-                    />
-                ))}
+            {!AccountUtils.isObservedAccount(selectedAccount) && (
+                <Tab.Screen
+                    name="AppsStack"
+                    component={AppsStack}
+                    options={{
+                        tabBarLabel: "Apps",
+                        tabBarTestID: "apps-tab",
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-apps", LL.TAB_TITLE_APPS()),
+                    }}
+                />
+            )}
 
             <Tab.Screen
                 name={Routes.HISTORY_STACK}

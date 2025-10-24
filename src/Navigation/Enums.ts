@@ -11,7 +11,6 @@ export enum Routes {
     IMPORT_MNEMONIC = "Import_Mnemonic",
     BROWSER = "Browser",
     HOME_STACK = "HomeStack",
-    DISCOVER_STACK = "DiscoverStack",
     APPS_STACK = "AppsStack",
 
     IMPORT_FROM_CLOUD = "Import_From_Cloud",
@@ -75,11 +74,8 @@ export enum Routes {
     SETTINGS_MANAGE_CUSTOM_NODES = "Settings_Manage_custom_Nodes",
     SETTINGS_NOTIFICATIONS = "Settings_Notifications",
     CAMERA = "Camera",
-    DISCOVER = "Discover",
     HISTORY_STACK = "HistoryStack",
     DISCOVER_FEATURED = "Discover_Featured",
-    DISCOVER_FAVOURITES = "Discover_Favourites",
-    DISCOVER_SEARCH = "Discover_Search",
     TOKEN_DETAILS = "Token_Details",
     BRIDGE_TOKEN_DETAILS = "Bridge_Token_Details",
     CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN = "Convert_Better_Token_Transaction_Screen",
@@ -93,7 +89,6 @@ export enum Routes {
     SECURITY_UPGRADE_V2 = "Security_Upgrade_V2",
     SECURITY_UPGRADE_V2_HOME = "Security_Upgrade_V2_Home",
     SECURITY_UPGRADE_V2_MNEMONIC_BACKUP = "Security_Upgrade_V2_Mnemonic_Backup",
-    DISCOVER_TABS_MANAGER = "Discover_Tabs_Manager",
 
     // BetterWorld
     APPS = "Apps",

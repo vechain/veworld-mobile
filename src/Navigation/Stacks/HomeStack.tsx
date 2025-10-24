@@ -140,13 +140,7 @@ export type RootStackParamListHome = {
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
-        returnScreen?:
-            | Routes.DISCOVER
-            | Routes.SETTINGS
-            | Routes.HOME
-            | Routes.ACTIVITY_STAKING
-            | Routes.APPS
-            | Routes.SWAP
+        returnScreen?: Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS | Routes.SWAP
     }
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
@@ -155,10 +149,8 @@ export type RootStackParamListHome = {
     [Routes.USERNAME_CLAIMED]: {
         username: string
     }
-    [Routes.DISCOVER_TABS_MANAGER]: undefined
     [Routes.APPS_TABS_MANAGER]: undefined
     [Routes.APPS_SEARCH]: undefined
-    [Routes.DISCOVER_SEARCH]: undefined
     [Routes.ACTIVITY_DETAILS]: {
         activity: Activity
         token?: FungibleToken
@@ -291,9 +283,7 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen
-                    name={
-                        betterWorldFeature.appsScreen.enabled ? Routes.APPS_TABS_MANAGER : Routes.DISCOVER_TABS_MANAGER
-                    }
+                    name={Routes.APPS_TABS_MANAGER}
                     component={TabsManagerScreen}
                     options={{
                         headerShown: false,
@@ -305,7 +295,7 @@ export const HomeStack = () => {
                     }}
                 />
                 <Screen
-                    name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_SEARCH}
+                    name={Routes.APPS_SEARCH}
                     component={AppsSearchScreen}
                     options={{
                         headerShown: false,
