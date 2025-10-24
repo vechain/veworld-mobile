@@ -1322,6 +1322,18 @@ type RootTranslation = {
 	 */
 	BTN_ADD_TO_FAVORITES: string
 	/**
+	 * Report a problem
+	 */
+	BTN_COLLECTION_ACTIONS_REPORT: string
+	/**
+	 * Mark as favorite
+	 */
+	BTN_COLLECTION_ACTIONS_FAVORITE: string
+	/**
+	 * Report and block collection
+	 */
+	BTN_COLLECTION_ACTIONS_BLOCK: string
+	/**
 	 * A​l​p​h​a​b​e​t​i​c​ ​(​A​-​Z​)
 	 */
 	BTN_ALPHABETIC_ASC: string
@@ -6657,6 +6669,18 @@ Thanks for your patience!
 	 * Add to Favorite dApps
 	 */
 	BTN_ADD_TO_FAVORITES: () => LocalizedString
+	/**
+	 * Report a problem
+	 */
+	BTN_COLLECTION_ACTIONS_REPORT: () => LocalizedString
+	/**
+	 * Mark as favorite
+	 */
+	BTN_COLLECTION_ACTIONS_FAVORITE: () => LocalizedString
+	/**
+	 * Report and block collection
+	 */
+	BTN_COLLECTION_ACTIONS_BLOCK: () => LocalizedString
 	/**
 	 * Alphabetic (A-Z)
 	 */
