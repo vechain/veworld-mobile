@@ -438,6 +438,8 @@
   "COLLECTION_NAME": "Collection name",
   "COLLECTIBLES_VIEW_DETAILS": "Details",
   "COLLECTIBLES_VIEW_GALLERY": "Gallery",
+  "COLLECTIBLES_REPORT_PROBLEM": "Report collection",
+  "COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION": "By reporting this collection, it will be automatically removed from your gallery and it will be reported for review.\nThis action is irreversible",
   "COMMOMN_DAY": "day",
   "COMMON_24H": "24 HRs",
   "COMMON_24H_VOLUME": "24h Volume",

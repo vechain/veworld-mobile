@@ -1821,6 +1821,14 @@ type RootTranslation = {
 	 */
 	COLLECTIBLES_VIEW_GALLERY: string
 	/**
+	 * Report collection
+	 */
+	COLLECTIBLES_REPORT_PROBLEM: string
+	/**
+	 * By reporting this collection, it will be automatically removed from your gallery and it will be reported for review.
+	 */
+	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: string
+	/**
 	 * d​a​y
 	 */
 	COMMOMN_DAY: string
@@ -7165,6 +7173,14 @@ Thanks for your patience!
 	 * Gallery
 	 */
 	COLLECTIBLES_VIEW_GALLERY: () => LocalizedString
+	/**
+	 * Report collection
+	 */
+	COLLECTIBLES_REPORT_PROBLEM: () => LocalizedString
+	/**
+	 * By reporting this collection, it will be automatically removed from your gallery and it will be reported for review.
+	 */
+	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: () => LocalizedString
 	/**
 	 * day
 	 */
