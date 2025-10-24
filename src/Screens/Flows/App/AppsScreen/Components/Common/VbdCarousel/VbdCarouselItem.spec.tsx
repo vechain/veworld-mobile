@@ -108,7 +108,7 @@ describe("VbdCarouselItem", () => {
                     social_urls: [],
                     teamWalletAddress: "",
                     appAvailableForAllocationVoting: true,
-                    categories: [X2ECategoryType.NUTRITION],
+                    categories: ["education-learning-test" as any],
                     tweets: [],
                     ve_world: { banner: "https://vechain.org" },
                 }}
