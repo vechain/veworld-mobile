@@ -1,23 +1,35 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo, useRef } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseSkeleton, BaseSpacer, BaseView, Layout } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
 import { CollectionCard } from "./Components"
-import { useNFTCollections } from "./Hooks"
+import { getNFTCollectionsQueryKey, useNFTCollections } from "./Hooks"
 import { COLORS } from "~Constants"
 import { AddressUtils } from "~Utils"
-import { selectAllFavoriteCollections, useAppSelector } from "~Storage/Redux"
+import {
+    selectAllFavoriteCollections,
+    selectSelectedAccount,
+    selectSelectedNetwork,
+    useAppSelector,
+} from "~Storage/Redux"
 import Animated, { SequencedTransition } from "react-native-reanimated"
+import { RefreshControl } from "react-native-gesture-handler"
+import { useQueryClient } from "@tanstack/react-query"
 
 export const CollectionsScreen = () => {
     const scrollRef = useRef<FlatList<string>>(null)
+
+    const [isRefreshing, setIsRefreshing] = useState(false)
 
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
     const { data: paginatedCollections, isLoading: isCollectionsLoading, fetchNextPage } = useNFTCollections()
     const favoriteCollections = useAppSelector(selectAllFavoriteCollections)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const queryClient = useQueryClient()
 
     const collectionsData = useMemo(
         () => paginatedCollections?.pages.flatMap(page => page.collections) ?? [],
@@ -38,6 +50,16 @@ export const CollectionsScreen = () => {
                 }, [] as string[])
         )
     }, [collectionsData, favoriteCollections])
+
+    const onRefresh = useCallback(async () => {
+        setIsRefreshing(true)
+        await queryClient.invalidateQueries({
+            queryKey: getNFTCollectionsQueryKey(selectedNetwork.genesis.id, selectedAccount.address),
+            refetchType: "all",
+            exact: true,
+        })
+        setIsRefreshing(false)
+    }, [queryClient, selectedAccount.address, selectedNetwork.genesis.id])
 
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<string>) => {
@@ -112,6 +134,13 @@ export const CollectionsScreen = () => {
                         renderItem={renderItem}
                         ItemSeparatorComponent={renderItemSeparator}
                         style={styles.list}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={isRefreshing}
+                                onRefresh={onRefresh}
+                                tintColor={theme.colors.border}
+                            />
+                        }
                         contentContainerStyle={styles.listContentContainer}
                         onEndReached={() => {
                             fetchNextPage()
