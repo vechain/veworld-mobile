@@ -118,9 +118,11 @@ export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) 
                             setSelectedKey={setSelectedKey}
                         />
                         <BaseSpacer height={24} />
-                        {selectedKey !== CollectiblesViewMode.DETAILS && renderCountLabel}
                         {selectedKey === CollectiblesViewMode.GALLERY && (
-                            <CollectionNftsList collectionAddress={collectionAddress} />
+                            <>
+                                {renderCountLabel}
+                                <CollectionNftsList collectionAddress={collectionAddress} />
+                            </>
                         )}
                         {selectedKey === CollectiblesViewMode.DETAILS && (
                             <CollectiblesDetailsCard collectionMetadata={collectionMetadata} />
