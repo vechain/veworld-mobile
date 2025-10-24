@@ -53,6 +53,7 @@ import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
 import { CollectionsScreen } from "~Screens/Flows/App/Collectibles"
 import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/CollectibleCollectionDetails"
+import { ReportNFTTransactionScreen } from "~Screens/Flows/App/NFT/NFTReportCollection/ReportNFTTransactionScreen"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -172,6 +173,10 @@ export type RootStackParamListHome = {
     [Routes.COLLECTIBLES_COLLECTIONS]: undefined
     [Routes.COLLECTIBLES_COLLECTION_DETAILS]: {
         collectionAddress: string
+    }
+    [Routes.REPORT_NFT_TRANSACTION_SCREEN]: {
+        nftAddress: string
+        transactionClauses: TransactionClause[]
     }
 }
 
@@ -341,6 +346,13 @@ export const HomeStack = () => {
                     <Screen
                         name={Routes.COLLECTIBLES_COLLECTION_DETAILS}
                         component={CollectibleCollectionDetails}
+                        options={{ headerShown: false }}
+                    />
+                )}
+                {betterWorldFeature.balanceScreen.collectibles.enabled && (
+                    <Screen
+                        name={Routes.REPORT_NFT_TRANSACTION_SCREEN}
+                        component={ReportNFTTransactionScreen}
                         options={{ headerShown: false }}
                     />
                 )}
