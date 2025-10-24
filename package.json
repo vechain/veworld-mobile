@@ -45,8 +45,7 @@
     "abi:generate-ts-business-events-file": "$(yarn bin json-abi-to-ts) generate-object --input-directory ./abi-resources/business_events --out-file ./src/Generated/businessEvents.ts --output ts",
     "abi:generate": "yarn abi:generate-json-abi-file && yarn abi:generate-ts-abi-file && yarn abi:generate-business-events-directory && yarn abi:generate-ts-business-events-file",
     "abi:all": "yarn abi:install && yarn abi:build && yarn abi:generate",
-    "ts-check": "tsc --noEmit",
-    "patch-p": "patch-package"
+    "ts-check": "tsc --noEmit"
   },
   "dependencies": {
     "@coinbase/cbpay-js": "^2.2.1",

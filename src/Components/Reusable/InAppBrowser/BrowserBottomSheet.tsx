@@ -4,12 +4,12 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { default as React, useCallback, useMemo, useState } from "react"
 import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
-import { useFeatureFlags, useInAppBrowser } from "~Components/Providers"
+import { useInAppBrowser } from "~Components/Providers"
 import { ColorThemeType, SCREEN_HEIGHT } from "~Constants"
 import { useDappBookmarking, useTabManagement, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
-import { RootStackParamListApps, RootStackParamListBrowser, RootStackParamListSettings, Routes } from "~Navigation"
+import { RootStackParamListApps, RootStackParamListSettings, Routes } from "~Navigation"
 import { selectCurrentTabId, useAppSelector } from "~Storage/Redux"
 
 type Props = {
@@ -51,42 +51,26 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
     const { navigationState, webviewRef, dappMetadata } = useInAppBrowser()
     const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
     const { styles, theme } = useThemedStyles(baseStyles)
-    const nav =
-        useNavigation<
-            NativeStackNavigationProp<RootStackParamListBrowser & RootStackParamListSettings & RootStackParamListApps>
-        >()
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListSettings & RootStackParamListApps>>()
     const { closeTab } = useTabManagement()
     const currentTabId = useAppSelector(selectCurrentTabId)
-    const { betterWorldFeature } = useFeatureFlags()
     const [actionContainerHeight, setActionContainerHeight] = useState(SCREEN_HEIGHT / 2)
 
     const navToTabsManager = useCallback(async () => {
         await onNavigate?.()
-        if (betterWorldFeature.appsScreen.enabled) {
-            nav.replace(Routes.APPS_TABS_MANAGER)
-        } else {
-            nav.replace(Routes.DISCOVER_TABS_MANAGER)
-        }
+        nav.replace(Routes.APPS_TABS_MANAGER)
         onClose?.()
-    }, [nav, onNavigate, onClose, betterWorldFeature.appsScreen.enabled])
+    }, [nav, onNavigate, onClose])
 
     const navToNewTab = useCallback(async () => {
         await onNavigate?.()
-        if (betterWorldFeature.appsScreen.enabled) {
-            nav.replace(Routes.APPS_SEARCH)
-        } else {
-            nav.replace(Routes.DISCOVER_SEARCH)
-        }
+        nav.replace(Routes.APPS_SEARCH)
         onClose?.()
-    }, [nav, onNavigate, onClose, betterWorldFeature.appsScreen.enabled])
+    }, [nav, onNavigate, onClose])
 
     const navToSearch = useCallback(() => {
-        if (betterWorldFeature.appsScreen.enabled) {
-            nav.replace(Routes.APPS_SEARCH)
-        } else {
-            nav.replace(Routes.DISCOVER_SEARCH)
-        }
-    }, [nav, betterWorldFeature.appsScreen.enabled])
+        nav.replace(Routes.APPS_SEARCH)
+    }, [nav])
 
     const closeCurrentTab = useCallback(() => {
         if (currentTabId) {
