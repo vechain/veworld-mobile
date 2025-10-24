@@ -38,6 +38,7 @@ export const useNFTMetadata = () => {
                     warn(ERROR_EVENTS.NFT, `Unable to detect protocol ${protocol} for metadata URI ${uri}`)
                     return undefined
             }
+
             // transform all metadata keys to lowercase avoiding case sensitive issues
             return (
                 tokenMetadata &&

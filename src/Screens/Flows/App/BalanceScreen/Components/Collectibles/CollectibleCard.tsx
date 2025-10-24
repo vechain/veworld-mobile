@@ -3,19 +3,16 @@ import React, { useCallback } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { ImageStyle } from "react-native-fast-image"
 import LinearGradient from "react-native-linear-gradient"
+import Animated from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseView, BlurView, NFTImageComponent } from "~Components"
 import { COLORS } from "~Constants"
 import { useNFTMedia, useThemedStyles } from "~Hooks"
+import { useNftBookmarking } from "~Hooks/useNftBookmarking"
 import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
+import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import { NFTMediaType } from "~Model"
-import {
-    isNftFavorite,
-    selectSelectedAccount,
-    selectSelectedNetwork,
-    toggleFavorite,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import HapticsService from "~Services/HapticsService"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 
 type Props = {
     address: string
@@ -23,15 +20,14 @@ type Props = {
     onPress: (args: { address: string; tokenId: string }) => void
 }
 
+const AnimatedBaseIcon = Animated.createAnimatedComponent(wrapFunctionComponent(BaseIcon))
+
 export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
-    const isFavorite = useAppSelector(state => isNftFavorite(state, address, tokenId))
-    const account = useAppSelector(selectSelectedAccount)
-    const network = useAppSelector(selectSelectedNetwork)
+    const { isFavorite, toggleFavorite } = useNftBookmarking(address, tokenId)
+    const { animatedStyles, favoriteIconAnimation } = useFavoriteAnimation()
     const details = useCollectibleDetails({ address, tokenId })
-
     const { fetchMedia } = useNFTMedia()
-    const dispatch = useAppDispatch()
 
     const { data: media } = useQuery({
         queryKey: ["COLLECTIBLES", "MEDIA", details.image],
@@ -45,14 +41,24 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
         onPress({ address, tokenId })
     }, [address, onPress, tokenId])
 
-    const onFavoriteToggle = useCallback(() => {
-        dispatch(toggleFavorite({ address, tokenId, owner: account.address, genesisId: network.genesis.id }))
-    }, [account.address, address, dispatch, network.genesis.id, tokenId])
+    const handleToggleFavorite = useCallback(() => {
+        HapticsService.triggerImpact({ level: "Light" })
+        favoriteIconAnimation(finished => {
+            if (finished) {
+                toggleFavorite()
+            }
+        })
+    }, [favoriteIconAnimation, toggleFavorite])
 
     return (
         <Pressable style={styles.root} onPress={handlePress}>
-            <Pressable style={styles.favoriteContainer} onPress={onFavoriteToggle}>
-                <BaseIcon name={isFavorite ? "icon-star-on" : "icon-star"} color={COLORS.WHITE} size={16} />
+            <Pressable style={styles.favoriteContainerContainer} onPress={handleToggleFavorite}>
+                <AnimatedBaseIcon
+                    name={isFavorite ? "icon-star-on" : "icon-star"}
+                    color={COLORS.WHITE}
+                    size={16}
+                    style={animatedStyles}
+                />
             </Pressable>
             {media?.mediaType === NFTMediaType.IMAGE && (
                 <NFTImageComponent style={styles.image as ImageStyle} uri={media.image} />
@@ -83,12 +89,13 @@ const baseStyles = () =>
             overflow: "hidden",
             aspectRatio: 0.8791,
             maxWidth: "50%",
+            backgroundColor: COLORS.PURPLE,
         },
         image: {
             height: "100%",
             width: "100%",
         },
-        favoriteContainer: {
+        favoriteContainerContainer: {
             position: "absolute",
             flexDirection: "row",
             alignItems: "center",

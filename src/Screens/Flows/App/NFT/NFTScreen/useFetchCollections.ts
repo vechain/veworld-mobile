@@ -1,15 +1,15 @@
+import { isEmpty } from "lodash"
 import { useCallback, useEffect, useMemo } from "react"
+import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { useNFTCollections } from "~Hooks"
+import { useNFTRegistry } from "~Hooks/useNft/useNFTRegistry"
 import {
     selectAllNFTCollections,
-    selectCollectionRegistryInfo,
     selectNftCollections,
     selectNftNetworkingSideEffects,
     selectSelectedNetwork,
     useAppSelector,
 } from "~Storage/Redux"
-import { isEmpty } from "lodash"
-import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { usePagination } from "../usePagination"
 
 export const useFetchCollections = (
@@ -19,7 +19,7 @@ export const useFetchCollections = (
     const { loadCollections } = useNFTCollections()
     const { fetchWithPagination } = usePagination()
     const network = useAppSelector(selectSelectedNetwork)
-    const registryInfo = useAppSelector(selectCollectionRegistryInfo)
+    const { data: registryInfo, isLoading: isRegistryInfoLoading } = useNFTRegistry()
     const allNFTCollections = useAppSelector(selectAllNFTCollections)
     const nftCollections = useAppSelector(selectNftCollections)
 
@@ -34,7 +34,12 @@ export const useFetchCollections = (
     }, [network.type, registryInfo, loadCollections, allNFTCollections])
 
     const fetchMoreCollections = useCallback(async () => {
-        if (onEndReachedCalledDuringMomentum && !nftNetworkingSideEffects?.isLoading) {
+        if (
+            onEndReachedCalledDuringMomentum &&
+            !nftNetworkingSideEffects?.isLoading &&
+            !isRegistryInfoLoading &&
+            !!registryInfo
+        ) {
             fetchWithPagination(
                 allNFTCollections?.pagination,
                 allNFTCollections?.collections.length ?? 0,
@@ -47,8 +52,10 @@ export const useFetchCollections = (
             setEndReachedCalledDuringMomentum(false)
         }
     }, [
-        allNFTCollections,
+        allNFTCollections?.collections.length,
+        allNFTCollections?.pagination,
         fetchWithPagination,
+        isRegistryInfoLoading,
         loadCollections,
         nftNetworkingSideEffects?.isLoading,
         onEndReachedCalledDuringMomentum,
@@ -61,7 +68,7 @@ export const useFetchCollections = (
         registryInfo,
         fetchMoreCollections,
         hasNext,
-        isLoading: nftNetworkingSideEffects.isLoading,
+        isLoading: nftNetworkingSideEffects.isLoading || isRegistryInfoLoading,
         error: nftNetworkingSideEffects.error,
         collections: nftCollections?.collections ?? [],
     }

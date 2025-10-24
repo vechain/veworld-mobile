@@ -425,7 +425,7 @@
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "Vi kunde inte hitta några säkerhetskopierade plånböcker i din {cloud: string}. Försök igen eller använd din återställningsfras.",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "Inga plånböcker tillgängliga",
   "COLLECTIBLES_ACTION_AVATAR_ACTIVE": "Avatar",
-  "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "Ställ in avatar",
+  "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "Sätt avatar",
   "COLLECTIBLES_ACTION_FAVORITE_INACTIVE": "Favorit",
   "COLLECTIBLES_ACTION_SEND_INACTIVE": "Skicka",
   "COLLECTIBLES_DESCRIPTION": "Beskrivning",

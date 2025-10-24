@@ -1,9 +1,9 @@
 import React, { memo, useMemo } from "react"
 import FastImage, { FastImageProps } from "react-native-fast-image"
 import { SvgUri } from "react-native-svg"
-import { NFTPlaceholderDark, NFTPlaceholderLight } from "~Assets"
+import { NFTPlaceholderDarkV2 } from "~Assets"
 import { BaseView } from "~Components/Base"
-import { useTheme } from "~Hooks"
+import { COLORS } from "~Constants"
 import { URIUtils } from "~Utils"
 
 type Props = {
@@ -13,12 +13,6 @@ type Props = {
 
 export const NFTImageComponent = memo((props: Props) => {
     const { uri, style, testID, mime, ...rest } = props
-
-    const theme = useTheme()
-
-    const placeholderImg = useMemo(() => {
-        return theme.isDark ? NFTPlaceholderDark : NFTPlaceholderLight
-    }, [theme.isDark])
 
     const cacheControl = useMemo(() => {
         //Return default value (it won't be used)
@@ -37,7 +31,7 @@ export const NFTImageComponent = memo((props: Props) => {
             <BaseView
                 style={[
                     {
-                        backgroundColor: theme.colors.placeholder,
+                        backgroundColor: COLORS.PURPLE,
                     },
                     style,
                 ]}>
@@ -50,7 +44,7 @@ export const NFTImageComponent = memo((props: Props) => {
                         fallback={
                             <FastImage
                                 fallback
-                                defaultSource={placeholderImg}
+                                defaultSource={NFTPlaceholderDarkV2}
                                 style={[style]}
                                 resizeMode={FastImage.resizeMode.cover}
                             />
@@ -59,7 +53,7 @@ export const NFTImageComponent = memo((props: Props) => {
                 ) : (
                     <FastImage
                         fallback
-                        defaultSource={placeholderImg}
+                        defaultSource={NFTPlaceholderDarkV2}
                         style={[style]}
                         resizeMode={FastImage.resizeMode.cover}
                     />
@@ -73,12 +67,12 @@ export const NFTImageComponent = memo((props: Props) => {
             testID={testID}
             style={[
                 {
-                    backgroundColor: theme.colors.placeholder,
+                    backgroundColor: COLORS.PURPLE,
                 },
                 style,
             ]}
             fallback
-            defaultSource={placeholderImg}
+            defaultSource={NFTPlaceholderDarkV2}
             source={{
                 uri,
                 priority: FastImage.priority.low,

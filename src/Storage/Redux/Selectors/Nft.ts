@@ -65,12 +65,6 @@ export const selectNftCollectionsWithoutMetadata = createSelector(
     collections => collections?.collections?.filter(col => !col.updated) ?? [],
 )
 
-export const selectCollectionRegistryInfo = createSelector(
-    selectNftState,
-    selectSelectedNetwork,
-    (state, network) => state.collectionRegistryInfo[network.type],
-)
-
 export const selectNftNetworkingSideEffects = createSelector(selectNftState, state => {
     return {
         isLoading: state.isLoading,
@@ -224,3 +218,24 @@ export const isNftFavorite = createSelector(
 )
 
 export const selectAllFavoriteNfts = createSelector(selectCurrentAccountFavoriteNfts, nfts => Object.values(nfts))
+
+const selectFavoriteCollections = createSelector(selectNftState, state => state.favoriteCollections ?? {})
+const selectCurrentNetworkFavoriteCollections = createSelector(
+    [selectFavoriteCollections, selectSelectedNetwork],
+    (collections, network) => collections[network.genesis.id] ?? {},
+)
+const selectCurrentAccountFavoriteCollections = createSelector(
+    [selectCurrentNetworkFavoriteCollections, selectSelectedAccount],
+    (favorites, selectedAccount) => favorites[HexUtils.normalize(selectedAccount.address)] ?? {},
+)
+
+export const isCollectionFavorite = createSelector(
+    [selectCurrentAccountFavoriteCollections, (_state: RootState, collectionAddress: string) => collectionAddress],
+    (favorites, collectionAddress) => {
+        return Boolean(favorites[HexUtils.normalize(collectionAddress)])
+    },
+)
+
+export const selectAllFavoriteCollections = createSelector(selectCurrentAccountFavoriteCollections, collections =>
+    Object.values(collections),
+)
