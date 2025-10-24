@@ -1,6 +1,6 @@
 import React from "react"
-import { CollectiblesList } from "../../Components/Collectibles/CollectiblesList"
+import { CollectionsList } from "../../Components/Collectibles/CollectionsList"
 
 export const CollectiblesTopSection = () => {
-    return <CollectiblesList />
+    return <CollectionsList />
 }
