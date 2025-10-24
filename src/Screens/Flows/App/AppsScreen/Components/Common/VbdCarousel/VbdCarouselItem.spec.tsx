@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react-native"
 import React from "react"
+import { X2ECategoryType } from "~Model"
 import { TestWrapper } from "~Test"
 import { VbdCarouselItem } from "./VbdCarouselItem"
 
@@ -47,6 +48,7 @@ describe("VbdCarouselItem", () => {
                     tweets: [],
                     ve_world: { banner: "https://vechain.org" },
                 }}
+                onPressItem={jest.fn()}
             />,
             {
                 wrapper: TestWrapper,
@@ -75,10 +77,11 @@ describe("VbdCarouselItem", () => {
                     social_urls: [],
                     teamWalletAddress: "",
                     appAvailableForAllocationVoting: true,
-                    categories: ["education-learning"],
+                    categories: [X2ECategoryType.NUTRITION],
                     tweets: [],
                     ve_world: { banner: "https://vechain.org" },
                 }}
+                onPressItem={jest.fn()}
             />,
             {
                 wrapper: TestWrapper,
@@ -105,10 +108,11 @@ describe("VbdCarouselItem", () => {
                     social_urls: [],
                     teamWalletAddress: "",
                     appAvailableForAllocationVoting: true,
-                    categories: ["education-learning-test"],
+                    categories: [X2ECategoryType.NUTRITION],
                     tweets: [],
                     ve_world: { banner: "https://vechain.org" },
                 }}
+                onPressItem={jest.fn()}
             />,
             {
                 wrapper: TestWrapper,
