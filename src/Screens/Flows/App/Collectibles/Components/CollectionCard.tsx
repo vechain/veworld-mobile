@@ -1,7 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
 import React, { useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
-import { BaseText, BaseView, BlurView } from "~Components"
+import FastImage from "react-native-fast-image"
+import Animated from "react-native-reanimated"
+import { NFTPlaceholderDark } from "~Assets"
+import { BaseIcon, BaseText, BaseView, BlurView } from "~Components"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS } from "~Constants"
 import { useFormatFiat, useNFTMedia, useThemedStyles } from "~Hooks"
@@ -14,11 +17,14 @@ type Props = {
     onPress: (address: string) => void
 }
 
+const AnimatedBaseIcon = Animated.createAnimatedComponent(wrapFunctionComponent(BaseIcon))
+
 export const CollectionCard = ({ collectionAddress, onPress }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { data: collectionMetadata, isLoading } = useCollectionMetadata(collectionAddress)
     const { fetchMedia } = useNFTMedia()
-    const { formatLocale } = useFormatFiat()
+    const [isFavorite, setIsFavorite] = useState(false)
+    const { animatedStyles, favoriteIconAnimation } = useFavoriteAnimation()
 
     const { data: media } = useQuery({
         queryKey: ["COLLECTIBLES", "COLLECTION", "MEDIA", collectionMetadata?.image],
@@ -80,14 +86,10 @@ export const CollectionCard = ({ collectionAddress, onPress }: Props) => {
                             <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE_RGBA_90} flexDirection="row">
                                 {collectionMetadata?.name}
                             </BaseText>
-                            {collectionMetadata?.totalSupply && (
+                            {collectionMetadata?.balanceOf && (
                                 <BaseView px={8} py={4} bg={COLORS.WHITE_RGBA_15} borderRadius={99}>
                                     <BaseText typographyFont="smallCaptionMedium" color={COLORS.WHITE_RGBA_90}>
-                                        {formatDisplayNumber(collectionMetadata?.totalSupply, {
-                                            includeSymbol: false,
-                                            locale: formatLocale,
-                                            useCompactNotation: true,
-                                        })}
+                                        {collectionMetadata?.balanceOf}
                                     </BaseText>
                                 </BaseView>
                             )}
@@ -112,6 +114,24 @@ const baseStyles = () =>
         image: {
             width: "100%",
             height: "100%",
+            position: "relative",
         },
         bottom: { position: "absolute", bottom: 0, left: 0, width: "100%" },
+        favoriteIconContainer: {
+            top: 0,
+            right: 0,
+            padding: 8,
+            position: "absolute",
+            zIndex: 1,
+        },
+        imageErrorContainer: {
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+        },
     })
