@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-24)</small>
+
+* build: init ([4c47541](https://github.com/vechain/veworld-mobile/commit/4c47541))
+* 466 tech debt   clear tsc errors (#3456) ([7401eeb](https://github.com/vechain/veworld-mobile/commit/7401eeb)), closes [#3456](https://github.com/vechain/veworld-mobile/issues/3456)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
