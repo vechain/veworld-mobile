@@ -31,11 +31,11 @@ export const CollectionsScreen: React.FC<Props> = ({
     const favoriteNfts = useAppSelector(selectAllFavoriteNfts)
     const [onEndReachedCalledDuringMomentum, setEndReachedCalledDuringMomentum] = useState(true)
 
-    const { nfts, fetchMoreNFTs } = useNFTWithMetadata(
-        collectionAddress,
-        onEndReachedCalledDuringMomentum,
-        setEndReachedCalledDuringMomentum,
-    )
+    const {
+        nfts,
+        fetchMoreNFTs,
+        isLoading: isNftsLoading,
+    } = useNFTWithMetadata(collectionAddress, onEndReachedCalledDuringMomentum, setEndReachedCalledDuringMomentum)
 
     const onMomentumScrollBegin = useCallback(() => {
         setEndReachedCalledDuringMomentum(true)
@@ -49,6 +49,7 @@ export const CollectionsScreen: React.FC<Props> = ({
         ({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
             return (
                 <CollectibleCard
+                    isLoading={isNftsLoading}
                     address={collectionAddress}
                     tokenId={item.tokenId}
                     isObservedAccount={isObservedAccount}
@@ -61,7 +62,7 @@ export const CollectionsScreen: React.FC<Props> = ({
                 />
             )
         },
-        [collectionAddress, isObservedAccount, nav],
+        [collectionAddress, isObservedAccount, nav, isNftsLoading],
     )
 
     const renderDetailsItem = useCallback(
@@ -74,8 +75,7 @@ export const CollectionsScreen: React.FC<Props> = ({
     const nftData = useMemo(() => {
         const allNfts = nfts?.map(nft => ({ address: nft.address, tokenId: nft.tokenId })) ?? []
 
-        // Sort NFTs: favorites first, then by original order
-        return allNfts.sort((a, b) => {
+        return [...allNfts].sort((a, b) => {
             const aIsFavorite = favoriteNftKeys.has(`${a.address.toLowerCase()}_${a.tokenId}`)
             const bIsFavorite = favoriteNftKeys.has(`${b.address.toLowerCase()}_${b.tokenId}`)
 
