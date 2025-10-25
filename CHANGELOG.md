@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-23)</small>
+
+* build: init ([6edbb3d](https://github.com/vechain/veworld-mobile/commit/6edbb3d))
+* Scroll to app when clicked in VeBetter section (#3451) ([7be7697](https://github.com/vechain/veworld-mobile/commit/7be7697)), closes [#3451](https://github.com/vechain/veworld-mobile/issues/3451)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
