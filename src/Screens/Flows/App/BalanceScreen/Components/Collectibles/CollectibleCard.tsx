@@ -6,7 +6,8 @@ import LinearGradient from "react-native-linear-gradient"
 import Animated from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseView, BlurView, NFTImageComponent } from "~Components"
 import { COLORS } from "~Constants"
-import { useNftBookmarking, useNFTMedia, useThemedStyles } from "~Hooks"
+import { useNFTMedia, useThemedStyles } from "~Hooks"
+import { useNftBookmarking } from "~Hooks/useNftBookmarking"
 import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
 import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import { NFTMediaType } from "~Model"
@@ -88,6 +89,7 @@ const baseStyles = () =>
             overflow: "hidden",
             aspectRatio: 0.8791,
             maxWidth: "50%",
+            backgroundColor: COLORS.PURPLE,
         },
         image: {
             height: "100%",

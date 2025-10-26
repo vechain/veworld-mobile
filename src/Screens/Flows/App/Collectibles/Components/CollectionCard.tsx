@@ -3,7 +3,7 @@ import React, { useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import FastImage from "react-native-fast-image"
 import Animated from "react-native-reanimated"
-import { NFTPlaceholderDark } from "~Assets"
+import { NFTPlaceholderDarkV2 } from "~Assets"
 import { BaseIcon, BaseText, BaseView, BlurView } from "~Components"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS } from "~Constants"
@@ -13,6 +13,8 @@ import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import HapticsService from "~Services/HapticsService"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { useCollectionMetadata } from "../Hooks/useCollectionMetadata"
+import AddressUtils from "~Utils/AddressUtils"
+import { SkeletonCollectionCard } from "./SkeletonCollectionCard"
 
 type Props = {
     collectionAddress: string
@@ -39,10 +41,17 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
 
     const handleToggleFavorite = useCallback(() => {
         HapticsService.triggerImpact({ level: "Light" })
-        favoriteIconAnimation()
-        toggleFavoriteCollection()
-        onToggleFavorite(!isFavorite)
+        favoriteIconAnimation(finished => {
+            if (finished) {
+                toggleFavoriteCollection()
+                onToggleFavorite(!isFavorite)
+            }
+        })
     }, [favoriteIconAnimation, toggleFavoriteCollection, onToggleFavorite, isFavorite])
+
+    if (isLoading) {
+        return <SkeletonCollectionCard />
+    }
 
     return (
         <TouchableOpacity disabled={isLoading} activeOpacity={0.8} onPress={() => onPress(collectionAddress)}>
@@ -52,13 +61,12 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
                     resizeMode="cover"
                     style={styles.image}
                     fallback
-                    defaultSource={NFTPlaceholderDark}>
+                    defaultSource={NFTPlaceholderDarkV2}>
                     <TouchableOpacity
                         disabled={!collectionMetadata?.id}
                         style={styles.favoriteIconContainer}
                         onPress={handleToggleFavorite}>
                         <AnimatedBaseIcon
-                            //TODO: Replace with favoriteCollections
                             name={isFavorite ? "icon-star-on" : "icon-star"}
                             size={16}
                             color={COLORS.WHITE}
@@ -74,7 +82,9 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
                             p={8}
                             bg={COLORS.BLACK_RGBA_30}>
                             <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE_RGBA_90} flexDirection="row">
-                                {collectionMetadata?.name}
+                                {!collectionMetadata?.name
+                                    ? AddressUtils.humanAddress(collectionAddress)
+                                    : collectionMetadata?.name}
                             </BaseText>
                             {collectionMetadata?.balanceOf && (
                                 <BaseView px={8} py={4} bg={COLORS.WHITE_RGBA_15} borderRadius={99}>

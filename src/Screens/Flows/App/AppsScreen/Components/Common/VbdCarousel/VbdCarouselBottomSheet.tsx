@@ -20,11 +20,11 @@ import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
 import { useAppOverview, useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VbdDApp } from "~Model"
-import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
+import { Routes } from "~Navigation"
 import { addBookmark, removeBookmark, useAppDispatch } from "~Storage/Redux"
 import { BigNutils, DateUtils } from "~Utils"
+import { useDAppActions } from "../../../Hooks"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
-import { Routes } from "~Navigation"
 
 export type VbdCarouselBottomSheetMetadata = {
     bannerUri?: string

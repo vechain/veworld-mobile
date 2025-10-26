@@ -14,7 +14,6 @@ export type RootStackParamListApps = {
         url: string
         ul?: boolean
         returnScreen?:
-            | Routes.DISCOVER
             | Routes.SETTINGS
             | Routes.HOME
             | Routes.ACTIVITY_STAKING

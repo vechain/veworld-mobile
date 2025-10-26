@@ -13,7 +13,7 @@ export const DappHorizontalCardSkeleton = () => {
             containerStyle={styles.container}
             layout={[
                 {
-                    children: [{ width: 48, height: 48, borderRadius: 4 }],
+                    children: [{ width: 64, height: 64, borderRadius: 8 }],
                 },
                 {
                     flexDirection: "column",

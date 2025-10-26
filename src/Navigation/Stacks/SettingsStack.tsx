@@ -1,6 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
-import { useFeatureFlags } from "~Components"
 import { Device, LocalDevice } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
@@ -55,15 +54,13 @@ export type RootStackParamListSettings = {
     [Routes.USERNAME_CLAIMED]: {
         username: string
     }
-    [Routes.DISCOVER_SEARCH]: undefined
-    [Routes.DISCOVER_TABS_MANAGER]: undefined
     [Routes.APPS_TABS_MANAGER]: undefined
     [Routes.APPS_SEARCH]: undefined
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
         returnScreen?:
-            | Routes.DISCOVER
+            | Routes.SWAP
             | Routes.SETTINGS
             | Routes.HOME
             | Routes.ACTIVITY_STAKING
@@ -75,8 +72,6 @@ export type RootStackParamListSettings = {
 const Settings = createStackNavigator<RootStackParamListSettings>()
 
 export const SettingsStack = () => {
-    const { betterWorldFeature } = useFeatureFlags()
-
     return (
         <Settings.Navigator screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Settings.Screen name={Routes.SETTINGS} component={SettingsScreen} options={{ headerShown: false }} />
@@ -182,7 +177,7 @@ export const SettingsStack = () => {
                 options={{ headerShown: false }}
             />
             <Settings.Screen
-                name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_TABS_MANAGER : Routes.DISCOVER_TABS_MANAGER}
+                name={Routes.APPS_TABS_MANAGER}
                 component={TabsManagerScreen}
                 options={{
                     headerShown: false,
@@ -193,7 +188,7 @@ export const SettingsStack = () => {
                 }}
             />
             <Settings.Screen
-                name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_SEARCH}
+                name={Routes.APPS_SEARCH}
                 component={AppsSearchScreen}
                 options={{
                     headerShown: false,

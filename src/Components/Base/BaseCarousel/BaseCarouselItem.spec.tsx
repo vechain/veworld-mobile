@@ -38,7 +38,7 @@ describe("BaseCarouselItem", () => {
     })
 
     it("should render correctly", () => {
-        ;(useNavigationState as jest.Mock).mockReturnValue(Routes.DISCOVER)
+        ;(useNavigationState as jest.Mock).mockReturnValue(Routes.APPS)
         const { getByTestId } = render(
             <BaseCarouselItem testID="carousel-item">
                 <Text testID="test-text">{"test text"}</Text>
@@ -52,7 +52,7 @@ describe("BaseCarouselItem", () => {
     })
 
     it("should open external link when isExternalLink is true and href is provided", async () => {
-        ;(useNavigationState as jest.Mock).mockReturnValue(Routes.DISCOVER)
+        ;(useNavigationState as jest.Mock).mockReturnValue(Routes.APPS)
         const testHref = "https://example.com"
         const { getByTestId } = render(
             <BaseCarouselItem

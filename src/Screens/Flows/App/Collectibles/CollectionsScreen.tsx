@@ -1,22 +1,21 @@
 import { useNavigation } from "@react-navigation/native"
+import { useQueryClient } from "@tanstack/react-query"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseSkeleton, BaseSpacer, BaseView, Layout } from "~Components"
+import { RefreshControl } from "react-native-gesture-handler"
+import Animated, { SequencedTransition } from "react-native-reanimated"
+import { BaseSpacer, Layout } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
-import { CollectionCard } from "./Components"
-import { getNFTCollectionsQueryKey, useNFTCollections } from "./Hooks"
-import { COLORS } from "~Constants"
-import { AddressUtils } from "~Utils"
 import {
     selectAllFavoriteCollections,
     selectSelectedAccount,
     selectSelectedNetwork,
     useAppSelector,
 } from "~Storage/Redux"
-import Animated, { SequencedTransition } from "react-native-reanimated"
-import { RefreshControl } from "react-native-gesture-handler"
-import { useQueryClient } from "@tanstack/react-query"
+import { AddressUtils } from "~Utils"
+import { CollectionCard, SkeletonCollectionCard } from "./Components"
+import { getNFTCollectionsQueryKey, useNFTCollections } from "./Hooks"
 
 export const CollectionsScreen = () => {
     const scrollRef = useRef<FlatList<string>>(null)
@@ -25,7 +24,13 @@ export const CollectionsScreen = () => {
 
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
-    const { data: paginatedCollections, isLoading: isCollectionsLoading, fetchNextPage } = useNFTCollections()
+    const {
+        data: paginatedCollections,
+        isLoading: isCollectionsLoading,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useNFTCollections()
     const favoriteCollections = useAppSelector(selectAllFavoriteCollections)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -61,6 +66,10 @@ export const CollectionsScreen = () => {
         setIsRefreshing(false)
     }, [queryClient, selectedAccount.address, selectedNetwork.genesis.id])
 
+    const handleEndReached = useCallback(() => {
+        if (hasNextPage && !isFetchingNextPage) fetchNextPage()
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage])
+
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<string>) => {
             return (
@@ -84,39 +93,8 @@ export const CollectionsScreen = () => {
     )
 
     const renderItemSkeleton = useCallback(() => {
-        return (
-            <BaseView style={styles.skeletonRoot} testID="VBD_CAROUSEL_ITEM_SKELETON" borderRadius={12}>
-                <BaseSkeleton
-                    animationDirection="horizontalLeft"
-                    boneColor={theme.isDark ? COLORS.LIGHT_PURPLE : COLORS.GREY_200}
-                    highlightColor={theme.isDark ? COLORS.PURPLE : COLORS.GREY_300}
-                    rootStyle={[StyleSheet.absoluteFill]}
-                    borderRadius={12}
-                    height={257}
-                />
-                <BaseView px={16} py={12} flexDirection="column" gap={8}>
-                    <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-                        <BaseSkeleton
-                            animationDirection="horizontalLeft"
-                            boneColor={theme.colors.skeletonBoneColor}
-                            highlightColor={theme.colors.skeletonHighlightColor}
-                            height={20}
-                            width={150}
-                            borderRadius={4}
-                        />
-                        <BaseSkeleton
-                            animationDirection="horizontalLeft"
-                            boneColor={theme.colors.skeletonBoneColor}
-                            highlightColor={theme.colors.skeletonHighlightColor}
-                            height={24}
-                            width={30}
-                            borderRadius={99}
-                        />
-                    </BaseView>
-                </BaseView>
-            </BaseView>
-        )
-    }, [styles.skeletonRoot, theme.colors.skeletonBoneColor, theme.colors.skeletonHighlightColor, theme.isDark])
+        return <SkeletonCollectionCard />
+    }, [])
 
     const renderItemSeparator = useCallback(() => {
         return <BaseSpacer height={8} />
@@ -142,11 +120,9 @@ export const CollectionsScreen = () => {
                             />
                         }
                         contentContainerStyle={styles.listContentContainer}
-                        onEndReached={() => {
-                            fetchNextPage()
-                        }}
+                        onEndReached={handleEndReached}
                         showsVerticalScrollIndicator={false}
-                        itemLayoutAnimation={SequencedTransition.delay(250)}
+                        itemLayoutAnimation={SequencedTransition.reverse()}
                     />
                 ) : (
                     <FlatList

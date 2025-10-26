@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react"
 import { AnalyticsEvent } from "~Constants"
-import { useAnalyticTracking } from "~Hooks"
+import { useAnalyticTracking } from "../useAnalyticTracking"
 import {
     isNftFavorite,
     selectSelectedAccount,

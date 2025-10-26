@@ -2,12 +2,18 @@ import { queryOptions } from "@tanstack/react-query"
 import { VIP181_ABI } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { queryClient } from "~Api/QueryProvider"
-import { getTokenURIQueryKey } from "~Hooks/useCollectibleMetadata/useTokenURI"
 
 export const getTokenURI = async (tokenId: string, contractAddress: string, thor: ThorClient) => {
     const res = await thor.contracts.load(contractAddress, VIP181_ABI).read.tokenURI(tokenId)
     return res[0] as string
 }
+
+export const getTokenURIQueryKey = (genesisId: string, address: string, tokenId: string) => [
+    "COLLECTIBLES",
+    genesisId,
+    address,
+    tokenId,
+]
 
 const getTokenURIOptions = (tokenId: string, contractAddress: string, genesisId: string, thor: ThorClient) => {
     return queryOptions({

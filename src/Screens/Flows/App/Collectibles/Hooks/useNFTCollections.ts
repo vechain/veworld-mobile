@@ -3,8 +3,7 @@ import { isEmpty } from "lodash"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { Network } from "~Model"
 import { getContractAddresses } from "~Networking"
-import { selectSelectedAccount, selectSelectedNetwork } from "~Storage/Redux"
-import { useAppSelector } from "~Storage/Redux/Hooks"
+import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
 export const getNFTCollectionsQueryKey = (genesisId: string, address: string) => [
     "COLLECTIBLES",

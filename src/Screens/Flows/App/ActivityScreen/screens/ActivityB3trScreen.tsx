@@ -14,9 +14,9 @@ export const ActivityB3trScreen = () => {
 
     const goToDiscover = useCallback(() => {
         navigation.navigate("TabStack", {
-            screen: Routes.DISCOVER_STACK,
+            screen: Routes.APPS_STACK,
             params: {
-                screen: Routes.DISCOVER,
+                screen: Routes.APPS,
             },
         })
     }, [navigation])

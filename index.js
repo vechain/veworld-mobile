@@ -192,39 +192,7 @@ const Main = () => {
  * @param {import ('~Storage/Redux').ExternalDappSession[]} externalDappSessions
  * @returns
  */
-const generateLinkingConfig = featureFlags => {
-    const appsStack = {
-        AppsStack: {
-            path: "discover",
-            initialRouteName: "Apps",
-            screens: {
-                Browser: {
-                    path: "browser/:redirect?/:ul/:url",
-                    parse: {
-                        ul: () => true,
-                        url: url => URIUtils.decodeUrl_HACK(url),
-                    },
-                },
-            },
-        },
-    }
-
-    const discoverStack = {
-        DiscoverStack: {
-            path: "discover",
-            initialRouteName: "Discover",
-            screens: {
-                Browser: {
-                    path: "browser/:redirect?/:ul/:url",
-                    parse: {
-                        ul: () => true,
-                        url: url => URIUtils.decodeUrl_HACK(url),
-                    },
-                },
-            },
-        },
-    }
-
+const generateLinkingConfig = () => {
     return {
         prefixes: [
             "https://www.veworld.com/",
@@ -241,7 +209,19 @@ const generateLinkingConfig = featureFlags => {
                             path: "nfts",
                             initialRouteName: Routes.NFTS,
                         },
-                        ...(featureFlags.betterWorldFeature.appsScreen.enabled ? appsStack : discoverStack),
+                        AppsStack: {
+                            path: "discover",
+                            initialRouteName: "Apps",
+                            screens: {
+                                Browser: {
+                                    path: "browser/:redirect?/:ul/:url",
+                                    parse: {
+                                        ul: () => true,
+                                        url: url => URIUtils.decodeUrl_HACK(url),
+                                    },
+                                },
+                            },
+                        },
                     },
                 },
             },
