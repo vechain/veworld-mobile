@@ -213,9 +213,7 @@ export const HomeStack = () => {
                         component={AssetDetailScreenSheet}
                         options={{
                             headerShown: false,
-                            // cardStyleInterpolator: slideFadeInTransition,
                             presentation: "transparentModal",
-                            // transitionSpec: TRANSITION_SPECS,
                             gestureDirection: "vertical",
                             gestureEnabled: true,
                         }}

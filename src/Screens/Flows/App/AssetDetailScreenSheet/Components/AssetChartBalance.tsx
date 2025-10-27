@@ -1,12 +1,11 @@
-import React, { useMemo } from "react"
+import React from "react"
 import { useDerivedValue } from "react-native-reanimated"
 import { useLineChart } from "react-native-wagmi-charts"
 import { BaseIcon, BaseText, BaseView } from "~Components"
-import { COLORS, getNumberFormatter } from "~Constants"
+import { COLORS } from "~Constants"
 import { useFormatFiat, useTheme } from "~Hooks"
 import { selectBalanceVisible, selectCurrencySymbol, useAppSelector } from "~Storage/Redux"
 import { ReanimatedUtils } from "~Utils"
-import ChartUtils from "~Utils/ChartUtils"
 import { useLineChartPrice } from "../../AssetDetailScreen/Hooks/usePrice"
 
 export const AssertChartBalance = () => {
@@ -17,25 +16,28 @@ export const AssertChartBalance = () => {
     const theme = useTheme()
     const currencySymbol = useAppSelector(selectCurrencySymbol)
 
-    const isGoingUp = useMemo(() => ChartUtils.getPriceChange(data) >= 0, [data])
-    const percentageChange = useMemo(() => ChartUtils.getPercentagePriceChange(data), [data])
-
-    const formattedPercentageChange = useMemo(
-        () =>
-            `${getNumberFormatter({
-                locale: formatLocale,
-                precision: 2,
-                style: "decimal",
-                useGrouping: true,
-            }).format(percentageChange)}%`,
-        [formatLocale, percentageChange],
-    )
-
     const formatted = useDerivedValue(() => {
         return ReanimatedUtils.formatFiatWorklet(value.value, currencySymbol, formatLocale, "before", 6, 6, {
-            cover: !isBalanceVisible,
+            cover: false,
         })
     }, [isBalanceVisible, value.value, currencySymbol, formatLocale])
+
+    const percentageChange = useDerivedValue(() => {
+        if (!data) return 0
+        return ((value.value - (data[0]?.value ?? 0)) / (data[0]?.value ?? 1)) * 100
+    }, [value.value, data])
+
+    const formattedPercentageChange = useDerivedValue(() => {
+        "worklet"
+        return ReanimatedUtils.formatFiatWorklet(percentageChange.value, "%", formatLocale, "after", 2, 2, {
+            cover: false,
+        })
+    }, [isBalanceVisible, percentageChange.value, currencySymbol, formatLocale])
+
+    const isGoingUp = useDerivedValue(() => {
+        "worklet"
+        return percentageChange.value > 0
+    }, [percentageChange.value])
 
     return (
         <BaseView flexDirection="column" alignItems="flex-end">
@@ -51,17 +53,17 @@ export const AssertChartBalance = () => {
             </BaseText>
             <BaseView flexDirection="row" gap={2}>
                 <BaseIcon
-                    name={isGoingUp ? "icon-stat-arrow-up" : "icon-stat-arrow-down"}
+                    name={isGoingUp.value ? "icon-stat-arrow-up" : "icon-stat-arrow-down"}
                     size={16}
-                    color={isGoingUp ? COLORS.GREEN_300 : COLORS.RED_400}
+                    color={isGoingUp.value ? COLORS.GREEN_300 : COLORS.RED_400}
                     testID="ASSET_DETAIL_SCREEN_CHART_ICON"
                 />
                 <BaseText
                     typographyFont="bodySemiBold"
-                    color={isGoingUp ? COLORS.GREEN_300 : COLORS.RED_400}
+                    color={isGoingUp.value ? COLORS.GREEN_300 : COLORS.RED_400}
                     align="right"
                     testID="ASSET_DETAIL_SCREEN_FIAT_BALANCE">
-                    {formattedPercentageChange}
+                    {formattedPercentageChange.value}
                 </BaseText>
             </BaseView>
         </BaseView>
