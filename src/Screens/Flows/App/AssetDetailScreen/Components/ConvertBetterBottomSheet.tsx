@@ -35,6 +35,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const vot3 = useTokenWithCompleteInfo(VOT3)
 
     const timer = useRef<NodeJS.Timeout | null>(null)
+    const shouldNavigateOnDismiss = useRef(false)
 
     const B3TRanimatedStyle = useAnimatedStyle(() => ({
         transform: [{ translateY: withTiming(cardPosition.value ? 105 : 0, { duration: 300 }) }],
@@ -123,22 +124,28 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     }, [cardPosition, isSwapped, setInput])
 
     const onDismiss = useCallback(() => {
-        resetStates()
-    }, [resetStates])
+        // Check if we need to navigate after dismissal
+        if (shouldNavigateOnDismiss.current) {
+            shouldNavigateOnDismiss.current = false
 
-    const onConvertPress = useCallback(() => {
-        // Dismiss the bottom sheet first
-        onClose()
-
-        // Use a small delay to ensure dismissal starts before navigation
-        setTimeout(() => {
             if (isB3TRActive) {
                 convertB3tr(realValue, input)
             } else {
                 convertVot3(realValue, input)
             }
-        }, 10)
-    }, [convertB3tr, convertVot3, input, isB3TRActive, onClose, realValue])
+            return
+        }
+
+        // Normal dismissal - reset states
+        resetStates()
+    }, [resetStates, isB3TRActive, convertB3tr, convertVot3, realValue, input])
+
+    const onConvertPress = useCallback(() => {
+        // Set flag to trigger navigation on dismissal
+        shouldNavigateOnDismiss.current = true
+        // Dismiss the bottom sheet
+        onClose()
+    }, [onClose])
 
     return (
         <BaseBottomSheet
