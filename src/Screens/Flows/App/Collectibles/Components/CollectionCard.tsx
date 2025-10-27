@@ -54,7 +54,11 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
     }
 
     return (
-        <TouchableOpacity disabled={isLoading} activeOpacity={0.8} onPress={() => onPress(collectionAddress)}>
+        <TouchableOpacity
+            testID={`VBD_COLLECTION_CARD_${collectionAddress}`}
+            disabled={isLoading}
+            activeOpacity={0.8}
+            onPress={() => onPress(collectionAddress)}>
             <BaseView style={styles.card}>
                 <FastImageBackground
                     source={{ uri: media?.image, cache: FastImage.cacheControl.immutable }}
