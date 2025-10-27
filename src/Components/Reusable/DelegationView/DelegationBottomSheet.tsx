@@ -1,13 +1,17 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { useQueries } from "@tanstack/react-query"
 import { forwardRef, default as React, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButtonGroupHorizontal, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
-import { ColorThemeType } from "~Constants"
+import { ColorThemeType, VTHO } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { useThorClient } from "~Hooks/useThorClient"
+import { getUseTokenBalanceConfig } from "~Hooks/useTokenBalance"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, BaseButtonGroupHorizontalType, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { selectDelegationAccountsWithVtho, selectDelegationUrls, useAppSelector } from "~Storage/Redux"
+import { selectDelegationAccounts, selectDelegationUrls, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { BigNutils } from "~Utils"
 import { RenderedOption } from "./Components/RenderedOption"
 
 type Props = {
@@ -33,7 +37,36 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
 ) {
     const { LL } = useI18nContext()
 
-    const accounts = useAppSelector(selectDelegationAccountsWithVtho)
+    const visibleAccounts = useAppSelector(selectDelegationAccounts)
+    const network = useAppSelector(selectSelectedNetwork)
+    const thor = useThorClient()
+    const { data: balances } = useQueries({
+        queries: visibleAccounts.map(account =>
+            getUseTokenBalanceConfig({ address: account.address, tokenAddress: VTHO.address, network, thor }),
+        ),
+        combine(result) {
+            return {
+                isLoading: result.some(r => r.isLoading),
+                data: result.some(r => !r.data)
+                    ? undefined
+                    : result.map(
+                          r =>
+                              r.data ?? {
+                                  balance: "0",
+                                  isHidden: false,
+                                  timeUpdated: Date.now().toString(),
+                                  tokenAddress: VTHO.address,
+                              },
+                      ),
+            }
+        },
+    })
+
+    const accounts = useMemo(() => {
+        if (!balances) return []
+        return visibleAccounts.filter((_, idx) => BigNutils(balances[idx]?.balance ?? "0").isBiggerThan("0"))
+    }, [balances, visibleAccounts])
+
     const delegationUrls = useAppSelector(selectDelegationUrls)
     const [selectedOption, setSelectedOption] = useState(selectedDelegationOption)
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -96,7 +129,7 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
                 </BaseText>
             </BaseView>
             <BaseSpacer height={8} />
-            <BaseText typographyFont="buttonSecondary" color={theme.colors.editSpeedBs.subtitle}>
+            <BaseText typographyFont="caption" color={theme.colors.editSpeedBs.subtitle}>
                 {LL.DELEGATE_DESCRIPTION()}
             </BaseText>
             <BaseSpacer height={24} />
@@ -106,7 +139,7 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
                 action={handleSelectDelegationOption}
                 renderButton={(button, textColor) => (
                     <BaseView justifyContent="center" alignItems="center" flexDirection="row">
-                        <BaseText color={textColor} typographyFont="smallButtonPrimary">
+                        <BaseText color={textColor} typographyFont="captionMedium">
                             {button.label}
                         </BaseText>
                     </BaseView>

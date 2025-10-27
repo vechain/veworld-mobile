@@ -3,6 +3,7 @@ import React, { useCallback } from "react"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { Icon } from "~Components"
+import FontUtils from "~Utils/FontUtils"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "canc"]
 
@@ -69,7 +70,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 40,
         },
         digitText: {
-            fontSize: 24,
+            fontSize: FontUtils.font(24),
             fontWeight: "medium",
             alignItems: "center",
             color: theme.colors.numberPad,

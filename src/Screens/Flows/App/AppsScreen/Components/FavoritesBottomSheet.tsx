@@ -18,6 +18,7 @@ import { removeBookmark, reorderBookmarks, selectBookmarkedDapps, useAppDispatch
 import { useI18nContext } from "~i18n"
 import { useDAppActions } from "../Hooks"
 import { FavoriteDAppCard } from "./FavoriteDAppCard"
+import { Routes } from "~Navigation"
 
 type Props = {
     onClose: () => void
@@ -28,7 +29,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     const { styles } = useThemedStyles(baseStyles)
     const theme = useTheme()
     const { LL } = useI18nContext()
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.APPS)
     const dispatch = useAppDispatch()
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
@@ -115,8 +116,8 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 pb={24}
                 testID="dapps-list-header">
                 <BaseView flexDirection="row" gap={16} alignItems="center">
-                    <BaseIcon name="icon-star" size={26} color={theme.colors.favoriteHeader} />
-                    <BaseText typographyFont="biggerTitleSemiBold">{LL.FAVOURITES_DAPPS_TITLE()}</BaseText>
+                    <BaseIcon name="icon-star" size={24} color={theme.colors.favoriteHeader} />
+                    <BaseText typographyFont="headerTitle">{LL.FAVOURITES_DAPPS_TITLE()}</BaseText>
                 </BaseView>
                 <BaseView style={styles.rightElement}>
                     {isEditingMode ? (

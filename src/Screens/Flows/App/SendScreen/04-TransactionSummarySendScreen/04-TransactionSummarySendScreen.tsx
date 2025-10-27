@@ -38,6 +38,7 @@ import {
 import { AccountUtils, AddressUtils, BigNutils, error, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
@@ -357,15 +358,15 @@ function TotalSendAmountView({
     )
     const isVTHO = useMemo(() => token.symbol.toLowerCase() === VTHO.symbol.toLowerCase(), [token.symbol])
 
-    const fiatHumanAmount = BigNutils().toCurrencyConversion(isVTHO ? formattedTotalCost : amount, exchangeRate)
+    const fiatHumanAmount = BigNutils().toCurrencyConversion(isVTHO ? formattedTotalCost : amount, exchangeRate ?? 0)
 
     return (
         <>
             <BaseSpacer height={24} />
-            <BaseText typographyFont="subTitleBold">{LL.SEND_DETAILS()}</BaseText>
+            <BaseText typographyFont="bodySemiBold">{LL.SEND_DETAILS()}</BaseText>
 
             <BaseSpacer height={12} />
-            <BaseText typographyFont="caption">{LL.SEND_AMOUNT()}</BaseText>
+            <BaseText typographyFont="captionRegular">{LL.SEND_AMOUNT()}</BaseText>
 
             <BaseView flexDirection="row">
                 {isVTHO ? (
@@ -373,14 +374,14 @@ function TotalSendAmountView({
                         {formattedAmount}
                     </Animated.Text>
                 ) : (
-                    <BaseText typographyFont="subSubTitle">{formattedAmount}</BaseText>
+                    <BaseText typographyFont="bodySemiBold">{formattedAmount}</BaseText>
                 )}
-                <BaseText typographyFont="bodyBold" mx={4}>
+                <BaseText typographyFont="bodySemiBold" mx={4}>
                     {symbol}
                 </BaseText>
 
                 {exchangeRate && !isVTHO && (
-                    <FiatBalance typographyFont="buttonSecondary" balances={[fiatHumanAmount.value]} prefix="≈ " />
+                    <FiatBalance typographyFont="body" balances={[fiatHumanAmount.value]} prefix="≈ " />
                 )}
             </BaseView>
 
@@ -393,16 +394,12 @@ function TotalSendAmountView({
                         <Animated.Text style={[baseStyles.coloredText, totalTxAnimatedStyle]}>
                             {formattedTotalCost}
                         </Animated.Text>
-                        <BaseText typographyFont="bodyBold" mx={4}>
+                        <BaseText typographyFont="bodyMedium" mx={4}>
                             {symbol}
                         </BaseText>
 
                         {exchangeRate && (
-                            <FiatBalance
-                                typographyFont="buttonSecondary"
-                                balances={[fiatHumanAmount.value]}
-                                prefix="≈ "
-                            />
+                            <FiatBalance typographyFont="bodyMedium" balances={[fiatHumanAmount.value]} prefix="≈ " />
                         )}
                     </BaseView>
                 </>
@@ -413,8 +410,8 @@ function TotalSendAmountView({
 
 const baseStyles = StyleSheet.create({
     coloredText: {
-        fontFamily: "Inter-Bold",
-        fontSize: 16,
-        fontWeight: "700",
+        fontFamily: "Inter-SemiBold",
+        fontSize: FontUtils.font(14),
+        fontWeight: "600",
     },
 })

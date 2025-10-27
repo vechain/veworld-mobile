@@ -8,6 +8,8 @@ import { TokenWithCompleteInfo, useFormatFiat, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Balance } from "~Model"
 import { BigNutils } from "~Utils"
+import { formatFullPrecision } from "~Utils/StandardizedFormatting"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     token?: TokenWithCompleteInfo
@@ -39,10 +41,10 @@ export const ConvertBetterCard: React.FC<Props> = ({
     }, [balance?.balance])
 
     const tokenTotalToHuman = useMemo(() => {
-        return BigNutils(tokenTotalBalance)
-            .toHuman(token?.decimals ?? 18)
-            .toTokenFormat_string(2, formatLocale)
-    }, [formatLocale, token?.decimals, tokenTotalBalance])
+        const humanBalance = BigNutils(tokenTotalBalance).toHuman(token?.decimals ?? 18).toString
+
+        return formatFullPrecision(humanBalance, { locale: formatLocale, tokenSymbol: token?.symbol })
+    }, [formatLocale, token?.decimals, token?.symbol, tokenTotalBalance])
 
     const computedTotalBalanceStyle = useMemo(() => {
         return error ? [styles.totalBalanceError] : []
@@ -97,7 +99,7 @@ export const ConvertBetterCard: React.FC<Props> = ({
                                     {tokenTotalToHuman}
                                 </BaseText>
                                 <BaseButton
-                                    typographyFont="captionSemiBold"
+                                    typographyFont="smallCaptionSemiBold"
                                     disabled={BigNutils(tokenTotalBalance).isZero}
                                     variant="outline"
                                     textColor={theme.colors.actionBanner.buttonText}
@@ -152,7 +154,7 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
             color: theme.colors.convertBetterCard.inputText,
             fontWeight: "600",
-            fontSize: 20,
+            fontSize: FontUtils.font(20),
             padding: 0,
         },
         disabledInput: {

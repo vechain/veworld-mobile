@@ -29,8 +29,6 @@ type Props = {
     }
 }
 
-const noop = () => {}
-
 type EnhancedTokenCardProps = {
     item: FungibleTokenWithBalance
     onSelectedToken: (value: string) => void
@@ -45,14 +43,7 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled }: Enhanc
 
     return (
         <Pressable onPress={onPress} testID="GAS_FEE_TOKEN_BOTTOM_SHEET_TOKEN" disabled={disabled}>
-            <AnimatedTokenCard
-                item={item}
-                drag={noop}
-                isEdit={false}
-                isActive={false}
-                isBalanceVisible
-                rootStyle={styles.rootContent}
-            />
+            <AnimatedTokenCard item={item} isEdit={false} isBalanceVisible rootStyle={styles.rootContent} />
         </Pressable>
     )
 }
@@ -145,7 +136,7 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                 </BaseText>
             </BaseView>
             <BaseSpacer height={8} />
-            <BaseText typographyFont="buttonSecondary" color={theme.colors.editSpeedBs.subtitle}>
+            <BaseText typographyFont="caption" color={theme.colors.editSpeedBs.subtitle}>
                 {LL.DELEGATE_FEE_TOKEN_DESC()}
             </BaseText>
             <BaseSpacer height={24} />

@@ -1,16 +1,22 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
-import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { COLORS, ColorThemeType } from "~Constants"
+import { LayoutChangeEvent, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
+import Animated, { useAnimatedStyle, withDelay, withTiming } from "react-native-reanimated"
+import { COLORS, ColorThemeType, typography } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseText } from "./BaseText"
-import { BaseView } from "./BaseView"
 
 type Props<TKeys extends string[] | readonly string[]> = {
     keys: TKeys
     labels: string[]
     selectedKey: TKeys[number]
     setSelectedKey: (key: TKeys[number]) => void
+    rootStyle?: StyleProp<ViewStyle>
+    showBorder?: boolean
+    indicatorBackgroundColor?: string
+    containerBackgroundColor?: string
+    selectedTextColor?: string
+    unselectedTextColor?: string
+    typographyFont?: keyof typeof typography.defaults
 }
 
 export const BaseTabs = <TKeys extends string[] | readonly string[]>({
@@ -18,16 +24,23 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
     labels,
     selectedKey,
     setSelectedKey,
+    rootStyle,
+    showBorder = true,
+    indicatorBackgroundColor,
+    containerBackgroundColor,
+    selectedTextColor,
+    unselectedTextColor,
+    typographyFont = "captionMedium",
 }: Props<TKeys>) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles(indicatorBackgroundColor, containerBackgroundColor))
     const [tabOffsets, setTabOffsets] = useState<{ offsetX: number; width: number }[]>([])
     const selectedIndex = useMemo(() => keys.indexOf(selectedKey), [keys, selectedKey])
     const getTextColor = useCallback(
         (isSelected: boolean) => {
-            if (isSelected) return theme.isDark ? COLORS.WHITE : COLORS.GREY_700
-            return theme.isDark ? COLORS.WHITE : COLORS.GREY_600
+            if (isSelected) return selectedTextColor ?? (theme.isDark ? COLORS.WHITE : COLORS.GREY_700)
+            return unselectedTextColor ?? (theme.isDark ? COLORS.WHITE : COLORS.GREY_600)
         },
-        [theme.isDark],
+        [selectedTextColor, theme.isDark, unselectedTextColor],
     )
     const onLayout = useCallback(
         (index: number) => (e: LayoutChangeEvent) => {
@@ -47,9 +60,15 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
             left: withTiming(offset.offsetX),
         }
     }, [tabOffsets, selectedIndex, keys.length])
+
+    const rootAnimatedStyles = useAnimatedStyle(() => {
+        if (tabOffsets.length !== keys.length) return { opacity: 0 }
+        return { opacity: withDelay(300, withTiming(1)) }
+    }, [tabOffsets.length, keys.length])
+
     if (keys.length !== labels.length) throw new Error("Keys and Labels should have the same length")
     return (
-        <BaseView style={styles.root} flexDirection="row" gap={4}>
+        <Animated.View style={[styles.root, showBorder && styles.withBorder, rootStyle, rootAnimatedStyles]}>
             {keys.map((key, index) => {
                 const isSelected = selectedKey === key
                 const textColor = getTextColor(isSelected)
@@ -62,26 +81,31 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
                             e.persist()
                             onLayout(index)(e)
                         }}>
-                        <BaseText color={textColor} typographyFont="bodyMedium">
+                        <BaseText color={textColor} typographyFont={typographyFont}>
                             {labels[index]}
                         </BaseText>
                     </TouchableOpacity>
                 )
             })}
             <Animated.View style={[indicatorStyles, styles.indicator]} />
-        </BaseView>
+        </Animated.View>
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = (indicatorBackgroundColor?: string, containerBackgroundColor?: string) => (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
-            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
-            borderWidth: 1,
+            backgroundColor: containerBackgroundColor ?? (theme.isDark ? COLORS.PURPLE : COLORS.WHITE),
+            borderWidth: 0,
             borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
             padding: 4,
             position: "relative",
             borderRadius: 8,
+            flexDirection: "row",
+            gap: 4,
+        },
+        withBorder: {
+            borderWidth: 1,
         },
         tab: {
             flex: 1,
@@ -91,7 +115,7 @@ const baseStyles = (theme: ColorThemeType) =>
             justifyContent: "center",
         },
         indicator: {
-            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100,
+            backgroundColor: indicatorBackgroundColor ?? (theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100),
             pointerEvents: "none",
             borderRadius: 4,
             position: "absolute",

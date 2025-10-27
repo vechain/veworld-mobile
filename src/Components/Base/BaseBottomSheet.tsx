@@ -96,6 +96,11 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<
      * @default true
      */
     enableBackToClose?: boolean
+    /**
+     * Make the bottom sheet top rounded. Only valid when `floating` is false.
+     * @default true
+     */
+    rounded?: boolean
 }
 
 const BaseBottomSheetContent = ({
@@ -196,16 +201,32 @@ const _BaseBottomSheet = <TData,>(
         backgroundStyle,
         stackBehavior = "push",
         floating = false,
+        rounded = true,
         ...props
     }: BaseBottomSheetProps<TData>,
     ref: React.ForwardedRef<BottomSheetModalMethods>,
 ) => {
     const { onChange, ...sheetProps } = props
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { height: windowHeight } = useWindowDimensions()
     const { bottom: bottomSafeAreaSize } = useSafeAreaInsets()
     const reducedMotion = useReducedMotion()
     const { handleSheetPositionChange } = useBottomSheetBackHandler(ref)
+
+    const bgRoundingStyle = useMemo(() => {
+        if (floating) return [styles.floatingRounding]
+        if (rounded) return [styles.notFloatingRounding]
+        return [styles.noRounding]
+    }, [floating, rounded, styles.floatingRounding, styles.noRounding, styles.notFloatingRounding])
+
+    const flattenedBsStyle = useMemo(() => {
+        return StyleSheet.flatten([bgRoundingStyle, backgroundStyle ?? styles.backgroundStyle])
+    }, [backgroundStyle, bgRoundingStyle, styles.backgroundStyle])
+
+    const handleColor = useMemo(() => {
+        if (!theme.isDark) return COLORS.GREY_300
+        return flattenedBsStyle.backgroundColor === theme.colors.card ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300
+    }, [flattenedBsStyle.backgroundColor, theme.colors.card, theme.isDark])
 
     const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
         return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
@@ -213,7 +234,13 @@ const _BaseBottomSheet = <TData,>(
 
     const renderBackdrop = useCallback(
         (props_: BottomSheetBackdropProps) => (
-            <BottomSheetBackdrop {...props_} pressBehavior={onPressOutside} opacity={0.8} disappearsOnIndex={-1} />
+            <BottomSheetBackdrop
+                {...props_}
+                pressBehavior={onPressOutside}
+                opacity={0.85}
+                disappearsOnIndex={-1}
+                appearsOnIndex={0}
+            />
         ),
         [onPressOutside],
     )
@@ -221,10 +248,10 @@ const _BaseBottomSheet = <TData,>(
     const renderHandle = useCallback(
         (props_: BottomSheetHandleProps) => (
             <BaseView style={styles.handleWrapper}>
-                <BaseView {...props_} style={styles.handleStyle} />
+                <BaseView {...props_} style={[styles.handleStyle, { backgroundColor: handleColor }]} />
             </BaseView>
         ),
-        [styles],
+        [handleColor, styles.handleStyle, styles.handleWrapper],
     )
 
     const onSheetPositionChange = useCallback(
@@ -290,6 +317,12 @@ const _BaseBottomSheet = <TData,>(
         [noMargins, snapPoints, contentStyle],
     )
 
+    const rootStyle = useMemo(() => {
+        if (floating) return [styles.floating, styles.floatingRounding]
+        if (rounded) return [styles.notFloatingRounding]
+        return undefined
+    }, [floating, rounded, styles.floating, styles.floatingRounding, styles.notFloatingRounding])
+
     return (
         <BottomSheetModal
             animateOnMount={!reducedMotion}
@@ -297,9 +330,9 @@ const _BaseBottomSheet = <TData,>(
             ref={ref}
             enablePanDownToClose={enablePanDownToClose}
             index={0}
-            style={floating ? styles.floating : styles.notFloating}
+            style={rootStyle}
             bottomInset={floating ? floatingBottomInset : undefined}
-            backgroundStyle={[backgroundStyle ?? styles.backgroundStyle]}
+            backgroundStyle={[bgRoundingStyle, backgroundStyle ?? styles.backgroundStyle]}
             // BlurView screws up navigation on Android. Sometimes it renders a blank page, and sometimes the new page is blurry. Bug lagging (https://github.com/gorhom/react-native-bottom-sheet/issues/2046)
             backdropComponent={blurBackdrop && Platform.OS !== "android" ? renderBlurBackdrop : renderBackdrop}
             handleComponent={enablePanDownToClose ? renderHandle : null}
@@ -359,7 +392,7 @@ export const BaseBottomSheet = typedForwardRef(_BaseBottomSheet)
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         backgroundStyle: {
-            backgroundColor: theme.colors.background,
+            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50,
         },
         blurBackdrop: {
             backgroundColor: COLORS.PURPLE_BLUR_TRANSPARENT,
@@ -369,14 +402,19 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             opacity: 0.5,
         },
-        notFloating: {
+        floating: {
+            marginHorizontal: 8,
+            overflow: "hidden",
+        },
+        floatingRounding: {
+            borderRadius: 24,
+        },
+        notFloatingRounding: {
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
         },
-        floating: {
-            borderRadius: 24,
-            marginHorizontal: 8,
-            overflow: "hidden",
+        noRounding: {
+            borderRadius: 0,
         },
         handleWrapper: {
             marginTop: 8,

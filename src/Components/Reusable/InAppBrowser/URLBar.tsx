@@ -2,27 +2,26 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import FastImage from "react-native-fast-image"
-import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
+import Animated from "react-native-reanimated"
 import { BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { BaseIcon } from "~Components/Base/BaseIcon"
-import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { COLORS } from "~Constants"
-import { useBottomSheetModal, useGetDappMetadataFromUrl } from "~Hooks"
+import { useBottomSheetModal, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
-import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
+import { RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
+import { useAppSelector } from "~Storage/Redux/Hooks"
+import { selectLastNavigationSource } from "~Storage/Redux/Selectors"
 import { DAppUtils } from "~Utils/DAppUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
-import { BrowserBottomSheet } from "./BrowserBottomSheet"
-import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import { DAppIcon } from "../DAppIcon"
 import { Spinner } from "../Spinner"
+import { BrowserBottomSheet } from "./BrowserBottomSheet"
 
 type Props = {
     navigationUrl: string
     onNavigate?: () => void | Promise<void>
-    returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
+    returnScreen?: Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS | Routes.SWAP
     isLoading?: boolean
 }
 
@@ -30,26 +29,27 @@ const AnimatedBaseIcon = Animated.createAnimatedComponent(BaseIcon)
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 const AnimatedBaseText = Animated.createAnimatedComponent(wrapFunctionComponent(BaseText))
 const AnimatedTouchable = Animated.createAnimatedComponent(wrapFunctionComponent(BaseTouchable))
-const AnimatedFavicon = Animated.createAnimatedComponent(FastImage)
 
 export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: Props) => {
-    const { showToolbars } = useInAppBrowser()
-    const { betterWorldFeature } = useFeatureFlags()
+    const { styles } = useThemedStyles(baseStyles)
     const dappMetadata = useGetDappMetadataFromUrl(navigationUrl)
-    const fetchDynamicLogo = useDynamicAppLogo({})
+    const fetchDynamicLogo = useDynamicAppLogo()
+    const lastNavigationSource = useAppSelector(selectLastNavigationSource)
 
     const nav =
         useNavigation<
-            NativeStackNavigationProp<
-                RootStackParamListBrowser & RootStackParamListSettings & RootStackParamListHome & RootStackParamListApps
-            >
+            NativeStackNavigationProp<RootStackParamListSettings & RootStackParamListHome & RootStackParamListApps>
         >()
 
     const _returnScreen = useMemo(() => {
         if (returnScreen) return returnScreen
-        if (betterWorldFeature.appsScreen.enabled) return Routes.APPS
-        return Routes.DISCOVER
-    }, [betterWorldFeature.appsScreen.enabled, returnScreen])
+
+        const validNavigationSources = [Routes.HOME, Routes.APPS]
+        if (lastNavigationSource && validNavigationSources.includes(lastNavigationSource as Routes)) {
+            return lastNavigationSource as Routes.HOME | Routes.APPS
+        }
+        return Routes.APPS
+    }, [returnScreen, lastNavigationSource])
 
     const { onOpen: openBottomSheet, ref: bottomSheetRef, onClose: closeBottomSheet } = useBottomSheetModal()
 
@@ -60,19 +60,8 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
 
     const navToSearch = useCallback(async () => {
         await onNavigate?.()
-        if (betterWorldFeature.appsScreen.enabled) {
-            nav.replace(Routes.APPS_SEARCH)
-        } else {
-            nav.replace(Routes.DISCOVER_SEARCH)
-        }
-    }, [betterWorldFeature.appsScreen.enabled, nav, onNavigate])
-
-    const animatedFaviconStyles = useAnimatedStyle(
-        () => ({
-            transform: [{ scale: withTiming(showToolbars ? 1 : 0.6, { duration: 300 }) }],
-        }),
-        [showToolbars],
-    )
+        nav.replace(Routes.APPS_SEARCH)
+    }, [nav, onNavigate])
 
     const parsedDappMetadata = useMemo(() => {
         if (dappMetadata)
@@ -92,24 +81,15 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
     }, [dappMetadata, fetchDynamicLogo, navigationUrl])
 
     const websiteFavicon = useMemo(() => {
-        return parsedDappMetadata.icon ? (
-            <AnimatedFavicon
-                testID="URL-bar-dapp-favicon"
-                source={{ uri: parsedDappMetadata.icon, priority: FastImage.priority.high }}
-                style={isIOS() ? [animatedFaviconStyles, styles.favicon] : styles.favicon}
-            />
-        ) : (
-            <AnimatedBaseIcon
-                testID="URL-bar-website-favicon"
-                name="icon-globe"
-                color={COLORS.GREY_400}
-                bg={COLORS.GREY_600}
-                size={12}
-                p={6}
-                style={isIOS() ? [animatedFaviconStyles, styles.favicon] : styles.favicon}
+        return (
+            <DAppIcon
+                uri={parsedDappMetadata.icon}
+                fallbackTestID="URL-bar-website-favicon"
+                imageTestID="URL-bar-dapp-favicon"
+                size={24}
             />
         )
-    }, [parsedDappMetadata, animatedFaviconStyles])
+    }, [parsedDappMetadata])
 
     const websiteName = useMemo(() => {
         const url = new URL(navigationUrl)
@@ -177,70 +157,59 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
         </>
     )
 }
+const baseStyles = () =>
+    StyleSheet.create({
+        animatedContainer: {
+            opacity: 1,
+            alignItems: "center",
+            flexDirection: "row",
+            backgroundColor: COLORS.BALANCE_BACKGROUND,
+            paddingVertical: 8,
+        },
+        inputContainer: {
+            width: "100%",
+            height: 40,
+            paddingHorizontal: 16,
+            alignItems: "center",
+            flexDirection: "row",
+            gap: 16,
+        },
+        noToolbarContainer: {
+            height: 24,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            flex: 1,
+            paddingHorizontal: 16,
+            marginVertical: 8,
+        },
+        dappContainer: {
+            gap: 8,
+        },
+        appName: {
+            textAlign: "center", // centers the text
+            transformOrigin: "center",
+        },
 
-const styles = StyleSheet.create({
-    animatedContainer: {
-        opacity: 1,
-        alignItems: "center",
-        flexDirection: "row",
-        // backgroundColor: COLORS.DARK_PURPLE,
-        paddingVertical: 8,
-    },
-    inputContainer: {
-        width: "100%",
-        height: 40,
-        paddingHorizontal: 16,
-        alignItems: "center",
-        flexDirection: "row",
-        gap: 16,
-    },
-    noToolbarContainer: {
-        height: 24,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        flex: 1,
-        paddingHorizontal: 16,
-        marginVertical: 8,
-    },
-    dappContainer: {
-        gap: 8,
-    },
-    appName: {
-        textAlign: "center", // centers the text
-        transformOrigin: "center",
-        fontSize: 14,
-        fontWeight: "700",
-    },
-    textInput: {
-        fontSize: 12,
-        paddingVertical: 8,
-    },
-    textInputContainer: {
-        height: 32,
-        paddingVertical: 0,
-        width: "100%",
-    },
-    textInputContainerRoot: {
-        width: "100%",
-    },
-    urlContainer: {
-        flex: 1,
-        alignItems: "center",
-        flexDirection: "row",
-        justifyContent: "center",
-        gap: 8,
-    },
-    favicon: {
-        width: 24,
-        height: 24,
-        borderRadius: 4,
-        transformOrigin: "center",
-    },
-    iconButton: {
-        transformOrigin: "center",
-    },
-    spinner: {
-        padding: 2,
-    },
-})
+        textInputContainer: {
+            height: 32,
+            paddingVertical: 0,
+            width: "100%",
+        },
+        textInputContainerRoot: {
+            width: "100%",
+        },
+        urlContainer: {
+            flex: 1,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 8,
+        },
+        iconButton: {
+            transformOrigin: "center",
+        },
+        spinner: {
+            padding: 2,
+        },
+    })

@@ -1,11 +1,12 @@
 /** @type {import("jest").Config} */
 const { defaults: tsjPreset } = require("ts-jest/presets")
-
+/** @type {import("jest").Config} */
 module.exports = {
     ...tsjPreset,
+    testEnvironment: "@shopify/react-native-skia/jestEnv.mjs",
     preset: "react-native",
     setupFiles: ["./node_modules/react-native-gesture-handler/jestSetup.js"],
-    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts", "@shopify/react-native-skia/jestSetup.js"],
     coverageReporters: ["json", "lcov", "text", "text-summary", "clover", "json-summary"],
     testTimeout: 10000,
     transform: {
@@ -39,6 +40,7 @@ module.exports = {
             "|expo/.*" +
             "|@privy-io/.*" +
             "|uuid" +
+            "|@shopify/react-native-skia" +
             ")",
     ],
     moduleNameMapper: {

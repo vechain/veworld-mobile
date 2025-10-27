@@ -38,7 +38,7 @@ export const EditSpeedSection = ({ speedChangeEnabled, selectedFeeOption, onOpen
                 </BaseText>
                 <BaseView flexDirection="row" gap={8}>
                     <BaseIcon name="icon-timer" size={16} color={theme.colors.textLight} />
-                    <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
+                    <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.assetDetailsCard.title}>
                         {LL.UNDER_SECONDS({ seconds: SPEED_MAP[selectedFeeOption].asSeconds() })}
                     </BaseText>
                 </BaseView>
@@ -50,6 +50,7 @@ export const EditSpeedSection = ({ speedChangeEnabled, selectedFeeOption, onOpen
                 style={styles.cardButton}
                 py={8}
                 px={12}
+                typographyFont="captionSemiBold"
                 textColor={theme.colors.cardButton.text}
                 testID="GAS_FEE_SPEED_EDIT">
                 {LL.EDIT_SPEED()}
@@ -77,6 +78,7 @@ const baseStyles = (speedChangeEnabled: boolean) => (theme: ColorThemeType) =>
             borderWidth: 1,
             backgroundColor: theme.colors.cardButton.background,
             gap: 8,
-            flex: 0.35,
+            flexBasis: "35%",
+            flexShrink: 1,
         },
     })

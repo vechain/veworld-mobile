@@ -4,7 +4,7 @@ import { debug } from "~Utils"
 import { DiscoveryState } from "../Slices"
 
 export const Migration26 = (state: PersistedState): PersistedState => {
-    debug(ERROR_EVENTS.SECURITY, "Performing migration 27: Removing preview field from tabs (migrating to previewPath)")
+    debug(ERROR_EVENTS.SECURITY, "Performing migration 26: Removing preview field from tabs (migrating to previewPath)")
 
     // @ts-ignore
     const currentState: DiscoveryState = state.discovery
@@ -17,6 +17,7 @@ export const Migration26 = (state: PersistedState): PersistedState => {
     // Remove the preview field from all tabs
     const updatedTabs =
         currentState.tabsManager?.tabs?.map(tab => {
+            //@ts-expect-error
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { preview, ...tabWithoutPreview } = tab
             return tabWithoutPreview

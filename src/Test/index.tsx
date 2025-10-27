@@ -23,7 +23,6 @@ import { RootState } from "~Storage/Redux/Types"
 import { FeatureFlaggedSmartWallet } from "../Components/Providers/FeatureFlaggedSmartWallet"
 import { usePersistedTheme } from "../Components/Providers/PersistedThemeProvider/PersistedThemeProvider"
 import TestHelpers from "./helpers"
-import { B3TRWithBalance, token1WithBalance, token2WithBalance, VOT3WithBalance } from "./helpers/data"
 
 export { default as TestHelpers } from "./helpers"
 
@@ -109,24 +108,10 @@ export const getStore = (preloadedState: Partial<RootState>) =>
                 },
             ],
             balances: {
-                mainnet: {
-                    "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957": [
-                        B3TRWithBalance.balance,
-                        VOT3WithBalance.balance,
-                        token1WithBalance.balance,
-                        token2WithBalance.balance,
-                    ],
-                },
-                testnet: {
-                    "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957": [
-                        B3TRWithBalance.balance,
-                        VOT3WithBalance.balance,
-                        token1WithBalance.balance,
-                        token2WithBalance.balance,
-                    ],
-                },
-                solo: {},
+                mainnet: {},
+                testnet: {},
                 other: {},
+                solo: {},
             },
             ...preloadedState,
         },
@@ -152,6 +137,7 @@ export const TestWrapper = ({
             queries: {
                 // ✅ turns retries off
                 retry: false,
+                gcTime: Infinity,
             },
         },
     })

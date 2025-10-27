@@ -21,7 +21,11 @@ export const validateIpfsUri = (uri: string): boolean => {
     )
 }
 
-export const getIpfsValue = async <TData>(uri: string, config?: NoInfer<AxiosRequestConfig<TData>>): Promise<TData> => {
+export const getIpfsValue = async <TData>(
+    uri: string | undefined,
+    config?: NoInfer<AxiosRequestConfig<TData>>,
+): Promise<TData> => {
+    if (!uri) throw new Error("[getIpfsValue]: parameter `uri` is not defined")
     const metadata = await axios.get<TData>(URIUtils.convertUriToUrl(uri), {
         responseType: "json",
         timeout: 20000,
@@ -34,11 +38,12 @@ export const getIpfsValue = async <TData>(uri: string, config?: NoInfer<AxiosReq
     return metadata.data
 }
 
-export const getIpfsQueryKeyOptions = <TData>(uri: string, config?: NoInfer<AxiosRequestConfig<TData>>) =>
+export const getIpfsQueryKeyOptions = <TData>(uri: string | undefined, config?: NoInfer<AxiosRequestConfig<TData>>) =>
     queryOptions({
         queryKey: ["IPFS_URI", "v2", uri],
         staleTime: Infinity,
         gcTime: Infinity,
         queryFn: () => getIpfsValue<TData>(uri, config),
         retry: 3,
+        enabled: !!uri,
     })

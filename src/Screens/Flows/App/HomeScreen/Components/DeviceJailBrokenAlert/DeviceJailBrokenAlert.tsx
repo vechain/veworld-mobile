@@ -5,6 +5,7 @@ import { useThemedStyles } from "~Hooks"
 import { StyleSheet, Text } from "react-native"
 import { ColorThemeType } from "~Constants"
 import { useI18nContext } from "~i18n"
+import FontUtils from "~Utils/FontUtils"
 
 export const DeviceJailBrokenAlert = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -24,7 +25,7 @@ export const DeviceJailBrokenAlert = () => {
             my={8}>
             <BaseIcon name="icon-shield-alert" size={18} color={theme.colors.errorVariant.title} />
             <BaseView flex={1}>
-                <BaseText color={theme.colors.errorVariant.title} typographyFont="body">
+                <BaseText color={theme.colors.errorVariant.title} typographyFont="captionSemiBold">
                     <WrapTranslation
                         message={LL.ALERT_TITLE_JAILBROKEN_DEVICE_2()}
                         renderComponent={() => (
@@ -47,7 +48,7 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.colors.errorVariant.background,
         },
         alertTitle: {
-            fontSize: 14,
+            fontSize: FontUtils.font(12),
             fontWeight: "600",
             fontFamily: "Inter-SemiBold",
             color: theme.colors.errorVariant.title,

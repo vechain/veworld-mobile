@@ -22,6 +22,7 @@ import { Routes } from "~Navigation"
 import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { SelectableAccountCard } from "../SelectableAccountCard"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 export enum SelectAccountBottomSheetType {
     PERSONAL = "YOUR_WALLETS",
@@ -66,7 +67,7 @@ const SectionSeparatorComponent = (props: BaseSectionListSeparatorProps) => {
 const SectionHeaderTitle = ({ children }: PropsWithChildren) => {
     const theme = useTheme()
     return (
-        <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
+        <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
             {children}
         </BaseText>
     )
@@ -106,7 +107,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
         ref,
     ) => {
         const { LL } = useI18nContext()
-
+        const { bottom } = useSafeAreaInsets()
         const { onResize, contentStyle, setSmallViewport } = useScrollableBottomSheetListWrapper()
         const initialLayout = useRef(false)
         const { resetHeight, ...scrollableListProps } = useScrollableBottomSheetList({ onResize, initialLayout })
@@ -123,7 +124,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
             [closeBottomSheet, setSelectedAccount],
         )
 
-        const { styles, theme } = useThemedStyles(baseStyles)
+        const { styles, theme } = useThemedStyles(baseStyles({ bottomInset: bottom }))
 
         const sections = useMemo(() => {
             if (selectedKey === SelectAccountBottomSheetType.PERSONAL) {
@@ -188,9 +189,9 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                                 size={20}
                                 color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
                             />
-                            <BaseText typographyFont="subTitleBold">{LL.SELECT_ACCOUNT_TITLE()}</BaseText>
+                            <BaseText typographyFont="subTitleSemiBold">{LL.SELECT_ACCOUNT_TITLE()}</BaseText>
                         </BaseView>
-                        <BaseText typographyFont="body" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                        <BaseText typographyFont="caption" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
                             {LL.SELECT_ACCOUNT_DESCRIPTION()}
                         </BaseText>
                     </BaseView>
@@ -218,6 +219,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
 
                 <AnimatedSectionList
                     sections={sections}
+                    contentContainerStyle={styles.contentContainer}
                     keyExtractor={item => item.address}
                     renderSectionHeader={SectionHeader}
                     stickySectionHeadersEnabled={false}
@@ -235,6 +237,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                     key={selectedKey}
                     showsVerticalScrollIndicator={false}
                     layout={LinearTransition.duration(500)}
+                    initialNumToRender={15}
                     {...scrollableListProps}
                     scrollEnabled
                 />
@@ -242,14 +245,18 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
         )
     },
 )
-
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        settingsBtn: {
-            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
-            padding: 8,
-            borderWidth: 1,
-            borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
-            borderRadius: 6,
-        },
-    })
+const baseStyles =
+    ({ bottomInset }: { bottomInset: number }) =>
+    (theme: ColorThemeType) =>
+        StyleSheet.create({
+            settingsBtn: {
+                backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+                padding: 8,
+                borderWidth: 1,
+                borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
+                borderRadius: 6,
+            },
+            contentContainer: {
+                paddingBottom: bottomInset,
+            },
+        })

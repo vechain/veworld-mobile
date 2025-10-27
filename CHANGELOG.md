@@ -1,5 +1,25 @@
 # Changelog
 
+## <small>2.4.7 (2025-10-17)</small>
+
+* build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
+* fix: fix total balance (#3420) ([6c29b81](https://github.com/vechain/veworld-mobile/commit/6c29b81)), closes [#3420](https://github.com/vechain/veworld-mobile/issues/3420)
+
+## <small>2.4.6 (2025-10-09)</small>
+
+* build: init ([009f8b6](https://github.com/vechain/veworld-mobile/commit/009f8b6))
+* Revert "Version control logic (#3302)" (#3393) ([073512b](https://github.com/vechain/veworld-mobile/commit/073512b)), closes [#3302](https://github.com/vechain/veworld-mobile/issues/3302) [#3393](https://github.com/vechain/veworld-mobile/issues/3393) [#3302](https://github.com/vechain/veworld-mobile/issues/3302)
+
+## <small>2.4.5 (2025-10-03)</small>
+
+* build: init ([58131c2](https://github.com/vechain/veworld-mobile/commit/58131c2))
+* Refactor components to be aware of a new conditional to define icon roundness (#3351) ([d34dedc](https://github.com/vechain/veworld-mobile/commit/d34dedc)), closes [#3351](https://github.com/vechain/veworld-mobile/issues/3351)
+
+## <small>2.4.4 (2025-09-25)</small>
+
+* build: init ([a565bd2](https://github.com/vechain/veworld-mobile/commit/a565bd2))
+* fix: fix delegation bottom sheet for account (#3317) ([49ab4e2](https://github.com/vechain/veworld-mobile/commit/49ab4e2)), closes [#3317](https://github.com/vechain/veworld-mobile/issues/3317)
+
 ## <small>2.4.3 (2025-09-17)</small>
 
 * build: init ([c9e9281](https://github.com/vechain/veworld-mobile/commit/c9e9281))

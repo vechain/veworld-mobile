@@ -13,7 +13,7 @@ export type RootStackParamListApps = {
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
-        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
+        returnScreen?: Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS | Routes.SWAP
     }
     [Routes.APPS_SEARCH]: undefined
     [Routes.APPS_TABS_MANAGER]: undefined
@@ -22,26 +22,24 @@ export type RootStackParamListApps = {
     [Routes.WALLET_DETAILS]: { device: Device }
 }
 
-const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListApps>()
+const { Navigator, Screen } = createStackNavigator<RootStackParamListApps>()
 
 export const AppsStack = () => {
     return (
         <Navigator id="AppsStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
-            <Group>
-                <Screen name={Routes.APPS} component={AppsScreen} options={{ headerShown: false }} />
-                <Screen
-                    name={Routes.BROWSER}
-                    component={InAppBrowser}
-                    options={{
-                        headerShown: false,
-                        cardStyleInterpolator: slideFadeInTransition,
-                        presentation: "modal",
-                        transitionSpec: TRANSITION_SPECS,
-                        gestureDirection: "vertical",
-                        gestureEnabled: true,
-                    }}
-                />
-            </Group>
+            <Screen name={Routes.APPS} component={AppsScreen} options={{ headerShown: false }} />
+            <Screen
+                name={Routes.BROWSER}
+                component={InAppBrowser}
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "modal",
+                    transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
+                    gestureEnabled: true,
+                }}
+            />
 
             <Screen
                 name={Routes.APPS_SEARCH}

@@ -1,5 +1,6 @@
 import { ethers } from "ethers"
 import {
+    addNavigationToDApp,
     addSession,
     clearTemporarySessions,
     closeAllTabs,
@@ -240,6 +241,98 @@ describe("DiscoverySlice", () => {
                 kind: "temporary",
                 name: "test",
             })
+        })
+    })
+    describe("addNavigationToDApp", () => {
+        const mockDAppsState = (
+            favorites: any[] = [],
+            featured: any[] = [],
+            custom: any[] = [],
+            lastNavigationSource?: string,
+        ): DiscoveryState => {
+            return {
+                connectedApps: [],
+                custom,
+                favorites,
+                featured,
+                hasOpenedDiscovery: true,
+                bannerInteractions: {},
+                tabsManager: {
+                    currentTabId: null,
+                    tabs: [],
+                },
+                lastNavigationSource,
+            }
+        }
+
+        it("should not modify lastNavigationSource when sourceScreen is not provided", () => {
+            const initialState = mockDAppsState([], [], [], "APPS")
+            const newState = DiscoverySlice.reducer(
+                initialState,
+                addNavigationToDApp({ href: "https://example.com", isCustom: false }),
+            )
+            expect(newState.lastNavigationSource).toBe("APPS")
+        })
+
+        it("should increment navigation count for favorite dApp", () => {
+            const favoriteDApp = {
+                name: "Test DApp",
+                href: "https://example.com",
+                desc: "Test description",
+                isCustom: false,
+                createAt: Date.now(),
+                amountOfNavigations: 1,
+            }
+            const initialState = mockDAppsState([favoriteDApp])
+            const newState = DiscoverySlice.reducer(
+                initialState,
+                addNavigationToDApp({ href: "https://example.com", isCustom: false }),
+            )
+            expect(newState.favorites[0].amountOfNavigations).toBe(2)
+        })
+
+        it("should increment navigation count for featured dApp", () => {
+            const featuredDApp = {
+                name: "Featured DApp",
+                href: "https://featured.com",
+                desc: "Featured description",
+                isCustom: false,
+                createAt: Date.now(),
+                amountOfNavigations: 3,
+            }
+            const initialState = mockDAppsState([], [featuredDApp])
+            const newState = DiscoverySlice.reducer(
+                initialState,
+                addNavigationToDApp({ href: "https://featured.com", isCustom: false }),
+            )
+            expect(newState.featured[0].amountOfNavigations).toBe(4)
+        })
+
+        it("should increment navigation count for custom dApp", () => {
+            const customDApp = {
+                name: "Custom DApp",
+                href: "https://custom.com",
+                desc: "Custom description",
+                isCustom: true,
+                createAt: Date.now(),
+                amountOfNavigations: 0,
+            }
+            const initialState = mockDAppsState([], [], [customDApp])
+            const newState = DiscoverySlice.reducer(
+                initialState,
+                addNavigationToDApp({ href: "https://custom.com", isCustom: true }),
+            )
+            expect(newState.custom[0].amountOfNavigations).toBe(1)
+        })
+
+        it("should handle navigation for non-existent dApp", () => {
+            const initialState = mockDAppsState()
+            const newState = DiscoverySlice.reducer(
+                initialState,
+                addNavigationToDApp({ href: "https://nonexistent.com", isCustom: false }),
+            )
+            expect(newState.favorites).toHaveLength(0)
+            expect(newState.featured).toHaveLength(0)
         })
     })
 })

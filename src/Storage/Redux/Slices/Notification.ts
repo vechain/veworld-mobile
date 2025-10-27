@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import HexUtils from "~Utils/HexUtils"
 import { NotificationState } from "../Types"
 
 export const initialNotificationState: NotificationState = {
@@ -8,6 +9,9 @@ export const initialNotificationState: NotificationState = {
     dappVisitCounter: {},
     userTags: {},
     dappNotifications: true,
+    walletRegistrations: null,
+    lastFullRegistration: null,
+    lastSubscriptionId: null,
 }
 
 export const Notification = createSlice({
@@ -45,6 +49,22 @@ export const Notification = createSlice({
         setDappNotifications: (state, action: PayloadAction<boolean>) => {
             state.dappNotifications = action.payload
         },
+        updateWalletRegistrations: (state, action: PayloadAction<{ addresses: string[]; timestamp: number }>) => {
+            if (!state.walletRegistrations) {
+                state.walletRegistrations = {}
+            }
+            for (const address of action.payload.addresses) {
+                // Normalize address for consistent storage
+                const normalizedAddress = HexUtils.normalize(address)
+                state.walletRegistrations![normalizedAddress] = action.payload.timestamp
+            }
+        },
+        updateLastFullRegistration: (state, action: PayloadAction<number>) => {
+            state.lastFullRegistration = action.payload
+        },
+        updateLastSubscriptionId: (state, action: PayloadAction<string | null>) => {
+            state.lastSubscriptionId = action.payload
+        },
     },
 })
 
@@ -56,4 +76,7 @@ export const {
     setDappVisitCounter,
     setDappNotifications,
     removeDappVisitCounter,
+    updateWalletRegistrations,
+    updateLastFullRegistration,
+    updateLastSubscriptionId,
 } = Notification.actions

@@ -39,7 +39,7 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: Props) => {
                                         {digit}
                                     </BaseText>
                                 ) : (
-                                    <BaseIcon name="icon-delete" color={theme.colors.text} />
+                                    <BaseIcon name="icon-delete" color={theme.colors.numberPad} />
                                 )}
                             </Pressable>
                         ) : null}
@@ -58,8 +58,8 @@ const baseStyles = StyleSheet.create({
         alignItems: "center",
     },
     pressable: {
-        width: 80,
-        height: 80,
+        width: 64,
+        height: 64,
         padding: 8,
         justifyContent: "center",
         alignItems: "center",

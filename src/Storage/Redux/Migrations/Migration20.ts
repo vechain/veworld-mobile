@@ -18,12 +18,16 @@ export const Migration20 = (state: PersistedState): PersistedState => {
 
     const newState: BalanceState = {
         ...currentState,
+        //@ts-expect-error
         testnet: Object.entries(currentState.testnet).reduce((acc: Record<string, Balance[]>, [address, balance]) => {
+            //@ts-expect-error
             const hasB3TR = balance.find(b => compareAddresses(b.tokenAddress, TEST_B3TR_ADDRESS))
+            //@ts-expect-error
             const hasVOT3 = balance.find(b => compareAddresses(b.tokenAddress, TEST_B3TR_ADDRESS))
 
             if (!hasB3TR) {
                 acc[address] = [
+                    //@ts-expect-error
                     ...balance,
                     {
                         balance: "0",
@@ -39,6 +43,7 @@ export const Migration20 = (state: PersistedState): PersistedState => {
             }
             if (!hasVOT3) {
                 acc[address] = [
+                    //@ts-expect-error
                     ...balance,
                     {
                         balance: "0",

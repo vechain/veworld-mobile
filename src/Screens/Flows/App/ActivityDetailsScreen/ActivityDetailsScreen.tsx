@@ -29,8 +29,8 @@ import {
     DappTxActivity,
     FungibleTokenActivity,
     LoginActivity,
-    NonFungibleTokenActivity,
     NFTMarketplaceActivity,
+    NonFungibleTokenActivity,
     SignCertActivity,
     StargateActivity,
     SwapActivity,
@@ -45,8 +45,8 @@ import {
     ConnectedAppDetails,
     DappTransactionDetails,
     FungibleTokenTransferDetails,
-    NonFungibleTokenTransferDetails,
     NonFungibleTokenMarketplaceDetails,
+    NonFungibleTokenTransferDetails,
     SignCertificateDetails,
 } from "./Components"
 import DappLoginDetails from "./Components/DappLoginDetails"
@@ -56,7 +56,7 @@ import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetail
 type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
 export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
-    const { activity, token, isSwap } = route.params
+    const { activity, token, isSwap, returnScreen = Routes.HISTORY } = route.params
 
     const network = useAppSelector(selectSelectedNetwork)
 
@@ -241,8 +241,8 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
     ])
 
     const onGoBack = useCallback(() => {
-        navigation.navigate(Routes.HISTORY)
-    }, [navigation])
+        navigation.navigate(returnScreen as any)
+    }, [navigation, returnScreen])
 
     const onAddCustomToken = useCallback(
         (tokenAddress: string) => {

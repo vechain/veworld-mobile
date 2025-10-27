@@ -6,8 +6,8 @@ import FastImage, { ImageStyle } from "react-native-fast-image"
 import Animated from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
-import { useThemedStyles, useTabManagement, useVisitedUrls } from "~Hooks"
-import { RootStackParamListBrowser, Routes } from "~Navigation"
+import { useTabManagement, useThemedStyles, useVisitedUrls } from "~Hooks"
+import { RootStackParamListApps, Routes } from "~Navigation"
 import { selectCurrentTabId, setCurrentTab, Tab, useAppDispatch, useAppSelector } from "~Storage/Redux"
 
 type TabViewCardProps = {
@@ -18,7 +18,7 @@ const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpaci
 
 export const TabViewCard = ({ tab }: TabViewCardProps) => {
     const { styles } = useThemedStyles(baseStyles)
-    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser>>()
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListApps>>()
     const selectedTabId = useAppSelector(selectCurrentTabId)
     const { closeTab } = useTabManagement()
     const { addVisitedUrl } = useVisitedUrls()
@@ -49,7 +49,7 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
                                 <BaseIcon name="icon-globe" size={8} color={COLORS.GREY_400} />
                             </BaseView>
                         )}
-                        <BaseText typographyFont="bodySemiBold" color={"white"} numberOfLines={1}>
+                        <BaseText typographyFont="captionMedium" color={"white"} numberOfLines={1}>
                             {tab.title}
                         </BaseText>
                     </View>

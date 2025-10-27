@@ -2,29 +2,19 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { FlatList, Platform, StyleSheet } from "react-native"
-import {
-    BaseIcon,
-    BaseSpacer,
-    BaseStatusBar,
-    BaseText,
-    BaseTouchable,
-    BaseView,
-    Layout,
-    useFeatureFlags,
-} from "~Components"
+import { BaseIcon, BaseSpacer, BaseStatusBar, BaseText, BaseTouchable, BaseView, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles, useTabManagement } from "~Hooks"
+import { useTabManagement, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { RootStackParamListApps, RootStackParamListBrowser, Routes } from "~Navigation"
+import { RootStackParamListApps, Routes } from "~Navigation"
 import { Tab } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
 import { TabViewCard } from "./Components"
 
 export const TabsManagerScreen = () => {
-    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListApps & RootStackParamListBrowser>>()
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListApps>>()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
-    const { betterWorldFeature } = useFeatureFlags()
     const { tabs, closeAllTabs } = useTabManagement()
 
     const onCloseAll = useCallback(() => {
@@ -32,12 +22,8 @@ export const TabsManagerScreen = () => {
     }, [closeAllTabs])
 
     const onNewTab = useCallback(() => {
-        if (betterWorldFeature.appsScreen.enabled) {
-            nav.replace(Routes.APPS_SEARCH)
-        } else {
-            nav.replace(Routes.DISCOVER_SEARCH)
-        }
-    }, [betterWorldFeature.appsScreen.enabled, nav])
+        nav.replace(Routes.APPS_SEARCH)
+    }, [nav])
 
     const onDone = useCallback(() => {
         nav.goBack()
@@ -60,7 +46,7 @@ export const TabsManagerScreen = () => {
 
     return (
         <Layout
-            bg={COLORS.DARK_PURPLE}
+            bg={COLORS.BALANCE_BACKGROUND}
             noBackButton
             noMargin
             footer={
@@ -94,7 +80,7 @@ export const TabsManagerScreen = () => {
             }
             fixedBody={
                 <BaseView flex={1} px={24} pt={8} bg={theme.colors.tabsFooter.background} style={styles.listContainer}>
-                    <BaseText mb={8} align="center" typographyFont="bodyMedium" color={buttonTextColor}>
+                    <BaseText mb={8} align="center" typographyFont="captionMedium" color={buttonTextColor}>
                         {tabs.length} {tabs.length === 1 ? "tab" : "tabs"}
                     </BaseText>
                     <FlatList
@@ -130,7 +116,7 @@ const baseStyles = (theme: ColorThemeType) =>
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            backgroundColor: theme.colors.tabsFooter.background,
+            backgroundColor: theme.colors.background,
             paddingBottom: PlatformUtils.isIOS() ? 32 : 8,
         },
         footerButton: {

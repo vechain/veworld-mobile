@@ -14,10 +14,11 @@ import {
 } from "~Components"
 import { ScanTarget } from "~Constants"
 import { useBottomSheetModal, useCameraBottomSheet, useVns, ZERO_ADDRESS } from "~Hooks"
+import { ScanFunctionRegistry } from "~Hooks/useScanTargets"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, WatchedAccount } from "~Model"
 import HapticsService from "~Services/HapticsService"
-import { addAccount, selectAccounts, selectBalanceVisible, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { addAccount, selectAccounts, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { AccountUtils, AddressUtils } from "~Utils"
 
 export const ObserveWalletScreen = () => {
@@ -26,7 +27,6 @@ export const ObserveWalletScreen = () => {
     const dispatch = useAppDispatch()
 
     const accounts = useAppSelector(selectAccounts)
-    const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     const [inputValue, setInputValue] = useState("")
     const [underlyingAddress, setUnderlyingAddress] = useState("")
@@ -76,14 +76,15 @@ export const ObserveWalletScreen = () => {
         nav.goBack()
     }, [LL, _watchedAccount, dispatch, nav])
 
-    const onImport = useCallback(
-        (_address?: string) => {
+    const onImportAddress = useCallback(
+        async (_address?: string) => {
             // Try to close the keyboard. Might come in handy if the user is using the camera to scan a QR code
             Keyboard.dismiss()
 
             const addressIsValid = AddressUtils.isValid(_address ?? underlyingAddress)
             if (!addressIsValid) {
                 showErrorToast({ text1: LL.ERROR_INVALID_ADDRESS() })
+                return true
             }
 
             // check if wallet is already observed - imported - if so, show error message
@@ -98,17 +99,28 @@ export const ObserveWalletScreen = () => {
 
             if (isWalletAlreadyImported) {
                 showErrorToast({ text1: LL.ERROR_WALLET_ALREADY_EXISTS() })
-            } else {
-                // find wallet in the network and present the wallet details
-                findWalletOnChain(_address ?? underlyingAddress)
+                return true
             }
+            // find wallet in the network and present the wallet details
+            findWalletOnChain(_address ?? underlyingAddress)
+            return true
         },
         [LL, accounts, underlyingAddress, findWalletOnChain],
     )
 
-    const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
-        onScan: onImport,
-        targets: [ScanTarget.ADDRESS],
+    const onScanVns = useCallback<ScanFunctionRegistry["vns"]>(
+        async (data, defaultFn) => {
+            const res = await defaultFn(data)
+            if (!res) return false
+            return onImportAddress(res.address)
+        },
+        [onImportAddress],
+    )
+
+    const { RenderCameraModal, handleOpenOnlyScanCamera } = useCameraBottomSheet({
+        onScanAddress: onImportAddress,
+        onScanVns,
+        targets: [ScanTarget.ADDRESS, ScanTarget.VNS],
     })
 
     const handleOnSetAddress = useCallback(
@@ -146,10 +158,6 @@ export const ObserveWalletScreen = () => {
         setError(undefined)
     }, [])
 
-    const handleOnIconPress = useCallback(() => {
-        handleOpenCamera()
-    }, [handleOpenCamera])
-
     return (
         <DismissKeyboardView>
             <Layout
@@ -172,7 +180,7 @@ export const ObserveWalletScreen = () => {
                                 setValue={handleOnSetAddress}
                                 value={inputValue}
                                 autoFocus
-                                onIconPress={() => (inputValue ? onClearAddress() : handleOnIconPress())}
+                                onIconPress={() => (inputValue ? onClearAddress() : handleOpenOnlyScanCamera())}
                                 rightIcon={inputValue ? "icon-x" : "icon-qr-code"}
                             />
 
@@ -183,7 +191,6 @@ export const ObserveWalletScreen = () => {
                             closeBottomSheet={closeSelectAccountBottonSheet}
                             account={_watchedAccount}
                             confirmAccount={handleConfirmAccount}
-                            isBalanceVisible={isBalanceVisible}
                             ref={selectAccountBottomSheetRef}
                         />
                     </>
@@ -194,7 +201,7 @@ export const ObserveWalletScreen = () => {
                             <BaseButton
                                 isLoading={isLoading}
                                 testID="observe-wallet-confirm-button"
-                                action={onImport}
+                                action={onImportAddress}
                                 disabled={!underlyingAddress || !!error}
                                 w={100}
                                 title={btnTitle}

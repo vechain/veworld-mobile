@@ -38,8 +38,8 @@ export const AboutScreen = () => {
                     }}>
                     <BaseView flex={1} flexDirection="row" justifyContent="space-between" alignItems="center">
                         <BaseView>
-                            <BaseText typographyFont="subTitleBold">{link.title}</BaseText>
-                            <BaseSpacer height={8} />
+                            <BaseText typographyFont="subSubTitleSemiBold">{link.title}</BaseText>
+                            <BaseSpacer height={4} />
                             <BaseText typographyFont="captionRegular">{link.subtitle}</BaseText>
                         </BaseView>
                         <BaseView>

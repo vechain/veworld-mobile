@@ -10,7 +10,7 @@ import { X2ECategoryType } from "~Model"
 import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux/Hooks"
 import { selectBookmarkedDapps } from "~Storage/Redux/Selectors"
-import { VeBetterDAOCarousel } from "../DiscoverScreen/Components/VeBetterDAOCarousel"
+import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
 import { EcosystemSection } from "./Components/Ecosystem"
 import { FavoritesBottomSheet } from "./Components/FavoritesBottomSheet"
 import { FavoritesSuggestionBanner } from "./Components/FavoritesSuggestionBanner"
@@ -34,7 +34,7 @@ export const AppsScreen = () => {
     } = useBottomSheetModal()
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.APPS)
 
     const showFavorites = bookmarkedDApps.length > 0
 
@@ -64,7 +64,7 @@ export const AppsScreen = () => {
 
     return (
         <Layout
-            bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
+            bg={theme.colors.background}
             noBackButton
             noMargin
             fixedHeader={
@@ -73,6 +73,7 @@ export const AppsScreen = () => {
                         title={LL.APPS_SCREEN_TITLE()}
                         leftIconName="icon-apps"
                         testID="AppsScreen_HeaderTitle"
+                        typographyFont="headerTitle"
                     />
                     <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                         <BaseSpacer width={8} />

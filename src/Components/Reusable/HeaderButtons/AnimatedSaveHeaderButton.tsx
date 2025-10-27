@@ -6,6 +6,7 @@ import { StyleSheet } from "react-native"
 import { ColorThemeType, typography } from "~Constants"
 import { LocalizedString } from "typesafe-i18n"
 import { useI18nContext } from "~i18n"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     action: () => void
@@ -98,7 +99,7 @@ const baseStyles = (theme: ColorThemeType) =>
         buttonLabel: {
             color: theme.colors.actionBottomSheet.icon,
             fontFamily: fontFamily["Inter-SemiBold"],
-            fontSize: 12,
+            fontSize: FontUtils.font(12),
             fontWeight: "600",
             textAlign: "center",
         },

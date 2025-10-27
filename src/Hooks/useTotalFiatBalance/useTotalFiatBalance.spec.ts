@@ -76,7 +76,7 @@ describe("useTotalFiatBalance", () => {
             exchangeRate: 1,
             fiatBalance: "1",
         })
-        ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue([])
+        ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: [], isLoading: false })
         ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
         ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
         ;(useTokenBalance as jest.Mock).mockReturnValue({ data: undefined, isLoading: false })
@@ -104,7 +104,7 @@ describe("useTotalFiatBalance", () => {
             exchangeRate: 1,
             fiatBalance: "0",
         })
-        ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue([])
+        ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: [], isLoading: false })
         ;(useUserStargateNfts as jest.Mock).mockReturnValue({
             ownedStargateNfts: [{ vetAmountStaked: ethers.utils.parseEther("1").toString() }],
             isLoading: false,
@@ -143,7 +143,7 @@ describe("useTotalFiatBalance", () => {
             exchangeRate: 1,
             fiatBalance: "0",
         })
-        ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue(["1"])
+        ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: ["1"], isLoading: false })
         ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
         ;(useUserStargateNfts as jest.Mock).mockReturnValue({
             ownedStargateNfts: [],
@@ -172,5 +172,150 @@ describe("useTotalFiatBalance", () => {
             "1", //Non Vechain Token
             "0", //Stargate
         ])
+    })
+
+    describe("useCompactNotation parameter", () => {
+        it("should use compact notation by default for large balances", () => {
+            const preloadedState = createPreloadedState()
+            ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue({
+                exchangeRate: 1,
+                fiatBalance: "15000", // 15K
+                tokenInfoLoading: false,
+            })
+            ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: [], isLoading: false })
+            ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+            ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
+            ;(useTokenBalance as jest.Mock).mockReturnValue({ data: undefined, isLoading: false })
+
+            const { result } = renderHook(
+                () => useTotalFiatBalance({ address: preloadedState.accounts!.selectedAccount! }),
+                {
+                    wrapper: TestWrapper,
+                    initialProps: {
+                        preloadedState,
+                    },
+                },
+            )
+
+            // Should use compact notation by default (K, M, B)
+            expect(result.current.renderedBalance).toBe("$45K")
+        })
+
+        it("should use compact notation when explicitly enabled", () => {
+            const preloadedState = createPreloadedState()
+            ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue({
+                exchangeRate: 1,
+                fiatBalance: "50000",
+                tokenInfoLoading: false,
+            })
+            ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: [], isLoading: false })
+            ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+            ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
+            ;(useTokenBalance as jest.Mock).mockReturnValue({ data: undefined, isLoading: false })
+
+            const { result } = renderHook(
+                () =>
+                    useTotalFiatBalance({
+                        address: preloadedState.accounts!.selectedAccount!,
+                        useCompactNotation: true,
+                    }),
+                {
+                    wrapper: TestWrapper,
+                    initialProps: {
+                        preloadedState,
+                    },
+                },
+            )
+
+            expect(result.current.renderedBalance).toBe("$150K")
+        })
+
+        it("should not use compact notation when disabled", () => {
+            const preloadedState = createPreloadedState()
+            ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue({
+                exchangeRate: 1,
+                fiatBalance: "15000",
+                tokenInfoLoading: false,
+            })
+            ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: [], isLoading: false })
+            ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+            ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
+            ;(useTokenBalance as jest.Mock).mockReturnValue({ data: undefined, isLoading: false })
+
+            const { result } = renderHook(
+                () =>
+                    useTotalFiatBalance({
+                        address: preloadedState.accounts!.selectedAccount!,
+                        useCompactNotation: false,
+                    }),
+                {
+                    wrapper: TestWrapper,
+                    initialProps: {
+                        preloadedState,
+                    },
+                },
+            )
+
+            // Should show full number with decimals
+            expect(result.current.renderedBalance).toBe("$45,000.00")
+        })
+
+        it("should format small balances correctly without compact notation", () => {
+            const preloadedState = createPreloadedState()
+            ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue({
+                exchangeRate: 1,
+                fiatBalance: "1234.56",
+                tokenInfoLoading: false,
+            })
+            ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: [], isLoading: false })
+            ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+            ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
+            ;(useTokenBalance as jest.Mock).mockReturnValue({ data: undefined, isLoading: false })
+
+            const { result } = renderHook(
+                () =>
+                    useTotalFiatBalance({
+                        address: preloadedState.accounts!.selectedAccount!,
+                        useCompactNotation: false,
+                    }),
+                {
+                    wrapper: TestWrapper,
+                    initialProps: {
+                        preloadedState,
+                    },
+                },
+            )
+
+            expect(result.current.renderedBalance).toBe("$3,703.68")
+        })
+
+        it("should handle million-dollar balances correctly without compact notation", () => {
+            const preloadedState = createPreloadedState()
+            ;(useTokenWithCompleteInfo as jest.Mock).mockReturnValue({
+                exchangeRate: 1,
+                fiatBalance: "1000000",
+                tokenInfoLoading: false,
+            })
+            ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: [], isLoading: false })
+            ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+            ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
+            ;(useTokenBalance as jest.Mock).mockReturnValue({ data: undefined, isLoading: false })
+
+            const { result } = renderHook(
+                () =>
+                    useTotalFiatBalance({
+                        address: preloadedState.accounts!.selectedAccount!,
+                        useCompactNotation: false,
+                    }),
+                {
+                    wrapper: TestWrapper,
+                    initialProps: {
+                        preloadedState,
+                    },
+                },
+            )
+
+            expect(result.current.renderedBalance).toBe("$3,000,000.00")
+        })
     })
 })

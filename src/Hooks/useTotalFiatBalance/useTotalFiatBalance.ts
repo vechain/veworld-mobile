@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { VET, VTHO } from "~Constants"
 import { useUserNodes, useUserStargateNfts } from "~Hooks/Staking"
@@ -6,20 +7,22 @@ import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
 import { useTokenBalance } from "~Hooks/useTokenBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
-import { selectBalanceVisible, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
+import { selectBalanceVisible, selectNetworkVBDTokens, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BalanceUtils, BigNutils } from "~Utils"
 
 type Args = {
     address: string
     enabled?: boolean
+    useCompactNotation?: boolean
 }
 
-export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
+export const useTotalFiatBalance = ({ address, enabled = true, useCompactNotation }: Args) => {
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
     const isVisible = useAppSelector(selectBalanceVisible)
 
     const tokenWithInfoVET = useTokenWithCompleteInfo(VET, address, { enabled })
     const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO, address, { enabled })
+    const network = useAppSelector(selectSelectedNetwork)
 
     const tokenWithInfoB3TR = useTokenWithCompleteInfo(B3TR, address, { enabled })
     const { data: vot3RawBalance, isLoading: loadingVot3Balance } = useTokenBalance({
@@ -34,7 +37,7 @@ export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
         VOT3.decimals,
     )
 
-    const nonVechainTokensFiat = useNonVechainTokenFiat({ accountAddress: address, enabled })
+    const { data: nonVechainTokensFiat } = useNonVechainTokenFiat({ accountAddress: address, enabled })
 
     const { stargateNodes, isLoading: loadingNodes } = useUserNodes(address, enabled)
 
@@ -97,11 +100,25 @@ export const useTotalFiatBalance = ({ address, enabled = true }: Args) => {
 
     const { amount, areAlmostZero } = useMemo(() => combineFiatBalances(balances), [balances, combineFiatBalances])
 
-    const { formatFiat } = useFormatFiat()
+    const { data: previousBalance } = useQuery({
+        queryKey: ["BALANCE", "TOTAL", network.genesis.id, address.toLowerCase()],
+        queryFn: () => amount,
+        enabled: !isLoading,
+        staleTime: 5 * 60 * 1000,
+        gcTime: Infinity,
+    })
+
+    const { formatFiat } = useFormatFiat({ useCompactNotation })
     const renderedBalance = useMemo(() => {
+        if (isLoading) {
+            return formatFiat({ amount: previousBalance ?? 0, cover: !isVisible })
+        }
         const balance = formatFiat({ amount, cover: !isVisible })
         return areAlmostZero ? `< ${balance}` : balance
-    }, [formatFiat, amount, isVisible, areAlmostZero])
+    }, [isLoading, formatFiat, amount, isVisible, areAlmostZero, previousBalance])
 
-    return useMemo(() => ({ balances, isLoading, renderedBalance }), [balances, isLoading, renderedBalance])
+    return useMemo(
+        () => ({ balances, isLoading, renderedBalance, rawAmount: amount }),
+        [amount, balances, isLoading, renderedBalance],
+    )
 }

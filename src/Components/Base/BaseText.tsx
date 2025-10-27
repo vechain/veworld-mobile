@@ -3,6 +3,7 @@ import React, { useMemo } from "react"
 import { FlexAlignType, Text, TextProps, TextStyle, ViewStyle } from "react-native"
 import { typography } from "~Constants/Theme"
 import { useTheme } from "~Hooks"
+import FontUtils from "~Utils/FontUtils"
 import { BaseView, BaseViewProps } from "./BaseView"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
@@ -57,10 +58,12 @@ export const BaseText = (props: BaseTextProps) => {
 
     const computedFontSize = useMemo(
         () =>
-            fontSize ??
-            (((typographyFont &&
-                defaultTypography[typographyFont].fontSize) as keyof typeof otherTypography.fontSize) ||
-                14),
+            FontUtils.font(
+                fontSize ??
+                    (((typographyFont &&
+                        defaultTypography[typographyFont].fontSize) as keyof typeof otherTypography.fontSize) ||
+                        14),
+            ),
         [typographyFont, fontSize],
     )
 

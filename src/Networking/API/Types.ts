@@ -87,3 +87,117 @@ export type FetchFungibleTokensContractsResponse = {
     data: string[]
     pagination: PaginationResponse
 }
+
+export type VeBetterTotalImpact = {
+    carbon?: number
+    water?: number
+    energy?: number
+    waste_mass?: number
+    waste_items?: number
+    waste_reduction?: number
+    biodiversity?: number
+    people?: number
+    timber?: number
+    plastic?: number
+    education_time?: number
+    trees_planted?: number
+    calories_burned?: number
+    clean_energy_production_wh?: number
+    sleep_quality_percentage?: number
+}
+
+export interface FetchVeBetterUserGeneralOverviewResponse {
+    wallet: string
+    roundId: number
+    date: string
+    totalRewardAmount: number
+    actionsRewarded: number
+    /**
+     * `totalImpact` may be undefined when the user has no impact at all
+     */
+    totalImpact?: VeBetterTotalImpact
+    rankByReward: number
+    rankByActionsRewarded: number
+    uniqueXAppInteractions: string[]
+}
+
+export interface FetchVeBetterUserOverviewResponseItem {
+    entity: string
+    date: string
+    totalRewardAmount: number
+    actionsRewarded: number
+    totalImpact?: VeBetterTotalImpact
+}
+
+export interface FetchVeBetterActionsResponseItem {
+    blockNumber: number
+    blockTimestamp: number
+    blockId: string
+    appId: string
+    distributor: string
+    amount: number
+    receiver: string
+    proof: {
+        version: number
+        description: string
+        proof: {
+            image: string
+            link: string
+            text: string
+            video: string
+        }
+        impact: {
+            carbon: number
+            water: number
+            energy: number
+            waste_mass: number
+            waste_items: number
+            waste_reduction: number
+            biodiversity: number
+            people: number
+            timber: number
+            plastic: number
+            education_time: number
+            trees_planted: number
+            calories_burned: number
+            clean_energy_production_wh: number
+            sleep_quality_percentage: number
+        }
+    }
+}
+
+export enum StargateNFTLevel {
+    Strength,
+    Thunder,
+    Mjolnir,
+    VeThorX,
+    StrengthX,
+    ThunderX,
+    MjolnirX,
+    Dawn,
+    Lightning,
+    Flash,
+}
+
+export interface FetchStargateTotalVetStakedResponse {
+    total: string
+    byLevel: {
+        [key in StargateNFTLevel]: string
+    }
+}
+
+export interface FetchStargateTotalSupplyResponse {
+    total: string
+    byLevel: {
+        [key in StargateNFTLevel]: number
+    }
+}
+
+export interface FetchVeBetterGlobalOverviewResponse {
+    roundId: number
+    date: string
+    totalRewardAmount: number
+    actionsRewarded: number
+    totalImpact: VeBetterTotalImpact
+    totalUniqueUserInteractions: number
+}

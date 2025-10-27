@@ -4,12 +4,13 @@ import "whatwg-fetch"
 import mockSafeAreaContext from "react-native-safe-area-context/jest/mock"
 // @ts-ignore
 import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock"
-import { ReactNode } from "react"
+import { Component, PropsWithChildren, ReactNode } from "react"
 import { SecurityLevelType } from "~Model/Biometrics"
 import { WALLET_STATUS } from "~Model/Wallet"
 import { MMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
 import * as dotenv from "dotenv"
+import { View } from "react-native"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
 
@@ -37,6 +38,11 @@ jest.mock("react-native-quick-crypto", () => ({
 }))
 
 jest.mock("react-native-keyboard-controller", () => require("react-native-keyboard-controller/jest"))
+jest.mock("react-native-vision-camera", () => ({
+    Camera: View,
+    useCameraDevice: jest.fn(),
+    useCodeScanner: jest.fn().mockImplementation(args => args),
+}))
 
 jest.mock("react-native-onesignal", () => ({
     ...jest.requireActual("react-native-onesignal"),
@@ -160,7 +166,15 @@ jest.mock("react-native-webview", () => ({
 }))
 
 jest.mock("expo-clipboard", () => {})
-jest.mock("react-native-linear-gradient", () => "LinearGradient")
+jest.mock(
+    "react-native-linear-gradient",
+    () =>
+        class LinearGradient extends Component<PropsWithChildren> {
+            render() {
+                return this.props.children ?? "TEST"
+            }
+        },
+)
 jest.mock("react-native-draggable-flatlist", () => ({
     NestableScrollContainer: componentMock,
     NestableDraggableFlatList: componentMock,
@@ -284,4 +298,20 @@ require("react-native-reanimated").setUpTests()
 
 jest.mock("~Hooks/useFetchFeaturedDApps/useVeBetterDaoDapps", () => ({
     useVeBetterDaoDapps: jest.fn().mockReturnValue({ data: [] }),
+}))
+
+jest.mock("@tanstack/react-query", () => ({
+    ...jest.requireActual("@tanstack/react-query"),
+    useQuery: jest
+        .fn()
+        .mockImplementation((...args: any[]) =>
+            jest.requireActual("@tanstack/react-query").useQuery({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+        ),
+    useInfiniteQuery: jest
+        .fn()
+        .mockImplementation((...args: any[]) =>
+            jest
+                .requireActual("@tanstack/react-query")
+                .useInfiniteQuery({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+        ),
 }))

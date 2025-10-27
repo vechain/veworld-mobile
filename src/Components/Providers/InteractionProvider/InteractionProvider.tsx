@@ -8,6 +8,7 @@ import {
     SwitchWalletRequest,
     TransactionRequest,
     TypeDataRequest,
+    DisconnectAppRequest,
 } from "~Model"
 
 type ContextType = {
@@ -17,6 +18,7 @@ type ContextType = {
     typedDataBsRef: RefObject<BottomSheetModalMethods>
     loginBsRef: RefObject<BottomSheetModalMethods>
     switchWalletBsRef: RefObject<BottomSheetModalMethods>
+    disconnectBsRef: RefObject<BottomSheetModalMethods>
     connectBsData: ConnectAppRequest | null
     setConnectBsData: Dispatch<SetStateAction<ConnectAppRequest | null>>
     certificateBsData: CertificateRequest | null
@@ -29,6 +31,8 @@ type ContextType = {
     setLoginBsData: Dispatch<SetStateAction<LoginRequest | null>>
     switchWalletBsData: SwitchWalletRequest | null
     setSwitchWalletBsData: Dispatch<SetStateAction<SwitchWalletRequest | null>>
+    disconnectBsData: DisconnectAppRequest | null
+    setDisconnectBsData: Dispatch<SetStateAction<DisconnectAppRequest | null>>
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -40,7 +44,9 @@ export const InteractionProvider = ({ children }: PropsWithChildren) => {
     const { ref: typedDataBsRef } = useBottomSheetModal()
     const { ref: loginBsRef } = useBottomSheetModal()
     const { ref: switchWalletBsRef } = useBottomSheetModal()
+    const { ref: disconnectBsRef } = useBottomSheetModal()
     const [connectBsData, setConnectBsData] = useState<ConnectAppRequest | null>(null)
+    const [disconnectBsData, setDisconnectBsData] = useState<DisconnectAppRequest | null>(null)
     const [certificateBsData, setCertificateBsData] = useState<CertificateRequest | null>(null)
     const [transactionBsData, setTransactionBsData] = useState<TransactionRequest | null>(null)
     const [typedDataBsData, setTypedDataBsData] = useState<TypeDataRequest | null>(null)
@@ -50,6 +56,9 @@ export const InteractionProvider = ({ children }: PropsWithChildren) => {
         () => ({
             connectBsRef,
             connectBsData,
+            disconnectBsRef,
+            disconnectBsData,
+            setDisconnectBsData,
             setConnectBsData,
             certificateBsRef,
             certificateBsData,
@@ -70,6 +79,8 @@ export const InteractionProvider = ({ children }: PropsWithChildren) => {
         [
             connectBsRef,
             connectBsData,
+            disconnectBsRef,
+            disconnectBsData,
             certificateBsRef,
             certificateBsData,
             transactionBsRef,

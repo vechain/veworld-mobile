@@ -1,7 +1,7 @@
 import { PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { ethers } from "ethers"
 
-export type DAppSourceType = "wallet-connect" | "in-app"
+export type DAppSourceType = "wallet-connect" | "in-app" | "external-app"
 export type TypedDataMessage = {
     domain: ethers.TypedDataDomain
     types: Record<string, ethers.TypedDataField[]>
@@ -27,13 +27,22 @@ type BaseInAppRequest = BaseRequest & {
     id: string
 }
 
+export type BaseExternalAppRequest = BaseRequest & {
+    type: "external-app"
+    publicKey: string
+    nonce: string
+    redirectUrl: string
+    genesisId: string
+    session: string
+}
+
 type BaseCertificateRequest = {
     message: Connex.Vendor.CertMessage
     options: Connex.Signer.CertOptions
     method: "thor_signCertificate"
 }
 
-type BaseTransactionRequest = {
+export type BaseTransactionRequest = {
     message: Connex.Vendor.TxMessage
     options: Connex.Signer.TxOptions
     method: "thor_sendTransaction"
@@ -44,6 +53,13 @@ type BaseTypedDataRequest = {
     method: "thor_signTypedData"
     origin: string
 } & TypedDataMessage
+
+type BaseExternalConnectAppRequest = BaseRequest & {
+    type: "external-app"
+    publicKey: string
+    redirectUrl: string
+    genesisId: string
+}
 
 type WcConnectAppRequest = BaseRequest & {
     type: "wallet-connect"
@@ -82,26 +98,36 @@ type WcCertRequest = BaseCertificateRequest & BaseWcRequest
 
 type InAppCertRequest = BaseCertificateRequest & BaseInAppRequest
 
+type ExternalAppCertRequest = BaseCertificateRequest & BaseExternalAppRequest
+
 type WcTxRequest = BaseTransactionRequest & BaseWcRequest
 
 type InAppTxRequest = BaseTransactionRequest & BaseInAppRequest
+
+type ExternalAppTxRequest = BaseTransactionRequest & BaseExternalAppRequest
 
 type WcSignDataRequest = BaseTypedDataRequest & BaseWcRequest
 
 type InAppTypedDataRequest = BaseTypedDataRequest & BaseInAppRequest
 
-export type CertificateRequest = WcCertRequest | InAppCertRequest
+type ExternalAppTypedDataRequest = BaseTypedDataRequest & BaseExternalAppRequest
 
-export type TransactionRequest = WcTxRequest | InAppTxRequest
+export type CertificateRequest = WcCertRequest | InAppCertRequest | ExternalAppCertRequest
 
-export type TypeDataRequest = WcSignDataRequest | InAppTypedDataRequest
+export type TransactionRequest = WcTxRequest | InAppTxRequest | ExternalAppTxRequest
+
+export type TypeDataRequest = WcSignDataRequest | InAppTypedDataRequest | ExternalAppTypedDataRequest
+
+export type DisconnectAppRequest = BaseExternalAppRequest & {
+    genesisId: string
+}
 
 /**
  * Login request. WC doesn't support it, so it'll be only in-app
  */
 export type LoginRequest = InAppLoginRequest
 
-export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest
+export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest | BaseExternalConnectAppRequest
 
 export type SwitchWalletRequest = InAppSwitchWalletRequest
 export type WalletRequest = InAppWalletRequest
@@ -167,3 +193,33 @@ export type VeBetterDaoDAppMetadata = {
 }
 
 export type VbdDApp = VeBetterDaoDapp & VeBetterDaoDAppMetadata
+
+export type ExternalAppRequest = BaseExternalAppRequest & {
+    /**
+     * The payload is the encrypted and base64 encoded payload from the external app
+     * It is encrypted with the public key of the session
+     * It is decrypted with the private key of the session
+     * It is then parsed into a TransactionRequest
+     */
+    payload: string
+}
+
+type ExternalRequestParsedPayload<T> = {
+    transaction?: T
+    typedData?: T
+    certificate?: T
+    session: string
+}
+
+/**
+ * Request parsed from the external app encrypted payload
+ */
+export type ParsedRequest<T> = {
+    payload: ExternalRequestParsedPayload<T>
+    request: BaseExternalAppRequest
+}
+
+/**
+ * Request decoded from the external app
+ */
+export type DecodedRequest = Omit<BaseExternalAppRequest, "session" | "redirectUrl"> & { payload: string }

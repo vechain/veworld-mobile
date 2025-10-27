@@ -47,11 +47,16 @@ export const TokenBox = ({
         <DropShadow style={[theme.shadows.card]}>
             <BaseView flexDirection="column" alignItems="center">
                 {token?.icon ? (
-                    <TokenImage icon={token.icon} isVechainToken={isVechainToken(token.symbol)} iconSize={30} />
+                    <TokenImage
+                        icon={token.icon}
+                        isVechainToken={isVechainToken(token.symbol)}
+                        iconSize={32}
+                        rounded={!token.crossChainProvider}
+                    />
                 ) : (
                     <BaseIcon
                         name="icon-help-circle"
-                        size={22}
+                        size={24}
                         color={COLORS.DARK_PURPLE}
                         bg={COLORS.WHITE}
                         iconPadding={4}
@@ -63,31 +68,31 @@ export const TokenBox = ({
 
     return (
         <BaseView py={12} px={16} style={{ width: SCREEN_WIDTH - 40 }} alignItems="flex-start">
-            <BaseText typographyFont="buttonPrimary">{provenanceText}</BaseText>
+            <BaseText typographyFont="captionSemiBold">{provenanceText}</BaseText>
             <BaseView flexDirection="row" py={8}>
                 {tokenIcon}
                 <BaseView flexDirection="column" pl={12}>
                     {token ? (
                         <>
                             <BaseView flexDirection="row">
-                                <BaseText typographyFont="subSubTitle">{token.symbol}</BaseText>
+                                <BaseText typographyFont="bodySemiBold">{token.symbol}</BaseText>
                             </BaseView>
                             <BaseView pt={3} flexDirection="row">
-                                <BaseText typographyFont="captionBold">{amount}</BaseText>
+                                <BaseText typographyFont="captionMedium">{amount}</BaseText>
                                 {fiatValue && (
                                     <FiatBalance typographyFont="captionRegular" balances={[fiatValue]} prefix=" ≈ " />
                                 )}
                             </BaseView>
                         </>
                     ) : (
-                        <BaseText typographyFont="button">{addressShort}</BaseText>
+                        <BaseText typographyFont="bodySemiBold">{addressShort}</BaseText>
                     )}
                 </BaseView>
                 {!isTokenAdded && (
                     <BaseView pl={12}>
                         <BaseIcon
                             name="icon-plus"
-                            size={20}
+                            size={24}
                             bg={COLORS.LIME_GREEN}
                             iconPadding={3}
                             color={COLORS.DARK_PURPLE}

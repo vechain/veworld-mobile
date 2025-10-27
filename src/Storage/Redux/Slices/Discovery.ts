@@ -50,6 +50,7 @@ export type DiscoveryState = {
     }
     isNormalUser?: boolean
     suggestedAppIds?: string[]
+    lastNavigationSource?: string
 }
 
 export const initialDiscoverState: DiscoveryState = {
@@ -136,6 +137,10 @@ export const DiscoverySlice = createSlice({
                     featured.amountOfNavigations += 1
                 }
             }
+        },
+        // Store the source screen for back navigation
+        setLastNavigationSource: (state, action: PayloadAction<{ screen: string }>) => {
+            state.lastNavigationSource = action.payload.screen
         },
         addConnectedDiscoveryApp: (state, action: PayloadAction<ConnectedDiscoveryApp>) => {
             if (!state.connectedApps) state.connectedApps = [action.payload]
@@ -225,4 +230,5 @@ export const {
     addSession,
     setIsNormalUser,
     setSuggestedAppIds,
+    setLastNavigationSource,
 } = DiscoverySlice.actions

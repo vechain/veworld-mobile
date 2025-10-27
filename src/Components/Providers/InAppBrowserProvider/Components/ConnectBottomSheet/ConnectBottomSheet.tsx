@@ -1,18 +1,34 @@
-import { default as React, useCallback, useMemo, useRef } from "react"
-import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import React, { useCallback, useMemo, useRef } from "react"
+import {
+    BaseBottomSheet,
+    BaseButton,
+    BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    SelectAccountBottomSheet,
+} from "~Components"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { ERROR_EVENTS } from "~Constants"
-import { useBottomSheetModal, useTheme } from "~Hooks"
+import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { ConnectAppRequest } from "~Model"
-import { selectFeaturedDapps, useAppSelector } from "~Storage/Redux"
-import { error } from "~Utils"
+import {
+    selectFeaturedDapps,
+    selectSelectedAccountOrNull,
+    selectVisibleAccountsWithoutObserved,
+    useAppSelector,
+} from "~Storage/Redux"
+import { AccountUtils, error } from "~Utils"
 import { useInAppBrowser } from "../../InAppBrowserProvider"
 import { DappDetails } from "../DappDetails"
 import { DappWithDetails } from "../DappWithDetails"
 import { useWcConnect } from "./useWcConnect"
 import { useWcSwitchChain } from "./useWcSwitchChain"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
+import { AccountSelector } from "~Components/Reusable/AccountSelector"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 type Request = {
     request: ConnectAppRequest
@@ -24,12 +40,14 @@ const ConnectBottomSheetContent = ({
     onConnect,
     onCloseBs,
     isLoading,
+    selectAccountBsRef,
 }: {
     request: ConnectAppRequest
     onConnect: (req: ConnectAppRequest) => Promise<void>
     onCancel: (req: ConnectAppRequest) => Promise<void>
     onCloseBs: () => void
     isLoading: boolean
+    selectAccountBsRef: React.RefObject<BottomSheetModalMethods>
 }) => {
     const { LL } = useI18nContext()
     const allApps = useAppSelector(selectFeaturedDapps)
@@ -38,16 +56,45 @@ const ConnectBottomSheetContent = ({
         const foundDapp = allApps.find(app => new URL(app.href).origin === new URL(request.appUrl).origin)
         return foundDapp?.name ?? request.appName
     }, [allApps, request.appName, request.appUrl])
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
+    const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
+    const { onClose: onCloseSelectAccountBs, onOpen: onOpenSelectAccountBs } = useBottomSheetModal({
+        externalRef: selectAccountBsRef,
+    })
+
+    const { onSetSelectedAccount } = useSetSelectedAccount()
 
     useWcSwitchChain(request, { onCloseBs })
 
+    const shouldShowAccountSelector = useMemo(() => {
+        return request.type === "external-app"
+    }, [request.type])
+
+    const isWatchedAccount = useMemo(() => {
+        return AccountUtils.isObservedAccount(selectedAccount)
+    }, [selectedAccount])
+
+    const onChangeAccountPress = useCallback(() => {
+        onOpenSelectAccountBs()
+    }, [onOpenSelectAccountBs])
+
     return (
         <>
-            <BaseView flexDirection="row" gap={12}>
-                <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
-                <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                    {LL.CONNECTION_REQUEST_TITLE()}
-                </BaseText>
+            <BaseView flexDirection="row" gap={12} justifyContent="space-between">
+                <BaseView flex={1} flexDirection="row" gap={12}>
+                    <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
+                    <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                        {LL.CONNECTION_REQUEST_TITLE()}
+                    </BaseText>
+                </BaseView>
+                {shouldShowAccountSelector && selectedAccount && (
+                    <AccountSelector
+                        account={selectedAccount}
+                        variant="short"
+                        changeable={shouldShowAccountSelector}
+                        onPress={onChangeAccountPress}
+                    />
+                )}
             </BaseView>
             <BaseSpacer height={24} />
             <DappWithDetails appName={request.appName} appUrl={request.appUrl}>
@@ -65,10 +112,21 @@ const ConnectBottomSheetContent = ({
                 <BaseButton action={onCancel.bind(null, request)} variant="outline" flex={1}>
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
-                <BaseButton action={onConnect.bind(null, request)} flex={1} isLoading={isLoading} disabled={isLoading}>
+                <BaseButton
+                    action={onConnect.bind(null, request)}
+                    flex={1}
+                    isLoading={isLoading}
+                    disabled={isLoading || isWatchedAccount}>
                     {LL.CONNECTION_REQUEST_CTA()}
                 </BaseButton>
             </BaseView>
+            <SelectAccountBottomSheet
+                closeBottomSheet={onCloseSelectAccountBs}
+                accounts={visibleAccounts}
+                setSelectedAccount={onSetSelectedAccount}
+                selectedAccount={selectedAccount}
+                ref={selectAccountBsRef}
+            />
         </>
     )
 }
@@ -78,6 +136,8 @@ export const ConnectBottomSheet = () => {
     const { connectBsRef, connectBsData, setConnectBsData } = useInteraction()
     const { ref, onClose: onCloseBs } = useBottomSheetModal({ externalRef: connectBsRef })
     const { rejectPendingProposal } = useWalletConnect()
+    const { onConnect: onConnectExternalDapp, onRejectRequest } = useExternalDappConnection()
+    const { ref: selectAccountBsRef } = useBottomSheetModal()
 
     const { processProposal, isLoading, setIsLoading } = useWcConnect({ onCloseBs })
     const isUserAction = useRef(false)
@@ -86,13 +146,21 @@ export const ConnectBottomSheet = () => {
         async (request: ConnectAppRequest) => {
             if (request.type === "wallet-connect") {
                 await processProposal(request)
+            } else if (request.type === "external-app") {
+                await onConnectExternalDapp({
+                    dappPublicKey: request.publicKey,
+                    redirectUrl: request.redirectUrl,
+                    dappName: request.appName,
+                    dappUrl: request.appUrl,
+                    genesisId: request.genesisId,
+                })
             } else {
                 addAppAndNavToRequest(request.initialRequest)
             }
             isUserAction.current = true
             onCloseBs()
         },
-        [addAppAndNavToRequest, onCloseBs, processProposal],
+        [addAppAndNavToRequest, onCloseBs, onConnectExternalDapp, processProposal],
     )
 
     const rejectProposal = useCallback(
@@ -103,6 +171,8 @@ export const ConnectBottomSheet = () => {
                 } catch (err: unknown) {
                     error(ERROR_EVENTS.WALLET_CONNECT, err)
                 }
+            } else if (request.type === "external-app") {
+                await onRejectRequest(request.redirectUrl)
             } else {
                 postMessage({
                     id: request.initialRequest.id,
@@ -111,7 +181,7 @@ export const ConnectBottomSheet = () => {
                 })
             }
         },
-        [postMessage, rejectPendingProposal],
+        [onRejectRequest, postMessage, rejectPendingProposal],
     )
 
     const onCancel = useCallback(
@@ -148,6 +218,7 @@ export const ConnectBottomSheet = () => {
                     onConnect={onConnect}
                     onCloseBs={onCloseBs}
                     isLoading={isLoading}
+                    selectAccountBsRef={selectAccountBsRef}
                 />
             )}
         </BaseBottomSheet>

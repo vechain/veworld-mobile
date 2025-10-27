@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import Animated, { useAnimatedStyle, withSpring, withTiming } from "react-native-reanimated"
 import { getTimeZone } from "react-native-localize"
+import Animated, { useAnimatedStyle, withSpring, withTiming } from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSkeleton, BaseSpacer, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { useTheme, useThemedStyles } from "~Hooks"
@@ -23,7 +23,9 @@ const Description = React.memo(({ children }: { children: string }) => {
                 <BaseText
                     color={theme.colors.x2eAppOpenDetails.description}
                     typographyFont="captionMedium"
-                    lineHeight={16}>
+                    lineHeight={16}
+                    flexDirection="row"
+                    numberOfLines={5}>
                     {children}
                 </BaseText>
             </BaseView>
@@ -44,7 +46,7 @@ const StatItem = React.memo(({ value, label, icon, isLoading = false }: StatItem
         <BaseView flexDirection="column" alignItems="center" justifyContent="center">
             <BaseIcon name={icon} size={20} color={theme.colors.x2eAppOpenDetails.favoriteBtn.borderActive} />
             <BaseSpacer height={8} />
-            <BaseText typographyFont="captionMedium" color={theme.colors.x2eAppOpenDetails.stats.caption}>
+            <BaseText typographyFont="smallCaptionMedium" color={theme.colors.x2eAppOpenDetails.stats.caption}>
                 {label}
             </BaseText>
             <BaseSpacer height={2} />
@@ -57,7 +59,7 @@ const StatItem = React.memo(({ value, label, icon, isLoading = false }: StatItem
                     height={16}
                 />
             ) : (
-                <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.x2eAppOpenDetails.stats.value}>
+                <BaseText typographyFont="bodySemiBold" color={theme.colors.x2eAppOpenDetails.stats.value}>
                     {value}
                 </BaseText>
             )}

@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo } from "react"
 import { useThemedStyles } from "~Hooks"
 
-import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, LedgerBadge, WatchedAccountBadge } from "~Components"
-import { BaseDevice, DEVICE_TYPE } from "~Model"
 import { Pressable, StyleSheet, ViewStyle } from "react-native"
-import { ColorThemeType, DerivationPath } from "~Constants"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, LedgerBadge, WatchedAccountBadge } from "~Components"
+import { ColorThemeType, DerivationPath } from "~Constants"
+import { BaseDevice, DEVICE_TYPE } from "~Model"
 import { selectAccountsByDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
@@ -60,29 +60,10 @@ export const DeviceBox: React.FC<Props> = ({
                             <BaseSpacer width={8} />
                         </>
                     )}
-                    {device?.type === DEVICE_TYPE.LEDGER && (
-                        <>
-                            <LedgerBadge />
-                            <BaseSpacer width={8} />
-                        </>
-                    )}
 
-                    {device?.derivationPath === DerivationPath.ETH && (
-                        <>
-                            <BaseIcon name="icon-ethereum" size={20} color={theme.colors.textDisabled} />
-                            <BaseSpacer width={8} />
-                        </>
-                    )}
-
-                    {device?.type === DEVICE_TYPE.LOCAL_WATCHED && (
-                        <>
-                            <WatchedAccountBadge />
-                            <BaseSpacer width={8} />
-                        </>
-                    )}
                     <BaseView flex={1}>
                         <BaseText
-                            typographyFont={isChildSelected ? "bodyBold" : "bodyMedium"}
+                            typographyFont={isChildSelected ? "bodySemiBold" : "bodyMedium"}
                             ellipsizeMode="tail"
                             numberOfLines={1}
                             mb={6}
@@ -91,6 +72,12 @@ export const DeviceBox: React.FC<Props> = ({
                         </BaseText>
                         <BaseText typographyFont="captionRegular">{`${deviceAccounts.length} accounts`}</BaseText>
                     </BaseView>
+                    {device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge />}
+                    {device?.derivationPath === DerivationPath.ETH && (
+                        <BaseIcon name="icon-ethereum" size={20} color={theme.colors.textDisabled} />
+                    )}
+
+                    {device?.type === DEVICE_TYPE.LOCAL_WATCHED && <WatchedAccountBadge />}
                 </BaseView>
                 <BaseSpacer width={12} />
 

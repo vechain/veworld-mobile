@@ -31,7 +31,7 @@ export const getAccountForIndex = (walletIndex: number, device: BaseDevice, acco
     const accountAddress = AddressUtils.getAddressFromXPub(device.xPub, walletIndex)
 
     return {
-        alias: nextAlias(accountId),
+        alias: nextAlias(accountId, device.alias),
         address: accountAddress,
         rootAddress: device.rootAddress,
         index: walletIndex,

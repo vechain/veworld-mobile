@@ -16,6 +16,7 @@ export type FeatureFlags = {
         [PaymentProvidersEnum.CoinbasePay]: {
             android: boolean
             iOS: boolean
+            url: string
         }
         [PaymentProvidersEnum.Transak]: {
             android: boolean
@@ -43,6 +44,17 @@ export type FeatureFlags = {
     }
     betterWorldFeature: {
         appsScreen: {
+            enabled: boolean
+        }
+        balanceScreen: {
+            enabled: boolean
+            collectibles: {
+                enabled: boolean
+            }
+        }
+    }
+    notificationCenter: {
+        registration: {
             enabled: boolean
         }
     }
