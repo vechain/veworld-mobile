@@ -82,9 +82,9 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
                             p={8}
                             bg={COLORS.BLACK_RGBA_30}>
                             <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE_RGBA_90} flexDirection="row">
-                                {!collectionMetadata?.name
-                                    ? AddressUtils.humanAddress(collectionAddress)
-                                    : collectionMetadata?.name}
+                                {collectionMetadata?.name
+                                    ? collectionMetadata?.name
+                                    : AddressUtils.humanAddress(collectionAddress)}
                             </BaseText>
                             {collectionMetadata?.balanceOf && (
                                 <BaseView px={8} py={4} bg={COLORS.WHITE_RGBA_15} borderRadius={99}>

@@ -66,7 +66,7 @@ const getCollectionMetadata = async (
         description,
         updated: true,
         symbol,
-        totalSupply: totalSupply !== undefined ? Number(totalSupply) : undefined,
+        totalSupply: totalSupply ? Number(totalSupply) : undefined,
     }
 
     return updatedCollection
