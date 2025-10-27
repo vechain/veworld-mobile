@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { ethers } from "ethers"
 import { default as React, useCallback, useMemo, useRef, useState } from "react"
-import { StyleSheet } from "react-native"
+import { Keyboard, StyleSheet } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
@@ -130,10 +130,10 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     }, [cardPosition, isSwapped, setInput])
 
     const onDismiss = useCallback(() => {
+        Keyboard.dismiss()
         // Check if we need to navigate after dismissal
         if (shouldNavigateOnDismiss.current) {
             shouldNavigateOnDismiss.current = false
-
             if (isB3TRActive) {
                 convertB3tr(realValue, input)
             } else {
