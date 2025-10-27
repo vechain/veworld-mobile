@@ -6,7 +6,8 @@ import { useNFTRegistry } from "~Hooks/useNft/useNFTRegistry"
 import { useNFTMetadata } from "~Hooks/useNFTMetadata"
 import { useThorClient } from "~Hooks/useThorClient"
 import { Network, NftCollection, NFTMetadata } from "~Model"
-import { getCachedNftBalanceOf, getCachedTokenURI, getNftsForContract, GithubCollectionResponse } from "~Networking"
+import { GithubCollectionResponse } from "~Networking"
+import { getCachedTokenURI, getCachedNftBalanceOf, getNftsForContract } from "~Networking/NFT"
 import { getNftCollectionMetadata } from "~Networking/NFT/getNftCollectionMetadata"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import AddressUtils from "~Utils/AddressUtils"
@@ -48,6 +49,7 @@ const getCollectionMetadata = async (
     let description = collection.description
     if (!collection.fromRegistry) {
         const { data } = await getNftsForContract(network.type, collectionAddress, address, 1, 0)
+
         const tokenURI = await getCachedTokenURI(data[0].tokenId, collectionAddress, network.genesis.id, thor)
         const tokenMetadata = await fetchMetadata(tokenURI)
 

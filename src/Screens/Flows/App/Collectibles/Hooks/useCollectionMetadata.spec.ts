@@ -1,29 +1,46 @@
 import { renderHook } from "@testing-library/react-hooks"
-import { TestWrapper } from "~Test"
 import { useCollectionMetadata } from "./useCollectionMetadata"
+import { TestWrapper } from "~Test"
+
+jest.mock("~Networking/NFT", () => ({
+    getCachedNftBalanceOf: jest.fn().mockResolvedValue(2),
+    getNftsForContract: jest.fn().mockResolvedValue({
+        data: [{ tokenId: 1 }],
+        pagination: { countLimit: 1, hasNext: false, hasCount: false, totalElements: 1, totalPages: 1 },
+    }),
+    getCachedTokenURI: jest
+        .fn()
+        .mockResolvedValue("ipfs://bafybeifc7nlzpeb6jyokeufehinqhapzhapdavjw75gfbre47jpvrn6y7q"),
+}))
+
+jest.mock("~Networking/NFT/getNftCollectionMetadata", () => ({
+    getNftCollectionMetadata: jest.fn().mockResolvedValue({ name: "Test", symbol: "TEST", totalSupply: "10" }),
+}))
+
+jest.mock("~Hooks/useNFTMetadata", () => ({
+    useNFTMetadata: () => ({
+        fetchMetadata: jest
+            .fn()
+            .mockResolvedValue({ name: "Test", description: "TEST", image: "https://example.com/image.png" }),
+    }),
+}))
+
+jest.mock("~Hooks/useNft/useNFTRegistry", () => ({
+    useNFTRegistry: () => ({
+        data: [],
+    }),
+}))
 
 describe("useCollectionMetadata", () => {
-    it.skip("should fetch collection metadata correctly", async () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
+
+    it("should fetch collection metadata correctly", async () => {
         const { result, waitFor } = renderHook(
-            () => useCollectionMetadata("0x1ec1d168574603ec35b9d229843b7c2b44bcb770"),
+            () => useCollectionMetadata("0x38a59fa7fd7039884465a0ff285b8c4b6fe394ca"),
             {
                 wrapper: TestWrapper,
-                initialProps: {
-                    preloadedState: {
-                        accounts: {
-                            accounts: [
-                                {
-                                    address: "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
-                                    alias: "Test Account",
-                                    index: 0,
-                                    rootAddress: "0x90d70a5d0e9ce28336f7d45990b9c63c0a4142g0",
-                                    visible: true,
-                                },
-                            ],
-                            selectedAccount: "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
-                        },
-                    },
-                },
             },
         )
 
