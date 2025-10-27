@@ -127,12 +127,17 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     }, [resetStates])
 
     const onConvertPress = useCallback(() => {
+        // Dismiss the bottom sheet first
         onClose()
-        if (isB3TRActive) {
-            convertB3tr(realValue, input)
-        } else {
-            convertVot3(realValue, input)
-        }
+
+        // Use a small delay to ensure dismissal starts before navigation
+        setTimeout(() => {
+            if (isB3TRActive) {
+                convertB3tr(realValue, input)
+            } else {
+                convertVot3(realValue, input)
+            }
+        }, 10)
     }, [convertB3tr, convertVot3, input, isB3TRActive, onClose, realValue])
 
     return (
