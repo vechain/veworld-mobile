@@ -1,17 +1,18 @@
 import React from "react"
-import { StyleSheet } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseView } from "./BaseView"
 
 type Props = {
     color: string
+    style?: StyleProp<ViewStyle>
 }
 
-export const BaseBottomSheetHandle = ({ color }: Props) => {
+export const BaseBottomSheetHandle = ({ color, style }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     return (
-        <BaseView style={styles.wrapper}>
+        <BaseView style={[styles.wrapper, style]}>
             <BaseView style={[styles.handle, { backgroundColor: color }]} />
         </BaseView>
     )

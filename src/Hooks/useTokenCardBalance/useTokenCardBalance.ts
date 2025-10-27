@@ -1,9 +1,9 @@
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { B3TR, VeDelegate } from "~Constants"
 import { useBalances } from "~Hooks/useBalances"
 import { useCombineFiatBalances } from "~Hooks/useCombineFiatBalances"
-import { useFormatFiat } from "~Hooks/useFormatFiat"
+import { FormatFiatFuncArgs, useFormatFiat } from "~Hooks/useFormatFiat"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
 import { formatTokenAmount } from "~Utils/StandardizedFormatting"
@@ -47,12 +47,18 @@ export const useTokenCardBalance = ({ token }: Args) => {
     )
 
     const { formatFiat, formatLocale } = useFormatFiat()
-    const renderFiatBalance = useMemo(() => {
-        const formattedFiat = formatFiat({ amount, cover: !isBalanceVisible })
-        if (!isBalanceVisible) return formattedFiat
-        if (areAlmostZero) return `< ${formattedFiat}`
-        return formattedFiat
-    }, [formatFiat, amount, isBalanceVisible, areAlmostZero])
+
+    const renderFiatBalance = useCallback(
+        (args: Omit<FormatFiatFuncArgs, "amount" | "cover"> = {}) => {
+            const formattedFiat = formatFiat({ amount, cover: !isBalanceVisible, ...args })
+            if (!isBalanceVisible) return formattedFiat
+            if (areAlmostZero) return `< ${formattedFiat}`
+            return formattedFiat
+        },
+        [amount, areAlmostZero, formatFiat, isBalanceVisible],
+    )
+
+    const memoizedFiatBalance = useMemo(() => renderFiatBalance(), [renderFiatBalance])
 
     const tokenBalance = useMemo(() => {
         return formatTokenAmount(token.balance.balance, token.symbol, token.decimals ?? 0, {
@@ -68,9 +74,10 @@ export const useTokenCardBalance = ({ token }: Args) => {
     return useMemo(
         () => ({
             showFiatBalance,
-            fiatBalance: renderFiatBalance,
+            fiatBalance: memoizedFiatBalance,
             tokenBalance,
+            renderFiatBalance,
         }),
-        [renderFiatBalance, showFiatBalance, tokenBalance],
+        [memoizedFiatBalance, renderFiatBalance, showFiatBalance, tokenBalance],
     )
 }

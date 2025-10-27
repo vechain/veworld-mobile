@@ -8,10 +8,15 @@ import { formatFiatAmount } from "~Utils/StandardizedFormatting"
 type FormatFiatConfig = Pick<Intl.NumberFormatOptions, "maximumFractionDigits" | "minimumFractionDigits"> & {
     useCompactNotation?: boolean
 }
-type FormatFiatFuncArgs = {
+export type FormatFiatFuncArgs = {
     amount?: number
     cover?: boolean
     symbolPosition?: SYMBOL_POSITIONS
+    /**
+     * Amount of decimals to show.
+     * @default 2
+     */
+    decimals?: number
 }
 
 export const useFormatFiat = (intlOptions?: FormatFiatConfig) => {
@@ -60,7 +65,7 @@ export const useFormatFiat = (intlOptions?: FormatFiatConfig) => {
     )
 
     const formatFiat = useCallback(
-        ({ amount = 0, cover, symbolPosition: _spOverride }: FormatFiatFuncArgs) => {
+        ({ amount = 0, cover, symbolPosition: _spOverride, decimals = 2 }: FormatFiatFuncArgs) => {
             const symbolPosition = _spOverride ?? mainSymbolPosition
 
             // If covered, return covered balance
@@ -73,7 +78,7 @@ export const useFormatFiat = (intlOptions?: FormatFiatConfig) => {
             return formatFiatAmount(amount, symbol, {
                 locale,
                 symbolPosition: isAfter ? "after" : "before",
-                forceDecimals: 2, // Always show 2 decimals for fiat amounts
+                forceDecimals: decimals, // Always show 2 decimals for fiat amounts
                 useCompactNotation,
                 ...restIntlOptions,
             })

@@ -216,8 +216,9 @@ export const HomeStack = () => {
                             // cardStyleInterpolator: slideFadeInTransition,
                             presentation: "transparentModal",
                             // transitionSpec: TRANSITION_SPECS,
-                            gestureDirection: "vertical",
-                            gestureEnabled: true,
+                            // gestureDirection: "vertical",
+                            // gestureEnabled: true,
+                            animationEnabled: false,
                         }}
                     />
                 ) : (
