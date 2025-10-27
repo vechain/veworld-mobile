@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-27)</small>
+
+* build: init ([af4ff96](https://github.com/vechain/veworld-mobile/commit/af4ff96))
+* fix(convertbetter): Dismiss bottom sheet before navigation (#3459) ([bce9e2f](https://github.com/vechain/veworld-mobile/commit/bce9e2f)), closes [#3459](https://github.com/vechain/veworld-mobile/issues/3459)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
