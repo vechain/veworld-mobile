@@ -37,21 +37,27 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const timer = useRef<NodeJS.Timeout | null>(null)
     const shouldNavigateOnDismiss = useRef(false)
 
-    const B3TRanimatedStyle = useAnimatedStyle(() => ({
-        transform: [{ translateY: withTiming(cardPosition.value ? 105 : 0, { duration: 300 }) }],
-        borderColor: withTiming(
-            !cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
-            { duration: 300 },
-        ),
-    }))
+    const B3TRanimatedStyle = useAnimatedStyle(
+        () => ({
+            transform: [{ translateY: withTiming(cardPosition.value ? 105 : 0, { duration: 300 }) }],
+            borderColor: withTiming(
+                !cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
+                { duration: 300 },
+            ),
+        }),
+        [theme.colors.convertBetterCard.borderColor, theme.colors.transparent],
+    )
 
-    const VOT3animatedStyle = useAnimatedStyle(() => ({
-        transform: [{ translateY: withTiming(cardPosition.value ? -105 : 0, { duration: 300 }) }],
-        borderColor: withTiming(
-            cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
-            { duration: 300 },
-        ),
-    }))
+    const VOT3animatedStyle = useAnimatedStyle(
+        () => ({
+            transform: [{ translateY: withTiming(cardPosition.value ? -105 : 0, { duration: 300 }) }],
+            borderColor: withTiming(
+                cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
+                { duration: 300 },
+            ),
+        }),
+        [theme.colors.convertBetterCard.borderColor, theme.colors.transparent],
+    )
 
     const b3trTokenTotal = BigNutils(b3tr?.balance?.balance).toString
     const vot3TokenTotal = BigNutils(vot3?.balance?.balance).toString
@@ -179,6 +185,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
 
                     <BaseView style={[styles.switchButtonContainer]}>
                         <TouchableOpacity
+                            testID="ConvertBetter_Swap_Button"
                             disabled={!isSwapEnabled}
                             style={styles.switchButtonTapArea}
                             activeOpacity={0.5}
