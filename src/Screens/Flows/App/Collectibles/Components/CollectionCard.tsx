@@ -67,6 +67,7 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
                     fallback
                     defaultSource={NFTPlaceholderDarkV2}>
                     <TouchableOpacity
+                        testID={`VBD_COLLECTION_CARD_FAVORITE_${collectionAddress}`}
                         disabled={!collectionMetadata?.id}
                         style={styles.favoriteIconContainer}
                         onPress={handleToggleFavorite}>

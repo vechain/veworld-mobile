@@ -51,8 +51,11 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
     }, [favoriteIconAnimation, toggleFavorite])
 
     return (
-        <Pressable style={styles.root} onPress={handlePress}>
-            <Pressable style={styles.favoriteContainerContainer} onPress={handleToggleFavorite}>
+        <Pressable testID={`VBD_COLLECTIBLE_CARD_${address}_${tokenId}`} style={styles.root} onPress={handlePress}>
+            <Pressable
+                testID={`VBD_COLLECTIBLE_CARD_FAVORITE_${address}_${tokenId}`}
+                style={styles.favoriteContainerContainer}
+                onPress={handleToggleFavorite}>
                 <AnimatedBaseIcon
                     name={isFavorite ? "icon-star-on" : "icon-star"}
                     color={COLORS.WHITE}
