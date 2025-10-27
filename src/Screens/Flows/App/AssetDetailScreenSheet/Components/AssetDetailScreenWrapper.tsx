@@ -15,7 +15,11 @@ import { BaseBottomSheetHandle } from "~Components/Base/BaseBottomSheetHandle"
 import { COLORS, ColorThemeType, SCREEN_HEIGHT } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
-export const AssetDetailScreenWrapper = ({ children }: PropsWithChildren) => {
+type Props = PropsWithChildren<{
+    handle?: boolean
+}>
+
+export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const nav = useNavigation()
@@ -67,8 +71,14 @@ export const AssetDetailScreenWrapper = ({ children }: PropsWithChildren) => {
                         translateY.value = height.value
                         height.value = e.nativeEvent.layout.height
                     }}>
-                    <BaseBottomSheetHandle color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300} />
-                    <BaseSpacer height={8} />
+                    {handle && (
+                        <>
+                            <BaseBottomSheetHandle
+                                color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
+                            />
+                            <BaseSpacer height={8} />
+                        </>
+                    )}
                     {children}
                 </Animated.View>
             </>
