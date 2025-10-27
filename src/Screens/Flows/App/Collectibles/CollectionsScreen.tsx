@@ -104,7 +104,17 @@ export const CollectionsScreen = () => {
         <Layout
             title={"Collections"}
             fixedBody={
-                !isCollectionsLoading ? (
+                isCollectionsLoading ? (
+                    <FlatList
+                        keyExtractor={item => item}
+                        data={[1, 2, 3, 4, 5].map(item => item.toString())}
+                        renderItem={renderItemSkeleton}
+                        ItemSeparatorComponent={renderItemSeparator}
+                        style={styles.list}
+                        contentContainerStyle={styles.listContentContainer}
+                        showsVerticalScrollIndicator={false}
+                    />
+                ) : (
                     <Animated.FlatList
                         ref={scrollRef}
                         keyExtractor={item => item}
@@ -123,16 +133,6 @@ export const CollectionsScreen = () => {
                         onEndReached={handleEndReached}
                         showsVerticalScrollIndicator={false}
                         itemLayoutAnimation={SequencedTransition.reverse()}
-                    />
-                ) : (
-                    <FlatList
-                        keyExtractor={item => item}
-                        data={[1, 2, 3, 4, 5].map(item => item.toString())}
-                        renderItem={renderItemSkeleton}
-                        ItemSeparatorComponent={renderItemSeparator}
-                        style={styles.list}
-                        contentContainerStyle={styles.listContentContainer}
-                        showsVerticalScrollIndicator={false}
                     />
                 )
             }
