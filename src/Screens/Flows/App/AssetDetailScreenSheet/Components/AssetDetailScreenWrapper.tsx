@@ -40,7 +40,7 @@ export const AssetDetailScreenWrapper = ({ children }: PropsWithChildren) => {
         result => {
             if (result !== 0)
                 rendering.value = withTiming(1, {
-                    duration: 500,
+                    duration: 300,
                 })
         },
     )
@@ -53,7 +53,7 @@ export const AssetDetailScreenWrapper = ({ children }: PropsWithChildren) => {
                         rendering.value = withTiming(
                             0,
                             {
-                                duration: 500,
+                                duration: 300,
                             },
                             finished => {
                                 if (finished) runOnJS(nav.goBack)()
