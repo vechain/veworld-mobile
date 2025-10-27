@@ -89,6 +89,7 @@ export function formatFiatWorklet(
     symbolPosition: "before" | "after",
     minFractionDigits: number,
     maxFractionDigits: number,
+    options: { cover?: boolean } = {},
 ): string {
     "worklet"
 
@@ -101,7 +102,8 @@ export function formatFiatWorklet(
             useGrouping: true,
         })
         const formatted = formatter.format(0)
-        return symbolPosition === "after" ? `${formatted} ${currencySymbol}` : `${currencySymbol}${formatted}`
+        const covered = options.cover ? "•".repeat(formatted.length) + "••" : formatted
+        return symbolPosition === "after" ? `${covered} ${currencySymbol}` : `${currencySymbol}${covered}`
     }
 
     const formatter = new Intl.NumberFormat(locale, {
@@ -112,7 +114,8 @@ export function formatFiatWorklet(
     })
 
     const formatted = formatter.format(amount)
-    return symbolPosition === "after" ? `${formatted} ${currencySymbol}` : `${currencySymbol}${formatted}`
+    const covered = options.cover ? "•".repeat(formatted.length) + "••" : formatted
+    return symbolPosition === "after" ? `${covered} ${currencySymbol}` : `${currencySymbol}${covered}`
 }
 
 export const wrapFunctionComponent = <TProps,>(Component: FC<TProps>): ComponentClass<TProps> =>
