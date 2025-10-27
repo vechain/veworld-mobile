@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { PropsWithChildren } from "react"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet } from "react-native"
 import Animated, {
     Extrapolation,
     interpolate,
@@ -12,7 +12,7 @@ import Animated, {
 } from "react-native-reanimated"
 import { BaseSafeArea, BaseSpacer } from "~Components"
 import { BaseBottomSheetHandle } from "~Components/Base/BaseBottomSheetHandle"
-import { COLORS, ColorThemeType } from "~Constants"
+import { COLORS, ColorThemeType, SCREEN_HEIGHT } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
 export const AssetDetailScreenWrapper = ({ children }: PropsWithChildren) => {
@@ -20,28 +20,34 @@ export const AssetDetailScreenWrapper = ({ children }: PropsWithChildren) => {
 
     const nav = useNavigation()
 
-    const height = useSharedValue(0)
-    const rendering = useSharedValue(0)
+    const height = useSharedValue(SCREEN_HEIGHT)
+    const translateY = useSharedValue(SCREEN_HEIGHT)
 
     const animatedS = useAnimatedStyle(() => {
         return {
-            height: interpolate(rendering.value, [0, 1], [0, height.value], Extrapolation.CLAMP),
+            transform: [{ translateY: translateY.value }],
         }
-    }, [])
+    }, [translateY.value])
 
     const backdropStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: `rgba(0, 0, 0, ${interpolate(rendering.value, [0, 1], [0, 0.85], Extrapolation.CLAMP)})`,
+            backgroundColor: `rgba(0, 0, 0, ${interpolate(
+                translateY.value,
+                [0, height.value],
+                [0.85, 0],
+                Extrapolation.CLAMP,
+            )})`,
         }
-    }, [])
+    }, [translateY.value, height.value])
 
     useAnimatedReaction(
         () => height.value,
         result => {
-            if (result !== 0)
-                rendering.value = withTiming(1, {
-                    duration: 300,
+            if (result !== SCREEN_HEIGHT) {
+                translateY.value = withTiming(0, {
+                    duration: 500,
                 })
+            }
         },
     )
     return (
@@ -50,28 +56,20 @@ export const AssetDetailScreenWrapper = ({ children }: PropsWithChildren) => {
                 <Animated.View
                     style={[StyleSheet.absoluteFillObject, backdropStyles]}
                     onTouchStart={() => {
-                        rendering.value = withTiming(
-                            0,
-                            {
-                                duration: 300,
-                            },
-                            finished => {
-                                if (finished) runOnJS(nav.goBack)()
-                            },
-                        )
+                        translateY.value = withTiming(height.value, { duration: 500 }, finished => {
+                            if (finished) runOnJS(nav.goBack)()
+                        })
                     }}
                 />
-                <Animated.View style={[styles.root, animatedS]}>
-                    {/* Create a nested view in absolute to animate it correctly */}
-                    <View
-                        onLayout={e => {
-                            height.value = e.nativeEvent.layout.height
-                        }}
-                        style={styles.wrapper}>
-                        <BaseBottomSheetHandle color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300} />
-                        <BaseSpacer height={8} />
-                        {children}
-                    </View>
+                <Animated.View
+                    style={[styles.root, animatedS]}
+                    onLayout={e => {
+                        translateY.value = height.value
+                        height.value = e.nativeEvent.layout.height
+                    }}>
+                    <BaseBottomSheetHandle color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300} />
+                    <BaseSpacer height={8} />
+                    {children}
                 </Animated.View>
             </>
         </BaseSafeArea>
@@ -87,14 +85,10 @@ const baseStyles = (theme: ColorThemeType) =>
             zIndex: 1,
             position: "relative",
             overflow: "hidden",
+            paddingBottom: 16,
+            transformOrigin: "bottom",
         },
         safeArea: {
             justifyContent: "flex-end",
-        },
-        wrapper: {
-            position: "absolute",
-            left: 0,
-            bottom: 0,
-            paddingBottom: 16,
         },
     })
