@@ -1322,6 +1322,18 @@ type RootTranslation = {
 	 */
 	BTN_ADD_TO_FAVORITES: string
 	/**
+	 * Report a problem
+	 */
+	BTN_COLLECTION_ACTIONS_REPORT: string
+	/**
+	 * Mark as favorite
+	 */
+	BTN_COLLECTION_ACTIONS_FAVORITE: string
+	/**
+	 * Report and block collection
+	 */
+	BTN_COLLECTION_ACTIONS_BLOCK: string
+	/**
 	 * A​l​p​h​a​b​e​t​i​c​ ​(​A​-​Z​)
 	 */
 	BTN_ALPHABETIC_ASC: string
@@ -1765,25 +1777,17 @@ type RootTranslation = {
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: string
 	/**
-	 * T​r​a​n​s​f​e​r​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​t​o​ ​s​t​a​r​t​ ​b​u​i​l​d​i​n​g​ ​y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n
+	 * A​v​a​t​a​r
 	 */
-	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: string
-	/**
-	 * o​r​ ​b​u​y​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​f​r​o​m​ ​o​n​e​ ​o​f​ ​o​u​r​ ​e​c​o​s​y​s​t​e​m​ ​a​p​p​s
-	 */
-	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
-	/**
-	 * F​a​v​o​r​i​t​e
-	 */
-	COLLECTIBLES_ACTION_FAVORITE_INACTIVE: string
+	COLLECTIBLES_ACTION_AVATAR_ACTIVE: string
 	/**
 	 * S​e​t​ ​a​v​a​t​a​r
 	 */
 	COLLECTIBLES_ACTION_AVATAR_INACTIVE: string
 	/**
-	 * A​v​a​t​a​r
+	 * F​a​v​o​r​i​t​e
 	 */
-	COLLECTIBLES_ACTION_AVATAR_ACTIVE: string
+	COLLECTIBLES_ACTION_FAVORITE_INACTIVE: string
 	/**
 	 * S​e​n​d
 	 */
@@ -1793,6 +1797,14 @@ type RootTranslation = {
 	 */
 	COLLECTIBLES_DESCRIPTION: string
 	/**
+	 * T​r​a​n​s​f​e​r​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​t​o​ ​s​t​a​r​t​ ​b​u​i​l​d​i​n​g​ ​y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: string
+	/**
+	 * o​r​ ​b​u​y​ ​a​ ​c​o​l​l​e​c​t​i​b​l​e​ ​f​r​o​m​ ​o​n​e​ ​o​f​ ​o​u​r​ ​e​c​o​s​y​s​t​e​m​ ​a​p​p​s
+	 */
+	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
+	/**
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
 	COLLECTIONS: string
@@ -1800,6 +1812,22 @@ type RootTranslation = {
 	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
 	 */
 	COLLECTION_NAME: string
+	/**
+	 * D​e​t​a​i​l​s
+	 */
+	COLLECTIBLES_VIEW_DETAILS: string
+	/**
+	 * G​a​l​l​e​r​y
+	 */
+	COLLECTIBLES_VIEW_GALLERY: string
+	/**
+	 * Report collection
+	 */
+	COLLECTIBLES_REPORT_PROBLEM: string
+	/**
+	 * By reporting this collection, it will be automatically removed from your gallery and it will be reported for review.
+	 */
+	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: string
 	/**
 	 * d​a​y
 	 */
@@ -3852,6 +3880,10 @@ type RootTranslation = {
 	 * C​o​l​l​e​c​t​i​b​l​e​s
 	 */
 	SB_COLLECTIBLES: string
+	/**
+	 * C​o​l​l​e​c​t​i​b​l​e
+	 */
+	SB_COLLECTIBLE: string
 	/**
 	 * C​o​n​f​i​r​m​ ​d​e​l​e​t​e
 	 */
@@ -6646,6 +6678,18 @@ Thanks for your patience!
 	 */
 	BTN_ADD_TO_FAVORITES: () => LocalizedString
 	/**
+	 * Report a problem
+	 */
+	BTN_COLLECTION_ACTIONS_REPORT: () => LocalizedString
+	/**
+	 * Mark as favorite
+	 */
+	BTN_COLLECTION_ACTIONS_FAVORITE: () => LocalizedString
+	/**
+	 * Report and block collection
+	 */
+	BTN_COLLECTION_ACTIONS_BLOCK: () => LocalizedString
+	/**
 	 * Alphabetic (A-Z)
 	 */
 	BTN_ALPHABETIC_ASC: () => LocalizedString
@@ -7086,25 +7130,17 @@ Thanks for your patience!
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: () => LocalizedString
 	/**
-	 * Transfer a collectible to start building your collection
+	 * Avatar
 	 */
-	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: () => LocalizedString
-	/**
-	 * or buy a collectible from one of our ecosystem apps
-	 */
-	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: () => LocalizedString
-	/**
-	 * Favorite
-	 */
-	COLLECTIBLES_ACTION_FAVORITE_INACTIVE: () => LocalizedString
+	COLLECTIBLES_ACTION_AVATAR_ACTIVE: () => LocalizedString
 	/**
 	 * Set avatar
 	 */
 	COLLECTIBLES_ACTION_AVATAR_INACTIVE: () => LocalizedString
 	/**
-	 * Avatar
+	 * Favorite
 	 */
-	COLLECTIBLES_ACTION_AVATAR_ACTIVE: () => LocalizedString
+	COLLECTIBLES_ACTION_FAVORITE_INACTIVE: () => LocalizedString
 	/**
 	 * Send
 	 */
@@ -7114,6 +7150,14 @@ Thanks for your patience!
 	 */
 	COLLECTIBLES_DESCRIPTION: () => LocalizedString
 	/**
+	 * Transfer a collectible to start building your collection
+	 */
+	COLLECTIBLES_EMPTY_CARD_DESCRIPTION: () => LocalizedString
+	/**
+	 * or buy a collectible from one of our ecosystem apps
+	 */
+	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: () => LocalizedString
+	/**
 	 * Collections
 	 */
 	COLLECTIONS: () => LocalizedString
@@ -7121,6 +7165,22 @@ Thanks for your patience!
 	 * Collection name
 	 */
 	COLLECTION_NAME: () => LocalizedString
+	/**
+	 * Details
+	 */
+	COLLECTIBLES_VIEW_DETAILS: () => LocalizedString
+	/**
+	 * Gallery
+	 */
+	COLLECTIBLES_VIEW_GALLERY: () => LocalizedString
+	/**
+	 * Report collection
+	 */
+	COLLECTIBLES_REPORT_PROBLEM: () => LocalizedString
+	/**
+	 * By reporting this collection, it will be automatically removed from your gallery and it will be reported for review.
+	 */
+	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: () => LocalizedString
 	/**
 	 * day
 	 */
@@ -9142,6 +9202,10 @@ Thanks for your patience!
 	 * Collectibles
 	 */
 	SB_COLLECTIBLES: () => LocalizedString
+	/**
+	 * Collectible
+	 */
+	SB_COLLECTIBLE: () => LocalizedString
 	/**
 	 * Confirm delete
 	 */
