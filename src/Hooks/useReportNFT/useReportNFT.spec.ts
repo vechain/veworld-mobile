@@ -64,12 +64,9 @@ describe("useReportNFT", () => {
             nftAddress,
         })
 
-        expect(mockNavigate).toHaveBeenCalledWith(Routes.NFTS, {
-            screen: Routes.REPORT_NFT_TRANSACTION_SCREEN,
-            params: {
-                nftAddress,
-                transactionClauses: mockClause,
-            },
+        expect(mockNavigate).toHaveBeenCalledWith(Routes.REPORT_NFT_TRANSACTION_SCREEN, {
+            nftAddress,
+            transactionClauses: mockClause,
         })
     })
 

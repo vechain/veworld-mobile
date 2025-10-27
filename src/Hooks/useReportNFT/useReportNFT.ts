@@ -18,13 +18,9 @@ export const useReportNFT = () => {
                 nftAddress: nftAddress,
             })
 
-            // @ts-ignore - Cross-stack navigation typing
-            navigation.navigate(Routes.NFTS, {
-                screen: Routes.REPORT_NFT_TRANSACTION_SCREEN,
-                params: {
-                    nftAddress,
-                    transactionClauses: clause,
-                },
+            navigation.navigate(Routes.REPORT_NFT_TRANSACTION_SCREEN, {
+                nftAddress,
+                transactionClauses: clause,
             })
         },
         [buildReportClause, navigation, track],
