@@ -18,12 +18,8 @@ import { RootStackParamListHome } from "~Navigation/Stacks/HomeStack"
 import { deleteSession, selectSelectedNetwork, selectSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
-import { RootStackParamListBrowser } from "~Navigation/Stacks/DiscoverStack"
 
-type Props = NativeStackScreenProps<
-    RootStackParamListBrowser | RootStackParamListApps | RootStackParamListHome,
-    Routes.BROWSER
->
+type Props = NativeStackScreenProps<RootStackParamListApps | RootStackParamListHome, Routes.BROWSER>
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const {
