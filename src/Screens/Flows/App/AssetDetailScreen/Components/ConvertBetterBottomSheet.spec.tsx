@@ -1,10 +1,10 @@
-import { act, screen } from "@testing-library/react-native"
+import { act, render, screen } from "@testing-library/react-native"
 import { ethers } from "ethers"
 import React from "react"
 import { B3TR, VOT3 } from "~Constants"
 import { useConvertBetterTokens } from "~Hooks"
 import { useTokenBalance } from "~Hooks/useTokenBalance"
-import { TestHelpers, TestWrapper } from "~Test"
+import { TestWrapper } from "~Test"
 import { ConvertBetterBottomSheet } from "./ConvertBetterBottomSheet"
 
 // Mock dependencies
@@ -33,54 +33,6 @@ jest.mock("~Hooks/useAmountInput", () => ({
         input: "",
         setInput: jest.fn(),
         removeInvalidCharacters: jest.fn(value => value.replace(/[^0-9.]/g, "")),
-    })),
-}))
-
-jest.mock("~Hooks/useTheme", () => ({
-    useTheme: jest.fn(() => ({
-        colors: {
-            convertBetterCard: {
-                borderColor: "#000",
-                swapIcon: "#000",
-                inputText: "#000",
-                convertValueText: "#000",
-            },
-            transparent: "transparent",
-            subtitle: "#666",
-            subSubtitle: "#888",
-            actionBottomSheet: {
-                background: "#fff",
-            },
-            actionBanner: {
-                buttonText: "#000",
-                buttonBorder: "#000",
-                buttonBackground: "#fff",
-            },
-        },
-    })),
-    useThemedStyles: jest.fn(() => ({
-        styles: {},
-        theme: {
-            colors: {
-                convertBetterCard: {
-                    borderColor: "#000",
-                    swapIcon: "#000",
-                    inputText: "#000",
-                    convertValueText: "#000",
-                },
-                transparent: "transparent",
-                subtitle: "#666",
-                subSubtitle: "#888",
-                actionBottomSheet: {
-                    background: "#fff",
-                },
-                actionBanner: {
-                    buttonText: "#000",
-                    buttonBorder: "#000",
-                    buttonBackground: "#fff",
-                },
-            },
-        },
     })),
 }))
 
@@ -138,20 +90,10 @@ describe("ConvertBetterBottomSheet - Ref-based dismissal pattern", () => {
         })
     })
 
-    it("should render without crashing", () => {
-        const { UNSAFE_root } = TestHelpers.render.renderComponentWithProps(
-            <ConvertBetterBottomSheet ref={mockRef} onClose={mockedOnClose} />,
-            { wrapper: TestWrapper },
-        )
-
-        expect(UNSAFE_root).toBeDefined()
-    })
-
     it("should call onDismiss when bottom sheet dismisses", async () => {
-        TestHelpers.render.renderComponentWithProps(
-            <ConvertBetterBottomSheet ref={mockRef} onClose={mockedOnClose} />,
-            { wrapper: TestWrapper },
-        )
+        render(<ConvertBetterBottomSheet ref={mockRef} onClose={mockedOnClose} />, {
+            wrapper: TestWrapper,
+        })
 
         const bottomSheet = screen.UNSAFE_getByType(require("~Components").BaseBottomSheet)
 
@@ -165,10 +107,9 @@ describe("ConvertBetterBottomSheet - Ref-based dismissal pattern", () => {
     })
 
     it("should have onConvertPress callback defined", () => {
-        TestHelpers.render.renderComponentWithProps(
-            <ConvertBetterBottomSheet ref={mockRef} onClose={mockedOnClose} />,
-            { wrapper: TestWrapper },
-        )
+        render(<ConvertBetterBottomSheet ref={mockRef} onClose={mockedOnClose} />, {
+            wrapper: TestWrapper,
+        })
 
         const convertButton = screen.getByTestId("Convert_Action_BTN")
         expect(convertButton).toBeDefined()
