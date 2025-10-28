@@ -8,9 +8,11 @@ import { TokenImage } from "~Components/Reusable/TokenImage"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
+import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
+import { AssetBalanceActivity } from "./Components/AssetBalanceActivity"
 import { ASSET_CHART_PERIODS, AssetChart } from "./Components/AssetChart"
 import { AssertChartBalance } from "./Components/AssetChartBalance"
 import { AssetDetailScreenWrapper } from "./Components/AssetDetailScreenWrapper"
@@ -77,6 +79,8 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
                         <BaseSpacer height={24} />
                     </>
                 )}
+
+                <AssetBalanceActivity token={token as FungibleTokenWithBalance} />
             </LineChart.Provider>
         </AssetDetailScreenWrapper>
     )

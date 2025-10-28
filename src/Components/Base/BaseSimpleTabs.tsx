@@ -12,7 +12,14 @@ type Props<TKeys extends string[] | readonly string[]> = {
     selectedKey: TKeys[number]
     rightIcon?: React.ReactNode
     setSelectedKey: (key: TKeys[number]) => void
+    /**
+     * Style for the container wrapping the wrapper of the tabs + the icon on the right
+     */
     rootStyle?: StyleProp<ViewStyle>
+    /**
+     * Style for the container wrapping the tabs.
+     */
+    innerContainerStyle?: StyleProp<ViewStyle>
 }
 
 export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
@@ -22,6 +29,7 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
     rightIcon,
     setSelectedKey,
     rootStyle,
+    innerContainerStyle,
 }: Props<TKeys>) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const [tabOffsets, setTabOffsets] = useState<{ offsetX: number; width: number }[]>([])
@@ -54,7 +62,7 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
     if (keys.length !== labels.length) throw new Error("Keys and Labels should have the same length")
     return (
         <BaseView style={[styles.root, rootStyle]} flexDirection="row" justifyContent="space-between" overflow="scroll">
-            <BaseView flexDirection="row" flex={1}>
+            <BaseView flexDirection="row" flex={1} style={innerContainerStyle}>
                 {keys.map((key, index) => {
                     const isSelected = selectedKey === key
                     const textColor = getTextColor(isSelected)

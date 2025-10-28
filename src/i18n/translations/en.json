@@ -1234,6 +1234,8 @@
   "TRANSACTION_FEE": "Transaction fee",
   "TRANSACTION_ID": "Transaction ID",
   "TYPE": "Type",
+  "TOKEN_DETAIL_BALANCE_TAB": "Balance",
+  "TOKEN_DETAIL_ACTIVITY_TAB": "Activity",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Unknown Account",
   "UNKNOWN_COLLECTION": "Unknown collection name",
