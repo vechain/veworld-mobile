@@ -21,6 +21,10 @@ type Props = PropsWithChildren<{
     handle?: boolean
 }>
 
+const PADDING_BOTTOM = 32
+// This value should be exactly half of the PADDING_BOTTOM, so that when you pan on the handle, you don't see the backdrop behind
+const DEFAULT_TRANSLATION = 16
+
 export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -57,7 +61,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
         () => height.value,
         result => {
             if (result !== SCREEN_HEIGHT) {
-                translateY.value = withTiming(16, {
+                translateY.value = withTiming(DEFAULT_TRANSLATION, {
                     duration: 500,
                 })
             }
@@ -67,15 +71,16 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
     const gesture = useMemo(() => {
         return Gesture.Pan()
             .onUpdate(v => {
-                translateY.value = Math.max(v.translationY, -16) + 16
+                translateY.value = Math.max(v.translationY, -DEFAULT_TRANSLATION) + DEFAULT_TRANSLATION
             })
             .onEnd(() => {
                 "worklet"
+                // If more than 20%, then close the bottomsheet (navigate to previous page)
                 if (translateY.value >= height.value / 5) {
                     onClose()
                     return
                 }
-                translateY.value = withSpring(16, { mass: 4, damping: 120, stiffness: 900 })
+                translateY.value = withSpring(DEFAULT_TRANSLATION, { mass: 4, damping: 120, stiffness: 900 })
             })
     }, [height.value, onClose, translateY])
 
@@ -115,7 +120,7 @@ const baseStyles = (theme: ColorThemeType) =>
             zIndex: 1,
             position: "relative",
             overflow: "hidden",
-            paddingBottom: 16,
+            paddingBottom: PADDING_BOTTOM,
             transformOrigin: "bottom",
         },
         safeArea: {
