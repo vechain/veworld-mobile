@@ -10,7 +10,7 @@ import { getNftsForContract } from "~Networking"
 import { selectAllFavoriteNfts, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { CollectibleCard } from "../../BalanceScreen/Components/Collectibles/CollectibleCard"
-import { CollectiblesEmptyCard } from "../../BalanceScreen/Components/Collectibles/CollectiblesEmptyCard"
+import { CollectibleCardSkeleton } from "./CollectibleCardSkeleton"
 
 const ITEMS_PER_PAGE = 10
 
@@ -50,6 +50,7 @@ export const CollectionNftsList = ({ collectionAddress }: Props) => {
     const {
         data: paginatedNfts,
         fetchNextPage,
+        isLoading: isLoadingNfts,
         hasNextPage,
         isFetchingNextPage,
     } = useInfiniteQuery({
@@ -111,6 +112,10 @@ export const CollectionNftsList = ({ collectionAddress }: Props) => {
         [onOpen],
     )
 
+    const renderItemSkeleton = useCallback(() => {
+        return <CollectibleCardSkeleton />
+    }, [])
+
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
             return <CollectibleCard address={item.address} tokenId={item.tokenId} onPress={onPress} />
@@ -126,23 +131,39 @@ export const CollectionNftsList = ({ collectionAddress }: Props) => {
 
     return (
         <>
-            <FlatList
-                renderItem={renderItem}
-                data={nfts}
-                numColumns={2}
-                ItemSeparatorComponent={ItemSeparatorComponent}
-                ListEmptyComponent={CollectiblesEmptyCard}
-                ListFooterComponent={<ListFooterComponent isLoading={isFetchingNextPage} />}
-                horizontal={false}
-                keyExtractor={v => `${v.address}_${v.tokenId}`}
-                columnWrapperStyle={styles.listColumn}
-                onEndReached={onEndReached}
-                onEndReachedThreshold={0.5}
-                refreshControl={
-                    <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor={theme.colors.border} />
-                }
-                showsVerticalScrollIndicator={false}
-            />
+            {isLoadingNfts ? (
+                <FlatList
+                    data={[1, 2, 3, 4, 5, 6, 7, 8].map(item => item.toString())}
+                    keyExtractor={item => item}
+                    numColumns={2}
+                    renderItem={renderItemSkeleton}
+                    ItemSeparatorComponent={ItemSeparatorComponent}
+                    horizontal={false}
+                    showsVerticalScrollIndicator={false}
+                    columnWrapperStyle={styles.listColumn}
+                />
+            ) : (
+                <FlatList
+                    renderItem={renderItem}
+                    data={nfts}
+                    numColumns={2}
+                    ItemSeparatorComponent={ItemSeparatorComponent}
+                    ListFooterComponent={<ListFooterComponent isLoading={isFetchingNextPage} />}
+                    horizontal={false}
+                    keyExtractor={v => `${v.address}_${v.tokenId}`}
+                    columnWrapperStyle={styles.listColumn}
+                    onEndReached={onEndReached}
+                    onEndReachedThreshold={0.5}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isRefreshing}
+                            onRefresh={onRefresh}
+                            tintColor={theme.colors.border}
+                        />
+                    }
+                    showsVerticalScrollIndicator={false}
+                />
+            )}
             <CollectibleBottomSheet bsRef={ref} />
         </>
     )
@@ -152,5 +173,15 @@ const baseStyles = () =>
     StyleSheet.create({
         listColumn: {
             columnGap: 8,
+        },
+        skeletonRoot: {
+            maxWidth: "50%",
+            height: "100%",
+            aspectRatio: 0.8791,
+            overflow: "hidden",
+            flex: 1,
+            borderRadius: 12,
+            position: "relative",
+            justifyContent: "flex-end",
         },
     })
