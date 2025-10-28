@@ -5,20 +5,6 @@ import { TestWrapper } from "~Test"
 
 const mockedOnPress = jest.fn()
 
-// jest.mock("../Hooks/useCollectionMetadata", () => {
-//     return {
-//         useCollectionMetadata: jest.fn().mockResolvedValue({
-//             id: "0x123",
-//             address: "0x123",
-//             description: "Test Description",
-//             image: "https://example.com/image.png",
-//             name: "Test Name",
-//             symbol: "TEST",
-//             totalSupply: 100,
-//         }),
-//     }
-// })
-
 describe("CollectionCard", () => {
     beforeEach(() => {
         jest.clearAllMocks()

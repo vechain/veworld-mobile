@@ -102,7 +102,7 @@ export const CollectiblesList = () => {
     return (
         <>
             <FlatList
-                testID="VBD_COLLECTIBLES_LIST"
+                testID="COLLECTIBLES_LIST"
                 renderItem={renderItem}
                 data={nfts}
                 numColumns={2}

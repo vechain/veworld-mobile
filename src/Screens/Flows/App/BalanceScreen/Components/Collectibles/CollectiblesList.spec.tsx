@@ -7,7 +7,7 @@ describe("CollectiblesList", () => {
     it("should render correctly", async () => {
         render(<CollectiblesList />, { wrapper: TestWrapper })
 
-        const collectiblesList = await screen.findByTestId("VBD_COLLECTIBLES_LIST")
+        const collectiblesList = await screen.findByTestId("COLLECTIBLES_LIST")
         expect(collectiblesList).toBeOnTheScreen()
     })
 })
