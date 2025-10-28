@@ -10,7 +10,7 @@ import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 
-const URL_SUPPORT = "https://support.veworld.com"
+const URL_SUPPORT = "https://support.veworld.com/support/tickets/new"
 
 const Content = ({
     collectionAddress,
