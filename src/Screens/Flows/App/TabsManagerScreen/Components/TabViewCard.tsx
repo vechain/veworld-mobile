@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import * as FileSystem from "expo-file-system"
 import React, { useCallback } from "react"
 import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
@@ -39,7 +40,10 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
         <AnimatedTouchableOpacity
             style={[styles.container, tab.id === selectedTabId && styles.selected]}
             onPress={onPress}>
-            <ImageBackground source={{ uri: tab.previewPath }} resizeMode="cover" style={[styles.image]}>
+            <ImageBackground
+                source={{ uri: `${FileSystem.documentDirectory}${tab.previewPath}` }}
+                resizeMode="cover"
+                style={[styles.image]}>
                 <View style={styles.header}>
                     <View style={styles.headerText}>
                         {tab.favicon ? (
