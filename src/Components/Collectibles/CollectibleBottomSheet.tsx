@@ -87,7 +87,7 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
                         mimeType={media?.mediaType}
                     />
                     {!AccountUtils.isObservedAccount(account) && (
-                        <CollectiblesSendActionButton address={address} tokenId={tokenId} />
+                        <CollectiblesSendActionButton address={address} tokenId={tokenId} onClose={onClose} />
                     )}
                 </BaseView>
                 {details.description && (
