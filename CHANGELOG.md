@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-28)</small>
+
+* build: init ([9774a57](https://github.com/vechain/veworld-mobile/commit/9774a57))
+* fix: collapse bs on send clicked (#3466) ([4768ff6](https://github.com/vechain/veworld-mobile/commit/4768ff6)), closes [#3466](https://github.com/vechain/veworld-mobile/issues/3466)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
