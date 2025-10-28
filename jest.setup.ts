@@ -314,4 +314,11 @@ jest.mock("@tanstack/react-query", () => ({
                 .requireActual("@tanstack/react-query")
                 .useInfiniteQuery({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
         ),
+    queryOptions: jest
+        .fn()
+        .mockImplementation((...args: any[]) =>
+            jest
+                .requireActual("@tanstack/react-query")
+                .queryOptions({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+        ),
 }))

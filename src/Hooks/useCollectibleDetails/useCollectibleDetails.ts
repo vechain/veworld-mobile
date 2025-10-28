@@ -17,7 +17,6 @@ export const useCollectibleDetails = ({ address, tokenId }: Args) => {
     const { data: collectionMetadata } = useQuery(getNftNameAndSymbolOptions(address, network.genesis.id, thor))
 
     const name = useMemo(() => {
-        if (!data) return undefined
         return data?.name ?? collectionMetadata?.name
     }, [collectionMetadata?.name, data])
 

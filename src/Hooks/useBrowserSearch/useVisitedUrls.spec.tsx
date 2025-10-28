@@ -42,13 +42,13 @@ describe("useVisitedUrls", () => {
         )
 
         await act(async () => {
-            await result.current.hooks.addVisitedUrl("https://www.google.com")
+            await result.current.hooks.addVisitedUrl("https://www.example.com")
         })
 
         expect(result.current.state.length).toBe(1)
         expect(result.current.state[0]).toMatchObject({
-            name: "www.google.com",
-            href: "https://www.google.com",
+            name: "www.example.com",
+            href: "https://www.example.com",
             isCustom: true,
             amountOfNavigations: 1,
         })
@@ -64,7 +64,7 @@ describe("useVisitedUrls", () => {
         })
 
         await act(async () => {
-            await visitedUrlsResult.current.addVisitedUrl("https//google/com")
+            await visitedUrlsResult.current.addVisitedUrl("https//example/com")
         })
 
         expect(selectorResult.current.length).toBe(0)
@@ -77,9 +77,9 @@ describe("useVisitedUrls", () => {
                     {
                         amountOfNavigations: 1,
                         createAt: new Date().getTime(),
-                        href: "https://www.google.com",
+                        href: "https://www.example.com",
                         isCustom: true,
-                        name: "Google",
+                        name: "Example",
                     },
                 ],
             },
@@ -99,7 +99,7 @@ describe("useVisitedUrls", () => {
         })
 
         await act(async () => {
-            await visitedUrlsResult.current.removeVisitedUrl("https://www.google.com")
+            await visitedUrlsResult.current.removeVisitedUrl("https://www.example.com")
         })
 
         expect(selectorResult.current.length).toBe(0)

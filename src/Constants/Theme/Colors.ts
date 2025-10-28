@@ -338,12 +338,22 @@ export type Colors = {
     activitySectionSeparator: {
         text: string
     }
+    collectibleDetailedCard: {
+        title: string
+        description: string
+        address: string
+        buttonGroup: {
+            background: string
+            text: string
+        }
+    }
 }
 
 export enum COLORS {
     TRANSPARENT = "transparent",
     WHITE = "#FFFFFF",
     BLACK = "#000000",
+    BLACK_RGBA_30 = "rgba(0, 0, 0, 0.3)",
     WHITE_DISABLED = "rgba(255, 255, 255, 0.7)",
     GRAY = "#A6A6A6",
     LIGHT_GRAY = "#f2f2f7",
@@ -802,6 +812,15 @@ const light: Colors = {
     activitySectionSeparator: {
         text: COLORS.GREY_600,
     },
+    collectibleDetailedCard: {
+        title: COLORS.GREY_700,
+        description: COLORS.GREY_500,
+        address: COLORS.PURPLE,
+        buttonGroup: {
+            background: COLORS.GREY_100,
+            text: COLORS.GREY_700,
+        },
+    },
 }
 
 const dark: Colors = {
@@ -1143,6 +1162,15 @@ const dark: Colors = {
     },
     activitySectionSeparator: {
         text: COLORS.GREY_300,
+    },
+    collectibleDetailedCard: {
+        title: COLORS.GREY_300,
+        description: COLORS.GREY_100,
+        address: COLORS.LIME_GREEN,
+        buttonGroup: {
+            background: COLORS.DARK_PURPLE,
+            text: COLORS.WHITE,
+        },
     },
 }
 

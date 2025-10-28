@@ -8,6 +8,8 @@ jest.mock("~Networking", () => ({
     fetchIndexedHistoryEvent: jest.fn(),
 }))
 
+jest.mock("axios")
+
 describe("useUserHasVetTransfer", () => {
     beforeEach(() => {
         jest.clearAllMocks()

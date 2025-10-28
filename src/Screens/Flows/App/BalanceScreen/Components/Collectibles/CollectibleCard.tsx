@@ -1,21 +1,19 @@
 import { useQuery } from "@tanstack/react-query"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { Pressable, StyleSheet } from "react-native"
-import { ImageStyle } from "react-native-fast-image"
+import FastImage, { ImageStyle } from "react-native-fast-image"
 import LinearGradient from "react-native-linear-gradient"
+import Animated from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseView, BlurView, NFTImageComponent } from "~Components"
 import { COLORS } from "~Constants"
 import { useNFTMedia, useThemedStyles } from "~Hooks"
+import { useNftBookmarking } from "~Hooks/useNftBookmarking"
 import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
+import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import { NFTMediaType } from "~Model"
-import {
-    isNftFavorite,
-    selectSelectedAccount,
-    selectSelectedNetwork,
-    toggleFavorite,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import HapticsService from "~Services/HapticsService"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
+import { NFTPlaceholderDarkV2 } from "~Assets"
 
 type Props = {
     address: string
@@ -23,15 +21,14 @@ type Props = {
     onPress: (args: { address: string; tokenId: string }) => void
 }
 
+const AnimatedBaseIcon = Animated.createAnimatedComponent(wrapFunctionComponent(BaseIcon))
+
 export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
-    const isFavorite = useAppSelector(state => isNftFavorite(state, address, tokenId))
-    const account = useAppSelector(selectSelectedAccount)
-    const network = useAppSelector(selectSelectedNetwork)
+    const { isFavorite, toggleFavorite } = useNftBookmarking(address, tokenId)
+    const { animatedStyles, favoriteIconAnimation } = useFavoriteAnimation()
     const details = useCollectibleDetails({ address, tokenId })
-
     const { fetchMedia } = useNFTMedia()
-    const dispatch = useAppDispatch()
 
     const { data: media } = useQuery({
         queryKey: ["COLLECTIBLES", "MEDIA", details.image],
@@ -45,18 +42,44 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
         onPress({ address, tokenId })
     }, [address, onPress, tokenId])
 
-    const onFavoriteToggle = useCallback(() => {
-        dispatch(toggleFavorite({ address, tokenId, owner: account.address, genesisId: network.genesis.id }))
-    }, [account.address, address, dispatch, network.genesis.id, tokenId])
+    const handleToggleFavorite = useCallback(() => {
+        HapticsService.triggerImpact({ level: "Light" })
+        favoriteIconAnimation(finished => {
+            if (finished) {
+                toggleFavorite()
+            }
+        })
+    }, [favoriteIconAnimation, toggleFavorite])
+
+    const RenderMedia = useMemo(() => {
+        if (media?.mediaType === NFTMediaType.IMAGE) {
+            return <NFTImageComponent style={styles.image as ImageStyle} uri={media.image} />
+        }
+
+        return (
+            <FastImage
+                fallback
+                defaultSource={NFTPlaceholderDarkV2}
+                style={styles.image as ImageStyle}
+                resizeMode={FastImage.resizeMode.cover}
+            />
+        )
+    }, [media?.mediaType, media?.image, styles.image])
 
     return (
-        <Pressable style={styles.root} onPress={handlePress}>
-            <Pressable style={styles.favoriteContainer} onPress={onFavoriteToggle}>
-                <BaseIcon name={isFavorite ? "icon-star-on" : "icon-star"} color={COLORS.WHITE} size={16} />
+        <Pressable testID={`VBD_COLLECTIBLE_CARD_${address}_${tokenId}`} style={styles.root} onPress={handlePress}>
+            <Pressable
+                testID={`VBD_COLLECTIBLE_CARD_FAVORITE_${address}_${tokenId}`}
+                style={styles.favoriteContainerContainer}
+                onPress={handleToggleFavorite}>
+                <AnimatedBaseIcon
+                    name={isFavorite ? "icon-star-on" : "icon-star"}
+                    color={COLORS.WHITE}
+                    size={16}
+                    style={animatedStyles}
+                />
             </Pressable>
-            {media?.mediaType === NFTMediaType.IMAGE && (
-                <NFTImageComponent style={styles.image as ImageStyle} uri={media.image} />
-            )}
+            {RenderMedia}
 
             <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
                 <LinearGradient
@@ -83,12 +106,13 @@ const baseStyles = () =>
             overflow: "hidden",
             aspectRatio: 0.8791,
             maxWidth: "50%",
+            backgroundColor: COLORS.PURPLE,
         },
         image: {
             height: "100%",
             width: "100%",
         },
-        favoriteContainer: {
+        favoriteContainerContainer: {
             position: "absolute",
             flexDirection: "row",
             alignItems: "center",
