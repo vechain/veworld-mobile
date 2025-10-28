@@ -1,3 +1,4 @@
+import * as FileSystem from "expo-file-system"
 import React, { memo, useMemo } from "react"
 import { Image, StyleSheet, ViewProps } from "react-native"
 import { SvgXml } from "react-native-svg"
@@ -37,7 +38,11 @@ export const AccountIcon: React.FC<AccountIconProps> = memo(({ account, size, bo
     return (
         <BaseView style={styles.container}>
             {account.profileImage ? (
-                <AccountPfp uri={account.profileImage.uri} size={size} borderRadius={borderRadius} />
+                <AccountPfp
+                    uri={`${FileSystem.documentDirectory}${account.profileImage.uri}`}
+                    size={size}
+                    borderRadius={borderRadius}
+                />
             ) : (
                 <PicassoAddressIcon address={account.address} size={size} borderRadius={borderRadius} />
             )}
