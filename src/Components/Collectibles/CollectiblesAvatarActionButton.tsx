@@ -12,15 +12,16 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { AddressUtils, MediaUtils } from "~Utils"
 import { CollectiblesActionButton } from "./CollectiblesActionButton"
 
 type Props = {
     image: string | undefined
+    mimeType: string | undefined
     address: string
     tokenId: string
 }
-export const CollectiblesAvatarActionButton = ({ image, address, tokenId }: Props) => {
+export const CollectiblesAvatarActionButton = ({ image, address, tokenId, mimeType }: Props) => {
     const { LL } = useI18nContext()
 
     const account = useAppSelector(selectSelectedAccount)
@@ -49,9 +50,10 @@ export const CollectiblesAvatarActionButton = ({ image, address, tokenId }: Prop
         if (!dirInfo.exists) {
             await FileSystem.makeDirectoryAsync(pfpDir, { intermediates: true })
         }
-        const fileName = `${account.address}_${Date.now()}`
+        const fileName = `${account.address}_${Date.now()}.${MediaUtils.resolveFileExtensionFromMimeType(
+            mimeType ?? "image/png",
+        )}`
         const persistentPath = `${pfpDir}${fileName}`
-
         if (isAvatar) {
             if (account.profileImage?.uri) {
                 //Clear old file
@@ -69,6 +71,7 @@ export const CollectiblesAvatarActionButton = ({ image, address, tokenId }: Prop
 
         //Set account avatar with image
         const res = await FileSystem.downloadAsync(image, persistentPath)
+
         dispatch(
             setAccountPfp({
                 accountAddress: account.address,
@@ -91,6 +94,7 @@ export const CollectiblesAvatarActionButton = ({ image, address, tokenId }: Prop
         dispatch,
         image,
         isAvatar,
+        mimeType,
         network.genesis.id,
         tokenId,
         track,

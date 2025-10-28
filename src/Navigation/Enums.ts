@@ -94,4 +94,8 @@ export enum Routes {
     APPS = "Apps",
     APPS_SEARCH = "Apps_Search",
     APPS_TABS_MANAGER = "Apps_Tabs_Manager",
+
+    // Collectibles
+    COLLECTIBLES_COLLECTIONS = "Collectibles_Collections",
+    COLLECTIBLES_COLLECTION_DETAILS = "Collectibles_Collection_Details",
 }

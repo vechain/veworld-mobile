@@ -1323,6 +1323,18 @@ type RootTranslation = {
 	 */
 	BTN_ADD_TO_FAVORITES: string
 	/**
+	 * Report a problem
+	 */
+	BTN_COLLECTION_ACTIONS_REPORT: string
+	/**
+	 * Mark as favorite
+	 */
+	BTN_COLLECTION_ACTIONS_FAVORITE: string
+	/**
+	 * Report and block collection
+	 */
+	BTN_COLLECTION_ACTIONS_BLOCK: string
+	/**
 	 * A​l​p​h​a​b​e​t​i​c​ ​(​A​-​Z​)
 	 */
 	BTN_ALPHABETIC_ASC: string
@@ -1801,6 +1813,22 @@ type RootTranslation = {
 	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
 	 */
 	COLLECTION_NAME: string
+	/**
+	 * D​e​t​a​i​l​s
+	 */
+	COLLECTIBLES_VIEW_DETAILS: string
+	/**
+	 * G​a​l​l​e​r​y
+	 */
+	COLLECTIBLES_VIEW_GALLERY: string
+	/**
+	 * Report collection
+	 */
+	COLLECTIBLES_REPORT_PROBLEM: string
+	/**
+	 * By reporting this collection, it will be automatically removed from your gallery and it will be reported for review.
+	 */
+	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: string
 	/**
 	 * d​a​y
 	 */
@@ -3853,6 +3881,10 @@ type RootTranslation = {
 	 * C​o​l​l​e​c​t​i​b​l​e​s
 	 */
 	SB_COLLECTIBLES: string
+	/**
+	 * C​o​l​l​e​c​t​i​b​l​e
+	 */
+	SB_COLLECTIBLE: string
 	/**
 	 * C​o​n​f​i​r​m​ ​d​e​l​e​t​e
 	 */
@@ -6647,6 +6679,18 @@ Thanks for your patience!
 	 */
 	BTN_ADD_TO_FAVORITES: () => LocalizedString
 	/**
+	 * Report a problem
+	 */
+	BTN_COLLECTION_ACTIONS_REPORT: () => LocalizedString
+	/**
+	 * Mark as favorite
+	 */
+	BTN_COLLECTION_ACTIONS_FAVORITE: () => LocalizedString
+	/**
+	 * Report and block collection
+	 */
+	BTN_COLLECTION_ACTIONS_BLOCK: () => LocalizedString
+	/**
 	 * Alphabetic (A-Z)
 	 */
 	BTN_ALPHABETIC_ASC: () => LocalizedString
@@ -7122,6 +7166,22 @@ Thanks for your patience!
 	 * Collection name
 	 */
 	COLLECTION_NAME: () => LocalizedString
+	/**
+	 * Details
+	 */
+	COLLECTIBLES_VIEW_DETAILS: () => LocalizedString
+	/**
+	 * Gallery
+	 */
+	COLLECTIBLES_VIEW_GALLERY: () => LocalizedString
+	/**
+	 * Report collection
+	 */
+	COLLECTIBLES_REPORT_PROBLEM: () => LocalizedString
+	/**
+	 * By reporting this collection, it will be automatically removed from your gallery and it will be reported for review.
+	 */
+	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: () => LocalizedString
 	/**
 	 * day
 	 */
@@ -9143,6 +9203,10 @@ Thanks for your patience!
 	 * Collectibles
 	 */
 	SB_COLLECTIBLES: () => LocalizedString
+	/**
+	 * Collectible
+	 */
+	SB_COLLECTIBLE: () => LocalizedString
 	/**
 	 * Confirm delete
 	 */
