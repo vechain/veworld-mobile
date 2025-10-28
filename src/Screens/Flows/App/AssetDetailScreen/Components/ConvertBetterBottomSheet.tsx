@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { ethers } from "ethers"
 import { default as React, useCallback, useMemo, useRef, useState } from "react"
-import { StyleSheet } from "react-native"
+import { Keyboard, StyleSheet } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
@@ -35,22 +35,29 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const vot3 = useTokenWithCompleteInfo(VOT3)
 
     const timer = useRef<NodeJS.Timeout | null>(null)
+    const shouldNavigateOnDismiss = useRef(false)
 
-    const B3TRanimatedStyle = useAnimatedStyle(() => ({
-        transform: [{ translateY: withTiming(cardPosition.value ? 105 : 0, { duration: 300 }) }],
-        borderColor: withTiming(
-            !cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
-            { duration: 300 },
-        ),
-    }))
+    const B3TRanimatedStyle = useAnimatedStyle(
+        () => ({
+            transform: [{ translateY: withTiming(cardPosition.value ? 105 : 0, { duration: 300 }) }],
+            borderColor: withTiming(
+                !cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
+                { duration: 300 },
+            ),
+        }),
+        [theme.colors.convertBetterCard.borderColor, theme.colors.transparent],
+    )
 
-    const VOT3animatedStyle = useAnimatedStyle(() => ({
-        transform: [{ translateY: withTiming(cardPosition.value ? -105 : 0, { duration: 300 }) }],
-        borderColor: withTiming(
-            cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
-            { duration: 300 },
-        ),
-    }))
+    const VOT3animatedStyle = useAnimatedStyle(
+        () => ({
+            transform: [{ translateY: withTiming(cardPosition.value ? -105 : 0, { duration: 300 }) }],
+            borderColor: withTiming(
+                cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
+                { duration: 300 },
+            ),
+        }),
+        [theme.colors.convertBetterCard.borderColor, theme.colors.transparent],
+    )
 
     const b3trTokenTotal = BigNutils(b3tr?.balance?.balance).toString
     const vot3TokenTotal = BigNutils(vot3?.balance?.balance).toString
@@ -123,22 +130,28 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     }, [cardPosition, isSwapped, setInput])
 
     const onDismiss = useCallback(() => {
-        resetStates()
-    }, [resetStates])
-
-    const onConvertPress = useCallback(() => {
-        // Dismiss the bottom sheet first
-        onClose()
-
-        // Use a small delay to ensure dismissal starts before navigation
-        setTimeout(() => {
+        Keyboard.dismiss()
+        // Check if we need to navigate after dismissal
+        if (shouldNavigateOnDismiss.current) {
+            shouldNavigateOnDismiss.current = false
             if (isB3TRActive) {
                 convertB3tr(realValue, input)
             } else {
                 convertVot3(realValue, input)
             }
-        }, 10)
-    }, [convertB3tr, convertVot3, input, isB3TRActive, onClose, realValue])
+            return
+        }
+
+        // Normal dismissal - reset states
+        resetStates()
+    }, [resetStates, isB3TRActive, convertB3tr, convertVot3, realValue, input])
+
+    const onConvertPress = useCallback(() => {
+        // Set flag to trigger navigation on dismissal
+        shouldNavigateOnDismiss.current = true
+        // Dismiss the bottom sheet
+        onClose()
+    }, [onClose])
 
     return (
         <BaseBottomSheet
@@ -172,6 +185,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
 
                     <BaseView style={[styles.switchButtonContainer]}>
                         <TouchableOpacity
+                            testID="ConvertBetter_Swap_Button"
                             disabled={!isSwapEnabled}
                             style={styles.switchButtonTapArea}
                             activeOpacity={0.5}
