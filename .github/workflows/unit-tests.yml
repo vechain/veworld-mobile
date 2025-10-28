@@ -33,8 +33,8 @@ jobs:
                 yarn install
                 yarn abi:generate
 
-            - name: Lint & Format Check
-              run: yarn lint && yarn format:check
+            - name: Lint, Format Check & TS Check
+              run: yarn lint && yarn format:check & yarn ts-check
 
             - name: Tests with Coverage
               env:

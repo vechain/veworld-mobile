@@ -15,6 +15,7 @@ describe("useLegacyFees", () => {
                     reverted: false,
                     revertReason: "",
                     vmError: "",
+                    outputs: [],
                 },
             }),
         )

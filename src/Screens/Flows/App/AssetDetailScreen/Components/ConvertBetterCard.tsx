@@ -69,7 +69,7 @@ export const ConvertBetterCard: React.FC<Props> = ({
     }, [onMaxAmountPress, tokenTotalBalance, tokenTotalToHuman])
 
     return (
-        <Animated.View style={animatedStyle}>
+        <Animated.View style={animatedStyle} testID={`ConvertBetter_${isSender ? "Sender" : "Receiver"}_Card`}>
             <BaseCard style={[styles.container]}>
                 <BaseView flexDirection="row" flex={1} justifyContent="space-between">
                     <BaseView flex={1}>
@@ -99,6 +99,7 @@ export const ConvertBetterCard: React.FC<Props> = ({
                                     {tokenTotalToHuman}
                                 </BaseText>
                                 <BaseButton
+                                    testID="ConvertBetter_Max_Button"
                                     typographyFont="smallCaptionSemiBold"
                                     disabled={BigNutils(tokenTotalBalance).isZero}
                                     variant="outline"

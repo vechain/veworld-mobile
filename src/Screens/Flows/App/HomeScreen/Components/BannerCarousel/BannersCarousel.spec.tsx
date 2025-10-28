@@ -56,6 +56,7 @@ const mockedFeatureFlags: FeatureFlags = {
         "coinbase-pay": {
             android: true,
             iOS: false,
+            url: "",
         },
         transak: {
             android: true,
@@ -77,6 +78,23 @@ const mockedFeatureFlags: FeatureFlags = {
                 ledger: false,
             },
         },
+    },
+    notificationCenter: {
+        registration: {
+            enabled: false,
+        },
+    },
+    betterWorldFeature: {
+        appsScreen: {
+            enabled: false,
+        },
+        balanceScreen: {
+            enabled: false,
+            collectibles: { enabled: false },
+        },
+    },
+    smartWalletFeature: {
+        enabled: false,
     },
 }
 
