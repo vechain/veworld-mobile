@@ -18,13 +18,16 @@ describe("CollectiblesSendActionButton", () => {
         ;(useNavigation as jest.Mock).mockReturnValue({
             navigate,
         })
-        render(<CollectiblesSendActionButton address="0x0" tokenId="1" />, {
+        const onClose = jest.fn()
+        render(<CollectiblesSendActionButton address="0x0" tokenId="1" onClose={onClose} />, {
             wrapper: TestWrapper,
         })
 
         await act(() => {
             fireEvent.press(screen.getByTestId("COLLECTIBLES_ACTION_SEND"))
         })
+
+        expect(onClose).toHaveBeenCalled()
 
         expect(navigate).toHaveBeenCalledWith(Routes.INSERT_ADDRESS_SEND, {
             contractAddress: "0x0",
