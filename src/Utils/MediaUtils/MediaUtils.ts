@@ -101,6 +101,15 @@ const resolveMediaTypeFromUri = async (imageUrl: string): Promise<NFTMediaType> 
 
 const isDefaultImage = (image: string): boolean => image === NFTPlaceholderDark || image === NFTPlaceHolderLight
 
+const resolveFileExtensionFromMimeType = (mimeType: string): string => {
+    if (mimeType === "image/jpeg") return "jpg"
+    if (mimeType === "image/png") return "png"
+    if (mimeType === "image/gif") return "gif"
+    if (mimeType === "image/webp") return "webp"
+    if (mimeType === "image/svg+xml") return "svg"
+    return "png"
+}
+
 export default {
     isValidMimeType,
     resolveMimeTypeFromUri,
@@ -108,4 +117,5 @@ export default {
     resolveMediaTypeFromUri,
     resolveMediaTypeFromMimeType,
     isDefaultImage,
+    resolveFileExtensionFromMimeType,
 }

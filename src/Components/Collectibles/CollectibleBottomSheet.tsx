@@ -80,7 +80,12 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
             <BaseView flexDirection="column" p={24} gap={32} bg={theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.WHITE}>
                 <BaseView flexDirection="row" gap={8}>
                     <CollectiblesFavoriteActionButton address={address} tokenId={tokenId} />
-                    <CollectiblesAvatarActionButton address={address} tokenId={tokenId} image={media?.image} />
+                    <CollectiblesAvatarActionButton
+                        address={address}
+                        tokenId={tokenId}
+                        image={media?.image}
+                        mimeType={media?.mediaType}
+                    />
                     {!AccountUtils.isObservedAccount(account) && (
                         <CollectiblesSendActionButton address={address} tokenId={tokenId} />
                     )}
