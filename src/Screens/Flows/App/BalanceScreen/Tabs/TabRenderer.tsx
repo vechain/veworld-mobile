@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
 import Animated, { ZoomIn, ZoomOut, LinearTransition } from "react-native-reanimated"
 import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
-import { COLORS, ColorThemeType } from "~Constants"
-import { useTabBarBottomMargin, useThemedStyles, useHasAnyVeBetterActions } from "~Hooks"
+import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
+import { useTabBarBottomMargin, useThemedStyles, useHasAnyVeBetterActions, useAnalyticTracking } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux/Hooks"
@@ -42,6 +42,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const { tabBarBottomMargin } = useTabBarBottomMargin()
     const showStakingTab = useShowStakingTab()
     const nav = useNavigation()
+    const track = useAnalyticTracking()
     const { betterWorldFeature } = useFeatureFlags()
 
     const filteredTabs = useMemo(() => {
@@ -90,6 +91,16 @@ export const TabRenderer = ({ onLayout }: Props) => {
         return null
     }, [theme.isDark, selectedTab, styles.manageTokens, nav])
 
+    const onTabPress = useCallback(
+        (tab: (typeof TABS)[number]) => {
+            setSelectedTab(tab)
+            if (tab === "COLLECTIBLES") {
+                track(AnalyticsEvent.COLLECTIBLES_TAB_OPENED)
+            }
+        },
+        [track],
+    )
+
     return (
         <Animated.View style={[styles.root, { paddingBottom: tabBarBottomMargin }]} onLayout={onLayout}>
             <Animated.View layout={LinearTransition.duration(400)} style={styles.animatedContent}>
@@ -117,7 +128,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                     keys={filteredTabs}
                     labels={labels}
                     selectedKey={selectedTab}
-                    setSelectedKey={setSelectedTab}
+                    setSelectedKey={onTabPress}
                     rootStyle={styles.tabs}
                     rightIcon={rightIcon}
                 />
