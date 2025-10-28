@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { Pressable, StyleSheet } from "react-native"
-import { ImageStyle } from "react-native-fast-image"
+import FastImage, { ImageStyle } from "react-native-fast-image"
 import LinearGradient from "react-native-linear-gradient"
 import Animated from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseView, BlurView, NFTImageComponent } from "~Components"
@@ -13,6 +13,7 @@ import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import { NFTMediaType } from "~Model"
 import HapticsService from "~Services/HapticsService"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
+import { NFTPlaceholderDarkV2 } from "~Assets"
 
 type Props = {
     address: string
@@ -50,6 +51,21 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
         })
     }, [favoriteIconAnimation, toggleFavorite])
 
+    const RenderMedia = useMemo(() => {
+        if (media?.mediaType === NFTMediaType.IMAGE) {
+            return <NFTImageComponent style={styles.image as ImageStyle} uri={media.image} />
+        }
+
+        return (
+            <FastImage
+                fallback
+                defaultSource={NFTPlaceholderDarkV2}
+                style={styles.image as ImageStyle}
+                resizeMode={FastImage.resizeMode.cover}
+            />
+        )
+    }, [media?.mediaType, media?.image, styles.image])
+
     return (
         <Pressable testID={`VBD_COLLECTIBLE_CARD_${address}_${tokenId}`} style={styles.root} onPress={handlePress}>
             <Pressable
@@ -63,9 +79,7 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
                     style={animatedStyles}
                 />
             </Pressable>
-            {media?.mediaType === NFTMediaType.IMAGE && (
-                <NFTImageComponent style={styles.image as ImageStyle} uri={media.image} />
-            )}
+            {RenderMedia}
 
             <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
                 <LinearGradient
