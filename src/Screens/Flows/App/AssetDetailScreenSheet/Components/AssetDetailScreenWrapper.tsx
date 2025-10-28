@@ -16,6 +16,7 @@ import { BaseSafeArea, BaseSpacer } from "~Components"
 import { BaseBottomSheetHandle } from "~Components/Base/BaseBottomSheetHandle"
 import { COLORS, ColorThemeType, SCREEN_HEIGHT } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { PlatformUtils } from "~Utils"
 
 type Props = PropsWithChildren<{
     handle?: boolean
@@ -91,7 +92,9 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                 <Animated.View
                     style={[styles.root, animatedS]}
                     onLayout={e => {
-                        translateY.value = height.value
+                        if (PlatformUtils.isAndroid()) {
+                            translateY.value = e.nativeEvent.layout.height
+                        }
                         height.value = e.nativeEvent.layout.height
                     }}>
                     {handle && (
