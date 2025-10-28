@@ -36,7 +36,12 @@ describe("CollectiblesAvatarActionButton", () => {
         getInfoAsync.mockResolvedValue({ exists: true })
         downloadAsync.mockResolvedValue({ uri: "file://test_uri" })
         TestHelpers.render.renderComponentWithProps(
-            <CollectiblesAvatarActionButton address="0x0" tokenId="1" image="https://google.com" />,
+            <CollectiblesAvatarActionButton
+                address="0x0"
+                tokenId="1"
+                image="https://google.com"
+                mimeType="image/png"
+            />,
             {
                 wrapper: TestWrapper,
             },
@@ -61,7 +66,12 @@ describe("CollectiblesAvatarActionButton", () => {
     it("should be able to clear the current avatar", async () => {
         getInfoAsync.mockResolvedValue({ exists: true })
         TestHelpers.render.renderComponentWithProps(
-            <CollectiblesAvatarActionButton address="0x0" tokenId="1" image="https://google.com" />,
+            <CollectiblesAvatarActionButton
+                address="0x0"
+                tokenId="1"
+                image="https://google.com"
+                mimeType="image/png"
+            />,
             {
                 wrapper: TestWrapper,
                 initialProps: {
@@ -101,7 +111,12 @@ describe("CollectiblesAvatarActionButton", () => {
         getInfoAsync.mockResolvedValue({ exists: false })
         downloadAsync.mockResolvedValue({ uri: "file://test_uri" })
         TestHelpers.render.renderComponentWithProps(
-            <CollectiblesAvatarActionButton address="0x0" tokenId="1" image="https://google.com" />,
+            <CollectiblesAvatarActionButton
+                address="0x0"
+                tokenId="1"
+                image="https://google.com"
+                mimeType="image/png"
+            />,
             {
                 wrapper: TestWrapper,
             },
