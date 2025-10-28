@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-28)</small>
+
+* build: init ([3c2bac8](https://github.com/vechain/veworld-mobile/commit/3c2bac8))
+* 379 - Collectibles collections screen (#3457) ([48ff0c1](https://github.com/vechain/veworld-mobile/commit/48ff0c1)), closes [#3457](https://github.com/vechain/veworld-mobile/issues/3457) [#3444](https://github.com/vechain/veworld-mobile/issues/3444) [#3455](https://github.com/vechain/veworld-mobile/issues/3455)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
