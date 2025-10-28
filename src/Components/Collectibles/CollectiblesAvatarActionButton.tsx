@@ -55,12 +55,12 @@ export const CollectiblesAvatarActionButton = ({ image, address, tokenId, mimeTy
         )}`
         const persistentPath = `${pfpDir}${fileName}`
         if (isAvatar) {
-            if (account.profileImage?.uri) {
+            const oldUri = account.profileImage?.uri
+                ? `${FileSystem.documentDirectory}${account.profileImage.uri}`
+                : undefined
+            if (oldUri) {
                 //Clear old file
-                const oldFileInfo = await FileSystem.getInfoAsync(account.profileImage.uri)
-                if (oldFileInfo.exists) {
-                    await FileSystem.deleteAsync(account.profileImage.uri, { idempotent: true })
-                }
+                await FileSystem.deleteAsync(oldUri, { idempotent: true })
             }
             dispatch(clearAccountPfp({ accountAddress: account.address }))
             track(AnalyticsEvent.NFT_COLLECTIBLE_AVATAR_DELETED, {
@@ -70,12 +70,12 @@ export const CollectiblesAvatarActionButton = ({ image, address, tokenId, mimeTy
         }
 
         //Set account avatar with image
-        const res = await FileSystem.downloadAsync(image, persistentPath)
+        await FileSystem.downloadAsync(image, persistentPath)
 
         dispatch(
             setAccountPfp({
                 accountAddress: account.address,
-                pfp: { address, tokenId, genesisId: network.genesis.id, uri: res.uri },
+                pfp: { address, tokenId, genesisId: network.genesis.id, uri: `pfp/${fileName}` },
             }),
         )
 
