@@ -1223,6 +1223,8 @@
   "TOKEN_CONVERSION": "代币转换",
   "TOKEN_CUSTOM": "自定义代币",
   "TOKEN_CUSTOM_SUBTITLE": "将自定义代币添加到您的钱包",
+  "TOKEN_DETAIL_ACTIVITY_TAB": "活动",
+  "TOKEN_DETAIL_BALANCE_TAB": "余额",
   "TOKEN_ID": "代币ID",
   "TOKEN_RECEIVE": "接收代币",
   "TOKEN_RECEIVE_SUBTITLE": "使用您的钱包地址接收",

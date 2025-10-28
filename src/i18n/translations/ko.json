@@ -1223,6 +1223,8 @@
   "TOKEN_CONVERSION": "토큰 변환",
   "TOKEN_CUSTOM": "커스텀 토큰",
   "TOKEN_CUSTOM_SUBTITLE": "지갑에 커스텀 토큰 추가",
+  "TOKEN_DETAIL_ACTIVITY_TAB": "활동",
+  "TOKEN_DETAIL_BALANCE_TAB": "잔액",
   "TOKEN_ID": "토큰 ID",
   "TOKEN_RECEIVE": "토큰 받기",
   "TOKEN_RECEIVE_SUBTITLE": "지갑 주소를 사용하여 수신",

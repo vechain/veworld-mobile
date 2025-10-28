@@ -1223,6 +1223,8 @@
   "TOKEN_CONVERSION": "Chuyển đổi mã thông báo",
   "TOKEN_CUSTOM": "Token tùy chỉnh",
   "TOKEN_CUSTOM_SUBTITLE": "Thêm một token tùy chỉnh vào ví của bạn",
+  "TOKEN_DETAIL_ACTIVITY_TAB": "Hoạt động",
+  "TOKEN_DETAIL_BALANCE_TAB": "Số dư",
   "TOKEN_ID": "ID mã thông báo",
   "TOKEN_RECEIVE": "Nhận token",
   "TOKEN_RECEIVE_SUBTITLE": "Sử dụng địa chỉ ví của bạn để nhận",
