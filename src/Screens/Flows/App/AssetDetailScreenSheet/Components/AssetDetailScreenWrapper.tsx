@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { PropsWithChildren } from "react"
+import React, { PropsWithChildren, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
+import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, {
     Extrapolation,
     interpolate,
@@ -8,6 +9,7 @@ import Animated, {
     useAnimatedReaction,
     useAnimatedStyle,
     useSharedValue,
+    withSpring,
     withTiming,
 } from "react-native-reanimated"
 import { BaseSafeArea, BaseSpacer } from "~Components"
@@ -44,27 +46,43 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
         }
     }, [translateY.value, height.value])
 
+    const onClose = useCallback(() => {
+        "worklet"
+        translateY.value = withTiming(height.value, { duration: 500 }, finished => {
+            if (finished) runOnJS(nav.goBack)()
+        })
+    }, [height.value, nav.goBack, translateY])
+
     useAnimatedReaction(
         () => height.value,
         result => {
             if (result !== SCREEN_HEIGHT) {
-                translateY.value = withTiming(0, {
+                translateY.value = withTiming(16, {
                     duration: 500,
                 })
             }
         },
     )
+
+    const gesture = useMemo(() => {
+        return Gesture.Pan()
+            .onUpdate(v => {
+                translateY.value = Math.max(v.translationY, -16) + 16
+            })
+            .onEnd(() => {
+                "worklet"
+                if (translateY.value >= height.value / 5) {
+                    onClose()
+                    return
+                }
+                translateY.value = withSpring(16, { mass: 4, damping: 120, stiffness: 900 })
+            })
+    }, [height.value, onClose, translateY])
+
     return (
         <BaseSafeArea grow={1} style={styles.safeArea} bg="transparent">
             <>
-                <Animated.View
-                    style={[StyleSheet.absoluteFillObject, backdropStyles]}
-                    onTouchStart={() => {
-                        translateY.value = withTiming(height.value, { duration: 500 }, finished => {
-                            if (finished) runOnJS(nav.goBack)()
-                        })
-                    }}
-                />
+                <Animated.View style={[StyleSheet.absoluteFillObject, backdropStyles]} onTouchStart={onClose} />
                 <Animated.View
                     style={[styles.root, animatedS]}
                     onLayout={e => {
@@ -73,9 +91,11 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                     }}>
                     {handle && (
                         <>
-                            <BaseBottomSheetHandle
-                                color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
-                            />
+                            <GestureDetector gesture={gesture}>
+                                <BaseBottomSheetHandle
+                                    color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
+                                />
+                            </GestureDetector>
                             <BaseSpacer height={8} />
                         </>
                     )}
