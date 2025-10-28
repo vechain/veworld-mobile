@@ -48,6 +48,7 @@ import {
     WalletManagementScreen,
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { AssetDetailScreenSheet } from "~Screens/Flows/App/AssetDetailScreenSheet"
 import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
@@ -223,7 +224,25 @@ export const HomeStack = () => {
                 />
                 <Screen name={Routes.MANAGE_TOKEN} component={ManageTokenScreen} options={{ headerShown: false }} />
 
-                <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
+                {betterWorldFeature?.balanceScreen?.tokens?.enabled ? (
+                    <Screen
+                        name={Routes.TOKEN_DETAILS}
+                        component={AssetDetailScreenSheet}
+                        options={{
+                            headerShown: false,
+                            presentation: "transparentModal",
+                            gestureDirection: "vertical",
+                            gestureEnabled: true,
+                        }}
+                    />
+                ) : (
+                    <Screen
+                        name={Routes.TOKEN_DETAILS}
+                        component={AssetDetailScreen}
+                        options={{ headerShown: false }}
+                    />
+                )}
+
                 <Screen
                     name={Routes.BRIDGE_TOKEN_DETAILS}
                     component={BridgeAssetDetailScreen}

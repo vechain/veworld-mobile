@@ -2,12 +2,13 @@ import { useNavigation } from "@react-navigation/native"
 import { default as React, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
-import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseTouchableBox, BaseView, TokenSymbol } from "~Components"
 import { useDevice } from "~Components/Providers/DeviceProvider"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, isSmallScreen, typography, VET, VOT3, VTHO } from "~Constants"
+import { B3TR, COLORS, isSmallScreen, typography, VET, VTHO } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
+import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
@@ -38,20 +39,7 @@ export const TokenCard = ({ token }: Props) => {
         [isLowEndDevice, isTokenSupported],
     )
 
-    const name = useMemo(() => {
-        switch (token.symbol) {
-            case "VET":
-                return "VeChain"
-            case "VTHO":
-                return "VeThor"
-            case "B3TR":
-                return "VeBetter"
-            case "VOT3":
-                return "VeBetter"
-            default:
-                return token.name
-        }
-    }, [token.name, token.symbol])
+    const name = useTokenDisplayName(token)
 
     const { data: chartData } = useSmartMarketChart({
         id: getCoinGeckoIdBySymbol[token.symbol],
@@ -90,49 +78,6 @@ export const TokenCard = ({ token }: Props) => {
         )
     }, [isTokenSupported, chartData, showFiatBalance, shouldShowCharts, isGoingUp])
 
-    const symbol = useMemo(() => {
-        switch (token.symbol) {
-            case "B3TR":
-                return (
-                    <BaseView flexDirection="row" gap={4} overflow="hidden">
-                        <BaseText
-                            typographyFont="captionSemiBold"
-                            numberOfLines={1}
-                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                            testID="TOKEN_CARD_SYMBOL_1">
-                            {B3TR.symbol}
-                        </BaseText>
-                        <BaseIcon
-                            name="icon-refresh-cw"
-                            size={12}
-                            color={theme.isDark ? COLORS.GREY_500 : COLORS.GREY_400}
-                        />
-                        <BaseText
-                            typographyFont="captionSemiBold"
-                            numberOfLines={1}
-                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                            testID="TOKEN_CARD_SYMBOL_2">
-                            {VOT3.symbol}
-                        </BaseText>
-
-                        {chartIcon}
-                    </BaseView>
-                )
-            default:
-                return (
-                    <BaseView flexDirection="row" gap={4}>
-                        <BaseText
-                            typographyFont="captionSemiBold"
-                            color={theme.colors.activityCard.subtitleLight}
-                            testID="TOKEN_CARD_SYMBOL">
-                            {token.symbol}
-                        </BaseText>
-                        {chartIcon}
-                    </BaseView>
-                )
-        }
-    }, [chartIcon, token.symbol, theme.colors.activityCard.subtitleLight, theme.isDark])
-
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
     // Only allow navigation for tokens with detailed information available
@@ -165,7 +110,7 @@ export const TokenCard = ({ token }: Props) => {
     return (
         <BaseTouchableBox
             action={handlePress}
-            py={symbol ? typography.lineHeight.body : typography.lineHeight.captionSemiBold}
+            py={token.symbol ? typography.lineHeight.body : typography.lineHeight.captionSemiBold}
             flexDirection="row"
             bg={theme.colors.card}
             containerStyle={styles.container}
@@ -179,7 +124,7 @@ export const TokenCard = ({ token }: Props) => {
                     rounded={!isCrossChainToken}
                 />
 
-                {symbol ? (
+                {token.symbol ? (
                     <BaseView flexDirection="column" flexGrow={0} flexShrink={1} style={styles.tokenInfo}>
                         <BaseText
                             typographyFont="bodySemiBold"
@@ -190,7 +135,9 @@ export const TokenCard = ({ token }: Props) => {
                             testID="TOKEN_CARD_NAME">
                             {name}
                         </BaseText>
-                        {symbol}
+                        <TokenSymbol token={token} typographyFont="captionSemiBold">
+                            {chartIcon}
+                        </TokenSymbol>
                     </BaseView>
                 ) : (
                     <BaseText

@@ -1,7 +1,6 @@
 import {
     BottomSheetBackdrop,
     BottomSheetBackdropProps,
-    BottomSheetHandleProps,
     BottomSheetModal,
     BottomSheetModalProps,
     BottomSheetView,
@@ -20,6 +19,7 @@ import { useThemedStyles } from "~Hooks"
 import { useBottomSheetBackHandler } from "~Hooks/useBottomSheetBackHandler"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { typedForwardRef } from "~Utils/ReactUtils"
+import { BaseBottomSheetHandle } from "./BaseBottomSheetHandle"
 import { BaseView } from "./BaseView"
 
 export type BaseBottomSheetProps<TData = unknown> = Omit<
@@ -245,14 +245,7 @@ const _BaseBottomSheet = <TData,>(
         [onPressOutside],
     )
 
-    const renderHandle = useCallback(
-        (props_: BottomSheetHandleProps) => (
-            <BaseView style={styles.handleWrapper}>
-                <BaseView {...props_} style={[styles.handleStyle, { backgroundColor: handleColor }]} />
-            </BaseView>
-        ),
-        [handleColor, styles.handleStyle, styles.handleWrapper],
-    )
+    const renderHandle = useCallback(() => <BaseBottomSheetHandle color={handleColor} />, [handleColor])
 
     const onSheetPositionChange = useCallback(
         (index: number) => {
@@ -415,19 +408,6 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         noRounding: {
             borderRadius: 0,
-        },
-        handleWrapper: {
-            marginTop: 8,
-            paddingTop: 8,
-            paddingBottom: 16,
-            paddingHorizontal: 8,
-        },
-        handleStyle: {
-            width: 70,
-            height: 4,
-            borderRadius: 8,
-            backgroundColor: COLORS.GREY_300,
-            alignSelf: "center",
         },
     })
 
