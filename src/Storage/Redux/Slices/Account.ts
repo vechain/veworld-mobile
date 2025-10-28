@@ -9,7 +9,7 @@ import { isEmpty } from "lodash"
  * @param selectedAccount the address of the selected account
  */
 
-type AccountSliceState = {
+export type AccountSliceState = {
     accounts: WalletAccount[]
     selectedAccount?: string
 }

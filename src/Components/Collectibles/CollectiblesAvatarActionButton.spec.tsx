@@ -58,7 +58,7 @@ describe("CollectiblesAvatarActionButton", () => {
                     address: "0x0",
                     tokenId: "1",
                     genesisId: defaultMainNetwork.genesis.id,
-                    uri: "file://test_uri",
+                    uri: expect.stringMatching(/^pfp\/0xCF130b42Ae33C5531277B4B7c0F1D994B8732957_\d+\.png/),
                 },
             })
         })
@@ -84,7 +84,7 @@ describe("CollectiblesAvatarActionButton", () => {
                                         address: "0x0",
                                         genesisId: defaultMainNetwork.genesis.id,
                                         tokenId: "1",
-                                        uri: "file://test_uri",
+                                        uri: "test_uri",
                                     },
                                 },
                             ],
@@ -101,7 +101,7 @@ describe("CollectiblesAvatarActionButton", () => {
         })
 
         await waitFor(() => {
-            expect(deleteAsync).toHaveBeenCalledWith("file://test_uri", { idempotent: true })
+            expect(deleteAsync).toHaveBeenCalledWith("/test/directory/test_uri", { idempotent: true })
             expect(clearAccountPfp).toHaveBeenCalledWith({
                 accountAddress: TestHelpers.data.account1D1.address,
             })
@@ -134,7 +134,7 @@ describe("CollectiblesAvatarActionButton", () => {
                     address: "0x0",
                     tokenId: "1",
                     genesisId: defaultMainNetwork.genesis.id,
-                    uri: "file://test_uri",
+                    uri: expect.stringMatching(/^pfp\/0xCF130b42Ae33C5531277B4B7c0F1D994B8732957_\d+\.png/),
                 },
             })
         })

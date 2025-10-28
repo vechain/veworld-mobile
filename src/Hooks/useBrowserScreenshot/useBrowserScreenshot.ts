@@ -73,7 +73,7 @@ export const useBrowserScreenshot = () => {
                     dispatch(
                         updateTab({
                             id: selectedTabId,
-                            previewPath: persistentPath,
+                            previewPath: `screenshots/${fileName}`,
                             ...(!isDapp && { title: navigationState?.title, favicon }),
                             favicon: dappMetadata?.icon ?? favicon,
                         }),
