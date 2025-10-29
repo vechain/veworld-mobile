@@ -61,8 +61,13 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
     }, [tabOffsets, selectedIndex, keys.length])
     if (keys.length !== labels.length) throw new Error("Keys and Labels should have the same length")
     return (
+<<<<<<< HEAD
         <BaseView style={[styles.root, rootStyle]} flexDirection="row" justifyContent="space-between" overflow="scroll">
             <BaseView flexDirection="row" flex={1} style={innerContainerStyle}>
+=======
+        <BaseView style={[styles.root, rootStyle]} flexDirection="row" justifyContent="space-between">
+            <BaseView flexDirection="row" flex={1} gap={8} overflow="scroll">
+>>>>>>> 0a1e86ace (fix(BaseSimpleTabs): add gap to tab items and remove overflow from root view (#3472))
                 {keys.map((key, index) => {
                     const isSelected = selectedKey === key
                     const textColor = getTextColor(isSelected)
