@@ -3,7 +3,7 @@ import { ethers } from "ethers"
 import { queryClient } from "~Api/QueryProvider"
 import { ERROR_EVENTS } from "~Constants"
 import { getCollectibleMetadataOptions } from "~Hooks/useCollectibleMetadata"
-import { getCachedTokenURI } from "~Networking"
+import { getCachedTokenURI } from "~Networking/NFT/getTokenURI"
 import { debug } from "~Utils/Logger"
 
 const ERC1155_URI_ABI_FRAGMENT = [
