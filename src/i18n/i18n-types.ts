@@ -1839,6 +1839,10 @@ type RootTranslation = {
 	 */
 	COMMON_24H: string
 	/**
+	 * W​e​b​s​i​t​e
+	 */
+	COMMON_WEBSITE: string
+	/**
 	 * 2​4​h​ ​V​o​l​u​m​e
 	 */
 	COMMON_24H_VOLUME: string
@@ -2104,6 +2108,10 @@ type RootTranslation = {
 	 * W​h​o​o​p​s​!
 	 */
 	COMMON_WHOOPS: string
+	/**
+	 * W​e​b​s​i​t​e
+	 */
+	COMMON_WEBSITE: string
 	/**
 	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
 	 * @param {string} alias
@@ -7209,6 +7217,10 @@ This action is irreversible
 	 */
 	COMMON_24H: () => LocalizedString
 	/**
+	 * Website
+	 */
+	COMMON_WEBSITE: () => LocalizedString
+	/**
 	 * 24h Volume
 	 */
 	COMMON_24H_VOLUME: () => LocalizedString
@@ -7472,6 +7484,10 @@ This action is irreversible
 	 * Whoops!
 	 */
 	COMMON_WHOOPS: () => LocalizedString
+	/**
+	 * Website
+	 */
+	COMMON_WEBSITE: () => LocalizedString
 	/**
 	 * Confirming this you will disconnect the {name} app from {alias}
 	 */
