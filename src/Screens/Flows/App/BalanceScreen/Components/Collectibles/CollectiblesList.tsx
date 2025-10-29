@@ -2,7 +2,8 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseSpacer } from "~Components"
-import { useThemedStyles } from "~Hooks"
+import { CollectibleBottomSheet } from "~Components/Collectibles/CollectibleBottomSheet"
+import { useAnalyticTracking, useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useHomeCollectibles } from "~Hooks/useHomeCollectibles"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -10,6 +11,7 @@ import { selectAllFavoriteNfts, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { CollectibleCard } from "./CollectibleCard"
 import { CollectiblesEmptyCard } from "./CollectiblesEmptyCard"
+import { AnalyticsEvent } from "~Constants"
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />
 
@@ -17,16 +19,18 @@ const ListFooterComponent = ({ addresses }: { addresses: string[] }) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(footerStyles)
+    const track = useAnalyticTracking()
 
     const onNavigate = useCallback(() => {
+        track(AnalyticsEvent.COLLECTIBLES_SEE_MORE_BUTTON_CLICKED)
         if (new Set(addresses).size === 1) {
-            nav.navigate(Routes.NFT_COLLECTION_DETAILS, {
+            nav.navigate(Routes.COLLECTIBLES_COLLECTION_DETAILS, {
                 collectionAddress: addresses[0],
             })
             return
         }
-        nav.navigate(Routes.NFTS)
-    }, [addresses, nav])
+        nav.navigate(Routes.COLLECTIBLES_COLLECTIONS)
+    }, [addresses, nav, track])
 
     if (addresses.length === 0) return null
 
@@ -59,6 +63,7 @@ export const CollectiblesList = () => {
     const { styles } = useThemedStyles(baseStyles)
     const favoriteNfts = useAppSelector(selectAllFavoriteNfts)
     const { data: allNfts } = useHomeCollectibles()
+    const { ref, onOpen } = useBottomSheetModal()
 
     const nfts = useMemo(() => {
         return (
@@ -83,22 +88,36 @@ export const CollectiblesList = () => {
 
     const addresses = useMemo(() => nfts.map(nft => nft.address), [nfts])
 
-    const renderItem = useCallback(({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
-        return <CollectibleCard address={item.address} tokenId={item.tokenId} />
-    }, [])
+    const onPress = useCallback(
+        ({ address, tokenId }: { address: string; tokenId: string }) => {
+            onOpen({ address, tokenId })
+        },
+        [onOpen],
+    )
+
+    const renderItem = useCallback(
+        ({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
+            return <CollectibleCard address={item.address} tokenId={item.tokenId} onPress={onPress} />
+        },
+        [onPress],
+    )
 
     return (
-        <FlatList
-            renderItem={renderItem}
-            data={nfts}
-            numColumns={2}
-            ItemSeparatorComponent={ItemSeparatorComponent}
-            ListEmptyComponent={CollectiblesEmptyCard}
-            horizontal={false}
-            keyExtractor={v => `${v.address}_${v.tokenId}`}
-            columnWrapperStyle={styles.listColumn}
-            ListFooterComponent={<ListFooterComponent addresses={addresses} />}
-        />
+        <>
+            <FlatList
+                testID="COLLECTIBLES_LIST"
+                renderItem={renderItem}
+                data={nfts}
+                numColumns={2}
+                ItemSeparatorComponent={ItemSeparatorComponent}
+                ListEmptyComponent={CollectiblesEmptyCard}
+                horizontal={false}
+                keyExtractor={v => `${v.address}_${v.tokenId}`}
+                columnWrapperStyle={styles.listColumn}
+                ListFooterComponent={<ListFooterComponent addresses={addresses} />}
+            />
+            <CollectibleBottomSheet bsRef={ref} />
+        </>
     )
 }
 

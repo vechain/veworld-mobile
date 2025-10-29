@@ -1,10 +1,11 @@
 import React, { PropsWithChildren, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
-import Animated, { LinearTransition } from "react-native-reanimated"
+import Animated, { AnimatedRef, LinearTransition } from "react-native-reanimated"
 import { BaseIcon, BaseSpacer, BaseText, DAppIcon } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { VbdDApp } from "~Model"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { LAYOUT_TRANSITION } from "./constants"
 import { useX2EAppAnimation } from "./Hooks/useX2EAppAnimation"
@@ -23,6 +24,8 @@ type AppRowDetailsProps = PropsWithChildren<{
     itemId?: string
     isOpen?: boolean
     onToggleOpen?: (itemId: string) => void
+    scrollRef: AnimatedRef<Animated.FlatList<VbdDApp>>
+    index: number
 }>
 
 export const RowDetails = React.memo(
@@ -38,6 +41,8 @@ export const RowDetails = React.memo(
         itemId,
         isOpen,
         onToggleOpen,
+        scrollRef,
+        index,
     }: AppRowDetailsProps) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -50,13 +55,15 @@ export const RowDetails = React.memo(
             itemId,
             isOpen,
             onToggleOpen,
+            scrollRef,
+            index,
         })
 
         const { showDetails, isAnimating, contentVisible } = state
         const { toggleDetails, onPressIn, onPressOut } = handlers
 
         const categoryElements = useMemo(() => {
-            return categories.map((category, index) => (
+            return categories.map((category, _index) => (
                 <BaseText
                     key={category}
                     bg={theme.colors.x2eAppOpenDetails.label.background}
@@ -65,7 +72,7 @@ export const RowDetails = React.memo(
                     borderRadius={4}
                     typographyFont="smallCaptionMedium"
                     color={theme.colors.x2eAppOpenDetails.label.text}
-                    testID={`DAPP_WITH_DETAILS_CATEGORY_${index}`}>
+                    testID={`DAPP_WITH_DETAILS_CATEGORY_${_index}`}>
                     {category}
                 </BaseText>
             ))

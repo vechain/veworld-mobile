@@ -1,11 +1,12 @@
+import * as FileSystem from "expo-file-system"
 import React, { memo, useMemo } from "react"
-import { StyleSheet, ViewProps } from "react-native"
+import { Image, StyleSheet, ViewProps } from "react-native"
 import { SvgXml } from "react-native-svg"
 import { NewLedgerLogo } from "~Assets"
 import { BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { Device, DEVICE_TYPE } from "~Model"
+import { Device, DEVICE_TYPE, WalletAccount } from "~Model"
 import { PicassoUtils } from "~Utils"
 
 type AccountIconProps = {
@@ -13,6 +14,7 @@ type AccountIconProps = {
         type?: DEVICE_TYPE
         device?: Device
         address: string
+        profileImage?: WalletAccount["profileImage"]
     }
     size?: number
     borderRadius?: number
@@ -35,7 +37,16 @@ export const AccountIcon: React.FC<AccountIconProps> = memo(({ account, size, bo
 
     return (
         <BaseView style={styles.container}>
-            <PicassoAddressIcon address={account.address} size={size} borderRadius={borderRadius} />
+            {account.profileImage ? (
+                <AccountPfp
+                    uri={`${FileSystem.documentDirectory}${account.profileImage.uri}`}
+                    size={size}
+                    borderRadius={borderRadius}
+                />
+            ) : (
+                <PicassoAddressIcon address={account.address} size={size} borderRadius={borderRadius} />
+            )}
+
             {showLedger && (
                 <BaseView borderRadius={99} p={4} style={styles.ledger}>
                     <NewLedgerLogo width={8} height={8} color={theme.isDark ? COLORS.GREY_700 : COLORS.WHITE} />
@@ -51,7 +62,7 @@ type PicassoAddressIconProps = {
     borderRadius?: number
 } & ViewProps
 
-export const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = memo(
+const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = memo(
     ({ address, size = 50, borderRadius = 99, style, ...otherProps }) => {
         const uri = PicassoUtils.getPicassoImgSrc(address).toString()
 
@@ -65,6 +76,20 @@ export const PicassoAddressIcon: React.FC<PicassoAddressIconProps> = memo(
 
 const picassoIconStyles = StyleSheet.create({
     view: { overflow: "hidden" },
+})
+
+type AccountPfpProps = {
+    uri: string
+    size?: number
+    borderRadius?: number
+} & ViewProps
+
+const AccountPfp: React.FC<AccountPfpProps> = memo(({ uri, size = 50, borderRadius = 99, style, ...otherProps }) => {
+    return (
+        <BaseView borderRadius={borderRadius} {...otherProps} style={[picassoIconStyles.view, style]}>
+            <Image source={{ uri }} width={size} height={size} resizeMethod="scale" />
+        </BaseView>
+    )
 })
 
 const accountIconStyles = (theme: ColorThemeType) =>

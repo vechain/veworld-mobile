@@ -5,11 +5,10 @@ import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { BaseIcon } from "~Components/Base/BaseIcon"
-import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
-import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
+import { RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { useAppSelector } from "~Storage/Redux/Hooks"
 import { selectLastNavigationSource } from "~Storage/Redux/Selectors"
@@ -22,7 +21,13 @@ import { BrowserBottomSheet } from "./BrowserBottomSheet"
 type Props = {
     navigationUrl: string
     onNavigate?: () => void | Promise<void>
-    returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS | Routes.SWAP
+    returnScreen?:
+        | Routes.SETTINGS
+        | Routes.HOME
+        | Routes.ACTIVITY_STAKING
+        | Routes.APPS
+        | Routes.SWAP
+        | Routes.COLLECTIBLES_COLLECTION_DETAILS
     isLoading?: boolean
 }
 
@@ -33,44 +38,41 @@ const AnimatedTouchable = Animated.createAnimatedComponent(wrapFunctionComponent
 
 export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
-    const { betterWorldFeature } = useFeatureFlags()
     const dappMetadata = useGetDappMetadataFromUrl(navigationUrl)
     const fetchDynamicLogo = useDynamicAppLogo()
     const lastNavigationSource = useAppSelector(selectLastNavigationSource)
 
     const nav =
         useNavigation<
-            NativeStackNavigationProp<
-                RootStackParamListBrowser & RootStackParamListSettings & RootStackParamListHome & RootStackParamListApps
-            >
+            NativeStackNavigationProp<RootStackParamListSettings & RootStackParamListHome & RootStackParamListApps>
         >()
 
     const _returnScreen = useMemo(() => {
         if (returnScreen) return returnScreen
 
-        const validNavigationSources = [Routes.HOME, Routes.APPS, Routes.DISCOVER]
+        const validNavigationSources = [Routes.HOME, Routes.APPS, Routes.COLLECTIBLES_COLLECTION_DETAILS]
         if (lastNavigationSource && validNavigationSources.includes(lastNavigationSource as Routes)) {
-            return lastNavigationSource as Routes.HOME | Routes.APPS | Routes.DISCOVER
+            return lastNavigationSource as Routes.HOME | Routes.APPS | Routes.COLLECTIBLES_COLLECTION_DETAILS
         }
-        if (betterWorldFeature.appsScreen.enabled) return Routes.APPS
-        return Routes.DISCOVER
-    }, [betterWorldFeature.appsScreen.enabled, returnScreen, lastNavigationSource])
+        return Routes.APPS
+    }, [returnScreen, lastNavigationSource])
 
     const { onOpen: openBottomSheet, ref: bottomSheetRef, onClose: closeBottomSheet } = useBottomSheetModal()
 
     const navToDiscover = useCallback(async () => {
         await onNavigate?.()
-        nav.navigate(_returnScreen)
+        // Use goBack for routes that require params to avoid crashes
+        if (_returnScreen === Routes.COLLECTIBLES_COLLECTION_DETAILS) {
+            nav.goBack()
+        } else {
+            nav.navigate(_returnScreen as any)
+        }
     }, [nav, onNavigate, _returnScreen])
 
     const navToSearch = useCallback(async () => {
         await onNavigate?.()
-        if (betterWorldFeature.appsScreen.enabled) {
-            nav.replace(Routes.APPS_SEARCH)
-        } else {
-            nav.replace(Routes.DISCOVER_SEARCH)
-        }
-    }, [betterWorldFeature.appsScreen.enabled, nav, onNavigate])
+        nav.replace(Routes.APPS_SEARCH)
+    }, [nav, onNavigate])
 
     const parsedDappMetadata = useMemo(() => {
         if (dappMetadata)

@@ -1,7 +1,6 @@
 import {
     BottomSheetBackdrop,
     BottomSheetBackdropProps,
-    BottomSheetHandleProps,
     BottomSheetModal,
     BottomSheetModalProps,
     BottomSheetView,
@@ -20,6 +19,7 @@ import { useThemedStyles } from "~Hooks"
 import { useBottomSheetBackHandler } from "~Hooks/useBottomSheetBackHandler"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { typedForwardRef } from "~Utils/ReactUtils"
+import { BaseBottomSheetHandle } from "./BaseBottomSheetHandle"
 import { BaseView } from "./BaseView"
 
 export type BaseBottomSheetProps<TData = unknown> = Omit<
@@ -207,11 +207,26 @@ const _BaseBottomSheet = <TData,>(
     ref: React.ForwardedRef<BottomSheetModalMethods>,
 ) => {
     const { onChange, ...sheetProps } = props
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { height: windowHeight } = useWindowDimensions()
     const { bottom: bottomSafeAreaSize } = useSafeAreaInsets()
     const reducedMotion = useReducedMotion()
     const { handleSheetPositionChange } = useBottomSheetBackHandler(ref)
+
+    const bgRoundingStyle = useMemo(() => {
+        if (floating) return [styles.floatingRounding]
+        if (rounded) return [styles.notFloatingRounding]
+        return [styles.noRounding]
+    }, [floating, rounded, styles.floatingRounding, styles.noRounding, styles.notFloatingRounding])
+
+    const flattenedBsStyle = useMemo(() => {
+        return StyleSheet.flatten([bgRoundingStyle, backgroundStyle ?? styles.backgroundStyle])
+    }, [backgroundStyle, bgRoundingStyle, styles.backgroundStyle])
+
+    const handleColor = useMemo(() => {
+        if (!theme.isDark) return COLORS.GREY_300
+        return flattenedBsStyle.backgroundColor === theme.colors.card ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300
+    }, [flattenedBsStyle.backgroundColor, theme.colors.card, theme.isDark])
 
     const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
         return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
@@ -230,14 +245,7 @@ const _BaseBottomSheet = <TData,>(
         [onPressOutside],
     )
 
-    const renderHandle = useCallback(
-        (props_: BottomSheetHandleProps) => (
-            <BaseView style={styles.handleWrapper}>
-                <BaseView {...props_} style={styles.handleStyle} />
-            </BaseView>
-        ),
-        [styles],
-    )
+    const renderHandle = useCallback(() => <BaseBottomSheetHandle color={handleColor} />, [handleColor])
 
     const onSheetPositionChange = useCallback(
         (index: number) => {
@@ -307,12 +315,6 @@ const _BaseBottomSheet = <TData,>(
         if (rounded) return [styles.notFloatingRounding]
         return undefined
     }, [floating, rounded, styles.floating, styles.floatingRounding, styles.notFloatingRounding])
-
-    const bgRoundingStyle = useMemo(() => {
-        if (floating) return [styles.floatingRounding]
-        if (rounded) return [styles.notFloatingRounding]
-        return [styles.noRounding]
-    }, [floating, rounded, styles.floatingRounding, styles.noRounding, styles.notFloatingRounding])
 
     return (
         <BottomSheetModal
@@ -406,19 +408,6 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         noRounding: {
             borderRadius: 0,
-        },
-        handleWrapper: {
-            marginTop: 8,
-            paddingTop: 8,
-            paddingBottom: 16,
-            paddingHorizontal: 8,
-        },
-        handleStyle: {
-            width: 70,
-            height: 4,
-            borderRadius: 8,
-            backgroundColor: COLORS.GREY_300,
-            alignSelf: "center",
         },
     })
 

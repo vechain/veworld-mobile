@@ -5,17 +5,19 @@ import { VbdDApp, X2ECategoryType } from "~Model"
 import { FetchAppOverviewResponse } from "~Networking/API/Types"
 import { RootState } from "~Storage/Redux/Types"
 import { TestHelpers, TestWrapper } from "~Test"
+import { useDAppActions } from "../../../Hooks"
 import { VbdCarouselBottomSheet } from "./VbdCarouselBottomSheet"
 
 // Mock the external dependencies
 jest.mock("~Networking/DApps/fetchAppOverview")
-jest.mock("~Screens/Flows/App/DiscoverScreen/Hooks")
+jest.mock("../../../Hooks", () => ({
+    useDAppActions: jest.fn(),
+}))
 jest.mock("react-native-localize", () => ({
     getTimeZone: jest.fn(() => "America/New_York"),
 }))
 
 const mockFetchAppOverview = require("~Networking/DApps/fetchAppOverview").fetchAppOverview as jest.Mock
-const mockUseDAppActions = require("~Screens/Flows/App/DiscoverScreen/Hooks").useDAppActions as jest.Mock
 
 const mockVbdDApp: VbdDApp = {
     id: "test-app-id",
@@ -104,7 +106,7 @@ describe("VbdCarouselBottomSheet", () => {
 
     beforeEach(() => {
         jest.clearAllMocks()
-        mockUseDAppActions.mockReturnValue({
+        ;(useDAppActions as jest.Mock).mockReturnValue({
             onDAppPress: mockOnDAppPress,
         })
         mockFetchAppOverview.mockResolvedValue(mockAppOverview)
