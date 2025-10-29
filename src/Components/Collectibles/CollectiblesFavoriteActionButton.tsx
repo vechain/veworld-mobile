@@ -1,18 +1,9 @@
 import React, { useCallback, useMemo } from "react"
+import { useNftBookmarking } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
-import {
-    isNftFavorite,
-    selectSelectedAccount,
-    selectSelectedNetwork,
-    toggleFavorite,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import { CollectiblesActionButton } from "./CollectiblesActionButton"
 import HapticsService from "~Services/HapticsService"
-import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { CollectiblesActionButton } from "./CollectiblesActionButton"
 
 type Props = {
     address: string
@@ -20,11 +11,7 @@ type Props = {
 }
 export const CollectiblesFavoriteActionButton = ({ address, tokenId }: Props) => {
     const { LL } = useI18nContext()
-    const isFavorite = useAppSelector(state => isNftFavorite(state, address, tokenId))
-    const network = useAppSelector(selectSelectedNetwork)
-    const account = useAppSelector(selectSelectedAccount)
-
-    const dispatch = useAppDispatch()
+    const { isFavorite, toggleFavorite } = useNftBookmarking(address, tokenId)
 
     const icon = useMemo<IconKey>(() => {
         if (isFavorite) return "icon-star-on"
@@ -33,16 +20,8 @@ export const CollectiblesFavoriteActionButton = ({ address, tokenId }: Props) =>
 
     const onPress = useCallback(() => {
         HapticsService.triggerImpact({ level: "Light" })
-        if (!isFavorite) {
-            Feedback.show({
-                severity: FeedbackSeverity.INFO,
-                type: FeedbackType.ALERT,
-                message: LL.FEEDBACK_FAVORITED(),
-                icon: "icon-star",
-            })
-        }
-        dispatch(toggleFavorite({ address, tokenId, owner: account.address, genesisId: network.genesis.id }))
-    }, [account.address, address, dispatch, network.genesis.id, tokenId, isFavorite, LL])
+        toggleFavorite()
+    }, [toggleFavorite])
 
     return (
         <CollectiblesActionButton
