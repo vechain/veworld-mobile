@@ -21,7 +21,7 @@ export const useVetDomainsAvatar = ({ address }: { address: string }) => {
 
     return useQuery({
         queryKey: ["VET_DOMAIN", "AVATAR_OF_ADDRESS", address.toLowerCase(), network.genesis.id],
-        staleTime: 24 * 60 * 60 * 1000,
+        staleTime: 0,
         //Keep the image always cached
         gcTime: Infinity,
         queryFn: () =>

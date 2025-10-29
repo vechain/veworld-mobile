@@ -21,7 +21,12 @@ export const VetDomainsAccountPfp = memo<Props>(({ uri, size = 50, ...props }) =
 
     return (
         <BaseAccountPfp size={size} {...props}>
-            <NFTImageComponent resizeMode="contain" uri={media?.image} mime={media?.mime} />
+            <NFTImageComponent
+                resizeMode="contain"
+                uri={media?.image}
+                mime={media?.mime}
+                style={{ width: size, height: size }}
+            />
         </BaseAccountPfp>
     )
 })
