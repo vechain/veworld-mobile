@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import {
     MarketChartResponse,
+    TokenInfoResponse,
     getMarketChart,
     getSmartMarketChart,
     getTokenInfo,
@@ -234,4 +235,36 @@ export const useVthoExchangeRate = (vs_currency: string) => {
         id: VETHOR_COINGECKO_ID,
         vs_currency,
     })
+}
+
+/**
+ * Extract and format social media links from token info
+ * @param tokenInfo - Token info from CoinGecko
+ * @returns Formatted social media links
+ */
+export const useTokenSocialLinks = (tokenInfo?: TokenInfoResponse) => {
+    return useMemo(() => {
+        if (!tokenInfo?.links) return null
+
+        const { links } = tokenInfo
+
+        // Helper to get first non-null item from array
+        const getFirst = (arr?: (string | null)[]): string | null => {
+            return arr?.find(item => item && item.trim() !== "") ?? null
+        }
+
+        return {
+            website: getFirst(links.homepage),
+            twitter: links.twitter_screen_name ? `https://twitter.com/${links.twitter_screen_name}` : null,
+            telegram: links.telegram_channel_identifier ? `https://t.me/${links.telegram_channel_identifier}` : null,
+            reddit: links.subreddit_url,
+            facebook: links.facebook_username ? `https://facebook.com/${links.facebook_username}` : null,
+            github: getFirst(links.repos_url?.github),
+            discord: getFirst(links.chat_url?.filter(url => url?.includes("discord"))),
+            chat: getFirst(links.chat_url),
+            forum: getFirst(links.official_forum_url),
+            announcement: getFirst(links.announcement_url),
+            explorer: getFirst(links.blockchain_site),
+        }
+    }, [tokenInfo])
 }
