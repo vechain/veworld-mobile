@@ -55,8 +55,19 @@ const TokenInfoResponseSchema = z.object({
     }),
     description: z.record(z.string(), z.string()),
     links: z.object({
-        blockchain_site: z.array(z.nullable(z.string())),
         homepage: z.array(z.string()),
+        blockchain_site: z.array(z.nullable(z.string())),
+        official_forum_url: z.array(z.nullable(z.string())),
+        chat_url: z.array(z.nullable(z.string())),
+        announcement_url: z.array(z.nullable(z.string())),
+        twitter_screen_name: z.nullable(z.string()),
+        facebook_username: z.nullable(z.string()),
+        telegram_channel_identifier: z.nullable(z.string()),
+        subreddit_url: z.nullable(z.string()),
+        repos_url: z.object({
+            github: z.array(z.nullable(z.string())),
+            bitbucket: z.array(z.nullable(z.string())),
+        }),
     }),
     market_data: TokenInfoMarketDataSchema,
 })
