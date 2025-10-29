@@ -53,8 +53,8 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
     }, [tabOffsets, selectedIndex, keys.length])
     if (keys.length !== labels.length) throw new Error("Keys and Labels should have the same length")
     return (
-        <BaseView style={[styles.root, rootStyle]} flexDirection="row" justifyContent="space-between" overflow="scroll">
-            <BaseView flexDirection="row" flex={1}>
+        <BaseView style={[styles.root, rootStyle]} flexDirection="row" justifyContent="space-between">
+            <BaseView flexDirection="row" flex={1} gap={8} overflow="scroll">
                 {keys.map((key, index) => {
                     const isSelected = selectedKey === key
                     const textColor = getTextColor(isSelected)
