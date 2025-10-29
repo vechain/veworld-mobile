@@ -16,6 +16,7 @@ import { AssetBalanceActivity } from "./Components/AssetBalanceActivity"
 import { ASSET_CHART_PERIODS, AssetChart } from "./Components/AssetChart"
 import { AssertChartBalance } from "./Components/AssetChartBalance"
 import { AssetDetailScreenWrapper } from "./Components/AssetDetailScreenWrapper"
+import { AssetStats } from "./Components/AssetStats"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -82,6 +83,9 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
 
                 <AssetBalanceActivity token={token as FungibleTokenWithBalance} />
             </LineChart.Provider>
+            {token.symbol && (
+                <AssetStats tokenSymbol={token.symbol} tokenDescription={token.tokenInfo?.description?.en} />
+            )}
         </AssetDetailScreenWrapper>
     )
 }
