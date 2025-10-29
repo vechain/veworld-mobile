@@ -808,6 +808,7 @@
   "NFT_DOWNLOAD_ERROR": "Beim Abrufen Ihrer NFTs ist ein Fehler aufgetreten. \n Bitte versuchen Sie es später erneut.",
   "NFT_PURCHASED": "NFT Gekauft",
   "NFT_RECEIVE": "NFT empfangen",
+  "NFT_REPORT_BLOCK_COLLECTION": "Sammlung melden und blockieren",
   "NFT_REPORT_COLLECTION": "Sammlung melden",
   "NFT_REPORT_COLLECTION_CONFIRM": "Bericht bestätigen",
   "NFT_REPORT_COLLECTION_MSG": "Bitte melden Sie, wenn diese Sammlung verdächtig oder unangemessen erscheint.",
