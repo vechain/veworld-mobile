@@ -10,6 +10,9 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { CollectiblesActionButton } from "./CollectiblesActionButton"
+import HapticsService from "~Services/HapticsService"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { Feedback } from "~Components/Providers/FeedbackProvider"
 
 type Props = {
     address: string
@@ -29,8 +32,17 @@ export const CollectiblesFavoriteActionButton = ({ address, tokenId }: Props) =>
     }, [isFavorite])
 
     const onPress = useCallback(() => {
+        HapticsService.triggerImpact({ level: "Light" })
+        if (!isFavorite) {
+            Feedback.show({
+                severity: FeedbackSeverity.INFO,
+                type: FeedbackType.ALERT,
+                message: LL.FEEDBACK_FAVORITED(),
+                icon: "icon-star",
+            })
+        }
         dispatch(toggleFavorite({ address, tokenId, owner: account.address, genesisId: network.genesis.id }))
-    }, [account.address, address, dispatch, network.genesis.id, tokenId])
+    }, [account.address, address, dispatch, network.genesis.id, tokenId, isFavorite, LL])
 
     return (
         <CollectiblesActionButton
