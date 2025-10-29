@@ -32,6 +32,8 @@ const TokenInfoMarketDataSchema = z.object({
     current_price: z.record(z.string(), z.number()),
     market_cap: z.record(z.string(), z.number()),
     total_volume: z.record(z.string(), z.number()),
+    high_24h: z.record(z.string(), z.number()),
+    low_24h: z.record(z.string(), z.number()),
 })
 
 const TokenInfoResponseSchema = z.object({
