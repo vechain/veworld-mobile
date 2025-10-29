@@ -52,7 +52,7 @@ import { AssetDetailScreenSheet } from "~Screens/Flows/App/AssetDetailScreenShee
 import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
-import { CollectionsScreen } from "~Screens/Flows/App/Collectibles"
+import { CollectionsScreen, SendCollectibleRecapScreen } from "~Screens/Flows/App/Collectibles"
 import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/CollectibleCollectionDetails"
 import { ReportNFTTransactionScreen } from "~Screens/Flows/App/NFT/NFTReportCollection/ReportNFTTransactionScreen"
 
@@ -175,6 +175,11 @@ export type RootStackParamListHome = {
     [Routes.REPORT_NFT_TRANSACTION_SCREEN]: {
         nftAddress: string
         transactionClauses: TransactionClause[]
+    }
+    [Routes.SEND_NFT_RECAP]: {
+        contractAddress: string
+        tokenId: string
+        receiverAddress: string
     }
 }
 
@@ -367,6 +372,13 @@ export const HomeStack = () => {
                     <Screen
                         name={Routes.REPORT_NFT_TRANSACTION_SCREEN}
                         component={ReportNFTTransactionScreen}
+                        options={{ headerShown: false }}
+                    />
+                )}
+                {betterWorldFeature.balanceScreen.collectibles.enabled && (
+                    <Screen
+                        name={Routes.SEND_NFT_RECAP}
+                        component={SendCollectibleRecapScreen}
                         options={{ headerShown: false }}
                     />
                 )}
