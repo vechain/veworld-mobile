@@ -5,7 +5,7 @@ import { LineChart } from "react-native-wagmi-charts"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { BaseSpacer, BaseText, BaseView, TokenSymbol } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { ColorThemeType } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -14,6 +14,7 @@ import { AddressUtils } from "~Utils"
 import { ASSET_CHART_PERIODS, AssetChart } from "./Components/AssetChart"
 import { AssertChartBalance } from "./Components/AssetChartBalance"
 import { AssetDetailScreenWrapper } from "./Components/AssetDetailScreenWrapper"
+import ChartUtils from "~Utils/ChartUtils"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -40,7 +41,8 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
 
     return (
         <AssetDetailScreenWrapper>
-            <LineChart.Provider data={chartData ?? DEFAULT_LINE_CHART_DATA}>
+            <LineChart.Provider
+                data={ChartUtils.downsampleData(chartData ?? DEFAULT_LINE_CHART_DATA, "hour", 1, "first")!}>
                 <BaseView flexDirection="row" justifyContent="space-between" style={styles.padding}>
                     <BaseView flexDirection="row" gap={16}>
                         <TokenImage
@@ -69,11 +71,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
                 <BaseSpacer height={24} />
                 {hasTokenChart && (
                     <>
-                        <AssetChart
-                            data={chartData}
-                            selectedPeriod={selectedItem}
-                            setSelectedPeriod={setSelectedItem}
-                        />
+                        <AssetChart selectedPeriod={selectedItem} setSelectedPeriod={setSelectedItem} />
                         <BaseSpacer height={24} />
                     </>
                 )}
@@ -86,7 +84,7 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
             paddingBottom: 16,
-            backgroundColor: theme.colors.card,
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.APP_BACKGROUND_LIGHT,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
             zIndex: 1,
