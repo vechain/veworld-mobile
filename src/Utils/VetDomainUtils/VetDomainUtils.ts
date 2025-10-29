@@ -30,7 +30,7 @@ export const getAvatar = async (
         const parsedAvatar = await parseAvatarRecord(avatarRecord, { genesisId: options.genesisId, thor: options.thor })
 
         return parsedAvatar
-    } catch (error) {
+    } catch {
         debug(ERROR_EVENTS.PROFILE, "[getAvatar]: Error while reading avatar.")
         return null
     }

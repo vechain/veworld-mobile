@@ -13,7 +13,7 @@ export const VetDomainsAccountPfp = memo<Props>(({ uri, size = 50, ...props }) =
 
     const { data: media } = useQuery({
         queryKey: ["COLLECTIBLES", "MEDIA", uri],
-        queryFn: () => fetchMedia(uri!),
+        queryFn: () => fetchMedia(uri),
         enabled: !!uri,
         staleTime: 5 * 60 * 1000,
         gcTime: 5 * 60 * 1000,

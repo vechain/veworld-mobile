@@ -27,7 +27,7 @@ export const parseAvatarRecord = async (
         }
 
         // Handle NFT avatar (ENS-12)
-        const match = record.match(/eip155:(\d+)\/(?:erc721|erc1155):([^/]+)\/(\d+)/)
+        const match = /eip155:(\d+)\/(?:erc721|erc1155):([^/]+)\/(\d+)/.exec(record)
 
         if (!match) return null
 
@@ -38,32 +38,19 @@ export const parseAvatarRecord = async (
             return null
         }
 
-        // Use enhanced client to make contract call
         let tokenUri = ""
-        try {
-            if (isErc1155) {
-                const contract = thor.contracts.load(contractAddress, ERC1155_URI_ABI_FRAGMENT)
-                const result = await contract.read.uri(BigInt(tokenId || 0))
-                tokenUri = result[0]
-            } else {
-                const result = await getCachedTokenURI(
-                    BigInt(tokenId || 0).toString(),
-                    contractAddress,
-                    genesisId,
-                    thor,
-                )
-                tokenUri = result
-            }
-        } catch (e) {
-            debug(ERROR_EVENTS.PROFILE, "[parseAvatarRecord]: Failed to fetch tokenURI/uri from contract:")
-            return null
-        }
-
         if (isErc1155) {
-            tokenUri = tokenUri.replace(
+            const contract = thor.contracts.load(contractAddress, ERC1155_URI_ABI_FRAGMENT)
+            const result = await contract.read.uri(BigInt(tokenId || 0))
+            tokenUri = result[0].replace(
                 "{id}",
                 ethers.utils.hexZeroPad(ethers.utils.hexlify(BigInt(tokenId || 0)), 32).slice(2),
             )
+        } else {
+            const result = await getCachedTokenURI(BigInt(tokenId || 0).toString(), contractAddress, genesisId, thor)
+            tokenUri = result
+        }
+        if (isErc1155) {
         }
 
         const metadata = await queryClient.fetchQuery(getCollectibleMetadataOptions(tokenUri))
@@ -79,7 +66,7 @@ export const parseAvatarRecord = async (
         }
 
         return imageUrl
-    } catch (error) {
+    } catch {
         debug(ERROR_EVENTS.PROFILE, "[parseAvatarRecord]: Error while parsing avatar record.")
         return null
     }
