@@ -514,6 +514,7 @@
   "COMMON_TOTAL_SUPPLY": "Total Supply",
   "COMMON_USERNAME": "Username",
   "COMMON_WHOOPS": "Whoops!",
+  "COMMON_WEBSITE": "Website",
   "CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE": "Confirming this you will disconnect the {name: string} app from {alias: string}",
   "CONNECTED_APPS_SCREEN_DESCRIPTION": "Connect your wallet with apps to make transactions and sign certificates.",
   "CONNECTED_APPS_SCREEN_NO_CONNECTED_APP": "You have no connected apps. Once you have some, they will displayed here.",
