@@ -1,20 +1,28 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useTheme } from "~Hooks/useTheme"
+import { useThemedStyles } from "~Hooks"
 import { getCoinGeckoIdBySymbol, useTokenInfo } from "~Api/Coingecko"
 import { MarketInfo, useFormattedMarketInfo } from "../../AssetDetailScreen/Hooks/useFormattedMarketInfo"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { COLORS } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useI18nContext } from "~i18n"
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from "react-native-reanimated"
 import * as Haptics from "expo-haptics"
+import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { Routes } from "~Navigation"
+import { SocialLinksButtons } from "./SocialLinksButtons"
 
 const DESCRIPTION_WORD_THRESHOLD = 20
 
 type AssetStatsProps = {
     tokenSymbol: string
     tokenDescription?: string
+    socialLinks?: {
+        website?: string
+        twitter?: string
+        telegram?: string
+    }
 }
 
 type StatItem = {
@@ -23,10 +31,18 @@ type StatItem = {
     testID: string
 }
 
-export const AssetStats = ({ tokenSymbol, tokenDescription }: AssetStatsProps): JSX.Element => {
-    const theme = useTheme()
+export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks }: AssetStatsProps): JSX.Element => {
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const [isAccordionOpen, setIsAccordionOpen] = useState(false)
+    const { navigateWithTab } = useBrowserTab(Routes.HOME)
+
+    const handleSocialLinkPress = useCallback(
+        (url: string) => {
+            navigateWithTab({ url, title: url })
+        },
+        [navigateWithTab],
+    )
 
     const currency = useAppSelector(selectCurrency)
 
@@ -119,9 +135,10 @@ export const AssetStats = ({ tokenSymbol, tokenDescription }: AssetStatsProps): 
                 </BaseView>
             ))}
 
+            <BaseSpacer height={1} background={theme.isDark ? COLORS.PURPLE : COLORS.GREY_100} my={24} />
+
             {tokenDescription && (
                 <>
-                    <BaseSpacer height={1} background={theme.isDark ? COLORS.PURPLE : COLORS.GREY_100} my={8} />
                     <BaseView flexDirection="row" alignItems="center" gap={12} justifyContent="flex-start" mb={8}>
                         <BaseIcon name="icon-alert-circle" size={20} color={theme.colors.actionBanner.title} />
                         <BaseText typographyFont="bodySemiBold" color={theme.colors.actionBanner.title}>
@@ -168,19 +185,22 @@ export const AssetStats = ({ tokenSymbol, tokenDescription }: AssetStatsProps): 
                             {tokenDescription}
                         </BaseText>
                     )}
+                    <BaseSpacer height={8} />
                 </>
             )}
+            <SocialLinksButtons socialLinks={socialLinks} onNavigate={handleSocialLinkPress} />
         </BaseView>
     )
 }
 
-const styles = StyleSheet.create({
-    toggleButton: {
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        marginTop: 8,
-        gap: 4,
-        width: "100%",
-    },
-})
+const baseStyles = (_theme: ColorThemeType) =>
+    StyleSheet.create({
+        toggleButton: {
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            marginTop: 8,
+            gap: 4,
+            width: "100%",
+        },
+    })
