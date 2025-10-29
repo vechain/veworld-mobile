@@ -50,8 +50,6 @@ export const parseAvatarRecord = async (
             const result = await getCachedTokenURI(BigInt(tokenId || 0).toString(), contractAddress, genesisId, thor)
             tokenUri = result
         }
-        if (isErc1155) {
-        }
 
         const metadata = await queryClient.fetchQuery(getCollectibleMetadataOptions(tokenUri))
         if (!metadata) {
