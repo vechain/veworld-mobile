@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-29)</small>
+
+* build: init ([019cffa](https://github.com/vechain/veworld-mobile/commit/019cffa))
+* 474 - Fix report Collection BS copy (#3469) ([d45324b](https://github.com/vechain/veworld-mobile/commit/d45324b)), closes [#3469](https://github.com/vechain/veworld-mobile/issues/3469)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
