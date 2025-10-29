@@ -14,6 +14,7 @@ import { AddressUtils } from "~Utils"
 import { ASSET_CHART_PERIODS, AssetChart } from "./Components/AssetChart"
 import { AssertChartBalance } from "./Components/AssetChartBalance"
 import { AssetDetailScreenWrapper } from "./Components/AssetDetailScreenWrapper"
+import { AssetStats } from "./Components/AssetStats"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -78,6 +79,9 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
                     </>
                 )}
             </LineChart.Provider>
+            {token.symbol && (
+                <AssetStats tokenSymbol={token.symbol} tokenDescription={token.tokenInfo?.description?.en} />
+            )}
         </AssetDetailScreenWrapper>
     )
 }
