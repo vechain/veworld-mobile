@@ -5427,6 +5427,14 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * F​a​v​o​r​i​t​e​d​!
+	 */
+	FEEDBACK_FAVORITED: string
+	/**
+	 * S​e​t​ ​a​s​ ​a​v​a​t​a​r​!
+	 */
+	FEEDBACK_SET_AVATAR: string
 }
 
 export type TranslationFunctions = {
@@ -10757,6 +10765,14 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Favorited!
+	 */
+	FEEDBACK_FAVORITED: () => LocalizedString
+	/**
+	 * Set as avatar!
+	 */
+	FEEDBACK_SET_AVATAR: () => LocalizedString
 }
 
 export type Formatters = {
