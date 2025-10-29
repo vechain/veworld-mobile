@@ -15,6 +15,7 @@ import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { useCollectionMetadata } from "../Hooks/useCollectionMetadata"
 import AddressUtils from "~Utils/AddressUtils"
 import { SkeletonCollectionCard } from "./SkeletonCollectionCard"
+import LinearGradient from "react-native-linear-gradient"
 
 type Props = {
     collectionAddress: string
@@ -66,19 +67,27 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
                     style={styles.image}
                     fallback
                     defaultSource={NFTPlaceholderDarkV2}>
-                    <TouchableOpacity
-                        testID={`VBD_COLLECTION_CARD_FAVORITE_${collectionAddress}`}
-                        disabled={!collectionMetadata?.id}
-                        style={styles.favoriteIconContainer}
-                        onPress={handleToggleFavorite}>
-                        <AnimatedBaseIcon
-                            name={isFavorite ? "icon-star-on" : "icon-star"}
-                            size={16}
-                            color={COLORS.WHITE}
-                            style={animatedStyles}
-                        />
-                    </TouchableOpacity>
-
+                    <BaseView style={styles.favoriteRootContainer}>
+                        <LinearGradient
+                            colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
+                            useAngle
+                            locations={[0, 0.5, 1]}
+                            style={styles.favoriteContainer}
+                            angle={180}>
+                            <TouchableOpacity
+                                testID={`VBD_COLLECTION_CARD_FAVORITE_${collectionAddress}`}
+                                disabled={!collectionMetadata?.id}
+                                style={styles.favoriteIcon}
+                                onPress={handleToggleFavorite}>
+                                <AnimatedBaseIcon
+                                    name={isFavorite ? "icon-star-on" : "icon-star"}
+                                    size={16}
+                                    color={COLORS.WHITE}
+                                    style={animatedStyles}
+                                />
+                            </TouchableOpacity>
+                        </LinearGradient>
+                    </BaseView>
                     <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
                         <BaseView
                             flexDirection="row"
@@ -122,12 +131,22 @@ const baseStyles = () =>
             position: "relative",
         },
         bottom: { position: "absolute", bottom: 0, left: 0, width: "100%" },
-        favoriteIconContainer: {
+        favoriteRootContainer: {
+            width: "100%",
+            position: "absolute",
             top: 0,
             right: 0,
-            padding: 8,
-            position: "absolute",
             zIndex: 1,
+        },
+        favoriteContainer: {
+            width: "100%",
+            padding: 8,
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            alignItems: "center",
+        },
+        favoriteIcon: {
+            marginRight: 4,
         },
         imageErrorContainer: {
             position: "absolute",

@@ -68,17 +68,27 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
 
     return (
         <Pressable testID={`VBD_COLLECTIBLE_CARD_${address}_${tokenId}`} style={styles.root} onPress={handlePress}>
-            <Pressable
-                testID={`VBD_COLLECTIBLE_CARD_FAVORITE_${address}_${tokenId}`}
-                style={styles.favoriteContainerContainer}
-                onPress={handleToggleFavorite}>
-                <AnimatedBaseIcon
-                    name={isFavorite ? "icon-star-on" : "icon-star"}
-                    color={COLORS.WHITE}
-                    size={16}
-                    style={animatedStyles}
-                />
-            </Pressable>
+            <BaseView style={styles.favoriteRootContainer}>
+                <LinearGradient
+                    colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
+                    useAngle
+                    locations={[0, 0.5, 1]}
+                    style={styles.favoriteContainer}
+                    angle={180}>
+                    <Pressable
+                        testID={`VBD_COLLECTIBLE_CARD_FAVORITE_${address}_${tokenId}`}
+                        style={styles.favoriteIcon}
+                        onPress={handleToggleFavorite}>
+                        <AnimatedBaseIcon
+                            name={isFavorite ? "icon-star-on" : "icon-star"}
+                            color={COLORS.WHITE}
+                            size={16}
+                            style={animatedStyles}
+                        />
+                    </Pressable>
+                </LinearGradient>
+            </BaseView>
+
             {RenderMedia}
 
             <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
@@ -112,15 +122,22 @@ const baseStyles = () =>
             height: "100%",
             width: "100%",
         },
-        favoriteContainerContainer: {
+        favoriteRootContainer: {
+            width: "100%",
             position: "absolute",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 8,
             top: 0,
             right: 0,
             zIndex: 1,
+        },
+        favoriteContainer: {
+            width: "100%",
+            padding: 8,
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            alignItems: "center",
+        },
+        favoriteIcon: {
+            marginRight: 4,
         },
         bottom: { position: "absolute", bottom: 0, left: 0, width: "100%" },
     })
