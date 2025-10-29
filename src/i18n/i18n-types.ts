@@ -1323,18 +1323,6 @@ type RootTranslation = {
 	 */
 	BTN_ADD_TO_FAVORITES: string
 	/**
-	 * Report a problem
-	 */
-	BTN_COLLECTION_ACTIONS_REPORT: string
-	/**
-	 * Mark as favorite
-	 */
-	BTN_COLLECTION_ACTIONS_FAVORITE: string
-	/**
-	 * Report and block collection
-	 */
-	BTN_COLLECTION_ACTIONS_BLOCK: string
-	/**
 	 * A​l​p​h​a​b​e​t​i​c​ ​(​A​-​Z​)
 	 */
 	BTN_ALPHABETIC_ASC: string
@@ -1382,6 +1370,18 @@ type RootTranslation = {
 	 * C​l​o​s​e​ ​A​p​p
 	 */
 	BTN_CLOSE_APP: string
+	/**
+	 * R​e​p​o​r​t​ ​a​n​d​ ​b​l​o​c​k​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_COLLECTION_ACTIONS_BLOCK: string
+	/**
+	 * M​a​r​k​ ​a​s​ ​f​a​v​o​r​i​t​e
+	 */
+	BTN_COLLECTION_ACTIONS_FAVORITE: string
+	/**
+	 * R​e​p​o​r​t​ ​a​ ​p​r​o​b​l​e​m
+	 */
+	BTN_COLLECTION_ACTIONS_REPORT: string
 	/**
 	 * C​o​n​f​i​r​m
 	 */
@@ -1806,13 +1806,14 @@ type RootTranslation = {
 	 */
 	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
 	/**
-	 * C​o​l​l​e​c​t​i​o​n​s
+	 * R​e​p​o​r​t​ ​c​o​l​l​e​c​t​i​o​n
 	 */
-	COLLECTIONS: string
+	COLLECTIBLES_REPORT_PROBLEM: string
 	/**
-	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
+	 * B​y​ ​r​e​p​o​r​t​i​n​g​ ​t​h​i​s​ ​c​o​l​l​e​c​t​i​o​n​,​ ​i​t​ ​w​i​l​l​ ​b​e​ ​a​u​t​o​m​a​t​i​c​a​l​l​y​ ​r​e​m​o​v​e​d​ ​f​r​o​m​ ​y​o​u​r​ ​g​a​l​l​e​r​y​ ​a​n​d​ ​i​t​ ​w​i​l​l​ ​b​e​ ​r​e​p​o​r​t​e​d​ ​f​o​r​ ​r​e​v​i​e​w​.​
+​T​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​.
 	 */
-	COLLECTION_NAME: string
+	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: string
 	/**
 	 * D​e​t​a​i​l​s
 	 */
@@ -1822,13 +1823,13 @@ type RootTranslation = {
 	 */
 	COLLECTIBLES_VIEW_GALLERY: string
 	/**
-	 * Report collection
+	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
-	COLLECTIBLES_REPORT_PROBLEM: string
+	COLLECTIONS: string
 	/**
-	 * By reporting this collection, it will be automatically removed from your gallery and it will be reported for review.
+	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
 	 */
-	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: string
+	COLLECTION_NAME: string
 	/**
 	 * d​a​y
 	 */
@@ -3262,7 +3263,7 @@ type RootTranslation = {
 	 */
 	NFT_COLLECTION_REPORTED: string
 	/**
-	 * T​h​a​n​k​s​ ​f​o​r​ ​y​o​u​r​ ​r​e​p​o​r​t​!​ ​Y​o​u​r​ ​a​c​t​i​o​n​ ​h​e​l​p​s​ ​p​r​o​t​e​c​t​ ​t​h​e​ ​e​n​t​i​r​e​ ​c​o​m​m​u​n​i​t​y​.
+	 * T​h​e​ ​c​o​l​l​e​c​t​i​o​n​ ​w​a​s​ ​r​e​p​o​r​t​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​!
 	 */
 	NFT_COLLECTION_REPORTED_MSG: string
 	/**
@@ -3314,6 +3315,10 @@ type RootTranslation = {
 	 * R​e​p​o​r​t​ ​C​o​l​l​e​c​t​i​o​n
 	 */
 	NFT_REPORT_COLLECTION: string
+	/**
+	 * R​e​p​o​r​t​ ​a​n​d​ ​b​l​o​c​k​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	NFT_REPORT_BLOCK_COLLECTION: string
 	/**
 	 * C​o​n​f​i​r​m​ ​R​e​p​o​r​t
 	 */
@@ -3878,13 +3883,13 @@ type RootTranslation = {
 	 */
 	SB_CLAIM_USERNAME: string
 	/**
-	 * C​o​l​l​e​c​t​i​b​l​e​s
-	 */
-	SB_COLLECTIBLES: string
-	/**
 	 * C​o​l​l​e​c​t​i​b​l​e
 	 */
 	SB_COLLECTIBLE: string
+	/**
+	 * C​o​l​l​e​c​t​i​b​l​e​s
+	 */
+	SB_COLLECTIBLES: string
 	/**
 	 * C​o​n​f​i​r​m​ ​d​e​l​e​t​e
 	 */
@@ -6679,18 +6684,6 @@ Thanks for your patience!
 	 */
 	BTN_ADD_TO_FAVORITES: () => LocalizedString
 	/**
-	 * Report a problem
-	 */
-	BTN_COLLECTION_ACTIONS_REPORT: () => LocalizedString
-	/**
-	 * Mark as favorite
-	 */
-	BTN_COLLECTION_ACTIONS_FAVORITE: () => LocalizedString
-	/**
-	 * Report and block collection
-	 */
-	BTN_COLLECTION_ACTIONS_BLOCK: () => LocalizedString
-	/**
 	 * Alphabetic (A-Z)
 	 */
 	BTN_ALPHABETIC_ASC: () => LocalizedString
@@ -6738,6 +6731,18 @@ Thanks for your patience!
 	 * Close App
 	 */
 	BTN_CLOSE_APP: () => LocalizedString
+	/**
+	 * Report and block collection
+	 */
+	BTN_COLLECTION_ACTIONS_BLOCK: () => LocalizedString
+	/**
+	 * Mark as favorite
+	 */
+	BTN_COLLECTION_ACTIONS_FAVORITE: () => LocalizedString
+	/**
+	 * Report a problem
+	 */
+	BTN_COLLECTION_ACTIONS_REPORT: () => LocalizedString
 	/**
 	 * Confirm
 	 */
@@ -7159,13 +7164,14 @@ Thanks for your patience!
 	 */
 	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: () => LocalizedString
 	/**
-	 * Collections
+	 * Report collection
 	 */
-	COLLECTIONS: () => LocalizedString
+	COLLECTIBLES_REPORT_PROBLEM: () => LocalizedString
 	/**
-	 * Collection name
+	 * By reporting this collection, it will be automatically removed from your gallery and it will be reported for review.
+This action is irreversible.
 	 */
-	COLLECTION_NAME: () => LocalizedString
+	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: () => LocalizedString
 	/**
 	 * Details
 	 */
@@ -7175,13 +7181,13 @@ Thanks for your patience!
 	 */
 	COLLECTIBLES_VIEW_GALLERY: () => LocalizedString
 	/**
-	 * Report collection
+	 * Collections
 	 */
-	COLLECTIBLES_REPORT_PROBLEM: () => LocalizedString
+	COLLECTIONS: () => LocalizedString
 	/**
-	 * By reporting this collection, it will be automatically removed from your gallery and it will be reported for review.
+	 * Collection name
 	 */
-	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: () => LocalizedString
+	COLLECTION_NAME: () => LocalizedString
 	/**
 	 * day
 	 */
@@ -8607,7 +8613,7 @@ Thanks for your patience!
 	 */
 	NFT_COLLECTION_REPORTED: () => LocalizedString
 	/**
-	 * Thanks for your report! Your action helps protect the entire community.
+	 * The collection was reported successfully!
 	 */
 	NFT_COLLECTION_REPORTED_MSG: () => LocalizedString
 	/**
@@ -8659,6 +8665,10 @@ Thanks for your patience!
 	 * Report Collection
 	 */
 	NFT_REPORT_COLLECTION: () => LocalizedString
+	/**
+	 * Report and block collection
+	 */
+	NFT_REPORT_BLOCK_COLLECTION: () => LocalizedString
 	/**
 	 * Confirm Report
 	 */
@@ -9200,13 +9210,13 @@ Thanks for your patience!
 	 */
 	SB_CLAIM_USERNAME: () => LocalizedString
 	/**
-	 * Collectibles
-	 */
-	SB_COLLECTIBLES: () => LocalizedString
-	/**
 	 * Collectible
 	 */
 	SB_COLLECTIBLE: () => LocalizedString
+	/**
+	 * Collectibles
+	 */
+	SB_COLLECTIBLES: () => LocalizedString
 	/**
 	 * Confirm delete
 	 */
