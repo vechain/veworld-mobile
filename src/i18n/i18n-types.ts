@@ -1811,7 +1811,7 @@ type RootTranslation = {
 	COLLECTIBLES_REPORT_PROBLEM: string
 	/**
 	 * B​y​ ​r​e​p​o​r​t​i​n​g​ ​t​h​i​s​ ​c​o​l​l​e​c​t​i​o​n​,​ ​i​t​ ​w​i​l​l​ ​b​e​ ​a​u​t​o​m​a​t​i​c​a​l​l​y​ ​r​e​m​o​v​e​d​ ​f​r​o​m​ ​y​o​u​r​ ​g​a​l​l​e​r​y​ ​a​n​d​ ​i​t​ ​w​i​l​l​ ​b​e​ ​r​e​p​o​r​t​e​d​ ​f​o​r​ ​r​e​v​i​e​w​.​
-​T​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​.
+​T​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e
 	 */
 	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: string
 	/**
@@ -5407,6 +5407,14 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * F​a​v​o​r​i​t​e​d​!
+	 */
+	FEEDBACK_FAVORITED: string
+	/**
+	 * S​e​t​ ​a​s​ ​a​v​a​t​a​r​!
+	 */
+	FEEDBACK_SET_AVATAR: string
 }
 
 export type TranslationFunctions = {
@@ -10717,6 +10725,14 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Favorited!
+	 */
+	FEEDBACK_FAVORITED: () => LocalizedString
+	/**
+	 * Set as avatar!
+	 */
+	FEEDBACK_SET_AVATAR: () => LocalizedString
 }
 
 export type Formatters = {

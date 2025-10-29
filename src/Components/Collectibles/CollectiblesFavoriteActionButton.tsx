@@ -1,14 +1,8 @@
 import React, { useCallback, useMemo } from "react"
+import { useNftBookmarking } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
-import {
-    isNftFavorite,
-    selectSelectedAccount,
-    selectSelectedNetwork,
-    toggleFavorite,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import HapticsService from "~Services/HapticsService"
 import { CollectiblesActionButton } from "./CollectiblesActionButton"
 
 type Props = {
@@ -17,11 +11,7 @@ type Props = {
 }
 export const CollectiblesFavoriteActionButton = ({ address, tokenId }: Props) => {
     const { LL } = useI18nContext()
-    const isFavorite = useAppSelector(state => isNftFavorite(state, address, tokenId))
-    const network = useAppSelector(selectSelectedNetwork)
-    const account = useAppSelector(selectSelectedAccount)
-
-    const dispatch = useAppDispatch()
+    const { isFavorite, toggleFavorite } = useNftBookmarking(address, tokenId)
 
     const icon = useMemo<IconKey>(() => {
         if (isFavorite) return "icon-star-on"
@@ -29,8 +19,9 @@ export const CollectiblesFavoriteActionButton = ({ address, tokenId }: Props) =>
     }, [isFavorite])
 
     const onPress = useCallback(() => {
-        dispatch(toggleFavorite({ address, tokenId, owner: account.address, genesisId: network.genesis.id }))
-    }, [account.address, address, dispatch, network.genesis.id, tokenId])
+        HapticsService.triggerImpact({ level: "Light" })
+        toggleFavorite()
+    }, [toggleFavorite])
 
     return (
         <CollectiblesActionButton

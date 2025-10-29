@@ -14,6 +14,8 @@ import {
 } from "~Storage/Redux"
 import { AddressUtils, MediaUtils } from "~Utils"
 import { CollectiblesActionButton } from "./CollectiblesActionButton"
+import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 
 type Props = {
     image: string | undefined
@@ -72,6 +74,13 @@ export const CollectiblesAvatarActionButton = ({ image, address, tokenId, mimeTy
         //Set account avatar with image
         await FileSystem.downloadAsync(image, persistentPath)
 
+        Feedback.show({
+            severity: FeedbackSeverity.INFO,
+            type: FeedbackType.ALERT,
+            message: LL.FEEDBACK_SET_AVATAR(),
+            icon: "icon-smile",
+        })
+
         dispatch(
             setAccountPfp({
                 accountAddress: account.address,
@@ -88,6 +97,7 @@ export const CollectiblesAvatarActionButton = ({ image, address, tokenId, mimeTy
             },
         )
     }, [
+        LL,
         account.address,
         account.profileImage?.uri,
         address,

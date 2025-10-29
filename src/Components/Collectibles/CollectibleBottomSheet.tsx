@@ -152,7 +152,7 @@ const baseStyles = () =>
             position: "absolute",
             top: 12,
             right: 12,
-            backgroundColor: "rgba(0, 0, 0, 0.30)",
+            backgroundColor: "rgba(0, 0, 0, 0.50)",
             borderRadius: 100,
             padding: 10,
         },
