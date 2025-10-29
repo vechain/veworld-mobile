@@ -443,6 +443,8 @@
   "COMMOMN_DAY": "day",
   "COMMON_24H": "24 HRs",
   "COMMON_24H_VOLUME": "24h Volume",
+  "COMMON_24H_PRICE_RANGE": "24h Range",
+  "COMMON_TOKEN_STATS": "Token stats",
   "COMMON_ASSETS": "Assets",
   "COMMON_BTN_ADD": "Add",
   "COMMON_BTN_APPLY": "Apply",
