@@ -4,6 +4,7 @@ import { BaseButton, BaseIcon, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { TwitterSVG, TelegramSVG } from "~Assets/IconComponents"
 
 const ALLOWED_SOCIAL_LINKS = ["website", "twitter", "telegram"] as const
 type AllowedSocialLink = (typeof ALLOWED_SOCIAL_LINKS)[number]
@@ -15,11 +16,6 @@ type SocialLinksButtonsProps = {
         telegram?: string
     }
     onNavigate: (url: string) => void
-}
-
-const getSocialIconName = (key: string): string => {
-    if (key === "website") return "icon-globe"
-    return `icon-${key.toLowerCase()}`
 }
 
 const SOCIAL_BUTTON_FLEX = {
@@ -38,9 +34,23 @@ export const SocialLinksButtons = ({ socialLinks, onNavigate }: SocialLinksButto
         ) as Array<[AllowedSocialLink, string]>
     }, [socialLinks])
 
+    const renderLeftIcon = useCallback(
+        (key: AllowedSocialLink) => {
+            if (key === "website")
+                return (
+                    <BaseIcon name="icon-globe" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_500} size={20} />
+                )
+            if (key === "twitter")
+                return <TwitterSVG color={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_500} width={20} height={20} />
+            if (key === "telegram")
+                return <TelegramSVG color={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_500} width={20} height={20} />
+            return null
+        },
+        [theme],
+    )
+
     const renderSocialButton = useCallback(
         ([key, value]: [AllowedSocialLink, string]) => {
-            const iconName = getSocialIconName(key)
             const isWebsite = key === "website"
 
             return (
@@ -51,13 +61,7 @@ export const SocialLinksButtons = ({ socialLinks, onNavigate }: SocialLinksButto
                     action={() => onNavigate(value)}
                     style={styles.button}
                     size="md"
-                    leftIcon={
-                        <BaseIcon
-                            name={iconName as any}
-                            color={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_500}
-                            size={20}
-                        />
-                    }
+                    leftIcon={renderLeftIcon(key)}
                     typographyFont="bodySemiBold"
                     textStyle={isWebsite ? styles.buttonText : undefined}
                     bgColor={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.WHITE}
@@ -67,13 +71,13 @@ export const SocialLinksButtons = ({ socialLinks, onNavigate }: SocialLinksButto
                 </BaseButton>
             )
         },
-        [onNavigate, styles, theme, LL],
+        [onNavigate, styles, theme, LL, renderLeftIcon],
     )
 
     if (filteredLinks.length === 0) return null
 
     return (
-        <BaseView flexDirection="row" alignItems="center" gap={16} justifyContent="space-between">
+        <BaseView flexDirection="row" alignItems="center" gap={16} justifyContent="space-between" my={12}>
             {filteredLinks.map(renderSocialButton)}
         </BaseView>
     )

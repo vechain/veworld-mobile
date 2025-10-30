@@ -102,13 +102,12 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks }: Asset
     return (
         <BaseView
             bg={theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_50}
-            px={16}
+            px={24}
             py={24}
             mx={16}
             my={16}
-            borderRadius={16}
-            gap={16}>
-            <BaseView flexDirection="row" alignItems="center" gap={12} justifyContent="flex-start" mb={8}>
+            borderRadius={16}>
+            <BaseView flexDirection="row" alignItems="center" gap={12} justifyContent="flex-start" mb={12}>
                 <BaseIcon name="icon-line-chart" size={20} color={theme.colors.actionBanner.title} />
                 <BaseText typographyFont="bodySemiBold" color={theme.colors.actionBanner.title}>
                     {LL.COMMON_TOKEN_STATS()}
@@ -122,7 +121,8 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks }: Asset
                     alignItems="center"
                     gap={12}
                     justifyContent="space-between"
-                    testID={testID}>
+                    testID={testID}
+                    py={8}>
                     <BaseText typographyFont="smallButtonPrimary" color={theme.colors.textLightish}>
                         {label}
                     </BaseText>
@@ -135,11 +135,11 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks }: Asset
                 </BaseView>
             ))}
 
-            <BaseSpacer height={1} background={theme.isDark ? COLORS.PURPLE : COLORS.GREY_100} my={24} />
+            <BaseSpacer height={1} background={theme.isDark ? COLORS.PURPLE : COLORS.GREY_100} my={16} />
 
             {tokenDescription && (
                 <>
-                    <BaseView flexDirection="row" alignItems="center" gap={12} justifyContent="flex-start" mb={8}>
+                    <BaseView flexDirection="row" alignItems="center" gap={12} justifyContent="flex-start" mb={12}>
                         <BaseIcon name="icon-alert-circle" size={20} color={theme.colors.actionBanner.title} />
                         <BaseText typographyFont="bodySemiBold" color={theme.colors.actionBanner.title}>
                             {LL.TITLE_ABOUT()}
@@ -156,6 +156,7 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks }: Asset
                                 {tokenDescription}
                             </BaseText>
                             <BaseView
+                                my={12}
                                 onStartShouldSetResponder={() => true}
                                 onTouchEnd={e => {
                                     e.stopPropagation()
