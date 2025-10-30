@@ -5,9 +5,10 @@ import React, { RefObject, useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useBottomSheetModal, useCollectionsBookmarking, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useBlacklistedCollection } from "~Hooks/useBlacklistedCollection"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { useCollectionsBookmarking } from "~Hooks/useCollectionsBookmarking"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 
@@ -66,7 +67,7 @@ const Content = ({
 
     return (
         <BaseView px={24} gap={12} pb={16}>
-            <TouchableOpacity style={styles.button} onPress={onBookmarkPress}>
+            <TouchableOpacity style={styles.button} onPress={onBookmarkPress} testID="COLLECTION_ACTIONS_BS_FAVORITE">
                 <BaseIcon
                     name={isFavorite ? "icon-star-on" : "icon-star"}
                     size={16}
@@ -77,7 +78,7 @@ const Content = ({
                     {isFavorite ? LL.BTN_REMOVE_FROM_FAVORITE() : LL.BTN_COLLECTION_ACTIONS_FAVORITE()}
                 </BaseText>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={onBlacklistPress}>
+            <TouchableOpacity style={styles.button} onPress={onBlacklistPress} testID="COLLECTION_ACTIONS_BS_BLACKLIST">
                 <BaseIcon
                     name={isBlacklisted ? "icon-eye" : "icon-eye-off"}
                     size={16}
@@ -88,7 +89,7 @@ const Content = ({
                     {isBlacklisted ? LL.BTN_SHOW_COLLECTION() : LL.BTN_HIDE_COLLECTION()}
                 </BaseText>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={onReportPress}>
+            <TouchableOpacity style={styles.button} onPress={onReportPress} testID="COLLECTION_ACTIONS_BS_REPORT">
                 <BaseIcon
                     name="icon-alert-triangle"
                     size={16}
@@ -100,7 +101,7 @@ const Content = ({
                 </BaseText>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={onBlockPress}>
+            <TouchableOpacity style={styles.button} onPress={onBlockPress} testID="COLLECTION_ACTIONS_BS_REPORT_BLOCK">
                 <BaseIcon
                     name="icon-slash"
                     size={16}
