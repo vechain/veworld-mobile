@@ -72,3 +72,54 @@ export const setName: abi.Function.Definition = {
     stateMutability: "nonpayable",
     type: "function",
 }
+
+/**
+ * Function definition to get a text record from the Vet Domains Public Resolver
+ */
+export const text = {
+    inputs: [
+        {
+            internalType: "bytes32",
+            name: "node",
+            type: "bytes32",
+        },
+        {
+            internalType: "string",
+            name: "key",
+            type: "string",
+        },
+    ],
+    name: "text",
+    outputs: [
+        {
+            internalType: "string",
+            name: "",
+            type: "string",
+        },
+    ],
+    stateMutability: "view",
+    type: "function",
+} as const
+
+/**
+ * Function definition to get the resolver address from the Vet Domains Registry
+ */
+export const resolver = {
+    inputs: [
+        {
+            internalType: "bytes32",
+            name: "node",
+            type: "bytes32",
+        },
+    ],
+    name: "resolver",
+    outputs: [
+        {
+            internalType: "address",
+            name: "",
+            type: "address",
+        },
+    ],
+    stateMutability: "view",
+    type: "function",
+} as const

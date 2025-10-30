@@ -35,7 +35,7 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
     const { isBlacklisted } = useBlacklistedCollection(collectionAddress)
 
     const { data: media } = useQuery({
-        queryKey: ["COLLECTIBLES", "COLLECTION", "MEDIA", collectionMetadata?.image],
+        queryKey: ["COLLECTIBLES", "MEDIA", collectionMetadata?.image],
         queryFn: () => fetchMedia(collectionMetadata?.image!),
         enabled: !!collectionMetadata?.image,
         staleTime: 5 * 60 * 60 * 1000,

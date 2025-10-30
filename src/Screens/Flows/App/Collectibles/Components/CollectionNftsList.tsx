@@ -33,9 +33,9 @@ type Props = {
 const getCollectionNftsQueryKey = (collectionAddress: string, genesisId: string, accountAddress: string) => [
     "COLLECTIBLES",
     "COLLECTION_NFTS",
-    collectionAddress,
     genesisId,
     accountAddress,
+    collectionAddress,
 ]
 
 export const CollectionNftsList = ({ collectionAddress }: Props) => {
