@@ -52,33 +52,69 @@ describe("AssetStats", () => {
     })
 
     describe("Description Accordion", () => {
-        const shortDescription = "This is a short description"
+        const shortDescription = "Short text"
         const longDescription =
-            "This is a very long description that has more than twenty words in total to trigger " +
-            "the accordion functionality and allow users to expand and collapse"
+            "This is a very long description that will span multiple lines when rendered " +
+            "and should trigger the accordion functionality to allow users to expand and collapse it"
 
-        it("should not show accordion for short descriptions (≤20 words)", () => {
-            const { queryByTestId, getByText } = render(
+        it("should not show accordion when description renders ≤3 lines", () => {
+            const { queryByTestId, getByTestId } = render(
                 <AssetStats tokenSymbol="VET" tokenDescription={shortDescription} />,
                 { wrapper: createWrapper() },
             )
 
-            expect(getByText(shortDescription)).toBeTruthy()
+            const hiddenText = getByTestId("token-description-hidden")
+
+            // Simulate onTextLayout with 2 lines
+            fireEvent(hiddenText, "textLayout", {
+                nativeEvent: {
+                    lines: [{ width: 100 }, { width: 100 }],
+                },
+            })
+
             expect(queryByTestId("read-more-toggle")).toBeNull()
         })
 
-        it("should show accordion toggle for long descriptions (>20 words)", () => {
-            const { getByTestId } = render(<AssetStats tokenSymbol="VET" tokenDescription={longDescription} />, {
-                wrapper: createWrapper(),
+        it("should show accordion toggle when description renders >3 lines", async () => {
+            const { getByTestId, queryByTestId } = render(
+                <AssetStats tokenSymbol="VET" tokenDescription={longDescription} />,
+                {
+                    wrapper: createWrapper(),
+                },
+            )
+
+            // Initially no toggle
+            expect(queryByTestId("read-more-toggle")).toBeNull()
+
+            // Simulate onTextLayout with 5 lines on the hidden text element
+            const hiddenText = getByTestId("token-description-hidden")
+            fireEvent(hiddenText, "textLayout", {
+                nativeEvent: {
+                    lines: [{ width: 100 }, { width: 100 }, { width: 100 }, { width: 100 }, { width: 100 }],
+                },
             })
 
-            expect(getByTestId("read-more-toggle")).toBeTruthy()
-            expect(getByTestId("token-description")).toBeTruthy()
+            await waitFor(() => {
+                expect(getByTestId("read-more-toggle")).toBeTruthy()
+            })
         })
 
         it("should toggle accordion when pressed", async () => {
             const { getByTestId } = render(<AssetStats tokenSymbol="VET" tokenDescription={longDescription} />, {
                 wrapper: createWrapper(),
+            })
+
+            const hiddenText = getByTestId("token-description-hidden")
+
+            // Simulate onTextLayout with 5 lines to trigger accordion
+            fireEvent(hiddenText, "textLayout", {
+                nativeEvent: {
+                    lines: [{ width: 100 }, { width: 100 }, { width: 100 }, { width: 100 }, { width: 100 }],
+                },
+            })
+
+            await waitFor(() => {
+                expect(getByTestId("read-more-toggle")).toBeTruthy()
             })
 
             const toggleButton = getByTestId("read-more-toggle")
@@ -97,6 +133,28 @@ describe("AssetStats", () => {
             await waitFor(() => {
                 expect(description.props.numberOfLines).toBe(3)
             })
+        })
+
+        it("should not cause infinite re-renders when line count is stable", () => {
+            const { getByTestId } = render(<AssetStats tokenSymbol="VET" tokenDescription={longDescription} />, {
+                wrapper: createWrapper(),
+            })
+
+            const hiddenText = getByTestId("token-description-hidden")
+
+            // Fire onTextLayout multiple times with same line count
+            const layoutEvent = {
+                nativeEvent: {
+                    lines: [{ width: 100 }, { width: 100 }, { width: 100 }, { width: 100 }],
+                },
+            }
+
+            fireEvent(hiddenText, "textLayout", layoutEvent)
+            fireEvent(hiddenText, "textLayout", layoutEvent)
+            fireEvent(hiddenText, "textLayout", layoutEvent)
+
+            // Should not throw or cause issues - state guard prevents updates
+            expect(getByTestId("token-description")).toBeTruthy()
         })
 
         it("should render About section when description exists", () => {
