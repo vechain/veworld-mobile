@@ -9,6 +9,7 @@ import { BaseIcon, BaseText, BaseView, BlurView } from "~Components"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS } from "~Constants"
 import { useNFTMedia, useThemedStyles } from "~Hooks"
+import { useBlacklistedCollection } from "~Hooks/useBlacklistedCollection"
 import { useCollectionsBookmarking } from "~Hooks/useCollectionsBookmarking"
 import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import HapticsService from "~Services/HapticsService"
@@ -31,6 +32,7 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
     const { fetchMedia } = useNFTMedia()
     const { animatedStyles, favoriteIconAnimation } = useFavoriteAnimation()
     const { isFavorite, toggleFavoriteCollection } = useCollectionsBookmarking(collectionAddress)
+    const { isBlacklisted } = useBlacklistedCollection(collectionAddress)
 
     const { data: media } = useQuery({
         queryKey: ["COLLECTIBLES", "COLLECTION", "MEDIA", collectionMetadata?.image],
@@ -66,36 +68,46 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
                 resizeMode="cover"
                 style={styles.image}
                 fallback
-                defaultSource={NFTPlaceholderDarkV2}>
-                <BaseView style={styles.favoriteRootContainer}>
-                    <LinearGradient
-                        colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
-                        useAngle
-                        locations={[0, 0.5, 1]}
-                        style={styles.favoriteContainer}
-                        angle={180}>
-                        <TouchableOpacity
-                            testID={`VBD_COLLECTION_CARD_FAVORITE_${collectionAddress}`}
-                            disabled={!collectionMetadata?.id}
-                            style={styles.favoriteIcon}
-                            onPress={handleToggleFavorite}>
-                            <AnimatedBaseIcon
-                                name={isFavorite ? "icon-star-on" : "icon-star"}
-                                size={16}
-                                color={COLORS.WHITE}
-                                style={animatedStyles}
-                            />
-                        </TouchableOpacity>
-                    </LinearGradient>
-                </BaseView>
+                defaultSource={NFTPlaceholderDarkV2}
+                blurred={isBlacklisted}>
+                {!isBlacklisted && (
+                    <BaseView style={styles.favoriteRootContainer}>
+                        <LinearGradient
+                            colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
+                            useAngle
+                            locations={[0, 0.5, 1]}
+                            style={styles.favoriteContainer}
+                            angle={180}>
+                            <TouchableOpacity
+                                testID={`VBD_COLLECTION_CARD_FAVORITE_${collectionAddress}`}
+                                disabled={!collectionMetadata?.id}
+                                style={styles.favoriteIcon}
+                                onPress={handleToggleFavorite}>
+                                <AnimatedBaseIcon
+                                    name={isFavorite ? "icon-star-on" : "icon-star"}
+                                    size={16}
+                                    color={COLORS.WHITE}
+                                    style={animatedStyles}
+                                />
+                            </TouchableOpacity>
+                        </LinearGradient>
+                    </BaseView>
+                )}
+
                 <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
                     <BaseView
                         flexDirection="row"
                         alignItems="center"
                         justifyContent="space-between"
                         p={8}
+                        gap={8}
                         bg={COLORS.BLACK_RGBA_30}>
-                        <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE_RGBA_90} flexDirection="row">
+                        <BaseText
+                            typographyFont="captionSemiBold"
+                            color={COLORS.WHITE_RGBA_90}
+                            flexDirection="row"
+                            flex={1}
+                            numberOfLines={1}>
                             {collectionMetadata?.name
                                 ? collectionMetadata?.name
                                 : AddressUtils.humanAddress(collectionAddress)}
