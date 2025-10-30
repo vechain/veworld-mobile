@@ -102,7 +102,12 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
                     useAngle
                     angle={0}>
                     <BaseView flexDirection="row" alignItems="center" p={8}>
-                        <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE_RGBA_90} flexDirection="row">
+                        <BaseText
+                            typographyFont="captionSemiBold"
+                            color={COLORS.WHITE_RGBA_90}
+                            flexDirection="row"
+                            flex={1}
+                            numberOfLines={1}>
                             {details.name}
                         </BaseText>
                     </BaseView>
