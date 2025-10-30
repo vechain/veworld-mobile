@@ -85,11 +85,14 @@ jobs:
               env:
                   ref: "${{ github.ref }}"
                   head: "${{ github.head_ref || 'main' }}"
+                  pr_number: "${{ github.event.pull_request.number || 99999 }}"
+                  pr_branch: "${{ github.ref_name }}"
+                  pr_base: "${{ github.event.pull_request.base.ref || 'main' }}"
               run: |
                   if [[ $ref == 'refs/heads/main' ]]; then
                       echo "SONAR_ARGS=-Dsonar.branch.name=main" >> $GITHUB_OUTPUT
                   else
-                      echo "SONAR_ARGS=-Dsonar.pullrequest.key=${{github.event.pull_request.number || 99999 }} -Dsonar.pullrequest.branch=${GITHUB_REF_NAME} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref || 'main' }}" >> $GITHUB_OUTPUT
+                      echo "SONAR_ARGS=-Dsonar.pullrequest.key=${pr_number} -Dsonar.pullrequest.branch=${pr_branch} -Dsonar.pullrequest.base=${pr_base}" >> $GITHUB_OUTPUT
                   fi
 
             - name: SonarCloud Scan
