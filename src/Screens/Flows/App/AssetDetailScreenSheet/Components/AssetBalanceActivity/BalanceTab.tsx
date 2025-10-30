@@ -6,6 +6,7 @@ import { FungibleTokenWithBalance } from "~Model"
 import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { formatTokenAmount } from "~Utils/StandardizedFormatting"
+import { BalanceTabActions } from "./BalanceTabActions"
 import { ValueContainer } from "./ValueContainer"
 
 type Props = {
@@ -56,44 +57,47 @@ export const BalanceTab = ({ token: _token }: Props) => {
     const { fiatBalance, showFiatBalance, tokenBalance } = useTokenCardBalance({ token })
     const { formatLocale } = useFormatFiat()
     return (
-        <ValueContainer>
-            {isVOT3OrB3TR ? (
-                <>
-                    {b3trToken && (
-                        <ValueContainer.TokenValue
-                            token={b3trToken}
-                            value={formatTokenAmount(
-                                b3trToken.balance.balance,
-                                b3trToken.symbol,
-                                b3trToken.decimals ?? 0,
-                                {
-                                    locale: formatLocale,
-                                    includeSymbol: false,
-                                },
-                            )}
-                            border
-                        />
-                    )}
-                    {vot3Token && (
-                        <ValueContainer.TokenValue
-                            token={vot3Token}
-                            value={formatTokenAmount(
-                                vot3Token.balance.balance,
-                                vot3Token.symbol,
-                                vot3Token.decimals ?? 0,
-                                {
-                                    locale: formatLocale,
-                                    includeSymbol: false,
-                                },
-                            )}
-                            border
-                        />
-                    )}
-                </>
-            ) : (
-                <ValueContainer.TokenValue token={token} value={tokenBalance} border={!!showFiatBalance} />
-            )}
-            {showFiatBalance && <ValueContainer.DollarValue value={fiatBalance} />}
-        </ValueContainer>
+        <>
+            <ValueContainer>
+                {isVOT3OrB3TR ? (
+                    <>
+                        {b3trToken && (
+                            <ValueContainer.TokenValue
+                                token={b3trToken}
+                                value={formatTokenAmount(
+                                    b3trToken.balance.balance,
+                                    b3trToken.symbol,
+                                    b3trToken.decimals ?? 0,
+                                    {
+                                        locale: formatLocale,
+                                        includeSymbol: false,
+                                    },
+                                )}
+                                border
+                            />
+                        )}
+                        {vot3Token && (
+                            <ValueContainer.TokenValue
+                                token={vot3Token}
+                                value={formatTokenAmount(
+                                    vot3Token.balance.balance,
+                                    vot3Token.symbol,
+                                    vot3Token.decimals ?? 0,
+                                    {
+                                        locale: formatLocale,
+                                        includeSymbol: false,
+                                    },
+                                )}
+                                border
+                            />
+                        )}
+                    </>
+                ) : (
+                    <ValueContainer.TokenValue token={token} value={tokenBalance} border={!!showFiatBalance} />
+                )}
+                {showFiatBalance && <ValueContainer.DollarValue value={fiatBalance} />}
+            </ValueContainer>
+            <BalanceTabActions token={token} />
+        </>
     )
 }

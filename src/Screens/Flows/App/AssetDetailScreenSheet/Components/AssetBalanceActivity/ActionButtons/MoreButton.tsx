@@ -1,0 +1,25 @@
+import React, { useCallback } from "react"
+import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
+import { useBottomSheetModal } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { MoreButtonBottomSheet } from "./MoreButtonBottomSheet"
+
+type Props = {
+    openReceiveBottomsheet: () => void
+}
+
+export const MoreButton = ({ openReceiveBottomsheet }: Props) => {
+    const { LL } = useI18nContext()
+    const { ref: ref, onOpen: onOpen } = useBottomSheetModal()
+
+    const onPress = useCallback(() => {
+        onOpen()
+    }, [onOpen])
+
+    return (
+        <>
+            <GlassButtonWithLabel label={LL.COMMON_BTN_MORE()} size="sm" icon="icon-more-vertical" onPress={onPress} />
+            <MoreButtonBottomSheet bsRef={ref} openReceiveBottomsheet={openReceiveBottomsheet} />
+        </>
+    )
+}
