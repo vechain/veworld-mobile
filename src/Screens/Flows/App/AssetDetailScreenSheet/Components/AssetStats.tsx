@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { Pressable, StyleSheet } from "react-native"
+import { GestureResponderEvent, NativeSyntheticEvent, Pressable, StyleSheet, TextLayoutEventData } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { getCoinGeckoIdBySymbol, useTokenInfo } from "~Api/Coingecko"
@@ -13,7 +13,7 @@ import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { Routes } from "~Navigation"
 import { SocialLinksButtons } from "./SocialLinksButtons"
 
-const DESCRIPTION_WORD_THRESHOLD = 20
+const DESCRIPTION_LINE_THRESHOLD = 3
 
 type AssetStatsProps = {
     tokenSymbol: string
@@ -31,10 +31,32 @@ type StatItem = {
     testID: string
 }
 
-export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks }: AssetStatsProps): JSX.Element => {
+const StatRow = React.memo<StatItem & { labelColor: string; valueColor: string }>(
+    ({ label, value, testID, labelColor, valueColor }) => (
+        <BaseView
+            flexDirection="row"
+            alignItems="center"
+            gap={12}
+            justifyContent="space-between"
+            testID={testID}
+            py={8}>
+            <BaseText typographyFont="smallButtonPrimary" color={labelColor}>
+                {label}
+            </BaseText>
+            <BaseText typographyFont="smallButtonPrimary" color={valueColor} testID={`${testID}-value`}>
+                {value ?? "N/A"}
+            </BaseText>
+        </BaseView>
+    ),
+)
+
+StatRow.displayName = "StatRow"
+
+export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks }: AssetStatsProps) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const [isAccordionOpen, setIsAccordionOpen] = useState(false)
+    const [descriptionLineCount, setDescriptionLineCount] = useState(0)
     const { navigateWithTab } = useBrowserTab(Routes.HOME)
 
     const handleSocialLinkPress = useCallback(
@@ -78,10 +100,23 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks }: Asset
     )
 
     const shouldShowAccordion = useMemo(() => {
-        if (!tokenDescription) return false
-        const wordCount = tokenDescription.trim().split(/\s+/).length
-        return wordCount > DESCRIPTION_WORD_THRESHOLD
-    }, [tokenDescription])
+        return descriptionLineCount > DESCRIPTION_LINE_THRESHOLD
+    }, [descriptionLineCount])
+
+    /**
+     * Measures the actual rendered line count of the description text.
+     * Uses state guard (prev === lineCount) to prevent infinite re-render loop.
+     */
+    const handleTextLayout = useCallback((e: NativeSyntheticEvent<TextLayoutEventData>) => {
+        const lineCount = e.nativeEvent.lines.length
+        setDescriptionLineCount(prev => (prev === lineCount ? prev : lineCount))
+    }, [])
+
+    const handleResponder = useCallback(() => true, [])
+
+    const handleTouchEnd = useCallback((e: GestureResponderEvent) => {
+        e.stopPropagation()
+    }, [])
 
     const open = useSharedValue(false)
     const progress = useDerivedValue(() => (open.value ? withTiming(1) : withTiming(0)))
@@ -114,25 +149,13 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks }: Asset
                 </BaseText>
             </BaseView>
 
-            {stats.map(({ label, value, testID }) => (
-                <BaseView
-                    key={testID}
-                    flexDirection="row"
-                    alignItems="center"
-                    gap={12}
-                    justifyContent="space-between"
-                    testID={testID}
-                    py={8}>
-                    <BaseText typographyFont="smallButtonPrimary" color={theme.colors.textLightish}>
-                        {label}
-                    </BaseText>
-                    <BaseText
-                        typographyFont="smallButtonPrimary"
-                        color={theme.colors.x2eAppOpenDetails.stats.value}
-                        testID={`${testID}-value`}>
-                        {value ?? "N/A"}
-                    </BaseText>
-                </BaseView>
+            {stats.map(stat => (
+                <StatRow
+                    key={stat.testID}
+                    {...stat}
+                    labelColor={theme.colors.textLightish}
+                    valueColor={theme.colors.x2eAppOpenDetails.stats.value}
+                />
             ))}
 
             <BaseSpacer height={1} background={theme.isDark ? COLORS.PURPLE : COLORS.GREY_100} my={16} />
@@ -146,45 +169,45 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks }: Asset
                         </BaseText>
                     </BaseView>
 
-                    {shouldShowAccordion ? (
-                        <>
-                            <BaseText
-                                typographyFont="smallButtonPrimary"
-                                color={theme.colors.textLightish}
-                                numberOfLines={isAccordionOpen ? undefined : 3}
-                                testID="token-description">
-                                {tokenDescription}
-                            </BaseText>
-                            <BaseView
-                                my={12}
-                                onStartShouldSetResponder={() => true}
-                                onTouchEnd={e => {
-                                    e.stopPropagation()
-                                }}>
-                                <Pressable onPress={handleToggle} style={styles.toggleButton} testID="read-more-toggle">
-                                    <BaseText
-                                        typographyFont="smallButtonPrimary"
-                                        color={theme.colors.actionBanner.title}>
-                                        {isAccordionOpen ? LL.COMMON_LBL_READ_LESS() : LL.COMMON_LBL_READ_MORE()}
-                                    </BaseText>
-                                    <Animated.View style={chevronStyle}>
-                                        <BaseIcon
-                                            name="icon-chevron-down"
-                                            color={theme.colors.actionBanner.title}
-                                            size={14}
-                                            testID="chevron"
-                                        />
-                                    </Animated.View>
-                                </Pressable>
-                            </BaseView>
-                        </>
-                    ) : (
-                        <BaseText
-                            typographyFont="smallButtonPrimary"
-                            color={theme.colors.textLightish}
-                            testID="token-description">
-                            {tokenDescription}
-                        </BaseText>
+                    {/**
+                     * Hidden text element that measures the full untruncated line count.
+                     * This is necessary because onTextLayout with numberOfLines returns the truncated count,
+                     * not the true line count. The opacity:0 and absolute positioning ensure it doesn't
+                     * affect layout while still being measured by the layout engine.
+                     */}
+                    <BaseText
+                        typographyFont="smallButtonPrimary"
+                        color={theme.colors.textLightish}
+                        onTextLayout={handleTextLayout}
+                        style={styles.hiddenText}
+                        testID="token-description-hidden">
+                        {tokenDescription}
+                    </BaseText>
+
+                    <BaseText
+                        typographyFont="smallButtonPrimary"
+                        color={theme.colors.textLightish}
+                        numberOfLines={shouldShowAccordion && !isAccordionOpen ? 3 : undefined}
+                        testID="token-description">
+                        {tokenDescription}
+                    </BaseText>
+
+                    {shouldShowAccordion && (
+                        <BaseView my={12} onStartShouldSetResponder={handleResponder} onTouchEnd={handleTouchEnd}>
+                            <Pressable onPress={handleToggle} style={styles.toggleButton} testID="read-more-toggle">
+                                <BaseText typographyFont="smallButtonPrimary" color={theme.colors.actionBanner.title}>
+                                    {isAccordionOpen ? LL.COMMON_LBL_READ_LESS() : LL.COMMON_LBL_READ_MORE()}
+                                </BaseText>
+                                <Animated.View style={chevronStyle}>
+                                    <BaseIcon
+                                        name="icon-chevron-down"
+                                        color={theme.colors.actionBanner.title}
+                                        size={14}
+                                        testID="chevron"
+                                    />
+                                </Animated.View>
+                            </Pressable>
+                        </BaseView>
                     )}
                     <BaseSpacer height={8} />
                 </>
@@ -203,5 +226,10 @@ const baseStyles = (_theme: ColorThemeType) =>
             marginTop: 8,
             gap: 4,
             width: "100%",
+        },
+        hiddenText: {
+            position: "absolute",
+            opacity: 0,
+            zIndex: -1,
         },
     })
