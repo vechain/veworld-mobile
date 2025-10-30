@@ -75,6 +75,8 @@
 	<string>$(PRODUCT_NAME) needs microphone access.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) requires access to your photo album to use media.</string>
+	<key>OneSignal_app_groups_key</key>
+	<string>group.org.vechain.veworld.app.onesignal</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>MaterialIcons.ttf</string>

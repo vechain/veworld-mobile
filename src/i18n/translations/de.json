@@ -437,7 +437,7 @@
   "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "Übertragen Sie ein Sammlerstück, um mit dem Aufbau Ihrer Sammlung zu beginnen",
   "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "oder kaufen Sie ein Sammlerstück über eine unserer Ecosystem-Apps",
   "COLLECTIBLES_REPORT_PROBLEM": "Sammlung melden",
-  "COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION": "Durch das Melden dieser Sammlung wird sie automatisch aus Ihrer Galerie entfernt und zur Überprüfung gemeldet.\nDiese Aktion ist unwiderruflich.",
+  "COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION": "Durch das Melden dieser Sammlung wird sie automatisch aus Ihrer Galerie entfernt und zur Überprüfung gemeldet.\nDiese Aktion ist nicht umkehrbar.",
   "COLLECTIBLES_VIEW_DETAILS": "Details",
   "COLLECTIBLES_VIEW_GALLERY": "Galerie",
   "COLLECTIONS": "Sammlungen",

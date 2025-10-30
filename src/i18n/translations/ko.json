@@ -437,7 +437,7 @@
   "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "수집품을 전송하여 컬렉션을 시작하세요",
   "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "또는 생태계 앱에서 수집품을 구입하세요",
   "COLLECTIBLES_REPORT_PROBLEM": "수집품 신고",
-  "COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION": "이 컬렉션을 신고하면 자동으로 갤러리에서 제거되며 검토를 위해 신고됩니다.\n이 동작은 되돌릴 수 없습니다.",
+  "COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION": "이 컬렉션을 신고하면 갤러리에서 자동으로 삭제되고 검토를 위해 신고됩니다.\n이 작업은 되돌릴 수 없습니다.",
   "COLLECTIBLES_VIEW_DETAILS": "세부 정보",
   "COLLECTIBLES_VIEW_GALLERY": "갤러리",
   "COLLECTIONS": "컬렉션",
