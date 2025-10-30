@@ -12,8 +12,8 @@ import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
-import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BalanceUtils } from "~Utils"
+import { selectBalanceVisible, selectCurrency, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils, AddressUtils, BalanceUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
 import { Chart, CHART_WIDTH } from "./Chart"
 
@@ -28,6 +28,7 @@ export const TokenCard = ({ token }: Props) => {
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
     const { isLowEndDevice } = useDevice()
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     // Check if token supports charts (has CoinGecko ID)
     const isTokenSupported = useMemo(() => !!getCoinGeckoIdBySymbol[token.symbol], [token.symbol])
@@ -85,6 +86,7 @@ export const TokenCard = ({ token }: Props) => {
 
     const handlePress = useCallback(() => {
         if (!isVechainToken) {
+            if (AccountUtils.isObservedAccount(selectedAccount)) return
             if (isCrossChainToken) {
                 navigation.navigate(Routes.BRIDGE_TOKEN_DETAILS, {
                     token,
@@ -105,7 +107,7 @@ export const TokenCard = ({ token }: Props) => {
         navigation.navigate(Routes.TOKEN_DETAILS, {
             token: tokenWithCompleteInfo,
         })
-    }, [navigation, tokenWithCompleteInfo, isVechainToken, token, isCrossChainToken])
+    }, [isVechainToken, navigation, tokenWithCompleteInfo, selectedAccount, isCrossChainToken, token])
 
     return (
         <BaseTouchableBox
