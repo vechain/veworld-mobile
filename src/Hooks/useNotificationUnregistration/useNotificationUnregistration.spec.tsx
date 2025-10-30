@@ -35,19 +35,26 @@ jest.mock("~Storage/Redux", () => {
         useAppDispatch: () => mockDispatch,
         selectAccounts: (state: any) => state.accounts?.accounts ?? [],
         selectWalletRegistrations: (state: any) => state.notification?.walletRegistrations ?? null,
-        selectPendingUnregistrations: (state: any) => state.notification?.pendingUnregistrations ?? [],
-        selectUnregistrationAttempts: (state: any) => state.notification?.unregistrationAttempts ?? {},
+        selectPendingUnregistrations: (state: any) =>
+            state.notification?.walletsPending?.filter((w: any) => w.status === "UNREGISTER") ?? [],
+        selectUnregistrationAttempts: (state: any) => {
+            const wallets = state.notification?.walletsPending?.filter((w: any) => w.status === "UNREGISTER") ?? []
+            return wallets.reduce((acc: any, w: any) => {
+                acc[w.address] = w.attempts
+                return acc
+            }, {})
+        },
         addPendingUnregistrations: (addresses: string[]) => ({
-            type: "notification/addPendingUnregistrations",
-            payload: addresses,
+            type: "notification/addPendingWallets",
+            payload: { addresses, status: "UNREGISTER" },
         }),
         removePendingUnregistrations: (addresses: string[]) => ({
-            type: "notification/removePendingUnregistrations",
-            payload: addresses,
+            type: "notification/removePendingWallets",
+            payload: { addresses, status: "UNREGISTER" },
         }),
         incrementUnregistrationAttempts: (address: string) => ({
-            type: "notification/incrementUnregistrationAttempts",
-            payload: address,
+            type: "notification/incrementPendingWalletAttempts",
+            payload: { address, status: "UNREGISTER" },
         }),
         removeFromWalletRegistrations: (addresses: string[]) => ({
             type: "notification/removeFromWalletRegistrations",
@@ -93,8 +100,14 @@ describe("useNotificationUnregistration", () => {
             },
             notification: {
                 walletRegistrations: {},
-                pendingUnregistrations: ["0x2", "0x3", "0x4", "0x5", "0x6", "0x7"],
-                unregistrationAttempts: {},
+                walletsPending: [
+                    { address: "0x2", status: "UNREGISTER", attempts: 0, addedAt: Date.now() },
+                    { address: "0x3", status: "UNREGISTER", attempts: 0, addedAt: Date.now() },
+                    { address: "0x4", status: "UNREGISTER", attempts: 0, addedAt: Date.now() },
+                    { address: "0x5", status: "UNREGISTER", attempts: 0, addedAt: Date.now() },
+                    { address: "0x6", status: "UNREGISTER", attempts: 0, addedAt: Date.now() },
+                    { address: "0x7", status: "UNREGISTER", attempts: 0, addedAt: Date.now() },
+                ],
             },
         }
         ;(unregisterPushNotification as jest.Mock).mockResolvedValue(undefined)
@@ -114,8 +127,10 @@ describe("useNotificationUnregistration", () => {
             },
             notification: {
                 walletRegistrations: {},
-                pendingUnregistrations: ["0x2", "0x3"],
-                unregistrationAttempts: {},
+                walletsPending: [
+                    { address: "0x2", status: "UNREGISTER", attempts: 0, addedAt: Date.now() },
+                    { address: "0x3", status: "UNREGISTER", attempts: 0, addedAt: Date.now() },
+                ],
             },
         }
 
@@ -133,8 +148,10 @@ describe("useNotificationUnregistration", () => {
             },
             notification: {
                 walletRegistrations: {},
-                pendingUnregistrations: ["0x2", "0x3"],
-                unregistrationAttempts: {},
+                walletsPending: [
+                    { address: "0x2", status: "UNREGISTER", attempts: 0, addedAt: Date.now() },
+                    { address: "0x3", status: "UNREGISTER", attempts: 0, addedAt: Date.now() },
+                ],
             },
         }
         ;(unregisterPushNotification as jest.Mock).mockResolvedValue(undefined)
@@ -145,7 +162,7 @@ describe("useNotificationUnregistration", () => {
 
         expect(mockDispatch).toHaveBeenCalledWith(
             expect.objectContaining({
-                type: "notification/removePendingUnregistrations",
+                type: "notification/removePendingWallets",
             }),
         )
     })
@@ -157,11 +174,10 @@ describe("useNotificationUnregistration", () => {
             },
             notification: {
                 walletRegistrations: {},
-                pendingUnregistrations: ["0x2", "0x3"],
-                unregistrationAttempts: {
-                    "0x2": 10, // Exceeded max retries
-                    "0x3": 2,
-                },
+                walletsPending: [
+                    { address: "0x2", status: "UNREGISTER", attempts: 10, addedAt: Date.now() }, // Exceeded max retries
+                    { address: "0x3", status: "UNREGISTER", attempts: 2, addedAt: Date.now() },
+                ],
             },
         }
         ;(unregisterPushNotification as jest.Mock).mockResolvedValue(undefined)

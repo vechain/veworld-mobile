@@ -12,8 +12,7 @@ export const initialNotificationState: NotificationState = {
     walletRegistrations: null,
     lastFullRegistration: null,
     lastSubscriptionId: null,
-    pendingUnregistrations: [],
-    unregistrationAttempts: {},
+    walletsPending: [],
 }
 
 export const Notification = createSlice({
@@ -67,28 +66,49 @@ export const Notification = createSlice({
         updateLastSubscriptionId: (state, action: PayloadAction<string | null>) => {
             state.lastSubscriptionId = action.payload
         },
-        addPendingUnregistrations: (state, action: PayloadAction<string[]>) => {
-            // Add addresses to pending unregistrations, avoiding duplicates
-            const normalized = action.payload.map(addr => HexUtils.normalize(addr))
-            const uniqueAddresses = normalized.filter(addr => !state.pendingUnregistrations.includes(addr))
-            state.pendingUnregistrations.push(...uniqueAddresses)
-        },
-        removePendingUnregistrations: (state, action: PayloadAction<string[]>) => {
-            // Remove addresses from pending unregistrations
-            const normalized = action.payload.map(addr => HexUtils.normalize(addr))
-            state.pendingUnregistrations = state.pendingUnregistrations.filter(addr => !normalized.includes(addr))
+        addPendingWallets: (
+            state,
+            action: PayloadAction<{ addresses: string[]; status: "REGISTER" | "UNREGISTER" }>,
+        ) => {
+            const { addresses, status } = action.payload
+            const normalized = addresses.map(addr => HexUtils.normalize(addr))
+            const now = Date.now()
 
-            // Also clear their attempt counts
-            for (const addr of normalized) {
-                delete state.unregistrationAttempts[addr]
+            // Add addresses to pending queue, avoiding duplicates with same status
+            for (const address of normalized) {
+                const existingIndex = state.walletsPending.findIndex(
+                    w => w.address === address && w.status === status,
+                )
+                if (existingIndex === -1) {
+                    state.walletsPending.push({
+                        address,
+                        status,
+                        attempts: 0,
+                        addedAt: now,
+                    })
+                }
             }
         },
-        incrementUnregistrationAttempts: (state, action: PayloadAction<string>) => {
-            const normalizedAddress = HexUtils.normalize(action.payload)
-            if (!state.unregistrationAttempts[normalizedAddress]) {
-                state.unregistrationAttempts[normalizedAddress] = 0
+        removePendingWallets: (state, action: PayloadAction<{ addresses: string[]; status: "REGISTER" | "UNREGISTER" }>) => {
+            const { addresses, status } = action.payload
+            const normalized = addresses.map(addr => HexUtils.normalize(addr))
+
+            // Remove addresses from pending queue
+            state.walletsPending = state.walletsPending.filter(
+                w => !(normalized.includes(w.address) && w.status === status),
+            )
+        },
+        incrementPendingWalletAttempts: (
+            state,
+            action: PayloadAction<{ address: string; status: "REGISTER" | "UNREGISTER" }>,
+        ) => {
+            const { address, status } = action.payload
+            const normalizedAddress = HexUtils.normalize(address)
+
+            const wallet = state.walletsPending.find(w => w.address === normalizedAddress && w.status === status)
+            if (wallet) {
+                wallet.attempts += 1
             }
-            state.unregistrationAttempts[normalizedAddress] += 1
         },
         removeFromWalletRegistrations: (state, action: PayloadAction<string[]>) => {
             // Remove addresses from walletRegistrations immediately when deletion is attempted
@@ -113,8 +133,18 @@ export const {
     updateWalletRegistrations,
     updateLastFullRegistration,
     updateLastSubscriptionId,
-    addPendingUnregistrations,
-    removePendingUnregistrations,
-    incrementUnregistrationAttempts,
+    addPendingWallets,
+    removePendingWallets,
+    incrementPendingWalletAttempts,
     removeFromWalletRegistrations,
 } = Notification.actions
+
+// Backward compatibility aliases for old hooks (will be deprecated)
+export const addPendingUnregistrations = (addresses: string[]) =>
+    addPendingWallets({ addresses, status: "UNREGISTER" })
+
+export const removePendingUnregistrations = (addresses: string[]) =>
+    removePendingWallets({ addresses, status: "UNREGISTER" })
+
+export const incrementUnregistrationAttempts = (address: string) =>
+    incrementPendingWalletAttempts({ address, status: "UNREGISTER" })

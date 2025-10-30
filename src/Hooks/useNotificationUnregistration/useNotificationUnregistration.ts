@@ -66,18 +66,9 @@ export const useNotificationUnregistration = ({ enabled = true }: { enabled?: bo
 
             return { success: true }
         },
-        retry: (failureCount, err, context: any) => {
-            const addresses = context?.addresses || []
-
-            // Check if any address has exceeded max retries
-            const hasExceededRetries = addresses.some((addr: string) => {
-                const normalizedAddr = HexUtils.normalize(addr)
-                const attempts = unregistrationAttempts[normalizedAddr] || 0
-                return attempts >= MAX_RETRIES
-            })
-
-            if (hasExceededRetries) {
-                error(NOTIFICATION_CENTER_EVENT, "Push unregistration failed, max retries reached for some addresses")
+        retry: (failureCount, err) => {
+            if (failureCount >= MAX_RETRIES) {
+                error(NOTIFICATION_CENTER_EVENT, "Push unregistration failed, max retries reached")
                 return false
             }
 
@@ -149,20 +140,16 @@ export const useNotificationUnregistration = ({ enabled = true }: { enabled?: bo
                 const subId = await OneSignal.User.pushSubscription.getIdAsync()
 
                 // Filter out addresses that have exceeded max retries
-                const addressesToProcess = pendingUnregistrations.filter(addr => {
-                    const normalizedAddr = HexUtils.normalize(addr)
-                    const attempts = unregistrationAttempts[normalizedAddr] || 0
-                    return attempts < MAX_RETRIES
-                })
+                const addressesToProcess = pendingUnregistrations
+                    .filter(wallet => wallet.attempts < MAX_RETRIES)
+                    .map(wallet => wallet.address)
 
                 if (addressesToProcess.length === 0) {
                     info(NOTIFICATION_CENTER_EVENT, "No pending unregistrations to process (all exceeded max retries)")
                     // Clean up addresses that exceeded max retries
-                    const exceededAddresses = pendingUnregistrations.filter(addr => {
-                        const normalizedAddr = HexUtils.normalize(addr)
-                        const attempts = unregistrationAttempts[normalizedAddr] || 0
-                        return attempts >= MAX_RETRIES
-                    })
+                    const exceededAddresses = pendingUnregistrations
+                        .filter(wallet => wallet.attempts >= MAX_RETRIES)
+                        .map(wallet => wallet.address)
                     if (exceededAddresses.length > 0) {
                         dispatch(removePendingUnregistrations(exceededAddresses))
                         error(
