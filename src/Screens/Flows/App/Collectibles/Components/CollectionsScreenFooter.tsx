@@ -19,26 +19,24 @@ export const CollectionsScreenFooter = () => {
     if (blackListedCollections.length === 0) return null
 
     return (
-        <>
-            <BaseButton
-                action={onGoToBlackListed}
-                style={styles.button}
-                typographyFont="captionSemiBold"
-                textColor={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
-                rightIcon={
-                    <BaseIcon
-                        name="icon-eye-off"
-                        color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
-                        style={styles.icon}
-                    />
-                }
-                radius={6}
-                bgColor={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200}
-                px={12}
-                py={8}>
-                {LL.COLLECTIONS_VIEW_HIDDEN()}
-            </BaseButton>
-        </>
+        <BaseButton
+            action={onGoToBlackListed}
+            style={styles.button}
+            typographyFont="captionSemiBold"
+            textColor={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+            rightIcon={
+                <BaseIcon
+                    name="icon-eye-off"
+                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                    style={styles.icon}
+                />
+            }
+            radius={6}
+            bgColor={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200}
+            px={12}
+            py={8}>
+            {LL.COLLECTIONS_VIEW_HIDDEN()}
+        </BaseButton>
     )
 }
 
