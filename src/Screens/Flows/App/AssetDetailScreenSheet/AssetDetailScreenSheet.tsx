@@ -11,10 +11,11 @@ import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
-import { ASSET_CHART_PERIODS, AssetChart } from "./Components/AssetChart"
+import { ASSET_CHART_PERIODS } from "./Components/AssetChart"
 import { AssertChartBalance } from "./Components/AssetChartBalance"
 import { AssetDetailScreenWrapper } from "./Components/AssetDetailScreenWrapper"
 import ChartUtils from "~Utils/ChartUtils"
+import { AssetChartV2 } from "./Components/AssetChart/AssetChartV2"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -71,7 +72,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
                 <BaseSpacer height={24} />
                 {hasTokenChart && (
                     <>
-                        <AssetChart selectedPeriod={selectedItem} setSelectedPeriod={setSelectedItem} />
+                        <AssetChartV2 token={token} />
                         <BaseSpacer height={24} />
                     </>
                 )}
