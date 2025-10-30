@@ -10,10 +10,15 @@ import {
 } from "~Storage/Redux/Slices/Notification"
 import { DEVICE_TYPE } from "~Model"
 import { OneSignal } from "react-native-onesignal"
+import { registerPushNotification } from "~Networking/NotificationCenter/NotificationCenterAPI"
 
 jest.mock("~Utils/Logger", () => ({
     info: jest.fn(),
     error: jest.fn(),
+}))
+
+jest.mock("~Networking/NotificationCenter/NotificationCenterAPI", () => ({
+    registerPushNotification: jest.fn().mockResolvedValue(undefined),
 }))
 
 let mockState: any
@@ -159,8 +164,8 @@ describe("useNotificationRegistration", () => {
     beforeEach(() => {
         mockDispatch.mockClear()
         mockGetIdAsync.mockReset()
+        ;(registerPushNotification as jest.Mock).mockClear()
         mockState = undefined
-        ;(global as any).fetch = jest.fn()
         dateNowSpy?.mockRestore()
         dateNowSpy = undefined
     })
@@ -180,7 +185,7 @@ describe("useNotificationRegistration", () => {
 
         await waitFor(() => {
             expect(mockGetIdAsync).not.toHaveBeenCalled()
-            expect(global.fetch as jest.Mock).not.toHaveBeenCalled()
+            expect(registerPushNotification).not.toHaveBeenCalled()
             expect(mockDispatch).not.toHaveBeenCalled()
         })
 
@@ -208,7 +213,7 @@ describe("useNotificationRegistration", () => {
 
         await waitFor(() => {
             expect(mockGetIdAsync).toHaveBeenCalledTimes(1)
-            expect(global.fetch as jest.Mock).not.toHaveBeenCalled()
+            expect(registerPushNotification).not.toHaveBeenCalled()
             expect(mockDispatch).not.toHaveBeenCalled()
         })
 
@@ -223,32 +228,18 @@ describe("useNotificationRegistration", () => {
         mockState = buildState()
 
         mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
-        ;(global.fetch as jest.Mock).mockResolvedValue({
-            ok: true,
-            json: jest.fn(),
-        })
 
         const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
         await waitFor(() => {
-            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
+            expect(registerPushNotification).toHaveBeenCalledTimes(1)
             expect(mockDispatch).toHaveBeenCalledTimes(3)
         })
 
-        const [url, options] = (global.fetch as jest.Mock).mock.calls[0]
-        expect(url).toBe("https://notifications.dev/api/v1/push-registrations")
-        expect(options).toMatchObject({
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-        })
-        const parsedBody = JSON.parse(options.body as string)
-        expect(parsedBody).toEqual({
+        expect(registerPushNotification).toHaveBeenCalledWith({
+            networkType: "testnet",
             walletAddresses: [ACCOUNT_ADDRESS],
-            provider: "onesignal",
-            providerDetails: {
-                appId: "onesignal-dev",
-                subscriptionId: SUBSCRIPTION_ID,
-            },
+            subscriptionId: SUBSCRIPTION_ID,
         })
 
         expect(mockDispatch).toHaveBeenCalledTimes(3)
@@ -296,23 +287,16 @@ describe("useNotificationRegistration", () => {
             mockState = buildState({ accounts })
 
             mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
-            ;(global.fetch as jest.Mock).mockResolvedValue({
-                ok: true,
-                json: jest.fn(),
-            })
 
             const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
             await waitFor(() => {
                 // Should send 2 requests (batches)
-                expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(2)
+                expect(registerPushNotification).toHaveBeenCalledTimes(2)
             })
 
             // First batch: 5 wallets
-            const [url1, options1] = (global.fetch as jest.Mock).mock.calls[0]
-            expect(url1).toBe("https://notifications.dev/api/v1/push-registrations")
-            const parsedBody1 = JSON.parse(options1.body as string)
-            expect(parsedBody1.walletAddresses).toEqual([
+            expect((registerPushNotification as jest.Mock).mock.calls[0][0].walletAddresses).toEqual([
                 ACCOUNT_ADDRESS,
                 ACCOUNT_ADDRESS_2,
                 ACCOUNT_ADDRESS_3,
@@ -321,10 +305,7 @@ describe("useNotificationRegistration", () => {
             ])
 
             // Second batch: 2 wallets
-            const [url2, options2] = (global.fetch as jest.Mock).mock.calls[1]
-            expect(url2).toBe("https://notifications.dev/api/v1/push-registrations")
-            const parsedBody2 = JSON.parse(options2.body as string)
-            expect(parsedBody2.walletAddresses).toEqual([ACCOUNT_ADDRESS_6, ACCOUNT_ADDRESS_7])
+            expect((registerPushNotification as jest.Mock).mock.calls[1][0].walletAddresses).toEqual([ACCOUNT_ADDRESS_6, ACCOUNT_ADDRESS_7])
 
             // Should dispatch 5 times:
             // 2 x updateWalletRegistrations (one per batch)
@@ -389,21 +370,15 @@ describe("useNotificationRegistration", () => {
             })
 
             mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
-            ;(global.fetch as jest.Mock).mockResolvedValue({
-                ok: true,
-                json: jest.fn(),
-            })
 
             const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
             await waitFor(() => {
                 // Should only send 1 request for the new wallet
-                expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
+                expect(registerPushNotification).toHaveBeenCalledTimes(1)
             })
 
-            const [, options] = (global.fetch as jest.Mock).mock.calls[0]
-            const parsedBody = JSON.parse(options.body as string)
-            expect(parsedBody.walletAddresses).toEqual([ACCOUNT_ADDRESS_2])
+            expect((registerPushNotification as jest.Mock).mock.calls[0][0].walletAddresses).toEqual([ACCOUNT_ADDRESS_2])
 
             // Should dispatch 2 times:
             // 1 x updateWalletRegistrations (just the new wallet)
@@ -454,29 +429,21 @@ describe("useNotificationRegistration", () => {
             })
 
             mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
-            ;(global.fetch as jest.Mock).mockResolvedValue({
-                ok: true,
-                json: jest.fn(),
-            })
 
             const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
             await waitFor(() => {
                 // Should send 2 requests (5 + 1)
-                expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(2)
+                expect(registerPushNotification).toHaveBeenCalledTimes(2)
             })
 
-            expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(2)
+            expect(registerPushNotification).toHaveBeenCalledTimes(2)
 
             // First batch: 5 wallets
-            const [, options1] = (global.fetch as jest.Mock).mock.calls[0]
-            const parsedBody1 = JSON.parse(options1.body as string)
-            expect(parsedBody1.walletAddresses).toHaveLength(5)
+            expect((registerPushNotification as jest.Mock).mock.calls[0][0].walletAddresses).toHaveLength(5)
 
             // Second batch: 1 wallet
-            const [, options2] = (global.fetch as jest.Mock).mock.calls[1]
-            const parsedBody2 = JSON.parse(options2.body as string)
-            expect(parsedBody2.walletAddresses).toHaveLength(1)
+            expect((registerPushNotification as jest.Mock).mock.calls[1][0].walletAddresses).toHaveLength(1)
 
             // Should update lastFullRegistration
             expect(mockDispatch).toHaveBeenCalledWith(
@@ -521,16 +488,12 @@ describe("useNotificationRegistration", () => {
             })
 
             mockGetIdAsync.mockResolvedValue(NEW_SUBSCRIPTION_ID) // New subscription ID
-            ;(global.fetch as jest.Mock).mockResolvedValue({
-                ok: true,
-                json: jest.fn(),
-            })
 
             const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
             await waitFor(() => {
                 // Should re-register all wallets in 2 batches despite recent registration
-                expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(2)
+                expect(registerPushNotification).toHaveBeenCalledTimes(2)
             })
 
             // Should update subscription ID
@@ -571,21 +534,15 @@ describe("useNotificationRegistration", () => {
             })
 
             mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
-            ;(global.fetch as jest.Mock).mockResolvedValue({
-                ok: true,
-                json: jest.fn(),
-            })
 
             const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
             await waitFor(() => {
                 // Should only try to register the 2 failed wallets
-                expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
+                expect(registerPushNotification).toHaveBeenCalledTimes(1)
             })
 
-            const [, options] = (global.fetch as jest.Mock).mock.calls[0]
-            const parsedBody = JSON.parse(options.body as string)
-            expect(parsedBody.walletAddresses).toEqual([ACCOUNT_ADDRESS_2, ACCOUNT_ADDRESS_3])
+            expect((registerPushNotification as jest.Mock).mock.calls[0][0].walletAddresses).toEqual([ACCOUNT_ADDRESS_2, ACCOUNT_ADDRESS_3])
 
             // Should NOT mark as full registration since we only registered 2 wallets, not all 3
             // (wallet 1 was already registered)
@@ -629,21 +586,15 @@ describe("useNotificationRegistration", () => {
             })
 
             mockGetIdAsync.mockResolvedValue(SUBSCRIPTION_ID)
-            ;(global.fetch as jest.Mock).mockResolvedValue({
-                ok: true,
-                json: jest.fn(),
-            })
 
             const { unmount, queryClient, waitFor } = renderUseNotificationRegistration()
 
             await waitFor(() => {
                 // Should only register the one missing address (MIXED_CASE_ADDRESS)
-                expect(global.fetch as jest.Mock).toHaveBeenCalledTimes(1)
+                expect(registerPushNotification).toHaveBeenCalledTimes(1)
             })
 
-            const [, options] = (global.fetch as jest.Mock).mock.calls[0]
-            const parsedBody = JSON.parse(options.body as string)
-            expect(parsedBody.walletAddresses).toEqual([MIXED_CASE_ADDRESS])
+            expect((registerPushNotification as jest.Mock).mock.calls[0][0].walletAddresses).toEqual([MIXED_CASE_ADDRESS])
 
             // Should store the address in normalized (lowercase) form
             expect(mockDispatch).toHaveBeenCalledWith(

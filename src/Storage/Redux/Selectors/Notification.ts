@@ -8,3 +8,5 @@ export const selectDappNotifications = (state: RootState) => state.notification.
 export const selectWalletRegistrations = (state: RootState) => state.notification.walletRegistrations
 export const selectLastFullRegistration = (state: RootState) => state.notification.lastFullRegistration
 export const selectLastSubscriptionId = (state: RootState) => state.notification.lastSubscriptionId
+export const selectPendingUnregistrations = (state: RootState) => state.notification.pendingUnregistrations
+export const selectUnregistrationAttempts = (state: RootState) => state.notification.unregistrationAttempts

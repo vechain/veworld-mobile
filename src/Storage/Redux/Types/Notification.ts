@@ -8,4 +8,6 @@ export interface NotificationState {
     walletRegistrations: Record<string, number> | null // address -> timestamp
     lastFullRegistration: number | null // last complete re-registration of all wallets
     lastSubscriptionId: string | null
+    pendingUnregistrations: string[] // addresses waiting to be unregistered
+    unregistrationAttempts: Record<string, number> // address -> retry count
 }

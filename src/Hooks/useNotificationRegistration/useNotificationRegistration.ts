@@ -1,6 +1,8 @@
 import { useMutation } from "@tanstack/react-query"
 import { useCallback, useEffect, useMemo } from "react"
 import { OneSignal } from "react-native-onesignal"
+import { NETWORK_TYPE } from "~Model"
+import { registerPushNotification } from "~Networking/NotificationCenter/NotificationCenterAPI"
 import {
     selectAccounts,
     selectLastFullRegistration,
@@ -16,13 +18,6 @@ import { AccountUtils, error, info } from "~Utils"
 import HexUtils from "~Utils/HexUtils"
 import { ERROR_EVENTS } from "../../Constants"
 
-const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
-const MAX_RETRIES = 3
-const BATCH_SIZE = 5
-const REQUEST_TIMEOUT_MS = 15000 // 15 seconds
-
-const NOTIFICATION_CENTER_EVENT = ERROR_EVENTS.NOTIFICATION_CENTER
-
 const chunkArray = <T>(array: T[], size: number): T[][] => {
     const chunks: T[][] = []
     for (let i = 0; i < array.length; i += size) {
@@ -30,6 +25,20 @@ const chunkArray = <T>(array: T[], size: number): T[][] => {
     }
     return chunks
 }
+
+const isRetryableError = (err: any): boolean => {
+    if (err?.response) {
+        const status = err.response.status
+        return status >= 500 && status < 600
+    }
+    return err?.message?.toLowerCase().includes("network") || err?.code === "ECONNABORTED" || !err?.response
+}
+
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
+const MAX_RETRIES = 3
+const BATCH_SIZE = 5
+
+const NOTIFICATION_CENTER_EVENT = ERROR_EVENTS.NOTIFICATION_CENTER
 
 const getRegistrationTimestamp = (
     walletRegistrations: Record<string, number> | null,
@@ -40,23 +49,6 @@ const getRegistrationTimestamp = (
     // Addresses are stored normalized, so normalize the lookup key
     const normalizedAddress = HexUtils.normalize(address)
     return walletRegistrations[normalizedAddress]
-}
-
-interface RegistrationPayload {
-    walletAddresses: string[]
-    provider: string
-    providerDetails: {
-        appId: string
-        subscriptionId: string | null
-    }
-}
-
-const isRetryableError = (err: any): boolean => {
-    if (err?.response) {
-        const status = err.response.status
-        return status >= 500 && status < 600
-    }
-    return err?.message?.toLowerCase().includes("network") || err?.code === "ECONNABORTED" || !err?.response
 }
 
 export const useNotificationRegistration = ({ enabled = true }: { enabled?: boolean } = {}) => {
@@ -114,85 +106,23 @@ export const useNotificationRegistration = ({ enabled = true }: { enabled?: bool
         [lastFullRegistration, lastSubscriptionId, walletAddresses, walletRegistrations],
     )
 
-    const sendRegistration = useCallback(
-        async (subscriptionId: string | null, addressesToRegister: string[]) => {
-            const registerBaseUrl = __DEV__
-                ? process.env.NOTIFICATION_CENTER_REGISTER_DEV
-                : process.env.NOTIFICATION_CENTER_REGISTER_PROD
+    const { mutateAsync } = useMutation({
+        mutationFn: async (params: { subscriptionId: string | null; addresses: string[] }) => {
+            const networkType = __DEV__ ? NETWORK_TYPE.TEST : NETWORK_TYPE.MAIN
 
-            if (!registerBaseUrl) {
-                throw new Error("Notification center base URL is not configured")
-            }
-
-            const registerUrl = registerBaseUrl + "/api/v1/push-registrations"
-            const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
-
-            if (!appId) {
-                throw new Error("OneSignal app ID is not configured")
-            }
-
-            if (addressesToRegister.length === 0) {
-                info(NOTIFICATION_CENTER_EVENT, "No wallet addresses to register, skipping")
-                return null
-            }
-
-            const payload: RegistrationPayload = {
-                walletAddresses: addressesToRegister,
-                provider: "onesignal",
-                providerDetails: {
-                    appId,
-                    subscriptionId,
-                },
-            }
-
-            info(NOTIFICATION_CENTER_EVENT, "Registering push notification", {
-                walletCount: addressesToRegister.length,
-                registerUrl,
-                addressesToRegister,
+            await registerPushNotification({
+                networkType,
+                walletAddresses: params.addresses,
+                subscriptionId: params.subscriptionId,
             })
 
-            const httpTimeoutController = new AbortController()
-            const timeoutId = setTimeout(() => httpTimeoutController.abort(), REQUEST_TIMEOUT_MS)
+            // Update Redux state on success
+            const now = Date.now()
+            dispatch(updateWalletRegistrations({ addresses: params.addresses, timestamp: now }))
+            dispatch(updateLastSubscriptionId(params.subscriptionId))
 
-            try {
-                const response = await fetch(registerUrl, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(payload),
-                    signal: httpTimeoutController.signal,
-                })
-
-                clearTimeout(timeoutId)
-
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}))
-                    const err = new Error(`Push registration failed with status ${response.status}`)
-                    ;(err as any).response = { status: response.status, data: errorData }
-                    throw err
-                }
-
-                const now = Date.now()
-                dispatch(updateWalletRegistrations({ addresses: addressesToRegister, timestamp: now }))
-                dispatch(updateLastSubscriptionId(subscriptionId))
-
-                info(NOTIFICATION_CENTER_EVENT, "Push registration successful at", new Date(now).toISOString())
-                return response
-            } catch (err) {
-                clearTimeout(timeoutId)
-                if ((err as Error).name === "AbortError") {
-                    throw new Error("Push registration request timed out")
-                }
-                throw err
-            }
+            return now
         },
-        [dispatch],
-    )
-
-    const { mutateAsync } = useMutation({
-        mutationFn: (params: { subscriptionId: string | null; addresses: string[] }) =>
-            sendRegistration(params.subscriptionId, params.addresses),
         retry: (failureCount, err) => {
             if (failureCount >= MAX_RETRIES) {
                 error(NOTIFICATION_CENTER_EVENT, "Push registration failed, max retries reached")
