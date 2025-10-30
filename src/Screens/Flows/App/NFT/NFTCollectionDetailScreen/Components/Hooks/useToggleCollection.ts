@@ -23,7 +23,7 @@ export const useToggleCollection = (collection: NftCollection) => {
             dispatch(
                 toggleBlackListCollection({
                     network: network.type,
-                    collection,
+                    collectionAddress: collection.address,
                     accountAddress: selectedAccount.address,
                 }),
             )

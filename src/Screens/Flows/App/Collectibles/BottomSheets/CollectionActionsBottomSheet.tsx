@@ -6,6 +6,7 @@ import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useCollectionsBookmarking, useThemedStyles } from "~Hooks"
+import { useBlacklistedCollection } from "~Hooks/useBlacklistedCollection"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -16,21 +17,33 @@ const Content = ({
     collectionAddress,
     onClose,
     onOpenReport,
+    onOpenHidden,
 }: {
     collectionAddress: string
     onClose: () => void
     onOpenReport: () => void
+    onOpenHidden: () => void
 }) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const navigation = useNavigation()
     const { navigateWithTab } = useBrowserTab()
     const { isFavorite, toggleFavoriteCollection } = useCollectionsBookmarking(collectionAddress)
+    const { isBlacklisted, toggleBlacklist } = useBlacklistedCollection(collectionAddress)
 
     const onBookmarkPress = useCallback(() => {
         toggleFavoriteCollection()
         onClose()
     }, [toggleFavoriteCollection, onClose])
+
+    const onBlacklistPress = useCallback(() => {
+        toggleBlacklist()
+        onClose()
+        if (!isBlacklisted)
+            setTimeout(() => {
+                onOpenHidden()
+            }, 300)
+    }, [toggleBlacklist, onClose, isBlacklisted, onOpenHidden])
 
     const onReportPress = useCallback(async () => {
         navigateWithTab({
@@ -64,6 +77,17 @@ const Content = ({
                     {isFavorite ? LL.BTN_REMOVE_FROM_FAVORITE() : LL.BTN_COLLECTION_ACTIONS_FAVORITE()}
                 </BaseText>
             </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={onBlacklistPress}>
+                <BaseIcon
+                    name={isBlacklisted ? "icon-eye" : "icon-eye-off"}
+                    size={16}
+                    style={styles.icon}
+                    color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600}
+                />
+                <BaseText color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600} typographyFont="bodySemiBold">
+                    {isBlacklisted ? LL.BTN_SHOW_COLLECTION() : LL.BTN_HIDE_COLLECTION()}
+                </BaseText>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={onReportPress}>
                 <BaseIcon
                     name="icon-alert-triangle"
@@ -94,9 +118,10 @@ const Content = ({
 type Props = {
     bsRef: RefObject<BottomSheetModalMethods>
     onOpenReport: () => void
+    onOpenHidden: () => void
 }
 
-export const CollectionActionsBottomSheet = ({ bsRef, onOpenReport }: Props) => {
+export const CollectionActionsBottomSheet = ({ bsRef, onOpenReport, onOpenHidden }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { onClose } = useBottomSheetModal({ externalRef: bsRef })
 
@@ -110,7 +135,12 @@ export const CollectionActionsBottomSheet = ({ bsRef, onOpenReport }: Props) => 
             noMargins
             floating>
             {collectionAddress => (
-                <Content collectionAddress={collectionAddress} onClose={onClose} onOpenReport={onOpenReport} />
+                <Content
+                    collectionAddress={collectionAddress}
+                    onClose={onClose}
+                    onOpenReport={onOpenReport}
+                    onOpenHidden={onOpenHidden}
+                />
             )}
         </BaseBottomSheet>
     )
