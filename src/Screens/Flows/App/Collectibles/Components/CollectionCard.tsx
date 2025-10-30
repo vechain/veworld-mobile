@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import React, { useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import FastImage from "react-native-fast-image"
+import LinearGradient from "react-native-linear-gradient"
 import Animated from "react-native-reanimated"
 import { NFTPlaceholderDarkV2 } from "~Assets"
 import { BaseIcon, BaseText, BaseView, BlurView } from "~Components"
@@ -11,11 +12,10 @@ import { useNFTMedia, useThemedStyles } from "~Hooks"
 import { useCollectionsBookmarking } from "~Hooks/useCollectionsBookmarking"
 import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import HapticsService from "~Services/HapticsService"
+import AddressUtils from "~Utils/AddressUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { useCollectionMetadata } from "../Hooks/useCollectionMetadata"
-import AddressUtils from "~Utils/AddressUtils"
 import { SkeletonCollectionCard } from "./SkeletonCollectionCard"
-import LinearGradient from "react-native-linear-gradient"
 
 type Props = {
     collectionAddress: string
@@ -33,7 +33,7 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
     const { isFavorite, toggleFavoriteCollection } = useCollectionsBookmarking(collectionAddress)
 
     const { data: media } = useQuery({
-        queryKey: ["COLLECTIBLES", "COLLECTION", "MEDIA", collectionMetadata?.image],
+        queryKey: ["COLLECTIBLES", "MEDIA", collectionMetadata?.image],
         queryFn: () => fetchMedia(collectionMetadata?.image!),
         enabled: !!collectionMetadata?.image,
         staleTime: 5 * 60 * 60 * 1000,
