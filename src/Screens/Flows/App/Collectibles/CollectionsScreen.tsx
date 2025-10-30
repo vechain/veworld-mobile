@@ -1,9 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query"
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { FlatList, StyleSheet } from "react-native"
+import { FlatList } from "react-native"
 import { RefreshControl } from "react-native-gesture-handler"
 import { Layout } from "~Components"
-import { useThemedStyles } from "~Hooks"
+import { useTheme } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import {
     selectAllFavoriteCollections,
     selectBlackListedAddresses,
@@ -12,16 +13,17 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
-import { BlacklistedCollectionsList } from "./Components/BlacklistedCollectionsList"
 import { CollectionsList } from "./Components/CollectionsList"
+import { CollectionsScreenFooter } from "./Components/CollectionsScreenFooter"
 import { getNFTCollectionsQueryKey, useNFTCollections } from "./Hooks"
 
 export const CollectionsScreen = () => {
+    const { LL } = useI18nContext()
     const scrollRef = useRef<FlatList<string>>(null)
 
     const [isRefreshing, setIsRefreshing] = useState(false)
 
-    const { theme } = useThemedStyles(baseStyles)
+    const theme = useTheme()
     const {
         data: paginatedCollections,
         isLoading: isCollectionsLoading,
@@ -78,7 +80,7 @@ export const CollectionsScreen = () => {
 
     return (
         <Layout
-            title={"Collections"}
+            title={LL.COLLECTIONS()}
             fixedBody={
                 <CollectionsList
                     scrollRef={scrollRef}
@@ -92,27 +94,9 @@ export const CollectionsScreen = () => {
                     }
                     onEndReached={handleEndReached}
                     isLoading={isCollectionsLoading}
-                    ListFooterComponent={BlacklistedCollectionsList}
+                    ListFooterComponent={CollectionsScreenFooter}
                 />
             }
         />
     )
 }
-
-const baseStyles = () =>
-    StyleSheet.create({
-        list: {
-            paddingHorizontal: 16,
-        },
-        listContentContainer: {
-            paddingTop: 16,
-            paddingBottom: 24,
-        },
-        skeletonRoot: {
-            width: "100%",
-            height: 182,
-            position: "relative",
-            overflow: "hidden",
-            justifyContent: "flex-end",
-        },
-    })
