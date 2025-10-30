@@ -8,16 +8,21 @@ const getNftBalanceOf = async (ownerAddress: string, contractAddress: string, th
     return Number(res[0]) || 0
 }
 
-const getNftBalanceOfOptions = (ownerAddress: string, contractAddress: string, thor: ThorClient) => {
+const getNftBalanceOfOptions = (ownerAddress: string, contractAddress: string, genesisId: string, thor: ThorClient) => {
     return queryOptions({
-        queryKey: ["COLLECTIBLES", "BALANCE_OF", ownerAddress, contractAddress],
+        queryKey: ["COLLECTIBLES", "BALANCE_OF", genesisId, ownerAddress, contractAddress],
         queryFn: () => getNftBalanceOf(ownerAddress, contractAddress, thor),
         staleTime: 1 * 60 * 60 * 1000,
         gcTime: 24 * 60 * 60 * 1000,
     })
 }
 
-export const getCachedNftBalanceOf = async (ownerAddress: string, contractAddress: string, thor: ThorClient) => {
-    const res = await queryClient.fetchQuery(getNftBalanceOfOptions(ownerAddress, contractAddress, thor))
+export const getCachedNftBalanceOf = async (
+    ownerAddress: string,
+    contractAddress: string,
+    genesisId: string,
+    thor: ThorClient,
+) => {
+    const res = await queryClient.fetchQuery(getNftBalanceOfOptions(ownerAddress, contractAddress, genesisId, thor))
     return res || 0
 }
