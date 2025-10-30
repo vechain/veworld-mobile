@@ -2,7 +2,6 @@ import { useQueryClient } from "@tanstack/react-query"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, StyleSheet } from "react-native"
 import { RefreshControl } from "react-native-gesture-handler"
-import { SequencedTransition } from "react-native-reanimated"
 import { Layout } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import {
@@ -92,7 +91,6 @@ export const CollectionsScreen = () => {
                         />
                     }
                     onEndReached={handleEndReached}
-                    itemLayoutAnimation={SequencedTransition.reverse()}
                     isLoading={isCollectionsLoading}
                     ListFooterComponent={BlacklistedCollectionsList}
                 />

@@ -57,6 +57,8 @@ export const CollectionsList = ({ data, scrollRef, isLoading, nested, style, ...
                 contentContainerStyle={styles.listContentContainer}
                 showsVerticalScrollIndicator={false}
                 style={!nested && styles.list}
+                numColumns={2}
+                columnWrapperStyle={styles.listColumn}
             />
         )
     return (
@@ -69,6 +71,8 @@ export const CollectionsList = ({ data, scrollRef, isLoading, nested, style, ...
             contentContainerStyle={styles.listContentContainer}
             showsVerticalScrollIndicator={false}
             style={[!nested && styles.list, style]}
+            numColumns={2}
+            columnWrapperStyle={styles.listColumn}
             {...props}
         />
     )
@@ -82,6 +86,9 @@ const baseStyles = () =>
         listContentContainer: {
             paddingTop: 16,
             paddingBottom: 24,
+        },
+        listColumn: {
+            columnGap: 8,
         },
         skeletonRoot: {
             width: "100%",
