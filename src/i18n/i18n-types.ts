@@ -1596,6 +1596,14 @@ type RootTranslation = {
 	 */
 	BTN_REMOVE_FROM_FAVORITES: string
 	/**
+	 * S​h​o​w​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_SHOW_COLLECTION: string
+	/**
+	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_HIDE_COLLECTION: string
+	/**
 	 * R​e​m​o​v​e​ ​w​a​l​l​e​t
 	 */
 	BTN_REMOVE_WALLET: string
@@ -1827,9 +1835,25 @@ type RootTranslation = {
 	 */
 	COLLECTIONS: string
 	/**
+	 * V​i​e​w​ ​h​i​d​d​e​n
+	 */
+	COLLECTIONS_VIEW_HIDDEN: string
+	/**
+	 * H​i​d​e​ ​b​a​c​k
+	 */
+	COLLECTIONS_HIDE_BACK: string
+	/**
 	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
 	 */
 	COLLECTION_NAME: string
+	/**
+	 * C​o​l​l​e​c​t​i​o​n​ ​h​i​d​d​e​n
+	 */
+	COLLECTION_HIDDEN_TITLE: string
+	/**
+	 * T​h​e​ ​c​o​l​l​e​c​t​i​o​n​ ​w​a​s​ ​m​o​v​e​d​ ​t​o​ ​t​h​e​ ​h​i​d​d​e​n​ ​s​e​c​t​i​o​n​ ​a​n​d​ ​n​o​ ​l​o​n​g​e​r​ ​v​i​s​i​b​l​e​ ​o​n​ ​t​h​e​ ​c​o​l​l​e​c​t​i​o​n​s​ ​l​i​s​t​.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: string
 	/**
 	 * d​a​y
 	 */
@@ -1839,9 +1863,21 @@ type RootTranslation = {
 	 */
 	COMMON_24H: string
 	/**
+	 * W​e​b​s​i​t​e
+	 */
+	COMMON_WEBSITE: string
+	/**
 	 * 2​4​h​ ​V​o​l​u​m​e
 	 */
 	COMMON_24H_VOLUME: string
+	/**
+	 * 2​4​h​ ​R​a​n​g​e
+	 */
+	COMMON_24H_PRICE_RANGE: string
+	/**
+	 * T​o​k​e​n​ ​s​t​a​t​s
+	 */
+	COMMON_TOKEN_STATS: string
 	/**
 	 * A​s​s​e​t​s
 	 */
@@ -2096,6 +2132,10 @@ type RootTranslation = {
 	 * W​h​o​o​p​s​!
 	 */
 	COMMON_WHOOPS: string
+	/**
+	 * W​e​b​s​i​t​e
+	 */
+	COMMON_WEBSITE: string
 	/**
 	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
 	 * @param {string} alias
@@ -5025,6 +5065,14 @@ type RootTranslation = {
 	 */
 	TOKEN_CUSTOM_SUBTITLE: string
 	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	TOKEN_DETAIL_ACTIVITY_TAB: string
+	/**
+	 * B​a​l​a​n​c​e
+	 */
+	TOKEN_DETAIL_BALANCE_TAB: string
+	/**
 	 * T​o​k​e​n​ ​I​D
 	 */
 	TOKEN_ID: string
@@ -6964,6 +7012,14 @@ Thanks for your patience!
 	 */
 	BTN_REMOVE_FROM_FAVORITES: () => LocalizedString
 	/**
+	 * Show collection
+	 */
+	BTN_SHOW_COLLECTION: () => LocalizedString
+	/**
+	 * Hide collection
+	 */
+	BTN_HIDE_COLLECTION: () => LocalizedString
+	/**
 	 * Remove wallet
 	 */
 	BTN_REMOVE_WALLET: () => LocalizedString
@@ -7193,9 +7249,25 @@ This action is irreversible.
 	 */
 	COLLECTIONS: () => LocalizedString
 	/**
+	 * View hidden
+	 */
+	COLLECTIONS_VIEW_HIDDEN: () => LocalizedString
+	/**
+	 * Hide back
+	 */
+	COLLECTIONS_HIDE_BACK: () => LocalizedString
+	/**
 	 * Collection name
 	 */
 	COLLECTION_NAME: () => LocalizedString
+	/**
+	 * Collection hidden
+	 */
+	COLLECTION_HIDDEN_TITLE: () => LocalizedString
+	/**
+	 * The collection was moved to the hidden section and no longer visible on the collections list.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: () => LocalizedString
 	/**
 	 * day
 	 */
@@ -7205,9 +7277,21 @@ This action is irreversible.
 	 */
 	COMMON_24H: () => LocalizedString
 	/**
+	 * Website
+	 */
+	COMMON_WEBSITE: () => LocalizedString
+	/**
 	 * 24h Volume
 	 */
 	COMMON_24H_VOLUME: () => LocalizedString
+	/**
+	 * 24h Range
+	 */
+	COMMON_24H_PRICE_RANGE: () => LocalizedString
+	/**
+	 * Token stats
+	 */
+	COMMON_TOKEN_STATS: () => LocalizedString
 	/**
 	 * Assets
 	 */
@@ -7460,6 +7544,10 @@ This action is irreversible.
 	 * Whoops!
 	 */
 	COMMON_WHOOPS: () => LocalizedString
+	/**
+	 * Website
+	 */
+	COMMON_WEBSITE: () => LocalizedString
 	/**
 	 * Confirming this you will disconnect the {name} app from {alias}
 	 */
@@ -10345,6 +10433,14 @@ Here's what it's all about:
 	 * Add a custom token to your wallet
 	 */
 	TOKEN_CUSTOM_SUBTITLE: () => LocalizedString
+	/**
+	 * Activity
+	 */
+	TOKEN_DETAIL_ACTIVITY_TAB: () => LocalizedString
+	/**
+	 * Balance
+	 */
+	TOKEN_DETAIL_BALANCE_TAB: () => LocalizedString
 	/**
 	 * Token ID
 	 */

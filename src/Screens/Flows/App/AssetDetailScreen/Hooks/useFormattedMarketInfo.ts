@@ -7,6 +7,8 @@ export type MarketInfo = {
     totalSupply: number | null
     totalVolume: number
     circulatingSupply: number
+    high24h?: number
+    low24h?: number
 }
 
 export const useFormattedMarketInfo = ({ marketInfo }: { marketInfo?: MarketInfo }) => {
@@ -16,6 +18,8 @@ export const useFormattedMarketInfo = ({ marketInfo }: { marketInfo?: MarketInfo
         marketCap: _marketCap,
         totalSupply: _totalSupply,
         circulatingSupply: _circulatingSupply,
+        high24h: _high24h,
+        low24h: _low24h,
     } = marketInfo || {}
 
     const marketCap = useMemo(() => {
@@ -34,10 +38,30 @@ export const useFormattedMarketInfo = ({ marketInfo }: { marketInfo?: MarketInfo
         return formatMarketData(_circulatingSupply ?? 0)
     }, [_circulatingSupply])
 
+    const high24h = useMemo(() => {
+        if (!_high24h) return null
+        return formatFiatAmount(_high24h, undefined, {
+            locale: formatLocale,
+            forceDecimals: 5,
+            skipThreshold: true,
+        })
+    }, [_high24h, formatLocale])
+
+    const low24h = useMemo(() => {
+        if (!_low24h) return null
+        return formatFiatAmount(_low24h, undefined, {
+            locale: formatLocale,
+            forceDecimals: 5,
+            skipThreshold: true,
+        })
+    }, [_low24h, formatLocale])
+
     return {
         marketCap,
         totalVolume,
         totalSupply: totalSupply === "0" ? null : totalSupply,
         circulatingSupply: circulatingSupply === "0" ? null : circulatingSupply,
+        high24h,
+        low24h,
     }
 }

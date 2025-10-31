@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { PropsWithChildren, useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { ScrollView, StyleSheet } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, {
     Extrapolation,
@@ -87,7 +87,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
 
     return (
         <BaseSafeArea grow={1} style={styles.safeArea} bg="transparent">
-            <>
+            <ScrollView>
                 <Animated.View style={[StyleSheet.absoluteFillObject, backdropStyles]} onTouchStart={onClose} />
                 <Animated.View
                     style={[styles.root, animatedS]}
@@ -109,7 +109,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                     )}
                     {children}
                 </Animated.View>
-            </>
+            </ScrollView>
         </BaseSafeArea>
     )
 }

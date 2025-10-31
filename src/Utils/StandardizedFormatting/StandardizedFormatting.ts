@@ -22,6 +22,11 @@ export interface StandardFormatOptions {
     showZeroAs?: string
     tokenSymbol?: string
     includeSymbol?: boolean
+    /**
+     * Skip threshold logic and show actual value even if very small
+     * Useful for price displays where precision matters
+     */
+    skipThreshold?: boolean
 }
 
 export interface TokenAwareFormatOptions extends StandardFormatOptions {
@@ -40,7 +45,7 @@ const HIGH_PRECISION_TOKENS = ["BTC", "ETH", "SOL"]
  * @returns Formatted string following app standards
  */
 export const formatDisplayNumber = (value: string | number, options: StandardFormatOptions = {}): string => {
-    const { locale = "en-US", useCompactNotation = true, forceDecimals, showZeroAs } = options
+    const { locale = "en-US", useCompactNotation = true, forceDecimals, showZeroAs, skipThreshold = false } = options
 
     const bigNum = BigNutils(value)
 
@@ -92,18 +97,23 @@ export const formatDisplayNumber = (value: string | number, options: StandardFor
     const formatted = formatter.format(numValue)
 
     // Check if the formatted value rounds to zero but the actual value is not zero
-    const zeroFormatted = getNumberFormatter({ locale, precision: 0, style: "decimal", useGrouping: false }).format(0)
-    const zeroFormattedWithTwoDecimals = getNumberFormatter({
-        locale,
-        precision: 2,
-        style: "decimal",
-        useGrouping: false,
-    }).format(0)
-    if ((formatted === zeroFormatted || formatted === zeroFormattedWithTwoDecimals) && !bigNum.isZero) {
-        const threshold = getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(
-            0.01,
+    // Skip threshold logic if skipThreshold flag is true
+    if (!skipThreshold) {
+        const zeroFormatted = getNumberFormatter({ locale, precision: 0, style: "decimal", useGrouping: false }).format(
+            0,
         )
-        return `< ${threshold}`
+        const zeroFormattedWithTwoDecimals = getNumberFormatter({
+            locale,
+            precision: 2,
+            style: "decimal",
+            useGrouping: false,
+        }).format(0)
+        if ((formatted === zeroFormatted || formatted === zeroFormattedWithTwoDecimals) && !bigNum.isZero) {
+            const threshold = getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(
+                0.01,
+            )
+            return `< ${threshold}`
+        }
     }
 
     return formatted
