@@ -13,7 +13,7 @@ import {
 import { curveBasis, curveBasisClosed, curveLinearClosed, line, scaleLinear, scaleTime } from "d3"
 import React, { useEffect, useMemo } from "react"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
-import { useDerivedValue, useSharedValue, withDelay, withTiming } from "react-native-reanimated"
+import { useDerivedValue, useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated"
 import { ClipPath } from "react-native-svg"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
@@ -49,10 +49,7 @@ const makeGraph = (data: DataPoint[]) => {
         .y(d => y(d.value))
         .curve(curveBasis)(data)
 
-    const skPath = Skia.Path.MakeFromSVGString(curvedLine!)!
-        .lineTo(x(data[data.length - 1].timestamp), y(0))
-        .lineTo(x(0), y(0))
-        .close()
+    const skPath = Skia.Path.MakeFromSVGString(curvedLine!)
 
     const skPoints = data.map(d => vec(x(d.timestamp), y(d.value)))
 
@@ -65,6 +62,8 @@ const makeGraph = (data: DataPoint[]) => {
         maxY: y(max),
         min,
         max,
+        calcXPos: x,
+        calcYPos: y,
     }
 }
 
@@ -82,7 +81,10 @@ export const AssetChartV2 = ({ token }: Props) => {
 
     const downsampleData = useMemo(() => ChartUtils.downsampleData(chartData, "hour", 1, "first"), [chartData])
 
-    const { path, points, maxX, minY, maxY } = useMemo(() => makeGraph(downsampleData ?? []), [downsampleData])
+    const { path, points, maxX, minY, maxY, calcXPos, calcYPos } = useMemo(
+        () => makeGraph(downsampleData ?? []),
+        [downsampleData],
+    )
 
     // Initial chartprogress animation
     const progress = useSharedValue(0)
@@ -95,8 +97,6 @@ export const AssetChartV2 = ({ token }: Props) => {
     const crossHairOpacity = useSharedValue(0)
     const crossHairStart = useSharedValue(0)
     const crossHairEnd = useSharedValue(1)
-
-    const sharedIndex = useSharedValue(0)
 
     useEffect(() => {
         progress.value = withTiming(1, { duration: 1500 })
@@ -119,7 +119,7 @@ export const AssetChartV2 = ({ token }: Props) => {
         return nearestIdx
     }
 
-    const derivedClipPath = useDerivedValue(() => {
+    const crossHairClipPath = useDerivedValue(() => {
         const rect = Skia.XYWHRect(
             crossHairStart.value * SCREEN_WIDTH,
             0,
@@ -129,6 +129,11 @@ export const AssetChartV2 = ({ token }: Props) => {
 
         return Skia.RRectXY(rect, 16, 16)
     }, [crossHairStart.value, crossHairEnd.value])
+
+    const backgroundClipPath = useMemo(() => {
+        if (!path || !downsampleData) return Skia.RRectXY(Skia.XYWHRect(0, 0, SCREEN_WIDTH, GRAPH_HEIGHT), 16, 16)
+        return path.copy().lineTo(maxX, calcYPos(0)).lineTo(calcXPos(0), calcYPos(0)).close()
+    }, [calcXPos, calcYPos, downsampleData, maxX, path])
 
     const panGesture = Gesture.Pan()
         .onBegin(e => {
@@ -144,17 +149,11 @@ export const AssetChartV2 = ({ token }: Props) => {
         .onChange(e => {
             translateX.value = e.x
             const pointIdx = findNearestPointIndex(e.x)
-            const percentage = pointIdx / (points.length - 1)
-            // const prevPointPercentage = (pointIdx - 1) / (points.length - 1)
-            // const nextPointPercentage = (pointIdx + 1) / (points.length - 1)
 
             if (pointIdx > 0 && pointIdx < points.length - 1) {
-                sharedIndex.value = pointIdx
                 const point = points[pointIdx]
 
                 const offset = e.x - point.x
-
-                console.log("offset", offset)
 
                 const prevPoint = points[pointIdx - 1].x + offset
                 const nextPoint = points[pointIdx + 1].x + offset
@@ -162,11 +161,8 @@ export const AssetChartV2 = ({ token }: Props) => {
                 const prevPointPercentage = prevPoint / points[points.length - 1].x
                 const nextPointPercentage = nextPoint / points[points.length - 1].x
 
-                console.log("prevPointPercentage", prevPointPercentage)
-                console.log("nextPointPercentage", nextPointPercentage)
-
-                crossHairStart.value = withTiming(prevPointPercentage + 0.02, { duration: 200 })
-                crossHairEnd.value = withTiming(nextPointPercentage - 0.02, { duration: 200 })
+                crossHairStart.value = withSpring(prevPointPercentage + 0.02)
+                crossHairEnd.value = withSpring(nextPointPercentage - 0.02)
             }
 
             //const point = points.findIndex(p => Math.abs(p.x - e.x) < 1)
@@ -188,18 +184,17 @@ export const AssetChartV2 = ({ token }: Props) => {
             <Canvas style={{ width: SCREEN_WIDTH, height: GRAPH_HEIGHT }}>
                 {/* <Points points={points} color={"red"} mode="points" strokeWidth={5} /> */}
                 {/* <Points points={nearestPoint} color={"green"} mode="points" strokeWidth={5} /> */}
-                {path && (
-                    <Group clip={path!}>
-                        <Rect x={0} y={0} width={SCREEN_WIDTH} height={GRAPH_HEIGHT}>
-                            <LinearGradient
-                                positions={[0, 0.2, 1]}
-                                colors={["rgba(38, 30, 76, 0)", "rgba(68, 59, 110, 0.5)", "rgba(185, 181, 207, 1)"]}
-                                end={Skia.Point(maxX, maxY)}
-                                start={Skia.Point(maxX, minY)}
-                            />
-                        </Rect>
-                    </Group>
-                )}
+
+                <Group clip={backgroundClipPath}>
+                    <Rect x={0} y={0} width={SCREEN_WIDTH} height={GRAPH_HEIGHT}>
+                        <LinearGradient
+                            positions={[0, 0.2, 1]}
+                            colors={["rgba(38, 30, 76, 0)", "rgba(68, 59, 110, 0.5)", "rgba(185, 181, 207, 1)"]}
+                            end={Skia.Point(maxX, maxY)}
+                            start={Skia.Point(maxX, minY)}
+                        />
+                    </Rect>
+                </Group>
 
                 <Path
                     style={"stroke"}
@@ -212,7 +207,7 @@ export const AssetChartV2 = ({ token }: Props) => {
                     end={progress}
                 />
 
-                <Group opacity={crossHairOpacity} clip={derivedClipPath}>
+                <Group opacity={crossHairOpacity} clip={crossHairClipPath}>
                     {/* Glow layer */}
                     <Path
                         style={"stroke"}
