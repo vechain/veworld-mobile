@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-31)</small>
+
+* build: init ([459108c](https://github.com/vechain/veworld-mobile/commit/459108c))
+* 459 token stats component (#3483) ([a83f66b](https://github.com/vechain/veworld-mobile/commit/a83f66b)), closes [#3483](https://github.com/vechain/veworld-mobile/issues/3483)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
