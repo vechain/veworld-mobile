@@ -1,51 +1,104 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { RefObject } from "react"
-import { BaseBottomSheet, BaseIcon, BaseText, BaseView, useFeatureFlags } from "~Components"
+import React, { RefObject, useCallback } from "react"
+import { StyleSheet, TouchableOpacity } from "react-native"
+import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
-import { useBottomSheetModal, useTheme } from "~Hooks"
+import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { IconKey } from "~Model"
-import { PlatformUtils } from "~Utils"
+import { FungibleTokenWithBalance, IconKey } from "~Model"
+import { BuyButton } from "./BuyButton"
+import { EarnButton } from "./EarnButton"
+import { ReceiveButton } from "./ReceiveButton"
+import { SellButton } from "./SellButton"
+import { SendButton } from "./SendButton"
+import { SwapButton } from "./SwapButton"
 
 type Props = {
     bsRef: RefObject<BottomSheetModalMethods>
     openReceiveBottomsheet: () => void
+    token: FungibleTokenWithBalance
 }
 
-const ActionButton = ({ label, icon }: { label: string; icon: IconKey }) => {
-    const theme = useTheme()
+const ActionButton = ({ label, icon, onPress }: { label: string; icon: IconKey; onPress: () => void }) => {
+    const { styles, theme } = useThemedStyles(actionButtonStyles)
     return (
-        <BaseView flexDirection="row" gap={24}>
+        <TouchableOpacity style={styles.root} onPress={onPress}>
             <BaseIcon
                 name={icon}
                 color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
                 size={16}
-                p={8}
                 bg={theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_100}
+                style={styles.icon}
             />
             <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_800}>
                 {label}
             </BaseText>
-        </BaseView>
+        </TouchableOpacity>
     )
 }
 
-export const MoreButtonBottomSheet = ({ bsRef }: Props) => {
+const actionButtonStyles = () =>
+    StyleSheet.create({
+        icon: {
+            padding: 8,
+        },
+        root: {
+            flexDirection: "row",
+            gap: 24,
+            paddingVertical: 8,
+            alignItems: "center",
+        },
+    })
+
+export const MoreButtonBottomSheet = ({ bsRef, openReceiveBottomsheet, token }: Props) => {
     const { LL } = useI18nContext()
-    const { paymentProvidersFeature } = useFeatureFlags()
     const theme = useTheme()
-    const { ref } = useBottomSheetModal({ externalRef: bsRef })
+    const { ref, onClose } = useBottomSheetModal({ externalRef: bsRef })
+
+    const onReceive = ReceiveButton.use(openReceiveBottomsheet)
+    const wrappedReceive = useCallback(() => {
+        onClose()
+        onReceive()
+    }, [onClose, onReceive])
+    const { disabled: sendDisabled, onPress: onSend } = SendButton.use(token)
+    const wrappedSend = useCallback(() => {
+        onClose()
+        onSend()
+    }, [onClose, onSend])
+    const onBuy = BuyButton.use()
+    const wrappedBuy = useCallback(() => {
+        onClose()
+        onBuy()
+    }, [onBuy, onClose])
+    const onEarn = EarnButton.use()
+    const wrappedEarn = useCallback(() => {
+        onClose()
+        onEarn()
+    }, [onClose, onEarn])
+    const onSwap = SwapButton.use()
+    const wrappedSwap = useCallback(() => {
+        onClose()
+        onSwap()
+    }, [onClose, onSwap])
+    const { disabled: sellDisabled, onPress: onSell } = SellButton.use()
+    const wrappedSell = useCallback(() => {
+        onClose()
+        onSell()
+    }, [onClose, onSell])
 
     return (
-        <BaseBottomSheet ref={ref} backgroundStyle={{ backgroundColor: theme.colors.card }}>
-            <ActionButton icon="icon-qr-code" label={LL.BALANCE_ACTION_RECEIVE()} />
-            <ActionButton icon="icon-arrow-up" label={LL.BALANCE_ACTION_SEND()} />
-            <ActionButton icon="icon-plus" label={LL.BALANCE_ACTION_BUY()} />
-            <ActionButton icon="icon-stargate" label={LL.BALANCE_ACTION_EARN()} />
-            <ActionButton icon="icon-arrow-left-right" label={LL.SWAP()} />
-            {PlatformUtils.isAndroid() && paymentProvidersFeature.coinify.android && (
-                <ActionButton icon="icon-minus" label={LL.BTN_SELL()} />
-            )}
+        <BaseBottomSheet ref={ref} backgroundStyle={{ backgroundColor: theme.colors.card }} dynamicHeight floating>
+            <BaseView flexDirection="column" gap={12} w={100}>
+                <ActionButton icon="icon-qr-code" label={LL.BALANCE_ACTION_RECEIVE()} onPress={wrappedReceive} />
+                {!sendDisabled && (
+                    <ActionButton icon="icon-arrow-up" label={LL.BALANCE_ACTION_SEND()} onPress={wrappedSend} />
+                )}
+
+                <ActionButton icon="icon-plus" label={LL.BALANCE_ACTION_BUY()} onPress={wrappedBuy} />
+                <ActionButton icon="icon-stargate" label={LL.BALANCE_ACTION_EARN()} onPress={wrappedEarn} />
+                <ActionButton icon="icon-arrow-left-right" label={LL.SWAP()} onPress={wrappedSwap} />
+                {!sellDisabled && <ActionButton icon="icon-minus" label={LL.BTN_SELL()} onPress={wrappedSell} />}
+            </BaseView>
         </BaseBottomSheet>
     )
 }

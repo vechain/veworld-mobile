@@ -6,16 +6,24 @@ import { useAnalyticTracking, useBrowserNavigation } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 
-export const EarnButton = () => {
-    const { LL } = useI18nContext()
+const useEarn = () => {
     const track = useAnalyticTracking()
     const nav = useNavigation()
     const { navigateToBrowser } = useBrowserNavigation()
 
-    const onEarn = useCallback(() => {
+    return useCallback(() => {
         navigateToBrowser(STARGATE_DAPP_URL, url => nav.navigate(Routes.BROWSER, { url, returnScreen: Routes.HOME }))
         track(AnalyticsEvent.TOKEN_EARN_CLICKED)
     }, [navigateToBrowser, nav, track])
+}
+
+const EarnButton = () => {
+    const { LL } = useI18nContext()
+
+    const onEarn = useEarn()
 
     return <GlassButtonWithLabel label={LL.BALANCE_ACTION_EARN()} size="sm" icon={"icon-stargate"} onPress={onEarn} />
 }
+
+EarnButton.use = useEarn
+export { EarnButton }

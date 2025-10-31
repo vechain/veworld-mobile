@@ -141,6 +141,7 @@
   "BALANCE_ACTION_EARN": "Earn",
   "BALANCE_ACTION_OTHER": "Other",
   "BALANCE_ACTION_RECEIVE": "Receive",
+  "BALANCE_ACTION_SELL": "Sell",
   "BALANCE_ACTION_SEND": "Send",
   "BALANCE_TAB_COLLECTIBLES": "Collectibles",
   "BALANCE_TAB_NO_TOKENS": "You don't have any tokens yet",

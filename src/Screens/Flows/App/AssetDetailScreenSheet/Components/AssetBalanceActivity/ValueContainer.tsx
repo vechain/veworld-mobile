@@ -61,7 +61,7 @@ const TokenValue = ({ value, token, border = true }: { value: string; token: Fun
                 </BaseText>
             </BaseView>
 
-            <BaseText typographyFont="subSubTitleSemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
+            <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
                 {value}
             </BaseText>
         </BaseView>

@@ -6,16 +6,17 @@ import { useAnalyticTracking } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
-import { BigNutils } from "~Utils"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils, BigNutils } from "~Utils"
 
 type Props = {
     token: FungibleTokenWithBalance
 }
 
-export const SendButton = ({ token }: Props) => {
-    const { LL } = useI18nContext()
+const useSend = (token: FungibleTokenWithBalance) => {
     const track = useAnalyticTracking()
     const nav = useNavigation()
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     const onSend = useCallback(() => {
         nav.navigate(Routes.INSERT_ADDRESS_SEND, {
             token,
@@ -23,15 +24,36 @@ export const SendButton = ({ token }: Props) => {
         track(AnalyticsEvent.TOKEN_SEND_CLICKED)
     }, [nav, token, track])
 
-    const isSendDisabled = useMemo(() => BigNutils(token.balance.balance).isZero, [token.balance.balance])
+    const isSendDisabled = useMemo(
+        () => BigNutils(token.balance.balance).isZero || AccountUtils.isObservedAccount(selectedAccount),
+        [selectedAccount, token.balance.balance],
+    )
+
+    return useMemo(
+        () => ({
+            disabled: isSendDisabled,
+            onPress: onSend,
+        }),
+        [isSendDisabled, onSend],
+    )
+}
+
+const SendButton = ({ token }: Props) => {
+    const { LL } = useI18nContext()
+
+    const { disabled, onPress } = useSend(token)
 
     return (
         <GlassButtonWithLabel
             label={LL.BALANCE_ACTION_SEND()}
             size="sm"
             icon="icon-arrow-up"
-            onPress={onSend}
-            disabled={isSendDisabled}
+            onPress={onPress}
+            disabled={disabled}
         />
     )
 }
+
+SendButton.use = useSend
+
+export { SendButton }

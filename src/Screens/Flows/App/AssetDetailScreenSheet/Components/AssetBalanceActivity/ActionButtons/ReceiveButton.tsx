@@ -8,15 +8,23 @@ type Props = {
     onOpenBottomsheet: () => void
 }
 
-export const ReceiveButton = ({ onOpenBottomsheet }: Props) => {
-    const { LL } = useI18nContext()
+const useReceive = (onOpenBottomsheet: () => void) => {
     const track = useAnalyticTracking()
-    const onReceive = useCallback(() => {
+    return useCallback(() => {
         onOpenBottomsheet()
         track(AnalyticsEvent.TOKEN_RECEIVE_CLICKED)
     }, [onOpenBottomsheet, track])
+}
+
+const ReceiveButton = ({ onOpenBottomsheet }: Props) => {
+    const { LL } = useI18nContext()
+    const onReceive = useReceive(onOpenBottomsheet)
 
     return (
         <GlassButtonWithLabel label={LL.BALANCE_ACTION_RECEIVE()} size="sm" icon="icon-qr-code" onPress={onReceive} />
     )
 }
+
+ReceiveButton.use = useReceive
+
+export { ReceiveButton }

@@ -625,6 +625,10 @@ type RootTranslation = {
 	 */
 	BALANCE_ACTION_RECEIVE: string
 	/**
+	 * S​e​l​l
+	 */
+	BALANCE_ACTION_SELL: string
+	/**
 	 * S​e​n​d
 	 */
 	BALANCE_ACTION_SEND: string
@@ -5013,6 +5017,14 @@ type RootTranslation = {
 	 */
 	TOKEN_CUSTOM_SUBTITLE: string
 	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	TOKEN_DETAIL_ACTIVITY_TAB: string
+	/**
+	 * B​a​l​a​n​c​e
+	 */
+	TOKEN_DETAIL_BALANCE_TAB: string
+	/**
 	 * T​o​k​e​n​ ​I​D
 	 */
 	TOKEN_ID: string
@@ -5056,14 +5068,6 @@ type RootTranslation = {
 	 * T​y​p​e
 	 */
 	TYPE: string
-	/**
-	 * B​a​l​a​n​c​e
-	 */
-	TOKEN_DETAIL_BALANCE_TAB: string
-	/**
-	 * A​c​t​i​v​i​t​y
-	 */
-	TOKEN_DETAIL_ACTIVITY_TAB: string
 	/**
 	 * ~​ ​{​s​e​c​o​n​d​s​|​t​o​S​e​c​o​n​d​s​D​u​r​a​t​i​o​n​}
 	 * @param {number} seconds
@@ -5993,6 +5997,10 @@ Try reconnect your device to the internet.
 	 * Receive
 	 */
 	BALANCE_ACTION_RECEIVE: () => LocalizedString
+	/**
+	 * Sell
+	 */
+	BALANCE_ACTION_SELL: () => LocalizedString
 	/**
 	 * Send
 	 */
@@ -10330,6 +10338,14 @@ Here's what it's all about:
 	 */
 	TOKEN_CUSTOM_SUBTITLE: () => LocalizedString
 	/**
+	 * Activity
+	 */
+	TOKEN_DETAIL_ACTIVITY_TAB: () => LocalizedString
+	/**
+	 * Balance
+	 */
+	TOKEN_DETAIL_BALANCE_TAB: () => LocalizedString
+	/**
 	 * Token ID
 	 */
 	TOKEN_ID: () => LocalizedString
@@ -10373,14 +10389,6 @@ Here's what it's all about:
 	 * Type
 	 */
 	TYPE: () => LocalizedString
-	/**
-	 * Balance
-	 */
-	TOKEN_DETAIL_BALANCE_TAB: () => LocalizedString
-	/**
-	 * Activity
-	 */
-	TOKEN_DETAIL_ACTIVITY_TAB: () => LocalizedString
 	/**
 	 * ~ {seconds|toSecondsDuration}
 	 */
