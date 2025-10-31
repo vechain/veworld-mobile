@@ -80,6 +80,48 @@ export const formatDateTime = (
     return `${formattedDate}${time}`
 }
 
+/**
+ * Formats a timestamp into a date string (worklet-compatible).
+ * This version works on the UI thread but has simplified formatting.
+ *
+ * @param {number} timestamp - The timestamp to format.
+ * @param {string} locale - The locale (currently unused in worklet version).
+ * @param {Object} options - The options for formatting.
+ *    @param {boolean} options.hideTime - Whether to only include the date.
+ *    @param {boolean} options.hideDay - Whether to include the day number.
+ * @returns {string} The formatted date and time string.
+ */
+export const formatDateTimeWorklet = (
+    timestamp: number,
+    locale: string,
+    options?: { hideTime?: boolean; hideDay?: boolean },
+): string => {
+    "worklet"
+
+    if (isNaN(timestamp) || !timestamp || timestamp < 0) return ""
+
+    const date = new Date(timestamp)
+
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+    const month = months[date.getMonth()]
+    const day = date.getDate()
+    const year = date.getFullYear()
+
+    let dateStr = options?.hideDay ? `${month} ${year}` : `${month} ${day.toString().padStart(2, "0")}, ${year}`
+
+    if (!options?.hideTime) {
+        let hours = date.getHours()
+        const minutes = date.getMinutes()
+        hours = hours % 12
+        hours = hours ? hours : 12 // 0 should be 12
+        const timeStr = `${hours}:${minutes.toString().padStart(2, "0")}`
+        dateStr += ` - ${timeStr}`
+    }
+
+    return dateStr
+}
+
 export const DEFAULT_TIMEZONE = "UTC"
 
 /**

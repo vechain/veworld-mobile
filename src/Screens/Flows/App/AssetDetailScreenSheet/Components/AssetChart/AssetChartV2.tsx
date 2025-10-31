@@ -1,10 +1,23 @@
-import { Blur, Canvas, Group, LinearGradient, Path, Rect, Skia, vec } from "@shopify/react-native-skia"
+import {
+    Blur,
+    Canvas,
+    Group,
+    LinearGradient,
+    Path,
+    Rect,
+    RoundedRect,
+    Skia,
+    Text,
+    useFont,
+    vec,
+} from "@shopify/react-native-skia"
 import { curveBasis, line, scaleLinear, scaleTime } from "d3"
 import React, { useCallback, useEffect, useMemo } from "react"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import {
     Extrapolation,
     interpolate,
+    runOnJS,
     useDerivedValue,
     useSharedValue,
     withDelay,
@@ -15,7 +28,9 @@ import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } 
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useTheme } from "~Hooks/useTheme"
 import { TokenWithCompleteInfo } from "~Model"
+import HapticsService from "~Services/HapticsService"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { DateUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
 
 type Props = {
@@ -68,6 +83,11 @@ export const AssetChartV2 = ({ token }: Props) => {
     const theme = useTheme()
     const currency = useAppSelector(selectCurrency)
     const hasTokenChart = useMemo(() => SUPPORTED_CHART_TOKENS.has(token.symbol), [token.symbol])
+    const skiaFont = useFont(require("../../../../../../Assets/Fonts/Inter/Inter-SemiBold.ttf"), 12)
+
+    // Define your padding
+    const CHIP_PADDING_X = 8
+    const CHIP_PADDING_Y = 4
 
     const { data: chartData } = useSmartMarketChart({
         id: hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
@@ -90,6 +110,37 @@ export const AssetChartV2 = ({ token }: Props) => {
     // Line cursor animation
     const translateX = useSharedValue(0)
     const cursorLineOpacity = useSharedValue(0)
+    const chipPosition = useSharedValue([{ translateX: 0, translateY: 10 }])
+    const chipTimestamp = useSharedValue(0)
+
+    // Create a derived value for the chip text and its dimensions
+    const chipTextData = useDerivedValue(() => {
+        return DateUtils.formatDateTimeWorklet(chipTimestamp.value, "en-US", {
+            hideTime: false,
+            hideDay: false,
+        })
+    }, [chipTimestamp.value, skiaFont])
+
+    const chipWidth = useDerivedValue(() => {
+        if (!skiaFont) {
+            return 0
+        }
+
+        // Measure the text dimensions
+        return skiaFont.measureText(chipTextData.value).width + CHIP_PADDING_X * 2
+    }, [chipTextData, skiaFont])
+
+    const chipHeight = useDerivedValue(() => {
+        if (!skiaFont) {
+            return 0
+        }
+
+        return skiaFont?.measureText(chipTextData.value).height + CHIP_PADDING_Y * 2
+    }, [chipTextData, skiaFont])
+
+    const chipTextY = useDerivedValue(() => {
+        return chipHeight.value / 2 + CHIP_PADDING_Y
+    }, [chipHeight])
 
     // Cross hair animation
     const crossHairOpacity = useSharedValue(0)
@@ -129,7 +180,12 @@ export const AssetChartV2 = ({ token }: Props) => {
     }, [backgroundProgress.value, minY, maxY, maxX])
 
     const crossHairClipPath = useDerivedValue(() => {
-        const rect = Skia.XYWHRect(crossHairStart.value, 0, crossHairEnd.value - crossHairStart.value, GRAPH_HEIGHT)
+        const rect = Skia.XYWHRect(
+            crossHairStart.value + 5,
+            0,
+            crossHairEnd.value - crossHairStart.value - 10,
+            GRAPH_HEIGHT,
+        )
 
         return Skia.RRectXY(rect, 16, 16)
     }, [crossHairStart.value, crossHairEnd.value])
@@ -150,13 +206,31 @@ export const AssetChartV2 = ({ token }: Props) => {
             const point = points[pointIdx]
             const offset = x - point.x
 
-            const prevPoint = points[pointIdx - 1].x + offset
-            const nextPoint = points[pointIdx + 1].x + offset
+            const prevPoint = points[pointIdx - 2].x + offset
+            const nextPoint = points[pointIdx + 2].x + offset
 
-            crossHairStart.value = withSpring(prevPoint + 0.02, { damping: 100, stiffness: 100 })
-            crossHairEnd.value = withSpring(nextPoint - 0.02, { damping: 100, stiffness: 100 })
+            crossHairStart.value = withSpring(prevPoint, { damping: 100, stiffness: 100 })
+            crossHairEnd.value = withSpring(nextPoint, { damping: 100, stiffness: 100 })
+
+            // Only update the chip position if the x position is within the chip text width
+            if (x > chipWidth.value / 2 && x < SCREEN_WIDTH - chipWidth.value / 2) {
+                chipPosition.value = [
+                    { translateX: x - chipWidth.value / 2, translateY: chipHeight.value + CHIP_PADDING_Y },
+                ]
+            }
+            // Update the chip timestamp to the nearest point timestamp
+            chipTimestamp.value = downsampleData?.[pointIdx]?.timestamp ?? 0
         },
-        [crossHairEnd, crossHairStart, points],
+        [
+            points,
+            crossHairStart,
+            crossHairEnd,
+            chipWidth.value,
+            chipTimestamp,
+            downsampleData,
+            chipPosition,
+            chipHeight.value,
+        ],
     )
 
     const panGesture = Gesture.Pan()
@@ -165,7 +239,7 @@ export const AssetChartV2 = ({ token }: Props) => {
             cursorLineOpacity.value = withTiming(1, { duration: 100 })
 
             const pointIdx = findNearestPointIndex(e.x)
-            if (pointIdx > 0 && pointIdx < points.length - 1) {
+            if (pointIdx > 1 && pointIdx < points.length - 2) {
                 crossHairOpacity.value = withTiming(1, { duration: 100 })
                 onPanGesture(e.x, pointIdx)
             }
@@ -174,13 +248,13 @@ export const AssetChartV2 = ({ token }: Props) => {
             translateX.value = e.x
             const pointIdx = findNearestPointIndex(e.x)
 
-            if (pointIdx > 0 && pointIdx < points.length - 1) {
+            if (pointIdx > 1 && pointIdx < points.length - 2) {
+                runOnJS(HapticsService.triggerHaptics)({ haptics: "Light" })
                 onPanGesture(e.x, pointIdx)
             }
 
             //const point = points.findIndex(p => Math.abs(p.x - e.x) < 1)
             // if (point !== -1) {
-            //     console.log(downsampleData?.[point].timestamp)
             // }
         })
         .onFinalize(() => {
@@ -242,14 +316,20 @@ export const AssetChartV2 = ({ token }: Props) => {
                     />
                 </Group>
 
-                <Rect
-                    x={translateX}
-                    y={0}
-                    width={1}
-                    height={GRAPH_HEIGHT}
-                    color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.DARK_PURPLE_DISABLED}
-                    opacity={cursorLineOpacity}
-                />
+                <Group opacity={cursorLineOpacity}>
+                    <Rect
+                        x={translateX}
+                        y={0}
+                        width={1}
+                        height={GRAPH_HEIGHT}
+                        color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.DARK_PURPLE_DISABLED}
+                        opacity={cursorLineOpacity}
+                    />
+                    <Group transform={chipPosition}>
+                        <RoundedRect width={chipWidth} height={chipHeight} r={99} color={COLORS.PURPLE_DISABLED} />
+                        <Text text={chipTextData} font={skiaFont} x={CHIP_PADDING_X} y={chipTextY} color="white" />
+                    </Group>
+                </Group>
             </Canvas>
         </GestureDetector>
     )
