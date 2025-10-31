@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { PropsWithChildren, useCallback, useMemo } from "react"
-import { ScrollView, StyleSheet } from "react-native"
+import React, { PropsWithChildren, useCallback, useEffect, useMemo } from "react"
+import { StyleSheet } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, {
     Extrapolation,
@@ -53,15 +53,13 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
 
     const onClose = useCallback(() => {
         "worklet"
-        translateY.value = withTiming(height.value, { duration: 500 }, finished => {
-            if (finished) runOnJS(nav.goBack)()
-        })
-    }, [height.value, nav.goBack, translateY])
+        runOnJS(nav.goBack)()
+    }, [nav.goBack])
 
     useAnimatedReaction(
         () => height.value,
-        result => {
-            if (result !== SCREEN_HEIGHT) {
+        current => {
+            if (current !== SCREEN_HEIGHT) {
                 translateY.value = withTiming(DEFAULT_TRANSLATION, {
                     duration: 500,
                 })
@@ -85,31 +83,52 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
             })
     }, [height.value, onClose, translateY])
 
+    useEffect(() => {
+        const unsubscribe = nav.addListener("beforeRemove", e => {
+            e.preventDefault()
+            //It doesn't make sense, but otherwise we'll end up in a loop
+            unsubscribe()
+            translateY.value = withTiming(height.value, { duration: 200 }, finished => {
+                if (finished) {
+                    runOnJS(nav.dispatch)(e.data.action)
+                }
+            })
+        })
+
+        return () => {
+            unsubscribe()
+        }
+    }, [height.value, nav, translateY])
+
     return (
         <BaseSafeArea grow={1} style={styles.safeArea} bg="transparent">
-            <ScrollView>
-                <Animated.View style={[StyleSheet.absoluteFillObject, backdropStyles]} onTouchStart={onClose} />
-                <Animated.View
-                    style={[styles.root, animatedS]}
-                    onLayout={e => {
-                        if (PlatformUtils.isAndroid()) {
-                            translateY.value = e.nativeEvent.layout.height
-                        }
-                        height.value = e.nativeEvent.layout.height
-                    }}>
-                    {handle && (
-                        <>
-                            <GestureDetector gesture={gesture}>
-                                <BaseBottomSheetHandle
-                                    color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
-                                />
-                            </GestureDetector>
-                            <BaseSpacer height={8} />
-                        </>
-                    )}
-                    {children}
-                </Animated.View>
-            </ScrollView>
+            <Animated.View
+                style={[StyleSheet.absoluteFillObject, backdropStyles]}
+                onTouchStart={() => {
+                    nav.goBack()
+                }}
+            />
+            <Animated.ScrollView
+                style={[styles.root, animatedS]}
+                onLayout={e => {
+                    if (PlatformUtils.isAndroid()) {
+                        translateY.value = e.nativeEvent.layout.height
+                    }
+                    height.value = e.nativeEvent.layout.height
+                }}
+                stickyHeaderIndices={[0]}>
+                {handle && (
+                    <>
+                        <GestureDetector gesture={gesture}>
+                            <BaseBottomSheetHandle
+                                color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
+                            />
+                        </GestureDetector>
+                        <BaseSpacer height={8} />
+                    </>
+                )}
+                {children}
+            </Animated.ScrollView>
         </BaseSafeArea>
     )
 }

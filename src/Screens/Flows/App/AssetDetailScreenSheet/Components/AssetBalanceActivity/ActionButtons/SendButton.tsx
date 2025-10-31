@@ -1,11 +1,12 @@
 import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
-import { Routes } from "~Navigation"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils, BigNutils } from "~Utils"
 
@@ -15,10 +16,10 @@ type Props = {
 
 const useSend = (token: FungibleTokenWithBalance) => {
     const track = useAnalyticTracking()
-    const nav = useNavigation()
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const onSend = useCallback(() => {
-        nav.navigate(Routes.INSERT_ADDRESS_SEND, {
+        nav.replace(Routes.INSERT_ADDRESS_SEND, {
             token,
         })
         track(AnalyticsEvent.TOKEN_SEND_CLICKED)
