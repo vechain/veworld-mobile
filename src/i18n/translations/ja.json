@@ -435,7 +435,7 @@
   "COLLECTIBLES_EMPTY_CARD_DESCRIPTION": "コレクティブルを転送してコレクションを始めましょう",
   "COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION": "または、エコシステムアプリからコレクティブルを購入しましょう",
   "COLLECTIBLES_REPORT_PROBLEM": "コレクションを報告",
-  "COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION": "このコレクションを報告すると、自動的にギャラリーから削除され、レビューのために報告されます。\nこの操作は取り消せません。",
+  "COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION": "このコレクションを報告することで、ギャラリーから自動的に削除され、レビューのために報告されます。\nこの操作は元に戻せません。",
   "COLLECTIBLES_VIEW_DETAILS": "詳細を見る",
   "COLLECTIBLES_VIEW_GALLERY": "ギャラリー",
   "COLLECTIONS": "コレクション",
