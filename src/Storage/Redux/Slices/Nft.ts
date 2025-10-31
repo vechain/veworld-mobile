@@ -175,26 +175,28 @@ export const NftSlice = createSlice({
             state,
             action: PayloadAction<{
                 network: NETWORK_TYPE
-                collection: NftCollection
+                collectionAddress: string
                 accountAddress: string
             }>,
         ) => {
-            const { network, collection, accountAddress } = action.payload
+            const { network, collectionAddress, accountAddress } = action.payload
 
             const currentBlackList = state.blackListedCollections[network][accountAddress]
 
-            const isBlackListed = currentBlackList?.addresses.includes(collection.address) ?? false
+            const isBlackListed =
+                currentBlackList?.addresses.find(addr => AddressUtils.compareAddresses(collectionAddress, addr)) ??
+                false
 
             if (isBlackListed) {
                 currentBlackList.addresses = currentBlackList.addresses.filter(
-                    address => address !== collection.address,
+                    addr => !AddressUtils.compareAddresses(collectionAddress, addr),
                 )
             } else {
                 if (currentBlackList) {
-                    state.blackListedCollections[network][accountAddress].addresses.push(collection.address)
+                    state.blackListedCollections[network][accountAddress].addresses.push(collectionAddress)
                 } else {
                     state.blackListedCollections[network][accountAddress] = {
-                        addresses: [collection.address],
+                        addresses: [collectionAddress],
                     }
                 }
             }
