@@ -1863,9 +1863,21 @@ type RootTranslation = {
 	 */
 	COMMON_24H: string
 	/**
+	 * W​e​b​s​i​t​e
+	 */
+	COMMON_WEBSITE: string
+	/**
 	 * 2​4​h​ ​V​o​l​u​m​e
 	 */
 	COMMON_24H_VOLUME: string
+	/**
+	 * 2​4​h​ ​R​a​n​g​e
+	 */
+	COMMON_24H_PRICE_RANGE: string
+	/**
+	 * T​o​k​e​n​ ​s​t​a​t​s
+	 */
+	COMMON_TOKEN_STATS: string
 	/**
 	 * A​s​s​e​t​s
 	 */
@@ -2120,6 +2132,10 @@ type RootTranslation = {
 	 * W​h​o​o​p​s​!
 	 */
 	COMMON_WHOOPS: string
+	/**
+	 * W​e​b​s​i​t​e
+	 */
+	COMMON_WEBSITE: string
 	/**
 	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
 	 * @param {string} alias
@@ -5049,6 +5065,14 @@ type RootTranslation = {
 	 */
 	TOKEN_CUSTOM_SUBTITLE: string
 	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	TOKEN_DETAIL_ACTIVITY_TAB: string
+	/**
+	 * B​a​l​a​n​c​e
+	 */
+	TOKEN_DETAIL_BALANCE_TAB: string
+	/**
 	 * T​o​k​e​n​ ​I​D
 	 */
 	TOKEN_ID: string
@@ -7253,9 +7277,21 @@ This action is irreversible.
 	 */
 	COMMON_24H: () => LocalizedString
 	/**
+	 * Website
+	 */
+	COMMON_WEBSITE: () => LocalizedString
+	/**
 	 * 24h Volume
 	 */
 	COMMON_24H_VOLUME: () => LocalizedString
+	/**
+	 * 24h Range
+	 */
+	COMMON_24H_PRICE_RANGE: () => LocalizedString
+	/**
+	 * Token stats
+	 */
+	COMMON_TOKEN_STATS: () => LocalizedString
 	/**
 	 * Assets
 	 */
@@ -7508,6 +7544,10 @@ This action is irreversible.
 	 * Whoops!
 	 */
 	COMMON_WHOOPS: () => LocalizedString
+	/**
+	 * Website
+	 */
+	COMMON_WEBSITE: () => LocalizedString
 	/**
 	 * Confirming this you will disconnect the {name} app from {alias}
 	 */
@@ -10393,6 +10433,14 @@ Here's what it's all about:
 	 * Add a custom token to your wallet
 	 */
 	TOKEN_CUSTOM_SUBTITLE: () => LocalizedString
+	/**
+	 * Activity
+	 */
+	TOKEN_DETAIL_ACTIVITY_TAB: () => LocalizedString
+	/**
+	 * Balance
+	 */
+	TOKEN_DETAIL_BALANCE_TAB: () => LocalizedString
 	/**
 	 * Token ID
 	 */
