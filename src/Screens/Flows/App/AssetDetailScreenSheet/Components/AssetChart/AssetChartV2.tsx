@@ -1,20 +1,16 @@
-import {
-    Blur,
-    Canvas,
-    Group,
-    LinearGradient,
-    Path,
-    Points,
-    Rect,
-    Skia,
-    usePathInterpolation,
-    vec,
-} from "@shopify/react-native-skia"
-import { curveBasis, curveBasisClosed, curveLinearClosed, line, scaleLinear, scaleTime } from "d3"
+import { Blur, Canvas, Group, LinearGradient, Path, Rect, Skia, vec } from "@shopify/react-native-skia"
+import { curveBasis, line, scaleLinear, scaleTime } from "d3"
 import React, { useEffect, useMemo } from "react"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
-import { useDerivedValue, useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated"
-import { ClipPath } from "react-native-svg"
+import {
+    Extrapolation,
+    interpolate,
+    useDerivedValue,
+    useSharedValue,
+    withDelay,
+    withSpring,
+    withTiming,
+} from "react-native-reanimated"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useTheme } from "~Hooks/useTheme"
@@ -34,6 +30,7 @@ type DataPoint = {
 const SUPPORTED_CHART_TOKENS = new Set(Object.keys(getCoinGeckoIdBySymbol))
 
 const GRAPH_HEIGHT = 125
+const INIT_ANIMATION_DURATION = 1500
 
 const makeGraph = (data: DataPoint[]) => {
     const max = Math.max(...data.map(val => val.value))
@@ -88,6 +85,7 @@ export const AssetChartV2 = ({ token }: Props) => {
 
     // Initial chartprogress animation
     const progress = useSharedValue(0)
+    const backgroundProgress = useSharedValue(0)
 
     // Line cursor animation
     const translateX = useSharedValue(0)
@@ -99,7 +97,11 @@ export const AssetChartV2 = ({ token }: Props) => {
     const crossHairEnd = useSharedValue(1)
 
     useEffect(() => {
-        progress.value = withTiming(1, { duration: 1500 })
+        progress.value = withTiming(1, { duration: INIT_ANIMATION_DURATION }, finished => {
+            if (finished) {
+                backgroundProgress.value = withTiming(1, { duration: 800 })
+            }
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -118,6 +120,10 @@ export const AssetChartV2 = ({ token }: Props) => {
 
         return nearestIdx
     }
+
+    const backgroudAnimation = useDerivedValue(() => {
+        return Skia.Point(maxX, interpolate(backgroundProgress.value, [0, 1], [maxY + 1, minY], Extrapolation.CLAMP))
+    }, [backgroundProgress.value, minY, maxY, maxX])
 
     const crossHairClipPath = useDerivedValue(() => {
         const rect = Skia.XYWHRect(
@@ -182,16 +188,13 @@ export const AssetChartV2 = ({ token }: Props) => {
     return (
         <GestureDetector gesture={panGesture}>
             <Canvas style={{ width: SCREEN_WIDTH, height: GRAPH_HEIGHT }}>
-                {/* <Points points={points} color={"red"} mode="points" strokeWidth={5} /> */}
-                {/* <Points points={nearestPoint} color={"green"} mode="points" strokeWidth={5} /> */}
-
                 <Group clip={backgroundClipPath}>
                     <Rect x={0} y={0} width={SCREEN_WIDTH} height={GRAPH_HEIGHT}>
                         <LinearGradient
                             positions={[0, 0.2, 1]}
                             colors={["rgba(38, 30, 76, 0)", "rgba(68, 59, 110, 0.5)", "rgba(185, 181, 207, 1)"]}
+                            start={backgroudAnimation}
                             end={Skia.Point(maxX, maxY)}
-                            start={Skia.Point(maxX, minY)}
                         />
                     </Rect>
                 </Group>
