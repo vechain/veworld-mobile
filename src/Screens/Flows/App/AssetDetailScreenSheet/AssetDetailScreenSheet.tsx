@@ -2,7 +2,12 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { LineChart } from "react-native-wagmi-charts"
-import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
+import {
+    DEFAULT_LINE_CHART_DATA,
+    getCoinGeckoIdBySymbol,
+    useSmartMarketChart,
+    useTokenSocialLinks,
+} from "~Api/Coingecko"
 import { BaseSpacer, BaseText, BaseView, TokenSymbol } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { ColorThemeType } from "~Constants"
@@ -16,6 +21,7 @@ import { AssetBalanceActivity } from "./Components/AssetBalanceActivity"
 import { ASSET_CHART_PERIODS, AssetChart } from "./Components/AssetChart"
 import { AssertChartBalance } from "./Components/AssetChartBalance"
 import { AssetDetailScreenWrapper } from "./Components/AssetDetailScreenWrapper"
+import { AssetStats } from "./Components/AssetStats"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -25,6 +31,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
     const { token } = route.params
     const { styles, theme } = useThemedStyles(baseStyles)
     const currency = useAppSelector(selectCurrency)
+    const socialLinks = useTokenSocialLinks(token.tokenInfo) ?? {}
 
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
     const name = useTokenDisplayName(token)
@@ -82,6 +89,13 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
 
                 <AssetBalanceActivity token={token as FungibleTokenWithBalance} />
             </LineChart.Provider>
+            {token.symbol && (
+                <AssetStats
+                    tokenSymbol={token.symbol}
+                    tokenDescription={token.tokenInfo?.description?.en}
+                    socialLinks={socialLinks ?? {}}
+                />
+            )}
         </AssetDetailScreenWrapper>
     )
 }

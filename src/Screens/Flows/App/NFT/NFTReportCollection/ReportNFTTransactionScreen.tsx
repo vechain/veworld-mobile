@@ -58,7 +58,7 @@ export const ReportNFTTransactionScreen = ({ route }: Props) => {
             dispatch(
                 toggleBlackListCollection({
                     network: selectedNetwork.type,
-                    collection,
+                    collectionAddress: collection.address,
                     accountAddress: selectedAccount.address,
                 }),
             )

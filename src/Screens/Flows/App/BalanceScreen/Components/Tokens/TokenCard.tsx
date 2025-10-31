@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { default as React, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
-import { BaseIcon, BaseText, BaseTouchableBox, BaseView, TokenSymbol } from "~Components"
+import { BaseIcon, BaseText, BaseTouchableBox, BaseView, TokenSymbol, useFeatureFlags } from "~Components"
 import { useDevice } from "~Components/Providers/DeviceProvider"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { B3TR, COLORS, isSmallScreen, typography, VET, VTHO } from "~Constants"
@@ -12,8 +12,8 @@ import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
-import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BalanceUtils } from "~Utils"
+import { selectBalanceVisible, selectCurrency, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils, AddressUtils, BalanceUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
 import { Chart, CHART_WIDTH } from "./Chart"
 
@@ -28,6 +28,8 @@ export const TokenCard = ({ token }: Props) => {
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
     const { isLowEndDevice } = useDevice()
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const { betterWorldFeature } = useFeatureFlags()
 
     // Check if token supports charts (has CoinGecko ID)
     const isTokenSupported = useMemo(() => !!getCoinGeckoIdBySymbol[token.symbol], [token.symbol])
@@ -85,6 +87,8 @@ export const TokenCard = ({ token }: Props) => {
 
     const handlePress = useCallback(() => {
         if (!isVechainToken) {
+            if (AccountUtils.isObservedAccount(selectedAccount) && !betterWorldFeature?.balanceScreen?.tokens?.enabled)
+                return
             if (isCrossChainToken) {
                 navigation.navigate(Routes.BRIDGE_TOKEN_DETAILS, {
                     token,
@@ -105,7 +109,15 @@ export const TokenCard = ({ token }: Props) => {
         navigation.navigate(Routes.TOKEN_DETAILS, {
             token: tokenWithCompleteInfo,
         })
-    }, [navigation, tokenWithCompleteInfo, isVechainToken, token, isCrossChainToken])
+    }, [
+        isVechainToken,
+        navigation,
+        tokenWithCompleteInfo,
+        selectedAccount,
+        betterWorldFeature?.balanceScreen?.tokens?.enabled,
+        isCrossChainToken,
+        token,
+    ])
 
     return (
         <BaseTouchableBox

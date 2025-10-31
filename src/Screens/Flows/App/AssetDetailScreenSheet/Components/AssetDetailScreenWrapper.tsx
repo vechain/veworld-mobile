@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { PropsWithChildren, useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { ScrollView, StyleSheet } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, {
     Extrapolation,
@@ -16,6 +16,7 @@ import { BaseSafeArea, BaseSpacer } from "~Components"
 import { BaseBottomSheetHandle } from "~Components/Base/BaseBottomSheetHandle"
 import { COLORS, ColorThemeType, SCREEN_HEIGHT } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { PlatformUtils } from "~Utils"
 
 type Props = PropsWithChildren<{
     handle?: boolean
@@ -86,12 +87,14 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
 
     return (
         <BaseSafeArea grow={1} style={styles.safeArea} bg="transparent">
-            <>
+            <ScrollView>
                 <Animated.View style={[StyleSheet.absoluteFillObject, backdropStyles]} onTouchStart={onClose} />
                 <Animated.View
                     style={[styles.root, animatedS]}
                     onLayout={e => {
-                        translateY.value = height.value
+                        if (PlatformUtils.isAndroid()) {
+                            translateY.value = e.nativeEvent.layout.height
+                        }
                         height.value = e.nativeEvent.layout.height
                     }}>
                     {handle && (
@@ -106,7 +109,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                     )}
                     {children}
                 </Animated.View>
-            </>
+            </ScrollView>
         </BaseSafeArea>
     )
 }

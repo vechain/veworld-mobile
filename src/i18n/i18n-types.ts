@@ -1496,6 +1496,10 @@ type RootTranslation = {
 	 */
 	BTN_GO_TO_SETTINGS: string
 	/**
+	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_HIDE_COLLECTION: string
+	/**
 	 * A​c​t​i​v​i​t​y
 	 */
 	BTN_HISTORY: string
@@ -1681,6 +1685,10 @@ type RootTranslation = {
 	 */
 	BTN_SEND_ANYWAY: string
 	/**
+	 * S​h​o​w​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_SHOW_COLLECTION: string
+	/**
 	 * S​h​o​w​ ​Q​R​ ​c​o​d​e
 	 */
 	BTN_SHOW_QR_CODE: string
@@ -1815,7 +1823,7 @@ type RootTranslation = {
 	COLLECTIBLES_REPORT_PROBLEM: string
 	/**
 	 * B​y​ ​r​e​p​o​r​t​i​n​g​ ​t​h​i​s​ ​c​o​l​l​e​c​t​i​o​n​,​ ​i​t​ ​w​i​l​l​ ​b​e​ ​a​u​t​o​m​a​t​i​c​a​l​l​y​ ​r​e​m​o​v​e​d​ ​f​r​o​m​ ​y​o​u​r​ ​g​a​l​l​e​r​y​ ​a​n​d​ ​i​t​ ​w​i​l​l​ ​b​e​ ​r​e​p​o​r​t​e​d​ ​f​o​r​ ​r​e​v​i​e​w​.​
-​T​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e
+​T​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​.
 	 */
 	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: string
 	/**
@@ -1830,6 +1838,22 @@ type RootTranslation = {
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
 	COLLECTIONS: string
+	/**
+	 * H​i​d​e​ ​b​a​c​k
+	 */
+	COLLECTIONS_HIDE_BACK: string
+	/**
+	 * V​i​e​w​ ​h​i​d​d​e​n
+	 */
+	COLLECTIONS_VIEW_HIDDEN: string
+	/**
+	 * T​h​e​ ​c​o​l​l​e​c​t​i​o​n​ ​w​a​s​ ​m​o​v​e​d​ ​t​o​ ​t​h​e​ ​h​i​d​d​e​n​ ​s​e​c​t​i​o​n​ ​a​n​d​ ​n​o​ ​l​o​n​g​e​r​ ​v​i​s​i​b​l​e​ ​o​n​ ​t​h​e​ ​c​o​l​l​e​c​t​i​o​n​s​ ​l​i​s​t​.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: string
+	/**
+	 * C​o​l​l​e​c​t​i​o​n​ ​h​i​d​d​e​n
+	 */
+	COLLECTION_HIDDEN_TITLE: string
 	/**
 	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
 	 */
@@ -1846,6 +1870,14 @@ type RootTranslation = {
 	 * 2​4​h​ ​V​o​l​u​m​e
 	 */
 	COMMON_24H_VOLUME: string
+	/**
+	 * 2​4​h​ ​R​a​n​g​e
+	 */
+	COMMON_24H_PRICE_RANGE: string
+	/**
+	 * T​o​k​e​n​ ​s​t​a​t​s
+	 */
+	COMMON_TOKEN_STATS: string
 	/**
 	 * A​s​s​e​t​s
 	 */
@@ -2100,6 +2132,10 @@ type RootTranslation = {
 	 * W​h​o​o​p​s​!
 	 */
 	COMMON_WHOOPS: string
+	/**
+	 * W​e​b​s​i​t​e
+	 */
+	COMMON_WEBSITE: string
 	/**
 	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
 	 * @param {string} alias
@@ -2879,6 +2915,14 @@ type RootTranslation = {
 	 */
 	FEBRUARY: string
 	/**
+	 * F​a​v​o​r​i​t​e​d​!
+	 */
+	FEEDBACK_FAVORITED: string
+	/**
+	 * S​e​t​ ​a​s​ ​a​v​a​t​a​r​!
+	 */
+	FEEDBACK_SET_AVATAR: string
+	/**
 	 * F​i​n​g​e​r​p​r​i​n​t
 	 */
 	FINGERPRINT: string
@@ -3315,6 +3359,10 @@ type RootTranslation = {
 	 * N​F​T​ ​R​e​c​e​i​v​e
 	 */
 	NFT_RECEIVE: string
+	/**
+	 * R​e​p​o​r​t​ ​a​n​d​ ​b​l​o​c​k​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	NFT_REPORT_BLOCK_COLLECTION: string
 	/**
 	 * R​e​p​o​r​t​ ​C​o​l​l​e​c​t​i​o​n
 	 */
@@ -6864,6 +6912,10 @@ Thanks for your patience!
 	 */
 	BTN_GO_TO_SETTINGS: () => LocalizedString
 	/**
+	 * Hide collection
+	 */
+	BTN_HIDE_COLLECTION: () => LocalizedString
+	/**
 	 * Activity
 	 */
 	BTN_HISTORY: () => LocalizedString
@@ -7048,6 +7100,10 @@ Thanks for your patience!
 	 */
 	BTN_SEND_ANYWAY: () => LocalizedString
 	/**
+	 * Show collection
+	 */
+	BTN_SHOW_COLLECTION: () => LocalizedString
+	/**
 	 * Show QR code
 	 */
 	BTN_SHOW_QR_CODE: () => LocalizedString
@@ -7181,7 +7237,7 @@ Thanks for your patience!
 	COLLECTIBLES_REPORT_PROBLEM: () => LocalizedString
 	/**
 	 * By reporting this collection, it will be automatically removed from your gallery and it will be reported for review.
-This action is irreversible
+This action is irreversible.
 	 */
 	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: () => LocalizedString
 	/**
@@ -7196,6 +7252,22 @@ This action is irreversible
 	 * Collections
 	 */
 	COLLECTIONS: () => LocalizedString
+	/**
+	 * Hide back
+	 */
+	COLLECTIONS_HIDE_BACK: () => LocalizedString
+	/**
+	 * View hidden
+	 */
+	COLLECTIONS_VIEW_HIDDEN: () => LocalizedString
+	/**
+	 * The collection was moved to the hidden section and no longer visible on the collections list.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: () => LocalizedString
+	/**
+	 * Collection hidden
+	 */
+	COLLECTION_HIDDEN_TITLE: () => LocalizedString
 	/**
 	 * Collection name
 	 */
@@ -7212,6 +7284,14 @@ This action is irreversible
 	 * 24h Volume
 	 */
 	COMMON_24H_VOLUME: () => LocalizedString
+	/**
+	 * 24h Range
+	 */
+	COMMON_24H_PRICE_RANGE: () => LocalizedString
+	/**
+	 * Token stats
+	 */
+	COMMON_TOKEN_STATS: () => LocalizedString
 	/**
 	 * Assets
 	 */
@@ -7464,6 +7544,10 @@ This action is irreversible
 	 * Whoops!
 	 */
 	COMMON_WHOOPS: () => LocalizedString
+	/**
+	 * Website
+	 */
+	COMMON_WEBSITE: () => LocalizedString
 	/**
 	 * Confirming this you will disconnect the {name} app from {alias}
 	 */
@@ -8237,6 +8321,14 @@ This action is irreversible
 	 */
 	FEBRUARY: () => LocalizedString
 	/**
+	 * Favorited!
+	 */
+	FEEDBACK_FAVORITED: () => LocalizedString
+	/**
+	 * Set as avatar!
+	 */
+	FEEDBACK_SET_AVATAR: () => LocalizedString
+	/**
 	 * Fingerprint
 	 */
 	FINGERPRINT: () => LocalizedString
@@ -8673,6 +8765,10 @@ This action is irreversible
 	 * NFT Receive
 	 */
 	NFT_RECEIVE: () => LocalizedString
+	/**
+	 * Report and block collection
+	 */
+	NFT_REPORT_BLOCK_COLLECTION: () => LocalizedString
 	/**
 	 * Report Collection
 	 */
