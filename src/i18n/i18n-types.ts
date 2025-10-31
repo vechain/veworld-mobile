@@ -1596,6 +1596,14 @@ type RootTranslation = {
 	 */
 	BTN_REMOVE_FROM_FAVORITES: string
 	/**
+	 * S​h​o​w​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_SHOW_COLLECTION: string
+	/**
+	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_HIDE_COLLECTION: string
+	/**
 	 * R​e​m​o​v​e​ ​w​a​l​l​e​t
 	 */
 	BTN_REMOVE_WALLET: string
@@ -1827,9 +1835,25 @@ type RootTranslation = {
 	 */
 	COLLECTIONS: string
 	/**
+	 * V​i​e​w​ ​h​i​d​d​e​n
+	 */
+	COLLECTIONS_VIEW_HIDDEN: string
+	/**
+	 * H​i​d​e​ ​b​a​c​k
+	 */
+	COLLECTIONS_HIDE_BACK: string
+	/**
 	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
 	 */
 	COLLECTION_NAME: string
+	/**
+	 * C​o​l​l​e​c​t​i​o​n​ ​h​i​d​d​e​n
+	 */
+	COLLECTION_HIDDEN_TITLE: string
+	/**
+	 * T​h​e​ ​c​o​l​l​e​c​t​i​o​n​ ​w​a​s​ ​m​o​v​e​d​ ​t​o​ ​t​h​e​ ​h​i​d​d​e​n​ ​s​e​c​t​i​o​n​ ​a​n​d​ ​n​o​ ​l​o​n​g​e​r​ ​v​i​s​i​b​l​e​ ​o​n​ ​t​h​e​ ​c​o​l​l​e​c​t​i​o​n​s​ ​l​i​s​t​.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: string
 	/**
 	 * d​a​y
 	 */
@@ -6964,6 +6988,14 @@ Thanks for your patience!
 	 */
 	BTN_REMOVE_FROM_FAVORITES: () => LocalizedString
 	/**
+	 * Show collection
+	 */
+	BTN_SHOW_COLLECTION: () => LocalizedString
+	/**
+	 * Hide collection
+	 */
+	BTN_HIDE_COLLECTION: () => LocalizedString
+	/**
 	 * Remove wallet
 	 */
 	BTN_REMOVE_WALLET: () => LocalizedString
@@ -7193,9 +7225,25 @@ This action is irreversible.
 	 */
 	COLLECTIONS: () => LocalizedString
 	/**
+	 * View hidden
+	 */
+	COLLECTIONS_VIEW_HIDDEN: () => LocalizedString
+	/**
+	 * Hide back
+	 */
+	COLLECTIONS_HIDE_BACK: () => LocalizedString
+	/**
 	 * Collection name
 	 */
 	COLLECTION_NAME: () => LocalizedString
+	/**
+	 * Collection hidden
+	 */
+	COLLECTION_HIDDEN_TITLE: () => LocalizedString
+	/**
+	 * The collection was moved to the hidden section and no longer visible on the collections list.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: () => LocalizedString
 	/**
 	 * day
 	 */

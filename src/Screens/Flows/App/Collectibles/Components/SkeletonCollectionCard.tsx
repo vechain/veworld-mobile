@@ -44,10 +44,11 @@ export const SkeletonCollectionCard = () => {
 const baseStyles = () =>
     StyleSheet.create({
         skeletonRoot: {
-            width: "100%",
-            height: 182,
+            flex: 1,
+            aspectRatio: 0.8791,
             position: "relative",
             overflow: "hidden",
             justifyContent: "flex-end",
+            maxWidth: "50%",
         },
     })
