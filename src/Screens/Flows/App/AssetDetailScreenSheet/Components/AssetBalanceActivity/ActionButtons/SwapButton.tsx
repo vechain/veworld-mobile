@@ -22,7 +22,7 @@ const SwapButton = () => {
 
     const onSwap = useSwap()
 
-    return <GlassButtonWithLabel label={LL.SWAP()} size="sm" icon="icon-arrow-left-right" onPress={onSwap} />
+    return <GlassButtonWithLabel label={LL.SWAP()} size="sm" icon="icon-arrow-left-right" onPress={onSwap} themed />
 }
 
 SwapButton.use = useSwap

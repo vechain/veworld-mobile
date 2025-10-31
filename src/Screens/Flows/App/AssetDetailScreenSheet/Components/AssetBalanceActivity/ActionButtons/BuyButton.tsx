@@ -20,7 +20,7 @@ const BuyButton = () => {
     const { LL } = useI18nContext()
     const onBuy = useBuy()
 
-    return <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} size="sm" icon="icon-plus" onPress={onBuy} />
+    return <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} size="sm" icon="icon-plus" onPress={onBuy} themed />
 }
 
 BuyButton.use = useBuy

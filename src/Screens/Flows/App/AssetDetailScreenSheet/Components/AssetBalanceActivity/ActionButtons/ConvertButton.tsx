@@ -44,6 +44,7 @@ const ConvertButton = ({ bsRef }: Props) => {
             icon="icon-refresh-cw"
             onPress={onPress}
             disabled={disabled}
+            themed
         />
     )
 }

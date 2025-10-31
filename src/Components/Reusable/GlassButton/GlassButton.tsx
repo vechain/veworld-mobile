@@ -3,7 +3,7 @@ import { Pressable, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 
 type GlassButtonProps = {
@@ -11,24 +11,72 @@ type GlassButtonProps = {
     onPress: () => void
     disabled?: boolean
     size?: "sm" | "md"
+    /**
+     * Whether to change color based on theme
+     */
+    themed?: boolean
 }
 
-const GlassButton = ({ icon, onPress, disabled, size = "md" }: GlassButtonProps) => {
-    const { styles } = useThemedStyles(baseStyles(size))
+const GlassButton = ({ icon, onPress, disabled, size = "md", themed }: GlassButtonProps) => {
+    const { styles, theme } = useThemedStyles(baseStyles(size))
 
     const [pressed, setPressed] = useState(false)
 
     const onPressIn = useCallback(() => setPressed(true), [])
     const onPressOut = useCallback(() => setPressed(false), [])
 
-    const colors = useMemo(() => {
+    const darkGradientColors = useMemo(() => {
         if (pressed) return ["rgba(177, 168, 220, 0.20)", "rgba(29, 23, 58, 0.20)"]
         return ["rgba(29, 23, 58, 0.20)", "rgba(177, 168, 220, 0.20)"]
     }, [pressed])
 
-    const borderStyle = useMemo(() => {
-        if (pressed) return { borderColor: COLORS.PURPLE_LABEL_10 }
+    const lightGradientColors = useMemo(() => {
+        if (pressed) return ["#E7E9EB", "#F9F9FA"].reverse()
+        return ["#E7E9EB", "#F9F9FA"]
     }, [pressed])
+
+    const gradientColors = useMemo(() => {
+        if (!themed) return darkGradientColors
+        return theme.isDark ? darkGradientColors : lightGradientColors
+    }, [darkGradientColors, lightGradientColors, theme.isDark, themed])
+
+    const darkBorderColor = useMemo(() => {
+        if (pressed) return COLORS.PURPLE_LABEL_10
+        return COLORS.PURPLE_LABEL_5
+    }, [pressed])
+
+    const lightBorderColor = useMemo(() => {
+        return "rgba(231, 233, 235, 0.50)"
+    }, [])
+
+    const borderStyle = useMemo(() => {
+        if (!themed) return { borderColor: darkBorderColor }
+        return theme.isDark ? { borderColor: darkBorderColor } : { borderColor: lightBorderColor }
+    }, [darkBorderColor, lightBorderColor, theme.isDark, themed])
+
+    const darkDisabledColors = useMemo(() => {
+        return {
+            backgroundColor: COLORS.PURPLE_LABEL_5,
+            iconColor: COLORS.DARK_PURPLE_DISABLED,
+        }
+    }, [])
+
+    const lightDisabledColors = useMemo(() => {
+        return {
+            backgroundColor: COLORS.GREY_100,
+            iconColor: COLORS.GREY_400,
+        }
+    }, [])
+
+    const { backgroundColor, iconColor } = useMemo(() => {
+        if (!themed) return darkDisabledColors
+        return theme.isDark ? darkDisabledColors : lightDisabledColors
+    }, [darkDisabledColors, lightDisabledColors, theme.isDark, themed])
+
+    const activeIconColor = useMemo(() => {
+        if (!themed || theme.isDark) return COLORS.PURPLE_LABEL
+        return COLORS.PURPLE
+    }, [theme.isDark, themed])
 
     return (
         <Pressable onPress={onPress} disabled={disabled} onPressIn={onPressIn} onPressOut={onPressOut}>
@@ -36,13 +84,17 @@ const GlassButton = ({ icon, onPress, disabled, size = "md" }: GlassButtonProps)
                 <BaseView
                     p={size === "sm" ? 10 : 16}
                     borderRadius={99}
-                    bg={COLORS.PURPLE_LABEL_5}
+                    bg={backgroundColor}
                     style={styles.disabledBorderStyle}>
-                    <BaseIcon name={icon} size={size === "sm" ? 20 : 24} color={COLORS.DARK_PURPLE_DISABLED} />
+                    <BaseIcon name={icon} size={size === "sm" ? 20 : 24} color={iconColor} />
                 </BaseView>
             ) : (
-                <LinearGradient colors={colors} angle={0} useAngle style={[styles.gradientBtnContainer, borderStyle]}>
-                    <BaseIcon name={icon} size={size === "sm" ? 20 : 24} color={COLORS.PURPLE_LABEL} />
+                <LinearGradient
+                    colors={gradientColors}
+                    angle={0}
+                    useAngle
+                    style={[styles.gradientBtnContainer, borderStyle]}>
+                    <BaseIcon name={icon} size={size === "sm" ? 20 : 24} color={activeIconColor} />
                 </LinearGradient>
             )}
         </Pressable>
@@ -55,15 +107,26 @@ type Props = {
     onPress: () => void
     disabled?: boolean
     size?: "sm" | "md"
+    /**
+     * Whether to change color based on theme
+     */
+    themed?: boolean
 }
 
-export const GlassButtonWithLabel = ({ label, icon, onPress, disabled, size }: Props) => {
+export const GlassButtonWithLabel = ({ label, icon, onPress, disabled, size, themed }: Props) => {
+    const theme = useTheme()
+    const activeTextColor = useMemo(() => {
+        if (!themed || theme.isDark) return COLORS.PURPLE_LABEL
+        return COLORS.PURPLE
+    }, [theme.isDark, themed])
+    const disabledTextColor = useMemo(() => {
+        if (!themed || theme.isDark) return COLORS.DARK_PURPLE_DISABLED
+        return COLORS.GREY_400
+    }, [theme.isDark, themed])
     return (
         <BaseView flexDirection="column" gap={8} alignItems="center">
-            <GlassButton icon={icon} onPress={onPress} disabled={disabled} size={size} />
-            <BaseText
-                typographyFont="captionSemiBold"
-                color={disabled ? COLORS.DARK_PURPLE_DISABLED : COLORS.PURPLE_LABEL}>
+            <GlassButton icon={icon} onPress={onPress} disabled={disabled} size={size} themed={themed} />
+            <BaseText typographyFont="captionSemiBold" color={disabled ? disabledTextColor : activeTextColor}>
                 {label}
             </BaseText>
         </BaseView>

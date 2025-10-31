@@ -23,7 +23,15 @@ const EarnButton = () => {
 
     const onEarn = useEarn()
 
-    return <GlassButtonWithLabel label={LL.BALANCE_ACTION_EARN()} size="sm" icon={"icon-stargate"} onPress={onEarn} />
+    return (
+        <GlassButtonWithLabel
+            label={LL.BALANCE_ACTION_EARN()}
+            size="sm"
+            icon={"icon-stargate"}
+            onPress={onEarn}
+            themed
+        />
+    )
 }
 
 EarnButton.use = useEarn

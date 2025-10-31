@@ -43,7 +43,9 @@ const SellButton = () => {
 
     if (disabled) return null
 
-    return <GlassButtonWithLabel label={LL.BALANCE_ACTION_SELL()} size="sm" icon="icon-minus" onPress={onPress} />
+    return (
+        <GlassButtonWithLabel label={LL.BALANCE_ACTION_SELL()} size="sm" icon="icon-minus" onPress={onPress} themed />
+    )
 }
 
 SellButton.use = useSell

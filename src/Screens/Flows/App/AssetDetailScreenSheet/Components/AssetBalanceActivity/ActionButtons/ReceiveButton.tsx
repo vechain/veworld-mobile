@@ -21,7 +21,13 @@ const ReceiveButton = ({ onOpenBottomsheet }: Props) => {
     const onReceive = useReceive(onOpenBottomsheet)
 
     return (
-        <GlassButtonWithLabel label={LL.BALANCE_ACTION_RECEIVE()} size="sm" icon="icon-qr-code" onPress={onReceive} />
+        <GlassButtonWithLabel
+            label={LL.BALANCE_ACTION_RECEIVE()}
+            size="sm"
+            icon="icon-qr-code"
+            onPress={onReceive}
+            themed
+        />
     )
 }
 

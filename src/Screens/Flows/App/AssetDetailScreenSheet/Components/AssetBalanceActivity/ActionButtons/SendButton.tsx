@@ -51,6 +51,7 @@ const SendButton = ({ token }: Props) => {
             icon="icon-arrow-up"
             onPress={onPress}
             disabled={disabled}
+            themed
         />
     )
 }

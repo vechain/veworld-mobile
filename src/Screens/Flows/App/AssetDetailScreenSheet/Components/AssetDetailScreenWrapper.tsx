@@ -136,7 +136,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
-            backgroundColor: theme.colors.card,
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.APP_BACKGROUND_LIGHT,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
             zIndex: 1,

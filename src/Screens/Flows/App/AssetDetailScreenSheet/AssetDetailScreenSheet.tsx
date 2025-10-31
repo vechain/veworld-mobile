@@ -10,7 +10,6 @@ import {
 } from "~Api/Coingecko"
 import { BaseSpacer, BaseText, BaseView, TokenSymbol } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
 import { FungibleTokenWithBalance } from "~Model"
@@ -100,17 +99,8 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
-        root: {
-            paddingBottom: 16,
-            backgroundColor: theme.colors.card,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-            zIndex: 1,
-            position: "relative",
-            overflow: "hidden",
-        },
         padding: {
             paddingHorizontal: 16,
         },

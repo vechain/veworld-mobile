@@ -20,7 +20,13 @@ export const MoreButton = ({ openReceiveBottomsheet, token }: Props) => {
 
     return (
         <>
-            <GlassButtonWithLabel label={LL.COMMON_BTN_MORE()} size="sm" icon="icon-more-vertical" onPress={onPress} />
+            <GlassButtonWithLabel
+                label={LL.COMMON_BTN_MORE()}
+                size="sm"
+                icon="icon-more-vertical"
+                onPress={onPress}
+                themed
+            />
             <MoreButtonBottomSheet bsRef={ref} openReceiveBottomsheet={openReceiveBottomsheet} token={token} />
         </>
     )
