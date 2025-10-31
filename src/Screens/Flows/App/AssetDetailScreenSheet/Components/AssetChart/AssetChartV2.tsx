@@ -26,6 +26,7 @@ import {
 } from "react-native-reanimated"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
+import { useFormatFiat } from "~Hooks"
 import { useTheme } from "~Hooks/useTheme"
 import { TokenWithCompleteInfo } from "~Model"
 import HapticsService from "~Services/HapticsService"
@@ -84,6 +85,7 @@ export const AssetChartV2 = ({ token }: Props) => {
     const currency = useAppSelector(selectCurrency)
     const hasTokenChart = useMemo(() => SUPPORTED_CHART_TOKENS.has(token.symbol), [token.symbol])
     const skiaFont = useFont(require("../../../../../../Assets/Fonts/Inter/Inter-SemiBold.ttf"), 12)
+    const { formatLocale } = useFormatFiat()
 
     // Define your padding
     const CHIP_PADDING_X = 8
@@ -115,11 +117,11 @@ export const AssetChartV2 = ({ token }: Props) => {
 
     // Create a derived value for the chip text and its dimensions
     const chipTextData = useDerivedValue(() => {
-        return DateUtils.formatDateTimeWorklet(chipTimestamp.value, "en-US", {
+        return DateUtils.formatDateTimeWorklet(chipTimestamp.value, formatLocale, {
             hideTime: false,
             hideDay: false,
         })
-    }, [chipTimestamp.value, skiaFont])
+    }, [chipTimestamp.value, skiaFont, formatLocale])
 
     const chipWidth = useDerivedValue(() => {
         if (!skiaFont) {
@@ -180,12 +182,7 @@ export const AssetChartV2 = ({ token }: Props) => {
     }, [backgroundProgress.value, minY, maxY, maxX])
 
     const crossHairClipPath = useDerivedValue(() => {
-        const rect = Skia.XYWHRect(
-            crossHairStart.value + 5,
-            0,
-            crossHairEnd.value - crossHairStart.value - 10,
-            GRAPH_HEIGHT,
-        )
+        const rect = Skia.XYWHRect(crossHairStart.value, 0, crossHairEnd.value - crossHairStart.value, GRAPH_HEIGHT)
 
         return Skia.RRectXY(rect, 16, 16)
     }, [crossHairStart.value, crossHairEnd.value])
@@ -206,8 +203,9 @@ export const AssetChartV2 = ({ token }: Props) => {
             const point = points[pointIdx]
             const offset = x - point.x
 
-            const prevPoint = points[pointIdx - 2].x + offset
-            const nextPoint = points[pointIdx + 2].x + offset
+            const prevPoint = pointIdx > 0 ? points[pointIdx - 1].x + offset : offset
+            const nextPoint =
+                pointIdx < points.length - 1 ? points[pointIdx + 1].x + offset : points[points.length - 1].x + offset
 
             crossHairStart.value = withSpring(prevPoint, { damping: 100, stiffness: 100 })
             crossHairEnd.value = withSpring(nextPoint, { damping: 100, stiffness: 100 })
@@ -239,7 +237,7 @@ export const AssetChartV2 = ({ token }: Props) => {
             cursorLineOpacity.value = withTiming(1, { duration: 100 })
 
             const pointIdx = findNearestPointIndex(e.x)
-            if (pointIdx > 1 && pointIdx < points.length - 2) {
+            if (pointIdx > 0 && pointIdx < points.length - 1) {
                 crossHairOpacity.value = withTiming(1, { duration: 100 })
                 onPanGesture(e.x, pointIdx)
             }
@@ -248,7 +246,7 @@ export const AssetChartV2 = ({ token }: Props) => {
             translateX.value = e.x
             const pointIdx = findNearestPointIndex(e.x)
 
-            if (pointIdx > 1 && pointIdx < points.length - 2) {
+            if (pointIdx > 0 && pointIdx < points.length - 1) {
                 runOnJS(HapticsService.triggerHaptics)({ haptics: "Light" })
                 onPanGesture(e.x, pointIdx)
             }
