@@ -203,7 +203,7 @@ export const AssetChartV2 = ({ token }: Props) => {
             const point = points[pointIdx]
             const offset = x - point.x
 
-            const prevPoint = pointIdx > 0 ? points[pointIdx - 1].x + offset : offset
+            const prevPoint = pointIdx > 0 ? points[pointIdx - 1].x + offset : points[0].x + offset
             const nextPoint =
                 pointIdx < points.length - 1 ? points[pointIdx + 1].x + offset : points[points.length - 1].x + offset
 
@@ -237,19 +237,16 @@ export const AssetChartV2 = ({ token }: Props) => {
             cursorLineOpacity.value = withTiming(1, { duration: 100 })
 
             const pointIdx = findNearestPointIndex(e.x)
-            if (pointIdx > 0 && pointIdx < points.length - 1) {
-                crossHairOpacity.value = withTiming(1, { duration: 100 })
-                onPanGesture(e.x, pointIdx)
-            }
+
+            crossHairOpacity.value = withTiming(1, { duration: 100 })
+            onPanGesture(e.x, pointIdx)
         })
         .onChange(e => {
             translateX.value = e.x
             const pointIdx = findNearestPointIndex(e.x)
 
-            if (pointIdx > 0 && pointIdx < points.length - 1) {
-                runOnJS(HapticsService.triggerHaptics)({ haptics: "Light" })
-                onPanGesture(e.x, pointIdx)
-            }
+            runOnJS(HapticsService.triggerHaptics)({ haptics: "Light" })
+            onPanGesture(e.x, pointIdx)
 
             //const point = points.findIndex(p => Math.abs(p.x - e.x) < 1)
             // if (point !== -1) {
