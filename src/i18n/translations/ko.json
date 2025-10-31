@@ -443,7 +443,7 @@
   "COLLECTIONS": "컬렉션",
   "COLLECTIONS_HIDE_BACK": "뒤로 숨기기",
   "COLLECTIONS_VIEW_HIDDEN": "숨겨진 항목 보기",
-  "COLLECTION_HIDDEN_DESCRIPTION": "컬렉션이 숨겨진 섹션으로 이동하여 더 이상 컬렉션 목록에 표시되지 않습니다.",
+  "COLLECTION_HIDDEN_DESCRIPTION": "컬렉션이 숨겨진 섹션으로 이동되어 컬렉션 목록에 더 이상 표시되지 않습니다.",
   "COLLECTION_HIDDEN_TITLE": "컬렉션 숨김",
   "COLLECTION_NAME": "컬렉션 이름",
   "COMMOMN_DAY": "일",

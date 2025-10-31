@@ -443,7 +443,7 @@
   "COLLECTIONS": "Samlingar",
   "COLLECTIONS_HIDE_BACK": "Dölj tillbaka",
   "COLLECTIONS_VIEW_HIDDEN": "Visa dolda",
-  "COLLECTION_HIDDEN_DESCRIPTION": "Samlingen flyttades till den dolda sektionen och är inte längre synlig på samlingslistan.",
+  "COLLECTION_HIDDEN_DESCRIPTION": "Samlingen flyttades till den gömda sektionen och syns inte längre i samlingslistan.",
   "COLLECTION_HIDDEN_TITLE": "Samling dold",
   "COLLECTION_NAME": "Samlingens namn",
   "COMMOMN_DAY": "dag",
