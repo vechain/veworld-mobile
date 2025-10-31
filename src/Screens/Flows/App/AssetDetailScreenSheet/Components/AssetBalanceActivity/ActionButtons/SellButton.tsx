@@ -1,22 +1,23 @@
 import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { useFeatureFlags } from "~Components"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { Routes } from "~Navigation"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils, PlatformUtils } from "~Utils"
 
 const useSell = () => {
     const track = useAnalyticTracking()
-    const nav = useNavigation()
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListSwitch>>()
     const { paymentProvidersFeature } = useFeatureFlags()
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const onPress = useCallback(() => {
-        nav.navigate(Routes.SELL_FLOW)
+        nav.replace(Routes.SELL_FLOW)
         track(AnalyticsEvent.TOKEN_BUY_CLICKED)
     }, [nav, track])
 

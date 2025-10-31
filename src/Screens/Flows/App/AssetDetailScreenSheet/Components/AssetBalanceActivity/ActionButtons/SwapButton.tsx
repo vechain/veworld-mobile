@@ -1,17 +1,18 @@
 import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback } from "react"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { Routes } from "~Navigation"
+import { RootStackParamListHome, Routes } from "~Navigation"
 
 const useSwap = () => {
     const track = useAnalyticTracking()
-    const nav = useNavigation()
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
 
     return useCallback(() => {
-        nav.navigate(Routes.SWAP)
+        nav.replace(Routes.SWAP)
         track(AnalyticsEvent.TOKEN_SWAP_CLICKED)
     }, [nav, track])
 }

@@ -211,7 +211,7 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.INSERT_ADDRESS_SEND}
                     component={InsertAddressSendScreen}
-                    options={{ headerShown: false, detachPreviousScreen: true }}
+                    options={{ headerShown: false }}
                 />
                 <Screen
                     name={Routes.TRANSACTION_SUMMARY_SEND}
