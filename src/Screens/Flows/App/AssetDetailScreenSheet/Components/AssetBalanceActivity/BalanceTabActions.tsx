@@ -1,8 +1,10 @@
-import React, { useMemo } from "react"
+import { RouteProp, useRoute } from "@react-navigation/native"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { BaseView } from "~Components"
 import { useBottomSheetModal, useCameraBottomSheet } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
-import { ConvertBetterBottomSheet } from "~Screens/Flows/App/AssetDetailScreen/Components"
+import { RootStackParamListHome, Routes } from "~Navigation"
+import { ConvertBetterBottomSheet, ConvertedBetterBottomSheet } from "~Screens/Flows/App/AssetDetailScreen/Components"
 import { BuyButton } from "./ActionButtons/BuyButton"
 import { ConvertButton } from "./ActionButtons/ConvertButton"
 import { EarnButton } from "./ActionButtons/EarnButton"
@@ -16,7 +18,29 @@ type Props = {
 }
 
 export const BalanceTabActions = ({ token }: Props) => {
-    const { ref, onClose } = useBottomSheetModal()
+    const route = useRoute<RouteProp<RootStackParamListHome, Routes.TOKEN_DETAILS>>()
+    const betterConversionResult = useMemo(
+        () => route.params.betterConversionResult,
+        [route.params.betterConversionResult],
+    )
+    const {
+        ref: convertBetterSuccessBottomSheetRef,
+        onOpen: openConvertSuccessBetterSheet,
+        onClose: closeConvertSuccessBetterSheet,
+    } = useBottomSheetModal()
+    const { ref: convertB3trBsRef, onClose } = useBottomSheetModal()
+
+    const onFailedConversion = useCallback(() => {
+        closeConvertSuccessBetterSheet()
+        convertB3trBsRef.current?.present()
+    }, [closeConvertSuccessBetterSheet, convertB3trBsRef])
+
+    useEffect(() => {
+        if (betterConversionResult) {
+            openConvertSuccessBetterSheet()
+        }
+    }, [betterConversionResult, openConvertSuccessBetterSheet])
+
     const { RenderCameraModal, handleOpenOnlyReceiveCamera } = useCameraBottomSheet({
         targets: [],
     })
@@ -29,9 +53,9 @@ export const BalanceTabActions = ({ token }: Props) => {
             EARN: <EarnButton key={"EARN"} />,
             SWAP: <SwapButton key={"SWAP"} />,
             MORE: <MoreButton openReceiveBottomsheet={handleOpenOnlyReceiveCamera} token={token} key={"MORE"} />,
-            CONVERT: <ConvertButton bsRef={ref} key={"CONVERT"} />,
+            CONVERT: <ConvertButton bsRef={convertB3trBsRef} key={"CONVERT"} />,
         }
-    }, [handleOpenOnlyReceiveCamera, ref, token])
+    }, [handleOpenOnlyReceiveCamera, convertB3trBsRef, token])
 
     const tokenActions = useMemo<(keyof typeof allActions)[]>(() => {
         switch (token.symbol) {
@@ -50,7 +74,13 @@ export const BalanceTabActions = ({ token }: Props) => {
     return (
         <BaseView flexDirection="row" gap={24} justifyContent="center">
             {tokenActions.map(action => allActions[action])}
-            <ConvertBetterBottomSheet ref={ref} onClose={onClose} />
+            <ConvertBetterBottomSheet ref={convertB3trBsRef} onClose={onClose} />
+            <ConvertedBetterBottomSheet
+                ref={convertBetterSuccessBottomSheetRef}
+                onClose={closeConvertSuccessBetterSheet}
+                onFailure={onFailedConversion}
+                {...betterConversionResult}
+            />
 
             {RenderCameraModal}
         </BaseView>
