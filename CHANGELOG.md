@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-10-31)</small>
+
+* build: init ([1c599b4](https://github.com/vechain/veworld-mobile/commit/1c599b4))
+* Fix: ios build fix by upgrading gems (#3485) ([d02de40](https://github.com/vechain/veworld-mobile/commit/d02de40)), closes [#3485](https://github.com/vechain/veworld-mobile/issues/3485)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
