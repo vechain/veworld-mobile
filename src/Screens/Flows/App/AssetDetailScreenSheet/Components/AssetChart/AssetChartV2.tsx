@@ -1,6 +1,6 @@
 import { Blur, Canvas, Group, LinearGradient, Path, Rect, Skia, vec } from "@shopify/react-native-skia"
 import { curveBasis, line, scaleLinear, scaleTime } from "d3"
-import React, { useEffect, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import {
     Extrapolation,
@@ -105,33 +105,31 @@ export const AssetChartV2 = ({ token }: Props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const findNearestPointIndex = (x: number) => {
-        "worklet"
-        let nearestIdx = 0
-        let minDistance = Math.abs(points[0].x - x)
+    const findNearestPointIndex = useCallback(
+        (x: number) => {
+            "worklet"
+            let nearestIdx = 0
+            let minDistance = Math.abs(points[0].x - x)
 
-        for (let i = 1; i < points.length; i++) {
-            const distance = Math.abs(points[i].x - x)
-            if (distance < minDistance) {
-                minDistance = distance
-                nearestIdx = i
+            for (let i = 1; i < points.length; i++) {
+                const distance = Math.abs(points[i].x - x)
+                if (distance < minDistance) {
+                    minDistance = distance
+                    nearestIdx = i
+                }
             }
-        }
 
-        return nearestIdx
-    }
+            return nearestIdx
+        },
+        [points],
+    )
 
     const backgroudAnimation = useDerivedValue(() => {
         return Skia.Point(maxX, interpolate(backgroundProgress.value, [0, 1], [maxY + 1, minY], Extrapolation.CLAMP))
     }, [backgroundProgress.value, minY, maxY, maxX])
 
     const crossHairClipPath = useDerivedValue(() => {
-        const rect = Skia.XYWHRect(
-            crossHairStart.value * SCREEN_WIDTH,
-            0,
-            (crossHairEnd.value - crossHairStart.value) * SCREEN_WIDTH,
-            GRAPH_HEIGHT,
-        )
+        const rect = Skia.XYWHRect(crossHairStart.value, 0, crossHairEnd.value - crossHairStart.value, GRAPH_HEIGHT)
 
         return Skia.RRectXY(rect, 16, 16)
     }, [crossHairStart.value, crossHairEnd.value])
@@ -141,34 +139,43 @@ export const AssetChartV2 = ({ token }: Props) => {
         return path.copy().lineTo(maxX, calcYPos(0)).lineTo(calcXPos(0), calcYPos(0)).close()
     }, [calcXPos, calcYPos, downsampleData, maxX, path])
 
+    /**
+     * On pan gesture, update the cross hair start and end values
+     * @param x - The x position of the pan gesture
+     * @param pointIdx - The index of the nearest point
+     */
+    const onPanGesture = useCallback(
+        (x: number, pointIdx: number) => {
+            "worklet"
+            const point = points[pointIdx]
+            const offset = x - point.x
+
+            const prevPoint = points[pointIdx - 1].x + offset
+            const nextPoint = points[pointIdx + 1].x + offset
+
+            crossHairStart.value = withSpring(prevPoint + 0.02, { damping: 100, stiffness: 100 })
+            crossHairEnd.value = withSpring(nextPoint - 0.02, { damping: 100, stiffness: 100 })
+        },
+        [crossHairEnd, crossHairStart, points],
+    )
+
     const panGesture = Gesture.Pan()
         .onBegin(e => {
             translateX.value = e.x
             cursorLineOpacity.value = withTiming(1, { duration: 100 })
 
             const pointIdx = findNearestPointIndex(e.x)
-            const pointPerc = pointIdx / (points.length - 1)
-            crossHairOpacity.value = withTiming(1, { duration: 100 })
-            crossHairStart.value = withTiming(Math.max(0, pointPerc - 0.03), { duration: 300 })
-            crossHairEnd.value = withTiming(Math.min(1, pointPerc + 0.03), { duration: 300 })
+            if (pointIdx > 0 && pointIdx < points.length - 1) {
+                crossHairOpacity.value = withTiming(1, { duration: 100 })
+                onPanGesture(e.x, pointIdx)
+            }
         })
         .onChange(e => {
             translateX.value = e.x
             const pointIdx = findNearestPointIndex(e.x)
 
             if (pointIdx > 0 && pointIdx < points.length - 1) {
-                const point = points[pointIdx]
-
-                const offset = e.x - point.x
-
-                const prevPoint = points[pointIdx - 1].x + offset
-                const nextPoint = points[pointIdx + 1].x + offset
-
-                const prevPointPercentage = prevPoint / points[points.length - 1].x
-                const nextPointPercentage = nextPoint / points[points.length - 1].x
-
-                crossHairStart.value = withSpring(prevPointPercentage + 0.02)
-                crossHairEnd.value = withSpring(nextPointPercentage - 0.02)
+                onPanGesture(e.x, pointIdx)
             }
 
             //const point = points.findIndex(p => Math.abs(p.x - e.x) < 1)
@@ -180,8 +187,8 @@ export const AssetChartV2 = ({ token }: Props) => {
             cursorLineOpacity.value = withTiming(0, { duration: 100 })
             translateX.value = withDelay(100, withTiming(0, { duration: 100 }))
 
-            crossHairStart.value = withTiming(0, { duration: 500 })
-            crossHairEnd.value = withTiming(1, { duration: 500 })
+            crossHairStart.value = withTiming(0, { duration: 450 })
+            crossHairEnd.value = withTiming(SCREEN_WIDTH, { duration: 450 })
             crossHairOpacity.value = withDelay(450, withTiming(0, { duration: 200 }))
         })
 
@@ -191,8 +198,8 @@ export const AssetChartV2 = ({ token }: Props) => {
                 <Group clip={backgroundClipPath}>
                     <Rect x={0} y={0} width={SCREEN_WIDTH} height={GRAPH_HEIGHT}>
                         <LinearGradient
-                            positions={[0, 0.2, 1]}
-                            colors={["rgba(38, 30, 76, 0)", "rgba(68, 59, 110, 0.5)", "rgba(185, 181, 207, 1)"]}
+                            positions={[0, 0.3, 1]}
+                            colors={theme.colors.chartGradientBackground}
                             start={backgroudAnimation}
                             end={Skia.Point(maxX, maxY)}
                         />
