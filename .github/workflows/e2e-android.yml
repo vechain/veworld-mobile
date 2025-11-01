@@ -59,7 +59,7 @@ jobs:
                   java-version: "17"
 
             - name: Sentry properties
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_SENTRY_PROPERTIES }}
                   filename: "sentry.properties"
@@ -67,7 +67,7 @@ jobs:
                   working-directory: "./android"
 
             - name: Decode KEY_ALIAS
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_KEY_ALIAS }}
                   filename: "key_alias.txt"
@@ -75,7 +75,7 @@ jobs:
                   working-directory: "./android"
 
             - name: Decode STORE_PASSWORD
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_STORE_PASSWORD }}
                   filename: "store_password.txt"
@@ -83,7 +83,7 @@ jobs:
                   working-directory: "./android"
 
             - name: Android Fastlane Service Account
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_SERVICE_ACCOUNT }}
                   filename: "pc-api-4895632399891248889-903-41060cd0ba40.json"
@@ -91,7 +91,7 @@ jobs:
                   working-directory: "./android"
 
             - name: Decode .env.default
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_ENV }}
                   filename: ".env.default"
@@ -99,7 +99,7 @@ jobs:
                   working-directory: "./android"
 
             - name: Keystore properties
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}
                   filename: "keystore.properties"
@@ -107,7 +107,7 @@ jobs:
                   working-directory: "./android"
 
             - name: Keystore file
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_RELEASE_KEYSTORE }}
                   filename: "release.keystore"
@@ -115,7 +115,7 @@ jobs:
                   working-directory: "./android"
 
             - name: Decode prod env
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.RN_ENV_PROD_E2E }}
                   filename: ".env.production"
@@ -143,7 +143,7 @@ jobs:
 
             - name: Test Android
               id: android-test
-              uses: devicecloud-dev/device-cloud-for-maestro@v1
+              uses: devicecloud-dev/device-cloud-for-maestro@d726a108189bb52a5cc90bb036a71b63a4036cd7 # v1
               with:
                   api-key: ${{ secrets.DCD_API_KEY }}
                   app-file: ${{ env.output_dir }}/app-release.apk

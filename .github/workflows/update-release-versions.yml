@@ -42,11 +42,15 @@ jobs:
       - name: Set Repository Variables
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GITHUB_EVENT_INPUTS_IOS_VERSION: ${{ github.event.inputs.ios_version }}
+          GITHUB_EVENT_INPUTS_IOS_BUILD: ${{ github.event.inputs.ios_build }}
+          GITHUB_EVENT_INPUTS_ANDROID_VERSION: ${{ github.event.inputs.android_version }}
+          GITHUB_EVENT_INPUTS_ANDROID_BUILD: ${{ github.event.inputs.android_build }}
         run: |
-          gh variable set IOS_VERSION --body "${{ github.event.inputs.ios_version }}"
-          gh variable set IOS_BUILD --body "${{ github.event.inputs.ios_build }}"
-          gh variable set ANDROID_VERSION --body "${{ github.event.inputs.android_version }}"
-          gh variable set ANDROID_BUILD --body "${{ github.event.inputs.android_build }}"
+          gh variable set IOS_VERSION --body "${GITHUB_EVENT_INPUTS_IOS_VERSION}"
+          gh variable set IOS_BUILD --body "${GITHUB_EVENT_INPUTS_IOS_BUILD}"
+          gh variable set ANDROID_VERSION --body "${GITHUB_EVENT_INPUTS_ANDROID_VERSION}"
+          gh variable set ANDROID_BUILD --body "${GITHUB_EVENT_INPUTS_ANDROID_BUILD}"
 
       - name: Verify Repository Variables
         run: |

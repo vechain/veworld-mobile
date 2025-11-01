@@ -44,7 +44,9 @@ jobs:
                   fetch-depth: 0
 
             - name: Check PR_BRANCH
-              run: echo ${{ inputs.pr_branch }}
+              run: echo ${INPUTS_PR_BRANCH}
+              env:
+                INPUTS_PR_BRANCH: ${{ inputs.pr_branch }}
 
             - name: Setup Node
               uses: actions/setup-node@v3
@@ -54,8 +56,8 @@ jobs:
 
             - name: Configure Git user
               run: |
-                  git config user.name "${{ github.actor }}"
-                  git config user.email "${{ github.actor }}@users.noreply.github.com"
+                  git config user.name "${GITHUB_ACTOR}"
+                  git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 
             - name: Install & Patch packages
               run: |
@@ -70,7 +72,7 @@ jobs:
 
             # Install sentry properties
             - name: Sentry properties
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_SENTRY_PROPERTIES }}
                   filename: "sentry.properties"
@@ -79,7 +81,7 @@ jobs:
 
             # Decode key_alias
             - name: Decode KEY_ALIAS
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_KEY_ALIAS }}
                   filename: "key_alias.txt"
@@ -88,7 +90,7 @@ jobs:
 
             # Decode key_password
             - name: Decode STORE_PASSWORD
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_STORE_PASSWORD }}
                   filename: "store_password.txt"
@@ -97,7 +99,7 @@ jobs:
 
             # Install env.default
             - name: Sentry properties
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_SERVICE_ACCOUNT }}
                   filename: "pc-api-4895632399891248889-903-1f538768f7fe.json"
@@ -106,7 +108,7 @@ jobs:
 
             # Install sentry properties
             - name: Sentry properties
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_ENV }}
                   filename: ".env.default"
@@ -115,7 +117,7 @@ jobs:
 
             # Install keystore properties
             - name: Keystore properties
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}
                   filename: "keystore.properties"
@@ -124,7 +126,7 @@ jobs:
 
             # Download Keystore
             - name: Keystore file
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_RELEASE_KEYSTORE }}
                   filename: "release.keystore"
@@ -132,7 +134,7 @@ jobs:
                   working-directory: "./android"
 
             - name: Decode prod env
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.RN_ENV_PROD}}
                   filename: ".env.production"
@@ -146,7 +148,10 @@ jobs:
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
-                  fastlane build_android_ci version_code:${{inputs.build}} version_name:${{inputs.version}}
+                  fastlane build_android_ci version_code:${INPUTS_BUILD} version_name:${INPUTS_VERSION}
+              env:
+                INPUTS_BUILD: ${{inputs.build}}
+                INPUTS_VERSION: ${{inputs.version}}
 
             - name: Artifact apk
               id: upload
@@ -162,9 +167,10 @@ jobs:
             - name: Commit and Push Changes
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  INPUTS_PR_BRANCH: ${{ inputs.pr_branch }}
               run: |
                   git config user.name "vechain-ci"
                   git config user.email "vechain.ci@vechain.org"
                   git add --all
                   git commit -m "build: android build artifacts" || echo "No changes to commit"
-                  git push origin HEAD:${{ inputs.pr_branch }}
+                  git push origin HEAD:${INPUTS_PR_BRANCH}
