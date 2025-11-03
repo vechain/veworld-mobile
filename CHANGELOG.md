@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.8 (2025-11-03)</small>
+
+* build: init ([06bfc38](https://github.com/vechain/veworld-mobile/commit/06bfc38))
+* Version control logic (#3397) ([329d1c9](https://github.com/vechain/veworld-mobile/commit/329d1c9)), closes [#3397](https://github.com/vechain/veworld-mobile/issues/3397)
+
 ## <small>2.4.7 (2025-10-17)</small>
 
 * build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
