@@ -3,7 +3,7 @@ import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { b3moEmpty, B3trLogoSVG, VeBetterFullLogoSVG } from "~Assets"
-import { BaseButton, BaseText, BaseTouchable, BaseView, Icon, useFeatureFlags } from "~Components"
+import { BaseButton, BaseText, BaseTouchable, BaseView, Icon } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useFormatFiat, useThemedStyles, useVeBetterGlobalOverview } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -41,15 +41,9 @@ export const NewUserVeBetterCard = () => {
     const { formatLocale } = useFormatFiat()
     const { data: globalOverview } = useVeBetterGlobalOverview()
 
-    const { betterWorldFeature } = useFeatureFlags()
-
     const navigateToAppScreen = useCallback(() => {
-        if (betterWorldFeature.appsScreen.enabled) {
-            nav.navigate(Routes.APPS_STACK, { screen: Routes.APPS })
-        } else {
-            nav.navigate(Routes.DISCOVER_STACK, { screen: Routes.DISCOVER })
-        }
-    }, [betterWorldFeature.appsScreen.enabled, nav])
+        nav.navigate(Routes.APPS_STACK, { screen: Routes.APPS })
+    }, [nav])
 
     const closeCard = useCallback(() => {
         dispatch(setHideNewUserVeBetterCard(true))

@@ -32,7 +32,7 @@ export const VersionChangelogBottomSheet = () => {
             return (
                 <BaseView flexDirection="row" gap={8}>
                     <BaseIcon size={16} color={theme.colors.button} name="icon-check" />
-                    <BaseText typographyFont="body" color={theme.colors.text}>
+                    <BaseText typographyFont="caption" color={theme.colors.text}>
                         {item}
                     </BaseText>
                 </BaseView>
@@ -51,7 +51,7 @@ export const VersionChangelogBottomSheet = () => {
             <BaseView gap={24} testID="VersionChangelogBottomSheet">
                 <BaseView gap={16} flexDirection="row" justifyContent="space-between" alignSelf="center">
                     <BaseIcon size={24} color={theme.colors.text} name="icon-party-popper" />
-                    <BaseText flexGrow={1} typographyFont="subTitleSemiBold" color={theme.colors.text}>
+                    <BaseText flexGrow={1} typographyFont="subSubTitleSemiBold" color={theme.colors.text}>
                         {LL.APP_UPDATED()}
                     </BaseText>
                     <BaseView px={8} py={4} borderRadius={4} bg={theme.colors.label.background}>
@@ -61,7 +61,7 @@ export const VersionChangelogBottomSheet = () => {
                     </BaseView>
                 </BaseView>
                 <BaseView gap={16}>
-                    <BaseText typographyFont="subSubTitleLight" color={theme.colors.text}>
+                    <BaseText typographyFont="body" color={theme.colors.text}>
                         {LL.APP_UPDATED_WHATS_NEW()}
                     </BaseText>
                     <FlatList

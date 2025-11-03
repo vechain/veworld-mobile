@@ -1,18 +1,18 @@
 import React, { useMemo } from "react"
-import { BaseText, BaseTouchable, BaseView, Icon, QRCodeBottomSheet } from "~Components"
-import { AddTokenBottomSheet } from "./AddTokenBottomSheet"
-import { COLORS, ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
-import { useI18nContext } from "~i18n"
-import { useThemedStyles, useBottomSheetModal, useHasAnyVeBetterActions } from "~Hooks"
-import { BigNutils } from "~Utils"
+import { BaseText, BaseTouchable, BaseView, Icon } from "~Components"
+import { COLORS, ColorThemeType } from "~Constants"
+import { useBottomSheetModal, useCameraBottomSheet, useHasAnyVeBetterActions, useThemedStyles } from "~Hooks"
 import { useSortedTokensByFiatValue } from "~Hooks/useSortedTokensByFiatValue"
+import { useI18nContext } from "~i18n"
+import { BigNutils } from "~Utils"
+import { AddTokenBottomSheet } from "./AddTokenBottomSheet"
 
 export const AddTokensCard = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { ref, onOpen } = useBottomSheetModal()
-    const { ref: qrCodeBottomSheetRef } = useBottomSheetModal()
+    const { RenderCameraModal, handleOpenOnlyReceiveCamera } = useCameraBottomSheet({ targets: [] })
 
     const { data: hasAnyVeBetterActions } = useHasAnyVeBetterActions()
     const { tokens } = useSortedTokensByFiatValue()
@@ -26,7 +26,7 @@ export const AddTokensCard = () => {
 
     return isNewUserWithNoTokens ? (
         <BaseView style={styles.root}>
-            <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}>
+            <BaseText typographyFont="caption" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}>
                 {LL.BALANCE_TAB_NO_TOKENS()}
             </BaseText>
 
@@ -37,8 +37,8 @@ export const AddTokensCard = () => {
                 <Icon name="icon-plus-circle" color={theme.isDark ? COLORS.PURPLE : COLORS.GREY_50} size={20} />
             </BaseTouchable>
 
-            <AddTokenBottomSheet bottomSheetRef={ref} qrCodeBottomSheetRef={qrCodeBottomSheetRef} />
-            <QRCodeBottomSheet ref={qrCodeBottomSheetRef} />
+            <AddTokenBottomSheet bottomSheetRef={ref} onQrCodePress={handleOpenOnlyReceiveCamera} />
+            {RenderCameraModal}
         </BaseView>
     ) : null
 }

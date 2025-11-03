@@ -44,6 +44,7 @@ import {
     selectSelectedAccount,
     useAppSelector,
 } from "~Storage/Redux"
+import { formatWithLessThan } from "~Utils/StandardizedFormatting"
 import { AddressUtils, BigNutils, URIUtils } from "~Utils"
 import { getTokenLevelName } from "~Utils/StargateUtils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
@@ -72,6 +73,7 @@ type ActivityBoxProps = {
     rightAmountDescription?: string | React.ReactNode
     nftImage?: string
     activityStatus?: ActivityStatus
+    iconColor?: string
     iconBackgroundColor?: string | GradientConfig
     onPress: () => void
     /**
@@ -97,6 +99,7 @@ const BaseActivityBox = ({
     rightAmount,
     rightAmountDescription,
     nftImage,
+    iconColor = COLORS.GREY_600,
     iconBackgroundColor = COLORS.GREY_100,
     activityStatus,
     onPress,
@@ -123,14 +126,17 @@ const BaseActivityBox = ({
         return (
             <BaseView flexDirection="column" gap={2} style={styles.rightTextContainer}>
                 {showRightAmount && (
-                    <BaseText typographyFont="bodySemiBold" numberOfLines={1} color={theme.colors.activityCard.title}>
+                    <BaseText
+                        typographyFont="captionSemiBold"
+                        numberOfLines={1}
+                        color={theme.colors.activityCard.title}>
                         {rightAmount}
                     </BaseText>
                 )}
                 {showrightAmountDescription &&
                     (typeof rightAmountDescription === "string" ? (
                         <BaseText
-                            typographyFont="smallCaptionMedium"
+                            typographyFont="captionMedium"
                             numberOfLines={1}
                             color={theme.colors.activityCard.title}>
                             {rightAmountDescription}
@@ -154,20 +160,14 @@ const BaseActivityBox = ({
                     start={gradientConfig.start}
                     end={gradientConfig.end}
                     style={styles.iconContainer}>
-                    <BaseIcon name={icon} size={16} color={COLORS.WHITE} testID="magnify" />
+                    <BaseIcon name={icon} size={16} color={iconColor} testID="magnify" />
                 </LinearGradient>
             )
         }
 
         return (
             <BaseView style={[styles.iconContainer, { backgroundColor: iconBackgroundColor as string }]}>
-                <BaseIcon
-                    name={icon}
-                    size={16}
-                    color={COLORS.DARK_PURPLE}
-                    testID="magnify"
-                    bg={iconBackgroundColor as string}
-                />
+                <BaseIcon name={icon} size={16} color={iconColor} testID="magnify" bg={iconBackgroundColor as string} />
             </BaseView>
         )
     }
@@ -189,13 +189,13 @@ const BaseActivityBox = ({
             <BaseSpacer width={16} />
 
             <BaseView flexDirection="column" flex={1}>
-                <BaseText typographyFont="captionRegular" color={theme.colors.activityCard.time}>
+                <BaseText typographyFont="smallCaption" color={theme.colors.activityCard.time}>
                     {timestampRenderer(timestamp)}
                 </BaseText>
                 <BaseSpacer height={2} />
                 <BaseView style={styles.titleContainer}>
                     <BaseText
-                        typographyFont={invertedStyles ? "body" : "bodySemiBold"}
+                        typographyFont={invertedStyles ? "caption" : "bodySemiBold"}
                         numberOfLines={1}
                         color={
                             invertedStyles ? theme.colors.activityCard.subtitleBold : theme.colors.activityCard.title
@@ -209,7 +209,8 @@ const BaseActivityBox = ({
                 {showDescription &&
                     (typeof description === "string" ? (
                         <BaseText
-                            typographyFont={invertedStyles ? "bodySemiBold" : "body"}
+                            typographyFont={invertedStyles ? "bodySemiBold" : "caption"}
+                            numberOfLines={1}
                             color={
                                 invertedStyles
                                     ? theme.colors.activityCard.title
@@ -237,6 +238,7 @@ const baseStyles = () =>
             borderRadius: 12,
             paddingVertical: 12,
             paddingHorizontal: 16,
+            height: 80,
         },
         iconContainer: {
             justifyContent: "center",
@@ -301,9 +303,8 @@ const TokenTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxPr
             return "0"
         }
 
-        return BigNutils(amount)
-            .toHuman(token?.decimals ?? 0)
-            .toTokenFormat_string(2, formatLocale)
+        const humanAmount = Number(BigNutils(amount).toHuman(token?.decimals ?? 0).toString).toFixed(6)
+        return formatWithLessThan(humanAmount, 0.01, { locale: formatLocale })
     }
 
     const getActivityProps = (): Omit<ActivityBoxProps, "timestamp" | "onPress"> => {
@@ -316,14 +317,14 @@ const TokenTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxPr
                     description: (
                         <BaseView flexDirection="row" gap={4}>
                             <BaseText
-                                typographyFont="body"
+                                typographyFont="caption"
                                 color={theme.colors.activityCard.subtitleLight}
                                 textTransform="lowercase"
                                 flexShrink={0}>
                                 {LL.FROM()}
                             </BaseText>
                             <BaseText
-                                typographyFont="bodyMedium"
+                                typographyFont="captionMedium"
                                 color={theme.colors.activityCard.subtitleBold}
                                 numberOfLines={1}
                                 flex={1}>
@@ -341,14 +342,14 @@ const TokenTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxPr
                     description: (
                         <BaseView flexDirection="row" gap={4}>
                             <BaseText
-                                typographyFont="body"
+                                typographyFont="caption"
                                 color={theme.colors.activityCard.subtitleLight}
                                 textTransform="lowercase"
                                 flexShrink={0}>
                                 {LL.TO()}
                             </BaseText>
                             <BaseText
-                                typographyFont="bodyMedium"
+                                typographyFont="captionMedium"
                                 color={theme.colors.activityCard.subtitleBold}
                                 numberOfLines={1}
                                 flex={1}>
@@ -390,13 +391,15 @@ const TokenSwap = ({ activity, onPress, ...props }: OverridableActivityBoxProps<
     const outputToken = allTokens.find(_token => AddressUtils.compareAddresses(_token.address, activity.outputToken))
     const inputToken = allTokens.find(_token => AddressUtils.compareAddresses(_token.address, activity.inputToken))
 
-    const paidAmount = BigNutils(activity.inputValue)
-        .toHuman(inputToken?.decimals ?? 0)
-        .toTokenFormat_string(2, formatLocale)
+    const humanPaidAmount = Number(BigNutils(activity.inputValue).toHuman(inputToken?.decimals ?? 0).toString).toFixed(
+        6,
+    )
+    const paidAmount = formatWithLessThan(humanPaidAmount, 0.01, { locale: formatLocale })
 
-    const receivedAmount = BigNutils(activity.outputValue)
-        .toHuman(outputToken?.decimals ?? 0)
-        .toTokenFormat_string(2, formatLocale)
+    const humanReceivedAmount = Number(
+        BigNutils(activity.outputValue).toHuman(outputToken?.decimals ?? 0).toString,
+    ).toFixed(6)
+    const receivedAmount = formatWithLessThan(humanReceivedAmount, 0.01, { locale: formatLocale })
 
     const rightAmount = `${DIRECTIONS.UP} ${receivedAmount} ${outputToken?.symbol ?? ""}`
     const rightAmountDescription = `${DIRECTIONS.DOWN} ${paidAmount} ${inputToken?.symbol ?? ""}`
@@ -453,14 +456,14 @@ const DAppTransaction = ({ activity, onPress, ...props }: OverridableActivityBox
             description={
                 <BaseView flexDirection="row" gap={4}>
                     <BaseText
-                        typographyFont="body"
+                        typographyFont="caption"
                         color={theme.colors.activityCard.subtitleLight}
                         textTransform="lowercase"
                         flexShrink={0}>
                         {LL.TO()}
                     </BaseText>
                     <BaseText
-                        typographyFont="bodyMedium"
+                        typographyFont="captionMedium"
                         color={theme.colors.activityCard.subtitleBold}
                         numberOfLines={1}
                         flex={1}>
@@ -550,7 +553,8 @@ const NFTSale = ({ activity, onPress, ...props }: OverridableActivityBoxProps<NF
         : allTokens.find(_token => _token.address === activity.tokenAddress)
 
     // Format the price
-    const formattedPrice = BigNutils(activity.price).toHuman(18).toTokenFormat_string(2, formatLocale)
+    const humanPrice = Number(BigNutils(activity.price).toHuman(18).toString).toFixed(6)
+    const formattedPrice = formatWithLessThan(humanPrice, 0.01, { locale: formatLocale })
 
     const onPressHandler = () => {
         onPress(activity)
@@ -629,12 +633,14 @@ const B3trAction = ({ activity, onPress, veBetterDaoDapps, ...props }: B3trActio
     }
 
     const dapp = veBetterDaoDapps.find(d => d.id === activity.appId)
-    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2, formatLocale)
+    const humanReward = Number(BigNutils(activity.value).toHuman(B3TR.decimals).toString).toFixed(6)
+    const rewardValue = formatWithLessThan(humanReward, 0.01, { locale: formatLocale })
 
     return (
         <BaseActivityBox
             testID={`B3TR-ACTION-${activity.id}`}
             icon="icon-leaf"
+            iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             timestamp={activity.timestamp}
             title={LL.B3TR_ACTION()}
@@ -659,6 +665,7 @@ const B3trProposalVote = ({ activity, onPress, ...props }: OverridableActivityBo
         <BaseActivityBox
             testID={`B3TR-PROPOSAL-VOTE-${activity.id}`}
             icon="icon-vote"
+            iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             timestamp={activity.timestamp}
             title={LL.B3TR_PROPOSAL_VOTE()}
@@ -683,6 +690,7 @@ const B3trXAllocationVote = ({
         <BaseActivityBox
             testID={`B3TR-XALLOCATION-VOTE-${activity.id}`}
             icon="icon-vote"
+            iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             timestamp={activity.timestamp}
             title={LL.B3TR_XALLOCATION_VOTE({ number: parseInt(activity.roundId, 10) })}
@@ -701,12 +709,14 @@ const B3trClaimReward = ({ activity, onPress, ...props }: OverridableActivityBox
         onPress(activity)
     }
 
-    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2, formatLocale)
+    const humanReward = Number(BigNutils(activity.value).toHuman(B3TR.decimals).toString).toFixed(6)
+    const rewardValue = formatWithLessThan(humanReward, 0.01, { locale: formatLocale })
 
     return (
         <BaseActivityBox
             testID={`B3TR-CLAIM-REWARD-${activity.id}`}
             icon="icon-leaf"
+            iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             timestamp={activity.timestamp}
             title={LL.B3TR_CLAIM_REWARD()}
@@ -729,6 +739,7 @@ const B3trUpgradeGM = ({ activity, onPress, ...props }: OverridableActivityBoxPr
         <BaseActivityBox
             testID={`B3TR-UPGRADE-GM-${activity.id}`}
             icon="icon-vote"
+            iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             timestamp={activity.timestamp}
             title={LL.B3TR_UPGRADE_GM()}
@@ -749,9 +760,8 @@ const B3trSwapB3trToVot3 = ({
     const title = LL.TOKEN_CONVERSION()
     const theme = useTheme()
 
-    const amount = BigNutils(activity.value)
-        .toHuman(B3TR.decimals ?? 0)
-        .toTokenFormat_string(2, formatLocale)
+    const humanAmount = Number(BigNutils(activity.value).toHuman(B3TR.decimals ?? 0).toString).toFixed(6)
+    const amount = formatWithLessThan(humanAmount, 0.01, { locale: formatLocale })
 
     const rightAmount = `${DIRECTIONS.UP} ${amount} ${VOT3.symbol}`
     const rightAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${B3TR.symbol}`
@@ -764,6 +774,7 @@ const B3trSwapB3trToVot3 = ({
         <BaseActivityBox
             testID={`B3TR-SWAP-B3TR-TO-VOT3-${activity.id}`}
             icon={"icon-convert"}
+            iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             timestamp={activity.timestamp}
             title={title}
@@ -789,9 +800,8 @@ const B3trSwapVot3ToB3tr = ({
     const theme = useTheme()
     const { formatLocale } = useFormatFiat()
 
-    const amount = BigNutils(activity.value)
-        .toHuman(B3TR.decimals ?? 0)
-        .toTokenFormat_string(2, formatLocale)
+    const humanAmount = Number(BigNutils(activity.value).toHuman(B3TR.decimals ?? 0).toString).toFixed(6)
+    const amount = formatWithLessThan(humanAmount, 0.01, { locale: formatLocale })
 
     const rightAmount = `${DIRECTIONS.UP} ${amount} ${B3TR.symbol}`
     const rightAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${VOT3.symbol}`
@@ -804,6 +814,7 @@ const B3trSwapVot3ToB3tr = ({
         <BaseActivityBox
             testID={`B3TR-SWAP-VOT3-TO-B3TR-${activity.id}`}
             icon={"icon-convert"}
+            iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             timestamp={activity.timestamp}
             title={title}
@@ -834,6 +845,7 @@ const B3trProposalSupport = ({
         <BaseActivityBox
             testID={`B3TR-PROPOSAL-SUPPORT-${activity.id}`}
             icon="icon-vote"
+            iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             timestamp={activity.timestamp}
             title={LL.B3TR_PROPOSAL_SUPPORT()}
@@ -926,9 +938,8 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
         )
     }, [activity?.type])
 
-    const amount = BigNutils(activity.value)
-        .toHuman(B3TR.decimals ?? 0)
-        .toTokenFormat_string(2, formatLocale)
+    const humanAmount = Number(BigNutils(activity.value).toHuman(B3TR.decimals ?? 0).toString).toFixed(6)
+    const amount = formatWithLessThan(humanAmount, 0.01, { locale: formatLocale })
 
     const rightAmount = useMemo(() => {
         if (hasRightAmount) {
@@ -952,6 +963,7 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
     return (
         <BaseActivityBox
             testID={`STARGATE-${activity.eventName}-${activity.id}`}
+            iconColor={COLORS.WHITE}
             iconBackgroundColor={{
                 colors: ["#820744", "#211EAB"],
                 angle: 132,

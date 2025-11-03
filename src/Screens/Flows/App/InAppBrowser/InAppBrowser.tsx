@@ -7,18 +7,19 @@ import Animated, { Easing, FadeOut } from "react-native-reanimated"
 import WebView from "react-native-webview"
 import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
 import { BaseStatusBar, DAppIcon, Layout, URLBar, useInAppBrowser } from "~Components"
-import { AnalyticsEvent, ColorThemeType, COLORS } from "~Constants"
+import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
-import { RootStackParamListBrowser, Routes } from "~Navigation"
+import { Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
+import { RootStackParamListHome } from "~Navigation/Stacks/HomeStack"
 import { deleteSession, selectSelectedNetwork, selectSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 
-type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
+type Props = NativeStackScreenProps<RootStackParamListApps | RootStackParamListHome, Routes.BROWSER>
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const {

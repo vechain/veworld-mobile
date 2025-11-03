@@ -69,6 +69,7 @@ import { FeatureFlaggedSmartWallet } from "./src/Components/Providers/FeatureFla
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { DeepLinksProvider } from "~Components/Providers/DeepLinksProvider"
 import { DeviceProvider } from "~Components/Providers/DeviceProvider"
+import { FeedbackProvider } from "~Components/Providers/FeedbackProvider"
 
 const { fontFamily } = typography
 
@@ -157,24 +158,26 @@ const Main = () => {
                         }}>
                         <FeatureFlagsProvider>
                             <FeatureFlaggedSmartWallet nodeUrl={nodeUrl} networkType={networkType}>
-                                <NavigationProvider>
-                                    <InteractionProvider>
-                                        <DeepLinksProvider>
-                                            <WalletConnectContextProvider>
-                                                <BottomSheetModalProvider>
-                                                    <InAppBrowserProvider>
-                                                        <NotificationsProvider>
-                                                            <DeviceProvider>
-                                                                <EntryPoint />
-                                                            </DeviceProvider>
-                                                        </NotificationsProvider>
-                                                    </InAppBrowserProvider>
-                                                </BottomSheetModalProvider>
-                                            </WalletConnectContextProvider>
-                                        </DeepLinksProvider>
-                                    </InteractionProvider>
-                                </NavigationProvider>
-                                <BaseToast />
+                                <FeedbackProvider>
+                                    <NavigationProvider>
+                                        <InteractionProvider>
+                                            <DeepLinksProvider>
+                                                <WalletConnectContextProvider>
+                                                    <BottomSheetModalProvider>
+                                                        <InAppBrowserProvider>
+                                                            <NotificationsProvider>
+                                                                <DeviceProvider>
+                                                                    <EntryPoint />
+                                                                </DeviceProvider>
+                                                            </NotificationsProvider>
+                                                        </InAppBrowserProvider>
+                                                    </BottomSheetModalProvider>
+                                                </WalletConnectContextProvider>
+                                            </DeepLinksProvider>
+                                        </InteractionProvider>
+                                    </NavigationProvider>
+                                    <BaseToast />
+                                </FeedbackProvider>
                             </FeatureFlaggedSmartWallet>
                         </FeatureFlagsProvider>
                     </PersistQueryClientProvider>
@@ -189,39 +192,7 @@ const Main = () => {
  * @param {import ('~Storage/Redux').ExternalDappSession[]} externalDappSessions
  * @returns
  */
-const generateLinkingConfig = featureFlags => {
-    const appsStack = {
-        AppsStack: {
-            path: "discover",
-            initialRouteName: "Apps",
-            screens: {
-                Browser: {
-                    path: "browser/:redirect?/:ul/:url",
-                    parse: {
-                        ul: () => true,
-                        url: url => URIUtils.decodeUrl_HACK(url),
-                    },
-                },
-            },
-        },
-    }
-
-    const discoverStack = {
-        DiscoverStack: {
-            path: "discover",
-            initialRouteName: "Discover",
-            screens: {
-                Browser: {
-                    path: "browser/:redirect?/:ul/:url",
-                    parse: {
-                        ul: () => true,
-                        url: url => URIUtils.decodeUrl_HACK(url),
-                    },
-                },
-            },
-        },
-    }
-
+const generateLinkingConfig = () => {
     return {
         prefixes: [
             "https://www.veworld.com/",
@@ -238,7 +209,19 @@ const generateLinkingConfig = featureFlags => {
                             path: "nfts",
                             initialRouteName: Routes.NFTS,
                         },
-                        ...(featureFlags.betterWorldFeature.appsScreen.enabled ? appsStack : discoverStack),
+                        AppsStack: {
+                            path: "discover",
+                            initialRouteName: "Apps",
+                            screens: {
+                                Browser: {
+                                    path: "browser/:redirect?/:ul/:url",
+                                    parse: {
+                                        ul: () => true,
+                                        url: url => URIUtils.decodeUrl_HACK(url),
+                                    },
+                                },
+                            },
+                        },
                     },
                 },
             },

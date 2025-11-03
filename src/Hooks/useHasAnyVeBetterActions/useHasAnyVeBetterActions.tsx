@@ -1,5 +1,5 @@
-import { keepPreviousData, useQueries } from "@tanstack/react-query"
-import { FetchVeBetterActionsResponseItem, fetchVeBetterActions, PaginationResponse } from "~Networking"
+import { useQueries } from "@tanstack/react-query"
+import { fetchVeBetterActions, FetchVeBetterActionsResponseItem, PaginationResponse } from "~Networking"
 import { selectAccountsWithoutObserved, useAppSelector } from "~Storage/Redux"
 
 /**
@@ -15,7 +15,8 @@ export const useHasAnyVeBetterActions = () => {
             queryFn: () => fetchVeBetterActions(account.address),
             select: (data: { data: FetchVeBetterActionsResponseItem[]; pagination: PaginationResponse }) =>
                 data.data.length > 0,
-            placeholderData: keepPreviousData,
+            staleTime: 5 * 60 * 1000,
+            gcTime: Infinity,
         })),
         combine: results => {
             return {

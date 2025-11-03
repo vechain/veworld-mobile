@@ -8,6 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { PlatformUtils } from "~Utils"
 import { ColorThemeType } from "~Constants"
 import RNBootSplash from "react-native-bootsplash"
+import FontUtils from "~Utils/FontUtils"
 
 export const StandaloneAppBlockedScreen = () => {
     const { LL } = useI18nContext()
@@ -58,9 +59,9 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         titleText: {
             textAlign: "left",
-            fontSize: 22,
+            fontSize: FontUtils.font(18),
             fontWeight: "700",
-            lineHeight: 28,
+            lineHeight: FontUtils.font(24),
             color: theme.colors.text,
         },
         imageContainer: {
@@ -75,7 +76,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         bodyText: {
             textAlign: "center",
-            fontSize: 15,
+            fontSize: FontUtils.font(12),
             fontWeight: "600",
             color: theme.colors.text,
             paddingVertical: 20,

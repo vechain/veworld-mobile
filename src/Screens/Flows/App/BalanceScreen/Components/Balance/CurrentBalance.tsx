@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { PixelRatio, StyleSheet, TouchableOpacity } from "react-native"
 import Animated, { FadeIn, FadeOut, LinearTransition } from "react-native-reanimated"
 import { BaseText } from "~Components"
 import { useDevice } from "~Components/Providers/DeviceProvider"
@@ -15,6 +15,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { SlotMachineText } from "./SlotMachineText"
+import FontUtils from "~Utils/FontUtils"
 
 export const CurrentBalance = () => {
     const currencySymbol = useAppSelector(selectCurrencySymbol)
@@ -24,7 +25,11 @@ export const CurrentBalance = () => {
     const dispatch = useAppDispatch()
 
     const { styles } = useThemedStyles(baseStyles)
-    const { renderedBalance } = useTotalFiatBalance({ address: account.address, enabled: true })
+    const { renderedBalance } = useTotalFiatBalance({
+        address: account.address,
+        enabled: true,
+        useCompactNotation: false,
+    })
     const { isLowEndDevice } = useDevice()
 
     const onPress = useCallback(() => {
@@ -36,18 +41,22 @@ export const CurrentBalance = () => {
         [currencySymbol, renderedBalance],
     )
 
+    // Check if balance uses compact notation (K, M, B, T) or less-than notation (<)
+    // These are not suitable for slot machine animation
+    const hasCompactOrSpecialNotation = useMemo(() => /[KMBT<]/.test(renderedBalance), [renderedBalance])
+
     return (
         <TouchableOpacity onPress={onPress}>
             <Animated.View style={styles.root} layout={LinearTransition.duration(300)}>
                 <BaseText
-                    typographyFont="biggerTitleMedium"
+                    typographyFont="headerTitle"
                     fontWeight="400"
                     color={COLORS.PURPLE_LABEL}
                     style={styles.currency}>
                     {currencySymbol}
                 </BaseText>
                 <Animated.View style={styles.balance}>
-                    {splittedText.includes("•") || isLowEndDevice ? (
+                    {splittedText.includes("•") || isLowEndDevice || hasCompactOrSpecialNotation ? (
                         <Animated.Text
                             entering={FadeIn.duration(300)}
                             exiting={FadeOut.duration(300)}
@@ -68,7 +77,7 @@ const baseStyles = () =>
         text: {
             color: COLORS.GREY_50,
             fontWeight: 600,
-            fontSize: 40,
+            fontSize: FontUtils.font(36),
             fontFamily: "Inter-SemiBold",
             lineHeight: 40,
         },
@@ -83,10 +92,10 @@ const baseStyles = () =>
         },
         balance: {
             flexDirection: "row",
-            minHeight: 46,
+            minHeight: 46 * PixelRatio.getFontScale(),
         },
         currency: {
-            height: 40,
+            height: 40 * PixelRatio.getFontScale(),
             alignItems: "center",
         },
     })

@@ -66,7 +66,9 @@ export const AccountDetailBox: React.FC<Props> = memo(
                     <BaseView style={(styles.leftSubContainer, { opacity: cardOpacity })}>
                         <BaseTouchable
                             style={styles.addressContainer}
-                            action={() => onCopyToClipboard(account.address, LL.COMMON_LBL_ADDRESS())}>
+                            action={() =>
+                                onCopyToClipboard(account.address, LL.COMMON_LBL_ADDRESS(), { icon: "icon-wallet" })
+                            }>
                             <BaseText style={styles.address} typographyFont="captionRegular">
                                 {nameOrAddressFrom}
                             </BaseText>
@@ -80,7 +82,12 @@ export const AccountDetailBox: React.FC<Props> = memo(
                 {/* Actions */}
                 <BaseView flexDirection="row" style={styles.rightSubContainer}>
                     {canClaimUsername && (
-                        <BaseButton title={LL.BTN_CLAIM()} action={onClaimPress} style={styles.claimBtn} />
+                        <BaseButton
+                            title={LL.BTN_CLAIM()}
+                            action={onClaimPress}
+                            style={styles.claimBtn}
+                            typographyFont="captionSemiBold"
+                        />
                     )}
                     {isEditable && (
                         <BaseTouchable action={() => onEditPress?.(account)}>

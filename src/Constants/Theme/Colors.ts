@@ -314,11 +314,46 @@ export type Colors = {
         true: string
         false: string
     }
+    veBetterDaoBanner: {
+        background: string[]
+        vbdLogo: {
+            symbol: string
+            text: string
+        }
+        text: string
+    }
+    feedbackChip: {
+        background: string
+        text: string
+        borderColor: string
+        icon: {
+            success: string
+            warning: string
+            error: string
+            info: string
+            loading: string
+        }
+        closeButton: string
+    }
+    activitySectionSeparator: {
+        text: string
+    }
+    collectibleDetailedCard: {
+        title: string
+        description: string
+        address: string
+        buttonGroup: {
+            background: string
+            text: string
+        }
+    }
 }
 
 export enum COLORS {
     TRANSPARENT = "transparent",
     WHITE = "#FFFFFF",
+    BLACK = "#000000",
+    BLACK_RGBA_30 = "rgba(0, 0, 0, 0.3)",
     WHITE_DISABLED = "rgba(255, 255, 255, 0.7)",
     GRAY = "#A6A6A6",
     LIGHT_GRAY = "#f2f2f7",
@@ -358,9 +393,15 @@ export enum COLORS {
     LIGHT_BLUE = "#90CDF4",
     MEDIUM_BLUE = "#3182CE",
     PASTEL_BLUE = "#4299E1",
-    BLUE_700 = "#2C5282",
-    BLUE_100 = "#BEE3F8",
     BLUE_50 = "#EBF8FF",
+    BLUE_100 = "#BEE3F8",
+    BLUE_200 = "#90CDF4",
+    BLUE_300 = "#63B3ED",
+    BLUE_400 = "#4299E1",
+    BLUE_500 = "#3182CE",
+    BLUE_600 = "#2B6CB0",
+    BLUE_700 = "#2C5282",
+    BLUE_800 = "#2A4365",
     LIGHT_GREEN = "#AAD836",
     PASTEL_GREEN = "#c5eacd",
     MEDIUM_GREEN = "#30B34E",
@@ -414,12 +455,18 @@ export enum COLORS {
     WHITE_RGBA_85 = "rgba(255,255,255,0.85)",
     WHITE_RGBA_15 = "rgba(255,255,255,0.15)",
     WHITE_RGBA_05 = "rgba(255, 255, 255, 0.05)",
+    WHITE_RGBA_30 = "rgba(255, 255, 255, 0.30)",
+    WHITE_RGBA_50 = "rgba(255, 255, 255, 0.50)",
+    WHITE_RGBA_90 = "rgba(255, 255, 255, 0.90)",
     PURPLE_LABEL = "#B9B5CF",
     PURPLE_LABEL_5 = "rgba(185, 181, 207, 0.05)",
     PURPLE_LABEL_10 = "rgba(185, 181, 207, 0.10)",
     BALANCE_BACKGROUND = "#1D173A",
     BALANCE_BACKGROUND_50 = "rgba(29, 23, 58, 0.50)",
+    BALANCE_BACKGROUND_80 = "rgba(29, 23, 58, 0.80)",
+    BALANCE_BACKGROUND_95 = "rgba(29, 23, 58, 0.95)",
     BALANCE_BACKGROUND_GRADIENT_END = "#423483",
+    BALANCE_BACKGROUND_GRADIENT_END_50 = "rgba(66, 52, 131, 0.50)",
     // App-level background tokens (do not reuse for non-background surfaces)
     APP_BACKGROUND_LIGHT = "#f2f2f7",
     APP_BACKGROUND_DARK = "#1D173A",
@@ -741,6 +788,39 @@ const light: Colors = {
         true: COLORS.LIGHT_GREEN,
         false: COLORS.GREY_300,
     },
+    veBetterDaoBanner: {
+        background: ["#E6EEFF", "#B3CCFF"],
+        vbdLogo: {
+            symbol: "#004CFC",
+            text: COLORS.BLACK,
+        },
+        text: COLORS.BLACK,
+    },
+    feedbackChip: {
+        background: COLORS.GREY_200,
+        text: COLORS.PURPLE,
+        borderColor: COLORS.GREY_300,
+        icon: {
+            success: COLORS.GREEN_600,
+            warning: COLORS.RED_600,
+            error: COLORS.RED_600,
+            info: COLORS.DARK_PURPLE_DISABLED,
+            loading: COLORS.DARK_PURPLE_DISABLED,
+        },
+        closeButton: COLORS.DARK_PURPLE_DISABLED,
+    },
+    activitySectionSeparator: {
+        text: COLORS.GREY_600,
+    },
+    collectibleDetailedCard: {
+        title: COLORS.GREY_700,
+        description: COLORS.GREY_500,
+        address: COLORS.PURPLE,
+        buttonGroup: {
+            background: COLORS.GREY_100,
+            text: COLORS.GREY_700,
+        },
+    },
 }
 
 const dark: Colors = {
@@ -1058,6 +1138,39 @@ const dark: Colors = {
     switch: {
         true: COLORS.LIGHT_GREEN,
         false: COLORS.DARK_PURPLE_DISABLED,
+    },
+    veBetterDaoBanner: {
+        background: ["#003199", "#002466"],
+        vbdLogo: {
+            symbol: "#B1F16C",
+            text: COLORS.WHITE,
+        },
+        text: COLORS.WHITE,
+    },
+    feedbackChip: {
+        background: COLORS.PURPLE_DISABLED,
+        text: COLORS.GREY_50,
+        borderColor: COLORS.PURPLE_LABEL_10,
+        icon: {
+            success: COLORS.GREEN_200,
+            warning: COLORS.RED_400,
+            error: COLORS.RED_400,
+            info: COLORS.GREY_300,
+            loading: COLORS.GREY_300,
+        },
+        closeButton: COLORS.PURPLE_LABEL,
+    },
+    activitySectionSeparator: {
+        text: COLORS.GREY_300,
+    },
+    collectibleDetailedCard: {
+        title: COLORS.GREY_300,
+        description: COLORS.GREY_100,
+        address: COLORS.LIME_GREEN,
+        buttonGroup: {
+            background: COLORS.DARK_PURPLE,
+            text: COLORS.WHITE,
+        },
     },
 }
 

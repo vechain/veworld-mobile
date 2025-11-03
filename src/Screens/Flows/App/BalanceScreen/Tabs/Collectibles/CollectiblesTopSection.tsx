@@ -1,10 +1,10 @@
 import React from "react"
-import { CollectiblesEmptyCard } from "../../Components/Collectibles/CollectiblesEmptyCard"
+import { CollectiblesList } from "../../Components/Collectibles/CollectiblesList"
 
 export const CollectiblesTopSection = () => {
     return (
         <>
-            <CollectiblesEmptyCard />
+            <CollectiblesList />
         </>
     )
 }

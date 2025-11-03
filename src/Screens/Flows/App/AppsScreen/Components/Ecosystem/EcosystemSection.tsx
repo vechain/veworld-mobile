@@ -3,14 +3,14 @@ import { BaseView } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
 import { UseDappsWithPaginationSortKey } from "~Hooks/useDappsWithPagination"
 import { useAppHubDapps } from "~Hooks/useDappsWithPagination/useAppHubDapps"
-import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
+import { Routes } from "~Navigation"
+import { useDAppActions } from "../../Hooks"
 import { DappOptionsBottomSheetV2 } from "./DappOptionsBottomSheetV2"
 import { DAppsList } from "./DappsList"
 import { FiltersSection } from "./FiltersSection"
 import { SortDAppsBottomSheetV2 } from "./SortDAppsBottomSheetV2"
 import { TopSection } from "./TopSection"
 import { DappTypeV2 } from "./types"
-import { Routes } from "~Navigation"
 
 export const EcosystemSection = () => {
     const [selectedFilter, setSelectedFilter] = useState(DappTypeV2.ALL)

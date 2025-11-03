@@ -16,7 +16,7 @@ import { ColorThemeType, TFonts } from "~Constants"
 import { typography } from "~Constants/Theme"
 import { useThemedStyles } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
-import { BaseText } from "./BaseText"
+import { BaseText, BaseTextProps } from "./BaseText"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
 
@@ -58,6 +58,7 @@ type Props = {
     numberOfLines?: number
     textTestID?: string
     textTransform?: TextStyle["textTransform"]
+    textProps?: BaseTextProps
     textStyle?: StyleProp<TextStyle>
     textContainerStyle?: ViewStyle
 } & TouchableOpacityProps
@@ -82,6 +83,7 @@ export const BaseButton = ({
     numberOfLines,
     textTestID,
     textTransform,
+    textProps,
     textStyle,
     textContainerStyle,
     ...otherProps
@@ -217,7 +219,8 @@ export const BaseButton = ({
                     numberOfLines={numberOfLines}
                     textTransform={textTransform}
                     containerStyle={textContainerStyle}
-                    testID={textTestID}>
+                    testID={textTestID}
+                    {...textProps}>
                     {title}
                     {children}
                 </BaseText>

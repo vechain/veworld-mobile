@@ -9,6 +9,7 @@ import { DEVICE_TYPE } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, useAppSelector, useAppDispatch, onAccountAttemptClaim } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     noMarginTop?: boolean
@@ -68,7 +69,7 @@ const baseStyle = (theme: ColorThemeType) =>
     StyleSheet.create({
         inlineBold: {
             fontFamily: "Inter-SemiBold",
-            fontSize: 12,
+            fontSize: FontUtils.font(12),
             fontWeight: "600",
             color: theme.colors.actionBanner.title,
         },

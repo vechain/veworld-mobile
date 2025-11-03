@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react-hooks"
-import { LayoutChangeEvent } from "react-native"
+import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native"
 import { useAnimatedHorizontalFilters } from "./useAnimatedHorizontalFilters"
 
 jest.mock("react-native-reanimated", () => {
@@ -28,11 +28,12 @@ const createMockLayoutEvent = (x: number, width: number): LayoutChangeEvent =>
         },
     } as LayoutChangeEvent)
 
-const createMockScrollEvent = (contentOffsetX: number) => ({
-    nativeEvent: {
-        contentOffset: { x: contentOffsetX, y: 0 },
-    },
-})
+const createMockScrollEvent = (contentOffsetX: number): NativeSyntheticEvent<NativeScrollEvent> =>
+    ({
+        nativeEvent: {
+            contentOffset: { x: contentOffsetX, y: 0 },
+        },
+    } as any)
 
 describe("useAnimatedHorizontalFilters", () => {
     beforeEach(() => {

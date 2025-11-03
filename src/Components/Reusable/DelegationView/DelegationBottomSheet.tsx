@@ -129,7 +129,7 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
                 </BaseText>
             </BaseView>
             <BaseSpacer height={8} />
-            <BaseText typographyFont="buttonSecondary" color={theme.colors.editSpeedBs.subtitle}>
+            <BaseText typographyFont="caption" color={theme.colors.editSpeedBs.subtitle}>
                 {LL.DELEGATE_DESCRIPTION()}
             </BaseText>
             <BaseSpacer height={24} />
@@ -139,7 +139,7 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
                 action={handleSelectDelegationOption}
                 renderButton={(button, textColor) => (
                     <BaseView justifyContent="center" alignItems="center" flexDirection="row">
-                        <BaseText color={textColor} typographyFont="smallButtonPrimary">
+                        <BaseText color={textColor} typographyFont="captionMedium">
                             {button.label}
                         </BaseText>
                     </BaseView>

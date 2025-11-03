@@ -48,7 +48,12 @@ import {
     WalletManagementScreen,
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { AssetDetailScreenSheet } from "~Screens/Flows/App/AssetDetailScreenSheet"
 import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
+import { CollectionsScreen, SendCollectibleRecapScreen } from "~Screens/Flows/App/Collectibles"
+import { BlacklistedCollectionsScreen } from "~Screens/Flows/App/Collectibles/BlacklistedCollectionsScreen"
+import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/CollectibleCollectionDetails"
+import { ReportNFTTransactionScreen } from "~Screens/Flows/App/NFT/NFTReportCollection/ReportNFTTransactionScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
 
@@ -140,12 +145,12 @@ export type RootStackParamListHome = {
         url: string
         ul?: boolean
         returnScreen?:
-            | Routes.DISCOVER
             | Routes.SETTINGS
             | Routes.HOME
             | Routes.ACTIVITY_STAKING
             | Routes.APPS
             | Routes.SWAP
+            | Routes.COLLECTIBLES_COLLECTION_DETAILS
     }
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
@@ -154,10 +159,8 @@ export type RootStackParamListHome = {
     [Routes.USERNAME_CLAIMED]: {
         username: string
     }
-    [Routes.DISCOVER_TABS_MANAGER]: undefined
     [Routes.APPS_TABS_MANAGER]: undefined
     [Routes.APPS_SEARCH]: undefined
-    [Routes.DISCOVER_SEARCH]: undefined
     [Routes.ACTIVITY_DETAILS]: {
         activity: Activity
         token?: FungibleToken
@@ -166,6 +169,20 @@ export type RootStackParamListHome = {
         returnScreen?: Routes.HOME | Routes.HISTORY
     }
     [Routes.BUY_FLOW]: undefined
+    [Routes.COLLECTIBLES_COLLECTIONS]: undefined
+    [Routes.COLLECTIBLES_COLLECTION_DETAILS]: {
+        collectionAddress: string
+    }
+    [Routes.REPORT_NFT_TRANSACTION_SCREEN]: {
+        nftAddress: string
+        transactionClauses: TransactionClause[]
+    }
+    [Routes.SEND_NFT_RECAP]: {
+        contractAddress: string
+        tokenId: string
+        receiverAddress: string
+    }
+    [Routes.BLACKLISTED_COLLECTIONS]: undefined
 }
 
 const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome>()
@@ -214,7 +231,25 @@ export const HomeStack = () => {
                 />
                 <Screen name={Routes.MANAGE_TOKEN} component={ManageTokenScreen} options={{ headerShown: false }} />
 
-                <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
+                {betterWorldFeature?.balanceScreen?.tokens?.enabled ? (
+                    <Screen
+                        name={Routes.TOKEN_DETAILS}
+                        component={AssetDetailScreenSheet}
+                        options={{
+                            headerShown: false,
+                            presentation: "transparentModal",
+                            gestureDirection: "vertical",
+                            gestureEnabled: true,
+                        }}
+                    />
+                ) : (
+                    <Screen
+                        name={Routes.TOKEN_DETAILS}
+                        component={AssetDetailScreen}
+                        options={{ headerShown: false }}
+                    />
+                )}
+
                 <Screen
                     name={Routes.BRIDGE_TOKEN_DETAILS}
                     component={BridgeAssetDetailScreen}
@@ -286,9 +321,7 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen
-                    name={
-                        betterWorldFeature.appsScreen.enabled ? Routes.APPS_TABS_MANAGER : Routes.DISCOVER_TABS_MANAGER
-                    }
+                    name={Routes.APPS_TABS_MANAGER}
                     component={TabsManagerScreen}
                     options={{
                         headerShown: false,
@@ -300,7 +333,7 @@ export const HomeStack = () => {
                     }}
                 />
                 <Screen
-                    name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_SEARCH}
+                    name={Routes.APPS_SEARCH}
                     component={AppsSearchScreen}
                     options={{
                         headerShown: false,
@@ -323,6 +356,43 @@ export const HomeStack = () => {
                         presentation: "modal",
                     }}
                 />
+                {betterWorldFeature.balanceScreen.collectibles.enabled && (
+                    <Screen
+                        name={Routes.COLLECTIBLES_COLLECTIONS}
+                        component={CollectionsScreen}
+                        options={{ headerShown: false }}
+                    />
+                )}
+                {betterWorldFeature.balanceScreen.collectibles.enabled && (
+                    <Screen
+                        name={Routes.COLLECTIBLES_COLLECTION_DETAILS}
+                        component={CollectibleCollectionDetails}
+                        options={{ headerShown: false }}
+                    />
+                )}
+                {betterWorldFeature.balanceScreen.collectibles.enabled && (
+                    <Screen
+                        name={Routes.REPORT_NFT_TRANSACTION_SCREEN}
+                        component={ReportNFTTransactionScreen}
+                        options={{ headerShown: false }}
+                    />
+                )}
+                {betterWorldFeature.balanceScreen.collectibles.enabled && (
+                    <Screen
+                        name={Routes.SEND_NFT_RECAP}
+                        component={SendCollectibleRecapScreen}
+                        options={{ headerShown: false }}
+                    />
+                )}
+                {betterWorldFeature.balanceScreen.collectibles.enabled && (
+                    <Screen
+                        name={Routes.BLACKLISTED_COLLECTIONS}
+                        component={BlacklistedCollectionsScreen}
+                        options={{
+                            presentation: "modal",
+                        }}
+                    />
+                )}
             </Group>
 
             <Group>

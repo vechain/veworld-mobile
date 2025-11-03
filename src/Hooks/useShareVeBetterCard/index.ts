@@ -1,0 +1,1 @@
+export { useShareVeBetterCard } from "./useShareVeBetterCard"

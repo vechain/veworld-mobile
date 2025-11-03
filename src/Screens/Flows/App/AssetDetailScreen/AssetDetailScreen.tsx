@@ -3,18 +3,18 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import striptags from "striptags"
-import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
+import { AlertInline, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { B3TR, VET } from "~Constants"
 import { typography } from "~Constants/Theme"
-import { useBottomSheetModal, useBottomSheetRef, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useBottomSheetRef, useCameraBottomSheet, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
+import { BannersCarousel } from "~Screens"
 import { selectBalanceVisible, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { AssetChart, ConvertedBetterBottomSheet, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
-import { BannersCarousel } from "~Screens"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -27,7 +27,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
+    const { RenderCameraModal, handleOpenOnlyReceiveCamera } = useCameraBottomSheet({ targets: [] })
 
     const {
         ref: convertBetterSuccessBottomSheetRef,
@@ -84,7 +84,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             tokenWithInfo={token}
                             foundToken={tokenWithBalance}
                             isBalanceVisible={isBalanceVisible}
-                            openQRCodeSheet={openQRCodeSheet}
+                            openQRCodeSheet={handleOpenOnlyReceiveCamera}
                             isObserved={isObserved}
                             convertB3trBottomSheetRef={convertB3trBsRef}
                         />
@@ -123,7 +123,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         <MarketInfoView tokenSymbol={token.symbol} />
                         <BaseSpacer height={16} />
                     </BaseView>
-                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+                    {RenderCameraModal}
 
                     <ConvertedBetterBottomSheet
                         ref={convertBetterSuccessBottomSheetRef}

@@ -52,9 +52,11 @@ describe("Migration23", () => {
 
         expect(result.balances.testnet[account]).toHaveLength(3)
         expect(
+            //@ts-expect-error
             result.balances.testnet[account].find(u => AddressUtils.compareAddresses(B3TR.address, u.tokenAddress)),
         ).toBeUndefined()
         expect(
+            //@ts-expect-error
             result.balances.testnet[account].find(u => AddressUtils.compareAddresses(VOT3.address, u.tokenAddress)),
         ).toBeUndefined()
     })
@@ -105,11 +107,13 @@ describe("Migration23", () => {
 
         expect(result.balances.mainnet[account]).toHaveLength(3)
         expect(
+            //@ts-expect-error
             result.balances.mainnet[account].find(u =>
                 AddressUtils.compareAddresses(TEST_B3TR_ADDRESS, u.tokenAddress),
             ),
         ).toBeUndefined()
         expect(
+            //@ts-expect-error
             result.balances.mainnet[account].find(u =>
                 AddressUtils.compareAddresses(TEST_VOT3_ADDRESS, u.tokenAddress),
             ),
@@ -157,8 +161,11 @@ describe("Migration23", () => {
         } as any) as unknown as RootState
 
         expect(result.balances.mainnet[account]).toHaveLength(3)
+        //@ts-expect-error
         expect(result.balances.mainnet[account][0].tokenAddress).toBe(B3TR.address)
+        //@ts-expect-error
         expect(result.balances.mainnet[account][1].tokenAddress).toBe(VOT3.address)
+        //@ts-expect-error
         expect(result.balances.mainnet[account][2].tokenAddress).toBe(VET.address)
     })
 })

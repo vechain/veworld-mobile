@@ -1311,6 +1311,29 @@ PODS:
     - React-Core
   - react-native-safe-area-context (5.0.0):
     - React-Core
+  - react-native-skia (1.12.4):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React
+    - React-callinvoker
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-slider (4.5.6):
     - DoubleConversion
     - glog
@@ -1793,6 +1816,12 @@ PODS:
   - Sentry/HybridSDK (8.45.0)
   - SocketRocket (0.7.0)
   - UMAppLoader (4.6.0)
+  - VisionCamera (4.7.2):
+    - VisionCamera/Core (= 4.7.2)
+    - VisionCamera/React (= 4.7.2)
+  - VisionCamera/Core (4.7.2)
+  - VisionCamera/React (4.7.2):
+    - React-Core
   - Yoga (0.0.0)
   - ZXingObjC/Core (3.6.9)
   - ZXingObjC/OneD (3.6.9):
@@ -1878,6 +1907,7 @@ DEPENDENCIES:
   - react-native-quick-crypto (from `../node_modules/react-native-quick-crypto`)
   - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-view-shot (from `../node_modules/react-native-view-shot`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -1923,6 +1953,7 @@ DEPENDENCIES:
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNSVG (from `../node_modules/react-native-svg`)
   - UMAppLoader (from `../node_modules/unimodules-app-loader/ios`)
+  - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -2089,6 +2120,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-restart"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-skia:
+    :path: "../node_modules/@shopify/react-native-skia"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   react-native-view-shot:
@@ -2179,6 +2212,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-svg"
   UMAppLoader:
     :path: "../node_modules/unimodules-app-loader/ios"
+  VisionCamera:
+    :path: "../node_modules/react-native-vision-camera"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -2264,6 +2299,7 @@ SPEC CHECKSUMS:
   react-native-quick-crypto: eff065b704d3f1c6e336cfc612dce63228ab3482
   react-native-restart: 0bc732f4461709022a742bb29bcccf6bbc5b4863
   react-native-safe-area-context: 314537f8fca6fe2c06bd53fc8905efa9e6aaaf59
+  react-native-skia: 4b9b729a5280ca399f86d108b0e73ee7bb770574
   react-native-slider: bcfc4f2683c072497b157a3c3f00e514a05feec5
   react-native-view-shot: d1a99d3a2b59689c7b6c0f88a249b2a7125bdd2f
   react-native-webview: a4483a25c71098e407df1c1d9056ab907647d7c7
@@ -2313,9 +2349,10 @@ SPEC CHECKSUMS:
   Sentry: f7c0c4b82e2f7e5909a660544dfaff84e35d5e03
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   UMAppLoader: f17a5ee8e85b536ace0fc254b447a37ed198d57e
-  Yoga: 9db4b2da1ed5d8e0c94158f9ac379c8b1b529f59
+  VisionCamera: 30b358b807324c692064f78385e9a732ce1bebfe
+  Yoga: 272dddd3c0e1e23d09ba81ed55ddfa7fdd3caa17
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
 PODFILE CHECKSUM: 4b636b80d0a0bd5fb67550985aa8ca5acf761948
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

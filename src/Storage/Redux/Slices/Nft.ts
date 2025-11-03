@@ -21,6 +21,37 @@ export type NftSliceState = {
     reportedCollections: ReportedCollections
     isLoading: boolean
     error: string | undefined
+    favoriteNfts?: {
+        [genesisId: string]: {
+            [owner: string]: {
+                /**
+                 * Key will be `<address>_<tokenId>`
+                 */
+                [addressTokenId: string]: {
+                    address: string
+                    tokenId: string
+                    /**
+                     * Date when the favorite was added.
+                     * Value is in milliseconds
+                     */
+                    createdAt: number
+                }
+            }
+        }
+    }
+    favoriteCollections?: {
+        [genesisId: string]: {
+            [owner: string]: {
+                /**
+                 * Key will be `<address>_<collectionId>`
+                 */
+                [addressCollectionId: string]: {
+                    address: string
+                    createdAt: number
+                }
+            }
+        }
+    }
 }
 
 export const initialStateNft: NftSliceState = {
@@ -46,6 +77,8 @@ export const initialStateNft: NftSliceState = {
     },
     isLoading: true,
     error: undefined,
+    favoriteNfts: {},
+    favoriteCollections: {},
 }
 
 const findExistingCollection = (
@@ -142,26 +175,28 @@ export const NftSlice = createSlice({
             state,
             action: PayloadAction<{
                 network: NETWORK_TYPE
-                collection: NftCollection
+                collectionAddress: string
                 accountAddress: string
             }>,
         ) => {
-            const { network, collection, accountAddress } = action.payload
+            const { network, collectionAddress, accountAddress } = action.payload
 
             const currentBlackList = state.blackListedCollections[network][accountAddress]
 
-            const isBlackListed = currentBlackList?.addresses.includes(collection.address) ?? false
+            const isBlackListed =
+                currentBlackList?.addresses.find(addr => AddressUtils.compareAddresses(collectionAddress, addr)) ??
+                false
 
             if (isBlackListed) {
                 currentBlackList.addresses = currentBlackList.addresses.filter(
-                    address => address !== collection.address,
+                    addr => !AddressUtils.compareAddresses(collectionAddress, addr),
                 )
             } else {
                 if (currentBlackList) {
-                    state.blackListedCollections[network][accountAddress].addresses.push(collection.address)
+                    state.blackListedCollections[network][accountAddress].addresses.push(collectionAddress)
                 } else {
                     state.blackListedCollections[network][accountAddress] = {
-                        addresses: [collection.address],
+                        addresses: [collectionAddress],
                     }
                 }
             }
@@ -315,6 +350,49 @@ export const NftSlice = createSlice({
         },
 
         resetNftState: () => initialStateNft,
+
+        toggleFavorite: (
+            state,
+            action: PayloadAction<{ address: string; tokenId: string; owner: string; genesisId: string }>,
+        ) => {
+            const { address, tokenId, owner, genesisId } = action.payload
+            const normalizedOwner = HexUtils.normalize(owner)
+            const normalizedAddress = HexUtils.normalize(address)
+            state.favoriteNfts ??= {}
+            state.favoriteNfts[genesisId] ??= {}
+            state.favoriteNfts[genesisId][normalizedOwner] ??= {}
+
+            const key = `${normalizedAddress}_${tokenId}`
+            if (state.favoriteNfts[genesisId][normalizedOwner][key]) {
+                delete state.favoriteNfts[genesisId][normalizedOwner][key]
+            } else {
+                state.favoriteNfts[genesisId][normalizedOwner][key] = {
+                    address: normalizedAddress,
+                    tokenId,
+                    createdAt: Date.now(),
+                }
+            }
+        },
+        toggleFavoriteCollection: (
+            state,
+            action: PayloadAction<{ address: string; owner: string; genesisId: string }>,
+        ) => {
+            const { address, owner, genesisId } = action.payload
+            const normalizedOwner = HexUtils.normalize(owner)
+            const normalizedAddress = HexUtils.normalize(address)
+            state.favoriteCollections ??= {}
+            state.favoriteCollections[genesisId] ??= {}
+            state.favoriteCollections[genesisId][normalizedOwner] ??= {}
+
+            if (state.favoriteCollections[genesisId][normalizedOwner][normalizedAddress]) {
+                delete state.favoriteCollections[genesisId][normalizedOwner][normalizedAddress]
+            } else {
+                state.favoriteCollections[genesisId][normalizedOwner][normalizedAddress] = {
+                    address: normalizedAddress,
+                    createdAt: Date.now(),
+                }
+            }
+        },
     },
 })
 
@@ -330,4 +408,6 @@ export const {
     resetNftState,
     clearNFTCache,
     refreshNFTs,
+    toggleFavorite,
+    toggleFavoriteCollection,
 } = NftSlice.actions

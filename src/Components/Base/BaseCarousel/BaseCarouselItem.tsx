@@ -52,7 +52,7 @@ export const BaseCarouselItem: React.FC<Props> = ({
         if (route === Routes.TOKEN_DETAILS) {
             return Routes.HOME
         }
-        return route as Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.APPS
+        return route as Routes.SETTINGS | Routes.HOME | Routes.APPS
     }, [route])
 
     const onPress = useCallback(async () => {

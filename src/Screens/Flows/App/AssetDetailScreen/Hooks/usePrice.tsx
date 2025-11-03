@@ -8,7 +8,9 @@ import { LocaleUtils, ReanimatedUtils } from "~Utils"
 
 import "intl"
 import "intl/locale-data/jsonp/en"
+import { CURRENCY_SYMBOLS } from "~Constants"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
 export type ValueAndFormatted<U = number, V = string> = {
     value: Readonly<SharedValue<U>>
@@ -21,11 +23,12 @@ export type ValueAndFormatted<U = number, V = string> = {
  */
 export function useLineChartPrice(): ValueAndFormatted {
     const { value: activeCursorPrice } = useRNWagmiChartLineChartPrice({
-        // do not round
         precision: 18,
     })
     const { data } = useLineChart()
-    const { formatFiat } = useFormatFiat({ maximumFractionDigits: 5, minimumFractionDigits: 5 })
+    const { formatLocale } = useFormatFiat({ maximumFractionDigits: 5, minimumFractionDigits: 5 })
+    const currency = useAppSelector(selectCurrency)
+    const symbol = CURRENCY_SYMBOLS[currency]
 
     const price = useDerivedValue(() => {
         if (activeCursorPrice.value) {
@@ -38,7 +41,11 @@ export function useLineChartPrice(): ValueAndFormatted {
         return data[data.length - 1]?.value ?? 0
     }, [activeCursorPrice.value, data])
 
-    const priceFormatted = useDerivedValue(() => formatFiat({ amount: price.value }), [formatFiat, price.value])
+    // Use worklet with explicit dependencies (no closures)
+    const priceFormatted = useDerivedValue(
+        () => ReanimatedUtils.formatFiatWorklet(price.value, symbol, formatLocale, "before", 5, 5),
+        [price.value, symbol, formatLocale],
+    )
 
     return {
         value: price,

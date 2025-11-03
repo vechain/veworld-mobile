@@ -51,6 +51,14 @@ export type FeatureFlags = {
             collectibles: {
                 enabled: boolean
             }
+            tokens: {
+                enabled: boolean
+            }
+        }
+    }
+    notificationCenter: {
+        registration: {
+            enabled: boolean
         }
     }
 }

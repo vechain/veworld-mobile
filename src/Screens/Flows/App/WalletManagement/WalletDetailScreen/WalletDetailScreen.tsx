@@ -1,4 +1,20 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { FlatList, Pressable } from "react-native"
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import {
+    AlertInline,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    EditIconHeaderButton,
+    Layout,
+    PlusIconHeaderButton,
+    RequireUserPassword,
+    SwipeableRow,
+    useFeatureFlags,
+} from "~Components"
 import {
     getClaimableUsernames,
     useBottomSheetModal,
@@ -8,41 +24,26 @@ import {
     useSetSelectedAccount,
     useTheme,
 } from "~Hooks"
-import { AccountUtils, AddressUtils } from "~Utils"
-import {
-    AlertInline,
-    BaseSpacer,
-    BaseView,
-    Layout,
-    PlusIconHeaderButton,
-    RequireUserPassword,
-    showSuccessToast,
-    showWarningToast,
-    SwipeableRow,
-    useFeatureFlags,
-    EditIconHeaderButton,
-    BaseText,
-} from "~Components"
 import { useI18nContext } from "~i18n"
-import { AccountDetailBox } from "./AccountDetailBox"
 import { AccountWithDevice, DEVICE_TYPE, WalletAccount, WatchedAccount } from "~Model"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import { addAccountForDevice, renameAccount, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
+    selectAccountByAddress,
     selectAccountsByDevice,
     selectBalanceVisible,
-    selectSelectedAccount,
     selectDevices,
-    selectAccountByAddress,
+    selectSelectedAccount,
 } from "~Storage/Redux/Selectors"
+import { AccountUtils, AddressUtils } from "~Utils"
+import { AccountDetailBox } from "./AccountDetailBox"
 import { AccountUnderlay, RemoveAccountWarningBottomSheet } from "./components"
-import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import { FlatList, Pressable } from "react-native"
 import { EditWalletAccountBottomSheet } from "./components/EditWalletAccountBottomSheet"
-import { RootStackParamListHome, Routes } from "~Navigation"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useAccountDelete } from "./hooks"
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
+/** @ts-ignore */
 import { DefaultStyle } from "react-native-reanimated/lib/typescript/reanimated2/hook/commonTypes"
+import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
 
@@ -103,9 +104,6 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
         dispatch(addAccountForDevice(device))
         refetchVns()
-        showSuccessToast({
-            text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
-        })
     }
 
     const onRenameWallet = useCallback(
@@ -151,8 +149,10 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const confirmRemoveAccount = useCallback(
         (account: AccountWithDevice) => {
             if (isOnlyAccount(account.rootAddress))
-                return showWarningToast({
-                    text1: LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
+                return Feedback.show({
+                    severity: FeedbackSeverity.WARNING,
+                    type: FeedbackType.ALERT,
+                    message: LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
                 })
 
             setAccountToRemove(account)

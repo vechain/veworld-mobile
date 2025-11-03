@@ -105,7 +105,7 @@ export const SwapScreen = () => {
                         <BaseSpacer height={24} />
                         <BaseText typographyFont="body">{LL.SWAP_DESCRIPTION()}</BaseText>
                         <BaseSpacer height={24} />
-                        <BaseText typographyFont="bodyMedium">
+                        <BaseText typographyFont="captionMedium">
                             {LL.SWAP_DAPP_NUMBER({ total: dAppsToShow.length })}
                         </BaseText>
                         <BaseSpacer height={16} />

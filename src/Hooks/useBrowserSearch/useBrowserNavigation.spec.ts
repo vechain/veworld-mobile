@@ -1,10 +1,13 @@
 import { act, renderHook } from "@testing-library/react-hooks"
-import { useVisitedUrls } from "./useVisitedUrls"
-import { SearchError, useBrowserNavigation } from "./useBrowserNavigation"
-import { TestWrapper } from "~Test"
 import { waitFor } from "@testing-library/react-native"
 import { useNavigation } from "@react-navigation/native"
+
+import { TestWrapper } from "~Test"
+
+import { useVisitedUrls } from "./useVisitedUrls"
 import { Routes } from "~Navigation"
+
+import { SearchError, useBrowserNavigation } from "./useBrowserNavigation"
 
 jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
@@ -12,9 +15,15 @@ jest.mock("@react-navigation/native", () => ({
 }))
 jest.mock("./useVisitedUrls")
 
+const isValidBrowserUrl = jest.fn()
+jest.mock("~Utils/URIUtils", () => ({
+    ...jest.requireActual("~Utils/URIUtils").default,
+    isValidBrowserUrl: (...args: any[]) => isValidBrowserUrl(...args),
+}))
+
 describe("useBrowserNavigation", () => {
     beforeEach(() => {
-        jest.restoreAllMocks()
+        jest.clearAllMocks()
     })
     it("should navigate to the browser with HTTPS url", async () => {
         const addVisitedUrl = jest.fn()
@@ -25,13 +34,14 @@ describe("useBrowserNavigation", () => {
         ;(useNavigation as jest.Mock).mockReturnValue({
             navigate,
         })
+        isValidBrowserUrl.mockResolvedValue(true)
 
         const { result } = renderHook(() => useBrowserNavigation(), {
             wrapper: TestWrapper,
         })
 
-        act(() => {
-            result.current.navigateToBrowser("https://google.com")
+        await act(async () => {
+            await result.current.navigateToBrowser("https://google.com")
         })
 
         await waitFor(() => {
@@ -47,6 +57,7 @@ describe("useBrowserNavigation", () => {
         ;(useNavigation as jest.Mock).mockReturnValue({
             navigate: jest.fn(),
         })
+        isValidBrowserUrl.mockResolvedValue(false)
 
         const { result } = renderHook(() => useBrowserNavigation(), {
             wrapper: TestWrapper,

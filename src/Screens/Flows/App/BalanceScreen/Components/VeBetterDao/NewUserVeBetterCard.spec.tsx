@@ -1,8 +1,8 @@
+import { fireEvent, render, screen } from "@testing-library/react-native"
 import React from "react"
-import { render, screen, fireEvent } from "@testing-library/react-native"
+import { Routes } from "~Navigation"
 import { TestWrapper } from "~Test"
 import { NewUserVeBetterCard } from "./NewUserVeBetterCard"
-import { Routes } from "~Navigation"
 
 const mockNavigate = jest.fn()
 const mockDispatch = jest.fn()
@@ -27,17 +27,11 @@ jest.mock("~Hooks/useVeBetterGlobalOverview", () => ({
     useVeBetterGlobalOverview: jest.fn(),
 }))
 
-jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
-    ...jest.requireActual("~Components/Providers/FeatureFlagsProvider"),
-    useFeatureFlags: jest.fn(),
-}))
-
 describe("NewUserVeBetterCard", () => {
     beforeEach(() => {
         jest.clearAllMocks()
 
         const { useVeBetterGlobalOverview } = require("~Hooks/useVeBetterGlobalOverview")
-        const { useFeatureFlags } = require("~Components/Providers/FeatureFlagsProvider")
 
         ;(useVeBetterGlobalOverview as jest.Mock).mockReturnValue({
             data: {
@@ -48,13 +42,6 @@ describe("NewUserVeBetterCard", () => {
                     energy: 800,
                     water: 600,
                     plastic: 400,
-                },
-            },
-        })
-        ;(useFeatureFlags as jest.Mock).mockReturnValue({
-            betterWorldFeature: {
-                appsScreen: {
-                    enabled: false,
                 },
             },
         })
@@ -116,36 +103,7 @@ describe("NewUserVeBetterCard", () => {
         expect(mockDispatch).toHaveBeenCalledWith(setHideNewUserVeBetterCard(true))
     })
 
-    it("navigates to DISCOVER when apps screen feature is disabled", async () => {
-        const { useFeatureFlags } = require("~Components/Providers/FeatureFlagsProvider")
-        ;(useFeatureFlags as jest.Mock).mockReturnValue({
-            betterWorldFeature: {
-                appsScreen: {
-                    enabled: false,
-                },
-            },
-        })
-
-        render(<NewUserVeBetterCard />, {
-            wrapper: TestWrapper,
-        })
-
-        const startButton = await screen.findByText("Start your impact")
-        fireEvent.press(startButton)
-
-        expect(mockNavigate).toHaveBeenCalledWith(Routes.DISCOVER_STACK, { screen: Routes.DISCOVER })
-    })
-
-    it("navigates to APPS when apps screen feature is enabled", async () => {
-        const { useFeatureFlags } = require("~Components/Providers/FeatureFlagsProvider")
-        ;(useFeatureFlags as jest.Mock).mockReturnValue({
-            betterWorldFeature: {
-                appsScreen: {
-                    enabled: true,
-                },
-            },
-        })
-
+    it("navigates to APPS", async () => {
         render(<NewUserVeBetterCard />, {
             wrapper: TestWrapper,
         })

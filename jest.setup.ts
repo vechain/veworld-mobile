@@ -10,6 +10,7 @@ import { WALLET_STATUS } from "~Model/Wallet"
 import { MMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
 import * as dotenv from "dotenv"
+import { View } from "react-native"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
 
@@ -37,6 +38,11 @@ jest.mock("react-native-quick-crypto", () => ({
 }))
 
 jest.mock("react-native-keyboard-controller", () => require("react-native-keyboard-controller/jest"))
+jest.mock("react-native-vision-camera", () => ({
+    Camera: View,
+    useCameraDevice: jest.fn(),
+    useCodeScanner: jest.fn().mockImplementation(args => args),
+}))
 
 jest.mock("react-native-onesignal", () => ({
     ...jest.requireActual("react-native-onesignal"),
@@ -292,4 +298,27 @@ require("react-native-reanimated").setUpTests()
 
 jest.mock("~Hooks/useFetchFeaturedDApps/useVeBetterDaoDapps", () => ({
     useVeBetterDaoDapps: jest.fn().mockReturnValue({ data: [] }),
+}))
+
+jest.mock("@tanstack/react-query", () => ({
+    ...jest.requireActual("@tanstack/react-query"),
+    useQuery: jest
+        .fn()
+        .mockImplementation((...args: any[]) =>
+            jest.requireActual("@tanstack/react-query").useQuery({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+        ),
+    useInfiniteQuery: jest
+        .fn()
+        .mockImplementation((...args: any[]) =>
+            jest
+                .requireActual("@tanstack/react-query")
+                .useInfiniteQuery({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+        ),
+    queryOptions: jest
+        .fn()
+        .mockImplementation((...args: any[]) =>
+            jest
+                .requireActual("@tanstack/react-query")
+                .queryOptions({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+        ),
 }))

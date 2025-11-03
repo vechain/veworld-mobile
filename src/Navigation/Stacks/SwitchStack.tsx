@@ -4,7 +4,7 @@ import { Transaction } from "@vechain/sdk-core"
 import { PendingRequestTypes } from "@walletconnect/types"
 import React, { useMemo } from "react"
 import { Certificate } from "thor-devkit"
-import { useWalletStatus } from "~Components"
+import { useFeatureFlags, useWalletStatus } from "~Components"
 import { CertificateRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
 import { LoginRequest, TransactionRequest } from "~Model/DApp"
 import { CreateWalletAppStack, Routes } from "~Navigation"
@@ -59,6 +59,8 @@ const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 export const SwitchStack = () => {
     const walletStatus = useWalletStatus()
 
+    const featureFlags = useFeatureFlags()
+
     const RenderStacks = useMemo(() => {
         if (walletStatus === WALLET_STATUS.FIRST_TIME_ACCESS) {
             return <Switch.Screen name="OnboardingStack" component={OnboardingStack} options={{ headerShown: false }} />
@@ -74,13 +76,15 @@ export const SwitchStack = () => {
                         }}>
                         <Switch.Screen name={Routes.CREATE_WALLET_FLOW} component={CreateWalletAppStack} />
 
-                        <Switch.Screen
-                            name={Routes.BLACKLISTED_COLLECTIONS}
-                            component={BlackListedCollectionsScreen}
-                            options={{
-                                presentation: "modal",
-                            }}
-                        />
+                        {!featureFlags?.betterWorldFeature?.balanceScreen?.collectibles?.enabled && (
+                            <Switch.Screen
+                                name={Routes.BLACKLISTED_COLLECTIONS}
+                                component={BlackListedCollectionsScreen}
+                                options={{
+                                    presentation: "modal",
+                                }}
+                            />
+                        )}
 
                         <Switch.Screen name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN} component={SignMessageScreen} />
 
@@ -125,7 +129,7 @@ export const SwitchStack = () => {
                 </>
             )
         }
-    }, [walletStatus])
+    }, [featureFlags?.betterWorldFeature?.balanceScreen?.collectibles?.enabled, walletStatus])
 
     return (
         <Switch.Navigator

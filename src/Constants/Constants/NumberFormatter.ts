@@ -243,15 +243,17 @@ export const getNumberFormatter = ({
     precision,
     style,
     useGrouping,
+    currency,
 }: {
     precision?: number
     locale?: Intl.LocalesArgument
     useGrouping?: boolean
     style?: keyof Intl.NumberFormatOptionsStyleRegistry
+    currency?: string
 }) => {
     const _locale = locale ?? "en-US"
     const _precision = precision ?? 0
-    const key = `${_locale}-${_precision}-${style}-${useGrouping}`
+    const key = `${_locale}-${_precision}-${style}-${useGrouping}${currency ? `-${currency}` : ""}`
 
     if (CachedNumberFormatter[key]) {
         return CachedNumberFormatter[key]
@@ -262,6 +264,7 @@ export const getNumberFormatter = ({
         minimumFractionDigits: _precision,
         maximumFractionDigits: _precision,
         useGrouping,
+        currency,
     })
 
     return CachedNumberFormatter[key]
