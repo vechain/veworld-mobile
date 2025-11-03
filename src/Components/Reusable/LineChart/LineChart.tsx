@@ -109,6 +109,7 @@ const _LineChart = ({
     showChip = true,
     showGradientBackground = true,
     isInteractive = true,
+    strokeColor,
     highlightColor,
     cursorColor,
     chipBackgroundColor,
@@ -302,7 +303,7 @@ const _LineChart = ({
                 <Path
                     style={"stroke"}
                     path={path!}
-                    color={highlightColor || (theme.isDark ? COLORS.PURPLE_LABEL : COLORS.DARK_PURPLE_DISABLED)}
+                    color={strokeColor || (theme.isDark ? COLORS.PURPLE_LABEL : COLORS.DARK_PURPLE_DISABLED)}
                     strokeWidth={strokeWidth}
                     strokeJoin={"round"}
                     strokeCap={"round"}
@@ -316,7 +317,7 @@ const _LineChart = ({
                         <Path
                             style={"stroke"}
                             path={path!}
-                            color={"white"}
+                            color={highlightColor || "white"}
                             strokeWidth={strokeWidth * 2}
                             strokeJoin={"round"}
                             strokeCap={"round"}
@@ -328,7 +329,7 @@ const _LineChart = ({
                         <Path
                             style={"stroke"}
                             path={path!}
-                            color={"white"}
+                            color={highlightColor || "white"}
                             strokeWidth={strokeWidth}
                             strokeJoin={"round"}
                             strokeCap={"round"}

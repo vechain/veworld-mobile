@@ -61,6 +61,7 @@ export type LineChartProps = {
      */
     isInteractive?: boolean
 
+    strokeColor?: string
     highlightColor?: string
     cursorColor?: string
     chipBackgroundColor?: string
