@@ -292,7 +292,7 @@ const _LineChart = ({
                     <Group clip={backgroundClipPath}>
                         <Rect x={0} y={0} width={width} height={height}>
                             <LinearGradient
-                                positions={[0, 0.3, 1]}
+                                positions={[0, 0.6, 1]}
                                 colors={gradientBackgroundColors || theme.colors.chartGradientBackground}
                                 start={backgroudAnimation}
                                 end={Skia.Point(maxX, maxY)}
