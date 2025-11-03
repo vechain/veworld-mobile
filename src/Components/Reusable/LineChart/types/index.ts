@@ -55,6 +55,11 @@ export type LineChartProps = {
      * @default 12
      */
     fontSize?: number
+    /**
+     * Whether to make the chart interactive
+     * @default true
+     */
+    isInteractive?: boolean
 
     highlightColor?: string
     cursorColor?: string

@@ -108,6 +108,7 @@ const _LineChart = ({
     showCursor = true,
     showChip = true,
     showGradientBackground = true,
+    isInteractive = true,
     highlightColor,
     cursorColor,
     chipBackgroundColor,
@@ -280,6 +281,7 @@ const _LineChart = ({
             crossHairEnd.value = withTiming(width, { duration: 450 })
             crossHairOpacity.value = withDelay(450, withTiming(0, { duration: 200 }))
         })
+        .enabled(isInteractive)
 
     return (
         <GestureDetector gesture={panGesture}>
