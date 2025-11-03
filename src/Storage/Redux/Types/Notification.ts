@@ -22,5 +22,4 @@ export interface NotificationState {
     userTags: Record<string, string>
     dappNotifications: boolean
     registrations: Registration[]
-    lastSubscriptionId: string | null
 }

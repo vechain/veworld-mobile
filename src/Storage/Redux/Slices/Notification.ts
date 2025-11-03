@@ -9,7 +9,6 @@ export const initialNotificationState: NotificationState = {
     userTags: {},
     dappNotifications: true,
     registrations: [],
-    lastSubscriptionId: null,
 }
 
 export const Notification = createSlice({
@@ -50,9 +49,6 @@ export const Notification = createSlice({
         setRegistrations: (state, action: PayloadAction<Registration[]>) => {
             state.registrations = action.payload
         },
-        updateLastSubscriptionId: (state, action: PayloadAction<string | null>) => {
-            state.lastSubscriptionId = action.payload
-        },
     },
 })
 
@@ -65,5 +61,4 @@ export const {
     setDappNotifications,
     removeDappVisitCounter,
     setRegistrations,
-    updateLastSubscriptionId,
 } = Notification.actions

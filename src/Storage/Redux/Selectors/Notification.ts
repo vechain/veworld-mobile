@@ -6,4 +6,3 @@ export const selectDappVisitCounter = (state: RootState) => state.notification.d
 export const selectNotificationFeautureEnabled = (state: RootState) => state.notification.feautureEnabled
 export const selectDappNotifications = (state: RootState) => state.notification.dappNotifications
 export const selectRegistrations = (state: RootState) => state.notification.registrations
-export const selectLastSubscriptionId = (state: RootState) => state.notification.lastSubscriptionId

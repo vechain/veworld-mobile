@@ -6,15 +6,7 @@ import {
     registerPushNotification,
     unregisterPushNotification,
 } from "~Networking/NotificationCenter/NotificationCenterAPI"
-import {
-    selectAccounts,
-    selectLastSubscriptionId,
-    selectRegistrations,
-    setRegistrations,
-    updateLastSubscriptionId,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectAccounts, selectRegistrations, setRegistrations, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { Registration, RegistrationState } from "~Storage/Redux/Types"
 import { AccountUtils, error, info } from "~Utils"
 import HexUtils from "~Utils/HexUtils"
@@ -128,11 +120,29 @@ const processNewAddresses = (
     })
 }
 
+/**
+ * Compute updated registrations based on current state
+ * This handles all business logic for state transitions
+ */
+const computeUpdatedRegistrations = (
+    currentWalletAddresses: string[],
+    existingRegistrations: Registration[],
+): Registration[] => {
+    const now = Date.now()
+    const currentAddressSet = new Set(currentWalletAddresses)
+
+    // Process removed, existing, and new addresses
+    const removedUpdated = processRemovedAddresses(existingRegistrations, currentAddressSet, now)
+    const existingUpdated = processExistingAddresses(existingRegistrations, currentAddressSet, now)
+    const newRegistrations = processNewAddresses(existingRegistrations, currentWalletAddresses, now)
+
+    return [...removedUpdated, ...existingUpdated, ...newRegistrations]
+}
+
 export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = {}) => {
     const dispatch = useAppDispatch()
     const accounts = useAppSelector(selectAccounts)
     const registrations = useAppSelector(selectRegistrations)
-    const lastSubscriptionId = useAppSelector(selectLastSubscriptionId)
 
     const isProcessingRef = useRef(false)
 
@@ -142,55 +152,6 @@ export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = 
                 .filter(account => !AccountUtils.isObservedAccount(account))
                 .map(account => HexUtils.normalize(account.address)),
         [accounts],
-    )
-
-    /**
-     * Pure function: Compute updated registrations based on current state
-     * This handles all business logic for state transitions
-     */
-    const computeUpdatedRegistrations = useCallback(
-        (currentSubscriptionId: string | null): Registration[] => {
-            const now = Date.now()
-
-            // Subscription ID changed - start fresh with all current addresses
-            if (currentSubscriptionId !== lastSubscriptionId && currentSubscriptionId !== null) {
-                info(
-                    NOTIFICATION_CENTER_EVENT,
-                    `Reregistering all addresses - last sub ID ${lastSubscriptionId} -> ${currentSubscriptionId}`,
-                )
-                return currentWalletAddresses.map(address => ({
-                    address,
-                    state: RegistrationState.PENDING,
-                    stateTransitionedTime: now,
-                    consecutiveFailures: 0,
-                }))
-            }
-
-            // Normal flow: process removed, existing, and new addresses
-            const currentAddressSet = new Set(currentWalletAddresses)
-            const removedUpdated = processRemovedAddresses(registrations, currentAddressSet, now)
-            const existingUpdated = processExistingAddresses(registrations, currentAddressSet, now)
-            const newRegistrations = processNewAddresses(registrations, currentWalletAddresses, now)
-
-            return [...removedUpdated, ...existingUpdated, ...newRegistrations]
-        },
-        [currentWalletAddresses, registrations, lastSubscriptionId],
-    )
-
-    /**
-     * Sync registration states to Redux
-     */
-    const syncRegistrationStates = useCallback(
-        async (currentSubscriptionId: string | null) => {
-            const updatedRegistrations = computeUpdatedRegistrations(currentSubscriptionId)
-            dispatch(setRegistrations(updatedRegistrations))
-
-            // Update subscription ID if changed
-            if (currentSubscriptionId !== lastSubscriptionId) {
-                dispatch(updateLastSubscriptionId(currentSubscriptionId))
-            }
-        },
-        [computeUpdatedRegistrations, dispatch, lastSubscriptionId],
     )
 
     /**
@@ -319,7 +280,7 @@ export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = 
      * Process all pending registrations/unregistrations
      */
     const processAllRegistrations = useCallback(
-        async (subscriptionId: string | null) => {
+        async (regsToProcess: Registration[], subscriptionId: string | null) => {
             if (isProcessingRef.current) {
                 info(NOTIFICATION_CENTER_EVENT, "Already processing registrations, skipping")
                 return
@@ -328,20 +289,18 @@ export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = 
             isProcessingRef.current = true
 
             try {
-                const currentRegistrations = registrations
-
                 // Filter registrations that need processing (exclude those that exceeded retries)
-                const pendingRegister = currentRegistrations.filter(
+                const pendingRegister = regsToProcess.filter(
                     r =>
                         (r.state === RegistrationState.PENDING || r.state === RegistrationState.PENDING_REREGISTER) &&
                         r.consecutiveFailures < MAX_RETRIES,
                 )
-                const pendingUnregister = currentRegistrations.filter(
+                const pendingUnregister = regsToProcess.filter(
                     r => r.state === RegistrationState.PENDING_UNREGISTER && r.consecutiveFailures < MAX_RETRIES,
                 )
 
                 // Log any that exceeded max retries
-                const exceededRetries = currentRegistrations.filter(r => r.consecutiveFailures >= MAX_RETRIES)
+                const exceededRetries = regsToProcess.filter(r => r.consecutiveFailures >= MAX_RETRIES)
                 if (exceededRetries.length > 0) {
                     for (const reg of exceededRetries) {
                         const errorMsg =
@@ -363,7 +322,7 @@ export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = 
                 isProcessingRef.current = false
             }
         },
-        [processBatch, registrations],
+        [processBatch],
     )
 
     /**
@@ -374,32 +333,23 @@ export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = 
             return
         }
 
-        let isCancelled = false
-
         const syncAndProcess = async () => {
             try {
                 const subscriptionId = await OneSignal.User.pushSubscription.getIdAsync()
 
-                if (isCancelled) return
-
                 // First, sync states (detect new/removed addresses, check 30 days, etc.)
-                await syncRegistrationStates(subscriptionId)
-
-                if (isCancelled) return
+                const updatedRegistrations = computeUpdatedRegistrations(currentWalletAddresses, registrations)
+                dispatch(setRegistrations(updatedRegistrations))
 
                 // Then, process any pending operations
-                await processAllRegistrations(subscriptionId)
+                await processAllRegistrations(updatedRegistrations, subscriptionId)
             } catch (err) {
                 error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
             }
         }
 
         syncAndProcess()
-
-        return () => {
-            isCancelled = true
-        }
-    }, [enabled, currentWalletAddresses, syncRegistrationStates, processAllRegistrations])
+    }, [enabled, currentWalletAddresses, registrations, dispatch, processAllRegistrations])
 
     return {}
 }
