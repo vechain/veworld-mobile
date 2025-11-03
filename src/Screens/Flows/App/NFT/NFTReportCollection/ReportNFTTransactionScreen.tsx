@@ -19,7 +19,6 @@ import { Routes } from "~Navigation"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import {
     reportCollection,
-    selectCollectionWithContractAddress,
     selectSelectedAccount,
     selectSelectedNetwork,
     setIsAppLoading,
@@ -28,6 +27,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
+import { useCollectionMetadata } from "../../Collectibles/Hooks/useCollectionMetadata"
 import { NFTReportSuccessBottomsheet } from "./NFTReportSuccessBottomsheet"
 
 type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.REPORT_NFT_TRANSACTION_SCREEN>
@@ -42,9 +42,9 @@ export const ReportNFTTransactionScreen = ({ route }: Props) => {
 
     const { nftAddress, transactionClauses } = route.params
 
-    const collection = useAppSelector(state => selectCollectionWithContractAddress(state, nftAddress))
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const { data: collectionMetadata } = useCollectionMetadata(nftAddress)
 
     const handleBottomSheetClose = useCallback(() => {
         closeBottomSheet()
@@ -54,28 +54,26 @@ export const ReportNFTTransactionScreen = ({ route }: Props) => {
     const onTransactionSuccess = useCallback(() => {
         dispatch(setIsAppLoading(false))
 
-        if (collection) {
-            dispatch(
-                toggleBlackListCollection({
-                    network: selectedNetwork.type,
-                    collectionAddress: collection.address,
-                    accountAddress: selectedAccount.address,
-                }),
-            )
-            dispatch(
-                reportCollection({
-                    network: selectedNetwork.type,
-                    collectionAddress: nftAddress,
-                    accountAddress: selectedAccount.address,
-                }),
-            )
-        }
+        dispatch(
+            toggleBlackListCollection({
+                network: selectedNetwork.type,
+                collectionAddress: nftAddress,
+                accountAddress: selectedAccount.address,
+            }),
+        )
+        dispatch(
+            reportCollection({
+                network: selectedNetwork.type,
+                collectionAddress: nftAddress,
+                accountAddress: selectedAccount.address,
+            }),
+        )
         track(AnalyticsEvent.NFT_COLLECTION_REPORTED, {
             nftAddress: nftAddress,
         })
 
         openBottomSheet()
-    }, [dispatch, openBottomSheet, collection, selectedNetwork, selectedAccount, nftAddress, track])
+    }, [dispatch, openBottomSheet, selectedNetwork, selectedAccount, nftAddress, track])
 
     const onTransactionFailure = useCallback(() => {
         dispatch(setIsAppLoading(false))
@@ -141,7 +139,7 @@ export const ReportNFTTransactionScreen = ({ route }: Props) => {
                                 {LL.COLLECTION_NAME()}
                             </BaseText>
                             <BaseText typographyFont="subSubTitle" mb={12}>
-                                {collection?.name ?? LL.UNKNOWN_COLLECTION()}
+                                {collectionMetadata?.name ?? LL.UNKNOWN_COLLECTION()}
                             </BaseText>
 
                             <BaseText typographyFont="body" mb={4}>
