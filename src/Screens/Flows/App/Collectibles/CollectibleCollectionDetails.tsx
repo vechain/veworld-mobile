@@ -100,6 +100,7 @@ export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) 
     return (
         <Layout
             title={collectionMetadata?.name}
+            headerTitleAlignment="center"
             headerRightElement={
                 <BaseTouchable style={styles.common} onPress={handleOpenActionsBottomSheet}>
                     <BaseIcon name="icon-more-horizontal" size={16} color={theme.colors.actionBottomSheet.text} />
