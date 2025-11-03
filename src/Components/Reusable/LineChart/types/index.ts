@@ -1,4 +1,5 @@
 import { AnimatedProp, Color } from "@shopify/react-native-skia"
+import { StyleProp, ViewStyle } from "react-native"
 import { SharedValue } from "react-native-reanimated"
 
 export type DataPoint = {
@@ -67,4 +68,5 @@ export type LineChartProps = {
     chipBackgroundColor?: string
     chipTextColor?: string
     gradientBackgroundColors?: AnimatedProp<Color[]>
+    canvasStyle?: StyleProp<ViewStyle>
 }

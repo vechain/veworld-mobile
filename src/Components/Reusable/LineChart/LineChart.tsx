@@ -115,6 +115,7 @@ const _LineChart = ({
     chipBackgroundColor,
     chipTextColor,
     gradientBackgroundColors,
+    canvasStyle,
 }: LineChartProps) => {
     const { data, activePointIndex } = useLineChart()
     const { formatLocale } = useFormatFiat()
@@ -286,7 +287,7 @@ const _LineChart = ({
 
     return (
         <GestureDetector gesture={panGesture}>
-            <Canvas style={{ width, height }}>
+            <Canvas style={[canvasStyle, { width, height }]}>
                 {showGradientBackground && (
                     <Group clip={backgroundClipPath}>
                         <Rect x={0} y={0} width={width} height={height}>
