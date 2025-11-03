@@ -1,10 +1,17 @@
-export type WalletPendingStatus = "REGISTER" | "UNREGISTER"
+export enum RegistrationState {
+    PENDING = "PENDING",
+    ACTIVE = "ACTIVE",
+    PENDING_REREGISTER = "PENDING_REREGISTER",
+    PENDING_UNREGISTER = "PENDING_UNREGISTER",
+}
 
-export interface PendingWallet {
-    address: string
-    status: WalletPendingStatus
-    attempts: number
-    addedAt: number // timestamp
+export interface Registration {
+    address: string // normalized
+    state: RegistrationState
+    stateTransitionedTime: number
+    lastSuccessfulSync?: number
+    consecutiveFailures: number
+    lastError?: string
 }
 
 export interface NotificationState {
@@ -14,8 +21,6 @@ export interface NotificationState {
     dappVisitCounter: Record<string, number>
     userTags: Record<string, string>
     dappNotifications: boolean
-    walletRegistrations: Record<string, number> | null // address -> timestamp
-    lastFullRegistration: number | null // last complete re-registration of all wallets
+    registrations: Registration[]
     lastSubscriptionId: string | null
-    walletsPending: PendingWallet[] // unified queue for registrations and unregistrations
 }

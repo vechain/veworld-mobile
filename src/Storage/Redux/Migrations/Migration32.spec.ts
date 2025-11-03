@@ -1,11 +1,31 @@
 import { Migration32 } from "./Migration32"
-import { RootState } from "../Types"
+
+// Types from Migration32 - representing state AFTER this migration
+interface PostMigration32State {
+    notification: {
+        feautureEnabled: boolean
+        permissionEnabled: boolean | null
+        optedIn: boolean | null
+        dappVisitCounter: Record<string, number>
+        userTags: Record<string, string>
+        dappNotifications: boolean
+        walletRegistrations: Record<string, number> | null
+        lastFullRegistration: number | null
+        lastSubscriptionId: string | null
+        walletsPending: Array<{
+            address: string
+            status: "REGISTER" | "UNREGISTER"
+            attempts: number
+            addedAt: number
+        }>
+    }
+}
 
 describe("Migration32", () => {
     it("should not do anything on empty notification state", () => {
         const result = Migration32({
             notification: {},
-        } as any) as unknown as RootState
+        } as any) as unknown as PostMigration32State
 
         expect(result.notification).toStrictEqual({})
     })
@@ -29,7 +49,7 @@ describe("Migration32", () => {
             },
         }
 
-        const result = Migration32(oldState as any) as unknown as RootState
+        const result = Migration32(oldState as any) as unknown as PostMigration32State
 
         // Verify walletsPending is added as empty array
         expect(result.notification.walletsPending).toEqual([])
@@ -64,7 +84,7 @@ describe("Migration32", () => {
             },
         }
 
-        const result = Migration32(oldState as any) as unknown as RootState
+        const result = Migration32(oldState as any) as unknown as PostMigration32State
 
         expect(result.notification.walletsPending).toEqual([])
         expect(result.notification.feautureEnabled).toBe(false)

@@ -2,26 +2,31 @@ import { useMutation } from "@tanstack/react-query"
 import { useCallback, useEffect, useMemo, useRef } from "react"
 import { OneSignal } from "react-native-onesignal"
 import { NETWORK_TYPE } from "~Model"
-import { registerPushNotification, unregisterPushNotification } from "~Networking/NotificationCenter/NotificationCenterAPI"
 import {
-    addPendingWallets,
-    incrementPendingWalletAttempts,
-    removePendingWallets,
-    removeFromWalletRegistrations,
+    registerPushNotification,
+    unregisterPushNotification,
+} from "~Networking/NotificationCenter/NotificationCenterAPI"
+import {
     selectAccounts,
-    selectLastFullRegistration,
     selectLastSubscriptionId,
-    selectWalletRegistrations,
-    selectWalletsPending,
-    updateLastFullRegistration,
+    selectRegistrations,
+    setRegistrations,
     updateLastSubscriptionId,
-    updateWalletRegistrations,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { Registration, RegistrationState } from "~Storage/Redux/Types"
 import { AccountUtils, error, info } from "~Utils"
 import HexUtils from "~Utils/HexUtils"
 import { ERROR_EVENTS } from "../../Constants"
+
+type NotificationOperation = "REGISTER" | "UNREGISTER"
+
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
+const BATCH_SIZE = 5
+const MAX_RETRIES = 3
+
+const NOTIFICATION_CENTER_EVENT = ERROR_EVENTS.NOTIFICATION_CENTER
 
 const chunkArray = <T>(array: T[], size: number): T[][] => {
     const chunks: T[][] = []
@@ -39,89 +44,163 @@ const isRetryableError = (err: any): boolean => {
     return err?.message?.toLowerCase().includes("network") || err?.code === "ECONNABORTED" || !err?.response
 }
 
-const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
-const MAX_RETRIES_REGISTER = 3
-const MAX_RETRIES_UNREGISTER = 10
-const BATCH_SIZE = 5
+/**
+ * Process removed addresses - mark for unregistration
+ */
+const processRemovedAddresses = (
+    existingRegistrations: Registration[],
+    currentAddressSet: Set<string>,
+    now: number,
+): Registration[] => {
+    return existingRegistrations
+        .filter(reg => !currentAddressSet.has(reg.address))
+        .map(reg => {
+            if (reg.state !== RegistrationState.PENDING_UNREGISTER) {
+                info(NOTIFICATION_CENTER_EVENT, `Marking address for unregistration: ${reg.address}`)
+                return {
+                    ...reg,
+                    state: RegistrationState.PENDING_UNREGISTER,
+                    stateTransitionedTime: now,
+                    consecutiveFailures: 0, // Reset on app restart
+                }
+            } else {
+                // Already pending unregister, just reset failures
+                return {
+                    ...reg,
+                    consecutiveFailures: 0,
+                }
+            }
+        })
+}
 
-const NOTIFICATION_CENTER_EVENT = ERROR_EVENTS.NOTIFICATION_CENTER
+/**
+ * Process existing addresses - check for 30-day re-registration
+ */
+const processExistingAddresses = (
+    existingRegistrations: Registration[],
+    currentAddressSet: Set<string>,
+    now: number,
+): Registration[] => {
+    return existingRegistrations
+        .filter(reg => currentAddressSet.has(reg.address))
+        .map(reg => {
+            // Check for 30-day re-registration
+            if (reg.state === RegistrationState.ACTIVE && reg.lastSuccessfulSync) {
+                const timeSinceSync = now - reg.lastSuccessfulSync
+                if (timeSinceSync >= THIRTY_DAYS_MS) {
+                    info(NOTIFICATION_CENTER_EVENT, `30 days passed for ${reg.address}, marking for re-registration`)
+                    return {
+                        ...reg,
+                        state: RegistrationState.PENDING_REREGISTER,
+                        stateTransitionedTime: now,
+                        consecutiveFailures: 0, // Reset failures on app restart
+                    }
+                }
+            }
 
-const getRegistrationTimestamp = (
-    walletRegistrations: Record<string, number> | null,
-    address: string,
-): number | undefined => {
-    if (!walletRegistrations) return undefined
+            // No changes needed, just reset failures
+            return {
+                ...reg,
+                consecutiveFailures: 0, // Reset failures on app restart
+            }
+        })
+}
 
-    // Addresses are stored normalized, so normalize the lookup key
-    const normalizedAddress = HexUtils.normalize(address)
-    return walletRegistrations[normalizedAddress]
+/**
+ * Find and create registrations for new addresses
+ */
+const processNewAddresses = (
+    existingRegistrations: Registration[],
+    currentAddresses: string[],
+    now: number,
+): Registration[] => {
+    const existingAddressSet = new Set(existingRegistrations.map(r => r.address))
+    const newAddresses = currentAddresses.filter(addr => !existingAddressSet.has(addr))
+
+    return newAddresses.map(address => {
+        info(NOTIFICATION_CENTER_EVENT, `New address detected, adding as PENDING: ${address}`)
+        return {
+            address,
+            state: RegistrationState.PENDING,
+            stateTransitionedTime: now,
+            consecutiveFailures: 0,
+        }
+    })
 }
 
 export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = {}) => {
     const dispatch = useAppDispatch()
     const accounts = useAppSelector(selectAccounts)
-
-    const walletRegistrations = useAppSelector(selectWalletRegistrations)
-    const lastFullRegistration = useAppSelector(selectLastFullRegistration)
+    const registrations = useAppSelector(selectRegistrations)
     const lastSubscriptionId = useAppSelector(selectLastSubscriptionId)
-    const walletsPending = useAppSelector(selectWalletsPending)
 
-    // Track previous wallet addresses to detect removals
-    const prevWalletAddressesRef = useRef<string[]>([])
+    const isProcessingRef = useRef(false)
 
     const currentWalletAddresses = useMemo(
-        () => accounts.filter(account => !AccountUtils.isObservedAccount(account)).map(account => account.address),
+        () =>
+            accounts
+                .filter(account => !AccountUtils.isObservedAccount(account))
+                .map(account => HexUtils.normalize(account.address)),
         [accounts],
     )
 
-    const getWalletsNeedingRegistration = useCallback(
-        (currentSubscriptionId: string | null): string[] => {
+    /**
+     * Pure function: Compute updated registrations based on current state
+     * This handles all business logic for state transitions
+     */
+    const computeUpdatedRegistrations = useCallback(
+        (currentSubscriptionId: string | null): Registration[] => {
             const now = Date.now()
 
-            // If subscription ID changed, re-register all wallets
-            if (currentSubscriptionId !== lastSubscriptionId) {
+            // Subscription ID changed - start fresh with all current addresses
+            if (currentSubscriptionId !== lastSubscriptionId && currentSubscriptionId !== null) {
                 info(
                     NOTIFICATION_CENTER_EVENT,
-                    "Re-registering all wallets: subscription ID changed",
-                    lastSubscriptionId,
-                    "->",
-                    currentSubscriptionId,
+                    `Reregistering all addresses - last sub ID ${lastSubscriptionId} -> ${currentSubscriptionId}`,
                 )
-                return currentWalletAddresses
+                return currentWalletAddresses.map(address => ({
+                    address,
+                    state: RegistrationState.PENDING,
+                    stateTransitionedTime: now,
+                    consecutiveFailures: 0,
+                }))
             }
 
-            // If no full registration has happened, register all
-            if (!lastFullRegistration) {
-                info(NOTIFICATION_CENTER_EVENT, "Registering all wallets: no previous full registration")
-                return currentWalletAddresses
-            }
+            // Normal flow: process removed, existing, and new addresses
+            const currentAddressSet = new Set(currentWalletAddresses)
+            const removedUpdated = processRemovedAddresses(registrations, currentAddressSet, now)
+            const existingUpdated = processExistingAddresses(registrations, currentAddressSet, now)
+            const newRegistrations = processNewAddresses(registrations, currentWalletAddresses, now)
 
-            // If last full registration was >30 days ago, re-register all
-            const timeSinceFullRegistration = now - lastFullRegistration
-            if (timeSinceFullRegistration >= THIRTY_DAYS_MS) {
-                info(NOTIFICATION_CENTER_EVENT, "Re-registering all wallets: 30 days since last full registration")
-                return currentWalletAddresses
-            }
-
-            // Otherwise, only register wallets that are new or haven't been registered in 30 days
-            return currentWalletAddresses.filter(address => {
-                const lastRegistered = getRegistrationTimestamp(walletRegistrations, address)
-                if (!lastRegistered) {
-                    return true // New wallet
-                }
-                const timeSinceRegistration = now - lastRegistered
-                return timeSinceRegistration >= THIRTY_DAYS_MS
-            })
+            return [...removedUpdated, ...existingUpdated, ...newRegistrations]
         },
-        [lastFullRegistration, lastSubscriptionId, currentWalletAddresses, walletRegistrations],
+        [currentWalletAddresses, registrations, lastSubscriptionId],
     )
 
-    // Unified mutation for both register and unregister
+    /**
+     * Sync registration states to Redux
+     */
+    const syncRegistrationStates = useCallback(
+        async (currentSubscriptionId: string | null) => {
+            const updatedRegistrations = computeUpdatedRegistrations(currentSubscriptionId)
+            dispatch(setRegistrations(updatedRegistrations))
+
+            // Update subscription ID if changed
+            if (currentSubscriptionId !== lastSubscriptionId) {
+                dispatch(updateLastSubscriptionId(currentSubscriptionId))
+            }
+        },
+        [computeUpdatedRegistrations, dispatch, lastSubscriptionId],
+    )
+
+    /**
+     * Mutation for API calls
+     */
     const { mutateAsync } = useMutation({
         mutationFn: async (params: {
             subscriptionId: string | null
             addresses: string[]
-            operation: "REGISTER" | "UNREGISTER"
+            operation: NotificationOperation
         }) => {
             const networkType = __DEV__ ? NETWORK_TYPE.TEST : NETWORK_TYPE.MAIN
             const apiCall = params.operation === "REGISTER" ? registerPushNotification : unregisterPushNotification
@@ -135,21 +214,18 @@ export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = 
             return { operation: params.operation, addresses: params.addresses }
         },
         retry: (failureCount, err) => {
-            // Use max of both retry limits - the batch processing will handle per-operation logic
-            const maxRetries = Math.max(MAX_RETRIES_REGISTER, MAX_RETRIES_UNREGISTER)
-
-            if (failureCount >= maxRetries) {
-                error(NOTIFICATION_CENTER_EVENT, `Push notification operation failed, max retries (${maxRetries}) reached`)
+            if (failureCount >= MAX_RETRIES) {
+                error(
+                    NOTIFICATION_CENTER_EVENT,
+                    `Push notification operation failed, max retries (${MAX_RETRIES}) reached`,
+                )
                 return false
             }
-
-            // Only retry on 5xx errors or network errors
             return isRetryableError(err)
         },
         retryDelay: attemptIndex => {
-            // Exponential backoff: 1s, 2s, 4s, 8s...
             const delayMs = 1000 * Math.pow(2, attemptIndex)
-            info(NOTIFICATION_CENTER_EVENT, `Retrying in ${delayMs}ms (attempt ${attemptIndex + 1})`)
+            info(NOTIFICATION_CENTER_EVENT, `Retrying in ${delayMs}ms (attempt ${attemptIndex + 1}/${MAX_RETRIES})`)
             return delayMs
         },
         onError: (err: any) => {
@@ -157,197 +233,173 @@ export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = 
         },
     })
 
-    // Process pending queue (both registrations and unregistrations)
-    useEffect(() => {
-        if (!enabled || walletsPending.length === 0) {
-            return
-        }
-
-        const processQueue = async () => {
-            try {
-                const subId = await OneSignal.User.pushSubscription.getIdAsync()
-
-                // Group by operation type
-                const toRegister = walletsPending.filter(w => w.status === "REGISTER")
-                const toUnregister = walletsPending.filter(w => w.status === "UNREGISTER")
-
-                // Process unregistrations first
-                if (toUnregister.length > 0) {
-                    await processBatches(toUnregister, "UNREGISTER", subId)
-                }
-
-                // Process registrations
-                if (toRegister.length > 0) {
-                    await processBatches(toRegister, "REGISTER", subId)
-                }
-            } catch (err) {
-                error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
-            }
-        }
-
-        const processBatches = async (
-            wallets: typeof walletsPending,
-            operation: "REGISTER" | "UNREGISTER",
-            subscriptionId: string | null,
-        ) => {
-            const maxRetries = operation === "REGISTER" ? MAX_RETRIES_REGISTER : MAX_RETRIES_UNREGISTER
-
-            // Filter out addresses that have exceeded max retries
-            const addressesToProcess = wallets
-                .filter(w => w.attempts < maxRetries)
-                .map(w => w.address)
-
-            if (addressesToProcess.length === 0) {
-                info(NOTIFICATION_CENTER_EVENT, `No pending ${operation.toLowerCase()}s to process (all exceeded max retries)`)
-                // Clean up addresses that exceeded max retries
-                const exceededAddresses = wallets
-                    .filter(w => w.attempts >= maxRetries)
-                    .map(w => w.address)
-
-                if (exceededAddresses.length > 0) {
-                    dispatch(removePendingWallets({ addresses: exceededAddresses, status: operation }))
-                    error(
-                        NOTIFICATION_CENTER_EVENT,
-                        `Removed ${exceededAddresses.length} addresses from ${operation.toLowerCase()} queue after exceeding max retries`,
-                    )
-                }
-                return
-            }
-
-            // Split into batches of 5
-            const batches = chunkArray(addressesToProcess, BATCH_SIZE)
+    /**
+     * Process a batch of registrations
+     */
+    const processBatch = useCallback(
+        async (regs: Registration[], operation: NotificationOperation, subscriptionId: string | null) => {
+            const addresses = regs.map(r => r.address)
+            const batches = chunkArray(addresses, BATCH_SIZE)
 
             info(
                 NOTIFICATION_CENTER_EVENT,
                 `Processing ${batches.length} ${operation.toLowerCase()} batch(es) of up to ${BATCH_SIZE} wallets`,
             )
 
-            // Send batches sequentially
-            for (let i = 0; i < batches.length; i++) {
-                const batch = batches[i]
+            for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
+                const batch = batches[batchIndex]
                 info(
                     NOTIFICATION_CENTER_EVENT,
-                    `Sending ${operation.toLowerCase()} batch ${i + 1}/${batches.length} with ${batch.length} wallet(s)`,
+                    `Sending ${operation.toLowerCase()} batch ${batchIndex + 1}/${batches.length} with ${
+                        batch.length
+                    } wallet(s)`,
                 )
 
-                // Increment attempt count for each address in batch
-                for (const addr of batch) {
-                    dispatch(incrementPendingWalletAttempts({ address: addr, status: operation }))
-                }
-
                 try {
-                    const result = await mutateAsync({ subscriptionId, addresses: batch, operation })
+                    await mutateAsync({ subscriptionId, addresses: batch, operation })
 
-                    // On success, handle based on operation type
-                    if (operation === "REGISTER") {
-                        const now = Date.now()
-                        dispatch(updateWalletRegistrations({ addresses: batch, timestamp: now }))
-                        dispatch(updateLastSubscriptionId(subscriptionId))
-                    }
+                    // Success - update registrations
+                    const now = Date.now()
+                    const updatedRegistrations = registrations.map(reg => {
+                        if (batch.includes(reg.address)) {
+                            if (operation === "UNREGISTER") {
+                                // Don't include in updated array (remove it)
+                                return null
+                            } else {
+                                // REGISTER or REREGISTER - mark as ACTIVE
+                                return {
+                                    ...reg,
+                                    state: RegistrationState.ACTIVE,
+                                    stateTransitionedTime: now,
+                                    lastSuccessfulSync: now,
+                                    consecutiveFailures: 0,
+                                    lastError: undefined,
+                                }
+                            }
+                        }
+                        return reg
+                    })
 
-                    // Remove from pending queue
-                    dispatch(removePendingWallets({ addresses: batch, status: operation }))
+                    // Filter out nulls (unregistered addresses)
+                    const filteredRegistrations = updatedRegistrations.filter((r): r is Registration => r !== null)
+                    dispatch(setRegistrations(filteredRegistrations))
 
                     info(
                         NOTIFICATION_CENTER_EVENT,
-                        `Successfully ${operation.toLowerCase()}ed batch ${i + 1}/${batches.length}, removed from queue`,
+                        `Successfully ${operation.toLowerCase()}ed batch ${batchIndex + 1}/${batches.length}`,
                     )
-                } catch (err) {
+                } catch (err: any) {
+                    // Failure - increment consecutive failures
+                    const updatedRegistrations = registrations.map(reg => {
+                        if (batch.includes(reg.address)) {
+                            const newFailureCount = reg.consecutiveFailures + 1
+                            return {
+                                ...reg,
+                                consecutiveFailures: newFailureCount,
+                                lastError: err?.message || "Unknown error",
+                            }
+                        }
+                        return reg
+                    })
+
+                    dispatch(setRegistrations(updatedRegistrations))
+
                     error(
                         NOTIFICATION_CENTER_EVENT,
-                        `Failed to ${operation.toLowerCase()} batch ${i + 1}/${batches.length}`,
+                        `Failed to ${operation.toLowerCase()} batch ${batchIndex + 1}/${batches.length}`,
                         err,
                     )
-                    // Don't remove from queue on failure - will retry on next effect run
                 }
             }
+        },
+        [dispatch, mutateAsync, registrations],
+    )
 
-            info(NOTIFICATION_CENTER_EVENT, `All ${operation.toLowerCase()} batches processed`)
-        }
+    /**
+     * Process all pending registrations/unregistrations
+     */
+    const processAllRegistrations = useCallback(
+        async (subscriptionId: string | null) => {
+            if (isProcessingRef.current) {
+                info(NOTIFICATION_CENTER_EVENT, "Already processing registrations, skipping")
+                return
+            }
 
-        processQueue()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [enabled, walletsPending.length]) // Only re-run when queue length changes
+            isProcessingRef.current = true
 
-    // Detect wallet additions and trigger registration
+            try {
+                const currentRegistrations = registrations
+
+                // Filter registrations that need processing (exclude those that exceeded retries)
+                const pendingRegister = currentRegistrations.filter(
+                    r =>
+                        (r.state === RegistrationState.PENDING || r.state === RegistrationState.PENDING_REREGISTER) &&
+                        r.consecutiveFailures < MAX_RETRIES,
+                )
+                const pendingUnregister = currentRegistrations.filter(
+                    r => r.state === RegistrationState.PENDING_UNREGISTER && r.consecutiveFailures < MAX_RETRIES,
+                )
+
+                // Log any that exceeded max retries
+                const exceededRetries = currentRegistrations.filter(r => r.consecutiveFailures >= MAX_RETRIES)
+                if (exceededRetries.length > 0) {
+                    for (const reg of exceededRetries) {
+                        const errorMsg =
+                            `Registration for ${reg.address} exceeded ${MAX_RETRIES} consecutive failures. ` +
+                            `Last error: ${reg.lastError}`
+                        error(NOTIFICATION_CENTER_EVENT, errorMsg)
+                    }
+                }
+
+                // Process registrations first, then unregistrations
+                if (pendingRegister.length > 0) {
+                    await processBatch(pendingRegister, "REGISTER", subscriptionId)
+                }
+
+                if (pendingUnregister.length > 0) {
+                    await processBatch(pendingUnregister, "UNREGISTER", subscriptionId)
+                }
+            } finally {
+                isProcessingRef.current = false
+            }
+        },
+        [processBatch, registrations],
+    )
+
+    /**
+     * Effect: Sync and process on mount and when accounts change
+     */
     useEffect(() => {
-        if (!enabled || currentWalletAddresses.length === 0) {
+        if (!enabled) {
             return
         }
 
-        const register = async () => {
+        let isCancelled = false
+
+        const syncAndProcess = async () => {
             try {
-                const subId = await OneSignal.User.pushSubscription.getIdAsync()
+                const subscriptionId = await OneSignal.User.pushSubscription.getIdAsync()
 
-                const walletsToRegister = getWalletsNeedingRegistration(subId)
-                if (walletsToRegister.length === 0) {
-                    info(NOTIFICATION_CENTER_EVENT, "Registration skipped - no wallets need registration")
-                    return
-                }
+                if (isCancelled) return
 
-                const isFullRegistration = walletsToRegister.length === currentWalletAddresses.length
+                // First, sync states (detect new/removed addresses, check 30 days, etc.)
+                await syncRegistrationStates(subscriptionId)
 
-                info(NOTIFICATION_CENTER_EVENT, `Adding ${walletsToRegister.length} wallet(s) to registration queue`)
+                if (isCancelled) return
 
-                // Add to pending queue
-                dispatch(addPendingWallets({ addresses: walletsToRegister, status: "REGISTER" }))
-
-                // If we're registering all wallets, update lastFullRegistration after success
-                // This will be handled in the queue processing logic
-                if (isFullRegistration) {
-                    const now = Date.now()
-                    dispatch(updateLastFullRegistration(now))
-                    info(NOTIFICATION_CENTER_EVENT, "Full registration scheduled at", new Date(now).toISOString())
-                }
+                // Then, process any pending operations
+                await processAllRegistrations(subscriptionId)
             } catch (err) {
                 error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
             }
         }
 
-        register()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [enabled, currentWalletAddresses])
+        syncAndProcess()
 
-    // Detect removed wallet addresses
-    useEffect(() => {
-        if (!enabled) return
-
-        const prevAddresses = prevWalletAddressesRef.current
-        const currentAddresses = currentWalletAddresses
-
-        // Find addresses that were removed
-        const removedAddresses = prevAddresses.filter(
-            addr => !currentAddresses.includes(addr) && !currentAddresses.includes(HexUtils.normalize(addr)),
-        )
-
-        if (removedAddresses.length > 0) {
-            info(NOTIFICATION_CENTER_EVENT, `Detected ${removedAddresses.length} removed wallet(s)`, removedAddresses)
-
-            // Only add addresses that were actually registered
-            const registeredRemovedAddresses = removedAddresses.filter(addr => {
-                if (!walletRegistrations) return false
-                const normalizedAddr = HexUtils.normalize(addr)
-                return normalizedAddr in walletRegistrations
-            })
-
-            if (registeredRemovedAddresses.length > 0) {
-                // Add to pending unregistrations queue
-                dispatch(addPendingWallets({ addresses: registeredRemovedAddresses, status: "UNREGISTER" }))
-
-                // Remove from wallet registrations immediately
-                dispatch(removeFromWalletRegistrations(registeredRemovedAddresses))
-
-                info(
-                    NOTIFICATION_CENTER_EVENT,
-                    `Added ${registeredRemovedAddresses.length} wallet(s) to unregistration queue`,
-                )
-            }
+        return () => {
+            isCancelled = true
         }
+    }, [enabled, currentWalletAddresses, syncRegistrationStates, processAllRegistrations])
 
-        // Update ref for next comparison
-        prevWalletAddressesRef.current = currentAddresses
-    }, [currentWalletAddresses, enabled, dispatch, walletRegistrations])
-
-    // Return nothing - hook is fully self-contained
     return {}
 }

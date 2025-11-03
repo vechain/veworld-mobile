@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import HexUtils from "~Utils/HexUtils"
-import { NotificationState } from "../Types"
+import { NotificationState, Registration } from "../Types"
 
 export const initialNotificationState: NotificationState = {
     feautureEnabled: false,
@@ -9,10 +8,8 @@ export const initialNotificationState: NotificationState = {
     dappVisitCounter: {},
     userTags: {},
     dappNotifications: true,
-    walletRegistrations: null,
-    lastFullRegistration: null,
+    registrations: [],
     lastSubscriptionId: null,
-    walletsPending: [],
 }
 
 export const Notification = createSlice({
@@ -50,74 +47,11 @@ export const Notification = createSlice({
         setDappNotifications: (state, action: PayloadAction<boolean>) => {
             state.dappNotifications = action.payload
         },
-        updateWalletRegistrations: (state, action: PayloadAction<{ addresses: string[]; timestamp: number }>) => {
-            if (!state.walletRegistrations) {
-                state.walletRegistrations = {}
-            }
-            for (const address of action.payload.addresses) {
-                // Normalize address for consistent storage
-                const normalizedAddress = HexUtils.normalize(address)
-                state.walletRegistrations![normalizedAddress] = action.payload.timestamp
-            }
-        },
-        updateLastFullRegistration: (state, action: PayloadAction<number>) => {
-            state.lastFullRegistration = action.payload
+        setRegistrations: (state, action: PayloadAction<Registration[]>) => {
+            state.registrations = action.payload
         },
         updateLastSubscriptionId: (state, action: PayloadAction<string | null>) => {
             state.lastSubscriptionId = action.payload
-        },
-        addPendingWallets: (
-            state,
-            action: PayloadAction<{ addresses: string[]; status: "REGISTER" | "UNREGISTER" }>,
-        ) => {
-            const { addresses, status } = action.payload
-            const normalized = addresses.map(addr => HexUtils.normalize(addr))
-            const now = Date.now()
-
-            // Add addresses to pending queue, avoiding duplicates with same status
-            for (const address of normalized) {
-                const existingIndex = state.walletsPending.findIndex(
-                    w => w.address === address && w.status === status,
-                )
-                if (existingIndex === -1) {
-                    state.walletsPending.push({
-                        address,
-                        status,
-                        attempts: 0,
-                        addedAt: now,
-                    })
-                }
-            }
-        },
-        removePendingWallets: (state, action: PayloadAction<{ addresses: string[]; status: "REGISTER" | "UNREGISTER" }>) => {
-            const { addresses, status } = action.payload
-            const normalized = addresses.map(addr => HexUtils.normalize(addr))
-
-            // Remove addresses from pending queue
-            state.walletsPending = state.walletsPending.filter(
-                w => !(normalized.includes(w.address) && w.status === status),
-            )
-        },
-        incrementPendingWalletAttempts: (
-            state,
-            action: PayloadAction<{ address: string; status: "REGISTER" | "UNREGISTER" }>,
-        ) => {
-            const { address, status } = action.payload
-            const normalizedAddress = HexUtils.normalize(address)
-
-            const wallet = state.walletsPending.find(w => w.address === normalizedAddress && w.status === status)
-            if (wallet) {
-                wallet.attempts += 1
-            }
-        },
-        removeFromWalletRegistrations: (state, action: PayloadAction<string[]>) => {
-            // Remove addresses from walletRegistrations immediately when deletion is attempted
-            if (!state.walletRegistrations) return
-
-            for (const address of action.payload) {
-                const normalizedAddress = HexUtils.normalize(address)
-                delete state.walletRegistrations[normalizedAddress]
-            }
         },
     },
 })
@@ -130,21 +64,6 @@ export const {
     setDappVisitCounter,
     setDappNotifications,
     removeDappVisitCounter,
-    updateWalletRegistrations,
-    updateLastFullRegistration,
+    setRegistrations,
     updateLastSubscriptionId,
-    addPendingWallets,
-    removePendingWallets,
-    incrementPendingWalletAttempts,
-    removeFromWalletRegistrations,
 } = Notification.actions
-
-// Backward compatibility aliases for old hooks (will be deprecated)
-export const addPendingUnregistrations = (addresses: string[]) =>
-    addPendingWallets({ addresses, status: "UNREGISTER" })
-
-export const removePendingUnregistrations = (addresses: string[]) =>
-    removePendingWallets({ addresses, status: "UNREGISTER" })
-
-export const incrementUnregistrationAttempts = (address: string) =>
-    incrementPendingWalletAttempts({ address, status: "UNREGISTER" })
