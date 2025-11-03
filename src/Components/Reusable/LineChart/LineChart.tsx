@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react"
+import React, { createContext, useCallback, useEffect, useMemo, useState } from "react"
 import { DataPoint, LineChartContextType, LineChartData, LineChartProps } from "./types"
 import { curveBasis, line, scaleLinear, scaleTime } from "d3"
 import {
@@ -30,6 +30,7 @@ import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import HapticsService from "~Services/HapticsService"
 import { useTheme } from "~Hooks/useTheme"
+import { useLineChart } from "./hooks/useLineChart"
 
 //#region Constants
 
@@ -98,11 +99,6 @@ const ChartProvider = ({ children, data = [] }: { children: React.ReactNode; dat
     )
 }
 
-const useLineChartProvider = () => {
-    const { data, activePointIndex } = useContext(LinearChartContext)
-    return { data, activePointIndex }
-}
-
 const _LineChart = ({
     width = SCREEN_WIDTH,
     height = GRAPH_HEIGHT,
@@ -118,7 +114,7 @@ const _LineChart = ({
     chipTextColor,
     gradientBackgroundColors,
 }: LineChartProps) => {
-    const { data, activePointIndex } = useLineChartProvider()
+    const { data, activePointIndex } = useLineChart()
     const { formatLocale } = useFormatFiat()
     const theme = useTheme()
 
