@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { LineChart } from "react-native-wagmi-charts"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { BaseSpacer, BaseText, BaseView, TokenSymbol } from "~Components"
+import { LineChart } from "~Components/Reusable/LineChart"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -11,11 +11,11 @@ import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
-import { ASSET_CHART_PERIODS } from "./Components/AssetChart"
+import { ASSET_CHART_PERIODS, AssetChart } from "./Components/AssetChart"
 import { AssertChartBalance } from "./Components/AssetChartBalance"
 import { AssetDetailScreenWrapper } from "./Components/AssetDetailScreenWrapper"
 import ChartUtils from "~Utils/ChartUtils"
-import { AssetChartV2 } from "./Components/AssetChart/AssetChartV2"
+// import { AssetChartV2 } from "./Components/AssetChart/AssetChartV2"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -72,7 +72,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
                 <BaseSpacer height={24} />
                 {hasTokenChart && (
                     <>
-                        <AssetChartV2 token={token} />
+                        <AssetChart selectedPeriod={selectedItem} setSelectedPeriod={setSelectedItem} />
                         <BaseSpacer height={24} />
                     </>
                 )}

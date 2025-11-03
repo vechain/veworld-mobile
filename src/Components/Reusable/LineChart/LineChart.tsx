@@ -1,3 +1,6 @@
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react"
+import { DataPoint, LineChartContextType, LineChartData, LineChartProps } from "./types"
+import { curveBasis, line, scaleLinear, scaleTime } from "d3"
 import {
     Blur,
     Canvas,
@@ -11,9 +14,7 @@ import {
     useFont,
     vec,
 } from "@shopify/react-native-skia"
-import { curveBasis, line, scaleLinear, scaleTime } from "d3"
-import React, { useCallback, useEffect, useMemo } from "react"
-import { Gesture, GestureDetector } from "react-native-gesture-handler"
+import { COLORS, SCREEN_WIDTH } from "~Constants"
 import {
     Extrapolation,
     interpolate,
@@ -24,38 +25,32 @@ import {
     withSpring,
     withTiming,
 } from "react-native-reanimated"
-import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
-import { COLORS, SCREEN_WIDTH } from "~Constants"
-import { useFormatFiat } from "~Hooks"
-import { useTheme } from "~Hooks/useTheme"
-import { TokenWithCompleteInfo } from "~Model"
-import HapticsService from "~Services/HapticsService"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { DateUtils } from "~Utils"
-import ChartUtils from "~Utils/ChartUtils"
+import { useFormatFiat } from "~Hooks/useFormatFiat"
+import { Gesture, GestureDetector } from "react-native-gesture-handler"
+import HapticsService from "~Services/HapticsService"
+import { useTheme } from "~Hooks/useTheme"
 
-type Props = {
-    token: TokenWithCompleteInfo
-}
-
-type DataPoint = {
-    timestamp: number
-    value: number
-}
-
-const SUPPORTED_CHART_TOKENS = new Set(Object.keys(getCoinGeckoIdBySymbol))
+//#region Constants
 
 const GRAPH_HEIGHT = 125
 const INIT_ANIMATION_DURATION = 1500
 
-const makeGraph = (data: DataPoint[]) => {
+const CHIP_PADDING_X = 8
+const CHIP_PADDING_Y = 4
+
+//#endregion
+
+//#region Helpers
+
+const makeGraph = (data: DataPoint[], width: number, height: number, strokeWidth: number = 4) => {
     const max = Math.max(...data.map(val => val.value))
     const min = Math.min(...data.map(val => val.value))
 
-    const y = scaleLinear().domain([min, max]).range([GRAPH_HEIGHT, 4])
+    const y = scaleLinear().domain([min, max]).range([height, strokeWidth])
     const x = scaleTime()
         .domain([data[0].timestamp, data[data.length - 1].timestamp])
-        .range([0, SCREEN_WIDTH])
+        .range([0, width])
 
     const curvedLine = line<DataPoint>()
         .x(d => x(d.timestamp))
@@ -80,29 +75,58 @@ const makeGraph = (data: DataPoint[]) => {
     }
 }
 
-export const AssetChartV2 = ({ token }: Props) => {
-    const theme = useTheme()
-    const currency = useAppSelector(selectCurrency)
-    const hasTokenChart = useMemo(() => SUPPORTED_CHART_TOKENS.has(token.symbol), [token.symbol])
-    const skiaFont = useFont(require("../../../../../../Assets/Fonts/Inter/Inter-SemiBold.ttf"), 12)
+//#endregion
+
+export const LinearChartContext = createContext<LineChartContextType>({
+    data: [],
+    activePointIndex: null!,
+    selectedPoint: null!,
+})
+
+const ChartProvider = ({ children, data = [] }: { children: React.ReactNode; data?: LineChartData }) => {
+    const activePointIndex = useSharedValue(-1)
+    const [selectedPoint, setSelectedPoint] = useState<DataPoint | null>(null)
+
+    useDerivedValue(() => {
+        runOnJS(setSelectedPoint)(activePointIndex.value !== -1 ? data[activePointIndex.value] : null)
+    }, [activePointIndex.value, data])
+
+    return (
+        <LinearChartContext.Provider value={{ data, activePointIndex, selectedPoint }}>
+            {children}
+        </LinearChartContext.Provider>
+    )
+}
+
+const useLineChartProvider = () => {
+    const { data, activePointIndex } = useContext(LinearChartContext)
+    return { data, activePointIndex }
+}
+
+const _LineChart = ({
+    width = SCREEN_WIDTH,
+    height = GRAPH_HEIGHT,
+    strokeWidth = 4,
+    fontSize = 12,
+    showHighlight = true,
+    showCursor = true,
+    showChip = true,
+    showGradientBackground = true,
+    highlightColor,
+    cursorColor,
+    chipBackgroundColor,
+    chipTextColor,
+    gradientBackgroundColors,
+}: LineChartProps) => {
+    const { data, activePointIndex } = useLineChartProvider()
     const { formatLocale } = useFormatFiat()
+    const theme = useTheme()
 
-    // Define your padding
-    const CHIP_PADDING_X = 8
-    const CHIP_PADDING_Y = 4
-
-    const { data: chartData } = useSmartMarketChart({
-        id: hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
-        vs_currency: currency,
-        days: 1,
-        placeholderData: DEFAULT_LINE_CHART_DATA,
-    })
-
-    const downsampleData = useMemo(() => ChartUtils.downsampleData(chartData, "hour", 1, "first"), [chartData])
+    const skiaFont = useFont(require("../../../Assets/Fonts/Inter/Inter-SemiBold.ttf"), fontSize)
 
     const { path, points, maxX, minY, maxY, calcXPos, calcYPos } = useMemo(
-        () => makeGraph(downsampleData ?? []),
-        [downsampleData],
+        () => makeGraph(data, width, height, strokeWidth),
+        [data, width, height, strokeWidth],
     )
 
     // Initial chartprogress animation
@@ -112,7 +136,7 @@ export const AssetChartV2 = ({ token }: Props) => {
     // Line cursor animation
     const translateX = useSharedValue(0)
     const cursorLineOpacity = useSharedValue(0)
-    const chipPosition = useSharedValue([{ translateX: 0, translateY: 10 }])
+    const chipPosition = useSharedValue([{ translateX: 0, translateY: 0 }])
     const chipTimestamp = useSharedValue(0)
 
     // Create a derived value for the chip text and its dimensions
@@ -151,7 +175,7 @@ export const AssetChartV2 = ({ token }: Props) => {
 
     useEffect(() => {
         progress.value = withTiming(1, { duration: INIT_ANIMATION_DURATION }, finished => {
-            if (finished) {
+            if (finished && showGradientBackground) {
                 backgroundProgress.value = withTiming(1, { duration: 800 })
             }
         })
@@ -182,15 +206,15 @@ export const AssetChartV2 = ({ token }: Props) => {
     }, [backgroundProgress.value, minY, maxY, maxX])
 
     const crossHairClipPath = useDerivedValue(() => {
-        const rect = Skia.XYWHRect(crossHairStart.value, 0, crossHairEnd.value - crossHairStart.value, GRAPH_HEIGHT)
+        const rect = Skia.XYWHRect(crossHairStart.value, 0, crossHairEnd.value - crossHairStart.value, height)
 
         return Skia.RRectXY(rect, 16, 16)
-    }, [crossHairStart.value, crossHairEnd.value])
+    }, [crossHairStart.value, crossHairEnd.value, height])
 
     const backgroundClipPath = useMemo(() => {
-        if (!path || !downsampleData) return Skia.RRectXY(Skia.XYWHRect(0, 0, SCREEN_WIDTH, GRAPH_HEIGHT), 16, 16)
+        if (!path || !data) return Skia.RRectXY(Skia.XYWHRect(0, 0, width, height), 16, 16)
         return path.copy().lineTo(maxX, calcYPos(0)).lineTo(calcXPos(0), calcYPos(0)).close()
-    }, [calcXPos, calcYPos, downsampleData, maxX, path])
+    }, [calcXPos, calcYPos, data, maxX, path, width, height])
 
     /**
      * On pan gesture, update the cross hair start and end values
@@ -211,13 +235,13 @@ export const AssetChartV2 = ({ token }: Props) => {
             crossHairEnd.value = withSpring(nextPoint, { damping: 100, stiffness: 100 })
 
             // Only update the chip position if the x position is within the chip text width
-            if (x > chipWidth.value / 2 && x < SCREEN_WIDTH - chipWidth.value / 2) {
+            if (x > chipWidth.value / 2 && x < width - chipWidth.value / 2) {
                 chipPosition.value = [
                     { translateX: x - chipWidth.value / 2, translateY: chipHeight.value + CHIP_PADDING_Y },
                 ]
             }
             // Update the chip timestamp to the nearest point timestamp
-            chipTimestamp.value = downsampleData?.[pointIdx]?.timestamp ?? 0
+            chipTimestamp.value = data?.[pointIdx]?.timestamp ?? 0
         },
         [
             points,
@@ -225,9 +249,10 @@ export const AssetChartV2 = ({ token }: Props) => {
             crossHairEnd,
             chipWidth.value,
             chipTimestamp,
-            downsampleData,
+            data,
             chipPosition,
             chipHeight.value,
+            width,
         ],
     )
 
@@ -237,6 +262,7 @@ export const AssetChartV2 = ({ token }: Props) => {
             cursorLineOpacity.value = withTiming(1, { duration: 100 })
 
             const pointIdx = findNearestPointIndex(e.x)
+            activePointIndex.value = pointIdx
 
             crossHairOpacity.value = withTiming(1, { duration: 100 })
             onPanGesture(e.x, pointIdx)
@@ -244,88 +270,110 @@ export const AssetChartV2 = ({ token }: Props) => {
         .onChange(e => {
             translateX.value = e.x
             const pointIdx = findNearestPointIndex(e.x)
+            activePointIndex.value = pointIdx
 
             runOnJS(HapticsService.triggerHaptics)({ haptics: "Light" })
             onPanGesture(e.x, pointIdx)
-
-            //const point = points.findIndex(p => Math.abs(p.x - e.x) < 1)
-            // if (point !== -1) {
-            // }
         })
         .onFinalize(() => {
             cursorLineOpacity.value = withTiming(0, { duration: 100 })
             translateX.value = withDelay(100, withTiming(0, { duration: 100 }))
+            activePointIndex.value = -1
 
             crossHairStart.value = withTiming(0, { duration: 450 })
-            crossHairEnd.value = withTiming(SCREEN_WIDTH, { duration: 450 })
+            crossHairEnd.value = withTiming(width, { duration: 450 })
             crossHairOpacity.value = withDelay(450, withTiming(0, { duration: 200 }))
         })
 
     return (
         <GestureDetector gesture={panGesture}>
-            <Canvas style={{ width: SCREEN_WIDTH, height: GRAPH_HEIGHT }}>
-                <Group clip={backgroundClipPath}>
-                    <Rect x={0} y={0} width={SCREEN_WIDTH} height={GRAPH_HEIGHT}>
-                        <LinearGradient
-                            positions={[0, 0.3, 1]}
-                            colors={theme.colors.chartGradientBackground}
-                            start={backgroudAnimation}
-                            end={Skia.Point(maxX, maxY)}
-                        />
-                    </Rect>
-                </Group>
+            <Canvas style={{ width, height }}>
+                {showGradientBackground && (
+                    <Group clip={backgroundClipPath}>
+                        <Rect x={0} y={0} width={width} height={height}>
+                            <LinearGradient
+                                positions={[0, 0.3, 1]}
+                                colors={gradientBackgroundColors || theme.colors.chartGradientBackground}
+                                start={backgroudAnimation}
+                                end={Skia.Point(maxX, maxY)}
+                            />
+                        </Rect>
+                    </Group>
+                )}
 
                 <Path
                     style={"stroke"}
                     path={path!}
-                    color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.DARK_PURPLE_DISABLED}
-                    strokeWidth={4}
+                    color={highlightColor || (theme.isDark ? COLORS.PURPLE_LABEL : COLORS.DARK_PURPLE_DISABLED)}
+                    strokeWidth={strokeWidth}
                     strokeJoin={"round"}
                     strokeCap={"round"}
                     start={0}
                     end={progress}
                 />
 
-                <Group opacity={crossHairOpacity} clip={crossHairClipPath}>
-                    {/* Glow layer */}
-                    <Path
-                        style={"stroke"}
-                        path={path!}
-                        color={"white"}
-                        strokeWidth={8}
-                        strokeJoin={"round"}
-                        strokeCap={"round"}
-                        opacity={0.35}>
-                        <Blur blur={2.5} />
-                    </Path>
+                {showHighlight && (
+                    <Group opacity={crossHairOpacity} clip={crossHairClipPath}>
+                        {/* Glow layer */}
+                        <Path
+                            style={"stroke"}
+                            path={path!}
+                            color={"white"}
+                            strokeWidth={strokeWidth * 2}
+                            strokeJoin={"round"}
+                            strokeCap={"round"}
+                            opacity={0.35}>
+                            <Blur blur={2.5} />
+                        </Path>
 
-                    {/* Main white line */}
-                    <Path
-                        style={"stroke"}
-                        path={path!}
-                        color={"white"}
-                        strokeWidth={4}
-                        strokeJoin={"round"}
-                        strokeCap={"round"}
-                        opacity={1}
-                    />
-                </Group>
-
-                <Group opacity={cursorLineOpacity}>
-                    <Rect
-                        x={translateX}
-                        y={0}
-                        width={1}
-                        height={GRAPH_HEIGHT}
-                        color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.DARK_PURPLE_DISABLED}
-                        opacity={cursorLineOpacity}
-                    />
-                    <Group transform={chipPosition}>
-                        <RoundedRect width={chipWidth} height={chipHeight} r={99} color={COLORS.PURPLE_DISABLED} />
-                        <Text text={chipTextData} font={skiaFont} x={CHIP_PADDING_X} y={chipTextY} color="white" />
+                        {/* Main white line */}
+                        <Path
+                            style={"stroke"}
+                            path={path!}
+                            color={"white"}
+                            strokeWidth={strokeWidth}
+                            strokeJoin={"round"}
+                            strokeCap={"round"}
+                            opacity={1}
+                        />
                     </Group>
-                </Group>
+                )}
+
+                {showCursor && (
+                    <Group opacity={cursorLineOpacity}>
+                        <Rect
+                            x={translateX}
+                            y={0}
+                            width={1}
+                            height={height}
+                            color={cursorColor || (theme.isDark ? COLORS.PURPLE_LABEL : COLORS.DARK_PURPLE_DISABLED)}
+                            opacity={cursorLineOpacity}
+                        />
+                        {showChip && (
+                            <Group transform={chipPosition}>
+                                <RoundedRect
+                                    width={chipWidth}
+                                    height={chipHeight}
+                                    r={99}
+                                    color={chipBackgroundColor || COLORS.PURPLE_DISABLED}
+                                />
+                                <Text
+                                    text={chipTextData}
+                                    font={skiaFont}
+                                    x={CHIP_PADDING_X}
+                                    y={chipTextY}
+                                    color={chipTextColor || "white"}
+                                />
+                            </Group>
+                        )}
+                    </Group>
+                )}
             </Canvas>
         </GestureDetector>
     )
 }
+
+export const LineChart = Object.assign(_LineChart, {
+    Chart: _LineChart,
+    Provider: ChartProvider,
+})
