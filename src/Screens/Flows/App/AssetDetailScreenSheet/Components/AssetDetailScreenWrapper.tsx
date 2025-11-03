@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { PropsWithChildren, useCallback, useEffect, useMemo } from "react"
 import { StyleSheet } from "react-native"
+import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, {
     Extrapolation,
@@ -108,27 +109,28 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                     nav.goBack()
                 }}
             />
-            <Animated.ScrollView
+            <Animated.View
                 style={[styles.root, animatedS]}
                 onLayout={e => {
                     if (PlatformUtils.isAndroid()) {
                         translateY.value = e.nativeEvent.layout.height
                     }
                     height.value = e.nativeEvent.layout.height
-                }}
-                stickyHeaderIndices={[0]}>
-                {handle && (
-                    <>
-                        <GestureDetector gesture={gesture}>
-                            <BaseBottomSheetHandle
-                                color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
-                            />
-                        </GestureDetector>
-                        <BaseSpacer height={8} />
-                    </>
-                )}
-                {children}
-            </Animated.ScrollView>
+                }}>
+                <NestableScrollContainer stickyHeaderIndices={[0]}>
+                    {handle && (
+                        <>
+                            <GestureDetector gesture={gesture}>
+                                <BaseBottomSheetHandle
+                                    color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
+                                />
+                            </GestureDetector>
+                            <BaseSpacer height={8} />
+                        </>
+                    )}
+                    {children}
+                </NestableScrollContainer>
+            </Animated.View>
         </BaseSafeArea>
     )
 }

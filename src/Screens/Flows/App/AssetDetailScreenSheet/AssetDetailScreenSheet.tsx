@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useMemo, useState } from "react"
+import { InfiniteData, useQueryClient } from "@tanstack/react-query"
+import React, { useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { LineChart } from "react-native-wagmi-charts"
 import {
@@ -11,10 +12,12 @@ import {
 import { BaseSpacer, BaseText, BaseView, TokenSymbol } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { useThemedStyles } from "~Hooks"
+import { getUseAccountTokenActivitiesQueryKey } from "~Hooks/useAccountTokenActivities"
 import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { FetchActivitiesResponse } from "~Networking"
+import { selectCurrency, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { AssetBalanceActivity } from "./Components/AssetBalanceActivity"
 import { ASSET_CHART_PERIODS, AssetChart } from "./Components/AssetChart"
@@ -31,6 +34,9 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const currency = useAppSelector(selectCurrency)
     const socialLinks = useTokenSocialLinks(token.tokenInfo) ?? {}
+    const account = useAppSelector(selectSelectedAccount)
+    const network = useAppSelector(selectSelectedNetwork)
+    const qc = useQueryClient()
 
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
     const name = useTokenDisplayName(token)
@@ -45,6 +51,19 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
     })
 
     const [selectedItem, setSelectedItem] = useState(ASSET_CHART_PERIODS[0])
+
+    useEffect(() => {
+        qc.setQueryData<InfiniteData<FetchActivitiesResponse, number>>(
+            getUseAccountTokenActivitiesQueryKey(network.genesis.id, account.address, token.address),
+            d => {
+                if (!d?.pages?.length) return undefined
+                return {
+                    pages: [d.pages[0]],
+                    pageParams: [d.pageParams[0]],
+                }
+            },
+        )
+    }, [account.address, network.genesis.id, qc, token.address])
 
     return (
         <AssetDetailScreenWrapper>

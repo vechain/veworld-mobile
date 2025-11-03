@@ -1867,17 +1867,13 @@ type RootTranslation = {
 	 */
 	COMMON_24H: string
 	/**
-	 * 2​4​h​ ​V​o​l​u​m​e
-	 */
-	COMMON_24H_VOLUME: string
-	/**
 	 * 2​4​h​ ​R​a​n​g​e
 	 */
 	COMMON_24H_PRICE_RANGE: string
 	/**
-	 * T​o​k​e​n​ ​s​t​a​t​s
+	 * 2​4​h​ ​V​o​l​u​m​e
 	 */
-	COMMON_TOKEN_STATS: string
+	COMMON_24H_VOLUME: string
 	/**
 	 * A​s​s​e​t​s
 	 */
@@ -2117,9 +2113,17 @@ type RootTranslation = {
 	 */
 	COMMON_SHOW: string
 	/**
+	 * S​h​o​w​ ​m​o​r​e
+	 */
+	COMMON_SHOW_MORE: string
+	/**
 	 * T​o​d​a​y
 	 */
 	COMMON_TODAY: string
+	/**
+	 * T​o​k​e​n​ ​s​t​a​t​s
+	 */
+	COMMON_TOKEN_STATS: string
 	/**
 	 * T​o​t​a​l​ ​S​u​p​p​l​y
 	 */
@@ -2129,13 +2133,13 @@ type RootTranslation = {
 	 */
 	COMMON_USERNAME: string
 	/**
-	 * W​h​o​o​p​s​!
-	 */
-	COMMON_WHOOPS: string
-	/**
 	 * W​e​b​s​i​t​e
 	 */
 	COMMON_WEBSITE: string
+	/**
+	 * W​h​o​o​p​s​!
+	 */
+	COMMON_WHOOPS: string
 	/**
 	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
 	 * @param {string} alias
@@ -7281,17 +7285,13 @@ This action is irreversible.
 	 */
 	COMMON_24H: () => LocalizedString
 	/**
-	 * 24h Volume
-	 */
-	COMMON_24H_VOLUME: () => LocalizedString
-	/**
 	 * 24h Range
 	 */
 	COMMON_24H_PRICE_RANGE: () => LocalizedString
 	/**
-	 * Token stats
+	 * 24h Volume
 	 */
-	COMMON_TOKEN_STATS: () => LocalizedString
+	COMMON_24H_VOLUME: () => LocalizedString
 	/**
 	 * Assets
 	 */
@@ -7529,9 +7529,17 @@ This action is irreversible.
 	 */
 	COMMON_SHOW: () => LocalizedString
 	/**
+	 * Show more
+	 */
+	COMMON_SHOW_MORE: () => LocalizedString
+	/**
 	 * Today
 	 */
 	COMMON_TODAY: () => LocalizedString
+	/**
+	 * Token stats
+	 */
+	COMMON_TOKEN_STATS: () => LocalizedString
 	/**
 	 * Total Supply
 	 */
@@ -7541,13 +7549,13 @@ This action is irreversible.
 	 */
 	COMMON_USERNAME: () => LocalizedString
 	/**
-	 * Whoops!
-	 */
-	COMMON_WHOOPS: () => LocalizedString
-	/**
 	 * Website
 	 */
 	COMMON_WEBSITE: () => LocalizedString
+	/**
+	 * Whoops!
+	 */
+	COMMON_WHOOPS: () => LocalizedString
 	/**
 	 * Confirming this you will disconnect the {name} app from {alias}
 	 */

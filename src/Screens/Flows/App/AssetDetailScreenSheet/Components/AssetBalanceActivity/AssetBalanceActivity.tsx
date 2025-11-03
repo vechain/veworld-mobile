@@ -5,6 +5,7 @@ import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
+import { ActivityTab } from "./ActivityTab"
 import { BalanceTab } from "./BalanceTab"
 
 const TABS = ["BALANCE", "ACTIVITY"] as const
@@ -33,6 +34,7 @@ export const AssetBalanceActivity = ({ token }: { token: FungibleTokenWithBalanc
                 innerContainerStyle={styles.tabsInner}
             />
             {selectedTab === "BALANCE" && <BalanceTab token={token} />}
+            {selectedTab === "ACTIVITY" && <ActivityTab token={token} />}
         </BaseView>
     )
 }
