@@ -4,6 +4,28 @@ import { FavouritesV2 } from "./FavouritesV2"
 import { TestWrapper } from "~Test"
 import { DiscoveryDApp } from "~Constants"
 
+jest.mock("react-native-draggable-flatlist", () => {
+    const { View } = require("react-native")
+    const DraggableFlatList = ({ data, renderItem, ...props }: any) => {
+        if (!data || data.length === 0) {
+            return null
+        }
+        return React.createElement(
+            View,
+            { testID: props.testID },
+            data.map((item: any, index: number) =>
+                renderItem({ item, index, isActive: false, drag: jest.fn(), getIndex: () => index }),
+            ),
+        )
+    }
+    const ScaleDecorator = ({ children }: any) => children
+    return {
+        __esModule: true,
+        default: DraggableFlatList,
+        ScaleDecorator,
+    }
+})
+
 const mockDApps: DiscoveryDApp[] = [
     {
         id: "1",
