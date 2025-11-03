@@ -35,6 +35,7 @@ export const SkeletonActivityBox = ({ style }: { style?: StyleProp<ViewStyle> })
                     marginBottom: 24,
                 },
             ]}
+            testID="SKELETON_ACTIVITY_BOX"
         />
     )
 }

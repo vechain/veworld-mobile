@@ -19,24 +19,20 @@ export const ActivityTabFooter = ({
     const { styles, theme } = useThemedStyles(baseStyles)
 
     if (isLoading) return <SkeletonActivityBox style={styles.skeleton} />
-    if (!show) return
+    if (!show) return null
 
     return (
         <BaseButton
             action={onClick}
             rightIcon={
-                <BaseIcon
-                    // style={{ marginLeft: 8 }}
-                    name="icon-arrow-down"
-                    color={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_600}
-                    size={16}
-                />
+                <BaseIcon name="icon-arrow-down" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_600} size={16} />
             }
             style={styles.btn}
             variant="solid"
             textColor={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_600}
             bgColor={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200}
-            typographyFont="smallCaptionSemiBold">
+            typographyFont="smallCaptionSemiBold"
+            testID="TOKEN_ACTIVITY_SHOW_MORE_BTN">
             {LL.COMMON_SHOW_MORE()}
         </BaseButton>
     )
@@ -49,7 +45,7 @@ const baseStyles = () =>
         },
         btn: {
             gap: 8,
-            marginTop: 24,
+            marginTop: 16,
             alignItems: "center",
             flexDirection: "row",
             justifyContent: "center",
