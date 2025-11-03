@@ -123,6 +123,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                             <GestureDetector gesture={gesture}>
                                 <BaseBottomSheetHandle
                                     color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
+                                    style={styles.handle}
                                 />
                             </GestureDetector>
                             <BaseSpacer height={8} />
@@ -149,5 +150,11 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         safeArea: {
             justifyContent: "flex-end",
+        },
+        handle: {
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.APP_BACKGROUND_LIGHT,
+            marginTop: 0,
+            paddingTop: 10,
+            paddingBottom: 10,
         },
     })
