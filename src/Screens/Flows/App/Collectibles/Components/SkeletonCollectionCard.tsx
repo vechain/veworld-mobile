@@ -24,7 +24,7 @@ export const SkeletonCollectionCard = () => {
                         boneColor={theme.colors.skeletonBoneColor}
                         highlightColor={theme.colors.skeletonHighlightColor}
                         height={20}
-                        width={150}
+                        width={75}
                         borderRadius={4}
                     />
                     <BaseSkeleton
