@@ -2,7 +2,7 @@ import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useMemo, us
 import { RefreshControlProps, ScrollView, StyleSheet } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { BackButtonHeader, CenteredHeader, SelectedNetworkViewer } from "~Components"
-import { BaseSafeArea, BaseScrollView, BaseView } from "~Components/Base"
+import { BaseSafeArea, BaseScrollView, BaseTextProps, BaseView } from "~Components/Base"
 import { useTabBarBottomMargin } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
@@ -29,6 +29,7 @@ type Props = {
     hasTopSafeAreaOnly?: boolean
     headerRightElement?: ReactNode
     bg?: string
+    headerTitleAlignment?: BaseTextProps["align"]
 }
 
 export const Layout = ({
@@ -54,6 +55,7 @@ export const Layout = ({
     hasSafeArea = true,
     hasTopSafeAreaOnly = false,
     headerRightElement,
+    headerTitleAlignment,
     bg,
 }: Props) => {
     const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } = useTabBarBottomMargin()
@@ -82,6 +84,7 @@ export const Layout = ({
                                 preventGoBack={preventGoBack}
                                 title={title}
                                 rightElement={headerRightElement}
+                                textAlignment={headerTitleAlignment}
                             />
                         </BaseView>
                     ) : (
@@ -147,6 +150,7 @@ export const Layout = ({
             preventGoBack,
             title,
             headerRightElement,
+            headerTitleAlignment,
             fixedHeader,
             showSelectedNetwork,
             body,
