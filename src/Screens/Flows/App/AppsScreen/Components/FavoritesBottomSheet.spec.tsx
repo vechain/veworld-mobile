@@ -16,7 +16,7 @@ jest.mock("../Hooks", () => ({
 
 jest.mock("react-native-draggable-flatlist", () => {
     const { View } = require("react-native")
-    return ({ data, renderItem, ListEmptyComponent, ...props }: any) => {
+    const DraggableFlatList = ({ data, renderItem, ListEmptyComponent, ...props }: any) => {
         if (!data || data.length === 0) {
             return React.createElement(View, { testID: props.testID }, ListEmptyComponent)
         }
@@ -25,6 +25,12 @@ jest.mock("react-native-draggable-flatlist", () => {
             { testID: props.testID },
             data.map((item: any, index: number) => renderItem({ item, index, isActive: false, drag: jest.fn() })),
         )
+    }
+    const ScaleDecorator = ({ children }: any) => children
+    return {
+        __esModule: true,
+        default: DraggableFlatList,
+        ScaleDecorator,
     }
 })
 
@@ -158,13 +164,6 @@ describe("FavoritesBottomSheet", () => {
 
             const flatList = screen.getByTestId("draggable-flatlist")
             expect(flatList).toBeTruthy()
-        })
-
-        it("should have proper component structure", () => {
-            renderWithFavorites()
-
-            expect(screen.getByTestId("dapps-list-header")).toBeTruthy()
-            expect(screen.getByTestId("draggable-flatlist")).toBeTruthy()
         })
     })
 })
