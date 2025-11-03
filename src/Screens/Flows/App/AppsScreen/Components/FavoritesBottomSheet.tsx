@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import DraggableFlatList, { DragEndParams, RenderItem } from "react-native-draggable-flatlist"
+import DraggableFlatList, { RenderItem, ScaleDecorator } from "react-native-draggable-flatlist"
 import {
     AnimatedSaveHeaderButton,
     BaseBottomSheet,
@@ -37,9 +37,8 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
 
     const handleClose = useCallback(() => {
         setIsEditingMode(false)
-        setReorderedDapps(bookmarkedDApps)
         onClose()
-    }, [onClose, bookmarkedDApps])
+    }, [onClose])
 
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
 
@@ -77,24 +76,22 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     const renderItem: RenderItem<DiscoveryDApp> = useCallback(
         ({ item, isActive, drag }) => {
             return (
-                <FavoriteDAppCard
-                    dapp={item}
-                    isActive={isActive}
-                    isEditMode={isEditingMode}
-                    onPress={handleDAppPress}
-                    onRightActionPress={onMorePress}
-                    onLongPress={onLongPressHandler}
-                    onRightActionLongPress={isEditingMode ? drag : undefined}
-                    px={0}
-                />
+                <ScaleDecorator activeScale={1.05}>
+                    <FavoriteDAppCard
+                        dapp={item}
+                        isActive={isActive}
+                        isEditMode={isEditingMode}
+                        onPress={handleDAppPress}
+                        onRightActionPress={onMorePress}
+                        onLongPress={onLongPressHandler}
+                        onRightActionLongPress={isEditingMode ? drag : undefined}
+                        px={0}
+                    />
+                </ScaleDecorator>
             )
         },
         [isEditingMode, handleDAppPress, onLongPressHandler, onMorePress],
     )
-
-    const onDragEnd = useCallback(({ data }: DragEndParams<DiscoveryDApp>) => {
-        setReorderedDapps(data)
-    }, [])
 
     const onSaveReorderedDapps = useCallback(() => {
         dispatch(reorderBookmarks(reorderedDapps))
@@ -102,8 +99,8 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     }, [dispatch, reorderedDapps])
 
     useEffect(() => {
-        if (reorderedDapps.length !== bookmarkedDApps.length) setReorderedDapps(bookmarkedDApps)
-    }, [bookmarkedDApps, reorderedDapps.length])
+        setReorderedDapps(bookmarkedDApps)
+    }, [bookmarkedDApps])
 
     const headerContent = useMemo(
         () => (
@@ -159,7 +156,6 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         style={reorderedDapps.length === 0 ? styles.emptyListStyle : undefined}
                         extraData={isEditingMode}
                         data={reorderedDapps}
-                        onDragEnd={onDragEnd}
                         keyExtractor={item => item.href}
                         renderItem={renderItem}
                         ListFooterComponent={renderFooter}
