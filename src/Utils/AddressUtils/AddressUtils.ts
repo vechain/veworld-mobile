@@ -4,8 +4,8 @@ import { error, warn } from "~Utils/Logger"
 import { ERROR_EVENTS, VET, VTHO, B3TR, TEST_B3TR_ADDRESS, TEST_VOT3_ADDRESS, VOT3 } from "~Constants"
 import CryptoUtils from "../CryptoUtils"
 import HexUtils from "../HexUtils"
-import { Vns } from "~Hooks"
 import { queryClient } from "~Api/QueryProvider"
+import { Vns } from "~Model/Vns"
 
 export const getAddressFromPrivateKey = (privateKey: string): string => {
     try {

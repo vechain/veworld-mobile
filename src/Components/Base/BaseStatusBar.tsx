@@ -26,6 +26,7 @@ export const BaseStatusBar = memo((props: Props) => {
             case Routes.HOME:
             case Routes.APPS_SEARCH:
             case Routes.APPS_TABS_MANAGER:
+            case Routes.TOKEN_DETAILS:
             case Routes.BROWSER:
                 return "light-content"
             default:
@@ -41,6 +42,8 @@ export const BaseStatusBar = memo((props: Props) => {
             case Routes.APPS_TABS_MANAGER:
             case Routes.BROWSER:
                 return COLORS.BALANCE_BACKGROUND
+            case Routes.TOKEN_DETAILS:
+                return COLORS.BLACK
             default:
                 return props.transparent ? theme.colors.transparent : theme.colors.background
         }
