@@ -7,6 +7,7 @@ import {
     Rect,
     RoundedRect,
     Skia,
+    SkPath,
     Text,
     useFont,
     vec,
@@ -119,7 +120,7 @@ const _LineChart = ({
     gradientBackgroundPositions = [0, 0.6, 1],
     canvasStyle,
 }: LineChartProps) => {
-    const [previousGraph, setPreviousGraph] = useState<ReturnType<typeof makeGraph> | null>(null)
+    // const [previousGraph, setPreviousGraph] = useState<ReturnType<typeof makeGraph> | null>(null)
 
     const { data, activePointIndex } = useLineChart()
     const { formatLocale } = useFormatFiat()
@@ -130,6 +131,7 @@ const _LineChart = ({
         () => makeGraph(data, width, height, strokeWidth),
         [data, width, height, strokeWidth],
     )
+    const previousGraph = useSharedValue<SkPath | null>(null)
 
     //Reference to the previous data
     const previousDataRef = useRef(data)
@@ -150,8 +152,9 @@ const _LineChart = ({
 
     useEffect(() => {
         if (!previousData) return
-        setPreviousGraph(makeGraph(previousData, width, height, strokeWidth))
-    }, [previousData, width, height, strokeWidth])
+        const graph = makeGraph(previousData, width, height, strokeWidth)
+        previousGraph.value = graph.path
+    }, [previousData, width, height, strokeWidth, previousGraph])
 
     // Initial chartprogress animation
     const progress = useSharedValue(0)
@@ -212,13 +215,11 @@ const _LineChart = ({
     }, [data.length])
 
     useEffect(() => {
-        if (previousData && previousData?.length !== data.length) {
-            backgroundProgress.value = withTiming(0, { duration: 100 })
+        if (previousData && previousData.length !== data.length) {
             morphProgress.value = withTiming(1, { duration: 350 }, finished => {
                 if (finished) {
-                    runOnJS(setPreviousGraph)({ path, points, maxX, minY, maxY, calcXPos, calcYPos, ...rest })
+                    previousGraph.value = path!
                     morphProgress.value = 0
-                    backgroundProgress.value = withTiming(1, { duration: 800 })
                 }
             })
         }
@@ -263,14 +264,14 @@ const _LineChart = ({
 
     //#region Animations
     const pathAnimation = useDerivedValue(() => {
-        if (!previousGraph) return path!
-        const start = previousGraph.path!
+        if (!previousGraph.value) return path!
+        const start = previousGraph.value!
         const end = path!
 
         makeMorph(start.toSVGString(), end.toSVGString(), morphProgress.value)
 
         return Skia.Path.MakeFromSVGString(interpolatedPath.value)!
-    }, [previousGraph?.path, path, morphProgress.value, makeMorph, interpolatedPath.value])
+    }, [previousGraph.value, path, morphProgress.value, makeMorph, interpolatedPath.value])
 
     const backgroudAnimation = useDerivedValue(() => {
         return Skia.Point(maxX, interpolate(backgroundProgress.value, [0, 1], [maxY + 1, minY], Extrapolation.CLAMP))
@@ -282,10 +283,22 @@ const _LineChart = ({
         return Skia.RRectXY(rect, 16, 16)
     }, [crossHairStart.value, crossHairEnd.value, height])
 
-    const backgroundClipPath = useMemo(() => {
+    const lineTo = useMemo(() => {
+        return [maxX, calcYPos(0)] as const
+    }, [maxX, calcYPos])
+
+    const lineToZero = useMemo(() => {
+        return [calcXPos(0), calcYPos(0)] as const
+    }, [calcXPos, calcYPos])
+
+    const backgroundClipPath = useDerivedValue(() => {
         if (!pathAnimation.value || !data) return Skia.RRectXY(Skia.XYWHRect(0, 0, width, height), 16, 16)
-        return pathAnimation.value.copy().lineTo(maxX, calcYPos(0)).lineTo(calcXPos(0), calcYPos(0)).close()
-    }, [pathAnimation.value, data, width, height, maxX, calcYPos, calcXPos])
+        return pathAnimation.value
+            .copy()
+            .lineTo(...lineTo)
+            .lineTo(...lineToZero)
+            .close()
+    }, [pathAnimation.value, data, width, height, lineTo, lineToZero])
     //#endregion
 
     /**
