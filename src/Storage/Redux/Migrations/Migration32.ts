@@ -21,21 +21,32 @@ export const Migration32 = (state: PersistedState): PersistedState => {
 
     const favoriteRefs: DAppReference[] = (currentDiscoveryState.favorites || [])
         .filter(dapp => !dapp.isCustom)
-        .map((dapp, index) => ({
-            id: dapp.id || dapp.veBetterDaoId || DAppUtils.generateDAppId(dapp.href),
-            href: dapp.href,
-            veBetterDaoId: dapp.veBetterDaoId,
-            order: index,
-            ...(dapp.isCustom && {
-                customMetadata: {
+        .map((dapp, index) => {
+            const ref: DAppReference = {
+                id: dapp.id || dapp.veBetterDaoId || DAppUtils.generateDAppId(dapp.href),
+                href: dapp.href,
+                veBetterDaoId: dapp.veBetterDaoId,
+                order: index,
+            }
+
+            if (dapp.isCustom) {
+                ref.customMetadata = {
                     name: dapp.name,
                     iconUri: dapp.iconUri,
                     desc: dapp.desc,
                     isCustom: true as const,
                     createAt: dapp.createAt,
-                },
-            }),
-        }))
+                }
+            } else if (dapp.veBetterDaoId) {
+                ref.fallbackMetadata = {
+                    name: dapp.name,
+                    desc: dapp.desc,
+                    createAt: dapp.createAt,
+                }
+            }
+
+            return ref
+        })
 
     const newDiscoveryState = {
         ...currentDiscoveryState,

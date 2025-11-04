@@ -45,6 +45,12 @@ export type DAppReference = {
         isCustom: true
         createAt: number
     }
+    // Fallback metadata for dApps not yet in featured list (e.g. newly added VBD dApps)
+    fallbackMetadata?: {
+        name: string
+        desc?: string
+        createAt: number
+    }
 }
 
 export type DiscoveryState = {
@@ -88,7 +94,7 @@ const findByHref = (dapps: DiscoveryDApp[], href: string) => {
     return dapps.find(dapp => URIUtils.compareURLs(dapp.href, href))
 }
 
-// Convert dApp to lightweight reference, preserving custom metadata if needed
+// Convert dApp to lightweight reference, preserving metadata if needed
 const createDAppReference = (dapp: DiscoveryDApp, order: number): DAppReference => {
     const ref: DAppReference = {
         id: dapp.id || dapp.veBetterDaoId || DAppUtils.generateDAppId(dapp.href),
@@ -105,6 +111,13 @@ const createDAppReference = (dapp: DiscoveryDApp, order: number): DAppReference 
             isCustom: true,
             createAt: dapp.createAt,
         }
+    } else if (dapp.veBetterDaoId) {
+        // Store fallback metadata for VBD dApps not yet in featured list
+        ref.fallbackMetadata = {
+            name: dapp.name,
+            desc: dapp.desc,
+            createAt: dapp.createAt,
+        }
     }
 
     return ref
@@ -118,12 +131,16 @@ export const DiscoverySlice = createSlice({
             const { payload } = action
             let bookmark: DiscoveryDApp
             if ("external_url" in payload) {
+                // Handle both Unix timestamp string ("1640995200") and ISO string formats
+                const timestamp = parseInt(payload.createdAtTimestamp, 10)
+                const createAt = isNaN(timestamp) ? Date.parse(payload.createdAtTimestamp) : timestamp * 1000
+
                 bookmark = {
                     name: payload.name,
                     href: payload.external_url,
                     desc: payload.description,
                     isCustom: false,
-                    createAt: parseInt(payload.createdAtTimestamp, 10),
+                    createAt,
                     amountOfNavigations: 1,
                     veBetterDaoId: payload.id,
                 }

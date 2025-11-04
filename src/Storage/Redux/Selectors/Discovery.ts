@@ -56,6 +56,20 @@ const resolveDAppFromReference = (
         }
     }
 
+    // Fallback metadata for VBD dApps not yet in featured list
+    if (ref.fallbackMetadata) {
+        return {
+            id: ref.id,
+            href: ref.href,
+            name: ref.fallbackMetadata.name,
+            desc: ref.fallbackMetadata.desc,
+            isCustom: false,
+            createAt: ref.fallbackMetadata.createAt,
+            amountOfNavigations: 0,
+            veBetterDaoId: ref.veBetterDaoId,
+        }
+    }
+
     return null
 }
 
