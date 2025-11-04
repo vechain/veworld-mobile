@@ -22,7 +22,7 @@ type Props = {
 const ActionButton = ({ label, icon, onPress }: { label: string; icon: IconKey; onPress: () => void }) => {
     const { styles, theme } = useThemedStyles(actionButtonStyles)
     return (
-        <TouchableOpacity style={styles.root} onPress={onPress}>
+        <TouchableOpacity style={styles.root} onPress={onPress} testID={`MORE_BUTTON_BS_ITEM_${label.toUpperCase()}`}>
             <BaseIcon
                 name={icon}
                 color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
