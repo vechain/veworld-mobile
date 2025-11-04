@@ -1,8 +1,14 @@
 {
   "version": "2.4.8",
-  "major": false,
+  "major": true,
   "descriptions": {
-    "en": [],
+    "en": [
+      "New Collectibles section available",
+      "Avatar customization with your NFTs",
+      "NFT performance improvements",
+      "Favorite your NFTs and collections",
+      "Bug fixes and performance improvements"
+    ],
     "de": [],
     "es": [],
     "fr": [],
