@@ -7,13 +7,20 @@ import { useThemedStyles } from "~Hooks"
 import { useAccountTokenActivities } from "~Hooks/useAccountTokenActivities"
 import { Activity, FungibleToken, TransactionOutcomes } from "~Model"
 import { Routes, TabStackParamList } from "~Navigation"
+import { SkeletonActivityBox } from "~Screens/Flows/App/ActivityScreen/Components"
 import { ActivityTabFooter } from "./ActivityTabFooter"
 
 export const ActivityTab = ({ token }: { token: FungibleToken }) => {
     const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation<NativeStackNavigationProp<TabStackParamList>>()
 
-    const { data: activities, fetchNextPage, isFetchingNextPage, hasNextPage } = useAccountTokenActivities(token)
+    const {
+        data: activities,
+        fetchNextPage,
+        isFetchingNextPage,
+        hasNextPage,
+        isPending,
+    } = useAccountTokenActivities(token)
 
     const onActivityPress = useCallback(
         (activity: Activity, _token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => {
@@ -43,6 +50,7 @@ export const ActivityTab = ({ token }: { token: FungibleToken }) => {
             ListFooterComponent={
                 <ActivityTabFooter onClick={onLoadMore} isLoading={isFetchingNextPage} show={hasNextPage} />
             }
+            ListEmptyComponent={isPending ? <SkeletonActivityBox /> : null}
         />
     )
 }
