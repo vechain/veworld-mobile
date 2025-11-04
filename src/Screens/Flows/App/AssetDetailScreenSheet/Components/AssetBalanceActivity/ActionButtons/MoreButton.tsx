@@ -12,7 +12,7 @@ type Props = {
 
 export const MoreButton = ({ openReceiveBottomsheet, token }: Props) => {
     const { LL } = useI18nContext()
-    const { ref: ref, onOpen: onOpen } = useBottomSheetModal()
+    const { ref, onOpen } = useBottomSheetModal()
 
     const onPress = useCallback(() => {
         onOpen()

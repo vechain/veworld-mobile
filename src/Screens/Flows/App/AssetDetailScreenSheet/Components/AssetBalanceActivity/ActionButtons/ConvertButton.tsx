@@ -13,7 +13,7 @@ type Props = {
 
 const useConvert = (bsRef: RefObject<BottomSheetModalMethods>) => {
     const track = useAnalyticTracking()
-    const { onOpen: onOpen } = useBottomSheetModal({ externalRef: bsRef })
+    const { onOpen } = useBottomSheetModal({ externalRef: bsRef })
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const onPress = useCallback(() => {

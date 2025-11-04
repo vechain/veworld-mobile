@@ -4,8 +4,8 @@ import AddressUtils from "../AddressUtils"
 import { ERROR_EVENTS } from "~Constants"
 
 type Vns = {
-    name?: string | undefined
-    address?: string | undefined
+    name?: string
+    address?: string
 }
 
 export const rootAlias = "Root Account"

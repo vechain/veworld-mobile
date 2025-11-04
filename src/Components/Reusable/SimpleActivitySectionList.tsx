@@ -62,19 +62,17 @@ export const SimpleActivitySectionList = ({ activities, onActivityPress, content
     const addItemToSection = useCallback((sections: ActivitySection[], activity: Activity, sectionName: string) => {
         const sectionExist = sections.find(section => section.title === sectionName)
 
-        if (!sectionExist) {
-            sections.push({
-                title: sectionName,
-                data: [activity],
-            })
-        } else {
+        if (sectionExist) {
             const itemExist = sectionExist.data.find(item => item.id === activity.id)
-
-            if (!itemExist) {
-                sectionExist.data.push(activity)
-            }
+            if (itemExist) return sections
+            sectionExist.data.push(activity)
+            return sections
         }
 
+        sections.push({
+            title: sectionName,
+            data: [activity],
+        })
         return sections
     }, [])
 
@@ -140,17 +138,14 @@ export const SimpleActivitySectionList = ({ activities, onActivityPress, content
 
     const renderItem = useCallback(
         ({ item: activity }: SectionListRenderItemInfo<Activity, ActivitySection>) => {
-            return (
-                <>
-                    <ActivityItemRenderer activity={activity} onPress={onActivityPress} />
-                </>
-            )
+            return <ActivityItemRenderer activity={activity} onPress={onActivityPress} />
         },
         [onActivityPress],
     )
 
     const keyExtractor = useCallback(
         (item: Activity) => {
+            //This needs to be done like this to rerender separators (it's a bug on the RN side)
             return `${item.id} - ${sections.length}`
         },
         [sections.length],
