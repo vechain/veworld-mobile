@@ -23,6 +23,9 @@ const SUPPORTED_CHART_TOKENS = new Set(Object.keys(getCoinGeckoIdBySymbol))
 
 export const AssetDetailScreenSheet = ({ route }: Props) => {
     const { token } = route.params
+
+    const [selectedItem, setSelectedItem] = useState(ASSET_CHART_PERIODS[0])
+
     const { styles, theme } = useThemedStyles(baseStyles)
     const currency = useAppSelector(selectCurrency)
 
@@ -34,11 +37,9 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
     const { data: chartData } = useSmartMarketChart({
         id: hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
         vs_currency: currency,
-        days: 1,
+        days: selectedItem.days,
         placeholderData: DEFAULT_LINE_CHART_DATA,
     })
-
-    const [selectedItem, setSelectedItem] = useState(ASSET_CHART_PERIODS[0])
 
     return (
         <AssetDetailScreenWrapper>

@@ -17,7 +17,6 @@ export const ASSET_CHART_PERIODS: AssetChartPeriod[] = [
     { days: 30, label: "1M" },
     { days: 180, label: "6M" },
     { days: 365, label: "1Y" },
-    { days: 365 * 10, label: "All" },
 ]
 
 type Props = {

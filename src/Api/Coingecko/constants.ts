@@ -12,6 +12,7 @@ export const marketChartTimeframes: MarketChartTimeFrame[] = [
     { label: "1M", value: 30, interval: "daily" },
     { label: "3M", value: 90, interval: "daily" },
     { label: "6M", value: 180, interval: "daily" },
+    { label: "1Y", value: 365, interval: "daily" },
 ]
 
 // Vechain tokens
