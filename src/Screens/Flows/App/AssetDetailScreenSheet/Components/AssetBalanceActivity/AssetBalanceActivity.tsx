@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native"
 import { BaseSimpleTabs, BaseView } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { useAccountTokenActivities } from "~Hooks/useAccountTokenActivities"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { ActivityTab } from "./ActivityTab"
@@ -16,6 +17,13 @@ export const AssetBalanceActivity = ({ token }: { token: FungibleTokenWithBalanc
     const [selectedTab, setSelectedTab] = useState<(typeof TABS)[number]>("BALANCE")
 
     const labels = useMemo(() => [LL.TOKEN_DETAIL_BALANCE_TAB(), LL.TOKEN_DETAIL_ACTIVITY_TAB()], [LL])
+
+    const { data, isLoading } = useAccountTokenActivities(token)
+
+    const disabledKeys = useMemo<(typeof TABS)[number][]>(() => {
+        if (!data?.data?.length && !isLoading) return ["ACTIVITY"]
+        return []
+    }, [data?.data?.length, isLoading])
 
     return (
         <BaseView
@@ -32,6 +40,7 @@ export const AssetBalanceActivity = ({ token }: { token: FungibleTokenWithBalanc
                 setSelectedKey={setSelectedTab}
                 rootStyle={styles.tabsRoot}
                 innerContainerStyle={styles.tabsInner}
+                disabledKeys={disabledKeys}
             />
             {selectedTab === "BALANCE" && <BalanceTab token={token} />}
             {selectedTab === "ACTIVITY" && <ActivityTab token={token} />}
