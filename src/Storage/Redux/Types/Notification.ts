@@ -10,8 +10,6 @@ export interface Registration {
     state: RegistrationState
     stateTransitionedTime: number
     lastSuccessfulSync?: number
-    consecutiveFailures: number
-    lastError?: string
 }
 
 export interface NotificationState {

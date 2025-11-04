@@ -1,7 +1,6 @@
 // useNotificationSync.ts
 import { useEffect, useMemo } from "react"
 import { OneSignal } from "react-native-onesignal"
-import { NETWORK_TYPE } from "~Model"
 import {
     removeRegistrations,
     upsertRegistrations,
@@ -14,45 +13,16 @@ import { Registration, RegistrationState } from "~Storage/Redux/Types"
 import { AccountUtils, error, info } from "~Utils"
 import HexUtils from "~Utils/HexUtils"
 import { ERROR_EVENTS } from "../../Constants"
-
-type RegistrationOperation = "REGISTER" | "UNREGISTER"
-
-interface NotificationAPIResponse {
-    failed: string[] // addresses that failed server-side
-}
-
+import { NotificationRegistrationClient } from "../../Networking/NotificationCenter/NotificationRegistrationClient"
 interface RegistrationPlan {
     toRegister: Registration[]
     toUnregister: Registration[]
 }
 
-interface RegistrationResult {
-    address: string
-    operation: RegistrationOperation
-    success: boolean
-    error?: string
-    timestamp: number
-}
-
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
 const BATCH_SIZE = 5
-const MAX_RETRIES = 3
 
 const NOTIFICATION_CENTER_EVENT = ERROR_EVENTS.NOTIFICATION_CENTER
-
-const chunkArray = <T>(array: T[], size: number): T[][] => {
-    const chunks: T[][] = []
-    for (let i = 0; i < array.length; i += size) chunks.push(array.slice(i, i + size))
-    return chunks
-}
-
-const isRetryableError = (err: any): boolean => {
-    if (err?.response) {
-        const status = err.response.status
-        return status >= 500 && status < 600
-    }
-    return err?.message?.toLowerCase().includes("network") || err?.code === "ECONNABORTED" || !err?.response
-}
 
 const createRegistration = (address: string, state: RegistrationState, lastSuccessfulSync?: number): Registration => {
     return {

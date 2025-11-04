@@ -1,6 +1,10 @@
 import { NETWORK_TYPE } from "~Model"
 import { requestFromEndpoint } from "~Networking/API/Helpers"
 
+interface NotificationAPIResponse {
+    failed: string[] // Array of addresses that failed
+}
+
 export const NOTIFICATION_CENTER_BASE_URL = {
     [NETWORK_TYPE.MAIN]: process.env.NOTIFICATION_CENTER_REGISTER_PROD,
     [NETWORK_TYPE.TEST]: process.env.NOTIFICATION_CENTER_REGISTER_DEV,
@@ -69,7 +73,7 @@ export const registerPushNotification = ({
     networkType,
     walletAddresses,
     subscriptionId,
-}: RegisterPushNotificationRequest) =>
+}: RegisterPushNotificationRequest): Promise<NotificationAPIResponse> =>
     executeIfValidNetwork(networkType, "/api/v1/push-registrations", (url, appId) => {
         const payload: RegisterPushNotificationPayload = {
             walletAddresses,
@@ -80,7 +84,7 @@ export const registerPushNotification = ({
             },
         }
 
-        return requestFromEndpoint<void>({
+        return requestFromEndpoint<NotificationAPIResponse>({
             url,
             data: payload,
             method: "POST",
@@ -91,7 +95,7 @@ export const unregisterPushNotification = ({
     networkType,
     walletAddresses,
     subscriptionId,
-}: UnregisterPushNotificationRequest) =>
+}: UnregisterPushNotificationRequest): Promise<NotificationAPIResponse> =>
     executeIfValidNetwork(networkType, "/api/v1/push-registrations", (url, appId) => {
         const payload: UnregisterPushNotificationPayload = {
             walletAddresses,
@@ -102,7 +106,7 @@ export const unregisterPushNotification = ({
             },
         }
 
-        return requestFromEndpoint<void>({
+        return requestFromEndpoint<NotificationAPIResponse>({
             url,
             data: payload,
             method: "DELETE",
