@@ -26,7 +26,7 @@ export const AddTokensCard = () => {
 
     return isNewUserWithNoTokens ? (
         <BaseView style={styles.root}>
-            <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}>
+            <BaseText typographyFont="caption" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}>
                 {LL.BALANCE_TAB_NO_TOKENS()}
             </BaseText>
 

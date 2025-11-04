@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
-import {
+import Animated, {
+    AnimatedRef,
     interpolate,
     interpolateColor,
     useAnimatedStyle,
@@ -9,12 +10,15 @@ import {
 } from "react-native-reanimated"
 import { useTheme } from "~Hooks"
 import { ANIMATION_TIMING, CONTENT_TIMING_CONFIG, PRESS_SPRING_CONFIG, SMOOTH_EASING } from "../constants"
+import { VbdDApp } from "~Model"
 
 interface UseX2EAppAnimationProps {
     isDefaultVisible?: boolean
     itemId?: string
     isOpen?: boolean
     onToggleOpen?: (itemId: string) => void
+    scrollRef: AnimatedRef<Animated.FlatList<VbdDApp>>
+    index: number
 }
 
 export const useX2EAppAnimation = ({
@@ -22,6 +26,8 @@ export const useX2EAppAnimation = ({
     itemId,
     isOpen,
     onToggleOpen,
+    scrollRef,
+    index,
 }: UseX2EAppAnimationProps) => {
     const useExternalState = itemId !== undefined && isOpen !== undefined && onToggleOpen !== undefined
     const theme = useTheme()
@@ -43,11 +49,13 @@ export const useX2EAppAnimation = ({
                 easing: SMOOTH_EASING,
             })
 
-            if (isOpen) {
-                setTimeout(() => {}, ANIMATION_TIMING.contentFadeDelay)
-            }
+            //Auto scroll to the selected index.
+            if (isOpen)
+                setTimeout(() => {
+                    scrollRef.current?.scrollToIndex({ animated: true, index, viewPosition: 0 })
+                }, 350)
         }
-    }, [isOpen, useExternalState, animationProgress])
+    }, [isOpen, useExternalState, animationProgress, scrollRef, index])
 
     const toggleDetails = useCallback(() => {
         if (useExternalState) {

@@ -302,10 +302,23 @@ jest.mock("~Hooks/useFetchFeaturedDApps/useVeBetterDaoDapps", () => ({
 
 jest.mock("@tanstack/react-query", () => ({
     ...jest.requireActual("@tanstack/react-query"),
-    useQuery: (...args: any[]) =>
-        jest.requireActual("@tanstack/react-query").useQuery({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
-    useInfiniteQuery: (...args: any[]) =>
-        jest
-            .requireActual("@tanstack/react-query")
-            .useInfiniteQuery({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+    useQuery: jest
+        .fn()
+        .mockImplementation((...args: any[]) =>
+            jest.requireActual("@tanstack/react-query").useQuery({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+        ),
+    useInfiniteQuery: jest
+        .fn()
+        .mockImplementation((...args: any[]) =>
+            jest
+                .requireActual("@tanstack/react-query")
+                .useInfiniteQuery({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+        ),
+    queryOptions: jest
+        .fn()
+        .mockImplementation((...args: any[]) =>
+            jest
+                .requireActual("@tanstack/react-query")
+                .queryOptions({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+        ),
 }))

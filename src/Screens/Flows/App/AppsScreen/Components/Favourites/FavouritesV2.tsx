@@ -94,15 +94,13 @@ export const FavouritesV2 = React.memo(
                         <BaseTouchable action={onActionLabelPress}>
                             <BaseView flexDirection="row">
                                 <BaseText
-                                    typographyFont="buttonMedium"
+                                    typographyFont="captionMedium"
                                     mx={2}
                                     color={theme.isDark ? COLORS.GREY_300 : COLORS.DARK_PURPLE}>
                                     {LL.DISCOVER_SEE_ALL_BOOKMARKS()}
                                 </BaseText>
                                 <BaseIcon
                                     name="icon-arrow-right"
-                                    //This should be 12, but given that we're increasing the font size of the label
-                                    //It makes sense to have it set as 14
                                     size={14}
                                     color={theme.isDark ? COLORS.GREY_300 : COLORS.DARK_PURPLE}
                                 />

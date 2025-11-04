@@ -4,6 +4,7 @@ import { BaseSpacer, BaseText, BaseTouchable, BaseView, DAppIcon } from "~Compon
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useAppLogo } from "~Hooks/useAppLogo"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     dapp: DiscoveryDApp
@@ -35,7 +36,7 @@ export const SwapDAppCard = ({ dapp, onDAppPress }: Props) => {
                         <BaseText
                             ellipsizeMode="tail"
                             numberOfLines={1}
-                            typographyFont="caption"
+                            typographyFont="captionRegular"
                             color={theme.colors.assetDetailsCard.text}>
                             {dapp.desc || dapp.href}
                         </BaseText>
@@ -70,9 +71,9 @@ const baseStyles = () =>
         },
         nameText: {
             fontWeight: "bold",
-            fontSize: 16,
+            fontSize: FontUtils.font(14),
         },
         description: {
-            fontSize: 12,
+            fontSize: FontUtils.font(12),
         },
     })

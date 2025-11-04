@@ -57,6 +57,19 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
         })
     }, [queryClient, selectedAccountAddress, selectedNetwork.type])
 
+    const invalidateCollectiblesQueries = useCallback(async () => {
+        await queryClient.invalidateQueries({
+            predicate(query) {
+                const queryKey = query.queryKey as string[]
+                if (!["COLLECTIBLES"].includes(queryKey[0])) return false
+                if (queryKey.length < 4) return false
+                if (queryKey[2] !== selectedNetwork.genesis.id) return false
+                if (!AddressUtils.compareAddresses(queryKey[3], selectedAccountAddress!)) return false
+                return true
+            },
+        })
+    }, [queryClient, selectedAccountAddress, selectedNetwork.genesis.id])
+
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
 
@@ -65,10 +78,17 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
             invalidateBalanceQueries(),
             invalidateTokens(),
             invalidateActivity(),
+            invalidateCollectiblesQueries(),
         ])
 
         setRefreshing(false)
-    }, [invalidateActivity, invalidateBalanceQueries, invalidateStargateQueries, invalidateTokens])
+    }, [
+        invalidateActivity,
+        invalidateBalanceQueries,
+        invalidateCollectiblesQueries,
+        invalidateStargateQueries,
+        invalidateTokens,
+    ])
     return (
         <RefreshControl
             onRefresh={onRefresh}

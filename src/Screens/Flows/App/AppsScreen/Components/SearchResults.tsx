@@ -119,7 +119,7 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
                         size="sm"
                         style={styles.clearButton}
                         textColor={theme.colors.history.button.text}
-                        typographyFont="bodySemiBold"
+                        typographyFont="captionSemiBold"
                         px={12}
                         py={4}>
                         {LL.BROWSER_HISTORY_CLEAR()}
@@ -131,7 +131,7 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
                 <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={12}>
                     <BaseText
                         testID={`search-results${isExactMatch ? "-found" : ""}-title`}
-                        typographyFont="bodySemiBold"
+                        typographyFont="captionMedium"
                         color={theme.colors.history.titleColor}>
                         {isExactMatch ? LL.BROWSER_HISTORY_FOUND() : LL.BROWSER_HISTORY_RESULTS()}
                     </BaseText>
@@ -147,7 +147,10 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
                             size={32}
                             color={theme.colors.history.emptyStateIcon.color}
                         />
-                        <BaseText testID="search-results-empty-title" color={theme.colors.history.emptyStateColor}>
+                        <BaseText
+                            testID="search-results-empty-title"
+                            typographyFont="body"
+                            color={theme.colors.history.emptyStateColor}>
                             {LL.BROWSER_HISTORY_EMPTY()}
                         </BaseText>
                     </BaseView>

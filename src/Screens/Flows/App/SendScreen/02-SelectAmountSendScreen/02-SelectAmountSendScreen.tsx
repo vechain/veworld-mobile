@@ -99,7 +99,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * Example "147031782362332055578.377092605442914032"
      */
     const fiatTotalBalance = useMemo(
-        () => BigNutils().toCurrencyConversion(tokenTotalToHuman.toString, exchangeRate),
+        () => BigNutils().toCurrencyConversion(tokenTotalToHuman.toString, exchangeRate ?? 0),
         [exchangeRate, tokenTotalToHuman],
     )
 
@@ -107,11 +107,16 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * FIAT selected balance calculated fron TOKEN input in human readable format (correct value is when TOKEN is active)
      * Example "53.54"
      */
-    const fiatHumanAmount = useMemo(() => BigNutils().toCurrencyConversion(input, exchangeRate), [exchangeRate, input])
+    const fiatHumanAmount = useMemo(
+        () => BigNutils().toCurrencyConversion(input, exchangeRate ?? 0),
+        [exchangeRate, input],
+    )
 
     const computeconvertedAmountInFooter = useMemo(() => {
         if (isInputInFiat) {
-            return BigNutils().toTokenConversion(input, exchangeRate).decimals(8).toString
+            return BigNutils()
+                .toTokenConversion(input, exchangeRate ?? 0)
+                .decimals(8).toString
         } else {
             return ""
         }
@@ -164,7 +169,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
             if (!isVTHO.current) {
                 const controlValue = isInputInFiat
-                    ? BigNutils().toTokenConversion(_newValue, exchangeRate)
+                    ? BigNutils().toTokenConversion(_newValue, exchangeRate ?? 0)
                     : BigNutils(_newValue).addTrailingZeros(token.decimals).toHuman(token.decimals)
 
                 const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(token.decimals)
@@ -191,7 +196,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
                 timer.current = setTimeout(async () => {
                     const controlValue = isInputInFiat
-                        ? BigNutils().toTokenConversion(_newValue, exchangeRate).decimals(token.decimals)
+                        ? BigNutils()
+                              .toTokenConversion(_newValue, exchangeRate ?? 0)
+                              .decimals(token.decimals)
                         : BigNutils(_newValue).addTrailingZeros(token.decimals).toHuman(token.decimals)
 
                     const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(token.decimals)

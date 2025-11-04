@@ -8,6 +8,7 @@ import { BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import FontUtils from "~Utils/FontUtils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export const VeBetterDaoBanner = () => {
@@ -68,7 +69,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         text: {
             fontFamily: "Rubik",
-            fontSize: 15,
+            fontSize: FontUtils.font(13),
             color: theme.colors.veBetterDaoBanner.text,
         },
     })

@@ -54,7 +54,7 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
     if (keys.length !== labels.length) throw new Error("Keys and Labels should have the same length")
     return (
         <BaseView style={[styles.root, rootStyle]} flexDirection="row" justifyContent="space-between">
-            <BaseView flexDirection="row">
+            <BaseView flexDirection="row" flex={1} gap={8} overflow="scroll">
                 {keys.map((key, index) => {
                     const isSelected = selectedKey === key
                     const textColor = getTextColor(isSelected)
@@ -86,7 +86,6 @@ const baseStyles = (theme: ColorThemeType) =>
         root: {
             backgroundColor: COLORS.TRANSPARENT,
             position: "relative",
-            borderRadius: 8,
             gap: 8,
         },
         tab: {
@@ -102,5 +101,6 @@ const baseStyles = (theme: ColorThemeType) =>
             height: 2,
             zIndex: -1,
             bottom: 0,
+            borderRadius: 0,
         },
     })

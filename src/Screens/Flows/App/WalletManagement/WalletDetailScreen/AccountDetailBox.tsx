@@ -82,7 +82,12 @@ export const AccountDetailBox: React.FC<Props> = memo(
                 {/* Actions */}
                 <BaseView flexDirection="row" style={styles.rightSubContainer}>
                     {canClaimUsername && (
-                        <BaseButton title={LL.BTN_CLAIM()} action={onClaimPress} style={styles.claimBtn} />
+                        <BaseButton
+                            title={LL.BTN_CLAIM()}
+                            action={onClaimPress}
+                            style={styles.claimBtn}
+                            typographyFont="captionSemiBold"
+                        />
                     )}
                     {isEditable && (
                         <BaseTouchable action={() => onEditPress?.(account)}>

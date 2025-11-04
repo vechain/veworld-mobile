@@ -16,6 +16,7 @@ import { useI18nContext } from "~i18n"
 import { PlatformUtils, StringUtils } from "~Utils"
 import { ReceiveTab } from "./ReceiveTab"
 import { ScanTab } from "./ScanTab"
+import FontUtils from "~Utils/FontUtils"
 
 const SEND_RECEIVE_BS_TABS = ["scan", "receive"] as const
 export type SendReceiveBsTab = (typeof SEND_RECEIVE_BS_TABS)[number]
@@ -185,7 +186,7 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
                                     bg={COLORS.BALANCE_BACKGROUND_95}>
                                     <WalletConnectIcon color={COLORS.WHITE} />
                                     <BaseText
-                                        typographyFont="captionMedium"
+                                        typographyFont="smallCaptionMedium"
                                         color={COLORS.WHITE}
                                         testID="SEND_RECEIVE_BS_WC_SUPPORTED">
                                         {LL.WALLET_CONNECT_SUPPORTED()}
@@ -215,6 +216,7 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
                             containerBackgroundColor={COLORS.PURPLE_DISABLED}
                             selectedTextColor={COLORS.WHITE}
                             unselectedTextColor={COLORS.WHITE}
+                            typographyFont="bodySemiBold"
                         />
                     )}
 
@@ -269,7 +271,7 @@ const baseStyles = () =>
             verticalAlign: "middle",
             alignSelf: "center",
             color: COLORS.WHITE,
-            fontSize: 16,
+            fontSize: FontUtils.font(16),
             fontWeight: "600",
             lineHeight: 24,
             textAlign: "center",

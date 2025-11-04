@@ -113,7 +113,11 @@ export const SettingsScreen = () => {
             noMargin
             fixedHeader={
                 <BaseView style={HeaderStyleV2} px={16}>
-                    <HeaderTitle title={LL.TITLE_MORE_OPTIONS()} testID="settings-screen" />
+                    <HeaderTitle
+                        title={LL.TITLE_MORE_OPTIONS()}
+                        testID="settings-screen"
+                        typographyFont="headerTitle"
+                    />
                 </BaseView>
             }
             body={

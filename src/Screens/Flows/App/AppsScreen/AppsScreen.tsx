@@ -73,6 +73,7 @@ export const AppsScreen = () => {
                         title={LL.APPS_SCREEN_TITLE()}
                         leftIconName="icon-apps"
                         testID="AppsScreen_HeaderTitle"
+                        typographyFont="headerTitle"
                     />
                     <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                         <BaseSpacer width={8} />

@@ -21,7 +21,7 @@ export const CollectiblesEmptyCard = () => {
                     dapp={item}
                     showDappTitle
                     iconSize={72}
-                    typographyFont="captionMedium"
+                    typographyFont="smallCaptionMedium"
                     onPress={() => {
                         navigateToBrowser(item.href)
                     }}
@@ -54,7 +54,7 @@ export const CollectiblesEmptyCard = () => {
                     </BaseView>
                     <BaseText
                         color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}
-                        typographyFont="body"
+                        typographyFont="bodyMedium"
                         align="center">
                         {LL.COLLECTIBLES_EMPTY_CARD_DESCRIPTION()}
                     </BaseText>
@@ -113,12 +113,6 @@ const baseStyles = (theme: ColorThemeType) =>
             position: "relative",
             flexDirection: "column",
             borderRadius: 16,
-        },
-        actionsText: {
-            fontWeight: 600,
-            fontSize: 40,
-            fontFamily: "Inter-SemiBold",
-            lineHeight: 40,
         },
         button: {
             justifyContent: "center",

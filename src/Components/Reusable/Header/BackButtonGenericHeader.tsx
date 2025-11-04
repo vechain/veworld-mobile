@@ -46,7 +46,7 @@ export const BackButtonGenericHeader = ({
 
     return (
         <BaseView {...otherProps}>
-            <BaseView flexDirection="row" w={100} style={HeaderStyle} justifyContent="space-between">
+            <BaseView flexDirection="row" w={100} style={HeaderStyle} justifyContent="space-between" gap={16}>
                 <BaseIcon
                     haptics="Light"
                     style={[iconStyle]}

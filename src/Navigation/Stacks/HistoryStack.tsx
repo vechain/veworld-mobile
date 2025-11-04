@@ -1,6 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack"
 import { default as React } from "react"
-import { useFeatureFlags } from "~Components"
 import { Activity, Device, FungibleToken, TransactionOutcomes } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
@@ -40,15 +39,13 @@ export type HistoryStackParamList = {
         url: string
         ul?: boolean
         returnScreen?:
-            | Routes.DISCOVER
             | Routes.SETTINGS
             | Routes.HOME
             | Routes.ACTIVITY_STAKING
             | Routes.APPS
             | Routes.SWAP
+            | Routes.COLLECTIBLES_COLLECTION_DETAILS
     }
-    [Routes.DISCOVER_TABS_MANAGER]: undefined
-    [Routes.DISCOVER_SEARCH]: undefined
     [Routes.APPS_TABS_MANAGER]: undefined
     [Routes.APPS_SEARCH]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
@@ -58,11 +55,19 @@ export type HistoryStackParamList = {
 const { Navigator, Screen } = createStackNavigator<HistoryStackParamList>()
 
 export const HistoryStack = () => {
-    const { betterWorldFeature } = useFeatureFlags()
     return (
         <Navigator id="HistoryStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Screen name={Routes.HISTORY} component={ActivityScreen} options={{ headerShown: false }} />
-            <Screen name={Routes.ACTIVITY_DETAILS} component={ActivityDetailsScreen} options={{ headerShown: false }} />
+            <Screen
+                name={Routes.ACTIVITY_DETAILS}
+                component={ActivityDetailsScreen}
+                options={{
+                    headerShown: false,
+                    // Android-specific fix: Keeps HISTORY screen mounted to prevent Tab Navigator from unmounting
+                    // This preserves tab state when navigating to/from activity details
+                    detachPreviousScreen: isIOS() ? undefined : false,
+                }}
+            />
             <Screen
                 name={Routes.BROWSER}
                 component={InAppBrowser}
@@ -75,7 +80,7 @@ export const HistoryStack = () => {
                 }}
             />
             <Screen
-                name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_TABS_MANAGER : Routes.DISCOVER_TABS_MANAGER}
+                name={Routes.APPS_TABS_MANAGER}
                 component={TabsManagerScreen}
                 options={{
                     headerShown: false,
@@ -86,7 +91,7 @@ export const HistoryStack = () => {
                 }}
             />
             <Screen
-                name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_SEARCH}
+                name={Routes.APPS_SEARCH}
                 component={AppsSearchScreen}
                 options={{
                     headerShown: false,

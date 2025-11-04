@@ -24,9 +24,9 @@ export const ContactCard = memo(({ contact, onPress, selected, containerStyle }:
             selected={selected}
             testID={`${contact.alias}-contact-box`}>
             <BaseView flexDirection="column">
-                <BaseText typographyFont="button">{contact.alias}</BaseText>
+                <BaseText typographyFont="bodySemiBold">{contact.alias}</BaseText>
                 <BaseSpacer height={4} />
-                <BaseText fontSize={10} typographyFont="smallCaptionRegular">
+                <BaseText fontSize={10} typographyFont="captionRegular">
                     {vnsName || vnsAddress}
                 </BaseText>
             </BaseView>

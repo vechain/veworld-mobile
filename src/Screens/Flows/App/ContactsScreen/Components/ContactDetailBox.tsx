@@ -20,9 +20,9 @@ export const ContactDetailBox: React.FC<Props> = memo(({ contact }) => {
     return (
         <BaseCard testID={`${contact.alias}-contact-box`} style={styles.card}>
             <BaseView flexDirection="column">
-                <BaseText typographyFont="button">{contact.alias}</BaseText>
+                <BaseText typographyFont="bodySemiBold">{contact.alias}</BaseText>
                 <BaseSpacer height={4} />
-                <BaseText fontSize={10} typographyFont="smallCaptionRegular">
+                <BaseText fontSize={10} typographyFont="captionRegular">
                     {domain || AddressUtils.humanAddress(address || contact.address)}
                 </BaseText>
             </BaseView>

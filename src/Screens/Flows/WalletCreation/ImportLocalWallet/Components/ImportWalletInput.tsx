@@ -4,6 +4,7 @@ import React from "react"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { typography } from "~Constants/Theme"
+import FontUtils from "~Utils/FontUtils"
 
 const { defaults: defaultTypography } = typography
 type Props = {
@@ -45,7 +46,7 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             paddingHorizontal: 10,
             height: 180,
             lineHeight: 28,
-            fontSize: defaultTypography.bodyAccent.fontSize,
+            fontSize: FontUtils.font(defaultTypography.bodyAccent.fontSize),
             fontFamily: defaultTypography.bodyAccent.fontFamily,
         },
     })

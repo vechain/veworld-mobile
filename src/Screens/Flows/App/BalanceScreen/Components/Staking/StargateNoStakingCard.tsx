@@ -10,7 +10,9 @@ import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { useBrowserNavigation } from "~Hooks/useBrowserSearch"
 import { useStargateStats } from "~Hooks/useStargateStats"
 import { useI18nContext } from "~i18n"
-import { BigNutils } from "~Utils"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils, BigNutils } from "~Utils"
+import FontUtils from "~Utils/FontUtils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { StargateStatsCard } from "./StargateStatsCard"
 
@@ -21,6 +23,7 @@ export const StargateNoStakingCard = () => {
     const { navigateToBrowser } = useBrowserNavigation()
 
     const { data: stargateStats } = useStargateStats()
+    const account = useAppSelector(selectSelectedAccount)
 
     const formattedStargateStats = useMemo(() => {
         return {
@@ -95,29 +98,33 @@ export const StargateNoStakingCard = () => {
                 </BaseView>
             </BaseView>
 
-            <BaseSpacer height={16} />
+            {!AccountUtils.isObservedAccount(account) && (
+                <>
+                    <BaseSpacer height={16} />
 
-            <BaseButton
-                testID="STARGATE_START_STAKING_BUTTON"
-                action={() => {
-                    navigateToBrowser(STARGATE_DAPP_URL_HOME_BANNER)
-                }}
-                variant="solid"
-                rightIcon={
-                    <BaseIcon
-                        name="icon-arrow-right"
-                        color={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
-                        size={20}
-                    />
-                }
-                typographyFont="bodySemiBold"
-                w={100}
-                style={styles.button}
-                textColor={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
-                bgColor={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE}
-                selfAlign="center">
-                {LL.STARGATE_START_STAKING()}
-            </BaseButton>
+                    <BaseButton
+                        testID="STARGATE_START_STAKING_BUTTON"
+                        action={() => {
+                            navigateToBrowser(STARGATE_DAPP_URL_HOME_BANNER)
+                        }}
+                        variant="solid"
+                        rightIcon={
+                            <BaseIcon
+                                name="icon-arrow-right"
+                                color={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
+                                size={20}
+                            />
+                        }
+                        typographyFont="bodySemiBold"
+                        w={100}
+                        style={styles.button}
+                        textColor={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
+                        bgColor={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE}
+                        selfAlign="center">
+                        {LL.STARGATE_START_STAKING()}
+                    </BaseButton>
+                </>
+            )}
         </BaseView>
     )
 }
@@ -133,12 +140,6 @@ const baseStyles = (theme: ColorThemeType) =>
             flexDirection: "column",
             borderRadius: 16,
         },
-        actionsText: {
-            fontWeight: 600,
-            fontSize: 40,
-            fontFamily: "Inter-SemiBold",
-            lineHeight: 40,
-        },
         strongIOS: {
             fontWeight: "600",
             fontFamily: "Inter-SemiBold",
@@ -152,7 +153,7 @@ const baseStyles = (theme: ColorThemeType) =>
             marginBottom: 0,
         },
         text: {
-            fontSize: 14,
+            fontSize: FontUtils.font(14),
             flex: 1,
             fontFamily: "Inter-Regular",
             lineHeight: 20,

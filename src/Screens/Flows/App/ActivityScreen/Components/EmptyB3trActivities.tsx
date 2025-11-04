@@ -24,15 +24,26 @@ export const EmptyB3trActivities = ({ onPress }: EmptyB3trActivitiesProps) => {
                 <VeBetterSVG />
             </BaseView>
             <BaseSpacer height={24} />
-            <BaseText style={styles.description} typographyFont="bodySemiBold" color={theme.colors.text}>
+            <BaseText
+                style={styles.description}
+                typographyFont="captionSemiBold"
+                color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_800}>
                 {LL.ACTIVITY_B3TR_EMPTY_LABEL()}
             </BaseText>
             <BaseSpacer height={16} />
-            <BaseText style={styles.description} typographyFont="subSubTitleLight" color={theme.colors.text}>
+            <BaseText
+                style={styles.description}
+                typographyFont="captionRegular"
+                color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}>
                 {LL.ACTIVITY_B3TR_EMPTY_DESCRIPTION()}
             </BaseText>
             <BaseSpacer height={24} />
-            <BaseButton variant="solid" title={LL.ACTIVITY_B3TR_EMPTY_BUTTON()} action={onPress} />
+            <BaseButton
+                variant="solid"
+                title={LL.ACTIVITY_B3TR_EMPTY_BUTTON()}
+                action={onPress}
+                typographyFont="bodySemiBold"
+            />
         </BaseView>
     )
 }

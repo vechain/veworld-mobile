@@ -100,11 +100,12 @@ const baseStyle = () =>
             paddingVertical: 8,
             borderRadius: 20,
             alignItems: "center",
+            justifyContent: "center",
         },
         animatedBackground: {
             position: "absolute",
-            top: 16,
-            height: 36,
+            top: 18,
+            height: 32,
             borderRadius: 20,
         },
     })

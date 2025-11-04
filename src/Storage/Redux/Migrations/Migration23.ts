@@ -56,9 +56,13 @@ export const Migration23 = (state: PersistedState): PersistedState => {
     )
 
     const newState: BalanceState = {
+        //@ts-expect-error
         mainnet: Object.fromEntries(Object.entries(currentState.mainnet).map(mainnetMapFn)),
+        //@ts-expect-error
         testnet: Object.fromEntries(Object.entries(currentState.testnet).map(testnetMapFn)),
+        //@ts-expect-error
         solo: Object.fromEntries(Object.entries(currentState.solo).map(mapFn())),
+        //@ts-expect-error
         other: Object.fromEntries(Object.entries(currentState.other).map(mapFn())),
     }
 

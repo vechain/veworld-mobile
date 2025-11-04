@@ -21,7 +21,7 @@ describe("ChartUtils", () => {
 
     describe("downsampleData", () => {
         it("should return undefined if no data is available", () => {
-            expect(downsampleData()).toBeUndefined()
+            expect(downsampleData(undefined)).toBeUndefined()
         })
 
         it("should return correct values when data is available", () => {

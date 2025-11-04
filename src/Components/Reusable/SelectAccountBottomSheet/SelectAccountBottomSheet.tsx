@@ -67,7 +67,7 @@ const SectionSeparatorComponent = (props: BaseSectionListSeparatorProps) => {
 const SectionHeaderTitle = ({ children }: PropsWithChildren) => {
     const theme = useTheme()
     return (
-        <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
+        <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
             {children}
         </BaseText>
     )
@@ -189,9 +189,9 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                                 size={20}
                                 color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
                             />
-                            <BaseText typographyFont="subTitleBold">{LL.SELECT_ACCOUNT_TITLE()}</BaseText>
+                            <BaseText typographyFont="subTitleSemiBold">{LL.SELECT_ACCOUNT_TITLE()}</BaseText>
                         </BaseView>
-                        <BaseText typographyFont="body" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                        <BaseText typographyFont="caption" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
                             {LL.SELECT_ACCOUNT_DESCRIPTION()}
                         </BaseText>
                     </BaseView>

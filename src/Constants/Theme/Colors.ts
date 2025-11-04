@@ -335,12 +335,25 @@ export type Colors = {
         }
         closeButton: string
     }
+    activitySectionSeparator: {
+        text: string
+    }
+    collectibleDetailedCard: {
+        title: string
+        description: string
+        address: string
+        buttonGroup: {
+            background: string
+            text: string
+        }
+    }
 }
 
 export enum COLORS {
     TRANSPARENT = "transparent",
     WHITE = "#FFFFFF",
     BLACK = "#000000",
+    BLACK_RGBA_30 = "rgba(0, 0, 0, 0.3)",
     WHITE_DISABLED = "rgba(255, 255, 255, 0.7)",
     GRAY = "#A6A6A6",
     LIGHT_GRAY = "#f2f2f7",
@@ -444,6 +457,7 @@ export enum COLORS {
     WHITE_RGBA_05 = "rgba(255, 255, 255, 0.05)",
     WHITE_RGBA_30 = "rgba(255, 255, 255, 0.30)",
     WHITE_RGBA_50 = "rgba(255, 255, 255, 0.50)",
+    WHITE_RGBA_90 = "rgba(255, 255, 255, 0.90)",
     PURPLE_LABEL = "#B9B5CF",
     PURPLE_LABEL_5 = "rgba(185, 181, 207, 0.05)",
     PURPLE_LABEL_10 = "rgba(185, 181, 207, 0.10)",
@@ -452,6 +466,7 @@ export enum COLORS {
     BALANCE_BACKGROUND_80 = "rgba(29, 23, 58, 0.80)",
     BALANCE_BACKGROUND_95 = "rgba(29, 23, 58, 0.95)",
     BALANCE_BACKGROUND_GRADIENT_END = "#423483",
+    BALANCE_BACKGROUND_GRADIENT_END_50 = "rgba(66, 52, 131, 0.50)",
     // App-level background tokens (do not reuse for non-background surfaces)
     APP_BACKGROUND_LIGHT = "#f2f2f7",
     APP_BACKGROUND_DARK = "#1D173A",
@@ -794,6 +809,18 @@ const light: Colors = {
         },
         closeButton: COLORS.DARK_PURPLE_DISABLED,
     },
+    activitySectionSeparator: {
+        text: COLORS.GREY_600,
+    },
+    collectibleDetailedCard: {
+        title: COLORS.GREY_700,
+        description: COLORS.GREY_500,
+        address: COLORS.PURPLE,
+        buttonGroup: {
+            background: COLORS.GREY_100,
+            text: COLORS.GREY_700,
+        },
+    },
 }
 
 const dark: Colors = {
@@ -1122,7 +1149,7 @@ const dark: Colors = {
     },
     feedbackChip: {
         background: COLORS.PURPLE_DISABLED,
-        text: COLORS.GREEN_50,
+        text: COLORS.GREY_50,
         borderColor: COLORS.PURPLE_LABEL_10,
         icon: {
             success: COLORS.GREEN_200,
@@ -1132,6 +1159,18 @@ const dark: Colors = {
             loading: COLORS.GREY_300,
         },
         closeButton: COLORS.PURPLE_LABEL,
+    },
+    activitySectionSeparator: {
+        text: COLORS.GREY_300,
+    },
+    collectibleDetailedCard: {
+        title: COLORS.GREY_300,
+        description: COLORS.GREY_100,
+        address: COLORS.LIME_GREEN,
+        buttonGroup: {
+            background: COLORS.DARK_PURPLE,
+            text: COLORS.WHITE,
+        },
     },
 }
 

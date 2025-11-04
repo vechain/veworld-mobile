@@ -292,7 +292,6 @@ describe("ActivitySectionList", () => {
                 refreshActivities={jest.fn()}
                 isFetching={false}
                 isRefreshing={false}
-                veBetterDaoDapps={[]}
                 initialNumToRender={100}
             />,
             { wrapper: TestWrapper },

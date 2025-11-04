@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, Text } from "react-native"
 import { TabBar, TabBarIndicator } from "react-native-tab-view"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import FontUtils from "~Utils/FontUtils"
 
 export const ActivityTabBar = ({ state, position, layout, jumpTo, ...tabbarProps }: MaterialTopTabBarProps) => {
     const { styles } = useThemedStyles(baseStyle)
@@ -79,7 +80,8 @@ const baseStyle = (theme: ColorThemeType) =>
             justifyContent: "center",
         },
         label: {
-            fontSize: 14,
+            fontSize: FontUtils.font(14),
+            lineHeight: FontUtils.font(18.2),
             fontWeight: "500",
         },
         selectedLabel: {
