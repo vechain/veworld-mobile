@@ -120,35 +120,38 @@ const _LineChart = ({
     canvasStyle,
 }: LineChartProps) => {
     const [previousGraph, setPreviousGraph] = useState<ReturnType<typeof makeGraph> | null>(null)
+
     const { data, activePointIndex } = useLineChart()
     const { formatLocale } = useFormatFiat()
     const theme = useTheme()
-
-    const previousDataRef = useRef(data)
-
-    const sharedData = useSharedValue(data)
-
-    useEffect(() => {
-        sharedData.value = data
-    }, [data, sharedData])
-
-    useEffect(() => {
-        previousDataRef.current = data
-    }, [data])
-
-    const previousData = previousDataRef.current
-
-    useEffect(() => {
-        if (!previousData) return
-        setPreviousGraph(makeGraph(previousData, width, height, strokeWidth))
-    }, [previousData, width, height, strokeWidth])
-
     const skiaFont = useFont(require("../../../Assets/Fonts/Inter/Inter-SemiBold.ttf"), fontSize)
 
     const { path, points, maxX, minY, maxY, calcXPos, calcYPos, ...rest } = useMemo(
         () => makeGraph(data, width, height, strokeWidth),
         [data, width, height, strokeWidth],
     )
+
+    //Reference to the previous data
+    const previousDataRef = useRef(data)
+    //Shared value to the current data
+    const sharedData = useSharedValue(data)
+    //Previous data
+    const previousData = previousDataRef.current
+
+    useEffect(() => {
+        //Update the shared value to the current data
+        sharedData.value = data
+    }, [data, sharedData])
+
+    useEffect(() => {
+        //Update the previous data reference to the current data
+        previousDataRef.current = data
+    }, [data])
+
+    useEffect(() => {
+        if (!previousData) return
+        setPreviousGraph(makeGraph(previousData, width, height, strokeWidth))
+    }, [previousData, width, height, strokeWidth])
 
     // Initial chartprogress animation
     const progress = useSharedValue(0)
@@ -186,7 +189,6 @@ const _LineChart = ({
         if (!skiaFont) {
             return 0
         }
-
         return skiaFont?.measureText(chipTextData.value).height + CHIP_PADDING_Y * 2
     }, [chipTextData, skiaFont])
 
@@ -242,21 +244,24 @@ const _LineChart = ({
         [points],
     )
 
-    const runOnRN = useCallback(
-        (_s: string, _e: string, _progress: number) => {
-            interpolatedPath.value = interpolatePath(_s, _e)(_progress)
+    //Workaround to interpolate the path between previous and current path into a worklet function
+    const interpolatePathWorklet = useCallback(
+        (_start: string, _end: string, _progress: number) => {
+            interpolatedPath.value = interpolatePath(_start, _end)(_progress)
         },
         [interpolatedPath],
     )
 
+    //Execute the interpolation in a worklet function
     const makeMorph = useCallback(
-        (start: string, end: string, _morphProgress: number) => {
+        (_start: string, _end: string, _morphProgress: number) => {
             "worklet"
-            runOnJS(runOnRN)(start, end, _morphProgress)
+            runOnJS(interpolatePathWorklet)(_start, _end, _morphProgress)
         },
-        [runOnRN],
+        [interpolatePathWorklet],
     )
 
+    //#region Animations
     const pathAnimation = useDerivedValue(() => {
         if (!previousGraph) return path!
         const start = previousGraph.path!
@@ -281,6 +286,7 @@ const _LineChart = ({
         if (!pathAnimation.value || !data) return Skia.RRectXY(Skia.XYWHRect(0, 0, width, height), 16, 16)
         return pathAnimation.value.copy().lineTo(maxX, calcYPos(0)).lineTo(calcXPos(0), calcYPos(0)).close()
     }, [pathAnimation.value, data, width, height, maxX, calcYPos, calcXPos])
+    //#endregion
 
     /**
      * On pan gesture, update the cross hair start and end values
