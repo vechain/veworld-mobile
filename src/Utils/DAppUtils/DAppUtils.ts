@@ -359,6 +359,16 @@ const dispatchExternalAppError = (redirectUrl: string, err: DeepLinkError) => {
     Linking.openURL(`${redirectUrl}?${params.toString()}`)
 }
 
+// Generate stable ID from URL (e.g. "https://app.vechain.org/dashboard" -> "app_vechain_org_dashboard")
+const generateDAppId = (href: string): string => {
+    try {
+        const url = new URL(href)
+        return `${url.hostname}${url.pathname}`.replace(/[^a-z0-9]/gi, "_").toLowerCase()
+    } catch {
+        return href.replace(/[^a-z0-9]/gi, "_").toLowerCase()
+    }
+}
+
 export const DAppUtils = {
     isValidTxMessage,
     isValidCertMessage,
@@ -375,4 +385,5 @@ export const DAppUtils = {
     dispatchInternalError,
     dispatchExternalAppError,
     decodeRequest,
+    generateDAppId,
 }
