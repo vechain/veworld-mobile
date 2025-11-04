@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.9 (2025-11-04)</small>
+
+* build: init ([71278d3](https://github.com/vechain/veworld-mobile/commit/71278d3))
+* 458 token   balanceactivity section (#3493) ([0ae90b6](https://github.com/vechain/veworld-mobile/commit/0ae90b6)), closes [#3493](https://github.com/vechain/veworld-mobile/issues/3493)
+
 ## <small>2.4.8 (2025-11-03)</small>
 
 * build: init ([1fdf5bb](https://github.com/vechain/veworld-mobile/commit/1fdf5bb))
