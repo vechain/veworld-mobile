@@ -111,9 +111,10 @@ type Props = {
      * Whether to change color based on theme
      */
     themed?: boolean
+    testID?: string
 }
 
-export const GlassButtonWithLabel = ({ label, icon, onPress, disabled, size, themed }: Props) => {
+export const GlassButtonWithLabel = ({ label, icon, onPress, disabled, size, themed, testID }: Props) => {
     const theme = useTheme()
     const activeTextColor = useMemo(() => {
         if (!themed || theme.isDark) return COLORS.PURPLE_LABEL
@@ -124,7 +125,7 @@ export const GlassButtonWithLabel = ({ label, icon, onPress, disabled, size, the
         return COLORS.GREY_400
     }, [theme.isDark, themed])
     return (
-        <BaseView flexDirection="column" gap={8} alignItems="center">
+        <BaseView flexDirection="column" gap={8} alignItems="center" testID={testID}>
             <GlassButton icon={icon} onPress={onPress} disabled={disabled} size={size} themed={themed} />
             <BaseText typographyFont="captionSemiBold" color={disabled ? disabledTextColor : activeTextColor}>
                 {label}

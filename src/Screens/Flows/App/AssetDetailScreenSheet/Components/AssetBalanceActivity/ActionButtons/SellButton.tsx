@@ -9,7 +9,8 @@ import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
-import { AccountUtils, BigNutils, PlatformUtils } from "~Utils"
+import { AccountUtils, BigNutils } from "~Utils"
+import PlatformUtils from "~Utils/PlatformUtils"
 
 const useSell = (token: FungibleTokenWithBalance) => {
     const track = useAnalyticTracking()
@@ -46,7 +47,14 @@ const SellButton = ({ token }: { token: FungibleTokenWithBalance }) => {
     if (disabled) return null
 
     return (
-        <GlassButtonWithLabel label={LL.BALANCE_ACTION_SELL()} size="sm" icon="icon-minus" onPress={onPress} themed />
+        <GlassButtonWithLabel
+            label={LL.BALANCE_ACTION_SELL()}
+            size="sm"
+            icon="icon-minus"
+            onPress={onPress}
+            themed
+            testID="SELL_BUTTON"
+        />
     )
 }
 
