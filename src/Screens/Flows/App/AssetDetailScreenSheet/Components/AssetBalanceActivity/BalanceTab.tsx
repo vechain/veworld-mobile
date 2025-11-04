@@ -95,7 +95,7 @@ export const BalanceTab = ({ token: _token }: Props) => {
                 ) : (
                     <ValueContainer.TokenValue token={token} value={tokenBalance} border={!!showFiatBalance} />
                 )}
-                {showFiatBalance && <ValueContainer.DollarValue value={fiatBalance} />}
+                {showFiatBalance && <ValueContainer.DollarValue value={fiatBalance} testID="DOLLAR_VALUE" />}
             </ValueContainer>
             <BalanceTabActions token={token} />
         </>

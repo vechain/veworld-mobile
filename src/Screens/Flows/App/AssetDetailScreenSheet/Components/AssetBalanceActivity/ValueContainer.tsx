@@ -17,11 +17,11 @@ const ValueContainer = ({ children }: PropsWithChildren) => {
     )
 }
 
-const DollarValue = ({ value }: { value: string }) => {
+const DollarValue = ({ value, testID }: { value: string; testID?: string }) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" py={12} px={16}>
+        <BaseView flexDirection="row" justifyContent="space-between" py={12} px={16} testID={testID}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon
                     borderRadius={99}
@@ -36,7 +36,10 @@ const DollarValue = ({ value }: { value: string }) => {
                 </BaseText>
             </BaseView>
 
-            <BaseText typographyFont="subSubTitleSemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
+            <BaseText
+                typographyFont="subSubTitleSemiBold"
+                color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}
+                testID={`${testID}_VALUE`}>
                 {value}
             </BaseText>
         </BaseView>
@@ -46,7 +49,13 @@ const DollarValue = ({ value }: { value: string }) => {
 const TokenValue = ({ value, token, border = true }: { value: string; token: FungibleToken; border?: boolean }) => {
     const { styles, theme } = useThemedStyles(tokenValueStyles)
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" py={12} px={16} style={border && styles.root}>
+        <BaseView
+            flexDirection="row"
+            justifyContent="space-between"
+            py={12}
+            px={16}
+            style={border && styles.root}
+            testID={`TOKEN_VALUE_${token.symbol}`}>
             <BaseView flexDirection="row" gap={12}>
                 <TokenImage
                     icon={token.icon}
@@ -56,12 +65,18 @@ const TokenValue = ({ value, token, border = true }: { value: string; token: Fun
                     rounded
                     symbol={token.symbol}
                 />
-                <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
+                <BaseText
+                    typographyFont="bodySemiBold"
+                    color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}
+                    testID={"TOKEN_VALUE_SYMBOL"}>
                     {token.symbol}
                 </BaseText>
             </BaseView>
 
-            <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
+            <BaseText
+                typographyFont="bodySemiBold"
+                color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}
+                testID={"TOKEN_VALUE_VALUE"}>
                 {value}
             </BaseText>
         </BaseView>
