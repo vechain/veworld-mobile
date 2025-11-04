@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
-import { BaseSpacer, Layout } from "~Components"
+import { BaseSpacer, Layout, VersionChangelogBottomSheet, VersionUpdateAvailableBottomSheet } from "~Components"
 import { COLORS } from "~Constants"
 import { useFetchFeaturedDApps, usePrefetchAllVns, useThemedStyles } from "~Hooks"
 import { useHomeCollectibles } from "~Hooks/useHomeCollectibles"
@@ -104,7 +104,8 @@ export const BalanceScreen = () => {
 
                         <BaseSpacer height={64} />
                     </AnimatedLinearGradient>
-
+                    <VersionUpdateAvailableBottomSheet />
+                    <VersionChangelogBottomSheet />
                     <TabRenderer onLayout={onLayout} />
                 </Animated.ScrollView>
             }
