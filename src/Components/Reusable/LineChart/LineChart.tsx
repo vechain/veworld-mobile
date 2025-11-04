@@ -1,6 +1,3 @@
-import React, { createContext, useCallback, useEffect, useMemo, useState } from "react"
-import { DataPoint, LineChartContextType, LineChartData, LineChartProps } from "./types"
-import { curveBasis, line, scaleLinear, scaleTime } from "d3"
 import {
     Blur,
     Canvas,
@@ -14,7 +11,10 @@ import {
     useFont,
     vec,
 } from "@shopify/react-native-skia"
-import { COLORS, SCREEN_WIDTH } from "~Constants"
+import { curveBasis, line, scaleLinear, scaleTime } from "d3"
+import { interpolatePath } from "d3-interpolate-path"
+import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import {
     Extrapolation,
     interpolate,
@@ -25,12 +25,13 @@ import {
     withSpring,
     withTiming,
 } from "react-native-reanimated"
-import { DateUtils } from "~Utils"
+import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
-import { Gesture, GestureDetector } from "react-native-gesture-handler"
-import HapticsService from "~Services/HapticsService"
 import { useTheme } from "~Hooks/useTheme"
+import HapticsService from "~Services/HapticsService"
+import { DateUtils } from "~Utils"
 import { useLineChart } from "./hooks/useLineChart"
+import { DataPoint, LineChartContextType, LineChartData, LineChartProps } from "./types"
 
 //#region Constants
 
@@ -118,13 +119,33 @@ const _LineChart = ({
     gradientBackgroundPositions = [0, 0.6, 1],
     canvasStyle,
 }: LineChartProps) => {
+    const [previousGraph, setPreviousGraph] = useState<ReturnType<typeof makeGraph> | null>(null)
     const { data, activePointIndex } = useLineChart()
     const { formatLocale } = useFormatFiat()
     const theme = useTheme()
 
+    const previousDataRef = useRef(data)
+
+    const sharedData = useSharedValue(data)
+
+    useEffect(() => {
+        sharedData.value = data
+    }, [data, sharedData])
+
+    useEffect(() => {
+        previousDataRef.current = data
+    }, [data])
+
+    const previousData = previousDataRef.current
+
+    useEffect(() => {
+        if (!previousData) return
+        setPreviousGraph(makeGraph(previousData, width, height, strokeWidth))
+    }, [previousData, width, height, strokeWidth])
+
     const skiaFont = useFont(require("../../../Assets/Fonts/Inter/Inter-SemiBold.ttf"), fontSize)
 
-    const { path, points, maxX, minY, maxY, calcXPos, calcYPos } = useMemo(
+    const { path, points, maxX, minY, maxY, calcXPos, calcYPos, ...rest } = useMemo(
         () => makeGraph(data, width, height, strokeWidth),
         [data, width, height, strokeWidth],
     )
@@ -132,6 +153,11 @@ const _LineChart = ({
     // Initial chartprogress animation
     const progress = useSharedValue(0)
     const backgroundProgress = useSharedValue(0)
+
+    // Progress of interpolation between previous and current path
+    const morphProgress = useSharedValue(0)
+    // Interpolated path between previous and current path
+    const interpolatedPath = useSharedValue("M0,0")
 
     // Line cursor animation
     const translateX = useSharedValue(0)
@@ -174,13 +200,28 @@ const _LineChart = ({
     const crossHairEnd = useSharedValue(1)
 
     useEffect(() => {
+        if (data.length === 0) return
         progress.value = withTiming(1, { duration: INIT_ANIMATION_DURATION }, finished => {
             if (finished && showGradientBackground) {
                 backgroundProgress.value = withTiming(1, { duration: 800 })
             }
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [data.length])
+
+    useEffect(() => {
+        if (previousData && previousData?.length !== data.length) {
+            backgroundProgress.value = withTiming(0, { duration: 100 })
+            morphProgress.value = withTiming(1, { duration: 350 }, finished => {
+                if (finished) {
+                    runOnJS(setPreviousGraph)({ path, points, maxX, minY, maxY, calcXPos, calcYPos, ...rest })
+                    morphProgress.value = 0
+                    backgroundProgress.value = withTiming(1, { duration: 800 })
+                }
+            })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [previousData?.length, data.length, path, points, maxX, minY, maxY, calcXPos, calcYPos, rest])
 
     const findNearestPointIndex = useCallback(
         (x: number) => {
@@ -201,6 +242,31 @@ const _LineChart = ({
         [points],
     )
 
+    const runOnRN = useCallback(
+        (_s: string, _e: string, _progress: number) => {
+            interpolatedPath.value = interpolatePath(_s, _e)(_progress)
+        },
+        [interpolatedPath],
+    )
+
+    const makeMorph = useCallback(
+        (start: string, end: string, _morphProgress: number) => {
+            "worklet"
+            runOnJS(runOnRN)(start, end, _morphProgress)
+        },
+        [runOnRN],
+    )
+
+    const pathAnimation = useDerivedValue(() => {
+        if (!previousGraph) return path!
+        const start = previousGraph.path!
+        const end = path!
+
+        makeMorph(start.toSVGString(), end.toSVGString(), morphProgress.value)
+
+        return Skia.Path.MakeFromSVGString(interpolatedPath.value)!
+    }, [previousGraph?.path, path, morphProgress.value, makeMorph, interpolatedPath.value])
+
     const backgroudAnimation = useDerivedValue(() => {
         return Skia.Point(maxX, interpolate(backgroundProgress.value, [0, 1], [maxY + 1, minY], Extrapolation.CLAMP))
     }, [backgroundProgress.value, minY, maxY, maxX])
@@ -212,9 +278,9 @@ const _LineChart = ({
     }, [crossHairStart.value, crossHairEnd.value, height])
 
     const backgroundClipPath = useMemo(() => {
-        if (!path || !data) return Skia.RRectXY(Skia.XYWHRect(0, 0, width, height), 16, 16)
-        return path.copy().lineTo(maxX, calcYPos(0)).lineTo(calcXPos(0), calcYPos(0)).close()
-    }, [calcXPos, calcYPos, data, maxX, path, width, height])
+        if (!pathAnimation.value || !data) return Skia.RRectXY(Skia.XYWHRect(0, 0, width, height), 16, 16)
+        return pathAnimation.value.copy().lineTo(maxX, calcYPos(0)).lineTo(calcXPos(0), calcYPos(0)).close()
+    }, [pathAnimation.value, data, width, height, maxX, calcYPos, calcXPos])
 
     /**
      * On pan gesture, update the cross hair start and end values
@@ -304,7 +370,7 @@ const _LineChart = ({
 
                 <Path
                     style={"stroke"}
-                    path={path!}
+                    path={pathAnimation}
                     color={strokeColor || (theme.isDark ? COLORS.PURPLE_LABEL : COLORS.DARK_PURPLE_DISABLED)}
                     strokeWidth={strokeWidth}
                     strokeJoin={"round"}
@@ -318,7 +384,7 @@ const _LineChart = ({
                         {/* Glow layer */}
                         <Path
                             style={"stroke"}
-                            path={path!}
+                            path={pathAnimation}
                             color={highlightColor || "white"}
                             strokeWidth={strokeWidth * 2}
                             strokeJoin={"round"}
@@ -330,7 +396,7 @@ const _LineChart = ({
                         {/* Main white line */}
                         <Path
                             style={"stroke"}
-                            path={path!}
+                            path={pathAnimation}
                             color={highlightColor || "white"}
                             strokeWidth={strokeWidth}
                             strokeJoin={"round"}
