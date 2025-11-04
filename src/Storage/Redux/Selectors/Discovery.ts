@@ -16,61 +16,37 @@ export const selectCustomDapps = createSelector(getDiscoveryState, (discovery): 
 
 const selectFavoriteRefs = createSelector(getDiscoveryState, discovery => discovery.favoriteRefs)
 
-// Resolve dApp reference using ID, veBetterDaoId, or URL origin fallbacks
+// Resolve dApp reference based on type using discriminated union
 const resolveDAppFromReference = (
     ref: import("../Slices/Discovery").DAppReference,
     byId: Map<string, DiscoveryDApp>,
     byVbdId: Map<string, DiscoveryDApp>,
-    byOrigin: Map<string, DiscoveryDApp>,
 ): DiscoveryDApp | null => {
-    let dapp = byId.get(ref.id)
+    switch (ref.type) {
+        case "app-hub": {
+            const dapp = byId.get(ref.id)
+            return dapp ? { ...dapp } : null
+        }
 
-    if (!dapp && ref.veBetterDaoId) {
-        dapp = byVbdId.get(ref.veBetterDaoId)
-    }
+        case "vbd": {
+            const dapp = byVbdId.get(ref.vbdId)
+            if (dapp) return { ...dapp }
 
-    if (!dapp) {
-        try {
-            const origin = new URL(ref.href).origin
-            dapp = byOrigin.get(origin)
-        } catch {
-            // Skip origin match for invalid URLs
+            return null
+        }
+
+        case "custom": {
+            return {
+                href: ref.url,
+                name: ref.title,
+                desc: ref.description,
+                iconUri: ref.iconUri,
+                isCustom: true,
+                createAt: ref.createAt,
+                amountOfNavigations: 0,
+            }
         }
     }
-
-    if (dapp) {
-        return { ...dapp }
-    }
-
-    if (ref.customMetadata) {
-        return {
-            id: ref.id,
-            href: ref.href,
-            name: ref.customMetadata.name,
-            desc: ref.customMetadata.desc,
-            iconUri: ref.customMetadata.iconUri,
-            isCustom: true,
-            createAt: ref.customMetadata.createAt,
-            amountOfNavigations: 0,
-            veBetterDaoId: ref.veBetterDaoId,
-        }
-    }
-
-    // Fallback metadata for VBD dApps not yet in featured list
-    if (ref.fallbackMetadata) {
-        return {
-            id: ref.id,
-            href: ref.href,
-            name: ref.fallbackMetadata.name,
-            desc: ref.fallbackMetadata.desc,
-            isCustom: false,
-            createAt: ref.fallbackMetadata.createAt,
-            amountOfNavigations: 0,
-            veBetterDaoId: ref.veBetterDaoId,
-        }
-    }
-
-    return null
 }
 
 export const selectBookmarkedDapps = createSelector(
@@ -82,21 +58,10 @@ export const selectBookmarkedDapps = createSelector(
         if (favoriteRefs && favoriteRefs.length > 0) {
             const byId = new Map(featured.filter(d => d.id).map(d => [d.id!, d]))
             const byVbdId = new Map(featured.filter(d => d.veBetterDaoId).map(d => [d.veBetterDaoId!, d]))
-            const byOrigin = new Map(
-                featured
-                    .map(d => {
-                        try {
-                            return [new URL(d.href).origin, d] as [string, DiscoveryDApp]
-                        } catch {
-                            return null
-                        }
-                    })
-                    .filter((x): x is [string, DiscoveryDApp] => x !== null),
-            )
 
             const resolved: DiscoveryDApp[] = []
             for (const ref of favoriteRefs) {
-                const dapp = resolveDAppFromReference(ref, byId, byVbdId, byOrigin)
+                const dapp = resolveDAppFromReference(ref, byId, byVbdId)
                 if (dapp) {
                     resolved.push(dapp)
                 }

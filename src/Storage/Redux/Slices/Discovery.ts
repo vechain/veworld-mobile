@@ -32,26 +32,30 @@ export type BannerInteractionDetails = {
     amountOfInteractions: number
 }
 
-// Reference to a bookmarked dApp - stores only IDs to enable auto-sync with featured list
-export type DAppReference = {
+// Reference to a bookmarked dApp using discriminated union for type safety
+type AppHubReference = {
+    type: "app-hub"
     id: string
-    href: string
-    veBetterDaoId?: string
     order: number
-    customMetadata?: {
-        name: string
-        iconUri?: string
-        desc?: string
-        isCustom: true
-        createAt: number
-    }
-    // Fallback metadata for dApps not yet in featured list (e.g. newly added VBD dApps)
-    fallbackMetadata?: {
-        name: string
-        desc?: string
-        createAt: number
-    }
 }
+
+type VBDReference = {
+    type: "vbd"
+    vbdId: string
+    order: number
+}
+
+type CustomURLReference = {
+    type: "custom"
+    url: string
+    title: string
+    description?: string
+    iconUri?: string
+    createAt: number
+    order: number
+}
+
+export type DAppReference = AppHubReference | VBDReference | CustomURLReference
 
 export type DiscoveryState = {
     featured: DiscoveryDApp[]
@@ -94,33 +98,36 @@ const findByHref = (dapps: DiscoveryDApp[], href: string) => {
     return dapps.find(dapp => URIUtils.compareURLs(dapp.href, href))
 }
 
-// Convert dApp to lightweight reference, preserving metadata if needed
+// Convert dApp to appropriate reference type based on its source
 const createDAppReference = (dapp: DiscoveryDApp, order: number): DAppReference => {
-    const ref: DAppReference = {
-        id: dapp.id || dapp.veBetterDaoId || DAppUtils.generateDAppId(dapp.href),
-        href: dapp.href,
-        veBetterDaoId: dapp.veBetterDaoId,
+    // Custom URL bookmark
+    if (dapp.isCustom) {
+        return {
+            type: "custom",
+            url: dapp.href,
+            title: dapp.name,
+            description: dapp.desc,
+            iconUri: dapp.iconUri,
+            createAt: dapp.createAt,
+            order,
+        }
+    }
+
+    // VeBetterDAO bookmark
+    if (dapp.veBetterDaoId) {
+        return {
+            type: "vbd",
+            vbdId: dapp.veBetterDaoId,
+            order,
+        }
+    }
+
+    // App Hub bookmark
+    return {
+        type: "app-hub",
+        id: dapp.id || DAppUtils.generateDAppId(dapp.href),
         order,
     }
-
-    if (dapp.isCustom) {
-        ref.customMetadata = {
-            name: dapp.name,
-            iconUri: dapp.iconUri,
-            desc: dapp.desc,
-            isCustom: true,
-            createAt: dapp.createAt,
-        }
-    } else if (dapp.veBetterDaoId) {
-        // Store fallback metadata for VBD dApps not yet in featured list
-        ref.fallbackMetadata = {
-            name: dapp.name,
-            desc: dapp.desc,
-            createAt: dapp.createAt,
-        }
-    }
-
-    return ref
 }
 
 export const DiscoverySlice = createSlice({
@@ -166,7 +173,9 @@ export const DiscoverySlice = createSlice({
             } else {
                 state.favorites = state.favorites.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
                 if (state.favoriteRefs) {
-                    state.favoriteRefs = state.favoriteRefs.filter(ref => !URIUtils.compareURLs(ref.href, href))
+                    state.favoriteRefs = state.favoriteRefs.filter(
+                        ref => ref.type !== "custom" || !URIUtils.compareURLs(ref.url, href),
+                    )
                 }
             }
         },

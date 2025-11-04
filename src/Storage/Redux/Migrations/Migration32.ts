@@ -21,31 +21,35 @@ export const Migration32 = (state: PersistedState): PersistedState => {
 
     const favoriteRefs: DAppReference[] = (currentDiscoveryState.favorites || [])
         .filter(dapp => !dapp.isCustom)
-        .map((dapp, index) => {
-            const ref: DAppReference = {
-                id: dapp.id || dapp.veBetterDaoId || DAppUtils.generateDAppId(dapp.href),
-                href: dapp.href,
-                veBetterDaoId: dapp.veBetterDaoId,
+        .map((dapp, index): DAppReference => {
+            // Custom URL bookmark
+            if (dapp.isCustom) {
+                return {
+                    type: "custom",
+                    url: dapp.href,
+                    title: dapp.name,
+                    description: dapp.desc,
+                    iconUri: dapp.iconUri,
+                    createAt: dapp.createAt,
+                    order: index,
+                }
+            }
+
+            // VeBetterDAO bookmark
+            if (dapp.veBetterDaoId) {
+                return {
+                    type: "vbd",
+                    vbdId: dapp.veBetterDaoId,
+                    order: index,
+                }
+            }
+
+            // App Hub bookmark
+            return {
+                type: "app-hub",
+                id: dapp.id || DAppUtils.generateDAppId(dapp.href),
                 order: index,
             }
-
-            if (dapp.isCustom) {
-                ref.customMetadata = {
-                    name: dapp.name,
-                    iconUri: dapp.iconUri,
-                    desc: dapp.desc,
-                    isCustom: true as const,
-                    createAt: dapp.createAt,
-                }
-            } else if (dapp.veBetterDaoId) {
-                ref.fallbackMetadata = {
-                    name: dapp.name,
-                    desc: dapp.desc,
-                    createAt: dapp.createAt,
-                }
-            }
-
-            return ref
         })
 
     const newDiscoveryState = {

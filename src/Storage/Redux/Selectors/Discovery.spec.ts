@@ -16,9 +16,8 @@ describe("Discovery", () => {
             }
 
             const favoriteRef: DAppReference = {
+                type: "app-hub",
                 id: "dapp1",
-                href: "https://test.com",
-                veBetterDaoId: "vbd1",
                 order: 0,
             }
 
@@ -48,9 +47,8 @@ describe("Discovery", () => {
             }
 
             const favoriteRef: DAppReference = {
-                id: "dapp1",
-                href: "https://test.com",
-                veBetterDaoId: "vbd1",
+                type: "vbd",
+                vbdId: "vbd1",
                 order: 0,
             }
 
@@ -129,9 +127,8 @@ describe("Discovery", () => {
             }
 
             const favoriteRef: DAppReference = {
+                type: "app-hub",
                 id: "dapp1",
-                href: "https://test.com",
-                veBetterDaoId: "vbd1",
                 order: 0,
             }
 

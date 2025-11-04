@@ -18,6 +18,7 @@ const bookmarkedDapps: DiscoveryDApp[] = [
 
 const featuredDapps: DiscoveryDApp[] = [
     {
+        id: "https_example_com",
         href: "https://example.com",
         name: "Example",
         isCustom: false,
@@ -25,6 +26,7 @@ const featuredDapps: DiscoveryDApp[] = [
         amountOfNavigations: 2,
     },
     {
+        id: "https_example2_com",
         href: "https://example2.com",
         name: "Example 2",
         isCustom: false,
