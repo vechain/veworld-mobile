@@ -1,7 +1,7 @@
-import { type Vns } from "~Hooks"
 import { TestHelpers } from "~Test"
 import { Contact, ContactType, WalletAccount } from "~Model"
 import { getAccountForIndex, getNextIndex, isObservedAccount, nextAlias, updateAccountVns } from "./AccountUtils"
+import { Vns } from "~Model/Vns"
 
 const accounts = [TestHelpers.data.account1D1, TestHelpers.data.account2D1]
 const contact1 = TestHelpers.data.getContact(0, ContactType.KNOWN)

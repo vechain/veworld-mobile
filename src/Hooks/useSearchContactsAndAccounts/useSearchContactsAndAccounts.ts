@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { Vns } from "~Hooks/useVns"
 import { AccountWithDevice, Contact, NETWORK_TYPE } from "~Model"
+import { Vns } from "~Model/Vns"
 import { selectKnownContacts, selectOtherAccounts, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
