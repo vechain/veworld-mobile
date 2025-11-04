@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { DiscoveryDApp } from "~Constants"
 import { VbdDApp } from "~Model"
-import { URIUtils } from "~Utils"
+import { DAppUtils, URIUtils } from "~Utils"
 
 export type ConnectedDiscoveryApp = {
     name: string
@@ -32,9 +32,25 @@ export type BannerInteractionDetails = {
     amountOfInteractions: number
 }
 
+// Reference to a bookmarked dApp - stores only IDs to enable auto-sync with featured list
+export type DAppReference = {
+    id: string
+    href: string
+    veBetterDaoId?: string
+    order: number
+    customMetadata?: {
+        name: string
+        iconUri?: string
+        desc?: string
+        isCustom: true
+        createAt: number
+    }
+}
+
 export type DiscoveryState = {
     featured: DiscoveryDApp[]
     favorites: DiscoveryDApp[]
+    favoriteRefs?: DAppReference[]
     custom: DiscoveryDApp[]
     hasOpenedDiscovery: boolean
     connectedApps: ConnectedDiscoveryApp[]
@@ -56,6 +72,7 @@ export type DiscoveryState = {
 export const initialDiscoverState: DiscoveryState = {
     featured: [],
     favorites: [],
+    favoriteRefs: [],
     custom: [],
     hasOpenedDiscovery: false,
     connectedApps: [],
@@ -71,6 +88,28 @@ const findByHref = (dapps: DiscoveryDApp[], href: string) => {
     return dapps.find(dapp => URIUtils.compareURLs(dapp.href, href))
 }
 
+// Convert dApp to lightweight reference, preserving custom metadata if needed
+const createDAppReference = (dapp: DiscoveryDApp, order: number): DAppReference => {
+    const ref: DAppReference = {
+        id: dapp.id || dapp.veBetterDaoId || DAppUtils.generateDAppId(dapp.href),
+        href: dapp.href,
+        veBetterDaoId: dapp.veBetterDaoId,
+        order,
+    }
+
+    if (dapp.isCustom) {
+        ref.customMetadata = {
+            name: dapp.name,
+            iconUri: dapp.iconUri,
+            desc: dapp.desc,
+            isCustom: true,
+            createAt: dapp.createAt,
+        }
+    }
+
+    return ref
+}
+
 export const DiscoverySlice = createSlice({
     name: "discovery",
     initialState: initialDiscoverState,
@@ -79,7 +118,6 @@ export const DiscoverySlice = createSlice({
             const { payload } = action
             let bookmark: DiscoveryDApp
             if ("external_url" in payload) {
-                //Treat the app as a VBD app
                 bookmark = {
                     name: payload.name,
                     href: payload.external_url,
@@ -99,6 +137,9 @@ export const DiscoverySlice = createSlice({
                 state.custom.push(bookmark)
             } else {
                 state.favorites.push(bookmark)
+                if (!state.favoriteRefs) state.favoriteRefs = []
+                const order = state.favoriteRefs.length
+                state.favoriteRefs.push(createDAppReference(bookmark, order))
             }
         },
         removeBookmark: (state, action: PayloadAction<{ href: string; isCustom?: boolean }>) => {
@@ -107,10 +148,17 @@ export const DiscoverySlice = createSlice({
                 state.custom = state.custom.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
             } else {
                 state.favorites = state.favorites.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
+                if (state.favoriteRefs) {
+                    state.favoriteRefs = state.favoriteRefs.filter(ref => !URIUtils.compareURLs(ref.href, href))
+                }
             }
         },
         reorderBookmarks: (state, action: PayloadAction<DiscoveryDApp[]>) => {
             state.favorites = action.payload
+            if (!state.favoriteRefs) state.favoriteRefs = []
+            state.favoriteRefs = action.payload
+                .filter(dapp => !dapp.isCustom)
+                .map((dapp, index) => createDAppReference(dapp, index))
         },
         setFeaturedDApps: (state, action: PayloadAction<DiscoveryDApp[]>) => {
             state.featured = action.payload

@@ -14,12 +14,85 @@ export const selectFeaturedDapps = createSelector(getDiscoveryState, (discovery)
 
 export const selectCustomDapps = createSelector(getDiscoveryState, (discovery): DiscoveryDApp[] => discovery.custom)
 
+const selectFavoriteRefs = createSelector(getDiscoveryState, discovery => discovery.favoriteRefs)
+
+// Resolve dApp reference using ID, veBetterDaoId, or URL origin fallbacks
+const resolveDAppFromReference = (
+    ref: import("../Slices/Discovery").DAppReference,
+    byId: Map<string, DiscoveryDApp>,
+    byVbdId: Map<string, DiscoveryDApp>,
+    byOrigin: Map<string, DiscoveryDApp>,
+): DiscoveryDApp | null => {
+    let dapp = byId.get(ref.id)
+
+    if (!dapp && ref.veBetterDaoId) {
+        dapp = byVbdId.get(ref.veBetterDaoId)
+    }
+
+    if (!dapp) {
+        try {
+            const origin = new URL(ref.href).origin
+            dapp = byOrigin.get(origin)
+        } catch {
+            // Skip origin match for invalid URLs
+        }
+    }
+
+    if (dapp) {
+        return { ...dapp }
+    }
+
+    if (ref.customMetadata) {
+        return {
+            id: ref.id,
+            href: ref.href,
+            name: ref.customMetadata.name,
+            desc: ref.customMetadata.desc,
+            iconUri: ref.customMetadata.iconUri,
+            isCustom: true,
+            createAt: ref.customMetadata.createAt,
+            amountOfNavigations: 0,
+            veBetterDaoId: ref.veBetterDaoId,
+        }
+    }
+
+    return null
+}
+
 export const selectBookmarkedDapps = createSelector(
     selectFavoritesDapps,
     selectCustomDapps,
-    (favorites, custom): DiscoveryDApp[] => {
-        const dapps: DiscoveryDApp[] = [...favorites, ...custom]
+    selectFavoriteRefs,
+    selectFeaturedDapps,
+    (favorites, custom, favoriteRefs, featured): DiscoveryDApp[] => {
+        if (favoriteRefs && favoriteRefs.length > 0) {
+            const byId = new Map(featured.filter(d => d.id).map(d => [d.id!, d]))
+            const byVbdId = new Map(featured.filter(d => d.veBetterDaoId).map(d => [d.veBetterDaoId!, d]))
+            const byOrigin = new Map(
+                featured
+                    .map(d => {
+                        try {
+                            return [new URL(d.href).origin, d] as [string, DiscoveryDApp]
+                        } catch {
+                            return null
+                        }
+                    })
+                    .filter((x): x is [string, DiscoveryDApp] => x !== null),
+            )
 
+            const resolved: DiscoveryDApp[] = []
+            for (const ref of favoriteRefs) {
+                const dapp = resolveDAppFromReference(ref, byId, byVbdId, byOrigin)
+                if (dapp) {
+                    resolved.push(dapp)
+                }
+            }
+
+            const allDapps = [...resolved, ...custom]
+            return _.uniqBy(allDapps, value => value.href)
+        }
+
+        const dapps: DiscoveryDApp[] = [...favorites, ...custom]
         return _.uniqBy(dapps, value => value.href)
     },
 )
