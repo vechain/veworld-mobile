@@ -80,7 +80,7 @@ export const MoreButtonBottomSheet = ({ bsRef, openReceiveBottomsheet, token }: 
         onClose()
         onSwap()
     }, [onClose, onSwap])
-    const { disabled: sellDisabled, onPress: onSell } = SellButton.use()
+    const { disabled: sellDisabled, onPress: onSell } = SellButton.use(token)
     const wrappedSell = useCallback(() => {
         onClose()
         onSell()

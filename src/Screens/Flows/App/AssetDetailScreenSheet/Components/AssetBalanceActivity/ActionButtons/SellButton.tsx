@@ -6,11 +6,12 @@ import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButt
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
-import { AccountUtils, PlatformUtils } from "~Utils"
+import { AccountUtils, BigNutils, PlatformUtils } from "~Utils"
 
-const useSell = () => {
+const useSell = (token: FungibleTokenWithBalance) => {
     const track = useAnalyticTracking()
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListSwitch>>()
     const { paymentProvidersFeature } = useFeatureFlags()
@@ -25,8 +26,9 @@ const useSell = () => {
         if (!PlatformUtils.isAndroid()) return true
         if (!paymentProvidersFeature.coinify.android) return true
         if (AccountUtils.isObservedAccount(selectedAccount)) return true
+        if (BigNutils(token.balance.balance).isZero) return true
         return false
-    }, [paymentProvidersFeature.coinify.android, selectedAccount])
+    }, [paymentProvidersFeature.coinify.android, selectedAccount, token.balance.balance])
 
     return useMemo(
         () => ({
@@ -37,9 +39,9 @@ const useSell = () => {
     )
 }
 
-const SellButton = () => {
+const SellButton = ({ token }: { token: FungibleTokenWithBalance }) => {
     const { LL } = useI18nContext()
-    const { onPress, disabled } = useSell()
+    const { onPress, disabled } = useSell(token)
 
     if (disabled) return null
 
