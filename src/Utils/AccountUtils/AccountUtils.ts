@@ -2,7 +2,11 @@ import { debug } from "~Utils/Logger"
 import { BaseDevice, Contact, DEVICE_TYPE, WalletAccount, WatchedAccount } from "~Model"
 import AddressUtils from "../AddressUtils"
 import { ERROR_EVENTS } from "~Constants"
-import { type Vns } from "~Hooks"
+
+type Vns = {
+    name?: string | undefined
+    address?: string | undefined
+}
 
 export const rootAlias = "Root Account"
 
