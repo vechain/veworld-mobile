@@ -1,3 +1,5 @@
+import type { EntityState } from "@reduxjs/toolkit"
+
 export enum RegistrationState {
     PENDING = "PENDING",
     ACTIVE = "ACTIVE",
@@ -19,5 +21,5 @@ export interface NotificationState {
     dappVisitCounter: Record<string, number>
     userTags: Record<string, string>
     dappNotifications: boolean
-    registrations: Registration[]
+    registrations: EntityState<Registration>
 }

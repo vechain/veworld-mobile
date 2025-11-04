@@ -5,10 +5,10 @@ import {
     removeRegistrations,
     upsertRegistrations,
     selectAccounts,
-    selectRegistrations,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { registrationSelectors } from "~Storage/Redux/Slices/Notification"
 import { Registration, RegistrationState } from "~Storage/Redux/Types"
 import { AccountUtils, error, info } from "~Utils"
 import HexUtils from "~Utils/HexUtils"
@@ -32,6 +32,7 @@ const createRegistration = (address: string, state: RegistrationState, lastSucce
         lastSuccessfulSync,
     }
 }
+
 const buildRegistrationPlan = (
     currentWalletAddresses: string[],
     existingRegistrations: Registration[],
@@ -39,7 +40,8 @@ const buildRegistrationPlan = (
     const now = Date.now()
     const oldAddressSet = new Set(existingRegistrations.map(r => r.address))
     const newAddressSet = new Set(currentWalletAddresses)
-
+console.log("existingRegistrations", existingRegistrations)
+console.log("currentWalletAddresses", currentWalletAddresses)
     const isDueReregister = (reg: Registration): boolean =>
         newAddressSet.has(reg.address) &&
         reg.state === RegistrationState.ACTIVE &&
@@ -48,6 +50,13 @@ const buildRegistrationPlan = (
 
     const toUnregister: Registration[] = []
     const toRegister: Registration[] = []
+
+    if (existingRegistrations.length === 0) {
+        for (const address of currentWalletAddresses) {
+            toRegister.push(createRegistration(address, RegistrationState.PENDING))
+        }
+        return { toRegister, toUnregister }
+    }
 
     for (const reg of existingRegistrations) {
         // Unregistrations
@@ -82,7 +91,7 @@ const buildRegistrationPlan = (
 export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = {}) => {
     const dispatch = useAppDispatch()
     const accounts = useAppSelector(selectAccounts)
-    const registrations = useAppSelector(selectRegistrations)
+    const registrations = useAppSelector(state => registrationSelectors.selectAll(state.notification))
 
     const currentWalletAddresses = useMemo(
         () => accounts.filter(a => !AccountUtils.isObservedAccount(a)).map(a => HexUtils.normalize(a.address)),
@@ -114,6 +123,7 @@ export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = 
                         lastSuccessfulSync: r.timestamp,
                     }))
 
+                    console.log("successfulRegistrations", successfulRegistrations)
                     dispatch(upsertRegistrations(successfulRegistrations))
                 }
 
@@ -124,6 +134,7 @@ export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = 
                     )
                     const successfulAddresses = unregisterResults.filter(r => r.success).map(r => r.address)
 
+                    console.log("successfulUnregisterAddresses", successfulAddresses)
                     dispatch(removeRegistrations(successfulAddresses))
                 }
             } catch (err) {

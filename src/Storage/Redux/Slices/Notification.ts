@@ -1,17 +1,12 @@
 // notificationSlice.ts
-import { createSlice, PayloadAction, createEntityAdapter, type EntityState } from "@reduxjs/toolkit"
-import { NotificationState as BaseNotificationState, Registration } from "../Types"
+import { createSlice, PayloadAction, createEntityAdapter } from "@reduxjs/toolkit"
+import { NotificationState, Registration } from "../Types"
 
 // --- adapter keyed by address ---
 const registrationsAdapter = createEntityAdapter<Registration>({
     selectId: r => r.address,
     sortComparer: false,
 })
-
-// Recompose your state: everything except `registrations` + nested EntityState
-type NotificationState = Omit<BaseNotificationState, "registrations"> & {
-    registrations: EntityState<Registration>
-}
 
 // --- initial state ---
 export const initialNotificationState: NotificationState = {

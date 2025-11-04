@@ -1,4 +1,3 @@
-import { NETWORK_TYPE } from "~Model"
 import {
     registerPushNotification,
     unregisterPushNotification,
@@ -64,7 +63,7 @@ export class NotificationRegistrationClient {
     ): Promise<RegistrationResult[]> {
         const batches = chunkArray(addresses, this.batchSize)
         const results: RegistrationResult[] = []
-
+        console.log("batches", batches)
         info(
             NOTIFICATION_CENTER_EVENT,
             `Processing ${batches.length} ${operation.toLowerCase()} batch(es) of up to ${this.batchSize}`,
@@ -85,9 +84,8 @@ export class NotificationRegistrationClient {
         const now = Date.now()
 
         const call = async (): Promise<NotificationAPIResponse> => {
-            const networkType = __DEV__ ? NETWORK_TYPE.TEST : NETWORK_TYPE.MAIN
             const apiCall = operation === "REGISTER" ? registerPushNotification : unregisterPushNotification
-            return apiCall({ networkType, walletAddresses: batch, subscriptionId })
+            return apiCall({ walletAddresses: batch, subscriptionId })
         }
 
         // retry with exponential backoff
