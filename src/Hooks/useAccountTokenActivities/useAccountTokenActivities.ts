@@ -52,19 +52,12 @@ export const useAccountTokenActivities = (token: FungibleToken) => {
         },
         gcTime: 5 * 60 * 1000,
         select(_data) {
-            try {
-                return {
-                    data: _data.pages
-                        .flatMap(t => t.data)
-                        .map(v => createActivityFromIndexedHistoryEvent(v, account.address, network))
-                        .filter((activity): activity is NonNullable<typeof activity> => activity !== null),
-                    pagination: _data.pages[_data.pages.length - 1]?.pagination,
-                }
-            } catch (err) {
-                return {
-                    data: [],
-                    pagination: {},
-                }
+            return {
+                data: _data.pages
+                    .flatMap(t => t.data)
+                    .map(v => createActivityFromIndexedHistoryEvent(v, account.address, network))
+                    .filter((activity): activity is NonNullable<typeof activity> => activity !== null),
+                pagination: _data.pages[_data.pages.length - 1]?.pagination,
             }
         },
         staleTime: 5 * 60 * 1000,
