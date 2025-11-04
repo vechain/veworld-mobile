@@ -173,28 +173,49 @@ describe("useDappBookmarking", () => {
     })
 
     it("should add a bookmark from VBD", async () => {
+        const vbdDApp = {
+            app_urls: [],
+            banner: "https://vechain.org",
+            createdAtTimestamp: new Date().toISOString(),
+            description: "DESC",
+            external_url: "https://example2.com",
+            id: "0x1",
+            logo: "https://google.com",
+            metadataURI: "ipfs://test1",
+            name: "TEST NAME",
+            screenshots: [],
+            social_urls: [],
+            teamWalletAddress: "0x0",
+            appAvailableForAllocationVoting: true,
+        } satisfies VbdDApp
+
         ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
-            data: [
-                {
-                    app_urls: [],
-                    banner: "https://vechain.org",
-                    createdAtTimestamp: new Date().toISOString(),
-                    description: "DESC",
-                    external_url: "https://example2.com",
-                    id: "0x1",
-                    logo: "https://google.com",
-                    metadataURI: "ipfs://test1",
-                    name: "TEST NAME",
-                    screenshots: [],
-                    social_urls: [],
-                    teamWalletAddress: "0x0",
-                    appAvailableForAllocationVoting: true,
-                },
-            ] satisfies VbdDApp[],
+            data: [vbdDApp],
             isLoading: false,
         })
+
         const { result, waitFor } = renderHook(() => useDappBookmarking("https://example2.com", "Example 2"), {
             wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: {
+                    discovery: {
+                        ...mockState.discovery,
+                        featured: [
+                            ...featuredDapps,
+                            {
+                                id: "https_example2_com",
+                                href: "https://example2.com",
+                                name: "TEST NAME",
+                                desc: "DESC",
+                                isCustom: false,
+                                createAt: Date.now(),
+                                amountOfNavigations: 0,
+                                veBetterDaoId: "0x1",
+                            },
+                        ],
+                    },
+                },
+            },
         })
 
         await act(async () => {
