@@ -69,15 +69,24 @@ export const CollectionNftsList = ({ collectionAddress }: Props) => {
         gcTime: 5 * 60 * 1000,
     })
 
+    const invalidateCollectiblesQueries = useCallback(async () => {
+        await queryClient.invalidateQueries({
+            predicate(query) {
+                const queryKey = query.queryKey as string[]
+                if (!["COLLECTIBLES"].includes(queryKey[0])) return false
+                if (queryKey.length < 4) return false
+                if (queryKey[2] !== selectedNetwork.genesis.id) return false
+                if (!AddressUtils.compareAddresses(queryKey[3], selectedAccount.address)) return false
+                return true
+            },
+        })
+    }, [queryClient, selectedAccount.address, selectedNetwork.genesis.id])
+
     const onRefresh = useCallback(async () => {
         setIsRefreshing(true)
-        await queryClient.invalidateQueries({
-            queryKey: getCollectionNftsQueryKey(collectionAddress, selectedNetwork.genesis.id, selectedAccount.address),
-            refetchType: "all",
-            exact: true,
-        })
+        await invalidateCollectiblesQueries()
         setIsRefreshing(false)
-    }, [queryClient, collectionAddress, selectedAccount.address, selectedNetwork.genesis.id])
+    }, [invalidateCollectiblesQueries])
 
     const nfts = useMemo(() => {
         const filteredFavorites = favoriteNfts.filter(nft =>
