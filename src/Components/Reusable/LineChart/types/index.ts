@@ -67,6 +67,16 @@ export type LineChartProps = {
     cursorColor?: string
     chipBackgroundColor?: string
     chipTextColor?: string
+    /**
+     * The positions of the gradient background
+     * @description Should have the same length as the gradientBackgroundColors
+     * @default [0, 0.6, 1]
+     */
+    gradientBackgroundPositions?: AnimatedProp<number[]>
+    /**
+     * The colors of the gradient background
+     * @description Should have the same length as the gradientBackgroundPositions
+     */
     gradientBackgroundColors?: AnimatedProp<Color[]>
     canvasStyle?: StyleProp<ViewStyle>
 }

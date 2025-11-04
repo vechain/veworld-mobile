@@ -115,6 +115,7 @@ const _LineChart = ({
     chipBackgroundColor,
     chipTextColor,
     gradientBackgroundColors,
+    gradientBackgroundPositions = [0, 0.6, 1],
     canvasStyle,
 }: LineChartProps) => {
     const { data, activePointIndex } = useLineChart()
@@ -292,7 +293,7 @@ const _LineChart = ({
                     <Group clip={backgroundClipPath}>
                         <Rect x={0} y={0} width={width} height={height}>
                             <LinearGradient
-                                positions={[0, 0.6, 1]}
+                                positions={gradientBackgroundPositions}
                                 colors={gradientBackgroundColors || theme.colors.chartGradientBackground}
                                 start={backgroudAnimation}
                                 end={Skia.Point(maxX, maxY)}
