@@ -9,7 +9,7 @@ type ProviderDetails = {
     subscriptionId: string | null
 }
 
-type RegisterPushNotificationRequest = {
+type PushNotificationRequest = {
     walletAddresses: string[]
     subscriptionId: string | null
 }
@@ -25,9 +25,7 @@ const sendRequest = (
     walletAddresses: string[],
     subscriptionId: string | null,
 ): Promise<NotificationAPIResponse> => {
-    const baseUrl = __DEV__
-        ? process.env.NOTIFICATION_CENTER_REGISTER_DEV
-        : process.env.NOTIFICATION_CENTER_REGISTER_PROD
+    const baseUrl = __DEV__ ? "http://192.168.86.21:8085" : process.env.NOTIFICATION_CENTER_REGISTER_PROD
 
     if (!baseUrl) {
         throw new Error("[NOTIFICATION CENTER]: Base URL not configured")
@@ -58,11 +56,9 @@ const sendRequest = (
 export const registerPushNotification = ({
     walletAddresses,
     subscriptionId,
-}: RegisterPushNotificationRequest): Promise<NotificationAPIResponse> =>
-    sendRequest("POST", walletAddresses, subscriptionId)
+}: PushNotificationRequest): Promise<NotificationAPIResponse> => sendRequest("POST", walletAddresses, subscriptionId)
 
 export const unregisterPushNotification = ({
     walletAddresses,
     subscriptionId,
-}: RegisterPushNotificationRequest): Promise<NotificationAPIResponse> =>
-    sendRequest("DELETE", walletAddresses, subscriptionId)
+}: PushNotificationRequest): Promise<NotificationAPIResponse> => sendRequest("DELETE", walletAddresses, subscriptionId)

@@ -30,12 +30,29 @@ const chunkArray = <T>(array: T[], size: number): T[][] => {
     return chunks
 }
 
-const isRetryableError = (err: any): boolean => {
-    if (err?.response) {
-        const status = err.response.status
-        return status >= 500 && status < 600
+const isRetryableError = (err: unknown): boolean => {
+    if (typeof err === "object" && err !== null && "response" in err) {
+        const response = (err as any).response
+        if (response?.status) {
+            const status = response.status
+            return status >= 500 && status < 600
+        }
     }
-    return err?.message?.toLowerCase().includes("network") || err?.code === "ECONNABORTED" || !err?.response
+
+    if (err instanceof Error) {
+        return err.message.toLowerCase().includes("network")
+    }
+
+    if (typeof err === "object" && err !== null) {
+        if ("code" in err && (err as any).code === "ECONNABORTED") {
+            return true
+        }
+        if (!("response" in err)) {
+            return true
+        }
+    }
+
+    return false
 }
 
 const MAX_RETRIES = 3
@@ -63,7 +80,6 @@ export class NotificationRegistrationClient {
     ): Promise<RegistrationResult[]> {
         const batches = chunkArray(addresses, this.batchSize)
         const results: RegistrationResult[] = []
-        console.log("batches", batches)
         info(
             NOTIFICATION_CENTER_EVENT,
             `Processing ${batches.length} ${operation.toLowerCase()} batch(es) of up to ${this.batchSize}`,
@@ -83,7 +99,7 @@ export class NotificationRegistrationClient {
     ): Promise<RegistrationResult[]> {
         const now = Date.now()
 
-        const call = async (): Promise<NotificationAPIResponse> => {
+        const callApi = async (): Promise<NotificationAPIResponse> => {
             const apiCall = operation === "REGISTER" ? registerPushNotification : unregisterPushNotification
             return apiCall({ walletAddresses: batch, subscriptionId })
         }
@@ -92,7 +108,7 @@ export class NotificationRegistrationClient {
         let attempt = 0
         while (true) {
             try {
-                const resp = await call()
+                const resp = await callApi()
                 const failed = new Set(resp.failed)
                 if (failed.size) {
                     error(
@@ -107,17 +123,18 @@ export class NotificationRegistrationClient {
                         ? { address: addr, operation, success: false, error: "failed", timestamp: now }
                         : { address: addr, operation, success: true, timestamp: now },
                 )
-            } catch (e: any) {
+            } catch (e: unknown) {
                 attempt++
                 const canRetry = attempt < MAX_RETRIES && isRetryableError(e)
                 error(NOTIFICATION_CENTER_EVENT, `Batch ${operation.toLowerCase()} attempt ${attempt} failed`, e)
                 if (!canRetry) {
+                    const errorMessage = e instanceof Error ? e.message : "batch failed"
                     // mark whole batch failed
                     return batch.map(addr => ({
                         address: addr,
                         operation,
                         success: false,
-                        error: e?.message ?? "batch failed",
+                        error: errorMessage,
                         timestamp: now,
                     }))
                 }

@@ -1,16 +1,6 @@
 import type { EntityState } from "@reduxjs/toolkit"
-
-export enum RegistrationState {
-    PENDING = "PENDING",
-    ACTIVE = "ACTIVE",
-    PENDING_REREGISTER = "PENDING_REREGISTER",
-    PENDING_UNREGISTER = "PENDING_UNREGISTER",
-}
-
 export interface Registration {
     address: string // normalized
-    state: RegistrationState
-    stateTransitionedTime: number
     lastSuccessfulSync?: number
 }
 
