@@ -8,6 +8,7 @@ import {
     Layout,
     SelectAccountBottomSheet,
 } from "~Components"
+import { useDevice } from "~Components/Providers/DeviceProvider"
 import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
@@ -26,7 +27,6 @@ import {
     ActivityTransferScreen,
 } from "./screens"
 import { ActivityDappsScreen } from "./screens/ActivityDappsScreen"
-import { useDevice } from "~Components/Providers/DeviceProvider"
 
 const Tab = createMaterialTopTabNavigator()
 
@@ -56,7 +56,12 @@ export const ActivityScreen = () => {
             noBackButton
             fixedHeader={
                 <BaseView style={HeaderStyleV2}>
-                    <HeaderTitle title={LL.BTN_HISTORY()} leftIconName="icon-history" typographyFont="headerTitle" />
+                    <HeaderTitle
+                        title={LL.BTN_HISTORY()}
+                        leftIconName="icon-history"
+                        typographyFont="headerTitle"
+                        align="left"
+                    />
                     <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
                 </BaseView>
             }
