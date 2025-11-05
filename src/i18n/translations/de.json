@@ -1238,7 +1238,7 @@
   "TOKEN_CUSTOM": "Benutzerdefinierter Token",
   "TOKEN_CUSTOM_SUBTITLE": "Fügen Sie Ihrem Wallet einen benutzerdefinierten Token hinzu",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Aktivität",
-  "TOKEN_DETAIL_BALANCE_TAB": "Kontostand",
+  "TOKEN_DETAIL_BALANCE_TAB": "Saldo",
   "TOKEN_ID": "Token-ID",
   "TOKEN_RECEIVE": "Token empfangen",
   "TOKEN_RECEIVE_SUBTITLE": "Verwenden Sie Ihre Wallet-Adresse, um Tokens zu empfangen",
