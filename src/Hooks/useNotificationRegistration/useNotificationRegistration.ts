@@ -1,4 +1,3 @@
-// useNotificationSync.ts
 import { useEffect, useMemo } from "react"
 import { OneSignal } from "react-native-onesignal"
 import {
@@ -13,7 +12,7 @@ import { Registration } from "~Storage/Redux/Types"
 import { AccountUtils, error, info } from "~Utils"
 import HexUtils from "~Utils/HexUtils"
 import { ERROR_EVENTS } from "../../Constants"
-import { PushRegistrationClient } from "../../Networking/NotificationCenter/PushRegistrationClient"
+import { RegistrationClient } from "../../Networking/NotificationCenter/RegistrationClient"
 
 interface RegistrationPlan {
     toRegister: string[]
@@ -66,7 +65,7 @@ const buildRegistrationPlan = (
     return { toRegister, toUnregister }
 }
 
-export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = {}) => {
+export const useNotificationRegistration = ({ enabled = true }: { enabled?: boolean } = {}) => {
     const dispatch = useAppDispatch()
     const accounts = useAppSelector(selectAccounts)
     const registrations = useAppSelector(state => registrationSelectors.selectAll(state.notification))
@@ -86,10 +85,7 @@ export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = 
                 const plan = buildRegistrationPlan(currentWalletAddresses, registrations)
 
                 if (plan.toRegister.length) {
-                    const registerResults = await PushRegistrationClient.registerAddresses(
-                        plan.toRegister,
-                        subscriptionId,
-                    )
+                    const registerResults = await RegistrationClient.registerAddresses(plan.toRegister, subscriptionId)
 
                     const successfulAddresses = registerResults.filter(r => r.success)
 
@@ -102,7 +98,7 @@ export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = 
                 }
 
                 if (plan.toUnregister.length) {
-                    const unregisterResults = await PushRegistrationClient.unregisterAddresses(
+                    const unregisterResults = await RegistrationClient.unregisterAddresses(
                         plan.toUnregister,
                         subscriptionId,
                     )

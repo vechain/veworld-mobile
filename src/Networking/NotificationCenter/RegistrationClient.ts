@@ -30,7 +30,7 @@ const NOTIFICATION_CENTER_EVENT = ERROR_EVENTS.NOTIFICATION_CENTER
 /**
  * Client for handling notification registrations with batching and retry logic
  */
-export class PushRegistrationClient {
+export class RegistrationClient {
     private static readonly BATCH_SIZE = 5
 
     static async registerAddresses(addresses: string[], subscriptionId: string | null): Promise<RegistrationResult[]> {

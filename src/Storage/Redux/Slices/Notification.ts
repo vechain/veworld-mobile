@@ -23,7 +23,6 @@ export const Notification = createSlice({
     name: "notification",
     initialState: initialNotificationState,
     reducers: {
-        // flags / misc
         updateNotificationFeatureFlag: (state, action: PayloadAction<boolean>) => {
             state.feautureEnabled = action.payload
         },
@@ -35,24 +34,25 @@ export const Notification = createSlice({
         },
         increaseDappVisitCounter: (state, action: PayloadAction<{ dappId: string }>) => {
             const id = action.payload.dappId
-            const cur = state.dappVisitCounter[id] ?? 0
-            if (cur < 2) state.dappVisitCounter[id] = cur + 1
+
+            if (state.dappVisitCounter[id]) {
+                if (state.dappVisitCounter[id] < 2) {
+                    state.dappVisitCounter[id] = state.dappVisitCounter[id] + 1
+                }
+            } else {
+                state.dappVisitCounter[id] = 1
+            }
         },
         setDappVisitCounter: (state, action: PayloadAction<{ dappId: string; counter: number }>) => {
             state.dappVisitCounter[action.payload.dappId] = action.payload.counter
         },
         removeDappVisitCounter: (state, action: PayloadAction<{ dappId: string }>) => {
-            if (state.dappVisitCounter[action.payload.dappId] != null) {
+            if (state.dappVisitCounter[action.payload.dappId]) {
                 delete state.dappVisitCounter[action.payload.dappId]
             }
         },
         setDappNotifications: (state, action: PayloadAction<boolean>) => {
             state.dappNotifications = action.payload
-        },
-
-        // registrations via adapter (all O(1))
-        setRegistrations: (state, action) => {
-            registrationsAdapter.setAll(state.registrations, action.payload)
         },
         upsertRegistrations: (state, action) => {
             registrationsAdapter.upsertMany(state.registrations, action.payload)
@@ -71,19 +71,8 @@ export const {
     setDappVisitCounter,
     setDappNotifications,
     removeDappVisitCounter,
-
-    setRegistrations,
     upsertRegistrations,
     removeRegistrations,
 } = Notification.actions
 
-// --- selectors ---
-// Get the selectors that work directly on NotificationState
-export const registrationSelectors = registrationsAdapter.getSelectors(
-    (state: NotificationState) => state.registrations,
-)
-
-// Example usage in app code:
-// import { registrationSelectors } from '~Storage/Redux/Slices/Notification'
-// const reg = useSelector((s: RootState) => registrationSelectors.selectById(s.notification, address))
-// const allRegs = useSelector((s: RootState) => registrationSelectors.selectAll(s.notification))
+export { registrationsAdapter }

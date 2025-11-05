@@ -14,7 +14,7 @@ import { ERROR_EVENTS, vechainNewsAndUpdates } from "~Constants"
 import { useAppState } from "~Hooks"
 import { AppStateType, NETWORK_TYPE } from "~Model"
 import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
-import { useNotificationSync } from "~Hooks/useNotificationSync"
+import { useNotificationRegistration } from "~Hooks/useNotificationRegistration"
 import {
     addRemovedNotificationTag,
     increaseDappVisitCounter,
@@ -80,7 +80,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
 
-    useNotificationSync({ enabled: isInitialized && notificationCenter?.registration?.enabled === true })
+    useNotificationRegistration({ enabled: isInitialized && notificationCenter?.registration?.enabled === true })
 
     const initializeOneSignal = useCallback(async () => {
         const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD

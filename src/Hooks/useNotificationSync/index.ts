@@ -1,1 +1,0 @@
-export { useNotificationSync } from "./useNotificationSync"
