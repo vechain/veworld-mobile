@@ -308,6 +308,8 @@
   "BROWSER_RELOAD_PAGE": "Reload page",
   "BROWSER_REMOVE_FAVORITE_DAPPS": "Remove from Favorites",
   "BROWSER_SEE_ALL_TABS": "See all tabs open",
+  "BROWSER_CLEAR_CACHE": "Clear browser cache",
+  "CACHE_CLEARED": "Cache cleared",
   "BROWSER_SHARE": "Share",
   "BROWSER_TAB_MANAGEMENT_TITLE": "Tabs",
   "BTN_ADD_ACCOUNT": "ADD ACCOUNT",
