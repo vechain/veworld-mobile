@@ -1,9 +1,9 @@
 import { useCallback } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import { selectSelectedAccountOrNull, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { getStargateNetworkConfig } from "~Constants/Constants/Staking"
 import { debug } from "~Utils"
 import { ERROR_EVENTS } from "~Constants"
+import { useStargateConfig } from "~Hooks/useStargateConfig"
 
 /**
  * Hook for managing Stargate data refetching
@@ -13,12 +13,11 @@ export const useFetchingStargate = () => {
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const queryClient = useQueryClient()
+    const stargateConfig = useStargateConfig(network)
 
     const refetchStargateData = useCallback(
         async (targetAddress?: string) => {
-            const networkConfig = getStargateNetworkConfig(network.type)
-
-            if (!networkConfig) {
+            if (!stargateConfig) {
                 debug(ERROR_EVENTS.STARGATE, `No Stargate configuration found for network: ${network.type}`)
                 return
             }
@@ -70,7 +69,7 @@ export const useFetchingStargate = () => {
                 debug(ERROR_EVENTS.STARGATE, "Error invalidating Stargate queries:", error)
             }
         },
-        [network.type, selectedAccount, queryClient],
+        [stargateConfig, selectedAccount, network.type, queryClient],
     )
 
     return {

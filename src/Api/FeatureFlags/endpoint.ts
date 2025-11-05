@@ -38,6 +38,16 @@ export type FeatureFlags = {
                 ledger: boolean
             }
         }
+        HAYABUSA: {
+            stargate: {
+                testnet: {
+                    nftContract: string
+                }
+                mainnet: {
+                    nftContract: string
+                }
+            }
+        }
     }
     smartWalletFeature: {
         enabled: boolean

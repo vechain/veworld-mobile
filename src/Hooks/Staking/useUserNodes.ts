@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { ThorClient } from "@vechain/sdk-network"
 import React from "react"
 import { NodeManagement, UserNodesInfo } from "~Constants"
-import { getStargateNetworkConfig } from "~Constants/Constants/Staking"
+import { useStargateConfig } from "~Hooks/useStargateConfig"
 import { useThorClient } from "~Hooks/useThorClient"
 import { NETWORK_TYPE, NodeInfo } from "~Model"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
@@ -42,10 +42,11 @@ export const getUserNodes = async (
 export const useUserNodes = (address?: string, _enabled: boolean = true) => {
     const thor = useThorClient()
     const network = useAppSelector(selectSelectedNetwork)
+    const stargateConfig = useStargateConfig(network)
 
     const nodeManagementAddress = React.useMemo(() => {
-        return getStargateNetworkConfig(network.type)?.NODE_MANAGEMENT_CONTRACT_ADDRESS
-    }, [network.type])
+        return stargateConfig.NODE_MANAGEMENT_CONTRACT_ADDRESS
+    }, [stargateConfig.NODE_MANAGEMENT_CONTRACT_ADDRESS])
 
     const queryKey = React.useMemo(() => {
         return getUserNodesQueryKey(network.type, address)

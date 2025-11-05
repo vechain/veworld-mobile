@@ -63,8 +63,8 @@ jest.mock("~Hooks/useThorClient", () => ({
     }),
 }))
 
-jest.mock("~Constants/Constants/Staking", () => ({
-    getStargateNetworkConfig: jest.fn().mockReturnValue({
+jest.mock("~Hooks/useStargateConfig", () => ({
+    useStargateConfig: jest.fn().mockReturnValue({
         STARGATE_NFT_CONTRACT_ADDRESS: "0xStargateNFTContractAddress",
         STARGATE_DELEGATION_CONTRACT_ADDRESS: "0xStargateDelegationContractAddress",
     }),

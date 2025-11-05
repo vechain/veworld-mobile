@@ -3,17 +3,18 @@ import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseCard, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { COLORS, ColorThemeType, getStargateNetworkConfig, VET, VTHO } from "~Constants"
+import { COLORS, ColorThemeType, VET, VTHO } from "~Constants"
 import { useFormatFiat, useTheme, useThemedStyles } from "~Hooks"
 import { useNFTMetadata } from "~Hooks/useNFTMetadata"
+import { useStargateConfig } from "~Hooks/useStargateConfig"
 import { useThorClient } from "~Hooks/useThorClient"
 import { useI18nContext } from "~i18n"
 import { NftData } from "~Model"
 import { getTokenURI } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
-import { getTokenLevelName, TokenLevelId } from "~Utils/StargateUtils"
 import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
+import { getTokenLevelName, TokenLevelId } from "~Utils/StargateUtils"
 import { StargateImage } from "./StargateImage"
 
 type Props = {
@@ -54,11 +55,12 @@ export const StargateCarouselItem = ({ item }: Props) => {
 
     const thor = useThorClient()
 
+    const stargateConfig = useStargateConfig(network)
+
     const { data: tokenURI } = useQuery({
         queryKey: ["StargateTokenURI", network.type, item.tokenId],
-        queryFn: () =>
-            getTokenURI(item.tokenId, getStargateNetworkConfig(network.type).STARGATE_NFT_CONTRACT_ADDRESS, thor),
-        enabled: Boolean(getStargateNetworkConfig(network.type).STARGATE_NFT_CONTRACT_ADDRESS),
+        queryFn: () => getTokenURI(item.tokenId, stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS!, thor),
+        enabled: Boolean(stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS),
     })
 
     const { data } = useQuery({

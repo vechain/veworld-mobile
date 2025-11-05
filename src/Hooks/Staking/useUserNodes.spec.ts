@@ -46,8 +46,8 @@ jest.mock("@tanstack/react-query", () => {
     }
 })
 
-jest.mock("~Constants/Constants/Staking", () => ({
-    getStargateNetworkConfig: jest.fn().mockReturnValue({
+jest.mock("~Hooks/useStargateConfig", () => ({
+    useStargateConfig: jest.fn().mockReturnValue({
         NODE_MANAGEMENT_CONTRACT_ADDRESS: "0xNodeManagementAddress",
     }),
 }))

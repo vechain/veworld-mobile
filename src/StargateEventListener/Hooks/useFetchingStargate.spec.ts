@@ -1,6 +1,7 @@
 import { renderHook, act } from "@testing-library/react-hooks"
+import { useStargateConfig } from "~Hooks/useStargateConfig"
+
 import { useFetchingStargate } from "./useFetchingStargate"
-import { getStargateNetworkConfig } from "~Constants/Constants/Staking"
 
 // Mocks
 const invalidateQueriesMock = jest.fn().mockResolvedValue(undefined)
@@ -29,8 +30,8 @@ jest.mock("~Storage/Redux", () => {
     }
 })
 
-jest.mock("~Constants/Constants/Staking", () => ({
-    getStargateNetworkConfig: jest.fn(),
+jest.mock("~Hooks/useStargateConfig", () => ({
+    useStargateConfig: jest.fn(),
 }))
 
 jest.mock("~Utils", () => ({
@@ -46,7 +47,7 @@ describe("useFetchingStargate", () => {
     })
 
     it("should early return when no Stargate network config is available", async () => {
-        ;(getStargateNetworkConfig as jest.Mock).mockReturnValue(undefined)
+        ;(useStargateConfig as jest.Mock).mockReturnValue(undefined)
 
         const { result } = renderHook(() => useFetchingStargate())
 
@@ -58,7 +59,7 @@ describe("useFetchingStargate", () => {
     })
 
     it("should early return when no account is selected and no target address provided", async () => {
-        ;(getStargateNetworkConfig as jest.Mock).mockReturnValue({ NODE_MANAGEMENT_CONTRACT_ADDRESS: "0xnode" })
+        ;(useStargateConfig as jest.Mock).mockReturnValue({ NODE_MANAGEMENT_CONTRACT_ADDRESS: "0xnode" })
 
         // Mock no selected account
         mockSelectSelectedAccountOrNull.mockReturnValue(null)
@@ -73,7 +74,7 @@ describe("useFetchingStargate", () => {
     })
 
     it("should proceed with refetch when target address is provided even if no account is selected", async () => {
-        ;(getStargateNetworkConfig as jest.Mock).mockReturnValue({ NODE_MANAGEMENT_CONTRACT_ADDRESS: "0xnode" })
+        ;(useStargateConfig as jest.Mock).mockReturnValue({ NODE_MANAGEMENT_CONTRACT_ADDRESS: "0xnode" })
 
         // Mock no selected account
         mockSelectSelectedAccountOrNull.mockReturnValue(null)
@@ -95,7 +96,7 @@ describe("useFetchingStargate", () => {
 
     it("should invalidate Stargate-related queries via predicate when config is available", async () => {
         // minimal shape; only presence matters for the hook
-        ;(getStargateNetworkConfig as jest.Mock).mockReturnValue({ NODE_MANAGEMENT_CONTRACT_ADDRESS: "0xnode" })
+        ;(useStargateConfig as jest.Mock).mockReturnValue({ NODE_MANAGEMENT_CONTRACT_ADDRESS: "0xnode" })
 
         const { result } = renderHook(() => useFetchingStargate())
 

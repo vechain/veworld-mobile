@@ -2,8 +2,8 @@ import { ThorClient } from "@vechain/sdk-network"
 import { Beat, Network } from "~Model"
 import { AddressUtils, BloomUtils, debug, error } from "~Utils"
 import { ERROR_EVENTS } from "~Constants"
-import { getStargateNetworkConfig } from "~Constants/Constants/Staking"
 import { getReceiptProcessor, InspectableOutput, ReceiptOutput } from "~Services/AbiService"
+import { StargateConfiguration } from "~Hooks/useStargateConfig"
 
 // Signature used by Generated ABI map for GenericAbiManager
 const NODE_DELEGATED_EVENT_SIGNATURE_NAME = "NodeDelegated(indexed uint256,indexed address,bool)"
@@ -30,6 +30,7 @@ interface NodeDelegatedEventHandlerProps {
     refetchStargateData: (targetAddress?: string) => void
     managedAddresses: string[]
     selectedAccountAddress?: string
+    stargateConfig: StargateConfiguration
 }
 
 export const handleNodeDelegatedEvent = async ({
@@ -39,22 +40,20 @@ export const handleNodeDelegatedEvent = async ({
     refetchStargateData,
     managedAddresses,
     selectedAccountAddress,
+    stargateConfig,
 }: NodeDelegatedEventHandlerProps) => {
     try {
-        // Get Stargate contract addresses for the current network
-        const networkConfig = getStargateNetworkConfig(network.type)
-
-        if (!networkConfig) {
+        if (!stargateConfig || Object.keys(stargateConfig).length === 0) {
             debug(ERROR_EVENTS.STARGATE, `No Stargate configuration found for network: ${network.type}`)
             return
         }
 
         const stargateContracts = [
-            networkConfig.NODE_MANAGEMENT_CONTRACT_ADDRESS,
-            networkConfig.STARGATE_DELEGATION_CONTRACT_ADDRESS,
-            networkConfig.STARGATE_NFT_CONTRACT_ADDRESS,
-            networkConfig.LEGACY_NODES_CONTRACT_ADDRESS,
-        ].filter(Boolean)
+            stargateConfig.NODE_MANAGEMENT_CONTRACT_ADDRESS,
+            stargateConfig.STARGATE_DELEGATION_CONTRACT_ADDRESS,
+            stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS,
+            stargateConfig.LEGACY_NODES_CONTRACT_ADDRESS,
+        ].filter((u): u is NonNullable<typeof u> => Boolean(u))
 
         // Check if beat might contain Stargate events using bloom filter
         const hasStargateContract = stargateContracts.some(contractAddress =>
@@ -68,7 +67,7 @@ export const handleNodeDelegatedEvent = async ({
         debug(ERROR_EVENTS.STARGATE, `Potential Stargate events in beat ${beat.number}`)
 
         // Parse NodeDelegated events from the beat (specifically from NodeManagement contract)
-        const nodeManagementAddress = networkConfig.NODE_MANAGEMENT_CONTRACT_ADDRESS
+        const nodeManagementAddress = stargateConfig.NODE_MANAGEMENT_CONTRACT_ADDRESS
         if (!nodeManagementAddress) {
             debug(ERROR_EVENTS.STARGATE, `No NodeManagement contract address found for network: ${network.type}`)
             return

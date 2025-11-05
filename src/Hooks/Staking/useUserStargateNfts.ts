@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { ThorClient } from "@vechain/sdk-network"
 import { useMemo } from "react"
-import { getStargateNetworkConfig } from "~Constants/Constants/Staking"
 import {
     StargateDelegationEvents,
     StargateDelegationFunctions,
@@ -14,6 +13,7 @@ import { NftData, NodeInfo } from "~Model/Staking"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { getHistoricalVTHOClaimed } from "./historical"
+import { useStargateConfig } from "~Hooks/useStargateConfig"
 
 const getUserStargateNftsQueryKey = (network: NETWORK_TYPE, address: string | undefined, nodeIds: string[]) => [
     "userStargateNfts",
@@ -95,13 +95,14 @@ export const useUserStargateNfts = ({
 
     const address = useMemo(() => _address ?? selectedAccount.address, [_address, selectedAccount.address])
 
+    const stargateConfig = useStargateConfig(network)
+
     const { stargateNFTAddress, stargateDelegationAddress } = useMemo(() => {
-        const config = getStargateNetworkConfig(network.type)
         return {
-            stargateNFTAddress: config?.STARGATE_NFT_CONTRACT_ADDRESS,
-            stargateDelegationAddress: config?.STARGATE_DELEGATION_CONTRACT_ADDRESS,
+            stargateNFTAddress: stargateConfig?.STARGATE_NFT_CONTRACT_ADDRESS,
+            stargateDelegationAddress: stargateConfig?.STARGATE_DELEGATION_CONTRACT_ADDRESS,
         }
-    }, [network.type])
+    }, [stargateConfig?.STARGATE_DELEGATION_CONTRACT_ADDRESS, stargateConfig?.STARGATE_NFT_CONTRACT_ADDRESS])
 
     const queryKey = useMemo(() => {
         return getUserStargateNftsQueryKey(
