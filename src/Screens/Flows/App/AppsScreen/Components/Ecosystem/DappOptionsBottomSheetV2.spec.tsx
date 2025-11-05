@@ -13,8 +13,8 @@ jest.mock("../../Hooks", () => ({
     useDAppActions: jest.fn(),
 }))
 
-jest.mock("~Hooks/useDappBookmarking", () => ({
-    ...jest.requireActual("~Hooks/useDappBookmarking"),
+jest.mock("~Hooks/useDappBookmarkToggle", () => ({
+    ...jest.requireActual("~Hooks/useDappBookmarkToggle"),
     useDappBookmarkToggle: jest.fn(),
 }))
 
