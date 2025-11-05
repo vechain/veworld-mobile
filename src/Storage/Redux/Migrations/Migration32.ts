@@ -19,45 +19,44 @@ export const Migration32 = (state: PersistedState): PersistedState => {
         return state
     }
 
-    const favoriteRefs: DAppReference[] = (currentDiscoveryState.favorites || [])
-        .filter(dapp => !dapp.isCustom)
-        .map((dapp, index): DAppReference => {
-            // Custom URL bookmark
-            if (dapp.isCustom) {
-                return {
-                    type: "custom",
-                    url: dapp.href,
-                    title: dapp.name,
-                    description: dapp.desc,
-                    iconUri: dapp.iconUri,
-                    createAt: dapp.createAt,
-                    order: index,
-                }
-            }
-
-            // VeBetterDAO bookmark
-            if (dapp.veBetterDaoId) {
-                return {
-                    type: "vbd",
-                    vbdId: dapp.veBetterDaoId,
-                    order: index,
-                }
-            }
-
-            // App Hub bookmark
+    const favoriteRefs: DAppReference[] = (currentDiscoveryState.favorites || []).map((dapp, index): DAppReference => {
+        // Custom URL bookmark
+        if (dapp.isCustom) {
             return {
-                type: "app-hub",
-                id: dapp.id || DAppUtils.generateDAppId(dapp.href),
+                type: "custom",
+                url: dapp.href,
+                title: dapp.name,
+                description: dapp.desc,
+                iconUri: dapp.iconUri,
+                createAt: dapp.createAt,
                 order: index,
             }
-        })
+        }
+
+        // VeBetterDAO bookmark
+        if (dapp.veBetterDaoId) {
+            return {
+                type: "vbd",
+                vbdId: dapp.veBetterDaoId,
+                order: index,
+            }
+        }
+
+        // App Hub bookmark
+        return {
+            type: "app-hub",
+            id: dapp.id || DAppUtils.generateDAppId(dapp.href),
+            order: index,
+        }
+    })
 
     const newDiscoveryState = {
         ...currentDiscoveryState,
+        favorites: [],
         favoriteRefs,
     } satisfies DiscoveryState
 
-    debug(ERROR_EVENTS.SECURITY, `Migrated ${favoriteRefs.length} favorites to favoriteRefs`)
+    debug(ERROR_EVENTS.SECURITY, `Migrated ${favoriteRefs.length} favorites to favoriteRefs and cleared old array`)
 
     return {
         ...state,

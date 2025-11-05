@@ -170,21 +170,44 @@ export const DiscoverySlice = createSlice({
             const { isCustom, href } = action.payload
             if (isCustom) {
                 state.custom = state.custom.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
-            } else {
-                state.favorites = state.favorites.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
                 if (state.favoriteRefs) {
                     state.favoriteRefs = state.favoriteRefs.filter(
                         ref => ref.type !== "custom" || !URIUtils.compareURLs(ref.url, href),
                     )
                 }
+                return
+            }
+
+            const favoriteMatch = state.favorites.find(dapp => URIUtils.compareURLs(dapp.href, href))
+            state.favorites = state.favorites.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
+
+            if (state.favoriteRefs) {
+                const featuredMatch = state.featured.find(dapp => URIUtils.compareURLs(dapp.href, href))
+                const possibleAppHubId = featuredMatch?.id || DAppUtils.generateDAppId(href)
+                const possibleVbdId = favoriteMatch?.veBetterDaoId || featuredMatch?.veBetterDaoId
+
+                state.favoriteRefs = state.favoriteRefs.filter(ref => {
+                    if (ref.type === "app-hub") {
+                        if (ref.id === possibleAppHubId) return false
+                        // URL fallback if id doesn't match
+                        const appHubFeatured = state.featured.find(f => f.id === ref.id)
+                        if (appHubFeatured && URIUtils.compareURLs(appHubFeatured.href, href)) return false
+                    }
+                    if (ref.type === "vbd") {
+                        if (possibleVbdId && ref.vbdId === possibleVbdId) return false
+                        // URL fallback if vbdId doesn't match
+                        const vbdFeatured = state.featured.find(f => f.veBetterDaoId === ref.vbdId)
+                        if (vbdFeatured && URIUtils.compareURLs(vbdFeatured.href, href)) return false
+                    }
+                    return true
+                })
             }
         },
         reorderBookmarks: (state, action: PayloadAction<DiscoveryDApp[]>) => {
-            state.favorites = action.payload
+            const nonCustom = action.payload.filter(dapp => !dapp.isCustom)
+            state.favorites = nonCustom
             if (!state.favoriteRefs) state.favoriteRefs = []
-            state.favoriteRefs = action.payload
-                .filter(dapp => !dapp.isCustom)
-                .map((dapp, index) => createDAppReference(dapp, index))
+            state.favoriteRefs = nonCustom.map((dapp, index) => createDAppReference(dapp, index))
         },
         setFeaturedDApps: (state, action: PayloadAction<DiscoveryDApp[]>) => {
             state.featured = action.payload

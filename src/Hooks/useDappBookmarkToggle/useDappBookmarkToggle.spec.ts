@@ -1,10 +1,12 @@
 import { renderHook, act } from "@testing-library/react-hooks"
-import { useDappBookmarking } from "./useDappBookmarking"
+import { useDappBookmarkToggle } from "./useDappBookmarkToggle"
 import { TestWrapper } from "~Test"
 import { DiscoveryDApp } from "~Constants"
 import { DiscoveryState } from "~Storage/Redux"
 import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 import { VbdDApp } from "~Model"
+
+jest.mock("~Hooks/useFetchFeaturedDApps/useVeBetterDaoDapps")
 
 const bookmarkedDapps: DiscoveryDApp[] = [
     {
@@ -75,8 +77,19 @@ const mockState = {
 }
 
 describe("useDappBookmarking", () => {
+    beforeEach(() => {
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+            data: [],
+            isLoading: false,
+        })
+    })
+
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
     it("should identify a bookmarked URL correctly", () => {
-        const { result } = renderHook(() => useDappBookmarking("https://example.com", "Example"), {
+        const { result } = renderHook(() => useDappBookmarkToggle("https://example.com", "Example"), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: {
@@ -90,7 +103,7 @@ describe("useDappBookmarking", () => {
     })
 
     it("should identify a non-bookmarked URL correctly", () => {
-        const { result } = renderHook(() => useDappBookmarking("https://notbookmarked.com"), {
+        const { result } = renderHook(() => useDappBookmarkToggle("https://notbookmarked.com"), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: {
@@ -106,7 +119,7 @@ describe("useDappBookmarking", () => {
     })
 
     it("should handle undefined URL gracefully", () => {
-        const { result } = renderHook(() => useDappBookmarking(), {
+        const { result } = renderHook(() => useDappBookmarkToggle(), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: {
@@ -122,7 +135,7 @@ describe("useDappBookmarking", () => {
     })
 
     it("should handle invalid URL gracefully", () => {
-        const { result } = renderHook(() => useDappBookmarking("https::example.com"), {
+        const { result } = renderHook(() => useDappBookmarkToggle("https::example.com"), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: {
@@ -138,7 +151,7 @@ describe("useDappBookmarking", () => {
     })
 
     it("should match URLs with the same origin but different paths", () => {
-        const { result } = renderHook(() => useDappBookmarking("https://example.com/some/path"), {
+        const { result } = renderHook(() => useDappBookmarkToggle("https://example.com/some/path"), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: {
@@ -152,7 +165,7 @@ describe("useDappBookmarking", () => {
     })
 
     it("should add a new bookmark when the URL is not in the list", async () => {
-        const { result, waitFor } = renderHook(() => useDappBookmarking("https://example2.com", "Example 2"), {
+        const { result, waitFor } = renderHook(() => useDappBookmarkToggle("https://example2.com", "Example 2"), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: {
@@ -194,7 +207,7 @@ describe("useDappBookmarking", () => {
             isLoading: false,
         })
 
-        const { result, waitFor } = renderHook(() => useDappBookmarking("https://example2.com", "Example 2"), {
+        const { result, waitFor } = renderHook(() => useDappBookmarkToggle("https://example2.com", "Example 2"), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: {
@@ -230,7 +243,7 @@ describe("useDappBookmarking", () => {
     })
 
     it("should add a bookmark from a generic URL", async () => {
-        const { result, waitFor } = renderHook(() => useDappBookmarking("https://exampletest.com", "Example Test"), {
+        const { result, waitFor } = renderHook(() => useDappBookmarkToggle("https://exampletest.com", "Example Test"), {
             wrapper: TestWrapper,
         })
 
@@ -246,7 +259,7 @@ describe("useDappBookmarking", () => {
     })
 
     it("should remove a bookmark when the URL is in the list", async () => {
-        const { result, waitFor } = renderHook(() => useDappBookmarking("https://example.com", "Example"), {
+        const { result, waitFor } = renderHook(() => useDappBookmarkToggle("https://example.com", "Example"), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: {

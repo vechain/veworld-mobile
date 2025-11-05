@@ -2,6 +2,7 @@ import { RootState } from "../Types"
 import { createSelector } from "@reduxjs/toolkit"
 import _ from "lodash"
 import { DiscoveryDApp } from "~Constants"
+import { resolveDAppsFromReferences } from "~Utils/DAppUtils/DAppBookmarkResolver"
 
 const getDiscoveryState = (state: RootState) => state.discovery
 
@@ -14,40 +15,7 @@ export const selectFeaturedDapps = createSelector(getDiscoveryState, (discovery)
 
 export const selectCustomDapps = createSelector(getDiscoveryState, (discovery): DiscoveryDApp[] => discovery.custom)
 
-const selectFavoriteRefs = createSelector(getDiscoveryState, discovery => discovery.favoriteRefs)
-
-// Resolve dApp reference based on type using discriminated union
-const resolveDAppFromReference = (
-    ref: import("../Slices/Discovery").DAppReference,
-    byId: Map<string, DiscoveryDApp>,
-    byVbdId: Map<string, DiscoveryDApp>,
-): DiscoveryDApp | null => {
-    switch (ref.type) {
-        case "app-hub": {
-            const dapp = byId.get(ref.id)
-            return dapp ? { ...dapp } : null
-        }
-
-        case "vbd": {
-            const dapp = byVbdId.get(ref.vbdId)
-            if (dapp) return { ...dapp }
-
-            return null
-        }
-
-        case "custom": {
-            return {
-                href: ref.url,
-                name: ref.title,
-                desc: ref.description,
-                iconUri: ref.iconUri,
-                isCustom: true,
-                createAt: ref.createAt,
-                amountOfNavigations: 0,
-            }
-        }
-    }
-}
+export const selectFavoriteRefs = createSelector(getDiscoveryState, discovery => discovery.favoriteRefs)
 
 export const selectBookmarkedDapps = createSelector(
     selectFavoritesDapps,
@@ -59,16 +27,7 @@ export const selectBookmarkedDapps = createSelector(
             const byId = new Map(featured.filter(d => d.id).map(d => [d.id!, d]))
             const byVbdId = new Map(featured.filter(d => d.veBetterDaoId).map(d => [d.veBetterDaoId!, d]))
 
-            const resolved: DiscoveryDApp[] = []
-            for (const ref of favoriteRefs) {
-                const dapp = resolveDAppFromReference(ref, byId, byVbdId)
-                if (dapp) {
-                    resolved.push(dapp)
-                }
-            }
-
-            const allDapps = [...resolved, ...custom]
-            return _.uniqBy(allDapps, value => value.href)
+            return resolveDAppsFromReferences(favoriteRefs, { byId, byVbdId })
         }
 
         const dapps: DiscoveryDApp[] = [...favorites, ...custom]

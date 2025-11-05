@@ -1,21 +1,14 @@
 import { useCallback, useMemo } from "react"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking, useVeBetterDaoDapps } from "~Hooks"
-import {
-    addBookmark,
-    removeBookmark,
-    selectBookmarkedDapps,
-    selectFeaturedDapps,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { useAnalyticTracking, useDappBookmarksList, useVeBetterDaoDapps } from "~Hooks"
+import { addBookmark, removeBookmark, selectFeaturedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 
-export const useDappBookmarking = (url?: string, title?: string) => {
+export const useDappBookmarkToggle = (url?: string, title?: string) => {
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
 
-    const bookmarkedDapps = useAppSelector(selectBookmarkedDapps)
+    const bookmarkedDapps = useDappBookmarksList()
     const featuredDapps = useAppSelector(selectFeaturedDapps)
     const { data: vbdApps } = useVeBetterDaoDapps()
 
