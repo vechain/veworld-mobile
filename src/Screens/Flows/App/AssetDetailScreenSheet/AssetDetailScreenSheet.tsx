@@ -44,30 +44,19 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
     const downsampledChartData = useMemo(() => {
         if (!chartData) return DEFAULT_LINE_CHART_DATA
 
-        if (selectedItem.days === 1) {
-            console.log("chartData", ChartUtils.downsampleData(chartData, "hour", 1, "first")?.length)
-            return ChartUtils.downsampleData(chartData, "hour", 1, "first")
+        switch (selectedItem.days) {
+            case 1:
+            case 7:
+                return ChartUtils.downsampleData(chartData, "hour", 1, "first")
+            case 30:
+                return ChartUtils.downsampleData(chartData, "day", 1, "first")
+            case 180:
+                return ChartUtils.downsampleData(chartData, "day", 30, "first")
+            case 365:
+                return ChartUtils.downsampleData(chartData, "day", 52, "first")
+            default:
+                return chartData
         }
-
-        if (selectedItem.days === 7) {
-            console.log("chartData 1W", ChartUtils.downsampleData(chartData, "hour", 1, "first")?.length)
-            return ChartUtils.downsampleData(chartData, "hour", 1, "first")
-        }
-
-        if (selectedItem.days === 30) {
-            return ChartUtils.downsampleData(chartData, "day", 1, "first")
-        }
-
-        if (selectedItem.days === 180) {
-            return ChartUtils.downsampleData(chartData, "day", 30, "first")
-        }
-
-        if (selectedItem.days === 365) {
-            console.log("chartData 1Y", ChartUtils.downsampleData(chartData, "day", 52, "first")?.length)
-            return ChartUtils.downsampleData(chartData, "day", 52, "first")
-        }
-
-        return chartData
     }, [chartData, selectedItem.days])
 
     return (

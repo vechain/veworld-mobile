@@ -127,7 +127,7 @@ const _LineChart = ({
     const theme = useTheme()
     const skiaFont = useFont(require("../../../Assets/Fonts/Inter/Inter-SemiBold.ttf"), fontSize)
 
-    const { path, points, maxX, minY, maxY, calcXPos, calcYPos, ...rest } = useMemo(
+    const { path, points, maxX, minY, maxY, calcXPos, calcYPos } = useMemo(
         () => makeGraph(data, width, height, strokeWidth),
         [data, width, height, strokeWidth],
     )
@@ -211,8 +211,7 @@ const _LineChart = ({
                 backgroundProgress.value = withTiming(1, { duration: 800 })
             }
         })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data.length])
+    }, [data.length, showGradientBackground, backgroundProgress, progress])
 
     useEffect(() => {
         if (previousData && previousData.length !== data.length) {
@@ -223,8 +222,7 @@ const _LineChart = ({
                 }
             })
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [previousData?.length, data.length, path, points, maxX, minY, maxY, calcXPos, calcYPos, rest])
+    }, [previousData, path, morphProgress, previousGraph, data.length])
 
     const findNearestPointIndex = useCallback(
         (x: number) => {
