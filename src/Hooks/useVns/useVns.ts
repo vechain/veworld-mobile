@@ -26,6 +26,7 @@ import {
 import { AccountUtils, AddressUtils, error } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
+import { Vns } from "~Model/Vns"
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
@@ -84,11 +85,6 @@ export const getVnsAddress = async (thor: Connex.Thor, network: Network, name?: 
     }
 
     return isEmpty ? undefined : addresses?.[0] || undefined
-}
-
-export type Vns = {
-    name?: string
-    address?: string
 }
 
 type VnsHook = {
