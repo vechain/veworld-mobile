@@ -3,13 +3,11 @@ import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseTouchable, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useDappBookmarksList, useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { X2ECategoryType } from "~Model"
 import { Routes } from "~Navigation"
-import { useAppSelector } from "~Storage/Redux/Hooks"
-import { selectBookmarkedDapps } from "~Storage/Redux/Selectors"
 import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
 import { EcosystemSection } from "./Components/Ecosystem"
 import { FavoritesBottomSheet } from "./Components/FavoritesBottomSheet"
@@ -33,7 +31,7 @@ export const AppsScreen = () => {
         onClose: onCloseAppsBottomSheet,
     } = useBottomSheetModal()
 
-    const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+    const bookmarkedDApps = useDappBookmarksList()
     const { onDAppPress } = useDAppActions(Routes.APPS)
 
     const showFavorites = bookmarkedDApps.length > 0

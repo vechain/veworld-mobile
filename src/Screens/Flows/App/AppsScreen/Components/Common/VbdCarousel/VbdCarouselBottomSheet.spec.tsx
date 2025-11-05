@@ -13,6 +13,17 @@ jest.mock("~Networking/DApps/fetchAppOverview")
 jest.mock("../../../Hooks", () => ({
     useDAppActions: jest.fn(),
 }))
+
+let mockVbdDAppsData: VbdDApp[] = []
+
+jest.mock("~Hooks/useFetchFeaturedDApps", () => ({
+    useVeBetterDaoDapps: () => ({
+        get data() {
+            return mockVbdDAppsData
+        },
+        isLoading: false,
+    }),
+}))
 jest.mock("react-native-localize", () => ({
     getTimeZone: jest.fn(() => "America/New_York"),
 }))
@@ -93,6 +104,7 @@ describe("VbdCarouselBottomSheet", () => {
         discovery: {
             featured: [],
             favorites: [],
+            favoriteRefs: [],
             custom: [],
             hasOpenedDiscovery: false,
             connectedApps: [],
@@ -106,6 +118,7 @@ describe("VbdCarouselBottomSheet", () => {
 
     beforeEach(() => {
         jest.clearAllMocks()
+        mockVbdDAppsData = [mockVbdDApp]
         ;(useDAppActions as jest.Mock).mockReturnValue({
             onDAppPress: mockOnDAppPress,
         })
@@ -223,17 +236,26 @@ describe("VbdCarouselBottomSheet", () => {
             // Add to favorite
             const addFavoriteButtonIcon = screen.getByTestId("bottom-sheet-add-favorite-icon")
             expect(addFavoriteButtonIcon).toBeOnTheScreen()
-            fireEvent.press(favoriteButton)
+
+            await act(async () => {
+                fireEvent.press(favoriteButton)
+            })
 
             // Check if the remove favorite icon is shown
-            const removeFavoriteButtonIcon = screen.getByTestId("bottom-sheet-remove-favorite-icon")
-            expect(removeFavoriteButtonIcon).toBeOnTheScreen()
+            await waitFor(() => {
+                const removeFavoriteButtonIcon = screen.getByTestId("bottom-sheet-remove-favorite-icon")
+                expect(removeFavoriteButtonIcon).toBeOnTheScreen()
+            })
 
             // Remove from favorite
-            fireEvent.press(favoriteButton)
+            await act(async () => {
+                fireEvent.press(favoriteButton)
+            })
 
             // Check if the add to favorite icon is shown
-            expect(addFavoriteButtonIcon).toBeOnTheScreen()
+            await waitFor(() => {
+                expect(screen.getByTestId("bottom-sheet-add-favorite-icon")).toBeOnTheScreen()
+            })
         })
     })
 

@@ -4,7 +4,7 @@ import { BackHandler, StyleSheet } from "react-native"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useDappBookmarkToggle, useTheme, useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
@@ -30,7 +30,8 @@ export const BrowserBottomBar: React.FC = () => {
         isDapp,
     } = useInAppBrowser()
     const theme = useTheme()
-    const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
+    const currentUrl = navigationState?.url
+    const { isBookMarked, toggleBookmark } = useDappBookmarkToggle(currentUrl)
     const { styles } = useThemedStyles(baseStyles)
     const isIOSPlatform = isIOS()
     const route = useRoute()
@@ -96,7 +97,7 @@ export const BrowserBottomBar: React.FC = () => {
                           onPress: () => {
                               toggleBookmark()
                           },
-                          disabled: !fromDiscovery,
+                          disabled: !fromDiscovery || !currentUrl,
                       },
                   ]
                 : []),
@@ -112,6 +113,7 @@ export const BrowserBottomBar: React.FC = () => {
     }, [
         canGoBack,
         canGoForward,
+        currentUrl,
         fromDiscovery,
         onForwardHandler,
         isBookMarked,

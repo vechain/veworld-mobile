@@ -6,7 +6,7 @@ import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers"
 import { ColorThemeType, SCREEN_HEIGHT } from "~Constants"
-import { useDappBookmarking, useTabManagement, useThemedStyles } from "~Hooks"
+import { useDappBookmarkToggle, useTabManagement, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
 import { RootStackParamListApps, RootStackParamListSettings, Routes } from "~Navigation"
@@ -49,7 +49,7 @@ export const getActionTextColor = (
 export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onNavigate, onClose }, ref) => {
     const { LL } = useI18nContext()
     const { navigationState, webviewRef, dappMetadata } = useInAppBrowser()
-    const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
+    const { isBookMarked, toggleBookmark } = useDappBookmarkToggle(navigationState?.url)
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListSettings & RootStackParamListApps>>()
     const { closeTab } = useTabManagement()
