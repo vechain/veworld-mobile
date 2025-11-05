@@ -81,39 +81,47 @@ export class RegistrationClient {
             try {
                 const resp = await callApi()
                 const failed = new Set(resp.failed)
+
                 if (failed.size) {
                     error(
                         NOTIFICATION_CENTER_EVENT,
-                        `Failed to ${operation.toLowerCase()} ${failed.size} address(es): ${Array.from(failed).join(
-                            ", ",
-                        )}`,
+                        `Failed to ${operation} ${failed.size} address(es): ${Array.from(failed).join(", ")}`,
                     )
                 }
-                return batch.map(addr =>
-                    failed.has(addr)
-                        ? { address: addr, operation, success: false, error: "failed", timestamp: now }
-                        : { address: addr, operation, success: true, timestamp: now },
-                )
+
+                return this.createResults(batch, operation, failed, now)
             } catch (e: unknown) {
                 attempt++
-                const canRetry = attempt < MAX_RETRIES && this.isRetryableError(e)
                 error(NOTIFICATION_CENTER_EVENT, `Batch ${operation.toLowerCase()} attempt ${attempt} failed`, e)
+
+                const canRetry = attempt < MAX_RETRIES && this.isRetryableError(e)
                 if (!canRetry) {
+                    const allFailed = new Set(batch)
                     const errorMessage = e instanceof Error ? e.message : "batch failed"
-                    // mark whole batch failed
-                    return batch.map(addr => ({
-                        address: addr,
-                        operation,
-                        success: false,
-                        error: errorMessage,
-                        timestamp: now,
-                    }))
+                    return this.createResults(batch, operation, allFailed, now, errorMessage)
                 }
+
                 const delay = 1000 * Math.pow(2, attempt - 1)
                 info(NOTIFICATION_CENTER_EVENT, `Retrying in ${delay}ms`)
                 await new Promise(r => setTimeout(r, delay))
             }
         }
+    }
+
+    private static createResults(
+        batch: string[],
+        operation: RegistrationOperation,
+        failedAddresses: Set<string>,
+        timestamp: number,
+        errorMsg?: string,
+    ): RegistrationResult[] {
+        return batch.map(addr => ({
+            address: addr,
+            operation,
+            success: !failedAddresses.has(addr),
+            error: failedAddresses.has(addr) ? errorMsg ?? "failed" : undefined,
+            timestamp,
+        }))
     }
 
     private static chunkArray<T>(array: T[], size: number): T[][] {
