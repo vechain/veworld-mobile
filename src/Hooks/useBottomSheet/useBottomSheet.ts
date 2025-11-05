@@ -30,6 +30,14 @@ export const useBottomSheetModal = <TData>({ externalRef }: UseBottomSheetModalO
         [externalRef],
     )
 
+    /**
+     * Function to open the bottomsheet without passing any data
+     */
+    const onOpenPlain = useCallback(() => {
+        if (externalRef) externalRef.current?.present()
+        else ref.current?.present()
+    }, [externalRef])
+
     const openWithDelay = useCallback(
         (delay: number) => {
             setTimeout(() => {
@@ -45,5 +53,5 @@ export const useBottomSheetModal = <TData>({ externalRef }: UseBottomSheetModalO
         else ref.current?.close()
     }, [externalRef])
 
-    return { ref: externalRef ?? ref, onOpen, onClose, openWithDelay }
+    return { ref: externalRef ?? ref, onOpen, onClose, openWithDelay, onOpenPlain }
 }
