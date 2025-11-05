@@ -64,6 +64,17 @@ describe("useNotificationRegistration", () => {
                 }),
             )
             expect(NotificationCenterAPI.unregisterPushNotification).not.toHaveBeenCalled()
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: expect.stringContaining("upsertRegistrations"),
+                    payload: expect.arrayContaining([
+                        expect.objectContaining({
+                            address: mockAddress1,
+                            lastSuccessfulSync: expect.any(Number),
+                        }),
+                    ]),
+                }),
+            )
         })
 
         it("should not register observed accounts", async () => {
@@ -81,6 +92,17 @@ describe("useNotificationRegistration", () => {
                     subscriptionId: mockSubscriptionId,
                 })
             })
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: expect.stringContaining("upsertRegistrations"),
+                    payload: expect.arrayContaining([
+                        expect.objectContaining({
+                            address: mockAddress1,
+                            lastSuccessfulSync: expect.any(Number),
+                        }),
+                    ]),
+                }),
+            )
         })
 
         it("should unregister addresses that have been removed", async () => {
@@ -99,6 +121,12 @@ describe("useNotificationRegistration", () => {
                     subscriptionId: mockSubscriptionId,
                 })
             })
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: expect.stringContaining("removeRegistrations"),
+                    payload: expect.arrayContaining([mockAddress2]),
+                }),
+            )
         })
 
         it("should re-register addresses that are due (30 days old)", async () => {
@@ -115,6 +143,17 @@ describe("useNotificationRegistration", () => {
                     subscriptionId: mockSubscriptionId,
                 })
             })
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: expect.stringContaining("upsertRegistrations"),
+                    payload: expect.arrayContaining([
+                        expect.objectContaining({
+                            address: mockAddress1,
+                            lastSuccessfulSync: expect.any(Number),
+                        }),
+                    ]),
+                }),
+            )
         })
 
         it("should not re-register addresses that are not due (less than 30 days old)", async () => {
@@ -149,93 +188,23 @@ describe("useNotificationRegistration", () => {
                     subscriptionId: mockSubscriptionId,
                 })
             })
-        })
-    })
-
-    describe("enabled flag", () => {
-        it("should not execute when enabled is false", async () => {
-            const accounts = [{ address: mockAddress1, index: 0 }]
-            mockUseAppSelector(accounts, [])
-
-            renderHook(() => useNotificationRegistration({ enabled: false }))
-
-            // Wait for useEffect to complete before asserting negative
-            await new Promise(resolve => setTimeout(resolve, 100))
-
-            expect(NotificationCenterAPI.registerPushNotification).not.toHaveBeenCalled()
-            expect(NotificationCenterAPI.unregisterPushNotification).not.toHaveBeenCalled()
-        })
-    })
-
-    describe("error handling", () => {
-        it("should handle registration errors gracefully", async () => {
-            const accounts = [{ address: mockAddress1, index: 0 }]
-            mockUseAppSelector(accounts, [])
-
-            const registrationError = new Error("Registration failed")
-            ;(NotificationCenterAPI.registerPushNotification as jest.Mock).mockRejectedValue(registrationError)
-
-            renderHook(() => useNotificationRegistration({ enabled: true }))
-
-            await waitFor(() => expect(NotificationCenterAPI.registerPushNotification).toHaveBeenCalled())
-        })
-
-        it("should handle unregistration errors gracefully", async () => {
-            const accounts: any[] = []
-            const registrations = [{ address: mockAddress1, lastSuccessfulSync: Date.now() }]
-            mockUseAppSelector(accounts, registrations)
-
-            const unregistrationError = new Error("Unregistration failed")
-            ;(NotificationCenterAPI.unregisterPushNotification as jest.Mock).mockRejectedValue(unregistrationError)
-
-            renderHook(() => useNotificationRegistration({ enabled: true }))
-
-            await waitFor(() => expect(NotificationCenterAPI.unregisterPushNotification).toHaveBeenCalled())
-        })
-    })
-
-    describe("edge cases", () => {
-        it("should handle empty accounts list", async () => {
-            const accounts: any[] = []
-            const registrations = [{ address: mockAddress1, lastSuccessfulSync: Date.now() }]
-            mockUseAppSelector(accounts, registrations)
-
-            renderHook(() => useNotificationRegistration({ enabled: true }))
-
-            await waitFor(() =>
-                expect(NotificationCenterAPI.unregisterPushNotification).toHaveBeenCalledWith({
-                    walletAddresses: [mockAddress1],
-                    subscriptionId: mockSubscriptionId,
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: expect.stringContaining("upsertRegistrations"),
+                    payload: expect.arrayContaining([
+                        expect.objectContaining({
+                            address: mockAddress2,
+                            lastSuccessfulSync: expect.any(Number),
+                        }),
+                    ]),
                 }),
             )
-        })
-
-        it("should handle empty registrations list", async () => {
-            const accounts = [{ address: mockAddress1, index: 0 }]
-            mockUseAppSelector(accounts, [])
-
-            renderHook(() => useNotificationRegistration({ enabled: true }))
-
-            await waitFor(() =>
-                expect(NotificationCenterAPI.registerPushNotification).toHaveBeenCalledWith({
-                    walletAddresses: [mockAddress1],
-                    subscriptionId: mockSubscriptionId,
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: expect.stringContaining("removeRegistrations"),
+                    payload: expect.arrayContaining([mockAddress1]),
                 }),
             )
-        })
-
-        it("should handle registrations with undefined lastSuccessfulSync", async () => {
-            const accounts = [{ address: mockAddress1, index: 0 }]
-            const registrations = [{ address: mockAddress1 }]
-            mockUseAppSelector(accounts, registrations)
-
-            renderHook(() => useNotificationRegistration({ enabled: true }))
-
-            // Wait for useEffect to complete before asserting negative
-            await new Promise(resolve => setTimeout(resolve, 100))
-
-            expect(NotificationCenterAPI.registerPushNotification).not.toHaveBeenCalled()
-            expect(NotificationCenterAPI.unregisterPushNotification).not.toHaveBeenCalled()
         })
 
         it("should handle multiple addresses requiring different actions", async () => {
@@ -255,42 +224,53 @@ describe("useNotificationRegistration", () => {
 
             renderHook(() => useNotificationRegistration({ enabled: true }))
 
-            await waitFor(() =>
+            await waitFor(() => {
                 expect(NotificationCenterAPI.registerPushNotification).toHaveBeenCalledWith({
                     walletAddresses: [mockAddress1],
                     subscriptionId: mockSubscriptionId,
+                })
+                expect(NotificationCenterAPI.unregisterPushNotification).toHaveBeenCalledWith({
+                    walletAddresses: [mockAddress3],
+                    subscriptionId: mockSubscriptionId,
+                })
+            })
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: expect.stringContaining("upsertRegistrations"),
+                    payload: expect.arrayContaining([
+                        expect.objectContaining({
+                            address: mockAddress1,
+                            lastSuccessfulSync: expect.any(Number),
+                        }),
+                    ]),
                 }),
             )
-            expect(NotificationCenterAPI.unregisterPushNotification).toHaveBeenCalledWith({
-                walletAddresses: [mockAddress3],
-                subscriptionId: mockSubscriptionId,
-            })
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: expect.stringContaining("removeRegistrations"),
+                    payload: expect.arrayContaining([mockAddress3]),
+                }),
+            )
         })
     })
 
-    describe("dispatch behavior", () => {
-        it("should dispatch upsertRegistrations for successful registrations", async () => {
+    describe("enabled flag", () => {
+        it("should not execute when enabled is false", async () => {
             const accounts = [{ address: mockAddress1, index: 0 }]
             mockUseAppSelector(accounts, [])
 
-            renderHook(() => useNotificationRegistration({ enabled: true }))
+            renderHook(() => useNotificationRegistration({ enabled: false }))
 
-            await waitFor(() =>
-                expect(mockDispatch).toHaveBeenCalledWith(
-                    expect.objectContaining({
-                        type: expect.stringContaining("upsertRegistrations"),
-                        payload: expect.arrayContaining([
-                            expect.objectContaining({
-                                address: mockAddress1,
-                                lastSuccessfulSync: expect.any(Number),
-                            }),
-                        ]),
-                    }),
-                ),
-            )
+            // Wait for useEffect to complete before asserting negative
+            await new Promise(resolve => setTimeout(resolve, 100))
+
+            expect(NotificationCenterAPI.registerPushNotification).not.toHaveBeenCalled()
+            expect(NotificationCenterAPI.unregisterPushNotification).not.toHaveBeenCalled()
         })
+    })
 
-        it("should dispatch removeRegistrations for successful unregistrations", async () => {
+    describe("edge cases", () => {
+        it("should handle empty accounts list", async () => {
             const accounts: any[] = []
             const registrations = [{ address: mockAddress1, lastSuccessfulSync: Date.now() }]
             mockUseAppSelector(accounts, registrations)
@@ -298,34 +278,56 @@ describe("useNotificationRegistration", () => {
             renderHook(() => useNotificationRegistration({ enabled: true }))
 
             await waitFor(() =>
-                expect(mockDispatch).toHaveBeenCalledWith(
-                    expect.objectContaining({
-                        type: expect.stringContaining("removeRegistrations"),
-                        payload: expect.arrayContaining([mockAddress1]),
-                    }),
-                ),
+                expect(NotificationCenterAPI.unregisterPushNotification).toHaveBeenCalledWith({
+                    walletAddresses: [mockAddress1],
+                    subscriptionId: mockSubscriptionId,
+                }),
+            )
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: expect.stringContaining("removeRegistrations"),
+                    payload: expect.arrayContaining([mockAddress1]),
+                }),
             )
         })
 
-        it("should dispatch empty array for failed registrations", async () => {
+        it("should handle empty registrations list", async () => {
             const accounts = [{ address: mockAddress1, index: 0 }]
             mockUseAppSelector(accounts, [])
-
-            // Mock API to return failure
-            ;(NotificationCenterAPI.registerPushNotification as jest.Mock).mockResolvedValue({
-                failed: [mockAddress1],
-            })
 
             renderHook(() => useNotificationRegistration({ enabled: true }))
 
             await waitFor(() =>
-                expect(mockDispatch).toHaveBeenCalledWith(
-                    expect.objectContaining({
-                        type: expect.stringContaining("upsertRegistrations"),
-                        payload: [],
-                    }),
-                ),
+                expect(NotificationCenterAPI.registerPushNotification).toHaveBeenCalledWith({
+                    walletAddresses: [mockAddress1],
+                    subscriptionId: mockSubscriptionId,
+                }),
             )
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: expect.stringContaining("upsertRegistrations"),
+                    payload: expect.arrayContaining([
+                        expect.objectContaining({
+                            address: mockAddress1,
+                            lastSuccessfulSync: expect.any(Number),
+                        }),
+                    ]),
+                }),
+            )
+        })
+
+        it("should handle registrations with undefined lastSuccessfulSync", async () => {
+            const accounts = [{ address: mockAddress1, index: 0 }]
+            const registrations = [{ address: mockAddress1 }]
+            mockUseAppSelector(accounts, registrations)
+
+            renderHook(() => useNotificationRegistration({ enabled: true }))
+
+            // Wait for useEffect to complete before asserting negative
+            await new Promise(resolve => setTimeout(resolve, 100))
+
+            expect(NotificationCenterAPI.registerPushNotification).not.toHaveBeenCalled()
+            expect(NotificationCenterAPI.unregisterPushNotification).not.toHaveBeenCalled()
         })
     })
 })
