@@ -13,14 +13,14 @@ import { Registration } from "~Storage/Redux/Types"
 import { AccountUtils, error, info } from "~Utils"
 import HexUtils from "~Utils/HexUtils"
 import { ERROR_EVENTS } from "../../Constants"
-import { NotificationRegistrationClient } from "../../Networking/NotificationCenter/NotificationRegistrationClient"
+import { PushRegistrationClient } from "../../Networking/NotificationCenter/PushRegistrationClient"
+
 interface RegistrationPlan {
     toRegister: string[]
     toUnregister: string[]
 }
 
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
-const BATCH_SIZE = 5
 
 const NOTIFICATION_CENTER_EVENT = ERROR_EVENTS.NOTIFICATION_CENTER
 
@@ -51,6 +51,7 @@ const buildRegistrationPlan = (
             newAddresses.push(address)
         }
     }
+    // Re-register addresses that are due
     let reRegisterAddresses: string[] = []
     for (const registration of existingRegistrations) {
         if (isDueReregister(registration)) {
@@ -78,22 +79,17 @@ export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = 
     useEffect(() => {
         if (!enabled) return
 
-        let cancelled = false
-
         const run = async () => {
             try {
-                console.log("Running notification sync", enabled, currentWalletAddresses)
                 const subscriptionId = await OneSignal.User.pushSubscription.getIdAsync()
 
-                if (cancelled) return
-
                 const plan = buildRegistrationPlan(currentWalletAddresses, registrations)
-                const gateway = new NotificationRegistrationClient(BATCH_SIZE)
 
                 if (plan.toRegister.length) {
-                    const registerResults = await gateway.registerAddresses(plan.toRegister, subscriptionId)
-
-                    if (cancelled) return
+                    const registerResults = await PushRegistrationClient.registerAddresses(
+                        plan.toRegister,
+                        subscriptionId,
+                    )
 
                     const successfulAddresses = registerResults.filter(r => r.success)
 
@@ -102,33 +98,26 @@ export const useNotificationSync = ({ enabled = true }: { enabled?: boolean } = 
                         lastSuccessfulSync: r.timestamp,
                     }))
 
-                    console.log("successfulRegistrations", successfulRegistrations)
                     dispatch(upsertRegistrations(successfulRegistrations))
                 }
 
                 if (plan.toUnregister.length) {
-                    const unregisterResults = await gateway.unregisterAddresses(plan.toUnregister, subscriptionId)
-
-                    if (cancelled) return
+                    const unregisterResults = await PushRegistrationClient.unregisterAddresses(
+                        plan.toUnregister,
+                        subscriptionId,
+                    )
 
                     const successfulAddresses = unregisterResults.filter(r => r.success).map(r => r.address)
 
-                    console.log("successfulUnregisterAddresses", successfulAddresses)
                     dispatch(removeRegistrations(successfulAddresses))
                 }
             } catch (err) {
-                if (!cancelled) {
-                    error(NOTIFICATION_CENTER_EVENT, "Error during notification registration/unregistration sync", err)
-                }
+                error(NOTIFICATION_CENTER_EVENT, "Error during notification registration/unregistration sync", err)
             }
         }
 
         // Fire-and-forget; UI doesn't care about state
         run()
-
-        return () => {
-            cancelled = true
-        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [enabled, currentWalletAddresses])
 
