@@ -44,7 +44,8 @@ const ListFooterComponent = ({ addresses }: { addresses: string[] }) => {
             typographyFont="bodyMedium"
             style={styles.btn}
             textColor={theme.colors.text}
-            rightIcon={<BaseIcon name="icon-arrow-right" size={14} style={styles.icon} color={theme.colors.text} />}>
+            rightIcon={<BaseIcon name="icon-arrow-right" size={14} style={styles.icon} color={theme.colors.text} />}
+            testID="COLLECTIBLES_LIST_SEE_ALL">
             {LL.ACTIVITY_SEE_ALL()}
         </BaseButton>
     )
@@ -119,7 +120,9 @@ export const CollectiblesList = () => {
                 horizontal={false}
                 keyExtractor={v => `${v.address}_${v.tokenId}`}
                 columnWrapperStyle={styles.listColumn}
-                ListFooterComponent={isLoading ? null : <ListFooterComponent addresses={addresses} />}
+                ListFooterComponent={
+                    isLoading || nfts.length === 0 ? null : <ListFooterComponent addresses={addresses} />
+                }
             />
             <CollectibleBottomSheet bsRef={ref} />
         </>
