@@ -1,4 +1,3 @@
-// notificationSlice.ts
 import { createSlice, PayloadAction, createEntityAdapter } from "@reduxjs/toolkit"
 import { NotificationState, Registration } from "../Types"
 
