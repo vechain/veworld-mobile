@@ -11,7 +11,7 @@ export const NftScreenHeader = ({ openSelectAccountBottomSheet }: Props) => {
 
     return (
         <BaseView style={HeaderStyleV2}>
-            <HeaderTitle testID="nfts_title" title={LL.TITLE_NFTS()} leftIconName="icon-image" />
+            <HeaderTitle testID="nfts_title" title={LL.TITLE_NFTS()} leftIconName="icon-image" align="left" />
             <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
         </BaseView>
     )
