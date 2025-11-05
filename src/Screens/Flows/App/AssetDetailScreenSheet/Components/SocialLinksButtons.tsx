@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
+import { TelegramSVG, TwitterSVG } from "~Assets/IconComponents"
 import { BaseButton, BaseIcon, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { TwitterSVG, TelegramSVG } from "~Assets/IconComponents"
 
 const ALLOWED_SOCIAL_LINKS = ["website", "twitter", "telegram"] as const
 type AllowedSocialLink = (typeof ALLOWED_SOCIAL_LINKS)[number]
@@ -38,12 +38,12 @@ export const SocialLinksButtons = ({ socialLinks, onNavigate }: SocialLinksButto
         (key: AllowedSocialLink) => {
             if (key === "website")
                 return (
-                    <BaseIcon name="icon-globe" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_500} size={20} />
+                    <BaseIcon name="icon-globe" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_600} size={20} />
                 )
             if (key === "twitter")
-                return <TwitterSVG color={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_500} width={20} height={20} />
+                return <TwitterSVG color={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_600} width={20} height={20} />
             if (key === "telegram")
-                return <TelegramSVG color={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_500} width={20} height={20} />
+                return <TelegramSVG color={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_600} width={20} height={20} />
             return null
         },
         [theme],
@@ -65,7 +65,7 @@ export const SocialLinksButtons = ({ socialLinks, onNavigate }: SocialLinksButto
                     typographyFont="bodySemiBold"
                     textStyle={isWebsite ? styles.buttonText : undefined}
                     bgColor={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.WHITE}
-                    textColor={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_500}
+                    textColor={theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_600}
                     selfAlign="center">
                     {isWebsite ? LL.COMMON_WEBSITE() : null}
                 </BaseButton>

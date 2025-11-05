@@ -625,6 +625,10 @@ type RootTranslation = {
 	 */
 	BALANCE_ACTION_RECEIVE: string
 	/**
+	 * S​e​l​l
+	 */
+	BALANCE_ACTION_SELL: string
+	/**
 	 * S​e​n​d
 	 */
 	BALANCE_ACTION_SEND: string
@@ -1492,6 +1496,10 @@ type RootTranslation = {
 	 */
 	BTN_GO_TO_SETTINGS: string
 	/**
+	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_HIDE_COLLECTION: string
+	/**
 	 * A​c​t​i​v​i​t​y
 	 */
 	BTN_HISTORY: string
@@ -1596,14 +1604,6 @@ type RootTranslation = {
 	 */
 	BTN_REMOVE_FROM_FAVORITES: string
 	/**
-	 * S​h​o​w​ ​c​o​l​l​e​c​t​i​o​n
-	 */
-	BTN_SHOW_COLLECTION: string
-	/**
-	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
-	 */
-	BTN_HIDE_COLLECTION: string
-	/**
 	 * R​e​m​o​v​e​ ​w​a​l​l​e​t
 	 */
 	BTN_REMOVE_WALLET: string
@@ -1684,6 +1684,10 @@ type RootTranslation = {
 	 * Y​e​s​,​ ​s​e​n​d​ ​a​n​y​w​a​y
 	 */
 	BTN_SEND_ANYWAY: string
+	/**
+	 * S​h​o​w​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_SHOW_COLLECTION: string
 	/**
 	 * S​h​o​w​ ​Q​R​ ​c​o​d​e
 	 */
@@ -1835,25 +1839,25 @@ type RootTranslation = {
 	 */
 	COLLECTIONS: string
 	/**
-	 * V​i​e​w​ ​h​i​d​d​e​n
-	 */
-	COLLECTIONS_VIEW_HIDDEN: string
-	/**
 	 * H​i​d​e​ ​b​a​c​k
 	 */
 	COLLECTIONS_HIDE_BACK: string
 	/**
-	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
+	 * V​i​e​w​ ​h​i​d​d​e​n
 	 */
-	COLLECTION_NAME: string
+	COLLECTIONS_VIEW_HIDDEN: string
+	/**
+	 * T​h​e​ ​c​o​l​l​e​c​t​i​o​n​ ​w​a​s​ ​m​o​v​e​d​ ​t​o​ ​t​h​e​ ​h​i​d​d​e​n​ ​s​e​c​t​i​o​n​ ​a​n​d​ ​n​o​ ​l​o​n​g​e​r​ ​v​i​s​i​b​l​e​ ​o​n​ ​t​h​e​ ​c​o​l​l​e​c​t​i​o​n​s​ ​l​i​s​t​.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: string
 	/**
 	 * C​o​l​l​e​c​t​i​o​n​ ​h​i​d​d​e​n
 	 */
 	COLLECTION_HIDDEN_TITLE: string
 	/**
-	 * T​h​e​ ​c​o​l​l​e​c​t​i​o​n​ ​w​a​s​ ​m​o​v​e​d​ ​t​o​ ​t​h​e​ ​h​i​d​d​e​n​ ​s​e​c​t​i​o​n​ ​a​n​d​ ​n​o​ ​l​o​n​g​e​r​ ​v​i​s​i​b​l​e​ ​o​n​ ​t​h​e​ ​c​o​l​l​e​c​t​i​o​n​s​ ​l​i​s​t​.
+	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
 	 */
-	COLLECTION_HIDDEN_DESCRIPTION: string
+	COLLECTION_NAME: string
 	/**
 	 * d​a​y
 	 */
@@ -1863,21 +1867,13 @@ type RootTranslation = {
 	 */
 	COMMON_24H: string
 	/**
-	 * W​e​b​s​i​t​e
-	 */
-	COMMON_WEBSITE: string
-	/**
-	 * 2​4​h​ ​V​o​l​u​m​e
-	 */
-	COMMON_24H_VOLUME: string
-	/**
 	 * 2​4​h​ ​R​a​n​g​e
 	 */
 	COMMON_24H_PRICE_RANGE: string
 	/**
-	 * T​o​k​e​n​ ​s​t​a​t​s
+	 * 2​4​h​ ​V​o​l​u​m​e
 	 */
-	COMMON_TOKEN_STATS: string
+	COMMON_24H_VOLUME: string
 	/**
 	 * A​s​s​e​t​s
 	 */
@@ -2117,9 +2113,17 @@ type RootTranslation = {
 	 */
 	COMMON_SHOW: string
 	/**
+	 * S​h​o​w​ ​m​o​r​e
+	 */
+	COMMON_SHOW_MORE: string
+	/**
 	 * T​o​d​a​y
 	 */
 	COMMON_TODAY: string
+	/**
+	 * T​o​k​e​n​ ​s​t​a​t​s
+	 */
+	COMMON_TOKEN_STATS: string
 	/**
 	 * T​o​t​a​l​ ​S​u​p​p​l​y
 	 */
@@ -2129,13 +2133,13 @@ type RootTranslation = {
 	 */
 	COMMON_USERNAME: string
 	/**
-	 * W​h​o​o​p​s​!
-	 */
-	COMMON_WHOOPS: string
-	/**
 	 * W​e​b​s​i​t​e
 	 */
 	COMMON_WEBSITE: string
+	/**
+	 * W​h​o​o​p​s​!
+	 */
+	COMMON_WHOOPS: string
 	/**
 	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
 	 * @param {string} alias
@@ -6046,6 +6050,10 @@ Try reconnect your device to the internet.
 	 */
 	BALANCE_ACTION_RECEIVE: () => LocalizedString
 	/**
+	 * Sell
+	 */
+	BALANCE_ACTION_SELL: () => LocalizedString
+	/**
 	 * Send
 	 */
 	BALANCE_ACTION_SEND: () => LocalizedString
@@ -6908,6 +6916,10 @@ Thanks for your patience!
 	 */
 	BTN_GO_TO_SETTINGS: () => LocalizedString
 	/**
+	 * Hide collection
+	 */
+	BTN_HIDE_COLLECTION: () => LocalizedString
+	/**
 	 * Activity
 	 */
 	BTN_HISTORY: () => LocalizedString
@@ -7012,14 +7024,6 @@ Thanks for your patience!
 	 */
 	BTN_REMOVE_FROM_FAVORITES: () => LocalizedString
 	/**
-	 * Show collection
-	 */
-	BTN_SHOW_COLLECTION: () => LocalizedString
-	/**
-	 * Hide collection
-	 */
-	BTN_HIDE_COLLECTION: () => LocalizedString
-	/**
 	 * Remove wallet
 	 */
 	BTN_REMOVE_WALLET: () => LocalizedString
@@ -7099,6 +7103,10 @@ Thanks for your patience!
 	 * Yes, send anyway
 	 */
 	BTN_SEND_ANYWAY: () => LocalizedString
+	/**
+	 * Show collection
+	 */
+	BTN_SHOW_COLLECTION: () => LocalizedString
 	/**
 	 * Show QR code
 	 */
@@ -7249,25 +7257,25 @@ This action is irreversible.
 	 */
 	COLLECTIONS: () => LocalizedString
 	/**
-	 * View hidden
-	 */
-	COLLECTIONS_VIEW_HIDDEN: () => LocalizedString
-	/**
 	 * Hide back
 	 */
 	COLLECTIONS_HIDE_BACK: () => LocalizedString
 	/**
-	 * Collection name
+	 * View hidden
 	 */
-	COLLECTION_NAME: () => LocalizedString
+	COLLECTIONS_VIEW_HIDDEN: () => LocalizedString
+	/**
+	 * The collection was moved to the hidden section and no longer visible on the collections list.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: () => LocalizedString
 	/**
 	 * Collection hidden
 	 */
 	COLLECTION_HIDDEN_TITLE: () => LocalizedString
 	/**
-	 * The collection was moved to the hidden section and no longer visible on the collections list.
+	 * Collection name
 	 */
-	COLLECTION_HIDDEN_DESCRIPTION: () => LocalizedString
+	COLLECTION_NAME: () => LocalizedString
 	/**
 	 * day
 	 */
@@ -7277,21 +7285,13 @@ This action is irreversible.
 	 */
 	COMMON_24H: () => LocalizedString
 	/**
-	 * Website
-	 */
-	COMMON_WEBSITE: () => LocalizedString
-	/**
-	 * 24h Volume
-	 */
-	COMMON_24H_VOLUME: () => LocalizedString
-	/**
 	 * 24h Range
 	 */
 	COMMON_24H_PRICE_RANGE: () => LocalizedString
 	/**
-	 * Token stats
+	 * 24h Volume
 	 */
-	COMMON_TOKEN_STATS: () => LocalizedString
+	COMMON_24H_VOLUME: () => LocalizedString
 	/**
 	 * Assets
 	 */
@@ -7529,9 +7529,17 @@ This action is irreversible.
 	 */
 	COMMON_SHOW: () => LocalizedString
 	/**
+	 * Show more
+	 */
+	COMMON_SHOW_MORE: () => LocalizedString
+	/**
 	 * Today
 	 */
 	COMMON_TODAY: () => LocalizedString
+	/**
+	 * Token stats
+	 */
+	COMMON_TOKEN_STATS: () => LocalizedString
 	/**
 	 * Total Supply
 	 */
@@ -7541,13 +7549,13 @@ This action is irreversible.
 	 */
 	COMMON_USERNAME: () => LocalizedString
 	/**
-	 * Whoops!
-	 */
-	COMMON_WHOOPS: () => LocalizedString
-	/**
 	 * Website
 	 */
 	COMMON_WEBSITE: () => LocalizedString
+	/**
+	 * Whoops!
+	 */
+	COMMON_WHOOPS: () => LocalizedString
 	/**
 	 * Confirming this you will disconnect the {name} app from {alias}
 	 */

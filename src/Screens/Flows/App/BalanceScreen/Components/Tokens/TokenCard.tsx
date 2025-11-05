@@ -86,9 +86,14 @@ export const TokenCard = ({ token }: Props) => {
     const isVechainToken = useMemo(() => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol), [token.symbol])
 
     const handlePress = useCallback(() => {
+        if (betterWorldFeature?.balanceScreen?.tokens?.enabled) {
+            navigation.navigate(Routes.TOKEN_DETAILS, {
+                token: tokenWithCompleteInfo,
+            })
+            return
+        }
         if (!isVechainToken) {
-            if (AccountUtils.isObservedAccount(selectedAccount) && !betterWorldFeature?.balanceScreen?.tokens?.enabled)
-                return
+            if (AccountUtils.isObservedAccount(selectedAccount)) return
             if (isCrossChainToken) {
                 navigation.navigate(Routes.BRIDGE_TOKEN_DETAILS, {
                     token,

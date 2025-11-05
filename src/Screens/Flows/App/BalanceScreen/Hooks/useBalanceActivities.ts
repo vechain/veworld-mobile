@@ -45,7 +45,7 @@ export const useBalanceActivities = ({ tab }: { tab: BalanceTab }) => {
     }, [selectedAccount.address, selectedNetwork, tab])
 
     return useQuery({
-        queryKey: ["BALANCE_ACTIVITIES", tab, selectedNetwork.genesis.id, selectedAccount.address],
+        queryKey: ["BALANCE_ACTIVITIES", selectedNetwork.genesis.id, selectedAccount.address, tab],
         queryFn: fetchActivities,
         select(_data) {
             return _data.data
