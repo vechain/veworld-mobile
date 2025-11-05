@@ -444,7 +444,7 @@
   "COLLECTIONS": "收藏",
   "COLLECTIONS_HIDE_BACK": "隐藏返回",
   "COLLECTIONS_VIEW_HIDDEN": "查看隐藏",
-  "COLLECTION_HIDDEN_DESCRIPTION": "该收藏已被移动到隐藏部分，并且不再在收藏列表中可见。",
+  "COLLECTION_HIDDEN_DESCRIPTION": "该收藏已移至隐藏部分，不再可见于收藏列表。",
   "COLLECTION_HIDDEN_TITLE": "收藏已隐藏",
   "COLLECTION_NAME": "收藏名称",
   "COMMOMN_DAY": "日",
