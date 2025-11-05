@@ -41,10 +41,38 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
         placeholderData: DEFAULT_LINE_CHART_DATA,
     })
 
+    const downsampledChartData = useMemo(() => {
+        if (!chartData) return DEFAULT_LINE_CHART_DATA
+
+        if (selectedItem.days === 1) {
+            console.log("chartData", ChartUtils.downsampleData(chartData, "hour", 1, "first")?.length)
+            return ChartUtils.downsampleData(chartData, "hour", 1, "first")
+        }
+
+        if (selectedItem.days === 7) {
+            console.log("chartData 1W", ChartUtils.downsampleData(chartData, "hour", 1, "first")?.length)
+            return ChartUtils.downsampleData(chartData, "hour", 1, "first")
+        }
+
+        if (selectedItem.days === 30) {
+            return ChartUtils.downsampleData(chartData, "day", 1, "first")
+        }
+
+        if (selectedItem.days === 180) {
+            return ChartUtils.downsampleData(chartData, "day", 30, "first")
+        }
+
+        if (selectedItem.days === 365) {
+            console.log("chartData 1Y", ChartUtils.downsampleData(chartData, "day", 52, "first")?.length)
+            return ChartUtils.downsampleData(chartData, "day", 52, "first")
+        }
+
+        return chartData
+    }, [chartData, selectedItem.days])
+
     return (
         <AssetDetailScreenWrapper>
-            <LineChart.Provider
-                data={ChartUtils.downsampleData(chartData ?? DEFAULT_LINE_CHART_DATA, "hour", 1, "first")!}>
+            <LineChart.Provider data={downsampledChartData}>
                 <BaseView flexDirection="row" justifyContent="space-between" style={styles.padding}>
                     <BaseView flexDirection="row" gap={16}>
                         <TokenImage
