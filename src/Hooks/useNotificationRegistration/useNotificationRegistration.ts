@@ -7,7 +7,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { registrationSelectors } from "~Storage/Redux/Slices/Notification"
+import { registrationSelectors } from "~Storage/Redux/Selectors/Notification"
 import { Registration } from "~Storage/Redux/Types"
 import { AccountUtils, error, info } from "~Utils"
 import HexUtils from "~Utils/HexUtils"
@@ -36,21 +36,20 @@ const buildRegistrationPlan = (
         reg.lastSuccessfulSync !== undefined &&
         now - reg.lastSuccessfulSync >= THIRTY_DAYS_MS
 
-    // removed addreses
     let removedAddresses = []
     for (const address of oldAddressSet) {
         if (!newAddressSet.has(address)) {
             removedAddresses.push(address)
         }
     }
-    // New addresses
+
     let newAddresses = []
     for (const address of newAddressSet) {
         if (!oldAddressSet.has(address)) {
             newAddresses.push(address)
         }
     }
-    // Re-register addresses that are due
+
     let reRegisterAddresses: string[] = []
     for (const registration of existingRegistrations) {
         if (isDueReregister(registration)) {
@@ -68,7 +67,7 @@ const buildRegistrationPlan = (
 export const useNotificationRegistration = ({ enabled = true }: { enabled?: boolean } = {}) => {
     const dispatch = useAppDispatch()
     const accounts = useAppSelector(selectAccounts)
-    const registrations = useAppSelector(state => registrationSelectors.selectAll(state.notification))
+    const registrations = useAppSelector(registrationSelectors.selectAll)
 
     const currentWalletAddresses = useMemo(
         () => accounts.filter(a => !AccountUtils.isObservedAccount(a)).map(a => HexUtils.normalize(a.address)),
