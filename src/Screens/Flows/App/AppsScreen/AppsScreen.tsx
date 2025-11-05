@@ -16,7 +16,6 @@ import { FavouritesV2 } from "./Components/Favourites/FavouritesV2"
 import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
 import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
 import { AppsBottomSheet, VeBetterSection } from "./Components/VeBetter"
-import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
 import { useDAppActions } from "./Hooks/useDAppActions"
 
 export const AppsScreen = () => {
