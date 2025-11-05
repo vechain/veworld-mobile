@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.9 (2025-11-05)</small>
+
+* build: init ([73a4b19](https://github.com/vechain/veworld-mobile/commit/73a4b19))
+* 496 bug   248 when all from the same collection on homepage the collection page is not shown (#3501) ([f29aabf](https://github.com/vechain/veworld-mobile/commit/f29aabf)), closes [#3501](https://github.com/vechain/veworld-mobile/issues/3501)
+
 ## <small>2.4.8 (2025-11-03)</small>
 
 * build: init ([1fdf5bb](https://github.com/vechain/veworld-mobile/commit/1fdf5bb))
