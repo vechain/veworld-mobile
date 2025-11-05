@@ -42,6 +42,13 @@ jest.mock("~Hooks/useThorClient", () => ({
     }),
 }))
 
+jest.mock("~Hooks/useStargateConfig", () => ({
+    STARGATE_NFT_CONTRACT_ADDRESS: "0x1856c533ac2d94340aaa8544d35a5c1d4a21dee7",
+    NODE_MANAGEMENT_CONTRACT_ADDRESS: "0xB0EF9D89C6b49CbA6BBF86Bf2FDf0Eee4968c6AB",
+    LEGACY_NODES_CONTRACT_ADDRESS: "0xb81E9C5f9644Dec9e5e3Cac86b4461A222072302",
+    STARGATE_DELEGATION_CONTRACT_ADDRESS: "0x4cb1c9ef05b529c093371264fab2c93cc6cddb0e",
+}))
+
 describe("useLevelCirculatingSupplies", () => {
     beforeEach(() => {
         jest.clearAllMocks()

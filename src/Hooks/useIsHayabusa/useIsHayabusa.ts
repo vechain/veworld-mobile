@@ -8,15 +8,15 @@ export const useIsHayabusa = (network: Network) => {
     const { isHayabusa } = useIsBlockchainHayabusa(network)
     const featureFlags = useFeatureFlags()
 
-    const isValidNftContract = useMemo(() => {
+    const isValidContract = useMemo(() => {
         if ([NETWORK_TYPE.OTHER, NETWORK_TYPE.SOLO].includes(network.type)) return false
-        const nftContract =
+        const contract =
             featureFlags?.forks?.HAYABUSA?.stargate?.[
                 network.type as Extract<NETWORK_TYPE, NETWORK_TYPE.MAIN | NETWORK_TYPE.TEST>
-            ]?.nftContract
-        if (!nftContract || nftContract === ethers.constants.AddressZero) return false
+            ]?.contract
+        if (!contract || contract === ethers.constants.AddressZero) return false
         return true
     }, [featureFlags?.forks?.HAYABUSA?.stargate, network.type])
 
-    return useMemo(() => isHayabusa && isValidNftContract, [isHayabusa, isValidNftContract])
+    return useMemo(() => isHayabusa && isValidContract, [isHayabusa, isValidContract])
 }

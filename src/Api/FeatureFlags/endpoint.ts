@@ -41,10 +41,16 @@ export type FeatureFlags = {
         HAYABUSA: {
             stargate: {
                 testnet: {
-                    nftContract: string
+                    /**
+                     * Address of the Stargate contract
+                     */
+                    contract: string
                 }
                 mainnet: {
-                    nftContract: string
+                    /**
+                     * Address of the Stargate contract
+                     */
+                    contract: string
                 }
             }
         }

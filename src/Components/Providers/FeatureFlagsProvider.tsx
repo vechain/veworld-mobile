@@ -45,10 +45,10 @@ export const initialState: FeatureFlags = {
         HAYABUSA: {
             stargate: {
                 testnet: {
-                    nftContract: "0x0000000000000000000000000000000000000000",
+                    contract: "0x0000000000000000000000000000000000000000",
                 },
                 mainnet: {
-                    nftContract: "0x0000000000000000000000000000000000000000",
+                    contract: "0x0000000000000000000000000000000000000000",
                 },
             },
         },
