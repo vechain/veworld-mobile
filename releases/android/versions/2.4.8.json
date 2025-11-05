@@ -1,0 +1,125 @@
+{
+  "version": "2.4.8",
+  "major": true,
+  "descriptions": {
+    "en": [
+      "New Collectibles section available",
+      "Avatar customization with your NFTs",
+      "NFT performance improvements",
+      "Favorite your NFTs and collections",
+      "Bug fixes and performance improvements"
+    ],
+    "de": [
+      "Neue Sammlerstücke-Sektion verfügbar",
+      "Avatar-Anpassung mit Ihren NFTs",
+      "Leistungsverbesserungen für NFTs",
+      "Favorisieren Sie Ihre NFTs und Sammlungen",
+      "Fehlerbehebungen und Leistungsverbesserungen"
+    ],
+    "es": [
+      "Nueva sección de coleccionables disponible",
+      "Personalización de avatar con tus NFTs",
+      "Mejoras en el rendimiento de NFTs",
+      "Favoritos tus NFTs y colecciones",
+      "Corrección de errores y mejoras de rendimiento"
+    ],
+    "fr": [
+      "Nouvelle section de collection disponibles",
+      "Personnalisation de l'avatar avec vos NFTs",
+      "Améliorations des performances des NFTs",
+      "Ajoutez vos NFTs et collections en favoris",
+      "Correction de bugs et améliorations des performances"
+    ],
+    "hi": [
+      "नया संग्रहणीय अनुभाग उपलब्ध",
+      "अपने NFTs के साथ अवतार अनुकूलन",
+      "NFT प्रदर्शन में सुधार",
+      "अपने NFTs और संग्रह को पसंदीदा बनाएं",
+      "बग फिक्स और प्रदर्शन सुधार"
+    ],
+    "it": [
+      "Nuova sezione Collezionabili disponibile",
+      "Personalizzazione avatar con i tuoi NFT",
+      "Miglioramenti delle prestazioni degli NFT",
+      "Aggiungi ai preferiti i tuoi NFT e collezioni",
+      "Correzione di bug e miglioramenti delle prestazioni"
+    ],
+    "ja": [
+      "新しいコレクションセクションが利用可能",
+      "NFTでアバターをカスタマイズ",
+      "NFTのパフォーマンス向上",
+      "お気に入りのNFTとコレクション",
+      "バグ修正とパフォーマンス改善"
+    ],
+    "ko": [
+      "새로운 수집품 섹션 이용 가능",
+      "NFT로 아바타 커스터마이징",
+      "NFT 성능 개선",
+      "NFT 및 컬렉션 즐겨찾기에 추가",
+      "버그 수정 및 성능 개선"
+    ],
+    "nl": [
+      "Nieuwe verzamelobjecten sectie beschikbaar",
+      "Avatar-aanpassing met je NFT's",
+      "Prestaties van NFT's verbeterd",
+      "Markeer je favoriete NFT's en collecties",
+      "Foutoplossingen en prestatieverbeteringen"
+    ],
+    "pl": [
+      "Nowa sekcja Kolekcjonerskie dostępna",
+      "Personalizacja awatara za pomocą twoich NFT",
+      "Ulepszenia wydajności NFT",
+      "Oznacz ulubione swoje NFT i kolekcje",
+      "Poprawki błędów i ulepszenia wydajności"
+    ],
+    "pt": [
+      "Nova seção de Colecionáveis disponível",
+      "Personalização de avatar com seus NFTs",
+      "Melhorias no desempenho de NFTs",
+      "Adicione aos favoritos seus NFTs e coleções",
+      "Correção de bugs e melhorias de desempenho"
+    ],
+    "ru": [
+      "Новый раздел коллекционных предметов доступен",
+      "Настройка аватара с помощью ваших NFT",
+      "Улучшение производительности NFT",
+      "Добавляйте NFT и коллекции в избранное",
+      "Исправления ошибок и улучшение производительности"
+    ],
+    "sv": [
+      "Ny samlingssektion tillgänglig",
+      "Avatar-anpassning med dina NFTs",
+      "Förbättringar av NFT-prestanda",
+      "Markera dina favoriter bland NFTs och samlingar",
+      "Buggfixar och prestandaförbättringar"
+    ],
+    "tr": [
+      "Yeni Koleksiyonlar bölümü mevcut",
+      "NFT'lerinizle avatar özelleştirme",
+      "NFT performans iyileştirmeleri",
+      "NFT'lerinizi ve koleksiyonlarınızı favorilere ekleyin",
+      "Hata düzeltmeleri ve performans iyileştirmeleri"
+    ],
+    "tw": [
+      "新的收藏品區已開放",
+      "使用您的NFT進行化身自訂",
+      "NFT效能提升",
+      "收藏您最愛的NFT和收藏品",
+      "錯誤修正和效能提升"
+    ],
+    "vi": [
+      "Phần Sưu tập mới đã có sẵn",
+      "Tùy chỉnh avatar với NFT của bạn",
+      "Cải tiến hiệu suất NFT",
+      "Yêu thích NFT và bộ sưu tập của bạn",
+      "Sửa lỗi và cải thiện hiệu suất"
+    ],
+    "zh": [
+      "新增收藏品部分可用",
+      "使用您的NFT进行头像自定义",
+      "NFT性能改进",
+      "收藏您喜欢的NFT和系列",
+      "错误修复和性能改进"
+    ]
+  }
+}

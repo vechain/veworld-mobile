@@ -1,4 +1,4 @@
-import { NETWORK_TYPE, NFTMediaType } from "~Model"
+import { NETWORK_TYPE } from "~Model"
 import { NftSlice, NftSliceState, toggleBlackListCollection, toggleFavorite, toggleFavoriteCollection } from "./Nft"
 import HexUtils from "~Utils/HexUtils"
 
@@ -114,19 +114,7 @@ describe("NftSlice", () => {
             initialState,
             toggleBlackListCollection({
                 network: NETWORK_TYPE.MAIN,
-                collection: {
-                    address: "0x1234567890abcdef1234567890abcdef12345678",
-                    name: "Test Collection",
-                    symbol: "TEST",
-                    creator: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
-                    fromRegistry: false,
-                    description: "Test Description",
-                    image: "Test Image",
-                    totalSupply: 10000,
-                    id: "test-collection",
-                    mediaType: NFTMediaType.IMAGE,
-                    updated: false,
-                },
+                collectionAddress: "0x1234567890abcdef1234567890abcdef12345678",
                 accountAddress: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
             }),
         )
@@ -144,19 +132,7 @@ describe("NftSlice", () => {
             initialState,
             toggleBlackListCollection({
                 network: NETWORK_TYPE.MAIN,
-                collection: {
-                    address: "0x1234567890abcdef1234567890abcdef12345678",
-                    name: "Test Collection",
-                    symbol: "TEST",
-                    creator: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
-                    fromRegistry: false,
-                    description: "Test Description",
-                    image: "Test Image",
-                    totalSupply: 10000,
-                    id: "test-collection",
-                    mediaType: NFTMediaType.IMAGE,
-                    updated: false,
-                },
+                collectionAddress: "0x1234567890abcdef1234567890abcdef12345678",
                 accountAddress: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
             }),
         )

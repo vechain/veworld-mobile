@@ -51,7 +51,7 @@ jobs:
         steps:
             - name: NightlyReportE2E2Slack
               if: ${{ github.event_name == 'schedule' }}
-              uses: slackapi/slack-github-action@v2.0.0
+              uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d # v2.0.0
               with:
                   webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
                   webhook-type: incoming-webhook
@@ -65,7 +65,7 @@ jobs:
                       }
             - name: FailureReportE2E2Slack
               if: github.ref == 'refs/heads/main' && (needs.build-and-test-ios.result != 'success' || needs.build-and-test-android.result != 'success')
-              uses: slackapi/slack-github-action@v2.0.0
+              uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d # v2.0.0
               with:
                   webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
                   webhook-type: incoming-webhook

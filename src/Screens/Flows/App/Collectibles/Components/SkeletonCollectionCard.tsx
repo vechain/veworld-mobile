@@ -24,7 +24,7 @@ export const SkeletonCollectionCard = () => {
                         boneColor={theme.colors.skeletonBoneColor}
                         highlightColor={theme.colors.skeletonHighlightColor}
                         height={20}
-                        width={150}
+                        width={75}
                         borderRadius={4}
                     />
                     <BaseSkeleton
@@ -44,10 +44,11 @@ export const SkeletonCollectionCard = () => {
 const baseStyles = () =>
     StyleSheet.create({
         skeletonRoot: {
-            width: "100%",
-            height: 182,
+            flex: 1,
+            aspectRatio: 0.8791,
             position: "relative",
             overflow: "hidden",
             justifyContent: "flex-end",
+            maxWidth: "50%",
         },
     })

@@ -26,6 +26,9 @@ type Props<ItemT = any, SectionT = DefaultSectionT> = BaseSectionListSeparatorPr
 }
 
 export const SectionListSeparator = <ItemT = any, SectionT = DefaultSectionT>(props: Props<ItemT, SectionT>) => {
+    // If leadingItem is present, but trailingSection is null it means that this is the last section
+    // that is display, thus it doesn't make sense to have additional space
+    if (props.leadingItem && !props.trailingSection) return null
     //If leadingItem is present, it means that it's trying to render the bottom section separator,
     //otherwise it's trying to render the separator between the header and the section
     return props.leadingItem ? (

@@ -85,15 +85,18 @@ jobs:
               env:
                   ref: "${{ github.ref }}"
                   head: "${{ github.head_ref || 'main' }}"
+                  pr_number: "${{ github.event.pull_request.number || 99999 }}"
+                  pr_branch: "${{ github.ref_name }}"
+                  pr_base: "${{ github.event.pull_request.base.ref || 'main' }}"
               run: |
                   if [[ $ref == 'refs/heads/main' ]]; then
                       echo "SONAR_ARGS=-Dsonar.branch.name=main" >> $GITHUB_OUTPUT
                   else
-                      echo "SONAR_ARGS=-Dsonar.pullrequest.key=${{github.event.pull_request.number || 99999 }} -Dsonar.pullrequest.branch=${{ github.ref_name }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref || 'main' }}" >> $GITHUB_OUTPUT
+                      echo "SONAR_ARGS=-Dsonar.pullrequest.key=${pr_number} -Dsonar.pullrequest.branch=${pr_branch} -Dsonar.pullrequest.base=${pr_base}" >> $GITHUB_OUTPUT
                   fi
 
             - name: SonarCloud Scan
-              uses: SonarSource/sonarqube-scan-action@v6.0.0
+              uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602 # v6.0.0
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
