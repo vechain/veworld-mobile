@@ -41,6 +41,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         onClose()
     }, [onClose, bookmarkedDApps])
 
+    const renderSeparator = useCallback(() => <BaseSpacer height={8} />, [])
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
 
     const onMorePress = useCallback(
@@ -170,8 +171,8 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         keyExtractor={item => item.href}
                         renderItem={renderItem}
                         data={reorderedDapps}
-                        ItemSeparatorComponent={() => <BaseSpacer height={8} />}
-                        ListEmptyComponent={() => (
+                        ItemSeparatorComponent={renderSeparator}
+                        ListEmptyComponent={
                             <ListEmptyResults
                                 subtitle={LL.FAVOURITES_DAPPS_EMPTY_LIST()}
                                 icon={"icon-alert-circle"}
@@ -180,7 +181,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                                 iconStyle={styles.emptyIcon}
                                 subtitleColor={theme.colors.actionBottomSheet.subText}
                             />
-                        )}
+                        }
                         ListFooterComponent={renderFooter}
                         onDragEnd={onDragEnd}
                     />
