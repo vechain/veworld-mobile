@@ -419,7 +419,7 @@
   "BTN_WALLET_TUTORIAL_SLIDE_02": "NÄSTA: SÄKERHET",
   "BTN_WALLET_TUTORIAL_SLIDE_03": "NÄSTA: HEMLIG FRAS",
   "BTN_WRITE_RECOVERY_PASSWORD": "Skriv återställningslösenord",
-  "CACHE_CLEARED": "Cache rensad",
+  "CACHE_CLEARED": "Cachen har rensats",
   "CERT_LEDGER_REJECTED": "Du har avvisat certifikatet",
   "CERT_LEDGER_REJECTED_SB": "Du har avvisat certifikatet på din Ledger, vänligen bekräfta på din enhet när det krävs",
   "CERT_LEDGER_SIGN_DATA": "Vi signerar ditt certifikat",
