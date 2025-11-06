@@ -2,12 +2,8 @@ import { useQuery } from "@tanstack/react-query"
 import { ThorClient } from "@vechain/sdk-network"
 import { useMemo } from "react"
 import { Stargate } from "~Constants"
-import {
-    StargateDelegationEvents,
-    StargateDelegationFunctions,
-    StargateDelegationRewards,
-} from "~Constants/Constants/Staking/abis/StargateDelegation.abi"
-import { StargateInfo, StargateNftEvents } from "~Constants/Constants/Staking/abis/StargateNFT.abi"
+import { StargateDelegationRewards } from "~Constants/Constants/Staking/abis/StargateDelegation.abi"
+import { StargateInfo } from "~Constants/Constants/Staking/abis/StargateNFT.abi"
 import { StargateConfiguration, useStargateConfig } from "~Hooks/useStargateConfig"
 import { useThorClient } from "~Hooks/useThorClient"
 import { NETWORK_TYPE } from "~Model"
@@ -38,51 +34,36 @@ const getLegacyUserStargateNfts = async (
     accountAddress: string,
     config: StargateConfiguration,
 ): Promise<NftData[]> => {
-    const nftContract = thor.contracts.load(config.STARGATE_NFT_CONTRACT_ADDRESS!, [
-        StargateInfo.getToken,
-        StargateInfo.claimableVetGeneratedVtho,
-        StargateNftEvents.BaseVTHORewardsClaimed,
-    ])
-    const delegationContract = thor.contracts.load(config.STARGATE_DELEGATION_CONTRACT_ADDRESS!, [
-        StargateDelegationFunctions.isDelegationActive,
-        StargateDelegationRewards.claimableRewards,
-        StargateDelegationRewards.accumulatedRewards,
-        StargateDelegationEvents.DelegationRewardsClaimed,
-    ])
     const nftsData: NftData[] = []
 
+    const getTokenMethod = ThorUtils.clause.getMethod(
+        [StargateInfo.getToken],
+        config.STARGATE_NFT_CONTRACT_ADDRESS!,
+        "getToken",
+    )
+
+    const claimableRewardsMethod = ThorUtils.clause.getMethod(
+        [StargateDelegationRewards.claimableRewards],
+        config.STARGATE_DELEGATION_CONTRACT_ADDRESS!,
+        "claimableRewards",
+    )
+    const claimableVetGeneratedVthoMethod = ThorUtils.clause.getMethod(
+        [StargateInfo.claimableVetGeneratedVtho],
+        config.STARGATE_NFT_CONTRACT_ADDRESS!,
+        "claimableVetGeneratedVtho",
+    )
+
     for (const node of stargateNodes) {
-        const result = await ThorUtils.executeMultipleClausesCall(
+        const result = await ThorUtils.clause.executeMultipleClausesCall(
             thor,
-            ThorUtils.getContractClauseOfMethod(
-                config.STARGATE_NFT_CONTRACT_ADDRESS!,
-                [StargateInfo.getToken],
-                "getToken",
-                [BigInt(node.nodeId)],
-            ),
-            ThorUtils.getContractClauseOfMethod(
-                config.STARGATE_DELEGATION_CONTRACT_ADDRESS!,
-                [StargateDelegationRewards.claimableRewards],
-                "claimableRewards",
-                [BigInt(node.nodeId)],
-            ),
-            ThorUtils.getContractClauseOfMethod(
-                config.STARGATE_NFT_CONTRACT_ADDRESS!,
-                [StargateInfo.claimableVetGeneratedVtho],
-                "claimableVetGeneratedVtho",
-                [BigInt(node.nodeId)],
-            ),
+            getTokenMethod.asContractClause([BigInt(node.nodeId)]),
+            claimableRewardsMethod.asContractClause([BigInt(node.nodeId)]),
+            claimableVetGeneratedVthoMethod.asContractClause([BigInt(node.nodeId)]),
         )
-        ThorUtils.assertMultipleClausesCallSuccess(result, () => {
+        ThorUtils.clause.assertMultipleClausesCallSuccess(result, () => {
             throw new Error("[getUserStargateNfts]: Clause reverted")
         })
-        const accumulatedRewards = await getHistoricalVTHOClaimed(
-            thor,
-            node.nodeId,
-            accountAddress,
-            nftContract,
-            delegationContract,
-        )
+        const accumulatedRewards = await getHistoricalVTHOClaimed(thor, node.nodeId, accountAddress, config)
         nftsData.push({
             tokenId: node.nodeId,
             levelId: result[0].result.plain.levelId.toString(),
@@ -104,23 +85,25 @@ const getHayabusaNfts = async (
 ): Promise<NftData[]> => {
     const nftsData: NftData[] = []
 
+    const getTokenMethod = ThorUtils.clause.getMethod(
+        [StargateInfo.getToken],
+        config.STARGATE_NFT_CONTRACT_ADDRESS!,
+        "getToken",
+    )
+
+    const claimableRewardsMethod = ThorUtils.clause.getMethod(
+        [Stargate.claimableRewards],
+        config.STARGATE_CONTRACT_ADDRESS!,
+        "claimableRewards",
+    )
+
     for (const node of stargateNodes) {
-        const result = await ThorUtils.executeMultipleClausesCall(
+        const result = await ThorUtils.clause.executeMultipleClausesCall(
             thor,
-            ThorUtils.getContractClauseOfMethod(
-                config.STARGATE_NFT_CONTRACT_ADDRESS!,
-                [StargateInfo.getToken],
-                "getToken",
-                [BigInt(node.nodeId)],
-            ),
-            ThorUtils.getContractClauseOfMethod(
-                config.STARGATE_CONTRACT_ADDRESS!,
-                [Stargate.claimableRewards],
-                "claimableRewards",
-                [BigInt(node.nodeId)],
-            ),
+            getTokenMethod.asContractClause([BigInt(node.nodeId)]),
+            claimableRewardsMethod.asContractClause([BigInt(node.nodeId)]),
         )
-        ThorUtils.assertMultipleClausesCallSuccess(result, () => {
+        ThorUtils.clause.assertMultipleClausesCallSuccess(result, () => {
             throw new Error("[getHayabusaNfts]: Clause reverted")
         })
         const accumulatedRewards = await fetchStargateVthoClaimed(networkType, accountAddress, node.nodeId)

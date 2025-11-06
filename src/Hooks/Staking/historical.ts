@@ -1,7 +1,8 @@
-import { Contract, ThorClient } from "@vechain/sdk-network"
+import { ThorClient } from "@vechain/sdk-network"
 import { StargateDelegationEvents, StargateNftEvents } from "~Constants"
-import { AbiParametersToPrimitiveTypes } from "abitype"
-import { AddressUtils, BigNutils } from "~Utils"
+import { StargateConfiguration } from "~Hooks/useStargateConfig"
+import { BigNutils } from "~Utils"
+import ThorUtils from "~Utils/ThorUtils"
 
 /**
  * Get the historical VTHO claimed by a user
@@ -16,35 +17,41 @@ export const getHistoricalVTHOClaimed = async (
     thor: ThorClient,
     nodeId: string,
     accountAddress: string,
-    nftContract: Contract<[typeof StargateNftEvents.BaseVTHORewardsClaimed]>,
-    delegationContract: Contract<[typeof StargateDelegationEvents.DelegationRewardsClaimed]>,
+    config: StargateConfiguration,
 ) => {
-    const nftCriteria = nftContract.criteria.BaseVTHORewardsClaimed({ owner: accountAddress, tokenId: BigInt(nodeId) })
-    const delegationCriteria = delegationContract.criteria.DelegationRewardsClaimed({
-        claimer: accountAddress,
-        tokenId: BigInt(nodeId),
-    })
-    const filteredLogs = await thor.logs.filterEventLogs({
-        criteriaSet: [nftCriteria, delegationCriteria],
-        options: {
+    const logs = await ThorUtils.events.filterEventLogs(
+        thor,
+        {
             limit: 1000,
             offset: 0,
         },
-    })
+        ThorUtils.events.getFilterCriteriaOfEvent(
+            config.STARGATE_NFT_CONTRACT_ADDRESS!,
+            [StargateNftEvents.BaseVTHORewardsClaimed],
+            "BaseVTHORewardsClaimed",
+            {
+                owner: accountAddress,
+                tokenId: BigInt(nodeId),
+            },
+        ),
+        ThorUtils.events.getFilterCriteriaOfEvent(
+            config.STARGATE_DELEGATION_CONTRACT_ADDRESS!,
+            [StargateDelegationEvents.DelegationRewardsClaimed],
+            "DelegationRewardsClaimed",
+            {
+                claimer: accountAddress,
+                tokenId: BigInt(nodeId),
+            },
+        ),
+    )
 
-    return filteredLogs.reduce((acc, curr) => {
-        if (AddressUtils.compareAddresses(curr.address, nftContract.address)) {
-            const data = curr.decodedData as AbiParametersToPrimitiveTypes<
-                (typeof StargateNftEvents.BaseVTHORewardsClaimed)["inputs"]
-            >
-            //data[3] is the `amount` property
-            acc.plus(data[2].toString())
-        } else {
-            const data = curr.decodedData as AbiParametersToPrimitiveTypes<
-                (typeof StargateDelegationEvents.DelegationRewardsClaimed)["inputs"]
-            >
-            //data[3] is the `rewards` property
-            acc.plus(data[3].toString())
+    return logs.reduce((acc, curr) => {
+        if (curr.name === "BaseVTHORewardsClaimed") {
+            // amount property
+            acc.plus(curr.decodedData[2])
+        } else if (curr.name === "DelegationRewardsClaimed") {
+            // rewards property
+            acc.plus(curr.decodedData[3])
         }
         return acc
     }, BigNutils("0"))
