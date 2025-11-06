@@ -206,15 +206,24 @@ export const DiscoverySlice = createSlice({
             }
         },
         reorderBookmarks: (state, action: PayloadAction<DiscoveryDApp[]>) => {
-            // Separate custom and non-custom dapps
-            const nonCustom = action.payload.filter(dapp => !dapp.isCustom)
-            const custom = action.payload.filter(dapp => dapp.isCustom)
+            const { nonCustom, custom } = action.payload.reduce<{
+                nonCustom: DiscoveryDApp[]
+                custom: DiscoveryDApp[]
+            }>(
+                (acc, dapp) => {
+                    if (dapp.isCustom) {
+                        acc.custom.push(dapp)
+                    } else {
+                        acc.nonCustom.push(dapp)
+                    }
+                    return acc
+                },
+                { nonCustom: [], custom: [] },
+            )
 
-            // Update state
             state.favorites = nonCustom
             state.custom = custom
 
-            // Update favoriteRefs with all dapps (app-hub, vbd, and custom)
             if (!state.favoriteRefs) state.favoriteRefs = []
             state.favoriteRefs = action.payload.map((dapp, index) => createDAppReference(dapp, index))
         },
