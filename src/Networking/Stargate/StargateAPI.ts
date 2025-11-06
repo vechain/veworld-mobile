@@ -3,7 +3,9 @@ import {
     getStargateRewardsDistributed,
     getStargateTotalSupply,
     getStargateTotalVetStaked,
+    getStargateVTHOClaimedByAddressAndTokenId,
 } from "~Constants"
+import { NETWORK_TYPE } from "~Model"
 import {
     fetchFromEndpoint,
     FetchStargateTotalSupplyResponse,
@@ -50,5 +52,17 @@ export const fetchStargateRewardsDistributed = async () => {
         return await fetchFromEndpoint<string>(getStargateRewardsDistributed())
     } catch (error) {
         throw new Error(`Failed to fetch Stargate rewards distributed: ${error}`)
+    }
+}
+
+export const fetchStargateVthoClaimed = async (networkType: NETWORK_TYPE, address: string, tokenId: string) => {
+    debug(ERROR_EVENTS.STARGATE, `Fetching Stargate VTHO claimed for Address: ${address}, TokenID: ${tokenId}`)
+
+    try {
+        return await fetchFromEndpoint<string>(getStargateVTHOClaimedByAddressAndTokenId(networkType, address, tokenId))
+    } catch (error) {
+        throw new Error(
+            `Failed to fetch Stargate vtho claimed for Address: ${address}, TokenID: ${tokenId}. Error ${error}`,
+        )
     }
 }

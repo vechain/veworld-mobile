@@ -306,3 +306,20 @@ export const getStargateTotalVetStaked = () => {
 export const getStargateRewardsDistributed = () => {
     return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/total-vtho-claimed`
 }
+
+/**
+ * Get VTHO claimed in Stargate for address
+ * @param networkType Network type
+ * @param address Address of the user
+ * @param tokenId Stargate Token ID
+ * @returns The VTHO claimed for address in Stargate
+ */
+export const getStargateVTHOClaimedByAddressAndTokenId = (
+    networkType: NETWORK_TYPE,
+    address: string,
+    tokenId: string,
+) => {
+    return networkType === NETWORK_TYPE.MAIN
+        ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/total-vtho-claimed/${address}?tokenId=${tokenId}`
+        : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/stargate/total-vtho-claimed/${address}?tokenId=${tokenId}`
+}
