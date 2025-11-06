@@ -25,7 +25,9 @@ const sendRequest = (
     walletAddresses: string[],
     subscriptionId: string | null,
 ): Promise<NotificationAPIResponse> => {
-    const baseUrl = __DEV__ ? "http://192.168.86.21:8085" : process.env.NOTIFICATION_CENTER_REGISTER_PROD
+    const baseUrl = __DEV__
+        ? process.env.NOTIFICATION_CENTER_REGISTER_DEV
+        : process.env.NOTIFICATION_CENTER_REGISTER_PROD
 
     if (!baseUrl) {
         throw new Error("[NOTIFICATION CENTER]: Base URL not configured")
