@@ -17,7 +17,7 @@ export const HeaderTitle: React.FC<HeaderTitleProps> = ({
     leftIconName,
     testID,
     typographyFont = "subTitleSemiBold",
-    align,
+    align = "center",
 }) => {
     const theme = useTheme()
     return (
