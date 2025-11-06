@@ -12,7 +12,7 @@ import {
     useFont,
     vec,
 } from "@shopify/react-native-skia"
-import { curveBasis, line, scaleLinear, scaleTime } from "d3"
+import * as d3 from "d3"
 import { interpolatePath } from "d3-interpolate-path"
 import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
@@ -47,18 +47,32 @@ const CHIP_PADDING_Y = 4
 //#region Helpers
 
 const makeGraph = (data: DataPoint[], width: number, height: number, strokeWidth: number = 4) => {
+    if (data.length === 0)
+        return {
+            path: Skia.Path.Make(),
+            points: [],
+            maxX: 0,
+            minX: 0,
+            minY: 0,
+            maxY: 0,
+            calcXPos: () => 0,
+            calcYPos: () => 0,
+        }
+
     const max = Math.max(...data.map(val => val.value))
     const min = Math.min(...data.map(val => val.value))
 
-    const y = scaleLinear().domain([min, max]).range([height, strokeWidth])
-    const x = scaleTime()
+    const y = d3.scaleLinear().domain([min, max]).range([height, strokeWidth])
+    const x = d3
+        .scaleTime()
         .domain([data[0].timestamp, data[data.length - 1].timestamp])
         .range([0, width])
 
-    const curvedLine = line<DataPoint>()
+    const curvedLine = d3
+        .line<DataPoint>()
         .x(d => x(d.timestamp))
         .y(d => y(d.value))
-        .curve(curveBasis)(data)
+        .curve(d3.curveBasis)(data)
 
     const skPath = Skia.Path.MakeFromSVGString(curvedLine!)
 

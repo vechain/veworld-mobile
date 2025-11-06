@@ -21,6 +21,14 @@ jest.mock("react-native", () => ({
     Dimensions: { get: jest.fn().mockReturnValue({ width: 400, height: 800 }) },
 }))
 
+jest.mock("d3")
+
+jest.mock("d3-interpolate-path", () => {
+    return {
+        interpolatePath: jest.fn().mockImplementation(() => jest.fn()),
+    }
+})
+
 const mockedNavigate = jest.fn()
 
 jest.mock("@react-navigation/native", () => {

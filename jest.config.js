@@ -41,6 +41,7 @@ module.exports = {
             "|@privy-io/.*" +
             "|uuid" +
             "|@shopify/react-native-skia" +
+            "|d3-interpolate-path" +
             ")",
     ],
     moduleNameMapper: {
