@@ -6,14 +6,20 @@ import { DEVICE_TYPE } from "~Model"
 import * as Redux from "~Storage/Redux"
 import * as NotificationCenterAPI from "~Networking/NotificationCenter/NotificationCenterAPI"
 
+const mockDispatch = jest.fn()
+const mockUseAppSelector = jest.fn()
+
 // Mock dependencies
 jest.mock("react-native-onesignal")
 jest.mock("~Networking/NotificationCenter/NotificationCenterAPI")
-jest.mock("~Storage/Redux", () => ({
-    ...jest.requireActual("~Storage/Redux"),
-    useAppDispatch: jest.fn(),
-    useAppSelector: jest.fn(),
-}))
+jest.mock("~Storage/Redux", () => {
+    const originalModule = jest.requireActual("~Storage/Redux")
+    return {
+        ...originalModule,
+        useAppDispatch: () => mockDispatch,
+        useAppSelector: (selector: any) => mockUseAppSelector(selector),
+    }
+})
 
 describe("useNotificationRegistration", () => {
     const mockSubscriptionId = "test-subscription-id"
@@ -21,24 +27,19 @@ describe("useNotificationRegistration", () => {
     const mockAddress2 = "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
     const mockAddress3 = "0x9999999999999999999999999999999999999999"
 
-    const mockDispatch = jest.fn()
-
     beforeEach(() => {
         jest.clearAllMocks()
 
         // Mock OneSignal
         ;(OneSignal.User.pushSubscription.getIdAsync as jest.Mock) = jest.fn().mockResolvedValue(mockSubscriptionId)
 
-        // Mock Redux hooks
-        ;(Redux.useAppDispatch as jest.Mock).mockReturnValue(mockDispatch)
-
         // Mock API calls with successful responses
         ;(NotificationCenterAPI.registerPushNotification as jest.Mock).mockResolvedValue({ failed: [] })
         ;(NotificationCenterAPI.unregisterPushNotification as jest.Mock).mockResolvedValue({ failed: [] })
     })
 
-    const mockUseAppSelector = (accounts: any[], registrations: any[]) => {
-        ;(Redux.useAppSelector as jest.Mock).mockImplementation((selector: any) => {
+    const setupMockSelector = (accounts: any[], registrations: any[]) => {
+        mockUseAppSelector.mockImplementation((selector: any) => {
             if (selector === Redux.selectAccounts) {
                 return accounts
             }
@@ -53,7 +54,7 @@ describe("useNotificationRegistration", () => {
     describe("registration behavior", () => {
         it("should register new addresses when they are added", async () => {
             const accounts = [{ address: mockAddress1, index: 0 }]
-            mockUseAppSelector(accounts, [])
+            setupMockSelector(accounts, [])
 
             renderHook(() => useNotificationRegistration({ enabled: true }))
 
@@ -82,7 +83,7 @@ describe("useNotificationRegistration", () => {
                 { address: mockAddress1, index: 0 },
                 { address: mockAddress2, index: 1, type: DEVICE_TYPE.LOCAL_WATCHED },
             ]
-            mockUseAppSelector(accounts, [])
+            setupMockSelector(accounts, [])
 
             renderHook(() => useNotificationRegistration({ enabled: true }))
 
@@ -111,7 +112,7 @@ describe("useNotificationRegistration", () => {
                 { address: mockAddress1, lastSuccessfulSync: Date.now() },
                 { address: mockAddress2, lastSuccessfulSync: Date.now() },
             ]
-            mockUseAppSelector(accounts, registrations)
+            setupMockSelector(accounts, registrations)
 
             renderHook(() => useNotificationRegistration({ enabled: true }))
 
@@ -133,7 +134,7 @@ describe("useNotificationRegistration", () => {
             const thirtyOneDaysAgo = Date.now() - 31 * 24 * 60 * 60 * 1000
             const accounts = [{ address: mockAddress1, index: 0 }]
             const registrations = [{ address: mockAddress1, lastSuccessfulSync: thirtyOneDaysAgo }]
-            mockUseAppSelector(accounts, registrations)
+            setupMockSelector(accounts, registrations)
 
             renderHook(() => useNotificationRegistration({ enabled: true }))
 
@@ -160,7 +161,7 @@ describe("useNotificationRegistration", () => {
             const recentSync = Date.now() - 15 * 24 * 60 * 60 * 1000
             const accounts = [{ address: mockAddress1, index: 0 }]
             const registrations = [{ address: mockAddress1, lastSuccessfulSync: recentSync }]
-            mockUseAppSelector(accounts, registrations)
+            setupMockSelector(accounts, registrations)
 
             renderHook(() => useNotificationRegistration({ enabled: true }))
 
@@ -174,7 +175,7 @@ describe("useNotificationRegistration", () => {
         it("should handle both registrations and unregistrations simultaneously", async () => {
             const accounts = [{ address: mockAddress2, index: 0 }]
             const registrations = [{ address: mockAddress1, lastSuccessfulSync: Date.now() }]
-            mockUseAppSelector(accounts, registrations)
+            setupMockSelector(accounts, registrations)
 
             renderHook(() => useNotificationRegistration({ enabled: true }))
 
@@ -220,7 +221,7 @@ describe("useNotificationRegistration", () => {
                 { address: mockAddress2, lastSuccessfulSync: recentSync },
                 { address: mockAddress3, lastSuccessfulSync: Date.now() },
             ]
-            mockUseAppSelector(accounts, registrations)
+            setupMockSelector(accounts, registrations)
 
             renderHook(() => useNotificationRegistration({ enabled: true }))
 
@@ -257,7 +258,7 @@ describe("useNotificationRegistration", () => {
     describe("enabled flag", () => {
         it("should not execute when enabled is false", async () => {
             const accounts = [{ address: mockAddress1, index: 0 }]
-            mockUseAppSelector(accounts, [])
+            setupMockSelector(accounts, [])
 
             renderHook(() => useNotificationRegistration({ enabled: false }))
 
@@ -273,7 +274,7 @@ describe("useNotificationRegistration", () => {
         it("should handle empty accounts list", async () => {
             const accounts: any[] = []
             const registrations = [{ address: mockAddress1, lastSuccessfulSync: Date.now() }]
-            mockUseAppSelector(accounts, registrations)
+            setupMockSelector(accounts, registrations)
 
             renderHook(() => useNotificationRegistration({ enabled: true }))
 
@@ -293,7 +294,7 @@ describe("useNotificationRegistration", () => {
 
         it("should handle empty registrations list", async () => {
             const accounts = [{ address: mockAddress1, index: 0 }]
-            mockUseAppSelector(accounts, [])
+            setupMockSelector(accounts, [])
 
             renderHook(() => useNotificationRegistration({ enabled: true }))
 
@@ -319,7 +320,7 @@ describe("useNotificationRegistration", () => {
         it("should handle registrations with undefined lastSuccessfulSync", async () => {
             const accounts = [{ address: mockAddress1, index: 0 }]
             const registrations = [{ address: mockAddress1 }]
-            mockUseAppSelector(accounts, registrations)
+            setupMockSelector(accounts, registrations)
 
             renderHook(() => useNotificationRegistration({ enabled: true }))
 
