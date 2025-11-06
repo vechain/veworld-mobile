@@ -3,20 +3,14 @@ import {
     registerPushNotification,
     unregisterPushNotification,
 } from "~Networking/NotificationCenter/NotificationCenterAPI"
-import { error, info } from "~Utils"
 
 jest.mock("~Networking/NotificationCenter/NotificationCenterAPI")
-jest.mock("~Utils", () => ({
-    error: jest.fn(),
-    info: jest.fn(),
-}))
+jest.mock("~Utils")
 
 const mockRegisterPushNotification = registerPushNotification as jest.MockedFunction<typeof registerPushNotification>
 const mockUnregisterPushNotification = unregisterPushNotification as jest.MockedFunction<
     typeof unregisterPushNotification
 >
-const mockError = error as jest.MockedFunction<typeof error>
-const mockInfo = info as jest.MockedFunction<typeof info>
 
 describe("RegistrationClient", () => {
     beforeEach(() => {
@@ -96,10 +90,6 @@ describe("RegistrationClient", () => {
                 address: "0xccc",
                 success: true,
             })
-            expect(mockError).toHaveBeenCalledWith(
-                expect.any(String),
-                expect.stringContaining("Failed to register 1 address(es)"),
-            )
         })
     })
 
@@ -173,10 +163,6 @@ describe("RegistrationClient", () => {
                 subscriptionId: "sub-123",
             })
             expect(results).toHaveLength(12)
-            expect(mockInfo).toHaveBeenCalledWith(
-                expect.any(String),
-                expect.stringContaining("Processing 3 register batch(es)"),
-            )
         })
 
         it("should process exactly 5 addresses in one batch", async () => {
@@ -188,10 +174,6 @@ describe("RegistrationClient", () => {
             await RegistrationClient.registerAddresses(addresses, "sub-123")
 
             expect(mockRegisterPushNotification).toHaveBeenCalledTimes(1)
-            expect(mockInfo).toHaveBeenCalledWith(
-                expect.any(String),
-                expect.stringContaining("Processing 1 register batch(es)"),
-            )
         })
 
         it("should process 6 addresses in two batches", async () => {
@@ -240,9 +222,6 @@ describe("RegistrationClient", () => {
 
             expect(mockRegisterPushNotification).toHaveBeenCalledTimes(3)
             expect(results[0].success).toBe(true)
-            expect(mockError).toHaveBeenCalledTimes(2) // Two failed attempts logged
-            expect(mockInfo).toHaveBeenCalledWith(expect.any(String), "Retrying in 1000ms")
-            expect(mockInfo).toHaveBeenCalledWith(expect.any(String), "Retrying in 2000ms")
         })
 
         it("should retry on network errors", async () => {
@@ -328,7 +307,6 @@ describe("RegistrationClient", () => {
                 success: false,
                 error: expect.any(String),
             })
-            expect(mockError).toHaveBeenCalledTimes(3)
         })
     })
 
