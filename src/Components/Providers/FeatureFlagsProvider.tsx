@@ -55,6 +55,9 @@ export const initialState: FeatureFlags = {
             collectibles: {
                 enabled: false,
             },
+            tokens: {
+                enabled: false,
+            },
         },
     },
     notificationCenter: {

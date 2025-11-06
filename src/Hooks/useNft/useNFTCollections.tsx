@@ -1,10 +1,10 @@
 import { useCallback } from "react"
 import { NftCollection } from "~Model"
 import {
+    getCachedNftBalanceOf,
+    getCachedTokenURI,
     getContractAddresses,
-    getNftBalanceOf,
     getNftsForContract,
-    getTokenURI,
     GithubCollectionResponse,
 } from "~Networking"
 import {
@@ -26,7 +26,7 @@ import { useThorClient } from "~Hooks/useThorClient"
 import { useI18nContext } from "~i18n"
 import { getNftCollectionMetadata } from "~Networking/NFT/getNftCollectionMetadata"
 import { debug, warn } from "~Utils"
-import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import AddressUtils from "~Utils/AddressUtils"
 import { initCollectionMetadataFromRegistry, initCollectionMetadataWithoutRegistry } from "./Helpers"
 import { useLazyLoader } from "./useLazyLoader"
 
@@ -67,7 +67,12 @@ export const useNFTCollections = () => {
 
                 try {
                     // NFT_WHALE - replace here
-                    balanceOf = await getNftBalanceOf(currentAddress, collection.address, thor)
+                    balanceOf = await getCachedNftBalanceOf(
+                        currentAddress,
+                        collection.address,
+                        network.genesis.id,
+                        thor,
+                    )
                 } catch (e) {
                     warn(ERROR_EVENTS.NFT, "failed to get balance", e)
                 }
@@ -77,7 +82,12 @@ export const useNFTCollections = () => {
                 if (!collection.fromRegistry) {
                     // NFT_WHALE - replace here
                     const { data } = await getNftsForContract(network.type, collection.address, currentAddress, 1, 0)
-                    const tokenURI = await getTokenURI(data[0].tokenId, collection.address, thor)
+                    const tokenURI = await getCachedTokenURI(
+                        data[0].tokenId,
+                        collection.address,
+                        network.genesis.id,
+                        thor,
+                    )
                     const tokenMetadata = await fetchMetadata(tokenURI)
 
                     if (tokenMetadata) {
@@ -140,7 +150,7 @@ export const useNFTCollections = () => {
 
                 // Parse collection metadata from registry info or the chain if needed
                 const _nftCollections: NftCollection[] = contractsForNFTs.map(collection => {
-                    const regInfo = registryInfo.find(col => compareAddresses(col.address, collection))
+                    const regInfo = registryInfo.find(col => AddressUtils.compareAddresses(col.address, collection))
                     if (regInfo) {
                         // NFT_WHALE - replace here
                         return initCollectionMetadataFromRegistry(network.type, currentAddress, collection, regInfo)

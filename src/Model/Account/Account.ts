@@ -27,7 +27,10 @@ export interface WalletAccount extends Account {
 
     profileImage?: {
         /**
-         * Path on the filesystem for the profile image
+         * Path on the filesystem for the profile image.
+         * The format will be `pfp/<filename>.<ext>
+         * To read from it, prepend `FileSystem.documentDirectory` since there's a bug on iOS:
+         * https://github.com/expo/expo/issues/4261
          */
         uri: string
         address: string

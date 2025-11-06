@@ -9,6 +9,8 @@ const marketInfo: MarketInfo = {
     marketCap: 1429387590,
     totalSupply: 85985041177,
     totalVolume: 34734564,
+    high24h: 0.04582,
+    low24h: 0.04216,
 }
 
 const results = {
@@ -39,6 +41,8 @@ describe("useFormattedMarketInfo", () => {
             marketCap: "$0.00",
             totalSupply: null,
             totalVolume: "$0.00",
+            high24h: null,
+            low24h: null,
         })
     })
 
@@ -80,5 +84,43 @@ describe("useFormattedMarketInfo", () => {
         })
 
         expect(result.current.totalVolume).toBe(results.totalVolume)
+    })
+
+    it("should display the correct high24h with full precision", async () => {
+        ;(selectCurrency as unknown as jest.Mock).mockImplementation(() => CURRENCY.USD)
+
+        const { result } = renderHook(() => useFormattedMarketInfo({ marketInfo }), {
+            wrapper: TestWrapper,
+        })
+
+        expect(result.current.high24h).toBe("$0.04582")
+    })
+
+    it("should display the correct low24h with full precision", async () => {
+        ;(selectCurrency as unknown as jest.Mock).mockImplementation(() => CURRENCY.USD)
+
+        const { result } = renderHook(() => useFormattedMarketInfo({ marketInfo }), {
+            wrapper: TestWrapper,
+        })
+
+        expect(result.current.low24h).toBe("$0.04216")
+    })
+
+    it("should return null for high24h and low24h when not provided", async () => {
+        ;(selectCurrency as unknown as jest.Mock).mockImplementation(() => CURRENCY.USD)
+
+        const marketInfoWithoutPrices = {
+            circulatingSupply: 72714516834,
+            marketCap: 1429387590,
+            totalSupply: 85985041177,
+            totalVolume: 34734564,
+        }
+
+        const { result } = renderHook(() => useFormattedMarketInfo({ marketInfo: marketInfoWithoutPrices }), {
+            wrapper: TestWrapper,
+        })
+
+        expect(result.current.high24h).toBeNull()
+        expect(result.current.low24h).toBeNull()
     })
 })

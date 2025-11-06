@@ -96,6 +96,7 @@ const mockedFeatureFlags: FeatureFlags = {
         balanceScreen: {
             enabled: false,
             collectibles: { enabled: false },
+            tokens: { enabled: false },
         },
     },
     smartWalletFeature: {

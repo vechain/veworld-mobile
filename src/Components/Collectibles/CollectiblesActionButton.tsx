@@ -49,5 +49,6 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         rootActive: {
             borderColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
+            borderWidth: 2,
         },
     })

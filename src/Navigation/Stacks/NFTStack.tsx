@@ -21,7 +21,7 @@ export type RootStackParamListNFT = {
         collectionAddress?: string
         nftTokenId: string
     }
-    [Routes.NFT_COLLECTION_DETAILS]: { collectionAddress: string }
+    [Routes.NFT_COLLECTION_DETAILS]: { collectionAddress: string; openReportBottomSheet?: boolean }
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
 
     [Routes.INSERT_ADDRESS_SEND]: {

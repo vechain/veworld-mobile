@@ -625,6 +625,10 @@ type RootTranslation = {
 	 */
 	BALANCE_ACTION_RECEIVE: string
 	/**
+	 * S​e​l​l
+	 */
+	BALANCE_ACTION_SELL: string
+	/**
 	 * S​e​n​d
 	 */
 	BALANCE_ACTION_SEND: string
@@ -1371,6 +1375,18 @@ type RootTranslation = {
 	 */
 	BTN_CLOSE_APP: string
 	/**
+	 * R​e​p​o​r​t​ ​a​n​d​ ​b​l​o​c​k​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_COLLECTION_ACTIONS_BLOCK: string
+	/**
+	 * M​a​r​k​ ​a​s​ ​f​a​v​o​r​i​t​e
+	 */
+	BTN_COLLECTION_ACTIONS_FAVORITE: string
+	/**
+	 * R​e​p​o​r​t​ ​a​ ​p​r​o​b​l​e​m
+	 */
+	BTN_COLLECTION_ACTIONS_REPORT: string
+	/**
 	 * C​o​n​f​i​r​m
 	 */
 	BTN_CONFIRM: string
@@ -1479,6 +1495,10 @@ type RootTranslation = {
 	 * G​o​ ​t​o​ ​s​e​t​t​i​n​g​s
 	 */
 	BTN_GO_TO_SETTINGS: string
+	/**
+	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_HIDE_COLLECTION: string
 	/**
 	 * A​c​t​i​v​i​t​y
 	 */
@@ -1665,6 +1685,10 @@ type RootTranslation = {
 	 */
 	BTN_SEND_ANYWAY: string
 	/**
+	 * S​h​o​w​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_SHOW_COLLECTION: string
+	/**
 	 * S​h​o​w​ ​Q​R​ ​c​o​d​e
 	 */
 	BTN_SHOW_QR_CODE: string
@@ -1794,9 +1818,42 @@ type RootTranslation = {
 	 */
 	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: string
 	/**
+	 * R​e​p​o​r​t​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	COLLECTIBLES_REPORT_PROBLEM: string
+	/**
+	 * B​y​ ​r​e​p​o​r​t​i​n​g​ ​t​h​i​s​ ​c​o​l​l​e​c​t​i​o​n​,​ ​i​t​ ​w​i​l​l​ ​b​e​ ​a​u​t​o​m​a​t​i​c​a​l​l​y​ ​r​e​m​o​v​e​d​ ​f​r​o​m​ ​y​o​u​r​ ​g​a​l​l​e​r​y​ ​a​n​d​ ​i​t​ ​w​i​l​l​ ​b​e​ ​r​e​p​o​r​t​e​d​ ​f​o​r​ ​r​e​v​i​e​w​.​
+​T​h​i​s​ ​a​c​t​i​o​n​ ​i​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​.
+	 */
+	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: string
+	/**
+	 * D​e​t​a​i​l​s
+	 */
+	COLLECTIBLES_VIEW_DETAILS: string
+	/**
+	 * G​a​l​l​e​r​y
+	 */
+	COLLECTIBLES_VIEW_GALLERY: string
+	/**
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
 	COLLECTIONS: string
+	/**
+	 * H​i​d​e​ ​b​a​c​k
+	 */
+	COLLECTIONS_HIDE_BACK: string
+	/**
+	 * V​i​e​w​ ​h​i​d​d​e​n
+	 */
+	COLLECTIONS_VIEW_HIDDEN: string
+	/**
+	 * T​h​e​ ​c​o​l​l​e​c​t​i​o​n​ ​w​a​s​ ​m​o​v​e​d​ ​t​o​ ​t​h​e​ ​h​i​d​d​e​n​ ​s​e​c​t​i​o​n​ ​a​n​d​ ​n​o​ ​l​o​n​g​e​r​ ​v​i​s​i​b​l​e​ ​o​n​ ​t​h​e​ ​c​o​l​l​e​c​t​i​o​n​s​ ​l​i​s​t​.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: string
+	/**
+	 * C​o​l​l​e​c​t​i​o​n​ ​h​i​d​d​e​n
+	 */
+	COLLECTION_HIDDEN_TITLE: string
 	/**
 	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
 	 */
@@ -1809,6 +1866,10 @@ type RootTranslation = {
 	 * 2​4​ ​H​R​s
 	 */
 	COMMON_24H: string
+	/**
+	 * 2​4​h​ ​R​a​n​g​e
+	 */
+	COMMON_24H_PRICE_RANGE: string
 	/**
 	 * 2​4​h​ ​V​o​l​u​m​e
 	 */
@@ -2052,9 +2113,17 @@ type RootTranslation = {
 	 */
 	COMMON_SHOW: string
 	/**
+	 * S​h​o​w​ ​m​o​r​e
+	 */
+	COMMON_SHOW_MORE: string
+	/**
 	 * T​o​d​a​y
 	 */
 	COMMON_TODAY: string
+	/**
+	 * T​o​k​e​n​ ​s​t​a​t​s
+	 */
+	COMMON_TOKEN_STATS: string
 	/**
 	 * T​o​t​a​l​ ​S​u​p​p​l​y
 	 */
@@ -2063,6 +2132,10 @@ type RootTranslation = {
 	 * U​s​e​r​n​a​m​e
 	 */
 	COMMON_USERNAME: string
+	/**
+	 * W​e​b​s​i​t​e
+	 */
+	COMMON_WEBSITE: string
 	/**
 	 * W​h​o​o​p​s​!
 	 */
@@ -2846,6 +2919,14 @@ type RootTranslation = {
 	 */
 	FEBRUARY: string
 	/**
+	 * F​a​v​o​r​i​t​e​d​!
+	 */
+	FEEDBACK_FAVORITED: string
+	/**
+	 * S​e​t​ ​a​s​ ​a​v​a​t​a​r​!
+	 */
+	FEEDBACK_SET_AVATAR: string
+	/**
 	 * F​i​n​g​e​r​p​r​i​n​t
 	 */
 	FINGERPRINT: string
@@ -3234,7 +3315,7 @@ type RootTranslation = {
 	 */
 	NFT_COLLECTION_REPORTED: string
 	/**
-	 * T​h​a​n​k​s​ ​f​o​r​ ​y​o​u​r​ ​r​e​p​o​r​t​!​ ​Y​o​u​r​ ​a​c​t​i​o​n​ ​h​e​l​p​s​ ​p​r​o​t​e​c​t​ ​t​h​e​ ​e​n​t​i​r​e​ ​c​o​m​m​u​n​i​t​y​.
+	 * T​h​e​ ​c​o​l​l​e​c​t​i​o​n​ ​w​a​s​ ​r​e​p​o​r​t​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​!
 	 */
 	NFT_COLLECTION_REPORTED_MSG: string
 	/**
@@ -3282,6 +3363,10 @@ type RootTranslation = {
 	 * N​F​T​ ​R​e​c​e​i​v​e
 	 */
 	NFT_RECEIVE: string
+	/**
+	 * R​e​p​o​r​t​ ​a​n​d​ ​b​l​o​c​k​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	NFT_REPORT_BLOCK_COLLECTION: string
 	/**
 	 * R​e​p​o​r​t​ ​C​o​l​l​e​c​t​i​o​n
 	 */
@@ -3849,6 +3934,10 @@ type RootTranslation = {
 	 * T​h​i​s​ ​u​s​e​r​n​a​m​e​ ​c​a​n​ ​b​e​ ​u​s​e​d​ ​i​n​s​t​e​a​d​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​c​o​n​n​e​c​t​ ​t​o​ ​d​A​p​p​s​.​ ​T​h​e​ ​c​l​a​i​m​i​n​g​ ​i​s​ ​f​r​e​e​ ​o​f​ ​c​h​a​r​g​e​.
 	 */
 	SB_CLAIM_USERNAME: string
+	/**
+	 * C​o​l​l​e​c​t​i​b​l​e
+	 */
+	SB_COLLECTIBLE: string
 	/**
 	 * C​o​l​l​e​c​t​i​b​l​e​s
 	 */
@@ -4980,6 +5069,14 @@ type RootTranslation = {
 	 */
 	TOKEN_CUSTOM_SUBTITLE: string
 	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	TOKEN_DETAIL_ACTIVITY_TAB: string
+	/**
+	 * B​a​l​a​n​c​e
+	 */
+	TOKEN_DETAIL_BALANCE_TAB: string
+	/**
 	 * T​o​k​e​n​ ​I​D
 	 */
 	TOKEN_ID: string
@@ -5953,6 +6050,10 @@ Try reconnect your device to the internet.
 	 */
 	BALANCE_ACTION_RECEIVE: () => LocalizedString
 	/**
+	 * Sell
+	 */
+	BALANCE_ACTION_SELL: () => LocalizedString
+	/**
 	 * Send
 	 */
 	BALANCE_ACTION_SEND: () => LocalizedString
@@ -6695,6 +6796,18 @@ Thanks for your patience!
 	 */
 	BTN_CLOSE_APP: () => LocalizedString
 	/**
+	 * Report and block collection
+	 */
+	BTN_COLLECTION_ACTIONS_BLOCK: () => LocalizedString
+	/**
+	 * Mark as favorite
+	 */
+	BTN_COLLECTION_ACTIONS_FAVORITE: () => LocalizedString
+	/**
+	 * Report a problem
+	 */
+	BTN_COLLECTION_ACTIONS_REPORT: () => LocalizedString
+	/**
 	 * Confirm
 	 */
 	BTN_CONFIRM: () => LocalizedString
@@ -6802,6 +6915,10 @@ Thanks for your patience!
 	 * Go to settings
 	 */
 	BTN_GO_TO_SETTINGS: () => LocalizedString
+	/**
+	 * Hide collection
+	 */
+	BTN_HIDE_COLLECTION: () => LocalizedString
 	/**
 	 * Activity
 	 */
@@ -6987,6 +7104,10 @@ Thanks for your patience!
 	 */
 	BTN_SEND_ANYWAY: () => LocalizedString
 	/**
+	 * Show collection
+	 */
+	BTN_SHOW_COLLECTION: () => LocalizedString
+	/**
 	 * Show QR code
 	 */
 	BTN_SHOW_QR_CODE: () => LocalizedString
@@ -7115,9 +7236,42 @@ Thanks for your patience!
 	 */
 	COLLECTIBLES_EMPTY_CARD_MARKETPLACE_CAPTION: () => LocalizedString
 	/**
+	 * Report collection
+	 */
+	COLLECTIBLES_REPORT_PROBLEM: () => LocalizedString
+	/**
+	 * By reporting this collection, it will be automatically removed from your gallery and it will be reported for review.
+This action is irreversible.
+	 */
+	COLLECTIBLES_REPORT_PROBLEM_DESCRIPTION: () => LocalizedString
+	/**
+	 * Details
+	 */
+	COLLECTIBLES_VIEW_DETAILS: () => LocalizedString
+	/**
+	 * Gallery
+	 */
+	COLLECTIBLES_VIEW_GALLERY: () => LocalizedString
+	/**
 	 * Collections
 	 */
 	COLLECTIONS: () => LocalizedString
+	/**
+	 * Hide back
+	 */
+	COLLECTIONS_HIDE_BACK: () => LocalizedString
+	/**
+	 * View hidden
+	 */
+	COLLECTIONS_VIEW_HIDDEN: () => LocalizedString
+	/**
+	 * The collection was moved to the hidden section and no longer visible on the collections list.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: () => LocalizedString
+	/**
+	 * Collection hidden
+	 */
+	COLLECTION_HIDDEN_TITLE: () => LocalizedString
 	/**
 	 * Collection name
 	 */
@@ -7130,6 +7284,10 @@ Thanks for your patience!
 	 * 24 HRs
 	 */
 	COMMON_24H: () => LocalizedString
+	/**
+	 * 24h Range
+	 */
+	COMMON_24H_PRICE_RANGE: () => LocalizedString
 	/**
 	 * 24h Volume
 	 */
@@ -7371,9 +7529,17 @@ Thanks for your patience!
 	 */
 	COMMON_SHOW: () => LocalizedString
 	/**
+	 * Show more
+	 */
+	COMMON_SHOW_MORE: () => LocalizedString
+	/**
 	 * Today
 	 */
 	COMMON_TODAY: () => LocalizedString
+	/**
+	 * Token stats
+	 */
+	COMMON_TOKEN_STATS: () => LocalizedString
 	/**
 	 * Total Supply
 	 */
@@ -7382,6 +7548,10 @@ Thanks for your patience!
 	 * Username
 	 */
 	COMMON_USERNAME: () => LocalizedString
+	/**
+	 * Website
+	 */
+	COMMON_WEBSITE: () => LocalizedString
 	/**
 	 * Whoops!
 	 */
@@ -8159,6 +8329,14 @@ Thanks for your patience!
 	 */
 	FEBRUARY: () => LocalizedString
 	/**
+	 * Favorited!
+	 */
+	FEEDBACK_FAVORITED: () => LocalizedString
+	/**
+	 * Set as avatar!
+	 */
+	FEEDBACK_SET_AVATAR: () => LocalizedString
+	/**
 	 * Fingerprint
 	 */
 	FINGERPRINT: () => LocalizedString
@@ -8547,7 +8725,7 @@ Thanks for your patience!
 	 */
 	NFT_COLLECTION_REPORTED: () => LocalizedString
 	/**
-	 * Thanks for your report! Your action helps protect the entire community.
+	 * The collection was reported successfully!
 	 */
 	NFT_COLLECTION_REPORTED_MSG: () => LocalizedString
 	/**
@@ -8595,6 +8773,10 @@ Thanks for your patience!
 	 * NFT Receive
 	 */
 	NFT_RECEIVE: () => LocalizedString
+	/**
+	 * Report and block collection
+	 */
+	NFT_REPORT_BLOCK_COLLECTION: () => LocalizedString
 	/**
 	 * Report Collection
 	 */
@@ -9139,6 +9321,10 @@ Thanks for your patience!
 	 * This username can be used instead of your wallet address to send and receive tokens and connect to dApps. The claiming is free of charge.
 	 */
 	SB_CLAIM_USERNAME: () => LocalizedString
+	/**
+	 * Collectible
+	 */
+	SB_COLLECTIBLE: () => LocalizedString
 	/**
 	 * Collectibles
 	 */
@@ -10255,6 +10441,14 @@ Here's what it's all about:
 	 * Add a custom token to your wallet
 	 */
 	TOKEN_CUSTOM_SUBTITLE: () => LocalizedString
+	/**
+	 * Activity
+	 */
+	TOKEN_DETAIL_ACTIVITY_TAB: () => LocalizedString
+	/**
+	 * Balance
+	 */
+	TOKEN_DETAIL_BALANCE_TAB: () => LocalizedString
 	/**
 	 * Token ID
 	 */

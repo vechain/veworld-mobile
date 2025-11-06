@@ -12,7 +12,15 @@ type Props<TKeys extends string[] | readonly string[]> = {
     selectedKey: TKeys[number]
     rightIcon?: React.ReactNode
     setSelectedKey: (key: TKeys[number]) => void
+    /**
+     * Style for the container wrapping the wrapper of the tabs + the icon on the right
+     */
     rootStyle?: StyleProp<ViewStyle>
+    /**
+     * Style for the container wrapping the tabs.
+     */
+    innerContainerStyle?: StyleProp<ViewStyle>
+    disabledKeys?: TKeys[number][]
 }
 
 export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
@@ -22,12 +30,15 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
     rightIcon,
     setSelectedKey,
     rootStyle,
+    innerContainerStyle,
+    disabledKeys,
 }: Props<TKeys>) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const [tabOffsets, setTabOffsets] = useState<{ offsetX: number; width: number }[]>([])
     const selectedIndex = useMemo(() => keys.indexOf(selectedKey), [keys, selectedKey])
     const getTextColor = useCallback(
-        (isSelected: boolean) => {
+        (isSelected: boolean, isDisabled: boolean) => {
+            if (isDisabled) return theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300
             if (isSelected) return theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE
             return theme.isDark ? COLORS.PURPLE_LABEL : COLORS.GREY_500
         },
@@ -53,11 +64,12 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
     }, [tabOffsets, selectedIndex, keys.length])
     if (keys.length !== labels.length) throw new Error("Keys and Labels should have the same length")
     return (
-        <BaseView style={[styles.root, rootStyle]} flexDirection="row" justifyContent="space-between" overflow="scroll">
-            <BaseView flexDirection="row" flex={1}>
+        <BaseView style={[styles.root, rootStyle]} flexDirection="row" justifyContent="space-between">
+            <BaseView flexDirection="row" flex={1} gap={8} overflow="scroll" style={innerContainerStyle}>
                 {keys.map((key, index) => {
                     const isSelected = selectedKey === key
-                    const textColor = getTextColor(isSelected)
+                    const isDisabled = disabledKeys?.includes(key) ?? false
+                    const textColor = getTextColor(isSelected, isDisabled)
                     return (
                         <TouchableOpacity
                             key={key}
@@ -66,7 +78,8 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
                             onLayout={e => {
                                 e.persist()
                                 onLayout(index)(e)
-                            }}>
+                            }}
+                            disabled={isDisabled}>
                             <BaseText color={textColor} typographyFont="subSubTitleSemiBold">
                                 {labels[index]}
                             </BaseText>

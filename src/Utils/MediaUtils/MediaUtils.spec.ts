@@ -157,3 +157,29 @@ describe("resolveMimeTypeFromRawData", () => {
         expect(resolveMimeTypeFromRawData(imageBuffer)).toBe("image/svg+xml")
     })
 })
+
+describe("resolveFileExtensionFromMimeType", () => {
+    it("should return jpg for image/jpeg", () => {
+        expect(MediaUtils.resolveFileExtensionFromMimeType("image/jpeg")).toBe("jpg")
+    })
+
+    it("should return png for image/png", () => {
+        expect(MediaUtils.resolveFileExtensionFromMimeType("image/png")).toBe("png")
+    })
+
+    it("should return gif for image/gif", () => {
+        expect(MediaUtils.resolveFileExtensionFromMimeType("image/gif")).toBe("gif")
+    })
+
+    it("should return webp for image/webp", () => {
+        expect(MediaUtils.resolveFileExtensionFromMimeType("image/webp")).toBe("webp")
+    })
+
+    it("should return svg for image/svg+xml", () => {
+        expect(MediaUtils.resolveFileExtensionFromMimeType("image/svg+xml")).toBe("svg")
+    })
+
+    it("should return png for unknown mime type", () => {
+        expect(MediaUtils.resolveFileExtensionFromMimeType("image/unknown")).toBe("png")
+    })
+})

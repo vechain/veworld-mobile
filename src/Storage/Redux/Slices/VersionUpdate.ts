@@ -39,7 +39,8 @@ export const VersionUpdateSlice = createSlice({
         },
 
         setInstalledVersion: (state, action: PayloadAction<string>) => {
-            state.installedVersion = action.payload
+            const newVersion = action.payload
+            state.installedVersion = newVersion
         },
 
         setLatestVersion: (state, action: PayloadAction<string>) => {

@@ -1,7 +1,13 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import HexUtils from "~Utils/HexUtils"
-import { NotificationState } from "../Types"
+import { createSlice, PayloadAction, createEntityAdapter } from "@reduxjs/toolkit"
+import { NotificationState, Registration } from "../Types"
 
+// --- adapter keyed by address ---
+const registrationsAdapter = createEntityAdapter<Registration>({
+    selectId: r => r.address,
+    sortComparer: false,
+})
+
+// --- initial state ---
 export const initialNotificationState: NotificationState = {
     feautureEnabled: false,
     permissionEnabled: null,
@@ -9,9 +15,7 @@ export const initialNotificationState: NotificationState = {
     dappVisitCounter: {},
     userTags: {},
     dappNotifications: true,
-    walletRegistrations: null,
-    lastFullRegistration: null,
-    lastSubscriptionId: null,
+    registrations: registrationsAdapter.getInitialState(),
 }
 
 export const Notification = createSlice({
@@ -49,21 +53,11 @@ export const Notification = createSlice({
         setDappNotifications: (state, action: PayloadAction<boolean>) => {
             state.dappNotifications = action.payload
         },
-        updateWalletRegistrations: (state, action: PayloadAction<{ addresses: string[]; timestamp: number }>) => {
-            if (!state.walletRegistrations) {
-                state.walletRegistrations = {}
-            }
-            for (const address of action.payload.addresses) {
-                // Normalize address for consistent storage
-                const normalizedAddress = HexUtils.normalize(address)
-                state.walletRegistrations![normalizedAddress] = action.payload.timestamp
-            }
+        upsertRegistrations: (state, action) => {
+            registrationsAdapter.upsertMany(state.registrations, action.payload)
         },
-        updateLastFullRegistration: (state, action: PayloadAction<number>) => {
-            state.lastFullRegistration = action.payload
-        },
-        updateLastSubscriptionId: (state, action: PayloadAction<string | null>) => {
-            state.lastSubscriptionId = action.payload
+        removeRegistrations: (state, action) => {
+            registrationsAdapter.removeMany(state.registrations, action.payload)
         },
     },
 })
@@ -76,7 +70,8 @@ export const {
     setDappVisitCounter,
     setDappNotifications,
     removeDappVisitCounter,
-    updateWalletRegistrations,
-    updateLastFullRegistration,
-    updateLastSubscriptionId,
+    upsertRegistrations,
+    removeRegistrations,
 } = Notification.actions
+
+export { registrationsAdapter }
