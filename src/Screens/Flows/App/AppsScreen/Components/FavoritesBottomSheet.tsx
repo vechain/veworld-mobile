@@ -103,8 +103,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     }, [])
 
     const onSaveReorderedDapps = useCallback(() => {
-        const nonCustom = reorderedDapps.filter(d => !d.isCustom)
-        dispatch(reorderBookmarks(nonCustom))
+        dispatch(reorderBookmarks(reorderedDapps))
         setIsEditingMode(false)
     }, [dispatch, reorderedDapps])
 

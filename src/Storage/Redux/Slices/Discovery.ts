@@ -161,10 +161,12 @@ export const DiscoverySlice = createSlice({
                 state.custom.push(bookmark)
             } else {
                 state.favorites.push(bookmark)
-                if (!state.favoriteRefs) state.favoriteRefs = []
-                const order = state.favoriteRefs.length
-                state.favoriteRefs.push(createDAppReference(bookmark, order))
             }
+
+            // Add to favoriteRefs for all bookmark types (app-hub, vbd, custom)
+            if (!state.favoriteRefs) state.favoriteRefs = []
+            const order = state.favoriteRefs.length
+            state.favoriteRefs.push(createDAppReference(bookmark, order))
         },
         removeBookmark: (state, action: PayloadAction<{ href: string; isCustom?: boolean }>) => {
             const { isCustom, href } = action.payload
@@ -204,10 +206,17 @@ export const DiscoverySlice = createSlice({
             }
         },
         reorderBookmarks: (state, action: PayloadAction<DiscoveryDApp[]>) => {
+            // Separate custom and non-custom dapps
             const nonCustom = action.payload.filter(dapp => !dapp.isCustom)
+            const custom = action.payload.filter(dapp => dapp.isCustom)
+
+            // Update state
             state.favorites = nonCustom
+            state.custom = custom
+
+            // Update favoriteRefs with all dapps (app-hub, vbd, and custom)
             if (!state.favoriteRefs) state.favoriteRefs = []
-            state.favoriteRefs = nonCustom.map((dapp, index) => createDAppReference(dapp, index))
+            state.favoriteRefs = action.payload.map((dapp, index) => createDAppReference(dapp, index))
         },
         setFeaturedDApps: (state, action: PayloadAction<DiscoveryDApp[]>) => {
             state.featured = action.payload

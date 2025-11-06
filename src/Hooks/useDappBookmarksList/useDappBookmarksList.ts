@@ -11,10 +11,8 @@ export const useDappBookmarksList = (): DiscoveryDApp[] => {
     const { data: vbdDapps = [] } = useVeBetterDaoDapps()
 
     return useMemo(() => {
-        // Build lookup maps
         const byId = new Map(featuredDapps.filter(d => d.id).map(d => [d.id!, d]))
 
-        // Convert VBD dApps to DiscoveryDApp format and create lookup map
         const byVbdId = new Map(
             vbdDapps.map(vbd => [
                 vbd.id,

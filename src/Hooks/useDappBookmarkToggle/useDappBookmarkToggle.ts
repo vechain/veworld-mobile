@@ -1,7 +1,14 @@
 import { useCallback, useMemo } from "react"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useDappBookmarksList, useVeBetterDaoDapps } from "~Hooks"
-import { addBookmark, removeBookmark, selectFeaturedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    addBookmark,
+    removeBookmark,
+    selectFavoriteRefs,
+    selectFeaturedDapps,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 
 export const useDappBookmarkToggle = (url?: string, title?: string) => {
@@ -9,6 +16,7 @@ export const useDappBookmarkToggle = (url?: string, title?: string) => {
     const track = useAnalyticTracking()
 
     const bookmarkedDapps = useDappBookmarksList()
+    const favoriteRefs = useAppSelector(selectFavoriteRefs)
     const featuredDapps = useAppSelector(selectFeaturedDapps)
     const { data: vbdApps } = useVeBetterDaoDapps()
 
@@ -16,11 +24,41 @@ export const useDappBookmarkToggle = (url?: string, title?: string) => {
         if (!url) return undefined
         const trimmed = URIUtils.getBaseURL(url)
         try {
-            return bookmarkedDapps.find(bookmark => URIUtils.getBaseURL(bookmark.href) === trimmed)
+            const featuredMatch = featuredDapps.find(dapp => URIUtils.getBaseURL(dapp.href) === trimmed)
+
+            if (featuredMatch) {
+                const isBookmarkedById = favoriteRefs?.some(ref => {
+                    if (ref.type === "app-hub" && featuredMatch.id) {
+                        return ref.id === featuredMatch.id
+                    }
+                    if (ref.type === "vbd" && featuredMatch.veBetterDaoId) {
+                        return ref.vbdId === featuredMatch.veBetterDaoId
+                    }
+                    return false
+                })
+
+                if (isBookmarkedById) {
+                    return bookmarkedDapps.find(bookmark => {
+                        if (featuredMatch.id) return bookmark.id === featuredMatch.id
+                        if (featuredMatch.veBetterDaoId) return bookmark.veBetterDaoId === featuredMatch.veBetterDaoId
+                        return false
+                    })
+                }
+            }
+
+            const vbdMatch = vbdApps?.find(dapp => URIUtils.getBaseURL(dapp.external_url) === trimmed)
+            if (vbdMatch) {
+                const isBookmarkedByVbdId = favoriteRefs?.some(ref => ref.type === "vbd" && ref.vbdId === vbdMatch.id)
+                if (isBookmarkedByVbdId) {
+                    return bookmarkedDapps.find(bookmark => bookmark.veBetterDaoId === vbdMatch.id)
+                }
+            }
+
+            return bookmarkedDapps.find(bookmark => bookmark.isCustom && URIUtils.getBaseURL(bookmark.href) === trimmed)
         } catch {
             return undefined
         }
-    }, [bookmarkedDapps, url])
+    }, [bookmarkedDapps, favoriteRefs, featuredDapps, vbdApps, url])
 
     const isBookMarked = useMemo(() => {
         return !!existingBookmark
