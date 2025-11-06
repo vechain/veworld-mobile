@@ -13,14 +13,46 @@ export const Migration32 = (state: PersistedState): PersistedState => {
     // @ts-expect-error
     const currentNotificationState: NotificationState = state.notification
 
+    // --- Part 1: Migrate notification state (always run if needed) ---
+    const needsNotificationMigration =
+        !currentNotificationState?.registrations ||
+        !currentNotificationState.registrations.ids ||
+        !currentNotificationState.registrations.entities
+
+    const newNotificationState: NotificationState = needsNotificationMigration
+        ? {
+              feautureEnabled: currentNotificationState?.feautureEnabled ?? false,
+              permissionEnabled: currentNotificationState?.permissionEnabled ?? null,
+              optedIn: currentNotificationState?.optedIn ?? null,
+              dappVisitCounter: currentNotificationState?.dappVisitCounter ?? {},
+              userTags: currentNotificationState?.userTags ?? {},
+              dappNotifications: currentNotificationState?.dappNotifications ?? true,
+              registrations: {
+                  ids: [],
+                  entities: {},
+              },
+          }
+        : currentNotificationState
+
+    if (needsNotificationMigration) {
+        debug(ERROR_EVENTS.SECURITY, "Migrated notification state to include registrations EntityAdapter structure")
+    }
+
+    // --- Part 2: Migrate discovery state (skip if already done) ---
     if (!currentDiscoveryState || Object.keys(currentDiscoveryState).length === 0) {
         debug(ERROR_EVENTS.SECURITY, "================= **** No discovery state to migrate **** =================")
-        return state
+        return {
+            ...state,
+            notification: newNotificationState,
+        } as PersistedState
     }
 
     if (currentDiscoveryState.favoriteRefs && currentDiscoveryState.favoriteRefs.length > 0) {
         debug(ERROR_EVENTS.SECURITY, "================= **** favoriteRefs already exists **** =================")
-        return state
+        return {
+            ...state,
+            notification: newNotificationState,
+        } as PersistedState
     }
 
     const favoriteRefs: DAppReference[] = (currentDiscoveryState.favorites || []).map((dapp, index): DAppReference => {
@@ -53,20 +85,6 @@ export const Migration32 = (state: PersistedState): PersistedState => {
             order: index,
         }
     })
-
-    // Remove old fields and initialize EntityAdapter structure nested under registrations
-    const newNotificationState = {
-        feautureEnabled: currentNotificationState?.feautureEnabled ?? false,
-        permissionEnabled: currentNotificationState?.permissionEnabled ?? null,
-        optedIn: currentNotificationState?.optedIn ?? null,
-        dappVisitCounter: currentNotificationState?.dappVisitCounter ?? {},
-        userTags: currentNotificationState?.userTags ?? {},
-        dappNotifications: currentNotificationState?.dappNotifications ?? true,
-        registrations: currentNotificationState?.registrations ?? {
-            ids: [],
-            entities: {},
-        },
-    } satisfies NotificationState
 
     const newDiscoveryState = {
         ...currentDiscoveryState,
