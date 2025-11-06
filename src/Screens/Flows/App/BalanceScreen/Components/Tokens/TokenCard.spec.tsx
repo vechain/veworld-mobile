@@ -2,7 +2,6 @@ import { fireEvent, render, screen } from "@testing-library/react-native"
 import React from "react"
 import { Routes } from "~Navigation"
 import { TestHelpers, TestWrapper } from "~Test"
-
 import { useSmartMarketChart } from "~Api/Coingecko"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { TokenCard } from "./TokenCard"
@@ -20,8 +19,6 @@ jest.mock("react-native", () => ({
     ...jest.requireActual("react-native"),
     Dimensions: { get: jest.fn().mockReturnValue({ width: 400, height: 800 }) },
 }))
-
-jest.mock("d3")
 
 jest.mock("d3-interpolate-path", () => {
     return {

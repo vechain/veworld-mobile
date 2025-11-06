@@ -41,7 +41,6 @@ module.exports = {
             "|@privy-io/.*" +
             "|uuid" +
             "|@shopify/react-native-skia" +
-            "|d3-interpolate-path" +
             ")",
     ],
     moduleNameMapper: {
@@ -68,7 +67,6 @@ module.exports = {
         "^@react-native-community/netinfo$": "<rootDir>/src/Test/mocks/@react-native-community/netinfo.js",
         "^@privy-io/expo$": "<rootDir>/src/Test/mocks/@privy-io/expo.js",
         Intl: "<rootDir>/node_modules/intl/",
-        d3: "<rootDir>/node_modules/d3/dist/d3.min.js",
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     testMatch: ["**/*.(spec|test).(ts|tsx|js|jsx)"],

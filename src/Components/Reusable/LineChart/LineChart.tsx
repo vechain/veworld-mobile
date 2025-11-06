@@ -1,3 +1,4 @@
+import * as d3 from "d3"
 import {
     Blur,
     Canvas,
@@ -12,7 +13,6 @@ import {
     useFont,
     vec,
 } from "@shopify/react-native-skia"
-import * as d3 from "d3"
 import { interpolatePath } from "d3-interpolate-path"
 import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
@@ -124,7 +124,7 @@ const ChartProvider = ({
     )
 }
 
-const _LineChart = ({
+const LineChart = ({
     width = SCREEN_WIDTH,
     height = GRAPH_HEIGHT,
     strokeWidth = 4,
@@ -298,6 +298,7 @@ const _LineChart = ({
 
         makeMorph(start.toSVGString(), end.toSVGString(), morphProgress.value)
 
+        if (!interpolatedPath.value) return Skia.Path.Make()!
         return Skia.Path.MakeFromSVGString(interpolatedPath.value)!
     }, [previousGraph.value, currentGraph.value, morphProgress.value, makeMorph, interpolatedPath.value])
 
@@ -320,7 +321,8 @@ const _LineChart = ({
     }, [calcXPos, calcYPos])
 
     const backgroundClipPath = useDerivedValue(() => {
-        if (!pathAnimation.value || !data) return Skia.RRectXY(Skia.XYWHRect(0, 0, width, height), 16, 16)
+        if ((!pathAnimation.value || !data) && !isLoading)
+            return Skia.RRectXY(Skia.XYWHRect(0, 0, width, height), 16, 16)
         return pathAnimation.value
             .copy()
             .lineTo(...lineTo)
@@ -487,7 +489,6 @@ const _LineChart = ({
     )
 }
 
-export const LineChart = Object.assign(_LineChart, {
-    Chart: _LineChart,
-    Provider: ChartProvider,
-})
+LineChart.Provider = ChartProvider
+
+export { LineChart }
