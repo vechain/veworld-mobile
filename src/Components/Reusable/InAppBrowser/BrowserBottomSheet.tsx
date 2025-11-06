@@ -5,6 +5,8 @@ import { default as React, useCallback, useMemo, useState } from "react"
 import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers"
+import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { ColorThemeType, SCREEN_HEIGHT } from "~Constants"
 import { useDappBookmarkToggle, useTabManagement, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -78,6 +80,16 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
             navToSearch()
         }
     }, [currentTabId, closeTab, navToSearch])
+
+    const clearCache = useCallback(() => {
+        webviewRef.current?.clearCache?.(true)
+        Feedback.show({
+            message: LL.CACHE_CLEARED(),
+            severity: FeedbackSeverity.SUCCESS,
+            icon: "icon-check",
+            type: FeedbackType.ALERT,
+        })
+    }, [LL, webviewRef])
 
     const actions: BottomSheetActionItem[] = useMemo(() => {
         const favoriteItem: BottomSheetAction = isBookMarked
@@ -157,6 +169,13 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
             },
             {
                 type: "action",
+                id: "cache-clear",
+                icon: "icon-trash-2",
+                label: LL.BROWSER_CLEAR_CACHE(),
+                onPress: () => clearCache(),
+            } satisfies BottomSheetAction,
+            {
+                type: "action",
                 id: "close-tab",
                 icon: "icon-x",
                 label: LL.BROWSER_CLOSE_TAB(),
@@ -167,13 +186,14 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         isBookMarked,
         LL,
         toggleBookmark,
-        webviewRef,
-        onClose,
         navigationState?.canGoBack,
         navigationState?.url,
+        webviewRef,
+        onClose,
         dappMetadata,
         navToNewTab,
         navToTabsManager,
+        clearCache,
         closeCurrentTab,
     ])
 

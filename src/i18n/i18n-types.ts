@@ -1299,6 +1299,14 @@ type RootTranslation = {
 	 */
 	BROWSER_SEE_ALL_TABS: string
 	/**
+	 * C​l​e​a​r​ ​b​r​o​w​s​e​r​ ​c​a​c​h​e
+	 */
+	BROWSER_CLEAR_CACHE: string
+	/**
+	 * C​a​c​h​e​ ​c​l​e​a​r​e​d
+	 */
+	CACHE_CLEARED: string
+	/**
 	 * S​h​a​r​e
 	 */
 	BROWSER_SHARE: string
@@ -6719,6 +6727,14 @@ Thanks for your patience!
 	 * See all tabs open
 	 */
 	BROWSER_SEE_ALL_TABS: () => LocalizedString
+	/**
+	 * Clear browser cache
+	 */
+	BROWSER_CLEAR_CACHE: () => LocalizedString
+	/**
+	 * Cache cleared
+	 */
+	CACHE_CLEARED: () => LocalizedString
 	/**
 	 * Share
 	 */
