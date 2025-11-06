@@ -5,7 +5,6 @@ import {
 } from "~Networking/NotificationCenter/NotificationCenterAPI"
 
 jest.mock("~Networking/NotificationCenter/NotificationCenterAPI")
-jest.mock("~Utils")
 
 const mockRegisterPushNotification = registerPushNotification as jest.MockedFunction<typeof registerPushNotification>
 const mockUnregisterPushNotification = unregisterPushNotification as jest.MockedFunction<
