@@ -1,3 +1,9 @@
+import type { EntityState } from "@reduxjs/toolkit"
+export interface Registration {
+    address: string // normalized
+    lastSuccessfulSync?: number
+}
+
 export interface NotificationState {
     feautureEnabled: boolean
     permissionEnabled: boolean | null
@@ -5,7 +11,5 @@ export interface NotificationState {
     dappVisitCounter: Record<string, number>
     userTags: Record<string, string>
     dappNotifications: boolean
-    walletRegistrations: Record<string, number> | null // address -> timestamp
-    lastFullRegistration: number | null // last complete re-registration of all wallets
-    lastSubscriptionId: string | null
+    registrations: EntityState<Registration>
 }
