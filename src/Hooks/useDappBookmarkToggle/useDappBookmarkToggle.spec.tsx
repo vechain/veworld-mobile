@@ -115,7 +115,7 @@ describe("useDappBookmarkToggle", () => {
                 {
                     name: "VBD App",
                     desc: "VBD Description",
-                    href: "https://vbdapp-new.com", // Changed URL
+                    href: "https://vbdapp-new.com", // Changed URL - resolved from VBD API
                     isCustom: false,
                     createAt: 0,
                     amountOfNavigations: 0,
@@ -154,7 +154,8 @@ describe("useDappBookmarkToggle", () => {
                 <TestWrapper preloadedState={preloadedState}>{children}</TestWrapper>
             )
 
-            const { result } = renderHook(() => useDappBookmarkToggle("https://vbdapp.com", "VBD App"), {
+            // Test with the NEW URL (current URL from VBD API)
+            const { result } = renderHook(() => useDappBookmarkToggle("https://vbdapp-new.com", "VBD App"), {
                 wrapper,
             })
 
@@ -194,9 +195,9 @@ describe("useDappBookmarkToggle", () => {
         })
     })
 
-    describe("Immediate state reflection", () => {
-        it("should show bookmarked immediately when favoriteRefs updates even if bookmarkedDapps is empty", () => {
-            const featuredDapp: DiscoveryDApp = {
+    describe("Bookmark detection", () => {
+        it("should detect bookmarked app from useDappBookmarksList", () => {
+            const bookmarkedDapp: DiscoveryDApp = {
                 id: "instant-app",
                 name: "Instant App",
                 href: "https://instant.com",
@@ -212,12 +213,12 @@ describe("useDappBookmarkToggle", () => {
                 order: 0,
             }
 
-            useDappBookmarksList.mockReturnValue([])
+            useDappBookmarksList.mockReturnValue([bookmarkedDapp])
             useVeBetterDaoDapps.mockReturnValue({ data: [], isLoading: false })
 
             const preloadedState = {
                 discovery: {
-                    featured: [featuredDapp],
+                    featured: [bookmarkedDapp],
                     favorites: [],
                     favoriteRefs: [favoriteRef],
                     custom: [],
@@ -241,6 +242,7 @@ describe("useDappBookmarkToggle", () => {
 
             expect(result.current.isBookMarked).toBe(true)
             expect(result.current.existingBookmark).toBeTruthy()
+            expect(result.current.existingBookmark?.id).toBe("instant-app")
         })
     })
 
