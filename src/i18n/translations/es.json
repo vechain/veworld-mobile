@@ -285,7 +285,7 @@
   "BROWSER_CHANGE_ACCOUNT_TITLE": "Cambio de cuenta",
   "BROWSER_CHANGE_NETWORK_DESC": "La red cambiará a:",
   "BROWSER_CHANGE_NETWORK_TITLE": "Cambio de red",
-  "BROWSER_CLEAR_CACHE": "Borrar caché del navegador",
+  "BROWSER_CLEAR_CACHE": "Borrar la caché del navegador",
   "BROWSER_CLOSE_TAB": "Cerrar pestaña",
   "BROWSER_COPY_LINK": "Copiar enlace de la página",
   "BROWSER_COPY_LINK_SUCCESS": "Enlace copiado exitosamente al portapapeles",
