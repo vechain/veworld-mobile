@@ -82,11 +82,20 @@ const makeGraph = (data: DataPoint[], width: number, height: number, strokeWidth
 
 export const LinearChartContext = createContext<LineChartContextType>({
     data: [],
+    isLoading: false,
     activePointIndex: null!,
     selectedPoint: null!,
 })
 
-const ChartProvider = ({ children, data = [] }: { children: React.ReactNode; data?: LineChartData }) => {
+const ChartProvider = ({
+    children,
+    data = [],
+    isLoading = false,
+}: {
+    children: React.ReactNode
+    data?: LineChartData
+    isLoading?: boolean
+}) => {
     const activePointIndex = useSharedValue(-1)
     const [selectedPoint, setSelectedPoint] = useState<DataPoint | null>(null)
 
@@ -95,7 +104,7 @@ const ChartProvider = ({ children, data = [] }: { children: React.ReactNode; dat
     }, [activePointIndex.value, data])
 
     return (
-        <LinearChartContext.Provider value={{ data, activePointIndex, selectedPoint }}>
+        <LinearChartContext.Provider value={{ data, isLoading, activePointIndex, selectedPoint }}>
             {children}
         </LinearChartContext.Provider>
     )
@@ -120,9 +129,7 @@ const _LineChart = ({
     gradientBackgroundPositions = [0, 0.6, 1],
     canvasStyle,
 }: LineChartProps) => {
-    // const [previousGraph, setPreviousGraph] = useState<ReturnType<typeof makeGraph> | null>(null)
-
-    const { data, activePointIndex } = useLineChart()
+    const { data, activePointIndex, isLoading } = useLineChart()
     const { formatLocale } = useFormatFiat()
     const theme = useTheme()
     const skiaFont = useFont(require("../../../Assets/Fonts/Inter/Inter-SemiBold.ttf"), fontSize)
@@ -131,6 +138,8 @@ const _LineChart = ({
         () => makeGraph(data, width, height, strokeWidth),
         [data, width, height, strokeWidth],
     )
+
+    const currentGraph = useSharedValue<SkPath | null>(path)
     const previousGraph = useSharedValue<SkPath | null>(null)
 
     //Reference to the previous data
@@ -142,13 +151,15 @@ const _LineChart = ({
 
     useEffect(() => {
         //Update the shared value to the current data
+        if (isLoading) return
         sharedData.value = data
-    }, [data, sharedData])
+    }, [data, sharedData, isLoading])
 
     useEffect(() => {
         //Update the previous data reference to the current data
+        if (isLoading) return
         previousDataRef.current = data
-    }, [data])
+    }, [data, isLoading])
 
     useEffect(() => {
         if (!previousData) return
@@ -214,15 +225,21 @@ const _LineChart = ({
     }, [data.length, showGradientBackground, backgroundProgress, progress])
 
     useEffect(() => {
-        if (previousData && previousData.length !== data.length) {
-            morphProgress.value = withTiming(1, { duration: 350 }, finished => {
-                if (finished) {
-                    previousGraph.value = path!
-                    morphProgress.value = 0
-                }
-            })
+        if (!isLoading) {
+            // Update current graph when loading finishes
+            currentGraph.value = path
+
+            // Start morphing animation
+            if (previousData && previousData.length !== data.length) {
+                morphProgress.value = withTiming(1, { duration: 350 }, finished => {
+                    if (finished) {
+                        previousGraph.value = path!
+                        morphProgress.value = 0
+                    }
+                })
+            }
         }
-    }, [previousData, path, morphProgress, previousGraph, data.length])
+    }, [isLoading, path, currentGraph, previousGraph, morphProgress, previousData, data.length])
 
     const findNearestPointIndex = useCallback(
         (x: number) => {
@@ -262,14 +279,13 @@ const _LineChart = ({
 
     //#region Animations
     const pathAnimation = useDerivedValue(() => {
-        if (!previousGraph.value) return path!
-        const start = previousGraph.value!
-        const end = path!
+        const start = previousGraph.value ?? Skia.Path.Make()!
+        const end = currentGraph.value!
 
         makeMorph(start.toSVGString(), end.toSVGString(), morphProgress.value)
 
         return Skia.Path.MakeFromSVGString(interpolatedPath.value)!
-    }, [previousGraph.value, path, morphProgress.value, makeMorph, interpolatedPath.value])
+    }, [previousGraph.value, currentGraph.value, morphProgress.value, makeMorph, interpolatedPath.value])
 
     const backgroudAnimation = useDerivedValue(() => {
         return Skia.Point(maxX, interpolate(backgroundProgress.value, [0, 1], [maxY + 1, minY], Extrapolation.CLAMP))
@@ -367,7 +383,7 @@ const _LineChart = ({
             crossHairEnd.value = withTiming(width, { duration: 450 })
             crossHairOpacity.value = withDelay(450, withTiming(0, { duration: 200 }))
         })
-        .enabled(isInteractive)
+        .enabled(isInteractive && !isLoading)
 
     return (
         <GestureDetector gesture={panGesture}>

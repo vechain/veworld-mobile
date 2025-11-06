@@ -9,6 +9,7 @@ export type DataPoint = {
 export type LineChartData = Array<DataPoint>
 export interface LineChartContextType {
     data: LineChartData
+    isLoading: boolean
     activePointIndex: SharedValue<number>
     selectedPoint: DataPoint | null
 }

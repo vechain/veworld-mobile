@@ -34,12 +34,18 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
 
     const hasTokenChart = useMemo(() => SUPPORTED_CHART_TOKENS.has(token.symbol), [token.symbol])
 
-    const { data: chartData } = useSmartMarketChart({
+    const {
+        data: chartData,
+        isLoading,
+        isFetching,
+        isRefetching,
+    } = useSmartMarketChart({
         id: hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
         vs_currency: currency,
         days: selectedItem.days,
-        placeholderData: DEFAULT_LINE_CHART_DATA,
     })
+
+    const isLoadingChart = useMemo(() => isLoading || isFetching || isRefetching, [isLoading, isFetching, isRefetching])
 
     const downsampledChartData = useMemo(() => {
         if (!chartData) return DEFAULT_LINE_CHART_DATA
@@ -61,7 +67,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
 
     return (
         <AssetDetailScreenWrapper>
-            <LineChart.Provider data={downsampledChartData}>
+            <LineChart.Provider data={downsampledChartData} isLoading={isLoadingChart}>
                 <BaseView flexDirection="row" justifyContent="space-between" style={styles.padding}>
                     <BaseView flexDirection="row" gap={16}>
                         <TokenImage
