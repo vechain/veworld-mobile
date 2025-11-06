@@ -38,11 +38,15 @@ export const useDappBookmarkToggle = (url?: string, title?: string) => {
                 })
 
                 if (isBookmarkedById) {
-                    return bookmarkedDapps.find(bookmark => {
+                    // Try to find in bookmarkedDapps
+                    const found = bookmarkedDapps.find(bookmark => {
                         if (featuredMatch.id) return bookmark.id === featuredMatch.id
                         if (featuredMatch.veBetterDaoId) return bookmark.veBetterDaoId === featuredMatch.veBetterDaoId
                         return false
                     })
+                    if (found) return found
+                    // If favoriteRefs says it's bookmarked but not resolved yet, return the featured dApp
+                    return featuredMatch
                 }
             }
 
@@ -50,15 +54,48 @@ export const useDappBookmarkToggle = (url?: string, title?: string) => {
             if (vbdMatch) {
                 const isBookmarkedByVbdId = favoriteRefs?.some(ref => ref.type === "vbd" && ref.vbdId === vbdMatch.id)
                 if (isBookmarkedByVbdId) {
-                    return bookmarkedDapps.find(bookmark => bookmark.veBetterDaoId === vbdMatch.id)
+                    // Try to find in bookmarkedDapps
+                    const found = bookmarkedDapps.find(bookmark => bookmark.veBetterDaoId === vbdMatch.id)
+                    if (found) return found
+                    // If favoriteRefs says it's bookmarked but not resolved yet, return minimal object
+                    return {
+                        href: vbdMatch.external_url,
+                        name: vbdMatch.name,
+                        desc: vbdMatch.description,
+                        isCustom: false,
+                        createAt: Date.parse(vbdMatch.createdAtTimestamp),
+                        amountOfNavigations: 0,
+                        veBetterDaoId: vbdMatch.id,
+                    } as DiscoveryDApp
                 }
             }
 
-            return bookmarkedDapps.find(bookmark => bookmark.isCustom && URIUtils.getBaseURL(bookmark.href) === trimmed)
+            // Check for custom URL bookmarks
+            const customRefExists = favoriteRefs?.some(
+                ref => ref.type === "custom" && URIUtils.compareURLs(ref.url, trimmed),
+            )
+            if (customRefExists) {
+                // Try to find in resolved bookmarkedDapps first
+                const found = bookmarkedDapps.find(
+                    bookmark => bookmark.isCustom && URIUtils.getBaseURL(bookmark.href) === trimmed,
+                )
+                if (found) return found
+                // If favoriteRefs says it's bookmarked but not resolved yet, return a minimal custom object
+                return {
+                    href: trimmed!,
+                    name: title || new URL(url).hostname,
+                    desc: "",
+                    isCustom: true,
+                    createAt: Date.now(),
+                    amountOfNavigations: 0,
+                } as DiscoveryDApp
+            }
+
+            return undefined
         } catch {
             return undefined
         }
-    }, [bookmarkedDapps, favoriteRefs, featuredDapps, vbdApps, url])
+    }, [bookmarkedDapps, favoriteRefs, featuredDapps, vbdApps, url, title])
 
     const isBookMarked = useMemo(() => {
         return !!existingBookmark

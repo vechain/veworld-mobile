@@ -164,8 +164,9 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                     <DraggableFlatList
                         testID="draggable-flatlist"
                         scrollEnabled={true}
-                        contentContainerStyle={styles.listContentContainer}
-                        style={reorderedDapps.length === 0 ? styles.emptyListStyle : undefined}
+                        contentContainerStyle={
+                            reorderedDapps.length === 0 ? styles.emptyContentContainer : styles.listContentContainer
+                        }
                         extraData={isEditingMode}
                         keyExtractor={item => item.href}
                         renderItem={renderItem}
@@ -211,10 +212,10 @@ const baseStyles = (theme: ColorThemeType) =>
         listContentContainer: {
             paddingHorizontal: 24,
         },
-        emptyListStyle: {
+        emptyContentContainer: {
             paddingHorizontal: 24,
             justifyContent: "center",
-            flex: 1,
+            flexGrow: 1,
         },
         emptyIcon: {
             backgroundColor: theme.colors.actionBottomSheet.emptyFavoritesIcon.background,

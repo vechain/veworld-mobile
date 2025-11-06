@@ -5,7 +5,6 @@ import { useDappBookmarkToggle } from "./useDappBookmarkToggle"
 import { DiscoveryDApp } from "~Constants"
 import { DAppReference } from "~Storage/Redux/Slices"
 
-// Mock dependencies
 jest.mock("~Hooks/useDappBookmarksList", () => ({
     useDappBookmarksList: jest.fn(),
 }))
@@ -192,6 +191,56 @@ describe("useDappBookmarkToggle", () => {
             })
 
             expect(result.current.isBookMarked).toBe(false)
+        })
+    })
+
+    describe("Immediate state reflection", () => {
+        it("should show bookmarked immediately when favoriteRefs updates even if bookmarkedDapps is empty", () => {
+            const featuredDapp: DiscoveryDApp = {
+                id: "instant-app",
+                name: "Instant App",
+                href: "https://instant.com",
+                desc: "Test",
+                isCustom: false,
+                createAt: 0,
+                amountOfNavigations: 0,
+            }
+
+            const favoriteRef: DAppReference = {
+                type: "app-hub",
+                id: "instant-app",
+                order: 0,
+            }
+
+            useDappBookmarksList.mockReturnValue([])
+            useVeBetterDaoDapps.mockReturnValue({ data: [], isLoading: false })
+
+            const preloadedState = {
+                discovery: {
+                    featured: [featuredDapp],
+                    favorites: [],
+                    favoriteRefs: [favoriteRef],
+                    custom: [],
+                    bannerInteractions: {},
+                    connectedApps: [],
+                    hasOpenedDiscovery: true,
+                    tabsManager: {
+                        currentTabId: null,
+                        tabs: [],
+                    },
+                },
+            }
+
+            const wrapper = ({ children }: { children: React.ReactNode }) => (
+                <TestWrapper preloadedState={preloadedState}>{children}</TestWrapper>
+            )
+
+            const { result } = renderHook(() => useDappBookmarkToggle("https://instant.com", "Instant App"), {
+                wrapper,
+            })
+
+            expect(result.current.isBookMarked).toBe(true)
+            expect(result.current.existingBookmark).toBeTruthy()
         })
     })
 
