@@ -325,13 +325,19 @@ jest.mock("@tanstack/react-query", () => ({
 
 jest.mock("d3", () => ({
     scaleLinear: jest.fn().mockImplementation(() => {
-        const scale = ((x: any) => x) as any
+        const scale = Object.assign(jest.fn(), {
+            domain: jest.fn().mockReturnValue(this),
+            range: jest.fn().mockReturnValue(this),
+        })
         scale.domain = jest.fn().mockReturnValue(scale)
         scale.range = jest.fn().mockReturnValue(scale)
         return scale
     }),
     scaleTime: jest.fn().mockImplementation(() => {
-        const scale = ((x: any) => x) as any
+        const scale = Object.assign(jest.fn(), {
+            domain: jest.fn().mockReturnValue(this),
+            range: jest.fn().mockReturnValue(this),
+        })
         scale.domain = jest.fn().mockReturnValue(scale)
         scale.range = jest.fn().mockReturnValue(scale)
         return scale
