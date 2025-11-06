@@ -17,7 +17,7 @@ const getCollectionMetadataQueryKey = (
     collectionAddress: string,
     genesisId: string,
     accountAddress: string,
-): string[] => ["COLLECTIBLES", "COLLECTION_METADATA", collectionAddress, genesisId, accountAddress]
+): string[] => ["COLLECTIBLES", "COLLECTION_METADATA", genesisId, accountAddress, collectionAddress]
 
 const getCollectionMetadata = async (
     collectionAddress: string,
@@ -40,7 +40,7 @@ const getCollectionMetadata = async (
     let balanceOf: number | undefined
 
     try {
-        balanceOf = await getCachedNftBalanceOf(address, collectionAddress, thor)
+        balanceOf = await getCachedNftBalanceOf(address, collectionAddress, network.genesis.id, thor)
     } catch (e) {
         warn(ERROR_EVENTS.NFT, "failed to get balance", e)
     }

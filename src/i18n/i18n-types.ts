@@ -625,6 +625,10 @@ type RootTranslation = {
 	 */
 	BALANCE_ACTION_RECEIVE: string
 	/**
+	 * S​e​l​l
+	 */
+	BALANCE_ACTION_SELL: string
+	/**
 	 * S​e​n​d
 	 */
 	BALANCE_ACTION_SEND: string
@@ -1295,6 +1299,14 @@ type RootTranslation = {
 	 */
 	BROWSER_SEE_ALL_TABS: string
 	/**
+	 * C​l​e​a​r​ ​b​r​o​w​s​e​r​ ​c​a​c​h​e
+	 */
+	BROWSER_CLEAR_CACHE: string
+	/**
+	 * C​a​c​h​e​ ​c​l​e​a​r​e​d
+	 */
+	CACHE_CLEARED: string
+	/**
 	 * S​h​a​r​e
 	 */
 	BROWSER_SHARE: string
@@ -1492,6 +1504,10 @@ type RootTranslation = {
 	 */
 	BTN_GO_TO_SETTINGS: string
 	/**
+	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_HIDE_COLLECTION: string
+	/**
 	 * A​c​t​i​v​i​t​y
 	 */
 	BTN_HISTORY: string
@@ -1677,6 +1693,10 @@ type RootTranslation = {
 	 */
 	BTN_SEND_ANYWAY: string
 	/**
+	 * S​h​o​w​ ​c​o​l​l​e​c​t​i​o​n
+	 */
+	BTN_SHOW_COLLECTION: string
+	/**
 	 * S​h​o​w​ ​Q​R​ ​c​o​d​e
 	 */
 	BTN_SHOW_QR_CODE: string
@@ -1827,6 +1847,22 @@ type RootTranslation = {
 	 */
 	COLLECTIONS: string
 	/**
+	 * H​i​d​e​ ​b​a​c​k
+	 */
+	COLLECTIONS_HIDE_BACK: string
+	/**
+	 * V​i​e​w​ ​h​i​d​d​e​n
+	 */
+	COLLECTIONS_VIEW_HIDDEN: string
+	/**
+	 * T​h​e​ ​c​o​l​l​e​c​t​i​o​n​ ​w​a​s​ ​m​o​v​e​d​ ​t​o​ ​t​h​e​ ​h​i​d​d​e​n​ ​s​e​c​t​i​o​n​ ​a​n​d​ ​n​o​ ​l​o​n​g​e​r​ ​v​i​s​i​b​l​e​ ​o​n​ ​t​h​e​ ​c​o​l​l​e​c​t​i​o​n​s​ ​l​i​s​t​.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: string
+	/**
+	 * C​o​l​l​e​c​t​i​o​n​ ​h​i​d​d​e​n
+	 */
+	COLLECTION_HIDDEN_TITLE: string
+	/**
 	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
 	 */
 	COLLECTION_NAME: string
@@ -1838,6 +1874,10 @@ type RootTranslation = {
 	 * 2​4​ ​H​R​s
 	 */
 	COMMON_24H: string
+	/**
+	 * 2​4​h​ ​R​a​n​g​e
+	 */
+	COMMON_24H_PRICE_RANGE: string
 	/**
 	 * 2​4​h​ ​V​o​l​u​m​e
 	 */
@@ -2081,9 +2121,17 @@ type RootTranslation = {
 	 */
 	COMMON_SHOW: string
 	/**
+	 * S​h​o​w​ ​m​o​r​e
+	 */
+	COMMON_SHOW_MORE: string
+	/**
 	 * T​o​d​a​y
 	 */
 	COMMON_TODAY: string
+	/**
+	 * T​o​k​e​n​ ​s​t​a​t​s
+	 */
+	COMMON_TOKEN_STATS: string
 	/**
 	 * T​o​t​a​l​ ​S​u​p​p​l​y
 	 */
@@ -2092,6 +2140,10 @@ type RootTranslation = {
 	 * U​s​e​r​n​a​m​e
 	 */
 	COMMON_USERNAME: string
+	/**
+	 * W​e​b​s​i​t​e
+	 */
+	COMMON_WEBSITE: string
 	/**
 	 * W​h​o​o​p​s​!
 	 */
@@ -5025,6 +5077,14 @@ type RootTranslation = {
 	 */
 	TOKEN_CUSTOM_SUBTITLE: string
 	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	TOKEN_DETAIL_ACTIVITY_TAB: string
+	/**
+	 * B​a​l​a​n​c​e
+	 */
+	TOKEN_DETAIL_BALANCE_TAB: string
+	/**
 	 * T​o​k​e​n​ ​I​D
 	 */
 	TOKEN_ID: string
@@ -5998,6 +6058,10 @@ Try reconnect your device to the internet.
 	 */
 	BALANCE_ACTION_RECEIVE: () => LocalizedString
 	/**
+	 * Sell
+	 */
+	BALANCE_ACTION_SELL: () => LocalizedString
+	/**
 	 * Send
 	 */
 	BALANCE_ACTION_SEND: () => LocalizedString
@@ -6664,6 +6728,14 @@ Thanks for your patience!
 	 */
 	BROWSER_SEE_ALL_TABS: () => LocalizedString
 	/**
+	 * Clear browser cache
+	 */
+	BROWSER_CLEAR_CACHE: () => LocalizedString
+	/**
+	 * Cache cleared
+	 */
+	CACHE_CLEARED: () => LocalizedString
+	/**
 	 * Share
 	 */
 	BROWSER_SHARE: () => LocalizedString
@@ -6860,6 +6932,10 @@ Thanks for your patience!
 	 */
 	BTN_GO_TO_SETTINGS: () => LocalizedString
 	/**
+	 * Hide collection
+	 */
+	BTN_HIDE_COLLECTION: () => LocalizedString
+	/**
 	 * Activity
 	 */
 	BTN_HISTORY: () => LocalizedString
@@ -7044,6 +7120,10 @@ Thanks for your patience!
 	 */
 	BTN_SEND_ANYWAY: () => LocalizedString
 	/**
+	 * Show collection
+	 */
+	BTN_SHOW_COLLECTION: () => LocalizedString
+	/**
 	 * Show QR code
 	 */
 	BTN_SHOW_QR_CODE: () => LocalizedString
@@ -7193,6 +7273,22 @@ This action is irreversible.
 	 */
 	COLLECTIONS: () => LocalizedString
 	/**
+	 * Hide back
+	 */
+	COLLECTIONS_HIDE_BACK: () => LocalizedString
+	/**
+	 * View hidden
+	 */
+	COLLECTIONS_VIEW_HIDDEN: () => LocalizedString
+	/**
+	 * The collection was moved to the hidden section and no longer visible on the collections list.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: () => LocalizedString
+	/**
+	 * Collection hidden
+	 */
+	COLLECTION_HIDDEN_TITLE: () => LocalizedString
+	/**
 	 * Collection name
 	 */
 	COLLECTION_NAME: () => LocalizedString
@@ -7204,6 +7300,10 @@ This action is irreversible.
 	 * 24 HRs
 	 */
 	COMMON_24H: () => LocalizedString
+	/**
+	 * 24h Range
+	 */
+	COMMON_24H_PRICE_RANGE: () => LocalizedString
 	/**
 	 * 24h Volume
 	 */
@@ -7445,9 +7545,17 @@ This action is irreversible.
 	 */
 	COMMON_SHOW: () => LocalizedString
 	/**
+	 * Show more
+	 */
+	COMMON_SHOW_MORE: () => LocalizedString
+	/**
 	 * Today
 	 */
 	COMMON_TODAY: () => LocalizedString
+	/**
+	 * Token stats
+	 */
+	COMMON_TOKEN_STATS: () => LocalizedString
 	/**
 	 * Total Supply
 	 */
@@ -7456,6 +7564,10 @@ This action is irreversible.
 	 * Username
 	 */
 	COMMON_USERNAME: () => LocalizedString
+	/**
+	 * Website
+	 */
+	COMMON_WEBSITE: () => LocalizedString
 	/**
 	 * Whoops!
 	 */
@@ -10345,6 +10457,14 @@ Here's what it's all about:
 	 * Add a custom token to your wallet
 	 */
 	TOKEN_CUSTOM_SUBTITLE: () => LocalizedString
+	/**
+	 * Activity
+	 */
+	TOKEN_DETAIL_ACTIVITY_TAB: () => LocalizedString
+	/**
+	 * Balance
+	 */
+	TOKEN_DETAIL_BALANCE_TAB: () => LocalizedString
 	/**
 	 * Token ID
 	 */

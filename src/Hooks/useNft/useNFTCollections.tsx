@@ -67,7 +67,12 @@ export const useNFTCollections = () => {
 
                 try {
                     // NFT_WHALE - replace here
-                    balanceOf = await getCachedNftBalanceOf(currentAddress, collection.address, thor)
+                    balanceOf = await getCachedNftBalanceOf(
+                        currentAddress,
+                        collection.address,
+                        network.genesis.id,
+                        thor,
+                    )
                 } catch (e) {
                     warn(ERROR_EVENTS.NFT, "failed to get balance", e)
                 }

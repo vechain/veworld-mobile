@@ -7,7 +7,7 @@ import { COLORS } from "~Constants"
 import { URIUtils } from "~Utils"
 
 type Props = {
-    uri?: string
+    uri: string | undefined
     mime?: string
 } & FastImageProps
 
@@ -78,8 +78,8 @@ export const NFTImageComponent = memo((props: Props) => {
                 priority: FastImage.priority.low,
                 cache: cacheControl,
             }}
-            {...rest}
             resizeMode={FastImage.resizeMode.cover}
+            {...rest}
         />
     )
 })

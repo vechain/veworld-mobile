@@ -1,4 +1,4 @@
-import { B3TR, VET, VTHO } from "~Constants/Constants"
+import { B3TR, VET, VOT3, VTHO } from "~Constants/Constants"
 
 export type MarketChartTimeFrame = {
     label: string
@@ -33,6 +33,7 @@ export const getCoinGeckoIdBySymbol = {
     [VET.symbol]: VET_COINGECKO_ID,
     [VTHO.symbol]: VETHOR_COINGECKO_ID,
     [B3TR.symbol]: B3TR_COINGECKO_ID,
+    [VOT3.symbol]: B3TR_COINGECKO_ID,
     BTC: BTC_COINGECKO_ID,
     ETH: ETH_COINGECKO_ID,
     SOL: SOL_COINGECKO_ID,

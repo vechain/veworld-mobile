@@ -1,18 +1,19 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { BaseSpacer, BaseSkeleton, BaseText, BaseView, Layout, BaseTouchable, BaseIcon } from "~Components"
+import { BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseTouchable, BaseView, Layout } from "~Components"
 import { BaseTabs } from "~Components/Base/BaseTabs"
+import { ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { useCollectionMetadata } from "./Hooks/useCollectionMetadata"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { RootStackParamListHome } from "~Navigation/Stacks/HomeStack"
 import { Routes } from "~Navigation/Enums"
+import { RootStackParamListHome } from "~Navigation/Stacks/HomeStack"
+import { CollectionActionsBottomSheet } from "./BottomSheets/CollectionActionsBottomSheet"
+import { HiddenCollectionBottomSheet } from "./BottomSheets/HiddenCollectionBottomSheet"
+import { ReportCollectionBottomsheet } from "./BottomSheets/ReportCollectionBottomSheet"
 import { CollectiblesDetailsCard } from "./Components/CollectiblesDetailsCard"
 import { CollectionNftsList } from "./Components/CollectionNftsList"
-import { ColorThemeType } from "~Constants"
-import { CollectionActionsBottomSheet } from "./BottomSheets/CollectionActionsBottomSheet"
-import { ReportCollectionBottomsheet } from "./BottomSheets/ReportCollectionBottomSheet"
+import { useCollectionMetadata } from "./Hooks/useCollectionMetadata"
 
 export enum CollectiblesViewMode {
     GALLERY = "GALLERY",
@@ -28,19 +29,16 @@ export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) 
     const { ref: collectionActionsBsRef, onOpen: onOpenCollectionActionsBs } = useBottomSheetModal()
     const {
         ref: reportCollectionBsRef,
-        onOpen: onOpenReportCollectionBs,
+        onOpenPlain: onOpenReportCollectionBs,
         onClose: onCloseReportCollectionBs,
     } = useBottomSheetModal()
+    const { ref: hiddenCollectionBsRef, onOpenPlain: onOpenHiddenCollectionBs } = useBottomSheetModal()
     const [selectedKey, setSelectedKey] = useState<CollectiblesViewMode>(CollectiblesViewMode.GALLERY)
     const collectionAddress = route.params.collectionAddress
 
     const handleOpenActionsBottomSheet = useCallback(() => {
         onOpenCollectionActionsBs(collectionAddress)
     }, [onOpenCollectionActionsBs, collectionAddress])
-
-    const handleOpenReportCollectionBottomSheet = useCallback(() => {
-        onOpenReportCollectionBs()
-    }, [onOpenReportCollectionBs])
 
     const { data: collectionMetadata, isLoading: isLoadingCollectionMetadata } =
         useCollectionMetadata(collectionAddress)
@@ -102,6 +100,7 @@ export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) 
     return (
         <Layout
             title={collectionMetadata?.name}
+            headerTitleAlignment="center"
             headerRightElement={
                 <BaseTouchable style={styles.common} onPress={handleOpenActionsBottomSheet}>
                     <BaseIcon name="icon-more-horizontal" size={16} color={theme.colors.actionBottomSheet.text} />
@@ -130,8 +129,10 @@ export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) 
                     </BaseView>
                     <CollectionActionsBottomSheet
                         bsRef={collectionActionsBsRef}
-                        onOpenReport={handleOpenReportCollectionBottomSheet}
+                        onOpenReport={onOpenReportCollectionBs}
+                        onOpenHidden={onOpenHiddenCollectionBs}
                     />
+                    <HiddenCollectionBottomSheet bsRef={hiddenCollectionBsRef} />
                     <ReportCollectionBottomsheet
                         ref={reportCollectionBsRef}
                         collectionAddress={collectionAddress}
