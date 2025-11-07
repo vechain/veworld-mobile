@@ -8,6 +8,20 @@ export const fetchIndexedHistoryEvent = async (
     page: number,
     networkType: Network,
     eventNames: Readonly<ActivityEvent[]> = [],
+    {
+        pageSize = DEFAULT_PAGE_SIZE,
+        contractAddress,
+    }: {
+        /**
+         * Size of the page.
+         * @default DEFAULT_PAGE_SIZE
+         */
+        pageSize?: number
+        /**
+         * Add of the contract that emitted the event
+         */
+        contractAddress?: string
+    } = {},
 ) => {
     debug(ERROR_EVENTS.ACTIVITIES, `Fetching activities for ${address}`)
 
@@ -16,9 +30,10 @@ export const fetchIndexedHistoryEvent = async (
             networkType: networkType.type,
             address,
             page,
-            pageSize: DEFAULT_PAGE_SIZE,
+            pageSize,
             direction: ORDER.DESC,
             eventName: eventNames,
+            contractAddress,
         })
         return await fetchFromEndpoint<FetchActivitiesResponse>(endpoint)
     } catch (error) {

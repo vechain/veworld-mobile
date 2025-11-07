@@ -2,13 +2,13 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, { AnimatedStyle, FadeIn, FadeOut, LinearTransition } from "react-native-reanimated"
+import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent, ScanTarget, STARGATE_DAPP_URL } from "~Constants"
 import { useAnalyticTracking, useBrowserNavigation, useCameraBottomSheet, useThemedStyles } from "~Hooks"
 import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
-import { GlassButtonWithLabel } from "./GlassButton"
 
 type Props = {
     style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
