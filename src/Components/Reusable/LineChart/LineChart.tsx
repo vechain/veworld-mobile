@@ -1,4 +1,3 @@
-import * as d3 from "d3"
 import {
     Blur,
     Canvas,
@@ -11,7 +10,6 @@ import {
     SkPath,
     Text,
     useFont,
-    vec,
 } from "@shopify/react-native-skia"
 import { interpolatePath } from "d3-interpolate-path"
 import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from "react"
@@ -33,6 +31,7 @@ import HapticsService from "~Services/HapticsService"
 import { DateUtils } from "~Utils"
 import { useLineChart } from "./hooks/useLineChart"
 import { DataPoint, LineChartContextType, LineChartData, LineChartProps } from "./types"
+import { makeGraph } from "./utils"
 
 //#region Constants
 
@@ -41,56 +40,6 @@ const INIT_ANIMATION_DURATION = 1500
 
 const CHIP_PADDING_X = 8
 const CHIP_PADDING_Y = 4
-
-//#endregion
-
-//#region Helpers
-
-const makeGraph = (data: DataPoint[], width: number, height: number, strokeWidth: number = 4) => {
-    if (data.length === 0)
-        return {
-            path: Skia.Path.Make(),
-            points: [],
-            maxX: 0,
-            minX: 0,
-            minY: 0,
-            maxY: 0,
-            calcXPos: () => 0,
-            calcYPos: () => 0,
-        }
-
-    const max = Math.max(...data.map(val => val.value))
-    const min = Math.min(...data.map(val => val.value))
-
-    const y = d3.scaleLinear().domain([min, max]).range([height, strokeWidth])
-    const x = d3
-        .scaleTime()
-        .domain([data[0].timestamp, data[data.length - 1].timestamp])
-        .range([0, width])
-
-    const curvedLine = d3
-        .line<DataPoint>()
-        .x(d => x(d.timestamp))
-        .y(d => y(d.value))
-        .curve(d3.curveBasis)(data)
-
-    const skPath = Skia.Path.MakeFromSVGString(curvedLine!)
-
-    const skPoints = data.map(d => vec(x(d.timestamp), y(d.value)))
-
-    return {
-        path: skPath,
-        points: skPoints,
-        maxX: x(data[data.length - 1].timestamp),
-        minX: x(data[0].timestamp),
-        minY: y(min),
-        maxY: y(max),
-        min,
-        max,
-        calcXPos: x,
-        calcYPos: y,
-    }
-}
 
 //#endregion
 
@@ -117,11 +66,16 @@ const ChartProvider = ({
         runOnJS(setSelectedPoint)(activePointIndex.value !== -1 ? data[activePointIndex.value] : null)
     }, [activePointIndex.value, data])
 
-    return (
-        <LinearChartContext.Provider value={{ data, isLoading, activePointIndex, selectedPoint }}>
-            {children}
-        </LinearChartContext.Provider>
-    )
+    const value = useMemo(() => {
+        return {
+            data,
+            isLoading,
+            activePointIndex,
+            selectedPoint,
+        }
+    }, [data, isLoading, activePointIndex, selectedPoint])
+
+    return <LinearChartContext.Provider value={value}>{children}</LinearChartContext.Provider>
 }
 
 const LineChart = ({
