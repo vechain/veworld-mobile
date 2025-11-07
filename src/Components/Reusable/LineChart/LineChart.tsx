@@ -286,7 +286,14 @@ const LineChart = ({
     }, [calcXPos, calcYPos])
 
     const backgroundClipPath = useDerivedValue(() => {
-        if (!data && !isLoading) return Skia.RRectXY(Skia.XYWHRect(0, 0, width, height), 16, 16)
+        if (!data) return Skia.RRectXY(Skia.XYWHRect(0, 0, width, height), 16, 16)
+        if (previousGraph.value && isLoading)
+            return previousGraph.value
+                .copy()
+                .lineTo(...lineTo)
+                .lineTo(...lineToZero)
+                .close()
+
         return pathAnimation.value
             .copy()
             .lineTo(...lineTo)
