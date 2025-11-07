@@ -274,7 +274,7 @@ describe("DiscoverySlice", () => {
             expect(newState.lastNavigationSource).toBe("APPS")
         })
 
-        it("should increment navigation count for favorite dApp", () => {
+        it("should not track navigation for bookmarked dApps (deprecated)", () => {
             const favoriteDApp = {
                 name: "Test DApp",
                 href: "https://example.com",
@@ -288,7 +288,8 @@ describe("DiscoverySlice", () => {
                 initialState,
                 addNavigationToDApp({ href: "https://example.com", isCustom: false }),
             )
-            expect(newState.favorites[0].amountOfNavigations).toBe(2)
+            // Navigation tracking on favorites is deprecated after Migration33
+            expect(newState.favorites[0].amountOfNavigations).toBe(1)
         })
 
         it("should increment navigation count for featured dApp", () => {
@@ -308,7 +309,7 @@ describe("DiscoverySlice", () => {
             expect(newState.featured[0].amountOfNavigations).toBe(4)
         })
 
-        it("should increment navigation count for custom dApp", () => {
+        it("should not track navigation for custom dApps", () => {
             const customDApp = {
                 name: "Custom DApp",
                 href: "https://custom.com",
@@ -322,7 +323,8 @@ describe("DiscoverySlice", () => {
                 initialState,
                 addNavigationToDApp({ href: "https://custom.com", isCustom: true }),
             )
-            expect(newState.custom[0].amountOfNavigations).toBe(1)
+            // Custom dApps don't track navigation counts
+            expect(newState.custom[0].amountOfNavigations).toBe(0)
         })
 
         it("should handle navigation for non-existent dApp", () => {

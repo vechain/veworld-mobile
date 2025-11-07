@@ -23,7 +23,7 @@ export const selectBookmarkedDapps = createSelector(
     selectFavoriteRefs,
     selectFeaturedDapps,
     (favorites, custom, favoriteRefs, featured): DiscoveryDApp[] => {
-        if (favoriteRefs && favoriteRefs.length > 0) {
+        if (favoriteRefs.length > 0) {
             const byId = new Map(featured.filter(d => d.id).map(d => [d.id!, d]))
             const byVbdId = new Map(featured.filter(d => d.veBetterDaoId).map(d => [d.veBetterDaoId!, d]))
 

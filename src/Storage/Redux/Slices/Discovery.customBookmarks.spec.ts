@@ -3,7 +3,7 @@ import { DiscoveryDApp } from "~Constants"
 
 describe("Discovery Slice - Custom Bookmarks", () => {
     describe("addBookmark", () => {
-        it("should add custom dApp to both state.custom and favoriteRefs", () => {
+        it("should add custom dApp to favoriteRefs", () => {
             const customDApp: DiscoveryDApp = {
                 name: "Custom Site",
                 href: "https://custom.com",
@@ -18,11 +18,7 @@ describe("Discovery Slice - Custom Bookmarks", () => {
                 payload: customDApp,
             })
 
-            // Should be in state.custom
-            expect(state.custom).toHaveLength(1)
-            expect(state.custom[0].href).toBe("https://custom.com")
-
-            // Should also be in favoriteRefs with type "custom"
+            // Should be in favoriteRefs with type "custom" (custom array is deprecated)
             expect(state.favoriteRefs).toHaveLength(1)
             expect(state.favoriteRefs?.[0]).toMatchObject({
                 type: "custom",
@@ -48,11 +44,7 @@ describe("Discovery Slice - Custom Bookmarks", () => {
                 payload: appHubDApp,
             })
 
-            // Should be in state.favorites
-            expect(state.favorites).toHaveLength(1)
-            expect(state.favorites[0].href).toBe("https://apphub.com")
-
-            // Should also be in favoriteRefs with type "app-hub"
+            // Should only be in favoriteRefs with type "app-hub" (favorites array is deprecated)
             expect(state.favoriteRefs).toHaveLength(1)
             expect(state.favoriteRefs?.[0]).toMatchObject({
                 type: "app-hub",
@@ -98,14 +90,8 @@ describe("Discovery Slice - Custom Bookmarks", () => {
                 payload: mixedDApps,
             })
 
-            // state.favorites should have non-custom dApps
-            expect(state.favorites).toHaveLength(2)
-            expect(state.favorites.some(d => d.id === "app-1")).toBe(true)
-            expect(state.favorites.some(d => d.veBetterDaoId === "vbd-1")).toBe(true)
-
-            // state.custom should have custom dApps
-            expect(state.custom).toHaveLength(1)
-            expect(state.custom[0].href).toBe("https://custom.com")
+            // All dApps should be in favoriteRefs (favorites/custom arrays are deprecated)
+            expect(state.favoriteRefs).toHaveLength(3)
 
             // favoriteRefs should have ALL dApps in order
             expect(state.favoriteRefs).toHaveLength(3)
@@ -167,7 +153,7 @@ describe("Discovery Slice - Custom Bookmarks", () => {
     })
 
     describe("removeBookmark - custom dApp", () => {
-        it("should remove custom dApp from both state.custom and favoriteRefs", () => {
+        it("should remove custom dApp from favoriteRefs", () => {
             // First add a custom bookmark
             let state = DiscoverySlice.reducer(initialDiscoverState, {
                 type: "discovery/addBookmark",
@@ -181,7 +167,7 @@ describe("Discovery Slice - Custom Bookmarks", () => {
                 },
             })
 
-            expect(state.custom).toHaveLength(1)
+            // Should be in favoriteRefs (custom array is deprecated)
             expect(state.favoriteRefs).toHaveLength(1)
 
             // Now remove it
@@ -193,8 +179,7 @@ describe("Discovery Slice - Custom Bookmarks", () => {
                 },
             })
 
-            // Should be removed from both
-            expect(state.custom).toHaveLength(0)
+            // Should be removed from favoriteRefs
             expect(state.favoriteRefs).toHaveLength(0)
         })
     })

@@ -60,7 +60,7 @@ export type DAppReference = AppHubReference | VBDReference | CustomURLReference
 export type DiscoveryState = {
     featured: DiscoveryDApp[]
     favorites: DiscoveryDApp[]
-    favoriteRefs?: DAppReference[]
+    favoriteRefs: DAppReference[]
     custom: DiscoveryDApp[]
     hasOpenedDiscovery: boolean
     connectedApps: ConnectedDiscoveryApp[]
@@ -157,74 +157,31 @@ export const DiscoverySlice = createSlice({
                 }
             }
 
-            if (bookmark.isCustom) {
-                state.custom.push(bookmark)
-            } else {
-                state.favorites.push(bookmark)
-            }
-
             // Add to favoriteRefs for all bookmark types (app-hub, vbd, custom)
-            if (!state.favoriteRefs) state.favoriteRefs = []
             const order = state.favoriteRefs.length
             state.favoriteRefs.push(createDAppReference(bookmark, order))
         },
         removeBookmark: (state, action: PayloadAction<{ href: string; isCustom?: boolean }>) => {
             const { isCustom, href } = action.payload
+
             if (isCustom) {
-                state.custom = state.custom.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
-                if (state.favoriteRefs) {
-                    state.favoriteRefs = state.favoriteRefs.filter(
-                        ref => ref.type !== "custom" || !URIUtils.compareURLs(ref.url, href),
-                    )
-                }
+                state.favoriteRefs = state.favoriteRefs.filter(
+                    ref => !(ref.type === "custom" && URIUtils.compareURLs(ref.url, href)),
+                )
                 return
             }
 
-            const favoriteMatch = state.favorites.find(dapp => URIUtils.compareURLs(dapp.href, href))
-            state.favorites = state.favorites.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
+            // For non-custom bookmarks, find the dApp to get its ID
+            const dapp = state.featured.find(d => URIUtils.compareURLs(d.href, href))
+            if (!dapp) return
 
-            if (state.favoriteRefs) {
-                const featuredMatch = state.featured.find(dapp => URIUtils.compareURLs(dapp.href, href))
-                const possibleAppHubId = featuredMatch?.id || DAppUtils.generateDAppId(href)
-                const possibleVbdId = favoriteMatch?.veBetterDaoId || featuredMatch?.veBetterDaoId
-
-                state.favoriteRefs = state.favoriteRefs.filter(ref => {
-                    if (ref.type === "app-hub") {
-                        if (ref.id === possibleAppHubId) return false
-                        // URL fallback if id doesn't match
-                        const appHubFeatured = state.featured.find(f => f.id === ref.id)
-                        if (appHubFeatured && URIUtils.compareURLs(appHubFeatured.href, href)) return false
-                    }
-                    if (ref.type === "vbd") {
-                        if (possibleVbdId && ref.vbdId === possibleVbdId) return false
-                        // URL fallback if vbdId doesn't match
-                        const vbdFeatured = state.featured.find(f => f.veBetterDaoId === ref.vbdId)
-                        if (vbdFeatured && URIUtils.compareURLs(vbdFeatured.href, href)) return false
-                    }
-                    return true
-                })
-            }
+            state.favoriteRefs = state.favoriteRefs.filter(ref => {
+                if (ref.type === "app-hub") return ref.id !== dapp.id
+                if (ref.type === "vbd") return ref.vbdId !== dapp.veBetterDaoId
+                return true
+            })
         },
         reorderBookmarks: (state, action: PayloadAction<DiscoveryDApp[]>) => {
-            const { nonCustom, custom } = action.payload.reduce<{
-                nonCustom: DiscoveryDApp[]
-                custom: DiscoveryDApp[]
-            }>(
-                (acc, dapp) => {
-                    if (dapp.isCustom) {
-                        acc.custom.push(dapp)
-                    } else {
-                        acc.nonCustom.push(dapp)
-                    }
-                    return acc
-                },
-                { nonCustom: [], custom: [] },
-            )
-
-            state.favorites = nonCustom
-            state.custom = custom
-
-            if (!state.favoriteRefs) state.favoriteRefs = []
             state.favoriteRefs = action.payload.map((dapp, index) => createDAppReference(dapp, index))
         },
         setFeaturedDApps: (state, action: PayloadAction<DiscoveryDApp[]>) => {
@@ -233,21 +190,9 @@ export const DiscoverySlice = createSlice({
         addNavigationToDApp: (state, action: PayloadAction<{ href: string; isCustom: boolean }>) => {
             const { payload } = action
 
-            if (payload.isCustom) {
-                const existingDApp = findByHref(state.custom, payload.href)
-
-                if (existingDApp) {
-                    existingDApp.amountOfNavigations += 1
-                }
-            } else {
-                const favourite = findByHref(state.favorites, payload.href)
-
-                if (favourite) {
-                    favourite.amountOfNavigations += 1
-                }
-
+            // Only track navigation counts for featured apps (non-custom)
+            if (!payload.isCustom) {
                 const featured = findByHref(state.featured, payload.href)
-
                 if (featured) {
                     featured.amountOfNavigations += 1
                 }
