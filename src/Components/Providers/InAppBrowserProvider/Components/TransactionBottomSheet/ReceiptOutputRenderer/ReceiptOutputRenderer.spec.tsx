@@ -28,6 +28,7 @@ describe("ReceiptOutputRenderer", () => {
                 connectedApps: [],
                 custom: [],
                 favorites: [],
+                favoriteRefs: [],
                 featured: [
                     {
                         veBetterDaoId: appId,

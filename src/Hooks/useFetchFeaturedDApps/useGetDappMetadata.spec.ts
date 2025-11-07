@@ -63,6 +63,7 @@ const mockState = {
         hasOpenedDiscovery: true,
         connectedApps: [],
         bannerInteractions: {},
+        favoriteRefs: [],
         tabsManager: {
             currentTabId: null,
             tabs: [],
@@ -79,6 +80,7 @@ describe("useGetDappMetadata", () => {
                     discovery: {
                         ...mockState.discovery,
                         favorites: [],
+                        favoriteRefs: [],
                     },
                 },
             },
@@ -94,6 +96,7 @@ describe("useGetDappMetadata", () => {
                     discovery: {
                         ...mockState.discovery,
                         favorites: [],
+                        favoriteRefs: [],
                     },
                 },
             },

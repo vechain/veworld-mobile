@@ -104,6 +104,7 @@ describe("URLBar", () => {
                 discovery: {
                     lastNavigationSource: Routes.HOME,
                     favorites: [],
+                    favoriteRefs: [],
                     featured: [],
                     custom: [],
                     hasOpenedDiscovery: false,
@@ -140,6 +141,7 @@ describe("URLBar", () => {
             const preloadedState = {
                 discovery: {
                     favorites: [],
+                    favoriteRefs: [],
                     featured: [],
                     custom: [],
                     hasOpenedDiscovery: false,
@@ -177,6 +179,7 @@ describe("URLBar", () => {
                 discovery: {
                     lastNavigationSource: "INVALID_ROUTE",
                     favorites: [],
+                    favoriteRefs: [],
                     featured: [],
                     custom: [],
                     hasOpenedDiscovery: false,

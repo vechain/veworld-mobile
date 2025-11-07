@@ -21,6 +21,7 @@ const createDiscoveryState = (...sessions: LoginSession[]): Partial<RootState> =
             connectedApps: [],
             custom: [],
             favorites: [],
+            favoriteRefs: [],
             featured: [],
             hasOpenedDiscovery: false,
             tabsManager: {

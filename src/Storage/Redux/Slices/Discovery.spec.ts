@@ -24,6 +24,7 @@ describe("DiscoverySlice", () => {
                 custom: [],
                 favorites: [],
                 featured: [],
+                favoriteRefs: [],
                 hasOpenedDiscovery: true,
                 bannerInteractions: Object.fromEntries(args.map(arg => [arg[0], { amountOfInteractions: arg[1] }])),
                 tabsManager: {
@@ -56,6 +57,7 @@ describe("DiscoverySlice", () => {
                 custom: [],
                 favorites: [],
                 featured: [],
+                favoriteRefs: [],
                 hasOpenedDiscovery: true,
                 bannerInteractions: {},
                 tabsManager: {
@@ -122,6 +124,7 @@ describe("DiscoverySlice", () => {
                 custom: [],
                 favorites: [],
                 featured: [],
+                favoriteRefs: [],
                 hasOpenedDiscovery: true,
                 bannerInteractions: {},
                 tabsManager: {
@@ -254,6 +257,7 @@ describe("DiscoverySlice", () => {
                 connectedApps: [],
                 custom,
                 favorites,
+                favoriteRefs: [],
                 featured,
                 hasOpenedDiscovery: true,
                 bannerInteractions: {},

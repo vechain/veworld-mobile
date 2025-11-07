@@ -40,6 +40,7 @@ describe("useIsNormalUser", () => {
                         connectedApps: [],
                         custom: [],
                         favorites: [],
+                        favoriteRefs: [],
                         featured: [],
                         hasOpenedDiscovery: false,
                         tabsManager: {

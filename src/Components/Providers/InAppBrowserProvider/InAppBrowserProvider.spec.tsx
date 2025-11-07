@@ -219,6 +219,7 @@ describe("useInAppBrowser hook", () => {
                                 connectedApps: [],
                                 custom: [],
                                 favorites: [],
+                                favoriteRefs: [],
                                 featured: [],
                                 hasOpenedDiscovery: true,
                                 tabsManager: {
@@ -371,6 +372,7 @@ describe("useInAppBrowser hook", () => {
                                 connectedApps: [],
                                 custom: [],
                                 favorites: [],
+                                favoriteRefs: [],
                                 featured: [],
                                 hasOpenedDiscovery: true,
                                 tabsManager: {
@@ -503,6 +505,7 @@ describe("useInAppBrowser hook", () => {
                                 connectedApps: [],
                                 custom: [],
                                 favorites: [],
+                                favoriteRefs: [],
                                 featured: [],
                                 hasOpenedDiscovery: true,
                                 tabsManager: {
@@ -647,6 +650,7 @@ describe("useInAppBrowser hook", () => {
                                 connectedApps: [],
                                 custom: [],
                                 favorites: [],
+                                favoriteRefs: [],
                                 featured: [],
                                 hasOpenedDiscovery: true,
                                 tabsManager: {
@@ -813,6 +817,7 @@ describe("useInAppBrowser hook", () => {
                                 connectedApps: [],
                                 custom: [],
                                 favorites: [],
+                                favoriteRefs: [],
                                 featured: [],
                                 hasOpenedDiscovery: true,
                                 tabsManager: {
@@ -941,6 +946,7 @@ describe("useInAppBrowser hook", () => {
                                 connectedApps: [],
                                 custom: [],
                                 favorites: [],
+                                favoriteRefs: [],
                                 featured: [],
                                 hasOpenedDiscovery: true,
                                 tabsManager: {
