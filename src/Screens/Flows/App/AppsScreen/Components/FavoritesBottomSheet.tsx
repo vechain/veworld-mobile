@@ -194,7 +194,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         layout: {
-            backgroundColor: theme.colors.actionBottomSheet.background,
+            backgroundColor: theme.colors.tabsFooter.background,
         },
         container: {
             flex: 1,
