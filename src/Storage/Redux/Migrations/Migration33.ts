@@ -1,43 +1,65 @@
 import { PersistedState } from "redux-persist"
 import { ERROR_EVENTS } from "~Constants"
-import { debug } from "~Utils"
-import { NotificationState } from "../Types"
+import { DAppUtils, debug } from "~Utils"
+import { DiscoveryState, DAppReference } from "../Slices"
 
 export const Migration33 = (state: PersistedState): PersistedState => {
-    debug(ERROR_EVENTS.SECURITY, "Performing migration 33: Ensuring notification registrations structure exists")
+    debug(ERROR_EVENTS.SECURITY, "Performing migration 33: Converting favorites to favoriteRefs")
 
     // @ts-expect-error
-    const currentNotificationState: NotificationState = state.notification
+    const currentDiscoveryState: DiscoveryState = state.discovery
 
-    // Check if notification state needs fixing
-    const needsNotificationFix =
-        !currentNotificationState?.registrations ||
-        !currentNotificationState.registrations.ids ||
-        !currentNotificationState.registrations.entities
-
-    if (!needsNotificationFix) {
-        debug(ERROR_EVENTS.SECURITY, "Notification registrations structure already exists, skipping migration")
+    if (!currentDiscoveryState || Object.keys(currentDiscoveryState).length === 0) {
+        debug(ERROR_EVENTS.SECURITY, "No discovery state to migrate")
         return state
     }
 
-    // Initialize the missing registrations EntityAdapter structure
-    const fixedNotificationState: NotificationState = {
-        feautureEnabled: currentNotificationState?.feautureEnabled ?? false,
-        permissionEnabled: currentNotificationState?.permissionEnabled ?? null,
-        optedIn: currentNotificationState?.optedIn ?? null,
-        dappVisitCounter: currentNotificationState?.dappVisitCounter ?? {},
-        userTags: currentNotificationState?.userTags ?? {},
-        dappNotifications: currentNotificationState?.dappNotifications ?? true,
-        registrations: {
-            ids: [],
-            entities: {},
-        },
+    if (currentDiscoveryState.favoriteRefs && currentDiscoveryState.favoriteRefs.length > 0) {
+        debug(ERROR_EVENTS.SECURITY, "favoriteRefs already exists, skipping migration")
+        return state
     }
 
-    debug(ERROR_EVENTS.SECURITY, "Fixed missing notification registrations structure")
+    const favoriteRefs: DAppReference[] = (currentDiscoveryState.favorites || []).map((dapp, index): DAppReference => {
+        // Custom URL bookmark
+        if (dapp.isCustom) {
+            return {
+                type: "custom",
+                url: dapp.href,
+                title: dapp.name,
+                description: dapp.desc,
+                iconUri: dapp.iconUri,
+                createAt: dapp.createAt,
+                order: index,
+            }
+        }
+
+        // VeBetterDAO bookmark
+        if (dapp.veBetterDaoId) {
+            return {
+                type: "vbd",
+                vbdId: dapp.veBetterDaoId,
+                order: index,
+            }
+        }
+
+        // App Hub bookmark
+        return {
+            type: "app-hub",
+            id: dapp.id || DAppUtils.generateDAppId(dapp.href),
+            order: index,
+        }
+    })
+
+    const newDiscoveryState = {
+        ...currentDiscoveryState,
+        favorites: [],
+        favoriteRefs,
+    } satisfies DiscoveryState
+
+    debug(ERROR_EVENTS.SECURITY, `Migrated ${favoriteRefs.length} favorites to favoriteRefs and cleared old array`)
 
     return {
         ...state,
-        notification: fixedNotificationState,
+        discovery: newDiscoveryState,
     } as PersistedState
 }
