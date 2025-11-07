@@ -95,6 +95,14 @@ interface TypedMethod<TAbi extends Abi, TFunctionName extends ContractFunctionNa
     value: (value: string | bigint) => this
 }
 
+/**
+ * Get an object to create clauses easily and typed.
+ * It can be used in place of {@link getClauseOfMethod} if you need to loop through a lot of clause creation
+ * @param abi ABI of the method
+ * @param contractAddress Contract address used to call
+ * @param functionName Name of the function
+ * @returns An object that can be used to create clauses easily and typed
+ */
 export const getMethod = <TAbi extends Abi, TFunctionName extends ContractFunctionName<TAbi>>(
     abi: TAbi,
     contractAddress: string,
@@ -181,7 +189,7 @@ export const getContractClauseOfMethod = <TAbi extends Abi, TFunctionName extend
  * 
  * 
  * @example
- * const result = await ThorUtils.executeMultipleClausesCall(thor, ThorUtils.getContractClauseOfMethod(
+ * const result = await ThorUtils.clause.executeMultipleClausesCall(thor, ThorUtils.getContractClauseOfMethod(
                 config.STARGATE_NFT_CONTRACT_ADDRESS!,
                 [StargateInfo.getToken],
                 "getToken",
@@ -202,7 +210,7 @@ export const executeMultipleClausesCall = <TClauses extends TypedContractClause<
  * @param cb Callback to run when at least one result is not a success. It should be a strong assertion (like a throw of an error)
  *
  * @example
- * ThorUtils.assertMultipleClausesCallSuccess(result, () => { throw new Error("Clause reverted") })
+ * ThorUtils.clause.assertMultipleClausesCallSuccess(result, () => { throw new Error("Clause reverted") })
  */
 export function assertMultipleClausesCallSuccess<TResults extends TypedContractCallResult<any, any>[]>(
     results: TResults,

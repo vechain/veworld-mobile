@@ -1,3 +1,4 @@
+import { ABIEvent } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { StargateDelegationEvents, StargateNftEvents } from "~Constants"
 import { StargateConfiguration } from "~Hooks/useStargateConfig"
@@ -18,6 +19,13 @@ export const getHistoricalVTHOClaimed = async (
     nodeId: string,
     accountAddress: string,
     config: StargateConfiguration,
+    events: {
+        BaseVTHORewardsClaimed: ABIEvent<[typeof StargateNftEvents.BaseVTHORewardsClaimed], "BaseVTHORewardsClaimed">
+        DelegationRewardsClaimed: ABIEvent<
+            [typeof StargateDelegationEvents.DelegationRewardsClaimed],
+            "DelegationRewardsClaimed"
+        >
+    },
 ) => {
     const logs = await ThorUtils.events.filterEventLogs(
         thor,
@@ -25,19 +33,17 @@ export const getHistoricalVTHOClaimed = async (
             limit: 1000,
             offset: 0,
         },
-        ThorUtils.events.getFilterCriteriaOfEvent(
+        ThorUtils.events.getFilterCriteriaOfRawEvent(
             config.STARGATE_NFT_CONTRACT_ADDRESS!,
-            [StargateNftEvents.BaseVTHORewardsClaimed],
-            "BaseVTHORewardsClaimed",
+            events.BaseVTHORewardsClaimed,
             {
                 owner: accountAddress,
                 tokenId: BigInt(nodeId),
             },
         ),
-        ThorUtils.events.getFilterCriteriaOfEvent(
+        ThorUtils.events.getFilterCriteriaOfRawEvent(
             config.STARGATE_DELEGATION_CONTRACT_ADDRESS!,
-            [StargateDelegationEvents.DelegationRewardsClaimed],
-            "DelegationRewardsClaimed",
+            events.DelegationRewardsClaimed,
             {
                 claimer: accountAddress,
                 tokenId: BigInt(nodeId),

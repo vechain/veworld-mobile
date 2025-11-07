@@ -53,6 +53,7 @@ export const handleNodeDelegatedEvent = async ({
             stargateConfig.STARGATE_DELEGATION_CONTRACT_ADDRESS,
             stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS,
             stargateConfig.LEGACY_NODES_CONTRACT_ADDRESS,
+            stargateConfig.STARGATE_CONTRACT_ADDRESS,
         ].filter((u): u is NonNullable<typeof u> => Boolean(u))
 
         // Check if beat might contain Stargate events using bloom filter

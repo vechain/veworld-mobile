@@ -2,8 +2,11 @@ import { useQuery } from "@tanstack/react-query"
 import { ThorClient } from "@vechain/sdk-network"
 import { useMemo } from "react"
 import { Stargate } from "~Constants"
-import { StargateDelegationRewards } from "~Constants/Constants/Staking/abis/StargateDelegation.abi"
-import { StargateInfo } from "~Constants/Constants/Staking/abis/StargateNFT.abi"
+import {
+    StargateDelegationEvents,
+    StargateDelegationRewards,
+} from "~Constants/Constants/Staking/abis/StargateDelegation.abi"
+import { StargateInfo, StargateNftEvents } from "~Constants/Constants/Staking/abis/StargateNFT.abi"
 import { StargateConfiguration, useStargateConfig } from "~Hooks/useStargateConfig"
 import { useThorClient } from "~Hooks/useThorClient"
 import { NETWORK_TYPE } from "~Model"
@@ -13,6 +16,7 @@ import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~S
 import { BigNutils } from "~Utils"
 import ThorUtils from "~Utils/ThorUtils"
 import { getHistoricalVTHOClaimed } from "./historical"
+import { ABIContract } from "@vechain/sdk-core"
 
 const getUserStargateNftsQueryKey = (network: NETWORK_TYPE, address: string | undefined, nodeIds: string[]) => [
     "userStargateNfts",
@@ -53,6 +57,13 @@ const getLegacyUserStargateNfts = async (
         "claimableVetGeneratedVtho",
     )
 
+    const BaseVTHORewardsClaimedEvent = ABIContract.ofAbi([StargateNftEvents.BaseVTHORewardsClaimed]).getEvent(
+        "BaseVTHORewardsClaimed",
+    )
+    const DelegationRewardsClaimedEvent = ABIContract.ofAbi([
+        StargateDelegationEvents.DelegationRewardsClaimed,
+    ]).getEvent("DelegationRewardsClaimed")
+
     for (const node of stargateNodes) {
         const result = await ThorUtils.clause.executeMultipleClausesCall(
             thor,
@@ -63,7 +74,10 @@ const getLegacyUserStargateNfts = async (
         ThorUtils.clause.assertMultipleClausesCallSuccess(result, () => {
             throw new Error("[getUserStargateNfts]: Clause reverted")
         })
-        const accumulatedRewards = await getHistoricalVTHOClaimed(thor, node.nodeId, accountAddress, config)
+        const accumulatedRewards = await getHistoricalVTHOClaimed(thor, node.nodeId, accountAddress, config, {
+            BaseVTHORewardsClaimed: BaseVTHORewardsClaimedEvent,
+            DelegationRewardsClaimed: DelegationRewardsClaimedEvent,
+        })
         nftsData.push({
             tokenId: node.nodeId,
             levelId: result[0].result.plain.levelId.toString(),
