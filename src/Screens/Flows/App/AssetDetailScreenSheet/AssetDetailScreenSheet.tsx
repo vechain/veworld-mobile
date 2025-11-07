@@ -130,12 +130,14 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
 
                 <AssetBalanceActivity token={token as FungibleTokenWithBalance} />
             </LineChart.Provider>
-            {token.symbol && (
+            {token.symbol && token.tokenInfo ? (
                 <AssetStats
                     tokenSymbol={token.symbol}
                     tokenDescription={token.tokenInfo?.description?.en}
                     socialLinks={socialLinks ?? {}}
                 />
+            ) : (
+                <BaseSpacer height={16} />
             )}
         </AssetDetailScreenWrapper>
     )
