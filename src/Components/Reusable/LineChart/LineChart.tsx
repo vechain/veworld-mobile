@@ -32,6 +32,7 @@ import { DateUtils } from "~Utils"
 import { useLineChart } from "./hooks/useLineChart"
 import { DataPoint, LineChartContextType, LineChartData, LineChartProps } from "./types"
 import { makeGraph } from "./utils"
+import { DEFAULT_TIMEZONE } from "~Utils/DateUtils/DateUtils"
 
 //#region Constants
 
@@ -149,14 +150,22 @@ const LineChart = ({
     const cursorLineOpacity = useSharedValue(0)
     const chipPosition = useSharedValue([{ translateX: 0, translateY: 0 }])
     const chipTimestamp = useSharedValue(0)
+    const chipTextValue = useSharedValue("")
 
-    // Create a derived value for the chip text and its dimensions
-    const chipTextData = useDerivedValue(() => {
-        return DateUtils.formatDateTimeWorklet(chipTimestamp.value, formatLocale, {
-            hideTime: false,
-            hideDay: false,
-        })
-    }, [chipTimestamp.value, skiaFont, formatLocale])
+    const formatChipTextWorklet = useCallback(
+        (timestamp: number) => {
+            chipTextValue.value = DateUtils.formatDateTime(timestamp, formatLocale, DEFAULT_TIMEZONE, {
+                hideTime: false,
+                hideDay: false,
+            })
+        },
+        [chipTextValue, formatLocale],
+    )
+
+    // Calculate the chip text value in a worklet function
+    useDerivedValue(() => {
+        runOnJS(formatChipTextWorklet)(chipTimestamp.value)
+    }, [chipTimestamp.value, formatChipTextWorklet])
 
     const chipWidth = useDerivedValue(() => {
         if (!skiaFont) {
@@ -164,15 +173,15 @@ const LineChart = ({
         }
 
         // Measure the text dimensions
-        return skiaFont.measureText(chipTextData.value).width + CHIP_PADDING_X * 2
-    }, [chipTextData, skiaFont])
+        return skiaFont.measureText(chipTextValue.value).width + CHIP_PADDING_X * 2
+    }, [chipTextValue.value, skiaFont])
 
     const chipHeight = useDerivedValue(() => {
         if (!skiaFont) {
             return 0
         }
-        return skiaFont?.measureText(chipTextData.value).height + CHIP_PADDING_Y * 2
-    }, [chipTextData, skiaFont])
+        return skiaFont?.measureText(chipTextValue.value).height + CHIP_PADDING_Y * 2
+    }, [chipTextValue.value, skiaFont])
 
     const chipTextY = useDerivedValue(() => {
         return chipHeight.value / 2 + CHIP_PADDING_Y
@@ -266,10 +275,12 @@ const LineChart = ({
         return Skia.RRectXY(rect, 16, 16)
     }, [crossHairStart.value, crossHairEnd.value, height])
 
+    //Prepare the line to the max X value
     const lineTo = useMemo(() => {
         return [maxX, calcYPos(0)] as const
     }, [maxX, calcYPos])
 
+    //Prepare the line to the zero value
     const lineToZero = useMemo(() => {
         return [calcXPos(0), calcYPos(0)] as const
     }, [calcXPos, calcYPos])
@@ -428,7 +439,7 @@ const LineChart = ({
                                     color={chipBackgroundColor || COLORS.PURPLE_DISABLED}
                                 />
                                 <Text
-                                    text={chipTextData}
+                                    text={chipTextValue}
                                     font={skiaFont}
                                     x={CHIP_PADDING_X}
                                     y={chipTextY}
