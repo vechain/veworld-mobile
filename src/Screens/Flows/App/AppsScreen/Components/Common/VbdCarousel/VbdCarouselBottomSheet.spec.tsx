@@ -102,7 +102,17 @@ describe("VbdCarouselBottomSheet", () => {
 
     const mockState: Partial<RootState> = {
         discovery: {
-            featured: [],
+            featured: [
+                {
+                    name: "Test DApp",
+                    href: "https://test-dapp.com",
+                    desc: "A test DApp for unit testing",
+                    isCustom: false,
+                    createAt: 1640995200000,
+                    amountOfNavigations: 0,
+                    veBetterDaoId: "test-app-id",
+                },
+            ],
             favorites: [],
             favoriteRefs: [],
             custom: [],
