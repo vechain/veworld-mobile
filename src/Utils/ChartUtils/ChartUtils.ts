@@ -36,7 +36,7 @@ export const getPercentagePriceChange = (data?: MarketChartResponse) => {
  */
 export const downsampleData = (
     data: MarketChartResponse | undefined,
-    unit: "hour" | "day" = "hour",
+    unit: "hour" | "day" | "month" = "hour",
     interval = 1,
     kind: "avg" | "first" = "avg",
 ) => {

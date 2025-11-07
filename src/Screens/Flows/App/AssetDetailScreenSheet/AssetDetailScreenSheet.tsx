@@ -24,7 +24,6 @@ import { ASSET_CHART_PERIODS, AssetChart } from "./Components/AssetChart"
 import { AssertChartBalance } from "./Components/AssetChartBalance"
 import { AssetDetailScreenWrapper } from "./Components/AssetDetailScreenWrapper"
 import ChartUtils from "~Utils/ChartUtils"
-// import { AssetChartV2 } from "./Components/AssetChart/AssetChartV2"
 import { AssetStats } from "./Components/AssetStats"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
@@ -74,6 +73,8 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
                 return ChartUtils.downsampleData(chartData, "day", 30, "first")
             case 365:
                 return ChartUtils.downsampleData(chartData, "day", 52, "first")
+            case "max":
+                return ChartUtils.downsampleData(chartData, "month", 1, "first")
             default:
                 return chartData
         }

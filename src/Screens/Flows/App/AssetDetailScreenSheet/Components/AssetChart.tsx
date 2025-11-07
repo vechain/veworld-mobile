@@ -7,7 +7,7 @@ import { SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
 export type AssetChartPeriod = {
-    days: number
+    days: number | "max"
     label: string
 }
 
@@ -17,6 +17,7 @@ export const ASSET_CHART_PERIODS: AssetChartPeriod[] = [
     { days: 30, label: "1M" },
     { days: 180, label: "6M" },
     { days: 365, label: "1Y" },
+    { days: "max", label: "All" },
 ]
 
 type Props = {
