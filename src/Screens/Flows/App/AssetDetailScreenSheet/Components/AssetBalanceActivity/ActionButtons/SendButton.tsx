@@ -52,6 +52,7 @@ const SendButton = ({ token }: Props) => {
             onPress={onPress}
             disabled={disabled}
             themed
+            truncateText
         />
     )
 }

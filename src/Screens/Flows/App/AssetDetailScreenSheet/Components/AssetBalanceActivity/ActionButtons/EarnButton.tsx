@@ -30,6 +30,7 @@ const EarnButton = () => {
             icon={"icon-stargate"}
             onPress={onEarn}
             themed
+            truncateText
         />
     )
 }
