@@ -94,7 +94,7 @@ describe("useUserNodes", () => {
         })
     })
 
-    it("should return empty stargateNodes array when address is undefined", () => {
+    it("should return empty data array when address is undefined", () => {
         const { result } = renderHook(() => useUserNodes(undefined), {
             wrapper: TestWrapper,
             initialProps: {
@@ -102,11 +102,11 @@ describe("useUserNodes", () => {
             },
         })
 
-        expect(result.current.stargateNodes).toEqual([])
+        expect(result.current.data).toEqual([])
         expect(result.current.isLoading).toBe(false)
     })
 
-    it("should return stargateNodes when address is provided", () => {
+    it("should return data when address is provided", () => {
         const address = "0x123456789"
 
         const { result } = renderHook(() => useUserNodes(address), {
@@ -116,23 +116,9 @@ describe("useUserNodes", () => {
             },
         })
 
-        expect(result.current.stargateNodes.length).toBe(2)
-        expect(result.current.stargateNodes[0].nodeId).toBe("1")
-        expect(result.current.stargateNodes[1].nodeId).toBe("3")
-    })
-
-    it("should filter out legacy nodes", () => {
-        const address = "0x123456789"
-
-        const { result } = renderHook(() => useUserNodes(address), {
-            wrapper: TestWrapper,
-            initialProps: {
-                preloadedState: preloadedState,
-            },
-        })
-
-        const legacyNodeExists = result.current.stargateNodes.some(node => node.nodeId === "2")
-        expect(legacyNodeExists).toBe(false)
+        expect(result.current.data.length).toBe(2)
+        expect(result.current.data[0].nodeId).toBe("1")
+        expect(result.current.data[1].nodeId).toBe("3")
     })
 
     it("should handle network type correctly", () => {
@@ -154,7 +140,7 @@ describe("useUserNodes", () => {
             },
         })
 
-        expect(result.current.stargateNodes.length).toBe(2)
+        expect(result.current.data.length).toBe(2)
     })
 
     it("should handle error state", () => {
@@ -171,7 +157,7 @@ describe("useUserNodes", () => {
 
         expect(result.current.isError).toBe(true)
         expect(result.current.error).toEqual(new Error("Test error"))
-        expect(result.current.stargateNodes).toEqual([])
+        expect(result.current.data).toEqual([])
     })
 
     it("should handle loading state", () => {
@@ -187,6 +173,6 @@ describe("useUserNodes", () => {
         })
 
         expect(result.current.isLoading).toBe(true)
-        expect(result.current.stargateNodes).toEqual([])
+        expect(result.current.data).toEqual([])
     })
 })

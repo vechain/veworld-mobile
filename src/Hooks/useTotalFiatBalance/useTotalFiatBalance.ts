@@ -39,10 +39,10 @@ export const useTotalFiatBalance = ({ address, enabled = true, useCompactNotatio
 
     const { data: nonVechainTokensFiat } = useNonVechainTokenFiat({ accountAddress: address, enabled })
 
-    const { stargateNodes, isLoading: loadingNodes } = useUserNodes(address, enabled)
+    const { data, isLoading: loadingNodes } = useUserNodes(address, enabled)
 
     const { ownedStargateNfts: stargateNfts, isLoading: loadingStargateNfts } = useUserStargateNfts({
-        nodes: stargateNodes,
+        nodes: data,
         isLoadingNodes: loadingNodes,
         address,
     })
@@ -55,12 +55,12 @@ export const useTotalFiatBalance = ({ address, enabled = true, useCompactNotatio
 
     const stargateFiatBalance = useMemo(() => {
         // We only include staked VET in fiat balance if user is the owner, not a manager - Stargate staking
-        const isNodeOwner = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
+        const isNodeOwner = data.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
 
         if (!isNodeOwner) return "0"
 
         return BalanceUtils.getFiatBalance(totalStargateVet.toString, tokenWithInfoVET.exchangeRate ?? 1, VET.decimals)
-    }, [totalStargateVet, tokenWithInfoVET.exchangeRate, stargateNodes, address])
+    }, [totalStargateVet, tokenWithInfoVET.exchangeRate, data, address])
 
     const isLoading = useMemo(
         () =>

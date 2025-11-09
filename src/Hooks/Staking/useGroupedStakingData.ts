@@ -18,21 +18,21 @@ export interface StakingGroup {
 }
 
 export const useGroupedStakingData = (userAddress?: string) => {
-    const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(userAddress)
+    const { data, isLoading: isLoadingNodes } = useUserNodes(userAddress)
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts({
-        nodes: stargateNodes,
+        nodes: data,
         address: userAddress,
         isLoadingNodes,
     })
 
     const stakingGroups = useMemo((): StakingGroup[] => {
-        if (!stargateNodes.length) return []
+        if (!data.length) return []
 
         // Separate owned and managed nodes
         const ownedNodes: NodeInfo[] = []
         const managedNodes: NodeInfo[] = []
 
-        stargateNodes.forEach(node => {
+        data.forEach(node => {
             if (AddressUtils.compareAddresses(node.xNodeOwner, userAddress)) {
                 ownedNodes.push(node)
             } else {
@@ -71,7 +71,7 @@ export const useGroupedStakingData = (userAddress?: string) => {
         }
 
         return groups
-    }, [stargateNodes, ownedStargateNfts, userAddress, isLoadingNodes, isLoadingNfts])
+    }, [data, ownedStargateNfts, userAddress, isLoadingNodes, isLoadingNfts])
 
     return {
         stakingGroups,

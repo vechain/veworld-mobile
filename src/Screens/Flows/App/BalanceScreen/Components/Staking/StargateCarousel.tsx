@@ -32,9 +32,9 @@ export const StargateCarousel = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const address = useAppSelector(selectSelectedAccountAddress)
 
-    const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
+    const { data, isLoading: isLoadingNodes } = useUserNodes(address)
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts({
-        nodes: stargateNodes,
+        nodes: data,
         isLoadingNodes,
         address,
     })
@@ -43,31 +43,31 @@ export const StargateCarousel = () => {
     const { navigateWithTab } = useBrowserTab()
 
     const hasOwnedNodes = useMemo(
-        () => stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address)),
-        [stargateNodes, address],
+        () => data.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address)),
+        [data, address],
     )
     const hasManagedNodes = useMemo(
-        () => stargateNodes.some(node => !AddressUtils.compareAddresses(node.xNodeOwner, address)),
-        [stargateNodes, address],
+        () => data.some(node => !AddressUtils.compareAddresses(node.xNodeOwner, address)),
+        [data, address],
     )
 
     // Initialize filter state
     const [filter, setFilter] = useState<StakingFilter>(StakingFilter.OWN)
 
     useEffect(() => {
-        if (isLoadingNodes || !stargateNodes.length) return
+        if (isLoadingNodes || !data.length) return
 
         const preferredFilter = hasOwnedNodes ? StakingFilter.OWN : StakingFilter.MANAGING
         setFilter(currentFilter => {
             return currentFilter !== preferredFilter ? preferredFilter : currentFilter
         })
-    }, [hasOwnedNodes, isLoadingNodes, stargateNodes.length])
+    }, [hasOwnedNodes, isLoadingNodes, data.length])
 
     const filteredNodes = useMemo(() => {
         return filter === StakingFilter.OWN
-            ? stargateNodes.filter(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
-            : stargateNodes.filter(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
-    }, [stargateNodes, filter, address])
+            ? data.filter(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
+            : data.filter(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
+    }, [data, filter, address])
 
     const filteredNfts = useMemo(() => {
         const nodeIds = new Set(filteredNodes.map(n => n.nodeId))
@@ -125,7 +125,7 @@ export const StargateCarousel = () => {
         [theme.isDark],
     )
 
-    if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return <StargateNoStakingCard />
+    if (!isLoadingNfts && !isLoadingNodes && data.length === 0) return <StargateNoStakingCard />
 
     return (
         <BaseView flexDirection="column" gap={12} w={100}>

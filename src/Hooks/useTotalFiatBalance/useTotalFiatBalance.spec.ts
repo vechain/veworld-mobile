@@ -77,7 +77,7 @@ describe("useTotalFiatBalance", () => {
             fiatBalance: "1",
         })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: [], isLoading: false })
-        ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+        ;(useUserNodes as jest.Mock).mockReturnValue({ data: [], isLoading: false })
         ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
         ;(useTokenBalance as jest.Mock).mockReturnValue({ data: undefined, isLoading: false })
         const { result } = renderHook(
@@ -115,7 +115,7 @@ describe("useTotalFiatBalance", () => {
         // Update the stargate nodes to use the same user address as in the preloaded state
         const selectedAccountAddress = preloadedState.accounts?.selectedAccount
         ;(useUserNodes as jest.Mock).mockReturnValue({
-            stargateNodes: [{ xNodeOwner: selectedAccountAddress }],
+            data: [{ xNodeOwner: selectedAccountAddress }],
             isLoading: false,
         })
 
@@ -144,7 +144,7 @@ describe("useTotalFiatBalance", () => {
             fiatBalance: "0",
         })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: ["1"], isLoading: false })
-        ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+        ;(useUserNodes as jest.Mock).mockReturnValue({ data: [], isLoading: false })
         ;(useUserStargateNfts as jest.Mock).mockReturnValue({
             ownedStargateNfts: [],
             isLoading: false,
@@ -183,7 +183,7 @@ describe("useTotalFiatBalance", () => {
                 tokenInfoLoading: false,
             })
             ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: [], isLoading: false })
-            ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+            ;(useUserNodes as jest.Mock).mockReturnValue({ data: [], isLoading: false })
             ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
             ;(useTokenBalance as jest.Mock).mockReturnValue({ data: undefined, isLoading: false })
 
@@ -209,7 +209,7 @@ describe("useTotalFiatBalance", () => {
                 tokenInfoLoading: false,
             })
             ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: [], isLoading: false })
-            ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+            ;(useUserNodes as jest.Mock).mockReturnValue({ data: [], isLoading: false })
             ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
             ;(useTokenBalance as jest.Mock).mockReturnValue({ data: undefined, isLoading: false })
 
@@ -238,7 +238,7 @@ describe("useTotalFiatBalance", () => {
                 tokenInfoLoading: false,
             })
             ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: [], isLoading: false })
-            ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+            ;(useUserNodes as jest.Mock).mockReturnValue({ data: [], isLoading: false })
             ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
             ;(useTokenBalance as jest.Mock).mockReturnValue({ data: undefined, isLoading: false })
 
@@ -268,7 +268,7 @@ describe("useTotalFiatBalance", () => {
                 tokenInfoLoading: false,
             })
             ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: [], isLoading: false })
-            ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+            ;(useUserNodes as jest.Mock).mockReturnValue({ data: [], isLoading: false })
             ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
             ;(useTokenBalance as jest.Mock).mockReturnValue({ data: undefined, isLoading: false })
 
@@ -297,7 +297,7 @@ describe("useTotalFiatBalance", () => {
                 tokenInfoLoading: false,
             })
             ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue({ data: [], isLoading: false })
-            ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+            ;(useUserNodes as jest.Mock).mockReturnValue({ data: [], isLoading: false })
             ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
             ;(useTokenBalance as jest.Mock).mockReturnValue({ data: undefined, isLoading: false })
 

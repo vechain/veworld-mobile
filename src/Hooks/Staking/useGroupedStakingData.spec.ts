@@ -21,44 +21,24 @@ const testNodes: NodeInfo[] = [
         nodeId: "1",
         nodeLevel: 1,
         xNodeOwner: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957", // User owns this node
-        isXNodeHolder: true,
-        isXNodeDelegated: false,
-        isXNodeDelegator: false,
-        isXNodeDelegatee: false,
-        delegatee: "",
         isLegacyNode: false,
     },
     {
         nodeId: "2",
         nodeLevel: 2,
         xNodeOwner: "0x456", // User manages this node
-        isXNodeHolder: false,
-        isXNodeDelegated: true,
-        isXNodeDelegator: false,
-        isXNodeDelegatee: true,
-        delegatee: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
         isLegacyNode: false,
     },
     {
         nodeId: "3",
         nodeLevel: 3,
         xNodeOwner: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957", // User owns this node
-        isXNodeHolder: true,
-        isXNodeDelegated: false,
-        isXNodeDelegator: false,
-        isXNodeDelegatee: false,
-        delegatee: "",
         isLegacyNode: false,
     },
     {
         nodeId: "4",
         nodeLevel: 1,
         xNodeOwner: "0x789", // Another managed node
-        isXNodeHolder: false,
-        isXNodeDelegated: true,
-        isXNodeDelegator: false,
-        isXNodeDelegatee: true,
-        delegatee: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
         isLegacyNode: false,
     },
 ]
@@ -108,7 +88,6 @@ describe("useGroupedStakingData", () => {
         // Default mock implementations
         mockUseUserNodes.mockReturnValue({
             data: testNodes,
-            stargateNodes: testNodes,
             isLoading: false,
             isError: false,
             error: null,
@@ -127,7 +106,6 @@ describe("useGroupedStakingData", () => {
     it("should return empty stakingGroups when address is undefined", () => {
         mockUseUserNodes.mockReturnValue({
             data: [],
-            stargateNodes: [],
             isLoading: false,
             isError: false,
             error: null,
@@ -148,7 +126,6 @@ describe("useGroupedStakingData", () => {
     it("should return empty stakingGroups when no nodes exist", () => {
         mockUseUserNodes.mockReturnValue({
             data: [],
-            stargateNodes: [],
             isLoading: false,
             isError: false,
             error: null,
@@ -237,7 +214,6 @@ describe("useGroupedStakingData", () => {
     it("should handle loading state from nodes", () => {
         mockUseUserNodes.mockReturnValue({
             data: [],
-            stargateNodes: [],
             isLoading: true,
             isError: false,
             error: null,
@@ -281,7 +257,6 @@ describe("useGroupedStakingData", () => {
     it("should handle loading state from both nodes and NFTs", () => {
         mockUseUserNodes.mockReturnValue({
             data: [],
-            stargateNodes: [],
             isLoading: true,
             isError: false,
             error: null,
@@ -346,29 +321,18 @@ describe("useGroupedStakingData", () => {
                 nodeId: "1",
                 nodeLevel: 1,
                 xNodeOwner: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
-                isXNodeHolder: true,
-                isXNodeDelegated: false,
-                isXNodeDelegator: false,
-                isXNodeDelegatee: false,
-                delegatee: "",
                 isLegacyNode: false,
             },
             {
                 nodeId: "2",
                 nodeLevel: 2,
                 xNodeOwner: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
-                isXNodeHolder: true,
-                isXNodeDelegated: false,
-                isXNodeDelegator: false,
-                isXNodeDelegatee: false,
-                delegatee: "",
                 isLegacyNode: false,
             },
         ]
 
         mockUseUserNodes.mockReturnValue({
             data: singleOwnerNodes,
-            stargateNodes: singleOwnerNodes,
             isLoading: false,
             isError: false,
             error: null,
@@ -393,18 +357,12 @@ describe("useGroupedStakingData", () => {
                 nodeId: "1",
                 nodeLevel: 1,
                 xNodeOwner: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
-                isXNodeHolder: true,
-                isXNodeDelegated: false,
-                isXNodeDelegator: false,
-                isXNodeDelegatee: false,
-                delegatee: "",
                 isLegacyNode: false,
             },
         ]
 
         mockUseUserNodes.mockReturnValue({
             data: mixedCaseNodes,
-            stargateNodes: mixedCaseNodes,
             isLoading: false,
             isError: false,
             error: null,
@@ -426,18 +384,12 @@ describe("useGroupedStakingData", () => {
                 nodeId: "1",
                 nodeLevel: 1,
                 xNodeOwner: testUserAddress,
-                isXNodeHolder: true,
-                isXNodeDelegated: false,
-                isXNodeDelegator: false,
-                isXNodeDelegatee: false,
-                delegatee: "",
                 isLegacyNode: false,
             },
         ]
 
         mockUseUserNodes.mockReturnValue({
             data: ownedOnlyNodes,
-            stargateNodes: ownedOnlyNodes,
             isLoading: false,
             isError: false,
             error: null,
@@ -461,18 +413,12 @@ describe("useGroupedStakingData", () => {
                 nodeId: "1",
                 nodeLevel: 1,
                 xNodeOwner: "0x456",
-                isXNodeHolder: false,
-                isXNodeDelegated: true,
-                isXNodeDelegator: false,
-                isXNodeDelegatee: true,
-                delegatee: testUserAddress,
                 isLegacyNode: false,
             },
         ]
 
         mockUseUserNodes.mockReturnValue({
             data: managedOnlyNodes,
-            stargateNodes: managedOnlyNodes,
             isLoading: false,
             isError: false,
             error: null,
@@ -496,33 +442,18 @@ describe("useGroupedStakingData", () => {
                 nodeId: "1",
                 nodeLevel: 1,
                 xNodeOwner: "0x456",
-                isXNodeHolder: false,
-                isXNodeDelegated: true,
-                isXNodeDelegator: false,
-                isXNodeDelegatee: true,
-                delegatee: testUserAddress,
                 isLegacyNode: false,
             },
             {
                 nodeId: "2",
                 nodeLevel: 2,
                 xNodeOwner: "0x789",
-                isXNodeHolder: false,
-                isXNodeDelegated: true,
-                isXNodeDelegator: false,
-                isXNodeDelegatee: true,
-                delegatee: testUserAddress,
                 isLegacyNode: false,
             },
             {
                 nodeId: "3",
                 nodeLevel: 3,
                 xNodeOwner: "0xABC",
-                isXNodeHolder: false,
-                isXNodeDelegated: true,
-                isXNodeDelegator: false,
-                isXNodeDelegatee: true,
-                delegatee: testUserAddress,
                 isLegacyNode: false,
             },
         ]
@@ -556,7 +487,6 @@ describe("useGroupedStakingData", () => {
 
         mockUseUserNodes.mockReturnValue({
             data: multiOwnerManagedNodes,
-            stargateNodes: multiOwnerManagedNodes,
             isLoading: false,
             isError: false,
             error: null,

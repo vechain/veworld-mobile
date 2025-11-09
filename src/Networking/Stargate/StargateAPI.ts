@@ -69,11 +69,17 @@ export const fetchStargateVthoClaimed = async (networkType: NETWORK_TYPE, addres
     }
 }
 
-export const fetchStargateTokens = async (networkType: NETWORK_TYPE, address: string) => {
+export const fetchStargateTokens = async (
+    networkType: NETWORK_TYPE,
+    address: string,
+    options: Parameters<typeof getStargateTokensByAddress>[2] = {},
+) => {
     debug(ERROR_EVENTS.STARGATE, `Fetching Stargate tokens for Address: ${address}.`)
 
     try {
-        return await fetchFromEndpoint<FetchStargateTokensResponse>(getStargateTokensByAddress(networkType, address))
+        return await fetchFromEndpoint<FetchStargateTokensResponse>(
+            getStargateTokensByAddress(networkType, address, options),
+        )
     } catch (error) {
         throw new Error(`Failed to fetch Stargate tokens for Address: ${address}. Error ${error}`)
     }
