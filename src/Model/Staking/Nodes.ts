@@ -2,11 +2,6 @@ export interface RawNodeInfo {
     nodeId: string
     nodeLevel: number
     xNodeOwner: string
-    isXNodeHolder: boolean
-    isXNodeDelegated: boolean
-    isXNodeDelegator: boolean
-    isXNodeDelegatee: boolean
-    delegatee: string
 }
 
 export interface NodeInfo extends RawNodeInfo {

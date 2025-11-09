@@ -5,13 +5,7 @@ import { ERROR_EVENTS } from "~Constants"
 import { getReceiptProcessor, InspectableOutput, ReceiptOutput } from "~Services/AbiService"
 import { StargateConfiguration } from "~Hooks/useStargateConfig"
 
-// Signature used by Generated ABI map for GenericAbiManager
-const NODE_DELEGATED_EVENT_SIGNATURE_NAME = "NodeDelegated(indexed uint256,indexed address,bool)"
-
-const isNodeDelegatedOutput = (
-    out: ReceiptOutput,
-): out is Extract<ReceiptOutput, { name: typeof NODE_DELEGATED_EVENT_SIGNATURE_NAME }> =>
-    out.name === NODE_DELEGATED_EVENT_SIGNATURE_NAME
+const isNodeDelegatedOutput = (out: ReceiptOutput) => out.name === "NodeDelegated(indexed uint256,indexed address,bool)"
 
 interface NodeDelegatedEventData {
     nodeId: string
@@ -77,7 +71,7 @@ export const handleNodeDelegatedEvent = async ({
         // Create a receipt processor for this network. Only Generic manager is needed here
         const receiptProcessor = getReceiptProcessor(network.type, ["Generic"])
 
-        const nodeDelegatedEvents = await parseNodeDelegatedEvents(beat, nodeManagementAddress, thor, receiptProcessor)
+        const nodeDelegatedEvents = await parseNodeDelegatedEvents(beat, stargateConfig, thor, receiptProcessor)
 
         // Filter events where either the owner or delegatee is an address managed in VeWorld
         const relevantEvents = nodeDelegatedEvents.filter(evt =>
@@ -139,7 +133,7 @@ export const handleNodeDelegatedEvent = async ({
  */
 const parseNodeDelegatedEvents = async (
     beat: Beat,
-    nodeManagementContract: string,
+    config: StargateConfiguration,
     thor: ThorClient,
     receiptProcessor: ReturnType<typeof getReceiptProcessor>,
 ): Promise<NodeDelegatedEventData[]> => {
@@ -153,7 +147,7 @@ const parseNodeDelegatedEvents = async (
 
         const events: NodeDelegatedEventData[] = processExpandedTransactionsForEvents(
             expanded.transactions.map(tx => ({ id: tx.id, origin: tx.origin, outputs: tx.outputs })),
-            nodeManagementContract,
+            config,
             beat,
             receiptProcessor,
         )
@@ -174,7 +168,7 @@ type ExpandedTx = {
 
 const processExpandedTransactionsForEvents = (
     transactions: ExpandedTx[],
-    nodeManagementContract: string,
+    config: StargateConfiguration,
     beat: Beat,
     receiptProcessor: ReturnType<typeof getReceiptProcessor>,
 ): NodeDelegatedEventData[] => {
@@ -194,7 +188,11 @@ const processExpandedTransactionsForEvents = (
     return analyzedPerTx.flatMap(({ origin, outputs }) =>
         outputs
             .filter(isNodeDelegatedOutput)
-            .filter(out => AddressUtils.compareAddresses(out.address, nodeManagementContract))
+            .filter(
+                out =>
+                    AddressUtils.compareAddresses(out.address, config.NODE_MANAGEMENT_CONTRACT_ADDRESS) ||
+                    AddressUtils.compareAddresses(out.address, config.STARGATE_CONTRACT_ADDRESS),
+            )
             .map(out => {
                 return {
                     nodeId: String(out.params.nodeId),
@@ -202,7 +200,7 @@ const processExpandedTransactionsForEvents = (
                     isDelegated: Boolean(out.params.delegated),
                     blockNumber: beat.number,
                     txId: "",
-                    contractAddress: nodeManagementContract,
+                    contractAddress: config.NODE_MANAGEMENT_CONTRACT_ADDRESS!,
                     owner: origin,
                 } satisfies NodeDelegatedEventData
             }),

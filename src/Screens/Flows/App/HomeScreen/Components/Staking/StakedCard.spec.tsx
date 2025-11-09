@@ -1,9 +1,9 @@
 import { render } from "@testing-library/react-native"
 import { ethers } from "ethers"
 import React from "react"
+import { NftData, NodeInfo } from "~Model/Staking"
 import { TestWrapper } from "~Test"
 import { StakedCard } from "./StakedCard"
-import { NodeInfo, NftData } from "~Model/Staking"
 
 describe("StakedCard", () => {
     const mockNodes: NodeInfo[] = [

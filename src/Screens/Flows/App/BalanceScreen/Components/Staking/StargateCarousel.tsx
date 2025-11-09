@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseButton, BaseCarousel, BaseSpacer, BaseView, CarouselSlideItem } from "~Components"
+import { BaseTabs } from "~Components/Base/BaseTabs"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
 import {
     COLORS,
@@ -19,7 +20,6 @@ import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
 import { StargateCarouselItem } from "./StargateCarouselItem"
-import { BaseTabs } from "~Components/Base/BaseTabs"
 import { StargateNoStakingCard } from "./StargateNoStakingCard"
 
 enum StakingFilter {
