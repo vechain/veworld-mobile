@@ -1,6 +1,7 @@
 import {
     ERROR_EVENTS,
     getStargateRewardsDistributed,
+    getStargateTokensByAddress,
     getStargateTotalSupply,
     getStargateTotalVetStaked,
     getStargateVTHOClaimedByAddressAndTokenId,
@@ -8,6 +9,7 @@ import {
 import { NETWORK_TYPE } from "~Model"
 import {
     fetchFromEndpoint,
+    FetchStargateTokensResponse,
     FetchStargateTotalSupplyResponse,
     FetchStargateTotalVetStakedResponse,
 } from "~Networking/API"
@@ -64,5 +66,15 @@ export const fetchStargateVthoClaimed = async (networkType: NETWORK_TYPE, addres
         throw new Error(
             `Failed to fetch Stargate vtho claimed for Address: ${address}, TokenID: ${tokenId}. Error ${error}`,
         )
+    }
+}
+
+export const fetchStargateTokens = async (networkType: NETWORK_TYPE, address: string) => {
+    debug(ERROR_EVENTS.STARGATE, `Fetching Stargate tokens for Address: ${address}.`)
+
+    try {
+        return await fetchFromEndpoint<FetchStargateTokensResponse>(getStargateTokensByAddress(networkType, address))
+    } catch (error) {
+        throw new Error(`Failed to fetch Stargate tokens for Address: ${address}. Error ${error}`)
     }
 }

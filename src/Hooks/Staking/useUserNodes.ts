@@ -76,6 +76,7 @@ const getUserNodesHayabusa = async (thor: ThorClient, address: string, config: S
 
 const getUserNodes = async (
     thor: ThorClient,
+    networkType: NETWORK_TYPE,
     address: string | undefined,
     config: StargateConfiguration,
 ): Promise<NodeInfo[]> => {
@@ -102,9 +103,10 @@ export const useUserNodes = (address?: string, _enabled: boolean = true) => {
 
     const { data, error, isError, isFetching } = useQuery({
         queryKey,
-        queryFn: async () => await getUserNodes(thor, address, stargateConfig),
+        queryFn: async () => await getUserNodes(thor, network.type, address, stargateConfig),
         enabled,
         staleTime: 60 * 5 * 1000,
+        gcTime: Infinity,
     })
 
     const stargateNodes = React.useMemo(() => data?.filter(node => !node.isLegacyNode) || [], [data])

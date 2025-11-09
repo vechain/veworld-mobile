@@ -323,3 +323,19 @@ export const getStargateVTHOClaimedByAddressAndTokenId = (
         ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/total-vtho-claimed/${address}?tokenId=${tokenId}`
         : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/stargate/total-vtho-claimed/${address}?tokenId=${tokenId}`
 }
+
+/**
+ * Get Stargate tokens for address
+ * @param networkType Network type
+ * @param address Address of the user
+ * @returns The Stargate tokens for address
+ */
+export const getStargateTokensByAddress = (
+    networkType: NETWORK_TYPE,
+    address: string,
+    { page = 0, pageSize = 50 }: { page?: number; pageSize?: number } = {},
+) => {
+    return networkType === NETWORK_TYPE.MAIN
+        ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/tokens?manager=${address}&owner=${address}&page=${page}&size=${pageSize}`
+        : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/stargate/tokens?manager=${address}&owner=${address}&page=${page}&size=${pageSize}`
+}
