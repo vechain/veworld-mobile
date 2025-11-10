@@ -50,7 +50,7 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
                 const queryKey = query.queryKey as string[]
                 if (!["userStargateNodes", "userStargateNfts", "STARGATE_CLAIMABLE"].includes(queryKey[0])) return false
                 if (queryKey.length < 3) return false
-                if (queryKey[1] !== selectedNetwork.type || queryKey[1] !== selectedNetwork.genesis.id) return false
+                if (![selectedNetwork.type, selectedNetwork.genesis.id].includes(queryKey[1])) return false
                 if (!AddressUtils.compareAddresses(queryKey[2], selectedAccountAddress!)) return false
                 return true
             },
