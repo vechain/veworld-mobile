@@ -55,6 +55,7 @@ export const BalanceTab = ({ token: _token }: Props) => {
     const { fiatBalance: b3trFiatBalance } = useTokenCardBalance({ token: b3trToken })
     const { fiatBalance: vot3FiatBalance } = useTokenCardBalance({ token: vot3Token })
     const { formatLocale } = useFormatFiat()
+
     return (
         <>
             <ValueContainer>
@@ -98,7 +99,7 @@ export const BalanceTab = ({ token: _token }: Props) => {
                 )}
                 {showFiatBalance && <ValueContainer.DollarValue value={totalFiatBalance} testID="DOLLAR_VALUE" />}
             </ValueContainer>
-            {b3trToken.balance ? (
+            {b3trToken.balance && isVOT3OrB3TR ? (
                 <BalanceTabActions token={b3trToken as FungibleTokenWithBalance} />
             ) : (
                 <BalanceTabActions token={token} />

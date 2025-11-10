@@ -1241,6 +1241,7 @@
   "TOKEN_CUSTOM_SUBTITLE": "अपने वॉलेट में एक कस्टम टोकन जोड़ें",
   "TOKEN_DETAIL_ACTIVITY_TAB": "गतिविधि",
   "TOKEN_DETAIL_BALANCE_TAB": "शेष राशि",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "ये टोकन vedelegate.vet पर स्टेक किए गए हैं और केवल वहीं प्रबंधित किए जा सकते हैं।",
   "TOKEN_ID": "टोकन आईडी",
   "TOKEN_RECEIVE": "टोकन प्राप्त करें",
   "TOKEN_RECEIVE_SUBTITLE": "प्राप्त करने के लिए अपने वॉलेट पते का उपयोग करें",

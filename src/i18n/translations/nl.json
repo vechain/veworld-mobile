@@ -1241,6 +1241,7 @@
   "TOKEN_CUSTOM_SUBTITLE": "Voeg een aangepaste token toe aan je wallet",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Activiteit",
   "TOKEN_DETAIL_BALANCE_TAB": "Balans",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Deze tokens zijn ingezet op vedelegate.vet en kunnen alleen daar beheerd worden.",
   "TOKEN_ID": "Token ID",
   "TOKEN_RECEIVE": "Ontvang token",
   "TOKEN_RECEIVE_SUBTITLE": "Gebruik je walletadres om te ontvangen",
