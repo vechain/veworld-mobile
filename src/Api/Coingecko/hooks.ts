@@ -140,8 +140,7 @@ export const useSmartMarketChart = ({
         placeholderData,
         staleTime: getQueryCacheTime(true),
         refetchInterval: getRefetchIntevalTime(),
-        // gcTime: 1000 * 60 * 60 * 24, // 24 hours
-        gcTime: 0,
+        gcTime: 1000 * 60 * 60 * 24, // 24 hours
     })
 }
 
