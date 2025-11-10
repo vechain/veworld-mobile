@@ -47,15 +47,15 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
     const invalidateStargateQueries = useCallback(async () => {
         await queryClient.invalidateQueries({
             predicate(query) {
-                if (!["userStargateNodes", "userStargateNfts"].includes(query.queryKey[0] as string)) return false
-                if (query.queryKey.length < 3) return false
-                if (query.queryKey[1] !== selectedNetwork.type) return false
-                if (!AddressUtils.compareAddresses(query.queryKey[2] as string | undefined, selectedAccountAddress!))
-                    return false
+                const queryKey = query.queryKey as string[]
+                if (!["userStargateNodes", "userStargateNfts", "STARGATE_CLAIMABLE"].includes(queryKey[0])) return false
+                if (queryKey.length < 3) return false
+                if (queryKey[1] !== selectedNetwork.type || queryKey[1] !== selectedNetwork.genesis.id) return false
+                if (!AddressUtils.compareAddresses(queryKey[2], selectedAccountAddress!)) return false
                 return true
             },
         })
-    }, [queryClient, selectedAccountAddress, selectedNetwork.type])
+    }, [queryClient, selectedAccountAddress, selectedNetwork.genesis.id, selectedNetwork.type])
 
     const invalidateCollectiblesQueries = useCallback(async () => {
         await queryClient.invalidateQueries({
