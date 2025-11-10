@@ -21,7 +21,6 @@ export const BalanceTab = ({ token: _token }: Props) => {
     const { data: b3trBalance } = useTokenBalance({ tokenAddress: B3TR.address, enabled: isVOT3OrB3TR })
 
     const token = useMemo(() => {
-        if (_token.symbol === VeDelegate.symbol) return _token
         if (!isVOT3OrB3TR) return _token
         const veBetterBalances = [vot3Balance, b3trBalance].filter(
             (balance): balance is NonNullable<typeof balance> => !!balance,
