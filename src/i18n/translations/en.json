@@ -1337,5 +1337,6 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "These tokens are staked on vedelegate.vet and can only be managed there."
 }
