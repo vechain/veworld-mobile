@@ -1241,6 +1241,7 @@
   "TOKEN_CUSTOM_SUBTITLE": "Dodaj niestandardowy token do swojego portfela",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Aktywność",
   "TOKEN_DETAIL_BALANCE_TAB": "Saldo",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Te tokeny są stakowane na vedelegate.vet i mogą być zarządzane tylko tam.",
   "TOKEN_ID": "ID tokena",
   "TOKEN_RECEIVE": "Odbierz token",
   "TOKEN_RECEIVE_SUBTITLE": "Użyj adresu swojego portfela, aby otrzymać",

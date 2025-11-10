@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { AlertStatus, ICON_NAMES, StatusColorVariant } from "~Components/Reusable/Alert/utils/AlertConfigs"
 import { ColorThemeType } from "~Constants"
@@ -23,8 +23,8 @@ export const AlertInline = memo(({ message, status, variant = "inline" }: AlertI
         <BaseView style={styles.container}>
             <BaseView style={styles.row}>
                 <BaseIcon name={ICON_NAMES[status]} size={16} color={colors.icon} />
-                <BaseSpacer width={8} />
-                <BaseText typographyFont="captionRegular" color={isInline ? colors.titleInline : colors.title}>
+
+                <BaseText typographyFont="captionRegular" color={isInline ? colors.titleInline : colors.title} flex={1}>
                     {message}
                 </BaseText>
             </BaseView>
@@ -35,6 +35,7 @@ export const AlertInline = memo(({ message, status, variant = "inline" }: AlertI
 const baseStyles = (isInline: boolean, status: StatusColorVariant) => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
+            flexDirection: "row",
             alignItems: "flex-start",
             justifyContent: "flex-start",
             paddingHorizontal: isInline ? 0 : 12,
@@ -43,6 +44,7 @@ const baseStyles = (isInline: boolean, status: StatusColorVariant) => (theme: Co
             borderRadius: isInline ? 0 : 6,
         },
         row: {
+            gap: 8,
             flexDirection: "row",
             alignItems: "flex-start",
         },

@@ -57,9 +57,10 @@ describe("MoreButtonBottomSheet", () => {
     beforeEach(() => {
         jest.clearAllMocks()
     })
-    it("should not show sell and send if they are disabled", () => {
+    it("should not show sell, send and swap if they are disabled", () => {
         ;(SellButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
         ;(SendButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
+        ;(SwapButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
 
         const bsRef = { current: { present: jest.fn(), close: jest.fn() } }
 
@@ -78,14 +79,15 @@ describe("MoreButtonBottomSheet", () => {
 
         expect(screen.queryByTestId("MORE_BUTTON_BS_ITEM_SEND")).toBeNull()
         expect(screen.queryByTestId("MORE_BUTTON_BS_ITEM_SELL")).toBeNull()
+        expect(screen.queryByTestId("MORE_BUTTON_BS_ITEM_SWAP")).toBeNull()
         expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_RECEIVE")).toBeVisible()
         expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_BUY")).toBeVisible()
         expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_EARN")).toBeVisible()
-        expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_SWAP")).toBeVisible()
     })
     it("should show sell if not disabled", () => {
         ;(SellButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
         ;(SendButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
+        ;(SwapButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
 
         const bsRef = { current: { present: jest.fn(), close: jest.fn() } }
 
@@ -112,6 +114,7 @@ describe("MoreButtonBottomSheet", () => {
     it("should show send if not disabled", () => {
         ;(SellButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
         ;(SendButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
+        ;(SwapButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
 
         const bsRef = { current: { present: jest.fn(), close: jest.fn() } }
 
@@ -135,6 +138,33 @@ describe("MoreButtonBottomSheet", () => {
         expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_EARN")).toBeVisible()
         expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_SWAP")).toBeVisible()
     })
+    it("should show swap if not disabled", () => {
+        ;(SellButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
+        ;(SendButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
+        ;(SwapButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
+
+        const bsRef = { current: { present: jest.fn(), close: jest.fn() } }
+
+        render(
+            <MoreButtonBottomSheet
+                bsRef={bsRef as any}
+                openReceiveBottomsheet={jest.fn()}
+                token={TestHelpers.data.B3TRWithBalance}
+            />,
+            { wrapper: TestWrapper },
+        )
+
+        act(() => {
+            bsRef.current.present()
+        })
+
+        expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_SEND")).toBeVisible()
+        expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_SELL")).toBeVisible()
+        expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_RECEIVE")).toBeVisible()
+        expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_BUY")).toBeVisible()
+        expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_EARN")).toBeVisible()
+        expect(screen.queryByTestId("MORE_BUTTON_BS_ITEM_SWAP")).toBeNull()
+    })
 
     it("should trigger the correct actions", () => {
         const onBuy = jest.fn()
@@ -149,6 +179,7 @@ describe("MoreButtonBottomSheet", () => {
         ;(SwapButton.use as jest.Mock).mockReturnValue(onSwap)
         ;(SellButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: onSell })
         ;(SendButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: onSend })
+        ;(SwapButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: onSwap })
 
         const bsRef = { current: { present: jest.fn(), close: jest.fn() } }
 
