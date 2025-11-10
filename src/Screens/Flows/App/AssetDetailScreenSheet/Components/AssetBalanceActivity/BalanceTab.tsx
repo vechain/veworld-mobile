@@ -98,7 +98,11 @@ export const BalanceTab = ({ token: _token }: Props) => {
                 )}
                 {showFiatBalance && <ValueContainer.DollarValue value={totalFiatBalance} testID="DOLLAR_VALUE" />}
             </ValueContainer>
-            {b3trToken ? <BalanceTabActions token={b3trToken} /> : <BalanceTabActions token={token} />}
+            {b3trToken.balance ? (
+                <BalanceTabActions token={b3trToken as FungibleTokenWithBalance} />
+            ) : (
+                <BalanceTabActions token={token} />
+            )}
         </>
     )
 }
