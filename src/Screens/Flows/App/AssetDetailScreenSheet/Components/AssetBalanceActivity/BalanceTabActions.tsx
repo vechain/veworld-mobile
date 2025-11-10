@@ -74,7 +74,7 @@ export const BalanceTabActions = ({ token }: Props) => {
     }, [token.symbol])
 
     return (
-        <BaseView flexDirection="row" gap={22} justifyContent="space-evenly">
+        <BaseView flexDirection="row" gap={20} justifyContent="center">
             {tokenActions.map(action => allActions[action])}
             <ConvertBetterBottomSheet ref={convertB3trBsRef} onClose={onClose} />
             <ConvertedBetterBottomSheet
