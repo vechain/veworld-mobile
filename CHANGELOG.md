@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.10 (2025-11-10)</small>
+
+* build: init ([4aea744](https://github.com/vechain/veworld-mobile/commit/4aea744))
+* fix: add support for fiat on b3tr (#3513) ([f34bc4a](https://github.com/vechain/veworld-mobile/commit/f34bc4a)), closes [#3513](https://github.com/vechain/veworld-mobile/issues/3513)
+
 ## <small>2.4.9 (2025-11-05)</small>
 
 * build: init ([73a4b19](https://github.com/vechain/veworld-mobile/commit/73a4b19))
