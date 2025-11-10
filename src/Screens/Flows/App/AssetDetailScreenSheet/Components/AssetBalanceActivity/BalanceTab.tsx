@@ -8,6 +8,7 @@ import { BigNutils } from "~Utils"
 import { formatTokenAmount } from "~Utils/StandardizedFormatting"
 import { BalanceTabActions } from "./BalanceTabActions"
 import { ValueContainer } from "./ValueContainer"
+import { VeDelegate } from "~Constants"
 
 type Props = {
     token: FungibleTokenWithBalance
@@ -20,6 +21,7 @@ export const BalanceTab = ({ token: _token }: Props) => {
     const { data: b3trBalance } = useTokenBalance({ tokenAddress: B3TR.address, enabled: isVOT3OrB3TR })
 
     const token = useMemo(() => {
+        if (_token.symbol === VeDelegate.symbol) return _token
         if (!isVOT3OrB3TR) return _token
         const veBetterBalances = [vot3Balance, b3trBalance].filter(
             (balance): balance is NonNullable<typeof balance> => !!balance,
@@ -38,13 +40,13 @@ export const BalanceTab = ({ token: _token }: Props) => {
     }, [_token, b3trBalance, isVOT3OrB3TR, vot3Balance])
 
     const b3trToken = useMemo<FungibleTokenWithBalance | undefined>(() => {
-        if (!b3trBalance) return undefined
+        if (!b3trBalance || token.symbol === VeDelegate.symbol) return undefined
 
         return {
             ...B3TR,
             balance: b3trBalance,
         }
-    }, [B3TR, b3trBalance])
+    }, [B3TR, b3trBalance, token.symbol])
 
     const vot3Token = useMemo<FungibleTokenWithBalance | undefined>(() => {
         if (!vot3Balance) return undefined
