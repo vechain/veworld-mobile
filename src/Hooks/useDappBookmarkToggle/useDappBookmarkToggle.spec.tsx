@@ -5,6 +5,16 @@ import { useDappBookmarkToggle } from "./useDappBookmarkToggle"
 import { DiscoveryDApp } from "~Constants"
 import { DAppReference } from "~Storage/Redux/Slices"
 
+const mockDispatch = jest.fn()
+
+jest.mock("~Storage/Redux", () => {
+    const actual = jest.requireActual("~Storage/Redux")
+    return {
+        ...actual,
+        useAppDispatch: () => mockDispatch,
+    }
+})
+
 jest.mock("~Hooks/useDappBookmarksList", () => ({
     useDappBookmarksList: jest.fn(),
 }))
@@ -298,6 +308,84 @@ describe("useDappBookmarkToggle", () => {
 
             expect(result.current.isBookMarked).toBe(true)
             expect(result.current.existingBookmark?.isCustom).toBe(true)
+        })
+    })
+
+    describe("toggleBookmark action", () => {
+        beforeEach(() => {
+            mockDispatch.mockClear()
+        })
+
+        it("should dispatch addBookmark with VBD app when toggling bookmark for an existing VBD app", async () => {
+            useDappBookmarksList.mockReturnValue([])
+            useVeBetterDaoDapps.mockReturnValue({ data: mockVbdDapps, isLoading: false })
+
+            const preloadedState = {
+                discovery: {
+                    featured: [],
+                    favorites: [],
+                    favoriteRefs: [],
+                    custom: [],
+                    bannerInteractions: {},
+                    connectedApps: [],
+                    hasOpenedDiscovery: true,
+                    tabsManager: {
+                        currentTabId: null,
+                        tabs: [],
+                    },
+                },
+            }
+
+            const wrapper = ({ children }: { children: React.ReactNode }) => (
+                <TestWrapper preloadedState={preloadedState}>{children}</TestWrapper>
+            )
+
+            const { result } = renderHook(() => useDappBookmarkToggle("https://vbdapp.com", "VBD App"), {
+                wrapper,
+            })
+
+            await result.current.toggleBookmark()
+
+            expect(mockDispatch).toHaveBeenCalled()
+            const addBookmarkCall = mockDispatch.mock.calls.find(call => call[0].type === "discovery/addBookmark")
+            expect(addBookmarkCall).toBeDefined()
+            expect(addBookmarkCall[0].payload).toEqual(mockVbdDapps[0])
+        })
+
+        it("should dispatch addBookmark with featured app when toggling an existing featured app", async () => {
+            useDappBookmarksList.mockReturnValue([])
+            useVeBetterDaoDapps.mockReturnValue({ data: [], isLoading: false })
+
+            const preloadedState = {
+                discovery: {
+                    featured: mockFeaturedDapps,
+                    favorites: [],
+                    favoriteRefs: [],
+                    custom: [],
+                    bannerInteractions: {},
+                    connectedApps: [],
+                    hasOpenedDiscovery: true,
+                    tabsManager: {
+                        currentTabId: null,
+                        tabs: [],
+                    },
+                },
+            }
+
+            const wrapper = ({ children }: { children: React.ReactNode }) => (
+                <TestWrapper preloadedState={preloadedState}>{children}</TestWrapper>
+            )
+
+            const { result } = renderHook(() => useDappBookmarkToggle("https://mugshot2.vet", "Mugshot"), {
+                wrapper,
+            })
+
+            await result.current.toggleBookmark()
+
+            expect(mockDispatch).toHaveBeenCalled()
+            const addBookmarkCall = mockDispatch.mock.calls.find(call => call[0].type === "discovery/addBookmark")
+            expect(addBookmarkCall).toBeDefined()
+            expect(addBookmarkCall[0].payload).toEqual(mockFeaturedDapps[0])
         })
     })
 })

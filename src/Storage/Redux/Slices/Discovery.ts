@@ -139,8 +139,8 @@ export const DiscoverySlice = createSlice({
             let bookmark: DiscoveryDApp
             if ("external_url" in payload) {
                 // Handle both Unix timestamp string ("1640995200") and ISO string formats
-                const timestamp = parseInt(payload.createdAtTimestamp, 10)
-                const createAt = isNaN(timestamp) ? Date.parse(payload.createdAtTimestamp) : timestamp * 1000
+                const timestamp = Number.parseInt(payload.createdAtTimestamp, 10)
+                const createAt = Number.isNaN(timestamp) ? Date.parse(payload.createdAtTimestamp) : timestamp * 1000
 
                 bookmark = {
                     name: payload.name,

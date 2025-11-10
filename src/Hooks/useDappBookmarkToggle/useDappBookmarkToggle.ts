@@ -64,7 +64,7 @@ export const useDappBookmarkToggle = (url?: string, title?: string) => {
                 href: baseURL!,
                 desc: "",
                 isCustom: true,
-                createAt: new Date().getTime(),
+                createAt: Date.now(),
                 amountOfNavigations: 1,
             }
 

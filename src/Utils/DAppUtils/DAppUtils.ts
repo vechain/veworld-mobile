@@ -363,9 +363,9 @@ const dispatchExternalAppError = (redirectUrl: string, err: DeepLinkError) => {
 const generateDAppId = (href: string): string => {
     try {
         const url = new URL(href)
-        return `${url.hostname}${url.pathname}`.replace(/[^a-z0-9]/gi, "_").toLowerCase()
+        return `${url.hostname}${url.pathname}`.replaceAll(/[^a-z0-9]/gi, "_").toLowerCase()
     } catch {
-        return href.replace(/[^a-z0-9]/gi, "_").toLowerCase()
+        return href.replaceAll(/[^a-z0-9]/gi, "_").toLowerCase()
     }
 }
 
