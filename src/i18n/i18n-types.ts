@@ -5085,9 +5085,10 @@ type RootTranslation = {
 	 */
 	TOKEN_DETAIL_BALANCE_TAB: string
 	/**
-	 * VET is the native cryptocurrency of the VeChainThor public blockchain. 
-	 * It is used to transfer value across the VeChainThor network and serves as a store of value or smart payment currency. 
-	 * VET generates VTHO (VeThor) passively over time, which is used to power transactions and execute smart contracts on the network.
+	 * VET is the native token of the VeChainThor blockchain, with a fixed total supply of 86.7 billion. 
+	 * It is the network’s value-transfer and staking asset, underpinning on-chain economic activity and network security. 
+	 * VET can be used for staking on StarGate - VeChain’s native staking platform - allowing users to earn VeThor (VTHO) — the energy token that powers on-chain transactions — while also enabling participation in governance decisions that shape the blockchain’s future. 
+	 * Through this dual role, VET anchors both the value and utility of the VeChain ecosystem.
 	 */
 	TOKEN_DESCRIPTION_VET: string
 	/**
@@ -10472,9 +10473,10 @@ Here's what it's all about:
 	 */
 	TOKEN_DETAIL_BALANCE_TAB: () => LocalizedString
 	/**
-	 * VET is the native cryptocurrency of the VeChainThor public blockchain. 
-	 * It is used to transfer value across the VeChainThor network and serves as a store of value or smart payment currency. 
-	 * VET generates VTHO (VeThor) passively over time, which is used to power transactions and execute smart contracts on the network.
+	 * VET is the native token of the VeChainThor blockchain, with a fixed total supply of 86.7 billion. 
+	 * It is the network’s value-transfer and staking asset, underpinning on-chain economic activity and network security. 
+	 * VET can be used for staking on StarGate - VeChain’s native staking platform - allowing users to earn VeThor (VTHO) — the energy token that powers on-chain transactions — while also enabling participation in governance decisions that shape the blockchain’s future. 
+	 * Through this dual role, VET anchors both the value and utility of the VeChain ecosystem.
 	 */
 	TOKEN_DESCRIPTION_VET: () => LocalizedString
 	/**
