@@ -3,17 +3,13 @@ import { InfiniteData, useQueryClient } from "@tanstack/react-query"
 import React, { useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { LineChart } from "react-native-wagmi-charts"
-import {
-    DEFAULT_LINE_CHART_DATA,
-    getCoinGeckoIdBySymbol,
-    useSmartMarketChart,
-    useTokenSocialLinks,
-} from "~Api/Coingecko"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { BaseSpacer, BaseText, BaseView, TokenSymbol } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { useThemedStyles } from "~Hooks"
 import { getUseAccountTokenActivitiesQueryKey } from "~Hooks/useAccountTokenActivities"
 import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
+import { useTokenRegistryInfo } from "~Hooks/useTokenRegistryInfo"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { FetchActivitiesResponse } from "~Networking"
@@ -33,7 +29,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
     const { token } = route.params
     const { styles, theme } = useThemedStyles(baseStyles)
     const currency = useAppSelector(selectCurrency)
-    const socialLinks = useTokenSocialLinks(token.tokenInfo) ?? {}
+    const { description, socialLinks } = useTokenRegistryInfo(token)
     const account = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
     const qc = useQueryClient()
@@ -110,8 +106,9 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
             {token.symbol && (
                 <AssetStats
                     tokenSymbol={token.symbol}
-                    tokenDescription={token.tokenInfo?.description?.en}
-                    socialLinks={socialLinks ?? {}}
+                    tokenDescription={description}
+                    socialLinks={socialLinks}
+                    isWrappedToken={isCrossChainToken}
                 />
             )}
         </AssetDetailScreenWrapper>
