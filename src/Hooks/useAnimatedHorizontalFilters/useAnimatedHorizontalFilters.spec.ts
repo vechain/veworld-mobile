@@ -1,6 +1,6 @@
 import { renderHook, act } from "@testing-library/react-hooks"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native"
-import { useAnimatedHorizontalFilters } from "./useAnimatedHorizontalFilters"
+import { useAnimatedHorizontalFilters, UseAnimatedHorizontalFiltersProps } from "./useAnimatedHorizontalFilters"
 
 jest.mock("react-native-reanimated", () => {
     const Reanimated = require("react-native-reanimated/mock")
@@ -46,6 +46,7 @@ describe("useAnimatedHorizontalFilters", () => {
                 items: mockItems,
                 selectedItem: mockSelectedItem,
                 keyExtractor: mockKeyExtractor,
+                size: "md",
             }),
         )
 
@@ -63,6 +64,7 @@ describe("useAnimatedHorizontalFilters", () => {
                 items: mockItems,
                 selectedItem: mockSelectedItem,
                 keyExtractor: mockKeyExtractor,
+                size: "md",
             }),
         )
 
@@ -81,6 +83,7 @@ describe("useAnimatedHorizontalFilters", () => {
                 items: mockItems,
                 selectedItem: mockSelectedItem,
                 keyExtractor: mockKeyExtractor,
+                size: "md",
             }),
         )
 
@@ -103,6 +106,7 @@ describe("useAnimatedHorizontalFilters", () => {
                 items: mockItems,
                 selectedItem: mockSelectedItem,
                 keyExtractor: mockKeyExtractor,
+                size: "md",
             }),
         )
 
@@ -119,6 +123,7 @@ describe("useAnimatedHorizontalFilters", () => {
                 items: mockItems,
                 selectedItem: mockSelectedItem,
                 keyExtractor: mockKeyExtractor,
+                size: "md",
             }),
         )
 
@@ -145,6 +150,7 @@ describe("useAnimatedHorizontalFilters", () => {
                 items: mockItems,
                 selectedItem: mockSelectedItem,
                 keyExtractor: mockKeyExtractor,
+                size: "md",
             }),
         )
 
@@ -170,6 +176,7 @@ describe("useAnimatedHorizontalFilters", () => {
                 items: complexItems,
                 selectedItem: complexSelectedItem,
                 keyExtractor: complexKeyExtractor,
+                size: "md",
             }),
         )
 
@@ -183,6 +190,7 @@ describe("useAnimatedHorizontalFilters", () => {
                 items: [],
                 selectedItem: "",
                 keyExtractor: (item: string) => item,
+                size: "md",
             }),
         )
 
@@ -195,6 +203,7 @@ describe("useAnimatedHorizontalFilters", () => {
                 items: mockItems,
                 selectedItem: "nonexistent",
                 keyExtractor: mockKeyExtractor,
+                size: "md",
             }),
         )
 
@@ -202,13 +211,17 @@ describe("useAnimatedHorizontalFilters", () => {
     })
 
     it("should update when props change", () => {
-        const { result, rerender } = renderHook(props => useAnimatedHorizontalFilters(props), {
-            initialProps: {
-                items: mockItems,
-                selectedItem: mockSelectedItem,
-                keyExtractor: mockKeyExtractor,
+        const { result, rerender } = renderHook(
+            (props: UseAnimatedHorizontalFiltersProps<string>) => useAnimatedHorizontalFilters(props),
+            {
+                initialProps: {
+                    items: mockItems,
+                    selectedItem: mockSelectedItem,
+                    keyExtractor: mockKeyExtractor,
+                    size: "md",
+                },
             },
-        })
+        )
 
         const initialRef = result.current.scrollViewRef
 
@@ -216,6 +229,7 @@ describe("useAnimatedHorizontalFilters", () => {
             items: mockItems,
             selectedItem: "item3",
             keyExtractor: mockKeyExtractor,
+            size: "md",
         })
 
         expect(result.current.scrollViewRef).toStrictEqual(initialRef)
@@ -227,6 +241,7 @@ describe("useAnimatedHorizontalFilters", () => {
                 items: mockItems,
                 selectedItem: mockSelectedItem,
                 keyExtractor: mockKeyExtractor,
+                size: "md",
             }),
         )
 
@@ -234,6 +249,8 @@ describe("useAnimatedHorizontalFilters", () => {
 
         expect(style).toEqual({
             width: 0,
+            height: 0,
+            top: 0,
             transform: [{ translateX: 0 }],
         })
     })
@@ -244,6 +261,7 @@ describe("useAnimatedHorizontalFilters", () => {
                 items: mockItems,
                 selectedItem: mockSelectedItem,
                 keyExtractor: mockKeyExtractor,
+                size: "md",
             }),
         )
 
@@ -264,6 +282,8 @@ describe("useAnimatedHorizontalFilters", () => {
         const style = result.current.indicatorAnimatedStyle
 
         expect(style).toHaveProperty("width")
+        expect(style).toHaveProperty("height")
+        expect(style).toHaveProperty("top")
         expect(style).toHaveProperty("transform")
         expect(Array.isArray(style.transform)).toBe(true)
     })

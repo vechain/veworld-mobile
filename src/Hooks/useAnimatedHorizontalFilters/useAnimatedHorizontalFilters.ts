@@ -11,7 +11,7 @@ import Animated, {
     scrollTo,
 } from "react-native-reanimated"
 
-interface UseAnimatedHorizontalFiltersProps<T> {
+export interface UseAnimatedHorizontalFiltersProps<T> {
     items: T[]
     selectedItem: T
     keyExtractor: (item: T) => string | number
@@ -145,7 +145,7 @@ export const useAnimatedHorizontalFilters = <T>({
                 width: 0,
                 height: 0,
                 top: 0,
-                transform: [{ translateX: 0 }, { translateY: 0 }],
+                transform: [{ translateX: 0 }],
             }
         }
 

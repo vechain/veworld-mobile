@@ -69,8 +69,6 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
                 return ChartUtils.downsampleData(chartData, "hour", 1, "first")
             case 30:
                 return ChartUtils.downsampleData(chartData, "day", 1, "first")
-            case 180:
-                return ChartUtils.downsampleData(chartData, "day", 30, "first")
             case 365:
                 return ChartUtils.downsampleData(chartData, "day", 52, "first")
             case "max":
