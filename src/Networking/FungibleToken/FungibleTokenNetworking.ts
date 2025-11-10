@@ -85,6 +85,8 @@ export const getTokensFromGithub = async ({ network }: { network: Network }): Pr
                 genesisId: network.genesis.id,
                 icon: `${TOKEN_URL}/assets/${token.icon}`,
                 custom: false,
+                socialLinks: token.socialLinks,
+                desc: token.desc,
             }
         })
     }
