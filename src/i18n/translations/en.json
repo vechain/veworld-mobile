@@ -1241,6 +1241,7 @@
   "TOKEN_CUSTOM_SUBTITLE": "Add a custom token to your wallet",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Activity",
   "TOKEN_DETAIL_BALANCE_TAB": "Balance",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "These tokens are staked on vedelegate.vet and can only be managed there.",
   "TOKEN_ID": "Token ID",
   "TOKEN_RECEIVE": "Receive token",
   "TOKEN_RECEIVE_SUBTITLE": "Use your wallet address to receive",
@@ -1337,6 +1338,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "These tokens are staked on vedelegate.vet and can only be managed there."
+  "YESTERDAY": "Yesterday"
 }
