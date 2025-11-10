@@ -94,7 +94,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
     return (
         <AssetDetailScreenWrapper>
             <LineChart.Provider data={downsampledChartData} isLoading={isLoadingChart}>
-                <BaseView flexDirection="row" justifyContent="space-between" style={styles.padding}>
+                <BaseView flexDirection="row" justifyContent="space-between" style={styles.padding} mt={8}>
                     <BaseView flexDirection="row" gap={16}>
                         <TokenImage
                             icon={token.icon}
