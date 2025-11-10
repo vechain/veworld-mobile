@@ -118,14 +118,12 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                     height.value = e.nativeEvent.layout.height
                 }}>
                 {handle && (
-                    <>
-                        <GestureDetector gesture={gesture}>
-                            <BaseBottomSheetHandle
-                                color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
-                                style={styles.handle}
-                            />
-                        </GestureDetector>
-                    </>
+                    <GestureDetector gesture={gesture}>
+                        <BaseBottomSheetHandle
+                            color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
+                            style={styles.handle}
+                        />
+                    </GestureDetector>
                 )}
                 <NestableScrollContainer showsVerticalScrollIndicator={false}>{children}</NestableScrollContainer>
             </Animated.View>
