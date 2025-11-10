@@ -1,1 +1,1 @@
-export { useAnimatedHorizontalFilters } from "./useAnimatedHorizontalFilters"
+export { useAnimatedHorizontalFilters, CHIP_PADDING } from "./useAnimatedHorizontalFilters"

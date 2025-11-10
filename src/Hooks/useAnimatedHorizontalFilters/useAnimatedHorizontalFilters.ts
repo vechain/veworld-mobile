@@ -15,22 +15,39 @@ interface UseAnimatedHorizontalFiltersProps<T> {
     items: T[]
     selectedItem: T
     keyExtractor: (item: T) => string | number
+    size: "sm" | "md"
 }
+
+export const CHIP_PADDING = {
+    sm: {
+        paddingHorizontal: 12,
+        paddingVertical: 4,
+        minWidth: 48,
+    },
+    md: {
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        minWidth: 64,
+    },
+} as const
 
 export const useAnimatedHorizontalFilters = <T>({
     items,
     selectedItem,
     keyExtractor,
+    size,
 }: UseAnimatedHorizontalFiltersProps<T>) => {
     const scrollViewRef = useAnimatedRef<Animated.ScrollView>()
 
     const [measurements, setMeasurements] = useState<{
         chipPositions: number[]
         chipWidths: number[]
+        chipHeights: number[]
         scrollViewWidth: number
     }>({
         chipPositions: [],
         chipWidths: [],
+        chipHeights: [],
         scrollViewWidth: 0,
     })
 
@@ -44,17 +61,26 @@ export const useAnimatedHorizontalFilters = <T>({
     )
 
     const isReady = useMemo(
-        () => measurements.chipPositions.length === items.length && measurements.chipWidths.length === items.length,
-        [measurements.chipPositions.length, measurements.chipWidths.length, items.length],
+        () =>
+            measurements.chipPositions.length === items.length &&
+            measurements.chipWidths.length === items.length &&
+            measurements.chipHeights.length === items.length,
+        [
+            measurements.chipPositions.length,
+            measurements.chipWidths.length,
+            measurements.chipHeights.length,
+            items.length,
+        ],
     )
 
     const contentBounds = useMemo(() => {
         if (!isReady) return { totalWidth: 0, maxScroll: 0 }
 
         const totalWidth = Math.max(...measurements.chipPositions) + Math.max(...measurements.chipWidths) + 20
+        const totalHeight = Math.max(...measurements.chipHeights)
         const maxScroll = Math.max(0, totalWidth - measurements.scrollViewWidth)
 
-        return { totalWidth, maxScroll }
+        return { totalWidth, totalHeight, maxScroll }
     }, [isReady, measurements])
 
     useDerivedValue(() => {
@@ -78,7 +104,7 @@ export const useAnimatedHorizontalFilters = <T>({
     }, [selectedIndex, isReady, measurements, contentBounds.maxScroll, scrollValue, targetScrollX])
 
     const handleChipLayout = useCallback((event: LayoutChangeEvent, index: number) => {
-        const { x, width } = event.nativeEvent.layout
+        const { x, width, height } = event.nativeEvent.layout
 
         setMeasurements(prev => {
             if (prev.chipPositions[index] === x && prev.chipWidths[index] === width) {
@@ -87,13 +113,16 @@ export const useAnimatedHorizontalFilters = <T>({
 
             const newPositions = [...prev.chipPositions]
             const newWidths = [...prev.chipWidths]
+            const newHeights = [...prev.chipHeights]
             newPositions[index] = x
             newWidths[index] = width
+            newHeights[index] = height
 
             return {
                 ...prev,
                 chipPositions: newPositions,
                 chipWidths: newWidths,
+                chipHeights: newHeights,
             }
         })
     }, [])
@@ -114,7 +143,9 @@ export const useAnimatedHorizontalFilters = <T>({
         if (!isReady) {
             return {
                 width: 0,
-                transform: [{ translateX: 0 }],
+                height: 0,
+                top: 0,
+                transform: [{ translateX: 0 }, { translateY: 0 }],
             }
         }
 
@@ -122,6 +153,13 @@ export const useAnimatedHorizontalFilters = <T>({
             scrollValue.value,
             items.map((_, index) => index),
             measurements.chipWidths,
+            Extrapolation.CLAMP,
+        )
+
+        const height = interpolate(
+            scrollValue.value,
+            items.map((_, index) => index),
+            measurements.chipHeights,
             Extrapolation.CLAMP,
         )
 
@@ -135,9 +173,11 @@ export const useAnimatedHorizontalFilters = <T>({
 
         return {
             width,
+            height,
+            top: 0,
             transform: [{ translateX }],
         }
-    }, [isReady, items, measurements.chipWidths, measurements.chipPositions])
+    }, [isReady, items, measurements.chipWidths, measurements.chipPositions, measurements.chipHeights, size])
 
     return {
         scrollViewRef,

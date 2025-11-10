@@ -15,7 +15,6 @@ export const ASSET_CHART_PERIODS: AssetChartPeriod[] = [
     { days: 1, label: "1D" },
     { days: 7, label: "1W" },
     { days: 30, label: "1M" },
-    { days: 180, label: "6M" },
     { days: 365, label: "1Y" },
     { days: "max", label: "All" },
 ]
@@ -28,7 +27,7 @@ type Props = {
 const CHART_HEIGHT = 125
 
 export const AssetChart = ({ selectedPeriod, setSelectedPeriod }: Props) => {
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
 
     return (
         <BaseView gap={24} flexDirection="column">
@@ -37,11 +36,17 @@ export const AssetChart = ({ selectedPeriod, setSelectedPeriod }: Props) => {
             </Animated.View>
             <AnimatedFilterChips
                 containerStyle={styles.chipContainer}
+                contentContainerStyle={styles.chipContentContainer}
+                size="sm"
+                scrollEnabled={false}
                 items={ASSET_CHART_PERIODS}
                 keyExtractor={item => item.days}
                 getItemLabel={item => item.label}
                 selectedItem={selectedPeriod}
                 onItemPress={setSelectedPeriod}
+                indicatorBackgroundColor={theme.colors.timePeriodChip.indicatorBackground}
+                activeTextColor={theme.colors.timePeriodChip.activeText}
+                inactiveTextColor={theme.colors.timePeriodChip.inactiveText}
             />
         </BaseView>
     )
@@ -51,5 +56,13 @@ const baseStyles = () =>
     StyleSheet.create({
         chipContainer: {
             marginHorizontal: 16,
+            flexDirection: "row",
+        },
+        chipContentContainer: {
+            gap: 16,
+            justifyContent: "center",
+            flexDirection: "row",
+            alignSelf: "center",
+            flex: 1,
         },
     })
