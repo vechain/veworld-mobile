@@ -97,7 +97,7 @@ export const BalanceTab = ({ token: _token }: Props) => {
                 )}
                 {showFiatBalance && <ValueContainer.DollarValue value={fiatBalance} testID="DOLLAR_VALUE" />}
             </ValueContainer>
-            <BalanceTabActions token={token} />
+            {b3trToken ? <BalanceTabActions token={b3trToken} /> : <BalanceTabActions token={token} />}
         </>
     )
 }
