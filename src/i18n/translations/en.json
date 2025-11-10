@@ -1337,5 +1337,6 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "TOKEN_DESCRIPTION_VET": "VET is the native cryptocurrency of the VeChainThor public blockchain. It is used to transfer value across the VeChainThor network and serves as a store of value or smart payment currency. VET generates VTHO (VeThor) passively over time, which is used to power transactions and execute smart contracts on the network."
 }
