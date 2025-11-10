@@ -1,8 +1,6 @@
 import { RootState } from "../Types"
 import { createSelector } from "@reduxjs/toolkit"
-import _ from "lodash"
 import { DiscoveryDApp } from "~Constants"
-import { resolveDAppsFromReferences } from "~Utils/DAppUtils/DAppBookmarkResolver"
 
 const getDiscoveryState = (state: RootState) => state.discovery
 
@@ -16,24 +14,6 @@ export const selectFeaturedDapps = createSelector(getDiscoveryState, (discovery)
 export const selectCustomDapps = createSelector(getDiscoveryState, (discovery): DiscoveryDApp[] => discovery.custom)
 
 export const selectFavoriteRefs = createSelector(getDiscoveryState, discovery => discovery.favoriteRefs)
-
-export const selectBookmarkedDapps = createSelector(
-    selectFavoritesDapps,
-    selectCustomDapps,
-    selectFavoriteRefs,
-    selectFeaturedDapps,
-    (favorites, custom, favoriteRefs, featured): DiscoveryDApp[] => {
-        if (favoriteRefs.length > 0) {
-            const byId = new Map(featured.filter(d => d.id).map(d => [d.id!, d]))
-            const byVbdId = new Map(featured.filter(d => d.veBetterDaoId).map(d => [d.veBetterDaoId!, d]))
-
-            return resolveDAppsFromReferences(favoriteRefs, { byId, byVbdId })
-        }
-
-        const dapps: DiscoveryDApp[] = [...favorites, ...custom]
-        return _.uniqBy(dapps, value => value.href)
-    },
-)
 
 export const selectAllDapps = createSelector(
     selectFavoritesDapps,
