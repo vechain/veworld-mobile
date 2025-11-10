@@ -96,12 +96,18 @@ describe("BalanceTab", () => {
             wrapper: TestWrapper,
         })
 
-        expect(within(screen.getByTestId("TOKEN_VALUE_B3TR")).getByTestId("TOKEN_VALUE_VALUE")).toHaveTextContent(
-            "1.00",
-        )
-        expect(within(screen.getByTestId("TOKEN_VALUE_VOT3")).getByTestId("TOKEN_VALUE_VALUE")).toHaveTextContent(
-            "2.00",
-        )
+        expect(
+            within(screen.getByTestId("TOKEN_FIAT_VALUE_B3TR")).getByTestId("TOKEN_FIAT_VALUE_TOKEN_VALUE"),
+        ).toHaveTextContent("1.00")
+        expect(
+            within(screen.getByTestId("TOKEN_FIAT_VALUE_B3TR")).getByTestId("TOKEN_FIAT_VALUE_FIAT_VALUE"),
+        ).toHaveTextContent("$1.00")
+        expect(
+            within(screen.getByTestId("TOKEN_FIAT_VALUE_VOT3")).getByTestId("TOKEN_FIAT_VALUE_TOKEN_VALUE"),
+        ).toHaveTextContent("2.00")
+        expect(
+            within(screen.getByTestId("TOKEN_FIAT_VALUE_VOT3")).getByTestId("TOKEN_FIAT_VALUE_FIAT_VALUE"),
+        ).toHaveTextContent("$2.00")
         expect(screen.getByTestId("DOLLAR_VALUE_VALUE")).toHaveTextContent("$3.00")
     })
 })

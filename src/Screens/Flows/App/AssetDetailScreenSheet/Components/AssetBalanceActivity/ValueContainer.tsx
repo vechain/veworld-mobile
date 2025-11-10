@@ -102,7 +102,7 @@ const TokenFiatValue = ({
             py={12}
             px={16}
             style={border && styles.root}
-            testID={`TOKEN_VALUE_${token.symbol}`}>
+            testID={`TOKEN_FIAT_VALUE_${token.symbol}`}>
             <BaseView flexDirection="row" gap={12}>
                 <TokenImage
                     icon={token.icon}
