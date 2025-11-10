@@ -38,7 +38,6 @@ const BookmarkedDAppsList = ({
 }: BookmarkListProps) => {
     const { styles } = useThemedStyles(baseStyles({ padding }))
     const dispatch = useAppDispatch()
-    const [_isDragging, setIsDragging] = useState(false)
 
     const handleLongPress = useCallback(() => {
         if (!isEditMode) {
@@ -78,13 +77,8 @@ const BookmarkedDAppsList = ({
         [iconBg, onDAppPress, isEditMode, handleLongPress, handleRemove],
     )
 
-    const onDragBegin = useCallback(() => {
-        setIsDragging(true)
-    }, [])
-
     const onDragEnd = useCallback(
         ({ data }: DragEndParams<DiscoveryDApp>) => {
-            setIsDragging(false)
             onReorder(data)
         },
         [onReorder],
@@ -99,7 +93,6 @@ const BookmarkedDAppsList = ({
                 horizontal
                 keyExtractor={(_item, index) => _item?.href ?? index.toString()}
                 renderItem={renderItem}
-                onDragBegin={onDragBegin}
                 onDragEnd={onDragEnd}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
