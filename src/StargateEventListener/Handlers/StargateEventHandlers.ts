@@ -5,23 +5,23 @@ import { ERROR_EVENTS } from "~Constants"
 import { getReceiptProcessor, InspectableOutput, ReceiptOutput } from "~Services/AbiService"
 import { StargateConfiguration } from "~Hooks/useStargateConfig"
 
-const isNodeDelegatedOutput = (out: ReceiptOutput) => out.name === "NodeDelegated(indexed uint256,indexed address,bool)"
-
-interface NodeDelegatedEventData {
-    nodeId: string
-    delegatee: string
-    isDelegated: boolean
-    blockNumber: number
-    txId: string
-    contractAddress: string
-    owner: string
-}
+const isStargateOutput = (out: ReceiptOutput) =>
+    out.name === "NodeDelegated(indexed uint256,indexed address,bool)" ||
+    out.name === "ClaimGeneratedVTHO(address,address,uint256)" ||
+    out.name === "TokenMinted(indexed address,indexed uint8,indexed bool,uint256,uint256)" ||
+    out.name === "Transfer(indexed address,indexed address,indexed uint256)" ||
+    out.name === "TokenBurned(indexed address,indexed uint8,uint256,uint256)" ||
+    //New contract
+    out.name === "DelegationRewardsClaimed(indexed address,indexed uint256,indexed uint256,uint256,uint32,uint32)" ||
+    out.name === "Unstaked(indexed address,indexed address,indexed uint256)" ||
+    //Old contract
+    out.name === "DelegationRewardsClaimed(indexed uint256,uint256,indexed address,indexed address)"
 
 interface NodeDelegatedEventHandlerProps {
     beat: Beat
     network: Network
     thor: ThorClient
-    refetchStargateData: (targetAddress?: string) => void
+    invalidateStargateData: (addresses: string[]) => void
     managedAddresses: string[]
     selectedAccountAddress?: string
     stargateConfig: StargateConfiguration
@@ -31,9 +31,8 @@ export const handleNodeDelegatedEvent = async ({
     beat,
     network,
     thor,
-    refetchStargateData,
+    invalidateStargateData,
     managedAddresses,
-    selectedAccountAddress,
     stargateConfig,
 }: NodeDelegatedEventHandlerProps) => {
     try {
@@ -71,58 +70,16 @@ export const handleNodeDelegatedEvent = async ({
         // Create a receipt processor for this network. Only Generic manager is needed here
         const receiptProcessor = getReceiptProcessor(network.type, ["Generic"])
 
-        const nodeDelegatedEvents = await parseNodeDelegatedEvents(beat, stargateConfig, thor, receiptProcessor)
+        const stargateEvents = await parseStargateEvents(beat, stargateConfig, thor, receiptProcessor)
 
-        // Filter events where either the owner or delegatee is an address managed in VeWorld
-        const relevantEvents = nodeDelegatedEvents.filter(evt =>
-            managedAddresses.some(
-                addr =>
-                    AddressUtils.compareAddresses(addr, evt.owner) ||
-                    AddressUtils.compareAddresses(addr, evt.delegatee),
-            ),
-        )
-
-        if (relevantEvents.length > 0) {
-            debug(
-                ERROR_EVENTS.STARGATE,
-                `Found ${relevantEvents.length} NodeDelegated events in beat ${beat.number} for managed addresses`,
-            )
-
-            const uniqueAddresses = new Set<string>()
-
-            // Process each event for logging and collect unique addresses
-            for (const eventData of relevantEvents) {
-                debug(ERROR_EVENTS.STARGATE, "Processing NodeDelegated event:", {
-                    nodeId: eventData.nodeId,
-                    delegatee: eventData.delegatee,
-                    isDelegated: eventData.isDelegated,
-                    blockNumber: eventData.blockNumber,
-                    txId: eventData.txId,
-                    owner: eventData.owner,
-                })
-
-                // Add owner address
-                uniqueAddresses.add(eventData.owner.toLowerCase())
-
-                // Add delegatee address if different from owner
-                if (!AddressUtils.compareAddresses(eventData.delegatee, eventData.owner)) {
-                    uniqueAddresses.add(eventData.delegatee.toLowerCase())
-                }
-            }
-
-            // Refetch data once per unique address with a delay to allow blockchain state to propagate
-            // Only refetch for the selected account to avoid unnecessary network calls
-            setTimeout(() => {
-                uniqueAddresses.forEach(address => {
-                    if (!selectedAccountAddress || AddressUtils.compareAddresses(address, selectedAccountAddress)) {
-                        debug(ERROR_EVENTS.STARGATE, "Refetching Stargate data for address:", address)
-                        refetchStargateData(address)
-                    } else {
-                        debug(ERROR_EVENTS.STARGATE, "Skipping refetch for non-selected address:", address)
-                    }
-                })
-            }, 500)
-        }
+        // Get all the unique addresses
+        const addresses = [...new Set(stargateEvents.flatMap(u => [u.address1, u.address2].filter(Boolean)))]
+            //Filter only by the addresses owned by the user
+            .filter(addr => managedAddresses.some(managedAddr => AddressUtils.compareAddresses(addr, managedAddr)))
+        if (addresses.length === 0) return
+        setTimeout(() => {
+            invalidateStargateData(addresses as string[])
+        }, 500)
     } catch (err) {
         error(ERROR_EVENTS.STARGATE, "Error handling NodeDelegated event:", err)
     }
@@ -131,12 +88,12 @@ export const handleNodeDelegatedEvent = async ({
 /**
  * Parse NodeDelegated events from a beat
  */
-const parseNodeDelegatedEvents = async (
+const parseStargateEvents = async (
     beat: Beat,
     config: StargateConfiguration,
     thor: ThorClient,
     receiptProcessor: ReturnType<typeof getReceiptProcessor>,
-): Promise<NodeDelegatedEventData[]> => {
+) => {
     try {
         const expanded = await thor.blocks.getBlockExpanded(beat.id)
 
@@ -145,13 +102,12 @@ const parseNodeDelegatedEvents = async (
             return []
         }
 
-        const events: NodeDelegatedEventData[] = processExpandedTransactionsForEvents(
+        const events = processExpandedTransactionsForEvents(
             expanded.transactions.map(tx => ({ id: tx.id, origin: tx.origin, outputs: tx.outputs })),
             config,
             beat,
             receiptProcessor,
         )
-        debug(ERROR_EVENTS.STARGATE, `Parsed ${events.length} NodeDelegated events from beat ${beat.number}`)
 
         return events
     } catch (err) {
@@ -171,7 +127,7 @@ const processExpandedTransactionsForEvents = (
     config: StargateConfiguration,
     beat: Beat,
     receiptProcessor: ReturnType<typeof getReceiptProcessor>,
-): NodeDelegatedEventData[] => {
+) => {
     // Analyze each transaction once, then flatten all outputs to events.
     const analyzedPerTx: { origin: string; outputs: ReceiptOutput[] }[] = []
 
@@ -185,24 +141,40 @@ const processExpandedTransactionsForEvents = (
         }
     }
 
-    return analyzedPerTx.flatMap(({ origin, outputs }) =>
+    return analyzedPerTx.flatMap(({ outputs }) =>
         outputs
-            .filter(isNodeDelegatedOutput)
+            .filter(isStargateOutput)
             .filter(
                 out =>
                     AddressUtils.compareAddresses(out.address, config.NODE_MANAGEMENT_CONTRACT_ADDRESS) ||
-                    AddressUtils.compareAddresses(out.address, config.STARGATE_CONTRACT_ADDRESS),
+                    AddressUtils.compareAddresses(out.address, config.STARGATE_CONTRACT_ADDRESS) ||
+                    AddressUtils.compareAddresses(out.address, config.STARGATE_NFT_CONTRACT_ADDRESS) ||
+                    AddressUtils.compareAddresses(out.address, config.STARGATE_DELEGATION_CONTRACT_ADDRESS!),
             )
             .map(out => {
-                return {
-                    nodeId: String(out.params.nodeId),
-                    delegatee: out.params.delegatee,
-                    isDelegated: Boolean(out.params.delegated),
-                    blockNumber: beat.number,
-                    txId: "",
-                    contractAddress: config.NODE_MANAGEMENT_CONTRACT_ADDRESS!,
-                    owner: origin,
-                } satisfies NodeDelegatedEventData
+                switch (out.name) {
+                    case "Transfer(indexed address,indexed address,indexed uint256)":
+                        return { address1: out.params.from, address2: out.params.to, tokenId: out.params.tokenId }
+                    case "TokenBurned(indexed address,indexed uint8,uint256,uint256)":
+                        return { address1: out.params.owner, tokenId: out.params.tokenId }
+                    case "TokenMinted(indexed address,indexed uint8,indexed bool,uint256,uint256)":
+                        return { address1: out.params.owner, tokenId: out.params.tokenId }
+                    // eslint-disable-next-line max-len
+                    case "DelegationRewardsClaimed(indexed address,indexed uint256,indexed uint256,uint256,uint32,uint32)":
+                        return { address1: out.params.receiver, tokenId: out.params.tokenId }
+                    case "ClaimGeneratedVTHO(address,address,uint256)":
+                        return { address1: out.params.owner, address2: out.params.receiver }
+                    case "NodeDelegated(indexed uint256,indexed address,bool)":
+                        return { tokenId: out.params.nodeId }
+                    case "Unstaked(indexed address,indexed address,indexed uint256)":
+                        return { address1: out.params.owner, tokenId: out.params.tokenId }
+                    case "DelegationRewardsClaimed(indexed uint256,uint256,indexed address,indexed address)":
+                        return {
+                            address1: out.params.claimer,
+                            address2: out.params.recipient,
+                            tokenId: out.params.tokenId,
+                        }
+                }
             }),
     )
 }

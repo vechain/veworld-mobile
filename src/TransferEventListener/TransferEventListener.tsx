@@ -2,6 +2,7 @@ import React, { useCallback } from "react"
 import { ERROR_EVENTS } from "~Constants"
 import { useFungibleTokenInfo } from "~Hooks"
 import { useStargateConfig } from "~Hooks/useStargateConfig"
+import { useStargateInvalidation } from "~Hooks/useStargateInvalidation"
 import { useThorClient } from "~Hooks/useThorClient"
 import { Activity, Beat } from "~Model"
 import { EventTypeResponse } from "~Networking"
@@ -19,7 +20,6 @@ import {
 } from "~Storage/Redux"
 import { BloomUtils, error } from "~Utils"
 import { handleNodeDelegatedEvent } from "../StargateEventListener/Handlers/StargateEventHandlers"
-import { useFetchingStargate } from "../StargateEventListener/Hooks/useFetchingStargate"
 import { handleNFTTransfers, handleTokenTransfers, handleVETTransfers } from "./Handlers"
 import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
 import { useInformUser, useStateReconciliation } from "./Hooks"
@@ -42,7 +42,7 @@ export const TransferEventListener: React.FC = () => {
 
     const { forTokens, forNFTs } = useInformUser({ network })
 
-    const { refetchStargateData } = useFetchingStargate()
+    const { invalidate: invalidateStargateData } = useStargateInvalidation()
 
     const blackListedCollections = useAppSelector(selectBlackListedCollections)
 
@@ -84,7 +84,7 @@ export const TransferEventListener: React.FC = () => {
                     beat,
                     network,
                     thor,
-                    refetchStargateData,
+                    invalidateStargateData,
                     managedAddresses: visibleAccounts.map(acc => acc.address),
                     selectedAccountAddress: selectedAccount.address,
                     stargateConfig,
@@ -151,7 +151,7 @@ export const TransferEventListener: React.FC = () => {
             dispatch,
             network,
             thor,
-            refetchStargateData,
+            invalidateStargateData,
             selectedAccount,
             stargateConfig,
             blackListedCollections,
