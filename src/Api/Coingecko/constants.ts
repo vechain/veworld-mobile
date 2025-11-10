@@ -2,7 +2,7 @@ import { B3TR, VET, VOT3, VTHO } from "~Constants/Constants"
 
 export type MarketChartTimeFrame = {
     label: string
-    value: number
+    value: number | "max"
     interval?: string
 }
 
@@ -12,6 +12,8 @@ export const marketChartTimeframes: MarketChartTimeFrame[] = [
     { label: "1M", value: 30, interval: "daily" },
     { label: "3M", value: 90, interval: "daily" },
     { label: "6M", value: 180, interval: "daily" },
+    { label: "1Y", value: 365, interval: "daily" },
+    { label: "All", value: "max", interval: "daily" },
 ]
 
 // Vechain tokens
