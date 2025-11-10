@@ -324,6 +324,10 @@ const LineChart = ({
             .lineTo(...lineToZero)
             .close()
     }, [pathAnimation.value, data, width, height, lineTo, lineToZero, prevLineTo.value, prevLineToZero.value])
+
+    const loadingOpacity = useDerivedValue(() => {
+        return isLoading ? withTiming(0.5, { duration: 100 }) : withTiming(1, { duration: 100 })
+    }, [isLoading])
     //#endregion
 
     /**
@@ -399,86 +403,90 @@ const LineChart = ({
     return (
         <GestureDetector gesture={panGesture}>
             <Canvas style={[canvasStyle, { width, height }]}>
-                {showGradientBackground && (
-                    <Group clip={backgroundClipPath}>
-                        <Rect x={0} y={0} width={width} height={height}>
-                            <LinearGradient
-                                positions={gradientBackgroundPositions}
-                                colors={gradientBackgroundColors || theme.colors.chartGradientBackground}
-                                start={backgroudAnimation}
-                                end={Skia.Point(maxX, maxY)}
+                <Group opacity={loadingOpacity}>
+                    {showGradientBackground && (
+                        <Group clip={backgroundClipPath}>
+                            <Rect x={0} y={0} width={width} height={height}>
+                                <LinearGradient
+                                    positions={gradientBackgroundPositions}
+                                    colors={gradientBackgroundColors || theme.colors.chartGradientBackground}
+                                    start={backgroudAnimation}
+                                    end={Skia.Point(maxX, maxY)}
+                                />
+                            </Rect>
+                        </Group>
+                    )}
+
+                    <Path
+                        style={"stroke"}
+                        path={pathAnimation}
+                        color={strokeColor || (theme.isDark ? COLORS.PURPLE_LABEL : COLORS.DARK_PURPLE_DISABLED)}
+                        strokeWidth={strokeWidth}
+                        strokeJoin={"round"}
+                        strokeCap={"round"}
+                        start={0}
+                        end={progress}
+                    />
+
+                    {showHighlight && (
+                        <Group opacity={crossHairOpacity} clip={crossHairClipPath}>
+                            {/* Glow layer */}
+                            <Path
+                                style={"stroke"}
+                                path={pathAnimation}
+                                color={highlightColor || "white"}
+                                strokeWidth={strokeWidth * 2}
+                                strokeJoin={"round"}
+                                strokeCap={"round"}
+                                opacity={0.35}>
+                                <Blur blur={2.5} />
+                            </Path>
+
+                            {/* Main white line */}
+                            <Path
+                                style={"stroke"}
+                                path={pathAnimation}
+                                color={highlightColor || "white"}
+                                strokeWidth={strokeWidth}
+                                strokeJoin={"round"}
+                                strokeCap={"round"}
+                                opacity={1}
                             />
-                        </Rect>
-                    </Group>
-                )}
+                        </Group>
+                    )}
 
-                <Path
-                    style={"stroke"}
-                    path={pathAnimation}
-                    color={strokeColor || (theme.isDark ? COLORS.PURPLE_LABEL : COLORS.DARK_PURPLE_DISABLED)}
-                    strokeWidth={strokeWidth}
-                    strokeJoin={"round"}
-                    strokeCap={"round"}
-                    start={0}
-                    end={progress}
-                />
-
-                {showHighlight && (
-                    <Group opacity={crossHairOpacity} clip={crossHairClipPath}>
-                        {/* Glow layer */}
-                        <Path
-                            style={"stroke"}
-                            path={pathAnimation}
-                            color={highlightColor || "white"}
-                            strokeWidth={strokeWidth * 2}
-                            strokeJoin={"round"}
-                            strokeCap={"round"}
-                            opacity={0.35}>
-                            <Blur blur={2.5} />
-                        </Path>
-
-                        {/* Main white line */}
-                        <Path
-                            style={"stroke"}
-                            path={pathAnimation}
-                            color={highlightColor || "white"}
-                            strokeWidth={strokeWidth}
-                            strokeJoin={"round"}
-                            strokeCap={"round"}
-                            opacity={1}
-                        />
-                    </Group>
-                )}
-
-                {showCursor && (
-                    <Group opacity={cursorLineOpacity}>
-                        <Rect
-                            x={translateX}
-                            y={0}
-                            width={1}
-                            height={height}
-                            color={cursorColor || (theme.isDark ? COLORS.PURPLE_LABEL : COLORS.DARK_PURPLE_DISABLED)}
-                            opacity={cursorLineOpacity}
-                        />
-                        {showChip && (
-                            <Group transform={chipPosition}>
-                                <RoundedRect
-                                    width={chipWidth}
-                                    height={chipHeight}
-                                    r={99}
-                                    color={chipBackgroundColor || COLORS.PURPLE_DISABLED}
-                                />
-                                <Text
-                                    text={chipTextValue}
-                                    font={skiaFont}
-                                    x={CHIP_PADDING_X}
-                                    y={chipTextY}
-                                    color={chipTextColor || "white"}
-                                />
-                            </Group>
-                        )}
-                    </Group>
-                )}
+                    {showCursor && (
+                        <Group opacity={cursorLineOpacity}>
+                            <Rect
+                                x={translateX}
+                                y={0}
+                                width={1}
+                                height={height}
+                                color={
+                                    cursorColor || (theme.isDark ? COLORS.PURPLE_LABEL : COLORS.DARK_PURPLE_DISABLED)
+                                }
+                                opacity={cursorLineOpacity}
+                            />
+                            {showChip && (
+                                <Group transform={chipPosition}>
+                                    <RoundedRect
+                                        width={chipWidth}
+                                        height={chipHeight}
+                                        r={99}
+                                        color={chipBackgroundColor || COLORS.PURPLE_DISABLED}
+                                    />
+                                    <Text
+                                        text={chipTextValue}
+                                        font={skiaFont}
+                                        x={CHIP_PADDING_X}
+                                        y={chipTextY}
+                                        color={chipTextColor || "white"}
+                                    />
+                                </Group>
+                            )}
+                        </Group>
+                    )}
+                </Group>
             </Canvas>
         </GestureDetector>
     )
