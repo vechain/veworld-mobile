@@ -25,7 +25,6 @@ import {
     withTiming,
 } from "react-native-reanimated"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
-import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useTheme } from "~Hooks/useTheme"
 import HapticsService from "~Services/HapticsService"
 import { DateUtils } from "~Utils"
@@ -33,6 +32,7 @@ import { useLineChart } from "./hooks/useLineChart"
 import { DataPoint, LineChartContextType, LineChartData, LineChartProps } from "./types"
 import { makeGraph } from "./utils"
 import { DEFAULT_TIMEZONE } from "~Utils/DateUtils/DateUtils"
+import { useI18nContext } from "~i18n"
 
 //#region Constants
 
@@ -99,7 +99,7 @@ const LineChart = ({
     canvasStyle,
 }: LineChartProps) => {
     const { data, activePointIndex, isLoading } = useLineChart()
-    const { formatLocale } = useFormatFiat()
+    const { locale } = useI18nContext()
     const theme = useTheme()
     const skiaFont = useFont(require("../../../Assets/Fonts/Inter/Inter-SemiBold.ttf"), fontSize)
 
@@ -173,12 +173,12 @@ const LineChart = ({
 
     const formatChipTextWorklet = useCallback(
         (timestamp: number) => {
-            chipTextValue.value = DateUtils.formatDateTime(timestamp, formatLocale, DEFAULT_TIMEZONE, {
+            chipTextValue.value = DateUtils.formatDateTime(timestamp, locale, DEFAULT_TIMEZONE, {
                 hideTime: false,
                 hideDay: false,
             })
         },
-        [chipTextValue, formatLocale],
+        [chipTextValue, locale],
     )
 
     // Calculate the chip text value in a worklet function
