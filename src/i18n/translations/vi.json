@@ -1241,7 +1241,7 @@
   "TOKEN_CUSTOM_SUBTITLE": "Thêm một token tùy chỉnh vào ví của bạn",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Hoạt động",
   "TOKEN_DETAIL_BALANCE_TAB": "Số dư",
-  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Những token này được stake trên vedelegate.vet và chỉ có thể quản lý ở đó.",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Các token này được staking trên vedelegate.vet và chỉ có thể quản lý ở đó.",
   "TOKEN_ID": "ID mã thông báo",
   "TOKEN_RECEIVE": "Nhận token",
   "TOKEN_RECEIVE_SUBTITLE": "Sử dụng địa chỉ ví của bạn để nhận",
