@@ -12,17 +12,15 @@ import * as Haptics from "expo-haptics"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { Routes } from "~Navigation"
 import { SocialLinksButtons } from "./SocialLinksButtons"
+import { TokenSocialLinks } from "~Model"
 
 const DESCRIPTION_LINE_THRESHOLD = 3
 
 type AssetStatsProps = {
     tokenSymbol: string
     tokenDescription?: string
-    socialLinks?: {
-        website?: string
-        twitter?: string
-        telegram?: string
-    }
+    socialLinks?: TokenSocialLinks
+    isWrappedToken?: boolean
 }
 
 type StatItem = {
@@ -52,7 +50,7 @@ const StatRow = React.memo<StatItem & { labelColor: string; valueColor: string }
 
 StatRow.displayName = "StatRow"
 
-export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks }: AssetStatsProps) => {
+export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks, isWrappedToken = false }: AssetStatsProps) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const [isAccordionOpen, setIsAccordionOpen] = useState(false)
@@ -68,8 +66,11 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks }: Asset
 
     const currency = useAppSelector(selectCurrency)
 
+    // Only fetch CoinGecko token info for non-wrapped tokens
+    const shouldFetchTokenInfo = !isWrappedToken && !!getCoinGeckoIdBySymbol[tokenSymbol]
+
     const { data: tokenInfo } = useTokenInfo({
-        id: getCoinGeckoIdBySymbol[tokenSymbol],
+        id: shouldFetchTokenInfo ? getCoinGeckoIdBySymbol[tokenSymbol] : undefined,
     })
 
     const marketInfo: MarketInfo | undefined = useMemo(() => {
@@ -142,23 +143,27 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks }: Asset
             mx={16}
             my={16}
             borderRadius={16}>
-            <BaseView flexDirection="row" alignItems="center" gap={12} justifyContent="flex-start" mb={12}>
-                <BaseIcon name="icon-line-chart" size={20} color={theme.colors.actionBanner.title} />
-                <BaseText typographyFont="bodySemiBold" color={theme.colors.actionBanner.title}>
-                    {LL.COMMON_TOKEN_STATS()}
-                </BaseText>
-            </BaseView>
+            {!isWrappedToken && (
+                <>
+                    <BaseView flexDirection="row" alignItems="center" gap={12} justifyContent="flex-start" mb={12}>
+                        <BaseIcon name="icon-line-chart" size={20} color={theme.colors.actionBanner.title} />
+                        <BaseText typographyFont="bodySemiBold" color={theme.colors.actionBanner.title}>
+                            {LL.COMMON_TOKEN_STATS()}
+                        </BaseText>
+                    </BaseView>
 
-            {stats.map(stat => (
-                <StatRow
-                    key={stat.testID}
-                    {...stat}
-                    labelColor={theme.colors.textLightish}
-                    valueColor={theme.colors.x2eAppOpenDetails.stats.value}
-                />
-            ))}
+                    {stats.map(stat => (
+                        <StatRow
+                            key={stat.testID}
+                            {...stat}
+                            labelColor={theme.colors.textLightish}
+                            valueColor={theme.colors.x2eAppOpenDetails.stats.value}
+                        />
+                    ))}
 
-            <BaseSpacer height={1} background={theme.isDark ? COLORS.PURPLE : COLORS.GREY_100} my={16} />
+                    <BaseSpacer height={1} background={theme.isDark ? COLORS.PURPLE : COLORS.GREY_100} my={16} />
+                </>
+            )}
 
             {tokenDescription && (
                 <>
