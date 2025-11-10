@@ -320,8 +320,8 @@ export const getStargateVTHOClaimedByAddressAndTokenId = (
     tokenId: string,
 ) => {
     return networkType === NETWORK_TYPE.MAIN
-        ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/total-vtho-claimed/${address}?tokenId=${tokenId}`
-        : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/stargate/total-vtho-claimed/${address}?tokenId=${tokenId}`
+        ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/total-vtho-claimed/${address}/${tokenId}`
+        : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/stargate/total-vtho-claimed/${address}/${tokenId}`
 }
 
 /**

@@ -12,7 +12,7 @@ import {
     STARGATE_DAPP_URL_NEW_STAKING_BANNER,
 } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { useUserNodes, useUserStargateNfts } from "~Hooks/Staking"
+import { useUserNodes } from "~Hooks/Staking"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -33,11 +33,7 @@ export const StargateCarousel = () => {
     const address = useAppSelector(selectSelectedAccountAddress)
 
     const { data, isLoading: isLoadingNodes } = useUserNodes(address)
-    const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts({
-        nodes: data,
-        isLoadingNodes,
-        address,
-    })
+
     const nav = useNavigation()
 
     const { navigateWithTab } = useBrowserTab()
@@ -69,23 +65,18 @@ export const StargateCarousel = () => {
             : data.filter(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
     }, [data, filter, address])
 
-    const filteredNfts = useMemo(() => {
-        const nodeIds = new Set(filteredNodes.map(n => n.nodeId))
-        return ownedStargateNfts.filter(nft => nodeIds.has(nft.tokenId))
-    }, [ownedStargateNfts, filteredNodes])
-
     const cards = useMemo(() => {
-        return filteredNfts
+        return filteredNodes
             .map(
                 (nft, idx) =>
                     ({
                         content: <StargateCarouselItem item={nft} />,
                         closable: false,
                         isExternalLink: false,
-                        name: nft.tokenId,
+                        name: nft.nodeId,
                         style: idx === 0 ? styles.biggerCarouselItem : styles.carouselItem,
-                        href: `${STARGATE_DAPP_URL}/nft/${nft.tokenId}`,
-                        testID: `STARGATE_CAROUSEL_ITEM_${nft.tokenId}`,
+                        href: `${STARGATE_DAPP_URL}/nft/${nft.nodeId}`,
+                        testID: `STARGATE_CAROUSEL_ITEM_${nft.nodeId}`,
                     } as CarouselSlideItem),
             )
             .concat([
@@ -99,7 +90,7 @@ export const StargateCarousel = () => {
                     testID: "STARGATE_CAROUSEL_NEW_STAKE",
                 } satisfies CarouselSlideItem,
             ])
-    }, [filteredNfts, styles.biggerCarouselItem, styles.carouselItem])
+    }, [filteredNodes, styles.biggerCarouselItem, styles.carouselItem])
 
     const onNavigateToStargate = useCallback(() => {
         navigateWithTab({
@@ -125,7 +116,7 @@ export const StargateCarousel = () => {
         [theme.isDark],
     )
 
-    if (!isLoadingNfts && !isLoadingNodes && data.length === 0) return <StargateNoStakingCard />
+    if (!isLoadingNodes && data.length === 0) return <StargateNoStakingCard />
 
     return (
         <BaseView flexDirection="column" gap={12} w={100}>
@@ -144,8 +135,8 @@ export const StargateCarousel = () => {
                     </BaseView>
                 )}
                 <StargateLockedValue
-                    isLoading={isLoadingNodes || isLoadingNfts}
-                    nfts={filteredNfts}
+                    isLoading={isLoadingNodes}
+                    nfts={filteredNodes}
                     rootStyle={styles.section}
                     isNodeOwner={filter === StakingFilter.OWN && hasOwnedNodes}
                 />

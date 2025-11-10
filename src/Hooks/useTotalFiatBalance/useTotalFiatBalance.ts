@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { VET, VTHO } from "~Constants"
-import { useUserNodes, useUserStargateNfts } from "~Hooks/Staking"
+import { useUserNodes } from "~Hooks/Staking"
 import { useCombineFiatBalances } from "~Hooks/useCombineFiatBalances"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
@@ -41,17 +41,11 @@ export const useTotalFiatBalance = ({ address, enabled = true, useCompactNotatio
 
     const { data, isLoading: loadingNodes } = useUserNodes(address, enabled)
 
-    const { ownedStargateNfts: stargateNfts, isLoading: loadingStargateNfts } = useUserStargateNfts({
-        nodes: data,
-        isLoadingNodes: loadingNodes,
-        address,
-    })
-
     const totalStargateVet = useMemo(() => {
-        return stargateNfts.reduce((acc, nft) => {
+        return data.reduce((acc, nft) => {
             return acc.plus(nft.vetAmountStaked ?? "0")
         }, BigNutils("0"))
-    }, [stargateNfts])
+    }, [data])
 
     const stargateFiatBalance = useMemo(() => {
         // We only include staked VET in fiat balance if user is the owner, not a manager - Stargate staking
@@ -64,13 +58,13 @@ export const useTotalFiatBalance = ({ address, enabled = true, useCompactNotatio
 
     const isLoading = useMemo(
         () =>
-            loadingStargateNfts ||
+            loadingNodes ||
             tokenWithInfoVET.tokenInfoLoading ||
             tokenWithInfoVTHO.tokenInfoLoading ||
             tokenWithInfoB3TR.tokenInfoLoading ||
             loadingVot3Balance,
         [
-            loadingStargateNfts,
+            loadingNodes,
             loadingVot3Balance,
             tokenWithInfoB3TR.tokenInfoLoading,
             tokenWithInfoVET.tokenInfoLoading,

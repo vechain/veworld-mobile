@@ -1,11 +1,10 @@
-export interface RawNodeInfo {
+export interface NodeInfo {
     nodeId: string
     nodeLevel: number
     xNodeOwner: string
-}
-
-export interface NodeInfo extends RawNodeInfo {
     isLegacyNode: boolean
+    vetAmountStaked: string
+    accumulatedRewards: string
 }
 
 export interface NftData {

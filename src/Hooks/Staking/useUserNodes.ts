@@ -3,6 +3,7 @@ import React, { useMemo } from "react"
 import { NETWORK_TYPE, NodeInfo } from "~Model"
 import { fetchStargateTokens } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { BigNutils } from "~Utils"
 import { getTokenLevelId } from "~Utils/StargateUtils"
 
 export const getUserNodesQueryKey = (network: NETWORK_TYPE, address?: string) => ["userStargateNodes", network, address]
@@ -17,6 +18,8 @@ const getUserNodes = async (networkType: NETWORK_TYPE, address: string | undefin
             nodeId: u.tokenId,
             nodeLevel: getTokenLevelId(u.level),
             xNodeOwner: u.owner,
+            vetAmountStaked: u.vetStaked,
+            accumulatedRewards: BigNutils(u.totalBootstrapRewardsClaimed).plus(u.totalRewardsClaimed).toString,
         }))
     } catch (error) {
         throw new Error(`Error fetching user nodes ${error}`)

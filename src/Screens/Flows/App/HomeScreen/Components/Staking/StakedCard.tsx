@@ -6,17 +6,16 @@ import { StargateLockedValue } from "~Components/Reusable/Staking"
 import { VET } from "~Constants"
 import { ColorThemeType } from "~Constants/Theme"
 import { useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { NodeInfo } from "~Model/Staking"
 import { Routes } from "~Navigation"
-import { NftData, NodeInfo } from "~Model/Staking"
 
 interface StakedCardProps {
     nodes: NodeInfo[]
-    nfts: NftData[]
     isOwner: boolean
     isLoading: boolean
 }
 
-export const StakedCard = memo<StakedCardProps>(({ nodes, nfts, isOwner, isLoading }) => {
+export const StakedCard = memo<StakedCardProps>(({ nodes, isOwner, isLoading }) => {
     const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
     const vetWithCompleteInfo = useTokenWithCompleteInfo(VET)
@@ -28,7 +27,7 @@ export const StakedCard = memo<StakedCardProps>(({ nodes, nfts, isOwner, isLoadi
             style={styles.container}
             testID="staked-card-container"
             onPress={() => nav.navigate(Routes.TOKEN_DETAILS, { token: vetWithCompleteInfo })}>
-            <StargateLockedValue isLoading={isLoading} nfts={nfts} isNodeOwner={isOwner} />
+            <StargateLockedValue isLoading={isLoading} nfts={nodes} isNodeOwner={isOwner} />
         </BaseTouchable>
     )
 })
