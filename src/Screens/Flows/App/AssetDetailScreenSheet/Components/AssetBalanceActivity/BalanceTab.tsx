@@ -55,7 +55,6 @@ export const BalanceTab = ({ token: _token }: Props) => {
     const { fiatBalance: b3trFiatBalance } = useTokenCardBalance({ token: b3trToken })
     const { fiatBalance: vot3FiatBalance } = useTokenCardBalance({ token: vot3Token })
     const { formatLocale } = useFormatFiat()
-
     return (
         <>
             <ValueContainer>
