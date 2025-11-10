@@ -5085,6 +5085,12 @@ type RootTranslation = {
 	 */
 	TOKEN_DETAIL_BALANCE_TAB: string
 	/**
+	 * VET is the native cryptocurrency of the VeChainThor public blockchain. 
+	 * It is used to transfer value across the VeChainThor network and serves as a store of value or smart payment currency. 
+	 * VET generates VTHO (VeThor) passively over time, which is used to power transactions and execute smart contracts on the network.
+	 */
+	TOKEN_DESCRIPTION_VET: string
+	/**
 	 * T​o​k​e​n​ ​I​D
 	 */
 	TOKEN_ID: string
@@ -10465,6 +10471,12 @@ Here's what it's all about:
 	 * Balance
 	 */
 	TOKEN_DETAIL_BALANCE_TAB: () => LocalizedString
+	/**
+	 * VET is the native cryptocurrency of the VeChainThor public blockchain. 
+	 * It is used to transfer value across the VeChainThor network and serves as a store of value or smart payment currency. 
+	 * VET generates VTHO (VeThor) passively over time, which is used to power transactions and execute smart contracts on the network.
+	 */
+	TOKEN_DESCRIPTION_VET: () => LocalizedString
 	/**
 	 * Token ID
 	 */
