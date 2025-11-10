@@ -125,7 +125,9 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                         />
                     </GestureDetector>
                 )}
-                <NestableScrollContainer showsVerticalScrollIndicator={false}>{children}</NestableScrollContainer>
+                <NestableScrollContainer bounces={false} showsVerticalScrollIndicator={false}>
+                    {children}
+                </NestableScrollContainer>
             </Animated.View>
         </BaseSafeArea>
     )
