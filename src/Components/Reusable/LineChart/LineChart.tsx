@@ -108,6 +108,11 @@ const LineChart = ({
         [data, width, height, strokeWidth],
     )
 
+    const previousMinY = useSharedValue(0)
+    const previousMaxX = useSharedValue(0)
+    const prevLineTo = useSharedValue<[number, number]>([0, 0])
+    const prevLineToZero = useSharedValue<[number, number]>([0, 0])
+
     const currentGraph = useSharedValue<SkPath | null>(path)
     const previousGraph = useSharedValue<SkPath | null>(null)
 
@@ -134,7 +139,21 @@ const LineChart = ({
         if (!previousData) return
         const graph = makeGraph(previousData, width, height, strokeWidth)
         previousGraph.value = graph.path
-    }, [previousData, width, height, strokeWidth, previousGraph])
+        previousMaxX.value = graph.maxX
+        previousMinY.value = graph.minY
+        prevLineTo.value = [graph.maxX, graph.calcYPos(0)]
+        prevLineToZero.value = [graph.calcXPos(0), graph.calcYPos(0)]
+    }, [
+        previousData,
+        width,
+        height,
+        strokeWidth,
+        previousGraph,
+        previousMaxX,
+        previousMinY,
+        prevLineTo,
+        prevLineToZero,
+    ])
 
     // Initial chartprogress animation
     const progress = useSharedValue(0)
@@ -256,18 +275,21 @@ const LineChart = ({
 
     //#region Animations
     const pathAnimation = useDerivedValue(() => {
-        const start = previousGraph.value ?? Skia.Path.Make()!
+        const start = previousGraph.value ?? currentGraph.value!
         const end = currentGraph.value!
 
         makeMorph(start.toSVGString(), end.toSVGString(), morphProgress.value)
 
-        if (!interpolatedPath.value) return Skia.Path.Make()!
+        // if (!interpolatedPath.value) return Skia.Path.Make()!
         return Skia.Path.MakeFromSVGString(interpolatedPath.value)!
     }, [previousGraph.value, currentGraph.value, morphProgress.value, makeMorph, interpolatedPath.value])
 
     const backgroudAnimation = useDerivedValue(() => {
+        //If loading, animate to the previous max X value
+        if (isLoading && previousGraph.value) return Skia.Point(previousMaxX.value, previousMinY.value)
+
         return Skia.Point(maxX, interpolate(backgroundProgress.value, [0, 1], [maxY + 1, minY], Extrapolation.CLAMP))
-    }, [backgroundProgress.value, minY, maxY, maxX])
+    }, [backgroundProgress.value, minY, maxY, maxX, previousMaxX.value, previousMinY.value])
 
     const crossHairClipPath = useDerivedValue(() => {
         const rect = Skia.XYWHRect(crossHairStart.value, 0, crossHairEnd.value - crossHairStart.value, height)
@@ -287,11 +309,12 @@ const LineChart = ({
 
     const backgroundClipPath = useDerivedValue(() => {
         if (!data) return Skia.RRectXY(Skia.XYWHRect(0, 0, width, height), 16, 16)
+        //If loading, render the previous graph and interpolate to the current graph when loaded
         if (previousGraph.value && isLoading)
             return previousGraph.value
                 .copy()
-                .lineTo(...lineTo)
-                .lineTo(...lineToZero)
+                .lineTo(...prevLineTo.value)
+                .lineTo(...prevLineToZero.value)
                 .close()
 
         return pathAnimation.value
@@ -299,7 +322,7 @@ const LineChart = ({
             .lineTo(...lineTo)
             .lineTo(...lineToZero)
             .close()
-    }, [pathAnimation.value, data, width, height, lineTo, lineToZero])
+    }, [pathAnimation.value, data, width, height, lineTo, lineToZero, prevLineTo.value, prevLineToZero.value])
     //#endregion
 
     /**
