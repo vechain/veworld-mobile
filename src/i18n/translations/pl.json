@@ -1239,6 +1239,7 @@
   "TOKEN_CONVERSION": "Konwersja tokenów",
   "TOKEN_CUSTOM": "Token niestandardowy",
   "TOKEN_CUSTOM_SUBTITLE": "Dodaj niestandardowy token do swojego portfela",
+  "TOKEN_DESCRIPTION_VET": "VET jest natywnym tokenem blockchainu VeChainThor, z ustaloną całkowitą podażą 86,7 miliarda. Jest to zasób do transferu wartości i stakingu w sieci, stanowiący podstawę działalności gospodarczej w łańcuchu bloków i bezpieczeństwa sieci. VET może być używany do stakingu na StarGate - natywnej platformie stakingowej VeChain - umożliwiając użytkownikom zarabianie VeThor (VTHO) — tokena energetycznego zasilającego transakcje w łańcuchu bloków — a także uczestnictwo w decyzjach dotyczących zarządzania, które kształtują przyszłość blockchainu. Dzięki tej podwójnej roli, VET zakotwicza zarówno wartość, jak i użyteczność ekosystemu VeChain.",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Aktywność",
   "TOKEN_DETAIL_BALANCE_TAB": "Saldo",
   "TOKEN_ID": "ID tokena",

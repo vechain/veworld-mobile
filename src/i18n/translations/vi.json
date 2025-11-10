@@ -1239,6 +1239,7 @@
   "TOKEN_CONVERSION": "Chuyển đổi mã thông báo",
   "TOKEN_CUSTOM": "Token tùy chỉnh",
   "TOKEN_CUSTOM_SUBTITLE": "Thêm một token tùy chỉnh vào ví của bạn",
+  "TOKEN_DESCRIPTION_VET": "VET là token gốc của blockchain VeChainThor, với tổng cung cố định là 86,7 tỷ. Nó là tài sản chuyển giá trị và đặt cọc của mạng, làm nền tảng cho hoạt động kinh tế trên chuỗi và bảo mật mạng lưới. VET có thể được sử dụng để đặt cọc trên StarGate - nền tảng đặt cọc gốc của VeChain - cho phép người dùng kiếm VeThor (VTHO) — token năng lượng cung cấp cho các giao dịch trên chuỗi — đồng thời cho phép tham gia vào các quyết định quản lý định hình tương lai của blockchain. Thông qua vai trò kép này, VET gắn kết cả giá trị và tiện ích của hệ sinh thái VeChain.",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Hoạt động",
   "TOKEN_DETAIL_BALANCE_TAB": "Số dư",
   "TOKEN_ID": "ID mã thông báo",

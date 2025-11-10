@@ -1239,6 +1239,7 @@
   "TOKEN_CONVERSION": "Token Dönüşümü",
   "TOKEN_CUSTOM": "Özel token",
   "TOKEN_CUSTOM_SUBTITLE": "Cüzdanınıza özel bir token ekleyin",
+  "TOKEN_DESCRIPTION_VET": "VET, sabit toplam arzı 86.7 milyar olan VeChainThor blokzincirinin yerel tokenidir. Ağın değer transferi ve stake varlığı olarak zincir üstü ekonomik faaliyetleri ve ağ güvenliğini destekler. VET, kullanıcıların, zincir üstü işlemleri güçlendiren enerji tokeni VeThor (VTHO) kazanmalarını sağlayan VeChain’in yerel staking platformu StarGate üzerinde staking yapmalarına imkân tanır ve ayrıca blokzincirin geleceğini şekillendiren yönetim kararlarına katılımı sağlar. Bu çift rol aracılığıyla VET, hem VeChain ekosisteminin değerini hem de faydasını sabitler.",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Aktivite",
   "TOKEN_DETAIL_BALANCE_TAB": "Bakiye",
   "TOKEN_ID": "Token Kimliği",

@@ -1239,6 +1239,7 @@
   "TOKEN_CONVERSION": "トークン変換",
   "TOKEN_CUSTOM": "カスタムトークン",
   "TOKEN_CUSTOM_SUBTITLE": "カスタムトークンをウォレットに追加",
+  "TOKEN_DESCRIPTION_VET": "VETは、VeChainThorブロックチェーンのネイティブトークンであり、総供給量は867億枚に固定されています。これはネットワークの価値転送およびステーキング資産であり、オンチェーンの経済活動とネットワークセキュリティを支えています。VETはVeChainのネイティブステーキングプラットフォームであるStarGateでのステーキングに使用でき、ユーザーはVeThor（VTHO）— オンチェーントランザクションを動かすエネルギートークン — を稼ぐことができると同時に、ブロックチェーンの未来を形作るガバナンス決定への参加を可能にします。この二重役割を通じて、VETはVeChainエコシステムの価値と実用性の両方を支えます。",
   "TOKEN_DETAIL_ACTIVITY_TAB": "アクティビティ",
   "TOKEN_DETAIL_BALANCE_TAB": "バランス",
   "TOKEN_ID": "トークンID",

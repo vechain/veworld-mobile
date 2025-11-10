@@ -1239,6 +1239,7 @@
   "TOKEN_CONVERSION": "代幣轉換",
   "TOKEN_CUSTOM": "自定義代幣",
   "TOKEN_CUSTOM_SUBTITLE": "將自定義代幣添加到您的錢包",
+  "TOKEN_DESCRIPTION_VET": "VET是VeChainThor區塊鏈的原生代幣，總供應量固定為867億。它是網路的價值轉移和質押資產，支持鏈上經濟活動和網路安全。VET可以用於VeChain原生質押平台StarGate的質押，讓用戶能夠賺取VeThor (VTHO)——支持鏈上交易的能源代幣——同時也能參與決定區塊鏈未來的治理決策。通過這一雙重角色，VET錨定了VeChain生態系統的價值和效用。",
   "TOKEN_DETAIL_ACTIVITY_TAB": "活動",
   "TOKEN_DETAIL_BALANCE_TAB": "餘額",
   "TOKEN_ID": "代幣 ID",
