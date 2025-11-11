@@ -1241,7 +1241,7 @@
   "TOKEN_CUSTOM_SUBTITLE": "Добавьте пользовательский токен в ваш кошелек",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Активность",
   "TOKEN_DETAIL_BALANCE_TAB": "Баланс",
-  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Эти токены находятся в стекинге на vedelegate.vet и могут управляться только там.",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Эти токены размещены на vedelegate.vet и могут управляться только там.",
   "TOKEN_ID": "ID токена",
   "TOKEN_RECEIVE": "Получить токен",
   "TOKEN_RECEIVE_SUBTITLE": "Используйте адрес своего кошелька для получения",

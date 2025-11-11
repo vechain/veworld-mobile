@@ -1241,7 +1241,7 @@
   "TOKEN_CUSTOM_SUBTITLE": "Ajoutez un jeton personnalisé à votre portefeuille",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Activité",
   "TOKEN_DETAIL_BALANCE_TAB": "Solde",
-  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Ces jetons sont jalonnés sur vedelegate.vet et ne peuvent être gérés que là-bas.",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Ces tokens sont jalonnés sur vedelegate.vet et ne peuvent être gérés qu'à cet endroit.",
   "TOKEN_ID": "ID du jeton",
   "TOKEN_RECEIVE": "Recevoir un jeton",
   "TOKEN_RECEIVE_SUBTITLE": "Utilisez l'adresse de votre portefeuille pour recevoir",
