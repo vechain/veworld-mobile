@@ -8,7 +8,7 @@ export type MarketChartTimeFrame = {
 
 export const marketChartTimeframes: MarketChartTimeFrame[] = [
     { label: "1D", value: 1, interval: "hourly" },
-    { label: "1W", value: 7, interval: "hourly" },
+    { label: "1W", value: 7, interval: "daily" },
     { label: "1M", value: 30, interval: "daily" },
     { label: "3M", value: 90, interval: "daily" },
     { label: "6M", value: 180, interval: "daily" },
