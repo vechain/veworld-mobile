@@ -68,7 +68,7 @@ export const getMarketChartQueryKey = ({
 }: {
     id?: string
     vs_currency: string
-    days: number
+    days: number | "max"
 }) => ["MARKET_CHART", id, vs_currency, days]
 
 /**
@@ -88,7 +88,7 @@ export const useMarketChart = ({
 }: {
     id?: string
     vs_currency: string
-    days: number
+    days: number | "max"
     interval?: string
     placeholderData?: MarketChartResponse
 }) => {
@@ -118,7 +118,7 @@ export const useSmartMarketChart = ({
 }: {
     id?: string
     vs_currency: string
-    days: number
+    days: number | "max"
     placeholderData?: MarketChartResponse
 }) => {
     const highestResolutionTimeframeDays = max(marketChartTimeframes.map(timeframe => timeframe.value)) ?? 180
@@ -130,14 +130,17 @@ export const useSmartMarketChart = ({
 
     return useQuery({
         queryKey: getMarketChartQueryKey({ id, vs_currency, days }),
-        queryFn: () =>
-            days > 1
+        queryFn: () => {
+            if (days === "max") return getMarketChart({ coinGeckoId: id, vs_currency, days })
+            return Number(days) > 1
                 ? getSmartMarketChart({ highestResolutionMarketChartData, days })
-                : getMarketChart({ coinGeckoId: id, vs_currency, days }),
+                : getMarketChart({ coinGeckoId: id, vs_currency, days })
+        },
         enabled: !!highestResolutionMarketChartData,
         placeholderData,
         staleTime: getQueryCacheTime(true),
         refetchInterval: getRefetchIntevalTime(),
+        gcTime: 1000 * 60 * 60 * 24, // 24 hours
     })
 }
 

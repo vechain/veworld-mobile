@@ -13,7 +13,7 @@ import Animated, {
     withSpring,
     withTiming,
 } from "react-native-reanimated"
-import { BaseSafeArea, BaseSpacer } from "~Components"
+import { BaseSafeArea } from "~Components"
 import { BaseBottomSheetHandle } from "~Components/Base/BaseBottomSheetHandle"
 import { COLORS, ColorThemeType, SCREEN_HEIGHT } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -117,18 +117,15 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                     }
                     height.value = e.nativeEvent.layout.height
                 }}>
-                <NestableScrollContainer stickyHeaderIndices={[0]}>
-                    {handle && (
-                        <>
-                            <GestureDetector gesture={gesture}>
-                                <BaseBottomSheetHandle
-                                    color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
-                                    style={styles.handle}
-                                />
-                            </GestureDetector>
-                            <BaseSpacer height={8} />
-                        </>
-                    )}
+                {handle && (
+                    <GestureDetector gesture={gesture}>
+                        <BaseBottomSheetHandle
+                            color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
+                            style={styles.handle}
+                        />
+                    </GestureDetector>
+                )}
+                <NestableScrollContainer bounces={false} showsVerticalScrollIndicator={false}>
                     {children}
                 </NestableScrollContainer>
             </Animated.View>

@@ -51,7 +51,7 @@ export const BalanceTabActions = ({ token }: Props) => {
             SEND: <SendButton token={token} key={"SEND"} />,
             BUY: <BuyButton key={"BUY"} />,
             EARN: <EarnButton key={"EARN"} />,
-            SWAP: <SwapButton key={"SWAP"} />,
+            SWAP: <SwapButton token={token} key={"SWAP"} />,
             MORE: <MoreButton openReceiveBottomsheet={handleOpenOnlyReceiveCamera} token={token} key={"MORE"} />,
             CONVERT: <ConvertButton bsRef={convertB3trBsRef} key={"CONVERT"} />,
         }
@@ -66,13 +66,15 @@ export const BalanceTabActions = ({ token }: Props) => {
             case "VOT3":
             case "B3TR":
                 return ["RECEIVE", "SEND", "CONVERT", "SWAP"]
+            case "veDelegate":
+                return ["RECEIVE", "SEND", "SWAP"]
             default:
                 return ["RECEIVE", "SEND", "SWAP"]
         }
     }, [token.symbol])
 
     return (
-        <BaseView flexDirection="row" gap={24} justifyContent="center">
+        <BaseView flexDirection="row" gap={20} justifyContent="center">
             {tokenActions.map(action => allActions[action])}
             <ConvertBetterBottomSheet ref={convertB3trBsRef} onClose={onClose} />
             <ConvertedBetterBottomSheet

@@ -34,9 +34,9 @@ const baseStyles = () =>
     StyleSheet.create({
         root: {
             position: "relative",
+            marginVertical: 8,
         },
         filterContainer: {
             gap: 4,
-            paddingVertical: 8,
         },
     })
