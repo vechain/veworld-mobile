@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.10 (2025-11-11)</small>
+
+* build: init ([9ff6e5e](https://github.com/vechain/veworld-mobile/commit/9ff6e5e))
+* 509 - Fix token spacing (#3519) ([bacc0bf](https://github.com/vechain/veworld-mobile/commit/bacc0bf)), closes [#3519](https://github.com/vechain/veworld-mobile/issues/3519)
+
 ## <small>2.4.9 (2025-11-05)</small>
 
 * build: init ([73a4b19](https://github.com/vechain/veworld-mobile/commit/73a4b19))
