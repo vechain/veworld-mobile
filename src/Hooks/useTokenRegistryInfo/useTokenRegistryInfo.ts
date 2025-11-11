@@ -2,6 +2,8 @@ import { useMemo } from "react"
 import { FungibleToken, TokenSocialLinks } from "~Model"
 import { VET, VTHO } from "~Constants"
 import { useI18nContext } from "~i18n"
+import { selectOfficialTokens, useAppSelector } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
 
 export type TokenRegistryInfo = {
     description?: string
@@ -10,14 +12,21 @@ export type TokenRegistryInfo = {
 
 /**
  * Custom hook to get token description and social links from token registry.
- * Handles special cases like VET which has a hardcoded description with i18n support.
- * For wrapped tokens (crossChainProvider exists), returns only description from registry.
+ *
+ * This hook looks up the token in selectOfficialTokens to get the enriched version
+ * with desc and links from the registry, since the token passed in might come from
+ * constants or other sources that don't have this data.
+ *
+ * Handles special cases:
+ * - VET: uses hardcoded i18n description and VTHO's social links
+ * - Wrapped tokens (crossChainProvider exists): returns only description from registry
  *
  * @param token - The fungible token object
- * @returns TokenRegistryInfo with description and social links
+ * @returns TokenRegistryInfo with description and social links from the registry
  */
 export const useTokenRegistryInfo = (token: FungibleToken): TokenRegistryInfo => {
     const { LL } = useI18nContext()
+    const officialTokens = useAppSelector(selectOfficialTokens)
 
     return useMemo(() => {
         const isVET = token.symbol === VET.symbol
@@ -30,20 +39,21 @@ export const useTokenRegistryInfo = (token: FungibleToken): TokenRegistryInfo =>
                 links: VTHO.links,
             }
         }
+        const officialToken = officialTokens.find(tk => AddressUtils.compareAddresses(tk.address, token.address))
 
-        // For wrapped tokens, only return description from registry (no social links)
+        const tokenWithRegistryData = officialToken || token
+
         if (isWrappedToken) {
             return {
-                description: token.desc,
+                description: tokenWithRegistryData.desc,
                 links: undefined,
             }
         }
 
-        // For regular tokens, return both description and social links from registry
         return {
-            description: token.desc,
-            links: token.links,
+            description: tokenWithRegistryData.desc,
+            links: tokenWithRegistryData.links,
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [token])
+    }, [token, officialTokens])
 }
