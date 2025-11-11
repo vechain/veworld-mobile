@@ -44,7 +44,7 @@ def build_font(font_name: str, font_map: str, font_prefix: str, output_dir: str)
         glyph.importOutlines(f"{CACHE_DIR}/{icon['name']}.svg", simplify=False, accuracy=0.5)
     
     temp_ttf_path = f"./{font_name}.ttf"
-    font.generate(temp_ttf_path, flags=["glyph-map-file"])
+    font.generate(temp_ttf_path)
     
     output_ttf_path = f"{output_dir}/{font_name}.ttf"
     os.makedirs(output_dir, exist_ok=True)
