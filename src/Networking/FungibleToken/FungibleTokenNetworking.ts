@@ -67,6 +67,34 @@ export const getTokenName = async (contractAddress: string, thor: Connex.Thor) =
 const TOKEN_URL = "https://vechain.github.io/token-registry/"
 
 /**
+ * Raw token structure from the VeChain token registry
+ * Based on schema defined in https://github.com/vechain/token-registry/blob/main/const.js
+ */
+interface RawTokenFromRegistry {
+    name: string
+    symbol: string
+    decimals: number
+    address: string
+    desc?: string
+    icon: string
+    totalSupply?: string
+    website?: string
+    whitePaper?: string
+    links?: {
+        twitter?: string
+        telegram?: string
+        facebook?: string
+        medium?: string
+        github?: string
+        slack?: string
+    }
+    crossChainProvider?: {
+        name: string
+        url: string
+    }
+}
+
+/**
  * Call out to our github repo and return the tokens for the given network
  */
 export const getTokensFromGithub = async ({ network }: { network: Network }): Promise<FungibleToken[]> => {
@@ -78,15 +106,23 @@ export const getTokensFromGithub = async ({ network }: { network: Network }): Pr
             timeout: 30 * 1000,
         })
 
-        const tokensFromGithub = JSON.parse(rawTokens.data) as FungibleToken[]
+        const tokensFromGithub = JSON.parse(rawTokens.data) as RawTokenFromRegistry[]
         tokens = tokensFromGithub.map(token => {
             return {
-                ...token,
+                name: token.name,
+                symbol: token.symbol,
+                decimals: token.decimals,
+                address: token.address,
                 genesisId: network.genesis.id,
                 icon: `${TOKEN_URL}/assets/${token.icon}`,
                 custom: false,
-                socialLinks: token.socialLinks,
                 desc: token.desc,
+                links: {
+                    website: token.website,
+                    twitter: token.links?.twitter,
+                    telegram: token.links?.telegram,
+                },
+                crossChainProvider: token.crossChainProvider,
             }
         })
     }
