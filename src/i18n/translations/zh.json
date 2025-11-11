@@ -1242,7 +1242,7 @@
   "TOKEN_DESCRIPTION_VET": "VET 是 VeChainThor 区块链的原生代币，总供应量为 867 亿。它是网络的价值传输和质押资产，支持链上经济活动和网络安全。VET 可用于 VeChain 的原生质押平台 StarGate 上进行质押，使用户能够赚取推动链上交易的能源代币 VeThor (VTHO)，同时参与塑造区块链未来的治理决策。通过这种双重角色，VET 锚定了 VeChain 生态系统的价值和实用性。",
   "TOKEN_DETAIL_ACTIVITY_TAB": "活动",
   "TOKEN_DETAIL_BALANCE_TAB": "余额",
-  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "这些代币已抵押至vedelegate.vet，只能在那里进行管理。",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "这些代币已在 vedelegate.vet 上质押，只能在该平台上进行管理。",
   "TOKEN_ID": "代币ID",
   "TOKEN_RECEIVE": "接收代币",
   "TOKEN_RECEIVE_SUBTITLE": "使用您的钱包地址接收",
