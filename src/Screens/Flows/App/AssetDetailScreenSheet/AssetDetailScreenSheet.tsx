@@ -2,12 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { InfiniteData, useQueryClient } from "@tanstack/react-query"
-import {
-    DEFAULT_LINE_CHART_DATA,
-    getCoinGeckoIdBySymbol,
-    useSmartMarketChart,
-    useTokenSocialLinks,
-} from "~Api/Coingecko"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
 import { AlertInline, BaseSpacer, BaseText, BaseView, TokenSymbol } from "~Components"
 import { LineChart } from "~Components/Reusable/LineChart"
 import { TokenImage } from "~Components/Reusable/TokenImage"
@@ -106,25 +101,18 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
             )
         }
 
-        if (token.symbol && token.tokenInfo) {
+        if (token.symbol && description && links) {
             return (
                 <AssetStats
                     tokenSymbol={token.symbol}
-                    tokenDescription={token.tokenInfo?.description?.en}
-                    socialLinks={
-                        socialLinks
-                            ? {
-                                  website: socialLinks.website ?? undefined,
-                                  twitter: socialLinks.twitter ?? undefined,
-                                  telegram: socialLinks.telegram ?? undefined,
-                              }
-                            : undefined
-                    }
+                    tokenDescription={description}
+                    links={links}
+                    isWrappedToken={isCrossChainToken}
                 />
             )
         }
         return <BaseSpacer height={16} />
-    }, [token.symbol, token.tokenInfo, socialLinks, LL])
+    }, [token.symbol, description, links, isCrossChainToken, LL])
 
     return (
         <AssetDetailScreenWrapper>
@@ -164,14 +152,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
 
                 <AssetBalanceActivity token={token as FungibleTokenWithBalance} />
             </LineChart.Provider>
-            {token.symbol && (
-                <AssetStats
-                    tokenSymbol={token.symbol}
-                    tokenDescription={description}
-                    links={links}
-                    isWrappedToken={isCrossChainToken}
-                />
-            )}
+            {renderFooter()}
         </AssetDetailScreenWrapper>
     )
 }
