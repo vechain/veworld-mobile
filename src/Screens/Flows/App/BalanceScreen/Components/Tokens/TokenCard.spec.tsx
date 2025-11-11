@@ -1,9 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react-native"
 import React from "react"
-import { useSmartMarketChartV2 } from "~Api/Coingecko"
-import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { Routes } from "~Navigation"
 import { TestHelpers, TestWrapper } from "~Test"
+
+import { useSmartMarketChartV2 } from "~Api/Coingecko"
+import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
+
 import { TokenCard } from "./TokenCard"
 
 jest.mock("~Api/Coingecko", () => ({
