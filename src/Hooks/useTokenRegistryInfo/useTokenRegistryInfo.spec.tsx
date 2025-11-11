@@ -23,7 +23,7 @@ describe("useTokenRegistryInfo", () => {
         custom: false,
         icon: "mock-icon",
         desc: "VTHO is used to power transactions on VeChainThor.",
-        socialLinks: {
+        links: {
             website: "https://www.vechain.org",
             twitter: "https://twitter.com/vechainofficial",
             telegram: "https://t.me/vechain_official_english",
@@ -38,7 +38,7 @@ describe("useTokenRegistryInfo", () => {
         custom: false,
         icon: "mock-icon",
         desc: "Wrapped VET token",
-        socialLinks: {
+        links: {
             website: "https://example.com",
             twitter: "https://twitter.com/example",
             telegram: "https://t.me/example",
@@ -55,14 +55,14 @@ describe("useTokenRegistryInfo", () => {
         expect(result.current.description).toBe(
             "VET is the native token of the VeChainThor blockchain, with a fixed total supply of 86.7 billion. It is the network’s value-transfer and staking asset, underpinning on-chain economic activity and network security. VET can be used for staking on StarGate - VeChain’s native staking platform - allowing users to earn VeThor (VTHO) — the energy token that powers on-chain transactions — while also enabling participation in governance decisions that shape the blockchain’s future. Through this dual role, VET anchors both the value and utility of the VeChain ecosystem.",
         )
-        expect(result.current.socialLinks).toEqual(VTHO.socialLinks)
+        expect(result.current.links).toEqual(VTHO.links)
     })
 
     it("should return description and social links from registry for regular tokens", () => {
         const { result } = renderHook(() => useTokenRegistryInfo(mockRegularToken))
 
         expect(result.current.description).toBe("VTHO is used to power transactions on VeChainThor.")
-        expect(result.current.socialLinks).toEqual({
+        expect(result.current.links).toEqual({
             website: "https://www.vechain.org",
             twitter: "https://twitter.com/vechainofficial",
             telegram: "https://t.me/vechain_official_english",
@@ -73,7 +73,7 @@ describe("useTokenRegistryInfo", () => {
         const { result } = renderHook(() => useTokenRegistryInfo(mockWrappedToken))
 
         expect(result.current.description).toBe("Wrapped VET token")
-        expect(result.current.socialLinks).toBeUndefined()
+        expect(result.current.links).toBeUndefined()
     })
 
     it("should return undefined description and social links when token has no registry data", () => {
@@ -89,7 +89,7 @@ describe("useTokenRegistryInfo", () => {
         const { result } = renderHook(() => useTokenRegistryInfo(mockTokenWithoutData))
 
         expect(result.current.description).toBeUndefined()
-        expect(result.current.socialLinks).toBeUndefined()
+        expect(result.current.links).toBeUndefined()
     })
 
     it("should memoize the result when token doesn't change", () => {

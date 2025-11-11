@@ -5,7 +5,7 @@ import { useI18nContext } from "~i18n"
 
 export type TokenRegistryInfo = {
     description?: string
-    socialLinks?: TokenSocialLinks
+    links?: TokenSocialLinks
 }
 
 /**
@@ -27,7 +27,7 @@ export const useTokenRegistryInfo = (token: FungibleToken): TokenRegistryInfo =>
         if (isVET) {
             return {
                 description: LL.TOKEN_DESCRIPTION_VET(),
-                socialLinks: VTHO.socialLinks,
+                links: VTHO.links,
             }
         }
 
@@ -35,14 +35,14 @@ export const useTokenRegistryInfo = (token: FungibleToken): TokenRegistryInfo =>
         if (isWrappedToken) {
             return {
                 description: token.desc,
-                socialLinks: undefined,
+                links: undefined,
             }
         }
 
         // For regular tokens, return both description and social links from registry
         return {
             description: token.desc,
-            socialLinks: token.socialLinks,
+            links: token.links,
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token])

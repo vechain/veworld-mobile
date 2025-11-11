@@ -19,7 +19,7 @@ const DESCRIPTION_LINE_THRESHOLD = 3
 type AssetStatsProps = {
     tokenSymbol: string
     tokenDescription?: string
-    socialLinks?: TokenSocialLinks
+    links?: TokenSocialLinks
     isWrappedToken?: boolean
 }
 
@@ -50,7 +50,7 @@ const StatRow = React.memo<StatItem & { labelColor: string; valueColor: string }
 
 StatRow.displayName = "StatRow"
 
-export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks, isWrappedToken = false }: AssetStatsProps) => {
+export const AssetStats = ({ tokenSymbol, tokenDescription, links, isWrappedToken = false }: AssetStatsProps) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const [isAccordionOpen, setIsAccordionOpen] = useState(false)
@@ -217,7 +217,7 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, socialLinks, isWrapp
                     <BaseSpacer height={8} />
                 </>
             )}
-            <SocialLinksButtons socialLinks={socialLinks} onNavigate={handleSocialLinkPress} />
+            <SocialLinksButtons links={links} onNavigate={handleSocialLinkPress} />
         </BaseView>
     )
 }

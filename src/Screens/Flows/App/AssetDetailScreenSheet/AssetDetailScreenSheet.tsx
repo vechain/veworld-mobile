@@ -29,7 +29,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
     const { token } = route.params
     const { styles, theme } = useThemedStyles(baseStyles)
     const currency = useAppSelector(selectCurrency)
-    const { description, socialLinks } = useTokenRegistryInfo(token)
+    const { description, links } = useTokenRegistryInfo(token)
     const account = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
     const qc = useQueryClient()
@@ -107,7 +107,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
                 <AssetStats
                     tokenSymbol={token.symbol}
                     tokenDescription={description}
-                    socialLinks={socialLinks}
+                    links={links}
                     isWrappedToken={isCrossChainToken}
                 />
             )}

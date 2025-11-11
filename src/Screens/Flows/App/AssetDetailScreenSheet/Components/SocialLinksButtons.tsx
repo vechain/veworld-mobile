@@ -10,7 +10,7 @@ const ALLOWED_SOCIAL_LINKS = ["website", "twitter", "telegram"] as const
 type AllowedSocialLink = (typeof ALLOWED_SOCIAL_LINKS)[number]
 
 type SocialLinksButtonsProps = {
-    socialLinks?: {
+    links?: {
         website?: string
         twitter?: string
         telegram?: string
@@ -23,16 +23,16 @@ const SOCIAL_BUTTON_FLEX = {
     iconOnly: 1,
 } as const
 
-export const SocialLinksButtons = ({ socialLinks, onNavigate }: SocialLinksButtonsProps): JSX.Element | null => {
+export const SocialLinksButtons = ({ links, onNavigate }: SocialLinksButtonsProps): JSX.Element | null => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
 
     const filteredLinks = useMemo(() => {
-        if (!socialLinks) return []
-        return Object.entries(socialLinks).filter(([key]) =>
+        if (!links) return []
+        return Object.entries(links).filter(([key]) =>
             ALLOWED_SOCIAL_LINKS.includes(key as AllowedSocialLink),
         ) as Array<[AllowedSocialLink, string]>
-    }, [socialLinks])
+    }, [links])
 
     const renderLeftIcon = useCallback(
         (key: AllowedSocialLink) => {

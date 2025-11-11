@@ -20,7 +20,7 @@ export interface TokenSocialLinks {
  * @field `icon` - The icon of the token
  * @field `custom` - Whether the token is a custom token
  * @field `desc` - Description from token registry
- * @field `socialLinks` - Social media links from token registry
+ * @field `links` - Social media links from token registry
  */
 export interface Token {
     name: string
@@ -29,7 +29,7 @@ export interface Token {
     icon: string
     custom: boolean
     desc?: string
-    socialLinks?: TokenSocialLinks
+    links?: TokenSocialLinks
     crossChainProvider?: {
         name: string
         url: string
