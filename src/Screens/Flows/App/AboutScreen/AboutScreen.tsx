@@ -62,8 +62,10 @@ export const AboutScreen = () => {
 
     const handleDevSettingsTap = useCallback(() => {
         HapticsService.triggerImpact({ level: "Medium" })
-        dispatch(setDeveloperMenuUnlocked(!developerMenuUnlocked))
-        if (developerMenuUnlocked) {
+        const newState = !developerMenuUnlocked
+        dispatch(setDeveloperMenuUnlocked(newState))
+
+        if (newState) {
             showSuccessToast({
                 text1: "Developer menu unlocked",
             })
