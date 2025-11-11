@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
 import DeviceInfo from "react-native-device-info"
@@ -7,9 +7,17 @@ import { Linking } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import HapticsService from "~Services/HapticsService"
 import { useTheme } from "~Hooks"
+import { Gesture, GestureDetector } from "react-native-gesture-handler"
+import { runOnJS } from "react-native-reanimated"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { setDeveloperMenuUnlocked } from "~Storage/Redux/Slices/UserPreferences"
+import { selectDeveloperMenuUnlocked } from "~Storage/Redux/Selectors/UserPreferences"
+import { showSuccessToast } from "~Components/Base/BaseToast"
 
 export const AboutScreen = () => {
     const { LL } = useI18nContext()
+    const dispatch = useAppDispatch()
+    const developerMenuUnlocked = useAppSelector(selectDeveloperMenuUnlocked)
 
     const theme = useTheme()
 
@@ -52,18 +60,39 @@ export const AboutScreen = () => {
         [theme.colors.text],
     )
 
+    const handleDevSettingsTap = useCallback(() => {
+        HapticsService.triggerImpact({ level: "Medium" })
+        dispatch(setDeveloperMenuUnlocked(!developerMenuUnlocked))
+        if (developerMenuUnlocked) {
+            showSuccessToast({
+                text1: "Developer menu unlocked",
+            })
+        } else {
+            showSuccessToast({
+                text1: "Developer menu locked",
+            })
+        }
+    }, [dispatch, developerMenuUnlocked])
+
+    const quadTap = useMemo(
+        () => Gesture.Tap().maxDuration(500).numberOfTaps(5).onStart(runOnJS(handleDevSettingsTap)),
+        [handleDevSettingsTap],
+    )
+
     return (
         <Layout
             title={LL.TITLE_ABOUT()}
             body={
                 <BaseView h={100} alignItems="center">
                     <BaseSpacer height={24} />
-                    <BaseCard
-                        containerStyle={styles.logoCardContainer}
-                        // @ts-ignore
-                        style={styles.logoCard}>
-                        <VeWorldLogoSVG width={90} height={62} color={theme.colors.veworldLogo} />
-                    </BaseCard>
+                    <GestureDetector gesture={Gesture.Exclusive(quadTap)}>
+                        <BaseCard
+                            containerStyle={styles.logoCardContainer}
+                            // @ts-ignore
+                            style={styles.logoCard}>
+                            <VeWorldLogoSVG width={90} height={62} color={theme.colors.veworldLogo} />
+                        </BaseCard>
+                    </GestureDetector>
                     <BaseSpacer height={16} />
                     <BaseText typographyFont="subTitleBold">{LL.VEWORLD()}</BaseText>
                     <BaseSpacer height={8} />

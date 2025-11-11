@@ -10861,6 +10861,22 @@ Here's what it's all about:
 	 * These tokens are staked on vedelegate.vet and can only be managed there.
 	 */
 	TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE: () => LocalizedString
+	/**
+	 *  Developer Settings
+	 */
+	TITLE_DEVELOPER_SETTINGS: () => LocalizedString
+	/**
+	 * Notification Center
+	 */
+	DEVELOPER_NOTIFICATION_CENTER_TITLE: () => LocalizedString
+	/**
+	 * Enter the URL of the notification center to register with
+	 */
+	DEVELOPER_NOTIFICATION_CENTER_DESC: () => LocalizedString
+	/**
+	 * Notification Center URL Label
+	 */
+	DEVELOPER_NOTIFICATION_CENTER_URL_LABEL: () => LocalizedString
 }
 
 export type Formatters = {

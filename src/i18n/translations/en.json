@@ -1338,5 +1338,10 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "TITLE_DEVELOPER_SETTINGS": "Developer Settings",
+  "DEVELOPER_NOTIFICATION_CENTER_TITLE": "Notification Center",
+  "DEVELOPER_NOTIFICATION_CENTER_DESC": "Enter the URL of the notification center to register with",
+  "DEVELOPER_NOTIFICATION_CENTER_URL_LABEL": "Notification Center URL"
+
 }
