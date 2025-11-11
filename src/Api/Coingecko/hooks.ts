@@ -138,6 +138,40 @@ export const useSmartMarketChart = ({
         },
         enabled: !!highestResolutionMarketChartData,
         placeholderData,
+        // staleTime: getQueryCacheTime(true),
+        staleTime: 0,
+        refetchInterval: getRefetchIntevalTime(),
+        gcTime: 1000 * 60 * 60 * 24, // 24 hours
+    })
+}
+
+export const useSmartMarketChartV2 = ({
+    id,
+    vs_currency,
+    days,
+    placeholderData,
+}: {
+    id?: string
+    vs_currency: string
+    days: number | "max"
+    placeholderData?: MarketChartResponse
+}) => {
+    const { data: highestResolutionMarketChartData } = useMarketChart({
+        id,
+        vs_currency,
+        days,
+    })
+
+    return useQuery({
+        queryKey: getMarketChartQueryKey({ id, vs_currency, days }),
+        queryFn: () => {
+            if (days === "max") return highestResolutionMarketChartData
+            return Number(days) > 1
+                ? getSmartMarketChart({ highestResolutionMarketChartData, days })
+                : highestResolutionMarketChartData
+        },
+        enabled: !!highestResolutionMarketChartData,
+        placeholderData,
         staleTime: getQueryCacheTime(true),
         refetchInterval: getRefetchIntevalTime(),
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
