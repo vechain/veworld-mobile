@@ -69,6 +69,8 @@ export const BalanceActions = ({ style }: Props) => {
                 label={LL.BALANCE_ACTION_RECEIVE()}
                 size="sm"
                 icon="icon-qr-code"
+                truncateText
+                typographyFont="captionSemiBold"
                 onPress={onReceive}
             />
             <GlassButtonWithLabel
@@ -77,10 +79,33 @@ export const BalanceActions = ({ style }: Props) => {
                 icon="icon-arrow-up"
                 onPress={onSend}
                 disabled={isSendDisabled}
+                typographyFont="captionSemiBold"
+                truncateText
             />
-            <GlassButtonWithLabel label={LL.SWAP()} size="sm" icon="icon-arrow-left-right" onPress={onSwap} />
-            <GlassButtonWithLabel label={LL.BALANCE_ACTION_BUY()} size="sm" icon="icon-plus" onPress={onBuy} />
-            <GlassButtonWithLabel label={LL.BALANCE_ACTION_EARN()} size="sm" icon={"icon-stargate"} onPress={onEarn} />
+            <GlassButtonWithLabel
+                label={LL.SWAP()}
+                size="sm"
+                icon="icon-arrow-left-right"
+                onPress={onSwap}
+                typographyFont="captionSemiBold"
+                truncateText
+            />
+            <GlassButtonWithLabel
+                label={LL.BALANCE_ACTION_BUY()}
+                size="sm"
+                icon="icon-plus"
+                onPress={onBuy}
+                typographyFont="captionSemiBold"
+                truncateText
+            />
+            <GlassButtonWithLabel
+                label={LL.BALANCE_ACTION_EARN()}
+                size="sm"
+                icon={"icon-stargate"}
+                onPress={onEarn}
+                typographyFont="captionSemiBold"
+                truncateText
+            />
             {RenderCameraModal}
         </Animated.View>
     )

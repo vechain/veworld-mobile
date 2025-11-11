@@ -2,8 +2,8 @@ import React, { useCallback, useMemo, useState } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseIcon, BaseText, BaseView } from "~Components"
-import { COLORS } from "~Constants"
-import { useTheme, useThemedStyles } from "~Hooks"
+import { COLORS, TFonts } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 
 type GlassButtonProps = {
@@ -112,10 +112,22 @@ type Props = {
      */
     themed?: boolean
     testID?: string
+    truncateText?: boolean
+    typographyFont?: TFonts
 }
 
-export const GlassButtonWithLabel = ({ label, icon, onPress, disabled, size, themed, testID }: Props) => {
-    const theme = useTheme()
+export const GlassButtonWithLabel = ({
+    label,
+    icon,
+    onPress,
+    disabled,
+    size,
+    themed,
+    testID,
+    truncateText = false,
+    typographyFont = "smallCaptionSemiBold",
+}: Props) => {
+    const { styles, theme } = useThemedStyles(baseStyles(size ?? "md"))
     const activeTextColor = useMemo(() => {
         if (!themed || theme.isDark) return COLORS.PURPLE_LABEL
         return COLORS.PURPLE
@@ -127,7 +139,11 @@ export const GlassButtonWithLabel = ({ label, icon, onPress, disabled, size, the
     return (
         <BaseView flexDirection="column" gap={8} alignItems="center" testID={testID}>
             <GlassButton icon={icon} onPress={onPress} disabled={disabled} size={size} themed={themed} />
-            <BaseText typographyFont="captionSemiBold" color={disabled ? disabledTextColor : activeTextColor}>
+            <BaseText
+                typographyFont={typographyFont}
+                color={disabled ? disabledTextColor : activeTextColor}
+                numberOfLines={1}
+                style={truncateText ? styles.textContainer : undefined}>
                 {label}
             </BaseText>
         </BaseView>
@@ -136,6 +152,9 @@ export const GlassButtonWithLabel = ({ label, icon, onPress, disabled, size, the
 
 const baseStyles = (size: "sm" | "md") => () =>
     StyleSheet.create({
+        textContainer: {
+            maxWidth: 55,
+        },
         gradientBtnContainer: {
             padding: size === "sm" ? 10 : 16,
             borderRadius: 99,
