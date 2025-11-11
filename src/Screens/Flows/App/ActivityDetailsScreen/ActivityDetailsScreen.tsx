@@ -1,4 +1,4 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo, useState } from "react"
 import { Linking } from "react-native"
 import { getTimeZone } from "react-native-localize"
@@ -12,8 +12,8 @@ import {
     TransactionStatusBox,
     TransferCard,
 } from "~Components"
-import { useBottomSheetModal, useTransferAddContact } from "~Hooks"
-import { HistoryStackParamList, Routes } from "~Navigation"
+import { TokenWithCompleteInfo, useBottomSheetModal, useTransferAddContact } from "~Hooks"
+import { HistoryStackParamList, Routes, TabStackParamList } from "~Navigation"
 import { DateUtils, HexUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityModalTitle } from "./util"
@@ -52,14 +52,15 @@ import {
 import DappLoginDetails from "./Components/DappLoginDetails"
 import { StargateActivityDetails } from "./Components/StakingDetails"
 import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
+import { useNavigation } from "@react-navigation/native"
 
 type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
-export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
+export const ActivityDetailsScreen = ({ route }: Props) => {
     const { activity, token, isSwap, returnScreen = Routes.HISTORY } = route.params
 
     const network = useAppSelector(selectSelectedNetwork)
-
+    const navigation = useNavigation<NativeStackNavigationProp<HistoryStackParamList & TabStackParamList>>()
     const { LL, locale } = useI18nContext()
 
     const [customTokenAddress, setCustomTokenAddress] = useState<string>()
@@ -241,8 +242,25 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
     ])
 
     const onGoBack = useCallback(() => {
-        navigation.navigate(returnScreen as any)
-    }, [navigation, returnScreen])
+        switch (returnScreen) {
+            case Routes.TOKEN_DETAILS:
+                navigation.navigate(Routes.HOME_STACK, {
+                    screen: Routes.TOKEN_DETAILS,
+                    params: {
+                        token: token as TokenWithCompleteInfo,
+                    },
+                })
+                break
+            case Routes.HOME:
+                navigation.navigate(Routes.HOME_STACK, {
+                    screen: Routes.HOME,
+                })
+                break
+
+            default:
+                navigation.navigate(returnScreen)
+        }
+    }, [navigation, returnScreen, token])
 
     const onAddCustomToken = useCallback(
         (tokenAddress: string) => {

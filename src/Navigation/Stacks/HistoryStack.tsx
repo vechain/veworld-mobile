@@ -33,7 +33,7 @@ export type HistoryStackParamList = {
         token?: FungibleToken
         isSwap?: boolean
         decodedClauses?: TransactionOutcomes
-        returnScreen?: Routes.HOME | Routes.HISTORY
+        returnScreen?: Routes.HOME | Routes.HISTORY | Routes.TOKEN_DETAILS
     }
     [Routes.BROWSER]: {
         url: string

@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useRef } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
-import { LineChart } from "react-native-wagmi-charts"
-import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChartV2 } from "~Api/Coingecko"
+import { LineChart } from "~Components/Reusable/LineChart"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { FungibleToken } from "~Model"
@@ -30,7 +30,7 @@ export const Chart = ({ token }: Props) => {
     // Early check for supported tokens to optimize API calls
     const isTokenSupported = SUPPORTED_CHART_TOKENS.has(token.symbol)
 
-    const { data: chartData } = useSmartMarketChart({
+    const { data: chartData } = useSmartMarketChartV2({
         id: isTokenSupported ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
         vs_currency: currency,
         days: 1,
@@ -58,13 +58,14 @@ export const Chart = ({ token }: Props) => {
     return (
         <Animated.View style={[styles.root, animatedStyles]} onLayout={onLayout} testID="TOKEN_CARD_CHART">
             <LineChart.Provider data={downsampled ?? DEFAULT_LINE_CHART_DATA}>
-                <LineChart width={CHART_WIDTH} height={CHART_HEIGHT} yGutter={1}>
-                    <LineChart.Path
-                        color={isGoingUp ? COLORS.GREEN_300 : COLORS.RED_400}
-                        width={CHART_STROKE_WIDTH}
-                        pathProps={{ strokeLinejoin: "round", strokeLinecap: "round" }}
-                    />
-                </LineChart>
+                <LineChart
+                    width={CHART_WIDTH}
+                    height={CHART_HEIGHT}
+                    isInteractive={false}
+                    strokeWidth={CHART_STROKE_WIDTH}
+                    showGradientBackground={false}
+                    strokeColor={isGoingUp ? COLORS.GREEN_300 : COLORS.RED_400}
+                />
             </LineChart.Provider>
         </Animated.View>
     )

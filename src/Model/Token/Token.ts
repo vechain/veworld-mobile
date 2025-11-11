@@ -52,6 +52,14 @@ export interface FungibleTokenWithBalance extends FungibleToken {
     balance: Balance
 }
 
+/**
+ * VIP180 - Fungible Token with an optional balance field
+ * @field `balance` - the balance of tokens
+ */
+export interface FungibleTokenWithOptionalBalance extends FungibleToken {
+    balance?: Balance
+}
+
 //Logs
 
 /**
