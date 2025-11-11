@@ -347,6 +347,12 @@ export type Colors = {
             text: string
         }
     }
+    chartGradientBackground: string[]
+    timePeriodChip: {
+        indicatorBackground: string
+        activeText: string
+        inactiveText: string
+    }
 }
 
 export enum COLORS {
@@ -821,6 +827,12 @@ const light: Colors = {
             text: COLORS.GREY_700,
         },
     },
+    chartGradientBackground: ["rgba(255, 255, 255, 0)", "rgba(68, 59, 110, 0.5)", "rgba(48, 38, 95, 1)"],
+    timePeriodChip: {
+        indicatorBackground: COLORS.GREY_300,
+        activeText: COLORS.PURPLE,
+        inactiveText: COLORS.GREY_500,
+    },
 }
 
 const dark: Colors = {
@@ -1171,6 +1183,12 @@ const dark: Colors = {
             background: COLORS.DARK_PURPLE,
             text: COLORS.WHITE,
         },
+    },
+    chartGradientBackground: ["rgba(38, 30, 76, 0)", "rgba(68, 59, 110, 0.5)", "rgba(185, 181, 207, 1)"],
+    timePeriodChip: {
+        indicatorBackground: COLORS.DARK_PURPLE_DISABLED,
+        activeText: COLORS.LIME_GREEN,
+        inactiveText: COLORS.GREY_100,
     },
 }
 

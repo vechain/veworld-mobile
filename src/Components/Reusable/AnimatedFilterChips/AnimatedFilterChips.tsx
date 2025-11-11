@@ -1,9 +1,10 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { COLORS } from "~Constants"
-import { useAnimatedHorizontalFilters, useThemedStyles } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
+import { CHIP_PADDING, useAnimatedHorizontalFilters } from "~Hooks/useAnimatedHorizontalFilters"
 
 type Props<T> = {
     items: T[]
@@ -11,8 +12,13 @@ type Props<T> = {
     keyExtractor: (item: T) => string | number
     getItemLabel: (item: T) => string
     onItemPress: (item: T, index: number) => void
-    containerStyle?: StyleProp<ViewStyle>
-    contentContainerStyle?: StyleProp<ViewStyle>
+    containerStyle?: Omit<StyleProp<ViewStyle>, "height" | "padding" | "paddingHorizontal" | "paddingVertical">
+    contentContainerStyle?: Omit<StyleProp<ViewStyle>, "padding" | "paddingVertical" | "paddingTop" | "paddingBottom">
+    size?: "sm" | "md"
+    scrollEnabled?: boolean
+    indicatorBackgroundColor?: string
+    activeTextColor?: string
+    inactiveTextColor?: string
 }
 
 export const AnimatedFilterChips = <T,>({
@@ -23,26 +29,37 @@ export const AnimatedFilterChips = <T,>({
     onItemPress,
     containerStyle,
     contentContainerStyle,
+    size = "md",
+    scrollEnabled = true,
+    indicatorBackgroundColor,
+    activeTextColor,
+    inactiveTextColor,
 }: Props<T>) => {
-    const { styles, theme } = useThemedStyles(baseStyle)
+    const { styles, theme } = useThemedStyles(baseStyle(size))
 
     const { scrollViewRef, handleChipLayout, handleScrollViewLayout, handleScroll, indicatorAnimatedStyle } =
         useAnimatedHorizontalFilters({
             items,
             selectedItem,
             keyExtractor,
+            size,
         })
 
     const textColor = useCallback(
         (item: T) => {
             const active = item === selectedItem
             if (active) {
-                return theme.isDark ? COLORS.PURPLE : COLORS.WHITE
+                return activeTextColor ?? (theme.isDark ? COLORS.PURPLE : COLORS.WHITE)
             }
-            return theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600
+            return inactiveTextColor ?? (theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600)
         },
-        [selectedItem, theme.isDark],
+        [selectedItem, theme.isDark, activeTextColor, inactiveTextColor],
     )
+
+    const indicatorBackground = useMemo(() => {
+        if (indicatorBackgroundColor) return indicatorBackgroundColor
+        return theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE
+    }, [indicatorBackgroundColor, theme.isDark])
 
     return (
         <BaseView style={[styles.rootContainer, containerStyle]}>
@@ -50,7 +67,7 @@ export const AnimatedFilterChips = <T,>({
                 style={[
                     styles.animatedBackground,
                     {
-                        backgroundColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
+                        backgroundColor: indicatorBackground,
                     },
                     indicatorAnimatedStyle,
                 ]}
@@ -62,6 +79,7 @@ export const AnimatedFilterChips = <T,>({
                 showsHorizontalScrollIndicator={false}
                 onLayout={handleScrollViewLayout}
                 onScroll={handleScroll}
+                scrollEnabled={scrollEnabled}
                 scrollEventThrottle={16}>
                 {items.map((item, index) => (
                     <BaseView key={index} onLayout={event => handleChipLayout(event, index)} style={styles.chipWrapper}>
@@ -70,7 +88,9 @@ export const AnimatedFilterChips = <T,>({
                             style={styles.transparentChip}
                             onPress={() => onItemPress(item, index)}
                             activeOpacity={0.8}>
-                            <BaseText style={{ color: textColor(item) }} typographyFont="bodyMedium">
+                            <BaseText
+                                style={{ color: textColor(item) }}
+                                typographyFont={size === "sm" ? "captionMedium" : "bodyMedium"}>
                                 {getItemLabel(item)}
                             </BaseText>
                         </BaseTouchable>
@@ -81,7 +101,7 @@ export const AnimatedFilterChips = <T,>({
     )
 }
 
-const baseStyle = () =>
+const baseStyle = (size: "sm" | "md") => () =>
     StyleSheet.create({
         rootContainer: {
             position: "relative",
@@ -89,23 +109,21 @@ const baseStyle = () =>
         filterContainer: {
             flexDirection: "row",
             gap: 12,
-            paddingTop: 16,
         },
         chipWrapper: {
             position: "relative",
         },
         transparentChip: {
-            minWidth: 64,
+            minWidth: CHIP_PADDING[size].minWidth,
             paddingHorizontal: 12,
-            paddingVertical: 8,
+            paddingVertical: CHIP_PADDING[size].paddingVertical,
             borderRadius: 20,
             alignItems: "center",
             justifyContent: "center",
         },
         animatedBackground: {
             position: "absolute",
-            top: 18,
-            height: 32,
             borderRadius: 20,
+            transformOrigin: "center",
         },
     })

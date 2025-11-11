@@ -153,7 +153,7 @@ export const getMarketChart = async ({
 }: {
     coinGeckoId?: string
     vs_currency: string
-    days: number
+    days: number | "max"
     interval?: string
 }): Promise<MarketChartResponse> => {
     try {

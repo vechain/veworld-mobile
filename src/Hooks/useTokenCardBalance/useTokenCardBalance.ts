@@ -4,12 +4,12 @@ import { B3TR, VeDelegate } from "~Constants"
 import { useBalances } from "~Hooks/useBalances"
 import { useCombineFiatBalances } from "~Hooks/useCombineFiatBalances"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
-import { FungibleTokenWithBalance } from "~Model"
+import { FungibleTokenWithOptionalBalance } from "~Model"
 import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
 import { formatTokenAmount } from "~Utils/StandardizedFormatting"
 
 type Args = {
-    token: FungibleTokenWithBalance
+    token: FungibleTokenWithOptionalBalance
 }
 
 /**
@@ -55,11 +55,11 @@ export const useTokenCardBalance = ({ token }: Args) => {
     }, [formatFiat, amount, isBalanceVisible, areAlmostZero])
 
     const tokenBalance = useMemo(() => {
-        return formatTokenAmount(token.balance.balance, token.symbol, token.decimals ?? 0, {
+        return formatTokenAmount(token.balance?.balance ?? "0", token.symbol, token.decimals ?? 0, {
             locale: formatLocale,
             includeSymbol: false,
         })
-    }, [formatLocale, token.balance.balance, token.decimals, token.symbol])
+    }, [formatLocale, token.balance?.balance, token.decimals, token.symbol])
 
     const showFiatBalance = useMemo(() => {
         return !!exchangeRate

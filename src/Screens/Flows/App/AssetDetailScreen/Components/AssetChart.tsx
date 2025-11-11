@@ -25,7 +25,7 @@ type Props = {
 const defaultTimeframe = marketChartTimeframes[0]
 export const AssetChart = ({ token }: Props) => {
     const queryClient = useQueryClient()
-    const [selectedTimeframe, setSelectedTimeframe] = useState<number>(defaultTimeframe.value)
+    const [selectedTimeframe, setSelectedTimeframe] = useState<number | "max">(defaultTimeframe.value)
     const [fakeLoading, setFakeLoading] = useState<boolean>(false)
 
     const currency = useAppSelector(selectCurrency)
@@ -71,7 +71,13 @@ export const AssetChart = ({ token }: Props) => {
                             vs_currency: currency,
                             days: timeframe.value,
                         }),
-                        queryFn: () =>
+                        queryFn: () => {
+                            if (timeframe.value === "max")
+                                return getMarketChart({
+                                    coinGeckoId: getCoinGeckoIdBySymbol[token.symbol],
+                                    vs_currency: currency,
+                                    days: highestResolutionTimeframeDays,
+                                })
                             timeframe.value > 1
                                 ? getSmartMarketChart({
                                       highestResolutionMarketChartData: highestTimeframeData,
@@ -82,7 +88,8 @@ export const AssetChart = ({ token }: Props) => {
                                       coinGeckoId: getCoinGeckoIdBySymbol[token.symbol],
                                       vs_currency: currency,
                                       days: 1,
-                                  }),
+                                  })
+                        },
                     })
                 }
             }
