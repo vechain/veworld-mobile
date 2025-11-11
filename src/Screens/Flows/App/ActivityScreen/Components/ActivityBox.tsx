@@ -940,6 +940,8 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
                 return LL.ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL()
             case ActivityEvent.STARGATE_DELEGATION_EXITED:
                 return LL.ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL()
+            case ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR:
+                return LL.ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL()
             case ActivityEvent.STARGATE_DELEGATE_ACTIVE:
                 return LL.ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL()
             case ActivityEvent.STARGATE_MANAGER_ADDED:

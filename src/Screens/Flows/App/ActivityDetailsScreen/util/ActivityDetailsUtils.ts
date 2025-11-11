@@ -61,6 +61,24 @@ export const getActivityTitle = (activity: Activity, LL: TranslationFunctions) =
             return LL.ACTIVITY_STARGATE_STAKE_LABEL()
         case ActivityType.STARGATE_UNSTAKE:
             return LL.ACTIVITY_STARGATE_UNSTAKE_LABEL()
+        case ActivityType.STARGATE_CLAIM_REWARDS:
+            return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
+        case ActivityType.STARGATE_BOOST:
+            return LL.ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL()
+        case ActivityType.STARGATE_DELEGATE_REQUEST:
+            return LL.ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL()
+        case ActivityType.STARGATE_DELEGATE_EXIT_REQUEST:
+            return LL.ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL()
+        case ActivityType.STARGATE_DELEGATION_EXITED:
+            return LL.ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL()
+        case ActivityType.STARGATE_DELEGATION_EXITED_VALIDATOR:
+            return LL.ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL()
+        case ActivityType.STARGATE_DELEGATE_ACTIVE:
+            return LL.ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL()
+        case ActivityType.STARGATE_MANAGER_ADDED:
+            return LL.ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL()
+        case ActivityType.STARGATE_MANAGER_REMOVED:
+            return LL.ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL()
         case ActivityType.UNKNOWN_TX:
             return LL.UNKNOWN_TX()
         default:
