@@ -198,6 +198,34 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: string
 	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​a​c​t​i​v​e
+	 */
+	ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL: string
+	/**
+	 * M​a​n​a​g​e​r​ ​a​d​d​e​d
+	 */
+	ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL: string
+	/**
+	 * M​a​n​a​g​e​r​ ​r​e​m​o​v​e​d
+	 */
+	ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL: string
+	/**
+	 * M​a​t​u​r​i​t​y​ ​b​o​o​s​t​e​d
+	 */
+	ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL: string
+	/**
 	 * V​E​T​ ​s​t​a​k​e​d​ ​&​ ​d​e​l​e​g​a​t​e​d
 	 */
 	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: string
@@ -1206,6 +1234,10 @@ type RootTranslation = {
 	 */
 	BROWSER_CHANGE_NETWORK_TITLE: string
 	/**
+	 * C​l​e​a​r​ ​b​r​o​w​s​e​r​ ​c​a​c​h​e
+	 */
+	BROWSER_CLEAR_CACHE: string
+	/**
 	 * C​l​o​s​e​ ​t​a​b
 	 */
 	BROWSER_CLOSE_TAB: string
@@ -1298,14 +1330,6 @@ type RootTranslation = {
 	 * S​e​e​ ​a​l​l​ ​t​a​b​s​ ​o​p​e​n
 	 */
 	BROWSER_SEE_ALL_TABS: string
-	/**
-	 * C​l​e​a​r​ ​b​r​o​w​s​e​r​ ​c​a​c​h​e
-	 */
-	BROWSER_CLEAR_CACHE: string
-	/**
-	 * C​a​c​h​e​ ​c​l​e​a​r​e​d
-	 */
-	CACHE_CLEARED: string
 	/**
 	 * S​h​a​r​e
 	 */
@@ -1748,6 +1772,10 @@ type RootTranslation = {
 	 * W​r​i​t​e​ ​r​e​c​o​v​e​r​y​ ​p​a​s​s​w​o​r​d
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: string
+	/**
+	 * C​a​c​h​e​ ​c​l​e​a​r​e​d
+	 */
+	CACHE_CLEARED: string
 	/**
 	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
@@ -5637,6 +5665,34 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: () => LocalizedString
 	/**
+	 * Delegation requested
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL: () => LocalizedString
+	/**
+	 * Delegation active
+	 */
+	ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL: () => LocalizedString
+	/**
+	 * Delegation exit requested
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: () => LocalizedString
+	/**
+	 * Delegation exited
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL: () => LocalizedString
+	/**
+	 * Manager added
+	 */
+	ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL: () => LocalizedString
+	/**
+	 * Manager removed
+	 */
+	ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL: () => LocalizedString
+	/**
+	 * Maturity boosted
+	 */
+	ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL: () => LocalizedString
+	/**
 	 * VET staked & delegated
 	 */
 	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: () => LocalizedString
@@ -6636,6 +6692,10 @@ Thanks for your patience!
 	 */
 	BROWSER_CHANGE_NETWORK_TITLE: () => LocalizedString
 	/**
+	 * Clear browser cache
+	 */
+	BROWSER_CLEAR_CACHE: () => LocalizedString
+	/**
 	 * Close tab
 	 */
 	BROWSER_CLOSE_TAB: () => LocalizedString
@@ -6727,14 +6787,6 @@ Thanks for your patience!
 	 * See all tabs open
 	 */
 	BROWSER_SEE_ALL_TABS: () => LocalizedString
-	/**
-	 * Clear browser cache
-	 */
-	BROWSER_CLEAR_CACHE: () => LocalizedString
-	/**
-	 * Cache cleared
-	 */
-	CACHE_CLEARED: () => LocalizedString
 	/**
 	 * Share
 	 */
@@ -7175,6 +7227,10 @@ Thanks for your patience!
 	 * Write recovery password
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: () => LocalizedString
+	/**
+	 * Cache cleared
+	 */
+	CACHE_CLEARED: () => LocalizedString
 	/**
 	 * You have rejected the certificate
 	 */

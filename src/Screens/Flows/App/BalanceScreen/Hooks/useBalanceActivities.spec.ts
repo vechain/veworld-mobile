@@ -190,12 +190,11 @@ describe("useBalanceActivities", () => {
                 0,
                 defaultMainNetwork,
                 [
-                    ActivityEvent.STARGATE_CLAIM_REWARDS_BASE,
-                    ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE,
-                    ActivityEvent.STARGATE_DELEGATE,
-                    ActivityEvent.STARGATE_DELEGATE_ONLY,
+                    ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY,
+                    ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY,
+                    ActivityEvent.STARGATE_DELEGATE_LEGACY,
                     ActivityEvent.STARGATE_STAKE,
-                    ActivityEvent.STARGATE_UNDELEGATE,
+                    ActivityEvent.STARGATE_UNDELEGATE_LEGACY,
                     ActivityEvent.STARGATE_UNSTAKE,
                 ],
             )

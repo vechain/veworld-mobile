@@ -23,13 +23,21 @@ const getActivityEventsByTab = (tab: BalanceTab): ActivityEvent[] => {
             ]
         case "STAKING":
             return [
-                ActivityEvent.STARGATE_CLAIM_REWARDS_BASE,
-                ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE,
-                ActivityEvent.STARGATE_DELEGATE,
-                ActivityEvent.STARGATE_DELEGATE_ONLY,
+                ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY,
+                ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY,
+                ActivityEvent.STARGATE_DELEGATE_LEGACY,
                 ActivityEvent.STARGATE_STAKE,
-                ActivityEvent.STARGATE_UNDELEGATE,
+                ActivityEvent.STARGATE_UNDELEGATE_LEGACY,
                 ActivityEvent.STARGATE_UNSTAKE,
+                ActivityEvent.STARGATE_CLAIM_REWARDS,
+                ActivityEvent.STARGATE_BOOST,
+                ActivityEvent.STARGATE_DELEGATE_REQUEST,
+                ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST,
+                ActivityEvent.STARGATE_DELEGATION_EXITED,
+                ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR,
+                ActivityEvent.STARGATE_DELEGATE_ACTIVE,
+                ActivityEvent.STARGATE_MANAGER_ADDED,
+                ActivityEvent.STARGATE_MANAGER_REMOVED,
             ]
         case "COLLECTIBLES":
             return [ActivityEvent.NFT_SALE, ActivityEvent.TRANSFER_NFT]

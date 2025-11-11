@@ -889,42 +889,67 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
                 return "icon-download"
             case ActivityEvent.STARGATE_UNSTAKE:
                 return "icon-upload"
-            case ActivityEvent.STARGATE_DELEGATE:
-            case ActivityEvent.STARGATE_DELEGATE_ONLY:
+            case ActivityEvent.STARGATE_DELEGATE_LEGACY:
                 return "icon-lock"
-            case ActivityEvent.STARGATE_UNDELEGATE:
+            case ActivityEvent.STARGATE_UNDELEGATE_LEGACY:
                 return "icon-unlock"
-            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
-            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS:
                 return "icon-gift"
+            case ActivityEvent.STARGATE_BOOST:
+                return "icon-thunder"
+            case ActivityEvent.STARGATE_DELEGATE_REQUEST:
+                return "icon-log-in"
+            case ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST:
+                return "icon-log-out"
+            case ActivityEvent.STARGATE_DELEGATION_EXITED:
+                return "icon-log-out"
+            case ActivityEvent.STARGATE_DELEGATE_ACTIVE:
+                return "icon-check-circle"
+            case ActivityEvent.STARGATE_MANAGER_ADDED:
+                return "icon-user-plus"
+            case ActivityEvent.STARGATE_MANAGER_REMOVED:
+                return "icon-user-minus"
             default:
                 return "icon-blocks"
         }
     }, [])
 
     const hasRightAmount = useMemo(() => {
-        return !(
-            activity?.type === ActivityEvent.STARGATE_UNDELEGATE ||
-            activity?.type === ActivityEvent.STARGATE_DELEGATE_ONLY
-        )
+        return !(activity?.type === ActivityEvent.STARGATE_UNDELEGATE_LEGACY)
     }, [activity?.type])
 
     const getActivityTitle = useCallback(() => {
         switch (activity.eventName) {
-            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY:
                 return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL()
-            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY:
                 return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
-            case ActivityEvent.STARGATE_DELEGATE:
+            case ActivityEvent.STARGATE_DELEGATE_LEGACY:
                 return LL.ACTIVITY_STARGATE_NODE_DELEGATE_LABEL()
-            case ActivityEvent.STARGATE_DELEGATE_ONLY:
-                return LL.ACTIVITY_STARGATE_NODE_DELEGATE_ONLY_LABEL()
-            case ActivityEvent.STARGATE_UNDELEGATE:
+            case ActivityEvent.STARGATE_UNDELEGATE_LEGACY:
                 return LL.ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL()
             case ActivityEvent.STARGATE_STAKE:
                 return LL.ACTIVITY_STARGATE_STAKE_LABEL()
             case ActivityEvent.STARGATE_UNSTAKE:
                 return LL.ACTIVITY_STARGATE_UNSTAKE_LABEL()
+            case ActivityEvent.STARGATE_DELEGATE_REQUEST:
+                return LL.ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL()
+            case ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST:
+                return LL.ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL()
+            case ActivityEvent.STARGATE_DELEGATION_EXITED:
+                return LL.ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL()
+            case ActivityEvent.STARGATE_DELEGATE_ACTIVE:
+                return LL.ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL()
+            case ActivityEvent.STARGATE_MANAGER_ADDED:
+                return LL.ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL()
+            case ActivityEvent.STARGATE_MANAGER_REMOVED:
+                return LL.ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL()
+            case ActivityEvent.STARGATE_BOOST:
+                return LL.ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL()
+            case ActivityEvent.STARGATE_CLAIM_REWARDS:
+                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
             default:
                 return LL.ACTIVITY_STARGATE_STAKE_LABEL()
         }
@@ -932,8 +957,9 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
 
     const isMinus = useMemo(() => {
         return !(
-            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE ||
-            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE ||
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY ||
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY ||
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS ||
             activity?.type === ActivityEvent.STARGATE_UNSTAKE
         )
     }, [activity?.type])
