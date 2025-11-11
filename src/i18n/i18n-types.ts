@@ -10870,13 +10870,22 @@ Here's what it's all about:
 	 */
 	DEVELOPER_NOTIFICATION_CENTER_TITLE: () => LocalizedString
 	/**
-	 * Enter the URL of the notification center to register with
+	 * Enter the notification center URL
 	 */
 	DEVELOPER_NOTIFICATION_CENTER_DESC: () => LocalizedString
 	/**
-	 * Notification Center URL Label
+	 * Developer menu unlocked
 	 */
-	DEVELOPER_NOTIFICATION_CENTER_URL_LABEL: () => LocalizedString
+	DEVELOPER_MENU_UNLOCKED_MSG: () => LocalizedString
+	/**
+	 * Developer menu locked
+	 */
+	DEVELOPER_MENU_LOCKED_MSG: () => LocalizedString
+
+	/**
+	 * Reset settings
+	 */
+	DEVELOPER_SETTINGS_RESET_BUTTON: () => LocalizedString
 }
 
 export type Formatters = {

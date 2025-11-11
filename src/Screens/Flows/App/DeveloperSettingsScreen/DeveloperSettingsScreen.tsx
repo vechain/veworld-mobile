@@ -14,10 +14,11 @@ export const DeveloperSettingsScreen = () => {
     const dispatch = useAppDispatch()
     const storedUrl = useAppSelector(selectNotificationCenterUrl)
 
-    const [url, setUrl] = useState(storedUrl || "")
+    const [notificationUrl, setNotificationUrl] = useState(storedUrl || "")
     const [urlError, setUrlError] = useState("")
 
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isResetting, setIsResetting] = useState(false)
 
     const isSubmitDisabled = !!urlError
 
@@ -28,14 +29,28 @@ export const DeveloperSettingsScreen = () => {
         setIsSubmitting(true)
 
         try {
-            dispatch(setNotificationCenterUrl(url || undefined))
+            dispatch(setNotificationCenterUrl(notificationUrl || undefined))
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
             goBack()
         } catch (e) {
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
         }
         setIsSubmitting(false)
-    }, [dispatch, isSubmitDisabled, url, goBack])
+    }, [dispatch, isSubmitDisabled, notificationUrl, goBack])
+
+    const onResetPress = useCallback(async () => {
+        if (isSubmitDisabled) return
+        setIsResetting(true)
+
+        try {
+            dispatch(setNotificationCenterUrl(undefined))
+            setNotificationUrl("")
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+        } catch (e) {
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+        }
+        setIsResetting(false)
+    }, [dispatch, isSubmitDisabled])
 
     const validateUrlInput = useCallback(
         (value: string): string => {
@@ -50,7 +65,7 @@ export const DeveloperSettingsScreen = () => {
 
     const handleChangeUrl = useCallback(
         (newUrl: string) => {
-            setUrl(newUrl)
+            setNotificationUrl(newUrl)
             setUrlError(validateUrlInput(newUrl))
         },
         [validateUrlInput],
@@ -67,13 +82,12 @@ export const DeveloperSettingsScreen = () => {
                             {LL.DEVELOPER_NOTIFICATION_CENTER_TITLE()}
                         </BaseText>
                         <BaseText typographyFont="captionRegular">{LL.DEVELOPER_NOTIFICATION_CENTER_DESC()}</BaseText>
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={12} />
                         <BaseTextInput
                             placeholder={LL.COMMON_LBL_ENTER_THE({
                                 name: LL.COMMON_LBL_URL(),
                             })}
-                            label={LL.COMMON_LBL_URL()}
-                            value={url}
+                            value={notificationUrl}
                             setValue={handleChangeUrl}
                             errorMessage={urlError}
                         />
@@ -81,16 +95,30 @@ export const DeveloperSettingsScreen = () => {
                 </BaseView>
             }
             footer={
-                <BaseButton
-                    haptics="Light"
-                    action={onSavePress}
-                    w={100}
-                    px={20}
-                    isLoading={isSubmitting}
-                    title={LL.COMMON_BTN_SAVE()}
-                    disabled={isSubmitting || isSubmitDisabled}
-                    radius={16}
-                />
+                <BaseView w={100}>
+                    <BaseView flexDirection="row" mb={16}>
+                        <BaseButton
+                            haptics="Light"
+                            action={onResetPress}
+                            flex={1}
+                            variant="outline"
+                            title={LL.DEVELOPER_SETTINGS_RESET_BUTTON()}
+                            radius={16}
+                            isLoading={isResetting}
+                            disabled={isResetting || isSubmitDisabled}
+                        />
+                        <BaseSpacer width={16} />
+                        <BaseButton
+                            haptics="Light"
+                            action={onSavePress}
+                            flex={1}
+                            isLoading={isSubmitting}
+                            title={LL.COMMON_BTN_SAVE()}
+                            disabled={isSubmitting || isSubmitDisabled}
+                            radius={16}
+                        />
+                    </BaseView>
+                </BaseView>
             }
         />
     )

@@ -1339,9 +1339,10 @@
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
   "YESTERDAY": "Yesterday",
-  "TITLE_DEVELOPER_SETTINGS": "Developer Settings",
+  "TITLE_DEVELOPER_SETTINGS": "Developer settings",
   "DEVELOPER_NOTIFICATION_CENTER_TITLE": "Notification Center",
-  "DEVELOPER_NOTIFICATION_CENTER_DESC": "Enter the URL of the notification center to register with",
-  "DEVELOPER_NOTIFICATION_CENTER_URL_LABEL": "Notification Center URL"
-
+  "DEVELOPER_NOTIFICATION_CENTER_DESC": "Configure the notification center URL to use for push notifications.",
+  "DEVELOPER_MENU_UNLOCKED_MSG": "Developer menu unlocked",
+  "DEVELOPER_MENU_LOCKED_MSG": "Developer menu locked",
+  "DEVELOPER_SETTINGS_RESET_BUTTON": "Reset settings"
 }

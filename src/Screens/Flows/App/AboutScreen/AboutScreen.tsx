@@ -67,14 +67,14 @@ export const AboutScreen = () => {
 
         if (newState) {
             showSuccessToast({
-                text1: "Developer menu unlocked",
+                text1: LL.DEVELOPER_MENU_UNLOCKED_MSG(),
             })
         } else {
             showSuccessToast({
-                text1: "Developer menu locked",
+                text1: LL.DEVELOPER_MENU_LOCKED_MSG(),
             })
         }
-    }, [dispatch, developerMenuUnlocked])
+    }, [dispatch, developerMenuUnlocked, LL])
 
     const quadTap = useMemo(
         () => Gesture.Tap().maxDuration(500).numberOfTaps(5).onStart(runOnJS(handleDevSettingsTap)),
