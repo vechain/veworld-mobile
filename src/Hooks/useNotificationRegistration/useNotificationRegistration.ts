@@ -27,15 +27,23 @@ const NOTIFICATION_CENTER_EVENT = ERROR_EVENTS.NOTIFICATION_CENTER
 const buildRegistrationPlan = (
     currentWalletAddresses: string[],
     existingRegistrations: Registration[],
+    currentUrl: string,
 ): RegistrationPlan => {
     const now = Date.now()
     const oldAddressSet = new Set(existingRegistrations.map(r => r.address))
     const newAddressSet = new Set(currentWalletAddresses)
 
-    const isDueReregister = (reg: Registration): boolean =>
-        newAddressSet.has(reg.address) &&
-        reg.lastSuccessfulSync !== undefined &&
-        now - reg.lastSuccessfulSync >= THIRTY_DAYS_MS
+    const isDueReregister = (reg: Registration): boolean => {
+        if (!newAddressSet.has(reg.address)) return false
+
+        // Re-register if URL has changed
+        if (reg.registeredUrl !== currentUrl) return true
+
+        // Re-register if 30 days have passed
+        if (reg.lastSuccessfulSync !== undefined && now - reg.lastSuccessfulSync >= THIRTY_DAYS_MS) return true
+
+        return false
+    }
 
     let removedAddresses = []
     for (const address of oldAddressSet) {
@@ -96,7 +104,7 @@ export const useNotificationRegistration = ({ enabled = true }: { enabled?: bool
 
                 const subscriptionId = await OneSignal.User.pushSubscription.getIdAsync()
 
-                const plan = buildRegistrationPlan(currentWalletAddresses, registrations)
+                const plan = buildRegistrationPlan(currentWalletAddresses, registrations, baseUrl)
 
                 if (plan.toRegister.length) {
                     const registerResults = await RegistrationClient.registerAddresses(
@@ -110,6 +118,7 @@ export const useNotificationRegistration = ({ enabled = true }: { enabled?: bool
                     const successfulRegistrations = successfulAddresses.map(r => ({
                         address: r.address,
                         lastSuccessfulSync: r.timestamp,
+                        registeredUrl: baseUrl,
                     }))
 
                     dispatch(upsertRegistrations(successfulRegistrations))
