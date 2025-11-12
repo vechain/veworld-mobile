@@ -1247,7 +1247,7 @@
   "TOKEN_CUSTOM_SUBTITLE": "Cüzdanınıza özel bir token ekleyin",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Etkinlik",
   "TOKEN_DETAIL_BALANCE_TAB": "Bakiye",
-  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Bu tokenlar vedelegate.vet üzerinde stake edilmiş ve yalnızca orada yönetilebilir.",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Bu token'lar vedelegate.vet üzerinde stake edilmiştir ve yalnızca oradan yönetilebilir.",
   "TOKEN_ID": "Token Kimliği",
   "TOKEN_RECEIVE": "Token al",
   "TOKEN_RECEIVE_SUBTITLE": "Almak için cüzdan adresinizi kullanın",

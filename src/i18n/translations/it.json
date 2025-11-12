@@ -1247,7 +1247,7 @@
   "TOKEN_CUSTOM_SUBTITLE": "Aggiungi un token personalizzato al tuo portafoglio",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Attività",
   "TOKEN_DETAIL_BALANCE_TAB": "Saldo",
-  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Questi token sono bloccati su vedelegate.vet e possono essere gestiti solo lì.",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Questi token sono stati bloccati su vedelegate.vet e possono essere gestiti solo lì.",
   "TOKEN_ID": "ID token",
   "TOKEN_RECEIVE": "Ricevi token",
   "TOKEN_RECEIVE_SUBTITLE": "Usa l'indirizzo del tuo portafoglio per ricevere",
