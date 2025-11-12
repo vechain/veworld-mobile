@@ -1247,7 +1247,7 @@
   "TOKEN_CUSTOM_SUBTITLE": "将自定义代币添加到您的钱包",
   "TOKEN_DETAIL_ACTIVITY_TAB": "活动",
   "TOKEN_DETAIL_BALANCE_TAB": "余额",
-  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "这些代币已抵押至vedelegate.vet，只能在那里进行管理。",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "这些代币被抵押在vedelegate.vet上，只能在那里管理。",
   "TOKEN_ID": "代币ID",
   "TOKEN_RECEIVE": "接收代币",
   "TOKEN_RECEIVE_SUBTITLE": "使用您的钱包地址接收",

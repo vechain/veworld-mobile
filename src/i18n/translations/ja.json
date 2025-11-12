@@ -1247,7 +1247,7 @@
   "TOKEN_CUSTOM_SUBTITLE": "カスタムトークンをウォレットに追加",
   "TOKEN_DETAIL_ACTIVITY_TAB": "アクティビティ",
   "TOKEN_DETAIL_BALANCE_TAB": "バランス",
-  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "これらのトークンはvedelegate.vetでステークされており、そちらでのみ管理できます。",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "これらのトークンはvedelegate.vetにステークされていますので、管理はそちらで行ってください。",
   "TOKEN_ID": "トークンID",
   "TOKEN_RECEIVE": "トークン受取",
   "TOKEN_RECEIVE_SUBTITLE": "ウォレットアドレスを使用して受け取る",
