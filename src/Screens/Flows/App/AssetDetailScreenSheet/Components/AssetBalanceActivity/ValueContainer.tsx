@@ -83,8 +83,64 @@ const TokenValue = ({ value, token, border = true }: { value: string; token: Fun
     )
 }
 
+const TokenFiatValue = ({
+    value,
+    fiatValue,
+    token,
+    border = true,
+}: {
+    value: string
+    fiatValue: string
+    token: FungibleToken
+    border?: boolean
+}) => {
+    const { styles, theme } = useThemedStyles(tokenValueStyles)
+    return (
+        <BaseView
+            flexDirection="row"
+            justifyContent="space-between"
+            py={12}
+            px={16}
+            style={border && styles.root}
+            testID={`TOKEN_FIAT_VALUE_${token.symbol}`}>
+            <BaseView flexDirection="row" gap={12}>
+                <TokenImage
+                    icon={token.icon}
+                    iconSize={24}
+                    isCrossChainToken={!!token.crossChainProvider}
+                    isVechainToken={TokenUtils.isVechainToken(token.symbol)}
+                    rounded
+                    symbol={token.symbol}
+                />
+                <BaseText
+                    typographyFont="bodySemiBold"
+                    color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}
+                    testID={"TOKEN_VALUE_SYMBOL"}>
+                    {token.symbol}
+                </BaseText>
+            </BaseView>
+
+            <BaseView flexDirection="column" alignItems="flex-end">
+                <BaseText
+                    typographyFont="bodySemiBold"
+                    color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}
+                    testID={"TOKEN_FIAT_VALUE_TOKEN_VALUE"}>
+                    {value}
+                </BaseText>
+                <BaseText
+                    typographyFont="smallCaptionMedium"
+                    color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
+                    testID={"TOKEN_FIAT_VALUE_FIAT_VALUE"}>
+                    {fiatValue}
+                </BaseText>
+            </BaseView>
+        </BaseView>
+    )
+}
+
 ValueContainer.DollarValue = DollarValue
 ValueContainer.TokenValue = TokenValue
+ValueContainer.TokenFiatValue = TokenFiatValue
 
 export { ValueContainer }
 

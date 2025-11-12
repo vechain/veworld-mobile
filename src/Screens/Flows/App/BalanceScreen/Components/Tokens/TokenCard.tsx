@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { default as React, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChartV2 } from "~Api/Coingecko"
 import { BaseIcon, BaseText, BaseTouchableBox, BaseView, TokenSymbol, useFeatureFlags } from "~Components"
 import { useDevice } from "~Components/Providers/DeviceProvider"
 import { TokenImage } from "~Components/Reusable/TokenImage"
@@ -43,7 +43,7 @@ export const TokenCard = ({ token }: Props) => {
 
     const name = useTokenDisplayName(token)
 
-    const { data: chartData } = useSmartMarketChart({
+    const { data: chartData } = useSmartMarketChartV2({
         id: getCoinGeckoIdBySymbol[token.symbol],
         vs_currency: currency,
         days: 1,
@@ -142,7 +142,7 @@ export const TokenCard = ({ token }: Props) => {
                 />
 
                 {token.symbol ? (
-                    <BaseView flexDirection="column" flexGrow={0} flexShrink={1} style={styles.tokenInfo}>
+                    <BaseView flexDirection="column" flexGrow={0} gap={3} flexShrink={1} style={styles.tokenInfo}>
                         <BaseText
                             typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.title}

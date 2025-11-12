@@ -1,24 +1,27 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { InfiniteData, useQueryClient } from "@tanstack/react-query"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { LineChart } from "react-native-wagmi-charts"
 import {
     DEFAULT_LINE_CHART_DATA,
     getCoinGeckoIdBySymbol,
-    useSmartMarketChart,
+    useSmartMarketChartV2,
     useTokenSocialLinks,
 } from "~Api/Coingecko"
-import { BaseSpacer, BaseText, BaseView, TokenSymbol } from "~Components"
+import { AlertInline, BaseSpacer, BaseText, BaseView, TokenSymbol } from "~Components"
+import { LineChart } from "~Components/Reusable/LineChart"
 import { TokenImage } from "~Components/Reusable/TokenImage"
+import { VeDelegate } from "~Constants/Constants"
 import { useThemedStyles } from "~Hooks"
 import { getUseAccountTokenActivitiesQueryKey } from "~Hooks/useAccountTokenActivities"
 import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
+import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { FetchActivitiesResponse } from "~Networking"
 import { selectCurrency, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
+import ChartUtils from "~Utils/ChartUtils"
 import { AssetBalanceActivity } from "./Components/AssetBalanceActivity"
 import { ASSET_CHART_PERIODS, AssetChart } from "./Components/AssetChart"
 import { AssertChartBalance } from "./Components/AssetChartBalance"
@@ -31,26 +34,53 @@ const SUPPORTED_CHART_TOKENS = new Set(Object.keys(getCoinGeckoIdBySymbol))
 
 export const AssetDetailScreenSheet = ({ route }: Props) => {
     const { token } = route.params
+
+    const [selectedItem, setSelectedItem] = useState(ASSET_CHART_PERIODS[0])
+
     const { styles, theme } = useThemedStyles(baseStyles)
     const currency = useAppSelector(selectCurrency)
-    const socialLinks = useTokenSocialLinks(token.tokenInfo) ?? {}
+    const socialLinks = useTokenSocialLinks(token.tokenInfo)
     const account = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
     const qc = useQueryClient()
+    const { LL } = useI18nContext()
 
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
     const name = useTokenDisplayName(token)
 
     const hasTokenChart = useMemo(() => SUPPORTED_CHART_TOKENS.has(token.symbol), [token.symbol])
 
-    const { data: chartData } = useSmartMarketChart({
+    const {
+        data: chartData,
+        isLoading,
+        isFetching,
+        isRefetching,
+    } = useSmartMarketChartV2({
         id: hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
         vs_currency: currency,
-        days: 1,
-        placeholderData: DEFAULT_LINE_CHART_DATA,
+        days: selectedItem.days,
     })
 
-    const [selectedItem, setSelectedItem] = useState(ASSET_CHART_PERIODS[0])
+    const isLoadingChart = useMemo(() => isLoading || isFetching || isRefetching, [isLoading, isFetching, isRefetching])
+
+    const downsampledChartData = useMemo(() => {
+        if (!chartData) return DEFAULT_LINE_CHART_DATA
+
+        switch (selectedItem.days) {
+            case 1:
+                return ChartUtils.downsampleData(chartData, "hour", 1, "first")
+            case 7:
+                return ChartUtils.downsampleData(chartData, "hour", 7, "first")
+            case 30:
+                return ChartUtils.downsampleData(chartData, "day", 1, "first")
+            case 365:
+                return ChartUtils.downsampleData(chartData, "day", 52, "first")
+            case "max":
+                return ChartUtils.downsampleData(chartData, "month", 1, "first")
+            default:
+                return chartData
+        }
+    }, [chartData, selectedItem.days])
 
     useEffect(() => {
         qc.setQueryData<InfiniteData<FetchActivitiesResponse, number>>(
@@ -65,10 +95,41 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
         )
     }, [account.address, network.genesis.id, qc, token.address])
 
+    const renderFooter = useCallback(() => {
+        if (token.symbol === VeDelegate.symbol) {
+            return (
+                <BaseView px={16}>
+                    <BaseSpacer height={24} />
+                    <AlertInline status="info" variant="banner" message={LL.TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE()} />
+                    <BaseSpacer height={16} />
+                </BaseView>
+            )
+        }
+
+        if (token.symbol && token.tokenInfo) {
+            return (
+                <AssetStats
+                    tokenSymbol={token.symbol}
+                    tokenDescription={token.tokenInfo?.description?.en}
+                    socialLinks={
+                        socialLinks
+                            ? {
+                                  website: socialLinks.website ?? undefined,
+                                  twitter: socialLinks.twitter ?? undefined,
+                                  telegram: socialLinks.telegram ?? undefined,
+                              }
+                            : undefined
+                    }
+                />
+            )
+        }
+        return <BaseSpacer height={16} />
+    }, [token.symbol, token.tokenInfo, socialLinks, LL])
+
     return (
         <AssetDetailScreenWrapper>
-            <LineChart.Provider data={chartData ?? DEFAULT_LINE_CHART_DATA}>
-                <BaseView flexDirection="row" justifyContent="space-between" style={styles.padding}>
+            <LineChart.Provider data={downsampledChartData} isLoading={isLoadingChart}>
+                <BaseView flexDirection="row" justifyContent="space-between" style={styles.padding} mt={8}>
                     <BaseView flexDirection="row" gap={16}>
                         <TokenImage
                             icon={token.icon}
@@ -94,26 +155,16 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
                     {chartData?.length && <AssertChartBalance />}
                 </BaseView>
                 <BaseSpacer height={24} />
-                {hasTokenChart && (
+                {hasTokenChart && token.symbol !== VeDelegate.symbol && (
                     <>
-                        <AssetChart
-                            data={chartData}
-                            selectedPeriod={selectedItem}
-                            setSelectedPeriod={setSelectedItem}
-                        />
+                        <AssetChart selectedPeriod={selectedItem} setSelectedPeriod={setSelectedItem} />
                         <BaseSpacer height={24} />
                     </>
                 )}
 
                 <AssetBalanceActivity token={token as FungibleTokenWithBalance} />
             </LineChart.Provider>
-            {token.symbol && (
-                <AssetStats
-                    tokenSymbol={token.symbol}
-                    tokenDescription={token.tokenInfo?.description?.en}
-                    socialLinks={socialLinks ?? {}}
-                />
-            )}
+            {renderFooter()}
         </AssetDetailScreenWrapper>
     )
 }
