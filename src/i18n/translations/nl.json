@@ -285,7 +285,7 @@
   "BROWSER_CHANGE_ACCOUNT_TITLE": "Account wijzigen",
   "BROWSER_CHANGE_NETWORK_DESC": "Het netwerk zal veranderen naar:",
   "BROWSER_CHANGE_NETWORK_TITLE": "Netwerk veranderen",
-  "BROWSER_CLEAR_CACHE": "Browsercache wissen",
+  "BROWSER_CLEAR_CACHE": "Wis de browsercache",
   "BROWSER_CLOSE_TAB": "Tabblad sluiten",
   "BROWSER_COPY_LINK": "Kopieer paginalink",
   "BROWSER_COPY_LINK_SUCCESS": "Link is succesvol gekopieerd naar het klembord",
