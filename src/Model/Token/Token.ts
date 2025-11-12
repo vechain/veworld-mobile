@@ -4,12 +4,23 @@ import { DIRECTIONS } from "~Constants"
 export type VeChainToken = "VET" | "VTHO"
 
 /**
+ * Social links for a token from the token registry
+ */
+export interface TokenSocialLinks {
+    website?: string
+    twitter?: string
+    telegram?: string
+}
+
+/**
  * Token
  * @field `name` - The name of the token
  * @field `symbol` - The symbol of the token
  * @field `address` - The address of the token
  * @field `icon` - The icon of the token
  * @field `custom` - Whether the token is a custom token
+ * @field `desc` - Description from token registry
+ * @field `links` - Social media links from token registry
  */
 export interface Token {
     name: string
@@ -18,6 +29,7 @@ export interface Token {
     icon: string
     custom: boolean
     desc?: string
+    links?: TokenSocialLinks
     crossChainProvider?: {
         name: string
         url: string
@@ -38,10 +50,6 @@ export interface TokenWithCompleteInfo extends FungibleToken {
     change?: number
     desc?: string
     balance?: Balance
-    links?: {
-        blockchain_site: string[]
-        homepage: string[]
-    }
 }
 
 /**
