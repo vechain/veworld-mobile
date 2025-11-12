@@ -13,6 +13,22 @@ export enum ORDER {
 }
 
 /**
+ * Get the indexer base URL from Genesis ID
+ * @param genesisId Genesis ID
+ * @returns The indexer base URL
+ */
+const getIndexerBaseUrl = (genesisId: string) => {
+    switch (genesisId) {
+        case "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a":
+            return process.env.REACT_APP_INDEXER_0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a_URL
+        case "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127":
+            return process.env.REACT_APP_INDEXER_0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127_URL
+        case "0x0000000081b0e5dc4decce0579106706333293e1acb1a3969f4fb4f5a47ef79c":
+            return process.env.REACT_APP_INDEXER_0x0000000081b0e5dc4decce0579106706333293e1acb1a3969f4fb4f5a47ef79c_URL
+    }
+}
+
+/**
  * Get Contract addresses of NFTs owned by an address
  *
  * @param networkType - Mainnet or Testnet
@@ -335,6 +351,6 @@ export const getStargateTokensByAddress = (
     address: string,
     { page = 0, pageSize = 50 }: { page?: number; pageSize?: number } = {},
 ) => {
-    const baseUrl = process.env[`REACT_APP_INDEXER_${genesisId}_URL`]
+    const baseUrl = getIndexerBaseUrl(genesisId)
     return `${baseUrl}/stargate/tokens?manager=${address}&owner=${address}&page=${page}&size=${pageSize}`
 }
