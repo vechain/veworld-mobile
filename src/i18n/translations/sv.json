@@ -1245,7 +1245,7 @@
   "TOKEN_CONVERSION": "Tokenkonvertering",
   "TOKEN_CUSTOM": "Anpassad token",
   "TOKEN_CUSTOM_SUBTITLE": "Lägg till en anpassad token i din plånbok",
-  "TOKEN_DESCRIPTION_VET": "VET är den inhemska tokenen för VeChainThor-blockkedjan, med en fast total tillgång på 86,7 miljarder. Det är nätverkets värdeöverförings- och insatsresurs, som ligger till grund för ekonomisk aktivitet och nätverkssäkerhet.\n\nVET kan användas för insats på StarGate - VeChains inhemska insatsplattform - vilket gör det möjligt för användare att tjäna VeThor (VTHO) — energitokenen som driver transaktioner på kedjan — samt möjliggör deltagande i styrningsbeslut som formar blockkedjans framtid. Genom denna dubbla roll förankrar VET både värdet och nyttan av VeChain-ekosystemet.",
+  "TOKEN_DESCRIPTION_VET": "VET är den ursprungliga token för VeChainThor-blockkedjan, med en fast total tillgång på 86,7 miljarder. Det är nätverkets värdeöverförings- och insatsaktiv, som ligger till grund för ekonomisk aktivitet på kedjan och nätverkssäkerhet.\n\nVET kan användas för insats på StarGate - VeChains egna insatsplattform - vilket gör det möjligt för användare att tjäna VeThor (VTHO) — energitoken som driver transaktioner på kedjan — samtidigt som det möjliggör deltagande i styrbeslut som formar blockkedjans framtid. Genom denna dubbla roll förankrar VET både värdet och användbarheten av VeChain-ekosystemet.",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Aktivitet",
   "TOKEN_DETAIL_BALANCE_TAB": "Balans",
   "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Dessa token är satta på vedelegate.vet och kan endast hanteras där.",
