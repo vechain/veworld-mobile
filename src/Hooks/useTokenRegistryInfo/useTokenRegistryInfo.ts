@@ -30,7 +30,6 @@ export const useTokenRegistryInfo = (token: FungibleToken): TokenRegistryInfo =>
 
     return useMemo(() => {
         const isVET = token.symbol === VET.symbol
-        const isWrappedToken = !!token.crossChainProvider
 
         // For VET, use hardcoded i18n description and VTHO's social links
         if (isVET) {
@@ -43,17 +42,9 @@ export const useTokenRegistryInfo = (token: FungibleToken): TokenRegistryInfo =>
 
         const tokenWithRegistryData = officialToken || token
 
-        if (isWrappedToken) {
-            return {
-                description: tokenWithRegistryData.desc,
-                links: undefined,
-            }
-        }
-
         return {
             description: tokenWithRegistryData.desc,
             links: tokenWithRegistryData.links,
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [token, officialTokens])
+    }, [token, officialTokens, LL])
 }
