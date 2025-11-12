@@ -1,17 +1,38 @@
 import { BottomTabBarHeightCallbackContext, BottomTabBarProps } from "@react-navigation/bottom-tabs"
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useEffect, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
-import Animated, { runOnJS, SharedValue, useAnimatedReaction, useAnimatedStyle } from "react-native-reanimated"
+import Animated, {
+    Extrapolation,
+    interpolate,
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
+} from "react-native-reanimated"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import PlatformUtils from "~Utils/PlatformUtils"
+import { Routes } from "~Navigation/Enums"
+import { selectCurrentScreen, useAppSelector } from "~Storage/Redux"
+import { PlatformUtils } from "~Utils"
 
-type Props = BottomTabBarProps & {
-    /**
-     * Height multiplier (can go from 0 to 1).
-     * 1 is shown, 0 is hidden.
-     */
-    heightMultiplier: SharedValue<number>
+type Props = BottomTabBarProps
+
+const getHeightMultiplierByScreen = (currentScreen: string) => {
+    switch (currentScreen) {
+        case Routes.SETTINGS_GET_SUPPORT:
+        case Routes.SETTINGS_GIVE_FEEDBACK:
+        case Routes.BROWSER:
+        case Routes.TOKEN_DETAILS:
+        case Routes.APPS_TABS_MANAGER:
+        case Routes.APPS_SEARCH:
+        case Routes.BUY_WEBVIEW:
+            return 0
+
+        case "":
+            return 0
+
+        default:
+            return 1
+    }
 }
 
 const useSafeContext = () => {
@@ -20,26 +41,32 @@ const useSafeContext = () => {
     return setHeight
 }
 
-export const TabBar = ({ state, descriptors, navigation, heightMultiplier }: Props) => {
-    const { styles } = useThemedStyles(baseStyles)
+export const TabBar = ({ state, descriptors, navigation }: Props) => {
+    const baseHeight = useMemo(() => (PlatformUtils.isIOS() ? 84 : 56), [])
 
-    const baseHeight = useMemo(() => (PlatformUtils.isIOS() ? 90 : 56), [])
-
+    const { styles } = useThemedStyles(baseStyles(baseHeight))
     const setHeight = useSafeContext()
+
+    const currentScreen = useAppSelector(selectCurrentScreen)
+
+    const heightMultiplier = useSharedValue(1)
+
+    useEffect(() => {
+        const multiplier = getHeightMultiplierByScreen(currentScreen)
+
+        setHeight(baseHeight * multiplier)
+
+        heightMultiplier.value = withTiming(multiplier, { duration: 400 })
+    }, [currentScreen, heightMultiplier, baseHeight, setHeight])
 
     const animatedStyles = useAnimatedStyle(() => {
         return {
-            height: heightMultiplier.value * baseHeight,
+            transform: [
+                { translateY: interpolate(heightMultiplier.value, [1, 0], [0, baseHeight], Extrapolation.CLAMP) },
+            ],
             paddingVertical: heightMultiplier.value * 8,
         }
     }, [heightMultiplier.value, baseHeight])
-
-    useAnimatedReaction(
-        () => heightMultiplier.value,
-        current => {
-            runOnJS(setHeight)(current)
-        },
-    )
 
     return (
         <Animated.View style={[styles.tabbar, styles.shadow, animatedStyles]}>
@@ -85,7 +112,7 @@ export const TabBar = ({ state, descriptors, navigation, heightMultiplier }: Pro
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = (baseHeight: number) => (theme: ColorThemeType) =>
     StyleSheet.create({
         tabbar: {
             position: "absolute",
@@ -95,11 +122,13 @@ const baseStyles = (theme: ColorThemeType) =>
             borderTopWidth: 0,
             paddingHorizontal: 16,
             justifyContent: "space-between",
-            alignItems: "center",
+            alignItems: "flex-start",
             gap: 8,
             backgroundColor: theme.colors.card,
             display: "flex",
             flexDirection: "row",
+            transformOrigin: "top",
+            height: baseHeight,
         },
         shadow: {
             shadowColor: "#000",
