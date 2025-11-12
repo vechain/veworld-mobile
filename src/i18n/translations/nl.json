@@ -620,7 +620,7 @@
   "DETAILS": "Details",
   "DEVELOPER_MENU_LOCKED_MSG": "Ontwikkelaarsmenu vergrendeld",
   "DEVELOPER_MENU_UNLOCKED_MSG": "Ontwikkelaarsmenu ontgrendeld",
-  "DEVELOPER_NOTIFICATION_CENTER_DESC": "Configureer de notificatiecentrum-URL voor het gebruik van pushmeldingen.",
+  "DEVELOPER_NOTIFICATION_CENTER_DESC": "Stel de URL van het notificatiecentrum in voor pushmeldingen.",
   "DEVELOPER_NOTIFICATION_CENTER_TITLE": "Notificatiecentrum",
   "DEVELOPER_SETTINGS_RESET_BUTTON": "Instellingen resetten",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Een of meer herstelzinnen van uw accounts zijn nog niet geback-upt. Zorg ervoor dat u een back-up maakt, zodat u nooit toegang tot uw crypto verliest.",

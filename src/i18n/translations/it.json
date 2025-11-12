@@ -621,7 +621,7 @@
   "DEVELOPER_MENU_LOCKED_MSG": "Menu sviluppatore bloccato",
   "DEVELOPER_MENU_UNLOCKED_MSG": "Menu sviluppatore sbloccato",
   "DEVELOPER_NOTIFICATION_CENTER_DESC": "Configura l'URL del centro notifiche da utilizzare per le notifiche push.",
-  "DEVELOPER_NOTIFICATION_CENTER_TITLE": "Centro notifiche",
+  "DEVELOPER_NOTIFICATION_CENTER_TITLE": "Centro Notifiche",
   "DEVELOPER_SETTINGS_RESET_BUTTON": "Reimposta impostazioni",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Una o più frasi di recupero dei tuoi account non sono ancora state salvate. Assicurati di fare il backup per non perdere mai l'accesso al tuo crypto.",
   "DEVICE_BACKUP_MODAL_TITLE": "Esegui il backup ora",

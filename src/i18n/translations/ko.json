@@ -619,7 +619,7 @@
   "DESCRIPTION_QR_CODE_FOR_ACCOUNT": "QR 코드를 스캔하거나 지갑 주소를 사용하여 토큰과 NFT 수신.",
   "DETAILS": "세부 사항",
   "DEVELOPER_MENU_LOCKED_MSG": "개발자 메뉴 잠김",
-  "DEVELOPER_MENU_UNLOCKED_MSG": "개발자 메뉴 잠금 해제됨",
+  "DEVELOPER_MENU_UNLOCKED_MSG": "개발자 메뉴 잠금 해제",
   "DEVELOPER_NOTIFICATION_CENTER_DESC": "푸시 알림에 사용할 알림 센터 URL을 구성합니다.",
   "DEVELOPER_NOTIFICATION_CENTER_TITLE": "알림 센터",
   "DEVELOPER_SETTINGS_RESET_BUTTON": "설정 재설정",
