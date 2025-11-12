@@ -27,11 +27,9 @@ export const SocialLinksButtons = ({ links, onNavigate }: SocialLinksButtonsProp
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
 
-    const filteredLinks = useMemo(() => {
+    const filteredLinks = useMemo<[AllowedSocialLink, string][]>(() => {
         if (!links) return []
-        return Object.entries(links).filter(([key]) =>
-            ALLOWED_SOCIAL_LINKS.includes(key as AllowedSocialLink),
-        ) as Array<[AllowedSocialLink, string]>
+        return ALLOWED_SOCIAL_LINKS.filter(l => Boolean(links[l])).map(key => [key, links[key]!])
     }, [links])
 
     const renderLeftIcon = useCallback(
@@ -53,10 +51,12 @@ export const SocialLinksButtons = ({ links, onNavigate }: SocialLinksButtonsProp
         ([key, value]: [AllowedSocialLink, string]) => {
             const isWebsite = key === "website"
 
+            const flexValue = isWebsite ? SOCIAL_BUTTON_FLEX.website : SOCIAL_BUTTON_FLEX.iconOnly
+
             return (
                 <BaseButton
                     key={key}
-                    flex={isWebsite ? SOCIAL_BUTTON_FLEX.website : SOCIAL_BUTTON_FLEX.iconOnly}
+                    flex={filteredLinks.length === 3 ? flexValue : 0}
                     testID={`${key}_BUTTON`}
                     action={() => onNavigate(value, key)}
                     style={styles.button}
@@ -71,13 +71,13 @@ export const SocialLinksButtons = ({ links, onNavigate }: SocialLinksButtonsProp
                 </BaseButton>
             )
         },
-        [onNavigate, styles, theme, LL, renderLeftIcon],
+        [filteredLinks.length, styles.button, styles.buttonText, renderLeftIcon, theme.isDark, LL, onNavigate],
     )
 
     if (filteredLinks.length === 0) return null
 
     return (
-        <BaseView flexDirection="row" alignItems="center" gap={16} justifyContent="space-between" my={12}>
+        <BaseView flexDirection="row" alignItems="center" gap={16} my={12}>
             {filteredLinks.map(renderSocialButton)}
         </BaseView>
     )
@@ -91,6 +91,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderWidth: 1,
             borderColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200,
             paddingHorizontal: 12,
+            minWidth: 72,
         },
 
         buttonText: {
