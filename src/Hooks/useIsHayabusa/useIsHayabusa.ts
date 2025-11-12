@@ -2,21 +2,18 @@ import { ethers } from "ethers"
 import { useMemo } from "react"
 import { useFeatureFlags } from "~Components"
 import { useIsBlockchainHayabusa } from "~Hooks/useIsBlockchainHayabusa"
-import { Network, NETWORK_TYPE } from "~Model"
+import { Network } from "~Model"
 
 export const useIsHayabusa = (network: Network) => {
     const { isHayabusa } = useIsBlockchainHayabusa(network)
     const featureFlags = useFeatureFlags()
 
     const isValidContract = useMemo(() => {
-        if ([NETWORK_TYPE.OTHER, NETWORK_TYPE.SOLO].includes(network.type)) return false
-        const contract =
-            featureFlags?.forks?.HAYABUSA?.stargate?.[
-                network.type as Extract<NETWORK_TYPE, NETWORK_TYPE.MAIN | NETWORK_TYPE.TEST>
-            ]?.contract
+        if (!featureFlags?.forks?.HAYABUSA?.stargate?.[network.genesis.id]) return {}
+        const contract = featureFlags?.forks?.HAYABUSA?.stargate?.[network.genesis.id]?.contract
         if (!contract || contract === ethers.constants.AddressZero) return false
         return true
-    }, [featureFlags?.forks?.HAYABUSA?.stargate, network.type])
+    }, [featureFlags?.forks?.HAYABUSA?.stargate, network.genesis.id])
 
     return useMemo(() => isHayabusa && isValidContract, [isHayabusa, isValidContract])
 }

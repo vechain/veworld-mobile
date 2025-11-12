@@ -70,7 +70,7 @@ export const fetchStargateVthoClaimed = async (networkType: NETWORK_TYPE, addres
 }
 
 export const fetchStargateTokens = async (
-    networkType: NETWORK_TYPE,
+    genesisId: string,
     address: string,
     options: Parameters<typeof getStargateTokensByAddress>[2] = {},
 ) => {
@@ -78,7 +78,7 @@ export const fetchStargateTokens = async (
 
     try {
         return await fetchFromEndpoint<FetchStargateTokensResponse>(
-            getStargateTokensByAddress(networkType, address, options),
+            getStargateTokensByAddress(genesisId, address, options),
         )
     } catch (error) {
         throw new Error(`Failed to fetch Stargate tokens for Address: ${address}. Error ${error}`)

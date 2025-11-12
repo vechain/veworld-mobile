@@ -40,17 +40,23 @@ export type FeatureFlags = {
         }
         HAYABUSA: {
             stargate: {
-                testnet: {
+                [genesisId: string]: {
                     /**
                      * Address of the Stargate contract
                      */
                     contract: string
-                }
-                mainnet: {
                     /**
-                     * Address of the Stargate contract
+                     * Address of the StargateNFT contract
                      */
-                    contract: string
+                    nft?: string
+                    /**
+                     * Address of the NodeManagement contract (deprecated)
+                     */
+                    nodeManagement?: string
+                    /**
+                     * Address of the StargateDelegation contract (deprecated)
+                     */
+                    delegation?: string
                 }
             }
         }
