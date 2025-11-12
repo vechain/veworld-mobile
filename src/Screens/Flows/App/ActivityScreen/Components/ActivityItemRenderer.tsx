@@ -170,6 +170,7 @@ export const ActivityItemRenderer = ({ activity, onPress, ...props }: Overridabl
         case ActivityType.STARGATE_CLAIM_REWARDS:
         case ActivityType.STARGATE_BOOST:
         case ActivityType.STARGATE_DELEGATE_REQUEST:
+        case ActivityType.STARGATE_DELEGATE_REQUEST_CANCELLED:
         case ActivityType.STARGATE_DELEGATE_EXIT_REQUEST:
         case ActivityType.STARGATE_DELEGATION_EXITED:
         case ActivityType.STARGATE_DELEGATION_EXITED_VALIDATOR:

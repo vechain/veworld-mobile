@@ -878,6 +878,7 @@ const UnknownTx = ({ activity, onPress, ...props }: OverridableActivityBoxProps<
 const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<StargateActivity>) => {
     const { LL } = useI18nContext()
     const { formatLocale } = useFormatFiat()
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const onPressHandler = () => {
         onPress(activity)
@@ -902,8 +903,8 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
             case ActivityEvent.STARGATE_DELEGATE_REQUEST:
                 return "icon-log-in"
             case ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST:
-                return "icon-log-out"
             case ActivityEvent.STARGATE_DELEGATION_EXITED:
+            case ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED:
                 return "icon-log-out"
             case ActivityEvent.STARGATE_DELEGATE_ACTIVE:
                 return "icon-check-circle"
@@ -917,7 +918,11 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
     }, [])
 
     const hasRightAmount = useMemo(() => {
-        return !(activity?.type === ActivityEvent.STARGATE_UNDELEGATE_LEGACY)
+        return !(
+            activity?.type === ActivityEvent.STARGATE_UNDELEGATE_LEGACY ||
+            activity?.type === ActivityEvent.STARGATE_MANAGER_ADDED ||
+            activity?.type === ActivityEvent.STARGATE_MANAGER_REMOVED
+        )
     }, [activity?.type])
 
     const getActivityTitle = useCallback(() => {
@@ -936,6 +941,8 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
                 return LL.ACTIVITY_STARGATE_UNSTAKE_LABEL()
             case ActivityEvent.STARGATE_DELEGATE_REQUEST:
                 return LL.ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL()
+            case ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED:
+                return LL.ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED()
             case ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST:
                 return LL.ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL()
             case ActivityEvent.STARGATE_DELEGATION_EXITED:
@@ -962,7 +969,10 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
             activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY ||
             activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY ||
             activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS ||
-            activity?.type === ActivityEvent.STARGATE_UNSTAKE
+            activity?.type === ActivityEvent.STARGATE_UNSTAKE ||
+            activity?.type === ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED ||
+            activity?.type === ActivityEvent.STARGATE_DELEGATION_EXITED ||
+            activity?.type === ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR
         )
     }, [activity?.type])
 
@@ -976,14 +986,55 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
         return undefined
     }, [hasRightAmount, isMinus, amount])
 
+    const isDelegationOrDelegateActivity = useMemo(() => {
+        return (
+            activity.eventName === ActivityEvent.STARGATE_DELEGATE_LEGACY ||
+            activity.eventName === ActivityEvent.STARGATE_DELEGATE_REQUEST ||
+            activity.eventName === ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST ||
+            activity.eventName === ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED ||
+            activity.eventName === ActivityEvent.STARGATE_DELEGATION_EXITED ||
+            activity.eventName === ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR ||
+            activity.eventName === ActivityEvent.STARGATE_DELEGATE_ACTIVE
+        )
+    }, [activity.eventName])
+
+    const getDescription = useMemo(() => {
+        if (isDelegationOrDelegateActivity && activity.validator) {
+            return AddressUtils.humanAddress(activity.validator)
+        }
+        if (
+            (activity.eventName === ActivityEvent.STARGATE_MANAGER_ADDED ||
+                activity.eventName === ActivityEvent.STARGATE_MANAGER_REMOVED) &&
+            activity.to?.[0]
+        ) {
+            const isUserAddress = AddressUtils.compareAddresses(activity.to[0], selectedAccount.address)
+            if (isUserAddress && activity.tokenId) {
+                return `#${activity.tokenId}`
+            }
+            return AddressUtils.humanAddress(activity.to[0])
+        }
+        return activity.levelId ? getTokenLevelName(activity.levelId) : ""
+    }, [
+        isDelegationOrDelegateActivity,
+        activity.validator,
+        activity.levelId,
+        activity.eventName,
+        activity.to,
+        activity.tokenId,
+        selectedAccount.address,
+    ])
+
     const baseActivityBoxProps = () => {
         return {
             icon: getStakingIcon(activity.eventName),
             title: getActivityTitle(),
-            description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
+            description: getDescription,
             rightAmount: rightAmount,
             rightAmountDescription:
-                hasRightAmount && (activity.eventName.includes("_CLAIM_") ? VTHO.symbol : VET.symbol),
+                hasRightAmount &&
+                (activity.eventName.includes("_CLAIM_") || activity.eventName.includes("BOOST")
+                    ? VTHO.symbol
+                    : VET.symbol),
             onPress: onPressHandler,
         }
     }

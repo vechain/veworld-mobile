@@ -572,6 +572,8 @@ export const createActivityFromIndexedHistoryEvent = (
         from,
         reverted,
         levelId,
+        validator,
+        delegationId,
     } = event
 
     const isTransaction =
@@ -742,6 +744,7 @@ export const createActivityFromIndexedHistoryEvent = (
         case ActivityEvent.STARGATE_CLAIM_REWARDS:
         case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY:
         case ActivityEvent.STARGATE_DELEGATE_REQUEST:
+        case ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED:
         case ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST:
         case ActivityEvent.STARGATE_DELEGATION_EXITED:
         case ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR:
@@ -755,6 +758,8 @@ export const createActivityFromIndexedHistoryEvent = (
                 value: value,
                 tokenId: tokenId,
                 levelId: levelId,
+                validator: validator,
+                delegationId: delegationId,
             } as StargateActivity
         }
         case ActivityEvent.VEVOTE_VOTE_CAST: {

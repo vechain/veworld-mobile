@@ -202,6 +202,10 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL: string
 	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED: string
+	/**
 	 * D​e​l​e​g​a​t​i​o​n​ ​a​c​t​i​v​e
 	 */
 	ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL: string
@@ -5668,6 +5672,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Delegation requested
 	 */
 	ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL: () => LocalizedString
+	/**
+	 * Delegation request cancelled
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
 	/**
 	 * Delegation active
 	 */

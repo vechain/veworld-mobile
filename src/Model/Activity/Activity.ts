@@ -66,6 +66,8 @@ export interface IndexedHistoryEvent {
     outputValue?: string
     reverted?: boolean
     levelId?: TokenLevelId
+    validator?: string
+    delegationId?: string
 }
 export interface NonTransactionalActivity {
     type: ActivityType.CONNECTED_APP_TRANSACTION | ActivityType.SIGN_CERT
@@ -363,6 +365,7 @@ export interface StargateActivity extends Activity {
         | ActivityEvent.STARGATE_DELEGATE_LEGACY
         | ActivityEvent.STARGATE_DELEGATE_REQUEST
         | ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST
+        | ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED
         | ActivityEvent.STARGATE_DELEGATION_EXITED
         | ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR
         | ActivityEvent.STARGATE_DELEGATE_ACTIVE
@@ -382,6 +385,8 @@ export interface StargateActivity extends Activity {
     delegationRewards?: string
     migrated?: boolean
     autorenew?: boolean
+    validator?: string
+    delegationId?: string
 }
 
 export interface VeVoteCastActivity extends Activity {

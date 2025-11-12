@@ -32,6 +32,7 @@ const getActivityEventsByTab = (tab: BalanceTab): ActivityEvent[] => {
                 ActivityEvent.STARGATE_CLAIM_REWARDS,
                 ActivityEvent.STARGATE_BOOST,
                 ActivityEvent.STARGATE_DELEGATE_REQUEST,
+                ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED,
                 ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST,
                 ActivityEvent.STARGATE_DELEGATION_EXITED,
                 ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR,

@@ -67,6 +67,8 @@ export const getActivityTitle = (activity: Activity, LL: TranslationFunctions) =
             return LL.ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL()
         case ActivityType.STARGATE_DELEGATE_REQUEST:
             return LL.ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL()
+        case ActivityType.STARGATE_DELEGATE_REQUEST_CANCELLED:
+            return LL.ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED()
         case ActivityType.STARGATE_DELEGATE_EXIT_REQUEST:
             return LL.ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL()
         case ActivityType.STARGATE_DELEGATION_EXITED:
@@ -110,6 +112,7 @@ export const getActivityModalTitle = (activity: Activity, LL: TranslationFunctio
         case ActivityType.STARGATE_CLAIM_REWARDS:
         case ActivityType.STARGATE_BOOST:
         case ActivityType.STARGATE_DELEGATE_REQUEST:
+        case ActivityType.STARGATE_DELEGATE_REQUEST_CANCELLED:
         case ActivityType.STARGATE_DELEGATE_EXIT_REQUEST:
         case ActivityType.STARGATE_DELEGATION_EXITED:
         case ActivityType.STARGATE_DELEGATION_EXITED_VALIDATOR:
