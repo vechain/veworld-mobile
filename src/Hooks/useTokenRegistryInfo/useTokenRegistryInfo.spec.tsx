@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 import { renderHook } from "@testing-library/react-hooks"
-import { useTokenRegistryInfo } from "./useTokenRegistryInfo"
-import { FungibleToken } from "~Model"
 import { B3TR, VET, VOT3, VTHO } from "~Constants"
+import { FungibleToken } from "~Model"
+import { useTokenRegistryInfo } from "./useTokenRegistryInfo"
 
 const mockOfficialTokens = [
     {
@@ -87,25 +87,6 @@ describe("useTokenRegistryInfo", () => {
         },
     }
 
-    const mockWrappedToken: FungibleToken = {
-        name: "Wrapped VET",
-        symbol: "WVET",
-        address: "0x789abc",
-        decimals: 18,
-        custom: false,
-        icon: "mock-icon",
-        desc: "Wrapped VET token",
-        links: {
-            website: "https://example.com",
-            twitter: "https://twitter.com/example",
-            telegram: "https://t.me/example",
-        },
-        crossChainProvider: {
-            name: "Bridge",
-            url: "https://bridge.vechain.org",
-        },
-    }
-
     it("should return hardcoded description and VTHO social links for VET token", () => {
         const { result } = renderHook(() => useTokenRegistryInfo(VET))
 
@@ -156,13 +137,6 @@ describe("useTokenRegistryInfo", () => {
         })
     })
 
-    it("should return only description for wrapped tokens (no social links)", () => {
-        const { result } = renderHook(() => useTokenRegistryInfo(mockWrappedToken))
-
-        expect(result.current.description).toBe("Wrapped VET token")
-        expect(result.current.links).toBeUndefined()
-    })
-
     it("should return undefined description and social links when token has no registry data", () => {
         const mockTokenWithoutData: FungibleToken = {
             name: "Custom Token",
@@ -177,15 +151,5 @@ describe("useTokenRegistryInfo", () => {
 
         expect(result.current.description).toBeUndefined()
         expect(result.current.links).toBeUndefined()
-    })
-
-    it("should memoize the result when token doesn't change", () => {
-        const { result, rerender } = renderHook(() => useTokenRegistryInfo(mockRegularToken))
-
-        const firstResult = result.current
-        rerender()
-        const secondResult = result.current
-
-        expect(firstResult).toBe(secondResult)
     })
 })

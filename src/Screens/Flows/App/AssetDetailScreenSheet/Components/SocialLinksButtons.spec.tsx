@@ -1,7 +1,7 @@
+import { fireEvent, render } from "@testing-library/react-native"
 import React from "react"
-import { render, fireEvent } from "@testing-library/react-native"
-import { SocialLinksButtons } from "./SocialLinksButtons"
 import { TestWrapper } from "~Test"
+import { SocialLinksButtons } from "./SocialLinksButtons"
 
 describe("SocialLinksButtons", () => {
     const mockOnNavigate = jest.fn()
@@ -102,7 +102,7 @@ describe("SocialLinksButtons", () => {
 
             fireEvent.press(getByTestId("website_BUTTON"))
 
-            expect(mockOnNavigate).toHaveBeenCalledWith(websiteUrl)
+            expect(mockOnNavigate).toHaveBeenCalledWith(websiteUrl, "website")
             expect(mockOnNavigate).toHaveBeenCalledTimes(1)
         })
 
@@ -115,7 +115,7 @@ describe("SocialLinksButtons", () => {
 
             fireEvent.press(getByTestId("twitter_BUTTON"))
 
-            expect(mockOnNavigate).toHaveBeenCalledWith(twitterUrl)
+            expect(mockOnNavigate).toHaveBeenCalledWith(twitterUrl, "twitter")
             expect(mockOnNavigate).toHaveBeenCalledTimes(1)
         })
 
@@ -128,7 +128,7 @@ describe("SocialLinksButtons", () => {
 
             fireEvent.press(getByTestId("telegram_BUTTON"))
 
-            expect(mockOnNavigate).toHaveBeenCalledWith(telegramUrl)
+            expect(mockOnNavigate).toHaveBeenCalledWith(telegramUrl, "telegram")
             expect(mockOnNavigate).toHaveBeenCalledTimes(1)
         })
 
@@ -143,13 +143,13 @@ describe("SocialLinksButtons", () => {
             })
 
             fireEvent.press(getByTestId("website_BUTTON"))
-            expect(mockOnNavigate).toHaveBeenCalledWith(links.website)
+            expect(mockOnNavigate).toHaveBeenCalledWith(links.website, "website")
 
             fireEvent.press(getByTestId("twitter_BUTTON"))
-            expect(mockOnNavigate).toHaveBeenCalledWith(links.twitter)
+            expect(mockOnNavigate).toHaveBeenCalledWith(links.twitter, "twitter")
 
             fireEvent.press(getByTestId("telegram_BUTTON"))
-            expect(mockOnNavigate).toHaveBeenCalledWith(links.telegram)
+            expect(mockOnNavigate).toHaveBeenCalledWith(links.telegram, "telegram")
 
             expect(mockOnNavigate).toHaveBeenCalledTimes(3)
         })
