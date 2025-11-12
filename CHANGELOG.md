@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.10 (2025-11-12)</small>
+
+* build: init ([7947b10](https://github.com/vechain/veworld-mobile/commit/7947b10))
+* fix: fix tests + selector (#3526) ([15ea845](https://github.com/vechain/veworld-mobile/commit/15ea845)), closes [#3526](https://github.com/vechain/veworld-mobile/issues/3526)
+
 ## <small>2.4.9 (2025-11-05)</small>
 
 * build: init ([73a4b19](https://github.com/vechain/veworld-mobile/commit/73a4b19))
