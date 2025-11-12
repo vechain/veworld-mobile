@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5.0 (2025-11-12)
+
+* build: init ([f497380](https://github.com/vechain/veworld-mobile/commit/f497380))
+* feat: use custom notification url (#3523) ([f64628f](https://github.com/vechain/veworld-mobile/commit/f64628f)), closes [#3523](https://github.com/vechain/veworld-mobile/issues/3523)
+
 ## <small>2.4.9 (2025-11-05)</small>
 
 * build: init ([73a4b19](https://github.com/vechain/veworld-mobile/commit/73a4b19))
