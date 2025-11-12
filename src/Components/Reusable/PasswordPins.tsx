@@ -28,28 +28,46 @@ export const PasswordPins: FC<Props> = memo(({ pin, digitNumber, isPINRetype, is
 
     const getMessageText = useMemo(() => {
         if (isPINRetype)
-            return <AlertInline message={LL.BD_USER_PASSWORD_CONFIRM()} status={"neutral"} variant={"inline"} />
+            return (
+                <AlertInline
+                    message={LL.BD_USER_PASSWORD_CONFIRM()}
+                    status={"neutral"}
+                    variant={"inline"}
+                    justifyContent="center"
+                />
+            )
 
         if (errorType === PinVerificationError.VALIDATE_PIN && errorValue)
-            return <AlertInline message={LL.BD_USER_PASSWORD_ERROR()} status={"error"} variant={"inline"} />
+            return (
+                <AlertInline
+                    message={LL.BD_USER_PASSWORD_ERROR()}
+                    status={"error"}
+                    variant={"inline"}
+                    justifyContent="center"
+                />
+            )
 
         if (errorType === PinVerificationError.EDIT_PIN && errorValue)
-            return <AlertInline message={LL.BD_USER_EDIT_PASSWORD_ERROR()} status={"error"} variant={"inline"} />
+            return (
+                <AlertInline
+                    message={LL.BD_USER_EDIT_PASSWORD_ERROR()}
+                    status={"error"}
+                    variant={"inline"}
+                    justifyContent="center"
+                />
+            )
 
-        return MESSAGE_FAKE_PLACEHOLDER
-    }, [isPINRetype, LL, errorType, errorValue])
-
-    const getPinMessage = useMemo(() => {
         return (
             <BaseText
                 style={themedStyles.messageTextStyle}
                 typographyFont="body"
                 alignContainer="center"
+                justifyContainer="center"
                 color={theme.colors.subtitle}>
-                {getMessageText}
+                {MESSAGE_FAKE_PLACEHOLDER}
             </BaseText>
         )
-    }, [themedStyles.messageTextStyle, theme.colors.subtitle, getMessageText])
+    }, [isPINRetype, LL, errorType, errorValue, themedStyles.messageTextStyle, theme.colors.subtitle])
 
     return (
         <BaseView alignItems="center" h={8} justifyContent={"space-between"}>
@@ -68,8 +86,7 @@ export const PasswordPins: FC<Props> = memo(({ pin, digitNumber, isPINRetype, is
                     )
                 })}
             </BaseView>
-
-            {getPinMessage}
+            {getMessageText}
         </BaseView>
     )
 })
