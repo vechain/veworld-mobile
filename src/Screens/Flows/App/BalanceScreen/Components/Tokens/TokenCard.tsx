@@ -142,7 +142,7 @@ export const TokenCard = ({ token }: Props) => {
                 />
 
                 {token.symbol ? (
-                    <BaseView flexDirection="column" flexGrow={0} flexShrink={1} style={styles.tokenInfo}>
+                    <BaseView flexDirection="column" flexGrow={0} gap={3} flexShrink={1} style={styles.tokenInfo}>
                         <BaseText
                             typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.title}

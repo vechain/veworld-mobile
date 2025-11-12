@@ -1247,7 +1247,7 @@
   "TOKEN_CUSTOM_SUBTITLE": "Lägg till en anpassad token i din plånbok",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Aktivitet",
   "TOKEN_DETAIL_BALANCE_TAB": "Balans",
-  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Dessa tokens är satsade på vedelegate.vet och kan endast hanteras där.",
+  "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Dessa token är satta på vedelegate.vet och kan endast hanteras där.",
   "TOKEN_ID": "Token-ID",
   "TOKEN_RECEIVE": "Ta emot token",
   "TOKEN_RECEIVE_SUBTITLE": "Använd din plånboksadress för att ta emot",

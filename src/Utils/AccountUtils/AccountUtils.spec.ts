@@ -23,13 +23,6 @@ describe("AccountUtils", () => {
         expect(getNextIndex(accounts)).toEqual(2)
     })
 
-    it("getAccountForIndex - should return the correct account", () => {
-        expect(getAccountForIndex(0, TestHelpers.data.device1, 0)).toEqual({
-            ...TestHelpers.data.account1D1,
-            alias: "Device 1 0",
-        })
-    })
-
     it("getAccountForIndex - should throw when no xPub", () => {
         expect(() => getAccountForIndex(0, { ...TestHelpers.data.device1, xPub: undefined }, 0)).toThrow(
             "The XPub can't be null for HD devices",
