@@ -620,7 +620,7 @@
   "DETAILS": "详情",
   "DEVELOPER_MENU_LOCKED_MSG": "开发者菜单已锁定",
   "DEVELOPER_MENU_UNLOCKED_MSG": "开发者菜单已解锁",
-  "DEVELOPER_NOTIFICATION_CENTER_DESC": "配置通知中心URL以使用推送通知。",
+  "DEVELOPER_NOTIFICATION_CENTER_DESC": "配置通知中心的 URL 以用于推送通知。",
   "DEVELOPER_NOTIFICATION_CENTER_TITLE": "通知中心",
   "DEVELOPER_SETTINGS_RESET_BUTTON": "重置设置",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "您的一个或多个账户恢复短语尚未备份。请确保备份，以免失去对您的加密货币的访问。",

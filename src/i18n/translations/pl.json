@@ -620,7 +620,7 @@
   "DETAILS": "Szczegóły",
   "DEVELOPER_MENU_LOCKED_MSG": "Menu dewelopera zablokowane",
   "DEVELOPER_MENU_UNLOCKED_MSG": "Menu dewelopera odblokowane",
-  "DEVELOPER_NOTIFICATION_CENTER_DESC": "Skonfiguruj adres URL centrum powiadomień do używania z powiadomieniami push.",
+  "DEVELOPER_NOTIFICATION_CENTER_DESC": "Skonfiguruj URL centrum powiadomień do użycia w powiadomieniach push.",
   "DEVELOPER_NOTIFICATION_CENTER_TITLE": "Centrum Powiadomień",
   "DEVELOPER_SETTINGS_RESET_BUTTON": "Zresetuj ustawienia",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Jedna lub więcej fraz odzyskiwania twoich kont nie zostały jeszcze zarchiwizowane. Upewnij się, że wykonałeś kopię zapasową, aby nigdy nie stracić dostępu do swojej kryptowaluty.",
