@@ -179,7 +179,7 @@ export const getMarketChart = async ({
             value: entry[1],
         }))
     } catch (e) {
-        error(ERROR_EVENTS.TOKENS, e)
+        error(ERROR_EVENTS.TOKENS, "[getMarketChart]", e)
         throw e
     }
 }

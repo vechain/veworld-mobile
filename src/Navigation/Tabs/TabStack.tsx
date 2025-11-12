@@ -1,9 +1,10 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect } from "react"
 import { StyleSheet } from "react-native"
+import { useSharedValue, withTiming } from "react-native-reanimated"
 import { TabIcon, useFeatureFlags } from "~Components"
-import { useCheckWalletBackup, useTheme } from "~Hooks"
+import { useCheckWalletBackup } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { HomeStack, RootStackParamListHome, RootStackParamListSettings, SettingsStack } from "~Navigation/Stacks"
@@ -14,6 +15,7 @@ import { selectCurrentScreen, selectSelectedAccount, useAppSelector } from "~Sto
 import { AccountUtils } from "~Utils"
 import PlatformUtils from "~Utils/PlatformUtils"
 import { useI18nContext } from "~i18n"
+import { TabBar } from "./TabBar"
 
 export type TabStackParamList = {
     HomeStack: NavigatorScreenParams<RootStackParamListHome>
@@ -25,15 +27,35 @@ export type TabStackParamList = {
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
 
+const getHeightMultiplierByScreen = (currentScreen: string) => {
+    switch (currentScreen) {
+        case Routes.SETTINGS_GET_SUPPORT:
+        case Routes.SETTINGS_GIVE_FEEDBACK:
+        case Routes.BROWSER:
+        case Routes.TOKEN_DETAILS:
+        case Routes.APPS_TABS_MANAGER:
+        case Routes.APPS_SEARCH:
+        case Routes.BUY_WEBVIEW:
+            return 0
+
+        case "":
+            return 0
+
+        default:
+            return 1
+    }
+}
+
 export const TabStack = () => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
     const currentScreen = useAppSelector(selectCurrentScreen)
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
 
     const { betterWorldFeature } = useFeatureFlags()
+
+    const heightMultiplier = useSharedValue(1)
 
     const renderTabBarIcon = useCallback(
         (focused: boolean, iconName: IconKey, label: string) => {
@@ -52,37 +74,22 @@ export const TabStack = () => {
         [isShowBackupModal],
     )
 
-    const display = useMemo(() => {
-        switch (currentScreen) {
-            case Routes.SETTINGS_GET_SUPPORT:
-            case Routes.SETTINGS_GIVE_FEEDBACK:
-            case Routes.BROWSER:
-            case Routes.TOKEN_DETAILS:
-            case Routes.APPS_TABS_MANAGER:
-            case Routes.APPS_SEARCH:
-            case Routes.BUY_WEBVIEW:
-                return "none"
+    useEffect(() => {
+        heightMultiplier.value = withTiming(getHeightMultiplierByScreen(currentScreen), { duration: 400 })
+    }, [currentScreen, heightMultiplier])
 
-            case "":
-                return "none"
-
-            default:
-                return "flex"
-        }
-    }, [currentScreen])
+    const renderTabBar = useCallback(
+        (props: BottomTabBarProps) => <TabBar heightMultiplier={heightMultiplier} {...props} />,
+        [heightMultiplier],
+    )
 
     return (
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
-                tabBarStyle: {
-                    display,
-                    backgroundColor: theme.colors.card,
-                    ...tabbarBaseStyles.tabbar,
-                    ...tabbarBaseStyles.shadow,
-                },
-            }}>
+            }}
+            tabBar={renderTabBar}>
             <Tab.Screen
                 name="HomeStack"
                 component={HomeStack}

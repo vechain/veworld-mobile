@@ -1,28 +1,28 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { StyleSheet } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { InfiniteData, useQueryClient } from "@tanstack/react-query"
-import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { StyleSheet } from "react-native"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChartV2 } from "~Api/Coingecko"
 import { AlertInline, BaseSpacer, BaseText, BaseView, TokenSymbol } from "~Components"
 import { LineChart } from "~Components/Reusable/LineChart"
 import { TokenImage } from "~Components/Reusable/TokenImage"
+import { VeDelegate } from "~Constants/Constants"
 import { useThemedStyles } from "~Hooks"
 import { getUseAccountTokenActivitiesQueryKey } from "~Hooks/useAccountTokenActivities"
 import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
 import { useTokenRegistryInfo } from "~Hooks/useTokenRegistryInfo"
+import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { FetchActivitiesResponse } from "~Networking"
 import { selectCurrency, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
+import ChartUtils from "~Utils/ChartUtils"
 import { AssetBalanceActivity } from "./Components/AssetBalanceActivity"
 import { ASSET_CHART_PERIODS, AssetChart } from "./Components/AssetChart"
 import { AssertChartBalance } from "./Components/AssetChartBalance"
 import { AssetDetailScreenWrapper } from "./Components/AssetDetailScreenWrapper"
-import ChartUtils from "~Utils/ChartUtils"
 import { AssetStats } from "./Components/AssetStats"
-import { VeDelegate } from "~Constants/Constants"
-import { useI18nContext } from "~i18n"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -51,7 +51,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
         isLoading,
         isFetching,
         isRefetching,
-    } = useSmartMarketChart({
+    } = useSmartMarketChartV2({
         id: hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
         vs_currency: currency,
         days: selectedItem.days,
@@ -64,8 +64,9 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
 
         switch (selectedItem.days) {
             case 1:
-            case 7:
                 return ChartUtils.downsampleData(chartData, "hour", 1, "first")
+            case 7:
+                return ChartUtils.downsampleData(chartData, "hour", 7, "first")
             case 30:
                 return ChartUtils.downsampleData(chartData, "day", 1, "first")
             case 365:
