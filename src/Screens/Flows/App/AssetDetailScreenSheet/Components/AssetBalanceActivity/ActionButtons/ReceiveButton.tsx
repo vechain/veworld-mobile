@@ -27,6 +27,7 @@ const ReceiveButton = ({ onOpenBottomsheet }: Props) => {
             icon="icon-qr-code"
             onPress={onReceive}
             themed
+            truncateText
         />
     )
 }

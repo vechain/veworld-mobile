@@ -117,6 +117,7 @@ export const SettingsScreen = () => {
                         title={LL.TITLE_MORE_OPTIONS()}
                         testID="settings-screen"
                         typographyFont="headerTitle"
+                        align="left"
                     />
                 </BaseView>
             }

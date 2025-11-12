@@ -20,9 +20,9 @@ export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange 
     const selectedCategoryObject = categories.find(cat => cat.id === selectedCategory.id) || categories[0]
     return (
         <AnimatedFilterChips
+            items={categories}
             containerStyle={styles.root}
             contentContainerStyle={styles.filterContainer}
-            items={categories}
             selectedItem={selectedCategoryObject}
             keyExtractor={item => item.id}
             getItemLabel={item => item.displayName}
@@ -34,7 +34,7 @@ export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange 
 const baseStyles = () =>
     StyleSheet.create({
         root: {
-            height: 64,
+            marginVertical: 8,
         },
         filterContainer: {
             paddingHorizontal: 16,

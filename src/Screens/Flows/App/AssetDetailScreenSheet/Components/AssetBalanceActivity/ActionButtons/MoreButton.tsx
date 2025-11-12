@@ -26,6 +26,7 @@ export const MoreButton = ({ openReceiveBottomsheet, token }: Props) => {
                 icon="icon-more-vertical"
                 onPress={onPress}
                 themed
+                truncateText
             />
             <MoreButtonBottomSheet bsRef={ref} openReceiveBottomsheet={openReceiveBottomsheet} token={token} />
         </>

@@ -1206,6 +1206,10 @@ type RootTranslation = {
 	 */
 	BROWSER_CHANGE_NETWORK_TITLE: string
 	/**
+	 * C​l​e​a​r​ ​b​r​o​w​s​e​r​ ​c​a​c​h​e
+	 */
+	BROWSER_CLEAR_CACHE: string
+	/**
 	 * C​l​o​s​e​ ​t​a​b
 	 */
 	BROWSER_CLOSE_TAB: string
@@ -1740,6 +1744,10 @@ type RootTranslation = {
 	 * W​r​i​t​e​ ​r​e​c​o​v​e​r​y​ ​p​a​s​s​w​o​r​d
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: string
+	/**
+	 * C​a​c​h​e​ ​c​l​e​a​r​e​d
+	 */
+	CACHE_CLEARED: string
 	/**
 	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
@@ -5467,6 +5475,10 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * T​h​e​s​e​ ​t​o​k​e​n​s​ ​a​r​e​ ​s​t​a​k​e​d​ ​o​n​ ​v​e​d​e​l​e​g​a​t​e​.​v​e​t​ ​a​n​d​ ​c​a​n​ ​o​n​l​y​ ​b​e​ ​m​a​n​a​g​e​d​ ​t​h​e​r​e​.
+	 */
+	TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE: string
 }
 
 export type TranslationFunctions = {
@@ -6628,6 +6640,10 @@ Thanks for your patience!
 	 */
 	BROWSER_CHANGE_NETWORK_TITLE: () => LocalizedString
 	/**
+	 * Clear browser cache
+	 */
+	BROWSER_CLEAR_CACHE: () => LocalizedString
+	/**
 	 * Close tab
 	 */
 	BROWSER_CLOSE_TAB: () => LocalizedString
@@ -7159,6 +7175,10 @@ Thanks for your patience!
 	 * Write recovery password
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: () => LocalizedString
+	/**
+	 * Cache cleared
+	 */
+	CACHE_CLEARED: () => LocalizedString
 	/**
 	 * You have rejected the certificate
 	 */
@@ -10837,6 +10857,10 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * These tokens are staked on vedelegate.vet and can only be managed there.
+	 */
+	TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE: () => LocalizedString
 }
 
 export type Formatters = {
