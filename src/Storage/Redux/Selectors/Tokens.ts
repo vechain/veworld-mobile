@@ -49,10 +49,10 @@ export const selectCustomTokensByAccount = createSelector(
 
 export const selectOfficialTokens = createSelector(
     [selectTokensForNetwork, selectNetworkVBDTokens],
-    (state, networkVBDTokens) =>
+    (tokensForNetwork, networkVBDTokens) =>
         TokenUtils.mergeTokens(
             [{ ...VET }, { ...VTHO }, { ...networkVBDTokens.B3TR }, { ...networkVBDTokens.VOT3 }],
-            state.officialTokens,
+            tokensForNetwork.officialTokens as FungibleToken[],
         ),
 )
 
