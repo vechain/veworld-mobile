@@ -618,6 +618,11 @@
   "DELEGATION_NO_FEE": "None",
   "DESCRIPTION_QR_CODE_FOR_ACCOUNT": "Scan the QR code or use the wallet address to receive tokens and NFTs.",
   "DETAILS": "Details",
+  "DEVELOPER_MENU_LOCKED_MSG": "Developer menu locked",
+  "DEVELOPER_MENU_UNLOCKED_MSG": "Developer menu unlocked",
+  "DEVELOPER_NOTIFICATION_CENTER_DESC": "Configure the notification center URL to use for push notifications.",
+  "DEVELOPER_NOTIFICATION_CENTER_TITLE": "Notification Center",
+  "DEVELOPER_SETTINGS_RESET_BUTTON": "Reset settings",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "One or more of your accounts recovery phrase haven’t been backed up yet. Make sure to backup to never lose access to your crypto.",
   "DEVICE_BACKUP_MODAL_TITLE": "Backup now",
   "DEVICE_JAILBROKE_MODAL_SUBTITLE": "We have detected that your device is jailbroken, which may compromise the security of your wallet. We strongly recommend backing up your recovery phrase, resetting VeWorld in General Settings, and importing your wallet on a non-jailbroken device.",
@@ -1190,6 +1195,7 @@
   "TITLE_CONVERT_BETTER_TOKENS": "Convert your Better tokens",
   "TITLE_CREATE_WALLET_SUCCESS": "Your vechain wallet is ready!",
   "TITLE_CREATE_WALLET_TYPE": "Wallet Setup",
+  "TITLE_DEVELOPER_SETTINGS": "Developer settings",
   "TITLE_EDIT_WALLET": "Edit wallet",
   "TITLE_GENERAL_SETTINGS": "General settings",
   "TITLE_GET_SUPPORT": "Get support",
@@ -1338,11 +1344,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "TITLE_DEVELOPER_SETTINGS": "Developer settings",
-  "DEVELOPER_NOTIFICATION_CENTER_TITLE": "Notification Center",
-  "DEVELOPER_NOTIFICATION_CENTER_DESC": "Configure the notification center URL to use for push notifications.",
-  "DEVELOPER_MENU_UNLOCKED_MSG": "Developer menu unlocked",
-  "DEVELOPER_MENU_LOCKED_MSG": "Developer menu locked",
-  "DEVELOPER_SETTINGS_RESET_BUTTON": "Reset settings"
+  "YESTERDAY": "Yesterday"
 }
