@@ -1245,7 +1245,7 @@
   "TOKEN_CONVERSION": "Token Conversion",
   "TOKEN_CUSTOM": "Custom token",
   "TOKEN_CUSTOM_SUBTITLE": "Add a custom token to your wallet",
-  "TOKEN_DESCRIPTION_VET": "VET is the native token of the VeChainThor blockchain, with a fixed total supply of 86.7 billion. It is the network’s value-transfer and staking asset, underpinning on-chain economic activity and network security. VET can be used for staking on StarGate - VeChain’s native staking platform - allowing users to earn VeThor (VTHO) — the energy token that powers on-chain transactions — while also enabling participation in governance decisions that shape the blockchain’s future. Through this dual role, VET anchors both the value and utility of the VeChain ecosystem.",
+  "TOKEN_DESCRIPTION_VET": "VET is the native token of the VeChainThor blockchain, with a fixed total supply of 86.7 billion. It is the network’s value-transfer and staking asset, underpinning on-chain economic activity and network security.\n\nVET can be used for staking on StarGate - VeChain’s native staking platform - allowing users to earn VeThor (VTHO) — the energy token that powers on-chain transactions — while also enabling participation in governance decisions that shape the blockchain’s future. Through this dual role, VET anchors both the value and utility of the VeChain ecosystem.",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Activity",
   "TOKEN_DETAIL_BALANCE_TAB": "Balance",
   "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "These tokens are staked on vedelegate.vet and can only be managed there.",
