@@ -16,7 +16,7 @@ import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { FetchActivitiesResponse } from "~Networking"
 import { selectCurrency, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { AddressUtils, PlatformUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
 import { AssetBalanceActivity } from "./Components/AssetBalanceActivity"
 import { ASSET_CHART_PERIODS, AssetChart } from "./Components/AssetChart"
@@ -97,7 +97,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
                 <BaseView px={16}>
                     <BaseSpacer height={24} />
                     <AlertInline status="info" variant="banner" message={LL.TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE()} />
-                    <BaseSpacer height={24} />
+                    <BaseSpacer height={PlatformUtils.isAndroid() ? 24 : 40} />
                 </BaseView>
             )
         }
