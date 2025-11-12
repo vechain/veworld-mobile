@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
-import { FungibleToken } from "~Model"
+import { FungibleToken, NETWORK_TYPE } from "~Model"
 import { B3TR, TEST_B3TR_ADDRESS, TEST_VOT3_ADDRESS, VET, VOT3, VTHO } from "~Constants"
 import { HexUtils, TokenUtils } from "~Utils"
 import { selectSelectedNetwork } from "./Network"
@@ -48,12 +48,15 @@ export const selectCustomTokensByAccount = createSelector(
 )
 
 export const selectOfficialTokens = createSelector(
-    [selectTokensForNetwork, selectNetworkVBDTokens],
-    (tokensForNetwork, networkVBDTokens) =>
-        TokenUtils.mergeTokens(
+    [selectTokensForNetwork, selectNetworkVBDTokens, selectSelectedNetwork],
+    (tokensForNetwork, networkVBDTokens, network) => {
+        if (network.type === NETWORK_TYPE.MAIN)
+            return TokenUtils.mergeTokens([{ ...VET }], tokensForNetwork.officialTokens as FungibleToken[])
+        return TokenUtils.mergeTokens(
             [{ ...VET }, { ...VTHO }, { ...networkVBDTokens.B3TR }, { ...networkVBDTokens.VOT3 }],
             tokensForNetwork.officialTokens as FungibleToken[],
-        ),
+        )
+    },
 )
 
 export const selectAllTokens = createSelector(

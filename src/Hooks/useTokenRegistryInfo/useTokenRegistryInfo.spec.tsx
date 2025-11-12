@@ -1,7 +1,9 @@
-/* eslint-disable max-len */
 import { renderHook } from "@testing-library/react-hooks"
+import React, { PropsWithChildren } from "react"
 import { B3TR, VET, VOT3, VTHO } from "~Constants"
+import { i18nObject } from "~i18n"
 import { FungibleToken } from "~Model"
+import { TestWrapper } from "~Test"
 import { useTokenRegistryInfo } from "./useTokenRegistryInfo"
 
 const mockOfficialTokens = [
@@ -45,32 +47,42 @@ const mockOfficialTokens = [
     },
 ]
 
-// Mock Redux
-jest.mock("~Storage/Redux", () => ({
-    ...jest.requireActual("~Storage/Redux"),
-    selectOfficialTokens: jest.fn(),
-    useAppSelector: jest.fn(),
-}))
-
-// Mock the i18n context
-jest.mock("~i18n", () => ({
-    useI18nContext: () => ({
-        LL: {
-            TOKEN_DESCRIPTION_VET: () =>
-                "VET is the native token of the VeChainThor blockchain, with a fixed total supply of 86.7 billion. It is the network's value-transfer and staking asset, underpinning on-chain economic activity and network security. VET can be used for staking on StarGate - VeChain's native staking platform - allowing users to earn VeThor (VTHO) — the energy token that powers on-chain transactions — while also enabling participation in governance decisions that shape the blockchain's future. Through this dual role, VET anchors both the value and utility of the VeChain ecosystem.",
-        },
-    }),
-}))
-
-const { useAppSelector } = require("~Storage/Redux")
+const PreloadedWrapper = ({ children }: PropsWithChildren) => {
+    return (
+        <TestWrapper
+            preloadedState={{
+                tokens: {
+                    tokens: {
+                        mainnet: {
+                            custom: {},
+                            officialTokens: mockOfficialTokens,
+                            suggestedTokens: [],
+                        },
+                        testnet: {
+                            custom: {},
+                            officialTokens: [],
+                            suggestedTokens: [],
+                        },
+                        other: {
+                            custom: {},
+                            officialTokens: [],
+                            suggestedTokens: [],
+                        },
+                        solo: {
+                            custom: {},
+                            officialTokens: [],
+                            suggestedTokens: [],
+                        },
+                    },
+                },
+            }}>
+            {children}
+        </TestWrapper>
+    )
+}
 
 describe("useTokenRegistryInfo", () => {
     beforeEach(() => {
-        // Mock useAppSelector to return mockOfficialTokens
-        ;(useAppSelector as jest.Mock).mockReturnValue(mockOfficialTokens)
-    })
-
-    afterEach(() => {
         jest.clearAllMocks()
     })
     const mockRegularToken: FungibleToken = {
@@ -88,17 +100,19 @@ describe("useTokenRegistryInfo", () => {
     }
 
     it("should return hardcoded description and VTHO social links for VET token", () => {
-        const { result } = renderHook(() => useTokenRegistryInfo(VET))
+        const { result } = renderHook(() => useTokenRegistryInfo(VET), {
+            wrapper: PreloadedWrapper,
+        })
 
-        expect(result.current.description).toBe(
-            "VET is the native token of the VeChainThor blockchain, with a fixed total supply of 86.7 billion. It is the network's value-transfer and staking asset, underpinning on-chain economic activity and network security. VET can be used for staking on StarGate - VeChain's native staking platform - allowing users to earn VeThor (VTHO) — the energy token that powers on-chain transactions — while also enabling participation in governance decisions that shape the blockchain's future. Through this dual role, VET anchors both the value and utility of the VeChain ecosystem.",
-        )
+        expect(result.current.description).toBe(i18nObject("en").TOKEN_DESCRIPTION_VET())
         expect(result.current.links).toEqual(VTHO.links)
     })
 
     it("should lookup and return description and links from official tokens for B3TR", () => {
         // Pass B3TR constant (which doesn't have registry data)
-        const { result } = renderHook(() => useTokenRegistryInfo(B3TR))
+        const { result } = renderHook(() => useTokenRegistryInfo(B3TR), {
+            wrapper: PreloadedWrapper,
+        })
 
         // Should find it in officialTokens and return registry data
         expect(result.current.description).toBe("B3TR description from registry")
@@ -109,7 +123,9 @@ describe("useTokenRegistryInfo", () => {
     })
 
     it("should lookup and return description and links from official tokens for VOT3", () => {
-        const { result } = renderHook(() => useTokenRegistryInfo(VOT3))
+        const { result } = renderHook(() => useTokenRegistryInfo(VOT3), {
+            wrapper: PreloadedWrapper,
+        })
 
         expect(result.current.description).toBe("VOT3 description from registry")
         expect(result.current.links).toEqual({
@@ -118,7 +134,9 @@ describe("useTokenRegistryInfo", () => {
     })
 
     it("should lookup and return description and links from official tokens for VTHO", () => {
-        const { result } = renderHook(() => useTokenRegistryInfo(VTHO))
+        const { result } = renderHook(() => useTokenRegistryInfo(VTHO), {
+            wrapper: PreloadedWrapper,
+        })
 
         expect(result.current.description).toBe("VTHO description from registry")
         expect(result.current.links).toEqual({
@@ -128,7 +146,9 @@ describe("useTokenRegistryInfo", () => {
     })
 
     it("should return description and social links from registry for regular tokens", () => {
-        const { result } = renderHook(() => useTokenRegistryInfo(mockRegularToken))
+        const { result } = renderHook(() => useTokenRegistryInfo(mockRegularToken), {
+            wrapper: PreloadedWrapper,
+        })
 
         expect(result.current.description).toBe("Regular token description")
         expect(result.current.links).toEqual({
@@ -147,7 +167,9 @@ describe("useTokenRegistryInfo", () => {
             icon: "mock-icon",
         }
 
-        const { result } = renderHook(() => useTokenRegistryInfo(mockTokenWithoutData))
+        const { result } = renderHook(() => useTokenRegistryInfo(mockTokenWithoutData), {
+            wrapper: PreloadedWrapper,
+        })
 
         expect(result.current.description).toBeUndefined()
         expect(result.current.links).toBeUndefined()
