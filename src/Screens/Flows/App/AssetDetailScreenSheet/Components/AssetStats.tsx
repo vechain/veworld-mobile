@@ -1,20 +1,16 @@
-import React, { useCallback, useMemo, useState } from "react"
-import { GestureResponderEvent, NativeSyntheticEvent, Pressable, StyleSheet, TextLayoutEventData } from "react-native"
-import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useThemedStyles } from "~Hooks"
+import React, { useCallback, useMemo } from "react"
 import { getCoinGeckoIdBySymbol, useTokenInfo } from "~Api/Coingecko"
-import { MarketInfo, useFormattedMarketInfo } from "../../AssetDetailScreen/Hooks/useFormattedMarketInfo"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { COLORS, ColorThemeType } from "~Constants"
-import { useI18nContext } from "~i18n"
-import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from "react-native-reanimated"
-import * as Haptics from "expo-haptics"
+import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { COLORS } from "~Constants"
+import { useTheme } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
-import { Routes } from "~Navigation"
-import { SocialLinksButtons } from "./SocialLinksButtons"
+import { useI18nContext } from "~i18n"
 import { TokenSocialLinks } from "~Model"
-
-const DESCRIPTION_LINE_THRESHOLD = 3
+import { Routes } from "~Navigation"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { MarketInfo, useFormattedMarketInfo } from "../../AssetDetailScreen/Hooks/useFormattedMarketInfo"
+import { AssetDescription } from "./AssetDescription"
+import { SocialLinksButtons } from "./SocialLinksButtons"
 
 type AssetStatsProps = {
     tokenSymbol: string
@@ -51,10 +47,8 @@ const StatRow = React.memo<StatItem & { labelColor: string; valueColor: string }
 StatRow.displayName = "StatRow"
 
 export const AssetStats = ({ tokenSymbol, tokenDescription, links, isWrappedToken = false }: AssetStatsProps) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const theme = useTheme()
     const { LL } = useI18nContext()
-    const [isAccordionOpen, setIsAccordionOpen] = useState(false)
-    const [descriptionLineCount, setDescriptionLineCount] = useState(0)
     const { navigateWithTab } = useBrowserTab(Routes.HOME)
 
     const handleSocialLinkPress = useCallback(
@@ -100,40 +94,11 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, links, isWrappedToke
         [LL, marketCap, circulatingSupply, totalSupply, totalVolume, high24h, low24h],
     )
 
-    const shouldShowAccordion = useMemo(() => {
-        return descriptionLineCount > DESCRIPTION_LINE_THRESHOLD
-    }, [descriptionLineCount])
-
-    /**
-     * Measures the actual rendered line count of the description text.
-     * Uses state guard (prev === lineCount) to prevent infinite re-render loop.
-     */
-    const handleTextLayout = useCallback((e: NativeSyntheticEvent<TextLayoutEventData>) => {
-        const lineCount = e.nativeEvent.lines.length
-        setDescriptionLineCount(prev => (prev === lineCount ? prev : lineCount))
-    }, [])
-
-    const handleResponder = useCallback(() => true, [])
-
-    const handleTouchEnd = useCallback((e: GestureResponderEvent) => {
-        e.stopPropagation()
-    }, [])
-
-    const open = useSharedValue(false)
-    const progress = useDerivedValue(() => (open.value ? withTiming(1) : withTiming(0)))
-
-    const chevronStyle = useAnimatedStyle(() => {
-        return {
-            transform: [{ rotate: `${progress.value * 180}deg` }],
-        }
-    }, [])
-
-    const handleToggle = useCallback(() => {
-        setIsAccordionOpen(prev => !prev)
-        open.value = !open.value
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []) // open is a stable SharedValue ref, doesn't need to be in deps
+    const shouldShowStats = useMemo(() => {
+        if (isWrappedToken) return false
+        if (!marketInfo) return false
+        return true
+    }, [isWrappedToken, marketInfo])
 
     return (
         <BaseView
@@ -143,7 +108,7 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, links, isWrappedToke
             mx={16}
             my={16}
             borderRadius={16}>
-            {!isWrappedToken && (
+            {shouldShowStats && (
                 <>
                     <BaseView flexDirection="row" alignItems="center" gap={12} justifyContent="flex-start" mb={12}>
                         <BaseIcon name="icon-line-chart" size={20} color={theme.colors.actionBanner.title} />
@@ -165,76 +130,8 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, links, isWrappedToke
                 </>
             )}
 
-            {tokenDescription && (
-                <>
-                    <BaseView flexDirection="row" alignItems="center" gap={12} justifyContent="flex-start" mb={12}>
-                        <BaseIcon name="icon-alert-circle" size={20} color={theme.colors.actionBanner.title} />
-                        <BaseText typographyFont="bodySemiBold" color={theme.colors.actionBanner.title}>
-                            {LL.TITLE_ABOUT()}
-                        </BaseText>
-                    </BaseView>
-
-                    {/**
-                     * Hidden text element that measures the full untruncated line count.
-                     * This is necessary because onTextLayout with numberOfLines returns the truncated count,
-                     * not the true line count. The opacity:0 and absolute positioning ensure it doesn't
-                     * affect layout while still being measured by the layout engine.
-                     */}
-                    <BaseText
-                        typographyFont="smallButtonPrimary"
-                        color={theme.colors.textLightish}
-                        onTextLayout={handleTextLayout}
-                        style={styles.hiddenText}
-                        testID="token-description-hidden">
-                        {tokenDescription}
-                    </BaseText>
-
-                    <BaseText
-                        typographyFont="smallButtonPrimary"
-                        color={theme.colors.textLightish}
-                        numberOfLines={shouldShowAccordion && !isAccordionOpen ? 3 : undefined}
-                        testID="token-description">
-                        {tokenDescription}
-                    </BaseText>
-
-                    {shouldShowAccordion && (
-                        <BaseView my={12} onStartShouldSetResponder={handleResponder} onTouchEnd={handleTouchEnd}>
-                            <Pressable onPress={handleToggle} style={styles.toggleButton} testID="read-more-toggle">
-                                <BaseText typographyFont="smallButtonPrimary" color={theme.colors.actionBanner.title}>
-                                    {isAccordionOpen ? LL.COMMON_LBL_READ_LESS() : LL.COMMON_LBL_READ_MORE()}
-                                </BaseText>
-                                <Animated.View style={chevronStyle}>
-                                    <BaseIcon
-                                        name="icon-chevron-down"
-                                        color={theme.colors.actionBanner.title}
-                                        size={14}
-                                        testID="chevron"
-                                    />
-                                </Animated.View>
-                            </Pressable>
-                        </BaseView>
-                    )}
-                    <BaseSpacer height={8} />
-                </>
-            )}
+            <AssetDescription description={tokenDescription} />
             <SocialLinksButtons links={links} onNavigate={handleSocialLinkPress} />
         </BaseView>
     )
 }
-
-const baseStyles = (_theme: ColorThemeType) =>
-    StyleSheet.create({
-        toggleButton: {
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            marginTop: 8,
-            gap: 4,
-            width: "100%",
-        },
-        hiddenText: {
-            position: "absolute",
-            opacity: 0,
-            zIndex: -1,
-        },
-    })

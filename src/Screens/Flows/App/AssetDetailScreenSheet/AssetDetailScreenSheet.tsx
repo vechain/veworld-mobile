@@ -102,7 +102,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
             )
         }
 
-        if (token.symbol && description && links) {
+        if (token.symbol) {
             return (
                 <AssetStats
                     tokenSymbol={token.symbol}
