@@ -15,7 +15,7 @@ type SocialLinksButtonsProps = {
         twitter?: string
         telegram?: string
     }
-    onNavigate: (url: string) => void
+    onNavigate: (url: string, key: "website" | "twitter" | "telegram") => void
 }
 
 const SOCIAL_BUTTON_FLEX = {
@@ -58,7 +58,7 @@ export const SocialLinksButtons = ({ links, onNavigate }: SocialLinksButtonsProp
                     key={key}
                     flex={isWebsite ? SOCIAL_BUTTON_FLEX.website : SOCIAL_BUTTON_FLEX.iconOnly}
                     testID={`${key}_BUTTON`}
-                    action={() => onNavigate(value)}
+                    action={() => onNavigate(value, key)}
                     style={styles.button}
                     size="md"
                     leftIcon={renderLeftIcon(key)}

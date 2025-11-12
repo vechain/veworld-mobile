@@ -97,7 +97,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
                 <BaseView px={16}>
                     <BaseSpacer height={24} />
                     <AlertInline status="info" variant="banner" message={LL.TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE()} />
-                    <BaseSpacer height={16} />
+                    <BaseSpacer height={24} />
                 </BaseView>
             )
         }

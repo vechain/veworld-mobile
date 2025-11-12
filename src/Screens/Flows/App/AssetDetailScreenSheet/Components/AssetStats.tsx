@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from "react"
+import { Linking } from "react-native"
 import { getCoinGeckoIdBySymbol, useTokenInfo } from "~Api/Coingecko"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
@@ -52,8 +53,12 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, links, isWrappedToke
     const { navigateWithTab } = useBrowserTab(Routes.HOME)
 
     const handleSocialLinkPress = useCallback(
-        (url: string) => {
-            navigateWithTab({ url, title: url })
+        (url: string, kind: "website" | "twitter" | "telegram") => {
+            if (kind === "website") {
+                navigateWithTab({ url, title: url })
+                return
+            }
+            Linking.openURL(url)
         },
         [navigateWithTab],
     )
