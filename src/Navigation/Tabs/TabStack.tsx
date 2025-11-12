@@ -1,8 +1,7 @@
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { useSharedValue, withTiming } from "react-native-reanimated"
 import { TabIcon, useFeatureFlags } from "~Components"
 import { useCheckWalletBackup } from "~Hooks"
 import { IconKey } from "~Model"
@@ -11,7 +10,7 @@ import { HomeStack, RootStackParamListHome, RootStackParamListSettings, Settings
 import { AppsStack, RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
-import { selectCurrentScreen, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import PlatformUtils from "~Utils/PlatformUtils"
 import { useI18nContext } from "~i18n"
@@ -27,35 +26,13 @@ export type TabStackParamList = {
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
 
-const getHeightMultiplierByScreen = (currentScreen: string) => {
-    switch (currentScreen) {
-        case Routes.SETTINGS_GET_SUPPORT:
-        case Routes.SETTINGS_GIVE_FEEDBACK:
-        case Routes.BROWSER:
-        case Routes.TOKEN_DETAILS:
-        case Routes.APPS_TABS_MANAGER:
-        case Routes.APPS_SEARCH:
-        case Routes.BUY_WEBVIEW:
-            return 0
-
-        case "":
-            return 0
-
-        default:
-            return 1
-    }
-}
-
 export const TabStack = () => {
     const { LL } = useI18nContext()
-    const currentScreen = useAppSelector(selectCurrentScreen)
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
 
     const { betterWorldFeature } = useFeatureFlags()
-
-    const heightMultiplier = useSharedValue(1)
 
     const renderTabBarIcon = useCallback(
         (focused: boolean, iconName: IconKey, label: string) => {
@@ -74,14 +51,7 @@ export const TabStack = () => {
         [isShowBackupModal],
     )
 
-    useEffect(() => {
-        heightMultiplier.value = withTiming(getHeightMultiplierByScreen(currentScreen), { duration: 400 })
-    }, [currentScreen, heightMultiplier])
-
-    const renderTabBar = useCallback(
-        (props: BottomTabBarProps) => <TabBar heightMultiplier={heightMultiplier} {...props} />,
-        [heightMultiplier],
-    )
+    const renderTabBar = useCallback((props: BottomTabBarProps) => <TabBar {...props} />, [])
 
     return (
         <Tab.Navigator
