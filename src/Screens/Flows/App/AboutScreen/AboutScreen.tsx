@@ -62,10 +62,10 @@ export const AboutScreen = () => {
 
     const handleDevSettingsTap = useCallback(() => {
         HapticsService.triggerImpact({ level: "Medium" })
-        const newState = !developerMenuUnlocked
-        dispatch(setDeveloperMenuUnlocked(newState))
+        const menuUnlocked = !developerMenuUnlocked
+        dispatch(setDeveloperMenuUnlocked(menuUnlocked))
 
-        if (newState) {
+        if (menuUnlocked) {
             showSuccessToast({
                 text1: LL.DEVELOPER_MENU_UNLOCKED_MSG(),
             })
@@ -76,7 +76,7 @@ export const AboutScreen = () => {
         }
     }, [dispatch, developerMenuUnlocked, LL])
 
-    const quadTap = useMemo(
+    const devMenuGesture = useMemo(
         () => Gesture.Tap().maxDuration(500).numberOfTaps(5).onStart(runOnJS(handleDevSettingsTap)),
         [handleDevSettingsTap],
     )
@@ -87,7 +87,7 @@ export const AboutScreen = () => {
             body={
                 <BaseView h={100} alignItems="center">
                     <BaseSpacer height={24} />
-                    <GestureDetector gesture={Gesture.Exclusive(quadTap)}>
+                    <GestureDetector gesture={Gesture.Exclusive(devMenuGesture)}>
                         <BaseCard
                             containerStyle={styles.logoCardContainer}
                             // @ts-ignore

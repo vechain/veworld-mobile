@@ -24,7 +24,7 @@ export const DeveloperSettingsScreen = () => {
 
     const goBack = useCallback(() => nav.goBack(), [nav])
 
-    const onSavePress = useCallback(async () => {
+    const handleOnSavePress = useCallback(async () => {
         if (isSubmitDisabled) return
         setIsSubmitting(true)
 
@@ -38,8 +38,7 @@ export const DeveloperSettingsScreen = () => {
         setIsSubmitting(false)
     }, [dispatch, isSubmitDisabled, notificationUrl, goBack])
 
-    const onResetPress = useCallback(async () => {
-        if (isSubmitDisabled) return
+    const handleOnResetPress = useCallback(async () => {
         setIsResetting(true)
 
         try {
@@ -50,7 +49,7 @@ export const DeveloperSettingsScreen = () => {
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
         }
         setIsResetting(false)
-    }, [dispatch, isSubmitDisabled])
+    }, [dispatch])
 
     const validateUrlInput = useCallback(
         (value: string): string => {
@@ -99,7 +98,7 @@ export const DeveloperSettingsScreen = () => {
                     <BaseView flexDirection="row" mb={16}>
                         <BaseButton
                             haptics="Light"
-                            action={onResetPress}
+                            action={handleOnResetPress}
                             flex={1}
                             variant="outline"
                             title={LL.DEVELOPER_SETTINGS_RESET_BUTTON()}
@@ -110,7 +109,7 @@ export const DeveloperSettingsScreen = () => {
                         <BaseSpacer width={16} />
                         <BaseButton
                             haptics="Light"
-                            action={onSavePress}
+                            action={handleOnSavePress}
                             flex={1}
                             isLoading={isSubmitting}
                             title={LL.COMMON_BTN_SAVE()}
