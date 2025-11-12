@@ -42,8 +42,8 @@ export const DeveloperSettingsScreen = () => {
         setIsResetting(true)
 
         try {
-            dispatch(setNotificationCenterUrl(undefined))
             setNotificationUrl("")
+            dispatch(setNotificationCenterUrl(undefined))
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
         } catch (e) {
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)

@@ -33,21 +33,27 @@ const NOTIFICATION_CENTER_EVENT = ERROR_EVENTS.NOTIFICATION_CENTER
 export class RegistrationClient {
     private static readonly BATCH_SIZE = 5
 
-    static async registerAddresses(addresses: string[], subscriptionId: string | null): Promise<RegistrationResult[]> {
-        return this.performOperation("REGISTER", addresses, subscriptionId)
+    static async registerAddresses(
+        addresses: string[],
+        subscriptionId: string | null,
+        baseUrl: string,
+    ): Promise<RegistrationResult[]> {
+        return this.performOperation("REGISTER", addresses, subscriptionId, baseUrl)
     }
 
     static async unregisterAddresses(
         addresses: string[],
         subscriptionId: string | null,
+        baseUrl: string,
     ): Promise<RegistrationResult[]> {
-        return this.performOperation("UNREGISTER", addresses, subscriptionId)
+        return this.performOperation("UNREGISTER", addresses, subscriptionId, baseUrl)
     }
 
     private static async performOperation(
         operation: RegistrationOperation,
         addresses: string[],
         subscriptionId: string | null,
+        baseUrl: string,
     ): Promise<RegistrationResult[]> {
         const batches = this.chunkArray(addresses, this.BATCH_SIZE)
         const results: RegistrationResult[] = []
@@ -57,7 +63,7 @@ export class RegistrationClient {
         )
 
         for (const batch of batches) {
-            const batchResults = await this.processBatch(operation, batch, subscriptionId)
+            const batchResults = await this.processBatch(operation, batch, subscriptionId, baseUrl)
             results.push(...batchResults)
         }
         return results
@@ -67,12 +73,13 @@ export class RegistrationClient {
         operation: RegistrationOperation,
         batch: string[],
         subscriptionId: string | null,
+        baseUrl: string,
     ): Promise<RegistrationResult[]> {
         const now = Date.now()
 
         const callApi = async (): Promise<NotificationAPIResponse> => {
             const apiCall = operation === "REGISTER" ? registerPushNotification : unregisterPushNotification
-            return apiCall({ walletAddresses: batch, subscriptionId })
+            return apiCall({ walletAddresses: batch, subscriptionId, baseUrl })
         }
 
         // retry with exponential backoff
