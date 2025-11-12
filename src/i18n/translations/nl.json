@@ -1245,7 +1245,7 @@
   "TOKEN_CONVERSION": "Token Conversie",
   "TOKEN_CUSTOM": "Aangepaste token",
   "TOKEN_CUSTOM_SUBTITLE": "Voeg een aangepaste token toe aan je wallet",
-  "TOKEN_DESCRIPTION_VET": "VET is de native token van de VeChainThor blockchain, met een vaste totale voorraad van 86,7 miljard. Het is het waarde-overdrachts- en staking-activum van het netwerk, dat de economische activiteit op de chain en de netwerkveiligheid ondersteunt. VET kan worden gebruikt voor staking op StarGate - VeChain's native staking-platform - waardoor gebruikers VeThor (VTHO) kunnen verdienen, de energietoken die transacties op de chain aandrijft, en daarnaast deelname mogelijk maakt aan governancebeslissingen die de toekomst van de blockchain vormgeven. Door deze dubbele rol verankert VET zowel de waarde als het nut van het VeChain-ecosysteem.",
+  "TOKEN_DESCRIPTION_VET": "VET is de native token van de VeChainThor blockchain, met een vaste totale voorraad van 86,7 miljard. Het is het netwerk's waarde-overdrachts- en staking-asset, dat de economische activiteiten op de keten en netwerkbeveiliging ondersteunt.\n\nVET kan worden gebruikt voor staking op StarGate - VeChain's native staking platform - waarmee gebruikers VeThor (VTHO) kunnen verdienen — de energietoken die on-chain transacties aandrijft — en kan ook deelnemen aan bestuursbeslissingen die de toekomst van de blockchain vormgeven. Via deze dubbele rol verankert VET zowel de waarde als het nut van het VeChain ecosysteem.",
   "TOKEN_DETAIL_ACTIVITY_TAB": "Activiteit",
   "TOKEN_DETAIL_BALANCE_TAB": "Balans",
   "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Deze tokens zijn ingezet op vedelegate.vet en kunnen alleen daar beheerd worden.",
