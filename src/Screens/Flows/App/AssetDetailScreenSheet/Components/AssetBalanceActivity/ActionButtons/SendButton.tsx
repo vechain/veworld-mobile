@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, VeDelegate } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
@@ -26,8 +26,11 @@ const useSend = (token: FungibleTokenWithBalance) => {
     }, [nav, token, track])
 
     const isSendDisabled = useMemo(
-        () => BigNutils(token.balance.balance).isZero || AccountUtils.isObservedAccount(selectedAccount),
-        [selectedAccount, token.balance.balance],
+        () =>
+            BigNutils(token.balance.balance).isZero ||
+            AccountUtils.isObservedAccount(selectedAccount) ||
+            token.symbol === VeDelegate.symbol,
+        [selectedAccount, token.balance.balance, token.symbol],
     )
 
     return useMemo(

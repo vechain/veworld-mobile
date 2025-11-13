@@ -7,7 +7,12 @@ import { isSmallScreen } from "~Constants"
 import { useCheckWalletBackup, useClaimableUsernames, useThemedStyles } from "~Hooks"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import {
+    selectAreDevFeaturesEnabled,
+    selectDeveloperMenuUnlocked,
+    selectSelectedAccount,
+    useAppSelector,
+} from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
 import SettingsRowDivider, { RowDividerProps } from "./Components/SettingsRowDivider"
@@ -30,6 +35,7 @@ type SettingsItem = SettingsRowItem | DividerItem | BackupBannerItem
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
+    const developerMenuUnlocked = useAppSelector(selectDeveloperMenuUnlocked)
 
     const { featureEnabled: notificationFeatureEnabled } = useNotifications()
 
@@ -59,10 +65,11 @@ export const SettingsScreen = () => {
             getLists(
                 LL,
                 devFeaturesEnabled,
+                developerMenuUnlocked,
                 notificationFeatureEnabled,
                 AccountUtils.isObservedAccount(selectedAccount),
             ),
-        [LL, devFeaturesEnabled, notificationFeatureEnabled, selectedAccount],
+        [LL, devFeaturesEnabled, developerMenuUnlocked, notificationFeatureEnabled, selectedAccount],
     )
 
     const renderBackupWarning = useMemo(() => {
@@ -162,6 +169,7 @@ const BACKUP_BANNER = {
 const getLists = (
     LL: TranslationFunctions,
     devEnabled: boolean,
+    developerMenuUnlocked: boolean,
     notificationFeatureEnabled: boolean,
     isObservedAccount: boolean,
 ): { settingsList: SettingsItem[] } => {
@@ -240,6 +248,12 @@ const getLists = (
             screenName: Routes.SETTINGS_ALERTS,
             icon: "icon-bell",
         },
+        DEVELOPER: {
+            element: "settingsRow",
+            title: LL.TITLE_DEVELOPER_SETTINGS(),
+            screenName: Routes.SETTINGS_DEVELOPER,
+            icon: "icon-code",
+        },
     } satisfies Record<string, SettingsItem>
 
     if (isObservedAccount) {
@@ -276,6 +290,10 @@ const getLists = (
 
     if (devEnabled) {
         settingsList.push(tiles.ALERTS)
+    }
+
+    if (developerMenuUnlocked) {
+        settingsList.push(tiles.DEVELOPER)
     }
 
     return { settingsList }

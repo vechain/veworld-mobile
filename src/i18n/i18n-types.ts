@@ -2550,6 +2550,26 @@ type RootTranslation = {
 	 */
 	DETAILS: string
 	/**
+	 * D​e​v​e​l​o​p​e​r​ ​m​e​n​u​ ​l​o​c​k​e​d
+	 */
+	DEVELOPER_MENU_LOCKED_MSG: string
+	/**
+	 * D​e​v​e​l​o​p​e​r​ ​m​e​n​u​ ​u​n​l​o​c​k​e​d
+	 */
+	DEVELOPER_MENU_UNLOCKED_MSG: string
+	/**
+	 * C​o​n​f​i​g​u​r​e​ ​t​h​e​ ​n​o​t​i​f​i​c​a​t​i​o​n​ ​c​e​n​t​e​r​ ​U​R​L​ ​t​o​ ​u​s​e​ ​f​o​r​ ​p​u​s​h​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​.
+	 */
+	DEVELOPER_NOTIFICATION_CENTER_DESC: string
+	/**
+	 * N​o​t​i​f​i​c​a​t​i​o​n​ ​C​e​n​t​e​r
+	 */
+	DEVELOPER_NOTIFICATION_CENTER_TITLE: string
+	/**
+	 * R​e​s​e​t​ ​s​e​t​t​i​n​g​s
+	 */
+	DEVELOPER_SETTINGS_RESET_BUTTON: string
+	/**
 	 * O​n​e​ ​o​r​ ​m​o​r​e​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​h​a​v​e​n​’​t​ ​b​e​e​n​ ​b​a​c​k​e​d​ ​u​p​ ​y​e​t​.​ ​M​a​k​e​ ​s​u​r​e​ ​t​o​ ​b​a​c​k​u​p​ ​t​o​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​c​r​y​p​t​o​.
 	 */
 	DEVICE_BACKUP_MODAL_SUBTITLE: string
@@ -4880,6 +4900,10 @@ type RootTranslation = {
 	 */
 	TITLE_CREATE_WALLET_TYPE: string
 	/**
+	 * D​e​v​e​l​o​p​e​r​ ​s​e​t​t​i​n​g​s
+	 */
+	TITLE_DEVELOPER_SETTINGS: string
+	/**
 	 * E​d​i​t​ ​w​a​l​l​e​t
 	 */
 	TITLE_EDIT_WALLET: string
@@ -5077,6 +5101,12 @@ type RootTranslation = {
 	 */
 	TOKEN_CUSTOM_SUBTITLE: string
 	/**
+	 * V​E​T​ ​i​s​ ​t​h​e​ ​n​a​t​i​v​e​ ​t​o​k​e​n​ ​o​f​ ​t​h​e​ ​V​e​C​h​a​i​n​T​h​o​r​ ​b​l​o​c​k​c​h​a​i​n​,​ ​w​i​t​h​ ​a​ ​f​i​x​e​d​ ​t​o​t​a​l​ ​s​u​p​p​l​y​ ​o​f​ ​8​6​.​7​ ​b​i​l​l​i​o​n​.​ ​I​t​ ​i​s​ ​t​h​e​ ​n​e​t​w​o​r​k​’​s​ ​v​a​l​u​e​-​t​r​a​n​s​f​e​r​ ​a​n​d​ ​s​t​a​k​i​n​g​ ​a​s​s​e​t​,​ ​u​n​d​e​r​p​i​n​n​i​n​g​ ​o​n​-​c​h​a​i​n​ ​e​c​o​n​o​m​i​c​ ​a​c​t​i​v​i​t​y​ ​a​n​d​ ​n​e​t​w​o​r​k​ ​s​e​c​u​r​i​t​y​.​
+​
+​V​E​T​ ​c​a​n​ ​b​e​ ​u​s​e​d​ ​f​o​r​ ​s​t​a​k​i​n​g​ ​o​n​ ​S​t​a​r​G​a​t​e​ ​-​ ​V​e​C​h​a​i​n​’​s​ ​n​a​t​i​v​e​ ​s​t​a​k​i​n​g​ ​p​l​a​t​f​o​r​m​ ​-​ ​a​l​l​o​w​i​n​g​ ​u​s​e​r​s​ ​t​o​ ​e​a​r​n​ ​V​e​T​h​o​r​ ​(​V​T​H​O​)​ ​—​ ​t​h​e​ ​e​n​e​r​g​y​ ​t​o​k​e​n​ ​t​h​a​t​ ​p​o​w​e​r​s​ ​o​n​-​c​h​a​i​n​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​—​ ​w​h​i​l​e​ ​a​l​s​o​ ​e​n​a​b​l​i​n​g​ ​p​a​r​t​i​c​i​p​a​t​i​o​n​ ​i​n​ ​g​o​v​e​r​n​a​n​c​e​ ​d​e​c​i​s​i​o​n​s​ ​t​h​a​t​ ​s​h​a​p​e​ ​t​h​e​ ​b​l​o​c​k​c​h​a​i​n​’​s​ ​f​u​t​u​r​e​.​ ​T​h​r​o​u​g​h​ ​t​h​i​s​ ​d​u​a​l​ ​r​o​l​e​,​ ​V​E​T​ ​a​n​c​h​o​r​s​ ​b​o​t​h​ ​t​h​e​ ​v​a​l​u​e​ ​a​n​d​ ​u​t​i​l​i​t​y​ ​o​f​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​e​c​o​s​y​s​t​e​m​.
+	 */
+	TOKEN_DESCRIPTION_VET: string
+	/**
 	 * A​c​t​i​v​i​t​y
 	 */
 	TOKEN_DETAIL_ACTIVITY_TAB: string
@@ -5084,6 +5114,10 @@ type RootTranslation = {
 	 * B​a​l​a​n​c​e
 	 */
 	TOKEN_DETAIL_BALANCE_TAB: string
+	/**
+	 * T​h​e​s​e​ ​t​o​k​e​n​s​ ​a​r​e​ ​s​t​a​k​e​d​ ​o​n​ ​v​e​d​e​l​e​g​a​t​e​.​v​e​t​ ​a​n​d​ ​c​a​n​ ​o​n​l​y​ ​b​e​ ​m​a​n​a​g​e​d​ ​t​h​e​r​e​.
+	 */
+	TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE: string
 	/**
 	 * T​o​k​e​n​ ​I​D
 	 */
@@ -5475,10 +5509,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * T​h​e​s​e​ ​t​o​k​e​n​s​ ​a​r​e​ ​s​t​a​k​e​d​ ​o​n​ ​v​e​d​e​l​e​g​a​t​e​.​v​e​t​ ​a​n​d​ ​c​a​n​ ​o​n​l​y​ ​b​e​ ​m​a​n​a​g​e​d​ ​t​h​e​r​e​.
-	 */
-	TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE: string
 }
 
 export type TranslationFunctions = {
@@ -7973,6 +8003,26 @@ This action is irreversible.
 	 */
 	DETAILS: () => LocalizedString
 	/**
+	 * Developer menu locked
+	 */
+	DEVELOPER_MENU_LOCKED_MSG: () => LocalizedString
+	/**
+	 * Developer menu unlocked
+	 */
+	DEVELOPER_MENU_UNLOCKED_MSG: () => LocalizedString
+	/**
+	 * Configure the notification center URL to use for push notifications.
+	 */
+	DEVELOPER_NOTIFICATION_CENTER_DESC: () => LocalizedString
+	/**
+	 * Notification Center
+	 */
+	DEVELOPER_NOTIFICATION_CENTER_TITLE: () => LocalizedString
+	/**
+	 * Reset settings
+	 */
+	DEVELOPER_SETTINGS_RESET_BUTTON: () => LocalizedString
+	/**
 	 * One or more of your accounts recovery phrase haven’t been backed up yet. Make sure to backup to never lose access to your crypto.
 	 */
 	DEVICE_BACKUP_MODAL_SUBTITLE: () => LocalizedString
@@ -10266,6 +10316,10 @@ Here's what it's all about:
 	 */
 	TITLE_CREATE_WALLET_TYPE: () => LocalizedString
 	/**
+	 * Developer settings
+	 */
+	TITLE_DEVELOPER_SETTINGS: () => LocalizedString
+	/**
 	 * Edit wallet
 	 */
 	TITLE_EDIT_WALLET: () => LocalizedString
@@ -10462,6 +10516,12 @@ Here's what it's all about:
 	 */
 	TOKEN_CUSTOM_SUBTITLE: () => LocalizedString
 	/**
+	 * VET is the native token of the VeChainThor blockchain, with a fixed total supply of 86.7 billion. It is the network’s value-transfer and staking asset, underpinning on-chain economic activity and network security.
+
+VET can be used for staking on StarGate - VeChain’s native staking platform - allowing users to earn VeThor (VTHO) — the energy token that powers on-chain transactions — while also enabling participation in governance decisions that shape the blockchain’s future. Through this dual role, VET anchors both the value and utility of the VeChain ecosystem.
+	 */
+	TOKEN_DESCRIPTION_VET: () => LocalizedString
+	/**
 	 * Activity
 	 */
 	TOKEN_DETAIL_ACTIVITY_TAB: () => LocalizedString
@@ -10469,6 +10529,10 @@ Here's what it's all about:
 	 * Balance
 	 */
 	TOKEN_DETAIL_BALANCE_TAB: () => LocalizedString
+	/**
+	 * These tokens are staked on vedelegate.vet and can only be managed there.
+	 */
+	TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE: () => LocalizedString
 	/**
 	 * Token ID
 	 */
@@ -10857,10 +10921,6 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * These tokens are staked on vedelegate.vet and can only be managed there.
-	 */
-	TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE: () => LocalizedString
 }
 
 export type Formatters = {

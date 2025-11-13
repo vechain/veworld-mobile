@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
-import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChartV2 } from "~Api/Coingecko"
 import { LineChart } from "~Components/Reusable/LineChart"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -30,7 +30,7 @@ export const Chart = ({ token }: Props) => {
     // Early check for supported tokens to optimize API calls
     const isTokenSupported = SUPPORTED_CHART_TOKENS.has(token.symbol)
 
-    const { data: chartData } = useSmartMarketChart({
+    const { data: chartData } = useSmartMarketChartV2({
         id: isTokenSupported ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
         vs_currency: currency,
         days: 1,

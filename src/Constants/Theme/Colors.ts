@@ -827,7 +827,7 @@ const light: Colors = {
             text: COLORS.GREY_700,
         },
     },
-    chartGradientBackground: ["rgba(255, 255, 255, 0)", "rgba(68, 59, 110, 0.5)", "rgba(48, 38, 95, 1)"],
+    chartGradientBackground: ["rgba(255, 255, 255, 0)", "rgba(102, 92, 148, 0.5)", "rgba(48, 38, 95, 1)"],
     timePeriodChip: {
         indicatorBackground: COLORS.GREY_300,
         activeText: COLORS.PURPLE,
