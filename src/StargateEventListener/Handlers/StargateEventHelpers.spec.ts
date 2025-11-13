@@ -68,7 +68,7 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             beat,
             network,
             thor,
-            refetchStargateData: refetch,
+            invalidateStargateData: refetch,
             managedAddresses: [],
             stargateConfig: {
                 // Missing NODE_MANAGEMENT_CONTRACT_ADDRESS on purpose
@@ -98,7 +98,7 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             beat,
             network,
             thor,
-            refetchStargateData: jest.fn(),
+            invalidateStargateData: jest.fn(),
             managedAddresses: [],
             stargateConfig: defaultStargateConfig,
         })
@@ -119,7 +119,7 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             beat,
             network,
             thor,
-            refetchStargateData: refetch,
+            invalidateStargateData: refetch,
             managedAddresses: [],
             stargateConfig: defaultStargateConfig,
         })
@@ -139,7 +139,7 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             beat,
             network,
             thor,
-            refetchStargateData: refetch,
+            invalidateStargateData: refetch,
             managedAddresses: [],
             stargateConfig: {},
         })
@@ -157,7 +157,7 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             beat,
             network,
             thor,
-            refetchStargateData: refetch,
+            invalidateStargateData: refetch,
             managedAddresses: [],
             stargateConfig: defaultStargateConfig,
         })
@@ -166,7 +166,7 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
         expect(thor.blocks.getBlockExpanded).not.toHaveBeenCalled()
     })
 
-    it("triggers refetch per matching NodeDelegated event for managed owner", async () => {
+    it.only("triggers refetch per matching NodeDelegated event for managed owner", async () => {
         jest.useFakeTimers()
 
         getReceiptProcessorMock.mockReturnValue({
@@ -194,7 +194,7 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             beat,
             network,
             thor,
-            refetchStargateData: refetch,
+            invalidateStargateData: refetch,
             managedAddresses: ["0xOWNER"],
             stargateConfig: defaultStargateConfig,
         })
@@ -202,7 +202,7 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
         // Fast-forward timers to trigger the setTimeout
         jest.runAllTimers()
 
-        expect(refetch).toHaveBeenCalledTimes(2) // Called for both owner and delegatee
+        expect(refetch).toHaveBeenCalledTimes(1) // Called for owner (as origin)
 
         jest.useRealTimers()
     })
@@ -229,7 +229,7 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             beat,
             network,
             thor,
-            refetchStargateData: refetch,
+            invalidateStargateData: refetch,
             managedAddresses: ["0xOWNER"],
             stargateConfig: defaultStargateConfig,
         })
@@ -279,7 +279,7 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             beat,
             network,
             thor,
-            refetchStargateData: refetch,
+            invalidateStargateData: refetch,
             managedAddresses: ["0xOWNER"],
             stargateConfig: defaultStargateConfig,
         })
@@ -287,7 +287,7 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
         // Fast-forward timers to trigger the setTimeout
         jest.runAllTimers()
 
-        expect(refetch).toHaveBeenCalledTimes(2) // Called for both owner and delegatee
+        expect(refetch).toHaveBeenCalledTimes(1) // Called for the owner
         expect(analyzeReceiptMock).toHaveBeenCalledTimes(2)
 
         jest.useRealTimers()

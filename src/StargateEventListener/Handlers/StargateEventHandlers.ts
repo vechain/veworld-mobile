@@ -73,7 +73,7 @@ export const handleNodeDelegatedEvent = async ({
         const stargateEvents = await parseStargateEvents(beat, stargateConfig, thor, receiptProcessor)
 
         // Get all the unique addresses
-        const addresses = [...new Set(stargateEvents.flatMap(u => [u.address1, u.address2].filter(Boolean)))]
+        const addresses = [...new Set(stargateEvents.flatMap(u => [u.address1, u.address2, u.origin].filter(Boolean)))]
             //Filter only by the addresses owned by the user
             .filter(addr => managedAddresses.some(managedAddr => AddressUtils.compareAddresses(addr, managedAddr)))
         if (addresses.length === 0) return
@@ -105,7 +105,6 @@ const parseStargateEvents = async (
         const events = processExpandedTransactionsForEvents(
             expanded.transactions.map(tx => ({ id: tx.id, origin: tx.origin, outputs: tx.outputs })),
             config,
-            beat,
             receiptProcessor,
         )
 
@@ -125,7 +124,6 @@ type ExpandedTx = {
 const processExpandedTransactionsForEvents = (
     transactions: ExpandedTx[],
     config: StargateConfiguration,
-    beat: Beat,
     receiptProcessor: ReturnType<typeof getReceiptProcessor>,
 ) => {
     // Analyze each transaction once, then flatten all outputs to events.
@@ -141,7 +139,7 @@ const processExpandedTransactionsForEvents = (
         }
     }
 
-    return analyzedPerTx.flatMap(({ outputs }) =>
+    return analyzedPerTx.flatMap(({ outputs, origin }) =>
         outputs
             .filter(isStargateOutput)
             .filter(
@@ -154,25 +152,31 @@ const processExpandedTransactionsForEvents = (
             .map(out => {
                 switch (out.name) {
                     case "Transfer(indexed address,indexed address,indexed uint256)":
-                        return { address1: out.params.from, address2: out.params.to, tokenId: out.params.tokenId }
+                        return {
+                            address1: out.params.from,
+                            address2: out.params.to,
+                            tokenId: out.params.tokenId,
+                            origin,
+                        }
                     case "TokenBurned(indexed address,indexed uint8,uint256,uint256)":
-                        return { address1: out.params.owner, tokenId: out.params.tokenId }
+                        return { address1: out.params.owner, tokenId: out.params.tokenId, origin }
                     case "TokenMinted(indexed address,indexed uint8,indexed bool,uint256,uint256)":
-                        return { address1: out.params.owner, tokenId: out.params.tokenId }
+                        return { address1: out.params.owner, tokenId: out.params.tokenId, origin }
                     // eslint-disable-next-line max-len
                     case "DelegationRewardsClaimed(indexed address,indexed uint256,indexed uint256,uint256,uint32,uint32)":
-                        return { address1: out.params.receiver, tokenId: out.params.tokenId }
+                        return { address1: out.params.receiver, tokenId: out.params.tokenId, origin }
                     case "ClaimGeneratedVTHO(address,address,uint256)":
-                        return { address1: out.params.owner, address2: out.params.receiver }
+                        return { address1: out.params.owner, address2: out.params.receiver, origin }
                     case "NodeDelegated(indexed uint256,indexed address,bool)":
-                        return { tokenId: out.params.nodeId }
+                        return { tokenId: out.params.nodeId, address1: out.params.delegatee, origin }
                     case "Unstaked(indexed address,indexed address,indexed uint256)":
-                        return { address1: out.params.owner, tokenId: out.params.tokenId }
+                        return { address1: out.params.owner, tokenId: out.params.tokenId, origin }
                     case "DelegationRewardsClaimed(indexed uint256,uint256,indexed address,indexed address)":
                         return {
                             address1: out.params.claimer,
                             address2: out.params.recipient,
                             tokenId: out.params.tokenId,
+                            origin,
                         }
                 }
             }),
