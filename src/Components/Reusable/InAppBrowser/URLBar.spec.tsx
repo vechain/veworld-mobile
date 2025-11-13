@@ -103,7 +103,7 @@ describe("URLBar", () => {
             const preloadedState = {
                 discovery: {
                     lastNavigationSource: Routes.HOME,
-                    favorites: [],
+
                     favoriteRefs: [],
                     featured: [],
                     custom: [],
@@ -140,7 +140,6 @@ describe("URLBar", () => {
             const onNavigateFn = jest.fn().mockResolvedValue(undefined)
             const preloadedState = {
                 discovery: {
-                    favorites: [],
                     favoriteRefs: [],
                     featured: [],
                     custom: [],
@@ -178,7 +177,7 @@ describe("URLBar", () => {
             const preloadedState = {
                 discovery: {
                     lastNavigationSource: "INVALID_ROUTE",
-                    favorites: [],
+
                     favoriteRefs: [],
                     featured: [],
                     custom: [],

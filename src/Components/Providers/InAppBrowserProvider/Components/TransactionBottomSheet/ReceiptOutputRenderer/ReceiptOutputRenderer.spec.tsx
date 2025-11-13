@@ -27,7 +27,7 @@ describe("ReceiptOutputRenderer", () => {
                 bannerInteractions: {},
                 connectedApps: [],
                 custom: [],
-                favorites: [],
+
                 favoriteRefs: [],
                 featured: [
                     {

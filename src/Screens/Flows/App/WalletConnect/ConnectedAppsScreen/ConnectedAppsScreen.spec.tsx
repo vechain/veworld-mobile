@@ -62,7 +62,7 @@ describe("ConnectedAppsScreen", () => {
                         ],
                         bannerInteractions: {},
                         custom: [],
-                        favorites: [],
+
                         favoriteRefs: [],
                         hasOpenedDiscovery: true,
                         tabsManager: { currentTabId: null, tabs: [] },

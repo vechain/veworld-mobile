@@ -19,7 +19,7 @@ const createInitialProps = (...dapps: DiscoveryDApp[]) => ({
         discovery: {
             custom: [],
             featured: dapps,
-            favorites: [],
+
             favoriteRefs: [],
             hasOpenedDiscovery: false,
             connectedApps: [],

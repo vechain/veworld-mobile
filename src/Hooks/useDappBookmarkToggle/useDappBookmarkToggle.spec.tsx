@@ -95,7 +95,7 @@ describe("useDappBookmarkToggle", () => {
             const preloadedState = {
                 discovery: {
                     featured: mockFeaturedDapps,
-                    favorites: [],
+
                     favoriteRefs: mockFavoriteRefs,
                     custom: [],
                     bannerInteractions: {},
@@ -147,7 +147,7 @@ describe("useDappBookmarkToggle", () => {
             const preloadedState = {
                 discovery: {
                     featured: [],
-                    favorites: [],
+
                     favoriteRefs: vbdFavoriteRefs,
                     custom: [],
                     bannerInteractions: {},
@@ -180,7 +180,7 @@ describe("useDappBookmarkToggle", () => {
             const preloadedState = {
                 discovery: {
                     featured: mockFeaturedDapps,
-                    favorites: [],
+
                     favoriteRefs: mockFavoriteRefs,
                     custom: [],
                     bannerInteractions: {},
@@ -229,7 +229,7 @@ describe("useDappBookmarkToggle", () => {
             const preloadedState = {
                 discovery: {
                     featured: [bookmarkedDapp],
-                    favorites: [],
+
                     favoriteRefs: [favoriteRef],
                     custom: [],
                     bannerInteractions: {},
@@ -285,7 +285,7 @@ describe("useDappBookmarkToggle", () => {
             const preloadedState = {
                 discovery: {
                     featured: [],
-                    favorites: [],
+
                     favoriteRefs: customFavoriteRefs,
                     custom: customBookmarkedDapps,
                     bannerInteractions: {},
@@ -323,7 +323,7 @@ describe("useDappBookmarkToggle", () => {
             const preloadedState = {
                 discovery: {
                     featured: [],
-                    favorites: [],
+
                     favoriteRefs: [],
                     custom: [],
                     bannerInteractions: {},
@@ -359,7 +359,7 @@ describe("useDappBookmarkToggle", () => {
             const preloadedState = {
                 discovery: {
                     featured: mockFeaturedDapps,
-                    favorites: [],
+
                     favoriteRefs: [],
                     custom: [],
                     bannerInteractions: {},

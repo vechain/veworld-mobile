@@ -28,7 +28,7 @@ describe("Discovery Slice - Custom Bookmarks", () => {
             })
         })
 
-        it("should add app-hub dApp to both state.favorites and favoriteRefs", () => {
+        it("should add app-hub dApp to favoriteRefs", () => {
             const appHubDApp: DiscoveryDApp = {
                 id: "app-1",
                 name: "App Hub App",

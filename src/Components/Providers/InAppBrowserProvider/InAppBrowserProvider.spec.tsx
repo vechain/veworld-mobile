@@ -218,7 +218,6 @@ describe("useInAppBrowser hook", () => {
                                 bannerInteractions: {},
                                 connectedApps: [],
                                 custom: [],
-                                favorites: [],
                                 favoriteRefs: [],
                                 featured: [],
                                 hasOpenedDiscovery: true,
@@ -371,7 +370,7 @@ describe("useInAppBrowser hook", () => {
                                 bannerInteractions: {},
                                 connectedApps: [],
                                 custom: [],
-                                favorites: [],
+
                                 favoriteRefs: [],
                                 featured: [],
                                 hasOpenedDiscovery: true,
@@ -504,7 +503,7 @@ describe("useInAppBrowser hook", () => {
                                 bannerInteractions: {},
                                 connectedApps: [],
                                 custom: [],
-                                favorites: [],
+
                                 favoriteRefs: [],
                                 featured: [],
                                 hasOpenedDiscovery: true,
@@ -649,7 +648,7 @@ describe("useInAppBrowser hook", () => {
                                 bannerInteractions: {},
                                 connectedApps: [],
                                 custom: [],
-                                favorites: [],
+
                                 favoriteRefs: [],
                                 featured: [],
                                 hasOpenedDiscovery: true,
@@ -816,7 +815,7 @@ describe("useInAppBrowser hook", () => {
                                 bannerInteractions: {},
                                 connectedApps: [],
                                 custom: [],
-                                favorites: [],
+
                                 favoriteRefs: [],
                                 featured: [],
                                 hasOpenedDiscovery: true,
@@ -945,7 +944,7 @@ describe("useInAppBrowser hook", () => {
                                 bannerInteractions: {},
                                 connectedApps: [],
                                 custom: [],
-                                favorites: [],
+
                                 favoriteRefs: [],
                                 featured: [],
                                 hasOpenedDiscovery: true,

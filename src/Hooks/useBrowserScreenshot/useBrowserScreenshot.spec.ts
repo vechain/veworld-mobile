@@ -54,7 +54,7 @@ describe("useBrowserScreenshot", () => {
                         bannerInteractions: {},
                         connectedApps: [],
                         custom: [],
-                        favorites: [],
+
                         favoriteRefs: [],
                         featured: [],
                         hasOpenedDiscovery: false,
@@ -112,7 +112,7 @@ describe("useBrowserScreenshot", () => {
                         bannerInteractions: {},
                         connectedApps: [],
                         custom: [],
-                        favorites: [],
+
                         favoriteRefs: [],
                         featured: [],
                         hasOpenedDiscovery: false,

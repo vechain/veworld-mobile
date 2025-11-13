@@ -20,7 +20,7 @@ const createDiscoveryState = (...sessions: LoginSession[]): Partial<RootState> =
             bannerInteractions: {},
             connectedApps: [],
             custom: [],
-            favorites: [],
+
             favoriteRefs: [],
             featured: [],
             hasOpenedDiscovery: false,

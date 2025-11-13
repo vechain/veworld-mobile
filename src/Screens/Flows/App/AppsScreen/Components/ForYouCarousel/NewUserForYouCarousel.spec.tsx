@@ -38,7 +38,7 @@ describe("NewUserForYouCarousel", () => {
                         bannerInteractions: {},
                         connectedApps: [],
                         custom: [],
-                        favorites: [],
+
                         favoriteRefs: [],
                         featured: [],
                         hasOpenedDiscovery: false,
@@ -70,7 +70,7 @@ describe("NewUserForYouCarousel", () => {
                         bannerInteractions: {},
                         connectedApps: [],
                         custom: [],
-                        favorites: [],
+
                         favoriteRefs: [],
                         featured: [],
                         hasOpenedDiscovery: false,

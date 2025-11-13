@@ -174,7 +174,7 @@ const mockDapps: DiscoveryDApp[] = [
 const initialStateMock = {
     discovery: {
         featured: mockDapps,
-        favorites: [],
+
         favoriteRefs: [],
         custom: [],
         hasOpenedDiscovery: true,

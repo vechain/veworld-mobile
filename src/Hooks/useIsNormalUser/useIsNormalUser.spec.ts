@@ -39,7 +39,7 @@ describe("useIsNormalUser", () => {
                         bannerInteractions: {},
                         connectedApps: [],
                         custom: [],
-                        favorites: [],
+
                         favoriteRefs: [],
                         featured: [],
                         hasOpenedDiscovery: false,

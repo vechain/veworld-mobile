@@ -30,7 +30,7 @@ describe("useBrowserTab", () => {
                         bannerInteractions: {},
                         connectedApps: [],
                         custom: [],
-                        favorites: [],
+
                         favoriteRefs: [],
                         featured: [],
                         hasOpenedDiscovery: false,
@@ -67,7 +67,7 @@ describe("useBrowserTab", () => {
                         bannerInteractions: {},
                         connectedApps: [],
                         custom: [],
-                        favorites: [],
+
                         favoriteRefs: [],
                         featured: [],
                         hasOpenedDiscovery: false,
@@ -102,7 +102,7 @@ describe("useBrowserTab", () => {
                         bannerInteractions: {},
                         connectedApps: [],
                         custom: [],
-                        favorites: [],
+
                         favoriteRefs: [],
                         featured: [],
                         hasOpenedDiscovery: false,
@@ -135,7 +135,7 @@ describe("useBrowserTab", () => {
                         bannerInteractions: {},
                         connectedApps: [],
                         custom: [],
-                        favorites: [],
+
                         favoriteRefs: [],
                         featured: [],
                         hasOpenedDiscovery: false,

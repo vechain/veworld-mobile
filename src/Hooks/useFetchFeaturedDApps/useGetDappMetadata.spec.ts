@@ -79,7 +79,7 @@ describe("useGetDappMetadata", () => {
                 preloadedState: {
                     discovery: {
                         ...mockState.discovery,
-                        favorites: [],
+
                         favoriteRefs: [],
                     },
                 },
@@ -95,7 +95,7 @@ describe("useGetDappMetadata", () => {
                 preloadedState: {
                     discovery: {
                         ...mockState.discovery,
-                        favorites: [],
+
                         favoriteRefs: [],
                     },
                 },

@@ -102,7 +102,6 @@ describe("FavoritesBottomSheet", () => {
             initialProps: {
                 preloadedState: {
                     discovery: {
-                        favorites: [],
                         favoriteRefs,
                         featured,
                         custom: [],

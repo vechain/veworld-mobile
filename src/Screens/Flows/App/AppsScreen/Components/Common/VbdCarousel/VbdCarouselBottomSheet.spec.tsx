@@ -113,7 +113,6 @@ describe("VbdCarouselBottomSheet", () => {
                     veBetterDaoId: "test-app-id",
                 },
             ],
-            favorites: [],
             favoriteRefs: [],
             custom: [],
             hasOpenedDiscovery: false,

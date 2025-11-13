@@ -44,7 +44,7 @@ const Wrapper = ({ children }: PropsWithChildren) => (
                 bannerInteractions: {},
                 connectedApps: [],
                 custom: [],
-                favorites: [],
+
                 hasOpenedDiscovery: true,
                 tabsManager: {
                     currentTabId: null,
