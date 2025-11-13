@@ -11,6 +11,8 @@ const mockUnregisterPushNotification = unregisterPushNotification as jest.Mocked
     typeof unregisterPushNotification
 >
 
+const mockBaseUrl = "https://test-notification-center.com"
+
 describe("RegistrationClient", () => {
     beforeEach(() => {
         jest.clearAllMocks()
@@ -29,11 +31,12 @@ describe("RegistrationClient", () => {
 
             mockRegisterPushNotification.mockResolvedValueOnce(mockResponse)
 
-            const results = await RegistrationClient.registerAddresses(addresses, subscriptionId)
+            const results = await RegistrationClient.registerAddresses(addresses, subscriptionId, mockBaseUrl)
 
             expect(mockRegisterPushNotification).toHaveBeenCalledWith({
                 walletAddresses: addresses,
                 subscriptionId,
+                baseUrl: mockBaseUrl,
             })
             expect(results).toHaveLength(1)
             expect(results[0]).toMatchObject({
@@ -52,7 +55,7 @@ describe("RegistrationClient", () => {
 
             mockRegisterPushNotification.mockResolvedValueOnce(mockResponse)
 
-            const results = await RegistrationClient.registerAddresses(addresses, subscriptionId)
+            const results = await RegistrationClient.registerAddresses(addresses, subscriptionId, mockBaseUrl)
 
             expect(mockRegisterPushNotification).toHaveBeenCalledTimes(1)
             expect(results).toHaveLength(3)
@@ -73,7 +76,7 @@ describe("RegistrationClient", () => {
 
             mockRegisterPushNotification.mockResolvedValueOnce(mockResponse)
 
-            const results = await RegistrationClient.registerAddresses(addresses, subscriptionId)
+            const results = await RegistrationClient.registerAddresses(addresses, subscriptionId, mockBaseUrl)
 
             expect(results).toHaveLength(3)
             expect(results[0]).toMatchObject({
@@ -100,11 +103,12 @@ describe("RegistrationClient", () => {
 
             mockUnregisterPushNotification.mockResolvedValueOnce(mockResponse)
 
-            const results = await RegistrationClient.unregisterAddresses(addresses, subscriptionId)
+            const results = await RegistrationClient.unregisterAddresses(addresses, subscriptionId, mockBaseUrl)
 
             expect(mockUnregisterPushNotification).toHaveBeenCalledWith({
                 walletAddresses: addresses,
                 subscriptionId,
+                baseUrl: mockBaseUrl,
             })
             expect(results).toHaveLength(1)
             expect(results[0]).toMatchObject({
@@ -123,7 +127,7 @@ describe("RegistrationClient", () => {
 
             mockUnregisterPushNotification.mockResolvedValueOnce(mockResponse)
 
-            const results = await RegistrationClient.unregisterAddresses(addresses, subscriptionId)
+            const results = await RegistrationClient.unregisterAddresses(addresses, subscriptionId, mockBaseUrl)
 
             expect(results).toHaveLength(2)
             expect(results[0]).toMatchObject({
@@ -145,21 +149,24 @@ describe("RegistrationClient", () => {
 
             mockRegisterPushNotification.mockResolvedValue(mockResponse)
 
-            const results = await RegistrationClient.registerAddresses(addresses, "sub-123")
+            const results = await RegistrationClient.registerAddresses(addresses, "sub-123", mockBaseUrl)
 
             // 12 addresses should create 3 batches: [5, 5, 2]
             expect(mockRegisterPushNotification).toHaveBeenCalledTimes(3)
             expect(mockRegisterPushNotification).toHaveBeenNthCalledWith(1, {
                 walletAddresses: addresses.slice(0, 5),
                 subscriptionId: "sub-123",
+                baseUrl: mockBaseUrl,
             })
             expect(mockRegisterPushNotification).toHaveBeenNthCalledWith(2, {
                 walletAddresses: addresses.slice(5, 10),
                 subscriptionId: "sub-123",
+                baseUrl: mockBaseUrl,
             })
             expect(mockRegisterPushNotification).toHaveBeenNthCalledWith(3, {
                 walletAddresses: addresses.slice(10, 12),
                 subscriptionId: "sub-123",
+                baseUrl: mockBaseUrl,
             })
             expect(results).toHaveLength(12)
         })
@@ -170,7 +177,7 @@ describe("RegistrationClient", () => {
 
             mockRegisterPushNotification.mockResolvedValueOnce(mockResponse)
 
-            await RegistrationClient.registerAddresses(addresses, "sub-123")
+            await RegistrationClient.registerAddresses(addresses, "sub-123", mockBaseUrl)
 
             expect(mockRegisterPushNotification).toHaveBeenCalledTimes(1)
         })
@@ -181,16 +188,18 @@ describe("RegistrationClient", () => {
 
             mockRegisterPushNotification.mockResolvedValue(mockResponse)
 
-            await RegistrationClient.registerAddresses(addresses, "sub-123")
+            await RegistrationClient.registerAddresses(addresses, "sub-123", mockBaseUrl)
 
             expect(mockRegisterPushNotification).toHaveBeenCalledTimes(2)
             expect(mockRegisterPushNotification).toHaveBeenNthCalledWith(1, {
                 walletAddresses: addresses.slice(0, 5),
                 subscriptionId: "sub-123",
+                baseUrl: mockBaseUrl,
             })
             expect(mockRegisterPushNotification).toHaveBeenNthCalledWith(2, {
                 walletAddresses: addresses.slice(5, 6),
                 subscriptionId: "sub-123",
+                baseUrl: mockBaseUrl,
             })
         })
     })
@@ -210,7 +219,7 @@ describe("RegistrationClient", () => {
                 .mockRejectedValueOnce(serverError)
                 .mockResolvedValueOnce(mockResponse)
 
-            const promise = RegistrationClient.registerAddresses(addresses, "sub-123")
+            const promise = RegistrationClient.registerAddresses(addresses, "sub-123", mockBaseUrl)
 
             // First retry after 1000ms
             await jest.advanceTimersByTimeAsync(1000)
@@ -230,7 +239,7 @@ describe("RegistrationClient", () => {
 
             mockRegisterPushNotification.mockRejectedValueOnce(networkError).mockResolvedValueOnce(mockResponse)
 
-            const promise = RegistrationClient.registerAddresses(addresses, "sub-123")
+            const promise = RegistrationClient.registerAddresses(addresses, "sub-123", mockBaseUrl)
 
             await jest.advanceTimersByTimeAsync(1000)
 
@@ -247,7 +256,7 @@ describe("RegistrationClient", () => {
 
             mockRegisterPushNotification.mockRejectedValueOnce(abortError).mockResolvedValueOnce(mockResponse)
 
-            const promise = RegistrationClient.registerAddresses(addresses, "sub-123")
+            const promise = RegistrationClient.registerAddresses(addresses, "sub-123", mockBaseUrl)
 
             await jest.advanceTimersByTimeAsync(1000)
 
@@ -267,7 +276,7 @@ describe("RegistrationClient", () => {
 
             mockRegisterPushNotification.mockRejectedValueOnce(clientError)
 
-            const results = await RegistrationClient.registerAddresses(addresses, "sub-123")
+            const results = await RegistrationClient.registerAddresses(addresses, "sub-123", mockBaseUrl)
 
             expect(mockRegisterPushNotification).toHaveBeenCalledTimes(1)
             expect(results[0]).toMatchObject({
@@ -286,7 +295,7 @@ describe("RegistrationClient", () => {
 
             mockRegisterPushNotification.mockRejectedValue(serverError)
 
-            const promise = RegistrationClient.registerAddresses(addresses, "sub-123")
+            const promise = RegistrationClient.registerAddresses(addresses, "sub-123", mockBaseUrl)
 
             // Wait for all retries
             await jest.advanceTimersByTimeAsync(1000)
@@ -317,7 +326,7 @@ describe("RegistrationClient", () => {
 
             mockRegisterPushNotification.mockRejectedValueOnce(serverError).mockResolvedValueOnce(mockResponse)
 
-            const promise = RegistrationClient.registerAddresses(addresses, "sub-123")
+            const promise = RegistrationClient.registerAddresses(addresses, "sub-123", mockBaseUrl)
             await jest.advanceTimersByTimeAsync(1000)
             const results = await promise
 
@@ -331,7 +340,7 @@ describe("RegistrationClient", () => {
 
             mockRegisterPushNotification.mockRejectedValueOnce(clientError)
 
-            const results = await RegistrationClient.registerAddresses(addresses, "sub-123")
+            const results = await RegistrationClient.registerAddresses(addresses, "sub-123", mockBaseUrl)
 
             expect(mockRegisterPushNotification).toHaveBeenCalledTimes(1)
             expect(results[0].success).toBe(false)
@@ -340,7 +349,7 @@ describe("RegistrationClient", () => {
 
     describe("edge cases", () => {
         it("should handle empty address array", async () => {
-            const results = await RegistrationClient.registerAddresses([], "sub-123")
+            const results = await RegistrationClient.registerAddresses([], "sub-123", mockBaseUrl)
 
             expect(results).toHaveLength(0)
             expect(mockRegisterPushNotification).not.toHaveBeenCalled()
@@ -354,7 +363,7 @@ describe("RegistrationClient", () => {
 
             mockRegisterPushNotification.mockResolvedValueOnce(mockResponse1).mockResolvedValueOnce(mockResponse2)
 
-            const results = await RegistrationClient.registerAddresses(addresses, "sub-123")
+            const results = await RegistrationClient.registerAddresses(addresses, "sub-123", mockBaseUrl)
 
             expect(results).toHaveLength(7)
             expect(results[0].success).toBe(true)
@@ -377,7 +386,7 @@ describe("RegistrationClient", () => {
                 .mockResolvedValueOnce(mockResponse)
                 .mockResolvedValueOnce(mockResponse)
 
-            const promise = RegistrationClient.registerAddresses(addresses, "sub-123")
+            const promise = RegistrationClient.registerAddresses(addresses, "sub-123", mockBaseUrl)
 
             await jest.advanceTimersByTimeAsync(1000)
 

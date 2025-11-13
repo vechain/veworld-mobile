@@ -8,6 +8,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { registrationSelectors } from "~Storage/Redux/Selectors/Notification"
+import { selectNotificationCenterUrl } from "~Storage/Redux/Selectors/UserPreferences"
 import { Registration } from "~Storage/Redux/Types"
 import { AccountUtils, error, info } from "~Utils"
 import HexUtils from "~Utils/HexUtils"
@@ -26,15 +27,23 @@ const NOTIFICATION_CENTER_EVENT = ERROR_EVENTS.NOTIFICATION_CENTER
 const buildRegistrationPlan = (
     currentWalletAddresses: string[],
     existingRegistrations: Registration[],
+    currentUrl: string,
 ): RegistrationPlan => {
     const now = Date.now()
     const oldAddressSet = new Set(existingRegistrations.map(r => r.address))
     const newAddressSet = new Set(currentWalletAddresses)
 
-    const isDueReregister = (reg: Registration): boolean =>
-        newAddressSet.has(reg.address) &&
-        reg.lastSuccessfulSync !== undefined &&
-        now - reg.lastSuccessfulSync >= THIRTY_DAYS_MS
+    const isDueReregister = (reg: Registration): boolean => {
+        if (!newAddressSet.has(reg.address)) return false
+
+        // Re-register if URL has changed
+        if (reg.registeredUrl !== currentUrl) return true
+
+        // Re-register if 30 days have passed
+        if (reg.lastSuccessfulSync !== undefined && now - reg.lastSuccessfulSync >= THIRTY_DAYS_MS) return true
+
+        return false
+    }
 
     let removedAddresses = []
     for (const address of oldAddressSet) {
@@ -64,10 +73,18 @@ const buildRegistrationPlan = (
     return { toRegister, toUnregister }
 }
 
+const getBaseUrl = (customUrl: string | undefined) => {
+    return (
+        customUrl ??
+        (__DEV__ ? process.env.NOTIFICATION_CENTER_REGISTER_DEV : process.env.NOTIFICATION_CENTER_REGISTER_PROD)
+    )
+}
+
 export const useNotificationRegistration = ({ enabled = true }: { enabled?: boolean } = {}) => {
     const dispatch = useAppDispatch()
     const accounts = useAppSelector(selectAccounts)
     const registrations = useAppSelector(registrationSelectors.selectAll)
+    const customUrl = useAppSelector(selectNotificationCenterUrl)
 
     const currentWalletAddresses = useMemo(
         () => accounts.filter(a => !AccountUtils.isObservedAccount(a)).map(a => HexUtils.normalize(a.address)),
@@ -79,18 +96,29 @@ export const useNotificationRegistration = ({ enabled = true }: { enabled?: bool
 
         const run = async () => {
             try {
+                const baseUrl = getBaseUrl(customUrl)
+
+                if (!baseUrl) {
+                    throw new Error(`${NOTIFICATION_CENTER_EVENT}: Base URL not configured`)
+                }
+
                 const subscriptionId = await OneSignal.User.pushSubscription.getIdAsync()
 
-                const plan = buildRegistrationPlan(currentWalletAddresses, registrations)
+                const plan = buildRegistrationPlan(currentWalletAddresses, registrations, baseUrl)
 
                 if (plan.toRegister.length) {
-                    const registerResults = await RegistrationClient.registerAddresses(plan.toRegister, subscriptionId)
+                    const registerResults = await RegistrationClient.registerAddresses(
+                        plan.toRegister,
+                        subscriptionId,
+                        baseUrl,
+                    )
 
                     const successfulAddresses = registerResults.filter(r => r.success)
 
                     const successfulRegistrations = successfulAddresses.map(r => ({
                         address: r.address,
                         lastSuccessfulSync: r.timestamp,
+                        registeredUrl: baseUrl,
                     }))
 
                     dispatch(upsertRegistrations(successfulRegistrations))
@@ -100,6 +128,7 @@ export const useNotificationRegistration = ({ enabled = true }: { enabled?: bool
                     const unregisterResults = await RegistrationClient.unregisterAddresses(
                         plan.toUnregister,
                         subscriptionId,
+                        baseUrl,
                     )
 
                     const successfulAddresses = unregisterResults.filter(r => r.success).map(r => r.address)
@@ -114,7 +143,7 @@ export const useNotificationRegistration = ({ enabled = true }: { enabled?: bool
         // Fire-and-forget; UI doesn't care about state
         run()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [enabled, currentWalletAddresses])
+    }, [enabled, currentWalletAddresses, customUrl])
 
     return {}
 }
