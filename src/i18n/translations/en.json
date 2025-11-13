@@ -1345,5 +1345,9 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "DEVELOPER_SETTING_NOTIFICATION_URL": "Notification URL",
+  "DEVELOPER_SETTING_INDEXER_TITLE": "Indexer",
+  "DEVELOPER_SETTING_INDEXER_DESCRIPTION": "Configure the indexer URLs for each network. Support is partial",
+  "COMMON_ERROR_URL_NOT_VALID": "Invalid URL. It should either be HTTPS or localhost."
 }

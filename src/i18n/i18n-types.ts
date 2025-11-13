@@ -5509,6 +5509,22 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * N​o​t​i​f​i​c​a​t​i​o​n​ ​U​R​L
+	 */
+	DEVELOPER_SETTING_NOTIFICATION_URL: string
+	/**
+	 * I​n​d​e​x​e​r
+	 */
+	DEVELOPER_SETTING_INDEXER_TITLE: string
+	/**
+	 * C​o​n​f​i​g​u​r​e​ ​t​h​e​ ​i​n​d​e​x​e​r​ ​U​R​L​s​ ​f​o​r​ ​e​a​c​h​ ​n​e​t​w​o​r​k​.​ ​S​u​p​p​o​r​t​ ​i​s​ ​p​a​r​t​i​a​l
+	 */
+	DEVELOPER_SETTING_INDEXER_DESCRIPTION: string
+	/**
+	 * I​n​v​a​l​i​d​ ​U​R​L​.​ ​I​t​ ​s​h​o​u​l​d​ ​e​i​t​h​e​r​ ​b​e​ ​H​T​T​P​S​ ​o​r​ ​l​o​c​a​l​h​o​s​t​.
+	 */
+	COMMON_ERROR_URL_NOT_VALID: string
 }
 
 export type TranslationFunctions = {
@@ -10921,6 +10937,22 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Notification URL
+	 */
+	DEVELOPER_SETTING_NOTIFICATION_URL: () => LocalizedString
+	/**
+	 * Indexer
+	 */
+	DEVELOPER_SETTING_INDEXER_TITLE: () => LocalizedString
+	/**
+	 * Configure the indexer URLs for each network. Support is partial
+	 */
+	DEVELOPER_SETTING_INDEXER_DESCRIPTION: () => LocalizedString
+	/**
+	 * Invalid URL. It should either be HTTPS or localhost.
+	 */
+	COMMON_ERROR_URL_NOT_VALID: () => LocalizedString
 }
 
 export type Formatters = {
