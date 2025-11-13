@@ -159,6 +159,21 @@ export const useSmartMarketChart = ({
     })
 }
 
+export const getSmartMarketChartV2QueryOptions = ({
+    days,
+    vs_currency,
+    id,
+}: Parameters<typeof getMarketChartQueryOptions>[0]) => {
+    return {
+        ...getMarketChartQueryOptions({
+            id,
+            vs_currency,
+            days,
+        }),
+        queryKey: ["MARKET_CHART_V2", id, vs_currency, days],
+    }
+}
+
 export const useSmartMarketChartV2 = ({
     id,
     vs_currency,
