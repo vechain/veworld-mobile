@@ -88,7 +88,7 @@
     "@walletconnect/core": "2.15.2",
     "@walletconnect/react-native-compat": "2.15.2",
     "@walletconnect/utils": "2.15.2",
-    "abitype": "^1.1.1",
+    "abitype": "1.0.8",
     "add": "^2.0.6",
     "aes-js": "3",
     "arweave": "1.13.7",

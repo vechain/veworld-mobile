@@ -166,7 +166,7 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
         expect(thor.blocks.getBlockExpanded).not.toHaveBeenCalled()
     })
 
-    it.only("triggers refetch per matching NodeDelegated event for managed owner", async () => {
+    it("triggers refetch per matching NodeDelegated event for managed owner", async () => {
         jest.useFakeTimers()
 
         getReceiptProcessorMock.mockReturnValue({
