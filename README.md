@@ -1,3 +1,4 @@
+![Zizmor Checks](https://github.com/vechain/veworld-mobile/actions/workflows/scan-workflows.yaml/badge.svg?branch=main&event=push)
 <img src="docs/img/banner.png" alt="banner" style="width: 100%; display: block; padding: 0 0 30px;" />
 
 🌐 Official website: [Website](https://vechain.org/)<br/>
