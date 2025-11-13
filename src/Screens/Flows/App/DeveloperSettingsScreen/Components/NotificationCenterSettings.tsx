@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo } from "react"
 import { z } from "zod"
 import { BaseView } from "~Components"
+import { BaseAccordionV2 } from "~Components/Base/BaseAccordionV2"
 import { useI18nContext } from "~i18n"
 import HapticsService from "~Services/HapticsService"
 import { selectNotificationCenterUrl, setNotificationCenterUrl, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { Accordion } from "./Accordion"
 import { ResettableTextInput } from "./ResettableTextInput"
 
 export const NotificationCenterSettings = () => {
@@ -33,12 +33,12 @@ export const NotificationCenterSettings = () => {
         [LL],
     )
     return (
-        <Accordion>
-            <Accordion.Header>
-                <Accordion.HeaderText>{LL.DEVELOPER_NOTIFICATION_CENTER_TITLE()}</Accordion.HeaderText>
-                <Accordion.HeaderIcon />
-            </Accordion.Header>
-            <Accordion.Content>
+        <BaseAccordionV2>
+            <BaseAccordionV2.Header>
+                <BaseAccordionV2.HeaderText>{LL.DEVELOPER_NOTIFICATION_CENTER_TITLE()}</BaseAccordionV2.HeaderText>
+                <BaseAccordionV2.HeaderIcon />
+            </BaseAccordionV2.Header>
+            <BaseAccordionV2.Content>
                 <BaseView flexDirection="column" gap={8}>
                     <ResettableTextInput
                         label={LL.DEVELOPER_SETTING_NOTIFICATION_URL()}
@@ -51,7 +51,7 @@ export const NotificationCenterSettings = () => {
                         validationSchema={validationSchema}
                     />
                 </BaseView>
-            </Accordion.Content>
-        </Accordion>
+            </BaseAccordionV2.Content>
+        </BaseAccordionV2>
     )
 }

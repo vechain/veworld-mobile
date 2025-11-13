@@ -5522,6 +5522,10 @@ type RootTranslation = {
 	 */
 	DEVELOPER_SETTING_INDEXER_DESCRIPTION: string
 	/**
+	 * I​n​d​e​x​e​r​ ​U​R​L​ ​u​p​d​a​t​e​d
+	 */
+	DEVELOPER_SETTING_INDEXER_UPDATED: string
+	/**
 	 * I​n​v​a​l​i​d​ ​U​R​L​.​ ​I​t​ ​s​h​o​u​l​d​ ​e​i​t​h​e​r​ ​b​e​ ​H​T​T​P​S​ ​o​r​ ​l​o​c​a​l​h​o​s​t​.
 	 */
 	COMMON_ERROR_URL_NOT_VALID: string
@@ -10949,6 +10953,10 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Configure the indexer URLs for each network. Support is partial
 	 */
 	DEVELOPER_SETTING_INDEXER_DESCRIPTION: () => LocalizedString
+	/**
+	 * Indexer URL updated
+	 */
+	DEVELOPER_SETTING_INDEXER_UPDATED: () => LocalizedString
 	/**
 	 * Invalid URL. It should either be HTTPS or localhost.
 	 */

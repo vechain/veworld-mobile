@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from "react"
 import { z } from "zod"
 import { BaseIcon, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
+import { IconKey } from "~Model"
 
 export type ResettableTextInputProps = {
     defaultValue: string | undefined
@@ -21,6 +22,7 @@ export const ResettableTextInput = ({
     ...props
 }: ResettableTextInputProps) => {
     const theme = useTheme()
+    const [enabled, setEnabled] = useState(false)
     const [value, setValue] = useState(defaultValue)
     const [error, setError] = useState("")
 
@@ -44,9 +46,24 @@ export const ResettableTextInput = ({
     }, [])
 
     const onIconPress = useCallback(() => {
-        if (defaultValue !== value) return onSave()
-        onReset()
-    }, [defaultValue, onReset, onSave, value])
+        if (!enabled) {
+            setEnabled(true)
+            return
+        }
+        if (defaultValue !== value) {
+            onSave()
+            if (value === "") setEnabled(false)
+            return
+        }
+        if (value) return onReset()
+        setEnabled(false)
+    }, [defaultValue, enabled, onReset, onSave, value])
+
+    const inputIcon = useMemo<IconKey>(() => {
+        if (!enabled) return "icon-pencil"
+        if (isDirty) return "icon-check"
+        return "icon-undo"
+    }, [enabled, isDirty])
 
     return (
         <BaseView>
@@ -63,21 +80,14 @@ export const ResettableTextInput = ({
             )}
 
             <BaseTextInput
-                rightIcon={
-                    isDirty || defaultValue ? (
-                        <BaseIcon
-                            name={isDirty ? "icon-check" : "icon-undo"}
-                            color={theme.colors.text}
-                            action={onIconPress}
-                        />
-                    ) : undefined
-                }
+                rightIcon={<BaseIcon name={inputIcon} color={theme.colors.text} action={onIconPress} />}
                 value={value}
                 onChange={e => {
                     setValue(e.nativeEvent.text)
                     setError("")
                 }}
                 errorMessage={error}
+                disabled={!enabled}
                 {...props}
             />
         </BaseView>

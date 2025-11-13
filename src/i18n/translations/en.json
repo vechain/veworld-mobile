@@ -1349,5 +1349,6 @@
   "DEVELOPER_SETTING_NOTIFICATION_URL": "Notification URL",
   "DEVELOPER_SETTING_INDEXER_TITLE": "Indexer",
   "DEVELOPER_SETTING_INDEXER_DESCRIPTION": "Configure the indexer URLs for each network. Support is partial",
+  "DEVELOPER_SETTING_INDEXER_UPDATED": "Indexer URL updated",
   "COMMON_ERROR_URL_NOT_VALID": "Invalid URL. It should either be HTTPS or localhost."
 }
