@@ -51,13 +51,18 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
 
     const hasTokenChart = useMemo(() => SUPPORTED_CHART_TOKENS.has(token.symbol), [token.symbol])
 
+    const chartId = useMemo(
+        () => (hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined),
+        [hasTokenChart, token.symbol],
+    )
+
     const {
         data: chartData,
         isLoading,
         isFetching,
         isRefetching,
     } = useSmartMarketChartV2({
-        id: hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
+        id: chartId,
         vs_currency: currency,
         days: selectedItem.days,
     })
@@ -68,28 +73,28 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
         getSmartMarketChartV2QueryOptions({
             days: ASSET_CHART_PERIODS[1].days,
             vs_currency: currency,
-            id: hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
+            id: chartId,
         }),
     )
     usePrefetchQuery(
         getSmartMarketChartV2QueryOptions({
             days: ASSET_CHART_PERIODS[2].days,
             vs_currency: currency,
-            id: hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
+            id: chartId,
         }),
     )
     usePrefetchQuery(
         getSmartMarketChartV2QueryOptions({
             days: ASSET_CHART_PERIODS[3].days,
             vs_currency: currency,
-            id: hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
+            id: chartId,
         }),
     )
     usePrefetchQuery(
         getSmartMarketChartV2QueryOptions({
             days: ASSET_CHART_PERIODS[4].days,
             vs_currency: currency,
-            id: hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
+            id: chartId,
         }),
     )
 

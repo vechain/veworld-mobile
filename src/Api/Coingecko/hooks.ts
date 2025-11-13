@@ -186,12 +186,11 @@ export const useSmartMarketChartV2 = ({
     placeholderData?: MarketChartResponse
 }) => {
     return useQuery({
-        ...getMarketChartQueryOptions({
+        ...getSmartMarketChartV2QueryOptions({
             id,
             vs_currency,
             days,
         }),
-        queryKey: ["MARKET_CHART_V2", id, vs_currency, days],
         placeholderData,
         staleTime: getQueryCacheTime(true),
         refetchInterval: getRefetchIntevalTime(),
