@@ -19,6 +19,7 @@ export const Migration33 = (state: PersistedState): PersistedState => {
         return state
     }
 
+    // @ts-expect-error - favorites may exist in old persisted state but not in new type
     const favoriteRefs: DAppReference[] = (currentDiscoveryState.favorites || []).map((dapp, index): DAppReference => {
         // Custom URL bookmark
         if (dapp.isCustom) {
@@ -52,10 +53,10 @@ export const Migration33 = (state: PersistedState): PersistedState => {
 
     const newDiscoveryState = {
         ...currentDiscoveryState,
-        favorites: [],
         favoriteRefs,
     } satisfies DiscoveryState
-
+    // Explicitly remove favorites to prevent it from persisting
+    delete (newDiscoveryState as any).favorites
     debug(ERROR_EVENTS.SECURITY, `Migrated ${favoriteRefs.length} favorites to favoriteRefs and cleared old array`)
 
     return {

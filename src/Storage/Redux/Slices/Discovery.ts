@@ -59,7 +59,6 @@ export type DAppReference = AppHubReference | VBDReference | CustomURLReference
 
 export type DiscoveryState = {
     featured: DiscoveryDApp[]
-    favorites: DiscoveryDApp[]
     favoriteRefs: DAppReference[]
     custom: DiscoveryDApp[]
     hasOpenedDiscovery: boolean
@@ -81,7 +80,6 @@ export type DiscoveryState = {
 
 export const initialDiscoverState: DiscoveryState = {
     featured: [],
-    favorites: [],
     favoriteRefs: [],
     custom: [],
     hasOpenedDiscovery: false,
