@@ -35,7 +35,6 @@ export const useUserNodes = (address?: string, _enabled: boolean = true) => {
     }, [address, network.genesis.id])
 
     const indexerUrl = useIndexerUrl(network)
-
     const enabled = !!address && !!indexerUrl && _enabled
 
     const { data, error, isError, isFetching } = useQuery({
