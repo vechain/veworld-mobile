@@ -5,7 +5,7 @@ import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChartV2 
 import { BaseIcon, BaseText, BaseTouchableBox, BaseView, TokenSymbol, useFeatureFlags } from "~Components"
 import { useDevice } from "~Components/Providers/DeviceProvider"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, isSmallScreen, typography, VET, VTHO } from "~Constants"
+import { B3TR, COLORS, isSmallScreen, typography, VeDelegate, VET, VTHO } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
@@ -31,8 +31,11 @@ export const TokenCard = ({ token }: Props) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const { betterWorldFeature } = useFeatureFlags()
 
-    // Check if token supports charts (has CoinGecko ID)
-    const isTokenSupported = useMemo(() => !!getCoinGeckoIdBySymbol[token.symbol], [token.symbol])
+    // Check if token supports charts (has CoinGecko ID) and exclude VeDelegate
+    const isTokenSupported = useMemo(
+        () => !!getCoinGeckoIdBySymbol[token.symbol] && token.symbol !== VeDelegate.symbol,
+        [token.symbol],
+    )
 
     // Decide chart visibility based on device/screen size AND token support
     // This ensures ALL token cards show either charts OR indicators consistently

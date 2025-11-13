@@ -1,12 +1,12 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { InfiniteData, useQueryClient } from "@tanstack/react-query"
+import { InfiniteData, usePrefetchQuery, useQueryClient } from "@tanstack/react-query"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import {
     DEFAULT_LINE_CHART_DATA,
     getCoinGeckoIdBySymbol,
+    getSmartMarketChartV2QueryOptions,
     useSmartMarketChartV2,
-    useTokenSocialLinks,
 } from "~Api/Coingecko"
 import { AlertInline, BaseSpacer, BaseText, BaseView, TokenSymbol } from "~Components"
 import { LineChart } from "~Components/Reusable/LineChart"
@@ -15,12 +15,13 @@ import { VeDelegate } from "~Constants/Constants"
 import { useThemedStyles } from "~Hooks"
 import { getUseAccountTokenActivitiesQueryKey } from "~Hooks/useAccountTokenActivities"
 import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
+import { useTokenRegistryInfo } from "~Hooks/useTokenRegistryInfo"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { FetchActivitiesResponse } from "~Networking"
 import { selectCurrency, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { AddressUtils, PlatformUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
 import { AssetBalanceActivity } from "./Components/AssetBalanceActivity"
 import { ASSET_CHART_PERIODS, AssetChart } from "./Components/AssetChart"
@@ -39,7 +40,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
 
     const { styles, theme } = useThemedStyles(baseStyles)
     const currency = useAppSelector(selectCurrency)
-    const socialLinks = useTokenSocialLinks(token.tokenInfo)
+    const { description, links } = useTokenRegistryInfo(token)
     const account = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
     const qc = useQueryClient()
@@ -50,16 +51,52 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
 
     const hasTokenChart = useMemo(() => SUPPORTED_CHART_TOKENS.has(token.symbol), [token.symbol])
 
+    const chartId = useMemo(
+        () => (hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined),
+        [hasTokenChart, token.symbol],
+    )
+
     const {
         data: chartData,
         isLoading,
         isFetching,
         isRefetching,
     } = useSmartMarketChartV2({
-        id: hasTokenChart ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
+        id: chartId,
         vs_currency: currency,
         days: selectedItem.days,
     })
+
+    // Prefetch all the periods
+
+    usePrefetchQuery(
+        getSmartMarketChartV2QueryOptions({
+            days: ASSET_CHART_PERIODS[1].days,
+            vs_currency: currency,
+            id: chartId,
+        }),
+    )
+    usePrefetchQuery(
+        getSmartMarketChartV2QueryOptions({
+            days: ASSET_CHART_PERIODS[2].days,
+            vs_currency: currency,
+            id: chartId,
+        }),
+    )
+    usePrefetchQuery(
+        getSmartMarketChartV2QueryOptions({
+            days: ASSET_CHART_PERIODS[3].days,
+            vs_currency: currency,
+            id: chartId,
+        }),
+    )
+    usePrefetchQuery(
+        getSmartMarketChartV2QueryOptions({
+            days: ASSET_CHART_PERIODS[4].days,
+            vs_currency: currency,
+            id: chartId,
+        }),
+    )
 
     const isLoadingChart = useMemo(() => isLoading || isFetching || isRefetching, [isLoading, isFetching, isRefetching])
 
@@ -101,30 +138,23 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
                 <BaseView px={16}>
                     <BaseSpacer height={24} />
                     <AlertInline status="info" variant="banner" message={LL.TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE()} />
-                    <BaseSpacer height={16} />
+                    <BaseSpacer height={PlatformUtils.isAndroid() ? 24 : 40} />
                 </BaseView>
             )
         }
 
-        if (token.symbol && token.tokenInfo) {
+        if (token.symbol) {
             return (
                 <AssetStats
                     tokenSymbol={token.symbol}
-                    tokenDescription={token.tokenInfo?.description?.en}
-                    socialLinks={
-                        socialLinks
-                            ? {
-                                  website: socialLinks.website ?? undefined,
-                                  twitter: socialLinks.twitter ?? undefined,
-                                  telegram: socialLinks.telegram ?? undefined,
-                              }
-                            : undefined
-                    }
+                    tokenDescription={description}
+                    links={links}
+                    isWrappedToken={isCrossChainToken}
                 />
             )
         }
         return <BaseSpacer height={16} />
-    }, [token.symbol, token.tokenInfo, socialLinks, LL])
+    }, [token.symbol, description, links, isCrossChainToken, LL])
 
     return (
         <AssetDetailScreenWrapper>

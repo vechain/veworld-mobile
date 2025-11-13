@@ -10,12 +10,12 @@ const ALLOWED_SOCIAL_LINKS = ["website", "twitter", "telegram"] as const
 type AllowedSocialLink = (typeof ALLOWED_SOCIAL_LINKS)[number]
 
 type SocialLinksButtonsProps = {
-    socialLinks?: {
+    links?: {
         website?: string
         twitter?: string
         telegram?: string
     }
-    onNavigate: (url: string) => void
+    onNavigate: (url: string, key: "website" | "twitter" | "telegram") => void
 }
 
 const SOCIAL_BUTTON_FLEX = {
@@ -23,16 +23,14 @@ const SOCIAL_BUTTON_FLEX = {
     iconOnly: 1,
 } as const
 
-export const SocialLinksButtons = ({ socialLinks, onNavigate }: SocialLinksButtonsProps): JSX.Element | null => {
+export const SocialLinksButtons = ({ links, onNavigate }: SocialLinksButtonsProps): JSX.Element | null => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
 
-    const filteredLinks = useMemo(() => {
-        if (!socialLinks) return []
-        return Object.entries(socialLinks).filter(([key]) =>
-            ALLOWED_SOCIAL_LINKS.includes(key as AllowedSocialLink),
-        ) as Array<[AllowedSocialLink, string]>
-    }, [socialLinks])
+    const filteredLinks = useMemo<[AllowedSocialLink, string][]>(() => {
+        if (!links) return []
+        return ALLOWED_SOCIAL_LINKS.filter(l => Boolean(links[l])).map(key => [key, links[key]!])
+    }, [links])
 
     const renderLeftIcon = useCallback(
         (key: AllowedSocialLink) => {
@@ -53,12 +51,14 @@ export const SocialLinksButtons = ({ socialLinks, onNavigate }: SocialLinksButto
         ([key, value]: [AllowedSocialLink, string]) => {
             const isWebsite = key === "website"
 
+            const flexValue = isWebsite ? SOCIAL_BUTTON_FLEX.website : SOCIAL_BUTTON_FLEX.iconOnly
+
             return (
                 <BaseButton
                     key={key}
-                    flex={isWebsite ? SOCIAL_BUTTON_FLEX.website : SOCIAL_BUTTON_FLEX.iconOnly}
+                    flex={filteredLinks.length === 3 ? flexValue : 0}
                     testID={`${key}_BUTTON`}
-                    action={() => onNavigate(value)}
+                    action={() => onNavigate(value, key)}
                     style={styles.button}
                     size="md"
                     leftIcon={renderLeftIcon(key)}
@@ -71,13 +71,13 @@ export const SocialLinksButtons = ({ socialLinks, onNavigate }: SocialLinksButto
                 </BaseButton>
             )
         },
-        [onNavigate, styles, theme, LL, renderLeftIcon],
+        [filteredLinks.length, styles.button, styles.buttonText, renderLeftIcon, theme.isDark, LL, onNavigate],
     )
 
     if (filteredLinks.length === 0) return null
 
     return (
-        <BaseView flexDirection="row" alignItems="center" gap={16} justifyContent="space-between" my={12}>
+        <BaseView flexDirection="row" alignItems="center" gap={16} my={12}>
             {filteredLinks.map(renderSocialButton)}
         </BaseView>
     )
@@ -91,6 +91,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderWidth: 1,
             borderColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200,
             paddingHorizontal: 12,
+            minWidth: 72,
         },
 
         buttonText: {

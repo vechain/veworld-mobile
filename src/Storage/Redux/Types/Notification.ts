@@ -2,6 +2,7 @@ import type { EntityState } from "@reduxjs/toolkit"
 export interface Registration {
     address: string // normalized
     lastSuccessfulSync?: number
+    registeredUrl?: string // The URL used for this registration
 }
 
 export interface NotificationState {
