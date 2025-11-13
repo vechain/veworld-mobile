@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import React, { useMemo } from "react"
-import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
+import { useIndexerUrl } from "~Hooks/useIndexerUrl"
 import { NodeInfo } from "~Model"
 import { fetchStargateTokens } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
@@ -9,11 +9,11 @@ import { getTokenLevelId } from "~Utils/StargateUtils"
 
 export const getUserNodesQueryKey = (genesisId: string, address?: string) => ["userStargateNodes", genesisId, address]
 
-const getUserNodes = async (genesisId: string, address: string | undefined): Promise<NodeInfo[]> => {
+const getUserNodes = async (baseUrl: string, address: string | undefined): Promise<NodeInfo[]> => {
     if (!address) return []
 
     try {
-        const r = await fetchStargateTokens(genesisId, address)
+        const r = await fetchStargateTokens(baseUrl, address)
         return r.data.map(u => ({
             isLegacyNode: false,
             nodeId: u.tokenId,
@@ -34,22 +34,13 @@ export const useUserNodes = (address?: string, _enabled: boolean = true) => {
         return getUserNodesQueryKey(network.genesis.id, address)
     }, [address, network.genesis.id])
 
-    const isValidNetwork = useMemo(
-        () =>
-            [
-                defaultMainNetwork.genesis.id,
-                defaultTestNetwork.genesis.id,
-                //Hayabusa DEVNET
-                "0x0000000081b0e5dc4decce0579106706333293e1acb1a3969f4fb4f5a47ef79c",
-            ].includes(network.genesis.id),
-        [network.genesis.id],
-    )
+    const indexerUrl = useIndexerUrl(network)
 
-    const enabled = !!address && isValidNetwork && _enabled
+    const enabled = !!address && !!indexerUrl && _enabled
 
     const { data, error, isError, isFetching } = useQuery({
         queryKey,
-        queryFn: async () => await getUserNodes(network.genesis.id, address),
+        queryFn: async () => await getUserNodes(indexerUrl!, address),
         enabled,
         staleTime: 60 * 5 * 1000,
         gcTime: Infinity,

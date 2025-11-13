@@ -9,10 +9,14 @@ import { Network } from "~Model"
 import { selectIndexerUrls, selectNetworks, setIndexerUrl, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { ResettableTextInput, ResettableTextInputProps } from "./ResettableTextInput"
 
-const IndexerInput = ({
-    validationSchema,
-    network,
-}: Pick<ResettableTextInputProps, "validationSchema"> & { network: Network }) => {
+type IndexerInputProps = Pick<ResettableTextInputProps, "validationSchema"> & {
+    network: {
+        name: string
+        genesis: Network["genesis"]
+    }
+}
+
+const IndexerInput = ({ validationSchema, network }: IndexerInputProps) => {
     const { LL } = useI18nContext()
     const indexerUrls = useAppSelector(selectIndexerUrls)
     const dispatch = useAppDispatch()
@@ -55,6 +59,16 @@ export const IndexerSettings = () => {
         [LL],
     )
 
+    const groupedNetworks = useMemo(() => {
+        return Object.entries(
+            networks.reduce((acc, curr) => {
+                if (acc[curr.genesis.id]) acc[curr.genesis.id].push(curr)
+                else acc[curr.genesis.id] = [curr]
+                return acc
+            }, {} as { [genesisId: string]: Network[] }),
+        ).map(([_, nets]) => ({ genesis: nets[0].genesis, name: nets.map(net => net.name).join("/") }))
+    }, [networks])
+
     return (
         <BaseAccordionV2>
             <BaseAccordionV2.Header>
@@ -66,7 +80,7 @@ export const IndexerSettings = () => {
                     <BaseAccordionV2.ContentDescription>
                         {LL.DEVELOPER_SETTING_INDEXER_DESCRIPTION()}
                     </BaseAccordionV2.ContentDescription>
-                    {networks.map(network => (
+                    {groupedNetworks.map(network => (
                         <IndexerInput network={network} validationSchema={validationSchema} key={network.name} />
                     ))}
                 </BaseView>

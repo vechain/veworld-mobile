@@ -12,6 +12,7 @@ import {
     FetchStargateTokensResponse,
     FetchStargateTotalSupplyResponse,
     FetchStargateTotalVetStakedResponse,
+    requestFromEndpoint,
 } from "~Networking/API"
 import { debug } from "~Utils/Logger"
 
@@ -70,16 +71,18 @@ export const fetchStargateVthoClaimed = async (networkType: NETWORK_TYPE, addres
 }
 
 export const fetchStargateTokens = async (
-    genesisId: string,
+    baseUrl: string,
     address: string,
-    options: Parameters<typeof getStargateTokensByAddress>[2] = {},
+    options: Parameters<typeof getStargateTokensByAddress>[1] = {},
 ) => {
     debug(ERROR_EVENTS.STARGATE, `Fetching Stargate tokens for Address: ${address}.`)
 
     try {
-        return await fetchFromEndpoint<FetchStargateTokensResponse>(
-            getStargateTokensByAddress(genesisId, address, options),
-        )
+        return await requestFromEndpoint<FetchStargateTokensResponse>({
+            baseURL: baseUrl.replace("/api/v1", ""),
+            method: "GET",
+            url: getStargateTokensByAddress(address, options),
+        })
     } catch (error) {
         throw new Error(`Failed to fetch Stargate tokens for Address: ${address}. Error ${error}`)
     }
