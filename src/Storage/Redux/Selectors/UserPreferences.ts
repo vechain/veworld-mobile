@@ -102,3 +102,11 @@ export const selectHideNewUserVeBetterCard = createSelector(reducer, state => {
 export const selectSignKeyPair = createSelector(reducer, state => {
     return state.signKeyPair ?? { publicKey: "", privateKey: "" }
 })
+
+export const selectNotificationCenterUrl = createSelector(reducer, state => {
+    return state.notificationCenterUrl
+})
+
+export const selectDeveloperMenuUnlocked = createSelector(reducer, state => {
+    return state.developerMenuUnlocked ?? false
+})

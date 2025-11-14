@@ -1,15 +1,13 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { AnimatedFilterChips, BaseText, BaseView } from "~Components"
-import { useNewDAppsV2, useTheme, useThemedStyles, useTrendingDAppsV2 } from "~Hooks"
+import { useNewDAppsV2, useTheme, useTrendingDAppsV2 } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VbdCarousel } from "../Common/VbdCarousel/VbdCarousel"
 import { StringUtils } from "~Utils"
-import { StyleSheet } from "react-native"
 
 export const ForYouCarousel = () => {
     const { LL } = useI18nContext()
     const theme = useTheme()
-    const { styles } = useThemedStyles(baseStyles)
     const [filter, setFilter] = useState<"new" | "popular">("popular")
 
     const onFilterPress = useCallback((value: "new" | "popular") => setFilter(value), [])
@@ -40,21 +38,9 @@ export const ForYouCarousel = () => {
                     keyExtractor={item => item}
                     getItemLabel={item => LL[`DISCOVER_FOR_YOU_${StringUtils.toUppercase(item)}`]()}
                     onItemPress={onFilterPress}
-                    containerStyle={styles.container}
-                    contentContainerStyle={styles.filterContainer}
                 />
             </BaseView>
             <VbdCarousel appIds={appIds} isLoading={isLoading} />
         </BaseView>
     )
 }
-
-const baseStyles = () =>
-    StyleSheet.create({
-        container: {
-            marginTop: -15,
-        },
-        filterContainer: {
-            paddingHorizontal: 0,
-        },
-    })

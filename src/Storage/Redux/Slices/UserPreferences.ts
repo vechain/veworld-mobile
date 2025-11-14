@@ -49,6 +49,8 @@ export interface UserPreferenceState {
     hideStargateBannerVETScreen?: boolean
     hideNewUserVeBetterCard?: boolean
     signKeyPair?: KeyPair
+    notificationCenterUrl?: string
+    developerMenuUnlocked?: boolean
 }
 
 export const initialUserPreferencesState: UserPreferenceState = {
@@ -74,6 +76,8 @@ export const initialUserPreferencesState: UserPreferenceState = {
     hideStargateBannerVETScreen: false,
     hideNewUserVeBetterCard: false,
     signKeyPair: undefined,
+    notificationCenterUrl: undefined,
+    developerMenuUnlocked: false,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -193,6 +197,14 @@ export const UserPreferencesSlice = createSlice({
         setSignKeyPair: (state, action: PayloadAction<KeyPair>) => {
             state.signKeyPair = action.payload
         },
+
+        setNotificationCenterUrl: (state, action: PayloadAction<string | undefined>) => {
+            state.notificationCenterUrl = action.payload
+        },
+
+        setDeveloperMenuUnlocked: (state, action: PayloadAction<boolean>) => {
+            state.developerMenuUnlocked = action.payload
+        },
     },
 })
 
@@ -220,4 +232,6 @@ export const {
     setHideStargateBannerVETScreen,
     setHideNewUserVeBetterCard,
     setSignKeyPair,
+    setNotificationCenterUrl,
+    setDeveloperMenuUnlocked,
 } = UserPreferencesSlice.actions

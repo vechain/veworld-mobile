@@ -53,6 +53,11 @@
       "major": true
     },
     {
+      "version": "2.4.9",
+      "key": "releases/ios/versions/2.4.9",
+      "major": false    
+    },
+    {
       "version": "2.4.10",
       "key": "releases/ios/versions/2.4.10",
       "major": true

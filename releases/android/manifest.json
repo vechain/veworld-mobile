@@ -48,6 +48,11 @@
       "major": true
     },
     {
+      "version": "2.4.9",
+      "key": "releases/android/versions/2.4.9",
+      "major": false
+    },
+    {
       "version": "2.4.10",
       "key": "releases/android/versions/2.4.10",
       "major": true

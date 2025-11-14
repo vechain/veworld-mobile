@@ -8,7 +8,7 @@ import { useInAppBrowser } from "~Components/Providers"
 import { Feedback } from "~Components/Providers/FeedbackProvider"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { ColorThemeType, SCREEN_HEIGHT } from "~Constants"
-import { useDappBookmarking, useTabManagement, useThemedStyles } from "~Hooks"
+import { useDappBookmarkToggle, useTabManagement, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
 import { RootStackParamListApps, RootStackParamListSettings, Routes } from "~Navigation"
@@ -51,7 +51,7 @@ export const getActionTextColor = (
 export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onNavigate, onClose }, ref) => {
     const { LL } = useI18nContext()
     const { navigationState, webviewRef, dappMetadata } = useInAppBrowser()
-    const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
+    const { isBookMarked, toggleBookmark } = useDappBookmarkToggle(navigationState?.url)
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListSettings & RootStackParamListApps>>()
     const { closeTab } = useTabManagement()

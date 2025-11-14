@@ -1,43 +1,46 @@
-import React from "react"
-import { useDerivedValue } from "react-native-reanimated"
-import { useLineChart } from "react-native-wagmi-charts"
+import React, { useMemo } from "react"
 import { BaseIcon, BaseText, BaseView } from "~Components"
+import { useLineChart } from "~Components/Reusable/LineChart"
 import { COLORS } from "~Constants"
 import { useFormatFiat, useTheme } from "~Hooks"
-import { selectBalanceVisible, selectCurrencySymbol, useAppSelector } from "~Storage/Redux"
-import { ReanimatedUtils } from "~Utils"
-import { useLineChartPrice } from "../../AssetDetailScreen/Hooks/usePrice"
+import { selectCurrencySymbol, useAppSelector } from "~Storage/Redux"
+import { formatFiatAmount } from "~Utils/StandardizedFormatting"
 
 export const AssertChartBalance = () => {
-    const { value } = useLineChartPrice()
-    const { data } = useLineChart()
+    const { data, selectedPoint } = useLineChart()
     const { formatLocale } = useFormatFiat()
-    const isBalanceVisible = useAppSelector(selectBalanceVisible)
     const theme = useTheme()
     const currencySymbol = useAppSelector(selectCurrencySymbol)
 
-    const formatted = useDerivedValue(() => {
-        return ReanimatedUtils.formatFiatWorklet(value.value, currencySymbol, formatLocale, "before", 6, 6, {
-            cover: false,
+    const formatted = useMemo(() => {
+        const value = selectedPoint?.value || data[data.length - 1]?.value || 0
+        return formatFiatAmount(value, currencySymbol, {
+            locale: formatLocale,
+            symbolPosition: "before",
+            forceDecimals: 6,
         })
-    }, [isBalanceVisible, value.value, currencySymbol, formatLocale])
+    }, [selectedPoint?.value, data, currencySymbol, formatLocale])
 
-    const percentageChange = useDerivedValue(() => {
+    const percentageChange = useMemo(() => {
         if (!data) return 0
-        return ((value.value - (data[0]?.value ?? 0)) / (data[0]?.value ?? 1)) * 100
-    }, [value.value, data])
 
-    const formattedPercentageChange = useDerivedValue(() => {
-        "worklet"
-        return ReanimatedUtils.formatFiatWorklet(percentageChange.value, "%", formatLocale, "after", 2, 2, {
-            cover: false,
+        if (!selectedPoint)
+            return ((data[data.length - 1]?.value - (data[0]?.value ?? 0)) / (data[0]?.value ?? 1)) * 100
+
+        return ((selectedPoint.value - (data[0]?.value ?? 0)) / (data[0]?.value ?? 1)) * 100
+    }, [selectedPoint, data])
+
+    const formattedPercentageChange = useMemo(() => {
+        return formatFiatAmount(percentageChange, "%", {
+            locale: formatLocale,
+            symbolPosition: "after",
+            forceDecimals: 2,
         })
-    }, [isBalanceVisible, percentageChange.value, currencySymbol, formatLocale])
+    }, [percentageChange, formatLocale])
 
-    const isGoingUp = useDerivedValue(() => {
-        "worklet"
-        return percentageChange.value > 0
-    }, [percentageChange.value])
+    const isGoingUp = useMemo(() => {
+        return percentageChange > 0
+    }, [percentageChange])
 
     return (
         <BaseView flexDirection="column" alignItems="flex-end">
@@ -49,21 +52,21 @@ export const AssertChartBalance = () => {
                 flexDirection="row"
                 testID="ASSET_DETAIL_SCREEN_FIAT_BALANCE"
                 lineHeight={28}>
-                {formatted.value}
+                {formatted}
             </BaseText>
             <BaseView flexDirection="row" gap={2}>
                 <BaseIcon
-                    name={isGoingUp.value ? "icon-stat-arrow-up" : "icon-stat-arrow-down"}
+                    name={isGoingUp ? "icon-stat-arrow-up" : "icon-stat-arrow-down"}
                     size={16}
-                    color={isGoingUp.value ? COLORS.GREEN_300 : COLORS.RED_400}
+                    color={isGoingUp ? COLORS.GREEN_300 : COLORS.RED_400}
                     testID="ASSET_DETAIL_SCREEN_CHART_ICON"
                 />
                 <BaseText
                     typographyFont="bodySemiBold"
-                    color={isGoingUp.value ? COLORS.GREEN_300 : COLORS.RED_400}
+                    color={isGoingUp ? COLORS.GREEN_300 : COLORS.RED_400}
                     align="right"
                     testID="ASSET_DETAIL_SCREEN_FIAT_BALANCE">
-                    {formattedPercentageChange.value}
+                    {formattedPercentageChange}
                 </BaseText>
             </BaseView>
         </BaseView>

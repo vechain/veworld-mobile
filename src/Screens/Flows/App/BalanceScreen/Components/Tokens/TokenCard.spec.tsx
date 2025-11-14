@@ -3,13 +3,14 @@ import React from "react"
 import { Routes } from "~Navigation"
 import { TestHelpers, TestWrapper } from "~Test"
 
-import { useSmartMarketChart } from "~Api/Coingecko"
+import { useSmartMarketChartV2 } from "~Api/Coingecko"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
+
 import { TokenCard } from "./TokenCard"
 
 jest.mock("~Api/Coingecko", () => ({
     ...jest.requireActual("~Api/Coingecko"),
-    useSmartMarketChart: jest.fn(),
+    useSmartMarketChartV2: jest.fn(),
 }))
 
 jest.mock("~Hooks/useTokenCardBalance", () => ({
@@ -20,6 +21,12 @@ jest.mock("react-native", () => ({
     ...jest.requireActual("react-native"),
     Dimensions: { get: jest.fn().mockReturnValue({ width: 400, height: 800 }) },
 }))
+
+jest.mock("d3-interpolate-path", () => {
+    return {
+        interpolatePath: jest.fn().mockImplementation(() => jest.fn()),
+    }
+})
 
 const mockedNavigate = jest.fn()
 
@@ -48,7 +55,7 @@ describe("TokenCard", () => {
         jest.clearAllMocks()
     })
     it("should render correctly", () => {
-        ;(useSmartMarketChart as jest.Mock).mockReturnValue({ data: [] })
+        ;(useSmartMarketChartV2 as jest.Mock).mockReturnValue({ data: [] })
         ;(useTokenCardBalance as jest.Mock).mockReturnValue({
             fiatBalance: "$0.00",
             showFiatBalance: true,
@@ -71,7 +78,7 @@ describe("TokenCard", () => {
             name: "TEST_NAME",
         },
     ])("should render $token.symbol as $name", ({ token, name }) => {
-        ;(useSmartMarketChart as jest.Mock).mockReturnValue({ data: [] })
+        ;(useSmartMarketChartV2 as jest.Mock).mockReturnValue({ data: [] })
         ;(useTokenCardBalance as jest.Mock).mockReturnValue({
             fiatBalance: "$0.00",
             showFiatBalance: true,
@@ -84,7 +91,7 @@ describe("TokenCard", () => {
     })
 
     it("should not display chart icon on large screens (shouldShowCharts = true)", () => {
-        ;(useSmartMarketChart as jest.Mock).mockReturnValue({
+        ;(useSmartMarketChartV2 as jest.Mock).mockReturnValue({
             data: [
                 { timestamp: Date.now(), value: 1 },
                 { timestamp: Date.now() + 10000, value: 2 },
@@ -104,7 +111,7 @@ describe("TokenCard", () => {
     })
 
     it("should display the correct balance (with fiat)", () => {
-        ;(useSmartMarketChart as jest.Mock).mockReturnValue({ data: [] })
+        ;(useSmartMarketChartV2 as jest.Mock).mockReturnValue({ data: [] })
         ;(useTokenCardBalance as jest.Mock).mockReturnValue({
             fiatBalance: "$1.00",
             showFiatBalance: true,
@@ -118,7 +125,7 @@ describe("TokenCard", () => {
     })
 
     it("should display the correct balance (without fiat)", () => {
-        ;(useSmartMarketChart as jest.Mock).mockReturnValue({ data: [] })
+        ;(useSmartMarketChartV2 as jest.Mock).mockReturnValue({ data: [] })
         ;(useTokenCardBalance as jest.Mock).mockReturnValue({
             showFiatBalance: false,
             tokenBalance: "2.00",
@@ -131,7 +138,7 @@ describe("TokenCard", () => {
     })
 
     it("should display the normal symbol for all tokens (except B3TR)", () => {
-        ;(useSmartMarketChart as jest.Mock).mockReturnValue({ data: [] })
+        ;(useSmartMarketChartV2 as jest.Mock).mockReturnValue({ data: [] })
         ;(useTokenCardBalance as jest.Mock).mockReturnValue({
             showFiatBalance: false,
             tokenBalance: "2.00",
@@ -143,7 +150,7 @@ describe("TokenCard", () => {
     })
 
     it("should display custom symbol for B3TR", () => {
-        ;(useSmartMarketChart as jest.Mock).mockReturnValue({ data: [] })
+        ;(useSmartMarketChartV2 as jest.Mock).mockReturnValue({ data: [] })
         ;(useTokenCardBalance as jest.Mock).mockReturnValue({
             showFiatBalance: false,
             tokenBalance: "2.00",
@@ -161,7 +168,7 @@ describe("TokenCard", () => {
         // Chart is rendered, not the icon
 
         it("should not show chart icon on large screens (shouldShowCharts = true)", () => {
-            ;(useSmartMarketChart as jest.Mock).mockReturnValue({
+            ;(useSmartMarketChartV2 as jest.Mock).mockReturnValue({
                 data: [
                     { timestamp: Date.now(), value: 1 },
                     { timestamp: Date.now() + 10000, value: 2 },
@@ -185,7 +192,7 @@ describe("TokenCard", () => {
         })
 
         it("should not show chart icon when showFiatBalance is false", () => {
-            ;(useSmartMarketChart as jest.Mock).mockReturnValue({
+            ;(useSmartMarketChartV2 as jest.Mock).mockReturnValue({
                 data: [
                     { timestamp: Date.now(), value: 1 },
                     { timestamp: Date.now() + 10000, value: 2 },
@@ -206,7 +213,7 @@ describe("TokenCard", () => {
         })
 
         it("should not show chart icon when chart data is unavailable", () => {
-            ;(useSmartMarketChart as jest.Mock).mockReturnValue({
+            ;(useSmartMarketChartV2 as jest.Mock).mockReturnValue({
                 data: null, // No price data
             })
             ;(useTokenCardBalance as jest.Mock).mockReturnValue({
@@ -227,7 +234,7 @@ describe("TokenCard", () => {
 
     describe("Navigation behavior", () => {
         it("should navigate to send screenwhen token is not vechain token", () => {
-            ;(useSmartMarketChart as jest.Mock).mockReturnValue({ data: [] })
+            ;(useSmartMarketChartV2 as jest.Mock).mockReturnValue({ data: [] })
             ;(useTokenCardBalance as jest.Mock).mockReturnValue({
                 fiatBalance: "$1.00",
                 showFiatBalance: true,
@@ -251,7 +258,7 @@ describe("TokenCard", () => {
         })
 
         it("should navigate to token details when token supports detail navigation", () => {
-            ;(useSmartMarketChart as jest.Mock).mockReturnValue({ data: [] })
+            ;(useSmartMarketChartV2 as jest.Mock).mockReturnValue({ data: [] })
             ;(useTokenCardBalance as jest.Mock).mockReturnValue({
                 fiatBalance: "$1.00",
                 showFiatBalance: true,
@@ -278,7 +285,7 @@ describe("TokenCard", () => {
             { token: TestHelpers.data.VTHOWithBalance, symbol: "VTHO" },
             { token: TestHelpers.data.B3TRWithBalance, symbol: "B3TR" },
         ])("should support navigation for $symbol token", ({ token }) => {
-            ;(useSmartMarketChart as jest.Mock).mockReturnValue({ data: [] })
+            ;(useSmartMarketChartV2 as jest.Mock).mockReturnValue({ data: [] })
             ;(useTokenCardBalance as jest.Mock).mockReturnValue({
                 fiatBalance: "$1.00",
                 showFiatBalance: true,

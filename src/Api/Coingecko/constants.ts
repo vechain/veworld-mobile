@@ -1,8 +1,8 @@
-import { B3TR, VET, VOT3, VTHO } from "~Constants/Constants"
+import { B3TR, VeDelegate, VET, VOT3, VTHO } from "~Constants/Constants"
 
 export type MarketChartTimeFrame = {
     label: string
-    value: number
+    value: number | "max"
     interval?: string
 }
 
@@ -12,6 +12,8 @@ export const marketChartTimeframes: MarketChartTimeFrame[] = [
     { label: "1M", value: 30, interval: "daily" },
     { label: "3M", value: 90, interval: "daily" },
     { label: "6M", value: 180, interval: "daily" },
+    { label: "1Y", value: 365, interval: "daily" },
+    { label: "All", value: "max", interval: "daily" },
 ]
 
 // Vechain tokens
@@ -33,6 +35,7 @@ export const getCoinGeckoIdBySymbol = {
     [VTHO.symbol]: VETHOR_COINGECKO_ID,
     [B3TR.symbol]: B3TR_COINGECKO_ID,
     [VOT3.symbol]: B3TR_COINGECKO_ID,
+    [VeDelegate.symbol]: B3TR_COINGECKO_ID,
     BTC: BTC_COINGECKO_ID,
     ETH: ETH_COINGECKO_ID,
     SOL: SOL_COINGECKO_ID,

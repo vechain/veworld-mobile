@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react-native"
 import { TransactionClause } from "@vechain/sdk-core"
 import { ethers } from "ethers"
-import React from "react"
+import React, { PropsWithChildren } from "react"
 import { B3TR, VOT3, VTHO } from "~Constants"
 import { RootState } from "~Storage/Redux/Types"
 import { TestHelpers, TestWrapper } from "~Test"
@@ -18,6 +18,82 @@ const clauses = [
     },
 ] satisfies TransactionClause[]
 
+const mockOfficialTokens = [
+    {
+        symbol: "VTHO",
+        name: "Vethor",
+        address: "0x0000000000000000000000000000456e65726779",
+        decimals: 18,
+        custom: false,
+        icon: VTHO.icon,
+        desc: "VTHO description from registry",
+        links: {
+            website: "https://www.vechain.org",
+            twitter: "https://twitter.com/vechainofficial",
+        },
+    },
+    {
+        symbol: "B3TR",
+        name: "B3TR",
+        address: "0x5ef79995FE8a89e0812330E4378eB2660ceDe699",
+        decimals: 18,
+        custom: false,
+        icon: B3TR.icon,
+        desc: "B3TR description from registry",
+        links: {
+            website: "https://b3tr.com",
+            twitter: "https://twitter.com/b3tr",
+        },
+    },
+    {
+        symbol: "VOT3",
+        name: "VOT3",
+        address: "0x76Ca782B59C74d088C7D2Cce2f211BC00836c602",
+        decimals: 18,
+        custom: false,
+        icon: VOT3.icon,
+        desc: "VOT3 description from registry",
+        links: {
+            website: "https://vot3.com",
+        },
+    },
+]
+
+const PreloadedWrapper = ({ children, preloadedState }: PropsWithChildren<{ preloadedState: Partial<RootState> }>) => {
+    return (
+        <TestWrapper
+            preloadedState={{
+                tokens: {
+                    tokens: {
+                        mainnet: {
+                            custom: {},
+                            officialTokens: mockOfficialTokens,
+                            suggestedTokens: [],
+                        },
+                        testnet: {
+                            custom: {},
+                            officialTokens: [],
+                            suggestedTokens: [],
+                        },
+                        other: {
+                            custom: {},
+                            officialTokens: [],
+                            suggestedTokens: [],
+                        },
+                        solo: {
+                            custom: {},
+                            officialTokens: [],
+                            suggestedTokens: [],
+                        },
+                    },
+                },
+                ...preloadedState,
+            }}>
+            {children}
+        </TestWrapper>
+    )
+}
+
 describe("ReceiptOutputRenderer", () => {
     describe("B3TR", () => {
         const appId = "0xapp"
@@ -27,7 +103,8 @@ describe("ReceiptOutputRenderer", () => {
                 bannerInteractions: {},
                 connectedApps: [],
                 custom: [],
-                favorites: [],
+
+                favoriteRefs: [],
                 featured: [
                     {
                         veBetterDaoId: appId,
@@ -63,7 +140,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                     initialProps: {
                         preloadedState,
                     },
@@ -91,7 +168,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                         initialProps: {
                             preloadedState,
                         },
@@ -116,7 +193,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                         initialProps: {
                             preloadedState,
                         },
@@ -142,7 +219,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                     initialProps: {
                         preloadedState,
                     },
@@ -170,7 +247,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                     initialProps: {
                         preloadedState,
                     },
@@ -196,7 +273,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                     initialProps: {
                         preloadedState,
                     },
@@ -225,7 +302,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                         initialProps: {
                             preloadedState,
                         },
@@ -254,7 +331,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                         initialProps: {
                             preloadedState,
                         },
@@ -284,7 +361,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
@@ -308,7 +385,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
@@ -335,7 +412,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                 },
             )
 
@@ -362,7 +439,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                 },
             )
 
@@ -387,7 +464,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                 },
             )
 
@@ -411,7 +488,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                 },
             )
 
@@ -431,7 +508,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                 },
             )
 
@@ -458,7 +535,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
@@ -482,7 +559,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
@@ -506,7 +583,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
@@ -532,7 +609,7 @@ describe("ReceiptOutputRenderer", () => {
                             }}
                         />,
                         {
-                            wrapper: TestWrapper,
+                            wrapper: PreloadedWrapper,
                         },
                     )
 
@@ -557,7 +634,7 @@ describe("ReceiptOutputRenderer", () => {
                             }}
                         />,
                         {
-                            wrapper: TestWrapper,
+                            wrapper: PreloadedWrapper,
                         },
                     )
 
@@ -582,7 +659,7 @@ describe("ReceiptOutputRenderer", () => {
                             }}
                         />,
                         {
-                            wrapper: TestWrapper,
+                            wrapper: PreloadedWrapper,
                         },
                     )
 
@@ -608,7 +685,7 @@ describe("ReceiptOutputRenderer", () => {
                             }}
                         />,
                         {
-                            wrapper: TestWrapper,
+                            wrapper: PreloadedWrapper,
                         },
                     )
 
@@ -635,7 +712,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
@@ -659,7 +736,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
@@ -684,7 +761,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
@@ -707,7 +784,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
@@ -731,7 +808,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
@@ -754,7 +831,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
@@ -784,7 +861,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                 },
             )
 
@@ -807,7 +884,7 @@ describe("ReceiptOutputRenderer", () => {
                 }}
             />,
             {
-                wrapper: TestWrapper,
+                wrapper: PreloadedWrapper,
             },
         )
 

@@ -45,6 +45,7 @@ const ConvertButton = ({ bsRef }: Props) => {
             onPress={onPress}
             disabled={disabled}
             themed
+            truncateText
         />
     )
 }
