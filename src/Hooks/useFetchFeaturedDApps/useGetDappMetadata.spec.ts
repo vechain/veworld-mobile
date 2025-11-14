@@ -4,16 +4,6 @@ import { TestWrapper } from "~Test"
 import { DiscoveryDApp } from "~Constants"
 import { DiscoveryState } from "~Storage/Redux"
 
-const bookmarkedDapps: DiscoveryDApp[] = [
-    {
-        href: "https://example.com",
-        name: "Example",
-        isCustom: false,
-        createAt: Date.now(),
-        amountOfNavigations: 2,
-    },
-]
-
 const featuredDapps: DiscoveryDApp[] = [
     {
         href: "https://mugshot.vet",
@@ -57,7 +47,6 @@ const customDapps: DiscoveryDApp[] = [
 
 const mockState = {
     discovery: {
-        favorites: bookmarkedDapps,
         featured: featuredDapps,
         custom: customDapps,
         hasOpenedDiscovery: true,
