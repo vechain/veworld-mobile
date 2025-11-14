@@ -136,17 +136,14 @@ export const FavouritesV2 = React.memo(
             setReorderedDapps(bookmarkedDApps)
         }, [bookmarkedDApps])
 
-        const handleReorder = useCallback(
-            (data: DiscoveryDApp[]) => {
-                setReorderedDapps(data)
-                dispatch(reorderBookmarks(data))
-            },
-            [dispatch],
-        )
+        const handleReorder = useCallback((data: DiscoveryDApp[]) => {
+            setReorderedDapps(data)
+        }, [])
 
         const handleDone = useCallback(() => {
+            dispatch(reorderBookmarks(reorderedDapps))
             setIsEditMode(false)
-        }, [])
+        }, [dispatch, reorderedDapps])
 
         const titleColor = useMemo(() => {
             if (theme.isDark) return COLORS.GREY_100

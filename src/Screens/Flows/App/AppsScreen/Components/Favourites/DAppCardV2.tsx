@@ -1,6 +1,6 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
-import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseTouchable, BaseView, DAppIcon, DappIconSize } from "~Components"
 import { COLORS, DiscoveryDApp, TFonts } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -76,6 +76,8 @@ export const DAppCardV2 = ({
 
     const iconUri = useAppLogo({ app: dapp })
 
+    const layoutAnimation = useMemo(() => LinearTransition.springify().damping(18).stiffness(220), [])
+
     useEffect(() => {
         if (isEditMode) {
             startShaking()
@@ -86,8 +88,7 @@ export const DAppCardV2 = ({
 
     return (
         <Animated.View
-            entering={ZoomIn}
-            exiting={ZoomOut}
+            layout={layoutAnimation}
             style={[animatedStyles, styles.container, isActive && styles.activeCard]}>
             <BaseTouchable
                 testID={`dapp-card-${dapp.id}`}
