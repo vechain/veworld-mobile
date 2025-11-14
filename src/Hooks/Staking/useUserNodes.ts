@@ -12,16 +12,25 @@ export const getUserNodesQueryKey = (genesisId: string, address?: string) => ["u
 const getUserNodes = async (baseUrl: string, address: string | undefined): Promise<NodeInfo[]> => {
     if (!address) return []
 
+    const results: NodeInfo[] = []
+    let page = 0
     try {
-        const r = await fetchStargateTokens(baseUrl, address)
-        return r.data.map(u => ({
-            isLegacyNode: false,
-            nodeId: u.tokenId,
-            nodeLevel: getTokenLevelId(u.level),
-            xNodeOwner: u.owner,
-            vetAmountStaked: u.vetStaked,
-            accumulatedRewards: BigNutils(u.totalBootstrapRewardsClaimed).plus(u.totalRewardsClaimed).toString,
-        }))
+        while (true) {
+            const r = await fetchStargateTokens(baseUrl, address, { page })
+            results.push(
+                ...r.data.map(u => ({
+                    isLegacyNode: false,
+                    nodeId: u.tokenId,
+                    nodeLevel: getTokenLevelId(u.level),
+                    xNodeOwner: u.owner,
+                    vetAmountStaked: u.vetStaked,
+                    accumulatedRewards: BigNutils(u.totalBootstrapRewardsClaimed).plus(u.totalRewardsClaimed).toString,
+                })),
+            )
+            if (!r.pagination.hasNext) break
+            page++
+        }
+        return results
     } catch (error) {
         throw new Error(`Error fetching user nodes ${error}`)
     }

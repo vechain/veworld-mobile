@@ -37,6 +37,9 @@ describe("useUserNodes", () => {
                 totalBootstrapRewardsClaimed: "1",
                 totalRewardsClaimed: "0",
             })),
+            pagination: {
+                hasNext: false,
+            },
         })
         const address = "0x123456789"
 
@@ -50,6 +53,64 @@ describe("useUserNodes", () => {
             expect(result.current.data[1].nodeId).toBe("2")
             expect(result.current.data[2].nodeId).toBe("3")
         })
+    })
+
+    it("should return data (2 pages) when address is provided", async () => {
+        ;(fetchStargateTokens as jest.Mock)
+            .mockResolvedValueOnce({
+                data: StargateNodeMocks.map(node => ({
+                    tokenId: node.nodeId,
+                    level: getTokenLevelName(node.nodeLevel),
+                    owner: node.xNodeOwner,
+                    vetStaked: node.vetAmountStaked,
+                    totalBootstrapRewardsClaimed: "1",
+                    totalRewardsClaimed: "0",
+                })),
+                pagination: {
+                    hasNext: true,
+                },
+            })
+            .mockResolvedValueOnce({
+                data: [
+                    {
+                        tokenId: "7",
+                        level: "Dawn",
+                        owner: "0x123456789",
+                        vetStaked: "1",
+                        totalBootstrapRewardsClaimed: "1",
+                        totalRewardsClaimed: "0",
+                    },
+                ],
+                pagination: {
+                    hasNext: false,
+                },
+            })
+        const address = "0x123456789"
+
+        const { result, waitFor } = renderHook(() => useUserNodes(address), {
+            wrapper: TestWrapper,
+        })
+
+        await waitFor(() => {
+            expect(result.current.data.length).toBe(4)
+            expect(result.current.data[0].nodeId).toBe("1")
+            expect(result.current.data[1].nodeId).toBe("2")
+            expect(result.current.data[2].nodeId).toBe("3")
+            expect(result.current.data[3].nodeId).toBe("7")
+        })
+
+        expect(fetchStargateTokens).toHaveBeenNthCalledWith(
+            1,
+            "https://indexer.mainnet.vechain.org/api/v1",
+            "0x123456789",
+            { page: 0 },
+        )
+        expect(fetchStargateTokens).toHaveBeenNthCalledWith(
+            2,
+            "https://indexer.mainnet.vechain.org/api/v1",
+            "0x123456789",
+            { page: 1 },
+        )
     })
 
     it("should handle error state", async () => {
