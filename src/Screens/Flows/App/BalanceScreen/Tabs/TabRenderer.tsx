@@ -160,6 +160,7 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
             gap: 16,
             flexDirection: "column",
+            zIndex: 1000,
         },
         animatedContent: {
             flexDirection: "column",
