@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.11 (2025-11-14)</small>
+
+* build: init ([ebf2bfd](https://github.com/vechain/veworld-mobile/commit/ebf2bfd))
+* Release: iOS 2.4.10 / Android 2.4.10 (#3507) ([be2ea8e](https://github.com/vechain/veworld-mobile/commit/be2ea8e)), closes [#3507](https://github.com/vechain/veworld-mobile/issues/3507)
+
 ## 2.5.0 (2025-11-13)
 
 * build: init ([f33174b](https://github.com/vechain/veworld-mobile/commit/f33174b))
