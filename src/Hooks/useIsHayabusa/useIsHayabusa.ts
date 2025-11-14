@@ -9,7 +9,7 @@ export const useIsHayabusa = (network: Network) => {
     const featureFlags = useFeatureFlags()
 
     const isValidContract = useMemo(() => {
-        if (!featureFlags?.forks?.HAYABUSA?.stargate?.[network.genesis.id]) return {}
+        if (!featureFlags?.forks?.HAYABUSA?.stargate?.[network.genesis.id]) return false
         const contract = featureFlags?.forks?.HAYABUSA?.stargate?.[network.genesis.id]?.contract
         if (!contract || contract === ethers.constants.AddressZero) return false
         return true
