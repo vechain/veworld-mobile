@@ -1,6 +1,6 @@
 {
   "latest": "2.4.10",
-  "major": "2.4.8",
+  "major": "2.4.10",
   "history": [
     {
       "version": "2.2.4",
@@ -55,7 +55,7 @@
     {
       "version": "2.4.10",
       "key": "releases/ios/versions/2.4.10",
-      "major": false
+      "major": true
     }
   ]
 }

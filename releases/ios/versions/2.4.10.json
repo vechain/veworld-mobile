@@ -1,8 +1,15 @@
 {
   "version": "2.4.10",
-  "major": false,
+  "major": true,
   "descriptions": {
-    "en": [],
+    "en": [
+      "New bottom-sheet token pages",
+      "Improved token graphs",
+      "Token activity tracking",
+      "Upgraded token stats",
+      "New About section for all tokens",
+      "Clear browser cache option"
+    ],
     "de": [],
     "es": [],
     "fr": [],
