@@ -86,6 +86,10 @@ export const BalanceScreen = () => {
     const balanceScrollAnimationStyles = useAnimatedStyle(() => {
         return {
             opacity: interpolate(scrollY.value, [0, headerHeight.value * 1.5], [1, 0]),
+            transform: [
+                { scale: interpolate(scrollY.value, [0, headerHeight.value / 2], [1, 0.95]) },
+                { rotateX: `${interpolate(scrollY.value, [0, headerHeight.value / 2], [0, 0.5])}deg` },
+            ],
         }
     }, [scrollY.value])
 
@@ -135,5 +139,5 @@ const baseStyles = () =>
     StyleSheet.create({
         scrollViewRoot: { minHeight: "100%" },
         scrollViewContent: { flexGrow: 1 },
-        gradient: { position: "relative", marginTop: 16 },
+        gradient: { position: "relative", marginTop: 16, transformOrigin: "center" },
     })
