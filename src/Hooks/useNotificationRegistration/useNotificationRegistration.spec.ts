@@ -26,6 +26,7 @@ describe("useNotificationRegistration", () => {
     const mockAddress1 = "0x1234567890123456789012345678901234567890"
     const mockAddress2 = "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
     const mockAddress3 = "0x9999999999999999999999999999999999999999"
+    const mockBaseUrl = "https://test-notification-center.com"
 
     beforeEach(() => {
         jest.clearAllMocks()
@@ -36,12 +37,21 @@ describe("useNotificationRegistration", () => {
         // Mock API calls with successful responses
         ;(NotificationCenterAPI.registerPushNotification as jest.Mock).mockResolvedValue({ failed: [] })
         ;(NotificationCenterAPI.unregisterPushNotification as jest.Mock).mockResolvedValue({ failed: [] })
+
+        // Mock environment variables
+        process.env.NOTIFICATION_CENTER_REGISTER_DEV = mockBaseUrl
+        process.env.NOTIFICATION_CENTER_REGISTER_PROD = mockBaseUrl
     })
 
-    const setupMockSelector = (accounts: any[], registrations: any[]) => {
+    const setupMockSelector = (accounts: any[], registrations: any[], customUrl?: string) => {
         mockUseAppSelector.mockImplementation((selector: any) => {
             if (selector === Redux.selectAccounts) {
                 return accounts
+            }
+            // For the selectNotificationCenterUrl call
+            const selectorString = selector.toString()
+            if (selectorString.includes("notificationCenterUrl") || selector.name === "memoized") {
+                return customUrl
             }
             // For the registrationSelectors.selectAll call
             if (typeof selector === "function") {
@@ -62,6 +72,7 @@ describe("useNotificationRegistration", () => {
                 expect(NotificationCenterAPI.registerPushNotification).toHaveBeenCalledWith({
                     walletAddresses: [mockAddress1],
                     subscriptionId: mockSubscriptionId,
+                    baseUrl: mockBaseUrl,
                 }),
             )
             expect(NotificationCenterAPI.unregisterPushNotification).not.toHaveBeenCalled()
@@ -72,6 +83,7 @@ describe("useNotificationRegistration", () => {
                         expect.objectContaining({
                             address: mockAddress1,
                             lastSuccessfulSync: expect.any(Number),
+                            registeredUrl: mockBaseUrl,
                         }),
                     ]),
                 }),
@@ -91,6 +103,7 @@ describe("useNotificationRegistration", () => {
                 expect(NotificationCenterAPI.registerPushNotification).toHaveBeenCalledWith({
                     walletAddresses: [mockAddress1],
                     subscriptionId: mockSubscriptionId,
+                    baseUrl: mockBaseUrl,
                 })
             })
             expect(mockDispatch).toHaveBeenCalledWith(
@@ -100,6 +113,7 @@ describe("useNotificationRegistration", () => {
                         expect.objectContaining({
                             address: mockAddress1,
                             lastSuccessfulSync: expect.any(Number),
+                            registeredUrl: mockBaseUrl,
                         }),
                     ]),
                 }),
@@ -120,6 +134,7 @@ describe("useNotificationRegistration", () => {
                 expect(NotificationCenterAPI.unregisterPushNotification).toHaveBeenCalledWith({
                     walletAddresses: [mockAddress2],
                     subscriptionId: mockSubscriptionId,
+                    baseUrl: mockBaseUrl,
                 })
             })
             expect(mockDispatch).toHaveBeenCalledWith(
@@ -142,6 +157,7 @@ describe("useNotificationRegistration", () => {
                 expect(NotificationCenterAPI.registerPushNotification).toHaveBeenCalledWith({
                     walletAddresses: [mockAddress1],
                     subscriptionId: mockSubscriptionId,
+                    baseUrl: mockBaseUrl,
                 })
             })
             expect(mockDispatch).toHaveBeenCalledWith(
@@ -151,6 +167,7 @@ describe("useNotificationRegistration", () => {
                         expect.objectContaining({
                             address: mockAddress1,
                             lastSuccessfulSync: expect.any(Number),
+                            registeredUrl: mockBaseUrl,
                         }),
                     ]),
                 }),
@@ -160,7 +177,9 @@ describe("useNotificationRegistration", () => {
         it("should not re-register addresses that are not due (less than 30 days old)", async () => {
             const recentSync = Date.now() - 15 * 24 * 60 * 60 * 1000
             const accounts = [{ address: mockAddress1, index: 0 }]
-            const registrations = [{ address: mockAddress1, lastSuccessfulSync: recentSync }]
+            const registrations = [
+                { address: mockAddress1, lastSuccessfulSync: recentSync, registeredUrl: mockBaseUrl },
+            ]
             setupMockSelector(accounts, registrations)
 
             renderHook(() => useNotificationRegistration({ enabled: true }))
@@ -183,10 +202,12 @@ describe("useNotificationRegistration", () => {
                 expect(NotificationCenterAPI.registerPushNotification).toHaveBeenCalledWith({
                     walletAddresses: [mockAddress2],
                     subscriptionId: mockSubscriptionId,
+                    baseUrl: mockBaseUrl,
                 })
                 expect(NotificationCenterAPI.unregisterPushNotification).toHaveBeenCalledWith({
                     walletAddresses: [mockAddress1],
                     subscriptionId: mockSubscriptionId,
+                    baseUrl: mockBaseUrl,
                 })
             })
             expect(mockDispatch).toHaveBeenCalledWith(
@@ -196,6 +217,7 @@ describe("useNotificationRegistration", () => {
                         expect.objectContaining({
                             address: mockAddress2,
                             lastSuccessfulSync: expect.any(Number),
+                            registeredUrl: mockBaseUrl,
                         }),
                     ]),
                 }),
@@ -217,9 +239,9 @@ describe("useNotificationRegistration", () => {
                 { address: mockAddress2, index: 1 },
             ]
             const registrations = [
-                { address: mockAddress1, lastSuccessfulSync: thirtyOneDaysAgo },
-                { address: mockAddress2, lastSuccessfulSync: recentSync },
-                { address: mockAddress3, lastSuccessfulSync: Date.now() },
+                { address: mockAddress1, lastSuccessfulSync: thirtyOneDaysAgo, registeredUrl: mockBaseUrl },
+                { address: mockAddress2, lastSuccessfulSync: recentSync, registeredUrl: mockBaseUrl },
+                { address: mockAddress3, lastSuccessfulSync: Date.now(), registeredUrl: mockBaseUrl },
             ]
             setupMockSelector(accounts, registrations)
 
@@ -229,10 +251,12 @@ describe("useNotificationRegistration", () => {
                 expect(NotificationCenterAPI.registerPushNotification).toHaveBeenCalledWith({
                     walletAddresses: [mockAddress1],
                     subscriptionId: mockSubscriptionId,
+                    baseUrl: mockBaseUrl,
                 })
                 expect(NotificationCenterAPI.unregisterPushNotification).toHaveBeenCalledWith({
                     walletAddresses: [mockAddress3],
                     subscriptionId: mockSubscriptionId,
+                    baseUrl: mockBaseUrl,
                 })
             })
             expect(mockDispatch).toHaveBeenCalledWith(
@@ -242,6 +266,7 @@ describe("useNotificationRegistration", () => {
                         expect.objectContaining({
                             address: mockAddress1,
                             lastSuccessfulSync: expect.any(Number),
+                            registeredUrl: mockBaseUrl,
                         }),
                     ]),
                 }),
@@ -250,6 +275,41 @@ describe("useNotificationRegistration", () => {
                 expect.objectContaining({
                     type: expect.stringContaining("removeRegistrations"),
                     payload: expect.arrayContaining([mockAddress3]),
+                }),
+            )
+        })
+
+        it("should re-register addresses when URL has changed", async () => {
+            const oldUrl = "https://old-notification-center.com"
+            const accounts = [{ address: mockAddress1, index: 0 }]
+            const registrations = [
+                {
+                    address: mockAddress1,
+                    lastSuccessfulSync: Date.now() - 5 * 24 * 60 * 60 * 1000, // 5 days ago
+                    registeredUrl: oldUrl,
+                },
+            ]
+            setupMockSelector(accounts, registrations) // Uses mockBaseUrl which is different from oldUrl
+
+            renderHook(() => useNotificationRegistration({ enabled: true }))
+
+            await waitFor(() => {
+                expect(NotificationCenterAPI.registerPushNotification).toHaveBeenCalledWith({
+                    walletAddresses: [mockAddress1],
+                    subscriptionId: mockSubscriptionId,
+                    baseUrl: mockBaseUrl,
+                })
+            })
+            expect(mockDispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: expect.stringContaining("upsertRegistrations"),
+                    payload: expect.arrayContaining([
+                        expect.objectContaining({
+                            address: mockAddress1,
+                            lastSuccessfulSync: expect.any(Number),
+                            registeredUrl: mockBaseUrl,
+                        }),
+                    ]),
                 }),
             )
         })
@@ -282,6 +342,7 @@ describe("useNotificationRegistration", () => {
                 expect(NotificationCenterAPI.unregisterPushNotification).toHaveBeenCalledWith({
                     walletAddresses: [mockAddress1],
                     subscriptionId: mockSubscriptionId,
+                    baseUrl: mockBaseUrl,
                 }),
             )
             expect(mockDispatch).toHaveBeenCalledWith(
@@ -302,6 +363,7 @@ describe("useNotificationRegistration", () => {
                 expect(NotificationCenterAPI.registerPushNotification).toHaveBeenCalledWith({
                     walletAddresses: [mockAddress1],
                     subscriptionId: mockSubscriptionId,
+                    baseUrl: mockBaseUrl,
                 }),
             )
             expect(mockDispatch).toHaveBeenCalledWith(
@@ -311,6 +373,7 @@ describe("useNotificationRegistration", () => {
                         expect.objectContaining({
                             address: mockAddress1,
                             lastSuccessfulSync: expect.any(Number),
+                            registeredUrl: mockBaseUrl,
                         }),
                     ]),
                 }),
@@ -319,7 +382,7 @@ describe("useNotificationRegistration", () => {
 
         it("should handle registrations with undefined lastSuccessfulSync", async () => {
             const accounts = [{ address: mockAddress1, index: 0 }]
-            const registrations = [{ address: mockAddress1 }]
+            const registrations = [{ address: mockAddress1, registeredUrl: mockBaseUrl }]
             setupMockSelector(accounts, registrations)
 
             renderHook(() => useNotificationRegistration({ enabled: true }))

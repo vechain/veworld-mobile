@@ -28,11 +28,11 @@ import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useTheme } from "~Hooks/useTheme"
 import HapticsService from "~Services/HapticsService"
 import { DateUtils } from "~Utils"
+import { DEFAULT_TIMEZONE } from "~Utils/DateUtils/DateUtils"
+import { useI18nContext } from "~i18n"
 import { useLineChart } from "./hooks/useLineChart"
 import { DataPoint, LineChartContextType, LineChartData, LineChartProps } from "./types"
 import { makeGraph } from "./utils"
-import { DEFAULT_TIMEZONE } from "~Utils/DateUtils/DateUtils"
-import { useI18nContext } from "~i18n"
 
 //#region Constants
 
@@ -95,13 +95,18 @@ const LineChart = ({
     chipBackgroundColor,
     chipTextColor,
     gradientBackgroundColors,
-    gradientBackgroundPositions = [0, 0.6, 1],
+    gradientBackgroundPositions: _gradientBackgroundPositions,
     canvasStyle,
 }: LineChartProps) => {
     const { data, activePointIndex, isLoading } = useLineChart()
     const { locale } = useI18nContext()
     const theme = useTheme()
     const skiaFont = useFont(require("../../../Assets/Fonts/Inter/Inter-SemiBold.ttf"), fontSize)
+
+    const gradientBackgroundPositions = useMemo(() => {
+        if (_gradientBackgroundPositions) return _gradientBackgroundPositions
+        return theme.isDark ? [0, 0.2, 1] : [0, 0.4, 1]
+    }, [_gradientBackgroundPositions, theme.isDark])
 
     const { path, points, maxX, minY, maxY, calcXPos, calcYPos } = useMemo(
         () => makeGraph(data, width, height, strokeWidth),

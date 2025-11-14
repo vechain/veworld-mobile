@@ -27,6 +27,7 @@ import {
     WalletManagementScreen,
 } from "~Screens"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
+import { DeveloperSettingsScreen } from "~Screens/Flows/App/DeveloperSettingsScreen"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
@@ -39,6 +40,7 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS_ABOUT]: undefined
     [Routes.SETTINGS_GENERAL]: undefined
     [Routes.SETTINGS_ALERTS]: undefined
+    [Routes.SETTINGS_DEVELOPER]: undefined
     [Routes.SETTINGS_CONTACTS]: undefined
     [Routes.SETTINGS_ADD_CONTACT]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
@@ -100,6 +102,12 @@ export const SettingsStack = () => {
             />
 
             <Settings.Screen name={Routes.SETTINGS_ABOUT} component={AboutScreen} options={{ headerShown: false }} />
+
+            <Settings.Screen
+                name={Routes.SETTINGS_DEVELOPER}
+                component={DeveloperSettingsScreen}
+                options={{ headerShown: false }}
+            />
 
             <Settings.Screen
                 name={Routes.WALLET_MANAGEMENT}
