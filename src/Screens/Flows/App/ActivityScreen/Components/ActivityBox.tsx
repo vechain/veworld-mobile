@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
 import { B3TR, COLORS, DIRECTIONS, typography, VET, VOT3, VTHO } from "~Constants"
-import { useFormatFiat, useTheme, useThemedStyles, useVns } from "~Hooks"
+import { useFetchValidators, useFormatFiat, useTheme, useThemedStyles, useVns } from "~Hooks"
 import { useNFTInfo } from "~Hooks/useNFTInfo"
 import { useI18nContext } from "~i18n"
 import {
@@ -45,7 +45,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { formatWithLessThan } from "~Utils/StandardizedFormatting"
-import { AddressUtils, BigNutils, URIUtils } from "~Utils"
+import { AddressUtils, BigNutils, URIUtils, ValidatorUtils } from "~Utils"
 import { getTokenLevelName } from "~Utils/StargateUtils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 import { StackedApps } from "./StackedApps"
@@ -879,6 +879,7 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
     const { LL } = useI18nContext()
     const { formatLocale } = useFormatFiat()
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const { validators } = useFetchValidators()
 
     const onPressHandler = () => {
         onPress(activity)
@@ -1000,7 +1001,8 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
 
     const getDescription = useMemo(() => {
         if (isDelegationOrDelegateActivity && activity.validator) {
-            return AddressUtils.humanAddress(activity.validator)
+            const validatorName = ValidatorUtils.getValidatorName(validators ?? [], activity.validator)
+            return validatorName || AddressUtils.humanAddress(activity.validator)
         }
         if (
             (activity.eventName === ActivityEvent.STARGATE_MANAGER_ADDED ||
@@ -1022,13 +1024,22 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
         activity.to,
         activity.tokenId,
         selectedAccount.address,
+        validators,
     ])
+
+    const validatorLogoUrl = useMemo(() => {
+        if (isDelegationOrDelegateActivity && activity.validator) {
+            return ValidatorUtils.getValidatorLogoUrlByAddress(validators ?? [], activity.validator)
+        }
+        return undefined
+    }, [isDelegationOrDelegateActivity, activity.validator, validators])
 
     const baseActivityBoxProps = () => {
         return {
             icon: getStakingIcon(activity.eventName),
             title: getActivityTitle(),
             description: getDescription,
+            nftImage: validatorLogoUrl,
             rightAmount: rightAmount,
             rightAmountDescription:
                 hasRightAmount &&
