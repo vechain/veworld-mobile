@@ -1110,6 +1110,8 @@
   "SETTINGS_LABEL_lowercase_num": "Only lowercase letters or numbers are allowed",
   "SETTINGS_LABEL_name_max_length": "Maximum number of characters is {max}",
   "SETTINGS_LABEL_name_min_length": "Minimum number of characters is {min}",
+  "SETTINGS_SECTION_APP_PREFERENCES": "App preferences",
+  "SETTINGS_SECTION_CURRENCY_PREFERENCES": "Currency preferences",
   "SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION": "Default delegation",
   "SETTINGS_TRANSACTIONS_MANAGE_URLS": "Manage URLs",
   "SETTINGS_TRANSACTIONS_SELECT_DEFAULT_DELEGATION": "Select the default delegation for your transactions",
@@ -1341,7 +1343,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "SETTINGS_SECTION_APP_PREFERENCES": "App preferences",
-  "SETTINGS_SECTION_CURRENCY_PREFERENCES": "Currency preferences"
+  "YESTERDAY": "Yesterday"
 }
