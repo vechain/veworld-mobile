@@ -7,13 +7,12 @@ on:
             - "releases/**"
     workflow_dispatch:
 
-permissions:
-    id-token: write 
-    contents: read  
-
 jobs:
     sync-to-s3:
         runs-on: ubuntu-latest
+        permissions:
+            id-token: write
+            contents: read
 
         steps:
             - name: Checkout repository
