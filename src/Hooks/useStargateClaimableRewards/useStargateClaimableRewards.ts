@@ -69,7 +69,7 @@ export const useStargateClaimableRewards = ({ nodeId }: Args) => {
 
     const enabled = useMemo(() => Object.keys(config).length > 0, [config])
 
-    const { error, data, isLoading, isError, errorUpdateCount } = useQuery({
+    return useQuery({
         queryKey: ["STARGATE_CLAIMABLE", network.genesis.id, account.address, nodeId],
         queryFn: () => getStargateClaimableRewards(thor, config, nodeId),
         staleTime: 5 * 60 * 1000,
@@ -77,6 +77,4 @@ export const useStargateClaimableRewards = ({ nodeId }: Args) => {
         retry: 3,
         enabled,
     })
-
-    return { error, data, isLoading, isError, errorUpdateCount }
 }
