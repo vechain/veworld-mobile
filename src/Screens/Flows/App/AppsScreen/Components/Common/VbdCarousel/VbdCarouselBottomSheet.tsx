@@ -17,7 +17,7 @@ import {
 } from "~Components"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
-import { useAppOverview, useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
+import { useAppOverview, useBottomSheetModal, useDappBookmarkToggle, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VbdDApp } from "~Model"
 import { Routes } from "~Navigation"
@@ -94,7 +94,7 @@ const VbdCarouselBottomSheetContent = ({
     const { onDAppPress } = useDAppActions(Routes.APPS)
     const { data: appOverview, isLoading } = useAppOverview(app.id)
 
-    const { isBookMarked } = useDappBookmarking(app?.external_url, app.name)
+    const { isBookMarked } = useDappBookmarkToggle(app?.external_url, app.name)
 
     const onToggleFavorite = useCallback(() => {
         if (!isBookMarked && app) {
