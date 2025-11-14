@@ -1,12 +1,13 @@
 import React, { useCallback, useMemo } from "react"
-import { ThemeEnum } from "~Constants"
+import { COLORS, ThemeEnum } from "~Constants"
 import { BaseButtonGroupHorizontal, usePersistedTheme } from "~Components"
 import { useI18nContext } from "~i18n"
 import { BaseButtonGroupHorizontalType } from "~Model"
+import { useTheme } from "~Hooks"
 
 export const ChangeTheme: React.FC = () => {
     const { theme: themePref, changeTheme } = usePersistedTheme()
-
+    const theme = useTheme()
     const { LL } = useI18nContext()
 
     const themes: Array<BaseButtonGroupHorizontalType> = useMemo(() => {
@@ -49,5 +50,16 @@ export const ChangeTheme: React.FC = () => {
         [changeTheme],
     )
 
-    return <BaseButtonGroupHorizontal selectedButtonIds={[themePref]} buttons={themes} action={handleSelectTheme} />
+    return (
+        <BaseButtonGroupHorizontal
+            typographyFont="captionMedium"
+            selectedButtonIds={[themePref]}
+            buttons={themes}
+            action={handleSelectTheme}
+            color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}
+            selectedColor={theme.isDark ? COLORS.WHITE : COLORS.GREY_700}
+            selectedBackgroundColor={theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100}
+            showBorder
+        />
+    )
 }

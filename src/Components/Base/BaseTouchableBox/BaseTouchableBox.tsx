@@ -122,7 +122,7 @@ const baseStyles =
             container: {
                 flex,
                 width: w ?? "100%",
-                borderRadius: 16,
+                borderRadius: 8,
                 overflow: "hidden",
             },
             innerContainer: {
@@ -133,7 +133,7 @@ const baseStyles =
                 paddingVertical: py,
                 backgroundColor: bg ?? theme.colors.card,
                 opacity: getOpacity(),
-                borderRadius: 16,
+                borderRadius: 8,
                 overflow: "hidden",
             },
         })
