@@ -113,7 +113,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                             padding={24}
                             iconBg={theme.isDark ? COLORS.DARK_PURPLE : undefined}
                         />
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={16} />
                     </BaseView>
                 )}
 

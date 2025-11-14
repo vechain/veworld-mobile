@@ -99,7 +99,7 @@ export const AppsScreen = () => {
                                 onActionLabelPress={onOpenFavorites}
                                 onDAppPress={onDAppPress}
                             />
-                            <BaseSpacer height={48} />
+                            <BaseSpacer height={40} />
                         </>
                     )}
                     {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
