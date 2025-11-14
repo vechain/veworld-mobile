@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5.0 (2025-11-13)
+
+* build: init ([f33174b](https://github.com/vechain/veworld-mobile/commit/f33174b))
+* feat: add prefetch of all the periods (#3530) ([31acbfd](https://github.com/vechain/veworld-mobile/commit/31acbfd)), closes [#3530](https://github.com/vechain/veworld-mobile/issues/3530)
+
 ## <small>2.4.9 (2025-11-05)</small>
 
 * build: init ([73a4b19](https://github.com/vechain/veworld-mobile/commit/73a4b19))
