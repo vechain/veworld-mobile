@@ -23,7 +23,7 @@ export const useLevelCirculatingSupplies = () => {
         queryFn: async () => await getLevelCirculatingSupplies(thor, stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS!),
         staleTime: 60 * 5 * 1000,
         gcTime: 60 * 30 * 1000,
-        enabled: !!thor,
+        enabled: Boolean(!!thor && stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS),
         select: data => {
             return data ? data.flat().map((supply: bigint) => Number(supply)) : []
         },
