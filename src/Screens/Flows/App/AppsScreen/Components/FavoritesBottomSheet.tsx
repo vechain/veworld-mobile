@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import DraggableFlatList, { RenderItem, ScaleDecorator } from "react-native-draggable-flatlist"
+import DraggableFlatList, { DragEndParams, RenderItem, ScaleDecorator } from "react-native-draggable-flatlist"
 import {
     AnimatedSaveHeaderButton,
     BaseBottomSheet,
@@ -37,8 +37,9 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
 
     const handleClose = useCallback(() => {
         setIsEditingMode(false)
+        setReorderedDapps(bookmarkedDApps)
         onClose()
-    }, [onClose])
+    }, [onClose, bookmarkedDApps])
 
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
 
@@ -50,27 +51,27 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         [dispatch],
     )
 
-    const onLongPress = useCallback(() => {
-        if (!isEditingMode) {
-            setIsEditingMode(true)
-        }
-    }, [isEditingMode])
-
     const onLongPressHandler = useCallback(
-        (_dapp: DiscoveryDApp) => {
+        (_dapp: DiscoveryDApp, drag?: () => void) => {
             if (!isEditingMode) {
-                onLongPress()
+                setIsEditingMode(true)
+                drag?.()
+            } else if (drag) {
+                drag()
             }
         },
-        [isEditingMode, onLongPress],
+        [isEditingMode],
     )
 
     const handleDAppPress = useCallback(
         (dapp: DiscoveryDApp) => {
+            if (isEditingMode) {
+                return
+            }
             onDAppPress(dapp)
             handleClose()
         },
-        [onDAppPress, handleClose],
+        [isEditingMode, onDAppPress, handleClose],
     )
 
     const renderItem: RenderItem<DiscoveryDApp> = useCallback(
@@ -83,8 +84,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         isEditMode={isEditingMode}
                         onPress={handleDAppPress}
                         onRightActionPress={onMorePress}
-                        onLongPress={onLongPressHandler}
-                        onRightActionLongPress={isEditingMode ? drag : undefined}
+                        onLongPress={dapp => onLongPressHandler(dapp, drag)}
                         px={0}
                     />
                 </ScaleDecorator>
@@ -93,14 +93,32 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         [isEditingMode, handleDAppPress, onLongPressHandler, onMorePress],
     )
 
+    const onDragEnd = useCallback(
+        ({ data }: DragEndParams<DiscoveryDApp>) => {
+            setReorderedDapps(data)
+        },
+        [setReorderedDapps],
+    )
+
     const onSaveReorderedDapps = useCallback(() => {
         dispatch(reorderBookmarks(reorderedDapps))
         setIsEditingMode(false)
     }, [dispatch, reorderedDapps])
 
     useEffect(() => {
-        setReorderedDapps(bookmarkedDApps)
-    }, [bookmarkedDApps])
+        // Update reorderedDapps when bookmarkedDApps changes, but only if not in editing mode
+        // to avoid conflicts during active reordering
+        if (!isEditingMode) {
+            setReorderedDapps(prevDapps => {
+                // Check if order or length changed by comparing hrefs
+                const orderChanged =
+                    prevDapps.length !== bookmarkedDApps.length ||
+                    prevDapps.some((dapp, index) => dapp.href !== bookmarkedDApps[index]?.href)
+
+                return orderChanged ? bookmarkedDApps : prevDapps
+            })
+        }
+    }, [bookmarkedDApps, isEditingMode])
 
     const headerContent = useMemo(
         () => (
@@ -156,6 +174,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         style={reorderedDapps.length === 0 ? styles.emptyListStyle : undefined}
                         extraData={isEditingMode}
                         data={reorderedDapps}
+                        onDragEnd={onDragEnd}
                         keyExtractor={item => item.href}
                         renderItem={renderItem}
                         ListFooterComponent={renderFooter}

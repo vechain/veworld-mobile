@@ -14,7 +14,6 @@ type Props = {
     onPress: (dapp: DiscoveryDApp) => void
     onLongPress: (dapp: DiscoveryDApp) => void
     onRightActionPress: (dapp: DiscoveryDApp, isEditMode: boolean) => void
-    onRightActionLongPress?: (dapp: DiscoveryDApp) => void
     px?: number
 }
 
@@ -28,7 +27,6 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
         onPress,
         onLongPress,
         onRightActionPress,
-        onRightActionLongPress,
         px = 0, // No outer padding needed since bottom sheet provides 20px + card provides 4px base
     }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
@@ -44,7 +42,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                     pl={8}
                     bg={isActive ? theme.colors.actionBottomSheet.isActiveBackground : undefined}>
                     <BaseTouchable
-                        disabled={isEditMode || isActive}
+                        disabled={isActive}
                         style={[styles.card]}
                         onPress={() => onPress(dapp)}
                         onLongPress={() => onLongPress?.(dapp)}>
@@ -72,7 +70,6 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                     </BaseTouchable>
                     <BaseTouchable
                         disabled={isActive}
-                        onLongPress={() => onRightActionLongPress?.(dapp)}
                         onPress={() => onRightActionPress(dapp, isEditMode)}
                         style={styles.touchableContainer}
                         activeOpacity={0.7}>
