@@ -34,6 +34,7 @@ export const ChangeCurrencyFormat = () => {
             }}
             buttons={separators}
             selectedButtonIds={[currencyFormat]}
+            typographyFont="captionMedium"
         />
     )
 }

@@ -38,6 +38,7 @@ export const ChangeSymbolPosition: React.FC = () => {
             selectedButtonIds={[symbolPosition || ""]}
             buttons={positions}
             action={handleSelectCurrency}
+            typographyFont="captionMedium"
         />
     )
 }

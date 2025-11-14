@@ -26,6 +26,7 @@ export const ChangeCurrency: React.FC = () => {
 
     return (
         <BaseButtonGroupHorizontal
+            typographyFont="captionMedium"
             selectedButtonIds={[selectedCurrency || ""]}
             buttons={currencies}
             action={handleSelectCurrency}
