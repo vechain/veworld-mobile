@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
@@ -13,6 +13,9 @@ export const ResetAppBox = () => {
     const nav = useNavigation()
 
     const onReset = useCallback(() => nav.navigate(Routes.RESET_APP), [nav])
+    const textColor = useMemo(() => {
+        return theme.isDark ? COLORS.WHITE : COLORS.PURPLE
+    }, [theme])
 
     return (
         <BaseView
@@ -24,8 +27,10 @@ export const ResetAppBox = () => {
             bg={theme.colors.card}>
             <BaseView gap={8} flexDirection="column" alignItems="flex-start">
                 <BaseView flexDirection="row" alignItems="center" gap={8}>
-                    <BaseIcon name="icon-rotate-ccw" size={16} />
-                    <BaseText typographyFont="bodySemiBold">{LL.BD_RESET()}</BaseText>
+                    <BaseIcon name="icon-rotate-ccw" size={16} color={textColor} />
+                    <BaseText typographyFont="bodySemiBold" color={textColor}>
+                        {LL.BD_RESET()}
+                    </BaseText>
                 </BaseView>
                 <BaseText typographyFont="caption" color={theme.colors.subtitle}>
                     {LL.BD_RESET_DISCLAIMER()}
@@ -35,6 +40,7 @@ export const ResetAppBox = () => {
                 size="sm"
                 radius={6}
                 style={styles.button}
+                textColor={COLORS.WHITE}
                 bgColor={COLORS.RED_600}
                 typographyFont="captionSemiBold"
                 title={LL.BTN_RESET_APP()}
