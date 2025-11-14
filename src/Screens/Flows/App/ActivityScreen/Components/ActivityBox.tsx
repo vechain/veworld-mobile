@@ -1027,19 +1027,11 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
         validators,
     ])
 
-    const validatorLogoUrl = useMemo(() => {
-        if (isDelegationOrDelegateActivity && activity.validator) {
-            return ValidatorUtils.getValidatorLogoUrlByAddress(validators ?? [], activity.validator)
-        }
-        return undefined
-    }, [isDelegationOrDelegateActivity, activity.validator, validators])
-
     const baseActivityBoxProps = () => {
         return {
             icon: getStakingIcon(activity.eventName),
             title: getActivityTitle(),
             description: getDescription,
-            nftImage: validatorLogoUrl,
             rightAmount: rightAmount,
             rightAmountDescription:
                 hasRightAmount &&
