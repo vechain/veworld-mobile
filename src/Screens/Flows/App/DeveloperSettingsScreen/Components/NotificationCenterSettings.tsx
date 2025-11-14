@@ -17,7 +17,7 @@ export const NotificationCenterSettings = () => {
             try {
                 dispatch(setNotificationCenterUrl(value || undefined))
                 await HapticsService.triggerHaptics({ haptics: "Success" })
-            } catch (e) {
+            } catch {
                 await HapticsService.triggerHaptics({ haptics: "Error" })
             }
         },
