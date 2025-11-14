@@ -326,8 +326,8 @@ export const getStargateVTHOClaimedByAddressAndTokenId = (
 
 /**
  * Get Stargate tokens for address endpoint. (It does not include the baseUrl)
- * @param genesisId ID of the genesis block
  * @param address Address of the user
+ * @param param1 Options
  * @returns The Stargate tokens for address
  */
 export const getStargateTokensByAddress = (
