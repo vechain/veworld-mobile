@@ -8,11 +8,11 @@ import { useIsBlockchainHayabusa } from "./useIsBlockchainHayabusa"
 
 const getBytecode = jest.fn()
 
-const setHardFork = jest.fn().mockImplementation(payload => ({ type: "networks/setHardFork", payload }))
+const setNetworkHardFork = jest.fn().mockImplementation(payload => ({ type: "networks/setNetworkHardFork", payload }))
 
 jest.mock("~Storage/Redux", () => ({
     ...jest.requireActual("~Storage/Redux"),
-    setHardFork: (...args: any[]) => setHardFork(...args),
+    setNetworkHardFork: (...args: any[]) => setNetworkHardFork(...args),
 }))
 
 jest.mock("~Hooks/useThorClient", () => ({
@@ -36,7 +36,10 @@ describe("useIsBlockchainHayabusa", () => {
         await waitFor(() => {
             expect(result.current.isHayabusa).toBe(true)
         })
-        expect(setHardFork).toHaveBeenCalledWith(NetworkHardFork.HAYABUSA)
+        expect(setNetworkHardFork).toHaveBeenCalledWith({
+            hardfork: NetworkHardFork.HAYABUSA,
+            network: defaultMainNetwork,
+        })
     })
     it("should return true if staker contract does not have code but is cached", async () => {
         getBytecode.mockResolvedValue("0x")
@@ -61,7 +64,7 @@ describe("useIsBlockchainHayabusa", () => {
         await waitFor(() => {
             expect(result.current.isHayabusa).toBe(true)
         })
-        expect(setHardFork).not.toHaveBeenCalled()
+        expect(setNetworkHardFork).not.toHaveBeenCalled()
         expect(getBytecode).not.toHaveBeenCalled()
     })
     it("should return false if staker contract does not have code and is not cached", async () => {
@@ -87,7 +90,7 @@ describe("useIsBlockchainHayabusa", () => {
         await waitFor(() => {
             expect(result.current.isHayabusa).toBe(false)
         })
-        expect(setHardFork).not.toHaveBeenCalled()
+        expect(setNetworkHardFork).not.toHaveBeenCalled()
         expect(getBytecode).toHaveBeenCalled()
     })
 })

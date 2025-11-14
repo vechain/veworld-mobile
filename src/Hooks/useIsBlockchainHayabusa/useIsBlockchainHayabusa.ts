@@ -4,12 +4,12 @@ import { useEffect, useMemo } from "react"
 import { STAKER_CONTRACT_ADDRESS } from "~Constants"
 import { useNetworkThorClient } from "~Hooks/useThorClient"
 import { Network, NetworkHardFork } from "~Model"
-import { selectSelectedNetworkHardfork, setHardFork, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectNetworkHardfork, setNetworkHardFork, useAppDispatch, useAppSelector } from "~Storage/Redux"
 
 export const useIsBlockchainHayabusa = (network: Network) => {
     const thorClient = useNetworkThorClient(network)
     const dispatch = useAppDispatch()
-    const hardfork = useAppSelector(selectSelectedNetworkHardfork)
+    const hardfork = useAppSelector(state => selectNetworkHardfork(state, network))
 
     const isCachedHayabusa = useMemo(() => hardfork >= NetworkHardFork.HAYABUSA, [hardfork])
 
@@ -24,8 +24,8 @@ export const useIsBlockchainHayabusa = (network: Network) => {
     const isBlockchainHayabusa = useMemo(() => Boolean(data && data !== "0x"), [data])
 
     useEffect(() => {
-        if (isBlockchainHayabusa) dispatch(setHardFork(NetworkHardFork.HAYABUSA))
-    }, [dispatch, isBlockchainHayabusa])
+        if (isBlockchainHayabusa) dispatch(setNetworkHardFork({ network, hardfork: NetworkHardFork.HAYABUSA }))
+    }, [dispatch, isBlockchainHayabusa, network])
 
     const isHayabusa = useMemo(() => isCachedHayabusa || isBlockchainHayabusa, [isBlockchainHayabusa, isCachedHayabusa])
 
