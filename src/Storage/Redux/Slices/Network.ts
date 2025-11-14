@@ -57,7 +57,8 @@ export const NetworkSlice = createSlice({
         },
         resetNetworkState: () => initialState,
         setHardFork: (state, action: PayloadAction<NetworkHardFork>) => {
-            state.hardfork[state.selectedNetwork] = action.payload
+            if (action.payload > (state.hardfork[state.selectedNetwork] ?? 0))
+                state.hardfork[state.selectedNetwork] = action.payload
         },
     },
 })

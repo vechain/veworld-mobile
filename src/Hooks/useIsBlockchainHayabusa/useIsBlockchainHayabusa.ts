@@ -25,7 +25,7 @@ export const useIsBlockchainHayabusa = (network: Network) => {
 
     useEffect(() => {
         if (isBlockchainHayabusa) dispatch(setHardFork(NetworkHardFork.HAYABUSA))
-    }, [data, dispatch, isBlockchainHayabusa])
+    }, [dispatch, isBlockchainHayabusa])
 
     const isHayabusa = useMemo(() => isCachedHayabusa || isBlockchainHayabusa, [isBlockchainHayabusa, isCachedHayabusa])
 
