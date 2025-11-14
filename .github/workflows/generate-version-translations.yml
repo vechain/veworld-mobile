@@ -1,8 +1,4 @@
 name: Generate Version Translations
-permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
 
 on:
     push:
@@ -13,6 +9,10 @@ on:
 jobs:
     translate-version-descriptions:
         runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+            id-token: write
         if: "!contains(github.event.head_commit.message, 'add translations')"
 
         steps:
