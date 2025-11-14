@@ -27,7 +27,9 @@ export const ResetAppBox = () => {
                     <BaseIcon name="icon-rotate-ccw" size={16} />
                     <BaseText typographyFont="bodySemiBold">{LL.BD_RESET()}</BaseText>
                 </BaseView>
-                <BaseText typographyFont="caption">{LL.BD_RESET_DISCLAIMER()}</BaseText>
+                <BaseText typographyFont="caption" color={theme.colors.subtitle}>
+                    {LL.BD_RESET_DISCLAIMER()}
+                </BaseText>
             </BaseView>
             <BaseButton
                 size="sm"

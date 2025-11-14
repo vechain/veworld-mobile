@@ -232,7 +232,7 @@
   "BD_PRIVATE_KEY_DISCLAIMER": "Never disclose your Private key. Anyone with this information can take your VeChain cryptos forever.",
   "BD_PRIVATE_KEY_PASSWORD_WARNING": "In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.",
   "BD_PRIVATE_KEY_WARMNING": "Never share your private key. Anyone who access it can steal all of your crypto assets.",
-  "BD_RESET": "Reset",
+  "BD_RESET": "Reset app",
   "BD_RESET_APP_01": "Resetting your account will log you out and erase all your data stored locally (accounts, wallets, transaction history etc).",
   "BD_RESET_APP_02": "Resetting VeWorld will not change your accounts' balances but will require you to re-enter your secret recovery phrase to access them.",
   "BD_RESET_APP_DISCLAIMER": "Ensure you have backed up the recovery phrase of all your wallets, as this action is irreversible.",

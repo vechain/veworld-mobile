@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { BaseSpacer, BaseText, BaseView, ChangeLanguage, Layout, SelectLanguageBottomSheet } from "~Components"
-import { useBottomSheetModal } from "~Hooks"
+import { useBottomSheetModal, useTheme } from "~Hooks"
 import { Locales, useI18nContext } from "~i18n"
 import { selectLanguage, setLanguage, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { ChangeCurrency, ChangeTheme, ResetAppBox, SettingsSection } from "./Components"
@@ -9,6 +9,7 @@ import { ChangeSymbolPosition } from "./Components/ChangeSymbolPosition"
 
 export const GeneralScreen = () => {
     const { LL, setLocale } = useI18nContext()
+    const theme = useTheme()
 
     const {
         ref: selectLanguageSheetRef,
@@ -37,26 +38,36 @@ export const GeneralScreen = () => {
                 <BaseView pt={8} gap={40}>
                     <SettingsSection icon="icon-settings-2" title={LL.SETTINGS_SECTION_APP_PREFERENCES()}>
                         <SettingsSection.Option>
-                            <BaseText typographyFont="captionMedium">{LL.BD_APP_THEME()}</BaseText>
+                            <BaseText typographyFont="captionMedium" color={theme.colors.subtitle}>
+                                {LL.BD_APP_THEME()}
+                            </BaseText>
                             <ChangeTheme />
                         </SettingsSection.Option>
                         <SettingsSection.Option>
-                            <BaseText typographyFont="captionMedium">{LL.BD_APP_LANGUAGE()}</BaseText>
+                            <BaseText typographyFont="captionMedium" color={theme.colors.subtitle}>
+                                {LL.BD_APP_LANGUAGE()}
+                            </BaseText>
                             <ChangeLanguage language={selectedLanguageCode} onPress={openSelectLanguageSheet} />
                         </SettingsSection.Option>
                     </SettingsSection>
 
                     <SettingsSection icon="icon-coins" title={LL.SETTINGS_SECTION_CURRENCY_PREFERENCES()}>
                         <SettingsSection.Option>
-                            <BaseText typographyFont="captionMedium">{LL.BD_CURRENCY_FORMAT()}</BaseText>
+                            <BaseText typographyFont="captionMedium" color={theme.colors.subtitle}>
+                                {LL.BD_CURRENCY_FORMAT()}
+                            </BaseText>
                             <ChangeCurrencyFormat />
                         </SettingsSection.Option>
                         <SettingsSection.Option>
-                            <BaseText typographyFont="captionMedium">{LL.BD_CONVERSION_CURRENCY()}</BaseText>
+                            <BaseText typographyFont="captionMedium" color={theme.colors.subtitle}>
+                                {LL.BD_CONVERSION_CURRENCY()}
+                            </BaseText>
                             <ChangeCurrency />
                         </SettingsSection.Option>
                         <SettingsSection.Option>
-                            <BaseText typographyFont="captionMedium">{LL.BD_SYMBOL_POSITION()}</BaseText>
+                            <BaseText typographyFont="captionMedium" color={theme.colors.subtitle}>
+                                {LL.BD_SYMBOL_POSITION()}
+                            </BaseText>
                             <ChangeSymbolPosition />
                         </SettingsSection.Option>
                     </SettingsSection>

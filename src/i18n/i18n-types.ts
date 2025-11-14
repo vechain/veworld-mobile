@@ -991,7 +991,7 @@ type RootTranslation = {
 	 */
 	BD_PRIVATE_KEY_WARMNING: string
 	/**
-	 * R​e​s​e​t
+	 * R​e​s​e​t​ ​a​p​p
 	 */
 	BD_RESET: string
 	/**
@@ -6448,7 +6448,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_PRIVATE_KEY_WARMNING: () => LocalizedString
 	/**
-	 * Reset
+	 * Reset app
 	 */
 	BD_RESET: () => LocalizedString
 	/**
