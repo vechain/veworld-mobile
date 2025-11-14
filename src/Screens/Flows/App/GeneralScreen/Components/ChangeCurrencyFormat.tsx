@@ -14,11 +14,11 @@ export const ChangeCurrencyFormat = () => {
         return [
             {
                 id: CURRENCY_FORMATS.COMMA,
-                label: LL.BD_CURRENCY_FORMAT_OPTION_comma(),
+                label: `${LL.BD_CURRENCY_FORMAT_OPTION_comma()} ,`,
             },
             {
                 id: CURRENCY_FORMATS.DOT,
-                label: LL.BD_CURRENCY_FORMAT_OPTION_dot(),
+                label: `${LL.BD_CURRENCY_FORMAT_OPTION_dot()} .`,
             },
             {
                 id: CURRENCY_FORMATS.SYSTEM,

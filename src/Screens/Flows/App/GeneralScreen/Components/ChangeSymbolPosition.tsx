@@ -5,12 +5,10 @@ import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectSymbolPosition } from "~Storage/Redux/Selectors"
 import { setSymbolPosition } from "~Storage/Redux/Actions"
 import { BaseButtonGroupHorizontalType } from "~Model"
-import { useI18nContext } from "~i18n"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 
 export const ChangeSymbolPosition: React.FC = () => {
     const symbolPosition = useAppSelector(selectSymbolPosition)
-    const { LL } = useI18nContext()
     const { formatFiat } = useFormatFiat()
 
     const dispatch = useAppDispatch()
@@ -19,12 +17,13 @@ export const ChangeSymbolPosition: React.FC = () => {
         () =>
             symbolPositions.map(pos => ({
                 id: pos,
-                label: `${LL[`BD_SYMBOL_POSITION_OPTION_${pos}`]()} \n(${formatFiat({
+                label: formatFiat({
                     amount: 100,
+                    decimals: 0,
                     symbolPosition: pos,
-                })})`,
+                }),
             })),
-        [LL, formatFiat],
+        [formatFiat],
     )
 
     const handleSelectCurrency = useCallback(

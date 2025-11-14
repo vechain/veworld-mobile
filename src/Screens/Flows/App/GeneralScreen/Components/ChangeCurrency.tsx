@@ -9,8 +9,7 @@ import { BaseButtonGroupHorizontalType } from "~Model"
 
 const currencies: Array<BaseButtonGroupHorizontalType> = currencyConfig.map(currency => ({
     id: currency.currency,
-    label: currency.currency,
-    icon: currency.iconName,
+    label: `${currency.symbol} ${currency.currency}`,
 }))
 
 export const ChangeCurrency: React.FC = () => {
