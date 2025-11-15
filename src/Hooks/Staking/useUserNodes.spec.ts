@@ -1,192 +1,130 @@
-import { TestWrapper, TestHelpers } from "~Test"
 import { renderHook } from "@testing-library/react-hooks"
+import { TestWrapper, TestHelpers } from "~Test"
+
+import { fetchStargateTokens } from "~Networking"
+import { getTokenLevelName } from "~Utils/StargateUtils"
+
 import { useUserNodes } from "./useUserNodes"
-import { RootState } from "~Storage/Redux/Types"
-import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
 
 const { StargateNodeMocks } = TestHelpers.data
 
-const mockQuerySuccess = {
-    data: StargateNodeMocks,
-    isFetching: false,
-    error: undefined,
-    isError: false,
-}
-
-const mockQueryError = {
-    data: undefined,
-    isFetching: false,
-    error: new Error("Test error"),
-    isError: true,
-}
-
-const mockQueryLoading = {
-    data: undefined,
-    isFetching: true,
-    error: undefined,
-    isError: false,
-}
-
-jest.mock("@tanstack/react-query", () => {
-    const actualQuery = jest.requireActual("@tanstack/react-query")
-    return {
-        ...actualQuery,
-        useQuery: jest.fn().mockImplementation(({ enabled }) => {
-            if (!enabled) {
-                return {
-                    data: undefined,
-                    isLoading: false,
-                    error: undefined,
-                    isError: false,
-                }
-            }
-
-            return mockQuerySuccess
-        }),
-    }
-})
-
-jest.mock("~Constants/Constants/Staking", () => ({
-    getStargateNetworkConfig: jest.fn().mockReturnValue({
-        NODE_MANAGEMENT_CONTRACT_ADDRESS: "0xNodeManagementAddress",
-    }),
+jest.mock("~Networking", () => ({
+    ...jest.requireActual("~Networking"),
+    fetchStargateTokens: jest.fn(),
 }))
-
-jest.mock("~Hooks/useThorClient", () => ({
-    useThorClient: jest.fn().mockReturnValue({
-        contracts: {
-            load: jest.fn(),
-        },
-    }),
-    useMainnetThorClient: jest.fn().mockReturnValue({
-        contracts: {
-            load: jest.fn(),
-        },
-    }),
-}))
-
-const preloadedState: Partial<RootState> = {
-    networks: {
-        customNetworks: [],
-        hardfork: {},
-        isNodeError: false,
-        selectedNetwork: defaultMainNetwork.id,
-        showConversionOtherNets: false,
-        showTestNetTag: false,
-    },
-}
 
 describe("useUserNodes", () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        const mockUseQuery = require("@tanstack/react-query").useQuery
-        mockUseQuery.mockImplementation(({ enabled }: { enabled?: boolean }) => {
-            if (!enabled) {
-                return {
-                    data: undefined,
-                    isFetching: false,
-                    error: undefined,
-                    isError: false,
-                }
-            }
-
-            return mockQuerySuccess
-        })
     })
 
-    it("should return empty stargateNodes array when address is undefined", () => {
+    it("should return empty data array when address is undefined", () => {
         const { result } = renderHook(() => useUserNodes(undefined), {
             wrapper: TestWrapper,
-            initialProps: {
-                preloadedState: preloadedState,
-            },
         })
 
-        expect(result.current.stargateNodes).toEqual([])
+        expect(result.current.data).toEqual([])
         expect(result.current.isLoading).toBe(false)
     })
 
-    it("should return stargateNodes when address is provided", () => {
-        const address = "0x123456789"
-
-        const { result } = renderHook(() => useUserNodes(address), {
-            wrapper: TestWrapper,
-            initialProps: {
-                preloadedState: preloadedState,
+    it("should return data when address is provided", async () => {
+        ;(fetchStargateTokens as jest.Mock).mockResolvedValue({
+            data: StargateNodeMocks.map(node => ({
+                tokenId: node.nodeId,
+                level: getTokenLevelName(node.nodeLevel),
+                owner: node.xNodeOwner,
+                vetStaked: node.vetAmountStaked,
+                totalBootstrapRewardsClaimed: "1",
+                totalRewardsClaimed: "0",
+            })),
+            pagination: {
+                hasNext: false,
             },
         })
-
-        expect(result.current.stargateNodes.length).toBe(2)
-        expect(result.current.stargateNodes[0].nodeId).toBe("1")
-        expect(result.current.stargateNodes[1].nodeId).toBe("3")
-    })
-
-    it("should filter out legacy nodes", () => {
         const address = "0x123456789"
 
-        const { result } = renderHook(() => useUserNodes(address), {
+        const { result, waitFor } = renderHook(() => useUserNodes(address), {
             wrapper: TestWrapper,
-            initialProps: {
-                preloadedState: preloadedState,
-            },
         })
 
-        const legacyNodeExists = result.current.stargateNodes.some(node => node.nodeId === "2")
-        expect(legacyNodeExists).toBe(false)
+        await waitFor(() => {
+            expect(result.current.data.length).toBe(3)
+            expect(result.current.data[0].nodeId).toBe("1")
+            expect(result.current.data[1].nodeId).toBe("2")
+            expect(result.current.data[2].nodeId).toBe("3")
+        })
     })
 
-    it("should handle network type correctly", () => {
-        const address = "0x123456789"
-
-        const { result } = renderHook(() => useUserNodes(address), {
-            wrapper: TestWrapper,
-            initialProps: {
-                preloadedState: {
-                    networks: {
-                        customNetworks: [],
-                        hardfork: {},
-                        isNodeError: false,
-                        selectedNetwork: defaultTestNetwork.id,
-                        showConversionOtherNets: false,
-                        showTestNetTag: false,
-                    },
+    it("should return data (2 pages) when address is provided", async () => {
+        ;(fetchStargateTokens as jest.Mock)
+            .mockResolvedValueOnce({
+                data: StargateNodeMocks.map(node => ({
+                    tokenId: node.nodeId,
+                    level: getTokenLevelName(node.nodeLevel),
+                    owner: node.xNodeOwner,
+                    vetStaked: node.vetAmountStaked,
+                    totalBootstrapRewardsClaimed: "1",
+                    totalRewardsClaimed: "0",
+                })),
+                pagination: {
+                    hasNext: true,
                 },
-            },
+            })
+            .mockResolvedValueOnce({
+                data: [
+                    {
+                        tokenId: "7",
+                        level: "Dawn",
+                        owner: "0x123456789",
+                        vetStaked: "1",
+                        totalBootstrapRewardsClaimed: "1",
+                        totalRewardsClaimed: "0",
+                    },
+                ],
+                pagination: {
+                    hasNext: false,
+                },
+            })
+        const address = "0x123456789"
+
+        const { result, waitFor } = renderHook(() => useUserNodes(address), {
+            wrapper: TestWrapper,
         })
 
-        expect(result.current.stargateNodes.length).toBe(2)
+        await waitFor(() => {
+            expect(result.current.data.length).toBe(4)
+            expect(result.current.data[0].nodeId).toBe("1")
+            expect(result.current.data[1].nodeId).toBe("2")
+            expect(result.current.data[2].nodeId).toBe("3")
+            expect(result.current.data[3].nodeId).toBe("7")
+        })
+
+        expect(fetchStargateTokens).toHaveBeenNthCalledWith(
+            1,
+            "https://indexer.mainnet.vechain.org/api/v1",
+            "0x123456789",
+            { page: 0 },
+        )
+        expect(fetchStargateTokens).toHaveBeenNthCalledWith(
+            2,
+            "https://indexer.mainnet.vechain.org/api/v1",
+            "0x123456789",
+            { page: 1 },
+        )
     })
 
-    it("should handle error state", () => {
-        const mockUseQuery = require("@tanstack/react-query").useQuery
-        mockUseQuery.mockImplementation(() => mockQueryError)
+    it("should handle error state", async () => {
+        ;(fetchStargateTokens as jest.Mock).mockRejectedValue(new Error("Test error"))
 
         const address = "0x123456789"
-        const { result } = renderHook(() => useUserNodes(address), {
+        const { result, waitFor } = renderHook(() => useUserNodes(address), {
             wrapper: TestWrapper,
-            initialProps: {
-                preloadedState: preloadedState,
-            },
         })
 
-        expect(result.current.isError).toBe(true)
-        expect(result.current.error).toEqual(new Error("Test error"))
-        expect(result.current.stargateNodes).toEqual([])
-    })
-
-    it("should handle loading state", () => {
-        const mockUseQuery = require("@tanstack/react-query").useQuery
-        mockUseQuery.mockImplementation(() => mockQueryLoading)
-
-        const address = "0x123456789"
-        const { result } = renderHook(() => useUserNodes(address), {
-            wrapper: TestWrapper,
-            initialProps: {
-                preloadedState: preloadedState,
-            },
+        await waitFor(() => {
+            expect(result.current.isError).toBe(true)
+            expect(result.current.error?.message).toMatch(/^Error fetching user nodes/)
+            expect(result.current.data).toStrictEqual([])
         })
-
-        expect(result.current.isLoading).toBe(true)
-        expect(result.current.stargateNodes).toEqual([])
     })
 })

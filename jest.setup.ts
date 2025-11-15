@@ -305,21 +305,23 @@ jest.mock("@tanstack/react-query", () => ({
     useQuery: jest
         .fn()
         .mockImplementation((...args: any[]) =>
-            jest.requireActual("@tanstack/react-query").useQuery({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+            jest
+                .requireActual("@tanstack/react-query")
+                .useQuery({ ...args[0], gcTime: Infinity, retryDelay: 1 }, ...args.slice(1)),
         ),
     useInfiniteQuery: jest
         .fn()
         .mockImplementation((...args: any[]) =>
             jest
                 .requireActual("@tanstack/react-query")
-                .useInfiniteQuery({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+                .useInfiniteQuery({ ...args[0], gcTime: Infinity, retryDelay: 1 }, ...args.slice(1)),
         ),
     queryOptions: jest
         .fn()
         .mockImplementation((...args: any[]) =>
             jest
                 .requireActual("@tanstack/react-query")
-                .queryOptions({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
+                .queryOptions({ ...args[0], gcTime: Infinity, retryDelay: 1 }, ...args.slice(1)),
         ),
 }))
 

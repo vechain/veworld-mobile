@@ -1,5 +1,6 @@
 import { IndexedHistoryEvent, OutputResponse } from "~Model"
 import { PaginationResponse } from "~Networking"
+import { StargateLevelName } from "~Utils/StargateUtils"
 
 export interface BaseTransactionResponse {
     id: string
@@ -200,4 +201,23 @@ export interface FetchVeBetterGlobalOverviewResponse {
     actionsRewarded: number
     totalImpact: VeBetterTotalImpact
     totalUniqueUserInteractions: number
+}
+
+export interface FetchStargateTokensResponseItem {
+    tokenId: string
+    level: StargateLevelName
+    owner: string
+    manager: string | null
+    delegationStatus: string
+    validatorId: string
+    totalRewardsClaimed: string
+    totalBootstrapRewardsClaimed: string
+    vetStaked: string
+    migrated: boolean
+    boosted: boolean
+}
+
+export interface FetchStargateTokensResponse {
+    data: FetchStargateTokensResponseItem[]
+    pagination: PaginationResponse
 }

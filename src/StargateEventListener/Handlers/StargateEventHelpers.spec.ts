@@ -6,12 +6,6 @@ jest.mock("~Services/AbiService", () => ({
     getReceiptProcessor: (...args: any[]) => getReceiptProcessorMock(...args),
 }))
 
-// Mocks for config and utils
-const getStargateNetworkConfigMock = jest.fn()
-jest.mock("~Constants/Constants/Staking", () => ({
-    getStargateNetworkConfig: (...args: any[]) => getStargateNetworkConfigMock(...args),
-}))
-
 const debugMock = jest.fn()
 const errorMock = jest.fn()
 const testBloomForAddressMock = jest.fn()
@@ -29,6 +23,13 @@ jest.mock("~Utils", () => ({
 jest.mock("~Constants", () => ({
     ERROR_EVENTS: { STARGATE: "STARGATE" },
 }))
+
+const defaultStargateConfig = {
+    NODE_MANAGEMENT_CONTRACT_ADDRESS: "0xnodeMgmt",
+    STARGATE_DELEGATION_CONTRACT_ADDRESS: "0xdelegation",
+    STARGATE_NFT_CONTRACT_ADDRESS: "0xnft",
+    LEGACY_NODES_CONTRACT_ADDRESS: "0xlegacy",
+}
 
 const createThorClient = (expanded?: { transactions: { id: string; origin?: string; outputs: any[] }[] }) => {
     return {
@@ -56,26 +57,26 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
         jest.clearAllMocks()
         getReceiptProcessorMock.mockReset()
         getReceiptProcessorMock.mockReturnValue({ analyzeReceipt: () => [] })
-        getStargateNetworkConfigMock.mockReturnValue({
-            NODE_MANAGEMENT_CONTRACT_ADDRESS: "0xnodeMgmt",
-            STARGATE_DELEGATION_CONTRACT_ADDRESS: "0xdelegation",
-            STARGATE_NFT_CONTRACT_ADDRESS: "0xnft",
-            LEGACY_NODES_CONTRACT_ADDRESS: "0xlegacy",
-        })
         testBloomForAddressMock.mockReturnValue(true)
     })
 
     it("returns early and logs when NodeManagement contract address is missing", async () => {
-        getStargateNetworkConfigMock.mockReturnValue({
-            // Missing NODE_MANAGEMENT_CONTRACT_ADDRESS on purpose
-            STARGATE_DELEGATION_CONTRACT_ADDRESS: "0xdelegation",
-            STARGATE_NFT_CONTRACT_ADDRESS: "0xnft",
-            LEGACY_NODES_CONTRACT_ADDRESS: "0xlegacy",
-        })
         const thor = createThorClient()
         const refetch = jest.fn()
 
-        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: refetch, managedAddresses: [] })
+        await handleNodeDelegatedEvent({
+            beat,
+            network,
+            thor,
+            invalidateStargateData: refetch,
+            managedAddresses: [],
+            stargateConfig: {
+                // Missing NODE_MANAGEMENT_CONTRACT_ADDRESS on purpose
+                STARGATE_DELEGATION_CONTRACT_ADDRESS: "0xdelegation",
+                STARGATE_NFT_CONTRACT_ADDRESS: "0xnft",
+                LEGACY_NODES_CONTRACT_ADDRESS: "0xlegacy",
+            },
+        })
 
         expect(refetch).not.toHaveBeenCalled()
         expect(thor.blocks.getBlockExpanded).not.toHaveBeenCalled()
@@ -93,7 +94,14 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
 
         const thor = createThorClient()
 
-        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: jest.fn(), managedAddresses: [] })
+        await handleNodeDelegatedEvent({
+            beat,
+            network,
+            thor,
+            invalidateStargateData: jest.fn(),
+            managedAddresses: [],
+            stargateConfig: defaultStargateConfig,
+        })
 
         expect(errorMock).toHaveBeenCalledWith("STARGATE", "Error handling NodeDelegated event:", expect.any(Error))
     })
@@ -107,7 +115,14 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
         } as any
         const refetch = jest.fn()
 
-        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: refetch, managedAddresses: [] })
+        await handleNodeDelegatedEvent({
+            beat,
+            network,
+            thor,
+            invalidateStargateData: refetch,
+            managedAddresses: [],
+            stargateConfig: defaultStargateConfig,
+        })
 
         expect(refetch).not.toHaveBeenCalled()
         const debugHadNoTxLog = debugMock.mock.calls.some(
@@ -117,11 +132,17 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
     })
 
     it("returns early when no network config", async () => {
-        getStargateNetworkConfigMock.mockReturnValue(undefined)
         const thor = createThorClient()
         const refetch = jest.fn()
 
-        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: refetch, managedAddresses: [] })
+        await handleNodeDelegatedEvent({
+            beat,
+            network,
+            thor,
+            invalidateStargateData: refetch,
+            managedAddresses: [],
+            stargateConfig: {},
+        })
 
         expect(refetch).not.toHaveBeenCalled()
         expect(thor.blocks.getBlockExpanded).not.toHaveBeenCalled()
@@ -132,7 +153,14 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
         const thor = createThorClient()
         const refetch = jest.fn()
 
-        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: refetch, managedAddresses: [] })
+        await handleNodeDelegatedEvent({
+            beat,
+            network,
+            thor,
+            invalidateStargateData: refetch,
+            managedAddresses: [],
+            stargateConfig: defaultStargateConfig,
+        })
 
         expect(refetch).not.toHaveBeenCalled()
         expect(thor.blocks.getBlockExpanded).not.toHaveBeenCalled()
@@ -166,14 +194,15 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             beat,
             network,
             thor,
-            refetchStargateData: refetch,
+            invalidateStargateData: refetch,
             managedAddresses: ["0xOWNER"],
+            stargateConfig: defaultStargateConfig,
         })
 
         // Fast-forward timers to trigger the setTimeout
         jest.runAllTimers()
 
-        expect(refetch).toHaveBeenCalledTimes(2) // Called for both owner and delegatee
+        expect(refetch).toHaveBeenCalledTimes(1) // Called for owner (as origin)
 
         jest.useRealTimers()
     })
@@ -200,8 +229,9 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             beat,
             network,
             thor,
-            refetchStargateData: refetch,
+            invalidateStargateData: refetch,
             managedAddresses: ["0xOWNER"],
+            stargateConfig: defaultStargateConfig,
         })
 
         expect(refetch).not.toHaveBeenCalled()
@@ -249,14 +279,15 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             beat,
             network,
             thor,
-            refetchStargateData: refetch,
+            invalidateStargateData: refetch,
             managedAddresses: ["0xOWNER"],
+            stargateConfig: defaultStargateConfig,
         })
 
         // Fast-forward timers to trigger the setTimeout
         jest.runAllTimers()
 
-        expect(refetch).toHaveBeenCalledTimes(2) // Called for both owner and delegatee
+        expect(refetch).toHaveBeenCalledTimes(1) // Called for the owner
         expect(analyzeReceiptMock).toHaveBeenCalledTimes(2)
 
         jest.useRealTimers()

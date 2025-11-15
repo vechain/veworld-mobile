@@ -42,6 +42,16 @@ export const initialState: FeatureFlags = {
                 ledger: false,
             },
         },
+        HAYABUSA: {
+            stargate: {
+                testnet: {
+                    contract: "0x0000000000000000000000000000000000000000",
+                },
+                mainnet: {
+                    contract: "0x0000000000000000000000000000000000000000",
+                },
+            },
+        },
     },
     smartWalletFeature: {
         enabled: false,

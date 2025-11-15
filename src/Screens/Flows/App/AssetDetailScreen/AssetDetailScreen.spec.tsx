@@ -88,6 +88,9 @@ const mockedFeatureFlags: FeatureFlags = {
                 ledger: false,
             },
         },
+        HAYABUSA: {
+            stargate: {},
+        },
     },
     betterWorldFeature: {
         appsScreen: {

@@ -51,6 +51,14 @@ export interface UserPreferenceState {
     signKeyPair?: KeyPair
     notificationCenterUrl?: string
     developerMenuUnlocked?: boolean
+    /**
+     * Indexer URLs.
+     * Each key is a genesis id and value is the URL.
+     * If an indexer isn't defined here, look up to the .env, otherwise return undefined
+     */
+    indexerUrls?: {
+        [genesisId: string]: string
+    }
 }
 
 export const initialUserPreferencesState: UserPreferenceState = {
@@ -205,6 +213,13 @@ export const UserPreferencesSlice = createSlice({
         setDeveloperMenuUnlocked: (state, action: PayloadAction<boolean>) => {
             state.developerMenuUnlocked = action.payload
         },
+
+        setIndexerUrl: (state, action: PayloadAction<{ genesisId: string; url: string | undefined }>) => {
+            const { genesisId, url } = action.payload
+            state.indexerUrls ??= {}
+            if (url) state.indexerUrls[genesisId] = url
+            else delete state.indexerUrls[genesisId]
+        },
     },
 })
 
@@ -234,4 +249,5 @@ export const {
     setSignKeyPair,
     setNotificationCenterUrl,
     setDeveloperMenuUnlocked,
+    setIndexerUrl,
 } = UserPreferencesSlice.actions
