@@ -120,7 +120,7 @@ describe("ActivityDetailsUtils", () => {
             [ActivityType.STARGATE_BOOST, "Maturity boosted"],
             [ActivityType.STARGATE_DELEGATE_REQUEST, "Delegation requested"],
             [ActivityType.STARGATE_DELEGATE_REQUEST_CANCELLED, "Delegation request cancelled"],
-            [ActivityType.STARGATE_DELEGATE_EXIT_REQUEST, "Delegation exit request"],
+            [ActivityType.STARGATE_DELEGATE_EXIT_REQUEST, "Delegation exit requested"],
             [ActivityType.STARGATE_DELEGATION_EXITED, "Delegation exited"],
             [ActivityType.STARGATE_DELEGATION_EXITED_VALIDATOR, "Delegation exited"],
             [ActivityType.STARGATE_DELEGATE_ACTIVE, "Delegation active"],
