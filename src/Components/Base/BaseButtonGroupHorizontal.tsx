@@ -1,7 +1,7 @@
 import React, { useCallback } from "react"
 import { StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTextProps } from "~Components"
-import { ColorThemeType } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { BaseButtonGroupHorizontalType } from "~Model"
 import HapticsService from "~Services/HapticsService"
@@ -18,6 +18,10 @@ type Props = {
     typographyFont?: BaseTextProps["typographyFont"]
     renderButton?: (button: BaseButtonGroupHorizontalType, textColor: string) => React.ReactNode
     style?: ViewStyle
+    color?: string
+    selectedColor?: string
+    selectedBackgroundColor?: string
+    showBorder?: boolean
 }
 
 export const BaseButtonGroupHorizontal = ({
@@ -28,6 +32,10 @@ export const BaseButtonGroupHorizontal = ({
     typographyFont = "buttonPrimary",
     renderButton,
     style,
+    color,
+    selectedColor,
+    selectedBackgroundColor,
+    showBorder = false,
 }: Props) => {
     const theme = useTheme()
 
@@ -45,6 +53,9 @@ export const BaseButtonGroupHorizontal = ({
 
     const calculateBGColor = useCallback(
         (selected: boolean, disabledStatus: boolean | undefined) => {
+            if (selected && selectedBackgroundColor) {
+                return selectedBackgroundColor
+            }
             if (disabledStatus && selected) {
                 return theme.colors.disabled
             }
@@ -53,24 +64,36 @@ export const BaseButtonGroupHorizontal = ({
             }
             return theme.colors.card
         },
-        [theme.colors.card, theme.colors.disabled, theme.colors.horizontalButtonSelected],
+        [selectedBackgroundColor, theme.colors.card, theme.colors.disabled, theme.colors.horizontalButtonSelected],
     )
 
     const calculateTextColor = useCallback(
         (selected: boolean, disabledStatus: boolean | undefined) => {
+            if (selected && selectedColor) {
+                return selectedColor
+            }
             if (disabledStatus) {
                 return theme.colors.horizontalButtonTextReversed
             }
             if (selected) {
                 return theme.colors.textSecondary
             }
-            return theme.colors.text
+            return color || theme.colors.text
         },
-        [theme.colors.textSecondary, theme.colors.horizontalButtonTextReversed, theme.colors.text],
+        [
+            selectedColor,
+            color,
+            theme.colors.textSecondary,
+            theme.colors.horizontalButtonTextReversed,
+            theme.colors.text,
+        ],
     )
 
     return (
-        <BaseView flexDirection="row" alignItems="stretch" style={[styles.backgroundStyle, style]}>
+        <BaseView
+            flexDirection="row"
+            alignItems="stretch"
+            style={[styles.backgroundStyle, style, showBorder && styles.borderStyle]}>
             {buttons.map((button, _) => {
                 const { id, label, disabled, icon } = button
                 const disabledStatus = disableAllButtons || disabled
@@ -120,5 +143,9 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         pressable: {
             padding: 10,
+        },
+        borderStyle: {
+            borderWidth: 1,
+            borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
         },
     })

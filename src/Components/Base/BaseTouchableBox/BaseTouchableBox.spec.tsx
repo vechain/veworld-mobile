@@ -42,7 +42,7 @@ describe("BaseTouchableBox component", () => {
         expect(baseTouchable.props.style).toMatchObject({
             alignItems: "center",
             backgroundColor: "red",
-            borderRadius: 16,
+            borderRadius: 8,
             flexDirection: "row",
             justifyContent: "center",
             opacity: 1,
@@ -71,7 +71,7 @@ describe("BaseTouchableBox component", () => {
             paddingVertical: 12,
             backgroundColor: "#30265F",
             opacity: 0.5,
-            borderRadius: 16,
+            borderRadius: 8,
             overflow: "hidden",
         })
     })
