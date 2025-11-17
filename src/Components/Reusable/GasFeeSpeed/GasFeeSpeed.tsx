@@ -131,7 +131,7 @@ const baseStyles = (theme: ColorThemeType) => {
             padding: 16,
         },
         cardContainer: {
-            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_50,
             marginTop: 16,
         },
         card: {
