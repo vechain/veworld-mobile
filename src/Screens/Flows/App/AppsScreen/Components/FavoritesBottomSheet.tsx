@@ -91,6 +91,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         onPress={handleDAppPress}
                         onRightActionPress={onMorePress}
                         onLongPress={dapp => onLongPressHandler(dapp, drag)}
+                        onRightActionLongPress={isEditingMode ? drag : undefined}
                         px={0}
                     />
                 </ScaleDecorator>
