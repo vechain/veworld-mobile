@@ -236,7 +236,7 @@
   "BD_RESET_APP_01": "La réinitialisation de votre compte vous déconnectera et effacera toutes vos données stockées localement (comptes, portefeuilles, historique des transactions, etc.).",
   "BD_RESET_APP_02": "La réinitialisation de VeWorld ne changera pas le solde de vos comptes mais nécessitera de réentrer votre phrase de récupération secrète pour y accéder.",
   "BD_RESET_APP_DISCLAIMER": "Assurez-vous d'avoir sauvegardé la phrase de récupération de tous vos portefeuilles, car cette action est irréversible.",
-  "BD_RESET_DISCLAIMER": "La réinitialisation de l'application supprimera tous les comptes et ramènera l'application à son état d'origine.",
+  "BD_RESET_DISCLAIMER": "La réinitialisation de l'application supprimera tous les comptes et ramènera l'application à l'état d'origine.",
   "BD_SCANED_ADDRESS_COPPIED": "Adresse copiée dans le presse-papiers",
   "BD_SECURITY_DOWNGRADE": "Veuillez réactiver la biométrie ou réinitialiser l'application",
   "BD_SECURITY_METHOD": "Sélectionnez la méthode de sécurité pour déverrouiller votre portefeuille.",

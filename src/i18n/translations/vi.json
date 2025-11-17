@@ -236,7 +236,7 @@
   "BD_RESET_APP_01": "Đặt lại tài khoản của bạn sẽ đăng xuất và xóa tất cả dữ liệu được lưu trữ cục bộ (tài khoản, ví, lịch sử giao dịch, vv).",
   "BD_RESET_APP_02": "Đặt lại VeWorld sẽ không thay đổi số dư tài khoản của bạn nhưng sẽ yêu cầu bạn nhập lại cụm từ khôi phục bí mật để truy cập chúng.",
   "BD_RESET_APP_DISCLAIMER": "Đảm bảo bạn đã sao lưu cụm từ khôi phục của tất cả các ví của bạn, vì hành động này là không thể hồi phục.",
-  "BD_RESET_DISCLAIMER": "Đặt lại ứng dụng sẽ xóa tất cả các tài khoản và đưa ứng dụng về trạng thái ban đầu.",
+  "BD_RESET_DISCLAIMER": "Việc đặt lại ứng dụng sẽ xóa tất cả các tài khoản và đưa ứng dụng về trạng thái ban đầu.",
   "BD_SCANED_ADDRESS_COPPIED": "Địa chỉ đã được sao chép vào clipboard",
   "BD_SECURITY_DOWNGRADE": "Vui lòng kích hoạt lại sinh trắc học hoặc đặt lại ứng dụng",
   "BD_SECURITY_METHOD": "Chọn phương pháp bảo mật để mở khóa ví của bạn.",
