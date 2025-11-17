@@ -3816,6 +3816,38 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_STARGATE_UNSTAKE: string
 	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​a​c​t​i​v​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: string
+	/**
+	 * M​a​n​a​g​e​r​ ​a​d​d​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: string
+	/**
+	 * M​a​n​a​g​e​r​ ​r​e​m​o​v​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: string
+	/**
+	 * M​a​t​u​r​i​t​y​ ​b​o​o​s​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: string
+	/**
 	 * S​w​a​p
 	 */
 	RECEIPT_OUTPUT_SWAP: string
@@ -4551,6 +4583,14 @@ type RootTranslation = {
 	 * @param {unknown} min
 	 */
 	SETTINGS_LABEL_name_min_length: RequiredParams<'min'>
+	/**
+	 * A​p​p​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	SETTINGS_SECTION_APP_PREFERENCES: string
+	/**
+	 * C​u​r​r​e​n​c​y​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	SETTINGS_SECTION_CURRENCY_PREFERENCES: string
 	/**
 	 * D​e​f​a​u​l​t​ ​d​e​l​e​g​a​t​i​o​n
 	 */
@@ -5493,14 +5533,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * A​p​p​ ​p​r​e​f​e​r​e​n​c​e​s
-	 */
-	SETTINGS_SECTION_APP_PREFERENCES: string
-	/**
-	 * C​u​r​r​e​n​c​y​ ​p​r​e​f​e​r​e​n​c​e​s
-	 */
-	SETTINGS_SECTION_CURRENCY_PREFERENCES: string
 }
 
 export type TranslationFunctions = {
@@ -9240,6 +9272,38 @@ This action is irreversible.
 	 */
 	RECEIPT_OUTPUT_STARGATE_UNSTAKE: () => LocalizedString
 	/**
+	 * Delegation requested
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: () => LocalizedString
+	/**
+	 * Delegation request cancelled
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
+	/**
+	 * Delegation active
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: () => LocalizedString
+	/**
+	 * Delegation exit requested
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: () => LocalizedString
+	/**
+	 * Delegation exited
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: () => LocalizedString
+	/**
+	 * Manager added
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: () => LocalizedString
+	/**
+	 * Manager removed
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: () => LocalizedString
+	/**
+	 * Maturity boosted
+	 */
+	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: () => LocalizedString
+	/**
 	 * Swap
 	 */
 	RECEIPT_OUTPUT_SWAP: () => LocalizedString
@@ -9964,6 +10028,14 @@ Are you sure you want to continue?
 	 * Minimum number of characters is {min}
 	 */
 	SETTINGS_LABEL_name_min_length: (arg: { min: unknown }) => LocalizedString
+	/**
+	 * App preferences
+	 */
+	SETTINGS_SECTION_APP_PREFERENCES: () => LocalizedString
+	/**
+	 * Currency preferences
+	 */
+	SETTINGS_SECTION_CURRENCY_PREFERENCES: () => LocalizedString
 	/**
 	 * Default delegation
 	 */
@@ -10897,14 +10969,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * App preferences
-	 */
-	SETTINGS_SECTION_APP_PREFERENCES: () => LocalizedString
-	/**
-	 * Currency preferences
-	 */
-	SETTINGS_SECTION_CURRENCY_PREFERENCES: () => LocalizedString
 }
 
 export type Formatters = {
