@@ -1,10 +1,10 @@
 {
-  "name": "STARGATE_DELEGATE_REQUEST",
+  "name": "STARGATE_DELEGATE_REQUEST_CANCELLED",
   "sameClause": true,
   "events": [
     {
-      "name": "DelegationInitiated(indexed uint256,indexed address,indexed uint256,uint256,uint8,uint8)",
-      "alias": "delegationSG",
+      "name": "DelegationExitRequested(indexed uint256,indexed address,indexed uint256,uint48)",
+      "alias": "exitRequest",
       "conditions": [
         {
           "firstOperand": "tokenId",
@@ -14,13 +14,6 @@
           "operator": "GT"
         },
         {
-          "firstOperand": "amount",
-          "isFirstStatic": false,
-          "secondOperand": 0,
-          "isSecondStatic": false,
-          "operator": "GT"
-        },
-        {
           "firstOperand": "address",
           "isFirstStatic": false,
           "secondOperand": "${STARGATE_CONTRACT}",
@@ -30,11 +23,11 @@
       ]
     },
     {
-      "name": "DelegationAdded(indexed address,indexed uint256,uint256,uint8)",
-      "alias": "delegationBuiltin",
+      "name": "DelegationWithdrawn(indexed uint256,indexed address,indexed uint256,uint256,uint8)",
+      "alias": "withdraw",
       "conditions": [
         {
-          "firstOperand": "stake",
+          "firstOperand": "tokenId",
           "isFirstStatic": false,
           "secondOperand": 0,
           "isSecondStatic": true,
@@ -43,83 +36,51 @@
         {
           "firstOperand": "address",
           "isFirstStatic": false,
-          "secondOperand": "0x00000000000000000000000000005374616B6572",
-          "isSecondStatic": true,
-          "operator": "EQ"
-        }
-      ]
-    },
-    {
-      "name": "VET_TRANSFER(address,address,uint256)",
-      "alias": "vetTransfer",
-      "conditions": [
-        {
-          "firstOperand": "from",
-          "isFirstStatic": false,
           "secondOperand": "${STARGATE_CONTRACT}",
           "isSecondStatic": true,
           "operator": "EQ"
-        },
-        {
-          "firstOperand": "amount",
-          "isFirstStatic": false,
-          "secondOperand": 0,
-          "isSecondStatic": true,
-          "operator": "GT"
         }
       ]
     }
   ],
   "rules": [
     {
-      "firstEventName": "delegationSG",
-      "firstEventProperty": "delegationId",
-      "secondEventName": "delegationBuiltin",
-      "secondEventProperty": "delegationID",
-      "operator": "EQ"
-    },
-    {
-      "firstEventName": "delegationSG",
-      "firstEventProperty": "validator",
-      "secondEventName": "delegationBuiltin",
-      "secondEventProperty": "validator",
+      "firstEventName": "exitRequest",
+      "firstEventProperty": "tokenId",
+      "secondEventName": "withdraw",
+      "secondEventProperty": "tokenId",
       "operator": "EQ"
     }
   ],
   "paramsDefinition": [
     {
       "name": "tokenId",
-      "eventName": "delegationSG",
+      "eventName": "withdraw",
       "businessEventName": "tokenId"
     },
     {
       "name": "validator",
-      "eventName": "delegationSG",
+      "eventName": "withdraw",
       "businessEventName": "validator"
     },
     {
       "name": "delegationId",
-      "eventName": "delegationSG",
+      "eventName": "withdraw",
       "businessEventName": "delegationId"
     },
     {
       "name": "origin",
-      "eventName": "delegationSG",
+      "eventName": "withdraw",
       "businessEventName": "owner"
     },
     {
       "name": "amount",
-      "eventName": "delegationSG",
-      "businessEventName": "value"
-    },
-    {
-      "name": "amount",
-      "eventName": "delegationSG",
+      "eventName": "withdraw",
       "businessEventName": "value"
     },
     {
       "name": "levelId",
-      "eventName": "delegationSG",
+      "eventName": "withdraw",
       "businessEventName": "levelId"
     }
   ],
@@ -147,12 +108,6 @@
       "name": "owner",
       "internalType": "address",
       "indexed": false
-    },
-    {
-      "indexed": false,
-      "internalType": "uint256",
-      "name": "value",
-      "type": "uint256"
     },
     {
       "indexed": false,

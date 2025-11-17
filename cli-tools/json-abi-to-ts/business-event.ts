@@ -63,7 +63,7 @@ export const validateAndUpdateBusinessEvent = async (
         const foundRealEvent = allEvents[foundEvt.name]! as any
         const foundInput = foundRealEvent.inputs.find((input: any) => input.name === paramDef.name)
         if (!foundInput) {
-            if (paramDef.name !== "address")
+            if (!["address", "origin"].includes(paramDef.name))
                 throw new Error(
                     // eslint-disable-next-line max-len
                     `[BusinessEventValidator]: Error at ${parsedPath.name}. ${paramDef.name} of event ${paramDef.eventName} not found in the event schema.`,

@@ -1,0 +1,43 @@
+{
+  "name": "STARGATE_UNDELEGATE_LEGACY",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "DelegationExitRequested(indexed uint256,uint256)",
+      "alias": "DelegationExitRequested",
+      "conditions": [
+        {
+          "firstOperand": "tokenId",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${STARGATE_DELEGATION_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    }
+  ],
+  "rules": [],
+  "paramsDefinition": [
+    {
+      "name": "tokenId",
+      "eventName": "DelegationExitRequested",
+      "businessEventName": "tokenId"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }
+  ],
+  "type": "event"
+}
