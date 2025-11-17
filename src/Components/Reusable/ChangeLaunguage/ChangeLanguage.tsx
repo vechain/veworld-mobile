@@ -20,6 +20,8 @@ export const ChangeLanguage: React.FC<Props> = ({ language, onPress }) => {
             action={onPress}
             justifyContent="space-between"
             haptics="Light"
+            px={16}
+            py={8}
             containerStyle={styles.container}>
             <BaseText typographyFont="captionMedium" color={theme.colors.subSubtitle}>
                 {selectedLanguageName}
