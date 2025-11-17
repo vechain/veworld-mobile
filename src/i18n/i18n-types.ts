@@ -4552,6 +4552,14 @@ type RootTranslation = {
 	 */
 	SETTINGS_LABEL_name_min_length: RequiredParams<'min'>
 	/**
+	 * A​p​p​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	SETTINGS_SECTION_APP_PREFERENCES: string
+	/**
+	 * C​u​r​r​e​n​c​y​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	SETTINGS_SECTION_CURRENCY_PREFERENCES: string
+	/**
 	 * D​e​f​a​u​l​t​ ​d​e​l​e​g​a​t​i​o​n
 	 */
 	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: string
@@ -5493,14 +5501,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * A​p​p​ ​p​r​e​f​e​r​e​n​c​e​s
-	 */
-	SETTINGS_SECTION_APP_PREFERENCES: string
-	/**
-	 * C​u​r​r​e​n​c​y​ ​p​r​e​f​e​r​e​n​c​e​s
-	 */
-	SETTINGS_SECTION_CURRENCY_PREFERENCES: string
 }
 
 export type TranslationFunctions = {
@@ -9965,6 +9965,14 @@ Are you sure you want to continue?
 	 */
 	SETTINGS_LABEL_name_min_length: (arg: { min: unknown }) => LocalizedString
 	/**
+	 * App preferences
+	 */
+	SETTINGS_SECTION_APP_PREFERENCES: () => LocalizedString
+	/**
+	 * Currency preferences
+	 */
+	SETTINGS_SECTION_CURRENCY_PREFERENCES: () => LocalizedString
+	/**
 	 * Default delegation
 	 */
 	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: () => LocalizedString
@@ -10897,14 +10905,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * App preferences
-	 */
-	SETTINGS_SECTION_APP_PREFERENCES: () => LocalizedString
-	/**
-	 * Currency preferences
-	 */
-	SETTINGS_SECTION_CURRENCY_PREFERENCES: () => LocalizedString
 }
 
 export type Formatters = {
