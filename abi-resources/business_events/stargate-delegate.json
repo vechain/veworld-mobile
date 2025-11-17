@@ -17,7 +17,7 @@
           "firstOperand": "amount",
           "isFirstStatic": false,
           "secondOperand": 0,
-          "isSecondStatic": false,
+          "isSecondStatic": true,
           "operator": "GT"
         },
         {
