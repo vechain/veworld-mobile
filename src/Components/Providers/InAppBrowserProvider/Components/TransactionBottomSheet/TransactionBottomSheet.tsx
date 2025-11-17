@@ -8,7 +8,7 @@ import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { DelegationView, GasFeeSpeed, RequireUserPassword, SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
-import { AnalyticsEvent, creteAnalyticsEvent, RequestMethods } from "~Constants"
+import { AnalyticsEvent, COLORS, creteAnalyticsEvent, RequestMethods } from "~Constants"
 import {
     useAnalyticTracking,
     useBottomSheetModal,
@@ -227,6 +227,7 @@ export const TransactionBottomSheetContent = ({
 
 export const TransactionBottomSheet = () => {
     const { LL } = useI18nContext()
+    const { theme } = useThemedStyles(baseStyles)
     const { transactionBsRef, transactionBsData, setTransactionBsData } = useInteraction()
     const { onClose: onCloseBs } = useBottomSheetModal({ externalRef: transactionBsRef })
     const { ref: selectAccountBsRef } = useBottomSheetModal()
@@ -391,6 +392,9 @@ export const TransactionBottomSheet = () => {
             ref={transactionBsRef}
             onDismiss={onDismiss}
             enableContentPanningGesture={false}
+            backgroundStyle={{
+                backgroundColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.LIGHT_GRAY,
+            }}
             noMargins>
             {transactionBsData && (
                 <TransactionBottomSheetContent
