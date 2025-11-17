@@ -5509,6 +5509,35 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * G​e​t​ ​y​o​u​r​ ​V​e​B​e​t​t​e​r​ ​c​a​r​d​ ​o​n
+	 */
+	STELLA_PAY_BOTTOM_SHEET_TITLE: string
+	/**
+	 * G​e​t​ ​y​o​u​r​ ​F​R​E​E​ ​c​a​r​d
+	 */
+	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD: string
+	/**
+	 * S​p​e​n​d
+	 */
+	STELLA_PAY_BOTTOM_SHEET_SPEND: string
+	/**
+	 * E​a​r​n
+	 */
+	STELLA_PAY_BOTTOM_SHEET_EARN: string
+	/**
+	 * U​s​e​ ​y​o​u​r​ ​c​a​r​d​ ​t​o​ ​s​p​e​n​d​ ​y​o​u​r​ ​r​e​w​a​r​d​s​ ​o​n​l​i​n​e​ ​a​n​d​ ​i​n​-​s​t​o​r​e​.​
+​A​v​a​i​l​a​b​l​e​ ​f​o​r​ ​G​o​o​g​l​e​ ​a​n​d​ ​A​p​p​l​e​ ​P​a​y​.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_SPEND_DESCRIPTION: string
+	/**
+	 * C​o​m​p​l​e​t​e​ ​B​e​t​t​e​r​ ​a​c​t​i​o​n​s​ ​a​n​d​ ​e​a​r​n​ ​B​3​T​R​ ​t​o​k​e​n​s​.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_EARN_DESCRIPTION: string
+	/**
+	 * S​i​g​n​ ​u​p​ ​a​n​d​ ​a​c​t​i​v​a​t​e​ ​y​o​u​r​ ​V​e​B​e​t​t​e​r​ ​c​a​r​d​ ​f​o​r​ ​f​r​e​e​ ​(​l​i​m​i​t​e​d​ ​t​i​m​e​ ​o​f​f​e​r​)​.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD_DESCRIPTION: string
 }
 
 export type TranslationFunctions = {
@@ -10921,6 +10950,35 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Get your VeBetter card on
+	 */
+	STELLA_PAY_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
+	 * Get your FREE card
+	 */
+	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD: () => LocalizedString
+	/**
+	 * Spend
+	 */
+	STELLA_PAY_BOTTOM_SHEET_SPEND: () => LocalizedString
+	/**
+	 * Earn
+	 */
+	STELLA_PAY_BOTTOM_SHEET_EARN: () => LocalizedString
+	/**
+	 * Use your card to spend your rewards online and in-store.
+Available for Google and Apple Pay.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_SPEND_DESCRIPTION: () => LocalizedString
+	/**
+	 * Complete Better actions and earn B3TR tokens.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_EARN_DESCRIPTION: () => LocalizedString
+	/**
+	 * Sign up and activate your VeBetter card for free (limited time offer).
+	 */
+	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD_DESCRIPTION: () => LocalizedString
 }
 
 export type Formatters = {
