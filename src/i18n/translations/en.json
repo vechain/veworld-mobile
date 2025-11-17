@@ -1152,6 +1152,13 @@
   "STARGATE_STAT_TOTAL_STAKED": "Total staked",
   "STARGATE_STAT_TOTAL_SUPPLY": "Total supply",
   "STATUS": "Status",
+  "STELLA_PAY_BOTTOM_SHEET_EARN": "Earn",
+  "STELLA_PAY_BOTTOM_SHEET_EARN_DESCRIPTION": "Complete Better actions and earn B3TR tokens.",
+  "STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD": "Get your FREE card",
+  "STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD_DESCRIPTION": "Sign up and activate your VeBetter card for free (limited time offer).",
+  "STELLA_PAY_BOTTOM_SHEET_SPEND": "Spend",
+  "STELLA_PAY_BOTTOM_SHEET_SPEND_DESCRIPTION": "Use your card to spend your rewards online and in-store.\nAvailable for Google and Apple Pay.",
+  "STELLA_PAY_BOTTOM_SHEET_TITLE": "Get your VeBetter card on",
   "SUCCESS_DOMAIN_AVAILABLE": "Available to claim",
   "SUCCESS_GENERIC": "Success!",
   "SUCCESS_GENERIC_VIEW_DETAIL_LINK": "View operation detail.",
@@ -1345,12 +1352,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "STELLA_PAY_BOTTOM_SHEET_TITLE": "Get your VeBetter card on",
-  "STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD": "Get your FREE card",
-  "STELLA_PAY_BOTTOM_SHEET_SPEND": "Spend",
-  "STELLA_PAY_BOTTOM_SHEET_EARN": "Earn",
-  "STELLA_PAY_BOTTOM_SHEET_SPEND_DESCRIPTION": "Use your card to spend your rewards online and in-store.\nAvailable for Google and Apple Pay.",
-  "STELLA_PAY_BOTTOM_SHEET_EARN_DESCRIPTION": "Complete Better actions and earn B3TR tokens.",
-  "STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD_DESCRIPTION": "Sign up and activate your VeBetter card for free (limited time offer)."
+  "YESTERDAY": "Yesterday"
 }
