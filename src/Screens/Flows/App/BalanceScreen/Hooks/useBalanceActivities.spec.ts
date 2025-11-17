@@ -196,6 +196,16 @@ describe("useBalanceActivities", () => {
                     ActivityEvent.STARGATE_STAKE,
                     ActivityEvent.STARGATE_UNDELEGATE_LEGACY,
                     ActivityEvent.STARGATE_UNSTAKE,
+                    ActivityEvent.STARGATE_CLAIM_REWARDS,
+                    ActivityEvent.STARGATE_BOOST,
+                    ActivityEvent.STARGATE_DELEGATE_REQUEST,
+                    ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED,
+                    ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST,
+                    ActivityEvent.STARGATE_DELEGATION_EXITED,
+                    ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR,
+                    ActivityEvent.STARGATE_DELEGATE_ACTIVE,
+                    ActivityEvent.STARGATE_MANAGER_ADDED,
+                    ActivityEvent.STARGATE_MANAGER_REMOVED,
                 ],
             )
         })

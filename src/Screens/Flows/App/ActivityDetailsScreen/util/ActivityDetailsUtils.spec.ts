@@ -109,6 +109,32 @@ describe("ActivityDetailsUtils", () => {
             expect(title).toBe("NFT Purchased")
         })
 
+        it.each([
+            [ActivityType.STARGATE_STAKE, "VET staked"],
+            [ActivityType.STARGATE_UNSTAKE, "VET unstaked"],
+            [ActivityType.STARGATE_CLAIM_REWARDS_BASE_LEGACY, "Base rewards"],
+            [ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY, "Delegation rewards"],
+            [ActivityType.STARGATE_DELEGATE_LEGACY, "VET staked & delegated"],
+            [ActivityType.STARGATE_UNDELEGATE_LEGACY, "Node undelegated"],
+            [ActivityType.STARGATE_CLAIM_REWARDS, "Delegation rewards"],
+            [ActivityType.STARGATE_BOOST, "Maturity boosted"],
+            [ActivityType.STARGATE_DELEGATE_REQUEST, "Delegation requested"],
+            [ActivityType.STARGATE_DELEGATE_REQUEST_CANCELLED, "Delegation request cancelled"],
+            [ActivityType.STARGATE_DELEGATE_EXIT_REQUEST, "Delegation exit request"],
+            [ActivityType.STARGATE_DELEGATION_EXITED, "Delegation exited"],
+            [ActivityType.STARGATE_DELEGATION_EXITED_VALIDATOR, "Delegation exited"],
+            [ActivityType.STARGATE_DELEGATE_ACTIVE, "Delegation active"],
+            [ActivityType.STARGATE_MANAGER_ADDED, "Manager added"],
+            [ActivityType.STARGATE_MANAGER_REMOVED, "Manager removed"],
+        ])("should return the correct title for a %s Stargate activity", (type, expected) => {
+            const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
+            const { LL } = result.current
+
+            const activity = { ...activityMock, type: type }
+            const title = getActivityTitle(activity, LL)
+            expect(title).toBe(expected)
+        })
+
         it("should return the undefined for an unknown activity type", () => {
             const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
             const { LL } = result.current
