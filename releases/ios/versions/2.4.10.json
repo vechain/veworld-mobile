@@ -1,0 +1,142 @@
+{
+  "version": "2.4.10",
+  "major": true,
+  "descriptions": {
+    "en": [
+      "New bottom-sheet token pages",
+      "Improved token graphs",
+      "Token activity tracking",
+      "Upgraded token stats",
+      "New About section for all tokens",
+      "Clear browser cache option"
+    ],
+    "de": [
+      "Neue Bottom-Sheet-Token-Seiten",
+      "Verbesserte Token-Grafiken",
+      "Nachverfolgung der Token-Aktivität",
+      "Verbesserte Token-Statistiken",
+      "Neuer Über-Bereich für alle Tokens",
+      "Option zum Löschen des Browser-Cache"
+    ],
+    "es": [
+      "Nuevas páginas de token de hoja inferior",
+      "Gráficas de tokens mejoradas",
+      "Seguimiento de actividad de tokens",
+      "Estadísticas de tokens mejoradas",
+      "Nueva sección Acerca de para todos los tokens",
+      "Opción de borrar la caché del navegador"
+    ],
+    "fr": [
+      "Nouvelles pages de jetons en feuille inférieure",
+      "Graphiques de jetons améliorés",
+      "Suivi de l'activité des jetons",
+      "Statistiques de jetons améliorées",
+      "Nouvelle section À propos pour tous les jetons",
+      "Option de nettoyage du cache du navigateur"
+    ],
+    "hi": [
+      "नई बॉटम-शीट टोकन पृष्ठ",
+      "सुधरे हुए टोकन ग्राफिक्स",
+      "टोकन गतिविधि ट्रैकिंग",
+      "उन्नत टोकन आँकड़े",
+      "सभी टोकनों के लिए नया अबाउट सेक्शन",
+      "ब्राउज़र कैश साफ़ करने का विकल्प"
+    ],
+    "it": [
+      "Nuove pagine di token in bottom-sheet",
+      "Grafici dei token migliorati",
+      "Tracciamento dell'attività dei token",
+      "Statistiche dei token aggiornate",
+      "Nuova sezione Informazioni per tutti i token",
+      "Opzione per svuotare la cache del browser"
+    ],
+    "ja": [
+      "新しいボトムシートトークンページ",
+      "改善されたトークングラフ",
+      "トークン活動の追跡",
+      "アップグレードされたトークン統計",
+      "すべてのトークンの新しい「About」セクション",
+      "ブラウザキャッシュクリアオプション"
+    ],
+    "ko": [
+      "새로운 바텀 시트 토큰 페이지",
+      "개선된 토큰 그래프",
+      "토큰 활동 추적",
+      "업그레이드된 토큰 통계",
+      "모든 토큰에 대한 새로운 정보 섹션",
+      "브라우저 캐시 삭제 옵션"
+    ],
+    "nl": [
+      "Nieuwe onderblad-tokenpagina's",
+      "Verbeterde tokengrafieken",
+      "Tokenactiviteit volgen",
+      "Verbeterde tokenstatistieken",
+      "Nieuwe Over-sectie voor alle tokens",
+      "Optie om browsercache te wissen"
+    ],
+    "pl": [
+      "Nowe strony z tokenami w dolnym arkuszu",
+      "Ulepszone wykresy tokenów",
+      "Śledzenie aktywności tokenów",
+      "Zaktualizowane statystyki tokenów",
+      "Nowa sekcja O tokenach",
+      "Opcja czyszczenia pamięci podręcznej przeglądarki"
+    ],
+    "pt": [
+      "Novas páginas de tokens em folha inferior",
+      "Melhorias nos gráficos de tokens",
+      "Rastreamento de atividade de tokens",
+      "Estatísticas de tokens aprimoradas",
+      "Nova seção Sobre para todos os tokens",
+      "Opção de limpar cache do navegador"
+    ],
+    "ru": [
+      "Новые страницы токенов с нижним листом",
+      "Улучшенные графики токенов",
+      "Отслеживание активности токенов",
+      "Обновленная статистика токенов",
+      "Новый раздел «О токене» для всех токенов",
+      "Опция очистки кеша браузера"
+    ],
+    "sv": [
+      "Nya bottom-sheet tokensidor",
+      "Förbättrade token grafer",
+      "Övervakning av tokenaktivitet",
+      "Uppgraderad tokenstatistik",
+      "Ny Om-sektion för alla tokens",
+      "Rensa webbläsarens cache alternativ"
+    ],
+    "tr": [
+      "Yeni alt sayfa jetonları",
+      "Geliştirilmiş jeton grafikleri",
+      "Jeton aktivitesi takibi",
+      "Yükseltilmiş jeton istatistikleri",
+      "Tüm jetonlar için yeni Hakkında bölümü",
+      "Tarayıcı önbelleği temizleme seçeneği"
+    ],
+    "tw": [
+      "新的底層表單代幣頁面",
+      "改進的代幣圖表",
+      "代幣活動追蹤",
+      "升級的代幣統計",
+      "所有代幣的新關於部分",
+      "清除瀏覽器緩存選項"
+    ],
+    "vi": [
+      "Trang token mới ở dưới cùng",
+      "Biểu đồ token được cải tiến",
+      "Theo dõi hoạt động token",
+      "Thống kê token nâng cấp",
+      "Phần Giới thiệu mới cho tất cả các token",
+      "Tùy chọn xóa bộ nhớ đệm của trình duyệt"
+    ],
+    "zh": [
+      "新的底部工作表令牌页面",
+      "改进的令牌图表",
+      "令牌活动跟踪",
+      "升级的令牌统计",
+      "所有令牌的新关于部分",
+      "清除浏览器缓存选项"
+    ]
+  }
+}

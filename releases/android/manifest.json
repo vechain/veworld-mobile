@@ -1,56 +1,61 @@
 {
-    "latest": "2.4.9",
-    "major": "2.4.8",
-    "history": [
-        {
-            "version": "2.3.0",
-            "key": "releases/android/versions/2.3.0",
-            "major": true
-        },
-        {
-            "version": "2.3.2",
-            "key": "releases/android/versions/2.3.2",
-            "major": true
-        },
-        {
-            "version": "2.3.3",
-            "key": "releases/android/versions/2.3.3",
-            "major": false
-        },
-        {
-            "version": "2.3.6",
-            "key": "releases/android/versions/2.3.6",
-            "major": false
-        },
-        {
-            "version": "2.4.3",
-            "key": "releases/android/versions/2.4.3",
-            "major": false
-        },
-        {
-            "version": "2.4.5",
-            "key": "releases/android/versions/2.4.5",
-            "major": false
-        },
-        {
-            "version": "2.4.6",
-            "key": "releases/android/versions/2.4.6",
-            "major": false
-        },
-        {
-            "version": "2.4.7",
-            "key": "releases/android/versions/2.4.7",
-            "major": false
-        },
-        {
-            "version": "2.4.8",
-            "key": "releases/android/versions/2.4.8",
-            "major": true
-        },
-        {
-          "version": "2.4.9",
-          "key": "releases/android/versions/2.4.9",
-          "major": false
-        }
-    ]
+  "latest": "2.4.10",
+  "major": "2.4.10",
+  "history": [
+    {
+      "version": "2.3.0",
+      "key": "releases/android/versions/2.3.0",
+      "major": true
+    },
+    {
+      "version": "2.3.2",
+      "key": "releases/android/versions/2.3.2",
+      "major": true
+    },
+    {
+      "version": "2.3.3",
+      "key": "releases/android/versions/2.3.3",
+      "major": false
+    },
+    {
+      "version": "2.3.6",
+      "key": "releases/android/versions/2.3.6",
+      "major": false
+    },
+    {
+      "version": "2.4.3",
+      "key": "releases/android/versions/2.4.3",
+      "major": false
+    },
+    {
+      "version": "2.4.5",
+      "key": "releases/android/versions/2.4.5",
+      "major": false
+    },
+    {
+      "version": "2.4.6",
+      "key": "releases/android/versions/2.4.6",
+      "major": false
+    },
+    {
+      "version": "2.4.7",
+      "key": "releases/android/versions/2.4.7",
+      "major": false
+    },
+    {
+      "version": "2.4.8",
+      "key": "releases/android/versions/2.4.8",
+      "major": true
+    },
+    {
+      "version": "2.4.9",
+      "key": "releases/android/versions/2.4.9",
+      "major": false
+    },
+    {
+      "version": "2.4.10",
+      "key": "releases/android/versions/2.4.10",
+      "major": true
+    }
+  ]
 }

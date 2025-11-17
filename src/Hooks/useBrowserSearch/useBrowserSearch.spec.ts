@@ -29,7 +29,8 @@ describe("useBrowserSearch", () => {
                     discovery: {
                         custom: [],
                         featured: [],
-                        favorites: [],
+
+                        favoriteRefs: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
                         bannerInteractions: {},
@@ -75,7 +76,8 @@ describe("useBrowserSearch", () => {
                     discovery: {
                         custom: [],
                         featured: [],
-                        favorites: [],
+
+                        favoriteRefs: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
                         bannerInteractions: {},
@@ -125,7 +127,8 @@ describe("useBrowserSearch", () => {
                     discovery: {
                         custom: [],
                         featured: [],
-                        favorites: [],
+
+                        favoriteRefs: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
                         bannerInteractions: {},
@@ -191,7 +194,8 @@ describe("useBrowserSearch", () => {
                             },
                         ],
                         featured: [],
-                        favorites: [],
+
+                        favoriteRefs: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
                         bannerInteractions: {},
@@ -250,7 +254,8 @@ describe("useBrowserSearch", () => {
                             },
                         ],
                         featured: [],
-                        favorites: [],
+
+                        favoriteRefs: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
                         bannerInteractions: {},

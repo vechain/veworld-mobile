@@ -4,6 +4,10 @@ import { selectVisitedUrls, useAppSelector } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
 import { TestWrapper } from "~Test"
 import { useVisitedUrls } from "./useVisitedUrls"
+import axios from "axios"
+
+jest.mock("axios")
+const mockedAxios = axios as jest.Mocked<typeof axios>
 
 jest.mock("~Components/Providers/InAppBrowserProvider", () => ({
     useInAppBrowserOrNull: jest.fn().mockReturnValue({
@@ -26,9 +30,10 @@ const createWrapper = ({
 }
 
 describe("useVisitedUrls", () => {
-    // beforeEach(() => {
-    //     jest.clearAllMocks()
-    // })
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockedAxios.get.mockResolvedValue({ data: "OK" })
+    })
 
     it("should add to the visited urls if the url is valid", async () => {
         const { result } = renderHook(
@@ -55,6 +60,8 @@ describe("useVisitedUrls", () => {
     })
 
     it("should not add to the visited urls if the url is invalid", async () => {
+        mockedAxios.get.mockRejectedValueOnce(new Error("Invalid URL"))
+
         const { result: visitedUrlsResult } = renderHook(() => useVisitedUrls(), {
             wrapper: createWrapper,
         })

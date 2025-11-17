@@ -13,8 +13,8 @@ import {
     ReorderIconHeaderButton,
 } from "~Components"
 import { ColorThemeType, DiscoveryDApp } from "~Constants"
-import { useTheme, useThemedStyles } from "~Hooks"
-import { removeBookmark, reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { useDappBookmarksList, useTheme, useThemedStyles } from "~Hooks"
+import { removeBookmark, reorderBookmarks, useAppDispatch } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useDAppActions } from "../Hooks"
 import { FavoriteDAppCard } from "./FavoriteDAppCard"
@@ -32,7 +32,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     const { onDAppPress } = useDAppActions(Routes.APPS)
     const dispatch = useAppDispatch()
 
-    const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+    const bookmarkedDApps = useDappBookmarksList()
     const [reorderedDapps, setReorderedDapps] = useState<DiscoveryDApp[]>(bookmarkedDApps)
 
     const handleClose = useCallback(() => {
@@ -41,12 +41,18 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         onClose()
     }, [onClose, bookmarkedDApps])
 
+    const renderSeparator = useCallback(() => <BaseSpacer height={8} />, [])
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
 
     const onMorePress = useCallback(
         (dapp: DiscoveryDApp, isEditMode: boolean) => {
             if (isEditMode) return
-            dispatch(removeBookmark(dapp))
+            dispatch(
+                removeBookmark({
+                    href: dapp.href,
+                    isCustom: dapp.isCustom,
+                }),
+            )
         },
         [dispatch],
     )
@@ -106,17 +112,8 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     }, [dispatch, reorderedDapps])
 
     useEffect(() => {
-        // Update reorderedDapps when bookmarkedDApps changes, but only if not in editing mode
-        // to avoid conflicts during active reordering
         if (!isEditingMode) {
-            setReorderedDapps(prevDapps => {
-                // Check if order or length changed by comparing hrefs
-                const orderChanged =
-                    prevDapps.length !== bookmarkedDApps.length ||
-                    prevDapps.some((dapp, index) => dapp.href !== bookmarkedDApps[index]?.href)
-
-                return orderChanged ? bookmarkedDApps : prevDapps
-            })
+            setReorderedDapps(bookmarkedDApps)
         }
     }, [bookmarkedDApps, isEditingMode])
 
@@ -169,19 +166,16 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 {headerContent}
                 <BaseView flex={1}>
                     <DraggableFlatList
+                        testID="draggable-flatlist"
                         scrollEnabled={true}
-                        contentContainerStyle={styles.listContentContainer}
-                        style={reorderedDapps.length === 0 ? styles.emptyListStyle : undefined}
+                        contentContainerStyle={
+                            reorderedDapps.length === 0 ? styles.emptyContentContainer : styles.listContentContainer
+                        }
                         extraData={isEditingMode}
-                        data={reorderedDapps}
-                        onDragEnd={onDragEnd}
                         keyExtractor={item => item.href}
                         renderItem={renderItem}
-                        ListFooterComponent={renderFooter}
-                        showsVerticalScrollIndicator={false}
-                        testID="draggable-flatlist"
-                        activationDistance={10}
-                        windowSize={5}
+                        data={reorderedDapps}
+                        ItemSeparatorComponent={renderSeparator}
                         ListEmptyComponent={
                             <ListEmptyResults
                                 subtitle={LL.FAVOURITES_DAPPS_EMPTY_LIST()}
@@ -192,6 +186,8 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                                 subtitleColor={theme.colors.actionBottomSheet.subText}
                             />
                         }
+                        ListFooterComponent={renderFooter}
+                        onDragEnd={onDragEnd}
                     />
                 </BaseView>
             </BaseView>
@@ -201,24 +197,15 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
+        layout: {
+            backgroundColor: theme.colors.tabsFooter.background,
+        },
         container: {
             flex: 1,
         },
-        leftElement: {
-            marginLeft: 8,
-        },
         rightElement: {
-            marginRight: 8,
-        },
-        listContentContainer: {
-            paddingTop: 12,
-            flexGrow: 1,
-            paddingHorizontal: 24,
-        },
-        layout: {
-            backgroundColor: theme.colors.card,
-            borderTopRightRadius: 24,
-            borderTopLeftRadius: 24,
+            flexDirection: "row",
+            gap: 16,
         },
         reorderIcon: {
             borderColor: theme.colors.actionBottomSheet.iconBackground.border,
@@ -226,12 +213,17 @@ const baseStyles = (theme: ColorThemeType) =>
             borderWidth: 1,
             borderRadius: 6,
         },
+        listContentContainer: {
+            paddingHorizontal: 24,
+        },
+        emptyContentContainer: {
+            paddingHorizontal: 24,
+            justifyContent: "center",
+            flexGrow: 1,
+        },
         emptyIcon: {
             backgroundColor: theme.colors.actionBottomSheet.emptyFavoritesIcon.background,
             borderRadius: 100,
             padding: 16,
-        },
-        emptyListStyle: {
-            alignSelf: "center",
         },
     })

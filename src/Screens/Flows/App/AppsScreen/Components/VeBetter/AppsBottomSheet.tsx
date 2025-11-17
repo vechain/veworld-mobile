@@ -4,7 +4,13 @@ import React, { forwardRef, useCallback, useEffect, useMemo, useState } from "re
 import { ListRenderItemInfo, StyleSheet } from "react-native"
 import Animated, { AnimatedRef, useAnimatedRef } from "react-native-reanimated"
 import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useBatchAppOverviews, useContentSwipeAnimation, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
+import {
+    useBatchAppOverviews,
+    useContentSwipeAnimation,
+    useDappBookmarkToggle,
+    useTheme,
+    useThemedStyles,
+} from "~Hooks"
 import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps/useVeBetterDaoActiveApps"
 import { useI18nContext } from "~i18n"
 import { IconKey, VbdDApp, X2ECategoryType } from "~Model"
@@ -52,7 +58,7 @@ const AppListItem = React.memo(
         scrollRef,
         index,
     }: X2EAppItemProps) => {
-        const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.external_url, dapp.name)
+        const { isBookMarked, toggleBookmark } = useDappBookmarkToggle(dapp.external_url, dapp.name)
         const { onDAppPress } = useDAppActions(Routes.APPS)
         const { LL } = useI18nContext()
 

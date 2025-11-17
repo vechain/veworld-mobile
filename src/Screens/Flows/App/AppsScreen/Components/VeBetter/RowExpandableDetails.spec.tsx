@@ -37,10 +37,11 @@ const Wrapper = ({ children }: PropsWithChildren) => (
         preloadedState={{
             discovery: {
                 featured: [],
+                favoriteRefs: [],
                 bannerInteractions: {},
                 connectedApps: [],
                 custom: [],
-                favorites: [],
+
                 hasOpenedDiscovery: true,
                 tabsManager: {
                     currentTabId: null,
