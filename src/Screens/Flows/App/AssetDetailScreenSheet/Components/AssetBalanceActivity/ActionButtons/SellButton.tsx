@@ -53,6 +53,7 @@ const SellButton = ({ token }: { token: FungibleTokenWithBalance }) => {
             icon="icon-minus"
             onPress={onPress}
             themed
+            truncateText
             testID="SELL_BUTTON"
         />
     )

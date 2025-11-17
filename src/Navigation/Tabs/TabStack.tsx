@@ -1,19 +1,20 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { TabIcon, useFeatureFlags } from "~Components"
-import { useCheckWalletBackup, useTheme } from "~Hooks"
+import { useCheckWalletBackup } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { HomeStack, RootStackParamListHome, RootStackParamListSettings, SettingsStack } from "~Navigation/Stacks"
 import { AppsStack, RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
-import { selectCurrentScreen, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import PlatformUtils from "~Utils/PlatformUtils"
 import { useI18nContext } from "~i18n"
+import { TabBar } from "./TabBar"
 
 export type TabStackParamList = {
     HomeStack: NavigatorScreenParams<RootStackParamListHome>
@@ -27,8 +28,6 @@ const Tab = createBottomTabNavigator<TabStackParamList>()
 
 export const TabStack = () => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
-    const currentScreen = useAppSelector(selectCurrentScreen)
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
@@ -52,37 +51,15 @@ export const TabStack = () => {
         [isShowBackupModal],
     )
 
-    const display = useMemo(() => {
-        switch (currentScreen) {
-            case Routes.SETTINGS_GET_SUPPORT:
-            case Routes.SETTINGS_GIVE_FEEDBACK:
-            case Routes.BROWSER:
-            case Routes.TOKEN_DETAILS:
-            case Routes.APPS_TABS_MANAGER:
-            case Routes.APPS_SEARCH:
-            case Routes.BUY_WEBVIEW:
-                return "none"
-
-            case "":
-                return "none"
-
-            default:
-                return "flex"
-        }
-    }, [currentScreen])
+    const renderTabBar = useCallback((props: BottomTabBarProps) => <TabBar {...props} />, [])
 
     return (
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
-                tabBarStyle: {
-                    display,
-                    backgroundColor: theme.colors.card,
-                    ...tabbarBaseStyles.tabbar,
-                    ...tabbarBaseStyles.shadow,
-                },
-            }}>
+            }}
+            tabBar={renderTabBar}>
             <Tab.Screen
                 name="HomeStack"
                 component={HomeStack}

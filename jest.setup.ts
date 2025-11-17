@@ -322,3 +322,38 @@ jest.mock("@tanstack/react-query", () => ({
                 .queryOptions({ ...args[0], gcTime: Infinity }, ...args.slice(1)),
         ),
 }))
+
+jest.mock("d3", () => ({
+    scaleLinear: jest.fn().mockImplementation(() => {
+        const scale = Object.assign(jest.fn(), {
+            domain: jest.fn().mockReturnValue(this),
+            range: jest.fn().mockReturnValue(this),
+        })
+        scale.domain = jest.fn().mockReturnValue(scale)
+        scale.range = jest.fn().mockReturnValue(scale)
+        return scale
+    }),
+    scaleTime: jest.fn().mockImplementation(() => {
+        const scale = Object.assign(jest.fn(), {
+            domain: jest.fn().mockReturnValue(this),
+            range: jest.fn().mockReturnValue(this),
+        })
+        scale.domain = jest.fn().mockReturnValue(scale)
+        scale.range = jest.fn().mockReturnValue(scale)
+        return scale
+    }),
+    line: jest.fn().mockImplementation(() => {
+        // Create a base function object for line generator
+        const lineGenerator = Object.assign(jest.fn().mockReturnValue("M0,0"), {
+            x: jest.fn().mockReturnValue(this),
+            y: jest.fn().mockReturnValue(this),
+            curve: jest.fn().mockReturnValue(this),
+        })
+        // Rebind to itself properly as a chainable API
+        lineGenerator.x = jest.fn().mockReturnValue(lineGenerator)
+        lineGenerator.y = jest.fn().mockReturnValue(lineGenerator)
+        lineGenerator.curve = jest.fn().mockReturnValue(lineGenerator)
+        return lineGenerator
+    }),
+    curveBasis: jest.fn(),
+}))

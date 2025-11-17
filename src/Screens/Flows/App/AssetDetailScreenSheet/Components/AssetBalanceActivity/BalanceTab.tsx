@@ -37,32 +37,31 @@ export const BalanceTab = ({ token: _token }: Props) => {
         }
     }, [_token, b3trBalance, isVOT3OrB3TR, vot3Balance])
 
-    const b3trToken = useMemo<FungibleTokenWithBalance | undefined>(() => {
-        if (!b3trBalance) return undefined
-
+    const b3trToken = useMemo(() => {
         return {
             ...B3TR,
             balance: b3trBalance,
         }
     }, [B3TR, b3trBalance])
 
-    const vot3Token = useMemo<FungibleTokenWithBalance | undefined>(() => {
-        if (!vot3Balance) return undefined
+    const vot3Token = useMemo(() => {
         return {
             ...VOT3,
             balance: vot3Balance,
         }
     }, [VOT3, vot3Balance])
 
-    const { fiatBalance, showFiatBalance, tokenBalance } = useTokenCardBalance({ token })
+    const { fiatBalance: totalFiatBalance, showFiatBalance, tokenBalance } = useTokenCardBalance({ token })
+    const { fiatBalance: b3trFiatBalance } = useTokenCardBalance({ token: b3trToken })
+    const { fiatBalance: vot3FiatBalance } = useTokenCardBalance({ token: vot3Token })
     const { formatLocale } = useFormatFiat()
     return (
         <>
             <ValueContainer>
                 {isVOT3OrB3TR ? (
                     <>
-                        {b3trToken && (
-                            <ValueContainer.TokenValue
+                        {b3trToken.balance && (
+                            <ValueContainer.TokenFiatValue
                                 token={b3trToken}
                                 value={formatTokenAmount(
                                     b3trToken.balance.balance,
@@ -73,11 +72,12 @@ export const BalanceTab = ({ token: _token }: Props) => {
                                         includeSymbol: false,
                                     },
                                 )}
+                                fiatValue={b3trFiatBalance}
                                 border
                             />
                         )}
-                        {vot3Token && (
-                            <ValueContainer.TokenValue
+                        {vot3Token.balance && (
+                            <ValueContainer.TokenFiatValue
                                 token={vot3Token}
                                 value={formatTokenAmount(
                                     vot3Token.balance.balance,
@@ -88,6 +88,7 @@ export const BalanceTab = ({ token: _token }: Props) => {
                                         includeSymbol: false,
                                     },
                                 )}
+                                fiatValue={vot3FiatBalance}
                                 border
                             />
                         )}
@@ -95,9 +96,13 @@ export const BalanceTab = ({ token: _token }: Props) => {
                 ) : (
                     <ValueContainer.TokenValue token={token} value={tokenBalance} border={!!showFiatBalance} />
                 )}
-                {showFiatBalance && <ValueContainer.DollarValue value={fiatBalance} testID="DOLLAR_VALUE" />}
+                {showFiatBalance && <ValueContainer.DollarValue value={totalFiatBalance} testID="DOLLAR_VALUE" />}
             </ValueContainer>
-            <BalanceTabActions token={token} />
+            {b3trToken.balance && isVOT3OrB3TR ? (
+                <BalanceTabActions token={b3trToken as FungibleTokenWithBalance} />
+            ) : (
+                <BalanceTabActions token={token} />
+            )}
         </>
     )
 }

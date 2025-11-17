@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from "react"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
-import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
+import Animated, { interpolate, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { BaseSpacer, Layout, VersionChangelogBottomSheet, VersionUpdateAvailableBottomSheet } from "~Components"
 import { COLORS } from "~Constants"
 import { useFetchFeaturedDApps, usePrefetchAllVns, useThemedStyles } from "~Hooks"
@@ -33,6 +33,7 @@ export const BalanceScreen = () => {
 
     const scrollY = useSharedValue(0)
     const contentOffsetY = useSharedValue(0)
+    const headerHeight = useSharedValue(100)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const { styles } = useThemedStyles(baseStyles)
 
@@ -50,6 +51,13 @@ export const BalanceScreen = () => {
             contentOffsetY.value = e.nativeEvent.layout.y
         },
         [contentOffsetY],
+    )
+
+    const onHeaderLayout = useCallback(
+        (e: LayoutChangeEvent) => {
+            headerHeight.value = e.nativeEvent.layout.height
+        },
+        [headerHeight],
     )
 
     const onScroll = useCallback(
@@ -75,6 +83,16 @@ export const BalanceScreen = () => {
         }
     }, [isObservedAccount])
 
+    const balanceScrollAnimationStyles = useAnimatedStyle(() => {
+        return {
+            opacity: interpolate(scrollY.value, [0, headerHeight.value * 1.5], [1, 0]),
+            transform: [
+                { scale: interpolate(scrollY.value, [0, headerHeight.value / 2], [1, 0.95]) },
+                { rotateX: `${interpolate(scrollY.value, [0, headerHeight.value / 2], [0, 0.5])}deg` },
+            ],
+        }
+    }, [scrollY.value])
+
     return (
         <Layout
             bg={COLORS.APP_BACKGROUND_DARK}
@@ -85,25 +103,29 @@ export const BalanceScreen = () => {
                 <Animated.ScrollView
                     refreshControl={<PullToRefresh />}
                     onScroll={onScroll}
+                    stickyHeaderIndices={[0]}
                     style={styles.scrollViewRoot}
                     contentContainerStyle={styles.scrollViewContent}>
-                    <AnimatedLinearGradient
-                        colors={colors}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 0, y: 1 }}
-                        style={styles.gradient}
-                        locations={[0, 0.55, 1]}
-                        angle={180}
-                        useAngle>
-                        <CurrentBalance />
+                    <Animated.View>
+                        <AnimatedLinearGradient
+                            colors={colors}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 0, y: 1 }}
+                            style={[styles.gradient, balanceScrollAnimationStyles]}
+                            locations={[0, 0.55, 1]}
+                            angle={180}
+                            onLayout={onHeaderLayout}
+                            useAngle>
+                            <CurrentBalance />
 
-                        <BaseSpacer height={6} />
-                        <BaseSpacer height={24} />
+                            <BaseSpacer height={6} />
+                            <BaseSpacer height={24} />
 
-                        {!isObservedAccount && <BalanceActions style={balanceActionsAnimatedStyles} />}
+                            {!isObservedAccount && <BalanceActions style={balanceActionsAnimatedStyles} />}
 
-                        <BaseSpacer height={64} />
-                    </AnimatedLinearGradient>
+                            <BaseSpacer height={64} />
+                        </AnimatedLinearGradient>
+                    </Animated.View>
                     <VersionUpdateAvailableBottomSheet />
                     <VersionChangelogBottomSheet />
                     <TabRenderer onLayout={onLayout} />
@@ -117,5 +139,5 @@ const baseStyles = () =>
     StyleSheet.create({
         scrollViewRoot: { minHeight: "100%" },
         scrollViewContent: { flexGrow: 1 },
-        gradient: { position: "relative", marginTop: 16 },
+        gradient: { position: "relative", marginTop: 16, transformOrigin: "center" },
     })

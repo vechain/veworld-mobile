@@ -1,28 +1,24 @@
 import { useCallback, useMemo } from "react"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking, useVeBetterDaoDapps } from "~Hooks"
-import {
-    addBookmark,
-    removeBookmark,
-    selectBookmarkedDapps,
-    selectFeaturedDapps,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { useAnalyticTracking, useDappBookmarksList, useVeBetterDaoDapps } from "~Hooks"
+import { addBookmark, removeBookmark, selectFeaturedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 
-export const useDappBookmarking = (url?: string, title?: string) => {
+export const useDappBookmarkToggle = (url?: string, title?: string) => {
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
 
-    const bookmarkedDapps = useAppSelector(selectBookmarkedDapps)
+    const bookmarkedDapps = useDappBookmarksList()
     const featuredDapps = useAppSelector(selectFeaturedDapps)
     const { data: vbdApps } = useVeBetterDaoDapps()
 
     const existingBookmark = useMemo(() => {
         if (!url) return undefined
         const trimmed = URIUtils.getBaseURL(url)
+        if (!trimmed) return undefined
+
         try {
+            // Simply check if URL exists in the resolved bookmarked dApps list
             return bookmarkedDapps.find(bookmark => URIUtils.getBaseURL(bookmark.href) === trimmed)
         } catch {
             return undefined
@@ -68,7 +64,7 @@ export const useDappBookmarking = (url?: string, title?: string) => {
                 href: baseURL!,
                 desc: "",
                 isCustom: true,
-                createAt: new Date().getTime(),
+                createAt: Date.now(),
                 amountOfNavigations: 1,
             }
 

@@ -1,77 +1,49 @@
 import { RootState } from "../Types"
 import { createSelector } from "@reduxjs/toolkit"
-import _ from "lodash"
 import { DiscoveryDApp } from "~Constants"
 
 const getDiscoveryState = (state: RootState) => state.discovery
-
-export const selectFavoritesDapps = createSelector(
-    getDiscoveryState,
-    (discovery): DiscoveryDApp[] => discovery.favorites,
-)
 
 export const selectFeaturedDapps = createSelector(getDiscoveryState, (discovery): DiscoveryDApp[] => discovery.featured)
 
 export const selectCustomDapps = createSelector(getDiscoveryState, (discovery): DiscoveryDApp[] => discovery.custom)
 
-export const selectBookmarkedDapps = createSelector(
-    selectFavoritesDapps,
-    selectCustomDapps,
-    (favorites, custom): DiscoveryDApp[] => {
-        const dapps: DiscoveryDApp[] = [...favorites, ...custom]
+export const selectFavoriteRefs = createSelector(getDiscoveryState, discovery => discovery.favoriteRefs)
 
-        return _.uniqBy(dapps, value => value.href)
-    },
-)
+export const selectAllDapps = createSelector(selectFeaturedDapps, selectCustomDapps, (featured, custom) => {
+    // Use a Set to track normalized URLs for O(1) lookups
+    const seenUrls = new Set<string>()
+    const result: DiscoveryDApp[] = []
 
-export const selectAllDapps = createSelector(
-    selectFavoritesDapps,
-    selectFeaturedDapps,
-    selectCustomDapps,
-    (favorites, featured, custom) => {
-        // Use a Set to track normalized URLs for O(1) lookups
-        const seenUrls = new Set<string>()
-        const result: DiscoveryDApp[] = []
-
-        // Helper to normalize URL for comparison
-        const normalizeUrl = (url: string) => {
-            try {
-                const parsed = new URL(url.toLowerCase())
-                parsed.hostname = parsed.hostname.replace("www.", "")
-                return parsed.origin + parsed.pathname
-            } catch {
-                return url.toLowerCase()
-            }
+    // Helper to normalize URL for comparison
+    const normalizeUrl = (url: string) => {
+        try {
+            const parsed = new URL(url.toLowerCase())
+            parsed.hostname = parsed.hostname.replace("www.", "")
+            return parsed.origin + parsed.pathname
+        } catch {
+            return url.toLowerCase()
         }
+    }
 
-        // Add favorites first (highest priority)
-        for (const dapp of favorites) {
-            const normalized = normalizeUrl(dapp.href)
+    // Add custom dapps first
+    for (const dapp of custom) {
+        const normalized = normalizeUrl(dapp.href)
+        seenUrls.add(normalized)
+        result.push(dapp)
+    }
+
+    // Add all featured apps (skip if URL already seen)
+    for (const dapp of featured) {
+        const normalized = normalizeUrl(dapp.href)
+        if (!seenUrls.has(normalized)) {
             seenUrls.add(normalized)
             result.push(dapp)
         }
+    }
 
-        // Add custom dapps (skip if URL already seen)
-        for (const dapp of custom) {
-            const normalized = normalizeUrl(dapp.href)
-            if (!seenUrls.has(normalized)) {
-                seenUrls.add(normalized)
-                result.push(dapp)
-            }
-        }
-
-        // Add all apps (skip if URL already seen)
-        for (const dapp of featured) {
-            const normalized = normalizeUrl(dapp.href)
-            if (!seenUrls.has(normalized)) {
-                seenUrls.add(normalized)
-                result.push(dapp)
-            }
-        }
-
-        return result
-    },
-)
+    return result
+})
 
 export const selectHasUserOpenedDiscovery = createSelector(
     getDiscoveryState,

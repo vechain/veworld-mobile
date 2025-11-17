@@ -4,11 +4,17 @@ import Animated, { ZoomIn, ZoomOut, LinearTransition } from "react-native-reanim
 import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
-import { useTabBarBottomMargin, useThemedStyles, useHasAnyVeBetterActions, useAnalyticTracking } from "~Hooks"
+import {
+    useAnalyticTracking,
+    useDappBookmarksList,
+    useHasAnyVeBetterActions,
+    useTabBarBottomMargin,
+    useThemedStyles,
+} from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux/Hooks"
-import { selectBookmarkedDapps, selectHideNewUserVeBetterCard, selectSelectedAccount } from "~Storage/Redux/Selectors"
+import { selectHideNewUserVeBetterCard, selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { AccountUtils } from "~Utils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
@@ -34,7 +40,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const [selectedTab, setSelectedTab] = useState<(typeof TABS)[number]>("TOKENS")
-    const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+    const bookmarkedDApps = useDappBookmarksList()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const hideNewUserVeBetterCard = useAppSelector(selectHideNewUserVeBetterCard)
     const { data: hasAnyVeBetterActions } = useHasAnyVeBetterActions()
@@ -154,6 +160,7 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
             gap: 16,
             flexDirection: "column",
+            zIndex: 1000,
         },
         animatedContent: {
             flexDirection: "column",

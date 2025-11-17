@@ -112,23 +112,13 @@ export const NewUserVeBetterCard = () => {
                 action={navigateToAppScreen}
                 style={styles.button}
                 bgColor={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE}
-                py={0}>
-                <BaseView
-                    flexDirection="row"
-                    gap={8}
-                    h={100}
-                    pt={4}
-                    alignItems="center"
-                    justifyContent="center"
-                    alignSelf="center">
-                    <BaseText
-                        alignContainer="center"
-                        typographyFont="bodySemiBold"
-                        color={theme.isDark ? COLORS.PURPLE : COLORS.WHITE}>
-                        {LL.VBD_START_YOUR_IMPACT()}
-                    </BaseText>
+                py={0}
+                textColor={theme.isDark ? COLORS.PURPLE : COLORS.WHITE}
+                typographyFont="bodySemiBold"
+                rightIcon={
                     <Icon name="icon-arrow-right" color={theme.isDark ? COLORS.PURPLE : COLORS.WHITE} size={20} />
-                </BaseView>
+                }>
+                {LL.VBD_START_YOUR_IMPACT()}
             </BaseButton>
         </BaseView>
     )
@@ -171,6 +161,8 @@ const style = (theme: ColorThemeType) =>
         },
         button: {
             height: 42,
+            justifyContent: "center",
+            gap: 8,
         },
         closeIcon: {
             position: "absolute",

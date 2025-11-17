@@ -31,6 +31,7 @@ export const ActivityTab = ({ token }: { token: FungibleToken }) => {
                     token: _token,
                     isSwap,
                     decodedClauses,
+                    returnScreen: Routes.TOKEN_DETAILS,
                 },
             })
         },

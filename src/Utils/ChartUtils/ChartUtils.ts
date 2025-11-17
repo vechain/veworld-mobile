@@ -34,7 +34,12 @@ export const getPercentagePriceChange = (data?: MarketChartResponse) => {
  * @param interval Interval to downsample. Defaults to 1
  * @returns Data, but downsampled
  */
-export const downsampleData = (data: MarketChartResponse | undefined, unit: "hour" | "day" = "hour", interval = 1) => {
+export const downsampleData = (
+    data: MarketChartResponse | undefined,
+    unit: "hour" | "day" | "month" = "hour",
+    interval = 1,
+    kind: "avg" | "first" = "avg",
+) => {
     if (!data) return undefined
 
     return [
@@ -55,6 +60,6 @@ export const downsampleData = (data: MarketChartResponse | undefined, unit: "hou
     ].map(([timestamp, values]) => ({
         timestamp: timestamp,
         //Perform the average for every hour
-        value: BigNumberUtils.average(values).toNumber,
+        value: kind === "avg" ? BigNumberUtils.average(values).toNumber : values[0],
     }))
 }
