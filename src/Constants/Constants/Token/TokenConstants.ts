@@ -16,7 +16,7 @@ export const VET: FungibleToken = {
     links: {
         website: "https://www.vechain.org",
         twitter: "https://twitter.com/vechainofficial",
-        telegram: "https://t.me/vechain_official_english",
+        telegram: "https://t.me/vechainandfriends",
     },
 }
 
@@ -30,7 +30,7 @@ export const VTHO: FungibleToken = {
     links: {
         website: "https://www.vechain.org",
         twitter: "https://twitter.com/vechainofficial",
-        telegram: "https://t.me/vechain_official_english",
+        telegram: "https://t.me/vechainandfriends",
     },
 }
 
