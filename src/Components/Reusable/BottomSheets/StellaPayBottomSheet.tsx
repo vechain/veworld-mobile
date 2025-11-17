@@ -53,7 +53,7 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         justifyContent="flex-start"
                         px={24}>
                         {optionsItems.map(item => (
-                            <BaseView flexDirection="row" gap={12} alignItems="flex-start">
+                            <BaseView key={item.title} flexDirection="row" gap={12} alignItems="flex-start">
                                 <BaseView bg={COLORS.PURPLE_DISABLED} px={12} py={12} borderRadius={100}>
                                     <BaseIcon name={item.icon} size={16} color={COLORS.LIME_GREEN} />
                                 </BaseView>
