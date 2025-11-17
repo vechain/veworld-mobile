@@ -11,7 +11,7 @@ import { useI18nContext } from "~i18n"
 type Props = {}
 
 export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({}, ref) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
 
     const optionsItems = useMemo(
@@ -37,10 +37,7 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     )
 
     return (
-        <BaseBottomSheet
-            ref={ref}
-            snapPoints={["92%"]}
-            backgroundStyle={{ backgroundColor: theme.colors.actionBottomSheet.background }}>
+        <BaseBottomSheet ref={ref} snapPoints={["92%"]} backgroundStyle={{ backgroundColor: COLORS.PURPLE }}>
             <BaseView flex={1} flexDirection="column" gap={24} alignItems="center" justifyContent="space-between">
                 <BaseView flex={1} flexDirection="column" gap={24} alignItems="center">
                     <BaseView flexDirection="column" gap={12} alignItems="center">
