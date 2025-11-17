@@ -28,15 +28,19 @@ export const Migration13 = (state: PersistedState): PersistedState => {
     // @ts-ignore
     const currentState: DiscoveryState = state.discovery
 
+    // @ts-expect-error - favorites may exist in old persisted state but not in new type
+    const favorites = currentState.favorites || []
+
     //We don't have any state, so return immediately
-    if (currentState.favorites.length === 0) {
+    if (favorites.length === 0) {
         debug(ERROR_EVENTS.SECURITY, "================= **** No state to migrate **** =================")
         return state
     }
 
     const newState: DiscoveryState = {
         ...currentState,
-        favorites: currentState.favorites.filter(filterFavorites),
+        // @ts-expect-error - favorites removed from type but may exist in old state
+        favorites: favorites.filter(filterFavorites),
     }
 
     return {

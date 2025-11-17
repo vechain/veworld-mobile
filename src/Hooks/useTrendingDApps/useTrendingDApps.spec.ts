@@ -96,7 +96,8 @@ const xAppsShares: {
 const initialStateMock = {
     discovery: {
         featured: mockDapps,
-        favorites: [],
+
+        favoriteRefs: [],
         custom: [],
         hasOpenedDiscovery: true,
         connectedApps: [],
@@ -164,6 +165,7 @@ describe("useTrendingDApps", () => {
             discovery: {
                 ...initialStateMock.discovery,
                 featured: [],
+                favoriteRefs: [],
             },
         }
 

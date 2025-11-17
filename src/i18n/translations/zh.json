@@ -1245,7 +1245,7 @@
   "TOKEN_CONVERSION": "代币转换",
   "TOKEN_CUSTOM": "自定义代币",
   "TOKEN_CUSTOM_SUBTITLE": "将自定义代币添加到您的钱包",
-  "TOKEN_DESCRIPTION_VET": "VET是VeChainThor区块链的原生代币，总供应量固定为867亿。它是网络的价值转移和质押资产，支持链上经济活动和网络安全。\n\nVET可以用于在StarGate——VeChain的原生质押平台——上进行质押，允许用户赚取能量代币VeThor (VTHO)，该代币为链上交易提供动力，并且还可以参与塑造区块链未来的治理决策。通过这种双重角色，VET锚定了VeChain生态系统的价值和实用性。",
+  "TOKEN_DESCRIPTION_VET": "VET 是 VeChainThor 区块链的原生代币，总供应量为 867 亿。它是网络的价值传输和质押资产，支持链上经济活动和网络安全。\n\nVET 可用于 VeChain 的原生质押平台 StarGate 上进行质押，允许用户赚取 VeThor (VTHO)（为链上交易提供动力的能量通证），同时也可参与决定区块链未来发展的治理决策。通过这种双重角色，VET 支持了 VeChain 生态系统的价值和实用性。",
   "TOKEN_DETAIL_ACTIVITY_TAB": "活动",
   "TOKEN_DETAIL_BALANCE_TAB": "余额",
   "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "这些代币被抵押在vedelegate.vet上，只能在那里管理。",

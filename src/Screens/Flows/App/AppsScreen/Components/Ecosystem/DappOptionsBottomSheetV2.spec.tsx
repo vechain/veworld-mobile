@@ -4,7 +4,7 @@ import { TestHelpers, TestWrapper } from "~Test"
 
 import { Share } from "react-native"
 import { DiscoveryDApp } from "~Constants"
-import { useDappBookmarking } from "~Hooks/useDappBookmarking"
+import { useDappBookmarkToggle } from "~Hooks/useDappBookmarkToggle"
 import { useDAppActions } from "../../Hooks"
 import { DappOptionsBottomSheetV2 } from "./DappOptionsBottomSheetV2"
 
@@ -13,9 +13,9 @@ jest.mock("../../Hooks", () => ({
     useDAppActions: jest.fn(),
 }))
 
-jest.mock("~Hooks/useDappBookmarking", () => ({
-    ...jest.requireActual("~Hooks/useDappBookmarking"),
-    useDappBookmarking: jest.fn(),
+jest.mock("~Hooks/useDappBookmarkToggle", () => ({
+    ...jest.requireActual("~Hooks/useDappBookmarkToggle"),
+    useDappBookmarkToggle: jest.fn(),
 }))
 
 jest.mock("react-native", () => {
@@ -48,7 +48,7 @@ describe("DappOptionsBottomSheetV2", () => {
         const toggleBookmark = jest.fn()
 
         ;(useDAppActions as jest.Mock).mockReturnValue({ onDAppPress })
-        ;(useDappBookmarking as jest.Mock).mockReturnValue({ isBookMarked: false, toggleBookmark })
+        ;(useDappBookmarkToggle as jest.Mock).mockReturnValue({ isBookMarked: false, toggleBookmark })
 
         TestHelpers.render.renderComponentWithProps(<DappOptionsBottomSheetV2 bsRef={ref as any} />, {
             wrapper: TestWrapper,
