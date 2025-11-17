@@ -1,4 +1,4 @@
-import { Validator, getValidatorLogoUrl } from "~Constants"
+import { Validator } from "~Constants"
 
 /**
  * Get validator information by address from the validators list
@@ -21,19 +21,7 @@ export const getValidatorName = (validators: Validator[], address: string): stri
     return validator?.name
 }
 
-/**
- * Get full validator logo URL by address from the validators list
- * @param validators - List of validators
- * @param address - Validator address
- * @returns Full logo URL or undefined if not found
- */
-export const getValidatorLogoUrlByAddress = (validators: Validator[], address: string): string | undefined => {
-    const validator = getValidatorByAddress(validators, address)
-    return validator ? getValidatorLogoUrl(validator.logo) : undefined
-}
-
 export const ValidatorUtils = {
     getValidatorByAddress,
     getValidatorName,
-    getValidatorLogoUrlByAddress,
 }
