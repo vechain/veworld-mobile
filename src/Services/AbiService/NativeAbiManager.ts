@@ -16,9 +16,12 @@ export class NativeAbiManager extends AbiManager {
                 decode(event, transfer) {
                     assertsIsTransfer(event, transfer)
                     return {
-                        from: transfer.sender,
-                        to: transfer.recipient,
-                        amount: BigInt(ethers.BigNumber.from(transfer.amount).toString()),
+                        decoded: {
+                            from: transfer.sender,
+                            to: transfer.recipient,
+                            amount: BigInt(ethers.BigNumber.from(transfer.amount).toString()),
+                        },
+                        includedEvents: [],
                     }
                 },
             },
@@ -31,7 +34,7 @@ export class NativeAbiManager extends AbiManager {
                 if (!found) return false
                 return {
                     name: found.fullSignature,
-                    params: found.decode(undefined, transfer, [], origin),
+                    params: found.decode(undefined, transfer, [], origin)?.decoded,
                 }
             })
             .filter((u): u is EventResult => typeof u !== "boolean")

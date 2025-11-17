@@ -27,4 +27,5 @@ export const defaultSorting = [
     "STARGATE_DELEGATE(uint256,address,bool)",
     "STARGATE_CLAIM_REWARDS_DELEGATE(uint256,uint256,address)",
     "STARGATE_UNDELEGATE(uint256)",
+    "STARGATE_BOOST(uint256,uint256,address,uint256)",
 ] as (keyof typeof businessEvents)[]
