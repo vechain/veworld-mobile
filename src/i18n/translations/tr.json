@@ -236,7 +236,7 @@
   "BD_RESET_APP_01": "Hesabınızı sıfırlamak, oturumu kapatır ve yerel olarak saklanan tüm verilerinizi (hesaplar, cüzdanlar, işlem geçmişi, vb.) siler.",
   "BD_RESET_APP_02": "VeWorld'ü sıfırlamak, hesap bakiyelerinizi değiştirmez, ancak bunlara erişmek için gizli kurtarma cümlenizi yeniden girmenizi gerektirir.",
   "BD_RESET_APP_DISCLAIMER": "Bu işlemin geri alınamaz olduğunu göz önünde bulundurarak tüm cüzdanlarınızın kurtarma cümlesini yedeklediğinizden emin olun.",
-  "BD_RESET_DISCLAIMER": "Uygulamayı sıfırlamak, tüm hesapları kaldırır ve uygulamayı orijinal durumuna döndürür.",
+  "BD_RESET_DISCLAIMER": "Uygulamayı sıfırlamak tüm hesapları kaldıracak ve uygulamayı orijinal durumuna döndürecektir.",
   "BD_SCANED_ADDRESS_COPPIED": "Adres panoya kopyalandı",
   "BD_SECURITY_DOWNGRADE": "Lütfen biyometriyi yeniden etkinleştirin veya uygulamayı sıfırlayın",
   "BD_SECURITY_METHOD": "Cüzdanınızı açmak için güvenlik yöntemini seçin.",

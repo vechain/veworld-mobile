@@ -236,7 +236,7 @@
   "BD_RESET_APP_01": "Durch das Zurücksetzen Ihres Kontos werden Sie abgemeldet und alle lokal gespeicherten Daten (Konten, Wallets, Transaktionshistorie usw.) gelöscht.",
   "BD_RESET_APP_02": "Das Zurücksetzen von VeWorld ändert das Guthaben Ihrer Konten nicht, erfordert jedoch, dass Sie Ihre geheime Wiederherstellungsphrase erneut eingeben, um darauf zuzugreifen.",
   "BD_RESET_APP_DISCLAIMER": "Stellen Sie sicher, dass Sie die Wiederherstellungsphrase aller Ihrer Wallets gesichert haben, da diese Aktion unwiderruflich ist.",
-  "BD_RESET_DISCLAIMER": "Durch das Zurücksetzen der App werden alle Konten entfernt und die App in den Originalzustand versetzt.",
+  "BD_RESET_DISCLAIMER": "Das Zurücksetzen der App entfernt alle Konten und stellt die App auf den Ursprungszustand zurück.",
   "BD_SCANED_ADDRESS_COPPIED": "Adresse in die Zwischenablage kopiert",
   "BD_SECURITY_DOWNGRADE": "Bitte aktivieren Sie die biometrischen Daten erneut oder setzen Sie die App zurück",
   "BD_SECURITY_METHOD": "Wählen Sie die Sicherheitsmethode, um Ihre Wallet zu entsperren.",
