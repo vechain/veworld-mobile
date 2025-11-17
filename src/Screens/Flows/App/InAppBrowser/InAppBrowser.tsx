@@ -27,7 +27,6 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         onMessage,
         onScroll,
         injectVechainScript,
-        onNavigationStateChange,
         resetWebViewState,
         ChangeAccountNetworkBottomSheetRef,
         originWhitelist,
@@ -132,9 +131,13 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                         <Animated.View ref={webviewContainerRef} style={[styles.webviewContainer]} collapsable={false}>
                             <WebView
                                 ref={webviewRef as MutableRefObject<WebView>}
-                                source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
+                                source={{
+                                    uri: route.params.url,
+                                    headers: {
+                                        "Accept-Language": locale,
+                                    },
+                                }}
                                 userAgent={userAgent}
-                                onNavigationStateChange={onNavigationStateChange}
                                 javaScriptEnabled={true}
                                 onMessage={onMessage}
                                 onScroll={onScroll}
