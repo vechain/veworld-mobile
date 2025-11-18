@@ -65,6 +65,37 @@ export const BaseCarouselItem: React.FC<Props> = ({
         return route as Routes.SETTINGS | Routes.HOME | Routes.APPS
     }, [route])
 
+    const handleExternalLinkPress = useCallback(
+        async (event: CarouselPressEvent) => {
+            if (!href) return
+            if (onPressActivation === "before") {
+                propsOnPress?.(event)
+                if (event.defaultPrevented) return
+            }
+            await Linking.openURL(href)
+            if (onPressActivation === "after") propsOnPress?.(event)
+        },
+        [href, onPressActivation, propsOnPress],
+    )
+    const handleInternalLinkPress = useCallback(
+        (event: CarouselPressEvent) => {
+            if (!href) return
+            if (onPressActivation === "before") {
+                propsOnPress?.(event)
+                if (event.defaultPrevented) return
+            }
+            navigateWithTab({
+                title: name || href,
+                url: href,
+                navigationFn(u) {
+                    nav.navigate(Routes.BROWSER, { url: u, returnScreen })
+                },
+            })
+            if (onPressActivation === "after") propsOnPress?.(event)
+        },
+        [href, name, navigateWithTab, nav, returnScreen, onPressActivation, propsOnPress],
+    )
+
     const onPress = useCallback(
         async function () {
             if (!href) return
@@ -78,28 +109,12 @@ export const BaseCarouselItem: React.FC<Props> = ({
             }
 
             if (isExternalLink) {
-                if (onPressActivation === "before") {
-                    propsOnPress?.(event)
-                    if (event.defaultPrevented) return
-                }
-                await Linking.openURL(href)
-                if (onPressActivation === "after") propsOnPress?.(event)
+                await handleExternalLinkPress(event)
             } else {
-                if (onPressActivation === "before") {
-                    propsOnPress?.(event)
-                    if (event.defaultPrevented) return
-                }
-                navigateWithTab({
-                    title: name || href,
-                    url: href,
-                    navigationFn(u) {
-                        nav.navigate(Routes.BROWSER, { url: u, returnScreen })
-                    },
-                })
-                if (onPressActivation === "after") propsOnPress?.(event)
+                handleInternalLinkPress(event)
             }
         },
-        [href, isExternalLink, onPressActivation, propsOnPress, name, navigateWithTab, nav, returnScreen],
+        [href, name, isExternalLink, handleExternalLinkPress, handleInternalLinkPress],
     )
 
     return (
