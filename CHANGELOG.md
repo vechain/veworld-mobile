@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.11 (2025-11-18)</small>
+
+* build: init ([2c6fc35](https://github.com/vechain/veworld-mobile/commit/2c6fc35))
+* 343 Favorite Reordering (#3492) ([43bc4d6](https://github.com/vechain/veworld-mobile/commit/43bc4d6)), closes [#3492](https://github.com/vechain/veworld-mobile/issues/3492)
+
 ## 2.5.0 (2025-11-13)
 
 * build: init ([f33174b](https://github.com/vechain/veworld-mobile/commit/f33174b))
