@@ -49,8 +49,10 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
             <BaseView flex={1} flexDirection="column" gap={24} alignItems="center" justifyContent="space-between">
                 <BaseView flex={1} flexDirection="column" gap={24} alignItems="center">
                     <BaseView flexDirection="column" gap={12} alignItems="center">
-                        <BaseText typographyFont="subTitleSemiBold">{LL.STELLA_PAY_BOTTOM_SHEET_TITLE()}</BaseText>
-                        <StellaPayLogoSVG width={100} height={20} />
+                        <BaseText typographyFont="subTitleSemiBold" color={COLORS.WHITE}>
+                            {LL.STELLA_PAY_BOTTOM_SHEET_TITLE()}
+                        </BaseText>
+                        <StellaPayLogoSVG width={100} height={20} color={COLORS.WHITE} />
                     </BaseView>
                     <FastImage source={StellaPayCard} style={styles.image as ImageStyle} resizeMode="cover" />
                     <BaseView
@@ -69,7 +71,9 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                                     <BaseText typographyFont="bodySemiBold" color={COLORS.LIME_GREEN}>
                                         {item.title}
                                     </BaseText>
-                                    <BaseText typographyFont="captionMedium">{item.description}</BaseText>
+                                    <BaseText typographyFont="captionMedium" color={COLORS.GREY_100}>
+                                        {item.description}
+                                    </BaseText>
                                 </BaseView>
                             </BaseView>
                         ))}
