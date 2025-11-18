@@ -198,6 +198,38 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: string
 	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​a​c​t​i​v​e
+	 */
+	ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL: string
+	/**
+	 * M​a​n​a​g​e​r​ ​a​d​d​e​d
+	 */
+	ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL: string
+	/**
+	 * M​a​n​a​g​e​r​ ​r​e​m​o​v​e​d
+	 */
+	ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL: string
+	/**
+	 * M​a​t​u​r​i​t​y​ ​b​o​o​s​t​e​d
+	 */
+	ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL: string
+	/**
 	 * V​E​T​ ​s​t​a​k​e​d​ ​&​ ​d​e​l​e​g​a​t​e​d
 	 */
 	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: string
@@ -5662,6 +5694,38 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Delegation rewards
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: () => LocalizedString
+	/**
+	 * Delegation requested
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL: () => LocalizedString
+	/**
+	 * Delegation request cancelled
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
+	/**
+	 * Delegation active
+	 */
+	ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL: () => LocalizedString
+	/**
+	 * Delegation exit requested
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: () => LocalizedString
+	/**
+	 * Delegation exited
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL: () => LocalizedString
+	/**
+	 * Manager added
+	 */
+	ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL: () => LocalizedString
+	/**
+	 * Manager removed
+	 */
+	ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL: () => LocalizedString
+	/**
+	 * Maturity boosted
+	 */
+	ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL: () => LocalizedString
 	/**
 	 * VET staked & delegated
 	 */

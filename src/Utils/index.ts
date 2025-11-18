@@ -39,6 +39,7 @@ import SemanticVersionUtils from "./SemanticVersionUtils"
 export * from "./Logger"
 export * from "./SignMessageUtils"
 export * from "./DAppUtils"
+export * from "./ValidatorUtils"
 
 export {
     AddressUtils,
