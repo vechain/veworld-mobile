@@ -27,7 +27,7 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         () =>
             [
                 {
-                    icon: "icon-arrow-right",
+                    icon: "icon-vebetter",
                     title: LL.STELLA_PAY_BOTTOM_SHEET_EARN(),
                     description: LL.STELLA_PAY_BOTTOM_SHEET_EARN_DESCRIPTION(),
                 },
