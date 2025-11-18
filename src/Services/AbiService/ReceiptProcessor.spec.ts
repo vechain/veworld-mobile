@@ -174,9 +174,9 @@ describe("ReceiptProcessor", () => {
                 expect(names).toStrictEqual([
                     // Block #1
                     "Approval(indexed address,indexed address,uint256)",
-                    "STARGATE_DELEGATE_REQUEST(uint256,address,uint256,address,uint256,uint256,uint8)",
                     "STARGATE_STAKE(uint256,uint256,uint8,address,bool)",
                     "STARGATE_BOOST(uint256,uint256,address,uint256)",
+                    "STARGATE_DELEGATE_REQUEST(uint256,address,uint256,address,uint256,uint256,uint8)",
                     // Block #2
                     "Transfer(indexed address,indexed address,uint256)",
                     "DelegationRewardsClaimed(indexed address,indexed uint256,indexed uint256,uint256,uint32,uint32)",
