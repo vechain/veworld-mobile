@@ -70,7 +70,15 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const labels = useMemo(() => filteredTabs.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL, filteredTabs])
 
     const paddingBottom = useMemo(() => {
-        return isAndroid() ? tabBarBottomMargin + 24 : 0
+        if (!isAndroid()) {
+            return 0
+        }
+
+        if (tabBarBottomMargin > 0) {
+            return tabBarBottomMargin - 32
+        }
+
+        return 24
     }, [tabBarBottomMargin])
 
     const showNewUserVeBetterCard = useMemo(() => {
@@ -108,7 +116,9 @@ export const TabRenderer = ({ onLayout }: Props) => {
     )
 
     return (
-        <Animated.View style={[styles.root, { paddingBottom: tabBarBottomMargin }]} onLayout={onLayout}>
+        <Animated.View
+            style={[styles.root, { paddingBottom: tabBarBottomMargin + paddingBottom * 4 }]}
+            onLayout={onLayout}>
             <Animated.View layout={LinearTransition.duration(400)} style={styles.animatedContent}>
                 {showFavorites && (
                     <BaseView flexDirection="column">
