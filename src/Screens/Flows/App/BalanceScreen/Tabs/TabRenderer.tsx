@@ -168,6 +168,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         tabs: {
             marginHorizontal: 24,
+            gap: 1, // Fix: This avoids Collectibles tab being cut by sort icon.
         },
         manageTokens: {
             paddingHorizontal: 16,
