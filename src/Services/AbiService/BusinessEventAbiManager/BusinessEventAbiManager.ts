@@ -70,6 +70,12 @@ const replaceItemWithParams = (item: BusinessEvent, network: NETWORK_TYPE, param
     } satisfies BusinessEvent
 }
 
+const buildEventResultHash = (event: EventResult) => {
+    return JSON.stringify({ name: event.name, params: event.params, address: event.address }, (_, value) =>
+        typeof value === "bigint" ? value.toString() : value,
+    )
+}
+
 export class BusinessEventAbiManager extends AbiManager {
     constructor(protected readonly network: NETWORK_TYPE, protected readonly params?: Record<string, string>) {
         super()
@@ -106,7 +112,11 @@ export class BusinessEventAbiManager extends AbiManager {
         for (const element of this.indexableAbis) {
             const decoded = element.decode(undefined, undefined, prevEventsCopy, origin)
             if (!decoded) continue
-            prevEventsCopy = prevEvents.filter(u => !decoded.includedEvents.includes(u))
+
+            prevEventsCopy = prevEventsCopy.filter(u => {
+                const evtSha = buildEventResultHash(u)
+                return !decoded.includedEvents.some(evt => buildEventResultHash(evt) === evtSha)
+            })
             results.push({ name: element.fullSignature, params: decoded.decoded })
         }
         return results.length > 0 ? results : prevEvents

@@ -38,7 +38,6 @@ export class NativeAbiManager extends AbiManager {
                 }
             })
             .filter((u): u is EventResult => typeof u !== "boolean")
-
         return prevEvents.concat(transfers)
     }
 }

@@ -1,0 +1,66 @@
+{
+  "number": 4,
+  "id": "0x0000000a00000000000000000000000000000000000000000000000000000004",
+  "size": 52092,
+  "parentID": "0x0000000a00000000000000000000000000000000000000000000000000000003",
+  "timestamp": 1758554755,
+  "gasLimit": 40000000,
+  "beneficiary": "0x4ee733b01ac73bedd21f02f69d28b5ea239ab102",
+  "gasUsed": 9508238,
+  "totalScore": 277164749,
+  "txsRoot": "0x512b65b41ba3650319a5806cbae380f82c567685d4eb37e5fe0a32fac6e9265c",
+  "txsFeatures": 1,
+  "stateRoot": "0x8bbaa9ee072ea5bd70506e06adb67a7f966805264194feacec004d8e2e254868",
+  "receiptsRoot": "0x0823ae8a6f7d4f0076c5b811df3bf70a42914e497cd5887f8dfdc7570236c17d",
+  "com": true,
+  "signer": "0x4ee733b01ac73bedd21f02f69d28b5ea239ab102",
+  "isTrunk": true,
+  "isFinalized": true,
+  "baseFeePerGas": "0x91b481d9aaa",
+  "transactions": [
+    {
+      "id": "0xf158e90b8245a0a9f1fc8cfa5f03b9238176043b91c3e1e3a32da3334b132770",
+      "type": 81,
+      "chainTag": 250,
+      "blockRef": "0x00006d533269aba0",
+      "expiration": 100,
+      "clauses": [
+        {
+          "to": "0x887d9102f0003f1724d8fd5d4fe95a11572fcd77",
+          "value": "0x0",
+          "data": "0xd4dfed3600000000000000000000000000000000000000000000000000000000000186ad"
+        }
+      ],
+      "maxFeePerGas": "0x9d29229e000",
+      "maxPriorityFeePerGas": "0x746a528800",
+      "gas": 69180,
+      "origin": "0xe705e3f310ab09fb9eb40b43cb1368289ef1f829",
+      "delegator": null,
+      "nonce": "0x2ad3fcb6",
+      "dependsOn": null,
+      "size": 167,
+      "gasUsed": 37886,
+      "gasPayer": "0xe705e3f310ab09fb9eb40b43cb1368289ef1f829",
+      "paid": "0x58700096f2a02ac",
+      "reward": "0x434c8ee1faf000",
+      "reverted": false,
+      "outputs": [
+        {
+          "contractAddress": null,
+          "events": [
+            {
+              "address": "0x887d9102f0003f1724d8fd5d4fe95a11572fcd77",
+              "topics": [
+                "0x2dea8fdc0115667de4800362c74206112df0a3a139fa2c217218b27a5da20259",
+                "0x00000000000000000000000000000000000000000000000000000000000186ad",
+                "0x0000000000000000000000002f408f473e267e09b348007e0ff91ee60326bdaa"
+              ],
+              "data": "0x"
+            }
+          ],
+          "transfers": []
+        }
+      ]
+    }
+  ]
+}
