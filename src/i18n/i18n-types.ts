@@ -697,13 +697,9 @@ type RootTranslation = {
 	 */
 	BD_APP_BLOCKED: string
 	/**
-	 * A​p​p​ ​l​a​n​g​u​a​g​e
+	 * L​a​n​g​u​a​g​e
 	 */
 	BD_APP_LANGUAGE: string
-	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​l​a​n​g​u​a​g​e
-	 */
-	BD_APP_LANGUAGE_DISCLAIMER: string
 	/**
 	 * R​e​q​u​i​r​e​ ​t​h​e​ ​p​i​n​ ​w​h​e​n​ ​p​e​r​f​o​r​m​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​w​i​t​h​ ​l​o​c​a​l​ ​w​a​l​l​e​t​s
 	 */
@@ -712,10 +708,6 @@ type RootTranslation = {
 	 * A​p​p​ ​t​h​e​m​e
 	 */
 	BD_APP_THEME: string
-	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​t​h​e​m​e
-	 */
-	BD_APP_THEME_DISCLAIMER: string
 	/**
 	 * {​c​l​o​u​d​T​y​p​e​}​ ​b​a​c​k​e​d​ ​u​p
 	 * @param {string} cloudType
@@ -822,10 +814,6 @@ type RootTranslation = {
 	 */
 	BD_CONVERSION_CURRENCY: string
 	/**
-	 * P​i​c​k​ ​t​h​e​ ​c​u​r​r​e​n​c​y​ ​t​h​a​t​ ​y​o​u​ ​p​r​e​f​e​r​ ​t​o​ ​b​e​ ​s​h​o​w​n​ ​f​o​r​ ​c​o​n​v​e​r​s​i​o​n​s
-	 */
-	BD_CONVERSION_CURRENCY_DISCLAIMER: string
-	/**
 	 * U​n​l​e​a​s​h​ ​t​h​e​ ​p​o​w​e​r​ ​o​f​ ​s​u​s​t​a​i​n​a​b​i​l​i​t​y​ ​a​n​d​ ​w​e​b​3​ ​f​o​r​ ​a​ ​b​e​t​t​e​r​ ​w​o​r​l​d​.
 	 */
 	BD_CREATE_WALLET_SUCCESS: string
@@ -841,10 +829,6 @@ type RootTranslation = {
 	 * C​u​r​r​e​n​c​y​ ​f​o​r​m​a​t
 	 */
 	BD_CURRENCY_FORMAT: string
-	/**
-	 * P​i​c​k​ ​t​h​e​ ​f​o​r​m​a​t​ ​t​h​a​t​ ​y​o​u​ ​p​r​e​f​e​r​ ​f​o​r​ ​d​e​c​i​m​a​l​ ​s​e​p​a​r​a​t​o​r​.
-	 */
-	BD_CURRENCY_FORMAT_DISCLAIMER: string
 	/**
 	 * C​o​m​m​a
 	 */
@@ -1007,7 +991,7 @@ type RootTranslation = {
 	 */
 	BD_PRIVATE_KEY_WARMNING: string
 	/**
-	 * V​e​W​o​r​l​d​ ​r​e​s​e​t
+	 * R​e​s​e​t​ ​a​p​p
 	 */
 	BD_RESET: string
 	/**
@@ -1023,7 +1007,7 @@ type RootTranslation = {
 	 */
 	BD_RESET_APP_DISCLAIMER: string
 	/**
-	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
+	 * R​e​s​e​t​t​i​n​g​ ​t​h​e​ ​a​p​p​ ​w​i​l​l​ ​r​e​m​o​v​e​ ​a​l​l​ ​t​h​e​ ​a​c​c​o​u​n​t​s​ ​a​n​d​ ​r​e​t​u​r​n​ ​t​h​e​ ​a​p​p​ ​t​o​ ​t​h​e​ ​o​r​i​g​i​n​a​l​ ​s​t​a​t​e​.
 	 */
 	BD_RESET_DISCLAIMER: string
 	/**
@@ -1620,7 +1604,7 @@ type RootTranslation = {
 	 */
 	BTN_REPEAT_PASSWORD: string
 	/**
-	 * R​e​s​e​t​ ​A​p​p
+	 * R​e​s​e​t​ ​a​p​p
 	 */
 	BTN_RESET_APP: string
 	/**
@@ -4568,6 +4552,14 @@ type RootTranslation = {
 	 */
 	SETTINGS_LABEL_name_min_length: RequiredParams<'min'>
 	/**
+	 * A​p​p​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	SETTINGS_SECTION_APP_PREFERENCES: string
+	/**
+	 * C​u​r​r​e​n​c​y​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	SETTINGS_SECTION_CURRENCY_PREFERENCES: string
+	/**
 	 * D​e​f​a​u​l​t​ ​d​e​l​e​g​a​t​i​o​n
 	 */
 	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: string
@@ -6193,13 +6185,9 @@ Try reconnect your device to the internet.
 	 */
 	BD_APP_BLOCKED: () => LocalizedString
 	/**
-	 * App language
+	 * Language
 	 */
 	BD_APP_LANGUAGE: () => LocalizedString
-	/**
-	 * Select the general app language
-	 */
-	BD_APP_LANGUAGE_DISCLAIMER: () => LocalizedString
 	/**
 	 * Require the pin when performing transactions with local wallets
 	 */
@@ -6208,10 +6196,6 @@ Try reconnect your device to the internet.
 	 * App theme
 	 */
 	BD_APP_THEME: () => LocalizedString
-	/**
-	 * Select the general app theme
-	 */
-	BD_APP_THEME_DISCLAIMER: () => LocalizedString
 	/**
 	 * {cloudType} backed up
 	 */
@@ -6317,10 +6301,6 @@ Try reconnect your device to the internet.
 	 */
 	BD_CONVERSION_CURRENCY: () => LocalizedString
 	/**
-	 * Pick the currency that you prefer to be shown for conversions
-	 */
-	BD_CONVERSION_CURRENCY_DISCLAIMER: () => LocalizedString
-	/**
 	 * Unleash the power of sustainability and web3 for a better world.
 	 */
 	BD_CREATE_WALLET_SUCCESS: () => LocalizedString
@@ -6336,10 +6316,6 @@ Try reconnect your device to the internet.
 	 * Currency format
 	 */
 	BD_CURRENCY_FORMAT: () => LocalizedString
-	/**
-	 * Pick the format that you prefer for decimal separator.
-	 */
-	BD_CURRENCY_FORMAT_DISCLAIMER: () => LocalizedString
 	/**
 	 * Comma
 	 */
@@ -6501,7 +6477,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_PRIVATE_KEY_WARMNING: () => LocalizedString
 	/**
-	 * VeWorld reset
+	 * Reset app
 	 */
 	BD_RESET: () => LocalizedString
 	/**
@@ -6517,7 +6493,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_RESET_APP_DISCLAIMER: () => LocalizedString
 	/**
-	 * Click to reset VeWorld and erase all your data stored on it
+	 * Resetting the app will remove all the accounts and return the app to the original state.
 	 */
 	BD_RESET_DISCLAIMER: () => LocalizedString
 	/**
@@ -7111,7 +7087,7 @@ Thanks for your patience!
 	 */
 	BTN_REPEAT_PASSWORD: () => LocalizedString
 	/**
-	 * Reset App
+	 * Reset app
 	 */
 	BTN_RESET_APP: () => LocalizedString
 	/**
@@ -10017,6 +9993,14 @@ Are you sure you want to continue?
 	 * Minimum number of characters is {min}
 	 */
 	SETTINGS_LABEL_name_min_length: (arg: { min: unknown }) => LocalizedString
+	/**
+	 * App preferences
+	 */
+	SETTINGS_SECTION_APP_PREFERENCES: () => LocalizedString
+	/**
+	 * Currency preferences
+	 */
+	SETTINGS_SECTION_CURRENCY_PREFERENCES: () => LocalizedString
 	/**
 	 * Default delegation
 	 */

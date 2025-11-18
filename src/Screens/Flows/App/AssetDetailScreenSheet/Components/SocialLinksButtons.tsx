@@ -58,6 +58,8 @@ export const SocialLinksButtons = ({ links, onNavigate }: SocialLinksButtonsProp
                     key={key}
                     flex={filteredLinks.length === 3 ? flexValue : 0}
                     testID={`${key}_BUTTON`}
+                    numberOfLines={1}
+                    textProps={{ ellipsizeMode: "tail" }}
                     action={() => onNavigate(value, key)}
                     style={styles.button}
                     size="md"
