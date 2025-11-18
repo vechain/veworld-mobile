@@ -44,7 +44,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                     pl={8}
                     bg={isActive ? theme.colors.actionBottomSheet.isActiveBackground : undefined}>
                     <BaseTouchable
-                        disabled={isEditMode || isActive}
+                        disabled={isActive}
                         style={[styles.card]}
                         onPress={() => onPress(dapp)}
                         onLongPress={() => onLongPress?.(dapp)}>
@@ -72,8 +72,8 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                     </BaseTouchable>
                     <BaseTouchable
                         disabled={isActive}
-                        onLongPress={() => onRightActionLongPress?.(dapp)}
                         onPress={() => onRightActionPress(dapp, isEditMode)}
+                        onLongPress={() => onRightActionLongPress?.(dapp)}
                         style={styles.touchableContainer}
                         activeOpacity={0.7}>
                         {isEditMode ? (
