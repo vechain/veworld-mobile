@@ -14,7 +14,3 @@ export const ValidatorHubUrls = {
     test: `${VALIDATOR_HUB_BASE_URL}/test.json`,
     main: `${VALIDATOR_HUB_BASE_URL}/main.json`,
 }
-
-export const getValidatorLogoUrl = (logo: string) => {
-    return `${VALIDATOR_HUB_BASE_URL}/${logo}`
-}
