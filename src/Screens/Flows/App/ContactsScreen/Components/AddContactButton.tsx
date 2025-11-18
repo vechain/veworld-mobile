@@ -1,8 +1,8 @@
-import React from "react"
+import React, { Fragment } from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { COLORS } from "~Constants"
-import { BaseButton, BaseIcon, BaseText, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -15,12 +15,12 @@ export const AddContactButton: React.FC<Props> = ({ onPress }) => {
     const { LL } = useI18nContext()
 
     return (
-        <>
-            <BaseButton
+        <Fragment>
+            <BaseTouchableBox
                 haptics="Light"
                 action={onPress}
-                bgColor={theme.colors.secondary}
-                style={baseStyles.plusContactButton}
+                bg={theme.colors.secondary}
+                containerStyle={baseStyles.plusContactButton}
                 w={40}>
                 <BaseView alignItems="center">
                     <BaseIcon my={8} size={55} name="icon-plus" color={COLORS.DARK_PURPLE} />
@@ -28,20 +28,24 @@ export const AddContactButton: React.FC<Props> = ({ onPress }) => {
                         {LL.BTN_CREATE_CONTACT()}
                     </BaseText>
                 </BaseView>
-            </BaseButton>
+            </BaseTouchableBox>
             <BaseText pt={15} typographyFont="body">
                 {LL.SB_CONTACT_LIST_EMPTY()}
             </BaseText>
             <BaseText pt={5} typographyFont="body">
                 {LL.SB_CREATE_ONE()}
             </BaseText>
-        </>
+        </Fragment>
     )
 }
 
 const baseStyles = StyleSheet.create({
     plusContactButton: {
+        flex: 0.3,
+        width: "100%",
+        paddingVertical: 16,
         justifyContent: "center",
         flexDirection: "column",
+        alignItems: "center",
     },
 })
