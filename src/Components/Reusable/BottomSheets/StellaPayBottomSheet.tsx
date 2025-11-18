@@ -12,6 +12,7 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import { useBottomSheetModal } from "~Hooks"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { selectCurrentScreen, useAppSelector } from "~Storage/Redux"
 
 type Props = {}
 
@@ -20,8 +21,20 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     const { LL } = useI18nContext()
     const { navigateWithTab } = useBrowserTab()
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
+    const currentRoute = useAppSelector(selectCurrentScreen)
 
     const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModalMethods> })
+
+    const returnScreen = useMemo(() => {
+        switch (currentRoute) {
+            case Routes.HOME:
+                return Routes.HOME
+            case Routes.APPS:
+                return Routes.APPS
+            default:
+                return Routes.HOME
+        }
+    }, [currentRoute])
 
     const optionsItems = useMemo(
         () =>
@@ -49,10 +62,10 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         await navigateWithTab({
             url: "https://vebetter.stellapay.io/",
             title: "Stella Pay",
-            navigationFn: url => nav.navigate(Routes.BROWSER, { url, returnScreen: Routes.HOME }),
+            navigationFn: url => nav.navigate(Routes.BROWSER, { url, returnScreen: returnScreen }),
         })
         onClose()
-    }, [navigateWithTab, onClose, nav])
+    }, [navigateWithTab, onClose, nav, returnScreen])
 
     return (
         <BaseBottomSheet ref={ref} snapPoints={["92%"]} backgroundStyle={{ backgroundColor: COLORS.PURPLE }}>

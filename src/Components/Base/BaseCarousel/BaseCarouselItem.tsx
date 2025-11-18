@@ -7,6 +7,16 @@ import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { Routes } from "~Navigation"
 import { BaseIcon } from "../BaseIcon"
 
+export type CarouselPressEvent = {
+    name: string
+    defaultPrevented: boolean
+    /**
+     * Prevent the default action of the event.
+     * Works only if `onPressActivation` is set to `before`.
+     */
+    preventDefault: () => void
+}
+
 type Props = {
     testID?: string
     href?: string
@@ -16,7 +26,7 @@ type Props = {
     closable?: boolean
     closeButtonStyle?: ViewStyle
     onClose?: () => void
-    onPress?: (name: string) => void
+    onPress?: (event: CarouselPressEvent) => void
     /**
      * Decide when `onPress` is called. Default is `after
      */
@@ -57,12 +67,27 @@ export const BaseCarouselItem: React.FC<Props> = ({
 
     const onPress = useCallback(async () => {
         if (!href) return
+
+        const event: CarouselPressEvent = {
+            name: name ?? "",
+            defaultPrevented: false,
+            preventDefault() {
+                this.defaultPrevented = true
+            },
+        }
+
         if (isExternalLink) {
-            if (onPressActivation === "before") propsOnPress?.(name ?? "")
+            if (onPressActivation === "before") {
+                propsOnPress?.(event)
+                if (event.defaultPrevented) return
+            }
             await Linking.openURL(href)
-            if (onPressActivation === "after") propsOnPress?.(name ?? "")
+            if (onPressActivation === "after") propsOnPress?.(event)
         } else {
-            if (onPressActivation === "before") propsOnPress?.(name ?? "")
+            if (onPressActivation === "before") {
+                propsOnPress?.(event)
+                if (event.defaultPrevented) return
+            }
             navigateWithTab({
                 title: name || href,
                 url: href,
@@ -70,7 +95,7 @@ export const BaseCarouselItem: React.FC<Props> = ({
                     nav.navigate(Routes.BROWSER, { url: u, returnScreen })
                 },
             })
-            if (onPressActivation === "after") propsOnPress?.(name ?? "")
+            if (onPressActivation === "after") propsOnPress?.(event)
         }
     }, [href, isExternalLink, onPressActivation, propsOnPress, name, navigateWithTab, nav, returnScreen])
 
