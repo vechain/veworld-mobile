@@ -10,6 +10,7 @@ import {
     BaseView,
     NetworkSwitcherContextMenu,
     SelectAccountBottomSheet,
+    StellaPayBottomSheet,
 } from "~Components"
 import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useCopyClipboard, useSetSelectedAccount, useThemedStyles } from "~Hooks"
@@ -66,6 +67,8 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
         onOpen: openSelectAccountBottomSheet,
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
+
+    const { ref: stellaPayBottomSheetRef, onOpen: openStellaPayBottomSheet } = useBottomSheetModal()
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         sourceScreen: Routes.HOME,
@@ -151,6 +154,11 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
             </BaseView>
 
             <BaseView flexDirection="row" gap={12}>
+                <TouchableOpacity onPress={openStellaPayBottomSheet}>
+                    <BaseView borderRadius={99} p={8}>
+                        <BaseIcon name="icon-credit-card" color={COLORS.PURPLE_LABEL} size={24} />
+                    </BaseView>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={handleOpenQRCode}>
                     <BaseView borderRadius={99} p={8}>
                         <BaseIcon name="icon-scan-line" color={COLORS.PURPLE_LABEL} size={24} />
@@ -176,6 +184,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                 goToWalletEnabled
             />
             {RenderCameraModal}
+            <StellaPayBottomSheet ref={stellaPayBottomSheetRef} />
         </BaseView>
     )
 }
