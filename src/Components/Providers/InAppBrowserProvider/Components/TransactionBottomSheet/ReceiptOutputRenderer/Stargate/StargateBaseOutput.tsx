@@ -59,7 +59,7 @@ export const StargateBaseOutput = ({ output, ...props }: Props) => {
             case "STARGATE_CLAIM_REWARDS_BASE_LEGACY(uint256,uint256,address)":
             case "STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY(uint256,uint256,address)":
             case "STARGATE_UNSTAKE(uint256,uint256,uint8,address)":
-            case "STARGATE_DELEGATION_EXIT_REQUEST(uint256,uint256,address)":
+            case "STARGATE_DELEGATE_REQUEST_CANCELLED(uint256,address,uint256,address,uint256,uint8)":
                 return DIRECTIONS.UP
             case "STARGATE_STAKE(uint256,uint256,uint8,address,bool)":
             case "STARGATE_BOOST(uint256,uint256,address,uint256)":
@@ -72,10 +72,10 @@ export const StargateBaseOutput = ({ output, ...props }: Props) => {
             case "STARGATE_CLAIM_REWARDS(uint256,uint256,address,uint256,uint32)":
             case "STARGATE_CLAIM_REWARDS_BASE_LEGACY(uint256,uint256,address)":
             case "STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY(uint256,uint256,address)":
-            case "STARGATE_DELEGATION_EXIT_REQUEST(uint256,uint256,address)":
             case "STARGATE_STAKE(uint256,uint256,uint8,address,bool)":
             case "STARGATE_BOOST(uint256,uint256,address,uint256)":
             case "STARGATE_UNSTAKE(uint256,uint256,uint8,address)":
+            case "STARGATE_DELEGATE_REQUEST_CANCELLED(uint256,address,uint256,address,uint256,uint8)":
                 return (
                     <BaseReceiptOutput.ValueContainer>
                         <BaseReceiptOutput.ValueMainText testID={`${output.name}_VALUE`}>
