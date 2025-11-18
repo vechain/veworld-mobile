@@ -189,7 +189,7 @@ describe("ReceiptProcessor", () => {
                     // Block #4
                     "STARGATE_MANAGER_REMOVED(uint256,address,address)",
                     // Block #5
-                    "DelegationSignaledExit(indexed uint256)",
+                    "STARGATE_DELEGATION_EXIT_REQUEST(uint256,uint256,address)",
                 ])
             })
 
