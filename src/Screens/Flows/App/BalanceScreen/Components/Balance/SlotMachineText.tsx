@@ -104,6 +104,8 @@ const baseStyles = () =>
             overflow: "hidden",
             flexDirection: "column",
             justifyContent: "center",
+            alignSelf: "flex-end",
+            height: 40 * PixelRatio.getFontScale(),
         },
         innerContainer: {
             position: "relative",
