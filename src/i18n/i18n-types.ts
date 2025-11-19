@@ -5501,6 +5501,18 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * N​e​t​w​o​r​k​ ​n​o​t​ ​d​e​t​e​c​t​e​d
+	 */
+	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: string
+	/**
+	 * T​h​i​s​ ​a​p​p​ ​i​s​ ​r​u​n​n​i​n​g​ ​o​n​ ​a​ ​n​e​t​w​o​r​k​ ​t​h​a​t​ ​i​s​ ​n​o​t​ ​c​u​r​r​e​n​t​l​y​ ​a​d​d​e​d​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​T​o​ ​c​o​n​t​i​n​u​e​,​ ​p​l​e​a​s​e​ ​a​d​d​ ​t​h​e​ ​n​e​t​w​o​r​k​s​ ​n​o​d​e​ ​U​R​L​.
+	 */
+	MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION: string
+	/**
+	 * G​o​ ​t​o
+	 */
+	COMMON_BTN_GO_TO: string
 }
 
 export type TranslationFunctions = {
@@ -10905,6 +10917,18 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Network not detected
+	 */
+	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
+	 * This app is running on a network that is not currently added to your wallet. To continue, please add the networks node URL.
+	 */
+	MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION: () => LocalizedString
+	/**
+	 * Go to
+	 */
+	COMMON_BTN_GO_TO: () => LocalizedString
 }
 
 export type Formatters = {

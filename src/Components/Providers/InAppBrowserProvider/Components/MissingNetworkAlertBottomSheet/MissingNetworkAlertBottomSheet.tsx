@@ -3,8 +3,10 @@ import React, { RefObject } from "react"
 import { BaseButton } from "~Components/Base/BaseButton"
 import { DefaultBottomSheet } from "~Components/Reusable/BottomSheets/DefaultBottomSheet"
 import { useBottomSheetModal } from "~Hooks/useBottomSheet"
+import { useI18nContext } from "~i18n"
 
 export const MissingNetworkAlertBottomSheet = React.forwardRef<BottomSheetModalMethods, {}>((_, ref) => {
+    const { LL } = useI18nContext()
     const { ref: intenralRef, onClose } = useBottomSheetModal({
         externalRef: ref as RefObject<BottomSheetModalMethods>,
     })
@@ -14,15 +16,12 @@ export const MissingNetworkAlertBottomSheet = React.forwardRef<BottomSheetModalM
             ref={intenralRef}
             icon={"icon-alert-triangle"}
             iconSize={40}
-            title={"Network not detected"}
-            description={
-                // eslint-disable-next-line max-len
-                "This app is running on a network that is not currently added to your wallet. To continue, please add the networks node URL."
-            }
+            title={LL.MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE()}
+            description={LL.MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION()}
             mainButton={
                 <BaseButton
                     w={100}
-                    title={"Go to"}
+                    title={LL.COMMON_BTN_GO_TO()}
                     action={() => {
                         onClose()
                     }}
@@ -32,7 +31,7 @@ export const MissingNetworkAlertBottomSheet = React.forwardRef<BottomSheetModalM
                 <BaseButton
                     w={100}
                     variant="outline"
-                    title={"Cancel"}
+                    title={LL.COMMON_BTN_CANCEL()}
                     action={() => {
                         onClose()
                     }}

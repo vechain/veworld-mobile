@@ -1343,5 +1343,8 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE": "Network not detected",
+  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "This app is running on a network that is not currently added to your wallet. To continue, please add the networks node URL.",
+  "COMMON_BTN_GO_TO": "Go to"
 }
