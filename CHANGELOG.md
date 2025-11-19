@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.11 (2025-11-19)</small>
+
+* build: init ([eb84985](https://github.com/vechain/veworld-mobile/commit/eb84985))
+* fix(spacing): android bottom bar (#3556) ([0b006be](https://github.com/vechain/veworld-mobile/commit/0b006be)), closes [#3556](https://github.com/vechain/veworld-mobile/issues/3556)
+
 ## 2.5.0 (2025-11-13)
 
 * build: init ([f33174b](https://github.com/vechain/veworld-mobile/commit/f33174b))
