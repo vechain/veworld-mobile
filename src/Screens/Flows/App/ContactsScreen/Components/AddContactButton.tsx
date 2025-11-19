@@ -1,4 +1,4 @@
-import React, { Fragment } from "react"
+import React from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { COLORS } from "~Constants"
@@ -15,13 +15,12 @@ export const AddContactButton: React.FC<Props> = ({ onPress }) => {
     const { LL } = useI18nContext()
 
     return (
-        <Fragment>
+        <>
             <BaseTouchableBox
                 haptics="Light"
                 action={onPress}
                 bg={theme.colors.secondary}
-                containerStyle={baseStyles.plusContactButton}
-                w={40}>
+                containerStyle={baseStyles.plusContactButton}>
                 <BaseView alignItems="center">
                     <BaseIcon my={8} size={55} name="icon-plus" color={COLORS.DARK_PURPLE} />
                     <BaseText py={5} typographyFont="bodyMedium" color={COLORS.DARK_PURPLE}>
@@ -35,14 +34,12 @@ export const AddContactButton: React.FC<Props> = ({ onPress }) => {
             <BaseText pt={5} typographyFont="body">
                 {LL.SB_CREATE_ONE()}
             </BaseText>
-        </Fragment>
+        </>
     )
 }
 
 const baseStyles = StyleSheet.create({
     plusContactButton: {
-        flex: 0.3,
-        width: "100%",
         paddingVertical: 16,
         justifyContent: "center",
         flexDirection: "column",
