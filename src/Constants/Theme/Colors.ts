@@ -353,6 +353,13 @@ export type Colors = {
         activeText: string
         inactiveText: string
     }
+    paymentProviderCard: {
+        background: string
+        border: string
+        title: string
+        propertyName: string
+        propertyValue: string
+    }
 }
 
 export enum COLORS {
@@ -833,6 +840,13 @@ const light: Colors = {
         activeText: COLORS.PURPLE,
         inactiveText: COLORS.GREY_500,
     },
+    paymentProviderCard: {
+        background: COLORS.TRANSPARENT,
+        border: COLORS.GREY_100,
+        title: COLORS.PRIMARY_800,
+        propertyName: COLORS.GREY_500,
+        propertyValue: COLORS.PRIMARY_800,
+    },
 }
 
 const dark: Colors = {
@@ -1189,6 +1203,13 @@ const dark: Colors = {
         indicatorBackground: COLORS.DARK_PURPLE_DISABLED,
         activeText: COLORS.LIME_GREEN,
         inactiveText: COLORS.GREY_100,
+    },
+    paymentProviderCard: {
+        background: COLORS.TRANSPARENT,
+        border: COLORS.DARK_PURPLE_DISABLED,
+        title: COLORS.WHITE,
+        propertyName: COLORS.GREY_400,
+        propertyValue: COLORS.GREY_200,
     },
 }
 

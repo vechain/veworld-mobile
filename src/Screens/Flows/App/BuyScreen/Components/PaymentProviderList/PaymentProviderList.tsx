@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native"
-import { AnalyticsEvent, ColorThemeType } from "~Constants"
+import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useNavigation } from "@react-navigation/native"
@@ -29,9 +29,21 @@ export const PaymentProviderList = () => {
                 if (paymentMethod === PaymentMethodsIds.ApplePay) return <ApplePaySVG />
                 if (paymentMethod === PaymentMethodsIds.GoolePay) return <GooglePaySVG />
                 if (paymentMethod === PaymentMethodsIds.BankAccount)
-                    return <BaseIcon name="icon-landmark" size={12} color={theme.colors.text} />
+                    return (
+                        <BaseIcon
+                            name="icon-landmark"
+                            size={12}
+                            color={theme.colors.paymentProviderCard.propertyValue}
+                        />
+                    )
                 if (paymentMethod === PaymentMethodsIds.CreditCard)
-                    return <BaseIcon name="icon-credit-card" size={12} color={theme.colors.text} />
+                    return (
+                        <BaseIcon
+                            name="icon-credit-card"
+                            size={12}
+                            color={theme.colors.paymentProviderCard.propertyValue}
+                        />
+                    )
 
                 return <></>
             }
@@ -46,7 +58,9 @@ export const PaymentProviderList = () => {
                             justifyContent="flex-start"
                             flex={1}
                             style={[styles.container]}>
-                            <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.text}>
+                            <BaseText
+                                typographyFont="subSubTitleSemiBold"
+                                color={theme.colors.paymentProviderCard.title}>
                                 {item.name}
                             </BaseText>
                             <BaseView
@@ -55,7 +69,9 @@ export const PaymentProviderList = () => {
                                 flex={1}
                                 style={[styles.subTitlesContainer]}>
                                 <BaseView flexDirection="row" justifyContent="flex-start">
-                                    <BaseText typographyFont="captionSemiBold" color={theme.colors.subtitle}>
+                                    <BaseText
+                                        typographyFont="captionSemiBold"
+                                        color={theme.colors.paymentProviderCard.propertyName}>
                                         {LL.SB_PAY_WITH()}
                                     </BaseText>
                                     {item.paymentMethods.map(method => (
@@ -67,16 +83,22 @@ export const PaymentProviderList = () => {
                                 </BaseView>
                                 <BaseSpacer width={12} />
                                 <BaseView flexDirection="row">
-                                    <BaseText typographyFont="captionSemiBold" color={theme.colors.subtitle}>
+                                    <BaseText
+                                        typographyFont="captionSemiBold"
+                                        color={theme.colors.paymentProviderCard.propertyName}>
                                         {LL.SB_FEES()}
                                     </BaseText>
                                     <BaseSpacer width={8} />
-                                    <BaseText typographyFont="captionSemiBold">{item.fees}</BaseText>
+                                    <BaseText
+                                        typographyFont="captionSemiBold"
+                                        color={theme.colors.paymentProviderCard.propertyValue}>
+                                        {item.fees}
+                                    </BaseText>
                                 </BaseView>
                             </BaseView>
                         </BaseView>
                         <BaseView flex={1} flexDirection="row" justifyContent="flex-end">
-                            <BaseIcon color={theme.colors.textLight} name="icon-chevron-right" />
+                            <BaseIcon size={16} color={COLORS.GREY_400} name="icon-chevron-right" />
                         </BaseView>
                     </BaseView>
                 </TouchableOpacity>
@@ -88,9 +110,9 @@ export const PaymentProviderList = () => {
             styles.card,
             styles.container,
             styles.subTitlesContainer,
-            theme.colors.subtitle,
-            theme.colors.text,
-            theme.colors.textLight,
+            theme.colors.paymentProviderCard.propertyName,
+            theme.colors.paymentProviderCard.propertyValue,
+            theme.colors.paymentProviderCard.title,
             track,
         ],
     )
@@ -108,8 +130,8 @@ export const PaymentProviderList = () => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         card: {
-            backgroundColor: theme.colors.transparent,
-            borderColor: theme.colors.cardBorder,
+            backgroundColor: theme.colors.paymentProviderCard.background,
+            borderColor: theme.colors.paymentProviderCard.border,
             borderWidth: 1,
             gap: 16,
             flex: 1,
