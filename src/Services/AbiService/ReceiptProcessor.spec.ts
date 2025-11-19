@@ -76,22 +76,20 @@ describe("ReceiptProcessor", () => {
             ])
         })
 
-        it("Process block - B3TR Action + Transfers", async () => {
+        it("Process block - B3TR Action", async () => {
             const block = require("~fixtures/business-event-blocks/block_b3tr_action.json")
 
             const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
                 commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
             )
 
-            expect(outputs).toHaveLength(5)
+            expect(outputs).toHaveLength(3)
             const names = outputs.map(output => output.name)
 
             expect(names).toStrictEqual([
                 "B3TR_ActionReward(address,address,uint256,bytes32,string)",
                 "B3TR_ActionReward(address,address,uint256,bytes32,string)",
                 "Transfer(indexed address,indexed address,uint256)",
-                "VET_TRANSFER(address,address,uint256)",
-                "VET_TRANSFER(address,address,uint256)",
             ])
         })
 
