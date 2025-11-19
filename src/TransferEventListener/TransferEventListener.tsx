@@ -1,4 +1,12 @@
 import React, { useCallback } from "react"
+import { ERROR_EVENTS } from "~Constants"
+import { useFungibleTokenInfo } from "~Hooks"
+import { useStargateConfig } from "~Hooks/useStargateConfig"
+import { useStargateInvalidation } from "~Hooks/useStargateInvalidation"
+import { useThorClient } from "~Hooks/useThorClient"
+import { Activity, Beat } from "~Model"
+import { EventTypeResponse } from "~Networking"
+import { fetchTransfersForBlock } from "~Networking/Transfers"
 import {
     selectActivitiesWithoutFinality,
     selectBlackListedCollections,
@@ -11,18 +19,11 @@ import {
     validateAndUpsertActivity,
 } from "~Storage/Redux"
 import { BloomUtils, error } from "~Utils"
-import { useInformUser, useStateReconciliation } from "./Hooks"
-import { useFungibleTokenInfo } from "~Hooks"
-import { Activity, Beat } from "~Model"
-import { useBeatWebsocket } from "./Hooks/useBeatWebsocket"
-import { EventTypeResponse } from "~Networking"
-import { fetchTransfersForBlock } from "~Networking/Transfers"
-import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
-import { handleNFTTransfers, handleTokenTransfers, handleVETTransfers } from "./Handlers"
 import { handleNodeDelegatedEvent } from "../StargateEventListener/Handlers/StargateEventHandlers"
-import { useFetchingStargate } from "../StargateEventListener/Hooks/useFetchingStargate"
-import { ERROR_EVENTS } from "~Constants"
-import { useThorClient } from "~Hooks/useThorClient"
+import { handleNFTTransfers, handleTokenTransfers, handleVETTransfers } from "./Handlers"
+import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
+import { useInformUser, useStateReconciliation } from "./Hooks"
+import { useBeatWebsocket } from "./Hooks/useBeatWebsocket"
 
 export const TransferEventListener: React.FC = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -41,11 +42,13 @@ export const TransferEventListener: React.FC = () => {
 
     const { forTokens, forNFTs } = useInformUser({ network })
 
-    const { refetchStargateData } = useFetchingStargate()
+    const { invalidate: invalidateStargateData } = useStargateInvalidation()
 
     const blackListedCollections = useAppSelector(selectBlackListedCollections)
 
     const dispatch = useAppDispatch()
+
+    const stargateConfig = useStargateConfig(network)
 
     /**
      * For each pending activity, validates and upserts the updated activity if it's finalized on the blockchain
@@ -81,9 +84,10 @@ export const TransferEventListener: React.FC = () => {
                     beat,
                     network,
                     thor,
-                    refetchStargateData,
+                    invalidateStargateData,
                     managedAddresses: visibleAccounts.map(acc => acc.address),
                     selectedAccountAddress: selectedAccount.address,
+                    stargateConfig,
                 })
 
                 if (relevantAccounts.length === 0) return
@@ -141,20 +145,21 @@ export const TransferEventListener: React.FC = () => {
             }
         },
         [
-            selectedAccount,
             visibleAccounts,
             updateActivities,
             pendingActivities,
             dispatch,
             network,
+            thor,
+            invalidateStargateData,
+            selectedAccount,
+            stargateConfig,
             blackListedCollections,
             updateNFTs,
             forNFTs,
-            thor,
             fetchData,
             updateBalances,
             forTokens,
-            refetchStargateData,
         ],
     )
 

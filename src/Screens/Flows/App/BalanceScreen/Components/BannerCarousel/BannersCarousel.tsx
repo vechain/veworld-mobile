@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
+import { CarouselPressEvent } from "~Components/Base/BaseCarousel/BaseCarouselItem"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { StargateBannerClosable } from "~Components/Reusable"
 import { AnalyticsEvent, SCREEN_WIDTH, STARGATE_DAPP_URL_HOME_BANNER } from "~Constants"
@@ -65,8 +66,8 @@ export const BannersCarousel = ({ location, baseWidth = SCREEN_WIDTH - 32, paddi
     )
 
     const onSlidePress = useCallback(
-        (name: string) => {
-            if (name === "Stargate") {
+        (event: CarouselPressEvent) => {
+            if (event.name === "Stargate") {
                 track(AnalyticsEvent.DISCOVERY_STARGATE_BANNER_CLICKED, { location })
             }
         },

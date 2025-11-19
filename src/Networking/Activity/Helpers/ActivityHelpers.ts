@@ -572,6 +572,8 @@ export const createActivityFromIndexedHistoryEvent = (
         from,
         reverted,
         levelId,
+        validator,
+        delegationId,
     } = event
 
     const isTransaction =
@@ -734,19 +736,30 @@ export const createActivityFromIndexedHistoryEvent = (
                 proposalId: proposalId,
             } as B3trProposalSupportActivity
         }
-        case ActivityEvent.STARGATE_UNDELEGATE:
-        case ActivityEvent.STARGATE_DELEGATE:
+        case ActivityEvent.STARGATE_UNDELEGATE_LEGACY:
+        case ActivityEvent.STARGATE_DELEGATE_LEGACY:
         case ActivityEvent.STARGATE_STAKE:
         case ActivityEvent.STARGATE_UNSTAKE:
-        case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
-        case ActivityEvent.STARGATE_DELEGATE_ONLY:
-        case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE: {
+        case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY:
+        case ActivityEvent.STARGATE_CLAIM_REWARDS:
+        case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY:
+        case ActivityEvent.STARGATE_DELEGATE_REQUEST:
+        case ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED:
+        case ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST:
+        case ActivityEvent.STARGATE_DELEGATION_EXITED:
+        case ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR:
+        case ActivityEvent.STARGATE_DELEGATE_ACTIVE:
+        case ActivityEvent.STARGATE_MANAGER_ADDED:
+        case ActivityEvent.STARGATE_MANAGER_REMOVED:
+        case ActivityEvent.STARGATE_BOOST: {
             return {
                 ...baseActivity,
                 eventName: eventName,
                 value: value,
                 tokenId: tokenId,
                 levelId: levelId,
+                validator: validator,
+                delegationId: delegationId,
             } as StargateActivity
         }
         case ActivityEvent.VEVOTE_VOTE_CAST: {

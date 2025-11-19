@@ -66,6 +66,8 @@ export interface IndexedHistoryEvent {
     outputValue?: string
     reverted?: boolean
     levelId?: TokenLevelId
+    validator?: string
+    delegationId?: string
 }
 export interface NonTransactionalActivity {
     type: ActivityType.CONNECTED_APP_TRANSACTION | ActivityType.SIGN_CERT
@@ -359,13 +361,22 @@ export interface B3trProposalSupportEvent extends IndexedHistoryEvent {
 
 export interface StargateActivity extends Activity {
     eventName:
-        | ActivityEvent.STARGATE_DELEGATE
-        | ActivityEvent.STARGATE_UNDELEGATE
+        | ActivityEvent.STARGATE_BOOST
+        | ActivityEvent.STARGATE_DELEGATE_LEGACY
+        | ActivityEvent.STARGATE_DELEGATE_REQUEST
+        | ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST
+        | ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED
+        | ActivityEvent.STARGATE_DELEGATION_EXITED
+        | ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR
+        | ActivityEvent.STARGATE_DELEGATE_ACTIVE
+        | ActivityEvent.STARGATE_MANAGER_ADDED
+        | ActivityEvent.STARGATE_MANAGER_REMOVED
+        | ActivityEvent.STARGATE_UNDELEGATE_LEGACY
         | ActivityEvent.STARGATE_STAKE
         | ActivityEvent.STARGATE_UNSTAKE
-        | ActivityEvent.STARGATE_CLAIM_REWARDS_BASE
-        | ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE
-        | ActivityEvent.STARGATE_DELEGATE_ONLY
+        | ActivityEvent.STARGATE_CLAIM_REWARDS
+        | ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY
+        | ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY
     value: string
     tokenId?: string
     levelId?: TokenLevelId
@@ -374,6 +385,8 @@ export interface StargateActivity extends Activity {
     delegationRewards?: string
     migrated?: boolean
     autorenew?: boolean
+    validator?: string
+    delegationId?: string
 }
 
 export interface VeVoteCastActivity extends Activity {
