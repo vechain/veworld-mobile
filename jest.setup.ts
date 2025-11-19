@@ -330,18 +330,22 @@ jest.mock("d3", () => ({
         const scale = Object.assign(jest.fn(), {
             domain: jest.fn().mockReturnValue(this),
             range: jest.fn().mockReturnValue(this),
+            rangeRound: jest.fn().mockReturnValue(this),
         })
         scale.domain = jest.fn().mockReturnValue(scale)
         scale.range = jest.fn().mockReturnValue(scale)
+        scale.rangeRound = jest.fn().mockReturnValue(scale)
         return scale
     }),
     scaleTime: jest.fn().mockImplementation(() => {
         const scale = Object.assign(jest.fn(), {
             domain: jest.fn().mockReturnValue(this),
             range: jest.fn().mockReturnValue(this),
+            rangeRound: jest.fn().mockReturnValue(this),
         })
         scale.domain = jest.fn().mockReturnValue(scale)
         scale.range = jest.fn().mockReturnValue(scale)
+        scale.rangeRound = jest.fn().mockReturnValue(scale)
         return scale
     }),
     line: jest.fn().mockImplementation(() => {
