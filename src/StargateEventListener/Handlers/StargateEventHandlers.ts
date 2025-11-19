@@ -2,8 +2,9 @@ import { ThorClient } from "@vechain/sdk-network"
 import { Beat, Network } from "~Model"
 import { AddressUtils, BloomUtils, debug, error } from "~Utils"
 import { ERROR_EVENTS } from "~Constants"
-import { getReceiptProcessor, InspectableOutput, ReceiptOutput } from "~Services/AbiService"
+import { InspectableOutput, ReceiptOutput } from "~Services/AbiService"
 import { StargateConfiguration } from "~Hooks/useStargateConfig"
+import { ReceiptProcessor } from "~Services/AbiService/ReceiptProcessor"
 
 const isStargateOutput = (out: ReceiptOutput) =>
     out.name === "NodeDelegated(indexed uint256,indexed address,bool)" ||
@@ -25,15 +26,17 @@ interface NodeDelegatedEventHandlerProps {
     managedAddresses: string[]
     selectedAccountAddress?: string
     stargateConfig: StargateConfiguration
+    genericReceiptProcessor: ReceiptProcessor
 }
 
-export const handleNodeDelegatedEvent = async ({
+export const handleStargateEvents = async ({
     beat,
     network,
     thor,
     invalidateStargateData,
     managedAddresses,
     stargateConfig,
+    genericReceiptProcessor,
 }: NodeDelegatedEventHandlerProps) => {
     try {
         if (!stargateConfig || Object.keys(stargateConfig).length === 0) {
@@ -67,10 +70,7 @@ export const handleNodeDelegatedEvent = async ({
             return
         }
 
-        // Create a receipt processor for this network. Only Generic manager is needed here
-        const receiptProcessor = getReceiptProcessor(network.type, ["Generic"])
-
-        const stargateEvents = await parseStargateEvents(beat, stargateConfig, thor, receiptProcessor)
+        const stargateEvents = await parseStargateEvents(beat, stargateConfig, thor, genericReceiptProcessor)
 
         // Get all the unique addresses
         const addresses = [...new Set(stargateEvents.flatMap(u => [u.address1, u.address2, u.origin].filter(Boolean)))]
@@ -92,7 +92,7 @@ const parseStargateEvents = async (
     beat: Beat,
     config: StargateConfiguration,
     thor: ThorClient,
-    receiptProcessor: ReturnType<typeof getReceiptProcessor>,
+    receiptProcessor: ReceiptProcessor,
 ) => {
     try {
         const expanded = await thor.blocks.getBlockExpanded(beat.id)
@@ -124,7 +124,7 @@ type ExpandedTx = {
 const processExpandedTransactionsForEvents = (
     transactions: ExpandedTx[],
     config: StargateConfiguration,
-    receiptProcessor: ReturnType<typeof getReceiptProcessor>,
+    receiptProcessor: ReceiptProcessor,
 ) => {
     // Analyze each transaction once, then flatten all outputs to events.
     const analyzedPerTx: { origin: string; outputs: ReceiptOutput[] }[] = []
