@@ -59,6 +59,7 @@ import {
     WindowResponse,
 } from "./types"
 import { getLoginKind } from "./Utils/LoginUtils"
+import { MissingNetworkAlertBottomSheet } from "./Components/MissingNetworkAlertBottomSheet"
 
 const { PackageDetails } = NativeModules
 
@@ -149,6 +150,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         switchWalletBsRef,
         setSwitchWalletBsData,
     } = useInteraction()
+
+    const { ref: missingNetworkAlertBottomSheetRef, onOpen: openMissingNetworkAlertBottomSheet } = useBottomSheetModal()
 
     useEffect(() => {
         if (platform === "ios") {
@@ -300,7 +303,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     method: request.method,
                 })
 
-                throw new Error("Invalid network")
+                openMissingNetworkAlertBottomSheet()
+
+                return
             }
 
             showInfoToast({
@@ -311,7 +316,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
             dispatch(changeSelectedNetwork(network))
         },
-        [LL, selectedNetwork, dispatch, postMessage, networks],
+        [selectedNetwork.genesis.id, networks, LL, dispatch, postMessage, openMissingNetworkAlertBottomSheet],
     )
 
     const switchAccount = useCallback(
@@ -1107,6 +1112,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             <TypedDataBottomSheet />
             <LoginBottomSheet />
             <SwitchWalletBottomSheet />
+            <MissingNetworkAlertBottomSheet ref={missingNetworkAlertBottomSheetRef} />
             {children}
         </Context.Provider>
     )
