@@ -3,22 +3,24 @@ import { PixelRatio, StyleSheet, TouchableOpacity } from "react-native"
 import Animated, { FadeIn, FadeOut, LinearTransition } from "react-native-reanimated"
 import { BaseText } from "~Components"
 import { useDevice } from "~Components/Providers/DeviceProvider"
-import { COLORS } from "~Constants"
+import { COLORS, SYMBOL_POSITIONS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
 import {
     selectBalanceVisible,
     selectCurrencySymbol,
     selectSelectedAccount,
+    selectSymbolPosition,
     setBalanceVisible,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { SlotMachineText } from "./SlotMachineText"
 import FontUtils from "~Utils/FontUtils"
+import { SlotMachineText } from "./SlotMachineText"
 
 export const CurrentBalance = () => {
     const currencySymbol = useAppSelector(selectCurrencySymbol)
+    const currencyPosition = useAppSelector(selectSymbolPosition)
     const account = useAppSelector(selectSelectedAccount)
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
@@ -37,7 +39,7 @@ export const CurrentBalance = () => {
     }, [dispatch, isBalanceVisible])
 
     const splittedText = useMemo(
-        () => renderedBalance.replace(currencySymbol, "").split(""),
+        () => renderedBalance.replace(currencySymbol, "").replace(" ", "").split(""),
         [currencySymbol, renderedBalance],
     )
 
@@ -48,13 +50,16 @@ export const CurrentBalance = () => {
     return (
         <TouchableOpacity onPress={onPress}>
             <Animated.View style={styles.root} layout={LinearTransition.duration(300)}>
-                <BaseText
-                    typographyFont="headerTitle"
-                    fontWeight="400"
-                    color={COLORS.PURPLE_LABEL}
-                    style={styles.currency}>
-                    {currencySymbol}
-                </BaseText>
+                {currencyPosition === SYMBOL_POSITIONS.BEFORE && (
+                    <BaseText
+                        typographyFont="headerTitle"
+                        fontWeight="400"
+                        color={COLORS.PURPLE_LABEL}
+                        style={styles.currency}>
+                        {currencySymbol}
+                    </BaseText>
+                )}
+
                 <Animated.View style={styles.balance}>
                     {splittedText.includes("•") || isLowEndDevice || hasCompactOrSpecialNotation ? (
                         <Animated.Text
@@ -67,6 +72,15 @@ export const CurrentBalance = () => {
                         splittedText.map((value, idx) => <SlotMachineText key={idx} value={value} />)
                     )}
                 </Animated.View>
+                {currencyPosition === SYMBOL_POSITIONS.AFTER && (
+                    <BaseText
+                        typographyFont="headerTitle"
+                        fontWeight="400"
+                        color={COLORS.PURPLE_LABEL}
+                        style={styles.currency}>
+                        {currencySymbol}
+                    </BaseText>
+                )}
             </Animated.View>
         </TouchableOpacity>
     )
@@ -97,5 +111,6 @@ const baseStyles = () =>
         currency: {
             height: 40 * PixelRatio.getFontScale(),
             alignItems: "center",
+            verticalAlign: "middle",
         },
     })
