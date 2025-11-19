@@ -1,7 +1,6 @@
-import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useMemo, useState } from "react"
-import { SectionListData, SectionListRenderItemInfo } from "react-native"
+import { SectionList, SectionListData, SectionListRenderItemInfo } from "react-native"
 import { BaseBottomSheet, BaseSpacer, BaseText, BaseView, NetworkBox } from "~Components"
 import { useSetSelectedAccount } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -9,6 +8,7 @@ import { Network, NETWORK_TYPE } from "~Model"
 import { clearNFTCache, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { changeSelectedNetwork } from "~Storage/Redux/Actions"
 import { selectNetworksByType, selectSelectedNetwork } from "~Storage/Redux/Selectors"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {
     onClose: () => void
@@ -81,7 +81,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
 
     const snapPoints = useMemo(() => {
         const allNetworks = [...mainNetworks, ...testNetworks, ...otherNetworks]
-        if (allNetworks.length <= 2) return ["45%"]
+        if (allNetworks.length <= 2) return [isAndroid() ? "50%" : "45%"]
         if (allNetworks.length <= 3) return ["60%"]
         if (allNetworks.length <= 4) return ["75%"]
         return ["90%"]
@@ -97,13 +97,13 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
     }, [])
 
     return (
-        <BaseBottomSheet floating snapPoints={snapPoints} ref={ref} onChange={handleSheetChanges}>
+        <BaseBottomSheet floating dynamicHeight ref={ref} onChange={handleSheetChanges}>
             <BaseView flexDirection="column" w={100}>
                 <BaseText typographyFont="subTitleBold">{LL.BD_SELECT_NETWORK()}</BaseText>
             </BaseView>
 
             <BaseSpacer height={16} />
-            <BottomSheetSectionList
+            <SectionList
                 sections={sections}
                 keyExtractor={i => i.id}
                 ItemSeparatorComponent={renderItemSeparator}

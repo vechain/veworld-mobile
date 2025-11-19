@@ -80,4 +80,5 @@ export type LineChartProps = {
      */
     gradientBackgroundColors?: AnimatedProp<Color[]>
     canvasStyle?: StyleProp<ViewStyle>
+    xGutter?: number
 }
