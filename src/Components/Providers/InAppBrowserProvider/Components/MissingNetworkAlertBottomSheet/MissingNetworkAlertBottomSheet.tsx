@@ -16,9 +16,7 @@ export const MissingNetworkAlertBottomSheet = React.forwardRef<BottomSheetModalM
 
     const onGoTo = useCallback(() => {
         onClose()
-        nav.navigate(Routes.SETTINGS_STACK, {
-            screen: Routes.SETTINGS_ADD_CUSTOM_NODE,
-        })
+        nav.navigate(Routes.SETTINGS_NETWORK)
     }, [nav, onClose])
 
     return (
