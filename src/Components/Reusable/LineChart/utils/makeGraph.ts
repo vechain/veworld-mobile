@@ -2,7 +2,13 @@ import * as d3 from "d3"
 import { Skia, vec } from "@shopify/react-native-skia"
 import { DataPoint } from "../types"
 
-export const makeGraph = (data: DataPoint[], width: number, height: number, strokeWidth: number = 4) => {
+export const makeGraph = (
+    data: DataPoint[],
+    width: number,
+    height: number,
+    strokeWidth: number = 4,
+    xGutter: number = 0,
+) => {
     if (data.length === 0)
         return {
             path: Skia.Path.Make(),
@@ -25,7 +31,7 @@ export const makeGraph = (data: DataPoint[], width: number, height: number, stro
     const x = d3
         .scaleTime()
         .domain([data[0].timestamp, data[data.length - 1].timestamp])
-        .rangeRound([0, width])
+        .rangeRound([xGutter, width - xGutter])
 
     const curvedLine = d3
         .line<DataPoint>()
