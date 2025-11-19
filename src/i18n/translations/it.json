@@ -807,7 +807,7 @@
   "MESSAGE_LEDGER_REJECTED_SB": "Hai rifiutato il messaggio sul tuo Ledger, conferma sul tuo dispositivo quando richiesto",
   "MESSAGE_LEDGER_SIGN_DATA": "Stiamo firmando il tuo messaggio",
   "MESSAGE_LEDGER_SIGN_DATA_SB": "Stiamo firmando il tuo messaggio con il tuo Ledger, conferma la firma sul tuo dispositivo quando richiesto",
-  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Questa app è in esecuzione su una rete che attualmente non è aggiunta al tuo portafoglio. Per continuare, aggiungi l'URL del nodo della rete.",
+  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Questa app è in esecuzione su una rete che non è attualmente aggiunta al tuo portafoglio. Per continuare, aggiungi l'URL del nodo della rete.",
   "MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE": "Rete non rilevata",
   "NETWORK_ADD_CUSTOM_NODE": "Aggiungi nodo personalizzato",
   "NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK": "Aggiungi rete",

@@ -162,6 +162,7 @@ const style = (theme: ColorThemeType) =>
         button: {
             height: 42,
             justifyContent: "center",
+            alignItems: "center",
             gap: 8,
         },
         closeIcon: {

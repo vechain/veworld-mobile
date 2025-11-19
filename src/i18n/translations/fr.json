@@ -807,7 +807,7 @@
   "MESSAGE_LEDGER_REJECTED_SB": "Vous avez rejeté le message sur votre Ledger, veuillez confirmer sur votre appareil si nécessaire",
   "MESSAGE_LEDGER_SIGN_DATA": "Nous signons votre message",
   "MESSAGE_LEDGER_SIGN_DATA_SB": "Nous signons votre message avec votre Ledger, veuillez confirmer la signature sur votre appareil si nécessaire",
-  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Cette application fonctionne sur un réseau qui n'est pas actuellement ajouté à votre portefeuille. Pour continuer, veuillez ajouter l'URL du nœud réseau.",
+  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Cette application fonctionne sur un réseau qui n'est pas actuellement ajouté à votre portefeuille. Pour continuer, veuillez ajouter l'URL du nœud des réseaux.",
   "MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE": "Réseau non détecté",
   "NETWORK_ADD_CUSTOM_NODE": "Ajouter un nœud personnalisé",
   "NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK": "Ajouter un réseau",

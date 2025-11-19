@@ -807,7 +807,7 @@
   "MESSAGE_LEDGER_REJECTED_SB": "Has rechazado el mensaje en tu Ledger, por favor confirma en tu dispositivo cuando sea necesario",
   "MESSAGE_LEDGER_SIGN_DATA": "Estamos firmando tu mensaje",
   "MESSAGE_LEDGER_SIGN_DATA_SB": "Estamos firmando tu mensaje con tu Ledger, por favor confirma la firma en tu dispositivo cuando sea necesario",
-  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Esta aplicación se está ejecutando en una red que actualmente no está añadida a su billetera. Para continuar, por favor añada la URL del nodo de la red.",
+  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Esta aplicación está funcionando en una red que actualmente no está añadida en su cartera. Para continuar, por favor añada la URL del nodo de las redes.",
   "MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE": "Red no detectada",
   "NETWORK_ADD_CUSTOM_NODE": "Agregar nodo personalizado",
   "NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK": "Agregar red",

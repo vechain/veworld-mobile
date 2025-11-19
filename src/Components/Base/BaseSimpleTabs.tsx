@@ -35,6 +35,7 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
 }: Props<TKeys>) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const [tabOffsets, setTabOffsets] = useState<{ offsetX: number; width: number }[]>([])
+    const hasRightIcon = !!rightIcon
     const selectedIndex = useMemo(() => keys.indexOf(selectedKey), [keys, selectedKey])
     const getTextColor = useCallback(
         (isSelected: boolean, isDisabled: boolean) => {
@@ -65,7 +66,12 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
     if (keys.length !== labels.length) throw new Error("Keys and Labels should have the same length")
     return (
         <BaseView style={[styles.root, rootStyle]} flexDirection="row" justifyContent="space-between">
-            <BaseView flexDirection="row" flex={1} gap={8} overflow="scroll" style={innerContainerStyle}>
+            <BaseView
+                flexDirection="row"
+                flex={1}
+                gap={8}
+                overflow="scroll"
+                style={[innerContainerStyle, hasRightIcon && styles.tabsWithRightIcon]}>
                 {keys.map((key, index) => {
                     const isSelected = selectedKey === key
                     const isDisabled = disabledKeys?.includes(key) ?? false
@@ -106,6 +112,9 @@ const baseStyles = (theme: ColorThemeType) =>
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
+        },
+        tabsWithRightIcon: {
+            paddingRight: 16, // Ensures last tab isn't visually cut by the right icon
         },
         indicator: {
             backgroundColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,

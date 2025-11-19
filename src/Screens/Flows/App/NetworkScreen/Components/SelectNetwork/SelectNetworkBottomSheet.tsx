@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseSpacer, BaseText, BaseView, BaseBottomSheet, NetworkBox } from "~Components"
 import { useI18nContext } from "~i18n"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { clearNFTCache, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { changeSelectedNetwork } from "~Storage/Redux/Actions"
 import { Network, NETWORK_TYPE } from "~Model"
@@ -80,7 +81,9 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
     const renderSectionSeparator = useCallback(() => <BaseSpacer height={24} />, [])
 
     const snapPoints = useMemo(() => {
-        if (!otherNetworks.length) return ["45%"]
+        const points = isAndroid() ? ["50%"] : ["45%"]
+
+        if (!otherNetworks.length) return points
 
         if (otherNetworks.length < 2) return ["60%"]
 
