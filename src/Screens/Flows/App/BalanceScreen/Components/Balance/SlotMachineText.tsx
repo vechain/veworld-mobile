@@ -90,7 +90,7 @@ const baseStyles = () =>
             fontWeight: "600",
             fontSize: FontUtils.font(36),
             fontFamily: "Inter-SemiBold",
-            lineHeight: 42 * PixelRatio.getFontScale(),
+            lineHeight: FontUtils.font(36),
             alignSelf: "center",
         },
         absolute: {
@@ -104,10 +104,10 @@ const baseStyles = () =>
             overflow: "hidden",
             flexDirection: "column",
             justifyContent: "center",
-            height: 46 * PixelRatio.getFontScale(),
+            alignSelf: "flex-end",
+            height: 40 * PixelRatio.getFontScale(),
         },
         innerContainer: {
-            height: 40 * PixelRatio.getFontScale(),
             position: "relative",
             overflow: "hidden",
         },

@@ -45,7 +45,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const hideNewUserVeBetterCard = useAppSelector(selectHideNewUserVeBetterCard)
     const { data: hasAnyVeBetterActions } = useHasAnyVeBetterActions()
     const { onDAppPress } = useDAppActions(Routes.HOME)
-    const { tabBarBottomMargin } = useTabBarBottomMargin()
+    const { iosOnlyTabBarBottomMargin, androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
     const showStakingTab = useShowStakingTab()
     const nav = useNavigation()
     const track = useAnalyticTracking()
@@ -69,9 +69,12 @@ export const TabRenderer = ({ onLayout }: Props) => {
     }, [bookmarkedDApps.length, selectedAccount])
     const labels = useMemo(() => filteredTabs.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL, filteredTabs])
 
-    const paddingBottom = useMemo(() => {
-        return isAndroid() ? tabBarBottomMargin + 24 : 0
-    }, [tabBarBottomMargin])
+    const containerPaddingBottom = useMemo(
+        () => (isAndroid() ? androidOnlyTabBarBottomMargin : iosOnlyTabBarBottomMargin),
+        [androidOnlyTabBarBottomMargin, iosOnlyTabBarBottomMargin],
+    )
+
+    const contentExtraBottomPadding = useMemo(() => (isAndroid() ? 16 : 0), [])
 
     const showNewUserVeBetterCard = useMemo(() => {
         return !hideNewUserVeBetterCard && !hasAnyVeBetterActions && selectedTab === "TOKENS"
@@ -108,7 +111,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
     )
 
     return (
-        <Animated.View style={[styles.root, { paddingBottom: tabBarBottomMargin }]} onLayout={onLayout}>
+        <Animated.View style={[styles.root, { paddingBottom: containerPaddingBottom }]} onLayout={onLayout}>
             <Animated.View layout={LinearTransition.duration(400)} style={styles.animatedContent}>
                 {showFavorites && (
                     <BaseView flexDirection="column">
@@ -138,7 +141,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                     rootStyle={styles.tabs}
                     rightIcon={rightIcon}
                 />
-                <BaseView flexDirection="column" flex={1} pb={paddingBottom} px={24}>
+                <BaseView flexDirection="column" flex={1} pb={contentExtraBottomPadding} px={24}>
                     {selectedTab === "TOKENS" && <Tokens isEmptyStateShown={showNewUserVeBetterCard} />}
                     {selectedTab === "STAKING" && <Staking />}
                     {selectedTab === "COLLECTIBLES" && <Collectibles />}

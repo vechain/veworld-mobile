@@ -22,7 +22,6 @@ export const Tokens = ({ isEmptyStateShown = false }: Props) => {
         <BaseView flexDirection="column">
             <TokensTopSection />
             <AddTokensCard />
-            <BaseSpacer height={32} />
             <BalanceActivity tab="TOKENS" />
             {!isEmptyStateShown && (
                 <>

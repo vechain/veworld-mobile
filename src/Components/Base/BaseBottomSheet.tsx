@@ -101,6 +101,10 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<
      * @default true
      */
     rounded?: boolean
+    /**
+     * Color for the handle.
+     */
+    handleColor?: string
 }
 
 const BaseBottomSheetContent = ({
@@ -202,6 +206,7 @@ const _BaseBottomSheet = <TData,>(
         stackBehavior = "push",
         floating = false,
         rounded = true,
+        handleColor: _handleColor,
         ...props
     }: BaseBottomSheetProps<TData>,
     ref: React.ForwardedRef<BottomSheetModalMethods>,
@@ -224,9 +229,10 @@ const _BaseBottomSheet = <TData,>(
     }, [backgroundStyle, bgRoundingStyle, styles.backgroundStyle])
 
     const handleColor = useMemo(() => {
+        if (_handleColor) return _handleColor
         if (!theme.isDark) return COLORS.GREY_300
         return flattenedBsStyle.backgroundColor === theme.colors.card ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300
-    }, [flattenedBsStyle.backgroundColor, theme.colors.card, theme.isDark])
+    }, [flattenedBsStyle.backgroundColor, theme.colors.card, theme.isDark, _handleColor])
 
     const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
         return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />

@@ -59,6 +59,7 @@ import {
     WindowResponse,
 } from "./types"
 import { getLoginKind } from "./Utils/LoginUtils"
+import { MissingNetworkAlertBottomSheet } from "./Components/MissingNetworkAlertBottomSheet"
 
 const { PackageDetails } = NativeModules
 
@@ -148,6 +149,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         switchWalletBsRef,
         setSwitchWalletBsData,
     } = useInteraction()
+
+    const { ref: missingNetworkAlertBottomSheetRef, onOpen: openMissingNetworkAlertBottomSheet } = useBottomSheetModal()
 
     useEffect(() => {
         if (platform === "ios") {
@@ -286,7 +289,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const switchNetwork = useCallback(
         (request: WindowRequest) => {
             if (selectedNetwork.genesis.id === request.genesisId) {
-                return
+                return true
             }
 
             const network = networks.find(n => n.genesis.id === request.genesisId)
@@ -298,7 +301,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     method: request.method,
                 })
 
-                throw new Error("Invalid network")
+                openMissingNetworkAlertBottomSheet()
+
+                return false
             }
 
             showInfoToast({
@@ -308,8 +313,10 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             })
 
             dispatch(changeSelectedNetwork(network))
+
+            return true
         },
-        [LL, selectedNetwork, dispatch, postMessage, networks],
+        [selectedNetwork.genesis.id, networks, LL, dispatch, postMessage, openMissingNetworkAlertBottomSheet],
     )
 
     const switchAccount = useCallback(
@@ -496,7 +503,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     // ~ MESSAGE VALIDATION
     const validateTxMessage = useCallback(
         (request: TxRequest, appUrl: string, appName: string) => {
-            switchNetwork(request)
+            const isNetworkValid = switchNetwork(request)
+            if (!isNetworkValid) return
 
             const message = request.message
 
@@ -539,7 +547,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         (request: CertRequest, appUrl: string, appName: string) => {
             const message = request.message
 
-            switchNetwork(request)
+            const isNetworkValid = switchNetwork(request)
+            if (!isNetworkValid) return
 
             track(AnalyticsEvent.DISCOVERY_CERTIFICATE_REQUESTED, {
                 dapp: new URL(appUrl).origin,
@@ -578,7 +587,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const validateSignedDataMessage = useCallback(
         (request: SignedDataRequest, appUrl: string, appName: string) => {
-            switchNetwork(request)
+            const isNetworkValid = switchNetwork(request)
+            if (!isNetworkValid) return
 
             const message = request
 
@@ -621,7 +631,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         (request: LoginRequest, appUrl: string, appName: string) => {
             track(AnalyticsEvent.DAPP_LOGIN_REQUESTED, { kind: getLoginKind(request), dapp: new URL(appUrl).origin })
 
-            switchNetwork(request)
+            const isNetworkValid = switchNetwork(request)
+            if (!isNetworkValid) return
 
             if (request.params.value === null) {
                 //Handle login without anything
@@ -752,7 +763,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const validateWalletMessage = useCallback(
         (request: WalletRequest, appUrl: string, appName: string) => {
-            switchNetwork(request)
+            const isNetworkValid = switchNetwork(request)
+            if (!isNetworkValid) return
 
             return executeWalletMessage(request, appUrl, appName)
         },
@@ -822,7 +834,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const validateSwitchWalletMessage = useCallback(
         (request: SwitchWalletRequest, appUrl: string, appName: string) => {
-            switchNetwork(request)
+            const isNetworkValid = switchNetwork(request)
+            if (!isNetworkValid) return
 
             return executeSwitchWalletMessage(request, appUrl, appName)
         },
@@ -1094,6 +1107,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             <TypedDataBottomSheet />
             <LoginBottomSheet />
             <SwitchWalletBottomSheet />
+            <MissingNetworkAlertBottomSheet ref={missingNetworkAlertBottomSheetRef} />
             {children}
         </Context.Provider>
     )
