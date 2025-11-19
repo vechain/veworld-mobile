@@ -18,7 +18,12 @@ This tool reads icon definitions from a JSON file, converts SVG icons into a fon
    python3 -m venv .venv
    ```
 
-2. **Activate the virtual environment**:
+2. **Import `fontforge` into venv**
+   ```bash
+   echo "/opt/homebrew/Cellar/fontforge/[version]/lib/python3.xx/site-packages/fontforge.so" >.venv/lib/python3.xx/site-packages/homebrew.pth
+   ```
+
+3. **Activate the virtual environment**:
    - On macOS/Linux:
      ```bash
      source .venv/bin/activate
@@ -28,7 +33,7 @@ This tool reads icon definitions from a JSON file, converts SVG icons into a fon
      .venv\Scripts\activate
      ```
 
-3. **Install dependencies**:
+4. **Install dependencies**:
    ```bash
    pip3 install -r requirements.txt
    ```
