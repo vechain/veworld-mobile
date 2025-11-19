@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import React, { useCallback } from "react"
 import DeviceInfo from "react-native-device-info"
 import { FeatureFlags, getFeatureFlags } from "~Api/FeatureFlags"
+import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
 import { SemanticVersionUtils } from "~Utils"
 
 export const initialState: FeatureFlags = {
@@ -44,10 +45,10 @@ export const initialState: FeatureFlags = {
         },
         HAYABUSA: {
             stargate: {
-                testnet: {
+                [defaultTestNetwork.genesis.id]: {
                     contract: "0x0000000000000000000000000000000000000000",
                 },
-                mainnet: {
+                [defaultMainNetwork.genesis.id]: {
                     contract: "0x0000000000000000000000000000000000000000",
                 },
             },
