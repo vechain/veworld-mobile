@@ -5,9 +5,6 @@ import { PlatformUtils } from "~Utils"
 
 const ANDROID_DEFAULT_PADDING = 24
 
-// Empirical data: This is necessary for older devices with the bottom tab bar height issues
-const ANDROID_ADDITIONAL_PADDING = 54
-
 export const useTabBarBottomMargin = () => {
     const rawPadding = useBottomTabBarHeight() || 0
 
@@ -23,7 +20,7 @@ export const useTabBarBottomMargin = () => {
                     return ANDROID_DEFAULT_PADDING
                 }
 
-                return rawPadding + ANDROID_ADDITIONAL_PADDING
+                return rawPadding
             }
 
             if (onlyForThisPlatform === PlatformType.IOS) {
