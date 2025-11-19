@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.11 (2025-11-19)</small>
+
+* build: init ([a291ba3](https://github.com/vechain/veworld-mobile/commit/a291ba3))
+* 87 - Stella pay enhanced flow (#3544) ([dc7892f](https://github.com/vechain/veworld-mobile/commit/dc7892f)), closes [#3544](https://github.com/vechain/veworld-mobile/issues/3544)
+
 ## 2.5.0 (2025-11-13)
 
 * build: init ([f33174b](https://github.com/vechain/veworld-mobile/commit/f33174b))
