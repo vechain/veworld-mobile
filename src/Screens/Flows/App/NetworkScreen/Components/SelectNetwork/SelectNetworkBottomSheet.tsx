@@ -1,14 +1,14 @@
-import React, { useCallback, useMemo, useState } from "react"
+import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseSpacer, BaseText, BaseView, BaseBottomSheet, NetworkBox } from "~Components"
+import React, { useCallback, useMemo, useState } from "react"
+import { SectionListData, SectionListRenderItemInfo } from "react-native"
+import { BaseBottomSheet, BaseSpacer, BaseText, BaseView, NetworkBox } from "~Components"
+import { useSetSelectedAccount } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { Network, NETWORK_TYPE } from "~Model"
 import { clearNFTCache, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { changeSelectedNetwork } from "~Storage/Redux/Actions"
-import { Network, NETWORK_TYPE } from "~Model"
 import { selectNetworksByType, selectSelectedNetwork } from "~Storage/Redux/Selectors"
-import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
-import { SectionListData, SectionListRenderItemInfo, StyleSheet } from "react-native"
-import { useSetSelectedAccount } from "~Hooks"
 
 type Props = {
     onClose: () => void
@@ -80,12 +80,12 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
     const renderSectionSeparator = useCallback(() => <BaseSpacer height={24} />, [])
 
     const snapPoints = useMemo(() => {
-        if (!otherNetworks.length) return ["45%"]
-
-        if (otherNetworks.length < 2) return ["60%"]
-
+        const allNetworks = [...mainNetworks, ...testNetworks, ...otherNetworks]
+        if (allNetworks.length <= 2) return ["45%"]
+        if (allNetworks.length <= 3) return ["60%"]
+        if (allNetworks.length <= 4) return ["75%"]
         return ["90%"]
-    }, [otherNetworks.length])
+    }, [mainNetworks, otherNetworks, testNetworks])
 
     const [snapIndex, setSnapIndex] = useState<number>(0)
 
@@ -103,27 +103,18 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
             </BaseView>
 
             <BaseSpacer height={16} />
-            <BaseView flexDirection="row" style={baseStyles.list}>
-                <BottomSheetSectionList
-                    sections={sections}
-                    keyExtractor={i => i.id}
-                    ItemSeparatorComponent={renderItemSeparator}
-                    SectionSeparatorComponent={renderSectionSeparator}
-                    renderSectionHeader={renderSectionHeader}
-                    renderItem={renderItem}
-                    stickySectionHeadersEnabled={false}
-                    scrollEnabled={isListScrollable}
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                />
-            </BaseView>
+            <BottomSheetSectionList
+                sections={sections}
+                keyExtractor={i => i.id}
+                ItemSeparatorComponent={renderItemSeparator}
+                SectionSeparatorComponent={renderSectionSeparator}
+                renderSectionHeader={renderSectionHeader}
+                renderItem={renderItem}
+                stickySectionHeadersEnabled={false}
+                scrollEnabled={isListScrollable}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+            />
         </BaseBottomSheet>
     )
-})
-
-const baseStyles = StyleSheet.create({
-    list: {
-        width: "100%",
-        height: "100%",
-    },
 })
