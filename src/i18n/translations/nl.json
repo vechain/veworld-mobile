@@ -807,7 +807,7 @@
   "MESSAGE_LEDGER_REJECTED_SB": "Je hebt het bericht op je Ledger afgewezen, bevestig dit op je apparaat indien nodig",
   "MESSAGE_LEDGER_SIGN_DATA": "We ondertekenen je bericht",
   "MESSAGE_LEDGER_SIGN_DATA_SB": "We ondertekenen je bericht met je Ledger, bevestig de handtekening op je apparaat indien nodig",
-  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Deze app draait op een netwerk dat momenteel niet aan je wallet is toegevoegd. Voeg de node-URL van het netwerk toe om door te gaan.",
+  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Deze app draait op een netwerk dat momenteel niet aan uw wallet is toegevoegd. Voeg de netwerk node-URL toe om door te gaan.",
   "MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE": "Netwerk niet gedetecteerd",
   "NETWORK_ADD_CUSTOM_NODE": "Aangepaste node toevoegen",
   "NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK": "Netwerk toevoegen",

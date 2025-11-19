@@ -807,7 +807,7 @@
   "MESSAGE_LEDGER_REJECTED_SB": "Sie haben die Nachricht auf Ihrem Ledger abgelehnt, bitte bestätigen Sie auf Ihrem Gerät, wenn erforderlich",
   "MESSAGE_LEDGER_SIGN_DATA": "Wir unterzeichnen Ihre Nachricht",
   "MESSAGE_LEDGER_SIGN_DATA_SB": "Wir unterzeichnen Ihre Nachricht mit Ihrem Ledger, bitte bestätigen Sie die Signatur auf Ihrem Gerät, wenn erforderlich",
-  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Diese App läuft in einem Netzwerk, das Ihrem Wallet derzeit nicht hinzugefügt ist. Um fortzufahren, fügen Sie bitte die Netzwerkknoten-URL hinzu.",
+  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Diese App läuft in einem Netzwerk, das derzeit nicht zu Ihrer Wallet hinzugefügt ist. Um fortzufahren, fügen Sie bitte die Netzwerk-Node-URL hinzu.",
   "MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE": "Netzwerk nicht erkannt",
   "NETWORK_ADD_CUSTOM_NODE": "Benutzerdefinierten Knoten hinzufügen",
   "NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK": "Netzwerk hinzufügen",
