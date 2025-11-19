@@ -189,13 +189,13 @@ const BaseActivityBox = ({
             <BaseSpacer width={16} />
 
             <BaseView flexDirection="column" flex={1}>
-                <BaseText typographyFont="smallCaption" color={theme.colors.activityCard.time}>
+                <BaseText typographyFont="smallCaptionMedium" color={theme.colors.activityCard.time}>
                     {timestampRenderer(timestamp)}
                 </BaseText>
                 <BaseSpacer height={2} />
                 <BaseView style={styles.titleContainer}>
                     <BaseText
-                        typographyFont={invertedStyles ? "caption" : "bodySemiBold"}
+                        typographyFont={invertedStyles ? "captionMedium" : "bodySemiBold"}
                         numberOfLines={1}
                         color={
                             invertedStyles ? theme.colors.activityCard.subtitleBold : theme.colors.activityCard.title
@@ -209,7 +209,7 @@ const BaseActivityBox = ({
                 {showDescription &&
                     (typeof description === "string" ? (
                         <BaseText
-                            typographyFont={invertedStyles ? "bodySemiBold" : "caption"}
+                            typographyFont={invertedStyles ? "bodySemiBold" : "captionMedium"}
                             numberOfLines={1}
                             color={
                                 invertedStyles
@@ -317,7 +317,7 @@ const TokenTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxPr
                     description: (
                         <BaseView flexDirection="row" gap={4}>
                             <BaseText
-                                typographyFont="caption"
+                                typographyFont="captionMedium"
                                 color={theme.colors.activityCard.subtitleLight}
                                 textTransform="lowercase"
                                 flexShrink={0}>
@@ -342,7 +342,7 @@ const TokenTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxPr
                     description: (
                         <BaseView flexDirection="row" gap={4}>
                             <BaseText
-                                typographyFont="caption"
+                                typographyFont="captionMedium"
                                 color={theme.colors.activityCard.subtitleLight}
                                 textTransform="lowercase"
                                 flexShrink={0}>
@@ -456,7 +456,7 @@ const DAppTransaction = ({ activity, onPress, ...props }: OverridableActivityBox
             description={
                 <BaseView flexDirection="row" gap={4}>
                     <BaseText
-                        typographyFont="caption"
+                        typographyFont="captionMedium"
                         color={theme.colors.activityCard.subtitleLight}
                         textTransform="lowercase"
                         flexShrink={0}>

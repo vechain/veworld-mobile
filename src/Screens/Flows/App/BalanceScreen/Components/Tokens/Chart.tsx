@@ -65,6 +65,7 @@ export const Chart = ({ token }: Props) => {
                     strokeWidth={CHART_STROKE_WIDTH}
                     showGradientBackground={false}
                     strokeColor={isGoingUp ? COLORS.GREEN_300 : COLORS.RED_400}
+                    xGutter={5}
                 />
             </LineChart.Provider>
         </Animated.View>

@@ -3,7 +3,7 @@ import {
     BottomSheetBackdropProps,
     BottomSheetModal,
     BottomSheetModalProps,
-    BottomSheetView,
+    BottomSheetScrollView,
 } from "@gorhom/bottom-sheet"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
@@ -101,6 +101,14 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<
      * @default true
      */
     rounded?: boolean
+    /**
+     * Color for the handle.
+     */
+    handleColor?: string
+    /**
+     * Sticky indices for dynamicHeight
+     */
+    stickyIndices?: number[]
 }
 
 const BaseBottomSheetContent = ({
@@ -116,6 +124,7 @@ const BaseBottomSheetContent = ({
     rightElement,
     children,
     floating,
+    stickyHeaderIndices,
 }: PropsWithChildren<{
     bottomSafeArea: boolean
     bottomSafeAreaSize: number
@@ -128,6 +137,7 @@ const BaseBottomSheetContent = ({
     leftElement?: ReactNode
     rightElement?: ReactNode
     floating: boolean
+    stickyHeaderIndices?: number[]
 }>) => {
     const headerStyles = useMemo(
         () => ({
@@ -164,11 +174,16 @@ const BaseBottomSheetContent = ({
                     {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
                 </BaseView>
             ) : (
-                <BottomSheetView style={contentViewStyle}>
+                <BottomSheetScrollView
+                    contentContainerStyle={contentViewStyle}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    stickyHeaderIndices={stickyHeaderIndices}
+                    stickyHeaderHiddenOnScroll={false}>
                     {renderHeader()}
                     {children}
                     {dynamicHeight && isAndroid() && !floating && <BaseSpacer height={16} />}
-                </BottomSheetView>
+                </BottomSheetScrollView>
             )}
             {footer && (
                 <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
@@ -202,6 +217,8 @@ const _BaseBottomSheet = <TData,>(
         stackBehavior = "push",
         floating = false,
         rounded = true,
+        handleColor: _handleColor,
+        stickyIndices,
         ...props
     }: BaseBottomSheetProps<TData>,
     ref: React.ForwardedRef<BottomSheetModalMethods>,
@@ -224,9 +241,10 @@ const _BaseBottomSheet = <TData,>(
     }, [backgroundStyle, bgRoundingStyle, styles.backgroundStyle])
 
     const handleColor = useMemo(() => {
+        if (_handleColor) return _handleColor
         if (!theme.isDark) return COLORS.GREY_300
         return flattenedBsStyle.backgroundColor === theme.colors.card ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300
-    }, [flattenedBsStyle.backgroundColor, theme.colors.card, theme.isDark])
+    }, [flattenedBsStyle.backgroundColor, theme.colors.card, theme.isDark, _handleColor])
 
     const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
         return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
@@ -352,7 +370,8 @@ const _BaseBottomSheet = <TData,>(
                         title={title}
                         leftElement={leftElement}
                         rightElement={rightElement}
-                        floating={floating}>
+                        floating={floating}
+                        stickyHeaderIndices={stickyIndices}>
                         {children(p?.data)}
                     </BaseBottomSheetContent>
                 )
@@ -368,7 +387,8 @@ const _BaseBottomSheet = <TData,>(
                     title={title}
                     leftElement={leftElement}
                     rightElement={rightElement}
-                    floating={floating}>
+                    floating={floating}
+                    stickyHeaderIndices={stickyIndices}>
                     {children}
                 </BaseBottomSheetContent>
             )}
