@@ -198,6 +198,18 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: string
 	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​a​c​t​i​v​e
+	 */
+	ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: string
+	/**
 	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​e​d
 	 */
 	ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL: string
@@ -205,30 +217,6 @@ type RootTranslation = {
 	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
 	 */
 	ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​a​c​t​i​v​e
-	 */
-	ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
-	 */
-	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
-	 */
-	ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL: string
-	/**
-	 * M​a​n​a​g​e​r​ ​a​d​d​e​d
-	 */
-	ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL: string
-	/**
-	 * M​a​n​a​g​e​r​ ​r​e​m​o​v​e​d
-	 */
-	ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL: string
-	/**
-	 * M​a​t​u​r​i​t​y​ ​b​o​o​s​t​e​d
-	 */
-	ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL: string
 	/**
 	 * V​E​T​ ​s​t​a​k​e​d​ ​&​ ​d​e​l​e​g​a​t​e​d
 	 */
@@ -249,6 +237,18 @@ type RootTranslation = {
 	 * V​E​T​ ​u​n​s​t​a​k​e​d
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: string
+	/**
+	 * M​a​n​a​g​e​r​ ​a​d​d​e​d
+	 */
+	ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL: string
+	/**
+	 * M​a​n​a​g​e​r​ ​r​e​m​o​v​e​d
+	 */
+	ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL: string
+	/**
+	 * M​a​t​u​r​i​t​y​ ​b​o​o​s​t​e​d
+	 */
+	ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL: string
 	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
@@ -1999,6 +1999,10 @@ type RootTranslation = {
 	 */
 	COMMON_DAPPS: string
 	/**
+	 * I​n​v​a​l​i​d​ ​U​R​L​.​ ​I​t​ ​s​h​o​u​l​d​ ​e​i​t​h​e​r​ ​b​e​ ​H​T​T​P​S​ ​o​r​ ​l​o​c​a​l​h​o​s​t​.
+	 */
+	COMMON_ERROR_URL_NOT_VALID: string
+	/**
 	 * H​i​d​e
 	 */
 	COMMON_HIDE: string
@@ -2585,6 +2589,22 @@ type RootTranslation = {
 	 * R​e​s​e​t​ ​s​e​t​t​i​n​g​s
 	 */
 	DEVELOPER_SETTINGS_RESET_BUTTON: string
+	/**
+	 * C​o​n​f​i​g​u​r​e​ ​t​h​e​ ​i​n​d​e​x​e​r​ ​U​R​L​s​ ​f​o​r​ ​e​a​c​h​ ​n​e​t​w​o​r​k​.​ ​S​u​p​p​o​r​t​ ​i​s​ ​p​a​r​t​i​a​l
+	 */
+	DEVELOPER_SETTING_INDEXER_DESCRIPTION: string
+	/**
+	 * I​n​d​e​x​e​r
+	 */
+	DEVELOPER_SETTING_INDEXER_TITLE: string
+	/**
+	 * I​n​d​e​x​e​r​ ​U​R​L​ ​u​p​d​a​t​e​d
+	 */
+	DEVELOPER_SETTING_INDEXER_UPDATED: string
+	/**
+	 * N​o​t​i​f​i​c​a​t​i​o​n​ ​U​R​L
+	 */
+	DEVELOPER_SETTING_NOTIFICATION_URL: string
 	/**
 	 * O​n​e​ ​o​r​ ​m​o​r​e​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​h​a​v​e​n​’​t​ ​b​e​e​n​ ​b​a​c​k​e​d​ ​u​p​ ​y​e​t​.​ ​M​a​k​e​ ​s​u​r​e​ ​t​o​ ​b​a​c​k​u​p​ ​t​o​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​c​r​y​p​t​o​.
 	 */
@@ -4750,6 +4770,35 @@ type RootTranslation = {
 	 */
 	STATUS: string
 	/**
+	 * E​a​r​n
+	 */
+	STELLA_PAY_BOTTOM_SHEET_EARN: string
+	/**
+	 * C​o​m​p​l​e​t​e​ ​B​e​t​t​e​r​ ​a​c​t​i​o​n​s​ ​a​n​d​ ​e​a​r​n​ ​B​3​T​R​ ​t​o​k​e​n​s​.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_EARN_DESCRIPTION: string
+	/**
+	 * G​e​t​ ​y​o​u​r​ ​F​R​E​E​ ​c​a​r​d
+	 */
+	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD: string
+	/**
+	 * S​i​g​n​ ​u​p​ ​a​n​d​ ​a​c​t​i​v​a​t​e​ ​y​o​u​r​ ​V​e​B​e​t​t​e​r​ ​c​a​r​d​ ​f​o​r​ ​f​r​e​e​ ​(​l​i​m​i​t​e​d​ ​t​i​m​e​ ​o​f​f​e​r​)​.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD_DESCRIPTION: string
+	/**
+	 * S​p​e​n​d
+	 */
+	STELLA_PAY_BOTTOM_SHEET_SPEND: string
+	/**
+	 * U​s​e​ ​y​o​u​r​ ​c​a​r​d​ ​t​o​ ​s​p​e​n​d​ ​y​o​u​r​ ​r​e​w​a​r​d​s​ ​o​n​l​i​n​e​ ​a​n​d​ ​i​n​-​s​t​o​r​e​.​
+​A​v​a​i​l​a​b​l​e​ ​f​o​r​ ​G​o​o​g​l​e​ ​a​n​d​ ​A​p​p​l​e​ ​P​a​y​.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_SPEND_DESCRIPTION: string
+	/**
+	 * G​e​t​ ​y​o​u​r​ ​V​e​B​e​t​t​e​r​ ​c​a​r​d​ ​o​n
+	 */
+	STELLA_PAY_BOTTOM_SHEET_TITLE: string
+	/**
 	 * A​v​a​i​l​a​b​l​e​ ​t​o​ ​c​l​a​i​m
 	 */
 	SUCCESS_DOMAIN_AVAILABLE: string
@@ -5533,35 +5582,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * G​e​t​ ​y​o​u​r​ ​V​e​B​e​t​t​e​r​ ​c​a​r​d​ ​o​n
-	 */
-	STELLA_PAY_BOTTOM_SHEET_TITLE: string
-	/**
-	 * G​e​t​ ​y​o​u​r​ ​F​R​E​E​ ​c​a​r​d
-	 */
-	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD: string
-	/**
-	 * S​p​e​n​d
-	 */
-	STELLA_PAY_BOTTOM_SHEET_SPEND: string
-	/**
-	 * E​a​r​n
-	 */
-	STELLA_PAY_BOTTOM_SHEET_EARN: string
-	/**
-	 * U​s​e​ ​y​o​u​r​ ​c​a​r​d​ ​t​o​ ​s​p​e​n​d​ ​y​o​u​r​ ​r​e​w​a​r​d​s​ ​o​n​l​i​n​e​ ​a​n​d​ ​i​n​-​s​t​o​r​e​.​
-​A​v​a​i​l​a​b​l​e​ ​f​o​r​ ​G​o​o​g​l​e​ ​a​n​d​ ​A​p​p​l​e​ ​P​a​y​.
-	 */
-	STELLA_PAY_BOTTOM_SHEET_SPEND_DESCRIPTION: string
-	/**
-	 * C​o​m​p​l​e​t​e​ ​B​e​t​t​e​r​ ​a​c​t​i​o​n​s​ ​a​n​d​ ​e​a​r​n​ ​B​3​T​R​ ​t​o​k​e​n​s​.
-	 */
-	STELLA_PAY_BOTTOM_SHEET_EARN_DESCRIPTION: string
-	/**
-	 * S​i​g​n​ ​u​p​ ​a​n​d​ ​a​c​t​i​v​a​t​e​ ​y​o​u​r​ ​V​e​B​e​t​t​e​r​ ​c​a​r​d​ ​f​o​r​ ​f​r​e​e​ ​(​l​i​m​i​t​e​d​ ​t​i​m​e​ ​o​f​f​e​r​)​.
-	 */
-	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD_DESCRIPTION: string
 }
 
 export type TranslationFunctions = {
@@ -5724,6 +5744,18 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: () => LocalizedString
 	/**
+	 * Delegation active
+	 */
+	ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL: () => LocalizedString
+	/**
+	 * Delegation exited
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL: () => LocalizedString
+	/**
+	 * Delegation exit requested
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: () => LocalizedString
+	/**
 	 * Delegation requested
 	 */
 	ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL: () => LocalizedString
@@ -5731,30 +5763,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Delegation request cancelled
 	 */
 	ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
-	/**
-	 * Delegation active
-	 */
-	ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL: () => LocalizedString
-	/**
-	 * Delegation exit requested
-	 */
-	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: () => LocalizedString
-	/**
-	 * Delegation exited
-	 */
-	ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL: () => LocalizedString
-	/**
-	 * Manager added
-	 */
-	ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL: () => LocalizedString
-	/**
-	 * Manager removed
-	 */
-	ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL: () => LocalizedString
-	/**
-	 * Maturity boosted
-	 */
-	ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL: () => LocalizedString
 	/**
 	 * VET staked & delegated
 	 */
@@ -5775,6 +5783,18 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * VET unstaked
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
+	/**
+	 * Manager added
+	 */
+	ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL: () => LocalizedString
+	/**
+	 * Manager removed
+	 */
+	ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL: () => LocalizedString
+	/**
+	 * Maturity boosted
+	 */
+	ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL: () => LocalizedString
 	/**
 	 * No Swaps to show yet
 	 */
@@ -7512,6 +7532,10 @@ This action is irreversible.
 	 */
 	COMMON_DAPPS: () => LocalizedString
 	/**
+	 * Invalid URL. It should either be HTTPS or localhost.
+	 */
+	COMMON_ERROR_URL_NOT_VALID: () => LocalizedString
+	/**
 	 * Hide
 	 */
 	COMMON_HIDE: () => LocalizedString
@@ -8091,6 +8115,22 @@ This action is irreversible.
 	 * Reset settings
 	 */
 	DEVELOPER_SETTINGS_RESET_BUTTON: () => LocalizedString
+	/**
+	 * Configure the indexer URLs for each network. Support is partial
+	 */
+	DEVELOPER_SETTING_INDEXER_DESCRIPTION: () => LocalizedString
+	/**
+	 * Indexer
+	 */
+	DEVELOPER_SETTING_INDEXER_TITLE: () => LocalizedString
+	/**
+	 * Indexer URL updated
+	 */
+	DEVELOPER_SETTING_INDEXER_UPDATED: () => LocalizedString
+	/**
+	 * Notification URL
+	 */
+	DEVELOPER_SETTING_NOTIFICATION_URL: () => LocalizedString
 	/**
 	 * One or more of your accounts recovery phrase haven’t been backed up yet. Make sure to backup to never lose access to your crypto.
 	 */
@@ -10221,6 +10261,35 @@ Here's what it's all about:
 	 */
 	STATUS: () => LocalizedString
 	/**
+	 * Earn
+	 */
+	STELLA_PAY_BOTTOM_SHEET_EARN: () => LocalizedString
+	/**
+	 * Complete Better actions and earn B3TR tokens.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_EARN_DESCRIPTION: () => LocalizedString
+	/**
+	 * Get your FREE card
+	 */
+	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD: () => LocalizedString
+	/**
+	 * Sign up and activate your VeBetter card for free (limited time offer).
+	 */
+	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD_DESCRIPTION: () => LocalizedString
+	/**
+	 * Spend
+	 */
+	STELLA_PAY_BOTTOM_SHEET_SPEND: () => LocalizedString
+	/**
+	 * Use your card to spend your rewards online and in-store.
+Available for Google and Apple Pay.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_SPEND_DESCRIPTION: () => LocalizedString
+	/**
+	 * Get your VeBetter card on
+	 */
+	STELLA_PAY_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
 	 * Available to claim
 	 */
 	SUCCESS_DOMAIN_AVAILABLE: () => LocalizedString
@@ -10998,35 +11067,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Get your VeBetter card on
-	 */
-	STELLA_PAY_BOTTOM_SHEET_TITLE: () => LocalizedString
-	/**
-	 * Get your FREE card
-	 */
-	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD: () => LocalizedString
-	/**
-	 * Spend
-	 */
-	STELLA_PAY_BOTTOM_SHEET_SPEND: () => LocalizedString
-	/**
-	 * Earn
-	 */
-	STELLA_PAY_BOTTOM_SHEET_EARN: () => LocalizedString
-	/**
-	 * Use your card to spend your rewards online and in-store.
-Available for Google and Apple Pay.
-	 */
-	STELLA_PAY_BOTTOM_SHEET_SPEND_DESCRIPTION: () => LocalizedString
-	/**
-	 * Complete Better actions and earn B3TR tokens.
-	 */
-	STELLA_PAY_BOTTOM_SHEET_EARN_DESCRIPTION: () => LocalizedString
-	/**
-	 * Sign up and activate your VeBetter card for free (limited time offer).
-	 */
-	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD_DESCRIPTION: () => LocalizedString
 }
 
 export type Formatters = {

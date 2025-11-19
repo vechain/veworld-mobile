@@ -482,6 +482,7 @@
   "COMMON_BTN_UNLOCK": "Ontgrendelen",
   "COMMON_CIRCULATING_SUPPLY": "In omloop zijnde voorraad",
   "COMMON_DAPPS": "DApps",
+  "COMMON_ERROR_URL_NOT_VALID": "Ongeldige URL. Het moet HTTPS of localhost zijn.",
   "COMMON_HIDE": "Verbergen",
   "COMMON_IMPORT": "Importeren",
   "COMMON_LBL_ADDRESS": "Adres",
