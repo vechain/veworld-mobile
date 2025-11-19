@@ -3,7 +3,7 @@ import {
     BottomSheetBackdropProps,
     BottomSheetModal,
     BottomSheetModalProps,
-    BottomSheetView,
+    BottomSheetScrollView,
 } from "@gorhom/bottom-sheet"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
@@ -168,11 +168,11 @@ const BaseBottomSheetContent = ({
                     {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
                 </BaseView>
             ) : (
-                <BottomSheetView style={contentViewStyle}>
+                <BottomSheetScrollView contentContainerStyle={contentViewStyle}>
                     {renderHeader()}
                     {children}
                     {dynamicHeight && isAndroid() && !floating && <BaseSpacer height={16} />}
-                </BottomSheetView>
+                </BottomSheetScrollView>
             )}
             {footer && (
                 <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
