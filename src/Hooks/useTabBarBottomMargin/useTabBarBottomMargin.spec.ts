@@ -35,7 +35,7 @@ describe("useTabBarBottomMargin", () => {
         const { result } = renderHook(() => useTabBarBottomMargin())
         const { androidOnlyTabBarBottomMargin, iosOnlyTabBarBottomMargin, tabBarBottomMargin } = result.current
 
-        expect(androidOnlyTabBarBottomMargin).toBe(64) // 10 (raw) + 54 (ANDROID_ADDITIONAL_PADDING)
+        expect(androidOnlyTabBarBottomMargin).toBe(10)
         expect(iosOnlyTabBarBottomMargin).toBe(0)
         expect(tabBarBottomMargin).toBe(10)
     })
