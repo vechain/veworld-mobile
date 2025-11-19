@@ -78,6 +78,9 @@ const mockedFeatureFlags: FeatureFlags = {
                 ledger: false,
             },
         },
+        HAYABUSA: {
+            stargate: {},
+        },
     },
     notificationCenter: {
         registration: {

@@ -14,7 +14,7 @@ import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-we
 import { showInfoToast, showWarningToast } from "~Components"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, usePrevious, useSetSelectedAccount } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { usePostWebviewMessage } from "~Hooks/usePostWebviewMessage"
@@ -86,7 +86,6 @@ type ContextType = {
     onMessage: (event: WebViewMessageEvent) => void
     onScroll: (event: NativeSyntheticEvent<Readonly<EnhancedScrollEvent>>) => void
     postMessage: (message: WindowResponse) => void
-    onNavigationStateChange: (navState: WebViewNavigation) => void
     injectVechainScript: () => string
     originWhitelist: string[]
     navigationCanGoBack: boolean
@@ -196,7 +195,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const postWebviewMessage = usePostWebviewMessage(webviewRef)
 
     const [navigationState, setNavigationState] = useState<WebViewNavigation | undefined>(undefined)
-    const previousUrl = usePrevious(navigationState?.url)
 
     const canGoBack = useMemo(() => {
         return navigationState?.canGoBack ?? false
@@ -989,16 +987,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         [detectScrollDirection, showToolbars],
     )
 
-    const onNavigationStateChange = useCallback(
-        (navState: WebViewNavigation) => {
-            setNavigationState(navState)
-            if (previousUrl !== navState.url) {
-                setShowToolbars(true)
-            }
-        },
-        [previousUrl],
-    )
-
     const closeInAppBrowser = useCallback(() => {
         nav.goBack()
     }, [nav])
@@ -1060,7 +1048,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             onScroll,
             postMessage,
             injectVechainScript: () => injectedJs({ locale, packageInfo }),
-            onNavigationStateChange,
+
             navigationCanGoBack: nav.canGoBack(),
             canGoBack,
             originWhitelist: ORIGIN_WHITELIST,
@@ -1087,7 +1075,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         onMessage,
         onScroll,
         postMessage,
-        onNavigationStateChange,
         nav,
         canGoBack,
         canGoForward,
