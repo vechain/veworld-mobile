@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react"
-import { Image, ImageStyle, LayoutAnimation, StyleProp, StyleSheet } from "react-native"
-import { BaseButton, BaseIcon, BaseText } from "~Components"
+import { LayoutAnimation, StyleSheet } from "react-native"
+import { BaseButton, BaseIcon, BaseText, DAppIcon } from "~Components"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
 import { BaseView } from "~Components/Base/BaseView"
 import { COLORS } from "~Constants"
@@ -61,7 +61,6 @@ export const DappDetailsCard = ({
 }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const [loadFallback, setLoadFallback] = useState(false)
     const [showDetails, setShowDetails] = useState(isDefaultVisible)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const { isFetching, isLoading } = useFetchFeaturedDApps()
@@ -114,18 +113,7 @@ export const DappDetailsCard = ({
         <BaseView bg={theme.isDark ? COLORS.PURPLE : COLORS.WHITE} p={16} flexDirection="column" borderRadius={12}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseView flexDirection="row" gap={16} flex={1}>
-                    <Image
-                        source={
-                            loadFallback
-                                ? require("~Assets/Img/dapp-fallback.png")
-                                : {
-                                      uri: icon,
-                                  }
-                        }
-                        style={[{ height: 48, width: 48 }, styles.icon] as StyleProp<ImageStyle>}
-                        onError={() => setLoadFallback(true)}
-                        resizeMode="contain"
-                    />
+                    <DAppIcon uri={icon} size={48} />
                     <BaseView flexDirection="column" gap={2} flex={1}>
                         <BaseText
                             typographyFont="bodyMedium"
@@ -188,10 +176,6 @@ export const DappDetailsCard = ({
 
 const baseStyles = () =>
     StyleSheet.create({
-        icon: {
-            borderRadius: 8,
-            overflow: "hidden",
-        },
         rightIcon: {
             marginLeft: 2,
         },
