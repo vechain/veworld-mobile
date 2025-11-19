@@ -1209,7 +1209,7 @@ const dark: Colors = {
         border: COLORS.DARK_PURPLE_DISABLED,
         title: COLORS.WHITE,
         propertyName: COLORS.GREY_400,
-        propertyValue: COLORS.GREEN_200,
+        propertyValue: COLORS.GREY_200,
     },
 }
 
