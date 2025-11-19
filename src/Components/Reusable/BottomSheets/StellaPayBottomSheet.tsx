@@ -68,7 +68,11 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     }, [navigateWithTab, onClose, nav, returnScreen])
 
     return (
-        <BaseBottomSheet ref={ref} snapPoints={["92%"]} backgroundStyle={{ backgroundColor: COLORS.PURPLE }}>
+        <BaseBottomSheet
+            ref={ref}
+            snapPoints={["92%"]}
+            backgroundStyle={styles.bottomSheet}
+            handleStyle={styles.handle}>
             <BaseView flex={1} flexDirection="column" gap={24} alignItems="center" justifyContent="space-between">
                 <BaseView flex={1} flexDirection="column" gap={24} alignItems="center">
                     <BaseView flexDirection="column" gap={12} alignItems="center">
@@ -86,7 +90,7 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         justifyContent="flex-start"
                         px={24}>
                         {optionsItems.map(item => (
-                            <BaseView key={item.title} flexDirection="row" gap={12} alignItems="flex-start">
+                            <BaseView key={item.title} flexDirection="row" gap={16} alignItems="flex-start">
                                 <BaseView bg={COLORS.PURPLE_DISABLED} px={12} py={12} borderRadius={100}>
                                     <BaseIcon name={item.icon} size={16} color={COLORS.LIME_GREEN} />
                                 </BaseView>
@@ -119,6 +123,12 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
 
 const baseStyles = () =>
     StyleSheet.create({
+        handle: {
+            backgroundColor: COLORS.DARK_PURPLE_DISABLED,
+        },
+        bottomSheet: {
+            backgroundColor: COLORS.PURPLE,
+        },
         image: {
             width: 258,
             height: 215,
