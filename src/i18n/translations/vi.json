@@ -482,6 +482,7 @@
   "COMMON_BTN_UNLOCK": "Mở khóa",
   "COMMON_CIRCULATING_SUPPLY": "Nguồn cung lưu thông",
   "COMMON_DAPPS": "DApps",
+  "COMMON_ERROR_URL_NOT_VALID": "URL không hợp lệ. Nó phải là HTTPS hoặc localhost.",
   "COMMON_HIDE": "Ẩn",
   "COMMON_IMPORT": "Nhập khẩu",
   "COMMON_LBL_ADDRESS": "Địa chỉ",

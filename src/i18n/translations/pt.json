@@ -482,6 +482,7 @@
   "COMMON_BTN_UNLOCK": "Desbloquear",
   "COMMON_CIRCULATING_SUPPLY": "Suprimento Circulante",
   "COMMON_DAPPS": "DApps",
+  "COMMON_ERROR_URL_NOT_VALID": "URL inválido. Deve ser HTTPS ou localhost.",
   "COMMON_HIDE": "Ocultar",
   "COMMON_IMPORT": "Importar",
   "COMMON_LBL_ADDRESS": "Endereço",
