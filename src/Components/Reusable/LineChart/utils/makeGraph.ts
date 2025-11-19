@@ -18,11 +18,14 @@ export const makeGraph = (data: DataPoint[], width: number, height: number, stro
     const max = Math.max(...data.map(val => val.value))
     const min = Math.min(...data.map(val => val.value))
 
-    const y = d3.scaleLinear().domain([min, max]).range([height, strokeWidth])
+    const y = d3
+        .scaleLinear()
+        .domain([min, max])
+        .range([height - strokeWidth, strokeWidth])
     const x = d3
         .scaleTime()
         .domain([data[0].timestamp, data[data.length - 1].timestamp])
-        .range([0, width])
+        .rangeRound([0, width])
 
     const curvedLine = d3
         .line<DataPoint>()
