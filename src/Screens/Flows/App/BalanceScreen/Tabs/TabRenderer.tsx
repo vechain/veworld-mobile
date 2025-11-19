@@ -69,12 +69,15 @@ export const TabRenderer = ({ onLayout }: Props) => {
     }, [bookmarkedDApps.length, selectedAccount])
     const labels = useMemo(() => filteredTabs.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL, filteredTabs])
 
+    // // Empirical data: This is necessary for older devices with the bottom tab bar height issues
+    const ANDROID_ADDITIONAL_PADDING = 72
+
     const containerPaddingBottom = useMemo(
         () => (isAndroid() ? androidOnlyTabBarBottomMargin : iosOnlyTabBarBottomMargin),
         [androidOnlyTabBarBottomMargin, iosOnlyTabBarBottomMargin],
     )
 
-    const contentExtraBottomPadding = useMemo(() => (isAndroid() ? 16 : 0), [])
+    const contentExtraBottomPadding = useMemo(() => (isAndroid() ? ANDROID_ADDITIONAL_PADDING : 0), [])
 
     const showNewUserVeBetterCard = useMemo(() => {
         return !hideNewUserVeBetterCard && !hasAnyVeBetterActions && selectedTab === "TOKENS"
