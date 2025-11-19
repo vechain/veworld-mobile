@@ -191,7 +191,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                             />
                             <BaseText typographyFont="subTitleSemiBold">{LL.SELECT_ACCOUNT_TITLE()}</BaseText>
                         </BaseView>
-                        <BaseText typographyFont="caption" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                        <BaseText typographyFont="body" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
                             {LL.SELECT_ACCOUNT_DESCRIPTION()}
                         </BaseText>
                     </BaseView>
