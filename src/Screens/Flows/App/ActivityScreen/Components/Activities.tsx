@@ -28,7 +28,6 @@ export const Activities = ({ filter, emptyComponent }: ActivitiesProps) => {
         filter.type,
         filter.value,
     )
-
     const { isPending } = useVeBetterDaoDapps()
 
     const renderActivitiesList = useMemo(() => {

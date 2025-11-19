@@ -1,11 +1,12 @@
 import { useRoute } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { CarouselSlideItem, FullscreenBaseCarousel, useFeatureFlags } from "~Components"
+import { CarouselSlideItem, FullscreenBaseCarousel, StellaPayBottomSheet, useFeatureFlags } from "~Components"
 import { SCREEN_WIDTH, STARGATE_DAPP_URL_DISCOVER_BANNER, STARGATE_DAPP_URL_HOME_BANNER } from "~Constants"
 import { AnalyticsEvent } from "~Constants/Enums/AnalyticsEvent"
-import { useAnalyticTracking } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal } from "~Hooks"
 import { Routes } from "~Navigation"
 import { StargateBanner, StellaPayBanner, VeBetterDaoBanner } from "./Banners"
+import { CarouselPressEvent } from "~Components/Base/BaseCarousel/BaseCarouselItem"
 
 const DAO_URL = "https://governance.vebetterdao.org"
 const STELLA_URL = "https://vebetter.stellapay.io/"
@@ -14,7 +15,7 @@ export const VeBetterDAOCarousel = () => {
     const featureFlags = useFeatureFlags()
     const track = useAnalyticTracking()
     const location = useRoute()
-
+    const { ref: stellaPayBottomSheetRef, onOpen: onOpenStellaPayBottomSheet } = useBottomSheetModal()
     const slides: CarouselSlideItem[] = useMemo(
         () => [
             {
@@ -27,7 +28,6 @@ export const VeBetterDAOCarousel = () => {
                 testID: "VeBetterDao_stella_banner",
                 content: <StellaPayBanner />,
                 href: STELLA_URL,
-                isExternalLink: true,
                 name: "stella",
             },
             {
@@ -56,29 +56,34 @@ export const VeBetterDAOCarousel = () => {
     }, [featureFlags.discoveryFeature.showStellaPayBanner, featureFlags.discoveryFeature.showStargateBanner, slides])
 
     const onSlidePress = useCallback(
-        (name: string) => {
-            if (name === "stella") {
+        (event: CarouselPressEvent) => {
+            if (event.name === "stella") {
+                event.preventDefault()
+                onOpenStellaPayBottomSheet()
                 track(AnalyticsEvent.DISCOVERY_STELLAPAY_BANNER_CLICKED)
-            } else if (name === "stargate") {
+            } else if (event.name === "stargate") {
                 track(AnalyticsEvent.DISCOVERY_STARGATE_BANNER_CLICKED, { location: "discover_screen" })
             } else {
                 track(AnalyticsEvent.DISCOVERY_VEBETTERDAO_BANNER_CLICKED)
             }
         },
-        [track],
+        [track, onOpenStellaPayBottomSheet],
     )
 
     return (
-        <FullscreenBaseCarousel
-            testID="VeBetterDao_carousel"
-            data={activeSlides}
-            showPagination={false}
-            onSlidePressActivation="before"
-            onSlidePress={onSlidePress}
-            padding={16}
-            itemHeight={108}
-            gap={8}
-            baseWidth={SCREEN_WIDTH}
-        />
+        <>
+            <FullscreenBaseCarousel
+                testID="VeBetterDao_carousel"
+                data={activeSlides}
+                showPagination={false}
+                onSlidePressActivation="before"
+                onSlidePress={onSlidePress}
+                padding={16}
+                itemHeight={108}
+                gap={8}
+                baseWidth={SCREEN_WIDTH}
+            />
+            <StellaPayBottomSheet ref={stellaPayBottomSheetRef} />
+        </>
     )
 }

@@ -127,8 +127,8 @@ export const getIndexedHistoryEventOrigin = ({
 }) => {
     const baseUrl =
         networkType === NETWORK_TYPE.MAIN
-            ? process.env.REACT_APP_INDEXER_MAINNET_URL
-            : process.env.REACT_APP_INDEXER_TESTNET_URL
+            ? process.env.REACT_APP_INDEXER_MAINNET_V2_URL
+            : process.env.REACT_APP_INDEXER_TESTNET_V2_URL
 
     let url = `${baseUrl}/history/${address}?page=${page}&size=${pageSize}&direction=${direction}`
 

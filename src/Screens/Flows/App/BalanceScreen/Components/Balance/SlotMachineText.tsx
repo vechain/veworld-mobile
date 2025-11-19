@@ -90,7 +90,7 @@ const baseStyles = () =>
             fontWeight: "600",
             fontSize: FontUtils.font(36),
             fontFamily: "Inter-SemiBold",
-            lineHeight: 40,
+            lineHeight: 42 * PixelRatio.getFontScale(),
             alignSelf: "center",
         },
         absolute: {

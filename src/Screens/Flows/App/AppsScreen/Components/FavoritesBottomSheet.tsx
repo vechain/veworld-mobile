@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import DraggableFlatList, { DragEndParams, RenderItem } from "react-native-draggable-flatlist"
+import DraggableFlatList, { DragEndParams, RenderItem, ScaleDecorator } from "react-native-draggable-flatlist"
 import {
     AnimatedSaveHeaderButton,
     BaseBottomSheet,
@@ -57,50 +57,55 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         [dispatch],
     )
 
-    const onLongPress = useCallback(() => {
-        if (!isEditingMode) {
-            setIsEditingMode(true)
-        }
-    }, [isEditingMode])
-
     const onLongPressHandler = useCallback(
-        (_dapp: DiscoveryDApp) => {
+        (_dapp: DiscoveryDApp, drag?: () => void) => {
             if (!isEditingMode) {
-                onLongPress()
+                setIsEditingMode(true)
+                drag?.()
+            } else if (drag) {
+                drag()
             }
         },
-        [isEditingMode, onLongPress],
+        [isEditingMode],
     )
 
     const handleDAppPress = useCallback(
         (dapp: DiscoveryDApp) => {
+            if (isEditingMode) {
+                return
+            }
             onDAppPress(dapp)
             handleClose()
         },
-        [onDAppPress, handleClose],
+        [isEditingMode, onDAppPress, handleClose],
     )
 
     const renderItem: RenderItem<DiscoveryDApp> = useCallback(
         ({ item, isActive, drag }) => {
             return (
-                <FavoriteDAppCard
-                    dapp={item}
-                    isActive={isActive}
-                    isEditMode={isEditingMode}
-                    onPress={handleDAppPress}
-                    onRightActionPress={onMorePress}
-                    onLongPress={onLongPressHandler}
-                    onRightActionLongPress={isEditingMode ? drag : undefined}
-                    px={0}
-                />
+                <ScaleDecorator activeScale={1.05}>
+                    <FavoriteDAppCard
+                        dapp={item}
+                        isActive={isActive}
+                        isEditMode={isEditingMode}
+                        onPress={handleDAppPress}
+                        onRightActionPress={onMorePress}
+                        onLongPress={dapp => onLongPressHandler(dapp, drag)}
+                        onRightActionLongPress={isEditingMode ? drag : undefined}
+                        px={0}
+                    />
+                </ScaleDecorator>
             )
         },
         [isEditingMode, handleDAppPress, onLongPressHandler, onMorePress],
     )
 
-    const onDragEnd = useCallback(({ data }: DragEndParams<DiscoveryDApp>) => {
-        setReorderedDapps(data)
-    }, [])
+    const onDragEnd = useCallback(
+        ({ data }: DragEndParams<DiscoveryDApp>) => {
+            setReorderedDapps(data)
+        },
+        [setReorderedDapps],
+    )
 
     const onSaveReorderedDapps = useCallback(() => {
         dispatch(reorderBookmarks(reorderedDapps))

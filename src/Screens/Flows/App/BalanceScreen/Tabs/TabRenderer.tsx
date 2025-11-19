@@ -119,7 +119,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                             padding={24}
                             iconBg={theme.isDark ? COLORS.DARK_PURPLE : undefined}
                         />
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={16} />
                     </BaseView>
                 )}
 
@@ -160,6 +160,7 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
             gap: 16,
             flexDirection: "column",
+            zIndex: 1000,
         },
         animatedContent: {
             flexDirection: "column",

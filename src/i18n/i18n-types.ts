@@ -198,6 +198,26 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: string
 	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​a​c​t​i​v​e
+	 */
+	ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED: string
+	/**
 	 * V​E​T​ ​s​t​a​k​e​d​ ​&​ ​d​e​l​e​g​a​t​e​d
 	 */
 	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: string
@@ -217,6 +237,18 @@ type RootTranslation = {
 	 * V​E​T​ ​u​n​s​t​a​k​e​d
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: string
+	/**
+	 * M​a​n​a​g​e​r​ ​a​d​d​e​d
+	 */
+	ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL: string
+	/**
+	 * M​a​n​a​g​e​r​ ​r​e​m​o​v​e​d
+	 */
+	ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL: string
+	/**
+	 * M​a​t​u​r​i​t​y​ ​b​o​o​s​t​e​d
+	 */
+	ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL: string
 	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
@@ -697,13 +729,9 @@ type RootTranslation = {
 	 */
 	BD_APP_BLOCKED: string
 	/**
-	 * A​p​p​ ​l​a​n​g​u​a​g​e
+	 * L​a​n​g​u​a​g​e
 	 */
 	BD_APP_LANGUAGE: string
-	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​l​a​n​g​u​a​g​e
-	 */
-	BD_APP_LANGUAGE_DISCLAIMER: string
 	/**
 	 * R​e​q​u​i​r​e​ ​t​h​e​ ​p​i​n​ ​w​h​e​n​ ​p​e​r​f​o​r​m​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​w​i​t​h​ ​l​o​c​a​l​ ​w​a​l​l​e​t​s
 	 */
@@ -712,10 +740,6 @@ type RootTranslation = {
 	 * A​p​p​ ​t​h​e​m​e
 	 */
 	BD_APP_THEME: string
-	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​g​e​n​e​r​a​l​ ​a​p​p​ ​t​h​e​m​e
-	 */
-	BD_APP_THEME_DISCLAIMER: string
 	/**
 	 * {​c​l​o​u​d​T​y​p​e​}​ ​b​a​c​k​e​d​ ​u​p
 	 * @param {string} cloudType
@@ -822,10 +846,6 @@ type RootTranslation = {
 	 */
 	BD_CONVERSION_CURRENCY: string
 	/**
-	 * P​i​c​k​ ​t​h​e​ ​c​u​r​r​e​n​c​y​ ​t​h​a​t​ ​y​o​u​ ​p​r​e​f​e​r​ ​t​o​ ​b​e​ ​s​h​o​w​n​ ​f​o​r​ ​c​o​n​v​e​r​s​i​o​n​s
-	 */
-	BD_CONVERSION_CURRENCY_DISCLAIMER: string
-	/**
 	 * U​n​l​e​a​s​h​ ​t​h​e​ ​p​o​w​e​r​ ​o​f​ ​s​u​s​t​a​i​n​a​b​i​l​i​t​y​ ​a​n​d​ ​w​e​b​3​ ​f​o​r​ ​a​ ​b​e​t​t​e​r​ ​w​o​r​l​d​.
 	 */
 	BD_CREATE_WALLET_SUCCESS: string
@@ -841,10 +861,6 @@ type RootTranslation = {
 	 * C​u​r​r​e​n​c​y​ ​f​o​r​m​a​t
 	 */
 	BD_CURRENCY_FORMAT: string
-	/**
-	 * P​i​c​k​ ​t​h​e​ ​f​o​r​m​a​t​ ​t​h​a​t​ ​y​o​u​ ​p​r​e​f​e​r​ ​f​o​r​ ​d​e​c​i​m​a​l​ ​s​e​p​a​r​a​t​o​r​.
-	 */
-	BD_CURRENCY_FORMAT_DISCLAIMER: string
 	/**
 	 * C​o​m​m​a
 	 */
@@ -1007,7 +1023,7 @@ type RootTranslation = {
 	 */
 	BD_PRIVATE_KEY_WARMNING: string
 	/**
-	 * V​e​W​o​r​l​d​ ​r​e​s​e​t
+	 * R​e​s​e​t​ ​a​p​p
 	 */
 	BD_RESET: string
 	/**
@@ -1023,7 +1039,7 @@ type RootTranslation = {
 	 */
 	BD_RESET_APP_DISCLAIMER: string
 	/**
-	 * C​l​i​c​k​ ​t​o​ ​r​e​s​e​t​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​e​r​a​s​e​ ​a​l​l​ ​y​o​u​r​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​i​t
+	 * R​e​s​e​t​t​i​n​g​ ​t​h​e​ ​a​p​p​ ​w​i​l​l​ ​r​e​m​o​v​e​ ​a​l​l​ ​t​h​e​ ​a​c​c​o​u​n​t​s​ ​a​n​d​ ​r​e​t​u​r​n​ ​t​h​e​ ​a​p​p​ ​t​o​ ​t​h​e​ ​o​r​i​g​i​n​a​l​ ​s​t​a​t​e​.
 	 */
 	BD_RESET_DISCLAIMER: string
 	/**
@@ -1620,7 +1636,7 @@ type RootTranslation = {
 	 */
 	BTN_REPEAT_PASSWORD: string
 	/**
-	 * R​e​s​e​t​ ​A​p​p
+	 * R​e​s​e​t​ ​a​p​p
 	 */
 	BTN_RESET_APP: string
 	/**
@@ -1982,6 +1998,10 @@ type RootTranslation = {
 	 * D​A​p​p​s
 	 */
 	COMMON_DAPPS: string
+	/**
+	 * I​n​v​a​l​i​d​ ​U​R​L​.​ ​I​t​ ​s​h​o​u​l​d​ ​e​i​t​h​e​r​ ​b​e​ ​H​T​T​P​S​ ​o​r​ ​l​o​c​a​l​h​o​s​t​.
+	 */
+	COMMON_ERROR_URL_NOT_VALID: string
 	/**
 	 * H​i​d​e
 	 */
@@ -2569,6 +2589,22 @@ type RootTranslation = {
 	 * R​e​s​e​t​ ​s​e​t​t​i​n​g​s
 	 */
 	DEVELOPER_SETTINGS_RESET_BUTTON: string
+	/**
+	 * C​o​n​f​i​g​u​r​e​ ​t​h​e​ ​i​n​d​e​x​e​r​ ​U​R​L​s​ ​f​o​r​ ​e​a​c​h​ ​n​e​t​w​o​r​k​.​ ​S​u​p​p​o​r​t​ ​i​s​ ​p​a​r​t​i​a​l
+	 */
+	DEVELOPER_SETTING_INDEXER_DESCRIPTION: string
+	/**
+	 * I​n​d​e​x​e​r
+	 */
+	DEVELOPER_SETTING_INDEXER_TITLE: string
+	/**
+	 * I​n​d​e​x​e​r​ ​U​R​L​ ​u​p​d​a​t​e​d
+	 */
+	DEVELOPER_SETTING_INDEXER_UPDATED: string
+	/**
+	 * N​o​t​i​f​i​c​a​t​i​o​n​ ​U​R​L
+	 */
+	DEVELOPER_SETTING_NOTIFICATION_URL: string
 	/**
 	 * O​n​e​ ​o​r​ ​m​o​r​e​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​h​a​v​e​n​’​t​ ​b​e​e​n​ ​b​a​c​k​e​d​ ​u​p​ ​y​e​t​.​ ​M​a​k​e​ ​s​u​r​e​ ​t​o​ ​b​a​c​k​u​p​ ​t​o​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​c​r​y​p​t​o​.
 	 */
@@ -4568,6 +4604,14 @@ type RootTranslation = {
 	 */
 	SETTINGS_LABEL_name_min_length: RequiredParams<'min'>
 	/**
+	 * A​p​p​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	SETTINGS_SECTION_APP_PREFERENCES: string
+	/**
+	 * C​u​r​r​e​n​c​y​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	SETTINGS_SECTION_CURRENCY_PREFERENCES: string
+	/**
 	 * D​e​f​a​u​l​t​ ​d​e​l​e​g​a​t​i​o​n
 	 */
 	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: string
@@ -4725,6 +4769,35 @@ type RootTranslation = {
 	 * S​t​a​t​u​s
 	 */
 	STATUS: string
+	/**
+	 * E​a​r​n
+	 */
+	STELLA_PAY_BOTTOM_SHEET_EARN: string
+	/**
+	 * C​o​m​p​l​e​t​e​ ​B​e​t​t​e​r​ ​a​c​t​i​o​n​s​ ​a​n​d​ ​e​a​r​n​ ​B​3​T​R​ ​t​o​k​e​n​s​.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_EARN_DESCRIPTION: string
+	/**
+	 * G​e​t​ ​y​o​u​r​ ​F​R​E​E​ ​c​a​r​d
+	 */
+	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD: string
+	/**
+	 * S​i​g​n​ ​u​p​ ​a​n​d​ ​a​c​t​i​v​a​t​e​ ​y​o​u​r​ ​V​e​B​e​t​t​e​r​ ​c​a​r​d​ ​f​o​r​ ​f​r​e​e​ ​(​l​i​m​i​t​e​d​ ​t​i​m​e​ ​o​f​f​e​r​)​.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD_DESCRIPTION: string
+	/**
+	 * S​p​e​n​d
+	 */
+	STELLA_PAY_BOTTOM_SHEET_SPEND: string
+	/**
+	 * U​s​e​ ​y​o​u​r​ ​c​a​r​d​ ​t​o​ ​s​p​e​n​d​ ​y​o​u​r​ ​r​e​w​a​r​d​s​ ​o​n​l​i​n​e​ ​a​n​d​ ​i​n​-​s​t​o​r​e​.​
+​A​v​a​i​l​a​b​l​e​ ​f​o​r​ ​G​o​o​g​l​e​ ​a​n​d​ ​A​p​p​l​e​ ​P​a​y​.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_SPEND_DESCRIPTION: string
+	/**
+	 * G​e​t​ ​y​o​u​r​ ​V​e​B​e​t​t​e​r​ ​c​a​r​d​ ​o​n
+	 */
+	STELLA_PAY_BOTTOM_SHEET_TITLE: string
 	/**
 	 * A​v​a​i​l​a​b​l​e​ ​t​o​ ​c​l​a​i​m
 	 */
@@ -5509,26 +5582,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * N​o​t​i​f​i​c​a​t​i​o​n​ ​U​R​L
-	 */
-	DEVELOPER_SETTING_NOTIFICATION_URL: string
-	/**
-	 * I​n​d​e​x​e​r
-	 */
-	DEVELOPER_SETTING_INDEXER_TITLE: string
-	/**
-	 * C​o​n​f​i​g​u​r​e​ ​t​h​e​ ​i​n​d​e​x​e​r​ ​U​R​L​s​ ​f​o​r​ ​e​a​c​h​ ​n​e​t​w​o​r​k​.​ ​S​u​p​p​o​r​t​ ​i​s​ ​p​a​r​t​i​a​l
-	 */
-	DEVELOPER_SETTING_INDEXER_DESCRIPTION: string
-	/**
-	 * I​n​d​e​x​e​r​ ​U​R​L​ ​u​p​d​a​t​e​d
-	 */
-	DEVELOPER_SETTING_INDEXER_UPDATED: string
-	/**
-	 * I​n​v​a​l​i​d​ ​U​R​L​.​ ​I​t​ ​s​h​o​u​l​d​ ​e​i​t​h​e​r​ ​b​e​ ​H​T​T​P​S​ ​o​r​ ​l​o​c​a​l​h​o​s​t​.
-	 */
-	COMMON_ERROR_URL_NOT_VALID: string
 }
 
 export type TranslationFunctions = {
@@ -5691,6 +5744,26 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: () => LocalizedString
 	/**
+	 * Delegation active
+	 */
+	ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL: () => LocalizedString
+	/**
+	 * Delegation exited
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL: () => LocalizedString
+	/**
+	 * Delegation exit requested
+	 */
+	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: () => LocalizedString
+	/**
+	 * Delegation requested
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL: () => LocalizedString
+	/**
+	 * Delegation request cancelled
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
+	/**
 	 * VET staked & delegated
 	 */
 	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: () => LocalizedString
@@ -5710,6 +5783,18 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * VET unstaked
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
+	/**
+	 * Manager added
+	 */
+	ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL: () => LocalizedString
+	/**
+	 * Manager removed
+	 */
+	ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL: () => LocalizedString
+	/**
+	 * Maturity boosted
+	 */
+	ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL: () => LocalizedString
 	/**
 	 * No Swaps to show yet
 	 */
@@ -6184,13 +6269,9 @@ Try reconnect your device to the internet.
 	 */
 	BD_APP_BLOCKED: () => LocalizedString
 	/**
-	 * App language
+	 * Language
 	 */
 	BD_APP_LANGUAGE: () => LocalizedString
-	/**
-	 * Select the general app language
-	 */
-	BD_APP_LANGUAGE_DISCLAIMER: () => LocalizedString
 	/**
 	 * Require the pin when performing transactions with local wallets
 	 */
@@ -6199,10 +6280,6 @@ Try reconnect your device to the internet.
 	 * App theme
 	 */
 	BD_APP_THEME: () => LocalizedString
-	/**
-	 * Select the general app theme
-	 */
-	BD_APP_THEME_DISCLAIMER: () => LocalizedString
 	/**
 	 * {cloudType} backed up
 	 */
@@ -6308,10 +6385,6 @@ Try reconnect your device to the internet.
 	 */
 	BD_CONVERSION_CURRENCY: () => LocalizedString
 	/**
-	 * Pick the currency that you prefer to be shown for conversions
-	 */
-	BD_CONVERSION_CURRENCY_DISCLAIMER: () => LocalizedString
-	/**
 	 * Unleash the power of sustainability and web3 for a better world.
 	 */
 	BD_CREATE_WALLET_SUCCESS: () => LocalizedString
@@ -6327,10 +6400,6 @@ Try reconnect your device to the internet.
 	 * Currency format
 	 */
 	BD_CURRENCY_FORMAT: () => LocalizedString
-	/**
-	 * Pick the format that you prefer for decimal separator.
-	 */
-	BD_CURRENCY_FORMAT_DISCLAIMER: () => LocalizedString
 	/**
 	 * Comma
 	 */
@@ -6492,7 +6561,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_PRIVATE_KEY_WARMNING: () => LocalizedString
 	/**
-	 * VeWorld reset
+	 * Reset app
 	 */
 	BD_RESET: () => LocalizedString
 	/**
@@ -6508,7 +6577,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_RESET_APP_DISCLAIMER: () => LocalizedString
 	/**
-	 * Click to reset VeWorld and erase all your data stored on it
+	 * Resetting the app will remove all the accounts and return the app to the original state.
 	 */
 	BD_RESET_DISCLAIMER: () => LocalizedString
 	/**
@@ -7102,7 +7171,7 @@ Thanks for your patience!
 	 */
 	BTN_REPEAT_PASSWORD: () => LocalizedString
 	/**
-	 * Reset App
+	 * Reset app
 	 */
 	BTN_RESET_APP: () => LocalizedString
 	/**
@@ -7462,6 +7531,10 @@ This action is irreversible.
 	 * DApps
 	 */
 	COMMON_DAPPS: () => LocalizedString
+	/**
+	 * Invalid URL. It should either be HTTPS or localhost.
+	 */
+	COMMON_ERROR_URL_NOT_VALID: () => LocalizedString
 	/**
 	 * Hide
 	 */
@@ -8042,6 +8115,22 @@ This action is irreversible.
 	 * Reset settings
 	 */
 	DEVELOPER_SETTINGS_RESET_BUTTON: () => LocalizedString
+	/**
+	 * Configure the indexer URLs for each network. Support is partial
+	 */
+	DEVELOPER_SETTING_INDEXER_DESCRIPTION: () => LocalizedString
+	/**
+	 * Indexer
+	 */
+	DEVELOPER_SETTING_INDEXER_TITLE: () => LocalizedString
+	/**
+	 * Indexer URL updated
+	 */
+	DEVELOPER_SETTING_INDEXER_UPDATED: () => LocalizedString
+	/**
+	 * Notification URL
+	 */
+	DEVELOPER_SETTING_NOTIFICATION_URL: () => LocalizedString
 	/**
 	 * One or more of your accounts recovery phrase haven’t been backed up yet. Make sure to backup to never lose access to your crypto.
 	 */
@@ -10009,6 +10098,14 @@ Are you sure you want to continue?
 	 */
 	SETTINGS_LABEL_name_min_length: (arg: { min: unknown }) => LocalizedString
 	/**
+	 * App preferences
+	 */
+	SETTINGS_SECTION_APP_PREFERENCES: () => LocalizedString
+	/**
+	 * Currency preferences
+	 */
+	SETTINGS_SECTION_CURRENCY_PREFERENCES: () => LocalizedString
+	/**
 	 * Default delegation
 	 */
 	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: () => LocalizedString
@@ -10163,6 +10260,35 @@ Here's what it's all about:
 	 * Status
 	 */
 	STATUS: () => LocalizedString
+	/**
+	 * Earn
+	 */
+	STELLA_PAY_BOTTOM_SHEET_EARN: () => LocalizedString
+	/**
+	 * Complete Better actions and earn B3TR tokens.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_EARN_DESCRIPTION: () => LocalizedString
+	/**
+	 * Get your FREE card
+	 */
+	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD: () => LocalizedString
+	/**
+	 * Sign up and activate your VeBetter card for free (limited time offer).
+	 */
+	STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD_DESCRIPTION: () => LocalizedString
+	/**
+	 * Spend
+	 */
+	STELLA_PAY_BOTTOM_SHEET_SPEND: () => LocalizedString
+	/**
+	 * Use your card to spend your rewards online and in-store.
+Available for Google and Apple Pay.
+	 */
+	STELLA_PAY_BOTTOM_SHEET_SPEND_DESCRIPTION: () => LocalizedString
+	/**
+	 * Get your VeBetter card on
+	 */
+	STELLA_PAY_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
 	 * Available to claim
 	 */
@@ -10941,26 +11067,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Notification URL
-	 */
-	DEVELOPER_SETTING_NOTIFICATION_URL: () => LocalizedString
-	/**
-	 * Indexer
-	 */
-	DEVELOPER_SETTING_INDEXER_TITLE: () => LocalizedString
-	/**
-	 * Configure the indexer URLs for each network. Support is partial
-	 */
-	DEVELOPER_SETTING_INDEXER_DESCRIPTION: () => LocalizedString
-	/**
-	 * Indexer URL updated
-	 */
-	DEVELOPER_SETTING_INDEXER_UPDATED: () => LocalizedString
-	/**
-	 * Invalid URL. It should either be HTTPS or localhost.
-	 */
-	COMMON_ERROR_URL_NOT_VALID: () => LocalizedString
 }
 
 export type Formatters = {
