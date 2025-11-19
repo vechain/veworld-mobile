@@ -807,7 +807,7 @@
   "MESSAGE_LEDGER_REJECTED_SB": "Odrzuciłeś wiadomość na swoim Ledgerze, proszę potwierdź na swoim urządzeniu, gdy będzie to wymagane",
   "MESSAGE_LEDGER_SIGN_DATA": "Podpisujemy Twoją wiadomość",
   "MESSAGE_LEDGER_SIGN_DATA_SB": "Podpisujemy Twoją wiadomość z użyciem Ledger, proszę potwierdź podpis na swoim urządzeniu, gdy będzie to wymagane",
-  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Ta aplikacja działa w sieci, która nie jest obecnie dodana do Twojego portfela. Aby kontynuować, dodaj URL węzła sieci.",
+  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Ta aplikacja działa w sieci, która nie jest obecnie dodana do twojego portfela. Aby kontynuować, proszę dodać URL węzła sieci.",
   "MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE": "Sieć nie wykryta",
   "NETWORK_ADD_CUSTOM_NODE": "Dodaj niestandardowy węzeł",
   "NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK": "Dodaj sieć",

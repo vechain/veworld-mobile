@@ -807,7 +807,7 @@
   "MESSAGE_LEDGER_REJECTED_SB": "Mesajı Ledger cihazınızda reddettiniz, lütfen gerekirse cihazınızdan onaylayın",
   "MESSAGE_LEDGER_SIGN_DATA": "Mesajınızı imzalıyoruz",
   "MESSAGE_LEDGER_SIGN_DATA_SB": "Mesajınızı Ledger cihazınızla imzalıyoruz, lütfen gerekirse cihazınızdan imzalamayı onaylayın",
-  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Bu uygulama, cüzdanınıza henüz eklenmemiş bir ağda çalışıyor. Devam etmek için lütfen ağın düğüm URL'sini ekleyin.",
+  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "Bu uygulama, şu anda cüzdanınıza eklenmemiş bir ağda çalışmaktadır. Devam etmek için lütfen ağların düğüm URL'sini ekleyin.",
   "MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE": "Ağ tespit edilmedi",
   "NETWORK_ADD_CUSTOM_NODE": "Özel node ekle",
   "NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK": "Ağ ekle",

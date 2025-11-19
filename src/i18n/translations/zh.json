@@ -807,7 +807,7 @@
   "MESSAGE_LEDGER_REJECTED_SB": "您已在 Ledger 上拒绝该信息，请在设备上按照要求确认",
   "MESSAGE_LEDGER_SIGN_DATA": "我们正在签署您的信息",
   "MESSAGE_LEDGER_SIGN_DATA_SB": "我们正在使用 Ledger 签署您的信息，请在设备上按照要求确认签名",
-  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "此应用程序正在运行的网络尚未添加到您的钱包。要继续，请添加网络节点URL。",
+  "MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION": "此应用程序正在运行一个当前未添加到您的钱包的网络。要继续，请添加网络节点 URL。",
   "MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE": "未检测到网络",
   "NETWORK_ADD_CUSTOM_NODE": "添加自定义节点",
   "NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK": "添加网络",
