@@ -11,6 +11,7 @@ import { Routes } from "~Navigation"
 import { useNFTCollections } from "~Screens/Flows/App/Collectibles/Hooks"
 import { selectAllFavoriteNfts, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
+import { CollectibleBuyCard } from "./CollectibleBuyCard"
 import { CollectibleCard } from "./CollectibleCard"
 import { CollectiblesEmptyCard } from "./CollectiblesEmptyCard"
 
@@ -78,24 +79,20 @@ export const CollectiblesList = () => {
     const { ref, onOpen } = useBottomSheetModal()
 
     const nfts = useMemo(() => {
-        return (
-            favoriteNfts
-                .sort((a, b) => b.createdAt - a.createdAt)
-                .map(({ createdAt: _createdAt, ...rest }) => rest)
-                .concat(allNfts?.data?.data.map(nft => ({ address: nft.contractAddress, tokenId: nft.tokenId })) ?? [])
-                //Deduplicate items
-                .reduce((acc, curr) => {
-                    if (
-                        acc.find(
-                            v => AddressUtils.compareAddresses(curr.address, v.address) && curr.tokenId === v.tokenId,
-                        )
-                    )
-                        return acc
-                    acc.push(curr)
+        const result: ({ address: string; tokenId: string } | { placeholder: true })[] = favoriteNfts
+            .sort((a, b) => b.createdAt - a.createdAt)
+            .map(({ createdAt: _createdAt, ...rest }) => rest)
+            .concat(allNfts?.data?.data.map(nft => ({ address: nft.contractAddress, tokenId: nft.tokenId })) ?? [])
+            //Deduplicate items
+            .reduce((acc, curr) => {
+                if (acc.find(v => AddressUtils.compareAddresses(curr.address, v.address) && curr.tokenId === v.tokenId))
                     return acc
-                }, [] as { address: string; tokenId: string }[])
-                .slice(0, 6)
-        )
+                acc.push(curr)
+                return acc
+            }, [] as { address: string; tokenId: string }[])
+            .slice(0, 6)
+        if (result.length < 6) return result.concat({ placeholder: true })
+        return result
     }, [allNfts?.data, favoriteNfts])
 
     const addresses = useMemo(
@@ -111,7 +108,8 @@ export const CollectiblesList = () => {
     )
 
     const renderItem = useCallback(
-        ({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
+        ({ item }: ListRenderItemInfo<{ address: string; tokenId: string } | { placeholder: true }>) => {
+            if ("placeholder" in item) return <CollectibleBuyCard />
             return <CollectibleCard address={item.address} tokenId={item.tokenId} onPress={onPress} />
         },
         [onPress],
@@ -127,7 +125,7 @@ export const CollectiblesList = () => {
                 ItemSeparatorComponent={ItemSeparatorComponent}
                 ListEmptyComponent={CollectiblesEmptyCard}
                 horizontal={false}
-                keyExtractor={v => `${v.address}_${v.tokenId}`}
+                keyExtractor={v => ("placeholder" in v ? v.placeholder.toString() : `${v.address}_${v.tokenId}`)}
                 columnWrapperStyle={styles.listColumn}
                 ListFooterComponent={
                     isLoading || nfts.length === 0 ? null : <ListFooterComponent addresses={addresses} />

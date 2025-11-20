@@ -1761,6 +1761,10 @@ type RootTranslation = {
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: string
 	/**
+	 * B​u​y​ ​n​e​w​ ​c​o​l​l​e​c​t​i​b​l​e​s
+	 */
+	BUY_NEW_COLLECTIBLES: string
+	/**
 	 * C​a​c​h​e​ ​c​l​e​a​r​e​d
 	 */
 	CACHE_CLEARED: string
@@ -7310,6 +7314,10 @@ Thanks for your patience!
 	 * Write recovery password
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: () => LocalizedString
+	/**
+	 * Buy new collectibles
+	 */
+	BUY_NEW_COLLECTIBLES: () => LocalizedString
 	/**
 	 * Cache cleared
 	 */
