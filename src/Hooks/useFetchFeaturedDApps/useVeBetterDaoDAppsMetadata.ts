@@ -7,6 +7,5 @@ export const useVeBetterDaoDAppsMetadata = (url: string, enabled: boolean = true
         queryFn: () => getVeBetterDaoDAppMetadata(url),
         enabled,
         staleTime: 1000 * 60 * 60,
-        gcTime: 1000 * 60 * 60,
     })
 }
