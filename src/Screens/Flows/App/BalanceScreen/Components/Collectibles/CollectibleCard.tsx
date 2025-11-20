@@ -78,52 +78,54 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
     }, [transferDetails])
 
     const topStyle = useMemo(() => {
-        if (isNew && !isBlacklisted) return styles.favoriteContainerTwo
-        if (isNew && isBlacklisted) return styles.favoriteContainerOne
-        if (!isNew && !isBlacklisted) return styles.favoriteContainerOne
+        if (isNew && !isBlacklisted) return styles.favoriteContainerBetween
+        if (isNew && isBlacklisted) return styles.favoriteContainerLeft
+        if (!isNew && !isBlacklisted) return styles.favoriteContainerRight
         return undefined
-    }, [isBlacklisted, isNew, styles.favoriteContainerOne, styles.favoriteContainerTwo])
+    }, [
+        isBlacklisted,
+        isNew,
+        styles.favoriteContainerBetween,
+        styles.favoriteContainerLeft,
+        styles.favoriteContainerRight,
+    ])
 
     return (
         <Pressable testID={`VBD_COLLECTIBLE_CARD_${address}_${tokenId}`} style={styles.root} onPress={handlePress}>
-            {topStyle && (
-                <>
-                    <BaseView style={styles.favoriteRootContainer}>
-                        <LinearGradient
-                            colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
-                            useAngle
-                            locations={[0, 0.5, 1]}
-                            style={[styles.favoriteContainer, topStyle]}
-                            angle={180}>
-                            {isNew && (
-                                <BaseText
-                                    bg="rgba(48, 38, 95, 0.90)"
-                                    color={COLORS.LIME_GREEN}
-                                    px={6}
-                                    typographyFont="smallCaptionSemiBold"
-                                    borderRadius={2}
-                                    lineHeight={14}
-                                    textTransform="uppercase">
-                                    {LL.DISCOVER_FOR_YOU_NEW()}
-                                </BaseText>
-                            )}
-                            {!isBlacklisted && (
-                                <Pressable
-                                    testID={`VBD_COLLECTIBLE_CARD_FAVORITE_${address}_${tokenId}`}
-                                    style={styles.favoriteIcon}
-                                    onPress={handleToggleFavorite}>
-                                    <AnimatedBaseIcon
-                                        name={isFavorite ? "icon-star-on" : "icon-star"}
-                                        color={COLORS.WHITE}
-                                        size={16}
-                                        style={animatedStyles}
-                                    />
-                                </Pressable>
-                            )}
-                        </LinearGradient>
-                    </BaseView>
-                </>
-            )}
+            <BaseView style={styles.favoriteRootContainer}>
+                <LinearGradient
+                    colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
+                    useAngle
+                    locations={[0, 0.5, 1]}
+                    style={[styles.favoriteContainer, topStyle]}
+                    angle={180}>
+                    {isNew && (
+                        <BaseText
+                            bg="rgba(48, 38, 95, 0.90)"
+                            color={COLORS.LIME_GREEN}
+                            px={6}
+                            typographyFont="smallCaptionSemiBold"
+                            borderRadius={2}
+                            lineHeight={14}
+                            textTransform="uppercase">
+                            {LL.DISCOVER_FOR_YOU_NEW()}
+                        </BaseText>
+                    )}
+                    {!isBlacklisted && (
+                        <Pressable
+                            testID={`VBD_COLLECTIBLE_CARD_FAVORITE_${address}_${tokenId}`}
+                            style={styles.favoriteIcon}
+                            onPress={handleToggleFavorite}>
+                            <AnimatedBaseIcon
+                                name={isFavorite ? "icon-star-on" : "icon-star"}
+                                color={COLORS.WHITE}
+                                size={16}
+                                style={animatedStyles}
+                            />
+                        </Pressable>
+                    )}
+                </LinearGradient>
+            </BaseView>
 
             {RenderMedia}
             {isBlacklisted && <BlurView style={[StyleSheet.absoluteFill]} overlayColor="transparent" blurAmount={20} />}
@@ -176,11 +178,15 @@ const baseStyles = () =>
             padding: 8,
             flexDirection: "row",
             alignItems: "center",
+            minHeight: 32,
         },
-        favoriteContainerOne: {
+        favoriteContainerRight: {
             justifyContent: "flex-end",
         },
-        favoriteContainerTwo: {
+        favoriteContainerLeft: {
+            justifyContent: "flex-start",
+        },
+        favoriteContainerBetween: {
             justifyContent: "space-between",
         },
         favoriteIcon: {
