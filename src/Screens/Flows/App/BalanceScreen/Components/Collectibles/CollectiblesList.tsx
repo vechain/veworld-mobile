@@ -91,7 +91,7 @@ export const CollectiblesList = () => {
                 return acc
             }, [] as { address: string; tokenId: string }[])
             .slice(0, 6)
-        if (result.length < 6 && !isLoadingNfts) return result.concat({ placeholder: true })
+        if (result.length < 6 && !isLoadingNfts && result.length > 0) return result.concat({ placeholder: true })
         return result
     }, [allNfts?.data, favoriteNfts, isLoadingNfts])
 
