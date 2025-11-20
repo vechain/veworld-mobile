@@ -14,6 +14,7 @@ import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
 import { useCollectibleTransferDetails } from "~Hooks/useCollectibleTransferDetails"
 import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import { useNftBookmarking } from "~Hooks/useNftBookmarking"
+import { useI18nContext } from "~i18n"
 import { NFTMediaType } from "~Model"
 import HapticsService from "~Services/HapticsService"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
@@ -27,6 +28,7 @@ type Props = {
 const AnimatedBaseIcon = Animated.createAnimatedComponent(wrapFunctionComponent(BaseIcon))
 
 export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
+    const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
     const { isFavorite, toggleFavorite } = useNftBookmarking(address, tokenId)
     const { animatedStyles, favoriteIconAnimation } = useFavoriteAnimation()
@@ -100,8 +102,9 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
                                     px={6}
                                     typographyFont="smallCaptionSemiBold"
                                     borderRadius={2}
-                                    lineHeight={14}>
-                                    NEW
+                                    lineHeight={14}
+                                    textTransform="uppercase">
+                                    {LL.DISCOVER_FOR_YOU_NEW()}
                                 </BaseText>
                             )}
                             {!isBlacklisted && (
