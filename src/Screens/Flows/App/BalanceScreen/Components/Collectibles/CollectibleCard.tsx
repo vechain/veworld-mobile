@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
+import moment from "moment"
 import React, { useCallback, useMemo } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
@@ -10,6 +11,7 @@ import { COLORS } from "~Constants"
 import { useNFTMedia, useThemedStyles } from "~Hooks"
 import { useBlacklistedCollection } from "~Hooks/useBlacklistedCollection"
 import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
+import { useCollectibleTransferDetails } from "~Hooks/useCollectibleTransferDetails"
 import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import { useNftBookmarking } from "~Hooks/useNftBookmarking"
 import { NFTMediaType } from "~Model"
@@ -31,6 +33,7 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
     const details = useCollectibleDetails({ address, tokenId })
     const { isBlacklisted } = useBlacklistedCollection(address)
     const { fetchMedia } = useNFTMedia()
+    const { data: transferDetails } = useCollectibleTransferDetails({ address, tokenId })
 
     const { data: media } = useQuery({
         queryKey: ["COLLECTIBLES", "MEDIA", details.image],
@@ -67,29 +70,56 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
         )
     }, [media?.mediaType, media?.image, styles.image])
 
+    const isNew = useMemo(() => {
+        if (!transferDetails || transferDetails.error) return false
+        return moment().diff((transferDetails.data?.data[0].blockTimestamp ?? 0) * 1000, "days") <= 5
+    }, [transferDetails])
+
+    const topStyle = useMemo(() => {
+        if (isNew && !isBlacklisted) return styles.favoriteContainerTwo
+        if (isNew && isBlacklisted) return styles.favoriteContainerOne
+        if (!isNew && !isBlacklisted) return styles.favoriteContainerOne
+        return undefined
+    }, [isBlacklisted, isNew, styles.favoriteContainerOne, styles.favoriteContainerTwo])
+
     return (
         <Pressable testID={`VBD_COLLECTIBLE_CARD_${address}_${tokenId}`} style={styles.root} onPress={handlePress}>
-            {!isBlacklisted && (
-                <BaseView style={styles.favoriteRootContainer}>
-                    <LinearGradient
-                        colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
-                        useAngle
-                        locations={[0, 0.5, 1]}
-                        style={styles.favoriteContainer}
-                        angle={180}>
-                        <Pressable
-                            testID={`VBD_COLLECTIBLE_CARD_FAVORITE_${address}_${tokenId}`}
-                            style={styles.favoriteIcon}
-                            onPress={handleToggleFavorite}>
-                            <AnimatedBaseIcon
-                                name={isFavorite ? "icon-star-on" : "icon-star"}
-                                color={COLORS.WHITE}
-                                size={16}
-                                style={animatedStyles}
-                            />
-                        </Pressable>
-                    </LinearGradient>
-                </BaseView>
+            {topStyle && (
+                <>
+                    <BaseView style={styles.favoriteRootContainer}>
+                        <LinearGradient
+                            colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
+                            useAngle
+                            locations={[0, 0.5, 1]}
+                            style={[styles.favoriteContainer, topStyle]}
+                            angle={180}>
+                            {isNew && (
+                                <BaseText
+                                    bg="rgba(48, 38, 95, 0.90)"
+                                    color={COLORS.LIME_GREEN}
+                                    px={6}
+                                    typographyFont="smallCaptionSemiBold"
+                                    borderRadius={2}
+                                    lineHeight={14}>
+                                    NEW
+                                </BaseText>
+                            )}
+                            {!isBlacklisted && (
+                                <Pressable
+                                    testID={`VBD_COLLECTIBLE_CARD_FAVORITE_${address}_${tokenId}`}
+                                    style={styles.favoriteIcon}
+                                    onPress={handleToggleFavorite}>
+                                    <AnimatedBaseIcon
+                                        name={isFavorite ? "icon-star-on" : "icon-star"}
+                                        color={COLORS.WHITE}
+                                        size={16}
+                                        style={animatedStyles}
+                                    />
+                                </Pressable>
+                            )}
+                        </LinearGradient>
+                    </BaseView>
+                </>
             )}
 
             {RenderMedia}
@@ -142,8 +172,13 @@ const baseStyles = () =>
             width: "100%",
             padding: 8,
             flexDirection: "row",
-            justifyContent: "flex-end",
             alignItems: "center",
+        },
+        favoriteContainerOne: {
+            justifyContent: "flex-end",
+        },
+        favoriteContainerTwo: {
+            justifyContent: "space-between",
         },
         favoriteIcon: {
             marginRight: 4,
