@@ -360,6 +360,11 @@ export type Colors = {
         propertyName: string
         propertyValue: string
     }
+    settingsSection: {
+        background: string
+        title: string
+        optionTitle: string
+    }
 }
 
 export enum COLORS {
@@ -847,6 +852,11 @@ const light: Colors = {
         propertyName: COLORS.GREY_500,
         propertyValue: COLORS.PRIMARY_800,
     },
+    settingsSection: {
+        background: COLORS.WHITE,
+        title: COLORS.PURPLE,
+        optionTitle: COLORS.GREY_600,
+    },
 }
 
 const dark: Colors = {
@@ -1210,6 +1220,11 @@ const dark: Colors = {
         title: COLORS.WHITE,
         propertyName: COLORS.GREY_400,
         propertyValue: COLORS.GREY_200,
+    },
+    settingsSection: {
+        background: COLORS.PURPLE_DISABLED,
+        title: COLORS.WHITE,
+        optionTitle: COLORS.GREY_300,
     },
 }
 

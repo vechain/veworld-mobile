@@ -352,7 +352,7 @@ describe("ReceiptOutputRenderer", () => {
                         clauses={clauses}
                         output={{
                             clauseIndex: 0,
-                            name: "STARGATE_CLAIM_REWARDS_BASE(uint256,uint256,address)",
+                            name: "STARGATE_CLAIM_REWARDS_BASE_LEGACY(uint256,uint256,address)",
                             params: {
                                 owner: "0x0",
                                 tokenId: 1n,
@@ -366,7 +366,7 @@ describe("ReceiptOutputRenderer", () => {
                 )
 
                 expect(
-                    screen.getByTestId("STARGATE_CLAIM_REWARDS_BASE(uint256,uint256,address)_VALUE"),
+                    screen.getByTestId("STARGATE_CLAIM_REWARDS_BASE_LEGACY(uint256,uint256,address)_VALUE"),
                 ).toHaveTextContent("+ 1.00 VTHO")
             })
             it("Delegate", () => {
@@ -376,7 +376,7 @@ describe("ReceiptOutputRenderer", () => {
                         clauses={clauses}
                         output={{
                             clauseIndex: 0,
-                            name: "STARGATE_CLAIM_REWARDS_DELEGATE(uint256,uint256,address)",
+                            name: "STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY(uint256,uint256,address)",
                             params: {
                                 owner: "0x0",
                                 tokenId: 1n,
@@ -390,7 +390,33 @@ describe("ReceiptOutputRenderer", () => {
                 )
 
                 expect(
-                    screen.getByTestId("STARGATE_CLAIM_REWARDS_DELEGATE(uint256,uint256,address)_VALUE"),
+                    screen.getByTestId("STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY(uint256,uint256,address)_VALUE"),
+                ).toHaveTextContent("+ 1.00 VTHO")
+            })
+            it("Hayabusa", () => {
+                renderComponentWithProps(
+                    <ReceiptOutputRenderer
+                        expanded
+                        clauses={clauses}
+                        output={{
+                            clauseIndex: 0,
+                            name: "STARGATE_CLAIM_REWARDS(uint256,uint256,address,uint256,uint32)",
+                            params: {
+                                owner: "0x0",
+                                tokenId: 1n,
+                                value: ethers.utils.parseEther("1").toBigInt(),
+                                delegationId: 1n,
+                                periodClaimed: 1,
+                            },
+                        }}
+                    />,
+                    {
+                        wrapper: PreloadedWrapper,
+                    },
+                )
+
+                expect(
+                    screen.getByTestId("STARGATE_CLAIM_REWARDS(uint256,uint256,address,uint256,uint32)_VALUE"),
                 ).toHaveTextContent("+ 1.00 VTHO")
             })
         })
@@ -419,33 +445,6 @@ describe("ReceiptOutputRenderer", () => {
             expect(screen.getByTestId("STARGATE_STAKE(uint256,uint256,uint8,address,bool)_VALUE")).toHaveTextContent(
                 "- 1.00 VET",
             )
-        })
-        it("Stake delegate", () => {
-            renderComponentWithProps(
-                <ReceiptOutputRenderer
-                    expanded
-                    clauses={clauses}
-                    output={{
-                        clauseIndex: 0,
-                        name: "STARGATE_STAKE_DELEGATE(uint256,uint256,uint8,address,bool,bool)",
-                        params: {
-                            levelId: 1,
-                            migrated: false,
-                            owner: "0x0",
-                            tokenId: 1n,
-                            value: ethers.utils.parseEther("1").toBigInt(),
-                            autorenew: true,
-                        },
-                    }}
-                />,
-                {
-                    wrapper: PreloadedWrapper,
-                },
-            )
-
-            expect(
-                screen.getByTestId("STARGATE_STAKE_DELEGATE(uint256,uint256,uint8,address,bool,bool)_VALUE"),
-            ).toHaveTextContent("- 1.00 VET")
         })
         it("Unstake", () => {
             renderComponentWithProps(
@@ -479,7 +478,7 @@ describe("ReceiptOutputRenderer", () => {
                     clauses={clauses}
                     output={{
                         clauseIndex: 0,
-                        name: "STARGATE_DELEGATE(uint256,address,bool)",
+                        name: "STARGATE_DELEGATE_LEGACY(uint256,address,bool)",
                         params: {
                             owner: "0x0",
                             tokenId: 1n,
@@ -492,7 +491,9 @@ describe("ReceiptOutputRenderer", () => {
                 },
             )
 
-            expect(screen.getByTestId("STARGATE_DELEGATE(uint256,address,bool)_TOKEN_ID")).toHaveTextContent("#1")
+            expect(screen.getByTestId("STARGATE_DELEGATE_LEGACY(uint256,address,bool)_TOKEN_ID")).toHaveTextContent(
+                "#1",
+            )
         })
         it("Undelegate", () => {
             renderComponentWithProps(
@@ -513,6 +514,181 @@ describe("ReceiptOutputRenderer", () => {
             )
 
             expect(screen.getByTestId("STARGATE_UNDELEGATE(uint256)_TOKEN_ID")).toHaveTextContent("#1")
+        })
+        it("Undelegate (Legacy)", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_UNDELEGATE_LEGACY(uint256)",
+                        params: {
+                            tokenId: 1n,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(screen.getByTestId("STARGATE_UNDELEGATE_LEGACY(uint256)_TOKEN_ID")).toHaveTextContent("#1")
+        })
+        it("Boost", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_BOOST(uint256,uint256,address,uint256)",
+                        params: {
+                            boostedBlocks: 1n,
+                            from: ethers.Wallet.createRandom().address,
+                            tokenId: 1n,
+                            value: ethers.utils.parseEther("1").toBigInt(),
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(screen.getByTestId("STARGATE_BOOST(uint256,uint256,address,uint256)_VALUE")).toHaveTextContent(
+                "- 1.00 VTHO",
+            )
+        })
+        it("Delegate request", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_DELEGATE_REQUEST(uint256,address,uint256,address,uint256,uint256,uint8)",
+                        params: {
+                            delegationId: 1n,
+                            levelId: 1,
+                            owner: ethers.Wallet.createRandom().address,
+                            tokenId: 1n,
+                            validator: ethers.Wallet.createRandom().address,
+                            value: 1n,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(
+                screen.getByTestId(
+                    "STARGATE_DELEGATE_REQUEST(uint256,address,uint256,address,uint256,uint256,uint8)_TOKEN_ID",
+                ),
+            ).toHaveTextContent("#1")
+        })
+        it("Delegate request cancelled", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_DELEGATE_REQUEST_CANCELLED(uint256,address,uint256,address,uint256,uint8)",
+                        params: {
+                            delegationId: 1n,
+                            levelId: 1,
+                            owner: ethers.Wallet.createRandom().address,
+                            tokenId: 1n,
+                            validator: ethers.Wallet.createRandom().address,
+                            value: ethers.utils.parseEther("1").toBigInt(),
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(
+                screen.getByTestId(
+                    "STARGATE_DELEGATE_REQUEST_CANCELLED(uint256,address,uint256,address,uint256,uint8)_VALUE",
+                ),
+            ).toHaveTextContent("+ 1.00 VET")
+        })
+        it("Delegation exit request", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_DELEGATION_EXIT_REQUEST(uint256,uint256,address)",
+                        params: {
+                            delegationId: 1n,
+                            owner: ethers.Wallet.createRandom().address,
+                            tokenId: 1n,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(
+                screen.getByTestId("STARGATE_DELEGATION_EXIT_REQUEST(uint256,uint256,address)_TOKEN_ID"),
+            ).toHaveTextContent("#1")
+        })
+        it("Manager added", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_MANAGER_ADDED(uint256,address,address)",
+                        params: {
+                            from: ethers.Wallet.createRandom().address,
+                            to: ethers.Wallet.createRandom().address,
+                            tokenId: 1n,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(screen.getByTestId("STARGATE_MANAGER_ADDED(uint256,address,address)_TOKEN_ID")).toHaveTextContent(
+                "#1",
+            )
+        })
+        it("Manager removed", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_MANAGER_REMOVED(uint256,address,address)",
+                        params: {
+                            from: ethers.Wallet.createRandom().address,
+                            to: ethers.Wallet.createRandom().address,
+                            tokenId: 1n,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(screen.getByTestId("STARGATE_MANAGER_REMOVED(uint256,address,address)_TOKEN_ID")).toHaveTextContent(
+                "#1",
+            )
         })
     })
     describe("Tokens", () => {
