@@ -82,7 +82,7 @@ export const CollectiblesList = () => {
         const result: ({ address: string; tokenId: string } | { placeholder: true })[] = favoriteNfts
             .sort((a, b) => b.createdAt - a.createdAt)
             .map(({ createdAt: _createdAt, ...rest }) => rest)
-            .concat(allNfts?.data?.data.map(nft => ({ address: nft.contractAddress, tokenId: nft.tokenId })) ?? [])
+            .concat(allNfts?.data.map(nft => ({ address: nft.contractAddress, tokenId: nft.tokenId })) ?? [])
             //Deduplicate items
             .reduce((acc, curr) => {
                 if (acc.find(v => AddressUtils.compareAddresses(curr.address, v.address) && curr.tokenId === v.tokenId))
@@ -93,10 +93,10 @@ export const CollectiblesList = () => {
             .slice(0, 6)
         if (result.length < 6 && !isLoadingNfts) return result.concat({ placeholder: true })
         return result
-    }, [allNfts?.data?.data, favoriteNfts, isLoadingNfts])
+    }, [allNfts?.data, favoriteNfts, isLoadingNfts])
 
     const addresses = useMemo(
-        () => paginatedCollections?.pages.flatMap(page => page.data?.data ?? []) ?? [],
+        () => paginatedCollections?.pages.flatMap(page => page.data ?? []) ?? [],
         [paginatedCollections],
     )
 

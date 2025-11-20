@@ -11,16 +11,18 @@ export const useHomeCollectibles = () => {
     return useQuery({
         queryKey: ["COLLECTIBLES", "NFTS", network.genesis.id, account.address, 6, 0],
         queryFn: () =>
-            indexerClient.GET("/api/v1/nfts", {
-                params: {
-                    query: {
-                        address: account.address,
-                        direction: "DESC",
-                        page: 0,
-                        size: 6,
+            indexerClient
+                .GET("/api/v1/nfts", {
+                    params: {
+                        query: {
+                            address: account.address,
+                            direction: "DESC",
+                            page: 0,
+                            size: 6,
+                        },
                     },
-                },
-            }),
+                })
+                .then(res => res.data!),
         staleTime: 5 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
         enabled: favoriteNfts.length < 6,

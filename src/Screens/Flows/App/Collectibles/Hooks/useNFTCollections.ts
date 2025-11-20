@@ -18,17 +18,19 @@ export const useNFTCollections = () => {
     return useInfiniteQuery({
         queryKey: getNFTCollectionsQueryKey(network.genesis.id, selectedAccount.address),
         queryFn: ({ pageParam = 0 }) =>
-            indexerClient.GET("/api/v1/nfts/contracts", {
-                params: {
-                    query: {
-                        owner: selectedAccount.address,
-                        direction: "DESC",
-                        page: pageParam,
-                        size: NFT_PAGE_SIZE,
+            indexerClient
+                .GET("/api/v1/nfts/contracts", {
+                    params: {
+                        query: {
+                            owner: selectedAccount.address,
+                            direction: "DESC",
+                            page: pageParam,
+                            size: NFT_PAGE_SIZE,
+                        },
                     },
-                },
-            }),
-        getNextPageParam: (lastPage, allPages) => (lastPage?.data?.pagination.hasNext ? allPages.length : undefined),
+                })
+                .then(res => res.data!),
+        getNextPageParam: (lastPage, allPages) => (lastPage.pagination.hasNext ? allPages.length : undefined),
         initialPageParam: 0,
     })
 }
