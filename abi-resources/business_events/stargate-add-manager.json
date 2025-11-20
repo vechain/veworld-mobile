@@ -1,0 +1,72 @@
+{
+  "name": "STARGATE_MANAGER_ADDED",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "TokenManagerAdded(indexed uint256,indexed address)",
+      "alias": "manager",
+      "conditions": [
+        {
+          "firstOperand": "tokenId",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "manager",
+          "isFirstStatic": false,
+          "secondOperand": "0x0000000000000000000000000000000000000000",
+          "isSecondStatic": true,
+          "operator": "NE"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${STARGATE_NFT_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    }
+  ],
+  "rules": [],
+  "paramsDefinition": [
+    {
+      "name": "tokenId",
+      "eventName": "manager",
+      "businessEventName": "tokenId"
+    },
+    {
+      "name": "origin",
+      "eventName": "manager",
+      "businessEventName": "from"
+    },
+    {
+      "name": "manager",
+      "eventName": "manager",
+      "businessEventName": "to"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    },
+    {
+      "type": "address",
+      "name": "from",
+      "internalType": "address",
+      "indexed": false
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    }
+  ],
+  "type": "event"
+}

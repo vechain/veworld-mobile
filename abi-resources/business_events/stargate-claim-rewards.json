@@ -1,20 +1,13 @@
 {
-  "name": "STARGATE_CLAIM_REWARDS_DELEGATE",
+  "name": "STARGATE_CLAIM_REWARDS",
   "sameClause": true,
   "events": [
     {
-      "name": "DelegationRewardsClaimed(indexed uint256,uint256,indexed address,indexed address)",
-      "alias": "DelegationRewardsClaimed",
+      "name": "DelegationRewardsClaimed(indexed address,indexed uint256,indexed uint256,uint256,uint32,uint32)",
+      "alias": "claimRewards",
       "conditions": [
         {
-          "firstOperand": "recipient",
-          "isFirstStatic": false,
-          "secondOperand": "origin",
-          "isSecondStatic": false,
-          "operator": "EQ"
-        },
-        {
-          "firstOperand": "rewards",
+          "firstOperand": "amount",
           "isFirstStatic": false,
           "secondOperand": 0,
           "isSecondStatic": true,
@@ -23,7 +16,7 @@
         {
           "firstOperand": "address",
           "isFirstStatic": false,
-          "secondOperand": "${STARGATE_DELEGATION_CONTRACT}",
+          "secondOperand": "${STARGATE_CONTRACT}",
           "isSecondStatic": true,
           "operator": "EQ"
         }
@@ -31,12 +24,12 @@
     },
     {
       "name": "Transfer(indexed address,indexed address,uint256)",
-      "alias": "vthoTransferDelegation",
+      "alias": "vthoTransfer",
       "conditions": [
         {
           "firstOperand": "from",
           "isFirstStatic": false,
-          "secondOperand": "${STARGATE_DELEGATION_CONTRACT}",
+          "secondOperand": "${STARGATE_CONTRACT}",
           "isSecondStatic": true,
           "operator": "EQ"
         },
@@ -57,30 +50,32 @@
       ]
     }
   ],
-  "rules": [
-    {
-      "firstEventName": "DelegationRewardsClaimed",
-      "firstEventProperty": "rewards",
-      "secondEventName": "vthoTransferDelegation",
-      "secondEventProperty": "value",
-      "operator": "EQ"
-    }
-  ],
+  "rules": [],
   "paramsDefinition": [
     {
       "name": "tokenId",
-      "eventName": "DelegationRewardsClaimed",
+      "eventName": "claimRewards",
       "businessEventName": "tokenId"
     },
     {
-      "name": "rewards",
-      "eventName": "DelegationRewardsClaimed",
+      "name": "amount",
+      "eventName": "claimRewards",
       "businessEventName": "value"
     },
     {
-      "name": "recipient",
-      "eventName": "DelegationRewardsClaimed",
+      "name": "receiver",
+      "eventName": "claimRewards",
       "businessEventName": "owner"
+    },
+    {
+      "name": "delegationId",
+      "eventName": "claimRewards",
+      "businessEventName": "delegationId"
+    },
+    {
+      "name": "lastClaimedPeriod",
+      "eventName": "claimRewards",
+      "businessEventName": "periodClaimed"
     }
   ],
   "inputs": [
@@ -101,6 +96,18 @@
       "internalType": "address",
       "name": "owner",
       "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "delegationId",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint32",
+      "name": "periodClaimed",
+      "type": "uint32"
     }
   ],
   "type": "event"

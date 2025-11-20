@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
@@ -13,9 +13,6 @@ export const ResetAppBox = () => {
     const nav = useNavigation()
 
     const onReset = useCallback(() => nav.navigate(Routes.RESET_APP), [nav])
-    const textColor = useMemo(() => {
-        return theme.isDark ? COLORS.WHITE : COLORS.PURPLE
-    }, [theme])
 
     return (
         <BaseView
@@ -24,15 +21,15 @@ export const ResetAppBox = () => {
             flexDirection="column"
             alignItems="flex-start"
             borderRadius={8}
-            bg={theme.colors.card}>
+            bg={theme.colors.settingsSection.background}>
             <BaseView gap={8} flexDirection="column" alignItems="flex-start">
                 <BaseView flexDirection="row" alignItems="center" gap={8}>
-                    <BaseIcon name="icon-rotate-ccw" size={16} color={textColor} />
-                    <BaseText typographyFont="bodySemiBold" color={textColor}>
+                    <BaseIcon name="icon-rotate-ccw" size={16} color={theme.colors.settingsSection.title} />
+                    <BaseText typographyFont="bodySemiBold" color={theme.colors.settingsSection.title}>
                         {LL.BD_RESET()}
                     </BaseText>
                 </BaseView>
-                <BaseText typographyFont="caption" color={theme.colors.subtitle}>
+                <BaseText typographyFont="captionMedium" color={theme.colors.settingsSection.optionTitle}>
                     {LL.BD_RESET_DISCLAIMER()}
                 </BaseText>
             </BaseView>
