@@ -1,4 +1,5 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
+import { useReceiptProcessor } from "~Components/Providers/ReceiptProcessorProvider"
 import { ERROR_EVENTS } from "~Constants"
 import { useFungibleTokenInfo } from "~Hooks"
 import { useStargateConfig } from "~Hooks/useStargateConfig"
@@ -19,7 +20,7 @@ import {
     validateAndUpsertActivity,
 } from "~Storage/Redux"
 import { BloomUtils, error } from "~Utils"
-import { handleNodeDelegatedEvent } from "../StargateEventListener/Handlers/StargateEventHandlers"
+import { handleStargateEvents } from "../StargateEventListener/Handlers/StargateEventHandlers"
 import { handleNFTTransfers, handleTokenTransfers, handleVETTransfers } from "./Handlers"
 import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
 import { useInformUser, useStateReconciliation } from "./Hooks"
@@ -49,6 +50,9 @@ export const TransferEventListener: React.FC = () => {
     const dispatch = useAppDispatch()
 
     const stargateConfig = useStargateConfig(network)
+
+    const getReceiptProcessor = useReceiptProcessor()
+    const genericReceiptProcessor = useMemo(() => getReceiptProcessor(["Generic"]), [getReceiptProcessor])
 
     /**
      * For each pending activity, validates and upserts the updated activity if it's finalized on the blockchain
@@ -80,7 +84,7 @@ export const TransferEventListener: React.FC = () => {
                 dispatch(updateBeat(beat))
 
                 // ~ STARGATE EVENTS (process regardless of token transfers)
-                await handleNodeDelegatedEvent({
+                await handleStargateEvents({
                     beat,
                     network,
                     thor,
@@ -88,6 +92,7 @@ export const TransferEventListener: React.FC = () => {
                     managedAddresses: visibleAccounts.map(acc => acc.address),
                     selectedAccountAddress: selectedAccount.address,
                     stargateConfig,
+                    genericReceiptProcessor,
                 })
 
                 if (relevantAccounts.length === 0) return
@@ -154,6 +159,7 @@ export const TransferEventListener: React.FC = () => {
             invalidateStargateData,
             selectedAccount,
             stargateConfig,
+            genericReceiptProcessor,
             blackListedCollections,
             updateNFTs,
             forNFTs,
