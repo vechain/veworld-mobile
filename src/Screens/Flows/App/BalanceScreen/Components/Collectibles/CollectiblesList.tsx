@@ -82,7 +82,7 @@ export const CollectiblesList = () => {
             favoriteNfts
                 .sort((a, b) => b.createdAt - a.createdAt)
                 .map(({ createdAt: _createdAt, ...rest }) => rest)
-                .concat(allNfts?.data.map(nft => ({ address: nft.contractAddress, tokenId: nft.tokenId })) ?? [])
+                .concat(allNfts?.data?.data.map(nft => ({ address: nft.contractAddress, tokenId: nft.tokenId })) ?? [])
                 //Deduplicate items
                 .reduce((acc, curr) => {
                     if (
@@ -94,12 +94,12 @@ export const CollectiblesList = () => {
                     acc.push(curr)
                     return acc
                 }, [] as { address: string; tokenId: string }[])
-                .slice(0, 4)
+                .slice(0, 6)
         )
     }, [allNfts?.data, favoriteNfts])
 
     const addresses = useMemo(
-        () => paginatedCollections?.pages.flatMap(page => page.collections) ?? [],
+        () => paginatedCollections?.pages.flatMap(page => page.data?.data ?? []) ?? [],
         [paginatedCollections],
     )
 

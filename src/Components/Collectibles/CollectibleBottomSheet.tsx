@@ -46,7 +46,7 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
     })
 
     const isNew = useMemo(() => {
-        if (!transferDetails || transferDetails.error) return false
+        if (!transferDetails) return false
         return moment().diff((transferDetails.data?.data[0].blockTimestamp ?? 0) * 1000, "days") <= 5
     }, [transferDetails])
 
