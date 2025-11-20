@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseSpacer } from "~Components"
 import { CollectibleBottomSheet } from "~Components/Collectibles/CollectibleBottomSheet"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, COLORS } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useHomeCollectibles } from "~Hooks/useHomeCollectibles"
 import { useI18nContext } from "~i18n"
@@ -37,16 +37,25 @@ const ListFooterComponent = ({ addresses }: { addresses: string[] }) => {
 
     return (
         <BaseButton
-            variant="ghost"
-            px={0}
-            py={4}
+            variant="solid"
+            px={12}
+            py={8}
             action={onNavigate}
-            typographyFont="bodyMedium"
+            typographyFont="captionSemiBold"
             style={styles.btn}
-            textColor={theme.colors.text}
-            rightIcon={<BaseIcon name="icon-arrow-right" size={14} style={styles.icon} color={theme.colors.text} />}
+            textColor={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+            bgColor={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200}
+            selfAlign="flex-start"
+            rightIcon={
+                <BaseIcon
+                    name="icon-arrow-right"
+                    size={16}
+                    style={styles.icon}
+                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                />
+            }
             testID="COLLECTIBLES_LIST_SEE_ALL">
-            {LL.ACTIVITY_SEE_ALL()}
+            {LL.COLLECTIONS_SEE_ALL()}
         </BaseButton>
     )
 }
@@ -54,7 +63,7 @@ const ListFooterComponent = ({ addresses }: { addresses: string[] }) => {
 const footerStyles = () =>
     StyleSheet.create({
         icon: {
-            marginLeft: 2,
+            marginLeft: 8,
         },
         btn: {
             marginTop: 16,
