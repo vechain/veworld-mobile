@@ -12,7 +12,7 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import { useBottomSheetModal } from "~Hooks"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
-import { selectCurrentScreen, useAppSelector } from "~Storage/Redux"
+import { selectCurrentScreen, setHideStellaPayBottomSheet, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { CheckBoxWithText } from "../CheckBoxWithText"
 
 type Props = {}
@@ -25,7 +25,7 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     const { navigateWithTab } = useBrowserTab()
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
     const currentRoute = useAppSelector(selectCurrentScreen)
-
+    const dispatch = useAppDispatch()
     const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModalMethods> })
 
     const returnScreen = useMemo(() => {
@@ -67,14 +67,26 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
             title: "Stella Pay",
             navigationFn: url => nav.navigate(Routes.BROWSER, { url, returnScreen: returnScreen }),
         })
+
+        if (isChecked) {
+            dispatch(setHideStellaPayBottomSheet(true))
+        }
+
         onClose()
-    }, [navigateWithTab, onClose, nav, returnScreen])
+    }, [navigateWithTab, onClose, nav, returnScreen, isChecked, dispatch])
+
+    const onDismiss = useCallback(() => {
+        if (isChecked) {
+            dispatch(setHideStellaPayBottomSheet(true))
+        }
+    }, [isChecked, dispatch])
 
     return (
         <BaseBottomSheet
             ref={ref}
             snapPoints={["92%"]}
             backgroundStyle={styles.bottomSheet}
+            onDismiss={onDismiss}
             handleColor={COLORS.DARK_PURPLE_DISABLED}>
             <BaseView flex={1} flexDirection="column" gap={24} alignItems="center" justifyContent="space-between">
                 <BaseView flex={1} flexDirection="column" gap={24} alignItems="center">
