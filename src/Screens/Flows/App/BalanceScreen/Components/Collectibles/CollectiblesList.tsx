@@ -74,7 +74,7 @@ const footerStyles = () =>
 export const CollectiblesList = () => {
     const { styles } = useThemedStyles(baseStyles)
     const favoriteNfts = useAppSelector(selectAllFavoriteNfts)
-    const { data: allNfts } = useHomeCollectibles()
+    const { data: allNfts, isLoading: isLoadingNfts } = useHomeCollectibles()
     const { data: paginatedCollections, isLoading } = useNFTCollections()
     const { ref, onOpen } = useBottomSheetModal()
 
@@ -91,9 +91,9 @@ export const CollectiblesList = () => {
                 return acc
             }, [] as { address: string; tokenId: string }[])
             .slice(0, 6)
-        if (result.length < 6) return result.concat({ placeholder: true })
+        if (result.length < 6 && !isLoadingNfts) return result.concat({ placeholder: true })
         return result
-    }, [allNfts?.data, favoriteNfts])
+    }, [allNfts?.data?.data, favoriteNfts, isLoadingNfts])
 
     const addresses = useMemo(
         () => paginatedCollections?.pages.flatMap(page => page.data?.data ?? []) ?? [],
