@@ -1,7 +1,6 @@
-import React, { PropsWithChildren, useMemo } from "react"
+import React, { PropsWithChildren } from "react"
 import { ViewProps } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components"
-import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks/useTheme"
 import { IconKey } from "~Model"
 
@@ -13,15 +12,12 @@ type Props = {
 
 const SettingsSection = ({ icon, title, children }: Props) => {
     const theme = useTheme()
-    const textColor = useMemo(() => {
-        return theme.isDark ? COLORS.WHITE : COLORS.PURPLE
-    }, [theme])
 
     return (
-        <BaseView flexDirection="column" gap={24}>
+        <BaseView flexDirection="column" gap={24} p={24} bg={theme.colors.settingsSection.background} borderRadius={12}>
             <BaseView flexDirection="row" alignItems="center" justifyContent="flex-start" gap={12}>
-                <BaseIcon name={icon} size={16} color={textColor} />
-                <BaseText typographyFont="bodySemiBold" color={textColor}>
+                <BaseIcon name={icon} size={16} color={theme.colors.settingsSection.title} />
+                <BaseText typographyFont="bodySemiBold" color={theme.colors.settingsSection.title}>
                     {title}
                 </BaseText>
             </BaseView>
@@ -32,7 +28,7 @@ const SettingsSection = ({ icon, title, children }: Props) => {
 
 const Option = (props: PropsWithChildren<ViewProps>) => {
     return (
-        <BaseView flexDirection="column" gap={8} {...props}>
+        <BaseView flexDirection="column" gap={16} {...props}>
             {props.children}
         </BaseView>
     )
