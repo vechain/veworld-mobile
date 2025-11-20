@@ -60,8 +60,7 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
 
         return (
             <FastImage
-                fallback
-                defaultSource={NFTPlaceholderDarkV2}
+                source={NFTPlaceholderDarkV2}
                 style={styles.image as ImageStyle}
                 resizeMode={FastImage.resizeMode.cover}
             />
