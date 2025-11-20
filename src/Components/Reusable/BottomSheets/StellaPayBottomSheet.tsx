@@ -20,12 +20,13 @@ type Props = {}
 export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({}, ref) => {
     const [isChecked, setIsChecked] = useState(false)
 
+    const currentRoute = useAppSelector(selectCurrentScreen)
+
+    const dispatch = useAppDispatch()
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const { navigateWithTab } = useBrowserTab()
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
-    const currentRoute = useAppSelector(selectCurrentScreen)
-    const dispatch = useAppDispatch()
     const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModalMethods> })
 
     const returnScreen = useMemo(() => {
