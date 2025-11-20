@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { PropsWithChildren, useCallback, useEffect, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import React, { PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { ScrollView, StyleSheet, View } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, {
@@ -28,12 +28,15 @@ const PADDING_BOTTOM = 32
 const DEFAULT_TRANSLATION = 16
 
 export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => {
+    const [scrollPosition, setScrollPosition] = useState(0)
+
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const nav = useNavigation()
 
     const height = useSharedValue(SCREEN_HEIGHT)
     const translateY = useSharedValue(SCREEN_HEIGHT)
+    const touchStartY = useSharedValue(0)
 
     const animatedS = useAnimatedStyle(() => {
         return {
@@ -70,19 +73,37 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
 
     const gesture = useMemo(() => {
         return Gesture.Pan()
+            .manualActivation(true)
+            .onTouchesDown(e => {
+                touchStartY.value = e.changedTouches[0].y
+            })
+            .onTouchesMove((e, state) => {
+                console.log("onTouchesMove", e.changedTouches[0].y - touchStartY.value)
+                if (e.changedTouches[0].y - touchStartY.value > 2) {
+                    console.log("activate")
+                    state.activate()
+                } else {
+                    console.log("fail")
+                    state.fail()
+                }
+            })
             .onUpdate(v => {
                 translateY.value = Math.max(v.translationY, -DEFAULT_TRANSLATION) + DEFAULT_TRANSLATION
+                console.log("scrollPosition", scrollPosition)
             })
-            .onEnd(() => {
+            .onEnd(e => {
                 "worklet"
                 // If more than 20%, then close the bottomsheet (navigate to previous page)
-                if (translateY.value >= height.value / 5) {
+                if (translateY.value >= height.value / 5 && scrollPosition === 0) {
                     onClose()
                     return
                 }
-                translateY.value = withSpring(DEFAULT_TRANSLATION, { mass: 4, damping: 120, stiffness: 900 })
+                if ((e.translationY < 3 && scrollPosition === 0) || e.translationY > 0) {
+                    console.log("tolo", scrollPosition)
+                    translateY.value = withSpring(DEFAULT_TRANSLATION, { mass: 4, damping: 120, stiffness: 900 })
+                }
             })
-    }, [height.value, onClose, translateY])
+    }, [height.value, touchStartY, translateY, scrollPosition, onClose])
 
     useEffect(() => {
         const unsubscribe = nav.addListener("beforeRemove", e => {
@@ -109,26 +130,26 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                     nav.goBack()
                 }}
             />
-            <Animated.View
-                style={[styles.root, animatedS]}
-                onLayout={e => {
-                    if (PlatformUtils.isAndroid()) {
-                        translateY.value = e.nativeEvent.layout.height
-                    }
-                    height.value = e.nativeEvent.layout.height
-                }}>
-                {handle && (
-                    <GestureDetector gesture={gesture}>
+            <GestureDetector gesture={Gesture.Simultaneous(Gesture.Native(), gesture)}>
+                <Animated.View
+                    style={[styles.root, animatedS]}
+                    onLayout={e => {
+                        if (PlatformUtils.isAndroid()) {
+                            translateY.value = e.nativeEvent.layout.height
+                        }
+                        height.value = e.nativeEvent.layout.height
+                    }}>
+                    {handle && (
                         <BaseBottomSheetHandle
                             color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
                             style={styles.handle}
                         />
-                    </GestureDetector>
-                )}
-                <NestableScrollContainer bounces={false} showsVerticalScrollIndicator={false}>
-                    {children}
-                </NestableScrollContainer>
-            </Animated.View>
+                    )}
+                    <NestableScrollContainer bounces={false} showsVerticalScrollIndicator={false}>
+                        {children}
+                    </NestableScrollContainer>
+                </Animated.View>
+            </GestureDetector>
         </BaseSafeArea>
     )
 }
