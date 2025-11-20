@@ -5,7 +5,7 @@
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf android/app/build && cd ios && pod deintegrate && cd ..",
     "purge:android": "rm -rf node_modules && rm -rf android/app/build",
-    "install:all": "yarn abi:install && yarn abi:build && yarn install && yarn abi:generate && npx pod-install",
+    "install:all": "yarn abi:install && yarn abi:build && yarn install && yarn abi:generate && yarn generate:indexer-schema:mainnet && npx pod-install",
     "install:android": "yarn abi:install && yarn abi:build && yarn install && yarn abi:generate",
     "reinstall": "yarn purge && yarn install:all",
     "android": "react-native run-android",
