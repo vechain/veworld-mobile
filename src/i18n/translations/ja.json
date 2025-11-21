@@ -904,6 +904,7 @@
   "ORIGIN": "出発地",
   "OUTCOMES": "結果",
   "PAID": "支払い済み",
+  "PENDING_ACTIVITY": "保留中...",
   "PIN_CODE": "ピンコード",
   "PLACEHOLDER_ENTER_ADDRESS": "住所を入力してください",
   "PLACEHOLDER_ENTER_NAME": "名前を入力してください",

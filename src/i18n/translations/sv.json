@@ -904,6 +904,7 @@
   "ORIGIN": "Ursprung",
   "OUTCOMES": "Resultat",
   "PAID": "Betald",
+  "PENDING_ACTIVITY": "Väntar...",
   "PIN_CODE": "PIN-kod",
   "PLACEHOLDER_ENTER_ADDRESS": "Ange adressen",
   "PLACEHOLDER_ENTER_NAME": "Ange namnet",

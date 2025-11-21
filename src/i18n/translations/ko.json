@@ -904,6 +904,7 @@
   "ORIGIN": "원산지",
   "OUTCOMES": "결과",
   "PAID": "지불됨",
+  "PENDING_ACTIVITY": "대기 중...",
   "PIN_CODE": "핀 코드",
   "PLACEHOLDER_ENTER_ADDRESS": "주소를 입력하세요",
   "PLACEHOLDER_ENTER_NAME": "이름을 입력하세요",
