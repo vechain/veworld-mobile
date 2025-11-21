@@ -16,7 +16,7 @@ import {
 import { Feedback } from "~Components/Providers/FeedbackProvider"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
-import { useAnalyticTracking, useCheckIdentity, useSignMessage, useSmartWallet } from "~Hooks"
+import { useAnalyticTracking, useCheckIdentity, useSignMessage, useSmartWallet, useWalletSecurity } from "~Hooks"
 import { Routes } from "~Navigation"
 import { ErrorMessageUtils, HexUtils, PlatformUtils, debug, error } from "~Utils"
 import { DEVICE_TYPE } from "~Model"
@@ -102,16 +102,20 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
         allowAutoPassword: true,
     })
 
+    const { biometrics } = useWalletSecurity()
+
     // Trigger signature generation when address changes
+    // Wait for biometrics to finish loading before triggering auth
     useEffect(() => {
-        if (resolvedDestinationAddress) {
+        // Only proceed once biometrics state has been determined (biometrics object exists)
+        if (resolvedDestinationAddress && biometrics !== undefined) {
             setSignature(undefined)
             setTimestamp(undefined)
             // Trigger authentication flow
             checkIdentityBeforeOpening()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [resolvedDestinationAddress])
+    }, [resolvedDestinationAddress, biometrics])
 
     const {
         data: coinbaseURL,
