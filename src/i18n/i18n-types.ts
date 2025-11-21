@@ -10879,7 +10879,7 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	WALLET_LEDGER_SELECT_DEVICE_TITLE: () => LocalizedString
 	/**
 	 * Failed to create account
-	 */n
+	 */
 	WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR: () => LocalizedString
 	/**
 	 * Account created successfully

@@ -30,7 +30,7 @@ export const BuyWebviewScreen: React.FC<Props> = ({ route }) => {
             fixedBody={
                 <>
                     {provider === PaymentProvidersEnum.CoinbasePay && !isLedgerAccount && (
-                        <CoinbasePayWebView currentAmount={0} destinationAddress={selectedAccountAddress} />
+                        <CoinbasePayWebView destinationAddress={selectedAccountAddress} />
                     )}
                     {provider === PaymentProvidersEnum.Transak && (
                         <TransakPayWebView currentAmount={0} destinationAddress={selectedAccountAddress} />

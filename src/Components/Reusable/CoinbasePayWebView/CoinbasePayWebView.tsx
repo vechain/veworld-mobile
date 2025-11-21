@@ -28,13 +28,7 @@ const isAndroid = PlatformUtils.isAndroid()
 
 const SIGNATURE_PREFIX = "CoinbaseSession"
 
-export const CoinbasePayWebView = ({
-    currentAmount: _currentAmount,
-    destinationAddress,
-}: {
-    currentAmount: number
-    destinationAddress: string
-}) => {
+export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress: string }) => {
     const nav = useNavigation()
     const [isLoading, setIsLoading] = useState(true)
     const styles = baseStyles(isLoading)
@@ -95,7 +89,8 @@ export const CoinbasePayWebView = ({
         [resolvedDestinationAddress, signMessage, nav, LL],
     )
 
-    // Setup authentication flow with useCheckIdentity
+    // Trigger the identity check to allow us to generate the signature with the
+    // private key
     const {
         isPasswordPromptOpen,
         handleClosePasswordModal,
@@ -107,10 +102,9 @@ export const CoinbasePayWebView = ({
         allowAutoPassword: true,
     })
 
-    // Trigger signature generation when address changes
+    // Trigger signature generation when address changes and biometrics are available
     useEffect(() => {
         if (resolvedDestinationAddress && !isBiometricsEmpty) {
-            // Reset signature when address changes
             setSignature(undefined)
             setTimestamp(undefined)
             // Trigger authentication flow
@@ -146,16 +140,16 @@ export const CoinbasePayWebView = ({
             Feedback.show({
                 severity: FeedbackSeverity.ERROR,
                 type: FeedbackType.ALERT,
-                message: "Coinbase Connection Failed",
+                message: LL.COINBASE_NOT_AVAILABLE(),
                 icon: "icon-alert-circle",
                 duration: 3000,
             })
             // Navigate back after showing error
             setTimeout(() => {
                 nav.goBack()
-            }, 500) // Wait 3 seconds for user to see the feedback
+            }, 500)
         }
-    }, [isError, queryError, nav])
+    }, [isError, queryError, nav, LL])
 
     const handleLoadEnd = useCallback(() => {
         setTimeout(() => {
