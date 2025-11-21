@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5.0 (2025-11-21)
+
+* build: init ([1548c5d](https://github.com/vechain/veworld-mobile/commit/1548c5d))
+* feat: add scrollable and scrollEnabled props to BaseBottomSheet for enhanced content management (#35 ([bf7d263](https://github.com/vechain/veworld-mobile/commit/bf7d263)), closes [#3564](https://github.com/vechain/veworld-mobile/issues/3564)
+
 ## 2.5.0 (2025-11-13)
 
 * build: init ([f33174b](https://github.com/vechain/veworld-mobile/commit/f33174b))
