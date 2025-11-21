@@ -4,6 +4,7 @@ import {
     BottomSheetModal,
     BottomSheetModalProps,
     BottomSheetScrollView,
+    BottomSheetView,
 } from "@gorhom/bottom-sheet"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
@@ -109,6 +110,18 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<
      * Sticky indices for dynamicHeight
      */
     stickyIndices?: number[]
+    /**
+     * Enable scrollable content. If set to true, the content will be scrollable.
+     * Only valid when `dynamicHeight` is true.
+     * @default true
+     */
+    scrollable?: boolean
+    /**
+     * Enable scrolling. If set to false, the content will not be scrollable.
+     * Only valid when `scrollable` is true.
+     * @default true
+     */
+    scrollEnabled?: boolean
 }
 
 const BaseBottomSheetContent = ({
@@ -125,6 +138,8 @@ const BaseBottomSheetContent = ({
     children,
     floating,
     stickyHeaderIndices,
+    scrollable,
+    scrollEnabled,
 }: PropsWithChildren<{
     bottomSafeArea: boolean
     bottomSafeAreaSize: number
@@ -138,6 +153,8 @@ const BaseBottomSheetContent = ({
     rightElement?: ReactNode
     floating: boolean
     stickyHeaderIndices?: number[]
+    scrollable?: boolean
+    scrollEnabled?: boolean
 }>) => {
     const headerStyles = useMemo(
         () => ({
@@ -165,16 +182,11 @@ const BaseBottomSheetContent = ({
         )
     }
 
-    return (
-        <>
-            {snapPoints ? (
-                <BaseView style={contentViewStyle}>
-                    {renderHeader()}
-                    {children}
-                    {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
-                </BaseView>
-            ) : (
+    const renderDynamicContent = () => {
+        if (scrollable) {
+            return (
                 <BottomSheetScrollView
+                    scrollEnabled={scrollEnabled}
                     contentContainerStyle={contentViewStyle}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
@@ -184,6 +196,27 @@ const BaseBottomSheetContent = ({
                     {children}
                     {dynamicHeight && isAndroid() && !floating && <BaseSpacer height={16} />}
                 </BottomSheetScrollView>
+            )
+        }
+        return (
+            <BottomSheetView style={contentViewStyle}>
+                {renderHeader()}
+                {children}
+                {dynamicHeight && isAndroid() && !floating && <BaseSpacer height={16} />}
+            </BottomSheetView>
+        )
+    }
+
+    return (
+        <>
+            {snapPoints ? (
+                <BaseView style={contentViewStyle}>
+                    {renderHeader()}
+                    {children}
+                    {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
+                </BaseView>
+            ) : (
+                renderDynamicContent()
             )}
             {footer && (
                 <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
@@ -219,6 +252,8 @@ const _BaseBottomSheet = <TData,>(
         rounded = true,
         handleColor: _handleColor,
         stickyIndices,
+        scrollable = true,
+        scrollEnabled = true,
         ...props
     }: BaseBottomSheetProps<TData>,
     ref: React.ForwardedRef<BottomSheetModalMethods>,
@@ -362,6 +397,7 @@ const _BaseBottomSheet = <TData,>(
                     <BaseBottomSheetContent
                         bottomSafeArea={bottomSafeArea}
                         bottomSafeAreaSize={bottomSafeAreaSize}
+                        scrollEnabled={scrollEnabled}
                         contentViewStyle={contentViewStyle}
                         dynamicHeight={dynamicHeight}
                         footer={footer}
@@ -371,6 +407,7 @@ const _BaseBottomSheet = <TData,>(
                         leftElement={leftElement}
                         rightElement={rightElement}
                         floating={floating}
+                        scrollable={scrollable}
                         stickyHeaderIndices={stickyIndices}>
                         {children(p?.data)}
                     </BaseBottomSheetContent>
@@ -379,6 +416,7 @@ const _BaseBottomSheet = <TData,>(
                 <BaseBottomSheetContent
                     bottomSafeArea={bottomSafeArea}
                     bottomSafeAreaSize={bottomSafeAreaSize}
+                    scrollEnabled={scrollEnabled}
                     contentViewStyle={contentViewStyle}
                     dynamicHeight={dynamicHeight}
                     footer={footer}
@@ -388,6 +426,7 @@ const _BaseBottomSheet = <TData,>(
                     leftElement={leftElement}
                     rightElement={rightElement}
                     floating={floating}
+                    scrollable={scrollable}
                     stickyHeaderIndices={stickyIndices}>
                     {children}
                 </BaseBottomSheetContent>
