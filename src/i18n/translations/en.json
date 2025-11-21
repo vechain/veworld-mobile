@@ -428,6 +428,7 @@
   "CLOUD_ERR_WALLET_OPERATION": "There was an error performing this iCloud wallet operation. Please try again.",
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "We couldn't find any backed-up wallets in your {cloud: string}. Try again or use your recovery phrase.",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "No wallets available",
+  "COINBASE_NOT_AVAILABLE": "Coinbase not available",
   "COLLECTIBLES_ACTION_AVATAR_ACTIVE": "Avatar",
   "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "Set avatar",
   "COLLECTIBLES_ACTION_FAVORITE_INACTIVE": "Favorite",
