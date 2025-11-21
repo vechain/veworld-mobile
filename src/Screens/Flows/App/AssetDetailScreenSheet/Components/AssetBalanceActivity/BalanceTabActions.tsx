@@ -1,9 +1,10 @@
 import { RouteProp, useRoute } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo } from "react"
-import { BaseView } from "~Components"
+import { BaseView, useFeatureFlags } from "~Components"
 import { useBottomSheetModal, useCameraBottomSheet } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
+import { useSendBottomSheet } from "~Hooks/useSendBottomSheet/useSendBottomSheet"
 import { ConvertBetterBottomSheet, ConvertedBetterBottomSheet } from "~Screens/Flows/App/AssetDetailScreen/Components"
 import { BuyButton } from "./ActionButtons/BuyButton"
 import { ConvertButton } from "./ActionButtons/ConvertButton"
@@ -45,17 +46,32 @@ export const BalanceTabActions = ({ token }: Props) => {
         targets: [],
     })
 
+    const { betterWorldFeature } = useFeatureFlags()
+    const { RenderSendBottomSheet, handleOpenSend } = useSendBottomSheet()
+
     const allActions = useMemo(() => {
         return {
             RECEIVE: <ReceiveButton onOpenBottomsheet={handleOpenOnlyReceiveCamera} key={"RECEIVE"} />,
-            SEND: <SendButton token={token} key={"SEND"} />,
+            SEND: (
+                <SendButton
+                    token={token}
+                    key={"SEND"}
+                    onOpenSendFlow={betterWorldFeature.balanceScreen?.send?.enabled ? handleOpenSend : undefined}
+                />
+            ),
             BUY: <BuyButton key={"BUY"} />,
             EARN: <EarnButton key={"EARN"} />,
             SWAP: <SwapButton token={token} key={"SWAP"} />,
             MORE: <MoreButton openReceiveBottomsheet={handleOpenOnlyReceiveCamera} token={token} key={"MORE"} />,
             CONVERT: <ConvertButton bsRef={convertB3trBsRef} key={"CONVERT"} />,
         }
-    }, [handleOpenOnlyReceiveCamera, convertB3trBsRef, token])
+    }, [
+        convertB3trBsRef,
+        handleOpenOnlyReceiveCamera,
+        handleOpenSend,
+        betterWorldFeature.balanceScreen?.send?.enabled,
+        token,
+    ])
 
     const tokenActions = useMemo<(keyof typeof allActions)[]>(() => {
         switch (token.symbol) {
@@ -85,6 +101,7 @@ export const BalanceTabActions = ({ token }: Props) => {
             />
 
             {RenderCameraModal}
+            {betterWorldFeature.balanceScreen?.send?.enabled && RenderSendBottomSheet}
         </BaseView>
     )
 }
