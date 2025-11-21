@@ -22,6 +22,7 @@ jobs:
                 yarn abi:build
                 yarn install
                 yarn abi:generate
+                yarn generate:indexer-schema:mainnet
 
             - name: Run generation script
               run: |

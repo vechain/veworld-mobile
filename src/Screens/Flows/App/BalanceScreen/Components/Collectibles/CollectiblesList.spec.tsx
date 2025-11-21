@@ -37,7 +37,7 @@ describe("CollectiblesList", () => {
             data: {
                 pages: [
                     {
-                        collections: ["0x0"],
+                        data: ["0x0"],
                     },
                 ],
             },
@@ -73,7 +73,7 @@ describe("CollectiblesList", () => {
             data: {
                 pages: [
                     {
-                        collections: ["0x0", "0x1"],
+                        data: ["0x0", "0x1"],
                     },
                 ],
             },

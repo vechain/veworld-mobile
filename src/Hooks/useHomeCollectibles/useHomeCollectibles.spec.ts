@@ -2,26 +2,30 @@ import { renderHook } from "@testing-library/react-hooks"
 import { useQuery } from "@tanstack/react-query"
 
 import { TestWrapper } from "~Test"
+
 import { defaultMainNetwork } from "~Constants"
 import { HexUtils } from "~Utils"
 
 import { useHomeCollectibles } from "./useHomeCollectibles"
 
-jest.mock("~Networking", () => ({
-    ...jest.requireActual("~Networking"),
-    getNFTs: jest.fn().mockResolvedValue({
-        data: [
-            {
-                id: "1",
-                tokenId: "1",
-                contractAddress: "0x0",
-                owner: "0x0",
-                txId: "0x0",
-                blockNumber: 1,
-                blockId: "0x0",
+jest.mock("~Hooks/useIndexerClient", () => ({
+    useIndexerClient: jest.fn().mockReturnValue({
+        GET: jest.fn().mockResolvedValue({
+            data: {
+                data: [
+                    {
+                        id: "1",
+                        tokenId: "1",
+                        contractAddress: "0x0",
+                        owner: "0x0",
+                        txId: "0x0",
+                        blockNumber: 1,
+                        blockId: "0x0",
+                    },
+                ],
+                paginations: {},
             },
-        ],
-        paginations: {},
+        }),
     }),
 }))
 
@@ -66,6 +70,16 @@ describe("useHomeCollectibles", () => {
                                     ["0x0_4"]: {
                                         address: "0x0",
                                         tokenId: "4",
+                                        createdAt: Date.now(),
+                                    },
+                                    ["0x0_5"]: {
+                                        address: "0x0",
+                                        tokenId: "5",
+                                        createdAt: Date.now(),
+                                    },
+                                    ["0x0_6"]: {
+                                        address: "0x0",
+                                        tokenId: "6",
                                         createdAt: Date.now(),
                                     },
                                 },

@@ -6,7 +6,7 @@ import { CollectibleBottomSheet } from "~Components/Collectibles/CollectibleBott
 import { Spinner } from "~Components/Reusable/Spinner"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
-import { getNftsForContract } from "~Networking"
+import { useIndexerClient } from "~Hooks/useIndexerClient"
 import { selectAllFavoriteNfts, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { CollectibleCard } from "../../BalanceScreen/Components/Collectibles/CollectibleCard"
@@ -46,6 +46,7 @@ export const CollectionNftsList = ({ collectionAddress }: Props) => {
     const { ref, onOpen } = useBottomSheetModal()
     const queryClient = useQueryClient()
     const [isRefreshing, setIsRefreshing] = useState(false)
+    const indexerClient = useIndexerClient(selectedNetwork)
 
     const {
         data: paginatedNfts,
@@ -56,13 +57,19 @@ export const CollectionNftsList = ({ collectionAddress }: Props) => {
     } = useInfiniteQuery({
         queryKey: getCollectionNftsQueryKey(collectionAddress, selectedNetwork.genesis.id, selectedAccount.address),
         queryFn: ({ pageParam = 0 }) =>
-            getNftsForContract(
-                selectedNetwork.type,
-                collectionAddress,
-                selectedAccount.address,
-                ITEMS_PER_PAGE,
-                pageParam,
-            ),
+            indexerClient
+                .GET("/api/v1/nfts", {
+                    params: {
+                        query: {
+                            address: selectedAccount.address,
+                            contractAddress: collectionAddress,
+                            direction: "DESC",
+                            page: pageParam,
+                            size: ITEMS_PER_PAGE,
+                        },
+                    },
+                })
+                .then(res => res.data!),
         getNextPageParam: (lastPage, allPages) => (lastPage.pagination.hasNext ? allPages.length : undefined),
         initialPageParam: 0,
         staleTime: 5 * 60 * 1000,
