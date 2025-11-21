@@ -102,16 +102,16 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
         allowAutoPassword: true,
     })
 
-    // Trigger signature generation when address changes and biometrics are available
+    // Trigger signature generation when address changes
     useEffect(() => {
-        if (resolvedDestinationAddress && !isBiometricsEmpty) {
+        if (resolvedDestinationAddress) {
             setSignature(undefined)
             setTimestamp(undefined)
             // Trigger authentication flow
             checkIdentityBeforeOpening()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [resolvedDestinationAddress, isBiometricsEmpty])
+    }, [resolvedDestinationAddress])
 
     const {
         data: coinbaseURL,
@@ -204,24 +204,26 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
     }, [coinbaseURL, isCoinbaseLoading])
 
     return (
-        <BaseView flex={1}>
+        <>
             <RequireUserPassword
                 isOpen={isPasswordPromptOpen}
                 onClose={handleClosePasswordModal}
                 onSuccess={onPasswordSuccess}
             />
-            {!isLoading && isAndroid && <BaseStatusBar />}
-            <BaseActivityIndicator isVisible={isLoading || isBiometricsEmpty} />
-            {url && (
-                <WebView
-                    source={{ uri: url }}
-                    onLoadEnd={handleLoadEnd}
-                    onMessage={onMessage}
-                    style={styles.webView}
-                    originWhitelist={originWhitelist}
-                />
-            )}
-        </BaseView>
+            <BaseView flex={1}>
+                {!isLoading && isAndroid && <BaseStatusBar />}
+                <BaseActivityIndicator isVisible={isLoading || isBiometricsEmpty} />
+                {url && (
+                    <WebView
+                        source={{ uri: url }}
+                        onLoadEnd={handleLoadEnd}
+                        onMessage={onMessage}
+                        style={styles.webView}
+                        originWhitelist={originWhitelist}
+                    />
+                )}
+            </BaseView>
+        </>
     )
 }
 
