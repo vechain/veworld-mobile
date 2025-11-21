@@ -6,6 +6,5 @@ export const useVeBetterGlobalOverview = () => {
         queryKey: ["VEBETTER", "GLOBAL_OVERVIEW"],
         queryFn: fetchVeBetterGlobalOverview,
         staleTime: 24 * 60 * 60 * 1000,
-        gcTime: 24 * 60 * 60 * 1000,
     })
 }

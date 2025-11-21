@@ -175,6 +175,7 @@ const BaseBottomSheetContent = ({
                 </BaseView>
             ) : (
                 <BottomSheetScrollView
+                    bounces={false}
                     contentContainerStyle={contentViewStyle}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}

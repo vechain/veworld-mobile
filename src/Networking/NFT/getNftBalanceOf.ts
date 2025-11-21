@@ -13,7 +13,6 @@ const getNftBalanceOfOptions = (ownerAddress: string, contractAddress: string, g
         queryKey: ["COLLECTIBLES", "BALANCE_OF", genesisId, ownerAddress, contractAddress],
         queryFn: () => getNftBalanceOf(ownerAddress, contractAddress, thor),
         staleTime: 1 * 60 * 60 * 1000,
-        gcTime: 24 * 60 * 60 * 1000,
     })
 }
 

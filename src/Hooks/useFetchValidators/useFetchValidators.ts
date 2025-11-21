@@ -34,7 +34,6 @@ export const useFetchValidators = () => {
             return data
         },
         staleTime: 1000 * 60 * 60 * 24,
-        gcTime: 1000 * 60 * 60 * 24,
     })
 
     return { validators, isLoading, isFetching, network }

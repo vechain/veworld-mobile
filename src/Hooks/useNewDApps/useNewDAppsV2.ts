@@ -34,7 +34,6 @@ export const useNewDAppsV2 = () => {
         queryKey: ["DAPPS_CAROUSEL", "NEW"],
         queryFn: getNewDapps,
         staleTime: 24 * 60 * 60 * 1000,
-        gcTime: 24 * 60 * 60 * 1000,
         enabled: !!veBetterDaoDapps?.length,
     })
 

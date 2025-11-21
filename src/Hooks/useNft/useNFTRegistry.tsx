@@ -11,7 +11,6 @@ export const useNFTRegistry = () => {
         queryKey: getNFTRegistryQueryKey(),
         queryFn: () => getCollectionInfo(network.type),
         staleTime: 24 * 60 * 60 * 1000, // 24 hours
-        gcTime: Infinity,
         retry: 3,
     })
 }

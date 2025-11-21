@@ -73,7 +73,6 @@ export const useStargateClaimableRewards = ({ nodeId }: Args) => {
         queryKey: ["STARGATE_CLAIMABLE", network.genesis.id, account.address, nodeId],
         queryFn: () => getStargateClaimableRewards(thor, config, nodeId),
         staleTime: 5 * 60 * 1000,
-        gcTime: Infinity,
         retry: 3,
         enabled,
     })

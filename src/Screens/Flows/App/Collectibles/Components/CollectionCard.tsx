@@ -39,7 +39,6 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
         queryFn: () => fetchMedia(collectionMetadata?.image!),
         enabled: !!collectionMetadata?.image,
         staleTime: 5 * 60 * 60 * 1000,
-        gcTime: 24 * 60 * 60 * 1000,
     })
 
     const handleToggleFavorite = useCallback(() => {

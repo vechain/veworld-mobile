@@ -66,7 +66,6 @@ export const CollectionNftsList = ({ collectionAddress }: Props) => {
         getNextPageParam: (lastPage, allPages) => (lastPage.pagination.hasNext ? allPages.length : undefined),
         initialPageParam: 0,
         staleTime: 5 * 60 * 1000,
-        gcTime: 5 * 60 * 1000,
     })
 
     const invalidateCollectiblesQueries = useCallback(async () => {

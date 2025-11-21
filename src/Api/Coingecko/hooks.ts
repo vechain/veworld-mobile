@@ -155,7 +155,6 @@ export const useSmartMarketChart = ({
         placeholderData,
         staleTime: getQueryCacheTime(true),
         refetchInterval: getRefetchIntevalTime(),
-        gcTime: 1000 * 60 * 60 * 24, // 24 hours
     })
 }
 
@@ -194,7 +193,6 @@ export const useSmartMarketChartV2 = ({
         placeholderData,
         staleTime: getQueryCacheTime(true),
         refetchInterval: getRefetchIntevalTime(),
-        gcTime: 1000 * 60 * 60 * 24,
         select(data) {
             if (days === "max") return data
             if (days > 1) return getSmartMarketChart({ highestResolutionMarketChartData: data, days })

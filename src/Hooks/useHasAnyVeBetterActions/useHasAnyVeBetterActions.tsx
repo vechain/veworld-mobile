@@ -16,7 +16,6 @@ export const useHasAnyVeBetterActions = () => {
             select: (data: { data: FetchVeBetterActionsResponseItem[]; pagination: PaginationResponse }) =>
                 data.data.length > 0,
             staleTime: 5 * 60 * 1000,
-            gcTime: Infinity,
         })),
         combine: results => {
             return {

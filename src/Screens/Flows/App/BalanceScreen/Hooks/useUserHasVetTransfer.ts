@@ -20,7 +20,6 @@ export const useUserHasVetTransfer = () => {
             return lastPage.pagination.hasNext ? pages.length : undefined
         },
         staleTime: 1000 * 60 * 60, // 1 hour
-        gcTime: 1000 * 60 * 60 * 2, // 2 hours
         select: data => {
             if (!data) return false
             return data.pages.flatMap(page => page.data).length > 0

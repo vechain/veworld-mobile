@@ -29,7 +29,6 @@ export const useMultipleTokensBalance = (addresses: string[], accountAddress?: s
         queryKey: ["TOKENS", "MULTIPLE", address, network.genesis.id, sortedAddresses],
         queryFn: () => BalanceUtils.getBalancesFromBlockchain(sortedAddresses, address, network, thor),
         staleTime: 10 * 60 * 1000,
-        gcTime: 10 * 60 * 1000,
         placeholderData: keepPreviousData,
     })
 
