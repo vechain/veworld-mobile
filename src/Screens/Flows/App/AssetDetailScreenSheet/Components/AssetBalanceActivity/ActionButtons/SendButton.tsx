@@ -12,18 +12,30 @@ import { AccountUtils, BigNutils } from "~Utils"
 
 type Props = {
     token: FungibleTokenWithBalance
+    /**
+     * Optional handler to open the new send flow.
+     * When not provided, the legacy navigation flow is used.
+     */
+    onOpenSendFlow?: () => void
 }
 
-const useSend = (token: FungibleTokenWithBalance) => {
+const useSend = (token: FungibleTokenWithBalance, onOpenSendFlow?: () => void) => {
     const track = useAnalyticTracking()
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
     const selectedAccount = useAppSelector(selectSelectedAccount)
+
     const onSend = useCallback(() => {
-        nav.replace(Routes.INSERT_ADDRESS_SEND, {
-            token,
-        })
+        if (onOpenSendFlow) {
+            // New V2 flow
+            onOpenSendFlow()
+        } else {
+            // Legacy behavior.
+            nav.replace(Routes.INSERT_ADDRESS_SEND, {
+                token,
+            })
+        }
         track(AnalyticsEvent.TOKEN_SEND_CLICKED)
-    }, [nav, token, track])
+    }, [nav, onOpenSendFlow, token, track])
 
     const isSendDisabled = useMemo(
         () =>
@@ -42,10 +54,10 @@ const useSend = (token: FungibleTokenWithBalance) => {
     )
 }
 
-const SendButton = ({ token }: Props) => {
+const SendButton = ({ token, onOpenSendFlow }: Props) => {
     const { LL } = useI18nContext()
 
-    const { disabled, onPress } = useSend(token)
+    const { disabled, onPress } = useSend(token, onOpenSendFlow)
 
     return (
         <GlassButtonWithLabel
