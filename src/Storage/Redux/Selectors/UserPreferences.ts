@@ -114,3 +114,7 @@ export const selectDeveloperMenuUnlocked = createSelector(reducer, state => {
 export const selectIndexerUrls = createSelector(reducer, state => {
     return state.indexerUrls ?? {}
 })
+
+export const selectHideStellaPayBottomSheet = createSelector(reducer, state => {
+    return state.hideStellaPayBottomSheet
+})

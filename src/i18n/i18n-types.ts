@@ -3872,6 +3872,38 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_STARGATE_DELEGATE: string
 	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​a​c​t​i​v​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: string
+	/**
+	 * M​a​n​a​g​e​r​ ​a​d​d​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: string
+	/**
+	 * M​a​n​a​g​e​r​ ​r​e​m​o​v​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: string
+	/**
+	 * M​a​t​u​r​i​t​y​ ​b​o​o​s​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: string
+	/**
 	 * V​E​T​ ​s​t​a​k​e
 	 */
 	RECEIPT_OUTPUT_STARGATE_STAKE: string
@@ -3887,38 +3919,6 @@ type RootTranslation = {
 	 * V​E​T​ ​u​n​s​t​a​k​e
 	 */
 	RECEIPT_OUTPUT_STARGATE_UNSTAKE: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​a​c​t​i​v​e
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: string
-	/**
-	 * M​a​n​a​g​e​r​ ​a​d​d​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: string
-	/**
-	 * M​a​n​a​g​e​r​ ​r​e​m​o​v​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: string
-	/**
-	 * M​a​t​u​r​i​t​y​ ​b​o​o​s​t​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: string
 	/**
 	 * S​w​a​p
 	 */
@@ -4850,6 +4850,10 @@ type RootTranslation = {
 	 * G​e​t​ ​y​o​u​r​ ​V​e​B​e​t​t​e​r​ ​c​a​r​d​ ​o​n
 	 */
 	STELLA_PAY_BOTTOM_SHEET_TITLE: string
+	/**
+	 * D​o​n​’​t​ ​s​h​o​w​ ​m​e​ ​t​h​i​s​ ​a​g​a​i​n
+	 */
+	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: string
 	/**
 	 * A​v​a​i​l​a​b​l​e​ ​t​o​ ​c​l​a​i​m
 	 */
@@ -9429,6 +9433,38 @@ This action is irreversible.
 	 */
 	RECEIPT_OUTPUT_STARGATE_DELEGATE: () => LocalizedString
 	/**
+	 * Delegation active
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: () => LocalizedString
+	/**
+	 * Delegation exited
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: () => LocalizedString
+	/**
+	 * Delegation exit requested
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: () => LocalizedString
+	/**
+	 * Delegation requested
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: () => LocalizedString
+	/**
+	 * Delegation request cancelled
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
+	/**
+	 * Manager added
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: () => LocalizedString
+	/**
+	 * Manager removed
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: () => LocalizedString
+	/**
+	 * Maturity boosted
+	 */
+	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: () => LocalizedString
+	/**
 	 * VET stake
 	 */
 	RECEIPT_OUTPUT_STARGATE_STAKE: () => LocalizedString
@@ -9444,38 +9480,6 @@ This action is irreversible.
 	 * VET unstake
 	 */
 	RECEIPT_OUTPUT_STARGATE_UNSTAKE: () => LocalizedString
-	/**
-	 * Delegation requested
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: () => LocalizedString
-	/**
-	 * Delegation request cancelled
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
-	/**
-	 * Delegation active
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: () => LocalizedString
-	/**
-	 * Delegation exit requested
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: () => LocalizedString
-	/**
-	 * Delegation exited
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: () => LocalizedString
-	/**
-	 * Manager added
-	 */
-	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: () => LocalizedString
-	/**
-	 * Manager removed
-	 */
-	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: () => LocalizedString
-	/**
-	 * Maturity boosted
-	 */
-	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: () => LocalizedString
 	/**
 	 * Swap
 	 */
@@ -10393,6 +10397,10 @@ Available for Google and Apple Pay.
 	 * Get your VeBetter card on
 	 */
 	STELLA_PAY_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
+	 * Don’t show me this again
+	 */
+	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: () => LocalizedString
 	/**
 	 * Available to claim
 	 */
