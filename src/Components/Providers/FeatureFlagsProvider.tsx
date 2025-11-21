@@ -69,6 +69,9 @@ export const initialState: FeatureFlags = {
             tokens: {
                 enabled: false,
             },
+            send: {
+                enabled: true,
+            },
         },
     },
     notificationCenter: {

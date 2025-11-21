@@ -365,6 +365,13 @@ export type Colors = {
         title: string
         optionTitle: string
     }
+    sendBottomSheet: {
+        background: string
+        iconColor: string
+        iconBackgroundColor: string
+        iconBorderColor: string
+        titleColor: string
+    }
 }
 
 export enum COLORS {
@@ -857,6 +864,13 @@ const light: Colors = {
         title: COLORS.PURPLE,
         optionTitle: COLORS.GREY_600,
     },
+    sendBottomSheet: {
+        background: COLORS.APP_BACKGROUND_LIGHT,
+        iconColor: COLORS.GREY_600,
+        iconBackgroundColor: COLORS.WHITE,
+        iconBorderColor: COLORS.GREY_200,
+        titleColor: COLORS.PRIMARY_900,
+    },
 }
 
 const dark: Colors = {
@@ -1225,6 +1239,13 @@ const dark: Colors = {
         background: COLORS.PURPLE_DISABLED,
         title: COLORS.WHITE,
         optionTitle: COLORS.GREY_300,
+    },
+    sendBottomSheet: {
+        background: COLORS.APP_BACKGROUND_DARK,
+        iconColor: COLORS.WHITE,
+        iconBackgroundColor: COLORS.PURPLE,
+        iconBorderColor: COLORS.PURPLE,
+        titleColor: COLORS.WHITE,
     },
 }
 
