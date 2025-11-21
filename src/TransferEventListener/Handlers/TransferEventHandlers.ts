@@ -1,24 +1,12 @@
-import { TransactionOrigin } from "~Model"
-import { NFTTransferHandlerProps, TokenTransferHandlerProps, VETTransferHandlerProps } from "./index"
-import { getName } from "~Networking"
-import {
-    InformUserForIncomingToken,
-    InformUserForIncomingVET,
-    InformUserForOutgoingToken,
-    InformUserForOutgoingVET,
-    findFirstInvolvedAccount,
-    informUserForIncomingNFT,
-    informUserForOutgoingNFT,
-} from "../Helpers"
 import { uniq } from "lodash"
+import { findFirstInvolvedAccount } from "../Helpers"
+import { NFTTransferHandlerProps, TokenTransferHandlerProps, VETTransferHandlerProps } from "./index"
 
 export const handleNFTTransfers = async ({
     visibleAccounts,
     transfers,
     network,
-    thorClient,
     updateNFTs,
-    informUser,
 }: NFTTransferHandlerProps) => {
     if (transfers.length === 0) return
 
@@ -30,36 +18,12 @@ export const handleNFTTransfers = async ({
     const transfer = transfers[0]
     const foundAccount = findFirstInvolvedAccount(visibleAccounts, transfer)
     if (!foundAccount) return
-
-    const collectionName = await getName(transfer.tokenAddress, thorClient)
-
-    if (foundAccount.origin === TransactionOrigin.TO) {
-        // inform user for successful transfer
-        informUserForIncomingNFT({
-            collectionName,
-            from: transfer.from,
-            alias: foundAccount.account.alias, // this should be read by typescript as it is already checked on line 21
-            transfer,
-            informUser,
-        })
-    } else if (foundAccount.origin === TransactionOrigin.FROM) {
-        // inform user for successful transfer
-        informUserForOutgoingNFT({
-            txId: transfer.txId,
-            to: transfer.to,
-            from: transfer.from,
-            collectionName,
-            informUser,
-        })
-    }
 }
 
 export const handleTokenTransfers = async ({
     visibleAccounts,
     transfers,
-    fetchData,
     updateBalances,
-    informUser,
 }: TokenTransferHandlerProps) => {
     if (transfers.length === 0) return
 
@@ -72,40 +36,9 @@ export const handleTokenTransfers = async ({
     const transfer = transfers[0]
     const foundAccount = findFirstInvolvedAccount(visibleAccounts, transfer)
     if (!foundAccount) return
-
-    const { symbol, decimals } = await fetchData(transfer.tokenAddress)
-
-    // User received token
-    if (foundAccount.origin === TransactionOrigin.TO) {
-        // inform user for successful transfer
-        InformUserForIncomingToken({
-            amount: transfer.value || "0",
-            symbol,
-            decimals,
-            transfer,
-            informUser,
-        })
-    }
-    // User send token
-    else if (foundAccount.origin === TransactionOrigin.FROM) {
-        // inform user of successful transfer
-        InformUserForOutgoingToken({
-            txId: transfer.txId,
-            amount: transfer.value ?? "0",
-            decimals,
-            transfer,
-            informUser,
-            symbol,
-        })
-    }
 }
 
-export const handleVETTransfers = ({
-    transfers,
-    visibleAccounts,
-    updateBalances,
-    informUser,
-}: VETTransferHandlerProps) => {
+export const handleVETTransfers = ({ transfers, visibleAccounts, updateBalances }: VETTransferHandlerProps) => {
     if (transfers.length === 0) return
 
     // Update Balances for accounts that have been changed
@@ -117,30 +50,6 @@ export const handleVETTransfers = ({
     const transfer = transfers[0]
     const foundAccount = findFirstInvolvedAccount(visibleAccounts, transfer)
     if (!foundAccount) return
-
-    // User received token
-    if (foundAccount.origin === TransactionOrigin.TO) {
-        // inform user for successful transfer
-        InformUserForIncomingVET({
-            txId: transfer.txId,
-            from: transfer.from,
-            amount: transfer.value,
-            to: transfer.to,
-            informUser,
-        })
-    }
-
-    // User send token
-    else if (foundAccount.origin === TransactionOrigin.FROM) {
-        // inform usr for successful transfer
-        InformUserForOutgoingVET({
-            txId: transfer.txId,
-            amount: transfer.value,
-            to: transfer.to,
-            from: transfer.from,
-            informUser,
-        })
-    }
 }
 
 export default { handleNFTTransfers, handleTokenTransfers, handleVETTransfers }

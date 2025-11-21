@@ -18,6 +18,8 @@ import {
     RequireUserPassword,
     TransferCard,
 } from "~Components"
+import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { AnalyticsEvent, COLORS, creteAnalyticsEvent, ERROR_EVENTS, VET, VTHO } from "~Constants"
 import { useAnalyticTracking, useTheme, useTransferAddContact } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
@@ -36,9 +38,9 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils, AddressUtils, BigNutils, error, TransactionUtils } from "~Utils"
+import FontUtils from "~Utils/FontUtils"
 import { useI18nContext } from "~i18n"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
-import FontUtils from "~Utils/FontUtils"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
@@ -62,7 +64,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         useTransferAddContact()
 
     const onFinish = useCallback(
-        (success: boolean) => {
+        (txId: string | undefined, success: boolean) => {
             const isNative =
                 token.symbol.toUpperCase() === VET.symbol.toUpperCase() ||
                 token.symbol.toUpperCase() === VTHO.symbol.toUpperCase()
@@ -86,8 +88,16 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 })
             else nav.navigate(Routes.HOME)
             dispatch(setIsAppLoading(false))
+
+            if (success)
+                Feedback.show({
+                    severity: FeedbackSeverity.LOADING,
+                    message: LL.TRANSACTION_IN_PROGRESS(),
+                    type: FeedbackType.ALERT,
+                    id: txId,
+                })
         },
-        [token.symbol, navigation, nav, dispatch, track, network.name],
+        [token.symbol, navigation, nav, dispatch, LL, track, network.name],
     )
 
     const onTransactionSuccess = useCallback(
@@ -95,17 +105,17 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             try {
                 dispatch(addPendingTransferTransactionActivity(transaction))
                 dispatch(setIsAppLoading(false))
-                onFinish(true)
+                onFinish(transaction.id.toString(), true)
             } catch (e) {
                 error(ERROR_EVENTS.SEND, e)
-                onFinish(false)
+                onFinish(transaction.id.toString(), false)
             }
         },
         [dispatch, onFinish],
     )
 
     const onTransactionFailure = useCallback(() => {
-        onFinish(false)
+        onFinish(undefined, false)
     }, [onFinish])
 
     const clauses = useMemo(

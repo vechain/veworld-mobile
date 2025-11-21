@@ -4814,6 +4814,10 @@ type RootTranslation = {
 	 */
 	STATUS: string
 	/**
+	 * D​o​n​’​t​ ​s​h​o​w​ ​m​e​ ​t​h​i​s​ ​a​g​a​i​n
+	 */
+	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: string
+	/**
 	 * E​a​r​n
 	 */
 	STELLA_PAY_BOTTOM_SHEET_EARN: string
@@ -4842,10 +4846,6 @@ type RootTranslation = {
 	 * G​e​t​ ​y​o​u​r​ ​V​e​B​e​t​t​e​r​ ​c​a​r​d​ ​o​n
 	 */
 	STELLA_PAY_BOTTOM_SHEET_TITLE: string
-	/**
-	 * D​o​n​’​t​ ​s​h​o​w​ ​m​e​ ​t​h​i​s​ ​a​g​a​i​n
-	 */
-	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: string
 	/**
 	 * A​v​a​i​l​a​b​l​e​ ​t​o​ ​c​l​a​i​m
 	 */
@@ -5193,6 +5193,18 @@ type RootTranslation = {
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​n​ ​p​r​o​g​r​e​s​s
+	 */
+	TRANSACTION_IN_PROGRESS: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​d​o​n​e
+	 */
+	TRANSACTION_DONE: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​a​i​l​e​d
+	 */
+	TRANSACTION_FAILED: string
 	/**
 	 * T​o
 	 */
@@ -10353,6 +10365,10 @@ Here's what it's all about:
 	 */
 	STATUS: () => LocalizedString
 	/**
+	 * Don’t show me this again
+	 */
+	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: () => LocalizedString
+	/**
 	 * Earn
 	 */
 	STELLA_PAY_BOTTOM_SHEET_EARN: () => LocalizedString
@@ -10381,10 +10397,6 @@ Available for Google and Apple Pay.
 	 * Get your VeBetter card on
 	 */
 	STELLA_PAY_BOTTOM_SHEET_TITLE: () => LocalizedString
-	/**
-	 * Don’t show me this again
-	 */
-	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: () => LocalizedString
 	/**
 	 * Available to claim
 	 */
@@ -10729,6 +10741,18 @@ Available for Google and Apple Pay.
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
+	/**
+	 * Transaction in progress
+	 */
+	TRANSACTION_IN_PROGRESS: () => LocalizedString
+	/**
+	 * Transaction done
+	 */
+	TRANSACTION_DONE: () => LocalizedString
+	/**
+	 * Transaction failed
+	 */
+	TRANSACTION_FAILED: () => LocalizedString
 	/**
 	 * To
 	 */

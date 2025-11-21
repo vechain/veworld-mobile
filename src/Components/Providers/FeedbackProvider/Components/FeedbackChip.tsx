@@ -59,8 +59,7 @@ export const FeedbackChip = ({ feedbackData, onDismiss }: Props) => {
                         color={theme.colors.feedbackChip.text}>
                         {feedbackData.message}
                     </BaseText>
-                    {(feedbackData.type === FeedbackType.PERMANENT ||
-                        feedbackData.severity === FeedbackSeverity.LOADING) && (
+                    {feedbackData.type === FeedbackType.PERMANENT && (
                         <TouchableOpacity onPress={onDismiss}>
                             <BaseIcon
                                 testID="FEEDBACK_CHIP_CLOSE_BUTTON"

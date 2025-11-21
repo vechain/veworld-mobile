@@ -1,7 +1,7 @@
 import EventEmitter from "events"
 import React, { useCallback, useEffect, useState } from "react"
 import { FeedbackChip } from "./Components/FeedbackChip"
-import { FeedbackSeverity, FeedbackShowArgs, FeedbackType } from "./Model"
+import { FeedbackShowArgs, FeedbackType } from "./Model"
 
 export const FeedbackEmitter = new EventEmitter()
 
@@ -20,7 +20,8 @@ export const FeedbackProvider = ({ children }: { children: React.ReactNode }) =>
 
     useEffect(() => {
         FeedbackEmitter.on("show", (args: FeedbackShowArgs) => {
-            if (feedbackData) return
+            if (feedbackData && !feedbackData.id) return
+            if (feedbackData && feedbackData.id && feedbackData.id !== args.id) return
             setFeedbackData(args)
         })
 
@@ -32,7 +33,7 @@ export const FeedbackProvider = ({ children }: { children: React.ReactNode }) =>
     useEffect(() => {
         let timeout: NodeJS.Timeout | null = null
         if (feedbackData) {
-            if (feedbackData.type === FeedbackType.ALERT && feedbackData.severity !== FeedbackSeverity.LOADING) {
+            if (feedbackData.type === FeedbackType.ALERT) {
                 timeout = setTimeout(() => {
                     onDismiss()
                 }, feedbackData.duration || 2000)

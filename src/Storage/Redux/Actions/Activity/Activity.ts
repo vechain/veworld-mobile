@@ -1,5 +1,8 @@
 import { Transaction } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
+import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { i18nObject } from "~i18n"
 import {
     Activity,
     ActivityStatus,
@@ -18,7 +21,7 @@ import {
     createSignCertificateActivity,
     createSingTypedDataActivity,
 } from "~Networking"
-import { selectSelectedAccount, selectDevice, selectSelectedNetwork } from "~Storage/Redux/Selectors"
+import { selectSelectedAccount, selectDevice, selectSelectedNetwork, selectLanguage } from "~Storage/Redux/Selectors"
 import { addActivity } from "~Storage/Redux/Slices"
 import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
 
@@ -32,8 +35,10 @@ import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
  */
 export const validateAndUpsertActivity = createAppAsyncThunk(
     "activity/upsertTransactionDetails",
-    async ({ activity, thor }: { activity: Activity; thor: ThorClient }, { dispatch }) => {
+    async ({ activity, thor }: { activity: Activity; thor: ThorClient }, { dispatch, getState }) => {
         let updatedActivity = { ...activity }
+        const locale = selectLanguage(getState())
+        const LL = i18nObject(locale)
 
         // If the activity is a transaction, we need to fetch the transaction from the chain
         if (updatedActivity.isTransaction) {
@@ -45,6 +50,13 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
             else {
                 updatedActivity.timestamp = !txReceipt ? Date.now() : txReceipt.meta.blockTimestamp * 1000
                 updatedActivity.status = txReceipt.reverted ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS
+
+                Feedback.show({
+                    message: txReceipt.reverted ? LL.TRANSACTION_FAILED() : LL.TRANSACTION_DONE(),
+                    severity: FeedbackSeverity.SUCCESS,
+                    type: FeedbackType.ALERT,
+                    id: updatedActivity.txId,
+                })
             }
         }
 

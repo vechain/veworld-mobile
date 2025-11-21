@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 import { useReceiptProcessor } from "~Components/Providers/ReceiptProcessorProvider"
 import { ERROR_EVENTS } from "~Constants"
-import { useFungibleTokenInfo } from "~Hooks"
 import { useStargateConfig } from "~Hooks/useStargateConfig"
 import { useStargateInvalidation } from "~Hooks/useStargateInvalidation"
 import { useThorClient } from "~Hooks/useThorClient"
@@ -23,7 +22,7 @@ import { BloomUtils, error } from "~Utils"
 import { handleStargateEvents } from "../StargateEventListener/Handlers/StargateEventHandlers"
 import { handleNFTTransfers, handleTokenTransfers, handleVETTransfers } from "./Handlers"
 import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
-import { useInformUser, useStateReconciliation } from "./Hooks"
+import { useStateReconciliation } from "./Hooks"
 import { useBeatWebsocket } from "./Hooks/useBeatWebsocket"
 
 export const TransferEventListener: React.FC = () => {
@@ -37,11 +36,7 @@ export const TransferEventListener: React.FC = () => {
 
     const thor = useThorClient()
 
-    const { fetchData } = useFungibleTokenInfo()
-
     const { updateBalances, updateNFTs } = useStateReconciliation()
-
-    const { forTokens, forNFTs } = useInformUser({ network })
 
     const { invalidate: invalidateStargateData } = useStargateInvalidation()
 
@@ -117,9 +112,7 @@ export const TransferEventListener: React.FC = () => {
                     visibleAccounts: relevantAccounts,
                     transfers: nftTransfers,
                     network: network,
-                    thorClient: thor,
                     updateNFTs,
-                    informUser: forNFTs,
                 })
 
                 // ~ FUNGIBLE TOKEN TRANSFER
@@ -129,9 +122,7 @@ export const TransferEventListener: React.FC = () => {
                     selectedAccount,
                     visibleAccounts: relevantAccounts,
                     transfers: tokenTransfers,
-                    fetchData,
                     updateBalances,
-                    informUser: forTokens,
                 })
 
                 // ~  VET TRANSFERS
@@ -141,7 +132,6 @@ export const TransferEventListener: React.FC = () => {
                     transfers: vetTransfers,
                     visibleAccounts,
                     updateBalances,
-                    informUser: forTokens,
                 })
 
                 // ~ STARGATE EVENTS (already processed above)
@@ -162,10 +152,7 @@ export const TransferEventListener: React.FC = () => {
             genericReceiptProcessor,
             blackListedCollections,
             updateNFTs,
-            forNFTs,
-            fetchData,
             updateBalances,
-            forTokens,
         ],
     )
 
