@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseButton, BaseIcon, BaseSpacer } from "~Components"
+import { BaseSpacer } from "~Components"
 import { CollectibleBottomSheet } from "~Components/Collectibles/CollectibleBottomSheet"
-import { AnalyticsEvent, COLORS } from "~Constants"
+import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useHomeCollectibles } from "~Hooks/useHomeCollectibles"
 import { useI18nContext } from "~i18n"
@@ -11,6 +11,7 @@ import { Routes } from "~Navigation"
 import { useNFTCollections } from "~Screens/Flows/App/Collectibles/Hooks"
 import { selectAllFavoriteNfts, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
+import { SeeAllButton } from "../SeeAllButton"
 import { CollectibleBuyCard } from "./CollectibleBuyCard"
 import { CollectibleCard } from "./CollectibleCard"
 import { CollectiblesEmptyCard } from "./CollectiblesEmptyCard"
@@ -20,7 +21,6 @@ const ItemSeparatorComponent = () => <BaseSpacer height={8} />
 const ListFooterComponent = ({ addresses }: { addresses: string[] }) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const { styles, theme } = useThemedStyles(footerStyles)
     const track = useAnalyticTracking()
 
     const onNavigate = useCallback(() => {
@@ -37,40 +37,11 @@ const ListFooterComponent = ({ addresses }: { addresses: string[] }) => {
     if (addresses.length === 0) return null
 
     return (
-        <BaseButton
-            variant="solid"
-            px={12}
-            py={8}
-            action={onNavigate}
-            typographyFont="captionSemiBold"
-            style={styles.btn}
-            textColor={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
-            bgColor={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200}
-            selfAlign="flex-start"
-            rightIcon={
-                <BaseIcon
-                    name="icon-arrow-right"
-                    size={16}
-                    style={styles.icon}
-                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
-                />
-            }
-            testID="COLLECTIBLES_LIST_SEE_ALL">
+        <SeeAllButton action={onNavigate} testID="COLLECTIBLES_LIST_SEE_ALL">
             {LL.COLLECTIONS_SEE_ALL()}
-        </BaseButton>
+        </SeeAllButton>
     )
 }
-
-const footerStyles = () =>
-    StyleSheet.create({
-        icon: {
-            marginLeft: 8,
-        },
-        btn: {
-            marginTop: 16,
-        },
-    })
-
 export const CollectiblesList = () => {
     const { styles } = useThemedStyles(baseStyles)
     const favoriteNfts = useAppSelector(selectAllFavoriteNfts)
