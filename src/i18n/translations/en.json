@@ -904,6 +904,7 @@
   "ORIGIN": "Origin",
   "OUTCOMES": "Outcomes",
   "PAID": "Paid",
+  "PENDING_ACTIVITY": "Pending...",
   "PIN_CODE": "PIN Code",
   "PLACEHOLDER_ENTER_ADDRESS": "Enter the address",
   "PLACEHOLDER_ENTER_NAME": "Enter the name",

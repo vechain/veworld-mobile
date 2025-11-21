@@ -13,6 +13,8 @@ import {
     RequireUserPassword,
     TransferCard,
 } from "~Components"
+import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { AnalyticsEvent, creteAnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useTransactionScreen, useTransferAddContact } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -54,7 +56,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
     )
 
     const onFinish = useCallback(
-        (success: boolean) => {
+        (txId: string | undefined, success: boolean) => {
             if (success) {
                 track(AnalyticsEvent.WALLET_OPERATION, {
                     ...creteAnalyticsEvent({
@@ -65,23 +67,29 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                         context: AnalyticsEvent.SEND,
                     }),
                 })
+                Feedback.show({
+                    severity: FeedbackSeverity.LOADING,
+                    message: LL.TRANSACTION_IN_PROGRESS(),
+                    type: FeedbackType.ALERT,
+                    id: txId,
+                })
             }
 
             dispatch(setIsAppLoading(false))
             nav.dispatch(StackActions.popToTop())
         },
-        [dispatch, nav, track, network.name],
+        [dispatch, nav, track, network.name, LL],
     )
 
     const onTransactionSuccess = useCallback(
         (transaction: Transaction) => {
             dispatch(addPendingNFTtransferTransactionActivity(transaction))
-            onFinish(true)
+            onFinish(transaction.id.toString(), true)
         },
         [onFinish, dispatch],
     )
 
-    const onTransactionFailure = useCallback(() => onFinish(false), [onFinish])
+    const onTransactionFailure = useCallback(() => onFinish(undefined, false), [onFinish])
 
     const {
         selectedDelegationOption,

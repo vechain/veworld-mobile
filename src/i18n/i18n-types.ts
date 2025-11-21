@@ -3715,6 +3715,10 @@ type RootTranslation = {
 	 */
 	PAID: string
 	/**
+	 * P​e​n​d​i​n​g​.​.​.
+	 */
+	PENDING_ACTIVITY: string
+	/**
 	 * P​I​N​ ​C​o​d​e
 	 */
 	PIN_CODE: string
@@ -5194,18 +5198,6 @@ type RootTranslation = {
 	 */
 	TITLE_WELCOME_TO: string
 	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​n​ ​p​r​o​g​r​e​s​s
-	 */
-	TRANSACTION_IN_PROGRESS: string
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​d​o​n​e
-	 */
-	TRANSACTION_DONE: string
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​a​i​l​e​d
-	 */
-	TRANSACTION_FAILED: string
-	/**
 	 * T​o
 	 */
 	TO: string
@@ -5284,6 +5276,14 @@ type RootTranslation = {
 	 */
 	TOUCH_ID: string
 	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​d​o​n​e
+	 */
+	TRANSACTION_DONE: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​a​i​l​e​d
+	 */
+	TRANSACTION_FAILED: string
+	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​e​e
 	 */
 	TRANSACTION_FEE: string
@@ -5291,6 +5291,10 @@ type RootTranslation = {
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​I​D
 	 */
 	TRANSACTION_ID: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​n​ ​p​r​o​g​r​e​s​s
+	 */
+	TRANSACTION_IN_PROGRESS: string
 	/**
 	 * T​y​p​e
 	 */
@@ -9281,6 +9285,10 @@ This action is irreversible.
 	 */
 	PAID: () => LocalizedString
 	/**
+	 * Pending...
+	 */
+	PENDING_ACTIVITY: () => LocalizedString
+	/**
 	 * PIN Code
 	 */
 	PIN_CODE: () => LocalizedString
@@ -10742,18 +10750,6 @@ Available for Google and Apple Pay.
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
 	/**
-	 * Transaction in progress
-	 */
-	TRANSACTION_IN_PROGRESS: () => LocalizedString
-	/**
-	 * Transaction done
-	 */
-	TRANSACTION_DONE: () => LocalizedString
-	/**
-	 * Transaction failed
-	 */
-	TRANSACTION_FAILED: () => LocalizedString
-	/**
 	 * To
 	 */
 	TO: () => LocalizedString
@@ -10832,6 +10828,14 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	TOUCH_ID: () => LocalizedString
 	/**
+	 * Transaction done
+	 */
+	TRANSACTION_DONE: () => LocalizedString
+	/**
+	 * Transaction failed
+	 */
+	TRANSACTION_FAILED: () => LocalizedString
+	/**
 	 * Transaction fee
 	 */
 	TRANSACTION_FEE: () => LocalizedString
@@ -10839,6 +10843,10 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Transaction ID
 	 */
 	TRANSACTION_ID: () => LocalizedString
+	/**
+	 * Transaction in progress
+	 */
+	TRANSACTION_IN_PROGRESS: () => LocalizedString
 	/**
 	 * Type
 	 */
