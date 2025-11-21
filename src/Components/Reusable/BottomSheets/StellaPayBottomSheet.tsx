@@ -1,4 +1,4 @@
-import React, { RefObject, useCallback, useMemo } from "react"
+import React, { RefObject, useCallback, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseBottomSheet, BaseText, BaseView, BaseButton, BaseIcon } from "~Components/Base"
 import { StellaPayCard, StellaPayLogoSVG } from "~Assets"
@@ -12,17 +12,21 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import { useBottomSheetModal } from "~Hooks"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
-import { selectCurrentScreen, useAppSelector } from "~Storage/Redux"
+import { selectCurrentScreen, setHideStellaPayBottomSheet, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { CheckBoxWithText } from "../CheckBoxWithText"
 
 type Props = {}
 
 export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({}, ref) => {
+    const [isChecked, setIsChecked] = useState(false)
+
+    const currentRoute = useAppSelector(selectCurrentScreen)
+
+    const dispatch = useAppDispatch()
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const { navigateWithTab } = useBrowserTab()
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
-    const currentRoute = useAppSelector(selectCurrentScreen)
-
     const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModalMethods> })
 
     const returnScreen = useMemo(() => {
@@ -64,14 +68,26 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
             title: "Stella Pay",
             navigationFn: url => nav.navigate(Routes.BROWSER, { url, returnScreen: returnScreen }),
         })
+
+        if (isChecked) {
+            dispatch(setHideStellaPayBottomSheet(true))
+        }
+
         onClose()
-    }, [navigateWithTab, onClose, nav, returnScreen])
+    }, [navigateWithTab, onClose, nav, returnScreen, isChecked, dispatch])
+
+    const onDismiss = useCallback(() => {
+        if (isChecked) {
+            dispatch(setHideStellaPayBottomSheet(true))
+        }
+    }, [isChecked, dispatch])
 
     return (
         <BaseBottomSheet
             ref={ref}
             snapPoints={["92%"]}
             backgroundStyle={styles.bottomSheet}
+            onDismiss={onDismiss}
             handleColor={COLORS.DARK_PURPLE_DISABLED}>
             <BaseView flex={1} flexDirection="column" gap={24} alignItems="center" justifyContent="space-between">
                 <BaseView flex={1} flexDirection="column" gap={24} alignItems="center">
@@ -107,15 +123,27 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                     </BaseView>
                 </BaseView>
 
-                <BaseButton
-                    w={100}
-                    style={styles.button}
-                    bgColor={COLORS.LIME_GREEN}
-                    textColor={COLORS.PURPLE}
-                    rightIcon={<BaseIcon name="icon-arrow-right" size={24} color={COLORS.PURPLE} />}
-                    action={onClick}>
-                    {LL.STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD()}
-                </BaseButton>
+                <BaseView flexDirection="column" gap={16} w={100}>
+                    <BaseButton
+                        w={100}
+                        style={styles.button}
+                        bgColor={COLORS.LIME_GREEN}
+                        textColor={COLORS.PURPLE}
+                        rightIcon={<BaseIcon name="icon-arrow-right" size={24} color={COLORS.PURPLE} />}
+                        action={onClick}>
+                        {LL.STELLA_PAY_BOTTOM_SHEET_GET_YOUR_FREE_CARD()}
+                    </BaseButton>
+                    <CheckBoxWithText
+                        isChecked={isChecked}
+                        text={LL.STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN()}
+                        checkAction={setIsChecked}
+                        testID="stella-pay-bottom-sheet-dont-show-again-checkbox"
+                        fontColor={COLORS.WHITE}
+                        checkBoxColor={COLORS.WHITE}
+                        style={styles.checkbox}
+                        font="bodyMedium"
+                    />
+                </BaseView>
             </BaseView>
         </BaseBottomSheet>
     )
@@ -127,11 +155,14 @@ const baseStyles = () =>
             backgroundColor: COLORS.PURPLE,
         },
         image: {
-            width: 258,
-            height: 215,
+            width: 219,
+            height: 182,
         },
         button: {
             justifyContent: "center",
             gap: 12,
+        },
+        checkbox: {
+            justifyContent: "center",
         },
     })
