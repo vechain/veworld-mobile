@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.11 (2025-11-20)</small>
+
+* build: init ([307b7fe](https://github.com/vechain/veworld-mobile/commit/307b7fe))
+* 87 - Add toggle to disable StellaPay BS (#3562) ([83affdd](https://github.com/vechain/veworld-mobile/commit/83affdd)), closes [#3562](https://github.com/vechain/veworld-mobile/issues/3562)
+
 ## 2.5.0 (2025-11-13)
 
 * build: init ([f33174b](https://github.com/vechain/veworld-mobile/commit/f33174b))
