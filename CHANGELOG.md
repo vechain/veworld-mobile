@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.11 (2025-11-20)</small>
+
+* build: init ([fd84308](https://github.com/vechain/veworld-mobile/commit/fd84308))
+* 532 feat   add stargate events to tx sign events (#3543) ([2729d57](https://github.com/vechain/veworld-mobile/commit/2729d57)), closes [#3543](https://github.com/vechain/veworld-mobile/issues/3543)
+
 ## 2.5.0 (2025-11-13)
 
 * build: init ([f33174b](https://github.com/vechain/veworld-mobile/commit/f33174b))
