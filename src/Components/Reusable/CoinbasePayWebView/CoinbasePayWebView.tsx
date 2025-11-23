@@ -1,22 +1,15 @@
 import { useNavigation } from "@react-navigation/native"
 import { useQuery } from "@tanstack/react-query"
 import React, { useCallback, useMemo, useState, useEffect } from "react"
-import { StyleSheet } from "react-native"
+import { ActivityIndicator, StyleSheet } from "react-native"
 import "react-native-url-polyfill/auto"
 import { WebView, WebViewMessageEvent } from "react-native-webview"
 import { generateCoinbaseOnRampURL } from "~Api/OnOffRampProviders"
-import {
-    BaseActivityIndicator,
-    BaseStatusBar,
-    BaseView,
-    RequireUserPassword,
-    useFeatureFlags,
-    useInAppBrowser,
-} from "~Components"
+import { BaseStatusBar, BaseView, RequireUserPassword, useFeatureFlags, useInAppBrowser } from "~Components"
 import { Feedback } from "~Components/Providers/FeedbackProvider"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
-import { useAnalyticTracking, useCheckIdentity, useSignMessage, useSmartWallet, useWalletSecurity } from "~Hooks"
+import { useAnalyticTracking, useCheckIdentity, useSignMessage, useSmartWallet } from "~Hooks"
 import { Routes } from "~Navigation"
 import { ErrorMessageUtils, HexUtils, PlatformUtils, debug, error } from "~Utils"
 import { DEVICE_TYPE } from "~Model"
@@ -102,20 +95,19 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
         allowAutoPassword: true,
     })
 
-    const { biometrics } = useWalletSecurity()
-
     // Trigger signature generation when address changes
-    // Wait for biometrics to finish loading before triggering auth
+    // Wait for biometrics to finish loading before triggering auth (isBiometricsEmpty becomes false once loaded)
     useEffect(() => {
-        // Only proceed once biometrics state has been determined (biometrics object exists)
-        if (resolvedDestinationAddress && biometrics !== undefined) {
+        // Only proceed once biometrics state has been determined
+        // isBiometricsEmpty is false when biometrics is loaded (whether enabled or not)
+        if (resolvedDestinationAddress && isBiometricsEmpty === false) {
             setSignature(undefined)
             setTimestamp(undefined)
             // Trigger authentication flow
             checkIdentityBeforeOpening()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [resolvedDestinationAddress, biometrics])
+    }, [resolvedDestinationAddress, isBiometricsEmpty])
 
     const {
         data: coinbaseURL,
@@ -207,27 +199,36 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
         return isCoinbaseLoading ? undefined : coinbaseURL
     }, [coinbaseURL, isCoinbaseLoading])
 
+    const shouldShowPasswordPrompt = isPasswordPromptOpen
+    const shouldShowSpinner = (isLoading || isBiometricsEmpty) && !shouldShowPasswordPrompt
+    const shouldShowWebView = !!url && !shouldShowPasswordPrompt
+
     return (
-        <>
+        <BaseView flex={1}>
+            {!isLoading && isAndroid && <BaseStatusBar />}
+            {shouldShowSpinner && (
+                <BaseView style={styles.spinnerOverlay}>
+                    <ActivityIndicator size="large" />
+                </BaseView>
+            )}
+
+            {shouldShowWebView && (
+                <WebView
+                    source={{ uri: url }}
+                    onLoadEnd={handleLoadEnd}
+                    onMessage={onMessage}
+                    style={styles.webView}
+                    originWhitelist={originWhitelist}
+                />
+            )}
+
+            {/* Render last so the modal stays on top of any other modalized content */}
             <RequireUserPassword
-                isOpen={isPasswordPromptOpen}
+                isOpen={shouldShowPasswordPrompt}
                 onClose={handleClosePasswordModal}
                 onSuccess={onPasswordSuccess}
             />
-            <BaseView flex={1}>
-                {!isLoading && isAndroid && <BaseStatusBar />}
-                <BaseActivityIndicator isVisible={isLoading || isBiometricsEmpty} />
-                {url && (
-                    <WebView
-                        source={{ uri: url }}
-                        onLoadEnd={handleLoadEnd}
-                        onMessage={onMessage}
-                        style={styles.webView}
-                        originWhitelist={originWhitelist}
-                    />
-                )}
-            </BaseView>
-        </>
+        </BaseView>
     )
 }
 
@@ -236,5 +237,11 @@ const baseStyles = (isLoading: boolean) =>
         webView: {
             flex: 1,
             opacity: isLoading ? 0 : 1,
+        },
+        spinnerOverlay: {
+            ...StyleSheet.absoluteFillObject,
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1,
         },
     })
