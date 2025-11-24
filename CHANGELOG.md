@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.12 (2025-11-24)</small>
+
+* build: init ([d22dcee](https://github.com/vechain/veworld-mobile/commit/d22dcee))
+* refactor: sync state globally for favorites (#3574) ([2db48b4](https://github.com/vechain/veworld-mobile/commit/2db48b4)), closes [#3574](https://github.com/vechain/veworld-mobile/issues/3574)
+
 ## 2.5.0 (2025-11-21)
 
 * build: init ([d6a9102](https://github.com/vechain/veworld-mobile/commit/d6a9102))
