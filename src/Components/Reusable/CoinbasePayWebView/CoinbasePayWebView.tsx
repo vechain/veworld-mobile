@@ -89,8 +89,7 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
         [resolvedDestinationAddress, signMessage, nav, LL],
     )
 
-    // Trigger the identity check to allow us to generate the signature with the
-    // private key
+    // WHen identity is confirmed, generate signature
     const {
         isPasswordPromptOpen,
         handleClosePasswordModal,
@@ -102,7 +101,7 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
         allowAutoPassword: true,
     })
 
-    // Trigger signature generation when address changes and biometrics is ready
+    // Trigger identiy check
     useEffect(() => {
         if (resolvedDestinationAddress && isBiometricsEmpty === false) {
             setSignature(undefined)
