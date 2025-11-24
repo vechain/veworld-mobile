@@ -23,19 +23,17 @@ import {
     FungibleTokenActivity,
     LoginActivity,
     NETWORK_TYPE,
-    NonFungibleTokenActivity,
     NFTMarketplaceActivity,
+    NonFungibleTokenActivity,
     StargateActivity,
     SwapActivity,
     UnknownTxActivity,
     VeVoteCastActivity,
 } from "~Model"
 
-jest.mock("~Hooks/useNFTInfo", () => ({
-    useNFTInfo: () => ({
-        tokenMetadata: {
-            image: "https://example.com/nft.jpg",
-        },
+jest.mock("~Hooks/useCollectibleDetails", () => ({
+    useCollectibleDetails: () => ({
+        image: "https://example.com/nft.jpg",
         collectionName: "Test Collection",
         isMediaLoading: false,
     }),
