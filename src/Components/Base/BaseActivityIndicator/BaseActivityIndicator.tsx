@@ -9,6 +9,7 @@ type Props = {
     isVisible: boolean
     onHide?: () => void
 }
+
 export const BaseActivityIndicator: React.FC<Props> = ({ text, isVisible, onHide = () => null }) => {
     return (
         <BaseModal
@@ -17,10 +18,16 @@ export const BaseActivityIndicator: React.FC<Props> = ({ text, isVisible, onHide
             isOpen={isVisible}
             onClose={onHide}
             transparent={true}>
-            <BaseView flex={1} alignItems="center" justifyContent="center">
-                <ActivityIndicator testID="activity-indicator" size="large" />
-                {text && <BaseText>{text}</BaseText>}
-            </BaseView>
+            <BaseActivityIndicatorView text={text} />
         </BaseModal>
+    )
+}
+
+export const BaseActivityIndicatorView: React.FC<{ text?: string }> = ({ text }) => {
+    return (
+        <BaseView flex={1} alignItems="center" justifyContent="center">
+            <ActivityIndicator testID="activity-indicator" size="large" />
+            {text && <BaseText>{text}</BaseText>}
+        </BaseView>
     )
 }

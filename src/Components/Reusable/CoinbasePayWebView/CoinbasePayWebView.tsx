@@ -1,11 +1,18 @@
 import { useNavigation } from "@react-navigation/native"
 import { useQuery } from "@tanstack/react-query"
 import React, { useCallback, useMemo, useState, useEffect } from "react"
-import { ActivityIndicator, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import "react-native-url-polyfill/auto"
 import { WebView, WebViewMessageEvent } from "react-native-webview"
 import { generateCoinbaseOnRampURL } from "~Api/OnOffRampProviders"
-import { BaseStatusBar, BaseView, RequireUserPassword, useFeatureFlags, useInAppBrowser } from "~Components"
+import {
+    BaseActivityIndicatorView,
+    BaseStatusBar,
+    BaseView,
+    RequireUserPassword,
+    useFeatureFlags,
+    useInAppBrowser,
+} from "~Components"
 import { Feedback } from "~Components/Providers/FeedbackProvider"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
@@ -202,12 +209,7 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
     return (
         <BaseView flex={1}>
             {!isLoading && isAndroid && <BaseStatusBar />}
-            {shouldShowSpinner && (
-                <BaseView style={styles.spinnerOverlay}>
-                    <ActivityIndicator size="large" />
-                </BaseView>
-            )}
-
+            {shouldShowSpinner && <BaseActivityIndicatorView />}
             {shouldShowWebView && (
                 <WebView
                     source={{ uri: url }}
@@ -217,8 +219,6 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
                     originWhitelist={originWhitelist}
                 />
             )}
-
-            {/* Render last so the modal stays on top of any other modalized content */}
             <RequireUserPassword
                 isOpen={isPasswordPromptOpen}
                 onClose={handleClosePasswordModal}
