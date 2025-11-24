@@ -71,7 +71,6 @@ export const NFTImageComponent = memo((props: Props) => {
                 },
                 style,
             ]}
-            fallback
             defaultSource={NFTPlaceholderDarkV2}
             source={{
                 uri,

@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseButton, BaseIcon, BaseSpacer } from "~Components"
+import { BaseSpacer } from "~Components"
 import { CollectibleBottomSheet } from "~Components/Collectibles/CollectibleBottomSheet"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useThemedStyles } from "~Hooks"
@@ -11,6 +11,8 @@ import { Routes } from "~Navigation"
 import { useNFTCollections } from "~Screens/Flows/App/Collectibles/Hooks"
 import { selectAllFavoriteNfts, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
+import { SeeAllButton } from "../SeeAllButton"
+import { CollectibleBuyCard } from "./CollectibleBuyCard"
 import { CollectibleCard } from "./CollectibleCard"
 import { CollectiblesEmptyCard } from "./CollectiblesEmptyCard"
 
@@ -19,7 +21,6 @@ const ItemSeparatorComponent = () => <BaseSpacer height={8} />
 const ListFooterComponent = ({ addresses }: { addresses: string[] }) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const { styles, theme } = useThemedStyles(footerStyles)
     const track = useAnalyticTracking()
 
     const onNavigate = useCallback(() => {
@@ -36,61 +37,37 @@ const ListFooterComponent = ({ addresses }: { addresses: string[] }) => {
     if (addresses.length === 0) return null
 
     return (
-        <BaseButton
-            variant="ghost"
-            px={0}
-            py={4}
-            action={onNavigate}
-            typographyFont="bodyMedium"
-            style={styles.btn}
-            textColor={theme.colors.text}
-            rightIcon={<BaseIcon name="icon-arrow-right" size={14} style={styles.icon} color={theme.colors.text} />}
-            testID="COLLECTIBLES_LIST_SEE_ALL">
-            {LL.ACTIVITY_SEE_ALL()}
-        </BaseButton>
+        <SeeAllButton action={onNavigate} testID="COLLECTIBLES_LIST_SEE_ALL">
+            {LL.COLLECTIONS_SEE_ALL()}
+        </SeeAllButton>
     )
 }
-
-const footerStyles = () =>
-    StyleSheet.create({
-        icon: {
-            marginLeft: 2,
-        },
-        btn: {
-            marginTop: 16,
-        },
-    })
-
 export const CollectiblesList = () => {
     const { styles } = useThemedStyles(baseStyles)
     const favoriteNfts = useAppSelector(selectAllFavoriteNfts)
-    const { data: allNfts } = useHomeCollectibles()
+    const { data: allNfts, isLoading: isLoadingNfts } = useHomeCollectibles()
     const { data: paginatedCollections, isLoading } = useNFTCollections()
     const { ref, onOpen } = useBottomSheetModal()
 
     const nfts = useMemo(() => {
-        return (
-            favoriteNfts
-                .sort((a, b) => b.createdAt - a.createdAt)
-                .map(({ createdAt: _createdAt, ...rest }) => rest)
-                .concat(allNfts?.data.map(nft => ({ address: nft.contractAddress, tokenId: nft.tokenId })) ?? [])
-                //Deduplicate items
-                .reduce((acc, curr) => {
-                    if (
-                        acc.find(
-                            v => AddressUtils.compareAddresses(curr.address, v.address) && curr.tokenId === v.tokenId,
-                        )
-                    )
-                        return acc
-                    acc.push(curr)
+        const result: ({ address: string; tokenId: string } | { placeholder: true })[] = favoriteNfts
+            .sort((a, b) => b.createdAt - a.createdAt)
+            .map(({ createdAt: _createdAt, ...rest }) => rest)
+            .concat(allNfts?.data.map(nft => ({ address: nft.contractAddress, tokenId: nft.tokenId })) ?? [])
+            //Deduplicate items
+            .reduce((acc, curr) => {
+                if (acc.find(v => AddressUtils.compareAddresses(curr.address, v.address) && curr.tokenId === v.tokenId))
                     return acc
-                }, [] as { address: string; tokenId: string }[])
-                .slice(0, 4)
-        )
-    }, [allNfts?.data, favoriteNfts])
+                acc.push(curr)
+                return acc
+            }, [] as { address: string; tokenId: string }[])
+            .slice(0, 6)
+        if (result.length < 6 && !isLoadingNfts && result.length > 0) return result.concat({ placeholder: true })
+        return result
+    }, [allNfts?.data, favoriteNfts, isLoadingNfts])
 
     const addresses = useMemo(
-        () => paginatedCollections?.pages.flatMap(page => page.collections) ?? [],
+        () => paginatedCollections?.pages.flatMap(page => page.data ?? []) ?? [],
         [paginatedCollections],
     )
 
@@ -102,7 +79,8 @@ export const CollectiblesList = () => {
     )
 
     const renderItem = useCallback(
-        ({ item }: ListRenderItemInfo<{ address: string; tokenId: string }>) => {
+        ({ item }: ListRenderItemInfo<{ address: string; tokenId: string } | { placeholder: true }>) => {
+            if ("placeholder" in item) return <CollectibleBuyCard />
             return <CollectibleCard address={item.address} tokenId={item.tokenId} onPress={onPress} />
         },
         [onPress],
@@ -118,7 +96,7 @@ export const CollectiblesList = () => {
                 ItemSeparatorComponent={ItemSeparatorComponent}
                 ListEmptyComponent={CollectiblesEmptyCard}
                 horizontal={false}
-                keyExtractor={v => `${v.address}_${v.tokenId}`}
+                keyExtractor={v => ("placeholder" in v ? v.placeholder.toString() : `${v.address}_${v.tokenId}`)}
                 columnWrapperStyle={styles.listColumn}
                 ListFooterComponent={
                     isLoading || nfts.length === 0 ? null : <ListFooterComponent addresses={addresses} />

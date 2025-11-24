@@ -32,6 +32,7 @@ jobs:
                 yarn abi:build
                 yarn install
                 yarn abi:generate
+                yarn generate:indexer-schema:mainnet
 
             - name: Lint, Format Check & TS Check
               run: yarn lint && yarn format:check & yarn ts-check
