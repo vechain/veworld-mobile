@@ -1,5 +1,8 @@
 import { Transaction } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { i18nObject } from "~i18n"
 import {
     Activity,
     ActivityStatus,
@@ -8,7 +11,9 @@ import {
     DEVICE_TYPE,
     NonFungibleTokenActivity,
     TypedData,
+    ActivityType,
 } from "~Model"
+import { NAVIGATION_REF, Routes } from "~Navigation"
 import {
     createConnectedAppActivity,
     createLoginActivity,
@@ -18,7 +23,7 @@ import {
     createSignCertificateActivity,
     createSingTypedDataActivity,
 } from "~Networking"
-import { selectSelectedAccount, selectDevice, selectSelectedNetwork } from "~Storage/Redux/Selectors"
+import { selectSelectedAccount, selectDevice, selectSelectedNetwork, selectLanguage } from "~Storage/Redux/Selectors"
 import { addActivity } from "~Storage/Redux/Slices"
 import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
 
@@ -32,8 +37,10 @@ import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
  */
 export const validateAndUpsertActivity = createAppAsyncThunk(
     "activity/upsertTransactionDetails",
-    async ({ activity, thor }: { activity: Activity; thor: ThorClient }, { dispatch }) => {
+    async ({ activity, thor }: { activity: Activity; thor: ThorClient }, { dispatch, getState }) => {
         let updatedActivity = { ...activity }
+        const locale = selectLanguage(getState())
+        const LL = i18nObject(locale)
 
         // If the activity is a transaction, we need to fetch the transaction from the chain
         if (updatedActivity.isTransaction) {
@@ -52,6 +59,31 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
         if (Date.now() - updatedActivity.timestamp > 120000 && updatedActivity.status === ActivityStatus.PENDING)
             updatedActivity.status = ActivityStatus.REVERTED
 
+        if (
+            [ActivityStatus.REVERTED, ActivityStatus.SUCCESS].includes(updatedActivity.status!) &&
+            [ActivityType.TRANSFER_FT, ActivityType.TRANSFER_NFT, ActivityType.TRANSFER_VET].includes(
+                updatedActivity.type as ActivityType,
+            )
+        ) {
+            Feedback.show({
+                message:
+                    updatedActivity.status === ActivityStatus.REVERTED
+                        ? LL.TRANSACTION_FAILED()
+                        : LL.TRANSACTION_DONE(),
+                severity: FeedbackSeverity.SUCCESS,
+                type: FeedbackType.ALERT,
+                id: updatedActivity.txId,
+                onPress() {
+                    NAVIGATION_REF.navigate(Routes.HISTORY_STACK, {
+                        screen: Routes.ACTIVITY_DETAILS,
+                        params: {
+                            activity: updatedActivity,
+                        },
+                    })
+                },
+            })
+        }
+
         dispatch(addActivity(updatedActivity))
         return updatedActivity
     },
@@ -67,6 +99,8 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
 export const addPendingTransferTransactionActivity =
     (outgoingTx: Transaction): AppThunk<void> =>
     (dispatch, getState) => {
+        const locale = selectLanguage(getState())
+        const LL = i18nObject(locale)
         const selectedAccount = selectSelectedAccount(getState())
         const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
 
@@ -75,6 +109,20 @@ export const addPendingTransferTransactionActivity =
 
         const pendingActivity: FungibleTokenActivity = createPendingTransferActivityFromTx(outgoingTx)
         dispatch(addActivity(pendingActivity))
+        Feedback.show({
+            severity: FeedbackSeverity.LOADING,
+            message: LL.TRANSACTION_IN_PROGRESS(),
+            type: FeedbackType.ALERT,
+            id: outgoingTx.id.toString(),
+            onPress() {
+                NAVIGATION_REF.navigate(Routes.HISTORY_STACK, {
+                    screen: Routes.HISTORY,
+                    params: {
+                        screen: Routes.ACTIVITY_ALL,
+                    },
+                })
+            },
+        })
     }
 
 /**
@@ -91,6 +139,8 @@ export const addPendingTransferTransactionActivity =
 export const addPendingNFTtransferTransactionActivity =
     (outgoingTx: Transaction): AppThunk<void> =>
     (dispatch, getState) => {
+        const locale = selectLanguage(getState())
+        const LL = i18nObject(locale)
         const selectedAccount = selectSelectedAccount(getState())
         const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
         // Ignore if the selected account is a smart wallet for now
@@ -98,6 +148,20 @@ export const addPendingNFTtransferTransactionActivity =
 
         const pendingActivity: NonFungibleTokenActivity = createPendingNFTTransferActivityFromTx(outgoingTx)
         dispatch(addActivity(pendingActivity))
+        Feedback.show({
+            severity: FeedbackSeverity.LOADING,
+            message: LL.TRANSACTION_IN_PROGRESS(),
+            type: FeedbackType.ALERT,
+            id: outgoingTx.id.toString(),
+            onPress() {
+                NAVIGATION_REF.navigate(Routes.HISTORY_STACK, {
+                    screen: Routes.HISTORY,
+                    params: {
+                        screen: Routes.ACTIVITY_ALL,
+                    },
+                })
+            },
+        })
     }
 
 /**

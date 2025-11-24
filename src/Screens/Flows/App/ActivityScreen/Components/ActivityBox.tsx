@@ -44,8 +44,8 @@ import {
     selectSelectedAccount,
     useAppSelector,
 } from "~Storage/Redux"
-import { formatWithLessThan } from "~Utils/StandardizedFormatting"
 import { AddressUtils, BigNutils, URIUtils, ValidatorUtils } from "~Utils"
+import { formatWithLessThan } from "~Utils/StandardizedFormatting"
 import { getTokenLevelName } from "~Utils/StargateUtils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 import { StackedApps } from "./StackedApps"
@@ -327,7 +327,8 @@ const TokenTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxPr
                                 typographyFont="captionMedium"
                                 color={theme.colors.activityCard.subtitleBold}
                                 numberOfLines={1}
-                                flex={1}>
+                                flex={1}
+                                testID="TOKEN_TRANSFER_SENDER">
                                 {addressOrUsername}
                             </BaseText>
                         </BaseView>
@@ -352,7 +353,8 @@ const TokenTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxPr
                                 typographyFont="captionMedium"
                                 color={theme.colors.activityCard.subtitleBold}
                                 numberOfLines={1}
-                                flex={1}>
+                                flex={1}
+                                testID="TOKEN_TRANSFER_RECEIVER">
                                 {addressOrUsername}
                             </BaseText>
                         </BaseView>

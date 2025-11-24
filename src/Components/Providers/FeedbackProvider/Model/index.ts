@@ -15,6 +15,11 @@ export enum FeedbackType {
 
 export type FeedbackShowArgs = {
     /**
+     * Identifier for the chip.
+     * Useful when you want to replace a chip to update its state
+     */
+    id?: string
+    /**
      * The severity of the feedback.
      */
     severity: FeedbackSeverity
@@ -31,4 +36,5 @@ export type FeedbackShowArgs = {
     message: string
     icon?: IconKey
     duration?: number
+    onPress?: () => void
 }

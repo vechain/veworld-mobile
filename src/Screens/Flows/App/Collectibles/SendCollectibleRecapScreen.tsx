@@ -15,6 +15,7 @@ import {
 } from "~Components"
 import { AnalyticsEvent, creteAnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useTransactionScreen, useTransferAddContact } from "~Hooks"
+import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
 import { useI18nContext } from "~i18n"
 import { ContactType, DEVICE_TYPE, NFTMediaType, NonFungibleToken } from "~Model"
 import { Routes } from "~Navigation"
@@ -31,7 +32,6 @@ import {
 import { AccountUtils, AddressUtils } from "~Utils"
 import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
-import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
 
 type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.SEND_NFT_RECAP>
 
@@ -79,7 +79,7 @@ export const SendCollectibleRecapScreen = ({ route }: Props) => {
     )
 
     const onFinish = useCallback(
-        (success: boolean) => {
+        (txId: string | undefined, success: boolean) => {
             if (success) {
                 track(AnalyticsEvent.WALLET_OPERATION, {
                     ...creteAnalyticsEvent({
@@ -101,12 +101,12 @@ export const SendCollectibleRecapScreen = ({ route }: Props) => {
     const onTransactionSuccess = useCallback(
         (transaction: Transaction) => {
             dispatch(addPendingNFTtransferTransactionActivity(transaction))
-            onFinish(true)
+            onFinish(transaction.id.toString(), true)
         },
         [onFinish, dispatch],
     )
 
-    const onTransactionFailure = useCallback(() => onFinish(false), [onFinish])
+    const onTransactionFailure = useCallback(() => onFinish(undefined, false), [onFinish])
 
     const {
         selectedDelegationOption,
