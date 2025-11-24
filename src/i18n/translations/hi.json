@@ -437,7 +437,7 @@
   "CLOUD_ERR_WALLET_OPERATION": "इस iCloud वॉलेट ऑपरेशन को करते समय एक त्रुटि हुई। कृपया पुन: प्रयास करें।",
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "हम आपके {cloud: string} में कोई भी बैक-अप वॉलेट नहीं पा सके। पुन: प्रयास करें या अपनी रिकवरी वाक्यांश का उपयोग करें।",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "कोई वॉलेट उपलब्ध नहीं है",
-  "COINBASE_NOT_AVAILABLE": "कॉइनबेस उपलब्ध नहीं है",
+  "COINBASE_NOT_AVAILABLE": "Coinbase उपलब्ध नहीं है",
   "COLLECTIBLES_ACTION_AVATAR_ACTIVE": "अवतार",
   "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "अवतार सेट करें",
   "COLLECTIBLES_ACTION_FAVORITE_INACTIVE": "पसंदीदा",
