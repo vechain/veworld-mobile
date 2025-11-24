@@ -89,7 +89,7 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
         [resolvedDestinationAddress, signMessage, nav, LL],
     )
 
-    // WHen identity is confirmed, generate signature
+    // When identity is confirmed, generate signature
     const {
         isPasswordPromptOpen,
         handleClosePasswordModal,
