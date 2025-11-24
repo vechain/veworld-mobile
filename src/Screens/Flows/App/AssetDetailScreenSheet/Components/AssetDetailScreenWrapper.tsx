@@ -62,6 +62,13 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
         runOnJS(nav.goBack)()
     }, [nav.goBack])
 
+    const onScrollOffsetChange = useCallback(
+        (scrollOffset: number) => {
+            scrollY.value = scrollOffset
+        },
+        [scrollY],
+    )
+
     useAnimatedReaction(
         () => height.value,
         current => {
@@ -156,9 +163,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                         bounces={false}
                         showsVerticalScrollIndicator={false}
                         nestedScrollEnabled
-                        onScrollOffsetChange={scrollOffset => {
-                            scrollY.value = scrollOffset
-                        }}>
+                        onScrollOffsetChange={onScrollOffsetChange}>
                         {children}
                     </NestableScrollContainer>
                 </Animated.View>
