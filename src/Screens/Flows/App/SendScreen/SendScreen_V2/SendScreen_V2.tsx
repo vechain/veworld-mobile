@@ -3,14 +3,16 @@ import { useNavigation } from "@react-navigation/native"
 import { StyleSheet } from "react-native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { ReactElement, useCallback, useMemo, useState } from "react"
-import { BaseIcon, BaseView, Layout } from "~Components"
+import { BaseView, Layout } from "~Components"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
+import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
 import FontUtils from "~Utils/FontUtils"
 
+// TODO(send-flow-v2): Add proper step types based on the logic implemented in each child step component
 type SendFlowStep = "selectToken" | "insertAddress" | "selectAmount" | "summary"
 
 type SendFlowState = {
@@ -36,7 +38,7 @@ type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.
 export const SendScreenV2 = (): ReactElement => {
     const { LL } = useI18nContext()
     const navigation = useNavigation<NavigationProps>()
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
     const [step, setStep] = useState<SendFlowStep>("selectToken")
     const [flowState, setFlowState] = useState<SendFlowState>({})
 
@@ -45,17 +47,8 @@ export const SendScreenV2 = (): ReactElement => {
     }, [navigation])
 
     const headerRightElement = useMemo(
-        () => (
-            <BaseIcon
-                name="icon-x"
-                size={16}
-                testID="Send_Screen_Close"
-                action={handleClose}
-                style={styles.iconContainer}
-                color={theme.colors.sendBottomSheet.iconColor}
-            />
-        ),
-        [handleClose, styles.iconContainer, theme.colors.sendBottomSheet.iconColor],
+        () => <CloseIconHeaderButton action={handleClose} testID="Send_Screen_Close" />,
+        [handleClose],
     )
 
     const goToInsertAddress = useCallback((token: FungibleTokenWithBalance) => {
@@ -100,6 +93,7 @@ export const SendScreenV2 = (): ReactElement => {
     }, [flowState.token])
 
     const renderStep = useMemo(() => {
+        // TODO(send-flow-v2): Implement proper step types based on the logic implemented in each child step component
         switch (step) {
             case "selectToken":
                 return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step1 logic */}</BaseView>
@@ -131,10 +125,8 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 8,
             width: 32,
             height: 32,
-            backgroundColor: theme.colors.sendBottomSheet.iconBackgroundColor,
             borderRadius: 6,
             borderWidth: 1,
-            borderColor: theme.colors.sendBottomSheet.iconBorderColor,
             alignItems: "center",
             justifyContent: "center",
         },

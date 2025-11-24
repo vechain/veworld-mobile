@@ -17,7 +17,6 @@ type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.
 export const SendScreen = (): ReactElement | null => {
     const navigation = useNavigation<NavigationProps>()
     const { betterWorldFeature } = useFeatureFlags()
-
     useEffect(() => {
         if (!betterWorldFeature.balanceScreen?.send?.enabled) {
             navigation.replace(Routes.SELECT_TOKEN_SEND)
