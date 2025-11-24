@@ -24,7 +24,6 @@ export const useHomeCollectibles = () => {
                 })
                 .then(res => res.data!),
         staleTime: 5 * 60 * 1000,
-        gcTime: 5 * 60 * 1000,
         enabled: favoriteNfts.length < 6,
     })
 }
