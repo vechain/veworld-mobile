@@ -1,8 +1,12 @@
-import React from "react"
-import { TestWrapper } from "~Test"
 import { act, render, screen } from "@testing-library/react-native"
+import React from "react"
 import { Text } from "react-native"
-import { FeedbackProvider, Feedback } from "./FeedbackProvider"
+import { TestWrapper } from "~Test"
+
+import { Feedback } from "./Events"
+
+import { FeedbackProvider } from "./FeedbackProvider"
+
 import { FeedbackSeverity, FeedbackType } from "./Model"
 
 describe("FeedbackProvider", () => {

@@ -1,15 +1,7 @@
-import EventEmitter from "events"
 import React, { useCallback, useEffect, useState } from "react"
 import { FeedbackChip } from "./Components/FeedbackChip"
+import { FeedbackEmitter } from "./Events"
 import { FeedbackShowArgs, FeedbackType } from "./Model"
-
-export const FeedbackEmitter = new EventEmitter()
-
-export const Feedback = {
-    show: (args: FeedbackShowArgs) => {
-        FeedbackEmitter.emit("show", args)
-    },
-}
 
 export const FeedbackProvider = ({ children }: { children: React.ReactNode }) => {
     const [feedbackData, setFeedbackData] = useState<FeedbackShowArgs | null>(null)

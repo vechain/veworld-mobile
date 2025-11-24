@@ -9,9 +9,9 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { useI18nContext } from "~i18n"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 
 export const useNftBookmarking = (address: string, tokenId: string) => {
     const dispatch = useAppDispatch()

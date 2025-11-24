@@ -1,6 +1,6 @@
 import { Transaction } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { i18nObject } from "~i18n"
 import {
