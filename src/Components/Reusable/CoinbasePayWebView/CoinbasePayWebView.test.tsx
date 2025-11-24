@@ -93,6 +93,7 @@ describe("CoinbasePayWebView", () => {
         mockWebViewProps = undefined
         mockIsPasswordPromptOpen = false
         mockIsBiometricsEmpty = false
+        onIdentityConfirmedCallback = null
 
         // Default mock implementation for signMessage
         // Returns a 65-byte signature (130 hex chars)
@@ -105,12 +106,8 @@ describe("CoinbasePayWebView", () => {
 
         // Mock the checkIdentityBeforeOpening to trigger the callback
         mockCheckIdentityBeforeOpening.mockImplementation(() => {
-            // Trigger the callback asynchronously
-            if (onIdentityConfirmedCallback) {
-                setTimeout(() => {
-                    onIdentityConfirmedCallback!()
-                }, 0)
-            }
+            // Trigger the callback immediately to avoid unwrapped act warnings
+            return onIdentityConfirmedCallback?.()
         })
     })
 
