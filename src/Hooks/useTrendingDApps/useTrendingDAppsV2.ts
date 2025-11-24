@@ -33,7 +33,6 @@ export const useTrendingDAppsV2 = () => {
         queryKey: ["DAPPS_CAROUSEL", "TRENDING"],
         queryFn: getSortedData,
         staleTime: 24 * 60 * 60 * 1000,
-        gcTime: 24 * 60 * 60 * 1000,
         enabled: !!vbdApps?.length && !!xAppSharesdData?.length,
     })
 

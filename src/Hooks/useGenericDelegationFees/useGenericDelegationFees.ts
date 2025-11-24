@@ -80,6 +80,7 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
         queryFn: () => estimateGenericDelegatorFees({ clauses, signer, networkType: selectedNetwork.type }),
         enabled: isValidGenericDelegatorNetwork(selectedNetwork.type),
         refetchInterval: 10000,
+        gcTime: 1000 * 60 * 5,
         placeholderData: keepPreviousData,
     })
 
