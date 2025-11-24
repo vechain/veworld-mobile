@@ -118,6 +118,8 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
     )
 
     const formattedConvertedAmount = useMemo(() => {
+        if (!input || input === "0") return "0"
+
         if (isInputInFiat) {
             const tokenAmount = BigNutils().toTokenConversion(input, exchangeRate ?? 0).toString
             return formatFullPrecision(tokenAmount, {
@@ -183,7 +185,9 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
 
             setInput(_newValue)
 
-            if (_newValue === "" || BigNutils(_newValue).isZero) {
+            const normalizedValue = _newValue.match(/^[.,]/) ? `0${_newValue}` : _newValue
+
+            if (_newValue === "" || BigNutils(normalizedValue).isZero) {
                 if (timer.current) {
                     clearTimeout(timer.current)
                     timer.current = null
@@ -199,8 +203,10 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
 
             if (!isVTHO.current) {
                 const controlValue = isInputInFiat
-                    ? BigNutils().toTokenConversion(_newValue, exchangeRate ?? 0)
-                    : BigNutils(_newValue).addTrailingZeros(selectedToken.decimals).toHuman(selectedToken.decimals)
+                    ? BigNutils().toTokenConversion(normalizedValue, exchangeRate ?? 0)
+                    : BigNutils(normalizedValue)
+                          .addTrailingZeros(selectedToken.decimals)
+                          .toHuman(selectedToken.decimals)
 
                 const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(selectedToken.decimals)
 
@@ -227,9 +233,11 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
                 timer.current = setTimeout(async () => {
                     const controlValue = isInputInFiat
                         ? BigNutils()
-                              .toTokenConversion(_newValue, exchangeRate ?? 0)
+                              .toTokenConversion(normalizedValue, exchangeRate ?? 0)
                               .decimals(selectedToken.decimals)
-                        : BigNutils(_newValue).addTrailingZeros(selectedToken.decimals).toHuman(selectedToken.decimals)
+                        : BigNutils(normalizedValue)
+                              .addTrailingZeros(selectedToken.decimals)
+                              .toHuman(selectedToken.decimals)
 
                     const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(selectedToken.decimals)
 
