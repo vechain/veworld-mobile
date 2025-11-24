@@ -50,6 +50,7 @@ import {
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AssetDetailScreenSheet } from "~Screens/Flows/App/AssetDetailScreenSheet"
 import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
+import { SendScreenV2 } from "~Screens/Flows/App/SendScreen/SendScreen_V2/SendScreen_V2"
 import { CollectionsScreen, SendCollectibleRecapScreen } from "~Screens/Flows/App/Collectibles"
 import { BlacklistedCollectionsScreen } from "~Screens/Flows/App/Collectibles/BlacklistedCollectionsScreen"
 import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/CollectibleCollectionDetails"
@@ -202,7 +203,7 @@ export const HomeStack = () => {
                 />
                 <Screen
                     name={Routes.SELECT_TOKEN_SEND}
-                    component={SelectTokenSendScreen}
+                    component={betterWorldFeature.balanceScreen?.send?.enabled ? SendScreenV2 : SelectTokenSendScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen

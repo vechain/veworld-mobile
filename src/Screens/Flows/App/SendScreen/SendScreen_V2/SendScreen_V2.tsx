@@ -119,7 +119,6 @@ export const SendScreenV2 = (): ReactElement => {
             bg={theme.colors.sendBottomSheet.background}
             title={LL.SEND_TOKEN_TITLE()}
             noBackButton
-            noMargin
             headerTitleAlignment="center"
             headerRightElement={headerRightElement}
             fixedBody={<BaseView flex={1}>{renderStep}</BaseView>}
