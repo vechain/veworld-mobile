@@ -53,7 +53,13 @@ export const PendingTransactions = () => {
     if (pendingTransactions.length === 0) return null
 
     return (
-        <BaseView p={16} borderRadius={16} bg={theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_200} mb={24} mx={16}>
+        <BaseView
+            p={16}
+            borderRadius={16}
+            bg={theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_200}
+            mb={24}
+            mx={16}
+            testID="PENDING_TRANSACTIONS_ROOT">
             <BaseView flexDirection="row" gap={12} py={6} mb={12}>
                 <Spinner color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE} size={16} />
                 <BaseText color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE} typographyFont="bodySemiBold">

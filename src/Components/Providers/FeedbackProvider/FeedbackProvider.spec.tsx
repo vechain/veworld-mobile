@@ -28,7 +28,7 @@ describe("FeedbackProvider", () => {
             })
         })
 
-        const chip = await screen.getByTestId("FEEDBACK_CHIP")
+        const chip = screen.getByTestId("FEEDBACK_CHIP")
         expect(chip).toBeVisible()
         expect(chip).toHaveTextContent("Test")
     })

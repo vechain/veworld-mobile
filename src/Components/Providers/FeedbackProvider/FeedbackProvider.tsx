@@ -13,7 +13,7 @@ export const FeedbackProvider = ({ children }: { children: React.ReactNode }) =>
     useEffect(() => {
         FeedbackEmitter.on("show", (args: FeedbackShowArgs) => {
             if (feedbackData && !feedbackData.id) return
-            if (feedbackData && feedbackData.id && feedbackData.id !== args.id) return
+            if (feedbackData?.id !== undefined && feedbackData.id !== args.id) return
             setFeedbackData(args)
         })
 
