@@ -5,7 +5,8 @@ import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
 import { B3TR, COLORS, DIRECTIONS, typography, VET, VOT3, VTHO } from "~Constants"
 import { useFetchValidators, useFormatFiat, useTheme, useThemedStyles, useVns } from "~Hooks"
-import { useNFTInfo } from "~Hooks/useNFTInfo"
+import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
+import { useStargateConfig } from "~Hooks/useStargateConfig"
 import { useI18nContext } from "~i18n"
 import {
     Activity,
@@ -42,6 +43,7 @@ import {
     selectFeaturedDapps,
     selectOfficialTokens,
     selectSelectedAccount,
+    selectSelectedNetwork,
     useAppSelector,
 } from "~Storage/Redux"
 import { AddressUtils, BigNutils, URIUtils, ValidatorUtils } from "~Utils"
@@ -504,7 +506,10 @@ const DAppSignCertBox = ({ activity, onPress, ...props }: OverridableActivityBox
 
 const NFTTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxProps<NonFungibleTokenActivity>) => {
     const { LL } = useI18nContext()
-    const { collectionName, tokenMetadata } = useNFTInfo(activity?.tokenId, activity.contractAddress)
+    const { image, collectionName } = useCollectibleDetails({
+        address: activity.contractAddress,
+        tokenId: activity.tokenId,
+    })
     const isReceived = activity.direction === DIRECTIONS.DOWN
     const title = isReceived ? LL.NFT_TRANSFER_RECEIVED() : LL.NFT_TRANSFER_SENT()
 
@@ -525,7 +530,7 @@ const NFTTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxProp
             title={title}
             description={validatedCollectionName()}
             onPress={onPressHandler}
-            nftImage={tokenMetadata?.image}
+            nftImage={image}
             {...props}
         />
     )
@@ -533,7 +538,10 @@ const NFTTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxProp
 
 const NFTSale = ({ activity, onPress, ...props }: OverridableActivityBoxProps<NFTMarketplaceActivity>) => {
     const { LL } = useI18nContext()
-    const { collectionName, tokenMetadata } = useNFTInfo(activity?.tokenId, activity.contractAddress)
+    const { image, collectionName } = useCollectibleDetails({
+        address: activity.contractAddress,
+        tokenId: activity.tokenId,
+    })
     const { formatLocale } = useFormatFiat()
     const customTokens = useAppSelector(selectCustomTokens)
     const officialTokens = useAppSelector(selectOfficialTokens)
@@ -574,7 +582,7 @@ const NFTSale = ({ activity, onPress, ...props }: OverridableActivityBoxProps<NF
             rightAmount={rightAmount}
             rightAmountDescription={token?.symbol ?? "VET"}
             onPress={onPressHandler}
-            nftImage={tokenMetadata?.image}
+            nftImage={image}
             {...props}
         />
     )
@@ -882,13 +890,23 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
     const { formatLocale } = useFormatFiat()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const { validators } = useFetchValidators()
+    const { name: vnsName } = useVns({
+        address: activity.validator || activity.to?.[0],
+        name: "",
+    })
+    const network = useAppSelector(selectSelectedNetwork)
+    const config = useStargateConfig(network)
+    const { image } = useCollectibleDetails({
+        address: config.STARGATE_NFT_CONTRACT_ADDRESS,
+        tokenId: activity.tokenId,
+    })
 
-    const onPressHandler = () => {
+    const onPressHandler = useCallback(() => {
         onPress(activity)
-    }
+    }, [activity, onPress])
 
-    const getStakingIcon = useCallback((eventName: string): IconKey => {
-        switch (eventName) {
+    const icon = useMemo<IconKey>(() => {
+        switch (activity.eventName) {
             case ActivityEvent.STARGATE_STAKE:
                 return "icon-download"
             case ActivityEvent.STARGATE_UNSTAKE:
@@ -918,17 +936,24 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
             default:
                 return "icon-blocks"
         }
-    }, [])
+    }, [activity.eventName])
 
     const hasRightAmount = useMemo(() => {
-        return !(
-            activity?.type === ActivityEvent.STARGATE_UNDELEGATE_LEGACY ||
-            activity?.type === ActivityEvent.STARGATE_MANAGER_ADDED ||
-            activity?.type === ActivityEvent.STARGATE_MANAGER_REMOVED
-        )
+        return ![
+            ActivityEvent.STARGATE_MANAGER_ADDED,
+            ActivityEvent.STARGATE_MANAGER_REMOVED,
+            ActivityEvent.STARGATE_UNDELEGATE_LEGACY,
+            ActivityEvent.STARGATE_DELEGATE_ACTIVE,
+            ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST,
+            ActivityEvent.STARGATE_DELEGATION_EXITED,
+            ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR,
+            ActivityEvent.STARGATE_DELEGATE_REQUEST,
+            ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED,
+            ActivityEvent.STARGATE_DELEGATE_LEGACY,
+        ].includes(activity.type as ActivityEvent)
     }, [activity?.type])
 
-    const getActivityTitle = useCallback(() => {
+    const activityTitle = useMemo(() => {
         switch (activity.eventName) {
             case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY:
                 return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL()
@@ -1001,10 +1026,10 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
         )
     }, [activity.eventName])
 
-    const getDescription = useMemo(() => {
+    const description = useMemo(() => {
         if (isDelegationOrDelegateActivity && activity.validator) {
             const validatorName = ValidatorUtils.getValidatorName(validators ?? [], activity.validator)
-            return validatorName || AddressUtils.humanAddress(activity.validator)
+            return validatorName || vnsName || AddressUtils.humanAddress(activity.validator)
         }
         if (
             (activity.eventName === ActivityEvent.STARGATE_MANAGER_ADDED ||
@@ -1015,34 +1040,49 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
             if (isUserAddress && activity.tokenId) {
                 return `#${activity.tokenId}`
             }
-            return AddressUtils.humanAddress(activity.to[0])
+            return vnsName || AddressUtils.humanAddress(activity.to[0])
         }
         return activity.levelId ? getTokenLevelName(activity.levelId) : ""
     }, [
         isDelegationOrDelegateActivity,
         activity.validator,
-        activity.levelId,
         activity.eventName,
         activity.to,
+        activity.levelId,
         activity.tokenId,
-        selectedAccount.address,
         validators,
+        vnsName,
+        selectedAccount.address,
     ])
 
-    const baseActivityBoxProps = () => {
-        return {
-            icon: getStakingIcon(activity.eventName),
-            title: getActivityTitle(),
-            description: getDescription,
-            rightAmount: rightAmount,
-            rightAmountDescription:
-                hasRightAmount &&
-                (activity.eventName.includes("_CLAIM_") || activity.eventName.includes("BOOST")
-                    ? VTHO.symbol
-                    : VET.symbol),
-            onPress: onPressHandler,
+    const rightAmountDescription = useMemo(() => {
+        switch (activity.eventName) {
+            case ActivityEvent.STARGATE_BOOST:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY:
+                return VTHO.symbol
+            case ActivityEvent.STARGATE_STAKE:
+            case ActivityEvent.STARGATE_UNSTAKE:
+                return VET.symbol
+            default:
+                return null
         }
-    }
+    }, [activity.eventName])
+
+    const imageToShow = useMemo(() => {
+        switch (activity.eventName) {
+            case ActivityEvent.STARGATE_BOOST:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY:
+            case ActivityEvent.STARGATE_STAKE:
+            case ActivityEvent.STARGATE_UNSTAKE:
+                return undefined
+            default:
+                return image
+        }
+    }, [activity.eventName, image])
 
     return (
         <BaseActivityBox
@@ -1055,7 +1095,13 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
                 end: { x: 0.87, y: 1 },
             }}
             timestamp={activity.timestamp}
-            {...baseActivityBoxProps()}
+            icon={icon}
+            title={activityTitle}
+            description={description}
+            rightAmount={rightAmount}
+            rightAmountDescription={rightAmountDescription}
+            onPress={onPressHandler}
+            nftImage={imageToShow}
             {...props}
         />
     )

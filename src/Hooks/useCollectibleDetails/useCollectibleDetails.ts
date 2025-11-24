@@ -6,8 +6,8 @@ import { getNftNameAndSymbolOptions } from "~Networking/NFT/getNftCollectionMeta
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
 type Args = {
-    address: string
-    tokenId: string
+    address: string | undefined
+    tokenId: string | undefined
 }
 
 export const useCollectibleDetails = ({ address, tokenId }: Args) => {
@@ -24,6 +24,7 @@ export const useCollectibleDetails = ({ address, tokenId }: Args) => {
         return {
             ...data,
             name,
+            collectionName: collectionMetadata?.name,
         }
-    }, [data, name])
+    }, [collectionMetadata?.name, data, name])
 }
