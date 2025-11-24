@@ -46,11 +46,11 @@ import {
     UsernameClaimed,
     WalletDetailScreen,
     WalletManagementScreen,
+    SendScreen,
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AssetDetailScreenSheet } from "~Screens/Flows/App/AssetDetailScreenSheet"
 import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
-import { SendScreenV2 } from "~Screens/Flows/App/SendScreen/SendScreen_V2/SendScreen_V2"
 import { CollectionsScreen, SendCollectibleRecapScreen } from "~Screens/Flows/App/Collectibles"
 import { BlacklistedCollectionsScreen } from "~Screens/Flows/App/Collectibles/BlacklistedCollectionsScreen"
 import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/CollectibleCollectionDetails"
@@ -67,6 +67,7 @@ type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
+    [Routes.SEND_TOKEN]: undefined
     [Routes.SELECT_TOKEN_SEND]: undefined
     [Routes.SELECT_AMOUNT_SEND]: {
         token: FungibleTokenWithBalance
@@ -201,9 +202,10 @@ export const HomeStack = () => {
                     component={betterWorldFeature.balanceScreen?.enabled ? BalanceScreen : HomeScreen}
                     options={{ headerShown: false }}
                 />
+                <Screen name={Routes.SEND_TOKEN} component={SendScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.SELECT_TOKEN_SEND}
-                    component={betterWorldFeature.balanceScreen?.send?.enabled ? SendScreenV2 : SelectTokenSendScreen}
+                    component={SelectTokenSendScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen

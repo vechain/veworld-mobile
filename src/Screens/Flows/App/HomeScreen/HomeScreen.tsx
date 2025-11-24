@@ -164,7 +164,7 @@ export const HomeScreen = () => {
         const sharedActions: FastAction[] = [
             {
                 name: LL.BTN_SEND(),
-                action: () => nav.navigate(Routes.SELECT_TOKEN_SEND),
+                action: () => nav.navigate(Routes.SEND_TOKEN),
                 icon: <BaseIcon color={theme.colors.text} name="icon-arrow-up" size={20} />,
                 testID: "sendButton",
             },

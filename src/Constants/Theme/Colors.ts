@@ -366,7 +366,6 @@ export type Colors = {
         optionTitle: string
     }
     sendBottomSheet: {
-        background: string
         iconColor: string
         iconBackgroundColor: string
         iconBorderColor: string
@@ -865,7 +864,6 @@ const light: Colors = {
         optionTitle: COLORS.GREY_600,
     },
     sendBottomSheet: {
-        background: COLORS.APP_BACKGROUND_LIGHT,
         iconColor: COLORS.GREY_600,
         iconBackgroundColor: COLORS.WHITE,
         iconBorderColor: COLORS.GREY_200,
@@ -1241,7 +1239,6 @@ const dark: Colors = {
         optionTitle: COLORS.GREY_300,
     },
     sendBottomSheet: {
-        background: COLORS.APP_BACKGROUND_DARK,
         iconColor: COLORS.WHITE,
         iconBackgroundColor: COLORS.PURPLE,
         iconBorderColor: COLORS.PURPLE,

@@ -30,6 +30,7 @@ export enum Routes {
     BUY_FLOW = "Buy_Flow",
     BUY = "Buy",
     BUY_WEBVIEW = "Buy_Webview",
+    SEND_TOKEN = "Send_Token",
     SELECT_TOKEN_SEND = "Select_Token_Send",
     SELECT_AMOUNT_SEND = "Select_Amount_Send",
     INSERT_ADDRESS_SEND = "Insert_Address_Send",

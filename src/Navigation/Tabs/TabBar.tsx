@@ -26,7 +26,7 @@ const getHeightMultiplierByScreen = (currentScreen: string) => {
         case Routes.APPS_SEARCH:
         case Routes.BUY_WEBVIEW:
         case Routes.BUY:
-        case Routes.SELECT_TOKEN_SEND:
+        case Routes.SEND_TOKEN:
             return 0
 
         case "":

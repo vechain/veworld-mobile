@@ -1,6 +1,6 @@
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
+import { RouteProp, useRoute } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo } from "react"
-import { BaseView, useFeatureFlags } from "~Components"
+import { BaseView } from "~Components"
 import { useBottomSheetModal, useCameraBottomSheet } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -13,7 +13,6 @@ import { MoreButton } from "./ActionButtons/MoreButton"
 import { ReceiveButton } from "./ActionButtons/ReceiveButton"
 import { SendButton } from "./ActionButtons/SendButton"
 import { SwapButton } from "./ActionButtons/SwapButton"
-import { Keyboard } from "react-native"
 
 type Props = {
     token: FungibleTokenWithBalance
@@ -21,7 +20,6 @@ type Props = {
 
 export const BalanceTabActions = ({ token }: Props) => {
     const route = useRoute<RouteProp<RootStackParamListHome, Routes.TOKEN_DETAILS>>()
-    const nav = useNavigation()
 
     const betterConversionResult = useMemo(
         () => route.params.betterConversionResult,
@@ -49,36 +47,17 @@ export const BalanceTabActions = ({ token }: Props) => {
         targets: [],
     })
 
-    const { betterWorldFeature } = useFeatureFlags()
-
-    const handleOpenSend = useCallback(() => {
-        Keyboard.dismiss()
-        nav.navigate(Routes.SELECT_TOKEN_SEND)
-    }, [nav])
-
     const allActions = useMemo(() => {
         return {
             RECEIVE: <ReceiveButton onOpenBottomsheet={handleOpenOnlyReceiveCamera} key={"RECEIVE"} />,
-            SEND: (
-                <SendButton
-                    token={token}
-                    key={"SEND"}
-                    onOpenSendFlow={betterWorldFeature.balanceScreen?.send?.enabled ? handleOpenSend : undefined}
-                />
-            ),
+            SEND: <SendButton token={token} key={"SEND"} />,
             BUY: <BuyButton key={"BUY"} />,
             EARN: <EarnButton key={"EARN"} />,
             SWAP: <SwapButton token={token} key={"SWAP"} />,
             MORE: <MoreButton openReceiveBottomsheet={handleOpenOnlyReceiveCamera} token={token} key={"MORE"} />,
             CONVERT: <ConvertButton bsRef={convertB3trBsRef} key={"CONVERT"} />,
         }
-    }, [
-        convertB3trBsRef,
-        handleOpenOnlyReceiveCamera,
-        handleOpenSend,
-        betterWorldFeature.balanceScreen?.send?.enabled,
-        token,
-    ])
+    }, [convertB3trBsRef, handleOpenOnlyReceiveCamera, token])
 
     const tokenActions = useMemo<(keyof typeof allActions)[]>(() => {
         switch (token.symbol) {

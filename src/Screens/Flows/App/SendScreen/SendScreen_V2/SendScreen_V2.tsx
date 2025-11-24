@@ -19,7 +19,7 @@ type SendFlowState = {
     amount?: string
 }
 
-type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SELECT_TOKEN_SEND>
+type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
 
 /**
  * SendScreenV2
@@ -116,7 +116,6 @@ export const SendScreenV2 = (): ReactElement => {
 
     return (
         <Layout
-            bg={theme.colors.sendBottomSheet.background}
             title={LL.SEND_TOKEN_TITLE()}
             noBackButton
             headerTitleAlignment="center"

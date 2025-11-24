@@ -38,7 +38,7 @@ export const BalanceActions = ({ style }: Props) => {
     }, [nav, track])
 
     const onSend = useCallback(() => {
-        nav.navigate(Routes.SELECT_TOKEN_SEND)
+        nav.navigate(Routes.SEND_TOKEN)
         track(AnalyticsEvent.DASHBOARD_SEND_CLICK)
     }, [nav, track])
 
