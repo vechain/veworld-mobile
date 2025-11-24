@@ -437,7 +437,7 @@
   "CLOUD_ERR_WALLET_OPERATION": "Houve um erro ao realizar esta operação da carteira iCloud. Por favor, tente novamente.",
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "Não conseguimos encontrar carteiras armazenadas em seu {cloud: string}. Tente novamente ou use sua frase de recuperação.",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "Nenhuma carteira disponível",
-  "COINBASE_NOT_AVAILABLE": "Coinbase não disponível",
+  "COINBASE_NOT_AVAILABLE": "Coinbase não está disponível",
   "COLLECTIBLES_ACTION_AVATAR_ACTIVE": "Avatar",
   "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "Definir avatar",
   "COLLECTIBLES_ACTION_FAVORITE_INACTIVE": "Favoritar",

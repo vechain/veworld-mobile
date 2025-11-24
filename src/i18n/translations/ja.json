@@ -437,7 +437,7 @@
   "CLOUD_ERR_WALLET_OPERATION": "このiCloudウォレット操作中にエラーが発生しました。再試行してください。",
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "{cloud: string}にバックアップされたウォレットが見つかりませんでした。再試行するか、リカバリーフレーズを使用してください。",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "利用可能なウォレットがありません",
-  "COINBASE_NOT_AVAILABLE": "コインベースは利用できません",
+  "COINBASE_NOT_AVAILABLE": "Coinbaseは利用できません",
   "COLLECTIBLES_ACTION_AVATAR_ACTIVE": "アバター",
   "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "アバターを設定",
   "COLLECTIBLES_ACTION_FAVORITE_INACTIVE": "お気に入り",
