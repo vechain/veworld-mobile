@@ -36,7 +36,7 @@ import {
     ManageCustomNodesScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
-    SelectAmountSendScreen,
+    SelectAmountSendScreenV2,
     SelectLedgerAccounts,
     SelectLedgerDevice,
     SelectTokenSendScreen,
@@ -207,7 +207,7 @@ export const HomeStack = () => {
                 />
                 <Screen
                     name={Routes.SELECT_AMOUNT_SEND}
-                    component={SelectAmountSendScreen}
+                    component={SelectAmountSendScreenV2}
                     options={{ headerShown: false }}
                 />
                 <Screen

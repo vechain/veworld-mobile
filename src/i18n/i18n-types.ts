@@ -1935,6 +1935,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_DONE: string
 	/**
+	 * G​o​ ​t​o
+	 */
+	COMMON_BTN_GO_TO: string
+	/**
 	 * L​o​a​d​i​n​g
 	 */
 	COMMON_BTN_LOADING: string
@@ -2092,6 +2096,10 @@ type RootTranslation = {
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
 	COMMON_MARKET_CAP: string
+	/**
+	 * M​a​x
+	 */
+	COMMON_MAX: string
 	/**
 	 * N​.​A​.
 	 */
@@ -3303,6 +3311,14 @@ type RootTranslation = {
 	 */
 	MESSAGE_LEDGER_SIGN_DATA_SB: string
 	/**
+	 * T​h​i​s​ ​a​p​p​ ​i​s​ ​r​u​n​n​i​n​g​ ​o​n​ ​a​ ​n​e​t​w​o​r​k​ ​t​h​a​t​ ​i​s​ ​n​o​t​ ​c​u​r​r​e​n​t​l​y​ ​a​d​d​e​d​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​T​o​ ​c​o​n​t​i​n​u​e​,​ ​p​l​e​a​s​e​ ​a​d​d​ ​t​h​e​ ​n​e​t​w​o​r​k​s​ ​n​o​d​e​ ​U​R​L​.
+	 */
+	MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION: string
+	/**
+	 * N​e​t​w​o​r​k​ ​n​o​t​ ​d​e​t​e​c​t​e​d
+	 */
+	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: string
+	/**
 	 * A​d​d​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
 	NETWORK_ADD_CUSTOM_NODE: string
@@ -3852,6 +3868,38 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_STARGATE_DELEGATE: string
 	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​a​c​t​i​v​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: string
+	/**
+	 * M​a​n​a​g​e​r​ ​a​d​d​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: string
+	/**
+	 * M​a​n​a​g​e​r​ ​r​e​m​o​v​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: string
+	/**
+	 * M​a​t​u​r​i​t​y​ ​b​o​o​s​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: string
+	/**
 	 * V​E​T​ ​s​t​a​k​e
 	 */
 	RECEIPT_OUTPUT_STARGATE_STAKE: string
@@ -3867,38 +3915,6 @@ type RootTranslation = {
 	 * V​E​T​ ​u​n​s​t​a​k​e
 	 */
 	RECEIPT_OUTPUT_STARGATE_UNSTAKE: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​a​c​t​i​v​e
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: string
-	/**
-	 * M​a​n​a​g​e​r​ ​a​d​d​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: string
-	/**
-	 * M​a​n​a​g​e​r​ ​r​e​m​o​v​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: string
-	/**
-	 * M​a​t​u​r​i​t​y​ ​b​o​o​s​t​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: string
 	/**
 	 * S​w​a​p
 	 */
@@ -4273,6 +4289,10 @@ type RootTranslation = {
 	 */
 	SEND_AMOUNT: string
 	/**
+	 * A​m​o​u​n​t​ ​e​x​c​e​e​d​s​ ​b​a​l​a​n​c​e
+	 */
+	SEND_AMOUNT_EXCEEDS_BALANCE: string
+	/**
 	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e​:​ ​{​p​e​r​c​e​n​t​a​g​e​}
 	 * @param {string} percentage
 	 */
@@ -4527,6 +4547,10 @@ type RootTranslation = {
 	 */
 	SEND_TO: string
 	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d
+	 */
+	SEND_TOKEN_SELECT: string
+	/**
 	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
@@ -4568,6 +4592,10 @@ type RootTranslation = {
 	 * S​e​n​d​i​n​g​ ​V​O​T​3
 	 */
 	SEND_VOT3_TITLE: string
+	/**
+	 * V​O​T​3​ ​t​o​k​e​n​s​ ​s​h​o​u​l​d​n​'​t​ ​b​e​ ​s​e​n​t​ ​d​i​r​e​c​t​l​y​ ​t​o​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​.​ ​V​O​T​3​ ​c​a​n​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​t​o​ ​B​3​T​R​ ​t​o​k​e​n​s​ ​a​n​d​ ​s​e​n​t​ ​a​f​t​e​r​w​a​r​d​s​.
+	 */
+	SEND_VOT3_WARNING: string
 	/**
 	 * V​e​c​h​a​i​n​ ​f​a​c​i​l​i​t​a​t​e​s​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​u​s​i​n​g​ ​V​T​H​O​ ​a​s​ ​t​h​e​ ​p​a​y​m​e​n​t​ ​m​e​d​i​u​m​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​O​u​r​ ​M​A​X​ ​c​a​l​c​u​l​a​t​i​o​n​ ​m​e​t​h​o​d​ ​w​i​l​l​ ​d​e​d​u​c​t​ ​a​ ​p​r​e​d​e​f​i​n​e​d​ ​b​a​s​e​ ​f​e​e​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​g​a​s
 	 */
@@ -5614,18 +5642,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * N​e​t​w​o​r​k​ ​n​o​t​ ​d​e​t​e​c​t​e​d
-	 */
-	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: string
-	/**
-	 * T​h​i​s​ ​a​p​p​ ​i​s​ ​r​u​n​n​i​n​g​ ​o​n​ ​a​ ​n​e​t​w​o​r​k​ ​t​h​a​t​ ​i​s​ ​n​o​t​ ​c​u​r​r​e​n​t​l​y​ ​a​d​d​e​d​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​T​o​ ​c​o​n​t​i​n​u​e​,​ ​p​l​e​a​s​e​ ​a​d​d​ ​t​h​e​ ​n​e​t​w​o​r​k​s​ ​n​o​d​e​ ​U​R​L​.
-	 */
-	MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION: string
-	/**
-	 * G​o​ ​t​o
-	 */
-	COMMON_BTN_GO_TO: string
 }
 
 export type TranslationFunctions = {
@@ -7512,6 +7528,10 @@ This action is irreversible.
 	 */
 	COMMON_BTN_DONE: () => LocalizedString
 	/**
+	 * Go to
+	 */
+	COMMON_BTN_GO_TO: () => LocalizedString
+	/**
 	 * Loading
 	 */
 	COMMON_BTN_LOADING: () => LocalizedString
@@ -7667,6 +7687,10 @@ This action is irreversible.
 	 * Market Cap
 	 */
 	COMMON_MARKET_CAP: () => LocalizedString
+	/**
+	 * Max
+	 */
+	COMMON_MAX: () => LocalizedString
 	/**
 	 * N.A.
 	 */
@@ -8872,6 +8896,14 @@ This action is irreversible.
 	 */
 	MESSAGE_LEDGER_SIGN_DATA_SB: () => LocalizedString
 	/**
+	 * This app is running on a network that is not currently added to your wallet. To continue, please add the networks node URL.
+	 */
+	MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION: () => LocalizedString
+	/**
+	 * Network not detected
+	 */
+	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
 	 * Add custom node
 	 */
 	NETWORK_ADD_CUSTOM_NODE: () => LocalizedString
@@ -9401,6 +9433,38 @@ This action is irreversible.
 	 */
 	RECEIPT_OUTPUT_STARGATE_DELEGATE: () => LocalizedString
 	/**
+	 * Delegation active
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: () => LocalizedString
+	/**
+	 * Delegation exited
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: () => LocalizedString
+	/**
+	 * Delegation exit requested
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: () => LocalizedString
+	/**
+	 * Delegation requested
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: () => LocalizedString
+	/**
+	 * Delegation request cancelled
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
+	/**
+	 * Manager added
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: () => LocalizedString
+	/**
+	 * Manager removed
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: () => LocalizedString
+	/**
+	 * Maturity boosted
+	 */
+	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: () => LocalizedString
+	/**
 	 * VET stake
 	 */
 	RECEIPT_OUTPUT_STARGATE_STAKE: () => LocalizedString
@@ -9416,38 +9480,6 @@ This action is irreversible.
 	 * VET unstake
 	 */
 	RECEIPT_OUTPUT_STARGATE_UNSTAKE: () => LocalizedString
-	/**
-	 * Delegation requested
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: () => LocalizedString
-	/**
-	 * Delegation request cancelled
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
-	/**
-	 * Delegation active
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: () => LocalizedString
-	/**
-	 * Delegation exit requested
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: () => LocalizedString
-	/**
-	 * Delegation exited
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: () => LocalizedString
-	/**
-	 * Manager added
-	 */
-	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: () => LocalizedString
-	/**
-	 * Manager removed
-	 */
-	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: () => LocalizedString
-	/**
-	 * Maturity boosted
-	 */
-	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: () => LocalizedString
 	/**
 	 * Swap
 	 */
@@ -9817,6 +9849,10 @@ This action is irreversible.
 	 */
 	SEND_AMOUNT: () => LocalizedString
 	/**
+	 * Amount exceeds balance
+	 */
+	SEND_AMOUNT_EXCEEDS_BALANCE: () => LocalizedString
+	/**
 	 * Balance percentage: {percentage}
 	 */
 	SEND_BALANCE_PERCENTAGE: (arg: { percentage: string }) => LocalizedString
@@ -10069,6 +10105,10 @@ This action is irreversible.
 	 */
 	SEND_TO: () => LocalizedString
 	/**
+	 * Select the token you wish to send
+	 */
+	SEND_TOKEN_SELECT: () => LocalizedString
+	/**
 	 * Select the token asset you wish to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
@@ -10109,6 +10149,10 @@ Are you sure you want to continue?
 	 * Sending VOT3
 	 */
 	SEND_VOT3_TITLE: () => LocalizedString
+	/**
+	 * VOT3 tokens shouldn't be sent directly to another wallet. VOT3 can be converted to B3TR tokens and sent afterwards.
+	 */
+	SEND_VOT3_WARNING: () => LocalizedString
 	/**
 	 * Vechain facilitates transactions using VTHO as the payment medium for transaction fees. Our MAX calculation method will deduct a predefined base fee for transaction gas
 	 */
@@ -11143,18 +11187,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Network not detected
-	 */
-	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: () => LocalizedString
-	/**
-	 * This app is running on a network that is not currently added to your wallet. To continue, please add the networks node URL.
-	 */
-	MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION: () => LocalizedString
-	/**
-	 * Go to
-	 */
-	COMMON_BTN_GO_TO: () => LocalizedString
 }
 
 export type Formatters = {
