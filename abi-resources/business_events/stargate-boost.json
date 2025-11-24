@@ -1,0 +1,132 @@
+{
+  "name": "STARGATE_BOOST",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "MaturityPeriodBoosted(indexed uint256,indexed address,uint256,uint256)",
+      "alias": "boost",
+      "conditions": [
+        {
+          "firstOperand": "boostedBlocks",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "paidAmount",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "tokenId",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${STARGATE_NFT_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    },
+    {
+      "name": "Transfer(indexed address,indexed address,uint256)",
+      "alias": "vthoTransfer",
+      "conditions": [
+        {
+          "firstOperand": "to",
+          "isFirstStatic": false,
+          "secondOperand": "0x0000000000000000000000000000000000000000",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "value",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "0x0000000000000000000000000000456e65726779",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "firstEventName": "boost",
+      "firstEventProperty": "paidBy",
+      "secondEventName": "vthoTransfer",
+      "secondEventProperty": "from",
+      "operator": "EQ"
+    },
+    {
+      "firstEventName": "boost",
+      "firstEventProperty": "paidAmount",
+      "secondEventName": "vthoTransfer",
+      "secondEventProperty": "value",
+      "operator": "EQ"
+    }
+  ],
+  "paramsDefinition": [
+    {
+      "name": "tokenId",
+      "eventName": "boost",
+      "businessEventName": "tokenId"
+    },
+    {
+      "name": "paidAmount",
+      "eventName": "boost",
+      "businessEventName": "value"
+    },
+    {
+      "name": "paidBy",
+      "eventName": "boost",
+      "businessEventName": "from"
+    },
+    {
+      "name": "boostedBlocks",
+      "eventName": "boost",
+      "businessEventName": "boostedBlocks"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "boostedBlocks",
+      "type": "uint256"
+    }
+  ],
+  "type": "event"
+}

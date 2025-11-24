@@ -110,3 +110,11 @@ export const selectNotificationCenterUrl = createSelector(reducer, state => {
 export const selectDeveloperMenuUnlocked = createSelector(reducer, state => {
     return state.developerMenuUnlocked ?? false
 })
+
+export const selectIndexerUrls = createSelector(reducer, state => {
+    return state.indexerUrls ?? {}
+})
+
+export const selectHideStellaPayBottomSheet = createSelector(reducer, state => {
+    return state.hideStellaPayBottomSheet
+})

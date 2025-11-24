@@ -35,8 +35,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
         getNextPageParam: (lastPage, pages) => {
             return lastPage.pagination.hasNext ? pages.length : undefined
         },
-        enabled: isFocused && filters.length > 0,
-        gcTime: 1000 * 60 * 2, // 2 minutes
+        enabled: isFocused && (filterType === FilterType.ALL || filters.length > 0),
     })
 
     const refreshActivities = useCallback(async () => {
@@ -58,6 +57,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
     const activities = useMemo(() => {
         if (data && data.pages?.length > 0) {
             const remoteActivities: Activity[] = []
+
             data.pages
                 .flatMap(page => page.data)
                 .forEach(event => {

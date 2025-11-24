@@ -202,13 +202,22 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     />
                 )
             }
-            case ActivityType.STARGATE_DELEGATE:
+            case ActivityType.STARGATE_DELEGATE_LEGACY:
             case ActivityType.STARGATE_STAKE:
-            case ActivityType.STARGATE_CLAIM_REWARDS_BASE:
-            case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE:
-            case ActivityType.STARGATE_DELEGATE_ONLY:
-            case ActivityType.STARGATE_UNDELEGATE:
+            case ActivityType.STARGATE_CLAIM_REWARDS_BASE_LEGACY:
+            case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY:
+            case ActivityType.STARGATE_UNDELEGATE_LEGACY:
             case ActivityType.STARGATE_UNSTAKE:
+            case ActivityType.STARGATE_CLAIM_REWARDS:
+            case ActivityType.STARGATE_BOOST:
+            case ActivityType.STARGATE_DELEGATE_REQUEST:
+            case ActivityType.STARGATE_DELEGATE_REQUEST_CANCELLED:
+            case ActivityType.STARGATE_DELEGATE_EXIT_REQUEST:
+            case ActivityType.STARGATE_DELEGATION_EXITED:
+            case ActivityType.STARGATE_DELEGATION_EXITED_VALIDATOR:
+            case ActivityType.STARGATE_DELEGATE_ACTIVE:
+            case ActivityType.STARGATE_MANAGER_ADDED:
+            case ActivityType.STARGATE_MANAGER_REMOVED:
                 return (
                     <StargateActivityDetails
                         activity={(activityFromStore ?? activity) as StargateActivity}

@@ -11,7 +11,6 @@ export const useHomeCollectibles = () => {
         queryKey: ["COLLECTIBLES", "NFTS", network.genesis.id, account.address, 4, 0],
         queryFn: () => getNFTs(network.type, account.address, 4, 0),
         staleTime: 5 * 60 * 1000,
-        gcTime: 5 * 60 * 1000,
         enabled: favoriteNfts.length < 4,
     })
 }

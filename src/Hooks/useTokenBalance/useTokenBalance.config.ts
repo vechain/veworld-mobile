@@ -29,6 +29,5 @@ export const getUseTokenBalanceConfig = ({
         queryFn: () =>
             BalanceUtils.getBalancesFromBlockchain([tokenAddress], address, network, thor).then(res => res[0]),
         staleTime: 10 * 60 * 1000,
-        gcTime: 10 * 60 * 1000,
         placeholderData: keepPreviousData,
     })

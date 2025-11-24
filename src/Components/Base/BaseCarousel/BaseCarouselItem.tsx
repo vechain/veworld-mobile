@@ -7,6 +7,16 @@ import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { Routes } from "~Navigation"
 import { BaseIcon } from "../BaseIcon"
 
+export type CarouselPressEvent = {
+    name: string
+    defaultPrevented: boolean
+    /**
+     * Prevent the default action of the event.
+     * Works only if `onPressActivation` is set to `before`.
+     */
+    preventDefault: () => void
+}
+
 type Props = {
     testID?: string
     href?: string
@@ -16,7 +26,7 @@ type Props = {
     closable?: boolean
     closeButtonStyle?: ViewStyle
     onClose?: () => void
-    onPress?: (name: string) => void
+    onPress?: (event: CarouselPressEvent) => void
     /**
      * Decide when `onPress` is called. Default is `after
      */
@@ -55,14 +65,25 @@ export const BaseCarouselItem: React.FC<Props> = ({
         return route as Routes.SETTINGS | Routes.HOME | Routes.APPS
     }, [route])
 
-    const onPress = useCallback(async () => {
-        if (!href) return
-        if (isExternalLink) {
-            if (onPressActivation === "before") propsOnPress?.(name ?? "")
+    const handleExternalLinkPress = useCallback(
+        async (event: CarouselPressEvent) => {
+            if (!href) return
+            if (onPressActivation === "before") {
+                propsOnPress?.(event)
+                if (event.defaultPrevented) return
+            }
             await Linking.openURL(href)
-            if (onPressActivation === "after") propsOnPress?.(name ?? "")
-        } else {
-            if (onPressActivation === "before") propsOnPress?.(name ?? "")
+            if (onPressActivation === "after") propsOnPress?.(event)
+        },
+        [href, onPressActivation, propsOnPress],
+    )
+    const handleInternalLinkPress = useCallback(
+        (event: CarouselPressEvent) => {
+            if (!href) return
+            if (onPressActivation === "before") {
+                propsOnPress?.(event)
+                if (event.defaultPrevented) return
+            }
             navigateWithTab({
                 title: name || href,
                 url: href,
@@ -70,9 +91,31 @@ export const BaseCarouselItem: React.FC<Props> = ({
                     nav.navigate(Routes.BROWSER, { url: u, returnScreen })
                 },
             })
-            if (onPressActivation === "after") propsOnPress?.(name ?? "")
-        }
-    }, [href, isExternalLink, onPressActivation, propsOnPress, name, navigateWithTab, nav, returnScreen])
+            if (onPressActivation === "after") propsOnPress?.(event)
+        },
+        [href, name, navigateWithTab, nav, returnScreen, onPressActivation, propsOnPress],
+    )
+
+    const onPress = useCallback(
+        async function () {
+            if (!href) return
+
+            const event: CarouselPressEvent = {
+                name: name ?? "",
+                defaultPrevented: false,
+                preventDefault() {
+                    this.defaultPrevented = true
+                },
+            }
+
+            if (isExternalLink) {
+                await handleExternalLinkPress(event)
+            } else {
+                handleInternalLinkPress(event)
+            }
+        },
+        [href, name, isExternalLink, handleExternalLinkPress, handleInternalLinkPress],
+    )
 
     return (
         <AnimatedTouchableOpacity

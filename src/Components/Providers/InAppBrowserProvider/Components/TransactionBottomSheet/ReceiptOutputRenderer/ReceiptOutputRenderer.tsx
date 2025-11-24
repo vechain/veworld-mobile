@@ -58,13 +58,20 @@ export const ReceiptOutputRenderer = ({ expanded, output, clauses }: Props) => {
         case "VET_FT_Swap(address,address,address,uint256,uint256)":
         case "Token_FTSwap(address,address,address,address,uint256,uint256)":
             return <SwapOutput expanded={expanded} output={output} clause={clause} />
-        case "STARGATE_CLAIM_REWARDS_BASE(uint256,uint256,address)":
-        case "STARGATE_CLAIM_REWARDS_DELEGATE(uint256,uint256,address)":
         case "STARGATE_STAKE(uint256,uint256,uint8,address,bool)":
-        case "STARGATE_STAKE_DELEGATE(uint256,uint256,uint8,address,bool,bool)":
-        case "STARGATE_DELEGATE(uint256,address,bool)":
+        case "STARGATE_DELEGATE_LEGACY(uint256,address,bool)":
         case "STARGATE_UNDELEGATE(uint256)":
         case "STARGATE_UNSTAKE(uint256,uint256,uint8,address)":
+        case "STARGATE_BOOST(uint256,uint256,address,uint256)":
+        case "STARGATE_CLAIM_REWARDS_BASE_LEGACY(uint256,uint256,address)":
+        case "STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY(uint256,uint256,address)":
+        case "STARGATE_CLAIM_REWARDS(uint256,uint256,address,uint256,uint32)":
+        case "STARGATE_DELEGATE_REQUEST(uint256,address,uint256,address,uint256,uint256,uint8)":
+        case "STARGATE_DELEGATE_REQUEST_CANCELLED(uint256,address,uint256,address,uint256,uint8)":
+        case "STARGATE_DELEGATION_EXIT_REQUEST(uint256,uint256,address)":
+        case "STARGATE_MANAGER_ADDED(uint256,address,address)":
+        case "STARGATE_MANAGER_REMOVED(uint256,address,address)":
+        case "STARGATE_UNDELEGATE_LEGACY(uint256)":
             return <StargateBaseOutput expanded={expanded} output={output} clause={clause} />
         case "Approval(indexed address,indexed address,uint256)":
             return <TokenApprovalOutput expanded={expanded} output={output} clause={clause} />

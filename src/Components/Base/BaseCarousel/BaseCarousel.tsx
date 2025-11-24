@@ -11,7 +11,7 @@ import {
     ViewStyle,
 } from "react-native"
 import Animated from "react-native-reanimated"
-import { BaseCarouselItem } from "~Components/Base/BaseCarousel/BaseCarouselItem"
+import { BaseCarouselItem, CarouselPressEvent } from "~Components/Base/BaseCarousel/BaseCarouselItem"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
 import { BaseView } from "~Components/Base/BaseView"
 import { ColorThemeType, SCREEN_WIDTH } from "~Constants"
@@ -42,7 +42,7 @@ type Props = {
     showPagination?: boolean
     paginationAlignment?: "flex-start" | "center" | "flex-end"
     testID?: string
-    onSlidePress?: (name: string) => void
+    onSlidePress?: (event: CarouselPressEvent) => void
     /**
      * Decide when `onSlidePress` is called. Default is `after
      */

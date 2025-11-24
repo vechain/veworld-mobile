@@ -1,72 +1,65 @@
 import { useQuery } from "@tanstack/react-query"
-import { ThorClient } from "@vechain/sdk-network"
-import React from "react"
-import { NodeManagement, UserNodesInfo } from "~Constants"
-import { getStargateNetworkConfig } from "~Constants/Constants/Staking"
-import { useThorClient } from "~Hooks/useThorClient"
-import { NETWORK_TYPE, NodeInfo } from "~Model"
+import React, { useMemo } from "react"
+import { useIndexerUrl } from "~Hooks/useIndexerUrl"
+import { NodeInfo } from "~Model"
+import { fetchStargateTokens } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { BigNutils } from "~Utils"
+import { getTokenLevelId } from "~Utils/StargateUtils"
 
-export const getUserNodesQueryKey = (network: NETWORK_TYPE, address?: string) => ["userStargateNodes", network, address]
+export const getUserNodesQueryKey = (genesisId: string, address?: string) => ["userStargateNodes", genesisId, address]
 
-export const getUserNodes = async (
-    thor: ThorClient,
-    address?: string,
-    nodeManagementAddress?: string,
-): Promise<NodeInfo[]> => {
-    if (!address || !nodeManagementAddress) return []
+const getUserNodes = async (baseUrl: string, address: string | undefined): Promise<NodeInfo[]> => {
+    if (!address) return []
 
+    const results: NodeInfo[] = []
+    let page = 0
     try {
-        const userNodesContract = thor.contracts.load(nodeManagementAddress, [UserNodesInfo.getUserNodes])
-        const isLegacyNodeContract = thor.contracts.load(nodeManagementAddress, [NodeManagement.isLegacyNode])
-
-        const userNodesResult = await userNodesContract.read.getUserNodes(address)
-        const rawNodes = userNodesResult[0]
-
-        if (!rawNodes || rawNodes.length === 0) return []
-        const clauses = rawNodes.map(node => isLegacyNodeContract.clause.isLegacyNode(BigInt(node.nodeId)))
-        const result = await thor.transactions.executeMultipleClausesCall(clauses)
-
-        return rawNodes.map((node, idx) => {
-            return {
-                ...node,
-                nodeId: node.nodeId.toString(),
-                isLegacyNode: result[idx].result.plain as boolean,
-            } satisfies NodeInfo
-        })
+        while (true) {
+            const r = await fetchStargateTokens(baseUrl, address, { page })
+            results.push(
+                ...r.data.map(u => ({
+                    isLegacyNode: false,
+                    nodeId: u.tokenId,
+                    nodeLevel: getTokenLevelId(u.level),
+                    xNodeOwner: u.owner,
+                    vetAmountStaked: u.vetStaked,
+                    accumulatedRewards: BigNutils(u.totalBootstrapRewardsClaimed).plus(u.totalRewardsClaimed).toString,
+                })),
+            )
+            if (!r.pagination.hasNext) break
+            page++
+        }
+        return results
     } catch (error) {
         throw new Error(`Error fetching user nodes ${error}`)
     }
 }
 
 export const useUserNodes = (address?: string, _enabled: boolean = true) => {
-    const thor = useThorClient()
     const network = useAppSelector(selectSelectedNetwork)
 
-    const nodeManagementAddress = React.useMemo(() => {
-        return getStargateNetworkConfig(network.type)?.NODE_MANAGEMENT_CONTRACT_ADDRESS
-    }, [network.type])
-
     const queryKey = React.useMemo(() => {
-        return getUserNodesQueryKey(network.type, address)
-    }, [address, network.type])
+        return getUserNodesQueryKey(network.genesis.id, address)
+    }, [address, network.genesis.id])
 
-    const enabled = !!thor && !!address && !!nodeManagementAddress && _enabled
+    const indexerUrl = useIndexerUrl(network)
+    const enabled = !!address && !!indexerUrl && _enabled
 
     const { data, error, isError, isFetching } = useQuery({
         queryKey,
-        queryFn: async () => await getUserNodes(thor, address, nodeManagementAddress),
+        queryFn: async () => await getUserNodes(indexerUrl!, address),
         enabled,
         staleTime: 60 * 5 * 1000,
     })
 
-    const stargateNodes = React.useMemo(() => data?.filter(node => !node.isLegacyNode) || [], [data])
-
-    return {
-        data,
-        stargateNodes,
-        isLoading: isFetching,
-        error,
-        isError,
-    }
+    return useMemo(
+        () => ({
+            data: data ?? [],
+            isLoading: isFetching,
+            error,
+            isError,
+        }),
+        [data, error, isError, isFetching],
+    )
 }

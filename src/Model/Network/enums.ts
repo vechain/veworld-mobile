@@ -8,4 +8,5 @@ export enum NETWORK_TYPE {
 export enum NetworkHardFork {
     FINALITY = 0,
     GALACTICA = 1,
+    HAYABUSA = 2,
 }

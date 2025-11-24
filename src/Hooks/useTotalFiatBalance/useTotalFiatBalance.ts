@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { VET, VTHO } from "~Constants"
-import { useUserNodes, useUserStargateNfts } from "~Hooks/Staking"
+import { useUserNodes } from "~Hooks/Staking"
 import { useCombineFiatBalances } from "~Hooks/useCombineFiatBalances"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
@@ -39,38 +39,32 @@ export const useTotalFiatBalance = ({ address, enabled = true, useCompactNotatio
 
     const { data: nonVechainTokensFiat } = useNonVechainTokenFiat({ accountAddress: address, enabled })
 
-    const { stargateNodes, isLoading: loadingNodes } = useUserNodes(address, enabled)
-
-    const { ownedStargateNfts: stargateNfts, isLoading: loadingStargateNfts } = useUserStargateNfts({
-        nodes: stargateNodes,
-        isLoadingNodes: loadingNodes,
-        address,
-    })
+    const { data, isLoading: loadingNodes } = useUserNodes(address, enabled)
 
     const totalStargateVet = useMemo(() => {
-        return stargateNfts.reduce((acc, nft) => {
+        return data.reduce((acc, nft) => {
             return acc.plus(nft.vetAmountStaked ?? "0")
         }, BigNutils("0"))
-    }, [stargateNfts])
+    }, [data])
 
     const stargateFiatBalance = useMemo(() => {
         // We only include staked VET in fiat balance if user is the owner, not a manager - Stargate staking
-        const isNodeOwner = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
+        const isNodeOwner = data.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
 
         if (!isNodeOwner) return "0"
 
         return BalanceUtils.getFiatBalance(totalStargateVet.toString, tokenWithInfoVET.exchangeRate ?? 1, VET.decimals)
-    }, [totalStargateVet, tokenWithInfoVET.exchangeRate, stargateNodes, address])
+    }, [totalStargateVet, tokenWithInfoVET.exchangeRate, data, address])
 
     const isLoading = useMemo(
         () =>
-            loadingStargateNfts ||
+            loadingNodes ||
             tokenWithInfoVET.tokenInfoLoading ||
             tokenWithInfoVTHO.tokenInfoLoading ||
             tokenWithInfoB3TR.tokenInfoLoading ||
             loadingVot3Balance,
         [
-            loadingStargateNfts,
+            loadingNodes,
             loadingVot3Balance,
             tokenWithInfoB3TR.tokenInfoLoading,
             tokenWithInfoVET.tokenInfoLoading,
@@ -105,7 +99,6 @@ export const useTotalFiatBalance = ({ address, enabled = true, useCompactNotatio
         queryFn: () => amount,
         enabled: !isLoading,
         staleTime: 5 * 60 * 1000,
-        gcTime: Infinity,
     })
 
     const { formatFiat } = useFormatFiat({ useCompactNotation })

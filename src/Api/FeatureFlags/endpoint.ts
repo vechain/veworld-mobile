@@ -38,6 +38,28 @@ export type FeatureFlags = {
                 ledger: boolean
             }
         }
+        HAYABUSA: {
+            stargate: {
+                [genesisId: string]: {
+                    /**
+                     * Address of the Stargate contract
+                     */
+                    contract: string
+                    /**
+                     * Address of the StargateNFT contract
+                     */
+                    nft?: string
+                    /**
+                     * Address of the NodeManagement contract (deprecated)
+                     */
+                    nodeManagement?: string
+                    /**
+                     * Address of the StargateDelegation contract (deprecated)
+                     */
+                    delegation?: string
+                }
+            }
+        }
     }
     smartWalletFeature: {
         enabled: boolean

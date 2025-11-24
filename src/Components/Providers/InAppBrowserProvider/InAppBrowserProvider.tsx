@@ -14,7 +14,7 @@ import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-we
 import { showInfoToast, showWarningToast } from "~Components"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, usePrevious, useSetSelectedAccount } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { usePostWebviewMessage } from "~Hooks/usePostWebviewMessage"
@@ -59,6 +59,7 @@ import {
     WindowResponse,
 } from "./types"
 import { getLoginKind } from "./Utils/LoginUtils"
+import { MissingNetworkAlertBottomSheet } from "./Components/MissingNetworkAlertBottomSheet"
 
 const { PackageDetails } = NativeModules
 
@@ -85,7 +86,6 @@ type ContextType = {
     onMessage: (event: WebViewMessageEvent) => void
     onScroll: (event: NativeSyntheticEvent<Readonly<EnhancedScrollEvent>>) => void
     postMessage: (message: WindowResponse) => void
-    onNavigationStateChange: (navState: WebViewNavigation) => void
     injectVechainScript: () => string
     originWhitelist: string[]
     navigationCanGoBack: boolean
@@ -150,6 +150,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         setSwitchWalletBsData,
     } = useInteraction()
 
+    const { ref: missingNetworkAlertBottomSheetRef, onOpen: openMissingNetworkAlertBottomSheet } = useBottomSheetModal()
+
     useEffect(() => {
         if (platform === "ios") {
             setIsLoading(false)
@@ -193,7 +195,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const postWebviewMessage = usePostWebviewMessage(webviewRef)
 
     const [navigationState, setNavigationState] = useState<WebViewNavigation | undefined>(undefined)
-    const previousUrl = usePrevious(navigationState?.url)
 
     const canGoBack = useMemo(() => {
         return navigationState?.canGoBack ?? false
@@ -288,7 +289,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const switchNetwork = useCallback(
         (request: WindowRequest) => {
             if (selectedNetwork.genesis.id === request.genesisId) {
-                return
+                return true
             }
 
             const network = networks.find(n => n.genesis.id === request.genesisId)
@@ -300,7 +301,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     method: request.method,
                 })
 
-                throw new Error("Invalid network")
+                openMissingNetworkAlertBottomSheet()
+
+                return false
             }
 
             showInfoToast({
@@ -310,8 +313,10 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             })
 
             dispatch(changeSelectedNetwork(network))
+
+            return true
         },
-        [LL, selectedNetwork, dispatch, postMessage, networks],
+        [selectedNetwork.genesis.id, networks, LL, dispatch, postMessage, openMissingNetworkAlertBottomSheet],
     )
 
     const switchAccount = useCallback(
@@ -498,7 +503,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     // ~ MESSAGE VALIDATION
     const validateTxMessage = useCallback(
         (request: TxRequest, appUrl: string, appName: string) => {
-            switchNetwork(request)
+            const isNetworkValid = switchNetwork(request)
+            if (!isNetworkValid) return
 
             const message = request.message
 
@@ -541,7 +547,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         (request: CertRequest, appUrl: string, appName: string) => {
             const message = request.message
 
-            switchNetwork(request)
+            const isNetworkValid = switchNetwork(request)
+            if (!isNetworkValid) return
 
             track(AnalyticsEvent.DISCOVERY_CERTIFICATE_REQUESTED, {
                 dapp: new URL(appUrl).origin,
@@ -580,7 +587,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const validateSignedDataMessage = useCallback(
         (request: SignedDataRequest, appUrl: string, appName: string) => {
-            switchNetwork(request)
+            const isNetworkValid = switchNetwork(request)
+            if (!isNetworkValid) return
 
             const message = request
 
@@ -623,7 +631,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         (request: LoginRequest, appUrl: string, appName: string) => {
             track(AnalyticsEvent.DAPP_LOGIN_REQUESTED, { kind: getLoginKind(request), dapp: new URL(appUrl).origin })
 
-            switchNetwork(request)
+            const isNetworkValid = switchNetwork(request)
+            if (!isNetworkValid) return
 
             if (request.params.value === null) {
                 //Handle login without anything
@@ -754,7 +763,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const validateWalletMessage = useCallback(
         (request: WalletRequest, appUrl: string, appName: string) => {
-            switchNetwork(request)
+            const isNetworkValid = switchNetwork(request)
+            if (!isNetworkValid) return
 
             return executeWalletMessage(request, appUrl, appName)
         },
@@ -824,7 +834,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const validateSwitchWalletMessage = useCallback(
         (request: SwitchWalletRequest, appUrl: string, appName: string) => {
-            switchNetwork(request)
+            const isNetworkValid = switchNetwork(request)
+            if (!isNetworkValid) return
 
             return executeSwitchWalletMessage(request, appUrl, appName)
         },
@@ -976,16 +987,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         [detectScrollDirection, showToolbars],
     )
 
-    const onNavigationStateChange = useCallback(
-        (navState: WebViewNavigation) => {
-            setNavigationState(navState)
-            if (previousUrl !== navState.url) {
-                setShowToolbars(true)
-            }
-        },
-        [previousUrl],
-    )
-
     const closeInAppBrowser = useCallback(() => {
         nav.goBack()
     }, [nav])
@@ -1047,7 +1048,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             onScroll,
             postMessage,
             injectVechainScript: () => injectedJs({ locale, packageInfo }),
-            onNavigationStateChange,
+
             navigationCanGoBack: nav.canGoBack(),
             canGoBack,
             originWhitelist: ORIGIN_WHITELIST,
@@ -1074,7 +1075,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         onMessage,
         onScroll,
         postMessage,
-        onNavigationStateChange,
         nav,
         canGoBack,
         canGoForward,
@@ -1107,6 +1107,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             <TypedDataBottomSheet />
             <LoginBottomSheet />
             <SwitchWalletBottomSheet />
+            <MissingNetworkAlertBottomSheet ref={missingNetworkAlertBottomSheetRef} />
             {children}
         </Context.Provider>
     )
