@@ -18,8 +18,6 @@ import {
     RequireUserPassword,
     TransferCard,
 } from "~Components"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
-import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { AnalyticsEvent, COLORS, creteAnalyticsEvent, ERROR_EVENTS, VET, VTHO } from "~Constants"
 import { useAnalyticTracking, useTheme, useTransferAddContact } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
@@ -64,7 +62,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         useTransferAddContact()
 
     const onFinish = useCallback(
-        (txId: string | undefined, success: boolean) => {
+        (success: boolean) => {
             const isNative =
                 token.symbol.toUpperCase() === VET.symbol.toUpperCase() ||
                 token.symbol.toUpperCase() === VTHO.symbol.toUpperCase()
@@ -88,16 +86,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 })
             else nav.navigate(Routes.HOME)
             dispatch(setIsAppLoading(false))
-
-            if (success)
-                Feedback.show({
-                    severity: FeedbackSeverity.LOADING,
-                    message: LL.TRANSACTION_IN_PROGRESS(),
-                    type: FeedbackType.ALERT,
-                    id: txId,
-                })
         },
-        [token.symbol, navigation, nav, dispatch, LL, track, network.name],
+        [token.symbol, navigation, nav, dispatch, track, network.name],
     )
 
     const onTransactionSuccess = useCallback(
@@ -105,17 +95,17 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             try {
                 dispatch(addPendingTransferTransactionActivity(transaction))
                 dispatch(setIsAppLoading(false))
-                onFinish(transaction.id.toString(), true)
+                onFinish(true)
             } catch (e) {
                 error(ERROR_EVENTS.SEND, e)
-                onFinish(transaction.id.toString(), false)
+                onFinish(false)
             }
         },
         [dispatch, onFinish],
     )
 
     const onTransactionFailure = useCallback(() => {
-        onFinish(undefined, false)
+        onFinish(false)
     }, [onFinish])
 
     const clauses = useMemo(
