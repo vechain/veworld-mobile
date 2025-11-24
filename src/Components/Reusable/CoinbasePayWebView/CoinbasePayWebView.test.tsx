@@ -180,28 +180,6 @@ describe("CoinbasePayWebView", () => {
 
             // Verify signature and timestamp headers are present
             expect(request.headers?.["x-signature"]).toBe(VALID_SIGNATURE)
-            expect(request.headers?.["x-timestamp"]).toBeDefined()
-            expect(request.headers?.["x-timestamp"]).toMatch(/^\d+$/)
-        })
-
-        it("should include signature and timestamp in request headers", async () => {
-            const expectedUrl = "https://coinbase.example.com/onramp?session=test456"
-
-            axiosMock.onGet().reply(200, { url: expectedUrl })
-
-            renderComponent()
-
-            await waitFor(
-                () => {
-                    expect(axiosMock.history.get.length).toBe(1)
-                },
-                { timeout: 3000 },
-            )
-
-            const request = axiosMock.history.get[0]
-
-            // Verify signature header matches the mocked signature
-            expect(request.headers?.["x-signature"]).toBe(VALID_SIGNATURE)
 
             // Verify timestamp header exists and is a valid timestamp
             expect(request.headers?.["x-timestamp"]).toMatch(/^\d+$/)
