@@ -36,4 +36,5 @@ export type FeedbackShowArgs = {
     message: string
     icon?: IconKey
     duration?: number
+    onPress?: () => void
 }

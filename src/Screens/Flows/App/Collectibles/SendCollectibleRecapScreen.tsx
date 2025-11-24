@@ -13,8 +13,6 @@ import {
     RequireUserPassword,
     TransferCard,
 } from "~Components"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
-import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { AnalyticsEvent, creteAnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useTransactionScreen, useTransferAddContact } from "~Hooks"
 import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
@@ -92,18 +90,12 @@ export const SendCollectibleRecapScreen = ({ route }: Props) => {
                         context: AnalyticsEvent.SEND,
                     }),
                 })
-                Feedback.show({
-                    severity: FeedbackSeverity.LOADING,
-                    message: LL.TRANSACTION_IN_PROGRESS(),
-                    type: FeedbackType.ALERT,
-                    id: txId,
-                })
             }
 
             dispatch(setIsAppLoading(false))
             nav.dispatch(StackActions.popToTop())
         },
-        [dispatch, nav, track, network.name, LL],
+        [dispatch, nav, track, network.name],
     )
 
     const onTransactionSuccess = useCallback(

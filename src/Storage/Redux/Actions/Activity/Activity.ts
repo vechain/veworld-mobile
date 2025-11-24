@@ -12,6 +12,7 @@ import {
     NonFungibleTokenActivity,
     TypedData,
 } from "~Model"
+import { NAVIGATION_REF, Routes } from "~Navigation"
 import {
     createConnectedAppActivity,
     createLoginActivity,
@@ -50,19 +51,32 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
             else {
                 updatedActivity.timestamp = !txReceipt ? Date.now() : txReceipt.meta.blockTimestamp * 1000
                 updatedActivity.status = txReceipt.reverted ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS
-
-                Feedback.show({
-                    message: txReceipt.reverted ? LL.TRANSACTION_FAILED() : LL.TRANSACTION_DONE(),
-                    severity: FeedbackSeverity.SUCCESS,
-                    type: FeedbackType.ALERT,
-                    id: updatedActivity.txId,
-                })
             }
         }
 
         // If the activity has been pending for more than 2 minutes, mark it as failed
         if (Date.now() - updatedActivity.timestamp > 120000 && updatedActivity.status === ActivityStatus.PENDING)
             updatedActivity.status = ActivityStatus.REVERTED
+
+        if ([ActivityStatus.REVERTED, ActivityStatus.SUCCESS].includes(updatedActivity.status!)) {
+            Feedback.show({
+                message:
+                    updatedActivity.status === ActivityStatus.REVERTED
+                        ? LL.TRANSACTION_FAILED()
+                        : LL.TRANSACTION_DONE(),
+                severity: FeedbackSeverity.SUCCESS,
+                type: FeedbackType.ALERT,
+                id: updatedActivity.txId,
+                onPress() {
+                    NAVIGATION_REF.navigate(Routes.HISTORY_STACK, {
+                        screen: Routes.ACTIVITY_DETAILS,
+                        params: {
+                            activity: updatedActivity,
+                        },
+                    })
+                },
+            })
+        }
 
         dispatch(addActivity(updatedActivity))
         return updatedActivity
@@ -79,6 +93,8 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
 export const addPendingTransferTransactionActivity =
     (outgoingTx: Transaction): AppThunk<void> =>
     (dispatch, getState) => {
+        const locale = selectLanguage(getState())
+        const LL = i18nObject(locale)
         const selectedAccount = selectSelectedAccount(getState())
         const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
 
@@ -87,6 +103,20 @@ export const addPendingTransferTransactionActivity =
 
         const pendingActivity: FungibleTokenActivity = createPendingTransferActivityFromTx(outgoingTx)
         dispatch(addActivity(pendingActivity))
+        Feedback.show({
+            severity: FeedbackSeverity.LOADING,
+            message: LL.TRANSACTION_IN_PROGRESS(),
+            type: FeedbackType.ALERT,
+            id: outgoingTx.id.toString(),
+            onPress() {
+                NAVIGATION_REF.navigate(Routes.HISTORY_STACK, {
+                    screen: Routes.ACTIVITY_DETAILS,
+                    params: {
+                        activity: pendingActivity,
+                    },
+                })
+            },
+        })
     }
 
 /**
@@ -103,6 +133,8 @@ export const addPendingTransferTransactionActivity =
 export const addPendingNFTtransferTransactionActivity =
     (outgoingTx: Transaction): AppThunk<void> =>
     (dispatch, getState) => {
+        const locale = selectLanguage(getState())
+        const LL = i18nObject(locale)
         const selectedAccount = selectSelectedAccount(getState())
         const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
         // Ignore if the selected account is a smart wallet for now
@@ -110,6 +142,20 @@ export const addPendingNFTtransferTransactionActivity =
 
         const pendingActivity: NonFungibleTokenActivity = createPendingNFTTransferActivityFromTx(outgoingTx)
         dispatch(addActivity(pendingActivity))
+        Feedback.show({
+            severity: FeedbackSeverity.LOADING,
+            message: LL.TRANSACTION_IN_PROGRESS(),
+            type: FeedbackType.ALERT,
+            id: outgoingTx.id.toString(),
+            onPress() {
+                NAVIGATION_REF.navigate(Routes.HISTORY_STACK, {
+                    screen: Routes.ACTIVITY_DETAILS,
+                    params: {
+                        activity: pendingActivity,
+                    },
+                })
+            },
+        })
     }
 
 /**

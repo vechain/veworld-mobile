@@ -1,5 +1,5 @@
-import React, { useMemo } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import React, { useCallback, useMemo } from "react"
+import { Pressable, StyleSheet, TouchableOpacity } from "react-native"
 import Animated, { FadeIn, FadeOut, ZoomInEasyUp, ZoomOutEasyUp } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BaseIcon } from "~Components/Base"
@@ -13,6 +13,8 @@ type Props = {
     feedbackData: FeedbackShowArgs | null
     onDismiss: () => void
 }
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export const FeedbackChip = ({ feedbackData, onDismiss }: Props) => {
     const inset = useSafeAreaInsets()
@@ -35,8 +37,13 @@ export const FeedbackChip = ({ feedbackData, onDismiss }: Props) => {
         }
     }, [feedbackData])
 
+    const handleOnPress = useCallback(() => {
+        if (!feedbackData || !feedbackData.onPress) return
+        feedbackData.onPress()
+    }, [feedbackData])
+
     return feedbackData ? (
-        <Animated.View style={styles.container} entering={FadeIn} exiting={FadeOut}>
+        <AnimatedPressable style={styles.container} entering={FadeIn} exiting={FadeOut} onPress={handleOnPress}>
             <Animated.View testID="FEEDBACK_CHIP" entering={ZoomInEasyUp} exiting={ZoomOutEasyUp} style={[styles.chip]}>
                 <Animated.View style={styles.innerContainer}>
                     {feedbackData.severity === FeedbackSeverity.LOADING ? (
@@ -72,7 +79,7 @@ export const FeedbackChip = ({ feedbackData, onDismiss }: Props) => {
                     )}
                 </Animated.View>
             </Animated.View>
-        </Animated.View>
+        </AnimatedPressable>
     ) : null
 }
 

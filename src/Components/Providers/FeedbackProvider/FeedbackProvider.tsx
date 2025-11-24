@@ -36,7 +36,7 @@ export const FeedbackProvider = ({ children }: { children: React.ReactNode }) =>
             if (feedbackData.type === FeedbackType.ALERT) {
                 timeout = setTimeout(() => {
                     onDismiss()
-                }, feedbackData.duration || 2000)
+                }, feedbackData.duration || 3000)
             }
         }
         return () => {

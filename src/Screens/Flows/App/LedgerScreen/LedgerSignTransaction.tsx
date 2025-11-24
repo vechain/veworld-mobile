@@ -21,8 +21,6 @@ import {
     useInAppBrowser,
     useWalletConnect,
 } from "~Components"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
-import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { AnalyticsEvent, creteAnalyticsEvent, ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useSendTransaction } from "~Hooks"
 import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
@@ -116,12 +114,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                             context: AnalyticsEvent.SEND,
                         }),
                     })
-                    Feedback.show({
-                        severity: FeedbackSeverity.LOADING,
-                        message: LL.TRANSACTION_IN_PROGRESS(),
-                        type: FeedbackType.ALERT,
-                        id: tx.id.toString(),
-                    })
                     break
                 case ActivityType.TRANSFER_FT:
                     dispatch(addPendingTransferTransactionActivity(tx))
@@ -134,12 +126,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                             subject: AnalyticsEvent.TOKEN,
                             context: AnalyticsEvent.SEND,
                         }),
-                    })
-                    Feedback.show({
-                        severity: FeedbackSeverity.LOADING,
-                        message: LL.TRANSACTION_IN_PROGRESS(),
-                        type: FeedbackType.ALERT,
-                        id: tx.id.toString(),
                     })
                     break
                 case ActivityType.TRANSFER_NFT:
@@ -154,12 +140,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                             context: AnalyticsEvent.SEND,
                         }),
                     })
-                    Feedback.show({
-                        severity: FeedbackSeverity.LOADING,
-                        message: LL.TRANSACTION_IN_PROGRESS(),
-                        type: FeedbackType.ALERT,
-                        id: tx.id.toString(),
-                    })
+
                     break
                 case ActivityType.DAPP_TRANSACTION:
                     if (dappRequest) {
@@ -177,7 +158,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                     }
             }
         },
-        [dispatch, track, network.name, LL, dappRequest],
+        [dispatch, track, network.name, dappRequest],
     )
 
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)
