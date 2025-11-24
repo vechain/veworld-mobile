@@ -107,26 +107,31 @@ export const BalanceActivity = ({ tab }: { tab: BalanceTab }) => {
     if (!isLoading && !data?.length) return null
 
     return (
-        <BaseView flexDirection="column" gap={16}>
-            <BaseText typographyFont="subSubTitleSemiBold" color={theme.isDark ? COLORS.GREY_100 : COLORS.DARK_PURPLE}>
-                {LL.ACTIVITY()}
-            </BaseText>
-            {isLoading ? (
-                <FlatList
-                    renderItem={renderLoadingItem}
-                    data={LOADING_ITEMS}
-                    ItemSeparatorComponent={ItemSeparatorComponent}
-                    keyExtractor={item => item.id}
-                />
-            ) : (
-                <FlatList
-                    renderItem={renderItem}
-                    data={data ?? []}
-                    ItemSeparatorComponent={ItemSeparatorComponent}
-                    keyExtractor={item => item.id}
-                    ListFooterComponent={<ListFooterComponent tab={tab} />}
-                />
-            )}
-        </BaseView>
+        <>
+            <BaseSpacer height={32} />
+            <BaseView flexDirection="column" gap={16}>
+                <BaseText
+                    typographyFont="subSubTitleSemiBold"
+                    color={theme.isDark ? COLORS.GREY_100 : COLORS.DARK_PURPLE}>
+                    {LL.ACTIVITY()}
+                </BaseText>
+                {isLoading ? (
+                    <FlatList
+                        renderItem={renderLoadingItem}
+                        data={LOADING_ITEMS}
+                        ItemSeparatorComponent={ItemSeparatorComponent}
+                        keyExtractor={item => item.id}
+                    />
+                ) : (
+                    <FlatList
+                        renderItem={renderItem}
+                        data={data ?? []}
+                        ItemSeparatorComponent={ItemSeparatorComponent}
+                        keyExtractor={item => item.id}
+                        ListFooterComponent={<ListFooterComponent tab={tab} />}
+                    />
+                )}
+            </BaseView>
+        </>
     )
 }

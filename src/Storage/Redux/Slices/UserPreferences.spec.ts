@@ -4,6 +4,7 @@ import {
     setHideStargateBannerVETScreen,
     setHideNewUserVeBetterCard,
     UserPreferencesSlice,
+    setHideStellaPayBottomSheet,
 } from "./UserPreferences"
 
 describe("UserPreferences", () => {
@@ -18,5 +19,9 @@ describe("UserPreferences", () => {
     it("should set hideNewUserVeBetterCard", () => {
         const state = UserPreferencesSlice.reducer(initialUserPreferencesState, setHideNewUserVeBetterCard(true))
         expect(state.hideNewUserVeBetterCard).toBe(true)
+    })
+    it("should set hideStellaPayBottomSheet", () => {
+        const state = UserPreferencesSlice.reducer(initialUserPreferencesState, setHideStellaPayBottomSheet(true))
+        expect(state.hideStellaPayBottomSheet).toBe(true)
     })
 })

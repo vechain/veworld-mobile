@@ -2,7 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import React from "react"
 import { useFeatureFlags } from "~Components"
-import { TokenWithCompleteInfo } from "~Hooks"
+import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import {
     Activity,
     CloudKitWallet,
@@ -56,6 +56,7 @@ import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/Co
 import { ReportNFTTransactionScreen } from "~Screens/Flows/App/NFT/NFTReportCollection/ReportNFTTransactionScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
+import { COLORS } from "~Constants"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -189,6 +190,7 @@ const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome
 
 export const HomeStack = () => {
     const { betterWorldFeature } = useFeatureFlags()
+    const theme = useTheme()
 
     return (
         <Navigator id="HomeStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
@@ -354,6 +356,11 @@ export const HomeStack = () => {
                     component={BuyStack}
                     options={{
                         presentation: "modal",
+                        cardStyle: {
+                            paddingTop: 16,
+                            borderRadius: 24,
+                            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+                        },
                     }}
                 />
                 {betterWorldFeature.balanceScreen.collectibles.enabled && (

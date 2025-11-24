@@ -1,0 +1,126 @@
+{
+  "name": "STARGATE_DELEGATE_REQUEST_CANCELLED",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "DelegationExitRequested(indexed uint256,indexed address,indexed uint256,uint48)",
+      "alias": "exitRequest",
+      "conditions": [
+        {
+          "firstOperand": "tokenId",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${STARGATE_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    },
+    {
+      "name": "DelegationWithdrawn(indexed uint256,indexed address,indexed uint256,uint256,uint8)",
+      "alias": "withdraw",
+      "conditions": [
+        {
+          "firstOperand": "tokenId",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${STARGATE_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "firstEventName": "exitRequest",
+      "firstEventProperty": "tokenId",
+      "secondEventName": "withdraw",
+      "secondEventProperty": "tokenId",
+      "operator": "EQ"
+    }
+  ],
+  "paramsDefinition": [
+    {
+      "name": "tokenId",
+      "eventName": "withdraw",
+      "businessEventName": "tokenId"
+    },
+    {
+      "name": "validator",
+      "eventName": "withdraw",
+      "businessEventName": "validator"
+    },
+    {
+      "name": "delegationId",
+      "eventName": "withdraw",
+      "businessEventName": "delegationId"
+    },
+    {
+      "name": "origin",
+      "eventName": "withdraw",
+      "businessEventName": "owner"
+    },
+    {
+      "name": "amount",
+      "eventName": "withdraw",
+      "businessEventName": "value"
+    },
+    {
+      "name": "levelId",
+      "eventName": "withdraw",
+      "businessEventName": "levelId"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "validator",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "delegationId",
+      "type": "uint256"
+    },
+    {
+      "type": "address",
+      "name": "owner",
+      "internalType": "address",
+      "indexed": false
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint8",
+      "name": "levelId",
+      "type": "uint8"
+    }
+  ],
+  "type": "event"
+}

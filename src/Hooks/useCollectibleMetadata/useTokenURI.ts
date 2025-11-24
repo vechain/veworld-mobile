@@ -12,6 +12,5 @@ export const useTokenURI = ({ address, tokenId }: { address: string; tokenId: st
         queryKey: getTokenURIQueryKey(network.genesis.id, normalizedAddress, tokenId),
         queryFn: () => getTokenURI(tokenId, address, thor),
         staleTime: 5 * 60 * 1000,
-        gcTime: 5 * 60 * 1000,
     })
 }

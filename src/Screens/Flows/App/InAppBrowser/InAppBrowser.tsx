@@ -6,7 +6,7 @@ import DeviceInfo from "react-native-device-info"
 import Animated, { Easing, FadeOut } from "react-native-reanimated"
 import WebView from "react-native-webview"
 import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
-import { BaseStatusBar, DAppIcon, Layout, URLBar, useInAppBrowser } from "~Components"
+import { DAppIcon, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
@@ -27,7 +27,6 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         onMessage,
         onScroll,
         injectVechainScript,
-        onNavigationStateChange,
         resetWebViewState,
         ChangeAccountNetworkBottomSheetRef,
         originWhitelist,
@@ -127,14 +126,17 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
             hasTopSafeAreaOnly
             fixedBody={
                 <View style={styles.container}>
-                    {Platform.OS === "ios" && <BaseStatusBar hero={true} />}
                     {userAgent && !isLoading && (
                         <Animated.View ref={webviewContainerRef} style={[styles.webviewContainer]} collapsable={false}>
                             <WebView
                                 ref={webviewRef as MutableRefObject<WebView>}
-                                source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
+                                source={{
+                                    uri: route.params.url,
+                                    headers: {
+                                        "Accept-Language": locale,
+                                    },
+                                }}
                                 userAgent={userAgent}
-                                onNavigationStateChange={onNavigationStateChange}
                                 javaScriptEnabled={true}
                                 onMessage={onMessage}
                                 onScroll={onScroll}

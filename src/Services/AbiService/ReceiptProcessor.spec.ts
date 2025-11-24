@@ -5,28 +5,38 @@ import { NativeAbiManager } from "./NativeAbiManager"
 import { ReceiptProcessor } from "./ReceiptProcessor"
 import { NETWORK_TYPE } from "~Model"
 
+const getBlockFixture = (name: string): ExpandedBlockDetail => {
+    return require(`~fixtures/business-event-blocks/block_${name}.json`)
+}
+
 describe("ReceiptProcessor", () => {
     const genericAbiManager = new GenericAbiManager()
     const nativeAbiManager = new NativeAbiManager()
     const businessEventAbiManager = new BusinessEventAbiManager(NETWORK_TYPE.MAIN, {
         B3TR_CONTRACT: "0x5ef79995fe8a89e0812330e4378eb2660cede699",
         VOT3_CONTRACT: "0x76ca782b59c74d088c7d2cce2f211bc00836c602",
+        EMISSIONS: "0x148d21032f4a7b4aef236e2e9c0c5bf62d10f8eb",
         B3TR_GOVERNOR_CONTRACT: "0x1c65c25fabe2fc1bcb82f253fa0c916a322f777c",
+        B3TR_DBA_POOL_CONTRACT: "0x98c1d097c39969bb5de754266f60d22bd105b368",
         GM_NFT_CONTRACT: "0x93b8cd34a7fc4f53271b9011161f7a2b5fea9d1f",
         X_ALLOC_VOTING_CONTRACT: "0x89a00bb0947a30ff95beef77a66aede3842fe5b7",
+        X_ALLOC_POOL_CONTRACT: "0x4191776F05f4bE4848d3f4d587345078B439C7d3",
         X2EARN_REWARDS_POOL_CONTRACT: "0x6bee7ddab6c99d5b2af0554eaea484ce18f52631",
         VOTER_REWARDS_CONTRACT: "0x838a33af756a6366f93e201423e1425f67ec0fa7",
         TREASURY_CONTRACT: "0xd5903bcc66e439c753e525f8af2fec7be2429593",
-        STARGATE_DELEGATION_CONTRACT: "0x7240e3bc0d26431512d5b67dbd26d199205bffe8",
-        STARGATE_NFT_CONTRACT: "0x1ec1d168574603ec35b9d229843b7c2b44bcb770",
+        STARGATE_DELEGATION_CONTRACT: "0x32cb945dc25f4fc4214df63e3825045d6088b096",
+        STARGATE_NFT_CONTRACT: "0x887d9102f0003f1724d8fd5d4fe95a11572fcd77",
+        VEVOTE_CONTRACT: "0x1c65c25fabe2fc1bcb82f253fa0c916a322f777c",
+        STARGATE_CONTRACT: "0x35ce14062457ef7817e10bbc3815317f5a07d695",
+        RELAYER_REWARDS_POOL_CONTRACT: "0x34b56f892c9e977b9ba2e43ba64c27d368ab3c86",
     })
 
     const commonReceiptProcessor = new ReceiptProcessor([genericAbiManager, nativeAbiManager, businessEventAbiManager])
 
-    beforeAll(async () => {
-        await genericAbiManager.loadAbis()
-        await nativeAbiManager.loadAbis()
-        await businessEventAbiManager.loadAbis()
+    beforeAll(() => {
+        genericAbiManager.loadAbis()
+        nativeAbiManager.loadAbis()
+        businessEventAbiManager.loadAbis()
     })
     describe("analyzeReceipt", () => {
         it("should identify a transfer event of erc 20", async () => {
@@ -66,22 +76,20 @@ describe("ReceiptProcessor", () => {
             ])
         })
 
-        it("Process block - B3TR Action + Transfers", async () => {
+        it("Process block - B3TR Action", async () => {
             const block = require("~fixtures/business-event-blocks/block_b3tr_action.json")
 
             const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
                 commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
             )
 
-            expect(outputs).toHaveLength(5)
+            expect(outputs).toHaveLength(3)
             const names = outputs.map(output => output.name)
 
             expect(names).toStrictEqual([
                 "B3TR_ActionReward(address,address,uint256,bytes32,string)",
                 "B3TR_ActionReward(address,address,uint256,bytes32,string)",
                 "Transfer(indexed address,indexed address,uint256)",
-                "VET_TRANSFER(address,address,uint256)",
-                "VET_TRANSFER(address,address,uint256)",
             ])
         })
 
@@ -129,82 +137,94 @@ describe("ReceiptProcessor", () => {
         })
 
         describe("Process block - Stargate", () => {
-            it("Stake", async () => {
-                const block = require("~fixtures/business-event-blocks/block_stargate_stake.json")
+            const BLOCK_STARGATE_STAKE = getBlockFixture("stargate_stake")
+            const BLOCK_STARGATE_UNSTAKE = getBlockFixture("stargate_unstake")
+            const BLOCK_STARGATE_BASE_REWARD = getBlockFixture("stargate_claim_base_reward")
+            const BLOCK_STARGATE_DELEGATE_REWARD = getBlockFixture("stargate_claim_delegate_reward")
+            const BLOCK_STARGATE_STAKE_DELEGATE = getBlockFixture("stargate_stake_delegate")
+            const BLOCK_STARGATE_UNDELEGATE = getBlockFixture("stargate_undelegate")
+            const BLOCK_STARGATE_DELEGATION = getBlockFixture("stargate_delegation")
+            const BLOCK_STARGATE_STAKER_DELEGATION = getBlockFixture("stargate_staker_delegation")
+            const BLOCK_STARGATE_DELEGATION_EXIT_REQUEST = getBlockFixture("stargate_exit_delegation_request")
+            const BLOCK_STARGATE_CLAIM_REWARDS = getBlockFixture("stargate_claim_rewards")
+            const BLOCK_STARGATE_MANAGER_ADDED = getBlockFixture("stargate_manager_added")
+            const BLOCK_STARGATE_MANAGER_REMOVED = getBlockFixture("stargate_manager_removed")
 
-                const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
-                    commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
-                )
+            it("Hayabusa", async () => {
+                const outputs = [
+                    BLOCK_STARGATE_STAKER_DELEGATION,
+                    BLOCK_STARGATE_CLAIM_REWARDS,
+                    BLOCK_STARGATE_MANAGER_ADDED,
+                    BLOCK_STARGATE_MANAGER_REMOVED,
+                    BLOCK_STARGATE_DELEGATION_EXIT_REQUEST,
+                ]
+                    .flatMap(u => u.transactions)
+                    .flatMap(tx =>
+                        commonReceiptProcessor
+                            .analyzeReceipt(tx.outputs, tx.origin)
+                            .map(output => ({ ...output, txId: tx.id })),
+                    )
 
-                expect(outputs).toHaveLength(1)
+                //This is a different number from the indexer
+                //But we have Approvals + we store the claim rewards separately as a proper event
+                expect(outputs).toHaveLength(13)
                 const names = outputs.map(output => output.name)
-                expect(names).toStrictEqual(["STARGATE_STAKE_DELEGATE(uint256,uint256,uint8,address,bool,bool)"])
+                expect(names).toStrictEqual([
+                    // Block #1
+                    "Approval(indexed address,indexed address,uint256)",
+                    "STARGATE_STAKE(uint256,uint256,uint8,address,bool)",
+                    "STARGATE_BOOST(uint256,uint256,address,uint256)",
+                    "STARGATE_DELEGATE_REQUEST(uint256,address,uint256,address,uint256,uint256,uint8)",
+                    // Block #2
+                    "Transfer(indexed address,indexed address,uint256)",
+                    "DelegationRewardsClaimed(indexed address,indexed uint256,indexed uint256,uint256,uint32,uint32)",
+                    "Transfer(indexed address,indexed address,uint256)",
+                    "DelegationRewardsClaimed(indexed address,indexed uint256,indexed uint256,uint256,uint32,uint32)",
+                    "Transfer(indexed address,indexed address,uint256)",
+                    "DelegationRewardsClaimed(indexed address,indexed uint256,indexed uint256,uint256,uint32,uint32)",
+                    // Block #3
+                    "STARGATE_MANAGER_ADDED(uint256,address,address)",
+                    // Block #4
+                    "STARGATE_MANAGER_REMOVED(uint256,address,address)",
+                    // Block #5
+                    "STARGATE_DELEGATION_EXIT_REQUEST(uint256,uint256,address)",
+                ])
             })
-            it("Unstake", async () => {
-                const block = require("~fixtures/business-event-blocks/block_stargate_unstake.json")
 
-                const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
-                    commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
-                )
+            it("Legacy", () => {
+                const outputs = [
+                    BLOCK_STARGATE_STAKE,
+                    BLOCK_STARGATE_UNSTAKE,
+                    BLOCK_STARGATE_BASE_REWARD,
+                    BLOCK_STARGATE_DELEGATE_REWARD,
+                    BLOCK_STARGATE_STAKE_DELEGATE,
+                    BLOCK_STARGATE_UNDELEGATE,
+                    BLOCK_STARGATE_DELEGATION,
+                ]
+                    .flatMap(u => u.transactions)
+                    .flatMap(tx =>
+                        commonReceiptProcessor
+                            .analyzeReceipt(tx.outputs, tx.origin)
+                            .map(output => ({ ...output, txId: tx.id })),
+                    )
 
-                expect(outputs).toHaveLength(1)
+                expect(outputs).toHaveLength(13)
                 const names = outputs.map(output => output.name)
-                expect(names).toStrictEqual(["STARGATE_UNSTAKE(uint256,uint256,uint8,address)"])
-            })
-            it("Claim rewards base", async () => {
-                const block = require("~fixtures/business-event-blocks/block_stargate_claim_base_reward.json")
-
-                const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
-                    commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
-                )
-
-                expect(outputs).toHaveLength(4)
-                const names = outputs.map(output => output.name)
-                expect(names[3]).toBe("STARGATE_CLAIM_REWARDS_BASE(uint256,uint256,address)")
-            })
-            it("Claim rewards delegation", async () => {
-                const block = require("~fixtures/business-event-blocks/block_stargate_claim_delegate_reward.json")
-
-                const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
-                    commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
-                )
-
-                expect(outputs).toHaveLength(1)
-                const names = outputs.map(output => output.name)
-                expect(names[0]).toBe("STARGATE_CLAIM_REWARDS_DELEGATE(uint256,uint256,address)")
-            })
-            it("Stake delegate", async () => {
-                const block = require("~fixtures/business-event-blocks/block_stargate_stake_delegate.json")
-
-                const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
-                    commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
-                )
-
-                expect(outputs).toHaveLength(1)
-                const names = outputs.map(output => output.name)
-                expect(names[0]).toBe("STARGATE_STAKE_DELEGATE(uint256,uint256,uint8,address,bool,bool)")
-            })
-            it("Undelegate", async () => {
-                const block = require("~fixtures/business-event-blocks/block_stargate_undelegate.json")
-
-                const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
-                    commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
-                )
-
-                expect(outputs).toHaveLength(1)
-                const names = outputs.map(output => output.name)
-                expect(names[0]).toBe("STARGATE_UNDELEGATE(uint256)")
-            })
-            it("Delegate", async () => {
-                const block = require("~fixtures/business-event-blocks/block_stargate_delegation.json")
-
-                const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
-                    commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
-                )
-
-                expect(outputs).toHaveLength(2)
-                const names = outputs.map(output => output.name)
-                expect(names[1]).toBe("STARGATE_DELEGATE(uint256,address,bool)")
+                expect(names).toStrictEqual([
+                    "STARGATE_DELEGATE_LEGACY(uint256,address,bool)",
+                    "STARGATE_STAKE(uint256,uint256,uint8,address,bool)",
+                    "STARGATE_CLAIM_REWARDS_BASE_LEGACY(uint256,uint256,address)",
+                    "STARGATE_UNSTAKE(uint256,uint256,uint8,address)",
+                    "STARGATE_CLAIM_REWARDS_BASE_LEGACY(uint256,uint256,address)",
+                    "STARGATE_CLAIM_REWARDS_BASE_LEGACY(uint256,uint256,address)",
+                    "STARGATE_CLAIM_REWARDS_BASE_LEGACY(uint256,uint256,address)",
+                    "STARGATE_CLAIM_REWARDS_BASE_LEGACY(uint256,uint256,address)",
+                    "STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY(uint256,uint256,address)",
+                    "STARGATE_DELEGATE_LEGACY(uint256,address,bool)",
+                    "STARGATE_STAKE(uint256,uint256,uint8,address,bool)",
+                    "STARGATE_UNDELEGATE_LEGACY(uint256)",
+                    "Transfer(indexed address,indexed address,uint256)",
+                ])
             })
         })
     })

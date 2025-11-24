@@ -37,7 +37,6 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
         queryFn: () => fetchMedia(details.image!),
         enabled: !!details.image,
         staleTime: 5 * 60 * 1000,
-        gcTime: 5 * 60 * 1000,
     })
 
     return (
@@ -117,6 +116,7 @@ export const CollectibleBottomSheet = ({ bsRef }: { bsRef: RefObject<BottomSheet
             enablePanDownToClose={false}
             noMargins
             dynamicHeight
+            scrollable={false}
             backgroundStyle={styles.bg}>
             {data => <CollectibleBottomSheetContent address={data.address} tokenId={data.tokenId} onClose={onClose} />}
         </BaseBottomSheet>

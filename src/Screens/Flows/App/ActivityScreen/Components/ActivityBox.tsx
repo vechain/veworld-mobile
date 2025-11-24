@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
 import { B3TR, COLORS, DIRECTIONS, typography, VET, VOT3, VTHO } from "~Constants"
-import { useFormatFiat, useTheme, useThemedStyles, useVns } from "~Hooks"
+import { useFetchValidators, useFormatFiat, useTheme, useThemedStyles, useVns } from "~Hooks"
 import { useNFTInfo } from "~Hooks/useNFTInfo"
 import { useI18nContext } from "~i18n"
 import {
@@ -45,7 +45,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { formatWithLessThan } from "~Utils/StandardizedFormatting"
-import { AddressUtils, BigNutils, URIUtils } from "~Utils"
+import { AddressUtils, BigNutils, URIUtils, ValidatorUtils } from "~Utils"
 import { getTokenLevelName } from "~Utils/StargateUtils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 import { StackedApps } from "./StackedApps"
@@ -189,13 +189,13 @@ const BaseActivityBox = ({
             <BaseSpacer width={16} />
 
             <BaseView flexDirection="column" flex={1}>
-                <BaseText typographyFont="smallCaption" color={theme.colors.activityCard.time}>
+                <BaseText typographyFont="smallCaptionMedium" color={theme.colors.activityCard.time}>
                     {timestampRenderer(timestamp)}
                 </BaseText>
                 <BaseSpacer height={2} />
                 <BaseView style={styles.titleContainer}>
                     <BaseText
-                        typographyFont={invertedStyles ? "caption" : "bodySemiBold"}
+                        typographyFont={invertedStyles ? "captionMedium" : "bodySemiBold"}
                         numberOfLines={1}
                         color={
                             invertedStyles ? theme.colors.activityCard.subtitleBold : theme.colors.activityCard.title
@@ -209,7 +209,7 @@ const BaseActivityBox = ({
                 {showDescription &&
                     (typeof description === "string" ? (
                         <BaseText
-                            typographyFont={invertedStyles ? "bodySemiBold" : "caption"}
+                            typographyFont={invertedStyles ? "bodySemiBold" : "captionMedium"}
                             numberOfLines={1}
                             color={
                                 invertedStyles
@@ -317,7 +317,7 @@ const TokenTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxPr
                     description: (
                         <BaseView flexDirection="row" gap={4}>
                             <BaseText
-                                typographyFont="caption"
+                                typographyFont="captionMedium"
                                 color={theme.colors.activityCard.subtitleLight}
                                 textTransform="lowercase"
                                 flexShrink={0}>
@@ -342,7 +342,7 @@ const TokenTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxPr
                     description: (
                         <BaseView flexDirection="row" gap={4}>
                             <BaseText
-                                typographyFont="caption"
+                                typographyFont="captionMedium"
                                 color={theme.colors.activityCard.subtitleLight}
                                 textTransform="lowercase"
                                 flexShrink={0}>
@@ -456,7 +456,7 @@ const DAppTransaction = ({ activity, onPress, ...props }: OverridableActivityBox
             description={
                 <BaseView flexDirection="row" gap={4}>
                     <BaseText
-                        typographyFont="caption"
+                        typographyFont="captionMedium"
                         color={theme.colors.activityCard.subtitleLight}
                         textTransform="lowercase"
                         flexShrink={0}>
@@ -878,6 +878,8 @@ const UnknownTx = ({ activity, onPress, ...props }: OverridableActivityBoxProps<
 const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<StargateActivity>) => {
     const { LL } = useI18nContext()
     const { formatLocale } = useFormatFiat()
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const { validators } = useFetchValidators()
 
     const onPressHandler = () => {
         onPress(activity)
@@ -889,14 +891,28 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
                 return "icon-download"
             case ActivityEvent.STARGATE_UNSTAKE:
                 return "icon-upload"
-            case ActivityEvent.STARGATE_DELEGATE:
-            case ActivityEvent.STARGATE_DELEGATE_ONLY:
+            case ActivityEvent.STARGATE_DELEGATE_LEGACY:
                 return "icon-lock"
-            case ActivityEvent.STARGATE_UNDELEGATE:
+            case ActivityEvent.STARGATE_UNDELEGATE_LEGACY:
                 return "icon-unlock"
-            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
-            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS:
                 return "icon-gift"
+            case ActivityEvent.STARGATE_BOOST:
+                return "icon-thunder"
+            case ActivityEvent.STARGATE_DELEGATE_REQUEST:
+                return "icon-log-in"
+            case ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST:
+            case ActivityEvent.STARGATE_DELEGATION_EXITED:
+            case ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED:
+                return "icon-log-out"
+            case ActivityEvent.STARGATE_DELEGATE_ACTIVE:
+                return "icon-check-circle"
+            case ActivityEvent.STARGATE_MANAGER_ADDED:
+                return "icon-user-plus"
+            case ActivityEvent.STARGATE_MANAGER_REMOVED:
+                return "icon-user-minus"
             default:
                 return "icon-blocks"
         }
@@ -904,27 +920,46 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
 
     const hasRightAmount = useMemo(() => {
         return !(
-            activity?.type === ActivityEvent.STARGATE_UNDELEGATE ||
-            activity?.type === ActivityEvent.STARGATE_DELEGATE_ONLY
+            activity?.type === ActivityEvent.STARGATE_UNDELEGATE_LEGACY ||
+            activity?.type === ActivityEvent.STARGATE_MANAGER_ADDED ||
+            activity?.type === ActivityEvent.STARGATE_MANAGER_REMOVED
         )
     }, [activity?.type])
 
     const getActivityTitle = useCallback(() => {
         switch (activity.eventName) {
-            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY:
                 return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL()
-            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY:
                 return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
-            case ActivityEvent.STARGATE_DELEGATE:
+            case ActivityEvent.STARGATE_DELEGATE_LEGACY:
                 return LL.ACTIVITY_STARGATE_NODE_DELEGATE_LABEL()
-            case ActivityEvent.STARGATE_DELEGATE_ONLY:
-                return LL.ACTIVITY_STARGATE_NODE_DELEGATE_ONLY_LABEL()
-            case ActivityEvent.STARGATE_UNDELEGATE:
+            case ActivityEvent.STARGATE_UNDELEGATE_LEGACY:
                 return LL.ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL()
             case ActivityEvent.STARGATE_STAKE:
                 return LL.ACTIVITY_STARGATE_STAKE_LABEL()
             case ActivityEvent.STARGATE_UNSTAKE:
                 return LL.ACTIVITY_STARGATE_UNSTAKE_LABEL()
+            case ActivityEvent.STARGATE_DELEGATE_REQUEST:
+                return LL.ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL()
+            case ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED:
+                return LL.ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED()
+            case ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST:
+                return LL.ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL()
+            case ActivityEvent.STARGATE_DELEGATION_EXITED:
+                return LL.ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL()
+            case ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR:
+                return LL.ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL()
+            case ActivityEvent.STARGATE_DELEGATE_ACTIVE:
+                return LL.ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL()
+            case ActivityEvent.STARGATE_MANAGER_ADDED:
+                return LL.ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL()
+            case ActivityEvent.STARGATE_MANAGER_REMOVED:
+                return LL.ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL()
+            case ActivityEvent.STARGATE_BOOST:
+                return LL.ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL()
+            case ActivityEvent.STARGATE_CLAIM_REWARDS:
+                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
             default:
                 return LL.ACTIVITY_STARGATE_STAKE_LABEL()
         }
@@ -932,9 +967,13 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
 
     const isMinus = useMemo(() => {
         return !(
-            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE ||
-            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE ||
-            activity?.type === ActivityEvent.STARGATE_UNSTAKE
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY ||
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY ||
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS ||
+            activity?.type === ActivityEvent.STARGATE_UNSTAKE ||
+            activity?.type === ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED ||
+            activity?.type === ActivityEvent.STARGATE_DELEGATION_EXITED ||
+            activity?.type === ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR
         )
     }, [activity?.type])
 
@@ -948,14 +987,57 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
         return undefined
     }, [hasRightAmount, isMinus, amount])
 
+    const isDelegationOrDelegateActivity = useMemo(() => {
+        return (
+            activity.eventName === ActivityEvent.STARGATE_DELEGATE_LEGACY ||
+            activity.eventName === ActivityEvent.STARGATE_DELEGATE_REQUEST ||
+            activity.eventName === ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST ||
+            activity.eventName === ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED ||
+            activity.eventName === ActivityEvent.STARGATE_DELEGATION_EXITED ||
+            activity.eventName === ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR ||
+            activity.eventName === ActivityEvent.STARGATE_DELEGATE_ACTIVE
+        )
+    }, [activity.eventName])
+
+    const getDescription = useMemo(() => {
+        if (isDelegationOrDelegateActivity && activity.validator) {
+            const validatorName = ValidatorUtils.getValidatorName(validators ?? [], activity.validator)
+            return validatorName || AddressUtils.humanAddress(activity.validator)
+        }
+        if (
+            (activity.eventName === ActivityEvent.STARGATE_MANAGER_ADDED ||
+                activity.eventName === ActivityEvent.STARGATE_MANAGER_REMOVED) &&
+            activity.to?.[0]
+        ) {
+            const isUserAddress = AddressUtils.compareAddresses(activity.to[0], selectedAccount.address)
+            if (isUserAddress && activity.tokenId) {
+                return `#${activity.tokenId}`
+            }
+            return AddressUtils.humanAddress(activity.to[0])
+        }
+        return activity.levelId ? getTokenLevelName(activity.levelId) : ""
+    }, [
+        isDelegationOrDelegateActivity,
+        activity.validator,
+        activity.levelId,
+        activity.eventName,
+        activity.to,
+        activity.tokenId,
+        selectedAccount.address,
+        validators,
+    ])
+
     const baseActivityBoxProps = () => {
         return {
             icon: getStakingIcon(activity.eventName),
             title: getActivityTitle(),
-            description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
+            description: getDescription,
             rightAmount: rightAmount,
             rightAmountDescription:
-                hasRightAmount && (activity.eventName.includes("_CLAIM_") ? VTHO.symbol : VET.symbol),
+                hasRightAmount &&
+                (activity.eventName.includes("_CLAIM_") || activity.eventName.includes("BOOST")
+                    ? VTHO.symbol
+                    : VET.symbol),
             onPress: onPressHandler,
         }
     }

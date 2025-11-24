@@ -24,6 +24,7 @@ import { KeyPair } from "./ExternalDapps"
  * @property {number|null} lastNotificationReminder
  * @property {string[]} removedNotificationTags
  * @property {KeyPair|undefined} signKeyPair - Key pair for signing session tokens for external dapps connections
+ * @property {boolean} hideStellaPayBottomSheet - Whether to hide the Stella Pay bottom sheet
  */
 
 export interface UserPreferenceState {
@@ -51,6 +52,15 @@ export interface UserPreferenceState {
     signKeyPair?: KeyPair
     notificationCenterUrl?: string
     developerMenuUnlocked?: boolean
+    /**
+     * Indexer URLs.
+     * Each key is a genesis id and value is the URL.
+     * If an indexer isn't defined here, look up to the .env, otherwise return undefined
+     */
+    indexerUrls?: {
+        [genesisId: string]: string
+    }
+    hideStellaPayBottomSheet?: boolean
 }
 
 export const initialUserPreferencesState: UserPreferenceState = {
@@ -78,6 +88,7 @@ export const initialUserPreferencesState: UserPreferenceState = {
     signKeyPair: undefined,
     notificationCenterUrl: undefined,
     developerMenuUnlocked: false,
+    hideStellaPayBottomSheet: false,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -205,6 +216,16 @@ export const UserPreferencesSlice = createSlice({
         setDeveloperMenuUnlocked: (state, action: PayloadAction<boolean>) => {
             state.developerMenuUnlocked = action.payload
         },
+
+        setIndexerUrl: (state, action: PayloadAction<{ genesisId: string; url: string | undefined }>) => {
+            const { genesisId, url } = action.payload
+            state.indexerUrls ??= {}
+            if (url) state.indexerUrls[genesisId] = url
+            else delete state.indexerUrls[genesisId]
+        },
+        setHideStellaPayBottomSheet: (state, action: PayloadAction<boolean>) => {
+            state.hideStellaPayBottomSheet = action.payload
+        },
     },
 })
 
@@ -234,4 +255,6 @@ export const {
     setSignKeyPair,
     setNotificationCenterUrl,
     setDeveloperMenuUnlocked,
+    setIndexerUrl,
+    setHideStellaPayBottomSheet,
 } = UserPreferencesSlice.actions

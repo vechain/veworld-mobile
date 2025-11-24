@@ -58,7 +58,7 @@ import * as Sentry from "@sentry/react-native"
 import "react-native-fast-url/src/polyfill"
 import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
-import { clientPersister, queryClient } from "~Api/QueryProvider"
+import { clientPersister, queryClient, RQ_CACHE_MAX_AGE } from "~Api/QueryProvider"
 import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
 import { Routes } from "~Navigation"
@@ -70,6 +70,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller"
 import { DeepLinksProvider } from "~Components/Providers/DeepLinksProvider"
 import { DeviceProvider } from "~Components/Providers/DeviceProvider"
 import { FeedbackProvider } from "~Components/Providers/FeedbackProvider"
+import { ReceiptProcessorProvider } from "~Components/Providers/ReceiptProcessorProvider"
 
 const { fontFamily } = typography
 
@@ -155,29 +156,32 @@ const Main = () => {
                         client={queryClient}
                         persistOptions={{
                             persister: clientPersister,
+                            maxAge: RQ_CACHE_MAX_AGE,
                         }}>
                         <FeatureFlagsProvider>
                             <FeatureFlaggedSmartWallet nodeUrl={nodeUrl} networkType={networkType}>
-                                <FeedbackProvider>
-                                    <NavigationProvider>
-                                        <InteractionProvider>
-                                            <DeepLinksProvider>
-                                                <WalletConnectContextProvider>
-                                                    <BottomSheetModalProvider>
-                                                        <InAppBrowserProvider>
-                                                            <NotificationsProvider>
-                                                                <DeviceProvider>
-                                                                    <EntryPoint />
-                                                                </DeviceProvider>
-                                                            </NotificationsProvider>
-                                                        </InAppBrowserProvider>
-                                                    </BottomSheetModalProvider>
-                                                </WalletConnectContextProvider>
-                                            </DeepLinksProvider>
-                                        </InteractionProvider>
-                                    </NavigationProvider>
-                                    <BaseToast />
-                                </FeedbackProvider>
+                                <ReceiptProcessorProvider>
+                                    <FeedbackProvider>
+                                        <NavigationProvider>
+                                            <InteractionProvider>
+                                                <DeepLinksProvider>
+                                                    <WalletConnectContextProvider>
+                                                        <BottomSheetModalProvider>
+                                                            <InAppBrowserProvider>
+                                                                <NotificationsProvider>
+                                                                    <DeviceProvider>
+                                                                        <EntryPoint />
+                                                                    </DeviceProvider>
+                                                                </NotificationsProvider>
+                                                            </InAppBrowserProvider>
+                                                        </BottomSheetModalProvider>
+                                                    </WalletConnectContextProvider>
+                                                </DeepLinksProvider>
+                                            </InteractionProvider>
+                                        </NavigationProvider>
+                                        <BaseToast />
+                                    </FeedbackProvider>
+                                </ReceiptProcessorProvider>
                             </FeatureFlaggedSmartWallet>
                         </FeatureFlagsProvider>
                     </PersistQueryClientProvider>

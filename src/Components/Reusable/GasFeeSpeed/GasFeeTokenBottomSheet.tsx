@@ -136,7 +136,7 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                 </BaseText>
             </BaseView>
             <BaseSpacer height={8} />
-            <BaseText typographyFont="caption" color={theme.colors.editSpeedBs.subtitle}>
+            <BaseText typographyFont="body" color={theme.colors.editSpeedBs.subtitle}>
                 {LL.DELEGATE_FEE_TOKEN_DESC()}
             </BaseText>
             <BaseSpacer height={24} />

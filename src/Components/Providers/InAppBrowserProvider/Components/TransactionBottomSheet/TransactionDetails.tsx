@@ -2,11 +2,12 @@ import { TransactionClause } from "@vechain/sdk-core"
 import React, { ComponentProps, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components/Base"
+import { useCompleteReceiptProcessor } from "~Components/Providers/ReceiptProcessorProvider"
 import { SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { TransactionRequest } from "~Model"
-import { getReceiptProcessor, InspectableOutput, ReceiptOutput } from "~Services/AbiService"
-import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { InspectableOutput, ReceiptOutput } from "~Services/AbiService"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { DappDetailsCard } from "../DappDetailsCard"
 import { ReceiptOutputRenderer } from "./ReceiptOutputRenderer/ReceiptOutputRenderer"
 
@@ -58,9 +59,7 @@ const TransactionCarousel = ({
 }
 
 export const TransactionDetails = ({ request, outputs = [], clauses = [], onShowDetails }: Props) => {
-    const network = useAppSelector(selectSelectedNetwork)
-
-    const receiptProcessor = useMemo(() => getReceiptProcessor(network.type), [network.type])
+    const receiptProcessor = useCompleteReceiptProcessor()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const analyzedOutputs = useMemo(
         () => receiptProcessor.analyzeReceipt(outputs, selectedAccount.address),
