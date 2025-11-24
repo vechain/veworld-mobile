@@ -7,14 +7,20 @@ import MockAdapter from "axios-mock-adapter"
 import axios from "axios"
 import { DEVICE_TYPE } from "~Model"
 
-// Mock WebView to isolate it and capture props
+var mockWebViewProps: any
+var MockWebView: jest.Mock
+
+// Mock WebView while preserving other exports
 jest.mock("react-native-webview", () => {
+    const actual = jest.requireActual("react-native-webview")
+    MockWebView = jest.fn((props: any) => {
+        mockWebViewProps = props
+        return <View testID="webview" {...props} />
+    })
     return {
-        WebView: (props: any) => {
-            // Store the WebView props globally for assertions
-            global.mockWebViewProps = props
-            return <View testID="webview" {...props} />
-        },
+        ...actual,
+        WebView: MockWebView,
+        default: MockWebView,
     }
 })
 
@@ -70,11 +76,6 @@ jest.mock("~Components/Providers/InAppBrowserProvider/InAppBrowserProvider", () 
     }),
 }))
 
-// Global variable to store WebView props
-declare global {
-    var mockWebViewProps: any
-}
-
 const VALID_SIGNATURE =
     // eslint-disable-next-line max-len
     "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1b"
@@ -89,7 +90,7 @@ describe("CoinbasePayWebView", () => {
     beforeEach(() => {
         jest.clearAllMocks()
         axiosMock.reset()
-        global.mockWebViewProps = undefined
+        mockWebViewProps = undefined
         mockIsPasswordPromptOpen = false
         mockIsBiometricsEmpty = false
 
@@ -241,8 +242,8 @@ describe("CoinbasePayWebView", () => {
 
             await waitFor(
                 () => {
-                    expect(global.mockWebViewProps).toBeDefined()
-                    expect(global.mockWebViewProps.source.uri).toBe(expectedUrl)
+                    expect(mockWebViewProps).toBeDefined()
+                    expect(mockWebViewProps.source.uri).toBe(expectedUrl)
                 },
                 { timeout: 3000 },
             )
@@ -275,8 +276,8 @@ describe("CoinbasePayWebView", () => {
 
             // Wait for the WebView to load, confirming the component has finished rendering
             await waitFor(() => {
-                expect(global.mockWebViewProps).toBeDefined()
-                expect(global.mockWebViewProps.source.uri).toBe(expectedUrl)
+                expect(mockWebViewProps).toBeDefined()
+                expect(mockWebViewProps.source.uri).toBe(expectedUrl)
             })
 
             // Now assert that the password prompt is not present
