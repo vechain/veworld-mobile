@@ -8,12 +8,11 @@ import axios from "axios"
 import { DEVICE_TYPE } from "~Model"
 
 let mockWebViewProps: any
-let MockWebView: jest.Mock
 
 // Mock WebView while preserving other exports
 jest.mock("react-native-webview", () => {
     const actual = jest.requireActual("react-native-webview")
-    MockWebView = jest.fn((props: any) => {
+    const MockWebView = jest.fn((props: any) => {
         mockWebViewProps = props
         return <View testID="webview" {...props} />
     })
