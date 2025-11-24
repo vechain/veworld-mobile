@@ -437,7 +437,7 @@
   "CLOUD_ERR_WALLET_OPERATION": "Bu iCloud cüzdan işlemini gerçekleştirirken bir hata oluştu. Lütfen tekrar deneyin.",
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "{cloud: string} içinde yedeklenmiş bir cüzdan bulamadık. Tekrar deneyin veya kurtarma ifadenizi kullanın.",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "Mevcut cüzdan yok",
-  "COINBASE_NOT_AVAILABLE": "Coinbase mevcut değil",
+  "COINBASE_NOT_AVAILABLE": "Coinbase kullanılamıyor",
   "COLLECTIBLES_ACTION_AVATAR_ACTIVE": "Avatar",
   "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "Avatar ayarla",
   "COLLECTIBLES_ACTION_FAVORITE_INACTIVE": "Favori",

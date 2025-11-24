@@ -98,6 +98,7 @@ type ContextType = {
     navigateToUrl: (url: string) => void
     showToolbars: boolean
     navigationState: WebViewNavigation | undefined
+    onNavigationStateChange: (navigationState: WebViewNavigation) => void
     resetWebViewState: () => void
     addAppAndNavToRequest: (request: InAppRequest) => void
     handleCloseChangeAccountNetworkBottomSheet: (event: TargetEvent) => void
@@ -195,6 +196,10 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const postWebviewMessage = usePostWebviewMessage(webviewRef)
 
     const [navigationState, setNavigationState] = useState<WebViewNavigation | undefined>(undefined)
+
+    const onNavigationStateChange = useCallback((state: WebViewNavigation) => {
+        setNavigationState(state)
+    }, [])
 
     const canGoBack = useMemo(() => {
         return navigationState?.canGoBack ?? false
@@ -1060,6 +1065,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             goHome,
             showToolbars,
             navigationState,
+            onNavigationStateChange,
             resetWebViewState,
             addAppAndNavToRequest,
             handleCloseChangeAccountNetworkBottomSheet,
@@ -1085,6 +1091,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         goHome,
         showToolbars,
         navigationState,
+        onNavigationStateChange,
         resetWebViewState,
         addAppAndNavToRequest,
         handleCloseChangeAccountNetworkBottomSheet,

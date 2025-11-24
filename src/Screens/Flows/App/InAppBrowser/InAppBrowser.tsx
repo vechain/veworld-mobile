@@ -32,6 +32,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         originWhitelist,
         isLoading,
         navigationState,
+        onNavigationStateChange,
     } = useInAppBrowser()
 
     const track = useAnalyticTracking()
@@ -140,6 +141,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                                 javaScriptEnabled={true}
                                 onMessage={onMessage}
                                 onScroll={onScroll}
+                                onNavigationStateChange={onNavigationStateChange}
                                 onLoadEnd={onLoadEnd}
                                 allowsBackForwardNavigationGestures
                                 style={styles.loginWebView}
