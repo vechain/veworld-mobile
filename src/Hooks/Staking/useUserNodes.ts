@@ -51,7 +51,6 @@ export const useUserNodes = (address?: string, _enabled: boolean = true) => {
         queryFn: async () => await getUserNodes(indexerUrl!, address),
         enabled,
         staleTime: 60 * 5 * 1000,
-        gcTime: Infinity,
     })
 
     return useMemo(

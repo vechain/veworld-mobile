@@ -58,7 +58,7 @@ import * as Sentry from "@sentry/react-native"
 import "react-native-fast-url/src/polyfill"
 import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
-import { clientPersister, queryClient } from "~Api/QueryProvider"
+import { clientPersister, queryClient, RQ_CACHE_MAX_AGE } from "~Api/QueryProvider"
 import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
 import { NAVIGATION_REF, Routes } from "~Navigation"
@@ -156,6 +156,7 @@ const Main = () => {
                         client={queryClient}
                         persistOptions={{
                             persister: clientPersister,
+                            maxAge: RQ_CACHE_MAX_AGE,
                         }}>
                         <FeatureFlagsProvider>
                             <FeatureFlaggedSmartWallet nodeUrl={nodeUrl} networkType={networkType}>

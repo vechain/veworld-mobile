@@ -97,6 +97,7 @@ export const useGalacticaFees = ({ isGalactica, gas }: Props) => {
         enabled: isGalactica,
         placeholderData: keepPreviousData,
         refetchInterval: 10000,
+        gcTime: 1000 * 60 * 5,
     })
 
     const options = useMemo(() => {
