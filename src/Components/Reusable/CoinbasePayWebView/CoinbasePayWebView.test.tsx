@@ -63,13 +63,6 @@ jest.mock("~Hooks/useSignMessage", () => ({
     }),
 }))
 
-// Mock RequireUserPassword to make it easy to assert visibility
-jest.mock("~Components/Reusable/RequireUserPassword", () => {
-    return {
-        RequireUserPassword: ({ isOpen }: any) => <View testID="require-user-password" isOpen={isOpen} />,
-    }
-})
-
 // Mock useInAppBrowser hook
 jest.mock("~Components/Providers/InAppBrowserProvider/InAppBrowserProvider", () => ({
     useInAppBrowser: () => ({
@@ -267,8 +260,27 @@ describe("CoinbasePayWebView", () => {
 
             const { getByTestId } = renderComponent()
             await waitFor(() => {
-                expect(getByTestId("require-user-password").props.isOpen).toBe(true)
+                expect(getByTestId("require-user-password").props.visible).toBe(true)
             })
+        })
+
+        it("does not show RequireUserPassword when biometrics are used", async () => {
+            const expectedUrl = "https://coinbase.example.com/onramp?session=with-biometrics"
+            axiosMock.onGet().reply(200, { url: expectedUrl })
+
+            mockIsBiometricsEmpty = false
+            mockIsPasswordPromptOpen = false
+
+            const { queryByTestId } = renderComponent()
+
+            // Wait for the WebView to load, confirming the component has finished rendering
+            await waitFor(() => {
+                expect(global.mockWebViewProps).toBeDefined()
+                expect(global.mockWebViewProps.source.uri).toBe(expectedUrl)
+            })
+
+            // Now assert that the password prompt is not present
+            expect(queryByTestId("require-user-password")).toBeNull()
         })
     })
 })
