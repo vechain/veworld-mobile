@@ -1,14 +1,14 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useState } from "react"
-import { StyleSheet } from "react-native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import React, { useCallback, useRef, useState } from "react"
+import { ScrollView, StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseTouchable, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useDappBookmarksList, useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useDappBookmarksList, useThemedStyles } from "~Hooks"
 import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { X2ECategoryType } from "~Model"
-import { Routes } from "~Navigation"
-import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
+import { RootStackParamListApps, Routes } from "~Navigation"
 import { EcosystemSection } from "./Components/Ecosystem"
 import { FavoritesBottomSheet } from "./Components/FavoritesBottomSheet"
 import { FavoritesSuggestionBanner } from "./Components/FavoritesSuggestionBanner"
@@ -16,9 +16,10 @@ import { FavouritesV2 } from "./Components/Favourites/FavouritesV2"
 import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
 import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
 import { AppsBottomSheet, VeBetterSection } from "./Components/VeBetter"
+import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
 import { useDAppActions } from "./Hooks/useDAppActions"
 
-export const AppsScreen = () => {
+export const AppsScreen = ({ route }: NativeStackScreenProps<RootStackParamListApps, Routes.APPS>) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
@@ -30,6 +31,7 @@ export const AppsScreen = () => {
         onOpen: onOpenAppsBottomSheet,
         onClose: onCloseAppsBottomSheet,
     } = useBottomSheetModal()
+    const layoutRef = useRef<ScrollView>(null)
 
     const bookmarkedDApps = useDappBookmarksList()
     const { onDAppPress } = useDAppActions(Routes.APPS)
@@ -65,6 +67,7 @@ export const AppsScreen = () => {
             bg={theme.colors.background}
             noBackButton
             noMargin
+            scrollViewRef={layoutRef}
             fixedHeader={
                 <BaseView style={[HeaderStyleV2, styles.header]}>
                     <HeaderTitle
@@ -121,7 +124,7 @@ export const AppsScreen = () => {
                         </>
                     )}
 
-                    <EcosystemSection />
+                    <EcosystemSection defaultFilter={route.params?.filter} scrollViewRef={layoutRef} />
                     <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
                     <AppsBottomSheet
                         ref={appsBottomSheetRef}

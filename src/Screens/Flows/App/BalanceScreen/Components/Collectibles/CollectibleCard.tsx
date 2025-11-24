@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
+import moment from "moment"
 import React, { useCallback, useMemo } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
@@ -10,8 +11,10 @@ import { COLORS } from "~Constants"
 import { useNFTMedia, useThemedStyles } from "~Hooks"
 import { useBlacklistedCollection } from "~Hooks/useBlacklistedCollection"
 import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
+import { useCollectibleTransferDetails } from "~Hooks/useCollectibleTransferDetails"
 import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
 import { useNftBookmarking } from "~Hooks/useNftBookmarking"
+import { useI18nContext } from "~i18n"
 import { NFTMediaType } from "~Model"
 import HapticsService from "~Services/HapticsService"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
@@ -25,12 +28,14 @@ type Props = {
 const AnimatedBaseIcon = Animated.createAnimatedComponent(wrapFunctionComponent(BaseIcon))
 
 export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
+    const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
     const { isFavorite, toggleFavorite } = useNftBookmarking(address, tokenId)
     const { animatedStyles, favoriteIconAnimation } = useFavoriteAnimation()
     const details = useCollectibleDetails({ address, tokenId })
     const { isBlacklisted } = useBlacklistedCollection(address)
     const { fetchMedia } = useNFTMedia()
+    const { data: transferDetails } = useCollectibleTransferDetails({ address, tokenId })
 
     const { data: media } = useQuery({
         queryKey: ["COLLECTIBLES", "MEDIA", details.image],
@@ -59,24 +64,53 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
 
         return (
             <FastImage
-                fallback
-                defaultSource={NFTPlaceholderDarkV2}
+                source={NFTPlaceholderDarkV2}
                 style={styles.image as ImageStyle}
                 resizeMode={FastImage.resizeMode.cover}
             />
         )
     }, [media?.mediaType, media?.image, styles.image])
 
+    const isNew = useMemo(() => {
+        if (!transferDetails) return false
+        return moment().diff((transferDetails.data?.data[0].blockTimestamp ?? 0) * 1000, "days") <= 5
+    }, [transferDetails])
+
+    const topStyle = useMemo(() => {
+        if (isNew && !isBlacklisted) return styles.favoriteContainerBetween
+        if (isNew && isBlacklisted) return styles.favoriteContainerLeft
+        if (!isNew && !isBlacklisted) return styles.favoriteContainerRight
+        return undefined
+    }, [
+        isBlacklisted,
+        isNew,
+        styles.favoriteContainerBetween,
+        styles.favoriteContainerLeft,
+        styles.favoriteContainerRight,
+    ])
+
     return (
         <Pressable testID={`VBD_COLLECTIBLE_CARD_${address}_${tokenId}`} style={styles.root} onPress={handlePress}>
-            {!isBlacklisted && (
-                <BaseView style={styles.favoriteRootContainer}>
-                    <LinearGradient
-                        colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
-                        useAngle
-                        locations={[0, 0.5, 1]}
-                        style={styles.favoriteContainer}
-                        angle={180}>
+            <BaseView style={styles.favoriteRootContainer}>
+                <LinearGradient
+                    colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
+                    useAngle
+                    locations={[0, 0.5, 1]}
+                    style={[styles.favoriteContainer, topStyle]}
+                    angle={180}>
+                    {isNew && (
+                        <BaseText
+                            bg="rgba(48, 38, 95, 0.90)"
+                            color={COLORS.LIME_GREEN}
+                            px={6}
+                            typographyFont="smallCaptionSemiBold"
+                            borderRadius={2}
+                            lineHeight={14}
+                            textTransform="uppercase">
+                            {LL.DISCOVER_FOR_YOU_NEW()}
+                        </BaseText>
+                    )}
+                    {!isBlacklisted && (
                         <Pressable
                             testID={`VBD_COLLECTIBLE_CARD_FAVORITE_${address}_${tokenId}`}
                             style={styles.favoriteIcon}
@@ -88,9 +122,9 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
                                 style={animatedStyles}
                             />
                         </Pressable>
-                    </LinearGradient>
-                </BaseView>
-            )}
+                    )}
+                </LinearGradient>
+            </BaseView>
 
             {RenderMedia}
             {isBlacklisted && <BlurView style={[StyleSheet.absoluteFill]} overlayColor="transparent" blurAmount={20} />}
@@ -142,8 +176,17 @@ const baseStyles = () =>
             width: "100%",
             padding: 8,
             flexDirection: "row",
-            justifyContent: "flex-end",
             alignItems: "center",
+            minHeight: 32,
+        },
+        favoriteContainerRight: {
+            justifyContent: "flex-end",
+        },
+        favoriteContainerLeft: {
+            justifyContent: "flex-start",
+        },
+        favoriteContainerBetween: {
+            justifyContent: "space-between",
         },
         favoriteIcon: {
             marginRight: 4,

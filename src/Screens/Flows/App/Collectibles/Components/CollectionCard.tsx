@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
-import React, { useCallback } from "react"
+import moment from "moment"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import FastImage from "react-native-fast-image"
 import LinearGradient from "react-native-linear-gradient"
@@ -11,7 +12,9 @@ import { COLORS } from "~Constants"
 import { useNFTMedia, useThemedStyles } from "~Hooks"
 import { useBlacklistedCollection } from "~Hooks/useBlacklistedCollection"
 import { useCollectionsBookmarking } from "~Hooks/useCollectionsBookmarking"
+import { useCollectionTransferDetails } from "~Hooks/useCollectionTransferDetails"
 import { useFavoriteAnimation } from "~Hooks/useFavoriteAnimation"
+import { useI18nContext } from "~i18n"
 import HapticsService from "~Services/HapticsService"
 import AddressUtils from "~Utils/AddressUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
@@ -27,12 +30,14 @@ type Props = {
 const AnimatedBaseIcon = Animated.createAnimatedComponent(wrapFunctionComponent(BaseIcon))
 
 export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }: Props) => {
+    const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
     const { data: collectionMetadata, isLoading } = useCollectionMetadata(collectionAddress)
     const { fetchMedia } = useNFTMedia()
     const { animatedStyles, favoriteIconAnimation } = useFavoriteAnimation()
     const { isFavorite, toggleFavoriteCollection } = useCollectionsBookmarking(collectionAddress)
     const { isBlacklisted } = useBlacklistedCollection(collectionAddress)
+    const { data: transferDetails } = useCollectionTransferDetails({ address: collectionAddress })
 
     const { data: media } = useQuery({
         queryKey: ["COLLECTIBLES", "MEDIA", collectionMetadata?.image],
@@ -50,6 +55,24 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
             }
         })
     }, [favoriteIconAnimation, toggleFavoriteCollection, onToggleFavorite, isFavorite])
+
+    const isNew = useMemo(() => {
+        if (!transferDetails || transferDetails.error) return false
+        return moment().diff((transferDetails.data?.data[0].blockTimestamp ?? 0) * 1000, "days") <= 5
+    }, [transferDetails])
+
+    const topStyle = useMemo(() => {
+        if (isNew && !isBlacklisted) return styles.favoriteContainerBetween
+        if (isNew && isBlacklisted) return styles.favoriteContainerLeft
+        if (!isNew && !isBlacklisted) return styles.favoriteContainerRight
+        return undefined
+    }, [
+        isBlacklisted,
+        isNew,
+        styles.favoriteContainerBetween,
+        styles.favoriteContainerLeft,
+        styles.favoriteContainerRight,
+    ])
 
     if (isLoading) {
         return <SkeletonCollectionCard />
@@ -69,14 +92,26 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
                 fallback
                 defaultSource={NFTPlaceholderDarkV2}
                 blurred={isBlacklisted}>
-                {!isBlacklisted && (
-                    <BaseView style={styles.favoriteRootContainer}>
-                        <LinearGradient
-                            colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
-                            useAngle
-                            locations={[0, 0.5, 1]}
-                            style={styles.favoriteContainer}
-                            angle={180}>
+                <BaseView style={styles.favoriteRootContainer}>
+                    <LinearGradient
+                        colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
+                        useAngle
+                        locations={[0, 0.5, 1]}
+                        style={[styles.favoriteContainer, topStyle]}
+                        angle={180}>
+                        {isNew && (
+                            <BaseText
+                                bg="rgba(48, 38, 95, 0.90)"
+                                color={COLORS.LIME_GREEN}
+                                px={6}
+                                typographyFont="smallCaptionSemiBold"
+                                borderRadius={2}
+                                lineHeight={14}
+                                textTransform="uppercase">
+                                {LL.DISCOVER_FOR_YOU_NEW()}
+                            </BaseText>
+                        )}
+                        {!isBlacklisted && (
                             <TouchableOpacity
                                 testID={`VBD_COLLECTION_CARD_FAVORITE_${collectionAddress}`}
                                 disabled={!collectionMetadata?.id}
@@ -89,9 +124,9 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
                                     style={animatedStyles}
                                 />
                             </TouchableOpacity>
-                        </LinearGradient>
-                    </BaseView>
-                )}
+                        )}
+                    </LinearGradient>
+                </BaseView>
 
                 <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
                     <BaseView
@@ -153,8 +188,17 @@ const baseStyles = () =>
             width: "100%",
             padding: 8,
             flexDirection: "row",
-            justifyContent: "flex-end",
             alignItems: "center",
+            minHeight: 32,
+        },
+        favoriteContainerRight: {
+            justifyContent: "flex-end",
+        },
+        favoriteContainerLeft: {
+            justifyContent: "flex-start",
+        },
+        favoriteContainerBetween: {
+            justifyContent: "space-between",
         },
         favoriteIcon: {
             marginRight: 4,
