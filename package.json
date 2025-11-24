@@ -1,6 +1,6 @@
 {
   "name": "veworld",
-  "version": "2.4.10",
+  "version": "2.4.11",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf android/app/build && cd ios && pod deintegrate && cd ..",
