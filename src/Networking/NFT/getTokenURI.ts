@@ -20,7 +20,6 @@ const getTokenURIOptions = (tokenId: string, contractAddress: string, genesisId:
         queryKey: getTokenURIQueryKey(genesisId, contractAddress, tokenId),
         queryFn: () => getTokenURI(tokenId, contractAddress, thor),
         staleTime: 1 * 60 * 60 * 1000,
-        gcTime: 24 * 60 * 60 * 1000,
     })
 }
 

@@ -262,9 +262,10 @@ export const VbdCarouselBottomSheet = ({ bsRef }: VbdCarouselBottomSheetProps) =
     return (
         <BaseBottomSheet<VbdCarouselBottomSheetMetadata>
             ref={ref}
-            dynamicHeight
             backgroundStyle={styles.backgroundStyle}
             enablePanDownToClose={false}
+            dynamicHeight
+            scrollable={false}
             noMargins
             floating>
             {data => <VbdCarouselBottomSheetContent {...data} onClose={onCloseBS} />}
@@ -277,7 +278,7 @@ const baseStyles = (theme: ColorThemeType) =>
         root: {
             height: isSmallScreen ? 320 : 360,
             position: "relative",
-            overflow: "hidden",
+
             justifyContent: "flex-end",
         },
         blurView: {
@@ -285,7 +286,6 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         backgroundStyle: {
             backgroundColor: theme.colors.actionBottomSheet.background,
-            overflow: "hidden",
         },
 
         infoContainer: {

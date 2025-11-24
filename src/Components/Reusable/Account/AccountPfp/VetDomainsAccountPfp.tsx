@@ -16,7 +16,6 @@ export const VetDomainsAccountPfp = memo<Props>(({ uri, size = 50, ...props }) =
         queryFn: () => fetchMedia(uri),
         enabled: !!uri,
         staleTime: 5 * 60 * 1000,
-        gcTime: 5 * 60 * 1000,
     })
 
     return (
