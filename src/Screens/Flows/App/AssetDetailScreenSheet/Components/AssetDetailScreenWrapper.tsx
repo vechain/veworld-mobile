@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { PropsWithChildren, useCallback, useEffect, useMemo } from "react"
 import { StyleSheet } from "react-native"
+import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, {
     clamp,
@@ -10,7 +11,6 @@ import Animated, {
     useAnimatedReaction,
     useAnimatedStyle,
     useSharedValue,
-    withDelay,
     withSpring,
     withTiming,
 } from "react-native-reanimated"
@@ -19,7 +19,6 @@ import { BaseBottomSheetHandle } from "~Components/Base/BaseBottomSheetHandle"
 import { COLORS, ColorThemeType, SCREEN_HEIGHT } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { PlatformUtils } from "~Utils"
-import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = PropsWithChildren<{
     handle?: boolean
@@ -30,8 +29,7 @@ const PADDING_BOTTOM = 32
 const DEFAULT_TRANSLATION = 16
 
 const INITIAL_POS_Y_SCROLL = 0
-const DELAY_RESET_POSITION = 300
-const SCROLL_THRESHOLD = 3.5
+const SCROLL_THRESHOLD = 4
 
 export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -71,6 +69,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                 translateY.value = withTiming(DEFAULT_TRANSLATION, {
                     duration: 500,
                 })
+                scrollY.value = 0
             }
         },
     )
@@ -110,21 +109,20 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
             })
     }, [height.value, onClose, translateY])
 
-    //This is needed on iOS only because the scroll view works in a different way than on Android
+    // This is needed on iOS only because the scroll view works in a different way than on Android
     // Also on Android this gesture block the scroll completely
     const scrollPanGesture = Gesture.Pan()
         .onUpdate(({ translationY }) => {
-            const clampedValue = clamp(translationY, 0, DEFAULT_TRANSLATION)
+            const clampedValue = clamp(translationY, 0, 0)
             scrollY.value = clampedValue
         })
         .onFinalize(({ translationY }) => {
             const scrollGoBackAnimation = withTiming(INITIAL_POS_Y_SCROLL)
-            if (translationY >= SCROLL_THRESHOLD && scrollY.value === 0) {
+            if (translationY >= SCROLL_THRESHOLD && scrollY.value <= 0) {
                 onClose()
-                scrollY.value = withDelay(DELAY_RESET_POSITION, scrollGoBackAnimation)
+                scrollY.value = scrollGoBackAnimation
             }
         })
-        .enabled(isIOS())
 
     const composedGestures = Gesture.Simultaneous(scrollPanGesture, nativeGesture)
 
@@ -154,14 +152,15 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                         )}
                     </GestureDetector>
 
-                    <Animated.ScrollView
+                    <NestableScrollContainer
                         bounces={false}
                         showsVerticalScrollIndicator={false}
-                        onScroll={event => {
-                            scrollY.value = event.nativeEvent.contentOffset.y
+                        nestedScrollEnabled
+                        onScrollOffsetChange={scrollOffset => {
+                            scrollY.value = scrollOffset
                         }}>
                         {children}
-                    </Animated.ScrollView>
+                    </NestableScrollContainer>
                 </Animated.View>
             </GestureDetector>
         </BaseSafeArea>

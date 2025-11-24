@@ -48,6 +48,7 @@ export const ActivityTab = ({ token }: { token: FungibleToken }) => {
             onActivityPress={onActivityPress}
             contentContainerStyle={styles.listContainer}
             scrollEnabled={false}
+            nestedScrollEnabled
             ListFooterComponent={
                 <ActivityTabFooter onClick={onLoadMore} isLoading={isFetchingNextPage} show={hasNextPage} />
             }
