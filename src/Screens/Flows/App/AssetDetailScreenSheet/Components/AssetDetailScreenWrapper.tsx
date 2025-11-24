@@ -1,25 +1,25 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { PropsWithChildren, useCallback, useEffect, useMemo } from "react"
-import { StyleSheet, ViewProps } from "react-native"
+import { StyleSheet } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, {
+    clamp,
     Extrapolation,
     interpolate,
     runOnJS,
     useAnimatedReaction,
     useAnimatedStyle,
-    useDerivedValue,
     useSharedValue,
-    withDecay,
+    withDelay,
     withSpring,
     withTiming,
 } from "react-native-reanimated"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BaseSafeArea } from "~Components"
 import { BaseBottomSheetHandle } from "~Components/Base/BaseBottomSheetHandle"
 import { COLORS, ColorThemeType, SCREEN_HEIGHT } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { PlatformUtils } from "~Utils"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = PropsWithChildren<{
     handle?: boolean
@@ -29,22 +29,18 @@ const PADDING_BOTTOM = 32
 // This value should be exactly half of the PADDING_BOTTOM, so that when you pan on the handle, you don't see the backdrop behind
 const DEFAULT_TRANSLATION = 16
 
-export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => {
-    // const [scrollPosition, setScrollPosition] = useState(0)
+const INITIAL_POS_Y_SCROLL = 0
+const DELAY_RESET_POSITION = 300
+const SCROLL_THRESHOLD = 3.5
 
+export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const nav = useNavigation()
 
     const height = useSharedValue(SCREEN_HEIGHT)
-    // const scrollHeight = useSharedValue(0)
     const translateY = useSharedValue(SCREEN_HEIGHT)
-    // const touchStartY = useSharedValue(0)
     const scrollY = useSharedValue(0)
-
-    // const isScrollableLocked = useDerivedValue(() => {
-    //     return scrollY.value > 0
-    // })
 
     const animatedS = useAnimatedStyle(() => {
         return {
@@ -79,43 +75,6 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
         },
     )
 
-    const gesture = Gesture.Pan()
-        // .onBegin(e => {
-        //     console.log("onBegin")
-        // })
-        // .onStart(e => {
-        //     console.log("onStart", e.translationY)
-        //     touchStartY.value = e.translationY
-        // })
-        // .onChange(v => {
-        //     "worklet"
-        //     const lowestSnapPoint = DEFAULT_TRANSLATION
-
-        //     const negativeScrollableContentOffset = !isScrollableLocked.value ? scrollHeight.value * -1 : 0
-
-        //     const draggedPosition = touchStartY.value + v.translationY
-
-        //     const accumulatedDraggedPosition = draggedPosition + negativeScrollableContentOffset
-
-        //     const clampedPosition = clamp(accumulatedDraggedPosition, height.value, 0)
-        // })
-        .onUpdate(v => {
-            translateY.value = Math.max(v.translationY, -DEFAULT_TRANSLATION) + DEFAULT_TRANSLATION
-            // console.log("onUpdate", translateY.value)
-        })
-        .onEnd(() => {
-            "worklet"
-            // If more than 20%, then close the bottomsheet (navigate to previous page)
-            if (translateY.value >= height.value / 5 && scrollY.value === 0) {
-                onClose()
-                return
-            }
-
-            translateY.value = withSpring(DEFAULT_TRANSLATION, { mass: 4, damping: 120, stiffness: 900 })
-        })
-        .enabled(scrollY.value === 0)
-        .simultaneousWithExternalGesture(Gesture.Native().enabled(scrollY.value !== 0))
-
     useEffect(() => {
         const unsubscribe = nav.addListener("beforeRemove", e => {
             e.preventDefault()
@@ -133,10 +92,41 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
         }
     }, [height.value, nav, translateY])
 
-    useDerivedValue(() => {
-        // console.log("scrollY.value", height.value)
-        return scrollY.value
-    }, [scrollY.value, height.value])
+    const nativeGesture = Gesture.Native()
+
+    const handleGesture = useMemo(() => {
+        return Gesture.Pan()
+            .onUpdate(v => {
+                translateY.value = Math.max(v.translationY, -DEFAULT_TRANSLATION) + DEFAULT_TRANSLATION
+            })
+            .onEnd(() => {
+                "worklet"
+                // If more than 20%, then close the bottomsheet (navigate to previous page)
+                if (translateY.value >= height.value / 5) {
+                    onClose()
+                    return
+                }
+                translateY.value = withSpring(DEFAULT_TRANSLATION, { mass: 4, damping: 120, stiffness: 900 })
+            })
+    }, [height.value, onClose, translateY])
+
+    //This is needed on iOS only because the scroll view works in a different way than on Android
+    // Also on Android this gesture block the scroll completely
+    const scrollPanGesture = Gesture.Pan()
+        .onUpdate(({ translationY }) => {
+            const clampedValue = clamp(translationY, 0, DEFAULT_TRANSLATION)
+            scrollY.value = clampedValue
+        })
+        .onFinalize(({ translationY }) => {
+            const scrollGoBackAnimation = withTiming(INITIAL_POS_Y_SCROLL)
+            if (translationY >= SCROLL_THRESHOLD && scrollY.value === 0) {
+                onClose()
+                scrollY.value = withDelay(DELAY_RESET_POSITION, scrollGoBackAnimation)
+            }
+        })
+        .enabled(isIOS())
+
+    const composedGestures = Gesture.Simultaneous(scrollPanGesture, nativeGesture)
 
     return (
         <BaseSafeArea grow={1} style={styles.safeArea} bg="transparent">
@@ -146,7 +136,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                     nav.goBack()
                 }}
             />
-            <GestureDetector gesture={gesture}>
+            <GestureDetector gesture={composedGestures}>
                 <Animated.View
                     style={[styles.root, animatedS]}
                     onLayout={e => {
@@ -155,14 +145,23 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                         }
                         height.value = e.nativeEvent.layout.height
                     }}>
-                    {handle && (
-                        <BaseBottomSheetHandle
-                            color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
-                            style={styles.handle}
-                        />
-                    )}
+                    <GestureDetector gesture={handleGesture}>
+                        {handle && (
+                            <BaseBottomSheetHandle
+                                color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
+                                style={styles.handle}
+                            />
+                        )}
+                    </GestureDetector>
 
-                    <DraggableView>{children}</DraggableView>
+                    <Animated.ScrollView
+                        bounces={false}
+                        showsVerticalScrollIndicator={false}
+                        onScroll={event => {
+                            scrollY.value = event.nativeEvent.contentOffset.y
+                        }}>
+                        {children}
+                    </Animated.ScrollView>
                 </Animated.View>
             </GestureDetector>
         </BaseSafeArea>
@@ -193,62 +192,3 @@ const baseStyles = (theme: ColorThemeType) =>
             zIndex: 1,
         },
     })
-
-const DraggableView = ({
-    children,
-    enableContentPanning = true,
-
-    style,
-    ...props
-}: PropsWithChildren<{ enableContentPanning?: boolean } & ViewProps>) => {
-    const contentInitialOffset = useSharedValue(0)
-    const contentHeight = useSharedValue(0)
-    const initialposition = useSharedValue(0)
-    const translateY = useSharedValue(0)
-    const { bottom, top } = useSafeAreaInsets()
-
-    const containerAbsoluteHeight = useMemo(() => {
-        return SCREEN_HEIGHT - top - bottom
-    }, [top, bottom])
-
-    const clampedTranslateY = useDerivedValue(() => {
-        const scrollableAreaHeight = contentHeight.value - containerAbsoluteHeight
-
-        return Math.max(Math.min(translateY.value, 0), Math.min(0, -scrollableAreaHeight - contentInitialOffset.value))
-    })
-
-    const panningGesture = useMemo(() => {
-        return Gesture.Pan()
-            .enabled(enableContentPanning)
-            .runOnJS(false)
-            .shouldCancelWhenOutside(false)
-            .onStart(() => {
-                initialposition.value = clampedTranslateY.value
-            })
-            .onChange(e => {
-                translateY.value = e.translationY + initialposition.value
-            })
-            .onEnd(e => {
-                translateY.value = withDecay({ velocity: e.velocityY })
-            })
-    }, [enableContentPanning, initialposition, clampedTranslateY.value, translateY])
-
-    const animatedStyles = useAnimatedStyle(() => {
-        return {
-            transform: [{ translateY: clampedTranslateY.value }],
-        }
-    }, [translateY.value])
-    return (
-        <GestureDetector gesture={panningGesture}>
-            <Animated.View
-                style={[animatedStyles, style]}
-                {...props}
-                onLayout={e => {
-                    contentHeight.value = e.nativeEvent.layout.height
-                    contentInitialOffset.value = e.nativeEvent.layout.y
-                }}>
-                {children}
-            </Animated.View>
-        </GestureDetector>
-    )
-}
