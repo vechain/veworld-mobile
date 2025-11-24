@@ -1,10 +1,10 @@
-import { RouteProp, useRoute } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo } from "react"
 import { BaseView, useFeatureFlags } from "~Components"
 import { useBottomSheetModal, useCameraBottomSheet } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { useSendBottomSheet } from "~Hooks/useSendBottomSheet/useSendBottomSheet"
+
 import { ConvertBetterBottomSheet, ConvertedBetterBottomSheet } from "~Screens/Flows/App/AssetDetailScreen/Components"
 import { BuyButton } from "./ActionButtons/BuyButton"
 import { ConvertButton } from "./ActionButtons/ConvertButton"
@@ -13,6 +13,7 @@ import { MoreButton } from "./ActionButtons/MoreButton"
 import { ReceiveButton } from "./ActionButtons/ReceiveButton"
 import { SendButton } from "./ActionButtons/SendButton"
 import { SwapButton } from "./ActionButtons/SwapButton"
+import { Keyboard } from "react-native"
 
 type Props = {
     token: FungibleTokenWithBalance
@@ -20,6 +21,8 @@ type Props = {
 
 export const BalanceTabActions = ({ token }: Props) => {
     const route = useRoute<RouteProp<RootStackParamListHome, Routes.TOKEN_DETAILS>>()
+    const nav = useNavigation()
+
     const betterConversionResult = useMemo(
         () => route.params.betterConversionResult,
         [route.params.betterConversionResult],
@@ -47,7 +50,11 @@ export const BalanceTabActions = ({ token }: Props) => {
     })
 
     const { betterWorldFeature } = useFeatureFlags()
-    const { RenderSendBottomSheet, handleOpenSend } = useSendBottomSheet()
+
+    const handleOpenSend = useCallback(() => {
+        Keyboard.dismiss()
+        nav.navigate(Routes.SELECT_TOKEN_SEND)
+    }, [nav])
 
     const allActions = useMemo(() => {
         return {
@@ -101,7 +108,6 @@ export const BalanceTabActions = ({ token }: Props) => {
             />
 
             {RenderCameraModal}
-            {betterWorldFeature.balanceScreen?.send?.enabled && RenderSendBottomSheet}
         </BaseView>
     )
 }
