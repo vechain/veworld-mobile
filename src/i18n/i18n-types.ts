@@ -1761,6 +1761,10 @@ type RootTranslation = {
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: string
 	/**
+	 * B​u​y​ ​n​e​w​ ​c​o​l​l​e​c​t​i​b​l​e​s
+	 */
+	BUY_NEW_COLLECTIBLES: string
+	/**
 	 * C​a​c​h​e​ ​c​l​e​a​r​e​d
 	 */
 	CACHE_CLEARED: string
@@ -1867,6 +1871,10 @@ type RootTranslation = {
 	 */
 	COLLECTIONS_HIDE_BACK: string
 	/**
+	 * S​e​e​ ​C​o​l​l​e​c​t​i​o​n​s
+	 */
+	COLLECTIONS_SEE_ALL: string
+	/**
 	 * V​i​e​w​ ​h​i​d​d​e​n
 	 */
 	COLLECTIONS_VIEW_HIDDEN: string
@@ -1934,6 +1942,10 @@ type RootTranslation = {
 	 * D​o​n​e
 	 */
 	COMMON_BTN_DONE: string
+	/**
+	 * G​o​ ​t​o
+	 */
+	COMMON_BTN_GO_TO: string
 	/**
 	 * L​o​a​d​i​n​g
 	 */
@@ -3303,6 +3315,14 @@ type RootTranslation = {
 	 */
 	MESSAGE_LEDGER_SIGN_DATA_SB: string
 	/**
+	 * T​h​i​s​ ​a​p​p​ ​i​s​ ​r​u​n​n​i​n​g​ ​o​n​ ​a​ ​n​e​t​w​o​r​k​ ​t​h​a​t​ ​i​s​ ​n​o​t​ ​c​u​r​r​e​n​t​l​y​ ​a​d​d​e​d​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​T​o​ ​c​o​n​t​i​n​u​e​,​ ​p​l​e​a​s​e​ ​a​d​d​ ​t​h​e​ ​n​e​t​w​o​r​k​s​ ​n​o​d​e​ ​U​R​L​.
+	 */
+	MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION: string
+	/**
+	 * N​e​t​w​o​r​k​ ​n​o​t​ ​d​e​t​e​c​t​e​d
+	 */
+	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: string
+	/**
 	 * A​d​d​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
 	NETWORK_ADD_CUSTOM_NODE: string
@@ -3852,6 +3872,38 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_STARGATE_DELEGATE: string
 	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​a​c​t​i​v​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: string
+	/**
+	 * M​a​n​a​g​e​r​ ​a​d​d​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: string
+	/**
+	 * M​a​n​a​g​e​r​ ​r​e​m​o​v​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: string
+	/**
+	 * M​a​t​u​r​i​t​y​ ​b​o​o​s​t​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: string
+	/**
 	 * V​E​T​ ​s​t​a​k​e
 	 */
 	RECEIPT_OUTPUT_STARGATE_STAKE: string
@@ -3867,38 +3919,6 @@ type RootTranslation = {
 	 * V​E​T​ ​u​n​s​t​a​k​e
 	 */
 	RECEIPT_OUTPUT_STARGATE_UNSTAKE: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​a​c​t​i​v​e
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: string
-	/**
-	 * M​a​n​a​g​e​r​ ​a​d​d​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: string
-	/**
-	 * M​a​n​a​g​e​r​ ​r​e​m​o​v​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: string
-	/**
-	 * M​a​t​u​r​i​t​y​ ​b​o​o​s​t​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: string
 	/**
 	 * S​w​a​p
 	 */
@@ -4831,6 +4851,10 @@ type RootTranslation = {
 	 */
 	STELLA_PAY_BOTTOM_SHEET_TITLE: string
 	/**
+	 * D​o​n​’​t​ ​s​h​o​w​ ​m​e​ ​t​h​i​s​ ​a​g​a​i​n
+	 */
+	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: string
+	/**
 	 * A​v​a​i​l​a​b​l​e​ ​t​o​ ​c​l​a​i​m
 	 */
 	SUCCESS_DOMAIN_AVAILABLE: string
@@ -5614,18 +5638,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * N​e​t​w​o​r​k​ ​n​o​t​ ​d​e​t​e​c​t​e​d
-	 */
-	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: string
-	/**
-	 * T​h​i​s​ ​a​p​p​ ​i​s​ ​r​u​n​n​i​n​g​ ​o​n​ ​a​ ​n​e​t​w​o​r​k​ ​t​h​a​t​ ​i​s​ ​n​o​t​ ​c​u​r​r​e​n​t​l​y​ ​a​d​d​e​d​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​T​o​ ​c​o​n​t​i​n​u​e​,​ ​p​l​e​a​s​e​ ​a​d​d​ ​t​h​e​ ​n​e​t​w​o​r​k​s​ ​n​o​d​e​ ​U​R​L​.
-	 */
-	MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION: string
-	/**
-	 * G​o​ ​t​o
-	 */
-	COMMON_BTN_GO_TO: string
 }
 
 export type TranslationFunctions = {
@@ -7339,6 +7351,10 @@ Thanks for your patience!
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: () => LocalizedString
 	/**
+	 * Buy new collectibles
+	 */
+	BUY_NEW_COLLECTIBLES: () => LocalizedString
+	/**
 	 * Cache cleared
 	 */
 	CACHE_CLEARED: () => LocalizedString
@@ -7444,6 +7460,10 @@ This action is irreversible.
 	 */
 	COLLECTIONS_HIDE_BACK: () => LocalizedString
 	/**
+	 * See Collections
+	 */
+	COLLECTIONS_SEE_ALL: () => LocalizedString
+	/**
 	 * View hidden
 	 */
 	COLLECTIONS_VIEW_HIDDEN: () => LocalizedString
@@ -7511,6 +7531,10 @@ This action is irreversible.
 	 * Done
 	 */
 	COMMON_BTN_DONE: () => LocalizedString
+	/**
+	 * Go to
+	 */
+	COMMON_BTN_GO_TO: () => LocalizedString
 	/**
 	 * Loading
 	 */
@@ -8872,6 +8896,14 @@ This action is irreversible.
 	 */
 	MESSAGE_LEDGER_SIGN_DATA_SB: () => LocalizedString
 	/**
+	 * This app is running on a network that is not currently added to your wallet. To continue, please add the networks node URL.
+	 */
+	MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION: () => LocalizedString
+	/**
+	 * Network not detected
+	 */
+	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
 	 * Add custom node
 	 */
 	NETWORK_ADD_CUSTOM_NODE: () => LocalizedString
@@ -9401,6 +9433,38 @@ This action is irreversible.
 	 */
 	RECEIPT_OUTPUT_STARGATE_DELEGATE: () => LocalizedString
 	/**
+	 * Delegation active
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: () => LocalizedString
+	/**
+	 * Delegation exited
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: () => LocalizedString
+	/**
+	 * Delegation exit requested
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: () => LocalizedString
+	/**
+	 * Delegation requested
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: () => LocalizedString
+	/**
+	 * Delegation request cancelled
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
+	/**
+	 * Manager added
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: () => LocalizedString
+	/**
+	 * Manager removed
+	 */
+	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: () => LocalizedString
+	/**
+	 * Maturity boosted
+	 */
+	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: () => LocalizedString
+	/**
 	 * VET stake
 	 */
 	RECEIPT_OUTPUT_STARGATE_STAKE: () => LocalizedString
@@ -9416,38 +9480,6 @@ This action is irreversible.
 	 * VET unstake
 	 */
 	RECEIPT_OUTPUT_STARGATE_UNSTAKE: () => LocalizedString
-	/**
-	 * Delegation requested
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: () => LocalizedString
-	/**
-	 * Delegation request cancelled
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
-	/**
-	 * Delegation active
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: () => LocalizedString
-	/**
-	 * Delegation exit requested
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: () => LocalizedString
-	/**
-	 * Delegation exited
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: () => LocalizedString
-	/**
-	 * Manager added
-	 */
-	RECEIPT_OUTPUT_STARGATE_MANAGER_ADDED: () => LocalizedString
-	/**
-	 * Manager removed
-	 */
-	RECEIPT_OUTPUT_STARGATE_MANAGER_REMOVED: () => LocalizedString
-	/**
-	 * Maturity boosted
-	 */
-	RECEIPT_OUTPUT_STARGATE_MATURITY_BOOSTED: () => LocalizedString
 	/**
 	 * Swap
 	 */
@@ -10366,6 +10398,10 @@ Available for Google and Apple Pay.
 	 */
 	STELLA_PAY_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
+	 * Don’t show me this again
+	 */
+	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: () => LocalizedString
+	/**
 	 * Available to claim
 	 */
 	SUCCESS_DOMAIN_AVAILABLE: () => LocalizedString
@@ -11143,18 +11179,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Network not detected
-	 */
-	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: () => LocalizedString
-	/**
-	 * This app is running on a network that is not currently added to your wallet. To continue, please add the networks node URL.
-	 */
-	MISSING_NETWORK_ALERT_BOTTOM_SHEET_DESCRIPTION: () => LocalizedString
-	/**
-	 * Go to
-	 */
-	COMMON_BTN_GO_TO: () => LocalizedString
 }
 
 export type Formatters = {

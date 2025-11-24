@@ -1,13 +1,16 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useQuery } from "@tanstack/react-query"
-import React, { RefObject } from "react"
+import moment from "moment"
+import React, { RefObject, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ImageStyle } from "react-native-fast-image"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView, NFTImageComponent } from "~Components/Reusable"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useNFTMedia, useThemedStyles } from "~Hooks"
+import { useBlacklistedCollection } from "~Hooks/useBlacklistedCollection"
 import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
+import { useCollectibleTransferDetails } from "~Hooks/useCollectibleTransferDetails"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
@@ -29,6 +32,8 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
     const { styles, theme } = useThemedStyles(baseStyles)
     const details = useCollectibleDetails({ address, tokenId })
     const account = useAppSelector(selectSelectedAccount)
+    const { isBlacklisted } = useBlacklistedCollection(address)
+    const { data: transferDetails } = useCollectibleTransferDetails({ address, tokenId })
 
     const { fetchMedia } = useNFTMedia()
 
@@ -37,13 +42,22 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
         queryFn: () => fetchMedia(details.image!),
         enabled: !!details.image,
         staleTime: 5 * 60 * 1000,
-        gcTime: 5 * 60 * 1000,
     })
+
+    const isNew = useMemo(() => {
+        if (!transferDetails) return false
+        return moment().diff((transferDetails.data?.data[0].blockTimestamp ?? 0) * 1000, "days") <= 5
+    }, [transferDetails])
 
     return (
         <BaseView flexDirection="column">
             <BaseView w={100} style={styles.rootImage} position="relative">
                 <NFTImageComponent style={styles.image as ImageStyle} uri={media?.image} />
+
+                {isBlacklisted && (
+                    <BlurView style={[StyleSheet.absoluteFill]} overlayColor="transparent" blurAmount={20} />
+                )}
+
                 <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
                     <BaseView bg={"rgba(0,0,0,0.30)"} w={100}>
                         <BaseView
@@ -68,6 +82,20 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
                         </BaseView>
                     </BaseView>
                 </BlurView>
+                {isNew && (
+                    <BaseText
+                        bg="rgba(48, 38, 95, 0.90)"
+                        color={COLORS.LIME_GREEN}
+                        px={12}
+                        py={4}
+                        typographyFont="captionSemiBold"
+                        borderRadius={4}
+                        lineHeight={16}
+                        textTransform="uppercase"
+                        containerStyle={styles.newBtn}>
+                        {LL.DISCOVER_FOR_YOU_NEW()}
+                    </BaseText>
+                )}
                 <BaseIcon
                     style={styles.closeBtn}
                     color={COLORS.WHITE}
@@ -117,6 +145,7 @@ export const CollectibleBottomSheet = ({ bsRef }: { bsRef: RefObject<BottomSheet
             enablePanDownToClose={false}
             noMargins
             dynamicHeight
+            scrollable={false}
             backgroundStyle={styles.bg}>
             {data => <CollectibleBottomSheetContent address={data.address} tokenId={data.tokenId} onClose={onClose} />}
         </BaseBottomSheet>
@@ -155,5 +184,10 @@ const baseStyles = () =>
             backgroundColor: "rgba(0, 0, 0, 0.50)",
             borderRadius: 100,
             padding: 10,
+        },
+        newBtn: {
+            position: "absolute",
+            top: 16,
+            left: 16,
         },
     })

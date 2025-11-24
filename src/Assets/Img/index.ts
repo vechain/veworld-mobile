@@ -27,3 +27,4 @@ export const StellaPayCard = require("./stella_pay_card.png")
 export const NFTPlaceholderDark = dark_nft_placeholder
 export const NFTPlaceholderLight = light_nft_placeholder
 export const Clouds = clouds
+export const CollectiblesEmptyState = require("./collectibles_empty_state.png")

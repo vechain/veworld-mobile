@@ -29,7 +29,6 @@ export const getUseUserTokensConfig = ({ address, network }: { address: string; 
         queryKey: ["TOKENS", "USER", address, network.genesis.id],
         queryFn: () => queryFn({ network, address }),
         staleTime: 10 * 60 * 1000,
-        gcTime: 10 * 60 * 1000,
         placeholderData: keepPreviousData,
     })
 
