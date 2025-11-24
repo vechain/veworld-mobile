@@ -3,7 +3,7 @@ import { BaseModal, BaseView, IBaseModal } from "~Components"
 import { LockScreen } from "~Screens"
 import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 
-export interface IRequireUserPassword extends Omit<IBaseModal, "children"> {
+interface IRequireUserPassword extends Omit<IBaseModal, "children"> {
     onSuccess: (password: string) => void
     onClose: () => void
     scenario?: LOCKSCREEN_SCENARIO

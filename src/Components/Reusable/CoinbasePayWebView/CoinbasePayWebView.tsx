@@ -204,13 +204,12 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
     }, [coinbaseURL, isCoinbaseLoading])
 
     const shouldShowSpinner = (isLoading || isBiometricsEmpty) && !isPasswordPromptOpen
-    const shouldShowWebView = !!url && !isPasswordPromptOpen
 
     return (
         <BaseView flex={1}>
             {!isLoading && isAndroid && <BaseStatusBar />}
             {shouldShowSpinner && <BaseActivityIndicatorView />}
-            {shouldShowWebView && (
+            {url && (
                 <WebView
                     source={{ uri: url }}
                     onLoadEnd={handleLoadEnd}
@@ -233,11 +232,5 @@ const baseStyles = (isLoading: boolean) =>
         webView: {
             flex: 1,
             opacity: isLoading ? 0 : 1,
-        },
-        spinnerOverlay: {
-            ...StyleSheet.absoluteFillObject,
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1,
         },
     })
