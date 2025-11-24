@@ -1,15 +1,19 @@
 import { ThorClient } from "@vechain/sdk-network"
 import { useMemo } from "react"
+import { Network } from "~Model"
 import { selectDefaultMainnet, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+
+export const useNetworkThorClient = (network: Network) => {
+    return useMemo(() => ThorClient.at(network.currentUrl), [network.currentUrl])
+}
 
 export const useThorClient = () => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    const thorClient = useMemo(() => ThorClient.at(selectedNetwork.currentUrl), [selectedNetwork.currentUrl])
-    return thorClient
+    return useNetworkThorClient(selectedNetwork)
 }
 
 export const useMainnetThorClient = () => {
     const mainnet = useAppSelector(selectDefaultMainnet)
-    const thorClient = useMemo(() => ThorClient.at(mainnet.currentUrl), [mainnet.currentUrl])
-    return thorClient
+
+    return useNetworkThorClient(mainnet)
 }

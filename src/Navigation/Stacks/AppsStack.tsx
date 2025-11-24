@@ -3,7 +3,15 @@ import React from "react"
 import { Device } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
-import { InAppBrowser, TabsManagerScreen, WalletDetailScreen, WalletManagementScreen } from "~Screens"
+import {
+    AddCustomNodeScreen,
+    ChangeNetworkScreen,
+    InAppBrowser,
+    ManageCustomNodesScreen,
+    TabsManagerScreen,
+    WalletDetailScreen,
+    WalletManagementScreen,
+} from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AppsScreen } from "~Screens/Flows/App/AppsScreen/AppsScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
@@ -26,6 +34,9 @@ export type RootStackParamListApps = {
     [Routes.ACTIVITY_STAKING]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
+    [Routes.SETTINGS_NETWORK]: undefined
+    [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
+    [Routes.SETTINGS_MANAGE_CUSTOM_NODES]: undefined
 }
 
 const { Navigator, Screen } = createStackNavigator<RootStackParamListApps>()
@@ -78,6 +89,19 @@ export const AppsStack = () => {
                 options={{ headerShown: false }}
             />
             <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
+            <Screen name={Routes.SETTINGS_NETWORK} component={ChangeNetworkScreen} options={{ headerShown: false }} />
+
+            <Screen
+                name={Routes.SETTINGS_ADD_CUSTOM_NODE}
+                component={AddCustomNodeScreen}
+                options={{ headerShown: false }}
+            />
+
+            <Screen
+                name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
+                component={ManageCustomNodesScreen}
+                options={{ headerShown: false }}
+            />
         </Navigator>
     )
 }

@@ -2,7 +2,7 @@ import React from "react"
 import { StyleSheet } from "react-native"
 import { useTheme } from "~Hooks"
 import { COLORS } from "~Constants"
-import { BaseButton, BaseIcon, BaseText, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -16,19 +16,18 @@ export const AddContactButton: React.FC<Props> = ({ onPress }) => {
 
     return (
         <>
-            <BaseButton
+            <BaseTouchableBox
                 haptics="Light"
                 action={onPress}
-                bgColor={theme.colors.secondary}
-                style={baseStyles.plusContactButton}
-                w={40}>
+                bg={theme.colors.secondary}
+                containerStyle={baseStyles.plusContactButton}>
                 <BaseView alignItems="center">
                     <BaseIcon my={8} size={55} name="icon-plus" color={COLORS.DARK_PURPLE} />
                     <BaseText py={5} typographyFont="bodyMedium" color={COLORS.DARK_PURPLE}>
                         {LL.BTN_CREATE_CONTACT()}
                     </BaseText>
                 </BaseView>
-            </BaseButton>
+            </BaseTouchableBox>
             <BaseText pt={15} typographyFont="body">
                 {LL.SB_CONTACT_LIST_EMPTY()}
             </BaseText>
@@ -41,7 +40,9 @@ export const AddContactButton: React.FC<Props> = ({ onPress }) => {
 
 const baseStyles = StyleSheet.create({
     plusContactButton: {
+        paddingVertical: 16,
         justifyContent: "center",
         flexDirection: "column",
+        alignItems: "center",
     },
 })

@@ -127,8 +127,8 @@ export const getIndexedHistoryEventOrigin = ({
 }) => {
     const baseUrl =
         networkType === NETWORK_TYPE.MAIN
-            ? process.env.REACT_APP_INDEXER_MAINNET_URL
-            : process.env.REACT_APP_INDEXER_TESTNET_URL
+            ? process.env.REACT_APP_INDEXER_MAINNET_V2_URL
+            : process.env.REACT_APP_INDEXER_TESTNET_V2_URL
 
     let url = `${baseUrl}/history/${address}?page=${page}&size=${pageSize}&direction=${direction}`
 
@@ -305,4 +305,34 @@ export const getStargateTotalVetStaked = () => {
  */
 export const getStargateRewardsDistributed = () => {
     return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/total-vtho-claimed`
+}
+
+/**
+ * Get VTHO claimed in Stargate for address
+ * @param networkType Network type
+ * @param address Address of the user
+ * @param tokenId Stargate Token ID
+ * @returns The VTHO claimed for address in Stargate
+ */
+export const getStargateVTHOClaimedByAddressAndTokenId = (
+    networkType: NETWORK_TYPE,
+    address: string,
+    tokenId: string,
+) => {
+    return networkType === NETWORK_TYPE.MAIN
+        ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/stargate/total-vtho-claimed/${address}/${tokenId}`
+        : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/stargate/total-vtho-claimed/${address}/${tokenId}`
+}
+
+/**
+ * Get Stargate tokens for address endpoint. (It does not include the baseUrl)
+ * @param address Address of the user
+ * @param param1 Options
+ * @returns The Stargate tokens for address
+ */
+export const getStargateTokensByAddress = (
+    address: string,
+    { page = 0, pageSize = 50 }: { page?: number; pageSize?: number } = {},
+) => {
+    return `/api/v1/stargate/tokens?manager=${address}&owner=${address}&page=${page}&size=${pageSize}`
 }

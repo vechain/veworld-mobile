@@ -12,6 +12,7 @@ import {
     Layout,
     PlusIconHeaderButton,
     RequireUserPassword,
+    showWarningToast,
     SwipeableRow,
     useFeatureFlags,
 } from "~Components"
@@ -42,8 +43,6 @@ import { EditWalletAccountBottomSheet } from "./components/EditWalletAccountBott
 import { useAccountDelete } from "./hooks"
 /** @ts-ignore */
 import { DefaultStyle } from "react-native-reanimated/lib/typescript/reanimated2/hook/commonTypes"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
-import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
 
@@ -149,10 +148,9 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const confirmRemoveAccount = useCallback(
         (account: AccountWithDevice) => {
             if (isOnlyAccount(account.rootAddress))
-                return Feedback.show({
-                    severity: FeedbackSeverity.WARNING,
-                    type: FeedbackType.ALERT,
-                    message: LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
+                return showWarningToast({
+                    text1: LL.NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT(),
+                    visibilityTime: 10000,
                 })
 
             setAccountToRemove(account)

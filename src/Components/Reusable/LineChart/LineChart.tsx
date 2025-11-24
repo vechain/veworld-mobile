@@ -97,6 +97,7 @@ const LineChart = ({
     gradientBackgroundColors,
     gradientBackgroundPositions: _gradientBackgroundPositions,
     canvasStyle,
+    xGutter,
 }: LineChartProps) => {
     const { data, activePointIndex, isLoading } = useLineChart()
     const { locale } = useI18nContext()
@@ -109,8 +110,8 @@ const LineChart = ({
     }, [_gradientBackgroundPositions, theme.isDark])
 
     const { path, points, maxX, minY, maxY, calcXPos, calcYPos } = useMemo(
-        () => makeGraph(data, width, height, strokeWidth),
-        [data, width, height, strokeWidth],
+        () => makeGraph(data, width, height, strokeWidth, xGutter),
+        [data, width, height, strokeWidth, xGutter],
     )
 
     const previousMinY = useSharedValue(0)
@@ -142,7 +143,7 @@ const LineChart = ({
 
     useEffect(() => {
         if (!previousData) return
-        const graph = makeGraph(previousData, width, height, strokeWidth)
+        const graph = makeGraph(previousData, width, height, strokeWidth, xGutter)
         previousGraph.value = graph.path
         previousMaxX.value = graph.maxX
         previousMinY.value = graph.minY
@@ -158,6 +159,7 @@ const LineChart = ({
         previousMinY,
         prevLineTo,
         prevLineToZero,
+        xGutter,
     ])
 
     // Initial chartprogress animation

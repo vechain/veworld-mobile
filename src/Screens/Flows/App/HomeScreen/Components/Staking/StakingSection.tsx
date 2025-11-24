@@ -1,7 +1,7 @@
 import React, { memo } from "react"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
-import { useI18nContext } from "~i18n"
 import { useGroupedStakingData } from "~Hooks/Staking"
+import { useI18nContext } from "~i18n"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { StakedCard } from "./StakedCard"
 
@@ -22,12 +22,7 @@ export const StakingSection = memo(() => {
             <BaseView gap={8}>
                 {stakingGroups.map(group => (
                     <BaseView key={`${group.address}-${group.isOwner}`}>
-                        <StakedCard
-                            nodes={group.nodes}
-                            nfts={group.nfts}
-                            isOwner={group.isOwner}
-                            isLoading={group.isLoading}
-                        />
+                        <StakedCard nodes={group.nodes} isOwner={group.isOwner} isLoading={group.isLoading} />
                     </BaseView>
                 ))}
             </BaseView>

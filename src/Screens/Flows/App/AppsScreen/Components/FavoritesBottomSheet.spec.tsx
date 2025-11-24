@@ -4,6 +4,7 @@ import { screen } from "@testing-library/react-native"
 import { TestWrapper, TestHelpers } from "~Test"
 import { FavoritesBottomSheet } from "./FavoritesBottomSheet"
 import { DiscoveryDApp } from "~Constants"
+import { DAppReference } from "~Storage/Redux"
 
 const { renderComponentWithProps } = TestHelpers.render
 
@@ -14,17 +15,31 @@ jest.mock("../Hooks", () => ({
     }),
 }))
 
+jest.mock("~Hooks/useFetchFeaturedDApps", () => ({
+    useVeBetterDaoDapps: () => ({
+        data: [],
+        isLoading: false,
+    }),
+}))
+
 jest.mock("react-native-draggable-flatlist", () => {
     const { View } = require("react-native")
-    return ({ data, renderItem, ListEmptyComponent, ...props }: any) => {
+    const DraggableFlatList = ({ data, renderItem, ListEmptyComponent, ...props }: any) => {
         if (!data || data.length === 0) {
-            return React.createElement(View, { testID: props.testID }, ListEmptyComponent)
+            const emptyComponent = typeof ListEmptyComponent === "function" ? ListEmptyComponent() : ListEmptyComponent
+            return React.createElement(View, { testID: props.testID }, emptyComponent)
         }
         return React.createElement(
             View,
             { testID: props.testID },
             data.map((item: any, index: number) => renderItem({ item, index, isActive: false, drag: jest.fn() })),
         )
+    }
+    const ScaleDecorator = ({ children }: any) => children
+    return {
+        __esModule: true,
+        default: DraggableFlatList,
+        ScaleDecorator,
     }
 })
 
@@ -62,18 +77,39 @@ const mockDApps: DiscoveryDApp[] = [
     },
 ]
 
+const mockDAppRefs: DAppReference[] = [
+    {
+        type: "app-hub",
+        id: "dapp1",
+        order: 0,
+    },
+    {
+        type: "app-hub",
+        id: "dapp2",
+        order: 1,
+    },
+    {
+        type: "app-hub",
+        id: "dapp3",
+        order: 2,
+    },
+]
+
 describe("FavoritesBottomSheet", () => {
     const mockOnClose = jest.fn()
     const ref = { current: null } as React.RefObject<BottomSheetModalMethods>
 
-    const renderWithFavorites = (favorites: DiscoveryDApp[] = mockDApps) => {
+    const renderWithFavorites = (
+        favoriteRefs: DAppReference[] = mockDAppRefs,
+        featured: DiscoveryDApp[] = mockDApps,
+    ) => {
         return renderComponentWithProps(<FavoritesBottomSheet ref={ref} onClose={mockOnClose} />, {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: {
                     discovery: {
-                        favorites,
-                        featured: [],
+                        favoriteRefs,
+                        featured,
                         custom: [],
                         bannerInteractions: {},
                         connectedApps: [],
@@ -103,7 +139,7 @@ describe("FavoritesBottomSheet", () => {
         })
 
         it("should render empty state when no favorites", () => {
-            renderWithFavorites([])
+            renderWithFavorites([], [])
 
             expect(screen.getByTestId("empty-results")).toBeTruthy()
             expect(screen.getByTestId("draggable-flatlist")).toBeTruthy()
@@ -158,13 +194,6 @@ describe("FavoritesBottomSheet", () => {
 
             const flatList = screen.getByTestId("draggable-flatlist")
             expect(flatList).toBeTruthy()
-        })
-
-        it("should have proper component structure", () => {
-            renderWithFavorites()
-
-            expect(screen.getByTestId("dapps-list-header")).toBeTruthy()
-            expect(screen.getByTestId("draggable-flatlist")).toBeTruthy()
         })
     })
 })

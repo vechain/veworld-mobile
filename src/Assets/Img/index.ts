@@ -22,6 +22,7 @@ export const StargateDappBannerB3MO = require("./Stargate_dapp_b3mo.png")
 export const StargateDappLogo = require("./Stargate_dApp_logo.png")
 export const StargateAvatar = require("./StargateAvatar.png")
 export const NFTPlaceholderDarkV2 = require("./no_NFT_image_placeholder.png")
+export const StellaPayCard = require("./stella_pay_card.png")
 
 export const NFTPlaceholderDark = dark_nft_placeholder
 export const NFTPlaceholderLight = light_nft_placeholder

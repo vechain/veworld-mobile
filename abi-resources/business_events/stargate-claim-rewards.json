@@ -1,0 +1,114 @@
+{
+  "name": "STARGATE_CLAIM_REWARDS",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "DelegationRewardsClaimed(indexed address,indexed uint256,indexed uint256,uint256,uint32,uint32)",
+      "alias": "claimRewards",
+      "conditions": [
+        {
+          "firstOperand": "amount",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${STARGATE_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    },
+    {
+      "name": "Transfer(indexed address,indexed address,uint256)",
+      "alias": "vthoTransfer",
+      "conditions": [
+        {
+          "firstOperand": "from",
+          "isFirstStatic": false,
+          "secondOperand": "${STARGATE_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "value",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "0x0000000000000000000000000000456e65726779",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    }
+  ],
+  "rules": [],
+  "paramsDefinition": [
+    {
+      "name": "tokenId",
+      "eventName": "claimRewards",
+      "businessEventName": "tokenId"
+    },
+    {
+      "name": "amount",
+      "eventName": "claimRewards",
+      "businessEventName": "value"
+    },
+    {
+      "name": "receiver",
+      "eventName": "claimRewards",
+      "businessEventName": "owner"
+    },
+    {
+      "name": "delegationId",
+      "eventName": "claimRewards",
+      "businessEventName": "delegationId"
+    },
+    {
+      "name": "lastClaimedPeriod",
+      "eventName": "claimRewards",
+      "businessEventName": "periodClaimed"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "owner",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "delegationId",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint32",
+      "name": "periodClaimed",
+      "type": "uint32"
+    }
+  ],
+  "type": "event"
+}

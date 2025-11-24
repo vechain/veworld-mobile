@@ -144,6 +144,7 @@ const baseStyles = (theme: ColorThemeType) =>
             overflow: "hidden",
             paddingBottom: PADDING_BOTTOM,
             transformOrigin: "bottom",
+            maxHeight: "100%",
         },
         safeArea: {
             justifyContent: "flex-end",
@@ -151,7 +152,7 @@ const baseStyles = (theme: ColorThemeType) =>
         handle: {
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.APP_BACKGROUND_LIGHT,
             marginTop: 0,
-            paddingTop: 10,
-            paddingBottom: 10,
+            paddingTop: 16,
+            paddingBottom: 16,
         },
     })

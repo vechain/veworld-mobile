@@ -3,6 +3,7 @@ import {
     BottomSheetBackdropProps,
     BottomSheetModal,
     BottomSheetModalProps,
+    BottomSheetScrollView,
     BottomSheetView,
 } from "@gorhom/bottom-sheet"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
@@ -101,6 +102,26 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<
      * @default true
      */
     rounded?: boolean
+    /**
+     * Color for the handle.
+     */
+    handleColor?: string
+    /**
+     * Sticky indices for dynamicHeight
+     */
+    stickyIndices?: number[]
+    /**
+     * Enable scrollable content. If set to true, the content will be scrollable.
+     * Only valid when `dynamicHeight` is true.
+     * @default true
+     */
+    scrollable?: boolean
+    /**
+     * Enable scrolling. If set to false, the content will not be scrollable.
+     * Only valid when `scrollable` is true.
+     * @default true
+     */
+    scrollEnabled?: boolean
 }
 
 const BaseBottomSheetContent = ({
@@ -116,6 +137,9 @@ const BaseBottomSheetContent = ({
     rightElement,
     children,
     floating,
+    stickyHeaderIndices,
+    scrollable,
+    scrollEnabled,
 }: PropsWithChildren<{
     bottomSafeArea: boolean
     bottomSafeAreaSize: number
@@ -128,6 +152,9 @@ const BaseBottomSheetContent = ({
     leftElement?: ReactNode
     rightElement?: ReactNode
     floating: boolean
+    stickyHeaderIndices?: number[]
+    scrollable?: boolean
+    scrollEnabled?: boolean
 }>) => {
     const headerStyles = useMemo(
         () => ({
@@ -155,6 +182,31 @@ const BaseBottomSheetContent = ({
         )
     }
 
+    const renderDynamicContent = () => {
+        if (scrollable) {
+            return (
+                <BottomSheetScrollView
+                    scrollEnabled={scrollEnabled}
+                    contentContainerStyle={contentViewStyle}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    stickyHeaderIndices={stickyHeaderIndices}
+                    stickyHeaderHiddenOnScroll={false}>
+                    {renderHeader()}
+                    {children}
+                    {dynamicHeight && isAndroid() && !floating && <BaseSpacer height={16} />}
+                </BottomSheetScrollView>
+            )
+        }
+        return (
+            <BottomSheetView style={contentViewStyle}>
+                {renderHeader()}
+                {children}
+                {dynamicHeight && isAndroid() && !floating && <BaseSpacer height={16} />}
+            </BottomSheetView>
+        )
+    }
+
     return (
         <>
             {snapPoints ? (
@@ -164,11 +216,7 @@ const BaseBottomSheetContent = ({
                     {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
                 </BaseView>
             ) : (
-                <BottomSheetView style={contentViewStyle}>
-                    {renderHeader()}
-                    {children}
-                    {dynamicHeight && isAndroid() && !floating && <BaseSpacer height={16} />}
-                </BottomSheetView>
+                renderDynamicContent()
             )}
             {footer && (
                 <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
@@ -202,6 +250,10 @@ const _BaseBottomSheet = <TData,>(
         stackBehavior = "push",
         floating = false,
         rounded = true,
+        handleColor: _handleColor,
+        stickyIndices,
+        scrollable = true,
+        scrollEnabled = true,
         ...props
     }: BaseBottomSheetProps<TData>,
     ref: React.ForwardedRef<BottomSheetModalMethods>,
@@ -224,9 +276,10 @@ const _BaseBottomSheet = <TData,>(
     }, [backgroundStyle, bgRoundingStyle, styles.backgroundStyle])
 
     const handleColor = useMemo(() => {
+        if (_handleColor) return _handleColor
         if (!theme.isDark) return COLORS.GREY_300
         return flattenedBsStyle.backgroundColor === theme.colors.card ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300
-    }, [flattenedBsStyle.backgroundColor, theme.colors.card, theme.isDark])
+    }, [flattenedBsStyle.backgroundColor, theme.colors.card, theme.isDark, _handleColor])
 
     const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
         return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
@@ -344,6 +397,7 @@ const _BaseBottomSheet = <TData,>(
                     <BaseBottomSheetContent
                         bottomSafeArea={bottomSafeArea}
                         bottomSafeAreaSize={bottomSafeAreaSize}
+                        scrollEnabled={scrollEnabled}
                         contentViewStyle={contentViewStyle}
                         dynamicHeight={dynamicHeight}
                         footer={footer}
@@ -352,7 +406,9 @@ const _BaseBottomSheet = <TData,>(
                         title={title}
                         leftElement={leftElement}
                         rightElement={rightElement}
-                        floating={floating}>
+                        floating={floating}
+                        scrollable={scrollable}
+                        stickyHeaderIndices={stickyIndices}>
                         {children(p?.data)}
                     </BaseBottomSheetContent>
                 )
@@ -360,6 +416,7 @@ const _BaseBottomSheet = <TData,>(
                 <BaseBottomSheetContent
                     bottomSafeArea={bottomSafeArea}
                     bottomSafeAreaSize={bottomSafeAreaSize}
+                    scrollEnabled={scrollEnabled}
                     contentViewStyle={contentViewStyle}
                     dynamicHeight={dynamicHeight}
                     footer={footer}
@@ -368,7 +425,9 @@ const _BaseBottomSheet = <TData,>(
                     title={title}
                     leftElement={leftElement}
                     rightElement={rightElement}
-                    floating={floating}>
+                    floating={floating}
+                    scrollable={scrollable}
+                    stickyHeaderIndices={stickyIndices}>
                     {children}
                 </BaseBottomSheetContent>
             )}

@@ -1,5 +1,9 @@
 import { setPlatform } from "~Test"
 import URIUtils from "./URIUtils"
+import axios from "axios"
+
+jest.mock("axios")
+const mockedAxios = axios as jest.Mocked<typeof axios>
 
 describe("URIUtils", () => {
     describe("Compare URLs", function () {
@@ -224,19 +228,28 @@ describe("URIUtils", () => {
     })
 
     describe("isValidBrowserUrl", function () {
+        beforeEach(() => {
+            mockedAxios.get.mockClear()
+        })
+
         test("should return true for a valid HTTPS URL", async () => {
+            mockedAxios.get.mockResolvedValueOnce({ data: "OK" })
             expect(await URIUtils.isValidBrowserUrl("https://www.example.com")).toBe(true)
         })
         test("should return true for a valid HTTP URL", async () => {
+            mockedAxios.get.mockResolvedValueOnce({ data: "OK" })
             expect(await URIUtils.isValidBrowserUrl("http://www.example.com")).toBe(true)
         })
         test("should return true for a valid URL with the following format www.exmaple.com", async () => {
+            mockedAxios.get.mockResolvedValueOnce({ data: "OK" })
             expect(await URIUtils.isValidBrowserUrl("www.example.com")).toBe(true)
         })
         test("should return false for an invalid URL", async () => {
+            mockedAxios.get.mockRejectedValueOnce(new Error("Network error"))
             expect(await URIUtils.isValidBrowserUrl("https://thisdoesnotexist99999.com")).toBe(false)
         })
         test("should return false for a malformed URL", async () => {
+            mockedAxios.get.mockRejectedValueOnce(new Error("Invalid URL"))
             expect(await URIUtils.isValidBrowserUrl("https://wwz example")).toBe(false)
         })
     })

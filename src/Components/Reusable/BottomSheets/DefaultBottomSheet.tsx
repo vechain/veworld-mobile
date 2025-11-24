@@ -52,7 +52,6 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
             return (
                 <BaseView justifyContent="center" alignItems="center" gap={12}>
                     {mainButton}
-                    {mainButton && secondaryButton && <BaseSpacer height={12} />}
                     {secondaryButton}
                 </BaseView>
             )

@@ -10,15 +10,23 @@ import {
     BaseView,
     NetworkSwitcherContextMenu,
     SelectAccountBottomSheet,
+    StellaPayBottomSheet,
 } from "~Components"
 import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useCopyClipboard, useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useCameraBottomSheet } from "~Hooks/useCameraBottomSheet"
 import { useVns } from "~Hooks/useVns"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, NETWORK_TYPE, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
-import { selectSelectedAccount, selectSelectedNetwork, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
+import {
+    selectHideStellaPayBottomSheet,
+    selectSelectedAccount,
+    selectSelectedNetwork,
+    selectVisibleAccounts,
+    useAppSelector,
+} from "~Storage/Redux"
 import { AccountUtils, AddressUtils } from "~Utils"
 
 type Props = {
@@ -32,10 +40,12 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const account = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
+    const hideStellaPayBottomSheet = useAppSelector(selectHideStellaPayBottomSheet)
 
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const { onCopyToClipboard } = useCopyClipboard()
+    const { navigateWithTab } = useBrowserTab()
 
     const height = useSharedValue(90)
 
@@ -66,6 +76,8 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
         onOpen: openSelectAccountBottomSheet,
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
+
+    const { ref: stellaPayBottomSheetRef, onOpen: openStellaPayBottomSheet } = useBottomSheetModal()
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         sourceScreen: Routes.HOME,
@@ -111,6 +123,18 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
         nav.navigate(Routes.SETTINGS_NETWORK)
     }, [nav])
 
+    const onStellaPayShortCutPress = useCallback(async () => {
+        if (hideStellaPayBottomSheet) {
+            await navigateWithTab({
+                url: "https://vebetter.stellapay.io/",
+                title: "Stella Pay",
+                navigationFn: url => nav.navigate(Routes.BROWSER, { url, returnScreen: Routes.HOME }),
+            })
+            return
+        }
+        openStellaPayBottomSheet()
+    }, [hideStellaPayBottomSheet, nav, openStellaPayBottomSheet, navigateWithTab])
+
     return (
         <BaseView style={styles.root} onLayout={onLayout}>
             {!isObservedAccount && (
@@ -151,6 +175,11 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
             </BaseView>
 
             <BaseView flexDirection="row" gap={12}>
+                <TouchableOpacity onPress={onStellaPayShortCutPress}>
+                    <BaseView borderRadius={99} p={8}>
+                        <BaseIcon name="icon-credit-card" color={COLORS.PURPLE_LABEL} size={24} />
+                    </BaseView>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={handleOpenQRCode}>
                     <BaseView borderRadius={99} p={8}>
                         <BaseIcon name="icon-scan-line" color={COLORS.PURPLE_LABEL} size={24} />
@@ -176,6 +205,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                 goToWalletEnabled
             />
             {RenderCameraModal}
+            <StellaPayBottomSheet ref={stellaPayBottomSheetRef} />
         </BaseView>
     )
 }

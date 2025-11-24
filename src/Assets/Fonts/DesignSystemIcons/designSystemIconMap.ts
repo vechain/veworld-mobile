@@ -873,6 +873,7 @@ export const designSystemIconMap = {
     "icon-users": 60738,
     "icon-utensils": 60740,
     "icon-utensils-crossed": 60739,
+    "icon-vebetter": 60819,
     "icon-vegan": 60741,
     "icon-venetian-mask": 60742,
     "icon-verified": 60743,
