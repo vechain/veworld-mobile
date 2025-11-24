@@ -1,4 +1,5 @@
 import React from "react"
+import { View } from "react-native"
 import { render, waitFor } from "@testing-library/react-native"
 import { CoinbasePayWebView } from "./CoinbasePayWebView"
 import { TestWrapper } from "~Test"
@@ -8,7 +9,6 @@ import { DEVICE_TYPE } from "~Model"
 
 // Mock WebView to isolate it and capture props
 jest.mock("react-native-webview", () => {
-    const { View } = require("react-native")
     return {
         WebView: (props: any) => {
             // Store the WebView props globally for assertions
@@ -38,6 +38,8 @@ jest.mock("@react-navigation/native", () => {
 const mockSignMessage = jest.fn()
 const mockCheckIdentityBeforeOpening = jest.fn()
 let onIdentityConfirmedCallback: ((password?: string) => Promise<any>) | null = null
+let mockIsPasswordPromptOpen = false
+let mockIsBiometricsEmpty = false
 
 jest.mock("~Hooks/useCheckIdentity", () => ({
     useCheckIdentity: (options: any) => {
@@ -46,11 +48,11 @@ jest.mock("~Hooks/useCheckIdentity", () => ({
             onIdentityConfirmedCallback = options.onIdentityConfirmed
         }
         return {
-            isPasswordPromptOpen: false,
+            isPasswordPromptOpen: mockIsPasswordPromptOpen,
             handleClosePasswordModal: jest.fn(),
             onPasswordSuccess: jest.fn(),
             checkIdentityBeforeOpening: mockCheckIdentityBeforeOpening,
-            isBiometricsEmpty: false,
+            isBiometricsEmpty: mockIsBiometricsEmpty,
         }
     },
 }))
@@ -60,6 +62,13 @@ jest.mock("~Hooks/useSignMessage", () => ({
         signMessage: mockSignMessage,
     }),
 }))
+
+// Mock RequireUserPassword to make it easy to assert visibility
+jest.mock("~Components/Reusable/RequireUserPassword", () => {
+    return {
+        RequireUserPassword: ({ isOpen }: any) => <View testID="require-user-password" isOpen={isOpen} />,
+    }
+})
 
 // Mock useInAppBrowser hook
 jest.mock("~Components/Providers/InAppBrowserProvider/InAppBrowserProvider", () => ({
@@ -88,6 +97,8 @@ describe("CoinbasePayWebView", () => {
         jest.clearAllMocks()
         axiosMock.reset()
         global.mockWebViewProps = undefined
+        mockIsPasswordPromptOpen = false
+        mockIsBiometricsEmpty = false
 
         // Default mock implementation for signMessage
         // Returns a 65-byte signature (130 hex chars)
@@ -242,6 +253,22 @@ describe("CoinbasePayWebView", () => {
                 },
                 { timeout: 3000 },
             )
+        })
+    })
+
+    describe("Password prompt flow", () => {
+        it("shows RequireUserPassword when biometrics are not used", async () => {
+            const expectedUrl = "https://coinbase.example.com/onramp?session=needs-password"
+            axiosMock.onGet().reply(200, { url: expectedUrl })
+
+            mockIsBiometricsEmpty = false
+            mockIsPasswordPromptOpen = true
+            mockCheckIdentityBeforeOpening.mockImplementation(() => {})
+
+            const { getByTestId } = renderComponent()
+            await waitFor(() => {
+                expect(getByTestId("require-user-password").props.isOpen).toBe(true)
+            })
         })
     })
 })
