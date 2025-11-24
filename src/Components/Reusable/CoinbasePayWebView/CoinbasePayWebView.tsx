@@ -95,11 +95,8 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
         allowAutoPassword: true,
     })
 
-    // Trigger signature generation when address changes
-    // Wait for biometrics to finish loading before triggering auth (isBiometricsEmpty becomes false once loaded)
+    // Trigger signature generation when address changes and biometrics is ready
     useEffect(() => {
-        // Only proceed once biometrics state has been determined
-        // isBiometricsEmpty is false when biometrics is loaded (whether enabled or not)
         if (resolvedDestinationAddress && isBiometricsEmpty === false) {
             setSignature(undefined)
             setTimestamp(undefined)
@@ -199,9 +196,8 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
         return isCoinbaseLoading ? undefined : coinbaseURL
     }, [coinbaseURL, isCoinbaseLoading])
 
-    const shouldShowPasswordPrompt = isPasswordPromptOpen
-    const shouldShowSpinner = (isLoading || isBiometricsEmpty) && !shouldShowPasswordPrompt
-    const shouldShowWebView = !!url && !shouldShowPasswordPrompt
+    const shouldShowSpinner = (isLoading || isBiometricsEmpty) && !isPasswordPromptOpen
+    const shouldShowWebView = !!url && !isPasswordPromptOpen
 
     return (
         <BaseView flex={1}>
@@ -224,7 +220,7 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
 
             {/* Render last so the modal stays on top of any other modalized content */}
             <RequireUserPassword
-                isOpen={shouldShowPasswordPrompt}
+                isOpen={isPasswordPromptOpen}
                 onClose={handleClosePasswordModal}
                 onSuccess={onPasswordSuccess}
             />
