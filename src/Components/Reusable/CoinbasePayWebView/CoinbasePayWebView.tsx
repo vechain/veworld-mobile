@@ -140,7 +140,7 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
                 severity: FeedbackSeverity.ERROR,
                 type: FeedbackType.ALERT,
                 message: LL.COINBASE_NOT_AVAILABLE(),
-                icon: "icon-alert-circle",
+                icon: "icon-alert-triangle",
                 duration: 3000,
             })
             // Navigate back after showing error
