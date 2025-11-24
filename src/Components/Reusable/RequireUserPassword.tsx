@@ -13,7 +13,7 @@ interface IRequireUserPassword extends Omit<IBaseModal, "children"> {
 export const RequireUserPassword: React.FC<IRequireUserPassword> = memo(
     ({ isOpen, onClose, onSuccess, scenario, isValidatePassword = true }) => {
         return (
-            <BaseModal isOpen={isOpen} onClose={onClose}>
+            <BaseModal isOpen={isOpen} onClose={onClose} testID="require-user-password">
                 <BaseView justifyContent="flex-start" w={100}>
                     <LockScreen
                         onSuccess={onSuccess}

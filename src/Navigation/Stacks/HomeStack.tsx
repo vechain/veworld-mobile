@@ -56,7 +56,7 @@ import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/Co
 import { ReportNFTTransactionScreen } from "~Screens/Flows/App/NFT/NFTReportCollection/ReportNFTTransactionScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
-import { COLORS } from "~Constants"
+import { COLORS, SCREEN_HEIGHT } from "~Constants"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -242,6 +242,7 @@ export const HomeStack = () => {
                             presentation: "transparentModal",
                             gestureDirection: "vertical",
                             gestureEnabled: true,
+                            gestureResponseDistance: SCREEN_HEIGHT,
                         }}
                     />
                 ) : (
