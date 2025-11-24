@@ -116,9 +116,9 @@ export const addPendingTransferTransactionActivity =
             id: outgoingTx.id.toString(),
             onPress() {
                 NAVIGATION_REF.navigate(Routes.HISTORY_STACK, {
-                    screen: Routes.ACTIVITY_DETAILS,
+                    screen: Routes.HISTORY,
                     params: {
-                        activity: pendingActivity,
+                        screen: Routes.ACTIVITY_ALL,
                     },
                 })
             },
@@ -155,9 +155,9 @@ export const addPendingNFTtransferTransactionActivity =
             id: outgoingTx.id.toString(),
             onPress() {
                 NAVIGATION_REF.navigate(Routes.HISTORY_STACK, {
-                    screen: Routes.ACTIVITY_DETAILS,
+                    screen: Routes.HISTORY,
                     params: {
-                        activity: pendingActivity,
+                        screen: Routes.ACTIVITY_ALL,
                     },
                 })
             },
