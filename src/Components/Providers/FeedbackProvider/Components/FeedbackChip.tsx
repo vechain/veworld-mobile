@@ -43,7 +43,12 @@ export const FeedbackChip = ({ feedbackData, onDismiss }: Props) => {
     }, [feedbackData])
 
     return feedbackData ? (
-        <AnimatedPressable style={styles.container} entering={FadeIn} exiting={FadeOut} onPress={handleOnPress}>
+        <AnimatedPressable
+            style={styles.container}
+            entering={FadeIn}
+            exiting={FadeOut}
+            onPress={handleOnPress}
+            testID="FEEDBACK_CHIP_ROOT">
             <Animated.View testID="FEEDBACK_CHIP" entering={ZoomInEasyUp} exiting={ZoomOutEasyUp} style={[styles.chip]}>
                 <Animated.View style={styles.innerContainer}>
                     {feedbackData.severity === FeedbackSeverity.LOADING ? (
