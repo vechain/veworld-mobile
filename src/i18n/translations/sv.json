@@ -1295,7 +1295,7 @@
   "TRANSACTION_FAILED": "Transaktionen misslyckades",
   "TRANSACTION_FEE": "Transaktionsavgift",
   "TRANSACTION_ID": "Transaktions-ID",
-  "TRANSACTION_IN_PROGRESS": "Transaktionen pågår",
+  "TRANSACTION_IN_PROGRESS": "Transaktion pågår",
   "TYPE": "Typ",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Okänt konto",

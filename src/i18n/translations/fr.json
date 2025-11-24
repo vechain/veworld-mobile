@@ -1292,7 +1292,7 @@
   "TOTAL": "Total",
   "TOUCH_ID": "Touch ID",
   "TRANSACTION_DONE": "Transaction terminée",
-  "TRANSACTION_FAILED": "Transaction échouée",
+  "TRANSACTION_FAILED": "Échec de la transaction",
   "TRANSACTION_FEE": "Frais de transaction",
   "TRANSACTION_ID": "ID de la transaction",
   "TRANSACTION_IN_PROGRESS": "Transaction en cours",
