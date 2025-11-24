@@ -18,7 +18,7 @@ export const useIndexerClient = (network: Network) => {
         const client = createFetchClient<paths>({
             baseUrl: indexerUrl?.replace("/api/v1", ""),
             headers: {
-                "x-project-id": "VeWorld",
+                "x-project-id": "veworld-mobile",
             },
         })
         client.use(errorMiddleware)
