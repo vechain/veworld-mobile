@@ -5638,6 +5638,10 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * Coinbase not available
+	 */
+	COINBASE_NOT_AVAILABLE: string
 }
 
 export type TranslationFunctions = {
@@ -11178,7 +11182,11 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	/**
 	 * Yesterday
 	 */
-	YESTERDAY: () => LocalizedString
+	YESTERDAY: () => LocalizedString,
+	/**
+	 * Coinbase not available
+	 */
+	COINBASE_NOT_AVAILABLE: () => LocalizedString
 }
 
 export type Formatters = {
