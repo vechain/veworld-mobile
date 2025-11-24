@@ -7,8 +7,8 @@ import MockAdapter from "axios-mock-adapter"
 import axios from "axios"
 import { DEVICE_TYPE } from "~Model"
 
-var mockWebViewProps: any
-var MockWebView: jest.Mock
+let mockWebViewProps: any
+let MockWebView: jest.Mock
 
 // Mock WebView while preserving other exports
 jest.mock("react-native-webview", () => {
