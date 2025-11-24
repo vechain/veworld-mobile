@@ -116,6 +116,7 @@ export const CollectibleBottomSheet = ({ bsRef }: { bsRef: RefObject<BottomSheet
             enablePanDownToClose={false}
             noMargins
             dynamicHeight
+            scrollable={false}
             backgroundStyle={styles.bg}>
             {data => <CollectibleBottomSheetContent address={data.address} tokenId={data.tokenId} onClose={onClose} />}
         </BaseBottomSheet>
