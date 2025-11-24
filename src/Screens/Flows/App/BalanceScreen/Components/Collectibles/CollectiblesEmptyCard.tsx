@@ -1,5 +1,6 @@
 import React, { useCallback } from "react"
-import { FlatList, StyleSheet } from "react-native"
+import { FlatList, Image, ImageStyle, StyleSheet } from "react-native"
+import { CollectiblesEmptyState } from "~Assets"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useBrowserNavigation, useCameraBottomSheet, useThemedStyles } from "~Hooks"
@@ -39,19 +40,12 @@ export const CollectiblesEmptyCard = () => {
         <>
             <BaseView style={styles.root} testID="COLLECTIBLES_EMPTY_CARD">
                 <BaseView px={24} pb={24} flexDirection="column" gap={24} alignItems="center">
-                    <BaseView
-                        borderRadius={32}
-                        bg={theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_100}
-                        p={16}
-                        flex={0}
-                        alignItems="center"
-                        justifyContent="center">
-                        <BaseIcon
-                            name="icon-image"
-                            size={32}
-                            color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.GREY_400}
-                        />
-                    </BaseView>
+                    <Image
+                        source={CollectiblesEmptyState}
+                        style={styles.emptyStateImage as ImageStyle}
+                        resizeMode="contain"
+                    />
+
                     <BaseText
                         color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}
                         typographyFont="bodyMedium"
@@ -120,5 +114,8 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         flatListContentContainer: {
             paddingHorizontal: 24,
+        },
+        emptyStateImage: {
+            height: 108,
         },
     })
