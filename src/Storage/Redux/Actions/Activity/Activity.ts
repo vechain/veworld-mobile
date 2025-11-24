@@ -11,6 +11,7 @@ import {
     DEVICE_TYPE,
     NonFungibleTokenActivity,
     TypedData,
+    ActivityType,
 } from "~Model"
 import { NAVIGATION_REF, Routes } from "~Navigation"
 import {
@@ -58,7 +59,12 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
         if (Date.now() - updatedActivity.timestamp > 120000 && updatedActivity.status === ActivityStatus.PENDING)
             updatedActivity.status = ActivityStatus.REVERTED
 
-        if ([ActivityStatus.REVERTED, ActivityStatus.SUCCESS].includes(updatedActivity.status!)) {
+        if (
+            [ActivityStatus.REVERTED, ActivityStatus.SUCCESS].includes(updatedActivity.status!) &&
+            [ActivityType.TRANSFER_FT, ActivityType.TRANSFER_NFT, ActivityType.TRANSFER_VET].includes(
+                updatedActivity.type as ActivityType,
+            )
+        ) {
             Feedback.show({
                 message:
                     updatedActivity.status === ActivityStatus.REVERTED
