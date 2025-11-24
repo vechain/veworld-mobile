@@ -2,7 +2,7 @@ import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/b
 import { NavigatorScreenParams } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { TabIcon, useFeatureFlags } from "~Components"
+import { AnimatedTabIcon, TabIcon, useFeatureFlags } from "~Components"
 import { useCheckWalletBackup } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
@@ -10,7 +10,7 @@ import { HomeStack, RootStackParamListHome, RootStackParamListSettings, Settings
 import { AppsStack, RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { selectActivitiesWithoutFinality, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import PlatformUtils from "~Utils/PlatformUtils"
 import { useI18nContext } from "~i18n"
@@ -31,6 +31,7 @@ export const TabStack = () => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
+    const pendingTransactions = useAppSelector(selectActivitiesWithoutFinality)
 
     const { betterWorldFeature } = useFeatureFlags()
 
@@ -49,6 +50,22 @@ export const TabStack = () => {
             )
         },
         [isShowBackupModal],
+    )
+
+    const renderActivityIcon = useCallback(
+        (focused: boolean, iconName: IconKey, label: string) => {
+            return (
+                <AnimatedTabIcon
+                    focused={focused}
+                    title={iconName}
+                    isSettings={false}
+                    isShowBackupModal={isShowBackupModal}
+                    label={label}
+                    isLoading={pendingTransactions.length > 0}
+                />
+            )
+        },
+        [isShowBackupModal, pendingTransactions.length],
     )
 
     const renderTabBar = useCallback((props: BottomTabBarProps) => <TabBar {...props} />, [])
@@ -100,7 +117,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: Routes.HISTORY,
                     tabBarTestID: "history-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-history", LL.TAB_TITLE_ACTIVITY()),
+                    tabBarIcon: ({ focused }) => renderActivityIcon(focused, "icon-history", LL.TAB_TITLE_ACTIVITY()),
                 }}
             />
 

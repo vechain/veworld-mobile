@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"

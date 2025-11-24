@@ -8,7 +8,7 @@ import {
 import { useResetStacks } from "./useResetStacks"
 import { AddressUtils } from "~Utils"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 
 export const useSetSelectedAccount = () => {
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
