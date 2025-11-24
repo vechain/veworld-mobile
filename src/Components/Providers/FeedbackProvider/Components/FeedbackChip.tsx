@@ -38,7 +38,7 @@ export const FeedbackChip = ({ feedbackData, onDismiss }: Props) => {
     }, [feedbackData])
 
     const handleOnPress = useCallback(() => {
-        if (!feedbackData || !feedbackData.onPress) return
+        if (!feedbackData?.onPress) return
         feedbackData.onPress()
     }, [feedbackData])
 

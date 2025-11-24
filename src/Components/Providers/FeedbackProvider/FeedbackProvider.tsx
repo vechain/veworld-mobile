@@ -24,12 +24,10 @@ export const FeedbackProvider = ({ children }: { children: React.ReactNode }) =>
 
     useEffect(() => {
         let timeout: NodeJS.Timeout | null = null
-        if (feedbackData) {
-            if (feedbackData.type === FeedbackType.ALERT) {
-                timeout = setTimeout(() => {
-                    onDismiss()
-                }, feedbackData.duration || 3000)
-            }
+        if (feedbackData?.type === FeedbackType.ALERT) {
+            timeout = setTimeout(() => {
+                onDismiss()
+            }, feedbackData.duration || 3000)
         }
         return () => {
             if (timeout) {

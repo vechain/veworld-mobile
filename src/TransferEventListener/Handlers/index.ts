@@ -17,7 +17,3 @@ export interface NFTTransferHandlerProps extends BaseTransferHandlerProps {
 export interface TokenTransferHandlerProps extends BaseTransferHandlerProps {
     updateBalances: (params: { accountAddress: string }) => void
 }
-
-export interface VETTransferHandlerProps extends BaseTransferHandlerProps {
-    updateBalances: (params: { accountAddress: string }) => void
-}

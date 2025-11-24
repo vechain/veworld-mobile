@@ -20,7 +20,7 @@ import {
 } from "~Storage/Redux"
 import { BloomUtils, error } from "~Utils"
 import { handleStargateEvents } from "../StargateEventListener/Handlers/StargateEventHandlers"
-import { handleNFTTransfers, handleTokenTransfers, handleVETTransfers } from "./Handlers"
+import { handleNFTTransfers, handleTokenTransfers } from "./Handlers"
 import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
 import { useStateReconciliation } from "./Hooks"
 import { useBeatWebsocket } from "./Hooks/useBeatWebsocket"
@@ -117,20 +117,12 @@ export const TransferEventListener: React.FC = () => {
 
                 // ~ FUNGIBLE TOKEN TRANSFER
                 const tokenTransfers = filterTransferEventsByType(transfers.data, EventTypeResponse.FUNGIBLE_TOKEN)
+                const vetTransfers = filterTransferEventsByType(transfers.data, EventTypeResponse.VET)
 
-                await handleTokenTransfers({
+                handleTokenTransfers({
                     selectedAccount,
                     visibleAccounts: relevantAccounts,
-                    transfers: tokenTransfers,
-                    updateBalances,
-                })
-
-                // ~  VET TRANSFERS
-                const vetTransfers = filterTransferEventsByType(transfers.data, EventTypeResponse.VET)
-                handleVETTransfers({
-                    selectedAccount,
-                    transfers: vetTransfers,
-                    visibleAccounts,
+                    transfers: tokenTransfers.concat(vetTransfers),
                     updateBalances,
                 })
 
