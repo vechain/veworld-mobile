@@ -3723,6 +3723,10 @@ type RootTranslation = {
 	 */
 	PAID: string
 	/**
+	 * P​e​n​d​i​n​g​.​.​.
+	 */
+	PENDING_ACTIVITY: string
+	/**
 	 * P​I​N​ ​C​o​d​e
 	 */
 	PIN_CODE: string
@@ -4822,6 +4826,10 @@ type RootTranslation = {
 	 */
 	STATUS: string
 	/**
+	 * D​o​n​’​t​ ​s​h​o​w​ ​m​e​ ​t​h​i​s​ ​a​g​a​i​n
+	 */
+	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: string
+	/**
 	 * E​a​r​n
 	 */
 	STELLA_PAY_BOTTOM_SHEET_EARN: string
@@ -4850,10 +4858,6 @@ type RootTranslation = {
 	 * G​e​t​ ​y​o​u​r​ ​V​e​B​e​t​t​e​r​ ​c​a​r​d​ ​o​n
 	 */
 	STELLA_PAY_BOTTOM_SHEET_TITLE: string
-	/**
-	 * D​o​n​’​t​ ​s​h​o​w​ ​m​e​ ​t​h​i​s​ ​a​g​a​i​n
-	 */
-	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: string
 	/**
 	 * A​v​a​i​l​a​b​l​e​ ​t​o​ ​c​l​a​i​m
 	 */
@@ -5280,6 +5284,14 @@ type RootTranslation = {
 	 */
 	TOUCH_ID: string
 	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​d​o​n​e
+	 */
+	TRANSACTION_DONE: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​a​i​l​e​d
+	 */
+	TRANSACTION_FAILED: string
+	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​e​e
 	 */
 	TRANSACTION_FEE: string
@@ -5287,6 +5299,10 @@ type RootTranslation = {
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​I​D
 	 */
 	TRANSACTION_ID: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​n​ ​p​r​o​g​r​e​s​s
+	 */
+	TRANSACTION_IN_PROGRESS: string
 	/**
 	 * T​y​p​e
 	 */
@@ -9289,6 +9305,10 @@ This action is irreversible.
 	 */
 	PAID: () => LocalizedString
 	/**
+	 * Pending...
+	 */
+	PENDING_ACTIVITY: () => LocalizedString
+	/**
 	 * PIN Code
 	 */
 	PIN_CODE: () => LocalizedString
@@ -10373,6 +10393,10 @@ Here's what it's all about:
 	 */
 	STATUS: () => LocalizedString
 	/**
+	 * Don’t show me this again
+	 */
+	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: () => LocalizedString
+	/**
 	 * Earn
 	 */
 	STELLA_PAY_BOTTOM_SHEET_EARN: () => LocalizedString
@@ -10401,10 +10425,6 @@ Available for Google and Apple Pay.
 	 * Get your VeBetter card on
 	 */
 	STELLA_PAY_BOTTOM_SHEET_TITLE: () => LocalizedString
-	/**
-	 * Don’t show me this again
-	 */
-	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: () => LocalizedString
 	/**
 	 * Available to claim
 	 */
@@ -10828,6 +10848,14 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	TOUCH_ID: () => LocalizedString
 	/**
+	 * Transaction done
+	 */
+	TRANSACTION_DONE: () => LocalizedString
+	/**
+	 * Transaction failed
+	 */
+	TRANSACTION_FAILED: () => LocalizedString
+	/**
 	 * Transaction fee
 	 */
 	TRANSACTION_FEE: () => LocalizedString
@@ -10835,6 +10863,10 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Transaction ID
 	 */
 	TRANSACTION_ID: () => LocalizedString
+	/**
+	 * Transaction in progress
+	 */
+	TRANSACTION_IN_PROGRESS: () => LocalizedString
 	/**
 	 * Type
 	 */

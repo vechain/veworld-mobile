@@ -4,7 +4,7 @@ import { AppRegistry, LogBox } from "react-native"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
 import "@walletconnect/react-native-compat"
-import { NavigationContainer, useNavigationContainerRef } from "@react-navigation/native"
+import { NavigationContainer } from "@react-navigation/native"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
 import {
@@ -61,7 +61,7 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { clientPersister, queryClient, RQ_CACHE_MAX_AGE } from "~Api/QueryProvider"
 import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
-import { Routes } from "~Navigation"
+import { NAVIGATION_REF, Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
 import { InteractionProvider } from "~Components/Providers/InteractionProvider"
@@ -246,24 +246,22 @@ const NavigationProvider = ({ children }) => {
         [theme],
     )
     const externalDappSessions = useAppSelector(selectExternalDappSessions)
-
-    const navigationRef = useNavigationContainerRef()
     const routeNameRef = useRef(null)
     const dispatch = useAppDispatch()
     const featureFlags = useFeatureFlags()
 
     return (
         <NavigationContainer
-            ref={navigationRef}
+            ref={NAVIGATION_REF}
             onReady={() => {
                 if (routeNameRef && routeNameRef.current === null) {
-                    routeNameRef.current = navigationRef.getCurrentRoute()?.name
+                    routeNameRef.current = NAVIGATION_REF.getCurrentRoute()?.name
                 }
                 setReady(true)
             }}
             onStateChange={async () => {
                 const previousRouteName = routeNameRef.current
-                const currentRouteName = navigationRef.getCurrentRoute()?.name
+                const currentRouteName = NAVIGATION_REF.getCurrentRoute()?.name
                 const trackScreenView = _currentRouteName => {
                     dispatch(setCurrentMountedScreen(_currentRouteName))
                 }

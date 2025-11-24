@@ -1,5 +1,7 @@
 import * as FileSystem from "expo-file-system"
 import React, { useCallback, useMemo } from "react"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -14,8 +16,6 @@ import {
 } from "~Storage/Redux"
 import { AddressUtils, MediaUtils } from "~Utils"
 import { CollectiblesActionButton } from "./CollectiblesActionButton"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
-import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 
 type Props = {
     image: string | undefined
