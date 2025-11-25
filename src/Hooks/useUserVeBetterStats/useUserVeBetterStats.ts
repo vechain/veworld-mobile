@@ -7,10 +7,6 @@ import { BigNutils } from "~Utils"
 const getVeBetterUserOverview = (address: string, fromDate: string, toDate: string, indexer: IndexerClient) => {
     const from = moment(fromDate).utc().format("YYYY-MM-DD")
     const to = moment(toDate).utc().format("YYYY-MM-DD")
-    const params = new URLSearchParams()
-    params.append("startDate", from)
-    params.append("endDate", to)
-    params.append("size", Math.ceil(moment(toDate).diff(fromDate, "day")).toString())
     return indexer
         .GET("/api/v1/b3tr/actions/users/{wallet}/daily-summaries", {
             params: {

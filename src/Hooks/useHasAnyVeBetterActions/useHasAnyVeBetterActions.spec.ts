@@ -2,11 +2,14 @@ import { renderHook } from "@testing-library/react-hooks"
 import { TestWrapper } from "~Test"
 
 import { useHasAnyVeBetterActions } from "./useHasAnyVeBetterActions"
-import { fetchVeBetterActions } from "~Networking"
 
-jest.mock("~Networking", () => ({
-    ...jest.requireActual("~Networking"),
-    fetchVeBetterActions: jest.fn(),
+const indexerGet = jest.fn()
+
+jest.mock("~Hooks/useIndexerClient", () => ({
+    ...jest.requireActual("~Hooks/useIndexerClient"),
+    useMainnetIndexerClient: jest.fn().mockReturnValue({
+        GET: (...args: any[]) => indexerGet(...args).then((res: any) => ({ data: res })),
+    }),
 }))
 
 describe("useHasAnyVeBetterActions", () => {
@@ -15,7 +18,7 @@ describe("useHasAnyVeBetterActions", () => {
     })
 
     it("should return true if any account has VeBetter actions", async () => {
-        ;(fetchVeBetterActions as jest.Mock).mockResolvedValue({ data: [{}] })
+        ;(indexerGet as jest.Mock).mockResolvedValue({ data: [{}] })
         const { result, waitFor } = renderHook(() => useHasAnyVeBetterActions(), {
             wrapper: TestWrapper,
         })
@@ -26,7 +29,7 @@ describe("useHasAnyVeBetterActions", () => {
     })
 
     it("should return false if no accounts have VeBetter actions", async () => {
-        ;(fetchVeBetterActions as jest.Mock).mockResolvedValue({ data: [] })
+        ;(indexerGet as jest.Mock).mockResolvedValue({ data: [] })
         const { result, waitFor } = renderHook(() => useHasAnyVeBetterActions(), {
             wrapper: TestWrapper,
         })
