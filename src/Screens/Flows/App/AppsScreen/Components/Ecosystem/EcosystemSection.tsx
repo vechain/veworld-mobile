@@ -93,8 +93,8 @@ export const EcosystemSection = ({
 
     useFocusEffect(
         useCallback(() => {
-            scrollViewRef.current?.scrollTo({ y })
             if (defaultFilter) {
+                scrollViewRef.current?.scrollTo({ y })
                 setSelectedFilter(defaultFilter)
                 navigation.setParams({ filter: undefined })
             }
