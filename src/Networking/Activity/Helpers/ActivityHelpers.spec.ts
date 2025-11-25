@@ -458,16 +458,6 @@ describe("createActivityFromIndexedHistoryEvent", () => {
             from: "0x6bee7ddab6c99d5b2af0554eaea484ce18f52631",
             value: "1200000000000000000",
             appId: "0x9643ed1637948cc571b23f836ade2bdb104de88e627fa6e8e3ffef1ee5a1739a",
-
-            proof: {
-                version: 2,
-                description: "The user made a purchase favoring sustainable choices",
-                proof: {
-                    // eslint-disable-next-line max-len
-                    image: "https://storage.googleapis.com/gcreceipts-public/2025-03-03/1741001248_0x79028e3d948bd5873ccf58a69089cac105832129.jpg",
-                },
-                impact: { carbon: 8580 },
-            },
         }
         const activity = createActivityFromIndexedHistoryEvent(
             event,
