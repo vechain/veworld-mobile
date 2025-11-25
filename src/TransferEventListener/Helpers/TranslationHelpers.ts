@@ -5,14 +5,14 @@ import { Network } from "~Model"
 import { BigNutils, AddressUtils } from "~Utils"
 import * as i18n from "~i18n"
 import { isEmpty } from "lodash"
-import { IncomingTransferResponse } from "~Networking"
+import { components } from "~Generated/indexer/schema"
 
 // ~ NFT - INCOMING
 type InformUserForIncomingNFTProps = {
     collectionName: string
     alias: string
     from: string
-    transfer: IncomingTransferResponse
+    transfer: components["schemas"]["IndexedTransferEvent"]
     informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
@@ -83,7 +83,7 @@ type InformUserForIncomingTokenProps = {
     amount: string
     symbol: string
     decimals: number
-    transfer: IncomingTransferResponse
+    transfer: components["schemas"]["IndexedTransferEvent"]
     informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
@@ -119,7 +119,7 @@ type InformUserForOutgoingTokenProps = {
     txId: string
     amount: string
     decimals: number
-    transfer: IncomingTransferResponse
+    transfer: components["schemas"]["IndexedTransferEvent"]
     informUser: (params: { accountAddress: string; txId?: string }) => void
     symbol: string
 }

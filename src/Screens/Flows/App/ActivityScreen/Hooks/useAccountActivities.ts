@@ -12,7 +12,10 @@ import {
 import { FilterType } from "../constants"
 import { useIndexerClient } from "~Hooks/useIndexerClient"
 
-export const useAccountActivities = (filterType: FilterType, filters: ActivityEvent[] = []) => {
+export const useAccountActivities = (
+    filterType: FilterType,
+    filters: ActivityEvent[] | readonly ActivityEvent[] = [],
+) => {
     const queryClient = useQueryClient()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
@@ -36,7 +39,7 @@ export const useAccountActivities = (filterType: FilterType, filters: ActivityEv
                             direction: "DESC",
                             page: pageParam,
                             size: DEFAULT_PAGE_SIZE,
-                            eventName: filters,
+                            eventName: filters as ActivityEvent[],
                         },
                     },
                 })
