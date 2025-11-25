@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useNavigation } from "@react-navigation/native"
+import { useTheme } from "~Hooks"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { ReactElement, useCallback, useMemo, useState } from "react"
 import { BaseView, Layout } from "~Components"
@@ -33,6 +34,7 @@ type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.
  */
 export const SendScreenV2 = (): ReactElement => {
     const { LL } = useI18nContext()
+    const theme = useTheme()
     const navigation = useNavigation<NavigationProps>()
     const [step, setStep] = useState<SendFlowStep>("selectToken")
     const [flowState, setFlowState] = useState<SendFlowState>({})
@@ -106,6 +108,7 @@ export const SendScreenV2 = (): ReactElement => {
     return (
         <Layout
             title={LL.SEND_TOKEN_TITLE()}
+            titleStyle={{ color: theme.colors.sendBottomSheet.titleColor }}
             noBackButton
             headerTitleAlignment="center"
             headerRightElement={headerRightElement}
