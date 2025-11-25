@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { useQuery } from "@tanstack/react-query"
-import React, { useCallback, useMemo, useState, useEffect } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import "react-native-url-polyfill/auto"
 import { WebView, WebViewMessageEvent } from "react-native-webview"
@@ -13,13 +13,13 @@ import {
     useFeatureFlags,
     useInAppBrowser,
 } from "~Components"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { useAnalyticTracking, useCheckIdentity, useSignMessage, useSmartWallet } from "~Hooks"
+import { DEVICE_TYPE } from "~Model"
 import { Routes } from "~Navigation"
 import { ErrorMessageUtils, HexUtils, PlatformUtils, debug, error } from "~Utils"
-import { DEVICE_TYPE } from "~Model"
 import { selectDevice, selectSelectedAccountOrNull, useAppSelector } from "../../../Storage/Redux"
 import { SignMessageUtils } from "../../../Utils"
 import { useI18nContext } from "../../../i18n/i18n-react"
