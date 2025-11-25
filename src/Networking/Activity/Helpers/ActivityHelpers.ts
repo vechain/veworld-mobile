@@ -32,8 +32,8 @@ import {
     UnknownTxActivity,
     VeVoteCastActivity,
 } from "~Model"
-import { EventTypeResponse } from "~Networking"
 import { ActivityUtils, AddressUtils, debug, TransactionUtils } from "~Utils"
+import { components } from "~Generated/indexer/schema"
 
 /**
  * Creates a base activity from a given transaction.
@@ -360,15 +360,17 @@ export const createTransferClauseFromIncomingTransfer = (
  *
  * @returns The corresponding ActivityType, or undefined if the eventType does not map to any known ActivityType.
  */
-export const eventTypeToActivityType = (eventType: EventTypeResponse): ActivityType | undefined => {
+export const eventTypeToActivityType = (
+    eventType: components["schemas"]["IndexedTransferEvent"]["eventType"],
+): ActivityType | undefined => {
     switch (eventType) {
-        case EventTypeResponse.VET:
+        case "VET":
             return ActivityType.TRANSFER_VET
 
-        case EventTypeResponse.FUNGIBLE_TOKEN:
+        case "FUNGIBLE_TOKEN":
             return ActivityType.TRANSFER_FT
 
-        case EventTypeResponse.NFT:
+        case "NFT":
             return ActivityType.TRANSFER_NFT
 
         default:
