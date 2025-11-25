@@ -1295,7 +1295,7 @@
   "TRANSACTION_FAILED": "Giao dịch thất bại",
   "TRANSACTION_FEE": "Phí giao dịch",
   "TRANSACTION_ID": "ID giao dịch",
-  "TRANSACTION_IN_PROGRESS": "Giao dịch đang được xử lý",
+  "TRANSACTION_IN_PROGRESS": "Giao dịch đang được thực hiện",
   "TYPE": "Loại",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Tài khoản không xác định",

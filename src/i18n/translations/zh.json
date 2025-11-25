@@ -907,7 +907,7 @@
   "ORIGIN": "起源",
   "OUTCOMES": "结果",
   "PAID": "已支付",
-  "PENDING_ACTIVITY": "正在处理中...",
+  "PENDING_ACTIVITY": "等待中...",
   "PIN_CODE": "PIN码",
   "PLACEHOLDER_ENTER_ADDRESS": "输入地址",
   "PLACEHOLDER_ENTER_NAME": "输入名称",
