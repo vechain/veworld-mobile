@@ -1,3 +1,4 @@
+import { components } from "~Generated/indexer/schema"
 import { IndexedHistoryEvent, OutputResponse } from "~Model"
 import { PaginationResponse } from "~Networking"
 import { StargateLevelName } from "~Utils/StargateUtils"
@@ -28,56 +29,12 @@ export interface TransactionsResponse extends BaseTransactionResponse {
     outputs: OutputResponse[]
 }
 
-export enum EventTypeResponse {
-    FUNGIBLE_TOKEN = "FUNGIBLE_TOKEN",
-    VET = "VET",
-    NFT = "NFT",
-    SEMI_FUNGIBLE_TOKEN = "SEMI_FUNGIBLE_TOKEN",
-}
-
-export interface IncomingTransferResponse extends BaseTransactionResponse {
-    txId: string
-    from: string
-    to: string
-    value: string
-    tokenId: number
-    tokenAddress: string
-    topics: string[]
-    eventType: EventTypeResponse
-}
-
 export interface FetchIncomingTransfersResponse {
-    data: IncomingTransferResponse[]
+    data: components["schemas"]["IndexedTransferEvent"][]
     pagination: PaginationResponse
 }
 
-export interface FetchAppOverviewResponse {
-    appId: string
-    roundId: number
-    date: string
-    totalRewardAmount: number
-    actionsRewarded: number
-    totalImpact: {
-        carbon: number
-        water: number
-        energy: number
-        waste_mass: number
-        waste_items: number
-        waste_reduction: number
-        biodiversity: number
-        people: number
-        timber: number
-        plastic: number
-        education_time: number
-        trees_planted: number
-        calories_burned: number
-        clean_energy_production_wh: number
-        sleep_quality_percentage: number
-    }
-    rankByReward: number
-    rankByActionsRewarded: number
-    totalUniqueUserInteractions: number
-}
+export type FetchAppOverviewResponse = components["schemas"]["AppOverview"]
 
 export interface FetchActivitiesResponse {
     data: IndexedHistoryEvent[]

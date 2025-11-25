@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo } from "react"
 import { useReceiptProcessor } from "~Components/Providers/ReceiptProcessorProvider"
 import { ERROR_EVENTS } from "~Constants"
+import { useIndexerClient } from "~Hooks/useIndexerClient"
 import { useStargateConfig } from "~Hooks/useStargateConfig"
 import { useStargateInvalidation } from "~Hooks/useStargateInvalidation"
 import { useThorClient } from "~Hooks/useThorClient"
 import { Activity, Beat } from "~Model"
-import { EventTypeResponse } from "~Networking"
-import { fetchTransfersForBlock } from "~Networking/Transfers"
+import { MAX_PAGE_SIZE } from "~Networking"
 import {
     selectActivitiesWithoutFinality,
     selectBlackListedCollections,
@@ -48,6 +48,8 @@ export const TransferEventListener: React.FC = () => {
 
     const getReceiptProcessor = useReceiptProcessor()
     const genericReceiptProcessor = useMemo(() => getReceiptProcessor(["Generic"]), [getReceiptProcessor])
+
+    const indexer = useIndexerClient(network)
 
     /**
      * For each pending activity, validates and upserts the updated activity if it's finalized on the blockchain
@@ -96,12 +98,19 @@ export const TransferEventListener: React.FC = () => {
                 await new Promise(resolve => setTimeout(resolve, 5000))
 
                 // Get transfers from indexer
-                const transfers = await fetchTransfersForBlock(
-                    beat.number,
-                    relevantAccounts.slice(0, 20).map(acc => acc.address), // Limit to first 20 accounts
-                    0,
-                    network.type,
-                )
+                const transfers = await indexer
+                    .GET("/api/v1/transfers/forBlock", {
+                        params: {
+                            query: {
+                                addresses: relevantAccounts.slice(0, 20).map(acc => acc.address),
+                                blockNumber: beat.number,
+                                direction: "ASC",
+                                page: 0,
+                                size: MAX_PAGE_SIZE,
+                            },
+                        },
+                    })
+                    .then(res => res.data!)
 
                 if (transfers.data.length <= 0) return
 
@@ -116,8 +125,8 @@ export const TransferEventListener: React.FC = () => {
                 })
 
                 // ~ FUNGIBLE TOKEN TRANSFER
-                const tokenTransfers = filterTransferEventsByType(transfers.data, EventTypeResponse.FUNGIBLE_TOKEN)
-                const vetTransfers = filterTransferEventsByType(transfers.data, EventTypeResponse.VET)
+                const tokenTransfers = filterTransferEventsByType(transfers.data, "FUNGIBLE_TOKEN")
+                const vetTransfers = filterTransferEventsByType(transfers.data, "VET")
 
                 handleTokenTransfers({
                     selectedAccount,
@@ -142,6 +151,7 @@ export const TransferEventListener: React.FC = () => {
             selectedAccount,
             stargateConfig,
             genericReceiptProcessor,
+            indexer,
             blackListedCollections,
             updateNFTs,
             updateBalances,

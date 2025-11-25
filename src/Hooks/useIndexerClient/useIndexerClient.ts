@@ -3,6 +3,7 @@ import { useIndexerUrl } from "~Hooks/useIndexerUrl"
 import { Network } from "~Model"
 import createFetchClient, { Middleware } from "openapi-fetch"
 import type { paths } from "~Generated/indexer/schema"
+import { defaultMainNetwork } from "~Constants"
 
 const errorMiddleware: Middleware = {
     onResponse({ response }) {
@@ -24,4 +25,8 @@ export const useIndexerClient = (network: Network) => {
         client.use(errorMiddleware)
         return client
     }, [indexerUrl])
+}
+
+export const useMainnetIndexerClient = () => {
+    return useIndexerClient(defaultMainNetwork)
 }

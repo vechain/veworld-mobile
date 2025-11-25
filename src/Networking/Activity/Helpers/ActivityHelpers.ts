@@ -560,7 +560,6 @@ export const createActivityFromIndexedHistoryEvent = (
         inputToken,
         outputToken,
         appId,
-        proof,
         support,
         votePower,
         voteWeight,
@@ -589,7 +588,7 @@ export const createActivityFromIndexedHistoryEvent = (
         blockNumber: blockNumber,
         genesisId: network.genesis.id,
         isTransaction: isTransaction,
-        type: eventName,
+        type: eventName as ActivityEvent,
         timestamp: blockTimestamp * 1000,
         gasPayer: gasPayer,
         delegated: origin !== gasPayer,
@@ -682,7 +681,8 @@ export const createActivityFromIndexedHistoryEvent = (
                 to: to ? [to] : [],
                 value: value ?? "0x0",
                 appId: appId,
-                proof: proof,
+                //TODO: Understand if we really need proof
+                // proof: proof,
             } as B3trActionActivity
         }
         case ActivityEvent.B3TR_PROPOSAL_VOTE: {

@@ -2,6 +2,7 @@ import { DIRECTIONS } from "~Constants"
 import { TypedData, TypedDataMessage } from "~Model"
 import { ActivityEvent, ActivityStatus, ActivitySupport, ActivityType } from "./enum"
 import { TokenLevelId } from "~Utils/StargateUtils"
+import { paths } from "~Generated/indexer/schema"
 
 export type OutputResponse = {
     contractAddress: string
@@ -31,44 +32,8 @@ export interface Activity {
     levelId?: TokenLevelId
 }
 
-export interface IndexedHistoryEvent {
-    id: string
-    blockId: string
-    blockNumber: number
-    blockTimestamp: number
-    txId: string
-    origin?: string
-    gasPayer?: string
-    tokenId?: string
-    contractAddress?: string
-    tokenAddress?: string // Payment token address for NFT sales
-    eventName: ActivityEvent
-    to?: string
-    from?: string
-    value?: string
-    appId?: string
-    proof?: string
-    roundId?: string
-    appVotes?: {
-        appId: string
-        voteWeight: string
-    }[]
-    support?: ActivitySupport
-    votePower?: string
-    voteWeight?: string
-    reason?: string
-    proposalId?: string
-    oldLevel?: string
-    newLevel?: string
-    inputToken?: string
-    outputToken?: string
-    inputValue?: string
-    outputValue?: string
-    reverted?: boolean
-    levelId?: TokenLevelId
-    validator?: string
-    delegationId?: string
-}
+export type IndexedHistoryEvent =
+    paths["/api/v2/history/{account}"]["get"]["responses"]["200"]["content"]["*/*"]["data"][number]
 export interface NonTransactionalActivity {
     type: ActivityType.CONNECTED_APP_TRANSACTION | ActivityType.SIGN_CERT
     timestamp: number
@@ -244,7 +209,7 @@ export interface B3trActionEvent extends IndexedHistoryEvent {
     from: string
     value: string
     appId: string
-    proof: string
+    // proof: string
 }
 
 export interface TransferVetEvent extends IndexedHistoryEvent {
