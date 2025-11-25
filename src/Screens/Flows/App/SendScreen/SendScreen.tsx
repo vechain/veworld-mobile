@@ -96,7 +96,6 @@ export const SendScreen = (): ReactElement => {
     return (
         <Layout
             title={LL.SEND_TOKEN_TITLE()}
-            titleStyle={{ color: theme.colors.sendBottomSheet.titleColor }}
             noBackButton
             headerTitleAlignment="center"
             headerRightElement={headerRightElement}

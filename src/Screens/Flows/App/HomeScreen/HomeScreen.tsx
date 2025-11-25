@@ -160,7 +160,6 @@ export const HomeScreen = () => {
     const Actions: FastAction[] = useMemo(() => {
         // If the account is observed, we don't want to show the send button as it's not possible to send from an observed account
         if (AccountUtils.isObservedAccount(selectedAccount)) return []
-
         const sharedActions: FastAction[] = [
             {
                 name: LL.BTN_SEND(),
