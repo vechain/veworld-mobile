@@ -202,7 +202,9 @@ export const HomeStack = () => {
                     component={betterWorldFeature.balanceScreen?.enabled ? BalanceScreen : HomeScreen}
                     options={{ headerShown: false }}
                 />
-                <Screen name={Routes.SEND_TOKEN} component={SendScreen} options={{ headerShown: false }} />
+                {!betterWorldFeature.balanceScreen?.send?.enabled && (
+                    <Screen name={Routes.SEND_TOKEN} component={SendScreen} options={{ headerShown: false }} />
+                )}
                 <Screen
                     name={Routes.SELECT_TOKEN_SEND}
                     component={SelectTokenSendScreen}

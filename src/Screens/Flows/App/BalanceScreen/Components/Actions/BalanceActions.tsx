@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, { AnimatedStyle, FadeIn, FadeOut, LinearTransition } from "react-native-reanimated"
+import { useFeatureFlags } from "~Components"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent, ScanTarget, STARGATE_DAPP_URL } from "~Constants"
 import { useAnalyticTracking, useBrowserNavigation, useCameraBottomSheet, useThemedStyles } from "~Hooks"
@@ -16,7 +17,7 @@ type Props = {
 
 export const BalanceActions = ({ style }: Props) => {
     const { LL } = useI18nContext()
-
+    const { betterWorldFeature } = useFeatureFlags()
     const { styles } = useThemedStyles(baseStyles)
     const { navigateToBrowser } = useBrowserNavigation()
 
@@ -38,9 +39,14 @@ export const BalanceActions = ({ style }: Props) => {
     }, [nav, track])
 
     const onSend = useCallback(() => {
-        nav.navigate(Routes.SEND_TOKEN)
+        if (betterWorldFeature.balanceScreen?.send?.enabled) {
+            nav.navigate(Routes.SEND_TOKEN)
+            track(AnalyticsEvent.DASHBOARD_SEND_CLICK)
+            return
+        }
+        nav.navigate(Routes.SELECT_TOKEN_SEND)
         track(AnalyticsEvent.DASHBOARD_SEND_CLICK)
-    }, [nav, track])
+    }, [nav, track, betterWorldFeature.balanceScreen?.send?.enabled])
 
     const onReceive = useCallback(() => {
         handleOpenCamera({ tabs: ["scan", "receive"], defaultTab: "receive" })

@@ -164,7 +164,13 @@ export const HomeScreen = () => {
         const sharedActions: FastAction[] = [
             {
                 name: LL.BTN_SEND(),
-                action: () => nav.navigate(Routes.SEND_TOKEN),
+                action: () => {
+                    if (featureFlags.betterWorldFeature.balanceScreen?.send?.enabled) {
+                        nav.navigate(Routes.SEND_TOKEN)
+                    } else {
+                        nav.navigate(Routes.SELECT_TOKEN_SEND)
+                    }
+                },
                 icon: <BaseIcon color={theme.colors.text} name="icon-arrow-up" size={20} />,
                 testID: "sendButton",
             },
@@ -207,6 +213,7 @@ export const HomeScreen = () => {
     }, [
         LL,
         featureFlags.paymentProvidersFeature.coinify.android,
+        featureFlags.betterWorldFeature.balanceScreen?.send?.enabled,
         // featureFlags.paymentProvidersFeature.coinify.iOS,
         nav,
         selectedAccount,
