@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useNavigation } from "@react-navigation/native"
-import { StyleSheet } from "react-native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { ReactElement, useCallback, useMemo, useState } from "react"
 import { BaseView, Layout } from "~Components"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
-import { useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
-import FontUtils from "~Utils/FontUtils"
 
 // TODO(send-flow-v2): Add proper step types based on the logic implemented in each child step component
 type SendFlowStep = "selectToken" | "insertAddress" | "selectAmount" | "summary"
@@ -38,7 +34,6 @@ type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.
 export const SendScreenV2 = (): ReactElement => {
     const { LL } = useI18nContext()
     const navigation = useNavigation<NavigationProps>()
-    const { styles } = useThemedStyles(baseStyles)
     const [step, setStep] = useState<SendFlowStep>("selectToken")
     const [flowState, setFlowState] = useState<SendFlowState>({})
 
@@ -114,28 +109,7 @@ export const SendScreenV2 = (): ReactElement => {
             noBackButton
             headerTitleAlignment="center"
             headerRightElement={headerRightElement}
-            fixedBody={<BaseView flex={1}>{renderStep}</BaseView>}
+            body={<BaseView flex={1}>{renderStep}</BaseView>}
         />
     )
 }
-
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        iconContainer: {
-            padding: 8,
-            width: 32,
-            height: 32,
-            borderRadius: 6,
-            borderWidth: 1,
-            alignItems: "center",
-            justifyContent: "center",
-        },
-        title: {
-            alignSelf: "center",
-            color: theme.colors.sendBottomSheet.titleColor,
-            fontSize: FontUtils.font(16),
-            fontWeight: "600",
-            lineHeight: 24,
-            textAlign: "center",
-        },
-    })
