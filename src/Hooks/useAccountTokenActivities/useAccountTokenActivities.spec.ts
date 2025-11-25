@@ -1,18 +1,20 @@
 import { act, renderHook } from "@testing-library/react-hooks"
 import { ReactNode } from "react"
+import { B3TR } from "~Constants"
 import { ActivityEvent, FungibleToken } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
-import { B3TR, defaultMainNetwork } from "~Constants"
 
 import { TestHelpers, TestWrapper } from "~Test"
 
-import { fetchIndexedHistoryEvent } from "~Networking"
-
 import { useAccountTokenActivities } from "./useAccountTokenActivities"
 
-jest.mock("~Networking", () => ({
-    ...jest.requireActual("~Networking"),
-    fetchIndexedHistoryEvent: jest.fn(),
+const indexerGet = jest.fn()
+
+jest.mock("~Hooks/useIndexerClient", () => ({
+    ...jest.requireActual("~Hooks/useIndexerClient"),
+    useIndexerClient: jest.fn().mockReturnValue({
+        GET: (...args: any[]) => indexerGet(...args).then((res: any) => ({ data: res })),
+    }),
 }))
 
 describe("useAccountTokenActivities", () => {
@@ -20,7 +22,7 @@ describe("useAccountTokenActivities", () => {
         jest.clearAllMocks()
     })
     it("should do the correct call based on the token symbol", async () => {
-        ;(fetchIndexedHistoryEvent as jest.Mock).mockResolvedValue({
+        ;(indexerGet as jest.Mock).mockResolvedValue({
             data: [],
             pagination: {
                 hasNext: false,
@@ -39,37 +41,52 @@ describe("useAccountTokenActivities", () => {
         )
 
         await waitFor(() => {
-            expect(fetchIndexedHistoryEvent).toHaveBeenNthCalledWith(
-                1,
-                "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
-                0,
-                defaultMainNetwork,
-                [ActivityEvent.TRANSFER_VET, ActivityEvent.SWAP_FT_TO_VET, ActivityEvent.SWAP_VET_TO_FT],
-                { pageSize: 6 },
-            )
+            expect(indexerGet).toHaveBeenNthCalledWith(1, "/api/v2/history/{account}", {
+                params: {
+                    path: {
+                        account: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    },
+                    query: {
+                        eventName: [
+                            ActivityEvent.TRANSFER_VET,
+                            ActivityEvent.SWAP_FT_TO_VET,
+                            ActivityEvent.SWAP_VET_TO_FT,
+                        ],
+                        page: 0,
+                        size: 6,
+                        direction: "DESC",
+                    },
+                },
+            })
         })
 
         rerender({ preloadedState: {}, token: TestHelpers.data.B3TRWithBalance })
 
         await waitFor(() => {
-            expect(fetchIndexedHistoryEvent).toHaveBeenNthCalledWith(
-                2,
-                "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
-                0,
-                defaultMainNetwork,
-                [
-                    ActivityEvent.TRANSFER_FT,
-                    ActivityEvent.TRANSFER_SF,
-                    ActivityEvent.SWAP_FT_TO_FT,
-                    ActivityEvent.SWAP_FT_TO_VET,
-                    ActivityEvent.SWAP_VET_TO_FT,
-                ],
-                { pageSize: 6, contractAddress: B3TR.address },
-            )
+            expect(indexerGet).toHaveBeenNthCalledWith(2, "/api/v2/history/{account}", {
+                params: {
+                    path: {
+                        account: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    },
+                    query: {
+                        eventName: [
+                            ActivityEvent.TRANSFER_FT,
+                            ActivityEvent.TRANSFER_SF,
+                            ActivityEvent.SWAP_FT_TO_FT,
+                            ActivityEvent.SWAP_FT_TO_VET,
+                            ActivityEvent.SWAP_VET_TO_FT,
+                        ],
+                        page: 0,
+                        size: 6,
+                        direction: "DESC",
+                        contractAddress: B3TR.address,
+                    },
+                },
+            })
         })
     })
     it("should change the amount of items after the first page", async () => {
-        ;(fetchIndexedHistoryEvent as jest.Mock).mockResolvedValue({
+        ;(indexerGet as jest.Mock).mockResolvedValue({
             data: [],
             pagination: {
                 hasNext: true,
@@ -88,14 +105,23 @@ describe("useAccountTokenActivities", () => {
         )
 
         await waitFor(() => {
-            expect(fetchIndexedHistoryEvent).toHaveBeenNthCalledWith(
-                1,
-                "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
-                0,
-                defaultMainNetwork,
-                [ActivityEvent.TRANSFER_VET, ActivityEvent.SWAP_FT_TO_VET, ActivityEvent.SWAP_VET_TO_FT],
-                { pageSize: 6 },
-            )
+            expect(indexerGet).toHaveBeenNthCalledWith(1, "/api/v2/history/{account}", {
+                params: {
+                    path: {
+                        account: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    },
+                    query: {
+                        eventName: [
+                            ActivityEvent.TRANSFER_VET,
+                            ActivityEvent.SWAP_FT_TO_VET,
+                            ActivityEvent.SWAP_VET_TO_FT,
+                        ],
+                        page: 0,
+                        size: 6,
+                        direction: "DESC",
+                    },
+                },
+            })
             expect(result.current.data?.data).toBeDefined()
         })
 
@@ -104,14 +130,23 @@ describe("useAccountTokenActivities", () => {
         })
 
         await waitFor(() => {
-            expect(fetchIndexedHistoryEvent).toHaveBeenNthCalledWith(
-                2,
-                "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
-                1,
-                defaultMainNetwork,
-                [ActivityEvent.TRANSFER_VET, ActivityEvent.SWAP_FT_TO_VET, ActivityEvent.SWAP_VET_TO_FT],
-                { pageSize: 4 },
-            )
+            expect(indexerGet).toHaveBeenNthCalledWith(2, "/api/v2/history/{account}", {
+                params: {
+                    path: {
+                        account: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    },
+                    query: {
+                        eventName: [
+                            ActivityEvent.TRANSFER_VET,
+                            ActivityEvent.SWAP_FT_TO_VET,
+                            ActivityEvent.SWAP_VET_TO_FT,
+                        ],
+                        page: 1,
+                        size: 4,
+                        direction: "DESC",
+                    },
+                },
+            })
         })
     })
 })
