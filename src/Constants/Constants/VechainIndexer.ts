@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
-import moment from "moment"
-import { Network, NETWORK_TYPE } from "~Model"
+import { NETWORK_TYPE } from "~Model"
 
 export enum ORDER {
     ASC = "ASC",
@@ -80,81 +79,6 @@ export const NFTS_OWNED_PER_OWNER = (
             ? process.env.REACT_APP_INDEXER_MAINNET_URL
             : process.env.REACT_APP_INDEXER_TESTNET_URL
     }/nfts?address=${ownerAddress}&size=${resultsPerPage}&page=${page}&direction=${direction}`
-
-/**
- * Get the contract addresses of fungible tokens owned by the given address
- *
- * @param thor - Connex.Thor instance to communicate with the blockchain
- * @param address - The address of origin or destination of the fungible tokens transfer events
- * @param officialTokensOnly - Whether to fetch only official tokens or not
- * @param page - The results page number
- * @param pageSize - The results page size
- * @param direction - The sort direction (DESC or ASC)
- */
-export const getFungibleTokensContracts = (
-    network: Network,
-    address: string,
-    officialTokensOnly: boolean,
-    page: number,
-    pageSize: number,
-    direction: ORDER,
-) => {
-    return network.type === NETWORK_TYPE.MAIN
-        ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/transfers/fungible-tokens-contracts?address=${address}&officialTokensOnly=${officialTokensOnly}&size=${pageSize}&page=${page}&direction=${direction}`
-        : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/transfers/fungible-tokens-contracts?address=${address}&officialTokensOnly=${officialTokensOnly}&size=${pageSize}&page=${page}&direction=${direction}`
-}
-
-/**
- * Get the global VeBetter actions overview
- * @returns Global VeBetter actions overview
- */
-export const getVeBetterGlobalOverview = () => {
-    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/b3tr/actions/global/overview`
-}
-
-/**
- * Get the VeBetter general overview for a user
- * @param address Address of the user
- * @returns The general overview for a user
- */
-export const getVeBetterUserGeneralOverview = (address: string) => {
-    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/b3tr/actions/users/${address}/overview`
-}
-
-/**
- * Get the VeBetter overview for a user in a timeframe
- * @param address Address of the user
- * @param fromDate Initial date (inclusive) in ISO String
- * @param toDate End date (inclusive) in ISO String
- * @returns The overview for a user for that timeframe
- */
-export const getVeBetterUserOverview = (address: string, fromDate: string, toDate: string) => {
-    const from = moment(fromDate).utc().format("YYYY-MM-DD")
-    const to = moment(toDate).utc().format("YYYY-MM-DD")
-    const params = new URLSearchParams()
-    params.append("startDate", from)
-    params.append("endDate", to)
-    params.append("size", Math.ceil(moment(toDate).diff(fromDate, "day")).toString())
-    return `${
-        process.env.REACT_APP_INDEXER_MAINNET_URL
-    }/b3tr/actions/users/${address}/daily-summaries?${params.toString()}`
-}
-
-/**
- * Get the VeBetter actions of a user
- * @param address Address of the user
- * @param param1 Options
- * @returns Return the VeBetter actions
- */
-export const getVeBetterActions = (
-    address: string,
-    { page = 0, pageSize = 20 }: { page?: number; pageSize?: number } = {},
-) => {
-    const params = new URLSearchParams()
-    params.append("page", page.toString())
-    params.append("size", pageSize.toString())
-    return `${process.env.REACT_APP_INDEXER_MAINNET_URL}/b3tr/actions/users/${address}?${params.toString()}`
-}
 
 /**
  * Get the total supply of Stargate NFTs

@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 import { useIndexerUrl } from "~Hooks/useIndexerUrl"
 import { Network } from "~Model"
-import createFetchClient, { Middleware } from "openapi-fetch"
+import createFetchClient, { Client, Middleware } from "openapi-fetch"
 import type { paths } from "~Generated/indexer/schema"
 import { defaultMainNetwork } from "~Constants"
 
@@ -12,6 +12,8 @@ const errorMiddleware: Middleware = {
         }
     },
 }
+
+export type IndexerClient = Client<paths, `${string}/${string}`>
 
 export const useIndexerClient = (network: Network) => {
     const indexerUrl = useIndexerUrl(network)
