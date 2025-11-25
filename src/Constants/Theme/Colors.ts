@@ -38,6 +38,7 @@ export type Colors = {
     pinFilled: string
     pinEmpty: string
     rightIconHeaderBorder: string
+    rightIconHeaderColor: string
     border: string
     notification: string
     transparent: string
@@ -365,12 +366,6 @@ export type Colors = {
         title: string
         optionTitle: string
     }
-    sendBottomSheet: {
-        iconColor: string
-        iconBackgroundColor: string
-        iconBorderColor: string
-        titleColor: string
-    }
 }
 
 export enum COLORS {
@@ -538,6 +533,7 @@ const light: Colors = {
     pinFilled: COLORS.PRIMARY_800,
     button: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.GREY_200,
+    rightIconHeaderColor: COLORS.GREY_600,
     cardBorder: COLORS.GREY_300,
     cardDivider: COLORS.GREY_100,
     border: COLORS.DARK_PURPLE,
@@ -863,12 +859,6 @@ const light: Colors = {
         title: COLORS.PURPLE,
         optionTitle: COLORS.GREY_600,
     },
-    sendBottomSheet: {
-        iconColor: COLORS.GREY_600,
-        iconBackgroundColor: COLORS.WHITE,
-        iconBorderColor: COLORS.GREY_200,
-        titleColor: COLORS.PRIMARY_900,
-    },
 }
 
 const dark: Colors = {
@@ -913,6 +903,7 @@ const dark: Colors = {
     icon: COLORS.WHITE,
     button: COLORS.LIME_GREEN,
     rightIconHeaderBorder: COLORS.TRANSPARENT,
+    rightIconHeaderColor: COLORS.WHITE,
     cardBorder: COLORS.DARK_PURPLE_DISABLED,
     cardDivider: COLORS.PURPLE_DISABLED,
     border: COLORS.WHITE,
@@ -1237,12 +1228,6 @@ const dark: Colors = {
         background: COLORS.PURPLE_DISABLED,
         title: COLORS.WHITE,
         optionTitle: COLORS.GREY_300,
-    },
-    sendBottomSheet: {
-        iconColor: COLORS.WHITE,
-        iconBackgroundColor: COLORS.PURPLE,
-        iconBorderColor: COLORS.PURPLE,
-        titleColor: COLORS.WHITE,
     },
 }
 
