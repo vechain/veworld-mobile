@@ -1,29 +1,40 @@
 import { useQuery } from "@tanstack/react-query"
 import React, { useMemo } from "react"
-import { useIndexerUrl } from "~Hooks/useIndexerUrl"
+import { IndexerClient, useIndexerClient } from "~Hooks/useIndexerClient"
 import { NodeInfo } from "~Model"
-import { fetchStargateTokens } from "~Networking"
+import { DEFAULT_PAGE_SIZE } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { getTokenLevelId } from "~Utils/StargateUtils"
 
 export const getUserNodesQueryKey = (genesisId: string, address?: string) => ["userStargateNodes", genesisId, address]
 
-const getUserNodes = async (baseUrl: string, address: string | undefined): Promise<NodeInfo[]> => {
+const getUserNodes = async (indexer: IndexerClient, address: string | undefined): Promise<NodeInfo[]> => {
     if (!address) return []
 
     const results: NodeInfo[] = []
     let page = 0
     try {
         while (true) {
-            const r = await fetchStargateTokens(baseUrl, address, { page })
+            const r = await indexer
+                .GET("/api/v1/stargate/tokens", {
+                    params: {
+                        query: {
+                            manager: address,
+                            owner: address,
+                            page,
+                            size: DEFAULT_PAGE_SIZE,
+                        },
+                    },
+                })
+                .then(res => res.data!)
             results.push(
                 ...r.data.map(u => ({
                     isLegacyNode: false,
                     nodeId: u.tokenId,
-                    nodeLevel: getTokenLevelId(u.level),
+                    nodeLevel: getTokenLevelId(u.level as Exclude<typeof u.level, "All">),
                     xNodeOwner: u.owner,
-                    vetAmountStaked: u.vetStaked,
+                    vetAmountStaked: u.vetStaked.toString(),
                     accumulatedRewards: BigNutils(u.totalBootstrapRewardsClaimed).plus(u.totalRewardsClaimed).toString,
                 })),
             )
@@ -43,12 +54,12 @@ export const useUserNodes = (address?: string, _enabled: boolean = true) => {
         return getUserNodesQueryKey(network.genesis.id, address)
     }, [address, network.genesis.id])
 
-    const indexerUrl = useIndexerUrl(network)
-    const enabled = !!address && !!indexerUrl && _enabled
+    const indexer = useIndexerClient(network)
+    const enabled = !!address && _enabled
 
     const { data, error, isError, isFetching } = useQuery({
         queryKey,
-        queryFn: async () => await getUserNodes(indexerUrl!, address),
+        queryFn: async () => await getUserNodes(indexer, address),
         enabled,
         staleTime: 60 * 5 * 1000,
     })

@@ -54,20 +54,6 @@ export enum StargateNFTLevel {
     Flash,
 }
 
-export interface FetchStargateTotalVetStakedResponse {
-    total: string
-    byLevel: {
-        [key in StargateNFTLevel]: string
-    }
-}
-
-export interface FetchStargateTotalSupplyResponse {
-    total: string
-    byLevel: {
-        [key in StargateNFTLevel]: number
-    }
-}
-
 export interface FetchStargateTokensResponseItem {
     tokenId: string
     level: StargateLevelName
