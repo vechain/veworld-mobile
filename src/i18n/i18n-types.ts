@@ -1818,6 +1818,10 @@ type RootTranslation = {
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: string
 	/**
+	 * C​o​i​n​b​a​s​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
+	 */
+	COINBASE_NOT_AVAILABLE: string
+	/**
 	 * A​v​a​t​a​r
 	 */
 	COLLECTIBLES_ACTION_AVATAR_ACTIVE: string
@@ -2104,6 +2108,10 @@ type RootTranslation = {
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
 	COMMON_MARKET_CAP: string
+	/**
+	 * M​a​x
+	 */
+	COMMON_MAX: string
 	/**
 	 * N​.​A​.
 	 */
@@ -4297,6 +4305,10 @@ type RootTranslation = {
 	 */
 	SEND_AMOUNT: string
 	/**
+	 * A​m​o​u​n​t​ ​e​x​c​e​e​d​s​ ​b​a​l​a​n​c​e
+	 */
+	SEND_AMOUNT_EXCEEDS_BALANCE: string
+	/**
 	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e​:​ ​{​p​e​r​c​e​n​t​a​g​e​}
 	 * @param {string} percentage
 	 */
@@ -4551,6 +4563,10 @@ type RootTranslation = {
 	 */
 	SEND_TO: string
 	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d
+	 */
+	SEND_TOKEN_SELECT: string
+	/**
 	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
@@ -4592,6 +4608,10 @@ type RootTranslation = {
 	 * S​e​n​d​i​n​g​ ​V​O​T​3
 	 */
 	SEND_VOT3_TITLE: string
+	/**
+	 * V​O​T​3​ ​t​o​k​e​n​s​ ​s​h​o​u​l​d​n​'​t​ ​b​e​ ​s​e​n​t​ ​d​i​r​e​c​t​l​y​ ​t​o​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​.​ ​V​O​T​3​ ​c​a​n​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​t​o​ ​B​3​T​R​ ​t​o​k​e​n​s​ ​a​n​d​ ​s​e​n​t​ ​a​f​t​e​r​w​a​r​d​s​.
+	 */
+	SEND_VOT3_WARNING: string
 	/**
 	 * V​e​c​h​a​i​n​ ​f​a​c​i​l​i​t​a​t​e​s​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​u​s​i​n​g​ ​V​T​H​O​ ​a​s​ ​t​h​e​ ​p​a​y​m​e​n​t​ ​m​e​d​i​u​m​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​O​u​r​ ​M​A​X​ ​c​a​l​c​u​l​a​t​i​o​n​ ​m​e​t​h​o​d​ ​w​i​l​l​ ​d​e​d​u​c​t​ ​a​ ​p​r​e​d​e​f​i​n​e​d​ ​b​a​s​e​ ​f​e​e​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​g​a​s
 	 */
@@ -5654,10 +5674,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * Coinbase not available
-	 */
-	COINBASE_NOT_AVAILABLE: string
 }
 
 export type TranslationFunctions = {
@@ -7427,6 +7443,10 @@ Thanks for your patience!
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: () => LocalizedString
 	/**
+	 * Coinbase not available
+	 */
+	COINBASE_NOT_AVAILABLE: () => LocalizedString
+	/**
 	 * Avatar
 	 */
 	COLLECTIBLES_ACTION_AVATAR_ACTIVE: () => LocalizedString
@@ -7711,6 +7731,10 @@ This action is irreversible.
 	 * Market Cap
 	 */
 	COMMON_MARKET_CAP: () => LocalizedString
+	/**
+	 * Max
+	 */
+	COMMON_MAX: () => LocalizedString
 	/**
 	 * N.A.
 	 */
@@ -9873,6 +9897,10 @@ This action is irreversible.
 	 */
 	SEND_AMOUNT: () => LocalizedString
 	/**
+	 * Amount exceeds balance
+	 */
+	SEND_AMOUNT_EXCEEDS_BALANCE: () => LocalizedString
+	/**
 	 * Balance percentage: {percentage}
 	 */
 	SEND_BALANCE_PERCENTAGE: (arg: { percentage: string }) => LocalizedString
@@ -10125,6 +10153,10 @@ This action is irreversible.
 	 */
 	SEND_TO: () => LocalizedString
 	/**
+	 * Select the token you wish to send
+	 */
+	SEND_TOKEN_SELECT: () => LocalizedString
+	/**
 	 * Select the token asset you wish to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
@@ -10165,6 +10197,10 @@ Are you sure you want to continue?
 	 * Sending VOT3
 	 */
 	SEND_VOT3_TITLE: () => LocalizedString
+	/**
+	 * VOT3 tokens shouldn't be sent directly to another wallet. VOT3 can be converted to B3TR tokens and sent afterwards.
+	 */
+	SEND_VOT3_WARNING: () => LocalizedString
 	/**
 	 * Vechain facilitates transactions using VTHO as the payment medium for transaction fees. Our MAX calculation method will deduct a predefined base fee for transaction gas
 	 */
@@ -11214,11 +11250,7 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	/**
 	 * Yesterday
 	 */
-	YESTERDAY: () => LocalizedString,
-	/**
-	 * Coinbase not available
-	 */
-	COINBASE_NOT_AVAILABLE: () => LocalizedString
+	YESTERDAY: () => LocalizedString
 }
 
 export type Formatters = {
