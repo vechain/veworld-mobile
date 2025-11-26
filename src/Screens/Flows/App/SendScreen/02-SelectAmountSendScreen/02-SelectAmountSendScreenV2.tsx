@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet, Text, TouchableOpacity, useWindowDimensions } from "react-native"
 import Animated, {
     FadeIn,
@@ -89,6 +89,12 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
         id: getCoinGeckoIdBySymbol[selectedToken.symbol],
         vs_currency: currency,
     })
+
+    useEffect(() => {
+        if (!exchangeRate && isInputInFiat) {
+            setIsInputInFiat(false)
+        }
+    }, [exchangeRate, isInputInFiat])
 
     const computedIcon = useMemo(() => {
         if (selectedToken.symbol === VET.symbol) return VET.icon
@@ -472,62 +478,72 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
                                     </Animated.View>
                                 )}
                             </BaseView>
-                            <BaseTouchable action={handleToggleInputMode} haptics="Light" disabled={isError}>
-                                <BaseView flexDirection="row" alignItems="center" gap={4}>
-                                    {isError ? (
-                                        <BaseText color={theme.colors.danger} typographyFont="captionMedium">
-                                            {isFeeAmountError
-                                                ? LL.SEND_INSUFFICIENT_GAS()
-                                                : LL.SEND_AMOUNT_EXCEEDS_BALANCE()}
-                                        </BaseText>
-                                    ) : (
-                                        <>
-                                            {!isInputInFiat && (
+                            {exchangeRate ? (
+                                <BaseTouchable action={handleToggleInputMode} haptics="Light" disabled={isError}>
+                                    <BaseView flexDirection="row" alignItems="center" gap={4}>
+                                        {isError ? (
+                                            <BaseText color={theme.colors.danger} typographyFont="captionMedium">
+                                                {isFeeAmountError
+                                                    ? LL.SEND_INSUFFICIENT_GAS()
+                                                    : LL.SEND_AMOUNT_EXCEEDS_BALANCE()}
+                                            </BaseText>
+                                        ) : (
+                                            <>
+                                                {!isInputInFiat && (
+                                                    <Animated.View
+                                                        entering={FadeIn.duration(300)}
+                                                        exiting={FadeOut.duration(200)}>
+                                                        <BaseText
+                                                            color={theme.colors.textLightish}
+                                                            typographyFont="bodySemiBold">
+                                                            {CURRENCY_SYMBOLS[currency]}
+                                                        </BaseText>
+                                                    </Animated.View>
+                                                )}
                                                 <Animated.View
-                                                    entering={FadeIn.duration(300)}
-                                                    exiting={FadeOut.duration(200)}>
+                                                    key={isInputInFiat ? "token-conv" : "fiat-conv"}
+                                                    entering={FadeIn.duration(300)}>
                                                     <BaseText
                                                         color={theme.colors.textLightish}
                                                         typographyFont="bodySemiBold">
-                                                        {CURRENCY_SYMBOLS[currency]}
+                                                        {formattedConvertedAmount}
                                                     </BaseText>
                                                 </Animated.View>
-                                            )}
-                                            <Animated.View
-                                                key={isInputInFiat ? "token-conv" : "fiat-conv"}
-                                                entering={FadeIn.duration(300)}>
-                                                <BaseText
+                                                {isInputInFiat && (
+                                                    <Animated.View
+                                                        entering={FadeIn.duration(300)}
+                                                        exiting={FadeOut.duration(200)}>
+                                                        <BaseText
+                                                            color={theme.colors.textLightish}
+                                                            testID="SendScreen_convertedSymbol"
+                                                            typographyFont="bodySemiBold">
+                                                            {selectedToken.symbol}
+                                                        </BaseText>
+                                                    </Animated.View>
+                                                )}
+                                            </>
+                                        )}
+                                        {!isError && (
+                                            <>
+                                                <BaseSpacer width={2} />
+                                                <BaseIcon
+                                                    name="icon-arrow-up-down"
+                                                    size={12}
                                                     color={theme.colors.textLightish}
-                                                    typographyFont="bodySemiBold">
-                                                    {formattedConvertedAmount}
-                                                </BaseText>
-                                            </Animated.View>
-                                            {isInputInFiat && (
-                                                <Animated.View
-                                                    entering={FadeIn.duration(300)}
-                                                    exiting={FadeOut.duration(200)}>
-                                                    <BaseText
-                                                        color={theme.colors.textLightish}
-                                                        testID="SendScreen_convertedSymbol"
-                                                        typographyFont="bodySemiBold">
-                                                        {selectedToken.symbol}
-                                                    </BaseText>
-                                                </Animated.View>
-                                            )}
-                                        </>
-                                    )}
-                                    {!isError && (
-                                        <>
-                                            <BaseSpacer width={2} />
-                                            <BaseIcon
-                                                name="icon-arrow-up-down"
-                                                size={12}
-                                                color={theme.colors.textLightish}
-                                            />
-                                        </>
-                                    )}
-                                </BaseView>
-                            </BaseTouchable>
+                                                />
+                                            </>
+                                        )}
+                                    </BaseView>
+                                </BaseTouchable>
+                            ) : (
+                                isError && (
+                                    <BaseText color={theme.colors.danger} typographyFont="captionMedium">
+                                        {isFeeAmountError
+                                            ? LL.SEND_INSUFFICIENT_GAS()
+                                            : LL.SEND_AMOUNT_EXCEEDS_BALANCE()}
+                                    </BaseText>
+                                )
+                            )}
                         </BaseView>
                         <BaseSpacer height={32} />
                         <TouchableOpacity onPress={handleOpenTokenSelector}>
