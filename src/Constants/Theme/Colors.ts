@@ -375,6 +375,7 @@ export type Colors = {
             tokenSelectorBorder: string
             tokenSelectorText: string
             disabledTokenCardBackground: string
+            stepText: string
         }
     }
 }
@@ -879,6 +880,7 @@ const light: Colors = {
             tokenSelectorBorder: COLORS.GREY_100,
             tokenSelectorText: COLORS.GREY_700,
             disabledTokenCardBackground: COLORS.GREY_100,
+            stepText: COLORS.GREY_500,
         },
     },
 }
@@ -1260,6 +1262,7 @@ const dark: Colors = {
             tokenSelectorBorder: COLORS.DARK_PURPLE_DISABLED,
             tokenSelectorText: COLORS.GREY_100,
             disabledTokenCardBackground: COLORS.PURPLE_DISABLED,
+            stepText: COLORS.GREY_300,
         },
     },
 }

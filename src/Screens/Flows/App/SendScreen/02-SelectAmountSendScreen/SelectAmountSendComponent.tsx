@@ -352,17 +352,31 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
         }
     }, [inputLength, availableWidth])
 
-    // Return early if no token available yet (after all hooks)
     if (!selectedToken) {
         return <BaseView flex={1} />
     }
 
-    // After the check, we know selectedToken is defined
-    const currentToken = selectedToken
-
     return (
         <>
-            <BaseView style={styles.tokenAmountCard} bg={tokenAmountCard.background} mb={48}>
+            <BaseView flexDirection="row" alignItems="center" justifyContent="space-between" mb={16} px={8}>
+                <BaseView flexDirection="row" alignItems="center" gap={8}>
+                    <BaseIcon
+                        name="icon-coins"
+                        size={16}
+                        iconPadding={2}
+                        borderRadius={100}
+                        bg={theme.colors.label.background}
+                        color={theme.colors.label.text}
+                    />
+                    <BaseText typographyFont="bodyMedium" color={theme.colors.subSubtitle}>
+                        {LL.SEND_TOKEN_AMOUNT()}
+                    </BaseText>
+                </BaseView>
+                <BaseText typographyFont="captionMedium" color={tokenAmountCard.stepText}>
+                    {LL.SEND_STEP_OF_3({ stepNumber: "1" })}
+                </BaseText>
+            </BaseView>
+            <BaseView style={styles.tokenAmountCard} bg={tokenAmountCard.background} mb={32}>
                 <BaseView alignItems="center" gap={8}>
                     <BaseView style={styles.inputContainer}>
                         {isInputInFiat && (
@@ -394,7 +408,7 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
                                     typographyFont="subSubTitleMedium"
                                     color={isError ? theme.colors.danger : theme.colors.text}
                                     style={styles.tokenSymbolRight}>
-                                    {currentToken.symbol}
+                                    {selectedToken.symbol}
                                 </BaseText>
                             </Animated.View>
                         )}
@@ -434,7 +448,7 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
                                                     color={theme.colors.textLightish}
                                                     testID="SendScreen_convertedSymbol"
                                                     typographyFont="bodySemiBold">
-                                                    {currentToken.symbol}
+                                                    {selectedToken.symbol}
                                                 </BaseText>
                                             </Animated.View>
                                         )}

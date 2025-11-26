@@ -4559,9 +4559,18 @@ type RootTranslation = {
 	 */
 	SEND_RECEIVE_TAB_SCAN: string
 	/**
+	 * {​s​t​e​p​N​u​m​b​e​r​}​ ​o​f​ ​3
+	 * @param {string} stepNumber
+	 */
+	SEND_STEP_OF_3: RequiredParams<'stepNumber'>
+	/**
 	 * T​o
 	 */
 	SEND_TO: string
+	/**
+	 * T​o​k​e​n​ ​a​m​o​u​n​t
+	 */
+	SEND_TOKEN_AMOUNT: string
 	/**
 	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d
 	 */
@@ -10149,9 +10158,17 @@ This action is irreversible.
 	 */
 	SEND_RECEIVE_TAB_SCAN: () => LocalizedString
 	/**
+	 * {stepNumber} of 3
+	 */
+	SEND_STEP_OF_3: (arg: { stepNumber: string }) => LocalizedString
+	/**
 	 * To
 	 */
 	SEND_TO: () => LocalizedString
+	/**
+	 * Token amount
+	 */
+	SEND_TOKEN_AMOUNT: () => LocalizedString
 	/**
 	 * Select the token you wish to send
 	 */
