@@ -1388,5 +1388,8 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "SEND_RECEIVER_FILTER_RECENT": "Recent",
+  "SEND_RECEIVER_FILTER_ACCOUNTS": "Accounts",
+  "SEND_RECEIVER_FILTER_CONTACTS": "Contacts"
 }

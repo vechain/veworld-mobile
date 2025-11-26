@@ -4543,33 +4543,33 @@ type RootTranslation = {
 	 */
 	SEND_RANGE_ZERO: string
 	/**
-	 * R​e​c​e​i​v​e
+	 * C​l​e​a​r
 	 */
-	SEND_RECEIVE_TAB_RECEIVE: string
-	/**
-	 * W​a​l​l​e​t​ ​a​d​d​r​e​s​s
-	 */
-	SEND_RECEIVER_ADDRESS_INPUT_LABEL: string
+	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: string
 	/**
 	 * I​n​v​a​l​i​d​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​,​ ​u​s​e​r​n​a​m​e​ ​o​r​ ​d​o​m​a​i​n
 	 */
 	SEND_RECEIVER_ADDRESS_INPUT_ERROR: string
 	/**
-	 * W​a​l​l​e​t​ ​o​r​ ​d​o​m​a​i​n
+	 * W​a​l​l​e​t​ ​a​d​d​r​e​s​s
 	 */
-	SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER: string
-	/**
-	 * C​l​e​a​r
-	 */
-	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: string
+	SEND_RECEIVER_ADDRESS_INPUT_LABEL: string
 	/**
 	 * P​a​s​t​e
 	 */
 	SEND_RECEIVER_ADDRESS_INPUT_PASTE: string
 	/**
+	 * W​a​l​l​e​t​ ​o​r​ ​d​o​m​a​i​n
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER: string
+	/**
 	 * A​d​d​ ​t​h​i​s​ ​n​e​w​ ​a​d​d​r​e​s​s​ ​t​o​ ​m​y​ ​c​o​n​t​a​c​t​s
 	 */
 	SEND_RECEIVER_ADD_CONTACT_BTN: string
+	/**
+	 * R​e​c​e​i​v​e
+	 */
+	SEND_RECEIVE_TAB_RECEIVE: string
 	/**
 	 * S​c​a​n
 	 */
@@ -5682,6 +5682,18 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * R​e​c​e​n​t
+	 */
+	SEND_RECEIVER_FILTER_RECENT: string
+	/**
+	 * A​c​c​o​u​n​t​s
+	 */
+	SEND_RECEIVER_FILTER_ACCOUNTS: string
+	/**
+	 * C​o​n​t​a​c​t​s
+	 */
+	SEND_RECEIVER_FILTER_CONTACTS: string
 }
 
 export type TranslationFunctions = {
@@ -10141,33 +10153,33 @@ This action is irreversible.
 	 */
 	SEND_RANGE_ZERO: () => LocalizedString
 	/**
-	 * Receive
+	 * Clear
 	 */
-	SEND_RECEIVE_TAB_RECEIVE: () => LocalizedString
-	/**
-	 * Wallet address
-	 */
-	SEND_RECEIVER_ADDRESS_INPUT_LABEL: () => LocalizedString
+	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: () => LocalizedString
 	/**
 	 * Invalid wallet address, username or domain
 	 */
 	SEND_RECEIVER_ADDRESS_INPUT_ERROR: () => LocalizedString
 	/**
-	 * Wallet or domain
+	 * Wallet address
 	 */
-	SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER: () => LocalizedString
-	/**
-	 * Clear
-	 */
-	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: () => LocalizedString
+	SEND_RECEIVER_ADDRESS_INPUT_LABEL: () => LocalizedString
 	/**
 	 * Paste
 	 */
 	SEND_RECEIVER_ADDRESS_INPUT_PASTE: () => LocalizedString
 	/**
+	 * Wallet or domain
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER: () => LocalizedString
+	/**
 	 * Add this new address to my contacts
 	 */
 	SEND_RECEIVER_ADD_CONTACT_BTN: () => LocalizedString
+	/**
+	 * Receive
+	 */
+	SEND_RECEIVE_TAB_RECEIVE: () => LocalizedString
 	/**
 	 * Scan
 	 */
@@ -11267,6 +11279,18 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Recent
+	 */
+	SEND_RECEIVER_FILTER_RECENT: () => LocalizedString
+	/**
+	 * Accounts
+	 */
+	SEND_RECEIVER_FILTER_ACCOUNTS: () => LocalizedString
+	/**
+	 * Contacts
+	 */
+	SEND_RECEIVER_FILTER_CONTACTS: () => LocalizedString
 }
 
 export type Formatters = {
