@@ -683,8 +683,6 @@ export const createActivityFromIndexedHistoryEvent = (
                 to: to ? [to] : [],
                 value: value ?? "0x0",
                 appId: appId,
-                //TODO: Understand if we really need proof
-                // proof: proof,
             } as B3trActionActivity
         }
         case ActivityEvent.B3TR_PROPOSAL_VOTE: {

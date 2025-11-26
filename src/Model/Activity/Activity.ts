@@ -143,7 +143,6 @@ export interface B3trActionActivity extends Activity {
     type: ActivityType.B3TR_ACTION
     value: string
     appId: string
-    proof: string
 }
 
 export interface B3trProposalVoteActivity extends Activity {
@@ -209,7 +208,6 @@ export interface B3trActionEvent extends IndexedHistoryEvent {
     from: string
     value: string
     appId: string
-    // proof: string
 }
 
 export interface TransferVetEvent extends IndexedHistoryEvent {
