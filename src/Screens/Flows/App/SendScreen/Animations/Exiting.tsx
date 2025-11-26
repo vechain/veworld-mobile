@@ -1,37 +1,19 @@
-import { ExitAnimationsValues, StyleProps, withTiming } from "react-native-reanimated"
-
-type LayoutAnimation = {
-    initialValues: StyleProps
-    animations: StyleProps
-    callback?: (finished: boolean) => void
-}
-
-// export const ExitingAnimation = (values: ExitAnimationsValues): LayoutAnimation => {
-//     "worklet"
-//     const animations: StyleProps = {
-//         opacity: withTiming(0, { duration: 2000 }),
-//         transform: [{ scale: withTiming(0, { duration: 2000 }) }],
-//     }
-//     const initialValues: StyleProps = {
-//         opacity: 1,
-//         transform: [{ scale: 1 }],
-//         transformOrigin: "center",
-//     }
-//     return {
-//         initialValues,
-//         animations,
-//     }
-// }
+import { ExitAnimationsValues, LayoutAnimation, StyleProps, withTiming } from "react-native-reanimated"
+import { LAYOUT_DURATION } from "./constants"
 
 export const ExitingToLeftAnimation = (values: ExitAnimationsValues): LayoutAnimation => {
     "worklet"
     const animations: StyleProps = {
         originX: withTiming(Math.min(values.currentOriginX - values.windowWidth, -values.windowWidth), {
-            duration: 2000,
+            duration: LAYOUT_DURATION,
         }),
+        transform: [{ scale: withTiming(0.8, { duration: LAYOUT_DURATION }) }],
+        opacity: withTiming(0.5, { duration: LAYOUT_DURATION }),
     }
     const initialValues: StyleProps = {
         originX: values.currentOriginX,
+        transform: [{ scale: 1 }],
+        opacity: 1,
         ...values,
     }
     return {
@@ -44,11 +26,15 @@ export const ExitingToRightAnimation = (values: ExitAnimationsValues): LayoutAni
     "worklet"
     const animations: StyleProps = {
         originX: withTiming(Math.max(values.currentOriginX + values.windowWidth, values.windowWidth), {
-            duration: 2000,
+            duration: LAYOUT_DURATION,
         }),
+        transform: [{ scale: withTiming(0.8, { duration: LAYOUT_DURATION }) }],
+        opacity: withTiming(0.5, { duration: LAYOUT_DURATION }),
     }
     const initialValues: StyleProps = {
         originX: values.currentOriginX,
+        transform: [{ scale: 1 }],
+        opacity: 1,
         ...values,
     }
     return {

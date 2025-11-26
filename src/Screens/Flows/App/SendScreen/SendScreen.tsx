@@ -2,16 +2,11 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { ReactElement, useCallback, useMemo, useState } from "react"
-import Animated, {
-    EntryAnimationsValues,
-    ExitAnimationsValues,
-    SlideInLeft,
-    SlideOutLeft,
-    useSharedValue,
-} from "react-native-reanimated"
+import { StyleSheet } from "react-native"
+import Animated, { EntryAnimationsValues, ExitAnimationsValues, useSharedValue } from "react-native-reanimated"
 import { BaseButton, BaseText, BaseView, Layout } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
-import { useTheme } from "~Hooks"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
@@ -31,15 +26,13 @@ type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.
 
 const ORDER: SendFlowStep[] = ["insertAddress", "selectAmount", "summary"]
 
-const DefaultInAnimation = SlideInLeft.duration(0).build()
-const DefaultOutAnimation = SlideOutLeft.duration(0).build()
-
 export const SendScreen = (): ReactElement => {
     const { LL } = useI18nContext()
     const theme = useTheme()
     const navigation = useNavigation<NavigationProps>()
     const [step, setStep] = useState<SendFlowStep>("insertAddress")
     const [flowState, setFlowState] = useState<SendFlowState>({})
+    const { styles } = useThemedStyles(baseStyles)
 
     const handleClose = useCallback(() => {
         navigation.goBack()
@@ -140,6 +133,17 @@ export const SendScreen = (): ReactElement => {
         [nextStep.value, previousStep.value],
     )
 
+    const backgroundColor = useMemo(() => {
+        switch (step) {
+            case "insertAddress":
+                return "green"
+            case "selectAmount":
+                return "red"
+            case "summary":
+                return "blue"
+        }
+    }, [step])
+
     return (
         <Layout
             title={LL.SEND_TOKEN_TITLE()}
@@ -147,34 +151,28 @@ export const SendScreen = (): ReactElement => {
             headerTitleAlignment="center"
             headerRightElement={headerRightElement}
             body={
-                <Animated.View style={{ flex: 1 }}>
+                <Animated.View style={styles.flexElement}>
                     <Animated.View
-                        style={{
-                            flex: 1,
-                            backgroundColor:
-                                step === "insertAddress" ? "green" : step === "selectAmount" ? "red" : "blue",
-                        }}
+                        style={[
+                            styles.flexElement,
+                            {
+                                backgroundColor,
+                            },
+                        ]}
                         entering={Entering}
                         exiting={Exiting}
                         key={step}>
-                        <BaseView
-                            style={{
-                                width: "100%",
-                                height: 300,
-                                flexDirection: "row",
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}>
+                        <BaseView style={styles.mockedBox}>
                             <BaseText typographyFont="biggerTitle">{step}</BaseText>
                         </BaseView>
                     </Animated.View>
 
                     <BaseView flexDirection="row" gap={16}>
                         <BaseButton action={goToPrev} disabled={step === "insertAddress"}>
-                            Go prev
+                            {LL.COMMON_LBL_BACK()}
                         </BaseButton>
                         <BaseButton action={goToNext} disabled={step === "summary"}>
-                            Go next
+                            {LL.COMMON_LBL_NEXT()}
                         </BaseButton>
                     </BaseView>
                 </Animated.View>
@@ -182,3 +180,15 @@ export const SendScreen = (): ReactElement => {
         />
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        flexElement: { flex: 1 },
+        mockedBox: {
+            width: "100%",
+            height: 300,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+        },
+    })
