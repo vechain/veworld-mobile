@@ -1,14 +1,14 @@
 import { act, renderHook } from "@testing-library/react-hooks"
 import * as Clipboard from "expo-clipboard"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
 import * as logger from "~Utils/Logger/Logger"
 import { useCopyClipboard } from "./useCopyClipboard"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 
 jest.mock("expo-clipboard", () => ({
     setStringAsync: jest.fn(() => Promise.resolve()),
 }))
 
-jest.mock("~Components/Providers/FeedbackProvider", () => ({
+jest.mock("~Components/Providers/FeedbackProvider/Events", () => ({
     Feedback: {
         show: jest.fn(),
     },

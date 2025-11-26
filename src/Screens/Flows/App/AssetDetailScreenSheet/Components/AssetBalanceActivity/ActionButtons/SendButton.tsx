@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
+import { useFeatureFlags } from "~Components"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent, VeDelegate } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
@@ -16,14 +17,21 @@ type Props = {
 
 const useSend = (token: FungibleTokenWithBalance) => {
     const track = useAnalyticTracking()
+    const { betterWorldFeature } = useFeatureFlags()
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
     const selectedAccount = useAppSelector(selectSelectedAccount)
+
     const onSend = useCallback(() => {
+        if (betterWorldFeature.balanceScreen?.send?.enabled) {
+            nav.replace(Routes.SEND_TOKEN)
+            track(AnalyticsEvent.TOKEN_SEND_CLICKED)
+            return
+        }
         nav.replace(Routes.INSERT_ADDRESS_SEND, {
             token,
         })
         track(AnalyticsEvent.TOKEN_SEND_CLICKED)
-    }, [nav, token, track])
+    }, [nav, track, token, betterWorldFeature.balanceScreen?.send?.enabled])
 
     const isSendDisabled = useMemo(
         () =>

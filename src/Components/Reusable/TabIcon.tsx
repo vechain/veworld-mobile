@@ -1,10 +1,11 @@
 import React, { FC, memo } from "react"
 import { StyleSheet, TextStyle } from "react-native"
-import { useThemedStyles } from "~Hooks"
-import { COLORS, ColorThemeType } from "~Constants"
 import { BaseText, BaseView } from "~Components/Base"
 import { Icon } from "~Components/Reusable/DesignSystemIconSet"
+import { COLORS, ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
+import { Spinner } from "./Spinner"
 
 type Props = {
     focused: boolean
@@ -27,6 +28,27 @@ export const TabIcon: FC<Props> = memo(({ focused, title, label, isSettings, isS
         </BaseView>
     )
 })
+
+export const AnimatedTabIcon: FC<Props & { isLoading?: boolean }> = memo(
+    ({ focused, title, label, isSettings, isShowBackupModal, isLoading }) => {
+        const { styles, theme } = useThemedStyles(baseStyles(focused))
+
+        return (
+            <BaseView justifyContent="center" alignItems="center" style={styles.container}>
+                {isSettings && isShowBackupModal && <BaseView style={styles.warningLabel} />}
+                {isLoading ? (
+                    <Spinner color={theme.isDark ? COLORS.LIME_GREEN : theme.colors.text} size={20} />
+                ) : (
+                    <Icon name={title} size={20} color={(styles.icon as TextStyle).color} />
+                )}
+
+                <BaseText typographyFont="smallCaptionSemiBold" style={styles.label}>
+                    {label}
+                </BaseText>
+            </BaseView>
+        )
+    },
+)
 
 const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
     const iconColor = () => {

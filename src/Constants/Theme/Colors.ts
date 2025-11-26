@@ -38,6 +38,7 @@ export type Colors = {
     pinFilled: string
     pinEmpty: string
     rightIconHeaderBorder: string
+    rightIconHeaderColor: string
     border: string
     notification: string
     transparent: string
@@ -543,6 +544,7 @@ const light: Colors = {
     pinFilled: COLORS.PRIMARY_800,
     button: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.GREY_200,
+    rightIconHeaderColor: COLORS.GREY_600,
     cardBorder: COLORS.GREY_300,
     cardDivider: COLORS.GREY_100,
     border: COLORS.DARK_PURPLE,
@@ -923,6 +925,7 @@ const dark: Colors = {
     icon: COLORS.WHITE,
     button: COLORS.LIME_GREEN,
     rightIconHeaderBorder: COLORS.TRANSPARENT,
+    rightIconHeaderColor: COLORS.WHITE,
     cardBorder: COLORS.DARK_PURPLE_DISABLED,
     cardDivider: COLORS.PURPLE_DISABLED,
     border: COLORS.WHITE,

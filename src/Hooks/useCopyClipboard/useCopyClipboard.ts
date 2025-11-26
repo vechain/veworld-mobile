@@ -5,8 +5,8 @@ import { debug } from "~Utils"
 import HapticsService from "~Services/HapticsService"
 import { ERROR_EVENTS } from "~Constants"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
 import { IconKey } from "~Model"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 
 type CopyToClipboardOptions = {
     icon?: IconKey

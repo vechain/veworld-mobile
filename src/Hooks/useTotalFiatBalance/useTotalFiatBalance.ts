@@ -99,7 +99,6 @@ export const useTotalFiatBalance = ({ address, enabled = true, useCompactNotatio
         queryFn: () => amount,
         enabled: !isLoading,
         staleTime: 5 * 60 * 1000,
-        gcTime: Infinity,
     })
 
     const { formatFiat } = useFormatFiat({ useCompactNotation })

@@ -8,7 +8,7 @@ export const getTokenURI = async (tokenId: string, contractAddress: string, thor
     return res[0] as string
 }
 
-export const getTokenURIQueryKey = (genesisId: string, address: string, tokenId: string) => [
+export const getTokenURIQueryKey = (genesisId: string, address: string | undefined, tokenId: string | undefined) => [
     "COLLECTIBLES",
     genesisId,
     address,
@@ -20,7 +20,6 @@ const getTokenURIOptions = (tokenId: string, contractAddress: string, genesisId:
         queryKey: getTokenURIQueryKey(genesisId, contractAddress, tokenId),
         queryFn: () => getTokenURI(tokenId, contractAddress, thor),
         staleTime: 1 * 60 * 60 * 1000,
-        gcTime: 24 * 60 * 60 * 1000,
     })
 }
 

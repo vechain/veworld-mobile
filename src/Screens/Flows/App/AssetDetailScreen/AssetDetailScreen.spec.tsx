@@ -100,6 +100,7 @@ const mockedFeatureFlags: FeatureFlags = {
             enabled: false,
             collectibles: { enabled: false },
             tokens: { enabled: false },
+            send: { enabled: false },
         },
     },
     smartWalletFeature: {

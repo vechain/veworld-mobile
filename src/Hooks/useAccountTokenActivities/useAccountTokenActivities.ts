@@ -50,7 +50,6 @@ export const useAccountTokenActivities = (token: FungibleToken) => {
         getNextPageParam: (lastPage, pages) => {
             return lastPage.pagination.hasNext ? pages.length : undefined
         },
-        gcTime: 5 * 60 * 1000,
         select(_data) {
             return {
                 data: _data.pages

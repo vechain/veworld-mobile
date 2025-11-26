@@ -24,6 +24,7 @@ import { KeyPair } from "./ExternalDapps"
  * @property {number|null} lastNotificationReminder
  * @property {string[]} removedNotificationTags
  * @property {KeyPair|undefined} signKeyPair - Key pair for signing session tokens for external dapps connections
+ * @property {boolean} hideStellaPayBottomSheet - Whether to hide the Stella Pay bottom sheet
  */
 
 export interface UserPreferenceState {
@@ -59,6 +60,7 @@ export interface UserPreferenceState {
     indexerUrls?: {
         [genesisId: string]: string
     }
+    hideStellaPayBottomSheet?: boolean
 }
 
 export const initialUserPreferencesState: UserPreferenceState = {
@@ -86,6 +88,7 @@ export const initialUserPreferencesState: UserPreferenceState = {
     signKeyPair: undefined,
     notificationCenterUrl: undefined,
     developerMenuUnlocked: false,
+    hideStellaPayBottomSheet: false,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -220,6 +223,9 @@ export const UserPreferencesSlice = createSlice({
             if (url) state.indexerUrls[genesisId] = url
             else delete state.indexerUrls[genesisId]
         },
+        setHideStellaPayBottomSheet: (state, action: PayloadAction<boolean>) => {
+            state.hideStellaPayBottomSheet = action.payload
+        },
     },
 })
 
@@ -250,4 +256,5 @@ export const {
     setNotificationCenterUrl,
     setDeveloperMenuUnlocked,
     setIndexerUrl,
+    setHideStellaPayBottomSheet,
 } = UserPreferencesSlice.actions

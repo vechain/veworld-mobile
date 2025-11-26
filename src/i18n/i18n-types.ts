@@ -1761,6 +1761,10 @@ type RootTranslation = {
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: string
 	/**
+	 * B​u​y​ ​n​e​w​ ​c​o​l​l​e​c​t​i​b​l​e​s
+	 */
+	BUY_NEW_COLLECTIBLES: string
+	/**
 	 * C​a​c​h​e​ ​c​l​e​a​r​e​d
 	 */
 	CACHE_CLEARED: string
@@ -1866,6 +1870,10 @@ type RootTranslation = {
 	 * H​i​d​e​ ​b​a​c​k
 	 */
 	COLLECTIONS_HIDE_BACK: string
+	/**
+	 * S​e​e​ ​C​o​l​l​e​c​t​i​o​n​s
+	 */
+	COLLECTIONS_SEE_ALL: string
 	/**
 	 * V​i​e​w​ ​h​i​d​d​e​n
 	 */
@@ -2096,10 +2104,6 @@ type RootTranslation = {
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
 	COMMON_MARKET_CAP: string
-	/**
-	 * M​a​x
-	 */
-	COMMON_MAX: string
 	/**
 	 * N​.​A​.
 	 */
@@ -3719,6 +3723,10 @@ type RootTranslation = {
 	 */
 	PAID: string
 	/**
+	 * P​e​n​d​i​n​g​.​.​.
+	 */
+	PENDING_ACTIVITY: string
+	/**
 	 * P​I​N​ ​C​o​d​e
 	 */
 	PIN_CODE: string
@@ -4289,10 +4297,6 @@ type RootTranslation = {
 	 */
 	SEND_AMOUNT: string
 	/**
-	 * A​m​o​u​n​t​ ​e​x​c​e​e​d​s​ ​b​a​l​a​n​c​e
-	 */
-	SEND_AMOUNT_EXCEEDS_BALANCE: string
-	/**
 	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e​:​ ​{​p​e​r​c​e​n​t​a​g​e​}
 	 * @param {string} percentage
 	 */
@@ -4547,10 +4551,6 @@ type RootTranslation = {
 	 */
 	SEND_TO: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d
-	 */
-	SEND_TOKEN_SELECT: string
-	/**
 	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
@@ -4592,10 +4592,6 @@ type RootTranslation = {
 	 * S​e​n​d​i​n​g​ ​V​O​T​3
 	 */
 	SEND_VOT3_TITLE: string
-	/**
-	 * V​O​T​3​ ​t​o​k​e​n​s​ ​s​h​o​u​l​d​n​'​t​ ​b​e​ ​s​e​n​t​ ​d​i​r​e​c​t​l​y​ ​t​o​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​.​ ​V​O​T​3​ ​c​a​n​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​t​o​ ​B​3​T​R​ ​t​o​k​e​n​s​ ​a​n​d​ ​s​e​n​t​ ​a​f​t​e​r​w​a​r​d​s​.
-	 */
-	SEND_VOT3_WARNING: string
 	/**
 	 * V​e​c​h​a​i​n​ ​f​a​c​i​l​i​t​a​t​e​s​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​u​s​i​n​g​ ​V​T​H​O​ ​a​s​ ​t​h​e​ ​p​a​y​m​e​n​t​ ​m​e​d​i​u​m​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​O​u​r​ ​M​A​X​ ​c​a​l​c​u​l​a​t​i​o​n​ ​m​e​t​h​o​d​ ​w​i​l​l​ ​d​e​d​u​c​t​ ​a​ ​p​r​e​d​e​f​i​n​e​d​ ​b​a​s​e​ ​f​e​e​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​g​a​s
 	 */
@@ -4829,6 +4825,10 @@ type RootTranslation = {
 	 * S​t​a​t​u​s
 	 */
 	STATUS: string
+	/**
+	 * D​o​n​’​t​ ​s​h​o​w​ ​m​e​ ​t​h​i​s​ ​a​g​a​i​n
+	 */
+	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: string
 	/**
 	 * E​a​r​n
 	 */
@@ -5284,6 +5284,14 @@ type RootTranslation = {
 	 */
 	TOUCH_ID: string
 	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​d​o​n​e
+	 */
+	TRANSACTION_DONE: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​a​i​l​e​d
+	 */
+	TRANSACTION_FAILED: string
+	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​e​e
 	 */
 	TRANSACTION_FEE: string
@@ -5291,6 +5299,10 @@ type RootTranslation = {
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​I​D
 	 */
 	TRANSACTION_ID: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​n​ ​p​r​o​g​r​e​s​s
+	 */
+	TRANSACTION_IN_PROGRESS: string
 	/**
 	 * T​y​p​e
 	 */
@@ -5642,6 +5654,10 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * Coinbase not available
+	 */
+	COINBASE_NOT_AVAILABLE: string
 }
 
 export type TranslationFunctions = {
@@ -7355,6 +7371,10 @@ Thanks for your patience!
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: () => LocalizedString
 	/**
+	 * Buy new collectibles
+	 */
+	BUY_NEW_COLLECTIBLES: () => LocalizedString
+	/**
 	 * Cache cleared
 	 */
 	CACHE_CLEARED: () => LocalizedString
@@ -7459,6 +7479,10 @@ This action is irreversible.
 	 * Hide back
 	 */
 	COLLECTIONS_HIDE_BACK: () => LocalizedString
+	/**
+	 * See Collections
+	 */
+	COLLECTIONS_SEE_ALL: () => LocalizedString
 	/**
 	 * View hidden
 	 */
@@ -7687,10 +7711,6 @@ This action is irreversible.
 	 * Market Cap
 	 */
 	COMMON_MARKET_CAP: () => LocalizedString
-	/**
-	 * Max
-	 */
-	COMMON_MAX: () => LocalizedString
 	/**
 	 * N.A.
 	 */
@@ -9285,6 +9305,10 @@ This action is irreversible.
 	 */
 	PAID: () => LocalizedString
 	/**
+	 * Pending...
+	 */
+	PENDING_ACTIVITY: () => LocalizedString
+	/**
 	 * PIN Code
 	 */
 	PIN_CODE: () => LocalizedString
@@ -9849,10 +9873,6 @@ This action is irreversible.
 	 */
 	SEND_AMOUNT: () => LocalizedString
 	/**
-	 * Amount exceeds balance
-	 */
-	SEND_AMOUNT_EXCEEDS_BALANCE: () => LocalizedString
-	/**
 	 * Balance percentage: {percentage}
 	 */
 	SEND_BALANCE_PERCENTAGE: (arg: { percentage: string }) => LocalizedString
@@ -10105,10 +10125,6 @@ This action is irreversible.
 	 */
 	SEND_TO: () => LocalizedString
 	/**
-	 * Select the token you wish to send
-	 */
-	SEND_TOKEN_SELECT: () => LocalizedString
-	/**
 	 * Select the token asset you wish to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
@@ -10149,10 +10165,6 @@ Are you sure you want to continue?
 	 * Sending VOT3
 	 */
 	SEND_VOT3_TITLE: () => LocalizedString
-	/**
-	 * VOT3 tokens shouldn't be sent directly to another wallet. VOT3 can be converted to B3TR tokens and sent afterwards.
-	 */
-	SEND_VOT3_WARNING: () => LocalizedString
 	/**
 	 * Vechain facilitates transactions using VTHO as the payment medium for transaction fees. Our MAX calculation method will deduct a predefined base fee for transaction gas
 	 */
@@ -10380,6 +10392,10 @@ Here's what it's all about:
 	 * Status
 	 */
 	STATUS: () => LocalizedString
+	/**
+	 * Don’t show me this again
+	 */
+	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: () => LocalizedString
 	/**
 	 * Earn
 	 */
@@ -10832,6 +10848,14 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	TOUCH_ID: () => LocalizedString
 	/**
+	 * Transaction done
+	 */
+	TRANSACTION_DONE: () => LocalizedString
+	/**
+	 * Transaction failed
+	 */
+	TRANSACTION_FAILED: () => LocalizedString
+	/**
 	 * Transaction fee
 	 */
 	TRANSACTION_FEE: () => LocalizedString
@@ -10839,6 +10863,10 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Transaction ID
 	 */
 	TRANSACTION_ID: () => LocalizedString
+	/**
+	 * Transaction in progress
+	 */
+	TRANSACTION_IN_PROGRESS: () => LocalizedString
 	/**
 	 * Type
 	 */
@@ -11186,7 +11214,11 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	/**
 	 * Yesterday
 	 */
-	YESTERDAY: () => LocalizedString
+	YESTERDAY: () => LocalizedString,
+	/**
+	 * Coinbase not available
+	 */
+	COINBASE_NOT_AVAILABLE: () => LocalizedString
 }
 
 export type Formatters = {

@@ -12,7 +12,13 @@ const metadataParser = (value: NFTMetadata | undefined | null) => {
     }, {}) as NFTMetadata
 }
 
-export const useCollectibleMetadata = ({ address, tokenId }: { address: string; tokenId: string }) => {
+export const useCollectibleMetadata = ({
+    address,
+    tokenId,
+}: {
+    address: string | undefined
+    tokenId: string | undefined
+}) => {
     const { data: uri, isLoading } = useTokenURI({ address, tokenId })
 
     const options = useMemo(
