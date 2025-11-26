@@ -1,10 +1,15 @@
+import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
-import React, { useState } from "react"
 import Animated from "react-native-reanimated"
-import { AnimatedFilterChips } from "../../../AnimatedFilterChips"
-import { useThemedStyles } from "~Hooks"
+import { BaseSpacer } from "~Components/Base"
+import { GenericAccountCard } from "~Components/Reusable/AccountCard"
 import { COLORS, ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { selectAccounts, useAppSelector } from "~Storage/Redux"
+import AddressUtils from "~Utils/AddressUtils"
+import { AnimatedFilterChips } from "../../../AnimatedFilterChips"
+import { AccountWithDevice } from "~Model"
 
 type FilterItem = "recent" | "accounts" | "contacts"
 
@@ -12,9 +17,33 @@ const FILTER_ITEMS: FilterItem[] = ["recent", "accounts", "contacts"]
 
 export const KnownAddressesList = () => {
     const [selectedItem, setSelectedItem] = useState<FilterItem>("recent")
+    const [selectedAccount, setSelectedAccount] = useState<string | undefined>(undefined)
+
+    const accounts = useAppSelector(selectAccounts)
+    // const contacts = useAppSelector(selectKnownContacts)
 
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
+
+    const renderItem = useCallback(
+        ({ item }: { item: AccountWithDevice }) => {
+            const isSelected = AddressUtils.compareAddresses(selectedAccount, item.address)
+
+            return (
+                <GenericAccountCard
+                    accountName={item.alias}
+                    accountAddress={item.address}
+                    onPress={({ accountAddress }) => {
+                        setSelectedAccount(accountAddress)
+                    }}
+                    selected={isSelected}
+                />
+            )
+        },
+        [selectedAccount],
+    )
+
+    const renderItemSeparator = useCallback(() => <BaseSpacer height={8} />, [])
 
     return (
         <Animated.View style={styles.root}>
@@ -30,6 +59,12 @@ export const KnownAddressesList = () => {
                     setSelectedItem(item)
                 }}
             />
+            <Animated.FlatList
+                data={accounts}
+                keyExtractor={item => item.address}
+                renderItem={renderItem}
+                ItemSeparatorComponent={renderItemSeparator}
+            />
         </Animated.View>
     )
 }
@@ -41,7 +76,7 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.WHITE,
             borderRadius: 16,
             padding: 24,
-            gap: 16,
+            gap: 24,
         },
         filterContainer: {
             flex: 1,
