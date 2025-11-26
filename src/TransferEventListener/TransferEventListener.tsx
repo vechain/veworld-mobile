@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo } from "react"
 import { useReceiptProcessor } from "~Components/Providers/ReceiptProcessorProvider"
 import { ERROR_EVENTS } from "~Constants"
-import { useIndexerClient } from "~Hooks/useIndexerClient"
+import { components } from "~Generated/indexer/schema"
+import { IndexerClient, useIndexerClient } from "~Hooks/useIndexerClient"
 import { useStargateConfig } from "~Hooks/useStargateConfig"
 import { useStargateInvalidation } from "~Hooks/useStargateInvalidation"
 import { useThorClient } from "~Hooks/useThorClient"
@@ -24,6 +25,32 @@ import { handleNFTTransfers, handleTokenTransfers } from "./Handlers"
 import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
 import { useStateReconciliation } from "./Hooks"
 import { useBeatWebsocket } from "./Hooks/useBeatWebsocket"
+
+const getAllTransfers = async (indexer: IndexerClient, accounts: string[], blockNumber: number) => {
+    let results: components["schemas"]["IndexedTransferEvent"][] = []
+    let page = 0
+    while (true) {
+        const transfers = await indexer
+            .GET("/api/v1/transfers/forBlock", {
+                params: {
+                    query: {
+                        addresses: accounts,
+                        blockNumber: blockNumber,
+                        direction: "ASC",
+                        page,
+                        size: MAX_PAGE_SIZE,
+                    },
+                },
+            })
+            .then(res => res.data!)
+
+        results = results.concat(transfers.data)
+        if (!transfers.pagination.hasNext || transfers.data.length === 0) break
+        page++
+    }
+
+    return results
+}
 
 export const TransferEventListener: React.FC = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -98,24 +125,16 @@ export const TransferEventListener: React.FC = () => {
                 await new Promise(resolve => setTimeout(resolve, 5000))
 
                 // Get transfers from indexer
-                const transfers = await indexer
-                    .GET("/api/v1/transfers/forBlock", {
-                        params: {
-                            query: {
-                                addresses: relevantAccounts.slice(0, 20).map(acc => acc.address),
-                                blockNumber: beat.number,
-                                direction: "ASC",
-                                page: 0,
-                                size: MAX_PAGE_SIZE,
-                            },
-                        },
-                    })
-                    .then(res => res.data!)
+                const transfers = await getAllTransfers(
+                    indexer,
+                    relevantAccounts.slice(0, 20).map(acc => acc.address),
+                    beat.number,
+                )
 
-                if (transfers.data.length <= 0) return
+                if (transfers.length <= 0) return
 
                 // ~ NFT TRANSFER
-                const nftTransfers = filterNFTTransferEvents(transfers.data, blackListedCollections)
+                const nftTransfers = filterNFTTransferEvents(transfers, blackListedCollections)
                 await handleNFTTransfers({
                     selectedAccount,
                     visibleAccounts: relevantAccounts,
@@ -125,8 +144,8 @@ export const TransferEventListener: React.FC = () => {
                 })
 
                 // ~ FUNGIBLE TOKEN TRANSFER
-                const tokenTransfers = filterTransferEventsByType(transfers.data, "FUNGIBLE_TOKEN")
-                const vetTransfers = filterTransferEventsByType(transfers.data, "VET")
+                const tokenTransfers = filterTransferEventsByType(transfers, "FUNGIBLE_TOKEN")
+                const vetTransfers = filterTransferEventsByType(transfers, "VET")
 
                 handleTokenTransfers({
                     selectedAccount,
