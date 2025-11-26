@@ -2,7 +2,13 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { ReactElement, useCallback, useMemo, useState } from "react"
-import Animated, { EntryAnimationsValues, ExitAnimationsValues, useSharedValue } from "react-native-reanimated"
+import Animated, {
+    EntryAnimationsValues,
+    ExitAnimationsValues,
+    SlideInLeft,
+    SlideOutLeft,
+    useSharedValue,
+} from "react-native-reanimated"
 import { BaseButton, BaseText, BaseView, Layout } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
 import { useTheme } from "~Hooks"
@@ -22,6 +28,11 @@ type SendFlowState = {
 }
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
+
+const ORDER: SendFlowStep[] = ["insertAddress", "selectAmount", "summary"]
+
+const DefaultInAnimation = SlideInLeft.duration(0).build()
+const DefaultOutAnimation = SlideOutLeft.duration(0).build()
 
 export const SendScreen = (): ReactElement => {
     const { LL } = useI18nContext()
@@ -69,7 +80,7 @@ export const SendScreen = (): ReactElement => {
     }, [])
 
     const previousStep = useSharedValue<typeof step | undefined>(undefined)
-    const nextStep = useSharedValue<typeof step | undefined>()
+    const nextStep = useSharedValue<typeof step | undefined>(undefined)
 
     const goToNext = useCallback(() => {
         switch (step) {
@@ -99,101 +110,35 @@ export const SendScreen = (): ReactElement => {
         }
     }, [nextStep, previousStep, step])
 
-    const SelectAmountExitAnimation = useCallback(
-        (values: ExitAnimationsValues) => {
-            "worklet"
-            return nextStep.value === "summary" ? ExitingToLeftAnimation(values) : ExitingToRightAnimation(values)
-        },
-        [nextStep.value],
-    )
-
-    const SelectAmountEnteringAnimation = useCallback(
+    const Entering = useCallback(
         (values: EntryAnimationsValues) => {
             "worklet"
-            return previousStep.value === "insertAddress"
-                ? EnteringFromRightAnimation(values)
-                : EnteringFromLeftAnimation(values)
+            if (!previousStep.value || !nextStep.value)
+                return {
+                    initialValues: values,
+                    animations: {},
+                }
+            if (ORDER.indexOf(nextStep.value!) > ORDER.indexOf(previousStep.value!))
+                return EnteringFromRightAnimation(values)
+            return EnteringFromLeftAnimation(values)
         },
-        [previousStep.value],
+        [nextStep.value, previousStep.value],
     )
 
-    const renderStep2 = useMemo(() => {
-        // TODO(send-flow-v2): Implement proper step types based on the logic implemented in each child step component
-        switch (step) {
-            case "insertAddress":
-                return (
-                    <Animated.View
-                        style={{ flex: 1, backgroundColor: "green" }}
-                        // entering={SlideInLeft.duration(1000)}
-                        // exiting={SlideOutRight.duration(1000)}
-
-                        // Always enter from the right because it can't start from left
-                        entering={!previousStep.value ? undefined : EnteringFromLeftAnimation}
-                        exiting={ExitingToLeftAnimation}
-                        key={step}>
-                        {/* TODO(send-flow-v2): Implement step1 logic */}
-                        <BaseView
-                            style={{
-                                width: "100%",
-                                height: 300,
-                                flexDirection: "row",
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}>
-                            <BaseText typographyFont="biggerTitle">1</BaseText>
-                        </BaseView>
-                    </Animated.View>
-                )
-            case "selectAmount":
-                return (
-                    <Animated.View
-                        style={{ flex: 1, backgroundColor: "red" }}
-                        // entering={
-                        //     previousStep.value === "insertAddress"
-                        //         ? EnteringFromRightAnimation
-                        //         : EnteringFromLeftAnimation
-                        // }
-                        entering={SelectAmountEnteringAnimation}
-                        // exiting={nextStep.value === "summary" ? ExitingToLeftAnimation : ExitingToRightAnimation}
-                        exiting={SelectAmountExitAnimation}
-                        key={step}>
-                        {/* TODO(send-flow-v2): Implement step2 logic */}
-                        <BaseView
-                            style={{
-                                width: "100%",
-                                height: 300,
-                                flexDirection: "row",
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}>
-                            <BaseText>2</BaseText>
-                        </BaseView>
-                    </Animated.View>
-                )
-            case "summary":
-                return (
-                    <Animated.View
-                        style={{ flex: 1, backgroundColor: "blue" }}
-                        entering={EnteringFromRightAnimation}
-                        exiting={ExitingToRightAnimation}
-                        key={step}>
-                        {/* TODO(send-flow-v2): Implement step3 logic */}
-                        <BaseView
-                            style={{
-                                width: "100%",
-                                height: 300,
-                                flexDirection: "row",
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}>
-                            <BaseText>3</BaseText>
-                        </BaseView>
-                    </Animated.View>
-                )
-            default:
-                return <BaseView flex={1} />
-        }
-    }, [SelectAmountEnteringAnimation, SelectAmountExitAnimation, previousStep.value, step])
+    const Exiting = useCallback(
+        (values: ExitAnimationsValues) => {
+            "worklet"
+            if (!previousStep.value || !nextStep.value)
+                return {
+                    initialValues: values,
+                    animations: {},
+                }
+            if (ORDER.indexOf(nextStep.value!) > ORDER.indexOf(previousStep.value!))
+                return ExitingToLeftAnimation(values)
+            return ExitingToRightAnimation(values)
+        },
+        [nextStep.value, previousStep.value],
+    )
 
     return (
         <Layout
@@ -203,7 +148,27 @@ export const SendScreen = (): ReactElement => {
             headerRightElement={headerRightElement}
             body={
                 <Animated.View style={{ flex: 1 }}>
-                    {renderStep2}
+                    <Animated.View
+                        style={{
+                            flex: 1,
+                            backgroundColor:
+                                step === "insertAddress" ? "green" : step === "selectAmount" ? "red" : "blue",
+                        }}
+                        entering={Entering}
+                        exiting={Exiting}
+                        key={step}>
+                        <BaseView
+                            style={{
+                                width: "100%",
+                                height: 300,
+                                flexDirection: "row",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}>
+                            <BaseText typographyFont="biggerTitle">{step}</BaseText>
+                        </BaseView>
+                    </Animated.View>
+
                     <BaseView flexDirection="row" gap={16}>
                         <BaseButton action={goToPrev} disabled={step === "insertAddress"}>
                             Go prev
