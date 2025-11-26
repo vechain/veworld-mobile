@@ -1818,6 +1818,10 @@ type RootTranslation = {
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: string
 	/**
+	 * C​o​i​n​b​a​s​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
+	 */
+	COINBASE_NOT_AVAILABLE: string
+	/**
 	 * A​v​a​t​a​r
 	 */
 	COLLECTIBLES_ACTION_AVATAR_ACTIVE: string
@@ -4543,6 +4547,30 @@ type RootTranslation = {
 	 */
 	SEND_RECEIVE_TAB_RECEIVE: string
 	/**
+	 * W​a​l​l​e​t​ ​a​d​d​r​e​s​s
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_LABEL: string
+	/**
+	 * I​n​v​a​l​i​d​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​,​ ​u​s​e​r​n​a​m​e​ ​o​r​ ​d​o​m​a​i​n
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_ERROR: string
+	/**
+	 * W​a​l​l​e​t​ ​o​r​ ​d​o​m​a​i​n
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER: string
+	/**
+	 * C​l​e​a​r
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: string
+	/**
+	 * P​a​s​t​e
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PASTE: string
+	/**
+	 * A​d​d​ ​t​h​i​s​ ​n​e​w​ ​a​d​d​r​e​s​s​ ​t​o​ ​m​y​ ​c​o​n​t​a​c​t​s
+	 */
+	SEND_RECEIVER_ADD_CONTACT_BTN: string
+	/**
 	 * S​c​a​n
 	 */
 	SEND_RECEIVE_TAB_SCAN: string
@@ -5654,10 +5682,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * Coinbase not available
-	 */
-	COINBASE_NOT_AVAILABLE: string
 }
 
 export type TranslationFunctions = {
@@ -7426,6 +7450,10 @@ Thanks for your patience!
 	 * No wallets available
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: () => LocalizedString
+	/**
+	 * Coinbase not available
+	 */
+	COINBASE_NOT_AVAILABLE: () => LocalizedString
 	/**
 	 * Avatar
 	 */
@@ -10117,6 +10145,30 @@ This action is irreversible.
 	 */
 	SEND_RECEIVE_TAB_RECEIVE: () => LocalizedString
 	/**
+	 * Wallet address
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_LABEL: () => LocalizedString
+	/**
+	 * Invalid wallet address, username or domain
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_ERROR: () => LocalizedString
+	/**
+	 * Wallet or domain
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Clear
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: () => LocalizedString
+	/**
+	 * Paste
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PASTE: () => LocalizedString
+	/**
+	 * Add this new address to my contacts
+	 */
+	SEND_RECEIVER_ADD_CONTACT_BTN: () => LocalizedString
+	/**
 	 * Scan
 	 */
 	SEND_RECEIVE_TAB_SCAN: () => LocalizedString
@@ -11214,11 +11266,7 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	/**
 	 * Yesterday
 	 */
-	YESTERDAY: () => LocalizedString,
-	/**
-	 * Coinbase not available
-	 */
-	COINBASE_NOT_AVAILABLE: () => LocalizedString
+	YESTERDAY: () => LocalizedString
 }
 
 export type Formatters = {
