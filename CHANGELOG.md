@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.12 (2025-11-26)</small>
+
+* build: init ([c0893d8](https://github.com/vechain/veworld-mobile/commit/c0893d8))
+* New send flow wrapper screen (#3568) ([3f39871](https://github.com/vechain/veworld-mobile/commit/3f39871)), closes [#3568](https://github.com/vechain/veworld-mobile/issues/3568)
+
 ## 2.5.0 (2025-11-21)
 
 * build: init ([d6a9102](https://github.com/vechain/veworld-mobile/commit/d6a9102))
