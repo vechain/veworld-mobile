@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { ReactElement, useCallback, useMemo, useState } from "react"
 import { BaseView, Layout } from "~Components"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
+import { SelectAmountSendComponent } from "./02-SelectAmountSendScreen/SelectAmountSendComponent"
 
 // TODO(send-flow-v2): Add proper step types based on the logic implemented in each child step component
-type SendFlowStep = "selectToken" | "insertAddress" | "selectAmount" | "summary"
+type SendFlowStep = "selectAmount" | "insertAddress" | "summary"
 
 type SendFlowState = {
     token?: FungibleTokenWithBalance
@@ -19,13 +20,17 @@ type SendFlowState = {
 }
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
+type RouteProps = NativeStackScreenProps<RootStackParamListHome, Routes.SEND_TOKEN>["route"]
 
 export const SendScreen = (): ReactElement => {
     const { LL } = useI18nContext()
     const theme = useTheme()
     const navigation = useNavigation<NavigationProps>()
-    const [step, setStep] = useState<SendFlowStep>("selectToken")
-    const [flowState, setFlowState] = useState<SendFlowState>({})
+    const route = useRoute<RouteProps>()
+    const [step, setStep] = useState<SendFlowStep>("selectAmount")
+    const [flowState, setFlowState] = useState<SendFlowState>({
+        token: route.params?.token,
+    })
 
     const handleClose = useCallback(() => {
         navigation.goBack()
@@ -36,62 +41,46 @@ export const SendScreen = (): ReactElement => {
         [handleClose],
     )
 
-    const goToInsertAddress = useCallback((token: FungibleTokenWithBalance) => {
+    const goToInsertAddress = useCallback((amount: string, token: FungibleTokenWithBalance) => {
         setFlowState(current => ({
             ...current,
+            amount,
             token,
-            // reset downstream state when token changes
+            // reset downstream state when amount/token changes
             address: undefined,
-            amount: undefined,
         }))
         setStep("insertAddress")
     }, [])
 
-    const goToSelectAmount = useCallback((address: string) => {
+    const goToSummary = useCallback((address: string) => {
         setFlowState(current => ({
             ...current,
             address,
-            // reset amount whenever address changes
-            amount: undefined,
-        }))
-        setStep("selectAmount")
-    }, [])
-
-    const goToSummary = useCallback((amount: string) => {
-        setFlowState(current => ({
-            ...current,
-            amount,
         }))
         setStep("summary")
     }, [])
 
-    const goBackToTokenSelection = useCallback(() => {
-        setStep("selectToken")
+    const goBackToSelectAmount = useCallback(() => {
+        setStep("selectAmount")
     }, [])
 
     const goBackToInsertAddress = useCallback(() => {
-        if (!flowState.token) {
-            setStep("selectToken")
-            return
-        }
         setStep("insertAddress")
-    }, [flowState.token])
+    }, [])
 
     const renderStep = useMemo(() => {
         // TODO(send-flow-v2): Implement proper step types based on the logic implemented in each child step component
         switch (step) {
-            case "selectToken":
-                return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step1 logic */}</BaseView>
+            case "selectAmount":
+                return <SelectAmountSendComponent token={flowState.token} onNext={goToInsertAddress} />
             case "insertAddress":
                 return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step2 logic */}</BaseView>
-            case "selectAmount":
-                return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step3 logic */}</BaseView>
             case "summary":
                 return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step4 logic */}</BaseView>
             default:
                 return <BaseView flex={1} />
         }
-    }, [step])
+    }, [step, flowState.token, goToInsertAddress])
 
     return (
         <Layout

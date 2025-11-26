@@ -1,5 +1,3 @@
-import { useNavigation } from "@react-navigation/native"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet, Text, TouchableOpacity, useWindowDimensions } from "react-native"
@@ -25,68 +23,59 @@ import {
     BaseTouchableBox,
     BaseView,
     FadeoutButton,
-    Layout,
     NumPad,
-    showErrorToast,
 } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { B3TR, COLORS, CURRENCY_FORMATS, CURRENCY_SYMBOLS, VeDelegate, VET, VOT3, VTHO } from "~Constants"
 import { ColorThemeType, typography } from "~Constants/Theme"
-import {
-    useAmountInput,
-    useBalances,
-    useCombineFiatBalances,
-    useFormatFiat,
-    useTheme,
-    useThemedStyles,
-    useTotalTokenBalance,
-} from "~Hooks"
+import { useAmountInput, useBalances, useCombineFiatBalances, useFormatFiat, useTheme, useThemedStyles } from "~Hooks"
 import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
 import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
-import { RootStackParamListHome, Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { selectCurrency, selectCurrencyFormat, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BigNutils, TransactionUtils } from "~Utils"
+import { AddressUtils, BigNutils } from "~Utils"
 import { formatFullPrecision, formatTokenAmount } from "~Utils/StandardizedFormatting"
 import { FungibleTokenWithBalance } from "~Model"
 import { useI18nContext } from "~i18n"
 
 const { defaults: defaultTypography } = typography
 
-type Props = NativeStackScreenProps<RootStackParamListHome, Routes.SELECT_AMOUNT_SEND>
+type SelectAmountSendComponentProps = {
+    token?: FungibleTokenWithBalance
+    onNext: (amount: string, token: FungibleTokenWithBalance) => void
+}
 
 const AnimatedText = Animated.createAnimatedComponent(Text)
 
-export const SelectAmountSendScreenV2 = ({ route }: Props) => {
-    const { address, token } = route.params
-
+export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendComponentProps) => {
     const { LL } = useI18nContext()
-    const nav = useNavigation()
     const { formatLocale } = useFormatFiat()
     const { width: screenWidth } = useWindowDimensions()
 
     const timer = useRef<NodeJS.Timeout | null>(null)
-    const isVTHO = useRef(token.symbol.toLowerCase() === VTHO.symbol.toLowerCase())
     const bottomSheetRef = useRef<BottomSheetModalMethods>(null)
 
     const currency = useAppSelector(selectCurrency)
     const currencyFormat = useAppSelector(selectCurrencyFormat)
     const availableTokens = useSendableTokensWithBalance()
 
+    const defaultToken = useMemo(() => {
+        if (token) return token
+        const vetToken = availableTokens.find(t => t.symbol === VET.symbol)
+        return vetToken || availableTokens[0]
+    }, [token, availableTokens])
+
     const [isInputInFiat, setIsInputInFiat] = useState(true)
     const [isError, setIsError] = useState(false)
-    const [isFeeAmountError, setIsFeeAmountError] = useState(false)
-    const [isFeeCalculationError, setIsFeeCalculationError] = useState(false)
-    const [areFeesLoading, setAreFeesLoading] = useState(false)
-    const [selectedToken, setSelectedToken] = useState<FungibleTokenWithBalance>(token)
-    const [internalToken, setInternalToken] = useState<FungibleTokenWithBalance>(token)
+    const [selectedToken, setSelectedToken] = useState<FungibleTokenWithBalance | undefined>(defaultToken)
+    const [internalToken, setInternalToken] = useState<FungibleTokenWithBalance | undefined>(defaultToken)
 
     const [tokenAmountFromFiat, setTokenAmountFromFiat] = useState("")
 
     const { input, setInput, removeInvalidCharacters } = useAmountInput()
 
     const { data: exchangeRate } = useExchangeRate({
-        id: getCoinGeckoIdBySymbol[selectedToken.symbol],
+        id: selectedToken ? getCoinGeckoIdBySymbol[selectedToken.symbol] : undefined,
         vs_currency: currency,
     })
 
@@ -97,21 +86,27 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
     }, [exchangeRate, isInputInFiat])
 
     const computedIcon = useMemo(() => {
+        if (!selectedToken) return VET.icon
         if (selectedToken.symbol === VET.symbol) return VET.icon
         if (selectedToken.symbol === VTHO.symbol) return VTHO.icon
         if (selectedToken.symbol === B3TR.symbol) return B3TR.icon
         if (selectedToken.symbol === VOT3.symbol) return VOT3.icon
         return selectedToken.icon
-    }, [selectedToken.icon, selectedToken.symbol])
+    }, [selectedToken])
 
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const { getGasFees, tokenTotalBalance, tokenTotalToHuman } = useTotalTokenBalance(
-        selectedToken,
-        isInputInFiat ? tokenAmountFromFiat : "1",
-        address,
-        selectedToken.decimals,
-    )
+    const tokenTotalBalance = useMemo(() => {
+        const currentToken = selectedToken || defaultToken
+        if (!currentToken) return "0"
+        return BigNutils(currentToken.balance.balance).toString
+    }, [selectedToken, defaultToken])
+
+    const tokenTotalToHuman = useMemo(() => {
+        const currentToken = selectedToken || defaultToken
+        if (!currentToken) return BigNutils("0")
+        return BigNutils(tokenTotalBalance).toHuman(currentToken.decimals)
+    }, [selectedToken, defaultToken, tokenTotalBalance])
 
     const fiatTotalBalance = useMemo(
         () => BigNutils().toCurrencyConversion(tokenTotalToHuman.toString, exchangeRate ?? 0),
@@ -125,6 +120,7 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
 
     const formattedConvertedAmount = useMemo(() => {
         if (!input || input === "0") return "0"
+        if (!selectedToken) return "0"
 
         if (isInputInFiat) {
             const tokenAmount = BigNutils().toTokenConversion(input, exchangeRate ?? 0).toString
@@ -137,15 +133,12 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
                 locale: formatLocale,
             })
         }
-    }, [exchangeRate, fiatHumanAmount.value, formatLocale, input, isInputInFiat, selectedToken.symbol])
+    }, [exchangeRate, fiatHumanAmount.value, formatLocale, input, isInputInFiat, selectedToken])
 
     const resetInput = useCallback(() => {
         setInput("")
         setTokenAmountFromFiat("")
         setIsError(false)
-        setIsFeeAmountError(false)
-        setIsFeeCalculationError(false)
-        setAreFeesLoading(false)
     }, [setInput])
 
     const handleToggleInputMode = useCallback(() => {
@@ -167,22 +160,23 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
         [internalToken, resetInput],
     )
 
-    const onFeesCalculationError = useCallback(() => {
-        showErrorToast({ text1: LL.ERROR_FEES_CALCULATION() })
-        resetInput()
-    }, [LL, resetInput])
-
-    const hasValidDecimalPlaces = useCallback((value: string): boolean => {
-        const parts = value.split(/[.,]/)
-        if (parts.length > 1) {
-            const decimalPart = parts[1]
-            return decimalPart.length <= 5
-        }
-        return true
-    }, [])
+    const hasValidDecimalPlaces = useCallback(
+        (value: string): boolean => {
+            const parts = value.split(/[.,]/)
+            if (parts.length > 1) {
+                const decimalPart = parts[1]
+                const maxDecimals = isInputInFiat ? 2 : 5
+                return decimalPart.length <= maxDecimals
+            }
+            return true
+        },
+        [isInputInFiat],
+    )
 
     const onChangeTextInput = useCallback(
         (newValue: string) => {
+            if (!selectedToken) return
+
             const _newValue = removeInvalidCharacters(newValue)
 
             if (!hasValidDecimalPlaces(_newValue)) {
@@ -200,115 +194,50 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
                 }
 
                 setIsError(false)
-                setIsFeeAmountError(false)
-                setIsFeeCalculationError(false)
                 setTokenAmountFromFiat("")
-                setAreFeesLoading(false)
                 return
             }
 
-            if (!isVTHO.current) {
-                const controlValue = isInputInFiat
-                    ? BigNutils().toTokenConversion(normalizedValue, exchangeRate ?? 0)
-                    : BigNutils(normalizedValue)
-                          .addTrailingZeros(selectedToken.decimals)
-                          .toHuman(selectedToken.decimals)
+            const controlValue = isInputInFiat
+                ? BigNutils().toTokenConversion(normalizedValue, exchangeRate ?? 0)
+                : BigNutils(normalizedValue).addTrailingZeros(selectedToken.decimals).toHuman(selectedToken.decimals)
 
-                const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(selectedToken.decimals)
+            const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(selectedToken.decimals)
 
-                if (controlValue.isBiggerThan(balanceToHuman.toString)) {
-                    setIsError(true)
-                    setIsFeeAmountError(false)
-                    setIsFeeCalculationError(false)
-                    HapticsService.triggerNotification({ level: "Error" })
-                } else {
-                    setIsError(false)
-                    setIsFeeAmountError(false)
-                    setIsFeeCalculationError(false)
-                }
-
-                setTokenAmountFromFiat(controlValue.toString)
+            if (controlValue.isBiggerThan(balanceToHuman.toString)) {
+                setIsError(true)
+                HapticsService.triggerNotification({ level: "Error" })
             } else {
-                setAreFeesLoading(true)
-
-                if (timer.current) {
-                    clearTimeout(timer.current)
-                    timer.current = null
-                }
-
-                timer.current = setTimeout(async () => {
-                    const controlValue = isInputInFiat
-                        ? BigNutils()
-                              .toTokenConversion(normalizedValue, exchangeRate ?? 0)
-                              .decimals(selectedToken.decimals)
-                        : BigNutils(normalizedValue)
-                              .addTrailingZeros(selectedToken.decimals)
-                              .toHuman(selectedToken.decimals)
-
-                    const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(selectedToken.decimals)
-
-                    if (controlValue.isBiggerThan(balanceToHuman.toString)) {
-                        setIsError(true)
-                        setIsFeeAmountError(false)
-                        setIsFeeCalculationError(false)
-                        setAreFeesLoading(false)
-                        HapticsService.triggerNotification({ level: "Error" })
-                        return
-                    }
-
-                    const clauses = TransactionUtils.prepareFungibleClause(controlValue.toString, token, address)
-                    const { gasFee, isError: feesError } = await getGasFees(clauses)
-
-                    if (feesError) {
-                        onFeesCalculationError()
-                        return
-                    }
-
-                    const gasFeeToHuman = gasFee.toHuman(VTHO.decimals)
-                    const fiatToToken = controlValue.toString
-                    const amountPlusFees = controlValue.plus(gasFeeToHuman.toString)
-
-                    if (amountPlusFees.isBiggerThan(balanceToHuman.toString)) {
-                        setIsFeeAmountError(true)
-                        setIsError(false)
-                        setIsFeeCalculationError(false)
-                        HapticsService.triggerNotification({ level: "Error" })
-                    } else {
-                        setIsError(false)
-                        setIsFeeAmountError(false)
-                        setIsFeeCalculationError(false)
-                    }
-
-                    setTokenAmountFromFiat(fiatToToken)
-                    setAreFeesLoading(false)
-                }, 500)
+                setIsError(false)
             }
+
+            setTokenAmountFromFiat(controlValue.toString)
         },
         [
-            address,
             exchangeRate,
-            getGasFees,
             hasValidDecimalPlaces,
             isInputInFiat,
-            onFeesCalculationError,
             removeInvalidCharacters,
             selectedToken,
             setInput,
             tokenTotalBalance,
-            token,
         ],
     )
 
-    const truncateToMaxDecimals = useCallback((value: string): string => {
-        const parts = value.split(/([.,])/)
-        if (parts.length >= 3) {
-            const integerPart = parts[0]
-            const separator = parts[1]
-            const decimalPart = parts[2]
-            return `${integerPart}${separator}${decimalPart.substring(0, 5)}`
-        }
-        return value
-    }, [])
+    const truncateToMaxDecimals = useCallback(
+        (value: string): string => {
+            const parts = value.split(/([.,])/)
+            if (parts.length >= 3) {
+                const integerPart = parts[0]
+                const separator = parts[1]
+                const decimalPart = parts[2]
+                const maxDecimals = isInputInFiat ? 2 : 5
+                return `${integerPart}${separator}${decimalPart.substring(0, maxDecimals)}`
+            }
+            return value
+        },
+        [isInputInFiat],
+    )
 
     const handleOnMaxPress = useCallback(async () => {
         const rawValue = removeInvalidCharacters(isInputInFiat ? fiatTotalBalance.value : tokenTotalToHuman.toString)
@@ -316,12 +245,6 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
 
         setInput(newValue)
         setTokenAmountFromFiat(tokenTotalToHuman.toString)
-
-        if (isVTHO.current) {
-            setIsFeeAmountError(true)
-            setIsError(false)
-            setIsFeeCalculationError(false)
-        }
     }, [
         fiatTotalBalance.value,
         isInputInFiat,
@@ -336,23 +259,22 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
      * Nav params: If user has FIAT active send the TOKEN amount calculated from FIAT,
      * otherwise send the input value (human readable token value)
      */
-    const goToInsertAddress = useCallback(async () => {
-        nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
-            token: selectedToken,
-            amount: isInputInFiat ? tokenAmountFromFiat : input,
-            address,
-        })
-    }, [address, input, isInputInFiat, nav, selectedToken, tokenAmountFromFiat])
+    const handleNext = useCallback(() => {
+        if (!selectedToken) return
+        const amount = isInputInFiat ? tokenAmountFromFiat : input
+        onNext(amount, selectedToken)
+    }, [input, isInputInFiat, onNext, selectedToken, tokenAmountFromFiat])
 
     const tokenAmountCard = theme.colors.sendScreen.tokenAmountCard
 
     const tokenBalance = useMemo(() => {
+        if (!selectedToken) return ""
         const humanBalance = BigNutils(selectedToken.balance.balance).toHuman(selectedToken.decimals ?? 0)
         return formatFullPrecision(humanBalance.toString, {
             locale: formatLocale,
             tokenSymbol: selectedToken.symbol,
         })
-    }, [formatLocale, selectedToken.balance.balance, selectedToken.decimals, selectedToken.symbol])
+    }, [formatLocale, selectedToken])
 
     const formattedInputDisplay = useMemo(() => {
         if (!input || input === "0") return "0"
@@ -430,180 +352,159 @@ export const SelectAmountSendScreenV2 = ({ route }: Props) => {
         }
     }, [inputLength, availableWidth])
 
+    // Return early if no token available yet (after all hooks)
+    if (!selectedToken) {
+        return <BaseView flex={1} />
+    }
+
+    // After the check, we know selectedToken is defined
+    const currentToken = selectedToken
+
     return (
         <>
-            <Layout
-                safeAreaTestID="Select_Amount_Send_Screen"
-                title={LL.SEND_TOKEN_TITLE()}
-                noStaticBottomPadding
-                body={
-                    <BaseView style={styles.tokenAmountCard} bg={tokenAmountCard.background} mb={48}>
-                        <BaseView alignItems="center" gap={8}>
-                            <BaseView style={styles.inputContainer}>
-                                {isInputInFiat && (
-                                    <Animated.View
-                                        entering={FadeInLeft.duration(300)}
-                                        exiting={FadeOutLeft.duration(200)}>
-                                        <BaseText
-                                            typographyFont="headerTitleMedium"
-                                            color={isError ? theme.colors.danger : theme.colors.text}
-                                            style={styles.currencySymbol}>
-                                            {CURRENCY_SYMBOLS[currency]}
-                                        </BaseText>
-                                    </Animated.View>
-                                )}
-                                <AnimatedText
-                                    key={isInputInFiat ? "fiat" : "token"}
-                                    entering={FadeIn.duration(300)}
-                                    style={[
-                                        styles.animatedInput,
-                                        {
-                                            color: isError ? theme.colors.danger : theme.colors.text,
-                                        },
-                                        animatedInputStyle,
-                                    ]}
-                                    testID="SendScreen_amountInput">
-                                    {formattedInputDisplay}
-                                </AnimatedText>
-                                {!isInputInFiat && (
-                                    <Animated.View
-                                        entering={FadeInRight.duration(300)}
-                                        exiting={FadeOutRight.duration(200)}>
-                                        <BaseText
-                                            typographyFont="subSubTitleMedium"
-                                            color={isError ? theme.colors.danger : theme.colors.text}
-                                            style={styles.tokenSymbolRight}>
-                                            {selectedToken.symbol}
-                                        </BaseText>
-                                    </Animated.View>
-                                )}
-                            </BaseView>
-                            {exchangeRate ? (
-                                <BaseTouchable action={handleToggleInputMode} haptics="Light" disabled={isError}>
-                                    <BaseView flexDirection="row" alignItems="center" gap={4}>
-                                        {isError ? (
-                                            <BaseText color={theme.colors.danger} typographyFont="captionMedium">
-                                                {isFeeAmountError
-                                                    ? LL.SEND_INSUFFICIENT_GAS()
-                                                    : LL.SEND_AMOUNT_EXCEEDS_BALANCE()}
-                                            </BaseText>
-                                        ) : (
-                                            <>
-                                                {!isInputInFiat && (
-                                                    <Animated.View
-                                                        entering={FadeIn.duration(300)}
-                                                        exiting={FadeOut.duration(200)}>
-                                                        <BaseText
-                                                            color={theme.colors.textLightish}
-                                                            typographyFont="bodySemiBold">
-                                                            {CURRENCY_SYMBOLS[currency]}
-                                                        </BaseText>
-                                                    </Animated.View>
-                                                )}
-                                                <Animated.View
-                                                    key={isInputInFiat ? "token-conv" : "fiat-conv"}
-                                                    entering={FadeIn.duration(300)}>
-                                                    <BaseText
-                                                        color={theme.colors.textLightish}
-                                                        typographyFont="bodySemiBold">
-                                                        {formattedConvertedAmount}
-                                                    </BaseText>
-                                                </Animated.View>
-                                                {isInputInFiat && (
-                                                    <Animated.View
-                                                        entering={FadeIn.duration(300)}
-                                                        exiting={FadeOut.duration(200)}>
-                                                        <BaseText
-                                                            color={theme.colors.textLightish}
-                                                            testID="SendScreen_convertedSymbol"
-                                                            typographyFont="bodySemiBold">
-                                                            {selectedToken.symbol}
-                                                        </BaseText>
-                                                    </Animated.View>
-                                                )}
-                                            </>
-                                        )}
-                                        {!isError && (
-                                            <>
-                                                <BaseSpacer width={2} />
-                                                <BaseIcon
-                                                    name="icon-arrow-up-down"
-                                                    size={12}
-                                                    color={theme.colors.textLightish}
-                                                />
-                                            </>
-                                        )}
-                                    </BaseView>
-                                </BaseTouchable>
-                            ) : (
-                                isError && (
-                                    <BaseText color={theme.colors.danger} typographyFont="captionMedium">
-                                        {isFeeAmountError
-                                            ? LL.SEND_INSUFFICIENT_GAS()
-                                            : LL.SEND_AMOUNT_EXCEEDS_BALANCE()}
-                                    </BaseText>
-                                )
-                            )}
-                        </BaseView>
-                        <BaseSpacer height={32} />
-                        <TouchableOpacity onPress={handleOpenTokenSelector}>
-                            <BaseView style={styles.tokenSelector} mx={18}>
-                                <BaseView flexDirection="row" alignItems="center" gap={8}>
-                                    <BaseIcon
-                                        name="icon-chevrons-up-down"
-                                        size={16}
-                                        color={tokenAmountCard.tokenSelectIcon}
-                                    />
-                                    <BaseView flexDirection="row" alignItems="center" gap={8}>
-                                        <TokenImage icon={computedIcon} iconSize={24} rounded={true} />
-                                        <BaseText
-                                            typographyFont="bodySemiBold"
-                                            color={tokenAmountCard.tokenSelectorText}>
-                                            {tokenBalance}
-                                        </BaseText>
-                                    </BaseView>
-                                </BaseView>
-                                <BaseTouchable action={handleOnMaxPress} style={styles.maxButton}>
-                                    <BaseText typographyFont="captionSemiBold" color={tokenAmountCard.maxButtonText}>
-                                        {LL.COMMON_MAX()}
-                                    </BaseText>
-                                </BaseTouchable>
-                            </BaseView>
-                        </TouchableOpacity>
-                        <BaseSpacer height={24} />
-                        <NumPad
-                            onDigitPress={digit => onChangeTextInput(input + digit)}
-                            onDigitDelete={() => onChangeTextInput(input.slice(0, -1))}
-                            typographyFont="headerTitleMedium"
-                            showDecimal
-                        />
+            <BaseView style={styles.tokenAmountCard} bg={tokenAmountCard.background} mb={48}>
+                <BaseView alignItems="center" gap={8}>
+                    <BaseView style={styles.inputContainer}>
+                        {isInputInFiat && (
+                            <Animated.View entering={FadeInLeft.duration(300)} exiting={FadeOutLeft.duration(200)}>
+                                <BaseText
+                                    typographyFont="headerTitleMedium"
+                                    color={isError ? theme.colors.danger : theme.colors.text}
+                                    style={styles.currencySymbol}>
+                                    {CURRENCY_SYMBOLS[currency]}
+                                </BaseText>
+                            </Animated.View>
+                        )}
+                        <AnimatedText
+                            key={isInputInFiat ? "fiat" : "token"}
+                            entering={FadeIn.duration(300)}
+                            style={[
+                                styles.animatedInput,
+                                {
+                                    color: isError ? theme.colors.danger : theme.colors.text,
+                                },
+                                animatedInputStyle,
+                            ]}
+                            testID="SendScreen_amountInput">
+                            {formattedInputDisplay}
+                        </AnimatedText>
+                        {!isInputInFiat && (
+                            <Animated.View entering={FadeInRight.duration(300)} exiting={FadeOutRight.duration(200)}>
+                                <BaseText
+                                    typographyFont="subSubTitleMedium"
+                                    color={isError ? theme.colors.danger : theme.colors.text}
+                                    style={styles.tokenSymbolRight}>
+                                    {currentToken.symbol}
+                                </BaseText>
+                            </Animated.View>
+                        )}
                     </BaseView>
-                }
-                footer={
-                    <FadeoutButton
-                        testID="next-button"
-                        title={LL.COMMON_BTN_NEXT()}
-                        disabled={
-                            isError ||
-                            isFeeCalculationError ||
-                            input === "" ||
-                            BigNutils(input).isZero ||
-                            areFeesLoading
-                        }
-                        action={goToInsertAddress}
-                        bottom={0}
-                        mx={0}
-                        width={"auto"}
-                    />
-                }
+                    {exchangeRate ? (
+                        <BaseTouchable action={handleToggleInputMode} haptics="Light" disabled={isError}>
+                            <BaseView flexDirection="row" alignItems="center" gap={4}>
+                                {isError ? (
+                                    <BaseText color={theme.colors.danger} typographyFont="captionMedium">
+                                        {LL.SEND_AMOUNT_EXCEEDS_BALANCE()}
+                                    </BaseText>
+                                ) : (
+                                    <>
+                                        {!isInputInFiat && (
+                                            <Animated.View
+                                                entering={FadeIn.duration(300)}
+                                                exiting={FadeOut.duration(200)}>
+                                                <BaseText
+                                                    color={theme.colors.textLightish}
+                                                    typographyFont="bodySemiBold">
+                                                    {CURRENCY_SYMBOLS[currency]}
+                                                </BaseText>
+                                            </Animated.View>
+                                        )}
+                                        <Animated.View
+                                            key={isInputInFiat ? "token-conv" : "fiat-conv"}
+                                            entering={FadeIn.duration(300)}>
+                                            <BaseText color={theme.colors.textLightish} typographyFont="bodySemiBold">
+                                                {formattedConvertedAmount}
+                                            </BaseText>
+                                        </Animated.View>
+                                        {isInputInFiat && (
+                                            <Animated.View
+                                                entering={FadeIn.duration(300)}
+                                                exiting={FadeOut.duration(200)}>
+                                                <BaseText
+                                                    color={theme.colors.textLightish}
+                                                    testID="SendScreen_convertedSymbol"
+                                                    typographyFont="bodySemiBold">
+                                                    {currentToken.symbol}
+                                                </BaseText>
+                                            </Animated.View>
+                                        )}
+                                    </>
+                                )}
+                                {!isError && (
+                                    <>
+                                        <BaseSpacer width={2} />
+                                        <BaseIcon
+                                            name="icon-arrow-up-down"
+                                            size={12}
+                                            color={theme.colors.textLightish}
+                                        />
+                                    </>
+                                )}
+                            </BaseView>
+                        </BaseTouchable>
+                    ) : (
+                        isError && (
+                            <BaseText color={theme.colors.danger} typographyFont="captionMedium">
+                                {LL.SEND_AMOUNT_EXCEEDS_BALANCE()}
+                            </BaseText>
+                        )
+                    )}
+                </BaseView>
+                <BaseSpacer height={32} />
+                <TouchableOpacity onPress={handleOpenTokenSelector}>
+                    <BaseView style={styles.tokenSelector} mx={18}>
+                        <BaseView flexDirection="row" alignItems="center" gap={8}>
+                            <BaseIcon name="icon-chevrons-up-down" size={16} color={tokenAmountCard.tokenSelectIcon} />
+                            <BaseView flexDirection="row" alignItems="center" gap={8}>
+                                <TokenImage icon={computedIcon} iconSize={24} rounded={true} />
+                                <BaseText typographyFont="bodySemiBold" color={tokenAmountCard.tokenSelectorText}>
+                                    {tokenBalance}
+                                </BaseText>
+                            </BaseView>
+                        </BaseView>
+                        <BaseTouchable action={handleOnMaxPress} style={styles.maxButton}>
+                            <BaseText typographyFont="captionSemiBold" color={tokenAmountCard.maxButtonText}>
+                                {LL.COMMON_MAX()}
+                            </BaseText>
+                        </BaseTouchable>
+                    </BaseView>
+                </TouchableOpacity>
+                <BaseSpacer height={24} />
+                <NumPad
+                    onDigitPress={digit => onChangeTextInput(input + digit)}
+                    onDigitDelete={() => onChangeTextInput(input.slice(0, -1))}
+                    typographyFont="headerTitleMedium"
+                    showDecimal
+                />
+            </BaseView>
+            <FadeoutButton
+                testID="next-button"
+                title={LL.COMMON_BTN_NEXT()}
+                disabled={isError || input === "" || BigNutils(input).isZero}
+                action={handleNext}
+                bottom={0}
+                mx={0}
+                width={"auto"}
             />
-            <TokenSelectionBottomSheet
-                ref={bottomSheetRef}
-                selectedToken={internalToken}
-                setSelectedToken={setInternalToken}
-                availableTokens={availableTokens}
-                onClose={handleCloseTokenSelector}
-            />
+            {internalToken && (
+                <TokenSelectionBottomSheet
+                    ref={bottomSheetRef}
+                    selectedToken={internalToken}
+                    setSelectedToken={setInternalToken}
+                    availableTokens={availableTokens}
+                    onClose={handleCloseTokenSelector}
+                />
+            )}
         </>
     )
 }
@@ -817,7 +718,10 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled, onDisabl
 }
 
 const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModalMethods, TokenSelectionBottomSheetProps>(
-    function TokenSelectionBottomSheet({ selectedToken, setSelectedToken, onClose, availableTokens }, ref) {
+    function TokenSelectionBottomSheet(
+        { selectedToken: _selectedToken, setSelectedToken, onClose, availableTokens },
+        ref,
+    ) {
         const { LL } = useI18nContext()
         const { theme, styles } = useThemedStyles(baseBottomSheetStyles)
         const [vot3WarningVisible, setVot3WarningVisible] = useState(false)
@@ -825,6 +729,8 @@ const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModalMethods, Toke
         const filteredTokens = useMemo(() => {
             return availableTokens.filter(token => token.symbol !== VeDelegate.symbol)
         }, [availableTokens])
+
+        // Use _selectedToken instead of selectedToken to avoid shadowing in this scope
 
         const handleTokenSelect = useCallback(
             (token: FungibleTokenWithBalance) => {
@@ -863,7 +769,7 @@ const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModalMethods, Toke
                                 <EnhancedTokenCard
                                     item={tk}
                                     onSelectedToken={handleTokenSelect}
-                                    selected={selectedToken.symbol === tk.symbol}
+                                    selected={_selectedToken.symbol === tk.symbol}
                                     disabled={isVot3}
                                     onDisabledPress={isVot3 ? handleVot3Press : undefined}
                                 />
