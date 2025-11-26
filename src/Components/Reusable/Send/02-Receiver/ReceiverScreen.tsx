@@ -3,14 +3,14 @@ import { WalletAddressCard } from "./Components/WalletAddressCard"
 
 import { useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
-import Animated from "react-native-reanimated"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { KnownAddressesList } from "./Components/KnownAddressesList"
 
 export const ReceiverScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
 
     return (
-        <Animated.View style={styles.root}>
+        <Animated.View style={styles.root} layout={LinearTransition}>
             <WalletAddressCard />
             <KnownAddressesList />
         </Animated.View>

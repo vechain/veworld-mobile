@@ -86,7 +86,11 @@ export const SendScreen = (): ReactElement => {
             noBackButton
             headerTitleAlignment="center"
             headerRightElement={headerRightElement}
-            body={<BaseView flex={1}>{renderStep}</BaseView>}
+            fixedBody={
+                <BaseView flex={1} p={16}>
+                    {renderStep}
+                </BaseView>
+            }
         />
     )
 }

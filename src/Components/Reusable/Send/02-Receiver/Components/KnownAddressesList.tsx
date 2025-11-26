@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
-import Animated from "react-native-reanimated"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseSpacer } from "~Components/Base"
 import { GenericAccountCard } from "~Components/Reusable/AccountCard"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -46,12 +46,11 @@ export const KnownAddressesList = () => {
     const renderItemSeparator = useCallback(() => <BaseSpacer height={8} />, [])
 
     return (
-        <Animated.View style={styles.root}>
+        <Animated.View style={styles.root} layout={LinearTransition}>
             <AnimatedFilterChips
                 items={FILTER_ITEMS}
                 selectedItem={selectedItem}
                 scrollEnabled={false}
-                containerStyle={styles.filterContainer}
                 contentContainerStyle={styles.filterContentContainer}
                 keyExtractor={item => item}
                 getItemLabel={item => LL[`SEND_RECEIVER_FILTER_${item.toUpperCase() as Uppercase<FilterItem>}`]()}
@@ -59,6 +58,7 @@ export const KnownAddressesList = () => {
                     setSelectedItem(item)
                 }}
             />
+
             <Animated.FlatList
                 data={accounts}
                 keyExtractor={item => item.address}
@@ -77,10 +77,9 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 16,
             padding: 24,
             gap: 24,
-        },
-        filterContainer: {
             flex: 1,
         },
+
         filterContentContainer: {
             flex: 1,
             justifyContent: "space-between",
