@@ -9,8 +9,7 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
 
-// TODO(send-flow-v2): Add proper step types based on the logic implemented in each child step component
-type SendFlowStep = "selectToken" | "insertAddress" | "selectAmount" | "summary"
+type SendFlowStep = "selectAmount" | "insertAddress" | "summary"
 
 type SendFlowState = {
     token?: FungibleTokenWithBalance
@@ -24,7 +23,7 @@ export const SendScreen = (): ReactElement => {
     const { LL } = useI18nContext()
     const theme = useTheme()
     const navigation = useNavigation<NavigationProps>()
-    const [step, setStep] = useState<SendFlowStep>("selectToken")
+    const [step, setStep] = useState<SendFlowStep>("selectAmount")
     const [flowState, setFlowState] = useState<SendFlowState>({})
 
     const handleClose = useCallback(() => {
@@ -65,27 +64,13 @@ export const SendScreen = (): ReactElement => {
         setStep("summary")
     }, [])
 
-    const goBackToTokenSelection = useCallback(() => {
-        setStep("selectToken")
-    }, [])
-
-    const goBackToInsertAddress = useCallback(() => {
-        if (!flowState.token) {
-            setStep("selectToken")
-            return
-        }
-        setStep("insertAddress")
-    }, [flowState.token])
-
     const renderStep = useMemo(() => {
         // TODO(send-flow-v2): Implement proper step types based on the logic implemented in each child step component
         switch (step) {
-            case "selectToken":
-                return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step1 logic */}</BaseView>
-            case "insertAddress":
-                return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step2 logic */}</BaseView>
             case "selectAmount":
                 return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step3 logic */}</BaseView>
+            case "insertAddress":
+                return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step2 logic */}</BaseView>
             case "summary":
                 return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step4 logic */}</BaseView>
             default:
