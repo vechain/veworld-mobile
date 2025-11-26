@@ -4,10 +4,16 @@ import { Network } from "~Model"
 import createFetchClient, { Client, Middleware } from "openapi-fetch"
 import type { paths } from "~Generated/indexer/schema"
 import { defaultMainNetwork } from "~Constants"
+import { debug } from "~Utils"
 
 const errorMiddleware: Middleware = {
-    onResponse({ response }) {
+    onResponse({ response, params }) {
         if (!response.ok) {
+            debug(
+                "INDEXER",
+                `An error occurred at: ${response.url}. Returned status is: ${response.status} ${response.statusText}`,
+                `Params sent: ${JSON.stringify(params)}`,
+            )
             throw new Error(`${response.url}: ${response.status} ${response.statusText}`)
         }
     },
