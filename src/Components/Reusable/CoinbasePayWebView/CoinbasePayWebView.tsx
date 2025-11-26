@@ -13,7 +13,7 @@ import {
     useFeatureFlags,
     useInAppBrowser,
 } from "~Components"
-import { Feedback } from "~Components/Providers/FeedbackProvider"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { useAnalyticTracking, useCheckIdentity, useSignMessage, useSmartWallet } from "~Hooks"

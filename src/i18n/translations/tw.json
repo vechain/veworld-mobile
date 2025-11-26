@@ -437,7 +437,7 @@
   "CLOUD_ERR_WALLET_OPERATION": "執行此 iCloud 錢包操作時發生錯誤。請再試一次。",
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "我們在您的 {cloud: string} 中找不到任何備份的錢包。請再試一次或使用您的恢復短語。",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "沒有可用的錢包",
-  "COINBASE_NOT_AVAILABLE": "Coinbase 無法使用",
+  "COINBASE_NOT_AVAILABLE": "無法使用 Coinbase",
   "COLLECTIBLES_ACTION_AVATAR_ACTIVE": "頭像",
   "COLLECTIBLES_ACTION_AVATAR_INACTIVE": "設置頭像",
   "COLLECTIBLES_ACTION_FAVORITE_INACTIVE": "收藏",

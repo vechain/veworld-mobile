@@ -46,6 +46,7 @@ import {
     UsernameClaimed,
     WalletDetailScreen,
     WalletManagementScreen,
+    SendScreen,
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AssetDetailScreenSheet } from "~Screens/Flows/App/AssetDetailScreenSheet"
@@ -66,6 +67,7 @@ type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
+    [Routes.SEND_TOKEN]: undefined
     [Routes.SELECT_TOKEN_SEND]: undefined
     [Routes.SELECT_AMOUNT_SEND]: {
         token: FungibleTokenWithBalance
@@ -200,6 +202,9 @@ export const HomeStack = () => {
                     component={betterWorldFeature.balanceScreen?.enabled ? BalanceScreen : HomeScreen}
                     options={{ headerShown: false }}
                 />
+                {betterWorldFeature.balanceScreen?.send?.enabled && (
+                    <Screen name={Routes.SEND_TOKEN} component={SendScreen} options={{ headerShown: false }} />
+                )}
                 <Screen
                     name={Routes.SELECT_TOKEN_SEND}
                     component={SelectTokenSendScreen}

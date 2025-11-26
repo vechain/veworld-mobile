@@ -1,4 +1,5 @@
 import React from "react"
+import { StyleProp, TextStyle } from "react-native"
 import { BaseIcon, BaseText, BaseTextProps, BaseView } from "~Components"
 import { typography } from "~Constants"
 import { useTheme } from "~Hooks"
@@ -10,6 +11,7 @@ type HeaderTitleProps = {
     testID?: string
     typographyFont?: keyof typeof typography.defaults
     align?: BaseTextProps["align"]
+    style?: StyleProp<TextStyle>
 }
 
 export const HeaderTitle: React.FC<HeaderTitleProps> = ({
@@ -18,6 +20,7 @@ export const HeaderTitle: React.FC<HeaderTitleProps> = ({
     testID,
     typographyFont = "subTitleSemiBold",
     align = "center",
+    style,
 }) => {
     const theme = useTheme()
     return (
@@ -30,7 +33,8 @@ export const HeaderTitle: React.FC<HeaderTitleProps> = ({
                 flex={1}
                 flexDirection="row"
                 numberOfLines={1}
-                align={align}>
+                align={align}
+                style={style}>
                 {title}
             </BaseText>
         </BaseView>

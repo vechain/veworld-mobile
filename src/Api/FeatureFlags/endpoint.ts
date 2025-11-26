@@ -76,6 +76,9 @@ export type FeatureFlags = {
             tokens: {
                 enabled: boolean
             }
+            send: {
+                enabled: boolean
+            }
         }
     }
     notificationCenter: {

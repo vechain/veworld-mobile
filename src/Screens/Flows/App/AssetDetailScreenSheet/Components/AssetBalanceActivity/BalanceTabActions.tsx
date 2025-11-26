@@ -4,6 +4,7 @@ import { BaseView } from "~Components"
 import { useBottomSheetModal, useCameraBottomSheet } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
+
 import { ConvertBetterBottomSheet, ConvertedBetterBottomSheet } from "~Screens/Flows/App/AssetDetailScreen/Components"
 import { BuyButton } from "./ActionButtons/BuyButton"
 import { ConvertButton } from "./ActionButtons/ConvertButton"
@@ -19,6 +20,7 @@ type Props = {
 
 export const BalanceTabActions = ({ token }: Props) => {
     const route = useRoute<RouteProp<RootStackParamListHome, Routes.TOKEN_DETAILS>>()
+
     const betterConversionResult = useMemo(
         () => route.params.betterConversionResult,
         [route.params.betterConversionResult],
@@ -55,7 +57,7 @@ export const BalanceTabActions = ({ token }: Props) => {
             MORE: <MoreButton openReceiveBottomsheet={handleOpenOnlyReceiveCamera} token={token} key={"MORE"} />,
             CONVERT: <ConvertButton bsRef={convertB3trBsRef} key={"CONVERT"} />,
         }
-    }, [handleOpenOnlyReceiveCamera, convertB3trBsRef, token])
+    }, [convertB3trBsRef, handleOpenOnlyReceiveCamera, token])
 
     const tokenActions = useMemo<(keyof typeof allActions)[]>(() => {
         switch (token.symbol) {
