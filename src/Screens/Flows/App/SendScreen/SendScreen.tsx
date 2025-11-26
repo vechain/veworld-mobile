@@ -111,7 +111,7 @@ export const SendScreen = (): ReactElement => {
                     initialValues: values,
                     animations: {},
                 }
-            if (ORDER.indexOf(nextStep.value!) > ORDER.indexOf(previousStep.value!))
+            if (ORDER.indexOf(nextStep.value) > ORDER.indexOf(previousStep.value))
                 return EnteringFromRightAnimation(values)
             return EnteringFromLeftAnimation(values)
         },
@@ -126,8 +126,7 @@ export const SendScreen = (): ReactElement => {
                     initialValues: values,
                     animations: {},
                 }
-            if (ORDER.indexOf(nextStep.value!) > ORDER.indexOf(previousStep.value!))
-                return ExitingToLeftAnimation(values)
+            if (ORDER.indexOf(nextStep.value) > ORDER.indexOf(previousStep.value)) return ExitingToLeftAnimation(values)
             return ExitingToRightAnimation(values)
         },
         [nextStep.value, previousStep.value],
