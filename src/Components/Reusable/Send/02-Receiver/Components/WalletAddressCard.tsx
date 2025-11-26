@@ -68,14 +68,18 @@ export const WalletAddressCard = () => {
         if (address && address.length > 0) {
             return (
                 <Pressable onPress={handleClearAddress}>
-                    <BaseText numberOfLines={1}>{LL.SEND_RECEIVER_ADDRESS_INPUT_CLEAR()}</BaseText>
+                    <BaseText numberOfLines={1} typographyFont="captionSemiBold">
+                        {LL.SEND_RECEIVER_ADDRESS_INPUT_CLEAR()}
+                    </BaseText>
                 </Pressable>
             )
         }
 
         return (
             <Pressable onPress={handlePasteAddress}>
-                <BaseText numberOfLines={1}>{LL.SEND_RECEIVER_ADDRESS_INPUT_PASTE()}</BaseText>
+                <BaseText numberOfLines={1} typographyFont="captionSemiBold">
+                    {LL.SEND_RECEIVER_ADDRESS_INPUT_PASTE()}
+                </BaseText>
             </Pressable>
         )
     }, [address, handleClearAddress, handlePasteAddress, LL])
@@ -115,7 +119,7 @@ export const WalletAddressCard = () => {
         <>
             <Animated.View style={styles.root} layout={LinearTransition}>
                 <Animated.View style={styles.inputWrapper}>
-                    <BaseText typographyFont="captionSemiBold" style={styles.title}>
+                    <BaseText typographyFont="captionSemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_700}>
                         {LL.SEND_RECEIVER_ADDRESS_INPUT_LABEL()}
                     </BaseText>
                     <BaseView style={styles.actionsContainer}>
@@ -123,6 +127,7 @@ export const WalletAddressCard = () => {
                             placeholder={LL.SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER()}
                             containerStyle={styles.input}
                             inputContainerStyle={styles.inputContainer}
+                            placeholderTextColor={COLORS.GREY_400}
                             value={address}
                             setValue={setAddress}
                             rightIconAdornment
@@ -132,7 +137,7 @@ export const WalletAddressCard = () => {
                             <BaseIcon
                                 name="icon-scan-line"
                                 size={24}
-                                color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_100}
+                                color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
                             />
                         </TouchableOpacity>
                     </BaseView>
