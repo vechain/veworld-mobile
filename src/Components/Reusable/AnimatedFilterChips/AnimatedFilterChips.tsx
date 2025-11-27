@@ -14,6 +14,7 @@ type Props<T> = {
     onItemPress: (item: T, index: number) => void
     containerStyle?: Omit<StyleProp<ViewStyle>, "height" | "padding" | "paddingHorizontal" | "paddingVertical">
     contentContainerStyle?: Omit<StyleProp<ViewStyle>, "padding" | "paddingVertical" | "paddingTop" | "paddingBottom">
+    chipStyle?: StyleProp<ViewStyle>
     size?: "sm" | "md"
     scrollEnabled?: boolean
     indicatorBackgroundColor?: string
@@ -29,6 +30,7 @@ export const AnimatedFilterChips = <T,>({
     onItemPress,
     containerStyle,
     contentContainerStyle,
+    chipStyle,
     size = "md",
     scrollEnabled = true,
     indicatorBackgroundColor,
@@ -82,7 +84,10 @@ export const AnimatedFilterChips = <T,>({
                 scrollEnabled={scrollEnabled}
                 scrollEventThrottle={16}>
                 {items.map((item, index) => (
-                    <BaseView key={index} onLayout={event => handleChipLayout(event, index)} style={styles.chipWrapper}>
+                    <BaseView
+                        key={index}
+                        onLayout={event => handleChipLayout(event, index)}
+                        style={[styles.chipWrapper, chipStyle]}>
                         <BaseTouchable
                             testID={`AnimatedFilterChips-${keyExtractor(item)}`}
                             style={styles.transparentChip}

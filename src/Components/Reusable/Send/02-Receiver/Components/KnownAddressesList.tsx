@@ -1,32 +1,46 @@
-import React, { useCallback, useState } from "react"
-import { StyleSheet } from "react-native"
+import React, { useCallback, useMemo, useState } from "react"
+import { SectionList, StyleSheet } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseSpacer } from "~Components/Base"
 import { GenericAccountCard } from "~Components/Reusable/AccountCard"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { selectAccounts, useAppSelector } from "~Storage/Redux"
+import {
+    selectAccounts,
+    selectCachedContacts,
+    selectKnownContacts,
+    selectSelectedAccount,
+    useAppSelector,
+} from "~Storage/Redux"
 import AddressUtils from "~Utils/AddressUtils"
 import { AnimatedFilterChips } from "../../../AnimatedFilterChips"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, Contact } from "~Model"
 
 type FilterItem = "recent" | "accounts" | "contacts"
 
 const FILTER_ITEMS: FilterItem[] = ["recent", "accounts", "contacts"]
 
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
+
 export const KnownAddressesList = () => {
     const [selectedItem, setSelectedItem] = useState<FilterItem>("recent")
     const [selectedAccount, setSelectedAccount] = useState<string | undefined>(undefined)
 
-    const accounts = useAppSelector(selectAccounts)
-    // const contacts = useAppSelector(selectKnownContacts)
+    const currentAccount = useAppSelector(selectSelectedAccount)
+    const allAccounts = useAppSelector(selectAccounts)
+    const contacts = useAppSelector(selectKnownContacts)
+    const unknownContacts = useAppSelector(selectCachedContacts)
+
+    const accounts = useMemo(() => {
+        return allAccounts.filter(account => AddressUtils.compareAddresses(account.address, currentAccount.address))
+    }, [allAccounts, currentAccount.address])
 
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
 
     const renderItem = useCallback(
-        ({ item }: { item: AccountWithDevice }) => {
+        ({ item }: { item: AccountWithDevice | Contact }) => {
             const isSelected = AddressUtils.compareAddresses(selectedAccount, item.address)
 
             return (
@@ -52,6 +66,7 @@ export const KnownAddressesList = () => {
                 selectedItem={selectedItem}
                 scrollEnabled={false}
                 contentContainerStyle={styles.filterContentContainer}
+                chipStyle={styles.filterChip}
                 keyExtractor={item => item}
                 getItemLabel={item => LL[`SEND_RECEIVER_FILTER_${item.toUpperCase() as Uppercase<FilterItem>}`]()}
                 onItemPress={item => {
@@ -59,12 +74,30 @@ export const KnownAddressesList = () => {
                 }}
             />
 
-            <Animated.FlatList
-                data={accounts}
-                keyExtractor={item => item.address}
-                renderItem={renderItem}
-                ItemSeparatorComponent={renderItemSeparator}
-            />
+            {selectedItem === "recent" && (
+                <Animated.FlatList
+                    data={[]}
+                    keyExtractor={item => item.address}
+                    renderItem={renderItem}
+                    ItemSeparatorComponent={renderItemSeparator}
+                />
+            )}
+            {selectedItem === "accounts" && (
+                <Animated.FlatList
+                    data={accounts}
+                    keyExtractor={item => item.address}
+                    renderItem={renderItem}
+                    ItemSeparatorComponent={renderItemSeparator}
+                />
+            )}
+            {selectedItem === "contacts" && (
+                <Animated.FlatList
+                    data={contacts}
+                    keyExtractor={item => item.address}
+                    renderItem={renderItem}
+                    ItemSeparatorComponent={renderItemSeparator}
+                />
+            )}
         </Animated.View>
     )
 }
@@ -83,5 +116,8 @@ const baseStyles = (theme: ColorThemeType) =>
         filterContentContainer: {
             flex: 1,
             justifyContent: "space-between",
+        },
+        filterChip: {
+            flex: 1,
         },
     })
