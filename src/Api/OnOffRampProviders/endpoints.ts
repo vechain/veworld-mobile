@@ -48,9 +48,9 @@ export const generateCoinbaseOnRampURL = async (
  *
  * @param address Address of the user
  * @param baseURL Base URL (retrieved from FF)
- * @param signature Signature for authentication
- * @param timestamp Timestamp used in signature
- * @returns The generated coinbase URL
+ * @param currency User's preferred currency
+ * @param theme Theme preference (light/dark)
+ * @returns The generated Transak URL response
  */
 export const generateTransakOnRampURL = async (
     address: string,

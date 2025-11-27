@@ -34,7 +34,6 @@ export const TransakPayWebView = ({ destinationAddress }: { currentAmount: numbe
         return destinationAddress
     }, [destinationAddress, senderDevice?.type, smartAccountAddress])
 
-    const { styles } = useThemedStyles(theme => baseStyles(theme, isLoadingQuery, isProcessing))
     const { paymentProvidersFeature } = useFeatureFlags()
 
     const bgColor = useMemo(() => {
@@ -58,6 +57,8 @@ export const TransakPayWebView = ({ destinationAddress }: { currentAmount: numbe
             persisted: false,
         },
     })
+
+    const { styles } = useThemedStyles(theme => baseStyles(theme, isLoadingQuery, isProcessing))
 
     const onTransakEventHandler = (event: Events) => {
         switch (event) {
