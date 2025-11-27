@@ -1,3 +1,4 @@
+import { components } from "~Generated/indexer/schema"
 import { IndexedHistoryEvent, OutputResponse } from "~Model"
 import { PaginationResponse } from "~Networking"
 import { StargateLevelName } from "~Utils/StargateUtils"
@@ -28,143 +29,16 @@ export interface TransactionsResponse extends BaseTransactionResponse {
     outputs: OutputResponse[]
 }
 
-export enum EventTypeResponse {
-    FUNGIBLE_TOKEN = "FUNGIBLE_TOKEN",
-    VET = "VET",
-    NFT = "NFT",
-    SEMI_FUNGIBLE_TOKEN = "SEMI_FUNGIBLE_TOKEN",
-}
-
-export interface IncomingTransferResponse extends BaseTransactionResponse {
-    txId: string
-    from: string
-    to: string
-    value: string
-    tokenId: number
-    tokenAddress: string
-    topics: string[]
-    eventType: EventTypeResponse
-}
-
 export interface FetchIncomingTransfersResponse {
-    data: IncomingTransferResponse[]
+    data: components["schemas"]["IndexedTransferEvent"][]
     pagination: PaginationResponse
 }
 
-export interface FetchAppOverviewResponse {
-    appId: string
-    roundId: number
-    date: string
-    totalRewardAmount: number
-    actionsRewarded: number
-    totalImpact: {
-        carbon: number
-        water: number
-        energy: number
-        waste_mass: number
-        waste_items: number
-        waste_reduction: number
-        biodiversity: number
-        people: number
-        timber: number
-        plastic: number
-        education_time: number
-        trees_planted: number
-        calories_burned: number
-        clean_energy_production_wh: number
-        sleep_quality_percentage: number
-    }
-    rankByReward: number
-    rankByActionsRewarded: number
-    totalUniqueUserInteractions: number
-}
+export type FetchAppOverviewResponse = components["schemas"]["AppOverview"]
 
 export interface FetchActivitiesResponse {
     data: IndexedHistoryEvent[]
     pagination: PaginationResponse
-}
-
-export type FetchFungibleTokensContractsResponse = {
-    data: string[]
-    pagination: PaginationResponse
-}
-
-export type VeBetterTotalImpact = {
-    carbon?: number
-    water?: number
-    energy?: number
-    waste_mass?: number
-    waste_items?: number
-    waste_reduction?: number
-    biodiversity?: number
-    people?: number
-    timber?: number
-    plastic?: number
-    education_time?: number
-    trees_planted?: number
-    calories_burned?: number
-    clean_energy_production_wh?: number
-    sleep_quality_percentage?: number
-}
-
-export interface FetchVeBetterUserGeneralOverviewResponse {
-    wallet: string
-    roundId: number
-    date: string
-    totalRewardAmount: number
-    actionsRewarded: number
-    /**
-     * `totalImpact` may be undefined when the user has no impact at all
-     */
-    totalImpact?: VeBetterTotalImpact
-    rankByReward: number
-    rankByActionsRewarded: number
-    uniqueXAppInteractions: string[]
-}
-
-export interface FetchVeBetterUserOverviewResponseItem {
-    entity: string
-    date: string
-    totalRewardAmount: number
-    actionsRewarded: number
-    totalImpact?: VeBetterTotalImpact
-}
-
-export interface FetchVeBetterActionsResponseItem {
-    blockNumber: number
-    blockTimestamp: number
-    blockId: string
-    appId: string
-    distributor: string
-    amount: number
-    receiver: string
-    proof: {
-        version: number
-        description: string
-        proof: {
-            image: string
-            link: string
-            text: string
-            video: string
-        }
-        impact: {
-            carbon: number
-            water: number
-            energy: number
-            waste_mass: number
-            waste_items: number
-            waste_reduction: number
-            biodiversity: number
-            people: number
-            timber: number
-            plastic: number
-            education_time: number
-            trees_planted: number
-            calories_burned: number
-            clean_energy_production_wh: number
-            sleep_quality_percentage: number
-        }
-    }
 }
 
 export enum StargateNFTLevel {
@@ -178,29 +52,6 @@ export enum StargateNFTLevel {
     Dawn,
     Lightning,
     Flash,
-}
-
-export interface FetchStargateTotalVetStakedResponse {
-    total: string
-    byLevel: {
-        [key in StargateNFTLevel]: string
-    }
-}
-
-export interface FetchStargateTotalSupplyResponse {
-    total: string
-    byLevel: {
-        [key in StargateNFTLevel]: number
-    }
-}
-
-export interface FetchVeBetterGlobalOverviewResponse {
-    roundId: number
-    date: string
-    totalRewardAmount: number
-    actionsRewarded: number
-    totalImpact: VeBetterTotalImpact
-    totalUniqueUserInteractions: number
 }
 
 export interface FetchStargateTokensResponseItem {

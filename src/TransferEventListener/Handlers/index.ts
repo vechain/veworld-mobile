@@ -1,12 +1,12 @@
 export * from "./TransferEventHandlers"
 
 import { AccountWithDevice, Network } from "~Model"
-import { IncomingTransferResponse } from "~Networking"
+import { FetchIncomingTransfersResponse } from "~Networking"
 
 export interface BaseTransferHandlerProps {
     selectedAccount: AccountWithDevice
     visibleAccounts: AccountWithDevice[]
-    transfers: IncomingTransferResponse[]
+    transfers: FetchIncomingTransfersResponse["data"]
 }
 
 export interface NFTTransferHandlerProps extends BaseTransferHandlerProps {

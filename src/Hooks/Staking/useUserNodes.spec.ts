@@ -1,16 +1,19 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { TestWrapper, TestHelpers } from "~Test"
 
-import { fetchStargateTokens } from "~Networking"
 import { getTokenLevelName } from "~Utils/StargateUtils"
 
 import { useUserNodes } from "./useUserNodes"
 
 const { StargateNodeMocks } = TestHelpers.data
 
-jest.mock("~Networking", () => ({
-    ...jest.requireActual("~Networking"),
-    fetchStargateTokens: jest.fn(),
+const getTokens = jest.fn()
+
+jest.mock("~Hooks/useIndexerClient", () => ({
+    ...jest.requireActual("~Hooks/useIndexerClient"),
+    useIndexerClient: jest.fn().mockReturnValue({
+        GET: (...args: any[]) => getTokens(...args),
+    }),
 }))
 
 describe("useUserNodes", () => {
@@ -28,17 +31,19 @@ describe("useUserNodes", () => {
     })
 
     it("should return data when address is provided", async () => {
-        ;(fetchStargateTokens as jest.Mock).mockResolvedValue({
-            data: StargateNodeMocks.map(node => ({
-                tokenId: node.nodeId,
-                level: getTokenLevelName(node.nodeLevel),
-                owner: node.xNodeOwner,
-                vetStaked: node.vetAmountStaked,
-                totalBootstrapRewardsClaimed: "1",
-                totalRewardsClaimed: "0",
-            })),
-            pagination: {
-                hasNext: false,
+        ;(getTokens as jest.Mock).mockResolvedValue({
+            data: {
+                data: StargateNodeMocks.map(node => ({
+                    tokenId: node.nodeId,
+                    level: getTokenLevelName(node.nodeLevel),
+                    owner: node.xNodeOwner,
+                    vetStaked: node.vetAmountStaked,
+                    totalBootstrapRewardsClaimed: "1",
+                    totalRewardsClaimed: "0",
+                })),
+                pagination: {
+                    hasNext: false,
+                },
             },
         })
         const address = "0x123456789"
@@ -56,33 +61,37 @@ describe("useUserNodes", () => {
     })
 
     it("should return data (2 pages) when address is provided", async () => {
-        ;(fetchStargateTokens as jest.Mock)
+        ;(getTokens as jest.Mock)
             .mockResolvedValueOnce({
-                data: StargateNodeMocks.map(node => ({
-                    tokenId: node.nodeId,
-                    level: getTokenLevelName(node.nodeLevel),
-                    owner: node.xNodeOwner,
-                    vetStaked: node.vetAmountStaked,
-                    totalBootstrapRewardsClaimed: "1",
-                    totalRewardsClaimed: "0",
-                })),
-                pagination: {
-                    hasNext: true,
+                data: {
+                    data: StargateNodeMocks.map(node => ({
+                        tokenId: node.nodeId,
+                        level: getTokenLevelName(node.nodeLevel),
+                        owner: node.xNodeOwner,
+                        vetStaked: node.vetAmountStaked,
+                        totalBootstrapRewardsClaimed: "1",
+                        totalRewardsClaimed: "0",
+                    })),
+                    pagination: {
+                        hasNext: true,
+                    },
                 },
             })
             .mockResolvedValueOnce({
-                data: [
-                    {
-                        tokenId: "7",
-                        level: "Dawn",
-                        owner: "0x123456789",
-                        vetStaked: "1",
-                        totalBootstrapRewardsClaimed: "1",
-                        totalRewardsClaimed: "0",
+                data: {
+                    data: [
+                        {
+                            tokenId: "7",
+                            level: "Dawn",
+                            owner: "0x123456789",
+                            vetStaked: "1",
+                            totalBootstrapRewardsClaimed: "1",
+                            totalRewardsClaimed: "0",
+                        },
+                    ],
+                    pagination: {
+                        hasNext: false,
                     },
-                ],
-                pagination: {
-                    hasNext: false,
                 },
             })
         const address = "0x123456789"
@@ -99,22 +108,30 @@ describe("useUserNodes", () => {
             expect(result.current.data[3].nodeId).toBe("7")
         })
 
-        expect(fetchStargateTokens).toHaveBeenNthCalledWith(
-            1,
-            "https://indexer.mainnet.vechain.org/api/v1",
-            "0x123456789",
-            { page: 0 },
-        )
-        expect(fetchStargateTokens).toHaveBeenNthCalledWith(
-            2,
-            "https://indexer.mainnet.vechain.org/api/v1",
-            "0x123456789",
-            { page: 1 },
-        )
+        expect(getTokens).toHaveBeenNthCalledWith(1, "/api/v1/stargate/tokens", {
+            params: {
+                query: {
+                    manager: "0x123456789",
+                    owner: "0x123456789",
+                    page: 0,
+                    size: 50,
+                },
+            },
+        })
+        expect(getTokens).toHaveBeenNthCalledWith(2, "/api/v1/stargate/tokens", {
+            params: {
+                query: {
+                    manager: "0x123456789",
+                    owner: "0x123456789",
+                    page: 1,
+                    size: 50,
+                },
+            },
+        })
     })
 
     it("should handle error state", async () => {
-        ;(fetchStargateTokens as jest.Mock).mockRejectedValue(new Error("Test error"))
+        ;(getTokens as jest.Mock).mockRejectedValue(new Error("Test error"))
 
         const address = "0x123456789"
         const { result, waitFor } = renderHook(() => useUserNodes(address), {
