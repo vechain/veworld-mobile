@@ -16,6 +16,10 @@ import { FungibleTokenWithBalance } from "~Model"
 import { useI18nContext } from "~i18n"
 import { TokenSelectionBottomSheet } from "./components/TokenSelectionBottomSheet"
 import { SelectAmountSendDetails } from "./components/SelectAmountSendDetails"
+import { useAmountConversion } from "./Hooks"
+
+const MAX_FIAT_DECIMALS = 2
+const MAX_TOKEN_DECIMALS = 5
 
 type SelectAmountSendComponentProps = {
     token?: FungibleTokenWithBalance
@@ -60,6 +64,47 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
         }
     }, [exchangeRate, isInputInFiat])
 
+    useEffect(() => {
+        return () => {
+            if (timer.current) {
+                clearTimeout(timer.current)
+                timer.current = null
+            }
+        }
+    }, [])
+
+    const tokenTotalBalance = useMemo(() => {
+        const currentToken = selectedToken || defaultToken
+        if (!currentToken) return "0"
+        return BigNutils(currentToken.balance.balance).toString
+    }, [selectedToken, defaultToken])
+
+    const {
+        tokenAmount: tokenAmountFromInput,
+        fiatAmount: fiatAmountFromInput,
+        formattedConvertedAmount,
+        isBalanceExceeded,
+        isValidAmount,
+        fiatTotalBalance,
+        tokenTotalToHuman,
+    } = useAmountConversion({
+        input,
+        exchangeRate: exchangeRate ?? undefined,
+        isInputInFiat,
+        tokenDecimals: selectedToken?.decimals ?? 18,
+        tokenTotalBalance,
+        formatLocale,
+    })
+
+    useEffect(() => {
+        if (isBalanceExceeded && !isError) {
+            setIsError(true)
+            HapticsService.triggerNotification({ level: "Error" })
+        } else if (!isBalanceExceeded && isError && input !== "") {
+            setIsError(false)
+        }
+    }, [isBalanceExceeded, isError, input])
+
     const computedIcon = useMemo(() => {
         if (!selectedToken) return VET.icon
         if (selectedToken.symbol === VET.symbol) return VET.icon
@@ -70,44 +115,6 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
     }, [selectedToken])
 
     const { styles, theme } = useThemedStyles(baseStyles)
-
-    const tokenTotalBalance = useMemo(() => {
-        const currentToken = selectedToken || defaultToken
-        if (!currentToken) return "0"
-        return BigNutils(currentToken.balance.balance).toString
-    }, [selectedToken, defaultToken])
-
-    const tokenTotalToHuman = useMemo(() => {
-        const currentToken = selectedToken || defaultToken
-        if (!currentToken) return BigNutils("0")
-        return BigNutils(tokenTotalBalance).toHuman(currentToken.decimals)
-    }, [selectedToken, defaultToken, tokenTotalBalance])
-
-    const fiatTotalBalance = useMemo(
-        () => BigNutils().toCurrencyConversion(tokenTotalToHuman.toString, exchangeRate ?? 0),
-        [exchangeRate, tokenTotalToHuman],
-    )
-
-    const fiatHumanAmount = useMemo(
-        () => BigNutils().toCurrencyConversion(input, exchangeRate ?? 0),
-        [exchangeRate, input],
-    )
-
-    const formattedConvertedAmount = useMemo(() => {
-        if (!input || input === "0") return "0"
-        if (!selectedToken) return "0"
-
-        if (isInputInFiat) {
-            const tokenAmount = BigNutils().toTokenConversion(input, exchangeRate ?? 0).toString
-            return formatFullPrecision(tokenAmount, {
-                locale: formatLocale,
-            })
-        } else {
-            return formatFullPrecision(fiatHumanAmount.value, {
-                locale: formatLocale,
-            })
-        }
-    }, [exchangeRate, fiatHumanAmount.value, formatLocale, input, isInputInFiat, selectedToken])
 
     const resetInput = useCallback(() => {
         setInput("")
@@ -139,7 +146,7 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
             const parts = value.split(/[.,]/)
             if (parts.length > 1) {
                 const decimalPart = parts[1]
-                const maxDecimals = isInputInFiat ? 2 : 5
+                const maxDecimals = isInputInFiat ? MAX_FIAT_DECIMALS : MAX_TOKEN_DECIMALS
                 return decimalPart.length <= maxDecimals
             }
             return true
@@ -159,9 +166,7 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
 
             setInput(_newValue)
 
-            const normalizedValue = /^[.,]/.exec(_newValue) ? `0${_newValue}` : _newValue
-
-            if (_newValue === "" || BigNutils(normalizedValue).isZero) {
+            if (_newValue === "" || BigNutils(_newValue).isZero) {
                 if (timer.current) {
                     clearTimeout(timer.current)
                     timer.current = null
@@ -172,30 +177,9 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
                 return
             }
 
-            const controlValue = isInputInFiat
-                ? BigNutils().toTokenConversion(normalizedValue, exchangeRate ?? 0)
-                : BigNutils(normalizedValue).addTrailingZeros(selectedToken.decimals).toHuman(selectedToken.decimals)
-
-            const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(selectedToken.decimals)
-
-            if (controlValue.isBiggerThan(balanceToHuman.toString)) {
-                setIsError(true)
-                HapticsService.triggerNotification({ level: "Error" })
-            } else {
-                setIsError(false)
-            }
-
-            setTokenAmountFromFiat(controlValue.toString)
+            setTokenAmountFromFiat(tokenAmountFromInput)
         },
-        [
-            exchangeRate,
-            hasValidDecimalPlaces,
-            isInputInFiat,
-            removeInvalidCharacters,
-            selectedToken,
-            setInput,
-            tokenTotalBalance,
-        ],
+        [hasValidDecimalPlaces, removeInvalidCharacters, selectedToken, setInput, tokenAmountFromInput],
     )
 
     const truncateToMaxDecimals = useCallback(
@@ -205,7 +189,7 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
                 const integerPart = parts[0]
                 const separator = parts[1]
                 const decimalPart = parts[2]
-                const maxDecimals = isInputInFiat ? 2 : 5
+                const maxDecimals = isInputInFiat ? MAX_FIAT_DECIMALS : MAX_TOKEN_DECIMALS
                 return `${integerPart}${separator}${decimalPart.substring(0, maxDecimals)}`
             }
             return value
@@ -230,19 +214,13 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
 
     const handleNext = useCallback(() => {
         if (!selectedToken) return
+
         const amount = isInputInFiat ? tokenAmountFromFiat : input
 
-        let fiatAmount: string | undefined
-        if (isInputInFiat) {
-            fiatAmount = input
-        } else if (exchangeRate) {
-            fiatAmount = fiatHumanAmount.value
-        } else {
-            fiatAmount = undefined
-        }
+        const fiatAmount = exchangeRate ? fiatAmountFromInput : undefined
 
         onNext(amount, selectedToken, fiatAmount)
-    }, [exchangeRate, fiatHumanAmount.value, input, isInputInFiat, onNext, selectedToken, tokenAmountFromFiat])
+    }, [exchangeRate, fiatAmountFromInput, input, isInputInFiat, onNext, selectedToken, tokenAmountFromFiat])
 
     const tokenAmountCard = theme.colors.sendScreen.tokenAmountCard
 
@@ -398,7 +376,7 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
             <FadeoutButton
                 testID="next-button"
                 title={LL.COMMON_BTN_NEXT()}
-                disabled={isError || input === "" || BigNutils(input).isZero}
+                disabled={isError || !isValidAmount}
                 action={handleNext}
                 bottom={0}
                 mx={0}
