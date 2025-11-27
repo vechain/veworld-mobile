@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query"
 import { ThorClient } from "@vechain/sdk-network"
 import { ERROR_EVENTS } from "~Constants"
+import { IndexerClient, useIndexerClient } from "~Hooks/useIndexerClient"
 import { initCollectionMetadataFromRegistry, initCollectionMetadataWithoutRegistry } from "~Hooks/useNft/Helpers"
 import { useNFTRegistry } from "~Hooks/useNft/useNFTRegistry"
 import { useNFTMetadata } from "~Hooks/useNFTMetadata"
 import { useThorClient } from "~Hooks/useThorClient"
 import { Network, NftCollection, NFTMetadata } from "~Model"
 import { GithubCollectionResponse } from "~Networking"
-import { getCachedTokenURI, getCachedNftBalanceOf, getNftsForContract } from "~Networking/NFT"
+import { getCachedNftBalanceOf, getCachedTokenURI } from "~Networking/NFT"
 import { getNftCollectionMetadata } from "~Networking/NFT/getNftCollectionMetadata"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import AddressUtils from "~Utils/AddressUtils"
@@ -26,6 +27,7 @@ const getCollectionMetadata = async (
     registryInfo: GithubCollectionResponse[],
     thor: ThorClient,
     fetchMetadata: (uri: string) => Promise<NFTMetadata | undefined>,
+    indexer: IndexerClient,
 ) => {
     const regInfo = registryInfo.find(col => AddressUtils.compareAddresses(col.address, collectionAddress))
 
@@ -48,7 +50,18 @@ const getCollectionMetadata = async (
     let image = collection.image
     let description = collection.description
     if (!collection.fromRegistry) {
-        const { data } = await getNftsForContract(network.type, collectionAddress, address, 1, 0)
+        const { data } = await indexer
+            .GET("/api/v1/nfts", {
+                params: {
+                    query: {
+                        address,
+                        contractAddress: collectionAddress,
+                        page: 0,
+                        size: 1,
+                    },
+                },
+            })
+            .then(res => res.data!)
 
         const tokenURI = await getCachedTokenURI(data[0].tokenId, collectionAddress, network.genesis.id, thor)
         const tokenMetadata = await fetchMetadata(tokenURI)
@@ -80,6 +93,7 @@ export const useCollectionMetadata = (collectionAddress: string) => {
     const { data: registryInfo } = useNFTRegistry()
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const indexer = useIndexerClient(network)
 
     return useQuery({
         queryKey: getCollectionMetadataQueryKey(collectionAddress, network.genesis.id, selectedAccount.address),
@@ -91,6 +105,7 @@ export const useCollectionMetadata = (collectionAddress: string) => {
                 registryInfo!,
                 thor,
                 fetchMetadata,
+                indexer,
             ),
         enabled: !!collectionAddress && !!registryInfo && !!thor,
         staleTime: 24 * 60 * 60 * 1000,

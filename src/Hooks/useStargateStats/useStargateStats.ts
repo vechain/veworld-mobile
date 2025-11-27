@@ -3,7 +3,7 @@ import { BigNumber, ethers } from "ethers"
 import { useMemo } from "react"
 import { getVTHORewardPerBlockPerNFTLevel } from "~Constants"
 import { useLevelCirculatingSupplies } from "~Hooks/Staking"
-import { fetchStargateRewardsDistributed, fetchStargateTotalSupply, fetchStargateTotalVetStaked } from "~Networking"
+import { useMainnetIndexerClient } from "~Hooks/useIndexerClient"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
 export const getStargateTotalSupplyKey = () => ["STARGATE_TOTAL_SUPPLY"]
@@ -15,6 +15,7 @@ const BLOCKS_PER_DAY = 8640 // 24 hours * 3600 seconds / 10 seconds per block
 export const useStargateStats = () => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const { data: circulatingSupplies, isLoading: circulatingSuppliesLoading } = useLevelCirculatingSupplies()
+    const indexer = useMainnetIndexerClient()
 
     // Calculate total VTHO rewards per day based on circulating supplies and reward rates
     const vthoPerDay = useMemo(() => {
@@ -53,15 +54,15 @@ export const useStargateStats = () => {
         queries: [
             {
                 queryKey: getStargateTotalSupplyKey(),
-                queryFn: () => fetchStargateTotalSupply(),
+                queryFn: () => indexer.GET("/api/v1/stargate/nft-holders").then(res => res.data!),
             },
             {
                 queryKey: getStargateTotalVetStakedKey(),
-                queryFn: () => fetchStargateTotalVetStaked(),
+                queryFn: () => indexer.GET("/api/v1/stargate/total-vet-staked").then(res => res.data!),
             },
             {
                 queryKey: getStargateRewardsDistributedKey(),
-                queryFn: () => fetchStargateRewardsDistributed(),
+                queryFn: () => indexer.GET("/api/v1/stargate/total-vtho-claimed").then(res => res.data!),
             },
         ],
         combine(results) {

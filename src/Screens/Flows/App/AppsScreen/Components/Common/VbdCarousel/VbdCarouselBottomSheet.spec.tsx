@@ -1,15 +1,15 @@
 import { act, fireEvent, screen, waitFor } from "@testing-library/react-native"
 import _ from "lodash"
 import React from "react"
+import { components } from "~Generated/indexer/schema"
+import { useAppOverview } from "~Hooks/useAppOverview"
 import { VbdDApp, X2ECategoryType } from "~Model"
-import { FetchAppOverviewResponse } from "~Networking/API/Types"
 import { RootState } from "~Storage/Redux/Types"
 import { TestHelpers, TestWrapper } from "~Test"
 import { useDAppActions } from "../../../Hooks"
 import { VbdCarouselBottomSheet } from "./VbdCarouselBottomSheet"
 
 // Mock the external dependencies
-jest.mock("~Networking/DApps/fetchAppOverview")
 jest.mock("../../../Hooks", () => ({
     useDAppActions: jest.fn(),
 }))
@@ -28,7 +28,9 @@ jest.mock("react-native-localize", () => ({
     getTimeZone: jest.fn(() => "America/New_York"),
 }))
 
-const mockFetchAppOverview = require("~Networking/DApps/fetchAppOverview").fetchAppOverview as jest.Mock
+jest.mock("~Hooks/useAppOverview", () => ({
+    useAppOverview: jest.fn(),
+}))
 
 const mockVbdDApp: VbdDApp = {
     id: "test-app-id",
@@ -50,7 +52,7 @@ const mockVbdDApp: VbdDApp = {
 describe("VbdCarouselBottomSheet", () => {
     const mockOnDAppPress = jest.fn()
 
-    const mockAppOverview: FetchAppOverviewResponse = {
+    const mockAppOverview: components["schemas"]["AppOverview"] = {
         appId: "test-entity",
         roundId: 1,
         date: "2024-01-01",
@@ -131,7 +133,7 @@ describe("VbdCarouselBottomSheet", () => {
         ;(useDAppActions as jest.Mock).mockReturnValue({
             onDAppPress: mockOnDAppPress,
         })
-        mockFetchAppOverview.mockResolvedValue(mockAppOverview)
+        ;(useAppOverview as jest.Mock).mockReturnValue({ data: mockAppOverview, isLoading: false })
     })
 
     describe("Rendering", () => {
@@ -218,7 +220,7 @@ describe("VbdCarouselBottomSheet", () => {
             })
 
             await waitFor(() => {
-                expect(mockFetchAppOverview).toHaveBeenCalledWith("test-app-id")
+                expect(useAppOverview).toHaveBeenCalledWith("test-app-id")
             })
 
             // Check that stats are displayed (numbers are formatted)
@@ -301,7 +303,7 @@ describe("VbdCarouselBottomSheet", () => {
             })
 
             await waitFor(() => {
-                expect(mockFetchAppOverview).toHaveBeenCalledWith("test-app-id")
+                expect(useAppOverview).toHaveBeenCalledWith("test-app-id")
             })
         })
     })
