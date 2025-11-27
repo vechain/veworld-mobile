@@ -366,6 +366,11 @@ export type Colors = {
         title: string
         optionTitle: string
     }
+    defaultIcon: {
+        border: string
+        background: string
+        color: string
+    }
 }
 
 export enum COLORS {
@@ -859,6 +864,11 @@ const light: Colors = {
         title: COLORS.PURPLE,
         optionTitle: COLORS.GREY_600,
     },
+    defaultIcon: {
+        border: COLORS.GREY_200,
+        background: COLORS.GREY_200,
+        color: COLORS.GREY_600,
+    },
 }
 
 const dark: Colors = {
@@ -1228,6 +1238,11 @@ const dark: Colors = {
         background: COLORS.PURPLE_DISABLED,
         title: COLORS.WHITE,
         optionTitle: COLORS.GREY_300,
+    },
+    defaultIcon: {
+        border: COLORS.PURPLE_DISABLED,
+        background: COLORS.PURPLE_DISABLED,
+        color: COLORS.GREY_100,
     },
 }
 
