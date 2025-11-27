@@ -1296,6 +1296,7 @@
   "TRANSACTION_FEE": "Transaction fee",
   "TRANSACTION_ID": "Transaction ID",
   "TRANSACTION_IN_PROGRESS": "Transaction in progress",
+  "TRANSAK_NOT_AVAILABLE": "Transak not available",
   "TYPE": "Type",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Unknown Account",
@@ -1382,6 +1383,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "TRANSAK_NOT_AVAILABLE": "Transak not available"
+  "YESTERDAY": "Yesterday"
 }
