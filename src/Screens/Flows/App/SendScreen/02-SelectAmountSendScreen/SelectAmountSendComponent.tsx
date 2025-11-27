@@ -4,10 +4,8 @@ import { StyleSheet, Text, TouchableOpacity, useWindowDimensions } from "react-n
 import Animated, {
     FadeIn,
     FadeInLeft,
-    FadeInRight,
     FadeOut,
     FadeOutLeft,
-    FadeOutRight,
     useAnimatedStyle,
     useDerivedValue,
     withTiming,
@@ -334,7 +332,7 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
     const animatedInputStyle = useAnimatedStyle(() => {
         const length = inputLength.value
         const baseFontSize = 48
-        const minFontSize = 12
+        const minFontSize = 24
 
         const charWidthAtBaseSize = baseFontSize * 0.6
 
@@ -376,40 +374,58 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
                     {LL.SEND_STEP_OF_3({ stepNumber: "1" })}
                 </BaseText>
             </BaseView>
-            <BaseView style={styles.tokenAmountCard} bg={tokenAmountCard.background} mb={32}>
+            <BaseView style={styles.tokenAmountCard} bg={tokenAmountCard.background}>
                 <BaseView alignItems="center" gap={8}>
                     <BaseView style={styles.inputContainer}>
-                        {isInputInFiat && (
-                            <Animated.View entering={FadeInLeft.duration(300)} exiting={FadeOutLeft.duration(200)}>
-                                <BaseText
-                                    typographyFont="headerTitleMedium"
-                                    color={isError ? theme.colors.danger : theme.colors.text}
-                                    style={styles.currencySymbol}>
-                                    {CURRENCY_SYMBOLS[currency]}
-                                </BaseText>
-                            </Animated.View>
-                        )}
-                        <AnimatedText
-                            key={isInputInFiat ? "fiat" : "token"}
-                            entering={FadeIn.duration(300)}
-                            style={[
-                                styles.animatedInput,
-                                {
-                                    color: isError ? theme.colors.danger : theme.colors.text,
-                                },
-                                animatedInputStyle,
-                            ]}
-                            testID="SendScreen_amountInput">
-                            {formattedInputDisplay}
-                        </AnimatedText>
-                        {!isInputInFiat && (
-                            <Animated.View entering={FadeInRight.duration(300)} exiting={FadeOutRight.duration(200)}>
-                                <BaseText
-                                    typographyFont="subSubTitleMedium"
-                                    color={isError ? theme.colors.danger : theme.colors.text}
-                                    style={styles.tokenSymbolRight}>
-                                    {selectedToken.symbol}
-                                </BaseText>
+                        {isInputInFiat ? (
+                            <>
+                                <Animated.View entering={FadeInLeft.duration(300)} exiting={FadeOutLeft.duration(200)}>
+                                    <BaseText
+                                        typographyFont="headerTitleMedium"
+                                        color={isError ? theme.colors.danger : theme.colors.text}
+                                        style={styles.currencySymbol}>
+                                        {CURRENCY_SYMBOLS[currency]}
+                                    </BaseText>
+                                </Animated.View>
+                                <Animated.View key="fiat" entering={FadeIn.duration(300)}>
+                                    <AnimatedText
+                                        style={[
+                                            styles.animatedInput,
+                                            {
+                                                color: isError ? theme.colors.danger : theme.colors.text,
+                                            },
+                                            animatedInputStyle,
+                                        ]}
+                                        allowFontScaling={false}
+                                        numberOfLines={1}
+                                        testID="SendScreen_amountInput">
+                                        {formattedInputDisplay}
+                                    </AnimatedText>
+                                </Animated.View>
+                            </>
+                        ) : (
+                            <Animated.View key="token" entering={FadeIn.duration(300)} style={styles.tokenInputWrapper}>
+                                <AnimatedText
+                                    style={[
+                                        styles.animatedInput,
+                                        {
+                                            color: isError ? theme.colors.danger : theme.colors.text,
+                                        },
+                                        animatedInputStyle,
+                                    ]}
+                                    allowFontScaling={false}
+                                    numberOfLines={1}
+                                    testID="SendScreen_amountInput">
+                                    {formattedInputDisplay}
+                                    <Text
+                                        style={[
+                                            styles.tokenSymbolInline,
+                                            { color: isError ? theme.colors.danger : theme.colors.text },
+                                        ]}>
+                                        {" "}
+                                        {selectedToken.symbol}
+                                    </Text>
+                                </AnimatedText>
                             </Animated.View>
                         )}
                     </BaseView>
@@ -501,6 +517,8 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
                     showDecimal
                 />
             </BaseView>
+            <BaseSpacer height={42} />
+
             <FadeoutButton
                 testID="next-button"
                 title={LL.COMMON_BTN_NEXT()}
@@ -534,7 +552,9 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             justifyContent: "center",
             height: 64,
+            paddingHorizontal: 24,
         },
+
         animatedInput: {
             fontFamily: defaultTypography.extraLargeTitleSemiBold.fontFamily,
             fontSize: defaultTypography.extraLargeTitleSemiBold.fontSize,
@@ -543,6 +563,16 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         currencySymbol: {
             marginRight: 8,
+        },
+        tokenInputWrapper: {
+            flexDirection: "row",
+            alignItems: "center",
+        },
+        tokenSymbolInline: {
+            fontFamily: defaultTypography.subSubTitleMedium.fontFamily,
+            fontSize: defaultTypography.subSubTitleMedium.fontSize,
+            fontWeight: defaultTypography.subSubTitleMedium.fontWeight,
+            marginLeft: 8,
         },
         tokenSymbolRight: {
             marginLeft: 8,
