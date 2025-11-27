@@ -1391,5 +1391,13 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "SEND_ACCOUNTS_SECTION_TITLE_MY_ACCOUNTS": "My accounts",
+  "SEND_ACCOUNTS_SECTION_TITLE_WATCHING_ACCOUNTS": "Watching",
+  "SEND_RECENT_EMPTY_STATE_TITLE": "No recent activity",
+  "SEND_RECENT_EMPTY_STATE_DESCRIPTION": "Once you send to an address, it’ll show up here for quick access.",
+  "SEND_ACCOUNTS_EMPTY_STATE_TITLE": "No accounts founds",
+  "SEND_ACCOUNTS_EMPTY_STATE_DESCRIPTION": "Your wallet's accounts will show up here once added.",
+  "SEND_CONTACTS_EMPTY_STATE_TITLE": "No contacts added",
+  "SEND_CONTACTS_EMPTY_STATE_DESCRIPTION": "Add your first contact to send faster and avoid errors."
 }

@@ -4567,6 +4567,18 @@ type RootTranslation = {
 	 */
 	SEND_RECEIVER_ADD_CONTACT_BTN: string
 	/**
+	 * A​c​c​o​u​n​t​s
+	 */
+	SEND_RECEIVER_FILTER_ACCOUNTS: string
+	/**
+	 * C​o​n​t​a​c​t​s
+	 */
+	SEND_RECEIVER_FILTER_CONTACTS: string
+	/**
+	 * R​e​c​e​n​t
+	 */
+	SEND_RECEIVER_FILTER_RECENT: string
+	/**
 	 * R​e​c​e​i​v​e
 	 */
 	SEND_RECEIVE_TAB_RECEIVE: string
@@ -5683,17 +5695,37 @@ type RootTranslation = {
 	 */
 	YESTERDAY: string
 	/**
-	 * R​e​c​e​n​t
+	 * M​y​ ​a​c​c​o​u​n​t​s
 	 */
-	SEND_RECEIVER_FILTER_RECENT: string
+	SEND_ACCOUNTS_SECTION_TITLE_MY_ACCOUNTS: string
 	/**
-	 * A​c​c​o​u​n​t​s
+	 * W​a​t​c​h​i​n​g
 	 */
-	SEND_RECEIVER_FILTER_ACCOUNTS: string
+	SEND_ACCOUNTS_SECTION_TITLE_WATCHING_ACCOUNTS: string
 	/**
-	 * C​o​n​t​a​c​t​s
+	 * N​o​ ​r​e​c​e​n​t​ ​a​c​t​i​v​i​t​y
 	 */
-	SEND_RECEIVER_FILTER_CONTACTS: string
+	SEND_RECENT_EMPTY_STATE_TITLE: string
+	/**
+	 * O​n​c​e​ ​y​o​u​ ​s​e​n​d​ ​t​o​ ​a​n​ ​a​d​d​r​e​s​s​,​ ​i​t​’​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​f​o​r​ ​q​u​i​c​k​ ​a​c​c​e​s​s​.
+	 */
+	SEND_RECENT_EMPTY_STATE_DESCRIPTION: string
+	/**
+	 * N​o​ ​a​c​c​o​u​n​t​s​ ​f​o​u​n​d​s
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_TITLE: string
+	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​'​s​ ​a​c​c​o​u​n​t​s​ ​w​i​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​o​n​c​e​ ​a​d​d​e​d​.
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_DESCRIPTION: string
+	/**
+	 * N​o​ ​c​o​n​t​a​c​t​s​ ​a​d​d​e​d
+	 */
+	SEND_CONTACTS_EMPTY_STATE_TITLE: string
+	/**
+	 * A​d​d​ ​y​o​u​r​ ​f​i​r​s​t​ ​c​o​n​t​a​c​t​ ​t​o​ ​s​e​n​d​ ​f​a​s​t​e​r​ ​a​n​d​ ​a​v​o​i​d​ ​e​r​r​o​r​s​.
+	 */
+	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: string
 }
 
 export type TranslationFunctions = {
@@ -10177,6 +10209,18 @@ This action is irreversible.
 	 */
 	SEND_RECEIVER_ADD_CONTACT_BTN: () => LocalizedString
 	/**
+	 * Accounts
+	 */
+	SEND_RECEIVER_FILTER_ACCOUNTS: () => LocalizedString
+	/**
+	 * Contacts
+	 */
+	SEND_RECEIVER_FILTER_CONTACTS: () => LocalizedString
+	/**
+	 * Recent
+	 */
+	SEND_RECEIVER_FILTER_RECENT: () => LocalizedString
+	/**
 	 * Receive
 	 */
 	SEND_RECEIVE_TAB_RECEIVE: () => LocalizedString
@@ -11280,17 +11324,37 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	YESTERDAY: () => LocalizedString
 	/**
-	 * Recent
+	 * My accounts
 	 */
-	SEND_RECEIVER_FILTER_RECENT: () => LocalizedString
+	SEND_ACCOUNTS_SECTION_TITLE_MY_ACCOUNTS: () => LocalizedString
 	/**
-	 * Accounts
+	 * Watching
 	 */
-	SEND_RECEIVER_FILTER_ACCOUNTS: () => LocalizedString
+	SEND_ACCOUNTS_SECTION_TITLE_WATCHING_ACCOUNTS: () => LocalizedString
 	/**
-	 * Contacts
+	 * No recent activity
 	 */
-	SEND_RECEIVER_FILTER_CONTACTS: () => LocalizedString
+	SEND_RECENT_EMPTY_STATE_TITLE: () => LocalizedString
+	/**
+	 * Once you send to an address, it’ll show up here for quick access.
+	 */
+	SEND_RECENT_EMPTY_STATE_DESCRIPTION: () => LocalizedString
+	/**
+	 * No accounts founds
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_TITLE: () => LocalizedString
+	/**
+	 * Your wallet's accounts will show up here once added.
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_DESCRIPTION: () => LocalizedString
+	/**
+	 * No contacts added
+	 */
+	SEND_CONTACTS_EMPTY_STATE_TITLE: () => LocalizedString
+	/**
+	 * Add your first contact to send faster and avoid errors.
+	 */
+	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: () => LocalizedString
 }
 
 export type Formatters = {
