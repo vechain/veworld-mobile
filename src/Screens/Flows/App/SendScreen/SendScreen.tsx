@@ -133,9 +133,9 @@ export const SendScreen = (): ReactElement => {
             case "summary":
                 return (
                     <SummaryScreen
-                        token={flowState.token ?? VETWithBalance}
-                        amount={flowState.amount ?? "110"}
-                        address={flowState.address ?? "0x1234567890ABCDEF1234567890ABCDEF12345678"}
+                        token={flowState.token}
+                        amount={flowState.amount}
+                        address={flowState.address}
                         onTxFinished={handleTxFinished}
                         onBindTransactionControls={setTxControls}
                         txError={txError}
@@ -144,7 +144,7 @@ export const SendScreen = (): ReactElement => {
             default:
                 return <BaseView flex={1} />
         }
-    }, [step, flowState.address, flowState.amount, flowState.token, VETWithBalance, handleTxFinished, txError])
+    }, [step, flowState.address, flowState.amount, flowState.token, handleTxFinished, txError])
 
     const footerConfig: FooterConfig = useMemo(() => {
         switch (step) {
