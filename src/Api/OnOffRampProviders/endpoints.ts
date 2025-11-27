@@ -47,16 +47,16 @@ export const generateCoinbaseOnRampURL = async (
 /**
  *
  * @param address Address of the user
- * @param baseURL Base URL (retrieved from FF)
  * @param currency User's preferred currency
  * @param theme Theme preference (light/dark)
+ * @param baseURL Base URL (retrieved from FF)
  * @returns The generated Transak URL response
  */
 export const generateTransakOnRampURL = async (
     address: string,
-    baseURL: string = "https://onramp-proxy.vechain.org",
     currency: CURRENCY,
     theme: ThemeEnum,
+    baseURL: string = "https://onramp-proxy.vechain.org",
 ) => {
     const result = await axios.get<GenerateTransakUrlResponse>("/", {
         params: {

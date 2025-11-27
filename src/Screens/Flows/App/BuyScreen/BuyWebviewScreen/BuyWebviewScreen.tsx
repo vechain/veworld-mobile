@@ -36,7 +36,7 @@ export const BuyWebviewScreen: React.FC<Props> = ({ route }) => {
                         <CoinbasePayWebView destinationAddress={selectedAccountAddress} />
                     )}
                     {provider === PaymentProvidersEnum.Transak && (
-                        <TransakPayWebView currentAmount={0} destinationAddress={selectedAccountAddress} />
+                        <TransakPayWebView destinationAddress={selectedAccountAddress} />
                     )}
                     {provider === PaymentProvidersEnum.Coinify && (
                         <CoinifyPayWebView currentAmount={0} destinationAddress={selectedAccountAddress} target="buy" />

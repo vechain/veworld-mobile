@@ -16,7 +16,7 @@ import { selectCurrency, selectDevice, selectSelectedAccountOrNull, useAppSelect
 import { error, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
-export const TransakPayWebView = ({ destinationAddress }: { currentAmount: number; destinationAddress: string }) => {
+export const TransakPayWebView = ({ destinationAddress }: { destinationAddress: string }) => {
     const { isDark } = useTheme()
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -51,9 +51,9 @@ export const TransakPayWebView = ({ destinationAddress }: { currentAmount: numbe
         queryFn: () =>
             generateTransakOnRampURL(
                 resolvedDestinationAddress,
-                paymentProvidersFeature.transak.url,
                 currency,
                 isDark ? ThemeEnum.DARK : ThemeEnum.LIGHT,
+                paymentProvidersFeature.transak.url,
             ),
         staleTime: 0,
         gcTime: 1,
