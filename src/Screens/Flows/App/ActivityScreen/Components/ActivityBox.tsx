@@ -899,6 +899,7 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
     const { image } = useCollectibleDetails({
         address: config.STARGATE_NFT_CONTRACT_ADDRESS,
         tokenId: activity.tokenId,
+        blockNumber: activity.blockNumber,
     })
 
     const onPressHandler = useCallback(() => {
