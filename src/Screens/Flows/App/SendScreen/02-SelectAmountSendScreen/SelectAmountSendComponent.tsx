@@ -1,48 +1,26 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { StyleSheet, Text, TouchableOpacity, useWindowDimensions } from "react-native"
-import Animated, {
-    FadeIn,
-    FadeInLeft,
-    FadeOutLeft,
-    useAnimatedStyle,
-    useDerivedValue,
-    withTiming,
-} from "react-native-reanimated"
+import { StyleSheet, useWindowDimensions } from "react-native"
+import { useAnimatedStyle, useDerivedValue, withTiming } from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import {
-    AlertInline,
-    BaseBottomSheet,
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseTouchable,
-    BaseTouchableBox,
-    BaseView,
-    FadeoutButton,
-    NumPad,
-} from "~Components"
-import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, CURRENCY_FORMATS, CURRENCY_SYMBOLS, VeDelegate, VET, VOT3, VTHO } from "~Constants"
-import { ColorThemeType, typography } from "~Constants/Theme"
-import { useAmountInput, useBalances, useCombineFiatBalances, useFormatFiat, useTheme, useThemedStyles } from "~Hooks"
+import { BaseSpacer, BaseView, FadeoutButton, NumPad } from "~Components"
+import { B3TR, CURRENCY_FORMATS, VET, VOT3, VTHO } from "~Constants"
+import { getNumberFormatter } from "~Constants/Constants/NumberFormatter"
+import { useAmountInput, useFormatFiat, useThemedStyles } from "~Hooks"
 import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
-import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
 import HapticsService from "~Services/HapticsService"
 import { selectCurrency, selectCurrencyFormat, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BigNutils } from "~Utils"
-import { formatFullPrecision, formatTokenAmount } from "~Utils/StandardizedFormatting"
+import { BigNutils } from "~Utils"
+import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 import { FungibleTokenWithBalance } from "~Model"
 import { useI18nContext } from "~i18n"
-
-const { defaults: defaultTypography } = typography
+import { TokenSelectionBottomSheet } from "./components/TokenSelectionBottomSheet"
+import { SelectAmountSendDetails } from "./components/SelectAmountSendDetails"
 
 type SelectAmountSendComponentProps = {
     token?: FungibleTokenWithBalance
     onNext: (amount: string, token: FungibleTokenWithBalance, fiatAmount?: string) => void
 }
-
-const AnimatedText = Animated.createAnimatedComponent(Text)
 
 export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendComponentProps) => {
     const { LL } = useI18nContext()
@@ -181,7 +159,7 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
 
             setInput(_newValue)
 
-            const normalizedValue = _newValue.match(/^[.,]/) ? `0${_newValue}` : _newValue
+            const normalizedValue = /^[.,]/.exec(_newValue) ? `0${_newValue}` : _newValue
 
             if (_newValue === "" || BigNutils(normalizedValue).isZero) {
                 if (timer.current) {
@@ -253,7 +231,16 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
     const handleNext = useCallback(() => {
         if (!selectedToken) return
         const amount = isInputInFiat ? tokenAmountFromFiat : input
-        const fiatAmount = isInputInFiat ? input : exchangeRate ? fiatHumanAmount.value : undefined
+
+        let fiatAmount: string | undefined
+        if (isInputInFiat) {
+            fiatAmount = input
+        } else if (exchangeRate) {
+            fiatAmount = fiatHumanAmount.value
+        } else {
+            fiatAmount = undefined
+        }
+
         onNext(amount, selectedToken, fiatAmount)
     }, [exchangeRate, fiatHumanAmount.value, input, isInputInFiat, onNext, selectedToken, tokenAmountFromFiat])
 
@@ -287,10 +274,11 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
 
         const [integerPart, decimalPart] = input.split(/[.,]/)
 
-        const formatter = new Intl.NumberFormat(locale, {
+        const formatter = getNumberFormatter({
+            locale,
             useGrouping: true,
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
+            precision: 0,
+            style: "decimal",
         })
 
         const formattedInteger = formatter.format(Number(integerPart))
@@ -305,10 +293,11 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
                     decimalSeparator = "."
                     break
                 case CURRENCY_FORMATS.SYSTEM:
-                default:
-                    const formatted = new Intl.NumberFormat(locale).format(1.1)
+                default: {
+                    const formatted = getNumberFormatter({ locale, style: "decimal" }).format(1.1)
                     decimalSeparator = formatted.charAt(1)
                     break
+                }
             }
 
             return `${formattedInteger}${decimalSeparator}${decimalPart}`
@@ -359,136 +348,43 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
 
     return (
         <>
-            <BaseView flexDirection="row" alignItems="center" justifyContent="space-between" mb={16} px={8}>
-                <BaseView flexDirection="row" alignItems="center" gap={8}>
-                    <BaseIcon
-                        name="icon-coins"
-                        size={16}
-                        iconPadding={2}
-                        borderRadius={100}
-                        bg={theme.colors.label.background}
-                        color={theme.colors.label.text}
-                    />
-                    <BaseText typographyFont="bodyMedium" color={theme.colors.subSubtitle}>
-                        {LL.SEND_TOKEN_AMOUNT()}
-                    </BaseText>
-                </BaseView>
-                <BaseText typographyFont="captionMedium" color={tokenAmountCard.stepText}>
-                    {LL.SEND_STEP_OF_3({ stepNumber: "1" })}
-                </BaseText>
-            </BaseView>
+            <SelectAmountSendDetails.Header />
+
             <BaseView style={styles.tokenAmountCard} bg={tokenAmountCard.background}>
                 <BaseView alignItems="center" gap={8}>
                     <BaseView style={styles.inputContainer}>
-                        {isInputInFiat ? (
-                            <Animated.View key="fiat" entering={FadeIn.duration(300)} style={styles.amountWrapper}>
-                                <Animated.View entering={FadeInLeft.duration(300)} exiting={FadeOutLeft.duration(200)}>
-                                    <BaseText
-                                        typographyFont="headerTitleMedium"
-                                        color={isError ? theme.colors.danger : theme.colors.text}
-                                        style={styles.currencySymbol}>
-                                        {CURRENCY_SYMBOLS[currency]}
-                                    </BaseText>
-                                </Animated.View>
-                                <AnimatedText
-                                    style={[
-                                        styles.animatedInput,
-                                        {
-                                            color: isError ? theme.colors.danger : theme.colors.text,
-                                        },
-                                        animatedInputStyle,
-                                    ]}
-                                    allowFontScaling={false}
-                                    numberOfLines={1}
-                                    testID="SendScreen_amountInput">
-                                    {formattedInputDisplay}
-                                </AnimatedText>
-                            </Animated.View>
-                        ) : (
-                            <Animated.View key="token" entering={FadeIn.duration(300)} style={styles.amountWrapper}>
-                                <AnimatedText
-                                    style={[
-                                        styles.animatedInput,
-                                        {
-                                            color: isError ? theme.colors.danger : theme.colors.text,
-                                        },
-                                        animatedInputStyle,
-                                    ]}
-                                    allowFontScaling={false}
-                                    testID="SendScreen_amountInput">
-                                    {formattedInputDisplay}
-                                    <Text
-                                        style={[
-                                            styles.tokenSymbolInline,
-                                            { color: isError ? theme.colors.danger : theme.colors.text },
-                                        ]}>
-                                        {" "}
-                                        {selectedToken.symbol}
-                                    </Text>
-                                </AnimatedText>
-                            </Animated.View>
-                        )}
+                        <SelectAmountSendDetails.AnimatedAmountInput
+                            isInputInFiat={isInputInFiat}
+                            isError={isError}
+                            formattedInputDisplay={formattedInputDisplay}
+                            animatedInputStyle={animatedInputStyle}
+                            currency={currency}
+                            selectedToken={selectedToken}
+                        />
                     </BaseView>
-                    {exchangeRate ? (
-                        <BaseTouchable action={handleToggleInputMode} haptics="Light" disabled={isError}>
-                            <BaseView flexDirection="row" alignItems="center" gap={4}>
-                                {isError ? (
-                                    <BaseText color={theme.colors.danger} typographyFont="captionMedium">
-                                        {LL.SEND_AMOUNT_EXCEEDS_BALANCE()}
-                                    </BaseText>
-                                ) : (
-                                    <Animated.View
-                                        key={isInputInFiat ? "token-conv" : "fiat-conv"}
-                                        entering={FadeIn.duration(300)}>
-                                        <BaseText color={theme.colors.textLightish} typographyFont="bodySemiBold">
-                                            {!isInputInFiat && CURRENCY_SYMBOLS[currency]}
-                                            {formattedConvertedAmount}
-                                            {isInputInFiat && (
-                                                <Text style={styles.convertedSymbol}> {selectedToken.symbol}</Text>
-                                            )}
-                                        </BaseText>
-                                    </Animated.View>
-                                )}
-                                {!isError && (
-                                    <>
-                                        <BaseSpacer width={2} />
-                                        <BaseIcon
-                                            name="icon-arrow-up-down"
-                                            size={12}
-                                            color={theme.colors.textLightish}
-                                        />
-                                    </>
-                                )}
-                            </BaseView>
-                        </BaseTouchable>
-                    ) : (
-                        isError && (
-                            <BaseText color={theme.colors.danger} typographyFont="captionMedium">
-                                {LL.SEND_AMOUNT_EXCEEDS_BALANCE()}
-                            </BaseText>
-                        )
-                    )}
+
+                    <SelectAmountSendDetails.ConversionToggle
+                        exchangeRate={exchangeRate}
+                        isError={isError}
+                        isInputInFiat={isInputInFiat}
+                        formattedConvertedAmount={formattedConvertedAmount}
+                        currency={currency}
+                        selectedToken={selectedToken}
+                        onToggle={handleToggleInputMode}
+                    />
                 </BaseView>
+
                 <BaseSpacer height={32} />
-                <TouchableOpacity onPress={handleOpenTokenSelector}>
-                    <BaseView style={styles.tokenSelector} mx={18}>
-                        <BaseView flexDirection="row" alignItems="center" gap={8}>
-                            <BaseIcon name="icon-chevrons-up-down" size={16} color={tokenAmountCard.tokenSelectIcon} />
-                            <BaseView flexDirection="row" alignItems="center" gap={8}>
-                                <TokenImage icon={computedIcon} iconSize={24} rounded={true} />
-                                <BaseText typographyFont="bodySemiBold" color={tokenAmountCard.tokenSelectorText}>
-                                    {tokenBalance}
-                                </BaseText>
-                            </BaseView>
-                        </BaseView>
-                        <BaseTouchable action={handleOnMaxPress} style={styles.maxButton}>
-                            <BaseText typographyFont="captionSemiBold" color={tokenAmountCard.maxButtonText}>
-                                {LL.COMMON_MAX()}
-                            </BaseText>
-                        </BaseTouchable>
-                    </BaseView>
-                </TouchableOpacity>
+
+                <SelectAmountSendDetails.TokenSelectorButton
+                    computedIcon={computedIcon}
+                    tokenBalance={tokenBalance}
+                    onOpenSelector={handleOpenTokenSelector}
+                    onMaxPress={handleOnMaxPress}
+                />
+
                 <BaseSpacer height={24} />
+
                 <NumPad
                     onDigitPress={digit => onChangeTextInput(input + digit)}
                     onDigitDelete={() => onChangeTextInput(input.slice(0, -1))}
@@ -496,6 +392,7 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
                     showDecimal
                 />
             </BaseView>
+
             <BaseSpacer height={42} />
 
             <FadeoutButton
@@ -507,12 +404,12 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
                 mx={0}
                 width={"auto"}
             />
+
             {internalToken && (
                 <TokenSelectionBottomSheet
                     ref={bottomSheetRef}
                     selectedToken={internalToken}
                     setSelectedToken={setInternalToken}
-                    availableTokens={availableTokens}
                     onClose={handleCloseTokenSelector}
                 />
             )}
@@ -520,12 +417,8 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
-        input: {
-            ...defaultTypography.largeTitle,
-            flex: 1,
-        },
         inputContainer: {
             flexDirection: "row",
             alignItems: "center",
@@ -533,316 +426,9 @@ const baseStyles = (theme: ColorThemeType) =>
             height: 64,
             paddingHorizontal: 24,
         },
-
-        animatedInput: {
-            fontFamily: defaultTypography.extraLargeTitleSemiBold.fontFamily,
-            fontSize: defaultTypography.extraLargeTitleSemiBold.fontSize,
-            fontWeight: defaultTypography.extraLargeTitleSemiBold.fontWeight,
-            textAlign: "center",
-        },
-        currencySymbol: {
-            marginRight: 8,
-        },
-        amountWrapper: {
-            height: 64,
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-        },
-        convertedSymbol: {
-            color: theme.colors.textLightish,
-        },
-        tokenSymbolInline: {
-            fontFamily: defaultTypography.subSubTitleMedium.fontFamily,
-            fontSize: defaultTypography.subSubTitleMedium.fontSize,
-            fontWeight: defaultTypography.subSubTitleMedium.fontWeight,
-        },
-        tokenSymbolRight: {
-            marginLeft: 8,
-        },
         tokenAmountCard: {
             padding: 24,
             paddingTop: 38,
             borderRadius: 24,
         },
-        tokenSelector: {
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: 16,
-            borderRadius: 12,
-            borderWidth: 1,
-            borderColor: theme.colors.sendScreen.tokenAmountCard.tokenSelectorBorder,
-            backgroundColor: theme.colors.card,
-        },
-        maxButton: {
-            paddingHorizontal: 18,
-            paddingVertical: 4,
-            borderRadius: 6,
-            borderWidth: 1,
-            borderColor: theme.colors.sendScreen.tokenAmountCard.maxButtonBorder,
-        },
     })
-
-type TokenSelectionBottomSheetProps = {
-    selectedToken: FungibleTokenWithBalance
-    setSelectedToken: (token: FungibleTokenWithBalance) => void
-    availableTokens: FungibleTokenWithBalance[]
-    onClose: (token?: FungibleTokenWithBalance) => void
-}
-
-type EnhancedTokenCardProps = {
-    item: FungibleTokenWithBalance
-    onSelectedToken: (token: FungibleTokenWithBalance) => void
-    selected: boolean
-    disabled?: boolean
-    onDisabledPress?: () => void
-}
-
-const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled, onDisabledPress }: EnhancedTokenCardProps) => {
-    const theme = useTheme()
-    const { styles } = useThemedStyles(baseTokenCardStyles({ selected }))
-    const currency = useAppSelector(selectCurrency)
-
-    const name = useTokenDisplayName(item)
-    const isCrossChainToken = useMemo(() => !!item.crossChainProvider, [item.crossChainProvider])
-
-    const exchangeRateId = useMemo(() => {
-        const coingeckoId = getCoinGeckoIdBySymbol[item.symbol]
-        if (coingeckoId) return coingeckoId
-        if (item.symbol === VeDelegate.symbol) return getCoinGeckoIdBySymbol[B3TR.symbol]
-        return item.symbol
-    }, [item.symbol])
-
-    const { data: exchangeRate } = useExchangeRate({
-        vs_currency: currency,
-        id: exchangeRateId,
-    })
-
-    const { fiatBalance } = useBalances({
-        token: item,
-        exchangeRate: exchangeRate ?? 0,
-    })
-
-    const { combineFiatBalances } = useCombineFiatBalances()
-
-    const { amount, areAlmostZero } = useMemo(
-        () => combineFiatBalances([fiatBalance]),
-        [combineFiatBalances, fiatBalance],
-    )
-
-    const { formatFiat, formatLocale } = useFormatFiat()
-    const renderFiatBalance = useMemo(() => {
-        const formattedFiat = formatFiat({ amount, cover: false })
-        if (areAlmostZero) return `< ${formattedFiat}`
-        return formattedFiat
-    }, [formatFiat, amount, areAlmostZero])
-
-    const tokenBalance = useMemo(() => {
-        return formatTokenAmount(item.balance?.balance ?? "0", item.symbol, item.decimals ?? 0, {
-            locale: formatLocale,
-            includeSymbol: false,
-        })
-    }, [formatLocale, item.balance?.balance, item.decimals, item.symbol])
-
-    const showFiatBalance = useMemo(() => {
-        return !!exchangeRate
-    }, [exchangeRate])
-
-    const onPress = useCallback(() => {
-        if (disabled && onDisabledPress) {
-            onDisabledPress()
-        } else if (!disabled) {
-            onSelectedToken(item)
-        }
-    }, [disabled, item, onDisabledPress, onSelectedToken])
-
-    return (
-        <BaseTouchableBox
-            action={onPress}
-            testID="TOKEN_SELECTOR_BOTTOM_SHEET_TOKEN"
-            py={item.symbol ? typography.lineHeight.body : typography.lineHeight.captionSemiBold}
-            flexDirection="row"
-            bg={disabled ? theme.colors.sendScreen.tokenAmountCard.disabledTokenCardBackground : theme.colors.card}
-            containerStyle={styles.container}
-            innerContainerStyle={styles.root}>
-            <BaseView flexDirection="row" gap={16} style={styles.leftSection}>
-                <TokenImage
-                    icon={item.icon}
-                    isVechainToken={AddressUtils.isVechainToken(item.address)}
-                    iconSize={32}
-                    isCrossChainToken={isCrossChainToken}
-                    rounded={!isCrossChainToken}
-                />
-
-                {item.symbol ? (
-                    <BaseView flexDirection="column" flexGrow={0} gap={3} flexShrink={1} style={styles.tokenInfo}>
-                        <BaseText
-                            typographyFont="bodySemiBold"
-                            color={theme.colors.activityCard.title}
-                            flexDirection="row"
-                            testID="TOKEN_CARD_NAME">
-                            {name}
-                        </BaseText>
-                        <BaseText typographyFont="captionSemiBold" color={theme.colors.activityCard.subtitleLight}>
-                            {item.symbol}
-                        </BaseText>
-                    </BaseView>
-                ) : (
-                    <BaseText
-                        flex={1}
-                        typographyFont="bodySemiBold"
-                        color={theme.colors.activityCard.title}
-                        flexDirection="row">
-                        {name}
-                    </BaseText>
-                )}
-            </BaseView>
-
-            <BaseView flexDirection="column" alignItems="flex-end" style={styles.balanceSection}>
-                {showFiatBalance ? (
-                    <>
-                        <BaseText
-                            typographyFont="bodySemiBold"
-                            color={theme.colors.activityCard.title}
-                            align="right"
-                            flexDirection="row"
-                            testID="TOKEN_CARD_FIAT_BALANCE">
-                            {renderFiatBalance}
-                        </BaseText>
-                        <BaseText
-                            typographyFont="captionSemiBold"
-                            color={theme.colors.activityCard.subtitleLight}
-                            align="right"
-                            flexDirection="row"
-                            testID="TOKEN_CARD_TOKEN_BALANCE">
-                            {tokenBalance}
-                        </BaseText>
-                    </>
-                ) : (
-                    <BaseText
-                        typographyFont="bodySemiBold"
-                        color={theme.colors.activityCard.title}
-                        align="right"
-                        flexDirection="row"
-                        testID="TOKEN_CARD_TOKEN_BALANCE">
-                        {tokenBalance}
-                    </BaseText>
-                )}
-            </BaseView>
-        </BaseTouchableBox>
-    )
-}
-
-const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModalMethods, TokenSelectionBottomSheetProps>(
-    function TokenSelectionBottomSheet(
-        { selectedToken: _selectedToken, setSelectedToken, onClose, availableTokens },
-        ref,
-    ) {
-        const { LL } = useI18nContext()
-        const { theme, styles } = useThemedStyles(baseBottomSheetStyles)
-        const [vot3WarningVisible, setVot3WarningVisible] = useState(false)
-
-        const filteredTokens = useMemo(() => {
-            return availableTokens.filter(token => token.symbol !== VeDelegate.symbol)
-        }, [availableTokens])
-
-        const handleTokenSelect = useCallback(
-            (token: FungibleTokenWithBalance) => {
-                setSelectedToken(token)
-                onClose(token)
-            },
-            [onClose, setSelectedToken],
-        )
-
-        const handleVot3Press = useCallback(() => {
-            setVot3WarningVisible(true)
-        }, [])
-
-        return (
-            <BaseBottomSheet
-                ref={ref}
-                dynamicHeight
-                contentStyle={styles.rootContent}
-                backgroundStyle={styles.rootContentBackground}>
-                <BaseView flexDirection="row" gap={12}>
-                    <BaseIcon name="icon-coins" size={20} color={theme.colors.editSpeedBs.title} />
-                    <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                        {LL.SEND_TOKEN_TITLE()}
-                    </BaseText>
-                </BaseView>
-                <BaseSpacer height={8} />
-                <BaseText typographyFont="body" color={theme.colors.editSpeedBs.subtitle}>
-                    {LL.SEND_TOKEN_SELECT()}
-                </BaseText>
-                <BaseSpacer height={24} />
-                <BaseView flexDirection="column" gap={8}>
-                    {filteredTokens.map(tk => {
-                        const isVot3 = tk.symbol === VOT3.symbol
-                        return (
-                            <React.Fragment key={tk.symbol}>
-                                <EnhancedTokenCard
-                                    item={tk}
-                                    onSelectedToken={handleTokenSelect}
-                                    selected={_selectedToken.symbol === tk.symbol}
-                                    disabled={isVot3}
-                                    onDisabledPress={isVot3 ? handleVot3Press : undefined}
-                                />
-                                {isVot3 && vot3WarningVisible && (
-                                    <BaseView style={styles.alertWrapper}>
-                                        <AlertInline message={LL.SEND_VOT3_WARNING()} variant="banner" status="info" />
-                                    </BaseView>
-                                )}
-                            </React.Fragment>
-                        )
-                    })}
-                </BaseView>
-                <BaseSpacer height={24} />
-            </BaseBottomSheet>
-        )
-    },
-)
-
-const baseBottomSheetStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        rootContent: {
-            paddingBottom: 40,
-        },
-        rootContentBackground: {
-            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE : theme.colors.actionBottomSheet.background,
-        },
-        alertWrapper: {
-            width: "100%",
-        },
-    })
-
-const baseTokenCardStyles =
-    ({ selected }: { selected: boolean }) =>
-    (theme: ColorThemeType) =>
-        StyleSheet.create({
-            root: {
-                gap: 16,
-                alignItems: "center",
-                borderRadius: 12,
-                justifyContent: "space-between",
-                minHeight: 80,
-                borderWidth: selected ? 2 : 0,
-                borderColor: selected ? theme.colors.text : "transparent",
-            },
-            container: {
-                borderRadius: 12,
-            },
-            leftSection: {
-                flexGrow: 1,
-                flexShrink: 1,
-                minWidth: 0,
-            },
-            tokenInfo: {
-                minWidth: 0,
-            },
-            balanceSection: {
-                flexGrow: 0,
-                flexShrink: 0,
-                minWidth: 88,
-            },
-        })
