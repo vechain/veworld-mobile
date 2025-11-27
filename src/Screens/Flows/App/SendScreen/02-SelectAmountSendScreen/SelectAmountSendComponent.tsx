@@ -325,9 +325,17 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
 
     const availableWidth = screenWidth - (24 * 2 + 50 + 20)
 
+    const totalDisplayLength = useMemo(() => {
+        const displayLength = (formattedInputDisplay || "0").length
+        if (!isInputInFiat && selectedToken?.symbol) {
+            return displayLength + 1 + selectedToken.symbol.length
+        }
+        return displayLength
+    }, [formattedInputDisplay, isInputInFiat, selectedToken?.symbol])
+
     const inputLength = useDerivedValue(() => {
-        return (formattedInputDisplay || "0").length
-    }, [formattedInputDisplay])
+        return totalDisplayLength
+    }, [totalDisplayLength])
 
     const animatedInputStyle = useAnimatedStyle(() => {
         const length = inputLength.value
@@ -404,7 +412,7 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
                                 </Animated.View>
                             </>
                         ) : (
-                            <Animated.View key="token" entering={FadeIn.duration(300)} style={styles.tokenInputWrapper}>
+                            <Animated.View key="token" entering={FadeIn.duration(300)}>
                                 <AnimatedText
                                     style={[
                                         styles.animatedInput,
@@ -414,7 +422,6 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
                                         animatedInputStyle,
                                     ]}
                                     allowFontScaling={false}
-                                    numberOfLines={1}
                                     testID="SendScreen_amountInput">
                                     {formattedInputDisplay}
                                     <Text
@@ -564,15 +571,10 @@ const baseStyles = (theme: ColorThemeType) =>
         currencySymbol: {
             marginRight: 8,
         },
-        tokenInputWrapper: {
-            flexDirection: "row",
-            alignItems: "center",
-        },
         tokenSymbolInline: {
             fontFamily: defaultTypography.subSubTitleMedium.fontFamily,
             fontSize: defaultTypography.subSubTitleMedium.fontSize,
             fontWeight: defaultTypography.subSubTitleMedium.fontWeight,
-            marginLeft: 8,
         },
         tokenSymbolRight: {
             marginLeft: 8,
@@ -698,15 +700,10 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled, onDisabl
                             typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.title}
                             flexDirection="row"
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
                             testID="TOKEN_CARD_NAME">
                             {name}
                         </BaseText>
-                        <BaseText
-                            typographyFont="captionSemiBold"
-                            color={theme.colors.activityCard.subtitleLight}
-                            numberOfLines={1}>
+                        <BaseText typographyFont="captionSemiBold" color={theme.colors.activityCard.subtitleLight}>
                             {item.symbol}
                         </BaseText>
                     </BaseView>
@@ -715,9 +712,7 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled, onDisabl
                         flex={1}
                         typographyFont="bodySemiBold"
                         color={theme.colors.activityCard.title}
-                        flexDirection="row"
-                        numberOfLines={1}
-                        ellipsizeMode="tail">
+                        flexDirection="row">
                         {name}
                     </BaseText>
                 )}
@@ -730,7 +725,6 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled, onDisabl
                             typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.title}
                             align="right"
-                            numberOfLines={1}
                             flexDirection="row"
                             testID="TOKEN_CARD_FIAT_BALANCE">
                             {renderFiatBalance}
@@ -739,7 +733,6 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled, onDisabl
                             typographyFont="captionSemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             align="right"
-                            numberOfLines={1}
                             flexDirection="row"
                             testID="TOKEN_CARD_TOKEN_BALANCE">
                             {tokenBalance}
@@ -750,7 +743,6 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled, onDisabl
                         typographyFont="bodySemiBold"
                         color={theme.colors.activityCard.title}
                         align="right"
-                        numberOfLines={1}
                         flexDirection="row"
                         testID="TOKEN_CARD_TOKEN_BALANCE">
                         {tokenBalance}
@@ -773,8 +765,6 @@ const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModalMethods, Toke
         const filteredTokens = useMemo(() => {
             return availableTokens.filter(token => token.symbol !== VeDelegate.symbol)
         }, [availableTokens])
-
-        // Use _selectedToken instead of selectedToken to avoid shadowing in this scope
 
         const handleTokenSelect = useCallback(
             (token: FungibleTokenWithBalance) => {
