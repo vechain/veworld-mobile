@@ -26,6 +26,7 @@ export const initialState: FeatureFlags = {
         transak: {
             android: true,
             iOS: true,
+            url: "https://onramp-proxy.vechain.org",
         },
         coinify: {
             android: true,

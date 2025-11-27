@@ -157,6 +157,11 @@ const Main = () => {
                         persistOptions={{
                             persister: clientPersister,
                             maxAge: RQ_CACHE_MAX_AGE,
+                            dehydrateOptions: {
+                                shouldDehydrateQuery(q) {
+                                    return q.meta?.persisted ?? true
+                                },
+                            },
                         }}>
                         <FeatureFlagsProvider>
                             <FeatureFlaggedSmartWallet nodeUrl={nodeUrl} networkType={networkType}>
