@@ -18,11 +18,12 @@ const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpaci
 export const WalletAddressCard = () => {
     const [address, setAddress] = useState("")
     const [isError, setIsError] = useState(false)
+    const [isFocused, setIsFocused] = useState(false)
 
     const accounts = useAppSelector(selectAccounts)
     const knownContacts = useAppSelector(selectKnownContacts)
 
-    const { styles, theme } = useThemedStyles(baseStyles(isError))
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const { getVnsAddress } = useVns()
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
@@ -59,6 +60,14 @@ export const WalletAddressCard = () => {
         setAddress("")
         setIsError(false)
     }, [setAddress])
+
+    const handleFocus = useCallback(() => {
+        setIsFocused(true)
+    }, [setIsFocused])
+
+    const handleBlur = useCallback(() => {
+        setIsFocused(false)
+    }, [])
 
     const handleOpenScanCamera = useCallback(() => {
         handleOpenCamera({ tabs: ["scan"], defaultTab: "scan" })
@@ -115,6 +124,33 @@ export const WalletAddressCard = () => {
         init()
     }, [getVnsAddress, address])
 
+    const computedInputStyles = useMemo(() => {
+        if (isError) {
+            return [
+                styles.inputContainer,
+                {
+                    borderColor: theme.colors.danger,
+                    borderWidth: 2,
+                },
+            ]
+        }
+
+        return [
+            styles.inputContainer,
+            {
+                borderColor: isFocused ? theme.colors.textInputFocusedBorderColor : theme.colors.cardBorder,
+                borderWidth: isFocused ? 2 : 1,
+            },
+        ]
+    }, [
+        isFocused,
+        theme.colors.textInputFocusedBorderColor,
+        theme.colors.cardBorder,
+        styles.inputContainer,
+        isError,
+        theme.colors.danger,
+    ])
+
     return (
         <>
             <Animated.View style={styles.root} layout={LinearTransition}>
@@ -126,12 +162,17 @@ export const WalletAddressCard = () => {
                         <BaseTextInput
                             placeholder={LL.SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER()}
                             containerStyle={styles.input}
-                            inputContainerStyle={styles.inputContainer}
+                            inputContainerStyle={computedInputStyles}
                             placeholderTextColor={COLORS.GREY_400}
                             value={address}
                             setValue={setAddress}
                             rightIconAdornment
+                            autoComplete="off"
+                            autoCapitalize="none"
+                            autoCorrect={false}
                             rightIcon={renderInputActions}
+                            onBlur={handleBlur}
+                            onFocus={handleFocus}
                         />
                         <TouchableOpacity style={styles.scanButton} activeOpacity={0.85} onPress={handleOpenScanCamera}>
                             <BaseIcon
@@ -171,7 +212,7 @@ export const WalletAddressCard = () => {
     )
 }
 
-const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
             flexDirection: "column",
@@ -195,8 +236,8 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
         },
         inputContainer: {
             flex: 1,
-            borderColor: isError ? theme.colors.danger : theme.colors.cardBorder,
-            borderWidth: isError ? 2 : 1,
+            borderColor: theme.colors.cardBorder,
+            borderWidth: 1,
         },
         input: {
             flex: 1,
