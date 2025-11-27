@@ -1,17 +1,19 @@
 import { useNavigation } from "@react-navigation/native"
 import { useQuery } from "@tanstack/react-query"
 import { Events, TransakWebView } from "@transak/ui-react-native-sdk"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { DimensionValue, StyleSheet } from "react-native"
 import { generateTransakOnRampURL } from "~Api/OnOffRampProviders"
 import { BaseActivityIndicator, BaseButton, BaseStatusBar, BaseView } from "~Components/Base"
 import { useFeatureFlags } from "~Components/Providers"
-import { AnalyticsEvent, COLORS, ColorThemeType, ThemeEnum } from "~Constants"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { AnalyticsEvent, COLORS, ColorThemeType, ERROR_EVENTS, ThemeEnum } from "~Constants"
 import { useAnalyticTracking, useSmartWallet, useTheme, useThemedStyles } from "~Hooks"
 import { DEVICE_TYPE } from "~Model"
 import { Routes } from "~Navigation"
 import { selectCurrency, selectDevice, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
-import { PlatformUtils } from "~Utils"
+import { error, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
 export const TransakPayWebView = ({ destinationAddress }: { currentAmount: number; destinationAddress: string }) => {
@@ -40,7 +42,11 @@ export const TransakPayWebView = ({ destinationAddress }: { currentAmount: numbe
         return isDark ? COLORS.DARK_PURPLE : COLORS.LIGHT_GRAY
     }, [isDark])
 
-    const { data: transakRes, isFetching: isLoadingQuery } = useQuery({
+    const {
+        data: transakRes,
+        isFetching: isLoadingQuery,
+        isError,
+    } = useQuery({
         queryKey: ["TRANSAK", "ONRAMP", resolvedDestinationAddress],
         queryFn: () =>
             generateTransakOnRampURL(
@@ -91,6 +97,23 @@ export const TransakPayWebView = ({ destinationAddress }: { currentAmount: numbe
         if (!transakRes?.url) return
         return { widgetUrl: transakRes?.url }
     }, [transakRes])
+
+    useEffect(() => {
+        if (!isError) return
+        error(ERROR_EVENTS.BUY, "Transak URL generation failed")
+        Feedback.show({
+            severity: FeedbackSeverity.ERROR,
+            message: LL.TRANSAK_NOT_AVAILABLE(),
+            type: FeedbackType.ALERT,
+        })
+        const timeoutId = setTimeout(() => {
+            nav.goBack()
+        }, 500)
+
+        return () => {
+            clearTimeout(timeoutId)
+        }
+    }, [LL, isError, nav])
 
     return (
         <BaseView flex={1}>

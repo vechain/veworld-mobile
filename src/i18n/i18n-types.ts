@@ -1818,6 +1818,10 @@ type RootTranslation = {
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: string
 	/**
+	 * C​o​i​n​b​a​s​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
+	 */
+	COINBASE_NOT_AVAILABLE: string
+	/**
 	 * A​v​a​t​a​r
 	 */
 	COLLECTIBLES_ACTION_AVATAR_ACTIVE: string
@@ -5655,9 +5659,9 @@ type RootTranslation = {
 	 */
 	YESTERDAY: string
 	/**
-	 * Coinbase not available
+	 * T​r​a​n​s​a​k​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
-	COINBASE_NOT_AVAILABLE: string
+	TRANSAK_NOT_AVAILABLE: string
 }
 
 export type TranslationFunctions = {
@@ -7426,6 +7430,10 @@ Thanks for your patience!
 	 * No wallets available
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: () => LocalizedString
+	/**
+	 * Coinbase not available
+	 */
+	COINBASE_NOT_AVAILABLE: () => LocalizedString
 	/**
 	 * Avatar
 	 */
@@ -11214,11 +11222,11 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	/**
 	 * Yesterday
 	 */
-	YESTERDAY: () => LocalizedString,
+	YESTERDAY: () => LocalizedString
 	/**
-	 * Coinbase not available
+	 * Transak not available
 	 */
-	COINBASE_NOT_AVAILABLE: () => LocalizedString
+	TRANSAK_NOT_AVAILABLE: () => LocalizedString
 }
 
 export type Formatters = {
