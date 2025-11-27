@@ -8,7 +8,6 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
 import { SummaryScreen } from "~Components/Reusable/Send"
-import { VET } from "~Constants"
 
 type SendFlowStep = "selectAmount" | "insertAddress" | "summary"
 
@@ -81,17 +80,6 @@ export const SendScreen = (): ReactElement => {
         setStep("summary")
     }, [])
 
-    const VETWithBalance = useMemo(() => {
-        return {
-            ...VET,
-            balance: {
-                balance: "35",
-                tokenAddress: VET.address,
-                timeUpdated: Date.now().toString(),
-                isHidden: false,
-            },
-        }
-    }, [])
     const handleTxFinished = useCallback(
         (success: boolean) => {
             if (success) {
@@ -130,21 +118,29 @@ export const SendScreen = (): ReactElement => {
                 return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step3 logic */}</BaseView>
             case "insertAddress":
                 return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step3 logic */}</BaseView>
-            case "summary":
+            case "summary": {
+                const { token, amount, address } = flowState
+
+                if (!token || !amount || !address) {
+                    // TODO: add a Error Screen?!
+                    return <BaseView flex={1} />
+                }
+
                 return (
                     <SummaryScreen
-                        token={flowState.token}
-                        amount={flowState.amount}
-                        address={flowState.address}
+                        token={token}
+                        amount={amount}
+                        address={address}
                         onTxFinished={handleTxFinished}
                         onBindTransactionControls={setTxControls}
                         txError={txError}
                     />
                 )
+            }
             default:
                 return <BaseView flex={1} />
         }
-    }, [step, flowState.address, flowState.amount, flowState.token, handleTxFinished, txError])
+    }, [step, flowState, handleTxFinished, txError])
 
     const footerConfig: FooterConfig = useMemo(() => {
         switch (step) {
