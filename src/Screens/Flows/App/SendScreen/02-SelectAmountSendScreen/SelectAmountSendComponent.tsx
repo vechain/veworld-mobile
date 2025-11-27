@@ -355,6 +355,7 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
 
         return {
             fontSize: withTiming(fontSize, { duration: 200 }),
+            lineHeight: withTiming(fontSize, { duration: 200 }),
         }
     }, [inputLength, availableWidth])
 
@@ -412,7 +413,7 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
                                 </Animated.View>
                             </>
                         ) : (
-                            <Animated.View key="token" entering={FadeIn.duration(300)}>
+                            <Animated.View key="token" entering={FadeIn.duration(300)} style={styles.tokenWrapper}>
                                 <AnimatedText
                                     style={[
                                         styles.animatedInput,
@@ -570,6 +571,11 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         currencySymbol: {
             marginRight: 8,
+        },
+        tokenWrapper: {
+            height: 64,
+            justifyContent: "center",
+            alignItems: "center",
         },
         tokenSymbolInline: {
             fontFamily: defaultTypography.subSubTitleMedium.fontFamily,
