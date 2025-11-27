@@ -39,7 +39,7 @@ const { defaults: defaultTypography } = typography
 
 type SelectAmountSendComponentProps = {
     token?: FungibleTokenWithBalance
-    onNext: (amount: string, token: FungibleTokenWithBalance) => void
+    onNext: (amount: string, token: FungibleTokenWithBalance, fiatAmount?: string) => void
 }
 
 const AnimatedText = Animated.createAnimatedComponent(Text)
@@ -250,16 +250,12 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
         truncateToMaxDecimals,
     ])
 
-    /**
-     * Navigate to the next screen
-     * Nav params: If user has FIAT active send the TOKEN amount calculated from FIAT,
-     * otherwise send the input value (human readable token value)
-     */
     const handleNext = useCallback(() => {
         if (!selectedToken) return
         const amount = isInputInFiat ? tokenAmountFromFiat : input
-        onNext(amount, selectedToken)
-    }, [input, isInputInFiat, onNext, selectedToken, tokenAmountFromFiat])
+        const fiatAmount = isInputInFiat ? input : exchangeRate ? fiatHumanAmount.value : undefined
+        onNext(amount, selectedToken, fiatAmount)
+    }, [exchangeRate, fiatHumanAmount.value, input, isInputInFiat, onNext, selectedToken, tokenAmountFromFiat])
 
     const tokenAmountCard = theme.colors.sendScreen.tokenAmountCard
 

@@ -17,6 +17,7 @@ type SendFlowState = {
     token?: FungibleTokenWithBalance
     address?: string
     amount?: string
+    fiatAmount?: string
 }
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
@@ -41,11 +42,12 @@ export const SendScreen = (): ReactElement => {
         [handleClose],
     )
 
-    const goToInsertAddress = useCallback((amount: string, token: FungibleTokenWithBalance) => {
+    const goToInsertAddress = useCallback((amount: string, token: FungibleTokenWithBalance, fiatAmount?: string) => {
         setFlowState(current => ({
             ...current,
             amount,
             token,
+            fiatAmount,
             // reset downstream state when amount/token changes
             address: undefined,
         }))
