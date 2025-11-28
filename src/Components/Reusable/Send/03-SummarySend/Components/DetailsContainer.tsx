@@ -23,7 +23,7 @@ const DetailsContainer = ({ children }: PropsWithChildren) => {
     )
 }
 
-const TokenValue = ({ value, token }: { value: string; token: FungibleToken; border?: boolean }) => {
+const TokenValue = ({ value, token }: { value: string; token: FungibleToken }) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
     return (
