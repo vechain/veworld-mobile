@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet, useWindowDimensions } from "react-native"
 import { useAnimatedStyle, useDerivedValue, withTiming } from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { BaseSpacer, BaseView, FadeoutButton, NumPad } from "~Components"
+import { BaseSpacer, BaseView, NumPad } from "~Components"
 import { B3TR, CURRENCY_FORMATS, VET, VOT3, VTHO } from "~Constants"
 import { getNumberFormatter } from "~Constants/Constants/NumberFormatter"
 import { useAmountInput, useFormatFiat, useThemedStyles } from "~Hooks"
@@ -13,7 +13,6 @@ import { selectCurrency, selectCurrencyFormat, useAppSelector } from "~Storage/R
 import { BigNutils } from "~Utils"
 import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 import { FungibleTokenWithBalance } from "~Model"
-import { useI18nContext } from "~i18n"
 import { TokenSelectionBottomSheet } from "./components/TokenSelectionBottomSheet"
 import { SelectAmountSendDetails } from "./components/SelectAmountSendDetails"
 import { useAmountConversion } from "./Hooks"
@@ -24,10 +23,16 @@ const MAX_TOKEN_DECIMALS = 5
 type SelectAmountSendComponentProps = {
     token?: FungibleTokenWithBalance
     onNext: (amount: string, token: FungibleTokenWithBalance, fiatAmount?: string) => void
+    onValidationChange?: (isValid: boolean, isError: boolean) => void
+    onBindNextHandler?: (handler: () => void) => void
 }
 
-export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendComponentProps) => {
-    const { LL } = useI18nContext()
+export const SelectAmountSendComponent = ({
+    token,
+    onNext,
+    onValidationChange,
+    onBindNextHandler,
+}: SelectAmountSendComponentProps) => {
     const { formatLocale } = useFormatFiat()
     const { width: screenWidth } = useWindowDimensions()
 
@@ -104,6 +109,10 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
             setIsError(false)
         }
     }, [isBalanceExceeded, isError, input])
+
+    useEffect(() => {
+        onValidationChange?.(isValidAmount, isError)
+    }, [isValidAmount, isError, onValidationChange])
 
     const computedIcon = useMemo(() => {
         if (!selectedToken) return VET.icon
@@ -221,6 +230,10 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
 
         onNext(amount, selectedToken, fiatAmount)
     }, [exchangeRate, fiatAmountFromInput, input, isInputInFiat, onNext, selectedToken, tokenAmountFromFiat])
+
+    useEffect(() => {
+        onBindNextHandler?.(handleNext)
+    }, [handleNext, onBindNextHandler])
 
     const tokenAmountCard = theme.colors.sendScreen.tokenAmountCard
 
@@ -370,18 +383,6 @@ export const SelectAmountSendComponent = ({ token, onNext }: SelectAmountSendCom
                     showDecimal
                 />
             </BaseView>
-
-            <BaseSpacer height={42} />
-
-            <FadeoutButton
-                testID="next-button"
-                title={LL.COMMON_BTN_NEXT()}
-                disabled={isError || !isValidAmount}
-                action={handleNext}
-                bottom={0}
-                mx={0}
-                width={"auto"}
-            />
 
             {internalToken && (
                 <TokenSelectionBottomSheet
