@@ -19,6 +19,7 @@ import { Platform, StyleSheet } from "react-native"
 import { NativeViewGestureHandler } from "react-native-gesture-handler"
 import { useAnimatedProps, useAnimatedStyle } from "react-native-reanimated"
 import { useStableCallback } from "~Hooks/useStableCallback"
+import BottomSheetRefreshControl from "./BottomSheetRefreshControl"
 
 const styles = StyleSheet.create({
     container: {
@@ -133,7 +134,18 @@ export function createBottomSheetScrollableComponent<T, P>(type: SCROLLABLE_TYPE
                     refreshControlGestureRef={refreshControlGestureRef}
                     gestureType={GESTURE_SOURCE.SCROLLABLE}
                     style={styles.container}>
-                    {scrollableContent}
+                    {onRefresh ? (
+                        <BottomSheetRefreshControl
+                            ref={refreshControlGestureRef}
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                            progressViewOffset={progressViewOffset}
+                            style={styles.container}>
+                            {scrollableContent}
+                        </BottomSheetRefreshControl>
+                    ) : (
+                        scrollableContent
+                    )}
                 </BottomSheetDraggableView>
             )
         }

@@ -225,6 +225,11 @@ jest.mock("@gorhom/bottom-sheet", () => ({
         SECTIONLIST: 4,
         VIRTUALIZEDLIST: 5,
     },
+    SCROLLABLE_STATE: {
+        LOCKED: 0,
+        UNLOCKED: 1,
+        UNDETERMINED: 2,
+    },
 }))
 
 jest.mock("react-native-reanimated-skeleton", () => "Skeleton")
