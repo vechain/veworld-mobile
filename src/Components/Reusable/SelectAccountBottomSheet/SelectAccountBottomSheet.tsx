@@ -3,6 +3,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { useNavigation } from "@react-navigation/native"
 import React, { ComponentProps, PropsWithChildren, useCallback, useMemo, useState } from "react"
 import { SectionListData, StyleSheet } from "react-native"
+import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { LinearTransition } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import {
@@ -148,75 +149,82 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
 
         return (
             <BaseBottomSheet
-                dynamicHeight
                 ref={ref}
+                dynamicHeight
                 onDismiss={onDismiss}
                 enableContentPanningGesture={false}
                 animationConfigs={ANIMATION_CONFIG}
-                stickyIndices={[0]}
+                scrollable={false}
                 noMargins>
-                <BaseView
-                    flexDirection="column"
-                    gap={24}
-                    pb={24}
-                    px={16}
-                    pt={16}
-                    bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50}>
-                    <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
-                        <BaseView flexDirection="column" gap={8}>
-                            <BaseView flexDirection="row" alignItems="center" gap={12}>
-                                <BaseIcon
-                                    name="icon-wallet"
-                                    size={20}
-                                    color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
-                                />
-                                <BaseText typographyFont="subTitleSemiBold">{LL.SELECT_ACCOUNT_TITLE()}</BaseText>
+                <NestableScrollContainer showsVerticalScrollIndicator={false} stickyHeaderIndices={[0]} bounces={false}>
+                    <BaseView
+                        flexDirection="column"
+                        gap={24}
+                        pb={24}
+                        px={16}
+                        pt={16}
+                        bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50}>
+                        <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
+                            <BaseView flexDirection="column" gap={8}>
+                                <BaseView flexDirection="row" alignItems="center" gap={12}>
+                                    <BaseIcon
+                                        name="icon-wallet"
+                                        size={20}
+                                        color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
+                                    />
+                                    <BaseText typographyFont="subTitleSemiBold">{LL.SELECT_ACCOUNT_TITLE()}</BaseText>
+                                </BaseView>
+                                <BaseText
+                                    typographyFont="body"
+                                    color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                                    {LL.SELECT_ACCOUNT_DESCRIPTION()}
+                                </BaseText>
                             </BaseView>
-                            <BaseText typographyFont="body" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
-                                {LL.SELECT_ACCOUNT_DESCRIPTION()}
-                            </BaseText>
+                            {goToWalletEnabled && (
+                                <BSTouchableOpacity onPress={onSettingsClick} style={styles.settingsBtn}>
+                                    <BaseIcon
+                                        name="icon-settings"
+                                        color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}
+                                    />
+                                </BSTouchableOpacity>
+                            )}
                         </BaseView>
-                        {goToWalletEnabled && (
-                            <BSTouchableOpacity onPress={onSettingsClick} style={styles.settingsBtn}>
-                                <BaseIcon name="icon-settings" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} />
-                            </BSTouchableOpacity>
+
+                        {keys.length > 1 && (
+                            <BaseTabs
+                                keys={keys}
+                                labels={labels}
+                                selectedKey={selectedKey}
+                                setSelectedKey={setSelectedKey}
+                            />
                         )}
                     </BaseView>
-
-                    {keys.length > 1 && (
-                        <BaseTabs
-                            keys={keys}
-                            labels={labels}
-                            selectedKey={selectedKey}
-                            setSelectedKey={setSelectedKey}
-                        />
-                    )}
-                </BaseView>
-
-                <BottomSheetSectionList
-                    sections={sections}
-                    contentContainerStyle={styles.contentContainer}
-                    keyExtractor={item => item.address}
-                    renderSectionHeader={SectionHeader}
-                    stickySectionHeadersEnabled={false}
-                    renderItem={({ item }) => (
-                        <SelectableAccountCard
-                            account={item}
-                            onPress={handlePress}
-                            selected={item.address === selectedAccount?.address}
-                            balanceToken={balanceToken}
-                            testID="selectAccount"
-                        />
-                    )}
-                    ItemSeparatorComponent={ItemSeparatorComponent}
-                    SectionSeparatorComponent={SectionSeparatorComponent}
-                    key={selectedKey}
-                    showsVerticalScrollIndicator={false}
-                    layout={LinearTransition.duration(500)}
-                    initialNumToRender={15}
-                    scrollEnabled
-                    style={styles.list}
-                />
+                    <BottomSheetSectionList
+                        sections={sections}
+                        contentContainerStyle={styles.contentContainer}
+                        keyExtractor={item => item.address}
+                        renderSectionHeader={SectionHeader}
+                        stickySectionHeadersEnabled={false}
+                        renderItem={({ item }) => (
+                            <SelectableAccountCard
+                                account={item}
+                                onPress={handlePress}
+                                selected={item.address === selectedAccount?.address}
+                                balanceToken={balanceToken}
+                                testID="selectAccount"
+                            />
+                        )}
+                        ItemSeparatorComponent={ItemSeparatorComponent}
+                        SectionSeparatorComponent={SectionSeparatorComponent}
+                        key={selectedKey}
+                        showsVerticalScrollIndicator={false}
+                        layout={LinearTransition.duration(500)}
+                        initialNumToRender={15}
+                        scrollEnabled
+                        alwaysBounceVertical
+                        style={styles.list}
+                    />
+                </NestableScrollContainer>
             </BaseBottomSheet>
         )
     },
