@@ -61,6 +61,7 @@ const mockedFeatureFlags: FeatureFlags = {
         transak: {
             android: true,
             iOS: true,
+            url: "",
         },
         coinify: {
             android: true,

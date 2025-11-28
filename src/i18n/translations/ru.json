@@ -1298,6 +1298,7 @@
   "TRANSACTION_FEE": "Комиссия за транзакцию",
   "TRANSACTION_ID": "ID транзакции",
   "TRANSACTION_IN_PROGRESS": "Транзакция выполняется",
+  "TRANSAK_NOT_AVAILABLE": "Transak недоступен",
   "TYPE": "Тип",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Неизвестный аккаунт",

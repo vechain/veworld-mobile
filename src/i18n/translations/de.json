@@ -1298,6 +1298,7 @@
   "TRANSACTION_FEE": "Transaktionsgebühr",
   "TRANSACTION_ID": "Transaktions-ID",
   "TRANSACTION_IN_PROGRESS": "Transaktion läuft",
+  "TRANSAK_NOT_AVAILABLE": "Transak nicht verfügbar",
   "TYPE": "Typ",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Unbekanntes Konto",

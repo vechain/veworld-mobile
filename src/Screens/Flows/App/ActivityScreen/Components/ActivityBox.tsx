@@ -899,6 +899,7 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
     const { image } = useCollectibleDetails({
         address: config.STARGATE_NFT_CONTRACT_ADDRESS,
         tokenId: activity.tokenId,
+        blockNumber: activity.blockNumber,
     })
 
     const onPressHandler = useCallback(() => {
@@ -925,6 +926,7 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
                 return "icon-log-in"
             case ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST:
             case ActivityEvent.STARGATE_DELEGATION_EXITED:
+            case ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR:
             case ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED:
                 return "icon-log-out"
             case ActivityEvent.STARGATE_DELEGATE_ACTIVE:

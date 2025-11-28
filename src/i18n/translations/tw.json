@@ -1298,6 +1298,7 @@
   "TRANSACTION_FEE": "交易費",
   "TRANSACTION_ID": "交易 ID",
   "TRANSACTION_IN_PROGRESS": "交易進行中",
+  "TRANSAK_NOT_AVAILABLE": "Transak 無法使用",
   "TYPE": "類型",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "未知帳號",

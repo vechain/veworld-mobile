@@ -1,14 +1,26 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { TestWrapper } from "~Test"
-import { fetchStargateRewardsDistributed, fetchStargateTotalSupply, fetchStargateTotalVetStaked } from "~Networking"
 import { useLevelCirculatingSupplies } from "~Hooks/Staking"
 import { useStargateStats } from "./useStargateStats"
 
-jest.mock("~Networking", () => ({
-    ...jest.requireActual("~Networking"),
-    fetchStargateTotalSupply: jest.fn(),
-    fetchStargateTotalVetStaked: jest.fn(),
-    fetchStargateRewardsDistributed: jest.fn(),
+const getStargateTotalSupply = jest.fn()
+const getStargateTotalVet = jest.fn()
+const getStargateRewardsDistributed = jest.fn()
+
+jest.mock("~Hooks/useIndexerClient", () => ({
+    ...jest.requireActual("~Hooks/useIndexerClient"),
+    useMainnetIndexerClient: jest.fn().mockReturnValue({
+        GET: (url: string, ...args: any[]) => {
+            switch (url) {
+                case "/api/v1/stargate/nft-holders":
+                    return getStargateTotalSupply(...args).then((res: any) => ({ data: res }))
+                case "/api/v1/stargate/total-vet-staked":
+                    return getStargateTotalVet(...args).then((res: any) => ({ data: res }))
+                case "/api/v1/stargate/total-vtho-claimed":
+                    return getStargateRewardsDistributed(...args).then((res: any) => ({ data: res }))
+            }
+        },
+    }),
 }))
 
 jest.mock("~Hooks/Staking", () => ({
@@ -21,7 +33,7 @@ describe("useStargateStats", () => {
     })
 
     it("should return the stargate stats", async () => {
-        ;(fetchStargateTotalSupply as jest.Mock).mockResolvedValue({
+        ;(getStargateTotalSupply as jest.Mock).mockResolvedValue({
             total: 12816,
             byLevel: {
                 Dawn: 5509,
@@ -36,7 +48,7 @@ describe("useStargateStats", () => {
                 Thunder: 263,
             },
         })
-        ;(fetchStargateTotalVetStaked as jest.Mock).mockResolvedValue({
+        ;(getStargateTotalVet as jest.Mock).mockResolvedValue({
             total: "6318030000000000000000000000",
             byLevel: {
                 Dawn: "55080000000000000000000000",
@@ -51,7 +63,7 @@ describe("useStargateStats", () => {
                 Thunder: "1315000000000000000000000000",
             },
         })
-        ;(fetchStargateRewardsDistributed as jest.Mock).mockResolvedValue("526381931206666467000000000")
+        ;(getStargateRewardsDistributed as jest.Mock).mockResolvedValue("526381931206666467000000000")
         ;(useLevelCirculatingSupplies as jest.Mock).mockImplementation(() => ({
             data: [25, 20, 15, 10, 5, 3, 10, 15, 20, 25],
             isLoading: false,

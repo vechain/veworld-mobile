@@ -1298,6 +1298,7 @@
   "TRANSACTION_FEE": "Phí giao dịch",
   "TRANSACTION_ID": "ID giao dịch",
   "TRANSACTION_IN_PROGRESS": "Giao dịch đang được thực hiện",
+  "TRANSAK_NOT_AVAILABLE": "Transak không khả dụng",
   "TYPE": "Loại",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Tài khoản không xác định",

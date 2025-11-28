@@ -1,7 +1,8 @@
 import axios, { AxiosResponse } from "axios"
-import { ERROR_EVENTS } from "~Constants"
+import { CURRENCY, ERROR_EVENTS, ThemeEnum } from "~Constants"
 import { error } from "~Utils"
-import { GenerateUrlResponse } from "./types"
+import { GenerateTransakUrlResponse, GenerateUrlResponse } from "./types"
+import { Platform } from "react-native"
 
 /**
  *
@@ -41,4 +42,43 @@ export const generateCoinbaseOnRampURL = async (
     }
 
     return (result.data as GenerateUrlResponse).url
+}
+
+/**
+ *
+ * @param address Address of the user
+ * @param currency User's preferred currency
+ * @param theme Theme preference (light/dark)
+ * @param baseURL Base URL (retrieved from FF)
+ * @returns The generated Transak URL response
+ */
+export const generateTransakOnRampURL = async (
+    address: string,
+    currency: CURRENCY,
+    theme: ThemeEnum,
+    baseURL: string = "https://onramp-proxy.vechain.org",
+) => {
+    const result = await axios.get<GenerateTransakUrlResponse>("/", {
+        params: {
+            address,
+            provider: "transak",
+            os: Platform.OS,
+            currency,
+            theme: theme.toUpperCase(),
+        },
+        headers: {
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
+            Expires: "0",
+        },
+        baseURL,
+        timeout: 15000, // 15 second timeout
+    })
+
+    if (result.status !== 200 || !result.data.url) {
+        error(ERROR_EVENTS.BUY, "Error while generating transak URL", result.data)
+        throw new Error("Error while generating transak URL")
+    }
+
+    return result.data
 }

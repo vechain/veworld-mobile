@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { VeDelegate, VET, VTHO } from "~Constants"
+import { useIndexerClient } from "~Hooks/useIndexerClient"
 import { useMultipleTokensBalance } from "~Hooks/useTokenBalance/useMultipleTokensBalance"
 import { getUseUserTokensConfig } from "~Hooks/useUserTokens"
 import { FungibleTokenWithBalance } from "~Model"
@@ -32,9 +33,10 @@ export const useNonVechainTokensBalance = ({
     const customTokens = useAppSelector(state => selectCustomTokensByAccount(state, parsedAddress))
     const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
     const hiddenBalances = useAppSelector(state => selectHiddenBalancesByAccount(state, parsedAddress))
+    const indexer = useIndexerClient(network)
 
     const { data: userTokens, isLoading: isLoadingUserTokens } = useQuery({
-        ...getUseUserTokensConfig({ address: parsedAddress, network }),
+        ...getUseUserTokensConfig({ address: parsedAddress, network, indexer }),
         enabled,
         select(data) {
             return data.filter(d => ![B3TR, VET, VTHO, VOT3].find(u => AddressUtils.compareAddresses(u.address, d)))

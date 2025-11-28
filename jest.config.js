@@ -14,8 +14,6 @@ module.exports = {
         "^.+\\.tsx?$": "ts-jest",
         ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
         "^.+\\.js$": "babel-jest",
-
-        "node_modules/@transak/react-native-sdk/node_modules/query-string/index.js": "babel-jest",
     },
     transformIgnorePatterns: [
         "node_modules/(?!((jest-)?react-native|@react-native(-community)?)" +
@@ -35,7 +33,7 @@ module.exports = {
             "|decode-uri-component" +
             "|split-on-first" +
             "|filter-obj" +
-            "|@transak/react-native-sdk" +
+            "|@transak/ui-react-native-sdk" +
             "|jail-monkey" +
             "|expo/.*" +
             "|@privy-io/.*" +
