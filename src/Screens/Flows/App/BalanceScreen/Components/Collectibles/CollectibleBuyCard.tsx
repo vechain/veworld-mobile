@@ -44,8 +44,6 @@ const baseStyles = () =>
             aspectRatio: 0.8791,
             maxWidth: "50%",
             backgroundColor: COLORS.PURPLE,
-            gap: 8,
-            // padding: 16,
             alignItems: "center",
         },
         image: {
