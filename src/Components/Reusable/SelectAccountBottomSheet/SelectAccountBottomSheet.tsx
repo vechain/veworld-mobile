@@ -2,8 +2,8 @@ import { TouchableOpacity as BSTouchableOpacity } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import React, { ComponentProps, PropsWithChildren, useCallback, useMemo, useState } from "react"
-import { SectionList, SectionListData, StyleSheet } from "react-native"
-import Animated, { LinearTransition } from "react-native-reanimated"
+import { SectionListData, StyleSheet } from "react-native"
+import { LinearTransition } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import {
     BaseBottomSheet,
@@ -15,6 +15,7 @@ import {
     SectionListSeparator,
 } from "~Components"
 import { BaseTabs } from "~Components/Base/BaseTabs"
+import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
@@ -78,16 +79,6 @@ const SectionHeader = ({
 }) => {
     return <SectionHeaderTitle>{section.alias}</SectionHeaderTitle>
 }
-
-const AnimatedSectionList = Animated.createAnimatedComponent(
-    SectionList<
-        AccountWithDevice,
-        {
-            data: AccountWithDevice[]
-            alias: string
-        }
-    >,
-)
 
 const ANIMATION_CONFIG = { stiffness: 90, damping: 15, duration: 300 }
 
@@ -202,7 +193,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                     )}
                 </BaseView>
 
-                <AnimatedSectionList
+                <BottomSheetSectionList
                     sections={sections}
                     contentContainerStyle={styles.contentContainer}
                     keyExtractor={item => item.address}

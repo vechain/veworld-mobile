@@ -1,7 +1,7 @@
 import { default as React, ReactNode, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { FlatList } from "react-native-gesture-handler"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import { BottomSheetFlatList } from "~Components/Reusable/BottomSheetLists"
 import { DelegateAccountCardRadio } from "~Components/Reusable/DelegateAccountCard"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -61,10 +61,11 @@ export const AccountOption = ({ selectedDelegationAccount, children, accounts }:
                 {accounts.length === 0 ? (
                     <AccountEmptyOption />
                 ) : (
-                    <FlatList
+                    <BottomSheetFlatList
                         data={accounts}
                         keyExtractor={account => account.address}
                         ItemSeparatorComponent={ItemSeparatorComponent}
+                        showsVerticalScrollIndicator={false}
                         renderItem={({ item }) => {
                             return (
                                 <DelegateAccountCardRadio
@@ -76,7 +77,6 @@ export const AccountOption = ({ selectedDelegationAccount, children, accounts }:
                                 />
                             )
                         }}
-                        // {...flatListProps}
                     />
                 )}
             </Option>
