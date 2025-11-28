@@ -103,4 +103,18 @@ const editContact =
         )
     }
 
-export { addContact, removeContact, editContact, createContact }
+const upsertRecentContact =
+    (clauses: Connex.VM.Clause[], genesisId: string): AppThunk =>
+    (dispatch, getState) => {
+        const { accounts: accountsState } = getState()
+        const selectedAccount = accountsState.selectedAccount
+        let recipientAddress = ""
+        if (!selectedAccount) {
+            error(ERROR_EVENTS.SETTINGS, "No selected account found!")
+            return
+        }
+
+        // dispatch()
+    }
+
+export { addContact, removeContact, editContact, createContact, upsertRecentContact }
