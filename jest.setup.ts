@@ -217,6 +217,14 @@ jest.mock("@gorhom/bottom-sheet", () => ({
     __esModule: true,
     ...require("@gorhom/bottom-sheet/mock"),
     ...require("./src/Test/mocks/bottom-sheet-mock"),
+    SCROLLABLE_TYPE: {
+        UNDETERMINED: 0,
+        VIEW: 1,
+        FLATLIST: 2,
+        SCROLLVIEW: 3,
+        SECTIONLIST: 4,
+        VIRTUALIZEDLIST: 5,
+    },
 }))
 
 jest.mock("react-native-reanimated-skeleton", () => "Skeleton")
