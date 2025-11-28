@@ -1313,7 +1313,7 @@
   "TRANSACTION_FEE": "Transaktionsavgift",
   "TRANSACTION_ID": "Transaktions-ID",
   "TRANSACTION_IN_PROGRESS": "Transaktion pågår",
-  "TRANSAK_NOT_AVAILABLE": "Transak är inte tillgänglig",
+  "TRANSAK_NOT_AVAILABLE": "Transak är inte tillgängligt",
   "TYPE": "Typ",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Okänt konto",
