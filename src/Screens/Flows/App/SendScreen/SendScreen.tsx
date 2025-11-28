@@ -149,7 +149,7 @@ export const SendScreen = (): ReactElement => {
             noBackButton
             headerTitleAlignment="center"
             headerRightElement={headerRightElement}
-            body={
+            fixedBody={
                 <Animated.View style={styles.flexElement}>
                     <Animated.View
                         style={[
