@@ -11,7 +11,7 @@ export interface BaseTransferHandlerProps {
 
 export interface NFTTransferHandlerProps extends BaseTransferHandlerProps {
     network: Network
-    updateNFTs: (params: { network: string; accountAddress: string }) => void
+    updateNFTs: (params: { network: Network; accountAddress: string }) => void
 }
 
 export interface TokenTransferHandlerProps extends BaseTransferHandlerProps {
