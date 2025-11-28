@@ -6,8 +6,14 @@ import { GenericAccountCard } from "~Components/Reusable/AccountCard"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, Contact } from "~Model"
-import { selectAccounts, selectKnownContacts, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountWithDevice, Contact, RecentContact } from "~Model"
+import {
+    selectAccounts,
+    selectKnownContacts,
+    selectRecentContacts,
+    selectSelectedAccount,
+    useAppSelector,
+} from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import AddressUtils from "~Utils/AddressUtils"
 import { AnimatedFilterChips } from "../../../AnimatedFilterChips"
@@ -37,7 +43,7 @@ export const KnownAddressesList = () => {
     const currentAccount = useAppSelector(selectSelectedAccount)
     const allAccounts = useAppSelector(selectAccounts)
     const contacts = useAppSelector(selectKnownContacts)
-    // const unknownContacts = useAppSelector(selectCachedContacts)
+    const recentContacts = useAppSelector(selectRecentContacts)
 
     const accounts = useMemo(() => {
         return allAccounts.filter(account => !AddressUtils.compareAddresses(account.address, currentAccount.address))
@@ -56,7 +62,7 @@ export const KnownAddressesList = () => {
     }, [accounts])
 
     const renderItem = useCallback(
-        ({ item }: { item: AccountWithDevice | Contact }) => {
+        ({ item }: { item: AccountWithDevice | Contact | RecentContact }) => {
             const isSelected = AddressUtils.compareAddresses(selectedAccount, item.address)
 
             return (
@@ -141,7 +147,7 @@ export const KnownAddressesList = () => {
 
             {selectedItem === "recent" && (
                 <Animated.FlatList
-                    data={[]}
+                    data={recentContacts}
                     style={styles.list}
                     contentContainerStyle={styles.listContentContainer}
                     keyExtractor={item => item.address}

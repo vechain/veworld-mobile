@@ -1,14 +1,27 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AccountUtils, AddressUtils } from "~Utils"
-import { Contact } from "~Model"
+import { Contact, RecentContact } from "~Model"
 import { address as addressThor } from "thor-devkit"
+import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
 
-type ContactsSliceState = {
+type RecentContacts = Record<
+    string,
+    {
+        [accountAddress: string]: Array<RecentContact>
+    }
+>
+
+export type ContactsSliceState = {
     contacts: Contact[]
+    recentContacts: RecentContacts
 }
 
 export const initialContactsState: ContactsSliceState = {
     contacts: [],
+    recentContacts: {
+        [defaultMainNetwork.genesis.id]: {},
+        [defaultTestNetwork.genesis.id]: {},
+    },
 }
 
 export const ContactsSlice = createSlice({
@@ -56,8 +69,33 @@ export const ContactsSlice = createSlice({
                 contact.vnsName = (AccountUtils.updateAccountVns(contact, action.payload) as Contact).vnsName
             })
         },
+        upsertRecentContact: (
+            state,
+            action: PayloadAction<{ selectedAccountAddress: string; genesisId: string; contact: RecentContact }>,
+        ) => {
+            const { selectedAccountAddress, genesisId, contact } = action.payload
+
+            if (!state.recentContacts[genesisId]) {
+                state.recentContacts[genesisId] = {}
+            }
+
+            if (!state.recentContacts[genesisId][selectedAccountAddress]) {
+                state.recentContacts[genesisId][selectedAccountAddress] = []
+            }
+
+            const recentContactIdx = state.recentContacts[genesisId][selectedAccountAddress].findIndex(c =>
+                AddressUtils.compareAddresses(c.address, contact.address),
+            )
+
+            if (recentContactIdx !== -1) {
+                state.recentContacts[genesisId][selectedAccountAddress][recentContactIdx] = contact
+            } else {
+                state.recentContacts[genesisId][selectedAccountAddress].push(contact)
+            }
+        },
         resetContactsState: () => initialContactsState,
     },
 })
 
-export const { insertContact, deleteContact, updateContact, setContactsVns, resetContactsState } = ContactsSlice.actions
+export const { insertContact, deleteContact, updateContact, setContactsVns, upsertRecentContact, resetContactsState } =
+    ContactsSlice.actions

@@ -9,16 +9,16 @@ import Animated, {
 } from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles, useVns } from "~Hooks"
 import { DEVICE_TYPE } from "~Model"
 import AddressUtils from "~Utils/AddressUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { AccountIcon } from "../Account/AccountIcon"
 
 type Props = {
-    accountName: string
+    accountName?: string
     accountAddress: string
-    onPress: ({ accountName, accountAddress }: { accountName: string; accountAddress: string }) => void
+    onPress: ({ accountName, accountAddress }: { accountName?: string; accountAddress: string }) => void
     testID?: string
     containerStyle?: StyleProp<AnimatedStyle<ViewStyle>>
     disabled?: boolean
@@ -39,6 +39,7 @@ export const GenericAccountCard = ({
 }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const selectedSV = useSharedValue(Number(selected))
+    const { name: vnsName } = useVns({ name: "", address: accountAddress })
 
     const containerAnimatedStyles = useAnimatedStyle(() => {
         return {
@@ -80,13 +81,15 @@ export const GenericAccountCard = ({
                 <AccountIcon account={{ address: accountAddress, type: DEVICE_TYPE.LOCAL_MNEMONIC }} size={32} />
                 <BaseView flex={1} flexDirection="column">
                     <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
-                        {accountName}
+                        {vnsName || accountName || AddressUtils.humanAddress(accountAddress)}
                     </BaseText>
-                    <BaseText
-                        typographyFont="smallCaptionMedium"
-                        color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
-                        {AddressUtils.humanAddress(accountAddress)}
-                    </BaseText>
+                    {(vnsName || accountName) && (
+                        <BaseText
+                            typographyFont="smallCaptionMedium"
+                            color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
+                            {AddressUtils.humanAddress(accountAddress)}
+                        </BaseText>
+                    )}
                 </BaseView>
 
                 {selected && (
