@@ -8,6 +8,7 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
 import { SummaryScreen } from "~Components/Reusable/Send"
+import { SendFlowHeader } from "~Components/Reusable/Send/SendFlowHeader"
 
 type SendFlowStep = "selectAmount" | "insertAddress" | "summary"
 
@@ -115,9 +116,9 @@ export const SendScreen = (): ReactElement => {
     const renderStep = useMemo(() => {
         switch (step) {
             case "selectAmount":
-                return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step3 logic */}</BaseView>
+                return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement select amount step */}</BaseView>
             case "insertAddress":
-                return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step3 logic */}</BaseView>
+                return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement insert address step */}</BaseView>
             case "summary": {
                 const { token, amount, address } = flowState
 
@@ -208,7 +209,12 @@ export const SendScreen = (): ReactElement => {
             noBackButton
             headerTitleAlignment="center"
             headerRightElement={headerRightElement}
-            body={<BaseView flex={1}>{renderStep}</BaseView>}
+            body={
+                <BaseView flex={1}>
+                    <SendFlowHeader step={step} />
+                    {renderStep}
+                </BaseView>
+            }
             footer={
                 <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                     {footerConfig.left && (

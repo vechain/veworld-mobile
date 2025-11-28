@@ -4585,6 +4585,10 @@ type RootTranslation = {
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
 	/**
+	 * T​o​k​e​n​ ​a​m​o​u​n​t
+	 */
+	SEND_TOKEN_AMOUNT: string
+	/**
 	 * {​t​o​k​e​n​C​o​u​n​t​}​ ​t​o​k​e​n​s
 	 * @param {number} tokenCount
 	 */
@@ -10188,6 +10192,10 @@ This action is irreversible.
 	 * Select the token asset you wish to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
+	/**
+	 * Token amount
+	 */
+	SEND_TOKEN_AMOUNT: () => LocalizedString
 	/**
 	 * {tokenCount} tokens
 	 */

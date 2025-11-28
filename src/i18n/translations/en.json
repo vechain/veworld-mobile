@@ -1121,6 +1121,7 @@
   "SEND_TOKEN_SELECT_ASSET": "Select the token asset you wish to send:",
   "SEND_TOKEN_SUBTITLE": "{tokenCount: number} tokens",
   "SEND_TOKEN_TITLE": "Send",
+  "SEND_TOKEN_AMOUNT": "Token amount",
   "SEND_TOTAL_COST": "Total Cost",
   "SEND_TRANSACTION_ERROR": "There was an error sending the transaction - ",
   "SEND_TRANSACTION_ERROR_GAS_FEE": "gas fee used was too low",
