@@ -383,7 +383,7 @@ export const SelectAmountSendComponent = ({
                     showDecimal
                 />
             </BaseView>
-
+            <BaseSpacer height={16} />
             {internalToken && (
                 <TokenSelectionBottomSheet
                     ref={bottomSheetRef}

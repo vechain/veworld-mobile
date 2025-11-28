@@ -139,7 +139,7 @@ export const SendScreen = (): ReactElement => {
             headerRightElement={headerRightElement}
             body={<BaseView flex={1}>{renderStep}</BaseView>}
             footer={
-                <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
+                <BaseView flexDirection="row" justifyContent="space-between" pt={16} bg={theme.colors.background}>
                     {footerConfig.left && (
                         <BaseButton
                             variant={footerConfig.left.variant ?? "outline"}
