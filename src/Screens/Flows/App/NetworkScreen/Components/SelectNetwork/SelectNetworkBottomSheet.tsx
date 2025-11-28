@@ -1,7 +1,8 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useMemo, useState } from "react"
-import { SectionList, SectionListData, SectionListRenderItemInfo } from "react-native"
+import { SectionListData, SectionListRenderItemInfo } from "react-native"
 import { BaseBottomSheet, BaseSpacer, BaseText, BaseView, NetworkBox } from "~Components"
+import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
 import { useSetSelectedAccount } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Network, NETWORK_TYPE } from "~Model"
@@ -103,7 +104,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
             </BaseView>
 
             <BaseSpacer height={16} />
-            <SectionList
+            <BottomSheetSectionList
                 sections={sections}
                 keyExtractor={i => i.id}
                 ItemSeparatorComponent={renderItemSeparator}
