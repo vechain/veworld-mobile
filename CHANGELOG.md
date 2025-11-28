@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.12 (2025-11-28)</small>
+
+* build: init ([9836c8f](https://github.com/vechain/veworld-mobile/commit/9836c8f))
+* Revert "fix: bs scroll view (#3588)" (#3590) ([0933fc1](https://github.com/vechain/veworld-mobile/commit/0933fc1)), closes [#3588](https://github.com/vechain/veworld-mobile/issues/3588) [#3590](https://github.com/vechain/veworld-mobile/issues/3590)
+
 ## 2.5.0 (2025-11-21)
 
 * build: init ([d6a9102](https://github.com/vechain/veworld-mobile/commit/d6a9102))
