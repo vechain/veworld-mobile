@@ -23,7 +23,9 @@ const useSend = (token: FungibleTokenWithBalance) => {
 
     const onSend = useCallback(() => {
         if (betterWorldFeature.balanceScreen?.send?.enabled) {
-            nav.replace(Routes.SEND_TOKEN)
+            nav.replace(Routes.SEND_TOKEN, {
+                token,
+            })
             track(AnalyticsEvent.TOKEN_SEND_CLICKED)
             return
         }

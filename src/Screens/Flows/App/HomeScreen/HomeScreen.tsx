@@ -165,7 +165,7 @@ export const HomeScreen = () => {
                 name: LL.BTN_SEND(),
                 action: () => {
                     if (featureFlags.betterWorldFeature.balanceScreen?.send?.enabled) {
-                        nav.navigate(Routes.SEND_TOKEN)
+                        nav.navigate(Routes.SEND_TOKEN, {})
                     } else {
                         nav.navigate(Routes.SELECT_TOKEN_SEND)
                     }

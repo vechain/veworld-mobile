@@ -6,6 +6,7 @@ export type TFonts =
     | "largeTitle"
     | "title"
     | "headerTitle"
+    | "headerTitleMedium"
     | "subTitleBold"
     | "subTitleSemiBold"
     | "subTitleMedium"
@@ -42,6 +43,7 @@ export type TFonts =
     | "bodyAccent"
     | "footNoteAccent"
     | "captionAccent"
+    | "extraLargeTitleSemiBold"
 
 const fontFamily = {
     "Inter-Bold": "Inter-Bold",
@@ -87,6 +89,7 @@ const fontSize = {
     28: 28,
     32: 32,
     40: 40,
+    48: 48,
 }
 
 const lineHeight = {
@@ -101,6 +104,7 @@ const lineHeight = {
     captionSmall: 12,
     captionSemiBold: 20,
     button14: 20,
+    extraLargeTitle: 48,
 }
 
 export type TypographyObject = {
@@ -112,6 +116,12 @@ export type TypographyObject = {
 
 export const defaults: Record<TFonts, TypographyObject> = {
     // INTER
+    extraLargeTitleSemiBold: {
+        fontFamily: fontFamily["Inter-SemiBold"],
+        fontSize: 48,
+        fontWeight: fontWeight[600],
+        lineHeight: lineHeight.extraLargeTitle,
+    },
     hugeTitle: {
         fontFamily: fontFamily["Inter-Bold"],
         fontSize: 40,
@@ -148,6 +158,12 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontFamily: fontFamily["Inter-SemiBold"],
         fontSize: fontSize[20],
         fontWeight: fontWeight[600],
+        lineHeight: lineHeight.title,
+    },
+    headerTitleMedium: {
+        fontFamily: fontFamily["Inter-Medium"],
+        fontSize: fontSize[20],
+        fontWeight: fontWeight[500],
         lineHeight: lineHeight.title,
     },
     subTitleBold: {
