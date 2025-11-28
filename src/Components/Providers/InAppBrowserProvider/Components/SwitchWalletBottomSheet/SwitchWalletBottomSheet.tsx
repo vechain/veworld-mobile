@@ -1,10 +1,10 @@
-import { default as React, useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { SectionList, SectionListData, StyleSheet } from "react-native"
+import { default as React, useCallback, useMemo, useRef, useState } from "react"
+import { SectionListData } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
+import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
 import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCard"
-import { SCREEN_HEIGHT } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, SwitchWalletRequest, WalletRequest, WatchedAccount } from "~Model"
@@ -17,12 +17,6 @@ type Props = {
     request: SwitchWalletRequest | WalletRequest
     onCancel: (request: SwitchWalletRequest | WalletRequest) => Promise<void>
     onConfirm: (args: { request: SwitchWalletRequest | WalletRequest; selectedAddress: string }) => Promise<void>
-    /**
-     * Triggered when onLayout is called
-     * @param newValue True when it's small, false when it isn't
-     * @returns
-     */
-    onResize: (newValue: boolean) => void
 }
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />
@@ -35,7 +29,7 @@ const SectionHeader = ({
     return <BaseText typographyFont="bodyMedium">{section.alias}</BaseText>
 }
 
-const SwitchWalletBottomSheetContent = ({ request, onCancel, onConfirm, onResize }: Props) => {
+const SwitchWalletBottomSheetContent = ({ request, onCancel, onConfirm }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
@@ -43,8 +37,6 @@ const SwitchWalletBottomSheetContent = ({ request, onCancel, onConfirm, onResize
     const [internalAccount, setInternalAccount] = useState(selectedAccount)
 
     const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
-    const [height, setHeight] = useState(SCREEN_HEIGHT)
-    const initialLayout = useRef(false)
 
     const sections = useMemo(() => {
         const groupedAccounts = visibleAccounts.reduce((acc, curr) => {
@@ -77,7 +69,7 @@ const SwitchWalletBottomSheetContent = ({ request, onCancel, onConfirm, onResize
             <DappWithDetails appName={request.appName} appUrl={request.appUrl} renderDetailsButton={false} />
             <BaseSpacer height={12} />
 
-            <SectionList
+            <BottomSheetSectionList
                 sections={sections}
                 keyExtractor={item => item.address}
                 renderSectionHeader={SectionHeader}
@@ -95,25 +87,7 @@ const SwitchWalletBottomSheetContent = ({ request, onCancel, onConfirm, onResize
                 SectionSeparatorComponent={ItemSeparatorComponent}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                onContentSizeChange={(_, contentHeight) => {
-                    if (contentHeight <= height) {
-                        onResize(true)
-                        setHeight(contentHeight)
-                    } else {
-                        onResize(false)
-                    }
-                }}
-                onLayout={e => {
-                    const _height = e.nativeEvent.layout.height
-                    if (initialLayout.current) return
-
-                    if (_height < SCREEN_HEIGHT) {
-                        setHeight(_height)
-                        initialLayout.current = true
-                    }
-                }}
                 scrollEnabled
-                style={{ maxHeight: height }}
             />
             <BaseSpacer height={24} />
             <BaseView flexDirection="row" gap={16} mb={isIOS() ? 16 : 0}>
@@ -145,8 +119,6 @@ export const SwitchWalletBottomSheet = () => {
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
 
     const isUserAction = useRef(false)
-
-    const [smallViewport, setSmallViewport] = useState(false)
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
@@ -204,31 +176,19 @@ export const SwitchWalletBottomSheet = () => {
         setSwitchWalletBsData(null)
     }, [switchWalletBsData, rejectRequest, setSwitchWalletBsData])
 
-    useEffect(() => {
-        if (switchWalletBsData === null) setSmallViewport(false)
-    }, [switchWalletBsData])
-
     return (
         <BaseBottomSheet<Request>
             dynamicHeight
             ref={switchWalletBsRef}
             onDismiss={onDismiss}
-            enableContentPanningGesture={false}
-            contentStyle={smallViewport ? undefined : styles.root}>
+            enableContentPanningGesture={false}>
             {switchWalletBsData && (
                 <SwitchWalletBottomSheetContent
                     onCancel={onCancel}
                     onConfirm={onConfirm}
                     request={switchWalletBsData}
-                    onResize={setSmallViewport}
                 />
             )}
         </BaseBottomSheet>
     )
 }
-
-const styles = StyleSheet.create({
-    root: {
-        height: "100%",
-    },
-})

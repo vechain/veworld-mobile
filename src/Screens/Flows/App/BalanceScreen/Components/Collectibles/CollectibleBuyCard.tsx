@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { Image, ImageStyle, Pressable, StyleSheet } from "react-native"
 import { CollectiblesEmptyState } from "~Assets"
-import { BaseIcon, BaseText } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -23,11 +23,13 @@ export const CollectibleBuyCard = () => {
     }, [nav])
     return (
         <Pressable testID={"COLLECTIBLE_BUY_CARD"} style={styles.root} onPress={handlePress}>
-            <Image source={CollectiblesEmptyState} style={styles.image as ImageStyle} resizeMode="contain" />
-            <BaseIcon name="icon-shopping-cart" color={COLORS.WHITE} size={16} />
-            <BaseText typographyFont="smallCaptionSemiBold" color={COLORS.WHITE}>
-                {LL.BUY_NEW_COLLECTIBLES()}
-            </BaseText>
+            <BaseView p={16} gap={8} alignItems="center">
+                <Image source={CollectiblesEmptyState} style={styles.image as ImageStyle} resizeMode="contain" />
+                <BaseIcon name="icon-shopping-cart" color={COLORS.WHITE} size={16} />
+                <BaseText typographyFont="smallCaptionSemiBold" color={COLORS.WHITE}>
+                    {LL.BUY_NEW_COLLECTIBLES()}
+                </BaseText>
+            </BaseView>
         </Pressable>
     )
 }
@@ -42,8 +44,6 @@ const baseStyles = () =>
             aspectRatio: 0.8791,
             maxWidth: "50%",
             backgroundColor: COLORS.PURPLE,
-            gap: 8,
-            padding: 16,
             alignItems: "center",
         },
         image: {

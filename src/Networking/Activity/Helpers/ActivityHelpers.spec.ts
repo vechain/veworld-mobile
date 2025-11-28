@@ -34,7 +34,6 @@ import {
 } from "./ActivityHelpers"
 import { getAmountFromClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { TestHelpers } from "~Test"
-import { EventTypeResponse } from "~Networking"
 
 const { vetTransaction1, nftTransaction1, token2 } = TestHelpers.data
 
@@ -178,19 +177,19 @@ describe("createSignCertificateActivity", () => {
 
 describe("eventTypeToActivityType", () => {
     it("Should map VET event type to TRANSFER_VET activity type", () => {
-        expect(eventTypeToActivityType(EventTypeResponse.VET)).toBe(ActivityType.TRANSFER_VET)
+        expect(eventTypeToActivityType("VET")).toBe(ActivityType.TRANSFER_VET)
     })
 
     it("Should map FUNGIBLE_TOKEN event type to TRANSFER_FT activity type", () => {
-        expect(eventTypeToActivityType(EventTypeResponse.FUNGIBLE_TOKEN)).toBe(ActivityType.TRANSFER_FT)
+        expect(eventTypeToActivityType("FUNGIBLE_TOKEN")).toBe(ActivityType.TRANSFER_FT)
     })
 
     it("Should map NFT event type to TRANSFER_NFT activity type", () => {
-        expect(eventTypeToActivityType(EventTypeResponse.NFT)).toBe(ActivityType.TRANSFER_NFT)
+        expect(eventTypeToActivityType("NFT")).toBe(ActivityType.TRANSFER_NFT)
     })
 
     it("Should return undefined for unknown event type", () => {
-        expect(eventTypeToActivityType("UNKNOWN" as EventTypeResponse)).toBeUndefined()
+        expect(eventTypeToActivityType("UNKNOWN" as any)).toBeUndefined()
     })
 })
 
@@ -459,8 +458,6 @@ describe("createActivityFromIndexedHistoryEvent", () => {
             from: "0x6bee7ddab6c99d5b2af0554eaea484ce18f52631",
             value: "1200000000000000000",
             appId: "0x9643ed1637948cc571b23f836ade2bdb104de88e627fa6e8e3ffef1ee5a1739a",
-            // eslint-disable-next-line max-len
-            proof: '{"version": 2,"description": "The user made a purchase favoring sustainable choices","proof": {"image":"https://storage.googleapis.com/gcreceipts-public/2025-03-03/1741001248_0x79028e3d948bd5873ccf58a69089cac105832129.jpg"},"impact": {"carbon":8580}}',
         }
         const activity = createActivityFromIndexedHistoryEvent(
             event,
@@ -483,7 +480,6 @@ describe("createActivityFromIndexedHistoryEvent", () => {
             status: activity?.status ?? ActivityStatus.SUCCESS,
             value: activity?.value ?? "0x0",
             appId: activity?.appId,
-            proof: activity?.proof,
         })
     })
 

@@ -1313,6 +1313,7 @@
   "TRANSACTION_FEE": "トランザクション手数料",
   "TRANSACTION_ID": "トランザクションID",
   "TRANSACTION_IN_PROGRESS": "取引進行中",
+  "TRANSAK_NOT_AVAILABLE": "Transakは利用できません",
   "TYPE": "タイプ",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "不明なアカウント",

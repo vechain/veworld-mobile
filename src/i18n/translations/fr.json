@@ -1313,6 +1313,7 @@
   "TRANSACTION_FEE": "Frais de transaction",
   "TRANSACTION_ID": "ID de la transaction",
   "TRANSACTION_IN_PROGRESS": "Transaction en cours",
+  "TRANSAK_NOT_AVAILABLE": "Transak non disponible",
   "TYPE": "Type",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Compte Inconnu",

@@ -32,8 +32,8 @@ import {
     UnknownTxActivity,
     VeVoteCastActivity,
 } from "~Model"
-import { EventTypeResponse } from "~Networking"
 import { ActivityUtils, AddressUtils, debug, TransactionUtils } from "~Utils"
+import { components } from "~Generated/indexer/schema"
 
 /**
  * Creates a base activity from a given transaction.
@@ -360,15 +360,17 @@ export const createTransferClauseFromIncomingTransfer = (
  *
  * @returns The corresponding ActivityType, or undefined if the eventType does not map to any known ActivityType.
  */
-export const eventTypeToActivityType = (eventType: EventTypeResponse): ActivityType | undefined => {
+export const eventTypeToActivityType = (
+    eventType: components["schemas"]["IndexedTransferEvent"]["eventType"],
+): ActivityType | undefined => {
     switch (eventType) {
-        case EventTypeResponse.VET:
+        case "VET":
             return ActivityType.TRANSFER_VET
 
-        case EventTypeResponse.FUNGIBLE_TOKEN:
+        case "FUNGIBLE_TOKEN":
             return ActivityType.TRANSFER_FT
 
-        case EventTypeResponse.NFT:
+        case "NFT":
             return ActivityType.TRANSFER_NFT
 
         default:
@@ -560,7 +562,6 @@ export const createActivityFromIndexedHistoryEvent = (
         inputToken,
         outputToken,
         appId,
-        proof,
         support,
         votePower,
         voteWeight,
@@ -589,7 +590,7 @@ export const createActivityFromIndexedHistoryEvent = (
         blockNumber: blockNumber,
         genesisId: network.genesis.id,
         isTransaction: isTransaction,
-        type: eventName,
+        type: eventName as ActivityEvent,
         timestamp: blockTimestamp * 1000,
         gasPayer: gasPayer,
         delegated: origin !== gasPayer,
@@ -682,7 +683,6 @@ export const createActivityFromIndexedHistoryEvent = (
                 to: to ? [to] : [],
                 value: value ?? "0x0",
                 appId: appId,
-                proof: proof,
             } as B3trActionActivity
         }
         case ActivityEvent.B3TR_PROPOSAL_VOTE: {

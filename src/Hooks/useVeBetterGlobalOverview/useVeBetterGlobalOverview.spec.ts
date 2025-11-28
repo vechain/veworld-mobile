@@ -2,11 +2,14 @@ import { renderHook } from "@testing-library/react-hooks"
 import { TestWrapper } from "~Test"
 
 import { useVeBetterGlobalOverview } from "./useVeBetterGlobalOverview"
-import { fetchVeBetterGlobalOverview } from "~Networking"
 
-jest.mock("~Networking", () => ({
-    ...jest.requireActual("~Networking"),
-    fetchVeBetterGlobalOverview: jest.fn(),
+const indexerGet = jest.fn()
+
+jest.mock("~Hooks/useIndexerClient", () => ({
+    ...jest.requireActual("~Hooks/useIndexerClient"),
+    useMainnetIndexerClient: jest.fn().mockReturnValue({
+        GET: (...args: any[]) => indexerGet(...args).then((res: any) => ({ data: res })),
+    }),
 }))
 
 describe("useVeBetterGlobalOverview", () => {
@@ -23,7 +26,7 @@ describe("useVeBetterGlobalOverview", () => {
                 plastic: 1500,
             },
         }
-        ;(fetchVeBetterGlobalOverview as jest.Mock).mockResolvedValue(mockData)
+        ;(indexerGet as jest.Mock).mockResolvedValue(mockData)
 
         const { result, waitFor } = renderHook(() => useVeBetterGlobalOverview(), {
             wrapper: TestWrapper,
@@ -35,7 +38,7 @@ describe("useVeBetterGlobalOverview", () => {
     })
 
     it("should handle fetch error", async () => {
-        ;(fetchVeBetterGlobalOverview as jest.Mock).mockRejectedValue(new Error("Network error"))
+        ;(indexerGet as jest.Mock).mockRejectedValue(new Error("Network error"))
 
         const { result, waitFor } = renderHook(() => useVeBetterGlobalOverview(), {
             wrapper: TestWrapper,
@@ -47,12 +50,12 @@ describe("useVeBetterGlobalOverview", () => {
     })
 
     it("should call fetchVeBetterGlobalOverview", async () => {
-        ;(fetchVeBetterGlobalOverview as jest.Mock).mockResolvedValue({})
+        ;(indexerGet as jest.Mock).mockResolvedValue({})
 
         renderHook(() => useVeBetterGlobalOverview(), {
             wrapper: TestWrapper,
         })
 
-        expect(fetchVeBetterGlobalOverview).toHaveBeenCalledTimes(1)
+        expect(indexerGet).toHaveBeenCalledTimes(1)
     })
 })

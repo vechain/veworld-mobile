@@ -1313,6 +1313,7 @@
   "TRANSACTION_FEE": "Transactiekosten",
   "TRANSACTION_ID": "Transactie-ID",
   "TRANSACTION_IN_PROGRESS": "Transactie wordt uitgevoerd",
+  "TRANSAK_NOT_AVAILABLE": "Transak niet beschikbaar",
   "TYPE": "Type",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Onbekende account",

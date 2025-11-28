@@ -1,11 +1,17 @@
 import { renderHook } from "@testing-library/react-hooks"
-import { fetchAppOverview } from "~Networking/DApps/fetchAppOverview"
-import { TestWrapper } from "~Test"
-import { useBatchAppOverviews } from "./useBatchAppOverviews"
 import { waitFor } from "@testing-library/react-native"
+import { TestWrapper } from "~Test"
 
-jest.mock("~Networking/DApps/fetchAppOverview")
-const mockFetchAppOverview = fetchAppOverview as jest.MockedFunction<typeof fetchAppOverview>
+import { useBatchAppOverviews } from "./useBatchAppOverviews"
+
+const indexerGet = jest.fn()
+
+jest.mock("~Hooks/useIndexerClient", () => ({
+    ...jest.requireActual("~Hooks/useIndexerClient"),
+    useMainnetIndexerClient: jest.fn().mockReturnValue({
+        GET: (...args: any[]) => indexerGet(...args).then((res: any) => ({ data: res })),
+    }),
+}))
 
 const createMockResponse = (appId: string) => ({
     entity: appId,
@@ -22,7 +28,7 @@ describe("useBatchAppOverviews", () => {
         const appIds = ["app-1", "app-2"]
         const responses = appIds.map(createMockResponse)
 
-        mockFetchAppOverview.mockResolvedValueOnce(responses[0] as any).mockResolvedValueOnce(responses[1] as any)
+        indexerGet.mockResolvedValueOnce(responses[0] as any).mockResolvedValueOnce(responses[1] as any)
 
         const { result } = renderHook(() => useBatchAppOverviews(appIds), {
             wrapper: TestWrapper,
@@ -33,7 +39,7 @@ describe("useBatchAppOverviews", () => {
             expect(result.current.overviews["app-2"]).toEqual(responses[1])
         })
 
-        expect(mockFetchAppOverview).toHaveBeenCalledTimes(2)
+        expect(indexerGet).toHaveBeenCalledTimes(2)
     })
 
     it("should handle empty appIds array", () => {
@@ -42,7 +48,7 @@ describe("useBatchAppOverviews", () => {
         })
 
         expect(result.current.overviews).toEqual({})
-        expect(mockFetchAppOverview).not.toHaveBeenCalled()
+        expect(indexerGet).not.toHaveBeenCalled()
     })
 
     it("should not fetch when disabled", () => {
@@ -51,6 +57,6 @@ describe("useBatchAppOverviews", () => {
         })
 
         expect(result.current.overviews).toEqual({})
-        expect(mockFetchAppOverview).not.toHaveBeenCalled()
+        expect(indexerGet).not.toHaveBeenCalled()
     })
 })

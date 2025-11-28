@@ -5695,37 +5695,9 @@ type RootTranslation = {
 	 */
 	YESTERDAY: string
 	/**
-	 * M​y​ ​a​c​c​o​u​n​t​s
+	 * T​r​a​n​s​a​k​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
-	SEND_ACCOUNTS_SECTION_TITLE_MY_ACCOUNTS: string
-	/**
-	 * W​a​t​c​h​i​n​g
-	 */
-	SEND_ACCOUNTS_SECTION_TITLE_WATCHING_ACCOUNTS: string
-	/**
-	 * N​o​ ​r​e​c​e​n​t​ ​a​c​t​i​v​i​t​y
-	 */
-	SEND_RECENT_EMPTY_STATE_TITLE: string
-	/**
-	 * O​n​c​e​ ​y​o​u​ ​s​e​n​d​ ​t​o​ ​a​n​ ​a​d​d​r​e​s​s​,​ ​i​t​’​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​f​o​r​ ​q​u​i​c​k​ ​a​c​c​e​s​s​.
-	 */
-	SEND_RECENT_EMPTY_STATE_DESCRIPTION: string
-	/**
-	 * N​o​ ​a​c​c​o​u​n​t​s​ ​f​o​u​n​d​s
-	 */
-	SEND_ACCOUNTS_EMPTY_STATE_TITLE: string
-	/**
-	 * Y​o​u​r​ ​w​a​l​l​e​t​'​s​ ​a​c​c​o​u​n​t​s​ ​w​i​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​o​n​c​e​ ​a​d​d​e​d​.
-	 */
-	SEND_ACCOUNTS_EMPTY_STATE_DESCRIPTION: string
-	/**
-	 * N​o​ ​c​o​n​t​a​c​t​s​ ​a​d​d​e​d
-	 */
-	SEND_CONTACTS_EMPTY_STATE_TITLE: string
-	/**
-	 * A​d​d​ ​y​o​u​r​ ​f​i​r​s​t​ ​c​o​n​t​a​c​t​ ​t​o​ ​s​e​n​d​ ​f​a​s​t​e​r​ ​a​n​d​ ​a​v​o​i​d​ ​e​r​r​o​r​s​.
-	 */
-	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: string
+	TRANSAK_NOT_AVAILABLE: string
 }
 
 export type TranslationFunctions = {
@@ -11324,37 +11296,9 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	YESTERDAY: () => LocalizedString
 	/**
-	 * My accounts
+	 * Transak not available
 	 */
-	SEND_ACCOUNTS_SECTION_TITLE_MY_ACCOUNTS: () => LocalizedString
-	/**
-	 * Watching
-	 */
-	SEND_ACCOUNTS_SECTION_TITLE_WATCHING_ACCOUNTS: () => LocalizedString
-	/**
-	 * No recent activity
-	 */
-	SEND_RECENT_EMPTY_STATE_TITLE: () => LocalizedString
-	/**
-	 * Once you send to an address, it’ll show up here for quick access.
-	 */
-	SEND_RECENT_EMPTY_STATE_DESCRIPTION: () => LocalizedString
-	/**
-	 * No accounts founds
-	 */
-	SEND_ACCOUNTS_EMPTY_STATE_TITLE: () => LocalizedString
-	/**
-	 * Your wallet's accounts will show up here once added.
-	 */
-	SEND_ACCOUNTS_EMPTY_STATE_DESCRIPTION: () => LocalizedString
-	/**
-	 * No contacts added
-	 */
-	SEND_CONTACTS_EMPTY_STATE_TITLE: () => LocalizedString
-	/**
-	 * Add your first contact to send faster and avoid errors.
-	 */
-	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: () => LocalizedString
+	TRANSAK_NOT_AVAILABLE: () => LocalizedString
 }
 
 export type Formatters = {
