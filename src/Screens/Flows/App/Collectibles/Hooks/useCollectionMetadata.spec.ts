@@ -2,12 +2,20 @@ import { renderHook } from "@testing-library/react-hooks"
 import { useCollectionMetadata } from "./useCollectionMetadata"
 import { TestWrapper } from "~Test"
 
+const indexerGet = jest.fn().mockResolvedValue({
+    data: [{ tokenId: 1 }],
+    pagination: { countLimit: 1, hasNext: false, hasCount: false, totalElements: 1, totalPages: 1 },
+})
+
+jest.mock("~Hooks/useIndexerClient", () => ({
+    ...jest.requireActual("~Hooks/useIndexerClient"),
+    useIndexerClient: jest.fn().mockReturnValue({
+        GET: (...args: any[]) => indexerGet(...args).then((res: any) => ({ data: res })),
+    }),
+}))
+
 jest.mock("~Networking/NFT", () => ({
     getCachedNftBalanceOf: jest.fn().mockResolvedValue(2),
-    getNftsForContract: jest.fn().mockResolvedValue({
-        data: [{ tokenId: 1 }],
-        pagination: { countLimit: 1, hasNext: false, hasCount: false, totalElements: 1, totalPages: 1 },
-    }),
     getCachedTokenURI: jest
         .fn()
         .mockResolvedValue("ipfs://bafybeifc7nlzpeb6jyokeufehinqhapzhapdavjw75gfbre47jpvrn6y7q"),

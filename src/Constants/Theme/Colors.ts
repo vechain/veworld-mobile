@@ -371,6 +371,7 @@ export type Colors = {
         background: string
         color: string
     }
+    transak: string
 }
 
 export enum COLORS {
@@ -494,6 +495,8 @@ export enum COLORS {
     // App-level background tokens (do not reuse for non-background surfaces)
     APP_BACKGROUND_LIGHT = "#f2f2f7",
     APP_BACKGROUND_DARK = "#1D173A",
+    // Color from Transak Webview
+    TRANSAK_DARK = "#1a1a1a",
 }
 
 const light: Colors = {
@@ -869,6 +872,7 @@ const light: Colors = {
         background: COLORS.GREY_200,
         color: COLORS.GREY_600,
     },
+    transak: COLORS.WHITE,
 }
 
 const dark: Colors = {
@@ -1244,6 +1248,7 @@ const dark: Colors = {
         background: COLORS.PURPLE_DISABLED,
         color: COLORS.GREY_100,
     },
+    transak: COLORS.TRANSAK_DARK,
 }
 
 export const colors = { light, dark }

@@ -1,13 +1,15 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useBalanceActivities } from "./useBalanceActivities"
 import { TestWrapper } from "~Test"
-import { fetchIndexedHistoryEvent } from "~Networking"
 import { ActivityEvent } from "~Model"
-import { defaultMainNetwork } from "~Constants"
 
-jest.mock("~Networking", () => ({
-    ...jest.requireActual("~Networking"),
-    fetchIndexedHistoryEvent: jest.fn(),
+const indexerGet = jest.fn()
+
+jest.mock("~Hooks/useIndexerClient", () => ({
+    ...jest.requireActual("~Hooks/useIndexerClient"),
+    useIndexerClient: jest.fn().mockReturnValue({
+        GET: (...args: any[]) => indexerGet(...args).then((res: any) => ({ data: res })),
+    }),
 }))
 
 const TEST_DATA = [
@@ -146,7 +148,7 @@ describe("useBalanceActivities", () => {
         jest.clearAllMocks()
     })
     it("should return the proper data", async () => {
-        ;(fetchIndexedHistoryEvent as jest.Mock).mockResolvedValue({
+        ;(indexerGet as jest.Mock).mockResolvedValue({
             data: TEST_DATA,
         })
         const { result, waitFor } = renderHook(() => useBalanceActivities({ tab: "TOKENS" }), {
@@ -155,28 +157,35 @@ describe("useBalanceActivities", () => {
 
         await waitFor(() => {
             expect(result.current.data).toHaveLength(4)
-            expect(fetchIndexedHistoryEvent).toHaveBeenCalledWith(
-                "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
-                0,
-                defaultMainNetwork,
-                [
-                    ActivityEvent.SWAP_FT_TO_FT,
-                    ActivityEvent.SWAP_FT_TO_VET,
-                    ActivityEvent.SWAP_VET_TO_FT,
-                    ActivityEvent.TRANSFER_FT,
-                    ActivityEvent.TRANSFER_SF,
-                    ActivityEvent.TRANSFER_VET,
-                    ActivityEvent.B3TR_ACTION,
-                    ActivityEvent.B3TR_CLAIM_REWARD,
-                    ActivityEvent.B3TR_SWAP_B3TR_TO_VOT3,
-                    ActivityEvent.B3TR_SWAP_VOT3_TO_B3TR,
-                    ActivityEvent.B3TR_UPGRADE_GM,
-                ],
-            )
+            expect(indexerGet).toHaveBeenCalledWith("/api/v2/history/{account}", {
+                params: {
+                    path: {
+                        account: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    },
+                    query: {
+                        direction: "DESC",
+                        page: 0,
+                        size: 50,
+                        eventName: [
+                            ActivityEvent.SWAP_FT_TO_FT,
+                            ActivityEvent.SWAP_FT_TO_VET,
+                            ActivityEvent.SWAP_VET_TO_FT,
+                            ActivityEvent.TRANSFER_FT,
+                            ActivityEvent.TRANSFER_SF,
+                            ActivityEvent.TRANSFER_VET,
+                            ActivityEvent.B3TR_ACTION,
+                            ActivityEvent.B3TR_CLAIM_REWARD,
+                            ActivityEvent.B3TR_SWAP_B3TR_TO_VOT3,
+                            ActivityEvent.B3TR_SWAP_VOT3_TO_B3TR,
+                            ActivityEvent.B3TR_UPGRADE_GM,
+                        ],
+                    },
+                },
+            })
         })
     })
     it("should return the data based on the correct tab (STAKING)", async () => {
-        ;(fetchIndexedHistoryEvent as jest.Mock).mockResolvedValue({
+        ;(indexerGet as jest.Mock).mockResolvedValue({
             data: TEST_DATA,
         })
         const { result, waitFor } = renderHook(() => useBalanceActivities({ tab: "STAKING" }), {
@@ -185,33 +194,40 @@ describe("useBalanceActivities", () => {
 
         await waitFor(() => {
             expect(result.current.data).toHaveLength(4)
-            expect(fetchIndexedHistoryEvent).toHaveBeenCalledWith(
-                "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
-                0,
-                defaultMainNetwork,
-                [
-                    ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY,
-                    ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY,
-                    ActivityEvent.STARGATE_DELEGATE_LEGACY,
-                    ActivityEvent.STARGATE_STAKE,
-                    ActivityEvent.STARGATE_UNDELEGATE_LEGACY,
-                    ActivityEvent.STARGATE_UNSTAKE,
-                    ActivityEvent.STARGATE_CLAIM_REWARDS,
-                    ActivityEvent.STARGATE_BOOST,
-                    ActivityEvent.STARGATE_DELEGATE_REQUEST,
-                    ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED,
-                    ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST,
-                    ActivityEvent.STARGATE_DELEGATION_EXITED,
-                    ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR,
-                    ActivityEvent.STARGATE_DELEGATE_ACTIVE,
-                    ActivityEvent.STARGATE_MANAGER_ADDED,
-                    ActivityEvent.STARGATE_MANAGER_REMOVED,
-                ],
-            )
+            expect(indexerGet).toHaveBeenCalledWith("/api/v2/history/{account}", {
+                params: {
+                    path: {
+                        account: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    },
+                    query: {
+                        direction: "DESC",
+                        page: 0,
+                        size: 50,
+                        eventName: [
+                            ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY,
+                            ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY,
+                            ActivityEvent.STARGATE_DELEGATE_LEGACY,
+                            ActivityEvent.STARGATE_STAKE,
+                            ActivityEvent.STARGATE_UNDELEGATE_LEGACY,
+                            ActivityEvent.STARGATE_UNSTAKE,
+                            ActivityEvent.STARGATE_CLAIM_REWARDS,
+                            ActivityEvent.STARGATE_BOOST,
+                            ActivityEvent.STARGATE_DELEGATE_REQUEST,
+                            ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED,
+                            ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST,
+                            ActivityEvent.STARGATE_DELEGATION_EXITED,
+                            ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR,
+                            ActivityEvent.STARGATE_DELEGATE_ACTIVE,
+                            ActivityEvent.STARGATE_MANAGER_ADDED,
+                            ActivityEvent.STARGATE_MANAGER_REMOVED,
+                        ],
+                    },
+                },
+            })
         })
     })
     it("should return the data based on the correct tab (COLLECTIBLES)", async () => {
-        ;(fetchIndexedHistoryEvent as jest.Mock).mockResolvedValue({
+        ;(indexerGet as jest.Mock).mockResolvedValue({
             data: TEST_DATA,
         })
         const { result, waitFor } = renderHook(() => useBalanceActivities({ tab: "COLLECTIBLES" }), {
@@ -220,12 +236,19 @@ describe("useBalanceActivities", () => {
 
         await waitFor(() => {
             expect(result.current.data).toHaveLength(4)
-            expect(fetchIndexedHistoryEvent).toHaveBeenCalledWith(
-                "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
-                0,
-                defaultMainNetwork,
-                [ActivityEvent.NFT_SALE, ActivityEvent.TRANSFER_NFT],
-            )
+            expect(indexerGet).toHaveBeenCalledWith("/api/v2/history/{account}", {
+                params: {
+                    path: {
+                        account: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    },
+                    query: {
+                        direction: "DESC",
+                        page: 0,
+                        size: 50,
+                        eventName: [ActivityEvent.NFT_SALE, ActivityEvent.TRANSFER_NFT],
+                    },
+                },
+            })
         })
     })
 })

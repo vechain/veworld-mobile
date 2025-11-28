@@ -1,15 +1,15 @@
-import { EventTypeResponse, IncomingTransferResponse } from "~Networking"
 import { DEVICE_TYPE, LocalDevice, NFTMediaType, NftCollection, TransactionOrigin } from "~Model"
 import { filterNFTTransferEvents, filterTransferEventsByType, findFirstInvolvedAccount } from "./TransferEventHelpers"
+import { components } from "~Generated/indexer/schema"
 
-const BASE_TRANSFER: IncomingTransferResponse = {
-    eventType: EventTypeResponse.NFT,
+const BASE_TRANSFER: components["schemas"]["IndexedTransferEvent"] = {
+    eventType: "NFT",
     tokenAddress: "0x12345",
     from: "0x321",
     to: "0x123",
     txId: "0x123",
     value: "0x123655",
-    tokenId: 12,
+    tokenId: "12",
     topics: ["0x12376543"],
     id: "0x123876543567",
     blockId: "0x1235433486755",
@@ -45,20 +45,20 @@ describe("TransferEventHelpers", () => {
         })
 
         it("all same type", () => {
-            const transfers: IncomingTransferResponse[] = [
+            const transfers: components["schemas"]["IndexedTransferEvent"][] = [
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x1",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x2",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x3",
                 },
             ]
@@ -66,20 +66,20 @@ describe("TransferEventHelpers", () => {
         })
 
         it("all different type", () => {
-            const transfers: IncomingTransferResponse[] = [
+            const transfers: components["schemas"]["IndexedTransferEvent"][] = [
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.FUNGIBLE_TOKEN,
+                    eventType: "FUNGIBLE_TOKEN",
                     tokenAddress: "0x1",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.SEMI_FUNGIBLE_TOKEN,
+                    eventType: "SEMI_FUNGIBLE_TOKEN",
                     tokenAddress: "0x2",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.VET,
+                    eventType: "VET",
                     tokenAddress: "0x3",
                 },
             ]
@@ -87,59 +87,59 @@ describe("TransferEventHelpers", () => {
         })
 
         it("mixed type", () => {
-            const transfers: IncomingTransferResponse[] = [
+            const transfers: components["schemas"]["IndexedTransferEvent"][] = [
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x1",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.SEMI_FUNGIBLE_TOKEN,
+                    eventType: "SEMI_FUNGIBLE_TOKEN",
                     tokenAddress: "0x2",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.VET,
+                    eventType: "VET",
                     tokenAddress: "0x3",
                 },
             ]
             expect(filterNFTTransferEvents(transfers, [])).toEqual([
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x1",
                 },
             ])
         })
 
         it("blacklisted collection", () => {
-            const transfers: IncomingTransferResponse[] = [
+            const transfers: components["schemas"]["IndexedTransferEvent"][] = [
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x1",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x2",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x3",
                 },
             ]
             expect(filterNFTTransferEvents(transfers, [NFT_COLLECTION])).toEqual([
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x1",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x3",
                 },
             ])
@@ -148,73 +148,73 @@ describe("TransferEventHelpers", () => {
 
     describe("filterTransferEventsByType", () => {
         it("empty list", () => {
-            expect(filterTransferEventsByType([], EventTypeResponse.NFT)).toEqual([])
+            expect(filterTransferEventsByType([], "NFT")).toEqual([])
         })
 
         it("all same type", () => {
-            const transfers: IncomingTransferResponse[] = [
+            const transfers: components["schemas"]["IndexedTransferEvent"][] = [
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x1",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x2",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x3",
                 },
             ]
-            expect(filterTransferEventsByType(transfers, EventTypeResponse.NFT)).toEqual(transfers)
+            expect(filterTransferEventsByType(transfers, "NFT")).toEqual(transfers)
         })
 
         it("all different type", () => {
-            const transfers: IncomingTransferResponse[] = [
+            const transfers: components["schemas"]["IndexedTransferEvent"][] = [
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.FUNGIBLE_TOKEN,
+                    eventType: "FUNGIBLE_TOKEN",
                     tokenAddress: "0x1",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.SEMI_FUNGIBLE_TOKEN,
+                    eventType: "SEMI_FUNGIBLE_TOKEN",
                     tokenAddress: "0x2",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.VET,
+                    eventType: "VET",
                     tokenAddress: "0x3",
                 },
             ]
-            expect(filterTransferEventsByType(transfers, EventTypeResponse.NFT)).toEqual([])
+            expect(filterTransferEventsByType(transfers, "NFT")).toEqual([])
         })
 
         it("mixed type", () => {
-            const transfers: IncomingTransferResponse[] = [
+            const transfers: components["schemas"]["IndexedTransferEvent"][] = [
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x1",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.SEMI_FUNGIBLE_TOKEN,
+                    eventType: "SEMI_FUNGIBLE_TOKEN",
                     tokenAddress: "0x2",
                 },
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.VET,
+                    eventType: "VET",
                     tokenAddress: "0x3",
                 },
             ]
-            expect(filterTransferEventsByType(transfers, EventTypeResponse.NFT)).toEqual([
+            expect(filterTransferEventsByType(transfers, "NFT")).toEqual([
                 {
                     ...BASE_TRANSFER,
-                    eventType: EventTypeResponse.NFT,
+                    eventType: "NFT",
                     tokenAddress: "0x1",
                 },
             ])
@@ -227,7 +227,7 @@ describe("TransferEventHelpers", () => {
         })
 
         it("no account", () => {
-            const transfers: IncomingTransferResponse = {
+            const transfers: components["schemas"]["IndexedTransferEvent"] = {
                 ...BASE_TRANSFER,
                 to: "0x321434",
                 from: "0x123",
@@ -251,7 +251,7 @@ describe("TransferEventHelpers", () => {
         })
 
         it("account is the origin", () => {
-            const transfer: IncomingTransferResponse = {
+            const transfer: components["schemas"]["IndexedTransferEvent"] = {
                 ...BASE_TRANSFER,
                 to: "0x321",
                 from: "0x123",
@@ -272,7 +272,7 @@ describe("TransferEventHelpers", () => {
         })
 
         it("account is the recipient", () => {
-            const transfer: IncomingTransferResponse = {
+            const transfer: components["schemas"]["IndexedTransferEvent"] = {
                 ...BASE_TRANSFER,
                 to: "0x123",
                 from: "0x321",
@@ -293,7 +293,7 @@ describe("TransferEventHelpers", () => {
         })
 
         it("account is both origin and recipient", () => {
-            const transfer: IncomingTransferResponse = {
+            const transfer: components["schemas"]["IndexedTransferEvent"] = {
                 ...BASE_TRANSFER,
                 to: "0x123",
                 from: "0x123",
@@ -314,7 +314,7 @@ describe("TransferEventHelpers", () => {
         })
 
         it("have two accounts one is the origin and the other is the sender", () => {
-            const transfer: IncomingTransferResponse = {
+            const transfer: components["schemas"]["IndexedTransferEvent"] = {
                 ...BASE_TRANSFER,
                 to: "0x123",
                 from: "0x321",
@@ -343,7 +343,7 @@ describe("TransferEventHelpers", () => {
         })
 
         it("priority account is in the list", () => {
-            const transfer: IncomingTransferResponse = {
+            const transfer: components["schemas"]["IndexedTransferEvent"] = {
                 ...BASE_TRANSFER,
                 to: "0x123",
                 from: "0x321",
@@ -372,7 +372,7 @@ describe("TransferEventHelpers", () => {
         })
 
         it("priority account is not in the list", () => {
-            const transfer: IncomingTransferResponse = {
+            const transfer: components["schemas"]["IndexedTransferEvent"] = {
                 ...BASE_TRANSFER,
                 to: "0x123",
                 from: "0x321",

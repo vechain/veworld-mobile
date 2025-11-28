@@ -1304,6 +1304,7 @@
   "TRANSACTION_FEE": "Opłata transakcyjna",
   "TRANSACTION_ID": "ID transakcji",
   "TRANSACTION_IN_PROGRESS": "Transakcja w trakcie",
+  "TRANSAK_NOT_AVAILABLE": "Transak niedostępny",
   "TYPE": "Typ",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Nieznane konto",
