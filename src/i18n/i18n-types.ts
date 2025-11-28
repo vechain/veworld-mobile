@@ -4297,6 +4297,22 @@ type RootTranslation = {
 	 */
 	SEND_ACCEPT_NO_GAS_TITLE: string
 	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​'​s​ ​a​c​c​o​u​n​t​s​ ​w​i​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​o​n​c​e​ ​a​d​d​e​d​.
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_DESCRIPTION: string
+	/**
+	 * N​o​ ​a​c​c​o​u​n​t​s​ ​f​o​u​n​d​s
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_TITLE: string
+	/**
+	 * M​y​ ​a​c​c​o​u​n​t​s
+	 */
+	SEND_ACCOUNTS_SECTION_TITLE_MY_ACCOUNTS: string
+	/**
+	 * W​a​t​c​h​i​n​g
+	 */
+	SEND_ACCOUNTS_SECTION_TITLE_WATCHING_ACCOUNTS: string
+	/**
 	 * A​m​o​u​n​t
 	 */
 	SEND_AMOUNT: string
@@ -4305,6 +4321,14 @@ type RootTranslation = {
 	 * @param {string} percentage
 	 */
 	SEND_BALANCE_PERCENTAGE: RequiredParams<'percentage'>
+	/**
+	 * A​d​d​ ​y​o​u​r​ ​f​i​r​s​t​ ​c​o​n​t​a​c​t​ ​t​o​ ​s​e​n​d​ ​f​a​s​t​e​r​ ​a​n​d​ ​a​v​o​i​d​ ​e​r​r​o​r​s​.
+	 */
+	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: string
+	/**
+	 * N​o​ ​c​o​n​t​a​c​t​s​ ​a​d​d​e​d
+	 */
+	SEND_CONTACTS_EMPTY_STATE_TITLE: string
 	/**
 	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
 	 */
@@ -4586,6 +4610,14 @@ type RootTranslation = {
 	 * S​c​a​n
 	 */
 	SEND_RECEIVE_TAB_SCAN: string
+	/**
+	 * O​n​c​e​ ​y​o​u​ ​s​e​n​d​ ​t​o​ ​a​n​ ​a​d​d​r​e​s​s​,​ ​i​t​’​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​f​o​r​ ​q​u​i​c​k​ ​a​c​c​e​s​s​.
+	 */
+	SEND_RECENT_EMPTY_STATE_DESCRIPTION: string
+	/**
+	 * N​o​ ​r​e​c​e​n​t​ ​a​c​t​i​v​i​t​y
+	 */
+	SEND_RECENT_EMPTY_STATE_TITLE: string
 	/**
 	 * T​o
 	 */
@@ -5344,6 +5376,10 @@ type RootTranslation = {
 	 */
 	TRANSACTION_IN_PROGRESS: string
 	/**
+	 * T​r​a​n​s​a​k​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
+	 */
+	TRANSAK_NOT_AVAILABLE: string
+	/**
 	 * T​y​p​e
 	 */
 	TYPE: string
@@ -5694,10 +5730,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * T​r​a​n​s​a​k​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
-	 */
-	TRANSAK_NOT_AVAILABLE: string
 }
 
 export type TranslationFunctions = {
@@ -9913,6 +9945,22 @@ This action is irreversible.
 	 */
 	SEND_ACCEPT_NO_GAS_TITLE: () => LocalizedString
 	/**
+	 * Your wallet's accounts will show up here once added.
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_DESCRIPTION: () => LocalizedString
+	/**
+	 * No accounts founds
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_TITLE: () => LocalizedString
+	/**
+	 * My accounts
+	 */
+	SEND_ACCOUNTS_SECTION_TITLE_MY_ACCOUNTS: () => LocalizedString
+	/**
+	 * Watching
+	 */
+	SEND_ACCOUNTS_SECTION_TITLE_WATCHING_ACCOUNTS: () => LocalizedString
+	/**
 	 * Amount
 	 */
 	SEND_AMOUNT: () => LocalizedString
@@ -9920,6 +9968,14 @@ This action is irreversible.
 	 * Balance percentage: {percentage}
 	 */
 	SEND_BALANCE_PERCENTAGE: (arg: { percentage: string }) => LocalizedString
+	/**
+	 * Add your first contact to send faster and avoid errors.
+	 */
+	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: () => LocalizedString
+	/**
+	 * No contacts added
+	 */
+	SEND_CONTACTS_EMPTY_STATE_TITLE: () => LocalizedString
 	/**
 	 * Contact address
 	 */
@@ -10200,6 +10256,14 @@ This action is irreversible.
 	 * Scan
 	 */
 	SEND_RECEIVE_TAB_SCAN: () => LocalizedString
+	/**
+	 * Once you send to an address, it’ll show up here for quick access.
+	 */
+	SEND_RECENT_EMPTY_STATE_DESCRIPTION: () => LocalizedString
+	/**
+	 * No recent activity
+	 */
+	SEND_RECENT_EMPTY_STATE_TITLE: () => LocalizedString
 	/**
 	 * To
 	 */
@@ -10948,6 +11012,10 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	TRANSACTION_IN_PROGRESS: () => LocalizedString
 	/**
+	 * Transak not available
+	 */
+	TRANSAK_NOT_AVAILABLE: () => LocalizedString
+	/**
 	 * Type
 	 */
 	TYPE: () => LocalizedString
@@ -11295,10 +11363,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Transak not available
-	 */
-	TRANSAK_NOT_AVAILABLE: () => LocalizedString
 }
 
 export type Formatters = {

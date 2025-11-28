@@ -155,6 +155,7 @@ export const KnownAddressesList = () => {
                     ItemSeparatorComponent={renderItemSeparator}
                     ListEmptyComponent={renderEmptyState}
                     showsVerticalScrollIndicator={false}
+                    layout={LinearTransition.duration(500)}
                     scrollEnabled={false}
                 />
             )}
@@ -186,6 +187,7 @@ export const KnownAddressesList = () => {
                     ItemSeparatorComponent={renderItemSeparator}
                     ListEmptyComponent={renderEmptyState}
                     showsVerticalScrollIndicator={false}
+                    layout={LinearTransition.duration(500)}
                     scrollEnabled={contacts.length > 0}
                 />
             )}

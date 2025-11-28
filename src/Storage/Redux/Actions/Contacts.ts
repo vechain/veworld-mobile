@@ -1,10 +1,17 @@
 import { AppThunk } from "../Types"
 import { Contact, ContactType } from "~Model"
 import { deleteContact, insertContact } from "../Slices"
-import { FormUtils, error } from "~Utils"
-import { updateContact } from "../Slices/Contacts"
+import { AddressUtils, FormUtils, error } from "~Utils"
+import { updateContact, upsertRecentContact } from "../Slices/Contacts"
 import { address } from "thor-devkit"
 import { ERROR_EVENTS } from "~Constants"
+import {
+    decodeNonFungibleTokenTransferClause,
+    decodeTokenTransferClause,
+    isNFTTransferClause,
+    isTokenTransferClause,
+    isVETtransferClause,
+} from "~Utils/TransactionUtils/TransactionUtils"
 
 /**
  * createContact: A utility function to create a Contact object.
@@ -103,18 +110,57 @@ const editContact =
         )
     }
 
-const upsertRecentContact =
+const createRecentContact =
     (clauses: Connex.VM.Clause[], genesisId: string): AppThunk =>
     (dispatch, getState) => {
-        const { accounts: accountsState } = getState()
+        const { accounts: accountsState, contacts: contactsState } = getState()
         const selectedAccount = accountsState.selectedAccount
         let recipientAddress = ""
+
         if (!selectedAccount) {
             error(ERROR_EVENTS.SETTINGS, "No selected account found!")
             return
         }
 
-        // dispatch()
+        if (isVETtransferClause(clauses[0])) {
+            recipientAddress = clauses[0].to ?? ""
+        } else if (isTokenTransferClause(clauses[0])) {
+            recipientAddress = decodeTokenTransferClause(clauses[0])?.to ?? ""
+        } else if (isNFTTransferClause(clauses[0])) {
+            recipientAddress = decodeNonFungibleTokenTransferClause(clauses[0])?.to ?? ""
+        } else {
+            error(ERROR_EVENTS.SETTINGS, "Invalid clause type!")
+            return
+        }
+
+        if (recipientAddress) {
+            let alias: string | undefined
+            const timestamp = Date.now()
+
+            const accountExists = accountsState.accounts.find(account =>
+                AddressUtils.compareAddresses(account.address, recipientAddress),
+            )
+
+            if (accountExists) {
+                alias = accountExists.alias
+            }
+
+            const contactExists = contactsState.contacts.find(contact =>
+                AddressUtils.compareAddresses(contact.address, recipientAddress),
+            )
+
+            if (contactExists) {
+                alias = contactExists.alias
+            }
+
+            dispatch(
+                upsertRecentContact({
+                    selectedAccountAddress: selectedAccount,
+                    genesisId,
+                    contact: { address: recipientAddress, alias: alias, timestamp },
+                }),
+            )
+        }
     }
 
-export { addContact, removeContact, editContact, createContact, upsertRecentContact }
+export { addContact, removeContact, editContact, createContact, createRecentContact }
