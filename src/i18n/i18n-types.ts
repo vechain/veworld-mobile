@@ -314,6 +314,10 @@ type RootTranslation = {
 	 */
 	ADDITIONAL_DETAIL_TOKEN_ID: string
 	/**
+	 * T​o​k​e​n
+	 */
+	TOKEN: string
+	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
 	ADD_ACCOUNT: string
@@ -1931,6 +1935,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_CANCEL_CAPS_LOCK: string
 	/**
+	 * B​A​C​K
+	 */
+	COMMON_BTN_BACK: string
+	/**
 	 * C​o​n​f​i​r​m
 	 */
 	COMMON_BTN_CONFIRM: string
@@ -2002,6 +2010,18 @@ type RootTranslation = {
 	 * T​r​y​ ​a​g​a​i​n
 	 */
 	COMMON_BTN_TRY_AGAIN: string
+	/**
+	 * D​i​s​p​l​a​y​e​d​ ​a​m​o​u​n​t​s​ ​h​a​v​e​ ​b​e​e​n​ ​u​p​d​a​t​e​d​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​l​a​t​e​s​t​ ​m​a​r​k​e​t​ ​p​r​i​c​e​.
+	 */
+	COMMON_ALERT_DISPLAYED_AMOUNTS_UPDATED: string
+	/**
+	 * T​o​k​e​n​ ​a​m​o​u​n​t​ ​a​d​j​u​s​t​e​d​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​.
+	 */
+	COMMON_ALERT_TOKEN_AMOUNT_ADJUSTED_FOR_FEE: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	COMMON_ALERT_TRANSACTION_FAILED: string
 	/**
 	 * U​n​l​o​c​k
 	 */
@@ -4551,6 +4571,16 @@ type RootTranslation = {
 	 */
 	SEND_RECEIVE_TAB_SCAN: string
 	/**
+	 * R​e​v​i​e​w​ ​d​e​t​a​i​l​s
+	 */
+	SEND_RECEIVER_DETAILS: string
+	/**
+	 * {current: number} of {total: number}
+	 * @param {unknown} current
+	 * @param {unknown} total
+	 */
+	SEND_RECEIVER_DETAILS_COUNT: RequiredParams<'current', 'total'>
+	/**
 	 * T​o
 	 */
 	SEND_TO: string
@@ -4558,6 +4588,10 @@ type RootTranslation = {
 	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
+	/**
+	 * T​o​k​e​n​ ​a​m​o​u​n​t
+	 */
+	SEND_TOKEN_AMOUNT: string
 	/**
 	 * {​t​o​k​e​n​C​o​u​n​t​}​ ​t​o​k​e​n​s
 	 * @param {number} tokenCount
@@ -5939,6 +5973,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Token ID
 	 */
 	ADDITIONAL_DETAIL_TOKEN_ID: () => LocalizedString
+	/**
+	 * T​o​k​e​n
+	 */
+	TOKEN: () => LocalizedString
 	/**
 	 * Add Account
 	 */
@@ -7544,6 +7582,10 @@ This action is irreversible.
 	 */
 	COMMON_BTN_CANCEL_CAPS_LOCK: () => LocalizedString
 	/**
+	 * BACK
+	 */
+	COMMON_BTN_BACK: () => LocalizedString
+	/**
 	 * Confirm
 	 */
 	COMMON_BTN_CONFIRM: () => LocalizedString
@@ -7615,6 +7657,18 @@ This action is irreversible.
 	 * Try again
 	 */
 	COMMON_BTN_TRY_AGAIN: () => LocalizedString
+	/**
+	 * Displayed amounts have been updated based on the latest market price.
+	 */
+	COMMON_ALERT_DISPLAYED_AMOUNTS_UPDATED: () => LocalizedString
+	/**
+	 * Token amount adjusted for transaction fee.
+	 */
+	COMMON_ALERT_TOKEN_AMOUNT_ADJUSTED_FOR_FEE: () => LocalizedString
+	/**
+	 * Transaction failed. Please try again.
+	 */
+	COMMON_ALERT_TRANSACTION_FAILED: () => LocalizedString
 	/**
 	 * Unlock
 	 */
@@ -10129,6 +10183,16 @@ This action is irreversible.
 	 */
 	SEND_RECEIVE_TAB_SCAN: () => LocalizedString
 	/**
+	 * Review details
+	 */
+	SEND_RECEIVER_DETAILS: () => LocalizedString
+	/**
+	 * {current: number} of {total: number}
+	 * @param {unknown} current
+	 * @param {unknown} total
+	 */
+	SEND_RECEIVER_DETAILS_COUNT: RequiredParams<'current', 'total'>
+	/**
 	 * To
 	 */
 	SEND_TO: () => LocalizedString
@@ -10136,6 +10200,10 @@ This action is irreversible.
 	 * Select the token asset you wish to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
+	/**
+	 * Token amount
+	 */
+	SEND_TOKEN_AMOUNT: () => LocalizedString
 	/**
 	 * {tokenCount} tokens
 	 */
