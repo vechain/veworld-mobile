@@ -1298,7 +1298,7 @@
   "TRANSACTION_FEE": "İşlem ücreti",
   "TRANSACTION_ID": "İşlem Kimliği",
   "TRANSACTION_IN_PROGRESS": "İşlem devam ediyor",
-  "TRANSAK_NOT_AVAILABLE": "Transak mevcut değil",
+  "TRANSAK_NOT_AVAILABLE": "Transak kullanılamıyor",
   "TYPE": "Tür",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Bilinmeyen Hesap",
