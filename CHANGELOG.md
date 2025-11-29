@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.12 (2025-11-28)</small>
+
+* build: init ([d30f2b5](https://github.com/vechain/veworld-mobile/commit/d30f2b5))
+* fix: bs scroll view (#3588) ([78c2a23](https://github.com/vechain/veworld-mobile/commit/78c2a23)), closes [#3588](https://github.com/vechain/veworld-mobile/issues/3588)
+
 ## 2.5.0 (2025-11-21)
 
 * build: init ([d6a9102](https://github.com/vechain/veworld-mobile/commit/d6a9102))
