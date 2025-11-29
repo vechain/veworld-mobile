@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.12 (2025-11-28)</small>
+
+* build: init ([e8ed2ae](https://github.com/vechain/veworld-mobile/commit/e8ed2ae))
+* 560 bug   scrollgesture on that bs doesnt work every time (#3586) ([4f8f586](https://github.com/vechain/veworld-mobile/commit/4f8f586)), closes [#3586](https://github.com/vechain/veworld-mobile/issues/3586)
+
 ## 2.5.0 (2025-11-21)
 
 * build: init ([d6a9102](https://github.com/vechain/veworld-mobile/commit/d6a9102))
