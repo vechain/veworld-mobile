@@ -13,8 +13,6 @@ const { defaults: defaultTypography } = typography
 
 const AnimatedText = Animated.createAnimatedComponent(Text)
 
-type HeaderProps = Record<string, never>
-
 type AnimatedAmountInputProps = {
     isInputInFiat: boolean
     isError: boolean
@@ -42,33 +40,6 @@ type TokenSelectorButtonProps = {
 }
 
 const SelectAmountSendDetails = () => null
-
-SelectAmountSendDetails.Header = React.memo<HeaderProps>(function Header() {
-    const { LL } = useI18nContext()
-    const theme = useTheme()
-    const tokenAmountCard = theme.colors.sendScreen.tokenAmountCard
-
-    return (
-        <BaseView flexDirection="row" alignItems="center" justifyContent="space-between" mb={16} px={8}>
-            <BaseView flexDirection="row" alignItems="center" gap={8}>
-                <BaseIcon
-                    name="icon-coins"
-                    size={16}
-                    iconPadding={2}
-                    borderRadius={100}
-                    bg={theme.colors.label.background}
-                    color={theme.colors.label.text}
-                />
-                <BaseText typographyFont="bodyMedium" color={theme.colors.subSubtitle}>
-                    {LL.SEND_TOKEN_AMOUNT()}
-                </BaseText>
-            </BaseView>
-            <BaseText typographyFont="captionMedium" color={tokenAmountCard.stepText}>
-                {LL.SEND_STEP_OF_3({ stepNumber: "1" })}
-            </BaseText>
-        </BaseView>
-    )
-})
 
 SelectAmountSendDetails.AnimatedAmountInput = React.memo<AnimatedAmountInputProps>(function AnimatedAmountInput({
     isInputInFiat,
@@ -222,7 +193,6 @@ SelectAmountSendDetails.TokenSelectorButton = React.memo<TokenSelectorButtonProp
     )
 })
 
-// Styles for namespace components
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         animatedInput: {

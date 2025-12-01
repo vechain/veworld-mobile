@@ -339,8 +339,6 @@ export const SelectAmountSendComponent = ({
 
     return (
         <>
-            <SelectAmountSendDetails.Header />
-
             <BaseView style={styles.tokenAmountCard} bg={tokenAmountCard.background}>
                 <BaseView alignItems="center" gap={8}>
                     <BaseView style={styles.inputContainer}>
