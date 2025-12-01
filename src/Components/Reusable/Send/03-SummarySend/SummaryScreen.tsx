@@ -11,6 +11,7 @@ import { FungibleTokenWithBalance } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { TokenReceiverCard } from "./Components/TokenReceiverCard"
 import { TransactionFeeCard } from "./Components/TransactionFeeCard"
+import { SendFlowHeader } from "../SendFlowHeader"
 
 type SummaryScreenProps = {
     token: FungibleTokenWithBalance
@@ -31,7 +32,6 @@ export const SummaryScreen = ({
 }: SummaryScreenProps) => {
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
-
     const currency = useAppSelector(selectCurrency)
 
     const exchangeRateId = useMemo(() => getCoinGeckoIdBySymbol[token.symbol], [token.symbol])
@@ -91,6 +91,7 @@ export const SummaryScreen = ({
 
     return (
         <Animated.View style={styles.root}>
+            <SendFlowHeader step="summary" />
             <TokenReceiverCard token={token} amount={amount} address={address} />
             <TransactionFeeCard
                 token={token}

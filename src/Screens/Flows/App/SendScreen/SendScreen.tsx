@@ -5,11 +5,10 @@ import React, { ReactElement, useCallback, useMemo, useState } from "react"
 import Animated, { EntryAnimationsValues, ExitAnimationsValues, useSharedValue } from "react-native-reanimated"
 
 import { SummaryScreen } from "~Components/Reusable/Send"
-import { SendFlowHeader } from "~Components/Reusable/Send/SendFlowHeader"
 import { StyleSheet } from "react-native"
-import { BaseButton, BaseText, BaseView, Layout } from "~Components"
+import { BaseButton, BaseView, Layout } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
-import { useTheme, useThemedStyles } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
@@ -43,7 +42,7 @@ const ORDER: SendFlowStep[] = ["insertAddress", "selectAmount", "summary"]
 export const SendScreen = (): ReactElement => {
     const { LL } = useI18nContext()
     const navigation = useNavigation<NavigationProps>()
-    const [step, setStep] = useState<SendFlowStep>("insertAddress")
+    const [step, setStep] = useState<SendFlowStep>("summary")
     const [flowState, setFlowState] = useState<SendFlowState>({})
 
     const [txError, setTxError] = useState(false)
@@ -150,7 +149,7 @@ export const SendScreen = (): ReactElement => {
                 const { token, amount, address } = flowState
 
                 if (!token || !amount || !address) {
-                    // TODO: add a Error Screen?!
+                    // TODO: add a Error Screen?!?!
                     return <BaseView flex={1} />
                 }
 
@@ -268,32 +267,32 @@ export const SendScreen = (): ReactElement => {
             fixedBody={
                 <Animated.View style={styles.flexElement}>
                     <Animated.View style={styles.flexElement} entering={Entering} exiting={Exiting} key={step}>
-                        <SendFlowHeader step={step} />
                         {renderStep}
                     </Animated.View>
-
-                    <BaseView flexDirection="row" gap={16}>
-                        {footerConfig.left && (
-                            <BaseButton
-                                variant={footerConfig.left.variant ?? "outline"}
-                                action={footerConfig.left.onPress}
-                                w={48}
-                                title={footerConfig.left.label}
-                                disabled={footerConfig.left.disabled}
-                                haptics="Medium"
-                            />
-                        )}
-                        {footerConfig.right && (
-                            <BaseButton
-                                action={footerConfig.right.onPress}
-                                w={footerConfig.left ? 48 : 100}
-                                title={footerConfig.right.label}
-                                disabled={footerConfig.right.disabled}
-                                haptics="Medium"
-                            />
-                        )}
-                    </BaseView>
                 </Animated.View>
+            }
+            footer={
+                <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" gap={16}>
+                    {footerConfig.left && (
+                        <BaseButton
+                            variant={footerConfig.left.variant ?? "outline"}
+                            action={footerConfig.left.onPress}
+                            w={48}
+                            title={footerConfig.left.label}
+                            disabled={footerConfig.left.disabled}
+                            haptics="Medium"
+                        />
+                    )}
+                    {footerConfig.right && (
+                        <BaseButton
+                            action={footerConfig.right.onPress}
+                            w={footerConfig.left ? 48 : 100}
+                            title={footerConfig.right.label}
+                            disabled={footerConfig.right.disabled}
+                            haptics="Medium"
+                        />
+                    )}
+                </BaseView>
             }
         />
     )
@@ -301,12 +300,5 @@ export const SendScreen = (): ReactElement => {
 
 const baseStyles = () =>
     StyleSheet.create({
-        flexElement: { flex: 1 },
-        mockedBox: {
-            width: "100%",
-            height: 300,
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-        },
+        flexElement: { flex: 1, paddingHorizontal: 8 },
     })
