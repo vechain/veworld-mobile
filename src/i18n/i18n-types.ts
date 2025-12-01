@@ -2035,6 +2035,10 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_AND: string
 	/**
+	 * B​a​c​k
+	 */
+	COMMON_LBL_BACK: string
+	/**
 	 * C​o​m​m​e​n​t
 	 */
 	COMMON_LBL_COMMENT: string
@@ -2071,6 +2075,10 @@ type RootTranslation = {
 	 * N​a​m​e
 	 */
 	COMMON_LBL_NAME: string
+	/**
+	 * N​e​x​t
+	 */
+	COMMON_LBL_NEXT: string
 	/**
 	 * N​o​ ​a​v​a​i​l​a​b​l​e​ ​p​r​i​c​e​ ​h​i​s​t​o​r​y​ ​f​o​r​ ​{​t​o​k​e​n​N​a​m​e​}
 	 * @param {string} tokenName
@@ -7673,6 +7681,10 @@ This action is irreversible.
 	 */
 	COMMON_LBL_AND: () => LocalizedString
 	/**
+	 * Back
+	 */
+	COMMON_LBL_BACK: () => LocalizedString
+	/**
 	 * Comment
 	 */
 	COMMON_LBL_COMMENT: () => LocalizedString
@@ -7708,6 +7720,10 @@ This action is irreversible.
 	 * Name
 	 */
 	COMMON_LBL_NAME: () => LocalizedString
+	/**
+	 * Next
+	 */
+	COMMON_LBL_NEXT: () => LocalizedString
 	/**
 	 * No available price history for {tokenName}
 	 */
