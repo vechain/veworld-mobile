@@ -6,6 +6,7 @@ import { CURRENCY_FORMATS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { selectCurrencyFormat, useAppSelector } from "~Storage/Redux"
 import { TFonts } from "~Constants/Theme"
+import { getDecimalSeparator } from "~Utils/BigNumberUtils/BigNumberUtils"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "canc"]
 
@@ -39,9 +40,9 @@ export const NumPad = ({
             case CURRENCY_FORMATS.DOT:
                 return CURRENCY_FORMATS.DOT
             case CURRENCY_FORMATS.SYSTEM:
-                return getLocales()[0].languageCode === "en" ? CURRENCY_FORMATS.DOT : CURRENCY_FORMATS.COMMA
             default:
-                return getLocales()[0].languageCode === "en" ? CURRENCY_FORMATS.DOT : CURRENCY_FORMATS.COMMA
+                const locale = getLocales()[0].languageCode
+                return getDecimalSeparator(locale) ?? CURRENCY_FORMATS.DOT
         }
     }, [currencyFormat])
 

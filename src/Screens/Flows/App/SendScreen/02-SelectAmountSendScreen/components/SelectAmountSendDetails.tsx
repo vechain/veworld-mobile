@@ -119,44 +119,30 @@ SelectAmountSendDetails.ConversionToggle = React.memo<ConversionToggleProps>(fun
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
 
+    if (!exchangeRate && !isError) return null
+
+    if (isError) {
+        return (
+            <BaseText color={theme.colors.danger} typographyFont="captionMedium">
+                {LL.SEND_AMOUNT_EXCEEDS_BALANCE()}
+            </BaseText>
+        )
+    }
+
     return (
-        <>
-            {exchangeRate ? (
-                <BaseTouchable action={onToggle} haptics="Light" disabled={isError}>
-                    <BaseView flexDirection="row" alignItems="center" gap={4}>
-                        {isError ? (
-                            <BaseText color={theme.colors.danger} typographyFont="captionMedium">
-                                {LL.SEND_AMOUNT_EXCEEDS_BALANCE()}
-                            </BaseText>
-                        ) : (
-                            <Animated.View
-                                key={isInputInFiat ? "token-conv" : "fiat-conv"}
-                                entering={FadeIn.duration(300)}>
-                                <BaseText color={theme.colors.textLightish} typographyFont="bodySemiBold">
-                                    {!isInputInFiat && CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS]}
-                                    {formattedConvertedAmount}
-                                    {isInputInFiat && (
-                                        <Text style={styles.convertedSymbol}> {selectedToken.symbol}</Text>
-                                    )}
-                                </BaseText>
-                            </Animated.View>
-                        )}
-                        {!isError && (
-                            <>
-                                <BaseSpacer width={2} />
-                                <BaseIcon name="icon-arrow-up-down" size={12} color={theme.colors.textLightish} />
-                            </>
-                        )}
-                    </BaseView>
-                </BaseTouchable>
-            ) : (
-                isError && (
-                    <BaseText color={theme.colors.danger} typographyFont="captionMedium">
-                        {LL.SEND_AMOUNT_EXCEEDS_BALANCE()}
+        <BaseTouchable action={onToggle} haptics="Light" disabled={isError}>
+            <BaseView flexDirection="row" alignItems="center" gap={4}>
+                <Animated.View key={isInputInFiat ? "token-conv" : "fiat-conv"} entering={FadeIn.duration(300)}>
+                    <BaseText color={theme.colors.textLightish} typographyFont="bodySemiBold">
+                        {!isInputInFiat && CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS]}
+                        {formattedConvertedAmount}
+                        {isInputInFiat && <Text style={styles.convertedSymbol}> {selectedToken.symbol}</Text>}
                     </BaseText>
-                )
-            )}
-        </>
+                </Animated.View>
+                <BaseSpacer width={2} />
+                <BaseIcon name="icon-arrow-up-down" size={12} color={theme.colors.textLightish} />
+            </BaseView>
+        </BaseTouchable>
     )
 })
 
