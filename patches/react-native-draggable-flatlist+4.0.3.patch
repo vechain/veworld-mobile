@@ -1,0 +1,109 @@
+diff --git a/node_modules/react-native-draggable-flatlist/lib/typescript/components/NestableScrollContainer.d.ts b/node_modules/react-native-draggable-flatlist/lib/typescript/components/NestableScrollContainer.d.ts
+index 3e13d2d..487e004 100644
+--- a/node_modules/react-native-draggable-flatlist/lib/typescript/components/NestableScrollContainer.d.ts
++++ b/node_modules/react-native-draggable-flatlist/lib/typescript/components/NestableScrollContainer.d.ts
+@@ -1,4 +1,8 @@
+ import React from "react";
+ import { ScrollViewProps } from "react-native";
+ import { ScrollView } from "react-native-gesture-handler";
+-export declare const NestableScrollContainer: React.ForwardRefExoticComponent<ScrollViewProps & React.RefAttributes<ScrollView>>;
++
++type NestableScrollContainerInnerProps = {
++        onScrollOffsetChange?: (scrollOffset: number) => void;
++    } & Omit<ScrollViewProps, "onScroll">;
++export declare const NestableScrollContainer: React.ForwardRefExoticComponent<NestableScrollContainerInnerProps & React.RefAttributes<ScrollView>>;
+diff --git a/node_modules/react-native-draggable-flatlist/src/components/DraggableFlatList.tsx b/node_modules/react-native-draggable-flatlist/src/components/DraggableFlatList.tsx
+index 7c88afc..4cbbb81 100644
+--- a/node_modules/react-native-draggable-flatlist/src/components/DraggableFlatList.tsx
++++ b/node_modules/react-native-draggable-flatlist/src/components/DraggableFlatList.tsx
+@@ -321,7 +321,7 @@ function DraggableFlatListInner<T>(props: DraggableFlatListProps<T>) {
+       // Turning this into a worklet causes timing issues. We want it to run
+       // just after the finger lifts.
+       runOnJS(onContainerTouchEnd)();
+-    });
++    }).runOnJS(true)
+ 
+   if (dragHitSlop) panGesture.hitSlop(dragHitSlop);
+   if (activationDistanceProp) {
+diff --git a/node_modules/react-native-draggable-flatlist/src/components/NestableDraggableFlatList.tsx b/node_modules/react-native-draggable-flatlist/src/components/NestableDraggableFlatList.tsx
+index 1559352..6364152 100644
+--- a/node_modules/react-native-draggable-flatlist/src/components/NestableDraggableFlatList.tsx
++++ b/node_modules/react-native-draggable-flatlist/src/components/NestableDraggableFlatList.tsx
+@@ -45,6 +45,7 @@ function NestableDraggableFlatListInner<T>(
+   useNestedAutoScroll({
+     ...animVals,
+     hoverOffset,
++    autoscrollThreshold: props.autoscrollThreshold,
+   });
+ 
+   const onListContainerLayout = useStableCallback(async ({ containerRef }) => {
+diff --git a/node_modules/react-native-draggable-flatlist/src/components/NestableScrollContainer.tsx b/node_modules/react-native-draggable-flatlist/src/components/NestableScrollContainer.tsx
+index 61054a7..ce9a459 100644
+--- a/node_modules/react-native-draggable-flatlist/src/components/NestableScrollContainer.tsx
++++ b/node_modules/react-native-draggable-flatlist/src/components/NestableScrollContainer.tsx
+@@ -1,7 +1,7 @@
+ import React from "react";
+ import { LayoutChangeEvent, ScrollViewProps } from "react-native";
+ import { ScrollView } from "react-native-gesture-handler";
+-import Animated, { useAnimatedScrollHandler } from "react-native-reanimated";
++import Animated, { runOnJS, useAnimatedScrollHandler } from "react-native-reanimated";
+ import {
+   NestableScrollContainerProvider,
+   useSafeNestableScrollContainerContext,
+@@ -10,7 +10,11 @@ import { useStableCallback } from "../hooks/useStableCallback";
+ 
+ const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
+ 
+-function NestableScrollContainerInner(props: ScrollViewProps) {
++type NestableScrollContainerInnerProps = {
++    onScrollOffsetChange?: (scrollOffset: number) => void;
++  } & Omit<ScrollViewProps, "onScroll">;
++
++function NestableScrollContainerInner(props: NestableScrollContainerInnerProps) {
+   const {
+     outerScrollOffset,
+     containerSize,
+@@ -19,12 +23,17 @@ function NestableScrollContainerInner(props: ScrollViewProps) {
+     outerScrollEnabled,
+   } = useSafeNestableScrollContainerContext();
+ 
+-  const onScroll = useAnimatedScrollHandler({
+-    onScroll: ({ contentOffset }) => {
+-      outerScrollOffset.value = contentOffset.y;
+-    },
++  const onScroll = useStableCallback((scrollOffset: number) => {
++    props.onScrollOffsetChange?.(scrollOffset);
+   });
+ 
++  const scrollHandler = useAnimatedScrollHandler({
++     onScroll: (event) => {
++       outerScrollOffset.value = event.contentOffset.y;
++          runOnJS(onScroll)(event.contentOffset.y);
++         },
++       });
++
+   const onLayout = useStableCallback((event: LayoutChangeEvent) => {
+     const {
+       nativeEvent: { layout },
+@@ -45,7 +54,7 @@ function NestableScrollContainerInner(props: ScrollViewProps) {
+       scrollEnabled={outerScrollEnabled}
+       ref={scrollableRef}
+       scrollEventThrottle={1}
+-      onScroll={onScroll}
++      onScroll={scrollHandler}
+     />
+   );
+ }
+diff --git a/node_modules/react-native-draggable-flatlist/src/hooks/useNestedAutoScroll.tsx b/node_modules/react-native-draggable-flatlist/src/hooks/useNestedAutoScroll.tsx
+index ee098ec..4a6f439 100644
+--- a/node_modules/react-native-draggable-flatlist/src/hooks/useNestedAutoScroll.tsx
++++ b/node_modules/react-native-draggable-flatlist/src/hooks/useNestedAutoScroll.tsx
+@@ -71,7 +71,7 @@ export function useNestedAutoScroll(params: {
+   }, []);
+ 
+   const isAtBottomEdge = useDerivedValue(() => {
+-    return distToBottomEdge.value <= autoscrollThreshold;
++    return distToBottomEdge.value <= autoscrollThreshold / 2;
+   });
+ 
+   const scrollTarget = useSharedValue(0);

@@ -12,8 +12,20 @@ const metadataParser = (value: NFTMetadata | undefined | null) => {
     }, {}) as NFTMetadata
 }
 
-export const useCollectibleMetadata = ({ address, tokenId }: { address: string; tokenId: string }) => {
-    const { data: uri, isLoading } = useTokenURI({ address, tokenId })
+export const useCollectibleMetadata = ({
+    address,
+    tokenId,
+    blockNumber,
+}: {
+    address: string | undefined
+    tokenId: string | undefined
+    /**
+     * Number of the block used to get the Token URI
+     * Pass it only when the token is burnt and the token URI throws
+     */
+    blockNumber?: number
+}) => {
+    const { data: uri, isLoading } = useTokenURI({ address, tokenId, blockNumber })
 
     const options = useMemo(
         () => ({

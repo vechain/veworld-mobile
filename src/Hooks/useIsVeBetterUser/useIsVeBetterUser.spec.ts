@@ -2,11 +2,14 @@ import { renderHook } from "@testing-library/react-hooks"
 import { TestWrapper } from "~Test"
 
 import { useIsVeBetterUser } from "./useIsVeBetterUser"
-import { fetchVeBetterActions } from "~Networking"
 
-jest.mock("~Networking", () => ({
-    ...jest.requireActual("~Networking"),
-    fetchVeBetterActions: jest.fn(),
+const indexerGet = jest.fn()
+
+jest.mock("~Hooks/useIndexerClient", () => ({
+    ...jest.requireActual("~Hooks/useIndexerClient"),
+    useMainnetIndexerClient: jest.fn().mockReturnValue({
+        GET: (...args: any[]) => indexerGet(...args).then((res: any) => ({ data: res })),
+    }),
 }))
 
 describe("useIsVeBetterUser", () => {
@@ -14,7 +17,7 @@ describe("useIsVeBetterUser", () => {
         jest.clearAllMocks()
     })
     it("should return true if the number of actions is > 0", async () => {
-        ;(fetchVeBetterActions as jest.Mock).mockResolvedValue({ data: [{}] })
+        ;(indexerGet as jest.Mock).mockResolvedValue({ data: [{}] })
         const { result, waitFor } = renderHook(() => useIsVeBetterUser(), {
             wrapper: TestWrapper,
         })
@@ -24,7 +27,7 @@ describe("useIsVeBetterUser", () => {
         })
     })
     it("should return false if the number of actions is 0", async () => {
-        ;(fetchVeBetterActions as jest.Mock).mockResolvedValue({ data: [] })
+        ;(indexerGet as jest.Mock).mockResolvedValue({ data: [] })
         const { result, waitFor } = renderHook(() => useIsVeBetterUser(), {
             wrapper: TestWrapper,
         })

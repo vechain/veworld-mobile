@@ -2,8 +2,8 @@ import { TouchableOpacity as BSTouchableOpacity } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import React, { ComponentProps, PropsWithChildren, useCallback, useMemo, useState } from "react"
-import { SectionList, SectionListData, StyleSheet } from "react-native"
-import Animated, { LinearTransition } from "react-native-reanimated"
+import { SectionListData, StyleSheet } from "react-native"
+import { LinearTransition } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import {
     BaseBottomSheet,
@@ -15,11 +15,12 @@ import {
     SectionListSeparator,
 } from "~Components"
 import { BaseTabs } from "~Components/Base/BaseTabs"
+import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
-import { AccountUtils } from "~Utils"
+import { AccountUtils, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { SelectableAccountCard } from "../SelectableAccountCard"
 
@@ -78,16 +79,6 @@ const SectionHeader = ({
 }) => {
     return <SectionHeaderTitle>{section.alias}</SectionHeaderTitle>
 }
-
-const AnimatedSectionList = Animated.createAnimatedComponent(
-    SectionList<
-        AccountWithDevice,
-        {
-            data: AccountWithDevice[]
-            alias: string
-        }
-    >,
-)
 
 const ANIMATION_CONFIG = { stiffness: 90, damping: 15, duration: 300 }
 
@@ -157,12 +148,11 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
 
         return (
             <BaseBottomSheet
-                dynamicHeight
                 ref={ref}
+                snapPoints={["60%", "75%", "80%"]}
                 onDismiss={onDismiss}
-                enableContentPanningGesture={false}
                 animationConfigs={ANIMATION_CONFIG}
-                stickyIndices={[0]}
+                scrollable={false}
                 noMargins>
                 <BaseView
                     flexDirection="column"
@@ -201,8 +191,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                         />
                     )}
                 </BaseView>
-
-                <AnimatedSectionList
+                <BottomSheetSectionList
                     sections={sections}
                     contentContainerStyle={styles.contentContainer}
                     keyExtractor={item => item.address}
@@ -223,6 +212,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                     showsVerticalScrollIndicator={false}
                     layout={LinearTransition.duration(500)}
                     initialNumToRender={15}
+                    alwaysBounceVertical
                     scrollEnabled
                     style={styles.list}
                 />
@@ -242,7 +232,7 @@ const baseStyles =
                 borderRadius: 6,
             },
             contentContainer: {
-                paddingBottom: bottomInset,
+                paddingBottom: PlatformUtils.isAndroid() ? bottomInset + 16 : bottomInset,
             },
             list: { paddingHorizontal: 16, paddingBottom: 24 },
         })

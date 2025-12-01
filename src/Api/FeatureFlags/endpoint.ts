@@ -21,6 +21,7 @@ export type FeatureFlags = {
         [PaymentProvidersEnum.Transak]: {
             android: boolean
             iOS: boolean
+            url: string
         }
         [PaymentProvidersEnum.Coinify]: {
             android: boolean
@@ -74,6 +75,9 @@ export type FeatureFlags = {
                 enabled: boolean
             }
             tokens: {
+                enabled: boolean
+            }
+            send: {
                 enabled: boolean
             }
         }

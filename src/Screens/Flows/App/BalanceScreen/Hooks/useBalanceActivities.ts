@@ -2,8 +2,9 @@ import { ActivityEvent } from "~Model"
 import { BalanceTab } from "../Tabs/types"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { useCallback } from "react"
-import { createActivityFromIndexedHistoryEvent, fetchIndexedHistoryEvent } from "~Networking"
+import { createActivityFromIndexedHistoryEvent, DEFAULT_PAGE_SIZE } from "~Networking"
 import { useQuery } from "@tanstack/react-query"
+import { useIndexerClient } from "~Hooks/useIndexerClient"
 
 const getActivityEventsByTab = (tab: BalanceTab): ActivityEvent[] => {
     switch (tab) {
@@ -48,10 +49,25 @@ const getActivityEventsByTab = (tab: BalanceTab): ActivityEvent[] => {
 export const useBalanceActivities = ({ tab }: { tab: BalanceTab }) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const indexer = useIndexerClient(selectedNetwork)
 
     const fetchActivities = useCallback(async () => {
-        return await fetchIndexedHistoryEvent(selectedAccount.address, 0, selectedNetwork, getActivityEventsByTab(tab))
-    }, [selectedAccount.address, selectedNetwork, tab])
+        return indexer
+            .GET("/api/v2/history/{account}", {
+                params: {
+                    path: {
+                        account: selectedAccount.address,
+                    },
+                    query: {
+                        direction: "DESC",
+                        page: 0,
+                        size: DEFAULT_PAGE_SIZE,
+                        eventName: getActivityEventsByTab(tab),
+                    },
+                },
+            })
+            .then(res => res.data!)
+    }, [indexer, selectedAccount.address, tab])
 
     return useQuery({
         queryKey: ["BALANCE_ACTIVITIES", selectedNetwork.genesis.id, selectedAccount.address, tab],

@@ -102,7 +102,7 @@ export const TransferCard = memo(
         }, [toAddresses])
 
         const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
-            const activeIdx = viewableItems[0].index
+            const activeIdx = viewableItems[0]?.index
 
             setActiveIndex(activeIdx ?? 0)
         }, [])

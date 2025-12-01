@@ -2,7 +2,7 @@ import { useIsFocused } from "@react-navigation/native"
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import { useCallback, useMemo, useState } from "react"
 import { Activity, ActivityEvent, ActivityType } from "~Model"
-import { createActivityFromIndexedHistoryEvent, fetchIndexedHistoryEvent, sortActivitiesByTimestamp } from "~Networking"
+import { createActivityFromIndexedHistoryEvent, DEFAULT_PAGE_SIZE, sortActivitiesByTimestamp } from "~Networking"
 import {
     selectAllActivitiesByAccountAddressAndNetwork,
     selectSelectedAccount,
@@ -10,8 +10,12 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { FilterType } from "../constants"
+import { useIndexerClient } from "~Hooks/useIndexerClient"
 
-export const useAccountActivities = (filterType: FilterType, filters: Readonly<ActivityEvent[]> = []) => {
+export const useAccountActivities = (
+    filterType: FilterType,
+    filters: ActivityEvent[] | readonly ActivityEvent[] = [],
+) => {
     const queryClient = useQueryClient()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
@@ -21,11 +25,27 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
 
     const [isRefreshing, setIsRefreshing] = useState(false)
 
+    const indexer = useIndexerClient(network)
+
     const fetchActivities = useCallback(
         async ({ pageParam = 0 }: { pageParam: number }) => {
-            return await fetchIndexedHistoryEvent(selectedAccount.address, pageParam, network, filters)
+            return indexer
+                .GET("/api/v2/history/{account}", {
+                    params: {
+                        path: {
+                            account: selectedAccount.address,
+                        },
+                        query: {
+                            direction: "DESC",
+                            page: pageParam,
+                            size: DEFAULT_PAGE_SIZE,
+                            eventName: filters as ActivityEvent[],
+                        },
+                    },
+                })
+                .then(res => res.data!)
         },
-        [filters, network, selectedAccount.address],
+        [filters, indexer, selectedAccount.address],
     )
 
     const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, isLoading } = useInfiniteQuery({
@@ -36,7 +56,6 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
             return lastPage.pagination.hasNext ? pages.length : undefined
         },
         enabled: isFocused && (filterType === FilterType.ALL || filters.length > 0),
-        gcTime: 1000 * 60 * 2, // 2 minutes
     })
 
     const refreshActivities = useCallback(async () => {

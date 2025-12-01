@@ -6,14 +6,19 @@ import { getNftNameAndSymbolOptions } from "~Networking/NFT/getNftCollectionMeta
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
 type Args = {
-    address: string
-    tokenId: string
+    address: string | undefined
+    tokenId: string | undefined
+    /**
+     * Number of the block used to get the Token URI
+     * Pass it only when the token is burnt and the token URI throws
+     */
+    blockNumber?: number
 }
 
-export const useCollectibleDetails = ({ address, tokenId }: Args) => {
+export const useCollectibleDetails = ({ address, tokenId, blockNumber }: Args) => {
     const thor = useThorClient()
     const network = useAppSelector(selectSelectedNetwork)
-    const { data } = useCollectibleMetadata({ address, tokenId })
+    const { data } = useCollectibleMetadata({ address, tokenId, blockNumber })
     const { data: collectionMetadata } = useQuery(getNftNameAndSymbolOptions(address, network.genesis.id, thor))
 
     const name = useMemo(() => {
@@ -24,6 +29,7 @@ export const useCollectibleDetails = ({ address, tokenId }: Args) => {
         return {
             ...data,
             name,
+            collectionName: collectionMetadata?.name,
         }
-    }, [data, name])
+    }, [collectionMetadata?.name, data, name])
 }

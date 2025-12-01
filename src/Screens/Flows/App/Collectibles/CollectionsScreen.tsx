@@ -38,7 +38,7 @@ export const CollectionsScreen = () => {
     const queryClient = useQueryClient()
 
     const collectionsData = useMemo(
-        () => paginatedCollections?.pages.flatMap(page => page.collections) ?? [],
+        () => paginatedCollections?.pages.flatMap(page => page.data) ?? [],
         [paginatedCollections],
     )
 

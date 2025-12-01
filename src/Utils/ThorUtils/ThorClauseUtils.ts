@@ -1,5 +1,5 @@
 import { ABIContract, ABIFunction, Address, Clause, TransactionClause, Units, VET } from "@vechain/sdk-core"
-import { ThorClient } from "@vechain/sdk-network"
+import { ContractCallOptions, ThorClient } from "@vechain/sdk-network"
 import {
     Abi,
     AbiParameterToPrimitiveType,
@@ -90,6 +90,7 @@ interface TypedMethod<TAbi extends Abi, TFunctionName extends ContractFunctionNa
     execute: (
         thorClient: ThorClient,
         parameters: FunctionParameters<TAbi, TFunctionName>,
+        opts?: ContractCallOptions,
     ) => Promise<TypedContractCallResult<TAbi, TFunctionName>>
     _value: bigint
     value: (value: string | bigint) => this
@@ -131,11 +132,12 @@ export const getMethod = <TAbi extends Abi, TFunctionName extends ContractFuncti
                 functionAbi: fn as ABIFunction<TAbi, TFunctionName>,
             }
         },
-        execute: (thorClient, parameters) => {
+        execute: (thorClient, parameters, opts) => {
             return thorClient.transactions.executeCall(
                 contractAddress,
                 fn as ABIFunction,
                 parameters as unknown[],
+                opts,
             ) as any
         },
         fn,

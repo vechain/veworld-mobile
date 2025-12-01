@@ -57,7 +57,6 @@ export const getCollectibleMetadataOptions = (
                         })
                         .then(res => res.data),
                 staleTime: 5 * 60 * 1000,
-                gcTime: 5 * 60 * 1000,
                 enabled,
             })
         case URIProtocol.DATA:
@@ -66,7 +65,6 @@ export const getCollectibleMetadataOptions = (
                 queryKey: ["UNKNOWN_URI", "v1", uri],
                 queryFn: () => null,
                 staleTime: 5 * 60 * 1000,
-                gcTime: 5 * 60 * 1000,
                 enabled,
             })
     }

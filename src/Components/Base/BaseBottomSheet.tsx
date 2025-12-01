@@ -186,6 +186,7 @@ const BaseBottomSheetContent = ({
         if (scrollable) {
             return (
                 <BottomSheetScrollView
+                    bounces={false}
                     scrollEnabled={scrollEnabled}
                     contentContainerStyle={contentViewStyle}
                     showsVerticalScrollIndicator={false}

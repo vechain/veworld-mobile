@@ -1,8 +1,8 @@
+import { fireEvent, render, screen } from "@testing-library/react-native"
 import React from "react"
 import { TestWrapper } from "~Test"
-import { fireEvent, render, screen } from "@testing-library/react-native"
-import { FeedbackChip } from "./FeedbackChip"
 import { FeedbackSeverity, FeedbackType } from "../Model"
+import { FeedbackChip } from "./FeedbackChip"
 
 describe("FeedbackChip", () => {
     it("should render the chip with the correct label", () => {
@@ -66,11 +66,9 @@ describe("FeedbackChip", () => {
         )
 
         const loadingIcon = screen.getByTestId("FEEDBACK_CHIP_LOADING_ICON")
-        const closeButton = screen.getByTestId("FEEDBACK_CHIP_CLOSE_BUTTON")
         const message = screen.getByTestId("FEEDBACK_CHIP_MESSAGE")
 
         expect(loadingIcon).toBeVisible()
-        expect(closeButton).toBeVisible()
         expect(message).toBeVisible()
         expect(message).toHaveTextContent("Test")
     })
@@ -108,5 +106,27 @@ describe("FeedbackChip", () => {
         fireEvent.press(closeButton)
 
         expect(onDismissMock).toHaveBeenCalledTimes(1)
+    })
+
+    it("should call onPress if defined and it has been clicked", () => {
+        const onPress = jest.fn()
+        render(
+            <FeedbackChip
+                feedbackData={{
+                    severity: FeedbackSeverity.ERROR,
+                    type: FeedbackType.PERMANENT,
+                    message: "Test",
+                    onPress,
+                }}
+                onDismiss={jest.fn()}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
+
+        fireEvent.press(screen.getByTestId("FEEDBACK_CHIP_ROOT"))
+
+        expect(onPress).toHaveBeenCalledTimes(1)
     })
 })

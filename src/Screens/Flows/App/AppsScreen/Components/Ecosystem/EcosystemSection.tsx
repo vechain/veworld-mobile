@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
-import { BaseView } from "~Components"
-import { useBottomSheetModal } from "~Hooks"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import React, { RefObject, useCallback, useEffect, useRef, useState } from "react"
+import { ScrollView, StyleSheet, View } from "react-native"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { UseDappsWithPaginationSortKey } from "~Hooks/useDappsWithPagination"
 import { useAppHubDapps } from "~Hooks/useDappsWithPagination/useAppHubDapps"
 import { Routes } from "~Navigation"
@@ -12,11 +13,22 @@ import { SortDAppsBottomSheetV2 } from "./SortDAppsBottomSheetV2"
 import { TopSection } from "./TopSection"
 import { DappTypeV2 } from "./types"
 
-export const EcosystemSection = () => {
-    const [selectedFilter, setSelectedFilter] = useState(DappTypeV2.ALL)
+export const EcosystemSection = ({
+    defaultFilter,
+    scrollViewRef,
+}: {
+    defaultFilter?: DappTypeV2
+    scrollViewRef: RefObject<ScrollView | null>
+}) => {
+    const [selectedFilter, setSelectedFilter] = useState(defaultFilter ?? DappTypeV2.ALL)
     const [selectedSort, setSelectedSort] = useState<UseDappsWithPaginationSortKey>("alphabetic_asc")
     const [animationDirection, setAnimationDirection] = useState<"left" | "right" | null>(null)
     const [isProcessingAll, setIsProcessingAll] = useState(false)
+    const [y, setY] = useState(0)
+
+    const { styles } = useThemedStyles(baseStyles)
+
+    const containerRef = useRef<View>(null)
 
     const selectedFilterRef = useRef(selectedFilter)
 
@@ -28,6 +40,8 @@ export const EcosystemSection = () => {
         kind: "v2",
         sort: selectedSort,
     })
+
+    const navigation = useNavigation()
 
     useEffect(() => {
         selectedFilterRef.current = selectedFilter
@@ -77,8 +91,23 @@ export const EcosystemSection = () => {
 
     const openSortApps = useCallback(() => onOpenSortBs(), [onOpenSortBs])
 
+    useFocusEffect(
+        useCallback(() => {
+            if (defaultFilter) {
+                scrollViewRef.current?.scrollTo({ y })
+                setSelectedFilter(defaultFilter)
+                navigation.setParams({ filter: undefined })
+            }
+        }, [defaultFilter, navigation, scrollViewRef, y]),
+    )
+
     return (
-        <BaseView gap={16} px={16}>
+        <View
+            style={styles.root}
+            ref={containerRef}
+            onLayout={e => {
+                setY(e.nativeEvent.layout.y)
+            }}>
             <TopSection onPress={openSortApps} />
             <FiltersSection selectedFilter={selectedFilter} onPress={handleFilterChange} />
             <DAppsList
@@ -91,6 +120,15 @@ export const EcosystemSection = () => {
             />
             <SortDAppsBottomSheetV2 onSortChange={setSelectedSort} selectedSort={selectedSort} bsRef={sortBs} />
             <DappOptionsBottomSheetV2 bsRef={dappOptionsBs} />
-        </BaseView>
+        </View>
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        root: {
+            flexDirection: "column",
+            gap: 16,
+            paddingHorizontal: 16,
+        },
+    })

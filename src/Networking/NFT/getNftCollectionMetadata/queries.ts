@@ -61,13 +61,13 @@ const getNftTotalSupply = async (address: string, thor: ThorClient) => {
     }
 }
 
-export const getNftNameAndSymbolOptions = (address: string, genesisId: string, thorClient: ThorClient) =>
+export const getNftNameAndSymbolOptions = (address: string | undefined, genesisId: string, thorClient: ThorClient) =>
     queryOptions({
         queryKey: ["NFT", "DETAILS", "NAME_SYMBOL", genesisId, address],
-        queryFn: () => getNftNameAndSymbol(address, thorClient),
+        queryFn: () => getNftNameAndSymbol(address!, thorClient),
         staleTime: 24 * 60 * 60 * 1000,
-        gcTime: 24 * 60 * 60 * 1000,
         retry: 3,
+        enabled: !!address,
     })
 
 export const getNftTotalSupplyOptions = (address: string, genesisId: string, thorClient: ThorClient) =>
@@ -75,6 +75,5 @@ export const getNftTotalSupplyOptions = (address: string, genesisId: string, tho
         queryKey: ["NFT", "DETAILS", "SUPPLY", genesisId, address],
         queryFn: () => getNftTotalSupply(address, thorClient),
         staleTime: 60 * 60 * 1000,
-        gcTime: 60 * 60 * 1000,
         retry: 3,
     })

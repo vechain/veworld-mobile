@@ -1761,6 +1761,10 @@ type RootTranslation = {
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: string
 	/**
+	 * B​u​y​ ​n​e​w​ ​c​o​l​l​e​c​t​i​b​l​e​s
+	 */
+	BUY_NEW_COLLECTIBLES: string
+	/**
 	 * C​a​c​h​e​ ​c​l​e​a​r​e​d
 	 */
 	CACHE_CLEARED: string
@@ -1814,6 +1818,10 @@ type RootTranslation = {
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: string
 	/**
+	 * C​o​i​n​b​a​s​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
+	 */
+	COINBASE_NOT_AVAILABLE: string
+	/**
 	 * A​v​a​t​a​r
 	 */
 	COLLECTIBLES_ACTION_AVATAR_ACTIVE: string
@@ -1866,6 +1874,10 @@ type RootTranslation = {
 	 * H​i​d​e​ ​b​a​c​k
 	 */
 	COLLECTIONS_HIDE_BACK: string
+	/**
+	 * S​e​e​ ​C​o​l​l​e​c​t​i​o​n​s
+	 */
+	COLLECTIONS_SEE_ALL: string
 	/**
 	 * V​i​e​w​ ​h​i​d​d​e​n
 	 */
@@ -2023,6 +2035,10 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_AND: string
 	/**
+	 * B​a​c​k
+	 */
+	COMMON_LBL_BACK: string
+	/**
 	 * C​o​m​m​e​n​t
 	 */
 	COMMON_LBL_COMMENT: string
@@ -2059,6 +2075,10 @@ type RootTranslation = {
 	 * N​a​m​e
 	 */
 	COMMON_LBL_NAME: string
+	/**
+	 * N​e​x​t
+	 */
+	COMMON_LBL_NEXT: string
 	/**
 	 * N​o​ ​a​v​a​i​l​a​b​l​e​ ​p​r​i​c​e​ ​h​i​s​t​o​r​y​ ​f​o​r​ ​{​t​o​k​e​n​N​a​m​e​}
 	 * @param {string} tokenName
@@ -3715,6 +3735,10 @@ type RootTranslation = {
 	 */
 	PAID: string
 	/**
+	 * P​e​n​d​i​n​g​.​.​.
+	 */
+	PENDING_ACTIVITY: string
+	/**
 	 * P​I​N​ ​C​o​d​e
 	 */
 	PIN_CODE: string
@@ -4814,6 +4838,10 @@ type RootTranslation = {
 	 */
 	STATUS: string
 	/**
+	 * D​o​n​’​t​ ​s​h​o​w​ ​m​e​ ​t​h​i​s​ ​a​g​a​i​n
+	 */
+	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: string
+	/**
 	 * E​a​r​n
 	 */
 	STELLA_PAY_BOTTOM_SHEET_EARN: string
@@ -4842,10 +4870,6 @@ type RootTranslation = {
 	 * G​e​t​ ​y​o​u​r​ ​V​e​B​e​t​t​e​r​ ​c​a​r​d​ ​o​n
 	 */
 	STELLA_PAY_BOTTOM_SHEET_TITLE: string
-	/**
-	 * D​o​n​’​t​ ​s​h​o​w​ ​m​e​ ​t​h​i​s​ ​a​g​a​i​n
-	 */
-	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: string
 	/**
 	 * A​v​a​i​l​a​b​l​e​ ​t​o​ ​c​l​a​i​m
 	 */
@@ -5272,6 +5296,14 @@ type RootTranslation = {
 	 */
 	TOUCH_ID: string
 	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​d​o​n​e
+	 */
+	TRANSACTION_DONE: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​a​i​l​e​d
+	 */
+	TRANSACTION_FAILED: string
+	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​e​e
 	 */
 	TRANSACTION_FEE: string
@@ -5279,6 +5311,14 @@ type RootTranslation = {
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​I​D
 	 */
 	TRANSACTION_ID: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​n​ ​p​r​o​g​r​e​s​s
+	 */
+	TRANSACTION_IN_PROGRESS: string
+	/**
+	 * T​r​a​n​s​a​k​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
+	 */
+	TRANSAK_NOT_AVAILABLE: string
 	/**
 	 * T​y​p​e
 	 */
@@ -7343,6 +7383,10 @@ Thanks for your patience!
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: () => LocalizedString
 	/**
+	 * Buy new collectibles
+	 */
+	BUY_NEW_COLLECTIBLES: () => LocalizedString
+	/**
 	 * Cache cleared
 	 */
 	CACHE_CLEARED: () => LocalizedString
@@ -7394,6 +7438,10 @@ Thanks for your patience!
 	 * No wallets available
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: () => LocalizedString
+	/**
+	 * Coinbase not available
+	 */
+	COINBASE_NOT_AVAILABLE: () => LocalizedString
 	/**
 	 * Avatar
 	 */
@@ -7447,6 +7495,10 @@ This action is irreversible.
 	 * Hide back
 	 */
 	COLLECTIONS_HIDE_BACK: () => LocalizedString
+	/**
+	 * See Collections
+	 */
+	COLLECTIONS_SEE_ALL: () => LocalizedString
 	/**
 	 * View hidden
 	 */
@@ -7604,6 +7656,10 @@ This action is irreversible.
 	 */
 	COMMON_LBL_AND: () => LocalizedString
 	/**
+	 * Back
+	 */
+	COMMON_LBL_BACK: () => LocalizedString
+	/**
 	 * Comment
 	 */
 	COMMON_LBL_COMMENT: () => LocalizedString
@@ -7639,6 +7695,10 @@ This action is irreversible.
 	 * Name
 	 */
 	COMMON_LBL_NAME: () => LocalizedString
+	/**
+	 * Next
+	 */
+	COMMON_LBL_NEXT: () => LocalizedString
 	/**
 	 * No available price history for {tokenName}
 	 */
@@ -9269,6 +9329,10 @@ This action is irreversible.
 	 */
 	PAID: () => LocalizedString
 	/**
+	 * Pending...
+	 */
+	PENDING_ACTIVITY: () => LocalizedString
+	/**
 	 * PIN Code
 	 */
 	PIN_CODE: () => LocalizedString
@@ -10353,6 +10417,10 @@ Here's what it's all about:
 	 */
 	STATUS: () => LocalizedString
 	/**
+	 * Don’t show me this again
+	 */
+	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: () => LocalizedString
+	/**
 	 * Earn
 	 */
 	STELLA_PAY_BOTTOM_SHEET_EARN: () => LocalizedString
@@ -10381,10 +10449,6 @@ Available for Google and Apple Pay.
 	 * Get your VeBetter card on
 	 */
 	STELLA_PAY_BOTTOM_SHEET_TITLE: () => LocalizedString
-	/**
-	 * Don’t show me this again
-	 */
-	STELLA_PAY_BOTTOM_SHEET_DONT_SHOW_AGAIN: () => LocalizedString
 	/**
 	 * Available to claim
 	 */
@@ -10808,6 +10872,14 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	TOUCH_ID: () => LocalizedString
 	/**
+	 * Transaction done
+	 */
+	TRANSACTION_DONE: () => LocalizedString
+	/**
+	 * Transaction failed
+	 */
+	TRANSACTION_FAILED: () => LocalizedString
+	/**
 	 * Transaction fee
 	 */
 	TRANSACTION_FEE: () => LocalizedString
@@ -10815,6 +10887,14 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Transaction ID
 	 */
 	TRANSACTION_ID: () => LocalizedString
+	/**
+	 * Transaction in progress
+	 */
+	TRANSACTION_IN_PROGRESS: () => LocalizedString
+	/**
+	 * Transak not available
+	 */
+	TRANSAK_NOT_AVAILABLE: () => LocalizedString
 	/**
 	 * Type
 	 */

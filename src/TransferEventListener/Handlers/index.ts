@@ -1,27 +1,19 @@
 export * from "./TransferEventHandlers"
 
-import { ThorClient } from "@vechain/sdk-network"
 import { AccountWithDevice, Network } from "~Model"
-import { IncomingTransferResponse } from "~Networking"
+import { FetchIncomingTransfersResponse } from "~Networking"
 
 export interface BaseTransferHandlerProps {
     selectedAccount: AccountWithDevice
     visibleAccounts: AccountWithDevice[]
-    transfers: IncomingTransferResponse[]
-    informUser: (params: { accountAddress: string; txId?: string }) => void
+    transfers: FetchIncomingTransfersResponse["data"]
 }
 
 export interface NFTTransferHandlerProps extends BaseTransferHandlerProps {
     network: Network
-    thorClient: ThorClient
-    updateNFTs: (params: { network: string; accountAddress: string }) => void
+    updateNFTs: (params: { network: Network; accountAddress: string }) => void
 }
 
 export interface TokenTransferHandlerProps extends BaseTransferHandlerProps {
-    fetchData: (address: string) => Promise<{ name: string; symbol: string; decimals: number }>
-    updateBalances: (params: { accountAddress: string }) => void
-}
-
-export interface VETTransferHandlerProps extends BaseTransferHandlerProps {
     updateBalances: (params: { accountAddress: string }) => void
 }

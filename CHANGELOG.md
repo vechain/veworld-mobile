@@ -1,5 +1,15 @@
 # Changelog
 
+## <small>2.4.12 (2025-11-28)</small>
+
+* build: init ([9836c8f](https://github.com/vechain/veworld-mobile/commit/9836c8f))
+* Revert "fix: bs scroll view (#3588)" (#3590) ([0933fc1](https://github.com/vechain/veworld-mobile/commit/0933fc1)), closes [#3588](https://github.com/vechain/veworld-mobile/issues/3588) [#3590](https://github.com/vechain/veworld-mobile/issues/3590)
+
+## 2.5.0 (2025-11-21)
+
+* build: init ([d6a9102](https://github.com/vechain/veworld-mobile/commit/d6a9102))
+* feat: add scrollable and scrollEnabled props to BaseBottomSheet for enhanced content management (#35 ([bf7d263](https://github.com/vechain/veworld-mobile/commit/bf7d263)), closes [#3564](https://github.com/vechain/veworld-mobile/issues/3564)
+
 ## 2.5.0 (2025-11-13)
 
 * build: init ([f33174b](https://github.com/vechain/veworld-mobile/commit/f33174b))

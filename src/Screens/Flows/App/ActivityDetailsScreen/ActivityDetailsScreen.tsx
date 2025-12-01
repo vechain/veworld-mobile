@@ -18,8 +18,10 @@ import { DateUtils, HexUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityModalTitle } from "./util"
 
+import { useNavigation } from "@react-navigation/native"
 import { useQuery } from "@tanstack/react-query"
 import { B3TR, VOT3 } from "~Constants"
+import { useIndexerClient } from "~Hooks/useIndexerClient"
 import {
     ActivityStatus,
     ActivityType,
@@ -36,7 +38,6 @@ import {
     SwapActivity,
     TypedDataActivity,
 } from "~Model"
-import { getTransaction } from "~Networking"
 import { selectActivity, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { ExplorerLinkType, getExplorerLink } from "~Utils/AddressUtils/AddressUtils"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
@@ -52,7 +53,6 @@ import {
 import DappLoginDetails from "./Components/DappLoginDetails"
 import { StargateActivityDetails } from "./Components/StakingDetails"
 import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
-import { useNavigation } from "@react-navigation/native"
 
 type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
@@ -67,9 +67,22 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
     const activityFromStore = useAppSelector(state => selectActivity(state, activity.id))
 
+    const indexer = useIndexerClient(network)
+
     const queryFn = useCallback(async () => {
-        return await getTransaction(activity.txId ?? "", network)
-    }, [activity.txId, network])
+        return indexer
+            .GET("/api/v1/transactions/{txId}", {
+                params: {
+                    path: {
+                        txId: activity.txId ?? "",
+                    },
+                    query: {
+                        expanded: true,
+                    },
+                },
+            })
+            .then(res => res.data!)
+    }, [activity.txId, indexer])
 
     const {
         data: transaction,

@@ -1,11 +1,11 @@
 {
   "name": "veworld",
-  "version": "2.4.10",
+  "version": "2.4.12",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf android/app/build && cd ios && pod deintegrate && cd ..",
     "purge:android": "rm -rf node_modules && rm -rf android/app/build",
-    "install:all": "yarn abi:install && yarn abi:build && yarn install && yarn abi:generate && npx pod-install",
+    "install:all": "yarn abi:install && yarn abi:build && yarn install && yarn abi:generate && yarn generate:indexer-schema:mainnet && npx pod-install",
     "install:android": "yarn abi:install && yarn abi:build && yarn install && yarn abi:generate",
     "reinstall": "yarn purge && yarn install:all",
     "android": "react-native run-android",
@@ -45,7 +45,8 @@
     "abi:generate-ts-business-events-file": "$(yarn bin json-abi-to-ts) generate-object --input-directory ./abi-resources/business_events --out-file ./src/Generated/businessEvents.ts --output ts",
     "abi:generate": "yarn abi:generate-json-abi-file && yarn abi:generate-ts-abi-file && yarn abi:generate-business-events-directory && yarn abi:generate-ts-business-events-file",
     "abi:all": "yarn abi:install && yarn abi:build && yarn abi:generate",
-    "ts-check": "tsc --noEmit"
+    "ts-check": "tsc --noEmit",
+    "generate:indexer-schema:mainnet": "openapi-typescript https://indexer.mainnet.vechain.org/api-docs -o ./src/Generated/indexer/schema.d.ts"
   },
   "dependencies": {
     "@coinbase/cbpay-js": "^2.2.1",
@@ -78,7 +79,7 @@
     "@tanstack/query-sync-storage-persister": "^5.59.9",
     "@tanstack/react-query": "^5.59.9",
     "@tanstack/react-query-persist-client": "^5.59.9",
-    "@transak/react-native-sdk": "^2.0.4",
+    "@transak/ui-react-native-sdk": "^1.0.0",
     "@vechain/connex-driver": "^2.1.0",
     "@vechain/connex-framework": "^2.1.0",
     "@vechain/picasso": "^2.1.1",
@@ -131,6 +132,7 @@
     "lottie-react-native": "6.7.0",
     "mixpanel-react-native": "^3.0.7",
     "moment": "^2.30.1",
+    "openapi-fetch": "^0.15.0",
     "react": "18.2.0",
     "react-native": "0.74.7",
     "react-native-android-location-enabler": "^2.0.1",
@@ -259,6 +261,7 @@
     "lint-staged": "^15.2.10",
     "lokijs": "^1.5.12",
     "metro-react-native-babel-preset": "^0.77.0",
+    "openapi-typescript": "^7.10.1",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "2.8.8",

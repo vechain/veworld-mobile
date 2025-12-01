@@ -36,9 +36,9 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils, AddressUtils, BigNutils, error, TransactionUtils } from "~Utils"
+import FontUtils from "~Utils/FontUtils"
 import { useI18nContext } from "~i18n"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
-import FontUtils from "~Utils/FontUtils"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 

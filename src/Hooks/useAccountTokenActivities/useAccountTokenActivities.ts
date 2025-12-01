@@ -1,7 +1,8 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useCallback } from "react"
+import { useIndexerClient } from "~Hooks/useIndexerClient"
 import { ActivityEvent, FungibleToken } from "~Model"
-import { createActivityFromIndexedHistoryEvent, fetchIndexedHistoryEvent } from "~Networking"
+import { createActivityFromIndexedHistoryEvent } from "~Networking"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
 export const getUseAccountTokenActivitiesQueryKey = (
@@ -13,34 +14,57 @@ export const getUseAccountTokenActivitiesQueryKey = (
 export const useAccountTokenActivities = (token: FungibleToken) => {
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
+    const indexer = useIndexerClient(network)
 
     const fetchActivities = useCallback(
         async ({ pageParam }: { pageParam: number }) => {
             const pageSize = pageParam === 0 ? 6 : 4
-            if (token.symbol === "VET")
-                return fetchIndexedHistoryEvent(
-                    account.address,
-                    pageParam,
-                    network,
-                    [ActivityEvent.TRANSFER_VET, ActivityEvent.SWAP_FT_TO_VET, ActivityEvent.SWAP_VET_TO_FT],
-                    { pageSize },
-                )
 
-            return fetchIndexedHistoryEvent(
-                account.address,
-                pageParam,
-                network,
-                [
-                    ActivityEvent.TRANSFER_FT,
-                    ActivityEvent.TRANSFER_SF,
-                    ActivityEvent.SWAP_FT_TO_FT,
-                    ActivityEvent.SWAP_FT_TO_VET,
-                    ActivityEvent.SWAP_VET_TO_FT,
-                ],
-                { contractAddress: token.address, pageSize },
-            )
+            if (token.symbol === "VET")
+                return indexer
+                    .GET("/api/v2/history/{account}", {
+                        params: {
+                            path: {
+                                account: account.address,
+                            },
+                            query: {
+                                eventName: [
+                                    ActivityEvent.TRANSFER_VET,
+                                    ActivityEvent.SWAP_FT_TO_VET,
+                                    ActivityEvent.SWAP_VET_TO_FT,
+                                ],
+                                page: pageParam,
+                                size: pageSize,
+                                direction: "DESC",
+                            },
+                        },
+                    })
+                    .then(res => res.data!)
+
+            return indexer
+                .GET("/api/v2/history/{account}", {
+                    params: {
+                        path: {
+                            account: account.address,
+                        },
+                        query: {
+                            eventName: [
+                                ActivityEvent.TRANSFER_FT,
+                                ActivityEvent.TRANSFER_SF,
+                                ActivityEvent.SWAP_FT_TO_FT,
+                                ActivityEvent.SWAP_FT_TO_VET,
+                                ActivityEvent.SWAP_VET_TO_FT,
+                            ],
+                            page: pageParam,
+                            size: pageSize,
+                            contractAddress: token.address,
+                            direction: "DESC",
+                        },
+                    },
+                })
+                .then(res => res.data!)
         },
-        [account.address, network, token.address, token.symbol],
+        [account.address, indexer, token.address, token.symbol],
     )
 
     return useInfiniteQuery({
@@ -50,7 +74,6 @@ export const useAccountTokenActivities = (token: FungibleToken) => {
         getNextPageParam: (lastPage, pages) => {
             return lastPage.pagination.hasNext ? pages.length : undefined
         },
-        gcTime: 5 * 60 * 1000,
         select(_data) {
             return {
                 data: _data.pages

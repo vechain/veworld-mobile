@@ -61,6 +61,7 @@ const mockedFeatureFlags: FeatureFlags = {
         transak: {
             android: true,
             iOS: true,
+            url: "",
         },
         coinify: {
             android: true,
@@ -95,6 +96,7 @@ const mockedFeatureFlags: FeatureFlags = {
             enabled: false,
             collectibles: { enabled: false },
             tokens: { enabled: false },
+            send: { enabled: false },
         },
     },
     smartWalletFeature: {

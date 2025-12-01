@@ -14,10 +14,15 @@ import {
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AppsScreen } from "~Screens/Flows/App/AppsScreen/AppsScreen"
+import { DappTypeV2 } from "~Screens/Flows/App/AppsScreen/Components/Ecosystem/types"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 export type RootStackParamListApps = {
-    [Routes.APPS]: undefined
+    [Routes.APPS]:
+        | {
+              filter?: DappTypeV2
+          }
+        | undefined
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
