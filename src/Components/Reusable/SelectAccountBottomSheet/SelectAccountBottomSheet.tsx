@@ -20,7 +20,7 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
-import { AccountUtils } from "~Utils"
+import { AccountUtils, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { SelectableAccountCard } from "../SelectableAccountCard"
 
@@ -232,7 +232,7 @@ const baseStyles =
                 borderRadius: 6,
             },
             contentContainer: {
-                paddingBottom: bottomInset,
+                paddingBottom: PlatformUtils.isAndroid() ? bottomInset + 16 : bottomInset,
             },
             list: { paddingHorizontal: 16, paddingBottom: 24 },
         })
