@@ -5,8 +5,9 @@ import { TouchableOpacity } from "react-native-gesture-handler"
 import Animated, { LinearTransition, ZoomInEasyUp, ZoomOutEasyUp } from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseTextInput, BaseView } from "~Components/Base"
 import { AlertInline } from "~Components/Reusable/Alert"
+import { CreateContactBottomSheet } from "~Components/Reusable/BottomSheets"
 import { COLORS, ColorThemeType, ScanTarget } from "~Constants"
-import { useCameraBottomSheet, useThemedStyles, useVns, ZERO_ADDRESS } from "~Hooks"
+import { useBottomSheetModal, useCameraBottomSheet, useThemedStyles, useVns, ZERO_ADDRESS } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
@@ -26,6 +27,8 @@ export const WalletAddressCard = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const { getVnsAddress } = useVns()
+    const { ref: createContactBottomSheetRef, onOpen: openCreateContactSheet } = useBottomSheetModal()
+
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         sourceScreen: Routes.SEND_TOKEN,
         targets: [ScanTarget.ADDRESS],
@@ -194,7 +197,8 @@ export const WalletAddressCard = () => {
                     <AnimatedTouchableOpacity
                         entering={ZoomInEasyUp}
                         exiting={ZoomOutEasyUp}
-                        style={styles.addToContactsButton}>
+                        style={styles.addToContactsButton}
+                        onPress={() => openCreateContactSheet({ address })}>
                         <BaseIcon
                             name="icon-plus-circle"
                             size={16}
@@ -208,6 +212,8 @@ export const WalletAddressCard = () => {
             </Animated.View>
 
             {RenderCameraModal}
+
+            <CreateContactBottomSheet bsRef={createContactBottomSheetRef} />
         </>
     )
 }

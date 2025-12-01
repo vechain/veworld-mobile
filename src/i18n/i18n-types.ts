@@ -4330,7 +4330,7 @@ type RootTranslation = {
 	 */
 	SEND_CONTACTS_EMPTY_STATE_TITLE: string
 	/**
-	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
+	 * W​a​l​l​e​t​ ​a​d​d​r​e​s​s
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: string
 	/**
@@ -4338,7 +4338,7 @@ type RootTranslation = {
 	 */
 	SEND_CREATE_CONTACT_CREATE_BUTTON: string
 	/**
-	 * C​o​n​t​a​c​t​ ​n​a​m​e
+	 * N​a​m​e
 	 */
 	SEND_CREATE_CONTACT_NAME: string
 	/**
@@ -4350,7 +4350,7 @@ type RootTranslation = {
 	 */
 	SEND_CREATE_CONTACT_SUBTITLE: string
 	/**
-	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
+	 * A​d​d​ ​c​o​n​t​a​c​t
 	 */
 	SEND_CREATE_CONTACT_TITLE: string
 	/**
@@ -5730,6 +5730,18 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * A​d​d​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​t​o​ ​M​y​ ​C​o​n​t​a​c​t​s
+	 */
+	SEND_CREATE_CONTACT_DESCRIPTION: string
+	/**
+	 * I​n​s​e​r​t​ ​c​o​n​t​a​c​t​ ​n​a​m​e
+	 */
+	SEND_CREATE_CONTACT_NAME_PLACEHOLDER: string
+	/**
+	 * I​n​s​e​r​t​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s
+	 */
+	SEND_CREATE_CONTACT_ADDRESS_PLACEHOLDER: string
 }
 
 export type TranslationFunctions = {
@@ -9977,7 +9989,7 @@ This action is irreversible.
 	 */
 	SEND_CONTACTS_EMPTY_STATE_TITLE: () => LocalizedString
 	/**
-	 * Contact address
+	 * Wallet address
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
 	/**
@@ -9985,7 +9997,7 @@ This action is irreversible.
 	 */
 	SEND_CREATE_CONTACT_CREATE_BUTTON: () => LocalizedString
 	/**
-	 * Contact name
+	 * Name
 	 */
 	SEND_CREATE_CONTACT_NAME: () => LocalizedString
 	/**
@@ -9997,7 +10009,7 @@ This action is irreversible.
 	 */
 	SEND_CREATE_CONTACT_SUBTITLE: () => LocalizedString
 	/**
-	 * Create contact
+	 * Add contact
 	 */
 	SEND_CREATE_CONTACT_TITLE: () => LocalizedString
 	/**
@@ -11363,6 +11375,18 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Add this wallet to My Contacts
+	 */
+	SEND_CREATE_CONTACT_DESCRIPTION: () => LocalizedString
+	/**
+	 * Insert contact name
+	 */
+	SEND_CREATE_CONTACT_NAME_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Insert wallet address
+	 */
+	SEND_CREATE_CONTACT_ADDRESS_PLACEHOLDER: () => LocalizedString
 }
 
 export type Formatters = {

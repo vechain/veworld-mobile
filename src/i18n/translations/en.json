@@ -1056,12 +1056,12 @@
   "SEND_BALANCE_PERCENTAGE": "Balance percentage: {percentage: string}",
   "SEND_CONTACTS_EMPTY_STATE_DESCRIPTION": "Add your first contact to send faster and avoid errors.",
   "SEND_CONTACTS_EMPTY_STATE_TITLE": "No contacts added",
-  "SEND_CREATE_CONTACT_ADDRESS": "Contact address",
+  "SEND_CREATE_CONTACT_ADDRESS": "Wallet address",
   "SEND_CREATE_CONTACT_CREATE_BUTTON": "CREATE CONTACT",
-  "SEND_CREATE_CONTACT_NAME": "Contact name",
+  "SEND_CREATE_CONTACT_NAME": "Name",
   "SEND_CREATE_CONTACT_PROCEED_ANYWAY_BUTTON": "PROCEED ANYWAY",
   "SEND_CREATE_CONTACT_SUBTITLE": "We noticed that the address you entered is not associated with any saved contacts, would you like to create one?",
-  "SEND_CREATE_CONTACT_TITLE": "Create contact",
+  "SEND_CREATE_CONTACT_TITLE": "Add contact",
   "SEND_CURRENT_BALANCE": "Currency balance",
   "SEND_DELEGATED_FEES": "None, paid by delegator",
   "SEND_DELEGATION_ACCOUNT": "Account",
@@ -1400,5 +1400,8 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "SEND_CREATE_CONTACT_DESCRIPTION": "Add this wallet to My Contacts",
+  "SEND_CREATE_CONTACT_NAME_PLACEHOLDER": "Insert contact name",
+  "SEND_CREATE_CONTACT_ADDRESS_PLACEHOLDER": "Insert wallet address"
 }

@@ -133,34 +133,37 @@ const createRecentContact =
             return
         }
 
-        if (recipientAddress) {
-            let alias: string | undefined
-            const timestamp = Date.now()
-
-            const accountExists = accountsState.accounts.find(account =>
-                AddressUtils.compareAddresses(account.address, recipientAddress),
-            )
-
-            if (accountExists) {
-                alias = accountExists.alias
-            }
-
-            const contactExists = contactsState.contacts.find(contact =>
-                AddressUtils.compareAddresses(contact.address, recipientAddress),
-            )
-
-            if (contactExists) {
-                alias = contactExists.alias
-            }
-
-            dispatch(
-                upsertRecentContact({
-                    selectedAccountAddress: selectedAccount,
-                    genesisId,
-                    contact: { address: recipientAddress, alias: alias, timestamp },
-                }),
-            )
+        if (!recipientAddress) {
+            error(ERROR_EVENTS.SETTINGS, "Can't create recent contact with invalid recipient address!")
+            return
         }
+
+        let alias: string | undefined
+        const timestamp = Date.now()
+
+        const accountExists = accountsState.accounts.find(account =>
+            AddressUtils.compareAddresses(account.address, recipientAddress),
+        )
+
+        if (accountExists) {
+            alias = accountExists.alias
+        }
+
+        const contactExists = contactsState.contacts.find(contact =>
+            AddressUtils.compareAddresses(contact.address, recipientAddress),
+        )
+
+        if (contactExists) {
+            alias = contactExists.alias
+        }
+
+        dispatch(
+            upsertRecentContact({
+                selectedAccountAddress: selectedAccount,
+                genesisId,
+                contact: { address: recipientAddress, alias: alias, timestamp },
+            }),
+        )
     }
 
 export { addContact, removeContact, editContact, createContact, createRecentContact }
