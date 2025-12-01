@@ -36,7 +36,6 @@ export const SelectAmountSendComponent = ({
     const { formatLocale } = useFormatFiat()
     const { width: screenWidth } = useWindowDimensions()
 
-    const timer = useRef<NodeJS.Timeout | null>(null)
     const bottomSheetRef = useRef<BottomSheetModalMethods>(null)
 
     const currency = useAppSelector(selectCurrency)
@@ -66,15 +65,6 @@ export const SelectAmountSendComponent = ({
             setIsInputInFiat(false)
         }
     }, [exchangeRate, isInputInFiat])
-
-    useEffect(() => {
-        return () => {
-            if (timer.current) {
-                clearTimeout(timer.current)
-                timer.current = null
-            }
-        }
-    }, [])
 
     const tokenTotalBalance = useMemo(() => {
         const currentToken = selectedToken || defaultToken
@@ -173,11 +163,6 @@ export const SelectAmountSendComponent = ({
             setInput(_newValue)
 
             if (_newValue === "" || BigNutils(_newValue).isZero) {
-                if (timer.current) {
-                    clearTimeout(timer.current)
-                    timer.current = null
-                }
-
                 setIsError(false)
                 return
             }

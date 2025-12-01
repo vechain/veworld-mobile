@@ -98,8 +98,8 @@ export const useAmountConversion = ({
     }, [input, isInputInFiat, normalizedInput, exchangeRate, tokenDecimals, tokenTotalBalance])
 
     const isValidAmount = useMemo(() => {
-        return input !== "" && !BigNutils(input).isZero
-    }, [input])
+        return input !== "" && !BigNutils(normalizedInput).isZero
+    }, [input, normalizedInput])
 
     return {
         normalizedInput,
