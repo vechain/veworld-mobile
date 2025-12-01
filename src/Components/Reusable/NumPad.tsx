@@ -40,9 +40,10 @@ export const NumPad = ({
             case CURRENCY_FORMATS.DOT:
                 return CURRENCY_FORMATS.DOT
             case CURRENCY_FORMATS.SYSTEM:
-            default:
+            default: {
                 const locale = getLocales()[0].languageCode
                 return getDecimalSeparator(locale) ?? CURRENCY_FORMATS.DOT
+            }
         }
     }, [currencyFormat])
 
