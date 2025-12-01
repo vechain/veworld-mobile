@@ -63,6 +63,11 @@
       "major": true
     },
     {
+      "version": "2.4.11",
+      "key": "releases/ios/versions/2.4.12",
+      "major": false
+    },
+    {
       "version": "2.4.12",
       "key": "releases/ios/versions/2.4.12",
       "major": false
