@@ -6,6 +6,8 @@ import { useExchangeRate } from "~Api/Coingecko"
 import { FungibleTokenWithBalance } from "~Model"
 
 const mockOnNext = jest.fn()
+const mockOnValidationChange = jest.fn()
+const mockOnBindNextHandler = jest.fn()
 
 jest.mock("~Api/Coingecko", () => ({
     ...jest.requireActual("~Api/Coingecko"),
@@ -55,26 +57,43 @@ const mockVTHOToken: FungibleTokenWithBalance = {
 }
 
 const findAmountInput = async () => await screen.findByTestId("SendScreen_amountInput", {}, { timeout: 5000 })
-const findNextButton = async () => await screen.findByTestId("next-button", {}, { timeout: 5000 })
 
 describe("SelectAmountSendComponent", () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        mockOnValidationChange.mockClear()
+        mockOnBindNextHandler.mockClear()
     })
 
     it("should render correctly with a token prop", async () => {
-        render(<SelectAmountSendComponent token={mockVETToken} onNext={mockOnNext} />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <SelectAmountSendComponent
+                token={mockVETToken}
+                onNext={mockOnNext}
+                onValidationChange={mockOnValidationChange}
+                onBindNextHandler={mockOnBindNextHandler}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         const amountInput = await findAmountInput()
         expect(amountInput).toBeOnTheScreen()
     })
 
     it("should display token symbol when not in fiat mode", async () => {
-        render(<SelectAmountSendComponent token={mockVETToken} onNext={mockOnNext} />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <SelectAmountSendComponent
+                token={mockVETToken}
+                onNext={mockOnNext}
+                onValidationChange={mockOnValidationChange}
+                onBindNextHandler={mockOnBindNextHandler}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         await findAmountInput()
 
@@ -92,9 +111,17 @@ describe("SelectAmountSendComponent", () => {
             data: 0.12,
         })
 
-        render(<SelectAmountSendComponent token={mockVETToken} onNext={mockOnNext} />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <SelectAmountSendComponent
+                token={mockVETToken}
+                onNext={mockOnNext}
+                onValidationChange={mockOnValidationChange}
+                onBindNextHandler={mockOnBindNextHandler}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         await findAmountInput()
 
@@ -113,9 +140,17 @@ describe("SelectAmountSendComponent", () => {
     })
 
     it("should set input to max token amount when max button is pressed", async () => {
-        render(<SelectAmountSendComponent token={mockVETToken} onNext={mockOnNext} />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <SelectAmountSendComponent
+                token={mockVETToken}
+                onNext={mockOnNext}
+                onValidationChange={mockOnValidationChange}
+                onBindNextHandler={mockOnBindNextHandler}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         await findAmountInput()
 
@@ -128,10 +163,18 @@ describe("SelectAmountSendComponent", () => {
         expect(amountInput.props.children).not.toBe("0")
     })
 
-    it("should enable next button when valid amount is entered", async () => {
-        render(<SelectAmountSendComponent token={mockVETToken} onNext={mockOnNext} />, {
-            wrapper: TestWrapper,
-        })
+    it("should call onValidationChange with valid state when valid amount is entered", async () => {
+        render(
+            <SelectAmountSendComponent
+                token={mockVETToken}
+                onNext={mockOnNext}
+                onValidationChange={mockOnValidationChange}
+                onBindNextHandler={mockOnBindNextHandler}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         await findAmountInput()
 
@@ -144,16 +187,24 @@ describe("SelectAmountSendComponent", () => {
             await new Promise(resolve => setTimeout(resolve, 100))
         })
 
-        const nextButton = await findNextButton()
-        expect(nextButton).toBeOnTheScreen()
+        // Verify validation callback was called with valid state
+        expect(mockOnValidationChange).toHaveBeenCalledWith(true, false)
         const amountInput = await findAmountInput()
         expect(amountInput.props.children).not.toBe("0")
     })
 
-    it("should pass token to onNext callback", async () => {
-        render(<SelectAmountSendComponent token={mockVETToken} onNext={mockOnNext} />, {
-            wrapper: TestWrapper,
-        })
+    it("should bind handler and call onNext with correct parameters when handler is invoked", async () => {
+        render(
+            <SelectAmountSendComponent
+                token={mockVETToken}
+                onNext={mockOnNext}
+                onValidationChange={mockOnValidationChange}
+                onBindNextHandler={mockOnBindNextHandler}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         await findAmountInput()
 
@@ -166,25 +217,35 @@ describe("SelectAmountSendComponent", () => {
             await new Promise(resolve => setTimeout(resolve, 200))
         })
 
-        const nextButton = await findNextButton()
+        // Verify handler was bound
+        expect(mockOnBindNextHandler).toHaveBeenCalled()
+
+        // Get the bound handler and call it
+        const boundHandler = mockOnBindNextHandler.mock.calls[mockOnBindNextHandler.mock.calls.length - 1][0]
 
         await act(async () => {
-            fireEvent.press(nextButton)
+            boundHandler()
         })
 
-        if (mockOnNext.mock.calls.length > 0) {
-            expect(mockOnNext).toHaveBeenCalledWith(expect.any(String), mockVETToken)
-        } else {
-            expect(nextButton).toBeOnTheScreen()
-            const amountInput = await findAmountInput()
-            expect(amountInput.props.children).toBe("1")
-        }
+        // Verify onNext was called with correct parameters (token and amount)
+        expect(mockOnNext).toHaveBeenCalled()
+        const callArgs = mockOnNext.mock.calls[0]
+        expect(callArgs[0]).toBeDefined() // amount
+        expect(callArgs[1]).toEqual(mockVETToken) // token
     })
 
-    it("should disable next button when amount exceeds balance", async () => {
-        render(<SelectAmountSendComponent token={mockVETToken} onNext={mockOnNext} />, {
-            wrapper: TestWrapper,
-        })
+    it("should call onValidationChange with error state when amount exceeds balance", async () => {
+        render(
+            <SelectAmountSendComponent
+                token={mockVETToken}
+                onNext={mockOnNext}
+                onValidationChange={mockOnValidationChange}
+                onBindNextHandler={mockOnBindNextHandler}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         await findAmountInput()
 
@@ -199,21 +260,25 @@ describe("SelectAmountSendComponent", () => {
             await new Promise(resolve => setTimeout(resolve, 300))
         })
 
-        try {
-            const nextButton = await findNextButton()
-            const isDisabled =
-                nextButton.props.accessibilityState?.disabled === true || nextButton.props.disabled === true
-            expect(isDisabled).toBe(true)
-        } catch (e) {
-            const errorMessage = screen.queryByText(/exceed/i)
-            expect(errorMessage || e).toBeTruthy()
-        }
+        // Verify validation callback was called with error state (isValid=false, isError=true)
+        const calls = mockOnValidationChange.mock.calls
+        const lastCall = calls[calls.length - 1]
+        expect(lastCall).toBeDefined()
+        expect(lastCall[1]).toBe(true) // isError should be true
     })
 
     it("should display error message when amount exceeds balance", async () => {
-        render(<SelectAmountSendComponent token={mockVETToken} onNext={mockOnNext} />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <SelectAmountSendComponent
+                token={mockVETToken}
+                onNext={mockOnNext}
+                onValidationChange={mockOnValidationChange}
+                onBindNextHandler={mockOnBindNextHandler}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         await findAmountInput()
 
@@ -245,9 +310,17 @@ describe("SelectAmountSendComponent", () => {
     })
 
     it("should handle decimal input correctly", async () => {
-        render(<SelectAmountSendComponent token={mockVETToken} onNext={mockOnNext} />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <SelectAmountSendComponent
+                token={mockVETToken}
+                onNext={mockOnNext}
+                onValidationChange={mockOnValidationChange}
+                onBindNextHandler={mockOnBindNextHandler}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         await findAmountInput()
 
@@ -268,9 +341,17 @@ describe("SelectAmountSendComponent", () => {
     })
 
     it("should limit decimal places to 5 in token mode", async () => {
-        render(<SelectAmountSendComponent token={mockVETToken} onNext={mockOnNext} />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <SelectAmountSendComponent
+                token={mockVETToken}
+                onNext={mockOnNext}
+                onValidationChange={mockOnValidationChange}
+                onBindNextHandler={mockOnBindNextHandler}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         await findAmountInput()
 
@@ -295,9 +376,17 @@ describe("SelectAmountSendComponent", () => {
     })
 
     it("should handle input and allow deletion via numpad", async () => {
-        render(<SelectAmountSendComponent token={mockVETToken} onNext={mockOnNext} />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <SelectAmountSendComponent
+                token={mockVETToken}
+                onNext={mockOnNext}
+                onValidationChange={mockOnValidationChange}
+                onBindNextHandler={mockOnBindNextHandler}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         await findAmountInput()
 
@@ -314,9 +403,17 @@ describe("SelectAmountSendComponent", () => {
     })
 
     it("should handle VTHO token correctly", async () => {
-        render(<SelectAmountSendComponent token={mockVTHOToken} onNext={mockOnNext} />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <SelectAmountSendComponent
+                token={mockVTHOToken}
+                onNext={mockOnNext}
+                onValidationChange={mockOnValidationChange}
+                onBindNextHandler={mockOnBindNextHandler}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         await findAmountInput()
 
@@ -329,14 +426,22 @@ describe("SelectAmountSendComponent", () => {
             await new Promise(resolve => setTimeout(resolve, 600))
         })
 
-        const nextButton = await findNextButton()
-        expect(nextButton).toBeOnTheScreen()
+        // Verify validation callback was called with valid state
+        expect(mockOnValidationChange).toHaveBeenCalledWith(true, false)
     })
 
     it("should reset input when token is changed", async () => {
-        render(<SelectAmountSendComponent token={mockVETToken} onNext={mockOnNext} />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <SelectAmountSendComponent
+                token={mockVETToken}
+                onNext={mockOnNext}
+                onValidationChange={mockOnValidationChange}
+                onBindNextHandler={mockOnBindNextHandler}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         await findAmountInput()
 
