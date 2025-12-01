@@ -2055,6 +2055,10 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_AND: string
 	/**
+	 * B​a​c​k
+	 */
+	COMMON_LBL_BACK: string
+	/**
 	 * C​o​m​m​e​n​t
 	 */
 	COMMON_LBL_COMMENT: string
@@ -2091,6 +2095,10 @@ type RootTranslation = {
 	 * N​a​m​e
 	 */
 	COMMON_LBL_NAME: string
+	/**
+	 * N​e​x​t
+	 */
+	COMMON_LBL_NEXT: string
 	/**
 	 * N​o​ ​a​v​a​i​l​a​b​l​e​ ​p​r​i​c​e​ ​h​i​s​t​o​r​y​ ​f​o​r​ ​{​t​o​k​e​n​N​a​m​e​}
 	 * @param {string} tokenName
@@ -5342,6 +5350,10 @@ type RootTranslation = {
 	 */
 	TRANSACTION_IN_PROGRESS: string
 	/**
+	 * T​r​a​n​s​a​k​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
+	 */
+	TRANSAK_NOT_AVAILABLE: string
+	/**
 	 * T​y​p​e
 	 */
 	TYPE: string
@@ -5692,10 +5704,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * T​r​a​n​s​a​k​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
-	 */
-	TRANSAK_NOT_AVAILABLE: string
 }
 
 export type TranslationFunctions = {
@@ -7702,6 +7710,10 @@ This action is irreversible.
 	 */
 	COMMON_LBL_AND: () => LocalizedString
 	/**
+	 * Back
+	 */
+	COMMON_LBL_BACK: () => LocalizedString
+	/**
 	 * Comment
 	 */
 	COMMON_LBL_COMMENT: () => LocalizedString
@@ -7737,6 +7749,10 @@ This action is irreversible.
 	 * Name
 	 */
 	COMMON_LBL_NAME: () => LocalizedString
+	/**
+	 * Next
+	 */
+	COMMON_LBL_NEXT: () => LocalizedString
 	/**
 	 * No available price history for {tokenName}
 	 */
@@ -10944,6 +10960,10 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	TRANSACTION_IN_PROGRESS: () => LocalizedString
 	/**
+	 * Transak not available
+	 */
+	TRANSAK_NOT_AVAILABLE: () => LocalizedString
+	/**
 	 * Type
 	 */
 	TYPE: () => LocalizedString
@@ -11291,10 +11311,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Transak not available
-	 */
-	TRANSAK_NOT_AVAILABLE: () => LocalizedString
 }
 
 export type Formatters = {
