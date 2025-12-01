@@ -54,8 +54,6 @@ export const SelectAmountSendComponent = ({
     const [selectedToken, setSelectedToken] = useState<FungibleTokenWithBalance | undefined>(defaultToken)
     const [internalToken, setInternalToken] = useState<FungibleTokenWithBalance | undefined>(defaultToken)
 
-    const [tokenAmountFromFiat, setTokenAmountFromFiat] = useState("")
-
     const { input, setInput, removeInvalidCharacters } = useAmountInput()
 
     const { data: exchangeRate } = useExchangeRate({
@@ -127,7 +125,6 @@ export const SelectAmountSendComponent = ({
 
     const resetInput = useCallback(() => {
         setInput("")
-        setTokenAmountFromFiat("")
         setIsError(false)
     }, [setInput])
 
@@ -182,13 +179,10 @@ export const SelectAmountSendComponent = ({
                 }
 
                 setIsError(false)
-                setTokenAmountFromFiat("")
                 return
             }
-
-            setTokenAmountFromFiat(tokenAmountFromInput)
         },
-        [hasValidDecimalPlaces, removeInvalidCharacters, selectedToken, setInput, tokenAmountFromInput],
+        [hasValidDecimalPlaces, removeInvalidCharacters, selectedToken, setInput],
     )
 
     const truncateToMaxDecimals = useCallback(
@@ -211,7 +205,6 @@ export const SelectAmountSendComponent = ({
         const newValue = truncateToMaxDecimals(rawValue)
 
         setInput(newValue)
-        setTokenAmountFromFiat(tokenTotalToHuman.toString)
     }, [
         fiatTotalBalance.value,
         isInputInFiat,
@@ -224,12 +217,12 @@ export const SelectAmountSendComponent = ({
     const handleNext = useCallback(() => {
         if (!selectedToken) return
 
-        const amount = isInputInFiat ? tokenAmountFromFiat : input
+        const amount = isInputInFiat ? tokenAmountFromInput : input
 
         const fiatAmount = exchangeRate ? fiatAmountFromInput : undefined
 
         onNext(amount, selectedToken, fiatAmount)
-    }, [exchangeRate, fiatAmountFromInput, input, isInputInFiat, onNext, selectedToken, tokenAmountFromFiat])
+    }, [exchangeRate, fiatAmountFromInput, input, isInputInFiat, onNext, selectedToken, tokenAmountFromInput])
 
     useEffect(() => {
         onBindNextHandler?.(handleNext)

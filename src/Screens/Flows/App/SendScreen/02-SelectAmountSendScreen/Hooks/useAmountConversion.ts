@@ -48,8 +48,8 @@ export const useAmountConversion = ({
     )
 
     const fiatHumanAmount = useMemo(
-        () => BigNutils().toCurrencyConversion(input, exchangeRate ?? 0),
-        [exchangeRate, input],
+        () => BigNutils().toCurrencyConversion(normalizedInput, exchangeRate ?? 0),
+        [exchangeRate, normalizedInput],
     )
 
     const tokenAmount = useMemo(() => {
@@ -74,7 +74,7 @@ export const useAmountConversion = ({
         if (!input || input === "0") return "0"
 
         if (isInputInFiat) {
-            const tokenAmountValue = BigNutils().toTokenConversion(input, exchangeRate ?? 0).toString
+            const tokenAmountValue = BigNutils().toTokenConversion(normalizedInput, exchangeRate ?? 0).toString
             return formatFullPrecision(tokenAmountValue, {
                 locale: formatLocale,
             })
@@ -83,7 +83,7 @@ export const useAmountConversion = ({
                 locale: formatLocale,
             })
         }
-    }, [exchangeRate, fiatHumanAmount.value, formatLocale, input, isInputInFiat])
+    }, [exchangeRate, fiatHumanAmount.value, formatLocale, input, isInputInFiat, normalizedInput])
 
     const isBalanceExceeded = useMemo(() => {
         if (!input || input === "0") return false
