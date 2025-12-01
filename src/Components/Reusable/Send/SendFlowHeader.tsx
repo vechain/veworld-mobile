@@ -21,7 +21,7 @@ export const SendFlowHeader: React.FC<SendFlowHeaderProps> = ({ step }) => {
     const { iconName, title, currentStep } = getStepConfig(step, LL)
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" pb={16}>
+        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" pt={16}>
             <BaseView flexDirection="row" justifyContent="flex-start" alignItems="center" gap={12}>
                 <BaseView style={[styles.iconContainer]}>
                     <BaseIcon color={theme.colors.defaultIcon.color} name={iconName} size={16} />

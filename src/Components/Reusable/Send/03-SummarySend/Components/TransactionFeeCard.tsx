@@ -186,7 +186,7 @@ export const TransactionFeeCard = ({
 
     return (
         <Animated.View>
-            <BaseView flexDirection="row" justifyContent="flex-start" alignItems="center" gap={12} pb={16}>
+            <BaseView flexDirection="row" justifyContent="flex-start" alignItems="center" gap={12} py={16}>
                 <BaseView style={[styles.iconContainer]}>
                     <BaseIcon color={theme.colors.defaultIcon.color} name="icon-arrow-up-down" size={16} />
                 </BaseView>

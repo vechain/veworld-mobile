@@ -116,6 +116,6 @@ const baseStyles = () =>
         root: {
             flex: 1,
             flexDirection: "column",
-            gap: 32,
+            gap: 16,
         },
     })
