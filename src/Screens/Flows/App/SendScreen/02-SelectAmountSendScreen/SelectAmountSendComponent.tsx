@@ -2,6 +2,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet, useWindowDimensions } from "react-native"
 import { useAnimatedStyle, useDerivedValue, withTiming } from "react-native-reanimated"
+import { getLocales } from "react-native-localize"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { BaseSpacer, BaseView, NumPad } from "~Components"
 import { B3TR, CURRENCY_FORMATS, VET, VOT3, VTHO } from "~Constants"
@@ -228,16 +229,21 @@ export const SelectAmountSendComponent = ({
         if (!input || input === "0") return "0"
 
         let locale: string
+        let decimalSeparator: string
+
         switch (currencyFormat) {
             case CURRENCY_FORMATS.COMMA:
                 locale = "de-DE"
+                decimalSeparator = CURRENCY_FORMATS.COMMA
                 break
             case CURRENCY_FORMATS.DOT:
                 locale = "en-US"
+                decimalSeparator = CURRENCY_FORMATS.DOT
                 break
             case CURRENCY_FORMATS.SYSTEM:
             default:
                 locale = formatLocale
+                decimalSeparator = getLocales()[0].languageCode === "en" ? "." : ","
                 break
         }
 
@@ -253,22 +259,6 @@ export const SelectAmountSendComponent = ({
         const formattedInteger = formatter.format(Number(integerPart))
 
         if (decimalPart !== undefined) {
-            let decimalSeparator: string
-            switch (currencyFormat) {
-                case CURRENCY_FORMATS.COMMA:
-                    decimalSeparator = ","
-                    break
-                case CURRENCY_FORMATS.DOT:
-                    decimalSeparator = "."
-                    break
-                case CURRENCY_FORMATS.SYSTEM:
-                default: {
-                    const formatted = getNumberFormatter({ locale, style: "decimal" }).format(1.1)
-                    decimalSeparator = formatted.charAt(1)
-                    break
-                }
-            }
-
             return `${formattedInteger}${decimalSeparator}${decimalPart}`
         }
 
