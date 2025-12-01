@@ -6,7 +6,6 @@ import { useExchangeRate } from "~Api/Coingecko"
 import { FungibleTokenWithBalance } from "~Model"
 
 const mockOnNext = jest.fn()
-const mockOnValidationChange = jest.fn()
 const mockOnBindNextHandler = jest.fn()
 
 jest.mock("~Api/Coingecko", () => ({
@@ -61,7 +60,6 @@ const findAmountInput = async () => await screen.findByTestId("SendScreen_amount
 describe("SelectAmountSendComponent", () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        mockOnValidationChange.mockClear()
         mockOnBindNextHandler.mockClear()
     })
 
@@ -70,7 +68,6 @@ describe("SelectAmountSendComponent", () => {
             <SelectAmountSendComponent
                 token={mockVETToken}
                 onNext={mockOnNext}
-                onValidationChange={mockOnValidationChange}
                 onBindNextHandler={mockOnBindNextHandler}
             />,
             {
@@ -87,7 +84,6 @@ describe("SelectAmountSendComponent", () => {
             <SelectAmountSendComponent
                 token={mockVETToken}
                 onNext={mockOnNext}
-                onValidationChange={mockOnValidationChange}
                 onBindNextHandler={mockOnBindNextHandler}
             />,
             {
@@ -115,7 +111,6 @@ describe("SelectAmountSendComponent", () => {
             <SelectAmountSendComponent
                 token={mockVETToken}
                 onNext={mockOnNext}
-                onValidationChange={mockOnValidationChange}
                 onBindNextHandler={mockOnBindNextHandler}
             />,
             {
@@ -144,7 +139,6 @@ describe("SelectAmountSendComponent", () => {
             <SelectAmountSendComponent
                 token={mockVETToken}
                 onNext={mockOnNext}
-                onValidationChange={mockOnValidationChange}
                 onBindNextHandler={mockOnBindNextHandler}
             />,
             {
@@ -163,12 +157,11 @@ describe("SelectAmountSendComponent", () => {
         expect(amountInput.props.children).not.toBe("0")
     })
 
-    it("should call onValidationChange with valid state when valid amount is entered", async () => {
+    it("should bind handler with valid state when valid amount is entered", async () => {
         render(
             <SelectAmountSendComponent
                 token={mockVETToken}
                 onNext={mockOnNext}
-                onValidationChange={mockOnValidationChange}
                 onBindNextHandler={mockOnBindNextHandler}
             />,
             {
@@ -178,17 +171,27 @@ describe("SelectAmountSendComponent", () => {
 
         await findAmountInput()
 
+        // Wait for component to stabilize (mode switch from fiat to token)
+        await act(async () => {
+            await new Promise(resolve => setTimeout(resolve, 200))
+        })
+
         const numPad1 = await screen.findByText("1")
         await act(async () => {
             fireEvent.press(numPad1)
         })
 
         await act(async () => {
-            await new Promise(resolve => setTimeout(resolve, 100))
+            await new Promise(resolve => setTimeout(resolve, 600))
         })
 
-        // Verify validation callback was called with valid state
-        expect(mockOnValidationChange).toHaveBeenCalledWith(true, false)
+        // Verify handler was bound with valid state
+        // Find the last stable call where isValid is true and isError is false
+        expect(mockOnBindNextHandler).toHaveBeenCalled()
+        const validStableCalls = mockOnBindNextHandler.mock.calls.filter(
+            call => call[0].isValid === true && call[0].isError === false,
+        )
+        expect(validStableCalls.length).toBeGreaterThan(0)
         const amountInput = await findAmountInput()
         expect(amountInput.props.children).not.toBe("0")
     })
@@ -198,7 +201,6 @@ describe("SelectAmountSendComponent", () => {
             <SelectAmountSendComponent
                 token={mockVETToken}
                 onNext={mockOnNext}
-                onValidationChange={mockOnValidationChange}
                 onBindNextHandler={mockOnBindNextHandler}
             />,
             {
@@ -220,11 +222,11 @@ describe("SelectAmountSendComponent", () => {
         // Verify handler was bound
         expect(mockOnBindNextHandler).toHaveBeenCalled()
 
-        // Get the bound handler and call it
-        const boundHandler = mockOnBindNextHandler.mock.calls[mockOnBindNextHandler.mock.calls.length - 1][0]
+        // Get the bound handler config and call the handler
+        const boundConfig = mockOnBindNextHandler.mock.calls[mockOnBindNextHandler.mock.calls.length - 1][0]
 
         await act(async () => {
-            boundHandler()
+            boundConfig.handler()
         })
 
         // Verify onNext was called with correct parameters (token and amount)
@@ -234,12 +236,11 @@ describe("SelectAmountSendComponent", () => {
         expect(callArgs[1]).toEqual(mockVETToken) // token
     })
 
-    it("should call onValidationChange with error state when amount exceeds balance", async () => {
+    it("should bind handler with error state when amount exceeds balance", async () => {
         render(
             <SelectAmountSendComponent
                 token={mockVETToken}
                 onNext={mockOnNext}
-                onValidationChange={mockOnValidationChange}
                 onBindNextHandler={mockOnBindNextHandler}
             />,
             {
@@ -260,11 +261,11 @@ describe("SelectAmountSendComponent", () => {
             await new Promise(resolve => setTimeout(resolve, 300))
         })
 
-        // Verify validation callback was called with error state (isValid=false, isError=true)
-        const calls = mockOnValidationChange.mock.calls
-        const lastCall = calls[calls.length - 1]
+        // Verify handler was bound with error state (isValid=false, isError=true)
+        const calls = mockOnBindNextHandler.mock.calls
+        const lastCall = calls[calls.length - 1][0]
         expect(lastCall).toBeDefined()
-        expect(lastCall[1]).toBe(true) // isError should be true
+        expect(lastCall.isError).toBe(true) // isError should be true
     })
 
     it("should display error message when amount exceeds balance", async () => {
@@ -272,7 +273,6 @@ describe("SelectAmountSendComponent", () => {
             <SelectAmountSendComponent
                 token={mockVETToken}
                 onNext={mockOnNext}
-                onValidationChange={mockOnValidationChange}
                 onBindNextHandler={mockOnBindNextHandler}
             />,
             {
@@ -314,7 +314,6 @@ describe("SelectAmountSendComponent", () => {
             <SelectAmountSendComponent
                 token={mockVETToken}
                 onNext={mockOnNext}
-                onValidationChange={mockOnValidationChange}
                 onBindNextHandler={mockOnBindNextHandler}
             />,
             {
@@ -345,7 +344,6 @@ describe("SelectAmountSendComponent", () => {
             <SelectAmountSendComponent
                 token={mockVETToken}
                 onNext={mockOnNext}
-                onValidationChange={mockOnValidationChange}
                 onBindNextHandler={mockOnBindNextHandler}
             />,
             {
@@ -380,7 +378,6 @@ describe("SelectAmountSendComponent", () => {
             <SelectAmountSendComponent
                 token={mockVETToken}
                 onNext={mockOnNext}
-                onValidationChange={mockOnValidationChange}
                 onBindNextHandler={mockOnBindNextHandler}
             />,
             {
@@ -407,7 +404,6 @@ describe("SelectAmountSendComponent", () => {
             <SelectAmountSendComponent
                 token={mockVTHOToken}
                 onNext={mockOnNext}
-                onValidationChange={mockOnValidationChange}
                 onBindNextHandler={mockOnBindNextHandler}
             />,
             {
@@ -426,8 +422,11 @@ describe("SelectAmountSendComponent", () => {
             await new Promise(resolve => setTimeout(resolve, 600))
         })
 
-        // Verify validation callback was called with valid state
-        expect(mockOnValidationChange).toHaveBeenCalledWith(true, false)
+        // Verify handler was bound with valid state
+        expect(mockOnBindNextHandler).toHaveBeenCalled()
+        const lastCall = mockOnBindNextHandler.mock.calls[mockOnBindNextHandler.mock.calls.length - 1][0]
+        expect(lastCall.isValid).toBe(true)
+        expect(lastCall.isError).toBe(false)
     })
 
     it("should reset input when token is changed", async () => {
@@ -435,7 +434,6 @@ describe("SelectAmountSendComponent", () => {
             <SelectAmountSendComponent
                 token={mockVETToken}
                 onNext={mockOnNext}
-                onValidationChange={mockOnValidationChange}
                 onBindNextHandler={mockOnBindNextHandler}
             />,
             {

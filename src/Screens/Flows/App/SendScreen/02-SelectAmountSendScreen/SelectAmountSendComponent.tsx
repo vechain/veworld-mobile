@@ -27,16 +27,10 @@ const MAX_TOKEN_DECIMALS = 5
 type SelectAmountSendComponentProps = {
     token?: FungibleTokenWithBalance
     onNext: (amount: string, token: FungibleTokenWithBalance, fiatAmount?: string) => void
-    onValidationChange?: (isValid: boolean, isError: boolean) => void
-    onBindNextHandler?: (handler: () => void) => void
+    onBindNextHandler?: (config: { handler: () => void; isValid: boolean; isError: boolean }) => void
 }
 
-export const SelectAmountSendComponent = ({
-    token,
-    onNext,
-    onValidationChange,
-    onBindNextHandler,
-}: SelectAmountSendComponentProps) => {
+export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: SelectAmountSendComponentProps) => {
     const { formatLocale } = useFormatFiat()
     const { width: screenWidth } = useWindowDimensions()
 
@@ -153,10 +147,6 @@ export const SelectAmountSendComponent = ({
         }
     }, [isBalanceExceeded, isError, input])
 
-    useEffect(() => {
-        onValidationChange?.(isValidAmount, isError)
-    }, [isValidAmount, isError, onValidationChange])
-
     const computedIcon = useMemo(() => {
         if (!selectedToken) return VET.icon
         if (selectedToken.symbol === VET.symbol) return VET.icon
@@ -265,8 +255,12 @@ export const SelectAmountSendComponent = ({
     }, [exchangeRate, fiatAmountFromInput, input, isInputInFiat, onNext, selectedToken, tokenAmountFromInput])
 
     useEffect(() => {
-        onBindNextHandler?.(handleNext)
-    }, [handleNext, onBindNextHandler])
+        onBindNextHandler?.({
+            handler: handleNext,
+            isValid: isValidAmount,
+            isError,
+        })
+    }, [handleNext, isValidAmount, isError, onBindNextHandler])
 
     const tokenAmountCard = theme.colors.sendScreen.tokenAmountCard
 

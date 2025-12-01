@@ -44,10 +44,9 @@ export const SendScreen = (): ReactElement => {
     const [flowState, setFlowState] = useState<SendFlowState>({
         token: route.params?.token,
     })
-    const [isAmountValid, setIsAmountValid] = useState(false)
-    const [isAmountError, setIsAmountError] = useState(false)
+    const [isNextDisabled, setIsNextDisabled] = useState(true)
 
-    const handleNextRef = useRef<(() => void) | null>(null)
+    const amountHandlerRef = useRef<(() => void) | null>(null)
 
     const handleClose = useCallback(() => {
         navigation.goBack()
@@ -94,12 +93,9 @@ export const SendScreen = (): ReactElement => {
                     <SelectAmountSendComponent
                         token={flowState.token}
                         onNext={goToInsertAddress}
-                        onValidationChange={(isValid, isError) => {
-                            setIsAmountValid(isValid)
-                            setIsAmountError(isError)
-                        }}
-                        onBindNextHandler={handler => {
-                            handleNextRef.current = handler
+                        onBindNextHandler={config => {
+                            amountHandlerRef.current = config.handler
+                            setIsNextDisabled(config.isError || !config.isValid)
                         }}
                     />
                 )
@@ -118,8 +114,8 @@ export const SendScreen = (): ReactElement => {
                 return {
                     right: {
                         label: LL.COMMON_BTN_NEXT(),
-                        onPress: () => handleNextRef.current?.(),
-                        disabled: isAmountError || !isAmountValid,
+                        onPress: () => amountHandlerRef.current?.(),
+                        disabled: isNextDisabled,
                     },
                 }
             case "insertAddress":
@@ -129,7 +125,7 @@ export const SendScreen = (): ReactElement => {
             default:
                 return {}
         }
-    }, [step, LL, isAmountError, isAmountValid])
+    }, [step, LL, isNextDisabled])
 
     return (
         <Layout
