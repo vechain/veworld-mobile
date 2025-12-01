@@ -1,16 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useNavigation } from "@react-navigation/native"
-import { useTheme } from "~Hooks"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { ReactElement, useCallback, useMemo, useState } from "react"
-import { BaseView, Layout } from "~Components"
+import { StyleSheet } from "react-native"
+import Animated, { EntryAnimationsValues, ExitAnimationsValues, useSharedValue } from "react-native-reanimated"
+import { BaseButton, BaseText, BaseView, Layout } from "~Components"
+import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
-import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
+import { EnteringFromLeftAnimation, EnteringFromRightAnimation } from "./Animations/Entering"
+import { ExitingToLeftAnimation, ExitingToRightAnimation } from "./Animations/Exiting"
 
 // TODO(send-flow-v2): Add proper step types based on the logic implemented in each child step component
-type SendFlowStep = "selectToken" | "insertAddress" | "selectAmount" | "summary"
+type SendFlowStep = "insertAddress" | "selectAmount" | "summary"
 
 type SendFlowState = {
     token?: FungibleTokenWithBalance
@@ -20,12 +24,15 @@ type SendFlowState = {
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
 
+const ORDER: SendFlowStep[] = ["insertAddress", "selectAmount", "summary"]
+
 export const SendScreen = (): ReactElement => {
     const { LL } = useI18nContext()
     const theme = useTheme()
     const navigation = useNavigation<NavigationProps>()
-    const [step, setStep] = useState<SendFlowStep>("selectToken")
+    const [step, setStep] = useState<SendFlowStep>("insertAddress")
     const [flowState, setFlowState] = useState<SendFlowState>({})
+    const { styles } = useThemedStyles(baseStyles)
 
     const handleClose = useCallback(() => {
         navigation.goBack()
@@ -65,31 +72,74 @@ export const SendScreen = (): ReactElement => {
         setStep("summary")
     }, [])
 
-    const goBackToTokenSelection = useCallback(() => {
-        setStep("selectToken")
-    }, [])
+    const previousStep = useSharedValue<typeof step | undefined>(undefined)
+    const nextStep = useSharedValue<typeof step | undefined>(undefined)
 
-    const goBackToInsertAddress = useCallback(() => {
-        if (!flowState.token) {
-            setStep("selectToken")
-            return
-        }
-        setStep("insertAddress")
-    }, [flowState.token])
-
-    const renderStep = useMemo(() => {
-        // TODO(send-flow-v2): Implement proper step types based on the logic implemented in each child step component
+    const goToNext = useCallback(() => {
         switch (step) {
-            case "selectToken":
-                return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step1 logic */}</BaseView>
             case "insertAddress":
-                return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step2 logic */}</BaseView>
+                nextStep.value = "selectAmount"
+                previousStep.value = step
+                setStep("selectAmount")
+                break
             case "selectAmount":
-                return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step3 logic */}</BaseView>
+                nextStep.value = "summary"
+                previousStep.value = step
+                setStep("summary")
+        }
+    }, [nextStep, previousStep, step])
+
+    const goToPrev = useCallback(() => {
+        switch (step) {
+            case "selectAmount":
+                nextStep.value = "insertAddress"
+                previousStep.value = step
+                setStep("insertAddress")
+                break
             case "summary":
-                return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement step4 logic */}</BaseView>
-            default:
-                return <BaseView flex={1} />
+                nextStep.value = "selectAmount"
+                previousStep.value = step
+                setStep("selectAmount")
+        }
+    }, [nextStep, previousStep, step])
+
+    const Entering = useCallback(
+        (values: EntryAnimationsValues) => {
+            "worklet"
+            if (!previousStep.value || !nextStep.value)
+                return {
+                    initialValues: values,
+                    animations: {},
+                }
+            if (ORDER.indexOf(nextStep.value) > ORDER.indexOf(previousStep.value))
+                return EnteringFromRightAnimation(values)
+            return EnteringFromLeftAnimation(values)
+        },
+        [nextStep.value, previousStep.value],
+    )
+
+    const Exiting = useCallback(
+        (values: ExitAnimationsValues) => {
+            "worklet"
+            if (!previousStep.value || !nextStep.value)
+                return {
+                    initialValues: values,
+                    animations: {},
+                }
+            if (ORDER.indexOf(nextStep.value) > ORDER.indexOf(previousStep.value)) return ExitingToLeftAnimation(values)
+            return ExitingToRightAnimation(values)
+        },
+        [nextStep.value, previousStep.value],
+    )
+
+    const backgroundColor = useMemo(() => {
+        switch (step) {
+            case "insertAddress":
+                return "green"
+            case "selectAmount":
+                return "red"
+            case "summary":
+                return "blue"
         }
     }, [step])
 
@@ -99,7 +149,45 @@ export const SendScreen = (): ReactElement => {
             noBackButton
             headerTitleAlignment="center"
             headerRightElement={headerRightElement}
-            body={<BaseView flex={1}>{renderStep}</BaseView>}
+            fixedBody={
+                <Animated.View style={styles.flexElement}>
+                    <Animated.View
+                        style={[
+                            styles.flexElement,
+                            {
+                                backgroundColor,
+                            },
+                        ]}
+                        entering={Entering}
+                        exiting={Exiting}
+                        key={step}>
+                        <BaseView style={styles.mockedBox}>
+                            <BaseText typographyFont="biggerTitle">{step}</BaseText>
+                        </BaseView>
+                    </Animated.View>
+
+                    <BaseView flexDirection="row" gap={16}>
+                        <BaseButton action={goToPrev} disabled={step === "insertAddress"}>
+                            {LL.COMMON_LBL_BACK()}
+                        </BaseButton>
+                        <BaseButton action={goToNext} disabled={step === "summary"}>
+                            {LL.COMMON_LBL_NEXT()}
+                        </BaseButton>
+                    </BaseView>
+                </Animated.View>
+            }
         />
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        flexElement: { flex: 1 },
+        mockedBox: {
+            width: "100%",
+            height: 300,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+        },
+    })
