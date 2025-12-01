@@ -1302,6 +1302,7 @@
   "TRANSACTION_FEE": "लेनदेन शुल्क",
   "TRANSACTION_ID": "लेनदेन आईडी",
   "TRANSACTION_IN_PROGRESS": "लेन-देन प्रगति पर है",
+  "TRANSAK_NOT_AVAILABLE": "Transak उपलब्ध नहीं है",
   "TYPE": "प्रकार",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "अज्ञात खाता",

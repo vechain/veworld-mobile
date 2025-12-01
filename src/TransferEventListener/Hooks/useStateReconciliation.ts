@@ -1,6 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useCallback } from "react"
-import { invalidateUserTokens, refreshNFTs, updateAccountBalances, useAppDispatch } from "~Storage/Redux"
+import { Network } from "~Model"
+import { invalidateUserTokens, updateAccountBalances, useAppDispatch } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
 
 export const useStateReconciliation = () => {
     const dispatch = useAppDispatch()
@@ -15,14 +17,19 @@ export const useStateReconciliation = () => {
     )
 
     const updateNFTs = useCallback(
-        (params: { network: string; accountAddress: string }) => {
-            dispatch(
-                refreshNFTs({
-                    accountAddress: params.accountAddress,
-                }),
-            )
+        (params: { network: Network; accountAddress: string }) => {
+            queryClient.invalidateQueries({
+                predicate(query) {
+                    const queryKey = query.queryKey as string[]
+                    if (!["COLLECTIBLES"].includes(queryKey[0])) return false
+                    if (queryKey.length < 4) return false
+                    if (queryKey[2] !== params.network.genesis.id) return false
+                    if (!AddressUtils.compareAddresses(queryKey[3], params.accountAddress)) return false
+                    return true
+                },
+            })
         },
-        [dispatch],
+        [queryClient],
     )
 
     return { updateBalances, updateNFTs }

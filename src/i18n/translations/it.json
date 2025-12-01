@@ -1302,6 +1302,7 @@
   "TRANSACTION_FEE": "Commissione di transazione",
   "TRANSACTION_ID": "ID Transazione",
   "TRANSACTION_IN_PROGRESS": "Transazione in corso",
+  "TRANSAK_NOT_AVAILABLE": "Transak non disponibile",
   "TYPE": "Tipo",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Account sconosciuto",

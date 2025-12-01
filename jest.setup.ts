@@ -10,7 +10,7 @@ import { WALLET_STATUS } from "~Model/Wallet"
 import { MMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
 import * as dotenv from "dotenv"
-import { View } from "react-native"
+import { FlatList, SectionList, View } from "react-native"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
 
@@ -217,6 +217,11 @@ jest.mock("@gorhom/bottom-sheet", () => ({
     __esModule: true,
     ...require("@gorhom/bottom-sheet/mock"),
     ...require("./src/Test/mocks/bottom-sheet-mock"),
+}))
+
+jest.mock("~Components/Reusable/BottomSheetLists", () => ({
+    BottomSheetSectionList: SectionList,
+    BottomSheetFlatList: FlatList,
 }))
 
 jest.mock("react-native-reanimated-skeleton", () => "Skeleton")

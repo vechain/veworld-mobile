@@ -1302,6 +1302,7 @@
   "TRANSACTION_FEE": "Transaction fee",
   "TRANSACTION_ID": "Transaction ID",
   "TRANSACTION_IN_PROGRESS": "Transaction in progress",
+  "TRANSAK_NOT_AVAILABLE": "Transak not available",
   "TYPE": "Type",
   "UNDER_SECONDS": "~ {seconds:number|toSecondsDuration}",
   "UNKNOWN_ACCOUNT": "Unknown Account",

@@ -12,7 +12,7 @@ export const handleNFTTransfers = async ({
 
     // Update NFTs for accounts that have been changed
     const changedAccounts = uniq([...transfers.map(t => t.to), ...transfers.map(t => t.from)])
-    changedAccounts.forEach(accountAddress => updateNFTs({ network: network.type, accountAddress }))
+    changedAccounts.forEach(accountAddress => updateNFTs({ network, accountAddress }))
 
     // Send one message. Only one will be displayed on screen so don't send multiple messages
     const transfer = transfers[0]
