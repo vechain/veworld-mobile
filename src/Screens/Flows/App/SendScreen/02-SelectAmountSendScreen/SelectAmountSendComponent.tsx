@@ -64,19 +64,19 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
 
             if (t.symbol === VET.symbol && vetInfo.exchangeRate) {
                 const fiatStr = BalanceUtils.getFiatBalance(t.balance.balance, vetInfo.exchangeRate, t.decimals)
-                fiatValue = parseFloat(fiatStr.replace(/[^0-9.]/g, "")) || 0
+                fiatValue = Number.parseFloat(fiatStr.replaceAll(/[^0-9.]/g, "")) || 0
             } else if (t.symbol === VTHO.symbol && vthoInfo.exchangeRate) {
                 const fiatStr = BalanceUtils.getFiatBalance(t.balance.balance, vthoInfo.exchangeRate, t.decimals)
-                fiatValue = parseFloat(fiatStr.replace(/[^0-9.]/g, "")) || 0
+                fiatValue = Number.parseFloat(fiatStr.replaceAll(/[^0-9.]/g, "")) || 0
             } else if (t.symbol === B3TR.symbol && b3trInfo.exchangeRate) {
                 const fiatStr = BalanceUtils.getFiatBalance(t.balance.balance, b3trInfo.exchangeRate, t.decimals)
-                fiatValue = parseFloat(fiatStr.replace(/[^0-9.]/g, "")) || 0
+                fiatValue = Number.parseFloat(fiatStr.replaceAll(/[^0-9.]/g, "")) || 0
             } else if (nonVechainTokensWithBalance && nonVechainTokensFiat) {
                 const tokenIndex = nonVechainTokensWithBalance.findIndex(nt => nt.address === t.address)
                 if (tokenIndex >= 0 && tokenIndex < nonVechainTokensFiat.length) {
                     const fiatStr = nonVechainTokensFiat[tokenIndex]
                     if (fiatStr) {
-                        fiatValue = parseFloat(fiatStr.replace(/[^0-9.]/g, "")) || 0
+                        fiatValue = Number.parseFloat(fiatStr.replaceAll(/[^0-9.]/g, "")) || 0
                     }
                 }
             }

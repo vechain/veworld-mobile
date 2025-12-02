@@ -54,10 +54,8 @@ export const NumPad = ({
                 const isBlank = digit === "blank"
                 const shouldShowDecimal = isBlank && showDecimal
                 const shouldRender = digit !== "blank" || shouldShowDecimal
-
-                const onPress = isDeleteKey
-                    ? onDigitDelete
-                    : handleOnDigitPress(shouldShowDecimal ? decimalSeparator : digit)
+                const decimalType = shouldShowDecimal ? decimalSeparator : digit
+                const onPress = isDeleteKey ? onDigitDelete : handleOnDigitPress(decimalType)
 
                 return (
                     <BaseView style={baseStyles.width} key={digit}>
