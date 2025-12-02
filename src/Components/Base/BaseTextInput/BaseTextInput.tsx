@@ -23,6 +23,7 @@ export type BaseTextInputProps = {
     rightIconTestID?: string
     rightIconStyle?: StyleProp<ViewStyle>
     rightIconSize?: number
+    rightIconColor?: string
     /**
      * Use adornment styles for the right icon. (Adds some default styles to the wrapper container)
      */
@@ -31,6 +32,7 @@ export type BaseTextInputProps = {
     leftIconTestID?: string
     leftIconStyle?: StyleProp<ViewStyle>
     leftIconSize?: number
+    leftIconColor?: string
     /**
      * Use adornment styles for the left icon. (Adds some default styles to the wrapper container)
      */
@@ -69,7 +71,9 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             leftIconTestID,
             leftIconStyle,
             leftIconSize = 24,
+            leftIconColor,
             rightIconSize = 24,
+            rightIconColor,
             rightIconAdornment = true,
             leftIconAdornment = true,
             hitSlop,
@@ -113,7 +117,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                     action={onIconPress}
                     name={rightIcon}
                     size={rightIconSize}
-                    color={theme.colors.text}
+                    color={rightIconColor ?? theme.colors.text}
                     style={[styles.rightIconStyle, rightIconStyle]}
                     testID={rightIconTestID}
                 />
@@ -134,6 +138,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             styles.rightElementStyle,
             styles.rightIconStyle,
             theme.colors.text,
+            rightIconColor,
         ])
 
         const computedLeftAdornmentStyles = useMemo(() => {
@@ -150,7 +155,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                     action={onIconPress}
                     name={leftIcon}
                     size={leftIconSize}
-                    color={theme.colors.text}
+                    color={leftIconColor ?? theme.colors.text}
                     style={[styles.leftIconStyle, leftIconStyle]}
                     testID={leftIconTestID}
                 />
@@ -171,6 +176,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             styles.leftElementStyle,
             styles.leftIconStyle,
             theme.colors.text,
+            leftIconColor,
         ])
 
         const setInputParams = useMemo(() => {

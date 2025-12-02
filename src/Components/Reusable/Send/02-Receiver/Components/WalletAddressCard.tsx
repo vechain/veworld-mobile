@@ -155,7 +155,8 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
                             autoComplete="off"
                             autoCapitalize="none"
                             autoCorrect={false}
-                            rightIcon={!selectedAddress ? "icon-copy" : "icon-circle-x"}
+                            rightIcon={!selectedAddress ? "icon-paste" : "icon-circle-x"}
+                            rightIconColor={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
                             rightIconSize={16}
                             onIconPress={!selectedAddress ? handlePasteAddress : handleClearAddress}
                             rightIconStyle={styles.rightIcon}
