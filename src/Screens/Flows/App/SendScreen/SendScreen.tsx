@@ -13,6 +13,7 @@ import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
 import { SelectAmountSendComponent } from "./02-SelectAmountSendScreen/SelectAmountSendComponent"
 import { EnteringFromLeftAnimation, EnteringFromRightAnimation } from "./Animations/Entering"
 import { ExitingToLeftAnimation, ExitingToRightAnimation } from "./Animations/Exiting"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 
 // TODO(send-flow-v2): Add proper step types based on the logic implemented in each child step component
 type SendFlowStep = "selectAmount" | "insertAddress" | "summary"
@@ -41,7 +42,7 @@ type RouteProps = NativeStackScreenProps<RootStackParamListHome, Routes.SEND_TOK
 
 const ORDER: SendFlowStep[] = ["selectAmount", "insertAddress", "summary"]
 
-export const SendScreen = (): ReactElement => {
+export const SendScreenContent = (): ReactElement => {
     const { LL } = useI18nContext()
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
@@ -214,6 +215,14 @@ export const SendScreen = (): ReactElement => {
                 </BaseView>
             }
         />
+    )
+}
+
+export const SendScreen = () => {
+    return (
+        <SendContextProvider>
+            <SendScreenContent />
+        </SendContextProvider>
     )
 }
 
