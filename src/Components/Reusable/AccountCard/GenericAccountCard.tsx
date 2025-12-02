@@ -81,9 +81,9 @@ export const GenericAccountCard = ({
                 <AccountIcon account={{ address: accountAddress, type: DEVICE_TYPE.LOCAL_MNEMONIC }} size={32} />
                 <BaseView flex={1} flexDirection="column">
                     <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
-                        {!!vnsName || accountName || AddressUtils.humanAddress(accountAddress)}
+                        {vnsName || accountName || AddressUtils.humanAddress(accountAddress)}
                     </BaseText>
-                    {(!!vnsName || accountName) && (
+                    {(vnsName || accountName) && (
                         <BaseText
                             typographyFont="smallCaptionMedium"
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>

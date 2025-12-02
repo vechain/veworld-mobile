@@ -91,6 +91,7 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
                 }
 
                 if (AddressUtils.isValid(vnsAddress)) {
+                    onAddressChange(vnsAddress ?? "")
                     Keyboard.dismiss()
                 }
             } else {
@@ -107,7 +108,7 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
             }
         }
         init()
-    }, [getVnsAddress, selectedAddress, isError])
+    }, [getVnsAddress, selectedAddress, isError, onAddressChange])
 
     const computedInputStyles = useMemo(() => {
         const defaultBorderColor = theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200
