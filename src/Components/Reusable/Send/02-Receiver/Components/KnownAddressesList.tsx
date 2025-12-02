@@ -100,7 +100,7 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
 
     const renderEmptyState = useCallback(() => {
         return (
-            <BaseView flex={1} justifyContent="center" alignItems="center" gap={24}>
+            <BaseView flex={1} justifyContent="center" alignItems="center" gap={24} pb={24}>
                 <BaseView
                     justifyContent="center"
                     alignItems="center"
@@ -212,6 +212,7 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.WHITE,
             borderRadius: 16,
             padding: 24,
+            paddingBottom: 0,
             gap: 24,
             flex: 1,
         },

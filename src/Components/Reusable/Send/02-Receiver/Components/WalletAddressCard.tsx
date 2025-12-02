@@ -110,6 +110,7 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
     }, [getVnsAddress, selectedAddress, isError])
 
     const computedInputStyles = useMemo(() => {
+        const defaultBorderColor = theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200
         if (isError) {
             return [
                 styles.inputContainer,
@@ -123,17 +124,17 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
         return [
             styles.inputContainer,
             {
-                borderColor: isFocused ? theme.colors.textInputFocusedBorderColor : theme.colors.cardBorder,
+                borderColor: isFocused ? theme.colors.textInputFocusedBorderColor : defaultBorderColor,
                 borderWidth: isFocused ? 2 : 1,
             },
         ]
     }, [
         isFocused,
         theme.colors.textInputFocusedBorderColor,
-        theme.colors.cardBorder,
         styles.inputContainer,
         isError,
         theme.colors.danger,
+        theme.isDark,
     ])
 
     return (

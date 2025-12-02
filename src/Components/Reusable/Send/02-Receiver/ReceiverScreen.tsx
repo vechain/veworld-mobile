@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { WalletAddressCard } from "./Components/WalletAddressCard"
-
 import { useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"

@@ -118,9 +118,8 @@ export const SendScreen = (): ReactElement => {
             noBackButton
             headerTitleAlignment="center"
             headerRightElement={headerRightElement}
-            hasSafeArea
             fixedBody={
-                <Animated.View style={[styles.container, styles.flexElement]}>
+                <Animated.View style={styles.flexElement}>
                     <Animated.View style={styles.flexElement} entering={Entering} exiting={Exiting} key={step}>
                         {step === "selectAmount" && <></>}
                         {step === "insertAddress" && (
@@ -131,28 +130,29 @@ export const SendScreen = (): ReactElement => {
                         )}
                         {step === "summary" && <></>}
                     </Animated.View>
-
-                    <AnimatedBaseView flexDirection="row" gap={16} px={16} pb={16} layout={LinearTransition}>
-                        {step !== "selectAmount" && (
-                            <AnimatedBaseButton
-                                variant="outline"
-                                flex={1}
-                                action={goToPrev}
-                                layout={LinearTransition}
-                                entering={FadeInLeft.delay(50)}
-                                exiting={FadeOutLeft}>
-                                {LL.COMMON_LBL_BACK()}
-                            </AnimatedBaseButton>
-                        )}
-                        <AnimatedBaseButton
-                            flex={1}
-                            action={goToNext}
-                            disabled={step === "summary"}
-                            layout={LinearTransition}>
-                            {LL.COMMON_LBL_NEXT()}
-                        </AnimatedBaseButton>
-                    </AnimatedBaseView>
                 </Animated.View>
+            }
+            footer={
+                <AnimatedBaseView flexDirection="row" gap={16} layout={LinearTransition}>
+                    {step !== "selectAmount" && (
+                        <AnimatedBaseButton
+                            variant="outline"
+                            flex={1}
+                            action={goToPrev}
+                            layout={LinearTransition}
+                            entering={FadeInLeft.delay(50)}
+                            exiting={FadeOutLeft}>
+                            {LL.COMMON_LBL_BACK()}
+                        </AnimatedBaseButton>
+                    )}
+                    <AnimatedBaseButton
+                        flex={1}
+                        action={goToNext}
+                        disabled={step === "summary"}
+                        layout={LinearTransition}>
+                        {LL.COMMON_LBL_NEXT()}
+                    </AnimatedBaseButton>
+                </AnimatedBaseView>
             }
         />
     )
@@ -160,6 +160,5 @@ export const SendScreen = (): ReactElement => {
 
 const baseStyles = () =>
     StyleSheet.create({
-        container: { paddingBottom: 36 },
         flexElement: { flex: 1 },
     })
