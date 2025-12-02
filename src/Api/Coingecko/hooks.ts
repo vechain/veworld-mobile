@@ -237,13 +237,24 @@ const getExchangeRateQueryKey = ({ id, vs_currency }: { id?: string; vs_currency
     vs_currency,
 ]
 
+type UseExchangeRateParams = {
+    id?: string
+    vs_currency: string
+    /**
+     * Optional override for the refetch interval in milliseconds.
+     * If not provided, the default feature-flag-driven interval is used.
+     */
+    refetchIntervalMs?: number | false
+}
+
 /**
  *  Get the exchange rate of a coin reusing the token info
- * @param id  the id of the coin
- * @param vs_currencies  the currencies to compare
+ * @param params.id  the id of the coin
+ * @param params.vs_currency  the currency to compare
+ * @param params.refetchIntervalMs  optional refetch interval override (ms)
  * @returns  the exchange rate
  */
-export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency: string }) => {
+export const useExchangeRate = ({ id, vs_currency, refetchIntervalMs }: UseExchangeRateParams) => {
     const isCoingecko = useMemo(() => getSymbolByCoingeckoId[id ?? ""], [id])
     const { data: tokenInfo, status: tokenInfoStatus } = useTokenInfo({ id: isCoingecko ? id : undefined })
     const currency = useMemo(() => vs_currency.toLowerCase(), [vs_currency])
@@ -269,7 +280,7 @@ export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency:
         },
         enabled,
         staleTime: getQueryCacheTime(),
-        refetchInterval: getRefetchIntevalTime(),
+        refetchInterval: refetchIntervalMs ?? getRefetchIntevalTime(),
     })
 }
 

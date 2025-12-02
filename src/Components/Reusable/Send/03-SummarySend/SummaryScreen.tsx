@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
-import { useInterval } from "usehooks-ts"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { AlertInline, BaseView } from "~Components"
 import { AlertStatus } from "~Components/Reusable/Alert/utils/AlertConfigs"
@@ -36,9 +35,10 @@ export const SummaryScreen = ({
 
     const exchangeRateId = useMemo(() => getCoinGeckoIdBySymbol[token.symbol], [token.symbol])
 
-    const { data: exchangeRate, refetch } = useExchangeRate({
+    const { data: exchangeRate } = useExchangeRate({
         id: exchangeRateId,
         vs_currency: currency,
+        refetchIntervalMs: 20000,
     })
 
     const [initialExchangeRate, setInitialExchangeRate] = useState<number | null>(null)
@@ -83,11 +83,6 @@ export const SummaryScreen = ({
             setPriceUpdated(true)
         }
     }, [exchangeRate, initialExchangeRate, priceUpdated])
-
-    // Periodically refetch exchange rate so we can compare every 20 seconds
-    useInterval(() => {
-        refetch()
-    }, 20000)
 
     return (
         <Animated.View style={styles.root}>
