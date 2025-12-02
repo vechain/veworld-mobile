@@ -1,12 +1,12 @@
-import React from "react"
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
+import React from "react"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { BackupWallet, SecurityLevelType } from "~Model"
+import { Routes } from "~Navigation"
 import { SecurityUpgrade_V2 } from "../../SecurityUpgrade_V2"
 import { MnemonicBackup } from "../../Standalone.components"
-import { Routes } from "~Navigation"
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import { GestureHandlerRootView } from "react-native-gesture-handler"
 
 export type RootStackParamListBackupWallet = {
     [Routes.SECURITY_UPGRADE_V2_HOME]: undefined
@@ -18,7 +18,7 @@ export type RootStackParamListBackupWallet = {
     }
 }
 
-const Stack = createNativeStackNavigator<RootStackParamListBackupWallet>()
+const Stack = createStackNavigator<RootStackParamListBackupWallet>()
 
 export const BackupWalletStack = ({
     oldPersistedState,

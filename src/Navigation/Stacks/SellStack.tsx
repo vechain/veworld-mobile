@@ -1,6 +1,6 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
-import { useNavAnimation } from "~Hooks"
+import { useDevice } from "~Components/Providers/DeviceProvider"
 import { Routes } from "~Navigation/Enums"
 import { SellTradeHistoryScreen, SellWebviewScreen } from "~Screens/Flows/App/SellScreen"
 import { OffRampProvidersEnum } from "~Screens/Flows/App/SellScreen/constants"
@@ -14,13 +14,15 @@ export type RootStackParamListSell = {
     }
 }
 
-const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListSell>()
+const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListSell>()
 
 export const SellStack = () => {
-    const { animation } = useNavAnimation()
+    const { isLowEndDevice } = useDevice()
 
     return (
-        <Navigator screenOptions={{ headerShown: false, animation }} initialRouteName={Routes.SELL_WEBVIEW}>
+        <Navigator
+            screenOptions={{ headerShown: false, animationEnabled: !isLowEndDevice }}
+            initialRouteName={Routes.SELL_WEBVIEW}>
             <Group>
                 <Screen
                     name={Routes.SELL_WEBVIEW}

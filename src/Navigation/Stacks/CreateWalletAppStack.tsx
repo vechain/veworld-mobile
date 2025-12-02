@@ -1,5 +1,8 @@
+import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { useDevice } from "~Components/Providers/DeviceProvider"
+import { CloudKitWallet, ConnectedLedgerDevice, DrivetWallet } from "~Model"
+import { Routes } from "~Navigation/Enums"
 import {
     EnableAdditionalSettings,
     ImportFromCloudScreen,
@@ -8,9 +11,6 @@ import {
     SelectLedgerAccounts,
     SelectLedgerDevice,
 } from "~Screens"
-import { Routes } from "~Navigation/Enums"
-import { CloudKitWallet, ConnectedLedgerDevice, DrivetWallet } from "~Model"
-import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
@@ -30,13 +30,13 @@ export type RootStackParamListCreateWalletApp = {
     }
 }
 
-const CreateWalletApp = createNativeStackNavigator<RootStackParamListCreateWalletApp>()
+const CreateWalletApp = createStackNavigator<RootStackParamListCreateWalletApp>()
 
 export const CreateWalletAppStack = () => {
-    const { animation } = useNavAnimation()
+    const { isLowEndDevice } = useDevice()
 
     return (
-        <CreateWalletApp.Navigator screenOptions={{ headerShown: false, animation }}>
+        <CreateWalletApp.Navigator screenOptions={{ headerShown: false, animationEnabled: !isLowEndDevice }}>
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_MNEMONIC}
                 component={ImportLocalWallet}
