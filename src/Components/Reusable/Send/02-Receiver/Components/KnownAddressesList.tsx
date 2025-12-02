@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { SectionList, StyleSheet } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
@@ -33,9 +33,14 @@ const AnimatedSectionList = Animated.createAnimatedComponent(
     >,
 )
 
-export const KnownAddressesList = () => {
-    const [selectedItem, setSelectedItem] = useState<FilterItem>("recent")
-    const [selectedAccount, setSelectedAccount] = useState<string | undefined>(undefined)
+type Props = {
+    selectedAddress?: string
+    activeFilter?: FilterItem
+    onAddressChange: (address: string) => void
+}
+
+export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressChange }: Props) => {
+    const [selectedItem, setSelectedItem] = useState<FilterItem>(activeFilter ?? "recent")
 
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
@@ -63,20 +68,20 @@ export const KnownAddressesList = () => {
 
     const renderItem = useCallback(
         ({ item }: { item: AccountWithDevice | Contact | RecentContact }) => {
-            const isSelected = AddressUtils.compareAddresses(selectedAccount, item.address)
+            const isSelected = AddressUtils.compareAddresses(selectedAddress, item.address)
 
             return (
                 <GenericAccountCard
                     accountName={item.alias}
                     accountAddress={item.address}
                     onPress={({ accountAddress }) => {
-                        setSelectedAccount(accountAddress)
+                        onAddressChange(accountAddress)
                     }}
                     selected={isSelected}
                 />
             )
         },
-        [selectedAccount],
+        [selectedAddress, onAddressChange],
     )
 
     const renderSectionHeader = useCallback(
@@ -129,6 +134,11 @@ export const KnownAddressesList = () => {
     const renderItemSeparator = useCallback(() => <BaseSpacer height={8} />, [])
 
     const renderSectionSeparator = useCallback(() => <BaseSpacer height={24} />, [])
+
+    //Update selected item when active filter changes from parent
+    useEffect(() => {
+        setSelectedItem(activeFilter ?? "recent")
+    }, [activeFilter, setSelectedItem])
 
     return (
         <Animated.View style={styles.root} layout={LinearTransition}>
