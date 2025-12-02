@@ -19,6 +19,11 @@ type SummaryScreenProps = {
     onTxFinished: (success: boolean) => void
     onBindTransactionControls: (controls: { onSubmit: () => void; isDisabledButtonState: boolean }) => void
     txError: boolean
+    /**
+     * Exchange rate used in the previous step (select amount) to price the transaction.
+     * Used as the baseline to detect market-driven price updates on the summary step.
+     */
+    initialExchangeRate: number | null
 }
 
 export const SummaryScreen = ({
@@ -28,6 +33,7 @@ export const SummaryScreen = ({
     onTxFinished,
     onBindTransactionControls,
     txError,
+    initialExchangeRate,
 }: SummaryScreenProps) => {
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
@@ -41,7 +47,6 @@ export const SummaryScreen = ({
         refetchIntervalMs: 20000,
     })
 
-    const [initialExchangeRate, setInitialExchangeRate] = useState<number | null>(null)
     const [priceUpdated, setPriceUpdated] = useState(false)
     const [hasGasAdjustment, setHasGasAdjustment] = useState(false)
 
@@ -70,14 +75,9 @@ export const SummaryScreen = ({
         return null
     }, [LL, hasGasAdjustment, priceUpdated, txError])
 
-    // Track initial vs latest exchange rate to detect market price updates
+    // Track latest exchange rate vs the one used in the previous step to detect market price updates
     useEffect(() => {
-        if (exchangeRate == null) return
-
-        if (initialExchangeRate === null) {
-            setInitialExchangeRate(exchangeRate)
-            return
-        }
+        if (exchangeRate == null || initialExchangeRate == null) return
 
         if (!priceUpdated && exchangeRate !== initialExchangeRate) {
             setPriceUpdated(true)

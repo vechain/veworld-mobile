@@ -6,8 +6,6 @@ import { TestWrapper } from "~Test"
 import { GasPriceCoefficient, VET, VTHO } from "~Constants"
 import { BigNutils } from "~Utils"
 
-const mockUseExchangeRate = jest.fn()
-
 jest.mock("~Hooks/useTransactionScreen", () => ({
     useTransactionScreen: jest.fn(),
 }))
@@ -124,6 +122,7 @@ describe("SummaryScreen", () => {
                     onTxFinished={jest.fn()}
                     onBindTransactionControls={jest.fn()}
                     txError={false}
+                    initialExchangeRate={1}
                     {...props}
                 />
             </TestWrapper>,
@@ -131,11 +130,6 @@ describe("SummaryScreen", () => {
     }
 
     it("renders summary header and transaction fee section", async () => {
-        mockUseExchangeRate.mockReturnValue({
-            data: 1,
-            refetch: jest.fn(),
-        })
-
         renderSummaryScreen()
 
         const headerTitle = await screen.findByText("Review details", {}, { timeout: 5000 })
@@ -146,11 +140,6 @@ describe("SummaryScreen", () => {
     })
 
     it("does not render any alert when there is no error, gas adjustment or price update", () => {
-        mockUseExchangeRate.mockReturnValue({
-            data: 1,
-            refetch: jest.fn(),
-        })
-
         renderSummaryScreen()
 
         expect(
@@ -171,11 +160,6 @@ describe("SummaryScreen", () => {
     })
 
     it("shows transaction failed alert when txError is true", async () => {
-        mockUseExchangeRate.mockReturnValue({
-            data: 1,
-            refetch: jest.fn(),
-        })
-
         renderSummaryScreen({ txError: true })
 
         const alert = await screen.findByText("Transaction failed. Please try again.")
@@ -183,11 +167,6 @@ describe("SummaryScreen", () => {
     })
 
     it("shows gas adjustment alert when onGasAdjusted is called", async () => {
-        mockUseExchangeRate.mockReturnValue({
-            data: 1,
-            refetch: jest.fn(),
-        })
-
         renderSummaryScreen()
 
         expect(lastTransactionFeeCardProps).not.toBeNull()
