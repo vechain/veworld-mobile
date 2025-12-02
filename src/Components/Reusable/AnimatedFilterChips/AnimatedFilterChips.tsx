@@ -83,24 +83,27 @@ export const AnimatedFilterChips = <T,>({
                 onScroll={handleScroll}
                 scrollEnabled={scrollEnabled}
                 scrollEventThrottle={16}>
-                {items.map((item, index) => (
-                    <BaseView
-                        key={index}
-                        onLayout={event => handleChipLayout(event, index)}
-                        style={[styles.chipWrapper, chipStyle]}>
-                        <BaseTouchable
-                            testID={`AnimatedFilterChips-${keyExtractor(item)}`}
-                            style={styles.transparentChip}
-                            onPress={() => onItemPress(item, index)}
-                            activeOpacity={0.8}>
-                            <BaseText
-                                style={{ color: textColor(item) }}
-                                typographyFont={size === "sm" ? "captionMedium" : "bodyMedium"}>
-                                {getItemLabel(item)}
-                            </BaseText>
-                        </BaseTouchable>
-                    </BaseView>
-                ))}
+                {items.map((item, index) => {
+                    const key = keyExtractor(item)
+                    return (
+                        <BaseView
+                            key={key}
+                            onLayout={event => handleChipLayout(event, index)}
+                            style={[styles.chipWrapper, chipStyle]}>
+                            <BaseTouchable
+                                testID={`AnimatedFilterChips-${key}`}
+                                style={styles.transparentChip}
+                                onPress={() => onItemPress(item, index)}
+                                activeOpacity={0.8}>
+                                <BaseText
+                                    style={{ color: textColor(item) }}
+                                    typographyFont={size === "sm" ? "captionMedium" : "bodyMedium"}>
+                                    {getItemLabel(item)}
+                                </BaseText>
+                            </BaseTouchable>
+                        </BaseView>
+                    )
+                })}
             </Animated.ScrollView>
         </BaseView>
     )

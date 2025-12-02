@@ -56,7 +56,7 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
 
     const accountsSection = useMemo(() => {
         const groupedAccounts = accounts.reduce((acc, curr) => {
-            const key = !AccountUtils.isObservedAccount(curr) ? "MY_ACCOUNTS" : "WATCHING_ACCOUNTS"
+            const key = AccountUtils.isObservedAccount(curr) ? "WATCHING_ACCOUNTS" : "MY_ACCOUNTS"
             return { ...acc, [key]: [...(acc[key] ?? []), curr] }
         }, {} as Readonly<Record<SectionItem, AccountWithDevice[]>>)
 

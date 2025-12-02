@@ -87,10 +87,10 @@ export const ContactsSlice = createSlice({
                 AddressUtils.compareAddresses(c.address, contact.address),
             )
 
-            if (recentContactIdx !== -1) {
-                state.recentContacts[genesisId][selectedAccountAddress][recentContactIdx] = contact
-            } else {
+            if (recentContactIdx === -1) {
                 state.recentContacts[genesisId][selectedAccountAddress].push(contact)
+            } else {
+                state.recentContacts[genesisId][selectedAccountAddress][recentContactIdx] = contact
             }
         },
         resetContactsState: () => initialContactsState,
