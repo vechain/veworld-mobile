@@ -6,12 +6,7 @@ import { TestWrapper } from "~Test"
 import { GasPriceCoefficient, VET, VTHO } from "~Constants"
 import { BigNutils } from "~Utils"
 
-const mockUseInterval = jest.fn()
 const mockUseExchangeRate = jest.fn()
-
-jest.mock("usehooks-ts", () => ({
-    useInterval: (callback: () => void, delay?: number) => mockUseInterval(callback, delay),
-}))
 
 jest.mock("~Hooks/useTransactionScreen", () => ({
     useTransactionScreen: jest.fn(),
