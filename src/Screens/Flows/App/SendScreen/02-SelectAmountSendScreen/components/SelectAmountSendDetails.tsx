@@ -1,6 +1,6 @@
 import React from "react"
-import { StyleSheet, Text, TouchableOpacity } from "react-native"
-import Animated, { AnimatedStyle, FadeIn, FadeInLeft, FadeOutLeft } from "react-native-reanimated"
+import { StyleSheet, Text, TouchableOpacity, useWindowDimensions } from "react-native"
+import Animated, { FadeIn, FadeInLeft, FadeOutLeft } from "react-native-reanimated"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { CURRENCY, CURRENCY_SYMBOLS } from "~Constants"
@@ -11,13 +11,10 @@ import { useI18nContext } from "~i18n"
 
 const { defaults: defaultTypography } = typography
 
-const AnimatedText = Animated.createAnimatedComponent(Text)
-
 type AnimatedAmountInputProps = {
     isInputInFiat: boolean
     isError: boolean
     formattedInputDisplay: string
-    animatedInputStyle: AnimatedStyle
     currency: CURRENCY
     selectedToken: FungibleTokenWithBalance
 }
@@ -45,12 +42,20 @@ SelectAmountSendDetails.AnimatedAmountInput = React.memo<AnimatedAmountInputProp
     isInputInFiat,
     isError,
     formattedInputDisplay,
-    animatedInputStyle,
     currency,
     selectedToken,
 }) {
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
+    const { width: screenWidth } = useWindowDimensions()
+
+    // Calculate available width for the text
+    // 24 * 2 = horizontal padding of parent inputContainer
+    // 48 = padding inside amountWrapper (24 * 2)
+    // For fiat mode: 40 = currency symbol width + margin
+    // For token mode: estimate symbol width based on symbol length (approx 12px per char + 8px spacing)
+    const symbolWidth = isInputInFiat ? 40 : selectedToken.symbol.length * 12 + 8
+    const availableWidth = screenWidth - 24 * 2 - 48 - symbolWidth
 
     return (
         <>
@@ -64,41 +69,47 @@ SelectAmountSendDetails.AnimatedAmountInput = React.memo<AnimatedAmountInputProp
                             {CURRENCY_SYMBOLS[currency]}
                         </BaseText>
                     </Animated.View>
-                    <AnimatedText
+                    <Text
                         style={[
                             styles.animatedInput,
                             {
                                 color: isError ? theme.colors.danger : theme.colors.text,
+                                maxWidth: availableWidth,
                             },
-                            animatedInputStyle,
                         ]}
                         allowFontScaling={false}
+                        numberOfLines={1}
+                        adjustsFontSizeToFit
+                        minimumFontScale={0.3}
                         testID="SendScreen_amountInput">
                         {formattedInputDisplay}
-                    </AnimatedText>
+                    </Text>
                 </Animated.View>
             ) : (
                 <Animated.View key="token" entering={FadeIn.duration(300)} style={styles.amountWrapper}>
-                    <AnimatedText
+                    <Text
                         style={[
                             styles.animatedInput,
                             {
                                 color: isError ? theme.colors.danger : theme.colors.text,
+                                maxWidth: availableWidth,
                             },
-                            animatedInputStyle,
                         ]}
                         allowFontScaling={false}
+                        numberOfLines={1}
+                        adjustsFontSizeToFit
+                        minimumFontScale={0.3}
                         testID="SendScreen_amountInput">
                         {formattedInputDisplay}
-                        <Text
-                            style={[
-                                styles.tokenSymbolInline,
-                                { color: isError ? theme.colors.danger : theme.colors.text },
-                            ]}>
-                            {" "}
-                            {selectedToken.symbol}
-                        </Text>
-                    </AnimatedText>
+                    </Text>
+                    <Text
+                        style={[
+                            styles.tokenSymbolInline,
+                            { color: isError ? theme.colors.danger : theme.colors.text },
+                        ]}>
+                        {" "}
+                        {selectedToken.symbol}
+                    </Text>
                 </Animated.View>
             )}
         </>

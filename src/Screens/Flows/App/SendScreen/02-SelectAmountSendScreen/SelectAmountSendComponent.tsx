@@ -1,7 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { StyleSheet, useWindowDimensions } from "react-native"
-import { useAnimatedStyle, useDerivedValue, withTiming } from "react-native-reanimated"
+import { StyleSheet } from "react-native"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { BaseSpacer, BaseView, NumPad } from "~Components"
 import { B3TR, CURRENCY_FORMATS, VET, VOT3, VTHO } from "~Constants"
@@ -14,7 +13,6 @@ import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
 import HapticsService from "~Services/HapticsService"
 import { selectCurrency, selectCurrencyFormat, useAppSelector } from "~Storage/Redux"
 import { BigNutils, BalanceUtils } from "~Utils"
-import FontUtils from "~Utils/FontUtils"
 import { getDecimalSeparator } from "~Utils/BigNumberUtils/BigNumberUtils"
 import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 import { FungibleTokenWithBalance } from "~Model"
@@ -33,7 +31,6 @@ type SelectAmountSendComponentProps = {
 
 export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: SelectAmountSendComponentProps) => {
     const { formatLocale } = useFormatFiat()
-    const { width: screenWidth } = useWindowDimensions()
 
     const bottomSheetRef = useRef<BottomSheetModalMethods>(null)
 
@@ -318,51 +315,6 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
         return formattedInteger
     }, [input, currencyFormat, formatLocale])
 
-    // Calculate available width for the amount input text
-    // 24 * 2 = horizontal padding of inputContainer (paddingHorizontal: 24)
-    // 50 = width for symbol (e.g., "$", "€")
-    // 20 = additional safety margin for spacing
-    const availableWidth = screenWidth - (24 * 2 + 50)
-
-    const totalDisplayLength = useMemo(() => {
-        const displayLength = (formattedInputDisplay || "0").length
-        if (isInputInFiat) {
-            // Account for currency symbol rendered separately (e.g., "$", "€") + spacing
-            return displayLength + 2
-        }
-        if (selectedToken?.symbol) {
-            return displayLength + 1 + selectedToken.symbol.length
-        }
-        return displayLength
-    }, [formattedInputDisplay, isInputInFiat, selectedToken?.symbol])
-
-    const inputLength = useDerivedValue(() => {
-        return totalDisplayLength
-    }, [totalDisplayLength])
-
-    const animatedInputStyle = useAnimatedStyle(() => {
-        const length = inputLength.value
-        const baseFontSize = FontUtils.fontWorklet(48)
-        const minFontSize = FontUtils.fontWorklet(12)
-
-        const charWidthRatio = 0.7
-        const charWidthAtBaseSize = baseFontSize * charWidthRatio
-
-        const threshold = Math.floor(availableWidth / charWidthAtBaseSize)
-
-        let fontSize = baseFontSize
-        if (length > threshold) {
-            const targetCharWidth = availableWidth / length
-            const calculatedFontSize = targetCharWidth / charWidthRatio
-            fontSize = Math.max(minFontSize, calculatedFontSize)
-        }
-
-        return {
-            fontSize: withTiming(fontSize, { duration: 200 }),
-            lineHeight: withTiming(fontSize, { duration: 200 }),
-        }
-    }, [inputLength, availableWidth])
-
     if (!selectedToken) {
         return <BaseView flex={1} />
     }
@@ -376,7 +328,6 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
                             isInputInFiat={isInputInFiat}
                             isError={isError}
                             formattedInputDisplay={formattedInputDisplay}
-                            animatedInputStyle={animatedInputStyle}
                             currency={currency}
                             selectedToken={selectedToken}
                         />
