@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native"
 import Animated, { AnimatedStyle, FadeIn, FadeInLeft, FadeOutLeft } from "react-native-reanimated"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { CURRENCY_SYMBOLS } from "~Constants"
+import { CURRENCY, CURRENCY_SYMBOLS } from "~Constants"
 import { ColorThemeType, typography } from "~Constants/Theme"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
@@ -18,7 +18,7 @@ type AnimatedAmountInputProps = {
     isError: boolean
     formattedInputDisplay: string
     animatedInputStyle: AnimatedStyle
-    currency: string
+    currency: CURRENCY
     selectedToken: FungibleTokenWithBalance
 }
 
@@ -27,7 +27,7 @@ type ConversionToggleProps = {
     isError: boolean
     isInputInFiat: boolean
     formattedConvertedAmount: string
-    currency: string
+    currency: CURRENCY
     selectedToken: FungibleTokenWithBalance
     onToggle: () => void
 }
@@ -61,7 +61,7 @@ SelectAmountSendDetails.AnimatedAmountInput = React.memo<AnimatedAmountInputProp
                             typographyFont="headerTitleMedium"
                             color={isError ? theme.colors.danger : theme.colors.text}
                             style={styles.currencySymbol}>
-                            {CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS]}
+                            {CURRENCY_SYMBOLS[currency]}
                         </BaseText>
                     </Animated.View>
                     <AnimatedText

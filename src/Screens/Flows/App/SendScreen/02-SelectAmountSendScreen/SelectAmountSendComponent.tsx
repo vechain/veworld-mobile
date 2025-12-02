@@ -314,6 +314,10 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
         return formattedInteger
     }, [input, currencyFormat, formatLocale])
 
+    // Calculate available width for the amount input text
+    // 24 * 2 = horizontal padding of inputContainer (paddingHorizontal: 24)
+    // 50 = estimated width for symbol (e.g., "$", "€")
+    // 20 = additional safety margin for spacing
     const availableWidth = screenWidth - (24 * 2 + 50 + 20)
 
     const totalDisplayLength = useMemo(() => {
@@ -331,7 +335,7 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
     const animatedInputStyle = useAnimatedStyle(() => {
         const length = inputLength.value
         const baseFontSize = FontUtils.fontWorklet(48)
-        const minFontSize = FontUtils.fontWorklet(24)
+        const minFontSize = FontUtils.fontWorklet(10)
 
         const charWidthAtBaseSize = baseFontSize * 0.6
 
