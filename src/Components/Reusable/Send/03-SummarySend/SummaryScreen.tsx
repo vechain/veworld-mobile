@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
@@ -50,6 +50,10 @@ export const SummaryScreen = ({
     const [priceUpdated, setPriceUpdated] = useState(false)
     const [hasGasAdjustment, setHasGasAdjustment] = useState(false)
 
+    const handleGasAdjusted = useCallback(() => {
+        setHasGasAdjustment(true)
+    }, [])
+
     const alertConfig = useMemo<null | { message: string; status: AlertStatus }>(() => {
         if (txError) {
             return {
@@ -94,7 +98,7 @@ export const SummaryScreen = ({
                 address={address}
                 onTxFinished={onTxFinished}
                 onBindTransactionControls={onBindTransactionControls}
-                onGasAdjusted={() => setHasGasAdjustment(true)}
+                onGasAdjusted={handleGasAdjusted}
             />
 
             {alertConfig && (
