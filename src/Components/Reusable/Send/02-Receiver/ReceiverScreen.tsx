@@ -12,13 +12,12 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
+import { useSendContext } from "../Provider"
 
-type Props = {
-    selectedAddress?: string
-    onAddressChange: (address: string) => void
-}
+export const ReceiverScreen = () => {
+    const { flowState, setFlowState } = useSendContext()
+    const selectedAddress = useMemo(() => flowState.address, [flowState.address])
 
-export const ReceiverScreen = ({ selectedAddress, onAddressChange }: Props) => {
     const [inputWalletAddress, setInputWalletAddress] = useState<string>("")
     const [listWalletAddresses, setListWalletAddresses] = useState<string>("")
     const { styles } = useThemedStyles(baseStyles)
@@ -52,9 +51,9 @@ export const ReceiverScreen = ({ selectedAddress, onAddressChange }: Props) => {
                 setListWalletAddresses(address)
                 setInputWalletAddress("")
             }
-            onAddressChange(address)
+            setFlowState({ ...flowState, address: address })
         },
-        [onAddressChange, selectedAddress],
+        [setFlowState, selectedAddress, flowState],
     )
 
     useEffect(() => {
