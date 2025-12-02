@@ -63,8 +63,9 @@ export const SwitchStack = () => {
 
     const RenderStacks = useMemo(() => {
         // This console log guarantees that on reset it properly wait for the wallet status
+        // DO NOT REMOVE IT UNLESS YOU ARE TOTALLY SURE THAT THE RESET WORKS WITHOUT ERRORS
         // eslint-disable-next-line no-console
-        console.log("DO NOT RERENDER IT YET")
+        console.log("__DEBUG_LOG__")
         if (walletStatus === WALLET_STATUS.FIRST_TIME_ACCESS) {
             return <Switch.Screen name="OnboardingStack" component={OnboardingStack} options={{ headerShown: false }} />
         } else {
