@@ -1,15 +1,16 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo } from "react"
 import { SectionListData, SectionListRenderItemInfo } from "react-native"
+import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { BaseBottomSheet, BaseSpacer, BaseText, BaseView, NetworkBox } from "~Components"
 import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
-import { useSetSelectedAccount } from "~Hooks"
+import { COLORS } from "~Constants"
+import { useSetSelectedAccount, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Network, NETWORK_TYPE } from "~Model"
 import { clearNFTCache, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { changeSelectedNetwork } from "~Storage/Redux/Actions"
 import { selectNetworksByType, selectSelectedNetwork } from "~Storage/Redux/Selectors"
-import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {
     onClose: () => void
@@ -19,7 +20,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const { onSetSelectedAccount } = useSetSelectedAccount()
-
+    const theme = useTheme()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const mainNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.MAIN))
@@ -80,42 +81,26 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
 
     const renderSectionSeparator = useCallback(() => <BaseSpacer height={24} />, [])
 
-    const snapPoints = useMemo(() => {
-        const allNetworks = [...mainNetworks, ...testNetworks, ...otherNetworks]
-        if (allNetworks.length <= 2) return [isAndroid() ? "50%" : "45%"]
-        if (allNetworks.length <= 3) return ["60%"]
-        if (allNetworks.length <= 4) return ["75%"]
-        return ["90%"]
-    }, [mainNetworks, otherNetworks, testNetworks])
-
-    const [snapIndex, setSnapIndex] = useState<number>(0)
-
-    // The list is scrollable when the bottom sheet is fully expanded
-    const isListScrollable = useMemo(() => snapIndex === snapPoints.length - 1, [snapIndex, snapPoints.length])
-
-    const handleSheetChanges = useCallback((index: number) => {
-        setSnapIndex(index)
-    }, [])
-
     return (
-        <BaseBottomSheet floating dynamicHeight ref={ref} onChange={handleSheetChanges}>
-            <BaseView flexDirection="column" w={100}>
-                <BaseText typographyFont="subTitleBold">{LL.BD_SELECT_NETWORK()}</BaseText>
-            </BaseView>
+        <BaseBottomSheet floating dynamicHeight enableContentPanningGesture={false} scrollable={false} ref={ref}>
+            <NestableScrollContainer showsVerticalScrollIndicator={false} stickyHeaderIndices={[0]} bounces={false}>
+                <BaseView flexDirection="column" w={100} bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50}>
+                    <BaseText typographyFont="subTitleBold">{LL.BD_SELECT_NETWORK()}</BaseText>
+                    <BaseSpacer height={16} />
+                </BaseView>
 
-            <BaseSpacer height={16} />
-            <BottomSheetSectionList
-                sections={sections}
-                keyExtractor={i => i.id}
-                ItemSeparatorComponent={renderItemSeparator}
-                SectionSeparatorComponent={renderSectionSeparator}
-                renderSectionHeader={renderSectionHeader}
-                renderItem={renderItem}
-                stickySectionHeadersEnabled={false}
-                scrollEnabled={isListScrollable}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-            />
+                <BottomSheetSectionList
+                    sections={sections}
+                    keyExtractor={i => i.id}
+                    ItemSeparatorComponent={renderItemSeparator}
+                    SectionSeparatorComponent={renderSectionSeparator}
+                    renderSectionHeader={renderSectionHeader}
+                    renderItem={renderItem}
+                    stickySectionHeadersEnabled={false}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                />
+            </NestableScrollContainer>
         </BaseBottomSheet>
     )
 })
