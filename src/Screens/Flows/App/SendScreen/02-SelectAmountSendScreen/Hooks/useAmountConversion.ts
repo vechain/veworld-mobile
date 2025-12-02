@@ -53,25 +53,25 @@ export const useAmountConversion = ({
     )
 
     const tokenAmount = useMemo(() => {
-        if (!input || input === "0") return "0"
+        if (!normalizedInput || normalizedInput === "0") return "0"
 
         if (isInputInFiat) {
             return BigNutils().toTokenConversion(normalizedInput, exchangeRate ?? 0).toString
         }
         return BigNutils(normalizedInput).addTrailingZeros(tokenDecimals).toHuman(tokenDecimals).toString
-    }, [normalizedInput, isInputInFiat, exchangeRate, tokenDecimals, input])
+    }, [normalizedInput, isInputInFiat, exchangeRate, tokenDecimals])
 
     const fiatAmount = useMemo(() => {
-        if (!input || input === "0") return "0"
+        if (!normalizedInput || normalizedInput === "0") return "0"
 
         if (isInputInFiat) {
             return normalizedInput
         }
         return fiatHumanAmount.value
-    }, [normalizedInput, isInputInFiat, fiatHumanAmount.value, input])
+    }, [normalizedInput, isInputInFiat, fiatHumanAmount.value])
 
     const formattedConvertedAmount = useMemo(() => {
-        if (!input || input === "0") return "0"
+        if (!normalizedInput || normalizedInput === "0") return "0"
 
         if (isInputInFiat) {
             const tokenAmountValue = BigNutils().toTokenConversion(normalizedInput, exchangeRate ?? 0).toString
@@ -83,10 +83,10 @@ export const useAmountConversion = ({
                 locale: formatLocale,
             })
         }
-    }, [exchangeRate, fiatHumanAmount.value, formatLocale, input, isInputInFiat, normalizedInput])
+    }, [exchangeRate, fiatHumanAmount.value, formatLocale, isInputInFiat, normalizedInput])
 
     const isBalanceExceeded = useMemo(() => {
-        if (!input || input === "0") return false
+        if (!normalizedInput || normalizedInput === "0") return false
 
         const controlValue = isInputInFiat
             ? BigNutils().toTokenConversion(normalizedInput, exchangeRate ?? 0)
@@ -95,11 +95,11 @@ export const useAmountConversion = ({
         const balanceToHuman = BigNutils(tokenTotalBalance).toHuman(tokenDecimals)
 
         return controlValue.isBiggerThan(balanceToHuman.toString)
-    }, [input, isInputInFiat, normalizedInput, exchangeRate, tokenDecimals, tokenTotalBalance])
+    }, [isInputInFiat, normalizedInput, exchangeRate, tokenDecimals, tokenTotalBalance])
 
     const isValidAmount = useMemo(() => {
-        return input !== "" && !BigNutils(normalizedInput).isZero
-    }, [input, normalizedInput])
+        return normalizedInput !== "" && !BigNutils(normalizedInput).isZero
+    }, [normalizedInput])
 
     return {
         normalizedInput,

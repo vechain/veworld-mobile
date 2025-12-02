@@ -316,7 +316,7 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
 
     // Calculate available width for the amount input text
     // 24 * 2 = horizontal padding of inputContainer (paddingHorizontal: 24)
-    // 50 = estimated width for symbol (e.g., "$", "€")
+    // 50 = width for symbol (e.g., "$", "€")
     // 20 = additional safety margin for spacing
     const availableWidth = screenWidth - (24 * 2 + 50 + 20)
 
