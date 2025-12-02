@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.13 (2025-12-02)</small>
+
+* build: init ([3a43547](https://github.com/vechain/veworld-mobile/commit/3a43547))
+* fix: try to fix dapps refs (#3598) ([71fb214](https://github.com/vechain/veworld-mobile/commit/71fb214)), closes [#3598](https://github.com/vechain/veworld-mobile/issues/3598)
+
 ## <small>2.4.12 (2025-11-28)</small>
 
 * build: init ([9836c8f](https://github.com/vechain/veworld-mobile/commit/9836c8f))
