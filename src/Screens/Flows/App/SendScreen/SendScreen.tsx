@@ -21,6 +21,11 @@ type SendFlowState = {
     token?: FungibleTokenWithBalance
     address?: string
     amount?: string
+    /**
+     * Exchange rate used when the user selected the amount.
+     * This is passed down to the summary step to detect subsequent market moves.
+     */
+    initialExchangeRate?: number | null
 }
 
 type FooterButtonConfig = {
@@ -42,7 +47,7 @@ const ORDER: SendFlowStep[] = ["insertAddress", "selectAmount", "summary"]
 export const SendScreen = (): ReactElement => {
     const { LL } = useI18nContext()
     const navigation = useNavigation<NavigationProps>()
-    const [step, setStep] = useState<SendFlowStep>("summary")
+    const [step, setStep] = useState<SendFlowStep>("insertAddress")
     const [flowState, setFlowState] = useState<SendFlowState>({})
 
     const [txError, setTxError] = useState(false)
@@ -86,10 +91,11 @@ export const SendScreen = (): ReactElement => {
         setStep("selectAmount")
     }, [])
 
-    const goToSummary = useCallback((amount: string) => {
+    const goToSummary = useCallback((amount: string, initialExchangeRate: number | null) => {
         setFlowState(current => ({
             ...current,
             amount,
+            initialExchangeRate,
         }))
         setStep("summary")
     }, [])
@@ -146,7 +152,7 @@ export const SendScreen = (): ReactElement => {
             case "insertAddress":
                 return <BaseView flex={1}>{/* TODO(send-flow-v2): Implement insert address step */}</BaseView>
             case "summary": {
-                const { token, amount, address } = flowState
+                const { token, amount, address, initialExchangeRate } = flowState
 
                 if (!token || !amount || !address) {
                     // TODO: add a Error Screen?!?!
@@ -158,6 +164,7 @@ export const SendScreen = (): ReactElement => {
                         token={token}
                         amount={amount}
                         address={address}
+                        initialExchangeRate={initialExchangeRate ?? null}
                         onTxFinished={handleTxFinished}
                         onBindTransactionControls={setTxControls}
                         txError={txError}
@@ -223,7 +230,9 @@ export const SendScreen = (): ReactElement => {
                         label: LL.COMMON_BTN_NEXT(),
                         onPress: () => {
                             if (flowState.amount) {
-                                goToSummary(flowState.amount)
+                                // TODO(send-flow-v2): once select amount step is implemented,
+                                // capture the exchange rate used to price the entered amount and pass it here.
+                                goToSummary(flowState.amount, null)
                             }
                         },
                         disabled: !flowState.amount,
