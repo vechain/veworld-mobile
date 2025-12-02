@@ -113,8 +113,12 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
     useEffect(() => {
         if (!exchangeRate && isInputInFiat) {
             setIsInputInFiat(false)
+            if (input !== "") {
+                setInput("")
+                setIsError(false)
+            }
         }
-    }, [exchangeRate, isInputInFiat])
+    }, [exchangeRate, isInputInFiat, input, setInput])
 
     const tokenTotalBalance = useMemo(() => {
         const currentToken = selectedToken || defaultToken
