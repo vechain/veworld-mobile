@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.13 (2025-12-02)</small>
+
+* build: init ([8eb94dc](https://github.com/vechain/veworld-mobile/commit/8eb94dc))
+* refactor: remove shouldDehydrateQuery function and add shouldRedactErrors options for hydration (#36 ([6926f24](https://github.com/vechain/veworld-mobile/commit/6926f24)), closes [#3600](https://github.com/vechain/veworld-mobile/issues/3600)
+
 ## <small>2.4.12 (2025-11-28)</small>
 
 * build: init ([9836c8f](https://github.com/vechain/veworld-mobile/commit/9836c8f))
