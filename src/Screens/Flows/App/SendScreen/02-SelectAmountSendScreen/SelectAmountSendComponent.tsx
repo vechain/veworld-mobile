@@ -14,6 +14,7 @@ import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
 import HapticsService from "~Services/HapticsService"
 import { selectCurrency, selectCurrencyFormat, useAppSelector } from "~Storage/Redux"
 import { BigNutils, BalanceUtils } from "~Utils"
+import FontUtils from "~Utils/FontUtils"
 import { getDecimalSeparator } from "~Utils/BigNumberUtils/BigNumberUtils"
 import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 import { FungibleTokenWithBalance } from "~Model"
@@ -329,8 +330,8 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
 
     const animatedInputStyle = useAnimatedStyle(() => {
         const length = inputLength.value
-        const baseFontSize = 48
-        const minFontSize = 24
+        const baseFontSize = FontUtils.fontWorklet(48)
+        const minFontSize = FontUtils.fontWorklet(24)
 
         const charWidthAtBaseSize = baseFontSize * 0.6
 
