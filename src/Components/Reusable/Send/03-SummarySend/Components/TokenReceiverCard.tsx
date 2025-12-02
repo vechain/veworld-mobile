@@ -11,12 +11,12 @@ type TokenReceiverCardProps = {
 }
 
 export const TokenReceiverCard = ({ token, amount, address }: TokenReceiverCardProps) => {
-    const { fiatBalance } = useTokenCardBalance({ token })
+    const { fiatBalance, showFiatBalance } = useTokenCardBalance({ token })
     return (
         <Animated.View>
             <DetailsContainer>
                 <DetailsContainer.TokenValue value={amount} token={token} />
-                <DetailsContainer.FiatValue value={fiatBalance} />
+                {showFiatBalance && <DetailsContainer.FiatValue value={fiatBalance} />}
                 <DetailsContainer.TokenReceiver address={address} />
             </DetailsContainer>
         </Animated.View>
