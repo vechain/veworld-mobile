@@ -318,11 +318,15 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
     // 24 * 2 = horizontal padding of inputContainer (paddingHorizontal: 24)
     // 50 = width for symbol (e.g., "$", "€")
     // 20 = additional safety margin for spacing
-    const availableWidth = screenWidth - (24 * 2 + 50 + 20)
+    const availableWidth = screenWidth - (24 * 2 + 50)
 
     const totalDisplayLength = useMemo(() => {
         const displayLength = (formattedInputDisplay || "0").length
-        if (!isInputInFiat && selectedToken?.symbol) {
+        if (isInputInFiat) {
+            // Account for currency symbol rendered separately (e.g., "$", "€") + spacing
+            return displayLength + 2
+        }
+        if (selectedToken?.symbol) {
             return displayLength + 1 + selectedToken.symbol.length
         }
         return displayLength
@@ -335,16 +339,17 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
     const animatedInputStyle = useAnimatedStyle(() => {
         const length = inputLength.value
         const baseFontSize = FontUtils.fontWorklet(48)
-        const minFontSize = FontUtils.fontWorklet(10)
+        const minFontSize = FontUtils.fontWorklet(12)
 
-        const charWidthAtBaseSize = baseFontSize * 0.6
+        const charWidthRatio = 0.7
+        const charWidthAtBaseSize = baseFontSize * charWidthRatio
 
         const threshold = Math.floor(availableWidth / charWidthAtBaseSize)
 
         let fontSize = baseFontSize
         if (length > threshold) {
             const targetCharWidth = availableWidth / length
-            const calculatedFontSize = targetCharWidth / 0.6
+            const calculatedFontSize = targetCharWidth / charWidthRatio
             fontSize = Math.max(minFontSize, calculatedFontSize)
         }
 

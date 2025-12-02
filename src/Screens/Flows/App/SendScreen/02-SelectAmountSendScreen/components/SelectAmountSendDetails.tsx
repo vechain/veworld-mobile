@@ -73,7 +73,6 @@ SelectAmountSendDetails.AnimatedAmountInput = React.memo<AnimatedAmountInputProp
                             animatedInputStyle,
                         ]}
                         allowFontScaling={false}
-                        numberOfLines={1}
                         testID="SendScreen_amountInput">
                         {formattedInputDisplay}
                     </AnimatedText>
