@@ -43,6 +43,9 @@ export const ReceiverScreen = ({ selectedAddress, onAddressChange }: Props) => {
     const handleAddressChange = useCallback(
         (source: "input" | "list", address: string) => {
             if (source === "input") {
+                if (AddressUtils.compareAddresses(address, selectedAddress)) {
+                    return
+                }
                 setInputWalletAddress(address)
                 setListWalletAddresses("")
             } else {
@@ -51,7 +54,7 @@ export const ReceiverScreen = ({ selectedAddress, onAddressChange }: Props) => {
             }
             onAddressChange(address)
         },
-        [onAddressChange],
+        [onAddressChange, selectedAddress],
     )
 
     useEffect(() => {
