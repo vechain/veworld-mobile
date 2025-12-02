@@ -9,7 +9,7 @@ import Animated, {
     FadeOutLeft,
     LinearTransition,
 } from "react-native-reanimated"
-import { BaseButton, BaseText, BaseView, Layout, SendContextProvider, SendFlowStep, useSendContext } from "~Components"
+import { BaseButton, BaseView, Layout, SendContextProvider, SendFlowStep, useSendContext } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
 import { useThemedStyles } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -80,9 +80,9 @@ export const SendScreenContent = (): ReactElement => {
             fixedBody={
                 <Animated.View style={styles.flexElement}>
                     <Animated.View style={styles.flexElement} entering={Entering} exiting={Exiting} key={step}>
-                        <BaseView style={styles.mockedBox}>
-                            <BaseText typographyFont="biggerTitle">{step}</BaseText>
-                        </BaseView>
+                        {step === "selectAmount" && <></>}
+                        {step === "insertAddress" && <></>}
+                        {step === "summary" && <></>}
                     </Animated.View>
                 </Animated.View>
             }
@@ -124,11 +124,4 @@ export const SendScreen = () => {
 const baseStyles = () =>
     StyleSheet.create({
         flexElement: { flex: 1 },
-        mockedBox: {
-            width: "100%",
-            height: 300,
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-        },
     })
