@@ -141,7 +141,7 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
         <>
             <Animated.View style={styles.root} layout={LinearTransition}>
                 <Animated.View style={styles.inputWrapper}>
-                    <BaseText typographyFont="captionSemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_700}>
+                    <BaseText typographyFont="captionSemiBold" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}>
                         {LL.SEND_RECEIVER_ADDRESS_INPUT_LABEL()}
                     </BaseText>
                     <BaseView style={styles.actionsContainer}>
@@ -218,9 +218,7 @@ const baseStyles = (theme: ColorThemeType) =>
             flexDirection: "column",
             gap: 12,
         },
-        title: {
-            color: theme.isDark ? COLORS.GREY_100 : COLORS.GREY_100,
-        },
+
         actionsContainer: {
             flexDirection: "row",
             gap: 8,
