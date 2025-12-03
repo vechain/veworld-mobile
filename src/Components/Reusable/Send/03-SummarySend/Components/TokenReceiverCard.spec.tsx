@@ -33,9 +33,18 @@ describe("TokenReceiverCard", () => {
         const address = "0xreceiver"
         const formattedAddress = AddressUtils.humanAddress(address)
 
-        render(<TokenReceiverCard token={token} amount={amount} address={address} />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <TokenReceiverCard
+                token={token}
+                amount={amount}
+                address={address}
+                amountInFiat={true}
+                fiatAmount="1.234"
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         const addressElement = await screen.findByText(formattedAddress, {}, { timeout: 5000 })
         expect(addressElement).toBeTruthy()
