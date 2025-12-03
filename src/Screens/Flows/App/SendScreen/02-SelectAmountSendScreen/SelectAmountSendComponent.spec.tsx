@@ -229,11 +229,12 @@ describe("SelectAmountSendComponent", () => {
             boundConfig.handler()
         })
 
-        // Verify onNext was called with correct parameters (token and amount)
+        // Verify onNext was called with correct parameters (token, amount, fiatAmount, amountInFiat)
         expect(mockOnNext).toHaveBeenCalled()
         const callArgs = mockOnNext.mock.calls[0]
         expect(callArgs[0]).toBeDefined() // amount
         expect(callArgs[1]).toEqual(mockVETToken) // token
+        expect(callArgs[3]).toBe(true)
     })
 
     it("should bind handler with error state when amount exceeds balance", async () => {

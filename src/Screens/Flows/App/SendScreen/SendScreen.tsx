@@ -50,8 +50,8 @@ export const SendScreenContent = (): ReactElement => {
     const amountHandlerRef = useRef<(() => void) | null>(null)
 
     const goToInsertAddress = useCallback(
-        (amount: string, token: FungibleTokenWithBalance, fiatAmount?: string) => {
-            setFlowState({ ...flowState, amount, token, fiatAmount })
+        (amount: string, token: FungibleTokenWithBalance, fiatAmount?: string, amountInFiat?: boolean) => {
+            setFlowState({ ...flowState, amount, token, fiatAmount, amountInFiat })
             goToNext()
         },
         [flowState, setFlowState, goToNext],

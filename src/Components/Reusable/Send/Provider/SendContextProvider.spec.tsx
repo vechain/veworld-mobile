@@ -25,6 +25,7 @@ describe("SendContextProvider", () => {
             amount: "0",
             fiatAmount: "",
             address: "",
+            amountInFiat: false,
         })
     })
 

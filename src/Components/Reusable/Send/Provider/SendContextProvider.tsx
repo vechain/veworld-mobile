@@ -9,6 +9,7 @@ type SendFlowState = {
     amount?: string
     fiatAmount?: string
     address?: string
+    amountInFiat?: boolean
 }
 
 type SendContextType = {
@@ -38,6 +39,7 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
         amount: "0",
         fiatAmount: "",
         address: "",
+        amountInFiat: false,
     })
 
     const [isNextButtonEnabled, setIsNextButtonEnabled] = useState(true)
