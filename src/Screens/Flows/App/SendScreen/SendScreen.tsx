@@ -121,6 +121,8 @@ export const SendScreenContent = (): ReactElement => {
                         token={flowState.token}
                         amount={flowState.amount}
                         address={flowState.address}
+                        fiatAmount={flowState.fiatAmount}
+                        amountInFiat={flowState.amountInFiat}
                         initialExchangeRate={flowState.initialExchangeRate ?? null}
                         onTxFinished={handleTxFinished}
                         onBindTransactionControls={setTxControls}
@@ -220,5 +222,5 @@ export const SendScreen = () => {
 
 const baseStyles = () =>
     StyleSheet.create({
-        flexElement: { flex: 1, paddingHorizontal: 12 },
+        flexElement: { flex: 1 },
     })
