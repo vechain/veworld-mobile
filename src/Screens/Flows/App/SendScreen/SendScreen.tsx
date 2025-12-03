@@ -5,7 +5,7 @@ import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-naviga
 import React, { ReactElement, useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { EntryAnimationsValues, ExitAnimationsValues, useSharedValue } from "react-native-reanimated"
-import { BaseButton, BaseView, Layout } from "~Components"
+import { BaseButton, BaseView, Layout, SendContextProvider } from "~Components"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
