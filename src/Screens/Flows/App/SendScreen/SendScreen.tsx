@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { ReactElement, useCallback, useMemo, useState } from "react"
@@ -14,6 +13,7 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { EnteringFromLeftAnimation, EnteringFromRightAnimation } from "./Animations/Entering"
 import { ExitingToLeftAnimation, ExitingToRightAnimation } from "./Animations/Exiting"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 
 type SendFlowStep = "insertAddress" | "selectAmount" | "summary"
 
@@ -42,9 +42,10 @@ type FooterConfig = {
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
 
-const ORDER: SendFlowStep[] = ["insertAddress", "selectAmount", "summary"]
+const AnimatedBaseButton = Animated.createAnimatedComponent(wrapFunctionComponent(BaseButton))
+const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
-export const SendScreen = (): ReactElement => {
+export const SendScreenContent = (): ReactElement => {
     const { LL } = useI18nContext()
     const navigation = useNavigation<NavigationProps>()
     const [step, setStep] = useState<SendFlowStep>("insertAddress")
@@ -57,6 +58,8 @@ export const SendScreen = (): ReactElement => {
     } | null>(null)
 
     const { styles } = useThemedStyles(baseStyles)
+    const { step, previousStep, nextStep, goToNext, goToPrevious, isPreviousButtonEnabled, isNextButtonEnabled } =
+        useSendContext()
 
     const previousStep = useSharedValue<typeof step | undefined>(undefined)
     const nextStep = useSharedValue<typeof step | undefined>(undefined)
@@ -304,6 +307,14 @@ export const SendScreen = (): ReactElement => {
                 </BaseView>
             }
         />
+    )
+}
+
+export const SendScreen = () => {
+    return (
+        <SendContextProvider>
+            <SendScreenContent />
+        </SendContextProvider>
     )
 }
 

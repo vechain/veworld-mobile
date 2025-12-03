@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { AppRegistry, LogBox } from "react-native"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
@@ -150,16 +150,20 @@ const Main = () => {
     /**
      * Function called by the persistor to indicate if it needs to dehydrate a query or not
      */
-    const shouldDehydrateQuery = useCallback(q => q.meta?.persisted ?? true, [])
+    // const shouldDehydrateQuery = useCallback(q => q.meta?.persisted ?? true, [])
     const persistOptions = useMemo(() => {
         return {
             persister: clientPersister,
             maxAge: RQ_CACHE_MAX_AGE,
             dehydrateOptions: {
-                shouldDehydrateQuery,
+                //  shouldDehydrateQuery,
+                shouldRedactErrors: () => false,
+            },
+            hydrateOptions: {
+                shouldRedactErrors: () => false,
             },
         }
-    }, [shouldDehydrateQuery])
+    }, [])
 
     if (!fontsLoaded) return
     return (
