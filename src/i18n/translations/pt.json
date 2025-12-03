@@ -1135,7 +1135,7 @@
   "SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY": "o pagador de gás não pode cobrir as taxas",
   "SEND_VOT3_DESCRIPTION": "Seus tokens VOT3 só podem ser convertidos de volta para B3TR neste endereço específico de carteira. Ao enviar para outra carteira, você não poderá converter para nenhum outro ativo.\nTem certeza de que deseja continuar?",
   "SEND_VOT3_TITLE": "Enviando VOT3",
-  "SEND_VOT3_WARNING": "Os tokens VOT3 não devem ser enviados diretamente para outra carteira. VOT3 pode ser convertido em B3TR e enviado posteriormente.",
+  "SEND_VOT3_WARNING": "Os tokens VOT3 não devem ser enviados diretamente para outra carteira. VOT3 pode ser convertido em tokens B3TR e enviado em seguida.",
   "SEND_VTHO_WARNING_MAX": "Vechain facilita transações usando VTHO como meio de pagamento para taxas de transação. Nosso método de cálculo MAX deduzirá uma taxa base predefinida para o gás da transação",
   "SEND_VTHO_WARNING_TOKEN": "Vechain usa VTHO para liquidar taxas de transação. Para garantir transações suaves, é essencial manter uma quantidade mínima de VTHO na sua carteira.",
   "SEPTEMBER": "Setembro",
