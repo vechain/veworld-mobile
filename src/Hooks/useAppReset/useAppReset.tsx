@@ -1,13 +1,14 @@
+import { useQueryClient } from "@tanstack/react-query"
 import { useCallback } from "react"
+import { clientPersister } from "~Api/QueryProvider"
+import { useApplicationSecurity, useNotifications, usePersistedCache, usePersistedTheme } from "~Components/Providers"
+import { ERROR_EVENTS } from "~Constants"
+import { useGoogleDrive } from "~Hooks/useGoogleDrive"
 import KeychainService from "~Services/KeychainService"
 import { CACHE_NFT_MEDIA_KEY, CACHE_NFT_METADATA_KEY } from "~Storage/PersistedCache/constants"
 import { resetApp, useAppDispatch } from "~Storage/Redux"
-import { info } from "~Utils/Logger"
-import { useApplicationSecurity, useNotifications, usePersistedCache, usePersistedTheme } from "~Components/Providers"
-import { ERROR_EVENTS } from "~Constants"
-import { useQueryClient } from "@tanstack/react-query"
-import { useGoogleDrive } from "~Hooks/useGoogleDrive"
 import { PlatformUtils } from "~Utils"
+import { info } from "~Utils/Logger"
 
 export const useAppReset = () => {
     const dispatch = useAppDispatch()
@@ -46,6 +47,8 @@ export const useAppReset = () => {
         await resetApplication()
 
         queryClient.removeQueries()
+
+        clientPersister.removeClient()
 
         // TODO: Move this to a more appropriate place
         await initAllCaches()
