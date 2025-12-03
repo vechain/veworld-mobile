@@ -32,10 +32,10 @@ export const ReceiverScreen = () => {
     const recentContacts = useAppSelector(selectRecentContacts)
 
     const activeFilter = useMemo(() => {
-        if (accounts.find(account => AddressUtils.compareAddresses(account.address, selectedAddress))) return "accounts"
-        if (contacts.find(contact => AddressUtils.compareAddresses(contact.address, selectedAddress))) return "contacts"
         if (recentContacts.find(recentContact => AddressUtils.compareAddresses(recentContact.address, selectedAddress)))
             return "recent"
+        if (accounts.find(account => AddressUtils.compareAddresses(account.address, selectedAddress))) return "accounts"
+        if (contacts.find(contact => AddressUtils.compareAddresses(contact.address, selectedAddress))) return "contacts"
         return undefined
     }, [selectedAddress, accounts, contacts, recentContacts])
 

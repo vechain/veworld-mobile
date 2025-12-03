@@ -69,7 +69,7 @@ export const selectContactsByAddresses = createSelector(
 export const selectRecentContacts = createSelector(
     [(state: RootState) => state.contacts.recentContacts, selectSelectedAccountAddress, selectSelectedNetwork],
     (recentContacts, selectedAccountAddress, selectedNetwork) => {
-        if (!selectedNetwork || !selectedAccountAddress) {
+        if (!selectedNetwork.genesis.id || !selectedAccountAddress) {
             return []
         }
         return (
