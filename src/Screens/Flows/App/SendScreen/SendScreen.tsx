@@ -96,11 +96,6 @@ export const SendScreenContent = (): ReactElement => {
     }, [txControls])
 
     const renderStep = useMemo(() => {
-        if (!flowState.token || !flowState.amount || !flowState.address) {
-            // TODO(send-flow-v2): add an error screen
-            return <BaseView flex={1} />
-        }
-
         switch (step) {
             case "selectAmount":
                 return (
@@ -116,6 +111,10 @@ export const SendScreenContent = (): ReactElement => {
             case "insertAddress":
                 return <BaseView flex={1} />
             case "summary":
+                if (!flowState.token || !flowState.amount || !flowState.address) {
+                    // TODO(send-flow-v2): add an error screen
+                    return <BaseView flex={1} />
+                }
                 return (
                     <SummaryScreen
                         token={flowState.token}
@@ -165,6 +164,24 @@ export const SendScreenContent = (): ReactElement => {
 
     const isSummaryStep = step === "summary"
 
+    const handleNextPress = useCallback(() => {
+        if (isSummaryStep) {
+            handleConfirmPress()
+            return
+        }
+
+        if (step === "selectAmount" && amountHandlerRef.current) {
+            try {
+                amountHandlerRef.current()
+            } catch {
+                // If the bound handler throws, do not advance the flow.
+            }
+            return
+        }
+
+        goToNext()
+    }, [handleConfirmPress, goToNext, isSummaryStep, step])
+
     return (
         <Layout
             title={LL.SEND_TOKEN_TITLE()}
@@ -195,7 +212,7 @@ export const SendScreenContent = (): ReactElement => {
 
                     <AnimatedBaseButton
                         flex={1}
-                        action={isSummaryStep ? handleConfirmPress : goToNext}
+                        action={handleNextPress}
                         disabled={
                             isSummaryStep ? !txControls || txControls.isDisabledButtonState : !isNextButtonEnabled
                         }
