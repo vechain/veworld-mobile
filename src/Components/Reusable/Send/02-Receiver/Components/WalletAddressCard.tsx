@@ -7,7 +7,8 @@ import { BaseIcon, BaseText, BaseTextInput, BaseView } from "~Components/Base"
 import { AlertInline } from "~Components/Reusable/Alert"
 import { CreateContactBottomSheet } from "~Components/Reusable/BottomSheets"
 import { COLORS, ColorThemeType, ScanTarget } from "~Constants"
-import { useBottomSheetModal, useCameraBottomSheet, useThemedStyles, useVns, ZERO_ADDRESS } from "~Hooks"
+import { useBottomSheetModal, useCameraBottomSheet, useThemedStyles, ZERO_ADDRESS } from "~Hooks"
+import { useVns } from "~Hooks/useVns"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
@@ -161,6 +162,11 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
                             rightIcon={selectedAddress ? "icon-circle-x" : "icon-paste"}
                             rightIconColor={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
                             rightIconSize={16}
+                            rightIconTestID={
+                                selectedAddress
+                                    ? "Send_Receiver_Address_Input_Clear_Button"
+                                    : "Send_Receiver_Address_Input_Paste_Button"
+                            }
                             onIconPress={selectedAddress ? handleClearAddress : handlePasteAddress}
                             rightIconStyle={styles.rightIcon}
                             onBlur={handleBlur}

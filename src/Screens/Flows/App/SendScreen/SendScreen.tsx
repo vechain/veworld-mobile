@@ -112,7 +112,11 @@ export const SendScreenContent = (): ReactElement => {
             headerRightElement={headerRightElement}
             fixedBody={
                 <Animated.View style={styles.flexElement}>
-                    <Animated.View style={styles.flexElement} entering={Entering} exiting={Exiting} key={step}>
+                    <Animated.View
+                        style={[styles.flexElement, styles.viewContainer]}
+                        entering={Entering}
+                        exiting={Exiting}
+                        key={step}>
                         {step === "selectAmount" && (
                             <SelectAmountSendComponent
                                 token={flowState.token}
@@ -167,5 +171,6 @@ export const SendScreen = () => {
 
 const baseStyles = () =>
     StyleSheet.create({
-        flexElement: { flex: 1, paddingHorizontal: 12 },
+        flexElement: { flex: 1 },
+        viewContainer: { paddingHorizontal: 16 },
     })
