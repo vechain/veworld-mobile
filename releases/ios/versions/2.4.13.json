@@ -1,10 +1,8 @@
 {
   "version": "2.4.13",
-  "major": true,
+  "major": false,
   "descriptions": {
-    "en": [
-      "Bug fixes and performance improvements"
-    ],
+    "en": [],
     "de": [],
     "es": [],
     "fr": [],
