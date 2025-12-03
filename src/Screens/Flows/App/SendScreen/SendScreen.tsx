@@ -111,18 +111,8 @@ export const SendScreenContent = (): ReactElement => {
             case "insertAddress":
                 return <BaseView flex={1} />
             case "summary":
-                if (!flowState.token || !flowState.amount || !flowState.address) {
-                    // TODO(send-flow-v2): add an error screen
-                    return <BaseView flex={1} />
-                }
                 return (
                     <SummaryScreen
-                        token={flowState.token}
-                        amount={flowState.amount}
-                        address={flowState.address}
-                        fiatAmount={flowState.fiatAmount}
-                        amountInFiat={flowState.amountInFiat}
-                        initialExchangeRate={flowState.initialExchangeRate ?? null}
                         onTxFinished={handleTxFinished}
                         onBindTransactionControls={setTxControls}
                         txError={txError}

@@ -1,10 +1,11 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { act, render, screen } from "@testing-library/react-native"
 import { SummaryScreen } from "./SummaryScreen"
 import { FungibleTokenWithBalance } from "~Model"
 import { TestWrapper } from "~Test"
 import { GasPriceCoefficient, VET, VTHO } from "~Constants"
 import { BigNutils } from "~Utils"
+import { SendContextProvider, useSendContext } from "../Provider/SendContextProvider"
 
 jest.mock("~Hooks/useTransactionScreen", () => ({
     useTransactionScreen: jest.fn(),
@@ -110,21 +111,41 @@ describe("SummaryScreen", () => {
         jest.clearAllMocks()
     })
 
+    const InitializeSendFlow: React.FC<{ children: React.ReactNode; token: FungibleTokenWithBalance }> = ({
+        children,
+        token,
+    }) => {
+        const { setFlowState } = useSendContext()
+
+        useEffect(() => {
+            setFlowState({
+                token,
+                amount: "1.234",
+                address: "0xreceiver",
+                fiatAmount: undefined,
+                amountInFiat: false,
+                initialExchangeRate: 1,
+            })
+        }, [setFlowState, token])
+
+        return <>{children}</>
+    }
+
     const renderSummaryScreen = (props?: Partial<React.ComponentProps<typeof SummaryScreen>>) => {
         const token = createToken()
 
         return render(
             <TestWrapper preloadedState={{}}>
-                <SummaryScreen
-                    token={token}
-                    amount="1.234"
-                    address="0xreceiver"
-                    onTxFinished={jest.fn()}
-                    onBindTransactionControls={jest.fn()}
-                    txError={false}
-                    initialExchangeRate={1}
-                    {...props}
-                />
+                <SendContextProvider initialToken={token}>
+                    <InitializeSendFlow token={token}>
+                        <SummaryScreen
+                            onTxFinished={jest.fn()}
+                            onBindTransactionControls={jest.fn()}
+                            txError={false}
+                            {...props}
+                        />
+                    </InitializeSendFlow>
+                </SendContextProvider>
             </TestWrapper>,
         )
     }

@@ -11,7 +11,7 @@ import {
 import { BigNutils, error, TransactionUtils } from "~Utils"
 import { AnalyticsEvent, COLORS, ColorThemeType, ERROR_EVENTS, VET, VTHO, creteAnalyticsEvent } from "~Constants"
 import { BaseText, BaseView, BaseIcon } from "~Components/Base"
-import { RequireUserPassword } from "~Components"
+import { RequireUserPassword, useSendContext } from "~Components"
 import { useTransactionScreen } from "~Hooks/useTransactionScreen"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
@@ -41,6 +41,7 @@ export const TransactionFeeCard = ({
     const track = useAnalyticTracking()
     const network = useAppSelector(selectSelectedNetwork)
     const { styles, theme } = useThemedStyles(baseStyles)
+    const { flowState, setFlowState } = useSendContext()
     const [finalAmount, setFinalAmount] = useState(amount)
 
     const onFinish = useCallback(
@@ -162,7 +163,15 @@ export const TransactionFeeCard = ({
             if (newBalance.isLessThanOrEqual("0")) {
                 fallbackToVTHO()
                 setFinalAmount(amount)
-            } else setFinalAmount(newBalance.toHuman(token.decimals).decimals(4).toString)
+            } else {
+                const adjustedAmount = newBalance.toHuman(token.decimals).decimals(4).toString
+                setFinalAmount(adjustedAmount)
+                setFlowState({
+                    ...flowState,
+                    amount: adjustedAmount,
+                    amountInFiat: false,
+                })
+            }
 
             if (!hasReportedGasAdjustment && typeof onGasAdjusted === "function") {
                 onGasAdjusted()
@@ -182,6 +191,8 @@ export const TransactionFeeCard = ({
         token.symbol,
         hasReportedGasAdjustment,
         onGasAdjusted,
+        flowState,
+        setFlowState,
     ])
 
     return (
