@@ -1136,6 +1136,7 @@
   "SEND_RECENT_EMPTY_STATE_DESCRIPTION": "Une fois que vous aurez envoyé à une adresse, elle apparaîtra ici pour un accès rapide.",
   "SEND_RECENT_EMPTY_STATE_TITLE": "Aucune activité récente",
   "SEND_STEP_OF_3": "{stepNumber: string} sur 3",
+  "SEND_STEP_OF_3": "{stepNumber: string} sur 3",
   "SEND_TO": "À",
   "SEND_TOKEN_AMOUNT": "Montant du jeton",
   "SEND_TOKEN_SELECT": "Sélectionnez le jeton que vous souhaitez envoyer",
