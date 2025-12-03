@@ -40,12 +40,18 @@ export const useStargateConfig = (network: Network) => {
         return {
             ...stargateNetworkConfig[network.genesis.id],
             ...(isHayabusa && {
-                STARGATE_CONTRACT_ADDRESS: featureFlags?.forks?.HAYABUSA?.stargate?.[network.genesis.id]?.contract,
-                STARGATE_NFT_CONTRACT_ADDRESS: featureFlags?.forks?.HAYABUSA?.stargate?.[network.genesis.id]?.nft,
+                STARGATE_CONTRACT_ADDRESS:
+                    featureFlags?.forks?.HAYABUSA?.stargate?.[network.genesis.id]?.contract ??
+                    stargateNetworkConfig[network.genesis.id]?.STARGATE_CONTRACT_ADDRESS,
+                STARGATE_NFT_CONTRACT_ADDRESS:
+                    featureFlags?.forks?.HAYABUSA?.stargate?.[network.genesis.id]?.nft ??
+                    stargateNetworkConfig[network.genesis.id]?.STARGATE_NFT_CONTRACT_ADDRESS,
                 NODE_MANAGEMENT_CONTRACT_ADDRESS:
-                    featureFlags?.forks?.HAYABUSA?.stargate?.[network.genesis.id]?.nodeManagement,
+                    featureFlags?.forks?.HAYABUSA?.stargate?.[network.genesis.id]?.nodeManagement ??
+                    stargateNetworkConfig[network.genesis.id]?.NODE_MANAGEMENT_CONTRACT_ADDRESS,
                 STARGATE_DELEGATION_CONTRACT_ADDRESS:
-                    featureFlags?.forks?.HAYABUSA?.stargate?.[network.genesis.id]?.delegation,
+                    featureFlags?.forks?.HAYABUSA?.stargate?.[network.genesis.id]?.delegation ??
+                    stargateNetworkConfig[network.genesis.id]?.STARGATE_DELEGATION_CONTRACT_ADDRESS,
             }),
         }
     }, [featureFlags?.forks?.HAYABUSA?.stargate, isHayabusa, network.genesis.id])
