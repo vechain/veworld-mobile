@@ -7,7 +7,9 @@ export type SendFlowStep = "insertAddress" | "selectAmount" | "summary"
 type SendFlowState = {
     token?: FungibleTokenWithBalance
     amount?: string
+    fiatAmount?: string
     address?: string
+    amountInFiat?: boolean
 }
 
 type SendContextType = {
@@ -26,12 +28,18 @@ type SendContextType = {
 
 const SendContext = React.createContext<SendContextType | undefined>(undefined)
 
-export const SendContextProvider = ({ children }: PropsWithChildren) => {
+type SendContextProviderProps = PropsWithChildren<{
+    initialToken?: FungibleTokenWithBalance
+}>
+
+export const SendContextProvider = ({ children, initialToken }: SendContextProviderProps) => {
     const [step, setStep] = useState<SendFlowStep>("selectAmount")
     const [flowState, setFlowState] = useState<SendFlowState>({
-        token: undefined,
+        token: initialToken,
         amount: "0",
+        fiatAmount: "",
         address: "",
+        amountInFiat: false,
     })
 
     const [isNextButtonEnabled, setIsNextButtonEnabled] = useState(true)

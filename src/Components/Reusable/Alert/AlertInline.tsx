@@ -26,9 +26,11 @@ export const AlertInline = memo(
                 <BaseView style={styles.row} justifyContent={justifyContent}>
                     <BaseIcon name={ICON_NAMES[status]} size={16} color={colors.icon} />
 
-                    <BaseText typographyFont="captionRegular" color={isInline ? colors.titleInline : colors.title}>
-                        {message}
-                    </BaseText>
+                    <BaseView flex={1}>
+                        <BaseText typographyFont="captionRegular" color={isInline ? colors.titleInline : colors.title}>
+                            {message}
+                        </BaseText>
+                    </BaseView>
                 </BaseView>
             </BaseView>
         )

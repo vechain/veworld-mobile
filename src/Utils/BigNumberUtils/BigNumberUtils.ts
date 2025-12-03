@@ -87,7 +87,7 @@ interface IBigNumberUtils {
     toBN: BN
 }
 
-const getDecimalSeparator = (locale: Intl.LocalesArgument) => {
+export const getDecimalSeparator = (locale: Intl.LocalesArgument) => {
     return locales_separator[locale as keyof typeof locales_separator]
 }
 
