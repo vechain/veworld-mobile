@@ -25,7 +25,13 @@ const MAX_TOKEN_DECIMALS = 5
 
 type SelectAmountSendComponentProps = {
     token?: FungibleTokenWithBalance
-    onNext: (amount: string, token: FungibleTokenWithBalance, fiatAmount?: string, amountInFiat?: boolean) => void
+    onNext: (
+        amount: string,
+        token: FungibleTokenWithBalance,
+        fiatAmount?: string,
+        amountInFiat?: boolean,
+        initialExchangeRate?: number | null,
+    ) => void
     onBindNextHandler?: (config: { handler: () => void; isValid: boolean; isError: boolean }) => void
 }
 
@@ -250,10 +256,10 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
         if (!selectedToken) return
 
         const amount = isInputInFiat ? tokenAmountFromInput : input
-
         const fiatAmount = exchangeRate ? fiatAmountFromInput : undefined
+        const initialExchangeRate = exchangeRate ?? null
 
-        onNext(amount, selectedToken, fiatAmount, isInputInFiat)
+        onNext(amount, selectedToken, fiatAmount, isInputInFiat, initialExchangeRate)
     }, [exchangeRate, fiatAmountFromInput, input, isInputInFiat, onNext, selectedToken, tokenAmountFromInput])
 
     useEffect(() => {
