@@ -147,6 +147,7 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
                     </BaseText>
                     <BaseView style={styles.actionsContainer}>
                         <BaseTextInput
+                            testID="Send_Receiver_Address_Input"
                             placeholder={LL.SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER()}
                             containerStyle={styles.input}
                             inputContainerStyle={computedInputStyles}
@@ -165,7 +166,11 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
                             onBlur={handleBlur}
                             onFocus={handleFocus}
                         />
-                        <TouchableOpacity style={styles.scanButton} activeOpacity={0.85} onPress={handleOpenScanCamera}>
+                        <TouchableOpacity
+                            testID="Send_Receiver_Address_Scan_Button"
+                            style={styles.scanButton}
+                            activeOpacity={0.85}
+                            onPress={handleOpenScanCamera}>
                             <BaseIcon
                                 name="icon-scan-line"
                                 size={24}
@@ -176,13 +181,17 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
                 </Animated.View>
 
                 {isError && (
-                    <Animated.View entering={ZoomInEasyUp} exiting={ZoomOutEasyUp}>
+                    <Animated.View
+                        testID="Send_Receiver_Address_Input_Error"
+                        entering={ZoomInEasyUp}
+                        exiting={ZoomOutEasyUp}>
                         <AlertInline message={LL.SEND_RECEIVER_ADDRESS_INPUT_ERROR()} status="error" variant="inline" />
                     </Animated.View>
                 )}
 
                 {shouldShowAddToContactsButton && (
                     <AnimatedTouchableOpacity
+                        testID="Send_Receiver_Address_Add_To_Contacts_Button"
                         entering={ZoomInEasyUp}
                         exiting={ZoomOutEasyUp}
                         style={styles.addToContactsButton}

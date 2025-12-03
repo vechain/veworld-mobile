@@ -54,7 +54,7 @@ export const GenericAccountCard = ({
             ),
             paddingVertical: withTiming(selectedSV.value ? 20 : 12, { duration: 300 }),
         }
-    })
+    }, [theme.isDark, selectedSV.value])
 
     const iconAnimatedStyles = useAnimatedStyle(() => {
         return {
@@ -65,7 +65,7 @@ export const GenericAccountCard = ({
                 },
             ],
         }
-    })
+    }, [selectedSV.value])
 
     useEffect(() => {
         selectedSV.value = Number(selected)

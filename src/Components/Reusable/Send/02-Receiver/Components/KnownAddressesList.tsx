@@ -100,7 +100,13 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
 
     const renderEmptyState = useCallback(() => {
         return (
-            <BaseView flex={1} justifyContent="center" alignItems="center" gap={24} pb={24}>
+            <BaseView
+                testID="Send_Receiver_Addresses_List_Empty_State"
+                flex={1}
+                justifyContent="center"
+                alignItems="center"
+                gap={24}
+                pb={24}>
                 <BaseView
                     justifyContent="center"
                     alignItems="center"
@@ -157,6 +163,7 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
 
             {selectedItem === "recent" && (
                 <Animated.FlatList
+                    testID="Send_Receiver_Addresses_List_Recent_Contacts"
                     data={recentContacts}
                     style={styles.list}
                     contentContainerStyle={styles.listContentContainer}
@@ -171,6 +178,7 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
             )}
             {selectedItem === "accounts" && (
                 <AnimatedSectionList
+                    testID="Send_Receiver_Addresses_List_Accounts"
                     sections={accountsSection}
                     renderSectionHeader={renderSectionHeader}
                     renderItem={renderItem}
@@ -189,6 +197,7 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
             )}
             {selectedItem === "contacts" && (
                 <Animated.FlatList
+                    testID="Send_Receiver_Addresses_List_Contacts"
                     data={contacts}
                     style={styles.list}
                     contentContainerStyle={styles.listContentContainer}
