@@ -8,6 +8,11 @@ type SendFlowState = {
     token?: FungibleTokenWithBalance
     amount?: string
     address?: string
+    /**
+     * Exchange rate used when the user selected the amount.
+     * This is passed down to the summary step to detect subsequent market moves.
+     */
+    initialExchangeRate?: number | null
 }
 
 type SendContextType = {
