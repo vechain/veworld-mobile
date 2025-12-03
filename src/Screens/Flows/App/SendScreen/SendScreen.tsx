@@ -1,6 +1,6 @@
-import { useNavigation } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { ReactElement, useCallback, useMemo } from "react"
+import React, { ReactElement, useCallback, useMemo, useRef } from "react"
 import { StyleSheet } from "react-native"
 import Animated, {
     EntryAnimationsValues,
@@ -12,8 +12,10 @@ import Animated, {
 import { BaseButton, BaseView, Layout, SendContextProvider, SendFlowStep, useSendContext } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
 import { useThemedStyles } from "~Hooks"
+import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
+import { SelectAmountSendComponent } from "./02-SelectAmountSendScreen"
 import { EnteringFromLeftAnimation, EnteringFromRightAnimation } from "./Animations/Entering"
 import { ExitingToLeftAnimation, ExitingToRightAnimation } from "./Animations/Exiting"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
@@ -25,13 +27,43 @@ type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.
 const AnimatedBaseButton = Animated.createAnimatedComponent(wrapFunctionComponent(BaseButton))
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
+type RouteProps = RouteProp<RootStackParamListHome, Routes.SEND_TOKEN>
+
 export const SendScreenContent = (): ReactElement => {
     const { LL } = useI18nContext()
 
     const navigation = useNavigation<NavigationProps>()
     const { styles } = useThemedStyles(baseStyles)
-    const { step, previousStep, nextStep, goToNext, goToPrevious, isPreviousButtonEnabled, isNextButtonEnabled } =
-        useSendContext()
+    const {
+        step,
+        previousStep,
+        nextStep,
+        goToNext,
+        goToPrevious,
+        isPreviousButtonEnabled,
+        isNextButtonEnabled,
+        setIsNextButtonEnabled,
+        flowState,
+        setFlowState,
+    } = useSendContext()
+
+    const amountHandlerRef = useRef<(() => void) | null>(null)
+
+    const goToInsertAddress = useCallback(
+        (amount: string, token: FungibleTokenWithBalance, fiatAmount?: string, amountInFiat?: boolean) => {
+            setFlowState({ ...flowState, amount, token, fiatAmount, amountInFiat })
+            goToNext()
+        },
+        [flowState, setFlowState, goToNext],
+    )
+
+    const handleNextPress = useCallback(() => {
+        if (step === "selectAmount") {
+            amountHandlerRef.current?.()
+        } else {
+            goToNext()
+        }
+    }, [step, goToNext])
 
     const handleClose = useCallback(() => {
         navigation.goBack()
@@ -80,7 +112,16 @@ export const SendScreenContent = (): ReactElement => {
             fixedBody={
                 <Animated.View style={styles.flexElement}>
                     <Animated.View style={styles.flexElement} entering={Entering} exiting={Exiting} key={step}>
-                        {step === "selectAmount" && <></>}
+                        {step === "selectAmount" && (
+                            <SelectAmountSendComponent
+                                token={flowState.token}
+                                onNext={goToInsertAddress}
+                                onBindNextHandler={config => {
+                                    amountHandlerRef.current = config.handler
+                                    setIsNextButtonEnabled(!config.isError && config.isValid)
+                                }}
+                            />
+                        )}
                         {step === "insertAddress" && <></>}
                         {step === "summary" && <></>}
                     </Animated.View>
@@ -102,7 +143,7 @@ export const SendScreenContent = (): ReactElement => {
                     )}
                     <AnimatedBaseButton
                         flex={1}
-                        action={goToNext}
+                        action={handleNextPress}
                         disabled={!isNextButtonEnabled}
                         layout={LinearTransition}>
                         {LL.COMMON_LBL_NEXT()}
@@ -114,8 +155,10 @@ export const SendScreenContent = (): ReactElement => {
 }
 
 export const SendScreen = () => {
+    const route = useRoute<RouteProps>()
+
     return (
-        <SendContextProvider>
+        <SendContextProvider initialToken={route.params?.token}>
             <SendScreenContent />
         </SendContextProvider>
     )
@@ -123,5 +166,5 @@ export const SendScreen = () => {
 
 const baseStyles = () =>
     StyleSheet.create({
-        flexElement: { flex: 1 },
+        flexElement: { flex: 1, paddingHorizontal: 12 },
     })
