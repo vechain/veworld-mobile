@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { ReactElement, useCallback, useMemo, useState } from "react"
+import React, { ReactElement, useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated, {
     EntryAnimationsValues,
@@ -11,6 +11,8 @@ import Animated, {
 } from "react-native-reanimated"
 
 import { SummaryScreen } from "~Components/Reusable/Send"
+import { SelectAmountSendComponent } from "./02-SelectAmountSendScreen"
+
 import { BaseButton, BaseView, Layout, SendContextProvider, SendFlowStep, useSendContext } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
 import { useThemedStyles } from "~Hooks"
@@ -19,6 +21,7 @@ import { useI18nContext } from "~i18n"
 import { EnteringFromLeftAnimation, EnteringFromRightAnimation } from "./Animations/Entering"
 import { ExitingToLeftAnimation, ExitingToRightAnimation } from "./Animations/Exiting"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
+import { FungibleTokenWithBalance } from "~Model"
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
 
@@ -34,15 +37,18 @@ export const SendScreenContent = (): ReactElement => {
 
     const {
         step,
-        flowState,
         previousStep,
         nextStep,
         goToNext,
         goToPrevious,
-        isPreviousButtonEnabled,
         isNextButtonEnabled,
+        isPreviousButtonEnabled,
+        setIsNextButtonEnabled,
+        flowState,
+        setFlowState,
     } = useSendContext()
 
+    const amountHandlerRef = useRef<(() => void) | null>(null)
     const [txError, setTxError] = useState(false)
     const [txControls, setTxControls] = useState<{
         onSubmit: () => void
@@ -52,6 +58,14 @@ export const SendScreenContent = (): ReactElement => {
     const handleClose = useCallback(() => {
         navigation.goBack()
     }, [navigation])
+
+    const goToInsertAddress = useCallback(
+        (amount: string, token: FungibleTokenWithBalance, fiatAmount?: string, amountInFiat?: boolean) => {
+            setFlowState({ ...flowState, amount, token, fiatAmount, amountInFiat })
+            goToNext()
+        },
+        [flowState, setFlowState, goToNext],
+    )
 
     const headerRightElement = useMemo(
         () => <CloseIconHeaderButton action={handleClose} testID="Send_Screen_Close" />,
@@ -76,30 +90,41 @@ export const SendScreenContent = (): ReactElement => {
     }, [txControls])
 
     const renderStep = useMemo(() => {
-        if (step !== "summary") {
-            // TODO(send-flow-v2): Implement select amount and insert address steps
-            return <BaseView flex={1} />
-        }
-
-        const { token, amount, address, initialExchangeRate } = flowState
-
-        if (!token || !amount || !address) {
+        if (!flowState.token || !flowState.amount || !flowState.address) {
             // TODO(send-flow-v2): add an error screen
             return <BaseView flex={1} />
         }
 
-        return (
-            <SummaryScreen
-                token={token}
-                amount={amount}
-                address={address}
-                initialExchangeRate={initialExchangeRate ?? null}
-                onTxFinished={handleTxFinished}
-                onBindTransactionControls={setTxControls}
-                txError={txError}
-            />
-        )
-    }, [step, flowState, handleTxFinished, txError])
+        switch (step) {
+            case "selectAmount":
+                return (
+                    <SelectAmountSendComponent
+                        token={flowState.token}
+                        onNext={goToInsertAddress}
+                        onBindNextHandler={config => {
+                            amountHandlerRef.current = config.handler
+                            setIsNextButtonEnabled(!config.isError && config.isValid)
+                        }}
+                    />
+                )
+            case "insertAddress":
+                return <BaseView flex={1} />
+            case "summary":
+                return (
+                    <SummaryScreen
+                        token={flowState.token}
+                        amount={flowState.amount}
+                        address={flowState.address}
+                        initialExchangeRate={flowState.initialExchangeRate ?? null}
+                        onTxFinished={handleTxFinished}
+                        onBindTransactionControls={setTxControls}
+                        txError={txError}
+                    />
+                )
+            default:
+                return <BaseView flex={1} />
+        }
+    }, [step, flowState, goToInsertAddress, handleTxFinished, txError, setTxControls, setIsNextButtonEnabled])
 
     const Entering = useCallback(
         (values: EntryAnimationsValues) => {
@@ -189,5 +214,5 @@ export const SendScreen = () => {
 
 const baseStyles = () =>
     StyleSheet.create({
-        flexElement: { flex: 1 },
+        flexElement: { flex: 1, paddingHorizontal: 12 },
     })

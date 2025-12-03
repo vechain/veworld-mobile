@@ -371,6 +371,18 @@ export type Colors = {
         background: string
         color: string
     }
+    sendScreen: {
+        tokenAmountCard: {
+            background: string
+            maxButtonBorder: string
+            maxButtonText: string
+            tokenSelectIcon: string
+            tokenSelectorBorder: string
+            tokenSelectorText: string
+            disabledTokenCardBackground: string
+            stepText: string
+        }
+    }
     transak: string
 }
 
@@ -872,6 +884,18 @@ const light: Colors = {
         background: COLORS.GREY_200,
         color: COLORS.GREY_600,
     },
+    sendScreen: {
+        tokenAmountCard: {
+            background: COLORS.WHITE,
+            maxButtonBorder: COLORS.GREY_200,
+            maxButtonText: COLORS.GREY_600,
+            tokenSelectIcon: COLORS.GREY_500,
+            tokenSelectorBorder: COLORS.GREY_100,
+            tokenSelectorText: COLORS.GREY_700,
+            disabledTokenCardBackground: COLORS.GREY_100,
+            stepText: COLORS.GREY_500,
+        },
+    },
     transak: COLORS.WHITE,
 }
 
@@ -1247,6 +1271,18 @@ const dark: Colors = {
         border: COLORS.PURPLE_DISABLED,
         background: COLORS.PURPLE_DISABLED,
         color: COLORS.GREY_100,
+    },
+    sendScreen: {
+        tokenAmountCard: {
+            background: COLORS.PURPLE_DISABLED,
+            maxButtonBorder: COLORS.DARK_PURPLE_DISABLED,
+            maxButtonText: COLORS.GREY_100,
+            tokenSelectIcon: COLORS.GREY_300,
+            tokenSelectorBorder: COLORS.DARK_PURPLE_DISABLED,
+            tokenSelectorText: COLORS.GREY_100,
+            disabledTokenCardBackground: COLORS.PURPLE_DISABLED,
+            stepText: COLORS.GREY_300,
+        },
     },
     transak: COLORS.TRANSAK_DARK,
 }

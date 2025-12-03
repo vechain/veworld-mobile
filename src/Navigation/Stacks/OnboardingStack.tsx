@@ -1,5 +1,8 @@
+import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { useDevice } from "~Components/Providers/DeviceProvider"
+import { CloudKitWallet, ConnectedLedgerDevice, DrivetWallet } from "~Model"
+import { Routes } from "~Navigation/Enums"
 import {
     EnableAdditionalSettings,
     ImportFromCloudScreen,
@@ -9,9 +12,6 @@ import {
     SelectLedgerDevice,
     WelcomeScreen,
 } from "~Screens"
-import { Routes } from "~Navigation/Enums"
-import { CloudKitWallet, ConnectedLedgerDevice, DrivetWallet } from "~Model"
-import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListOnboarding = {
     [Routes.WELCOME]: undefined
@@ -31,13 +31,13 @@ export type RootStackParamListOnboarding = {
     }
 }
 
-const Onboarding = createNativeStackNavigator<RootStackParamListOnboarding>()
+const Onboarding = createStackNavigator<RootStackParamListOnboarding>()
 
 export const OnboardingStack = () => {
-    const { animation } = useNavAnimation()
+    const { isLowEndDevice } = useDevice()
 
     return (
-        <Onboarding.Navigator screenOptions={{ headerShown: false, animation }}>
+        <Onboarding.Navigator screenOptions={{ headerShown: false, animationEnabled: !isLowEndDevice }}>
             <Onboarding.Screen name={Routes.WELCOME} component={WelcomeScreen} options={{ headerShown: false }} />
 
             <Onboarding.Screen
