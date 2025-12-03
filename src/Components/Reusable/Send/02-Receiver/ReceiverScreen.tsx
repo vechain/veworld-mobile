@@ -51,9 +51,9 @@ export const ReceiverScreen = () => {
                 setListWalletAddresses(address)
                 setInputWalletAddress("")
             }
-            setFlowState({ ...flowState, address: address })
+            setFlowState(prev => ({ ...prev, address: address }))
         },
-        [setFlowState, selectedAddress, flowState],
+        [setFlowState, selectedAddress],
     )
 
     useEffect(() => {
