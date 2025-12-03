@@ -35,6 +35,9 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
     const [step, setStep] = useState<SendFlowStep>("selectAmount")
     const [flowState, setFlowState] = useState<SendFlowState>({
         token: initialToken,
+        amount: "0",
+        fiatAmount: "",
+        address: "",
     })
 
     const [isNextButtonEnabled, setIsNextButtonEnabled] = useState(true)

@@ -23,6 +23,7 @@ describe("SendContextProvider", () => {
         expect(result.current.flowState).toMatchObject({
             token: undefined,
             amount: "0",
+            fiatAmount: "",
             address: "",
         })
     })
