@@ -15,7 +15,7 @@ import { AddressUtils } from "~Utils"
 import { useSendContext } from "../Provider"
 
 export const ReceiverScreen = () => {
-    const { flowState, setFlowState } = useSendContext()
+    const { flowState, setFlowState, setIsNextButtonEnabled } = useSendContext()
     const selectedAddress = useMemo(() => flowState.address, [flowState.address])
 
     const [inputWalletAddress, setInputWalletAddress] = useState<string>("")
@@ -65,6 +65,14 @@ export const ReceiverScreen = () => {
         setListWalletAddresses(selectedAddress ?? "")
         setInputWalletAddress("")
     }, [selectedAddress, activeFilter])
+
+    useEffect(() => {
+        if (selectedAddress && AddressUtils.isValid(selectedAddress)) {
+            setIsNextButtonEnabled(true)
+        } else {
+            setIsNextButtonEnabled(false)
+        }
+    }, [selectedAddress, setIsNextButtonEnabled])
 
     return (
         <Animated.View style={styles.root} layout={LinearTransition}>
