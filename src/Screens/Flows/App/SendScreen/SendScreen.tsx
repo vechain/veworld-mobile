@@ -1,6 +1,6 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { ReactElement, useCallback, useMemo, useRef } from "react"
+import React, { ReactElement, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import Animated, {
     EntryAnimationsValues,
@@ -13,7 +13,6 @@ import { BaseButton, BaseView, Layout } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
 import { ReceiverScreen, SendContextProvider, SendFlowStep, useSendContext } from "~Components/Reusable/Send"
 import { useThemedStyles } from "~Hooks"
-import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { useI18nContext } from "~i18n"
@@ -35,36 +34,8 @@ export const SendScreenContent = (): ReactElement => {
 
     const navigation = useNavigation<NavigationProps>()
     const { styles } = useThemedStyles(baseStyles)
-    const {
-        step,
-        previousStep,
-        nextStep,
-        goToNext,
-        goToPrevious,
-        isPreviousButtonEnabled,
-        isNextButtonEnabled,
-        setIsNextButtonEnabled,
-        flowState,
-        setFlowState,
-    } = useSendContext()
-
-    const amountHandlerRef = useRef<(() => void) | null>(null)
-
-    const goToInsertAddress = useCallback(
-        (amount: string, token: FungibleTokenWithBalance, fiatAmount?: string, amountInFiat?: boolean) => {
-            setFlowState({ ...flowState, amount, token, fiatAmount, amountInFiat })
-            goToNext()
-        },
-        [flowState, setFlowState, goToNext],
-    )
-
-    const handleNextPress = useCallback(() => {
-        if (step === "selectAmount") {
-            amountHandlerRef.current?.()
-        } else {
-            goToNext()
-        }
-    }, [step, goToNext])
+    const { step, previousStep, nextStep, goToNext, goToPrevious, isPreviousButtonEnabled, isNextButtonEnabled } =
+        useSendContext()
 
     const handleClose = useCallback(() => {
         navigation.goBack()
@@ -117,16 +88,7 @@ export const SendScreenContent = (): ReactElement => {
                         entering={Entering}
                         exiting={Exiting}
                         key={step}>
-                        {step === "selectAmount" && (
-                            <SelectAmountSendComponent
-                                token={flowState.token}
-                                onNext={goToInsertAddress}
-                                onBindNextHandler={config => {
-                                    amountHandlerRef.current = config.handler
-                                    setIsNextButtonEnabled(!config.isError && config.isValid)
-                                }}
-                            />
-                        )}
+                        {step === "selectAmount" && <SelectAmountSendComponent />}
                         {step === "insertAddress" && <ReceiverScreen />}
                         {step === "summary" && <></>}
                     </Animated.View>
@@ -148,7 +110,7 @@ export const SendScreenContent = (): ReactElement => {
                     )}
                     <AnimatedBaseButton
                         flex={1}
-                        action={handleNextPress}
+                        action={goToNext}
                         disabled={!isNextButtonEnabled}
                         layout={LinearTransition}>
                         {LL.COMMON_LBL_NEXT()}
