@@ -9,16 +9,18 @@ import Animated, {
     FadeOutLeft,
     LinearTransition,
 } from "react-native-reanimated"
-import { BaseButton, BaseView, Layout } from "~Components"
+import { BaseButton, BaseIcon, BaseText, BaseView, Layout } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
-import { ReceiverScreen, SendNFTContextProvider, useSendContext } from "~Components/Reusable/Send/Provider"
-import { useThemedStyles } from "~Hooks"
+import { ReceiverScreen, SendNFTContextProvider, useSendContext } from "~Components/Reusable/Send"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { RootStackParamListNFT, Routes } from "~Navigation"
 import { selectNFTWithAddressAndTokenId, useAppSelector } from "~Storage/Redux"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { useI18nContext } from "~i18n"
 import { EnteringFromLeftAnimation, EnteringFromRightAnimation } from "../../SendScreen/Animations/Entering"
 import { ExitingToLeftAnimation, ExitingToRightAnimation } from "../../SendScreen/Animations/Exiting"
+
+const TOTAL_STEPS = 2
 
 type SendNFTFlowStep = "insertAddress" | "summary"
 
@@ -33,6 +35,7 @@ type RouteProps = RouteProp<RootStackParamListNFT, Routes.SEND_NFT>
 
 export const SendNFTScreenContent = (): ReactElement => {
     const { LL } = useI18nContext()
+    const theme = useTheme()
 
     const navigation = useNavigation<NavigationProps>()
     const { styles } = useThemedStyles(baseStyles)
@@ -42,6 +45,17 @@ export const SendNFTScreenContent = (): ReactElement => {
     const handleClose = useCallback(() => {
         navigation.goBack()
     }, [navigation])
+
+    const stepInfo = useMemo(() => {
+        switch (step) {
+            case "insertAddress":
+                return { icon: "icon-user-check" as const, name: LL.SEND_RECEIVER(), currentStep: 1 }
+            case "summary":
+                return { icon: "icon-clipboard-check" as const, name: LL.RECAP(), currentStep: 2 }
+            default:
+                return { icon: "icon-user" as const, name: "", currentStep: 1 }
+        }
+    }, [step, LL])
 
     const headerRightElement = useMemo(
         () => <CloseIconHeaderButton action={handleClose} testID="Send_NFT_Screen_Close" />,
@@ -86,6 +100,25 @@ export const SendNFTScreenContent = (): ReactElement => {
             headerRightElement={headerRightElement}
             fixedBody={
                 <Animated.View style={styles.flexElement}>
+                    <BaseView style={styles.stepIndicator}>
+                        <BaseView style={styles.stepIndicatorLeft}>
+                            <BaseIcon
+                                name={stepInfo.icon}
+                                size={16}
+                                iconPadding={3}
+                                bg={theme.colors.sendScreen.stepBackground}
+                                color={theme.colors.sendScreen.stepText}
+                            />
+                            <BaseText typographyFont="bodyMedium">{stepInfo.name}</BaseText>
+                        </BaseView>
+                        <BaseText typographyFont="caption" color={theme.colors.textLight}>
+                            {LL.SEND_STEP_OF({
+                                currentStep: stepInfo.currentStep.toString(),
+                                totalSteps: TOTAL_STEPS.toString(),
+                            })}
+                        </BaseText>
+                    </BaseView>
+
                     <Animated.View
                         style={[styles.flexElement, styles.viewContainer]}
                         entering={Entering}
@@ -141,4 +174,16 @@ const baseStyles = () =>
     StyleSheet.create({
         flexElement: { flex: 1 },
         viewContainer: { paddingHorizontal: 16 },
+        stepIndicator: {
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingTop: 16,
+            paddingHorizontal: 24,
+        },
+        stepIndicatorLeft: {
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 8,
+        },
     })

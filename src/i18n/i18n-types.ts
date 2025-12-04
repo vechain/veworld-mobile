@@ -4599,6 +4599,10 @@ type RootTranslation = {
 	 */
 	SEND_RANGE_ZERO: string
 	/**
+	 * R​e​c​e​i​v​e​r
+	 */
+	SEND_RECEIVER: string
+	/**
 	 * C​l​e​a​r
 	 */
 	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: string
@@ -4650,6 +4654,12 @@ type RootTranslation = {
 	 * N​o​ ​r​e​c​e​n​t​ ​a​c​t​i​v​i​t​y
 	 */
 	SEND_RECENT_EMPTY_STATE_TITLE: string
+	/**
+	 * {​c​u​r​r​e​n​t​S​t​e​p​}​ ​o​f​ ​{​t​o​t​a​l​S​t​e​p​s​}
+	 * @param {string} currentStep
+	 * @param {string} totalSteps
+	 */
+	SEND_STEP_OF: RequiredParams<'currentStep' | 'totalSteps'>
 	/**
 	 * {​s​t​e​p​N​u​m​b​e​r​}​ ​o​f​ ​3
 	 * @param {string} stepNumber
@@ -10294,6 +10304,10 @@ This action is irreversible.
 	 */
 	SEND_RANGE_ZERO: () => LocalizedString
 	/**
+	 * Receiver
+	 */
+	SEND_RECEIVER: () => LocalizedString
+	/**
 	 * Clear
 	 */
 	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: () => LocalizedString
@@ -10345,6 +10359,10 @@ This action is irreversible.
 	 * No recent activity
 	 */
 	SEND_RECENT_EMPTY_STATE_TITLE: () => LocalizedString
+	/**
+	 * {currentStep} of {totalSteps}
+	 */
+	SEND_STEP_OF: (arg: { currentStep: string, totalSteps: string }) => LocalizedString
 	/**
 	 * {stepNumber} of 3
 	 */
