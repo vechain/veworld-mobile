@@ -8,6 +8,7 @@ import { AlertInline } from "~Components/Reusable/Alert"
 import { CreateContactBottomSheet } from "~Components/Reusable/BottomSheets"
 import { COLORS, ColorThemeType, ScanTarget } from "~Constants"
 import { useBottomSheetModal, useCameraBottomSheet, useThemedStyles, ZERO_ADDRESS } from "~Hooks"
+import { ScanFunctionRegistry } from "~Hooks/useScanTargets"
 import { useVns } from "~Hooks/useVns"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -34,13 +35,32 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
     const { getVnsAddress } = useVns()
     const { ref: createContactBottomSheetRef, onOpen: openCreateContactSheet } = useBottomSheetModal()
 
-    const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
-        sourceScreen: Routes.SEND_TOKEN,
-        targets: [ScanTarget.ADDRESS],
-        onScanAddress: data => {
-            onAddressChange(data)
-            return Promise.resolve(true)
+    const handleScanAddress = useCallback<ScanFunctionRegistry["address"]>(
+        async (address: string) => {
+            onAddressChange(address)
+            return true
         },
+        [onAddressChange],
+    )
+
+    const handleScanVns = useCallback<ScanFunctionRegistry["vns"]>(
+        async (data, defaultFn) => {
+            const res = await defaultFn(data)
+            if (!res) {
+                setIsError(true)
+                return false
+            }
+            onAddressChange(res.address)
+            return true
+        },
+        [onAddressChange],
+    )
+
+    const { RenderCameraModal, handleOpenOnlyScanCamera } = useCameraBottomSheet({
+        sourceScreen: Routes.SEND_TOKEN,
+        targets: [ScanTarget.ADDRESS, ScanTarget.VNS],
+        onScanAddress: handleScanAddress,
+        onScanVns: handleScanVns,
     })
 
     const isAddressInContactsOrAccounts = useMemo(() => {
@@ -76,10 +96,6 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
     const handleBlur = useCallback(() => {
         setIsFocused(false)
     }, [])
-
-    const handleOpenScanCamera = useCallback(() => {
-        handleOpenCamera({ tabs: ["scan"], defaultTab: "scan" })
-    }, [handleOpenCamera])
 
     useEffect(() => {
         const init = async () => {
@@ -176,7 +192,7 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
                             testID="Send_Receiver_Address_Scan_Button"
                             style={styles.scanButton}
                             activeOpacity={0.85}
-                            onPress={handleOpenScanCamera}>
+                            onPress={handleOpenOnlyScanCamera}>
                             <BaseIcon
                                 name="icon-scan-line"
                                 size={24}
