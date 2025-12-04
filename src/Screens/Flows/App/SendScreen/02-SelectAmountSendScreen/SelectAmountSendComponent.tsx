@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { BaseSpacer, BaseView, NumPad } from "~Components"
+import { useSendContext } from "~Components/Reusable/Send"
 import { B3TR, CURRENCY_FORMATS, VET, VOT3, VTHO } from "~Constants"
 import { getNumberFormatter } from "~Constants/Constants/NumberFormatter"
 import { useAmountInput, useFormatFiat, useThemedStyles } from "~Hooks"
@@ -23,13 +24,8 @@ import { useAmountConversion } from "./Hooks"
 const MAX_FIAT_DECIMALS = 2
 const MAX_TOKEN_DECIMALS = 5
 
-type SelectAmountSendComponentProps = {
-    token?: FungibleTokenWithBalance
-    onNext: (amount: string, token: FungibleTokenWithBalance, fiatAmount?: string, amountInFiat?: boolean) => void
-    onBindNextHandler?: (config: { handler: () => void; isValid: boolean; isError: boolean }) => void
-}
-
-export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: SelectAmountSendComponentProps) => {
+export const SelectAmountSendComponent = () => {
+    const { flowState, setFlowState, setIsNextButtonEnabled } = useSendContext()
     const { formatLocale } = useFormatFiat()
 
     const bottomSheetRef = useRef<BottomSheetModalMethods>(null)
@@ -46,7 +42,7 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
     const { data: nonVechainTokensFiat } = useNonVechainTokenFiat()
 
     const defaultToken = useMemo(() => {
-        if (token) return token
+        if (flowState.token) return flowState.token
 
         const sendableTokens = availableTokens.filter(
             t => t.symbol !== VOT3.symbol && !BigNutils(t.balance.balance).isZero,
@@ -86,7 +82,7 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
 
         return tokensWithFiatValue[0]?.token || sendableTokens[0]
     }, [
-        token,
+        flowState.token,
         availableTokens,
         vetInfo.exchangeRate,
         vthoInfo.exchangeRate,
@@ -246,23 +242,26 @@ export const SelectAmountSendComponent = ({ token, onNext, onBindNextHandler }: 
         truncateToMaxDecimals,
     ])
 
-    const handleNext = useCallback(() => {
+    // Update flowState reactively when amount changes
+    useEffect(() => {
         if (!selectedToken) return
 
         const amount = isInputInFiat ? tokenAmountFromInput : input
-
         const fiatAmount = exchangeRate ? fiatAmountFromInput : undefined
 
-        onNext(amount, selectedToken, fiatAmount, isInputInFiat)
-    }, [exchangeRate, fiatAmountFromInput, input, isInputInFiat, onNext, selectedToken, tokenAmountFromInput])
+        setFlowState(prev => ({
+            ...prev,
+            amount,
+            token: selectedToken,
+            fiatAmount,
+            amountInFiat: isInputInFiat,
+        }))
+    }, [exchangeRate, fiatAmountFromInput, input, isInputInFiat, selectedToken, setFlowState, tokenAmountFromInput])
 
+    // Update next button enabled state based on validation
     useEffect(() => {
-        onBindNextHandler?.({
-            handler: handleNext,
-            isValid: isValidAmount,
-            isError,
-        })
-    }, [handleNext, isValidAmount, isError, onBindNextHandler])
+        setIsNextButtonEnabled(!isError && isValidAmount)
+    }, [isError, isValidAmount, setIsNextButtonEnabled])
 
     const tokenAmountCard = theme.colors.sendScreen.tokenAmountCard
 
