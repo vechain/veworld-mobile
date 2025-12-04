@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { ReactElement, useCallback, useMemo, useRef, useState } from "react"
+import React, { ReactElement, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated, {
     EntryAnimationsValues,
@@ -10,20 +10,22 @@ import Animated, {
     LinearTransition,
 } from "react-native-reanimated"
 
-import { SummaryScreen } from "~Components/Reusable/Send"
 import { SelectAmountSendComponent } from "./02-SelectAmountSendScreen"
-
 import { BaseButton, BaseView, Layout } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
-import { ReceiverScreen, SendContextProvider, SendFlowStep, useSendContext } from "~Components/Reusable/Send"
+import {
+    ReceiverScreen,
+    SendContextProvider,
+    SendFlowStep,
+    useSendContext,
+    SummaryScreen,
+} from "~Components/Reusable/Send"
 import { useThemedStyles } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { useI18nContext } from "~i18n"
 import { EnteringFromLeftAnimation, EnteringFromRightAnimation } from "./Animations/Entering"
 import { ExitingToLeftAnimation, ExitingToRightAnimation } from "./Animations/Exiting"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
-import { FungibleTokenWithBalance } from "~Model"
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
 
@@ -38,7 +40,7 @@ export const SendScreenContent = (): ReactElement => {
     const { styles } = useThemedStyles(baseStyles)
     const { step, previousStep, nextStep, goToNext, goToPrevious, isPreviousButtonEnabled, isNextButtonEnabled } =
         useSendContext()
-    
+
     const [txError, setTxError] = useState(false)
     const [txControls, setTxControls] = useState<{
         onSubmit: () => void
@@ -74,9 +76,7 @@ export const SendScreenContent = (): ReactElement => {
     const renderStep = useMemo(() => {
         switch (step) {
             case "selectAmount":
-                return (
-                    <SelectAmountSendComponent />
-                )
+                return <SelectAmountSendComponent />
             case "insertAddress":
                 return <ReceiverScreen />
             case "summary":
@@ -90,7 +90,7 @@ export const SendScreenContent = (): ReactElement => {
             default:
                 return <BaseView flex={1} />
         }
-    }, [step, flowState, goToInsertAddress, handleTxFinished, txError, setTxControls, setIsNextButtonEnabled])
+    }, [step, handleTxFinished, txError, setTxControls])
 
     const Entering = useCallback(
         (values: EntryAnimationsValues) => {
@@ -129,17 +129,8 @@ export const SendScreenContent = (): ReactElement => {
             return
         }
 
-        if (step === "selectAmount" && amountHandlerRef.current) {
-            try {
-                amountHandlerRef.current()
-            } catch {
-                // If the bound handler throws, do not advance the flow.
-            }
-            return
-        }
-
         goToNext()
-    }, [handleConfirmPress, goToNext, isSummaryStep, step])
+    }, [handleConfirmPress, goToNext, isSummaryStep])
 
     return (
         <Layout

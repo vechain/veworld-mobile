@@ -4656,8 +4656,9 @@ type RootTranslation = {
 	 * @param {unknown} total
 	 */
 	SEND_RECEIVER_DETAILS_COUNT: RequiredParams<'current', 'total'>
-	 * O​n​c​e​ ​y​o​u​ ​s​e​n​d​ ​t​o​ ​a​n​ ​a​d​d​r​e​s​s​,​ ​i​t​’​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​f​o​r​ ​q​u​i​c​k​ ​a​c​c​e​s​s​.
-	 */
+	/**
+	* O​n​c​e​ ​y​o​u​ ​s​e​n​d​ ​t​o​ ​a​n​ ​a​d​d​r​e​s​s​,​ ​i​t​’​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​f​o​r​ ​q​u​i​c​k​ ​a​c​c​e​s​s​.
+	*/
 	SEND_RECENT_EMPTY_STATE_DESCRIPTION: string
 	/**
 	 * N​o​ ​r​e​c​e​n​t​ ​a​c​t​i​v​i​t​y
@@ -10380,6 +10381,7 @@ This action is irreversible.
 	 * @param {unknown} total
 	 */
 	SEND_RECEIVER_DETAILS_COUNT: RequiredParams<'current', 'total'>
+	/**
 	 * Once you send to an address, it’ll show up here for quick access.
 	 */
 	SEND_RECENT_EMPTY_STATE_DESCRIPTION: () => LocalizedString
