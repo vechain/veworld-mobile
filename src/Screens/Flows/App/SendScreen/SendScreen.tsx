@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { ReactElement, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
@@ -33,6 +33,8 @@ const ORDER: SendFlowStep[] = ["selectAmount", "insertAddress", "summary"]
 
 const AnimatedBaseButton = Animated.createAnimatedComponent(wrapFunctionComponent(BaseButton))
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
+
+type RouteProps = RouteProp<RootStackParamListHome, Routes.SEND_TOKEN>
 
 export const SendScreenContent = (): ReactElement => {
     const { LL } = useI18nContext()
@@ -184,8 +186,10 @@ export const SendScreenContent = (): ReactElement => {
 }
 
 export const SendScreen = () => {
+    const route = useRoute<RouteProps>()
+
     return (
-        <SendContextProvider>
+        <SendContextProvider initialToken={route.params?.token}>
             <SendScreenContent />
         </SendContextProvider>
     )
