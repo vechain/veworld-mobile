@@ -1,13 +1,21 @@
 import React from "react"
-import { render } from "@testing-library/react-native"
+import { render, waitFor } from "@testing-library/react-native"
 import { TestWrapper } from "~Test"
 import { TransactionFeeCard } from "./TransactionFeeCard"
 import { FungibleTokenWithBalance } from "~Model"
 import { GasPriceCoefficient, VET, VTHO } from "~Constants"
 import { BigNutils } from "~Utils"
+import { useSendContext } from "~Components/Reusable/Send"
+
+const mockSetFlowState = jest.fn()
 
 jest.mock("~Hooks/useTransactionScreen", () => ({
     useTransactionScreen: jest.fn(),
+}))
+
+jest.mock("~Components/Reusable/Send", () => ({
+    ...jest.requireActual("~Components/Reusable/Send"),
+    useSendContext: jest.fn(),
 }))
 
 jest.mock("~Components/Reusable/DelegationView", () => ({
@@ -19,6 +27,8 @@ jest.mock("~Components/Reusable/GasFeeSpeed", () => ({
 }))
 
 const { useTransactionScreen } = require("~Hooks/useTransactionScreen")
+
+const mockedUseSendContext = useSendContext as jest.Mock
 
 const createToken = (overrides: Partial<FungibleTokenWithBalance> = {}): FungibleTokenWithBalance =>
     ({
@@ -82,6 +92,16 @@ const baseHookReturn = {
 
 describe("TransactionFeeCard", () => {
     beforeEach(() => {
+        mockedUseSendContext.mockReturnValue({
+            flowState: {
+                token: createToken(),
+                amount: "0",
+                fiatAmount: "",
+                address: "",
+                amountInFiat: false,
+            },
+            setFlowState: mockSetFlowState,
+        })
         ;(useTransactionScreen as jest.Mock).mockReturnValue(baseHookReturn)
     })
 
@@ -111,7 +131,7 @@ describe("TransactionFeeCard", () => {
         })
     })
 
-    it("calls onGasAdjusted when gas is not enough and amount is adjusted", () => {
+    it("calls onGasAdjusted when gas is not enough and amount is adjusted", async () => {
         const token = createToken()
         const onGasAdjusted = jest.fn()
 
@@ -135,6 +155,8 @@ describe("TransactionFeeCard", () => {
             wrapper: TestWrapper,
         })
 
-        expect(onGasAdjusted).toHaveBeenCalled()
+        await waitFor(() => {
+            expect(onGasAdjusted).toHaveBeenCalled()
+        })
     })
 })
