@@ -1,5 +1,4 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import moment from "moment"
 import React, { RefObject, useCallback, useEffect } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { STARGATE_DAPP_URL } from "~Constants"
@@ -7,13 +6,8 @@ import { useBottomSheetModal } from "~Hooks/useBottomSheet"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useTheme } from "~Hooks/useTheme"
 import { useI18nContext } from "~i18n"
-import {
-    selectSelectedAccount,
-    selectSelectedNetwork,
-    setLastValidatorExited,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { useAppDispatch } from "~Storage/Redux"
+import { setLastValidatorExit } from "~Storage/Redux/Actions/WalletPreferences"
 
 type Props = {}
 
@@ -30,21 +24,10 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
         externalRef: ref as RefObject<BottomSheetModalMethods>,
     })
 
-    const currentNetwork = useAppSelector(selectSelectedNetwork)
-    const currentAccount = useAppSelector(selectSelectedAccount)
-
     const onDismiss = useCallback(() => {
-        const timestamp = moment().unix()
-        dispatch(
-            setLastValidatorExited({
-                genesisId: currentNetwork.id,
-                address: currentAccount.address,
-                timestamp,
-                validatorId: "0x0000000000000000000000000000000000000000",
-            }),
-        )
+        dispatch(setLastValidatorExit("0x0000000000000000000000000000000000000000"))
         onBottomSheetClose()
-    }, [dispatch, currentNetwork.id, currentAccount.address, onBottomSheetClose])
+    }, [dispatch, onBottomSheetClose])
 
     const onChooseNewValidator = useCallback(() => {
         onDismiss()
