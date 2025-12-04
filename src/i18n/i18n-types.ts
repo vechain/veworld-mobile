@@ -2117,6 +2117,10 @@ type RootTranslation = {
 	 */
 	COMMON_MARKET_CAP: string
 	/**
+	 * M​a​x
+	 */
+	COMMON_MAX: string
+	/**
 	 * N​.​A​.
 	 */
 	COMMON_NOT_AVAILABLE: string
@@ -4305,26 +4309,70 @@ type RootTranslation = {
 	 */
 	SEND_ACCEPT_NO_GAS_TITLE: string
 	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​'​s​ ​a​c​c​o​u​n​t​s​ ​w​i​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​o​n​c​e​ ​a​d​d​e​d​.
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_DESCRIPTION: string
+	/**
+	 * N​o​ ​a​c​c​o​u​n​t​s​ ​f​o​u​n​d​s
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_TITLE: string
+	/**
+	 * M​y​ ​a​c​c​o​u​n​t​s
+	 */
+	SEND_ACCOUNTS_SECTION_TITLE_MY_ACCOUNTS: string
+	/**
+	 * W​a​t​c​h​i​n​g
+	 */
+	SEND_ACCOUNTS_SECTION_TITLE_WATCHING_ACCOUNTS: string
+	/**
 	 * A​m​o​u​n​t
 	 */
 	SEND_AMOUNT: string
+	/**
+	 * A​m​o​u​n​t​ ​e​x​c​e​e​d​s​ ​b​a​l​a​n​c​e
+	 */
+	SEND_AMOUNT_EXCEEDS_BALANCE: string
 	/**
 	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e​:​ ​{​p​e​r​c​e​n​t​a​g​e​}
 	 * @param {string} percentage
 	 */
 	SEND_BALANCE_PERCENTAGE: RequiredParams<'percentage'>
 	/**
-	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
+	 * A​d​d​ ​y​o​u​r​ ​f​i​r​s​t​ ​c​o​n​t​a​c​t​ ​t​o​ ​s​e​n​d​ ​f​a​s​t​e​r​ ​a​n​d​ ​a​v​o​i​d​ ​e​r​r​o​r​s​.
+	 */
+	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: string
+	/**
+	 * N​o​ ​c​o​n​t​a​c​t​s​ ​a​d​d​e​d
+	 */
+	SEND_CONTACTS_EMPTY_STATE_TITLE: string
+	/**
+	 * S​e​n​d​ ​c​o​l​l​e​c​t​i​b​l​e
+	 */
+	SEND_COLLECTIBLE: string
+	/**
+	 * W​a​l​l​e​t​ ​a​d​d​r​e​s​s
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: string
+	/**
+	 * I​n​s​e​r​t​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s
+	 */
+	SEND_CREATE_CONTACT_ADDRESS_PLACEHOLDER: string
 	/**
 	 * C​R​E​A​T​E​ ​C​O​N​T​A​C​T
 	 */
 	SEND_CREATE_CONTACT_CREATE_BUTTON: string
 	/**
-	 * C​o​n​t​a​c​t​ ​n​a​m​e
+	 * A​d​d​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​t​o​ ​M​y​ ​C​o​n​t​a​c​t​s
+	 */
+	SEND_CREATE_CONTACT_DESCRIPTION: string
+	/**
+	 * N​a​m​e
 	 */
 	SEND_CREATE_CONTACT_NAME: string
+	/**
+	 * I​n​s​e​r​t​ ​c​o​n​t​a​c​t​ ​n​a​m​e
+	 */
+	SEND_CREATE_CONTACT_NAME_PLACEHOLDER: string
 	/**
 	 * P​R​O​C​E​E​D​ ​A​N​Y​W​A​Y
 	 */
@@ -4334,7 +4382,7 @@ type RootTranslation = {
 	 */
 	SEND_CREATE_CONTACT_SUBTITLE: string
 	/**
-	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
+	 * A​d​d​ ​c​o​n​t​a​c​t
 	 */
 	SEND_CREATE_CONTACT_TITLE: string
 	/**
@@ -4551,6 +4599,42 @@ type RootTranslation = {
 	 */
 	SEND_RANGE_ZERO: string
 	/**
+	 * C​l​e​a​r
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: string
+	/**
+	 * I​n​v​a​l​i​d​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​,​ ​u​s​e​r​n​a​m​e​ ​o​r​ ​d​o​m​a​i​n
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_ERROR: string
+	/**
+	 * W​a​l​l​e​t​ ​a​d​d​r​e​s​s
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_LABEL: string
+	/**
+	 * P​a​s​t​e
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PASTE: string
+	/**
+	 * W​a​l​l​e​t​ ​o​r​ ​d​o​m​a​i​n
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER: string
+	/**
+	 * A​d​d​ ​t​h​i​s​ ​n​e​w​ ​a​d​d​r​e​s​s​ ​t​o​ ​m​y​ ​c​o​n​t​a​c​t​s
+	 */
+	SEND_RECEIVER_ADD_CONTACT_BTN: string
+	/**
+	 * A​c​c​o​u​n​t​s
+	 */
+	SEND_RECEIVER_FILTER_ACCOUNTS: string
+	/**
+	 * C​o​n​t​a​c​t​s
+	 */
+	SEND_RECEIVER_FILTER_CONTACTS: string
+	/**
+	 * R​e​c​e​n​t
+	 */
+	SEND_RECEIVER_FILTER_RECENT: string
+	/**
 	 * R​e​c​e​i​v​e
 	 */
 	SEND_RECEIVE_TAB_RECEIVE: string
@@ -4559,9 +4643,30 @@ type RootTranslation = {
 	 */
 	SEND_RECEIVE_TAB_SCAN: string
 	/**
+	 * O​n​c​e​ ​y​o​u​ ​s​e​n​d​ ​t​o​ ​a​n​ ​a​d​d​r​e​s​s​,​ ​i​t​’​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​f​o​r​ ​q​u​i​c​k​ ​a​c​c​e​s​s​.
+	 */
+	SEND_RECENT_EMPTY_STATE_DESCRIPTION: string
+	/**
+	 * N​o​ ​r​e​c​e​n​t​ ​a​c​t​i​v​i​t​y
+	 */
+	SEND_RECENT_EMPTY_STATE_TITLE: string
+	/**
+	 * {​s​t​e​p​N​u​m​b​e​r​}​ ​o​f​ ​3
+	 * @param {string} stepNumber
+	 */
+	SEND_STEP_OF_3: RequiredParams<'stepNumber'>
+	/**
 	 * T​o
 	 */
 	SEND_TO: string
+	/**
+	 * T​o​k​e​n​ ​a​m​o​u​n​t
+	 */
+	SEND_TOKEN_AMOUNT: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d
+	 */
+	SEND_TOKEN_SELECT: string
 	/**
 	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
 	 */
@@ -4604,6 +4709,10 @@ type RootTranslation = {
 	 * S​e​n​d​i​n​g​ ​V​O​T​3
 	 */
 	SEND_VOT3_TITLE: string
+	/**
+	 * V​O​T​3​ ​t​o​k​e​n​s​ ​s​h​o​u​l​d​n​'​t​ ​b​e​ ​s​e​n​t​ ​d​i​r​e​c​t​l​y​ ​t​o​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​.​ ​V​O​T​3​ ​c​a​n​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​t​o​ ​B​3​T​R​ ​t​o​k​e​n​s​ ​a​n​d​ ​s​e​n​t​ ​a​f​t​e​r​w​a​r​d​s​.
+	 */
+	SEND_VOT3_WARNING: string
 	/**
 	 * V​e​c​h​a​i​n​ ​f​a​c​i​l​i​t​a​t​e​s​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​u​s​i​n​g​ ​V​T​H​O​ ​a​s​ ​t​h​e​ ​p​a​y​m​e​n​t​ ​m​e​d​i​u​m​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​O​u​r​ ​M​A​X​ ​c​a​l​c​u​l​a​t​i​o​n​ ​m​e​t​h​o​d​ ​w​i​l​l​ ​d​e​d​u​c​t​ ​a​ ​p​r​e​d​e​f​i​n​e​d​ ​b​a​s​e​ ​f​e​e​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​g​a​s
 	 */
@@ -7736,6 +7845,10 @@ This action is irreversible.
 	 */
 	COMMON_MARKET_CAP: () => LocalizedString
 	/**
+	 * Max
+	 */
+	COMMON_MAX: () => LocalizedString
+	/**
 	 * N.A.
 	 */
 	COMMON_NOT_AVAILABLE: () => LocalizedString
@@ -9893,25 +10006,69 @@ This action is irreversible.
 	 */
 	SEND_ACCEPT_NO_GAS_TITLE: () => LocalizedString
 	/**
+	 * Your wallet's accounts will show up here once added.
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_DESCRIPTION: () => LocalizedString
+	/**
+	 * No accounts founds
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_TITLE: () => LocalizedString
+	/**
+	 * My accounts
+	 */
+	SEND_ACCOUNTS_SECTION_TITLE_MY_ACCOUNTS: () => LocalizedString
+	/**
+	 * Watching
+	 */
+	SEND_ACCOUNTS_SECTION_TITLE_WATCHING_ACCOUNTS: () => LocalizedString
+	/**
 	 * Amount
 	 */
 	SEND_AMOUNT: () => LocalizedString
+	/**
+	 * Amount exceeds balance
+	 */
+	SEND_AMOUNT_EXCEEDS_BALANCE: () => LocalizedString
 	/**
 	 * Balance percentage: {percentage}
 	 */
 	SEND_BALANCE_PERCENTAGE: (arg: { percentage: string }) => LocalizedString
 	/**
-	 * Contact address
+	 * Add your first contact to send faster and avoid errors.
+	 */
+	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: () => LocalizedString
+	/**
+	 * No contacts added
+	 */
+	SEND_CONTACTS_EMPTY_STATE_TITLE: () => LocalizedString
+	/**
+	 * Send collectible
+	 */
+	SEND_COLLECTIBLE: () => LocalizedString
+	/**
+	 * Wallet address
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
+	/**
+	 * Insert wallet address
+	 */
+	SEND_CREATE_CONTACT_ADDRESS_PLACEHOLDER: () => LocalizedString
 	/**
 	 * CREATE CONTACT
 	 */
 	SEND_CREATE_CONTACT_CREATE_BUTTON: () => LocalizedString
 	/**
-	 * Contact name
+	 * Add this wallet to My Contacts
+	 */
+	SEND_CREATE_CONTACT_DESCRIPTION: () => LocalizedString
+	/**
+	 * Name
 	 */
 	SEND_CREATE_CONTACT_NAME: () => LocalizedString
+	/**
+	 * Insert contact name
+	 */
+	SEND_CREATE_CONTACT_NAME_PLACEHOLDER: () => LocalizedString
 	/**
 	 * PROCEED ANYWAY
 	 */
@@ -9921,7 +10078,7 @@ This action is irreversible.
 	 */
 	SEND_CREATE_CONTACT_SUBTITLE: () => LocalizedString
 	/**
-	 * Create contact
+	 * Add contact
 	 */
 	SEND_CREATE_CONTACT_TITLE: () => LocalizedString
 	/**
@@ -10137,6 +10294,42 @@ This action is irreversible.
 	 */
 	SEND_RANGE_ZERO: () => LocalizedString
 	/**
+	 * Clear
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: () => LocalizedString
+	/**
+	 * Invalid wallet address, username or domain
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_ERROR: () => LocalizedString
+	/**
+	 * Wallet address
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_LABEL: () => LocalizedString
+	/**
+	 * Paste
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PASTE: () => LocalizedString
+	/**
+	 * Wallet or domain
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Add this new address to my contacts
+	 */
+	SEND_RECEIVER_ADD_CONTACT_BTN: () => LocalizedString
+	/**
+	 * Accounts
+	 */
+	SEND_RECEIVER_FILTER_ACCOUNTS: () => LocalizedString
+	/**
+	 * Contacts
+	 */
+	SEND_RECEIVER_FILTER_CONTACTS: () => LocalizedString
+	/**
+	 * Recent
+	 */
+	SEND_RECEIVER_FILTER_RECENT: () => LocalizedString
+	/**
 	 * Receive
 	 */
 	SEND_RECEIVE_TAB_RECEIVE: () => LocalizedString
@@ -10145,9 +10338,29 @@ This action is irreversible.
 	 */
 	SEND_RECEIVE_TAB_SCAN: () => LocalizedString
 	/**
+	 * Once you send to an address, it’ll show up here for quick access.
+	 */
+	SEND_RECENT_EMPTY_STATE_DESCRIPTION: () => LocalizedString
+	/**
+	 * No recent activity
+	 */
+	SEND_RECENT_EMPTY_STATE_TITLE: () => LocalizedString
+	/**
+	 * {stepNumber} of 3
+	 */
+	SEND_STEP_OF_3: (arg: { stepNumber: string }) => LocalizedString
+	/**
 	 * To
 	 */
 	SEND_TO: () => LocalizedString
+	/**
+	 * Token amount
+	 */
+	SEND_TOKEN_AMOUNT: () => LocalizedString
+	/**
+	 * Select the token you wish to send
+	 */
+	SEND_TOKEN_SELECT: () => LocalizedString
 	/**
 	 * Select the token asset you wish to send:
 	 */
@@ -10189,6 +10402,10 @@ Are you sure you want to continue?
 	 * Sending VOT3
 	 */
 	SEND_VOT3_TITLE: () => LocalizedString
+	/**
+	 * VOT3 tokens shouldn't be sent directly to another wallet. VOT3 can be converted to B3TR tokens and sent afterwards.
+	 */
+	SEND_VOT3_WARNING: () => LocalizedString
 	/**
 	 * Vechain facilitates transactions using VTHO as the payment medium for transaction fees. Our MAX calculation method will deduct a predefined base fee for transaction gas
 	 */
