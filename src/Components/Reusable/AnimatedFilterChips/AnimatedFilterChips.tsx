@@ -14,6 +14,7 @@ type Props<T> = {
     onItemPress: (item: T, index: number) => void
     containerStyle?: Omit<StyleProp<ViewStyle>, "height" | "padding" | "paddingHorizontal" | "paddingVertical">
     contentContainerStyle?: Omit<StyleProp<ViewStyle>, "padding" | "paddingVertical" | "paddingTop" | "paddingBottom">
+    chipStyle?: StyleProp<ViewStyle>
     size?: "sm" | "md"
     scrollEnabled?: boolean
     indicatorBackgroundColor?: string
@@ -29,6 +30,7 @@ export const AnimatedFilterChips = <T,>({
     onItemPress,
     containerStyle,
     contentContainerStyle,
+    chipStyle,
     size = "md",
     scrollEnabled = true,
     indicatorBackgroundColor,
@@ -81,21 +83,29 @@ export const AnimatedFilterChips = <T,>({
                 onScroll={handleScroll}
                 scrollEnabled={scrollEnabled}
                 scrollEventThrottle={16}>
-                {items.map((item, index) => (
-                    <BaseView key={index} onLayout={event => handleChipLayout(event, index)} style={styles.chipWrapper}>
-                        <BaseTouchable
-                            testID={`AnimatedFilterChips-${keyExtractor(item)}`}
-                            style={styles.transparentChip}
-                            onPress={() => onItemPress(item, index)}
-                            activeOpacity={0.8}>
-                            <BaseText
-                                style={{ color: textColor(item) }}
-                                typographyFont={size === "sm" ? "captionMedium" : "bodyMedium"}>
-                                {getItemLabel(item)}
-                            </BaseText>
-                        </BaseTouchable>
-                    </BaseView>
-                ))}
+                {items.map((item, index) => {
+                    const key = keyExtractor(item)
+                    const selected = keyExtractor(selectedItem) === key
+
+                    return (
+                        <BaseView
+                            key={key}
+                            onLayout={event => handleChipLayout(event, index)}
+                            style={[styles.chipWrapper, chipStyle]}>
+                            <BaseTouchable
+                                testID={`AnimatedFilterChips-${key}${selected ? "-selected" : ""}`}
+                                style={styles.transparentChip}
+                                onPress={() => onItemPress(item, index)}
+                                activeOpacity={0.8}>
+                                <BaseText
+                                    style={{ color: textColor(item) }}
+                                    typographyFont={size === "sm" ? "captionMedium" : "bodyMedium"}>
+                                    {getItemLabel(item)}
+                                </BaseText>
+                            </BaseTouchable>
+                        </BaseView>
+                    )
+                })}
             </Animated.ScrollView>
         </BaseView>
     )

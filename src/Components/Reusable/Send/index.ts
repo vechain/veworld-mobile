@@ -1,2 +1,2 @@
-export * from "./03-SummarySend"
+export { ReceiverScreen } from "./02-Receiver"
 export * from "./Provider"

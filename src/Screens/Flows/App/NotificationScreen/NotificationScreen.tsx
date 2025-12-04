@@ -37,10 +37,6 @@ export const NotificationScreen = () => {
 
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
     const { data = [], error } = useVeBetterDaoDapps()
-    const { getTags, addTag, addDAppTag, removeTag, removeDAppTag } = useNotifications()
-
-    const [tags, setTags] = useState<{ [key: string]: string }>({})
-
     const {
         isNotificationPermissionEnabled,
         isUserOptedIn,
@@ -48,7 +44,14 @@ export const NotificationScreen = () => {
         optOut,
         requestNotficationPermission,
         featureEnabled,
+        getTags,
+        addTag,
+        removeTag,
+        addAllDAppsTags,
+        removeAllDAppsTags,
     } = useNotifications()
+
+    const [tags, setTags] = useState<{ [key: string]: string }>({})
 
     const areNotificationsEnabled = !!isUserOptedIn && !!isNotificationPermissionEnabled
     const hasReachedSubscriptionLimit = Object.keys(tags).length === SUBSCRIPTION_LIMIT
@@ -113,31 +116,26 @@ export const NotificationScreen = () => {
         const allCurrentlyEnabled = data.every(dapp => !!tags[dapp.id])
 
         if (allCurrentlyEnabled) {
-            data.forEach(dapp => {
-                removeDAppTag(dapp.id)
-            })
+            removeAllDAppsTags()
             dispatch(setDappNotifications(false))
         } else {
             if (hasReachedSubscriptionLimit) {
                 showSubscriptionLimitReachedWarning()
                 return
             }
-            data.forEach(dapp => {
-                addDAppTag(dapp.id)
-            })
+            addAllDAppsTags()
             dispatch(setDappNotifications(true))
         }
-
         updateTags()
     }, [
-        addDAppTag,
         data,
+        tags,
+        removeAllDAppsTags,
+        dispatch,
         hasReachedSubscriptionLimit,
-        removeDAppTag,
+        addAllDAppsTags,
         showSubscriptionLimitReachedWarning,
         updateTags,
-        tags,
-        dispatch,
     ])
 
     const ListHeaderComponent = useMemo(() => {

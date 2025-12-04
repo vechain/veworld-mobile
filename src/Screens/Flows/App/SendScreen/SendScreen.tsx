@@ -13,10 +13,12 @@ import Animated, {
 import { SummaryScreen } from "~Components/Reusable/Send"
 import { SelectAmountSendComponent } from "./02-SelectAmountSendScreen"
 
-import { BaseButton, BaseView, Layout, SendContextProvider, SendFlowStep, useSendContext } from "~Components"
+import { BaseButton, BaseView, Layout } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
+import { ReceiverScreen, SendContextProvider, SendFlowStep, useSendContext } from "~Components/Reusable/Send"
 import { useThemedStyles } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { useI18nContext } from "~i18n"
 import { EnteringFromLeftAnimation, EnteringFromRightAnimation } from "./Animations/Entering"
 import { ExitingToLeftAnimation, ExitingToRightAnimation } from "./Animations/Exiting"
@@ -34,21 +36,9 @@ export const SendScreenContent = (): ReactElement => {
     const { LL } = useI18nContext()
     const navigation = useNavigation<NavigationProps>()
     const { styles } = useThemedStyles(baseStyles)
-
-    const {
-        step,
-        previousStep,
-        nextStep,
-        goToNext,
-        goToPrevious,
-        isNextButtonEnabled,
-        isPreviousButtonEnabled,
-        setIsNextButtonEnabled,
-        flowState,
-        setFlowState,
-    } = useSendContext()
-
-    const amountHandlerRef = useRef<(() => void) | null>(null)
+    const { step, previousStep, nextStep, goToNext, goToPrevious, isPreviousButtonEnabled, isNextButtonEnabled } =
+        useSendContext()
+    
     const [txError, setTxError] = useState(false)
     const [txControls, setTxControls] = useState<{
         onSubmit: () => void
@@ -58,20 +48,6 @@ export const SendScreenContent = (): ReactElement => {
     const handleClose = useCallback(() => {
         navigation.goBack()
     }, [navigation])
-
-    const goToInsertAddress = useCallback(
-        (
-            amount: string,
-            token: FungibleTokenWithBalance,
-            fiatAmount?: string,
-            amountInFiat?: boolean,
-            initialExchangeRate?: number | null,
-        ) => {
-            setFlowState({ ...flowState, amount, token, fiatAmount, amountInFiat, initialExchangeRate })
-            goToNext()
-        },
-        [flowState, setFlowState, goToNext],
-    )
 
     const headerRightElement = useMemo(
         () => <CloseIconHeaderButton action={handleClose} testID="Send_Screen_Close" />,
@@ -99,17 +75,10 @@ export const SendScreenContent = (): ReactElement => {
         switch (step) {
             case "selectAmount":
                 return (
-                    <SelectAmountSendComponent
-                        token={flowState.token}
-                        onNext={goToInsertAddress}
-                        onBindNextHandler={config => {
-                            amountHandlerRef.current = config.handler
-                            setIsNextButtonEnabled(!config.isError && config.isValid)
-                        }}
-                    />
+                    <SelectAmountSendComponent />
                 )
             case "insertAddress":
-                return <BaseView flex={1} />
+                return <ReceiverScreen />
             case "summary":
                 return (
                     <SummaryScreen
@@ -180,7 +149,11 @@ export const SendScreenContent = (): ReactElement => {
             headerRightElement={headerRightElement}
             fixedBody={
                 <Animated.View style={styles.flexElement}>
-                    <Animated.View style={styles.flexElement} entering={Entering} exiting={Exiting} key={step}>
+                    <Animated.View
+                        style={[styles.flexElement, styles.viewContainer]}
+                        entering={Entering}
+                        exiting={Exiting}
+                        key={step}>
                         {renderStep}
                     </Animated.View>
                 </Animated.View>
@@ -230,4 +203,5 @@ export const SendScreen = () => {
 const baseStyles = () =>
     StyleSheet.create({
         flexElement: { flex: 1 },
+        viewContainer: { paddingHorizontal: 16 },
     })

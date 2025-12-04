@@ -9,6 +9,7 @@ const mockDispatch = jest.fn()
 
 const mockUpdateAccountBalances = jest.fn()
 const mockInvalidateUserTokens = jest.fn()
+const mockCreateRecentContact = jest.fn()
 
 jest.mock("~Storage/Redux", () => {
     const originalModule = jest.requireActual("~Storage/Redux")
@@ -16,6 +17,7 @@ jest.mock("~Storage/Redux", () => {
         ...originalModule,
         updateAccountBalances: () => mockUpdateAccountBalances,
         invalidateUserTokens: () => mockInvalidateUserTokens,
+        createRecentContact: () => mockCreateRecentContact,
         useAppDispatch: () => mockDispatch,
     }
 })
@@ -68,6 +70,7 @@ describe("useSendTransaction", () => {
         mockDispatch.mockClear()
         mockUpdateAccountBalances.mockClear()
         mockInvalidateUserTokens.mockClear()
+        mockCreateRecentContact.mockClear()
     })
 
     it("should render correctly", async () => {
@@ -137,6 +140,7 @@ describe("useSendTransaction", () => {
         // Verify dispatch was called
         expect(mockDispatch).toHaveBeenCalled()
         expect(mockUpdateAccountBalances).toHaveBeenCalled()
+        expect(mockCreateRecentContact).toHaveBeenCalled()
     })
 
     it("should return transaction ID even if invalidate user tokens fails", async () => {
@@ -168,6 +172,7 @@ describe("useSendTransaction", () => {
         expect(mockDispatch).toHaveBeenCalled()
         expect(mockInvalidateUserTokens).toHaveBeenCalled()
         expect(mockUpdateAccountBalances).not.toHaveBeenCalled()
+        expect(mockCreateRecentContact).toHaveBeenCalled()
     })
 
     it("should handle NFT tx", async () => {

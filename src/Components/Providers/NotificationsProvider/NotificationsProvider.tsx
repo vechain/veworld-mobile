@@ -18,6 +18,7 @@ import { useNotificationRegistration } from "~Hooks/useNotificationRegistration"
 import {
     addRemovedNotificationTag,
     increaseDappVisitCounter,
+    removeDappsVisitCounter,
     removeDappVisitCounter,
     removeRemovedNotificationTag,
     selectDappNotifications,
@@ -27,6 +28,7 @@ import {
     selectNotificationPermissionEnabled,
     selectRemovedNotificationTags,
     selectSelectedNetwork,
+    setDappsVisitCounter,
     setDappVisitCounter,
     updateNotificationFeatureFlag,
     updateNotificationOptedIn,
@@ -54,6 +56,9 @@ type ContextType = {
     removeTag: (key: string) => void
     removeDAppTag: (key: string) => void
     removeAllTags: () => void
+    addAllDAppsTags: () => void
+    removeAllDAppsTags: () => void
+    addAllTags: () => void
 }
 
 const Context = createContext<ContextType | undefined>(undefined)
@@ -210,6 +215,15 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         [addTag, dispatch],
     )
 
+    const addAllDAppsTags = useCallback(() => {
+        const tags = dapps.reduce((acc, dapp) => {
+            acc[dapp.id] = "true"
+            return acc
+        }, {} as Record<string, string>)
+        OneSignal.User.addTags(tags)
+        dispatch(setDappsVisitCounter({ dappIds: Object.keys(tags), counter: 2 }))
+    }, [dispatch, dapps])
+
     const removeTag = useCallback(
         (key: string) => {
             OneSignal.User.removeTag(key)
@@ -229,6 +243,12 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         [dispatch, removeTag],
     )
 
+    const removeAllDAppsTags = useCallback(() => {
+        const dappIds = dapps.map(dapp => dapp.id)
+        OneSignal.User.removeTags(dappIds)
+        dispatch(removeDappsVisitCounter({ dappIds: dappIds }))
+    }, [dispatch, dapps])
+
     const removeAllTags = useCallback(() => {
         getTags()?.then(tags => {
             const tagKeys = Object.keys(tags)
@@ -236,19 +256,25 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         })
     }, [getTags])
 
+    const addAllTags = useCallback(() => {
+        const tags = dapps.reduce((acc, dapp) => {
+            acc[dapp.id] = "true"
+            return acc
+        }, {} as Record<string, string>)
+        OneSignal.User.addTags(tags)
+    }, [dapps])
+
     const updateDappNotifications = useCallback(async () => {
         if (dapps.length > 0) {
             const tags = await getTags()
             const allEnabled = dapps.every(dapp => !!tags[dapp.id])
             if (!allEnabled) {
-                dapps.forEach(dapp => {
-                    if (!tags[dapp.id]) {
-                        addDAppTag(dapp.id)
-                    }
-                })
+                const dappKeys = dapps.map(dapp => dapp.id)
+                dispatch(setDappsVisitCounter({ dappIds: dappKeys, counter: 2 }))
+                addAllTags()
             }
         }
-    }, [dapps, getTags, addDAppTag])
+    }, [dapps, getTags, dispatch, addAllTags])
 
     const init = useCallback(async () => {
         initializeOneSignal()
@@ -359,6 +385,9 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
             removeAllTags: removeAllTags,
             addDAppTag: addDAppTag,
             removeDAppTag: removeDAppTag,
+            addAllDAppsTags: addAllDAppsTags,
+            removeAllDAppsTags: removeAllDAppsTags,
+            addAllTags: addAllTags,
         }
     }, [
         addDAppTag,
@@ -374,6 +403,9 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         removeDAppTag,
         removeTag,
         requestPermission,
+        addAllDAppsTags,
+        removeAllDAppsTags,
+        addAllTags,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>

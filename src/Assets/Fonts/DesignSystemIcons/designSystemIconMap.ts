@@ -637,6 +637,7 @@ export const designSystemIconMap = {
     "icon-palmtree": 60519,
     "icon-paperclip": 60520,
     "icon-party-popper": 60521,
+    "icon-paste": 60820,
     "icon-pause": 60524,
     "icon-pause-circle": 60522,
     "icon-pause-octagon": 60523,

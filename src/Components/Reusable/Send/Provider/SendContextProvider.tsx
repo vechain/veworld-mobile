@@ -19,7 +19,7 @@ type SendFlowState = {
 
 type SendContextType = {
     flowState: SendFlowState
-    setFlowState: (state: SendFlowState) => void
+    setFlowState: React.Dispatch<React.SetStateAction<SendFlowState>>
     step: SendFlowStep
     previousStep: SharedValue<SendFlowStep | undefined>
     nextStep: SharedValue<SendFlowStep | undefined>
