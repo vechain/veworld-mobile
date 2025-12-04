@@ -6,8 +6,10 @@ import { AlertInline, BaseView, useSendContext } from "~Components"
 import { AlertStatus } from "~Components/Reusable/Alert/utils/AlertConfigs"
 import { useI18nContext } from "~i18n"
 import { useThemedStyles } from "~Hooks"
+import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
+import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 import { TokenReceiverCard } from "./Components/TokenReceiverCard"
 import { TransactionFeeCard } from "./Components/TransactionFeeCard"
 import { SendFlowHeader } from "../SendFlowHeader"
@@ -23,6 +25,7 @@ export const SummaryScreen = ({ onTxFinished, onBindTransactionControls, txError
     const { LL } = useI18nContext()
     const { flowState } = useSendContext()
     const currency = useAppSelector(selectCurrency)
+    const { formatLocale } = useFormatFiat()
 
     const { token, amount, address, fiatAmount, amountInFiat, initialExchangeRate } = flowState
 
@@ -87,7 +90,6 @@ export const SummaryScreen = ({ onTxFinished, onBindTransactionControls, txError
         }
 
         if (amountInFiat && fiatAmount != null) {
-            // Fiat was fixed on step 1 -> recompute token while keeping fiat as entered
             const nextTokenAmount = BigNutils().toTokenConversion(fiatAmount, exchangeRate).toString
 
             setDisplayTokenAmount(nextTokenAmount)
@@ -102,6 +104,19 @@ export const SummaryScreen = ({ onTxFinished, onBindTransactionControls, txError
         setDisplayFiatAmount(value)
     }, [amount, amountInFiat, exchangeRate, fiatAmount])
 
+    const formattedFiatAmount = useMemo(() => {
+        if (displayFiatAmount == null) return undefined
+
+        const trimmed = displayFiatAmount.trim()
+        // Preserve special "< 0.01" style strings
+        if (trimmed.startsWith("<")) return trimmed
+
+        return formatFullPrecision(trimmed, {
+            locale: formatLocale,
+            forceDecimals: 2,
+        })
+    }, [displayFiatAmount, formatLocale])
+
     if (!token || !address) {
         return <BaseView flex={1} />
     }
@@ -112,9 +127,9 @@ export const SummaryScreen = ({ onTxFinished, onBindTransactionControls, txError
             <TokenReceiverCard
                 token={token}
                 amount={displayTokenAmount}
-                fiatAmount={displayFiatAmount}
-                amountInFiat={Boolean(amountInFiat)}
                 address={address}
+                fiatAmount={formattedFiatAmount}
+                amountInFiat={Boolean(amountInFiat)}
             />
             <TransactionFeeCard
                 token={token}
