@@ -19,7 +19,7 @@ describe("AnimatedFilterChips", () => {
         )
 
         expect(screen.getByTestId("AnimatedFilterChips-item1")).toBeVisible()
-        expect(screen.getByTestId("AnimatedFilterChips-item2")).toBeVisible()
+        expect(screen.getByTestId("AnimatedFilterChips-item2-selected")).toBeVisible()
         expect(screen.getByTestId("AnimatedFilterChips-item3")).toBeVisible()
     })
 

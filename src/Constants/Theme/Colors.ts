@@ -75,6 +75,7 @@ export type Colors = {
     accountCard: string
     marketInfoBackground: string
     favoriteHeader: string
+    textInputFocusedBorderColor: string
     successVariant: {
         background: string
         border: string
@@ -583,6 +584,7 @@ const light: Colors = {
     graphStatsText: COLORS.GREY_600,
     marketInfoBackground: COLORS.GREY_200,
     favoriteHeader: COLORS.PURPLE,
+    textInputFocusedBorderColor: COLORS.PURPLE,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -966,6 +968,7 @@ const dark: Colors = {
     graphStatsText: COLORS.GREY_400,
     marketInfoBackground: COLORS.PURPLE_DISABLED,
     favoriteHeader: COLORS.GREY_50,
+    textInputFocusedBorderColor: COLORS.LIME_GREEN,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,

@@ -9,16 +9,17 @@ import Animated, {
     FadeOutLeft,
     LinearTransition,
 } from "react-native-reanimated"
-import { BaseButton, BaseView, Layout, SendContextProvider, SendFlowStep, useSendContext } from "~Components"
+import { BaseButton, BaseView, Layout } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
+import { ReceiverScreen, SendContextProvider, SendFlowStep, useSendContext } from "~Components/Reusable/Send"
 import { useThemedStyles } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { useI18nContext } from "~i18n"
 import { SelectAmountSendComponent } from "./02-SelectAmountSendScreen"
 import { EnteringFromLeftAnimation, EnteringFromRightAnimation } from "./Animations/Entering"
 import { ExitingToLeftAnimation, ExitingToRightAnimation } from "./Animations/Exiting"
-import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 
 const ORDER: SendFlowStep[] = ["selectAmount", "insertAddress", "summary"]
 
@@ -111,7 +112,11 @@ export const SendScreenContent = (): ReactElement => {
             headerRightElement={headerRightElement}
             fixedBody={
                 <Animated.View style={styles.flexElement}>
-                    <Animated.View style={styles.flexElement} entering={Entering} exiting={Exiting} key={step}>
+                    <Animated.View
+                        style={[styles.flexElement, styles.viewContainer]}
+                        entering={Entering}
+                        exiting={Exiting}
+                        key={step}>
                         {step === "selectAmount" && (
                             <SelectAmountSendComponent
                                 token={flowState.token}
@@ -122,7 +127,7 @@ export const SendScreenContent = (): ReactElement => {
                                 }}
                             />
                         )}
-                        {step === "insertAddress" && <></>}
+                        {step === "insertAddress" && <ReceiverScreen />}
                         {step === "summary" && <></>}
                     </Animated.View>
                 </Animated.View>
@@ -166,5 +171,6 @@ export const SendScreen = () => {
 
 const baseStyles = () =>
     StyleSheet.create({
-        flexElement: { flex: 1, paddingHorizontal: 12 },
+        flexElement: { flex: 1 },
+        viewContainer: { paddingHorizontal: 16 },
     })
