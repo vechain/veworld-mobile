@@ -40,8 +40,31 @@ export const SummaryScreen = ({ onTxFinished, onBindTransactionControls, txError
     const [priceUpdated, setPriceUpdated] = useState(false)
     const [hasGasAdjustment, setHasGasAdjustment] = useState(false)
 
-    const [displayTokenAmount, setDisplayTokenAmount] = useState(amount ?? "0")
-    const [displayFiatAmount, setDisplayFiatAmount] = useState<string | undefined>(fiatAmount)
+    const { displayTokenAmount, displayFiatAmount } = useMemo(() => {
+        if (!exchangeRate) {
+            return {
+                displayTokenAmount: amount ?? "0",
+                displayFiatAmount: fiatAmount,
+            }
+        }
+
+        if (amountInFiat && fiatAmount != null) {
+            const nextTokenAmount = BigNutils().toTokenConversion(fiatAmount, exchangeRate).toString
+
+            return {
+                displayTokenAmount: nextTokenAmount,
+                displayFiatAmount: fiatAmount,
+            }
+        }
+
+        const sourceAmount = amount ?? "0"
+        const { value } = BigNutils().toCurrencyConversion(sourceAmount, exchangeRate)
+
+        return {
+            displayTokenAmount: sourceAmount,
+            displayFiatAmount: value,
+        }
+    }, [amount, amountInFiat, exchangeRate, fiatAmount])
 
     const handleGasAdjusted = useCallback(() => {
         setHasGasAdjustment(true)
@@ -80,29 +103,6 @@ export const SummaryScreen = ({ onTxFinished, onBindTransactionControls, txError
             setPriceUpdated(true)
         }
     }, [exchangeRate, initialExchangeRate, priceUpdated])
-
-    // Keep displayed amounts in sync with latest exchange rate and user input mode
-    useEffect(() => {
-        if (!exchangeRate) {
-            setDisplayTokenAmount(amount ?? "0")
-            setDisplayFiatAmount(fiatAmount)
-            return
-        }
-
-        if (amountInFiat && fiatAmount != null) {
-            const nextTokenAmount = BigNutils().toTokenConversion(fiatAmount, exchangeRate).toString
-
-            setDisplayTokenAmount(nextTokenAmount)
-            setDisplayFiatAmount(fiatAmount)
-            return
-        }
-
-        // Token was fixed -> recompute fiat from latest rate
-        const sourceAmount = amount ?? "0"
-        const { value } = BigNutils().toCurrencyConversion(sourceAmount, exchangeRate)
-        setDisplayTokenAmount(sourceAmount)
-        setDisplayFiatAmount(value)
-    }, [amount, amountInFiat, exchangeRate, fiatAmount])
 
     const formattedFiatAmount = useMemo(() => {
         if (displayFiatAmount == null) return undefined

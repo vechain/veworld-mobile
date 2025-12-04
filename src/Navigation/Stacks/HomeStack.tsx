@@ -67,7 +67,6 @@ type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
-    [Routes.SEND_SUMMARY]: undefined
     [Routes.SEND_TOKEN]: {
         token?: FungibleTokenWithBalance
     }
