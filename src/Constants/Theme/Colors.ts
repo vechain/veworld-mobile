@@ -75,6 +75,7 @@ export type Colors = {
     accountCard: string
     marketInfoBackground: string
     favoriteHeader: string
+    textInputFocusedBorderColor: string
     successVariant: {
         background: string
         border: string
@@ -366,6 +367,18 @@ export type Colors = {
         title: string
         optionTitle: string
     }
+    sendScreen: {
+        tokenAmountCard: {
+            background: string
+            maxButtonBorder: string
+            maxButtonText: string
+            tokenSelectIcon: string
+            tokenSelectorBorder: string
+            tokenSelectorText: string
+            disabledTokenCardBackground: string
+            stepText: string
+        }
+    }
     transak: string
 }
 
@@ -571,6 +584,7 @@ const light: Colors = {
     graphStatsText: COLORS.GREY_600,
     marketInfoBackground: COLORS.GREY_200,
     favoriteHeader: COLORS.PURPLE,
+    textInputFocusedBorderColor: COLORS.PURPLE,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -862,6 +876,18 @@ const light: Colors = {
         title: COLORS.PURPLE,
         optionTitle: COLORS.GREY_600,
     },
+    sendScreen: {
+        tokenAmountCard: {
+            background: COLORS.WHITE,
+            maxButtonBorder: COLORS.GREY_200,
+            maxButtonText: COLORS.GREY_600,
+            tokenSelectIcon: COLORS.GREY_500,
+            tokenSelectorBorder: COLORS.GREY_100,
+            tokenSelectorText: COLORS.GREY_700,
+            disabledTokenCardBackground: COLORS.GREY_100,
+            stepText: COLORS.GREY_500,
+        },
+    },
     transak: COLORS.WHITE,
 }
 
@@ -942,6 +968,7 @@ const dark: Colors = {
     graphStatsText: COLORS.GREY_400,
     marketInfoBackground: COLORS.PURPLE_DISABLED,
     favoriteHeader: COLORS.GREY_50,
+    textInputFocusedBorderColor: COLORS.LIME_GREEN,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,
@@ -1232,6 +1259,18 @@ const dark: Colors = {
         background: COLORS.PURPLE_DISABLED,
         title: COLORS.WHITE,
         optionTitle: COLORS.GREY_300,
+    },
+    sendScreen: {
+        tokenAmountCard: {
+            background: COLORS.PURPLE_DISABLED,
+            maxButtonBorder: COLORS.DARK_PURPLE_DISABLED,
+            maxButtonText: COLORS.GREY_100,
+            tokenSelectIcon: COLORS.GREY_300,
+            tokenSelectorBorder: COLORS.DARK_PURPLE_DISABLED,
+            tokenSelectorText: COLORS.GREY_100,
+            disabledTokenCardBackground: COLORS.PURPLE_DISABLED,
+            stepText: COLORS.GREY_300,
+        },
     },
     transak: COLORS.TRANSAK_DARK,
 }

@@ -1,6 +1,7 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
-import Animated, { ZoomIn, ZoomOut, LinearTransition } from "react-native-reanimated"
+import Animated, { LinearTransition, ZoomIn, ZoomOut } from "react-native-reanimated"
 import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
@@ -17,16 +18,15 @@ import { useAppSelector } from "~Storage/Redux/Hooks"
 import { selectHideNewUserVeBetterCard, selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { AccountUtils } from "~Utils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
-import { useShowStakingTab } from "../Hooks/useShowStakingTab"
-import { useNavigation } from "@react-navigation/native"
-import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
-import { NewUserVeBetterCard } from "../Components/VeBetterDao/NewUserVeBetterCard"
-import { Tokens } from "./Tokens"
-import { Staking } from "./Staking"
-import { Collectibles } from "./Collectibles"
 import { BannersCarousel } from "../Components/BannerCarousel"
+import { NewUserVeBetterCard } from "../Components/VeBetterDao/NewUserVeBetterCard"
+import { useShowStakingTab } from "../Hooks/useShowStakingTab"
+import { Collectibles } from "./Collectibles"
+import { Staking } from "./Staking"
+import { Tokens } from "./Tokens"
 
 const TABS = ["TOKENS", "STAKING", "COLLECTIBLES"] as const
 
@@ -65,8 +65,9 @@ export const TabRenderer = ({ onLayout }: Props) => {
     }, [showStakingTab, betterWorldFeature.balanceScreen?.collectibles?.enabled])
 
     const showFavorites = useMemo(() => {
+        if (!bookmarkedDApps?.length) return false
         return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount)
-    }, [bookmarkedDApps.length, selectedAccount])
+    }, [bookmarkedDApps?.length, selectedAccount])
     const labels = useMemo(() => filteredTabs.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL, filteredTabs])
 
     // // Empirical data: This is necessary for older devices with the bottom tab bar height issues

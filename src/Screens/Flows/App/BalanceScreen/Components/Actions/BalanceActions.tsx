@@ -40,7 +40,7 @@ export const BalanceActions = ({ style }: Props) => {
 
     const onSend = useCallback(() => {
         if (betterWorldFeature.balanceScreen?.send?.enabled) {
-            nav.navigate(Routes.SEND_TOKEN)
+            nav.navigate(Routes.SEND_TOKEN, {})
             track(AnalyticsEvent.DASHBOARD_SEND_CLICK)
             return
         }

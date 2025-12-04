@@ -1,5 +1,5 @@
 import { NavigatorScreenParams } from "@react-navigation/native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { Transaction } from "@vechain/sdk-core"
 import { PendingRequestTypes } from "@walletconnect/types"
 import React, { useMemo } from "react"
@@ -54,7 +54,7 @@ export type RootStackParamListSwitch = {
     [Routes.CHOOSE_DETAILS_BACKUP_PASSWORD]: { backupDetails: string[] | string; device: LocalDevice }
     [Routes.SELL_FLOW]: undefined
 }
-const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
+const Switch = createStackNavigator<RootStackParamListSwitch>()
 
 export const SwitchStack = () => {
     const walletStatus = useWalletStatus()
@@ -62,6 +62,10 @@ export const SwitchStack = () => {
     const featureFlags = useFeatureFlags()
 
     const RenderStacks = useMemo(() => {
+        // This console log guarantees that on reset it properly wait for the wallet status
+        // DO NOT REMOVE IT UNLESS YOU ARE TOTALLY SURE THAT THE RESET WORKS WITHOUT ERRORS
+        // eslint-disable-next-line no-console
+        console.log("__DEBUG_LOG__")
         if (walletStatus === WALLET_STATUS.FIRST_TIME_ACCESS) {
             return <Switch.Screen name="OnboardingStack" component={OnboardingStack} options={{ headerShown: false }} />
         } else {

@@ -45,10 +45,22 @@ export const Notification = createSlice({
         setDappVisitCounter: (state, action: PayloadAction<{ dappId: string; counter: number }>) => {
             state.dappVisitCounter[action.payload.dappId] = action.payload.counter
         },
+        setDappsVisitCounter: (state, action: PayloadAction<{ dappIds: string[]; counter: number }>) => {
+            action.payload.dappIds.forEach(dappId => {
+                state.dappVisitCounter[dappId] = action.payload.counter
+            })
+        },
         removeDappVisitCounter: (state, action: PayloadAction<{ dappId: string }>) => {
             if (state.dappVisitCounter[action.payload.dappId]) {
                 delete state.dappVisitCounter[action.payload.dappId]
             }
+        },
+        removeDappsVisitCounter: (state, action: PayloadAction<{ dappIds: string[] }>) => {
+            action.payload.dappIds.forEach(dappId => {
+                if (state.dappVisitCounter[dappId]) {
+                    delete state.dappVisitCounter[dappId]
+                }
+            })
         },
         setDappNotifications: (state, action: PayloadAction<boolean>) => {
             state.dappNotifications = action.payload
@@ -68,8 +80,10 @@ export const {
     updateNotificationOptedIn,
     increaseDappVisitCounter,
     setDappVisitCounter,
+    setDappsVisitCounter,
     setDappNotifications,
     removeDappVisitCounter,
+    removeDappsVisitCounter,
     upsertRegistrations,
     removeRegistrations,
 } = Notification.actions
