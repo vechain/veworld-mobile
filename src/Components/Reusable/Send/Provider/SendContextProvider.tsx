@@ -1,11 +1,5 @@
 import React, { PropsWithChildren, useCallback, useContext, useMemo, useState } from "react"
-import {
-    EntryAnimationsValues,
-    ExitAnimationsValues,
-    LayoutAnimation,
-    SharedValue,
-    useSharedValue,
-} from "react-native-reanimated"
+import { EntryAnimationsValues, ExitAnimationsValues, LayoutAnimation, useSharedValue } from "react-native-reanimated"
 import { FungibleTokenWithBalance } from "~Model"
 import {
     EnteringFromLeftAnimation,
@@ -32,16 +26,8 @@ type SendContextType = {
     flowState: SendFlowState
     setFlowState: React.Dispatch<React.SetStateAction<SendFlowState>>
     step: SendFlowStep
-    previousStep: SharedValue<SendFlowStep | undefined>
-    nextStep: SharedValue<SendFlowStep | undefined>
     goToNext: () => void
     goToPrevious: () => void
-    isNextButtonEnabled: boolean
-    isPreviousButtonEnabled: boolean
-    setIsNextButtonEnabled: (enabled: boolean) => void
-    setIsPreviousButtonEnabled: (enabled: boolean) => void
-    txError: boolean
-    setTxError: (hasError: boolean) => void
     EnteringAnimation: (values: EntryAnimationsValues) => LayoutAnimation
     ExitingAnimation: (values: ExitAnimationsValues) => LayoutAnimation
 }
@@ -63,10 +49,6 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
         address: "",
         amountInFiat: false,
     })
-
-    const [isNextButtonEnabled, setIsNextButtonEnabled] = useState(true)
-    const [isPreviousButtonEnabled, setIsPreviousButtonEnabled] = useState(true)
-    const [txError, setTxError] = useState(false)
 
     const previousStep = useSharedValue<typeof step | undefined>(undefined)
     const nextStep = useSharedValue<typeof step | undefined>(undefined)
@@ -135,33 +117,12 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
             flowState,
             setFlowState,
             step,
-            previousStep,
-            nextStep,
-            isNextButtonEnabled,
-            isPreviousButtonEnabled,
-            setIsNextButtonEnabled,
-            setIsPreviousButtonEnabled,
             goToNext,
             goToPrevious,
-            txError,
-            setTxError,
             EnteringAnimation,
             ExitingAnimation,
         }),
-        [
-            flowState,
-            step,
-            previousStep,
-            nextStep,
-            isNextButtonEnabled,
-            isPreviousButtonEnabled,
-            goToNext,
-            goToPrevious,
-            txError,
-            setTxError,
-            EnteringAnimation,
-            ExitingAnimation,
-        ],
+        [flowState, step, goToNext, goToPrevious, EnteringAnimation, ExitingAnimation],
     )
 
     return <SendContext.Provider value={contextValue}>{children}</SendContext.Provider>
