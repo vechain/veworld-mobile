@@ -248,6 +248,7 @@ export const SelectAmountSendComponent = () => {
 
         const amount = isInputInFiat ? tokenAmountFromInput : input
         const fiatAmount = exchangeRate ? fiatAmountFromInput : undefined
+        const initialExchangeRate = exchangeRate
 
         setFlowState(prev => ({
             ...prev,
@@ -255,6 +256,7 @@ export const SelectAmountSendComponent = () => {
             token: selectedToken,
             fiatAmount,
             amountInFiat: isInputInFiat,
+            initialExchangeRate,
         }))
     }, [exchangeRate, fiatAmountFromInput, input, isInputInFiat, selectedToken, setFlowState, tokenAmountFromInput])
 

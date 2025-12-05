@@ -9,6 +9,11 @@ type SendFlowState = {
     amount?: string
     fiatAmount?: string
     address?: string
+    /**
+     * Exchange rate used when the user selected the amount.
+     * This is passed down to the summary step to detect subsequent market moves.
+     */
+    initialExchangeRate?: number | null
     amountInFiat?: boolean
 }
 
@@ -24,6 +29,8 @@ type SendContextType = {
     isPreviousButtonEnabled: boolean
     setIsNextButtonEnabled: (enabled: boolean) => void
     setIsPreviousButtonEnabled: (enabled: boolean) => void
+    txError: boolean
+    setTxError: (hasError: boolean) => void
 }
 
 const SendContext = React.createContext<SendContextType | undefined>(undefined)
@@ -44,6 +51,7 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
 
     const [isNextButtonEnabled, setIsNextButtonEnabled] = useState(true)
     const [isPreviousButtonEnabled, setIsPreviousButtonEnabled] = useState(true)
+    const [txError, setTxError] = useState(false)
 
     const previousStep = useSharedValue<typeof step | undefined>(undefined)
     const nextStep = useSharedValue<typeof step | undefined>(undefined)
@@ -91,6 +99,8 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
             setIsPreviousButtonEnabled,
             goToNext,
             goToPrevious,
+            txError,
+            setTxError,
         }),
         [
             flowState,
@@ -104,6 +114,8 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
             setIsPreviousButtonEnabled,
             goToNext,
             goToPrevious,
+            txError,
+            setTxError,
         ],
     )
 

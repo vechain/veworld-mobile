@@ -1,6 +1,6 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { ReactElement, useCallback, useMemo } from "react"
+import React, { ReactElement, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated, {
     EntryAnimationsValues,
@@ -9,20 +9,27 @@ import Animated, {
     FadeOutLeft,
     LinearTransition,
 } from "react-native-reanimated"
+
+import { SelectAmountSendComponent } from "./02-SelectAmountSendScreen"
 import { BaseButton, BaseView, Layout } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
-import { ReceiverScreen, SendContextProvider, SendFlowStep, useSendContext } from "~Components/Reusable/Send"
+import {
+    ReceiverScreen,
+    SendContextProvider,
+    SendFlowStep,
+    useSendContext,
+    SummaryScreen,
+} from "~Components/Reusable/Send"
 import { useThemedStyles } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { useI18nContext } from "~i18n"
-import { SelectAmountSendComponent } from "./02-SelectAmountSendScreen"
 import { EnteringFromLeftAnimation, EnteringFromRightAnimation } from "./Animations/Entering"
 import { ExitingToLeftAnimation, ExitingToRightAnimation } from "./Animations/Exiting"
-
-const ORDER: SendFlowStep[] = ["selectAmount", "insertAddress", "summary"]
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
+
+const ORDER: SendFlowStep[] = ["selectAmount", "insertAddress", "summary"]
 
 const AnimatedBaseButton = Animated.createAnimatedComponent(wrapFunctionComponent(BaseButton))
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
@@ -31,11 +38,22 @@ type RouteProps = RouteProp<RootStackParamListHome, Routes.SEND_TOKEN>
 
 export const SendScreenContent = (): ReactElement => {
     const { LL } = useI18nContext()
-
     const navigation = useNavigation<NavigationProps>()
     const { styles } = useThemedStyles(baseStyles)
-    const { step, previousStep, nextStep, goToNext, goToPrevious, isPreviousButtonEnabled, isNextButtonEnabled } =
-        useSendContext()
+    const {
+        step,
+        previousStep,
+        nextStep,
+        goToNext,
+        goToPrevious,
+        isPreviousButtonEnabled,
+        isNextButtonEnabled,
+        txError,
+    } = useSendContext()
+    const [txControls, setTxControls] = useState<{
+        onSubmit: () => void
+        isDisabledButtonState: boolean
+    } | null>(null)
 
     const handleClose = useCallback(() => {
         navigation.goBack()
@@ -45,6 +63,24 @@ export const SendScreenContent = (): ReactElement => {
         () => <CloseIconHeaderButton action={handleClose} testID="Send_Screen_Close" />,
         [handleClose],
     )
+
+    const handleConfirmPress = useCallback(() => {
+        if (!txControls) return
+        txControls.onSubmit()
+    }, [txControls])
+
+    const renderStep = useMemo(() => {
+        switch (step) {
+            case "selectAmount":
+                return <SelectAmountSendComponent />
+            case "insertAddress":
+                return <ReceiverScreen />
+            case "summary":
+                return <SummaryScreen onBindTransactionControls={setTxControls} />
+            default:
+                return <BaseView flex={1} />
+        }
+    }, [step, setTxControls])
 
     const Entering = useCallback(
         (values: EntryAnimationsValues) => {
@@ -75,6 +111,17 @@ export const SendScreenContent = (): ReactElement => {
         [nextStep.value, previousStep.value],
     )
 
+    const isSummaryStep = step === "summary"
+
+    const handleNextPress = useCallback(() => {
+        if (isSummaryStep) {
+            handleConfirmPress()
+            return
+        }
+
+        goToNext()
+    }, [handleConfirmPress, goToNext, isSummaryStep])
+
     return (
         <Layout
             title={LL.SEND_TOKEN_TITLE()}
@@ -88,9 +135,7 @@ export const SendScreenContent = (): ReactElement => {
                         entering={Entering}
                         exiting={Exiting}
                         key={step}>
-                        {step === "selectAmount" && <SelectAmountSendComponent />}
-                        {step === "insertAddress" && <ReceiverScreen />}
-                        {step === "summary" && <></>}
+                        {renderStep}
                     </Animated.View>
                 </Animated.View>
             }
@@ -108,12 +153,19 @@ export const SendScreenContent = (): ReactElement => {
                             {LL.COMMON_LBL_BACK()}
                         </AnimatedBaseButton>
                     )}
+
                     <AnimatedBaseButton
                         flex={1}
-                        action={goToNext}
-                        disabled={!isNextButtonEnabled}
+                        action={handleNextPress}
+                        disabled={
+                            isSummaryStep ? !txControls || txControls.isDisabledButtonState : !isNextButtonEnabled
+                        }
                         layout={LinearTransition}>
-                        {LL.COMMON_LBL_NEXT()}
+                        {isSummaryStep
+                            ? txError
+                                ? LL.COMMON_BTN_TRY_AGAIN()
+                                : LL.COMMON_BTN_CONFIRM()
+                            : LL.COMMON_LBL_NEXT()}
                     </AnimatedBaseButton>
                 </AnimatedBaseView>
             }
