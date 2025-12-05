@@ -41,7 +41,7 @@ export const TransactionFeeCard = ({
     const track = useAnalyticTracking()
     const network = useAppSelector(selectSelectedNetwork)
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { flowState, setFlowState } = useSendContext()
+    const { flowState, setFlowState, setIsNextButtonEnabled } = useSendContext()
     const [finalAmount, setFinalAmount] = useState(amount)
 
     const onFinish = useCallback(
@@ -135,7 +135,9 @@ export const TransactionFeeCard = ({
             onSubmit,
             isDisabledButtonState,
         })
-    }, [onBindTransactionControls, onSubmit, isDisabledButtonState])
+
+        setIsNextButtonEnabled(!isDisabledButtonState)
+    }, [onBindTransactionControls, onSubmit, isDisabledButtonState, setIsNextButtonEnabled])
 
     /**
      * If user is sending a token and gas is not enough, we will adjust the amount to send or switch fee token.

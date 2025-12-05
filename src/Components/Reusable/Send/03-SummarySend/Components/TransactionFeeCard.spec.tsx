@@ -101,6 +101,7 @@ describe("TransactionFeeCard", () => {
                 amountInFiat: false,
             },
             setFlowState: mockSetFlowState,
+            setIsNextButtonEnabled: jest.fn(),
         })
         ;(useTransactionScreen as jest.Mock).mockReturnValue(baseHookReturn)
     })
