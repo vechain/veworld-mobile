@@ -1,6 +1,6 @@
 import React, { ComponentProps } from "react"
 import { StyleSheet } from "react-native"
-import Animated, { FadeInLeft, FadeOutLeft, LinearTransition } from "react-native-reanimated"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseButton, BaseView, BaseViewProps, useSendContext } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -36,14 +36,7 @@ const SendContentFooterBack = ({ children, ...props }: Omit<ButtonProps, "action
     const { LL } = useI18nContext()
     const { goToPrevious } = useSendContext()
     return (
-        <AnimatedBaseButton
-            variant="outline"
-            flex={1}
-            action={goToPrevious}
-            layout={LinearTransition}
-            entering={FadeInLeft.delay(50)}
-            exiting={FadeOutLeft}
-            {...props}>
+        <AnimatedBaseButton variant="outline" flex={1} action={goToPrevious} layout={LinearTransition} {...props}>
             {children ?? LL.COMMON_LBL_BACK()}
         </AnimatedBaseButton>
     )
