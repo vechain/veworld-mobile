@@ -367,7 +367,6 @@ export const SelectAmountSendComponent = () => {
                         onDigitPress={digit => onChangeTextInput(input + digit)}
                         onDigitDelete={() => onChangeTextInput(input.slice(0, -1))}
                         typographyFont="headerTitleMedium"
-                        showDecimal
                     />
                 </Animated.View>
             </SendContent.Container>

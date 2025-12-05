@@ -20,23 +20,55 @@ type Props = {
     onDigitPress: (digit: string) => void
     onDigitDelete: () => void
     typographyFont?: TFonts
-    showDecimal?: boolean
 }
 
-export const SendNumPad = ({
-    onDigitPress,
+const NumPadItem = ({
     onDigitDelete,
-    typographyFont = "biggerTitleMedium",
-    showDecimal = false,
-}: Props) => {
-    const handleOnDigitPress = useCallback(
-        (digit: string) => () => {
-            onDigitPress(digit)
-        },
-        [onDigitPress],
-    )
-
+    onDigitPress,
+    digit,
+    typographyFont,
+    decimalSeparator,
+}: { digit: string; decimalSeparator: string } & Props) => {
     const theme = useTheme()
+    const isDeleteKey = useMemo(() => digit === "canc", [digit])
+    const isBlank = useMemo(() => digit === "blank", [digit])
+    const value = useMemo(() => (isBlank ? decimalSeparator : digit), [decimalSeparator, digit, isBlank])
+    const onPress = useCallback(() => {
+        if (isDeleteKey) {
+            onDigitDelete()
+            return
+        }
+        onDigitPress(value)
+    }, [value, isDeleteKey, onDigitDelete, onDigitPress])
+
+    return (
+        <BaseView style={baseStyles.width} key={digit}>
+            <Pressable
+                style={({ pressed }) => [baseStyles.pressable, { opacity: pressed ? 0.5 : 1.0 }]}
+                onPress={onPress}>
+                {isDeleteKey ? (
+                    <BaseIcon name="icon-delete" color={theme.colors.numberPad} />
+                ) : (
+                    <BaseText color={theme.colors.numberPad} typographyFont={typographyFont} alignContainer="center">
+                        {value}
+                    </BaseText>
+                )}
+            </Pressable>
+        </BaseView>
+    )
+}
+
+const NumPadRow = ({ row, ...props }: { row: string[]; decimalSeparator: string } & Props) => {
+    return (
+        <BaseView flexDirection="row" justifyContent="space-between">
+            {row.map(digit => {
+                return <NumPadItem digit={digit} key={digit} {...props} />
+            })}
+        </BaseView>
+    )
+}
+
+export const SendNumPad = ({ onDigitPress, onDigitDelete, typographyFont = "biggerTitleMedium" }: Props) => {
     const currencyFormat = useAppSelector(selectCurrencyFormat)
 
     const decimalSeparator = useMemo(() => {
@@ -57,40 +89,14 @@ export const SendNumPad = ({
         <BaseView flexDirection="column" gap={8}>
             {numPad.map((digits, idx) => {
                 return (
-                    <BaseView flexDirection="row" justifyContent="space-between" key={idx}>
-                        {digits.map(digit => {
-                            const isDeleteKey = digit === "canc"
-                            const isBlank = digit === "blank"
-                            const shouldShowDecimal = isBlank && showDecimal
-                            const shouldRender = digit !== "blank" || shouldShowDecimal
-                            const decimalType = shouldShowDecimal ? decimalSeparator : digit
-                            const onPress = isDeleteKey ? onDigitDelete : handleOnDigitPress(decimalType)
-
-                            return (
-                                <BaseView style={baseStyles.width} key={digit}>
-                                    {shouldRender ? (
-                                        <Pressable
-                                            style={({ pressed }) => [
-                                                baseStyles.pressable,
-                                                { opacity: pressed ? 0.5 : 1.0 },
-                                            ]}
-                                            onPress={onPress}>
-                                            {isDeleteKey ? (
-                                                <BaseIcon name="icon-delete" color={theme.colors.numberPad} />
-                                            ) : (
-                                                <BaseText
-                                                    color={theme.colors.numberPad}
-                                                    typographyFont={typographyFont}
-                                                    alignContainer="center">
-                                                    {shouldShowDecimal ? decimalSeparator : digit}
-                                                </BaseText>
-                                            )}
-                                        </Pressable>
-                                    ) : null}
-                                </BaseView>
-                            )
-                        })}
-                    </BaseView>
+                    <NumPadRow
+                        row={digits}
+                        key={`SEND_NUMPAD_${idx}`}
+                        decimalSeparator={decimalSeparator}
+                        onDigitDelete={onDigitDelete}
+                        onDigitPress={onDigitPress}
+                        typographyFont={typographyFont}
+                    />
                 )
             })}
         </BaseView>
@@ -105,8 +111,6 @@ const baseStyles = StyleSheet.create({
         flex: 1,
     },
     pressable: {
-        // width: 64,
-        // height: 56,
         width: "100%",
         height: "100%",
         justifyContent: "center",
