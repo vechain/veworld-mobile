@@ -1,8 +1,8 @@
-import React from "react"
 import { render } from "@testing-library/react-native"
-import { TabRenderer } from "./TabRenderer"
-import { TestWrapper } from "~Test"
+import React from "react"
 import { useTabBarBottomMargin } from "~Hooks"
+import { TestWrapper } from "~Test"
+import { TabRenderer } from "./TabRenderer"
 
 jest.mock("~Hooks/useTabBarBottomMargin", () => ({
     useTabBarBottomMargin: jest.fn(),
@@ -42,7 +42,7 @@ describe("BalanceScreen -> TabRenderer", () => {
 
         const [root] = UNSAFE_getAllByType(AnimatedView)
 
-        expect(root.props.style).toEqual(expect.arrayContaining([expect.objectContaining({ paddingBottom: 42 })]))
+        expect(root.props.style).toEqual(expect.arrayContaining([expect.objectContaining({ paddingBottom: 42 + 72 })]))
     })
 
     it("uses iosOnlyTabBarBottomMargin when not Android", () => {
