@@ -1,32 +1,17 @@
 import React, { useMemo } from "react"
 import { Animated } from "react-native"
-import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 import { useSendContext } from "../../Provider"
+import { useCurrentExchangeRate } from "../Hooks"
 import { DetailsContainer } from "./DetailsContainer"
 
-type TokenReceiverCardProps = {
-    address: string
-}
-
-export const TokenReceiverCard = ({ address }: TokenReceiverCardProps) => {
+export const TokenReceiverCard = () => {
     const { flowState } = useSendContext()
-    const currency = useAppSelector(selectCurrency)
     const { formatLocale } = useFormatFiat()
 
-    const exchangeRateId = useMemo(
-        () => (flowState.token ? getCoinGeckoIdBySymbol[flowState.token.symbol] : undefined),
-        [flowState.token],
-    )
-
-    const { data: exchangeRate } = useExchangeRate({
-        id: exchangeRateId,
-        vs_currency: currency,
-        refetchIntervalMs: 20000,
-    })
+    const { data: exchangeRate } = useCurrentExchangeRate()
 
     const { displayTokenAmount, displayFiatAmount } = useMemo(() => {
         if (!exchangeRate) {
@@ -103,7 +88,7 @@ export const TokenReceiverCard = ({ address }: TokenReceiverCardProps) => {
                         {formattedFiatAmount && <DetailsContainer.FiatValue value={formattedFiatAmount} />}
                     </>
                 )}
-                <DetailsContainer.TokenReceiver address={address} />
+                <DetailsContainer.TokenReceiver address={flowState.address!} />
             </DetailsContainer>
         </Animated.View>
     )

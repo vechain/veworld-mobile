@@ -121,7 +121,7 @@ export const SummaryScreen = () => {
             <SendContent.Header />
             <SendContent.Container>
                 <Animated.View style={styles.root}>
-                    <TokenReceiverCard address={address} />
+                    <TokenReceiverCard />
                     <TransactionProvider
                         fallbackToVTHO={fallbackToVTHO}
                         isEnoughGas={isEnoughGas}
