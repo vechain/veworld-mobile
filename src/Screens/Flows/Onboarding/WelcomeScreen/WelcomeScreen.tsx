@@ -17,7 +17,7 @@ import {
     Layout,
     SelectLanguageBottomSheet,
 } from "~Components"
-import { AnalyticsEvent, COLORS, DerivationPath, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
+import { AnalyticsEvent, COLORS, DerivationPath, isSmallScreen, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 import {
     useAnalyticTracking,
     useBottomSheetModal,
@@ -152,11 +152,12 @@ export const WelcomeScreen = () => {
         <>
             <Layout
                 noBackButton
+                noStaticBottomPadding
                 fixedBody={
                     <BaseView alignItems="center" flex={1} px={24}>
                         <BaseView flexDirection="row" mt={20}>
                             <BaseText typographyFont="largeTitle" testID="welcome-title-id" style={styles.title}>
-                                {`${LL.TITLE_WELCOME_TO()} ${LL.VEWORLD()}`}
+                                {`${LL.TITLE_WELCOME_TO()}${LL.VEWORLD()}`}
                             </BaseText>
                         </BaseView>
 
@@ -166,7 +167,11 @@ export const WelcomeScreen = () => {
                             </BaseText>
                         </BaseView>
 
-                        <VeWorldLogoSVG height={240} width={240} color={theme.colors.veworldLogo} />
+                        <VeWorldLogoSVG
+                            height={isSmallScreen ? 120 : 240}
+                            width={isSmallScreen ? 120 : 240}
+                            color={theme.colors.veworldLogo}
+                        />
                     </BaseView>
                 }
                 footer={
@@ -198,7 +203,7 @@ export const WelcomeScreen = () => {
                             isLoading={isLoading}
                         />
 
-                        <BaseSpacer height={42} />
+                        <BaseSpacer height={24} />
 
                         <BaseView flexDirection="row" justifyContent="space-between">
                             <BaseView
@@ -241,9 +246,13 @@ export const WelcomeScreen = () => {
                             />
                         </BaseView>
 
-                        <BaseSpacer height={12} />
+                        {DEV_DEMO_BUTTON && (
+                            <>
+                                <BaseSpacer height={12} />
 
-                        <BaseView>{DEV_DEMO_BUTTON}</BaseView>
+                                <BaseView>{DEV_DEMO_BUTTON}</BaseView>
+                            </>
+                        )}
                     </BaseView>
                 }
             />

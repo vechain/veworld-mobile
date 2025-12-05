@@ -15,6 +15,8 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
+import { DeviceBackupBottomSheet, DeviceJailBrokenWarningModal } from "../HomeScreen/Components"
+import { EnableNotificationsBottomSheet } from "../HomeScreen/Components/EnableNotificationsBottomSheet"
 import { BalanceActions } from "./Components/Actions/BalanceActions"
 import { CurrentBalance } from "./Components/Balance/CurrentBalance"
 import { PullToRefresh } from "./Components/PullToRefresh"
@@ -126,9 +128,13 @@ export const BalanceScreen = () => {
                             <BaseSpacer height={64} />
                         </AnimatedLinearGradient>
                     </Animated.View>
+
+                    <TabRenderer onLayout={onLayout} />
+                    <DeviceBackupBottomSheet />
+                    <DeviceJailBrokenWarningModal />
+                    <EnableNotificationsBottomSheet />
                     <VersionUpdateAvailableBottomSheet />
                     <VersionChangelogBottomSheet />
-                    <TabRenderer onLayout={onLayout} />
                 </Animated.ScrollView>
             }
         />
