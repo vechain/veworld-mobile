@@ -2,17 +2,18 @@ import React, { useEffect, useMemo, useState } from "react"
 import { AlertInline, BaseView, useSendContext } from "~Components"
 import { AlertStatus } from "~Components/Reusable/Alert/utils/AlertConfigs"
 import { useI18nContext } from "~i18n"
+import { useCurrentExchangeRate } from "../Hooks"
 
 type Props = {
     txError: boolean
     hasGasAdjustment: boolean
-    exchangeRate: number | null | undefined
 }
 
-export const TransactionAlert = ({ txError, hasGasAdjustment, exchangeRate }: Props) => {
+export const TransactionAlert = ({ txError, hasGasAdjustment }: Props) => {
     const { LL } = useI18nContext()
     const { flowState } = useSendContext()
     const [priceUpdated, setPriceUpdated] = useState(false)
+    const { data: exchangeRate } = useCurrentExchangeRate()
 
     // Track latest exchange rate vs the one used in the previous step to detect market price updates
     useEffect(() => {

@@ -1,30 +1,23 @@
-import { Transaction } from "@vechain/sdk-core"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { Animated, StyleSheet } from "react-native"
 import { RequireUserPassword, useSendContext } from "~Components"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { DelegationView } from "~Components/Reusable/DelegationView"
 import { GasFeeSpeed } from "~Components/Reusable/GasFeeSpeed"
-import { AnalyticsEvent, COLORS, ColorThemeType, creteAnalyticsEvent, ERROR_EVENTS, VET, VTHO } from "~Constants"
-import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { COLORS, ColorThemeType, VTHO } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 import { useTransactionScreen } from "~Hooks/useTransactionScreen"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
-import {
-    addPendingTransferTransactionActivity,
-    selectSelectedNetwork,
-    setIsAppLoading,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
-import { BigNutils, error, TransactionUtils } from "~Utils"
+import { BigNutils, TransactionUtils } from "~Utils"
+import { useTransactionCallbacks } from "../Hooks"
 
 type TransactionFeeCardProps = {
     token: FungibleTokenWithBalance
     amount: string
     address: string
     onTxFinished?: (success: boolean) => void
-    onGasAdjusted?: () => void
+    onGasAdjusted: () => void
 }
 
 export const TransactionFeeCard = ({
@@ -35,54 +28,12 @@ export const TransactionFeeCard = ({
     onGasAdjusted,
 }: TransactionFeeCardProps) => {
     const { LL } = useI18nContext()
-    const dispatch = useAppDispatch()
-    const track = useAnalyticTracking()
-    const network = useAppSelector(selectSelectedNetwork)
     const { styles, theme } = useThemedStyles(baseStyles)
     const { flowState, setFlowState } = useSendContext()
     const [finalAmount, setFinalAmount] = useState(amount)
 
-    const onFinish = useCallback(
-        (success: boolean) => {
-            const isNative =
-                token.symbol.toUpperCase() === VET.symbol.toUpperCase() ||
-                token.symbol.toUpperCase() === VTHO.symbol.toUpperCase()
-
-            if (success) {
-                track(AnalyticsEvent.WALLET_OPERATION, {
-                    ...creteAnalyticsEvent({
-                        medium: AnalyticsEvent.SEND,
-                        signature: AnalyticsEvent.LOCAL,
-                        network: network.name,
-                        subject: isNative ? AnalyticsEvent.NATIVE_TOKEN : AnalyticsEvent.TOKEN,
-                        context: AnalyticsEvent.SEND,
-                    }),
-                })
-            }
-
-            dispatch(setIsAppLoading(false))
-            onTxFinished?.(success)
-        },
-        [token.symbol, dispatch, track, network.name, onTxFinished],
-    )
-
-    const onTransactionSuccess = useCallback(
-        async (transaction: Transaction) => {
-            try {
-                dispatch(addPendingTransferTransactionActivity(transaction))
-                dispatch(setIsAppLoading(false))
-                onFinish(true)
-            } catch (e) {
-                error(ERROR_EVENTS.SEND, e)
-                onFinish(false)
-            }
-        },
-        [dispatch, onFinish],
-    )
-
-    const onTransactionFailure = useCallback(() => {
-        onFinish(false)
-    }, [onFinish])
+    const onFailure = useCallback(() => onTxFinished?.(false), [onTxFinished])
+    const { onTransactionSuccess, onTransactionFailure } = useTransactionCallbacks({ token, onFailure })
 
     const clauses = useMemo(
         () => TransactionUtils.prepareFungibleClause(finalAmount, token, address),
@@ -122,8 +73,6 @@ export const TransactionFeeCard = ({
         autoVTHOFallback: false,
     })
 
-    const [hasReportedGasAdjustment, setHasReportedGasAdjustment] = useState(false)
-
     /**
      * If user is sending a token and gas is not enough, we will adjust the amount to send or switch fee token.
      */
@@ -136,10 +85,7 @@ export const TransactionFeeCard = ({
         }
         if (selectedDelegationToken.toLowerCase() !== token.symbol.toLowerCase()) {
             fallbackToVTHO()
-            if (!hasReportedGasAdjustment && typeof onGasAdjusted === "function") {
-                onGasAdjusted()
-                setHasReportedGasAdjustment(true)
-            }
+            onGasAdjusted()
             return
         }
 
@@ -160,10 +106,7 @@ export const TransactionFeeCard = ({
                 })
             }
 
-            if (!hasReportedGasAdjustment && typeof onGasAdjusted === "function") {
-                onGasAdjusted()
-                setHasReportedGasAdjustment(true)
-            }
+            onGasAdjusted()
         }
     }, [
         amount,
@@ -176,7 +119,6 @@ export const TransactionFeeCard = ({
         token.balance.balance,
         token.decimals,
         token.symbol,
-        hasReportedGasAdjustment,
         onGasAdjusted,
         flowState,
         setFlowState,

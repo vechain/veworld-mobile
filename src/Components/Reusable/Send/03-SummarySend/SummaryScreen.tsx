@@ -1,16 +1,11 @@
 import { useNavigation } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
-import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { BaseView, useSendContext } from "~Components"
 import { useThemedStyles } from "~Hooks"
-import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { BigNutils } from "~Utils"
-import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 import { SendContent } from "../Shared"
 import { TransactionAlert } from "./Components"
 import { TokenReceiverCard } from "./Components/TokenReceiverCard"
@@ -22,62 +17,10 @@ export const SummaryScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
     const navigation = useNavigation<NavigationProps>()
     const { flowState, txError, setTxError } = useSendContext()
-    const currency = useAppSelector(selectCurrency)
-    const { formatLocale } = useFormatFiat()
 
-    const { token, amount, address, fiatAmount, amountInFiat } = flowState
-
-    const exchangeRateId = useMemo(() => (token ? getCoinGeckoIdBySymbol[token.symbol] : undefined), [token])
-
-    const { data: exchangeRate } = useExchangeRate({
-        id: exchangeRateId,
-        vs_currency: currency,
-        refetchIntervalMs: 20000,
-    })
+    const { token, address } = flowState
 
     const [hasGasAdjustment, setHasGasAdjustment] = useState(false)
-
-    const { displayTokenAmount, displayFiatAmount } = useMemo(() => {
-        if (!exchangeRate) {
-            return {
-                displayTokenAmount: amount ?? "0",
-                displayFiatAmount: fiatAmount,
-            }
-        }
-
-        if (amountInFiat && fiatAmount != null) {
-            const nextTokenAmount = BigNutils().toTokenConversion(fiatAmount, exchangeRate).toString
-
-            return {
-                displayTokenAmount: nextTokenAmount,
-                displayFiatAmount: fiatAmount,
-            }
-        }
-
-        const sourceAmount = amount ?? "0"
-        const { value } = BigNutils().toCurrencyConversion(sourceAmount, exchangeRate)
-
-        return {
-            displayTokenAmount: sourceAmount,
-            displayFiatAmount: value,
-        }
-    }, [amount, amountInFiat, exchangeRate, fiatAmount])
-
-    const formattedTokenAmount = useMemo(() => {
-        if (!token) return undefined
-
-        const raw = (displayTokenAmount ?? "").trim()
-        if (!raw) return undefined
-
-        // Preserve any special "< 0.00001" style strings just in case
-        if (raw.startsWith("<")) return raw
-
-        return formatFullPrecision(raw, {
-            locale: formatLocale,
-            forceDecimals: 5,
-            tokenSymbol: token.symbol,
-        })
-    }, [displayTokenAmount, formatLocale, token])
 
     const handleGasAdjusted = useCallback(() => {
         setHasGasAdjustment(true)
@@ -100,19 +43,6 @@ export const SummaryScreen = () => {
         [navigation, setTxError, txError],
     )
 
-    const formattedFiatAmount = useMemo(() => {
-        if (displayFiatAmount == null) return undefined
-
-        const trimmed = displayFiatAmount.trim()
-        // Preserve special "< 0.01" style strings
-        if (trimmed.startsWith("<")) return trimmed
-
-        return formatFullPrecision(trimmed, {
-            locale: formatLocale,
-            forceDecimals: 2,
-        })
-    }, [displayFiatAmount, formatLocale])
-
     if (!token || !address) {
         return <BaseView flex={1} />
     }
@@ -122,26 +52,16 @@ export const SummaryScreen = () => {
             <SendContent.Header />
             <SendContent.Container>
                 <Animated.View style={styles.root}>
-                    <TokenReceiverCard
-                        token={token}
-                        amount={formattedTokenAmount ?? displayTokenAmount}
-                        address={address}
-                        fiatAmount={formattedFiatAmount}
-                        amountInFiat={Boolean(amountInFiat)}
-                    />
+                    <TokenReceiverCard address={address} />
                     <TransactionFeeCard
                         token={token}
-                        amount={displayTokenAmount}
+                        amount={flowState.amount!}
                         address={address}
                         onTxFinished={handleTxFinished}
                         onGasAdjusted={handleGasAdjusted}
                     />
 
-                    <TransactionAlert
-                        hasGasAdjustment={hasGasAdjustment}
-                        txError={txError}
-                        exchangeRate={exchangeRate}
-                    />
+                    <TransactionAlert hasGasAdjustment={hasGasAdjustment} txError={txError} />
                 </Animated.View>
             </SendContent.Container>
             <SendContent.Footer>
