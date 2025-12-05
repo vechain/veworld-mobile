@@ -10,20 +10,24 @@ import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { formatFullPrecision } from "~Utils/StandardizedFormatting"
+import { useNavigation } from "@react-navigation/native"
+import { RootStackParamListHome, Routes } from "~Navigation"
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { TokenReceiverCard } from "./Components/TokenReceiverCard"
 import { TransactionFeeCard } from "./Components/TransactionFeeCard"
 import { SendFlowHeader } from "../SendFlowHeader"
 
 type SummaryScreenProps = {
-    onTxFinished: (success: boolean) => void
     onBindTransactionControls: (controls: { onSubmit: () => void; isDisabledButtonState: boolean }) => void
-    txError: boolean
 }
 
-export const SummaryScreen = ({ onTxFinished, onBindTransactionControls, txError }: SummaryScreenProps) => {
+type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
+
+export const SummaryScreen = ({ onBindTransactionControls }: SummaryScreenProps) => {
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
-    const { flowState } = useSendContext()
+    const navigation = useNavigation<NavigationProps>()
+    const { flowState, txError, setTxError } = useSendContext()
     const currency = useAppSelector(selectCurrency)
     const { formatLocale } = useFormatFiat()
 
@@ -69,6 +73,23 @@ export const SummaryScreen = ({ onTxFinished, onBindTransactionControls, txError
     const handleGasAdjusted = useCallback(() => {
         setHasGasAdjustment(true)
     }, [])
+
+    const handleTxFinished = useCallback(
+        (success: boolean) => {
+            if (success) {
+                if (txError) {
+                    setTxError(false)
+                }
+                navigation.navigate(Routes.HOME)
+                return
+            }
+
+            if (!txError) {
+                setTxError(true)
+            }
+        },
+        [navigation, setTxError, txError],
+    )
 
     const alertConfig = useMemo<null | { message: string; status: AlertStatus }>(() => {
         if (txError) {
@@ -135,7 +156,7 @@ export const SummaryScreen = ({ onTxFinished, onBindTransactionControls, txError
                 token={token}
                 amount={displayTokenAmount}
                 address={address}
-                onTxFinished={onTxFinished}
+                onTxFinished={handleTxFinished}
                 onBindTransactionControls={onBindTransactionControls}
                 onGasAdjusted={handleGasAdjusted}
             />

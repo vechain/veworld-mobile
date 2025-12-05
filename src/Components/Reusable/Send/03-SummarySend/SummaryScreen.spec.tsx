@@ -21,6 +21,7 @@ jest.mock("~Components/Reusable/GasFeeSpeed", () => ({
 
 let lastTransactionFeeCardProps: {
     onGasAdjusted?: () => void
+    onTxFinished?: (success: boolean) => void
 } | null = null
 
 jest.mock("./Components/TransactionFeeCard", () => {
@@ -33,6 +34,7 @@ jest.mock("./Components/TransactionFeeCard", () => {
         TransactionFeeCard: (props: React.ComponentProps<(typeof actual)["TransactionFeeCard"]>) => {
             lastTransactionFeeCardProps = {
                 onGasAdjusted: props.onGasAdjusted,
+                onTxFinished: props.onTxFinished,
             }
             return <actual.TransactionFeeCard {...props} />
         },
@@ -138,12 +140,7 @@ describe("SummaryScreen", () => {
             <TestWrapper preloadedState={{}}>
                 <SendContextProvider initialToken={token}>
                     <InitializeSendFlow token={token}>
-                        <SummaryScreen
-                            onTxFinished={jest.fn()}
-                            onBindTransactionControls={jest.fn()}
-                            txError={false}
-                            {...props}
-                        />
+                        <SummaryScreen onBindTransactionControls={jest.fn()} {...props} />
                     </InitializeSendFlow>
                 </SendContextProvider>
             </TestWrapper>,
@@ -180,8 +177,14 @@ describe("SummaryScreen", () => {
         ).toBeNull()
     })
 
-    it("shows transaction failed alert when txError is true", async () => {
-        renderSummaryScreen({ txError: true })
+    it("shows transaction failed alert when transaction finishes with error", async () => {
+        renderSummaryScreen()
+
+        expect(lastTransactionFeeCardProps).not.toBeNull()
+
+        await act(async () => {
+            lastTransactionFeeCardProps?.onTxFinished?.(false)
+        })
 
         const alert = await screen.findByText("Transaction failed. Please try again.")
         expect(alert).toBeTruthy()

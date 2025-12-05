@@ -40,10 +40,16 @@ export const SendScreenContent = (): ReactElement => {
     const { LL } = useI18nContext()
     const navigation = useNavigation<NavigationProps>()
     const { styles } = useThemedStyles(baseStyles)
-    const { step, previousStep, nextStep, goToNext, goToPrevious, isPreviousButtonEnabled, isNextButtonEnabled } =
-        useSendContext()
-
-    const [txError, setTxError] = useState(false)
+    const {
+        step,
+        previousStep,
+        nextStep,
+        goToNext,
+        goToPrevious,
+        isPreviousButtonEnabled,
+        isNextButtonEnabled,
+        txError,
+    } = useSendContext()
     const [txControls, setTxControls] = useState<{
         onSubmit: () => void
         isDisabledButtonState: boolean
@@ -58,20 +64,8 @@ export const SendScreenContent = (): ReactElement => {
         [handleClose],
     )
 
-    const handleTxFinished = useCallback(
-        (success: boolean) => {
-            if (success) {
-                navigation.navigate(Routes.HOME)
-                return
-            }
-            setTxError(true)
-        },
-        [navigation],
-    )
-
     const handleConfirmPress = useCallback(() => {
         if (!txControls) return
-        setTxError(false)
         txControls.onSubmit()
     }, [txControls])
 
@@ -82,17 +76,11 @@ export const SendScreenContent = (): ReactElement => {
             case "insertAddress":
                 return <ReceiverScreen />
             case "summary":
-                return (
-                    <SummaryScreen
-                        onTxFinished={handleTxFinished}
-                        onBindTransactionControls={setTxControls}
-                        txError={txError}
-                    />
-                )
+                return <SummaryScreen onBindTransactionControls={setTxControls} />
             default:
                 return <BaseView flex={1} />
         }
-    }, [step, handleTxFinished, txError, setTxControls])
+    }, [step, setTxControls])
 
     const Entering = useCallback(
         (values: EntryAnimationsValues) => {
