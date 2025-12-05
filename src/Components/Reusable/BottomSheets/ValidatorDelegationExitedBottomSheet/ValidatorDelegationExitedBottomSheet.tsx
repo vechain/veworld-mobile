@@ -1,7 +1,8 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { RefObject, useCallback, useEffect } from "react"
+import React, { RefObject, useCallback, useEffect, useMemo } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { STARGATE_DAPP_URL } from "~Constants"
+import { useValidatorExit } from "~Hooks/Staking"
 import { useBottomSheetModal } from "~Hooks/useBottomSheet"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useTheme } from "~Hooks/useTheme"
@@ -23,11 +24,18 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
     } = useBottomSheetModal({
         externalRef: ref as RefObject<BottomSheetModalMethods>,
     })
+    const { data: validatorExitEvents, isLoading: isValidatorExitEventsLoading } = useValidatorExit()
+
+    const lastValidatorExitEvent = useMemo(() => {
+        return Object.values(validatorExitEvents ?? {})
+            .flatMap(events => events)
+            .sort((a, b) => b.blockTimestamp - a.blockTimestamp)[0]
+    }, [validatorExitEvents])
 
     const onDismiss = useCallback(() => {
-        dispatch(setLastValidatorExit("0x0000000000000000000000000000000000000000"))
+        dispatch(setLastValidatorExit(lastValidatorExitEvent?.validator ?? ""))
         onBottomSheetClose()
-    }, [dispatch, onBottomSheetClose])
+    }, [dispatch, onBottomSheetClose, lastValidatorExitEvent?.validator])
 
     const onChooseNewValidator = useCallback(() => {
         onDismiss()
@@ -38,11 +46,13 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
     }, [onDismiss, navigateWithTab])
 
     useEffect(() => {
-        onBottomSheetOpen()
-    }, [onBottomSheetOpen])
+        if (!isValidatorExitEventsLoading && lastValidatorExitEvent) {
+            onBottomSheetOpen()
+        }
+    }, [isValidatorExitEventsLoading, lastValidatorExitEvent, onBottomSheetOpen])
 
     return (
-        <BaseBottomSheet ref={bottomSheetRef} dynamicHeight onDismiss={onDismiss} scrollable={false} bottomSafeArea>
+        <BaseBottomSheet ref={bottomSheetRef} dynamicHeight scrollable={false} bottomSafeArea>
             <BaseView gap={24}>
                 <BaseView justifyContent="center" alignItems="center" gap={24}>
                     <BaseIcon name={"icon-stargate"} size={40} color={theme.colors.text} />

@@ -9,10 +9,21 @@ import { URIUtils } from "~Utils"
 type Props = {
     uri?: string
     testID?: string
+    /**
+     * The width of the image.
+     * @default 208
+     */
+    width?: number
+    /**
+     * The height of the image.
+     * @default 208
+     */
+    height?: number
+    borderRadius?: number
 }
 
-export const StargateImage = ({ uri, testID }: Props) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+export const StargateImage = ({ uri, testID, width = 208, height = 208, borderRadius = 8 }: Props) => {
+    const { styles, theme } = useThemedStyles(baseStyles({ width, height }))
 
     const placeholderImg = useMemo(() => {
         return theme.isDark ? NFTPlaceholderDark : NFTPlaceholderLight
@@ -24,7 +35,7 @@ export const StargateImage = ({ uri, testID }: Props) => {
     }, [uri])
 
     return (
-        <BaseView style={styles.root}>
+        <BaseView style={[styles.root, { borderRadius }]}>
             <FastImage
                 testID={testID}
                 style={[
@@ -46,16 +57,18 @@ export const StargateImage = ({ uri, testID }: Props) => {
     )
 }
 
-const baseStyles = () =>
-    StyleSheet.create({
-        root: {
-            width: 208,
-            height: 160,
-            overflow: "hidden",
-            borderRadius: 8,
-        },
-        image: {
-            width: 208,
-            height: 208,
-        },
-    })
+const baseStyles =
+    ({ width, height }: { width: number; height: number }) =>
+    () =>
+        StyleSheet.create({
+            root: {
+                width: 208,
+                height: 160,
+                overflow: "hidden",
+                borderRadius: 8,
+            },
+            image: {
+                width,
+                height,
+            },
+        })
