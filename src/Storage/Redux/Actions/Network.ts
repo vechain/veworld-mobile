@@ -77,7 +77,7 @@ export const validateAndAddCustomNode = createAppAsyncThunk(
             })
 
             dispatch(addCustomNetwork(network))
-            dispatch(changeSelectedNetwork(network))
+            dispatch(switchActiveNetwork(network))
         } catch (e) {
             return rejectWithValue("Failed to add custom network")
         }
@@ -131,7 +131,7 @@ export const handleRemoveCustomNode =
             const defaultNetwork = defaultNetworks.find(net => net.type === selectedNetwork.type) || defaultNetworks[0]
 
             if (defaultNetwork) {
-                dispatch(changeSelectedNetwork(defaultNetwork))
+                dispatch(switchActiveNetwork(defaultNetwork))
             }
         }
 
@@ -163,7 +163,7 @@ export const handleChangeNode = (): AppThunk<Promise<void>> => async (dispatch, 
                 ...network,
                 currentUrl: validUrl,
             }
-            dispatch(changeSelectedNetwork(updatedNetwork))
+            dispatch(switchActiveNetwork(updatedNetwork))
         } else {
             throw new Error("Failed to connect to any URL for the current network.")
         }

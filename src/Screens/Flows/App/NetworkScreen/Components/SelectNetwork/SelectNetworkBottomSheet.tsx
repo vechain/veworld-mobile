@@ -9,7 +9,7 @@ import { useSetSelectedAccount, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Network, NETWORK_TYPE } from "~Model"
 import { clearNFTCache, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { changeSelectedNetwork } from "~Storage/Redux/Actions"
+import { switchActiveNetwork } from "~Storage/Redux/Actions"
 import { selectNetworksByType, selectSelectedNetwork } from "~Storage/Redux/Selectors"
 
 type Props = {
@@ -59,7 +59,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
         (network: Network) => {
             onSetSelectedAccount({})
             dispatch(clearNFTCache())
-            dispatch(changeSelectedNetwork(network))
+            dispatch(switchActiveNetwork(network))
             onClose()
         },
         [onSetSelectedAccount, dispatch, onClose],
