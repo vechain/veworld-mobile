@@ -1,19 +1,18 @@
 import { useNavigation } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { AlertInline, BaseView, useSendContext } from "~Components"
-import { AlertStatus } from "~Components/Reusable/Alert/utils/AlertConfigs"
+import { BaseView, useSendContext } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
-import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 import { SendContent } from "../Shared"
+import { TransactionAlert } from "./Components"
 import { TokenReceiverCard } from "./Components/TokenReceiverCard"
 import { TransactionFeeCard } from "./Components/TransactionFeeCard"
 
@@ -21,13 +20,12 @@ type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.
 
 export const SummaryScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
-    const { LL } = useI18nContext()
     const navigation = useNavigation<NavigationProps>()
     const { flowState, txError, setTxError } = useSendContext()
     const currency = useAppSelector(selectCurrency)
     const { formatLocale } = useFormatFiat()
 
-    const { token, amount, address, fiatAmount, amountInFiat, initialExchangeRate } = flowState
+    const { token, amount, address, fiatAmount, amountInFiat } = flowState
 
     const exchangeRateId = useMemo(() => (token ? getCoinGeckoIdBySymbol[token.symbol] : undefined), [token])
 
@@ -37,7 +35,6 @@ export const SummaryScreen = () => {
         refetchIntervalMs: 20000,
     })
 
-    const [priceUpdated, setPriceUpdated] = useState(false)
     const [hasGasAdjustment, setHasGasAdjustment] = useState(false)
 
     const { displayTokenAmount, displayFiatAmount } = useMemo(() => {
@@ -103,40 +100,6 @@ export const SummaryScreen = () => {
         [navigation, setTxError, txError],
     )
 
-    const alertConfig = useMemo<null | { message: string; status: AlertStatus }>(() => {
-        if (txError) {
-            return {
-                message: LL.COMMON_ALERT_TRANSACTION_FAILED(),
-                status: "error",
-            }
-        }
-
-        if (hasGasAdjustment) {
-            return {
-                message: LL.COMMON_ALERT_TOKEN_AMOUNT_ADJUSTED_FOR_FEE(),
-                status: "info",
-            }
-        }
-
-        if (priceUpdated) {
-            return {
-                message: LL.COMMON_ALERT_DISPLAYED_AMOUNTS_UPDATED(),
-                status: "info",
-            }
-        }
-
-        return null
-    }, [LL, hasGasAdjustment, priceUpdated, txError])
-
-    // Track latest exchange rate vs the one used in the previous step to detect market price updates
-    useEffect(() => {
-        if (exchangeRate == null || initialExchangeRate == null) return
-
-        if (!priceUpdated && exchangeRate !== initialExchangeRate) {
-            setPriceUpdated(true)
-        }
-    }, [exchangeRate, initialExchangeRate, priceUpdated])
-
     const formattedFiatAmount = useMemo(() => {
         if (displayFiatAmount == null) return undefined
 
@@ -174,11 +137,11 @@ export const SummaryScreen = () => {
                         onGasAdjusted={handleGasAdjusted}
                     />
 
-                    {alertConfig && (
-                        <BaseView>
-                            <AlertInline message={alertConfig.message} status={alertConfig.status} variant="banner" />
-                        </BaseView>
-                    )}
+                    <TransactionAlert
+                        hasGasAdjustment={hasGasAdjustment}
+                        txError={txError}
+                        exchangeRate={exchangeRate}
+                    />
                 </Animated.View>
             </SendContent.Container>
             <SendContent.Footer>
@@ -195,6 +158,5 @@ const baseStyles = () =>
             flex: 1,
             flexDirection: "column",
             gap: 16,
-            paddingHorizontal: 16,
         },
     })
