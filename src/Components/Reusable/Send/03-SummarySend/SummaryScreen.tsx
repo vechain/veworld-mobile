@@ -70,6 +70,22 @@ export const SummaryScreen = ({ onBindTransactionControls }: SummaryScreenProps)
         }
     }, [amount, amountInFiat, exchangeRate, fiatAmount])
 
+    const formattedTokenAmount = useMemo(() => {
+        if (!token) return undefined
+
+        const raw = (displayTokenAmount ?? "").trim()
+        if (!raw) return undefined
+
+        // Preserve any special "< 0.00001" style strings just in case
+        if (raw.startsWith("<")) return raw
+
+        return formatFullPrecision(raw, {
+            locale: formatLocale,
+            forceDecimals: 5,
+            tokenSymbol: token.symbol,
+        })
+    }, [displayTokenAmount, formatLocale, token])
+
     const handleGasAdjusted = useCallback(() => {
         setHasGasAdjustment(true)
     }, [])
@@ -147,7 +163,7 @@ export const SummaryScreen = ({ onBindTransactionControls }: SummaryScreenProps)
             <SendFlowHeader step="summary" />
             <TokenReceiverCard
                 token={token}
-                amount={displayTokenAmount}
+                amount={formattedTokenAmount ?? displayTokenAmount}
                 address={address}
                 fiatAmount={formattedFiatAmount}
                 amountInFiat={Boolean(amountInFiat)}
