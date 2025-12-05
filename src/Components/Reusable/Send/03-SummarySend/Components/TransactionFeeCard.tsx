@@ -1,44 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React from "react"
 import { Animated, StyleSheet } from "react-native"
-import { RequireUserPassword, useSendContext } from "~Components"
+import { RequireUserPassword } from "~Components"
 import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { DelegationView } from "~Components/Reusable/DelegationView"
 import { GasFeeSpeed } from "~Components/Reusable/GasFeeSpeed"
-import { COLORS, ColorThemeType, VTHO } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { useTransactionScreen } from "~Hooks/useTransactionScreen"
 import { useI18nContext } from "~i18n"
-import { FungibleTokenWithBalance } from "~Model"
-import { BigNutils, TransactionUtils } from "~Utils"
-import { useTransactionCallbacks } from "../Hooks"
+import { useTransactionContext } from "./TransactionProvider"
 
-type TransactionFeeCardProps = {
-    token: FungibleTokenWithBalance
-    amount: string
-    address: string
-    onTxFinished?: (success: boolean) => void
-    onGasAdjusted: () => void
-}
-
-export const TransactionFeeCard = ({
-    token,
-    amount,
-    address,
-    onTxFinished,
-    onGasAdjusted,
-}: TransactionFeeCardProps) => {
+export const TransactionFeeCard = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { flowState, setFlowState } = useSendContext()
-    const [finalAmount, setFinalAmount] = useState(amount)
-
-    const onFailure = useCallback(() => onTxFinished?.(false), [onTxFinished])
-    const { onTransactionSuccess, onTransactionFailure } = useTransactionCallbacks({ token, onFailure })
-
-    const clauses = useMemo(
-        () => TransactionUtils.prepareFungibleClause(finalAmount, token, address),
-        [finalAmount, token, address],
-    )
 
     const {
         selectedDelegationOption,
@@ -50,7 +23,6 @@ export const TransactionFeeCard = ({
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
         isEnoughGas,
-        isDelegated,
         selectedDelegationAccount,
         selectedDelegationUrl,
         gasOptions,
@@ -62,67 +34,10 @@ export const TransactionFeeCard = ({
         availableTokens,
         selectedDelegationToken,
         setSelectedDelegationToken,
-        fallbackToVTHO,
         hasEnoughBalanceOnAny,
         isFirstTimeLoadingFees,
         hasEnoughBalanceOnToken,
-    } = useTransactionScreen({
-        clauses,
-        onTransactionSuccess,
-        onTransactionFailure,
-        autoVTHOFallback: false,
-    })
-
-    /**
-     * If user is sending a token and gas is not enough, we will adjust the amount to send or switch fee token.
-     */
-    useEffect(() => {
-        if (isDelegated && selectedDelegationToken === VTHO.symbol) {
-            return
-        }
-        if (isEnoughGas) {
-            return
-        }
-        if (selectedDelegationToken.toLowerCase() !== token.symbol.toLowerCase()) {
-            fallbackToVTHO()
-            onGasAdjusted()
-            return
-        }
-
-        const gasFees = gasOptions[selectedFeeOption].maxFee
-        const balance = BigNutils(token.balance.balance)
-        if (BigNutils(amount).multiply(BigNutils(10).toBN.pow(18)).plus(gasFees.toBN).isBiggerThan(balance.toBN)) {
-            const newBalance = balance.minus(gasFees.toBN)
-            if (newBalance.isLessThanOrEqual("0")) {
-                fallbackToVTHO()
-                setFinalAmount(amount)
-            } else {
-                const adjustedAmount = newBalance.toHuman(token.decimals).decimals(4).toString
-                setFinalAmount(adjustedAmount)
-                setFlowState({
-                    ...flowState,
-                    amount: adjustedAmount,
-                    amountInFiat: false,
-                })
-            }
-
-            onGasAdjusted()
-        }
-    }, [
-        amount,
-        fallbackToVTHO,
-        gasOptions,
-        isDelegated,
-        isEnoughGas,
-        selectedDelegationToken,
-        selectedFeeOption,
-        token.balance.balance,
-        token.decimals,
-        token.symbol,
-        onGasAdjusted,
-        flowState,
-        setFlowState,
-    ])
+    } = useTransactionContext()
 
     return (
         <Animated.View>
