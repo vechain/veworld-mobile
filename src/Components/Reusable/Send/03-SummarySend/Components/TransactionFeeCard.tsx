@@ -1,6 +1,15 @@
+import { Transaction } from "@vechain/sdk-core"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { Animated, StyleSheet } from "react-native"
-import { Transaction } from "@vechain/sdk-core"
+import { RequireUserPassword, useSendContext } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components/Base"
+import { DelegationView } from "~Components/Reusable/DelegationView"
+import { GasFeeSpeed } from "~Components/Reusable/GasFeeSpeed"
+import { AnalyticsEvent, COLORS, ColorThemeType, creteAnalyticsEvent, ERROR_EVENTS, VET, VTHO } from "~Constants"
+import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { useTransactionScreen } from "~Hooks/useTransactionScreen"
+import { useI18nContext } from "~i18n"
+import { FungibleTokenWithBalance } from "~Model"
 import {
     addPendingTransferTransactionActivity,
     selectSelectedNetwork,
@@ -9,22 +18,12 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { BigNutils, error, TransactionUtils } from "~Utils"
-import { AnalyticsEvent, COLORS, ColorThemeType, ERROR_EVENTS, VET, VTHO, creteAnalyticsEvent } from "~Constants"
-import { BaseText, BaseView, BaseIcon } from "~Components/Base"
-import { RequireUserPassword, useSendContext } from "~Components"
-import { useTransactionScreen } from "~Hooks/useTransactionScreen"
-import { useI18nContext } from "~i18n"
-import { useAnalyticTracking, useThemedStyles } from "~Hooks"
-import { GasFeeSpeed } from "~Components/Reusable/GasFeeSpeed"
-import { DelegationView } from "~Components/Reusable/DelegationView"
-import { FungibleTokenWithBalance } from "~Model"
 
 type TransactionFeeCardProps = {
     token: FungibleTokenWithBalance
     amount: string
     address: string
     onTxFinished?: (success: boolean) => void
-    onBindTransactionControls?: (controls: { onSubmit: () => void; isDisabledButtonState: boolean }) => void
     onGasAdjusted?: () => void
 }
 
@@ -33,7 +32,6 @@ export const TransactionFeeCard = ({
     amount,
     address,
     onTxFinished,
-    onBindTransactionControls,
     onGasAdjusted,
 }: TransactionFeeCardProps) => {
     const { LL } = useI18nContext()
@@ -41,7 +39,7 @@ export const TransactionFeeCard = ({
     const track = useAnalyticTracking()
     const network = useAppSelector(selectSelectedNetwork)
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { flowState, setFlowState, setIsNextButtonEnabled } = useSendContext()
+    const { flowState, setFlowState } = useSendContext()
     const [finalAmount, setFinalAmount] = useState(amount)
 
     const onFinish = useCallback(
@@ -93,7 +91,6 @@ export const TransactionFeeCard = ({
 
     const {
         selectedDelegationOption,
-        onSubmit,
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
@@ -105,7 +102,6 @@ export const TransactionFeeCard = ({
         isDelegated,
         selectedDelegationAccount,
         selectedDelegationUrl,
-        isDisabledButtonState,
         gasOptions,
         gasUpdatedAt,
         selectedFeeOption,
@@ -127,17 +123,6 @@ export const TransactionFeeCard = ({
     })
 
     const [hasReportedGasAdjustment, setHasReportedGasAdjustment] = useState(false)
-
-    useEffect(() => {
-        if (!onBindTransactionControls) return
-
-        onBindTransactionControls({
-            onSubmit,
-            isDisabledButtonState,
-        })
-
-        setIsNextButtonEnabled(!isDisabledButtonState)
-    }, [onBindTransactionControls, onSubmit, isDisabledButtonState, setIsNextButtonEnabled])
 
     /**
      * If user is sending a token and gas is not enough, we will adjust the amount to send or switch fee token.

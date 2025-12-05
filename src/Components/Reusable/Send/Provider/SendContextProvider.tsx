@@ -1,6 +1,17 @@
 import React, { PropsWithChildren, useCallback, useContext, useMemo, useState } from "react"
-import { SharedValue, useSharedValue } from "react-native-reanimated"
+import {
+    EntryAnimationsValues,
+    ExitAnimationsValues,
+    LayoutAnimation,
+    SharedValue,
+    useSharedValue,
+} from "react-native-reanimated"
 import { FungibleTokenWithBalance } from "~Model"
+import {
+    EnteringFromLeftAnimation,
+    EnteringFromRightAnimation,
+} from "~Screens/Flows/App/SendScreen/Animations/Entering"
+import { ExitingToLeftAnimation, ExitingToRightAnimation } from "~Screens/Flows/App/SendScreen/Animations/Exiting"
 
 export type SendFlowStep = "insertAddress" | "selectAmount" | "summary"
 
@@ -31,6 +42,8 @@ type SendContextType = {
     setIsPreviousButtonEnabled: (enabled: boolean) => void
     txError: boolean
     setTxError: (hasError: boolean) => void
+    EnteringAnimation: (values: EntryAnimationsValues) => LayoutAnimation
+    ExitingAnimation: (values: ExitAnimationsValues) => LayoutAnimation
 }
 
 const SendContext = React.createContext<SendContextType | undefined>(undefined)
@@ -38,6 +51,8 @@ const SendContext = React.createContext<SendContextType | undefined>(undefined)
 type SendContextProviderProps = PropsWithChildren<{
     initialToken?: FungibleTokenWithBalance
 }>
+
+const ORDER: SendFlowStep[] = ["selectAmount", "insertAddress", "summary"]
 
 export const SendContextProvider = ({ children, initialToken }: SendContextProviderProps) => {
     const [step, setStep] = useState<SendFlowStep>("selectAmount")
@@ -86,6 +101,35 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
         }
     }, [nextStep, previousStep, step])
 
+    const EnteringAnimation = useCallback(
+        (values: EntryAnimationsValues) => {
+            "worklet"
+            if (!previousStep.value || !nextStep.value)
+                return {
+                    initialValues: values,
+                    animations: {},
+                }
+            if (ORDER.indexOf(nextStep.value) > ORDER.indexOf(previousStep.value))
+                return EnteringFromRightAnimation(values)
+            return EnteringFromLeftAnimation(values)
+        },
+        [nextStep.value, previousStep.value],
+    )
+
+    const ExitingAnimation = useCallback(
+        (values: ExitAnimationsValues) => {
+            "worklet"
+            if (!previousStep.value || !nextStep.value)
+                return {
+                    initialValues: values,
+                    animations: {},
+                }
+            if (ORDER.indexOf(nextStep.value) > ORDER.indexOf(previousStep.value)) return ExitingToLeftAnimation(values)
+            return ExitingToRightAnimation(values)
+        },
+        [nextStep.value, previousStep.value],
+    )
+
     const contextValue: SendContextType = useMemo(
         () => ({
             flowState,
@@ -101,21 +145,22 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
             goToPrevious,
             txError,
             setTxError,
+            EnteringAnimation,
+            ExitingAnimation,
         }),
         [
             flowState,
-            setFlowState,
             step,
             previousStep,
             nextStep,
             isNextButtonEnabled,
             isPreviousButtonEnabled,
-            setIsNextButtonEnabled,
-            setIsPreviousButtonEnabled,
             goToNext,
             goToPrevious,
             txError,
             setTxError,
+            EnteringAnimation,
+            ExitingAnimation,
         ],
     )
 

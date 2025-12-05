@@ -1,29 +1,25 @@
+import { useNavigation } from "@react-navigation/native"
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { AlertInline, BaseView, useSendContext } from "~Components"
 import { AlertStatus } from "~Components/Reusable/Alert/utils/AlertConfigs"
-import { useI18nContext } from "~i18n"
 import { useThemedStyles } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
+import { useI18nContext } from "~i18n"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { formatFullPrecision } from "~Utils/StandardizedFormatting"
-import { useNavigation } from "@react-navigation/native"
-import { RootStackParamListHome, Routes } from "~Navigation"
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { SendContent } from "../Shared"
 import { TokenReceiverCard } from "./Components/TokenReceiverCard"
 import { TransactionFeeCard } from "./Components/TransactionFeeCard"
-import { SendFlowHeader } from "../SendFlowHeader"
-
-type SummaryScreenProps = {
-    onBindTransactionControls: (controls: { onSubmit: () => void; isDisabledButtonState: boolean }) => void
-}
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
 
-export const SummaryScreen = ({ onBindTransactionControls }: SummaryScreenProps) => {
+export const SummaryScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const navigation = useNavigation<NavigationProps>()
@@ -159,30 +155,37 @@ export const SummaryScreen = ({ onBindTransactionControls }: SummaryScreenProps)
     }
 
     return (
-        <Animated.View style={styles.root}>
-            <SendFlowHeader step="summary" />
-            <TokenReceiverCard
-                token={token}
-                amount={formattedTokenAmount ?? displayTokenAmount}
-                address={address}
-                fiatAmount={formattedFiatAmount}
-                amountInFiat={Boolean(amountInFiat)}
-            />
-            <TransactionFeeCard
-                token={token}
-                amount={displayTokenAmount}
-                address={address}
-                onTxFinished={handleTxFinished}
-                onBindTransactionControls={onBindTransactionControls}
-                onGasAdjusted={handleGasAdjusted}
-            />
+        <SendContent>
+            <SendContent.Header />
+            <SendContent.Container>
+                <Animated.View style={styles.root}>
+                    <TokenReceiverCard
+                        token={token}
+                        amount={formattedTokenAmount ?? displayTokenAmount}
+                        address={address}
+                        fiatAmount={formattedFiatAmount}
+                        amountInFiat={Boolean(amountInFiat)}
+                    />
+                    <TransactionFeeCard
+                        token={token}
+                        amount={displayTokenAmount}
+                        address={address}
+                        onTxFinished={handleTxFinished}
+                        onGasAdjusted={handleGasAdjusted}
+                    />
 
-            {alertConfig && (
-                <BaseView>
-                    <AlertInline message={alertConfig.message} status={alertConfig.status} variant="banner" />
-                </BaseView>
-            )}
-        </Animated.View>
+                    {alertConfig && (
+                        <BaseView>
+                            <AlertInline message={alertConfig.message} status={alertConfig.status} variant="banner" />
+                        </BaseView>
+                    )}
+                </Animated.View>
+            </SendContent.Container>
+            <SendContent.Footer>
+                <SendContent.Footer.Back />
+                <SendContent.Footer.Next action={() => {}} />
+            </SendContent.Footer>
+        </SendContent>
     )
 }
 

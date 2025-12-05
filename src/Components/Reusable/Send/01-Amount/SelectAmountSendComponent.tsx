@@ -1,31 +1,36 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
+import Animated from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { BaseSpacer, BaseView, NumPad } from "~Components"
+import { BaseSpacer, BaseView } from "~Components"
 import { useSendContext } from "~Components/Reusable/Send"
-import { B3TR, CURRENCY_FORMATS, VET, VOT3, VTHO } from "~Constants"
+import { B3TR, ColorThemeType, CURRENCY_FORMATS, VET, VOT3, VTHO } from "~Constants"
 import { getNumberFormatter } from "~Constants/Constants/NumberFormatter"
 import { useAmountInput, useFormatFiat, useThemedStyles } from "~Hooks"
+import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
+import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
-import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
-import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
+import { FungibleTokenWithBalance } from "~Model"
 import HapticsService from "~Services/HapticsService"
 import { selectCurrency, selectCurrencyFormat, useAppSelector } from "~Storage/Redux"
-import { BigNutils, BalanceUtils } from "~Utils"
+import { BalanceUtils, BigNutils } from "~Utils"
 import { getDecimalSeparator } from "~Utils/BigNumberUtils/BigNumberUtils"
 import { formatFullPrecision } from "~Utils/StandardizedFormatting"
-import { FungibleTokenWithBalance } from "~Model"
-import { TokenSelectionBottomSheet } from "./components/TokenSelectionBottomSheet"
-import { SelectAmountSendDetails } from "./components/SelectAmountSendDetails"
+import { SendContent } from "../Shared"
+import { SelectAmountConversionToggle } from "./Components/SelectAmountConversionToggle"
+import { SelectAmountInput } from "./Components/SelectAmountInput"
+import { SelectAmountTokenSelector } from "./Components/SelectAmountTokenSelector"
+import { SendNumPad } from "./Components/SendNumPad"
+import { TokenSelectionBottomSheet } from "./Components/TokenSelectionBottomSheet"
 import { useAmountConversion } from "./Hooks"
 
 const MAX_FIAT_DECIMALS = 2
 const MAX_TOKEN_DECIMALS = 5
 
 export const SelectAmountSendComponent = () => {
-    const { flowState, setFlowState, setIsNextButtonEnabled } = useSendContext()
+    const { flowState, setFlowState, goToNext } = useSendContext()
     const { formatLocale } = useFormatFiat()
 
     const bottomSheetRef = useRef<BottomSheetModalMethods>(null)
@@ -154,7 +159,7 @@ export const SelectAmountSendComponent = () => {
         return selectedToken.icon
     }, [selectedToken])
 
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
 
     const resetInput = useCallback(() => {
         setInput("")
@@ -242,31 +247,6 @@ export const SelectAmountSendComponent = () => {
         truncateToMaxDecimals,
     ])
 
-    // Update flowState reactively when amount changes
-    useEffect(() => {
-        if (!selectedToken) return
-
-        const amount = isInputInFiat ? tokenAmountFromInput : input
-        const fiatAmount = exchangeRate ? fiatAmountFromInput : undefined
-        const initialExchangeRate = exchangeRate
-
-        setFlowState(prev => ({
-            ...prev,
-            amount,
-            token: selectedToken,
-            fiatAmount,
-            amountInFiat: isInputInFiat,
-            initialExchangeRate,
-        }))
-    }, [exchangeRate, fiatAmountFromInput, input, isInputInFiat, selectedToken, setFlowState, tokenAmountFromInput])
-
-    // Update next button enabled state based on validation
-    useEffect(() => {
-        setIsNextButtonEnabled(!isError && isValidAmount)
-    }, [isError, isValidAmount, setIsNextButtonEnabled])
-
-    const tokenAmountCard = theme.colors.sendScreen.tokenAmountCard
-
     const tokenBalance = useMemo(() => {
         if (!selectedToken) return ""
         const humanBalance = BigNutils(selectedToken.balance.balance).toHuman(selectedToken.decimals ?? 0)
@@ -316,54 +296,84 @@ export const SelectAmountSendComponent = () => {
         return formattedInteger
     }, [input, currencyFormat, formatLocale])
 
+    const onSubmit = useCallback(() => {
+        const amount = isInputInFiat ? tokenAmountFromInput : input
+        const fiatAmount = exchangeRate ? fiatAmountFromInput : undefined
+        const initialExchangeRate = exchangeRate
+
+        setFlowState(prev => ({
+            ...prev,
+            amount,
+            token: selectedToken,
+            fiatAmount,
+            amountInFiat: isInputInFiat,
+            initialExchangeRate,
+        }))
+        goToNext()
+    }, [
+        exchangeRate,
+        fiatAmountFromInput,
+        goToNext,
+        input,
+        isInputInFiat,
+        selectedToken,
+        setFlowState,
+        tokenAmountFromInput,
+    ])
+
     if (!selectedToken) {
         return <BaseView flex={1} />
     }
 
     return (
-        <>
-            <BaseView style={styles.tokenAmountCard} bg={tokenAmountCard.background}>
-                <BaseView alignItems="center" gap={8}>
-                    <BaseView style={styles.inputContainer}>
-                        <SelectAmountSendDetails.AnimatedAmountInput
-                            isInputInFiat={isInputInFiat}
+        <SendContent>
+            <SendContent.Header />
+            <SendContent.Container>
+                <Animated.View style={styles.tokenAmountCard}>
+                    <BaseView alignItems="center" gap={8}>
+                        <BaseView style={styles.inputContainer}>
+                            <SelectAmountInput
+                                isInputInFiat={isInputInFiat}
+                                isError={isError}
+                                formattedInputDisplay={formattedInputDisplay}
+                                currency={currency}
+                                selectedToken={selectedToken}
+                            />
+                        </BaseView>
+
+                        <SelectAmountConversionToggle
+                            exchangeRate={exchangeRate}
                             isError={isError}
-                            formattedInputDisplay={formattedInputDisplay}
+                            isInputInFiat={isInputInFiat}
+                            formattedConvertedAmount={formattedConvertedAmount}
                             currency={currency}
                             selectedToken={selectedToken}
+                            onToggle={handleToggleInputMode}
                         />
                     </BaseView>
 
-                    <SelectAmountSendDetails.ConversionToggle
-                        exchangeRate={exchangeRate}
-                        isError={isError}
-                        isInputInFiat={isInputInFiat}
-                        formattedConvertedAmount={formattedConvertedAmount}
-                        currency={currency}
-                        selectedToken={selectedToken}
-                        onToggle={handleToggleInputMode}
+                    <BaseSpacer height={32} />
+
+                    <SelectAmountTokenSelector
+                        computedIcon={computedIcon}
+                        tokenBalance={tokenBalance}
+                        onOpenSelector={handleOpenTokenSelector}
+                        onMaxPress={handleOnMaxPress}
                     />
-                </BaseView>
 
-                <BaseSpacer height={32} />
+                    <BaseSpacer height={32} />
 
-                <SelectAmountSendDetails.TokenSelectorButton
-                    computedIcon={computedIcon}
-                    tokenBalance={tokenBalance}
-                    onOpenSelector={handleOpenTokenSelector}
-                    onMaxPress={handleOnMaxPress}
-                />
-
-                <BaseSpacer height={24} />
-
-                <NumPad
-                    onDigitPress={digit => onChangeTextInput(input + digit)}
-                    onDigitDelete={() => onChangeTextInput(input.slice(0, -1))}
-                    typographyFont="headerTitleMedium"
-                    showDecimal
-                />
-            </BaseView>
-            <BaseSpacer height={16} />
+                    <SendNumPad
+                        onDigitPress={digit => onChangeTextInput(input + digit)}
+                        onDigitDelete={() => onChangeTextInput(input.slice(0, -1))}
+                        typographyFont="headerTitleMedium"
+                        showDecimal
+                    />
+                </Animated.View>
+            </SendContent.Container>
+            <SendContent.Footer>
+                <SendContent.Footer.Next action={onSubmit} disabled={isError || !isValidAmount} />
+            </SendContent.Footer>
             {internalToken && (
                 <TokenSelectionBottomSheet
                     ref={bottomSheetRef}
@@ -372,11 +382,11 @@ export const SelectAmountSendComponent = () => {
                     onClose={handleCloseTokenSelector}
                 />
             )}
-        </>
+        </SendContent>
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         inputContainer: {
             flexDirection: "row",
@@ -389,5 +399,6 @@ const baseStyles = () =>
             padding: 24,
             paddingTop: 38,
             borderRadius: 24,
+            backgroundColor: theme.colors.sendScreen.tokenAmountCard.background,
         },
     })
