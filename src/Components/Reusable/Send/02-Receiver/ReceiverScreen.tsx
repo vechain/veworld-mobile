@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { WalletAddressCard } from "./Components/WalletAddressCard"
-import { useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
-import Animated, { LinearTransition } from "react-native-reanimated"
-import { KnownAddressesList } from "./Components/KnownAddressesList"
+import { LinearTransition } from "react-native-reanimated"
+import { useThemedStyles } from "~Hooks"
 import {
     selectAccounts,
     selectKnownContacts,
@@ -13,9 +11,12 @@ import {
 } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { useSendContext } from "../Provider"
+import { SendContent } from "../Shared"
+import { KnownAddressesList } from "./Components/KnownAddressesList"
+import { WalletAddressCard } from "./Components/WalletAddressCard"
 
 export const ReceiverScreen = () => {
-    const { flowState, setFlowState, setIsNextButtonEnabled } = useSendContext()
+    const { flowState, setFlowState, goToNext } = useSendContext()
     const selectedAddress = useMemo(() => flowState.address, [flowState.address])
 
     const [inputWalletAddress, setInputWalletAddress] = useState<string>("")
@@ -66,26 +67,27 @@ export const ReceiverScreen = () => {
         setInputWalletAddress("")
     }, [selectedAddress, activeFilter])
 
-    useEffect(() => {
-        if (selectedAddress && AddressUtils.isValid(selectedAddress)) {
-            setIsNextButtonEnabled(true)
-        } else {
-            setIsNextButtonEnabled(false)
-        }
-    }, [selectedAddress, setIsNextButtonEnabled])
+    const disabled = useMemo(() => !selectedAddress || !AddressUtils.isValid(selectedAddress), [selectedAddress])
 
     return (
-        <Animated.View style={styles.root} layout={LinearTransition}>
-            <WalletAddressCard
-                selectedAddress={inputWalletAddress}
-                onAddressChange={address => handleAddressChange("input", address)}
-            />
-            <KnownAddressesList
-                activeFilter={activeFilter}
-                selectedAddress={listWalletAddresses}
-                onAddressChange={address => handleAddressChange("list", address)}
-            />
-        </Animated.View>
+        <SendContent>
+            <SendContent.Header />
+            <SendContent.Container style={styles.root} layout={LinearTransition}>
+                <WalletAddressCard
+                    selectedAddress={inputWalletAddress}
+                    onAddressChange={address => handleAddressChange("input", address)}
+                />
+                <KnownAddressesList
+                    activeFilter={activeFilter}
+                    selectedAddress={listWalletAddresses}
+                    onAddressChange={address => handleAddressChange("list", address)}
+                />
+            </SendContent.Container>
+            <SendContent.Footer>
+                <SendContent.Footer.Back />
+                <SendContent.Footer.Next action={goToNext} disabled={disabled} />
+            </SendContent.Footer>
+        </SendContent>
     )
 }
 
@@ -95,6 +97,6 @@ const baseStyles = () =>
             flex: 1,
             flexDirection: "column",
             gap: 8,
-            paddingVertical: 24,
+            paddingTop: 24,
         },
     })

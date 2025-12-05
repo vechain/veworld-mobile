@@ -1,8 +1,8 @@
-import React from "react"
 import { renderHook } from "@testing-library/react-hooks"
-import { TestWrapper, TestHelpers } from "~Test"
-import { SendContextProvider, useSendContext } from "./SendContextProvider"
+import React from "react"
 import { RootState } from "~Storage/Redux/Types"
+import { TestHelpers, TestWrapper } from "~Test"
+import { SendContextProvider, useSendContext } from "./SendContextProvider"
 
 const { VETWithBalance } = TestHelpers.data
 
@@ -68,24 +68,5 @@ describe("SendContextProvider", () => {
         expect(result.current.step).toBe("insertAddress")
         result.current.goToPrevious()
         expect(result.current.step).toBe("selectAmount")
-    })
-    it("should update the isNextButtonEnabled state", () => {
-        const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}),
-        })
-
-        expect(result.current.isNextButtonEnabled).toBe(true)
-        result.current.setIsNextButtonEnabled(false)
-        expect(result.current.isNextButtonEnabled).toBe(false)
-    })
-
-    it("should update the isPreviousButtonEnabled state", () => {
-        const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}),
-        })
-
-        expect(result.current.isPreviousButtonEnabled).toBe(true)
-        result.current.setIsPreviousButtonEnabled(false)
-        expect(result.current.isPreviousButtonEnabled).toBe(false)
     })
 })

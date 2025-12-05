@@ -1,9 +1,20 @@
-import React from "react"
 import { render, screen } from "@testing-library/react-native"
+import React from "react"
 import { TestWrapper } from "~Test"
-import { TokenReceiverCard } from "./TokenReceiverCard"
+
 import { FungibleTokenWithBalance } from "~Model"
 import { AddressUtils } from "~Utils"
+import { useSendContext } from "../../Provider"
+
+import { TokenReceiverCard } from "./TokenReceiverCard"
+
+jest.mock("../Hooks", () => ({
+    useCurrentExchangeRate: jest.fn().mockReturnValue("1"),
+}))
+
+jest.mock("../../Provider", () => ({
+    useSendContext: jest.fn(),
+}))
 
 const createToken = (overrides: Partial<FungibleTokenWithBalance> = {}): FungibleTokenWithBalance =>
     ({
@@ -28,23 +39,22 @@ const createToken = (overrides: Partial<FungibleTokenWithBalance> = {}): Fungibl
 
 describe("TokenReceiverCard", () => {
     it("renders token amount, fiat value and receiver address", async () => {
-        const token = createToken()
-        const amount = "1.234"
+        jest.mocked(useSendContext).mockReturnValue({
+            flowState: {
+                address: "0xreceiver",
+                amount: "1.234",
+                token: createToken(),
+                amountInFiat: false,
+                fiatAmount: undefined,
+                initialExchangeRate: undefined,
+            },
+        } as any)
         const address = "0xreceiver"
         const formattedAddress = AddressUtils.humanAddress(address)
 
-        render(
-            <TokenReceiverCard
-                token={token}
-                amount={amount}
-                address={address}
-                amountInFiat={true}
-                fiatAmount="1.234"
-            />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        render(<TokenReceiverCard />, {
+            wrapper: TestWrapper,
+        })
 
         const addressElement = await screen.findByText(formattedAddress, {}, { timeout: 5000 })
         expect(addressElement).toBeTruthy()
