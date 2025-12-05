@@ -7,6 +7,14 @@ import { GasPriceCoefficient, VET, VTHO } from "~Constants"
 import { BigNutils } from "~Utils"
 import { SendContextProvider, useSendContext } from "../Provider/SendContextProvider"
 
+jest.mock("~Api/Coingecko", () => {
+    const actual = jest.requireActual("~Api/Coingecko") as typeof import("~Api/Coingecko")
+    return {
+        ...actual,
+        useExchangeRate: jest.fn().mockReturnValue({ data: undefined }),
+    }
+})
+
 jest.mock("~Hooks/useTransactionScreen", () => ({
     useTransactionScreen: jest.fn(),
 }))
@@ -41,7 +49,13 @@ jest.mock("./Components/TransactionFeeCard", () => {
     }
 })
 
-const { useTransactionScreen } = require("~Hooks/useTransactionScreen")
+const { useTransactionScreen } = require("~Hooks/useTransactionScreen") as {
+    useTransactionScreen: jest.Mock
+}
+
+const { useExchangeRate } = require("~Api/Coingecko") as {
+    useExchangeRate: jest.Mock
+}
 
 const baseHookReturn = {
     selectedDelegationOption: undefined,
@@ -105,7 +119,9 @@ const createToken = (overrides: Partial<FungibleTokenWithBalance> = {}): Fungibl
 
 describe("SummaryScreen", () => {
     beforeEach(() => {
-        ;(useTransactionScreen as jest.Mock).mockReturnValue(baseHookReturn)
+        useTransactionScreen.mockReturnValue(baseHookReturn)
+        useExchangeRate.mockReset()
+        useExchangeRate.mockReturnValue({ data: undefined })
         lastTransactionFeeCardProps = null
     })
 
@@ -200,6 +216,18 @@ describe("SummaryScreen", () => {
         })
 
         const alert = await screen.findByText("Token amount adjusted for transaction fee.")
+        expect(alert).toBeTruthy()
+    })
+
+    it("shows price updated alert when exchange rate changes compared to initialExchangeRate", async () => {
+        useExchangeRate.mockReturnValue({ data: 2 })
+
+        renderSummaryScreen()
+
+        const alert = await screen.findByText("Displayed amounts have been updated based on the latest market price.", {
+            exact: false,
+        })
+
         expect(alert).toBeTruthy()
     })
 })
