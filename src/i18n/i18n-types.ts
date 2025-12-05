@@ -4655,6 +4655,10 @@ type RootTranslation = {
 	 */
 	SEND_RECENT_EMPTY_STATE_TITLE: string
 	/**
+	 * R​e​v​i​e​w​ ​d​e​t​a​i​l​s
+	 */
+	SEND_REVIEW_DETAILS: string
+	/**
 	 * {​c​u​r​r​e​n​t​S​t​e​p​}​ ​o​f​ ​{​t​o​t​a​l​S​t​e​p​s​}
 	 * @param {string} currentStep
 	 * @param {string} totalSteps
@@ -10359,6 +10363,10 @@ This action is irreversible.
 	 * No recent activity
 	 */
 	SEND_RECENT_EMPTY_STATE_TITLE: () => LocalizedString
+	/**
+	 * Review details
+	 */
+	SEND_REVIEW_DETAILS: () => LocalizedString
 	/**
 	 * {currentStep} of {totalSteps}
 	 */

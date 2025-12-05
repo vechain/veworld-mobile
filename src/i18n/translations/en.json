@@ -1137,6 +1137,7 @@
   "SEND_RECEIVE_TAB_SCAN": "Scan",
   "SEND_RECENT_EMPTY_STATE_DESCRIPTION": "Once you send to an address, it’ll show up here for quick access.",
   "SEND_RECENT_EMPTY_STATE_TITLE": "No recent activity",
+  "SEND_REVIEW_DETAILS": "Review details",
   "SEND_STEP_OF": "{currentStep: string} of {totalSteps: string}",
   "SEND_STEP_OF_3": "{stepNumber: string} of 3",
   "SEND_TO": "To",

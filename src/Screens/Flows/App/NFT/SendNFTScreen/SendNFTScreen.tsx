@@ -51,7 +51,7 @@ export const SendNFTScreenContent = (): ReactElement => {
             case "insertAddress":
                 return { icon: "icon-user-check" as const, name: LL.SEND_RECEIVER(), currentStep: 1 }
             case "summary":
-                return { icon: "icon-clipboard-check" as const, name: LL.RECAP(), currentStep: 2 }
+                return { icon: "icon-list-checks" as const, name: LL.SEND_REVIEW_DETAILS(), currentStep: 2 }
             default:
                 return { icon: "icon-user" as const, name: "", currentStep: 1 }
         }
