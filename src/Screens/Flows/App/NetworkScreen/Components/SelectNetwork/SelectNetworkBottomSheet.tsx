@@ -72,7 +72,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
     const renderItem = useCallback(
         ({ item }: SectionListRenderItemInfo<Network, Section>) => {
             const isSelected = selectedNetwork.id === item.id
-            return <NetworkBox network={item} isSelected={isSelected} onPress={() => onPress(item)} flex={1} />
+            return <NetworkBox network={item} isSelected={isSelected} onPress={onPress} />
         },
         [selectedNetwork, onPress],
     )

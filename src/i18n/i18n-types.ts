@@ -3343,6 +3343,50 @@ type RootTranslation = {
 	 */
 	NETWORK_ADD_CUSTOM_NODE: string
 	/**
+	 * A​d​d​ ​c​u​s​t​o​m​ ​n​e​t​w​o​r​k
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK: string
+	/**
+	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​n​o​d​e​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_DESC: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​n​a​m​e
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_PLACEHOLDER: string
+	/**
+	 * N​o​d​e​ ​n​a​m​e
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_LABEL: string
+	/**
+	 * h​t​t​p​s​:​/​/​.​.​.
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_PLACEHOLDER: string
+	/**
+	 * U​R​L
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_LABEL: string
+	/**
+	 * U​R​L​ ​i​n​v​a​l​i​d​ ​o​r​ ​n​o​d​e​ ​c​o​n​f​i​g​u​r​a​t​i​o​n​ ​i​s​s​u​e
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_ERROR: string
+	/**
+	 * N​e​t​w​o​r​k​ ​a​d​d​e​d
+	 */
+	NETWORK_ADDED: string
+	/**
+	 * N​e​t​w​o​r​k​ ​r​e​m​o​v​e​d
+	 */
+	NETWORK_REMOVED: string
+	/**
+	 * N​e​t​w​o​r​k​ ​s​w​i​t​c​h​e​d
+	 */
+	NETWORK_SWITCHED: string
+	/**
+	 * A​d​d​ ​c​u​s​t​o​m
+	 */
+	NETWORK_ADD_CUSTOM: string
+	/**
 	 * A​d​d​ ​n​e​t​w​o​r​k
 	 */
 	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: string
@@ -3375,11 +3419,11 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_MAINNET: string
 	/**
-	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
+	 * M​a​i​n​n​e​t
 	 */
 	NETWORK_LABEL_MAIN_NETWORKS: string
 	/**
-	 * O​t​h​e​r​ ​N​e​t​w​o​r​k​s
+	 * C​u​s​t​o​m​ ​n​e​t​w​o​r​k​s
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: string
 	/**
@@ -3387,7 +3431,7 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_TESTNET: string
 	/**
-	 * T​e​s​t​ ​N​e​t​w​o​r​k​s
+	 * T​e​s​t​n​e​t
 	 */
 	NETWORK_LABEL_TEST_NETWORKS: string
 	/**
@@ -4350,13 +4394,25 @@ type RootTranslation = {
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: string
 	/**
+	 * I​n​s​e​r​t​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s
+	 */
+	SEND_CREATE_CONTACT_ADDRESS_PLACEHOLDER: string
+	/**
 	 * C​R​E​A​T​E​ ​C​O​N​T​A​C​T
 	 */
 	SEND_CREATE_CONTACT_CREATE_BUTTON: string
 	/**
+	 * A​d​d​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​t​o​ ​M​y​ ​C​o​n​t​a​c​t​s
+	 */
+	SEND_CREATE_CONTACT_DESCRIPTION: string
+	/**
 	 * N​a​m​e
 	 */
 	SEND_CREATE_CONTACT_NAME: string
+	/**
+	 * I​n​s​e​r​t​ ​c​o​n​t​a​c​t​ ​n​a​m​e
+	 */
+	SEND_CREATE_CONTACT_NAME_PLACEHOLDER: string
 	/**
 	 * P​R​O​C​E​E​D​ ​A​N​Y​W​A​Y
 	 */
@@ -5763,18 +5819,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * A​d​d​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​t​o​ ​M​y​ ​C​o​n​t​a​c​t​s
-	 */
-	SEND_CREATE_CONTACT_DESCRIPTION: string
-	/**
-	 * I​n​s​e​r​t​ ​c​o​n​t​a​c​t​ ​n​a​m​e
-	 */
-	SEND_CREATE_CONTACT_NAME_PLACEHOLDER: string
-	/**
-	 * I​n​s​e​r​t​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s
-	 */
-	SEND_CREATE_CONTACT_ADDRESS_PLACEHOLDER: string
 }
 
 export type TranslationFunctions = {
@@ -9061,6 +9105,50 @@ This action is irreversible.
 	 */
 	NETWORK_ADD_CUSTOM_NODE: () => LocalizedString
 	/**
+	 * Add custom network
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK: () => LocalizedString
+	/**
+	 * Add a custom node to connect to
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_DESC: () => LocalizedString
+	/**
+	 * Insert the name
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Node name
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_LABEL: () => LocalizedString
+	/**
+	 * https://...
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_PLACEHOLDER: () => LocalizedString
+	/**
+	 * URL
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_LABEL: () => LocalizedString
+	/**
+	 * URL invalid or node configuration issue
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_ERROR: () => LocalizedString
+	/**
+	 * Network added
+	 */
+	NETWORK_ADDED: () => LocalizedString
+	/**
+	 * Network removed
+	 */
+	NETWORK_REMOVED: () => LocalizedString
+	/**
+	 * Network switched
+	 */
+	NETWORK_SWITCHED: () => LocalizedString
+	/**
+	 * Add custom
+	 */
+	NETWORK_ADD_CUSTOM: () => LocalizedString
+	/**
 	 * Add network
 	 */
 	NETWORK_ADD_CUSTOM_NODE_ADD_NETWORK: () => LocalizedString
@@ -9093,11 +9181,11 @@ This action is irreversible.
 	 */
 	NETWORK_LABEL_MAINNET: () => LocalizedString
 	/**
-	 * Main Networks
+	 * Mainnet
 	 */
 	NETWORK_LABEL_MAIN_NETWORKS: () => LocalizedString
 	/**
-	 * Other Networks
+	 * Custom networks
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: () => LocalizedString
 	/**
@@ -9105,7 +9193,7 @@ This action is irreversible.
 	 */
 	NETWORK_LABEL_TESTNET: () => LocalizedString
 	/**
-	 * Test Networks
+	 * Testnet
 	 */
 	NETWORK_LABEL_TEST_NETWORKS: () => LocalizedString
 	/**
@@ -10042,13 +10130,25 @@ This action is irreversible.
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
 	/**
+	 * Insert wallet address
+	 */
+	SEND_CREATE_CONTACT_ADDRESS_PLACEHOLDER: () => LocalizedString
+	/**
 	 * CREATE CONTACT
 	 */
 	SEND_CREATE_CONTACT_CREATE_BUTTON: () => LocalizedString
 	/**
+	 * Add this wallet to My Contacts
+	 */
+	SEND_CREATE_CONTACT_DESCRIPTION: () => LocalizedString
+	/**
 	 * Name
 	 */
 	SEND_CREATE_CONTACT_NAME: () => LocalizedString
+	/**
+	 * Insert contact name
+	 */
+	SEND_CREATE_CONTACT_NAME_PLACEHOLDER: () => LocalizedString
 	/**
 	 * PROCEED ANYWAY
 	 */
@@ -11440,18 +11540,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Add this wallet to My Contacts
-	 */
-	SEND_CREATE_CONTACT_DESCRIPTION: () => LocalizedString
-	/**
-	 * Insert contact name
-	 */
-	SEND_CREATE_CONTACT_NAME_PLACEHOLDER: () => LocalizedString
-	/**
-	 * Insert wallet address
-	 */
-	SEND_CREATE_CONTACT_ADDRESS_PLACEHOLDER: () => LocalizedString
 }
 
 export type Formatters = {

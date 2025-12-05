@@ -1,98 +1,122 @@
-import React, { useCallback } from "react"
-import { StyleSheet } from "react-native"
+import React, { MutableRefObject, useCallback, useEffect, useMemo } from "react"
+import { Pressable, StyleSheet } from "react-native"
+import Animated, {
+    FadeIn,
+    FadeOut,
+    interpolate,
+    interpolateColor,
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
+} from "react-native-reanimated"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import { BaseIcon, BaseText, BaseView, SwipeableRow } from "~Components"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
-import { StringUtils } from "~Utils"
-import { BaseCard, BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
-import { IconKey, Network } from "~Model"
-import { useI18nContext } from "~i18n"
+import { Network } from "~Model"
 
 type Props = {
     network: Network
     onPress?: (network: Network) => void
-    rightIcon?: IconKey
     isSelected?: boolean
-    flex?: number
-    activeOpacity?: number
-}
-export const NetworkBox: React.FC<Props> = ({ network, onPress, rightIcon, isSelected = false }) => {
-    const { LL } = useI18nContext()
+} & (
+    | {
+          deletable: true
+          onDelete: (network: Network) => void
+          swipeableItemRefs: MutableRefObject<Map<string, SwipeableItemImperativeRef>>
+      }
+    | { deletable?: false }
+)
+
+const AnimatedBaseIcon = Animated.createAnimatedComponent(BaseIcon)
+
+const Body = ({ network, isSelected }: Pick<Props, "network" | "isSelected">) => {
     const { theme, styles } = useThemedStyles(baseStyles)
-    const style = isSelected ? styles.selected : styles.notSelected
+    const textColor = useMemo(() => {
+        if (isSelected) return theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE
+        return theme.isDark ? COLORS.WHITE : COLORS.GREY_600
+    }, [isSelected, theme.isDark])
 
-    const handleOnPress = useCallback(() => !!onPress && onPress(network), [onPress, network])
+    const selectedAnimationValue = useSharedValue(Number(isSelected ?? false))
 
-    const networkBoxBody = useCallback(
-        () => (
-            <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" flex={1}>
-                <BaseView
-                    flexDirection="column"
-                    alignItems="flex-start"
-                    style={rightIcon ? styles.NetworkInfoRightIcon : styles.NetworkInfoNoRightIcon}>
-                    <BaseView flexDirection="row">
-                        <BaseText typographyFont="button" ellipsizeMode="tail" numberOfLines={1}>
-                            {StringUtils.capitalize(network.name)}
-                        </BaseText>
-                        {network.defaultNet && (
-                            <BaseText pl={2} typographyFont="captionRegular">
-                                ({LL.COMMON_LBL_DEFAULT()})
-                            </BaseText>
-                        )}
-                    </BaseView>
-                    <BaseText pt={2} typographyFont="captionMedium">
-                        {network.currentUrl}
-                    </BaseText>
-                </BaseView>
-                {rightIcon && <BaseIcon name={rightIcon} color={theme.colors.text} size={16} />}
+    useEffect(() => {
+        selectedAnimationValue.value = withTiming(Number(isSelected ?? false))
+    }, [isSelected, selectedAnimationValue])
+
+    const animatedStyles = useAnimatedStyle(() => {
+        const selectedColor = theme.isDark ? COLORS.LIME_GREEN : COLORS.PRIMARY_800
+        const borderColor = interpolateColor(selectedAnimationValue.value, [0, 1], ["transparent", selectedColor])
+
+        return {
+            paddingVertical: interpolate(selectedAnimationValue.value, [0, 1], [12, 16]),
+            borderColor,
+        }
+    }, [selectedAnimationValue.value])
+
+    return (
+        <Animated.View style={[styles.root, animatedStyles]}>
+            <BaseView flexDirection="column" alignItems="flex-start" flex={1}>
+                <BaseText typographyFont="bodySemiBold" ellipsizeMode="tail" numberOfLines={1} color={textColor}>
+                    {network.name}
+                </BaseText>
+                <BaseText pt={4} typographyFont="captionMedium">
+                    {network.currentUrl}
+                </BaseText>
             </BaseView>
-        ),
-        [
-            LL,
-            network.currentUrl,
-            network.defaultNet,
-            network.name,
-            rightIcon,
-            styles.NetworkInfoNoRightIcon,
-            styles.NetworkInfoRightIcon,
-            theme.colors.text,
-        ],
+            {isSelected && (
+                <AnimatedBaseIcon
+                    name="icon-check"
+                    size={20}
+                    color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE}
+                    entering={FadeIn}
+                    exiting={FadeOut}
+                />
+            )}
+        </Animated.View>
     )
+}
+
+export const NetworkBox: React.FC<Props> = ({ network, onPress, isSelected = false, ...props }) => {
+    const handleOnPress = useCallback(() => !!onPress && onPress(network), [onPress, network])
+    const handleDelete = useCallback(() => {
+        if (props.deletable) props.onDelete(network)
+    }, [props, network])
+
+    if (props.deletable)
+        return (
+            <SwipeableRow
+                testID="SEARCH_RESULT_ITEM_CONTAINER"
+                xMargins={0}
+                yMargins={0}
+                item={network}
+                itemKey={network.name}
+                snapPointsLeft={[50]}
+                handleTrashIconPress={handleDelete}
+                swipeableItemRefs={props.swipeableItemRefs}
+                onPress={handleOnPress}>
+                <Body network={network} isSelected={isSelected} />
+            </SwipeableRow>
+        )
 
     return onPress ? (
-        <BaseView style={styles.touchableContainer} flexDirection="row" accessible={false}>
-            <BaseTouchableBox
-                haptics="Light"
-                action={handleOnPress}
-                innerContainerStyle={style}
-                testID={`networks_box_${network.name}`}>
-                {networkBoxBody()}
-            </BaseTouchableBox>
-        </BaseView>
+        <Pressable onPress={handleOnPress}>
+            <Body network={network} isSelected={isSelected} />
+        </Pressable>
     ) : (
-        <BaseCard style={style}>{networkBoxBody()}</BaseCard>
+        <Body network={network} isSelected={isSelected} />
     )
 }
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        selected: {
-            borderWidth: 1.5,
-            borderColor: theme.colors.text,
-            borderRadius: 16,
-        },
-        notSelected: {
-            borderWidth: 1.5,
-            borderColor: theme.colors.card,
-            borderRadius: 16,
-        },
-        touchableContainer: {
+        root: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flex: 1,
+            paddingHorizontal: 16,
             backgroundColor: theme.colors.card,
-            borderRadius: 16,
-        },
-        NetworkInfoRightIcon: {
-            width: "90%",
-        },
-        NetworkInfoNoRightIcon: {
-            width: "100%",
+            borderRadius: 8,
+            borderWidth: 2,
         },
     })

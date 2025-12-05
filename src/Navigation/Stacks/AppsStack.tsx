@@ -7,7 +7,6 @@ import {
     AddCustomNodeScreen,
     ChangeNetworkScreen,
     InAppBrowser,
-    ManageCustomNodesScreen,
     TabsManagerScreen,
     WalletDetailScreen,
     WalletManagementScreen,
@@ -41,7 +40,6 @@ export type RootStackParamListApps = {
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
-    [Routes.SETTINGS_MANAGE_CUSTOM_NODES]: undefined
 }
 
 const { Navigator, Screen } = createStackNavigator<RootStackParamListApps>()
@@ -99,12 +97,6 @@ export const AppsStack = () => {
             <Screen
                 name={Routes.SETTINGS_ADD_CUSTOM_NODE}
                 component={AddCustomNodeScreen}
-                options={{ headerShown: false }}
-            />
-
-            <Screen
-                name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
-                component={ManageCustomNodesScreen}
                 options={{ headerShown: false }}
             />
         </Navigator>

@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import React from "react"
 import { useFeatureFlags } from "~Components"
+import { COLORS, SCREEN_HEIGHT } from "~Constants"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import {
     Activity,
@@ -33,20 +34,19 @@ import {
     InAppBrowser,
     InsertAddressSendScreen,
     LedgerSignTransaction,
-    ManageCustomNodesScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
     SelectAmountSendScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
     SelectTokenSendScreen,
+    SendScreen,
     SwapScreen,
     TabsManagerScreen,
     TransactionSummarySendScreen,
     UsernameClaimed,
     WalletDetailScreen,
     WalletManagementScreen,
-    SendScreen,
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AssetDetailScreenSheet } from "~Screens/Flows/App/AssetDetailScreenSheet"
@@ -57,7 +57,6 @@ import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/Co
 import { ReportNFTTransactionScreen } from "~Screens/Flows/App/NFT/NFTReportCollection/ReportNFTTransactionScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
-import { COLORS, SCREEN_HEIGHT } from "~Constants"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -159,7 +158,6 @@ export type RootStackParamListHome = {
     }
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
-    [Routes.SETTINGS_MANAGE_CUSTOM_NODES]: undefined
     [Routes.CLAIM_USERNAME]: undefined
     [Routes.USERNAME_CLAIMED]: {
         username: string
@@ -322,12 +320,6 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.SETTINGS_ADD_CUSTOM_NODE}
                     component={AddCustomNodeScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Screen
-                    name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
-                    component={ManageCustomNodesScreen}
                     options={{ headerShown: false }}
                 />
                 <Screen
