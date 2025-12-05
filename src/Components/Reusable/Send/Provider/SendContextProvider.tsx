@@ -1,18 +1,19 @@
 import React, { PropsWithChildren, useCallback, useContext, useMemo, useState } from "react"
 import { SharedValue, useSharedValue } from "react-native-reanimated"
-import { FungibleTokenWithBalance } from "~Model"
+import { FungibleTokenWithBalance, NonFungibleToken } from "~Model"
 
 export type SendFlowStep = "insertAddress" | "selectAmount" | "summary"
 
-type SendFlowState = {
+export type SendFlowState = {
     token?: FungibleTokenWithBalance
+    nft?: NonFungibleToken
     amount?: string
     fiatAmount?: string
     address?: string
     amountInFiat?: boolean
 }
 
-type SendContextType = {
+export type SendContextType = {
     flowState: SendFlowState
     setFlowState: React.Dispatch<React.SetStateAction<SendFlowState>>
     step: SendFlowStep
@@ -26,7 +27,7 @@ type SendContextType = {
     setIsPreviousButtonEnabled: (enabled: boolean) => void
 }
 
-const SendContext = React.createContext<SendContextType | undefined>(undefined)
+export const SendContext = React.createContext<SendContextType | undefined>(undefined)
 
 type SendContextProviderProps = PropsWithChildren<{
     initialToken?: FungibleTokenWithBalance

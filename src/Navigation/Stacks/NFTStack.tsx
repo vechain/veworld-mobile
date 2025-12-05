@@ -11,6 +11,7 @@ import {
     NFTScreen,
     ReportNFTTransactionScreen,
     SendNFTRecapScreen,
+    SendNFTScreen,
     WalletDetailScreen,
     WalletManagementScreen,
 } from "~Screens"
@@ -28,6 +29,11 @@ export type RootStackParamListNFT = {
         token?: FungibleTokenWithBalance
         contractAddress?: string
         tokenId?: string
+    }
+
+    [Routes.SEND_NFT]: {
+        contractAddress: string
+        tokenId: string
     }
 
     [Routes.SEND_NFT_RECAP]: {
@@ -74,6 +80,8 @@ export const NFTStack = () => {
                     component={InsertAddressSendScreen}
                     options={{ headerShown: false }}
                 />
+
+                <Screen name={Routes.SEND_NFT} component={SendNFTScreen} options={{ headerShown: false }} />
 
                 <Screen name={Routes.SEND_NFT_RECAP} component={SendNFTRecapScreen} options={{ headerShown: false }} />
 
