@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.14 (2025-12-04)</small>
+
+* build: init ([d9ac5e7](https://github.com/vechain/veworld-mobile/commit/d9ac5e7))
+* Send amount step use context provider (#3608) ([2855101](https://github.com/vechain/veworld-mobile/commit/2855101)), closes [#3608](https://github.com/vechain/veworld-mobile/issues/3608)
+
 ## <small>2.4.13 (2025-12-02)</small>
 
 * build: init ([658831e](https://github.com/vechain/veworld-mobile/commit/658831e))
