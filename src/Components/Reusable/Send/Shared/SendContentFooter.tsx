@@ -1,15 +1,16 @@
 import React, { ComponentProps } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
-import { BaseButton, BaseView, BaseViewProps, useSendContext } from "~Components"
+import { useSendContext } from "~Components"
+import { BaseButton, BaseView, BaseViewProps } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
+import ReanimatedUtils from "~Utils/ReanimatedUtils"
 
-const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
-const AnimatedBaseButton = Animated.createAnimatedComponent(wrapFunctionComponent(BaseButton))
+const AnimatedBaseView = Animated.createAnimatedComponent(ReanimatedUtils.wrapFunctionComponent(BaseView))
+const AnimatedBaseButton = Animated.createAnimatedComponent(ReanimatedUtils.wrapFunctionComponent(BaseButton))
 
-type ButtonProps = Omit<ComponentProps<typeof AnimatedBaseButton>, "flex" | "variant">
+type ButtonProps = Omit<ComponentProps<typeof BaseButton>, "flex" | "variant">
 
 const SendContentFooter = ({ children, style, ...props }: BaseViewProps) => {
     const { styles } = useThemedStyles(baseStyles)
@@ -17,8 +18,8 @@ const SendContentFooter = ({ children, style, ...props }: BaseViewProps) => {
         <AnimatedBaseView
             flexDirection="row"
             gap={16}
-            layout={LinearTransition}
             style={[styles.root, style]}
+            layout={LinearTransition}
             {...props}>
             {children}
         </AnimatedBaseView>
