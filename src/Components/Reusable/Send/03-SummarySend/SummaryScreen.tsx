@@ -24,7 +24,7 @@ export const SummaryScreen = () => {
     const { address } = flowState
 
     const token = useMemo(() => {
-        if (!flowState.token) throw new Error("THIS IS IMPOSSIBILE THAT CAN HAPPEN")
+        if (!flowState.token) throw new Error("SummaryScreen requires a token in flowState")
         return flowState.token
     }, [flowState.token])
 
