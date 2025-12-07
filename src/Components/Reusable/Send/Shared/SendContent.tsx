@@ -5,13 +5,15 @@ import { useThemedStyles } from "~Hooks"
 import { SendContentContainer } from "./SendContentContainer"
 import { SendContentFooter } from "./SendContentFooter"
 import { SendContentHeader } from "./SendContentHeader"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 type Props = Omit<AnimatedProps<ViewProps>, "entering" | "exiting">
 
 const SendContent = ({ children, style, ...props }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
+    const insets = useSafeAreaInsets()
     return (
-        <Animated.View style={[styles.root, style]} {...props}>
+        <Animated.View style={[styles.root, { paddingBottom: insets.bottom }, style]} {...props}>
             {children}
         </Animated.View>
     )

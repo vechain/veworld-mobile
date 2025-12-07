@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react"
-import { Pressable, StyleSheet } from "react-native"
+import { StyleSheet, TouchableOpacity } from "react-native"
 import { getLocales } from "react-native-localize"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { CURRENCY_FORMATS } from "~Constants"
@@ -43,9 +43,7 @@ const NumPadItem = ({
 
     return (
         <BaseView style={baseStyles.width} key={digit}>
-            <Pressable
-                style={({ pressed }) => [baseStyles.pressable, { opacity: pressed ? 0.5 : 1.0 }]}
-                onPress={onPress}>
+            <TouchableOpacity activeOpacity={0.5} style={baseStyles.pressable} onPress={onPress}>
                 {isDeleteKey ? (
                     <BaseIcon name="icon-delete" color={theme.colors.numberPad} />
                 ) : (
@@ -53,7 +51,7 @@ const NumPadItem = ({
                         {value}
                     </BaseText>
                 )}
-            </Pressable>
+            </TouchableOpacity>
         </BaseView>
     )
 }

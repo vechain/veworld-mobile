@@ -97,6 +97,5 @@ const baseStyles = () =>
             flex: 1,
             flexDirection: "column",
             gap: 8,
-            paddingTop: 24,
         },
     })
