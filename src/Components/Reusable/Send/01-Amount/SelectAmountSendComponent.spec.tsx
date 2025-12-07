@@ -1,16 +1,19 @@
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react-native"
 import React from "react"
-import { TestWrapper } from "~Test"
-import { SelectAmountSendComponent } from "./SelectAmountSendComponent"
-import { act, fireEvent, render, screen } from "@testing-library/react-native"
-import { useExchangeRate } from "~Api/Coingecko"
+
 import { FungibleTokenWithBalance } from "~Model"
-import { useSendContext } from "~Components/Reusable/Send"
+import { TestWrapper } from "~Test"
+
+import { useExchangeRate } from "~Api/Coingecko"
+import { useSendContext } from "../Provider"
+import { useDefaultToken } from "./Hooks"
+
+import { SelectAmountSendComponent } from "./SelectAmountSendComponent"
 
 const mockSetFlowState = jest.fn()
-const mockSetIsNextButtonEnabled = jest.fn()
 
-jest.mock("~Components/Reusable/Send", () => ({
-    ...jest.requireActual("~Components/Reusable/Send"),
+jest.mock("../Provider", () => ({
+    ...jest.requireActual("../Provider"),
     useSendContext: jest.fn(),
 }))
 
@@ -19,6 +22,11 @@ jest.mock("~Api/Coingecko", () => ({
     useExchangeRate: jest.fn().mockReturnValue({
         data: undefined,
     }),
+}))
+
+jest.mock("./Hooks", () => ({
+    ...jest.requireActual("./Hooks"),
+    useDefaultToken: jest.fn(),
 }))
 
 jest.mock("~Services/HapticsService", () => ({
@@ -34,7 +42,7 @@ jest.mock("~Services/HapticsService", () => ({
 const mockVETToken: FungibleTokenWithBalance = {
     address: "VET",
     balance: {
-        balance: "0x470de4df820000",
+        balance: "0x1bc16d674ec80000", // 2 VET
         timeUpdated: "2023-05-24T13:14:07.205Z",
         tokenAddress: "VET",
         isHidden: false,
@@ -49,7 +57,7 @@ const mockVETToken: FungibleTokenWithBalance = {
 const mockVTHOToken: FungibleTokenWithBalance = {
     address: "0x0000000000000000000000000000456E65726779",
     balance: {
-        balance: "0x8ac7230489e80000",
+        balance: "0x1bc16d674ec80000", // 2 VTHO
         timeUpdated: "2023-05-24T13:14:07.205Z",
         tokenAddress: "0x0000000000000000000000000000456E65726779",
         isHidden: false,
@@ -61,12 +69,15 @@ const mockVTHOToken: FungibleTokenWithBalance = {
     symbol: "VTHO",
 }
 
+const goToNext = jest.fn()
+
 const setupMockContext = (token: FungibleTokenWithBalance = mockVETToken) => {
     ;(useSendContext as jest.Mock).mockReturnValue({
         flowState: { token, amount: "0", fiatAmount: "", address: "", amountInFiat: false },
         setFlowState: mockSetFlowState,
-        setIsNextButtonEnabled: mockSetIsNextButtonEnabled,
+        goToNext,
     })
+    jest.mocked(useDefaultToken).mockReturnValue(token)
 }
 
 const findAmountInput = async () => await screen.findByTestId("SendScreen_amountInput", {}, { timeout: 5000 })
@@ -75,6 +86,7 @@ describe("SelectAmountSendComponent", () => {
     beforeEach(() => {
         jest.clearAllMocks()
         setupMockContext()
+        ;(useExchangeRate as jest.Mock).mockReturnValue({ data: 1 })
     })
 
     it("should render correctly with a token from context", async () => {
@@ -164,13 +176,17 @@ describe("SelectAmountSendComponent", () => {
             await new Promise(resolve => setTimeout(resolve, 600))
         })
 
-        // Verify setIsNextButtonEnabled was called with true (valid state)
-        expect(mockSetIsNextButtonEnabled).toHaveBeenCalled()
-        const enabledCalls = mockSetIsNextButtonEnabled.mock.calls.filter(call => call[0] === true)
-        expect(enabledCalls.length).toBeGreaterThan(0)
-
         const amountInput = await findAmountInput()
         expect(amountInput.props.children).not.toBe("0")
+
+        // Check that the next button works
+        const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
+        await act(async () => {
+            fireEvent.press(btn)
+        })
+        await waitFor(() => {
+            expect(goToNext).toHaveBeenCalled()
+        })
     })
 
     it("should update flowState with correct parameters when amount changes", async () => {
@@ -189,9 +205,13 @@ describe("SelectAmountSendComponent", () => {
             await new Promise(resolve => setTimeout(resolve, 200))
         })
 
+        const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
+        await act(async () => {
+            fireEvent.press(btn)
+        })
+
         // Verify setFlowState was called
         expect(mockSetFlowState).toHaveBeenCalled()
-
         // Get the last call and verify it updates with correct structure
         const lastCall = mockSetFlowState.mock.calls[mockSetFlowState.mock.calls.length - 1][0]
         // setFlowState is called with a function, so we need to call it to get the result
@@ -227,10 +247,12 @@ describe("SelectAmountSendComponent", () => {
             await new Promise(resolve => setTimeout(resolve, 300))
         })
 
-        // Verify setIsNextButtonEnabled was called with false (error state)
-        expect(mockSetIsNextButtonEnabled).toHaveBeenCalled()
-        const lastCall = mockSetIsNextButtonEnabled.mock.calls[mockSetIsNextButtonEnabled.mock.calls.length - 1][0]
-        expect(lastCall).toBe(false)
+        // Check that the next button does not work
+        const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
+        await act(async () => {
+            fireEvent.press(btn)
+        })
+        expect(goToNext).not.toHaveBeenCalled()
     })
 
     it("should display error message when amount exceeds balance", async () => {
@@ -354,13 +376,16 @@ describe("SelectAmountSendComponent", () => {
             await new Promise(resolve => setTimeout(resolve, 600))
         })
 
-        // Verify setIsNextButtonEnabled was called with true (valid state)
-        expect(mockSetIsNextButtonEnabled).toHaveBeenCalled()
-        const enabledCalls = mockSetIsNextButtonEnabled.mock.calls.filter(call => call[0] === true)
-        expect(enabledCalls.length).toBeGreaterThan(0)
+        // Check that the next button works
+        const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
+        await act(async () => {
+            fireEvent.press(btn)
+        })
+        expect(goToNext).toHaveBeenCalled()
     })
 
     it("should reset input when token is changed", async () => {
+        setupMockContext()
         render(<SelectAmountSendComponent />, {
             wrapper: TestWrapper,
         })

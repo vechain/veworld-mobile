@@ -1,10 +1,11 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseText, BaseView, useSendContext } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 import { useI18nContext } from "~i18n"
+import { useSendContext } from "../Provider"
 
 type SendFlowStep = "selectAmount" | "insertAddress" | "summary"
 

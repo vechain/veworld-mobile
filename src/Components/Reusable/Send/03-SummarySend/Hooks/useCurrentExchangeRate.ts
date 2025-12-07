@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { useSendContext } from "~Components"
+import { useSendContext } from "../../Provider"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
 export const useCurrentExchangeRate = () => {

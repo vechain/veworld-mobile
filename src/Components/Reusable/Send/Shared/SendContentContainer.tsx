@@ -1,8 +1,8 @@
 import React from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import Animated, { AnimatedProps } from "react-native-reanimated"
-import { useSendContext } from "~Components"
 import { useThemedStyles } from "~Hooks"
+import { useSendContext } from "../Provider"
 
 type Props = Omit<AnimatedProps<ViewProps>, "entering" | "exiting">
 

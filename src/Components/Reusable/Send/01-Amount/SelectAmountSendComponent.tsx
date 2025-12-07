@@ -4,98 +4,37 @@ import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { BaseSpacer, BaseView } from "~Components"
-import { useSendContext } from "~Components/Reusable/Send"
 import { B3TR, ColorThemeType, CURRENCY_FORMATS, VET, VOT3, VTHO } from "~Constants"
 import { getNumberFormatter } from "~Constants/Constants/NumberFormatter"
 import { useAmountInput, useFormatFiat, useThemedStyles } from "~Hooks"
-import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
-import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
-import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
-import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { FungibleTokenWithBalance } from "~Model"
 import HapticsService from "~Services/HapticsService"
 import { selectCurrency, selectCurrencyFormat, useAppSelector } from "~Storage/Redux"
-import { BalanceUtils, BigNutils } from "~Utils"
+import { BigNutils } from "~Utils"
 import { getDecimalSeparator } from "~Utils/BigNumberUtils/BigNumberUtils"
 import { formatFullPrecision } from "~Utils/StandardizedFormatting"
+import { useSendContext } from "../Provider"
 import { SendContent } from "../Shared"
 import { SelectAmountConversionToggle } from "./Components/SelectAmountConversionToggle"
 import { SelectAmountInput } from "./Components/SelectAmountInput"
 import { SelectAmountTokenSelector } from "./Components/SelectAmountTokenSelector"
 import { SendNumPad } from "./Components/SendNumPad"
 import { TokenSelectionBottomSheet } from "./Components/TokenSelectionBottomSheet"
-import { useAmountConversion } from "./Hooks"
+import { useAmountConversion, useDefaultToken } from "./Hooks"
 
 const MAX_FIAT_DECIMALS = 2
 const MAX_TOKEN_DECIMALS = 5
 
 export const SelectAmountSendComponent = () => {
-    const { flowState, setFlowState, goToNext } = useSendContext()
+    const { setFlowState, goToNext } = useSendContext()
     const { formatLocale } = useFormatFiat()
 
     const bottomSheetRef = useRef<BottomSheetModalMethods>(null)
 
     const currency = useAppSelector(selectCurrency)
     const currencyFormat = useAppSelector(selectCurrencyFormat)
-    const availableTokens = useSendableTokensWithBalance()
 
-    const vetInfo = useTokenWithCompleteInfo(VET)
-    const vthoInfo = useTokenWithCompleteInfo(VTHO)
-    const b3trInfo = useTokenWithCompleteInfo(B3TR)
-
-    const { data: nonVechainTokensWithBalance } = useNonVechainTokensBalance()
-    const { data: nonVechainTokensFiat } = useNonVechainTokenFiat()
-
-    const defaultToken = useMemo(() => {
-        if (flowState.token) return flowState.token
-
-        const sendableTokens = availableTokens.filter(
-            t => t.symbol !== VOT3.symbol && !BigNutils(t.balance.balance).isZero,
-        )
-
-        if (sendableTokens.length === 0) {
-            const vetToken = availableTokens.find(t => t.symbol === VET.symbol)
-            return vetToken || availableTokens[0]
-        }
-
-        const tokensWithFiatValue = sendableTokens.map(t => {
-            let fiatValue = 0
-
-            if (t.symbol === VET.symbol && vetInfo.exchangeRate) {
-                const fiatStr = BalanceUtils.getFiatBalance(t.balance.balance, vetInfo.exchangeRate, t.decimals)
-                fiatValue = Number.parseFloat(fiatStr.replaceAll(/[^0-9.]/g, "")) || 0
-            } else if (t.symbol === VTHO.symbol && vthoInfo.exchangeRate) {
-                const fiatStr = BalanceUtils.getFiatBalance(t.balance.balance, vthoInfo.exchangeRate, t.decimals)
-                fiatValue = Number.parseFloat(fiatStr.replaceAll(/[^0-9.]/g, "")) || 0
-            } else if (t.symbol === B3TR.symbol && b3trInfo.exchangeRate) {
-                const fiatStr = BalanceUtils.getFiatBalance(t.balance.balance, b3trInfo.exchangeRate, t.decimals)
-                fiatValue = Number.parseFloat(fiatStr.replaceAll(/[^0-9.]/g, "")) || 0
-            } else if (nonVechainTokensWithBalance && nonVechainTokensFiat) {
-                const tokenIndex = nonVechainTokensWithBalance.findIndex(nt => nt.address === t.address)
-                if (tokenIndex >= 0 && tokenIndex < nonVechainTokensFiat.length) {
-                    const fiatStr = nonVechainTokensFiat[tokenIndex]
-                    if (fiatStr) {
-                        fiatValue = Number.parseFloat(fiatStr.replaceAll(/[^0-9.]/g, "")) || 0
-                    }
-                }
-            }
-
-            return { token: t, fiatValue }
-        })
-
-        tokensWithFiatValue.sort((a, b) => b.fiatValue - a.fiatValue)
-
-        return tokensWithFiatValue[0]?.token || sendableTokens[0]
-    }, [
-        flowState.token,
-        availableTokens,
-        vetInfo.exchangeRate,
-        vthoInfo.exchangeRate,
-        b3trInfo.exchangeRate,
-        nonVechainTokensWithBalance,
-        nonVechainTokensFiat,
-    ])
-
+    const defaultToken = useDefaultToken()
     const [isInputInFiat, setIsInputInFiat] = useState(true)
     const [isError, setIsError] = useState(false)
     const [selectedToken, setSelectedToken] = useState<FungibleTokenWithBalance | undefined>(defaultToken)

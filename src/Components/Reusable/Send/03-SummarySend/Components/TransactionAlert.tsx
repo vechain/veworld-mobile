@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { AlertInline, BaseView, useSendContext } from "~Components"
+import { AlertInline, BaseView } from "~Components"
 import { AlertStatus } from "~Components/Reusable/Alert/utils/AlertConfigs"
 import { useI18nContext } from "~i18n"
+import { useSendContext } from "../../Provider"
 import { useCurrentExchangeRate } from "../Hooks"
 
 type Props = {
