@@ -1,6 +1,11 @@
 import React, { PropsWithChildren, useCallback, useContext, useMemo, useState } from "react"
-import { SharedValue, useSharedValue } from "react-native-reanimated"
+import { EntryAnimationsValues, ExitAnimationsValues, LayoutAnimation, useSharedValue } from "react-native-reanimated"
 import { FungibleTokenWithBalance, NonFungibleToken } from "~Model"
+import {
+    EnteringFromLeftAnimation,
+    EnteringFromRightAnimation,
+} from "~Screens/Flows/App/SendScreen/Animations/Entering"
+import { ExitingToLeftAnimation, ExitingToRightAnimation } from "~Screens/Flows/App/SendScreen/Animations/Exiting"
 
 export type SendFlowStep = "insertAddress" | "selectAmount" | "summary"
 
@@ -22,16 +27,10 @@ export type SendContextType = {
     flowState: SendFlowState
     setFlowState: React.Dispatch<React.SetStateAction<SendFlowState>>
     step: SendFlowStep
-    previousStep: SharedValue<SendFlowStep | undefined>
-    nextStep: SharedValue<SendFlowStep | undefined>
     goToNext: () => void
     goToPrevious: () => void
-    isNextButtonEnabled: boolean
-    isPreviousButtonEnabled: boolean
-    setIsNextButtonEnabled: (enabled: boolean) => void
-    setIsPreviousButtonEnabled: (enabled: boolean) => void
-    txError: boolean
-    setTxError: (hasError: boolean) => void
+    EnteringAnimation: (values: EntryAnimationsValues) => LayoutAnimation
+    ExitingAnimation: (values: ExitAnimationsValues) => LayoutAnimation
 }
 
 export const SendContext = React.createContext<SendContextType | undefined>(undefined)
@@ -39,6 +38,8 @@ export const SendContext = React.createContext<SendContextType | undefined>(unde
 type SendContextProviderProps = PropsWithChildren<{
     initialToken?: FungibleTokenWithBalance
 }>
+
+const ORDER: SendFlowStep[] = ["selectAmount", "insertAddress", "summary"]
 
 export const SendContextProvider = ({ children, initialToken }: SendContextProviderProps) => {
     const [step, setStep] = useState<SendFlowStep>("selectAmount")
@@ -49,10 +50,6 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
         address: "",
         amountInFiat: false,
     })
-
-    const [isNextButtonEnabled, setIsNextButtonEnabled] = useState(true)
-    const [isPreviousButtonEnabled, setIsPreviousButtonEnabled] = useState(true)
-    const [txError, setTxError] = useState(false)
 
     const previousStep = useSharedValue<typeof step | undefined>(undefined)
     const nextStep = useSharedValue<typeof step | undefined>(undefined)
@@ -87,37 +84,46 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
         }
     }, [nextStep, previousStep, step])
 
+    const EnteringAnimation = useCallback(
+        (values: EntryAnimationsValues) => {
+            "worklet"
+            if (!previousStep.value || !nextStep.value)
+                return {
+                    initialValues: values,
+                    animations: {},
+                }
+            if (ORDER.indexOf(nextStep.value) > ORDER.indexOf(previousStep.value))
+                return EnteringFromRightAnimation(values)
+            return EnteringFromLeftAnimation(values)
+        },
+        [nextStep.value, previousStep.value],
+    )
+
+    const ExitingAnimation = useCallback(
+        (values: ExitAnimationsValues) => {
+            "worklet"
+            if (!previousStep.value || !nextStep.value)
+                return {
+                    initialValues: values,
+                    animations: {},
+                }
+            if (ORDER.indexOf(nextStep.value) > ORDER.indexOf(previousStep.value)) return ExitingToLeftAnimation(values)
+            return ExitingToRightAnimation(values)
+        },
+        [nextStep.value, previousStep.value],
+    )
+
     const contextValue: SendContextType = useMemo(
         () => ({
             flowState,
             setFlowState,
             step,
-            previousStep,
-            nextStep,
-            isNextButtonEnabled,
-            isPreviousButtonEnabled,
-            setIsNextButtonEnabled,
-            setIsPreviousButtonEnabled,
             goToNext,
             goToPrevious,
-            txError,
-            setTxError,
+            EnteringAnimation,
+            ExitingAnimation,
         }),
-        [
-            flowState,
-            setFlowState,
-            step,
-            previousStep,
-            nextStep,
-            isNextButtonEnabled,
-            isPreviousButtonEnabled,
-            setIsNextButtonEnabled,
-            setIsPreviousButtonEnabled,
-            goToNext,
-            goToPrevious,
-            txError,
-            setTxError,
-        ],
+        [flowState, step, goToNext, goToPrevious, EnteringAnimation, ExitingAnimation],
     )
 
     return <SendContext.Provider value={contextValue}>{children}</SendContext.Provider>
