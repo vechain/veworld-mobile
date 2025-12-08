@@ -1,188 +1,151 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
-import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { AlertInline, BaseView, useSendContext } from "~Components"
-import { AlertStatus } from "~Components/Reusable/Alert/utils/AlertConfigs"
+import { BaseView } from "~Components"
+import { useSendContext } from "~Components/Reusable/Send"
+import { VTHO } from "~Constants"
+import { useThemedStyles, useTransactionScreen } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { useThemedStyles } from "~Hooks"
-import { useFormatFiat } from "~Hooks/useFormatFiat"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { BigNutils } from "~Utils"
-import { formatFullPrecision } from "~Utils/StandardizedFormatting"
-import { useNavigation } from "@react-navigation/native"
-import { RootStackParamListHome, Routes } from "~Navigation"
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { BigNutils, TransactionUtils } from "~Utils"
+import { SendContent } from "../Shared"
+import { TransactionAlert } from "./Components"
 import { TokenReceiverCard } from "./Components/TokenReceiverCard"
 import { TransactionFeeCard } from "./Components/TransactionFeeCard"
-import { SendFlowHeader } from "../SendFlowHeader"
+import { TransactionProvider } from "./Components/TransactionProvider"
+import { useTransactionCallbacks } from "./Hooks"
 
-type SummaryScreenProps = {
-    onBindTransactionControls: (controls: { onSubmit: () => void; isDisabledButtonState: boolean }) => void
-}
-
-type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
-
-export const SummaryScreen = ({ onBindTransactionControls }: SummaryScreenProps) => {
-    const { styles } = useThemedStyles(baseStyles)
+export const SummaryScreen = () => {
     const { LL } = useI18nContext()
-    const navigation = useNavigation<NavigationProps>()
-    const { flowState, txError, setTxError } = useSendContext()
-    const currency = useAppSelector(selectCurrency)
-    const { formatLocale } = useFormatFiat()
+    const { styles } = useThemedStyles(baseStyles)
+    const { flowState, setFlowState } = useSendContext()
+    const [txError, setTxError] = useState(false)
+    const originalAmount = useRef(flowState.amount)
 
-    const { token, amount, address, fiatAmount, amountInFiat, initialExchangeRate } = flowState
+    const { address } = flowState
 
-    const exchangeRateId = useMemo(() => (token ? getCoinGeckoIdBySymbol[token.symbol] : undefined), [token])
+    const token = useMemo(() => {
+        if (!flowState.token) throw new Error("SummaryScreen requires a token in flowState")
+        return flowState.token
+    }, [flowState.token])
 
-    const { data: exchangeRate } = useExchangeRate({
-        id: exchangeRateId,
-        vs_currency: currency,
-        refetchIntervalMs: 20000,
-    })
-
-    const [priceUpdated, setPriceUpdated] = useState(false)
     const [hasGasAdjustment, setHasGasAdjustment] = useState(false)
 
-    const { displayTokenAmount, displayFiatAmount } = useMemo(() => {
-        if (!exchangeRate) {
-            return {
-                displayTokenAmount: amount ?? "0",
-                displayFiatAmount: fiatAmount,
-            }
-        }
+    const onFailure = useCallback(() => setTxError(true), [setTxError])
+    const { onTransactionSuccess, onTransactionFailure } = useTransactionCallbacks({
+        token: token,
+        onFailure,
+    })
 
-        if (amountInFiat && fiatAmount != null) {
-            const nextTokenAmount = BigNutils().toTokenConversion(fiatAmount, exchangeRate).toString
-
-            return {
-                displayTokenAmount: nextTokenAmount,
-                displayFiatAmount: fiatAmount,
-            }
-        }
-
-        const sourceAmount = amount ?? "0"
-        const { value } = BigNutils().toCurrencyConversion(sourceAmount, exchangeRate)
-
-        return {
-            displayTokenAmount: sourceAmount,
-            displayFiatAmount: value,
-        }
-    }, [amount, amountInFiat, exchangeRate, fiatAmount])
-
-    const formattedTokenAmount = useMemo(() => {
-        if (!token) return undefined
-
-        const raw = (displayTokenAmount ?? "").trim()
-        if (!raw) return undefined
-
-        // Preserve any special "< 0.00001" style strings just in case
-        if (raw.startsWith("<")) return raw
-
-        return formatFullPrecision(raw, {
-            locale: formatLocale,
-            forceDecimals: 5,
-            tokenSymbol: token.symbol,
-        })
-    }, [displayTokenAmount, formatLocale, token])
-
-    const handleGasAdjusted = useCallback(() => {
-        setHasGasAdjustment(true)
-    }, [])
-
-    const handleTxFinished = useCallback(
-        (success: boolean) => {
-            if (success) {
-                if (txError) {
-                    setTxError(false)
-                }
-                navigation.navigate(Routes.HOME)
-                return
-            }
-
-            if (!txError) {
-                setTxError(true)
-            }
-        },
-        [navigation, setTxError, txError],
+    const clauses = useMemo(
+        () => TransactionUtils.prepareFungibleClause(flowState.amount!, token, address!),
+        [flowState.amount, token, address],
     )
 
-    const alertConfig = useMemo<null | { message: string; status: AlertStatus }>(() => {
-        if (txError) {
-            return {
-                message: LL.COMMON_ALERT_TRANSACTION_FAILED(),
-                status: "error",
-            }
-        }
+    const {
+        isEnoughGas,
+        isDelegated,
+        gasOptions,
+        selectedFeeOption,
+        selectedDelegationToken,
+        fallbackToVTHO,
+        isDisabledButtonState,
+        onSubmit,
+        ...transactionProps
+    } = useTransactionScreen({
+        clauses,
+        onTransactionSuccess,
+        onTransactionFailure,
+        autoVTHOFallback: false,
+    })
 
-        if (hasGasAdjustment) {
-            return {
-                message: LL.COMMON_ALERT_TOKEN_AMOUNT_ADJUSTED_FOR_FEE(),
-                status: "info",
-            }
-        }
-
-        if (priceUpdated) {
-            return {
-                message: LL.COMMON_ALERT_DISPLAYED_AMOUNTS_UPDATED(),
-                status: "info",
-            }
-        }
-
-        return null
-    }, [LL, hasGasAdjustment, priceUpdated, txError])
-
-    // Track latest exchange rate vs the one used in the previous step to detect market price updates
+    /**
+     * If user is sending a token and gas is not enough, we will adjust the amount to send or switch fee token.
+     */
     useEffect(() => {
-        if (exchangeRate == null || initialExchangeRate == null) return
-
-        if (!priceUpdated && exchangeRate !== initialExchangeRate) {
-            setPriceUpdated(true)
+        if (isDelegated && selectedDelegationToken === VTHO.symbol) {
+            return
         }
-    }, [exchangeRate, initialExchangeRate, priceUpdated])
+        if (isEnoughGas) {
+            return
+        }
+        // If there's not enough gas with the current delegation token and it's different from the current token that's being sent
+        // Then fallback to VTHO
+        if (selectedDelegationToken.toLowerCase() !== token.symbol.toLowerCase()) {
+            fallbackToVTHO()
+            return
+        }
 
-    const formattedFiatAmount = useMemo(() => {
-        if (displayFiatAmount == null) return undefined
+        const gasFees = gasOptions[selectedFeeOption].maxFee
+        const balance = BigNutils(token.balance.balance)
+        const amountPlusFees = BigNutils(flowState.amount!).multiply(BigNutils(10).toBN.pow(18)).plus(gasFees.toBN)
+        // If the current amount + fees is < balance, then ignore
+        if (amountPlusFees.isLessThanOrEqual(balance.toBN)) return
+        const newBalance = balance.minus(gasFees.toBN)
+        if (newBalance.isLessThanOrEqual("0")) {
+            // If it cannot even pay for the fees, fallback to VTHO and restore the original amount
+            fallbackToVTHO()
+            setFlowState({
+                ...flowState,
+                amount: originalAmount.current,
+            })
+        } else {
+            // Deduct from the balance the fees to get the new value
+            const adjustedAmount = newBalance.toHuman(token.decimals).decimals(4).toString
+            setFlowState({
+                ...flowState,
+                amount: adjustedAmount,
+                amountInFiat: false,
+            })
+        }
 
-        const trimmed = displayFiatAmount.trim()
-        // Preserve special "< 0.01" style strings
-        if (trimmed.startsWith("<")) return trimmed
-
-        return formatFullPrecision(trimmed, {
-            locale: formatLocale,
-            forceDecimals: 2,
-        })
-    }, [displayFiatAmount, formatLocale])
+        setHasGasAdjustment(true)
+    }, [
+        fallbackToVTHO,
+        gasOptions,
+        isDelegated,
+        isEnoughGas,
+        selectedDelegationToken,
+        selectedFeeOption,
+        token.balance.balance,
+        token.decimals,
+        token.symbol,
+        flowState,
+        setFlowState,
+    ])
 
     if (!token || !address) {
         return <BaseView flex={1} />
     }
 
     return (
-        <Animated.View style={styles.root}>
-            <SendFlowHeader step="summary" />
-            <TokenReceiverCard
-                token={token}
-                amount={formattedTokenAmount ?? displayTokenAmount}
-                address={address}
-                fiatAmount={formattedFiatAmount}
-                amountInFiat={Boolean(amountInFiat)}
-            />
-            <TransactionFeeCard
-                token={token}
-                amount={displayTokenAmount}
-                address={address}
-                onTxFinished={handleTxFinished}
-                onBindTransactionControls={onBindTransactionControls}
-                onGasAdjusted={handleGasAdjusted}
-            />
+        <SendContent>
+            <SendContent.Header />
+            <SendContent.Container>
+                <Animated.View style={styles.root}>
+                    <TokenReceiverCard />
+                    <TransactionProvider
+                        fallbackToVTHO={fallbackToVTHO}
+                        isEnoughGas={isEnoughGas}
+                        isDelegated={isDelegated}
+                        gasOptions={gasOptions}
+                        selectedFeeOption={selectedFeeOption}
+                        selectedDelegationToken={selectedDelegationToken}
+                        isDisabledButtonState={isDisabledButtonState}
+                        onSubmit={onSubmit}
+                        {...transactionProps}>
+                        <TransactionFeeCard />
+                    </TransactionProvider>
 
-            {alertConfig && (
-                <BaseView>
-                    <AlertInline message={alertConfig.message} status={alertConfig.status} variant="banner" />
-                </BaseView>
-            )}
-        </Animated.View>
+                    <TransactionAlert hasGasAdjustment={hasGasAdjustment} txError={txError} />
+                </Animated.View>
+            </SendContent.Container>
+            <SendContent.Footer>
+                <SendContent.Footer.Back />
+                <SendContent.Footer.Next action={onSubmit} disabled={isDisabledButtonState}>
+                    {txError ? LL.COMMON_BTN_TRY_AGAIN() : LL.COMMON_BTN_CONFIRM()}
+                </SendContent.Footer.Next>
+            </SendContent.Footer>
+        </SendContent>
     )
 }
 
@@ -192,6 +155,5 @@ const baseStyles = () =>
             flex: 1,
             flexDirection: "column",
             gap: 16,
-            paddingHorizontal: 16,
         },
     })
