@@ -1,9 +1,16 @@
 import React, { PropsWithChildren, useCallback, useMemo, useState } from "react"
 import { useSharedValue } from "react-native-reanimated"
 import { NonFungibleToken } from "~Model"
+import {
+    EnteringFromLeftAnimation,
+    EnteringFromRightAnimation,
+} from "~Screens/Flows/App/SendScreen/Animations/Entering"
+import { ExitingToLeftAnimation, ExitingToRightAnimation } from "~Screens/Flows/App/SendScreen/Animations/Exiting"
 import { SendContext, SendContextType, SendFlowState, SendFlowStep } from "./SendContextProvider"
 
 type SendNFTFlowStep = "insertAddress" | "summary"
+
+const ORDER: SendNFTFlowStep[] = ["insertAddress", "summary"]
 
 type SendNFTContextProviderProps = PropsWithChildren<{
     initialNft?: NonFungibleToken
@@ -15,9 +22,6 @@ export const SendNFTContextProvider = ({ children, initialNft }: SendNFTContextP
         nft: initialNft,
         address: "",
     })
-
-    const [isNextButtonEnabled, setIsNextButtonEnabled] = useState(true)
-    const [isPreviousButtonEnabled, setIsPreviousButtonEnabled] = useState(true)
 
     const previousStep = useSharedValue<SendFlowStep | undefined>(undefined)
     const nextStep = useSharedValue<SendFlowStep | undefined>(undefined)
@@ -42,33 +46,47 @@ export const SendNFTContextProvider = ({ children, initialNft }: SendNFTContextP
         }
     }, [nextStep, previousStep, step])
 
+    const EnteringAnimation = useCallback(
+        (values: Parameters<typeof EnteringFromRightAnimation>[0]) => {
+            "worklet"
+            if (!previousStep.value || !nextStep.value)
+                return {
+                    initialValues: values,
+                    animations: {},
+                }
+            if (ORDER.indexOf(nextStep.value as SendNFTFlowStep) > ORDER.indexOf(previousStep.value as SendNFTFlowStep))
+                return EnteringFromRightAnimation(values)
+            return EnteringFromLeftAnimation(values)
+        },
+        [nextStep.value, previousStep.value],
+    )
+
+    const ExitingAnimation = useCallback(
+        (values: Parameters<typeof ExitingToLeftAnimation>[0]) => {
+            "worklet"
+            if (!previousStep.value || !nextStep.value)
+                return {
+                    initialValues: values,
+                    animations: {},
+                }
+            if (ORDER.indexOf(nextStep.value as SendNFTFlowStep) > ORDER.indexOf(previousStep.value as SendNFTFlowStep))
+                return ExitingToLeftAnimation(values)
+            return ExitingToRightAnimation(values)
+        },
+        [nextStep.value, previousStep.value],
+    )
+
     const contextValue: SendContextType = useMemo(
         () => ({
             flowState,
             setFlowState,
             step,
-            previousStep,
-            nextStep,
-            isNextButtonEnabled,
-            isPreviousButtonEnabled,
-            setIsNextButtonEnabled,
-            setIsPreviousButtonEnabled,
             goToNext,
             goToPrevious,
+            EnteringAnimation,
+            ExitingAnimation,
         }),
-        [
-            flowState,
-            setFlowState,
-            step,
-            previousStep,
-            nextStep,
-            isNextButtonEnabled,
-            isPreviousButtonEnabled,
-            setIsNextButtonEnabled,
-            setIsPreviousButtonEnabled,
-            goToNext,
-            goToPrevious,
-        ],
+        [flowState, step, goToNext, goToPrevious, EnteringAnimation, ExitingAnimation],
     )
 
     return <SendContext.Provider value={contextValue}>{children}</SendContext.Provider>
