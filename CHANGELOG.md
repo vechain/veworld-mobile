@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.14 (2025-12-08)</small>
+
+* build: init ([2b17d34](https://github.com/vechain/veworld-mobile/commit/2b17d34))
+* Refactor send screen (#3614) ([73be8e3](https://github.com/vechain/veworld-mobile/commit/73be8e3)), closes [#3614](https://github.com/vechain/veworld-mobile/issues/3614)
+
 ## <small>2.4.13 (2025-12-02)</small>
 
 * build: init ([658831e](https://github.com/vechain/veworld-mobile/commit/658831e))
