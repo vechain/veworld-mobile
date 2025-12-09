@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react-native"
 import React, { ComponentProps, useEffect } from "react"
 import { FungibleTokenWithBalance } from "~Model"
 import { TestWrapper } from "~Test"
-import { SendContextProvider, useSendContext } from "../../Provider/SendContextProvider"
+import { SendContextProvider, useTokenSendContext } from "../../Provider/SendContextProvider"
 import { useCurrentExchangeRate } from "../Hooks"
 import { TransactionAlert } from "./TransactionAlert"
 
@@ -39,10 +39,11 @@ const InitializeSendFlow: React.FC<{ children: React.ReactNode; token: FungibleT
     children,
     token,
 }) => {
-    const { setFlowState } = useSendContext()
+    const { setFlowState } = useTokenSendContext()
 
     useEffect(() => {
         setFlowState({
+            type: "token",
             token,
             amount: "1.234",
             address: "0xreceiver",

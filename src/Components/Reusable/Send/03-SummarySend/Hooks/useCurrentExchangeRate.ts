@@ -1,11 +1,11 @@
 import { useMemo } from "react"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { useSendContext } from "../../Provider"
+import { useTokenSendContext } from "../../Provider"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
 export const useCurrentExchangeRate = () => {
     const currency = useAppSelector(selectCurrency)
-    const { flowState } = useSendContext()
+    const { flowState } = useTokenSendContext()
 
     const exchangeRateId = useMemo(
         () => (flowState.token ? getCoinGeckoIdBySymbol[flowState.token.symbol] : undefined),

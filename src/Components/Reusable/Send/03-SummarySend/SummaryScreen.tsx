@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseView } from "~Components"
-import { useSendContext } from "~Components/Reusable/Send"
+import { useTokenSendContext } from "~Components/Reusable/Send"
 import { VTHO } from "~Constants"
 import { useThemedStyles, useTransactionScreen } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -17,7 +17,7 @@ import { useTransactionCallbacks } from "./Hooks"
 export const SummaryScreen = () => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
-    const { flowState, setFlowState } = useSendContext()
+    const { flowState, setFlowState } = useTokenSendContext()
     const [txError, setTxError] = useState(false)
     const originalAmount = useRef(flowState.amount)
 

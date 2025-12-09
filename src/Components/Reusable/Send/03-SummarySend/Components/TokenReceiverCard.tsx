@@ -3,12 +3,12 @@ import { Animated } from "react-native"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { BigNutils } from "~Utils"
 import { formatFullPrecision } from "~Utils/StandardizedFormatting"
-import { useSendContext } from "../../Provider"
+import { useTokenSendContext } from "../../Provider"
 import { useCurrentExchangeRate } from "../Hooks"
 import { DetailsContainer } from "./DetailsContainer"
 
 export const TokenReceiverCard = () => {
-    const { flowState } = useSendContext()
+    const { flowState } = useTokenSendContext()
     const { formatLocale } = useFormatFiat()
 
     const { data: exchangeRate } = useCurrentExchangeRate()
