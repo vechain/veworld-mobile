@@ -18,7 +18,7 @@ import { StargateNodeCard } from "../../StargateNodeCard"
 
 type Props = {}
 
-export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({}, ref) => {
+export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>((_, ref) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -33,13 +33,15 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
     const { data: validatorExitEvents, isLoading: isValidatorExitEventsLoading } = useValidatorExit()
     const { validators, isLoading: isValidatorsLoading } = useFetchValidators()
 
+    //Get the validator addresses from the validator exit events
     const exitedValidators = useMemo(() => {
         return Object.keys(validatorExitEvents ?? {})
     }, [validatorExitEvents])
 
+    //Get the most recent validator exit event
     const lastValidatorExitEvent = useMemo(() => {
         return Object.values(validatorExitEvents ?? {})
-            .flatMap(events => events)
+            .flat()
             .sort((a, b) => b.blockTimestamp - a.blockTimestamp)[0]
     }, [validatorExitEvents])
 
