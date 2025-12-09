@@ -89,9 +89,10 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
     const initializeOneSignal = useCallback(async () => {
         const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
+        if (!appId) return
 
         try {
-            OneSignal.initialize(appId as string)
+            if (appId) OneSignal.initialize(appId as string)
             setIsInitialized(true)
         } catch (err) {
             error(ERROR_EVENTS.ONE_SIGNAL, err)
@@ -100,6 +101,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     }, [])
 
     const getOptInStatus = useCallback(async () => {
+        if (!isInitialized) return
         let _optInStatus = false
 
         try {
@@ -109,9 +111,10 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         }
 
         dispatch(updateNotificationOptedIn(_optInStatus))
-    }, [dispatch])
+    }, [dispatch, isInitialized])
 
     const getPermission = useCallback(async () => {
+        if (!isInitialized) return
         let _permissionEnabled = false
 
         try {
@@ -121,7 +124,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         }
 
         dispatch(updateNotificationPermission(_permissionEnabled))
-    }, [dispatch])
+    }, [dispatch, isInitialized])
 
     const requestPermission = useCallback(() => {
         dispatch(updateNotificationPermission(!permissionEnabled))
@@ -196,15 +199,17 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     )
 
     const getTags = useCallback(() => {
+        if (!featureEnabled || !isInitialized) return Promise.resolve({} as { [key: string]: string })
         return OneSignal.User.getTags()
-    }, [])
+    }, [featureEnabled, isInitialized])
 
     const addTag = useCallback(
         (key: string, value: string) => {
+            if (!featureEnabled || !isInitialized) return
             OneSignal.User.addTag(key, value)
             dispatch(removeRemovedNotificationTag(key))
         },
-        [dispatch],
+        [dispatch, featureEnabled, isInitialized],
     )
 
     const addDAppTag = useCallback(
@@ -216,38 +221,42 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     )
 
     const addAllDAppsTags = useCallback(() => {
+        if (!featureEnabled || !isInitialized) return
         const tags = dapps.reduce((acc, dapp) => {
             acc[dapp.id] = "true"
             return acc
         }, {} as Record<string, string>)
         OneSignal.User.addTags(tags)
         dispatch(setDappsVisitCounter({ dappIds: Object.keys(tags), counter: 2 }))
-    }, [dispatch, dapps])
+    }, [featureEnabled, isInitialized, dapps, dispatch])
 
     const removeTag = useCallback(
         (key: string) => {
+            if (!featureEnabled || !isInitialized) return
             OneSignal.User.removeTag(key)
 
             if (!removedNotificationTags?.includes(key)) {
                 dispatch(addRemovedNotificationTag(key))
             }
         },
-        [dispatch, removedNotificationTags],
+        [dispatch, featureEnabled, isInitialized, removedNotificationTags],
     )
 
     const removeDAppTag = useCallback(
         (key: string) => {
+            if (!featureEnabled || !isInitialized) return
             removeTag(key)
             dispatch(removeDappVisitCounter({ dappId: key }))
         },
-        [dispatch, removeTag],
+        [dispatch, featureEnabled, isInitialized, removeTag],
     )
 
     const removeAllDAppsTags = useCallback(() => {
+        if (!featureEnabled || !isInitialized) return
         const dappIds = dapps.map(dapp => dapp.id)
         OneSignal.User.removeTags(dappIds)
         dispatch(removeDappsVisitCounter({ dappIds: dappIds }))
-    }, [dispatch, dapps])
+    }, [featureEnabled, isInitialized, dapps, dispatch])
 
     const removeAllTags = useCallback(() => {
         getTags()?.then(tags => {
@@ -257,14 +266,16 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     }, [getTags])
 
     const addAllTags = useCallback(() => {
+        if (!featureEnabled || !isInitialized) return
         const tags = dapps.reduce((acc, dapp) => {
             acc[dapp.id] = "true"
             return acc
         }, {} as Record<string, string>)
         OneSignal.User.addTags(tags)
-    }, [dapps])
+    }, [dapps, featureEnabled, isInitialized])
 
     const updateDappNotifications = useCallback(async () => {
+        if (!featureEnabled || !isInitialized) return
         if (dapps.length > 0) {
             const tags = await getTags()
             const allEnabled = dapps.every(dapp => !!tags[dapp.id])
@@ -274,7 +285,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
                 addAllTags()
             }
         }
-    }, [dapps, getTags, dispatch, addAllTags])
+    }, [featureEnabled, isInitialized, dapps, getTags, dispatch, addAllTags])
 
     const init = useCallback(async () => {
         initializeOneSignal()
@@ -308,7 +319,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     }, [init, featureEnabled])
 
     useEffect(() => {
-        if (!featureEnabled) {
+        if (!featureEnabled || !isInitialized) {
             return
         }
 
@@ -324,15 +335,18 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
             OneSignal.Notifications.removeEventListener("permissionChange", onPermissionChanged)
             OneSignal.User.pushSubscription.removeEventListener("change", onOptInStatusChanged)
         }
-    }, [featureEnabled, onNotificationClicked, onOptInStatusChanged, onPermissionChanged])
+    }, [featureEnabled, isInitialized, onNotificationClicked, onOptInStatusChanged, onPermissionChanged])
 
     useEffect(() => {
+        if (!featureEnabled || !isInitialized) {
+            return
+        }
+
         if (
             currentState === AppStateType.ACTIVE &&
             currentState !== previousState &&
             !isFetcingTags.current &&
-            isMainnet &&
-            featureEnabled
+            isMainnet
         ) {
             isFetcingTags.current = true
             getTags()
@@ -359,6 +373,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         getTags,
         featureEnabled,
         removedNotificationTags,
+        isInitialized,
     ])
 
     const increaseDappCounter = useCallback(
