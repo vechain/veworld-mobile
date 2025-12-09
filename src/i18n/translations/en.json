@@ -1345,6 +1345,8 @@
   "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE": "StarGate notification",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR": "Choose new validator",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS": "Choose new validators",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME": "{nodeLevel: string} node",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID": "Token ID: {tokenId: string}",
   "VALUE_TITLE": "Value",
   "VBD_CONTRIBUTE_OFFSET": "contribute to the offset",
   "VBD_GET_REWARDED": "get rewarded for your actions and",
@@ -1423,7 +1425,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "VALIDATOR_DELEGATION_EXITED_NODE_NAME": "{nodeLevel: string} node",
-  "VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID": "Token ID: {tokenId: string}"
+  "YESTERDAY": "Yesterday"
 }

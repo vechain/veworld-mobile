@@ -1345,6 +1345,8 @@
   "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE": "StarGate notifikation",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR": "Välj ny validerare",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS": "Välj nya validatorer",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME": "{nodeLevel: string}-nod",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID": "Token-ID: {tokenId: string}",
   "VALUE_TITLE": "Värde",
   "VBD_CONTRIBUTE_OFFSET": "bidra till förskjutningen",
   "VBD_GET_REWARDED": "bli belönad för dina handlingar och",

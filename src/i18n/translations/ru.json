@@ -1345,6 +1345,8 @@
   "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE": "Уведомление StarGate",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR": "Выберите нового валидатора",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS": "Выберите новых валидаторов",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME": "Узел {nodeLevel: string}",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID": "Идентификатор токена: {tokenId: string}",
   "VALUE_TITLE": "Значение",
   "VBD_CONTRIBUTE_OFFSET": "внести вклад в смещение",
   "VBD_GET_REWARDED": "получите награду за свои действия и",

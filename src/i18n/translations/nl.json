@@ -1345,6 +1345,8 @@
   "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE": "StarGate-melding",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR": "Kies een nieuwe validator",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS": "Kies nieuwe validators",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME": "{nodeLevel: string} node",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID": "Token-ID: {tokenId: string}",
   "VALUE_TITLE": "Waarde",
   "VBD_CONTRIBUTE_OFFSET": "draag bij aan de compensatie",
   "VBD_GET_REWARDED": "word beloond voor je acties en",

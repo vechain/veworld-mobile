@@ -1345,6 +1345,8 @@
   "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE": "Thông báo StarGate",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR": "Chọn trình xác thực mới",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS": "Chọn trình xác thực mới",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME": "Nút {nodeLevel: string}",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID": "Mã token: {tokenId: string}",
   "VALUE_TITLE": "Giá trị",
   "VBD_CONTRIBUTE_OFFSET": "đóng góp vào bù đắp",
   "VBD_GET_REWARDED": "nhận phần thưởng cho hành động của bạn và",

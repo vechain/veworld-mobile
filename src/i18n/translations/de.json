@@ -1345,6 +1345,8 @@
   "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE": "StarGate-Benachrichtigung",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR": "Neuen Validator auswählen",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS": "Neue Validatoren auswählen",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME": "{nodeLevel: string} Knoten",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID": "Token-ID: {tokenId: string}",
   "VALUE_TITLE": "Wert",
   "VBD_CONTRIBUTE_OFFSET": "beitragen zur Kompensation",
   "VBD_GET_REWARDED": "Belohnungen für deine Aktionen erhalten und",

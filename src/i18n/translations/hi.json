@@ -1345,6 +1345,8 @@
   "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE": "StarGate सूचना",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR": "नया वैलिडेटर चुनें",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS": "नए वैलिडेटर चुनें",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME": "{nodeLevel: string} नोड",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID": "टोकन आईडी: {tokenId: string}",
   "VALUE_TITLE": "मूल्य",
   "VBD_CONTRIBUTE_OFFSET": "ऑफसेट में योगदान करें",
   "VBD_GET_REWARDED": "अपने कार्यों के लिए पुरस्कृत हों और",

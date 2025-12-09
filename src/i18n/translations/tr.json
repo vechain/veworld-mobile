@@ -1345,6 +1345,8 @@
   "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE": "StarGate bildirimi",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR": "Yeni doğrulayıcı seç",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS": "Yeni doğrulayıcılar seç",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME": "{nodeLevel: string} düğüm",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID": "Token Kimliği: {tokenId: string}",
   "VALUE_TITLE": "Değer",
   "VBD_CONTRIBUTE_OFFSET": "dengeye katkıda bulun",
   "VBD_GET_REWARDED": "hareketleriniz için ödül kazanın ve",
