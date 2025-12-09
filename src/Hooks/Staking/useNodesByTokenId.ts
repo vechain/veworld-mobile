@@ -25,7 +25,9 @@ const getNodeByTokenId = async (indexer: IndexerClient, tokenId: string): Promis
                 },
             })
             .then(res => res.data!)
+
         if (r.data.length === 0) return undefined
+
         return {
             isLegacyNode: false,
             nodeId: tokenId,
