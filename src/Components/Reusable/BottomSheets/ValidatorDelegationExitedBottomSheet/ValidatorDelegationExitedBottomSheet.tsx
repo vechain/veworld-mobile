@@ -33,6 +33,10 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
     const { data: validatorExitEvents, isLoading: isValidatorExitEventsLoading } = useValidatorExit()
     const { validators, isLoading: isValidatorsLoading } = useFetchValidators()
 
+    const exitedValidators = useMemo(() => {
+        return Object.keys(validatorExitEvents ?? {})
+    }, [validatorExitEvents])
+
     const lastValidatorExitEvent = useMemo(() => {
         return Object.values(validatorExitEvents ?? {})
             .flatMap(events => events)
@@ -46,6 +50,14 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
             AddressUtils.humanAddress(lastValidatorExitEvent.validator)
         )
     }, [validators, lastValidatorExitEvent, isValidatorsLoading])
+
+    const getValidatorNames = useCallback(() => {
+        return exitedValidators
+            .map(validator => {
+                return getValidatorName(validators ?? [], validator) ?? AddressUtils.humanAddress(validator)
+            })
+            .join(", ")
+    }, [exitedValidators, validators])
 
     const onDismiss = useCallback(() => {
         dispatch(setLastValidatorExit())
@@ -66,6 +78,24 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
         }
     }, [isValidatorExitEventsLoading, lastValidatorExitEvent, onBottomSheetOpen])
 
+    const description = useMemo(() => {
+        if (exitedValidators.length > 1) {
+            return LL.VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION_MULTIPLE({
+                validatorNames: getValidatorNames(),
+            })
+        }
+        return LL.VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION({
+            validatorName: validatorName,
+        })
+    }, [exitedValidators, getValidatorNames, validatorName, LL])
+
+    const buttonTitle = useMemo(() => {
+        if (exitedValidators.length > 1) {
+            return LL.VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS()
+        }
+        return LL.VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR()
+    }, [exitedValidators, LL])
+
     const renderItem = useCallback(({ item }: { item: components["schemas"]["IndexedHistoryEvent"] }) => {
         return <StargateNodeCard tokenId={item.tokenId ?? ""} blockNumber={item.blockNumber} />
     }, [])
@@ -84,9 +114,7 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
                             {LL.VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE()}
                         </BaseText>
                         <BaseText align="center" typographyFont="body" lineHeight={20} color={theme.colors.text}>
-                            {LL.VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION({
-                                validatorName: validatorName,
-                            })}
+                            {description}
                         </BaseText>
                     </BaseView>
                 </BaseView>
@@ -102,10 +130,7 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
                 />
 
                 <BaseView gap={16}>
-                    <BaseButton
-                        action={onChooseNewValidator}
-                        title={LL.VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR()}
-                    />
+                    <BaseButton action={onChooseNewValidator} title={buttonTitle} />
                     <BaseButton variant="outline" action={onDismiss} title={LL.BTN_ILL_DO_IT_LATER()} />
                 </BaseView>
             </BaseView>

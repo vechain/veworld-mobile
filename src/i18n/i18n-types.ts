@@ -5488,6 +5488,28 @@ type RootTranslation = {
 	 */
 	USERNAME: string
 	/**
+	 * T​h​e​ ​v​a​l​i​d​a​t​o​r​ ​{​v​a​l​i​d​a​t​o​r​N​a​m​e​}​ ​i​s​ ​n​o​ ​l​o​n​g​e​r​ ​a​c​t​i​v​e​.​ ​A​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r​ ​m​u​s​t​ ​b​e​ ​s​e​l​e​c​t​e​d​ ​t​o​ ​c​o​n​t​i​n​u​e​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​.
+	 * @param {string} validatorName
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION: RequiredParams<'validatorName'>
+	/**
+	 * T​h​e​ ​v​a​l​i​d​a​t​o​r​ ​{​v​a​l​i​d​a​t​o​r​N​a​m​e​s​}​ ​a​r​e​ ​n​o​ ​l​o​n​g​e​r​ ​a​c​t​i​v​e​.​ ​N​e​w​ ​v​a​l​i​d​a​t​o​r​ ​m​u​s​t​ ​b​e​ ​s​e​l​e​c​t​e​d​ ​t​o​ ​c​o​n​t​i​n​u​e​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​.
+	 * @param {string} validatorNames
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION_MULTIPLE: RequiredParams<'validatorNames'>
+	/**
+	 * S​t​a​r​G​a​t​e​ ​n​o​t​i​f​i​c​a​t​i​o​n
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE: string
+	/**
+	 * C​h​o​o​s​e​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR: string
+	/**
+	 * C​h​o​o​s​e​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r​s
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS: string
+	/**
 	 * V​a​l​u​e
 	 */
 	VALUE_TITLE: string
@@ -5805,19 +5827,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * S​t​a​r​G​a​t​e​ ​n​o​t​i​f​i​c​a​t​i​o​n
-	 */
-	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE: string
-	/**
-	 * T​h​e​ ​v​a​l​i​d​a​t​o​r​ ​{​v​a​l​i​d​a​t​o​r​N​a​m​e​}​ ​i​s​ ​n​o​ ​l​o​n​g​e​r​ ​a​c​t​i​v​e​.​ ​A​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r​ ​m​u​s​t​ ​b​e​ ​s​e​l​e​c​t​e​d​ ​t​o​ ​c​o​n​t​i​n​u​e​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​.
-	 * @param {string} validatorName
-	 */
-	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION: RequiredParams<'validatorName'>
-	/**
-	 * C​h​o​o​s​e​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r
-	 */
-	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR: string
 }
 
 export type TranslationFunctions = {
@@ -11208,6 +11217,26 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	USERNAME: () => LocalizedString
 	/**
+	 * The validator {validatorName} is no longer active. A new validator must be selected to continue earning rewards.
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION: (arg: { validatorName: string }) => LocalizedString
+	/**
+	 * The validator {validatorNames} are no longer active. New validator must be selected to continue earning rewards.
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION_MULTIPLE: (arg: { validatorNames: string }) => LocalizedString
+	/**
+	 * StarGate notification
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
+	 * Choose new validator
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR: () => LocalizedString
+	/**
+	 * Choose new validators
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS: () => LocalizedString
+	/**
 	 * Value
 	 */
 	VALUE_TITLE: () => LocalizedString
@@ -11523,18 +11552,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * StarGate notification
-	 */
-	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE: () => LocalizedString
-	/**
-	 * The validator {validatorName} is no longer active. A new validator must be selected to continue earning rewards.
-	 */
-	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION: (arg: { validatorName: string }) => LocalizedString
-	/**
-	 * Choose new validator
-	 */
-	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR: () => LocalizedString
 }
 
 export type Formatters = {
