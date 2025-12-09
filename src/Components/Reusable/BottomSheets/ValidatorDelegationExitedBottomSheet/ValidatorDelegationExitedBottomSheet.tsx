@@ -5,10 +5,13 @@ import { STARGATE_DAPP_URL } from "~Constants"
 import { useValidatorExit } from "~Hooks/Staking"
 import { useBottomSheetModal } from "~Hooks/useBottomSheet"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { useFetchValidators } from "~Hooks/useFetchValidators"
 import { useTheme } from "~Hooks/useTheme"
 import { useI18nContext } from "~i18n"
 import { useAppDispatch } from "~Storage/Redux"
 import { setLastValidatorExit } from "~Storage/Redux/Actions/WalletPreferences"
+import AddressUtils from "~Utils/AddressUtils"
+import { getValidatorName } from "~Utils/ValidatorUtils"
 
 type Props = {}
 
@@ -25,12 +28,21 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
         externalRef: ref as RefObject<BottomSheetModalMethods>,
     })
     const { data: validatorExitEvents, isLoading: isValidatorExitEventsLoading } = useValidatorExit()
+    const { validators, isLoading: isValidatorsLoading } = useFetchValidators()
 
     const lastValidatorExitEvent = useMemo(() => {
         return Object.values(validatorExitEvents ?? {})
             .flatMap(events => events)
             .sort((a, b) => b.blockTimestamp - a.blockTimestamp)[0]
     }, [validatorExitEvents])
+
+    const validatorName = useMemo(() => {
+        if (isValidatorsLoading || !lastValidatorExitEvent.validator) return ""
+        return (
+            getValidatorName(validators ?? [], lastValidatorExitEvent.validator) ??
+            AddressUtils.humanAddress(lastValidatorExitEvent.validator)
+        )
+    }, [validators, lastValidatorExitEvent, isValidatorsLoading])
 
     const onDismiss = useCallback(() => {
         dispatch(setLastValidatorExit(lastValidatorExitEvent?.validator ?? ""))
@@ -58,19 +70,21 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
                     <BaseIcon name={"icon-stargate"} size={40} color={theme.colors.text} />
                     <BaseView justifyContent="center" alignItems="center" gap={8}>
                         <BaseText align="center" typographyFont="subSubTitleSemiBold" color={theme.colors.text}>
-                            {"StarGate notification"}
+                            {LL.VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE()}
                         </BaseText>
                         <BaseText align="center" typographyFont="body" lineHeight={20} color={theme.colors.text}>
-                            {
-                                // eslint-disable-next-line max-len
-                                "The validator {validatorName} is no longer active. A new validator must be selected to continue earning rewards."
-                            }
+                            {LL.VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION({
+                                validatorName: validatorName,
+                            })}
                         </BaseText>
                     </BaseView>
                 </BaseView>
                 <BaseSpacer height={256} />
                 <BaseView gap={16}>
-                    <BaseButton action={onChooseNewValidator} title="Choose new validator" />
+                    <BaseButton
+                        action={onChooseNewValidator}
+                        title={LL.VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR()}
+                    />
                     <BaseButton variant="outline" action={onDismiss} title={LL.BTN_ILL_DO_IT_LATER()} />
                 </BaseView>
             </BaseView>

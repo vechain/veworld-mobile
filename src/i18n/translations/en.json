@@ -1418,5 +1418,8 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE": "StarGate notification",
+  "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION": "The validator {validatorName:string} is no longer active. A new validator must be selected to continue earning rewards.",
+  "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR": "Choose new validator"
 }
