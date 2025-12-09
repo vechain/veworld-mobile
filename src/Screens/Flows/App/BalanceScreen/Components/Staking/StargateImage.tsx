@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { NFTPlaceholderDark, NFTPlaceholderLight } from "~Assets"
 import { BaseView } from "~Components"
@@ -20,9 +20,10 @@ type Props = {
      */
     height?: number
     borderRadius?: number
+    containerStyle?: StyleProp<ViewStyle>
 }
 
-export const StargateImage = ({ uri, testID, width = 208, height = 208, borderRadius = 8 }: Props) => {
+export const StargateImage = ({ uri, testID, width = 208, height = 208, borderRadius = 8, containerStyle }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles({ width, height }))
 
     const placeholderImg = useMemo(() => {
@@ -35,7 +36,7 @@ export const StargateImage = ({ uri, testID, width = 208, height = 208, borderRa
     }, [uri])
 
     return (
-        <BaseView style={[styles.root, { borderRadius }]}>
+        <BaseView style={[styles.root, { borderRadius }, containerStyle]}>
             <FastImage
                 testID={testID}
                 style={[

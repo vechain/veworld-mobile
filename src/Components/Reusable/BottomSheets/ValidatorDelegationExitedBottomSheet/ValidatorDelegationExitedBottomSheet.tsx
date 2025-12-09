@@ -1,22 +1,25 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { RefObject, useCallback, useEffect, useMemo } from "react"
+import { FlatList, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
-import { STARGATE_DAPP_URL } from "~Constants"
+import { COLORS, ColorThemeType, STARGATE_DAPP_URL } from "~Constants"
+import { components } from "~Generated/indexer/schema"
 import { useValidatorExit } from "~Hooks/Staking"
 import { useBottomSheetModal } from "~Hooks/useBottomSheet"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useFetchValidators } from "~Hooks/useFetchValidators"
-import { useTheme } from "~Hooks/useTheme"
+import { useThemedStyles } from "~Hooks/useTheme"
 import { useI18nContext } from "~i18n"
 import { useAppDispatch } from "~Storage/Redux"
 import { setLastValidatorExit } from "~Storage/Redux/Actions/WalletPreferences"
 import AddressUtils from "~Utils/AddressUtils"
 import { getValidatorName } from "~Utils/ValidatorUtils"
+import { StargateNodeCard } from "../../StargateNodeCard"
 
 type Props = {}
 
 export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({}, ref) => {
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const { navigateWithTab } = useBrowserTab()
@@ -37,7 +40,7 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
     }, [validatorExitEvents])
 
     const validatorName = useMemo(() => {
-        if (isValidatorsLoading || !lastValidatorExitEvent.validator) return ""
+        if (isValidatorsLoading || !lastValidatorExitEvent?.validator) return ""
         return (
             getValidatorName(validators ?? [], lastValidatorExitEvent.validator) ??
             AddressUtils.humanAddress(lastValidatorExitEvent.validator)
@@ -63,6 +66,14 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
         }
     }, [isValidatorExitEventsLoading, lastValidatorExitEvent, onBottomSheetOpen])
 
+    const renderItem = useCallback(({ item }: { item: components["schemas"]["IndexedHistoryEvent"] }) => {
+        return <StargateNodeCard tokenId={item.tokenId ?? ""} blockNumber={item.blockNumber} />
+    }, [])
+
+    const itemSeparatorComponent = useCallback(() => {
+        return <BaseSpacer height={1} background={theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100} />
+    }, [theme.isDark])
+
     return (
         <BaseBottomSheet ref={bottomSheetRef} dynamicHeight scrollable={false} bottomSafeArea>
             <BaseView gap={24}>
@@ -79,7 +90,17 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
                         </BaseText>
                     </BaseView>
                 </BaseView>
-                <BaseSpacer height={256} />
+
+                <FlatList
+                    data={Object.values(validatorExitEvents ?? {}).flat()}
+                    ItemSeparatorComponent={itemSeparatorComponent}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.id}
+                    style={styles.contentContainer}
+                    showsVerticalScrollIndicator={false}
+                    bounces={false}
+                />
+
                 <BaseView gap={16}>
                     <BaseButton
                         action={onChooseNewValidator}
@@ -91,3 +112,12 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
         </BaseBottomSheet>
     )
 })
+
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        contentContainer: {
+            maxHeight: 260,
+            borderRadius: 12,
+            backgroundColor: theme.colors.card,
+        },
+    })
