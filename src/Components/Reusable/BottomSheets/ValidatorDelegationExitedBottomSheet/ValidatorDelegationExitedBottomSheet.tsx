@@ -48,9 +48,9 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
     }, [validators, lastValidatorExitEvent, isValidatorsLoading])
 
     const onDismiss = useCallback(() => {
-        dispatch(setLastValidatorExit(lastValidatorExitEvent?.validator ?? ""))
+        dispatch(setLastValidatorExit())
         onBottomSheetClose()
-    }, [dispatch, onBottomSheetClose, lastValidatorExitEvent?.validator])
+    }, [dispatch, onBottomSheetClose])
 
     const onChooseNewValidator = useCallback(() => {
         onDismiss()

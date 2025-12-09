@@ -5,7 +5,7 @@ import { IndexerClient, useIndexerClient } from "~Hooks/useIndexerClient"
 import { ActivityEvent } from "~Model"
 import { DEFAULT_PAGE_SIZE } from "~Networking/API"
 import { selectLastValidatorExited, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-// import AccountUtils from "~Utils/AccountUtils"
+import { AccountUtils } from "~Utils"
 
 const getValidatorExitedEvents = async (
     indexer: IndexerClient,
@@ -56,6 +56,7 @@ export const useValidatorExit = () => {
     const lastValidatorExitTimestamp = useAppSelector(selectLastValidatorExited)
 
     const indexer = useIndexerClient(network)
+
     const { data, isLoading, error, isError } = useQuery({
         queryKey: ["validatorExitEvents", network.genesis.id, account.address, lastValidatorExitTimestamp],
         queryFn: async () => await getValidatorExitedEvents(indexer, account.address, lastValidatorExitTimestamp ?? 0),
@@ -67,17 +68,17 @@ export const useValidatorExit = () => {
             const validatorExitEvents = d.filter(
                 event =>
                     event.eventName === ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR &&
-                    event.blockTimestamp < latestDelegateRequestTimestamp,
+                    event.blockTimestamp > latestDelegateRequestTimestamp,
             )
 
             const groupedValidators = validatorExitEvents.reduce((acc, event) => {
-                return { ...acc, [event.validator!]: [...(acc[event.validator!] ?? []), event, event, event, event] }
+                return { ...acc, [event.validator!]: [...(acc[event.validator!] ?? []), event] }
             }, {} as Record<string, components["schemas"]["IndexedHistoryEvent"][]>)
 
             return groupedValidators
         },
         staleTime: 1000 * 60 * 60, // 1 hour
-        // enabled: !AccountUtils.isObservedAccount(account),
+        enabled: !AccountUtils.isObservedAccount(account),
     })
 
     return useMemo(

@@ -7,7 +7,7 @@ import { ERROR_EVENTS } from "~Constants"
 import { setLastValidatorExited } from "../Slices"
 import moment from "moment"
 
-export const setLastValidatorExit = (validatorId: string) => (dispatch: Dispatch, getState: () => RootState) => {
+export const setLastValidatorExit = () => (dispatch: Dispatch, getState: () => RootState) => {
     const selectedNetwork = selectSelectedNetwork(getState())
     const selectedAccount = selectSelectedAccount(getState())
     const timestamp = moment().unix()
@@ -27,7 +27,6 @@ export const setLastValidatorExit = (validatorId: string) => (dispatch: Dispatch
             genesisId: selectedNetwork.genesis.id,
             address: selectedAccount.address,
             timestamp,
-            validatorId,
         }),
     )
 }

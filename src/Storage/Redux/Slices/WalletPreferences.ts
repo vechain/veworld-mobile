@@ -13,9 +13,9 @@ export const WalletPreferencesSlice = createSlice({
     reducers: {
         setLastValidatorExited: (
             state,
-            action: PayloadAction<{ genesisId: string; address: string; timestamp: number; validatorId: string }>,
+            action: PayloadAction<{ genesisId: string; address: string; timestamp: number }>,
         ) => {
-            const { genesisId, address, timestamp, validatorId } = action.payload
+            const { genesisId, address, timestamp } = action.payload
 
             if (!state[genesisId]) {
                 state[genesisId] = {}
@@ -24,11 +24,9 @@ export const WalletPreferencesSlice = createSlice({
             if (!state[genesisId][address]) {
                 state[genesisId][address] = {
                     lastValidatorExitedAt: timestamp,
-                    lastValidatorExitedId: validatorId,
                 }
             } else {
                 state[genesisId][address].lastValidatorExitedAt = timestamp
-                state[genesisId][address].lastValidatorExitedId = validatorId
             }
         },
         resetWalletPreferencesState: () => initialWalletPreferencesState,

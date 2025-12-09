@@ -3,10 +3,6 @@ export type WalletPreference = {
      * The timestamp of the last validator exited.
      */
     lastValidatorExitedAt?: number
-    /**
-     * The id of the last validator exited.
-     */
-    lastValidatorExitedId?: string
 }
 
 /**
