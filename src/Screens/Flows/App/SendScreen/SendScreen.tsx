@@ -1,70 +1,31 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { ReactElement, useCallback, useMemo, useRef } from "react"
+import React, { ReactElement, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import Animated, {
-    EntryAnimationsValues,
-    ExitAnimationsValues,
-    FadeInLeft,
-    FadeOutLeft,
-    LinearTransition,
-} from "react-native-reanimated"
-import { BaseButton, BaseView, Layout } from "~Components"
-import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
-import { ReceiverScreen, SendContextProvider, SendFlowStep, useSendContext } from "~Components/Reusable/Send"
-import { useThemedStyles } from "~Hooks"
-import { FungibleTokenWithBalance } from "~Model"
-import { RootStackParamListHome, Routes } from "~Navigation"
-import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
-import { useI18nContext } from "~i18n"
-import { SelectAmountSendComponent } from "./02-SelectAmountSendScreen"
-import { EnteringFromLeftAnimation, EnteringFromRightAnimation } from "./Animations/Entering"
-import { ExitingToLeftAnimation, ExitingToRightAnimation } from "./Animations/Exiting"
+import Animated, { LinearTransition } from "react-native-reanimated"
 
-const ORDER: SendFlowStep[] = ["selectAmount", "insertAddress", "summary"]
+import { Layout } from "~Components"
+import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
+import {
+    ReceiverScreen,
+    SelectAmountSendComponent,
+    SendContextProvider,
+    SummaryScreen,
+    useSendContext,
+} from "~Components/Reusable/Send"
+import { useThemedStyles } from "~Hooks"
+import { RootStackParamListHome, Routes } from "~Navigation"
+import { useI18nContext } from "~i18n"
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
-
-const AnimatedBaseButton = Animated.createAnimatedComponent(wrapFunctionComponent(BaseButton))
-const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
 type RouteProps = RouteProp<RootStackParamListHome, Routes.SEND_TOKEN>
 
 export const SendScreenContent = (): ReactElement => {
     const { LL } = useI18nContext()
-
     const navigation = useNavigation<NavigationProps>()
     const { styles } = useThemedStyles(baseStyles)
-    const {
-        step,
-        previousStep,
-        nextStep,
-        goToNext,
-        goToPrevious,
-        isPreviousButtonEnabled,
-        isNextButtonEnabled,
-        setIsNextButtonEnabled,
-        flowState,
-        setFlowState,
-    } = useSendContext()
-
-    const amountHandlerRef = useRef<(() => void) | null>(null)
-
-    const goToInsertAddress = useCallback(
-        (amount: string, token: FungibleTokenWithBalance, fiatAmount?: string, amountInFiat?: boolean) => {
-            setFlowState({ ...flowState, amount, token, fiatAmount, amountInFiat })
-            goToNext()
-        },
-        [flowState, setFlowState, goToNext],
-    )
-
-    const handleNextPress = useCallback(() => {
-        if (step === "selectAmount") {
-            amountHandlerRef.current?.()
-        } else {
-            goToNext()
-        }
-    }, [step, goToNext])
+    const { step } = useSendContext()
 
     const handleClose = useCallback(() => {
         navigation.goBack()
@@ -75,35 +36,6 @@ export const SendScreenContent = (): ReactElement => {
         [handleClose],
     )
 
-    const Entering = useCallback(
-        (values: EntryAnimationsValues) => {
-            "worklet"
-            if (!previousStep.value || !nextStep.value)
-                return {
-                    initialValues: values,
-                    animations: {},
-                }
-            if (ORDER.indexOf(nextStep.value) > ORDER.indexOf(previousStep.value))
-                return EnteringFromRightAnimation(values)
-            return EnteringFromLeftAnimation(values)
-        },
-        [nextStep.value, previousStep.value],
-    )
-
-    const Exiting = useCallback(
-        (values: ExitAnimationsValues) => {
-            "worklet"
-            if (!previousStep.value || !nextStep.value)
-                return {
-                    initialValues: values,
-                    animations: {},
-                }
-            if (ORDER.indexOf(nextStep.value) > ORDER.indexOf(previousStep.value)) return ExitingToLeftAnimation(values)
-            return ExitingToRightAnimation(values)
-        },
-        [nextStep.value, previousStep.value],
-    )
-
     return (
         <Layout
             title={LL.SEND_TOKEN_TITLE()}
@@ -111,49 +43,11 @@ export const SendScreenContent = (): ReactElement => {
             headerTitleAlignment="center"
             headerRightElement={headerRightElement}
             fixedBody={
-                <Animated.View style={styles.flexElement}>
-                    <Animated.View
-                        style={[styles.flexElement, styles.viewContainer]}
-                        entering={Entering}
-                        exiting={Exiting}
-                        key={step}>
-                        {step === "selectAmount" && (
-                            <SelectAmountSendComponent
-                                token={flowState.token}
-                                onNext={goToInsertAddress}
-                                onBindNextHandler={config => {
-                                    amountHandlerRef.current = config.handler
-                                    setIsNextButtonEnabled(!config.isError && config.isValid)
-                                }}
-                            />
-                        )}
-                        {step === "insertAddress" && <ReceiverScreen />}
-                        {step === "summary" && <></>}
-                    </Animated.View>
+                <Animated.View style={[styles.viewContainer, styles.flexElement]} layout={LinearTransition}>
+                    {step === "selectAmount" && <SelectAmountSendComponent />}
+                    {step === "insertAddress" && <ReceiverScreen />}
+                    {step === "summary" && <SummaryScreen />}
                 </Animated.View>
-            }
-            footer={
-                <AnimatedBaseView flexDirection="row" gap={16} layout={LinearTransition}>
-                    {step !== "selectAmount" && (
-                        <AnimatedBaseButton
-                            variant="outline"
-                            flex={1}
-                            action={goToPrevious}
-                            layout={LinearTransition}
-                            disabled={!isPreviousButtonEnabled}
-                            entering={FadeInLeft.delay(50)}
-                            exiting={FadeOutLeft}>
-                            {LL.COMMON_LBL_BACK()}
-                        </AnimatedBaseButton>
-                    )}
-                    <AnimatedBaseButton
-                        flex={1}
-                        action={handleNextPress}
-                        disabled={!isNextButtonEnabled}
-                        layout={LinearTransition}>
-                        {LL.COMMON_LBL_NEXT()}
-                    </AnimatedBaseButton>
-                </AnimatedBaseView>
             }
         />
     )
@@ -172,5 +66,5 @@ export const SendScreen = () => {
 const baseStyles = () =>
     StyleSheet.create({
         flexElement: { flex: 1 },
-        viewContainer: { paddingHorizontal: 16 },
+        viewContainer: { paddingHorizontal: 16, flexDirection: "column" },
     })
