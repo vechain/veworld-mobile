@@ -11,7 +11,7 @@ import {
     SelectAmountSendComponent,
     SendContextProvider,
     SummaryScreen,
-    useSendContext,
+    useTokenSendContext,
 } from "~Components/Reusable/Send"
 import { useThemedStyles } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -25,7 +25,7 @@ export const SendScreenContent = (): ReactElement => {
     const { LL } = useI18nContext()
     const navigation = useNavigation<NavigationProps>()
     const { styles } = useThemedStyles(baseStyles)
-    const { step } = useSendContext()
+    const { step } = useTokenSendContext()
 
     const handleClose = useCallback(() => {
         navigation.goBack()

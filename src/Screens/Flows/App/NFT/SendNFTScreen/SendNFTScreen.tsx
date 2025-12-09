@@ -6,7 +6,7 @@ import Animated, { LinearTransition } from "react-native-reanimated"
 
 import { Layout } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
-import { ReceiverScreen, SendNFTContextProvider, useSendContext } from "~Components/Reusable/Send"
+import { ReceiverScreen, SendNFTContextProvider, useNFTSendContext } from "~Components/Reusable/Send"
 import { useThemedStyles } from "~Hooks"
 import { RootStackParamListNFT, Routes } from "~Navigation"
 import { selectNFTWithAddressAndTokenId, useAppSelector } from "~Storage/Redux"
@@ -20,7 +20,7 @@ export const SendNFTScreenContent = (): ReactElement => {
     const { LL } = useI18nContext()
     const navigation = useNavigation<NavigationProps>()
     const { styles } = useThemedStyles(baseStyles)
-    const { step } = useSendContext()
+    const { step } = useNFTSendContext()
 
     const handleClose = useCallback(() => {
         navigation.goBack()
@@ -55,7 +55,7 @@ export const SendNFTScreen = () => {
     )
 
     return (
-        <SendNFTContextProvider initialNft={nft ?? undefined}>
+        <SendNFTContextProvider initialNft={nft}>
             <SendNFTScreenContent />
         </SendNFTContextProvider>
     )

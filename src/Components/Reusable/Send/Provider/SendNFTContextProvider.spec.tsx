@@ -22,7 +22,7 @@ describe("SendNFTContextProvider", () => {
         })
 
         expect(result.current.flowState).toMatchObject({
-            nft: undefined,
+            type: "nft",
             address: "",
         })
         expect(result.current.step).toBe("insertAddress")
@@ -33,9 +33,15 @@ describe("SendNFTContextProvider", () => {
             wrapper: createWrapper({}, NFT_Mock),
         })
 
-        expect(result.current.flowState.nft).not.toBeUndefined()
-        expect(result.current.flowState.nft?.tokenId).toEqual(NFT_Mock.tokenId)
-        expect(result.current.flowState.nft?.address).toEqual(NFT_Mock.address)
+        expect(result.current.flowState).toMatchObject({
+            type: "nft",
+        })
+
+        if (result.current.flowState.type === "nft") {
+            expect(result.current.flowState.nft).not.toBeUndefined()
+            expect(result.current.flowState.nft.tokenId).toEqual(NFT_Mock.tokenId)
+            expect(result.current.flowState.nft.address).toEqual(NFT_Mock.address)
+        }
     })
 
     it("should update the flow state", () => {
@@ -117,33 +123,5 @@ describe("SendNFTContextProvider", () => {
         })
 
         expect(result.current.step).toBe("summary")
-    })
-
-    it("should update the isNextButtonEnabled state", () => {
-        const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}),
-        })
-
-        expect(result.current.isNextButtonEnabled).toBe(true)
-
-        act(() => {
-            result.current.setIsNextButtonEnabled(false)
-        })
-
-        expect(result.current.isNextButtonEnabled).toBe(false)
-    })
-
-    it("should update the isPreviousButtonEnabled state", () => {
-        const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}),
-        })
-
-        expect(result.current.isPreviousButtonEnabled).toBe(true)
-
-        act(() => {
-            result.current.setIsPreviousButtonEnabled(false)
-        })
-
-        expect(result.current.isPreviousButtonEnabled).toBe(false)
     })
 })

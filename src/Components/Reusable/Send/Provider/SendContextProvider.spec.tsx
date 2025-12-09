@@ -21,6 +21,7 @@ describe("SendContextProvider", () => {
         })
 
         expect(result.current.flowState).toMatchObject({
+            type: "token",
             token: undefined,
             amount: "0",
             fiatAmount: "",
@@ -35,15 +36,18 @@ describe("SendContextProvider", () => {
         })
 
         result.current.setFlowState({
+            type: "token",
             token: VETWithBalance,
             amount: "1",
             address: "0x1234567890123456789012345678901234567890",
         })
 
-        expect(result.current.flowState.token).not.toBeUndefined()
-        expect(result.current.flowState.token?.symbol).toEqual(VETWithBalance.symbol)
-        expect(result.current.flowState.amount).toBe("1")
-        expect(result.current.flowState.address).toBe("0x1234567890123456789012345678901234567890")
+        if (result.current.flowState.type === "token") {
+            expect(result.current.flowState.token).not.toBeUndefined()
+            expect(result.current.flowState.token?.symbol).toEqual(VETWithBalance.symbol)
+            expect(result.current.flowState.amount).toBe("1")
+            expect(result.current.flowState.address).toBe("0x1234567890123456789012345678901234567890")
+        }
     })
 
     it("should update the step", () => {

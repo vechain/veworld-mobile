@@ -6,7 +6,7 @@ import {
     EnteringFromRightAnimation,
 } from "~Screens/Flows/App/SendScreen/Animations/Entering"
 import { ExitingToLeftAnimation, ExitingToRightAnimation } from "~Screens/Flows/App/SendScreen/Animations/Exiting"
-import { SendContext, SendContextType, SendFlowState, SendFlowStep } from "./SendContextProvider"
+import { SendContext, SendContextType, SendNFTFlowState, SendFlowStep } from "./SendContextProvider"
 
 type SendNFTFlowStep = "insertAddress" | "summary"
 
@@ -18,8 +18,9 @@ type SendNFTContextProviderProps = PropsWithChildren<{
 
 export const SendNFTContextProvider = ({ children, initialNft }: SendNFTContextProviderProps) => {
     const [step, setStep] = useState<SendNFTFlowStep>("insertAddress")
-    const [flowState, setFlowState] = useState<SendFlowState>({
-        nft: initialNft,
+    const [flowState, setFlowState] = useState<SendNFTFlowState>({
+        type: "nft",
+        nft: initialNft!,
         address: "",
     })
 
@@ -76,7 +77,7 @@ export const SendNFTContextProvider = ({ children, initialNft }: SendNFTContextP
         [nextStep.value, previousStep.value],
     )
 
-    const contextValue: SendContextType = useMemo(
+    const contextValue: SendContextType<SendNFTFlowState> = useMemo(
         () => ({
             flowState,
             setFlowState,
