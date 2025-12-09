@@ -17,7 +17,3 @@ export const selectWalletPreferences = createSelector(
 export const selectLastValidatorExited = createSelector(selectWalletPreferences, walletPreferences => {
     return walletPreferences?.lastValidatorExitedAt ?? undefined
 })
-
-export const selectLastValidatorExitedId = createSelector(selectWalletPreferences, walletPreferences => {
-    return walletPreferences?.lastValidatorExitedId ?? undefined
-})
