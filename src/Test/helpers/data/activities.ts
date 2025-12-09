@@ -1,0 +1,42 @@
+export const validatorExitEventMock = {
+    id: "d99f7ed3c97f33fb22b66ec9fa04a7a1e901267c",
+    blockId: "0x0165257444eb8474763e85863f8592566504eaeeeb8cdbf63e6dfd6dd407d0d9",
+    blockNumber: 23405940,
+    blockTimestamp: 1764097820,
+    txId: "0xcb78555b3a93f9356070582672994de96607e186104c8342217b1d568f5374de",
+    origin: "0x1234",
+    tokenId: "15676",
+    eventName: "STARGATE_DELEGATION_EXITED_VALIDATOR",
+    owner: "0x1234",
+    validator: "0x79bvalidator",
+    delegationId: "58",
+}
+
+export const validatorExitEventsMock = [
+    {
+        id: "d99f7ed3c97f33fb22b66ec9fa04a7a1e901267c",
+        blockId: "0x0165257444eb8474763e85863f8592566504eaeeeb8cdbf63e6dfd6dd407d0d9",
+        blockNumber: 23405940,
+        blockTimestamp: 1764097820,
+        txId: "0xcb78555b3a93f9356070582672994de96607e186104c8342217b1d568f5374de",
+        origin: "0x1234",
+        tokenId: "15676",
+        eventName: "STARGATE_DELEGATION_EXITED_VALIDATOR",
+        owner: "0x1234",
+        validator: "0x79bvalidator",
+        delegationId: "58",
+    },
+    {
+        id: "d99f7ed3c97f33fb22b66ec9fa04a7a1e901249a",
+        blockId: "0x0165257444eb8474763e85863f8592566504eaeeeb8cdbf63e6dfd6dd407d1c9",
+        blockNumber: 23405941,
+        blockTimestamp: 1764097820,
+        txId: "0xcb78555b3a93f9356070582672994de96607e186104c8342217b1d568f5374de",
+        origin: "0x16834",
+        tokenId: "15676",
+        eventName: "STARGATE_DELEGATION_EXITED_VALIDATOR",
+        owner: "0x16834",
+        validator: "0x79b68validator",
+        delegationId: "572",
+    },
+]
