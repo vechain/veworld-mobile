@@ -1423,5 +1423,7 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME": "{nodeLevel: string} node",
+  "VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID": "Token ID: {tokenId: string}"
 }

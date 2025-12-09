@@ -5827,6 +5827,16 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * {​n​o​d​e​L​e​v​e​l​}​ ​n​o​d​e
+	 * @param {string} nodeLevel
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME: RequiredParams<'nodeLevel'>
+	/**
+	 * T​o​k​e​n​ ​I​D​:​ ​{​t​o​k​e​n​I​d​}
+	 * @param {string} tokenId
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID: RequiredParams<'tokenId'>
 }
 
 export type TranslationFunctions = {
@@ -11552,6 +11562,14 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * {nodeLevel} node
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME: (arg: { nodeLevel: string }) => LocalizedString
+	/**
+	 * Token ID: {tokenId}
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID: (arg: { tokenId: string }) => LocalizedString
 }
 
 export type Formatters = {

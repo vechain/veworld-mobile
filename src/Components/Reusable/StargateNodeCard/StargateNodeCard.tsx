@@ -11,6 +11,7 @@ import { getTokenLevelName, TokenLevelId } from "~Utils/StargateUtils/StargateUt
 import { useNodesByTokenId } from "~Hooks/Staking"
 import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks/useTheme"
+import { useI18nContext } from "~i18n/i18n-react"
 
 type Props = {
     tokenId: string
@@ -20,6 +21,7 @@ type Props = {
 export const StargateNodeCard = ({ tokenId, blockNumber }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { fetchMetadata } = useNFTMetadata()
+    const { LL } = useI18nContext()
 
     const network = useAppSelector(selectSelectedNetwork)
 
@@ -53,12 +55,18 @@ export const StargateNodeCard = ({ tokenId, blockNumber }: Props) => {
             />
             <BaseView flexDirection="column" gap={4}>
                 <BaseText typographyFont="bodySemiBold">
-                    {getTokenLevelName(
-                        (nodeInfo?.nodeLevel ? (nodeInfo.nodeLevel as TokenLevelId) : undefined) ?? TokenLevelId.None,
-                    )}
-                    {" node"}
+                    {LL.VALIDATOR_DELEGATION_EXITED_NODE_NAME({
+                        nodeLevel: getTokenLevelName(
+                            (nodeInfo?.nodeLevel ? (nodeInfo.nodeLevel as TokenLevelId) : undefined) ??
+                                TokenLevelId.None,
+                        ),
+                    })}
                 </BaseText>
-                <BaseText typographyFont="captionMedium">{"Token ID: " + nodeInfo?.nodeId}</BaseText>
+                <BaseText typographyFont="captionMedium">
+                    {LL.VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID({
+                        tokenId: nodeInfo?.nodeId ?? "",
+                    })}
+                </BaseText>
             </BaseView>
         </BaseView>
     )
