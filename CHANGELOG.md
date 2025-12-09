@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.14 (2025-12-09)</small>
+
+* build: init ([66a87d5](https://github.com/vechain/veworld-mobile/commit/66a87d5))
+* Fix build for non vechain users (#3619) ([af44867](https://github.com/vechain/veworld-mobile/commit/af44867)), closes [#3619](https://github.com/vechain/veworld-mobile/issues/3619)
+
 ## <small>2.4.13 (2025-12-02)</small>
 
 * build: init ([658831e](https://github.com/vechain/veworld-mobile/commit/658831e))
