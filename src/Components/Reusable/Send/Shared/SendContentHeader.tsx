@@ -1,11 +1,13 @@
-import React, { useMemo } from "react"
+import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 import { useI18nContext } from "~i18n"
-import { SendFlowStep, useSendContext } from "../Provider"
+import { useSendContext } from "../Provider"
+
+type SendFlowStep = "selectAmount" | "insertAddress" | "summary"
 
 const TOTAL_STEPS = 3
 
@@ -14,7 +16,7 @@ export const SendContentHeader = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { step } = useSendContext()
 
-    const { iconName, title, currentStep } = useMemo(() => getStepConfig(step, LL), [step, LL])
+    const { iconName, title, currentStep } = getStepConfig(step, LL)
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" pt={16}>

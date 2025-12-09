@@ -26,7 +26,7 @@ const MAX_FIAT_DECIMALS = 2
 const MAX_TOKEN_DECIMALS = 5
 
 export const SelectAmountSendComponent = () => {
-    const { setFlowState, goToNext } = useTokenSendContext()
+    const { setFlowState, goToNext, flowState } = useTokenSendContext()
     const { formatLocale } = useFormatFiat()
 
     const bottomSheetRef = useRef<BottomSheetModalMethods>(null)
@@ -35,12 +35,14 @@ export const SelectAmountSendComponent = () => {
     const currencyFormat = useAppSelector(selectCurrencyFormat)
 
     const defaultToken = useDefaultToken()
-    const [isInputInFiat, setIsInputInFiat] = useState(true)
+    const [isInputInFiat, setIsInputInFiat] = useState(flowState.amountInFiat ?? true)
     const [isError, setIsError] = useState(false)
     const [selectedToken, setSelectedToken] = useState<FungibleTokenWithBalance | undefined>(defaultToken)
     const [internalToken, setInternalToken] = useState<FungibleTokenWithBalance | undefined>(defaultToken)
 
-    const { input, setInput, removeInvalidCharacters } = useAmountInput()
+    const { input, setInput, removeInvalidCharacters } = useAmountInput(
+        (flowState?.amountInFiat ? flowState.fiatAmount : flowState.amount) ?? "",
+    )
 
     const { data: exchangeRate } = useExchangeRate({
         id: selectedToken ? getCoinGeckoIdBySymbol[selectedToken.symbol] : undefined,
