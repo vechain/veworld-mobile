@@ -69,6 +69,8 @@ export const ReceiverScreen = () => {
 
     const disabled = useMemo(() => !selectedAddress || !AddressUtils.isValid(selectedAddress), [selectedAddress])
 
+    const isTokenFlow = flowState.type === "token"
+
     return (
         <SendContent>
             <SendContent.Header />
@@ -84,7 +86,7 @@ export const ReceiverScreen = () => {
                 />
             </SendContent.Container>
             <SendContent.Footer>
-                <SendContent.Footer.Back />
+                {isTokenFlow && <SendContent.Footer.Back />}
                 <SendContent.Footer.Next action={goToNext} disabled={disabled} />
             </SendContent.Footer>
         </SendContent>

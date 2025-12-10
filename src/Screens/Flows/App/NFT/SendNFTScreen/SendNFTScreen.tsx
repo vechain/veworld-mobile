@@ -6,67 +6,59 @@ import Animated, { LinearTransition } from "react-native-reanimated"
 
 import { Layout } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
-import {
-    ReceiverScreen,
-    SelectAmountSendComponent,
-    SendContextProvider,
-    SummaryScreen,
-    useTokenSendContext,
-} from "~Components/Reusable/Send"
+import { ReceiverScreen, SendContextProvider, useNFTSendContext } from "~Components/Reusable/Send"
 import { useThemedStyles } from "~Hooks"
-import { RootStackParamListHome, Routes } from "~Navigation"
+import { RootStackParamListNFT, Routes } from "~Navigation"
+import { HexUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
-type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
+type NavigationProps = NativeStackNavigationProp<RootStackParamListNFT, Routes.SEND_NFT>
 
-type RouteProps = RouteProp<RootStackParamListHome, Routes.SEND_TOKEN>
+type RouteProps = RouteProp<RootStackParamListNFT, Routes.SEND_NFT>
 
-export const SendScreenContent = (): ReactElement => {
+export const SendNFTScreenContent = (): ReactElement => {
     const { LL } = useI18nContext()
     const navigation = useNavigation<NavigationProps>()
     const { styles } = useThemedStyles(baseStyles)
-    const { step } = useTokenSendContext()
+    const { step } = useNFTSendContext()
 
     const handleClose = useCallback(() => {
         navigation.goBack()
     }, [navigation])
 
     const headerRightElement = useMemo(
-        () => <CloseIconHeaderButton action={handleClose} testID="Send_Screen_Close" />,
+        () => <CloseIconHeaderButton action={handleClose} testID="Send_NFT_Screen_Close" />,
         [handleClose],
     )
 
     return (
         <Layout
-            title={LL.SEND_TOKEN_TITLE()}
+            title={LL.SEND_COLLECTIBLE()}
             noBackButton
             headerTitleAlignment="center"
             headerRightElement={headerRightElement}
             fixedBody={
                 <Animated.View style={[styles.viewContainer, styles.flexElement]} layout={LinearTransition}>
-                    {step === "selectAmount" && <SelectAmountSendComponent />}
                     {step === "insertAddress" && <ReceiverScreen />}
-                    {step === "summary" && <SummaryScreen />}
+                    {step === "summary" && <></>}
                 </Animated.View>
             }
         />
     )
 }
 
-export const SendScreen = () => {
+export const SendNFTScreen = () => {
     const route = useRoute<RouteProps>()
 
     return (
         <SendContextProvider
             initialFlowState={{
-                type: "token",
-                token: route.params?.token,
-                amount: "0",
-                fiatAmount: "",
+                type: "nft",
+                contractAddress: HexUtils.normalize(route.params.contractAddress),
+                tokenId: route.params.tokenId,
                 address: "",
-                amountInFiat: false,
             }}>
-            <SendScreenContent />
+            <SendNFTScreenContent />
         </SendContextProvider>
     )
 }
