@@ -13,7 +13,7 @@ import { selectCurrency, selectCurrencyFormat, useAppSelector } from "~Storage/R
 import { BigNutils } from "~Utils"
 import { getDecimalSeparator } from "~Utils/BigNumberUtils/BigNumberUtils"
 import { formatFullPrecision } from "~Utils/StandardizedFormatting"
-import { useSendContext } from "../Provider"
+import { useTokenSendContext } from "../Provider"
 import { SendContent } from "../Shared"
 import { SelectAmountConversionToggle } from "./Components/SelectAmountConversionToggle"
 import { SelectAmountInput } from "./Components/SelectAmountInput"
@@ -26,7 +26,7 @@ const MAX_FIAT_DECIMALS = 2
 const MAX_TOKEN_DECIMALS = 5
 
 export const SelectAmountSendComponent = () => {
-    const { setFlowState, goToNext, flowState } = useSendContext()
+    const { setFlowState, goToNext, flowState } = useTokenSendContext()
     const { formatLocale } = useFormatFiat()
 
     const bottomSheetRef = useRef<BottomSheetModalMethods>(null)

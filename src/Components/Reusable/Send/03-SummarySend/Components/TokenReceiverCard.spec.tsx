@@ -4,7 +4,7 @@ import { TestWrapper } from "~Test"
 
 import { FungibleTokenWithBalance } from "~Model"
 import { AddressUtils } from "~Utils"
-import { useSendContext } from "../../Provider"
+import { useTokenSendContext } from "../../Provider"
 
 import { TokenReceiverCard } from "./TokenReceiverCard"
 
@@ -13,7 +13,7 @@ jest.mock("../Hooks", () => ({
 }))
 
 jest.mock("../../Provider", () => ({
-    useSendContext: jest.fn(),
+    useTokenSendContext: jest.fn(),
 }))
 
 const createToken = (overrides: Partial<FungibleTokenWithBalance> = {}): FungibleTokenWithBalance =>
@@ -39,8 +39,9 @@ const createToken = (overrides: Partial<FungibleTokenWithBalance> = {}): Fungibl
 
 describe("TokenReceiverCard", () => {
     it("renders token amount, fiat value and receiver address", async () => {
-        jest.mocked(useSendContext).mockReturnValue({
+        jest.mocked(useTokenSendContext).mockReturnValue({
             flowState: {
+                type: "token",
                 address: "0xreceiver",
                 amount: "1.234",
                 token: createToken(),

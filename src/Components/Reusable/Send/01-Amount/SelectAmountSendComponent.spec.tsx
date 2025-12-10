@@ -5,7 +5,7 @@ import { FungibleTokenWithBalance } from "~Model"
 import { TestWrapper } from "~Test"
 
 import { useExchangeRate } from "~Api/Coingecko"
-import { useSendContext } from "../Provider"
+import { useSendContext, useTokenSendContext } from "../Provider"
 import { useDefaultToken } from "./Hooks"
 
 import { SelectAmountSendComponent } from "./SelectAmountSendComponent"
@@ -15,6 +15,7 @@ const mockSetFlowState = jest.fn()
 jest.mock("../Provider", () => ({
     ...jest.requireActual("../Provider"),
     useSendContext: jest.fn(),
+    useTokenSendContext: jest.fn(),
 }))
 
 jest.mock("~Api/Coingecko", () => ({
@@ -72,11 +73,17 @@ const mockVTHOToken: FungibleTokenWithBalance = {
 const goToNext = jest.fn()
 
 const setupMockContext = (token: FungibleTokenWithBalance = mockVETToken) => {
-    ;(useSendContext as jest.Mock).mockReturnValue({
-        flowState: { token, amount: "0", fiatAmount: "", address: "", amountInFiat: false },
+    const mockContextValue = {
+        flowState: { type: "token", token, amount: "0", fiatAmount: "", address: "", amountInFiat: false },
         setFlowState: mockSetFlowState,
         goToNext,
-    })
+        step: "selectAmount" as const,
+        goToPrevious: jest.fn(),
+        EnteringAnimation: jest.fn(),
+        ExitingAnimation: jest.fn(),
+    }
+    ;(useTokenSendContext as jest.Mock).mockReturnValue(mockContextValue)
+    ;(useSendContext as jest.Mock).mockReturnValue(mockContextValue)
     jest.mocked(useDefaultToken).mockReturnValue(token)
 }
 
@@ -217,6 +224,7 @@ describe("SelectAmountSendComponent", () => {
         // setFlowState is called with a function, so we need to call it to get the result
         if (typeof lastCall === "function") {
             const result = lastCall({
+                type: "token",
                 token: mockVETToken,
                 amount: "0",
                 fiatAmount: "",
