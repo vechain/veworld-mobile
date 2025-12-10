@@ -1143,7 +1143,7 @@
   "SEND_RECEIVE_TAB_SCAN": "Scannen",
   "SEND_RECENT_EMPTY_STATE_DESCRIPTION": "Zodra je naar een adres stuurt, verschijnt het hier voor snelle toegang.",
   "SEND_RECENT_EMPTY_STATE_TITLE": "Geen recente activiteit",
-  "SEND_REVIEW_DETAILS": "Gegevens controleren",
+  "SEND_REVIEW_DETAILS": "Details controleren",
   "SEND_STEP_OF": "{currentStep: string} van {totalSteps: string}",
   "SEND_STEP_OF_3": "{stepNumber: string} van 3",
   "SEND_TO": "Naar",

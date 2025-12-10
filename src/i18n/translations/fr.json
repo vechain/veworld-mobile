@@ -1062,7 +1062,7 @@
   "SEND_AMOUNT": "Montant",
   "SEND_AMOUNT_EXCEEDS_BALANCE": "Le montant dépasse le solde",
   "SEND_BALANCE_PERCENTAGE": "Pourcentage du solde : {percentage: string}",
-  "SEND_COLLECTIBLE": "Envoyer un objet de collection",
+  "SEND_COLLECTIBLE": "Envoyer le collectible",
   "SEND_CONTACTS_EMPTY_STATE_DESCRIPTION": "Ajoutez votre premier contact pour envoyer plus rapidement et éviter les erreurs.",
   "SEND_CONTACTS_EMPTY_STATE_TITLE": "Aucun contact ajouté",
   "SEND_CREATE_CONTACT_ADDRESS": "Adresse du portefeuille",

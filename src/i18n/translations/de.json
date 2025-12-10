@@ -1062,7 +1062,7 @@
   "SEND_AMOUNT": "Betrag",
   "SEND_AMOUNT_EXCEEDS_BALANCE": "Betrag überschreitet Guthaben",
   "SEND_BALANCE_PERCENTAGE": "Kontostand Prozentsatz: {percentage: string}",
-  "SEND_COLLECTIBLE": "Sammelobjekt senden",
+  "SEND_COLLECTIBLE": "Sammlerstück senden",
   "SEND_CONTACTS_EMPTY_STATE_DESCRIPTION": "Füge deinen ersten Kontakt hinzu, um schneller senden zu können und Fehler zu vermeiden.",
   "SEND_CONTACTS_EMPTY_STATE_TITLE": "Keine Kontakte hinzugefügt",
   "SEND_CREATE_CONTACT_ADDRESS": "Wallet-Adresse",
