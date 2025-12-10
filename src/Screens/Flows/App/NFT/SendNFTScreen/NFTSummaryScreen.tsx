@@ -8,7 +8,7 @@ import { SendContent } from "~Components/Reusable/Send/Shared"
 import { TransactionAlert } from "~Components/Reusable/Send/03-SummarySend/Components"
 import { TransactionFeeCard } from "~Components/Reusable/Send/03-SummarySend/Components/TransactionFeeCard"
 import { TransactionProvider } from "~Components/Reusable/Send/03-SummarySend/Components/TransactionProvider"
-import { useSendContext } from "~Components/Reusable/Send"
+import { useNFTSendContext } from "~Components/Reusable/Send"
 import { AnalyticsEvent, creteAnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useThemedStyles, useTransactionScreen } from "~Hooks"
 import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
@@ -29,7 +29,7 @@ import { NFTReceiverCard } from "./Components"
 export const NFTSummaryScreen = () => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
-    const { flowState } = useSendContext()
+    const { flowState } = useNFTSendContext()
     const [txError, setTxError] = useState(false)
 
     const nav = useNavigation()
@@ -41,16 +41,16 @@ export const NFTSummaryScreen = () => {
     const { address } = flowState
 
     const collectible = useCollectibleDetails({
-        address: flowState.nft?.address,
-        tokenId: flowState.nft?.tokenId,
+        address: flowState.contractAddress,
+        tokenId: flowState.tokenId,
     })
 
     const nft: NonFungibleToken = useMemo(() => {
         return {
             owner: selectedAccount.address,
-            address: flowState.nft?.address ?? "",
-            tokenId: flowState.nft?.tokenId ?? "",
-            id: flowState.nft?.address ?? "",
+            address: flowState.contractAddress ?? "",
+            tokenId: flowState.tokenId ?? "",
+            id: flowState.contractAddress ?? "",
             updated: false,
             name: collectible.name ?? "",
             description: collectible.description ?? "",
@@ -60,8 +60,8 @@ export const NFTSummaryScreen = () => {
         }
     }, [
         selectedAccount.address,
-        flowState.nft?.address,
-        flowState.nft?.tokenId,
+        flowState.contractAddress,
+        flowState.tokenId,
         collectible.name,
         collectible.description,
         collectible.image,

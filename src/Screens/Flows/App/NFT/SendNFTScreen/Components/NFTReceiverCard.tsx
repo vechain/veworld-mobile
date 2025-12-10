@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 import { Animated, StyleSheet } from "react-native"
 import { BaseText, BaseView, NFTMedia, NFTTransferCardSkeleton } from "~Components"
 import { DetailsContainer } from "~Components/Reusable/Send/03-SummarySend/Components/DetailsContainer"
-import { useSendContext } from "~Components/Reusable/Send"
+import { useNFTSendContext } from "~Components/Reusable/Send"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
@@ -12,13 +12,13 @@ const PADDING = 16
 const GAP = 12
 
 export const NFTReceiverCard = () => {
-    const { flowState } = useSendContext()
+    const { flowState } = useNFTSendContext()
     const { LL } = useI18nContext()
     const theme = useTheme()
 
     const collectible = useCollectibleDetails({
-        address: flowState.nft?.address,
-        tokenId: flowState.nft?.tokenId,
+        address: flowState.contractAddress,
+        tokenId: flowState.tokenId,
     })
 
     const isLoading = !collectible.collectionName
@@ -32,9 +32,9 @@ export const NFTReceiverCard = () => {
     }, [LL, collectible.collectionName])
 
     const validatedTokenId = useMemo(() => {
-        const tokenId = flowState.nft?.tokenId ?? ""
+        const tokenId = flowState.tokenId ?? ""
         return tokenId.length > 13 ? `${tokenId.slice(0, 12)}...` : tokenId
-    }, [flowState.nft?.tokenId])
+    }, [flowState.tokenId])
 
     const renderMedia = useMemo(() => {
         if (isLoading) return <NFTTransferCardSkeleton />
