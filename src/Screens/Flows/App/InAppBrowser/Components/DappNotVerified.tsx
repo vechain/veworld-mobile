@@ -122,7 +122,7 @@ export const DappNotVerified = ({ returnScreen, onNavigate }: Props) => {
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
             flex: 1,
@@ -130,5 +130,6 @@ const baseStyles = () =>
             borderTopRightRadius: 24,
             paddingHorizontal: 24,
             paddingVertical: 40,
+            backgroundColor: theme.colors.card,
         },
     })

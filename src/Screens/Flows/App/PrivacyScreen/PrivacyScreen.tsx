@@ -144,7 +144,7 @@ export const PrivacyScreen = () => {
 
     // [END] - Animations
 
-    const contentPadding = useLayoutScrollviewPadding()
+    const { containerPaddingBottom } = useLayoutScrollviewPadding()
 
     return (
         <Layout
@@ -152,7 +152,7 @@ export const PrivacyScreen = () => {
             title={LL.TITLE_PRIVACY()}
             body={
                 <>
-                    <BaseView style={{ paddingBottom: contentPadding }}>
+                    <BaseView style={{ paddingBottom: containerPaddingBottom }}>
                         {/*TODO: https://github.com/vechainfoundation/veworld-mobile/issues/1339*/}
                         {__DEV__ && (
                             <>

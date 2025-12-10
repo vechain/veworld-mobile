@@ -63,7 +63,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
     }, [bookmarkedDApps?.length, selectedAccount])
     const labels = useMemo(() => filteredTabs.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL, filteredTabs])
 
-    const containerPadding = useLayoutScrollviewPadding()
+    const { containerPaddingBottom, contentExtraBottomPadding } = useLayoutScrollviewPadding()
 
     const showNewUserVeBetterCard = useMemo(() => {
         return !hideNewUserVeBetterCard && !hasAnyVeBetterActions && selectedTab === "TOKENS"
@@ -100,7 +100,9 @@ export const TabRenderer = ({ onLayout }: Props) => {
     )
 
     return (
-        <Animated.View style={[styles.root, { paddingBottom: containerPadding }]} onLayout={onLayout}>
+        <Animated.View
+            style={[styles.root, { paddingBottom: containerPaddingBottom + contentExtraBottomPadding }]}
+            onLayout={onLayout}>
             <Animated.View layout={LinearTransition.duration(400)} style={[styles.animatedContent]}>
                 {showFavorites && (
                     <BaseView flexDirection="column">

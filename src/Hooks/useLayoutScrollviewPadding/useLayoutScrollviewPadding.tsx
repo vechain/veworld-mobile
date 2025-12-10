@@ -16,7 +16,7 @@ export const useLayoutScrollviewPadding = () => {
     const contentExtraBottomPadding = useMemo(() => (isAndroid() ? ANDROID_ADDITIONAL_PADDING : 0), [])
 
     return useMemo(
-        () => containerPaddingBottom + contentExtraBottomPadding,
+        () => ({ containerPaddingBottom, contentExtraBottomPadding }),
         [containerPaddingBottom, contentExtraBottomPadding],
     )
 }
