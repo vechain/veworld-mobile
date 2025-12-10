@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.14 (2025-12-10)</small>
+
+* build: init ([1988e22](https://github.com/vechain/veworld-mobile/commit/1988e22))
+* 451 - validator exit warning BS (#3618) ([d4167f5](https://github.com/vechain/veworld-mobile/commit/d4167f5)), closes [#3618](https://github.com/vechain/veworld-mobile/issues/3618)
+
 ## <small>2.4.13 (2025-12-02)</small>
 
 * build: init ([658831e](https://github.com/vechain/veworld-mobile/commit/658831e))
