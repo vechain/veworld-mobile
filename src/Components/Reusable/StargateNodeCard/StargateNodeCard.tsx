@@ -1,17 +1,16 @@
-import React from "react"
-import { useNFTMetadata } from "~Hooks/useNFTMetadata"
-import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { useThorClient } from "~Hooks/useThorClient"
-import { useStargateConfig } from "~Hooks/useStargateConfig"
 import { useQuery } from "@tanstack/react-query"
-import { getTokenURI } from "~Networking/NFT"
-import { StargateImage } from "~Screens/Flows/App/BalanceScreen/Components/Staking/StargateImage"
-import { BaseText, BaseView } from "~Components/Base"
-import { getTokenLevelName, TokenLevelId } from "~Utils/StargateUtils/StargateUtils"
-import { useNodesByTokenId } from "~Hooks/Staking"
+import React from "react"
 import { StyleSheet } from "react-native"
+import { BaseText, BaseView } from "~Components/Base"
+import { useNodesByTokenId } from "~Hooks/Staking"
+import { useTokenURI } from "~Hooks/useCollectibleMetadata/useTokenURI"
+import { useNFTMetadata } from "~Hooks/useNFTMetadata"
+import { useStargateConfig } from "~Hooks/useStargateConfig"
 import { useThemedStyles } from "~Hooks/useTheme"
 import { useI18nContext } from "~i18n/i18n-react"
+import { StargateImage } from "~Screens/Flows/App/BalanceScreen/Components/Staking/StargateImage"
+import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { getTokenLevelName, TokenLevelId } from "~Utils/StargateUtils/StargateUtils"
 
 type Props = {
     tokenId: string
@@ -25,17 +24,14 @@ export const StargateNodeCard = ({ tokenId, blockNumber }: Props) => {
 
     const network = useAppSelector(selectSelectedNetwork)
 
-    const thor = useThorClient()
-
     const stargateConfig = useStargateConfig(network)
 
     const { data: nodeInfo } = useNodesByTokenId(tokenId)
 
-    const { data: tokenURI } = useQuery({
-        queryKey: ["StargateTokenURI", network.type, nodeInfo?.nodeId],
-        queryFn: () =>
-            getTokenURI(nodeInfo?.nodeId ?? "", stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS!, thor, blockNumber),
-        enabled: Boolean(stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS) && !!nodeInfo,
+    const { data: tokenURI } = useTokenURI({
+        address: stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS!,
+        tokenId,
+        blockNumber,
     })
 
     const { data } = useQuery({

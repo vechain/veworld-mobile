@@ -61,21 +61,33 @@ export const useValidatorExit = () => {
         queryKey: ["validatorExitEvents", network.genesis.id, account.address, lastValidatorExitTimestamp],
         queryFn: async () => await getValidatorExitedEvents(indexer, account.address, lastValidatorExitTimestamp ?? 0),
         select: d => {
-            const delegateRequestEvents = d.filter(event => event.eventName === ActivityEvent.STARGATE_DELEGATE_REQUEST)
-            const latestDelegateRequestTimestamp =
-                delegateRequestEvents.length > 0 ? delegateRequestEvents[0].blockTimestamp : 0
-
-            const validatorExitEvents = d.filter(
-                event =>
-                    event.eventName === ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR &&
-                    event.blockTimestamp > latestDelegateRequestTimestamp,
-            )
-
-            const groupedValidators = validatorExitEvents.reduce((acc, event) => {
-                return { ...acc, [event.validator!]: [...(acc[event.validator!] ?? []), event] }
+            const groupedEventsByTokenId = d.reduce((acc, event) => {
+                return { ...acc, [event.tokenId ?? ""]: [...(acc[event.tokenId ?? ""] ?? []), event] }
             }, {} as Record<string, components["schemas"]["IndexedHistoryEvent"][]>)
 
-            return groupedValidators
+            const validatorExitEvents = Object.values(groupedEventsByTokenId)
+                .map(events => {
+                    // Get the delegate request events for the token id
+                    const delegateRequestEvents = events.filter(
+                        event => event.eventName === ActivityEvent.STARGATE_DELEGATE_REQUEST,
+                    )
+
+                    // Get the latest delegate request timestamp
+                    const latestDelegateRequestTimestamp =
+                        delegateRequestEvents.length > 0 ? delegateRequestEvents[0].blockTimestamp : 0
+
+                    // Get the validator exit that happened after the latest delegate request timestamp
+                    return events.filter(
+                        event =>
+                            event.eventName === ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR &&
+                            event.blockTimestamp > latestDelegateRequestTimestamp,
+                    )
+                })
+                .flat()
+
+            return validatorExitEvents.reduce((acc, event) => {
+                return { ...acc, [event.validator!]: [...(acc[event.validator!] ?? []), event] }
+            }, {} as Record<string, components["schemas"]["IndexedHistoryEvent"][]>)
         },
         staleTime: 1000 * 60 * 60, // 1 hour
         enabled: !AccountUtils.isObservedAccount(account),

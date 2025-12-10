@@ -33,7 +33,7 @@ export const validatorExitEventsMock = [
         blockTimestamp: 1764097820,
         txId: "0xcb78555b3a93f9356070582672994de96607e186104c8342217b1d568f5374de",
         origin: "0x16834",
-        tokenId: "15676",
+        tokenId: "15674",
         eventName: "STARGATE_DELEGATION_EXITED_VALIDATOR",
         owner: "0x16834",
         validator: "0x79b68validator",
