@@ -39,6 +39,8 @@ import {
     Notification,
     ExternalDappsSlice,
     resetExternalDappsState,
+    WalletPreferencesSlice,
+    resetWalletPreferencesState,
 } from "./Slices"
 import { migrationUpdates } from "~Storage/Redux/Migrations"
 import { createMigrate } from "redux-persist"
@@ -93,6 +95,7 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
             VersionUpdateSlice.name,
             Notification.name,
             ExternalDappsSlice.name,
+            WalletPreferencesSlice.name,
         ],
         migrate: createMigrate(migrationUpdates, { debug: true }),
         transforms: [encryptor],
@@ -123,4 +126,5 @@ export const resetActions = [
     resetBrowserState,
     resetVersionUpdateState,
     resetExternalDappsState,
+    resetWalletPreferencesState,
 ]
