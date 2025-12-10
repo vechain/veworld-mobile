@@ -41,24 +41,38 @@ export type SendContextType<T = SendFlowState | SendNFTFlowState> = {
 
 export const SendContext = React.createContext<SendContextType<any> | undefined>(undefined)
 
-type SendContextProviderProps = PropsWithChildren<{
-    initialToken?: FungibleTokenWithBalance
-}>
+type SendContextProviderProps = PropsWithChildren<
+    { flowType: "token"; initialToken?: FungibleTokenWithBalance } | { flowType: "nft"; initialNft: NonFungibleToken }
+>
 
 const ORDER: SendFlowStep[] = ["selectAmount", "insertAddress", "summary"]
 
-export const SendContextProvider = ({ children, initialToken }: SendContextProviderProps) => {
-    const [step, setStep] = useState<SendFlowStep>("selectAmount")
-    const [flowState, setFlowState] = useState<SendFlowState>({
-        type: "token",
-        token: initialToken,
-        amount: "0",
-        fiatAmount: "",
-        address: "",
-    })
+export const SendContextProvider = (props: SendContextProviderProps) => {
+    const { children } = props
 
-    const previousStep = useSharedValue<typeof step | undefined>(undefined)
-    const nextStep = useSharedValue<typeof step | undefined>(undefined)
+    const initialState =
+        props.flowType === "token"
+            ? ({
+                  type: "token",
+                  token: props.initialToken,
+                  amount: "0",
+                  fiatAmount: "",
+                  address: "",
+                  amountInFiat: false,
+              } as SendFlowState)
+            : ({
+                  type: "nft",
+                  nft: props.initialNft,
+                  address: "",
+              } as SendNFTFlowState)
+
+    const initialStep: SendFlowStep = props.flowType === "token" ? "selectAmount" : "insertAddress"
+
+    const [step, setStep] = useState<SendFlowStep>(initialStep)
+    const [flowState, setFlowState] = useState<SendFlowState | SendNFTFlowState>(initialState)
+
+    const previousStep = useSharedValue<SendFlowStep | undefined>(undefined)
+    const nextStep = useSharedValue<SendFlowStep | undefined>(undefined)
 
     const goToNext = useCallback(() => {
         switch (step) {
@@ -78,9 +92,11 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
     const goToPrevious = useCallback(() => {
         switch (step) {
             case "insertAddress":
-                nextStep.value = "selectAmount"
-                previousStep.value = step
-                setStep("selectAmount")
+                if (flowState.type === "token") {
+                    nextStep.value = "selectAmount"
+                    previousStep.value = step
+                    setStep("selectAmount")
+                }
                 break
             case "summary":
                 nextStep.value = "insertAddress"
@@ -88,7 +104,7 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
                 setStep("insertAddress")
                 break
         }
-    }, [nextStep, previousStep, step])
+    }, [nextStep, previousStep, step, flowState.type])
 
     const EnteringAnimation = useCallback(
         (values: EntryAnimationsValues) => {
@@ -119,7 +135,7 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
         [nextStep.value, previousStep.value],
     )
 
-    const contextValue: SendContextType<SendFlowState> = useMemo(
+    const contextValue: SendContextType<SendFlowState | SendNFTFlowState> = useMemo(
         () => ({
             flowState,
             setFlowState,

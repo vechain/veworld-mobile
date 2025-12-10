@@ -72,7 +72,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
             contractAddress: route.params.collectionAddress!,
             tokenId: route.params.nftTokenId,
         })
-    }, [nav, route.params.collectionAddress, route.params.nftTokenId, betterWorldFeature.balanceScreen?.send?.enabled])
+    }, [betterWorldFeature.balanceScreen?.send?.enabled, nav, route.params.collectionAddress, route.params.nftTokenId])
 
     const onMarketPlacePress = useCallback(async () => {
         const supported = await Linking.canOpenURL(nft?.external_url ?? "")

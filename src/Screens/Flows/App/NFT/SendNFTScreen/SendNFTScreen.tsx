@@ -6,10 +6,11 @@ import Animated, { LinearTransition } from "react-native-reanimated"
 
 import { Layout } from "~Components"
 import { CloseIconHeaderButton } from "~Components/Reusable/HeaderButtons"
-import { ReceiverScreen, SendNFTContextProvider, useNFTSendContext } from "~Components/Reusable/Send"
+import { ReceiverScreen, SendContextProvider, useNFTSendContext } from "~Components/Reusable/Send"
 import { useThemedStyles } from "~Hooks"
 import { RootStackParamListNFT, Routes } from "~Navigation"
 import { selectNFTWithAddressAndTokenId, useAppSelector } from "~Storage/Redux"
+import { HexUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListNFT, Routes.SEND_NFT>
@@ -51,13 +52,13 @@ export const SendNFTScreen = () => {
     const route = useRoute<RouteProps>()
 
     const nft = useAppSelector(state =>
-        selectNFTWithAddressAndTokenId(state, route.params.contractAddress, route.params.tokenId),
+        selectNFTWithAddressAndTokenId(state, HexUtils.normalize(route.params.contractAddress), route.params.tokenId),
     )
 
     return (
-        <SendNFTContextProvider initialNft={nft}>
+        <SendContextProvider flowType="nft" initialNft={nft!}>
             <SendNFTScreenContent />
-        </SendNFTContextProvider>
+        </SendContextProvider>
     )
 }
 

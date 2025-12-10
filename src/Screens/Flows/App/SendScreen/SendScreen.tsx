@@ -57,7 +57,7 @@ export const SendScreen = () => {
     const route = useRoute<RouteProps>()
 
     return (
-        <SendContextProvider initialToken={route.params?.token}>
+        <SendContextProvider flowType="token" initialToken={route.params?.token}>
             <SendScreenContent />
         </SendContextProvider>
     )

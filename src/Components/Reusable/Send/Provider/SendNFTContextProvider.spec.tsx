@@ -1,16 +1,17 @@
 import React from "react"
 import { renderHook, act } from "@testing-library/react-hooks"
 import { TestWrapper, TestHelpers } from "~Test"
-import { SendNFTContextProvider } from "./SendNFTContextProvider"
-import { useSendContext } from "./SendContextProvider"
+import { SendContextProvider, useSendContext } from "./SendContextProvider"
 import { RootState } from "~Storage/Redux/Types"
 
 const { NFT_Mock } = TestHelpers.data
 
-const createWrapper = (preloadedState: Partial<RootState>, initialNft?: typeof NFT_Mock) => {
+const createWrapper = (preloadedState: Partial<RootState>, initialNft: typeof NFT_Mock) => {
     return ({ children }: { children: React.ReactNode }) => (
         <TestWrapper preloadedState={preloadedState}>
-            <SendNFTContextProvider initialNft={initialNft}>{children}</SendNFTContextProvider>
+            <SendContextProvider flowType="nft" initialNft={initialNft}>
+                {children}
+            </SendContextProvider>
         </TestWrapper>
     )
 }
@@ -18,7 +19,7 @@ const createWrapper = (preloadedState: Partial<RootState>, initialNft?: typeof N
 describe("SendNFTContextProvider", () => {
     it("should render with initial state", () => {
         const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}),
+            wrapper: createWrapper({}, NFT_Mock),
         })
 
         expect(result.current.flowState).toMatchObject({
@@ -61,7 +62,7 @@ describe("SendNFTContextProvider", () => {
 
     it("should navigate from insertAddress to summary", () => {
         const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}),
+            wrapper: createWrapper({}, NFT_Mock),
         })
 
         expect(result.current.step).toBe("insertAddress")
@@ -75,7 +76,7 @@ describe("SendNFTContextProvider", () => {
 
     it("should navigate from summary back to insertAddress", () => {
         const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}),
+            wrapper: createWrapper({}, NFT_Mock),
         })
 
         expect(result.current.step).toBe("insertAddress")
@@ -95,7 +96,7 @@ describe("SendNFTContextProvider", () => {
 
     it("should not change step when goToPrevious is called on insertAddress", () => {
         const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}),
+            wrapper: createWrapper({}, NFT_Mock),
         })
 
         expect(result.current.step).toBe("insertAddress")
@@ -109,7 +110,7 @@ describe("SendNFTContextProvider", () => {
 
     it("should not change step when goToNext is called on summary", () => {
         const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}),
+            wrapper: createWrapper({}, NFT_Mock),
         })
 
         act(() => {

@@ -10,7 +10,7 @@ import { ReceiverScreen } from "./ReceiverScreen"
 const createWrapper = (preloadedState: Partial<RootState>) => {
     return ({ children }: { children: React.ReactNode }) => (
         <TestWrapper preloadedState={preloadedState}>
-            <SendContextProvider>{children}</SendContextProvider>
+            <SendContextProvider flowType="token">{children}</SendContextProvider>
         </TestWrapper>
     )
 }
