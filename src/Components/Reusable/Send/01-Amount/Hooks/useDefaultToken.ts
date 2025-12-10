@@ -5,10 +5,10 @@ import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { BalanceUtils, BigNutils } from "~Utils"
-import { useSendContext } from "../../Provider"
+import { useTokenSendContext } from "../../Provider"
 
 export const useDefaultToken = () => {
-    const { flowState } = useSendContext()
+    const { flowState } = useTokenSendContext()
     const availableTokens = useSendableTokensWithBalance()
 
     const vetInfo = useTokenWithCompleteInfo(VET)

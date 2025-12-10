@@ -61,7 +61,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
     const { betterWorldFeature } = useFeatureFlags()
 
     const onSendPress = useCallback(() => {
-        if (betterWorldFeature.balanceScreen?.send?.enabled) {
+        if (betterWorldFeature.balanceScreen?.sendCollectibles?.enabled) {
             nav.navigate(Routes.SEND_NFT, {
                 contractAddress: route.params.collectionAddress!,
                 tokenId: route.params.nftTokenId,
@@ -72,7 +72,12 @@ export const NFTDetailScreen = ({ route }: Props) => {
             contractAddress: route.params.collectionAddress!,
             tokenId: route.params.nftTokenId,
         })
-    }, [nav, route.params.collectionAddress, route.params.nftTokenId, betterWorldFeature.balanceScreen?.send?.enabled])
+    }, [
+        betterWorldFeature.balanceScreen?.sendCollectibles?.enabled,
+        nav,
+        route.params.collectionAddress,
+        route.params.nftTokenId,
+    ])
 
     const onMarketPlacePress = useCallback(async () => {
         const supported = await Linking.canOpenURL(nft?.external_url ?? "")

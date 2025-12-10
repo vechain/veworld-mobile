@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useCallback, useContext, useMemo, useState } from "react"
 import { EntryAnimationsValues, ExitAnimationsValues, LayoutAnimation, useSharedValue } from "react-native-reanimated"
-import { FungibleTokenWithBalance, NonFungibleToken } from "~Model"
+import { FungibleTokenWithBalance } from "~Model"
 import {
     EnteringFromLeftAnimation,
     EnteringFromRightAnimation,
@@ -10,8 +10,8 @@ import { ExitingToLeftAnimation, ExitingToRightAnimation } from "~Screens/Flows/
 export type SendFlowStep = "insertAddress" | "selectAmount" | "summary"
 
 export type SendFlowState = {
+    type: "token"
     token?: FungibleTokenWithBalance
-    nft?: NonFungibleToken
     amount?: string
     fiatAmount?: string
     address?: string
@@ -23,9 +23,16 @@ export type SendFlowState = {
     amountInFiat?: boolean
 }
 
-export type SendContextType = {
-    flowState: SendFlowState
-    setFlowState: React.Dispatch<React.SetStateAction<SendFlowState>>
+export type SendNFTFlowState = {
+    type: "nft"
+    contractAddress: string
+    tokenId: string
+    address?: string
+}
+
+export type SendContextType<T = SendFlowState | SendNFTFlowState> = {
+    flowState: T
+    setFlowState: React.Dispatch<React.SetStateAction<T>>
     step: SendFlowStep
     goToNext: () => void
     goToPrevious: () => void
@@ -33,25 +40,22 @@ export type SendContextType = {
     ExitingAnimation: (values: ExitAnimationsValues) => LayoutAnimation
 }
 
-export const SendContext = React.createContext<SendContextType | undefined>(undefined)
+export const SendContext = React.createContext<SendContextType<any> | undefined>(undefined)
 
 type SendContextProviderProps = PropsWithChildren<{
-    initialToken?: FungibleTokenWithBalance
+    initialFlowState: SendFlowState | SendNFTFlowState
 }>
 
 const ORDER: SendFlowStep[] = ["selectAmount", "insertAddress", "summary"]
 
-export const SendContextProvider = ({ children, initialToken }: SendContextProviderProps) => {
-    const [step, setStep] = useState<SendFlowStep>("selectAmount")
-    const [flowState, setFlowState] = useState<SendFlowState>({
-        token: initialToken,
-        amount: "0",
-        fiatAmount: "",
-        address: "",
-    })
+export const SendContextProvider = ({ children, initialFlowState }: SendContextProviderProps) => {
+    const initialStep: SendFlowStep = initialFlowState.type === "token" ? "selectAmount" : "insertAddress"
 
-    const previousStep = useSharedValue<typeof step | undefined>(undefined)
-    const nextStep = useSharedValue<typeof step | undefined>(undefined)
+    const [step, setStep] = useState<SendFlowStep>(initialStep)
+    const [flowState, setFlowState] = useState<SendFlowState | SendNFTFlowState>(initialFlowState)
+
+    const previousStep = useSharedValue<SendFlowStep | undefined>(undefined)
+    const nextStep = useSharedValue<SendFlowStep | undefined>(undefined)
 
     const goToNext = useCallback(() => {
         switch (step) {
@@ -71,9 +75,11 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
     const goToPrevious = useCallback(() => {
         switch (step) {
             case "insertAddress":
-                nextStep.value = "selectAmount"
-                previousStep.value = step
-                setStep("selectAmount")
+                if (flowState.type === "token") {
+                    nextStep.value = "selectAmount"
+                    previousStep.value = step
+                    setStep("selectAmount")
+                }
                 break
             case "summary":
                 nextStep.value = "insertAddress"
@@ -81,7 +87,7 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
                 setStep("insertAddress")
                 break
         }
-    }, [nextStep, previousStep, step])
+    }, [nextStep, previousStep, step, flowState.type])
 
     const EnteringAnimation = useCallback(
         (values: EntryAnimationsValues) => {
@@ -112,7 +118,7 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
         [nextStep.value, previousStep.value],
     )
 
-    const contextValue: SendContextType = useMemo(
+    const contextValue: SendContextType<SendFlowState | SendNFTFlowState> = useMemo(
         () => ({
             flowState,
             setFlowState,
@@ -133,5 +139,13 @@ export const useSendContext = () => {
     if (!context) {
         throw new Error("useSendContext must be used within a SendContextProvider")
     }
-    return context
+    return context as SendContextType<SendFlowState | SendNFTFlowState>
+}
+
+export const useTokenSendContext = () => {
+    return useSendContext() as SendContextType<SendFlowState>
+}
+
+export const useNFTSendContext = () => {
+    return useSendContext() as SendContextType<SendNFTFlowState>
 }

@@ -11,7 +11,7 @@ import {
     SelectAmountSendComponent,
     SendContextProvider,
     SummaryScreen,
-    useSendContext,
+    useTokenSendContext,
 } from "~Components/Reusable/Send"
 import { useThemedStyles } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -25,7 +25,7 @@ export const SendScreenContent = (): ReactElement => {
     const { LL } = useI18nContext()
     const navigation = useNavigation<NavigationProps>()
     const { styles } = useThemedStyles(baseStyles)
-    const { step } = useSendContext()
+    const { step } = useTokenSendContext()
 
     const handleClose = useCallback(() => {
         navigation.goBack()
@@ -57,7 +57,15 @@ export const SendScreen = () => {
     const route = useRoute<RouteProps>()
 
     return (
-        <SendContextProvider initialToken={route.params?.token}>
+        <SendContextProvider
+            initialFlowState={{
+                type: "token",
+                token: route.params?.token,
+                amount: "0",
+                fiatAmount: "",
+                address: "",
+                amountInFiat: false,
+            }}>
             <SendScreenContent />
         </SendContextProvider>
     )

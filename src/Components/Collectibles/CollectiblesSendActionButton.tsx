@@ -18,7 +18,7 @@ export const CollectiblesSendActionButton = ({ address, tokenId, onClose }: Prop
 
     const onPress = useCallback(async () => {
         onClose()
-        if (betterWorldFeature.balanceScreen?.send?.enabled) {
+        if (betterWorldFeature.balanceScreen?.sendCollectibles?.enabled) {
             nav.navigate(Routes.SEND_NFT, {
                 contractAddress: address,
                 tokenId,
@@ -29,7 +29,7 @@ export const CollectiblesSendActionButton = ({ address, tokenId, onClose }: Prop
             contractAddress: address,
             tokenId,
         })
-    }, [address, nav, onClose, tokenId, betterWorldFeature.balanceScreen?.send?.enabled])
+    }, [address, nav, onClose, tokenId, betterWorldFeature.balanceScreen?.sendCollectibles?.enabled])
 
     return (
         <CollectiblesActionButton
