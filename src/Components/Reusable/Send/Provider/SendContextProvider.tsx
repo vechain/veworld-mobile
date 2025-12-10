@@ -48,7 +48,6 @@ export const SendContextProvider = ({ children, initialToken }: SendContextProvi
         amount: "0",
         fiatAmount: "",
         address: "",
-        amountInFiat: false,
     })
 
     const previousStep = useSharedValue<typeof step | undefined>(undefined)
