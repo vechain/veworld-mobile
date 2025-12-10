@@ -29,12 +29,12 @@ export const UnverifiedAppsBottomSheet = ({ bsRef }: Props) => {
             icon="icon-alert-triangle"
             buttonsInLine
             mainButton={
-                <BaseButton variant="solid" action={onClose} flex={1}>
+                <BaseButton variant="solid" action={onClose} flex={1} testID="UNVERIFIED_APPS_BS_BACK">
                     {LL.SETTING_UNVERIFIED_APP_MODAL_CTA_BACK()}
                 </BaseButton>
             }
             secondaryButton={
-                <BaseButton variant="outline" action={onAllow} flex={1}>
+                <BaseButton variant="outline" action={onAllow} flex={1} testID="UNVERIFIED_APPS_BS_ALLOW">
                     {LL.SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW()}
                 </BaseButton>
             }
