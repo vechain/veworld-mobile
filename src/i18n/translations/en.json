@@ -1418,5 +1418,14 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "DAPP_NOT_VERIFIED_BROWSER_WARNING_TITLE": "App not verified",
+  "DAPP_NOT_VERIFIED_BROWSER_WARNING_SUBTITLE": "This app hasn't been verified by VeWorld and access has been blocked.\nUnverified apps may be malicious and could put your assets at risk.",
+  "DAPP_TRUSTED_TITLE": "Trust this app?",
+  "DAPP_TRUSTED_DESCRIPTION": "Manage in settings.",
+  "DAPP_OWNED_TITLE": "App developer?",
+  "DAPP_OWNED_DESCRIPTION": "Add your app to the app hub to get verified.",
+  "DAPP_NOT_VERIFIED_SWITCH_NETWORK": "Switch network",
+  "COMMON_LBL_CLOSE": "Close"
+
 }
