@@ -77,11 +77,11 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
     const ListHeaderComponent = useMemo(
         () => (
             <>
-                <BaseText mb={4} typographyFont="subSubTitleMedium">
+                <BaseText mb={4} typographyFont="bodySemiBold">
                     {LL.SB_BACKUP_WALLET()}
                 </BaseText>
                 <BaseSpacer height={4} />
-                <BaseText typographyFont="captionRegular">{LL.BD_BACKUP_RECOVERY_PHRASE()}</BaseText>
+                <BaseText typographyFont="captionMedium">{LL.BD_BACKUP_RECOVERY_PHRASE()}</BaseText>
                 <BaseSpacer height={16} />
             </>
         ),

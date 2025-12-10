@@ -26,11 +26,11 @@ export const UnverifiedApps = () => {
 
     return (
         <BaseView>
-            <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE}>
+            <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE}>
                 {LL.SETTING_UNVERIFIED_APP_TITLE()}
             </BaseText>
             <BaseSpacer height={4} />
-            <BaseText typographyFont="captionRegular" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}>
+            <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}>
                 {LL.SETTING_UNVERIFIED_APP_SUBTITLE()}
             </BaseText>
             <BaseSpacer height={16} />

@@ -161,6 +161,8 @@ export const PrivacyScreen = () => {
                                     subtitle={LL.BD_APP_LOCK()}
                                     onValueChange={toggleAppLockSwitch}
                                     value={false}
+                                    typographyFont="bodySemiBold"
+                                    subtitleTypographyFont="captionMedium"
                                 />
 
                                 <BaseSpacer height={40} />
@@ -204,6 +206,8 @@ export const PrivacyScreen = () => {
                                     subtitle={LL.BD_ANALYTICS_TRACKING()}
                                     onValueChange={toggleAnalyticsTrackingSwitch}
                                     value={isAnalyticsTrackingEnabled}
+                                    typographyFont="bodySemiBold"
+                                    subtitleTypographyFont="captionMedium"
                                 />
                                 <BaseSpacer height={40} />
                             </>
