@@ -39,8 +39,8 @@ export const BaseSwitch = ({ onValueChange, value, testID }: Props) => {
     }, [value])
 
     return (
-        <Pressable onPress={toggleValue}>
-            <Animated.View style={[styles.root, rootAnimatedStyles]} testID={testID}>
+        <Pressable onPress={toggleValue} testID={testID}>
+            <Animated.View style={[styles.root, rootAnimatedStyles]}>
                 <Animated.View style={[styles.ball, ballStyles]} />
             </Animated.View>
         </Pressable>

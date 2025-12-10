@@ -1,7 +1,8 @@
 import React, { useCallback } from "react"
 import { BaseSpacer, BaseSwitch, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
-import { useBottomSheetModal, useTheme } from "~Hooks"
+import { useTheme } from "~Hooks"
+import { useBottomSheetModal } from "~Hooks/useBottomSheet"
 import { useI18nContext } from "~i18n"
 import { selectDeveloperAppsEnabled, setDeveloperAppsEnabled, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { UnverifiedAppsBottomSheet } from "./UnverifiedAppsBottomSheet"
@@ -42,7 +43,7 @@ export const UnverifiedApps = () => {
                     flexDirection="row">
                     {LL.SETTING_UNVERIFIED_APP_TOGGLE_CTA()}
                 </BaseText>
-                <BaseSwitch onValueChange={onValueChange} value={enabled} />
+                <BaseSwitch onValueChange={onValueChange} value={enabled} testID="UNVERIFIED_APP_TOGGLE" />
             </BaseView>
             <UnverifiedAppsBottomSheet bsRef={ref} />
         </BaseView>
