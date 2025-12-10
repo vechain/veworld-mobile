@@ -83,7 +83,7 @@ export const useValidatorExit = () => {
 
     return useMemo(
         () => ({
-            data: data ?? [],
+            data: data ?? {},
             isLoading,
             error,
             isError,

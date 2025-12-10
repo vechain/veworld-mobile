@@ -26,7 +26,7 @@ describe("useValidatorExit", () => {
         await waitFor(() => {
             expect(result.current.isLoading).toBe(false)
         })
-        expect(result.current.data).toEqual([])
+        expect(result.current.data).toMatchObject({})
     })
 
     it("should return the validator exit events", async () => {
