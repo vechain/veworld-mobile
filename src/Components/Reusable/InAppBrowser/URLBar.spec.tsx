@@ -30,7 +30,7 @@ describe("URLBar", () => {
             },
         })
 
-        render(<URLBar navigationUrl="https://vechain.org" isLoading={false} />, {
+        render(<URLBar navigationUrl="https://vechain.org" isLoading={false} onNavigate={jest.fn()} />, {
             wrapper: TestWrapper,
         })
 
@@ -51,7 +51,7 @@ describe("URLBar", () => {
         ;(useNavigation as jest.Mock).mockReturnValue({
             replace: replaceFn,
         })
-        render(<URLBar navigationUrl="https://vechain.org" isLoading={false} />, {
+        render(<URLBar navigationUrl="https://vechain.org" isLoading={false} onNavigate={jest.fn()} />, {
             wrapper: TestWrapper,
         })
 
@@ -219,9 +219,17 @@ describe("URLBar", () => {
             })
             ;(useNavigation as jest.Mock).mockReturnValue({ navigate: navigateFn })
 
-            render(<URLBar navigationUrl="https://vechain.org" isLoading={false} returnScreen={Routes.HOME} />, {
-                wrapper: TestWrapper,
-            })
+            render(
+                <URLBar
+                    navigationUrl="https://vechain.org"
+                    isLoading={false}
+                    returnScreen={Routes.HOME}
+                    onNavigate={jest.fn()}
+                />,
+                {
+                    wrapper: TestWrapper,
+                },
+            )
 
             const backButton = await screen.getByTestId("URL-bar-back-button")
             fireEvent.press(backButton)
