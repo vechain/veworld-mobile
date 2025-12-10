@@ -1,10 +1,8 @@
-import { useQuery } from "@tanstack/react-query"
 import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseText, BaseView } from "~Components/Base"
 import { useNodesByTokenId } from "~Hooks/Staking"
-import { useTokenURI } from "~Hooks/useCollectibleMetadata/useTokenURI"
-import { useNFTMetadata } from "~Hooks/useNFTMetadata"
+import { useCollectibleMetadata } from "~Hooks/useCollectibleMetadata"
 import { useStargateConfig } from "~Hooks/useStargateConfig"
 import { useThemedStyles } from "~Hooks/useTheme"
 import { useI18nContext } from "~i18n/i18n-react"
@@ -19,7 +17,6 @@ type Props = {
 
 export const StargateNodeCard = ({ tokenId, blockNumber }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
-    const { fetchMetadata } = useNFTMetadata()
     const { LL } = useI18nContext()
 
     const network = useAppSelector(selectSelectedNetwork)
@@ -28,22 +25,16 @@ export const StargateNodeCard = ({ tokenId, blockNumber }: Props) => {
 
     const { data: nodeInfo } = useNodesByTokenId(tokenId)
 
-    const { data: tokenURI } = useTokenURI({
+    const { data: metadata } = useCollectibleMetadata({
         address: stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS!,
         tokenId,
         blockNumber,
     })
 
-    const { data } = useQuery({
-        queryKey: ["StargateNftMetadata", network.type, nodeInfo?.nodeId],
-        queryFn: () => fetchMetadata(tokenURI!),
-        enabled: Boolean(tokenURI),
-    })
-
     return (
         <BaseView flexDirection="row" alignItems="center" gap={16} px={16} py={12}>
             <StargateImage
-                uri={data?.image}
+                uri={metadata?.image}
                 width={40}
                 height={40}
                 borderRadius={4}
