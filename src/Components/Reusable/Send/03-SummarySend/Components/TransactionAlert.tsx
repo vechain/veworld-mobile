@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react"
 import { AlertInline, BaseView } from "~Components"
 import { AlertStatus } from "~Components/Reusable/Alert/utils/AlertConfigs"
 import { useI18nContext } from "~i18n"
-import { useSendContext } from "../../Provider"
+import { useTokenSendContext } from "../../Provider"
 import { useCurrentExchangeRate } from "../Hooks"
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 
 export const TransactionAlert = ({ txError, hasGasAdjustment }: Props) => {
     const { LL } = useI18nContext()
-    const { flowState } = useSendContext()
+    const { flowState } = useTokenSendContext()
     const [priceUpdated, setPriceUpdated] = useState(false)
     const { data: exchangeRate } = useCurrentExchangeRate()
 

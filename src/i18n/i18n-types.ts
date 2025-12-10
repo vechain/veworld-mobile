@@ -4362,6 +4362,10 @@ type RootTranslation = {
 	 */
 	SEND_CONTACTS_EMPTY_STATE_TITLE: string
 	/**
+	 * S​e​n​d​ ​c​o​l​l​e​c​t​i​b​l​e
+	 */
+	SEND_COLLECTIBLE: string
+	/**
 	 * W​a​l​l​e​t​ ​a​d​d​r​e​s​s
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: string
@@ -4611,6 +4615,10 @@ type RootTranslation = {
 	 */
 	SEND_RANGE_ZERO: string
 	/**
+	 * R​e​c​e​i​v​e​r
+	 */
+	SEND_RECEIVER: string
+	/**
 	 * C​l​e​a​r
 	 */
 	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: string
@@ -4672,6 +4680,16 @@ type RootTranslation = {
 	 * N​o​ ​r​e​c​e​n​t​ ​a​c​t​i​v​i​t​y
 	 */
 	SEND_RECENT_EMPTY_STATE_TITLE: string
+	/**
+	 * R​e​v​i​e​w​ ​d​e​t​a​i​l​s
+	 */
+	SEND_REVIEW_DETAILS: string
+	/**
+	 * {​c​u​r​r​e​n​t​S​t​e​p​}​ ​o​f​ ​{​t​o​t​a​l​S​t​e​p​s​}
+	 * @param {string} currentStep
+	 * @param {string} totalSteps
+	 */
+	SEND_STEP_OF: RequiredParams<'currentStep' | 'totalSteps'>
 	/**
 	 * {​s​t​e​p​N​u​m​b​e​r​}​ ​o​f​ ​3
 	 * @param {string} stepNumber
@@ -5827,16 +5845,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * {​n​o​d​e​L​e​v​e​l​}​ ​n​o​d​e
-	 * @param {string} nodeLevel
-	 */
-	VALIDATOR_DELEGATION_EXITED_NODE_NAME: RequiredParams<'nodeLevel'>
-	/**
-	 * T​o​k​e​n​ ​I​D​:​ ​{​t​o​k​e​n​I​d​}
-	 * @param {string} tokenId
-	 */
-	VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID: RequiredParams<'tokenId'>
 }
 
 export type TranslationFunctions = {
@@ -10116,6 +10124,10 @@ This action is irreversible.
 	 */
 	SEND_CONTACTS_EMPTY_STATE_TITLE: () => LocalizedString
 	/**
+	 * Send collectible
+	 */
+	SEND_COLLECTIBLE: () => LocalizedString
+	/**
 	 * Wallet address
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
@@ -10364,6 +10376,10 @@ This action is irreversible.
 	 */
 	SEND_RANGE_ZERO: () => LocalizedString
 	/**
+	 * Receiver
+	 */
+	SEND_RECEIVER: () => LocalizedString
+	/**
 	 * Clear
 	 */
 	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: () => LocalizedString
@@ -10423,6 +10439,14 @@ This action is irreversible.
 	 * No recent activity
 	 */
 	SEND_RECENT_EMPTY_STATE_TITLE: () => LocalizedString
+	/**
+	 * Review details
+	 */
+	SEND_REVIEW_DETAILS: () => LocalizedString
+	/**
+	 * {currentStep} of {totalSteps}
+	 */
+	SEND_STEP_OF: (arg: { currentStep: string, totalSteps: string }) => LocalizedString
 	/**
 	 * {stepNumber} of 3
 	 */
@@ -11562,14 +11586,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * {nodeLevel} node
-	 */
-	VALIDATOR_DELEGATION_EXITED_NODE_NAME: (arg: { nodeLevel: string }) => LocalizedString
-	/**
-	 * Token ID: {tokenId}
-	 */
-	VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID: (arg: { tokenId: string }) => LocalizedString
 }
 
 export type Formatters = {
