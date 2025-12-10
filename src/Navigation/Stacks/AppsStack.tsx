@@ -4,7 +4,6 @@ import { Device } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import {
-    AddCustomNodeScreen,
     ChangeNetworkScreen,
     InAppBrowser,
     TabsManagerScreen,
@@ -39,7 +38,6 @@ export type RootStackParamListApps = {
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.SETTINGS_NETWORK]: undefined
-    [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
 }
 
 const { Navigator, Screen } = createStackNavigator<RootStackParamListApps>()
@@ -93,12 +91,6 @@ export const AppsStack = () => {
             />
             <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
             <Screen name={Routes.SETTINGS_NETWORK} component={ChangeNetworkScreen} options={{ headerShown: false }} />
-
-            <Screen
-                name={Routes.SETTINGS_ADD_CUSTOM_NODE}
-                component={AddCustomNodeScreen}
-                options={{ headerShown: false }}
-            />
         </Navigator>
     )
 }

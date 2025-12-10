@@ -5,7 +5,6 @@ import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import {
     AddContactScreen,
-    AddCustomNodeScreen,
     ChangeNetworkScreen,
     ChooseBackupDetailsPassword,
     ClaimUsername,
@@ -33,7 +32,6 @@ import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
     [Routes.SETTINGS_NETWORK]: undefined
-    [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
     [Routes.SETTINGS_PRIVACY]: undefined
     [Routes.SETTINGS_ABOUT]: undefined
     [Routes.SETTINGS_GENERAL]: undefined
@@ -78,12 +76,6 @@ export const SettingsStack = () => {
             <Settings.Screen
                 name={Routes.SETTINGS_NETWORK}
                 component={ChangeNetworkScreen}
-                options={{ headerShown: false }}
-            />
-
-            <Settings.Screen
-                name={Routes.SETTINGS_ADD_CUSTOM_NODE}
-                component={AddCustomNodeScreen}
                 options={{ headerShown: false }}
             />
 
