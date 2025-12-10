@@ -40,6 +40,7 @@ import {
     SelectLedgerAccounts,
     SelectLedgerDevice,
     SelectTokenSendScreen,
+    SendNFTScreen,
     SendScreen,
     SwapScreen,
     TabsManagerScreen,
@@ -179,6 +180,10 @@ export type RootStackParamListHome = {
     [Routes.REPORT_NFT_TRANSACTION_SCREEN]: {
         nftAddress: string
         transactionClauses: TransactionClause[]
+    }
+    [Routes.SEND_NFT]: {
+        contractAddress: string
+        tokenId: string
     }
     [Routes.SEND_NFT_RECAP]: {
         contractAddress: string
@@ -383,6 +388,9 @@ export const HomeStack = () => {
                         component={ReportNFTTransactionScreen}
                         options={{ headerShown: false }}
                     />
+                )}
+                {betterWorldFeature.balanceScreen.sendCollectibles.enabled && (
+                    <Screen name={Routes.SEND_NFT} component={SendNFTScreen} options={{ headerShown: false }} />
                 )}
                 {betterWorldFeature.balanceScreen.collectibles.enabled && (
                     <Screen

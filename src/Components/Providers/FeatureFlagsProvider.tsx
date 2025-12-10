@@ -73,6 +73,9 @@ export const initialState: FeatureFlags = {
             send: {
                 enabled: false,
             },
+            sendCollectibles: {
+                enabled: false,
+            },
         },
     },
     notificationCenter: {

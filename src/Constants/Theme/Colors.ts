@@ -367,6 +367,11 @@ export type Colors = {
         title: string
         optionTitle: string
     }
+    defaultIcon: {
+        border: string
+        background: string
+        color: string
+    }
     sendScreen: {
         tokenAmountCard: {
             background: string
@@ -376,8 +381,9 @@ export type Colors = {
             tokenSelectorBorder: string
             tokenSelectorText: string
             disabledTokenCardBackground: string
-            stepText: string
         }
+        stepText: string
+        stepBackground: string
     }
     transak: string
 }
@@ -876,6 +882,11 @@ const light: Colors = {
         title: COLORS.PURPLE,
         optionTitle: COLORS.GREY_600,
     },
+    defaultIcon: {
+        border: COLORS.GREY_200,
+        background: COLORS.GREY_200,
+        color: COLORS.GREY_600,
+    },
     sendScreen: {
         tokenAmountCard: {
             background: COLORS.WHITE,
@@ -885,8 +896,9 @@ const light: Colors = {
             tokenSelectorBorder: COLORS.GREY_100,
             tokenSelectorText: COLORS.GREY_700,
             disabledTokenCardBackground: COLORS.GREY_100,
-            stepText: COLORS.GREY_500,
         },
+        stepText: COLORS.GREY_700,
+        stepBackground: COLORS.GREY_200,
     },
     transak: COLORS.WHITE,
 }
@@ -1260,6 +1272,11 @@ const dark: Colors = {
         title: COLORS.WHITE,
         optionTitle: COLORS.GREY_300,
     },
+    defaultIcon: {
+        border: COLORS.PURPLE_DISABLED,
+        background: COLORS.PURPLE_DISABLED,
+        color: COLORS.GREY_100,
+    },
     sendScreen: {
         tokenAmountCard: {
             background: COLORS.PURPLE_DISABLED,
@@ -1269,8 +1286,9 @@ const dark: Colors = {
             tokenSelectorBorder: COLORS.DARK_PURPLE_DISABLED,
             tokenSelectorText: COLORS.GREY_100,
             disabledTokenCardBackground: COLORS.PURPLE_DISABLED,
-            stepText: COLORS.GREY_300,
         },
+        stepText: COLORS.GREY_100,
+        stepBackground: COLORS.PURPLE_DISABLED,
     },
     transak: COLORS.TRANSAK_DARK,
 }

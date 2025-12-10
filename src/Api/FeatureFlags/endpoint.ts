@@ -80,6 +80,9 @@ export type FeatureFlags = {
             send: {
                 enabled: boolean
             }
+            sendCollectibles: {
+                enabled: boolean
+            }
         }
     }
     notificationCenter: {

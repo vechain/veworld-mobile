@@ -1,14 +1,26 @@
-import * as React from "react"
 import { render, screen } from "@testing-library/react-native"
+import * as React from "react"
 import { TestWrapper } from "~Test"
+
 import { SendContextProvider } from "~Components/Reusable"
-import { ReceiverScreen } from "./ReceiverScreen"
 import { RootState } from "~Storage/Redux/Types"
+
+import { ReceiverScreen } from "./ReceiverScreen"
 
 const createWrapper = (preloadedState: Partial<RootState>) => {
     return ({ children }: { children: React.ReactNode }) => (
         <TestWrapper preloadedState={preloadedState}>
-            <SendContextProvider>{children}</SendContextProvider>
+            <SendContextProvider
+                initialFlowState={{
+                    type: "token",
+                    token: undefined,
+                    amount: "0",
+                    fiatAmount: "",
+                    address: "",
+                    amountInFiat: false,
+                }}>
+                {children}
+            </SendContextProvider>
         </TestWrapper>
     )
 }
