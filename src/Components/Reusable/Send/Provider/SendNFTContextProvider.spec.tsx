@@ -6,10 +6,16 @@ import { RootState } from "~Storage/Redux/Types"
 
 const { NFT_Mock } = TestHelpers.data
 
-const createWrapper = (preloadedState: Partial<RootState>, initialNft: typeof NFT_Mock) => {
+const createWrapper = (preloadedState: Partial<RootState>, contractAddress: string = "0x0", tokenId: string = "0") => {
     return ({ children }: { children: React.ReactNode }) => (
         <TestWrapper preloadedState={preloadedState}>
-            <SendContextProvider flowType="nft" initialNft={initialNft}>
+            <SendContextProvider
+                initialFlowState={{
+                    type: "nft",
+                    contractAddress,
+                    tokenId,
+                    address: "",
+                }}>
                 {children}
             </SendContextProvider>
         </TestWrapper>
@@ -19,19 +25,21 @@ const createWrapper = (preloadedState: Partial<RootState>, initialNft: typeof NF
 describe("SendNFTContextProvider", () => {
     it("should render with initial state", () => {
         const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}, NFT_Mock),
+            wrapper: createWrapper({}, "0xcontract", "123"),
         })
 
         expect(result.current.flowState).toMatchObject({
             type: "nft",
+            contractAddress: "0xcontract",
+            tokenId: "123",
             address: "",
         })
         expect(result.current.step).toBe("insertAddress")
     })
 
-    it("should render with initial NFT", () => {
+    it("should render with initial NFT identifiers", () => {
         const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}, NFT_Mock),
+            wrapper: createWrapper({}, NFT_Mock.address, NFT_Mock.tokenId),
         })
 
         expect(result.current.flowState).toMatchObject({
@@ -39,15 +47,14 @@ describe("SendNFTContextProvider", () => {
         })
 
         if (result.current.flowState.type === "nft") {
-            expect(result.current.flowState.nft).not.toBeUndefined()
-            expect(result.current.flowState.nft.tokenId).toEqual(NFT_Mock.tokenId)
-            expect(result.current.flowState.nft.address).toEqual(NFT_Mock.address)
+            expect(result.current.flowState.contractAddress).toEqual(NFT_Mock.address)
+            expect(result.current.flowState.tokenId).toEqual(NFT_Mock.tokenId)
         }
     })
 
     it("should update the flow state", () => {
         const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}, NFT_Mock),
+            wrapper: createWrapper({}, NFT_Mock.address, NFT_Mock.tokenId),
         })
 
         act(() => {
@@ -62,7 +69,7 @@ describe("SendNFTContextProvider", () => {
 
     it("should navigate from insertAddress to summary", () => {
         const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}, NFT_Mock),
+            wrapper: createWrapper({}, NFT_Mock.address, NFT_Mock.tokenId),
         })
 
         expect(result.current.step).toBe("insertAddress")
@@ -76,7 +83,7 @@ describe("SendNFTContextProvider", () => {
 
     it("should navigate from summary back to insertAddress", () => {
         const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}, NFT_Mock),
+            wrapper: createWrapper({}, NFT_Mock.address, NFT_Mock.tokenId),
         })
 
         expect(result.current.step).toBe("insertAddress")
@@ -96,7 +103,7 @@ describe("SendNFTContextProvider", () => {
 
     it("should not change step when goToPrevious is called on insertAddress", () => {
         const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}, NFT_Mock),
+            wrapper: createWrapper({}, NFT_Mock.address, NFT_Mock.tokenId),
         })
 
         expect(result.current.step).toBe("insertAddress")
@@ -110,7 +117,7 @@ describe("SendNFTContextProvider", () => {
 
     it("should not change step when goToNext is called on summary", () => {
         const { result } = renderHook(() => useSendContext(), {
-            wrapper: createWrapper({}, NFT_Mock),
+            wrapper: createWrapper({}, NFT_Mock.address, NFT_Mock.tokenId),
         })
 
         act(() => {

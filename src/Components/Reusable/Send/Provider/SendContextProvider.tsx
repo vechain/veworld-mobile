@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useCallback, useContext, useMemo, useState } from "react"
 import { EntryAnimationsValues, ExitAnimationsValues, LayoutAnimation, useSharedValue } from "react-native-reanimated"
-import { FungibleTokenWithBalance, NonFungibleToken } from "~Model"
+import { FungibleTokenWithBalance } from "~Model"
 import {
     EnteringFromLeftAnimation,
     EnteringFromRightAnimation,
@@ -25,7 +25,8 @@ export type SendFlowState = {
 
 export type SendNFTFlowState = {
     type: "nft"
-    nft: NonFungibleToken
+    contractAddress: string
+    tokenId: string
     address?: string
 }
 
@@ -41,35 +42,17 @@ export type SendContextType<T = SendFlowState | SendNFTFlowState> = {
 
 export const SendContext = React.createContext<SendContextType<any> | undefined>(undefined)
 
-type SendContextProviderProps = PropsWithChildren<
-    { flowType: "token"; initialToken?: FungibleTokenWithBalance } | { flowType: "nft"; initialNft: NonFungibleToken }
->
+type SendContextProviderProps = PropsWithChildren<{
+    initialFlowState: SendFlowState | SendNFTFlowState
+}>
 
 const ORDER: SendFlowStep[] = ["selectAmount", "insertAddress", "summary"]
 
-export const SendContextProvider = (props: SendContextProviderProps) => {
-    const { children } = props
-
-    const initialState =
-        props.flowType === "token"
-            ? ({
-                  type: "token",
-                  token: props.initialToken,
-                  amount: "0",
-                  fiatAmount: "",
-                  address: "",
-                  amountInFiat: false,
-              } as SendFlowState)
-            : ({
-                  type: "nft",
-                  nft: props.initialNft,
-                  address: "",
-              } as SendNFTFlowState)
-
-    const initialStep: SendFlowStep = props.flowType === "token" ? "selectAmount" : "insertAddress"
+export const SendContextProvider = ({ children, initialFlowState }: SendContextProviderProps) => {
+    const initialStep: SendFlowStep = initialFlowState.type === "token" ? "selectAmount" : "insertAddress"
 
     const [step, setStep] = useState<SendFlowStep>(initialStep)
-    const [flowState, setFlowState] = useState<SendFlowState | SendNFTFlowState>(initialState)
+    const [flowState, setFlowState] = useState<SendFlowState | SendNFTFlowState>(initialFlowState)
 
     const previousStep = useSharedValue<SendFlowStep | undefined>(undefined)
     const nextStep = useSharedValue<SendFlowStep | undefined>(undefined)

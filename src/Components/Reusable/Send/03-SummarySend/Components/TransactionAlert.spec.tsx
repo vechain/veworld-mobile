@@ -61,7 +61,15 @@ const renderScreen = (props: ComponentProps<typeof TransactionAlert>) => {
 
     return render(
         <TestWrapper preloadedState={{}}>
-            <SendContextProvider initialToken={token}>
+            <SendContextProvider
+                initialFlowState={{
+                    type: "token",
+                    token,
+                    amount: "0",
+                    fiatAmount: "",
+                    address: "",
+                    amountInFiat: false,
+                }}>
                 <InitializeSendFlow token={token}>
                     <TransactionAlert {...props} />
                 </InitializeSendFlow>

@@ -9,7 +9,17 @@ const { VETWithBalance } = TestHelpers.data
 const createWrapper = (preloadedState: Partial<RootState>) => {
     return ({ children }: { children: React.ReactNode }) => (
         <TestWrapper preloadedState={preloadedState}>
-            <SendContextProvider flowType="token">{children}</SendContextProvider>
+            <SendContextProvider
+                initialFlowState={{
+                    type: "token",
+                    token: undefined,
+                    amount: "0",
+                    fiatAmount: "",
+                    address: "",
+                    amountInFiat: false,
+                }}>
+                {children}
+            </SendContextProvider>
         </TestWrapper>
     )
 }

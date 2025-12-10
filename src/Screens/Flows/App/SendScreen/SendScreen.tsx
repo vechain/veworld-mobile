@@ -57,7 +57,15 @@ export const SendScreen = () => {
     const route = useRoute<RouteProps>()
 
     return (
-        <SendContextProvider flowType="token" initialToken={route.params?.token}>
+        <SendContextProvider
+            initialFlowState={{
+                type: "token",
+                token: route.params?.token,
+                amount: "0",
+                fiatAmount: "",
+                address: "",
+                amountInFiat: false,
+            }}>
             <SendScreenContent />
         </SendContextProvider>
     )
