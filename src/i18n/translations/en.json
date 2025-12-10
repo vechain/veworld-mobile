@@ -1426,6 +1426,12 @@
   "DAPP_OWNED_TITLE": "App developer?",
   "DAPP_OWNED_DESCRIPTION": "Add your app to the app hub to get verified.",
   "DAPP_NOT_VERIFIED_SWITCH_NETWORK": "Switch network",
-  "COMMON_LBL_CLOSE": "Close"
-
+  "COMMON_LBL_CLOSE": "Close",
+  "SETTING_UNVERIFIED_APP_TITLE": "Unverified Apps",
+  "SETTING_UNVERIFIED_APP_SUBTITLE": "Allowing unverified apps lets you open apps that haven't been reviewed by VeWorld. These apps may be malicious and could put your assets at risk.",
+  "SETTING_UNVERIFIED_APP_TOGGLE_CTA": "Allow unverified Apps",
+  "SETTING_UNVERIFIED_APP_MODAL_TITLE": "Allow unverified Apps",
+  "SETTING_UNVERIFIED_APP_MODAL_SUBTITLE": "Unverified apps may be scams and can lead to asset loss. Disable after use.",
+  "SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW": "Yes, allow",
+  "SETTING_UNVERIFIED_APP_MODAL_CTA_BACK": "No, go back"
 }

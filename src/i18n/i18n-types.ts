@@ -5838,6 +5838,34 @@ type RootTranslation = {
 	 * C​l​o​s​e
 	 */
 	COMMON_LBL_CLOSE: string
+	/**
+	 * U​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_TITLE: string
+	/**
+	 * A​l​l​o​w​i​n​g​ ​u​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​l​e​t​s​ ​y​o​u​ ​o​p​e​n​ ​a​p​p​s​ ​t​h​a​t​ ​h​a​v​e​n​'​t​ ​b​e​e​n​ ​r​e​v​i​e​w​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.​ ​T​h​e​s​e​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​m​a​l​i​c​i​o​u​s​ ​a​n​d​ ​c​o​u​l​d​ ​p​u​t​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​.
+	 */
+	SETTING_UNVERIFIED_APP_SUBTITLE: string
+	/**
+	 * A​l​l​o​w​ ​u​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_TOGGLE_CTA: string
+	/**
+	 * A​l​l​o​w​ ​u​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_TITLE: string
+	/**
+	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​s​c​a​m​s​ ​a​n​d​ ​c​a​n​ ​l​e​a​d​ ​t​o​ ​a​s​s​e​t​ ​l​o​s​s​.​ ​D​i​s​a​b​l​e​ ​a​f​t​e​r​ ​u​s​e​.
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_SUBTITLE: string
+	/**
+	 * Y​e​s​,​ ​a​l​l​o​w
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW: string
+	/**
+	 * N​o​,​ ​g​o​ ​b​a​c​k
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_BACK: string
 }
 
 export type TranslationFunctions = {
@@ -11576,6 +11604,34 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Close
 	 */
 	COMMON_LBL_CLOSE: () => LocalizedString
+	/**
+	 * Unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_TITLE: () => LocalizedString
+	/**
+	 * Allowing unverified apps lets you open apps that haven't been reviewed by VeWorld. These apps may be malicious and could put your assets at risk.
+	 */
+	SETTING_UNVERIFIED_APP_SUBTITLE: () => LocalizedString
+	/**
+	 * Allow unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_TOGGLE_CTA: () => LocalizedString
+	/**
+	 * Allow unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_TITLE: () => LocalizedString
+	/**
+	 * Unverified apps may be scams and can lead to asset loss. Disable after use.
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Yes, allow
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW: () => LocalizedString
+	/**
+	 * No, go back
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_BACK: () => LocalizedString
 }
 
 export type Formatters = {

@@ -12,6 +12,7 @@ import {
 } from "~Components"
 import { ERROR_EVENTS } from "~Constants"
 import { useBottomSheetModal, useCheckWalletBackup, useDisclosure, useInterval, useWalletSecurity } from "~Hooks"
+import { useLayoutScrollviewPadding } from "~Hooks/useLayoutScrollviewPadding"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, LocalDevice } from "~Model"
 import { Routes } from "~Navigation"
@@ -27,6 +28,7 @@ import {
 } from "~Storage/Redux"
 import { warn } from "~Utils"
 import { BackupWarningBottomSheet, DevicesBackupState, EnableBiometrics } from "./Components"
+import { UnverifiedApps } from "./Components/UnverifiedApps"
 import { useBackupDetails, useEditPin } from "./Hooks"
 
 export const PrivacyScreen = () => {
@@ -142,13 +144,15 @@ export const PrivacyScreen = () => {
 
     // [END] - Animations
 
+    const contentPadding = useLayoutScrollviewPadding()
+
     return (
         <Layout
             safeAreaTestID="PrivacyScreen"
             title={LL.TITLE_PRIVACY()}
             body={
                 <>
-                    <BaseView>
+                    <BaseView style={{ paddingBottom: contentPadding }}>
                         {/*TODO: https://github.com/vechainfoundation/veworld-mobile/issues/1339*/}
                         {__DEV__ && (
                             <>
@@ -201,8 +205,11 @@ export const PrivacyScreen = () => {
                                     onValueChange={toggleAnalyticsTrackingSwitch}
                                     value={isAnalyticsTrackingEnabled}
                                 />
+                                <BaseSpacer height={40} />
                             </>
                         )}
+
+                        <UnverifiedApps />
 
                         <RequireUserPassword
                             isOpen={isEditPinPromptOpen}

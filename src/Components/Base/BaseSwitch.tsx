@@ -4,6 +4,7 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, {
     interpolateColor,
     runOnJS,
+    useAnimatedReaction,
     useAnimatedStyle,
     useSharedValue,
     withTiming,
@@ -33,6 +34,15 @@ export const BaseSwitch = ({ onValueChange, value, testID }: Props) => {
         //Align the value
         leftSharedValue.value = value ? LEFT_TRUE : LEFT_FALSE
     }, [leftSharedValue, value])
+
+    useAnimatedReaction(
+        () => leftSharedValue.value,
+        current => {
+            if (current !== LEFT_TRUE && current !== LEFT_FALSE) return
+            if (current === LEFT_TRUE && !value) leftSharedValue.value = withTiming(LEFT_FALSE, { duration: 300 })
+            if (current === LEFT_FALSE && value) leftSharedValue.value = withTiming(LEFT_TRUE, { duration: 300 })
+        },
+    )
 
     const toggleValue = useCallback(() => {
         const newValue = !value

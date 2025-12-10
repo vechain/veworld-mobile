@@ -25,7 +25,7 @@ const DappNotVerifiedCard = ({ title, subtitle, onPress, icon }: DappNotVerified
                 <BaseText color={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE} typographyFont="bodySemiBold">
                     {title}
                 </BaseText>
-                <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="caption">
+                <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="captionRegular">
                     {subtitle}
                 </BaseText>
             </BaseView>
