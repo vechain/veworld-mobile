@@ -1151,7 +1151,7 @@
   "SEND_RECEIVE_TAB_SCAN": "扫描",
   "SEND_RECENT_EMPTY_STATE_DESCRIPTION": "当你向某个地址发送后，这里会显示该地址以便快速访问。",
   "SEND_RECENT_EMPTY_STATE_TITLE": "无最近活动",
-  "SEND_REVIEW_DETAILS": "查看详情",
+  "SEND_REVIEW_DETAILS": "审核详情",
   "SEND_STEP_OF": "{currentStep: string} / {totalSteps: string}",
   "SEND_STEP_OF_3": "{stepNumber} / 3",
   "SEND_TO": "至",

@@ -1070,7 +1070,7 @@
   "SEND_AMOUNT": "Importo",
   "SEND_AMOUNT_EXCEEDS_BALANCE": "Importo superiore al saldo",
   "SEND_BALANCE_PERCENTAGE": "Percentuale del saldo: {percentage: string}",
-  "SEND_COLLECTIBLE": "Invia collezionabile",
+  "SEND_COLLECTIBLE": "Invia oggetto da collezione",
   "SEND_CONTACTS_EMPTY_STATE_DESCRIPTION": "Aggiungi il tuo primo contatto per inviare più velocemente ed evitare errori.",
   "SEND_CONTACTS_EMPTY_STATE_TITLE": "Nessun contatto aggiunto",
   "SEND_CREATE_CONTACT_ADDRESS": "Indirizzo wallet",

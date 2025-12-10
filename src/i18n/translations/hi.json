@@ -1151,7 +1151,7 @@
   "SEND_RECEIVE_TAB_SCAN": "स्कैन",
   "SEND_RECENT_EMPTY_STATE_DESCRIPTION": "एक बार जब आप किसी पते पर भेजेंगे, तो वह यहाँ त्वरित पहुँच के लिए दिखेगा।",
   "SEND_RECENT_EMPTY_STATE_TITLE": "कोई हालिया गतिविधि नहीं",
-  "SEND_REVIEW_DETAILS": "विवरण देखें",
+  "SEND_REVIEW_DETAILS": "विवरण समीक्षा करें",
   "SEND_STEP_OF": "{currentStep: string} में से {totalSteps: string}",
   "SEND_STEP_OF_3": "3 में से {stepNumber: string}",
   "SEND_TO": "प्रति",

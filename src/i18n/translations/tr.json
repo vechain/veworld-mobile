@@ -1070,7 +1070,7 @@
   "SEND_AMOUNT": "Miktar",
   "SEND_AMOUNT_EXCEEDS_BALANCE": "Tutar, bakiyeyi aşıyor",
   "SEND_BALANCE_PERCENTAGE": "Bakiye yüzdesi: {percentage: string}",
-  "SEND_COLLECTIBLE": "Koleksiyon gönder",
+  "SEND_COLLECTIBLE": "Koleksiyonu gönder",
   "SEND_CONTACTS_EMPTY_STATE_DESCRIPTION": "Daha hızlı göndermek ve hatalardan kaçınmak için ilk kişinizi ekleyin.",
   "SEND_CONTACTS_EMPTY_STATE_TITLE": "Kişi eklenmedi",
   "SEND_CREATE_CONTACT_ADDRESS": "Cüzdan adresi",

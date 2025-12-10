@@ -1151,7 +1151,7 @@
   "SEND_RECEIVE_TAB_SCAN": "Сканировать",
   "SEND_RECENT_EMPTY_STATE_DESCRIPTION": "После отправки на адрес он появится здесь для быстрого доступа.",
   "SEND_RECENT_EMPTY_STATE_TITLE": "Нет недавней активности",
-  "SEND_REVIEW_DETAILS": "Проверить детали",
+  "SEND_REVIEW_DETAILS": "Проверьте детали",
   "SEND_STEP_OF": "{currentStep: string} из {totalSteps: string}",
   "SEND_STEP_OF_3": "{stepNumber} из 3",
   "SEND_TO": "Кому",

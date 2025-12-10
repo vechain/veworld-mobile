@@ -1152,7 +1152,7 @@
   "SEND_RECENT_EMPTY_STATE_DESCRIPTION": "Khi bạn gửi tới một địa chỉ, nó sẽ xuất hiện ở đây để truy cập nhanh.",
   "SEND_RECENT_EMPTY_STATE_TITLE": "Chưa có hoạt động gần đây",
   "SEND_REVIEW_DETAILS": "Xem lại chi tiết",
-  "SEND_STEP_OF": "{currentStep: string} của {totalSteps: string}",
+  "SEND_STEP_OF": "{currentStep: string} trên tổng số {totalSteps: string}",
   "SEND_STEP_OF_3": "{stepNumber: string} trên 3",
   "SEND_TO": "Đến",
   "SEND_TOKEN_AMOUNT": "Số lượng token",
