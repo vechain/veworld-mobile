@@ -4354,6 +4354,10 @@ type RootTranslation = {
 	 */
 	SEND_BALANCE_PERCENTAGE: RequiredParams<'percentage'>
 	/**
+	 * S​e​n​d​ ​c​o​l​l​e​c​t​i​b​l​e
+	 */
+	SEND_COLLECTIBLE: string
+	/**
 	 * A​d​d​ ​y​o​u​r​ ​f​i​r​s​t​ ​c​o​n​t​a​c​t​ ​t​o​ ​s​e​n​d​ ​f​a​s​t​e​r​ ​a​n​d​ ​a​v​o​i​d​ ​e​r​r​o​r​s​.
 	 */
 	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: string
@@ -4361,10 +4365,6 @@ type RootTranslation = {
 	 * N​o​ ​c​o​n​t​a​c​t​s​ ​a​d​d​e​d
 	 */
 	SEND_CONTACTS_EMPTY_STATE_TITLE: string
-	/**
-	 * S​e​n​d​ ​c​o​l​l​e​c​t​i​b​l​e
-	 */
-	SEND_COLLECTIBLE: string
 	/**
 	 * W​a​l​l​e​t​ ​a​d​d​r​e​s​s
 	 */
@@ -5505,6 +5505,38 @@ type RootTranslation = {
 	 * u​s​e​r​n​a​m​e
 	 */
 	USERNAME: string
+	/**
+	 * T​h​e​ ​v​a​l​i​d​a​t​o​r​ ​{​v​a​l​i​d​a​t​o​r​N​a​m​e​}​ ​i​s​ ​n​o​ ​l​o​n​g​e​r​ ​a​c​t​i​v​e​.​ ​A​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r​ ​m​u​s​t​ ​b​e​ ​s​e​l​e​c​t​e​d​ ​t​o​ ​c​o​n​t​i​n​u​e​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​.
+	 * @param {string} validatorName
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION: RequiredParams<'validatorName'>
+	/**
+	 * T​h​e​ ​v​a​l​i​d​a​t​o​r​ ​{​v​a​l​i​d​a​t​o​r​N​a​m​e​s​}​ ​a​r​e​ ​n​o​ ​l​o​n​g​e​r​ ​a​c​t​i​v​e​.​ ​N​e​w​ ​v​a​l​i​d​a​t​o​r​ ​m​u​s​t​ ​b​e​ ​s​e​l​e​c​t​e​d​ ​t​o​ ​c​o​n​t​i​n​u​e​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​.
+	 * @param {string} validatorNames
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION_MULTIPLE: RequiredParams<'validatorNames'>
+	/**
+	 * S​t​a​r​G​a​t​e​ ​n​o​t​i​f​i​c​a​t​i​o​n
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE: string
+	/**
+	 * C​h​o​o​s​e​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR: string
+	/**
+	 * C​h​o​o​s​e​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r​s
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS: string
+	/**
+	 * {​n​o​d​e​L​e​v​e​l​}​ ​n​o​d​e
+	 * @param {string} nodeLevel
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME: RequiredParams<'nodeLevel'>
+	/**
+	 * T​o​k​e​n​ ​I​D​:​ ​{​t​o​k​e​n​I​d​}
+	 * @param {string} tokenId
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID: RequiredParams<'tokenId'>
 	/**
 	 * V​a​l​u​e
 	 */
@@ -10155,6 +10187,10 @@ This action is irreversible.
 	 */
 	SEND_BALANCE_PERCENTAGE: (arg: { percentage: string }) => LocalizedString
 	/**
+	 * Send collectible
+	 */
+	SEND_COLLECTIBLE: () => LocalizedString
+	/**
 	 * Add your first contact to send faster and avoid errors.
 	 */
 	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: () => LocalizedString
@@ -10162,10 +10198,6 @@ This action is irreversible.
 	 * No contacts added
 	 */
 	SEND_CONTACTS_EMPTY_STATE_TITLE: () => LocalizedString
-	/**
-	 * Send collectible
-	 */
-	SEND_COLLECTIBLE: () => LocalizedString
 	/**
 	 * Wallet address
 	 */
@@ -11289,6 +11321,34 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * username
 	 */
 	USERNAME: () => LocalizedString
+	/**
+	 * The validator {validatorName} is no longer active. A new validator must be selected to continue earning rewards.
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION: (arg: { validatorName: string }) => LocalizedString
+	/**
+	 * The validator {validatorNames} are no longer active. New validator must be selected to continue earning rewards.
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION_MULTIPLE: (arg: { validatorNames: string }) => LocalizedString
+	/**
+	 * StarGate notification
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
+	 * Choose new validator
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR: () => LocalizedString
+	/**
+	 * Choose new validators
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS: () => LocalizedString
+	/**
+	 * {nodeLevel} node
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME: (arg: { nodeLevel: string }) => LocalizedString
+	/**
+	 * Token ID: {tokenId}
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID: (arg: { tokenId: string }) => LocalizedString
 	/**
 	 * Value
 	 */
