@@ -5,12 +5,21 @@ buildscript {
         compileSdkVersion = 35
         targetSdkVersion = 35
         ndkVersion = "26.1.10909125"
-        kotlinVersion = "2.0.21"
+        // Expo SDK 52 / expo-modules-core expect Kotlin 1.9.24/1.9.25; align to 1.9.24 to avoid missing compose compiler artifacts.
+        kotlinVersion = "1.9.24"
         androidXBrowser = "1.8.0"
     }
     repositories {
         google()
         mavenCentral()
+        // For Kotlin Compose compiler artifacts required by Expo SDK 52 / expo-modules-core
+        maven {
+            url 'https://maven.pkg.jetbrains.space/public/p/compose/dev'
+        }
+        // Kotlin compiler dev artifacts (including compose compiler plugin)
+        maven {
+            url 'https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev'
+        }
     }
 
     dependencies {
@@ -33,6 +42,13 @@ allprojects {
 
         google()
         mavenCentral()
+        // Kotlin Compose compiler artifacts
+        maven {
+            url 'https://maven.pkg.jetbrains.space/public/p/compose/dev'
+        }
+        maven {
+            url 'https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev'
+        }
     }
 }
 
