@@ -12,12 +12,21 @@ import { useAnalyticTracking, useGetDappMetadataFromUrl, useThemedStyles } from 
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
+import { NETWORK_TYPE } from "~Model"
 import { Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { RootStackParamListHome } from "~Navigation/Stacks/HomeStack"
-import { deleteSession, selectSelectedNetwork, selectSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    deleteSession,
+    selectDeveloperAppsEnabled,
+    selectSelectedNetwork,
+    selectSession,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
+import { DappNotVerified } from "./Components/DappNotVerified"
 
 type Props = NativeStackScreenProps<RootStackParamListApps | RootStackParamListHome, Routes.BROWSER>
 
@@ -43,6 +52,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const { ref: webviewContainerRef, performScreenshot } = useBrowserScreenshot()
     const dispatch = useAppDispatch()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const developerAppsEnabled = useAppSelector(selectDeveloperAppsEnabled)
     const activeSession = useAppSelector(state =>
         selectSession(state, navigationState?.url ?? "", selectedNetwork.genesis.id),
     )
@@ -110,13 +120,19 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         }
     }, [onAndroidBackPress])
 
+    const shouldShowWebview = useMemo(() => {
+        if (dappMetadata) return true
+        if (selectedNetwork.type !== NETWORK_TYPE.MAIN) return true
+        return developerAppsEnabled
+    }, [dappMetadata, developerAppsEnabled, selectedNetwork.type])
+
     return (
         <Layout
             bg={COLORS.BALANCE_BACKGROUND}
             fixedHeader={
                 <URLBar
                     navigationUrl={route.params.url}
-                    isLoading={isLoadingWebView}
+                    isLoading={shouldShowWebview ? isLoadingWebView : false}
                     onNavigate={onNavigate}
                     returnScreen={route.params.returnScreen}
                 />
@@ -129,31 +145,35 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 <View style={styles.container}>
                     {userAgent && !isLoading && (
                         <Animated.View ref={webviewContainerRef} style={[styles.webviewContainer]} collapsable={false}>
-                            <WebView
-                                ref={webviewRef as MutableRefObject<WebView>}
-                                source={{
-                                    uri: route.params.url,
-                                    headers: {
-                                        "Accept-Language": locale,
-                                    },
-                                }}
-                                userAgent={userAgent}
-                                javaScriptEnabled={true}
-                                onMessage={onMessage}
-                                onScroll={onScroll}
-                                onNavigationStateChange={onNavigationStateChange}
-                                onLoadEnd={onLoadEnd}
-                                allowsBackForwardNavigationGestures
-                                style={styles.loginWebView}
-                                scalesPageToFit={true}
-                                injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
-                                allowsInlineMediaPlayback={true}
-                                originWhitelist={originWhitelist}
-                                collapsable={false}
-                                pullToRefreshEnabled
-                                startInLoadingState={true}
-                                renderLoading={renderLoading}
-                            />
+                            {shouldShowWebview ? (
+                                <WebView
+                                    ref={webviewRef as MutableRefObject<WebView>}
+                                    source={{
+                                        uri: route.params.url,
+                                        headers: {
+                                            "Accept-Language": locale,
+                                        },
+                                    }}
+                                    userAgent={userAgent}
+                                    javaScriptEnabled={true}
+                                    onMessage={onMessage}
+                                    onScroll={onScroll}
+                                    onNavigationStateChange={onNavigationStateChange}
+                                    onLoadEnd={onLoadEnd}
+                                    allowsBackForwardNavigationGestures
+                                    style={styles.loginWebView}
+                                    scalesPageToFit={true}
+                                    injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
+                                    allowsInlineMediaPlayback={true}
+                                    originWhitelist={originWhitelist}
+                                    collapsable={false}
+                                    pullToRefreshEnabled
+                                    startInLoadingState={true}
+                                    renderLoading={renderLoading}
+                                />
+                            ) : (
+                                <DappNotVerified onNavigate={onNavigate} returnScreen={route.params.returnScreen} />
+                            )}
                         </Animated.View>
                     )}
 

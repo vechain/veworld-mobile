@@ -35,6 +35,7 @@ import {
     LedgerSignTransaction,
     ManageTokenScreen,
     ObserveWalletScreen,
+    PrivacyScreen,
     SelectAmountSendScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
@@ -189,6 +190,7 @@ export type RootStackParamListHome = {
         receiverAddress: string
     }
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
+    [Routes.SETTINGS_PRIVACY]: undefined
 }
 
 const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome>()
@@ -415,6 +417,8 @@ export const HomeStack = () => {
                 <Screen name={Routes.CLAIM_USERNAME} component={ClaimUsername} options={{ headerShown: false }} />
                 <Screen name={Routes.USERNAME_CLAIMED} component={UsernameClaimed} options={{ headerShown: false }} />
             </Group>
+
+            <Screen name={Routes.SETTINGS_PRIVACY} component={PrivacyScreen} options={{ headerShown: false }} />
         </Navigator>
     )
 }

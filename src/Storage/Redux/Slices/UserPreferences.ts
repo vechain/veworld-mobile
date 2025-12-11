@@ -61,6 +61,11 @@ export interface UserPreferenceState {
         [genesisId: string]: string
     }
     hideStellaPayBottomSheet?: boolean
+    /**
+     * Indicate that the user explicitly accepts to go to apps that are not on app hub.
+     * By default it's false.
+     */
+    developerAppsEnabled?: boolean
 }
 
 export const initialUserPreferencesState: UserPreferenceState = {
@@ -226,6 +231,9 @@ export const UserPreferencesSlice = createSlice({
         setHideStellaPayBottomSheet: (state, action: PayloadAction<boolean>) => {
             state.hideStellaPayBottomSheet = action.payload
         },
+        setDeveloperAppsEnabled: (state, action: PayloadAction<boolean>) => {
+            state.developerAppsEnabled = action.payload
+        },
     },
 })
 
@@ -257,4 +265,5 @@ export const {
     setDeveloperMenuUnlocked,
     setIndexerUrl,
     setHideStellaPayBottomSheet,
+    setDeveloperAppsEnabled,
 } = UserPreferencesSlice.actions

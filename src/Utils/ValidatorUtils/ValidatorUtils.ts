@@ -1,4 +1,5 @@
 import { Validator } from "~Constants"
+import AddressUtils from "../AddressUtils"
 
 /**
  * Get validator information by address from the validators list
@@ -7,7 +8,7 @@ import { Validator } from "~Constants"
  * @returns Validator object or undefined if not found
  */
 export const getValidatorByAddress = (validators: Validator[], address: string): Validator | undefined => {
-    return validators.find(validator => validator.address.toLowerCase() === address.toLowerCase())
+    return validators.find(validator => AddressUtils.compareAddresses(validator.address, address))
 }
 
 /**
