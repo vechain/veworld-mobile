@@ -225,6 +225,7 @@
     "@react-native/eslint-config": "0.76.9",
     "@react-native/metro-config": "0.76.9",
     "@react-native/typescript-config": "0.76.9",
+    "@react-native-community/cli": "^13.6.1",
     "@release-it/conventional-changelog":  "^10.0.1",
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-hooks": "^8.0.1",
