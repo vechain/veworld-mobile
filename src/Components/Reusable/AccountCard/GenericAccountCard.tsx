@@ -101,6 +101,7 @@ export const GenericAccountCard = ({
                     </BaseText>
                     {(vnsName || accountName) && (
                         <BaseText
+                            numberOfLines={1}
                             typographyFont="smallCaptionMedium"
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
                             {description}
