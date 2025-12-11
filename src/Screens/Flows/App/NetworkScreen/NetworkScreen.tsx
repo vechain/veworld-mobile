@@ -8,11 +8,11 @@ import {
     BaseText,
     BaseView,
     Layout,
-    NetworkBox,
     SectionListSeparator,
 } from "~Components"
 import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { NetworkBox } from "~Components/Reusable/Network"
 import { COLORS } from "~Constants"
 import { useSetSelectedAccount, useTheme } from "~Hooks"
 import { Network, NETWORK_TYPE } from "~Model"
@@ -25,7 +25,7 @@ import {
 } from "~Storage/Redux"
 import { selectNetworksByType, selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { useI18nContext } from "~i18n"
-import { CustomNetworkFooter } from "./Components/CustomNetworkFooter"
+import { CustomNetworkFooter } from "./Components"
 
 type Section = {
     title: string

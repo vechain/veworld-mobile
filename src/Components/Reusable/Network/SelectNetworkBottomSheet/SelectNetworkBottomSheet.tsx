@@ -11,7 +11,6 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    NetworkBox,
     SectionListSeparator,
 } from "~Components"
 import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
@@ -23,6 +22,7 @@ import { Routes } from "~Navigation"
 import { clearNFTCache, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { switchActiveNetwork } from "~Storage/Redux/Actions"
 import { selectNetworksByType, selectSelectedNetwork } from "~Storage/Redux/Selectors"
+import { NetworkBox } from "../NetworkBox"
 
 type Props = {
     onClose: () => void
