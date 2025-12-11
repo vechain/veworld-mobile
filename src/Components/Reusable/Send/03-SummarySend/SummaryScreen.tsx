@@ -84,18 +84,18 @@ export const SummaryScreen = () => {
         if (newBalance.isLessThanOrEqual("0")) {
             // If it cannot even pay for the fees, fallback to VTHO and restore the original amount
             fallbackToVTHO()
-            setFlowState({
-                ...flowState,
+            setFlowState(prev => ({
+                ...prev,
                 amount: originalAmount.current,
-            })
+            }))
         } else {
             // Deduct from the balance the fees to get the new value
             const adjustedAmount = newBalance.toHuman(token.decimals).decimals(4).toString
-            setFlowState({
-                ...flowState,
+            setFlowState(prev => ({
+                ...prev,
                 amount: adjustedAmount,
                 amountInFiat: false,
-            })
+            }))
         }
 
         setHasGasAdjustment(true)
@@ -109,8 +109,8 @@ export const SummaryScreen = () => {
         token.balance.balance,
         token.decimals,
         token.symbol,
-        flowState,
         setFlowState,
+        flowState.amount,
     ])
 
     if (!token || !address) {
