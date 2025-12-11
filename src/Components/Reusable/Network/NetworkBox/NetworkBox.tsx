@@ -88,7 +88,7 @@ export const NetworkBox: React.FC<Props> = ({ network, onPress, isSelected = fal
                 xMargins={0}
                 yMargins={0}
                 item={network}
-                itemKey={network.name}
+                itemKey={network.id}
                 snapPointsLeft={[50]}
                 handleTrashIconPress={handleDelete}
                 swipeableItemRefs={props.swipeableItemRefs}
