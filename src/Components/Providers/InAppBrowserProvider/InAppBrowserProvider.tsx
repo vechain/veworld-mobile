@@ -29,7 +29,6 @@ import {
     WalletRequest,
 } from "~Model"
 import {
-    changeSelectedNetwork,
     deleteSession,
     selectAccounts,
     selectFeaturedDapps,
@@ -37,6 +36,7 @@ import {
     selectSelectedAccountAddress,
     selectSelectedAccountOrNull,
     selectSelectedNetwork,
+    switchActiveNetwork,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -46,6 +46,7 @@ import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"
 import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
 import { DisconnectBottomSheet } from "./Components/DisconnectBottomSheet"
 import { LoginBottomSheet } from "./Components/LoginBottomSheet/LoginBottomSheet"
+import { MissingNetworkAlertBottomSheet } from "./Components/MissingNetworkAlertBottomSheet"
 import { SwitchWalletBottomSheet } from "./Components/SwitchWalletBottomSheet"
 import { TransactionBottomSheet } from "./Components/TransactionBottomSheet/TransactionBottomSheet"
 import { TypedDataBottomSheet } from "./Components/TypedDataBottomSheet"
@@ -59,7 +60,6 @@ import {
     WindowResponse,
 } from "./types"
 import { getLoginKind } from "./Utils/LoginUtils"
-import { MissingNetworkAlertBottomSheet } from "./Components/MissingNetworkAlertBottomSheet"
 
 const { PackageDetails } = NativeModules
 
@@ -317,7 +317,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 }),
             })
 
-            dispatch(changeSelectedNetwork(network))
+            dispatch(switchActiveNetwork(network))
 
             return true
         },
