@@ -1,7 +1,7 @@
 import { TouchableOpacity } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import { SectionListData, SectionListRenderItemInfo, StyleSheet } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import {
@@ -16,13 +16,12 @@ import {
 import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { useResetStacks } from "~Hooks/useSetSelectedAccount/useResetStacks"
+import { useNetworkList } from "~Hooks/useNetworkList"
 import { useI18nContext } from "~i18n"
-import { Network, NETWORK_TYPE } from "~Model"
+import { Network } from "~Model"
 import { Routes } from "~Navigation"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { switchActiveNetwork } from "~Storage/Redux/Actions"
-import { selectNetworksByType, selectSelectedNetwork } from "~Storage/Redux/Selectors"
+import { useAppSelector } from "~Storage/Redux"
+import { selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { NetworkBox } from "../NetworkBox"
 
 type Props = {
@@ -42,53 +41,23 @@ const SectionSeparator = (props: BaseSectionListSeparatorProps<Network, Section>
 
 export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
     const { LL } = useI18nContext()
-    const dispatch = useAppDispatch()
     const { styles, theme } = useThemedStyles(baseStyles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    const { resetStacks } = useResetStacks()
-
-    const mainNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.MAIN))
-    const testNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.TEST))
-    const otherNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.OTHER))
 
     const nav = useNavigation()
 
-    // variables
-    const sections: Section[] = useMemo(() => {
-        const data: Section[] = []
-        if (mainNetworks.length > 0) {
-            data.push({
-                title: LL.NETWORK_LABEL_MAIN_NETWORKS(),
-                data: mainNetworks,
-            })
-        }
-        if (testNetworks.length > 0) {
-            data.push({
-                title: LL.NETWORK_LABEL_TEST_NETWORKS(),
-                data: testNetworks,
-            })
-        }
-        if (otherNetworks.length > 0) {
-            data.push({
-                title: LL.NETWORK_LABEL_OTHER_NETWORKS(),
-                data: otherNetworks,
-            })
-        }
-        return data
-    }, [mainNetworks, testNetworks, otherNetworks, LL])
+    const { sections, onPress } = useNetworkList({ onNetworkSelected: onClose })
 
-    const onPress = useCallback(
-        (network: Network) => {
-            resetStacks()
-            dispatch(switchActiveNetwork(network))
-            onClose()
+    const renderSectionHeader = useCallback(
+        ({ section }: { section: SectionListData<Network, Section> }) => {
+            return (
+                <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
+                    {section.title}
+                </BaseText>
+            )
         },
-        [dispatch, onClose, resetStacks],
+        [theme.isDark],
     )
-
-    const renderSectionHeader = useCallback(({ section }: { section: SectionListData<Network, Section> }) => {
-        return <BaseText typographyFont="bodyMedium">{section.title}</BaseText>
-    }, [])
 
     const renderItem = useCallback(
         ({ item }: SectionListRenderItemInfo<Network, Section>) => {
@@ -103,7 +72,13 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
     }, [nav])
 
     return (
-        <BaseBottomSheet floating dynamicHeight enableContentPanningGesture={false} scrollable={false} ref={ref}>
+        <BaseBottomSheet
+            floating
+            dynamicHeight
+            enableContentPanningGesture={false}
+            scrollable={false}
+            ref={ref}
+            backgroundStyle={styles.background}>
             <NestableScrollContainer showsVerticalScrollIndicator={false} stickyHeaderIndices={[0]} bounces={false}>
                 <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
                     <BaseView flexDirection="column" gap={8}>
@@ -156,5 +131,8 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         list: {
             marginTop: 24,
+        },
+        background: {
+            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.APP_BACKGROUND_LIGHT,
         },
     })

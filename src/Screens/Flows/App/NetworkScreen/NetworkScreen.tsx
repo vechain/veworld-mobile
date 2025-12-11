@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from "react"
+import React, { useCallback, useRef } from "react"
 import { SectionList, SectionListData, SectionListRenderItemInfo } from "react-native"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import {
@@ -15,9 +15,9 @@ import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackPr
 import { NetworkBox } from "~Components/Reusable/Network"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
-import { useResetStacks } from "~Hooks/useSetSelectedAccount/useResetStacks"
+import { useNetworkList } from "~Hooks/useNetworkList"
 import { Network, NETWORK_TYPE } from "~Model"
-import { handleRemoveCustomNode, switchActiveNetwork, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { handleRemoveCustomNode, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectNetworksByType, selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { useI18nContext } from "~i18n"
 import { CustomNetworkFooter } from "./Components"
@@ -39,44 +39,12 @@ export const ChangeNetworkScreen = () => {
     const theme = useTheme()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
-    const { resetStacks } = useResetStacks()
-
     const mainNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.MAIN))
     const testNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.TEST))
     const otherNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.OTHER))
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
 
-    // variables
-    const sections: Section[] = useMemo(() => {
-        const data: Section[] = []
-        if (mainNetworks.length > 0) {
-            data.push({
-                title: LL.NETWORK_LABEL_MAIN_NETWORKS(),
-                data: mainNetworks,
-            })
-        }
-        if (testNetworks.length > 0) {
-            data.push({
-                title: LL.NETWORK_LABEL_TEST_NETWORKS(),
-                data: testNetworks,
-            })
-        }
-        if (otherNetworks.length > 0) {
-            data.push({
-                title: LL.NETWORK_LABEL_OTHER_NETWORKS(),
-                data: otherNetworks,
-            })
-        }
-        return data
-    }, [mainNetworks, testNetworks, otherNetworks, LL])
-
-    const onPress = useCallback(
-        (network: Network) => {
-            resetStacks()
-            dispatch(switchActiveNetwork(network))
-        },
-        [dispatch, resetStacks],
-    )
+    const { sections, onPress } = useNetworkList()
 
     const renderSectionHeader = useCallback(
         ({ section }: { section: SectionListData<Network, Section> }) => {

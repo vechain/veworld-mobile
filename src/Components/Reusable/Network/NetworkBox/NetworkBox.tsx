@@ -46,7 +46,8 @@ const Body = ({ network, isSelected }: Pick<Props, "network" | "isSelected">) =>
 
     const animatedStyles = useAnimatedStyle(() => {
         const selectedColor = theme.isDark ? COLORS.LIME_GREEN : COLORS.PRIMARY_800
-        const borderColor = interpolateColor(selectedAnimationValue.value, [0, 1], ["transparent", selectedColor])
+        const unselectedColor = theme.isDark ? "transparent" : COLORS.GREY_200
+        const borderColor = interpolateColor(selectedAnimationValue.value, [0, 1], [unselectedColor, selectedColor])
 
         return {
             paddingVertical: interpolate(selectedAnimationValue.value, [0, 1], [12, 16]),
@@ -57,10 +58,17 @@ const Body = ({ network, isSelected }: Pick<Props, "network" | "isSelected">) =>
     return (
         <Animated.View style={[styles.root, animatedStyles]}>
             <BaseView flexDirection="column" alignItems="flex-start" flex={1}>
-                <BaseText typographyFont="bodySemiBold" ellipsizeMode="tail" numberOfLines={1} color={textColor}>
+                <BaseText
+                    typographyFont={isSelected ? "bodySemiBold" : "bodyMedium"}
+                    ellipsizeMode="tail"
+                    numberOfLines={1}
+                    color={textColor}>
                     {network.name}
                 </BaseText>
-                <BaseText pt={4} typographyFont="captionMedium">
+                <BaseText
+                    pt={4}
+                    typographyFont="captionMedium"
+                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
                     {network.currentUrl}
                 </BaseText>
             </BaseView>
