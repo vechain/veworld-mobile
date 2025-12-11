@@ -113,10 +113,10 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
                                 size={20}
                                 color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
                             />
-                            <BaseText typographyFont="subTitleSemiBold">{LL.NETWORS_BS_TITLE()}</BaseText>
+                            <BaseText typographyFont="subTitleSemiBold">{LL.NETWORKS_BS_TITLE()}</BaseText>
                         </BaseView>
                         <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
-                            {LL.NETWORS_BS_SUBTITLE()}
+                            {LL.NETWORKS_BS_SUBTITLE()}
                         </BaseText>
                     </BaseView>
                     <TouchableOpacity onPress={onSettingsClick} style={styles.settingsBtn}>

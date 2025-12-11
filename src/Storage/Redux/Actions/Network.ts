@@ -131,7 +131,7 @@ export const handleRemoveCustomNode =
             const defaultNetwork = defaultNetworks.find(net => net.type === selectedNetwork.type) || defaultNetworks[0]
 
             if (defaultNetwork) {
-                dispatch(switchActiveNetwork(defaultNetwork))
+                dispatch(changeSelectedNetwork(defaultNetwork))
             }
         }
 

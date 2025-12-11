@@ -3492,6 +3492,14 @@ type RootTranslation = {
 	 */
 	NETWORK_WARNING_QR_CODE_FOR_ACCOUNT: string
 	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​n​e​t​w​o​r​k
+	 */
+	NETWORKS_BS_SUBTITLE: string
+	/**
+	 * N​e​t​w​o​r​k​s
+	 */
+	NETWORKS_BS_TITLE: string
+	/**
 	 * Y​o​u​ ​h​a​v​e​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​a​v​e​d​ ​t​h​e​ ​N​F​T​ ​i​m​a​g​e​ ​t​o​ ​y​o​u​r​ ​p​h​o​t​o​ ​a​l​b​u​m
 	 */
 	NFT_ALERT_IMAGE_SAVED_MSG: string
@@ -5960,14 +5968,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * N​e​t​w​o​r​k​s
-	 */
-	NETWORS_BS_TITLE: string
-	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​n​e​t​w​o​r​k
-	 */
-	NETWORS_BS_SUBTITLE: string
 }
 
 export type TranslationFunctions = {
@@ -9403,6 +9403,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	NETWORK_WARNING_QR_CODE_FOR_ACCOUNT: () => LocalizedString
 	/**
+	 * Select the active network
+	 */
+	NETWORKS_BS_SUBTITLE: () => LocalizedString
+	/**
+	 * Networks
+	 */
+	NETWORKS_BS_TITLE: () => LocalizedString
+	/**
 	 * You have successfully saved the NFT image to your photo album
 	 */
 	NFT_ALERT_IMAGE_SAVED_MSG: () => LocalizedString
@@ -11822,14 +11830,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Networks
-	 */
-	NETWORS_BS_TITLE: () => LocalizedString
-	/**
-	 * Select the active network
-	 */
-	NETWORS_BS_SUBTITLE: () => LocalizedString
 }
 
 export type Formatters = {
