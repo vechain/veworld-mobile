@@ -72,10 +72,7 @@ export const selectRecentContacts = createSelector(
         if (!selectedNetwork.genesis.id || !selectedAccountAddress) {
             return []
         }
-        return (
-            recentContacts[selectedNetwork.genesis.id]?.[selectedAccountAddress]?.sort(
-                (a, b) => b.timestamp - a.timestamp,
-            ) ?? []
-        )
+        const recentAccountContacts = recentContacts[selectedNetwork.genesis.id]?.[selectedAccountAddress] ?? []
+        return [...recentAccountContacts].sort((a, b) => b.timestamp - a.timestamp) ?? []
     },
 )
