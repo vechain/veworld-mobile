@@ -14,15 +14,10 @@ import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { NetworkBox } from "~Components/Reusable/Network"
 import { COLORS } from "~Constants"
-import { useSetSelectedAccount, useTheme } from "~Hooks"
+import { useTheme } from "~Hooks"
+import { useResetStacks } from "~Hooks/useSetSelectedAccount/useResetStacks"
 import { Network, NETWORK_TYPE } from "~Model"
-import {
-    clearNFTCache,
-    handleRemoveCustomNode,
-    switchActiveNetwork,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { handleRemoveCustomNode, switchActiveNetwork, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectNetworksByType, selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { useI18nContext } from "~i18n"
 import { CustomNetworkFooter } from "./Components"
@@ -41,9 +36,10 @@ const SectionSeparator = (props: BaseSectionListSeparatorProps<Network, Section>
 export const ChangeNetworkScreen = () => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-    const { onSetSelectedAccount } = useSetSelectedAccount()
     const theme = useTheme()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+
+    const { resetStacks } = useResetStacks()
 
     const mainNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.MAIN))
     const testNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.TEST))
@@ -76,11 +72,10 @@ export const ChangeNetworkScreen = () => {
 
     const onPress = useCallback(
         (network: Network) => {
-            onSetSelectedAccount({})
-            dispatch(clearNFTCache())
+            resetStacks()
             dispatch(switchActiveNetwork(network))
         },
-        [onSetSelectedAccount, dispatch],
+        [dispatch, resetStacks],
     )
 
     const renderSectionHeader = useCallback(

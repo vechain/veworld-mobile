@@ -1,10 +1,9 @@
 import React, { MutableRefObject, useCallback, useEffect, useMemo } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import Animated, {
-    FadeIn,
-    FadeOut,
     interpolate,
     interpolateColor,
+    LinearTransition,
     useAnimatedStyle,
     useSharedValue,
     withTiming,
@@ -64,15 +63,13 @@ const Body = ({ network, isSelected }: Pick<Props, "network" | "isSelected">) =>
                     {network.currentUrl}
                 </BaseText>
             </BaseView>
-            {isSelected && (
-                <AnimatedBaseIcon
-                    name="icon-check"
-                    size={20}
-                    color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE}
-                    entering={FadeIn}
-                    exiting={FadeOut}
-                />
-            )}
+            <AnimatedBaseIcon
+                name="icon-check"
+                size={20}
+                color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE}
+                layout={LinearTransition.delay(500)}
+                style={{ opacity: Number(isSelected) }}
+            />
         </Animated.View>
     )
 }

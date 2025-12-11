@@ -15,11 +15,12 @@ import {
 } from "~Components"
 import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
+import { useResetStacks } from "~Hooks/useSetSelectedAccount/useResetStacks"
 import { useI18nContext } from "~i18n"
 import { Network, NETWORK_TYPE } from "~Model"
 import { Routes } from "~Navigation"
-import { clearNFTCache, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { switchActiveNetwork } from "~Storage/Redux/Actions"
 import { selectNetworksByType, selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { NetworkBox } from "../NetworkBox"
@@ -42,9 +43,9 @@ const SectionSeparator = (props: BaseSectionListSeparatorProps<Network, Section>
 export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-    const { onSetSelectedAccount } = useSetSelectedAccount()
     const { styles, theme } = useThemedStyles(baseStyles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const { resetStacks } = useResetStacks()
 
     const mainNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.MAIN))
     const testNetworks = useAppSelector(selectNetworksByType(NETWORK_TYPE.TEST))
@@ -78,12 +79,11 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
 
     const onPress = useCallback(
         (network: Network) => {
-            onSetSelectedAccount({})
-            dispatch(clearNFTCache())
+            resetStacks()
             dispatch(switchActiveNetwork(network))
             onClose()
         },
-        [onSetSelectedAccount, dispatch, onClose],
+        [dispatch, onClose, resetStacks],
     )
 
     const renderSectionHeader = useCallback(({ section }: { section: SectionListData<Network, Section> }) => {
