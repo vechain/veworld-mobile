@@ -106,6 +106,7 @@ export const DappNotVerified = ({ returnScreen, onNavigate }: Props) => {
                 title={LL.DAPP_OWNED_TITLE()}
                 subtitle={LL.DAPP_OWNED_DESCRIPTION()}
             />
+
             <BaseSpacer height={24} />
 
             <BaseView flexDirection="row" gap={16}>
