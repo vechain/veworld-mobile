@@ -115,12 +115,16 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
                             />
                             <BaseText typographyFont="subTitleSemiBold">{LL.NETWORS_BS_TITLE()}</BaseText>
                         </BaseView>
-                        <BaseText typographyFont="body" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                        <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
                             {LL.NETWORS_BS_SUBTITLE()}
                         </BaseText>
                     </BaseView>
                     <TouchableOpacity onPress={onSettingsClick} style={styles.settingsBtn}>
-                        <BaseIcon name="icon-settings" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} />
+                        <BaseIcon
+                            name="icon-settings"
+                            color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}
+                            size={16}
+                        />
                     </TouchableOpacity>
                 </BaseView>
 
@@ -134,6 +138,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
                     stickySectionHeadersEnabled={false}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
+                    style={styles.list}
                 />
             </NestableScrollContainer>
         </BaseBottomSheet>
@@ -148,5 +153,8 @@ const baseStyles = (theme: ColorThemeType) =>
             borderWidth: 1,
             borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
             borderRadius: 6,
+        },
+        list: {
+            marginTop: 24,
         },
     })
