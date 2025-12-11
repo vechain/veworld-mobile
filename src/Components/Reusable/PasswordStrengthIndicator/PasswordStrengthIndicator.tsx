@@ -44,7 +44,12 @@ export const PasswordStrengthIndicator = ({ strength, showComputedStrength = tru
 
                 <BaseSpacer width={4} />
 
-                {showComputedStrength && <BaseAnimatedText text={computedStrength} style={styles.securityText} />}
+                {showComputedStrength && (
+                    <BaseAnimatedText
+                        text={computedStrength as unknown as Animated.SharedValue<string>}
+                        style={styles.securityText}
+                    />
+                )}
             </BaseView>
             <BaseSpacer height={6} />
             <BaseView style={styles.barBackground}>
