@@ -51,7 +51,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
     const renderSectionHeader = useCallback(
         ({ section }: { section: SectionListData<Network, Section> }) => {
             return (
-                <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
+                <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
                     {section.title}
                 </BaseText>
             )
