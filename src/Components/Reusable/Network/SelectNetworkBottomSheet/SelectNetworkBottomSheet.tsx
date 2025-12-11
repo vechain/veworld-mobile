@@ -69,7 +69,8 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
 
     const onSettingsClick = useCallback(() => {
         nav.navigate(Routes.SETTINGS_NETWORK)
-    }, [nav])
+        onClose()
+    }, [nav, onClose])
 
     return (
         <BaseBottomSheet
