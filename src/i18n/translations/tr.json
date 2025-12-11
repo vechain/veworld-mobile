@@ -1360,7 +1360,7 @@
   "UPDATING_IN": "güncelleniyor",
   "USERNAME": "kullanıcı adı",
   "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION": "{validatorName:string} doğrulayıcısı artık aktif değil. Ödül kazanmaya devam etmek için yeni bir doğrulayıcı seçilmelidir.",
-  "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION_MULTIPLE": "{validatorNames:string} doğrulayıcıları artık aktif değil. Ödül kazanmaya devam etmek için yeni doğrulayıcı seçilmelidir.",
+  "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION_MULTIPLE": "{validatorNames:string} doğrulayıcıları artık aktif değil. Ödül kazanmaya devam etmek için yeni doğrulayıcılar seçilmelidir.",
   "VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE": "StarGate bildirimi",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR": "Yeni doğrulayıcı seç",
   "VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS": "Yeni doğrulayıcılar seç",
