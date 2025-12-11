@@ -499,6 +499,7 @@
   "COMMON_LBL_COMMENT": "Comment",
   "COMMON_LBL_DATA": "Data",
   "COMMON_LBL_DEFAULT": "Default",
+  "COMMON_LBL_ID": "ID",
   "COMMON_LBL_ENTER_THE": "Enter the {name: string}",
   "COMMON_LBL_ERROR": "Error",
   "COMMON_LBL_FAVOURITE": "Favorite",

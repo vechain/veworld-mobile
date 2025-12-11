@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { CURRENCY, COLORS, ColorThemeType } from "~Constants"
-import { useTheme, useThemedStyles } from "~Hooks"
+import { useTheme, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, FungibleToken } from "~Model"
 import { AddressUtils, TokenUtils } from "~Utils"
@@ -114,9 +114,19 @@ const FiatValue = ({ value, testID }: { value: string; testID?: string }) => {
 const TokenReceiver = ({ address, testID }: { address: string; testID?: string }) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
-    const formattedAddress = useMemo(() => {
-        return AddressUtils.humanAddress(address ?? "")
-    }, [address])
+
+    const vns = useVns({
+        name: "",
+        address: address,
+    })
+
+    const displayAddress = useMemo(() => {
+        return AddressUtils.showAddressOrName(address, vns, {
+            ellipsed: true,
+            lengthBefore: 4,
+            lengthAfter: 6,
+        })
+    }, [address, vns])
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" py={PADDING} px={PADDING} testID={testID}>
@@ -126,7 +136,7 @@ const TokenReceiver = ({ address, testID }: { address: string; testID?: string }
 
             <BaseView flexDirection="row" gap={GAP_RIGHT}>
                 <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
-                    {formattedAddress}
+                    {displayAddress}
                 </BaseText>
                 <AccountIcon account={{ address, type: DEVICE_TYPE.LOCAL_MNEMONIC }} size={24} />
             </BaseView>
