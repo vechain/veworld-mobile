@@ -9,7 +9,8 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import { BaseIcon, BaseText, BaseView } from "~Components/Base"
+import { BaseText, BaseView } from "~Components/Base"
+import { BaseIcon } from "~Components/Base/BaseIcon"
 import { SwipeableRow } from "~Components/Reusable/SwipeableRow"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
