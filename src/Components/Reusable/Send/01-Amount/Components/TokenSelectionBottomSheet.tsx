@@ -172,17 +172,17 @@ export const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModalMethod
 
         const availableTokens = useSendableTokensWithBalance()
 
-        const notSendableTokens = useMemo(() => {
+        const nonSendableTokens = useMemo(() => {
             return [VeDelegate.symbol, VOT3.symbol]
         }, [])
 
         const filteredTokens = useMemo(() => {
             const vot3Token = availableTokens.find(token => token.symbol === VOT3.symbol)
             if (vot3Token) {
-                return [...availableTokens.filter(token => !notSendableTokens.includes(token.symbol)), vot3Token]
+                return [...availableTokens.filter(token => !nonSendableTokens.includes(token.symbol)), vot3Token]
             }
-            return availableTokens.filter(token => token.symbol !== VeDelegate.symbol)
-        }, [availableTokens, notSendableTokens])
+            return availableTokens.filter(token => !nonSendableTokens.includes(token.symbol))
+        }, [availableTokens, nonSendableTokens])
 
         const handleTokenSelect = useCallback(
             (token: FungibleTokenWithBalance) => {
