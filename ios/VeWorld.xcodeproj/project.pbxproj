@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -105,7 +105,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		4CAAC6342EB27B0D007F446C /* Exceptions for "OneSignalNotificationServiceExtension" folder in "OneSignalNotificationServiceExtension" target */ = {
+		4CAAC6342EB27B0D007F446C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -115,18 +115,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		4CAAC62D2EB27B0D007F446C /* OneSignalNotificationServiceExtension */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				4CAAC6342EB27B0D007F446C /* Exceptions for "OneSignalNotificationServiceExtension" folder in "OneSignalNotificationServiceExtension" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = OneSignalNotificationServiceExtension;
-			sourceTree = "<group>";
-		};
+		4CAAC62D2EB27B0D007F446C /* OneSignalNotificationServiceExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4CAAC6342EB27B0D007F446C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = OneSignalNotificationServiceExtension; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -328,7 +317,6 @@
 				4CAAC6382EB27B0D007F446C /* Embed Foundation Extensions */,
 				FCC37923F8B0D46DD39E782A /* [CP] Embed Pods Frameworks */,
 				563AE341EDB5408E31AED749 /* [CP] Copy Pods Resources */,
-				7F6D148073C710B716ADA448 /* [CP-User] [CP-User] Embed OpenSSL Framework */,
 			);
 			buildRules = (
 			);
@@ -484,9 +472,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -501,30 +493,18 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		7F6D148073C710B716ADA448 /* [CP-User] [CP-User] Embed OpenSSL Framework */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${BUILT_PRODUCTS_DIR}/OpenSSL.framework",
-			);
-			name = "[CP-User] [CP-User] Embed OpenSSL Framework";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\nset -e\n\nOPENSSL_FRAMEWORK=\"${BUILT_PRODUCTS_DIR}/OpenSSL.framework\"\n\nif [ -d \"$OPENSSL_FRAMEWORK\" ]; then\n  echo \"[QuickCrypto] Copying OpenSSL.framework to app bundle\"\n  mkdir -p \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\n  cp -Rf \"$OPENSSL_FRAMEWORK\" \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/\"\n  \n  # Code sign the framework (only if code signing is required and not a simulator build)\n  if [ \"${CODE_SIGNING_REQUIRED}\" = \"YES\" ] && [ \"${EFFECTIVE_PLATFORM_NAME}\" != \"-iphonesimulator\" ]; then\n    codesign --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" --preserve-metadata=identifier,entitlements --timestamp=none \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework\" || true\n  fi\n  echo \"[QuickCrypto] Successfully embedded OpenSSL.framework\"\nelse\n  echo \"[QuickCrypto] Warning: OpenSSL.framework not found at $OPENSSL_FRAMEWORK\"\nfi\n";
 		};
 		7FB5B84D37AFE84B01534B79 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -534,9 +514,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -633,9 +617,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1114,10 +1102,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -1191,10 +1176,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
