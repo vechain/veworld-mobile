@@ -323,6 +323,7 @@ class BigNumberUtils implements IBigNumberUtils {
             value: this.data.isLessThan("0.01") && !this.data.isZero() ? "< 0.01" : this.data.toString(),
             preciseValue: this.data.toFixed(decimals ?? 8, BN.ROUND_DOWN),
             isLeesThan_0_01: this.data.isLessThan("0.01") && !this.data.isZero(),
+            self: this,
         }
     }
 

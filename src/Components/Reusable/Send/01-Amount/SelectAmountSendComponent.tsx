@@ -1,4 +1,5 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { ethers } from "ethers"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
@@ -6,9 +7,8 @@ import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { BaseSpacer, BaseView } from "~Components"
 import { B3TR, ColorThemeType, CURRENCY_FORMATS, VET, VOT3, VTHO } from "~Constants"
 import { getNumberFormatter } from "~Constants/Constants/NumberFormatter"
-import { useAmountInput, useFormatFiat, useThemedStyles } from "~Hooks"
+import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
-import HapticsService from "~Services/HapticsService"
 import { selectCurrency, selectCurrencyFormat, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { getDecimalSeparator } from "~Utils/BigNumberUtils/BigNumberUtils"
@@ -20,7 +20,8 @@ import { SelectAmountInput } from "./Components/SelectAmountInput"
 import { SelectAmountTokenSelector } from "./Components/SelectAmountTokenSelector"
 import { SendNumPad } from "./Components/SendNumPad"
 import { TokenSelectionBottomSheet } from "./Components/TokenSelectionBottomSheet"
-import { useAmountConversion, useDefaultToken } from "./Hooks"
+import { useDefaultToken } from "./Hooks"
+import { useSendAmountInput } from "./Hooks/useSendAmountInput"
 
 const MAX_FIAT_DECIMALS = 2
 const MAX_TOKEN_DECIMALS = 5
@@ -36,60 +37,29 @@ export const SelectAmountSendComponent = () => {
 
     const defaultToken = useDefaultToken()
     const [isInputInFiat, setIsInputInFiat] = useState(flowState.amountInFiat ?? true)
-    const [isError, setIsError] = useState(false)
     const [selectedToken, setSelectedToken] = useState<FungibleTokenWithBalance | undefined>(defaultToken)
     const [internalToken, setInternalToken] = useState<FungibleTokenWithBalance | undefined>(defaultToken)
 
-    const { input, setInput, removeInvalidCharacters } = useAmountInput(
-        (flowState?.amountInFiat ? flowState.fiatAmount : flowState.amount) ?? "",
-    )
-
-    const { data: exchangeRate } = useExchangeRate({
-        id: selectedToken ? getCoinGeckoIdBySymbol[selectedToken.symbol] : undefined,
+    const { data: exchangeRate, fetchStatus } = useExchangeRate({
+        id: selectedToken ? getCoinGeckoIdBySymbol[selectedToken.symbol] ?? selectedToken.symbol : undefined,
         vs_currency: currency,
     })
 
-    useEffect(() => {
-        if (!exchangeRate && isInputInFiat) {
-            setIsInputInFiat(false)
-            if (input !== "") {
-                setInput("")
-                setIsError(false)
-            }
-        }
-    }, [exchangeRate, isInputInFiat, input, setInput])
-
-    const tokenTotalBalance = useMemo(() => {
-        const currentToken = selectedToken || defaultToken
-        if (!currentToken) return "0"
-        return BigNutils(currentToken.balance.balance).toString
-    }, [selectedToken, defaultToken])
-
-    const {
-        tokenAmount: tokenAmountFromInput,
-        fiatAmount: fiatAmountFromInput,
-        formattedConvertedAmount,
-        isBalanceExceeded,
-        isValidAmount,
-        fiatTotalBalance,
-        tokenTotalToHuman,
-    } = useAmountConversion({
-        input,
-        exchangeRate: exchangeRate ?? undefined,
+    const { isBalanceExceeded, fiatAmount, tokenAmount, onChange, onMax, onReset, input } = useSendAmountInput({
+        token: selectedToken,
         isInputInFiat,
-        tokenDecimals: selectedToken?.decimals ?? 18,
-        tokenTotalBalance,
-        formatLocale,
     })
 
+    const noExchangeRate = useMemo(() => {
+        return !exchangeRate && fetchStatus === "idle" && selectedToken
+    }, [exchangeRate, fetchStatus, selectedToken])
+
     useEffect(() => {
-        if (isBalanceExceeded && !isError) {
-            setIsError(true)
-            HapticsService.triggerNotification({ level: "Error" })
-        } else if (!isBalanceExceeded && isError && input !== "") {
-            setIsError(false)
+        if (isInputInFiat && noExchangeRate) {
+            setIsInputInFiat(false)
+            onReset()
         }
-    }, [isBalanceExceeded, isError, input])
+    }, [exchangeRate, fetchStatus, isInputInFiat, noExchangeRate, onReset])
 
     const computedIcon = useMemo(() => {
         if (!selectedToken) return VET.icon
@@ -102,15 +72,10 @@ export const SelectAmountSendComponent = () => {
 
     const { styles } = useThemedStyles(baseStyles)
 
-    const resetInput = useCallback(() => {
-        setInput("")
-        setIsError(false)
-    }, [setInput])
-
     const handleToggleInputMode = useCallback(() => {
         setIsInputInFiat(s => !s)
-        resetInput()
-    }, [resetInput])
+        onReset()
+    }, [onReset])
 
     const handleOpenTokenSelector = useCallback(() => {
         bottomSheetRef.current?.present()
@@ -120,73 +85,23 @@ export const SelectAmountSendComponent = () => {
         (tokenToSelect?: FungibleTokenWithBalance) => {
             const finalToken = tokenToSelect || internalToken
             setSelectedToken(finalToken)
-            resetInput()
+            onReset()
             bottomSheetRef.current?.dismiss()
         },
-        [internalToken, resetInput],
+        [internalToken, onReset],
     )
 
-    const hasValidDecimalPlaces = useCallback(
-        (value: string): boolean => {
-            const parts = value.split(/[.,]/)
-            if (parts.length > 1) {
-                const decimalPart = parts[1]
-                const maxDecimals = isInputInFiat ? MAX_FIAT_DECIMALS : MAX_TOKEN_DECIMALS
-                return decimalPart.length <= maxDecimals
-            }
-            return true
-        },
-        [isInputInFiat],
-    )
-
-    const onChangeTextInput = useCallback(
-        (newValue: string) => {
-            if (!selectedToken) return
-
-            const _newValue = removeInvalidCharacters(newValue)
-
-            if (!hasValidDecimalPlaces(_newValue)) {
-                return
-            }
-
-            setInput(_newValue)
-
-            if (_newValue === "" || BigNutils(_newValue).isZero) {
-                setIsError(false)
-                return
-            }
-        },
-        [hasValidDecimalPlaces, removeInvalidCharacters, selectedToken, setInput],
-    )
-
-    const truncateToMaxDecimals = useCallback(
-        (value: string): string => {
-            const parts = value.split(/([.,])/)
-            if (parts.length >= 3) {
-                const integerPart = parts[0]
-                const separator = parts[1]
-                const decimalPart = parts[2]
-                const maxDecimals = isInputInFiat ? MAX_FIAT_DECIMALS : MAX_TOKEN_DECIMALS
-                return `${integerPart}${separator}${decimalPart.substring(0, maxDecimals)}`
-            }
-            return value
-        },
-        [isInputInFiat],
-    )
-
-    const handleOnMaxPress = useCallback(async () => {
-        const rawValue = removeInvalidCharacters(isInputInFiat ? fiatTotalBalance.value : tokenTotalToHuman.toString)
-        const newValue = truncateToMaxDecimals(rawValue)
-
-        setInput(newValue)
-    }, [
-        fiatTotalBalance.value,
-        isInputInFiat,
-        removeInvalidCharacters,
-        setInput,
-        tokenTotalToHuman,
-        truncateToMaxDecimals,
-    ])
+    const truncateToMaxDecimals = useCallback((value: string, kind: "fiat" | "token"): string => {
+        const parts = value.split(/([.,])/)
+        if (parts.length >= 3) {
+            const integerPart = parts[0]
+            const separator = parts[1]
+            const decimalPart = parts[2]
+            const maxDecimals = kind === "fiat" ? MAX_FIAT_DECIMALS : MAX_TOKEN_DECIMALS
+            return `${integerPart}${separator}${decimalPart.substring(0, maxDecimals)}`
+        }
+        return value
+    }, [])
 
     const tokenBalance = useMemo(() => {
         if (!selectedToken) return ""
@@ -197,8 +112,46 @@ export const SelectAmountSendComponent = () => {
         })
     }, [formatLocale, selectedToken])
 
-    const formattedInputDisplay = useMemo(() => {
-        if (!input || input === "0") return "0"
+    const formattedInput = useMemo(() => {
+        let locale: string
+        let decimalSeparator: string
+
+        switch (currencyFormat) {
+            case CURRENCY_FORMATS.COMMA:
+                locale = "de-DE"
+                decimalSeparator = CURRENCY_FORMATS.COMMA
+                break
+            case CURRENCY_FORMATS.DOT:
+                locale = "en-US"
+                decimalSeparator = CURRENCY_FORMATS.DOT
+                break
+            case CURRENCY_FORMATS.SYSTEM:
+            default:
+                locale = formatLocale
+                decimalSeparator = getDecimalSeparator(locale) ?? CURRENCY_FORMATS.DOT
+                break
+        }
+
+        const [integerPart, decimalPart] = truncateToMaxDecimals(input, isInputInFiat ? "fiat" : "token").split(/[.,]/)
+
+        const formatter = getNumberFormatter({
+            locale,
+            useGrouping: true,
+            precision: 0,
+            style: "decimal",
+        })
+
+        const formattedInteger = formatter.format(Number(integerPart))
+
+        if (decimalPart !== undefined) {
+            return `${formattedInteger}${decimalSeparator}${decimalPart}`
+        }
+
+        return formattedInteger
+    }, [currencyFormat, truncateToMaxDecimals, input, isInputInFiat, formatLocale])
+
+    const formattedConverted = useMemo(() => {
+        const valueToFormat = isInputInFiat ? tokenAmount : fiatAmount
 
         let locale: string
         let decimalSeparator: string
@@ -219,7 +172,10 @@ export const SelectAmountSendComponent = () => {
                 break
         }
 
-        const [integerPart, decimalPart] = input.split(/[.,]/)
+        const [integerPart, decimalPart] = truncateToMaxDecimals(
+            ethers.utils.formatUnits(valueToFormat, selectedToken?.decimals ?? 18),
+            isInputInFiat ? "token" : "fiat",
+        ).split(/[.,]/)
 
         const formatter = getNumberFormatter({
             locale,
@@ -230,36 +186,35 @@ export const SelectAmountSendComponent = () => {
 
         const formattedInteger = formatter.format(Number(integerPart))
 
-        if (decimalPart !== undefined) {
+        if (!BigNutils(decimalPart).isZero) {
             return `${formattedInteger}${decimalSeparator}${decimalPart}`
         }
 
         return formattedInteger
-    }, [input, currencyFormat, formatLocale])
+    }, [
+        isInputInFiat,
+        fiatAmount,
+        tokenAmount,
+        currencyFormat,
+        truncateToMaxDecimals,
+        selectedToken?.decimals,
+        formatLocale,
+    ])
 
     const onSubmit = useCallback(() => {
-        const amount = isInputInFiat ? tokenAmountFromInput : input
-        const fiatAmount = exchangeRate ? fiatAmountFromInput : undefined
+        const amount = ethers.utils.formatUnits(tokenAmount, selectedToken?.decimals)
+        const fiat = isInputInFiat ? ethers.utils.formatUnits(fiatAmount, selectedToken?.decimals) : undefined
 
         setFlowState(prev => ({
             ...prev,
             amount,
             token: selectedToken,
-            fiatAmount,
+            fiatAmount: fiat,
             amountInFiat: isInputInFiat,
             initialExchangeRate: exchangeRate,
         }))
         goToNext()
-    }, [
-        exchangeRate,
-        fiatAmountFromInput,
-        goToNext,
-        input,
-        isInputInFiat,
-        selectedToken,
-        setFlowState,
-        tokenAmountFromInput,
-    ])
+    }, [exchangeRate, fiatAmount, goToNext, isInputInFiat, selectedToken, setFlowState, tokenAmount])
 
     if (!selectedToken) {
         return <BaseView flex={1} />
@@ -274,22 +229,24 @@ export const SelectAmountSendComponent = () => {
                         <BaseView style={styles.inputContainer}>
                             <SelectAmountInput
                                 isInputInFiat={isInputInFiat}
-                                isError={isError}
-                                formattedInputDisplay={formattedInputDisplay}
+                                isError={isBalanceExceeded}
+                                formattedInputDisplay={formattedInput}
                                 currency={currency}
                                 selectedToken={selectedToken}
                             />
                         </BaseView>
 
-                        <SelectAmountConversionToggle
-                            exchangeRate={exchangeRate}
-                            isError={isError}
-                            isInputInFiat={isInputInFiat}
-                            formattedConvertedAmount={formattedConvertedAmount}
-                            currency={currency}
-                            selectedToken={selectedToken}
-                            onToggle={handleToggleInputMode}
-                        />
+                        {!noExchangeRate && (
+                            <SelectAmountConversionToggle
+                                exchangeRate={exchangeRate}
+                                isError={isBalanceExceeded}
+                                isInputInFiat={isInputInFiat}
+                                formattedConvertedAmount={formattedConverted}
+                                currency={currency}
+                                selectedToken={selectedToken}
+                                onToggle={handleToggleInputMode}
+                            />
+                        )}
                     </BaseView>
 
                     <BaseSpacer height={32} />
@@ -298,20 +255,21 @@ export const SelectAmountSendComponent = () => {
                         computedIcon={computedIcon}
                         tokenBalance={tokenBalance}
                         onOpenSelector={handleOpenTokenSelector}
-                        onMaxPress={handleOnMaxPress}
+                        onMaxPress={onMax}
                     />
 
                     <BaseSpacer height={32} />
 
                     <SendNumPad
-                        onDigitPress={digit => onChangeTextInput(input + digit)}
-                        onDigitDelete={() => onChangeTextInput(input.slice(0, -1))}
+                        onDigitPress={digit => onChange({ type: "add", digit })}
+                        onDigitDelete={() => onChange({ type: "delete" })}
                         typographyFont="headerTitleMedium"
                     />
                 </Animated.View>
             </SendContent.Container>
             <SendContent.Footer>
-                <SendContent.Footer.Next action={onSubmit} disabled={isError || !isValidAmount} />
+                {/* TODO: Check that it's not zero too */}
+                <SendContent.Footer.Next action={onSubmit} disabled={isBalanceExceeded} />
             </SendContent.Footer>
             {internalToken && (
                 <TokenSelectionBottomSheet

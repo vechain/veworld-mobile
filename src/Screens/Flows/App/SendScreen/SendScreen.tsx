@@ -64,7 +64,6 @@ export const SendScreen = () => {
                 amount: "0",
                 fiatAmount: "",
                 address: "",
-                amountInFiat: false,
             }}>
             <SendScreenContent />
         </SendContextProvider>
