@@ -93,7 +93,7 @@ export const DappNotVerified = ({ returnScreen, onNavigate }: Props) => {
             </BaseView>
 
             <DappNotVerifiedCard
-                icon="icon-arrow-link"
+                icon="icon-arrow-right"
                 onPress={onAppTrusted}
                 title={LL.DAPP_TRUSTED_TITLE()}
                 subtitle={LL.DAPP_TRUSTED_DESCRIPTION()}
