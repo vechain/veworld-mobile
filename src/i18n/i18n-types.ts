@@ -5855,6 +5855,67 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * A​p​p​ ​n​o​t​ ​v​e​r​i​f​i​e​d
+	 */
+	DAPP_NOT_VERIFIED_BROWSER_WARNING_TITLE: string
+	/**
+	 * T​h​i​s​ ​a​p​p​ ​h​a​s​n​'​t​ ​b​e​e​n​ ​v​e​r​i​f​i​e​d​ ​b​y​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​a​c​c​e​s​s​ ​h​a​s​ ​b​e​e​n​ ​b​l​o​c​k​e​d​.​
+​U​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​m​a​l​i​c​i​o​u​s​ ​a​n​d​ ​c​o​u​l​d​ ​p​u​t​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​.
+	 */
+	DAPP_NOT_VERIFIED_BROWSER_WARNING_SUBTITLE: string
+	/**
+	 * T​r​u​s​t​ ​t​h​i​s​ ​a​p​p​?
+	 */
+	DAPP_TRUSTED_TITLE: string
+	/**
+	 * M​a​n​a​g​e​ ​i​n​ ​s​e​t​t​i​n​g​s​.
+	 */
+	DAPP_TRUSTED_DESCRIPTION: string
+	/**
+	 * A​p​p​ ​d​e​v​e​l​o​p​e​r​?
+	 */
+	DAPP_OWNED_TITLE: string
+	/**
+	 * A​d​d​ ​y​o​u​r​ ​a​p​p​ ​t​o​ ​t​h​e​ ​a​p​p​ ​h​u​b​ ​t​o​ ​g​e​t​ ​v​e​r​i​f​i​e​d​.
+	 */
+	DAPP_OWNED_DESCRIPTION: string
+	/**
+	 * S​w​i​t​c​h​ ​n​e​t​w​o​r​k
+	 */
+	DAPP_NOT_VERIFIED_SWITCH_NETWORK: string
+	/**
+	 * C​l​o​s​e
+	 */
+	COMMON_LBL_CLOSE: string
+	/**
+	 * U​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_TITLE: string
+	/**
+	 * A​l​l​o​w​i​n​g​ ​u​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​l​e​t​s​ ​y​o​u​ ​o​p​e​n​ ​a​p​p​s​ ​t​h​a​t​ ​h​a​v​e​n​'​t​ ​b​e​e​n​ ​r​e​v​i​e​w​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.​ ​T​h​e​s​e​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​m​a​l​i​c​i​o​u​s​ ​a​n​d​ ​c​o​u​l​d​ ​p​u​t​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​.
+	 */
+	SETTING_UNVERIFIED_APP_SUBTITLE: string
+	/**
+	 * A​l​l​o​w​ ​u​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_TOGGLE_CTA: string
+	/**
+	 * A​l​l​o​w​ ​u​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_TITLE: string
+	/**
+	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​s​c​a​m​s​ ​a​n​d​ ​c​a​n​ ​l​e​a​d​ ​t​o​ ​a​s​s​e​t​ ​l​o​s​s​.​ ​D​i​s​a​b​l​e​ ​a​f​t​e​r​ ​u​s​e​.
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_SUBTITLE: string
+	/**
+	 * Y​e​s​,​ ​a​l​l​o​w
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW: string
+	/**
+	 * N​o​,​ ​g​o​ ​b​a​c​k
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_BACK: string
 }
 
 export type TranslationFunctions = {
@@ -11604,6 +11665,67 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * App not verified
+	 */
+	DAPP_NOT_VERIFIED_BROWSER_WARNING_TITLE: () => LocalizedString
+	/**
+	 * This app hasn't been verified by VeWorld and access has been blocked.
+Unverified apps may be malicious and could put your assets at risk.
+	 */
+	DAPP_NOT_VERIFIED_BROWSER_WARNING_SUBTITLE: () => LocalizedString
+	/**
+	 * Trust this app?
+	 */
+	DAPP_TRUSTED_TITLE: () => LocalizedString
+	/**
+	 * Manage in settings.
+	 */
+	DAPP_TRUSTED_DESCRIPTION: () => LocalizedString
+	/**
+	 * App developer?
+	 */
+	DAPP_OWNED_TITLE: () => LocalizedString
+	/**
+	 * Add your app to the app hub to get verified.
+	 */
+	DAPP_OWNED_DESCRIPTION: () => LocalizedString
+	/**
+	 * Switch network
+	 */
+	DAPP_NOT_VERIFIED_SWITCH_NETWORK: () => LocalizedString
+	/**
+	 * Close
+	 */
+	COMMON_LBL_CLOSE: () => LocalizedString
+	/**
+	 * Unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_TITLE: () => LocalizedString
+	/**
+	 * Allowing unverified apps lets you open apps that haven't been reviewed by VeWorld. These apps may be malicious and could put your assets at risk.
+	 */
+	SETTING_UNVERIFIED_APP_SUBTITLE: () => LocalizedString
+	/**
+	 * Allow unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_TOGGLE_CTA: () => LocalizedString
+	/**
+	 * Allow unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_TITLE: () => LocalizedString
+	/**
+	 * Unverified apps may be scams and can lead to asset loss. Disable after use.
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Yes, allow
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW: () => LocalizedString
+	/**
+	 * No, go back
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_BACK: () => LocalizedString
 }
 
 export type Formatters = {

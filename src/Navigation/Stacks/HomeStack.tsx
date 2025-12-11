@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import React from "react"
 import { useFeatureFlags } from "~Components"
+import { COLORS, SCREEN_HEIGHT } from "~Constants"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import {
     Activity,
@@ -36,18 +37,19 @@ import {
     ManageCustomNodesScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
+    PrivacyScreen,
     SelectAmountSendScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
     SelectTokenSendScreen,
+    SendNFTScreen,
+    SendScreen,
     SwapScreen,
     TabsManagerScreen,
     TransactionSummarySendScreen,
     UsernameClaimed,
     WalletDetailScreen,
     WalletManagementScreen,
-    SendScreen,
-    SendNFTScreen,
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AssetDetailScreenSheet } from "~Screens/Flows/App/AssetDetailScreenSheet"
@@ -58,7 +60,6 @@ import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/Co
 import { ReportNFTTransactionScreen } from "~Screens/Flows/App/NFT/NFTReportCollection/ReportNFTTransactionScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
-import { COLORS, SCREEN_HEIGHT } from "~Constants"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -193,6 +194,7 @@ export type RootStackParamListHome = {
         receiverAddress: string
     }
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
+    [Routes.SETTINGS_PRIVACY]: undefined
 }
 
 const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome>()
@@ -430,6 +432,8 @@ export const HomeStack = () => {
                 <Screen name={Routes.CLAIM_USERNAME} component={ClaimUsername} options={{ headerShown: false }} />
                 <Screen name={Routes.USERNAME_CLAIMED} component={UsernameClaimed} options={{ headerShown: false }} />
             </Group>
+
+            <Screen name={Routes.SETTINGS_PRIVACY} component={PrivacyScreen} options={{ headerShown: false }} />
         </Navigator>
     )
 }

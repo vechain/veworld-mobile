@@ -118,3 +118,7 @@ export const selectIndexerUrls = createSelector(reducer, state => {
 export const selectHideStellaPayBottomSheet = createSelector(reducer, state => {
     return state.hideStellaPayBottomSheet
 })
+
+export const selectDeveloperAppsEnabled = createSelector(reducer, state => {
+    return state.developerAppsEnabled ?? false
+})

@@ -7,6 +7,7 @@ import {
     ActivityDetailsScreen,
     ActivityScreen,
     InAppBrowser,
+    PrivacyScreen,
     TabsManagerScreen,
     WalletDetailScreen,
     WalletManagementScreen,
@@ -50,6 +51,7 @@ export type HistoryStackParamList = {
     [Routes.APPS_SEARCH]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
+    [Routes.SETTINGS_PRIVACY]: undefined
 }
 
 const { Navigator, Screen } = createStackNavigator<HistoryStackParamList>()
@@ -108,6 +110,7 @@ export const HistoryStack = () => {
                 options={{ headerShown: false }}
             />
             <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
+            <Screen name={Routes.SETTINGS_PRIVACY} component={PrivacyScreen} options={{ headerShown: false }} />
         </Navigator>
     )
 }
