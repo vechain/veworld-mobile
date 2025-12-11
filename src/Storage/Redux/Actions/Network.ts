@@ -77,7 +77,7 @@ export const validateAndAddCustomNode = createAppAsyncThunk(
             })
 
             dispatch(addCustomNetwork(network))
-            dispatch(switchActiveNetwork(network))
+            dispatch(changeSelectedNetwork(network))
         } catch (e) {
             return rejectWithValue("Failed to add custom network")
         }

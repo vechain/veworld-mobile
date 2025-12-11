@@ -119,6 +119,14 @@ export const ChangeNetworkScreen = () => {
         [selectedNetwork.id, onPress, onDelete],
     )
 
+    const keyExtractor = useCallback(
+        (item: Network) => {
+            const allNetworks = mainNetworks.length + testNetworks.length + otherNetworks.length
+            return `${item.id} - ${allNetworks}`
+        },
+        [mainNetworks.length, otherNetworks.length, testNetworks.length],
+    )
+
     return (
         <Layout
             safeAreaTestID="NetworkScreen"
@@ -141,7 +149,7 @@ export const ChangeNetworkScreen = () => {
                     <BaseSpacer height={24} />
                     <SectionList
                         sections={sections}
-                        keyExtractor={i => i.id}
+                        keyExtractor={keyExtractor}
                         ItemSeparatorComponent={ItemSeparator}
                         SectionSeparatorComponent={SectionSeparator}
                         renderSectionHeader={renderSectionHeader}
