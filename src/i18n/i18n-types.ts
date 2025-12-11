@@ -314,10 +314,6 @@ type RootTranslation = {
 	 */
 	ADDITIONAL_DETAIL_TOKEN_ID: string
 	/**
-	 * T​o​k​e​n
-	 */
-	TOKEN: string
-	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
 	ADD_ACCOUNT: string
@@ -1915,6 +1911,18 @@ type RootTranslation = {
 	 */
 	COMMON_24H_VOLUME: string
 	/**
+	 * D​i​s​p​l​a​y​e​d​ ​a​m​o​u​n​t​s​ ​h​a​v​e​ ​b​e​e​n​ ​u​p​d​a​t​e​d​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​l​a​t​e​s​t​ ​m​a​r​k​e​t​ ​p​r​i​c​e​.
+	 */
+	COMMON_ALERT_DISPLAYED_AMOUNTS_UPDATED: string
+	/**
+	 * T​o​k​e​n​ ​a​m​o​u​n​t​ ​a​d​j​u​s​t​e​d​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​.
+	 */
+	COMMON_ALERT_TOKEN_AMOUNT_ADJUSTED_FOR_FEE: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	COMMON_ALERT_TRANSACTION_FAILED: string
+	/**
 	 * A​s​s​e​t​s
 	 */
 	COMMON_ASSETS: string
@@ -1927,6 +1935,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_APPLY: string
 	/**
+	 * B​a​c​k
+	 */
+	COMMON_BTN_BACK: string
+	/**
 	 * C​a​n​c​e​l
 	 */
 	COMMON_BTN_CANCEL: string
@@ -1934,10 +1946,6 @@ type RootTranslation = {
 	 * C​A​N​C​E​L
 	 */
 	COMMON_BTN_CANCEL_CAPS_LOCK: string
-	/**
-	 * B​A​C​K
-	 */
-	COMMON_BTN_BACK: string
 	/**
 	 * C​o​n​f​i​r​m
 	 */
@@ -2010,18 +2018,6 @@ type RootTranslation = {
 	 * T​r​y​ ​a​g​a​i​n
 	 */
 	COMMON_BTN_TRY_AGAIN: string
-	/**
-	 * D​i​s​p​l​a​y​e​d​ ​a​m​o​u​n​t​s​ ​h​a​v​e​ ​b​e​e​n​ ​u​p​d​a​t​e​d​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​l​a​t​e​s​t​ ​m​a​r​k​e​t​ ​p​r​i​c​e​.
-	 */
-	COMMON_ALERT_DISPLAYED_AMOUNTS_UPDATED: string
-	/**
-	 * T​o​k​e​n​ ​a​m​o​u​n​t​ ​a​d​j​u​s​t​e​d​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​.
-	 */
-	COMMON_ALERT_TOKEN_AMOUNT_ADJUSTED_FOR_FEE: string
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
-	 */
-	COMMON_ALERT_TRANSACTION_FAILED: string
 	/**
 	 * U​n​l​o​c​k
 	 */
@@ -3359,9 +3355,13 @@ type RootTranslation = {
 	 */
 	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: string
 	/**
-	 * A​d​d​ ​c​u​s​t​o​m​ ​n​o​d​e
+	 * N​e​t​w​o​r​k​ ​a​d​d​e​d
 	 */
-	NETWORK_ADD_CUSTOM_NODE: string
+	NETWORK_ADDED: string
+	/**
+	 * A​d​d​ ​c​u​s​t​o​m
+	 */
+	NETWORK_ADD_CUSTOM: string
 	/**
 	 * A​d​d​ ​c​u​s​t​o​m​ ​n​e​t​w​o​r​k
 	 */
@@ -3371,41 +3371,29 @@ type RootTranslation = {
 	 */
 	NETWORK_ADD_CUSTOM_NETWORK_DESC: string
 	/**
-	 * I​n​s​e​r​t​ ​t​h​e​ ​n​a​m​e
-	 */
-	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_PLACEHOLDER: string
-	/**
 	 * N​o​d​e​ ​n​a​m​e
 	 */
 	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_LABEL: string
 	/**
-	 * h​t​t​p​s​:​/​/​.​.​.
+	 * I​n​s​e​r​t​ ​t​h​e​ ​n​a​m​e
 	 */
-	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_PLACEHOLDER: string
-	/**
-	 * U​R​L
-	 */
-	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_LABEL: string
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_PLACEHOLDER: string
 	/**
 	 * U​R​L​ ​i​n​v​a​l​i​d​ ​o​r​ ​n​o​d​e​ ​c​o​n​f​i​g​u​r​a​t​i​o​n​ ​i​s​s​u​e
 	 */
 	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_ERROR: string
 	/**
-	 * N​e​t​w​o​r​k​ ​a​d​d​e​d
+	 * U​R​L
 	 */
-	NETWORK_ADDED: string
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_LABEL: string
 	/**
-	 * N​e​t​w​o​r​k​ ​r​e​m​o​v​e​d
+	 * h​t​t​p​s​:​/​/​.​.​.
 	 */
-	NETWORK_REMOVED: string
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_PLACEHOLDER: string
 	/**
-	 * N​e​t​w​o​r​k​ ​s​w​i​t​c​h​e​d
+	 * A​d​d​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
-	NETWORK_SWITCHED: string
-	/**
-	 * A​d​d​ ​c​u​s​t​o​m
-	 */
-	NETWORK_ADD_CUSTOM: string
+	NETWORK_ADD_CUSTOM_NODE: string
 	/**
 	 * A​d​d​ ​n​e​t​w​o​r​k
 	 */
@@ -3458,6 +3446,14 @@ type RootTranslation = {
 	 * M​a​n​a​g​e​ ​n​o​d​e​s
 	 */
 	NETWORK_MANAGE_NODES: string
+	/**
+	 * N​e​t​w​o​r​k​ ​r​e​m​o​v​e​d
+	 */
+	NETWORK_REMOVED: string
+	/**
+	 * N​e​t​w​o​r​k​ ​s​w​i​t​c​h​e​d
+	 */
+	NETWORK_SWITCHED: string
 	/**
 	 * O​n​l​y​ ​V​e​c​h​a​i​n​ ​n​e​t​w​o​r​k​ ​s​u​p​p​o​r​t​e​d
 	 */
@@ -4402,6 +4398,10 @@ type RootTranslation = {
 	 */
 	SEND_BALANCE_PERCENTAGE: RequiredParams<'percentage'>
 	/**
+	 * S​e​n​d​ ​c​o​l​l​e​c​t​i​b​l​e
+	 */
+	SEND_COLLECTIBLE: string
+	/**
 	 * A​d​d​ ​y​o​u​r​ ​f​i​r​s​t​ ​c​o​n​t​a​c​t​ ​t​o​ ​s​e​n​d​ ​f​a​s​t​e​r​ ​a​n​d​ ​a​v​o​i​d​ ​e​r​r​o​r​s​.
 	 */
 	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: string
@@ -4409,10 +4409,6 @@ type RootTranslation = {
 	 * N​o​ ​c​o​n​t​a​c​t​s​ ​a​d​d​e​d
 	 */
 	SEND_CONTACTS_EMPTY_STATE_TITLE: string
-	/**
-	 * S​e​n​d​ ​c​o​l​l​e​c​t​i​b​l​e
-	 */
-	SEND_COLLECTIBLE: string
 	/**
 	 * W​a​l​l​e​t​ ​a​d​d​r​e​s​s
 	 */
@@ -4691,6 +4687,16 @@ type RootTranslation = {
 	 */
 	SEND_RECEIVER_ADD_CONTACT_BTN: string
 	/**
+	 * R​e​v​i​e​w​ ​d​e​t​a​i​l​s
+	 */
+	SEND_RECEIVER_DETAILS: string
+	/**
+	 * {​c​u​r​r​e​n​t​}​ ​o​f​ ​{​t​o​t​a​l​}
+	 * @param {number} current
+	 * @param {number} total
+	 */
+	SEND_RECEIVER_DETAILS_COUNT: RequiredParams<'current' | 'total'>
+	/**
 	 * A​c​c​o​u​n​t​s
 	 */
 	SEND_RECEIVER_FILTER_ACCOUNTS: string
@@ -4711,18 +4717,8 @@ type RootTranslation = {
 	 */
 	SEND_RECEIVE_TAB_SCAN: string
 	/**
-	 * R​e​v​i​e​w​ ​d​e​t​a​i​l​s
+	 * O​n​c​e​ ​y​o​u​ ​s​e​n​d​ ​t​o​ ​a​n​ ​a​d​d​r​e​s​s​,​ ​i​t​’​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​f​o​r​ ​q​u​i​c​k​ ​a​c​c​e​s​s​.
 	 */
-	SEND_RECEIVER_DETAILS: string
-	/**
-	 * {current: number} of {total: number}
-	 * @param {unknown} current
-	 * @param {unknown} total
-	 */
-	SEND_RECEIVER_DETAILS_COUNT: RequiredParams<'current', 'total'>
-	/**
-	* O​n​c​e​ ​y​o​u​ ​s​e​n​d​ ​t​o​ ​a​n​ ​a​d​d​r​e​s​s​,​ ​i​t​’​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​f​o​r​ ​q​u​i​c​k​ ​a​c​c​e​s​s​.
-	*/
 	SEND_RECENT_EMPTY_STATE_DESCRIPTION: string
 	/**
 	 * N​o​ ​r​e​c​e​n​t​ ​a​c​t​i​v​i​t​y
@@ -4759,10 +4755,6 @@ type RootTranslation = {
 	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
-	/**
-	 * T​o​k​e​n​ ​a​m​o​u​n​t
-	 */
-	SEND_TOKEN_AMOUNT: string
 	/**
 	 * {​t​o​k​e​n​C​o​u​n​t​}​ ​t​o​k​e​n​s
 	 * @param {number} tokenCount
@@ -5427,6 +5419,10 @@ type RootTranslation = {
 	 */
 	TODAY: string
 	/**
+	 * T​o​k​e​n
+	 */
+	TOKEN: string
+	/**
 	 * B​u​y​ ​t​o​k​e​n
 	 */
 	TOKEN_BUY: string
@@ -5871,6 +5867,14 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * N​e​t​w​o​r​k​s
+	 */
+	NETWORS_BS_TITLE: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​n​e​t​w​o​r​k
+	 */
+	NETWORS_BS_SUBTITLE: string
 }
 
 export type TranslationFunctions = {
@@ -6148,10 +6152,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Token ID
 	 */
 	ADDITIONAL_DETAIL_TOKEN_ID: () => LocalizedString
-	/**
-	 * T​o​k​e​n
-	 */
-	TOKEN: () => LocalizedString
 	/**
 	 * Add Account
 	 */
@@ -7737,6 +7737,18 @@ This action is irreversible.
 	 */
 	COMMON_24H_VOLUME: () => LocalizedString
 	/**
+	 * Displayed amounts have been updated based on the latest market price.
+	 */
+	COMMON_ALERT_DISPLAYED_AMOUNTS_UPDATED: () => LocalizedString
+	/**
+	 * Token amount adjusted for transaction fee.
+	 */
+	COMMON_ALERT_TOKEN_AMOUNT_ADJUSTED_FOR_FEE: () => LocalizedString
+	/**
+	 * Transaction failed. Please try again.
+	 */
+	COMMON_ALERT_TRANSACTION_FAILED: () => LocalizedString
+	/**
 	 * Assets
 	 */
 	COMMON_ASSETS: () => LocalizedString
@@ -7749,6 +7761,10 @@ This action is irreversible.
 	 */
 	COMMON_BTN_APPLY: () => LocalizedString
 	/**
+	 * Back
+	 */
+	COMMON_BTN_BACK: () => LocalizedString
+	/**
 	 * Cancel
 	 */
 	COMMON_BTN_CANCEL: () => LocalizedString
@@ -7756,10 +7772,6 @@ This action is irreversible.
 	 * CANCEL
 	 */
 	COMMON_BTN_CANCEL_CAPS_LOCK: () => LocalizedString
-	/**
-	 * BACK
-	 */
-	COMMON_BTN_BACK: () => LocalizedString
 	/**
 	 * Confirm
 	 */
@@ -7832,18 +7844,6 @@ This action is irreversible.
 	 * Try again
 	 */
 	COMMON_BTN_TRY_AGAIN: () => LocalizedString
-	/**
-	 * Displayed amounts have been updated based on the latest market price.
-	 */
-	COMMON_ALERT_DISPLAYED_AMOUNTS_UPDATED: () => LocalizedString
-	/**
-	 * Token amount adjusted for transaction fee.
-	 */
-	COMMON_ALERT_TOKEN_AMOUNT_ADJUSTED_FOR_FEE: () => LocalizedString
-	/**
-	 * Transaction failed. Please try again.
-	 */
-	COMMON_ALERT_TRANSACTION_FAILED: () => LocalizedString
 	/**
 	 * Unlock
 	 */
@@ -9173,9 +9173,13 @@ This action is irreversible.
 	 */
 	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
-	 * Add custom node
+	 * Network added
 	 */
-	NETWORK_ADD_CUSTOM_NODE: () => LocalizedString
+	NETWORK_ADDED: () => LocalizedString
+	/**
+	 * Add custom
+	 */
+	NETWORK_ADD_CUSTOM: () => LocalizedString
 	/**
 	 * Add custom network
 	 */
@@ -9185,41 +9189,29 @@ This action is irreversible.
 	 */
 	NETWORK_ADD_CUSTOM_NETWORK_DESC: () => LocalizedString
 	/**
-	 * Insert the name
-	 */
-	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_PLACEHOLDER: () => LocalizedString
-	/**
 	 * Node name
 	 */
 	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_LABEL: () => LocalizedString
 	/**
-	 * https://...
+	 * Insert the name
 	 */
-	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_PLACEHOLDER: () => LocalizedString
-	/**
-	 * URL
-	 */
-	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_LABEL: () => LocalizedString
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_PLACEHOLDER: () => LocalizedString
 	/**
 	 * URL invalid or node configuration issue
 	 */
 	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_ERROR: () => LocalizedString
 	/**
-	 * Network added
+	 * URL
 	 */
-	NETWORK_ADDED: () => LocalizedString
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_LABEL: () => LocalizedString
 	/**
-	 * Network removed
+	 * https://...
 	 */
-	NETWORK_REMOVED: () => LocalizedString
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_PLACEHOLDER: () => LocalizedString
 	/**
-	 * Network switched
+	 * Add custom node
 	 */
-	NETWORK_SWITCHED: () => LocalizedString
-	/**
-	 * Add custom
-	 */
-	NETWORK_ADD_CUSTOM: () => LocalizedString
+	NETWORK_ADD_CUSTOM_NODE: () => LocalizedString
 	/**
 	 * Add network
 	 */
@@ -9272,6 +9264,14 @@ This action is irreversible.
 	 * Manage nodes
 	 */
 	NETWORK_MANAGE_NODES: () => LocalizedString
+	/**
+	 * Network removed
+	 */
+	NETWORK_REMOVED: () => LocalizedString
+	/**
+	 * Network switched
+	 */
+	NETWORK_SWITCHED: () => LocalizedString
 	/**
 	 * Only Vechain network supported
 	 */
@@ -10190,6 +10190,10 @@ This action is irreversible.
 	 */
 	SEND_BALANCE_PERCENTAGE: (arg: { percentage: string }) => LocalizedString
 	/**
+	 * Send collectible
+	 */
+	SEND_COLLECTIBLE: () => LocalizedString
+	/**
 	 * Add your first contact to send faster and avoid errors.
 	 */
 	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: () => LocalizedString
@@ -10197,10 +10201,6 @@ This action is irreversible.
 	 * No contacts added
 	 */
 	SEND_CONTACTS_EMPTY_STATE_TITLE: () => LocalizedString
-	/**
-	 * Send collectible
-	 */
-	SEND_COLLECTIBLE: () => LocalizedString
 	/**
 	 * Wallet address
 	 */
@@ -10478,6 +10478,14 @@ This action is irreversible.
 	 */
 	SEND_RECEIVER_ADD_CONTACT_BTN: () => LocalizedString
 	/**
+	 * Review details
+	 */
+	SEND_RECEIVER_DETAILS: () => LocalizedString
+	/**
+	 * {current} of {total}
+	 */
+	SEND_RECEIVER_DETAILS_COUNT: (arg: { current: number, total: number }) => LocalizedString
+	/**
 	 * Accounts
 	 */
 	SEND_RECEIVER_FILTER_ACCOUNTS: () => LocalizedString
@@ -10497,16 +10505,6 @@ This action is irreversible.
 	 * Scan
 	 */
 	SEND_RECEIVE_TAB_SCAN: () => LocalizedString
-	/**
-	 * Review details
-	 */
-	SEND_RECEIVER_DETAILS: () => LocalizedString
-	/**
-	 * {current: number} of {total: number}
-	 * @param {unknown} current
-	 * @param {unknown} total
-	 */
-	SEND_RECEIVER_DETAILS_COUNT: RequiredParams<'current', 'total'>
 	/**
 	 * Once you send to an address, it’ll show up here for quick access.
 	 */
@@ -10543,10 +10541,6 @@ This action is irreversible.
 	 * Select the token asset you wish to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
-	/**
-	 * Token amount
-	 */
-	SEND_TOKEN_AMOUNT: () => LocalizedString
 	/**
 	 * {tokenCount} tokens
 	 */
@@ -11201,6 +11195,10 @@ Available for Google and Apple Pay.
 	 */
 	TODAY: () => LocalizedString
 	/**
+	 * Token
+	 */
+	TOKEN: () => LocalizedString
+	/**
 	 * Buy token
 	 */
 	TOKEN_BUY: () => LocalizedString
@@ -11642,6 +11640,14 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Networks
+	 */
+	NETWORS_BS_TITLE: () => LocalizedString
+	/**
+	 * Select the active network
+	 */
+	NETWORS_BS_SUBTITLE: () => LocalizedString
 }
 
 export type Formatters = {

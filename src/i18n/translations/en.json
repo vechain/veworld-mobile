@@ -1433,5 +1433,7 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "NETWORS_BS_TITLE": "Networks",
+  "NETWORS_BS_SUBTITLE": "Select the active network"
 }
