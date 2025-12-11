@@ -96,7 +96,10 @@ export const GenericAccountCard = ({
             <BaseView flexDirection="row" flex={1} gap={12} justifyContent="space-between" alignItems="center">
                 <AccountIcon account={{ address: accountAddress, type: DEVICE_TYPE.LOCAL_MNEMONIC }} size={32} />
                 <BaseView flex={1} flexDirection="column">
-                    <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
+                    <BaseText
+                        numberOfLines={1}
+                        typographyFont="captionMedium"
+                        color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
                         {title}
                     </BaseText>
                     {(vnsName || accountName) && (
