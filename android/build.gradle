@@ -1,11 +1,11 @@
 buildscript {
     ext {
         buildToolsVersion = "34.0.0"
-        minSdkVersion = 23
+        minSdkVersion = 24
         compileSdkVersion = 35
         targetSdkVersion = 35
         ndkVersion = "26.1.10909125"
-        kotlinVersion = "1.9.22"
+        kotlinVersion = "2.0.21"
         androidXBrowser = "1.8.0"
     }
     repositories {
@@ -39,7 +39,7 @@ allprojects {
 subprojects {
     afterEvaluate { project ->
         if (project.name == 'react-native-quick-crypto') {
-            project.android.defaultConfig.minSdkVersion = 23
+            project.android.defaultConfig.minSdkVersion = 24
         }
     }
 }
