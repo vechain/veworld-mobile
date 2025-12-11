@@ -853,6 +853,8 @@
   "NETWORK_REMOVED": "Network removed",
   "NETWORK_SWITCHED": "Network switched",
   "NETWORK_WARNING_QR_CODE_FOR_ACCOUNT": "Only Vechain network supported",
+  "NETWORS_BS_SUBTITLE": "Select the active network",
+  "NETWORS_BS_TITLE": "Networks",
   "NFT_ALERT_IMAGE_SAVED_MSG": "You have successfully saved the NFT image to your photo album",
   "NFT_ALERT_IMAGE_SAVED_TITLE": "NFT image saved to photo album",
   "NFT_ATTRIBUTES": "Attributes",
@@ -1455,7 +1457,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "NETWORS_BS_TITLE": "Networks",
-  "NETWORS_BS_SUBTITLE": "Select the active network"
+  "YESTERDAY": "Yesterday"
 }
