@@ -81,11 +81,7 @@ const Receiver = ({ address, testID }: { address: string; testID?: string }) => 
     })
 
     const displayAddress = useMemo(() => {
-        return AddressUtils.showAddressOrName(address, vns, {
-            ellipsed: true,
-            lengthBefore: 4,
-            lengthAfter: 6,
-        })
+        return AddressUtils.showAddressOrName(address, vns, { ellipsed: true })
     }, [address, vns])
 
     return (

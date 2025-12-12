@@ -75,7 +75,7 @@ describe("NFTReceiverCard", () => {
         const formattedAddress = AddressUtils.showAddressOrName(
             mockFlowState.address,
             { name: "", address: "" },
-            { ellipsed: true, lengthBefore: 4, lengthAfter: 6 },
+            { ellipsed: true, lengthBefore: 5, lengthAfter: 3 },
         )
 
         const addressElement = await screen.findByText(formattedAddress)
