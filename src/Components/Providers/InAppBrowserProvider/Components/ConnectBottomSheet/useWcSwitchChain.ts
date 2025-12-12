@@ -3,7 +3,7 @@ import { showInfoToast } from "~Components/Base"
 import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { useI18nContext } from "~i18n"
 import { ConnectAppRequest } from "~Model"
-import { changeSelectedNetwork, selectNetworks, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectNetworks, switchActiveNetwork, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { HexUtils } from "~Utils"
 
 export const useWcSwitchChain = (request: ConnectAppRequest, { onCloseBs }: { onCloseBs: () => void }) => {
@@ -29,7 +29,7 @@ export const useWcSwitchChain = (request: ConnectAppRequest, { onCloseBs }: { on
             )
 
             if (requestedNetwork) {
-                dispatch(changeSelectedNetwork(requestedNetwork))
+                dispatch(switchActiveNetwork(requestedNetwork))
                 showInfoToast({
                     text1: LL.NOTIFICATION_WC_NETWORK_CHANGED({
                         network: requestedNetwork.name,

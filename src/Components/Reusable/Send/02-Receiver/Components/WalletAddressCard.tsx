@@ -97,10 +97,18 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
         setIsFocused(false)
     }, [])
 
+    const handleGetVnsAddress = useCallback(
+        async (address: string) => {
+            const vnsAddress = await getVnsAddress(address)
+            return vnsAddress
+        },
+        [getVnsAddress],
+    )
+
     useEffect(() => {
         const init = async () => {
             if (selectedAddress && selectedAddress.includes(".vet")) {
-                const vnsAddress = await getVnsAddress(selectedAddress)
+                const vnsAddress = await handleGetVnsAddress(selectedAddress)
 
                 if (vnsAddress === ZERO_ADDRESS) {
                     setIsError(true)
@@ -109,6 +117,7 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
 
                 if (AddressUtils.isValid(vnsAddress)) {
                     onAddressChange(vnsAddress ?? "")
+                    setIsError(false)
                     Keyboard.dismiss()
                 }
             } else {
@@ -118,6 +127,7 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
                 }
 
                 if (selectedAddress.length === 42 && AddressUtils.isValid(selectedAddress)) {
+                    setIsError(false)
                     Keyboard.dismiss()
                 } else {
                     setIsError(true)
@@ -125,7 +135,7 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
             }
         }
         init()
-    }, [getVnsAddress, selectedAddress, isError, onAddressChange])
+    }, [handleGetVnsAddress, selectedAddress, isError, onAddressChange])
 
     const computedInputStyles = useMemo(() => {
         const defaultBorderColor = theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200
