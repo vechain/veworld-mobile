@@ -1,28 +1,50 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
+import { B3TR, VET, VOT3, VTHO } from "~Constants"
 import { ColorThemeType } from "~Constants/Theme"
-import { useTheme, useThemedStyles } from "~Hooks"
+import { useFormatFiat, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { FungibleTokenWithBalance } from "~Model"
+import { BigNutils } from "~Utils"
+import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 
 type Props = {
-    computedIcon: string
-    tokenBalance: string
     onOpenSelector: () => void
     onMaxPress: () => void
+    token: FungibleTokenWithBalance
 }
 
 export const SelectAmountTokenSelector = React.memo<Props>(function TokenSelectorButton({
-    computedIcon,
-    tokenBalance,
     onOpenSelector,
     onMaxPress,
+    token,
 }) {
     const { LL } = useI18nContext()
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
     const tokenAmountCard = theme.colors.sendScreen.tokenAmountCard
+
+    const { formatLocale } = useFormatFiat()
+
+    const tokenBalance = useMemo(() => {
+        if (!token) return ""
+        const humanBalance = BigNutils(token.balance.balance).toHuman(token.decimals ?? 0)
+        return formatFullPrecision(humanBalance.toString, {
+            locale: formatLocale,
+            tokenSymbol: token.symbol,
+        })
+    }, [formatLocale, token])
+
+    const computedIcon = useMemo(() => {
+        if (!token) return VET.icon
+        if (token.symbol === VET.symbol) return VET.icon
+        if (token.symbol === VTHO.symbol) return VTHO.icon
+        if (token.symbol === B3TR.symbol) return B3TR.icon
+        if (token.symbol === VOT3.symbol) return VOT3.icon
+        return token.icon
+    }, [token])
 
     return (
         <TouchableOpacity onPress={onOpenSelector}>
