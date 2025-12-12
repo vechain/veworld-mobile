@@ -289,11 +289,7 @@ export const WelcomeScreen = () => {
                 }
             />
 
-            <SelectLanguageBottomSheet
-                ref={selectLanguageSheetRef}
-                selectedLanguage={selectedLanguageCode}
-                handleSelectLanguage={handleSelectLanguage}
-            />
+            <SelectLanguageBottomSheet bsRef={selectLanguageSheetRef} />
         </>
     )
 }
