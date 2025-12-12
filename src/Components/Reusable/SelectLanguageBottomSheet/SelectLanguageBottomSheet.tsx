@@ -37,6 +37,7 @@ export const SelectLanguageBottomSheet = ({ bsRef }: Props) => {
         <BaseBottomSheet dynamicHeight ref={ref} enableContentPanningGesture={false} scrollable={false}>
             <NestableScrollContainer bounces={false} showsVerticalScrollIndicator={false} stickyHeaderIndices={[0]}>
                 <BaseView
+                    bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50}
                     flexDirection="column"
                     justifyContent="space-between"
                     w={100}
