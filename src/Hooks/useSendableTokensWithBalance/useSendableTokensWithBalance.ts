@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { VET, VTHO } from "~Constants"
+import { NON_SENDABLE_TOKENS, VET, VTHO } from "~Constants"
 import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useTokenBalance } from "~Hooks/useTokenBalance"
 import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
@@ -38,6 +38,7 @@ export const useSendableTokensWithBalance = () => {
             [vetWithBalance, vthoWithBalance, b3trWithBalance, vot3WithBalance, ...nonVechainTokens].filter(
                 (tk): tk is NonNullable<typeof tk> => {
                     if (tk === undefined) return false
+                    if (NON_SENDABLE_TOKENS.includes(tk.symbol)) return false
                     return !BigNutils(tk.balance.balance).isZero
                 },
             ),
