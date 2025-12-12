@@ -1,13 +1,12 @@
 import React, { useEffect } from "react"
-import { NativeModules, InteractionManager } from "react-native"
-import { AutoLockProvider, BaseStatusBar, ErrorBoundary, useApplicationSecurity } from "~Components"
-import { SwitchStack } from "~Navigation"
-import { AppLoader } from "./AppLoader"
-import { AnimatedSplashScreen } from "./AnimatedSplashScreen"
+import { InteractionManager, NativeModules } from "react-native"
 import RNBootSplash from "react-native-bootsplash"
+import { AutoLockProvider, BaseStatusBar, ErrorBoundary, useApplicationSecurity } from "~Components"
 import { SecurityLevelType } from "~Model"
+import { SwitchStack } from "~Navigation"
 import { PlatformUtils } from "~Utils"
-import { CaptureProtection } from "react-native-capture-protection"
+import { AnimatedSplashScreen } from "./AnimatedSplashScreen"
+import { AppLoader } from "./AppLoader"
 const { ScreenShieldRN } = NativeModules
 
 export const EntryPoint = () => {
@@ -48,7 +47,7 @@ export const EntryPoint = () => {
                     playAnimation={true}
                     useFadeOutAnimation={securityType === SecurityLevelType.SECRET}>
                     <AppLoader>
-                        <BaseStatusBar />
+                        <BaseStatusBar root />
                         <SwitchStack />
                     </AppLoader>
                 </AnimatedSplashScreen>

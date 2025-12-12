@@ -1,16 +1,15 @@
 import React, { useCallback } from "react"
+import { BaseTabs } from "~Components/Base/BaseTabs"
 import { CURRENCY } from "~Constants"
 import { currencyConfig } from "~Constants/Constants"
-import { BaseButtonGroupHorizontal } from "~Components"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { selectCurrency } from "~Storage/Redux/Selectors"
-import { setCurrency } from "~Storage/Redux/Actions"
 import { BaseButtonGroupHorizontalType } from "~Model"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { setCurrency } from "~Storage/Redux/Actions"
+import { selectCurrency } from "~Storage/Redux/Selectors"
 
 const currencies: Array<BaseButtonGroupHorizontalType> = currencyConfig.map(currency => ({
     id: currency.currency,
-    label: currency.currency,
-    icon: currency.iconName,
+    label: `${currency.symbol} ${currency.currency}`,
 }))
 
 export const ChangeCurrency: React.FC = () => {
@@ -19,17 +18,18 @@ export const ChangeCurrency: React.FC = () => {
     const dispatch = useAppDispatch()
 
     const handleSelectCurrency = useCallback(
-        async (button: BaseButtonGroupHorizontalType) => {
-            dispatch(setCurrency(button.id as CURRENCY))
+        async (currency: string) => {
+            dispatch(setCurrency(currency as CURRENCY))
         },
         [dispatch],
     )
 
     return (
-        <BaseButtonGroupHorizontal
-            selectedButtonIds={[selectedCurrency || ""]}
-            buttons={currencies}
-            action={handleSelectCurrency}
+        <BaseTabs
+            keys={currencies.map(curr => curr.id)}
+            labels={currencies.map(curr => curr.label)}
+            selectedKey={selectedCurrency}
+            setSelectedKey={handleSelectCurrency}
         />
     )
 }

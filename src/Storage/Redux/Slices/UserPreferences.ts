@@ -3,6 +3,7 @@ import lodash from "lodash"
 import moment from "moment"
 import { CURRENCY, CURRENCY_FORMATS, SYMBOL_POSITIONS, ThemeEnum } from "~Constants/Enums"
 import { Locales } from "~i18n"
+import { KeyPair } from "./ExternalDapps"
 
 /**
  * @typedef {Object} UserPreferenceState
@@ -22,6 +23,8 @@ import { Locales } from "~i18n"
  * @property {Object.<string, number>|undefined} lastBackupRequestTimestamp
  * @property {number|null} lastNotificationReminder
  * @property {string[]} removedNotificationTags
+ * @property {KeyPair|undefined} signKeyPair - Key pair for signing session tokens for external dapps connections
+ * @property {boolean} hideStellaPayBottomSheet - Whether to hide the Stella Pay bottom sheet
  */
 
 export interface UserPreferenceState {
@@ -45,6 +48,24 @@ export interface UserPreferenceState {
     showJailbrokeWarning?: boolean
     hideStargateBannerHomeScreen?: boolean
     hideStargateBannerVETScreen?: boolean
+    hideNewUserVeBetterCard?: boolean
+    signKeyPair?: KeyPair
+    notificationCenterUrl?: string
+    developerMenuUnlocked?: boolean
+    /**
+     * Indexer URLs.
+     * Each key is a genesis id and value is the URL.
+     * If an indexer isn't defined here, look up to the .env, otherwise return undefined
+     */
+    indexerUrls?: {
+        [genesisId: string]: string
+    }
+    hideStellaPayBottomSheet?: boolean
+    /**
+     * Indicate that the user explicitly accepts to go to apps that are not on app hub.
+     * By default it's false.
+     */
+    developerAppsEnabled?: boolean
 }
 
 export const initialUserPreferencesState: UserPreferenceState = {
@@ -68,6 +89,11 @@ export const initialUserPreferencesState: UserPreferenceState = {
     showJailbrokeWarning: true,
     hideStargateBannerHomeScreen: false,
     hideStargateBannerVETScreen: false,
+    hideNewUserVeBetterCard: false,
+    signKeyPair: undefined,
+    notificationCenterUrl: undefined,
+    developerMenuUnlocked: false,
+    hideStellaPayBottomSheet: false,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -179,6 +205,35 @@ export const UserPreferencesSlice = createSlice({
         setHideStargateBannerVETScreen: (state, action: PayloadAction<boolean>) => {
             state.hideStargateBannerVETScreen = action.payload
         },
+
+        setHideNewUserVeBetterCard: (state, action: PayloadAction<boolean>) => {
+            state.hideNewUserVeBetterCard = action.payload
+        },
+
+        setSignKeyPair: (state, action: PayloadAction<KeyPair>) => {
+            state.signKeyPair = action.payload
+        },
+
+        setNotificationCenterUrl: (state, action: PayloadAction<string | undefined>) => {
+            state.notificationCenterUrl = action.payload
+        },
+
+        setDeveloperMenuUnlocked: (state, action: PayloadAction<boolean>) => {
+            state.developerMenuUnlocked = action.payload
+        },
+
+        setIndexerUrl: (state, action: PayloadAction<{ genesisId: string; url: string | undefined }>) => {
+            const { genesisId, url } = action.payload
+            state.indexerUrls ??= {}
+            if (url) state.indexerUrls[genesisId] = url
+            else delete state.indexerUrls[genesisId]
+        },
+        setHideStellaPayBottomSheet: (state, action: PayloadAction<boolean>) => {
+            state.hideStellaPayBottomSheet = action.payload
+        },
+        setDeveloperAppsEnabled: (state, action: PayloadAction<boolean>) => {
+            state.developerAppsEnabled = action.payload
+        },
     },
 })
 
@@ -204,4 +259,11 @@ export const {
     setShowJailbrokeDeviceWarning,
     setHideStargateBannerHomeScreen,
     setHideStargateBannerVETScreen,
+    setHideNewUserVeBetterCard,
+    setSignKeyPair,
+    setNotificationCenterUrl,
+    setDeveloperMenuUnlocked,
+    setIndexerUrl,
+    setHideStellaPayBottomSheet,
+    setDeveloperAppsEnabled,
 } = UserPreferencesSlice.actions

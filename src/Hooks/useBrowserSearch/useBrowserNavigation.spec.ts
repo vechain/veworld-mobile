@@ -1,22 +1,29 @@
 import { act, renderHook } from "@testing-library/react-hooks"
-import { useVisitedUrls } from "./useVisitedUrls"
-import { SearchError, useBrowserNavigation } from "./useBrowserNavigation"
-import { TestWrapper } from "~Test"
 import { waitFor } from "@testing-library/react-native"
 import { useNavigation } from "@react-navigation/native"
+
+import { TestWrapper } from "~Test"
+
+import { useVisitedUrls } from "./useVisitedUrls"
 import { Routes } from "~Navigation"
-import axios from "axios"
+
+import { SearchError, useBrowserNavigation } from "./useBrowserNavigation"
 
 jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
     useNavigation: jest.fn(),
 }))
 jest.mock("./useVisitedUrls")
-jest.mock("axios")
+
+const isValidBrowserUrl = jest.fn()
+jest.mock("~Utils/URIUtils", () => ({
+    ...jest.requireActual("~Utils/URIUtils").default,
+    isValidBrowserUrl: (...args: any[]) => isValidBrowserUrl(...args),
+}))
 
 describe("useBrowserNavigation", () => {
     beforeEach(() => {
-        jest.restoreAllMocks()
+        jest.clearAllMocks()
     })
     it("should navigate to the browser with HTTPS url", async () => {
         const addVisitedUrl = jest.fn()
@@ -27,21 +34,19 @@ describe("useBrowserNavigation", () => {
         ;(useNavigation as jest.Mock).mockReturnValue({
             navigate,
         })
-        ;(axios.get as jest.Mock).mockResolvedValue({
-            status: 200,
-        })
+        isValidBrowserUrl.mockResolvedValue(true)
 
         const { result } = renderHook(() => useBrowserNavigation(), {
             wrapper: TestWrapper,
         })
 
-        act(() => {
-            result.current.navigateToBrowser("https://vechain.org")
+        await act(async () => {
+            await result.current.navigateToBrowser("https://google.com")
         })
 
         await waitFor(() => {
-            expect(navigate).toHaveBeenCalledWith(Routes.BROWSER, { url: "https://vechain.org" })
-            expect(addVisitedUrl).toHaveBeenCalledWith("https://vechain.org")
+            expect(navigate).toHaveBeenCalledWith(Routes.BROWSER, { url: "https://google.com" })
+            expect(addVisitedUrl).toHaveBeenCalledWith("https://google.com")
         })
     })
 
@@ -52,6 +57,7 @@ describe("useBrowserNavigation", () => {
         ;(useNavigation as jest.Mock).mockReturnValue({
             navigate: jest.fn(),
         })
+        isValidBrowserUrl.mockResolvedValue(false)
 
         const { result } = renderHook(() => useBrowserNavigation(), {
             wrapper: TestWrapper,

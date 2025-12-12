@@ -1,8 +1,4 @@
 name: Generate Version Translations
-permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
 
 on:
     push:
@@ -13,6 +9,10 @@ on:
 jobs:
     translate-version-descriptions:
         runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+            id-token: write
         if: "!contains(github.event.head_commit.message, 'add translations')"
 
         steps:
@@ -52,15 +52,27 @@ jobs:
                   IOS_DESCRIPTIONS=$(cat $IOS_VERSION_FILE | jq -r '.descriptions.en | length')
                   ANDROID_DESCRIPTIONS=$(cat $ANDROID_VERSION_FILE | jq -r '.descriptions.en | length')
 
-                  if [ "$IOS_DESCRIPTIONS" -eq "0" ] || [ "$ANDROID_DESCRIPTIONS" -eq "0" ]; then
-                    echo "English descriptions are not yet filled. Skipping translation."
+                  if [ "$IOS_DESCRIPTIONS" -gt "0" ]; then
+                    echo "SHOULD_TRANSLATE_IOS=true" >> $GITHUB_ENV
+                    echo "iOS has English descriptions, will translate"
+                  else
+                    echo "iOS English descriptions are empty, skipping iOS translation"
+                  fi
+
+                  if [ "$ANDROID_DESCRIPTIONS" -gt "0" ]; then
+                    echo "SHOULD_TRANSLATE_ANDROID=true" >> $GITHUB_ENV
+                    echo "Android has English descriptions, will translate"
+                  else
+                    echo "Android English descriptions are empty, skipping Android translation"
+                  fi
+
+                  if [ "$IOS_DESCRIPTIONS" -eq "0" ] && [ "$ANDROID_DESCRIPTIONS" -eq "0" ]; then
+                    echo "No English descriptions found for either platform. Skipping all translations."
                     exit 0
                   fi
 
-                  echo "SHOULD_TRANSLATE=true" >> $GITHUB_ENV
-
             - name: Setup release translation environment
-              if: env.SHOULD_TRANSLATE == 'true'
+              if: env.SHOULD_TRANSLATE_IOS == 'true' || env.SHOULD_TRANSLATE_ANDROID == 'true'
               run: |
                   mkdir -p releaseI18n
                   
@@ -151,7 +163,7 @@ jobs:
                   mv --force translo.release.config.json translo.config.json
 
             - name: Translate iOS descriptions
-              if: env.SHOULD_TRANSLATE == 'true'
+              if: env.SHOULD_TRANSLATE_IOS == 'true'
               env:
                   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
               run: |
@@ -170,7 +182,7 @@ jobs:
                   done
 
             - name: Translate Android descriptions
-              if: env.SHOULD_TRANSLATE == 'true'
+              if: env.SHOULD_TRANSLATE_ANDROID == 'true'
               env:
                   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
               run: |
@@ -193,7 +205,7 @@ jobs:
                   done
 
             - name: Commit and push translations
-              if: env.SHOULD_TRANSLATE == 'true'
+              if: env.SHOULD_TRANSLATE_IOS == 'true' || env.SHOULD_TRANSLATE_ANDROID == 'true'
               run: |
                   git config user.name "vechain-ci"
                   git config user.email "vechain.ci@vechain.org"

@@ -16,10 +16,12 @@ export type FeatureFlags = {
         [PaymentProvidersEnum.CoinbasePay]: {
             android: boolean
             iOS: boolean
+            url: string
         }
         [PaymentProvidersEnum.Transak]: {
             android: boolean
             iOS: boolean
+            url: string
         }
         [PaymentProvidersEnum.Coinify]: {
             android: boolean
@@ -37,13 +39,63 @@ export type FeatureFlags = {
                 ledger: boolean
             }
         }
+        HAYABUSA: {
+            stargate: {
+                [genesisId: string]: {
+                    /**
+                     * Address of the Stargate contract
+                     */
+                    contract: string
+                    /**
+                     * Address of the StargateNFT contract
+                     */
+                    nft?: string
+                    /**
+                     * Address of the NodeManagement contract (deprecated)
+                     */
+                    nodeManagement?: string
+                    /**
+                     * Address of the StargateDelegation contract (deprecated)
+                     */
+                    delegation?: string
+                }
+            }
+        }
+    }
+    smartWalletFeature: {
+        enabled: boolean
+    }
+    betterWorldFeature: {
+        appsScreen: {
+            enabled: boolean
+        }
+        balanceScreen: {
+            enabled: boolean
+            collectibles: {
+                enabled: boolean
+            }
+            tokens: {
+                enabled: boolean
+            }
+            send: {
+                enabled: boolean
+            }
+            sendCollectibles: {
+                enabled: boolean
+            }
+        }
+    }
+    notificationCenter: {
+        registration: {
+            enabled: boolean
+        }
     }
 }
 
 export const getFeatureFlags = async () => {
     const featureFlagsUrl = __DEV__
-        ? "https://vechain.github.io/veworld-feature-flags/dev/mobile-feature-flags.json"
-        : "https://vechain.github.io/veworld-feature-flags/mobile-feature-flags.json"
+        ? "https://vechain.github.io/veworld-feature-flags/dev/mobile-versioned-feature-flags.json"
+        : "https://vechain.github.io/veworld-feature-flags/mobile-versioned-feature-flags.json"
 
     const req = await fetch(featureFlagsUrl, {
         method: "GET",
@@ -54,6 +106,6 @@ export const getFeatureFlags = async () => {
         },
     })
 
-    const response: FeatureFlags = await req.json()
+    const response = await req.json()
     return response
 }

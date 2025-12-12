@@ -29,7 +29,8 @@ describe("useBrowserSearch", () => {
                     discovery: {
                         custom: [],
                         featured: [],
-                        favorites: [],
+
+                        favoriteRefs: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
                         bannerInteractions: {},
@@ -42,9 +43,9 @@ describe("useBrowserSearch", () => {
             },
         })
         expect(result.current.results).toBeDefined()
-        expect(result.current.results).toHaveLength(1)
-        expect(result.current.results[0].type).toBe(HistoryUrlKind.URL)
-        expect((result.current.results[0] as HistoryUrlItem).url).toBe(new URL("https://vechain.org").origin)
+        expect(result.current.results.data).toHaveLength(1)
+        expect(result.current.results.data[0].type).toBe(HistoryUrlKind.URL)
+        expect((result.current.results.data[0] as HistoryUrlItem).url).toBe(new URL("https://vechain.org").origin)
     })
     it("should return filtered result with not empty string ignore-case", () => {
         ;(useVisitedUrls as jest.Mock).mockResolvedValueOnce({
@@ -75,7 +76,8 @@ describe("useBrowserSearch", () => {
                     discovery: {
                         custom: [],
                         featured: [],
-                        favorites: [],
+
+                        favoriteRefs: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
                         bannerInteractions: {},
@@ -88,11 +90,13 @@ describe("useBrowserSearch", () => {
             },
         })
         expect(result.current.results).toBeDefined()
-        expect(result.current.results).toHaveLength(2)
-        expect(result.current.results[0].type).toBe(HistoryUrlKind.URL)
-        expect((result.current.results[0] as HistoryUrlItem).url).toBe(new URL("https://testnet.vechain.org").origin)
-        expect(result.current.results[1].type).toBe(HistoryUrlKind.URL)
-        expect((result.current.results[1] as HistoryUrlItem).url).toBe(new URL("https://vechain.org").origin)
+        expect(result.current.results.data).toHaveLength(2)
+        expect(result.current.results.data[0].type).toBe(HistoryUrlKind.URL)
+        expect((result.current.results.data[0] as HistoryUrlItem).url).toBe(
+            new URL("https://testnet.vechain.org").origin,
+        )
+        expect(result.current.results.data[1].type).toBe(HistoryUrlKind.URL)
+        expect((result.current.results.data[1] as HistoryUrlItem).url).toBe(new URL("https://vechain.org").origin)
     })
     it("should filter visited urls by name or url", () => {
         ;(useVisitedUrls as jest.Mock).mockResolvedValueOnce({
@@ -123,7 +127,8 @@ describe("useBrowserSearch", () => {
                     discovery: {
                         custom: [],
                         featured: [],
-                        favorites: [],
+
+                        favoriteRefs: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
                         bannerInteractions: {},
@@ -136,11 +141,13 @@ describe("useBrowserSearch", () => {
             },
         })
         expect(result.current.results).toBeDefined()
-        expect(result.current.results).toHaveLength(2)
-        expect(result.current.results[0].type).toBe(HistoryUrlKind.URL)
-        expect((result.current.results[0] as HistoryUrlItem).url).toBe(new URL("https://testnet.vechain.org").origin)
-        expect(result.current.results[1].type).toBe(HistoryUrlKind.URL)
-        expect((result.current.results[1] as HistoryUrlItem).url).toBe(new URL("https://google.com").origin)
+        expect(result.current.results.data).toHaveLength(2)
+        expect(result.current.results.data[0].type).toBe(HistoryUrlKind.URL)
+        expect((result.current.results.data[0] as HistoryUrlItem).url).toBe(
+            new URL("https://testnet.vechain.org").origin,
+        )
+        expect(result.current.results.data[1].type).toBe(HistoryUrlKind.URL)
+        expect((result.current.results.data[1] as HistoryUrlItem).url).toBe(new URL("https://google.com").origin)
     })
 
     it("should filter dapps by name", () => {
@@ -187,7 +194,8 @@ describe("useBrowserSearch", () => {
                             },
                         ],
                         featured: [],
-                        favorites: [],
+
+                        favoriteRefs: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
                         bannerInteractions: {},
@@ -200,11 +208,11 @@ describe("useBrowserSearch", () => {
             },
         })
         expect(result.current.results).toBeDefined()
-        expect(result.current.results).toHaveLength(2)
-        expect(result.current.results[0].type).toBe(HistoryUrlKind.DAPP)
-        expect((result.current.results[0] as HistoryDappItem).dapp.href).toBe(new URL("https://google.com").origin)
-        expect(result.current.results[1].type).toBe(HistoryUrlKind.DAPP)
-        expect((result.current.results[1] as HistoryDappItem).dapp.href).toBe(
+        expect(result.current.results.data).toHaveLength(2)
+        expect(result.current.results.data[0].type).toBe(HistoryUrlKind.DAPP)
+        expect((result.current.results.data[0] as HistoryDappItem).dapp.href).toBe(new URL("https://google.com").origin)
+        expect(result.current.results.data[1].type).toBe(HistoryUrlKind.DAPP)
+        expect((result.current.results.data[1] as HistoryDappItem).dapp.href).toBe(
             new URL("https://testnet.vechain.org").origin,
         )
     })
@@ -246,7 +254,8 @@ describe("useBrowserSearch", () => {
                             },
                         ],
                         featured: [],
-                        favorites: [],
+
+                        favoriteRefs: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
                         bannerInteractions: {},
@@ -259,11 +268,11 @@ describe("useBrowserSearch", () => {
             },
         })
         expect(result.current.results).toBeDefined()
-        expect(result.current.results).toHaveLength(2)
-        expect(result.current.results[0].type).toBe(HistoryUrlKind.DAPP)
-        expect((result.current.results[0] as HistoryDappItem).dapp.href).toBe(new URL("https://google.com").origin)
-        expect(result.current.results[1].type).toBe(HistoryUrlKind.DAPP)
-        expect((result.current.results[1] as HistoryDappItem).dapp.href).toBe(
+        expect(result.current.results.data).toHaveLength(2)
+        expect(result.current.results.data[0].type).toBe(HistoryUrlKind.DAPP)
+        expect((result.current.results.data[0] as HistoryDappItem).dapp.href).toBe(new URL("https://google.com").origin)
+        expect(result.current.results.data[1].type).toBe(HistoryUrlKind.DAPP)
+        expect((result.current.results.data[1] as HistoryDappItem).dapp.href).toBe(
             new URL("https://testnet.vechain.org").origin,
         )
     })

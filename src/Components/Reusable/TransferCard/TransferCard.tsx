@@ -2,13 +2,13 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
 import {
+    AccountIcon,
     BaseIcon,
     BaseSpacer,
     BaseText,
     BaseView,
     LedgerBadge,
     PaginatedDot,
-    PicassoAddressIcon,
     WatchedAccountBadge,
 } from "~Components"
 import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
@@ -102,7 +102,7 @@ export const TransferCard = memo(
         }, [toAddresses])
 
         const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
-            const activeIdx = viewableItems[0].index
+            const activeIdx = viewableItems[0]?.index
 
             setActiveIndex(activeIdx ?? 0)
         }, [])
@@ -302,13 +302,19 @@ const AccountCard = ({
     const { LL } = useI18nContext()
     const provenanceText = provenance === PROVENANCE.FROM ? LL.FROM() : LL.TO()
 
+    const accounts = useAppSelector(selectVisibleAccounts)
+
+    const account = useMemo(() => {
+        return accounts.find(acc => AddressUtils.compareAddresses(acc.address, _address)) ?? { address: _address }
+    }, [_address, accounts])
+
     return (
         <BaseView py={12} px={16} key={_address} style={{ width: SCREEN_WIDTH - 40 }} alignItems="flex-start">
-            <BaseText typographyFont="buttonPrimary">{provenanceText}</BaseText>
+            <BaseText typographyFont="captionSemiBold">{provenanceText}</BaseText>
             <BaseView flexDirection="row" py={8}>
-                <PicassoAddressIcon address={_address} size={40} />
+                <AccountIcon account={account} size={32} />
                 <BaseView flexDirection="column" pl={12}>
-                    {contactName && <BaseText typographyFont="subSubTitle">{contactName}</BaseText>}
+                    {contactName && <BaseText typographyFont="bodySemiBold">{contactName}</BaseText>}
                     <BaseView flexDirection="row" mt={3}>
                         {isLedger && (
                             <>
@@ -322,7 +328,7 @@ const AccountCard = ({
                                 <BaseSpacer width={8} />
                             </>
                         )}
-                        <BaseText typographyFont={contactName ? "captionRegular" : "button"}>{vnsName}</BaseText>
+                        <BaseText typographyFont={"captionRegular"}>{vnsName}</BaseText>
                     </BaseView>
                 </BaseView>
                 {!contactName && onAddContactPress && (

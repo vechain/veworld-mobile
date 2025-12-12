@@ -41,24 +41,46 @@ export const getActivityTitle = (activity: Activity, LL: TranslationFunctions) =
             return LL.B3TR_UPGRADE_GM()
         case ActivityType.TRANSFER_NFT:
             return (activity as NonFungibleTokenActivity).direction === DIRECTIONS.UP ? LL.NFT_SEND() : LL.NFT_RECEIVE()
+        case ActivityType.NFT_SALE:
+            return (activity as NonFungibleTokenActivity).direction === DIRECTIONS.UP
+                ? LL.NFT_SOLD()
+                : LL.NFT_PURCHASED()
         case ActivityType.CONNECTED_APP_TRANSACTION:
             return LL.CONNECTED_APP_TITLE()
         case ActivityType.SIGN_TYPED_DATA:
             return LL.CONNECTED_APP_SIGN_TYPED_DATA()
-        case ActivityType.STARGATE_CLAIM_REWARDS_BASE:
+        case ActivityType.STARGATE_CLAIM_REWARDS_BASE_LEGACY:
             return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL()
-        case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE:
+        case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY:
             return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
-        case ActivityType.STARGATE_DELEGATE:
+        case ActivityType.STARGATE_DELEGATE_LEGACY:
             return LL.ACTIVITY_STARGATE_NODE_DELEGATE_LABEL()
-        case ActivityType.STARGATE_DELEGATE_ONLY:
-            return LL.ACTIVITY_STARGATE_NODE_DELEGATE_ONLY_LABEL()
-        case ActivityType.STARGATE_UNDELEGATE:
+        case ActivityType.STARGATE_UNDELEGATE_LEGACY:
             return LL.ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL()
         case ActivityType.STARGATE_STAKE:
             return LL.ACTIVITY_STARGATE_STAKE_LABEL()
         case ActivityType.STARGATE_UNSTAKE:
             return LL.ACTIVITY_STARGATE_UNSTAKE_LABEL()
+        case ActivityType.STARGATE_CLAIM_REWARDS:
+            return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
+        case ActivityType.STARGATE_BOOST:
+            return LL.ACTIVITY_STARTGATE_MATURITY_BOOSTED_LABEL()
+        case ActivityType.STARGATE_DELEGATE_REQUEST:
+            return LL.ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL()
+        case ActivityType.STARGATE_DELEGATE_REQUEST_CANCELLED:
+            return LL.ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED()
+        case ActivityType.STARGATE_DELEGATE_EXIT_REQUEST:
+            return LL.ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL()
+        case ActivityType.STARGATE_DELEGATION_EXITED:
+            return LL.ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL()
+        case ActivityType.STARGATE_DELEGATION_EXITED_VALIDATOR:
+            return LL.ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL()
+        case ActivityType.STARGATE_DELEGATE_ACTIVE:
+            return LL.ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL()
+        case ActivityType.STARGATE_MANAGER_ADDED:
+            return LL.ACTIVITY_STARTGATE_MANAGER_ADDED_LABEL()
+        case ActivityType.STARGATE_MANAGER_REMOVED:
+            return LL.ACTIVITY_STARTGATE_MANAGER_REMOVED_LABEL()
         case ActivityType.UNKNOWN_TX:
             return LL.UNKNOWN_TX()
         default:
@@ -85,11 +107,20 @@ export const getActivityModalTitle = (activity: Activity, LL: TranslationFunctio
         case ActivityType.TRANSFER_NFT:
         case ActivityType.CONNECTED_APP_TRANSACTION:
         case ActivityType.SIGN_TYPED_DATA:
-        case ActivityType.STARGATE_CLAIM_REWARDS_BASE:
-        case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE:
-        case ActivityType.STARGATE_DELEGATE:
-        case ActivityType.STARGATE_DELEGATE_ONLY:
-        case ActivityType.STARGATE_UNDELEGATE:
+        case ActivityType.STARGATE_CLAIM_REWARDS_BASE_LEGACY:
+        case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY:
+        case ActivityType.STARGATE_CLAIM_REWARDS:
+        case ActivityType.STARGATE_BOOST:
+        case ActivityType.STARGATE_DELEGATE_REQUEST:
+        case ActivityType.STARGATE_DELEGATE_REQUEST_CANCELLED:
+        case ActivityType.STARGATE_DELEGATE_EXIT_REQUEST:
+        case ActivityType.STARGATE_DELEGATION_EXITED:
+        case ActivityType.STARGATE_DELEGATION_EXITED_VALIDATOR:
+        case ActivityType.STARGATE_DELEGATE_ACTIVE:
+        case ActivityType.STARGATE_MANAGER_ADDED:
+        case ActivityType.STARGATE_MANAGER_REMOVED:
+        case ActivityType.STARGATE_DELEGATE_LEGACY:
+        case ActivityType.STARGATE_UNDELEGATE_LEGACY:
         case ActivityType.STARGATE_STAKE:
         case ActivityType.STARGATE_UNSTAKE:
         case ActivityType.UNKNOWN_TX:

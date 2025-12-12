@@ -71,7 +71,7 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
         [amount, formatLocale],
     )
 
-    const fiatHumanAmount = BigNutils().toCurrencyConversion(amount, exchangeRate)
+    const fiatHumanAmount = BigNutils().toCurrencyConversion(amount, exchangeRate ?? 0)
 
     const onTransactionSuccess = useCallback(
         (_transaction: Transaction, txId: string) => {

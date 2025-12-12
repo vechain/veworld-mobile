@@ -1,24 +1,66 @@
-import { Switch, SwitchProps } from "react-native"
-import React from "react"
-import { useTheme } from "~Hooks"
-import { COLORS } from "~Constants/Theme/Colors"
+import React, { useCallback } from "react"
+import { Pressable, StyleSheet } from "react-native"
+import Animated, { interpolate, interpolateColor, useAnimatedStyle, withTiming } from "react-native-reanimated"
+import { COLORS } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 
-type Props = SwitchProps
+type Props = {
+    onValueChange: (newValue: boolean) => void
+    value?: boolean
+    testID?: string
+}
 
-export const BaseSwitch = ({ onValueChange, value, ...props }: Props) => {
-    const theme = useTheme()
+/**
+ * Calculated by doing 40(width)-2(padding from the left)-16(size of the ball)
+ */
+const LEFT_TRUE = 22
+const LEFT_FALSE = 2
+
+export const BaseSwitch = ({ onValueChange, value, testID }: Props) => {
+    const { styles, theme } = useThemedStyles(baseStyles)
+
+    const toggleValue = useCallback(() => {
+        onValueChange(!value)
+    }, [onValueChange, value])
+
+    const rootAnimatedStyles = useAnimatedStyle(() => {
+        return {
+            backgroundColor: withTiming(
+                interpolateColor(Number(value), [0, 1], [theme.colors.switch.false, theme.colors.switch.true]),
+                { duration: 300 },
+            ),
+        }
+    }, [value])
+
+    const ballStyles = useAnimatedStyle(() => {
+        return {
+            left: withTiming(interpolate(Number(value), [0, 1], [LEFT_FALSE, LEFT_TRUE]), { duration: 300 }),
+        }
+    }, [value])
 
     return (
-        <Switch
-            trackColor={{
-                false: theme.colors.primaryDisabled,
-                true: theme.colors.switchEnabled,
-            }}
-            thumbColor={COLORS.WHITE}
-            ios_backgroundColor={theme.colors.primaryDisabled}
-            onValueChange={onValueChange}
-            value={value}
-            {...props}
-        />
+        <Pressable onPress={toggleValue} testID={testID}>
+            <Animated.View style={[styles.root, rootAnimatedStyles]}>
+                <Animated.View style={[styles.ball, ballStyles]} />
+            </Animated.View>
+        </Pressable>
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        root: {
+            borderRadius: 999,
+            width: 40,
+            height: 20,
+            position: "relative",
+        },
+        ball: {
+            backgroundColor: COLORS.WHITE,
+            width: 16,
+            height: 16,
+            borderRadius: 8,
+            position: "absolute",
+            top: 2,
+        },
+    })

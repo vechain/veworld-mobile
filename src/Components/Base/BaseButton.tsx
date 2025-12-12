@@ -1,14 +1,22 @@
 /* eslint-disable react-native/no-inline-styles */
 import Lottie from "lottie-react-native"
 import React, { useCallback, useMemo } from "react"
-import { FlexAlignType, StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native"
+import {
+    FlexAlignType,
+    StyleProp,
+    StyleSheet,
+    TextStyle,
+    TouchableOpacity,
+    TouchableOpacityProps,
+    ViewStyle,
+} from "react-native"
 import { StyleProps } from "react-native-reanimated"
 import { LoaderDark, LoaderLight } from "~Assets"
 import { ColorThemeType, TFonts } from "~Constants"
 import { typography } from "~Constants/Theme"
 import { useThemedStyles } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
-import { BaseText } from "./BaseText"
+import { BaseText, BaseTextProps } from "./BaseText"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
 
@@ -19,6 +27,7 @@ type Props = {
     isDisabledTextOnly?: boolean
     variant?: "solid" | "outline" | "ghost" | "link"
     bgColor?: string
+    borderColor?: string
     textColor?: string
     title?: string
     m?: number
@@ -47,6 +56,11 @@ type Props = {
     activeOpacity?: number
     disabledActionHaptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
     numberOfLines?: number
+    textTestID?: string
+    textTransform?: TextStyle["textTransform"]
+    textProps?: BaseTextProps
+    textStyle?: StyleProp<TextStyle>
+    textContainerStyle?: ViewStyle
 } & TouchableOpacityProps
 
 export const BaseButton = ({
@@ -67,6 +81,11 @@ export const BaseButton = ({
     disabledAction,
     disabledActionHaptics,
     numberOfLines,
+    textTestID,
+    textTransform,
+    textProps,
+    textStyle,
+    textContainerStyle,
     ...otherProps
 }: Props) => {
     const {
@@ -78,6 +97,7 @@ export const BaseButton = ({
         haptics,
         action,
         bgColor,
+        borderColor,
         px,
         py,
         w,
@@ -167,7 +187,7 @@ export const BaseButton = ({
             style={[
                 {
                     backgroundColor: calculateBackgroundColor,
-                    borderColor: isOutlineButton ? backgroundColor : theme.colors.transparent,
+                    borderColor: borderColor || (isOutlineButton ? backgroundColor : theme.colors.transparent),
                     width: w && `${w}%`,
                     height: h && `${h}%`,
                     margin: m,
@@ -195,8 +215,12 @@ export const BaseButton = ({
                     fontFamily={fontFamily}
                     fontWeight={fontWeight}
                     fontSize={fontSize}
-                    style={themedStyles.text}
-                    numberOfLines={numberOfLines}>
+                    style={[themedStyles.text, textStyle]}
+                    numberOfLines={numberOfLines}
+                    textTransform={textTransform}
+                    containerStyle={textContainerStyle}
+                    testID={textTestID}
+                    {...textProps}>
                     {title}
                     {children}
                 </BaseText>

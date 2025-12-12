@@ -10,9 +10,19 @@ import {
 import { debug, ConnectionUtils, URIUtils, warn } from "~Utils"
 import { ERROR_EVENTS, genesises } from "~Constants"
 import axios from "axios"
-import { selectCustomNetworks, selectDefaultNetworks, selectNetworkById, selectSelectedNetwork } from "../Selectors"
+import {
+    selectCustomNetworks,
+    selectDefaultNetworks,
+    selectLanguage,
+    selectNetworkById,
+    selectNetworks,
+    selectSelectedNetwork,
+} from "../Selectors"
 import { Network } from "~Model"
 import uuid from "react-native-uuid"
+import { i18nObject } from "~i18n"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 
 export * from "../Slices/Network"
 
@@ -57,11 +67,13 @@ export const validateAndAddCustomNode = createAppAsyncThunk(
         try {
             const network = await validateCustomNode({ url, name })
 
-            const customNetworks = selectCustomNetworks(getState())
+            const allNetworks = selectNetworks(getState())
 
             //Check if the custom network already exists
-            customNetworks.forEach(net => {
-                if (net.urls.some(u => URIUtils.compareURLs(u, url))) throw new Error("Network already exists")
+            allNetworks.forEach(net => {
+                if (URIUtils.compareURLs(net.currentUrl, url)) {
+                    throw new Error("Network already exists")
+                }
             })
 
             dispatch(addCustomNetwork(network))
@@ -151,7 +163,7 @@ export const handleChangeNode = (): AppThunk<Promise<void>> => async (dispatch, 
                 ...network,
                 currentUrl: validUrl,
             }
-            dispatch(changeSelectedNetwork(updatedNetwork))
+            dispatch(switchActiveNetwork(updatedNetwork))
         } else {
             throw new Error("Failed to connect to any URL for the current network.")
         }
@@ -159,3 +171,19 @@ export const handleChangeNode = (): AppThunk<Promise<void>> => async (dispatch, 
         dispatch(updateNodeError(true))
     }
 }
+
+export const switchActiveNetwork =
+    (network: Network): AppThunk<void> =>
+    (dispatch, getState) => {
+        const locale = selectLanguage(getState())
+        const LL = i18nObject(locale)
+
+        dispatch(changeSelectedNetwork(network))
+
+        Feedback.show({
+            message: LL.NETWORK_SWITCHED(),
+            severity: FeedbackSeverity.INFO,
+            type: FeedbackType.ALERT,
+            icon: "icon-globe",
+        })
+    }

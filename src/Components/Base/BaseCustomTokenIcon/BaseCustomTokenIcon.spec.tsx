@@ -1,9 +1,10 @@
-import React from "react"
 import { render, screen } from "@testing-library/react-native"
-import { BaseCustomTokenIcon } from "./BaseCustomTokenIcon"
-import { ColorUtils } from "~Utils"
-import { COLORS } from "~Constants"
+import React from "react"
 import { TestWrapper } from "~Test"
+
+import { COLORS } from "~Constants"
+import { ColorUtils } from "~Utils"
+import { BaseCustomTokenIcon } from "./BaseCustomTokenIcon"
 
 // Mock for ColorUtils.generateColor
 jest.mock("~Utils/ColorUtils", () => ({
@@ -19,7 +20,7 @@ describe("BaseCustomTokenIcon", () => {
     const shortTokenSymbol = "USD"
 
     beforeEach(() => {
-        jest.resetAllMocks()
+        jest.clearAllMocks()
     })
 
     it("renders correctly with provided tokenSymbol and tokenAddress", async () => {
@@ -78,7 +79,7 @@ describe("BaseCustomTokenIcon", () => {
 
         let displayedText = await findByText(longTokenSymbol.substring(0, 4).toUpperCase())
 
-        expect(displayedText.props.style[0].fontSize).toBe(10)
+        expect(displayedText.props.style[0].fontSize).toBe(20.5)
         // Mock for isColorLight = true
         ;(ColorUtils.generateColor as jest.Mock).mockReturnValueOnce(["testString", true])
 
@@ -88,7 +89,7 @@ describe("BaseCustomTokenIcon", () => {
 
         displayedText = await findByText(shortTokenSymbol)
 
-        expect(displayedText.props.style[0].fontSize).toBe(14)
+        expect(displayedText.props.style[0].fontSize).toBe(28.5)
     })
 
     it("renders correctly with optional style prop", async () => {

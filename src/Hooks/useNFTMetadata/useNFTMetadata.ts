@@ -1,5 +1,4 @@
 import axios from "axios"
-import { usePersistedCache } from "~Components/Providers"
 import { ERROR_EVENTS } from "~Constants"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
 import { URIProtocol } from "~Constants/Enums/URIProtocol"
@@ -8,34 +7,24 @@ import { getNFTMetadataArweave, getNFTMetadataIpfs } from "~Networking"
 import { debug, warn } from "~Utils"
 
 export const useNFTMetadata = () => {
-    const { metadataCache } = usePersistedCache()
-
     const fetchMetadata = async (uri: string): Promise<NFTMetadata | undefined> => {
         try {
             const protocol = uri?.split(":")[0].trim()
             let tokenMetadata: NFTMetadata | undefined
+            debug(ERROR_EVENTS.NFT, `Fetching metadata for ${uri}. Protocol: ${protocol}`)
 
             switch (protocol) {
-                case URIProtocol.IPFS:
+                case URIProtocol.IPFS: {
+                    tokenMetadata = await getNFTMetadataIpfs(uri)
+                    break
+                }
                 case URIProtocol.ARWEAVE: {
-                    const cachedData = metadataCache?.getItem(uri)
-                    if (cachedData) {
-                        debug(ERROR_EVENTS.NFT, `Using cached metadata for ${uri}`)
-                        return cachedData
-                    }
-
-                    debug(ERROR_EVENTS.NFT, `Fetching metadata for ${uri}`)
-                    const retrievedData =
-                        URIProtocol.IPFS === protocol ? await getNFTMetadataIpfs(uri) : await getNFTMetadataArweave(uri)
-
-                    metadataCache?.setItem(uri, retrievedData)
-                    tokenMetadata = retrievedData
+                    tokenMetadata = await getNFTMetadataArweave(uri)
                     break
                 }
 
                 case URIProtocol.HTTPS:
                 case URIProtocol.HTTP: {
-                    debug(ERROR_EVENTS.NFT, `Fetching metadata for ${uri}`)
                     tokenMetadata =
                         (
                             await axios.get<NFTMetadata>(uri, {
@@ -49,6 +38,7 @@ export const useNFTMetadata = () => {
                     warn(ERROR_EVENTS.NFT, `Unable to detect protocol ${protocol} for metadata URI ${uri}`)
                     return undefined
             }
+
             // transform all metadata keys to lowercase avoiding case sensitive issues
             return (
                 tokenMetadata &&

@@ -8,6 +8,7 @@ import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
+import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 
 export const BalanceView = ({
     tokenWithInfo,
@@ -92,6 +93,7 @@ export const BalanceView = ({
         change24h,
     ])
 
+    const isCrossChainToken = useMemo(() => !!tokenWithInfo.crossChainProvider, [tokenWithInfo.crossChainProvider])
     return (
         <BaseView style={containerStyle ?? styles.layout}>
             <BaseView style={styles.balanceContainer}>
@@ -99,7 +101,8 @@ export const BalanceView = ({
                     icon={tokenWithInfo.icon}
                     isVechainToken={isVetToken}
                     iconSize={26}
-                    isCrossChainToken={!!tokenWithInfo.crossChainProvider}
+                    isCrossChainToken={isCrossChainToken}
+                    rounded={!isCrossChainToken}
                 />
                 <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                     {symbol}
@@ -115,7 +118,13 @@ export const BalanceView = ({
                 ) : (
                     <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                         {isBalanceVisible
-                            ? BigNutils(balance?.balance).toHuman(decimals).toTokenFormatFull_string(7, formatLocale)
+                            ? (() => {
+                                  const humanBalance = BigNutils(balance?.balance).toHuman(decimals).toString
+                                  return formatFullPrecision(humanBalance, {
+                                      locale: formatLocale,
+                                      tokenSymbol: symbol,
+                                  })
+                              })()
                             : "•••••"}
                     </BaseText>
                 )}

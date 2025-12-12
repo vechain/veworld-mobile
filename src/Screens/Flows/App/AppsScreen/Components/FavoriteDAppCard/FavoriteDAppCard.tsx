@@ -1,0 +1,133 @@
+import React, { memo } from "react"
+import { StyleSheet } from "react-native"
+
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, DAppIcon } from "~Components"
+import { DiscoveryDApp } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { useAppLogo } from "~Hooks/useAppLogo"
+import FontUtils from "~Utils/FontUtils"
+
+type Props = {
+    dapp: DiscoveryDApp
+    isEditMode: boolean
+    isActive: boolean
+    onPress: (dapp: DiscoveryDApp) => void
+    onLongPress: (dapp: DiscoveryDApp) => void
+    onRightActionPress: (dapp: DiscoveryDApp, isEditMode: boolean) => void
+    onRightActionLongPress?: (dapp: DiscoveryDApp) => void
+    px?: number
+}
+
+const IMAGE_SIZE = 64
+
+export const FavoriteDAppCard: React.FC<Props> = memo(
+    ({
+        dapp,
+        isEditMode,
+        isActive,
+        onPress,
+        onLongPress,
+        onRightActionPress,
+        onRightActionLongPress,
+        px = 0, // No outer padding needed since bottom sheet provides 20px + card provides 4px base
+    }: Props) => {
+        const { styles, theme } = useThemedStyles(baseStyles)
+
+        const iconUri = useAppLogo({ app: dapp })
+
+        return (
+            <BaseView flexDirection="row" flex={1} px={px} mb={8} ml={-8}>
+                <BaseView
+                    flexDirection="row"
+                    flex={1}
+                    style={isActive ? styles.activeContainer : undefined}
+                    pl={8}
+                    bg={isActive ? theme.colors.actionBottomSheet.isActiveBackground : undefined}>
+                    <BaseTouchable
+                        disabled={isActive}
+                        style={[styles.card]}
+                        onPress={() => onPress(dapp)}
+                        onLongPress={() => onLongPress?.(dapp)}>
+                        <BaseView flexDirection="row" alignItems="flex-start" flex={1} pr={10}>
+                            <DAppIcon size={IMAGE_SIZE} uri={iconUri} />
+                            <BaseSpacer width={24} />
+                            <BaseView flex={1}>
+                                <BaseText
+                                    ellipsizeMode="tail"
+                                    numberOfLines={1}
+                                    typographyFont="bodySemiBold"
+                                    color={theme.colors.assetDetailsCard.title}>
+                                    {dapp.name}
+                                </BaseText>
+                                <BaseSpacer height={4} />
+                                <BaseText
+                                    numberOfLines={2}
+                                    ellipsizeMode="tail"
+                                    typographyFont="captionMedium"
+                                    color={theme.colors.assetDetailsCard.text}>
+                                    {dapp.desc ? dapp.desc : dapp.href}
+                                </BaseText>
+                            </BaseView>
+                        </BaseView>
+                    </BaseTouchable>
+                    <BaseTouchable
+                        disabled={isActive}
+                        onPress={() => onRightActionPress(dapp, isEditMode)}
+                        onLongPress={() => onRightActionLongPress?.(dapp)}
+                        style={styles.touchableContainer}
+                        activeOpacity={0.7}>
+                        {isEditMode ? (
+                            <BaseIcon
+                                name="icon-grip-horizontal"
+                                color={theme.colors.actionBottomSheet.icon}
+                                size={20}
+                            />
+                        ) : (
+                            <BaseIcon
+                                name="icon-star-on"
+                                color={theme.colors.actionBottomSheet.favoriteIcon}
+                                size={20}
+                            />
+                        )}
+                    </BaseTouchable>
+                </BaseView>
+            </BaseView>
+        )
+    },
+)
+
+const baseStyles = () =>
+    StyleSheet.create({
+        container: {
+            flex: 1,
+        },
+        card: {
+            flex: 1,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingVertical: 8,
+        },
+        activeContainer: {
+            borderRadius: 12,
+        },
+        touchableContainer: {
+            width: 40,
+            height: 40,
+            alignItems: "center",
+            justifyContent: "center",
+        },
+        icon: {
+            borderRadius: 8,
+            overflow: "hidden",
+            width: 64,
+            height: 64,
+        },
+        nameText: {
+            fontWeight: "bold",
+            fontSize: FontUtils.font(14),
+        },
+        description: {
+            fontSize: FontUtils.font(12),
+        },
+    })

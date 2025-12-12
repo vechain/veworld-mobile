@@ -70,6 +70,12 @@ const replaceItemWithParams = (item: BusinessEvent, network: NETWORK_TYPE, param
     } satisfies BusinessEvent
 }
 
+const buildEventResultHash = (event: EventResult) => {
+    return JSON.stringify({ name: event.name, params: event.params, address: event.address }, (_, value) =>
+        typeof value === "bigint" ? value.toString() : value,
+    )
+}
+
 export class BusinessEventAbiManager extends AbiManager {
     constructor(protected readonly network: NETWORK_TYPE, protected readonly params?: Record<string, string>) {
         super()
@@ -84,11 +90,11 @@ export class BusinessEventAbiManager extends AbiManager {
                 fullSignature: signature,
                 decode(_, __, prevEvents, origin) {
                     try {
-                        return convertEventResultAliasRecordIntoParams(
-                            decodeEventFn(prevEvents, parsedItem, origin),
-                            item,
-                            origin,
-                        )
+                        const decoded = decodeEventFn(prevEvents, parsedItem, origin)
+                        return {
+                            decoded: convertEventResultAliasRecordIntoParams(decoded, item, origin),
+                            includedEvents: Object.values(decoded),
+                        }
                     } catch {
                         return undefined
                     }
@@ -101,12 +107,18 @@ export class BusinessEventAbiManager extends AbiManager {
     }
     protected _parseEvents(_output: InspectableOutput, prevEvents: EventResult[], origin: string): EventResult[] {
         this.assertEventsLoaded()
-        const found = this.indexableAbis.reduce((acc, curr) => {
-            if (acc) return acc
-            const decoded = curr.decode(undefined, undefined, prevEvents, origin)
-            if (decoded !== undefined) return { fullSignature: curr.fullSignature, decoded }
-        }, undefined as { decoded: { [key: string]: unknown }; fullSignature: string } | undefined)
-        if (!found) return prevEvents
-        return [{ name: found.fullSignature, params: found.decoded }]
+        let prevEventsCopy = [...prevEvents]
+        const results: EventResult[] = []
+        for (const element of this.indexableAbis) {
+            const decoded = element.decode(undefined, undefined, prevEventsCopy, origin)
+            if (!decoded) continue
+
+            prevEventsCopy = prevEventsCopy.filter(u => {
+                const evtSha = buildEventResultHash(u)
+                return !decoded.includedEvents.some(evt => buildEventResultHash(evt) === evtSha)
+            })
+            results.push({ name: element.fullSignature, params: decoded.decoded })
+        }
+        return results.length > 0 ? results : prevEvents
     }
 }

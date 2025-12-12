@@ -3,7 +3,7 @@ import { FiatBalance } from "~Components"
 import { COLORS } from "~Constants"
 import { useFormatFiat, useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
-import { BalanceUtils } from "~Utils"
+import { formatTokenAmount } from "~Utils/StandardizedFormatting"
 import { BaseTokenCard } from "./BaseTokenCard"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
@@ -17,23 +17,21 @@ export const BridgeTokenCard = ({ tokenWithBalance, isBalanceVisible, isEdit }: 
     const theme = useTheme()
     const { formatLocale } = useFormatFiat()
 
-    const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
+    const tokenValueLabelColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
 
     const tokenWithCompleteInfo = useTokenWithCompleteInfo(tokenWithBalance)
 
     const { fiatBalance, change24h, isPositive24hChange, exchangeRate, isTokensOwnedLoading } =
         useTokenCardFiatInfo(tokenWithCompleteInfo)
 
-    const tokenBalance = useMemo(
-        () =>
-            BalanceUtils.getTokenUnitBalance(
-                tokenWithBalance.balance.balance,
-                tokenWithBalance.decimals ?? 0,
-                2,
-                formatLocale,
-            ),
-        [formatLocale, tokenWithBalance.balance.balance, tokenWithBalance.decimals],
-    )
+    const tokenBalance = useMemo(() => {
+        return formatTokenAmount(
+            tokenWithBalance.balance.balance,
+            tokenWithBalance.symbol,
+            tokenWithBalance.decimals ?? 0,
+            { locale: formatLocale, includeSymbol: false },
+        )
+    }, [formatLocale, tokenWithBalance.balance.balance, tokenWithBalance.decimals, tokenWithBalance.symbol])
 
     const showFiatBalance = useMemo(() => {
         return !!exchangeRate
@@ -56,7 +54,7 @@ export const BridgeTokenCard = ({ tokenWithBalance, isBalanceVisible, isEdit }: 
                         isPositive24hChange={isPositive24hChange}
                         renderFiatBalance={
                             <FiatBalance
-                                typographyFont="subSubTitleSemiBold"
+                                typographyFont="bodySemiBold"
                                 color={tokenValueLabelColor}
                                 balances={[fiatBalance]}
                                 isVisible={isBalanceVisible}

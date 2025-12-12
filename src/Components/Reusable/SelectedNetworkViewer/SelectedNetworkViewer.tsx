@@ -2,12 +2,12 @@ import React, { useCallback } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
-import { useThemedStyles, useBlockchainNetwork } from "~Hooks"
+import { useBlockchainNetwork, useThemedStyles } from "~Hooks"
 
-import { capitalize, truncateTextIfSizeIsGreaterThan } from "~Utils/StringUtils/StringUtils"
 import { useNavigation } from "@react-navigation/native"
-import HapticsService from "~Services/HapticsService"
 import { Routes } from "~Navigation"
+import HapticsService from "~Services/HapticsService"
+import { capitalize, truncateTextIfSizeIsGreaterThan } from "~Utils/StringUtils/StringUtils"
 
 type Props = {
     showEvenIfMainnet?: boolean
@@ -27,7 +27,7 @@ export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
         <TouchableOpacity style={styles.networkViewer} onPress={onNetworkLabelPress}>
             <BaseView style={styles.networkViewerIconText}>
                 <BaseIcon name="icon-globe" color={theme.colors.testnetText} size={16} testID="web" />
-                <BaseText pl={5} typographyFont="smallCaptionSemiBold" color={theme.colors.testnetText}>
+                <BaseText pl={5} typographyFont="captionSemiBold" color={theme.colors.testnetText}>
                     {network.name.length > 0 && formatNetworkName(network.name).toLowerCase()}
                 </BaseText>
             </BaseView>

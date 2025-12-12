@@ -17,7 +17,7 @@ import {
     Layout,
     SelectLanguageBottomSheet,
 } from "~Components"
-import { AnalyticsEvent, COLORS, DerivationPath, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
+import { AnalyticsEvent, COLORS, DerivationPath, isSmallScreen, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 import {
     useAnalyticTracking,
     useBottomSheetModal,
@@ -149,130 +149,152 @@ export const WelcomeScreen = () => {
     )
 
     return (
-        <Layout
-            noBackButton
-            fixedBody={
-                <BaseView alignItems="center" flex={1} px={24}>
-                    <BaseView flexDirection="row" mt={20}>
-                        <BaseText typographyFont="largeTitle" testID="welcome-title-id" style={styles.title}>
-                            {`${LL.TITLE_WELCOME_TO()}${LL.VEWORLD()}`}
-                        </BaseText>
-                    </BaseView>
-
-                    <BaseView alignItems="center" w={100}>
-                        <BaseText align="center" typographyFont="buttonSecondary" py={20}>
-                            {LL.BD_WELCOME_SCREEN()}
-                        </BaseText>
-                    </BaseView>
-
-                    <VeWorldLogoSVG height={240} width={240} />
-                </BaseView>
-            }
-            footer={
-                <BaseView alignItems="center" w={100}>
-                    {!!isError && (
-                        <BaseText my={10} color={theme.colors.danger}>
-                            {isError}
-                        </BaseText>
-                    )}
-
-                    <BaseButton
-                        action={() => onNewWallet()}
-                        w={100}
-                        title={LL.BTN_CREATE_WALLET()}
-                        testID="CREATE_WALLET_BTN"
-                        haptics="Medium"
-                        isLoading={isLoading}
-                    />
-
-                    <BaseSpacer height={12} />
-
-                    <BaseButton
-                        action={onImportWallet}
-                        w={100}
-                        variant="ghost"
-                        title={LL.BTN_IMPORT_WALLET()}
-                        testID="IMPORT_WALLET_BTN"
-                        haptics="Medium"
-                        isLoading={isLoading}
-                    />
-
-                    <BaseSpacer height={42} />
-
-                    <BaseView flexDirection="row" justifyContent="space-between">
-                        <BaseView alignSelf="center" flexDirection="row" flex={1} alignItems="center" flexWrap="wrap">
-                            <BaseText typographyFont="body" align="center">
-                                {LL.BD_CREATE_WALLET_TYPE_USER_ACCEPTS()}
-                            </BaseText>
-                            <BaseText
-                                typographyFont="bodyMedium"
-                                underline
-                                align="center"
-                                onPress={goToTermsAndConditions}>
-                                {LL.COMMON_LBL_TERMS_AND_CONDITIONS()}
-                            </BaseText>
-                            <BaseText typographyFont="body" align="center">
-                                {` ${LL.COMMON_LBL_AND()} `}
-                            </BaseText>
-                            <BaseText typographyFont="bodyMedium" underline align="center" onPress={goToPrivacyPolicy}>
-                                {LL.COMMON_LBL_PRIVACY_POLICY()}
+        <>
+            <Layout
+                noBackButton
+                noStaticBottomPadding
+                fixedBody={
+                    <BaseView alignItems="center" flex={1} px={24}>
+                        <BaseView flexDirection="row" mt={20}>
+                            <BaseText typographyFont="largeTitle" testID="welcome-title-id" style={styles.title}>
+                                {`${LL.TITLE_WELCOME_TO()}${LL.VEWORLD()}`}
                             </BaseText>
                         </BaseView>
 
-                        <BaseButton
-                            variant="outline"
-                            size="sm"
-                            action={openSelectLanguageSheet}
-                            title={selectedLanguageName}
-                            typographyFont="bodyMedium"
-                            rightIcon={<BaseIcon name={"icon-chevron-down"} color={theme.colors.button} size={24} />}
+                        <BaseView alignItems="center" w={100}>
+                            <BaseText align="center" typographyFont="buttonSecondary" py={20}>
+                                {LL.BD_WELCOME_SCREEN()}
+                            </BaseText>
+                        </BaseView>
+
+                        <VeWorldLogoSVG
+                            height={isSmallScreen ? 120 : 240}
+                            width={isSmallScreen ? 120 : 240}
+                            color={theme.colors.veworldLogo}
                         />
                     </BaseView>
+                }
+                footer={
+                    <BaseView alignItems="center" w={100}>
+                        {!!isError && (
+                            <BaseText my={10} color={theme.colors.danger}>
+                                {isError}
+                            </BaseText>
+                        )}
 
-                    <BaseSpacer height={12} />
+                        <BaseButton
+                            action={() => onNewWallet()}
+                            w={100}
+                            title={LL.BTN_CREATE_WALLET()}
+                            testID="CREATE_WALLET_BTN"
+                            haptics="Medium"
+                            isLoading={isLoading}
+                        />
 
-                    <BaseView>{DEV_DEMO_BUTTON}</BaseView>
+                        <BaseSpacer height={12} />
 
-                    <Modal animationType="fade" transparent={true} visible={isQuickCloudModalOpen}>
-                        <BaseTouchable
-                            action={onQuickCloudModalClose}
-                            style={{
-                                height: SCREEN_HEIGHT,
-                                width: SCREEN_WIDTH,
-                            }}>
-                            <LinearGradient colors={theme.colors.gradientBackground} style={styles.gradient}>
-                                <Animated.View entering={FadeInDown} exiting={FadeOutDown}>
-                                    <CloudKitModalReminder
-                                        walletNumber={walletNumber}
-                                        onQuickCloudModalClose={onQuickCloudModalClose}
-                                        onGoToImportFromCLoud={onGoToImportFromCLoud}
-                                    />
-                                </Animated.View>
-                            </LinearGradient>
-                        </BaseTouchable>
-                    </Modal>
+                        <BaseButton
+                            action={onImportWallet}
+                            w={100}
+                            variant="ghost"
+                            title={LL.BTN_IMPORT_WALLET()}
+                            testID="IMPORT_WALLET_BTN"
+                            haptics="Medium"
+                            isLoading={isLoading}
+                        />
 
-                    <ImportWalletBottomSheet ref={ref} onClose={onClose} />
+                        <BaseSpacer height={24} />
 
-                    <CreatePasswordModal
-                        isOpen={isOpen}
-                        onClose={onCloseCreateFlow}
-                        onSuccess={pin =>
-                            onSuccess({
-                                pin,
-                                derivationPath: DerivationPath.VET,
-                            })
-                        }
-                    />
+                        <BaseView flexDirection="row" justifyContent="space-between">
+                            <BaseView
+                                alignSelf="center"
+                                flexDirection="row"
+                                flex={1}
+                                alignItems="center"
+                                flexWrap="wrap">
+                                <BaseText typographyFont="body" align="center">
+                                    {LL.BD_CREATE_WALLET_TYPE_USER_ACCEPTS()}
+                                </BaseText>
+                                <BaseText
+                                    typographyFont="bodyMedium"
+                                    underline
+                                    align="center"
+                                    onPress={goToTermsAndConditions}>
+                                    {LL.COMMON_LBL_TERMS_AND_CONDITIONS()}
+                                </BaseText>
+                                <BaseText typographyFont="body" align="center">
+                                    {` ${LL.COMMON_LBL_AND()} `}
+                                </BaseText>
+                                <BaseText
+                                    typographyFont="bodyMedium"
+                                    underline
+                                    align="center"
+                                    onPress={goToPrivacyPolicy}>
+                                    {LL.COMMON_LBL_PRIVACY_POLICY()}
+                                </BaseText>
+                            </BaseView>
 
-                    <SelectLanguageBottomSheet
-                        ref={selectLanguageSheetRef}
-                        selectedLanguage={selectedLanguageCode}
-                        handleSelectLanguage={handleSelectLanguage}
-                    />
-                </BaseView>
-            }
-        />
+                            <BaseButton
+                                variant="outline"
+                                size="sm"
+                                action={openSelectLanguageSheet}
+                                title={selectedLanguageName}
+                                typographyFont="bodyMedium"
+                                rightIcon={
+                                    <BaseIcon name={"icon-chevron-down"} color={theme.colors.button} size={24} />
+                                }
+                            />
+                        </BaseView>
+
+                        {DEV_DEMO_BUTTON && (
+                            <>
+                                <BaseSpacer height={12} />
+
+                                <BaseView>{DEV_DEMO_BUTTON}</BaseView>
+                            </>
+                        )}
+                    </BaseView>
+                }
+            />
+
+            <Modal animationType="fade" transparent={true} visible={isQuickCloudModalOpen}>
+                <BaseTouchable
+                    action={onQuickCloudModalClose}
+                    style={{
+                        height: SCREEN_HEIGHT,
+                        width: SCREEN_WIDTH,
+                    }}>
+                    <LinearGradient colors={theme.colors.gradientBackground} style={styles.gradient}>
+                        <Animated.View entering={FadeInDown} exiting={FadeOutDown}>
+                            <CloudKitModalReminder
+                                walletNumber={walletNumber}
+                                onQuickCloudModalClose={onQuickCloudModalClose}
+                                onGoToImportFromCLoud={onGoToImportFromCLoud}
+                            />
+                        </Animated.View>
+                    </LinearGradient>
+                </BaseTouchable>
+            </Modal>
+
+            <ImportWalletBottomSheet ref={ref} onClose={onClose} />
+
+            <CreatePasswordModal
+                isOpen={isOpen}
+                onClose={onCloseCreateFlow}
+                onSuccess={pin =>
+                    onSuccess({
+                        pin,
+                        derivationPath: DerivationPath.VET,
+                    })
+                }
+            />
+
+            <SelectLanguageBottomSheet
+                ref={selectLanguageSheetRef}
+                selectedLanguage={selectedLanguageCode}
+                handleSelectLanguage={handleSelectLanguage}
+            />
+        </>
     )
 }
 

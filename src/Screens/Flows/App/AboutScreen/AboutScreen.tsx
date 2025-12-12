@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
 import DeviceInfo from "react-native-device-info"
@@ -7,9 +7,17 @@ import { Linking } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import HapticsService from "~Services/HapticsService"
 import { useTheme } from "~Hooks"
+import { Gesture, GestureDetector } from "react-native-gesture-handler"
+import { runOnJS } from "react-native-reanimated"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { setDeveloperMenuUnlocked } from "~Storage/Redux/Slices/UserPreferences"
+import { selectDeveloperMenuUnlocked } from "~Storage/Redux/Selectors/UserPreferences"
+import { showSuccessToast } from "~Components/Base/BaseToast"
 
 export const AboutScreen = () => {
     const { LL } = useI18nContext()
+    const dispatch = useAppDispatch()
+    const developerMenuUnlocked = useAppSelector(selectDeveloperMenuUnlocked)
 
     const theme = useTheme()
 
@@ -38,8 +46,8 @@ export const AboutScreen = () => {
                     }}>
                     <BaseView flex={1} flexDirection="row" justifyContent="space-between" alignItems="center">
                         <BaseView>
-                            <BaseText typographyFont="subTitleBold">{link.title}</BaseText>
-                            <BaseSpacer height={8} />
+                            <BaseText typographyFont="subSubTitleSemiBold">{link.title}</BaseText>
+                            <BaseSpacer height={4} />
                             <BaseText typographyFont="captionRegular">{link.subtitle}</BaseText>
                         </BaseView>
                         <BaseView>
@@ -52,18 +60,41 @@ export const AboutScreen = () => {
         [theme.colors.text],
     )
 
+    const handleDevSettingsTap = useCallback(() => {
+        HapticsService.triggerImpact({ level: "Medium" })
+        const menuUnlocked = !developerMenuUnlocked
+        dispatch(setDeveloperMenuUnlocked(menuUnlocked))
+
+        if (menuUnlocked) {
+            showSuccessToast({
+                text1: LL.DEVELOPER_MENU_UNLOCKED_MSG(),
+            })
+        } else {
+            showSuccessToast({
+                text1: LL.DEVELOPER_MENU_LOCKED_MSG(),
+            })
+        }
+    }, [dispatch, developerMenuUnlocked, LL])
+
+    const devMenuGesture = useMemo(
+        () => Gesture.Tap().maxDuration(500).numberOfTaps(5).onStart(runOnJS(handleDevSettingsTap)),
+        [handleDevSettingsTap],
+    )
+
     return (
         <Layout
             title={LL.TITLE_ABOUT()}
             body={
                 <BaseView h={100} alignItems="center">
                     <BaseSpacer height={24} />
-                    <BaseCard
-                        containerStyle={styles.logoCardContainer}
-                        // @ts-ignore
-                        style={styles.logoCard}>
-                        <VeWorldLogoSVG width={90} height={62} />
-                    </BaseCard>
+                    <GestureDetector gesture={Gesture.Exclusive(devMenuGesture)}>
+                        <BaseCard
+                            containerStyle={styles.logoCardContainer}
+                            // @ts-ignore
+                            style={styles.logoCard}>
+                            <VeWorldLogoSVG width={90} height={62} color={theme.colors.veworldLogo} />
+                        </BaseCard>
+                    </GestureDetector>
                     <BaseSpacer height={16} />
                     <BaseText typographyFont="subTitleBold">{LL.VEWORLD()}</BaseText>
                     <BaseSpacer height={8} />

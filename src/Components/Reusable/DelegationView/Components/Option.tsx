@@ -12,7 +12,7 @@ type Props = PropsWithChildren<{
 export const OptionText = ({ children }: PropsWithChildren) => {
     const theme = useTheme()
     return (
-        <BaseText typographyFont="body" color={theme.colors.textLight}>
+        <BaseText typographyFont="caption" color={theme.colors.textLight}>
             {children}
         </BaseText>
     )

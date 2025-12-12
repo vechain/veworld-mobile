@@ -43,6 +43,7 @@ describe("useCheckAppVersion", () => {
             data: {
                 major: "1.1.0",
                 latest: "1.1.0",
+                history: [],
             },
         } as any)
     })
@@ -87,7 +88,6 @@ describe("useCheckAppVersion", () => {
                     }),
             })
 
-            // For needs-update scenario
             jest.mocked(SemanticVersionUtils.moreThan).mockReturnValue(true)
             renderHook(() => useCheckAppVersion(), {
                 wrapper: ({ children }) =>
@@ -104,6 +104,7 @@ describe("useCheckAppVersion", () => {
                 data: {
                     major: mockmajorVersionValue,
                     latest: "2.0.0",
+                    history: [],
                 },
             } as any)
             jest.mocked(SemanticVersionUtils.moreThan).mockReturnValue(true)
@@ -293,7 +294,7 @@ describe("useCheckAppVersion", () => {
                     },
                 },
             }
-
+            jest.mocked(DeviceInfo.getVersion).mockReturnValue("1.0.0")
             jest.mocked(SemanticVersionUtils.moreThan).mockImplementation((major, installed) => {
                 return major === "2.0.0" && installed === "1.0.0"
             })
@@ -424,9 +425,24 @@ describe("useCheckAppVersion", () => {
                 versionUpdate: {
                     ...initialVersionState,
                     shouldShowChangelog: true,
-                    changelogKey: "changelog-1.1.0",
+                    changelogKey: "releases/ios/versions/1.0.0",
                 },
             }
+
+            jest.mocked(DeviceInfo.getVersion).mockReturnValue("1.0.0")
+
+            jest.mocked(useQuery).mockImplementation((options: any) => {
+                if (options.queryKey[0] === "changelog") {
+                    return { data: ["Feature 1", "Feature 2"] } as any
+                }
+                return {
+                    data: {
+                        major: "1.1.0",
+                        latest: "1.1.0",
+                        history: [{ version: "1.0.0", key: "releases/ios/versions/1.0.0", major: true }],
+                    },
+                } as any
+            })
 
             const { result } = renderHook(() => useCheckAppVersion(), {
                 wrapper: ({ children }) =>
@@ -444,7 +460,7 @@ describe("useCheckAppVersion", () => {
                 versionUpdate: {
                     ...initialVersionState,
                     shouldShowChangelog: true,
-                    changelogKey: "changelog-1.1.0",
+                    changelogKey: "releases/ios/versions/1.1.0",
                 },
             }
 
@@ -456,7 +472,7 @@ describe("useCheckAppVersion", () => {
                     data: {
                         major: "1.1.0",
                         latest: "1.1.0",
-                        changelogKey: "changelog-1.1.0",
+                        history: [{ version: "1.1.0", key: "releases/ios/versions/1.1.0", major: true }],
                     },
                 } as any
             })
@@ -478,7 +494,7 @@ describe("useCheckAppVersion", () => {
                 versionUpdate: {
                     ...initialVersionState,
                     shouldShowChangelog: true,
-                    changelogKey: "changelog-1.1.0",
+                    changelogKey: "releases/ios/versions/1.1.0",
                 },
             }
 
@@ -490,7 +506,7 @@ describe("useCheckAppVersion", () => {
                     data: {
                         major: "1.1.0",
                         latest: "1.1.0",
-                        changelogKey: "changelog-1.1.0",
+                        history: [{ version: "1.1.0", key: "releases/ios/versions/1.1.0", major: true }],
                     },
                 } as any
             })
@@ -506,7 +522,7 @@ describe("useCheckAppVersion", () => {
             expect(result.current.changelog).toEqual(mockChangelogData)
         })
 
-        it("should trigger setChangelogToShow when app version changes", () => {
+        it("should trigger setChangelogToShow when app version changes and version exists in history", () => {
             jest.mocked(DeviceInfo.getVersion).mockReturnValue("1.1.0")
 
             const preloadedState = {
@@ -522,7 +538,7 @@ describe("useCheckAppVersion", () => {
                 data: {
                     major: "2.0.0",
                     latest: "2.0.0",
-                    changelogKey: "changelog-2.0.0",
+                    history: [{ version: "1.1.0", key: "releases/ios/versions/1.1.0", major: true }],
                 },
             } as any)
 
@@ -533,6 +549,49 @@ describe("useCheckAppVersion", () => {
                         preloadedState,
                     }),
             })
+        })
+
+        it("should NOT show changelog when app version changes but changelog fetch fails", () => {
+            jest.mocked(DeviceInfo.getVersion).mockReturnValue("2.4.0") // Version that doesn't exist
+
+            const preloadedState = {
+                versionUpdate: {
+                    ...initialVersionState,
+                    installedVersion: "1.0.0",
+                    changelogKey: null,
+                    shouldShowChangelog: false,
+                },
+            }
+
+            jest.mocked(useQuery).mockImplementation((options: any) => {
+                if (options.queryKey[0] === "changelog") {
+                    return {
+                        data: undefined,
+                        error: new Error("Changelog fetch failed (status 404)"),
+                        isLoading: false,
+                        isFetching: false,
+                    } as any
+                }
+
+                return {
+                    data: {
+                        major: "2.2.6",
+                        latest: "2.3.0",
+                    },
+                    isLoading: false,
+                    error: null,
+                } as any
+            })
+
+            const { result } = renderHook(() => useCheckAppVersion(), {
+                wrapper: ({ children }) =>
+                    TestWrapper({
+                        children,
+                        preloadedState,
+                    }),
+            })
+
+            expect(result.current.shouldShowChangelog).toBe(false)
         })
     })
 })

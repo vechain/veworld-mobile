@@ -1,13 +1,9 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { AccountUtils, AddressUtils, BigNutils } from "~Utils"
+import sortBy from "lodash/sortBy"
+import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
+import { AccountUtils, AddressUtils } from "~Utils"
 import { RootState } from "../Types"
 import { selectDevicesState } from "./Device"
-import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
-import sortBy from "lodash/sortBy"
-import { ethers } from "ethers"
-import { HexUInt } from "@vechain/sdk-core"
-import { VTHO } from "~Constants"
-import { selectSelectedNetwork } from "./Network"
 
 export const selectAccountsState = (state: RootState) => state.accounts
 
@@ -17,8 +13,10 @@ export const selectAccountsState = (state: RootState) => state.accounts
 export const selectAccounts = createSelector(selectAccountsState, selectDevicesState, (state, devices) => {
     return sortBy(
         state.accounts.map(account => {
-            const device = devices.find(_device => _device.rootAddress === account.rootAddress)
-
+            const device = devices.find(_device =>
+                AddressUtils.compareAddresses(_device.rootAddress, account.rootAddress),
+            )
+            // console.log("device", device, account)
             if (AccountUtils.isObservedAccount(account)) {
                 return account
             } else {
@@ -81,6 +79,10 @@ export const selectOtherAccounts = createSelector(
     },
 )
 
+export const selectAccountsWithoutObserved = createSelector(selectAccounts, allAccounts =>
+    allAccounts.filter(_account => !AccountUtils.isObservedAccount(_account)),
+)
+
 /**
  * @returns all the visibile accounts
  */
@@ -94,6 +96,16 @@ export const selectVisibleAccounts = createSelector(selectAccounts, accounts => 
 export const selectVisibleAccountsWithoutObserved = createSelector(selectAccounts, accounts => {
     return accounts.filter(account => account.visible && !AccountUtils.isObservedAccount(account))
 })
+
+/**
+ * @returns all the visibile accounts that are not ledger
+ */
+export const selectVisibleAccountsWithoutObservedAndLedger = createSelector(
+    selectVisibleAccountsWithoutObserved,
+    accounts => {
+        return accounts.filter(account => account.visible && account.device.type !== DEVICE_TYPE.LEDGER)
+    },
+)
 
 /**
  * @returns all the visibile accounts but the selected one
@@ -116,33 +128,6 @@ export const selectDelegationAccounts = createSelector(
                     account.device.type === DEVICE_TYPE.LOCAL_PRIVATE_KEY) &&
                 !AddressUtils.compareAddresses(selectedAccountAddress, account.address),
         ) as LocalAccountWithDevice[]
-    },
-)
-
-export const selectDelegationAccountsWithVtho = createSelector(
-    [selectDelegationAccounts, selectSelectedNetwork, (state: RootState) => state.balances],
-    (accounts, network, balances) => {
-        return Object.entries(balances[network.type])
-            .filter(([address]) => accounts.find(acc => AddressUtils.compareAddresses(acc.address, address)))
-            .map(
-                ([address, _balances]) =>
-                    [
-                        address,
-                        _balances.find(v => AddressUtils.compareAddresses(v.tokenAddress, VTHO.address)),
-                    ] as const,
-            )
-            .filter(
-                ([_, vthoBalance]) =>
-                    vthoBalance && ethers.utils.parseUnits(HexUInt.of(vthoBalance?.balance).bi.toString(), 18).gt(0),
-            )
-            .sort(([_, vtho1], [__, vtho2]) =>
-                BigNutils(HexUInt.of(vtho2?.balance ?? "0x0").bi.toString()).isBiggerThan(
-                    HexUInt.of(vtho1?.balance ?? "0x0").bi.toString(),
-                )
-                    ? 1
-                    : -1,
-            )
-            .map(([address]) => accounts.find(acc => AddressUtils.compareAddresses(acc.address, address))!)
     },
 )
 

@@ -1,19 +1,14 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { ethers } from "ethers"
 import { default as React, useCallback, useMemo, useRef, useState } from "react"
-import { StyleSheet } from "react-native"
+import { Keyboard, StyleSheet } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useAmountInput, useConvertBetterTokens, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
-import {
-    selectB3trTokenWithBalance,
-    selectNetworkVBDTokens,
-    selectVot3TokenWithBalance,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ConvertBetterCard } from "./ConvertBetterCard"
@@ -35,32 +30,37 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const cardPosition = useSharedValue(0)
 
     const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
-    const b3trWithBalance = useAppSelector(selectB3trTokenWithBalance)
-    const vot3WithBalance = useAppSelector(selectVot3TokenWithBalance)
 
     const b3tr = useTokenWithCompleteInfo(B3TR)
     const vot3 = useTokenWithCompleteInfo(VOT3)
 
     const timer = useRef<NodeJS.Timeout | null>(null)
+    const shouldNavigateOnDismiss = useRef(false)
 
-    const B3TRanimatedStyle = useAnimatedStyle(() => ({
-        transform: [{ translateY: withTiming(cardPosition.value ? 105 : 0, { duration: 300 }) }],
-        borderColor: withTiming(
-            !cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
-            { duration: 300 },
-        ),
-    }))
+    const B3TRanimatedStyle = useAnimatedStyle(
+        () => ({
+            transform: [{ translateY: withTiming(cardPosition.value ? 105 : 0, { duration: 300 }) }],
+            borderColor: withTiming(
+                !cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
+                { duration: 300 },
+            ),
+        }),
+        [theme.colors.convertBetterCard.borderColor, theme.colors.transparent],
+    )
 
-    const VOT3animatedStyle = useAnimatedStyle(() => ({
-        transform: [{ translateY: withTiming(cardPosition.value ? -105 : 0, { duration: 300 }) }],
-        borderColor: withTiming(
-            cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
-            { duration: 300 },
-        ),
-    }))
+    const VOT3animatedStyle = useAnimatedStyle(
+        () => ({
+            transform: [{ translateY: withTiming(cardPosition.value ? -105 : 0, { duration: 300 }) }],
+            borderColor: withTiming(
+                cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
+                { duration: 300 },
+            ),
+        }),
+        [theme.colors.convertBetterCard.borderColor, theme.colors.transparent],
+    )
 
-    const b3trTokenTotal = BigNutils(b3trWithBalance?.balance?.balance).toString
-    const vot3TokenTotal = BigNutils(vot3WithBalance?.balance?.balance).toString
+    const b3trTokenTotal = BigNutils(b3tr?.balance?.balance).toString
+    const vot3TokenTotal = BigNutils(vot3?.balance?.balance).toString
 
     const { convertB3tr, convertVot3 } = useConvertBetterTokens()
 
@@ -130,17 +130,28 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     }, [cardPosition, isSwapped, setInput])
 
     const onDismiss = useCallback(() => {
+        Keyboard.dismiss()
+        // Check if we need to navigate after dismissal
+        if (shouldNavigateOnDismiss.current) {
+            shouldNavigateOnDismiss.current = false
+            if (isB3TRActive) {
+                convertB3tr(realValue, input)
+            } else {
+                convertVot3(realValue, input)
+            }
+            return
+        }
+
+        // Normal dismissal - reset states
         resetStates()
-    }, [resetStates])
+    }, [resetStates, isB3TRActive, convertB3tr, convertVot3, realValue, input])
 
     const onConvertPress = useCallback(() => {
+        // Set flag to trigger navigation on dismissal
+        shouldNavigateOnDismiss.current = true
+        // Dismiss the bottom sheet
         onClose()
-        if (isB3TRActive) {
-            convertB3tr(realValue, input)
-        } else {
-            convertVot3(realValue, input)
-        }
-    }, [convertB3tr, convertVot3, input, isB3TRActive, onClose, realValue])
+    }, [onClose])
 
     return (
         <BaseBottomSheet
@@ -163,7 +174,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                 <Animated.View style={[styles.betterCardContainer]}>
                     <ConvertBetterCard
                         token={b3tr}
-                        balance={b3trWithBalance?.balance}
+                        balance={b3tr?.balance}
                         isSender={!isSwapped}
                         sendAmount={input}
                         error={isError}
@@ -174,6 +185,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
 
                     <BaseView style={[styles.switchButtonContainer]}>
                         <TouchableOpacity
+                            testID="ConvertBetter_Swap_Button"
                             disabled={!isSwapEnabled}
                             style={styles.switchButtonTapArea}
                             activeOpacity={0.5}
@@ -190,7 +202,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
 
                     <ConvertBetterCard
                         token={vot3}
-                        balance={vot3WithBalance?.balance}
+                        balance={vot3?.balance}
                         isSender={isSwapped}
                         sendAmount={input}
                         error={isError}

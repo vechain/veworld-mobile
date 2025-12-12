@@ -1,20 +1,21 @@
 import { useMemo } from "react"
 import { useVechainStatsTokensInfo } from "~Api/Coingecko"
 import { B3TR, VeDelegate } from "~Constants/Constants"
-import {
-    selectCurrency,
-    selectNonVechainTokensBalancesByAccount,
-    selectNonVechainTokensWithBalances,
-    useAppSelector,
-} from "~Storage/Redux"
+import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BalanceUtils } from "~Utils"
 
-export const useNonVechainTokenFiat = (accountAddress?: string) => {
-    const visibleTokens = useAppSelector(state =>
-        accountAddress
-            ? selectNonVechainTokensBalancesByAccount(state, accountAddress)
-            : selectNonVechainTokensWithBalances(state),
-    )
+export const useNonVechainTokenFiat = ({
+    accountAddress,
+    enabled = true,
+}: {
+    accountAddress?: string
+    enabled?: boolean
+} = {}) => {
+    const { data: visibleTokens, isLoading } = useNonVechainTokensBalance({
+        accountAddress,
+        enabled,
+    })
     const currency = useAppSelector(selectCurrency).toLowerCase()
 
     const { data: nonVeChainTokens } = useVechainStatsTokensInfo()
@@ -39,5 +40,8 @@ export const useNonVechainTokenFiat = (accountAddress?: string) => {
         })
     }, [currency, nonVeChainTokens, visibleTokens])
 
-    return nonVechainTokensFiat
+    return {
+        data: nonVechainTokensFiat,
+        isLoading,
+    }
 }

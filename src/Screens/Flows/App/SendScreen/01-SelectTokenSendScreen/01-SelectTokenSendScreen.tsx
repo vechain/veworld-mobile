@@ -6,18 +6,19 @@ import { FlatList, StyleSheet, TouchableOpacity } from "react-native"
 import { BaseSpacer, BaseText, BaseView, Layout, SendVot3WarningBottomSheet } from "~Components"
 import { ColorThemeType, VeDelegate, VET, VTHO } from "~Constants"
 import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { selectNetworkVBDTokens, selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
+import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { TokenCard, VechainTokenCard, BridgeTokenCard } from "../../HomeScreen/Components"
+import { BridgeTokenCard, TokenCard, VechainTokenCard } from "../../HomeScreen/Components"
 
 type Props = NativeStackNavigationProp<RootStackParamListHome, Routes.SELECT_TOKEN_SEND>
 
 export const SelectTokenSendScreen = () => {
     const { LL } = useI18nContext()
-    const tokens = useAppSelector(selectSendableTokensWithBalance)
+    const tokens = useSendableTokensWithBalance()
     const { VOT3, B3TR } = useAppSelector(state => selectNetworkVBDTokens(state))
     const { ref: vot3WarningRef, onOpen: openVot3Warning, onClose: closeVot3Warning } = useBottomSheetModal()
 
@@ -111,7 +112,7 @@ export const SelectTokenSendScreen = () => {
             body={
                 <BaseView>
                     <BaseView>
-                        <BaseText typographyFont="subSubTitleLight">{LL.SEND_TOKEN_SELECT_ASSET()}</BaseText>
+                        <BaseText typographyFont="body">{LL.SEND_TOKEN_SELECT_ASSET()}</BaseText>
                         <BaseSpacer height={24} />
                     </BaseView>
                     {filteredTokens.length ? (

@@ -6,6 +6,7 @@ import { typography } from "~Constants/Theme"
 import { BaseIcon, BaseTouchable, BaseView } from "~Components"
 import { PlatformUtils } from "~Utils"
 import { IconKey } from "~Model"
+import FontUtils from "~Utils/FontUtils"
 
 const { defaults: defaultTypography } = typography
 
@@ -98,7 +99,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderColor: theme.colors.transparent,
             borderWidth: 1,
             borderRadius: 8,
-            fontSize: defaultTypography.body.fontSize,
+            fontSize: FontUtils.font(defaultTypography.body.fontSize),
             fontFamily: defaultTypography.body.fontFamily,
             paddingVertical: 12,
             paddingLeft: 16,

@@ -4,11 +4,11 @@ import { Pressable, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { useMultipleTokensBalance } from "~Hooks/useTokenBalance/useMultipleTokensBalance"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance, NETWORK_TYPE } from "~Model"
 import { AnimatedTokenCard } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/AnimatedTokenCard"
 import {
-    selectAllBalances,
     selectAllTokens,
     selectDefaultDelegationToken,
     selectSelectedNetwork,
@@ -29,8 +29,6 @@ type Props = {
     }
 }
 
-const noop = () => {}
-
 type EnhancedTokenCardProps = {
     item: FungibleTokenWithBalance
     onSelectedToken: (value: string) => void
@@ -45,14 +43,7 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled }: Enhanc
 
     return (
         <Pressable onPress={onPress} testID="GAS_FEE_TOKEN_BOTTOM_SHEET_TOKEN" disabled={disabled}>
-            <AnimatedTokenCard
-                item={item}
-                drag={noop}
-                isEdit={false}
-                isActive={false}
-                isBalanceVisible
-                rootStyle={styles.rootContent}
-            />
+            <AnimatedTokenCard item={item} isEdit={false} isBalanceVisible rootStyle={styles.rootContent} />
         </Pressable>
     )
 }
@@ -67,7 +58,15 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const tokens = useAppSelector(selectAllTokens)
-    const balances = useAppSelector(selectAllBalances)
+    const availableTokenAddresses = useMemo(
+        () =>
+            availableTokens
+                .map(tk => tokens.find(u => u.symbol === tk)!)
+                .filter(Boolean)
+                .map(tk => tk.address),
+        [availableTokens, tokens],
+    )
+    const { data: balances } = useMultipleTokensBalance(availableTokenAddresses)
     const defaultToken = useAppSelector(selectDefaultDelegationToken)
     const dispatch = useAppDispatch()
 
@@ -107,7 +106,7 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     const tokenList = useMemo(() => {
         return availableTokens.map(tk => {
             const foundToken = tokens.find(u => u.symbol === tk)!
-            const balance = balances.find(b => AddressUtils.compareAddresses(b.tokenAddress, foundToken.address)) ?? {
+            const balance = balances?.find(b => AddressUtils.compareAddresses(b.tokenAddress, foundToken.address)) ?? {
                 balance: "0",
                 isHidden: false,
                 timeUpdated: new Date().toISOString(),
@@ -137,7 +136,7 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                 </BaseText>
             </BaseView>
             <BaseSpacer height={8} />
-            <BaseText typographyFont="buttonSecondary" color={theme.colors.editSpeedBs.subtitle}>
+            <BaseText typographyFont="body" color={theme.colors.editSpeedBs.subtitle}>
                 {LL.DELEGATE_FEE_TOKEN_DESC()}
             </BaseText>
             <BaseSpacer height={24} />

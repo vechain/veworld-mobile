@@ -1,10 +1,11 @@
 import React from "react"
+import { StyleSheet } from "react-native"
 import { FiatBalance } from "~Components"
-import { WalletAccount } from "~Model"
 import { VET, VTHO } from "~Constants"
 import { useNonVechainTokenFiat, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
-import { StyleSheet } from "react-native"
-import { selectBalanceForTokenByAccount, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
+import { useTokenBalance } from "~Hooks/useTokenBalance"
+import { WalletAccount } from "~Model"
+import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { BalanceUtils } from "~Utils"
 
 type Props = {
@@ -20,7 +21,10 @@ export const AccountDetailFiatBalance: React.FC<Props> = ({ account, isVisible, 
     const vetWithInfo = useTokenWithCompleteInfo(VET, account.address)
     const vthoWithInfo = useTokenWithCompleteInfo(VTHO, account.address)
     const b3trWithInfo = useTokenWithCompleteInfo(B3TR, account.address)
-    const vot3RawBalance = useAppSelector(state => selectBalanceForTokenByAccount(state, VOT3.address, account.address))
+    const { data: vot3RawBalance } = useTokenBalance({
+        address: account.address,
+        tokenAddress: VOT3.address,
+    })
 
     const vot3FiatBalance = BalanceUtils.getFiatBalance(
         vot3RawBalance?.balance ?? "0",
@@ -28,7 +32,7 @@ export const AccountDetailFiatBalance: React.FC<Props> = ({ account, isVisible, 
         VOT3.decimals,
     )
 
-    const nonVechainTokens = useNonVechainTokenFiat(account.address)
+    const nonVechainTokens = useNonVechainTokenFiat({ accountAddress: account.address })
 
     return (
         <FiatBalance
@@ -37,7 +41,7 @@ export const AccountDetailFiatBalance: React.FC<Props> = ({ account, isVisible, 
                 vthoWithInfo.fiatBalance,
                 b3trWithInfo.fiatBalance,
                 vot3FiatBalance,
-                ...nonVechainTokens,
+                ...nonVechainTokens.data,
             ]}
             isVisible={isVisible}
             isLoading={isLoading}

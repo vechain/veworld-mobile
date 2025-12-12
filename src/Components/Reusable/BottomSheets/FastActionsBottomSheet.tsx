@@ -64,7 +64,11 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                         style={[styles.action]}>
                         <BaseView flexDirection="row" justifyContent={"center"} alignItems="center">
                             <BaseView
-                                bg={action.disabled ? iconColor.disabledIconBackground : iconColor.iconBackground}
+                                bg={
+                                    action.disabled
+                                        ? iconColor.disabledIconBackground
+                                        : iconColor.iconBackground.background
+                                }
                                 style={styles.actionIconBottomSheet}>
                                 {action.icon}
                             </BaseView>
@@ -73,7 +77,7 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                                     <BaseSpacer width={24} />
                                     <BaseText
                                         color={action.disabled ? iconColor.disabledText : iconColor.text}
-                                        typographyFont="subSubTitleSemiBold">
+                                        typographyFont="bodySemiBold">
                                         {action.name}
                                     </BaseText>
                                 </>

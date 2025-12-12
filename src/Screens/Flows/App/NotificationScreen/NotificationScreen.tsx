@@ -37,10 +37,6 @@ export const NotificationScreen = () => {
 
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
     const { data = [], error } = useVeBetterDaoDapps()
-    const { getTags, addTag, addDAppTag, removeTag, removeDAppTag } = useNotifications()
-
-    const [tags, setTags] = useState<{ [key: string]: string }>({})
-
     const {
         isNotificationPermissionEnabled,
         isUserOptedIn,
@@ -48,7 +44,14 @@ export const NotificationScreen = () => {
         optOut,
         requestNotficationPermission,
         featureEnabled,
+        getTags,
+        addTag,
+        removeTag,
+        addAllDAppsTags,
+        removeAllDAppsTags,
     } = useNotifications()
+
+    const [tags, setTags] = useState<{ [key: string]: string }>({})
 
     const areNotificationsEnabled = !!isUserOptedIn && !!isNotificationPermissionEnabled
     const hasReachedSubscriptionLimit = Object.keys(tags).length === SUBSCRIPTION_LIMIT
@@ -113,31 +116,26 @@ export const NotificationScreen = () => {
         const allCurrentlyEnabled = data.every(dapp => !!tags[dapp.id])
 
         if (allCurrentlyEnabled) {
-            data.forEach(dapp => {
-                removeDAppTag(dapp.id)
-            })
+            removeAllDAppsTags()
             dispatch(setDappNotifications(false))
         } else {
             if (hasReachedSubscriptionLimit) {
                 showSubscriptionLimitReachedWarning()
                 return
             }
-            data.forEach(dapp => {
-                addDAppTag(dapp.id)
-            })
+            addAllDAppsTags()
             dispatch(setDappNotifications(true))
         }
-
         updateTags()
     }, [
-        addDAppTag,
         data,
+        tags,
+        removeAllDAppsTags,
+        dispatch,
         hasReachedSubscriptionLimit,
-        removeDAppTag,
+        addAllDAppsTags,
         showSubscriptionLimitReachedWarning,
         updateTags,
-        tags,
-        dispatch,
     ])
 
     const ListHeaderComponent = useMemo(() => {
@@ -156,21 +154,23 @@ export const NotificationScreen = () => {
 
                 {areNotificationsEnabled && (
                     <>
-                        <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_UPDATES()}</BaseText>
+                        <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_UPDATES()}</BaseText>
                         <BaseSpacer height={16} />
                         <EnableFeature
                             title={LL.VECHAIN_NEWS_AND_UPDATES()}
+                            typographyFont="bodyMedium"
                             onValueChange={toogleSubscriptionSwitch(vechainNewsAndUpdates)}
                             value={!!tags[vechainNewsAndUpdates]}
                         />
                         <BaseSpacer height={40} />
 
-                        <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_VEBETTERDAO()}</BaseText>
+                        <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_VEBETTERDAO()}</BaseText>
                         <BaseSpacer height={16} />
                         {isMainnet && (
                             <>
                                 <EnableFeature
                                     title={LL.PUSH_NOTIFICATIONS_DAPPS_DESC()}
+                                    typographyFont="bodyMedium"
                                     onValueChange={toogleDAppSubscriptionSwitch}
                                     value={dappNotifications}
                                 />
@@ -179,6 +179,7 @@ export const NotificationScreen = () => {
                         )}
                         <EnableFeature
                             title={LL.PUSH_NOTIFICATIONS_VOTE_REMINDER()}
+                            typographyFont="bodyMedium"
                             onValueChange={toogleSubscriptionSwitch(voteReminderTagKey)}
                             value={!!tags[voteReminderTagKey]}
                         />

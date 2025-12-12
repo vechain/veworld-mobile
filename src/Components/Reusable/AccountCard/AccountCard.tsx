@@ -12,9 +12,10 @@ import {
 } from "~Components"
 import { ColorThemeType, VET, VTHO } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
+import { useSimplifiedTokenBalance } from "~Hooks/useTokenBalance"
 import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
-import { selectVetBalanceByAccount, selectVthoBalanceByAccount, useAppSelector } from "~Storage/Redux"
-import { AccountUtils, AddressUtils, BigNutils } from "~Utils"
+import { AccountUtils, AddressUtils } from "~Utils"
+import { formatTokenAmount } from "~Utils/StandardizedFormatting"
 
 type Props = {
     account: AccountWithDevice | WatchedAccount
@@ -42,8 +43,14 @@ export const AccountCard: React.FC<Props> = memo(
         testID,
     }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
-        const vetBalance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
-        const vthoBalance = useAppSelector(state => selectVthoBalanceByAccount(state, account.address))
+        const { data: vetBalance } = useSimplifiedTokenBalance({
+            tokenAddress: VET.address,
+            address: account.address,
+        })
+        const { data: vthoBalance } = useSimplifiedTokenBalance({
+            tokenAddress: VTHO.address,
+            address: account.address,
+        })
         const { name: vnsName, address: vnsAddress } = useVns({
             name: "",
             address: account.address,
@@ -60,11 +67,10 @@ export const AccountCard: React.FC<Props> = memo(
 
             const computedVetBalance = formattedBalance ? formattedBalance : vetBalance
 
-            return `${
-                isVthoBalance
-                    ? BigNutils(vthoBalance).toHuman(VET.decimals).toTokenFormat_string(2)
-                    : BigNutils(computedVetBalance).toHuman(VET.decimals).toTokenFormat_string(2)
-            } ${isVthoBalance ? VTHO.symbol : VET.symbol}`
+            const tokenBalance = isVthoBalance ? vthoBalance : computedVetBalance
+            const tokenSymbol = isVthoBalance ? VTHO.symbol : VET.symbol
+
+            return formatTokenAmount(tokenBalance, tokenSymbol, VET.decimals)
         }, [isBalanceVisible, isVthoBalance, vetBalance, vthoBalance, formattedBalance])
 
         const accountWithDevice = useMemo(() => {
@@ -90,7 +96,7 @@ export const AccountCard: React.FC<Props> = memo(
                     showOpacityWhenDisabled={showOpacityWhenDisabled}
                     containerStyle={[styles.container, selected ? styles.selectedContainer : {}]}>
                     <BaseView flexDirection="row" flex={1} pr={10}>
-                        <AccountIcon address={account.address} />
+                        <AccountIcon account={account} />
                         <BaseSpacer width={12} />
                         <BaseView flex={1}>
                             <BaseText ellipsizeMode="tail" numberOfLines={1}>

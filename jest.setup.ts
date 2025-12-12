@@ -4,13 +4,17 @@ import "whatwg-fetch"
 import mockSafeAreaContext from "react-native-safe-area-context/jest/mock"
 // @ts-ignore
 import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock"
-import { ReactNode } from "react"
+import { Component, PropsWithChildren, ReactNode } from "react"
 import { SecurityLevelType } from "~Model/Biometrics"
 import { WALLET_STATUS } from "~Model/Wallet"
 import { MMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
+import * as dotenv from "dotenv"
+import { FlatList, SectionList, View } from "react-native"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
+
+dotenv.config({ path: "./.env" })
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 jest.mock("react-native/src/private/animated/NativeAnimatedHelper.js")
@@ -62,6 +66,13 @@ jest.mock("react-native-quick-crypto", () => ({
             digest: (first: string) => first,
         }),
     })),
+}))
+
+jest.mock("react-native-keyboard-controller", () => require("react-native-keyboard-controller/jest"))
+jest.mock("react-native-vision-camera", () => ({
+    Camera: View,
+    useCameraDevice: jest.fn(),
+    useCodeScanner: jest.fn().mockImplementation(args => args),
 }))
 
 jest.mock("react-native-onesignal", () => ({
@@ -147,6 +158,19 @@ jest.mock("expo-local-authentication", () => ({
 jest.mock("expo-av", () => {})
 jest.mock("expo-background-fetch", () => {})
 
+jest.mock("expo-file-system", () => ({
+    documentDirectory: "file:///test/documents/",
+    getInfoAsync: jest.fn().mockResolvedValue({ exists: false }),
+    makeDirectoryAsync: jest.fn().mockResolvedValue(undefined),
+    deleteAsync: jest.fn().mockResolvedValue(undefined),
+    copyAsync: jest.fn().mockResolvedValue(undefined),
+}))
+
+jest.mock("react-native-view-shot", () => ({
+    captureRef: jest.fn().mockResolvedValue("file:///test/screenshot.jpg"),
+    releaseCapture: jest.fn(),
+}))
+
 jest.mock("expo-haptics", () => ({
     ImpactFeedbackStyle: {
         Light: "light",
@@ -173,7 +197,15 @@ jest.mock("react-native-webview", () => ({
 }))
 
 jest.mock("expo-clipboard", () => {})
-jest.mock("react-native-linear-gradient", () => "LinearGradient")
+jest.mock(
+    "react-native-linear-gradient",
+    () =>
+        class LinearGradient extends Component<PropsWithChildren> {
+            render() {
+                return this.props.children ?? "TEST"
+            }
+        },
+)
 jest.mock("react-native-draggable-flatlist", () => ({
     NestableScrollContainer: componentMock,
     NestableDraggableFlatList: componentMock,
@@ -215,12 +247,12 @@ jest.mock("@react-navigation/bottom-tabs", () => ({
 jest.mock("@gorhom/bottom-sheet", () => ({
     __esModule: true,
     ...require("@gorhom/bottom-sheet/mock"),
-    BottomSheetFlatList: ({ data, renderItem }: any) => {
-        return data.map((row: any) => renderItem({ item: row }))
-    },
-    BottomSheetSectionList: ({ sections, renderItem }: any) => {
-        return sections.flatMap((s: any) => s.data).map((row: any) => renderItem({ item: row }))
-    },
+    ...require("./src/Test/mocks/bottom-sheet-mock"),
+}))
+
+jest.mock("~Components/Reusable/BottomSheetLists", () => ({
+    BottomSheetSectionList: SectionList,
+    BottomSheetFlatList: FlatList,
 }))
 
 jest.mock("react-native-reanimated-skeleton", () => "Skeleton")
@@ -293,6 +325,9 @@ jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
             if (name === "RNCWebViewModule") {
                 return null
             }
+            if (name === "SettingsManager") {
+                return null
+            }
             return turboModuleRegistry.getEnforcing(name)
         },
     }
@@ -308,3 +343,71 @@ jest.mock("expo-task-manager", () => ({
 }))
 
 require("react-native-reanimated").setUpTests()
+
+jest.mock("~Hooks/useFetchFeaturedDApps/useVeBetterDaoDapps", () => ({
+    useVeBetterDaoDapps: jest.fn().mockReturnValue({ data: [] }),
+}))
+
+jest.mock("@tanstack/react-query", () => ({
+    ...jest.requireActual("@tanstack/react-query"),
+    useQuery: jest
+        .fn()
+        .mockImplementation((...args: any[]) =>
+            jest
+                .requireActual("@tanstack/react-query")
+                .useQuery({ ...args[0], gcTime: Infinity, retryDelay: 1 }, ...args.slice(1)),
+        ),
+    useInfiniteQuery: jest
+        .fn()
+        .mockImplementation((...args: any[]) =>
+            jest
+                .requireActual("@tanstack/react-query")
+                .useInfiniteQuery({ ...args[0], gcTime: Infinity, retryDelay: 1 }, ...args.slice(1)),
+        ),
+    queryOptions: jest
+        .fn()
+        .mockImplementation((...args: any[]) =>
+            jest
+                .requireActual("@tanstack/react-query")
+                .queryOptions({ ...args[0], gcTime: Infinity, retryDelay: 1 }, ...args.slice(1)),
+        ),
+}))
+
+jest.mock("d3", () => ({
+    scaleLinear: jest.fn().mockImplementation(() => {
+        const scale = Object.assign(jest.fn(), {
+            domain: jest.fn().mockReturnValue(this),
+            range: jest.fn().mockReturnValue(this),
+            rangeRound: jest.fn().mockReturnValue(this),
+        })
+        scale.domain = jest.fn().mockReturnValue(scale)
+        scale.range = jest.fn().mockReturnValue(scale)
+        scale.rangeRound = jest.fn().mockReturnValue(scale)
+        return scale
+    }),
+    scaleTime: jest.fn().mockImplementation(() => {
+        const scale = Object.assign(jest.fn(), {
+            domain: jest.fn().mockReturnValue(this),
+            range: jest.fn().mockReturnValue(this),
+            rangeRound: jest.fn().mockReturnValue(this),
+        })
+        scale.domain = jest.fn().mockReturnValue(scale)
+        scale.range = jest.fn().mockReturnValue(scale)
+        scale.rangeRound = jest.fn().mockReturnValue(scale)
+        return scale
+    }),
+    line: jest.fn().mockImplementation(() => {
+        // Create a base function object for line generator
+        const lineGenerator = Object.assign(jest.fn().mockReturnValue("M0,0"), {
+            x: jest.fn().mockReturnValue(this),
+            y: jest.fn().mockReturnValue(this),
+            curve: jest.fn().mockReturnValue(this),
+        })
+        // Rebind to itself properly as a chainable API
+        lineGenerator.x = jest.fn().mockReturnValue(lineGenerator)
+        lineGenerator.y = jest.fn().mockReturnValue(lineGenerator)
+        lineGenerator.curve = jest.fn().mockReturnValue(lineGenerator)
+        return lineGenerator
+    }),
+    curveBasis: jest.fn(),
+}))

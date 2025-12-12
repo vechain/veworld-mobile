@@ -21,6 +21,12 @@ type Props = {
     numberOfLines?: number
     rootStyle?: ViewStyle
     ellipsizeMode?: BaseTextProps["ellipsizeMode"]
+    /**
+     * Indicate the position of the dot.
+     * If the value is set to false, then the dot is not displayed
+     * @default 'right'
+     */
+    dot?: "left" | "right" | false
 }
 
 export const BaseRadioButton = ({
@@ -37,6 +43,7 @@ export const BaseRadioButton = ({
     rootStyle,
     ellipsizeMode,
     labelContainerStyle,
+    dot,
 }: Props) => {
     const { styles, theme } = useThemedStyles(_theme => baseStyles(_theme, isSelected))
 
@@ -75,6 +82,16 @@ export const BaseRadioButton = ({
             accessibilityValue={{ text: isSelected ? "selected" : "not selected" }}
             onPress={() => onPress(id)}>
             <BaseView flexDirection={"row"} justifyContent={"space-between"} style={contentStyle}>
+                {dot === "left" && (
+                    <BaseIcon
+                        name={isSelected ? "icon-radio-selected" : "icon-radio-default"}
+                        color={iconColor}
+                        size={16}
+                        px={0}
+                        py={0}
+                        p={0}
+                    />
+                )}
                 <BaseText
                     typographyFont="bodyMedium"
                     style={[computedTextStyles, labelStyle]}
@@ -84,14 +101,16 @@ export const BaseRadioButton = ({
                     containerStyle={labelContainerStyle}>
                     {label}
                 </BaseText>
-                <BaseIcon
-                    name={isSelected ? "icon-radio-selected" : "icon-radio-default"}
-                    color={iconColor}
-                    size={16}
-                    px={0}
-                    py={0}
-                    p={0}
-                />
+                {dot === "right" && (
+                    <BaseIcon
+                        name={isSelected ? "icon-radio-selected" : "icon-radio-default"}
+                        color={iconColor}
+                        size={16}
+                        px={0}
+                        py={0}
+                        p={0}
+                    />
+                )}
             </BaseView>
         </Touchable>
     )

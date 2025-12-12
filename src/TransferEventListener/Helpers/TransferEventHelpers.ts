@@ -1,21 +1,23 @@
+import { components } from "~Generated/indexer/schema"
 import { AccountWithDevice, NftCollection, TransactionOrigin } from "~Model"
-import { EventTypeResponse, IncomingTransferResponse } from "~Networking"
+import { FetchIncomingTransfersResponse } from "~Networking"
 import { AddressUtils } from "~Utils"
 
 export const filterNFTTransferEvents = (
-    transfers: IncomingTransferResponse[],
+    transfers: FetchIncomingTransfersResponse["data"],
     blackListedCollections: NftCollection[],
-): IncomingTransferResponse[] =>
+): FetchIncomingTransfersResponse["data"] =>
     transfers.filter(
         t =>
-            t.eventType === EventTypeResponse.NFT &&
+            t.eventType === "NFT" &&
+            t.tokenAddress &&
             !blackListedCollections.map(c => c.address).includes(t.tokenAddress),
     )
 
 export const filterTransferEventsByType = (
-    transfers: IncomingTransferResponse[],
-    eventType: EventTypeResponse,
-): IncomingTransferResponse[] => transfers.filter(t => t.eventType === eventType)
+    transfers: FetchIncomingTransfersResponse["data"],
+    eventType: components["schemas"]["IndexedTransferEvent"]["eventType"],
+): FetchIncomingTransfersResponse["data"] => transfers.filter(t => t.eventType === eventType)
 
 export interface InvolvedAcct {
     account: AccountWithDevice
@@ -31,7 +33,7 @@ export interface InvolvedAcct {
  */
 export const findFirstInvolvedAccount = (
     visibleAccounts: AccountWithDevice[],
-    decodedTransfer: IncomingTransferResponse,
+    decodedTransfer: components["schemas"]["IndexedTransferEvent"],
     priorityAccount?: AccountWithDevice,
 ): InvolvedAcct | undefined => {
     // First check the priority account if provided
@@ -51,7 +53,7 @@ export const findFirstInvolvedAccount = (
 
 const findFirstAccountInTransferResponse = (
     accounts: AccountWithDevice[],
-    decodedTransfer: IncomingTransferResponse,
+    decodedTransfer: components["schemas"]["IndexedTransferEvent"],
 ): InvolvedAcct | undefined => {
     let origin: TransactionOrigin | undefined
     const foundAccount = accounts.find(acc => {

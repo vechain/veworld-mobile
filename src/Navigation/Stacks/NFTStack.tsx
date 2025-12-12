@@ -1,6 +1,9 @@
-import React from "react"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { TransactionClause } from "@vechain/sdk-core"
+import React from "react"
+import { useNavAnimation } from "~Hooks"
+import { Device, FungibleTokenWithBalance } from "~Model"
+import { Routes } from "~Navigation/Enums"
 import {
     InsertAddressSendScreen,
     NFTCollectionDetailScreen,
@@ -8,10 +11,10 @@ import {
     NFTScreen,
     ReportNFTTransactionScreen,
     SendNFTRecapScreen,
+    SendNFTScreen,
+    WalletDetailScreen,
+    WalletManagementScreen,
 } from "~Screens"
-import { Routes } from "~Navigation/Enums"
-import { FungibleTokenWithBalance } from "~Model"
-import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListNFT = {
     [Routes.NFTS]: undefined
@@ -19,13 +22,18 @@ export type RootStackParamListNFT = {
         collectionAddress?: string
         nftTokenId: string
     }
-    [Routes.NFT_COLLECTION_DETAILS]: { collectionAddress: string }
+    [Routes.NFT_COLLECTION_DETAILS]: { collectionAddress: string; openReportBottomSheet?: boolean }
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
 
     [Routes.INSERT_ADDRESS_SEND]: {
         token?: FungibleTokenWithBalance
         contractAddress?: string
         tokenId?: string
+    }
+
+    [Routes.SEND_NFT]: {
+        contractAddress: string
+        tokenId: string
     }
 
     [Routes.SEND_NFT_RECAP]: {
@@ -38,15 +46,18 @@ export type RootStackParamListNFT = {
         nftAddress: string
         transactionClauses: TransactionClause[]
     }
+
+    [Routes.WALLET_MANAGEMENT]: undefined
+    [Routes.WALLET_DETAILS]: { device: Device }
 }
 
-const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListNFT>()
+const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListNFT>()
 
 export const NFTStack = () => {
     const { animation } = useNavAnimation()
 
     return (
-        <Navigator id="NftStack" screenOptions={{ headerShown: false, animation }}>
+        <Navigator id="NftStack" screenOptions={{ headerShown: false, animationEnabled: animation !== "none" }}>
             <Group>
                 <Screen name={Routes.NFTS} component={NFTScreen} options={{ headerShown: false }} />
 
@@ -70,7 +81,16 @@ export const NFTStack = () => {
                     options={{ headerShown: false }}
                 />
 
+                <Screen name={Routes.SEND_NFT} component={SendNFTScreen} options={{ headerShown: false }} />
+
                 <Screen name={Routes.SEND_NFT_RECAP} component={SendNFTRecapScreen} options={{ headerShown: false }} />
+
+                <Screen
+                    name={Routes.WALLET_MANAGEMENT}
+                    component={WalletManagementScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
             </Group>
         </Navigator>
     )

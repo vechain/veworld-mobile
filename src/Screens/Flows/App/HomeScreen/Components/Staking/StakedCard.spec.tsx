@@ -1,61 +1,65 @@
 import { render } from "@testing-library/react-native"
 import { ethers } from "ethers"
 import React from "react"
-import { useUserNodes } from "~Hooks/Staking/useUserNodes"
-import { useUserStargateNfts } from "~Hooks/Staking/useUserStargateNfts"
+import { NodeInfo } from "~Model/Staking"
 import { TestWrapper } from "~Test"
 import { StakedCard } from "./StakedCard"
 
-jest.mock("~Hooks/Staking/useUserNodes", () => ({
-    useUserNodes: jest.fn(),
-}))
-
-jest.mock("~Hooks/Staking/useUserStargateNfts", () => ({
-    useUserStargateNfts: jest.fn(),
-}))
-
 describe("StakedCard", () => {
-    beforeEach(() => {
-        jest.clearAllMocks()
-    })
-    it("should render the component", async () => {
-        ;(useUserNodes as jest.Mock).mockReturnValue({
-            stargateNodes: [{}],
-            isLoading: false,
-        })
-        ;(useUserStargateNfts as jest.Mock).mockReturnValue({
-            ownedStargateNfts: [],
-            isLoading: false,
-        })
-        const { findByText } = render(<StakedCard />, {
+    const mockNodes: NodeInfo[] = [
+        {
+            nodeId: "1",
+            nodeLevel: 1,
+            xNodeOwner: "0x123",
+            isLegacyNode: false,
+            vetAmountStaked: ethers.utils.parseEther("1000").toString(),
+            accumulatedRewards: "0",
+        },
+    ]
+
+    it("should render the component with owner data", async () => {
+        const { findByText } = render(<StakedCard nodes={mockNodes} isOwner={true} isLoading={false} />, {
             wrapper: TestWrapper,
         })
 
-        const stakingLabel = await findByText("Staking")
-        expect(stakingLabel).toBeOnTheScreen()
+        const totalLockedLabel = await findByText("Total locked")
+        expect(totalLockedLabel).toBeOnTheScreen()
     })
 
-    it("should render the component with balance", async () => {
-        ;(useUserNodes as jest.Mock).mockReturnValue({
-            stargateNodes: [{}],
-            isLoading: false,
-        })
-        ;(useUserStargateNfts as jest.Mock).mockReturnValue({
-            ownedStargateNfts: [
-                {
-                    vetAmountStaked: ethers.utils.parseEther("1").toString(),
-                },
-            ],
-            isLoading: false,
-        })
-        const { findByText } = render(<StakedCard />, {
+    it("should render VET symbol with balance", async () => {
+        const { findByText } = render(<StakedCard nodes={mockNodes} isOwner={true} isLoading={false} />, {
             wrapper: TestWrapper,
         })
 
         const tokenSymbol = await findByText("VET")
-        const totalLockedText = await findByText("Total locked")
-
         expect(tokenSymbol).toBeOnTheScreen()
-        expect(totalLockedText).toBeOnTheScreen()
+    })
+
+    it("should render managing tag when user is not owner", async () => {
+        const { findByText } = render(<StakedCard nodes={mockNodes} isOwner={false} isLoading={false} />, {
+            wrapper: TestWrapper,
+        })
+
+        const managingLabel = await findByText("Managing")
+        expect(managingLabel).toBeOnTheScreen()
+    })
+
+    it("should not render card when no nodes and not loading", () => {
+        const { queryByTestId } = render(<StakedCard nodes={[]} isOwner={true} isLoading={false} />, {
+            wrapper: TestWrapper,
+        })
+
+        // Component should not render the touchable container when no nodes and not loading
+        expect(queryByTestId("staked-card-container")).toBeNull()
+    })
+
+    it("should render loading state", async () => {
+        const { findByTestId } = render(<StakedCard nodes={mockNodes} isOwner={true} isLoading={true} />, {
+            wrapper: TestWrapper,
+        })
+
+        // The skeleton loader should be present when loading
+        const skeleton = await findByTestId("stargate-locked-value-skeleton")
+        expect(skeleton).toBeOnTheScreen()
     })
 })

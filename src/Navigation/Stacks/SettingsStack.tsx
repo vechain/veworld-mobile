@@ -1,11 +1,10 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
-import { useNavAnimation } from "~Hooks"
 import { Device, LocalDevice } from "~Model"
 import { Routes } from "~Navigation/Enums"
+import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import {
     AddContactScreen,
-    AddCustomNodeScreen,
     ChangeNetworkScreen,
     ChooseBackupDetailsPassword,
     ClaimUsername,
@@ -14,12 +13,10 @@ import {
     DetailsBackupScreen,
     GeneralScreen,
     InAppBrowser,
-    ManageCustomNodesScreen,
     ManageUrlsScreen,
     NotificationScreen,
     PrivacyScreen,
     ResetAppScreen,
-    SearchScreen,
     SettingsScreen,
     SettingsTransactionsScreen,
     TabsManagerScreen,
@@ -28,16 +25,18 @@ import {
     WalletManagementScreen,
 } from "~Screens"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
+import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { DeveloperSettingsScreen } from "~Screens/Flows/App/DeveloperSettingsScreen"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
     [Routes.SETTINGS_NETWORK]: undefined
-    [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
-    [Routes.SETTINGS_MANAGE_CUSTOM_NODES]: undefined
     [Routes.SETTINGS_PRIVACY]: undefined
     [Routes.SETTINGS_ABOUT]: undefined
     [Routes.SETTINGS_GENERAL]: undefined
     [Routes.SETTINGS_ALERTS]: undefined
+    [Routes.SETTINGS_DEVELOPER]: undefined
     [Routes.SETTINGS_CONTACTS]: undefined
     [Routes.SETTINGS_ADD_CONTACT]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
@@ -53,38 +52,30 @@ export type RootStackParamListSettings = {
     [Routes.USERNAME_CLAIMED]: {
         username: string
     }
-    [Routes.DISCOVER_SEARCH]: undefined
-    [Routes.DISCOVER_TABS_MANAGER]: undefined
+    [Routes.APPS_TABS_MANAGER]: undefined
+    [Routes.APPS_SEARCH]: undefined
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
-        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING
+        returnScreen?:
+            | Routes.SWAP
+            | Routes.SETTINGS
+            | Routes.HOME
+            | Routes.ACTIVITY_STAKING
+            | Routes.APPS
+            | Routes.COLLECTIBLES_COLLECTION_DETAILS
     }
 }
 
-const Settings = createNativeStackNavigator<RootStackParamListSettings>()
+const Settings = createStackNavigator<RootStackParamListSettings>()
 
 export const SettingsStack = () => {
-    const { animation } = useNavAnimation()
-
     return (
-        <Settings.Navigator screenOptions={{ headerShown: false, animation }}>
+        <Settings.Navigator screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Settings.Screen name={Routes.SETTINGS} component={SettingsScreen} options={{ headerShown: false }} />
             <Settings.Screen
                 name={Routes.SETTINGS_NETWORK}
                 component={ChangeNetworkScreen}
-                options={{ headerShown: false }}
-            />
-
-            <Settings.Screen
-                name={Routes.SETTINGS_ADD_CUSTOM_NODE}
-                component={AddCustomNodeScreen}
-                options={{ headerShown: false }}
-            />
-
-            <Settings.Screen
-                name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
-                component={ManageCustomNodesScreen}
                 options={{ headerShown: false }}
             />
 
@@ -95,6 +86,12 @@ export const SettingsStack = () => {
             />
 
             <Settings.Screen name={Routes.SETTINGS_ABOUT} component={AboutScreen} options={{ headerShown: false }} />
+
+            <Settings.Screen
+                name={Routes.SETTINGS_DEVELOPER}
+                component={DeveloperSettingsScreen}
+                options={{ headerShown: false }}
+            />
 
             <Settings.Screen
                 name={Routes.WALLET_MANAGEMENT}
@@ -172,12 +169,40 @@ export const SettingsStack = () => {
                 options={{ headerShown: false }}
             />
             <Settings.Screen
-                name={Routes.DISCOVER_TABS_MANAGER}
+                name={Routes.APPS_TABS_MANAGER}
                 component={TabsManagerScreen}
-                options={{ headerShown: false }}
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "modal",
+                    transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
+                }}
             />
-            <Settings.Screen name={Routes.DISCOVER_SEARCH} component={SearchScreen} options={{ headerShown: false }} />
-            <Settings.Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
+            <Settings.Screen
+                name={Routes.APPS_SEARCH}
+                component={AppsSearchScreen}
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "modal",
+                    transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
+                    gestureEnabled: true,
+                }}
+            />
+            <Settings.Screen
+                name={Routes.BROWSER}
+                component={InAppBrowser}
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "modal",
+                    transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
+                    gestureEnabled: true,
+                }}
+            />
         </Settings.Navigator>
     )
 }

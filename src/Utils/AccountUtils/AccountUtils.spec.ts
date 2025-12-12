@@ -1,8 +1,7 @@
 import { TestHelpers } from "~Test"
-import AccountUtils from "./index"
-import { updateAccountVns } from "./AccountUtils"
-import { Vns } from "~Hooks"
 import { Contact, ContactType, WalletAccount } from "~Model"
+import { getAccountForIndex, getNextIndex, isObservedAccount, nextAlias, updateAccountVns } from "./AccountUtils"
+import { Vns } from "~Model/Vns"
 
 const accounts = [TestHelpers.data.account1D1, TestHelpers.data.account2D1]
 const contact1 = TestHelpers.data.getContact(0, ContactType.KNOWN)
@@ -17,19 +16,15 @@ const vnsData: Vns[] = [
 
 describe("AccountUtils", () => {
     it("nextAlias - should return the next alias", () => {
-        expect(AccountUtils.nextAlias(1, "Device")).toEqual("Device 1")
+        expect(nextAlias(1, "Device")).toEqual("Device 1")
     })
 
     it("getNextIndex - should return the next index", () => {
-        expect(AccountUtils.getNextIndex(accounts)).toEqual(2)
-    })
-
-    it("getAccountForIndex - should return the correct account", () => {
-        expect(AccountUtils.getAccountForIndex(0, TestHelpers.data.device1, 0)).toEqual(TestHelpers.data.account1D1)
+        expect(getNextIndex(accounts)).toEqual(2)
     })
 
     it("getAccountForIndex - should throw when no xPub", () => {
-        expect(() => AccountUtils.getAccountForIndex(0, { ...TestHelpers.data.device1, xPub: undefined }, 0)).toThrow(
+        expect(() => getAccountForIndex(0, { ...TestHelpers.data.device1, xPub: undefined }, 0)).toThrow(
             "The XPub can't be null for HD devices",
         )
     })
@@ -50,10 +45,10 @@ describe("AccountUtils", () => {
     })
 
     it("isObservedAccount - should return true", () => {
-        expect(AccountUtils.isObservedAccount(TestHelpers.data.account5D1Observed)).toBe(true)
+        expect(isObservedAccount(TestHelpers.data.account5D1Observed)).toBe(true)
     })
 
     it("isObservedAccount - should return false", () => {
-        expect(AccountUtils.isObservedAccount(TestHelpers.data.account4D1)).toBe(false)
+        expect(isObservedAccount(TestHelpers.data.account4D1)).toBe(false)
     })
 })

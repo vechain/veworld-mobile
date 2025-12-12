@@ -3,6 +3,23 @@ import React, { PropsWithChildren } from "react"
 import { TestWrapper } from "~Test"
 import { DappWithDetails } from "./DappWithDetails"
 
+jest.mock("react-native", () => ({
+    ...jest.requireActual("react-native"),
+    LayoutAnimation: { configureNext: jest.fn(), Types: {}, Properties: {} },
+}))
+
+jest.mock("~Hooks/useFetchFeaturedDApps", () => ({
+    useFetchFeaturedDApps: jest.fn(() => ({
+        isFetching: false,
+        isLoading: false,
+    })),
+    useVeBetterDaoDapps: jest.fn(() => ({
+        data: [],
+        isLoading: false,
+        error: null,
+    })),
+}))
+
 const Wrapper = ({ children }: PropsWithChildren) => (
     <TestWrapper
         preloadedState={{
@@ -19,7 +36,8 @@ const Wrapper = ({ children }: PropsWithChildren) => (
                 bannerInteractions: {},
                 connectedApps: [],
                 custom: [],
-                favorites: [],
+
+                favoriteRefs: [],
                 hasOpenedDiscovery: true,
                 tabsManager: {
                     currentTabId: null,
@@ -33,14 +51,14 @@ const Wrapper = ({ children }: PropsWithChildren) => (
 
 describe("DappWithDetails", () => {
     it("should render correctly", () => {
-        render(<DappWithDetails icon="" name="Test dApp" url="https://vechain.org" />, { wrapper: Wrapper })
+        render(<DappWithDetails appName="Test dApp" appUrl="https://vechain.org" />, { wrapper: Wrapper })
 
         expect(screen.getByTestId("DAPP_WITH_DETAILS_NAME")).toHaveTextContent("Test dApp")
         expect(screen.getByTestId("DAPP_WITH_DETAILS_URL")).toHaveTextContent("https://vechain.org")
         expect(screen.queryByTestId("DAPP_DETAILS_NOT_VERIFIED_WARNING")).toBeNull()
     })
     it("should open up details if button is clicked", async () => {
-        render(<DappWithDetails icon="" name="Test dApp" url="https://vechain.org" />, { wrapper: Wrapper })
+        render(<DappWithDetails appName="Test dApp" appUrl="https://vechain.org" />, { wrapper: Wrapper })
 
         const btn = screen.getByTestId("DAPP_WITH_DETAILS_DETAILS_BTN")
         expect(btn).toHaveTextContent("Details")
@@ -50,7 +68,7 @@ describe("DappWithDetails", () => {
         expect(btn).toHaveTextContent("Hide")
     })
     it("should show warning if the url is not of a dapp and showDappWarning is true", () => {
-        render(<DappWithDetails icon="" name="Test dApp" url="https://mainnet.vechain.org" showDappWarning />, {
+        render(<DappWithDetails appName="Test dApp" appUrl="https://mainnet.vechain.org" showDappWarning />, {
             wrapper: Wrapper,
         })
 

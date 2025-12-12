@@ -1,18 +1,19 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import React from "react"
 import {
-    BaseSpacer,
     BaseView,
     ChangeAccountButtonPill,
-    HeaderStyle,
+    HeaderStyleV2,
     HeaderTitle,
     Layout,
     SelectAccountBottomSheet,
-    SelectedNetworkViewer,
 } from "~Components"
+import { useDevice } from "~Components/Providers/DeviceProvider"
 import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
-import { selectBalanceVisible, selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
+import { Routes } from "~Navigation"
+import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
+import { PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useResetActivityStack } from "./Hooks"
 import { ActivityTabBar } from "./navigation"
@@ -21,11 +22,10 @@ import {
     ActivityB3trScreen,
     ActivityNftScreen,
     ActivityOtherScreen,
+    ActivityStakingScreen,
     ActivitySwapScreen,
     ActivityTransferScreen,
-    ActivityStakingScreen,
 } from "./screens"
-import { Routes } from "~Navigation"
 import { ActivityDappsScreen } from "./screens/ActivityDappsScreen"
 
 const Tab = createMaterialTopTabNavigator()
@@ -34,9 +34,8 @@ export const ActivityScreen = () => {
     const { LL } = useI18nContext()
     useResetActivityStack()
 
-    const isBalanceVisible = useAppSelector(selectBalanceVisible)
-
     const { onSetSelectedAccount } = useSetSelectedAccount()
+    const { isLowEndDevice } = useDevice()
 
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -56,22 +55,25 @@ export const ActivityScreen = () => {
             safeAreaTestID="History_Screen"
             noBackButton
             fixedHeader={
-                <BaseView style={HeaderStyle}>
-                    <HeaderTitle title={LL.BTN_HISTORY()} />
-                    <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
-                        <SelectedNetworkViewer />
-                        <BaseSpacer width={8} />
-                        <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
-                    </BaseView>
+                <BaseView style={HeaderStyleV2}>
+                    <HeaderTitle
+                        title={LL.BTN_HISTORY()}
+                        leftIconName="icon-history"
+                        typographyFont="headerTitle"
+                        align="left"
+                    />
+                    <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
                 </BaseView>
             }
             fixedBody={
                 <>
                     <Tab.Navigator
+                        tabBarPosition="top"
                         screenOptions={{
-                            animationEnabled: false,
+                            animationEnabled: !isLowEndDevice || PlatformUtils.isIOS(),
                             lazy: true,
-                            swipeEnabled: false,
+                            swipeEnabled: true,
+                            tabBarBounces: false,
                         }}
                         tabBar={ActivityTabBar}>
                         <Tab.Screen
@@ -120,7 +122,6 @@ export const ActivityScreen = () => {
                         accounts={accounts}
                         setSelectedAccount={setSelectedAccount}
                         selectedAccount={selectedAccount}
-                        isBalanceVisible={isBalanceVisible}
                         ref={selectAccountBottomSheetRef}
                     />
                 </>

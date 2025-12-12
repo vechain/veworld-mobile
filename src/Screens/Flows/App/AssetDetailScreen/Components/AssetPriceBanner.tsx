@@ -11,6 +11,7 @@ import { typography } from "~Constants/Theme"
 import { AssetTrendBannerSkeleton } from "./AssetTrendBannerSkeleton"
 import { AssetPriceBannerSkeleton } from "./AssetPriceBannerSkeleton"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import FontUtils from "~Utils/FontUtils"
 const { ...otherTypography } = typography
 
 type Props = {
@@ -91,21 +92,21 @@ const baseStyles = (theme: ColorThemeType) =>
             fontFamily: otherTypography.fontFamily["Inter-Bold"],
         },
         textTitle: {
-            fontSize: otherTypography.fontSize[18],
+            fontSize: FontUtils.font(otherTypography.fontSize[18]),
             fontWeight: "600",
             fontFamily: otherTypography.fontFamily["Inter-SemiBold"],
             height: 28,
             padding: 0,
         },
         textCaption: {
-            fontSize: otherTypography.fontSize[12],
+            fontSize: FontUtils.font(otherTypography.fontSize[12]),
             fontWeight: "400",
             fontFamily: otherTypography.fontFamily["Inter-Regular"],
             height: 16,
             padding: 0,
         },
         textBody: {
-            fontSize: otherTypography.fontSize[14],
+            fontSize: FontUtils.font(otherTypography.fontSize[14]),
             fontWeight: "400",
             fontFamily: otherTypography.fontFamily["Inter-Regular"],
             height: 16,

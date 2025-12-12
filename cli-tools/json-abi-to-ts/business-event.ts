@@ -1,6 +1,7 @@
 import { select } from "@inquirer/prompts"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
+import { ConditionValidator } from "./condition.js"
 
 export const FAKE_SIGNATURE_REGEX = /(.*)\(/
 
@@ -32,11 +33,17 @@ export const validateAndUpdateBusinessEvent = async (
             )
         }
         //If the event is already a valid event, skip it
-        if (groupedEventsByCommonName[strippedSignature].includes(event.name)) continue
+        if (groupedEventsByCommonName[strippedSignature].includes(event.name)) {
+            const foundRealEvent = allEvents[event.name]! as any
+            new ConditionValidator(event, foundRealEvent, { pathName: parsedPath.name }).validate()
+            continue
+        }
 
         //If there's only one event matching, then just return it
         if (groupedEventsByCommonName[strippedSignature].length === 1) {
             event.name = groupedEventsByCommonName[strippedSignature][0]
+            const foundRealEvent = allEvents[event.name]! as any
+            new ConditionValidator(event, foundRealEvent, { pathName: parsedPath.name }).validate()
             continue
         }
 
@@ -51,6 +58,8 @@ export const validateAndUpdateBusinessEvent = async (
         })
 
         event.name = result
+        const foundRealEvent = allEvents[event.name]! as any
+        new ConditionValidator(event, foundRealEvent, { pathName: parsedPath.name }).validate()
     }
 
     parsed.inputs = parsed.paramsDefinition.map((paramDef: any) => {
@@ -63,7 +72,7 @@ export const validateAndUpdateBusinessEvent = async (
         const foundRealEvent = allEvents[foundEvt.name]! as any
         const foundInput = foundRealEvent.inputs.find((input: any) => input.name === paramDef.name)
         if (!foundInput) {
-            if (paramDef.name !== "address")
+            if (!["address", "origin"].includes(paramDef.name))
                 throw new Error(
                     // eslint-disable-next-line max-len
                     `[BusinessEventValidator]: Error at ${parsedPath.name}. ${paramDef.name} of event ${paramDef.eventName} not found in the event schema.`,

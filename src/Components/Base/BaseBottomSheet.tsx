@@ -1,31 +1,32 @@
 import {
     BottomSheetBackdrop,
     BottomSheetBackdropProps,
-    BottomSheetHandleProps,
     BottomSheetModal,
     BottomSheetModalProps,
+    BottomSheetScrollView,
     BottomSheetView,
 } from "@gorhom/bottom-sheet"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { isFinite } from "lodash"
-import { PropsWithChildren, default as React, ReactNode, useCallback, useEffect, useMemo, useState } from "react"
+import { PropsWithChildren, default as React, ReactNode, useCallback, useMemo } from "react"
 import { Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
 import { useReducedMotion } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { LocalizedString } from "typesafe-i18n"
 import { BaseSpacer, BaseText, BlurBackdropBottomSheet } from "~Components"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
-import { useBackHandler, useThemedStyles } from "~Hooks"
-import { BackHandlerEvent } from "~Model"
+import { useThemedStyles } from "~Hooks"
+import { useBottomSheetBackHandler } from "~Hooks/useBottomSheetBackHandler"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { typedForwardRef } from "~Utils/ReactUtils"
+import { BaseBottomSheetHandle } from "./BaseBottomSheetHandle"
 import { BaseView } from "./BaseView"
 
-const OPENED_STATE = 0
-const CLOSED_STATE = -1
-
-export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, "snapPoints" | "children"> & {
+export type BaseBottomSheetProps<TData = unknown> = Omit<
+    BottomSheetModalProps,
+    "snapPoints" | "children" | "enablePanDownToClose"
+> & {
     /**
      * The content of the modal.
      */
@@ -34,6 +35,14 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, 
      * The title of the modal.
      */
     title?: LocalizedString
+    /**
+     * Optional left element in the header (e.g., close button, icon).
+     */
+    leftElement?: ReactNode
+    /**
+     * Optional right element in the header (e.g., action button, icon).
+     */
+    rightElement?: ReactNode
     /**
      * Snap points for the bottom sheet. They should be an array of strings, each representing a percentage.
      */
@@ -67,21 +76,52 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, 
      */
     onPressOutside?: BackdropPressBehavior
     /**
-     * Determines the behavior when the Android hardware back button is pressed. Use `BackHandlerEvent.BLOCK` to prevent the back button from closing the modal.
-     */
-    backHandlerEvent?: BackHandlerEvent
-    /**
      * If `true`, there's a bottom safe area.
      */
     bottomSafeArea?: boolean
     /**
      * Enable pan down to close
+     * @default true
      */
     enablePanDownToClose?: boolean
     /**
      * Enable blur backdrop on iOS
      */
     blurBackdrop?: boolean
+    /**
+     * Enable floating behavior - detach from the bottom of the screen
+     */
+    floating?: boolean
+    /**
+     * Enable back to close. If set to true when clicking the back button on Android it'll close the BS.
+     * @default true
+     */
+    enableBackToClose?: boolean
+    /**
+     * Make the bottom sheet top rounded. Only valid when `floating` is false.
+     * @default true
+     */
+    rounded?: boolean
+    /**
+     * Color for the handle.
+     */
+    handleColor?: string
+    /**
+     * Sticky indices for dynamicHeight
+     */
+    stickyIndices?: number[]
+    /**
+     * Enable scrollable content. If set to true, the content will be scrollable.
+     * Only valid when `dynamicHeight` is true.
+     * @default true
+     */
+    scrollable?: boolean
+    /**
+     * Enable scrolling. If set to false, the content will not be scrollable.
+     * Only valid when `scrollable` is true.
+     * @default true
+     */
+    scrollEnabled?: boolean
 }
 
 const BaseBottomSheetContent = ({
@@ -93,7 +133,13 @@ const BaseBottomSheetContent = ({
     footerStyle,
     snapPoints,
     title,
+    leftElement,
+    rightElement,
     children,
+    floating,
+    stickyHeaderIndices,
+    scrollable,
+    scrollEnabled,
 }: PropsWithChildren<{
     bottomSafeArea: boolean
     bottomSafeAreaSize: number
@@ -103,21 +149,75 @@ const BaseBottomSheetContent = ({
     footerStyle: StyleProp<ViewStyle>[] | StyleProp<ViewStyle>
     snapPoints?: string[]
     title?: string
+    leftElement?: ReactNode
+    rightElement?: ReactNode
+    floating: boolean
+    stickyHeaderIndices?: number[]
+    scrollable?: boolean
+    scrollEnabled?: boolean
 }>) => {
+    const headerStyles = useMemo(
+        () => ({
+            headerContainer: { marginBottom: 16 },
+            leftElement: { marginRight: 16 },
+            rightElement: { marginLeft: 16 },
+        }),
+        [],
+    )
+
+    const renderHeader = () => {
+        const hasHeader = title || leftElement || rightElement
+        if (!hasHeader) return null
+
+        return (
+            <BaseView flexDirection="row" alignItems="center" style={headerStyles.headerContainer}>
+                {leftElement && <BaseView style={headerStyles.leftElement}>{leftElement}</BaseView>}
+                {title && (
+                    <BaseView flex={1}>
+                        <BaseText typographyFont="biggerTitleSemiBold">{title}</BaseText>
+                    </BaseView>
+                )}
+                {rightElement && <BaseView style={headerStyles.rightElement}>{rightElement}</BaseView>}
+            </BaseView>
+        )
+    }
+
+    const renderDynamicContent = () => {
+        if (scrollable) {
+            return (
+                <BottomSheetScrollView
+                    bounces={false}
+                    scrollEnabled={scrollEnabled}
+                    contentContainerStyle={contentViewStyle}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    stickyHeaderIndices={stickyHeaderIndices}
+                    stickyHeaderHiddenOnScroll={false}>
+                    {renderHeader()}
+                    {children}
+                    {dynamicHeight && isAndroid() && !floating && <BaseSpacer height={16} />}
+                </BottomSheetScrollView>
+            )
+        }
+        return (
+            <BottomSheetView style={contentViewStyle}>
+                {renderHeader()}
+                {children}
+                {dynamicHeight && isAndroid() && !floating && <BaseSpacer height={16} />}
+            </BottomSheetView>
+        )
+    }
+
     return (
         <>
             {snapPoints ? (
                 <BaseView style={contentViewStyle}>
-                    {title && <BaseText typographyFont="title">{title}</BaseText>}
+                    {renderHeader()}
                     {children}
                     {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
                 </BaseView>
             ) : (
-                <BottomSheetView style={contentViewStyle}>
-                    {title && <BaseText typographyFont="title">{title}</BaseText>}
-                    {children}
-                    {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
-                </BottomSheetView>
+                renderDynamicContent()
             )}
             {footer && (
                 <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
@@ -135,71 +235,79 @@ const _BaseBottomSheet = <TData,>(
         snapPoints,
         dynamicHeight = false,
         title,
+        leftElement,
+        rightElement,
         ignoreMinimumSnapPoint = false,
         footerStyle,
         noMargins = false,
         footer,
         children,
         onPressOutside = "close",
-        backHandlerEvent = BackHandlerEvent.DONT_BLOCK,
+        enableBackToClose = true,
         bottomSafeArea = true,
         enablePanDownToClose = true,
         blurBackdrop = false,
+        backgroundStyle,
+        stackBehavior = "push",
+        floating = false,
+        rounded = true,
+        handleColor: _handleColor,
+        stickyIndices,
+        scrollable = true,
+        scrollEnabled = true,
         ...props
     }: BaseBottomSheetProps<TData>,
     ref: React.ForwardedRef<BottomSheetModalMethods>,
 ) => {
     const { onChange, ...sheetProps } = props
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { height: windowHeight } = useWindowDimensions()
     const { bottom: bottomSafeAreaSize } = useSafeAreaInsets()
     const reducedMotion = useReducedMotion()
-    const { addBackHandlerListener, removeBackHandlerListener } = useBackHandler(backHandlerEvent)
+    const { handleSheetPositionChange } = useBottomSheetBackHandler(ref)
 
-    const [sheetState, setSheetState] = useState<number>(-1)
+    const bgRoundingStyle = useMemo(() => {
+        if (floating) return [styles.floatingRounding]
+        if (rounded) return [styles.notFloatingRounding]
+        return [styles.noRounding]
+    }, [floating, rounded, styles.floatingRounding, styles.noRounding, styles.notFloatingRounding])
+
+    const flattenedBsStyle = useMemo(() => {
+        return StyleSheet.flatten([bgRoundingStyle, backgroundStyle ?? styles.backgroundStyle])
+    }, [backgroundStyle, bgRoundingStyle, styles.backgroundStyle])
+
+    const handleColor = useMemo(() => {
+        if (_handleColor) return _handleColor
+        if (!theme.isDark) return COLORS.GREY_300
+        return flattenedBsStyle.backgroundColor === theme.colors.card ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300
+    }, [flattenedBsStyle.backgroundColor, theme.colors.card, theme.isDark, _handleColor])
 
     const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
         return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
     }, [])
 
     const renderBackdrop = useCallback(
-        (props_: BottomSheetBackdropProps) => {
-            return (
-                <BottomSheetBackdrop {...props_} pressBehavior={onPressOutside} opacity={0.8} disappearsOnIndex={-1} />
-            )
-        },
-
+        (props_: BottomSheetBackdropProps) => (
+            <BottomSheetBackdrop
+                {...props_}
+                pressBehavior={onPressOutside}
+                opacity={0.85}
+                disappearsOnIndex={-1}
+                appearsOnIndex={0}
+            />
+        ),
         [onPressOutside],
     )
 
-    const renderHandle = useCallback(
-        (props_: BottomSheetHandleProps) => (
-            <BaseView style={styles.handleWrapper}>
-                <BaseView {...props_} style={styles.handleStyle} />
-            </BaseView>
-        ),
-        [styles],
-    )
+    const renderHandle = useCallback(() => <BaseBottomSheetHandle color={handleColor} />, [handleColor])
 
     const onSheetPositionChange = useCallback(
-        (index: number, position: number, type: any) => {
-            setSheetState(index)
-            if (onChange) {
-                onChange(index, position, type)
-            }
+        (index: number) => {
+            if (enableBackToClose) handleSheetPositionChange(index)
+            onChange?.(index)
         },
-        [onChange],
+        [enableBackToClose, handleSheetPositionChange, onChange],
     )
-
-    useEffect(() => {
-        if (sheetState === OPENED_STATE) {
-            addBackHandlerListener()
-        }
-
-        if (sheetState === CLOSED_STATE) {
-            removeBackHandlerListener()
-        }
-    }, [addBackHandlerListener, removeBackHandlerListener, sheetState])
 
     /**
      * `snapPoints` should be an array of strings, each representing a percentage.
@@ -235,6 +343,12 @@ const _BaseBottomSheet = <TData,>(
         return Math.floor((windowHeight - bottomSafeAreaSize) * 0.85)
     }, [dynamicHeight, windowHeight, bottomSafeAreaSize])
 
+    const floatingBottomInset = useMemo(() => {
+        if (!floating) return undefined
+        if (isAndroid()) return bottomSafeAreaSize + 32
+        return bottomSafeAreaSize
+    }, [floating, bottomSafeAreaSize])
+
     // Create content style object
     const contentViewStyle = useMemo(
         () => [
@@ -250,14 +364,22 @@ const _BaseBottomSheet = <TData,>(
         [noMargins, snapPoints, contentStyle],
     )
 
+    const rootStyle = useMemo(() => {
+        if (floating) return [styles.floating, styles.floatingRounding]
+        if (rounded) return [styles.notFloatingRounding]
+        return undefined
+    }, [floating, rounded, styles.floating, styles.floatingRounding, styles.notFloatingRounding])
+
     return (
         <BottomSheetModal
             animateOnMount={!reducedMotion}
-            stackBehavior="push"
+            stackBehavior={stackBehavior}
             ref={ref}
             enablePanDownToClose={enablePanDownToClose}
             index={0}
-            backgroundStyle={[props.backgroundStyle ?? styles.backgroundStyle]}
+            style={rootStyle}
+            bottomInset={floating ? floatingBottomInset : undefined}
+            backgroundStyle={[bgRoundingStyle, backgroundStyle ?? styles.backgroundStyle]}
             // BlurView screws up navigation on Android. Sometimes it renders a blank page, and sometimes the new page is blurry. Bug lagging (https://github.com/gorhom/react-native-bottom-sheet/issues/2046)
             backdropComponent={blurBackdrop && Platform.OS !== "android" ? renderBlurBackdrop : renderBackdrop}
             handleComponent={enablePanDownToClose ? renderHandle : null}
@@ -269,18 +391,25 @@ const _BaseBottomSheet = <TData,>(
             onChange={onSheetPositionChange}
             maxDynamicContentSize={maxDynamicContentSize}
             enableDynamicSizing={dynamicHeight}
+            detached={floating}
             {...sheetProps}>
             {typeof children === "function" ? (
                 p => (
                     <BaseBottomSheetContent
                         bottomSafeArea={bottomSafeArea}
                         bottomSafeAreaSize={bottomSafeAreaSize}
+                        scrollEnabled={scrollEnabled}
                         contentViewStyle={contentViewStyle}
                         dynamicHeight={dynamicHeight}
                         footer={footer}
                         footerStyle={footerStyle}
                         snapPoints={snapPoints}
-                        title={title}>
+                        title={title}
+                        leftElement={leftElement}
+                        rightElement={rightElement}
+                        floating={floating}
+                        scrollable={scrollable}
+                        stickyHeaderIndices={stickyIndices}>
                         {children(p?.data)}
                     </BaseBottomSheetContent>
                 )
@@ -288,12 +417,18 @@ const _BaseBottomSheet = <TData,>(
                 <BaseBottomSheetContent
                     bottomSafeArea={bottomSafeArea}
                     bottomSafeAreaSize={bottomSafeAreaSize}
+                    scrollEnabled={scrollEnabled}
                     contentViewStyle={contentViewStyle}
                     dynamicHeight={dynamicHeight}
                     footer={footer}
                     footerStyle={footerStyle}
                     snapPoints={snapPoints}
-                    title={title}>
+                    title={title}
+                    leftElement={leftElement}
+                    rightElement={rightElement}
+                    floating={floating}
+                    scrollable={scrollable}
+                    stickyHeaderIndices={stickyIndices}>
                     {children}
                 </BaseBottomSheetContent>
             )}
@@ -310,9 +445,7 @@ export const BaseBottomSheet = typedForwardRef(_BaseBottomSheet)
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         backgroundStyle: {
-            backgroundColor: theme.colors.background,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
+            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50,
         },
         blurBackdrop: {
             backgroundColor: COLORS.PURPLE_BLUR_TRANSPARENT,
@@ -322,18 +455,19 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             opacity: 0.5,
         },
-        handleWrapper: {
-            marginTop: 8,
-            paddingTop: 8,
-            paddingBottom: 16,
-            paddingHorizontal: 8,
+        floating: {
+            marginHorizontal: 8,
+            overflow: "hidden",
         },
-        handleStyle: {
-            width: 70,
-            height: 4,
-            borderRadius: 8,
-            backgroundColor: theme.colors.text,
-            alignSelf: "center",
+        floatingRounding: {
+            borderRadius: 24,
+        },
+        notFloatingRounding: {
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+        },
+        noRounding: {
+            borderRadius: 0,
         },
     })
 

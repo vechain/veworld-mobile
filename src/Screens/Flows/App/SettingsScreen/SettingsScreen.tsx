@@ -2,21 +2,18 @@ import { useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef } from "react"
 import { StyleSheet } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
-import {
-    AlertCard,
-    BaseSpacer,
-    BaseView,
-    HeaderStyle,
-    HeaderTitle,
-    Layout,
-    SelectedNetworkViewer,
-    useNotifications,
-} from "~Components"
-import { ColorThemeType, isSmallScreen } from "~Constants"
-import { useCheckWalletBackup, useClaimableUsernames, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
+import { AlertCard, BaseSpacer, BaseView, HeaderStyleV2, HeaderTitle, Layout, useNotifications } from "~Components"
+import { isSmallScreen } from "~Constants"
+import { useCheckWalletBackup, useClaimableUsernames, useThemedStyles } from "~Hooks"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import {
+    selectAreDevFeaturesEnabled,
+    selectDeveloperMenuUnlocked,
+    selectSelectedAccount,
+    useAppSelector,
+} from "~Storage/Redux"
+import { AccountUtils } from "~Utils"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
 import SettingsRowDivider, { RowDividerProps } from "./Components/SettingsRowDivider"
 
@@ -33,15 +30,17 @@ type BackupBannerItem = {
     title: string
 }
 
+type SettingsItem = SettingsRowItem | DividerItem | BackupBannerItem
+
 export const SettingsScreen = () => {
     const { LL } = useI18nContext()
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
+    const developerMenuUnlocked = useAppSelector(selectDeveloperMenuUnlocked)
 
     const { featureEnabled: notificationFeatureEnabled } = useNotifications()
 
     const { unclaimedAddresses } = useClaimableUsernames()
     const { styles: themedStyles } = useThemedStyles(baseStyles)
-    const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const flatSettingListRef = useRef(null)
 
@@ -62,8 +61,15 @@ export const SettingsScreen = () => {
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
 
     const { settingsList } = useMemo(
-        () => getLists(LL, devFeaturesEnabled, notificationFeatureEnabled),
-        [LL, devFeaturesEnabled, notificationFeatureEnabled],
+        () =>
+            getLists(
+                LL,
+                devFeaturesEnabled,
+                developerMenuUnlocked,
+                notificationFeatureEnabled,
+                AccountUtils.isObservedAccount(selectedAccount),
+            ),
+        [LL, devFeaturesEnabled, developerMenuUnlocked, notificationFeatureEnabled, selectedAccount],
     )
 
     const renderBackupWarning = useMemo(() => {
@@ -80,7 +86,7 @@ export const SettingsScreen = () => {
     }, [LL])
 
     const renderItem = useCallback(
-        (props: { item: SettingsRowItem | DividerItem | BackupBannerItem }) => {
+        (props: { item: SettingsItem }) => {
             const { item } = props
 
             switch (item.element) {
@@ -111,141 +117,183 @@ export const SettingsScreen = () => {
     return (
         <Layout
             noBackButton
+            noMargin
             fixedHeader={
-                <BaseView style={HeaderStyle}>
-                    <HeaderTitle title={LL.TITLE_MENU()} testID="settings-screen" />
-                    <SelectedNetworkViewer />
+                <BaseView style={HeaderStyleV2} px={16}>
+                    <HeaderTitle
+                        title={LL.TITLE_MORE_OPTIONS()}
+                        testID="settings-screen"
+                        typographyFont="headerTitle"
+                        align="left"
+                    />
                 </BaseView>
             }
             body={
-                <BaseView mt={-16} style={[themedStyles.list, { paddingBottom: androidOnlyTabBarBottomMargin }]}>
-                    <FlatList
-                        ref={flatSettingListRef}
-                        data={settingsList}
-                        scrollEnabled={isShowBackupModal || isSmallScreen}
-                        keyExtractor={(item, index) =>
-                            item.element === "settingsRow" ? item.icon : `${item.element}-${index}`
-                        }
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={renderItem}
-                    />
-                </BaseView>
+                <FlatList
+                    ref={flatSettingListRef}
+                    data={settingsList}
+                    style={themedStyles.list}
+                    scrollEnabled={isShowBackupModal || isSmallScreen}
+                    keyExtractor={(item, index) =>
+                        item.element === "settingsRow" ? item.icon : `${item.element}-${index}`
+                    }
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={renderItem}
+                />
             }
         />
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
-        separator: {
-            backgroundColor: theme.colors.text,
-            height: 0.5,
-        },
         list: {
-            paddingTop: 0,
-            paddingHorizontal: 8,
-            flex: 1,
-        },
-        header: {
-            height: 48,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            paddingBottom: 28,
+            paddingHorizontal: 24,
+            paddingTop: 16,
         },
     })
 
-const getLists = (LL: TranslationFunctions, devEnabled: boolean, notificationFeatureEnabled: boolean) => {
-    const settingsList: (SettingsRowItem | DividerItem | BackupBannerItem)[] = [
-        {
+const DIVIDER = {
+    element: "divider",
+    title: "Support_divider",
+    height: 1,
+} satisfies DividerItem
+
+const BACKUP_BANNER = {
+    element: "backupBanner",
+    title: "Backup_Warning",
+} satisfies BackupBannerItem
+
+const getLists = (
+    LL: TranslationFunctions,
+    devEnabled: boolean,
+    developerMenuUnlocked: boolean,
+    notificationFeatureEnabled: boolean,
+    isObservedAccount: boolean,
+): { settingsList: SettingsItem[] } => {
+    const tiles = {
+        GENERAL_SETTINGS: {
             element: "settingsRow",
             title: LL.TITLE_GENERAL_SETTINGS(),
             screenName: Routes.SETTINGS_GENERAL,
             icon: "icon-settings",
         },
-        {
+        MANAGE_WALLET: {
             element: "settingsRow",
             title: LL.TITLE_MANAGE_WALLET(),
             screenName: Routes.WALLET_MANAGEMENT,
             icon: "icon-wallet",
         },
-        {
-            element: "settingsRow",
-            title: LL.TITLE_TRANSACTIONS(),
-            screenName: Routes.SETTINGS_TRANSACTIONS,
-            icon: "icon-transaction",
-        },
-        {
+        NETWORKS: {
             element: "settingsRow",
             title: LL.TITLE_NETWORKS(),
             screenName: Routes.SETTINGS_NETWORK,
             icon: "icon-globe",
         },
-        {
-            element: "settingsRow",
-            title: LL.TITLE_CONNECTED_APPS(),
-            screenName: Routes.SETTINGS_CONNECTED_APPS,
-            icon: "icon-apps",
-        },
-        {
-            element: "settingsRow",
-            title: LL.TITLE_CONTACTS(),
-            screenName: Routes.SETTINGS_CONTACTS,
-            icon: "icon-users",
-        },
-        {
-            element: "settingsRow",
-            title: LL.TITLE_PRIVACY(),
-            screenName: Routes.SETTINGS_PRIVACY,
-            icon: "icon-shield-check",
-        },
-        {
-            element: "backupBanner",
-            title: "Backup_Warning",
-        },
-        {
-            element: "divider",
-            title: "Support_divider",
-            height: 1,
-        },
-        {
+        GET_SUPPORT: {
             element: "settingsRow",
             title: LL.TITLE_GET_SUPPORT(),
             screenName: Routes.BROWSER,
             icon: "icon-help-circle",
             url: "https://support.veworld.com",
         },
-        {
+        GIVE_FEEDBACK: {
             element: "settingsRow",
             title: LL.TITLE_GIVE_FEEDBACK(),
             screenName: Routes.BROWSER,
             icon: "icon-message-square",
             url: "https://forms.office.com/e/Vq1CUJD9Vy",
         },
-        {
+        ABOUT: {
             element: "settingsRow",
             title: LL.TITLE_ABOUT(),
             screenName: Routes.SETTINGS_ABOUT,
             icon: "icon-info",
         },
-    ]
-
-    if (notificationFeatureEnabled) {
-        settingsList.splice(4, 0, {
+        TRANSACTIONS: {
+            element: "settingsRow",
+            title: LL.TITLE_TRANSACTIONS(),
+            screenName: Routes.SETTINGS_TRANSACTIONS,
+            icon: "icon-transaction",
+        },
+        CONNECTED_APPS: {
+            element: "settingsRow",
+            title: LL.TITLE_CONNECTED_APPS(),
+            screenName: Routes.SETTINGS_CONNECTED_APPS,
+            icon: "icon-apps",
+        },
+        CONTACTS: {
+            element: "settingsRow",
+            title: LL.TITLE_CONTACTS(),
+            screenName: Routes.SETTINGS_CONTACTS,
+            icon: "icon-users",
+        },
+        PRIVACY: {
+            element: "settingsRow",
+            title: LL.TITLE_PRIVACY(),
+            screenName: Routes.SETTINGS_PRIVACY,
+            icon: "icon-shield-check",
+        },
+        NOTIFICATIONS: {
             element: "settingsRow",
             title: LL.TITLE_NOTIFICATIONS(),
             screenName: Routes.SETTINGS_NOTIFICATIONS,
             icon: "icon-bell-ring",
-        })
-    }
-
-    if (devEnabled) {
-        settingsList.push({
+        },
+        ALERTS: {
             element: "settingsRow",
             title: LL.TITLE_ALERTS(),
             screenName: Routes.SETTINGS_ALERTS,
             icon: "icon-bell",
-        })
+        },
+        DEVELOPER: {
+            element: "settingsRow",
+            title: LL.TITLE_DEVELOPER_SETTINGS(),
+            screenName: Routes.SETTINGS_DEVELOPER,
+            icon: "icon-code",
+        },
+    } satisfies Record<string, SettingsItem>
+
+    if (isObservedAccount) {
+        return {
+            settingsList: [
+                tiles.GENERAL_SETTINGS,
+                tiles.MANAGE_WALLET,
+                tiles.NETWORKS,
+                DIVIDER,
+                tiles.GET_SUPPORT,
+                tiles.GIVE_FEEDBACK,
+                tiles.ABOUT,
+            ],
+        }
+    }
+    const settingsList: SettingsItem[] = [
+        tiles.GENERAL_SETTINGS,
+        tiles.MANAGE_WALLET,
+        tiles.TRANSACTIONS,
+        tiles.NETWORKS,
+        tiles.CONNECTED_APPS,
+        tiles.CONTACTS,
+        tiles.PRIVACY,
+        BACKUP_BANNER,
+        DIVIDER,
+        tiles.GET_SUPPORT,
+        tiles.GIVE_FEEDBACK,
+        tiles.ABOUT,
+    ]
+
+    if (notificationFeatureEnabled) {
+        settingsList.splice(4, 0, tiles.NOTIFICATIONS)
+    }
+
+    if (devEnabled) {
+        settingsList.push(tiles.ALERTS)
+    }
+
+    if (developerMenuUnlocked) {
+        settingsList.push(tiles.DEVELOPER)
     }
 
     return { settingsList }

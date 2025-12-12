@@ -1,68 +1,42 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
-import React, { useCallback, useMemo, createContext, useContext, useState } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
-import { TabIcon } from "~Components"
-import { useCheckWalletBackup, useTheme } from "~Hooks"
+import React, { useCallback } from "react"
+import { StyleSheet } from "react-native"
+import { AnimatedTabIcon, TabIcon, useFeatureFlags } from "~Components"
+import { useCheckWalletBackup } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
-import {
-    DiscoverStack,
-    HomeStack,
-    RootStackParamListBrowser,
-    RootStackParamListHome,
-    RootStackParamListSettings,
-    SettingsStack,
-} from "~Navigation/Stacks"
+import { HomeStack, RootStackParamListHome, RootStackParamListSettings, SettingsStack } from "~Navigation/Stacks"
+import { AppsStack, RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
-import { selectCurrentScreen, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { selectActivitiesWithoutFinality, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils } from "~Utils"
 import PlatformUtils from "~Utils/PlatformUtils"
-import { COLORS } from "~Constants"
+import { useI18nContext } from "~i18n"
+import { TabBar } from "./TabBar"
 
 export type TabStackParamList = {
     HomeStack: NavigatorScreenParams<RootStackParamListHome>
     NFTStack: NavigatorScreenParams<RootStackParamListNFT>
-    DiscoverStack: NavigatorScreenParams<RootStackParamListBrowser>
     SettingsStack: NavigatorScreenParams<RootStackParamListSettings>
     [Routes.HISTORY_STACK]: NavigatorScreenParams<HistoryStackParamList>
+    AppsStack: NavigatorScreenParams<RootStackParamListApps>
 }
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
 
-const FocusedTabContext = createContext<string>("HomeStack")
-
-const CustomTabButton = (props: any) => {
-    const { children, onPress, route, ...otherProps } = props
-    const focusedTab = useContext(FocusedTabContext)
-
-    const routeName = route?.name || props.routeName || props.descriptor?.route?.name || "unknown"
-
-    const focused = focusedTab === routeName
-
-    return (
-        <TouchableOpacity
-            {...otherProps}
-            onPress={onPress}
-            style={[
-                customTabButtonStyles.container,
-                focused ? customTabButtonStyles.focused : customTabButtonStyles.unfocused,
-            ]}>
-            {children}
-        </TouchableOpacity>
-    )
-}
-
 export const TabStack = () => {
-    const theme = useTheme()
-    const currentScreen = useAppSelector(selectCurrentScreen)
-    const [focusedTab, setFocusedTab] = useState<string>("HomeStack")
+    const { LL } = useI18nContext()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
+    const pendingTransactions = useAppSelector(selectActivitiesWithoutFinality)
+
+    const { betterWorldFeature } = useFeatureFlags()
 
     const renderTabBarIcon = useCallback(
-        (focused: boolean, iconName: IconKey) => {
+        (focused: boolean, iconName: IconKey, label: string) => {
             const isSettings = iconName === "icon-menu"
 
             return (
@@ -71,134 +45,94 @@ export const TabStack = () => {
                     title={iconName}
                     isSettings={isSettings}
                     isShowBackupModal={isShowBackupModal}
+                    label={label}
                 />
             )
         },
         [isShowBackupModal],
     )
 
-    // Create a custom tabBarButton that tracks the focused tab
-    const createTabBarButton = useCallback((routeName: string) => {
-        return (props: any) => {
-            const enhancedProps = {
-                ...props,
-                route: { name: routeName },
-                onPress: () => {
-                    setFocusedTab(routeName)
-                    props.onPress?.()
-                },
-            }
-            return <CustomTabButton {...enhancedProps} />
-        }
-    }, [])
+    const renderActivityIcon = useCallback(
+        (focused: boolean, iconName: IconKey, label: string) => {
+            return (
+                <AnimatedTabIcon
+                    focused={focused}
+                    title={iconName}
+                    isSettings={false}
+                    isShowBackupModal={isShowBackupModal}
+                    label={label}
+                    isLoading={pendingTransactions.length > 0}
+                />
+            )
+        },
+        [isShowBackupModal, pendingTransactions.length],
+    )
 
-    const display = useMemo(() => {
-        switch (currentScreen) {
-            case Routes.SETTINGS_GET_SUPPORT:
-            case Routes.SETTINGS_GIVE_FEEDBACK:
-            case Routes.BROWSER:
-            case Routes.TOKEN_DETAILS:
-            case Routes.DISCOVER_TABS_MANAGER:
-                return "none"
-
-            case "":
-                return "none"
-
-            default:
-                return "flex"
-        }
-    }, [currentScreen])
+    const renderTabBar = useCallback((props: BottomTabBarProps) => <TabBar {...props} />, [])
 
     return (
-        <FocusedTabContext.Provider value={focusedTab}>
-            <Tab.Navigator
-                screenOptions={() => ({
-                    headerShown: false,
-                    tabBarShowLabel: false,
-                    tabBarStyle: {
-                        display,
-                        backgroundColor: theme.colors.card,
-                        ...tabbarBaseStyles.tabbar,
-                        ...tabbarBaseStyles.shadow,
-                    },
-                    lazy: true,
-                })}>
-                <Tab.Screen
-                    name="HomeStack"
-                    component={HomeStack}
-                    options={{
-                        tabBarLabel: "Wallet",
-                        tabBarTestID: "wallet-tab",
-                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-home"),
-                        tabBarButton: createTabBarButton("HomeStack"),
-                    }}
-                />
+        <Tab.Navigator
+            screenOptions={{
+                headerShown: false,
+                tabBarShowLabel: false,
+            }}
+            tabBar={renderTabBar}>
+            <Tab.Screen
+                name="HomeStack"
+                component={HomeStack}
+                options={{
+                    tabBarLabel: "Wallet",
+                    tabBarTestID: "wallet-tab",
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-home", LL.TAB_TITLE_HOME()),
+                }}
+            />
 
+            {!betterWorldFeature?.balanceScreen?.collectibles?.enabled && (
                 <Tab.Screen
                     name="NFTStack"
                     component={NFTStack}
                     options={{
                         tabBarLabel: "NFT",
                         tabBarTestID: "nft-tab",
-                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image"),
-                        tabBarButton: createTabBarButton("NFTStack"),
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image", LL.TAB_TITLE_NFT()),
                     }}
                 />
+            )}
 
+            {!AccountUtils.isObservedAccount(selectedAccount) && (
                 <Tab.Screen
-                    name="DiscoverStack"
-                    component={DiscoverStack}
+                    name="AppsStack"
+                    component={AppsStack}
                     options={{
-                        tabBarLabel: "Discover",
-                        tabBarTestID: "discover-tab",
-                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-explorer"),
-                        tabBarButton: createTabBarButton("DiscoverStack"),
+                        tabBarLabel: "Apps",
+                        tabBarTestID: "apps-tab",
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-apps", LL.TAB_TITLE_APPS()),
                     }}
                 />
+            )}
 
-                <Tab.Screen
-                    name={Routes.HISTORY_STACK}
-                    component={HistoryStack}
-                    options={{
-                        tabBarLabel: Routes.HISTORY,
-                        tabBarTestID: "history-tab",
-                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-history"),
-                        tabBarButton: createTabBarButton(Routes.HISTORY_STACK),
-                    }}
-                />
+            <Tab.Screen
+                name={Routes.HISTORY_STACK}
+                component={HistoryStack}
+                options={{
+                    tabBarLabel: Routes.HISTORY,
+                    tabBarTestID: "history-tab",
+                    tabBarIcon: ({ focused }) => renderActivityIcon(focused, "icon-history", LL.TAB_TITLE_ACTIVITY()),
+                }}
+            />
 
-                <Tab.Screen
-                    name="SettingsStack"
-                    component={SettingsStack}
-                    options={{
-                        tabBarLabel: "Settings",
-                        tabBarTestID: "settings-tab",
-                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-menu"),
-                        tabBarButton: createTabBarButton("SettingsStack"),
-                    }}
-                />
-            </Tab.Navigator>
-        </FocusedTabContext.Provider>
+            <Tab.Screen
+                name="SettingsStack"
+                component={SettingsStack}
+                options={{
+                    tabBarLabel: "Settings",
+                    tabBarTestID: "settings-tab",
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-more-horizontal", LL.TAB_TITLE_MORE()),
+                }}
+            />
+        </Tab.Navigator>
     )
 }
-
-const customTabButtonStyles = StyleSheet.create({
-    container: {
-        alignItems: "center",
-        justifyContent: "center",
-        marginHorizontal: 8,
-        paddingHorizontal: 8,
-        paddingVertical: 8,
-        borderRadius: 8,
-        minWidth: 50,
-    },
-    focused: {
-        backgroundColor: COLORS.DARK_PURPLE,
-    },
-    unfocused: {
-        backgroundColor: "transparent",
-    },
-})
 
 export const tabbarBaseStyles = StyleSheet.create({
     tabbar: {
@@ -207,9 +141,12 @@ export const tabbarBaseStyles = StyleSheet.create({
         left: 0,
         right: 0,
         borderTopWidth: 0,
-        paddingHorizontal: 8,
-        paddingTop: 12,
-        height: PlatformUtils.isIOS() ? 90 : 60,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 8,
+        height: PlatformUtils.isIOS() ? 90 : 56,
     },
     shadow: {
         shadowColor: "#000",

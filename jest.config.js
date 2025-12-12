@@ -1,11 +1,12 @@
 /** @type {import("jest").Config} */
 const { defaults: tsjPreset } = require("ts-jest/presets")
-
+/** @type {import("jest").Config} */
 module.exports = {
     ...tsjPreset,
+    testEnvironment: "@shopify/react-native-skia/jestEnv.mjs",
     preset: "react-native",
     setupFiles: ["./node_modules/react-native-gesture-handler/jestSetup.js"],
-    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts", "@shopify/react-native-skia/jestSetup.js"],
     coverageReporters: ["json", "lcov", "text", "text-summary", "clover", "json-summary"],
     testTimeout: 10000,
     transform: {
@@ -13,8 +14,6 @@ module.exports = {
         "^.+\\.tsx?$": "ts-jest",
         ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
         "^.+\\.js$": "babel-jest",
-
-        "node_modules/@transak/react-native-sdk/node_modules/query-string/index.js": "babel-jest",
     },
     transformIgnorePatterns: [
         "node_modules/(?!((jest-)?react-native|@react-native(-community)?)" +
@@ -35,9 +34,12 @@ module.exports = {
             "|decode-uri-component" +
             "|split-on-first" +
             "|filter-obj" +
-            "|@transak/react-native-sdk" +
+            "|@transak/ui-react-native-sdk" +
             "|jail-monkey" +
             "|expo/.*" +
+            "|@privy-io/.*" +
+            "|uuid" +
+            "|@shopify/react-native-skia" +
             ")",
     ],
     moduleNameMapper: {
@@ -57,10 +59,12 @@ module.exports = {
         "^~Test$": ["<rootDir>/src/Test/index.tsx"],
         "^~Networking(.*)": ["<rootDir>/src/Networking$1"],
         "^~Logging(.*)": ["<rootDir>/src/Logging$1"],
+        "^~VechainWalletKit(.*)": ["<rootDir>/src/VechainWalletKit$1"],
         "^~Generated(.*)": ["<rootDir>/src/Generated$1"],
         "^~fixtures(.*)": ["<rootDir>/__fixtures__$1"],
         "^react-native-device-info$": "<rootDir>/src/Test/mocks/react-native-device-info.js",
         "^@react-native-community/netinfo$": "<rootDir>/src/Test/mocks/@react-native-community/netinfo.js",
+        "^@privy-io/expo$": "<rootDir>/src/Test/mocks/@privy-io/expo.js",
         Intl: "<rootDir>/node_modules/intl/",
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],

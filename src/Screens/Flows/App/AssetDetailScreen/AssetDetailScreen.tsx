@@ -3,22 +3,18 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import striptags from "striptags"
-import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
+import { AlertInline, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { B3TR, VET } from "~Constants"
 import { typography } from "~Constants/Theme"
-import { useBottomSheetModal, useBottomSheetRef, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { useBottomSheetModal, useBottomSheetRef, useCameraBottomSheet, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import {
-    selectBalanceVisible,
-    selectSelectedAccount,
-    selectSendableTokensWithBalance,
-    useAppSelector,
-} from "~Storage/Redux"
+import { BannersCarousel } from "~Screens"
+import { selectBalanceVisible, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { AssetChart, ConvertedBetterBottomSheet, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
-import { StargateCarousel } from "./Components/StargateCarousel"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -31,9 +27,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const tokenWithCompleteInfo = useTokenWithCompleteInfo(token)
-
-    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
+    const { RenderCameraModal, handleOpenOnlyReceiveCamera } = useCameraBottomSheet({ targets: [] })
 
     const {
         ref: convertBetterSuccessBottomSheetRef,
@@ -45,12 +39,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
-    const tokens = useAppSelector(selectSendableTokensWithBalance)
-    const foundToken = tokens.find(
-        t =>
-            t.name?.toLowerCase().includes(token.name.toLowerCase()) ||
-            t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
-    )
+    const tokenWithBalance = useMemo(() => {
+        if (!token.balance) return
+        return token as FungibleTokenWithBalance
+    }, [token])
 
     const tokenName = useMemo(
         () => (token.symbol === B3TR.symbol ? LL.TITLE_VEBETTER() : token.name),
@@ -59,10 +51,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     // render description based on locale. NB: at the moment only EN is supported
     const description = useMemo(() => {
-        if (!tokenWithCompleteInfo?.tokenInfo?.description) return ""
+        if (!token?.tokenInfo?.description) return ""
 
-        return tokenWithCompleteInfo?.tokenInfo?.description[locale] ?? tokenWithCompleteInfo?.tokenInfo?.description.en
-    }, [tokenWithCompleteInfo?.tokenInfo?.description, locale])
+        return token?.tokenInfo?.description[locale] ?? token?.tokenInfo?.description.en
+    }, [token?.tokenInfo?.description, locale])
 
     const isObserved = useMemo(() => AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
 
@@ -89,25 +81,26 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         <BaseSpacer height={40} />
 
                         <AssetBalanceCard
-                            tokenWithInfo={tokenWithCompleteInfo}
-                            foundToken={foundToken}
+                            tokenWithInfo={token}
+                            foundToken={tokenWithBalance}
                             isBalanceVisible={isBalanceVisible}
-                            openQRCodeSheet={openQRCodeSheet}
+                            openQRCodeSheet={handleOpenOnlyReceiveCamera}
                             isObserved={isObserved}
                             convertB3trBottomSheetRef={convertB3trBsRef}
                         />
+                        <BaseSpacer height={16} />
 
                         {token.symbol === B3TR.symbol && (
                             <BaseView w={100}>
-                                <BaseSpacer height={16} />
                                 <AlertInline status="info" variant="inline" message={LL.ALERT_MSG_VOT3_BALANCE()} />
+                                <BaseSpacer height={16} />
                             </BaseView>
                         )}
 
-                        <BaseSpacer height={40} />
-                        {token.symbol === VET.symbol && <StargateCarousel />}
+                        {token.symbol === VET.symbol && <BannersCarousel location="token_screen" />}
 
-                        {/* TODO: handle loading/skeleton */}
+                        <BaseSpacer height={40} />
+
                         {!!description && (
                             <>
                                 <BaseText
@@ -130,7 +123,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         <MarketInfoView tokenSymbol={token.symbol} />
                         <BaseSpacer height={16} />
                     </BaseView>
-                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+                    {RenderCameraModal}
 
                     <ConvertedBetterBottomSheet
                         ref={convertBetterSuccessBottomSheetRef}

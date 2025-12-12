@@ -4,9 +4,13 @@ import { selectVisitedUrls, useAppSelector } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
 import { TestWrapper } from "~Test"
 import { useVisitedUrls } from "./useVisitedUrls"
+import axios from "axios"
+
+jest.mock("axios")
+const mockedAxios = axios as jest.Mocked<typeof axios>
 
 jest.mock("~Components/Providers/InAppBrowserProvider", () => ({
-    useInAppBrowser: jest.fn().mockReturnValue({
+    useInAppBrowserOrNull: jest.fn().mockReturnValue({
         navigationState: {},
     } as any),
 }))
@@ -26,9 +30,10 @@ const createWrapper = ({
 }
 
 describe("useVisitedUrls", () => {
-    // beforeEach(() => {
-    //     jest.clearAllMocks()
-    // })
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockedAxios.get.mockResolvedValue({ data: "OK" })
+    })
 
     it("should add to the visited urls if the url is valid", async () => {
         const { result } = renderHook(
@@ -42,19 +47,21 @@ describe("useVisitedUrls", () => {
         )
 
         await act(async () => {
-            await result.current.hooks.addVisitedUrl("https://www.google.com")
+            await result.current.hooks.addVisitedUrl("https://www.example.com")
         })
 
         expect(result.current.state.length).toBe(1)
         expect(result.current.state[0]).toMatchObject({
-            name: "www.google.com",
-            href: "https://www.google.com",
+            name: "www.example.com",
+            href: "https://www.example.com",
             isCustom: true,
             amountOfNavigations: 1,
         })
     })
 
     it("should not add to the visited urls if the url is invalid", async () => {
+        mockedAxios.get.mockRejectedValueOnce(new Error("Invalid URL"))
+
         const { result: visitedUrlsResult } = renderHook(() => useVisitedUrls(), {
             wrapper: createWrapper,
         })
@@ -64,7 +71,7 @@ describe("useVisitedUrls", () => {
         })
 
         await act(async () => {
-            await visitedUrlsResult.current.addVisitedUrl("https//google/com")
+            await visitedUrlsResult.current.addVisitedUrl("https//example/com")
         })
 
         expect(selectorResult.current.length).toBe(0)
@@ -77,9 +84,9 @@ describe("useVisitedUrls", () => {
                     {
                         amountOfNavigations: 1,
                         createAt: new Date().getTime(),
-                        href: "https://www.google.com",
+                        href: "https://www.example.com",
                         isCustom: true,
-                        name: "Google",
+                        name: "Example",
                     },
                 ],
             },
@@ -99,7 +106,7 @@ describe("useVisitedUrls", () => {
         })
 
         await act(async () => {
-            await visitedUrlsResult.current.removeVisitedUrl("https://www.google.com")
+            await visitedUrlsResult.current.removeVisitedUrl("https://www.example.com")
         })
 
         expect(selectorResult.current.length).toBe(0)

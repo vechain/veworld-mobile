@@ -1,187 +1,206 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
-import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
-import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { TabsIconSVG } from "~Assets"
-import { BaseIcon, BaseText, BaseTextInput, BaseTouchable, BaseView, useInAppBrowser } from "~Components"
+import { StyleSheet } from "react-native"
+import Animated from "react-native-reanimated"
+import { BaseText, BaseTouchable, BaseView } from "~Components/Base"
+import { BaseIcon } from "~Components/Base/BaseIcon"
 import { COLORS } from "~Constants"
-import { useTheme } from "~Hooks"
-import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
-import { selectCurrentTabId, selectTabs, updateTab, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { URIUtils } from "~Utils"
+import { useBottomSheetModal, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
+import { useDynamicAppLogo } from "~Hooks/useAppLogo"
+import { useCloseBrowser } from "~Hooks/useCloseBrowser"
+import { RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
+import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
+import { DAppUtils } from "~Utils/DAppUtils"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
+import { DAppIcon } from "../DAppIcon"
+import { Spinner } from "../Spinner"
+import { BrowserBottomSheet } from "./BrowserBottomSheet"
 
 type Props = {
-    onBrowserNavigation?: (error: boolean) => void
-    onNavigate?: () => void | Promise<void>
-    returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING
+    navigationUrl: string
+    onNavigate: () => void | Promise<void>
+    returnScreen?:
+        | Routes.SETTINGS
+        | Routes.HOME
+        | Routes.ACTIVITY_STAKING
+        | Routes.APPS
+        | Routes.SWAP
+        | Routes.COLLECTIBLES_COLLECTION_DETAILS
+    isLoading?: boolean
 }
 
-export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.DISCOVER }: Props) => {
-    const { showToolbars, navigationState, isDapp, navigateToUrl } = useInAppBrowser()
+const AnimatedBaseIcon = Animated.createAnimatedComponent(BaseIcon)
+const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
+const AnimatedBaseText = Animated.createAnimatedComponent(wrapFunctionComponent(BaseText))
+const AnimatedTouchable = Animated.createAnimatedComponent(wrapFunctionComponent(BaseTouchable))
+
+export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: Props) => {
+    const { styles } = useThemedStyles(baseStyles)
+    const dappMetadata = useGetDappMetadataFromUrl(navigationUrl)
+    const fetchDynamicLogo = useDynamicAppLogo()
+
     const nav =
         useNavigation<
-            NativeStackNavigationProp<RootStackParamListBrowser & RootStackParamListSettings & RootStackParamListHome>
+            NativeStackNavigationProp<RootStackParamListSettings & RootStackParamListHome & RootStackParamListApps>
         >()
 
-    const tabs = useAppSelector(selectTabs)
-    const selectedTabId = useAppSelector(selectCurrentTabId)
-    const dispatch = useAppDispatch()
+    const { onOpen: openBottomSheet, ref: bottomSheetRef, onClose: closeBottomSheet } = useBottomSheetModal()
 
-    const navToDiscover = useCallback(async () => {
-        await onNavigate?.()
-        nav.navigate(returnScreen)
-    }, [nav, onNavigate, returnScreen])
+    const navigateBack = useCloseBrowser({ returnScreen, onNavigate })
 
-    const navToTabsManager = useCallback(async () => {
+    const navToSearch = useCallback(async () => {
         await onNavigate?.()
-        nav.replace(Routes.DISCOVER_TABS_MANAGER)
+        nav.replace(Routes.APPS_SEARCH)
     }, [nav, onNavigate])
 
-    const theme = useTheme()
-
-    const animatedStyles = useAnimatedStyle(
-        () => ({
-            height: showToolbars ? withTiming(56) : withTiming(24),
-        }),
-        [showToolbars],
-    )
-
-    const onSubmit = useCallback(
-        async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-            const value = e.nativeEvent.text.toLowerCase()
-            const isValid = await URIUtils.isValidBrowserUrl(value)
-            if (isValid) {
-                const url = URIUtils.parseUrl(value)
-                onBrowserNavigation?.(false)
-                navigateToUrl(url)
-                if (selectedTabId) dispatch(updateTab({ id: selectedTabId, href: url }))
-                return
+    const parsedDappMetadata = useMemo(() => {
+        if (dappMetadata)
+            return {
+                icon: fetchDynamicLogo({ app: dappMetadata }),
+                name: dappMetadata.name,
+                url: navigationUrl,
+                isDapp: true,
             }
-            onBrowserNavigation?.(true)
-        },
-        [dispatch, navigateToUrl, onBrowserNavigation, selectedTabId],
-    )
 
-    const renderWithToolbar = useMemo(() => {
+        return {
+            name: new URL(navigationUrl).hostname,
+            url: navigationUrl,
+            icon: DAppUtils.generateFaviconUrl(navigationUrl, { size: 64 }),
+            isDapp: false,
+        }
+    }, [dappMetadata, fetchDynamicLogo, navigationUrl])
+
+    const websiteFavicon = useMemo(() => {
         return (
-            <BaseView style={styles.inputContainer}>
-                {/* Icon on the left */}
-                <BaseIcon
-                    testID="URL-bar-back-button"
-                    name="icon-arrow-left"
-                    color={theme.colors.text}
-                    action={navToDiscover}
-                    haptics="Light"
-                    size={24}
-                    p={8}
-                />
+            <DAppIcon
+                uri={parsedDappMetadata.icon}
+                fallbackTestID="URL-bar-website-favicon"
+                imageTestID="URL-bar-dapp-favicon"
+                size={24}
+            />
+        )
+    }, [parsedDappMetadata])
 
-                {/* URL Text centered */}
-                <BaseView flex={1} alignItems="center" flexDirection="row">
-                    {isDapp ? (
-                        <BaseView flex={0.9} flexDirection="row" alignItems="center" style={styles.dappContainer}>
-                            <BaseIcon name="icon-lock" color={theme.colors.textLight} size={12} />
+    const websiteName = useMemo(() => {
+        const url = new URL(navigationUrl)
+        return dappMetadata ? dappMetadata.name : url.hostname.replace("www.", "") || "about:blank"
+    }, [dappMetadata, navigationUrl])
 
-                            <BaseText
-                                testID="URL-bar-dapp-name"
-                                typographyFont="captionRegular"
-                                color={theme.colors.subtitle}
-                                numberOfLines={1}>
-                                {navigationState?.url}
-                            </BaseText>
-                        </BaseView>
-                    ) : (
-                        <BaseTextInput
-                            testID="URL-bar-input"
-                            defaultValue={navigationState?.url}
-                            onSubmitEditing={onSubmit}
-                            style={styles.textInput}
-                            inputContainerStyle={styles.textInputContainer}
-                            containerStyle={styles.textInputContainerRoot}
-                        />
-                    )}
-                </BaseView>
-
-                <BaseTouchable onPress={navToTabsManager} testID="TABS_BTN">
-                    <TabsIconSVG
-                        count={tabs.length}
-                        textColor={theme.colors.text}
-                        color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
+    return (
+        <>
+            <Animated.View style={styles.animatedContainer}>
+                <AnimatedBaseView style={styles.inputContainer}>
+                    {/* Icon on the left */}
+                    <AnimatedBaseIcon
+                        testID="URL-bar-back-button"
+                        name="icon-x"
+                        color={COLORS.GREY_50}
+                        bg={COLORS.PURPLE}
+                        action={navigateBack}
+                        haptics="Light"
+                        size={16}
+                        p={8}
+                        style={styles.iconButton}
                     />
-                </BaseTouchable>
-            </BaseView>
-        )
-    }, [
-        isDapp,
-        navToDiscover,
-        navToTabsManager,
-        navigationState?.url,
-        onSubmit,
-        tabs.length,
-        theme.colors.subtitle,
-        theme.colors.text,
-        theme.colors.textLight,
-        theme.isDark,
-    ])
 
-    const renderWithoutToolbar = useMemo(() => {
-        return (
-            <BaseView style={styles.noToolbarContainer}>
-                <BaseText typographyFont="smallCaptionMedium" color={theme.colors.subtitle} numberOfLines={1}>
-                    {navigationState?.url}
-                </BaseText>
-            </BaseView>
-        )
-    }, [navigationState?.url, theme.colors.subtitle])
+                    {/* URL Text centered */}
+                    <AnimatedTouchable
+                        testID="URL-bar-website-name"
+                        style={styles.urlContainer}
+                        onPress={navToSearch}
+                        disabled={isLoading}>
+                        <AnimatedBaseView
+                            flex={1}
+                            alignItems="center"
+                            flexDirection="row"
+                            justifyContent="center"
+                            gap={8}>
+                            {isLoading ? (
+                                <Spinner color={COLORS.WHITE} size={20} style={styles.spinner} />
+                            ) : (
+                                websiteFavicon
+                            )}
+                            <AnimatedBaseText
+                                allowFontScaling={false}
+                                typographyFont="bodySemiBold"
+                                color={COLORS.GREY_50}
+                                style={[styles.appName]}>
+                                {websiteName}
+                            </AnimatedBaseText>
+                        </AnimatedBaseView>
+                    </AnimatedTouchable>
 
-    return navigationState?.url ? (
-        <Animated.View style={[styles.animatedContainer, animatedStyles]}>
-            {showToolbars ? renderWithToolbar : renderWithoutToolbar}
-        </Animated.View>
-    ) : null
+                    <AnimatedBaseIcon
+                        name="icon-more-vertical"
+                        color={COLORS.GREY_50}
+                        bg={COLORS.PURPLE}
+                        action={openBottomSheet}
+                        haptics="Light"
+                        size={16}
+                        p={8}
+                        style={styles.iconButton}
+                    />
+                </AnimatedBaseView>
+            </Animated.View>
+
+            <BrowserBottomSheet ref={bottomSheetRef} onNavigate={onNavigate} onClose={closeBottomSheet} />
+        </>
+    )
 }
+const baseStyles = () =>
+    StyleSheet.create({
+        animatedContainer: {
+            opacity: 1,
+            alignItems: "center",
+            flexDirection: "row",
+            backgroundColor: COLORS.BALANCE_BACKGROUND,
+            paddingVertical: 8,
+        },
+        inputContainer: {
+            width: "100%",
+            height: 40,
+            paddingHorizontal: 16,
+            alignItems: "center",
+            flexDirection: "row",
+            gap: 16,
+        },
+        noToolbarContainer: {
+            height: 24,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            flex: 1,
+            paddingHorizontal: 16,
+            marginVertical: 8,
+        },
+        dappContainer: {
+            gap: 8,
+        },
+        appName: {
+            textAlign: "center", // centers the text
+            transformOrigin: "center",
+        },
 
-const styles = StyleSheet.create({
-    animatedContainer: {
-        opacity: 1,
-        alignItems: "center",
-        flexDirection: "row",
-    },
-    inputContainer: {
-        width: "100%",
-        height: 40,
-        paddingHorizontal: 16,
-        alignItems: "center",
-        flexDirection: "row",
-        gap: 16,
-    },
-    noToolbarContainer: {
-        height: 24,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        flex: 1,
-        paddingHorizontal: 16,
-    },
-    dappContainer: {
-        gap: 8,
-    },
-    urlText: {
-        textAlign: "center", // centers the text
-        marginHorizontal: 10, // adds space around the text
-        marginVertical: 10,
-    },
-    textInput: {
-        fontSize: 12,
-        paddingVertical: 8,
-    },
-    textInputContainer: {
-        height: 32,
-        paddingVertical: 0,
-        width: "100%",
-    },
-    textInputContainerRoot: {
-        width: "100%",
-    },
-})
+        textInputContainer: {
+            height: 32,
+            paddingVertical: 0,
+            width: "100%",
+        },
+        textInputContainerRoot: {
+            width: "100%",
+        },
+        urlContainer: {
+            flex: 1,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 8,
+        },
+        iconButton: {
+            transformOrigin: "center",
+        },
+        spinner: {
+            padding: 2,
+        },
+    })

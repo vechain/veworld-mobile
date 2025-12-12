@@ -1,3 +1,4 @@
+import { AddressUtils } from "~Utils"
 import { AbiManager, EventResult, InspectableOutput } from "./AbiManager"
 import { ReceiptOutput } from "./ReceiptOutput"
 
@@ -13,14 +14,38 @@ export class ReceiptProcessor {
                 [] as EventResult[],
             )
 
-            receiptOutputs.push(
-                ...(events.map(evt => ({
-                    clauseIndex: i,
-                    name: evt.name,
-                    params: evt.params,
-                    address: evt.address,
-                })) as any),
-            )
+            if (events.length === 0) {
+                receiptOutputs.push(
+                    ...output.events.map(
+                        evt =>
+                            ({
+                                clauseIndex: i,
+                                name: "___INTERNAL_UNKNOWN___",
+                                params: {},
+                                address: evt.address,
+                            } as ReceiptOutput),
+                    ),
+                )
+            } else {
+                receiptOutputs.push(
+                    ...events
+                        .map(
+                            evt =>
+                                ({
+                                    clauseIndex: i,
+                                    name: evt.name,
+                                    params: evt.params,
+                                    address: evt.address,
+                                } as ReceiptOutput),
+                        )
+                        .filter(evt => {
+                            if (evt.name !== "VET_TRANSFER(address,address,uint256)") return true
+                            if (AddressUtils.compareAddresses(evt.params.from, origin)) return true
+                            if (AddressUtils.compareAddresses(evt.params.to, origin)) return true
+                            return false
+                        }),
+                )
+            }
         }
         return receiptOutputs
     }

@@ -1,7 +1,17 @@
-import React, { useCallback, useMemo, useRef, useState } from "react"
-import { ScrollView, StyleProp, StyleSheet, TouchableOpacity, ViewStyle, ViewToken } from "react-native"
+import { BottomSheetFlatList, BottomSheetFlatListMethods } from "@gorhom/bottom-sheet"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+    ListRenderItemInfo,
+    NativeScrollEvent,
+    NativeSyntheticEvent,
+    ScrollView,
+    StyleProp,
+    StyleSheet,
+    TouchableOpacity,
+    ViewStyle,
+} from "react-native"
 import Animated from "react-native-reanimated"
-import { BaseCarouselItem } from "~Components/Base/BaseCarousel/BaseCarouselItem"
+import { BaseCarouselItem, CarouselPressEvent } from "~Components/Base/BaseCarousel/BaseCarouselItem"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
 import { BaseView } from "~Components/Base/BaseView"
 import { ColorThemeType, SCREEN_WIDTH } from "~Constants"
@@ -32,7 +42,7 @@ type Props = {
     showPagination?: boolean
     paginationAlignment?: "flex-start" | "center" | "flex-end"
     testID?: string
-    onSlidePress?: (name: string) => void
+    onSlidePress?: (event: CarouselPressEvent) => void
     /**
      * Decide when `onSlidePress` is called. Default is `after
      */
@@ -66,6 +76,24 @@ type Props = {
      * Provide snap offsets. By default they're calculated
      */
     snapOffsets?: number[]
+    /**
+     * Set to true if it's inside a bottom sheet.
+     * @default false
+     */
+    bottomSheet?: boolean
+    /**
+     * Style for the pagination dots
+     */
+    dotStyles?: {
+        /**
+         * Style for the active dot
+         */
+        active: StyleProp<ViewStyle>
+        /**
+         * Default style of the dot
+         */
+        default: StyleProp<ViewStyle>
+    }
 }
 
 export const BaseCarousel = ({
@@ -84,12 +112,13 @@ export const BaseCarousel = ({
     testID,
     snapOffsets,
     itemHeight,
+    bottomSheet,
+    dotStyles,
 }: Props) => {
     const [page, setPage] = useState(0)
 
-    const ref = useRef<Animated.FlatList<any>>(null)
+    const ref = useRef<Animated.FlatList<any> | BottomSheetFlatListMethods>(null)
     const { styles } = useThemedStyles(baseStyles(paginationAlignment))
-
     const ItemSeparatorComponent = useCallback(() => <BaseSpacer width={gap} />, [gap])
 
     const w = useMemo(() => {
@@ -127,64 +156,94 @@ export const BaseCarousel = ({
         [data.length, padding],
     )
 
-    const onViewableItemsChanged = useCallback(
-        (info: { viewableItems: ViewToken<CarouselSlideItem>[]; changed: ViewToken<CarouselSlideItem>[] }) => {
-            if (info.viewableItems.length === 0) return
-            setPage(info.viewableItems[0].index!)
+    const renderItem = useCallback(
+        ({ item, index }: ListRenderItemInfo<CarouselSlideItem>) => {
+            return (
+                <BaseCarouselItem
+                    testID={item.testID}
+                    href={item.href}
+                    isExternalLink={item.isExternalLink}
+                    name={item.name}
+                    onPress={onSlidePress}
+                    contentWrapperStyle={[
+                        itemHeight ? { height: itemHeight } : undefined,
+                        contentWrapperStyle,
+                        getInitialPaddingStyles(index),
+                    ]}
+                    onPressActivation={onSlidePressActivation}
+                    closable={item.closable}
+                    onClose={item.onClose}
+                    closeButtonStyle={item.closeButtonStyle}
+                    style={item.style}>
+                    {item.content}
+                </BaseCarouselItem>
+            )
         },
-        [],
+        [contentWrapperStyle, getInitialPaddingStyles, itemHeight, onSlidePress, onSlidePressActivation],
     )
+
+    const Component = useMemo(() => (bottomSheet ? BottomSheetFlatList : Animated.FlatList), [bottomSheet])
+
+    const names = useMemo(() => data.map(d => d.name ?? ""), [data])
+
+    const onScroll = useCallback(
+        (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+            const contentOffset = Math.ceil(e.nativeEvent.contentOffset.x)
+            if (contentOffset + e.nativeEvent.layoutMeasurement.width >= e.nativeEvent.contentSize.width) {
+                //This is the last page
+                setPage(offsets.length - 1)
+                return
+            }
+            const pointIdx = [...offsets].reverse().findIndex(offset => offset <= contentOffset)
+
+            if (pointIdx === -1) {
+                setPage(0)
+                return
+            }
+            setPage(offsets.length - 1 - pointIdx)
+        },
+        [offsets],
+    )
+
+    useEffect(() => {
+        ref.current?.scrollToOffset({ animated: true, offset: 0 })
+    }, [names])
 
     return (
         <BaseView flex={1} flexDirection="column" style={[styles.root, rootStyle]}>
-            <Animated.FlatList
-                ref={ref}
+            <Component
+                ref={ref as any}
                 data={data}
                 snapToOffsets={offsets}
                 snapToEnd={false}
                 snapToStart={false}
                 disableIntervalMomentum
                 ItemSeparatorComponent={ItemSeparatorComponent}
-                viewabilityConfig={{ itemVisiblePercentThreshold: 100 }}
-                onViewableItemsChanged={onViewableItemsChanged}
-                decelerationRate="fast"
+                decelerationRate={"fast"}
+                alwaysBounceHorizontal={false}
+                bounces={false}
                 snapToAlignment="start"
                 horizontal
                 style={containerStyle}
                 keyExtractor={item => item.name ?? ""}
                 testID={testID}
-                renderItem={({ item, index }) => {
-                    return (
-                        <BaseCarouselItem
-                            testID={item.testID}
-                            href={item.href}
-                            isExternalLink={item.isExternalLink}
-                            name={item.name}
-                            onPress={onSlidePress}
-                            contentWrapperStyle={[
-                                itemHeight ? { height: itemHeight } : undefined,
-                                contentWrapperStyle,
-                                getInitialPaddingStyles(index),
-                            ]}
-                            onPressActivation={onSlidePressActivation}
-                            closable={item.closable}
-                            onClose={item.onClose}
-                            closeButtonStyle={item.closeButtonStyle}
-                            style={item.style}>
-                            {item.content}
-                        </BaseCarouselItem>
-                    )
-                }}
+                renderItem={renderItem}
                 showsHorizontalScrollIndicator={false}
+                onScroll={onScroll}
             />
-            {showPagination && (
+            {showPagination && data.length > 1 && (
                 <ScrollView
                     contentContainerStyle={[styles.dotContainer, { paddingStart: padding }, paginationStyle]}
                     horizontal>
                     {Array.from({ length: data.length }, (_, idx) => (
                         <TouchableOpacity
                             key={idx}
-                            style={[styles.dot, page === idx ? styles.activeDot : undefined]}
+                            style={[
+                                styles.dot,
+                                page === idx ? styles.activeDot : undefined,
+                                dotStyles?.default,
+                                page === idx ? dotStyles?.active : undefined,
+                            ]}
                             onPress={onPressPagination.bind(null, idx)}
                         />
                     ))}

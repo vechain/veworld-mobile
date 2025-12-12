@@ -1,8 +1,4 @@
 name: Create Version Info PR
-permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
 
 on:
     workflow_run:
@@ -14,6 +10,10 @@ on:
 jobs:
     create-release-pr:
         runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+            id-token: write
         if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
         steps:

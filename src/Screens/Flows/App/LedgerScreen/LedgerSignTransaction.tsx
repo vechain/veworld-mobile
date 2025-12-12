@@ -23,6 +23,8 @@ import {
 } from "~Components"
 import { AnalyticsEvent, creteAnalyticsEvent, ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useSendTransaction } from "~Hooks"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
+import { useLoginSession } from "~Hooks/useLoginSession"
 import { ActivityType } from "~Model"
 import { RootStackParamListHome, RootStackParamListSwitch, Routes } from "~Navigation"
 import {
@@ -58,6 +60,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const { LL } = useI18nContext()
     const { processRequest } = useWalletConnect()
     const { postMessage } = useInAppBrowser()
+    const { createSessionIfNotExists } = useLoginSession()
+
     const network = useAppSelector(selectSelectedNetwork)
 
     const [signature, setSignature] = useState<Buffer>()
@@ -65,6 +69,8 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const [signingError, setSigningError] = useState<boolean>()
     const [isSending, setIsSending] = useState(false)
     const [userRejected, setUserRejected] = useState<boolean>(false)
+
+    const { onSuccess, onFailure, onRejectRequest } = useExternalDappConnection()
 
     const {
         ref: connectionErrorSheetRef,
@@ -224,11 +230,18 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
             if (res.success) {
                 setSignature(res.payload)
+                if (dappRequest) createSessionIfNotExists(dappRequest)
             } else {
                 if (res.err === LEDGER_ERROR_CODES.USER_REJECTED) {
                     setUserRejected(true)
+                    if (dappRequest && dappRequest.type === "external-app") {
+                        await onRejectRequest(dappRequest.redirectUrl)
+                    }
                 } else {
                     setSigningError(true)
+                    if (dappRequest && dappRequest.type === "external-app") {
+                        await onFailure(dappRequest.redirectUrl)
+                    }
                 }
             }
         } catch (e) {
@@ -237,7 +250,16 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         } finally {
             setIsAwaitingSignature(false)
         }
-    }, [accountWithDevice, withTransport, transaction])
+    }, [
+        withTransport,
+        accountWithDevice.index,
+        accountWithDevice.device,
+        transaction,
+        dappRequest,
+        createSessionIfNotExists,
+        onRejectRequest,
+        onFailure,
+    ])
 
     /** Effects */
 
@@ -290,12 +312,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         dispatch(setIsAppLoading(false))
 
         if (dappRequest) {
-            // Requires an extra goBack if it's the first request from the dapp
-            if (dappRequest.type === "in-app" && dappRequest.isFirstRequest) nav.goBack()
-
-            // nav back to SendTransaction Screen
-            nav.goBack()
-            // nav back to original screen
             nav.goBack()
         } else {
             if (initialRoute) {
@@ -333,6 +349,15 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         txid: txId,
                         signer: accountWithDevice.address,
                     })
+                } else if (dappRequest.type === "external-app") {
+                    await onSuccess({
+                        redirectUrl: dappRequest.redirectUrl,
+                        publicKey: dappRequest.publicKey,
+                        data: {
+                            txid: txId,
+                            signer: accountWithDevice.address,
+                        },
+                    })
                 } else {
                     postMessage({
                         id: dappRequest.id,
@@ -364,17 +389,18 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     }, [
         signature,
         dispatch,
-        transaction,
-        delegationSignature,
         sendTransaction,
+        transaction.body,
+        delegationSignature,
         disconnectLedger,
         dappRequest,
-        postMessage,
         navigateOnFinish,
+        processRequest,
+        accountWithDevice.address,
+        onSuccess,
+        postMessage,
         LL,
         nav,
-        accountWithDevice.address,
-        processRequest,
     ])
 
     const handleOnRetry = useCallback(() => {

@@ -11,11 +11,11 @@ import { useI18nContext } from "~i18n"
 import { AccountWithDevice } from "~Model"
 import { Routes } from "~Navigation"
 import {
-    changeSelectedNetwork,
     selectNetworks,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
     selectVisibleAccounts,
+    switchActiveNetwork,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -40,7 +40,14 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
     const [pendingRequests, setPendingRequests] = useState<PendingRequests>({})
 
-    const { certificateBsRef, setCertificateBsData } = useInteraction()
+    const {
+        certificateBsRef,
+        setCertificateBsData,
+        transactionBsRef,
+        setTransactionBsData,
+        typedDataBsRef,
+        setTypedDataBsData,
+    } = useInteraction()
 
     const addPendingRequest = useCallback((requestEvent: PendingRequestTypes.Struct) => {
         setPendingRequests(prev => ({
@@ -96,14 +103,18 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
             warn(ERROR_EVENTS.WALLET_CONNECT, `Responding with WC Request ${requestEvent.id}`, err)
 
-            await web3Wallet.respondSessionRequest({
-                topic: requestEvent.topic,
-                response: {
-                    id: requestEvent.id,
-                    jsonrpc: "The request was rejected",
-                    error: err,
-                },
-            })
+            try {
+                await web3Wallet.respondSessionRequest({
+                    topic: requestEvent.topic,
+                    response: {
+                        id: requestEvent.id,
+                        jsonrpc: "The request was rejected",
+                        error: err,
+                    },
+                })
+            } catch {
+                error(ERROR_EVENTS.WALLET_CONNECT, "Failed to respond to WC")
+            }
 
             afterRequest(requestEvent)
         },
@@ -168,18 +179,17 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
             if (message) {
                 track(AnalyticsEvent.DAPP_TX_REQUESTED)
-                nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
-                    request: {
-                        method: "thor_sendTransaction",
-                        type: "wallet-connect",
-                        requestEvent,
-                        session,
-                        message,
-                        options,
-                        appName: session.peer.metadata.name,
-                        appUrl: session.peer.metadata.url,
-                    },
+                setTransactionBsData({
+                    method: "thor_sendTransaction",
+                    type: "wallet-connect",
+                    requestEvent,
+                    session,
+                    message,
+                    options,
+                    appName: session.peer.metadata.name,
+                    appUrl: session.peer.metadata.url,
                 })
+                transactionBsRef.current?.present()
             } else {
                 showErrorToast({
                     text1: LL.NOTIFICATION_DAPP_INVALID_REQUEST(),
@@ -190,7 +200,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                 return failRequest(requestEvent, rpcError)
             }
         },
-        [failRequest, LL, track, nav],
+        [LL, track, setTransactionBsData, transactionBsRef, failRequest],
     )
 
     const goToSignMessage = useCallback(
@@ -224,23 +234,22 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                 return failRequest(requestEvent, getRpcError("invalidParams"))
             }
 
-            nav.navigate(Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN, {
-                request: {
-                    method: "thor_signTypedData",
-                    type: "wallet-connect",
-                    domain,
-                    types,
-                    value,
-                    options,
-                    requestEvent,
-                    session,
-                    origin: session.peer.metadata.url,
-                    appName: session.peer.metadata.name,
-                    appUrl: session.peer.metadata.url,
-                },
+            setTypedDataBsData({
+                method: "thor_signTypedData",
+                type: "wallet-connect",
+                domain,
+                types,
+                value,
+                options,
+                requestEvent,
+                session,
+                origin: session.peer.metadata.url,
+                appName: session.peer.metadata.name,
+                appUrl: session.peer.metadata.url,
             })
+            typedDataBsRef.current?.present()
         },
-        [failRequest, nav],
+        [failRequest, setTypedDataBsData, typedDataBsRef],
     )
 
     const switchAccount = useCallback(
@@ -287,7 +296,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
             }
 
             if (selectedNetwork.genesis.id !== network.genesis.id) {
-                dispatch(changeSelectedNetwork(network))
+                dispatch(switchActiveNetwork(network))
                 showInfoToast({
                     text1: LL.NOTIFICATION_WC_NETWORK_CHANGED({
                         network: network.name,

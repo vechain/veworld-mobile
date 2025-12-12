@@ -1,76 +1,242 @@
+import { useNavigation } from "@react-navigation/native"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native"
-import axios from "axios"
 import React from "react"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { TestWrapper } from "~Test"
+
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
+import { Routes } from "~Navigation"
+
 import { URLBar } from "./URLBar"
 
 jest.mock("~Components/Providers/InAppBrowserProvider")
-jest.mock("axios")
+
+jest.mock("@react-navigation/native", () => ({
+    ...jest.requireActual("@react-navigation/native"),
+    useNavigation: jest.fn(),
+}))
 
 describe("URLBar", () => {
     beforeEach(() => {
         jest.restoreAllMocks()
     })
-    it("should render correctly", () => {
+
+    it("should render correctly", async () => {
         ;(useInAppBrowser as jest.Mock).mockReturnValue({
             showToolbars: true,
             isDapp: false,
+            dappMetadata: undefined,
             navigationState: {
                 url: "https://vechain.org",
             },
         })
-        render(<URLBar />, {
+
+        render(<URLBar navigationUrl="https://vechain.org" isLoading={false} onNavigate={jest.fn()} />, {
             wrapper: TestWrapper,
         })
 
-        expect(screen.getByTestId("URL-bar-input")).toBeVisible()
+        const urlInput = await screen.findByTestId("URL-bar-website-name")
+
+        expect(urlInput).toBeVisible()
     })
 
-    it("should navigate to HTTPS URL", async () => {
-        const navigateFn = jest.fn()
+    it("should navigate to apps search", async () => {
+        const replaceFn = jest.fn()
         ;(useInAppBrowser as jest.Mock).mockReturnValue({
             showToolbars: true,
             isDapp: false,
             navigationState: {
                 url: "https://vechain.org",
             },
-            navigateToUrl: navigateFn,
         })
-        render(<URLBar />, {
+        ;(useNavigation as jest.Mock).mockReturnValue({
+            replace: replaceFn,
+        })
+        render(<URLBar navigationUrl="https://vechain.org" isLoading={false} onNavigate={jest.fn()} />, {
             wrapper: TestWrapper,
         })
 
-        const urlInput = screen.getByTestId("URL-bar-input")
-        fireEvent.changeText(urlInput, "https://google.com")
-        fireEvent(urlInput, "submitEditing", { nativeEvent: { text: "https://google.com" } })
+        const urlInput = await screen.getByTestId("URL-bar-website-name")
+        fireEvent.press(urlInput)
 
         await waitFor(() => {
-            expect(navigateFn).toHaveBeenCalledWith("https://google.com")
+            expect(replaceFn).toHaveBeenCalledWith(Routes.APPS_SEARCH)
         })
     })
 
-    it("should navigate to HTTP URL", async () => {
-        const navigateFn = jest.fn()
-        ;(useInAppBrowser as jest.Mock).mockReturnValue({
-            showToolbars: true,
-            isDapp: false,
-            navigationState: {
-                url: "https://vechain.org",
-            },
-            navigateToUrl: navigateFn,
-        })
-        render(<URLBar />, {
-            wrapper: TestWrapper,
+    describe("navToDiscover (back navigation)", () => {
+        it("should call onNavigate and navigate to returnScreen when returnScreen prop is provided", async () => {
+            const navigateFn = jest.fn()
+            const onNavigateFn = jest.fn().mockResolvedValue(undefined)
+            ;(useInAppBrowser as jest.Mock).mockReturnValue({
+                showToolbars: true,
+                isDapp: false,
+                navigationState: {
+                    url: "https://vechain.org",
+                },
+            })
+            ;(useNavigation as jest.Mock).mockReturnValue({
+                navigate: navigateFn,
+            })
+
+            render(
+                <URLBar
+                    navigationUrl="https://vechain.org"
+                    isLoading={false}
+                    onNavigate={onNavigateFn}
+                    returnScreen={Routes.SETTINGS}
+                />,
+                { wrapper: TestWrapper },
+            )
+
+            const backButton = await screen.getByTestId("URL-bar-back-button")
+            fireEvent.press(backButton)
+
+            await waitFor(() => {
+                expect(onNavigateFn).toHaveBeenCalled()
+                expect(navigateFn).toHaveBeenCalledWith(Routes.SETTINGS)
+            })
         })
 
-        const urlInput = screen.getByTestId("URL-bar-input")
-        ;(axios.get as jest.Mock).mockResolvedValue({ status: 200 })
-        fireEvent.changeText(urlInput, "http://localhost:1234")
-        fireEvent(urlInput, "submitEditing", { nativeEvent: { text: "http://localhost:1234" } })
+        it("should navigate to lastNavigationSource when available and valid", async () => {
+            const navigateFn = jest.fn()
+            const onNavigateFn = jest.fn().mockResolvedValue(undefined)
+            const preloadedState = {
+                discovery: {
+                    lastNavigationSource: Routes.HOME,
 
-        await waitFor(() => {
-            expect(navigateFn).toHaveBeenCalledWith("http://localhost:1234")
+                    favoriteRefs: [],
+                    featured: [],
+                    custom: [],
+                    hasOpenedDiscovery: false,
+                    connectedApps: [],
+                    tabsManager: { currentTabId: null, tabs: [] },
+                    bannerInteractions: {},
+                    isNormalUser: false,
+                },
+            }
+
+            ;(useInAppBrowser as jest.Mock).mockReturnValue({
+                showToolbars: true,
+                isDapp: false,
+                navigationState: { url: "https://vechain.org" },
+            })
+            ;(useNavigation as jest.Mock).mockReturnValue({ navigate: navigateFn })
+
+            render(<URLBar navigationUrl="https://vechain.org" isLoading={false} onNavigate={onNavigateFn} />, {
+                wrapper: ({ children }) => TestWrapper({ children, preloadedState }),
+            })
+
+            const backButton = await screen.getByTestId("URL-bar-back-button")
+            fireEvent.press(backButton)
+
+            await waitFor(() => {
+                expect(onNavigateFn).toHaveBeenCalled()
+                expect(navigateFn).toHaveBeenCalledWith(Routes.HOME)
+            })
+        })
+
+        it("should navigate to Routes.APPS when lastNavigationSource", async () => {
+            const navigateFn = jest.fn()
+            const onNavigateFn = jest.fn().mockResolvedValue(undefined)
+            const preloadedState = {
+                discovery: {
+                    favoriteRefs: [],
+                    featured: [],
+                    custom: [],
+                    hasOpenedDiscovery: false,
+                    connectedApps: [],
+                    tabsManager: { currentTabId: null, tabs: [] },
+                    bannerInteractions: {},
+                    isNormalUser: false,
+                },
+            }
+
+            ;(useInAppBrowser as jest.Mock).mockReturnValue({
+                showToolbars: true,
+                isDapp: false,
+                navigationState: { url: "https://vechain.org" },
+            })
+            ;(useNavigation as jest.Mock).mockReturnValue({ navigate: navigateFn })
+
+            render(<URLBar navigationUrl="https://vechain.org" isLoading={false} onNavigate={onNavigateFn} />, {
+                wrapper: ({ children }) => TestWrapper({ children, preloadedState }),
+            })
+
+            const backButton = await screen.getByTestId("URL-bar-back-button")
+            fireEvent.press(backButton)
+
+            await waitFor(() => {
+                expect(onNavigateFn).toHaveBeenCalled()
+                expect(navigateFn).toHaveBeenCalledWith(Routes.APPS)
+            })
+        })
+
+        it("should ignore invalid lastNavigationSource and fallback to default", async () => {
+            const navigateFn = jest.fn()
+            const onNavigateFn = jest.fn().mockResolvedValue(undefined)
+            const preloadedState = {
+                discovery: {
+                    lastNavigationSource: "INVALID_ROUTE",
+
+                    favoriteRefs: [],
+                    featured: [],
+                    custom: [],
+                    hasOpenedDiscovery: false,
+                    connectedApps: [],
+                    tabsManager: { currentTabId: null, tabs: [] },
+                    bannerInteractions: {},
+                    isNormalUser: false,
+                },
+            }
+
+            ;(useInAppBrowser as jest.Mock).mockReturnValue({
+                showToolbars: true,
+                isDapp: false,
+                navigationState: { url: "https://vechain.org" },
+            })
+            ;(useNavigation as jest.Mock).mockReturnValue({ navigate: navigateFn })
+
+            render(<URLBar navigationUrl="https://vechain.org" isLoading={false} onNavigate={onNavigateFn} />, {
+                wrapper: ({ children }) => TestWrapper({ children, preloadedState }),
+            })
+
+            const backButton = await screen.getByTestId("URL-bar-back-button")
+            fireEvent.press(backButton)
+
+            await waitFor(() => {
+                expect(onNavigateFn).toHaveBeenCalled()
+                expect(navigateFn).toHaveBeenCalledWith(Routes.APPS)
+            })
+        })
+
+        it("should work without onNavigate callback", async () => {
+            const navigateFn = jest.fn()
+
+            ;(useInAppBrowser as jest.Mock).mockReturnValue({
+                showToolbars: true,
+                isDapp: false,
+                navigationState: { url: "https://vechain.org" },
+            })
+            ;(useNavigation as jest.Mock).mockReturnValue({ navigate: navigateFn })
+
+            render(
+                <URLBar
+                    navigationUrl="https://vechain.org"
+                    isLoading={false}
+                    returnScreen={Routes.HOME}
+                    onNavigate={jest.fn()}
+                />,
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+
+            const backButton = await screen.getByTestId("URL-bar-back-button")
+            fireEvent.press(backButton)
+
+            await waitFor(() => {
+                expect(navigateFn).toHaveBeenCalledWith(Routes.HOME)
+            })
         })
     })
 })

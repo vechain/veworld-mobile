@@ -48,6 +48,8 @@ const parseBigNumberable = (value: BigNumberable): BN.Value => {
     return value
 }
 
+type Value = BN.Value | bigint
+
 interface IBigNumberUtils {
     // utility Methods
     toHuman(decimals: number, callback?: (result: BN) => void): BigNumberUtils
@@ -62,18 +64,19 @@ interface IBigNumberUtils {
     ): { value: string; preciseValue: string; isLeesThan_0_01: boolean }
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void): BigNumberUtils
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtils
+    toCompactString(locale: Intl.LocalesArgument, decimals?: number): string
     clone(): BigNumberUtils
 
     // Math Methods
-    minus(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
-    plus(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
-    times(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
-    idiv(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
-    multiply(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
+    minus(value: Value, callback?: (result: BN) => void): BigNumberUtils
+    plus(value: Value, callback?: (result: BN) => void): BigNumberUtils
+    times(value: Value, callback?: (result: BN) => void): BigNumberUtils
+    idiv(value: Value, callback?: (result: BN) => void): BigNumberUtils
+    multiply(value: Value, callback?: (result: BN) => void): BigNumberUtils
 
     // Comparison Methods
-    isLessThan(value: string | number | BN): boolean
-    isBiggerThan(value: string | number | BN): boolean
+    isLessThan(value: Value): boolean
+    isBiggerThan(value: Value): boolean
 
     // Properties
     toString: string
@@ -84,7 +87,7 @@ interface IBigNumberUtils {
     toBN: BN
 }
 
-const getDecimalSeparator = (locale: Intl.LocalesArgument) => {
+export const getDecimalSeparator = (locale: Intl.LocalesArgument) => {
     return locales_separator[locale as keyof typeof locales_separator]
 }
 
@@ -92,12 +95,17 @@ const stripTrailingZeros = (value: string) => {
     return [...value].reduceRight((acc, curr) => (acc === "" && curr === "0" ? acc : `${curr}${acc}`), "")
 }
 
+const toBNValue = (value: Value): BN.Value => {
+    if (typeof value === "bigint") return value.toString()
+    return value
+}
+
 class BigNumberUtils implements IBigNumberUtils {
     private data: BN
 
-    constructor(input: string | number | BN) {
+    constructor(input: Value) {
         BN.config({ EXPONENTIAL_AT: 1e9 })
-        this.data = new BN(input)
+        this.data = new BN(toBNValue(input))
     }
 
     // custom initializer
@@ -150,8 +158,8 @@ class BigNumberUtils implements IBigNumberUtils {
         return this
     }
 
-    minus(value: string | number | BN, callback?: (result: BN) => void): this {
-        this.data = this.data.minus(value)
+    minus(value: Value, callback?: (result: BN) => void): this {
+        this.data = this.data.minus(toBNValue(value))
 
         if (callback) {
             callback(this.data)
@@ -160,8 +168,8 @@ class BigNumberUtils implements IBigNumberUtils {
         return this
     }
 
-    multiply(value: string | number | BN, callback?: (result: BN) => void): this {
-        this.data = this.data.multipliedBy(value)
+    multiply(value: Value, callback?: (result: BN) => void): this {
+        this.data = this.data.multipliedBy(toBNValue(value))
 
         if (callback) {
             callback(this.data)
@@ -170,8 +178,8 @@ class BigNumberUtils implements IBigNumberUtils {
         return this
     }
 
-    plus(value: string | number | BN, callback?: (result: BN) => void): this {
-        this.data = this.data.plus(value)
+    plus(value: Value, callback?: (result: BN) => void): this {
+        this.data = this.data.plus(toBNValue(value))
 
         if (callback) {
             callback(this.data)
@@ -180,8 +188,8 @@ class BigNumberUtils implements IBigNumberUtils {
         return this
     }
 
-    times(value: string | number | BN, callback?: (result: BN) => void): this {
-        this.data = this.data.times(value)
+    times(value: Value, callback?: (result: BN) => void): this {
+        this.data = this.data.times(toBNValue(value))
 
         if (callback) {
             callback(this.data)
@@ -190,8 +198,8 @@ class BigNumberUtils implements IBigNumberUtils {
         return this
     }
 
-    idiv(value: string | number | BN, callback?: (result: BN) => void): this {
-        this.data = this.data.idiv(value)
+    idiv(value: Value, callback?: (result: BN) => void): this {
+        this.data = this.data.idiv(toBNValue(value))
 
         if (callback) {
             callback(this.data)
@@ -200,8 +208,8 @@ class BigNumberUtils implements IBigNumberUtils {
         return this
     }
 
-    div(value: string | number | BN, callback?: (result: BN) => void): this {
-        this.data = this.data.div(value)
+    div(value: Value, callback?: (result: BN) => void): this {
+        this.data = this.data.div(toBNValue(value))
 
         if (callback) {
             callback(this.data)
@@ -210,20 +218,20 @@ class BigNumberUtils implements IBigNumberUtils {
         return this
     }
 
-    isLessThan(value: string | number | BN): boolean {
-        return this.data.isLessThan(value)
+    isLessThan(value: Value): boolean {
+        return this.data.isLessThan(toBNValue(value))
     }
 
-    isLessThanOrEqual(value: string | number | BN): boolean {
-        return this.data.isLessThanOrEqualTo(value)
+    isLessThanOrEqual(value: Value): boolean {
+        return this.data.isLessThanOrEqualTo(toBNValue(value))
     }
 
-    isBiggerThan(value: string | number | BN): boolean {
-        return this.data.isGreaterThan(value)
+    isBiggerThan(value: Value): boolean {
+        return this.data.isGreaterThan(toBNValue(value))
     }
 
-    isBiggerThanOrEqual(value: string | number | BN): boolean {
-        return this.data.isGreaterThanOrEqualTo(value)
+    isBiggerThanOrEqual(value: Value): boolean {
+        return this.data.isGreaterThanOrEqualTo(toBNValue(value))
     }
 
     toCurrencyFormat_string(decimals: number, locale?: Intl.LocalesArgument): string {
@@ -340,6 +348,40 @@ class BigNumberUtils implements IBigNumberUtils {
         return this
     }
 
+    /**
+     * Converts large numbers to a compact UI string format with suffixes.
+     * Examples: 10000000 -> "10 M", 200000 -> "200 K", 1500 -> "1.5 K"
+     * @param decimals Number of decimal places to show (defaults to 1)
+     * @returns A compact formatted string
+     */
+    toCompactString(locale: Intl.LocalesArgument, decimals: number = 1): string {
+        const powers: Record<number, number> = {
+            4: Math.pow(10, 12),
+            3: Math.pow(10, 9),
+            2: Math.pow(10, 6),
+            1: Math.pow(10, 3),
+            0: 1,
+        }
+
+        const log10 = Math.log10(this.data.toNumber())
+
+        if (log10 < 3) return this.data.toFixed(0)
+
+        const power = Math.floor(log10 / 3)
+        const value = this.toNumber / powers[power]
+        const suffix = ["", "K", "M", "B", "T"][power]
+
+        const formatter = getNumberFormatter({
+            locale,
+            precision: decimals,
+            style: "decimal",
+            useGrouping: true,
+        })
+
+        const formatted = formatter.format(value)
+        return formatted + suffix
+    }
+
     clone() {
         return new BigNumberUtils(this.data)
     }
@@ -362,7 +404,7 @@ class BigNumberUtils implements IBigNumberUtils {
     }
 }
 
-function BigNutils(input?: string | number | BN): BigNumberUtils {
+function BigNutils(input?: string | number | BN | bigint): BigNumberUtils {
     if (input) {
         return new BigNumberUtils(input)
     } else {

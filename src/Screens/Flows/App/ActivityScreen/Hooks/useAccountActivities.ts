@@ -2,7 +2,7 @@ import { useIsFocused } from "@react-navigation/native"
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import { useCallback, useMemo, useState } from "react"
 import { Activity, ActivityEvent, ActivityType } from "~Model"
-import { createActivityFromIndexedHistoryEvent, fetchIndexedHistoryEvent, sortActivitiesByTimestamp } from "~Networking"
+import { createActivityFromIndexedHistoryEvent, DEFAULT_PAGE_SIZE, sortActivitiesByTimestamp } from "~Networking"
 import {
     selectAllActivitiesByAccountAddressAndNetwork,
     selectSelectedAccount,
@@ -10,8 +10,12 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { FilterType } from "../constants"
+import { useIndexerClient } from "~Hooks/useIndexerClient"
 
-export const useAccountActivities = (filterType: FilterType, filters: Readonly<ActivityEvent[]> = []) => {
+export const useAccountActivities = (
+    filterType: FilterType,
+    filters: ActivityEvent[] | readonly ActivityEvent[] = [],
+) => {
     const queryClient = useQueryClient()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
@@ -21,11 +25,27 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
 
     const [isRefreshing, setIsRefreshing] = useState(false)
 
+    const indexer = useIndexerClient(network)
+
     const fetchActivities = useCallback(
         async ({ pageParam = 0 }: { pageParam: number }) => {
-            return await fetchIndexedHistoryEvent(selectedAccount.address, pageParam, network, filters)
+            return indexer
+                .GET("/api/v2/history/{account}", {
+                    params: {
+                        path: {
+                            account: selectedAccount.address,
+                        },
+                        query: {
+                            direction: "DESC",
+                            page: pageParam,
+                            size: DEFAULT_PAGE_SIZE,
+                            eventName: filters as ActivityEvent[],
+                        },
+                    },
+                })
+                .then(res => res.data!)
         },
-        [filters, network, selectedAccount.address],
+        [filters, indexer, selectedAccount.address],
     )
 
     const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, isLoading } = useInfiniteQuery({
@@ -33,10 +53,9 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
         queryFn: fetchActivities,
         initialPageParam: 0,
         getNextPageParam: (lastPage, pages) => {
-            return lastPage.pagination.hasNext ? pages.length + 1 : undefined
+            return lastPage.pagination.hasNext ? pages.length : undefined
         },
-        enabled: isFocused && filters.length > 0,
-        gcTime: 1000 * 60 * 2, // 2 minutes
+        enabled: isFocused && (filterType === FilterType.ALL || filters.length > 0),
     })
 
     const refreshActivities = useCallback(async () => {
@@ -58,6 +77,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
     const activities = useMemo(() => {
         if (data && data.pages?.length > 0) {
             const remoteActivities: Activity[] = []
+
             data.pages
                 .flatMap(page => page.data)
                 .forEach(event => {
@@ -80,8 +100,12 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
                 //Show `Dapp Transaction` only if there are no events associated to that transaction
                 const uniqueRemoteIds = new Set(remoteActivities.map(ra => ra.txId).filter(Boolean))
                 const filteredLocalActivities = localActivitiesByTimsstamp.filter(activity => {
-                    if ((activity.type as ActivityType) === ActivityType.SIGN_CERT) return false
-                    if ((activity.type as ActivityType) === ActivityType.SIGN_TYPED_DATA) return false
+                    if (
+                        [ActivityType.SIGN_CERT, ActivityType.SIGN_TYPED_DATA, ActivityType.DAPP_LOGIN].includes(
+                            activity.type as ActivityType,
+                        )
+                    )
+                        return false
                     if (!activity.txId) return true
                     if (uniqueRemoteIds.has(activity.txId)) return false
 
@@ -101,6 +125,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
                     ActivityType.SIGN_CERT,
                     ActivityType.SIGN_TYPED_DATA,
                     ActivityType.CONNECTED_APP_TRANSACTION,
+                    ActivityType.DAPP_LOGIN,
                 ].includes(activity.type as ActivityType),
             )
             sortActivitiesByTimestamp(returnValue)

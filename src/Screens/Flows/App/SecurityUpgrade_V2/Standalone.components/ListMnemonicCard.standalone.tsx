@@ -25,10 +25,15 @@ export const ListMnemonicCard = ({ onSelected, wallet }: Props) => {
         }
     }, [LL, wallet.type])
 
+    const iconWallet = useMemo(
+        () => ({ type: wallet.type, address: wallet.rootAddress }),
+        [wallet.rootAddress, wallet.type],
+    )
+
     return (
         <BaseTouchableBox haptics="Light" action={() => onSelected(wallet)}>
             <BaseView flexDirection="row" flex={1} pr={10}>
-                <AccountIcon address={wallet.rootAddress} />
+                <AccountIcon account={iconWallet} />
                 <BaseSpacer width={12} />
 
                 <BaseView flex={1} flexDirection="row" justifyContent="space-between">

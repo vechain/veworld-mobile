@@ -8,12 +8,16 @@ import { ethers } from "ethers"
 const mockDispatch = jest.fn()
 
 const mockUpdateAccountBalances = jest.fn()
+const mockInvalidateUserTokens = jest.fn()
+const mockCreateRecentContact = jest.fn()
 
 jest.mock("~Storage/Redux", () => {
     const originalModule = jest.requireActual("~Storage/Redux")
     return {
         ...originalModule,
         updateAccountBalances: () => mockUpdateAccountBalances,
+        invalidateUserTokens: () => mockInvalidateUserTokens,
+        createRecentContact: () => mockCreateRecentContact,
         useAppDispatch: () => mockDispatch,
     }
 })
@@ -45,6 +49,15 @@ jest.mock("react-native-toast-message", () => {
     }
 })
 
+jest.mock("~Components/Providers/NotificationsProvider", () => ({
+    NotificationsProvider: ({ children }: { children: React.ReactNode }) => children,
+    useNotifications: () => ({
+        // Add any methods/properties that NotificationsProvider exposes
+        showNotification: jest.fn(),
+        hideNotification: jest.fn(),
+    }),
+}))
+
 const { vetTransaction1, dappTransaction1, nftTransaction1 } = TestHelpers.data
 
 const toSignedTx = (tx: Transaction) => {
@@ -56,6 +69,8 @@ describe("useSendTransaction", () => {
     beforeEach(() => {
         mockDispatch.mockClear()
         mockUpdateAccountBalances.mockClear()
+        mockInvalidateUserTokens.mockClear()
+        mockCreateRecentContact.mockClear()
     })
 
     it("should render correctly", async () => {
@@ -125,6 +140,39 @@ describe("useSendTransaction", () => {
         // Verify dispatch was called
         expect(mockDispatch).toHaveBeenCalled()
         expect(mockUpdateAccountBalances).toHaveBeenCalled()
+        expect(mockCreateRecentContact).toHaveBeenCalled()
+    })
+
+    it("should return transaction ID even if invalidate user tokens fails", async () => {
+        mockInvalidateUserTokens.mockImplementationOnce(() => {
+            throw new Error("Balance update failed")
+        })
+        // Setup mock dispatch to actually execute the thunk action
+        mockDispatch.mockImplementation(action => {
+            if (typeof action === "function") {
+                return action()
+            }
+            return action
+        })
+
+        const { result } = renderHook(() => useSendTransaction(jest.fn()), {
+            wrapper: TestWrapper,
+        })
+        expect(result.current).toEqual({
+            sendTransaction: expect.any(Function),
+        })
+        const signedTx = toSignedTx(dappTransaction1)
+        ;(axios.post as jest.Mock).mockResolvedValueOnce({
+            data: { id: signedTx.id },
+        })
+
+        // Test should pass since the hook catches the error and returns the transaction ID
+        await expect(result.current.sendTransaction(signedTx)).resolves.toEqual(signedTx.id)
+        // Verify dispatch was called
+        expect(mockDispatch).toHaveBeenCalled()
+        expect(mockInvalidateUserTokens).toHaveBeenCalled()
+        expect(mockUpdateAccountBalances).not.toHaveBeenCalled()
+        expect(mockCreateRecentContact).toHaveBeenCalled()
     })
 
     it("should handle NFT tx", async () => {

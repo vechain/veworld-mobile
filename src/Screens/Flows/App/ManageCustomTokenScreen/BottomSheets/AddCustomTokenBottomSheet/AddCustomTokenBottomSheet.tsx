@@ -18,12 +18,10 @@ import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
 import {
     addOrUpdateCustomTokens,
-    addTokenBalance,
+    selectCustomTokens,
     selectOfficialTokens,
     selectSelectedAccount,
     selectSelectedNetwork,
-    selectVisibleCustomTokens,
-    updateAccountBalances,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -56,7 +54,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
 
         const officialTokens = useAppSelector(selectOfficialTokens)
 
-        const customTokens = useAppSelector(selectVisibleCustomTokens)
+        const customTokens = useAppSelector(selectCustomTokens)
 
         const account = useAppSelector(selectSelectedAccount)
 
@@ -66,47 +64,51 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
                 const address = addressRaw.toLowerCase()
                 setErrorMessage("")
                 setValue(address)
-                if (AddressUtils.isValid(address)) {
-                    try {
-                        // check if it is an official token
-                        if (officialTokens.map(tkn => tkn.address.toLowerCase()).includes(address)) {
-                            setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN())
-                            return
-                        }
-                        // check if already present
-                        if (customTokens.map(tkn => tkn.address.toLowerCase()).includes(address)) {
-                            setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT())
-                            return
-                        }
-                        const newToken = await getCustomTokenInfo({
-                            network,
-                            tokenAddress: address,
-                            thorClient,
-                        })
-                        if (newToken) {
-                            if (isEmpty(newToken.symbol) || isEmpty(newToken.name)) {
-                                setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_GENERIC_ERROR())
-                                return
-                            }
-                            setNewCustomToken(newToken)
-                        } else {
-                            setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS())
-                        }
-                    } catch (e) {
-                        warn(ERROR_EVENTS.TOKENS, "handleValueChange", e)
-                        setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS())
-                    }
-                } else {
+                if (!AddressUtils.isValid(address)) {
                     debug(ERROR_EVENTS.TOKENS, "Address not valid yet")
+                    return false
+                }
+                try {
+                    // check if it is an official token
+                    if (officialTokens.map(tkn => tkn.address.toLowerCase()).includes(address)) {
+                        setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_ERROR_OFFICIAL_TOKEN())
+                        return false
+                    }
+                    // check if already present
+                    if (customTokens.map(tkn => tkn.address.toLowerCase()).includes(address)) {
+                        setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_ERROR_ALREADY_PRESENT())
+                        return false
+                    }
+                    const newToken = await getCustomTokenInfo({
+                        network,
+                        tokenAddress: address,
+                        thorClient,
+                    })
+                    if (!newToken) {
+                        setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS())
+                        return false
+                    }
+                    if (isEmpty(newToken.symbol) || isEmpty(newToken.name)) {
+                        setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_GENERIC_ERROR())
+                        return false
+                    }
+                    setNewCustomToken(newToken)
+                    return true
+                } catch (e) {
+                    warn(ERROR_EVENTS.TOKENS, "handleValueChange", e)
+                    setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_ERROR_WRONG_ADDRESS())
+                    return false
                 }
             },
             [LL, customTokens, network, officialTokens, setNewCustomToken, thorClient],
         )
 
         const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
-            onScan: handleValueChange,
+            onScanAddress: handleValueChange,
             targets: [ScanTarget.ADDRESS],
         })
+
+        const onQrCode = useCallback(() => handleOpenCamera({ tabs: ["scan"], defaultTab: "scan" }), [handleOpenCamera])
 
         const handleOnDismissModal = () => {
             //don't reset if we are adding a token from SwapCard screen
@@ -132,20 +134,6 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
                     newTokens: availableTokens,
                 }),
             )
-            dispatch(
-                addTokenBalance({
-                    network: network.type,
-                    accountAddress: account.address,
-                    balance: {
-                        balance: "0",
-                        tokenAddress: token?.address ?? newCustomToken?.address ?? "",
-                        timeUpdated: new Date(0).toISOString(),
-                        isCustomToken: true,
-                        isHidden: false,
-                    },
-                }),
-            )
-            dispatch(updateAccountBalances(thorClient, account.address))
             track(AnalyticsEvent.TOKENS_CUSTOM_TOKEN_ADDED)
 
             onClose()
@@ -184,7 +172,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
                                 rightIcon={value ? "icon-x" : "icon-qr-code"}
                                 onIconPress={
                                     !value
-                                        ? handleOpenCamera
+                                        ? onQrCode
                                         : () => {
                                               setValue("")
                                               setErrorMessage("")

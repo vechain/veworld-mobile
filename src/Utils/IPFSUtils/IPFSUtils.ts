@@ -1,3 +1,7 @@
+import { queryOptions } from "@tanstack/react-query"
+import axios, { AxiosRequestConfig } from "axios"
+import URIUtils from "~Utils/URIUtils"
+
 /**
  * Validate IPFS URI strings. An example of a valid IPFS URI is:
  * - ipfs://QmfSTia1TJUiKQ2fyW9NTPzEKNdjMGzbUgrC3QPSTpkum6/406.json
@@ -16,3 +20,30 @@ export const validateIpfsUri = (uri: string): boolean => {
         /^ipfs:\/\/baf[a-z0-9]+(\/[^/]+)*\/?$/.test(trimmedUri)
     )
 }
+
+export const getIpfsValue = async <TData>(
+    uri: string | undefined,
+    config?: NoInfer<AxiosRequestConfig<TData>>,
+): Promise<TData> => {
+    if (!uri) throw new Error("[getIpfsValue]: parameter `uri` is not defined")
+    const metadata = await axios.get<TData>(URIUtils.convertUriToUrl(uri), {
+        responseType: "json",
+        timeout: 20000,
+        ...config,
+        headers: {
+            "x-project-id": "veworld-mobile",
+        },
+    })
+
+    return metadata.data
+}
+
+export const getIpfsQueryKeyOptions = <TData>(uri: string | undefined, config?: NoInfer<AxiosRequestConfig<TData>>) =>
+    queryOptions({
+        queryKey: ["IPFS_URI", "v2", uri],
+        staleTime: Infinity,
+        gcTime: Infinity,
+        queryFn: () => getIpfsValue<TData>(uri, config),
+        retry: 3,
+        enabled: !!uri,
+    })

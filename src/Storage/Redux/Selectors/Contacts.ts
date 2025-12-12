@@ -2,6 +2,8 @@ import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
 import { Contact, ContactType } from "~Model"
 import { AddressUtils } from "~Utils"
+import { selectSelectedAccountAddress } from "./Account"
+import { selectSelectedNetwork } from "./Network"
 
 /**
  * selectContactsState: A selector to get the contacts state from the root state.
@@ -57,5 +59,20 @@ export const selectContactsByAddresses = createSelector(
         return contacts.filter((contact: Contact) => {
             return !!_addresses?.find((_address: string) => AddressUtils.compareAddresses(_address, contact.address))
         })
+    },
+)
+
+/**
+ * selectRecentContacts: A selector to get the recent contacts for a given account address and genesis id.
+ * @returns {RecentContact[]} - An array of recent contacts for the given account address and genesis id sorted by timestamp in descending order.
+ */
+export const selectRecentContacts = createSelector(
+    [(state: RootState) => state.contacts.recentContacts, selectSelectedAccountAddress, selectSelectedNetwork],
+    (recentContacts, selectedAccountAddress, selectedNetwork) => {
+        if (!selectedNetwork.genesis.id || !selectedAccountAddress) {
+            return []
+        }
+        const recentAccountContacts = recentContacts[selectedNetwork.genesis.id]?.[selectedAccountAddress] ?? []
+        return [...recentAccountContacts].sort((a, b) => b.timestamp - a.timestamp) ?? []
     },
 )

@@ -5,11 +5,9 @@ import { TestHelpers, TestWrapper } from "~Test"
 
 import { FeatureFlags } from "~Api/FeatureFlags/endpoint"
 import { FeatureFlagsProvider, useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
-import { useUserNodes, useUserStargateNfts } from "~Hooks/Staking"
 import { Routes } from "~Navigation"
 import { RootState } from "~Storage/Redux/Types"
 
-import { ethers } from "ethers"
 import { AssetDetailScreen } from "./AssetDetailScreen"
 
 const { VETWithCompleteInfo } = TestHelpers.data
@@ -68,10 +66,12 @@ const mockedFeatureFlags: FeatureFlags = {
         "coinbase-pay": {
             android: true,
             iOS: false,
+            url: "",
         },
         transak: {
             android: true,
             iOS: true,
+            url: "",
         },
         coinify: {
             android: true,
@@ -89,6 +89,29 @@ const mockedFeatureFlags: FeatureFlags = {
                 ledger: false,
             },
         },
+        HAYABUSA: {
+            stargate: {},
+        },
+    },
+    betterWorldFeature: {
+        appsScreen: {
+            enabled: false,
+        },
+        balanceScreen: {
+            enabled: false,
+            collectibles: { enabled: false },
+            tokens: { enabled: false },
+            send: { enabled: false },
+            sendCollectibles: { enabled: false },
+        },
+    },
+    smartWalletFeature: {
+        enabled: false,
+    },
+    notificationCenter: {
+        registration: {
+            enabled: false,
+        },
     },
 }
 
@@ -100,11 +123,7 @@ jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
 jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
     useRoute: jest.fn(),
-}))
-
-jest.mock("~Hooks/Staking", () => ({
-    useUserNodes: jest.fn(),
-    useUserStargateNfts: jest.fn(),
+    useNavigationState: jest.fn(),
 }))
 
 jest.mock("~Hooks/useNFTMetadata", () => ({
@@ -121,8 +140,6 @@ describe("AssetDetailScreen", () => {
         ;(useRoute as jest.Mock).mockReturnValue({
             name: Routes.HOME,
         })
-        ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [] })
-        ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [] })
         render(
             <AssetDetailScreen
                 navigation={navigationMock}
@@ -141,8 +158,6 @@ describe("AssetDetailScreen", () => {
         ;(useRoute as jest.Mock).mockReturnValue({
             name: Routes.HOME,
         })
-        ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [] })
-        ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [] })
         render(
             <AssetDetailScreen
                 navigation={navigationMock}
@@ -155,40 +170,5 @@ describe("AssetDetailScreen", () => {
 
         expect(screen.getByText("Vechain")).toBeOnTheScreen()
         expect(screen.getByTestId("token_screen_carousel")).toBeOnTheScreen()
-    })
-
-    it("should not render carousel but the staking section if there are nodes", () => {
-        ;(useFeatureFlags as jest.Mock).mockReturnValue(mockedFeatureFlags)
-        ;(useRoute as jest.Mock).mockReturnValue({
-            name: Routes.HOME,
-        })
-        ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [{}] })
-        ;(useUserStargateNfts as jest.Mock).mockReturnValue({
-            ownedStargateNfts: [
-                {
-                    vetAmountStaked: ethers.utils.parseEther("1").toString(),
-                    accumulatedRewards: ethers.utils.parseEther("1").toString(),
-                    claimableRewards: ethers.utils.parseEther("1").toString(),
-                    levelId: "8",
-                    tokenId: "8",
-                },
-            ],
-        })
-        render(
-            <AssetDetailScreen
-                navigation={navigationMock}
-                route={{ params: { token: VETWithCompleteInfo }, key: "test", name: Routes.TOKEN_DETAILS }}
-            />,
-            {
-                wrapper: createWrapper({}),
-            },
-        )
-
-        expect(screen.getByText("Vechain")).toBeOnTheScreen()
-        expect(screen.queryByTestId("token_screen_carousel")).toBeNull()
-        expect(screen.getByTestId("STARGATE_CAROUSEL_ITEM_8")).toBeOnTheScreen()
-        expect(screen.getByTestId("STARGATE_CAROUSEL_ITEM_VALUE_LOCKED")).toBeOnTheScreen()
-        expect(screen.getByTestId("STARGATE_CAROUSEL_ITEM_VALUE_REWARDS")).toBeOnTheScreen()
-        expect(screen.getByTestId("STARGATE_CAROUSEL_ITEM_VALUE_CLAIMABLE")).toBeOnTheScreen()
     })
 })

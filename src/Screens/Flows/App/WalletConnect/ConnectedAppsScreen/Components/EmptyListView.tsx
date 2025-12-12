@@ -1,32 +1,21 @@
-import React, { useCallback } from "react"
-import { useCameraBottomSheet } from "~Hooks"
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, useWalletConnect } from "~Components"
-import { COLORS, ScanTarget } from "~Constants"
-import { useI18nContext } from "~i18n"
+import React from "react"
 import { StyleSheet } from "react-native"
-import HapticsService from "~Services/HapticsService"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { COLORS, ScanTarget } from "~Constants"
+import { useCameraBottomSheet } from "~Hooks"
+import { useI18nContext } from "~i18n"
 
 export const EmptyListView = () => {
     const { LL } = useI18nContext()
-    const { onPair } = useWalletConnect()
 
-    const onScan = useCallback(
-        (uri: string) => {
-            HapticsService.triggerImpact({ level: "Light" })
-            onPair(uri)
-        },
-        [onPair],
-    )
-
-    const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
-        onScan,
+    const { RenderCameraModal, handleOpenOnlyScanCamera } = useCameraBottomSheet({
         targets: [ScanTarget.WALLET_CONNECT],
     })
 
     return (
         <BaseView mx={20} justifyContent="center" alignItems="center">
             <BaseView flexDirection="row" justifyContent="space-evenly" w={100}>
-                <BaseTouchable action={handleOpenCamera}>
+                <BaseTouchable action={handleOpenOnlyScanCamera}>
                     <BaseView
                         my={16}
                         bg={COLORS.LIME_GREEN}

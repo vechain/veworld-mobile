@@ -69,6 +69,6 @@ export const initEncryption = async (keyId: string) => {
 
 const createKey = () => {
     const arr = new Uint8Array(64)
-    const keyBuff = crypto.getRandomValues(arr) as ArrayBuffer
+    const keyBuff = crypto.getRandomValues(arr)
     return Buffer.from(keyBuff).toString("hex")
 }

@@ -1,9 +1,10 @@
 import React from "react"
 import Svg, { ClipPath, Defs, G, Path, Rect, Text } from "react-native-svg"
+import FontUtils from "~Utils/FontUtils"
 
 const defaultFont = {
     fontFamily: "Inter-SemiBold",
-    fontSize: 10,
+    fontSize: FontUtils.font(12),
     fontWeight: "600",
 }
 

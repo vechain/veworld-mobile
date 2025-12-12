@@ -75,7 +75,11 @@
             "VeWorld": "VeWorld",
             "veWorld": "veWorld",
             "Better": "Better",
-            "On-chain": "On-chain"
+            "On-chain": "On-chain",
+            "Coinbase": "Coinbase"
+        },
+        "it": {
+            "Recycling": "Riciclo"
         }
     }
 }

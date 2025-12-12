@@ -1,0 +1,68 @@
+import { MutableRefObject, useCallback, useMemo, useRef, useState } from "react"
+import { LayoutChangeEvent, useWindowDimensions, ViewStyle } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { usePrevious } from "~Hooks/usePrevious"
+
+type Args = {
+    onResize: (value: boolean) => void
+    initialLayout: MutableRefObject<boolean>
+    bottomSpacing?: number
+}
+
+/**
+ * Hook for creating nested scrollable components inside a BottomSheet.
+ * Do not use @gorhom/bottom-sheet components, just use these
+ */
+export const useScrollableBottomSheetList = ({ onResize, initialLayout, bottomSpacing = 24 }: Args) => {
+    const { height: windowHeight } = useWindowDimensions()
+    const { bottom: bottomSafeAreaSize } = useSafeAreaInsets()
+
+    const maxHeight = useMemo(
+        () => Math.floor((windowHeight - bottomSafeAreaSize) * 0.85),
+        [bottomSafeAreaSize, windowHeight],
+    )
+
+    const [height, setHeight] = useState(maxHeight)
+    const previousHeight = usePrevious(height)
+    const offsetY = useRef(160)
+    const onContentSizeChange = useCallback(
+        (_: number, contentHeight: number) => {
+            if (contentHeight <= height) {
+                const overflows = contentHeight + offsetY.current >= height
+                //32 is the size of the handle + 4px of offset
+                const minValue = overflows ? maxHeight - offsetY.current - 32 - bottomSpacing : contentHeight
+                setHeight(minValue)
+                //If the height increased, just set it as a small viewport to set the correct size
+                if ((previousHeight ?? 0) < contentHeight) onResize(true)
+                //Otherwise make the component figure it out itself
+                else onResize(!overflows)
+            } else {
+                onResize(false)
+            }
+        },
+        [bottomSpacing, height, maxHeight, onResize, previousHeight],
+    )
+
+    const onLayout = useCallback(
+        (e: LayoutChangeEvent) => {
+            const _height = e.nativeEvent.layout.height
+            offsetY.current = e.nativeEvent.layout.y
+            if (initialLayout.current) return
+
+            if (_height < maxHeight) {
+                setHeight(_height)
+                initialLayout.current = true
+            }
+        },
+        [initialLayout, maxHeight],
+    )
+
+    const style = useMemo(() => ({ height } as ViewStyle), [height])
+
+    const resetHeight = useCallback(() => setHeight(maxHeight), [maxHeight])
+
+    return useMemo(
+        () => ({ style, onLayout, onContentSizeChange, resetHeight }),
+        [onContentSizeChange, onLayout, style, resetHeight],
+    )
+}

@@ -4,7 +4,8 @@ import { ScaleDecorator, ShadowDecorator } from "react-native-draggable-flatlist
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { DAppUtils } from "~Utils"
+import { useAppLogo } from "~Hooks/useAppLogo"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     dapp: DiscoveryDApp
@@ -22,6 +23,8 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
     ({ dapp, isEditMode, isActive, onPress, onLongPress, onRightActionPress, onRightActionLongPress }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
+        const appLogo = useAppLogo({ app: dapp })
+
         return (
             <ScaleDecorator activeScale={1.05}>
                 <ShadowDecorator elevation={1} radius={4} opacity={0.2} color={theme.colors.backgroundReversed}>
@@ -34,9 +37,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                             <BaseView flexDirection="row" flex={1} pr={10}>
                                 <Image
                                     source={{
-                                        uri: dapp.id
-                                            ? DAppUtils.getAppHubIconUrl(dapp.id)
-                                            : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
+                                        uri: appLogo,
                                     }}
                                     style={
                                         [
@@ -108,9 +109,9 @@ const baseStyles = () =>
         },
         nameText: {
             fontWeight: "bold",
-            fontSize: 16,
+            fontSize: FontUtils.font(14),
         },
         description: {
-            fontSize: 12,
+            fontSize: FontUtils.font(12),
         },
     })

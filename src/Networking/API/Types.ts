@@ -1,5 +1,7 @@
+import { components } from "~Generated/indexer/schema"
 import { IndexedHistoryEvent, OutputResponse } from "~Model"
 import { PaginationResponse } from "~Networking"
+import { StargateLevelName } from "~Utils/StargateUtils"
 
 export interface BaseTransactionResponse {
     id: string
@@ -27,35 +29,46 @@ export interface TransactionsResponse extends BaseTransactionResponse {
     outputs: OutputResponse[]
 }
 
-export enum EventTypeResponse {
-    FUNGIBLE_TOKEN = "FUNGIBLE_TOKEN",
-    VET = "VET",
-    NFT = "NFT",
-    SEMI_FUNGIBLE_TOKEN = "SEMI_FUNGIBLE_TOKEN",
-}
-
-export interface IncomingTransferResponse extends BaseTransactionResponse {
-    txId: string
-    from: string
-    to: string
-    value: string
-    tokenId: number
-    tokenAddress: string
-    topics: string[]
-    eventType: EventTypeResponse
-}
-
 export interface FetchIncomingTransfersResponse {
-    data: IncomingTransferResponse[]
+    data: components["schemas"]["IndexedTransferEvent"][]
     pagination: PaginationResponse
 }
+
+export type FetchAppOverviewResponse = components["schemas"]["AppOverview"]
 
 export interface FetchActivitiesResponse {
     data: IndexedHistoryEvent[]
     pagination: PaginationResponse
 }
 
-export type FetchFungibleTokensContractsResponse = {
-    data: string[]
+export enum StargateNFTLevel {
+    Strength,
+    Thunder,
+    Mjolnir,
+    VeThorX,
+    StrengthX,
+    ThunderX,
+    MjolnirX,
+    Dawn,
+    Lightning,
+    Flash,
+}
+
+export interface FetchStargateTokensResponseItem {
+    tokenId: string
+    level: StargateLevelName
+    owner: string
+    manager: string | null
+    delegationStatus: string
+    validatorId: string
+    totalRewardsClaimed: string
+    totalBootstrapRewardsClaimed: string
+    vetStaked: string
+    migrated: boolean
+    boosted: boolean
+}
+
+export interface FetchStargateTokensResponse {
+    data: FetchStargateTokensResponseItem[]
     pagination: PaginationResponse
 }

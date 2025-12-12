@@ -94,3 +94,31 @@ export const selectHideStargateBannerHomeScreen = createSelector(reducer, state 
 export const selectHideStargateBannerVETScreen = createSelector(reducer, state => {
     return state.hideStargateBannerVETScreen
 })
+
+export const selectHideNewUserVeBetterCard = createSelector(reducer, state => {
+    return state.hideNewUserVeBetterCard
+})
+
+export const selectSignKeyPair = createSelector(reducer, state => {
+    return state.signKeyPair ?? { publicKey: "", privateKey: "" }
+})
+
+export const selectNotificationCenterUrl = createSelector(reducer, state => {
+    return state.notificationCenterUrl
+})
+
+export const selectDeveloperMenuUnlocked = createSelector(reducer, state => {
+    return state.developerMenuUnlocked ?? false
+})
+
+export const selectIndexerUrls = createSelector(reducer, state => {
+    return state.indexerUrls ?? {}
+})
+
+export const selectHideStellaPayBottomSheet = createSelector(reducer, state => {
+    return state.hideStellaPayBottomSheet
+})
+
+export const selectDeveloperAppsEnabled = createSelector(reducer, state => {
+    return state.developerAppsEnabled ?? false
+})

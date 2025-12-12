@@ -4,11 +4,16 @@ on:
     workflow_dispatch:
 
     workflow_call:
+        outputs:
+            resultUrl:
+                description: "Device Cloud Output URL:"
+                value: $${{ jobs.build-e2e-ios.resultUrl }}
 
 jobs:
     build-e2e-ios:
         name: Build & Test iOS
-        runs-on: macos-15
+        # down bump due to  xcode16.3 incompatibility
+        runs-on: macos-14-xlarge
         environment: ios-release
         outputs:
             resultUrl: ${{ steps.test-result.outputs.resultUrl }}
@@ -44,6 +49,7 @@ jobs:
                   brew tap wix/brew
                   brew install applesimutils
                   brew install fastlane
+                  sudo xcode-select -s /Applications/Xcode_16.2.app
                   bundle install
               env:
                   HOMEBREW_NO_AUTO_UPDATE: 1
@@ -51,7 +57,7 @@ jobs:
 
             # Setup Ruby
             - name: Setup Ruby
-              uses: ruby/setup-ruby@v1.224.0
+              uses: ruby/setup-ruby@bbda85882f33075a3727c01e3c8d0de0be6146ce # v1.224.0
               with:
                   bundler-cache: true
 
@@ -68,7 +74,7 @@ jobs:
 
             # Install sentry properties
             - name: Sentry properties
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.IOS_SENTRY_PROPERTIES }}
                   filename: "sentry.properties"
@@ -76,7 +82,7 @@ jobs:
                   working-directory: "./ios"
 
             - name: Env default decode
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
                   filename: "env.default"
@@ -84,7 +90,7 @@ jobs:
                   working-directory: "./ios/fastlane"
 
             - name: Env decode
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.IOS_ENV}}
                   filename: ".env"
@@ -92,7 +98,7 @@ jobs:
                   working-directory: "./ios/fastlane"
 
             - name: Decode prod env
-              uses: mobiledevops/secret-to-file-action@v1
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
                   base64-encoded-secret: ${{ secrets.RN_ENV_PROD_E2E}}
                   filename: ".env.production"
@@ -125,7 +131,7 @@ jobs:
             # Specifying version and device + retry on a temporary basis while devicecloud work on higher spec vm options.
             - name: Test iOS
               id: ios-test
-              uses: devicecloud-dev/device-cloud-for-maestro@v1
+              uses: devicecloud-dev/device-cloud-for-maestro@d726a108189bb52a5cc90bb036a71b63a4036cd7 # v1
               with:
                   api-key: ${{ secrets.DCD_API_KEY }}
                   app-file: ${{ env.APP_PATH }}

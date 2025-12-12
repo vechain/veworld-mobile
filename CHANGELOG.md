@@ -1,5 +1,90 @@
 # Changelog
 
+## <small>2.4.13 (2025-12-02)</small>
+
+* build: init ([658831e](https://github.com/vechain/veworld-mobile/commit/658831e))
+* refactor: remove shouldDehydrateQuery function and add shouldRedactErrors options for hydration (#36 ([6926f24](https://github.com/vechain/veworld-mobile/commit/6926f24)), closes [#3600](https://github.com/vechain/veworld-mobile/issues/3600)
+
+## <small>2.4.12 (2025-11-28)</small>
+
+* build: init ([9836c8f](https://github.com/vechain/veworld-mobile/commit/9836c8f))
+* Revert "fix: bs scroll view (#3588)" (#3590) ([0933fc1](https://github.com/vechain/veworld-mobile/commit/0933fc1)), closes [#3588](https://github.com/vechain/veworld-mobile/issues/3588) [#3590](https://github.com/vechain/veworld-mobile/issues/3590)
+
+## 2.5.0 (2025-11-21)
+
+* build: init ([d6a9102](https://github.com/vechain/veworld-mobile/commit/d6a9102))
+* feat: add scrollable and scrollEnabled props to BaseBottomSheet for enhanced content management (#35 ([bf7d263](https://github.com/vechain/veworld-mobile/commit/bf7d263)), closes [#3564](https://github.com/vechain/veworld-mobile/issues/3564)
+
+## 2.5.0 (2025-11-13)
+
+* build: init ([f33174b](https://github.com/vechain/veworld-mobile/commit/f33174b))
+* feat: add prefetch of all the periods (#3530) ([31acbfd](https://github.com/vechain/veworld-mobile/commit/31acbfd)), closes [#3530](https://github.com/vechain/veworld-mobile/issues/3530)
+
+## <small>2.4.9 (2025-11-05)</small>
+
+* build: init ([73a4b19](https://github.com/vechain/veworld-mobile/commit/73a4b19))
+* 496 bug   248 when all from the same collection on homepage the collection page is not shown (#3501) ([f29aabf](https://github.com/vechain/veworld-mobile/commit/f29aabf)), closes [#3501](https://github.com/vechain/veworld-mobile/issues/3501)
+
+## <small>2.4.8 (2025-11-03)</small>
+
+* build: init ([1fdf5bb](https://github.com/vechain/veworld-mobile/commit/1fdf5bb))
+* Version control logic (#3397) ([329d1c9](https://github.com/vechain/veworld-mobile/commit/329d1c9)), closes [#3397](https://github.com/vechain/veworld-mobile/issues/3397)
+
+## <small>2.4.7 (2025-10-17)</small>
+
+* build: init ([a0225a7](https://github.com/vechain/veworld-mobile/commit/a0225a7))
+* fix: fix total balance (#3420) ([6c29b81](https://github.com/vechain/veworld-mobile/commit/6c29b81)), closes [#3420](https://github.com/vechain/veworld-mobile/issues/3420)
+
+## <small>2.4.6 (2025-10-09)</small>
+
+* build: init ([009f8b6](https://github.com/vechain/veworld-mobile/commit/009f8b6))
+* Revert "Version control logic (#3302)" (#3393) ([073512b](https://github.com/vechain/veworld-mobile/commit/073512b)), closes [#3302](https://github.com/vechain/veworld-mobile/issues/3302) [#3393](https://github.com/vechain/veworld-mobile/issues/3393) [#3302](https://github.com/vechain/veworld-mobile/issues/3302)
+
+## <small>2.4.5 (2025-10-03)</small>
+
+* build: init ([58131c2](https://github.com/vechain/veworld-mobile/commit/58131c2))
+* Refactor components to be aware of a new conditional to define icon roundness (#3351) ([d34dedc](https://github.com/vechain/veworld-mobile/commit/d34dedc)), closes [#3351](https://github.com/vechain/veworld-mobile/issues/3351)
+
+## <small>2.4.4 (2025-09-25)</small>
+
+* build: init ([a565bd2](https://github.com/vechain/veworld-mobile/commit/a565bd2))
+* fix: fix delegation bottom sheet for account (#3317) ([49ab4e2](https://github.com/vechain/veworld-mobile/commit/49ab4e2)), closes [#3317](https://github.com/vechain/veworld-mobile/issues/3317)
+
+## <small>2.4.3 (2025-09-17)</small>
+
+* build: init ([c9e9281](https://github.com/vechain/veworld-mobile/commit/c9e9281))
+* fix: return to swap page from inappbrowser when closed (#3292) ([193df87](https://github.com/vechain/veworld-mobile/commit/193df87)), closes [#3292](https://github.com/vechain/veworld-mobile/issues/3292)
+
+## <small>2.4.2 (2025-09-10)</small>
+
+* build: init ([82afb17](https://github.com/vechain/veworld-mobile/commit/82afb17))
+* fix: generic delegator validation with new galactica fee (#3281) ([2b4de70](https://github.com/vechain/veworld-mobile/commit/2b4de70)), closes [#3281](https://github.com/vechain/veworld-mobile/issues/3281)
+
+## <small>2.4.1 (2025-09-04)</small>
+
+* build: init ([055b5de](https://github.com/vechain/veworld-mobile/commit/055b5de))
+* fix: store tab preview images on disk instead of redux state (#3252) ([c611155](https://github.com/vechain/veworld-mobile/commit/c611155)), closes [#3252](https://github.com/vechain/veworld-mobile/issues/3252)
+
+## <small>2.3.10 (2025-08-29)</small>
+
+* build: init ([bc9b729](https://github.com/vechain/veworld-mobile/commit/bc9b729))
+* Fix vbd apps vebetter section (#3236) ([d37bfd1](https://github.com/vechain/veworld-mobile/commit/d37bfd1)), closes [#3236](https://github.com/vechain/veworld-mobile/issues/3236)
+
+## <small>2.3.3 (2025-08-14)</small>
+
+* build: init ([0afca2d](https://github.com/vechain/veworld-mobile/commit/0afca2d))
+* fix: fix font sizes (#3185) ([5713164](https://github.com/vechain/veworld-mobile/commit/5713164)), closes [#3185](https://github.com/vechain/veworld-mobile/issues/3185)
+
+## <small>2.3.1 (2025-08-04)</small>
+
+* build: init ([ecfcbcc](https://github.com/vechain/veworld-mobile/commit/ecfcbcc))
+* Fix android build issue (#3142) ([38bb9a6](https://github.com/vechain/veworld-mobile/commit/38bb9a6)), closes [#3142](https://github.com/vechain/veworld-mobile/issues/3142)
+
+## <small>2.2.10 (2025-07-24)</small>
+
+* build: init ([955e4db](https://github.com/vechain/veworld-mobile/commit/955e4db))
+* fix: fix comma + snap of base carousel (#3116) ([812d481](https://github.com/vechain/veworld-mobile/commit/812d481)), closes [#3116](https://github.com/vechain/veworld-mobile/issues/3116)
+
 ## <small>2.2.9 (2025-07-21)</small>
 
 * build: init ([9aed4db](https://github.com/vechain/veworld-mobile/commit/9aed4db))

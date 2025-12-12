@@ -1,11 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { StyleSheet, Keyboard } from "react-native"
-import { useBottomSheetModal, useSearchOrScanInput, useVns, ZERO_ADDRESS } from "~Hooks"
-import { AddressUtils } from "~Utils"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { Keyboard, StyleSheet } from "react-native"
+import { address as addressThor } from "thor-devkit"
 import {
-    AccountCard,
     BaseAccordion,
     BaseSpacer,
     BaseText,
@@ -15,10 +13,13 @@ import {
     Layout,
     showWarningToast,
 } from "~Components"
+import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCard"
+import { useBottomSheetModal, useSearchOrScanInput, useVns, ZERO_ADDRESS } from "~Hooks"
+import { AccountWithDevice } from "~Model"
 import { RootStackParamListHome, RootStackParamListNFT, Routes } from "~Navigation"
+import { AddressUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { CreateContactBottomSheet } from "./Components"
-import { address as addressThor } from "thor-devkit"
 
 type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListNFT, Routes.INSERT_ADDRESS_SEND>
 
@@ -114,6 +115,10 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         [filteredContacts, filteredAccounts],
     )
 
+    const onAccountPress = useCallback((account: AccountWithDevice) => {
+        setSelectedAddress(account.address)
+    }, [])
+
     return (
         <Layout
             safeAreaTestID="Insert_Address_Send_Screen"
@@ -177,23 +182,17 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
                                 </BaseView>
                             }
                             bodyComponent={
-                                <BaseView>
-                                    {filteredAccounts.map(account => {
-                                        const isSelected =
-                                            !!selectedAddress &&
-                                            AddressUtils.compareAddresses(account.address, selectedAddress)
-                                        const onPress = () => setSelectedAddress(account.address)
-                                        return (
-                                            <AccountCard
-                                                testID="selectAccount"
-                                                key={account.address}
-                                                containerStyle={baseStyles.accountCard}
-                                                account={account}
-                                                onPress={onPress}
-                                                selected={isSelected}
-                                            />
-                                        )
-                                    })}
+                                <BaseView gap={8}>
+                                    {filteredAccounts.map(account => (
+                                        <SelectableAccountCard
+                                            account={account}
+                                            balanceToken="VET"
+                                            selected={AddressUtils.compareAddresses(account.address, selectedAddress)}
+                                            onPress={onAccountPress}
+                                            key={account.address}
+                                            testID="selectAccount"
+                                        />
+                                    ))}
                                 </BaseView>
                             }
                         />
@@ -201,9 +200,9 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
 
                     {isEmpty && (
                         <BaseView w={100} alignItems="center">
-                            <BaseText typographyFont="body">{LL.SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND()}</BaseText>
+                            <BaseText typographyFont="caption">{LL.SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND()}</BaseText>
 
-                            <BaseText typographyFont="body">{LL.SEND_PLEASE_TYPE_ADDRESS()}</BaseText>
+                            <BaseText typographyFont="caption">{LL.SEND_PLEASE_TYPE_ADDRESS()}</BaseText>
                         </BaseView>
                     )}
                 </BaseView>
@@ -247,6 +246,5 @@ const baseStyles = StyleSheet.create({
         marginBottom: 70,
     },
     skeletonContact: { width: 50, paddingVertical: 2 },
-    accountCard: { marginVertical: 5, height: 74, justifyContent: "center" },
     contactCard: { marginVertical: 5, height: 64, justifyContent: "center" },
 })

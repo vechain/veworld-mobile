@@ -26,7 +26,7 @@ export const NoVthoBalanceAlert = ({ delegationToken, isEnoughBalance }: Props) 
                 px={12}
                 py={8}>
                 <BaseIcon size={16} color={theme.colors.errorAlert.icon} name="icon-alert-triangle" />
-                <BaseText typographyFont="body" color={theme.colors.errorAlert.text}>
+                <BaseText typographyFont="caption" color={theme.colors.errorAlert.text} flexDirection="row" flex={1}>
                     {LL.NO_VTHO_BALANCE()}
                 </BaseText>
             </BaseView>

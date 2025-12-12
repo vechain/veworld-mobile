@@ -14,7 +14,7 @@ export enum FilterType {
 export const filterValues = {
     all: {
         type: FilterType.ALL,
-        value: Object.values(ActivityEvent),
+        value: [],
     },
     b3tr: {
         type: FilterType.B3TR,
@@ -43,19 +43,31 @@ export const filterValues = {
         type: FilterType.TRANSFER,
         value: [ActivityEvent.TRANSFER_FT, ActivityEvent.TRANSFER_SF, ActivityEvent.TRANSFER_VET],
     },
-    nfts: { type: FilterType.NFTS, value: [ActivityEvent.TRANSFER_NFT] },
+    nfts: {
+        type: FilterType.NFTS,
+        value: [ActivityEvent.TRANSFER_NFT, ActivityEvent.NFT_SALE],
+    },
     dapps: { type: FilterType.DAPPS, value: [] },
     staking: {
         type: FilterType.STAKING,
         value: [
-            ActivityEvent.STARGATE_DELEGATE,
+            ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY,
+            ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY,
+            ActivityEvent.STARGATE_DELEGATE_LEGACY,
             ActivityEvent.STARGATE_STAKE,
-            ActivityEvent.STARGATE_CLAIM_REWARDS_BASE,
-            ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE,
-            ActivityEvent.STARGATE_UNDELEGATE,
+            ActivityEvent.STARGATE_UNDELEGATE_LEGACY,
             ActivityEvent.STARGATE_UNSTAKE,
-            ActivityEvent.STARGATE_DELEGATE_ONLY,
+            ActivityEvent.STARGATE_CLAIM_REWARDS,
+            ActivityEvent.STARGATE_BOOST,
+            ActivityEvent.STARGATE_DELEGATE_REQUEST,
+            ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED,
+            ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST,
+            ActivityEvent.STARGATE_DELEGATION_EXITED,
+            ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR,
+            ActivityEvent.STARGATE_DELEGATE_ACTIVE,
+            ActivityEvent.STARGATE_MANAGER_ADDED,
+            ActivityEvent.STARGATE_MANAGER_REMOVED,
         ],
     },
-    other: { type: FilterType.OTHER, value: [ActivityEvent.UNKNOWN_TX] },
+    other: { type: FilterType.OTHER, value: [ActivityEvent.UNKNOWN_TX, ActivityEvent.VEVOTE_VOTE_CAST] },
 } as const

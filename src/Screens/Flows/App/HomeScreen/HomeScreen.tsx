@@ -9,10 +9,8 @@ import {
     BaseIcon,
     BaseSpacer,
     BaseView,
-    DisabledBuySwapIosBottomSheet,
     FastActionsBar,
     Layout,
-    QRCodeBottomSheet,
     SelectAccountBottomSheet,
     useFeatureFlags,
     VersionChangelogBottomSheet,
@@ -23,20 +21,26 @@ import {
     getVeDelegateBalanceQueryKey,
     useAnalyticTracking,
     useBottomSheetModal,
+    useCameraBottomSheet,
+    useFetchFeaturedDApps,
     useMemoizedAnimation,
     usePrefetchAllVns,
     useSetSelectedAccount,
     useTheme,
 } from "~Hooks"
+import { useOfficialTokens } from "~Hooks/useOfficialTokens"
 import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import {
+    addOfficialTokens,
+    invalidateUserTokens,
     selectBalanceVisible,
     selectCurrency,
     selectSelectedAccount,
     selectSelectedNetwork,
     selectVisibleAccounts,
     setAppResetTimestamp,
+    updateAccountBalances,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -54,20 +58,29 @@ import {
 } from "./Components"
 import { BannersCarousel } from "./Components/BannerCarousel"
 import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
-import { StakedCard } from "./Components/Staking"
-import { useTokenBalances } from "./Hooks"
+import { StakingSection } from "./Components/Staking"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
     usePrefetchAllVns()
+
+    // Pre Fetch featured dapps
+    useFetchFeaturedDApps()
+
+    const { data: officialTokens } = useOfficialTokens()
 
     const nav = useNavigation()
     const queryClient = useQueryClient()
 
     const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()
-    const { updateBalances, updateSuggested } = useTokenBalances()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (officialTokens?.length)
+            dispatch(addOfficialTokens({ network: selectedNetwork.type, tokens: officialTokens }))
+    }, [dispatch, officialTokens, selectedNetwork.type])
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
@@ -76,7 +89,7 @@ export const HomeScreen = () => {
         on the error boundary. This is needed because the error boundary will not unmount
         and we're left with a wrong state.
     */
-    const dispatch = useAppDispatch()
+
     useEffect(() => {
         dispatch(setAppResetTimestamp())
     }, [dispatch])
@@ -94,13 +107,7 @@ export const HomeScreen = () => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
-
-    const {
-        ref: blockedFeaturesIOSBottomSheetRef,
-        onOpen: openBlockedFeaturesIOSBottomSheet,
-        onClose: closeBlockedFeaturesIOSBottomSheet,
-    } = useBottomSheetModal()
+    const { RenderCameraModal, handleOpenOnlyReceiveCamera } = useCameraBottomSheet({ targets: [] })
 
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -121,13 +128,21 @@ export const HomeScreen = () => {
         })
     }, [queryClient, selectedAccount.address, selectedNetwork.type])
 
+    const invalidateBalanceQueries = useCallback(async () => {
+        await dispatch(updateAccountBalances(selectedAccount.address, queryClient))
+    }, [dispatch, queryClient, selectedAccount.address])
+
+    const invalidateTokens = useCallback(async () => {
+        await dispatch(invalidateUserTokens(selectedAccount.address, queryClient))
+    }, [dispatch, queryClient, selectedAccount.address])
+
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
 
-        await Promise.all([updateBalances(true), updateSuggested(), invalidateStargateQueries()])
+        await Promise.all([invalidateStargateQueries(), invalidateBalanceQueries(), invalidateTokens()])
 
         setRefreshing(false)
-    }, [invalidateStargateQueries, updateBalances, updateSuggested])
+    }, [invalidateBalanceQueries, invalidateStargateQueries, invalidateTokens])
 
     const { animateEntering } = useMemoizedAnimation({
         enteringAnimation: new FadeInRight(),
@@ -145,21 +160,22 @@ export const HomeScreen = () => {
     const Actions: FastAction[] = useMemo(() => {
         // If the account is observed, we don't want to show the send button as it's not possible to send from an observed account
         if (AccountUtils.isObservedAccount(selectedAccount)) return []
-
         const sharedActions: FastAction[] = [
             {
                 name: LL.BTN_SEND(),
-                action: () => nav.navigate(Routes.SELECT_TOKEN_SEND),
+                action: () => {
+                    if (featureFlags.betterWorldFeature.balanceScreen?.send?.enabled) {
+                        nav.navigate(Routes.SEND_TOKEN, {})
+                    } else {
+                        nav.navigate(Routes.SELECT_TOKEN_SEND)
+                    }
+                },
                 icon: <BaseIcon color={theme.colors.text} name="icon-arrow-up" size={20} />,
                 testID: "sendButton",
             },
             {
                 name: LL.BTN_SWAP(),
                 action: () => {
-                    if (PlatformUtils.isIOS()) {
-                        openBlockedFeaturesIOSBottomSheet()
-                        return
-                    }
                     nav.navigate(Routes.SWAP)
                 },
                 icon: <BaseIcon color={theme.colors.text} name="icon-arrow-left-right" size={20} />,
@@ -168,10 +184,6 @@ export const HomeScreen = () => {
             {
                 name: LL.BTN_BUY(),
                 action: () => {
-                    if (PlatformUtils.isIOS()) {
-                        openBlockedFeaturesIOSBottomSheet()
-                        return
-                    }
                     nav.navigate(Routes.BUY_FLOW)
                     track(AnalyticsEvent.BUY_CRYPTO_BUTTON_CLICKED)
                 },
@@ -192,16 +204,17 @@ export const HomeScreen = () => {
 
         if (PlatformUtils.isAndroid() && featureFlags.paymentProvidersFeature.coinify.android)
             return [...sharedActions, sellAction]
-        if (PlatformUtils.isIOS() && featureFlags.paymentProvidersFeature.coinify.iOS)
-            return [...sharedActions, sellAction]
+        // Uncomment this when we have a way to show the sell button on iOS
+        // if (PlatformUtils.isIOS() && featureFlags.paymentProvidersFeature.coinify.iOS)
+        //     return [...sharedActions, sellAction]
 
         return sharedActions
     }, [
         LL,
         featureFlags.paymentProvidersFeature.coinify.android,
-        featureFlags.paymentProvidersFeature.coinify.iOS,
+        featureFlags.betterWorldFeature.balanceScreen?.send?.enabled,
+        // featureFlags.paymentProvidersFeature.coinify.iOS,
         nav,
-        openBlockedFeaturesIOSBottomSheet,
         selectedAccount,
         theme.colors.text,
         track,
@@ -238,7 +251,7 @@ export const HomeScreen = () => {
                                 openSelectAccountBottomSheet={openSelectAccountBottomSheet}
                                 account={selectedAccount}
                                 selectedCurrency={selectedCurrency}
-                                openQRCodeSheet={openQRCodeSheet}
+                                openQRCodeSheet={handleOpenOnlyReceiveCamera}
                             />
                         </BaseView>
                         <BaseSpacer height={16} />
@@ -248,15 +261,14 @@ export const HomeScreen = () => {
 
                     <BannersCarousel location="home_screen" />
 
-                    <BaseView style={styles.container}>
-                        <StakedCard />
-                    </BaseView>
-
-                    <BaseView style={styles.container}>
-                        <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
-                        <BaseSpacer height={8} />
-                        <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
-                        <BaseSpacer height={24} />
+                    <BaseView style={styles.container} gap={24}>
+                        <StakingSection />
+                        <BaseView>
+                            <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
+                            <BaseSpacer height={8} />
+                            <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
+                            <BaseSpacer height={24} />
+                        </BaseView>
                     </BaseView>
 
                     {/*Account Selection*/}
@@ -265,20 +277,16 @@ export const HomeScreen = () => {
                         accounts={accounts}
                         setSelectedAccount={setSelectedAccount}
                         selectedAccount={selectedAccount}
-                        isBalanceVisible={isBalanceVisible}
                         ref={selectAccountBottomSheetRef}
+                        goToWalletEnabled
                     />
 
-                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+                    {RenderCameraModal}
                     <DeviceBackupBottomSheet />
                     <DeviceJailBrokenWarningModal />
                     <EnableNotificationsBottomSheet />
                     <VersionUpdateAvailableBottomSheet />
                     <VersionChangelogBottomSheet />
-                    <DisabledBuySwapIosBottomSheet
-                        ref={blockedFeaturesIOSBottomSheetRef}
-                        onConfirm={closeBlockedFeaturesIOSBottomSheet}
-                    />
                 </NestableScrollContainer>
             }
         />

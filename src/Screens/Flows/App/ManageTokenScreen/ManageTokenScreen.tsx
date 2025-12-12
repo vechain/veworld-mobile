@@ -1,46 +1,34 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import {
-    BaseIcon,
     BaseSearchInput,
     BaseSpacer,
     BaseText,
-    BaseTouchableBox,
     BaseView,
     DismissKeyboardView,
     Layout,
     OfficialTokenCard,
     PlusIconHeaderButton,
-    useThor,
 } from "~Components"
-import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal } from "~Hooks"
 
-import { useNavigation } from "@react-navigation/native"
 import { AnalyticsEvent } from "~Constants"
+import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
-import { Routes } from "~Navigation"
-import { updateAccountBalances, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import {
-    selectNonVechainFungibleTokens,
-    selectNonVechainTokensWithBalances,
-    selectSelectedAccount,
-    selectSelectedNetwork,
-} from "~Storage/Redux/Selectors"
-import { addTokenBalance, removeTokenBalance, setIsAppLoading } from "~Storage/Redux/Slices"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectNonVechainFungibleTokens, selectSelectedAccount, selectSelectedNetwork } from "~Storage/Redux/Selectors"
+import { setIsAppLoading, toggleTokenVisibility } from "~Storage/Redux/Slices"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
+import { BigNutils } from "~Utils"
 
 export const ManageTokenScreen = () => {
-    const theme = useTheme()
-
-    const nav = useNavigation()
-
     const { LL } = useI18nContext()
 
     const dispatch = useAppDispatch()
 
     const account = useAppSelector(selectSelectedAccount)
 
-    const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
+    const { data: tokenBalances } = useNonVechainTokensBalance()
 
     const tokens = useAppSelector(selectNonVechainFungibleTokens)
 
@@ -49,9 +37,6 @@ export const ManageTokenScreen = () => {
     const track = useAnalyticTracking()
 
     const [tokenQuery, setTokenQuery] = useState<string>("")
-    const [selectedTokenSymbols, setSelectedTokenSymbols] = useState<string[]>(
-        tokenBalances.map(tokenWithBalance => tokenWithBalance.symbol),
-    )
 
     const {
         ref: addCustomTokenSheetRef,
@@ -59,40 +44,56 @@ export const ManageTokenScreen = () => {
         onClose: closeAddCustomTokenSheet,
     } = useBottomSheetModal()
 
-    const filteredTokens = tokens.filter(
-        token =>
-            token.name.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()) ||
-            token.symbol.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()),
+    const selectedTokenSymbols = useMemo(() => {
+        return tokenBalances.filter(tk => !tk.balance.isHidden).map(tokenWithBalance => tokenWithBalance.symbol)
+    }, [tokenBalances])
+
+    const selectableTokens = useMemo(() => {
+        return tokenBalances.map(tk => (!BigNutils(tk.balance.balance).isZero ? tk.symbol : undefined)).filter(Boolean)
+    }, [tokenBalances])
+
+    const filteredTokens = useMemo(
+        () =>
+            tokens.filter(
+                token =>
+                    token.name.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()) ||
+                    token.symbol.toLocaleLowerCase().includes(tokenQuery.toLocaleLowerCase()),
+            ),
+        [tokenQuery, tokens],
     )
-    const selectedTokens = filteredTokens.filter(token => selectedTokenSymbols.includes(token.symbol))
-    const unselectedTokens = filteredTokens.filter(token => !selectedTokenSymbols.includes(token.symbol))
-    const thorClient = useThor()
+    const selectedTokens = useMemo(
+        () => filteredTokens.filter(token => selectedTokenSymbols.includes(token.symbol)),
+        [filteredTokens, selectedTokenSymbols],
+    )
+    const unselectedTokens = useMemo(() => {
+        const unselected = filteredTokens.filter(token => !selectedTokenSymbols.includes(token.symbol))
+
+        return unselected.sort((a, b) => {
+            const aIsSelectable = selectableTokens.includes(a.symbol)
+            const bIsSelectable = selectableTokens.includes(b.symbol)
+
+            // First, prioritize selectable tokens (those with non-zero balance)
+            if (aIsSelectable && !bIsSelectable) return -1
+            if (!aIsSelectable && bIsSelectable) return 1
+
+            // If both have zero balance or same balance, sort alphabetically by symbol
+            return a.symbol.localeCompare(b.symbol)
+        })
+    }, [filteredTokens, selectedTokenSymbols, selectableTokens])
 
     const selectToken = async (token: FungibleToken) => {
-        setSelectedTokenSymbols(tokenSymbols => [...tokenSymbols, token.symbol])
-
         dispatch(
-            addTokenBalance({
+            toggleTokenVisibility({
                 network: currentNetwork.type,
                 accountAddress: account.address,
-                balance: {
-                    balance: "0",
-                    tokenAddress: token.address,
-                    timeUpdated: new Date(0).toISOString(),
-                    isCustomToken: false,
-                    isHidden: false,
-                },
+                tokenAddress: token.address,
             }),
         )
-
-        dispatch(updateAccountBalances(thorClient, account.address))
-
         track(AnalyticsEvent.TOKENS_CUSTOM_TOKEN_ADDED)
     }
     const unselectToken = (token: FungibleToken) => {
-        setSelectedTokenSymbols(tokenSymbols => tokenSymbols.filter(tokenSymbol => tokenSymbol !== token.symbol))
         dispatch(
-            removeTokenBalance({
+            toggleTokenVisibility({
                 network: currentNetwork.type,
                 accountAddress: account.address,
                 tokenAddress: token.address,
@@ -106,10 +107,6 @@ export const ManageTokenScreen = () => {
         } else {
             selectToken(token)
         }
-    }
-
-    const navigateManageCustomTokenScreen = () => {
-        nav.navigate(Routes.MANAGE_CUSTOM_TOKEN)
     }
 
     useEffect(() => {
@@ -135,19 +132,6 @@ export const ManageTokenScreen = () => {
                             <BaseSpacer height={8} />
                             <BaseText typographyFont="body">{LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}</BaseText>
                             <BaseSpacer height={16} />
-
-                            <BaseTouchableBox
-                                haptics="Light"
-                                action={navigateManageCustomTokenScreen}
-                                justifyContent="center">
-                                <BaseIcon name="icon-settings-2" color={theme.colors.primary} />
-                                <BaseSpacer width={8} />
-                                <BaseText typographyFont="bodyMedium">
-                                    {LL.MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED()}
-                                </BaseText>
-                                <BaseSpacer width={8} />
-                            </BaseTouchableBox>
-                            <BaseSpacer height={16} />
                             <BaseSearchInput
                                 value={tokenQuery}
                                 setValue={setTokenQuery}
@@ -161,11 +145,13 @@ export const ManageTokenScreen = () => {
                             <>
                                 {!!selectedTokens.length && (
                                     <>
-                                        <BaseText typographyFont="subSubTitle">{LL.MANAGE_TOKEN_SELECTED()}</BaseText>
+                                        <BaseText typographyFont="subSubTitleSemiBold">
+                                            {LL.MANAGE_TOKEN_SELECTED()}
+                                        </BaseText>
                                         <BaseSpacer height={16} />
                                         {selectedTokens.map(token => (
                                             <OfficialTokenCard
-                                                iconSize={26}
+                                                iconSize={32}
                                                 selected
                                                 key={token.address}
                                                 token={token}
@@ -177,13 +163,16 @@ export const ManageTokenScreen = () => {
                                 )}
                                 {!!unselectedTokens.length && (
                                     <>
-                                        <BaseText typographyFont="subSubTitle">{LL.MANAGE_TOKEN_UNSELECTED()}</BaseText>
+                                        <BaseText typographyFont="subSubTitleSemiBold">
+                                            {LL.MANAGE_TOKEN_UNSELECTED()}
+                                        </BaseText>
                                         <BaseSpacer height={16} />
                                         {unselectedTokens.map(token => (
                                             <OfficialTokenCard
                                                 iconSize={26}
                                                 key={token.address}
                                                 token={token}
+                                                disabled={!selectableTokens.includes(token.symbol)}
                                                 action={handleClickToken(token)}
                                             />
                                         ))}

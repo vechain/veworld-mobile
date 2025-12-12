@@ -32,6 +32,8 @@ const TokenInfoMarketDataSchema = z.object({
     current_price: z.record(z.string(), z.number()),
     market_cap: z.record(z.string(), z.number()),
     total_volume: z.record(z.string(), z.number()),
+    high_24h: z.record(z.string(), z.number()),
+    low_24h: z.record(z.string(), z.number()),
 })
 
 const TokenInfoResponseSchema = z.object({
@@ -53,8 +55,19 @@ const TokenInfoResponseSchema = z.object({
     }),
     description: z.record(z.string(), z.string()),
     links: z.object({
-        blockchain_site: z.array(z.nullable(z.string())),
         homepage: z.array(z.string()),
+        blockchain_site: z.array(z.nullable(z.string())),
+        official_forum_url: z.array(z.nullable(z.string())),
+        chat_url: z.array(z.nullable(z.string())),
+        announcement_url: z.array(z.nullable(z.string())),
+        twitter_screen_name: z.nullable(z.string()),
+        facebook_username: z.nullable(z.string()),
+        telegram_channel_identifier: z.nullable(z.string()),
+        subreddit_url: z.nullable(z.string()),
+        repos_url: z.object({
+            github: z.array(z.nullable(z.string())),
+            bitbucket: z.array(z.nullable(z.string())),
+        }),
     }),
     market_data: TokenInfoMarketDataSchema,
 })
@@ -140,7 +153,7 @@ export const getMarketChart = async ({
 }: {
     coinGeckoId?: string
     vs_currency: string
-    days: number
+    days: number | "max"
     interval?: string
 }): Promise<MarketChartResponse> => {
     try {
@@ -166,7 +179,7 @@ export const getMarketChart = async ({
             value: entry[1],
         }))
     } catch (e) {
-        error(ERROR_EVENTS.TOKENS, e)
+        error(ERROR_EVENTS.TOKENS, "[getMarketChart]", e)
         throw e
     }
 }

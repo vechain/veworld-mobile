@@ -76,7 +76,7 @@ export const UserCreatePasswordScreen: React.FC<UserCreatePasswordScreenProps> =
             fixedHeader={<BackButtonHeader action={onBack} title={LL.TITLE_USER_PASSWORD()} />}
             body={
                 <BaseView alignItems="center" justifyContent="flex-start">
-                    <BaseText w={100} align="left" typographyFont="body" color={theme.colors.subtitle}>
+                    <BaseText w={100} align="center" typographyFont="body" color={theme.colors.subtitle}>
                         {LL.SB_USER_PASSWORD()}
                     </BaseText>
                     <BaseSpacer height={isSmallScreen ? 45 : 80} />

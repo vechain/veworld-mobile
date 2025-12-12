@@ -16,6 +16,9 @@ export const BrowserSlice = createSlice({
         setVisitedUrl: (state, action: PayloadAction<DiscoveryDApp>) => {
             state.visitedUrls = [...state.visitedUrls.filter(dapp => dapp.href !== action.payload.href), action.payload]
         },
+        updateLastVisitedUrl: (state, action: PayloadAction<DiscoveryDApp>) => {
+            state.visitedUrls = [...state.visitedUrls.slice(0, -1), action.payload]
+        },
         deleteVisitedUrl: (state, action: PayloadAction<string>) => {
             state.visitedUrls = state.visitedUrls.filter(dapp => {
                 try {
@@ -29,4 +32,4 @@ export const BrowserSlice = createSlice({
     },
 })
 
-export const { setVisitedUrl, deleteVisitedUrl, resetBrowserState } = BrowserSlice.actions
+export const { setVisitedUrl, updateLastVisitedUrl, deleteVisitedUrl, resetBrowserState } = BrowserSlice.actions
