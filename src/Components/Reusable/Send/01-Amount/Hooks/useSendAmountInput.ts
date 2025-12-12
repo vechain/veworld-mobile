@@ -6,6 +6,8 @@ import { BigNutils } from "~Utils"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { ethers } from "ethers"
+import { useFiatAmount } from "./useFiatAmount"
+import { useTokenAmount } from "./useTokenAmount"
 
 type Args = {
     token: FungibleTokenWithBalance
@@ -42,38 +44,18 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
         vs_currency: currency,
     })
 
-    const [fiatAmount, setFiatAmount] = useState(() => {
-        if (flowState.amountInFiat)
-            return ethers.utils.parseUnits(flowState.fiatAmount ?? "0", token.decimals).toString()
-        return BigNutils()
-            .toCurrencyConversion(
-                ethers.utils.parseUnits(flowState.amount ?? "0", token.decimals).toString(),
-                exchangeRate ?? 0,
-                undefined,
-                token.decimals,
-            )
-            .self.toBigInt.toString()
-    })
-    const [tokenAmount, setTokenAmount] = useState(() => {
-        if (!flowState.amountInFiat) return ethers.utils.parseUnits(flowState.amount ?? "0", token.decimals).toString()
-        return BigNutils()
-            .toTokenConversion(
-                ethers.utils.parseUnits(flowState.fiatAmount ?? "0", token.decimals).toString(),
-                exchangeRate ?? undefined,
-                undefined,
-            )
-            .toBigInt.toString()
-    })
+    const tokenTotalBalance = useMemo(() => {
+        return BigNutils(token.balance.balance).toString
+    }, [token?.balance.balance])
+
+    const [fiatAmount, setFiatAmount] = useFiatAmount({ token, exchangeRate })
+    const [tokenAmount, setTokenAmount] = useTokenAmount({ token, exchangeRate })
     const [input, setInput] = useState(
         truncateToMaxDecimals(
             (flowState.amountInFiat ? flowState.fiatAmount : flowState.amount) ?? "0",
             flowState.amountInFiat ? { kind: "fiat" } : { kind: "token", decimals: token.decimals },
         ),
     )
-
-    const tokenTotalBalance = useMemo(() => {
-        return BigNutils(token.balance.balance).toString
-    }, [token?.balance.balance])
 
     const hasValidDecimalPlaces = useCallback(
         (value: string): boolean => {
@@ -128,7 +110,16 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
                 )
             }
         },
-        [exchangeRate, hasValidDecimalPlaces, input, isInputInFiat, removeInvalidCharacters, token],
+        [
+            exchangeRate,
+            hasValidDecimalPlaces,
+            input,
+            isInputInFiat,
+            removeInvalidCharacters,
+            setFiatAmount,
+            setTokenAmount,
+            token,
+        ],
     )
 
     const onMax = useCallback(() => {
@@ -140,13 +131,13 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
 
         if (isInputInFiat) setInput(ethers.utils.formatUnits(newFiatValue, token.decimals))
         else setInput(ethers.utils.formatUnits(tokenTotalBalance, token.decimals))
-    }, [exchangeRate, isInputInFiat, token.decimals, tokenTotalBalance])
+    }, [exchangeRate, isInputInFiat, setFiatAmount, setTokenAmount, token.decimals, tokenTotalBalance])
 
     const onReset = useCallback(() => {
         setFiatAmount("0")
         setTokenAmount("0")
         setInput("0")
-    }, [])
+    }, [setFiatAmount, setTokenAmount])
 
     const isBalanceExceeded = useMemo(
         () => BigNutils(tokenAmount).isBiggerThan(tokenTotalBalance),
