@@ -36,8 +36,24 @@ export const SelectLanguageBottomSheet = ({ bsRef }: Props) => {
     return (
         <BaseBottomSheet dynamicHeight ref={ref} enableContentPanningGesture={false} scrollable={false}>
             <NestableScrollContainer bounces={false} showsVerticalScrollIndicator={false} stickyHeaderIndices={[0]}>
-                <BaseView flexDirection="row" justifyContent="space-between" w={100} alignItems="center" pb={24}>
-                    <BaseText typographyFont="subSubTitleSemiBold">{LL.SB_SELECT_LANGUAGE()}</BaseText>
+                <BaseView
+                    flexDirection="column"
+                    justifyContent="space-between"
+                    w={100}
+                    alignItems="flex-start"
+                    pb={24}
+                    gap={8}>
+                    <BaseView flexDirection="row" alignItems="flex-start" gap={12}>
+                        <BaseIcon
+                            name="icon-globe"
+                            size={20}
+                            color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
+                        />
+                        <BaseText typographyFont="subTitleSemiBold">{LL.SB_SELECT_LANGUAGE()}</BaseText>
+                    </BaseView>
+                    <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                        {LL.SB_SELECT_LANGUAGE_DESC()}
+                    </BaseText>
                 </BaseView>
                 <BottomSheetFlatList
                     data={languages}
