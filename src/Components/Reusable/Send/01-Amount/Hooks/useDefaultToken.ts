@@ -4,8 +4,9 @@ import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
 import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
-import { BalanceUtils, BigNutils } from "~Utils"
+import { AddressUtils, BalanceUtils, BigNutils } from "~Utils"
 import { useTokenSendContext } from "../../Provider"
+import { selectLastSentToken, useAppSelector } from "~Storage/Redux"
 
 export const useDefaultToken = () => {
     const { flowState } = useTokenSendContext()
@@ -18,12 +19,20 @@ export const useDefaultToken = () => {
     const { data: nonVechainTokensWithBalance } = useNonVechainTokensBalance()
     const { data: nonVechainTokensFiat } = useNonVechainTokenFiat()
 
+    const lastSentTokenAddress = useAppSelector(selectLastSentToken)
+
     return useMemo(() => {
         if (flowState.token) return flowState.token
 
         const sendableTokens = availableTokens.filter(
             t => t.symbol !== VOT3.symbol && !BigNutils(t.balance.balance).isZero && t.symbol !== VeDelegate.symbol,
         )
+
+        const lastToken = availableTokens.find(token =>
+            AddressUtils.compareAddresses(token.address, lastSentTokenAddress),
+        )
+
+        if (lastToken) return lastToken
 
         if (sendableTokens.length === 0) {
             const vetToken = availableTokens.find(t => t.symbol === VET.symbol)
@@ -61,6 +70,7 @@ export const useDefaultToken = () => {
     }, [
         flowState.token,
         availableTokens,
+        lastSentTokenAddress,
         vetInfo.exchangeRate,
         vthoInfo.exchangeRate,
         b3trInfo.exchangeRate,
