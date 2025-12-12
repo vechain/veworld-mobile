@@ -172,14 +172,23 @@ export const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModalMethod
 
         const availableTokens = useSendableTokensWithBalance()
 
+        const nonSendableTokens = useMemo(() => {
+            return [VeDelegate.symbol, VOT3.symbol]
+        }, [])
+
         const filteredTokens = useMemo(() => {
-            return availableTokens.filter(token => token.symbol !== VeDelegate.symbol)
-        }, [availableTokens])
+            const vot3Token = availableTokens.find(token => token.symbol === VOT3.symbol)
+            if (vot3Token) {
+                return [...availableTokens.filter(token => !nonSendableTokens.includes(token.symbol)), vot3Token]
+            }
+            return availableTokens.filter(token => !nonSendableTokens.includes(token.symbol))
+        }, [availableTokens, nonSendableTokens])
 
         const handleTokenSelect = useCallback(
             (token: FungibleTokenWithBalance) => {
                 setSelectedToken(token)
                 onClose(token)
+                setVot3WarningVisible(false)
             },
             [onClose, setSelectedToken],
         )
@@ -188,12 +197,18 @@ export const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModalMethod
             setVot3WarningVisible(true)
         }, [])
 
+        const onDismiss = useCallback(() => {
+            //Reset vot3 warning to hidden when the bottom sheet is dismissed
+            setVot3WarningVisible(false)
+        }, [])
+
         return (
             <BaseBottomSheet
                 ref={ref}
                 dynamicHeight
                 contentStyle={styles.rootContent}
-                backgroundStyle={styles.rootContentBackground}>
+                backgroundStyle={styles.rootContentBackground}
+                onDismiss={onDismiss}>
                 <BaseView flexDirection="row" gap={12}>
                     <BaseIcon name="icon-coins" size={20} color={theme.colors.editSpeedBs.title} />
                     <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
