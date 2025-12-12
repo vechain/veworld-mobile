@@ -33,7 +33,13 @@ const refineEthersDecimalValue = (value: string | undefined) => {
     return value
 }
 
-export const SelectAmountSendComponent = () => {
+const SelectAmountSendComponentContent = ({
+    selectedToken,
+    setSelectedToken,
+}: {
+    selectedToken: FungibleTokenWithBalance
+    setSelectedToken: (token: FungibleTokenWithBalance) => void
+}) => {
     const { setFlowState, goToNext, flowState } = useTokenSendContext()
     const { formatLocale } = useFormatFiat()
 
@@ -41,13 +47,10 @@ export const SelectAmountSendComponent = () => {
 
     const currency = useAppSelector(selectCurrency)
 
-    const defaultToken = useDefaultToken()
     const [isInputInFiat, setIsInputInFiat] = useState(flowState.amountInFiat ?? true)
-    const [selectedToken, setSelectedToken] = useState<FungibleTokenWithBalance | undefined>(defaultToken)
-    const [internalToken, setInternalToken] = useState<FungibleTokenWithBalance | undefined>(defaultToken)
 
     const { data: exchangeRate, fetchStatus } = useExchangeRate({
-        id: selectedToken ? getCoinGeckoIdBySymbol[selectedToken.symbol] ?? selectedToken.symbol : undefined,
+        id: getCoinGeckoIdBySymbol[selectedToken.symbol] ?? selectedToken.symbol,
         vs_currency: currency,
     })
 
@@ -88,13 +91,12 @@ export const SelectAmountSendComponent = () => {
     }, [])
 
     const handleCloseTokenSelector = useCallback(
-        (tokenToSelect?: FungibleTokenWithBalance) => {
-            const finalToken = tokenToSelect || internalToken
-            setSelectedToken(finalToken)
+        (tokenToSelect: FungibleTokenWithBalance) => {
+            setSelectedToken(tokenToSelect)
             onReset()
             bottomSheetRef.current?.dismiss()
         },
-        [internalToken, onReset],
+        [onReset, setSelectedToken],
     )
 
     const tokenBalance = useMemo(() => {
@@ -130,10 +132,6 @@ export const SelectAmountSendComponent = () => {
         }))
         goToNext()
     }, [exchangeRate, fiatAmount, goToNext, isInputInFiat, selectedToken, setFlowState, tokenAmount])
-
-    if (!selectedToken) {
-        return <BaseView flex={1} />
-    }
 
     return (
         <SendContent>
@@ -186,16 +184,25 @@ export const SelectAmountSendComponent = () => {
                 {/* TODO: Check that it's not zero too */}
                 <SendContent.Footer.Next action={onSubmit} disabled={isBalanceExceeded} />
             </SendContent.Footer>
-            {internalToken && (
-                <TokenSelectionBottomSheet
-                    ref={bottomSheetRef}
-                    selectedToken={internalToken}
-                    setSelectedToken={setInternalToken}
-                    onClose={handleCloseTokenSelector}
-                />
-            )}
+            <TokenSelectionBottomSheet
+                ref={bottomSheetRef}
+                selectedToken={selectedToken}
+                setSelectedToken={setSelectedToken}
+                onClose={handleCloseTokenSelector}
+            />
         </SendContent>
     )
+}
+
+export const SelectAmountSendComponent = () => {
+    const defaultToken = useDefaultToken()
+    const [selectedToken, setSelectedToken] = useState<FungibleTokenWithBalance | undefined>(defaultToken)
+
+    const token = useMemo(() => selectedToken ?? defaultToken, [defaultToken, selectedToken])
+
+    if (!token) return <BaseView flex={1} />
+
+    return <SelectAmountSendComponentContent selectedToken={token} setSelectedToken={setSelectedToken} />
 }
 
 const baseStyles = (theme: ColorThemeType) =>

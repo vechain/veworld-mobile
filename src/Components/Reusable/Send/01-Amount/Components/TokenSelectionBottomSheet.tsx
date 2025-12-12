@@ -1,6 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { AlertInline, BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { B3TR, COLORS, VeDelegate, VOT3 } from "~Constants"
@@ -13,12 +14,11 @@ import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { formatTokenAmount } from "~Utils/StandardizedFormatting"
 import { useI18nContext } from "~i18n"
-import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 
 type TokenSelectionBottomSheetProps = {
     selectedToken: FungibleTokenWithBalance
     setSelectedToken: (token: FungibleTokenWithBalance) => void
-    onClose: (token?: FungibleTokenWithBalance) => void
+    onClose: (token: FungibleTokenWithBalance) => void
 }
 
 type EnhancedTokenCardProps = {

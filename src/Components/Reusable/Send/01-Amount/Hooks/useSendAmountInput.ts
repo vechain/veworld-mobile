@@ -8,7 +8,7 @@ import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { ethers } from "ethers"
 
 type Args = {
-    token: FungibleTokenWithBalance | undefined
+    token: FungibleTokenWithBalance
     isInputInFiat: boolean
 }
 
@@ -19,10 +19,10 @@ const MAX_FIAT_DECIMALS = 2
  */
 const LOW_PRECISION_SYMBOLS = ["BTC", "ETH", "SOL", "USDC", "USDT", "WAN", "XRP"]
 
-const getMaxDecimals = (args: { kind: "fiat" } | { kind: "token"; token: FungibleToken | undefined }) => {
+const getMaxDecimals = (args: { kind: "fiat" } | { kind: "token"; token: FungibleToken }) => {
     if (args.kind === "fiat") return MAX_FIAT_DECIMALS
-    if (LOW_PRECISION_SYMBOLS.includes(args.token?.symbol ?? "")) return 5
-    return args.token?.decimals ?? 18
+    if (LOW_PRECISION_SYMBOLS.includes(args.token.symbol)) return 5
+    return args.token.decimals ?? 18
 }
 
 export const truncateToMaxDecimals = (value: string, opts: Parameters<typeof getMaxDecimals>[0]) => {
@@ -44,28 +44,27 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
     )
     const currency = useAppSelector(selectCurrency)
     const { data: exchangeRate } = useExchangeRate({
-        id: token ? getCoinGeckoIdBySymbol[token?.symbol] ?? token.symbol : undefined,
+        id: getCoinGeckoIdBySymbol[token.symbol] ?? token.symbol,
         vs_currency: currency,
     })
 
     const [fiatAmount, setFiatAmount] = useState(() => {
         if (flowState.amountInFiat)
-            return ethers.utils.parseUnits(flowState.fiatAmount ?? "0", token?.decimals ?? 18).toString()
+            return ethers.utils.parseUnits(flowState.fiatAmount ?? "0", token.decimals).toString()
         return BigNutils()
             .toCurrencyConversion(
-                ethers.utils.parseUnits(flowState.amount ?? "0", token?.decimals ?? 18).toString(),
+                ethers.utils.parseUnits(flowState.amount ?? "0", token.decimals).toString(),
                 exchangeRate ?? 0,
                 undefined,
-                token?.decimals ?? 18,
+                token.decimals,
             )
             .self.toBigInt.toString()
     })
     const [tokenAmount, setTokenAmount] = useState(() => {
-        if (!flowState.amountInFiat)
-            return ethers.utils.parseUnits(flowState.amount ?? "0", token?.decimals ?? 18).toString()
+        if (!flowState.amountInFiat) return ethers.utils.parseUnits(flowState.amount ?? "0", token.decimals).toString()
         return BigNutils()
             .toTokenConversion(
-                ethers.utils.parseUnits(flowState.fiatAmount ?? "0", token?.decimals ?? 18).toString(),
+                ethers.utils.parseUnits(flowState.fiatAmount ?? "0", token.decimals).toString(),
                 exchangeRate ?? undefined,
                 undefined,
             )
@@ -79,7 +78,7 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
     )
 
     const tokenTotalBalance = useMemo(() => {
-        return BigNutils(token?.balance.balance ?? "0").toString
+        return BigNutils(token.balance.balance).toString
     }, [token?.balance.balance])
 
     const hasValidDecimalPlaces = useCallback(
@@ -110,24 +109,24 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
             setInput(newValue)
 
             if (isInputInFiat) {
-                setFiatAmount(ethers.utils.parseUnits(parsableInput || "0", token?.decimals ?? 18).toString())
+                setFiatAmount(ethers.utils.parseUnits(parsableInput || "0", token.decimals).toString())
                 setTokenAmount(
                     BigNutils()
                         .toTokenConversion(
-                            ethers.utils.parseUnits(parsableInput || "0", token?.decimals ?? 18).toString(),
+                            ethers.utils.parseUnits(parsableInput || "0", token.decimals).toString(),
                             exchangeRate ?? undefined,
                         )
                         .toBigInt.toString(),
                 )
             } else {
-                setTokenAmount(ethers.utils.parseUnits(parsableInput || "0", token?.decimals ?? 18).toString())
+                setTokenAmount(ethers.utils.parseUnits(parsableInput || "0", token.decimals).toString())
                 setFiatAmount(
                     BigNutils()
                         .toCurrencyConversion(
-                            ethers.utils.parseUnits(parsableInput || "0", token?.decimals ?? 18).toString(),
+                            ethers.utils.parseUnits(parsableInput || "0", token.decimals).toString(),
                             exchangeRate ?? 0,
                             undefined,
-                            token?.decimals ?? 18,
+                            token.decimals,
                         )
                         .self.toBigInt.toString(),
                 )
@@ -139,13 +138,13 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
     const onMax = useCallback(() => {
         setTokenAmount(tokenTotalBalance)
         const newFiatValue = BigNutils()
-            .toCurrencyConversion(tokenTotalBalance.toString(), exchangeRate ?? 0, undefined, token?.decimals ?? 18)
+            .toCurrencyConversion(tokenTotalBalance.toString(), exchangeRate ?? 0, undefined, token.decimals)
             .self.toBigInt.toString()
         setFiatAmount(newFiatValue)
 
-        if (isInputInFiat) setInput(ethers.utils.formatUnits(newFiatValue, token?.decimals ?? 18))
-        else setInput(ethers.utils.formatUnits(tokenTotalBalance, token?.decimals ?? 18))
-    }, [exchangeRate, isInputInFiat, token?.decimals, tokenTotalBalance])
+        if (isInputInFiat) setInput(ethers.utils.formatUnits(newFiatValue, token.decimals))
+        else setInput(ethers.utils.formatUnits(tokenTotalBalance, token.decimals))
+    }, [exchangeRate, isInputInFiat, token.decimals, tokenTotalBalance])
 
     const onReset = useCallback(() => {
         setFiatAmount("0")

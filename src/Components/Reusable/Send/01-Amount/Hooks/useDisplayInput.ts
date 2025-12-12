@@ -14,7 +14,7 @@ type Args = {
     tokenAmount: string
     fiatAmount: string
     isInputInFiat: boolean
-    token: FungibleToken | undefined
+    token: FungibleToken
 }
 
 export const useDisplayInput = ({ input, tokenAmount, fiatAmount, isInputInFiat, token }: Args) => {
@@ -66,7 +66,7 @@ export const useDisplayInput = ({ input, tokenAmount, fiatAmount, isInputInFiat,
     const formattedConverted = useMemo(() => {
         const valueToFormat = isInputInFiat ? tokenAmount : fiatAmount
         const [integerPart, decimalPart] = truncateToMaxDecimals(
-            ethers.utils.formatUnits(valueToFormat, token?.decimals ?? 18),
+            ethers.utils.formatUnits(valueToFormat, token.decimals),
             // Always use 2 decimals for converted value
             { kind: "fiat" },
         ).split(/[.,]/)
