@@ -1,0 +1,139 @@
+import { TouchableOpacity } from "@gorhom/bottom-sheet"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { useNavigation } from "@react-navigation/native"
+import React, { useCallback } from "react"
+import { SectionListData, SectionListRenderItemInfo, StyleSheet } from "react-native"
+import { NestableScrollContainer } from "react-native-draggable-flatlist"
+import {
+    BaseBottomSheet,
+    BaseIcon,
+    BaseSectionListSeparatorProps,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    SectionListSeparator,
+} from "~Components"
+import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
+import { COLORS, ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { useNetworkList } from "~Hooks/useNetworkList"
+import { useI18nContext } from "~i18n"
+import { Network } from "~Model"
+import { Routes } from "~Navigation"
+import { useAppSelector } from "~Storage/Redux"
+import { selectSelectedNetwork } from "~Storage/Redux/Selectors"
+import { NetworkBox } from "../NetworkBox"
+
+type Props = {
+    onClose: () => void
+}
+
+type Section = {
+    title: string
+    data: Network[]
+}
+
+const ItemSeparator = () => <BaseSpacer height={8} />
+
+const SectionSeparator = (props: BaseSectionListSeparatorProps<Network, Section>) => (
+    <SectionListSeparator {...props} headerToItemsHeight={8} headerToHeaderHeight={24} />
+)
+
+export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
+    const { LL } = useI18nContext()
+    const { styles, theme } = useThemedStyles(baseStyles)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+
+    const nav = useNavigation()
+
+    const { sections, onPress } = useNetworkList({ onNetworkSelected: onClose })
+
+    const renderSectionHeader = useCallback(
+        ({ section }: { section: SectionListData<Network, Section> }) => {
+            return (
+                <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
+                    {section.title}
+                </BaseText>
+            )
+        },
+        [theme.isDark],
+    )
+
+    const renderItem = useCallback(
+        ({ item }: SectionListRenderItemInfo<Network, Section>) => {
+            const isSelected = selectedNetwork.id === item.id
+            return <NetworkBox network={item} isSelected={isSelected} onPress={onPress} />
+        },
+        [selectedNetwork, onPress],
+    )
+
+    const onSettingsClick = useCallback(() => {
+        nav.navigate(Routes.SETTINGS_NETWORK)
+        onClose()
+    }, [nav, onClose])
+
+    return (
+        <BaseBottomSheet
+            floating
+            dynamicHeight
+            enableContentPanningGesture={false}
+            scrollable={false}
+            ref={ref}
+            backgroundStyle={styles.background}>
+            <NestableScrollContainer showsVerticalScrollIndicator={false} stickyHeaderIndices={[0]} bounces={false}>
+                <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
+                    <BaseView flexDirection="column" gap={8}>
+                        <BaseView flexDirection="row" alignItems="center" gap={12}>
+                            <BaseIcon
+                                name="icon-globe"
+                                size={20}
+                                color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
+                            />
+                            <BaseText typographyFont="subTitleSemiBold">{LL.NETWORKS_BS_TITLE()}</BaseText>
+                        </BaseView>
+                        <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                            {LL.NETWORKS_BS_SUBTITLE()}
+                        </BaseText>
+                    </BaseView>
+                    <TouchableOpacity onPress={onSettingsClick} style={styles.settingsBtn}>
+                        <BaseIcon
+                            name="icon-settings"
+                            color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}
+                            size={16}
+                        />
+                    </TouchableOpacity>
+                </BaseView>
+
+                <BottomSheetSectionList
+                    sections={sections}
+                    keyExtractor={i => i.id}
+                    ItemSeparatorComponent={ItemSeparator}
+                    SectionSeparatorComponent={SectionSeparator}
+                    renderSectionHeader={renderSectionHeader}
+                    renderItem={renderItem}
+                    stickySectionHeadersEnabled={false}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    style={styles.list}
+                />
+            </NestableScrollContainer>
+        </BaseBottomSheet>
+    )
+})
+
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        settingsBtn: {
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+            padding: 8,
+            borderWidth: 1,
+            borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
+            borderRadius: 6,
+        },
+        list: {
+            marginTop: 24,
+        },
+        background: {
+            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.APP_BACKGROUND_LIGHT,
+        },
+    })

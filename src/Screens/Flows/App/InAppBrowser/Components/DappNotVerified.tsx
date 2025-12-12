@@ -2,13 +2,13 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { Linking, Pressable, StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { SelectNetworkBottomSheet } from "~Components/Reusable/Network"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useCloseBrowser } from "~Hooks/useCloseBrowser"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation"
-import { SelectNetworkBottomSheet } from "../../NetworkScreen/Components"
 
 type DappNotVerifiedCardProps = {
     title: string

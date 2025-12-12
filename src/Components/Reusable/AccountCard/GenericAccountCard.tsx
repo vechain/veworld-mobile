@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, {
     AnimatedStyle,
@@ -23,6 +23,7 @@ type Props = {
     containerStyle?: StyleProp<AnimatedStyle<ViewStyle>>
     disabled?: boolean
     selected?: boolean
+    isContact?: boolean
 }
 
 const AnimatedTouchable = Animated.createAnimatedComponent(wrapFunctionComponent(BaseTouchable))
@@ -36,6 +37,7 @@ export const GenericAccountCard = ({
     containerStyle,
     disabled,
     selected = false,
+    isContact = false,
 }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const selectedSV = useSharedValue(Number(selected))
@@ -67,6 +69,20 @@ export const GenericAccountCard = ({
         }
     }, [selectedSV.value])
 
+    const title = useMemo(() => {
+        if (isContact) {
+            return accountName
+        }
+        return vnsName || accountName || AddressUtils.humanAddress(accountAddress)
+    }, [isContact, vnsName, accountName, accountAddress])
+
+    const description = useMemo(() => {
+        if (isContact) {
+            return vnsName || AddressUtils.humanAddress(accountAddress)
+        }
+        return AddressUtils.humanAddress(accountAddress)
+    }, [isContact, vnsName, accountAddress])
+
     useEffect(() => {
         selectedSV.value = Number(selected)
     }, [selected, selectedSV])
@@ -80,14 +96,18 @@ export const GenericAccountCard = ({
             <BaseView flexDirection="row" flex={1} gap={12} justifyContent="space-between" alignItems="center">
                 <AccountIcon account={{ address: accountAddress, type: DEVICE_TYPE.LOCAL_MNEMONIC }} size={32} />
                 <BaseView flex={1} flexDirection="column">
-                    <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
-                        {vnsName || accountName || AddressUtils.humanAddress(accountAddress)}
+                    <BaseText
+                        numberOfLines={1}
+                        typographyFont="captionMedium"
+                        color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
+                        {title}
                     </BaseText>
                     {(vnsName || accountName) && (
                         <BaseText
+                            numberOfLines={1}
                             typographyFont="smallCaptionMedium"
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
-                            {AddressUtils.humanAddress(accountAddress)}
+                            {description}
                         </BaseText>
                     )}
                 </BaseView>

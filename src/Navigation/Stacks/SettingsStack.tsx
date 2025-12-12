@@ -5,7 +5,6 @@ import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import {
     AddContactScreen,
-    AddCustomNodeScreen,
     ChangeNetworkScreen,
     ChooseBackupDetailsPassword,
     ClaimUsername,
@@ -14,7 +13,6 @@ import {
     DetailsBackupScreen,
     GeneralScreen,
     InAppBrowser,
-    ManageCustomNodesScreen,
     ManageUrlsScreen,
     NotificationScreen,
     PrivacyScreen,
@@ -27,15 +25,13 @@ import {
     WalletManagementScreen,
 } from "~Screens"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
-import { DeveloperSettingsScreen } from "~Screens/Flows/App/DeveloperSettingsScreen"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { DeveloperSettingsScreen } from "~Screens/Flows/App/DeveloperSettingsScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
     [Routes.SETTINGS_NETWORK]: undefined
-    [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
-    [Routes.SETTINGS_MANAGE_CUSTOM_NODES]: undefined
     [Routes.SETTINGS_PRIVACY]: undefined
     [Routes.SETTINGS_ABOUT]: undefined
     [Routes.SETTINGS_GENERAL]: undefined
@@ -80,18 +76,6 @@ export const SettingsStack = () => {
             <Settings.Screen
                 name={Routes.SETTINGS_NETWORK}
                 component={ChangeNetworkScreen}
-                options={{ headerShown: false }}
-            />
-
-            <Settings.Screen
-                name={Routes.SETTINGS_ADD_CUSTOM_NODE}
-                component={AddCustomNodeScreen}
-                options={{ headerShown: false }}
-            />
-
-            <Settings.Screen
-                name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
-                component={ManageCustomNodesScreen}
                 options={{ headerShown: false }}
             />
 

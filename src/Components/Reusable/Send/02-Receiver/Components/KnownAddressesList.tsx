@@ -6,7 +6,7 @@ import { GenericAccountCard } from "~Components/Reusable/AccountCard"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, Contact, RecentContact } from "~Model"
+import { AccountWithDevice, Contact, ContactType, RecentContact } from "~Model"
 import {
     selectAccounts,
     selectKnownContacts,
@@ -69,7 +69,7 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
     const renderItem = useCallback(
         ({ item }: { item: AccountWithDevice | Contact | RecentContact }) => {
             const isSelected = AddressUtils.compareAddresses(selectedAddress, item.address)
-
+            const isContact = "type" in item && item.type === ContactType.KNOWN
             return (
                 <GenericAccountCard
                     accountName={item.alias}
@@ -78,6 +78,7 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
                         onAddressChange(accountAddress)
                     }}
                     selected={isSelected}
+                    isContact={isContact}
                 />
             )
         },
