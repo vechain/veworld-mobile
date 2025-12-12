@@ -5,7 +5,7 @@ import * as Haptics from "expo-haptics"
 import React, { RefObject, useCallback, useMemo, useState } from "react"
 import { Keyboard, StyleSheet } from "react-native"
 import { z } from "zod"
-import { AlertInline, BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { AlertInline, BaseBottomSheet, BaseButton, BaseIcon, BaseText, BaseView } from "~Components"
 import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { COLORS, ColorThemeType, ERROR_EVENTS } from "~Constants"
@@ -90,20 +90,26 @@ export const AddCustomNetworkBottomSheet = ({ bsRef }: Props) => {
     }, [])
 
     return (
-        <BaseBottomSheet ref={bsRef} dynamicHeight scrollEnabled={false} onDismiss={onDismiss}>
-            <BaseView flex={1} flexDirection="row" gap={12}>
-                <BaseIcon name="icon-users" size={20} color={theme.colors.editSpeedBs.title} />
-                <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                    {LL.NETWORK_ADD_CUSTOM_NETWORK()}
+        <BaseBottomSheet
+            ref={bsRef}
+            dynamicHeight
+            scrollable={false}
+            onDismiss={onDismiss}
+            contentStyle={styles.container}>
+            <BaseView gap={8}>
+                <BaseView flexDirection="row" gap={12}>
+                    <BaseIcon name="icon-users" size={20} color={theme.colors.editSpeedBs.title} />
+                    <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                        {LL.NETWORK_ADD_CUSTOM_NETWORK()}
+                    </BaseText>
+                </BaseView>
+                <BaseText typographyFont="bodyMedium" color={theme.colors.editSpeedBs.subtitle}>
+                    {LL.NETWORK_ADD_CUSTOM_NETWORK_DESC()}
                 </BaseText>
             </BaseView>
-            <BaseSpacer height={8} />
-            <BaseText typographyFont="bodyMedium" color={theme.colors.editSpeedBs.subtitle}>
-                {LL.NETWORK_ADD_CUSTOM_NETWORK_DESC()}
-            </BaseText>
-            <BaseSpacer height={24} />
+
             <BaseView gap={8} flexDirection="column">
-                <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>
+                <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>
                     {LL.NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_LABEL()}
                 </BaseText>
                 <BottomSheetTextInput
@@ -116,26 +122,27 @@ export const AddCustomNetworkBottomSheet = ({ bsRef }: Props) => {
                     style={styles.input}
                 />
             </BaseView>
-            <BaseSpacer height={24} />
             <BaseView gap={8} flexDirection="column">
-                <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>
+                <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>
                     {LL.NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_LABEL()}
                 </BaseText>
                 <BottomSheetTextInput
                     testID="ADD_CUSTOM_NETWORK_URL_INPUT"
                     placeholder={LL.NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_PLACEHOLDER()}
                     value={url}
+                    keyboardType="url"
                     placeholderTextColor={COLORS.GREY_400}
                     onChangeText={onUrlChange}
                     style={styles.input}
                 />
-                <AlertInline
-                    message={LL.NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_ERROR()}
-                    status="error"
-                    style={[styles.alert, urlError && styles.alertVisible]}
-                />
+                {urlError && (
+                    <AlertInline
+                        message={LL.NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_ERROR()}
+                        status="error"
+                        style={[styles.alert, urlError && styles.alertVisible]}
+                    />
+                )}
             </BaseView>
-            <BaseSpacer height={24} />
             <BaseView flexDirection="row" gap={16}>
                 <BaseButton variant="outline" action={onClose} flex={1}>
                     {LL.COMMON_BTN_CANCEL()}
@@ -155,6 +162,9 @@ export const AddCustomNetworkBottomSheet = ({ bsRef }: Props) => {
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
+        container: {
+            gap: 24,
+        },
         input: {
             borderRadius: 8,
             borderWidth: theme.isDark ? 2 : 1,
