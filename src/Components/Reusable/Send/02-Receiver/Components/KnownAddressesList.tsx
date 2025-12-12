@@ -36,7 +36,7 @@ const AnimatedSectionList = Animated.createAnimatedComponent(
 type Props = {
     selectedAddress?: string
     activeFilter?: FilterItem
-    onAddressChange: (address: string) => void
+    onAddressChange: (address: string, context: "recent" | "accounts" | "contacts") => void
 }
 
 export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressChange }: Props) => {
@@ -67,7 +67,13 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
     }, [accounts])
 
     const renderItem = useCallback(
-        ({ item }: { item: AccountWithDevice | Contact | RecentContact }) => {
+        ({
+            item,
+            context,
+        }: {
+            item: AccountWithDevice | Contact | RecentContact
+            context: "recent" | "accounts" | "contacts"
+        }) => {
             const isSelected = AddressUtils.compareAddresses(selectedAddress, item.address)
             const isContact = "type" in item && item.type === ContactType.KNOWN
             return (
@@ -75,7 +81,7 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
                     accountName={item.alias}
                     accountAddress={item.address}
                     onPress={({ accountAddress }) => {
-                        onAddressChange(accountAddress)
+                        onAddressChange(accountAddress, context)
                     }}
                     selected={isSelected}
                     isContact={isContact}
@@ -166,10 +172,11 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
                 <Animated.FlatList
                     testID="Send_Receiver_Addresses_List_Recent_Contacts"
                     data={recentContacts}
+                    extraData={{ context: "recent" }}
                     style={styles.list}
                     contentContainerStyle={styles.listContentContainer}
                     keyExtractor={item => item.address}
-                    renderItem={renderItem}
+                    renderItem={({ item }) => renderItem({ item, context: "recent" })}
                     ItemSeparatorComponent={renderItemSeparator}
                     ListEmptyComponent={renderEmptyState}
                     showsVerticalScrollIndicator={false}
@@ -181,8 +188,9 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
                 <AnimatedSectionList
                     testID="Send_Receiver_Addresses_List_Accounts"
                     sections={accountsSection}
+                    extraData={{ context: "accounts" }}
                     renderSectionHeader={renderSectionHeader}
-                    renderItem={renderItem}
+                    renderItem={({ item }) => renderItem({ item, context: "accounts" })}
                     contentContainerStyle={styles.listContentContainer}
                     style={styles.list}
                     keyExtractor={item => item.address}
@@ -200,10 +208,11 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
                 <Animated.FlatList
                     testID="Send_Receiver_Addresses_List_Contacts"
                     data={contacts}
+                    extraData={{ context: "contacts" }}
                     style={styles.list}
                     contentContainerStyle={styles.listContentContainer}
                     keyExtractor={item => item.address}
-                    renderItem={renderItem}
+                    renderItem={({ item }) => renderItem({ item, context: "contacts" })}
                     ItemSeparatorComponent={renderItemSeparator}
                     ListEmptyComponent={renderEmptyState}
                     showsVerticalScrollIndicator={false}
