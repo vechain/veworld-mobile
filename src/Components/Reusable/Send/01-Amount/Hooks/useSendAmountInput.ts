@@ -1,7 +1,7 @@
 import { useAmountInput } from "~Hooks"
 import { useTokenSendContext } from "../../Provider"
 import { useCallback, useMemo, useState } from "react"
-import { FungibleTokenWithBalance } from "~Model"
+import { FungibleToken, FungibleTokenWithBalance } from "~Model"
 import { BigNutils } from "~Utils"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
@@ -13,15 +13,25 @@ type Args = {
 }
 
 const MAX_FIAT_DECIMALS = 2
-const MAX_TOKEN_DECIMALS = 5
 
-const truncateToMaxDecimals = (value: string, kind: "fiat" | "token") => {
+/**
+ * Symbols where the max precision is 5 digits and not their decimals
+ */
+const LOW_PRECISION_SYMBOLS = ["BTC", "ETH", "SOL", "USDC", "USDT", "WAN", "XRP"]
+
+const getMaxDecimals = (args: { kind: "fiat" } | { kind: "token"; token: FungibleToken | undefined }) => {
+    if (args.kind === "fiat") return MAX_FIAT_DECIMALS
+    if (LOW_PRECISION_SYMBOLS.includes(args.token?.symbol ?? "")) return 5
+    return args.token?.decimals ?? 18
+}
+
+export const truncateToMaxDecimals = (value: string, opts: Parameters<typeof getMaxDecimals>[0]) => {
     const parts = value.split(/([.,])/)
     if (parts.length >= 3) {
         const integerPart = parts[0]
         const separator = parts[1]
         const decimalPart = parts[2]
-        const maxDecimals = kind === "fiat" ? MAX_FIAT_DECIMALS : MAX_TOKEN_DECIMALS
+        const maxDecimals = getMaxDecimals(opts)
         return `${integerPart}${separator}${decimalPart.substring(0, maxDecimals)}`
     }
     return value
@@ -54,18 +64,17 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
         if (!flowState.amountInFiat)
             return ethers.utils.parseUnits(flowState.amount ?? "0", token?.decimals ?? 18).toString()
         return BigNutils()
-            .toCurrencyConversion(
+            .toTokenConversion(
                 ethers.utils.parseUnits(flowState.fiatAmount ?? "0", token?.decimals ?? 18).toString(),
-                1 / (exchangeRate ?? 1),
+                exchangeRate ?? undefined,
                 undefined,
-                token?.decimals ?? 18,
             )
-            .self.toBigInt.toString()
+            .toBigInt.toString()
     })
     const [input, setInput] = useState(
         truncateToMaxDecimals(
             (flowState.amountInFiat ? flowState.fiatAmount : flowState.amount) ?? "0",
-            flowState.amountInFiat ? "fiat" : "token",
+            flowState.amountInFiat ? { kind: "fiat" } : { kind: "token", token },
         ),
     )
 
@@ -78,12 +87,12 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
             const parts = value.split(/[.,]/)
             if (parts.length > 1) {
                 const decimalPart = parts[1]
-                const maxDecimals = isInputInFiat ? MAX_FIAT_DECIMALS : MAX_TOKEN_DECIMALS
+                const maxDecimals = getMaxDecimals(isInputInFiat ? { kind: "fiat" } : { kind: "token", token })
                 return decimalPart.length <= maxDecimals
             }
             return true
         },
-        [isInputInFiat],
+        [isInputInFiat, token],
     )
 
     const onDigit = useCallback(
@@ -104,13 +113,11 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
                 setFiatAmount(ethers.utils.parseUnits(parsableInput || "0", token?.decimals ?? 18).toString())
                 setTokenAmount(
                     BigNutils()
-                        .toCurrencyConversion(
+                        .toTokenConversion(
                             ethers.utils.parseUnits(parsableInput || "0", token?.decimals ?? 18).toString(),
-                            1 / (exchangeRate ?? 1),
-                            undefined,
-                            token?.decimals ?? 18,
+                            exchangeRate ?? undefined,
                         )
-                        .self.toBigInt.toString(),
+                        .toBigInt.toString(),
                 )
             } else {
                 setTokenAmount(ethers.utils.parseUnits(parsableInput || "0", token?.decimals ?? 18).toString())
