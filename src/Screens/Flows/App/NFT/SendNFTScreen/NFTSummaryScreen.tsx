@@ -11,9 +11,7 @@ import { TransactionProvider } from "~Components/Reusable/Send/03-SummarySend/Co
 import { useNFTSendContext } from "~Components/Reusable/Send"
 import { AnalyticsEvent, creteAnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useThemedStyles, useTransactionScreen } from "~Hooks"
-import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
 import { useI18nContext } from "~i18n"
-import { NFTMediaType, NonFungibleToken } from "~Model"
 import { Routes } from "~Navigation"
 import {
     addPendingNFTtransferTransactionActivity,
@@ -39,35 +37,6 @@ export const NFTSummaryScreen = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const { address } = flowState
-
-    const collectible = useCollectibleDetails({
-        address: flowState.contractAddress,
-        tokenId: flowState.tokenId,
-    })
-
-    const nft: NonFungibleToken = useMemo(() => {
-        return {
-            owner: selectedAccount.address,
-            address: flowState.contractAddress ?? "",
-            tokenId: flowState.tokenId ?? "",
-            id: flowState.contractAddress ?? "",
-            updated: false,
-            name: collectible.name ?? "",
-            description: collectible.description ?? "",
-            image: collectible.image ?? "",
-            mimeType: collectible.mimeType ?? "",
-            mediaType: collectible.mediaType ?? NFTMediaType.IMAGE,
-        }
-    }, [
-        selectedAccount.address,
-        flowState.contractAddress,
-        flowState.tokenId,
-        collectible.name,
-        collectible.description,
-        collectible.image,
-        collectible.mimeType,
-        collectible.mediaType,
-    ])
 
     const onFinish = useCallback(
         (txId: string | undefined, success: boolean) => {
@@ -103,8 +72,14 @@ export const NFTSummaryScreen = () => {
     }, [onFinish])
 
     const clauses = useMemo(
-        () => prepareNonFungibleClause(selectedAccount.address, address!, nft),
-        [selectedAccount.address, address, nft],
+        () =>
+            prepareNonFungibleClause(
+                selectedAccount.address,
+                address!,
+                flowState.contractAddress ?? "",
+                flowState.tokenId ?? "",
+            ),
+        [selectedAccount.address, address, flowState.contractAddress, flowState.tokenId],
     )
 
     const {

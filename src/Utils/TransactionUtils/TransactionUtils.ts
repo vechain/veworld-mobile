@@ -6,7 +6,6 @@ import {
     ConnexClause,
     DappTxActivity,
     FungibleTokenWithBalance,
-    NonFungibleToken,
     SwapEvent,
     SwapResult,
     Token,
@@ -723,16 +722,15 @@ export const sendSignedTransaction = async (tx: Transaction, networkUrl: string)
 export const prepareNonFungibleClause = (
     accountFrom: string,
     addressTo: string,
-    nft?: NonFungibleToken,
+    collectionAddress: string,
+    tokenId: string,
 ): Transaction.Body["clauses"] => {
-    if (!nft) return []
-
     const func = new abi.Function(abis.VIP181.transferFrom)
-    const data = func.encode(accountFrom, addressTo, nft.tokenId)
+    const data = func.encode(accountFrom, addressTo, tokenId)
 
     return [
         {
-            to: nft.address,
+            to: collectionAddress,
             value: "0x0",
             data: data,
         },
