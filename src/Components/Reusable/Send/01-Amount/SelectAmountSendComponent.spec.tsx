@@ -333,6 +333,38 @@ describe("SelectAmountSendComponent", () => {
         expect(amountInput).toHaveTextContent("0")
     })
 
+    it("should handle input and allow deletion via long press on delete key", async () => {
+        render(<SelectAmountSendComponent />, {
+            wrapper: TestWrapper,
+        })
+
+        await findAmountInput()
+
+        const numPad1 = await screen.findByText("1")
+        const numPadDecimal = await screen.findByText(".")
+        const numPad5 = await screen.findByText("5")
+        const deleteKey = await screen.findByTestId("SEND_DELETE_KEY")
+
+        await act(async () => {
+            fireEvent.press(numPad1)
+        })
+        await act(async () => {
+            fireEvent.press(numPadDecimal)
+        })
+        await act(async () => {
+            fireEvent.press(numPad5)
+        })
+
+        const amountInput = await findAmountInput()
+        expect(amountInput).toHaveTextContent("1.5")
+
+        await act(async () => {
+            await fireEvent(deleteKey, "longPress")
+        })
+
+        expect(amountInput).toHaveTextContent("0")
+    })
+
     it("should handle VTHO token correctly", async () => {
         setupMockContext(mockVTHOToken)
 

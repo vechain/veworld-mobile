@@ -50,9 +50,10 @@ const NumPadItem = ({
                 activeOpacity={0.5}
                 style={baseStyles.pressable}
                 onPress={onPress}
+                onLongPress={isDeleteKey ? onDigitDeleteLongPress : undefined}
                 testID={isDeleteKey ? "SEND_DELETE_KEY" : `SEND_${digit}_KEY`}>
                 {isDeleteKey ? (
-                    <BaseIcon name="icon-delete" color={theme.colors.numberPad} onLongPress={onDigitDeleteLongPress} />
+                    <BaseIcon name="icon-delete" color={theme.colors.numberPad} />
                 ) : (
                     <BaseText color={theme.colors.numberPad} typographyFont={typographyFont} alignContainer="center">
                         {value}
