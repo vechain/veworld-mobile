@@ -8,7 +8,7 @@ export const useCurrentExchangeRate = () => {
     const { flowState } = useTokenSendContext()
 
     const exchangeRateId = useMemo(
-        () => (flowState.token ? getCoinGeckoIdBySymbol[flowState.token.symbol] : undefined),
+        () => (flowState.token ? getCoinGeckoIdBySymbol[flowState.token.symbol] ?? flowState.token.symbol : undefined),
         [flowState.token],
     )
 

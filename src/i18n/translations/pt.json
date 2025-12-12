@@ -835,7 +835,7 @@
   "NETWORK_ADD_CUSTOM_NETWORK_DESC": "Adicione um nó personalizado para se conectar",
   "NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_LABEL": "Nome do nó",
   "NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_PLACEHOLDER": "Insira o nome",
-  "NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_ERROR": "URL inválido ou problema na configuração do nó",
+  "NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_ERROR": "URL inválida ou problema na configuração do nó",
   "NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_LABEL": "URL",
   "NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_PLACEHOLDER": "https://...",
   "NETWORK_ADD_CUSTOM_NODE": "Adicionar nó personalizado",

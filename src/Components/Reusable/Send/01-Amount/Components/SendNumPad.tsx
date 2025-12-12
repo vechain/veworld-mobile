@@ -43,7 +43,11 @@ const NumPadItem = ({
 
     return (
         <BaseView style={baseStyles.width} key={digit}>
-            <TouchableOpacity activeOpacity={0.5} style={baseStyles.pressable} onPress={onPress}>
+            <TouchableOpacity
+                activeOpacity={0.5}
+                style={baseStyles.pressable}
+                onPress={onPress}
+                testID={isDeleteKey ? "SEND_DELETE_KEY" : `SEND_${digit}_KEY`}>
                 {isDeleteKey ? (
                     <BaseIcon name="icon-delete" color={theme.colors.numberPad} />
                 ) : (
