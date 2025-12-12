@@ -31,7 +31,6 @@ export const useTokenAmount = ({ token, exchangeRate }: Args) => {
             .toTokenConversion(
                 ethers.utils.parseUnits(flowState.fiatAmount ?? "0", token.decimals).toString(),
                 exchangeRate ?? undefined,
-                undefined,
             )
             .toBigInt.toString()
     })
