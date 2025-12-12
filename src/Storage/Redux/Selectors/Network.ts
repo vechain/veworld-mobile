@@ -20,7 +20,7 @@ export const selectNetworksByType = (type: NETWORK_TYPE) =>
     })
 
 export const selectNetworks = createSelector(selectNetworksState, selectDefaultNetworks, (state, defaultNets) => {
-    return state.customNetworks.concat(defaultNets)
+    return defaultNets.concat(state.customNetworks)
 })
 
 export const selectCustomNetworks = createSelector(selectNetworksState, state => {
