@@ -1,80 +1,93 @@
 import { useMemo } from "react"
-import { B3TR, VeDelegate, VET, VOT3, VTHO } from "~Constants"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
+import { B3TR, VET, VTHO } from "~Constants"
 import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
 import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
-import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
+import { selectCurrency, selectLastSentToken, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BalanceUtils, BigNutils } from "~Utils"
 import { useTokenSendContext } from "../../Provider"
-import { selectLastSentToken, useAppSelector } from "~Storage/Redux"
 
 export const useDefaultToken = () => {
     const { flowState } = useTokenSendContext()
     const availableTokens = useSendableTokensWithBalance()
 
-    const vetInfo = useTokenWithCompleteInfo(VET)
-    const vthoInfo = useTokenWithCompleteInfo(VTHO)
-    const b3trInfo = useTokenWithCompleteInfo(B3TR)
+    const currency = useAppSelector(selectCurrency)
+    const { data: vetExchangeRate } = useExchangeRate({ vs_currency: currency, id: getCoinGeckoIdBySymbol[VET.symbol] })
+    const { data: vthoExchangeRate } = useExchangeRate({
+        vs_currency: currency,
+        id: getCoinGeckoIdBySymbol[VTHO.symbol],
+    })
+    const { data: b3trExchangeRate } = useExchangeRate({
+        vs_currency: currency,
+        id: getCoinGeckoIdBySymbol[B3TR.symbol],
+    })
 
-    const { data: nonVechainTokensWithBalance } = useNonVechainTokensBalance()
-    const { data: nonVechainTokensFiat } = useNonVechainTokenFiat()
+    const { data: nonVechainTokensWithBalance, isLoading: isLoadingVechainTokensBalance } = useNonVechainTokensBalance()
+    const { data: nonVechainTokensFiat, isLoading: isLoadingNonVechainTokenFiat } = useNonVechainTokenFiat()
+
+    const isLoading = useMemo(
+        () => isLoadingVechainTokensBalance || isLoadingNonVechainTokenFiat,
+        [isLoadingNonVechainTokenFiat, isLoadingVechainTokensBalance],
+    )
 
     const lastSentTokenAddress = useAppSelector(selectLastSentToken)
 
     return useMemo(() => {
         if (flowState.token) return flowState.token
-
-        const sendableTokens = availableTokens.filter(
-            t => t.symbol !== VOT3.symbol && !BigNutils(t.balance.balance).isZero && t.symbol !== VeDelegate.symbol,
-        )
-
         const lastToken = availableTokens.find(token =>
             AddressUtils.compareAddresses(token.address, lastSentTokenAddress),
         )
 
         if (lastToken) return lastToken
+        if (isLoading || !nonVechainTokensWithBalance || !nonVechainTokensFiat) return
 
-        if (sendableTokens.length === 0) {
-            const vetToken = availableTokens.find(t => t.symbol === VET.symbol)
-            return vetToken || availableTokens[0]
-        }
-
-        const tokensWithFiatValue = sendableTokens.map(t => {
-            let fiatValue = 0
-
-            if (t.symbol === VET.symbol && vetInfo.exchangeRate) {
-                const fiatStr = BalanceUtils.getFiatBalance(t.balance.balance, vetInfo.exchangeRate, t.decimals)
-                fiatValue = Number.parseFloat(fiatStr.replaceAll(/[^0-9.]/g, "")) || 0
-            } else if (t.symbol === VTHO.symbol && vthoInfo.exchangeRate) {
-                const fiatStr = BalanceUtils.getFiatBalance(t.balance.balance, vthoInfo.exchangeRate, t.decimals)
-                fiatValue = Number.parseFloat(fiatStr.replaceAll(/[^0-9.]/g, "")) || 0
-            } else if (t.symbol === B3TR.symbol && b3trInfo.exchangeRate) {
-                const fiatStr = BalanceUtils.getFiatBalance(t.balance.balance, b3trInfo.exchangeRate, t.decimals)
-                fiatValue = Number.parseFloat(fiatStr.replaceAll(/[^0-9.]/g, "")) || 0
-            } else if (nonVechainTokensWithBalance && nonVechainTokensFiat) {
-                const tokenIndex = nonVechainTokensWithBalance.findIndex(nt => nt.address === t.address)
-                if (tokenIndex >= 0 && tokenIndex < nonVechainTokensFiat.length) {
-                    const fiatStr = nonVechainTokensFiat[tokenIndex]
-                    if (fiatStr) {
-                        fiatValue = Number.parseFloat(fiatStr.replaceAll(/[^0-9.]/g, "")) || 0
-                    }
+        const tokensWithFiatValue = availableTokens.map(token => {
+            if (token.symbol === VET.symbol && vetExchangeRate) {
+                return {
+                    token,
+                    fiatValue: BalanceUtils.getPreciseFiatBalance(
+                        token.balance.balance,
+                        vetExchangeRate,
+                        token.decimals,
+                    ),
                 }
             }
+            if (token.symbol === VTHO.symbol && vthoExchangeRate) {
+                return {
+                    token,
+                    fiatValue: BalanceUtils.getFiatBalance(token.balance.balance, vthoExchangeRate, token.decimals),
+                }
+            }
+            if (token.symbol === B3TR.symbol && b3trExchangeRate) {
+                return {
+                    token,
+                    fiatValue: BalanceUtils.getFiatBalance(token.balance.balance, b3trExchangeRate, token.decimals),
+                }
+            }
+            const tokenIndex = nonVechainTokensWithBalance.findIndex(nt =>
+                AddressUtils.compareAddresses(nt.address, token.address),
+            )
+            if (tokenIndex === -1 || tokenIndex >= nonVechainTokensFiat.length) return { token, fiatValue: "0" }
 
-            return { token: t, fiatValue }
+            return {
+                token,
+                fiatValue: nonVechainTokensFiat[tokenIndex],
+            }
         })
 
-        tokensWithFiatValue.sort((a, b) => b.fiatValue - a.fiatValue)
+        tokensWithFiatValue.sort((a, b) => BigNutils(b.fiatValue).toBN.comparedTo(BigNutils(a.fiatValue).toBN))
 
-        return tokensWithFiatValue[0]?.token || sendableTokens[0]
+        return tokensWithFiatValue[0]?.token || availableTokens[0]
     }, [
         flowState.token,
         availableTokens,
-        lastSentTokenAddress,
-        vetInfo.exchangeRate,
-        vthoInfo.exchangeRate,
-        b3trInfo.exchangeRate,
+        isLoading,
         nonVechainTokensWithBalance,
         nonVechainTokensFiat,
+        lastSentTokenAddress,
+        vetExchangeRate,
+        vthoExchangeRate,
+        b3trExchangeRate,
     ])
 }
