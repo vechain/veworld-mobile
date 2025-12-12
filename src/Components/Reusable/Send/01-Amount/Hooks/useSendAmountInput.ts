@@ -8,6 +8,7 @@ import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { ethers } from "ethers"
 import { useFiatAmount } from "./useFiatAmount"
 import { useTokenAmount } from "./useTokenAmount"
+import HapticsService from "~Services/HapticsService"
 
 type Args = {
     token: FungibleTokenWithBalance
@@ -139,6 +140,11 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
         setInput("0")
     }, [setFiatAmount, setTokenAmount])
 
+    const onDeleteAll = useCallback(() => {
+        HapticsService.triggerHaptics({ haptics: "Medium" })
+        onReset()
+    }, [onReset])
+
     const isBalanceExceeded = useMemo(
         () => BigNutils(tokenAmount).isBiggerThan(tokenTotalBalance),
         [tokenAmount, tokenTotalBalance],
@@ -152,8 +158,9 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
             onMax,
             isBalanceExceeded,
             onReset,
+            onDeleteAll,
             input,
         }),
-        [fiatAmount, input, isBalanceExceeded, onDigit, onMax, onReset, tokenAmount],
+        [fiatAmount, input, isBalanceExceeded, onDigit, onMax, onReset, onDeleteAll, tokenAmount],
     )
 }

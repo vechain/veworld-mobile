@@ -52,10 +52,11 @@ const SelectAmountSendComponentContent = ({
         vs_currency: currency,
     })
 
-    const { isBalanceExceeded, fiatAmount, tokenAmount, onChange, onMax, onReset, input } = useSendAmountInput({
-        token: selectedToken,
-        isInputInFiat,
-    })
+    const { isBalanceExceeded, fiatAmount, tokenAmount, onChange, onMax, onReset, input, onDeleteAll } =
+        useSendAmountInput({
+            token: selectedToken,
+            isInputInFiat,
+        })
 
     const noExchangeRate = useMemo(() => {
         return !exchangeRate && fetchStatus === "idle"
@@ -157,6 +158,7 @@ const SelectAmountSendComponentContent = ({
                     <SendNumPad
                         onDigitPress={digit => onChange({ type: "add", digit })}
                         onDigitDelete={() => onChange({ type: "delete" })}
+                        onDigitDeleteLongPress={onDeleteAll}
                         typographyFont="headerTitleMedium"
                     />
                 </Animated.View>
