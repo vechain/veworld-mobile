@@ -104,6 +104,7 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingVertical: 12,
             paddingLeft: 16,
             paddingRight: 8,
+            textAlignVertical: "center",
         },
         icon: {
             paddingVertical: 12,

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useMemo, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef } from "react"
 import { AppRegistry, LogBox } from "react-native"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
@@ -249,12 +249,28 @@ const generateLinkingConfig = () => {
 const NavigationProvider = ({ children }) => {
     const theme = useTheme()
 
-    const [ready, setReady] = useState(false)
-
     const navigationTheme = useMemo(
         () => ({
             dark: theme.isDark,
             colors: theme.colors,
+            fonts: {
+                regular: {
+                    fontFamily: typography.fontFamily["Inter-Regular"],
+                    fontWeight: "normal",
+                },
+                medium: {
+                    fontFamily: typography.fontFamily["Inter-Medium"],
+                    fontWeight: "500",
+                },
+                bold: {
+                    fontFamily: typography.fontFamily["Inter-Bold"],
+                    fontWeight: "bold",
+                },
+                heavy: {
+                    fontFamily: typography.fontFamily["Inter-Bold"],
+                    fontWeight: "bold",
+                },
+            },
         }),
         [theme],
     )
@@ -270,7 +286,6 @@ const NavigationProvider = ({ children }) => {
                 if (routeNameRef && routeNameRef.current === null) {
                     routeNameRef.current = NAVIGATION_REF.getCurrentRoute()?.name
                 }
-                setReady(true)
             }}
             onStateChange={async () => {
                 const previousRouteName = routeNameRef.current

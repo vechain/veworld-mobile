@@ -166,7 +166,7 @@ export const WalletManagementScreen = () => {
             title={LL.TITLE_WALLET_MANAGEMENT()}
             headerRightElement={headerRightElement}
             fixedBody={
-                <BaseView style={styles.view} mb={tabBarBottomMargin}>
+                <BaseView style={styles.view} mb={tabBarBottomMargin} flex={1}>
                     <BaseView style={styles.subTitleContainer}>
                         <BaseText typographyFont="body">{LL.SB_WALLETS_MANAGEMENT()}</BaseText>
                     </BaseView>
@@ -176,7 +176,7 @@ export const WalletManagementScreen = () => {
                         onDragEnd={handleDragEnd}
                         keyExtractor={device => device.rootAddress}
                         renderItem={renderItem}
-                        activationDistance={10}
+                        activationDistance={20}
                         showsVerticalScrollIndicator={false}
                         containerStyle={styles.draggableFlatListContainer}
                         contentContainerStyle={styles.contentContainerStyle}
