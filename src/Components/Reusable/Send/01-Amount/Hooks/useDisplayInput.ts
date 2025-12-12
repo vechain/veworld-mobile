@@ -51,7 +51,7 @@ export const useDisplayInput = ({ input, tokenAmount, fiatAmount, isInputInFiat,
     const formattedInput = useMemo(() => {
         const [integerPart, decimalPart] = truncateToMaxDecimals(
             input,
-            isInputInFiat ? { kind: "fiat" } : { kind: "token", token },
+            isInputInFiat ? { kind: "fiat" } : { kind: "token", decimals: token.decimals },
         ).split(/[.,]/)
 
         const formattedInteger = formatter.format(Number(integerPart))
@@ -61,7 +61,7 @@ export const useDisplayInput = ({ input, tokenAmount, fiatAmount, isInputInFiat,
         }
 
         return formattedInteger
-    }, [input, isInputInFiat, token, formatter, decimalSeparator])
+    }, [input, isInputInFiat, token.decimals, formatter, decimalSeparator])
 
     const formattedConverted = useMemo(() => {
         const valueToFormat = isInputInFiat ? tokenAmount : fiatAmount

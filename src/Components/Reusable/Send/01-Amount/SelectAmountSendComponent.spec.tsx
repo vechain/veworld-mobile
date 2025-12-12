@@ -284,7 +284,7 @@ describe("SelectAmountSendComponent", () => {
         expect(amountInput).toHaveTextContent("1.5")
     })
 
-    it("should limit decimal places to 18 in token mode with VET", async () => {
+    it("should limit decimal places to 18 in token mode", async () => {
         render(<SelectAmountSendComponent />, {
             wrapper: TestWrapper,
         })
@@ -310,34 +310,6 @@ describe("SelectAmountSendComponent", () => {
 
         expect(amountInput).toHaveTextContent("1.111111111111111111")
     })
-    it("should limit decimal places to 5 in token mode with BTC", async () => {
-        setupMockContext({ ...mockVETToken, symbol: "BTC" })
-        render(<SelectAmountSendComponent />, {
-            wrapper: TestWrapper,
-        })
-
-        await findAmountInput()
-
-        const numPad1 = await screen.findByText("1")
-        const numPadDecimal = await screen.findByText(".")
-
-        await act(async () => {
-            fireEvent.press(numPad1)
-        })
-        await act(async () => {
-            fireEvent.press(numPadDecimal)
-        })
-        for (let i = 0; i < 10; i++) {
-            await act(async () => {
-                fireEvent.press(numPad1)
-            })
-        }
-
-        const amountInput = await findAmountInput()
-
-        expect(amountInput).toHaveTextContent("1.11111")
-    })
-
     it("should handle input and allow deletion via numpad", async () => {
         render(<SelectAmountSendComponent />, {
             wrapper: TestWrapper,

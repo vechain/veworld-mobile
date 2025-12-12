@@ -1,7 +1,7 @@
 import { useAmountInput } from "~Hooks"
 import { useTokenSendContext } from "../../Provider"
 import { useCallback, useMemo, useState } from "react"
-import { FungibleToken, FungibleTokenWithBalance } from "~Model"
+import { FungibleTokenWithBalance } from "~Model"
 import { BigNutils } from "~Utils"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
@@ -14,15 +14,9 @@ type Args = {
 
 const MAX_FIAT_DECIMALS = 2
 
-/**
- * Symbols where the max precision is 5 digits and not their decimals
- */
-const LOW_PRECISION_SYMBOLS = ["BTC", "ETH", "SOL", "USDC", "USDT", "WAN", "XRP"]
-
-const getMaxDecimals = (args: { kind: "fiat" } | { kind: "token"; token: FungibleToken }) => {
+const getMaxDecimals = (args: { kind: "fiat" } | { kind: "token"; decimals: number }) => {
     if (args.kind === "fiat") return MAX_FIAT_DECIMALS
-    if (LOW_PRECISION_SYMBOLS.includes(args.token.symbol)) return 5
-    return args.token.decimals ?? 18
+    return args.decimals
 }
 
 export const truncateToMaxDecimals = (value: string, opts: Parameters<typeof getMaxDecimals>[0]) => {
@@ -73,7 +67,7 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
     const [input, setInput] = useState(
         truncateToMaxDecimals(
             (flowState.amountInFiat ? flowState.fiatAmount : flowState.amount) ?? "0",
-            flowState.amountInFiat ? { kind: "fiat" } : { kind: "token", token },
+            flowState.amountInFiat ? { kind: "fiat" } : { kind: "token", decimals: token.decimals },
         ),
     )
 
@@ -86,12 +80,14 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
             const parts = value.split(/[.,]/)
             if (parts.length > 1) {
                 const decimalPart = parts[1]
-                const maxDecimals = getMaxDecimals(isInputInFiat ? { kind: "fiat" } : { kind: "token", token })
+                const maxDecimals = getMaxDecimals(
+                    isInputInFiat ? { kind: "fiat" } : { kind: "token", decimals: token.decimals },
+                )
                 return decimalPart.length <= maxDecimals
             }
             return true
         },
-        [isInputInFiat, token],
+        [isInputInFiat, token.decimals],
     )
 
     const onDigit = useCallback(
