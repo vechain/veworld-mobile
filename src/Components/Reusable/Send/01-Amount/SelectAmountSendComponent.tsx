@@ -5,12 +5,11 @@ import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { BaseSpacer, BaseView } from "~Components"
-import { B3TR, ColorThemeType, VET, VOT3, VTHO } from "~Constants"
-import { useFormatFiat, useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
-import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 import { useTokenSendContext } from "../Provider"
 import { SendContent } from "../Shared"
 import { SelectAmountConversionToggle } from "./Components/SelectAmountConversionToggle"
@@ -41,7 +40,6 @@ const SelectAmountSendComponentContent = ({
     setSelectedToken: (token: FungibleTokenWithBalance) => void
 }) => {
     const { setFlowState, goToNext, flowState } = useTokenSendContext()
-    const { formatLocale } = useFormatFiat()
 
     const bottomSheetRef = useRef<BottomSheetModalMethods>(null)
 
@@ -60,8 +58,8 @@ const SelectAmountSendComponentContent = ({
     })
 
     const noExchangeRate = useMemo(() => {
-        return !exchangeRate && fetchStatus === "idle" && selectedToken
-    }, [exchangeRate, fetchStatus, selectedToken])
+        return !exchangeRate && fetchStatus === "idle"
+    }, [exchangeRate, fetchStatus])
 
     useEffect(() => {
         if (isInputInFiat && noExchangeRate) {
@@ -69,15 +67,6 @@ const SelectAmountSendComponentContent = ({
             onReset()
         }
     }, [exchangeRate, fetchStatus, isInputInFiat, noExchangeRate, onReset])
-
-    const computedIcon = useMemo(() => {
-        if (!selectedToken) return VET.icon
-        if (selectedToken.symbol === VET.symbol) return VET.icon
-        if (selectedToken.symbol === VTHO.symbol) return VTHO.icon
-        if (selectedToken.symbol === B3TR.symbol) return B3TR.icon
-        if (selectedToken.symbol === VOT3.symbol) return VOT3.icon
-        return selectedToken.icon
-    }, [selectedToken])
 
     const { styles } = useThemedStyles(baseStyles)
 
@@ -98,15 +87,6 @@ const SelectAmountSendComponentContent = ({
         },
         [onReset, setSelectedToken],
     )
-
-    const tokenBalance = useMemo(() => {
-        if (!selectedToken) return ""
-        const humanBalance = BigNutils(selectedToken.balance.balance).toHuman(selectedToken.decimals ?? 0)
-        return formatFullPrecision(humanBalance.toString, {
-            locale: formatLocale,
-            tokenSymbol: selectedToken.symbol,
-        })
-    }, [formatLocale, selectedToken])
 
     const { formattedInput, formattedConverted } = useDisplayInput({
         input,
@@ -132,6 +112,11 @@ const SelectAmountSendComponentContent = ({
         }))
         goToNext()
     }, [exchangeRate, fiatAmount, goToNext, isInputInFiat, selectedToken, setFlowState, tokenAmount])
+
+    const isNextDisabled = useMemo(
+        () => isBalanceExceeded || BigNutils(tokenAmount).isLessThanOrEqual("0"),
+        [isBalanceExceeded, tokenAmount],
+    )
 
     return (
         <SendContent>
@@ -165,8 +150,7 @@ const SelectAmountSendComponentContent = ({
                     <BaseSpacer height={32} />
 
                     <SelectAmountTokenSelector
-                        computedIcon={computedIcon}
-                        tokenBalance={tokenBalance}
+                        token={selectedToken}
                         onOpenSelector={handleOpenTokenSelector}
                         onMaxPress={onMax}
                     />
@@ -181,8 +165,7 @@ const SelectAmountSendComponentContent = ({
                 </Animated.View>
             </SendContent.Container>
             <SendContent.Footer>
-                {/* TODO: Check that it's not zero too */}
-                <SendContent.Footer.Next action={onSubmit} disabled={isBalanceExceeded} />
+                <SendContent.Footer.Next action={onSubmit} disabled={isNextDisabled} />
             </SendContent.Footer>
             <TokenSelectionBottomSheet
                 ref={bottomSheetRef}
