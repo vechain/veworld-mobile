@@ -133,18 +133,15 @@ const SelectAmountSendComponentContent = ({
                                 selectedToken={selectedToken}
                             />
                         </BaseView>
-
-                        {!noExchangeRate && (
-                            <SelectAmountConversionToggle
-                                exchangeRate={exchangeRate}
-                                isError={isBalanceExceeded}
-                                isInputInFiat={isInputInFiat}
-                                formattedConvertedAmount={formattedConverted}
-                                currency={currency}
-                                selectedToken={selectedToken}
-                                onToggle={handleToggleInputMode}
-                            />
-                        )}
+                        <SelectAmountConversionToggle
+                            exchangeRate={exchangeRate}
+                            isError={isBalanceExceeded}
+                            isInputInFiat={isInputInFiat}
+                            formattedConvertedAmount={formattedConverted}
+                            currency={currency}
+                            selectedToken={selectedToken}
+                            onToggle={handleToggleInputMode}
+                        />
                     </BaseView>
 
                     <BaseSpacer height={32} />

@@ -137,13 +137,9 @@ describe("SelectAmountSendComponent", () => {
             fireEvent.press(numPad1)
         })
 
-        await act(async () => {
-            await new Promise(resolve => setTimeout(resolve, 300))
-        })
-
         const amountInput = await findAmountInput()
         expect(amountInput).toBeOnTheScreen()
-        expect(amountInput.props.children).toBe("1")
+        expect(amountInput).toHaveTextContent("1")
     })
 
     it("should set input to max token amount when max button is pressed", async () => {
@@ -159,7 +155,7 @@ describe("SelectAmountSendComponent", () => {
         })
 
         const amountInput = await findAmountInput()
-        expect(amountInput.props.children).not.toBe("0")
+        expect(amountInput).toHaveTextContent("2.0")
     })
 
     it("should enable next button when valid amount is entered", async () => {
@@ -169,22 +165,13 @@ describe("SelectAmountSendComponent", () => {
 
         await findAmountInput()
 
-        // Wait for component to stabilize (mode switch from fiat to token)
-        await act(async () => {
-            await new Promise(resolve => setTimeout(resolve, 200))
-        })
-
         const numPad1 = await screen.findByText("1")
         await act(async () => {
             fireEvent.press(numPad1)
         })
 
-        await act(async () => {
-            await new Promise(resolve => setTimeout(resolve, 600))
-        })
-
         const amountInput = await findAmountInput()
-        expect(amountInput.props.children).not.toBe("0")
+        expect(amountInput).toHaveTextContent("1")
 
         // Check that the next button works
         const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
@@ -206,10 +193,6 @@ describe("SelectAmountSendComponent", () => {
         const numPad1 = await screen.findByText("1")
         await act(async () => {
             fireEvent.press(numPad1)
-        })
-
-        await act(async () => {
-            await new Promise(resolve => setTimeout(resolve, 200))
         })
 
         const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
@@ -251,10 +234,6 @@ describe("SelectAmountSendComponent", () => {
             }
         })
 
-        await act(async () => {
-            await new Promise(resolve => setTimeout(resolve, 300))
-        })
-
         // Check that the next button does not work
         const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
         await act(async () => {
@@ -271,30 +250,13 @@ describe("SelectAmountSendComponent", () => {
         await findAmountInput()
 
         const numPad9 = await screen.findByText("9")
-        await act(async () => {
-            for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 10; i++) {
+            await act(async () => {
                 fireEvent.press(numPad9)
-            }
-        })
-
-        await act(async () => {
-            await new Promise(resolve => setTimeout(resolve, 200))
-        })
-
-        const errorTexts = ["Amount exceeds balance", "exceeds", "balance"]
-        let errorFound = false
-        for (const text of errorTexts) {
-            const errorMessage = screen.queryByText(new RegExp(text, "i"))
-            if (errorMessage) {
-                errorFound = true
-                expect(errorMessage).toBeOnTheScreen()
-                break
-            }
+            })
         }
-        if (!errorFound) {
-            const amountInput = await findAmountInput()
-            expect(amountInput).toBeOnTheScreen()
-        }
+
+        expect(screen.getByTestId("SEND_AMOUNT_EXCEEDS_BALANCE")).toBeVisible()
     })
 
     it("should handle decimal input correctly", async () => {
@@ -310,17 +272,19 @@ describe("SelectAmountSendComponent", () => {
 
         await act(async () => {
             fireEvent.press(numPad1)
+        })
+        await act(async () => {
             fireEvent.press(numPadDecimal)
+        })
+        await act(async () => {
             fireEvent.press(numPad5)
         })
 
         const amountInput = await findAmountInput()
-        const displayValue = amountInput.props.children
-        expect(displayValue).toBeDefined()
-        expect(displayValue.toString()).toMatch(/1.*5|5/)
+        expect(amountInput).toHaveTextContent("1.5")
     })
 
-    it("should limit decimal places to 5 in token mode", async () => {
+    it("should limit decimal places to 18 in token mode with VET", async () => {
         render(<SelectAmountSendComponent />, {
             wrapper: TestWrapper,
         })
@@ -332,19 +296,46 @@ describe("SelectAmountSendComponent", () => {
 
         await act(async () => {
             fireEvent.press(numPad1)
-            fireEvent.press(numPadDecimal)
-            for (let i = 0; i < 6; i++) {
-                fireEvent.press(numPad1)
-            }
         })
+        await act(async () => {
+            fireEvent.press(numPadDecimal)
+        })
+        for (let i = 0; i < 20; i++) {
+            await act(async () => {
+                fireEvent.press(numPad1)
+            })
+        }
 
         const amountInput = await findAmountInput()
-        const displayedValue = amountInput.props.children.toString()
 
-        const parts = displayedValue.split(/[.,]/)
-        if (parts.length > 1) {
-            expect(parts[1].length).toBeLessThanOrEqual(5)
+        expect(amountInput).toHaveTextContent("1.111111111111111111")
+    })
+    it("should limit decimal places to 5 in token mode with BTC", async () => {
+        setupMockContext({ ...mockVETToken, symbol: "BTC" })
+        render(<SelectAmountSendComponent />, {
+            wrapper: TestWrapper,
+        })
+
+        await findAmountInput()
+
+        const numPad1 = await screen.findByText("1")
+        const numPadDecimal = await screen.findByText(".")
+
+        await act(async () => {
+            fireEvent.press(numPad1)
+        })
+        await act(async () => {
+            fireEvent.press(numPadDecimal)
+        })
+        for (let i = 0; i < 10; i++) {
+            await act(async () => {
+                fireEvent.press(numPad1)
+            })
         }
+
+        const amountInput = await findAmountInput()
+
+        expect(amountInput).toHaveTextContent("1.11111")
     })
 
     it("should handle input and allow deletion via numpad", async () => {
@@ -361,9 +352,13 @@ describe("SelectAmountSendComponent", () => {
         })
 
         const amountInput = await findAmountInput()
-        expect(amountInput.props.children).toBe("1")
+        expect(amountInput).toHaveTextContent("1")
 
-        expect(amountInput).toBeOnTheScreen()
+        await act(async () => {
+            fireEvent.press(screen.getByTestId("SEND_DELETE_KEY"))
+        })
+
+        expect(amountInput).toHaveTextContent("0")
     })
 
     it("should handle VTHO token correctly", async () => {
@@ -380,35 +375,10 @@ describe("SelectAmountSendComponent", () => {
             fireEvent.press(numPad1)
         })
 
-        await act(async () => {
-            await new Promise(resolve => setTimeout(resolve, 600))
-        })
-
         // Check that the next button works
-        const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
         await act(async () => {
-            fireEvent.press(btn)
+            fireEvent.press(screen.getByTestId("SEND_FOOTER_NEXT"))
         })
         expect(goToNext).toHaveBeenCalled()
-    })
-
-    it("should reset input when token is changed", async () => {
-        setupMockContext()
-        render(<SelectAmountSendComponent />, {
-            wrapper: TestWrapper,
-        })
-
-        await findAmountInput()
-
-        const numPad1 = await screen.findByText("1")
-        await act(async () => {
-            fireEvent.press(numPad1)
-        })
-
-        const amountInput = await findAmountInput()
-        expect(amountInput.props.children).toBe("1")
-
-        const tokenSelector = screen.getByTestId("SendScreen_amountInput").parent?.parent?.parent
-        expect(tokenSelector).toBeDefined()
     })
 })
