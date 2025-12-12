@@ -83,8 +83,14 @@ export const AddCustomNetworkBottomSheet = ({ bsRef }: Props) => {
         [allNodes],
     )
 
+    const onDismiss = useCallback(() => {
+        setName("")
+        setUrl("")
+        setUrlError(false)
+    }, [])
+
     return (
-        <BaseBottomSheet ref={bsRef} dynamicHeight>
+        <BaseBottomSheet ref={bsRef} dynamicHeight scrollEnabled={false} onDismiss={onDismiss}>
             <BaseView flex={1} flexDirection="row" gap={12}>
                 <BaseIcon name="icon-users" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
@@ -103,7 +109,6 @@ export const AddCustomNetworkBottomSheet = ({ bsRef }: Props) => {
                 <BottomSheetTextInput
                     testID="ADD_CUSTOM_NETWORK_NAME_INPUT"
                     placeholder={LL.NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_PLACEHOLDER()}
-                    contextMenuHidden
                     value={name}
                     autoFocus={true}
                     placeholderTextColor={COLORS.GREY_400}
@@ -119,7 +124,6 @@ export const AddCustomNetworkBottomSheet = ({ bsRef }: Props) => {
                 <BottomSheetTextInput
                     testID="ADD_CUSTOM_NETWORK_URL_INPUT"
                     placeholder={LL.NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_PLACEHOLDER()}
-                    contextMenuHidden
                     value={url}
                     placeholderTextColor={COLORS.GREY_400}
                     onChangeText={onUrlChange}
