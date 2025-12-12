@@ -33,26 +33,25 @@ end
 target 'VeWorld' do
   use_expo_modules!
   post_integrate do |installer|
-    begin
-      expo_patch_react_imports!(installer)
-    rescue => e
-      Pod::UI.warn e
-    end
-    begin
-      expo_patch_react_imports!(installer)
-    rescue => e
-      Pod::UI.warn e
-    end
-    begin
-      expo_patch_react_imports!(installer)
-    rescue => e
-      Pod::UI.warn e
-    end
+    # Expo patches React imports multiple times to handle different targets
+    4.times do
       begin
         expo_patch_react_imports!(installer)
       rescue => e
         Pod::UI.warn e
       end
+    end
+
+    # Remove QuickCrypto's custom OpenSSL embed script that duplicates the Pods embed step
+    app_project_path = File.join(__dir__, 'VeWorld.xcodeproj', 'project.pbxproj')
+    if File.exist?(app_project_path)
+      pbx = File.read(app_project_path)
+
+      pbx.gsub!(/^\s*[A-F0-9]+ \/\* \[CP-User\] \[CP-User\] Embed OpenSSL Framework \*\/,\n/m, "")
+      pbx.gsub!(/^\s*[A-F0-9]+ \/\* \[CP-User\] \[CP-User\] Embed OpenSSL Framework \*\/ = \{\n(?:.|\n)*?\t\t\};\n/m, "")
+
+      File.write(app_project_path, pbx)
+    end
   end
   config = use_native_modules!
 
@@ -73,21 +72,38 @@ target 'VeWorld' do
   end
   
   post_install do |installer|
-     installer.pods_project.targets.each do |target|
-       target.build_configurations.each do |config|
-         config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', '_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION']
-       end
-     end
-     
-     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
-     react_native_post_install(
-       installer,
-       config[:reactNativePath],
-       :mac_catalyst_enabled => false,
-       # :ccache_enabled => true
-     )
-     __apply_Xcode_14_3_RC_post_install_workaround(installer)
-   end
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', '_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION']
+      end
+    end
+
+    # Ensure OpenSSL.framework is always writable before codesigning (fixes CI/dev builds)
+    frameworks_script = File.join(__dir__, 'Pods', 'Target Support Files', 'Pods-VeWorld', 'Pods-VeWorld-frameworks.sh')
+    if File.exist?(frameworks_script)
+      contents = File.read(frameworks_script)
+      marker = '# Resign the code if required by the build settings to avoid unstable apps'
+      inject = <<~'SH'
+        # Ensure frameworks are writable before codesigning (some, like OpenSSL, may ship read-only)
+        chmod -R u+w "${destination}/$(basename "$1")" || true
+
+        # Resign the code if required by the build settings to avoid unstable apps
+      SH
+      unless contents.include?('Ensure frameworks are writable before codesigning')
+        contents = contents.sub(marker, inject)
+        File.write(frameworks_script, contents)
+      end
+    end
+
+    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
+    react_native_post_install(
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false,
+      # :ccache_enabled => true
+    )
+    __apply_Xcode_14_3_RC_post_install_workaround(installer)
+  end
 end
 
 target 'OneSignalNotificationServiceExtension' do
