@@ -3388,6 +3388,14 @@ type RootTranslation = {
 	 */
 	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: string
 	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​n​e​t​w​o​r​k
+	 */
+	NETWORKS_BS_SUBTITLE: string
+	/**
+	 * N​e​t​w​o​r​k​s
+	 */
+	NETWORKS_BS_TITLE: string
+	/**
 	 * N​e​t​w​o​r​k​ ​a​d​d​e​d
 	 */
 	NETWORK_ADDED: string
@@ -3491,14 +3499,6 @@ type RootTranslation = {
 	 * O​n​l​y​ ​V​e​c​h​a​i​n​ ​n​e​t​w​o​r​k​ ​s​u​p​p​o​r​t​e​d
 	 */
 	NETWORK_WARNING_QR_CODE_FOR_ACCOUNT: string
-	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​n​e​t​w​o​r​k
-	 */
-	NETWORKS_BS_SUBTITLE: string
-	/**
-	 * N​e​t​w​o​r​k​s
-	 */
-	NETWORKS_BS_TITLE: string
 	/**
 	 * Y​o​u​ ​h​a​v​e​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​a​v​e​d​ ​t​h​e​ ​N​F​T​ ​i​m​a​g​e​ ​t​o​ ​y​o​u​r​ ​p​h​o​t​o​ ​a​l​b​u​m
 	 */
@@ -4294,9 +4294,13 @@ type RootTranslation = {
 	 */
 	SB_SECURITY_METHOD: string
 	/**
-	 * S​e​l​e​c​t​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e
+	 * L​a​n​g​u​a​g​e
 	 */
 	SB_SELECT_LANGUAGE: string
+	/**
+	 * C​h​a​n​g​e​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​l​a​n​g​u​a​g​e
+	 */
+	SB_SELECT_LANGUAGE_DESC: string
 	/**
 	 * I​n​s​e​r​t​ ​t​h​e​ ​p​i​n​ ​y​o​u​ ​c​r​e​a​t​e​d​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​.
 	 */
@@ -9299,6 +9303,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
+	 * Select the active network
+	 */
+	NETWORKS_BS_SUBTITLE: () => LocalizedString
+	/**
+	 * Networks
+	 */
+	NETWORKS_BS_TITLE: () => LocalizedString
+	/**
 	 * Network added
 	 */
 	NETWORK_ADDED: () => LocalizedString
@@ -9402,14 +9414,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Only Vechain network supported
 	 */
 	NETWORK_WARNING_QR_CODE_FOR_ACCOUNT: () => LocalizedString
-	/**
-	 * Select the active network
-	 */
-	NETWORKS_BS_SUBTITLE: () => LocalizedString
-	/**
-	 * Networks
-	 */
-	NETWORKS_BS_TITLE: () => LocalizedString
 	/**
 	 * You have successfully saved the NFT image to your photo album
 	 */
@@ -10180,9 +10184,13 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	SB_SECURITY_METHOD: () => LocalizedString
 	/**
-	 * Select your language
+	 * Language
 	 */
 	SB_SELECT_LANGUAGE: () => LocalizedString
+	/**
+	 * Change the interface language
+	 */
+	SB_SELECT_LANGUAGE_DESC: () => LocalizedString
 	/**
 	 * Insert the pin you created in order to unlock your wallet.
 	 */
