@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { B3TR, VET, VOT3, VTHO } from "~Constants"
+import { B3TR, VeDelegate, VET, VOT3, VTHO } from "~Constants"
 import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
 import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
@@ -22,7 +22,7 @@ export const useDefaultToken = () => {
         if (flowState.token) return flowState.token
 
         const sendableTokens = availableTokens.filter(
-            t => t.symbol !== VOT3.symbol && !BigNutils(t.balance.balance).isZero,
+            t => t.symbol !== VOT3.symbol && !BigNutils(t.balance.balance).isZero && t.symbol !== VeDelegate.symbol,
         )
 
         if (sendableTokens.length === 0) {

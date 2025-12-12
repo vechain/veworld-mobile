@@ -1,9 +1,9 @@
-import React, { useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useThemedStyles } from "~Hooks"
+import React, { useMemo } from "react"
+import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { StyleSheet } from "react-native"
+import { useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 
 type Props = {
@@ -18,6 +18,11 @@ type Props = {
     buttonsInLine?: boolean
     textColor?: string
     backgroundColor?: string
+    /**
+     * Gap between the buttons
+     * @default 12
+     */
+    buttonsGap?: number
 }
 
 export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
@@ -34,6 +39,7 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
             buttonsInLine = false,
             backgroundColor,
             textColor,
+            buttonsGap = 12,
         },
         ref,
     ) => {
@@ -42,7 +48,7 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         const buttonGroup = useMemo(() => {
             if (buttonsInLine) {
                 return (
-                    <BaseView justifyContent="center" alignItems="center" flexDirection="row" gap={12}>
+                    <BaseView justifyContent="center" alignItems="center" flexDirection="row" gap={buttonsGap}>
                         {secondaryButton}
                         {mainButton}
                     </BaseView>
@@ -50,12 +56,12 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
             }
 
             return (
-                <BaseView justifyContent="center" alignItems="center" gap={12}>
+                <BaseView justifyContent="center" alignItems="center" gap={buttonsGap}>
                     {mainButton}
                     {secondaryButton}
                 </BaseView>
             )
-        }, [mainButton, secondaryButton, buttonsInLine])
+        }, [buttonsInLine, buttonsGap, mainButton, secondaryButton])
         return (
             <BaseBottomSheet
                 ref={ref}

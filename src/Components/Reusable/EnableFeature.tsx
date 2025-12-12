@@ -8,7 +8,16 @@ type Props = {
     subtitle?: string
     onValueChange: (value: boolean) => void
     value: boolean
+    /**
+     * Typography font for the title
+     * @default subSubTitleMedium
+     */
     typographyFont?: keyof typeof typography.defaults
+    /**
+     * Typography font for the subtitle
+     * @default captionRegular
+     */
+    subtitleTypographyFont?: keyof typeof typography.defaults
 }
 
 export const EnableFeature = ({
@@ -17,6 +26,7 @@ export const EnableFeature = ({
     onValueChange,
     value,
     typographyFont = "subSubTitleMedium",
+    subtitleTypographyFont = "captionRegular",
 }: Props) => {
     const theme = useTheme()
     return (
@@ -24,7 +34,7 @@ export const EnableFeature = ({
             <BaseView flexDirection="column" flex={1} justifyContent="center">
                 <BaseText typographyFont={typographyFont}>{title}</BaseText>
                 {subtitle && (
-                    <BaseText color={theme.colors.textLight} typographyFont="captionRegular" mt={8}>
+                    <BaseText color={theme.colors.textLight} typographyFont={subtitleTypographyFont} mt={8}>
                         {subtitle}
                     </BaseText>
                 )}

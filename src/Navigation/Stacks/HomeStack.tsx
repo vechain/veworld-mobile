@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import React from "react"
 import { useFeatureFlags } from "~Components"
+import { COLORS, SCREEN_HEIGHT } from "~Constants"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import {
     Activity,
@@ -18,7 +19,6 @@ import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import {
     ActivityDetailsScreen,
-    AddCustomNodeScreen,
     AssetDetailScreen,
     BridgeAssetDetailScreen,
     ChangeNetworkScreen,
@@ -33,21 +33,21 @@ import {
     InAppBrowser,
     InsertAddressSendScreen,
     LedgerSignTransaction,
-    ManageCustomNodesScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
+    PrivacyScreen,
     SelectAmountSendScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
     SelectTokenSendScreen,
+    SendNFTScreen,
+    SendScreen,
     SwapScreen,
     TabsManagerScreen,
     TransactionSummarySendScreen,
     UsernameClaimed,
     WalletDetailScreen,
     WalletManagementScreen,
-    SendScreen,
-    SendNFTScreen,
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AssetDetailScreenSheet } from "~Screens/Flows/App/AssetDetailScreenSheet"
@@ -58,7 +58,6 @@ import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/Co
 import { ReportNFTTransactionScreen } from "~Screens/Flows/App/NFT/NFTReportCollection/ReportNFTTransactionScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
-import { COLORS, SCREEN_HEIGHT } from "~Constants"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -159,8 +158,6 @@ export type RootStackParamListHome = {
             | Routes.COLLECTIBLES_COLLECTION_DETAILS
     }
     [Routes.SETTINGS_NETWORK]: undefined
-    [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
-    [Routes.SETTINGS_MANAGE_CUSTOM_NODES]: undefined
     [Routes.CLAIM_USERNAME]: undefined
     [Routes.USERNAME_CLAIMED]: {
         username: string
@@ -193,6 +190,7 @@ export type RootStackParamListHome = {
         receiverAddress: string
     }
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
+    [Routes.SETTINGS_PRIVACY]: undefined
 }
 
 const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome>()
@@ -325,17 +323,6 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen
-                    name={Routes.SETTINGS_ADD_CUSTOM_NODE}
-                    component={AddCustomNodeScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Screen
-                    name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
-                    component={ManageCustomNodesScreen}
-                    options={{ headerShown: false }}
-                />
-                <Screen
                     name={Routes.APPS_TABS_MANAGER}
                     component={TabsManagerScreen}
                     options={{
@@ -433,6 +420,8 @@ export const HomeStack = () => {
                 <Screen name={Routes.CLAIM_USERNAME} component={ClaimUsername} options={{ headerShown: false }} />
                 <Screen name={Routes.USERNAME_CLAIMED} component={UsernameClaimed} options={{ headerShown: false }} />
             </Group>
+
+            <Screen name={Routes.SETTINGS_PRIVACY} component={PrivacyScreen} options={{ headerShown: false }} />
         </Navigator>
     )
 }

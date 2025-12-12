@@ -110,7 +110,7 @@ export const BASE_GAS_PRICE = "0x000000000000000000000000000000000000626173652d6
 
 export const defaultMainNetwork: Network = {
     id: NETWORK_TYPE.MAIN,
-    name: NETWORK_TYPE.MAIN,
+    name: "VeChain Mainnet",
     type: NETWORK_TYPE.MAIN,
     defaultNet: true,
     urls: THOR_MAIN_URLS,
@@ -121,7 +121,7 @@ export const defaultMainNetwork: Network = {
 
 export const defaultTestNetwork: Network = {
     id: NETWORK_TYPE.TEST,
-    name: NETWORK_TYPE.TEST,
+    name: "VeChain Testnet",
     type: NETWORK_TYPE.TEST,
     defaultNet: true,
     urls: THOR_TESTNET_URLS,

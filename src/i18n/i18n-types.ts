@@ -2055,6 +2055,10 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_BACK: string
 	/**
+	 * C​l​o​s​e
+	 */
+	COMMON_LBL_CLOSE: string
+	/**
 	 * C​o​m​m​e​n​t
 	 */
 	COMMON_LBL_COMMENT: string
@@ -2530,6 +2534,27 @@ type RootTranslation = {
 	 */
 	DAPP_LOGIN_TITLE: string
 	/**
+	 * T​h​i​s​ ​a​p​p​ ​h​a​s​n​'​t​ ​b​e​e​n​ ​v​e​r​i​f​i​e​d​ ​b​y​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​a​c​c​e​s​s​ ​h​a​s​ ​b​e​e​n​ ​b​l​o​c​k​e​d​.​
+​U​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​m​a​l​i​c​i​o​u​s​ ​a​n​d​ ​c​o​u​l​d​ ​p​u​t​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​.
+	 */
+	DAPP_NOT_VERIFIED_BROWSER_WARNING_SUBTITLE: string
+	/**
+	 * A​p​p​ ​n​o​t​ ​v​e​r​i​f​i​e​d
+	 */
+	DAPP_NOT_VERIFIED_BROWSER_WARNING_TITLE: string
+	/**
+	 * S​w​i​t​c​h​ ​n​e​t​w​o​r​k
+	 */
+	DAPP_NOT_VERIFIED_SWITCH_NETWORK: string
+	/**
+	 * A​d​d​ ​y​o​u​r​ ​a​p​p​ ​t​o​ ​t​h​e​ ​a​p​p​ ​h​u​b​ ​t​o​ ​g​e​t​ ​v​e​r​i​f​i​e​d​.
+	 */
+	DAPP_OWNED_DESCRIPTION: string
+	/**
+	 * A​p​p​ ​d​e​v​e​l​o​p​e​r​?
+	 */
+	DAPP_OWNED_TITLE: string
+	/**
 	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	DAPP_SIGN_CERT: string
@@ -2545,6 +2570,14 @@ type RootTranslation = {
 	 * D​A​p​p​ ​T​r​a​n​s​a​c​t​i​o​n
 	 */
 	DAPP_TRANSACTION_TITLE: string
+	/**
+	 * M​a​n​a​g​e​ ​i​n​ ​s​e​t​t​i​n​g​s​.
+	 */
+	DAPP_TRUSTED_DESCRIPTION: string
+	/**
+	 * T​r​u​s​t​ ​t​h​i​s​ ​a​p​p​?
+	 */
+	DAPP_TRUSTED_TITLE: string
 	/**
 	 * D​a​r​k
 	 */
@@ -3359,6 +3392,42 @@ type RootTranslation = {
 	 */
 	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: string
 	/**
+	 * N​e​t​w​o​r​k​ ​a​d​d​e​d
+	 */
+	NETWORK_ADDED: string
+	/**
+	 * A​d​d​ ​c​u​s​t​o​m
+	 */
+	NETWORK_ADD_CUSTOM: string
+	/**
+	 * A​d​d​ ​c​u​s​t​o​m​ ​n​e​t​w​o​r​k
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK: string
+	/**
+	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​n​o​d​e​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_DESC: string
+	/**
+	 * N​o​d​e​ ​n​a​m​e
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_LABEL: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​n​a​m​e
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_PLACEHOLDER: string
+	/**
+	 * U​R​L​ ​i​n​v​a​l​i​d​ ​o​r​ ​n​o​d​e​ ​c​o​n​f​i​g​u​r​a​t​i​o​n​ ​i​s​s​u​e
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_ERROR: string
+	/**
+	 * U​R​L
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_LABEL: string
+	/**
+	 * h​t​t​p​s​:​/​/​.​.​.
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_PLACEHOLDER: string
+	/**
 	 * A​d​d​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
 	NETWORK_ADD_CUSTOM_NODE: string
@@ -3395,11 +3464,11 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_MAINNET: string
 	/**
-	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
+	 * M​a​i​n​n​e​t
 	 */
 	NETWORK_LABEL_MAIN_NETWORKS: string
 	/**
-	 * O​t​h​e​r​ ​N​e​t​w​o​r​k​s
+	 * C​u​s​t​o​m​ ​n​e​t​w​o​r​k​s
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: string
 	/**
@@ -3407,7 +3476,7 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_TESTNET: string
 	/**
-	 * T​e​s​t​ ​N​e​t​w​o​r​k​s
+	 * T​e​s​t​n​e​t
 	 */
 	NETWORK_LABEL_TEST_NETWORKS: string
 	/**
@@ -3415,9 +3484,25 @@ type RootTranslation = {
 	 */
 	NETWORK_MANAGE_NODES: string
 	/**
+	 * N​e​t​w​o​r​k​ ​r​e​m​o​v​e​d
+	 */
+	NETWORK_REMOVED: string
+	/**
+	 * N​e​t​w​o​r​k​ ​s​w​i​t​c​h​e​d
+	 */
+	NETWORK_SWITCHED: string
+	/**
 	 * O​n​l​y​ ​V​e​c​h​a​i​n​ ​n​e​t​w​o​r​k​ ​s​u​p​p​o​r​t​e​d
 	 */
 	NETWORK_WARNING_QR_CODE_FOR_ACCOUNT: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​n​e​t​w​o​r​k
+	 */
+	NETWORKS_BS_SUBTITLE: string
+	/**
+	 * N​e​t​w​o​r​k​s
+	 */
+	NETWORKS_BS_TITLE: string
 	/**
 	 * Y​o​u​ ​h​a​v​e​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​a​v​e​d​ ​t​h​e​ ​N​F​T​ ​i​m​a​g​e​ ​t​o​ ​y​o​u​r​ ​p​h​o​t​o​ ​a​l​b​u​m
 	 */
@@ -4857,6 +4942,34 @@ type RootTranslation = {
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: string
 	/**
+	 * Y​e​s​,​ ​a​l​l​o​w
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW: string
+	/**
+	 * N​o​,​ ​g​o​ ​b​a​c​k
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_BACK: string
+	/**
+	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​s​c​a​m​s​ ​a​n​d​ ​c​a​n​ ​l​e​a​d​ ​t​o​ ​a​s​s​e​t​ ​l​o​s​s​.​ ​D​i​s​a​b​l​e​ ​a​f​t​e​r​ ​u​s​e​.
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_SUBTITLE: string
+	/**
+	 * A​l​l​o​w​ ​u​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_TITLE: string
+	/**
+	 * A​l​l​o​w​i​n​g​ ​u​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​l​e​t​s​ ​y​o​u​ ​o​p​e​n​ ​a​p​p​s​ ​t​h​a​t​ ​h​a​v​e​n​'​t​ ​b​e​e​n​ ​r​e​v​i​e​w​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.​ ​T​h​e​s​e​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​m​a​l​i​c​i​o​u​s​ ​a​n​d​ ​c​o​u​l​d​ ​p​u​t​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​.
+	 */
+	SETTING_UNVERIFIED_APP_SUBTITLE: string
+	/**
+	 * U​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_TITLE: string
+	/**
+	 * A​l​l​o​w​ ​u​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_TOGGLE_CTA: string
+	/**
 	 * S​h​a​r​e
 	 */
 	SHARE: string
@@ -5509,6 +5622,38 @@ type RootTranslation = {
 	 * u​s​e​r​n​a​m​e
 	 */
 	USERNAME: string
+	/**
+	 * T​h​e​ ​v​a​l​i​d​a​t​o​r​ ​{​v​a​l​i​d​a​t​o​r​N​a​m​e​}​ ​i​s​ ​n​o​ ​l​o​n​g​e​r​ ​a​c​t​i​v​e​.​ ​A​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r​ ​m​u​s​t​ ​b​e​ ​s​e​l​e​c​t​e​d​ ​t​o​ ​c​o​n​t​i​n​u​e​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​.
+	 * @param {string} validatorName
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION: RequiredParams<'validatorName'>
+	/**
+	 * T​h​e​ ​v​a​l​i​d​a​t​o​r​ ​{​v​a​l​i​d​a​t​o​r​N​a​m​e​s​}​ ​a​r​e​ ​n​o​ ​l​o​n​g​e​r​ ​a​c​t​i​v​e​.​ ​N​e​w​ ​v​a​l​i​d​a​t​o​r​ ​m​u​s​t​ ​b​e​ ​s​e​l​e​c​t​e​d​ ​t​o​ ​c​o​n​t​i​n​u​e​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​.
+	 * @param {string} validatorNames
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION_MULTIPLE: RequiredParams<'validatorNames'>
+	/**
+	 * S​t​a​r​G​a​t​e​ ​n​o​t​i​f​i​c​a​t​i​o​n
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE: string
+	/**
+	 * C​h​o​o​s​e​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR: string
+	/**
+	 * C​h​o​o​s​e​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r​s
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS: string
+	/**
+	 * {​n​o​d​e​L​e​v​e​l​}​ ​n​o​d​e
+	 * @param {string} nodeLevel
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME: RequiredParams<'nodeLevel'>
+	/**
+	 * T​o​k​e​n​ ​I​D​:​ ​{​t​o​k​e​n​I​d​}
+	 * @param {string} tokenId
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID: RequiredParams<'tokenId'>
 	/**
 	 * V​a​l​u​e
 	 */
@@ -7833,6 +7978,10 @@ This action is irreversible.
 	 */
 	COMMON_LBL_BACK: () => LocalizedString
 	/**
+	 * Close
+	 */
+	COMMON_LBL_CLOSE: () => LocalizedString
+	/**
 	 * Comment
 	 */
 	COMMON_LBL_COMMENT: () => LocalizedString
@@ -8301,6 +8450,27 @@ This action is irreversible.
 	 */
 	DAPP_LOGIN_TITLE: () => LocalizedString
 	/**
+	 * This app hasn't been verified by VeWorld and access has been blocked.
+Unverified apps may be malicious and could put your assets at risk.
+	 */
+	DAPP_NOT_VERIFIED_BROWSER_WARNING_SUBTITLE: () => LocalizedString
+	/**
+	 * App not verified
+	 */
+	DAPP_NOT_VERIFIED_BROWSER_WARNING_TITLE: () => LocalizedString
+	/**
+	 * Switch network
+	 */
+	DAPP_NOT_VERIFIED_SWITCH_NETWORK: () => LocalizedString
+	/**
+	 * Add your app to the app hub to get verified.
+	 */
+	DAPP_OWNED_DESCRIPTION: () => LocalizedString
+	/**
+	 * App developer?
+	 */
+	DAPP_OWNED_TITLE: () => LocalizedString
+	/**
 	 * Sign certificate
 	 */
 	DAPP_SIGN_CERT: () => LocalizedString
@@ -8316,6 +8486,14 @@ This action is irreversible.
 	 * DApp Transaction
 	 */
 	DAPP_TRANSACTION_TITLE: () => LocalizedString
+	/**
+	 * Manage in settings.
+	 */
+	DAPP_TRUSTED_DESCRIPTION: () => LocalizedString
+	/**
+	 * Trust this app?
+	 */
+	DAPP_TRUSTED_TITLE: () => LocalizedString
 	/**
 	 * Dark
 	 */
@@ -9129,6 +9307,42 @@ This action is irreversible.
 	 */
 	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
+	 * Network added
+	 */
+	NETWORK_ADDED: () => LocalizedString
+	/**
+	 * Add custom
+	 */
+	NETWORK_ADD_CUSTOM: () => LocalizedString
+	/**
+	 * Add custom network
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK: () => LocalizedString
+	/**
+	 * Add a custom node to connect to
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_DESC: () => LocalizedString
+	/**
+	 * Node name
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_LABEL: () => LocalizedString
+	/**
+	 * Insert the name
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_PLACEHOLDER: () => LocalizedString
+	/**
+	 * URL invalid or node configuration issue
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_ERROR: () => LocalizedString
+	/**
+	 * URL
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_LABEL: () => LocalizedString
+	/**
+	 * https://...
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_PLACEHOLDER: () => LocalizedString
+	/**
 	 * Add custom node
 	 */
 	NETWORK_ADD_CUSTOM_NODE: () => LocalizedString
@@ -9165,11 +9379,11 @@ This action is irreversible.
 	 */
 	NETWORK_LABEL_MAINNET: () => LocalizedString
 	/**
-	 * Main Networks
+	 * Mainnet
 	 */
 	NETWORK_LABEL_MAIN_NETWORKS: () => LocalizedString
 	/**
-	 * Other Networks
+	 * Custom networks
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: () => LocalizedString
 	/**
@@ -9177,7 +9391,7 @@ This action is irreversible.
 	 */
 	NETWORK_LABEL_TESTNET: () => LocalizedString
 	/**
-	 * Test Networks
+	 * Testnet
 	 */
 	NETWORK_LABEL_TEST_NETWORKS: () => LocalizedString
 	/**
@@ -9185,9 +9399,25 @@ This action is irreversible.
 	 */
 	NETWORK_MANAGE_NODES: () => LocalizedString
 	/**
+	 * Network removed
+	 */
+	NETWORK_REMOVED: () => LocalizedString
+	/**
+	 * Network switched
+	 */
+	NETWORK_SWITCHED: () => LocalizedString
+	/**
 	 * Only Vechain network supported
 	 */
 	NETWORK_WARNING_QR_CODE_FOR_ACCOUNT: () => LocalizedString
+	/**
+	 * Select the active network
+	 */
+	NETWORKS_BS_SUBTITLE: () => LocalizedString
+	/**
+	 * Networks
+	 */
+	NETWORKS_BS_TITLE: () => LocalizedString
 	/**
 	 * You have successfully saved the NFT image to your photo album
 	 */
@@ -10591,6 +10821,34 @@ Are you sure you want to continue?
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: () => LocalizedString
 	/**
+	 * Yes, allow
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW: () => LocalizedString
+	/**
+	 * No, go back
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_BACK: () => LocalizedString
+	/**
+	 * Unverified apps may be scams and can lead to asset loss. Disable after use.
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Allow unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_TITLE: () => LocalizedString
+	/**
+	 * Allowing unverified apps lets you open apps that haven't been reviewed by VeWorld. These apps may be malicious and could put your assets at risk.
+	 */
+	SETTING_UNVERIFIED_APP_SUBTITLE: () => LocalizedString
+	/**
+	 * Unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_TITLE: () => LocalizedString
+	/**
+	 * Allow unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_TOGGLE_CTA: () => LocalizedString
+	/**
 	 * Share
 	 */
 	SHARE: () => LocalizedString
@@ -11236,6 +11494,34 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * username
 	 */
 	USERNAME: () => LocalizedString
+	/**
+	 * The validator {validatorName} is no longer active. A new validator must be selected to continue earning rewards.
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION: (arg: { validatorName: string }) => LocalizedString
+	/**
+	 * The validator {validatorNames} are no longer active. New validator must be selected to continue earning rewards.
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION_MULTIPLE: (arg: { validatorNames: string }) => LocalizedString
+	/**
+	 * StarGate notification
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
+	 * Choose new validator
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR: () => LocalizedString
+	/**
+	 * Choose new validators
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS: () => LocalizedString
+	/**
+	 * {nodeLevel} node
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME: (arg: { nodeLevel: string }) => LocalizedString
+	/**
+	 * Token ID: {tokenId}
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID: (arg: { tokenId: string }) => LocalizedString
 	/**
 	 * Value
 	 */
