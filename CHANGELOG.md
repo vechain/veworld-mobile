@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5.0 (2025-12-12)
+
+* build: init ([17a2dfe](https://github.com/vechain/veworld-mobile/commit/17a2dfe))
+* feat: enhance address selection context in ReceiverScreen and KnownAddressesList (#3636) ([748d6dc](https://github.com/vechain/veworld-mobile/commit/748d6dc)), closes [#3636](https://github.com/vechain/veworld-mobile/issues/3636)
+
 ## <small>2.4.13 (2025-12-02)</small>
 
 * build: init ([658831e](https://github.com/vechain/veworld-mobile/commit/658831e))
