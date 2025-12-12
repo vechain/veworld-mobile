@@ -11,6 +11,7 @@ import { useThemedStyles } from "~Hooks"
 import { RootStackParamListNFT, Routes } from "~Navigation"
 import { HexUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
+import { NFTSummaryScreen } from "~Screens"
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListNFT, Routes.SEND_NFT>
 
@@ -40,7 +41,7 @@ export const SendNFTScreenContent = (): ReactElement => {
             fixedBody={
                 <Animated.View style={[styles.viewContainer, styles.flexElement]} layout={LinearTransition}>
                     {step === "insertAddress" && <ReceiverScreen />}
-                    {step === "summary" && <></>}
+                    {step === "summary" && <NFTSummaryScreen />}
                 </Animated.View>
             }
         />
