@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.14 (2025-12-13)</small>
+
+* build: init ([aa59799](https://github.com/vechain/veworld-mobile/commit/aa59799))
+* fix: fix broken route (#3640) ([3fecc95](https://github.com/vechain/veworld-mobile/commit/3fecc95)), closes [#3640](https://github.com/vechain/veworld-mobile/issues/3640)
+
 ## <small>2.4.13 (2025-12-02)</small>
 
 * build: init ([658831e](https://github.com/vechain/veworld-mobile/commit/658831e))
