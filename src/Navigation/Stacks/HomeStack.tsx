@@ -388,9 +388,6 @@ export const HomeStack = () => {
                     <Screen name={Routes.SEND_NFT} component={SendNFTScreen} options={{ headerShown: false }} />
                 )}
                 {betterWorldFeature.balanceScreen.collectibles.enabled && (
-                    <Screen name={Routes.SEND_NFT} component={SendNFTScreen} options={{ headerShown: false }} />
-                )}
-                {betterWorldFeature.balanceScreen.collectibles.enabled && (
                     <Screen
                         name={Routes.SEND_NFT_RECAP}
                         component={SendCollectibleRecapScreen}
