@@ -30,7 +30,25 @@ export const WalletPreferencesSlice = createSlice({
             }
         },
         resetWalletPreferencesState: () => initialWalletPreferencesState,
+        setLastSentToken: (
+            state,
+            action: PayloadAction<{ genesisId: string; from: string; contractAddress: string }>,
+        ) => {
+            const { genesisId, from, contractAddress } = action.payload
+
+            if (!state[genesisId]) {
+                state[genesisId] = {}
+            }
+
+            if (!state[genesisId][from]) {
+                state[genesisId][from] = {
+                    lastSentTokenAddress: contractAddress,
+                }
+            } else {
+                state[genesisId][from].lastSentTokenAddress = contractAddress
+            }
+        },
     },
 })
 
-export const { setLastValidatorExited, resetWalletPreferencesState } = WalletPreferencesSlice.actions
+export const { setLastValidatorExited, resetWalletPreferencesState, setLastSentToken } = WalletPreferencesSlice.actions

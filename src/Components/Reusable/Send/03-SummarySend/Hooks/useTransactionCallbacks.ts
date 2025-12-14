@@ -12,6 +12,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { setLastSentTokenAction } from "~Storage/Redux/Actions/WalletPreferences"
 import { error } from "~Utils"
 
 export const useTransactionCallbacks = ({ token, onFailure }: { token: Token; onFailure: () => void }) => {
@@ -48,6 +49,7 @@ export const useTransactionCallbacks = ({ token, onFailure }: { token: Token; on
         async (transaction: Transaction) => {
             try {
                 dispatch(addPendingTransferTransactionActivity(transaction))
+                dispatch(setLastSentTokenAction(transaction))
                 dispatch(setIsAppLoading(false))
                 onFinish(true)
             } catch (e) {

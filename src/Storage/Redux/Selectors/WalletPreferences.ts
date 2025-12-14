@@ -17,3 +17,7 @@ export const selectWalletPreferences = createSelector(
 export const selectLastValidatorExited = createSelector(selectWalletPreferences, walletPreferences => {
     return walletPreferences?.lastValidatorExitedAt ?? undefined
 })
+
+export const selectLastSentToken = createSelector(selectWalletPreferences, walletPreferences => {
+    return walletPreferences?.lastSentTokenAddress
+})

@@ -3,6 +3,10 @@ export type WalletPreference = {
      * The timestamp of the last validator exited.
      */
     lastValidatorExitedAt?: number
+    /**
+     * The last token address sent via the send flow
+     */
+    lastSentTokenAddress?: string
 }
 
 /**
