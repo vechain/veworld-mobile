@@ -1,13 +1,13 @@
 import { Dispatch } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
-import { selectSelectedAccount, selectSelectedNetwork } from "../Selectors"
+import { selectSelectedAccount, selectSelectedAccountOrNull, selectSelectedNetwork } from "../Selectors"
 import { warn } from "~Utils/Logger"
 import AccountUtils from "~Utils/AccountUtils"
 import { ERROR_EVENTS, VET } from "~Constants"
 import { setLastSentToken, setLastValidatorExited } from "../Slices"
 import moment from "moment"
 import { Transaction } from "@vechain/sdk-core"
-import { TransactionUtils } from "~Utils"
+import TransactionUtils from "~Utils/TransactionUtils"
 
 export const setLastValidatorExit = () => (dispatch: Dispatch, getState: () => RootState) => {
     const selectedNetwork = selectSelectedNetwork(getState())
@@ -43,9 +43,9 @@ const getTokenAddressFromTransferClause = (clause: Connex.VM.Clause) => {
 
 export const setLastSentTokenAction = (transaction: Transaction) => (dispatch: Dispatch, getState: () => RootState) => {
     const selectedNetwork = selectSelectedNetwork(getState())
-    const selectedAccount = selectSelectedAccount(getState())
+    const selectedAccount = selectSelectedAccountOrNull(getState())
 
-    if (!selectedNetwork.genesis.id || !selectedAccount.address) {
+    if (!selectedNetwork.genesis.id || !selectedAccount) {
         warn(ERROR_EVENTS.WALLET_PREFERENCES, "Selected network or account not found")
         return
     }
