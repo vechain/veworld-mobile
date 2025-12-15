@@ -136,7 +136,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
         if (isChecking) {
             return (
                 <BaseView flexDirection="row" style={styles.inputMessage}>
-                    <BaseText color={theme.colors.infoVariant.titleInline}>
+                    <BaseText color={theme.colors.infoVariant.titleInline} typographyFont="captionRegular">
                         {LL.CHECKING_USERNAME_AVAILABILITY()}
                     </BaseText>
                 </BaseView>
@@ -147,7 +147,10 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                     {hasErrors && (
                         <>
                             <BaseIcon name="icon-alert-triangle" color={theme.colors.errorVariant.icon} size={16} />
-                            <BaseText color={theme.colors.errorVariant.titleInline} lineBreakMode="clip">
+                            <BaseText
+                                color={theme.colors.errorVariant.titleInline}
+                                lineBreakMode="clip"
+                                typographyFont="captionRegular">
                                 {isNotAvailable ? LL.ERROR_DOMAIN_ALREADY_TAKEN() : errorMessage}
                             </BaseText>
                         </>
@@ -155,7 +158,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                     {isUsernameAvailable && (
                         <>
                             <BaseIcon name="icon-check-circle" color={theme.colors.successVariant.icon} size={16} />
-                            <BaseText color={theme.colors.successVariant.titleInline}>
+                            <BaseText color={theme.colors.successVariant.titleInline} typographyFont="captionRegular">
                                 {LL.SUCCESS_DOMAIN_AVAILABLE()}
                             </BaseText>
                         </>
@@ -191,7 +194,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                     <BaseView style={[styles.contentContainer]}>
                         {/* Body */}
                         <BaseView flexGrow={1}>
-                            <BaseText typographyFont="subSubTitleLight">{LL.SB_CLAIM_USERNAME()}</BaseText>
+                            <BaseText typographyFont="body">{LL.SB_CLAIM_USERNAME()}</BaseText>
                             <BaseSpacer height={40} />
                             {/* Input container */}
                             <BaseView mb={8} flexDirection="row" justifyContent="space-between">

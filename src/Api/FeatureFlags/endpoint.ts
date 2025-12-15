@@ -16,10 +16,12 @@ export type FeatureFlags = {
         [PaymentProvidersEnum.CoinbasePay]: {
             android: boolean
             iOS: boolean
+            url: string
         }
         [PaymentProvidersEnum.Transak]: {
             android: boolean
             iOS: boolean
+            url: string
         }
         [PaymentProvidersEnum.Coinify]: {
             android: boolean
@@ -37,6 +39,28 @@ export type FeatureFlags = {
                 ledger: boolean
             }
         }
+        HAYABUSA: {
+            stargate: {
+                [genesisId: string]: {
+                    /**
+                     * Address of the Stargate contract
+                     */
+                    contract: string
+                    /**
+                     * Address of the StargateNFT contract
+                     */
+                    nft?: string
+                    /**
+                     * Address of the NodeManagement contract (deprecated)
+                     */
+                    nodeManagement?: string
+                    /**
+                     * Address of the StargateDelegation contract (deprecated)
+                     */
+                    delegation?: string
+                }
+            }
+        }
     }
     smartWalletFeature: {
         enabled: boolean
@@ -46,6 +70,23 @@ export type FeatureFlags = {
             enabled: boolean
         }
         balanceScreen: {
+            enabled: boolean
+            collectibles: {
+                enabled: boolean
+            }
+            tokens: {
+                enabled: boolean
+            }
+            send: {
+                enabled: boolean
+            }
+            sendCollectibles: {
+                enabled: boolean
+            }
+        }
+    }
+    notificationCenter: {
+        registration: {
             enabled: boolean
         }
     }

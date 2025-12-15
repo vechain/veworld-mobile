@@ -17,7 +17,7 @@ export const TransactionStatusBox: React.FC<Props> = memo(({ status }) => {
     const statusDescription =
         status === ActivityStatus.PENDING ? LL.ACTIVITIES_PENDING_DESCRIPTION() : LL.ACTIVITIES_FAILED_DESCRIPTION()
 
-    const statusBgColor = status === ActivityStatus.PENDING ? COLORS.PASTEL_ORANGE : COLORS.PASTEL_RED
+    const statusBgColor = status === ActivityStatus.PENDING ? COLORS.PASTEL_ORANGE : COLORS.RED_100
 
     const statusTitleBgColor = status === ActivityStatus.PENDING ? COLORS.MEDIUM_ORANGE : COLORS.MEDIUM_RED
 
@@ -33,7 +33,7 @@ export const TransactionStatusBox: React.FC<Props> = memo(({ status }) => {
                         </BaseText>
                     </BaseView>
                 </BaseView>
-                <BaseText typographyFont="buttonSecondary" pt={8} color={COLORS.DARK_PURPLE}>
+                <BaseText typographyFont="buttonSecondary" pt={8} color={COLORS.RED_700}>
                     {statusDescription}
                 </BaseText>
             </BaseView>

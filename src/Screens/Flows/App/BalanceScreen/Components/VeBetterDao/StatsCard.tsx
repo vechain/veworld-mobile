@@ -6,6 +6,7 @@ import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
 import { BigNutils, StringUtils } from "~Utils"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {
     label: "co2" | "water" | "energy" | "plastic"
@@ -65,11 +66,11 @@ export const StatsCard = ({ label, value }: Props) => {
 
     return (
         <BaseView style={styles.root} testID={`STATS_CARD_${label}`}>
-            <BlurView overlayColor="transparent" blurAmount={10} style={styles.blur}>
+            <BlurView blurAmount={7} style={styles.blur}>
                 <BaseView flexDirection="column" p={16} justifyContent="center" alignItems="center">
                     <BaseIcon color={COLORS.LIGHT_GREEN} size={24} name={icon} />
                     <BaseSpacer height={8} />
-                    <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="bodySemiBold">
+                    <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="captionSemiBold">
                         {LL[`VBD_STAT_${StringUtils.toUppercase(label)}`]()}
                     </BaseText>
                     <BaseText
@@ -82,7 +83,7 @@ export const StatsCard = ({ label, value }: Props) => {
                     <BaseView flexDirection="row" alignItems="center" gap={2}>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                            typographyFont="subTitleSemiBold"
+                            typographyFont="subSubTitleSemiBold"
                             testID="STATS_CARD_VALUE">
                             {parsedValue}
                         </BaseText>
@@ -99,8 +100,9 @@ export const StatsCard = ({ label, value }: Props) => {
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
+const baseStyles = (theme: ColorThemeType) => {
+    const blurDarkBg = isAndroid() ? "rgba(89, 82, 127, 0.65)" : "rgba(3, 3, 4, 0.4)"
+    return StyleSheet.create({
         root: {
             flex: 1,
             borderWidth: 1,
@@ -110,6 +112,7 @@ const baseStyles = (theme: ColorThemeType) =>
             overflow: "hidden",
         },
         blur: {
-            backgroundColor: theme.isDark ? "rgba(89, 82, 127, 0.25)" : theme.colors.transparent,
+            backgroundColor: theme.isDark ? blurDarkBg : theme.colors.transparent,
         },
     })
+}

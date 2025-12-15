@@ -1,11 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react"
-import { StyleSheet } from "react-native"
-import LinearGradient from "react-native-linear-gradient"
+import React, { useLayoutEffect, useMemo } from "react"
+import { PixelRatio, StyleSheet } from "react-native"
 import Animated, {
     FadeIn,
     FadeOut,
     LinearTransition,
-    runOnJS,
     SharedValue,
     useAnimatedStyle,
     useSharedValue,
@@ -13,12 +11,21 @@ import Animated, {
 } from "react-native-reanimated"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     value: string
 }
 
-const VALUE_ARRAY = Array.from({ length: 10 }, (_, idx) => ({ id: idx.toString(), value: idx % 10 }))
+const VALUE_ARRAY = (
+    Array.from({ length: 10 }, (_, idx) => ({ id: idx.toString(), value: idx % 10 })) as {
+        id: string
+        value: number | string
+    }[]
+).concat([
+    { id: "10", value: "," },
+    { id: "11", value: "." },
+])
 
 const SlotMachineTextElement = ({
     item,
@@ -38,7 +45,7 @@ const SlotMachineTextElement = ({
     }, [translate.value])
     return (
         <Animated.Text
-            style={[styles.text, styles.absolute, animatedStyles, { top: 40 * index }]}
+            style={[styles.text, styles.absolute, animatedStyles, { top: 40 * index * PixelRatio.getFontScale() }]}
             key={item.id}
             exiting={FadeOut.duration(300)}
             entering={FadeIn.duration(300)}>
@@ -52,41 +59,22 @@ export const SlotMachineText = ({ value }: Props) => {
 
     const translateY = useSharedValue(0)
 
-    const [hiddenValue, setHiddenValue] = useState(0)
-
     const parsedValue = useMemo(() => {
-        if (!/\d/.test(value)) return 0
+        if (!/\d/.test(value)) {
+            if (value === ",") return 10
+            return 11
+        }
         return Number.parseInt(value, 10)
     }, [value])
 
-    useEffect(() => {
-        if (!/\d/.test(value)) return
-        translateY.value = withSpring(40 * parsedValue, undefined, () => {
-            "worklet"
-            runOnJS(setHiddenValue)(parsedValue)
-        })
+    useLayoutEffect(() => {
+        translateY.value = withSpring(40 * parsedValue * PixelRatio.getFontScale(), undefined)
     }, [parsedValue, translateY, value])
-
-    if (!/\d/.test(value))
-        return (
-            <Animated.Text style={styles.text} exiting={FadeOut.duration(300)} entering={FadeIn.duration(300)}>
-                {value}
-            </Animated.Text>
-        )
 
     return (
         <Animated.View style={[styles.root]} layout={LinearTransition.duration(300)}>
-            <LinearGradient
-                colors={[COLORS.BALANCE_BACKGROUND, "rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0)", COLORS.BALANCE_BACKGROUND]}
-                angle={180}
-                useAngle
-                locations={[0, 0.2, 0.7, 1]}
-                style={[StyleSheet.absoluteFill, styles.gradient]}
-            />
             <Animated.View style={[styles.innerContainer]} layout={LinearTransition.duration(300)}>
-                <Animated.Text style={[styles.text, styles.hiddenText]} layout={LinearTransition.duration(300)}>
-                    {hiddenValue}
-                </Animated.Text>
+                <Animated.Text style={[styles.text, styles.hiddenText]}>{value}</Animated.Text>
                 {VALUE_ARRAY.map((item, idx) => (
                     <SlotMachineTextElement key={idx} item={item} index={idx} translate={translateY} />
                 ))}
@@ -100,10 +88,10 @@ const baseStyles = () =>
         text: {
             color: COLORS.GREY_50,
             fontWeight: "600",
-            fontSize: 38,
+            fontSize: FontUtils.font(36),
             fontFamily: "Inter-SemiBold",
-            lineHeight: 40,
-            verticalAlign: "middle",
+            lineHeight: FontUtils.font(36),
+            alignSelf: "center",
         },
         absolute: {
             position: "absolute",
@@ -116,10 +104,10 @@ const baseStyles = () =>
             overflow: "hidden",
             flexDirection: "column",
             justifyContent: "center",
-            height: 46,
+            alignSelf: "flex-end",
+            height: 40 * PixelRatio.getFontScale(),
         },
         innerContainer: {
-            height: 40,
             position: "relative",
             overflow: "hidden",
         },

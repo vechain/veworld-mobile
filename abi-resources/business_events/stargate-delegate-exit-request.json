@@ -1,0 +1,86 @@
+{
+  "name": "STARGATE_DELEGATION_EXIT_REQUEST",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "DelegationExitRequested(indexed uint256,indexed address,indexed uint256,uint48)",
+      "alias": "delegationSG",
+      "conditions": [
+        {
+          "firstOperand": "tokenId",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${STARGATE_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    },
+    {
+      "name": "DelegationSignaledExit(indexed uint256)",
+      "alias": "delegationBuiltin",
+      "conditions": [
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "0x00000000000000000000000000005374616B6572",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "firstEventName": "delegationSG",
+      "firstEventProperty": "delegationId",
+      "secondEventName": "delegationBuiltin",
+      "secondEventProperty": "delegationID",
+      "operator": "EQ"
+    }
+  ],
+  "paramsDefinition": [
+    {
+      "name": "tokenId",
+      "eventName": "delegationSG",
+      "businessEventName": "tokenId"
+    },
+    {
+      "name": "delegationId",
+      "eventName": "delegationSG",
+      "businessEventName": "delegationId"
+    },
+    {
+      "name": "origin",
+      "eventName": "delegationSG",
+      "businessEventName": "owner"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "delegationId",
+      "type": "uint256"
+    },
+    {
+      "type": "address",
+      "name": "owner",
+      "internalType": "address",
+      "indexed": false
+    }
+  ],
+  "type": "event"
+}

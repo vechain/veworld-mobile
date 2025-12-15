@@ -1,7 +1,7 @@
 import { useQueries } from "@tanstack/react-query"
 import { useMemo } from "react"
+import { useMainnetIndexerClient } from "~Hooks/useIndexerClient"
 import { FetchAppOverviewResponse } from "~Networking/API/Types"
-import { fetchAppOverview } from "~Networking/DApps/fetchAppOverview"
 
 /**
  * Hook to batch fetch app overviews for multiple apps with React Query
@@ -10,13 +10,22 @@ import { fetchAppOverview } from "~Networking/DApps/fetchAppOverview"
  * @returns Object with overview data keyed by appId and loading states
  */
 export const useBatchAppOverviews = (appIds: string[], enabled = true) => {
+    const indexer = useMainnetIndexerClient()
     const queries = useQueries({
         queries: appIds.map(appId => ({
             queryKey: ["appOverview", appId],
-            queryFn: () => fetchAppOverview(appId),
+            queryFn: () =>
+                indexer
+                    .GET("/api/v1/b3tr/actions/apps/{appId}/overview", {
+                        params: {
+                            path: {
+                                appId,
+                            },
+                        },
+                    })
+                    .then(res => res.data!),
             enabled: enabled && !!appId,
             staleTime: 1000 * 60 * 60 * 24,
-            gcTime: 1000 * 60 * 60 * 24,
         })),
     })
 

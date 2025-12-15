@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
+import { LayoutChangeEvent, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -10,20 +10,36 @@ type Props<TKeys extends string[] | readonly string[]> = {
     keys: TKeys
     labels: string[]
     selectedKey: TKeys[number]
+    rightIcon?: React.ReactNode
     setSelectedKey: (key: TKeys[number]) => void
+    /**
+     * Style for the container wrapping the wrapper of the tabs + the icon on the right
+     */
+    rootStyle?: StyleProp<ViewStyle>
+    /**
+     * Style for the container wrapping the tabs.
+     */
+    innerContainerStyle?: StyleProp<ViewStyle>
+    disabledKeys?: TKeys[number][]
 }
 
 export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
     keys,
     labels,
     selectedKey,
+    rightIcon,
     setSelectedKey,
+    rootStyle,
+    innerContainerStyle,
+    disabledKeys,
 }: Props<TKeys>) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const [tabOffsets, setTabOffsets] = useState<{ offsetX: number; width: number }[]>([])
+    const hasRightIcon = !!rightIcon
     const selectedIndex = useMemo(() => keys.indexOf(selectedKey), [keys, selectedKey])
     const getTextColor = useCallback(
-        (isSelected: boolean) => {
+        (isSelected: boolean, isDisabled: boolean) => {
+            if (isDisabled) return theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300
             if (isSelected) return theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE
             return theme.isDark ? COLORS.PURPLE_LABEL : COLORS.GREY_500
         },
@@ -49,26 +65,37 @@ export const BaseSimpleTabs = <TKeys extends string[] | readonly string[]>({
     }, [tabOffsets, selectedIndex, keys.length])
     if (keys.length !== labels.length) throw new Error("Keys and Labels should have the same length")
     return (
-        <BaseView style={styles.root} flexDirection="row">
-            {keys.map((key, index) => {
-                const isSelected = selectedKey === key
-                const textColor = getTextColor(isSelected)
-                return (
-                    <TouchableOpacity
-                        key={key}
-                        style={styles.tab}
-                        onPress={() => setSelectedKey(key)}
-                        onLayout={e => {
-                            e.persist()
-                            onLayout(index)(e)
-                        }}>
-                        <BaseText color={textColor} typographyFont="bodySemiBold">
-                            {labels[index]}
-                        </BaseText>
-                    </TouchableOpacity>
-                )
-            })}
-            <Animated.View style={[indicatorStyles, styles.indicator]} />
+        <BaseView style={[styles.root, rootStyle]} flexDirection="row" justifyContent="space-between">
+            <BaseView
+                flexDirection="row"
+                flex={1}
+                gap={8}
+                overflow="scroll"
+                style={[innerContainerStyle, hasRightIcon && styles.tabsWithRightIcon]}>
+                {keys.map((key, index) => {
+                    const isSelected = selectedKey === key
+                    const isDisabled = disabledKeys?.includes(key) ?? false
+                    const textColor = getTextColor(isSelected, isDisabled)
+                    return (
+                        <TouchableOpacity
+                            key={key}
+                            style={styles.tab}
+                            onPress={() => setSelectedKey(key)}
+                            onLayout={e => {
+                                e.persist()
+                                onLayout(index)(e)
+                            }}
+                            disabled={isDisabled}>
+                            <BaseText color={textColor} typographyFont="subSubTitleSemiBold">
+                                {labels[index]}
+                            </BaseText>
+                        </TouchableOpacity>
+                    )
+                })}
+                <Animated.View style={[indicatorStyles, styles.indicator]} />
+            </BaseView>
+
+            {rightIcon}
         </BaseView>
     )
 }
@@ -78,7 +105,7 @@ const baseStyles = (theme: ColorThemeType) =>
         root: {
             backgroundColor: COLORS.TRANSPARENT,
             position: "relative",
-            borderRadius: 8,
+            gap: 8,
         },
         tab: {
             padding: 8,
@@ -86,13 +113,16 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             justifyContent: "center",
         },
+        tabsWithRightIcon: {
+            paddingRight: 16, // Ensures last tab isn't visually cut by the right icon
+        },
         indicator: {
             backgroundColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
             pointerEvents: "none",
-            borderRadius: 4,
             position: "absolute",
             height: 2,
             zIndex: -1,
             bottom: 0,
+            borderRadius: 0,
         },
     })

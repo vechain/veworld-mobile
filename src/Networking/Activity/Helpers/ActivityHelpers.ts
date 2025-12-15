@@ -32,8 +32,8 @@ import {
     UnknownTxActivity,
     VeVoteCastActivity,
 } from "~Model"
-import { EventTypeResponse } from "~Networking"
 import { ActivityUtils, AddressUtils, debug, TransactionUtils } from "~Utils"
+import { components } from "~Generated/indexer/schema"
 
 /**
  * Creates a base activity from a given transaction.
@@ -360,15 +360,17 @@ export const createTransferClauseFromIncomingTransfer = (
  *
  * @returns The corresponding ActivityType, or undefined if the eventType does not map to any known ActivityType.
  */
-export const eventTypeToActivityType = (eventType: EventTypeResponse): ActivityType | undefined => {
+export const eventTypeToActivityType = (
+    eventType: components["schemas"]["IndexedTransferEvent"]["eventType"],
+): ActivityType | undefined => {
     switch (eventType) {
-        case EventTypeResponse.VET:
+        case "VET":
             return ActivityType.TRANSFER_VET
 
-        case EventTypeResponse.FUNGIBLE_TOKEN:
+        case "FUNGIBLE_TOKEN":
             return ActivityType.TRANSFER_FT
 
-        case EventTypeResponse.NFT:
+        case "NFT":
             return ActivityType.TRANSFER_NFT
 
         default:
@@ -560,7 +562,6 @@ export const createActivityFromIndexedHistoryEvent = (
         inputToken,
         outputToken,
         appId,
-        proof,
         support,
         votePower,
         voteWeight,
@@ -572,6 +573,8 @@ export const createActivityFromIndexedHistoryEvent = (
         from,
         reverted,
         levelId,
+        validator,
+        delegationId,
     } = event
 
     const isTransaction =
@@ -587,7 +590,7 @@ export const createActivityFromIndexedHistoryEvent = (
         blockNumber: blockNumber,
         genesisId: network.genesis.id,
         isTransaction: isTransaction,
-        type: eventName,
+        type: eventName as ActivityEvent,
         timestamp: blockTimestamp * 1000,
         gasPayer: gasPayer,
         delegated: origin !== gasPayer,
@@ -680,7 +683,6 @@ export const createActivityFromIndexedHistoryEvent = (
                 to: to ? [to] : [],
                 value: value ?? "0x0",
                 appId: appId,
-                proof: proof,
             } as B3trActionActivity
         }
         case ActivityEvent.B3TR_PROPOSAL_VOTE: {
@@ -734,19 +736,30 @@ export const createActivityFromIndexedHistoryEvent = (
                 proposalId: proposalId,
             } as B3trProposalSupportActivity
         }
-        case ActivityEvent.STARGATE_UNDELEGATE:
-        case ActivityEvent.STARGATE_DELEGATE:
+        case ActivityEvent.STARGATE_UNDELEGATE_LEGACY:
+        case ActivityEvent.STARGATE_DELEGATE_LEGACY:
         case ActivityEvent.STARGATE_STAKE:
         case ActivityEvent.STARGATE_UNSTAKE:
-        case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
-        case ActivityEvent.STARGATE_DELEGATE_ONLY:
-        case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE: {
+        case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY:
+        case ActivityEvent.STARGATE_CLAIM_REWARDS:
+        case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY:
+        case ActivityEvent.STARGATE_DELEGATE_REQUEST:
+        case ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED:
+        case ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST:
+        case ActivityEvent.STARGATE_DELEGATION_EXITED:
+        case ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR:
+        case ActivityEvent.STARGATE_DELEGATE_ACTIVE:
+        case ActivityEvent.STARGATE_MANAGER_ADDED:
+        case ActivityEvent.STARGATE_MANAGER_REMOVED:
+        case ActivityEvent.STARGATE_BOOST: {
             return {
                 ...baseActivity,
                 eventName: eventName,
                 value: value,
                 tokenId: tokenId,
                 levelId: levelId,
+                validator: validator,
+                delegationId: delegationId,
             } as StargateActivity
         }
         case ActivityEvent.VEVOTE_VOTE_CAST: {

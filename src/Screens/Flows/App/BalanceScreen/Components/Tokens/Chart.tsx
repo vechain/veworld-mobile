@@ -1,46 +1,72 @@
-import React, { useMemo } from "react"
-import { Animated, StyleSheet } from "react-native"
-import { LineChart } from "react-native-wagmi-charts"
-import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
-import { B3TR, COLORS, SCREEN_WIDTH, VET, VTHO } from "~Constants"
+import React, { useCallback, useMemo, useRef } from "react"
+import { StyleSheet } from "react-native"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChartV2 } from "~Api/Coingecko"
+import { LineChart } from "~Components/Reusable/LineChart"
+import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { FungibleToken } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import ChartUtils from "~Utils/ChartUtils"
 
+// Chart configuration constants
+export const CHART_WIDTH = 48
+const CHART_HEIGHT = 32
+const CHART_STROKE_WIDTH = 2
+
+// Supported chart tokens (any token with CoinGecko ID supports charts)
+const SUPPORTED_CHART_TOKENS = new Set(Object.keys(getCoinGeckoIdBySymbol))
+
 type Props = {
     token: FungibleToken
 }
 
-export const CAN_DISPLAY_CHART = SCREEN_WIDTH >= 450
-
 export const Chart = ({ token }: Props) => {
     const currency = useAppSelector(selectCurrency)
     const { styles } = useThemedStyles(baseStyles)
-    const { data: chartData } = useSmartMarketChart({
-        id: getCoinGeckoIdBySymbol[token.symbol],
+    const opacity = useSharedValue(0)
+    const rendered = useRef(false)
+
+    // Early check for supported tokens to optimize API calls
+    const isTokenSupported = SUPPORTED_CHART_TOKENS.has(token.symbol)
+
+    const { data: chartData } = useSmartMarketChartV2({
+        id: isTokenSupported ? getCoinGeckoIdBySymbol[token.symbol] : undefined,
         vs_currency: currency,
         days: 1,
         placeholderData: DEFAULT_LINE_CHART_DATA,
     })
 
     const isGoingUp = useMemo(() => ChartUtils.getPriceChange(chartData) >= 0, [chartData])
+    const downsampled = useMemo(() => ChartUtils.downsampleData(chartData, "hour", 1), [chartData])
 
-    const downsampled = useMemo(() => ChartUtils.downsampleData(chartData, "hour", 4), [chartData])
+    const animatedStyles = useAnimatedStyle(() => {
+        return {
+            opacity: opacity.value,
+        }
+    }, [opacity.value])
 
-    if (!CAN_DISPLAY_CHART) return null
-    if (![B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol)) return null
+    const onLayout = useCallback(() => {
+        if (rendered.current) return
+        rendered.current = true
+        opacity.value = withTiming(1)
+    }, [opacity])
+
+    // Only render for supported tokens (parent already checked device/screen)
+    if (!isTokenSupported) return null
 
     return (
-        <Animated.View style={styles.root}>
+        <Animated.View style={[styles.root, animatedStyles]} onLayout={onLayout} testID="TOKEN_CARD_CHART">
             <LineChart.Provider data={downsampled ?? DEFAULT_LINE_CHART_DATA}>
-                <LineChart width={90} height={32} yGutter={1}>
-                    <LineChart.Path
-                        color={isGoingUp ? COLORS.GREEN_300 : COLORS.RED_400}
-                        width={3}
-                        pathProps={{ strokeLinejoin: "round", strokeLinecap: "round" }}
-                    />
-                </LineChart>
+                <LineChart
+                    width={CHART_WIDTH}
+                    height={CHART_HEIGHT}
+                    isInteractive={false}
+                    strokeWidth={CHART_STROKE_WIDTH}
+                    showGradientBackground={false}
+                    strokeColor={isGoingUp ? COLORS.GREEN_300 : COLORS.RED_400}
+                    xGutter={5}
+                />
             </LineChart.Provider>
         </Animated.View>
     )
@@ -49,7 +75,8 @@ export const Chart = ({ token }: Props) => {
 const baseStyles = () =>
     StyleSheet.create({
         root: {
-            height: 32,
-            flex: 1,
+            width: CHART_WIDTH,
+            height: CHART_HEIGHT,
+            alignItems: "center",
         },
     })

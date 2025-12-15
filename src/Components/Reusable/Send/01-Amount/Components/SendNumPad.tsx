@@ -1,0 +1,131 @@
+import React, { useCallback, useMemo } from "react"
+import { StyleSheet, TouchableOpacity } from "react-native"
+import { getLocales } from "react-native-localize"
+import { BaseIcon, BaseText, BaseView } from "~Components"
+import { CURRENCY_FORMATS } from "~Constants"
+import { TFonts } from "~Constants/Theme"
+import { useTheme } from "~Hooks"
+import { selectCurrencyFormat, useAppSelector } from "~Storage/Redux"
+import { getDecimalSeparator } from "~Utils/BigNumberUtils/BigNumberUtils"
+
+// const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "canc"]
+const numPad = [
+    ["1", "2", "3"],
+    ["4", "5", "6"],
+    ["7", "8", "9"],
+    ["blank", "0", "canc"],
+]
+
+type Props = {
+    onDigitPress: (digit: string) => void
+    onDigitDelete: () => void
+    onDigitDeleteLongPress: () => void
+    typographyFont?: TFonts
+}
+
+const NumPadItem = ({
+    onDigitDelete,
+    onDigitDeleteLongPress,
+    onDigitPress,
+    digit,
+    typographyFont,
+    decimalSeparator,
+}: { digit: string; decimalSeparator: string } & Props) => {
+    const theme = useTheme()
+    const isDeleteKey = useMemo(() => digit === "canc", [digit])
+    const isBlank = useMemo(() => digit === "blank", [digit])
+    const value = useMemo(() => (isBlank ? decimalSeparator : digit), [decimalSeparator, digit, isBlank])
+
+    const onPress = useCallback(() => {
+        if (isDeleteKey) {
+            onDigitDelete()
+            return
+        }
+        onDigitPress(value)
+    }, [value, isDeleteKey, onDigitDelete, onDigitPress])
+
+    return (
+        <BaseView style={baseStyles.width} key={digit}>
+            <TouchableOpacity
+                activeOpacity={0.5}
+                style={baseStyles.pressable}
+                onPress={onPress}
+                onLongPress={isDeleteKey ? onDigitDeleteLongPress : undefined}
+                testID={isDeleteKey ? "SEND_DELETE_KEY" : `SEND_${digit}_KEY`}>
+                {isDeleteKey ? (
+                    <BaseIcon name="icon-delete" color={theme.colors.numberPad} />
+                ) : (
+                    <BaseText color={theme.colors.numberPad} typographyFont={typographyFont} alignContainer="center">
+                        {value}
+                    </BaseText>
+                )}
+            </TouchableOpacity>
+        </BaseView>
+    )
+}
+
+const NumPadRow = ({ row, ...props }: { row: string[]; decimalSeparator: string } & Props) => {
+    return (
+        <BaseView flexDirection="row" justifyContent="space-between">
+            {row.map(digit => {
+                return <NumPadItem digit={digit} key={digit} {...props} />
+            })}
+        </BaseView>
+    )
+}
+
+export const SendNumPad = ({
+    onDigitPress,
+    onDigitDelete,
+    onDigitDeleteLongPress,
+    typographyFont = "biggerTitleMedium",
+}: Props) => {
+    const currencyFormat = useAppSelector(selectCurrencyFormat)
+
+    const decimalSeparator = useMemo(() => {
+        switch (currencyFormat) {
+            case CURRENCY_FORMATS.COMMA:
+                return CURRENCY_FORMATS.COMMA
+            case CURRENCY_FORMATS.DOT:
+                return CURRENCY_FORMATS.DOT
+            case CURRENCY_FORMATS.SYSTEM:
+            default: {
+                const locale = getLocales()[0].languageCode
+                return getDecimalSeparator(locale) ?? CURRENCY_FORMATS.DOT
+            }
+        }
+    }, [currencyFormat])
+
+    return (
+        <BaseView flexDirection="column" gap={8}>
+            {numPad.map((digits, idx) => {
+                return (
+                    <NumPadRow
+                        row={digits}
+                        key={`SEND_NUMPAD_${idx}`}
+                        decimalSeparator={decimalSeparator}
+                        onDigitDelete={onDigitDelete}
+                        onDigitPress={onDigitPress}
+                        onDigitDeleteLongPress={onDigitDeleteLongPress}
+                        typographyFont={typographyFont}
+                    />
+                )
+            })}
+        </BaseView>
+    )
+}
+
+const baseStyles = StyleSheet.create({
+    width: {
+        alignItems: "center",
+        height: 56,
+        padding: 8,
+        flex: 1,
+    },
+    pressable: {
+        width: "100%",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+})

@@ -83,7 +83,7 @@ const ConnectBottomSheetContent = ({
             <BaseView flexDirection="row" gap={12} justifyContent="space-between">
                 <BaseView flex={1} flexDirection="row" gap={12}>
                     <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
-                    <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                    <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.editSpeedBs.title}>
                         {LL.CONNECTION_REQUEST_TITLE()}
                     </BaseText>
                 </BaseView>

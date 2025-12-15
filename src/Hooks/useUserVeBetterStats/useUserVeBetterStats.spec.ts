@@ -1,14 +1,23 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { TestWrapper } from "~Test"
 
-import { fetchVeBetterUserGeneralOverview, fetchVeBetterUserOverview } from "~Networking"
 import { useUserVeBetterStats } from "./useUserVeBetterStats"
-import moment from "moment"
 
-jest.mock("~Networking", () => ({
-    ...jest.requireActual("~Networking"),
-    fetchVeBetterUserGeneralOverview: jest.fn(),
-    fetchVeBetterUserOverview: jest.fn(),
+const getVeBetterUserOverview = jest.fn()
+const getVeBetterUserGeneralOverview = jest.fn()
+
+jest.mock("~Hooks/useIndexerClient", () => ({
+    ...jest.requireActual("~Hooks/useIndexerClient"),
+    useMainnetIndexerClient: jest.fn().mockReturnValue({
+        GET: (url: string, ...args: any[]) => {
+            switch (url) {
+                case "/api/v1/b3tr/actions/users/{wallet}/daily-summaries":
+                    return getVeBetterUserOverview(...args).then((res: any) => ({ data: res }))
+                case "/api/v1/b3tr/actions/users/{wallet}/overview":
+                    return getVeBetterUserGeneralOverview(...args).then((res: any) => ({ data: res }))
+            }
+        },
+    }),
 }))
 
 describe("useUserVeBetterStats", () => {
@@ -16,15 +25,15 @@ describe("useUserVeBetterStats", () => {
         jest.clearAllMocks()
     })
     it("should return the correct data", async () => {
-        ;(fetchVeBetterUserGeneralOverview as jest.Mock).mockResolvedValue({
+        ;(getVeBetterUserGeneralOverview as jest.Mock).mockResolvedValue({
             totalImpact: {
                 carbon: 1000,
             },
         })
-        ;(fetchVeBetterUserOverview as jest.Mock).mockImplementation((_address, startDate) => {
-            //It is a monthly overview request
-            if (moment(startDate).isBefore(moment().utc().startOf("week")))
-                return {
+        ;(getVeBetterUserOverview as jest.Mock).mockImplementation(({ params }) => {
+            //It is a monthly overview request. 10 is > 7, which is a week.
+            if (params.query.size > 10)
+                return Promise.resolve({
                     data: [
                         {
                             totalRewardAmount: 100,
@@ -33,8 +42,8 @@ describe("useUserVeBetterStats", () => {
                             totalRewardAmount: 300,
                         },
                     ],
-                }
-            return {
+                })
+            return Promise.resolve({
                 data: [
                     {
                         totalRewardAmount: 100,
@@ -43,7 +52,7 @@ describe("useUserVeBetterStats", () => {
                         totalRewardAmount: 200,
                     },
                 ],
-            }
+            })
         })
         const { result, waitFor } = renderHook(() => useUserVeBetterStats(), { wrapper: TestWrapper })
 
@@ -55,11 +64,11 @@ describe("useUserVeBetterStats", () => {
     })
 
     it("should return totalImpact if not returned by the first call", async () => {
-        ;(fetchVeBetterUserGeneralOverview as jest.Mock).mockResolvedValue({})
-        ;(fetchVeBetterUserOverview as jest.Mock).mockImplementation((_address, startDate) => {
+        ;(getVeBetterUserGeneralOverview as jest.Mock).mockResolvedValue({})
+        ;(getVeBetterUserOverview as jest.Mock).mockImplementation(({ params }) => {
             //It is a monthly overview request
-            if (moment(startDate).isBefore(moment().utc().startOf("week")))
-                return {
+            if (params.query.size > 10)
+                return Promise.resolve({
                     data: [
                         {
                             totalRewardAmount: 100,
@@ -68,8 +77,8 @@ describe("useUserVeBetterStats", () => {
                             totalRewardAmount: 300,
                         },
                     ],
-                }
-            return {
+                })
+            return Promise.resolve({
                 data: [
                     {
                         totalRewardAmount: 100,
@@ -78,7 +87,7 @@ describe("useUserVeBetterStats", () => {
                         totalRewardAmount: 200,
                     },
                 ],
-            }
+            })
         })
         const { result, waitFor } = renderHook(() => useUserVeBetterStats(), { wrapper: TestWrapper })
 

@@ -9,7 +9,7 @@ import { isEmpty } from "lodash"
  * @param selectedAccount the address of the selected account
  */
 
-type AccountSliceState = {
+export type AccountSliceState = {
     accounts: WalletAccount[]
     selectedAccount?: string
 }
@@ -131,6 +131,40 @@ export const AccountSlice = createSlice({
                 account.vnsName = (AccountUtils.updateAccountVns(account, action.payload) as WalletAccount).vnsName
             })
         },
+        setAccountPfp: (
+            state,
+            action: PayloadAction<{
+                accountAddress: string
+                pfp: { address: string; tokenId: string; genesisId: string; uri: string }
+            }>,
+        ) => {
+            const { accountAddress, pfp } = action.payload
+            const account = state.accounts.find(_account =>
+                AddressUtils.compareAddresses(_account.address, accountAddress),
+            )
+            if (!account) return
+
+            account.profileImage = {
+                address: pfp.address,
+                tokenId: pfp.tokenId,
+                genesisId: pfp.genesisId,
+                uri: pfp.uri,
+            }
+        },
+        clearAccountPfp: (
+            state,
+            action: PayloadAction<{
+                accountAddress: string
+            }>,
+        ) => {
+            const { accountAddress } = action.payload
+            const account = state.accounts.find(_account =>
+                AddressUtils.compareAddresses(_account.address, accountAddress),
+            )
+            if (!account) return
+
+            account.profileImage = undefined
+        },
         onAccountAttemptClaim: (state, action: PayloadAction<{ address: string }>) => {
             const { address } = action.payload
             const accountIdx = state.accounts.findIndex(account =>
@@ -174,4 +208,6 @@ export const {
     resetAccountState,
     setAccountsVns,
     onAccountAttemptClaim,
+    setAccountPfp,
+    clearAccountPfp,
 } = AccountSlice.actions

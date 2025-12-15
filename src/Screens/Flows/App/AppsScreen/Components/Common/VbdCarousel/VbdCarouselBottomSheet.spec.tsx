@@ -1,21 +1,36 @@
 import { act, fireEvent, screen, waitFor } from "@testing-library/react-native"
 import _ from "lodash"
 import React from "react"
+import { components } from "~Generated/indexer/schema"
+import { useAppOverview } from "~Hooks/useAppOverview"
 import { VbdDApp, X2ECategoryType } from "~Model"
-import { FetchAppOverviewResponse } from "~Networking/API/Types"
 import { RootState } from "~Storage/Redux/Types"
 import { TestHelpers, TestWrapper } from "~Test"
+import { useDAppActions } from "../../../Hooks"
 import { VbdCarouselBottomSheet } from "./VbdCarouselBottomSheet"
 
 // Mock the external dependencies
-jest.mock("~Networking/DApps/fetchAppOverview")
-jest.mock("~Screens/Flows/App/DiscoverScreen/Hooks")
+jest.mock("../../../Hooks", () => ({
+    useDAppActions: jest.fn(),
+}))
+
+let mockVbdDAppsData: VbdDApp[] = []
+
+jest.mock("~Hooks/useFetchFeaturedDApps", () => ({
+    useVeBetterDaoDapps: () => ({
+        get data() {
+            return mockVbdDAppsData
+        },
+        isLoading: false,
+    }),
+}))
 jest.mock("react-native-localize", () => ({
     getTimeZone: jest.fn(() => "America/New_York"),
 }))
 
-const mockFetchAppOverview = require("~Networking/DApps/fetchAppOverview").fetchAppOverview as jest.Mock
-const mockUseDAppActions = require("~Screens/Flows/App/DiscoverScreen/Hooks").useDAppActions as jest.Mock
+jest.mock("~Hooks/useAppOverview", () => ({
+    useAppOverview: jest.fn(),
+}))
 
 const mockVbdDApp: VbdDApp = {
     id: "test-app-id",
@@ -37,7 +52,7 @@ const mockVbdDApp: VbdDApp = {
 describe("VbdCarouselBottomSheet", () => {
     const mockOnDAppPress = jest.fn()
 
-    const mockAppOverview: FetchAppOverviewResponse = {
+    const mockAppOverview: components["schemas"]["AppOverview"] = {
         appId: "test-entity",
         roundId: 1,
         date: "2024-01-01",
@@ -89,8 +104,18 @@ describe("VbdCarouselBottomSheet", () => {
 
     const mockState: Partial<RootState> = {
         discovery: {
-            featured: [],
-            favorites: [],
+            featured: [
+                {
+                    name: "Test DApp",
+                    href: "https://test-dapp.com",
+                    desc: "A test DApp for unit testing",
+                    isCustom: false,
+                    createAt: 1640995200000,
+                    amountOfNavigations: 0,
+                    veBetterDaoId: "test-app-id",
+                },
+            ],
+            favoriteRefs: [],
             custom: [],
             hasOpenedDiscovery: false,
             connectedApps: [],
@@ -104,10 +129,11 @@ describe("VbdCarouselBottomSheet", () => {
 
     beforeEach(() => {
         jest.clearAllMocks()
-        mockUseDAppActions.mockReturnValue({
+        mockVbdDAppsData = [mockVbdDApp]
+        ;(useDAppActions as jest.Mock).mockReturnValue({
             onDAppPress: mockOnDAppPress,
         })
-        mockFetchAppOverview.mockResolvedValue(mockAppOverview)
+        ;(useAppOverview as jest.Mock).mockReturnValue({ data: mockAppOverview, isLoading: false })
     })
 
     describe("Rendering", () => {
@@ -194,7 +220,7 @@ describe("VbdCarouselBottomSheet", () => {
             })
 
             await waitFor(() => {
-                expect(mockFetchAppOverview).toHaveBeenCalledWith("test-app-id")
+                expect(useAppOverview).toHaveBeenCalledWith("test-app-id")
             })
 
             // Check that stats are displayed (numbers are formatted)
@@ -221,17 +247,26 @@ describe("VbdCarouselBottomSheet", () => {
             // Add to favorite
             const addFavoriteButtonIcon = screen.getByTestId("bottom-sheet-add-favorite-icon")
             expect(addFavoriteButtonIcon).toBeOnTheScreen()
-            fireEvent.press(favoriteButton)
+
+            await act(async () => {
+                fireEvent.press(favoriteButton)
+            })
 
             // Check if the remove favorite icon is shown
-            const removeFavoriteButtonIcon = screen.getByTestId("bottom-sheet-remove-favorite-icon")
-            expect(removeFavoriteButtonIcon).toBeOnTheScreen()
+            await waitFor(() => {
+                const removeFavoriteButtonIcon = screen.getByTestId("bottom-sheet-remove-favorite-icon")
+                expect(removeFavoriteButtonIcon).toBeOnTheScreen()
+            })
 
             // Remove from favorite
-            fireEvent.press(favoriteButton)
+            await act(async () => {
+                fireEvent.press(favoriteButton)
+            })
 
             // Check if the add to favorite icon is shown
-            expect(addFavoriteButtonIcon).toBeOnTheScreen()
+            await waitFor(() => {
+                expect(screen.getByTestId("bottom-sheet-add-favorite-icon")).toBeOnTheScreen()
+            })
         })
     })
 
@@ -268,7 +303,7 @@ describe("VbdCarouselBottomSheet", () => {
             })
 
             await waitFor(() => {
-                expect(mockFetchAppOverview).toHaveBeenCalledWith("test-app-id")
+                expect(useAppOverview).toHaveBeenCalledWith("test-app-id")
             })
         })
     })

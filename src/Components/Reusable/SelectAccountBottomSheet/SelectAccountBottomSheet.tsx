@@ -1,9 +1,10 @@
 import { TouchableOpacity as BSTouchableOpacity } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
-import React, { ComponentProps, PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { SectionList, SectionListData, StyleSheet } from "react-native"
-import Animated, { LinearTransition } from "react-native-reanimated"
+import React, { ComponentProps, PropsWithChildren, useCallback, useMemo, useState } from "react"
+import { SectionListData, StyleSheet } from "react-native"
+import { LinearTransition } from "react-native-reanimated"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import {
     BaseBottomSheet,
     BaseIcon,
@@ -14,12 +15,12 @@ import {
     SectionListSeparator,
 } from "~Components"
 import { BaseTabs } from "~Components/Base/BaseTabs"
+import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
-import { useScrollableBottomSheetList, useScrollableBottomSheetListWrapper } from "~Hooks/useScrollableBottomSheetList"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
-import { AccountUtils } from "~Utils"
+import { AccountUtils, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { SelectableAccountCard } from "../SelectableAccountCard"
 
@@ -66,7 +67,7 @@ const SectionSeparatorComponent = (props: BaseSectionListSeparatorProps) => {
 const SectionHeaderTitle = ({ children }: PropsWithChildren) => {
     const theme = useTheme()
     return (
-        <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
+        <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
             {children}
         </BaseText>
     )
@@ -78,16 +79,6 @@ const SectionHeader = ({
 }) => {
     return <SectionHeaderTitle>{section.alias}</SectionHeaderTitle>
 }
-
-const AnimatedSectionList = Animated.createAnimatedComponent(
-    SectionList<
-        AccountWithDevice,
-        {
-            data: AccountWithDevice[]
-            alias: string
-        }
-    >,
-)
 
 const ANIMATION_CONFIG = { stiffness: 90, damping: 15, duration: 300 }
 
@@ -106,10 +97,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
         ref,
     ) => {
         const { LL } = useI18nContext()
-
-        const { onResize, contentStyle, setSmallViewport } = useScrollableBottomSheetListWrapper()
-        const initialLayout = useRef(false)
-        const { resetHeight, ...scrollableListProps } = useScrollableBottomSheetList({ onResize, initialLayout })
+        const { bottom } = useSafeAreaInsets()
         const nav = useNavigation()
         const [selectedKey, setSelectedKey] = useState<SelectAccountBottomSheetType>(
             SelectAccountBottomSheetType.PERSONAL,
@@ -123,7 +111,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
             [closeBottomSheet, setSelectedAccount],
         )
 
-        const { styles, theme } = useThemedStyles(baseStyles)
+        const { styles, theme } = useThemedStyles(baseStyles({ bottomInset: bottom }))
 
         const sections = useMemo(() => {
             if (selectedKey === SelectAccountBottomSheetType.PERSONAL) {
@@ -158,66 +146,54 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
 
         const labels = useMemo(() => keys.map(key => LL[`SELECT_ACCOUNT_${key}`]()), [LL, keys])
 
-        //Reset the state in order for the BS to fix its size
-        useEffect(() => {
-            setSmallViewport(false)
-            initialLayout.current = false
-            resetHeight()
-        }, [resetHeight, selectedKey, setSmallViewport])
-
-        const handleDismiss = useCallback(() => {
-            setSmallViewport(false)
-            initialLayout.current = false
-            resetHeight()
-            onDismiss?.()
-        }, [onDismiss, resetHeight, setSmallViewport])
-
         return (
             <BaseBottomSheet
-                dynamicHeight
                 ref={ref}
-                onDismiss={handleDismiss}
-                contentStyle={contentStyle}
-                enableContentPanningGesture={false}
-                animationConfigs={ANIMATION_CONFIG}>
-                <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
-                    <BaseView flexDirection="column" gap={8}>
-                        <BaseView flexDirection="row" alignItems="center" gap={12}>
-                            <BaseIcon
-                                name="icon-wallet"
-                                size={20}
-                                color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
-                            />
-                            <BaseText typographyFont="subTitleBold">{LL.SELECT_ACCOUNT_TITLE()}</BaseText>
+                snapPoints={["60%", "75%", "80%"]}
+                onDismiss={onDismiss}
+                animationConfigs={ANIMATION_CONFIG}
+                scrollable={false}
+                noMargins>
+                <BaseView
+                    flexDirection="column"
+                    gap={24}
+                    pb={24}
+                    px={16}
+                    pt={16}
+                    bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50}>
+                    <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
+                        <BaseView flexDirection="column" gap={8}>
+                            <BaseView flexDirection="row" alignItems="center" gap={12}>
+                                <BaseIcon
+                                    name="icon-wallet"
+                                    size={20}
+                                    color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
+                                />
+                                <BaseText typographyFont="subTitleSemiBold">{LL.SELECT_ACCOUNT_TITLE()}</BaseText>
+                            </BaseView>
+                            <BaseText typographyFont="body" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                                {LL.SELECT_ACCOUNT_DESCRIPTION()}
+                            </BaseText>
                         </BaseView>
-                        <BaseText typographyFont="body" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
-                            {LL.SELECT_ACCOUNT_DESCRIPTION()}
-                        </BaseText>
+                        {goToWalletEnabled && (
+                            <BSTouchableOpacity onPress={onSettingsClick} style={styles.settingsBtn}>
+                                <BaseIcon name="icon-settings" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} />
+                            </BSTouchableOpacity>
+                        )}
                     </BaseView>
-                    {goToWalletEnabled && (
-                        <BSTouchableOpacity onPress={onSettingsClick} style={styles.settingsBtn}>
-                            <BaseIcon name="icon-settings" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} />
-                        </BSTouchableOpacity>
-                    )}
-                </BaseView>
 
-                <BaseSpacer height={24} />
-
-                {keys.length > 1 && (
-                    <>
+                    {keys.length > 1 && (
                         <BaseTabs
                             keys={keys}
                             labels={labels}
                             selectedKey={selectedKey}
                             setSelectedKey={setSelectedKey}
                         />
-
-                        <BaseSpacer height={24} />
-                    </>
-                )}
-
-                <AnimatedSectionList
+                    )}
+                </BaseView>
+                <BottomSheetSectionList
                     sections={sections}
+                    contentContainerStyle={styles.contentContainer}
                     keyExtractor={item => item.address}
                     renderSectionHeader={SectionHeader}
                     stickySectionHeadersEnabled={false}
@@ -235,21 +211,28 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                     key={selectedKey}
                     showsVerticalScrollIndicator={false}
                     layout={LinearTransition.duration(500)}
-                    {...scrollableListProps}
+                    initialNumToRender={15}
+                    alwaysBounceVertical
                     scrollEnabled
+                    style={styles.list}
                 />
             </BaseBottomSheet>
         )
     },
 )
-
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        settingsBtn: {
-            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
-            padding: 8,
-            borderWidth: 1,
-            borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
-            borderRadius: 6,
-        },
-    })
+const baseStyles =
+    ({ bottomInset }: { bottomInset: number }) =>
+    (theme: ColorThemeType) =>
+        StyleSheet.create({
+            settingsBtn: {
+                backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+                padding: 8,
+                borderWidth: 1,
+                borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
+                borderRadius: 6,
+            },
+            contentContainer: {
+                paddingBottom: PlatformUtils.isAndroid() ? bottomInset + 16 : bottomInset,
+            },
+            list: { paddingHorizontal: 16, paddingBottom: 24 },
+        })

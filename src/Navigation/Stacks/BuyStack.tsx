@@ -1,8 +1,8 @@
+import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { useDevice } from "~Components/Providers/DeviceProvider"
 import { Routes } from "~Navigation/Enums"
 import { BuyScreen, BuyWebviewScreen } from "~Screens"
-import { useNavAnimation } from "~Hooks"
 import { PaymentProvidersEnum } from "~Screens/Flows/App/BuyScreen/Hooks"
 
 export type RootStackParamListBuy = {
@@ -13,13 +13,13 @@ export type RootStackParamListBuy = {
     }
 }
 
-const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListBuy>()
+const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListBuy>()
 
 export const BuyStack = () => {
-    const { animation } = useNavAnimation()
+    const { isLowEndDevice } = useDevice()
 
     return (
-        <Navigator screenOptions={{ headerShown: false, animation }}>
+        <Navigator screenOptions={{ headerShown: false, animationEnabled: !isLowEndDevice }}>
             <Group>
                 <Screen name={Routes.BUY} component={BuyScreen} />
                 <Screen name={Routes.BUY_WEBVIEW} component={BuyWebviewScreen} />

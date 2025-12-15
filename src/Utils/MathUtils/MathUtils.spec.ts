@@ -27,3 +27,16 @@ describe("getEven", () => {
         expect(MathUtils.getEven(11)).toBe(false)
     })
 })
+
+describe("deterministicRNG", () => {
+    it("should return the values in the same exact order", () => {
+        const randomFn = MathUtils.deterministicRNG(1000)
+        expect(randomFn()).toBe(0.005409005102924978)
+        expect(randomFn()).toBe(0.2744163888130252)
+        expect(randomFn()).toBe(0.8346936783600687)
+        expect(randomFn()).toBe(0.4895105754891069)
+        expect(randomFn()).toBe(0.5194758015016486)
+        expect(randomFn()).toBe(0.6166606844087504)
+        expect(randomFn()).toBe(0.6215187350831426)
+    })
+})

@@ -1,0 +1,165 @@
+import { TouchableOpacity } from "@gorhom/bottom-sheet"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { useNavigation } from "@react-navigation/native"
+import React, { RefObject, useCallback } from "react"
+import { StyleSheet } from "react-native"
+import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components"
+import { COLORS, ColorThemeType } from "~Constants"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useBlacklistedCollection } from "~Hooks/useBlacklistedCollection"
+import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { useCollectionsBookmarking } from "~Hooks/useCollectionsBookmarking"
+import { useI18nContext } from "~i18n"
+import { Routes } from "~Navigation"
+
+const URL_SUPPORT = "https://support.veworld.com/support/tickets/new"
+
+const Content = ({
+    collectionAddress,
+    onClose,
+    onOpenReport,
+    onOpenHidden,
+}: {
+    collectionAddress: string
+    onClose: () => void
+    onOpenReport: () => void
+    onOpenHidden: () => void
+}) => {
+    const { LL } = useI18nContext()
+    const { styles, theme } = useThemedStyles(baseStyles)
+    const navigation = useNavigation()
+    const { navigateWithTab } = useBrowserTab()
+    const { isFavorite, toggleFavoriteCollection } = useCollectionsBookmarking(collectionAddress)
+    const { isBlacklisted, toggleBlacklist } = useBlacklistedCollection(collectionAddress)
+
+    const onBookmarkPress = useCallback(() => {
+        toggleFavoriteCollection()
+        onClose()
+    }, [toggleFavoriteCollection, onClose])
+
+    const onBlacklistPress = useCallback(() => {
+        toggleBlacklist()
+        onClose()
+        if (!isBlacklisted)
+            setTimeout(() => {
+                onOpenHidden()
+            }, 300)
+    }, [toggleBlacklist, onClose, isBlacklisted, onOpenHidden])
+
+    const onReportPress = useCallback(async () => {
+        navigateWithTab({
+            url: URL_SUPPORT,
+            title: LL.BTN_COLLECTION_ACTIONS_REPORT(),
+            navigationFn(u) {
+                navigation.navigate(Routes.BROWSER, { url: u })
+            },
+        })
+
+        onClose()
+    }, [onClose, LL, navigateWithTab, navigation])
+
+    const onBlockPress = useCallback(() => {
+        onClose()
+        setTimeout(() => {
+            onOpenReport()
+        }, 300)
+    }, [onClose, onOpenReport])
+
+    return (
+        <BaseView px={24} gap={12} pb={16}>
+            <TouchableOpacity style={styles.button} onPress={onBookmarkPress} testID="COLLECTION_ACTIONS_BS_FAVORITE">
+                <BaseIcon
+                    name={isFavorite ? "icon-star-on" : "icon-star"}
+                    size={16}
+                    style={styles.icon}
+                    color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600}
+                />
+                <BaseText color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600} typographyFont="bodySemiBold">
+                    {isFavorite ? LL.BTN_REMOVE_FROM_FAVORITE() : LL.BTN_COLLECTION_ACTIONS_FAVORITE()}
+                </BaseText>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={onBlacklistPress} testID="COLLECTION_ACTIONS_BS_BLACKLIST">
+                <BaseIcon
+                    name={isBlacklisted ? "icon-eye" : "icon-eye-off"}
+                    size={16}
+                    style={styles.icon}
+                    color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600}
+                />
+                <BaseText color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600} typographyFont="bodySemiBold">
+                    {isBlacklisted ? LL.BTN_SHOW_COLLECTION() : LL.BTN_HIDE_COLLECTION()}
+                </BaseText>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={onReportPress} testID="COLLECTION_ACTIONS_BS_REPORT">
+                <BaseIcon
+                    name="icon-alert-triangle"
+                    size={16}
+                    style={styles.icon}
+                    color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600}
+                />
+                <BaseText color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600} typographyFont="bodySemiBold">
+                    {LL.BTN_COLLECTION_ACTIONS_REPORT()}
+                </BaseText>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button} onPress={onBlockPress} testID="COLLECTION_ACTIONS_BS_REPORT_BLOCK">
+                <BaseIcon
+                    name="icon-slash"
+                    size={16}
+                    style={styles.icon}
+                    color={theme.isDark ? COLORS.RED_300 : COLORS.RED_600}
+                />
+                <BaseText color={theme.isDark ? COLORS.RED_300 : COLORS.RED_600} typographyFont="bodySemiBold">
+                    {LL.BTN_COLLECTION_ACTIONS_BLOCK()}
+                </BaseText>
+            </TouchableOpacity>
+        </BaseView>
+    )
+}
+
+type Props = {
+    bsRef: RefObject<BottomSheetModalMethods>
+    onOpenReport: () => void
+    onOpenHidden: () => void
+}
+
+export const CollectionActionsBottomSheet = ({ bsRef, onOpenReport, onOpenHidden }: Props) => {
+    const { styles } = useThemedStyles(baseStyles)
+    const { onClose } = useBottomSheetModal({ externalRef: bsRef })
+
+    return (
+        <BaseBottomSheet<string>
+            ref={bsRef}
+            dynamicHeight
+            bottomSafeArea={false}
+            blurBackdrop
+            backgroundStyle={styles.layout}
+            noMargins
+            floating>
+            {collectionAddress => (
+                <Content
+                    collectionAddress={collectionAddress}
+                    onClose={onClose}
+                    onOpenReport={onOpenReport}
+                    onOpenHidden={onOpenHidden}
+                />
+            )}
+        </BaseBottomSheet>
+    )
+}
+
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        layout: {
+            backgroundColor: theme.colors.newBottomSheet.background,
+        },
+        button: {
+            flexDirection: "row",
+            gap: 24,
+            paddingVertical: 6,
+            alignItems: "center",
+        },
+        icon: {
+            padding: 8,
+            backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_100,
+        },
+    })

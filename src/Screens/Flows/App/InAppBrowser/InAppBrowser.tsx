@@ -3,23 +3,32 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { MutableRefObject, default as React, useCallback, useEffect, useMemo, useState } from "react"
 import { BackHandler, Platform, StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
-import FastImage, { ImageStyle } from "react-native-fast-image"
 import Animated, { Easing, FadeOut } from "react-native-reanimated"
 import WebView from "react-native-webview"
 import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
-import { BaseIcon, BaseStatusBar, BaseView, Layout, URLBar, useInAppBrowser } from "~Components"
+import { DAppIcon, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
-import { RootStackParamListBrowser, Routes } from "~Navigation"
+import { NETWORK_TYPE } from "~Model"
+import { Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
-import { deleteSession, selectSelectedNetwork, selectSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { RootStackParamListHome } from "~Navigation/Stacks/HomeStack"
+import {
+    deleteSession,
+    selectDeveloperAppsEnabled,
+    selectSelectedNetwork,
+    selectSession,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
+import { DappNotVerified } from "./Components/DappNotVerified"
 
-type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
+type Props = NativeStackScreenProps<RootStackParamListApps | RootStackParamListHome, Routes.BROWSER>
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const {
@@ -27,22 +36,23 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         onMessage,
         onScroll,
         injectVechainScript,
-        onNavigationStateChange,
         resetWebViewState,
         ChangeAccountNetworkBottomSheetRef,
         originWhitelist,
         isLoading,
         navigationState,
+        onNavigationStateChange,
     } = useInAppBrowser()
 
     const track = useAnalyticTracking()
     const nav = useNavigation()
     const { locale } = useI18nContext()
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
     const [isLoadingWebView, setIsLoadingWebView] = useState(true)
     const { ref: webviewContainerRef, performScreenshot } = useBrowserScreenshot()
     const dispatch = useAppDispatch()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const developerAppsEnabled = useAppSelector(selectDeveloperAppsEnabled)
     const activeSession = useAppSelector(state =>
         selectSession(state, navigationState?.url ?? "", selectedNetwork.genesis.id),
     )
@@ -78,35 +88,14 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     }, [])
 
     const renderLoading = useCallback(() => {
-        if (!dappMetadata)
-            return (
-                <Animated.View exiting={isIOS() ? FadeOut.duration(400) : undefined} style={[styles.loadingWebView]}>
-                    <BaseView style={[styles.loadingIcon, styles.notDappLoadingIcon]}>
-                        <BaseIcon name="icon-globe" size={32} color={theme.colors.history.historyItem.iconColor} />
-                    </BaseView>
-                </Animated.View>
-            )
-
         return (
             <Animated.View
                 exiting={isIOS() ? FadeOut.duration(400).easing(Easing.out(Easing.ease)) : undefined}
                 style={[styles.loadingWebView]}>
-                <FastImage
-                    source={{
-                        uri: iconUri,
-                    }}
-                    style={styles.loadingIcon as ImageStyle}
-                />
+                <DAppIcon uri={iconUri} size={88} />
             </Animated.View>
         )
-    }, [
-        dappMetadata,
-        iconUri,
-        styles.loadingIcon,
-        styles.loadingWebView,
-        styles.notDappLoadingIcon,
-        theme.colors.history.historyItem.iconColor,
-    ])
+    }, [iconUri, styles.loadingWebView])
 
     const onNavigate = useCallback(async () => {
         await performScreenshot()
@@ -131,13 +120,19 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         }
     }, [onAndroidBackPress])
 
+    const shouldShowWebview = useMemo(() => {
+        if (dappMetadata) return true
+        if (selectedNetwork.type !== NETWORK_TYPE.MAIN) return true
+        return developerAppsEnabled
+    }, [dappMetadata, developerAppsEnabled, selectedNetwork.type])
+
     return (
         <Layout
-            bg={COLORS.DARK_PURPLE}
+            bg={COLORS.BALANCE_BACKGROUND}
             fixedHeader={
                 <URLBar
                     navigationUrl={route.params.url}
-                    isLoading={isLoadingWebView}
+                    isLoading={shouldShowWebview ? isLoadingWebView : false}
                     onNavigate={onNavigate}
                     returnScreen={route.params.returnScreen}
                 />
@@ -148,29 +143,37 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
             hasTopSafeAreaOnly
             fixedBody={
                 <View style={styles.container}>
-                    {Platform.OS === "ios" && <BaseStatusBar hero={true} />}
                     {userAgent && !isLoading && (
                         <Animated.View ref={webviewContainerRef} style={[styles.webviewContainer]} collapsable={false}>
-                            <WebView
-                                ref={webviewRef as MutableRefObject<WebView>}
-                                source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
-                                userAgent={userAgent}
-                                onNavigationStateChange={onNavigationStateChange}
-                                javaScriptEnabled={true}
-                                onMessage={onMessage}
-                                onScroll={onScroll}
-                                onLoadEnd={onLoadEnd}
-                                allowsBackForwardNavigationGestures
-                                style={styles.loginWebView}
-                                scalesPageToFit={true}
-                                injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
-                                allowsInlineMediaPlayback={true}
-                                originWhitelist={originWhitelist}
-                                collapsable={false}
-                                pullToRefreshEnabled
-                                startInLoadingState={true}
-                                renderLoading={renderLoading}
-                            />
+                            {shouldShowWebview ? (
+                                <WebView
+                                    ref={webviewRef as MutableRefObject<WebView>}
+                                    source={{
+                                        uri: route.params.url,
+                                        headers: {
+                                            "Accept-Language": locale,
+                                        },
+                                    }}
+                                    userAgent={userAgent}
+                                    javaScriptEnabled={true}
+                                    onMessage={onMessage}
+                                    onScroll={onScroll}
+                                    onNavigationStateChange={onNavigationStateChange}
+                                    onLoadEnd={onLoadEnd}
+                                    allowsBackForwardNavigationGestures
+                                    style={styles.loginWebView}
+                                    scalesPageToFit={true}
+                                    injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
+                                    allowsInlineMediaPlayback={true}
+                                    originWhitelist={originWhitelist}
+                                    collapsable={false}
+                                    pullToRefreshEnabled
+                                    startInLoadingState={true}
+                                    renderLoading={renderLoading}
+                                />
+                            ) : (
+                                <DappNotVerified onNavigate={onNavigate} returnScreen={route.params.returnScreen} />
+                            )}
                         </Animated.View>
                     )}
 
@@ -199,17 +202,6 @@ const baseStyles = (theme: ColorThemeType) => {
             flex: 1,
             borderTopStartRadius: 24,
             borderTopEndRadius: 24,
-        },
-        loadingIcon: {
-            width: 100,
-            height: 100,
-            alignSelf: "center",
-            borderRadius: 8,
-        },
-        notDappLoadingIcon: {
-            backgroundColor: theme.colors.history.historyItem.iconBackground,
-            alignItems: "center",
-            justifyContent: "center",
         },
         loadingWebView: {
             backgroundColor: theme.colors.tabsFooter.background,

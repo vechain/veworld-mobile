@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from "react"
 import { BaseText, BaseView } from "~Components"
-import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { selectSuggestedAppIds, setSuggestedAppIds, useAppDispatch, useAppSelector } from "~Storage/Redux"
@@ -37,10 +36,7 @@ export const NewUserForYouCarousel = () => {
 
     return (
         <BaseView flexDirection="column" gap={16}>
-            <BaseText
-                typographyFont="subSubTitleSemiBold"
-                color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}
-                px={16}>
+            <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.dappTitle} px={16}>
                 {LL.DISCOVER_SUGGESTED_FOR_YOU()}
             </BaseText>
             <VbdCarousel appIds={appIds ?? []} isLoading={isLoading} />

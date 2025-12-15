@@ -1,9 +1,10 @@
 import React from "react"
-import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
-import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { StyleSheet } from "react-native"
+import { BaseSpacer, BaseText, BaseTouchable, BaseView, DAppIcon } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useAppLogo } from "~Hooks/useAppLogo"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     dapp: DiscoveryDApp
@@ -21,13 +22,7 @@ export const SwapDAppCard = ({ dapp, onDAppPress }: Props) => {
         <BaseView flexDirection="row" flex={1} bg={theme.colors.background} px={16}>
             <BaseTouchable style={[styles.card]} onPress={() => onDAppPress(dapp)}>
                 <BaseView flexDirection="row" flex={1} pr={10}>
-                    <Image
-                        source={{
-                            uri: iconUri,
-                        }}
-                        style={[{ height: IMAGE_SIZE, width: IMAGE_SIZE }, styles.icon] as StyleProp<ImageStyle>}
-                        resizeMode="contain"
-                    />
+                    <DAppIcon size={IMAGE_SIZE} uri={iconUri} />
                     <BaseSpacer width={12} />
                     <BaseView flex={1}>
                         <BaseText
@@ -41,7 +36,7 @@ export const SwapDAppCard = ({ dapp, onDAppPress }: Props) => {
                         <BaseText
                             ellipsizeMode="tail"
                             numberOfLines={1}
-                            typographyFont="caption"
+                            typographyFont="captionRegular"
                             color={theme.colors.assetDetailsCard.text}>
                             {dapp.desc || dapp.href}
                         </BaseText>
@@ -76,9 +71,9 @@ const baseStyles = () =>
         },
         nameText: {
             fontWeight: "bold",
-            fontSize: 16,
+            fontSize: FontUtils.font(14),
         },
         description: {
-            fontSize: 12,
+            fontSize: FontUtils.font(12),
         },
     })

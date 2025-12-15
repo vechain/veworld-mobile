@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query"
+import { queryOptions, useQuery } from "@tanstack/react-query"
 import {
     MarketChartResponse,
+    TokenInfoResponse,
     getMarketChart,
     getSmartMarketChart,
     getTokenInfo,
@@ -67,8 +68,25 @@ export const getMarketChartQueryKey = ({
 }: {
     id?: string
     vs_currency: string
-    days: number
+    days: number | "max"
 }) => ["MARKET_CHART", id, vs_currency, days]
+
+const getMarketChartQueryOptions = ({
+    id,
+    vs_currency,
+    days,
+    interval,
+}: {
+    id?: string
+    vs_currency: string
+    days: number | "max"
+    interval?: string
+}) =>
+    queryOptions({
+        queryKey: getMarketChartQueryKey({ id, vs_currency, days }),
+        queryFn: () => getMarketChart({ coinGeckoId: id, vs_currency, days, interval }),
+        enabled: !!id,
+    })
 
 /**
  *  Get the market chart of a coin for a given number of days and currency
@@ -87,14 +105,12 @@ export const useMarketChart = ({
 }: {
     id?: string
     vs_currency: string
-    days: number
+    days: number | "max"
     interval?: string
     placeholderData?: MarketChartResponse
 }) => {
     return useQuery({
-        queryKey: getMarketChartQueryKey({ id, vs_currency, days }),
-        queryFn: () => getMarketChart({ coinGeckoId: id, vs_currency, days, interval }),
-        enabled: !!id,
+        ...getMarketChartQueryOptions({ id, vs_currency, days, interval }),
         placeholderData,
         // staleTime: CHART_DATA_SYNC_PERIOD,
     })
@@ -117,7 +133,7 @@ export const useSmartMarketChart = ({
 }: {
     id?: string
     vs_currency: string
-    days: number
+    days: number | "max"
     placeholderData?: MarketChartResponse
 }) => {
     const highestResolutionTimeframeDays = max(marketChartTimeframes.map(timeframe => timeframe.value)) ?? 180
@@ -129,14 +145,59 @@ export const useSmartMarketChart = ({
 
     return useQuery({
         queryKey: getMarketChartQueryKey({ id, vs_currency, days }),
-        queryFn: () =>
-            days > 1
+        queryFn: () => {
+            if (days === "max") return getMarketChart({ coinGeckoId: id, vs_currency, days })
+            return Number(days) > 1
                 ? getSmartMarketChart({ highestResolutionMarketChartData, days })
-                : getMarketChart({ coinGeckoId: id, vs_currency, days }),
+                : getMarketChart({ coinGeckoId: id, vs_currency, days })
+        },
         enabled: !!highestResolutionMarketChartData,
         placeholderData,
         staleTime: getQueryCacheTime(true),
         refetchInterval: getRefetchIntevalTime(),
+    })
+}
+
+export const getSmartMarketChartV2QueryOptions = ({
+    days,
+    vs_currency,
+    id,
+}: Parameters<typeof getMarketChartQueryOptions>[0]) => {
+    return {
+        ...getMarketChartQueryOptions({
+            id,
+            vs_currency,
+            days,
+        }),
+        queryKey: ["MARKET_CHART_V2", id, vs_currency, days],
+    }
+}
+
+export const useSmartMarketChartV2 = ({
+    id,
+    vs_currency,
+    days,
+    placeholderData,
+}: {
+    id?: string
+    vs_currency: string
+    days: number | "max"
+    placeholderData?: MarketChartResponse
+}) => {
+    return useQuery({
+        ...getSmartMarketChartV2QueryOptions({
+            id,
+            vs_currency,
+            days,
+        }),
+        placeholderData,
+        staleTime: getQueryCacheTime(true),
+        refetchInterval: getRefetchIntevalTime(),
+        select(data) {
+            if (days === "max") return data
+            if (days > 1) return getSmartMarketChart({ highestResolutionMarketChartData: data, days })
+            return data
+        },
     })
 }
 
@@ -176,13 +237,24 @@ const getExchangeRateQueryKey = ({ id, vs_currency }: { id?: string; vs_currency
     vs_currency,
 ]
 
+type UseExchangeRateParams = {
+    id?: string
+    vs_currency: string
+    /**
+     * Optional override for the refetch interval in milliseconds.
+     * If not provided, the default feature-flag-driven interval is used.
+     */
+    refetchIntervalMs?: number | false
+}
+
 /**
  *  Get the exchange rate of a coin reusing the token info
- * @param id  the id of the coin
- * @param vs_currencies  the currencies to compare
+ * @param params.id  the id of the coin
+ * @param params.vs_currency  the currency to compare
+ * @param params.refetchIntervalMs  optional refetch interval override (ms)
  * @returns  the exchange rate
  */
-export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency: string }) => {
+export const useExchangeRate = ({ id, vs_currency, refetchIntervalMs }: UseExchangeRateParams) => {
     const isCoingecko = useMemo(() => getSymbolByCoingeckoId[id ?? ""], [id])
     const { data: tokenInfo, status: tokenInfoStatus } = useTokenInfo({ id: isCoingecko ? id : undefined })
     const currency = useMemo(() => vs_currency.toLowerCase(), [vs_currency])
@@ -208,7 +280,7 @@ export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency:
         },
         enabled,
         staleTime: getQueryCacheTime(),
-        refetchInterval: getRefetchIntevalTime(),
+        refetchInterval: refetchIntervalMs ?? getRefetchIntevalTime(),
     })
 }
 
@@ -234,4 +306,36 @@ export const useVthoExchangeRate = (vs_currency: string) => {
         id: VETHOR_COINGECKO_ID,
         vs_currency,
     })
+}
+
+/**
+ * Extract and format social media links from token info
+ * @param tokenInfo - Token info from CoinGecko
+ * @returns Formatted social media links
+ */
+export const useTokenSocialLinks = (tokenInfo?: TokenInfoResponse) => {
+    return useMemo(() => {
+        if (!tokenInfo?.links) return null
+
+        const { links } = tokenInfo
+
+        // Helper to get first non-null item from array
+        const getFirst = (arr?: (string | null)[]): string | null => {
+            return arr?.find(item => item && item.trim() !== "") ?? null
+        }
+
+        return {
+            website: getFirst(links.homepage),
+            twitter: links.twitter_screen_name ? `https://twitter.com/${links.twitter_screen_name}` : null,
+            telegram: links.telegram_channel_identifier ? `https://t.me/${links.telegram_channel_identifier}` : null,
+            reddit: links.subreddit_url,
+            facebook: links.facebook_username ? `https://facebook.com/${links.facebook_username}` : null,
+            github: getFirst(links.repos_url?.github),
+            discord: getFirst(links.chat_url?.filter(url => url?.includes("discord"))),
+            chat: getFirst(links.chat_url),
+            forum: getFirst(links.official_forum_url),
+            announcement: getFirst(links.announcement_url),
+            explorer: getFirst(links.blockchain_site),
+        }
+    }, [tokenInfo])
 }

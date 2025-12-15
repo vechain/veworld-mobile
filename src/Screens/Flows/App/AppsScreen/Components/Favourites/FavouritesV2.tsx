@@ -1,39 +1,107 @@
-import React, { useCallback, useMemo } from "react"
-import { FlatList, ListRenderItemInfo, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
+import DraggableFlatList, { DragEndParams, RenderItem, ScaleDecorator } from "react-native-draggable-flatlist"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
-import { COLORS, DiscoveryDApp } from "~Constants"
-import { useTheme } from "~Hooks"
+import { COLORS, ColorThemeType, DiscoveryDApp } from "~Constants"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { reorderBookmarks, removeBookmark, useAppDispatch } from "~Storage/Redux"
 import { DAppCardV2 } from "./DAppCardV2"
 
 type BookmarkListProps = {
     bookmarkedDApps: DiscoveryDApp[]
     onDAppPress: (dapp: DiscoveryDApp) => void
+    onReorder: (data: DiscoveryDApp[]) => void
+    isEditMode: boolean
+    onEditModeChange: (isEditMode: boolean) => void
+    /**
+     * Icon background for the dapp card
+     */
+    iconBg?: string
+    /**
+     * Padding from the left.
+     * @default 16
+     */
+    padding?: number
 }
 
 const ItemSeparatorComponent = () => <BaseSpacer width={8} />
-const FooterComponent = () => <BaseSpacer width={16} />
 
-const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps) => {
-    const renderItem = useCallback(
-        ({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
-            return <DAppCardV2 dapp={item} onPress={() => onDAppPress(item)} showDappTitle={false} iconSize={72} />
+const BookmarkedDAppsList = ({
+    bookmarkedDApps,
+    onDAppPress,
+    onReorder,
+    isEditMode,
+    onEditModeChange,
+    iconBg,
+    padding,
+}: BookmarkListProps) => {
+    const { styles } = useThemedStyles(baseStyles({ padding }))
+    const dispatch = useAppDispatch()
+
+    const handleLongPress = useCallback(() => {
+        if (!isEditMode) {
+            onEditModeChange(true)
+        }
+    }, [isEditMode, onEditModeChange])
+
+    const handleRemove = useCallback(
+        (dapp: DiscoveryDApp) => {
+            dispatch(removeBookmark(dapp))
         },
-        [onDAppPress],
+        [dispatch],
     )
 
+    const renderItem: RenderItem<DiscoveryDApp> = useCallback(
+        ({ item, drag, isActive, getIndex }) => {
+            const index = getIndex()
+            const animationDirection: 1 | -1 = index !== undefined && index % 2 === 0 ? 1 : -1
+
+            return (
+                <ScaleDecorator activeScale={isActive ? 1.1 : 1}>
+                    <DAppCardV2
+                        dapp={item}
+                        onPress={() => !isEditMode && onDAppPress(item)}
+                        onLongPress={isEditMode ? drag : handleLongPress}
+                        isEditMode={isEditMode}
+                        isActive={isActive}
+                        onRemove={() => handleRemove(item)}
+                        animationDirection={animationDirection}
+                        showDappTitle={false}
+                        iconSize={72}
+                        iconBg={iconBg}
+                    />
+                </ScaleDecorator>
+            )
+        },
+        [iconBg, onDAppPress, isEditMode, handleLongPress, handleRemove],
+    )
+
+    const onDragEnd = useCallback(
+        ({ data }: DragEndParams<DiscoveryDApp>) => {
+            onReorder(data)
+        },
+        [onReorder],
+    )
+
+    const FooterComponent = useCallback(() => <BaseSpacer width={padding} />, [padding])
+
     return (
-        <FlatList
-            data={bookmarkedDApps}
-            horizontal
-            keyExtractor={(_item, index) => _item?.href ?? index.toString()}
-            renderItem={renderItem}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.flatListContainer}
-            ItemSeparatorComponent={ItemSeparatorComponent}
-            ListFooterComponent={FooterComponent}
-        />
+        <BaseView style={styles.listContainer}>
+            <DraggableFlatList
+                data={bookmarkedDApps}
+                horizontal
+                keyExtractor={(_item, index) => _item?.href ?? index.toString()}
+                renderItem={renderItem}
+                onDragEnd={onDragEnd}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.flatListContainer}
+                ItemSeparatorComponent={ItemSeparatorComponent}
+                ListFooterComponent={FooterComponent}
+                activationDistance={isEditMode ? 10 : undefined}
+            />
+        </BaseView>
     )
 }
 
@@ -42,57 +110,100 @@ type FavouritesProps = {
     onDAppPress: (dapp: DiscoveryDApp) => void
     onActionLabelPress?: () => void
     renderCTASeeAll?: boolean
+    renderCTADone?: boolean
     style?: StyleProp<ViewStyle>
-}
+} & Pick<BookmarkListProps, "iconBg" | "padding">
 
 export const FavouritesV2 = React.memo(
-    ({ bookmarkedDApps, onActionLabelPress, onDAppPress, renderCTASeeAll = true, style }: FavouritesProps) => {
+    ({
+        bookmarkedDApps,
+        onActionLabelPress,
+        onDAppPress,
+        renderCTASeeAll = true,
+        renderCTADone = true,
+        style,
+        iconBg,
+        padding = 16,
+    }: FavouritesProps) => {
         const { LL } = useI18nContext()
         const showBookmarkedDAppsList = bookmarkedDApps.length > 0
         const theme = useTheme()
+        const dispatch = useAppDispatch()
+        const [reorderedDapps, setReorderedDapps] = useState<DiscoveryDApp[]>(bookmarkedDApps)
+        const [isEditMode, setIsEditMode] = useState(false)
 
-        const titleTypography = useMemo(
-            () => (renderCTASeeAll ? "subSubTitleSemiBold" : ("bodySemiBold" as const)),
-            [renderCTASeeAll],
-        )
+        useEffect(() => {
+            setReorderedDapps(bookmarkedDApps)
+        }, [bookmarkedDApps])
+
+        const handleReorder = useCallback((data: DiscoveryDApp[]) => {
+            setReorderedDapps(data)
+        }, [])
+
+        const handleDone = useCallback(() => {
+            dispatch(reorderBookmarks(reorderedDapps))
+            setIsEditMode(false)
+        }, [dispatch, reorderedDapps])
 
         const titleColor = useMemo(() => {
             if (theme.isDark) return COLORS.GREY_100
-            return renderCTASeeAll ? COLORS.GREY_800 : COLORS.PURPLE
+            return renderCTASeeAll ? COLORS.GREY_800 : COLORS.DARK_PURPLE
         }, [theme.isDark, renderCTASeeAll])
+
+        const displayedDapps = useMemo(
+            () => (renderCTASeeAll ? reorderedDapps.slice(0, 15) : reorderedDapps),
+            [renderCTASeeAll, reorderedDapps],
+        )
 
         return (
             <BaseView gap={16} flexDirection="column" style={style}>
-                <BaseView flexDirection="row" justifyContent="space-between" px={16} alignItems="center">
-                    <BaseText typographyFont={titleTypography} color={titleColor}>
+                <BaseView flexDirection="row" justifyContent="space-between" px={padding} alignItems="center">
+                    <BaseText typographyFont="subSubTitleSemiBold" color={titleColor}>
                         {LL.DISCOVER_TAB_FAVOURITES()}
                     </BaseText>
 
-                    {renderCTASeeAll && onActionLabelPress && (
-                        <BaseTouchable action={onActionLabelPress}>
+                    {isEditMode && renderCTADone ? (
+                        <BaseTouchable action={handleDone}>
                             <BaseView flexDirection="row">
                                 <BaseText
-                                    typographyFont="buttonMedium"
+                                    typographyFont="captionMedium"
                                     mx={2}
                                     color={theme.isDark ? COLORS.GREY_300 : COLORS.DARK_PURPLE}>
-                                    {LL.DISCOVER_SEE_ALL_BOOKMARKS()}
+                                    {LL.COMMON_BTN_DONE()}
                                 </BaseText>
-                                <BaseIcon
-                                    name="icon-arrow-right"
-                                    //This should be 12, but given that we're increasing the font size of the label
-                                    //It makes sense to have it set as 14
-                                    size={14}
-                                    color={theme.isDark ? COLORS.GREY_300 : COLORS.DARK_PURPLE}
-                                />
                             </BaseView>
                         </BaseTouchable>
+                    ) : (
+                        renderCTASeeAll &&
+                        onActionLabelPress && (
+                            <BaseTouchable action={onActionLabelPress}>
+                                <BaseView flexDirection="row">
+                                    <BaseText
+                                        typographyFont="captionMedium"
+                                        mx={2}
+                                        color={theme.isDark ? COLORS.GREY_300 : COLORS.DARK_PURPLE}>
+                                        {LL.DISCOVER_SEE_ALL_BOOKMARKS()}
+                                    </BaseText>
+                                    <BaseIcon
+                                        name="icon-arrow-right"
+                                        size={14}
+                                        color={theme.isDark ? COLORS.GREY_300 : COLORS.DARK_PURPLE}
+                                    />
+                                </BaseView>
+                            </BaseTouchable>
+                        )
                     )}
                 </BaseView>
 
                 {showBookmarkedDAppsList && (
                     <BookmarkedDAppsList
-                        bookmarkedDApps={renderCTASeeAll ? bookmarkedDApps.slice(0, 15) : bookmarkedDApps}
+                        bookmarkedDApps={displayedDapps}
                         onDAppPress={onDAppPress}
+                        onReorder={handleReorder}
+                        isEditMode={isEditMode}
+                        onEditModeChange={setIsEditMode}
+                        iconBg={iconBg}
+                        padding={padding}
                     />
                 )}
             </BaseView>
@@ -100,8 +211,15 @@ export const FavouritesV2 = React.memo(
     },
 )
 
-const styles = StyleSheet.create({
-    flatListContainer: {
-        paddingLeft: 16,
-    },
-})
+const baseStyles =
+    ({ padding }: Pick<FavouritesProps, "padding">) =>
+    (_theme: ColorThemeType) =>
+        StyleSheet.create({
+            flatListContainer: {
+                paddingLeft: padding,
+                paddingVertical: 8,
+            },
+            listContainer: {
+                position: "relative",
+            },
+        })

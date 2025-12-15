@@ -38,6 +38,7 @@ export type Colors = {
     pinFilled: string
     pinEmpty: string
     rightIconHeaderBorder: string
+    rightIconHeaderColor: string
     border: string
     notification: string
     transparent: string
@@ -74,6 +75,7 @@ export type Colors = {
     accountCard: string
     marketInfoBackground: string
     favoriteHeader: string
+    textInputFocusedBorderColor: string
     successVariant: {
         background: string
         border: string
@@ -314,11 +316,88 @@ export type Colors = {
         true: string
         false: string
     }
+    veBetterDaoBanner: {
+        background: string[]
+        vbdLogo: {
+            symbol: string
+            text: string
+        }
+        text: string
+    }
+    feedbackChip: {
+        background: string
+        text: string
+        borderColor: string
+        icon: {
+            success: string
+            warning: string
+            error: string
+            info: string
+            loading: string
+        }
+        closeButton: string
+    }
+    activitySectionSeparator: {
+        text: string
+    }
+    collectibleDetailedCard: {
+        title: string
+        description: string
+        address: string
+        buttonGroup: {
+            background: string
+            text: string
+        }
+    }
+    chartGradientBackground: string[]
+    timePeriodChip: {
+        indicatorBackground: string
+        activeText: string
+        inactiveText: string
+    }
+    paymentProviderCard: {
+        background: string
+        border: string
+        title: string
+        propertyName: string
+        propertyValue: string
+    }
+    settingsSection: {
+        background: string
+        title: string
+        optionTitle: string
+    }
+    defaultIcon: {
+        border: string
+        background: string
+        color: string
+    }
+    sendScreen: {
+        tokenAmountCard: {
+            background: string
+            maxButtonBorder: string
+            maxButtonText: string
+            tokenSelectIcon: string
+            tokenSelectorBorder: string
+            tokenSelectorText: string
+            disabledTokenCardBackground: string
+        }
+        summaryScreen: {
+            background: string
+            caption: string
+            address: string
+        }
+        stepText: string
+        stepBackground: string
+    }
+    transak: string
 }
 
 export enum COLORS {
     TRANSPARENT = "transparent",
     WHITE = "#FFFFFF",
+    BLACK = "#000000",
+    BLACK_RGBA_30 = "rgba(0, 0, 0, 0.3)",
     WHITE_DISABLED = "rgba(255, 255, 255, 0.7)",
     GRAY = "#A6A6A6",
     LIGHT_GRAY = "#f2f2f7",
@@ -358,9 +437,15 @@ export enum COLORS {
     LIGHT_BLUE = "#90CDF4",
     MEDIUM_BLUE = "#3182CE",
     PASTEL_BLUE = "#4299E1",
-    BLUE_700 = "#2C5282",
-    BLUE_100 = "#BEE3F8",
     BLUE_50 = "#EBF8FF",
+    BLUE_100 = "#BEE3F8",
+    BLUE_200 = "#90CDF4",
+    BLUE_300 = "#63B3ED",
+    BLUE_400 = "#4299E1",
+    BLUE_500 = "#3182CE",
+    BLUE_600 = "#2B6CB0",
+    BLUE_700 = "#2C5282",
+    BLUE_800 = "#2A4365",
     LIGHT_GREEN = "#AAD836",
     PASTEL_GREEN = "#c5eacd",
     MEDIUM_GREEN = "#30B34E",
@@ -414,12 +499,23 @@ export enum COLORS {
     WHITE_RGBA_85 = "rgba(255,255,255,0.85)",
     WHITE_RGBA_15 = "rgba(255,255,255,0.15)",
     WHITE_RGBA_05 = "rgba(255, 255, 255, 0.05)",
+    WHITE_RGBA_30 = "rgba(255, 255, 255, 0.30)",
+    WHITE_RGBA_50 = "rgba(255, 255, 255, 0.50)",
+    WHITE_RGBA_90 = "rgba(255, 255, 255, 0.90)",
     PURPLE_LABEL = "#B9B5CF",
     PURPLE_LABEL_5 = "rgba(185, 181, 207, 0.05)",
     PURPLE_LABEL_10 = "rgba(185, 181, 207, 0.10)",
     BALANCE_BACKGROUND = "#1D173A",
     BALANCE_BACKGROUND_50 = "rgba(29, 23, 58, 0.50)",
+    BALANCE_BACKGROUND_80 = "rgba(29, 23, 58, 0.80)",
+    BALANCE_BACKGROUND_95 = "rgba(29, 23, 58, 0.95)",
     BALANCE_BACKGROUND_GRADIENT_END = "#423483",
+    BALANCE_BACKGROUND_GRADIENT_END_50 = "rgba(66, 52, 131, 0.50)",
+    // App-level background tokens (do not reuse for non-background surfaces)
+    APP_BACKGROUND_LIGHT = "#f2f2f7",
+    APP_BACKGROUND_DARK = "#1D173A",
+    // Color from Transak Webview
+    TRANSAK_DARK = "#1a1a1a",
 }
 
 const light: Colors = {
@@ -449,11 +545,11 @@ const light: Colors = {
     numberPad: COLORS.GREY_600,
     textLight: COLORS.GREY_500,
     textLightish: COLORS.GREY_500,
-    background: COLORS.LIGHT_GRAY,
+    background: COLORS.APP_BACKGROUND_LIGHT,
     backgroundReversed: COLORS.DARK_PURPLE,
     backgroundTransparent: COLORS.LIGHT_GRAY_TRANSPARENT,
-    splashColorLayer: COLORS.DARK_PURPLE,
-    splashBackground: COLORS.DARK_PURPLE,
+    splashColorLayer: COLORS.APP_BACKGROUND_DARK,
+    splashBackground: COLORS.APP_BACKGROUND_DARK,
     title: COLORS.PRIMARY_800,
     headerTitle: COLORS.DARK_PURPLE,
     subtitle: COLORS.GREY_600,
@@ -464,6 +560,7 @@ const light: Colors = {
     pinFilled: COLORS.PRIMARY_800,
     button: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.GREY_200,
+    rightIconHeaderColor: COLORS.GREY_600,
     cardBorder: COLORS.GREY_300,
     cardDivider: COLORS.GREY_100,
     border: COLORS.DARK_PURPLE,
@@ -498,6 +595,7 @@ const light: Colors = {
     graphStatsText: COLORS.GREY_600,
     marketInfoBackground: COLORS.GREY_200,
     favoriteHeader: COLORS.PURPLE,
+    textInputFocusedBorderColor: COLORS.PURPLE,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -738,6 +836,81 @@ const light: Colors = {
         true: COLORS.LIGHT_GREEN,
         false: COLORS.GREY_300,
     },
+    veBetterDaoBanner: {
+        background: ["#E6EEFF", "#B3CCFF"],
+        vbdLogo: {
+            symbol: "#004CFC",
+            text: COLORS.BLACK,
+        },
+        text: COLORS.BLACK,
+    },
+    feedbackChip: {
+        background: COLORS.GREY_200,
+        text: COLORS.PURPLE,
+        borderColor: COLORS.GREY_300,
+        icon: {
+            success: COLORS.GREEN_600,
+            warning: COLORS.RED_600,
+            error: COLORS.RED_600,
+            info: COLORS.DARK_PURPLE_DISABLED,
+            loading: COLORS.DARK_PURPLE_DISABLED,
+        },
+        closeButton: COLORS.DARK_PURPLE_DISABLED,
+    },
+    activitySectionSeparator: {
+        text: COLORS.GREY_600,
+    },
+    collectibleDetailedCard: {
+        title: COLORS.GREY_700,
+        description: COLORS.GREY_500,
+        address: COLORS.PURPLE,
+        buttonGroup: {
+            background: COLORS.GREY_100,
+            text: COLORS.GREY_700,
+        },
+    },
+    chartGradientBackground: ["rgba(255, 255, 255, 0)", "rgba(102, 92, 148, 0.5)", "rgba(48, 38, 95, 1)"],
+    timePeriodChip: {
+        indicatorBackground: COLORS.GREY_300,
+        activeText: COLORS.PURPLE,
+        inactiveText: COLORS.GREY_500,
+    },
+    paymentProviderCard: {
+        background: COLORS.TRANSPARENT,
+        border: COLORS.GREY_100,
+        title: COLORS.PRIMARY_800,
+        propertyName: COLORS.GREY_500,
+        propertyValue: COLORS.PRIMARY_800,
+    },
+    settingsSection: {
+        background: COLORS.WHITE,
+        title: COLORS.PURPLE,
+        optionTitle: COLORS.GREY_600,
+    },
+    defaultIcon: {
+        border: COLORS.GREY_200,
+        background: COLORS.GREY_200,
+        color: COLORS.GREY_600,
+    },
+    sendScreen: {
+        tokenAmountCard: {
+            background: COLORS.WHITE,
+            maxButtonBorder: COLORS.GREY_200,
+            maxButtonText: COLORS.GREY_600,
+            tokenSelectIcon: COLORS.GREY_500,
+            tokenSelectorBorder: COLORS.GREY_100,
+            tokenSelectorText: COLORS.GREY_700,
+            disabledTokenCardBackground: COLORS.GREY_100,
+        },
+        summaryScreen: {
+            background: COLORS.GREY_50,
+            caption: COLORS.GREY_500,
+            address: COLORS.GREY_800,
+        },
+        stepText: COLORS.GREY_700,
+        stepBackground: COLORS.GREY_200,
+    },
+    transak: COLORS.WHITE,
 }
 
 const dark: Colors = {
@@ -767,11 +940,11 @@ const dark: Colors = {
     numberPad: COLORS.GREY_300,
     textLight: COLORS.WHITE,
     textLightish: COLORS.GREY_300,
-    background: COLORS.DARK_PURPLE,
+    background: COLORS.APP_BACKGROUND_DARK,
     backgroundReversed: COLORS.GRAY,
     backgroundTransparent: COLORS.DARK_PURPLE_TRANSPARENT,
     splashColorLayer: COLORS.LIME_GREEN,
-    splashBackground: COLORS.DARK_PURPLE,
+    splashBackground: COLORS.APP_BACKGROUND_DARK,
     pinEmpty: COLORS.GREY_500,
     pinFilled: COLORS.LIME_GREEN,
     title: COLORS.WHITE,
@@ -782,6 +955,7 @@ const dark: Colors = {
     icon: COLORS.WHITE,
     button: COLORS.LIME_GREEN,
     rightIconHeaderBorder: COLORS.TRANSPARENT,
+    rightIconHeaderColor: COLORS.WHITE,
     cardBorder: COLORS.DARK_PURPLE_DISABLED,
     cardDivider: COLORS.PURPLE_DISABLED,
     border: COLORS.WHITE,
@@ -816,6 +990,7 @@ const dark: Colors = {
     graphStatsText: COLORS.GREY_400,
     marketInfoBackground: COLORS.PURPLE_DISABLED,
     favoriteHeader: COLORS.GREY_50,
+    textInputFocusedBorderColor: COLORS.LIME_GREEN,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,
@@ -1056,6 +1231,81 @@ const dark: Colors = {
         true: COLORS.LIGHT_GREEN,
         false: COLORS.DARK_PURPLE_DISABLED,
     },
+    veBetterDaoBanner: {
+        background: ["#003199", "#002466"],
+        vbdLogo: {
+            symbol: "#B1F16C",
+            text: COLORS.WHITE,
+        },
+        text: COLORS.WHITE,
+    },
+    feedbackChip: {
+        background: COLORS.PURPLE_DISABLED,
+        text: COLORS.GREY_50,
+        borderColor: COLORS.PURPLE_LABEL_10,
+        icon: {
+            success: COLORS.GREEN_200,
+            warning: COLORS.RED_400,
+            error: COLORS.RED_400,
+            info: COLORS.GREY_300,
+            loading: COLORS.GREY_300,
+        },
+        closeButton: COLORS.PURPLE_LABEL,
+    },
+    activitySectionSeparator: {
+        text: COLORS.GREY_300,
+    },
+    collectibleDetailedCard: {
+        title: COLORS.GREY_300,
+        description: COLORS.GREY_100,
+        address: COLORS.LIME_GREEN,
+        buttonGroup: {
+            background: COLORS.DARK_PURPLE,
+            text: COLORS.WHITE,
+        },
+    },
+    chartGradientBackground: ["rgba(38, 30, 76, 0)", "rgba(68, 59, 110, 0.5)", "rgba(185, 181, 207, 1)"],
+    timePeriodChip: {
+        indicatorBackground: COLORS.DARK_PURPLE_DISABLED,
+        activeText: COLORS.LIME_GREEN,
+        inactiveText: COLORS.GREY_100,
+    },
+    paymentProviderCard: {
+        background: COLORS.TRANSPARENT,
+        border: COLORS.DARK_PURPLE_DISABLED,
+        title: COLORS.WHITE,
+        propertyName: COLORS.GREY_400,
+        propertyValue: COLORS.GREY_200,
+    },
+    settingsSection: {
+        background: COLORS.PURPLE_DISABLED,
+        title: COLORS.WHITE,
+        optionTitle: COLORS.GREY_300,
+    },
+    defaultIcon: {
+        border: COLORS.PURPLE_DISABLED,
+        background: COLORS.PURPLE_DISABLED,
+        color: COLORS.GREY_100,
+    },
+    sendScreen: {
+        tokenAmountCard: {
+            background: COLORS.PURPLE_DISABLED,
+            maxButtonBorder: COLORS.DARK_PURPLE_DISABLED,
+            maxButtonText: COLORS.GREY_100,
+            tokenSelectIcon: COLORS.GREY_300,
+            tokenSelectorBorder: COLORS.DARK_PURPLE_DISABLED,
+            tokenSelectorText: COLORS.GREY_100,
+            disabledTokenCardBackground: COLORS.PURPLE_DISABLED,
+        },
+        summaryScreen: {
+            background: COLORS.PURPLE_DISABLED,
+            caption: COLORS.GREY_300,
+            address: COLORS.WHITE,
+        },
+        stepText: COLORS.GREY_100,
+        stepBackground: COLORS.PURPLE_DISABLED,
+    },
+    transak: COLORS.TRANSAK_DARK,
 }
 
 export const colors = { light, dark }

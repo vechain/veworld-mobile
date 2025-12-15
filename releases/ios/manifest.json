@@ -1,6 +1,6 @@
 {
-  "latest": "2.4.4",
-  "major": "2.4.3",
+  "latest": "2.4.13",
+  "major": "2.4.13",
   "history": [
     {
       "version": "2.2.4",
@@ -33,9 +33,49 @@
       "major": true
     },
     {
-      "version": "2.4.4",
-      "key": "releases/ios/versions/2.4.4",
+      "version": "2.4.5",
+      "key": "releases/ios/versions/2.4.5",
       "major": false
+    },
+    {
+      "version": "2.4.6",
+      "key": "releases/ios/versions/2.4.6",
+      "major": false
+    },
+    {
+      "version": "2.4.7",
+      "key": "releases/ios/versions/2.4.7",
+      "major": false
+    },
+    {
+      "version": "2.4.8",
+      "key": "releases/ios/versions/2.4.8",
+      "major": true
+    },
+    {
+      "version": "2.4.9",
+      "key": "releases/ios/versions/2.4.9",
+      "major": false
+    },
+    {
+      "version": "2.4.10",
+      "key": "releases/ios/versions/2.4.10",
+      "major": true
+    },
+    {
+      "version": "2.4.11",
+      "key": "releases/ios/versions/2.4.11",
+      "major": false
+    },
+    {
+      "version": "2.4.12",
+      "key": "releases/ios/versions/2.4.12",
+      "major": false
+    },
+    {
+      "version": "2.4.13",
+      "key": "releases/ios/versions/2.4.13",
+      "major": true
     }
   ]
 }

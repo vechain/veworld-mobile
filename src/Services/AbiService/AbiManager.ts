@@ -21,7 +21,10 @@ export interface IndexableAbi {
         origin: string,
     ):
         | {
-              [key: string]: unknown
+              decoded: {
+                  [key: string]: unknown
+              }
+              includedEvents: EventResult[]
           }
         | undefined
 }

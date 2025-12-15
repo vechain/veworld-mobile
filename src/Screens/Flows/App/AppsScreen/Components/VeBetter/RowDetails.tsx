@@ -1,10 +1,11 @@
-import React, { PropsWithChildren, useCallback, useMemo, useState } from "react"
-import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
-import Animated, { LinearTransition } from "react-native-reanimated"
-import { BaseIcon, BaseSpacer, BaseText } from "~Components"
+import React, { PropsWithChildren, useMemo } from "react"
+import { StyleSheet, TouchableOpacity } from "react-native"
+import Animated, { AnimatedRef, LinearTransition } from "react-native-reanimated"
+import { BaseIcon, BaseSpacer, BaseText, DAppIcon } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { VbdDApp } from "~Model"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { LAYOUT_TRANSITION } from "./constants"
 import { useX2EAppAnimation } from "./Hooks/useX2EAppAnimation"
@@ -23,6 +24,8 @@ type AppRowDetailsProps = PropsWithChildren<{
     itemId?: string
     isOpen?: boolean
     onToggleOpen?: (itemId: string) => void
+    scrollRef: AnimatedRef<Animated.FlatList<VbdDApp>>
+    index: number
 }>
 
 export const RowDetails = React.memo(
@@ -38,9 +41,10 @@ export const RowDetails = React.memo(
         itemId,
         isOpen,
         onToggleOpen,
+        scrollRef,
+        index,
     }: AppRowDetailsProps) => {
         const { styles, theme } = useThemedStyles(baseStyles)
-        const [loadFallback, setLoadFallback] = useState(false)
 
         const {
             state,
@@ -51,30 +55,24 @@ export const RowDetails = React.memo(
             itemId,
             isOpen,
             onToggleOpen,
+            scrollRef,
+            index,
         })
 
         const { showDetails, isAnimating, contentVisible } = state
         const { toggleDetails, onPressIn, onPressOut } = handlers
 
-        const onImageError = useCallback(() => {
-            setLoadFallback(true)
-        }, [])
-
-        const imageSource = useMemo(() => {
-            return loadFallback ? require("~Assets/Img/dapp-fallback.png") : { uri: icon }
-        }, [loadFallback, icon])
-
         const categoryElements = useMemo(() => {
-            return categories.map((category, index) => (
+            return categories.map((category, _index) => (
                 <BaseText
                     key={category}
                     bg={theme.colors.x2eAppOpenDetails.label.background}
                     px={8}
                     py={4}
                     borderRadius={4}
-                    typographyFont="captionMedium"
+                    typographyFont="smallCaptionMedium"
                     color={theme.colors.x2eAppOpenDetails.label.text}
-                    testID={`DAPP_WITH_DETAILS_CATEGORY_${index}`}>
+                    testID={`DAPP_WITH_DETAILS_CATEGORY_${_index}`}>
                     {category}
                 </BaseText>
             ))
@@ -128,11 +126,11 @@ export const RowDetails = React.memo(
                             style={[animatedStyles.padding]}
                             layout={LinearTransition.springify().damping(20).stiffness(100).mass(0.6)}>
                             <BaseView flexDirection="row" flex={1} alignItems="flex-start">
-                                <Image
-                                    source={imageSource}
-                                    style={[{ height: 64, width: 64 }, styles.icon] as StyleProp<ImageStyle>}
-                                    onError={onImageError}
-                                    resizeMode="contain"
+                                <DAppIcon
+                                    uri={icon}
+                                    size={64}
+                                    imageTestID="ROW_DETAILS_IMAGE"
+                                    fallbackTestID="ROW_DETAILS_IMAGE_FALLBACK"
                                 />
                                 <Animated.View style={animatedStyles.spacerStyle} />
                                 <BaseView flexDirection="column" gap={10} overflow="hidden" pr={16} flex={1}>
@@ -189,10 +187,6 @@ const baseStyles = (theme: ColorThemeType) =>
         mainContainer: {
             backgroundColor: theme.colors.x2eAppOpenDetails.background,
             transformOrigin: "center",
-            overflow: "hidden",
-        },
-        icon: {
-            borderRadius: 8,
             overflow: "hidden",
         },
         iconWrapper: {

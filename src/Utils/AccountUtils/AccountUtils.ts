@@ -2,7 +2,7 @@ import { debug } from "~Utils/Logger"
 import { BaseDevice, Contact, DEVICE_TYPE, WalletAccount, WatchedAccount } from "~Model"
 import AddressUtils from "../AddressUtils"
 import { ERROR_EVENTS } from "~Constants"
-import { Vns } from "~Hooks"
+import { Vns } from "~Model/Vns"
 
 export const rootAlias = "Root Account"
 
@@ -31,7 +31,7 @@ export const getAccountForIndex = (walletIndex: number, device: BaseDevice, acco
     const accountAddress = AddressUtils.getAddressFromXPub(device.xPub, walletIndex)
 
     return {
-        alias: nextAlias(accountId),
+        alias: nextAlias(accountId, device.alias),
         address: accountAddress,
         rootAddress: device.rootAddress,
         index: walletIndex,

@@ -1,21 +1,15 @@
 import { NavigatorScreenParams } from "@react-navigation/native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { Transaction } from "@vechain/sdk-core"
 import { PendingRequestTypes } from "@walletconnect/types"
 import React, { useMemo } from "react"
 import { Certificate } from "thor-devkit"
-import { useWalletStatus } from "~Components"
-import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
+import { useFeatureFlags, useWalletStatus } from "~Components"
 import { CertificateRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
 import { LoginRequest, TransactionRequest } from "~Model/DApp"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import { TabStack, TabStackParamList } from "~Navigation/Tabs"
-import {
-    BlackListedCollectionsScreen,
-    ChooseBackupDetailsPassword,
-    DappChangeAccountScreen,
-    DetailsBackupScreen,
-} from "~Screens"
+import { BlackListedCollectionsScreen, ChooseBackupDetailsPassword, DetailsBackupScreen } from "~Screens"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { LedgerSignCertificate, LedgerSignTransaction } from "~Screens/Flows/App/LedgerScreen"
 import { LedgerSignMessage } from "~Screens/Flows/App/LedgerScreen/LedgerSignMessage"
@@ -55,20 +49,23 @@ export type RootStackParamListSwitch = {
         accountWithDevice: LedgerAccountWithDevice
     }
     [Routes.BLOCKED_APP_SCREEN]: undefined
-    [Routes.DAPP_CHANGE_ACCOUNT_SCREEN]: {
-        request: WindowRequest
-    }
 
     [Routes.ICLOUD_DETAILS_BACKUP]: { deviceToBackup?: LocalDevice; backupDetails: string[] | string }
     [Routes.CHOOSE_DETAILS_BACKUP_PASSWORD]: { backupDetails: string[] | string; device: LocalDevice }
     [Routes.SELL_FLOW]: undefined
 }
-const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
+const Switch = createStackNavigator<RootStackParamListSwitch>()
 
 export const SwitchStack = () => {
     const walletStatus = useWalletStatus()
 
+    const featureFlags = useFeatureFlags()
+
     const RenderStacks = useMemo(() => {
+        // This console log guarantees that on reset it properly wait for the wallet status
+        // DO NOT REMOVE IT UNLESS YOU ARE TOTALLY SURE THAT THE RESET WORKS WITHOUT ERRORS
+        // eslint-disable-next-line no-console
+        console.log("__DEBUG_LOG__")
         if (walletStatus === WALLET_STATUS.FIRST_TIME_ACCESS) {
             return <Switch.Screen name="OnboardingStack" component={OnboardingStack} options={{ headerShown: false }} />
         } else {
@@ -83,13 +80,15 @@ export const SwitchStack = () => {
                         }}>
                         <Switch.Screen name={Routes.CREATE_WALLET_FLOW} component={CreateWalletAppStack} />
 
-                        <Switch.Screen
-                            name={Routes.BLACKLISTED_COLLECTIONS}
-                            component={BlackListedCollectionsScreen}
-                            options={{
-                                presentation: "modal",
-                            }}
-                        />
+                        {!featureFlags?.betterWorldFeature?.balanceScreen?.collectibles?.enabled && (
+                            <Switch.Screen
+                                name={Routes.BLACKLISTED_COLLECTIONS}
+                                component={BlackListedCollectionsScreen}
+                                options={{
+                                    presentation: "modal",
+                                }}
+                            />
+                        )}
 
                         <Switch.Screen name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN} component={SignMessageScreen} />
 
@@ -100,8 +99,6 @@ export const SwitchStack = () => {
                         <Switch.Screen name={Routes.LEDGER_SIGN_TRANSACTION} component={LedgerSignTransaction} />
 
                         <Switch.Screen name={Routes.LEDGER_SIGN_MESSAGE} component={LedgerSignMessage} />
-
-                        <Switch.Screen name={Routes.DAPP_CHANGE_ACCOUNT_SCREEN} component={DappChangeAccountScreen} />
 
                         <Switch.Screen
                             name={Routes.ICLOUD_DETAILS_BACKUP}
@@ -136,7 +133,7 @@ export const SwitchStack = () => {
                 </>
             )
         }
-    }, [walletStatus])
+    }, [featureFlags?.betterWorldFeature?.balanceScreen?.collectibles?.enabled, walletStatus])
 
     return (
         <Switch.Navigator

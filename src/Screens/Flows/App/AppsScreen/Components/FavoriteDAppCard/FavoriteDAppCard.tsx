@@ -5,6 +5,7 @@ import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, DAppIcon } fro
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useAppLogo } from "~Hooks/useAppLogo"
+import FontUtils from "~Utils/FontUtils"
 
 type Props = {
     dapp: DiscoveryDApp
@@ -43,18 +44,18 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                     pl={8}
                     bg={isActive ? theme.colors.actionBottomSheet.isActiveBackground : undefined}>
                     <BaseTouchable
-                        disabled={isEditMode || isActive}
+                        disabled={isActive}
                         style={[styles.card]}
                         onPress={() => onPress(dapp)}
                         onLongPress={() => onLongPress?.(dapp)}>
                         <BaseView flexDirection="row" alignItems="flex-start" flex={1} pr={10}>
-                            <DAppIcon size={IMAGE_SIZE} fallbackIcon="icon-globe" iconUri={iconUri} />
+                            <DAppIcon size={IMAGE_SIZE} uri={iconUri} />
                             <BaseSpacer width={24} />
                             <BaseView flex={1}>
                                 <BaseText
                                     ellipsizeMode="tail"
                                     numberOfLines={1}
-                                    typographyFont="subSubTitleSemiBold"
+                                    typographyFont="bodySemiBold"
                                     color={theme.colors.assetDetailsCard.title}>
                                     {dapp.name}
                                 </BaseText>
@@ -71,8 +72,8 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                     </BaseTouchable>
                     <BaseTouchable
                         disabled={isActive}
-                        onLongPress={() => onRightActionLongPress?.(dapp)}
                         onPress={() => onRightActionPress(dapp, isEditMode)}
+                        onLongPress={() => onRightActionLongPress?.(dapp)}
                         style={styles.touchableContainer}
                         activeOpacity={0.7}>
                         {isEditMode ? (
@@ -124,9 +125,9 @@ const baseStyles = () =>
         },
         nameText: {
             fontWeight: "bold",
-            fontSize: 16,
+            fontSize: FontUtils.font(14),
         },
         description: {
-            fontSize: 12,
+            fontSize: FontUtils.font(12),
         },
     })

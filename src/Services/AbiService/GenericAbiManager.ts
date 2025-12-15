@@ -28,13 +28,16 @@ export class GenericAbiManager extends AbiManager {
                     assertsHasEvent(event)
                     if (!isEvent(event, item, iface)) return undefined
                     const decodedLog = iface.decodeEventLog(item.name, event.data, event.topics)
-                    return Object.fromEntries(
-                        Object.entries(decodedLog)
-                            .filter(([key]) => !key.match(/^\d+$/))
-                            .map(([key, value]) =>
-                                value instanceof ethers.BigNumber ? [key, BigInt(value.toString())] : [key, value],
-                            ),
-                    )
+                    return {
+                        decoded: Object.fromEntries(
+                            Object.entries(decodedLog)
+                                .filter(([key]) => !key.match(/^\d+$/))
+                                .map(([key, value]) =>
+                                    value instanceof ethers.BigNumber ? [key, BigInt(value.toString())] : [key, value],
+                                ),
+                        ),
+                        includedEvents: [],
+                    }
                 },
             } satisfies IndexableAbi
         })
@@ -50,7 +53,7 @@ export class GenericAbiManager extends AbiManager {
                 if (!found) return false
                 return {
                     name: found.fullSignature,
-                    params: found.decode(evt, undefined, [], origin),
+                    params: found.decode(evt, undefined, [], origin)?.decoded,
                     address: evt.address,
                 }
             })

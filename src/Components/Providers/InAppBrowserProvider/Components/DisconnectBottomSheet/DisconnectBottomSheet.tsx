@@ -36,7 +36,7 @@ const DisconnectBottomSheetContent = ({
         <>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
-                <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.editSpeedBs.title}>
                     {LL.DISCONNECTION_REQUEST()}
                 </BaseText>
             </BaseView>

@@ -58,6 +58,8 @@ const baseStyles = (theme: ColorThemeType, disabled: boolean) =>
             borderRadius: 38,
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: theme.colors.actionBottomSheet[disabled ? "disabledIconBackground" : "iconBackground"],
+            backgroundColor: disabled
+                ? theme.colors.actionBottomSheet.disabledIconBackground
+                : theme.colors.actionBottomSheet.iconBackground.background,
         },
     })

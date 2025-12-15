@@ -5,16 +5,17 @@ import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
-import { useDappBookmarking } from "~Hooks/useDappBookmarking"
+import { useDappBookmarkToggle } from "~Hooks/useDappBookmarkToggle"
 import { useI18nContext } from "~i18n"
 import { useDAppActions } from "../../Hooks"
+import { Routes } from "~Navigation"
 
 const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.href)
-    const { onDAppPress } = useDAppActions()
+    const { isBookMarked, toggleBookmark } = useDappBookmarkToggle(dapp.href)
+    const { onDAppPress } = useDAppActions(Routes.APPS)
 
     const onBookmarkPress = useCallback(() => toggleBookmark(), [toggleBookmark])
     const onOpenDappPress = useCallback(async () => {

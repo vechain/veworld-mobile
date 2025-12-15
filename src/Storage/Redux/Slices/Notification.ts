@@ -1,6 +1,13 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { NotificationState } from "../Types"
+import { createSlice, PayloadAction, createEntityAdapter } from "@reduxjs/toolkit"
+import { NotificationState, Registration } from "../Types"
 
+// --- adapter keyed by address ---
+const registrationsAdapter = createEntityAdapter<Registration>({
+    selectId: r => r.address,
+    sortComparer: false,
+})
+
+// --- initial state ---
 export const initialNotificationState: NotificationState = {
     feautureEnabled: false,
     permissionEnabled: null,
@@ -8,6 +15,7 @@ export const initialNotificationState: NotificationState = {
     dappVisitCounter: {},
     userTags: {},
     dappNotifications: true,
+    registrations: registrationsAdapter.getInitialState(),
 }
 
 export const Notification = createSlice({
@@ -37,13 +45,31 @@ export const Notification = createSlice({
         setDappVisitCounter: (state, action: PayloadAction<{ dappId: string; counter: number }>) => {
             state.dappVisitCounter[action.payload.dappId] = action.payload.counter
         },
+        setDappsVisitCounter: (state, action: PayloadAction<{ dappIds: string[]; counter: number }>) => {
+            action.payload.dappIds.forEach(dappId => {
+                state.dappVisitCounter[dappId] = action.payload.counter
+            })
+        },
         removeDappVisitCounter: (state, action: PayloadAction<{ dappId: string }>) => {
             if (state.dappVisitCounter[action.payload.dappId]) {
                 delete state.dappVisitCounter[action.payload.dappId]
             }
         },
+        removeDappsVisitCounter: (state, action: PayloadAction<{ dappIds: string[] }>) => {
+            action.payload.dappIds.forEach(dappId => {
+                if (state.dappVisitCounter[dappId]) {
+                    delete state.dappVisitCounter[dappId]
+                }
+            })
+        },
         setDappNotifications: (state, action: PayloadAction<boolean>) => {
             state.dappNotifications = action.payload
+        },
+        upsertRegistrations: (state, action) => {
+            registrationsAdapter.upsertMany(state.registrations, action.payload)
+        },
+        removeRegistrations: (state, action) => {
+            registrationsAdapter.removeMany(state.registrations, action.payload)
         },
     },
 })
@@ -54,6 +80,12 @@ export const {
     updateNotificationOptedIn,
     increaseDappVisitCounter,
     setDappVisitCounter,
+    setDappsVisitCounter,
     setDappNotifications,
     removeDappVisitCounter,
+    removeDappsVisitCounter,
+    upsertRegistrations,
+    removeRegistrations,
 } = Notification.actions
+
+export { registrationsAdapter }

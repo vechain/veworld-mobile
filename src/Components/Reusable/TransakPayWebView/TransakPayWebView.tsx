@@ -1,138 +1,141 @@
-import { Environments, EventTypes, Events, TransakConfig, TransakWebView } from "@transak/react-native-sdk"
+import { useNavigation } from "@react-navigation/native"
+import { useQuery } from "@tanstack/react-query"
+import { Events, TransakWebView } from "@transak/ui-react-native-sdk"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { DimensionValue, StyleSheet } from "react-native"
+import { generateTransakOnRampURL } from "~Api/OnOffRampProviders"
 import { BaseActivityIndicator, BaseButton, BaseStatusBar, BaseView } from "~Components/Base"
-import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
-import { useAnalyticTracking, useTheme, useThemedStyles } from "~Hooks"
-import { PlatformUtils } from "~Utils"
-import { VECHAIN_BLOCKCHAIN } from "./Constants"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { getUniqueIdSync } from "react-native-device-info"
-import uuid from "react-native-uuid"
+import { useFeatureFlags } from "~Components/Providers"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { AnalyticsEvent, COLORS, ColorThemeType, ERROR_EVENTS, ThemeEnum } from "~Constants"
+import { useAnalyticTracking, useSmartWallet, useTheme, useThemedStyles } from "~Hooks"
+import { DEVICE_TYPE } from "~Model"
 import { Routes } from "~Navigation"
+import { selectCurrency, selectDevice, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
+import { error, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { useNavigation } from "@react-navigation/native"
 
-const isProd = process.env.NODE_ENV === "production"
-const isAndroid = PlatformUtils.isAndroid()
-
-const disabledOSProvider = isAndroid ? "apple_pay" : "google_pay,credit_debit_card"
-// eslint-disable-next-line max-len
-const disablePaymentMethods = `gbp_bank_transfer,inr_bank_transfer,sepa_bank_transfer,pm_cash_app,pm_us_wire_bank_transfer,${disabledOSProvider}`
-const defaultPaymentMethod = isAndroid ? "google_pay" : "apple_pay"
-
-// only for jest
-const uniqueID = getUniqueIdSync ? getUniqueIdSync() : "jest-unique-id"
-
-// using getUniqueId allows us to make the partnerOrderId really unique and unrepeatable and to track better customer orders via Mixpanel to see their flow
-const partnerOrderId = `${uniqueID}-${uuid.v4().toString()}`
-
-export const TransakPayWebView = ({
-    currentAmount,
-    destinationAddress,
-}: {
-    currentAmount: number
-    destinationAddress: string
-}) => {
+export const TransakPayWebView = ({ destinationAddress }: { destinationAddress: string }) => {
     const { isDark } = useTheme()
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const track = useAnalyticTracking()
     const currency = useAppSelector(selectCurrency)
 
-    const [isLoading, setIsLoading] = useState(true)
     const [isProcessing, setIsProcessing] = useState(false)
 
-    const { styles } = useThemedStyles(theme => baseStyles(theme, isLoading, isProcessing))
+    const account = useAppSelector(selectSelectedAccountOrNull)
+    const { smartAccountAddress } = useSmartWallet()
 
-    const { backgroundColors, themeColor } = useMemo(() => {
-        const bg = isDark ? COLORS.DARK_PURPLE : COLORS.LIGHT_GRAY
-        const tc = isDark ? COLORS.LIGHT_PURPLE : COLORS.DARK_PURPLE
-        return { backgroundColors: bg, themeColor: tc.replace("#", "") }
+    const senderDevice = useAppSelector(state => selectDevice(state, account?.address))
+    const resolvedDestinationAddress = useMemo(() => {
+        if (senderDevice?.type === DEVICE_TYPE.SMART_WALLET && smartAccountAddress) {
+            return smartAccountAddress
+        }
+        return destinationAddress
+    }, [destinationAddress, senderDevice?.type, smartAccountAddress])
+
+    const { paymentProvidersFeature } = useFeatureFlags()
+
+    const bgColor = useMemo(() => {
+        return isDark ? COLORS.DARK_PURPLE : COLORS.LIGHT_GRAY
     }, [isDark])
 
-    const transakConfig: TransakConfig = useMemo(
-        () => ({
-            apiKey: process.env.REACT_APP_TRANSAK_API_KEY as string,
-            partnerOrderId,
-            walletAddress: destinationAddress,
-            productsAvailed: "BUY",
-            networks: VECHAIN_BLOCKCHAIN,
-            defaultPaymentMethod,
-            disablePaymentMethods,
-            disableWalletAddressForm: true,
-            defaultFiatCurrency: currency,
-            defaultFiatAmount: currentAmount || 5,
-            defaultNetwork: VECHAIN_BLOCKCHAIN,
-            defaultCryptoCurrency: "VET",
-            backgroundColors,
-            colorMode: isDark ? "DARK" : "LIGHT",
-            themeColor,
-            hideMenu: true,
-            environment: isProd ? Environments.PRODUCTION : Environments.STAGING,
-        }),
-        [backgroundColors, currency, currentAmount, destinationAddress, isDark, themeColor],
-    )
+    const {
+        data: transakRes,
+        isFetching: isLoadingQuery,
+        isError,
+    } = useQuery({
+        queryKey: ["TRANSAK", "ONRAMP", resolvedDestinationAddress],
+        queryFn: () =>
+            generateTransakOnRampURL(
+                resolvedDestinationAddress,
+                currency,
+                isDark ? ThemeEnum.DARK : ThemeEnum.LIGHT,
+                paymentProvidersFeature.transak.url,
+            ),
+        staleTime: 0,
+        gcTime: 1,
+        networkMode: "online",
+        retry: 3,
+        meta: {
+            persisted: false,
+        },
+    })
 
-    const onTransakEventHandler = (event: EventTypes) => {
+    const { styles } = useThemedStyles(theme => baseStyles(theme, isLoadingQuery, isProcessing))
+
+    const onTransakEventHandler = (event: Events) => {
         switch (event) {
-            case Events.ORDER_CREATED:
+            case Events.TRANSAK_ORDER_CREATED:
                 track(AnalyticsEvent.BUY_CRYPTO_CREATED_ORDER, {
                     provider: "transak",
-                    partnerOrderId,
+                    partnerOrderId: transakRes?.partnerOrderId,
                 })
                 break
 
-            case Events.ORDER_PROCESSING:
+            case Events.TRANSAK_ORDER_SUCCESSFUL:
                 track(AnalyticsEvent.BUY_CRYPTO_SUCCESSFULLY_COMPLETED, {
                     provider: "transak",
-                    partnerOrderId,
+                    partnerOrderId: transakRes?.partnerOrderId,
                 })
                 setIsProcessing(true)
                 break
 
-            case Events.ORDER_FAILED:
+            case Events.TRANSAK_ORDER_FAILED:
                 track(AnalyticsEvent.BUY_CRYPTO_FAILED, {
                     provider: "transak",
-                    partnerOrderId,
+                    partnerOrderId: transakRes?.partnerOrderId,
                 })
                 break
         }
     }
 
-    const handleLoadEnd = useCallback(() => {
-        if (isLoading) setIsLoading(false)
-    }, [isLoading])
+    const onButtonPress = useCallback(() => nav.navigate(Routes.BUY), [nav])
+    const config = useMemo(() => {
+        if (!transakRes?.url) return
+        return { widgetUrl: transakRes?.url }
+    }, [transakRes])
 
     useEffect(() => {
-        handleLoadEnd()
-    }, [handleLoadEnd])
+        if (!isError) return
+        error(ERROR_EVENTS.BUY, "Transak URL generation failed")
+        Feedback.show({
+            severity: FeedbackSeverity.ERROR,
+            message: LL.TRANSAK_NOT_AVAILABLE(),
+            type: FeedbackType.ALERT,
+        })
+        const timeoutId = setTimeout(() => {
+            nav.goBack()
+        }, 500)
 
-    const onButtonPress = useCallback(() => nav.navigate(Routes.BUY), [nav])
+        return () => {
+            clearTimeout(timeoutId)
+        }
+    }, [LL, isError, nav])
 
     return (
         <BaseView flex={1}>
-            {!isLoading && isAndroid && <BaseStatusBar />}
-            <BaseActivityIndicator isVisible={isLoading} />
+            {!isLoadingQuery && PlatformUtils.isAndroid() && <BaseStatusBar />}
+            <BaseActivityIndicator isVisible={isLoadingQuery} />
             <BaseView style={styles.webviewWrapper}>
-                <TransakWebView
-                    transakConfig={transakConfig}
-                    onTransakEvent={onTransakEventHandler}
-                    style={styles.webView}
-                    originWhitelist={["http://", "https://", "about:*"]}
-                />
+                {config && (
+                    <TransakWebView
+                        transakConfig={config}
+                        onTransakEvent={onTransakEventHandler}
+                        style={styles.webView}
+                        originWhitelist={["http://", "https://", "about:*"]}
+                    />
+                )}
             </BaseView>
             {isProcessing && (
-                <BaseView
-                    bg={isLoading ? "transparent" : (transakConfig.backgroundColors as string)}
-                    p={20}
-                    w={100}
-                    style={styles.buttonWrapper}>
+                <BaseView bg={isLoadingQuery ? "transparent" : bgColor} p={20} w={100} style={styles.buttonWrapper}>
                     <BaseButton
                         style={styles.button}
                         action={onButtonPress}
-                        isLoading={isLoading}
-                        disabled={isLoading}
+                        isLoading={isLoadingQuery}
+                        disabled={isLoadingQuery}
                         w={100}
                         title={LL.BD_BACK_TO_APP()}
                         haptics="Success"
@@ -152,7 +155,7 @@ const baseStyles = (theme: ColorThemeType, isLoading: boolean, isProcessing: boo
         },
         webView: {
             marginTop: 10,
-            marginBottom: (isAndroid ? 10 : 30) as DimensionValue,
+            marginBottom: (PlatformUtils.isAndroid() ? 10 : 30) as DimensionValue,
             opacity: isLoading ? 0 : 1,
         },
         buttonWrapper: {

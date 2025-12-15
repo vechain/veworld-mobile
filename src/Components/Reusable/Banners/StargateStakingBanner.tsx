@@ -10,6 +10,7 @@ import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import FontUtils from "~Utils/FontUtils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export const StargateStakingBanner = () => {
@@ -80,7 +81,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         text: {
             fontFamily: "Rubik",
-            fontSize: 15,
+            fontSize: FontUtils.font(13),
             color: theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800,
             margin: 0,
         },

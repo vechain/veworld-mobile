@@ -76,7 +76,7 @@ static void ClearKeychainIfNecessary() {
 - (void)applicationDidEnterBackground:(UIApplication *)application {
   UIView *secureView = [[UIView alloc] initWithFrame:self.window.bounds]; 
   secureView.tag = 9824684;
-  secureView.backgroundColor = [UIColor colorWithRed:(0.0352941176470588) green:(0.00784313725490196) blue:(0.184313725490196) alpha:(1)];
+  secureView.backgroundColor = [UIColor colorWithRed:(0.11372549019607843) green:(0.09019607843137255) blue:(0.22745098039215686) alpha:(1)];
 
   CGFloat imageViewWidth = 100;
   CGFloat imageViewHeight = 91;

@@ -42,6 +42,8 @@ describe("IPFSUtils", () => {
                 gcTime: Infinity,
                 queryFn: expect.any(Function),
                 retry: 3,
+                enabled: true,
+                retryDelay: 1,
             })
         })
     })

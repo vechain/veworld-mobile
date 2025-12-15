@@ -9,6 +9,7 @@ import { BaseIcon } from "~Components/Base/BaseIcon"
 import { DIRECTIONS } from "~Constants"
 import {
     Activity,
+    ActivityEvent,
     ActivityStatus,
     ActivityType,
     B3trActionActivity,
@@ -22,18 +23,17 @@ import {
     FungibleTokenActivity,
     LoginActivity,
     NETWORK_TYPE,
-    NonFungibleTokenActivity,
     NFTMarketplaceActivity,
+    NonFungibleTokenActivity,
+    StargateActivity,
     SwapActivity,
     UnknownTxActivity,
     VeVoteCastActivity,
 } from "~Model"
 
-jest.mock("~Hooks/useNFTInfo", () => ({
-    useNFTInfo: () => ({
-        tokenMetadata: {
-            image: "https://example.com/nft.jpg",
-        },
+jest.mock("~Hooks/useCollectibleDetails", () => ({
+    useCollectibleDetails: () => ({
+        image: "https://example.com/nft.jpg",
         collectionName: "Test Collection",
         isMediaLoading: false,
     }),
@@ -720,6 +720,279 @@ describe("ActivityBox", () => {
                 expect(getByTestId(`FT-TRANSFER-${activityWithStatus.id}`)).toBeTruthy()
                 expect(screen.getByText("Failed")).toBeTruthy()
             })
+        })
+    })
+
+    describe("Stargate Activities", () => {
+        it("should render stargate stake correctly", () => {
+            const activity: StargateActivity = {
+                id: "stargate-stake-1",
+                blockNumber: 123456,
+                timestamp: Date.now(),
+                type: ActivityType.STARGATE_STAKE,
+                eventName: ActivityEvent.STARGATE_STAKE,
+                from: "0x123",
+                to: ["0x456"],
+                status: ActivityStatus.SUCCESS,
+                isTransaction: true,
+                delegated: false,
+                value: "10000000000000000000",
+                genesisId: "genesis-id",
+            }
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.Staking activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^STARGATE-STARGATE_STAKE-/i)).toBeTruthy()
+        })
+
+        it("should render stargate unstake correctly", () => {
+            const activity: StargateActivity = {
+                id: "stargate-unstake-1",
+                blockNumber: 123456,
+                timestamp: Date.now(),
+                type: ActivityType.STARGATE_UNSTAKE,
+                eventName: ActivityEvent.STARGATE_UNSTAKE,
+                from: "0x123",
+                to: ["0x456"],
+                status: ActivityStatus.SUCCESS,
+                isTransaction: true,
+                delegated: false,
+                value: "5000000000000000000",
+                genesisId: "genesis-id",
+            }
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.Staking activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^STARGATE-STARGATE_UNSTAKE-/i)).toBeTruthy()
+        })
+
+        it("should render stargate delegate request correctly", () => {
+            const activity: StargateActivity = {
+                id: "stargate-delegate-req-1",
+                blockNumber: 123456,
+                timestamp: Date.now(),
+                type: ActivityType.STARGATE_DELEGATE_REQUEST,
+                eventName: ActivityEvent.STARGATE_DELEGATE_REQUEST,
+                from: "0x123",
+                to: ["0x456"],
+                status: ActivityStatus.SUCCESS,
+                isTransaction: true,
+                delegated: false,
+                value: "3000000000000000000",
+                validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+                genesisId: "genesis-id",
+            }
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.Staking activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^STARGATE-STARGATE_DELEGATE_REQUEST-/i)).toBeTruthy()
+        })
+
+        it("should render stargate delegate active correctly", () => {
+            const activity: StargateActivity = {
+                id: "stargate-delegate-active-1",
+                blockNumber: 123456,
+                timestamp: Date.now(),
+                type: ActivityType.STARGATE_DELEGATE_ACTIVE,
+                eventName: ActivityEvent.STARGATE_DELEGATE_ACTIVE,
+                from: "0x123",
+                to: ["0x456"],
+                status: ActivityStatus.SUCCESS,
+                isTransaction: true,
+                delegated: false,
+                value: "3000000000000000000",
+                validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+                genesisId: "genesis-id",
+            }
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.Staking activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^STARGATE-STARGATE_DELEGATE_ACTIVE-/i)).toBeTruthy()
+        })
+
+        it("should render stargate delegate exit request correctly", () => {
+            const activity: StargateActivity = {
+                id: "stargate-exit-req-1",
+                blockNumber: 123456,
+                timestamp: Date.now(),
+                type: ActivityType.STARGATE_DELEGATE_EXIT_REQUEST,
+                eventName: ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST,
+                from: "0x123",
+                to: ["0x456"],
+                status: ActivityStatus.SUCCESS,
+                isTransaction: true,
+                delegated: false,
+                value: "3000000000000000000",
+                validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+                genesisId: "genesis-id",
+            }
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.Staking activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^STARGATE-STARGATE_DELEGATE_EXIT_REQUEST-/i)).toBeTruthy()
+        })
+
+        it("should render stargate delegation exited correctly", () => {
+            const activity: StargateActivity = {
+                id: "stargate-exited-1",
+                blockNumber: 123456,
+                timestamp: Date.now(),
+                type: ActivityType.STARGATE_DELEGATION_EXITED,
+                eventName: ActivityEvent.STARGATE_DELEGATION_EXITED,
+                from: "0x123",
+                to: ["0x456"],
+                status: ActivityStatus.SUCCESS,
+                isTransaction: true,
+                delegated: false,
+                value: "3000000000000000000",
+                validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+                genesisId: "genesis-id",
+            }
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.Staking activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^STARGATE-STARGATE_DELEGATION_EXITED-/i)).toBeTruthy()
+        })
+
+        it("should render stargate delegate request cancelled correctly", () => {
+            const activity: StargateActivity = {
+                id: "stargate-cancelled-1",
+                blockNumber: 123456,
+                timestamp: Date.now(),
+                type: ActivityType.STARGATE_DELEGATE_REQUEST_CANCELLED,
+                eventName: ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED,
+                from: "0x123",
+                to: ["0x456"],
+                status: ActivityStatus.SUCCESS,
+                isTransaction: true,
+                delegated: false,
+                value: "3000000000000000000",
+                validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+                genesisId: "genesis-id",
+            }
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.Staking activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^STARGATE-STARGATE_DELEGATE_REQUEST_CANCELLED-/i)).toBeTruthy()
+        })
+
+        it("should render stargate boost correctly", () => {
+            const activity: StargateActivity = {
+                id: "stargate-boost-1",
+                blockNumber: 123456,
+                timestamp: Date.now(),
+                type: ActivityType.STARGATE_BOOST,
+                eventName: ActivityEvent.STARGATE_BOOST,
+                from: "0x123",
+                to: ["0x456"],
+                status: ActivityStatus.SUCCESS,
+                isTransaction: true,
+                delegated: false,
+                value: "1000000000000000000",
+                genesisId: "genesis-id",
+            }
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.Staking activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^STARGATE-STARGATE_BOOST-/i)).toBeTruthy()
+        })
+
+        it("should render stargate claim rewards correctly", () => {
+            const activity: StargateActivity = {
+                id: "stargate-claim-1",
+                blockNumber: 123456,
+                timestamp: Date.now(),
+                type: ActivityType.STARGATE_CLAIM_REWARDS,
+                eventName: ActivityEvent.STARGATE_CLAIM_REWARDS,
+                from: "0x123",
+                to: ["0x456"],
+                status: ActivityStatus.SUCCESS,
+                isTransaction: true,
+                delegated: false,
+                value: "500000000000000000",
+                genesisId: "genesis-id",
+            }
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.Staking activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^STARGATE-STARGATE_CLAIM_REWARDS-/i)).toBeTruthy()
+        })
+
+        it("should render stargate manager added correctly", () => {
+            const activity: StargateActivity = {
+                id: "stargate-manager-add-1",
+                blockNumber: 123456,
+                timestamp: Date.now(),
+                type: ActivityType.STARGATE_MANAGER_ADDED,
+                eventName: ActivityEvent.STARGATE_MANAGER_ADDED,
+                from: "0x123",
+                to: ["0xb4094c25f86d628fdd571afc4077f0d0196afb48"],
+                status: ActivityStatus.SUCCESS,
+                isTransaction: true,
+                delegated: false,
+                tokenId: "123",
+                value: "0",
+                genesisId: "genesis-id",
+            }
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.Staking activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^STARGATE-STARGATE_MANAGER_ADDED-/i)).toBeTruthy()
+        })
+
+        it("should render stargate manager removed correctly", () => {
+            const activity: StargateActivity = {
+                id: "stargate-manager-remove-1",
+                blockNumber: 123456,
+                timestamp: Date.now(),
+                type: ActivityType.STARGATE_MANAGER_REMOVED,
+                eventName: ActivityEvent.STARGATE_MANAGER_REMOVED,
+                from: "0x123",
+                to: ["0xb4094c25f86d628fdd571afc4077f0d0196afb48"],
+                status: ActivityStatus.SUCCESS,
+                isTransaction: true,
+                delegated: false,
+                tokenId: "123",
+                value: "0",
+                genesisId: "genesis-id",
+            }
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.Staking activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^STARGATE-STARGATE_MANAGER_REMOVED-/i)).toBeTruthy()
         })
     })
 })

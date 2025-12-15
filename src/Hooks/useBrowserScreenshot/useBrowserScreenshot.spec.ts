@@ -54,7 +54,8 @@ describe("useBrowserScreenshot", () => {
                         bannerInteractions: {},
                         connectedApps: [],
                         custom: [],
-                        favorites: [],
+
+                        favoriteRefs: [],
                         featured: [],
                         hasOpenedDiscovery: false,
                         tabsManager: {
@@ -88,7 +89,7 @@ describe("useBrowserScreenshot", () => {
 
         expect(updateTab).toHaveBeenCalledWith({
             id: "TEST_ID",
-            previewPath: "/test/directory/screenshots/TEST_ID-preview.jpg",
+            previewPath: "screenshots/TEST_ID-preview.jpg",
             favicon: "https://vechain.org/favicon.ico",
         })
     })
@@ -111,7 +112,8 @@ describe("useBrowserScreenshot", () => {
                         bannerInteractions: {},
                         connectedApps: [],
                         custom: [],
-                        favorites: [],
+
+                        favoriteRefs: [],
                         featured: [],
                         hasOpenedDiscovery: false,
                         tabsManager: {
@@ -147,7 +149,7 @@ describe("useBrowserScreenshot", () => {
 
         expect(updateTab).toHaveBeenCalledWith({
             id: "TEST_ID",
-            previewPath: "/test/directory/screenshots/TEST_ID-preview.jpg",
+            previewPath: "screenshots/TEST_ID-preview.jpg",
             title: "NAV STATE TITLE",
             favicon:
                 // eslint-disable-next-line max-len

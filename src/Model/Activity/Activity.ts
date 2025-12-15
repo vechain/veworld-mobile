@@ -2,6 +2,7 @@ import { DIRECTIONS } from "~Constants"
 import { TypedData, TypedDataMessage } from "~Model"
 import { ActivityEvent, ActivityStatus, ActivitySupport, ActivityType } from "./enum"
 import { TokenLevelId } from "~Utils/StargateUtils"
+import { paths } from "~Generated/indexer/schema"
 
 export type OutputResponse = {
     contractAddress: string
@@ -31,42 +32,8 @@ export interface Activity {
     levelId?: TokenLevelId
 }
 
-export interface IndexedHistoryEvent {
-    id: string
-    blockId: string
-    blockNumber: number
-    blockTimestamp: number
-    txId: string
-    origin?: string
-    gasPayer?: string
-    tokenId?: string
-    contractAddress?: string
-    tokenAddress?: string // Payment token address for NFT sales
-    eventName: ActivityEvent
-    to?: string
-    from?: string
-    value?: string
-    appId?: string
-    proof?: string
-    roundId?: string
-    appVotes?: {
-        appId: string
-        voteWeight: string
-    }[]
-    support?: ActivitySupport
-    votePower?: string
-    voteWeight?: string
-    reason?: string
-    proposalId?: string
-    oldLevel?: string
-    newLevel?: string
-    inputToken?: string
-    outputToken?: string
-    inputValue?: string
-    outputValue?: string
-    reverted?: boolean
-    levelId?: TokenLevelId
-}
+export type IndexedHistoryEvent =
+    paths["/api/v2/history/{account}"]["get"]["responses"]["200"]["content"]["*/*"]["data"][number]
 export interface NonTransactionalActivity {
     type: ActivityType.CONNECTED_APP_TRANSACTION | ActivityType.SIGN_CERT
     timestamp: number
@@ -176,7 +143,6 @@ export interface B3trActionActivity extends Activity {
     type: ActivityType.B3TR_ACTION
     value: string
     appId: string
-    proof: string
 }
 
 export interface B3trProposalVoteActivity extends Activity {
@@ -242,7 +208,6 @@ export interface B3trActionEvent extends IndexedHistoryEvent {
     from: string
     value: string
     appId: string
-    proof: string
 }
 
 export interface TransferVetEvent extends IndexedHistoryEvent {
@@ -359,13 +324,22 @@ export interface B3trProposalSupportEvent extends IndexedHistoryEvent {
 
 export interface StargateActivity extends Activity {
     eventName:
-        | ActivityEvent.STARGATE_DELEGATE
-        | ActivityEvent.STARGATE_UNDELEGATE
+        | ActivityEvent.STARGATE_BOOST
+        | ActivityEvent.STARGATE_DELEGATE_LEGACY
+        | ActivityEvent.STARGATE_DELEGATE_REQUEST
+        | ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST
+        | ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED
+        | ActivityEvent.STARGATE_DELEGATION_EXITED
+        | ActivityEvent.STARGATE_DELEGATION_EXITED_VALIDATOR
+        | ActivityEvent.STARGATE_DELEGATE_ACTIVE
+        | ActivityEvent.STARGATE_MANAGER_ADDED
+        | ActivityEvent.STARGATE_MANAGER_REMOVED
+        | ActivityEvent.STARGATE_UNDELEGATE_LEGACY
         | ActivityEvent.STARGATE_STAKE
         | ActivityEvent.STARGATE_UNSTAKE
-        | ActivityEvent.STARGATE_CLAIM_REWARDS_BASE
-        | ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE
-        | ActivityEvent.STARGATE_DELEGATE_ONLY
+        | ActivityEvent.STARGATE_CLAIM_REWARDS
+        | ActivityEvent.STARGATE_CLAIM_REWARDS_BASE_LEGACY
+        | ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY
     value: string
     tokenId?: string
     levelId?: TokenLevelId
@@ -374,6 +348,8 @@ export interface StargateActivity extends Activity {
     delegationRewards?: string
     migrated?: boolean
     autorenew?: boolean
+    validator?: string
+    delegationId?: string
 }
 
 export interface VeVoteCastActivity extends Activity {

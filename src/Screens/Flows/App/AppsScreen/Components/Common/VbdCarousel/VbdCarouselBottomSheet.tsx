@@ -1,7 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { ElementType, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import FastImage, { ImageStyle } from "react-native-fast-image"
 import { getTimeZone } from "react-native-localize"
 import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
 import {
@@ -14,15 +13,18 @@ import {
     BaseText,
     BaseView,
     BlurView,
+    DAppIcon,
 } from "~Components"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
-import { useAppOverview, useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useDappBookmarkToggle, useTheme, useThemedStyles } from "~Hooks"
+import { useAppOverview } from "~Hooks/useAppOverview"
 import { useI18nContext } from "~i18n"
 import { VbdDApp } from "~Model"
-import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
+import { Routes } from "~Navigation"
 import { addBookmark, removeBookmark, useAppDispatch } from "~Storage/Redux"
 import { BigNutils, DateUtils } from "~Utils"
+import { useDAppActions } from "../../../Hooks"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
 
 export type VbdCarouselBottomSheetMetadata = {
@@ -90,10 +92,10 @@ const VbdCarouselBottomSheetContent = ({
     const { styles } = useThemedStyles(baseStyles)
 
     const dispatch = useAppDispatch()
-    const { onDAppPress } = useDAppActions()
+    const { onDAppPress } = useDAppActions(Routes.APPS)
     const { data: appOverview, isLoading } = useAppOverview(app.id)
 
-    const { isBookMarked } = useDappBookmarking(app?.external_url, app.name)
+    const { isBookMarked } = useDappBookmarkToggle(app?.external_url, app.name)
 
     const onToggleFavorite = useCallback(() => {
         if (!isBookMarked && app) {
@@ -177,7 +179,7 @@ const VbdCarouselBottomSheetContent = ({
                         <BaseView flexDirection="column" gap={16} px={24} py={16}>
                             <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
                                 <BaseView flexDirection="row" alignItems="center" flex={1}>
-                                    <FastImage source={{ uri: iconUri }} style={styles.logo as ImageStyle} />
+                                    <DAppIcon size={24} uri={iconUri} />
                                     <BaseSpacer width={12} flexShrink={0} />
                                     <BaseText
                                         numberOfLines={1}
@@ -261,9 +263,10 @@ export const VbdCarouselBottomSheet = ({ bsRef }: VbdCarouselBottomSheetProps) =
     return (
         <BaseBottomSheet<VbdCarouselBottomSheetMetadata>
             ref={ref}
-            dynamicHeight
             backgroundStyle={styles.backgroundStyle}
             enablePanDownToClose={false}
+            dynamicHeight
+            scrollable={false}
             noMargins
             floating>
             {data => <VbdCarouselBottomSheetContent {...data} onClose={onCloseBS} />}
@@ -276,20 +279,14 @@ const baseStyles = (theme: ColorThemeType) =>
         root: {
             height: isSmallScreen ? 320 : 360,
             position: "relative",
-            overflow: "hidden",
+
             justifyContent: "flex-end",
         },
         blurView: {
             backgroundColor: "rgba(0, 0, 0, 0.30)",
         },
-        logo: {
-            width: 32,
-            height: 32,
-            borderRadius: 4,
-        },
         backgroundStyle: {
             backgroundColor: theme.colors.actionBottomSheet.background,
-            overflow: "hidden",
         },
 
         infoContainer: {
@@ -309,7 +306,7 @@ const baseStyles = (theme: ColorThemeType) =>
             position: "absolute",
             top: 12,
             right: 12,
-            backgroundColor: "rgba(0, 0, 0, 0.30)",
+            backgroundColor: "rgba(0, 0, 0, 0.50)",
             borderRadius: 100,
             padding: 10,
         },

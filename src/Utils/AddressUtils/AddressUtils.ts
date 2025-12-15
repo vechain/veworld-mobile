@@ -4,8 +4,8 @@ import { error, warn } from "~Utils/Logger"
 import { ERROR_EVENTS, VET, VTHO, B3TR, TEST_B3TR_ADDRESS, TEST_VOT3_ADDRESS, VOT3 } from "~Constants"
 import CryptoUtils from "../CryptoUtils"
 import HexUtils from "../HexUtils"
-import { Vns } from "~Hooks"
 import { queryClient } from "~Api/QueryProvider"
+import { Vns } from "~Model/Vns"
 
 export const getAddressFromPrivateKey = (privateKey: string): string => {
     try {
@@ -148,11 +148,11 @@ export const getExplorerLink = (network?: Network, type?: ExplorerLinkType) => {
 /**
  * Format address
  * @param address - the address
- * @param lengthBefore - (optional, default 4) the characters to show before the dots
- * @param lengthAfter - (optional, default 4) the characters to show after the dots
+ * @param lengthBefore - the characters to show before the dots. @default 5
+ * @param lengthAfter - the characters to show after the dots. @default 3
  * @returns the formatted address
  */
-export const humanAddress = (_address: string, lengthBefore = 6, lengthAfter = 4) => {
+export const humanAddress = (_address: string, lengthBefore = 5, lengthAfter = 3) => {
     const before = _address.substring(0, lengthBefore)
     const after = _address.substring(_address.length - lengthAfter)
     return `${before}…${after}`

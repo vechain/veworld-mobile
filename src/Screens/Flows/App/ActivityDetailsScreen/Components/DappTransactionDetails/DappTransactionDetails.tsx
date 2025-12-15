@@ -14,7 +14,7 @@ import { ClausesCarousel } from "./ClausesCarousel"
 
 type Props = {
     activity: DappTxActivity
-    clauses?: Connex.VM.Clause[]
+    clauses?: { to?: string; value: string; data: string }[]
     status?: ActivityStatus
     paid: string | undefined
     isLoading?: boolean
@@ -32,7 +32,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(
 
         const tokens = useAppSelector(selectOfficialTokens)
 
-        const clausesMetadata = TransactionUtils.interpretClauses(clauses ?? [], tokens)
+        const clausesMetadata = TransactionUtils.interpretClauses((clauses as Connex.Vendor.TxMessage) ?? [], tokens)
 
         const transactionIDshort = useMemo(() => {
             return AddressUtils.humanAddress(activity.txId ?? "", 7, 9)
