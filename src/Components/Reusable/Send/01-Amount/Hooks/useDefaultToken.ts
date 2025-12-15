@@ -56,13 +56,21 @@ export const useDefaultToken = () => {
             if (token.symbol === VTHO.symbol && vthoExchangeRate) {
                 return {
                     token,
-                    fiatValue: BalanceUtils.getFiatBalance(token.balance.balance, vthoExchangeRate, token.decimals),
+                    fiatValue: BalanceUtils.getPreciseFiatBalance(
+                        token.balance.balance,
+                        vthoExchangeRate,
+                        token.decimals,
+                    ),
                 }
             }
             if (token.symbol === B3TR.symbol && b3trExchangeRate) {
                 return {
                     token,
-                    fiatValue: BalanceUtils.getFiatBalance(token.balance.balance, b3trExchangeRate, token.decimals),
+                    fiatValue: BalanceUtils.getPreciseFiatBalance(
+                        token.balance.balance,
+                        b3trExchangeRate,
+                        token.decimals,
+                    ),
                 }
             }
             const tokenIndex = nonVechainTokensWithBalance.findIndex(nt =>
