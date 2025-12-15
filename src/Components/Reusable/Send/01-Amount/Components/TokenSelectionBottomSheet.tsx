@@ -170,7 +170,7 @@ export const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModalMethod
         const { theme, styles } = useThemedStyles(baseBottomSheetStyles)
         const [vot3WarningVisible, setVot3WarningVisible] = useState(false)
 
-        const availableTokens = useSendableTokensWithBalance()
+        const availableTokens = useSendableTokensWithBalance({ includeVOT3: true })
 
         const filteredTokens = useMemo(() => {
             const vot3Token = availableTokens.find(token => token.symbol === VOT3.symbol)
