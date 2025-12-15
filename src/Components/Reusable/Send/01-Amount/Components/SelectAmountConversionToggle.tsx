@@ -34,7 +34,7 @@ export const SelectAmountConversionToggle = React.memo<Props>(function Conversio
 
     if (isError) {
         return (
-            <BaseText color={theme.colors.danger} typographyFont="captionMedium">
+            <BaseText color={theme.colors.danger} typographyFont="captionMedium" testID="SEND_AMOUNT_EXCEEDS_BALANCE">
                 {LL.SEND_AMOUNT_EXCEEDS_BALANCE()}
             </BaseText>
         )

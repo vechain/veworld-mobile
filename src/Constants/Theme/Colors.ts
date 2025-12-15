@@ -382,6 +382,11 @@ export type Colors = {
             tokenSelectorText: string
             disabledTokenCardBackground: string
         }
+        summaryScreen: {
+            background: string
+            caption: string
+            address: string
+        }
         stepText: string
         stepBackground: string
     }
@@ -897,6 +902,11 @@ const light: Colors = {
             tokenSelectorText: COLORS.GREY_700,
             disabledTokenCardBackground: COLORS.GREY_100,
         },
+        summaryScreen: {
+            background: COLORS.GREY_50,
+            caption: COLORS.GREY_500,
+            address: COLORS.GREY_800,
+        },
         stepText: COLORS.GREY_700,
         stepBackground: COLORS.GREY_200,
     },
@@ -1286,6 +1296,11 @@ const dark: Colors = {
             tokenSelectorBorder: COLORS.DARK_PURPLE_DISABLED,
             tokenSelectorText: COLORS.GREY_100,
             disabledTokenCardBackground: COLORS.PURPLE_DISABLED,
+        },
+        summaryScreen: {
+            background: COLORS.PURPLE_DISABLED,
+            caption: COLORS.GREY_300,
+            address: COLORS.WHITE,
         },
         stepText: COLORS.GREY_100,
         stepBackground: COLORS.PURPLE_DISABLED,

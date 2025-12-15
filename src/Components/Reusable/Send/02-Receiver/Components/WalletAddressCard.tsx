@@ -1,6 +1,6 @@
 import * as Clipboard from "expo-clipboard"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { Keyboard, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Animated, { LinearTransition, ZoomInEasyUp, ZoomOutEasyUp } from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseTextInput, BaseView } from "~Components/Base"
@@ -118,7 +118,6 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
                 if (AddressUtils.isValid(vnsAddress)) {
                     onAddressChange(vnsAddress ?? "")
                     setIsError(false)
-                    Keyboard.dismiss()
                 }
             } else {
                 if (!selectedAddress) {
@@ -128,14 +127,13 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
 
                 if (selectedAddress.length === 42 && AddressUtils.isValid(selectedAddress)) {
                     setIsError(false)
-                    Keyboard.dismiss()
                 } else {
                     setIsError(true)
                 }
             }
         }
         init()
-    }, [handleGetVnsAddress, selectedAddress, isError, onAddressChange])
+    }, [handleGetVnsAddress, selectedAddress, isError, onAddressChange, isFocused])
 
     const computedInputStyles = useMemo(() => {
         const defaultBorderColor = theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200
@@ -195,8 +193,8 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
                             }
                             onIconPress={selectedAddress ? handleClearAddress : handlePasteAddress}
                             rightIconStyle={styles.rightIcon}
-                            onBlur={handleBlur}
-                            onFocus={handleFocus}
+                            handleBlur={handleBlur}
+                            handleFocus={handleFocus}
                         />
                         <TouchableOpacity
                             testID="Send_Receiver_Address_Scan_Button"

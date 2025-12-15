@@ -56,7 +56,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const activeSession = useAppSelector(state =>
         selectSession(state, navigationState?.url ?? "", selectedNetwork.genesis.id),
     )
-    const dappMetadata = useGetDappMetadataFromUrl(route.params.url)
+    const dappMetadata = useGetDappMetadataFromUrl(route.params.url, false)
     const fetchDynamicLogo = useDynamicAppLogo({ size: 48 })
 
     const iconUri = useMemo(() => {

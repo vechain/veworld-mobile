@@ -313,7 +313,7 @@ class BigNumberUtils implements IBigNumberUtils {
     toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void, decimals?: number) {
         let _balance = !isEmpty(balance) ? balance : "0"
         let _rate = rate ?? 1
-        this.data = new BN(_balance).multipliedBy(_rate)
+        this.data = new BN(_balance).multipliedBy(_rate.toString())
 
         if (callback) {
             callback(this.data)
@@ -323,13 +323,13 @@ class BigNumberUtils implements IBigNumberUtils {
             value: this.data.isLessThan("0.01") && !this.data.isZero() ? "< 0.01" : this.data.toString(),
             preciseValue: this.data.toFixed(decimals ?? 8, BN.ROUND_DOWN),
             isLeesThan_0_01: this.data.isLessThan("0.01") && !this.data.isZero(),
+            self: this,
         }
     }
 
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void) {
         let _balance = !isEmpty(balance) ? balance : "0"
-        let _rate = 1 / (rate ?? 1)
-        this.data = new BN(_balance).multipliedBy(_rate)
+        this.data = new BN(_balance).dividedBy((rate ?? 1).toString())
 
         if (callback) {
             callback(this.data)
