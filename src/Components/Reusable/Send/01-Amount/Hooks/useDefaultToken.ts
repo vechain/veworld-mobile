@@ -13,12 +13,15 @@ export const useDefaultToken = () => {
     const availableTokens = useSendableTokensWithBalance()
 
     const currency = useAppSelector(selectCurrency)
-    const { data: vetExchangeRate } = useExchangeRate({ vs_currency: currency, id: getCoinGeckoIdBySymbol[VET.symbol] })
-    const { data: vthoExchangeRate } = useExchangeRate({
+    const { data: vetExchangeRate, isLoading: isLoadingVet } = useExchangeRate({
+        vs_currency: currency,
+        id: getCoinGeckoIdBySymbol[VET.symbol],
+    })
+    const { data: vthoExchangeRate, isLoading: isLoadingVtho } = useExchangeRate({
         vs_currency: currency,
         id: getCoinGeckoIdBySymbol[VTHO.symbol],
     })
-    const { data: b3trExchangeRate } = useExchangeRate({
+    const { data: b3trExchangeRate, isLoading: isLoadingB3tr } = useExchangeRate({
         vs_currency: currency,
         id: getCoinGeckoIdBySymbol[B3TR.symbol],
     })
@@ -27,8 +30,13 @@ export const useDefaultToken = () => {
     const { data: nonVechainTokensFiat, isLoading: isLoadingNonVechainTokenFiat } = useNonVechainTokenFiat()
 
     const isLoading = useMemo(
-        () => isLoadingVechainTokensBalance || isLoadingNonVechainTokenFiat,
-        [isLoadingNonVechainTokenFiat, isLoadingVechainTokensBalance],
+        () =>
+            isLoadingVechainTokensBalance ||
+            isLoadingNonVechainTokenFiat ||
+            isLoadingVet ||
+            isLoadingVtho ||
+            isLoadingB3tr,
+        [isLoadingB3tr, isLoadingNonVechainTokenFiat, isLoadingVechainTokensBalance, isLoadingVet, isLoadingVtho],
     )
 
     const lastSentTokenAddress = useAppSelector(selectLastSentToken)
