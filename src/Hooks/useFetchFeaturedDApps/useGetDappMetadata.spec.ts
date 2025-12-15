@@ -114,4 +114,19 @@ describe("useGetDappMetadata", () => {
         })
         expect(result.current?.href).toBe("https://app.evearn.com")
     })
+
+    it("should return the dapp metadata for the evearn app if strict is false", () => {
+        const { result } = renderHook(() => useGetDappMetadataFromUrl("https://evearn.com", false), {
+            wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: {
+                    discovery: {
+                        ...mockState.discovery,
+                        favoriteRefs: [],
+                    },
+                },
+            },
+        })
+        expect(result.current?.href).toBe("https://app.evearn.com")
+    })
 })
