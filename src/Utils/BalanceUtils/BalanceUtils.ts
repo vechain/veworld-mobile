@@ -242,6 +242,11 @@ const getFiatBalance = (balance: string, exchangeRate: number, decimals: number)
     return isLeesThan_0_01 ? `< ${value}` : value
 }
 
+const getPreciseFiatBalance = (balance: string, exchangeRate: number, decimals: number) => {
+    const { preciseValue } = BigNutils().toCurrencyConversion(balance, exchangeRate, undefined, decimals)
+    return preciseValue
+}
+
 const getTokenUnitBalance = (
     balance: string,
     decimals: number,
@@ -263,4 +268,5 @@ export default {
     getTokenUnitBalance,
     getBalanceAndTokenInfoFromBlockchain,
     getBalancesFromBlockchain,
+    getPreciseFiatBalance,
 }

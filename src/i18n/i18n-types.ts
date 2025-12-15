@@ -2071,6 +2071,10 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_DEFAULT: string
 	/**
+	 * I​D
+	 */
+	COMMON_LBL_ID: string
+	/**
 	 * E​n​t​e​r​ ​t​h​e​ ​{​n​a​m​e​}
 	 * @param {string} name
 	 */
@@ -7993,6 +7997,10 @@ This action is irreversible.
 	 * Default
 	 */
 	COMMON_LBL_DEFAULT: () => LocalizedString
+	/**
+	 * ID
+	 */
+	COMMON_LBL_ID: () => LocalizedString
 	/**
 	 * Enter the {name}
 	 */

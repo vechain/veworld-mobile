@@ -1,9 +1,10 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { AlertInline, BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, VeDelegate, VOT3 } from "~Constants"
+import { B3TR, COLORS, NON_SENDABLE_TOKENS, VeDelegate, VOT3 } from "~Constants"
 import { ColorThemeType, typography } from "~Constants/Theme"
 import { useBalances, useCombineFiatBalances, useFormatFiat, useTheme, useThemedStyles } from "~Hooks"
 import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
@@ -13,12 +14,11 @@ import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { formatTokenAmount } from "~Utils/StandardizedFormatting"
 import { useI18nContext } from "~i18n"
-import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 
 type TokenSelectionBottomSheetProps = {
     selectedToken: FungibleTokenWithBalance
     setSelectedToken: (token: FungibleTokenWithBalance) => void
-    onClose: (token?: FungibleTokenWithBalance) => void
+    onClose: (token: FungibleTokenWithBalance) => void
 }
 
 type EnhancedTokenCardProps = {
@@ -170,19 +170,15 @@ export const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModalMethod
         const { theme, styles } = useThemedStyles(baseBottomSheetStyles)
         const [vot3WarningVisible, setVot3WarningVisible] = useState(false)
 
-        const availableTokens = useSendableTokensWithBalance()
-
-        const nonSendableTokens = useMemo(() => {
-            return [VeDelegate.symbol, VOT3.symbol]
-        }, [])
+        const availableTokens = useSendableTokensWithBalance({ includeVOT3: true })
 
         const filteredTokens = useMemo(() => {
             const vot3Token = availableTokens.find(token => token.symbol === VOT3.symbol)
             if (vot3Token) {
-                return [...availableTokens.filter(token => !nonSendableTokens.includes(token.symbol)), vot3Token]
+                return [...availableTokens.filter(token => !NON_SENDABLE_TOKENS.includes(token.symbol)), vot3Token]
             }
-            return availableTokens.filter(token => !nonSendableTokens.includes(token.symbol))
-        }, [availableTokens, nonSendableTokens])
+            return availableTokens.filter(token => !NON_SENDABLE_TOKENS.includes(token.symbol))
+        }, [availableTokens])
 
         const handleTokenSelect = useCallback(
             (token: FungibleTokenWithBalance) => {

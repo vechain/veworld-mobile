@@ -34,9 +34,15 @@ export const SelectLanguageBottomSheet = ({ bsRef }: Props) => {
     const languagesListSeparator = useCallback(() => <BaseSpacer height={8} />, [])
 
     return (
-        <BaseBottomSheet dynamicHeight ref={ref} enableContentPanningGesture={false} scrollable={false}>
+        <BaseBottomSheet
+            dynamicHeight
+            ref={ref}
+            enableContentPanningGesture={false}
+            scrollable={false}
+            backgroundStyle={styles.background}>
             <NestableScrollContainer bounces={false} showsVerticalScrollIndicator={false} stickyHeaderIndices={[0]}>
                 <BaseView
+                    bg={theme.isDark ? COLORS.DARK_PURPLE : theme.colors.background}
                     flexDirection="column"
                     justifyContent="space-between"
                     w={100}
@@ -100,6 +106,9 @@ export const SelectLanguageBottomSheet = ({ bsRef }: Props) => {
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
+        background: {
+            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE : theme.colors.background,
+        },
         languageContainer: {
             borderRadius: 8,
         },
