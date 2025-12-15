@@ -10,17 +10,13 @@ import {
     VIP180_ABI,
 } from "@vechain/sdk-core"
 import { ethers } from "ethers"
-import { B3TR, defaultMainNetwork } from "~Constants"
-import { DEVICE_TYPE, NETWORK_TYPE } from "~Model"
-import { RootState } from "../Types"
+import { B3TR, defaultMainNetwork } from "~Constants/Constants"
+import { DEVICE_TYPE } from "~Model/Wallet"
+import { NETWORK_TYPE } from "~Model/Network"
+import { type RootState } from "../Types"
+import { getStore } from "~Test"
 
 import { setLastSentTokenAction } from "./WalletPreferences"
-
-// jest.mock("../Selectors", () => ({
-//     ...jest.requireActual("../Selectors"),
-//     selectSelectedAccountOrNull: jest.fn(),
-//     selectSelectedNetwork: jest.fn(),
-// }))
 
 const constructTx = (...clauses: TransactionClause[]) =>
     Transaction.of({
@@ -53,6 +49,7 @@ const observedWallet = ethers.Wallet.createRandom().address
 
 const buildState = (state: (oldState: Partial<RootState>) => Partial<RootState> = old => old) => {
     return state({
+        ...getStore({}),
         accounts: {
             accounts: [
                 {
@@ -149,7 +146,7 @@ describe("WalletPreferences - Actions", () => {
                     buildState(old => ({
                         ...old,
                         accounts: {
-                            ...old.accounts!,
+                            accounts: [],
                             selectedAccount: undefined,
                         },
                     })),
