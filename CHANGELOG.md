@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.14 (2025-12-15)</small>
+
+* build: init ([1bd20cf](https://github.com/vechain/veworld-mobile/commit/1bd20cf))
+* fix: remove time (#3644) ([377e4d8](https://github.com/vechain/veworld-mobile/commit/377e4d8)), closes [#3644](https://github.com/vechain/veworld-mobile/issues/3644)
+
 ## <small>2.4.13 (2025-12-02)</small>
 
 * build: init ([658831e](https://github.com/vechain/veworld-mobile/commit/658831e))
