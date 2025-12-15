@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react"
 import { CertificateRequest, TransactionRequest, TypeDataRequest } from "~Model"
 import {
+    addConnectedDiscoveryApp,
     addSession,
     selectSelectedAccountOrNull,
     selectSelectedNetwork,
@@ -37,6 +38,13 @@ export const useLoginSession = () => {
                     url: request.appUrl,
                     name: request.appName,
                     replaceable: true,
+                }),
+            )
+            dispatch(
+                addConnectedDiscoveryApp({
+                    connectedTime: Date.now(),
+                    href: new URL(request.appUrl).hostname,
+                    name: request.appName,
                 }),
             )
         },
