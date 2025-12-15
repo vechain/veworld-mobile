@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { AlertInline, BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, VeDelegate, VOT3 } from "~Constants"
+import { B3TR, COLORS, NON_SENDABLE_TOKENS, VeDelegate, VOT3 } from "~Constants"
 import { ColorThemeType, typography } from "~Constants/Theme"
 import { useBalances, useCombineFiatBalances, useFormatFiat, useTheme, useThemedStyles } from "~Hooks"
 import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
@@ -172,17 +172,13 @@ export const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModalMethod
 
         const availableTokens = useSendableTokensWithBalance()
 
-        const nonSendableTokens = useMemo(() => {
-            return [VeDelegate.symbol, VOT3.symbol]
-        }, [])
-
         const filteredTokens = useMemo(() => {
             const vot3Token = availableTokens.find(token => token.symbol === VOT3.symbol)
             if (vot3Token) {
-                return [...availableTokens.filter(token => !nonSendableTokens.includes(token.symbol)), vot3Token]
+                return [...availableTokens.filter(token => !NON_SENDABLE_TOKENS.includes(token.symbol)), vot3Token]
             }
-            return availableTokens.filter(token => !nonSendableTokens.includes(token.symbol))
-        }, [availableTokens, nonSendableTokens])
+            return availableTokens.filter(token => !NON_SENDABLE_TOKENS.includes(token.symbol))
+        }, [availableTokens])
 
         const handleTokenSelect = useCallback(
             (token: FungibleTokenWithBalance) => {
