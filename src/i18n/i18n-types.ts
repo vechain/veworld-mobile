@@ -2071,10 +2071,6 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_DEFAULT: string
 	/**
-	 * I​D
-	 */
-	COMMON_LBL_ID: string
-	/**
 	 * E​n​t​e​r​ ​t​h​e​ ​{​n​a​m​e​}
 	 * @param {string} name
 	 */
@@ -2091,6 +2087,10 @@ type RootTranslation = {
 	 * F​a​v​o​r​i​t​e​s
 	 */
 	COMMON_LBL_FAVOURITES: string
+	/**
+	 * I​D
+	 */
+	COMMON_LBL_ID: string
 	/**
 	 * I​m​p​o​r​t
 	 */
@@ -3071,6 +3071,14 @@ type RootTranslation = {
 	 * S​e​t​ ​a​s​ ​a​v​a​t​a​r​!
 	 */
 	FEEDBACK_SET_AVATAR: string
+	/**
+	 * A​p​p​ ​c​o​n​n​e​c​t​e​d​!
+	 */
+	FEEDBACK_APP_CONNECTED: string
+	/**
+	 * T​r​a​n​s​f​e​r​ ​r​e​c​e​i​v​e​d
+	 */
+	FEEDBACK_TRANSFER_RECEIVED: string
 	/**
 	 * F​i​n​g​e​r​p​r​i​n​t
 	 */
@@ -7998,10 +8006,6 @@ This action is irreversible.
 	 */
 	COMMON_LBL_DEFAULT: () => LocalizedString
 	/**
-	 * ID
-	 */
-	COMMON_LBL_ID: () => LocalizedString
-	/**
 	 * Enter the {name}
 	 */
 	COMMON_LBL_ENTER_THE: (arg: { name: string }) => LocalizedString
@@ -8017,6 +8021,10 @@ This action is irreversible.
 	 * Favorites
 	 */
 	COMMON_LBL_FAVOURITES: () => LocalizedString
+	/**
+	 * ID
+	 */
+	COMMON_LBL_ID: () => LocalizedString
 	/**
 	 * Import
 	 */
@@ -8990,6 +8998,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Set as avatar!
 	 */
 	FEEDBACK_SET_AVATAR: () => LocalizedString
+	/**
+	 * App connected!
+	 */
+	FEEDBACK_APP_CONNECTED: () => LocalizedString
+	/**
+	 * Transfer received
+	 */
+	FEEDBACK_TRANSFER_RECEIVED: () => LocalizedString
 	/**
 	 * Fingerprint
 	 */
