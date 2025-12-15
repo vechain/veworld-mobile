@@ -21,6 +21,8 @@ export const ReceiverScreen = () => {
 
     const [inputWalletAddress, setInputWalletAddress] = useState<string>("")
     const [listWalletAddresses, setListWalletAddresses] = useState<string>("")
+    const [addressChangeCtx, setAddressChangeCtx] = useState<"recent" | "accounts" | "contacts" | null>(null)
+
     const { styles } = useThemedStyles(baseStyles)
 
     const allAccounts = useAppSelector(selectAccounts)
@@ -33,22 +35,25 @@ export const ReceiverScreen = () => {
     const recentContacts = useAppSelector(selectRecentContacts)
 
     const activeFilter = useMemo(() => {
+        if (addressChangeCtx) return addressChangeCtx
         if (recentContacts.find(recentContact => AddressUtils.compareAddresses(recentContact.address, selectedAddress)))
             return "recent"
         if (accounts.find(account => AddressUtils.compareAddresses(account.address, selectedAddress))) return "accounts"
         if (contacts.find(contact => AddressUtils.compareAddresses(contact.address, selectedAddress))) return "contacts"
         return undefined
-    }, [selectedAddress, accounts, contacts, recentContacts])
+    }, [selectedAddress, accounts, contacts, recentContacts, addressChangeCtx])
 
     const handleAddressChange = useCallback(
-        (source: "input" | "list", address: string) => {
+        (source: "input" | "list", address: string, ctx?: "recent" | "accounts" | "contacts") => {
             if (source === "input") {
+                setAddressChangeCtx(null)
                 if (AddressUtils.compareAddresses(address, selectedAddress)) {
                     return
                 }
                 setInputWalletAddress(address)
                 setListWalletAddresses("")
             } else {
+                setAddressChangeCtx(ctx ?? null)
                 setListWalletAddresses(address)
                 setInputWalletAddress("")
             }
@@ -82,7 +87,7 @@ export const ReceiverScreen = () => {
                 <KnownAddressesList
                     activeFilter={activeFilter}
                     selectedAddress={listWalletAddresses}
-                    onAddressChange={address => handleAddressChange("list", address)}
+                    onAddressChange={(address, ctx) => handleAddressChange("list", address, ctx)}
                 />
             </SendContent.Container>
             <SendContent.Footer>

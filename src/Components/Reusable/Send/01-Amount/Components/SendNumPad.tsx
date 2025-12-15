@@ -19,11 +19,13 @@ const numPad = [
 type Props = {
     onDigitPress: (digit: string) => void
     onDigitDelete: () => void
+    onDigitDeleteLongPress: () => void
     typographyFont?: TFonts
 }
 
 const NumPadItem = ({
     onDigitDelete,
+    onDigitDeleteLongPress,
     onDigitPress,
     digit,
     typographyFont,
@@ -33,6 +35,7 @@ const NumPadItem = ({
     const isDeleteKey = useMemo(() => digit === "canc", [digit])
     const isBlank = useMemo(() => digit === "blank", [digit])
     const value = useMemo(() => (isBlank ? decimalSeparator : digit), [decimalSeparator, digit, isBlank])
+
     const onPress = useCallback(() => {
         if (isDeleteKey) {
             onDigitDelete()
@@ -43,7 +46,12 @@ const NumPadItem = ({
 
     return (
         <BaseView style={baseStyles.width} key={digit}>
-            <TouchableOpacity activeOpacity={0.5} style={baseStyles.pressable} onPress={onPress}>
+            <TouchableOpacity
+                activeOpacity={0.5}
+                style={baseStyles.pressable}
+                onPress={onPress}
+                onLongPress={isDeleteKey ? onDigitDeleteLongPress : undefined}
+                testID={isDeleteKey ? "SEND_DELETE_KEY" : `SEND_${digit}_KEY`}>
                 {isDeleteKey ? (
                     <BaseIcon name="icon-delete" color={theme.colors.numberPad} />
                 ) : (
@@ -66,7 +74,12 @@ const NumPadRow = ({ row, ...props }: { row: string[]; decimalSeparator: string 
     )
 }
 
-export const SendNumPad = ({ onDigitPress, onDigitDelete, typographyFont = "biggerTitleMedium" }: Props) => {
+export const SendNumPad = ({
+    onDigitPress,
+    onDigitDelete,
+    onDigitDeleteLongPress,
+    typographyFont = "biggerTitleMedium",
+}: Props) => {
     const currencyFormat = useAppSelector(selectCurrencyFormat)
 
     const decimalSeparator = useMemo(() => {
@@ -93,6 +106,7 @@ export const SendNumPad = ({ onDigitPress, onDigitDelete, typographyFont = "bigg
                         decimalSeparator={decimalSeparator}
                         onDigitDelete={onDigitDelete}
                         onDigitPress={onDigitPress}
+                        onDigitDeleteLongPress={onDigitDeleteLongPress}
                         typographyFont={typographyFont}
                     />
                 )

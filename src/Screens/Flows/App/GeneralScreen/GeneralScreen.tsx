@@ -1,34 +1,18 @@
-import React, { useCallback } from "react"
+import React from "react"
 import { BaseSpacer, BaseText, BaseView, ChangeLanguage, Layout, SelectLanguageBottomSheet } from "~Components"
 import { useBottomSheetModal, useTheme } from "~Hooks"
-import { Locales, useI18nContext } from "~i18n"
-import { selectLanguage, setLanguage, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { useI18nContext } from "~i18n"
+import { selectLanguage, useAppSelector } from "~Storage/Redux"
 import { ChangeCurrency, ChangeTheme, ResetAppBox, SettingsSection } from "./Components"
 import { ChangeCurrencyFormat } from "./Components/ChangeCurrencyFormat"
 import { ChangeSymbolPosition } from "./Components/ChangeSymbolPosition"
 
 export const GeneralScreen = () => {
-    const { LL, setLocale } = useI18nContext()
-    const theme = useTheme()
-
-    const {
-        ref: selectLanguageSheetRef,
-        onOpen: openSelectLanguageSheet,
-        onClose: closeSelectLanguageSheet,
-    } = useBottomSheetModal()
-
-    const dispatch = useAppDispatch()
-
     const selectedLanguageCode = useAppSelector(selectLanguage)
 
-    const handleSelectLanguage = useCallback(
-        (language: Locales) => {
-            dispatch(setLanguage(language))
-            setLocale(language)
-            closeSelectLanguageSheet()
-        },
-        [closeSelectLanguageSheet, dispatch, setLocale],
-    )
+    const theme = useTheme()
+    const { LL } = useI18nContext()
+    const { ref: selectLanguageSheetRef, onOpen: openSelectLanguageSheet } = useBottomSheetModal()
 
     return (
         <Layout
@@ -74,11 +58,7 @@ export const GeneralScreen = () => {
 
                     <ResetAppBox />
 
-                    <SelectLanguageBottomSheet
-                        ref={selectLanguageSheetRef}
-                        selectedLanguage={selectedLanguageCode}
-                        handleSelectLanguage={handleSelectLanguage}
-                    />
+                    <SelectLanguageBottomSheet bsRef={selectLanguageSheetRef} />
                     <BaseSpacer height={20} />
                 </BaseView>
             }
