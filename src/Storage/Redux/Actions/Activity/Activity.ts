@@ -2,6 +2,7 @@ import { Transaction } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { AnalyticsEvent, creteAnalyticsEvent } from "~Constants"
 import { i18nObject } from "~i18n"
 import {
     Activity,
@@ -22,10 +23,18 @@ import {
     createPendingTransferActivityFromTx,
     createSignCertificateActivity,
     createSingTypedDataActivity,
+    enrichActivityWithTrackingData,
 } from "~Networking"
 import { selectSelectedAccount, selectDevice, selectSelectedNetwork, selectLanguage } from "~Storage/Redux/Selectors"
 import { addActivity } from "~Storage/Redux/Slices"
 import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
+import { AnalyticsUtils } from "~Utils"
+import ObjectUtils from "~Utils/ObjectUtils"
+
+type ActivityOptions = {
+    appName?: string
+    appUrl?: string
+} & Pick<Activity, "medium" | "signature" | "context" | "subject">
 
 /**
  * This method upserts an activity to the store fetching the transaction details from the chain
@@ -41,6 +50,7 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
         let updatedActivity = { ...activity }
         const locale = selectLanguage(getState())
         const LL = i18nObject(locale)
+        const selectedNetwork = selectSelectedNetwork(getState())
 
         // If the activity is a transaction, we need to fetch the transaction from the chain
         if (updatedActivity.isTransaction) {
@@ -59,8 +69,31 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
         if (Date.now() - updatedActivity.timestamp > 120000 && updatedActivity.status === ActivityStatus.PENDING)
             updatedActivity.status = ActivityStatus.REVERTED
 
+        if (updatedActivity.status === ActivityStatus.PENDING) {
+            dispatch(addActivity(updatedActivity))
+            return updatedActivity
+        }
+
+        if (updatedActivity.subject) {
+            dispatch(
+                AnalyticsUtils.trackEvent(
+                    AnalyticsEvent.WALLET_OPERATION,
+                    creteAnalyticsEvent(
+                        ObjectUtils.trimUndefined({
+                            network: selectedNetwork.name,
+                            medium: updatedActivity.medium,
+                            signature: updatedActivity.signature,
+                            subject: updatedActivity.subject,
+                            context: updatedActivity.context,
+                            failed: updatedActivity.status === ActivityStatus.REVERTED,
+                            dappUrl: updatedActivity.dappUrlOrName,
+                        }),
+                    ),
+                ),
+            )
+        }
+
         if (
-            [ActivityStatus.REVERTED, ActivityStatus.SUCCESS].includes(updatedActivity.status!) &&
             [ActivityType.TRANSFER_FT, ActivityType.TRANSFER_NFT, ActivityType.TRANSFER_VET].includes(
                 updatedActivity.type as ActivityType,
             )
@@ -97,7 +130,7 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
  * @returns An asynchronous thunk action that, when dispatched, upserts a pending transfer activity to the Redux store.
  */
 export const addPendingTransferTransactionActivity =
-    (outgoingTx: Transaction): AppThunk<void> =>
+    (outgoingTx: Transaction, options: ActivityOptions): AppThunk<void> =>
     (dispatch, getState) => {
         const locale = selectLanguage(getState())
         const LL = i18nObject(locale)
@@ -108,7 +141,7 @@ export const addPendingTransferTransactionActivity =
         if (!selectedAccount || !outgoingTx.id || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
 
         const pendingActivity: FungibleTokenActivity = createPendingTransferActivityFromTx(outgoingTx)
-        dispatch(addActivity(pendingActivity))
+        dispatch(addActivity(enrichActivityWithTrackingData(pendingActivity, options)))
         Feedback.show({
             severity: FeedbackSeverity.LOADING,
             message: LL.TRANSACTION_IN_PROGRESS(),
@@ -137,7 +170,7 @@ export const addPendingTransferTransactionActivity =
  * @returns An asynchronous thunk action that, when dispatched, upserts a pending NFT transfer activity to the Redux store.
  */
 export const addPendingNFTtransferTransactionActivity =
-    (outgoingTx: Transaction): AppThunk<void> =>
+    (outgoingTx: Transaction, options: ActivityOptions): AppThunk<void> =>
     (dispatch, getState) => {
         const locale = selectLanguage(getState())
         const LL = i18nObject(locale)
@@ -147,7 +180,7 @@ export const addPendingNFTtransferTransactionActivity =
         if (!selectedAccount || !outgoingTx.id || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
 
         const pendingActivity: NonFungibleTokenActivity = createPendingNFTTransferActivityFromTx(outgoingTx)
-        dispatch(addActivity(pendingActivity))
+        dispatch(addActivity(enrichActivityWithTrackingData(pendingActivity, options)))
         Feedback.show({
             severity: FeedbackSeverity.LOADING,
             message: LL.TRANSACTION_IN_PROGRESS(),
@@ -258,19 +291,17 @@ export const addLoginActivity =
  * This method adds a new pending DApp transaction activity to the Redux store.
  *
  * @param tx - The transaction details.
- * @param name - The name of the DApp (optional).
- * @param linkUrl - The URL of the DApp (optional).
  *
  * @returns An asynchronous thunk action that, when dispatched, adds a new pending DApp transaction activity to the Redux store.
  */
 export const addPendingDappTransactionActivity =
-    (tx: Transaction, name?: string, linkUrl?: string): AppThunk<void> =>
+    (tx: Transaction, options: ActivityOptions): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
         const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
 
         if (!selectedAccount || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
 
-        const pendingDappActivity: Activity = createPendingDappTransactionActivity(tx, name, linkUrl)
-        dispatch(addActivity(pendingDappActivity))
+        const pendingDappActivity: Activity = createPendingDappTransactionActivity(tx, options.appName, options.appUrl)
+        dispatch(addActivity(enrichActivityWithTrackingData(pendingDappActivity, options)))
     }
