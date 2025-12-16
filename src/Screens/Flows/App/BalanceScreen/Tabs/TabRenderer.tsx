@@ -1,3 +1,4 @@
+import { useNetInfo } from "@react-native-community/netinfo"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
@@ -44,6 +45,8 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const track = useAnalyticTracking()
     const { betterWorldFeature } = useFeatureFlags()
 
+    const { isConnected } = useNetInfo()
+
     const filteredTabs = useMemo(() => {
         return TABS.filter(tab => {
             if (tab === "STAKING") {
@@ -70,7 +73,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
     }, [hideNewUserVeBetterCard, hasAnyVeBetterActions, selectedTab])
 
     const rightIcon = useMemo(() => {
-        if (selectedTab === "TOKENS") {
+        if (selectedTab === "TOKENS" && isConnected) {
             return (
                 <AnimatedTouchable
                     style={styles.manageTokens}
@@ -87,7 +90,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
         }
 
         return null
-    }, [theme.isDark, selectedTab, styles.manageTokens, nav])
+    }, [selectedTab, isConnected, styles.manageTokens, theme.isDark, nav])
 
     const onTabPress = useCallback(
         (tab: (typeof TABS)[number]) => {
