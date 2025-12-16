@@ -152,17 +152,27 @@ const Main = () => {
      */
     // const shouldDehydrateQuery = useCallback(q => q.meta?.persisted ?? true, [])
     const persistOptions = useMemo(() => {
-        return {
+        /**
+         * @type {Omit<import("@tanstack/react-query-persist-client").PersistQueryClientOptions, 'queryClient'>}
+         */
+        const result = {
             persister: clientPersister,
             maxAge: RQ_CACHE_MAX_AGE,
             dehydrateOptions: {
-                //  shouldDehydrateQuery,
+                shouldDehydrateQuery: query => {
+                    if (query.state.status === "success") return true
+                    if (query.queryKey.length === 0) return false
+                    if (query.queryKey[0] === "TRANSAK") return false
+                    if (query.state.status === "error" && query.state.data) return true
+                    return false
+                },
                 shouldRedactErrors: () => false,
             },
             hydrateOptions: {
                 shouldRedactErrors: () => false,
             },
         }
+        return result
     }, [])
 
     if (!fontsLoaded) return

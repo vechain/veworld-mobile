@@ -1,3 +1,4 @@
+import { useNetInfo } from "@react-native-community/netinfo"
 import { useQueryClient } from "@tanstack/react-query"
 import React, { ComponentType, forwardRef, useCallback, useState } from "react"
 import { RefreshControlProps } from "react-native"
@@ -24,6 +25,8 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
     const theme = useTheme()
     const dispatch = useAppDispatch()
     const { invalidate: invalidateStargate } = useStargateInvalidation()
+
+    const { isConnected } = useNetInfo()
 
     const invalidateBalanceQueries = useCallback(async () => {
         await dispatch(updateAccountBalances(selectedAccountAddress!, queryClient))
@@ -98,12 +101,14 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
         invalidateStargateTotalStats,
         invalidateTokens,
     ])
+
     return (
         <RefreshControl
             onRefresh={onRefresh}
             tintColor={theme.colors.border}
             refreshing={refreshing}
             ref={ref}
+            enabled={Boolean(isConnected)}
             {...props}
         />
     )

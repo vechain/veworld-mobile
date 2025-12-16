@@ -1,3 +1,4 @@
+import { useNetInfo } from "@react-native-community/netinfo"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
@@ -22,6 +23,8 @@ export const BalanceActions = ({ style }: Props) => {
 
     const nav = useNavigation()
     const track = useAnalyticTracking()
+
+    const { isConnected } = useNetInfo()
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         targets: [ScanTarget.ADDRESS, ScanTarget.WALLET_CONNECT, ScanTarget.HTTPS_URL],
@@ -75,13 +78,14 @@ export const BalanceActions = ({ style }: Props) => {
                 truncateText
                 typographyFont="captionSemiBold"
                 onPress={onReceive}
+                disabled={!isConnected}
             />
             <GlassButtonWithLabel
                 label={LL.BALANCE_ACTION_SEND()}
                 size="sm"
                 icon="icon-arrow-up"
                 onPress={onSend}
-                disabled={isSendDisabled}
+                disabled={isSendDisabled || !isConnected}
                 typographyFont="captionSemiBold"
                 truncateText
             />
@@ -92,6 +96,7 @@ export const BalanceActions = ({ style }: Props) => {
                 onPress={onSwap}
                 typographyFont="captionSemiBold"
                 truncateText
+                disabled={!isConnected}
             />
             <GlassButtonWithLabel
                 label={LL.BALANCE_ACTION_BUY()}
@@ -100,6 +105,7 @@ export const BalanceActions = ({ style }: Props) => {
                 onPress={onBuy}
                 typographyFont="captionSemiBold"
                 truncateText
+                disabled={!isConnected}
             />
             <GlassButtonWithLabel
                 label={LL.BALANCE_ACTION_EARN()}
@@ -108,6 +114,7 @@ export const BalanceActions = ({ style }: Props) => {
                 onPress={onEarn}
                 typographyFont="captionSemiBold"
                 truncateText
+                disabled={!isConnected}
             />
             {RenderCameraModal}
         </Animated.View>

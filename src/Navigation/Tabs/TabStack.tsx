@@ -1,3 +1,4 @@
+import { useNetInfo } from "@react-native-community/netinfo"
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
 import React, { useCallback } from "react"
@@ -34,6 +35,8 @@ export const TabStack = () => {
     const pendingTransactions = useAppSelector(selectActivitiesWithoutFinality)
 
     const { betterWorldFeature } = useFeatureFlags()
+
+    const { isConnected } = useNetInfo()
 
     const renderTabBarIcon = useCallback(
         (focused: boolean, iconName: IconKey, label: string) => {
@@ -99,7 +102,7 @@ export const TabStack = () => {
                 />
             )}
 
-            {!AccountUtils.isObservedAccount(selectedAccount) && (
+            {!AccountUtils.isObservedAccount(selectedAccount) && isConnected && (
                 <Tab.Screen
                     name="AppsStack"
                     component={AppsStack}
