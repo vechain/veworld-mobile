@@ -1,3 +1,4 @@
+import { useNetInfo } from "@react-native-community/netinfo"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
@@ -46,6 +47,8 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
     const { LL } = useI18nContext()
     const { onCopyToClipboard } = useCopyClipboard()
     const { navigateWithTab } = useBrowserTab()
+
+    const { isConnected } = useNetInfo()
 
     const height = useSharedValue(90)
 
@@ -175,16 +178,25 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
             </BaseView>
 
             <BaseView flexDirection="row" gap={12}>
-                <TouchableOpacity onPress={onStellaPayShortCutPress}>
+                {isConnected ? (
+                    <>
+                        <TouchableOpacity onPress={onStellaPayShortCutPress}>
+                            <BaseView borderRadius={99} p={8}>
+                                <BaseIcon name="icon-credit-card" color={COLORS.PURPLE_LABEL} size={24} />
+                            </BaseView>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleOpenQRCode}>
+                            <BaseView borderRadius={99} p={8}>
+                                <BaseIcon name="icon-scan-line" color={COLORS.PURPLE_LABEL} size={24} />
+                            </BaseView>
+                        </TouchableOpacity>
+                    </>
+                ) : (
                     <BaseView borderRadius={99} p={8}>
-                        <BaseIcon name="icon-credit-card" color={COLORS.PURPLE_LABEL} size={24} />
+                        <BaseIcon name="icon-wifi-off" color={COLORS.PURPLE_LABEL} size={24} />
                     </BaseView>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleOpenQRCode}>
-                    <BaseView borderRadius={99} p={8}>
-                        <BaseIcon name="icon-scan-line" color={COLORS.PURPLE_LABEL} size={24} />
-                    </BaseView>
-                </TouchableOpacity>
+                )}
+
                 {network.type !== NETWORK_TYPE.MAIN && (
                     <NetworkSwitcherContextMenu>
                         <TouchableOpacity onPress={onSwitchNetwork}>
