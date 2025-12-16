@@ -748,6 +748,7 @@
   "FEBRUARY": "二月",
   "FEEDBACK_APP_CONNECTED": "應用程式已連線！",
   "FEEDBACK_FAVORITED": "已收藏！",
+  "FEEDBACK_N_TRANSFERS_RECEIVED": "已收到 {count: number} 筆轉帳",
   "FEEDBACK_SET_AVATAR": "設為頭像！",
   "FEEDBACK_TRANSFER_RECEIVED": "已收到轉帳",
   "FINGERPRINT": "指紋",

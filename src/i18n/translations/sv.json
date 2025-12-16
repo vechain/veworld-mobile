@@ -748,6 +748,7 @@
   "FEBRUARY": "Februari",
   "FEEDBACK_APP_CONNECTED": "Appen är ansluten!",
   "FEEDBACK_FAVORITED": "Favoritmarkerad!",
+  "FEEDBACK_N_TRANSFERS_RECEIVED": "{count: number} överföringar mottagna",
   "FEEDBACK_SET_AVATAR": "Ställ in som avatar!",
   "FEEDBACK_TRANSFER_RECEIVED": "Överföring mottagen",
   "FINGERPRINT": "Fingeravtryck",

@@ -748,6 +748,7 @@
   "FEBRUARY": "Şubat",
   "FEEDBACK_APP_CONNECTED": "Uygulama bağlandı!",
   "FEEDBACK_FAVORITED": "Favorilere eklendi!",
+  "FEEDBACK_N_TRANSFERS_RECEIVED": "{count: number} Transfer alındı",
   "FEEDBACK_SET_AVATAR": "Avatar olarak ayarla!",
   "FEEDBACK_TRANSFER_RECEIVED": "Transfer alındı",
   "FINGERPRINT": "Parmak izi",

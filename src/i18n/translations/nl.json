@@ -748,6 +748,7 @@
   "FEBRUARY": "Februari",
   "FEEDBACK_APP_CONNECTED": "App verbonden!",
   "FEEDBACK_FAVORITED": "Toegevoegd aan favorieten!",
+  "FEEDBACK_N_TRANSFERS_RECEIVED": "{count: number} Ontvangen overschrijvingen",
   "FEEDBACK_SET_AVATAR": "Ingesteld als avatar!",
   "FEEDBACK_TRANSFER_RECEIVED": "Overdracht ontvangen",
   "FINGERPRINT": "Vingerafdruk",

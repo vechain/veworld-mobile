@@ -748,6 +748,7 @@
   "FEBRUARY": "Février",
   "FEEDBACK_APP_CONNECTED": "Application connectée !",
   "FEEDBACK_FAVORITED": "Mis en favori !",
+  "FEEDBACK_N_TRANSFERS_RECEIVED": "{count: number} transferts reçus",
   "FEEDBACK_SET_AVATAR": "Définir comme avatar !",
   "FEEDBACK_TRANSFER_RECEIVED": "Transfert reçu",
   "FINGERPRINT": "Empreinte digitale",
