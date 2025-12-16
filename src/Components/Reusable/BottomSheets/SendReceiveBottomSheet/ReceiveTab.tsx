@@ -1,16 +1,20 @@
 import picasso from "@vechain/picasso"
-import React, { useCallback, useState } from "react"
+import * as FileSystem from "expo-file-system"
+import React, { useCallback, useMemo, useState } from "react"
 import { Share, StyleSheet } from "react-native"
 import QRCode from "react-native-qrcode-svg"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useCopyClipboard } from "~Hooks/useCopyClipboard"
+import { useVetDomainsAvatar } from "~Hooks/useVetDomainsAvatar"
 import { useVns } from "~Hooks/useVns"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { AddressUtils, URIUtils } from "~Utils"
 import { OnlyVechainNetworkAlert } from "./OnlyVechainNetworkAlert"
+
+const LOGO_SIZE = 56
 
 export const ReceiveTab = () => {
     const { LL } = useI18nContext()
@@ -21,6 +25,18 @@ export const ReceiveTab = () => {
         name: "",
         address: selectedAccount.address,
     })
+
+    const { data: vetDomainsPfp } = useVetDomainsAvatar({ address: selectedAccount.address })
+
+    const avatarUri = useMemo(() => {
+        if (selectedAccount.profileImage) {
+            return `${FileSystem.documentDirectory}${selectedAccount.profileImage.uri}`
+        }
+        if (vetDomainsPfp) {
+            return URIUtils.convertUriToUrl(vetDomainsPfp)
+        }
+        return undefined
+    }, [selectedAccount.profileImage, vetDomainsPfp])
 
     const [accountCopied, setAccountCopied] = useState(false)
 
@@ -55,10 +71,14 @@ export const ReceiveTab = () => {
                         value={selectedAccount.address}
                         size={200}
                         quietZone={10}
-                        logoSize={56}
+                        logoSize={LOGO_SIZE}
                         logoBackgroundColor="transparent"
-                        logoSVG={picasso(selectedAccount.address.toLowerCase())}
-                        logoBorderRadius={8}
+                        {...(avatarUri
+                            ? { logo: { uri: avatarUri }, logoBorderRadius: LOGO_SIZE / 2 }
+                            : {
+                                  logoSVG: picasso(selectedAccount.address.toLowerCase()),
+                                  logoBorderRadius: 8,
+                              })}
                     />
                 </BaseView>
                 <BaseSpacer height={16} />
