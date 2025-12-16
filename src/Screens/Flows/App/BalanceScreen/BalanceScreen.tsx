@@ -84,7 +84,7 @@ export const BalanceScreen = () => {
     }, [selectedAccount])
 
     const colors = useMemo(() => {
-        if (!isConnected) return [COLORS.APP_BACKGROUND_DARK, "rgba(29, 23, 58, 0.5)", COLORS.RED_600]
+        if (!isConnected) return [COLORS.APP_BACKGROUND_DARK, "rgba(29, 23, 58, 0.5)", COLORS.RED_800]
         if (isObservedAccount)
             return [COLORS.APP_BACKGROUND_DARK, COLORS.APP_BACKGROUND_DARK, COLORS.APP_BACKGROUND_DARK]
         return [COLORS.APP_BACKGROUND_DARK, "rgba(29, 23, 58, 0.5)", "#423483"]
@@ -134,9 +134,7 @@ export const BalanceScreen = () => {
                             <BaseSpacer height={6} />
                             <BaseSpacer height={24} />
 
-                            {!isObservedAccount && isConnected && (
-                                <BalanceActions style={balanceActionsAnimatedStyles} />
-                            )}
+                            {!isObservedAccount && <BalanceActions style={balanceActionsAnimatedStyles} />}
 
                             <BaseSpacer height={64} />
                         </AnimatedLinearGradient>
