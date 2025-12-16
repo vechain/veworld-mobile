@@ -1,8 +1,9 @@
 import { Transaction } from "@vechain/sdk-core"
-import { ThorClient } from "@vechain/sdk-network"
+import { ThorClient, TransactionReceipt } from "@vechain/sdk-network"
+import { ethers } from "ethers"
 import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
-import { AnalyticsEvent, creteAnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, createAnalyticsEvent, VTHO } from "~Constants"
 import { i18nObject } from "~i18n"
 import {
     Activity,
@@ -25,10 +26,17 @@ import {
     createSingTypedDataActivity,
     enrichActivityWithTrackingData,
 } from "~Networking"
-import { selectSelectedAccount, selectDevice, selectSelectedNetwork, selectLanguage } from "~Storage/Redux/Selectors"
+import { ReceiptProcessor } from "~Services/AbiService/ReceiptProcessor"
+import {
+    selectSelectedAccount,
+    selectDevice,
+    selectSelectedNetwork,
+    selectLanguage,
+    selectNetworkVBDTokens,
+} from "~Storage/Redux/Selectors"
 import { addActivity } from "~Storage/Redux/Slices"
 import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
-import { AnalyticsUtils } from "~Utils"
+import { AddressUtils, AnalyticsUtils, BigNutils } from "~Utils"
 import ObjectUtils from "~Utils/ObjectUtils"
 
 type ActivityOptions = {
@@ -36,25 +44,113 @@ type ActivityOptions = {
     appUrl?: string
 } & Pick<Activity, "medium" | "signature" | "context" | "subject">
 
+const accumulateTransfers = (
+    receipt: TransactionReceipt,
+    { processor, b3trAddress }: { processor: ReceiptProcessor; b3trAddress: string },
+) => {
+    const flattenedOutputs = receipt.outputs.flat()
+
+    const origin = receipt.meta.txOrigin!
+
+    const processedOutputs = processor.analyzeReceipt(flattenedOutputs, origin)
+
+    const accumulatedResults = processedOutputs
+        .filter(
+            evt =>
+                evt.name === "Transfer(indexed address,indexed address,uint256)" ||
+                evt.name === "VET_TRANSFER(address,address,uint256)",
+        )
+        .reduce(
+            (acc, curr) => {
+                switch (curr.name) {
+                    case "VET_TRANSFER(address,address,uint256)":
+                        if (AddressUtils.compareAddresses(curr.params.from, origin)) {
+                            acc.VET_SENT = BigNutils(acc.VET_SENT).plus(curr.params.amount).toString
+                            return acc
+                        }
+                        if (AddressUtils.compareAddresses(curr.params.to, origin)) {
+                            acc.VET_RECEIVED = BigNutils(acc.VET_RECEIVED).plus(curr.params.amount).toString
+                            return acc
+                        }
+                        return acc
+                    case "Transfer(indexed address,indexed address,uint256)":
+                        if (AddressUtils.compareAddresses(curr.address, VTHO.address)) {
+                            if (AddressUtils.compareAddresses(curr.params.from, origin)) {
+                                acc.VTHO_SENT = BigNutils(acc.VTHO_SENT).plus(curr.params.value).toString
+                                return acc
+                            }
+                            if (AddressUtils.compareAddresses(curr.params.to, origin)) {
+                                acc.VTHO_RECEIVED = BigNutils(acc.VTHO_RECEIVED).plus(curr.params.value).toString
+                                return acc
+                            }
+                            return acc
+                        }
+                        if (AddressUtils.compareAddresses(curr.address, b3trAddress)) {
+                            if (AddressUtils.compareAddresses(curr.params.from, origin)) {
+                                acc.B3TR_SENT = BigNutils(acc.B3TR_SENT).plus(curr.params.value).toString
+                                return acc
+                            }
+                            if (AddressUtils.compareAddresses(curr.params.to, origin)) {
+                                acc.B3TR_RECEIVED = BigNutils(acc.B3TR_RECEIVED).plus(curr.params.value).toString
+                                return acc
+                            }
+                            return acc
+                        }
+                }
+
+                return acc
+            },
+            {
+                VET_SENT: "0",
+                VET_RECEIVED: "0",
+                B3TR_SENT: "0",
+                B3TR_RECEIVED: "0",
+                VTHO_SENT: "0",
+                VTHO_RECEIVED: "0",
+            } as {
+                /**
+                 * Amount of tokens sent
+                 */
+                [key in "VET" | "VTHO" | "B3TR" as `${key}_SENT`]: string
+            } & {
+                /**
+                 * Amount of tokens received
+                 */
+                [key in "VET" | "VTHO" | "B3TR" as `${key}_RECEIVED`]: string
+            },
+        )
+
+    return Object.fromEntries(
+        Object.entries(accumulatedResults).map(([key, value]) => [key, parseFloat(ethers.utils.formatEther(value))]),
+    )
+}
+
 /**
  * This method upserts an activity to the store fetching the transaction details from the chain
  * If the activity is not a transaction, it will just upsert the activity.
  *
  * @param activity - The activity to be upserted.
  * @param thor - The Connex.Thor instance used for querying the chain.
+ * @param processor - Receipt processor with only Generic and Native enabled
  * @returns A promise which resolves to the upserted activity.
  */
 export const validateAndUpsertActivity = createAppAsyncThunk(
     "activity/upsertTransactionDetails",
-    async ({ activity, thor }: { activity: Activity; thor: ThorClient }, { dispatch, getState }) => {
+    async (
+        { activity, thor, processor }: { activity: Activity; thor: ThorClient; processor: ReceiptProcessor },
+        { dispatch, getState },
+    ) => {
         let updatedActivity = { ...activity }
         const locale = selectLanguage(getState())
         const LL = i18nObject(locale)
         const selectedNetwork = selectSelectedNetwork(getState())
+        const { B3TR } = selectNetworkVBDTokens(getState())
+
+        let txReceipt: TransactionReceipt | null = null
 
         // If the activity is a transaction, we need to fetch the transaction from the chain
         if (updatedActivity.isTransaction) {
-            const txReceipt = await thor.transactions.getTransactionReceipt(updatedActivity.txId?.toLowerCase() ?? "")
+            txReceipt = await thor.transactions.getTransactionReceipt(updatedActivity.txId?.toLowerCase() ?? "")
 
             updatedActivity.blockNumber = txReceipt?.meta.blockNumber ?? 0
 
@@ -78,7 +174,7 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
             dispatch(
                 AnalyticsUtils.trackEvent(
                     AnalyticsEvent.WALLET_OPERATION,
-                    creteAnalyticsEvent(
+                    createAnalyticsEvent(
                         ObjectUtils.trimUndefined({
                             network: selectedNetwork.name,
                             medium: updatedActivity.medium,
@@ -87,6 +183,11 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
                             context: updatedActivity.context,
                             failed: updatedActivity.status === ActivityStatus.REVERTED,
                             dappUrl: updatedActivity.dappUrlOrName,
+                            ...(txReceipt &&
+                                accumulateTransfers(txReceipt, {
+                                    processor,
+                                    b3trAddress: B3TR.address,
+                                })),
                         }),
                     ),
                 ),

@@ -75,6 +75,10 @@ export const TransferEventListener: React.FC = () => {
 
     const getReceiptProcessor = useReceiptProcessor()
     const genericReceiptProcessor = useMemo(() => getReceiptProcessor(["Generic"]), [getReceiptProcessor])
+    const genericNativeReceiptProcessor = useMemo(
+        () => getReceiptProcessor(["Generic", "Native"]),
+        [getReceiptProcessor],
+    )
 
     const indexer = useIndexerClient(network)
 
@@ -85,12 +89,14 @@ export const TransferEventListener: React.FC = () => {
         async (activities: Activity[]) => {
             const updatedActs: Activity[] = []
             for (const activity of activities) {
-                const updated = await dispatch(validateAndUpsertActivity({ activity, thor })).unwrap()
+                const updated = await dispatch(
+                    validateAndUpsertActivity({ activity, thor, processor: genericNativeReceiptProcessor }),
+                ).unwrap()
                 updatedActs.push(updated)
             }
             return updatedActs
         },
-        [dispatch, thor],
+        [dispatch, thor, genericNativeReceiptProcessor],
     )
 
     const onBeatMessage = useCallback(
