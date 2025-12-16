@@ -91,15 +91,7 @@ export const SettingsScreen = () => {
 
             switch (item.element) {
                 case "settingsRow":
-                    return (
-                        <SettingsRow
-                            title={item.title}
-                            screenName={item.screenName}
-                            icon={item.icon}
-                            url={item.url}
-                            showBadge={shouldShowBadge(item)}
-                        />
-                    )
+                    return <SettingsRow {...item} showBadge={shouldShowBadge(item)} />
 
                 case "divider":
                     return <SettingsRowDivider height={item.height} title={item.title} />
@@ -179,80 +171,84 @@ const getLists = (
             title: LL.TITLE_GENERAL_SETTINGS(),
             screenName: Routes.SETTINGS_GENERAL,
             icon: "icon-settings",
+            external: false,
         },
         MANAGE_WALLET: {
             element: "settingsRow",
             title: LL.TITLE_MANAGE_WALLET(),
             screenName: Routes.WALLET_MANAGEMENT,
             icon: "icon-wallet",
+            external: false,
         },
         NETWORKS: {
             element: "settingsRow",
             title: LL.TITLE_NETWORKS(),
             screenName: Routes.SETTINGS_NETWORK,
             icon: "icon-globe",
+            external: false,
         },
         GET_SUPPORT: {
             element: "settingsRow",
             title: LL.TITLE_GET_SUPPORT(),
-            screenName: Routes.BROWSER,
             icon: "icon-help-circle",
             url: "https://support.veworld.com",
-        },
-        GIVE_FEEDBACK: {
-            element: "settingsRow",
-            title: LL.TITLE_GIVE_FEEDBACK(),
-            screenName: Routes.BROWSER,
-            icon: "icon-message-square",
-            url: "https://forms.office.com/e/Vq1CUJD9Vy",
+            external: true,
         },
         ABOUT: {
             element: "settingsRow",
             title: LL.TITLE_ABOUT(),
             screenName: Routes.SETTINGS_ABOUT,
             icon: "icon-info",
+            external: false,
         },
         TRANSACTIONS: {
             element: "settingsRow",
             title: LL.TITLE_TRANSACTIONS(),
             screenName: Routes.SETTINGS_TRANSACTIONS,
             icon: "icon-transaction",
+            external: false,
         },
         CONNECTED_APPS: {
             element: "settingsRow",
             title: LL.TITLE_CONNECTED_APPS(),
             screenName: Routes.SETTINGS_CONNECTED_APPS,
             icon: "icon-apps",
+            external: false,
         },
         CONTACTS: {
             element: "settingsRow",
             title: LL.TITLE_CONTACTS(),
             screenName: Routes.SETTINGS_CONTACTS,
             icon: "icon-users",
+            external: false,
         },
         PRIVACY: {
             element: "settingsRow",
             title: LL.TITLE_PRIVACY(),
             screenName: Routes.SETTINGS_PRIVACY,
             icon: "icon-shield-check",
+            external: false,
         },
         NOTIFICATIONS: {
             element: "settingsRow",
             title: LL.TITLE_NOTIFICATIONS(),
             screenName: Routes.SETTINGS_NOTIFICATIONS,
             icon: "icon-bell-ring",
+            external: false,
         },
         ALERTS: {
             element: "settingsRow",
             title: LL.TITLE_ALERTS(),
             screenName: Routes.SETTINGS_ALERTS,
             icon: "icon-bell",
+            external: false,
         },
         DEVELOPER: {
             element: "settingsRow",
             title: LL.TITLE_DEVELOPER_SETTINGS(),
             screenName: Routes.SETTINGS_DEVELOPER,
             icon: "icon-code",
+            external: false,
         },
     } satisfies Record<string, SettingsItem>
 
@@ -264,7 +260,6 @@ const getLists = (
                 tiles.NETWORKS,
                 DIVIDER,
                 tiles.GET_SUPPORT,
-                tiles.GIVE_FEEDBACK,
                 tiles.ABOUT,
             ],
         }
@@ -280,7 +275,6 @@ const getLists = (
         BACKUP_BANNER,
         DIVIDER,
         tiles.GET_SUPPORT,
-        tiles.GIVE_FEEDBACK,
         tiles.ABOUT,
     ]
 
