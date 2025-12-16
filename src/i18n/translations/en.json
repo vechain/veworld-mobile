@@ -750,6 +750,7 @@
   "FEEDBACK_FAVORITED": "Favorited!",
   "FEEDBACK_SET_AVATAR": "Set as avatar!",
   "FEEDBACK_TRANSFER_RECEIVED": "Transfer received",
+  "FEEDBACK_N_TRANSFERS_RECEIVED": "{count: number} Transfers received",
   "FINGERPRINT": "Fingerprint",
   "FROM": "From",
   "GAS_FEE": "Gas fee",
