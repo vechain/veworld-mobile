@@ -7,6 +7,8 @@ import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 // const REGEX_NOT_WWW = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}(:\d+)?$/
 
 const IPFS_GATEWAY = "https://api.gateway-proxy.vechain.org/ipfs/"
+const IPFS_GATEWAY_HOSTNAME = "api.gateway-proxy.vechain.org"
+const ARWEAVE_GATEWAY_HOSTNAME = "arweave.net"
 
 // A helper function to normalize the URL by removing 'www.'
 const normalizeURL = (url: string) => {
@@ -194,6 +196,16 @@ const convertHttpToHttps = (url: string) => {
     return url
 }
 
+const getSecondLevelDomain = (url: string) => {
+    if (!isValid(url)) return undefined
+    return new URL(url).hostname.split(".").slice(-2).join(".")
+}
+
+const compareSecondLevelDomains = (url1: string, url2: string) => {
+    if (!isValid(url1) || !isValid(url2)) return false
+    return getSecondLevelDomain(url1) === getSecondLevelDomain(url2)
+}
+
 export default {
     compareURLs,
     clean,
@@ -212,5 +224,8 @@ export default {
     convertHttpToHttps,
     parseUrl,
     parseUrlSafe,
+    compareSecondLevelDomains,
     IPFS_GATEWAY,
+    IPFS_GATEWAY_HOSTNAME,
+    ARWEAVE_GATEWAY_HOSTNAME,
 }

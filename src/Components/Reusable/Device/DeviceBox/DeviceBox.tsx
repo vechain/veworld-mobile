@@ -63,7 +63,7 @@ export const DeviceBox: React.FC<Props> = ({
 
                     <BaseView flex={1}>
                         <BaseText
-                            typographyFont={isChildSelected ? "bodyBold" : "bodyMedium"}
+                            typographyFont={isChildSelected ? "bodySemiBold" : "bodyMedium"}
                             ellipsizeMode="tail"
                             numberOfLines={1}
                             mb={6}

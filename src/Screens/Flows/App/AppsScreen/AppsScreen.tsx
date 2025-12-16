@@ -1,16 +1,14 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useState } from "react"
-import { StyleSheet } from "react-native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import React, { useCallback, useRef, useState } from "react"
+import { ScrollView, StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseTouchable, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useDappBookmarksList, useThemedStyles } from "~Hooks"
 import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { X2ECategoryType } from "~Model"
-import { Routes } from "~Navigation"
-import { useAppSelector } from "~Storage/Redux/Hooks"
-import { selectBookmarkedDapps } from "~Storage/Redux/Selectors"
-import { VeBetterDAOCarousel } from "../DiscoverScreen/Components/VeBetterDAOCarousel"
+import { RootStackParamListApps, Routes } from "~Navigation"
 import { EcosystemSection } from "./Components/Ecosystem"
 import { FavoritesBottomSheet } from "./Components/FavoritesBottomSheet"
 import { FavoritesSuggestionBanner } from "./Components/FavoritesSuggestionBanner"
@@ -18,9 +16,10 @@ import { FavouritesV2 } from "./Components/Favourites/FavouritesV2"
 import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
 import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
 import { AppsBottomSheet, VeBetterSection } from "./Components/VeBetter"
+import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
 import { useDAppActions } from "./Hooks/useDAppActions"
 
-export const AppsScreen = () => {
+export const AppsScreen = ({ route }: NativeStackScreenProps<RootStackParamListApps, Routes.APPS>) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
@@ -32,8 +31,9 @@ export const AppsScreen = () => {
         onOpen: onOpenAppsBottomSheet,
         onClose: onCloseAppsBottomSheet,
     } = useBottomSheetModal()
+    const layoutRef = useRef<ScrollView>(null)
 
-    const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+    const bookmarkedDApps = useDappBookmarksList()
     const { onDAppPress } = useDAppActions(Routes.APPS)
 
     const showFavorites = bookmarkedDApps.length > 0
@@ -64,15 +64,18 @@ export const AppsScreen = () => {
 
     return (
         <Layout
-            bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
+            bg={theme.colors.background}
             noBackButton
             noMargin
+            scrollViewRef={layoutRef}
             fixedHeader={
                 <BaseView style={[HeaderStyleV2, styles.header]}>
                     <HeaderTitle
                         title={LL.APPS_SCREEN_TITLE()}
                         leftIconName="icon-apps"
                         testID="AppsScreen_HeaderTitle"
+                        typographyFont="headerTitle"
+                        align="left"
                     />
                     <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                         <BaseSpacer width={8} />
@@ -97,7 +100,7 @@ export const AppsScreen = () => {
                                 onActionLabelPress={onOpenFavorites}
                                 onDAppPress={onDAppPress}
                             />
-                            <BaseSpacer height={48} />
+                            <BaseSpacer height={40} />
                         </>
                     )}
                     {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
@@ -121,7 +124,7 @@ export const AppsScreen = () => {
                         </>
                     )}
 
-                    <EcosystemSection />
+                    <EcosystemSection defaultFilter={route.params?.filter} scrollViewRef={layoutRef} />
                     <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
                     <AppsBottomSheet
                         ref={appsBottomSheetRef}

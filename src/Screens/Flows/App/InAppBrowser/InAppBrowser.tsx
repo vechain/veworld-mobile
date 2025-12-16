@@ -6,19 +6,29 @@ import DeviceInfo from "react-native-device-info"
 import Animated, { Easing, FadeOut } from "react-native-reanimated"
 import WebView from "react-native-webview"
 import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
-import { BaseStatusBar, DAppIcon, Layout, URLBar, useInAppBrowser } from "~Components"
+import { DAppIcon, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
-import { RootStackParamListBrowser, Routes } from "~Navigation"
+import { NETWORK_TYPE } from "~Model"
+import { Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
-import { deleteSession, selectSelectedNetwork, selectSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { RootStackParamListHome } from "~Navigation/Stacks/HomeStack"
+import {
+    deleteSession,
+    selectDeveloperAppsEnabled,
+    selectSelectedNetwork,
+    selectSession,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
+import { DappNotVerified } from "./Components/DappNotVerified"
 
-type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
+type Props = NativeStackScreenProps<RootStackParamListApps | RootStackParamListHome, Routes.BROWSER>
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const {
@@ -26,12 +36,12 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         onMessage,
         onScroll,
         injectVechainScript,
-        onNavigationStateChange,
         resetWebViewState,
         ChangeAccountNetworkBottomSheetRef,
         originWhitelist,
         isLoading,
         navigationState,
+        onNavigationStateChange,
     } = useInAppBrowser()
 
     const track = useAnalyticTracking()
@@ -42,10 +52,11 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const { ref: webviewContainerRef, performScreenshot } = useBrowserScreenshot()
     const dispatch = useAppDispatch()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const developerAppsEnabled = useAppSelector(selectDeveloperAppsEnabled)
     const activeSession = useAppSelector(state =>
         selectSession(state, navigationState?.url ?? "", selectedNetwork.genesis.id),
     )
-    const dappMetadata = useGetDappMetadataFromUrl(route.params.url)
+    const dappMetadata = useGetDappMetadataFromUrl(route.params.url, false)
     const fetchDynamicLogo = useDynamicAppLogo({ size: 48 })
 
     const iconUri = useMemo(() => {
@@ -109,13 +120,19 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         }
     }, [onAndroidBackPress])
 
+    const shouldShowWebview = useMemo(() => {
+        if (dappMetadata) return true
+        if (selectedNetwork.type !== NETWORK_TYPE.MAIN) return true
+        return developerAppsEnabled
+    }, [dappMetadata, developerAppsEnabled, selectedNetwork.type])
+
     return (
         <Layout
-            bg={COLORS.DARK_PURPLE}
+            bg={COLORS.BALANCE_BACKGROUND}
             fixedHeader={
                 <URLBar
                     navigationUrl={route.params.url}
-                    isLoading={isLoadingWebView}
+                    isLoading={shouldShowWebview ? isLoadingWebView : false}
                     onNavigate={onNavigate}
                     returnScreen={route.params.returnScreen}
                 />
@@ -126,29 +143,37 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
             hasTopSafeAreaOnly
             fixedBody={
                 <View style={styles.container}>
-                    {Platform.OS === "ios" && <BaseStatusBar hero={true} />}
                     {userAgent && !isLoading && (
                         <Animated.View ref={webviewContainerRef} style={[styles.webviewContainer]} collapsable={false}>
-                            <WebView
-                                ref={webviewRef as MutableRefObject<WebView>}
-                                source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
-                                userAgent={userAgent}
-                                onNavigationStateChange={onNavigationStateChange}
-                                javaScriptEnabled={true}
-                                onMessage={onMessage}
-                                onScroll={onScroll}
-                                onLoadEnd={onLoadEnd}
-                                allowsBackForwardNavigationGestures
-                                style={styles.loginWebView}
-                                scalesPageToFit={true}
-                                injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
-                                allowsInlineMediaPlayback={true}
-                                originWhitelist={originWhitelist}
-                                collapsable={false}
-                                pullToRefreshEnabled
-                                startInLoadingState={true}
-                                renderLoading={renderLoading}
-                            />
+                            {shouldShowWebview ? (
+                                <WebView
+                                    ref={webviewRef as MutableRefObject<WebView>}
+                                    source={{
+                                        uri: route.params.url,
+                                        headers: {
+                                            "Accept-Language": locale,
+                                        },
+                                    }}
+                                    userAgent={userAgent}
+                                    javaScriptEnabled={true}
+                                    onMessage={onMessage}
+                                    onScroll={onScroll}
+                                    onNavigationStateChange={onNavigationStateChange}
+                                    onLoadEnd={onLoadEnd}
+                                    allowsBackForwardNavigationGestures
+                                    style={styles.loginWebView}
+                                    scalesPageToFit={true}
+                                    injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
+                                    allowsInlineMediaPlayback={true}
+                                    originWhitelist={originWhitelist}
+                                    collapsable={false}
+                                    pullToRefreshEnabled
+                                    startInLoadingState={true}
+                                    renderLoading={renderLoading}
+                                />
+                            ) : (
+                                <DappNotVerified onNavigate={onNavigate} returnScreen={route.params.returnScreen} />
+                            )}
                         </Animated.View>
                     )}
 

@@ -58,7 +58,7 @@ export const CopyDetailsButton = memo(({ backupDetails, deviceToBackup }: Props)
             selfAlign="flex-start"
             action={handleCopyToClipboard}
             title={LL.BTN_MNEMONIC_CLIPBOARD()}
-            typographyFont="smallButtonPrimary"
+            typographyFont="smallCaptionSemiBold"
             disabled={!backupDetails.length}
             textColor={theme.colors.text}
             rightIcon={<BaseIcon name="icon-copy" color={theme.colors.text} size={12} style={styles.icon} />}

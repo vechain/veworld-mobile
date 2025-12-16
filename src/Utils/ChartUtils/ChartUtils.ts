@@ -15,6 +15,18 @@ export const getPriceChange = (data?: MarketChartResponse) => {
 }
 
 /**
+ * Returns the price change (in percentage) from the last point to the first
+ * @param data Data to display in the chart
+ */
+export const getPercentagePriceChange = (data?: MarketChartResponse) => {
+    if (!data || data.length === 0) return 0
+    const openPrice = data[0].value
+    const closePrice = data[data.length - 1].value
+
+    return ((closePrice - openPrice) / openPrice) * 100
+}
+
+/**
  * Downsample data to create a record for every hour of the dataset.
  * The value will be computed as the average per hour.
  * @param data Data to downsample
@@ -22,7 +34,12 @@ export const getPriceChange = (data?: MarketChartResponse) => {
  * @param interval Interval to downsample. Defaults to 1
  * @returns Data, but downsampled
  */
-export const downsampleData = (data: MarketChartResponse | undefined, unit: "hour" | "day" = "hour", interval = 1) => {
+export const downsampleData = (
+    data: MarketChartResponse | undefined,
+    unit: "hour" | "day" | "month" = "hour",
+    interval = 1,
+    kind: "avg" | "first" = "avg",
+) => {
     if (!data) return undefined
 
     return [
@@ -43,6 +60,6 @@ export const downsampleData = (data: MarketChartResponse | undefined, unit: "hou
     ].map(([timestamp, values]) => ({
         timestamp: timestamp,
         //Perform the average for every hour
-        value: BigNumberUtils.average(values).toNumber,
+        value: kind === "avg" ? BigNumberUtils.average(values).toNumber : values[0],
     }))
 }

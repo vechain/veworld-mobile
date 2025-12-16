@@ -80,14 +80,14 @@ export const GalacticaEstimation = ({
                     ) : (
                         <BaseView flexDirection="row" gap={8} testID="MAX_FEE_GALACTICA">
                             <BaseAnimatedText
-                                typographyFont="subSubTitleBold"
+                                typographyFont="subSubTitleSemiBold"
                                 color={theme.colors.assetDetailsCard.title}
                                 style={blinkStyles}
                                 testID="GALACTICA_ESTIMATED_FEE">
                                 {selectedDelegationToken}&nbsp;{formatValue(maxFeeVtho)}
                             </BaseAnimatedText>
                             <BaseAnimatedText
-                                typographyFont="bodyMedium"
+                                typographyFont="captionMedium"
                                 color={theme.colors.textLightish}
                                 style={blinkStyles}>
                                 {maxFeeFiat.isLeesThan_0_01 ? `< ${maxFormattedFiat}` : maxFormattedFiat}

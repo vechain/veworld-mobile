@@ -96,7 +96,7 @@ const BaseReceiptOutput = ({
         [expanded, styles.root],
     )
     return (
-        <DappDetails show style={rootStyles} noAnimation testID={testID}>
+        <DappDetails show style={rootStyles} testID={testID}>
             <BaseView
                 flexDirection="row"
                 gap={16}

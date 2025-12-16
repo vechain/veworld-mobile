@@ -2,8 +2,9 @@ import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
-import { Activities, EmptyActivityList } from "../Components"
 import { useI18nContext } from "~i18n"
+import { Activities, EmptyActivityList } from "../Components"
+import { PendingTransactions } from "../Components/PendingTransactions"
 import { filterValues } from "../constants"
 
 export const ActivityAllScreen = () => {
@@ -20,6 +21,7 @@ export const ActivityAllScreen = () => {
 
     return (
         <BaseView style={styles.rootContainer}>
+            <PendingTransactions />
             <Activities filter={filterValues.all} emptyComponent={emptyList} />
         </BaseView>
     )

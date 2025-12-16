@@ -59,7 +59,7 @@ export const BaseCard = memo(
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         touchableContainer: {
-            borderRadius: 8,
+            borderRadius: 12,
             overflow: "hidden",
         },
         container: {
@@ -78,5 +78,6 @@ const baseStyles = (theme: ColorThemeType) =>
         view: {
             flexDirection: "row",
             padding: 12,
+            borderRadius: 12,
         },
     })

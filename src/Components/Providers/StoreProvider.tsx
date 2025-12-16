@@ -1,6 +1,8 @@
+import { configureStore, MiddlewareArray, ThunkMiddleware } from "@reduxjs/toolkit"
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
-import { getPersistorConfig, newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
-import { RootState } from "~Storage/Redux/Types"
+import { MMKV } from "react-native-mmkv"
+import { Provider } from "react-redux"
+import { AnyAction, Reducer } from "redux"
 import {
     FLUSH,
     PAUSE,
@@ -12,15 +14,13 @@ import {
     REGISTER,
     REHYDRATE,
 } from "redux-persist"
-import reduxReset from "redux-reset"
-import { configureStore, MiddlewareArray, ThunkMiddleware } from "@reduxjs/toolkit"
-import { Provider } from "react-redux"
-import { PersistGate } from "redux-persist/integration/react"
-import { PersistedCacheProvider, useApplicationSecurity } from "~Components/Providers"
-import { AnyAction, Reducer } from "redux"
-import { MMKV } from "react-native-mmkv"
-import { SplashScreen } from "../../../src/SplashScreen"
 import { PersistConfig } from "redux-persist/es/types"
+import { PersistGate } from "redux-persist/integration/react"
+import reduxReset from "redux-reset"
+import { PersistedCacheProvider, useApplicationSecurity } from "~Components/Providers"
+import { getPersistorConfig, newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
+import { RootState } from "~Storage/Redux/Types"
+import { SplashScreen } from "../../../src/SplashScreen"
 
 type StoreContextType = {
     store:
@@ -70,7 +70,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         const nftPersistence: PersistConfig<NftSliceState> = {
             key: NftSlice.name,
             storage: newStorage(mmkv),
-            whitelist: ["blackListedCollections", "reportedCollections"],
+            whitelist: ["blackListedCollections", "reportedCollections", "favoriteNfts"],
         }
 
         const persistedReducer: Reducer = persistReducer<RootState>(persistConfig, reducer(nftPersistence))

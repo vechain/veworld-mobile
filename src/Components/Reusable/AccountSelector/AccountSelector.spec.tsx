@@ -25,7 +25,7 @@ describe("AccountSelector", () => {
     })
     it("should work with short variant", () => {
         ;(useVns as jest.Mock).mockReturnValue({ name: "", address: "" })
-        render(<AccountSelector variant="short" account={mockAccountWithDevice1} onPress={jest.fn()} />, {
+        render(<AccountSelector variant="short" account={mockAccountWithDevice1} changeable={false} />, {
             wrapper: TestWrapper,
         })
 
@@ -33,7 +33,7 @@ describe("AccountSelector", () => {
     })
     it("should show the humanized address if no VNS is available", () => {
         ;(useVns as jest.Mock).mockReturnValue({ name: "", address: "" })
-        render(<AccountSelector variant="long" account={mockAccountWithDevice1} onPress={jest.fn()} />, {
+        render(<AccountSelector variant="long" account={mockAccountWithDevice1} changeable={false} />, {
             wrapper: TestWrapper,
         })
 
@@ -43,7 +43,7 @@ describe("AccountSelector", () => {
     })
     it("should show VNS if is available", () => {
         ;(useVns as jest.Mock).mockReturnValue({ name: "VNS TEST", address: "" })
-        render(<AccountSelector variant="long" account={mockAccountWithDevice1} onPress={jest.fn()} />, {
+        render(<AccountSelector variant="long" account={mockAccountWithDevice1} changeable={false} />, {
             wrapper: TestWrapper,
         })
 

@@ -66,10 +66,12 @@ const mockedFeatureFlags: FeatureFlags = {
         "coinbase-pay": {
             android: true,
             iOS: false,
+            url: "",
         },
         transak: {
             android: true,
             iOS: true,
+            url: "",
         },
         coinify: {
             android: true,
@@ -87,6 +89,9 @@ const mockedFeatureFlags: FeatureFlags = {
                 ledger: false,
             },
         },
+        HAYABUSA: {
+            stargate: {},
+        },
     },
     betterWorldFeature: {
         appsScreen: {
@@ -94,10 +99,19 @@ const mockedFeatureFlags: FeatureFlags = {
         },
         balanceScreen: {
             enabled: false,
+            collectibles: { enabled: false },
+            tokens: { enabled: false },
+            send: { enabled: false },
+            sendCollectibles: { enabled: false },
         },
     },
     smartWalletFeature: {
         enabled: false,
+    },
+    notificationCenter: {
+        registration: {
+            enabled: false,
+        },
     },
 }
 

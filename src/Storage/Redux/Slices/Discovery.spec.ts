@@ -22,8 +22,8 @@ describe("DiscoverySlice", () => {
             return {
                 connectedApps: [],
                 custom: [],
-                favorites: [],
                 featured: [],
+                favoriteRefs: [],
                 hasOpenedDiscovery: true,
                 bannerInteractions: Object.fromEntries(args.map(arg => [arg[0], { amountOfInteractions: arg[1] }])),
                 tabsManager: {
@@ -54,8 +54,9 @@ describe("DiscoverySlice", () => {
             return {
                 connectedApps: [],
                 custom: [],
-                favorites: [],
+
                 featured: [],
+                favoriteRefs: [],
                 hasOpenedDiscovery: true,
                 bannerInteractions: {},
                 tabsManager: {
@@ -120,8 +121,9 @@ describe("DiscoverySlice", () => {
             return {
                 connectedApps: [],
                 custom: [],
-                favorites: [],
+
                 featured: [],
+                favoriteRefs: [],
                 hasOpenedDiscovery: true,
                 bannerInteractions: {},
                 tabsManager: {
@@ -245,7 +247,6 @@ describe("DiscoverySlice", () => {
     })
     describe("addNavigationToDApp", () => {
         const mockDAppsState = (
-            favorites: any[] = [],
             featured: any[] = [],
             custom: any[] = [],
             lastNavigationSource?: string,
@@ -253,7 +254,7 @@ describe("DiscoverySlice", () => {
             return {
                 connectedApps: [],
                 custom,
-                favorites,
+                favoriteRefs: [],
                 featured,
                 hasOpenedDiscovery: true,
                 bannerInteractions: {},
@@ -265,17 +266,8 @@ describe("DiscoverySlice", () => {
             }
         }
 
-        it("should store the source screen when provided", () => {
-            const initialState = mockDAppsState()
-            const newState = DiscoverySlice.reducer(
-                initialState,
-                addNavigationToDApp({ href: "https://example.com", isCustom: false, sourceScreen: "HOME" }),
-            )
-            expect(newState.lastNavigationSource).toBe("HOME")
-        })
-
         it("should not modify lastNavigationSource when sourceScreen is not provided", () => {
-            const initialState = mockDAppsState([], [], [], "APPS")
+            const initialState = mockDAppsState([], [], "APPS")
             const newState = DiscoverySlice.reducer(
                 initialState,
                 addNavigationToDApp({ href: "https://example.com", isCustom: false }),
@@ -283,34 +275,7 @@ describe("DiscoverySlice", () => {
             expect(newState.lastNavigationSource).toBe("APPS")
         })
 
-        it("should update lastNavigationSource when a new sourceScreen is provided", () => {
-            const initialState = mockDAppsState([], [], [], "HOME")
-            const newState = DiscoverySlice.reducer(
-                initialState,
-                addNavigationToDApp({ href: "https://example.com", isCustom: false, sourceScreen: "DISCOVER" }),
-            )
-            expect(newState.lastNavigationSource).toBe("DISCOVER")
-        })
-
-        it("should increment navigation count for favorite dApp and store source", () => {
-            const favoriteDApp = {
-                name: "Test DApp",
-                href: "https://example.com",
-                desc: "Test description",
-                isCustom: false,
-                createAt: Date.now(),
-                amountOfNavigations: 1,
-            }
-            const initialState = mockDAppsState([favoriteDApp])
-            const newState = DiscoverySlice.reducer(
-                initialState,
-                addNavigationToDApp({ href: "https://example.com", isCustom: false, sourceScreen: "APPS" }),
-            )
-            expect(newState.favorites[0].amountOfNavigations).toBe(2)
-            expect(newState.lastNavigationSource).toBe("APPS")
-        })
-
-        it("should increment navigation count for featured dApp and store source", () => {
+        it("should increment navigation count for featured dApp", () => {
             const featuredDApp = {
                 name: "Featured DApp",
                 href: "https://featured.com",
@@ -319,16 +284,15 @@ describe("DiscoverySlice", () => {
                 createAt: Date.now(),
                 amountOfNavigations: 3,
             }
-            const initialState = mockDAppsState([], [featuredDApp])
+            const initialState = mockDAppsState([featuredDApp])
             const newState = DiscoverySlice.reducer(
                 initialState,
-                addNavigationToDApp({ href: "https://featured.com", isCustom: false, sourceScreen: "DISCOVER" }),
+                addNavigationToDApp({ href: "https://featured.com", isCustom: false }),
             )
             expect(newState.featured[0].amountOfNavigations).toBe(4)
-            expect(newState.lastNavigationSource).toBe("DISCOVER")
         })
 
-        it("should increment navigation count for custom dApp and store source", () => {
+        it("should not track navigation for custom dApps", () => {
             const customDApp = {
                 name: "Custom DApp",
                 href: "https://custom.com",
@@ -337,23 +301,21 @@ describe("DiscoverySlice", () => {
                 createAt: Date.now(),
                 amountOfNavigations: 0,
             }
-            const initialState = mockDAppsState([], [], [customDApp])
+            const initialState = mockDAppsState([], [customDApp])
             const newState = DiscoverySlice.reducer(
                 initialState,
-                addNavigationToDApp({ href: "https://custom.com", isCustom: true, sourceScreen: "HOME" }),
+                addNavigationToDApp({ href: "https://custom.com", isCustom: true }),
             )
-            expect(newState.custom[0].amountOfNavigations).toBe(1)
-            expect(newState.lastNavigationSource).toBe("HOME")
+            // Custom dApps don't track navigation counts
+            expect(newState.custom[0].amountOfNavigations).toBe(0)
         })
 
-        it("should handle navigation for non-existent dApp but still store source", () => {
+        it("should handle navigation for non-existent dApp", () => {
             const initialState = mockDAppsState()
             const newState = DiscoverySlice.reducer(
                 initialState,
-                addNavigationToDApp({ href: "https://nonexistent.com", isCustom: false, sourceScreen: "APPS" }),
+                addNavigationToDApp({ href: "https://nonexistent.com", isCustom: false }),
             )
-            expect(newState.lastNavigationSource).toBe("APPS")
-            expect(newState.favorites).toHaveLength(0)
             expect(newState.featured).toHaveLength(0)
         })
     })

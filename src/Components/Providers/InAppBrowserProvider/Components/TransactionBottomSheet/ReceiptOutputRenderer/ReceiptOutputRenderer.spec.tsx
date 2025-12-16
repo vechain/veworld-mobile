@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react-native"
 import { TransactionClause } from "@vechain/sdk-core"
 import { ethers } from "ethers"
-import React from "react"
+import React, { PropsWithChildren } from "react"
 import { B3TR, VOT3, VTHO } from "~Constants"
 import { RootState } from "~Storage/Redux/Types"
 import { TestHelpers, TestWrapper } from "~Test"
@@ -18,6 +18,82 @@ const clauses = [
     },
 ] satisfies TransactionClause[]
 
+const mockOfficialTokens = [
+    {
+        symbol: "VTHO",
+        name: "Vethor",
+        address: "0x0000000000000000000000000000456e65726779",
+        decimals: 18,
+        custom: false,
+        icon: VTHO.icon,
+        desc: "VTHO description from registry",
+        links: {
+            website: "https://www.vechain.org",
+            twitter: "https://twitter.com/vechainofficial",
+        },
+    },
+    {
+        symbol: "B3TR",
+        name: "B3TR",
+        address: "0x5ef79995FE8a89e0812330E4378eB2660ceDe699",
+        decimals: 18,
+        custom: false,
+        icon: B3TR.icon,
+        desc: "B3TR description from registry",
+        links: {
+            website: "https://b3tr.com",
+            twitter: "https://twitter.com/b3tr",
+        },
+    },
+    {
+        symbol: "VOT3",
+        name: "VOT3",
+        address: "0x76Ca782B59C74d088C7D2Cce2f211BC00836c602",
+        decimals: 18,
+        custom: false,
+        icon: VOT3.icon,
+        desc: "VOT3 description from registry",
+        links: {
+            website: "https://vot3.com",
+        },
+    },
+]
+
+const PreloadedWrapper = ({ children, preloadedState }: PropsWithChildren<{ preloadedState: Partial<RootState> }>) => {
+    return (
+        <TestWrapper
+            preloadedState={{
+                tokens: {
+                    tokens: {
+                        mainnet: {
+                            custom: {},
+                            officialTokens: mockOfficialTokens,
+                            suggestedTokens: [],
+                        },
+                        testnet: {
+                            custom: {},
+                            officialTokens: [],
+                            suggestedTokens: [],
+                        },
+                        other: {
+                            custom: {},
+                            officialTokens: [],
+                            suggestedTokens: [],
+                        },
+                        solo: {
+                            custom: {},
+                            officialTokens: [],
+                            suggestedTokens: [],
+                        },
+                    },
+                },
+                ...preloadedState,
+            }}>
+            {children}
+        </TestWrapper>
+    )
+}
+
 describe("ReceiptOutputRenderer", () => {
     describe("B3TR", () => {
         const appId = "0xapp"
@@ -27,7 +103,8 @@ describe("ReceiptOutputRenderer", () => {
                 bannerInteractions: {},
                 connectedApps: [],
                 custom: [],
-                favorites: [],
+
+                favoriteRefs: [],
                 featured: [
                     {
                         veBetterDaoId: appId,
@@ -63,7 +140,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                     initialProps: {
                         preloadedState,
                     },
@@ -91,7 +168,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                         initialProps: {
                             preloadedState,
                         },
@@ -116,7 +193,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                         initialProps: {
                             preloadedState,
                         },
@@ -142,7 +219,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                     initialProps: {
                         preloadedState,
                     },
@@ -170,7 +247,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                     initialProps: {
                         preloadedState,
                     },
@@ -196,7 +273,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                     initialProps: {
                         preloadedState,
                     },
@@ -225,7 +302,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                         initialProps: {
                             preloadedState,
                         },
@@ -254,7 +331,7 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                         initialProps: {
                             preloadedState,
                         },
@@ -275,7 +352,7 @@ describe("ReceiptOutputRenderer", () => {
                         clauses={clauses}
                         output={{
                             clauseIndex: 0,
-                            name: "STARGATE_CLAIM_REWARDS_BASE(uint256,uint256,address)",
+                            name: "STARGATE_CLAIM_REWARDS_BASE_LEGACY(uint256,uint256,address)",
                             params: {
                                 owner: "0x0",
                                 tokenId: 1n,
@@ -284,12 +361,12 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
                 expect(
-                    screen.getByTestId("STARGATE_CLAIM_REWARDS_BASE(uint256,uint256,address)_VALUE"),
+                    screen.getByTestId("STARGATE_CLAIM_REWARDS_BASE_LEGACY(uint256,uint256,address)_VALUE"),
                 ).toHaveTextContent("+ 1.00 VTHO")
             })
             it("Delegate", () => {
@@ -299,7 +376,7 @@ describe("ReceiptOutputRenderer", () => {
                         clauses={clauses}
                         output={{
                             clauseIndex: 0,
-                            name: "STARGATE_CLAIM_REWARDS_DELEGATE(uint256,uint256,address)",
+                            name: "STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY(uint256,uint256,address)",
                             params: {
                                 owner: "0x0",
                                 tokenId: 1n,
@@ -308,12 +385,38 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
                 expect(
-                    screen.getByTestId("STARGATE_CLAIM_REWARDS_DELEGATE(uint256,uint256,address)_VALUE"),
+                    screen.getByTestId("STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY(uint256,uint256,address)_VALUE"),
+                ).toHaveTextContent("+ 1.00 VTHO")
+            })
+            it("Hayabusa", () => {
+                renderComponentWithProps(
+                    <ReceiptOutputRenderer
+                        expanded
+                        clauses={clauses}
+                        output={{
+                            clauseIndex: 0,
+                            name: "STARGATE_CLAIM_REWARDS(uint256,uint256,address,uint256,uint32)",
+                            params: {
+                                owner: "0x0",
+                                tokenId: 1n,
+                                value: ethers.utils.parseEther("1").toBigInt(),
+                                delegationId: 1n,
+                                periodClaimed: 1,
+                            },
+                        }}
+                    />,
+                    {
+                        wrapper: PreloadedWrapper,
+                    },
+                )
+
+                expect(
+                    screen.getByTestId("STARGATE_CLAIM_REWARDS(uint256,uint256,address,uint256,uint32)_VALUE"),
                 ).toHaveTextContent("+ 1.00 VTHO")
             })
         })
@@ -335,40 +438,13 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                 },
             )
 
             expect(screen.getByTestId("STARGATE_STAKE(uint256,uint256,uint8,address,bool)_VALUE")).toHaveTextContent(
                 "- 1.00 VET",
             )
-        })
-        it("Stake delegate", () => {
-            renderComponentWithProps(
-                <ReceiptOutputRenderer
-                    expanded
-                    clauses={clauses}
-                    output={{
-                        clauseIndex: 0,
-                        name: "STARGATE_STAKE_DELEGATE(uint256,uint256,uint8,address,bool,bool)",
-                        params: {
-                            levelId: 1,
-                            migrated: false,
-                            owner: "0x0",
-                            tokenId: 1n,
-                            value: ethers.utils.parseEther("1").toBigInt(),
-                            autorenew: true,
-                        },
-                    }}
-                />,
-                {
-                    wrapper: TestWrapper,
-                },
-            )
-
-            expect(
-                screen.getByTestId("STARGATE_STAKE_DELEGATE(uint256,uint256,uint8,address,bool,bool)_VALUE"),
-            ).toHaveTextContent("- 1.00 VET")
         })
         it("Unstake", () => {
             renderComponentWithProps(
@@ -387,7 +463,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                 },
             )
 
@@ -402,7 +478,7 @@ describe("ReceiptOutputRenderer", () => {
                     clauses={clauses}
                     output={{
                         clauseIndex: 0,
-                        name: "STARGATE_DELEGATE(uint256,address,bool)",
+                        name: "STARGATE_DELEGATE_LEGACY(uint256,address,bool)",
                         params: {
                             owner: "0x0",
                             tokenId: 1n,
@@ -411,11 +487,13 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                 },
             )
 
-            expect(screen.getByTestId("STARGATE_DELEGATE(uint256,address,bool)_TOKEN_ID")).toHaveTextContent("#1")
+            expect(screen.getByTestId("STARGATE_DELEGATE_LEGACY(uint256,address,bool)_TOKEN_ID")).toHaveTextContent(
+                "#1",
+            )
         })
         it("Undelegate", () => {
             renderComponentWithProps(
@@ -431,11 +509,186 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                 },
             )
 
             expect(screen.getByTestId("STARGATE_UNDELEGATE(uint256)_TOKEN_ID")).toHaveTextContent("#1")
+        })
+        it("Undelegate (Legacy)", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_UNDELEGATE_LEGACY(uint256)",
+                        params: {
+                            tokenId: 1n,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(screen.getByTestId("STARGATE_UNDELEGATE_LEGACY(uint256)_TOKEN_ID")).toHaveTextContent("#1")
+        })
+        it("Boost", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_BOOST(uint256,uint256,address,uint256)",
+                        params: {
+                            boostedBlocks: 1n,
+                            from: ethers.Wallet.createRandom().address,
+                            tokenId: 1n,
+                            value: ethers.utils.parseEther("1").toBigInt(),
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(screen.getByTestId("STARGATE_BOOST(uint256,uint256,address,uint256)_VALUE")).toHaveTextContent(
+                "- 1.00 VTHO",
+            )
+        })
+        it("Delegate request", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_DELEGATE_REQUEST(uint256,address,uint256,address,uint256,uint256,uint8)",
+                        params: {
+                            delegationId: 1n,
+                            levelId: 1,
+                            owner: ethers.Wallet.createRandom().address,
+                            tokenId: 1n,
+                            validator: ethers.Wallet.createRandom().address,
+                            value: 1n,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(
+                screen.getByTestId(
+                    "STARGATE_DELEGATE_REQUEST(uint256,address,uint256,address,uint256,uint256,uint8)_TOKEN_ID",
+                ),
+            ).toHaveTextContent("#1")
+        })
+        it("Delegate request cancelled", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_DELEGATE_REQUEST_CANCELLED(uint256,address,uint256,address,uint256,uint8)",
+                        params: {
+                            delegationId: 1n,
+                            levelId: 1,
+                            owner: ethers.Wallet.createRandom().address,
+                            tokenId: 1n,
+                            validator: ethers.Wallet.createRandom().address,
+                            value: ethers.utils.parseEther("1").toBigInt(),
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(
+                screen.getByTestId(
+                    "STARGATE_DELEGATE_REQUEST_CANCELLED(uint256,address,uint256,address,uint256,uint8)_VALUE",
+                ),
+            ).toHaveTextContent("+ 1.00 VET")
+        })
+        it("Delegation exit request", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_DELEGATION_EXIT_REQUEST(uint256,uint256,address)",
+                        params: {
+                            delegationId: 1n,
+                            owner: ethers.Wallet.createRandom().address,
+                            tokenId: 1n,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(
+                screen.getByTestId("STARGATE_DELEGATION_EXIT_REQUEST(uint256,uint256,address)_TOKEN_ID"),
+            ).toHaveTextContent("#1")
+        })
+        it("Manager added", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_MANAGER_ADDED(uint256,address,address)",
+                        params: {
+                            from: ethers.Wallet.createRandom().address,
+                            to: ethers.Wallet.createRandom().address,
+                            tokenId: 1n,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(screen.getByTestId("STARGATE_MANAGER_ADDED(uint256,address,address)_TOKEN_ID")).toHaveTextContent(
+                "#1",
+            )
+        })
+        it("Manager removed", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_MANAGER_REMOVED(uint256,address,address)",
+                        params: {
+                            from: ethers.Wallet.createRandom().address,
+                            to: ethers.Wallet.createRandom().address,
+                            tokenId: 1n,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: PreloadedWrapper,
+                },
+            )
+
+            expect(screen.getByTestId("STARGATE_MANAGER_REMOVED(uint256,address,address)_TOKEN_ID")).toHaveTextContent(
+                "#1",
+            )
         })
     })
     describe("Tokens", () => {
@@ -458,11 +711,11 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
-                expect(screen.getByTestId("TOKEN_SEND_RECEIVER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("TOKEN_SEND_RECEIVER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("TOKEN_SEND_VALUE")).toHaveTextContent("- 1.00 B3TR")
             })
             it("Token receive", () => {
@@ -482,11 +735,11 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
-                expect(screen.getByTestId("TOKEN_RECEIVE_SENDER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("TOKEN_RECEIVE_SENDER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("TOKEN_RECEIVE_VALUE")).toHaveTextContent("+ 1.00 B3TR")
             })
             it("Token approval", () => {
@@ -506,11 +759,11 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
-                expect(screen.getByTestId("TOKEN_APPROVAL_SPENDER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("TOKEN_APPROVAL_SPENDER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("TOKEN_APPROVAL_VALUE")).toHaveTextContent("1.00 B3TR")
             })
             describe("Swap", () => {
@@ -532,7 +785,7 @@ describe("ReceiptOutputRenderer", () => {
                             }}
                         />,
                         {
-                            wrapper: TestWrapper,
+                            wrapper: PreloadedWrapper,
                         },
                     )
 
@@ -557,7 +810,7 @@ describe("ReceiptOutputRenderer", () => {
                             }}
                         />,
                         {
-                            wrapper: TestWrapper,
+                            wrapper: PreloadedWrapper,
                         },
                     )
 
@@ -582,7 +835,7 @@ describe("ReceiptOutputRenderer", () => {
                             }}
                         />,
                         {
-                            wrapper: TestWrapper,
+                            wrapper: PreloadedWrapper,
                         },
                     )
 
@@ -608,7 +861,7 @@ describe("ReceiptOutputRenderer", () => {
                             }}
                         />,
                         {
-                            wrapper: TestWrapper,
+                            wrapper: PreloadedWrapper,
                         },
                     )
 
@@ -635,11 +888,11 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
-                expect(screen.getByTestId("TOKEN_SEND_RECEIVER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("TOKEN_SEND_RECEIVER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("TOKEN_SEND_VALUE")).toHaveTextContent("- 1.00 VET")
             })
             it("Token receive", () => {
@@ -659,11 +912,11 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
-                expect(screen.getByTestId("TOKEN_RECEIVE_SENDER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("TOKEN_RECEIVE_SENDER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("TOKEN_RECEIVE_VALUE")).toHaveTextContent("+ 1.00 VET")
             })
         })
@@ -684,11 +937,11 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
-                expect(screen.getByTestId("NFT_SEND_RECEIVER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("NFT_SEND_RECEIVER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("NFT_SEND_TOKEN_ID")).toHaveTextContent("#1")
             })
             it("Token receive", () => {
@@ -707,11 +960,11 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
-                expect(screen.getByTestId("NFT_SEND_SENDER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("NFT_SEND_SENDER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("NFT_SEND_TOKEN_ID")).toHaveTextContent("#1")
             })
             it("Token approval", () => {
@@ -731,11 +984,11 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
-                expect(screen.getByTestId("NFT_APPROVAL_SPENDER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("NFT_APPROVAL_SPENDER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("NFT_APPROVAL_VALUE")).toHaveTextContent("#1")
             })
             it("Token approval for all", () => {
@@ -754,11 +1007,11 @@ describe("ReceiptOutputRenderer", () => {
                         }}
                     />,
                     {
-                        wrapper: TestWrapper,
+                        wrapper: PreloadedWrapper,
                     },
                 )
 
-                expect(screen.getByTestId("NFT_APPROVAL_SPENDER")).toHaveTextContent("0xb961…9Ea7")
+                expect(screen.getByTestId("NFT_APPROVAL_SPENDER")).toHaveTextContent("0xb96…Ea7")
                 expect(screen.getByTestId("NFT_APPROVAL_VALUE")).toHaveTextContent("ALL")
             })
         })
@@ -784,7 +1037,7 @@ describe("ReceiptOutputRenderer", () => {
                     }}
                 />,
                 {
-                    wrapper: TestWrapper,
+                    wrapper: PreloadedWrapper,
                 },
             )
 
@@ -807,12 +1060,12 @@ describe("ReceiptOutputRenderer", () => {
                 }}
             />,
             {
-                wrapper: TestWrapper,
+                wrapper: PreloadedWrapper,
             },
         )
 
         expect(screen.getByTestId("BASE_RECEIPT_CLAUSE_INDEX")).toHaveTextContent("#1")
-        expect(screen.getByTestId("BASE_RECEIPT_TO")).toHaveTextContent("0x73Cb…1050")
+        expect(screen.getByTestId("BASE_RECEIPT_TO")).toHaveTextContent("0x73C…050")
         expect(screen.getByTestId("BASE_RECEIPT_CONTRACT_DATA")).toHaveTextContent("0x0")
     })
 })

@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import React, { useCallback } from "react"
 import DeviceInfo from "react-native-device-info"
 import { FeatureFlags, getFeatureFlags } from "~Api/FeatureFlags"
+import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
 import { SemanticVersionUtils } from "~Utils"
 
 export const initialState: FeatureFlags = {
@@ -25,6 +26,7 @@ export const initialState: FeatureFlags = {
         transak: {
             android: true,
             iOS: true,
+            url: "https://onramp-proxy.vechain.org",
         },
         coinify: {
             android: true,
@@ -42,6 +44,16 @@ export const initialState: FeatureFlags = {
                 ledger: false,
             },
         },
+        HAYABUSA: {
+            stargate: {
+                [defaultTestNetwork.genesis.id]: {
+                    contract: "0x0000000000000000000000000000000000000000",
+                },
+                [defaultMainNetwork.genesis.id]: {
+                    contract: "0x0000000000000000000000000000000000000000",
+                },
+            },
+        },
     },
     smartWalletFeature: {
         enabled: false,
@@ -55,6 +67,20 @@ export const initialState: FeatureFlags = {
             collectibles: {
                 enabled: false,
             },
+            tokens: {
+                enabled: false,
+            },
+            send: {
+                enabled: false,
+            },
+            sendCollectibles: {
+                enabled: false,
+            },
+        },
+    },
+    notificationCenter: {
+        registration: {
+            enabled: false,
         },
     },
 }

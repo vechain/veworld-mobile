@@ -4,7 +4,7 @@ import { AppRegistry, LogBox } from "react-native"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
 import "@walletconnect/react-native-compat"
-import { NavigationContainer, useNavigationContainerRef } from "@react-navigation/native"
+import { NavigationContainer } from "@react-navigation/native"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
 import {
@@ -58,16 +58,19 @@ import * as Sentry from "@sentry/react-native"
 import "react-native-fast-url/src/polyfill"
 import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
-import { clientPersister, queryClient } from "~Api/QueryProvider"
+import { clientPersister, queryClient, RQ_CACHE_MAX_AGE } from "~Api/QueryProvider"
 import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
-import { Routes } from "~Navigation"
+import { NAVIGATION_REF, Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
 import { InteractionProvider } from "~Components/Providers/InteractionProvider"
 import { FeatureFlaggedSmartWallet } from "./src/Components/Providers/FeatureFlaggedSmartWallet"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { DeepLinksProvider } from "~Components/Providers/DeepLinksProvider"
+import { DeviceProvider } from "~Components/Providers/DeviceProvider"
+import { FeedbackProvider } from "~Components/Providers/FeedbackProvider"
+import { ReceiptProcessorProvider } from "~Components/Providers/ReceiptProcessorProvider"
 
 const { fontFamily } = typography
 
@@ -144,34 +147,54 @@ const Main = () => {
     const networkType = selectedNetwork.type
     const nodeUrl = selectedNetwork.currentUrl
 
+    /**
+     * Function called by the persistor to indicate if it needs to dehydrate a query or not
+     */
+    // const shouldDehydrateQuery = useCallback(q => q.meta?.persisted ?? true, [])
+    const persistOptions = useMemo(() => {
+        return {
+            persister: clientPersister,
+            maxAge: RQ_CACHE_MAX_AGE,
+            dehydrateOptions: {
+                //  shouldDehydrateQuery,
+                shouldRedactErrors: () => false,
+            },
+            hydrateOptions: {
+                shouldRedactErrors: () => false,
+            },
+        }
+    }, [])
+
     if (!fontsLoaded) return
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <KeyboardProvider>
                 <ConnexContextProvider>
-                    <PersistQueryClientProvider
-                        client={queryClient}
-                        persistOptions={{
-                            persister: clientPersister,
-                        }}>
+                    <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
                         <FeatureFlagsProvider>
                             <FeatureFlaggedSmartWallet nodeUrl={nodeUrl} networkType={networkType}>
-                                <NavigationProvider>
-                                    <InteractionProvider>
-                                        <DeepLinksProvider>
-                                            <WalletConnectContextProvider>
-                                                <BottomSheetModalProvider>
-                                                    <InAppBrowserProvider>
-                                                        <NotificationsProvider>
-                                                            <EntryPoint />
-                                                        </NotificationsProvider>
-                                                    </InAppBrowserProvider>
-                                                </BottomSheetModalProvider>
-                                            </WalletConnectContextProvider>
-                                        </DeepLinksProvider>
-                                    </InteractionProvider>
-                                </NavigationProvider>
-                                <BaseToast />
+                                <ReceiptProcessorProvider>
+                                    <FeedbackProvider>
+                                        <NavigationProvider>
+                                            <InteractionProvider>
+                                                <DeepLinksProvider>
+                                                    <WalletConnectContextProvider>
+                                                        <BottomSheetModalProvider>
+                                                            <InAppBrowserProvider>
+                                                                <NotificationsProvider>
+                                                                    <DeviceProvider>
+                                                                        <EntryPoint />
+                                                                    </DeviceProvider>
+                                                                </NotificationsProvider>
+                                                            </InAppBrowserProvider>
+                                                        </BottomSheetModalProvider>
+                                                    </WalletConnectContextProvider>
+                                                </DeepLinksProvider>
+                                            </InteractionProvider>
+                                        </NavigationProvider>
+                                        <BaseToast />
+                                    </FeedbackProvider>
+                                </ReceiptProcessorProvider>
                             </FeatureFlaggedSmartWallet>
                         </FeatureFlagsProvider>
                     </PersistQueryClientProvider>
@@ -186,39 +209,7 @@ const Main = () => {
  * @param {import ('~Storage/Redux').ExternalDappSession[]} externalDappSessions
  * @returns
  */
-const generateLinkingConfig = featureFlags => {
-    const appsStack = {
-        AppsStack: {
-            path: "discover",
-            initialRouteName: "Apps",
-            screens: {
-                Browser: {
-                    path: "browser/:redirect?/:ul/:url",
-                    parse: {
-                        ul: () => true,
-                        url: url => URIUtils.decodeUrl_HACK(url),
-                    },
-                },
-            },
-        },
-    }
-
-    const discoverStack = {
-        DiscoverStack: {
-            path: "discover",
-            initialRouteName: "Discover",
-            screens: {
-                Browser: {
-                    path: "browser/:redirect?/:ul/:url",
-                    parse: {
-                        ul: () => true,
-                        url: url => URIUtils.decodeUrl_HACK(url),
-                    },
-                },
-            },
-        },
-    }
-
+const generateLinkingConfig = () => {
     return {
         prefixes: [
             "https://www.veworld.com/",
@@ -235,7 +226,19 @@ const generateLinkingConfig = featureFlags => {
                             path: "nfts",
                             initialRouteName: Routes.NFTS,
                         },
-                        ...(featureFlags.betterWorldFeature.appsScreen.enabled ? appsStack : discoverStack),
+                        AppsStack: {
+                            path: "discover",
+                            initialRouteName: "Apps",
+                            screens: {
+                                Browser: {
+                                    path: "browser/:redirect?/:ul/:url",
+                                    parse: {
+                                        ul: () => true,
+                                        url: url => URIUtils.decodeUrl_HACK(url),
+                                    },
+                                },
+                            },
+                        },
                     },
                 },
             },
@@ -256,24 +259,22 @@ const NavigationProvider = ({ children }) => {
         [theme],
     )
     const externalDappSessions = useAppSelector(selectExternalDappSessions)
-
-    const navigationRef = useNavigationContainerRef()
     const routeNameRef = useRef(null)
     const dispatch = useAppDispatch()
     const featureFlags = useFeatureFlags()
 
     return (
         <NavigationContainer
-            ref={navigationRef}
+            ref={NAVIGATION_REF}
             onReady={() => {
                 if (routeNameRef && routeNameRef.current === null) {
-                    routeNameRef.current = navigationRef.getCurrentRoute()?.name
+                    routeNameRef.current = NAVIGATION_REF.getCurrentRoute()?.name
                 }
                 setReady(true)
             }}
             onStateChange={async () => {
                 const previousRouteName = routeNameRef.current
-                const currentRouteName = navigationRef.getCurrentRoute()?.name
+                const currentRouteName = NAVIGATION_REF.getCurrentRoute()?.name
                 const trackScreenView = _currentRouteName => {
                     dispatch(setCurrentMountedScreen(_currentRouteName))
                 }

@@ -17,7 +17,7 @@ export type TokenWithCompleteInfo = FungibleToken & {
     fiatBalance: string
     tokenUnitBalance: string
     tokenUnitFullBalance: string
-    exchangeRate?: number
+    exchangeRate?: number | null
     exchangeRateCurrency: string
     exchangeRateLoading: boolean
     tokenInfo?: TokenInfoResponse

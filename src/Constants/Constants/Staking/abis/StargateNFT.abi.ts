@@ -1,6 +1,12 @@
 import { abi } from "thor-devkit"
 
-type StargateInfoKeys = "getToken" | "claimableVetGeneratedVtho" | "getLevelsCirculatingSupplies"
+type StargateInfoKeys =
+    | "getToken"
+    | "claimableVetGeneratedVtho"
+    | "getLevelsCirculatingSupplies"
+    | "idsManagedBy"
+    | "idsOwnedBy"
+    | "tokensOverview"
 
 export const StargateInfo = {
     getToken: {
@@ -50,6 +56,85 @@ export const StargateInfo = {
                 internalType: "uint208[]",
                 name: "",
                 type: "uint208[]",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    idsManagedBy: {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_user",
+                type: "address",
+            },
+        ],
+        name: "idsManagedBy",
+        outputs: [
+            {
+                internalType: "uint256[]",
+                name: "",
+                type: "uint256[]",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    idsOwnedBy: {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_owner",
+                type: "address",
+            },
+        ],
+        name: "idsOwnedBy",
+        outputs: [
+            {
+                internalType: "uint256[]",
+                name: "",
+                type: "uint256[]",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    tokensOverview: {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_user",
+                type: "address",
+            },
+        ],
+        name: "tokensOverview",
+        outputs: [
+            {
+                components: [
+                    {
+                        internalType: "uint256",
+                        name: "id",
+                        type: "uint256",
+                    },
+                    {
+                        internalType: "address",
+                        name: "owner",
+                        type: "address",
+                    },
+                    {
+                        internalType: "address",
+                        name: "manager",
+                        type: "address",
+                    },
+                    {
+                        internalType: "uint8",
+                        name: "levelId",
+                        type: "uint8",
+                    },
+                ],
+                internalType: "struct DataTypes.TokenOverview[]",
+                name: "",
+                type: "tuple[]",
             },
         ],
         stateMutability: "view",

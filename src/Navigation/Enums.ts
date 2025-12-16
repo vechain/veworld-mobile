@@ -11,8 +11,8 @@ export enum Routes {
     IMPORT_MNEMONIC = "Import_Mnemonic",
     BROWSER = "Browser",
     HOME_STACK = "HomeStack",
-    DISCOVER_STACK = "DiscoverStack",
     APPS_STACK = "AppsStack",
+    SETTINGS_STACK = "SettingsStack",
 
     IMPORT_FROM_CLOUD = "Import_From_Cloud",
     IMPORT_MNEMONIC_BACKUP_PASSWORD = "Import_Mnemonic_Backup_Password",
@@ -30,6 +30,8 @@ export enum Routes {
     BUY_FLOW = "Buy_Flow",
     BUY = "Buy",
     BUY_WEBVIEW = "Buy_Webview",
+    SEND_TOKEN = "Send_Token",
+    SEND_SUMMARY = "Send_Summary",
     SELECT_TOKEN_SEND = "Select_Token_Send",
     SELECT_AMOUNT_SEND = "Select_Amount_Send",
     INSERT_ADDRESS_SEND = "Insert_Address_Send",
@@ -71,15 +73,11 @@ export enum Routes {
     SETTINGS_GET_SUPPORT = "Settings_Get_Support",
     SETTINGS_GIVE_FEEDBACK = "Settings_Give_Feedback",
     SETTINGS_ABOUT = "Settings_About",
-    SETTINGS_ADD_CUSTOM_NODE = "Settings_Add_Custom_Node",
-    SETTINGS_MANAGE_CUSTOM_NODES = "Settings_Manage_custom_Nodes",
+    SETTINGS_DEVELOPER = "Settings_Developer",
     SETTINGS_NOTIFICATIONS = "Settings_Notifications",
     CAMERA = "Camera",
-    DISCOVER = "Discover",
     HISTORY_STACK = "HistoryStack",
     DISCOVER_FEATURED = "Discover_Featured",
-    DISCOVER_FAVOURITES = "Discover_Favourites",
-    DISCOVER_SEARCH = "Discover_Search",
     TOKEN_DETAILS = "Token_Details",
     BRIDGE_TOKEN_DETAILS = "Bridge_Token_Details",
     CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN = "Convert_Better_Token_Transaction_Screen",
@@ -93,10 +91,13 @@ export enum Routes {
     SECURITY_UPGRADE_V2 = "Security_Upgrade_V2",
     SECURITY_UPGRADE_V2_HOME = "Security_Upgrade_V2_Home",
     SECURITY_UPGRADE_V2_MNEMONIC_BACKUP = "Security_Upgrade_V2_Mnemonic_Backup",
-    DISCOVER_TABS_MANAGER = "Discover_Tabs_Manager",
 
     // BetterWorld
     APPS = "Apps",
     APPS_SEARCH = "Apps_Search",
     APPS_TABS_MANAGER = "Apps_Tabs_Manager",
+
+    // Collectibles
+    COLLECTIBLES_COLLECTIONS = "Collectibles_Collections",
+    COLLECTIBLES_COLLECTION_DETAILS = "Collectibles_Collection_Details",
 }

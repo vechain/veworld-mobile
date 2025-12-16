@@ -4,16 +4,6 @@ import { TestWrapper } from "~Test"
 import { DiscoveryDApp } from "~Constants"
 import { DiscoveryState } from "~Storage/Redux"
 
-const bookmarkedDapps: DiscoveryDApp[] = [
-    {
-        href: "https://example.com",
-        name: "Example",
-        isCustom: false,
-        createAt: Date.now(),
-        amountOfNavigations: 2,
-    },
-]
-
 const featuredDapps: DiscoveryDApp[] = [
     {
         href: "https://mugshot.vet",
@@ -25,6 +15,13 @@ const featuredDapps: DiscoveryDApp[] = [
     {
         href: "https://example2.com",
         name: "Example 2",
+        isCustom: false,
+        createAt: Date.now(),
+        amountOfNavigations: 2,
+    },
+    {
+        href: "https://app.evearn.com",
+        name: "Evearn",
         isCustom: false,
         createAt: Date.now(),
         amountOfNavigations: 2,
@@ -57,12 +54,12 @@ const customDapps: DiscoveryDApp[] = [
 
 const mockState = {
     discovery: {
-        favorites: bookmarkedDapps,
         featured: featuredDapps,
         custom: customDapps,
         hasOpenedDiscovery: true,
         connectedApps: [],
         bannerInteractions: {},
+        favoriteRefs: [],
         tabsManager: {
             currentTabId: null,
             tabs: [],
@@ -78,7 +75,8 @@ describe("useGetDappMetadata", () => {
                 preloadedState: {
                     discovery: {
                         ...mockState.discovery,
-                        favorites: [],
+
+                        favoriteRefs: [],
                     },
                 },
             },
@@ -93,11 +91,42 @@ describe("useGetDappMetadata", () => {
                 preloadedState: {
                     discovery: {
                         ...mockState.discovery,
-                        favorites: [],
+
+                        favoriteRefs: [],
                     },
                 },
             },
         })
         expect(result.current).toBeUndefined()
+    })
+
+    it("should return the dapp metadata for the evearn app", () => {
+        const { result } = renderHook(() => useGetDappMetadataFromUrl("https://app.evearn.com"), {
+            wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: {
+                    discovery: {
+                        ...mockState.discovery,
+                        favoriteRefs: [],
+                    },
+                },
+            },
+        })
+        expect(result.current?.href).toBe("https://app.evearn.com")
+    })
+
+    it("should return the dapp metadata for the evearn app if strict is false", () => {
+        const { result } = renderHook(() => useGetDappMetadataFromUrl("https://evearn.com", false), {
+            wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: {
+                    discovery: {
+                        ...mockState.discovery,
+                        favoriteRefs: [],
+                    },
+                },
+            },
+        })
+        expect(result.current?.href).toBe("https://app.evearn.com")
     })
 })

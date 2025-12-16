@@ -1,13 +1,16 @@
 import { RouteProp } from "@react-navigation/native"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { render, screen } from "@testing-library/react-native"
-import React from "react"
-import { GasPriceCoefficient, VTHO } from "~Constants"
+import React, { PropsWithChildren } from "react"
+
+import { B3TR, GasPriceCoefficient, VOT3, VTHO } from "~Constants"
+import { TestWrapper } from "~Test"
+
 import { useTransactionScreen } from "~Hooks/useTransactionScreen"
 import { DelegationType } from "~Model/Delegation"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { TestWrapper } from "~Test"
 import { BigNutils } from "~Utils"
+
 import { TransactionSummarySendScreen } from "./04-TransactionSummarySendScreen"
 
 jest.mock("@gorhom/bottom-sheet", () => ({
@@ -21,6 +24,81 @@ type NavigationType = NativeStackNavigationProp<RootStackParamListHome, Routes.T
 type RouteType = RouteProp<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
 const findElement = async () => await screen.findByTestId("Transaction_Summary_Send_Screen", {}, { timeout: 5000 })
+
+const mockOfficialTokens = [
+    {
+        symbol: "VTHO",
+        name: "Vethor",
+        address: "0x0000000000000000000000000000456e65726779",
+        decimals: 18,
+        custom: false,
+        icon: VTHO.icon,
+        desc: "VTHO description from registry",
+        links: {
+            website: "https://www.vechain.org",
+            twitter: "https://twitter.com/vechainofficial",
+        },
+    },
+    {
+        symbol: "B3TR",
+        name: "B3TR",
+        address: "0x5ef79995FE8a89e0812330E4378eB2660ceDe699",
+        decimals: 18,
+        custom: false,
+        icon: B3TR.icon,
+        desc: "B3TR description from registry",
+        links: {
+            website: "https://b3tr.com",
+            twitter: "https://twitter.com/b3tr",
+        },
+    },
+    {
+        symbol: "VOT3",
+        name: "VOT3",
+        address: "0x76Ca782B59C74d088C7D2Cce2f211BC00836c602",
+        decimals: 18,
+        custom: false,
+        icon: VOT3.icon,
+        desc: "VOT3 description from registry",
+        links: {
+            website: "https://vot3.com",
+        },
+    },
+]
+
+const PreloadedWrapper = ({ children }: PropsWithChildren) => {
+    return (
+        <TestWrapper
+            preloadedState={{
+                tokens: {
+                    tokens: {
+                        mainnet: {
+                            custom: {},
+                            officialTokens: mockOfficialTokens,
+                            suggestedTokens: [],
+                        },
+                        testnet: {
+                            custom: {},
+                            officialTokens: [],
+                            suggestedTokens: [],
+                        },
+                        other: {
+                            custom: {},
+                            officialTokens: [],
+                            suggestedTokens: [],
+                        },
+                        solo: {
+                            custom: {},
+                            officialTokens: [],
+                            suggestedTokens: [],
+                        },
+                    },
+                },
+            }}>
+            {children}
+        </TestWrapper>
+    )
+}
 
 const createRouteToken = (balance = "0x470de4df820000") => {
     return {
@@ -138,7 +216,7 @@ describe("TransactionSummarySendScreen", () => {
     })
     it("should render correctly", async () => {
         render(<TransactionSummarySendScreen {...createTestProps()} />, {
-            wrapper: TestWrapper,
+            wrapper: PreloadedWrapper,
         })
 
         await findElement()
@@ -160,7 +238,7 @@ describe("TransactionSummarySendScreen", () => {
                 }}
             />,
             {
-                wrapper: TestWrapper,
+                wrapper: PreloadedWrapper,
             },
         )
 
@@ -185,7 +263,7 @@ describe("TransactionSummarySendScreen", () => {
                 }}
             />,
             {
-                wrapper: TestWrapper,
+                wrapper: PreloadedWrapper,
             },
         )
 
@@ -245,7 +323,7 @@ describe("TransactionSummarySendScreen", () => {
                 }}
             />,
             {
-                wrapper: TestWrapper,
+                wrapper: PreloadedWrapper,
             },
         )
 

@@ -17,14 +17,15 @@ import {
 } from "~Components"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
-import { useAppOverview, useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useDappBookmarkToggle, useTheme, useThemedStyles } from "~Hooks"
+import { useAppOverview } from "~Hooks/useAppOverview"
 import { useI18nContext } from "~i18n"
 import { VbdDApp } from "~Model"
-import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
+import { Routes } from "~Navigation"
 import { addBookmark, removeBookmark, useAppDispatch } from "~Storage/Redux"
 import { BigNutils, DateUtils } from "~Utils"
+import { useDAppActions } from "../../../Hooks"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
-import { Routes } from "~Navigation"
 
 export type VbdCarouselBottomSheetMetadata = {
     bannerUri?: string
@@ -94,7 +95,7 @@ const VbdCarouselBottomSheetContent = ({
     const { onDAppPress } = useDAppActions(Routes.APPS)
     const { data: appOverview, isLoading } = useAppOverview(app.id)
 
-    const { isBookMarked } = useDappBookmarking(app?.external_url, app.name)
+    const { isBookMarked } = useDappBookmarkToggle(app?.external_url, app.name)
 
     const onToggleFavorite = useCallback(() => {
         if (!isBookMarked && app) {
@@ -262,9 +263,10 @@ export const VbdCarouselBottomSheet = ({ bsRef }: VbdCarouselBottomSheetProps) =
     return (
         <BaseBottomSheet<VbdCarouselBottomSheetMetadata>
             ref={ref}
-            dynamicHeight
             backgroundStyle={styles.backgroundStyle}
             enablePanDownToClose={false}
+            dynamicHeight
+            scrollable={false}
             noMargins
             floating>
             {data => <VbdCarouselBottomSheetContent {...data} onClose={onCloseBS} />}
@@ -277,7 +279,7 @@ const baseStyles = (theme: ColorThemeType) =>
         root: {
             height: isSmallScreen ? 320 : 360,
             position: "relative",
-            overflow: "hidden",
+
             justifyContent: "flex-end",
         },
         blurView: {
@@ -285,7 +287,6 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         backgroundStyle: {
             backgroundColor: theme.colors.actionBottomSheet.background,
-            overflow: "hidden",
         },
 
         infoContainer: {
@@ -305,7 +306,7 @@ const baseStyles = (theme: ColorThemeType) =>
             position: "absolute",
             top: 12,
             right: 12,
-            backgroundColor: "rgba(0, 0, 0, 0.30)",
+            backgroundColor: "rgba(0, 0, 0, 0.50)",
             borderRadius: 100,
             padding: 10,
         },

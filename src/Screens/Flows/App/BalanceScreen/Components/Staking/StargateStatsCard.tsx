@@ -26,14 +26,14 @@ export const StargateStatsCard = ({ title, parsedValue, unit }: Props) => {
                     justifyContent="space-between"
                     alignItems="flex-start"
                     flex={1}>
-                    <BaseText color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} typographyFont="bodySemiBold">
+                    <BaseText color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} typographyFont="captionSemiBold">
                         {title}
                     </BaseText>
 
                     <BaseView flexDirection="column" alignItems="flex-start" gap={4}>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                            typographyFont="subTitleSemiBold"
+                            typographyFont="subSubTitleSemiBold"
                             testID="STATS_CARD_VALUE">
                             {parsedValue}
                         </BaseText>

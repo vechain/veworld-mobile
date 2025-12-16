@@ -1,4 +1,4 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo, useState } from "react"
 import { Linking } from "react-native"
 import { getTimeZone } from "react-native-localize"
@@ -12,14 +12,16 @@ import {
     TransactionStatusBox,
     TransferCard,
 } from "~Components"
-import { useBottomSheetModal, useTransferAddContact } from "~Hooks"
-import { HistoryStackParamList, Routes } from "~Navigation"
+import { TokenWithCompleteInfo, useBottomSheetModal, useTransferAddContact } from "~Hooks"
+import { HistoryStackParamList, Routes, TabStackParamList } from "~Navigation"
 import { DateUtils, HexUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityModalTitle } from "./util"
 
+import { useNavigation } from "@react-navigation/native"
 import { useQuery } from "@tanstack/react-query"
 import { B3TR, VOT3 } from "~Constants"
+import { useIndexerClient } from "~Hooks/useIndexerClient"
 import {
     ActivityStatus,
     ActivityType,
@@ -36,7 +38,6 @@ import {
     SwapActivity,
     TypedDataActivity,
 } from "~Model"
-import { getTransaction } from "~Networking"
 import { selectActivity, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { ExplorerLinkType, getExplorerLink } from "~Utils/AddressUtils/AddressUtils"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
@@ -55,20 +56,33 @@ import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetail
 
 type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
-export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
+export const ActivityDetailsScreen = ({ route }: Props) => {
     const { activity, token, isSwap, returnScreen = Routes.HISTORY } = route.params
 
     const network = useAppSelector(selectSelectedNetwork)
-
+    const navigation = useNavigation<NativeStackNavigationProp<HistoryStackParamList & TabStackParamList>>()
     const { LL, locale } = useI18nContext()
 
     const [customTokenAddress, setCustomTokenAddress] = useState<string>()
 
     const activityFromStore = useAppSelector(state => selectActivity(state, activity.id))
 
+    const indexer = useIndexerClient(network)
+
     const queryFn = useCallback(async () => {
-        return await getTransaction(activity.txId ?? "", network)
-    }, [activity.txId, network])
+        return indexer
+            .GET("/api/v1/transactions/{txId}", {
+                params: {
+                    path: {
+                        txId: activity.txId ?? "",
+                    },
+                    query: {
+                        expanded: true,
+                    },
+                },
+            })
+            .then(res => res.data!)
+    }, [activity.txId, indexer])
 
     const {
         data: transaction,
@@ -201,13 +215,22 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
                     />
                 )
             }
-            case ActivityType.STARGATE_DELEGATE:
+            case ActivityType.STARGATE_DELEGATE_LEGACY:
             case ActivityType.STARGATE_STAKE:
-            case ActivityType.STARGATE_CLAIM_REWARDS_BASE:
-            case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE:
-            case ActivityType.STARGATE_DELEGATE_ONLY:
-            case ActivityType.STARGATE_UNDELEGATE:
+            case ActivityType.STARGATE_CLAIM_REWARDS_BASE_LEGACY:
+            case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE_LEGACY:
+            case ActivityType.STARGATE_UNDELEGATE_LEGACY:
             case ActivityType.STARGATE_UNSTAKE:
+            case ActivityType.STARGATE_CLAIM_REWARDS:
+            case ActivityType.STARGATE_BOOST:
+            case ActivityType.STARGATE_DELEGATE_REQUEST:
+            case ActivityType.STARGATE_DELEGATE_REQUEST_CANCELLED:
+            case ActivityType.STARGATE_DELEGATE_EXIT_REQUEST:
+            case ActivityType.STARGATE_DELEGATION_EXITED:
+            case ActivityType.STARGATE_DELEGATION_EXITED_VALIDATOR:
+            case ActivityType.STARGATE_DELEGATE_ACTIVE:
+            case ActivityType.STARGATE_MANAGER_ADDED:
+            case ActivityType.STARGATE_MANAGER_REMOVED:
                 return (
                     <StargateActivityDetails
                         activity={(activityFromStore ?? activity) as StargateActivity}
@@ -241,8 +264,25 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
     ])
 
     const onGoBack = useCallback(() => {
-        navigation.navigate(returnScreen as any)
-    }, [navigation, returnScreen])
+        switch (returnScreen) {
+            case Routes.TOKEN_DETAILS:
+                navigation.navigate(Routes.HOME_STACK, {
+                    screen: Routes.TOKEN_DETAILS,
+                    params: {
+                        token: token as TokenWithCompleteInfo,
+                    },
+                })
+                break
+            case Routes.HOME:
+                navigation.navigate(Routes.HOME_STACK, {
+                    screen: Routes.HOME,
+                })
+                break
+
+            default:
+                navigation.navigate(returnScreen)
+        }
+    }, [navigation, returnScreen, token])
 
     const onAddCustomToken = useCallback(
         (tokenAddress: string) => {

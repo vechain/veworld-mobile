@@ -1,20 +1,19 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import React from "react"
 import {
-    BaseSpacer,
     BaseView,
     ChangeAccountButtonPill,
     HeaderStyleV2,
     HeaderTitle,
     Layout,
     SelectAccountBottomSheet,
-    SelectedNetworkViewer,
 } from "~Components"
-import { NetworkSwitcherContextMenu } from "~Components/Reusable/ContextMenu"
+import { useDevice } from "~Components/Providers/DeviceProvider"
 import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
+import { PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useResetActivityStack } from "./Hooks"
 import { ActivityTabBar } from "./navigation"
@@ -36,6 +35,7 @@ export const ActivityScreen = () => {
     useResetActivityStack()
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
+    const { isLowEndDevice } = useDevice()
 
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -56,23 +56,24 @@ export const ActivityScreen = () => {
             noBackButton
             fixedHeader={
                 <BaseView style={HeaderStyleV2}>
-                    <HeaderTitle title={LL.BTN_HISTORY()} leftIconName="icon-history" />
-                    <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
-                        <NetworkSwitcherContextMenu>
-                            <SelectedNetworkViewer />
-                        </NetworkSwitcherContextMenu>
-                        <BaseSpacer width={8} />
-                        <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
-                    </BaseView>
+                    <HeaderTitle
+                        title={LL.BTN_HISTORY()}
+                        leftIconName="icon-history"
+                        typographyFont="headerTitle"
+                        align="left"
+                    />
+                    <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
                 </BaseView>
             }
             fixedBody={
                 <>
                     <Tab.Navigator
+                        tabBarPosition="top"
                         screenOptions={{
-                            animationEnabled: false,
+                            animationEnabled: !isLowEndDevice || PlatformUtils.isIOS(),
                             lazy: true,
-                            swipeEnabled: false,
+                            swipeEnabled: true,
+                            tabBarBounces: false,
                         }}
                         tabBar={ActivityTabBar}>
                         <Tab.Screen

@@ -2,11 +2,18 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
 import { ListRenderItemInfo, StyleSheet } from "react-native"
+import Animated, { AnimatedRef, useAnimatedRef } from "react-native-reanimated"
 import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useBatchAppOverviews, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
+import {
+    useBatchAppOverviews,
+    useContentSwipeAnimation,
+    useDappBookmarkToggle,
+    useTheme,
+    useThemedStyles,
+} from "~Hooks"
 import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps/useVeBetterDaoActiveApps"
 import { useI18nContext } from "~i18n"
-import { VeBetterDaoDapp, VeBetterDaoDAppMetadata, X2ECategoryType } from "~Model"
+import { IconKey, VbdDApp, X2ECategoryType } from "~Model"
 import { Routes } from "~Navigation"
 import { FetchAppOverviewResponse } from "~Networking/API/Types"
 import { CategoryFilters, RowDetails, RowExpandableDetails } from "~Screens/Flows/App/AppsScreen/Components"
@@ -14,10 +21,8 @@ import { useCategories, useCategoryFiltering } from "~Screens/Flows/App/AppsScre
 import { useDAppActions } from "~Screens/Flows/App/AppsScreen/Hooks"
 import { URIUtils } from "~Utils"
 
-type X2EDapp = VeBetterDaoDapp & VeBetterDaoDAppMetadata
-
 type X2EAppsListProps = {
-    apps: X2EDapp[]
+    apps: VbdDApp[]
     isLoading?: boolean
     onDismiss?: () => void
     openItemId: string | null
@@ -27,12 +32,14 @@ type X2EAppsListProps = {
 }
 
 type X2EAppItemProps = {
-    dapp: X2EDapp
+    dapp: VbdDApp
     onDismiss?: () => void
     openItemId: string | null
     onToggleOpenItem: (itemId: string) => void
     appOverview?: FetchAppOverviewResponse
     isOverviewLoading?: boolean
+    scrollRef: AnimatedRef<Animated.FlatList<any>>
+    index: number
 }
 
 type X2EAppsBottomSheetProps = {
@@ -41,8 +48,17 @@ type X2EAppsBottomSheetProps = {
 }
 
 const AppListItem = React.memo(
-    ({ dapp, onDismiss, openItemId, onToggleOpenItem, appOverview, isOverviewLoading = false }: X2EAppItemProps) => {
-        const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.external_url, dapp.name)
+    ({
+        dapp,
+        onDismiss,
+        openItemId,
+        onToggleOpenItem,
+        appOverview,
+        isOverviewLoading = false,
+        scrollRef,
+        index,
+    }: X2EAppItemProps) => {
+        const { isBookMarked, toggleBookmark } = useDappBookmarkToggle(dapp.external_url, dapp.name)
         const { onDAppPress } = useDAppActions(Routes.APPS)
         const { LL } = useI18nContext()
 
@@ -120,7 +136,9 @@ const AppListItem = React.memo(
                 onToggleFavorite={toggleBookmark}
                 itemId={dapp.id}
                 isOpen={isOpen}
-                onToggleOpen={onToggleOpenItem}>
+                onToggleOpen={onToggleOpenItem}
+                scrollRef={scrollRef}
+                index={index}>
                 {detailsChildren}
             </RowDetails>
         )
@@ -139,9 +157,10 @@ const AppList = React.memo(
     }: X2EAppsListProps) => {
         const theme = useTheme()
         const { styles } = useThemedStyles(baseStyles)
+        const ref = useAnimatedRef<Animated.FlatList<any>>()
 
         const renderItem = useCallback(
-            ({ item }: ListRenderItemInfo<X2EDapp>) => {
+            ({ item, index }: ListRenderItemInfo<VbdDApp>) => {
                 return (
                     <AppListItem
                         dapp={item}
@@ -150,10 +169,12 @@ const AppList = React.memo(
                         onToggleOpenItem={onToggleOpenItem}
                         appOverview={appOverviews[item.id]}
                         isOverviewLoading={isOverviewsLoading}
+                        scrollRef={ref}
+                        index={index}
                     />
                 )
             },
-            [onDismiss, openItemId, onToggleOpenItem, appOverviews, isOverviewsLoading],
+            [onDismiss, openItemId, onToggleOpenItem, appOverviews, isOverviewsLoading, ref],
         )
 
         const renderSkeletonItem = useCallback(() => {
@@ -189,7 +210,7 @@ const AppList = React.memo(
             return <BaseSpacer height={24} />
         }, [])
 
-        const keyExtractor = useCallback((item: X2EDapp) => item.id, [])
+        const keyExtractor = useCallback((item: VbdDApp) => item.id, [])
 
         if (isLoading) {
             return (
@@ -206,13 +227,16 @@ const AppList = React.memo(
         }
 
         return (
-            <BottomSheetFlatList
+            <Animated.FlatList
                 data={apps}
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
                 ItemSeparatorComponent={renderItemSeparator}
                 onEndReachedThreshold={0.5}
                 contentContainerStyle={styles.flatListPadding}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                ref={ref}
             />
         )
     },
@@ -223,8 +247,58 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
         const { data: allApps, isLoading } = useVeBetterDaoActiveDapps()
         const theme = useTheme()
         const [openItemId, setOpenItemId] = useState<string | null>(null)
+        const [animationDirection, setAnimationDirection] = useState<"left" | "right" | null>(null)
 
-        const { selectedCategory, setSelectedCategory, filteredApps } = useCategoryFiltering(allApps, initialCategoryId)
+        const {
+            selectedCategory,
+            setSelectedCategory: originalSetSelectedCategory,
+            filteredApps,
+        } = useCategoryFiltering(allApps, initialCategoryId)
+
+        const allCategories = useCategories()
+
+        const handleAnimationComplete = useCallback(() => {
+            setAnimationDirection(null)
+        }, [])
+
+        const { animatedStyle } = useContentSwipeAnimation({
+            animationDirection,
+            onAnimationComplete: handleAnimationComplete,
+            fadeOpacity: 0.1,
+        })
+
+        const contentAnimatedStyle = [{ flex: 1 }, animatedStyle]
+
+        const setSelectedCategory = useCallback(
+            (category: { id: X2ECategoryType; displayName: string; icon: IconKey }) => {
+                if (category.id === selectedCategory.id || animationDirection) return
+
+                const currentIndex = allCategories.findIndex(cat => cat.id === selectedCategory.id)
+                const newIndex = allCategories.findIndex(cat => cat.id === category.id)
+
+                let direction: "left" | "right" | null = null
+                if (newIndex > currentIndex) {
+                    direction = "left"
+                } else if (newIndex < currentIndex) {
+                    direction = "right"
+                }
+
+                originalSetSelectedCategory(category)
+
+                if (direction) {
+                    setAnimationDirection(direction)
+                }
+            },
+            [selectedCategory.id, allCategories, animationDirection, originalSetSelectedCategory],
+        )
+
+        useEffect(() => {
+            return () => {
+                if (animationDirection) {
+                    setAnimationDirection(null)
+                }
+            }
+        }, [animationDirection])
 
         const appIds = useMemo(() => filteredApps.map(app => app.id), [filteredApps])
         const { overviews: appOverviews, isLoading: isOverviewsLoading } = useBatchAppOverviews(
@@ -249,8 +323,8 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
             () => (
                 <BaseView>
                     <BaseView flexDirection="row" gap={16} alignItems="center" px={24} mt={16}>
-                        <BaseIcon name={selectedCategory.icon} size={32} color={theme.colors.editSpeedBs.title} />
-                        <BaseText typographyFont="biggerTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                        <BaseIcon name={selectedCategory.icon} size={24} color={theme.colors.editSpeedBs.title} />
+                        <BaseText typographyFont="headerTitle" color={theme.colors.editSpeedBs.title}>
                             {selectedCategory.displayName}
                         </BaseText>
                     </BaseView>
@@ -268,17 +342,20 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
                 onDismiss={handleDismiss}
                 floating={false}
                 noMargins={true}
+                enableContentPanningGesture={false}
                 backgroundStyle={{ backgroundColor: theme.colors.card }}>
                 {headerContent}
-                <AppList
-                    apps={filteredApps}
-                    isLoading={isLoading}
-                    onDismiss={handleDismiss}
-                    openItemId={openItemId}
-                    onToggleOpenItem={handleToggleOpenItem}
-                    appOverviews={appOverviews}
-                    isOverviewsLoading={isOverviewsLoading}
-                />
+                <Animated.View style={contentAnimatedStyle}>
+                    <AppList
+                        apps={filteredApps}
+                        isLoading={isLoading}
+                        onDismiss={handleDismiss}
+                        openItemId={openItemId}
+                        onToggleOpenItem={handleToggleOpenItem}
+                        appOverviews={appOverviews}
+                        isOverviewsLoading={isOverviewsLoading}
+                    />
+                </Animated.View>
             </BaseBottomSheet>
         )
     },

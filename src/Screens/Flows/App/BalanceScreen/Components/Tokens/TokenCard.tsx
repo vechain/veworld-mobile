@@ -1,19 +1,21 @@
 import { useNavigation } from "@react-navigation/native"
-import { default as React, useCallback, useMemo, useState } from "react"
+import { default as React, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
-import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChartV2 } from "~Api/Coingecko"
+import { BaseIcon, BaseText, BaseTouchableBox, BaseView, TokenSymbol, useFeatureFlags } from "~Components"
+import { useDevice } from "~Components/Providers/DeviceProvider"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, typography, VET, VOT3, VTHO } from "~Constants"
+import { B3TR, COLORS, isSmallScreen, typography, VeDelegate, VET, VTHO } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
+import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { selectBalanceVisible, selectCurrency, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils, AddressUtils, BalanceUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
-import { Chart } from "./Chart"
+import { Chart, CHART_WIDTH } from "./Chart"
 
 type Props = {
     token: FungibleTokenWithBalance
@@ -22,25 +24,29 @@ type Props = {
 export const TokenCard = ({ token }: Props) => {
     const navigation = useNavigation()
     const currency = useAppSelector(selectCurrency)
+    const isBalanceVisible = useAppSelector(selectBalanceVisible)
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
-    const [showChart, setShowChart] = useState(true)
-    const name = useMemo(() => {
-        switch (token.symbol) {
-            case "VET":
-                return "VeChain"
-            case "VTHO":
-                return "VeThor"
-            case "B3TR":
-                return "VeBetter"
-            case "VOT3":
-                return "VeBetter"
-            default:
-                return token.name
-        }
-    }, [token.name, token.symbol])
+    const { isLowEndDevice } = useDevice()
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const { betterWorldFeature } = useFeatureFlags()
 
-    const { data: chartData } = useSmartMarketChart({
+    // Check if token supports charts (has CoinGecko ID) and exclude VeDelegate
+    const isTokenSupported = useMemo(
+        () => !!getCoinGeckoIdBySymbol[token.symbol] && token.symbol !== VeDelegate.symbol,
+        [token.symbol],
+    )
+
+    // Decide chart visibility based on device/screen size AND token support
+    // This ensures ALL token cards show either charts OR indicators consistently
+    const shouldShowCharts = useMemo(
+        () => !isSmallScreen && !isLowEndDevice && isTokenSupported,
+        [isLowEndDevice, isTokenSupported],
+    )
+
+    const name = useTokenDisplayName(token)
+
+    const { data: chartData } = useSmartMarketChartV2({
         id: getCoinGeckoIdBySymbol[token.symbol],
         vs_currency: currency,
         days: 1,
@@ -52,8 +58,20 @@ export const TokenCard = ({ token }: Props) => {
     const { fiatBalance, showFiatBalance, tokenBalance } = useTokenCardBalance({ token })
     const tokenWithCompleteInfo = useTokenWithCompleteInfo(token)
 
+    const balance = useMemo(() => {
+        if (!isBalanceVisible) {
+            return "••••••"
+        }
+
+        return tokenBalance
+    }, [isBalanceVisible, tokenBalance])
+
     const chartIcon = useMemo(() => {
-        if (!chartData || !showFiatBalance || showChart) return null
+        // Only show icon on small screens/low-end devices when:
+        // 1. Token supports charts (has price data)
+        // 2. Fiat balance is visible
+        // 3. Chart data is available
+        if (!isTokenSupported || !chartData || !showFiatBalance || shouldShowCharts) return null
 
         return (
             <BaseIcon
@@ -63,112 +81,108 @@ export const TokenCard = ({ token }: Props) => {
                 testID="TOKEN_CARD_CHART_ICON"
             />
         )
-    }, [chartData, showFiatBalance, showChart, isGoingUp])
-
-    const symbol = useMemo(() => {
-        switch (token.symbol) {
-            case "B3TR":
-                return (
-                    <BaseView flexDirection="row" gap={4}>
-                        <BaseText
-                            typographyFont="bodySemiBold"
-                            color={theme.colors.activityCard.subtitleLight}
-                            testID="TOKEN_CARD_SYMBOL_1">
-                            {B3TR.symbol}
-                        </BaseText>
-                        <BaseIcon
-                            name="icon-arrow-left-right"
-                            size={12}
-                            color={theme.colors.activityCard.subtitleLight}
-                        />
-                        <BaseText
-                            typographyFont="bodySemiBold"
-                            color={theme.colors.activityCard.subtitleLight}
-                            testID="TOKEN_CARD_SYMBOL_2">
-                            {VOT3.symbol}
-                        </BaseText>
-                        {chartIcon}
-                    </BaseView>
-                )
-            default:
-                return (
-                    <BaseView flexDirection="row" gap={4}>
-                        <BaseText
-                            typographyFont="bodySemiBold"
-                            color={theme.colors.activityCard.subtitleLight}
-                            testID="TOKEN_CARD_SYMBOL">
-                            {token.symbol}
-                        </BaseText>
-                        {chartIcon}
-                    </BaseView>
-                )
-        }
-    }, [chartIcon, token.symbol, theme.colors.activityCard.subtitleLight])
+    }, [isTokenSupported, chartData, showFiatBalance, shouldShowCharts, isGoingUp])
 
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
     // Only allow navigation for tokens with detailed information available
-    const supportsDetailNavigation = useMemo(
-        () => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol),
-        [token.symbol],
-    )
+    const isVechainToken = useMemo(() => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol), [token.symbol])
 
     const handlePress = useCallback(() => {
-        if (!supportsDetailNavigation) {
+        if (betterWorldFeature?.balanceScreen?.tokens?.enabled) {
+            navigation.navigate(Routes.TOKEN_DETAILS, {
+                token: tokenWithCompleteInfo,
+            })
+            return
+        }
+        if (!isVechainToken) {
+            if (AccountUtils.isObservedAccount(selectedAccount)) return
+            if (isCrossChainToken) {
+                navigation.navigate(Routes.BRIDGE_TOKEN_DETAILS, {
+                    token,
+                })
+                return
+            }
+
+            const isTokenBalance = BalanceUtils.getIsTokenWithBalance(token)
+
+            if (!isTokenBalance) return
+
+            navigation.navigate(Routes.INSERT_ADDRESS_SEND, {
+                token,
+            })
             return
         }
 
         navigation.navigate(Routes.TOKEN_DETAILS, {
             token: tokenWithCompleteInfo,
         })
-    }, [navigation, tokenWithCompleteInfo, supportsDetailNavigation])
+    }, [
+        isVechainToken,
+        navigation,
+        tokenWithCompleteInfo,
+        selectedAccount,
+        betterWorldFeature?.balanceScreen?.tokens?.enabled,
+        isCrossChainToken,
+        token,
+    ])
 
     return (
         <BaseTouchableBox
-            action={supportsDetailNavigation ? handlePress : undefined}
-            py={symbol ? typography.lineHeight.body : typography.lineHeight.bodySemiBold}
+            action={handlePress}
+            py={token.symbol ? typography.lineHeight.body : typography.lineHeight.captionSemiBold}
             flexDirection="row"
             bg={theme.colors.card}
-            containerStyle={styles.root}>
-            <BaseView flexDirection="row" gap={16} flex={1}>
+            containerStyle={styles.container}
+            innerContainerStyle={styles.root}>
+            <BaseView flexDirection="row" gap={16} style={styles.leftSection}>
                 <TokenImage
                     icon={token.icon}
                     isVechainToken={AddressUtils.isVechainToken(token.address)}
-                    iconSize={40}
+                    iconSize={32}
                     isCrossChainToken={isCrossChainToken}
                     rounded={!isCrossChainToken}
                 />
 
-                {symbol ? (
-                    <BaseView flexDirection="column" flex={1}>
+                {token.symbol ? (
+                    <BaseView flexDirection="column" flexGrow={0} gap={3} flexShrink={1} style={styles.tokenInfo}>
                         <BaseText
-                            typographyFont="subSubTitleSemiBold"
+                            typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.title}
                             flexDirection="row"
                             numberOfLines={1}
-                            flex={1}
+                            ellipsizeMode="tail"
                             testID="TOKEN_CARD_NAME">
                             {name}
                         </BaseText>
-                        {symbol}
+                        <TokenSymbol token={token} typographyFont="captionSemiBold">
+                            {chartIcon}
+                        </TokenSymbol>
                     </BaseView>
                 ) : (
                     <BaseText
-                        typographyFont="subSubTitleSemiBold"
+                        flex={1}
+                        typographyFont="bodySemiBold"
                         color={theme.colors.activityCard.title}
-                        flexDirection="row">
+                        flexDirection="row"
+                        numberOfLines={1}
+                        ellipsizeMode="tail">
                         {name}
                     </BaseText>
                 )}
             </BaseView>
 
-            <Chart token={token} showChart={showChart} setShowChart={setShowChart} />
+            {shouldShowCharts && (
+                <BaseView style={styles.chartContainer}>
+                    <Chart token={token} />
+                </BaseView>
+            )}
 
-            <BaseView flexDirection="column" alignItems="flex-end" flexShrink={0}>
+            <BaseView flexDirection="column" alignItems="flex-end" style={styles.balanceSection}>
                 {showFiatBalance ? (
                     <>
                         <BaseText
-                            typographyFont="subSubTitleSemiBold"
+                            typographyFont="bodySemiBold"
                             color={theme.colors.activityCard.title}
                             align="right"
                             numberOfLines={1}
@@ -177,24 +191,24 @@ export const TokenCard = ({ token }: Props) => {
                             {fiatBalance}
                         </BaseText>
                         <BaseText
-                            typographyFont="bodyMedium"
+                            typographyFont="captionSemiBold"
                             color={theme.colors.activityCard.subtitleLight}
                             align="right"
                             numberOfLines={1}
                             flexDirection="row"
                             testID="TOKEN_CARD_TOKEN_BALANCE">
-                            {tokenBalance}
+                            {balance}
                         </BaseText>
                     </>
                 ) : (
                     <BaseText
-                        typographyFont="subSubTitleSemiBold"
+                        typographyFont="bodySemiBold"
                         color={theme.colors.activityCard.title}
                         align="right"
                         numberOfLines={1}
                         flexDirection="row"
                         testID="TOKEN_CARD_TOKEN_BALANCE">
-                        {tokenBalance}
+                        {balance}
                     </BaseText>
                 )}
             </BaseView>
@@ -207,5 +221,31 @@ const baseStyles = () =>
         root: {
             gap: 16,
             alignItems: "center",
+            borderRadius: 12,
+            justifyContent: "space-between",
+            minHeight: 80,
+        },
+        container: {
+            borderRadius: 12,
+        },
+        leftSection: {
+            flexGrow: 1,
+            flexShrink: 1,
+            minWidth: 0,
+        },
+        tokenInfo: {
+            minWidth: 0,
+        },
+        chartContainer: {
+            width: CHART_WIDTH,
+            flexShrink: 0,
+            flexGrow: 0,
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        balanceSection: {
+            flexGrow: 0,
+            flexShrink: 0,
+            minWidth: 88,
         },
     })

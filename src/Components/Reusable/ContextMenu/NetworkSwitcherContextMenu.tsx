@@ -1,13 +1,13 @@
-import ContextMenu, { ContextMenuAction, ContextMenuOnPressNativeEvent } from "react-native-context-menu-view"
-import React, { useCallback, useMemo } from "react"
-import { useAppDispatch, useAppSelector } from "~Storage/Redux/Hooks"
-import { useI18nContext } from "~i18n"
-import { selectNetworks, selectSelectedNetwork } from "~Storage/Redux/Selectors"
-import { NativeSyntheticEvent } from "react-native"
-import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
+import React, { useCallback, useMemo } from "react"
+import { NativeSyntheticEvent } from "react-native"
+import ContextMenu, { ContextMenuAction, ContextMenuOnPressNativeEvent } from "react-native-context-menu-view"
+import { useI18nContext } from "~i18n"
+import { Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
-import { changeSelectedNetwork } from "~Storage/Redux/Actions"
+import { switchActiveNetwork } from "~Storage/Redux/Actions"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux/Hooks"
+import { selectNetworks, selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { clearNFTCache } from "~Storage/Redux/Slices/Nft"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
@@ -47,7 +47,7 @@ export const NetworkSwitcherContextMenu = ({ children }: Props) => {
             }
 
             dispatch(clearNFTCache())
-            dispatch(changeSelectedNetwork(networks[e.nativeEvent.index]))
+            dispatch(switchActiveNetwork(networks[e.nativeEvent.index]))
         },
         [dispatch, networks, nav],
     )

@@ -145,11 +145,13 @@ export const ManageTokenScreen = () => {
                             <>
                                 {!!selectedTokens.length && (
                                     <>
-                                        <BaseText typographyFont="subSubTitle">{LL.MANAGE_TOKEN_SELECTED()}</BaseText>
+                                        <BaseText typographyFont="subSubTitleSemiBold">
+                                            {LL.MANAGE_TOKEN_SELECTED()}
+                                        </BaseText>
                                         <BaseSpacer height={16} />
                                         {selectedTokens.map(token => (
                                             <OfficialTokenCard
-                                                iconSize={26}
+                                                iconSize={32}
                                                 selected
                                                 key={token.address}
                                                 token={token}
@@ -161,7 +163,9 @@ export const ManageTokenScreen = () => {
                                 )}
                                 {!!unselectedTokens.length && (
                                     <>
-                                        <BaseText typographyFont="subSubTitle">{LL.MANAGE_TOKEN_UNSELECTED()}</BaseText>
+                                        <BaseText typographyFont="subSubTitleSemiBold">
+                                            {LL.MANAGE_TOKEN_UNSELECTED()}
+                                        </BaseText>
                                         <BaseSpacer height={16} />
                                         {unselectedTokens.map(token => (
                                             <OfficialTokenCard

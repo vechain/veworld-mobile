@@ -200,9 +200,9 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
 
                     {isEmpty && (
                         <BaseView w={100} alignItems="center">
-                            <BaseText typographyFont="body">{LL.SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND()}</BaseText>
+                            <BaseText typographyFont="caption">{LL.SEND_NO_CONTACTS_OR_ACCOUNTS_FOUND()}</BaseText>
 
-                            <BaseText typographyFont="body">{LL.SEND_PLEASE_TYPE_ADDRESS()}</BaseText>
+                            <BaseText typographyFont="caption">{LL.SEND_PLEASE_TYPE_ADDRESS()}</BaseText>
                         </BaseView>
                     )}
                 </BaseView>

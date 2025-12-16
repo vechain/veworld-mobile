@@ -33,7 +33,12 @@ describe("useTransaction", () => {
         const { result } = renderHook(
             () =>
                 useTransactionGas({
-                    clauses: prepareNonFungibleClause(account1D1.address, account2D1.address, NFT_Mock),
+                    clauses: prepareNonFungibleClause(
+                        account1D1.address,
+                        account2D1.address,
+                        NFT_Mock.address,
+                        NFT_Mock.tokenId,
+                    ),
                 }),
             { wrapper: TestWrapper },
         )

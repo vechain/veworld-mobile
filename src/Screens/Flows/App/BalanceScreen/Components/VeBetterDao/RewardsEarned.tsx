@@ -6,7 +6,7 @@ import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { B3TR, COLORS, ColorThemeType } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { BigNutils } from "~Utils"
+import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
 
 type Props = {
     total: number | string | undefined
@@ -21,8 +21,8 @@ export const RewardsEarned = ({ week, month, total }: Props) => {
     return (
         <BaseView style={styles.root} gap={8}>
             <BaseView flexDirection="row" gap={8}>
-                <BaseIcon name="icon-gift" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} size={16} />
-                <BaseText color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} typographyFont="subSubTitleSemiBold">
+                <BaseIcon name="icon-gift" color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE} size={16} />
+                <BaseText color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE} typographyFont="bodySemiBold">
                     {LL.VBD_REWARDS_EARNED()}
                 </BaseText>
             </BaseView>
@@ -30,15 +30,17 @@ export const RewardsEarned = ({ week, month, total }: Props) => {
                 <FastImage source={b3tr3D} style={styles.b3tr3D as ImageStyle} />
                 <BaseView flexDirection="column">
                     <BaseView py={4} flexDirection="row" justifyContent="space-between">
-                        <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="bodyMedium">
+                        <BaseText
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
+                            typographyFont="captionMedium">
                             {LL.THIS_WEEK()}
                         </BaseText>
                         <BaseView flexDirection="row" gap={8}>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                                typographyFont="bodySemiBold"
+                                typographyFont="captionSemiBold"
                                 testID="REWARDS_EARNED_WEEK_VALUE">
-                                {BigNutils(week ?? "0").toTokenFormatFull_string(2, formatLocale)}
+                                {formatDisplayNumber(week ?? "0", { locale: formatLocale })}
                             </BaseText>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
@@ -48,15 +50,17 @@ export const RewardsEarned = ({ week, month, total }: Props) => {
                         </BaseView>
                     </BaseView>
                     <BaseView py={4} flexDirection="row" justifyContent="space-between">
-                        <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="bodyMedium">
+                        <BaseText
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
+                            typographyFont="captionMedium">
                             {LL.THIS_MONTH()}
                         </BaseText>
                         <BaseView flexDirection="row" gap={8}>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                                typographyFont="bodySemiBold"
+                                typographyFont="captionSemiBold"
                                 testID="REWARDS_EARNED_MONTH_VALUE">
-                                {BigNutils(month ?? "0").toTokenFormatFull_string(2, formatLocale)}
+                                {formatDisplayNumber(month ?? "0", { locale: formatLocale })}
                             </BaseText>
                             <BaseText
                                 color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
@@ -74,11 +78,13 @@ export const RewardsEarned = ({ week, month, total }: Props) => {
                     <BaseView flexDirection="row" gap={8}>
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700}
-                            typographyFont="subSubTitleSemiBold"
+                            typographyFont="bodySemiBold"
                             testID="REWARDS_EARNED_TOTAL_VALUE">
-                            {BigNutils(total ?? "0").toTokenFormatFull_string(2, formatLocale)}
+                            {formatDisplayNumber(total ?? "0", { locale: formatLocale })}
                         </BaseText>
-                        <BaseText color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} typographyFont="bodyMedium">
+                        <BaseText
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
+                            typographyFont="captionMedium">
                             {B3TR.symbol}
                         </BaseText>
                     </BaseView>

@@ -56,8 +56,10 @@ export const NetworkSlice = createSlice({
             state.isNodeError = action.payload
         },
         resetNetworkState: () => initialState,
-        setHardFork: (state, action: PayloadAction<NetworkHardFork>) => {
-            state.hardfork[state.selectedNetwork] = action.payload
+        setNetworkHardFork: (state, action: PayloadAction<{ network: Network; hardfork: NetworkHardFork }>) => {
+            const { hardfork, network } = action.payload
+            const id = network.genesis.id
+            if (hardfork > (state.hardfork[id] ?? 0)) state.hardfork[id] = hardfork
         },
     },
 })
@@ -69,5 +71,5 @@ export const {
     removeCustomNetwork,
     updateNodeError,
     resetNetworkState,
-    setHardFork,
+    setNetworkHardFork,
 } = NetworkSlice.actions

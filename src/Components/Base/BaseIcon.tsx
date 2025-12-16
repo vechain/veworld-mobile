@@ -80,7 +80,7 @@ const BaseIconWrapperWithRef = forwardRef<View | TouchableOpacity, BaseIconWrapp
                             justifyContent: "center",
                             alignItems: "center",
                             backgroundColor: bg,
-                            borderRadius: borderRadius || (size ? size + 10 / 2 : 50),
+                            borderRadius: borderRadius ?? (size ? size + 10 / 2 : 50),
                             opacity: props.disabled ? 0.5 : 1,
                             margin: props.m,
                             marginVertical: props.my,

@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import DraggableFlatList, { DragEndParams, RenderItem } from "react-native-draggable-flatlist"
+import DraggableFlatList, { DragEndParams, RenderItem, ScaleDecorator } from "react-native-draggable-flatlist"
 import {
     AnimatedSaveHeaderButton,
     BaseBottomSheet,
@@ -13,8 +13,8 @@ import {
     ReorderIconHeaderButton,
 } from "~Components"
 import { ColorThemeType, DiscoveryDApp } from "~Constants"
-import { useTheme, useThemedStyles } from "~Hooks"
-import { removeBookmark, reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { useDappBookmarksList, useTheme, useThemedStyles } from "~Hooks"
+import { removeBookmark, reorderBookmarks, useAppDispatch } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useDAppActions } from "../Hooks"
 import { FavoriteDAppCard } from "./FavoriteDAppCard"
@@ -32,7 +32,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     const { onDAppPress } = useDAppActions(Routes.APPS)
     const dispatch = useAppDispatch()
 
-    const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+    const bookmarkedDApps = useDappBookmarksList()
     const [reorderedDapps, setReorderedDapps] = useState<DiscoveryDApp[]>(bookmarkedDApps)
 
     const handleClose = useCallback(() => {
@@ -41,60 +41,71 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         onClose()
     }, [onClose, bookmarkedDApps])
 
+    const renderSeparator = useCallback(() => <BaseSpacer height={8} />, [])
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
 
     const onMorePress = useCallback(
         (dapp: DiscoveryDApp, isEditMode: boolean) => {
             if (isEditMode) return
-            dispatch(removeBookmark(dapp))
+            dispatch(
+                removeBookmark({
+                    href: dapp.href,
+                    isCustom: dapp.isCustom,
+                }),
+            )
         },
         [dispatch],
     )
 
-    const onLongPress = useCallback(() => {
-        if (!isEditingMode) {
-            setIsEditingMode(true)
-        }
-    }, [isEditingMode])
-
     const onLongPressHandler = useCallback(
-        (_dapp: DiscoveryDApp) => {
+        (_dapp: DiscoveryDApp, drag?: () => void) => {
             if (!isEditingMode) {
-                onLongPress()
+                setIsEditingMode(true)
+                drag?.()
+            } else if (drag) {
+                drag()
             }
         },
-        [isEditingMode, onLongPress],
+        [isEditingMode],
     )
 
     const handleDAppPress = useCallback(
         (dapp: DiscoveryDApp) => {
+            if (isEditingMode) {
+                return
+            }
             onDAppPress(dapp)
             handleClose()
         },
-        [onDAppPress, handleClose],
+        [isEditingMode, onDAppPress, handleClose],
     )
 
     const renderItem: RenderItem<DiscoveryDApp> = useCallback(
         ({ item, isActive, drag }) => {
             return (
-                <FavoriteDAppCard
-                    dapp={item}
-                    isActive={isActive}
-                    isEditMode={isEditingMode}
-                    onPress={handleDAppPress}
-                    onRightActionPress={onMorePress}
-                    onLongPress={onLongPressHandler}
-                    onRightActionLongPress={isEditingMode ? drag : undefined}
-                    px={0}
-                />
+                <ScaleDecorator activeScale={1.05}>
+                    <FavoriteDAppCard
+                        dapp={item}
+                        isActive={isActive}
+                        isEditMode={isEditingMode}
+                        onPress={handleDAppPress}
+                        onRightActionPress={onMorePress}
+                        onLongPress={dapp => onLongPressHandler(dapp, drag)}
+                        onRightActionLongPress={isEditingMode ? drag : undefined}
+                        px={0}
+                    />
+                </ScaleDecorator>
             )
         },
         [isEditingMode, handleDAppPress, onLongPressHandler, onMorePress],
     )
 
-    const onDragEnd = useCallback(({ data }: DragEndParams<DiscoveryDApp>) => {
-        setReorderedDapps(data)
-    }, [])
+    const onDragEnd = useCallback(
+        ({ data }: DragEndParams<DiscoveryDApp>) => {
+            setReorderedDapps(data)
+        },
+        [setReorderedDapps],
+    )
 
     const onSaveReorderedDapps = useCallback(() => {
         dispatch(reorderBookmarks(reorderedDapps))
@@ -102,8 +113,10 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     }, [dispatch, reorderedDapps])
 
     useEffect(() => {
-        if (reorderedDapps.length !== bookmarkedDApps.length) setReorderedDapps(bookmarkedDApps)
-    }, [bookmarkedDApps, reorderedDapps.length])
+        if (!isEditingMode) {
+            setReorderedDapps(bookmarkedDApps)
+        }
+    }, [bookmarkedDApps, isEditingMode])
 
     const headerContent = useMemo(
         () => (
@@ -116,8 +129,8 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 pb={24}
                 testID="dapps-list-header">
                 <BaseView flexDirection="row" gap={16} alignItems="center">
-                    <BaseIcon name="icon-star" size={26} color={theme.colors.favoriteHeader} />
-                    <BaseText typographyFont="biggerTitleSemiBold">{LL.FAVOURITES_DAPPS_TITLE()}</BaseText>
+                    <BaseIcon name="icon-star" size={24} color={theme.colors.favoriteHeader} />
+                    <BaseText typographyFont="headerTitle">{LL.FAVOURITES_DAPPS_TITLE()}</BaseText>
                 </BaseView>
                 <BaseView style={styles.rightElement}>
                     {isEditingMode ? (
@@ -154,19 +167,16 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 {headerContent}
                 <BaseView flex={1}>
                     <DraggableFlatList
+                        testID="draggable-flatlist"
                         scrollEnabled={true}
-                        contentContainerStyle={styles.listContentContainer}
-                        style={reorderedDapps.length === 0 ? styles.emptyListStyle : undefined}
+                        contentContainerStyle={
+                            reorderedDapps.length === 0 ? styles.emptyContentContainer : styles.listContentContainer
+                        }
                         extraData={isEditingMode}
-                        data={reorderedDapps}
-                        onDragEnd={onDragEnd}
                         keyExtractor={item => item.href}
                         renderItem={renderItem}
-                        ListFooterComponent={renderFooter}
-                        showsVerticalScrollIndicator={false}
-                        testID="draggable-flatlist"
-                        activationDistance={10}
-                        windowSize={5}
+                        data={reorderedDapps}
+                        ItemSeparatorComponent={renderSeparator}
                         ListEmptyComponent={
                             <ListEmptyResults
                                 subtitle={LL.FAVOURITES_DAPPS_EMPTY_LIST()}
@@ -177,6 +187,8 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                                 subtitleColor={theme.colors.actionBottomSheet.subText}
                             />
                         }
+                        ListFooterComponent={renderFooter}
+                        onDragEnd={onDragEnd}
                     />
                 </BaseView>
             </BaseView>
@@ -186,24 +198,15 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
+        layout: {
+            backgroundColor: theme.colors.tabsFooter.background,
+        },
         container: {
             flex: 1,
         },
-        leftElement: {
-            marginLeft: 8,
-        },
         rightElement: {
-            marginRight: 8,
-        },
-        listContentContainer: {
-            paddingTop: 12,
-            flexGrow: 1,
-            paddingHorizontal: 24,
-        },
-        layout: {
-            backgroundColor: theme.colors.card,
-            borderTopRightRadius: 24,
-            borderTopLeftRadius: 24,
+            flexDirection: "row",
+            gap: 16,
         },
         reorderIcon: {
             borderColor: theme.colors.actionBottomSheet.iconBackground.border,
@@ -211,12 +214,17 @@ const baseStyles = (theme: ColorThemeType) =>
             borderWidth: 1,
             borderRadius: 6,
         },
+        listContentContainer: {
+            paddingHorizontal: 24,
+        },
+        emptyContentContainer: {
+            paddingHorizontal: 24,
+            justifyContent: "center",
+            flexGrow: 1,
+        },
         emptyIcon: {
             backgroundColor: theme.colors.actionBottomSheet.emptyFavoritesIcon.background,
             borderRadius: 100,
             padding: 16,
-        },
-        emptyListStyle: {
-            alignSelf: "center",
         },
     })

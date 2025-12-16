@@ -27,6 +27,12 @@ import { Migration26 } from "./Migration26"
 import { Migration27 } from "./Migration27"
 import { Migration28 } from "./Migration28"
 import { Migration29 } from "./Migration29"
+import { Migration30 } from "./Migration30"
+import { Migration31 } from "./Migration31"
+import { Migration32 } from "./Migration32"
+import { Migration33 } from "./Migration33"
+import { Migration34 } from "./Migration34"
+import { Migration35 } from "./Migration35"
 
 export const migrationUpdates: MigrationManifest = {
     2: state => Migration2(state),
@@ -57,4 +63,10 @@ export const migrationUpdates: MigrationManifest = {
     27: state => Migration27(state),
     28: state => Migration28(state),
     29: state => Migration29(state),
+    30: state => Migration30(state),
+    31: state => Migration31(state),
+    32: state => Migration32(state),
+    33: state => Migration33(state),
+    34: state => Migration34(state),
+    35: state => Migration35(state),
 }

@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { BaseChip, BaseText, BaseView } from "~Components"
+import { AnimatedFilterChips, BaseText, BaseView } from "~Components"
 import { useNewDAppsV2, useTheme, useTrendingDAppsV2 } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VbdCarousel } from "../Common/VbdCarousel/VbdCarousel"
+import { StringUtils } from "~Utils"
 
 export const ForYouCarousel = () => {
     const { LL } = useI18nContext()
@@ -31,18 +32,13 @@ export const ForYouCarousel = () => {
                 <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.dappTitle}>
                     {LL.DISCOVER_FOR_YOU()}
                 </BaseText>
-                <BaseView flexDirection="row" gap={12}>
-                    <BaseChip
-                        label={LL.DISCOVER_FOR_YOU_POPULAR()}
-                        active={filter === "popular"}
-                        onPress={() => onFilterPress("popular")}
-                    />
-                    <BaseChip
-                        label={LL.DISCOVER_FOR_YOU_NEW()}
-                        active={filter === "new"}
-                        onPress={() => onFilterPress("new")}
-                    />
-                </BaseView>
+                <AnimatedFilterChips
+                    items={["popular", "new"] as const}
+                    selectedItem={filter}
+                    keyExtractor={item => item}
+                    getItemLabel={item => LL[`DISCOVER_FOR_YOU_${StringUtils.toUppercase(item)}`]()}
+                    onItemPress={onFilterPress}
+                />
             </BaseView>
             <VbdCarousel appIds={appIds} isLoading={isLoading} />
         </BaseView>

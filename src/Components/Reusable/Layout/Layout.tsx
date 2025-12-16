@@ -1,8 +1,8 @@
 import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useMemo, useState } from "react"
-import { RefreshControlProps, ScrollView, StyleSheet } from "react-native"
+import { RefreshControlProps, ScrollView, StyleProp, StyleSheet, TextStyle } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { BackButtonHeader, CenteredHeader, SelectedNetworkViewer } from "~Components"
-import { BaseSafeArea, BaseScrollView, BaseView } from "~Components/Base"
+import { BaseSafeArea, BaseScrollView, BaseTextProps, BaseView } from "~Components/Base"
 import { useTabBarBottomMargin } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
@@ -10,6 +10,7 @@ type Props = {
     noBackButton?: boolean
     noMargin?: boolean
     title?: string
+    titleStyle?: StyleProp<TextStyle>
     fixedHeader?: ReactNode
     body?: ReactNode
     fixedBody?: ReactNode
@@ -29,12 +30,14 @@ type Props = {
     hasTopSafeAreaOnly?: boolean
     headerRightElement?: ReactNode
     bg?: string
+    headerTitleAlignment?: BaseTextProps["align"]
 }
 
 export const Layout = ({
     noBackButton = false,
     noMargin = false,
     title,
+    titleStyle,
     fixedHeader,
     body,
     fixedBody,
@@ -54,6 +57,7 @@ export const Layout = ({
     hasSafeArea = true,
     hasTopSafeAreaOnly = false,
     headerRightElement,
+    headerTitleAlignment,
     bg,
 }: Props) => {
     const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } = useTabBarBottomMargin()
@@ -82,12 +86,17 @@ export const Layout = ({
                                 preventGoBack={preventGoBack}
                                 title={title}
                                 rightElement={headerRightElement}
+                                textAlignment={headerTitleAlignment}
                             />
                         </BaseView>
                     ) : (
                         title && (
                             <BaseView mx={noMargin ? 0 : 16}>
-                                <CenteredHeader title={title} rightElement={headerRightElement} />
+                                <CenteredHeader
+                                    title={title}
+                                    titleStyle={titleStyle}
+                                    rightElement={headerRightElement}
+                                />
                             </BaseView>
                         )
                     )}
@@ -146,7 +155,9 @@ export const Layout = ({
             onGoBack,
             preventGoBack,
             title,
+            titleStyle,
             headerRightElement,
+            headerTitleAlignment,
             fixedHeader,
             showSelectedNetwork,
             body,

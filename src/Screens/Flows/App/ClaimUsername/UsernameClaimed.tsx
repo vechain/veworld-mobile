@@ -4,6 +4,7 @@ import { StyleSheet, Text } from "react-native"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useTabBarBottomMargin, useThemedStyles, useVns } from "~Hooks"
 import { RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
+import FontUtils from "~Utils/FontUtils"
 
 import { useI18nContext } from "~i18n"
 
@@ -52,7 +53,7 @@ const baseStyle = () =>
     StyleSheet.create({
         inlineBold: {
             fontFamily: "Inter-Bold",
-            fontSize: 14,
+            fontSize: FontUtils.font(14),
             fontWeight: "600",
         },
     })

@@ -1,14 +1,15 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { FlatList, ListRenderItemInfo } from "react-native"
+import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
-import { useTheme, useThemedStyles } from "~Hooks"
+import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Activity, FungibleToken, TransactionOutcomes } from "~Model"
 import { Routes } from "~Navigation"
 import { ActivityItemRenderer } from "~Screens/Flows/App/ActivityScreen/Components/ActivityItemRenderer"
 import { SkeletonActivity } from "../../Components/Activity/SkeletonActivity"
+import { SeeAllButton } from "../../Components/SeeAllButton"
 import { useActivityTimestampRenderer } from "../../Hooks/useActivityTimestampRenderer"
 import { useBalanceActivities } from "../../Hooks/useBalanceActivities"
 import { BalanceTab } from "../types"
@@ -17,7 +18,6 @@ const ItemSeparatorComponent = () => <BaseSpacer height={8} />
 const ListFooterComponent = ({ tab }: { tab: BalanceTab }) => {
     const nav = useNavigation()
     const { LL } = useI18nContext()
-    const { styles, theme } = useThemedStyles(footerStyles)
 
     const tabRoute = useMemo(() => {
         if (tab === "TOKENS") {
@@ -42,30 +42,8 @@ const ListFooterComponent = ({ tab }: { tab: BalanceTab }) => {
         })
     }, [nav, tabRoute])
 
-    return (
-        <BaseButton
-            variant="ghost"
-            px={0}
-            py={4}
-            action={onNavigate}
-            typographyFont="bodyMedium"
-            style={styles.btn}
-            textColor={theme.colors.text}
-            rightIcon={<BaseIcon name="icon-arrow-right" size={14} style={styles.icon} color={theme.colors.text} />}>
-            {LL.ACTIVITY_SEE_ALL()}
-        </BaseButton>
-    )
+    return <SeeAllButton action={onNavigate}>{LL.ACTIVITY_SEE_ALL()}</SeeAllButton>
 }
-
-const footerStyles = () =>
-    StyleSheet.create({
-        icon: {
-            marginLeft: 2,
-        },
-        btn: {
-            marginTop: 16,
-        },
-    })
 
 const LOADING_ITEMS = [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }]
 
@@ -104,29 +82,34 @@ export const BalanceActivity = ({ tab }: { tab: BalanceTab }) => {
         return <SkeletonActivity />
     }, [])
 
-    if (!isLoading && data?.length === 0) return null
+    if (!isLoading && !data?.length) return null
 
     return (
-        <BaseView flexDirection="column" gap={16}>
-            <BaseText typographyFont="subSubTitleSemiBold" color={theme.isDark ? COLORS.GREY_100 : COLORS.DARK_PURPLE}>
-                {LL.ACTIVITY()}
-            </BaseText>
-            {isLoading ? (
-                <FlatList
-                    renderItem={renderLoadingItem}
-                    data={LOADING_ITEMS}
-                    ItemSeparatorComponent={ItemSeparatorComponent}
-                    keyExtractor={item => item.id}
-                />
-            ) : (
-                <FlatList
-                    renderItem={renderItem}
-                    data={data ?? []}
-                    ItemSeparatorComponent={ItemSeparatorComponent}
-                    keyExtractor={item => item.id}
-                    ListFooterComponent={<ListFooterComponent tab={tab} />}
-                />
-            )}
-        </BaseView>
+        <>
+            <BaseSpacer height={32} />
+            <BaseView flexDirection="column" gap={16}>
+                <BaseText
+                    typographyFont="subSubTitleSemiBold"
+                    color={theme.isDark ? COLORS.GREY_100 : COLORS.DARK_PURPLE}>
+                    {LL.ACTIVITY()}
+                </BaseText>
+                {isLoading ? (
+                    <FlatList
+                        renderItem={renderLoadingItem}
+                        data={LOADING_ITEMS}
+                        ItemSeparatorComponent={ItemSeparatorComponent}
+                        keyExtractor={item => item.id}
+                    />
+                ) : (
+                    <FlatList
+                        renderItem={renderItem}
+                        data={data ?? []}
+                        ItemSeparatorComponent={ItemSeparatorComponent}
+                        keyExtractor={item => item.id}
+                        ListFooterComponent={<ListFooterComponent tab={tab} />}
+                    />
+                )}
+            </BaseView>
+        </>
     )
 }

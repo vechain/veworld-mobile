@@ -1,14 +1,14 @@
 import React from "react"
-import { StyleSheet } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { BaseSkeleton } from "~Components"
 import { useTheme } from "~Hooks"
 
-export const SkeletonActivityBox = () => {
+export const SkeletonActivityBox = ({ style }: { style?: StyleProp<ViewStyle> }) => {
     const theme = useTheme()
 
     return (
         <BaseSkeleton
-            containerStyle={baseStyles.container}
+            containerStyle={[baseStyles.container, style]}
             animationDirection="horizontalLeft"
             boneColor={theme.colors.skeletonBoneColor}
             highlightColor={theme.colors.skeletonHighlightColor}
@@ -35,6 +35,7 @@ export const SkeletonActivityBox = () => {
                     marginBottom: 24,
                 },
             ]}
+            testID="SKELETON_ACTIVITY_BOX"
         />
     )
 }

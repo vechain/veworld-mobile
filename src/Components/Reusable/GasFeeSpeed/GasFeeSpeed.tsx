@@ -4,7 +4,7 @@ import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { useInterval } from "usehooks-ts"
 import { BaseCard } from "~Components/Base"
-import { ColorThemeType, GasPriceCoefficient } from "~Constants"
+import { COLORS, ColorThemeType, GasPriceCoefficient } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionFees"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
@@ -134,7 +134,7 @@ const baseStyles = (theme: ColorThemeType) => {
             padding: 16,
         },
         cardContainer: {
-            backgroundColor: theme.colors.assetDetailsCard.background,
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_50,
             marginTop: 16,
         },
         card: {

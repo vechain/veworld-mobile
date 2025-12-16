@@ -1,11 +1,9 @@
-import React, { useMemo } from "react"
+import React from "react"
 import { StyleSheet } from "react-native"
-import { StargateSVG } from "~Assets/IconComponents"
-import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, useFeatureFlags } from "~Components"
-import { COLORS } from "~Constants"
+import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
-import { useI18nContext } from "~i18n"
 
 type EmptyActivityListProps = {
     icon?: IconKey
@@ -15,77 +13,33 @@ type EmptyActivityListProps = {
     onPress?: () => void
 }
 
-const useEmptyActivityColors = (isDark: boolean, hasCardStyle: boolean) => {
-    return useMemo(
-        () => ({
-            icon: isDark ? COLORS.WHITE : COLORS.GREY_400,
-            label: isDark ? (hasCardStyle ? COLORS.WHITE : COLORS.GREY_600) : COLORS.PRIMARY_800,
-            description: isDark ? (hasCardStyle ? COLORS.WHITE : COLORS.GREY_400) : COLORS.GREY_800,
-            cardBackground: isDark ? COLORS.PURPLE : COLORS.WHITE,
-        }),
-        [isDark, hasCardStyle],
+export const EmptyActivityList = React.memo<EmptyActivityListProps>(({ icon, label }) => {
+    const { styles, theme } = useThemedStyles(baseStyles)
+
+    return (
+        <BaseView style={styles.rootContainer}>
+            {icon && (
+                <BaseIcon
+                    name={icon}
+                    size={32}
+                    style={styles.iconContainer}
+                    color={theme.isDark ? COLORS.GREY_200 : COLORS.GREY_400}
+                    borderRadius={99}
+                />
+            )}
+
+            <BaseSpacer height={24} />
+
+            <BaseText typographyFont="body" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} align="center">
+                {label}
+            </BaseText>
+        </BaseView>
     )
-}
-
-export const EmptyActivityList = React.memo<EmptyActivityListProps>(
-    ({ icon, label, description, hasCardStyle = false, onPress }) => {
-        const { styles, theme } = useThemedStyles(baseStyles)
-        const colors = useEmptyActivityColors(theme.isDark, hasCardStyle)
-        const featureFlags = useFeatureFlags()
-
-        const containerStyle = useMemo(
-            () => [
-                styles.rootContainer,
-                hasCardStyle && styles.cardContainer,
-                hasCardStyle && { backgroundColor: colors.cardBackground },
-            ],
-            [styles.rootContainer, styles.cardContainer, hasCardStyle, colors.cardBackground],
-        )
-
-        const iconContainerStyle = useMemo(
-            () => [styles.iconContainer, { backgroundColor: theme.colors.card }],
-            [styles.iconContainer, theme.colors.card],
-        )
-
-        const { LL } = useI18nContext()
-
-        return (
-            <BaseView style={containerStyle}>
-                {icon ? (
-                    <BaseIcon name={icon} size={32} style={iconContainerStyle} color={colors.icon} />
-                ) : (
-                    <StargateSVG currentColor={colors.label} />
-                )}
-
-                <BaseSpacer height={24} />
-
-                <BaseText typographyFont="captionSemiBold" color={colors.label} align="center">
-                    {label}
-                </BaseText>
-
-                {description && (
-                    <>
-                        <BaseSpacer height={8} />
-                        <BaseText typographyFont="captionRegular" color={colors.description} align="center">
-                            {description}
-                        </BaseText>
-                    </>
-                )}
-
-                {onPress && featureFlags.discoveryFeature.showStargateBanner && (
-                    <>
-                        <BaseSpacer height={24} />
-                        <BaseButton variant="solid" title={LL.ACTIVITY_STAKING_EMPTY_BUTTON()} action={onPress} />
-                    </>
-                )}
-            </BaseView>
-        )
-    },
-)
+})
 
 EmptyActivityList.displayName = "EmptyActivityList"
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         rootContainer: {
             justifyContent: "center",
@@ -106,5 +60,6 @@ const baseStyles = () =>
             borderRadius: 32,
             justifyContent: "center",
             alignItems: "center",
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
         },
     })

@@ -12,19 +12,25 @@ import {
     SelectAccountBottomSheet,
 } from "~Components"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import {
+    useAnalyticTracking,
+    useDappBookmarksList,
+    useBottomSheetModal,
+    useSetSelectedAccount,
+    useThemedStyles,
+} from "~Hooks"
 import { useFetchFeaturedDApps } from "~Hooks/useFetchFeaturedDApps"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
     addNavigationToDApp,
-    selectBookmarkedDapps,
     selectSelectedAccount,
     selectSwapFeaturedDapps,
     selectVisibleAccounts,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { URIUtils } from "~Utils"
 import { ListSkeleton, SwapDAppCard } from "./components"
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SWAP>
@@ -39,7 +45,7 @@ export const SwapScreen = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const accounts = useAppSelector(selectVisibleAccounts)
     const swappDApps = useAppSelector(selectSwapFeaturedDapps)
-    const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+    const bookmarkedDApps = useDappBookmarksList()
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
@@ -51,12 +57,18 @@ export const SwapScreen = () => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
+    const bookmarkedByHref = useMemo(
+        () => new Set(bookmarkedDApps.map(b => URIUtils.getBaseURL(b.href))),
+        [bookmarkedDApps],
+    )
+
     const dAppsToShow = useMemo(() => {
         const swapDAppsBookmarked: DiscoveryDApp[] = []
         const swapDAppsNotBookmarked: DiscoveryDApp[] = []
 
         swappDApps.forEach(dapp => {
-            if (bookmarkedDApps.find(b => b.name === dapp.name)) {
+            const normalized = URIUtils.getBaseURL(dapp.href)
+            if (bookmarkedByHref.has(normalized)) {
                 swapDAppsBookmarked.push(dapp)
             } else {
                 swapDAppsNotBookmarked.push(dapp)
@@ -66,7 +78,7 @@ export const SwapScreen = () => {
         swapDAppsBookmarked.sort((a, b) => a.name.localeCompare(b.name))
         swapDAppsNotBookmarked.sort((a, b) => a.name.localeCompare(b.name))
         return [...swapDAppsBookmarked, ...swapDAppsNotBookmarked]
-    }, [bookmarkedDApps, swappDApps])
+    }, [bookmarkedByHref, swappDApps])
 
     const onDAppPress = useCallback(
         ({ href, custom }: { href: string; custom?: boolean }) => {
@@ -105,7 +117,7 @@ export const SwapScreen = () => {
                         <BaseSpacer height={24} />
                         <BaseText typographyFont="body">{LL.SWAP_DESCRIPTION()}</BaseText>
                         <BaseSpacer height={24} />
-                        <BaseText typographyFont="bodyMedium">
+                        <BaseText typographyFont="captionMedium">
                             {LL.SWAP_DAPP_NUMBER({ total: dAppsToShow.length })}
                         </BaseText>
                         <BaseSpacer height={16} />

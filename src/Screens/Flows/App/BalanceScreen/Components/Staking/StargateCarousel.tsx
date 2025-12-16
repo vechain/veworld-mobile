@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseButton, BaseCarousel, BaseSpacer, BaseView, CarouselSlideItem } from "~Components"
+import { BaseTabs } from "~Components/Base/BaseTabs"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
 import {
     COLORS,
@@ -11,7 +12,7 @@ import {
     STARGATE_DAPP_URL_NEW_STAKING_BANNER,
 } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { useUserNodes, useUserStargateNfts } from "~Hooks/Staking"
+import { useUserNodes } from "~Hooks/Staking"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -19,7 +20,6 @@ import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
 import { StargateCarouselItem } from "./StargateCarouselItem"
-import { BaseTabs } from "~Components/Base/BaseTabs"
 import { StargateNoStakingCard } from "./StargateNoStakingCard"
 
 enum StakingFilter {
@@ -32,60 +32,51 @@ export const StargateCarousel = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const address = useAppSelector(selectSelectedAccountAddress)
 
-    const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
-    const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts({
-        nodes: stargateNodes,
-        isLoadingNodes,
-        address,
-    })
+    const { data, isLoading: isLoadingNodes } = useUserNodes(address)
+
     const nav = useNavigation()
 
     const { navigateWithTab } = useBrowserTab()
 
     const hasOwnedNodes = useMemo(
-        () => stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address)),
-        [stargateNodes, address],
+        () => data.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address)),
+        [data, address],
     )
     const hasManagedNodes = useMemo(
-        () => stargateNodes.some(node => !AddressUtils.compareAddresses(node.xNodeOwner, address)),
-        [stargateNodes, address],
+        () => data.some(node => !AddressUtils.compareAddresses(node.xNodeOwner, address)),
+        [data, address],
     )
 
     // Initialize filter state
     const [filter, setFilter] = useState<StakingFilter>(StakingFilter.OWN)
 
     useEffect(() => {
-        if (isLoadingNodes || !stargateNodes.length) return
+        if (isLoadingNodes || !data.length) return
 
         const preferredFilter = hasOwnedNodes ? StakingFilter.OWN : StakingFilter.MANAGING
         setFilter(currentFilter => {
             return currentFilter !== preferredFilter ? preferredFilter : currentFilter
         })
-    }, [hasOwnedNodes, isLoadingNodes, stargateNodes.length])
+    }, [hasOwnedNodes, isLoadingNodes, data.length])
 
     const filteredNodes = useMemo(() => {
         return filter === StakingFilter.OWN
-            ? stargateNodes.filter(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
-            : stargateNodes.filter(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
-    }, [stargateNodes, filter, address])
-
-    const filteredNfts = useMemo(() => {
-        const nodeIds = new Set(filteredNodes.map(n => n.nodeId))
-        return ownedStargateNfts.filter(nft => nodeIds.has(nft.tokenId))
-    }, [ownedStargateNfts, filteredNodes])
+            ? data.filter(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
+            : data.filter(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
+    }, [data, filter, address])
 
     const cards = useMemo(() => {
-        return filteredNfts
+        return filteredNodes
             .map(
                 (nft, idx) =>
                     ({
                         content: <StargateCarouselItem item={nft} />,
                         closable: false,
                         isExternalLink: false,
-                        name: nft.tokenId,
+                        name: nft.nodeId,
                         style: idx === 0 ? styles.biggerCarouselItem : styles.carouselItem,
-                        href: `${STARGATE_DAPP_URL}/nft/${nft.tokenId}`,
-                        testID: `STARGATE_CAROUSEL_ITEM_${nft.tokenId}`,
+                        href: `${STARGATE_DAPP_URL}/nft/${nft.nodeId}`,
+                        testID: `STARGATE_CAROUSEL_ITEM_${nft.nodeId}`,
                     } as CarouselSlideItem),
             )
             .concat([
@@ -99,7 +90,7 @@ export const StargateCarousel = () => {
                     testID: "STARGATE_CAROUSEL_NEW_STAKE",
                 } satisfies CarouselSlideItem,
             ])
-    }, [filteredNfts, styles.biggerCarouselItem, styles.carouselItem])
+    }, [filteredNodes, styles.biggerCarouselItem, styles.carouselItem])
 
     const onNavigateToStargate = useCallback(() => {
         navigateWithTab({
@@ -125,7 +116,7 @@ export const StargateCarousel = () => {
         [theme.isDark],
     )
 
-    if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return <StargateNoStakingCard />
+    if (!isLoadingNodes && data.length === 0) return <StargateNoStakingCard />
 
     return (
         <BaseView flexDirection="column" gap={12} w={100}>
@@ -144,8 +135,8 @@ export const StargateCarousel = () => {
                     </BaseView>
                 )}
                 <StargateLockedValue
-                    isLoading={isLoadingNodes || isLoadingNfts}
-                    nfts={filteredNfts}
+                    isLoading={isLoadingNodes}
+                    nfts={filteredNodes}
                     rootStyle={styles.section}
                     isNodeOwner={filter === StakingFilter.OWN && hasOwnedNodes}
                 />
@@ -165,7 +156,7 @@ export const StargateCarousel = () => {
                     py={8}
                     textColor={theme.colors.actionBanner.buttonTextSecondary}
                     bgColor={theme.colors.actionBanner.buttonBackground}
-                    typographyFont="bodySemiBold">
+                    typographyFont="captionSemiBold">
                     {LL.STARGATE_MANAGE_STAKING()}
                 </BaseButton>
             </BaseView>

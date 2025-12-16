@@ -4,7 +4,15 @@ import React, { useCallback, useMemo } from "react"
 import { Linking } from "react-native"
 import { getTimeZone } from "react-native-localize"
 import striptags from "striptags"
-import { BaseSpacer, BaseView, FadeoutButton, Layout, TransactionStatusBox, showErrorToast } from "~Components"
+import {
+    BaseSpacer,
+    BaseView,
+    FadeoutButton,
+    Layout,
+    TransactionStatusBox,
+    showErrorToast,
+    useFeatureFlags,
+} from "~Components"
 import { useCopyClipboard, useTabBarBottomMargin } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { ActivityStatus } from "~Model"
@@ -50,14 +58,26 @@ export const NFTDetailScreen = ({ route }: Props) => {
 
     const isPendingTx = useAppSelector(state => selectPendingTx(state, nft?.id!))
 
-    const onSendPress = useCallback(
-        () =>
-            nav.navigate(Routes.INSERT_ADDRESS_SEND, {
+    const { betterWorldFeature } = useFeatureFlags()
+
+    const onSendPress = useCallback(() => {
+        if (betterWorldFeature.balanceScreen?.sendCollectibles?.enabled) {
+            nav.navigate(Routes.SEND_NFT, {
                 contractAddress: route.params.collectionAddress!,
                 tokenId: route.params.nftTokenId,
-            }),
-        [nav, route.params.collectionAddress, route.params.nftTokenId],
-    )
+            })
+            return
+        }
+        nav.navigate(Routes.INSERT_ADDRESS_SEND, {
+            contractAddress: route.params.collectionAddress!,
+            tokenId: route.params.nftTokenId,
+        })
+    }, [
+        betterWorldFeature.balanceScreen?.sendCollectibles?.enabled,
+        nav,
+        route.params.collectionAddress,
+        route.params.nftTokenId,
+    ])
 
     const onMarketPlacePress = useCallback(async () => {
         const supported = await Linking.canOpenURL(nft?.external_url ?? "")

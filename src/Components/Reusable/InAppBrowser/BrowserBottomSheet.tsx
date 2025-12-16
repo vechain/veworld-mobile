@@ -4,12 +4,14 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { default as React, useCallback, useMemo, useState } from "react"
 import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
-import { useFeatureFlags, useInAppBrowser } from "~Components/Providers"
+import { useInAppBrowser } from "~Components/Providers"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { ColorThemeType, SCREEN_HEIGHT } from "~Constants"
-import { useDappBookmarking, useTabManagement, useThemedStyles } from "~Hooks"
+import { useDappBookmarkToggle, useTabManagement, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
-import { RootStackParamListApps, RootStackParamListBrowser, RootStackParamListSettings, Routes } from "~Navigation"
+import { RootStackParamListApps, RootStackParamListSettings, Routes } from "~Navigation"
 import { selectCurrentTabId, useAppSelector } from "~Storage/Redux"
 
 type Props = {
@@ -49,44 +51,28 @@ export const getActionTextColor = (
 export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onNavigate, onClose }, ref) => {
     const { LL } = useI18nContext()
     const { navigationState, webviewRef, dappMetadata } = useInAppBrowser()
-    const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
+    const { isBookMarked, toggleBookmark } = useDappBookmarkToggle(navigationState?.url)
     const { styles, theme } = useThemedStyles(baseStyles)
-    const nav =
-        useNavigation<
-            NativeStackNavigationProp<RootStackParamListBrowser & RootStackParamListSettings & RootStackParamListApps>
-        >()
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListSettings & RootStackParamListApps>>()
     const { closeTab } = useTabManagement()
     const currentTabId = useAppSelector(selectCurrentTabId)
-    const { betterWorldFeature } = useFeatureFlags()
     const [actionContainerHeight, setActionContainerHeight] = useState(SCREEN_HEIGHT / 2)
 
     const navToTabsManager = useCallback(async () => {
         await onNavigate?.()
-        if (betterWorldFeature.appsScreen.enabled) {
-            nav.replace(Routes.APPS_TABS_MANAGER)
-        } else {
-            nav.replace(Routes.DISCOVER_TABS_MANAGER)
-        }
+        nav.replace(Routes.APPS_TABS_MANAGER)
         onClose?.()
-    }, [nav, onNavigate, onClose, betterWorldFeature.appsScreen.enabled])
+    }, [nav, onNavigate, onClose])
 
     const navToNewTab = useCallback(async () => {
         await onNavigate?.()
-        if (betterWorldFeature.appsScreen.enabled) {
-            nav.replace(Routes.APPS_SEARCH)
-        } else {
-            nav.replace(Routes.DISCOVER_SEARCH)
-        }
+        nav.replace(Routes.APPS_SEARCH)
         onClose?.()
-    }, [nav, onNavigate, onClose, betterWorldFeature.appsScreen.enabled])
+    }, [nav, onNavigate, onClose])
 
     const navToSearch = useCallback(() => {
-        if (betterWorldFeature.appsScreen.enabled) {
-            nav.replace(Routes.APPS_SEARCH)
-        } else {
-            nav.replace(Routes.DISCOVER_SEARCH)
-        }
-    }, [nav, betterWorldFeature.appsScreen.enabled])
+        nav.replace(Routes.APPS_SEARCH)
+    }, [nav])
 
     const closeCurrentTab = useCallback(() => {
         if (currentTabId) {
@@ -94,6 +80,16 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
             navToSearch()
         }
     }, [currentTabId, closeTab, navToSearch])
+
+    const clearCache = useCallback(() => {
+        webviewRef.current?.clearCache?.(true)
+        Feedback.show({
+            message: LL.CACHE_CLEARED(),
+            severity: FeedbackSeverity.SUCCESS,
+            icon: "icon-check",
+            type: FeedbackType.ALERT,
+        })
+    }, [LL, webviewRef])
 
     const actions: BottomSheetActionItem[] = useMemo(() => {
         const favoriteItem: BottomSheetAction = isBookMarked
@@ -173,6 +169,13 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
             },
             {
                 type: "action",
+                id: "cache-clear",
+                icon: "icon-trash-2",
+                label: LL.BROWSER_CLEAR_CACHE(),
+                onPress: () => clearCache(),
+            } satisfies BottomSheetAction,
+            {
+                type: "action",
                 id: "close-tab",
                 icon: "icon-x",
                 label: LL.BROWSER_CLOSE_TAB(),
@@ -183,13 +186,14 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         isBookMarked,
         LL,
         toggleBookmark,
-        webviewRef,
-        onClose,
         navigationState?.canGoBack,
         navigationState?.url,
+        webviewRef,
+        onClose,
         dappMetadata,
         navToNewTab,
         navToTabsManager,
+        clearCache,
         closeCurrentTab,
     ])
 

@@ -7,6 +7,9 @@ import { NETWORK_TYPE } from "~Model"
 jest.mock("axios")
 
 describe("getNftsForContract", () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
     it("should return the NFTs owned by the contract address", async () => {
         const contractAddress = "0xContractAddress"
         const ownerAddress = "0xOwnerAddress"

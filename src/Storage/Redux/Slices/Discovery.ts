@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { DiscoveryDApp } from "~Constants"
 import { VbdDApp } from "~Model"
-import { URIUtils } from "~Utils"
+import { DAppUtils, URIUtils } from "~Utils"
 
 export type ConnectedDiscoveryApp = {
     name: string
@@ -32,9 +32,34 @@ export type BannerInteractionDetails = {
     amountOfInteractions: number
 }
 
+// Reference to a bookmarked dApp using discriminated union for type safety
+type AppHubReference = {
+    type: "app-hub"
+    id: string
+    order: number
+}
+
+type VBDReference = {
+    type: "vbd"
+    vbdId: string
+    order: number
+}
+
+type CustomURLReference = {
+    type: "custom"
+    url: string
+    title: string
+    description?: string
+    iconUri?: string
+    createAt: number
+    order: number
+}
+
+export type DAppReference = AppHubReference | VBDReference | CustomURLReference
+
 export type DiscoveryState = {
     featured: DiscoveryDApp[]
-    favorites: DiscoveryDApp[]
+    favoriteRefs: DAppReference[]
     custom: DiscoveryDApp[]
     hasOpenedDiscovery: boolean
     connectedApps: ConnectedDiscoveryApp[]
@@ -55,7 +80,7 @@ export type DiscoveryState = {
 
 export const initialDiscoverState: DiscoveryState = {
     featured: [],
-    favorites: [],
+    favoriteRefs: [],
     custom: [],
     hasOpenedDiscovery: false,
     connectedApps: [],
@@ -71,6 +96,38 @@ const findByHref = (dapps: DiscoveryDApp[], href: string) => {
     return dapps.find(dapp => URIUtils.compareURLs(dapp.href, href))
 }
 
+// Convert dApp to appropriate reference type based on its source
+const createDAppReference = (dapp: DiscoveryDApp, order: number): DAppReference => {
+    // Custom URL bookmark
+    if (dapp.isCustom) {
+        return {
+            type: "custom",
+            url: dapp.href,
+            title: dapp.name,
+            description: dapp.desc,
+            iconUri: dapp.iconUri,
+            createAt: dapp.createAt,
+            order,
+        }
+    }
+
+    // VeBetterDAO bookmark
+    if (dapp.veBetterDaoId) {
+        return {
+            type: "vbd",
+            vbdId: dapp.veBetterDaoId,
+            order,
+        }
+    }
+
+    // App Hub bookmark
+    return {
+        type: "app-hub",
+        id: dapp.id || DAppUtils.generateDAppId(dapp.href),
+        order,
+    }
+}
+
 export const DiscoverySlice = createSlice({
     name: "discovery",
     initialState: initialDiscoverState,
@@ -79,13 +136,16 @@ export const DiscoverySlice = createSlice({
             const { payload } = action
             let bookmark: DiscoveryDApp
             if ("external_url" in payload) {
-                //Treat the app as a VBD app
+                // Handle both Unix timestamp string ("1640995200") and ISO string formats
+                const timestamp = Number.parseInt(payload.createdAtTimestamp, 10)
+                const createAt = Number.isNaN(timestamp) ? Date.parse(payload.createdAtTimestamp) : timestamp * 1000
+
                 bookmark = {
                     name: payload.name,
                     href: payload.external_url,
                     desc: payload.description,
                     isCustom: false,
-                    createAt: parseInt(payload.createdAtTimestamp, 10),
+                    createAt,
                     amountOfNavigations: 1,
                     veBetterDaoId: payload.id,
                 }
@@ -95,56 +155,50 @@ export const DiscoverySlice = createSlice({
                 }
             }
 
-            if (bookmark.isCustom) {
-                state.custom.push(bookmark)
-            } else {
-                state.favorites.push(bookmark)
-            }
+            // Add to favoriteRefs for all bookmark types (app-hub, vbd, custom)
+            const order = state.favoriteRefs.length
+            state.favoriteRefs.push(createDAppReference(bookmark, order))
         },
         removeBookmark: (state, action: PayloadAction<{ href: string; isCustom?: boolean }>) => {
             const { isCustom, href } = action.payload
+
             if (isCustom) {
-                state.custom = state.custom.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
-            } else {
-                state.favorites = state.favorites.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
+                state.favoriteRefs = state.favoriteRefs.filter(
+                    ref => !(ref.type === "custom" && URIUtils.compareURLs(ref.url, href)),
+                )
+                return
             }
+
+            // For non-custom bookmarks, find the dApp to get its ID
+            const dapp = state.featured.find(d => URIUtils.compareURLs(d.href, href))
+            if (!dapp) return
+
+            state.favoriteRefs = state.favoriteRefs.filter(ref => {
+                if (ref.type === "app-hub") return ref.id !== dapp.id
+                if (ref.type === "vbd") return ref.vbdId !== dapp.veBetterDaoId
+                return true
+            })
         },
         reorderBookmarks: (state, action: PayloadAction<DiscoveryDApp[]>) => {
-            state.favorites = action.payload
+            state.favoriteRefs = action.payload.map((dapp, index) => createDAppReference(dapp, index))
         },
         setFeaturedDApps: (state, action: PayloadAction<DiscoveryDApp[]>) => {
             state.featured = action.payload
         },
-        addNavigationToDApp: (
-            state,
-            action: PayloadAction<{ href: string; isCustom: boolean; sourceScreen?: string }>,
-        ) => {
+        addNavigationToDApp: (state, action: PayloadAction<{ href: string; isCustom: boolean }>) => {
             const { payload } = action
 
-            // Store the source screen for back navigation
-            if (payload.sourceScreen) {
-                state.lastNavigationSource = payload.sourceScreen
-            }
-
-            if (payload.isCustom) {
-                const existingDApp = findByHref(state.custom, payload.href)
-
-                if (existingDApp) {
-                    existingDApp.amountOfNavigations += 1
-                }
-            } else {
-                const favourite = findByHref(state.favorites, payload.href)
-
-                if (favourite) {
-                    favourite.amountOfNavigations += 1
-                }
-
+            // Only track navigation counts for featured apps (non-custom)
+            if (!payload.isCustom) {
                 const featured = findByHref(state.featured, payload.href)
-
                 if (featured) {
                     featured.amountOfNavigations += 1
                 }
             }
+        },
+        // Store the source screen for back navigation
+        setLastNavigationSource: (state, action: PayloadAction<{ screen: string }>) => {
+            state.lastNavigationSource = action.payload.screen
         },
         addConnectedDiscoveryApp: (state, action: PayloadAction<ConnectedDiscoveryApp>) => {
             if (!state.connectedApps) state.connectedApps = [action.payload]
@@ -234,4 +288,5 @@ export const {
     addSession,
     setIsNormalUser,
     setSuggestedAppIds,
+    setLastNavigationSource,
 } = DiscoverySlice.actions

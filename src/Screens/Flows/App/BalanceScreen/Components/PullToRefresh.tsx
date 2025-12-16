@@ -3,6 +3,7 @@ import React, { ComponentType, forwardRef, useCallback, useState } from "react"
 import { RefreshControlProps } from "react-native"
 import { NativeViewGestureHandlerProps, RefreshControl } from "react-native-gesture-handler"
 import { useTheme } from "~Hooks"
+import { useStargateInvalidation } from "~Hooks/useStargateInvalidation"
 import {
     invalidateUserTokens,
     selectSelectedAccountAddress,
@@ -22,6 +23,7 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const theme = useTheme()
     const dispatch = useAppDispatch()
+    const { invalidate: invalidateStargate } = useStargateInvalidation()
 
     const invalidateBalanceQueries = useCallback(async () => {
         await dispatch(updateAccountBalances(selectedAccountAddress!, queryClient))
@@ -34,28 +36,33 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
     const invalidateActivity = useCallback(() => {
         return queryClient.invalidateQueries({
             predicate(query) {
-                if (query.queryKey[0] !== "BALANCE_ACTIVITIES") return false
-                if (query.queryKey.length !== 4) return false
-                if (query.queryKey[2] !== selectedNetwork.genesis.id) return false
-                if (!AddressUtils.compareAddresses(query.queryKey[3] as string | undefined, selectedAccountAddress!))
-                    return false
+                const queryKey = query.queryKey as string[]
+                if (!["BALANCE_ACTIVITIES", "TOKEN_ACTIVITIES"].includes(queryKey[0])) return false
+                if (queryKey.length < 4) return false
+                if (queryKey[1] !== selectedNetwork.genesis.id) return false
+                if (!AddressUtils.compareAddresses(queryKey[2], selectedAccountAddress!)) return false
                 return true
             },
         })
     }, [queryClient, selectedAccountAddress, selectedNetwork.genesis.id])
 
     const invalidateStargateQueries = useCallback(async () => {
+        if (!selectedAccountAddress) return
+        await invalidateStargate([selectedAccountAddress])
+    }, [invalidateStargate, selectedAccountAddress])
+
+    const invalidateCollectiblesQueries = useCallback(async () => {
         await queryClient.invalidateQueries({
             predicate(query) {
-                if (!["userStargateNodes", "userStargateNfts"].includes(query.queryKey[0] as string)) return false
-                if (query.queryKey.length < 3) return false
-                if (query.queryKey[1] !== selectedNetwork.type) return false
-                if (!AddressUtils.compareAddresses(query.queryKey[2] as string | undefined, selectedAccountAddress!))
-                    return false
+                const queryKey = query.queryKey as string[]
+                if (!["COLLECTIBLES"].includes(queryKey[0])) return false
+                if (queryKey.length < 4) return false
+                if (queryKey[2] !== selectedNetwork.genesis.id) return false
+                if (!AddressUtils.compareAddresses(queryKey[3], selectedAccountAddress!)) return false
                 return true
             },
         })
-    }, [queryClient, selectedAccountAddress, selectedNetwork.type])
+    }, [queryClient, selectedAccountAddress, selectedNetwork.genesis.id])
 
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
@@ -65,10 +72,17 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
             invalidateBalanceQueries(),
             invalidateTokens(),
             invalidateActivity(),
+            invalidateCollectiblesQueries(),
         ])
 
         setRefreshing(false)
-    }, [invalidateActivity, invalidateBalanceQueries, invalidateStargateQueries, invalidateTokens])
+    }, [
+        invalidateActivity,
+        invalidateBalanceQueries,
+        invalidateCollectiblesQueries,
+        invalidateStargateQueries,
+        invalidateTokens,
+    ])
     return (
         <RefreshControl
             onRefresh={onRefresh}

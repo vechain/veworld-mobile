@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { FetchAppOverviewResponse } from "~Networking/API/Types"
-import { fetchAppOverview } from "~Networking/DApps/fetchAppOverview"
+import { useMainnetIndexerClient } from "~Hooks/useIndexerClient"
 
 /**
  * Hook to fetch app overview data with React Query caching
@@ -9,16 +8,24 @@ import { fetchAppOverview } from "~Networking/DApps/fetchAppOverview"
  * @returns React Query result with app overview data
  */
 export const useAppOverview = (appId: string | undefined, enabled = true) => {
-    return useQuery<FetchAppOverviewResponse>({
+    const indexer = useMainnetIndexerClient()
+    return useQuery({
         queryKey: ["appOverview", appId],
         queryFn: () => {
             if (!appId) {
                 throw new Error("App ID is required")
             }
-            return fetchAppOverview(appId)
+            return indexer
+                .GET("/api/v1/b3tr/actions/apps/{appId}/overview", {
+                    params: {
+                        path: {
+                            appId,
+                        },
+                    },
+                })
+                .then(res => res.data!)
         },
         enabled: enabled && !!appId,
         staleTime: 1000 * 60 * 60 * 24,
-        gcTime: 1000 * 60 * 60 * 24,
     })
 }

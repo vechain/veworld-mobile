@@ -1,9 +1,11 @@
 import { useMemo } from "react"
+import { useReceiptProcessor } from "~Components/Providers/ReceiptProcessorProvider"
 import { B3TR, VET, VTHO } from "~Constants"
 import { useMultipleTokensBalance } from "~Hooks/useTokenBalance"
-import { FungibleToken, NETWORK_TYPE } from "~Model"
-import { getReceiptProcessor, InspectableOutput, ReceiptOutput } from "~Services/AbiService"
-import { selectNetworkVBDTokens, selectOfficialTokens, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { FungibleToken } from "~Model"
+import { InspectableOutput, ReceiptOutput } from "~Services/AbiService"
+import { ReceiptProcessor } from "~Services/AbiService/ReceiptProcessor"
+import { selectNetworkVBDTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
 import { BigNumberUtils, BigNutils } from "~Utils"
 import AddressUtils from "~Utils/AddressUtils"
 
@@ -24,16 +26,15 @@ type Args = {
 const calculateClausesValue = ({
     transactionOutputs,
     selectedToken,
-    network,
     origin,
+    processor,
 }: {
     transactionOutputs: InspectableOutput[]
     selectedToken: FungibleToken
-    network: NETWORK_TYPE
     origin: string
+    processor: ReceiptProcessor
 }) => {
-    const receiptProcessor = getReceiptProcessor(network, ["Generic", "Native"])
-    const analyzedOutputs = receiptProcessor.analyzeReceipt(transactionOutputs, origin)
+    const analyzedOutputs = processor.analyzeReceipt(transactionOutputs, origin)
     const filtered: Extract<
         ReceiptOutput,
         | { name: "VET_TRANSFER(address,address,uint256)" }
@@ -71,7 +72,8 @@ export const useIsEnoughGas = ({
     const { B3TR: networkB3TR } = useAppSelector(selectNetworkVBDTokens)
     const addressesToCheck = useMemo(() => [VTHO.address, networkB3TR.address, VET.address], [networkB3TR.address])
     const { data: balances } = useMultipleTokensBalance(addressesToCheck)
-    const network = useAppSelector(selectSelectedNetwork)
+    const getReceiptProcessor = useReceiptProcessor()
+    const processor = useMemo(() => getReceiptProcessor(["Generic", "Native"]), [getReceiptProcessor])
 
     const hasEnoughBalanceOnToken = useMemo(() => {
         return Object.fromEntries(
@@ -93,7 +95,7 @@ export const useIsEnoughGas = ({
                 const clausesValue = calculateClausesValue({
                     transactionOutputs,
                     selectedToken: foundTmpToken,
-                    network: network.type,
+                    processor,
                     origin,
                 })
 
@@ -120,7 +122,7 @@ export const useIsEnoughGas = ({
         transactionOutputs,
         officialTokens,
         balances,
-        network.type,
+        processor,
         origin,
         isDelegated,
         enableSameTokenFeeHandling,

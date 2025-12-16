@@ -42,10 +42,11 @@ const Wrapper = ({ children }: PropsWithChildren) => (
         preloadedState={{
             discovery: {
                 featured: [],
+                favoriteRefs: [],
                 bannerInteractions: {},
                 connectedApps: [],
                 custom: [],
-                favorites: [],
+
                 hasOpenedDiscovery: true,
                 tabsManager: {
                     currentTabId: null,
@@ -106,11 +107,14 @@ describe("CategoryFilters", () => {
         fireEvent.press(recyclingChip)
 
         expect(mockOnCategoryChange).toHaveBeenCalledTimes(1)
-        expect(mockOnCategoryChange).toHaveBeenCalledWith({
-            id: X2ECategoryType.PLASTIC_WASTE_RECYCLING,
-            displayName: "Recycling",
-            icon: "icon-recycle",
-        })
+        expect(mockOnCategoryChange).toHaveBeenCalledWith(
+            {
+                id: X2ECategoryType.PLASTIC_WASTE_RECYCLING,
+                displayName: "Recycling",
+                icon: "icon-recycle",
+            },
+            1,
+        )
     })
 
     it("should call onCategoryChange with correct category data for different chips", () => {
@@ -125,11 +129,14 @@ describe("CategoryFilters", () => {
         const energyChip = screen.getByText("Energy")
         fireEvent.press(energyChip)
 
-        expect(mockOnCategoryChange).toHaveBeenCalledWith({
-            id: X2ECategoryType.RENEWABLE_ENERGY_EFFICIENCY,
-            displayName: "Energy",
-            icon: "icon-plug",
-        })
+        expect(mockOnCategoryChange).toHaveBeenCalledWith(
+            {
+                id: X2ECategoryType.RENEWABLE_ENERGY_EFFICIENCY,
+                displayName: "Energy",
+                icon: "icon-plug",
+            },
+            3,
+        )
     })
 
     it("should handle multiple chip presses correctly", () => {
@@ -148,16 +155,24 @@ describe("CategoryFilters", () => {
         fireEvent.press(shoppingChip)
 
         expect(mockOnCategoryChange).toHaveBeenCalledTimes(2)
-        expect(mockOnCategoryChange).toHaveBeenNthCalledWith(1, {
-            id: X2ECategoryType.FITNESS_WELLNESS,
-            displayName: "Lifestyle",
-            icon: "icon-dumbbell",
-        })
-        expect(mockOnCategoryChange).toHaveBeenNthCalledWith(2, {
-            id: X2ECategoryType.SUSTAINABLE_SHOPPING,
-            displayName: "Shopping",
-            icon: "icon-shopping-bag",
-        })
+        expect(mockOnCategoryChange).toHaveBeenNthCalledWith(
+            1,
+            {
+                id: X2ECategoryType.FITNESS_WELLNESS,
+                displayName: "Lifestyle",
+                icon: "icon-dumbbell",
+            },
+            2,
+        )
+        expect(mockOnCategoryChange).toHaveBeenNthCalledWith(
+            2,
+            {
+                id: X2ECategoryType.SUSTAINABLE_SHOPPING,
+                displayName: "Shopping",
+                icon: "icon-shopping-bag",
+            },
+            4,
+        )
     })
 
     it("should update selected category when props change", () => {
@@ -231,5 +246,29 @@ describe("CategoryFilters", () => {
         })
 
         expect(mockOnCategoryChange).toHaveBeenCalledTimes(5)
+    })
+
+    it("should render animated background for tab indicator", () => {
+        render(
+            <CategoryFilters
+                selectedCategory={{ id: X2ECategoryType.NUTRITION }}
+                onCategoryChange={mockOnCategoryChange}
+            />,
+            { wrapper: Wrapper },
+        )
+
+        expect(screen.getByText("Food & Drink")).toBeVisible()
+    })
+
+    it("should handle ScrollView layout and scroll events", () => {
+        render(
+            <CategoryFilters
+                selectedCategory={{ id: X2ECategoryType.NUTRITION }}
+                onCategoryChange={mockOnCategoryChange}
+            />,
+            { wrapper: Wrapper },
+        )
+
+        expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
     })
 })

@@ -19,6 +19,7 @@ import {
     Network,
     NonFungibleTokenActivity,
     NFTMarketplaceActivity,
+    StargateActivity,
     SwapActivity,
     UnknownTxActivity,
 } from "~Model"
@@ -33,7 +34,6 @@ import {
 } from "./ActivityHelpers"
 import { getAmountFromClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { TestHelpers } from "~Test"
-import { EventTypeResponse } from "~Networking"
 
 const { vetTransaction1, nftTransaction1, token2 } = TestHelpers.data
 
@@ -177,19 +177,19 @@ describe("createSignCertificateActivity", () => {
 
 describe("eventTypeToActivityType", () => {
     it("Should map VET event type to TRANSFER_VET activity type", () => {
-        expect(eventTypeToActivityType(EventTypeResponse.VET)).toBe(ActivityType.TRANSFER_VET)
+        expect(eventTypeToActivityType("VET")).toBe(ActivityType.TRANSFER_VET)
     })
 
     it("Should map FUNGIBLE_TOKEN event type to TRANSFER_FT activity type", () => {
-        expect(eventTypeToActivityType(EventTypeResponse.FUNGIBLE_TOKEN)).toBe(ActivityType.TRANSFER_FT)
+        expect(eventTypeToActivityType("FUNGIBLE_TOKEN")).toBe(ActivityType.TRANSFER_FT)
     })
 
     it("Should map NFT event type to TRANSFER_NFT activity type", () => {
-        expect(eventTypeToActivityType(EventTypeResponse.NFT)).toBe(ActivityType.TRANSFER_NFT)
+        expect(eventTypeToActivityType("NFT")).toBe(ActivityType.TRANSFER_NFT)
     })
 
     it("Should return undefined for unknown event type", () => {
-        expect(eventTypeToActivityType("UNKNOWN" as EventTypeResponse)).toBeUndefined()
+        expect(eventTypeToActivityType("UNKNOWN" as any)).toBeUndefined()
     })
 })
 
@@ -458,8 +458,6 @@ describe("createActivityFromIndexedHistoryEvent", () => {
             from: "0x6bee7ddab6c99d5b2af0554eaea484ce18f52631",
             value: "1200000000000000000",
             appId: "0x9643ed1637948cc571b23f836ade2bdb104de88e627fa6e8e3ffef1ee5a1739a",
-            // eslint-disable-next-line max-len
-            proof: '{"version": 2,"description": "The user made a purchase favoring sustainable choices","proof": {"image":"https://storage.googleapis.com/gcreceipts-public/2025-03-03/1741001248_0x79028e3d948bd5873ccf58a69089cac105832129.jpg"},"impact": {"carbon":8580}}',
         }
         const activity = createActivityFromIndexedHistoryEvent(
             event,
@@ -482,7 +480,6 @@ describe("createActivityFromIndexedHistoryEvent", () => {
             status: activity?.status ?? ActivityStatus.SUCCESS,
             value: activity?.value ?? "0x0",
             appId: activity?.appId,
-            proof: activity?.proof,
         })
     })
 
@@ -802,6 +799,304 @@ describe("createActivityFromIndexedHistoryEvent", () => {
             gasPayer: activity?.gasPayer,
             delegated: activity?.delegated ?? false,
             status: ActivityStatus.REVERTED,
+        })
+    })
+
+    it("Should create a activity from STARGATE_STAKE history event", () => {
+        const event: IndexedHistoryEvent = {
+            id: "sg1e3851107857350a1322e2c3c1dcb05318aa",
+            blockId: "0x0146bbcd64538fc18ab4e35266cddba720df4c8a1bad3923910693379af80e1e",
+            blockNumber: 21412813,
+            blockTimestamp: 1744657240,
+            txId: "0x711ff1e144910204cbcf4195cbe737b01421d835055e08aa7b800bf29fdb4e99",
+            origin: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            gasPayer: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            eventName: ActivityEvent.STARGATE_STAKE,
+            to: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            from: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            value: "10000000000000000000",
+        }
+        const activity = createActivityFromIndexedHistoryEvent(
+            event,
+            "0x79028e3d948bd5873ccf58a69089cac105832129",
+            defaultTestNetwork,
+        ) as StargateActivity
+
+        expect(activity).toMatchObject({
+            eventName: ActivityEvent.STARGATE_STAKE,
+            value: "10000000000000000000",
+        })
+    })
+
+    it("Should create a activity from STARGATE_UNSTAKE history event", () => {
+        const event: IndexedHistoryEvent = {
+            id: "sg2e3851107857350a1322e2c3c1dcb05318aa",
+            blockId: "0x0146bbcd64538fc18ab4e35266cddba720df4c8a1bad3923910693379af80e1e",
+            blockNumber: 21412813,
+            blockTimestamp: 1744657240,
+            txId: "0x711ff1e144910204cbcf4195cbe737b01421d835055e08aa7b800bf29fdb4e99",
+            origin: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            gasPayer: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            eventName: ActivityEvent.STARGATE_UNSTAKE,
+            to: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            from: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            value: "5000000000000000000",
+        }
+        const activity = createActivityFromIndexedHistoryEvent(
+            event,
+            "0x79028e3d948bd5873ccf58a69089cac105832129",
+            defaultTestNetwork,
+        ) as StargateActivity
+
+        expect(activity).toMatchObject({
+            eventName: ActivityEvent.STARGATE_UNSTAKE,
+            value: "5000000000000000000",
+        })
+    })
+
+    it("Should create a activity from STARGATE_DELEGATE_REQUEST history event", () => {
+        const event: IndexedHistoryEvent = {
+            id: "sg3e3851107857350a1322e2c3c1dcb05318aa",
+            blockId: "0x0146bbcd64538fc18ab4e35266cddba720df4c8a1bad3923910693379af80e1e",
+            blockNumber: 21412813,
+            blockTimestamp: 1744657240,
+            txId: "0x711ff1e144910204cbcf4195cbe737b01421d835055e08aa7b800bf29fdb4e99",
+            origin: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            gasPayer: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            eventName: ActivityEvent.STARGATE_DELEGATE_REQUEST,
+            to: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            from: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            value: "3000000000000000000",
+            validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+        }
+        const activity = createActivityFromIndexedHistoryEvent(
+            event,
+            "0x79028e3d948bd5873ccf58a69089cac105832129",
+            defaultTestNetwork,
+        ) as StargateActivity
+
+        expect(activity).toMatchObject({
+            eventName: ActivityEvent.STARGATE_DELEGATE_REQUEST,
+            value: "3000000000000000000",
+            validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+        })
+    })
+
+    it("Should create a activity from STARGATE_DELEGATE_ACTIVE history event", () => {
+        const event: IndexedHistoryEvent = {
+            id: "sg4e3851107857350a1322e2c3c1dcb05318aa",
+            blockId: "0x0146bbcd64538fc18ab4e35266cddba720df4c8a1bad3923910693379af80e1e",
+            blockNumber: 21412813,
+            blockTimestamp: 1744657240,
+            txId: "0x711ff1e144910204cbcf4195cbe737b01421d835055e08aa7b800bf29fdb4e99",
+            origin: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            gasPayer: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            eventName: ActivityEvent.STARGATE_DELEGATE_ACTIVE,
+            to: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            from: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            value: "3000000000000000000",
+            validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+        }
+        const activity = createActivityFromIndexedHistoryEvent(
+            event,
+            "0x79028e3d948bd5873ccf58a69089cac105832129",
+            defaultTestNetwork,
+        ) as StargateActivity
+
+        expect(activity).toMatchObject({
+            eventName: ActivityEvent.STARGATE_DELEGATE_ACTIVE,
+            value: "3000000000000000000",
+            validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+        })
+    })
+
+    it("Should create a activity from STARGATE_DELEGATE_EXIT_REQUEST history event", () => {
+        const event: IndexedHistoryEvent = {
+            id: "sg5e3851107857350a1322e2c3c1dcb05318aa",
+            blockId: "0x0146bbcd64538fc18ab4e35266cddba720df4c8a1bad3923910693379af80e1e",
+            blockNumber: 21412813,
+            blockTimestamp: 1744657240,
+            txId: "0x711ff1e144910204cbcf4195cbe737b01421d835055e08aa7b800bf29fdb4e99",
+            origin: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            gasPayer: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            eventName: ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST,
+            to: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            from: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            value: "3000000000000000000",
+            validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+        }
+        const activity = createActivityFromIndexedHistoryEvent(
+            event,
+            "0x79028e3d948bd5873ccf58a69089cac105832129",
+            defaultTestNetwork,
+        ) as StargateActivity
+
+        expect(activity).toMatchObject({
+            eventName: ActivityEvent.STARGATE_DELEGATE_EXIT_REQUEST,
+            value: "3000000000000000000",
+            validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+        })
+    })
+
+    it("Should create a activity from STARGATE_DELEGATION_EXITED history event", () => {
+        const event: IndexedHistoryEvent = {
+            id: "sg6e3851107857350a1322e2c3c1dcb05318aa",
+            blockId: "0x0146bbcd64538fc18ab4e35266cddba720df4c8a1bad3923910693379af80e1e",
+            blockNumber: 21412813,
+            blockTimestamp: 1744657240,
+            txId: "0x711ff1e144910204cbcf4195cbe737b01421d835055e08aa7b800bf29fdb4e99",
+            origin: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            gasPayer: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            eventName: ActivityEvent.STARGATE_DELEGATION_EXITED,
+            to: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            from: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            value: "3000000000000000000",
+            validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+        }
+        const activity = createActivityFromIndexedHistoryEvent(
+            event,
+            "0x79028e3d948bd5873ccf58a69089cac105832129",
+            defaultTestNetwork,
+        ) as StargateActivity
+
+        expect(activity).toMatchObject({
+            eventName: ActivityEvent.STARGATE_DELEGATION_EXITED,
+            value: "3000000000000000000",
+            validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+        })
+    })
+
+    it("Should create a activity from STARGATE_DELEGATE_REQUEST_CANCELLED history event", () => {
+        const event: IndexedHistoryEvent = {
+            id: "sg7e3851107857350a1322e2c3c1dcb05318aa",
+            blockId: "0x0146bbcd64538fc18ab4e35266cddba720df4c8a1bad3923910693379af80e1e",
+            blockNumber: 21412813,
+            blockTimestamp: 1744657240,
+            txId: "0x711ff1e144910204cbcf4195cbe737b01421d835055e08aa7b800bf29fdb4e99",
+            origin: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            gasPayer: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            eventName: ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED,
+            to: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            from: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            value: "3000000000000000000",
+            validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+        }
+        const activity = createActivityFromIndexedHistoryEvent(
+            event,
+            "0x79028e3d948bd5873ccf58a69089cac105832129",
+            defaultTestNetwork,
+        ) as StargateActivity
+
+        expect(activity).toMatchObject({
+            eventName: ActivityEvent.STARGATE_DELEGATE_REQUEST_CANCELLED,
+            value: "3000000000000000000",
+            validator: "0x25AE0ef84dA4a76D5a1DFE80D3789C2c46FeE30a",
+        })
+    })
+
+    it("Should create a activity from STARGATE_BOOST history event", () => {
+        const event: IndexedHistoryEvent = {
+            id: "sg8e3851107857350a1322e2c3c1dcb05318aa",
+            blockId: "0x0146bbcd64538fc18ab4e35266cddba720df4c8a1bad3923910693379af80e1e",
+            blockNumber: 21412813,
+            blockTimestamp: 1744657240,
+            txId: "0x711ff1e144910204cbcf4195cbe737b01421d835055e08aa7b800bf29fdb4e99",
+            origin: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            gasPayer: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            eventName: ActivityEvent.STARGATE_BOOST,
+            to: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            from: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            value: "1000000000000000000",
+        }
+        const activity = createActivityFromIndexedHistoryEvent(
+            event,
+            "0x79028e3d948bd5873ccf58a69089cac105832129",
+            defaultTestNetwork,
+        ) as StargateActivity
+
+        expect(activity).toMatchObject({
+            eventName: ActivityEvent.STARGATE_BOOST,
+            value: "1000000000000000000",
+        })
+    })
+
+    it("Should create a activity from STARGATE_CLAIM_REWARDS history event", () => {
+        const event: IndexedHistoryEvent = {
+            id: "sg9e3851107857350a1322e2c3c1dcb05318aa",
+            blockId: "0x0146bbcd64538fc18ab4e35266cddba720df4c8a1bad3923910693379af80e1e",
+            blockNumber: 21412813,
+            blockTimestamp: 1744657240,
+            txId: "0x711ff1e144910204cbcf4195cbe737b01421d835055e08aa7b800bf29fdb4e99",
+            origin: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            gasPayer: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            eventName: ActivityEvent.STARGATE_CLAIM_REWARDS,
+            to: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            from: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            value: "500000000000000000",
+        }
+        const activity = createActivityFromIndexedHistoryEvent(
+            event,
+            "0x79028e3d948bd5873ccf58a69089cac105832129",
+            defaultTestNetwork,
+        ) as StargateActivity
+
+        expect(activity).toMatchObject({
+            eventName: ActivityEvent.STARGATE_CLAIM_REWARDS,
+            value: "500000000000000000",
+        })
+    })
+
+    it("Should create a activity from STARGATE_MANAGER_ADDED history event", () => {
+        const event: IndexedHistoryEvent = {
+            id: "sg10e3851107857350a1322e2c3c1dcb05318aa",
+            blockId: "0x0146bbcd64538fc18ab4e35266cddba720df4c8a1bad3923910693379af80e1e",
+            blockNumber: 21412813,
+            blockTimestamp: 1744657240,
+            txId: "0x711ff1e144910204cbcf4195cbe737b01421d835055e08aa7b800bf29fdb4e99",
+            origin: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            gasPayer: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            eventName: ActivityEvent.STARGATE_MANAGER_ADDED,
+            to: "0xb4094c25f86d628fdd571afc4077f0d0196afb48",
+            from: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            tokenId: "123",
+            value: "0",
+        }
+        const activity = createActivityFromIndexedHistoryEvent(
+            event,
+            "0x79028e3d948bd5873ccf58a69089cac105832129",
+            defaultTestNetwork,
+        ) as StargateActivity
+
+        expect(activity).toMatchObject({
+            eventName: ActivityEvent.STARGATE_MANAGER_ADDED,
+            tokenId: "123",
+        })
+    })
+
+    it("Should create a activity from STARGATE_MANAGER_REMOVED history event", () => {
+        const event: IndexedHistoryEvent = {
+            id: "sg11e3851107857350a1322e2c3c1dcb05318aa",
+            blockId: "0x0146bbcd64538fc18ab4e35266cddba720df4c8a1bad3923910693379af80e1e",
+            blockNumber: 21412813,
+            blockTimestamp: 1744657240,
+            txId: "0x711ff1e144910204cbcf4195cbe737b01421d835055e08aa7b800bf29fdb4e99",
+            origin: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            gasPayer: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            eventName: ActivityEvent.STARGATE_MANAGER_REMOVED,
+            to: "0xb4094c25f86d628fdd571afc4077f0d0196afb48",
+            from: "0x79028e3d948bd5873ccf58a69089cac105832129",
+            tokenId: "123",
+            value: "0",
+        }
+        const activity = createActivityFromIndexedHistoryEvent(
+            event,
+            "0x79028e3d948bd5873ccf58a69089cac105832129",
+            defaultTestNetwork,
+        ) as StargateActivity
+
+        expect(activity).toMatchObject({
+            eventName: ActivityEvent.STARGATE_MANAGER_REMOVED,
+            tokenId: "123",
         })
     })
 

@@ -33,7 +33,7 @@ export const FavoritesSuggestionBanner = ({ onPress }: Props) => {
                 <BaseIcon name="icon-star" size={16} color={theme.colors.favoritesSuggestionBanner.iconColor} />
                 <BaseText
                     testID="FavoritesSuggestionBanner_Title"
-                    typographyFont="bodySemiBold"
+                    typographyFont="captionSemiBold"
                     color={theme.colors.favoritesSuggestionBanner.color}>
                     {LL.FAVORITES_SUGGESTION_BANNER_TITLE()}
                 </BaseText>

@@ -42,10 +42,19 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
                     fetchMoreNFTs={fetchMoreNFTs}
                     onMomentumScrollBegin={onMomentumScrollBegin}
                     hasNext={hasNext}
+                    openReportBottomSheet={route.params.openReportBottomSheet}
                 />
             )
         }
-    }, [nfts, anyCollection, isLoading, fetchMoreNFTs, onMomentumScrollBegin, hasNext])
+    }, [
+        nfts,
+        anyCollection,
+        isLoading,
+        fetchMoreNFTs,
+        onMomentumScrollBegin,
+        hasNext,
+        route.params.openReportBottomSheet,
+    ])
 
     const renderContent = useMemo(() => {
         if (!isEmpty(error) && isEmpty(nfts)) return <NetworkErrorView />

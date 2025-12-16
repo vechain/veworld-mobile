@@ -1,0 +1,108 @@
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { StyleSheet } from "react-native"
+import { LinearTransition } from "react-native-reanimated"
+import { useThemedStyles } from "~Hooks"
+import {
+    selectAccounts,
+    selectKnownContacts,
+    selectRecentContacts,
+    selectSelectedAccount,
+    useAppSelector,
+} from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
+import { useSendContext } from "../Provider"
+import { SendContent } from "../Shared"
+import { KnownAddressesList } from "./Components/KnownAddressesList"
+import { WalletAddressCard } from "./Components/WalletAddressCard"
+
+export const ReceiverScreen = () => {
+    const { flowState, setFlowState, goToNext } = useSendContext()
+    const selectedAddress = useMemo(() => flowState.address, [flowState.address])
+
+    const [inputWalletAddress, setInputWalletAddress] = useState<string>("")
+    const [listWalletAddresses, setListWalletAddresses] = useState<string>("")
+    const [addressChangeCtx, setAddressChangeCtx] = useState<"recent" | "accounts" | "contacts" | null>(null)
+
+    const { styles } = useThemedStyles(baseStyles)
+
+    const allAccounts = useAppSelector(selectAccounts)
+    const currentAccount = useAppSelector(selectSelectedAccount)
+
+    const accounts = useMemo(() => {
+        return allAccounts.filter(account => !AddressUtils.compareAddresses(account.address, currentAccount?.address))
+    }, [allAccounts, currentAccount?.address])
+    const contacts = useAppSelector(selectKnownContacts)
+    const recentContacts = useAppSelector(selectRecentContacts)
+
+    const activeFilter = useMemo(() => {
+        if (addressChangeCtx) return addressChangeCtx
+        if (recentContacts.find(recentContact => AddressUtils.compareAddresses(recentContact.address, selectedAddress)))
+            return "recent"
+        if (accounts.find(account => AddressUtils.compareAddresses(account.address, selectedAddress))) return "accounts"
+        if (contacts.find(contact => AddressUtils.compareAddresses(contact.address, selectedAddress))) return "contacts"
+        return undefined
+    }, [selectedAddress, accounts, contacts, recentContacts, addressChangeCtx])
+
+    const handleAddressChange = useCallback(
+        (source: "input" | "list", address: string, ctx?: "recent" | "accounts" | "contacts") => {
+            if (source === "input") {
+                setAddressChangeCtx(null)
+                if (AddressUtils.compareAddresses(address, selectedAddress)) {
+                    return
+                }
+                setInputWalletAddress(address)
+                setListWalletAddresses("")
+            } else {
+                setAddressChangeCtx(ctx ?? null)
+                setListWalletAddresses(address)
+                setInputWalletAddress("")
+            }
+            setFlowState(prev => ({ ...prev, address: address }))
+        },
+        [setFlowState, selectedAddress],
+    )
+
+    useEffect(() => {
+        if (!activeFilter) {
+            setInputWalletAddress(selectedAddress ?? "")
+            setListWalletAddresses("")
+            return
+        }
+        setListWalletAddresses(selectedAddress ?? "")
+        setInputWalletAddress("")
+    }, [selectedAddress, activeFilter])
+
+    const disabled = useMemo(() => !selectedAddress || !AddressUtils.isValid(selectedAddress), [selectedAddress])
+
+    const isTokenFlow = flowState.type === "token"
+
+    return (
+        <SendContent>
+            <SendContent.Header />
+            <SendContent.Container style={styles.root} layout={LinearTransition}>
+                <WalletAddressCard
+                    selectedAddress={inputWalletAddress}
+                    onAddressChange={address => handleAddressChange("input", address)}
+                />
+                <KnownAddressesList
+                    activeFilter={activeFilter}
+                    selectedAddress={listWalletAddresses}
+                    onAddressChange={(address, ctx) => handleAddressChange("list", address, ctx)}
+                />
+            </SendContent.Container>
+            <SendContent.Footer>
+                {isTokenFlow && <SendContent.Footer.Back />}
+                <SendContent.Footer.Next action={goToNext} disabled={disabled} />
+            </SendContent.Footer>
+        </SendContent>
+    )
+}
+
+const baseStyles = () =>
+    StyleSheet.create({
+        root: {
+            flex: 1,
+            flexDirection: "column",
+            gap: 8,
+        },
+    })
