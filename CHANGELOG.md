@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5.0 (2025-12-16)
+
+* build: init ([2e871c3](https://github.com/vechain/veworld-mobile/commit/2e871c3))
+* feat(receive-tab): show avatar on QR code with circular shape (#3650) ([a5c2484](https://github.com/vechain/veworld-mobile/commit/a5c2484)), closes [#3650](https://github.com/vechain/veworld-mobile/issues/3650)
+
 ## <small>2.4.13 (2025-12-02)</small>
 
 * build: init ([658831e](https://github.com/vechain/veworld-mobile/commit/658831e))
