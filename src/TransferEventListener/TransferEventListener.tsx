@@ -25,6 +25,7 @@ import { handleNFTTransfers, handleTokenTransfers } from "./Handlers"
 import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
 import { useStateReconciliation } from "./Hooks"
 import { useBeatWebsocket } from "./Hooks/useBeatWebsocket"
+import { useI18nContext } from "~i18n"
 
 const getAllTransfers = async (indexer: IndexerClient, accounts: string[], blockNumber: number) => {
     let results: components["schemas"]["IndexedTransferEvent"][] = []
@@ -53,6 +54,7 @@ const getAllTransfers = async (indexer: IndexerClient, accounts: string[], block
 }
 
 export const TransferEventListener: React.FC = () => {
+    const { LL } = useI18nContext()
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
@@ -135,24 +137,30 @@ export const TransferEventListener: React.FC = () => {
 
                 // ~ NFT TRANSFER
                 const nftTransfers = filterNFTTransferEvents(transfers, blackListedCollections)
-                await handleNFTTransfers({
-                    selectedAccount,
-                    visibleAccounts: relevantAccounts,
-                    transfers: nftTransfers,
-                    network: network,
-                    updateNFTs,
-                })
+                await handleNFTTransfers(
+                    {
+                        selectedAccount,
+                        visibleAccounts: relevantAccounts,
+                        transfers: nftTransfers,
+                        network: network,
+                        updateNFTs,
+                    },
+                    LL,
+                )
 
                 // ~ FUNGIBLE TOKEN TRANSFER
                 const tokenTransfers = filterTransferEventsByType(transfers, "FUNGIBLE_TOKEN")
                 const vetTransfers = filterTransferEventsByType(transfers, "VET")
 
-                handleTokenTransfers({
-                    selectedAccount,
-                    visibleAccounts: relevantAccounts,
-                    transfers: tokenTransfers.concat(vetTransfers),
-                    updateBalances,
-                })
+                handleTokenTransfers(
+                    {
+                        selectedAccount,
+                        visibleAccounts: relevantAccounts,
+                        transfers: tokenTransfers.concat(vetTransfers),
+                        updateBalances,
+                    },
+                    LL,
+                )
 
                 // ~ STARGATE EVENTS (already processed above)
             } catch (e) {
@@ -174,6 +182,7 @@ export const TransferEventListener: React.FC = () => {
             blackListedCollections,
             updateNFTs,
             updateBalances,
+            LL,
         ],
     )
 
