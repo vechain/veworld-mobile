@@ -5,6 +5,7 @@ import { COLORS } from "~Constants"
 import { useTheme, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
+import { selectKnownContacts, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
 const PADDING = 16
@@ -74,6 +75,9 @@ const NFTInfo = ({
 const Receiver = ({ address, testID }: { address: string; testID?: string }) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
+    const contacts = useAppSelector(selectKnownContacts)
+
+    const contact = useMemo(() => contacts.find(c => c.address === address), [contacts, address])
 
     const vns = useVns({
         name: "",
@@ -81,8 +85,8 @@ const Receiver = ({ address, testID }: { address: string; testID?: string }) => 
     })
 
     const displayAddress = useMemo(() => {
-        return AddressUtils.showAddressOrName(address, vns, { ellipsed: true })
-    }, [address, vns])
+        return contact ? contact.alias : AddressUtils.showAddressOrName(address, vns, { ellipsed: true })
+    }, [address, vns, contact])
 
     return (
         <BaseView
