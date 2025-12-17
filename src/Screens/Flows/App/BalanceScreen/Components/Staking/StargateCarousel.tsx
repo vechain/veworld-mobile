@@ -69,8 +69,8 @@ export const StargateCarousel = () => {
         // Sort by delegation status: [no delegation, exiting, delegated]
         const delegationPriority: Record<DelegationStatus, number> = {
             [DelegationStatus.NONE]: 0,
-            [DelegationStatus.EXITED]: 1,
-            [DelegationStatus.EXITING]: 2,
+            [DelegationStatus.EXITING]: 1,
+            [DelegationStatus.EXITED]: 2,
             [DelegationStatus.QUEUED]: 3,
             [DelegationStatus.ACTIVE]: 4,
         }

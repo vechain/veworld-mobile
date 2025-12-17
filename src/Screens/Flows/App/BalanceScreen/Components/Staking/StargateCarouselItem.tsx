@@ -66,7 +66,7 @@ export const StargateCarouselItem = ({ item }: Props) => {
     })
 
     // Use the unlocked version of the NFT image (without the status badge baked in)
-    const unlockedTokenURI = useMemo(() => tokenURI?.replace("_locked", ""), [tokenURI])
+    const unlockedTokenURI = useMemo(() => tokenURI?.replace(/_locked$/, ""), [tokenURI])
     const { data } = useQuery({
         queryKey: ["StargateNftMetadata", network.type, item.nodeId, "unlocked"],
         queryFn: () => fetchMetadata(unlockedTokenURI!),

@@ -40,14 +40,14 @@ export const useDelegationExitDays = ({ validatorId, enabled = true }: Props) =>
         queryKey: ["currentBlock", network.genesis.id],
         queryFn: async () => {
             const block = await thor.blocks.getBestBlockCompressed()
-            return block?.number ?? 0
+            return block?.number
         },
         enabled: enabled && !!validatorId,
         staleTime: 10 * 1000, // 10 seconds
     })
 
     const exitDays = useMemo(() => {
-        if (!validatorData?.cycleEndBlock || !currentBlock) return undefined
+        if (!validatorData?.cycleEndBlock || currentBlock === undefined) return undefined
 
         const blocksRemaining = validatorData.cycleEndBlock - currentBlock
         if (blocksRemaining <= 0) return 0

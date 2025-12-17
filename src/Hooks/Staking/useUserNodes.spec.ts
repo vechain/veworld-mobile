@@ -1,6 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { TestWrapper, TestHelpers } from "~Test"
 
+import { DelegationStatus } from "~Model"
 import { getTokenLevelName } from "~Utils/StargateUtils"
 
 import { useUserNodes } from "./useUserNodes"
@@ -40,7 +41,7 @@ describe("useUserNodes", () => {
                     vetStaked: node.vetAmountStaked,
                     totalBootstrapRewardsClaimed: "1",
                     totalRewardsClaimed: "0",
-                    delegationStatus: "ACTIVE",
+                    delegationStatus: DelegationStatus.ACTIVE,
                     validatorId: node.validatorId,
                 })),
                 pagination: {
@@ -73,7 +74,7 @@ describe("useUserNodes", () => {
                         vetStaked: node.vetAmountStaked,
                         totalBootstrapRewardsClaimed: "1",
                         totalRewardsClaimed: "0",
-                        delegationStatus: "ACTIVE",
+                        delegationStatus: DelegationStatus.ACTIVE,
                         validatorId: node.validatorId,
                     })),
                     pagination: {
@@ -91,7 +92,7 @@ describe("useUserNodes", () => {
                             vetStaked: "1",
                             totalBootstrapRewardsClaimed: "1",
                             totalRewardsClaimed: "0",
-                            delegationStatus: "NONE",
+                            delegationStatus: DelegationStatus.NONE,
                             validatorId: null,
                         },
                     ],
