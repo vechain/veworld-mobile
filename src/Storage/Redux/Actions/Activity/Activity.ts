@@ -3,7 +3,7 @@ import { ThorClient, TransactionReceipt } from "@vechain/sdk-network"
 import { ethers } from "ethers"
 import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
-import { AnalyticsEvent, createAnalyticsEvent, VTHO } from "~Constants"
+import { AnalyticsEvent, createAnalyticsEvent, MixPanelTransfers, VTHO } from "~Constants"
 import { i18nObject } from "~i18n"
 import {
     Activity,
@@ -67,10 +67,12 @@ const accumulateTransfers = (
                     case "VET_TRANSFER(address,address,uint256)":
                         if (AddressUtils.compareAddresses(curr.params.from, origin)) {
                             acc.VET_SENT = BigNutils(acc.VET_SENT).plus(curr.params.amount).toString
+                            acc.VET_SENT_COUNT = BigNutils(acc.VET_SENT_COUNT).plus(1).toString
                             return acc
                         }
                         if (AddressUtils.compareAddresses(curr.params.to, origin)) {
                             acc.VET_RECEIVED = BigNutils(acc.VET_RECEIVED).plus(curr.params.amount).toString
+                            acc.VET_RECEIVED_COUNT = BigNutils(acc.VET_RECEIVED_COUNT).plus(1).toString
                             return acc
                         }
                         return acc
@@ -78,10 +80,12 @@ const accumulateTransfers = (
                         if (AddressUtils.compareAddresses(curr.address, VTHO.address)) {
                             if (AddressUtils.compareAddresses(curr.params.from, origin)) {
                                 acc.VTHO_SENT = BigNutils(acc.VTHO_SENT).plus(curr.params.value).toString
+                                acc.VTHO_SENT_COUNT = BigNutils(acc.VTHO_SENT_COUNT).plus(1).toString
                                 return acc
                             }
                             if (AddressUtils.compareAddresses(curr.params.to, origin)) {
                                 acc.VTHO_RECEIVED = BigNutils(acc.VTHO_RECEIVED).plus(curr.params.value).toString
+                                acc.VTHO_RECEIVED_COUNT = BigNutils(acc.VTHO_RECEIVED_COUNT).plus(1).toString
                                 return acc
                             }
                             return acc
@@ -89,10 +93,12 @@ const accumulateTransfers = (
                         if (AddressUtils.compareAddresses(curr.address, b3trAddress)) {
                             if (AddressUtils.compareAddresses(curr.params.from, origin)) {
                                 acc.B3TR_SENT = BigNutils(acc.B3TR_SENT).plus(curr.params.value).toString
+                                acc.B3TR_SENT_COUNT = BigNutils(acc.B3TR_SENT_COUNT).plus(1).toString
                                 return acc
                             }
                             if (AddressUtils.compareAddresses(curr.params.to, origin)) {
                                 acc.B3TR_RECEIVED = BigNutils(acc.B3TR_RECEIVED).plus(curr.params.value).toString
+                                acc.B3TR_RECEIVED_COUNT = BigNutils(acc.B3TR_RECEIVED_COUNT).plus(1).toString
                                 return acc
                             }
                             return acc
@@ -108,21 +114,20 @@ const accumulateTransfers = (
                 B3TR_RECEIVED: "0",
                 VTHO_SENT: "0",
                 VTHO_RECEIVED: "0",
-            } as {
-                /**
-                 * Amount of tokens sent
-                 */
-                [key in "VET" | "VTHO" | "B3TR" as `${key}_SENT`]: string
-            } & {
-                /**
-                 * Amount of tokens received
-                 */
-                [key in "VET" | "VTHO" | "B3TR" as `${key}_RECEIVED`]: string
-            },
+                B3TR_RECEIVED_COUNT: "0",
+                B3TR_SENT_COUNT: "0",
+                VET_RECEIVED_COUNT: "0",
+                VET_SENT_COUNT: "0",
+                VTHO_RECEIVED_COUNT: "0",
+                VTHO_SENT_COUNT: "0",
+            } as Record<keyof MixPanelTransfers, string>,
         )
 
     return Object.fromEntries(
-        Object.entries(accumulatedResults).map(([key, value]) => [key, parseFloat(ethers.utils.formatEther(value))]),
+        Object.entries(accumulatedResults).map(([key, value]) => {
+            if (key.endsWith("COUNT")) return [key, Number.parseInt(value, 10)]
+            return [key, Number.parseFloat(ethers.utils.formatEther(value))]
+        }),
     )
 }
 
@@ -171,7 +176,7 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
             return updatedActivity
         }
 
-        if (updatedActivity.subject) {
+        if (updatedActivity.subject && updatedActivity.isTransaction) {
             dispatch(
                 AnalyticsUtils.trackEvent(
                     AnalyticsEvent.WALLET_OPERATION,
@@ -184,11 +189,14 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
                             context: updatedActivity.context,
                             failed: updatedActivity.status === ActivityStatus.REVERTED,
                             dappUrl: updatedActivity.dappUrlOrName,
-                            ...(txReceipt &&
-                                accumulateTransfers(txReceipt, {
+                            transactionId: updatedActivity.txId?.toLowerCase(),
+                            ...(txReceipt && {
+                                ...accumulateTransfers(txReceipt, {
                                     processor,
                                     b3trAddress: B3TR.address,
-                                })),
+                                }),
+                                origin: txReceipt.meta.txOrigin!.toLowerCase(),
+                            }),
                         }),
                     ),
                 ),

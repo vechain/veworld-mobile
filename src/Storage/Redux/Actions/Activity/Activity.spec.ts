@@ -77,6 +77,7 @@ describe("Activity - Actions", () => {
                 ],
                 result: {
                     VTHO_SENT: 4999.63418,
+                    VTHO_SENT_COUNT: 1,
                 },
                 label: "VTHO_SENT",
                 origin: "0x14b3fe72a8c99a118bb8e288c51c9bd5eeac1f24",
@@ -111,6 +112,7 @@ describe("Activity - Actions", () => {
                 ],
                 result: {
                     VTHO_RECEIVED: 4999.63418,
+                    VTHO_RECEIVED_COUNT: 1,
                 },
                 label: "VTHO_RECEIVED",
                 origin: "0x14b3fe72a8c99a118bb8e288c51c9bd5eeac1f24",
@@ -145,6 +147,7 @@ describe("Activity - Actions", () => {
                 ],
                 result: {
                     B3TR_RECEIVED: 4999.63418,
+                    B3TR_RECEIVED_COUNT: 1,
                 },
                 label: "B3TR_RECEIVED",
                 origin: "0x14b3fe72a8c99a118bb8e288c51c9bd5eeac1f24",
@@ -179,6 +182,7 @@ describe("Activity - Actions", () => {
                 ],
                 result: {
                     B3TR_SENT: 4999.63418,
+                    B3TR_SENT_COUNT: 1,
                 },
                 label: "B3TR_SENT",
                 origin: "0x14b3fe72a8c99a118bb8e288c51c9bd5eeac1f24",
@@ -205,6 +209,7 @@ describe("Activity - Actions", () => {
                 ],
                 result: {
                     VET_SENT: 4999.63418,
+                    VET_SENT_COUNT: 1,
                 },
                 label: "VET_SENT",
                 origin: "0x14b3fe72a8c99a118bb8e288c51c9bd5eeac1f24",
@@ -231,6 +236,7 @@ describe("Activity - Actions", () => {
                 ],
                 result: {
                     VET_RECEIVED: 4999.63418,
+                    VET_RECEIVED_COUNT: 1,
                 },
                 label: "VET_RECEIVED",
                 origin: "0x14b3fe72a8c99a118bb8e288c51c9bd5eeac1f24",

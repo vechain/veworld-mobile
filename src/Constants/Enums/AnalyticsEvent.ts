@@ -242,6 +242,13 @@ export enum AnalyticsEvent {
     TOKEN_SWAP_CLICKED = "TOKEN_SWAP_CLICKED",
 }
 
+type TransferKeyAccumulator = {
+    [key in "VET" | "VTHO" | "B3TR"]: `${key}_SENT` | `${key}_RECEIVED` | `${key}_SENT_COUNT` | `${key}_RECEIVED_COUNT`
+}["VET" | "VTHO" | "B3TR"]
+export type MixPanelTransfers = {
+    [key in TransferKeyAccumulator]?: number
+}
+
 /**
  * @description MixPanelEvent type
  */
@@ -254,17 +261,11 @@ type MixPanelEvent = {
 
     failed?: boolean
     dappUrl?: string
-} & {
     /**
-     * Amount of tokens sent
+     * Origin of the tx
      */
-    [key in "VET" | "VTHO" | "B3TR" as `${key}_SENT`]?: number
-} & {
-    /**
-     * Amount of tokens received
-     */
-    [key in "VET" | "VTHO" | "B3TR" as `${key}_RECEIVED`]?: number
-}
+    origin?: string
+} & MixPanelTransfers
 
 /**
  * Create an event for tracking transactions
