@@ -94,7 +94,7 @@ const FiatValue = ({ value, testID }: { value: string; testID?: string }) => {
             </BaseText>
             <BaseView flexDirection="row" gap={GAP_RIGHT}>
                 <BaseText
-                    typographyFont="subSubTitleSemiBold"
+                    typographyFont="bodySemiBold"
                     color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}
                     testID={`${testID}_VALUE`}>
                     {value}

@@ -1,10 +1,11 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { StyleSheet, Text } from "react-native"
 import Animated, { FadeIn } from "react-native-reanimated"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
-import { ColorThemeType, CURRENCY, CURRENCY_SYMBOLS } from "~Constants"
+import { ColorThemeType, CURRENCY, CURRENCY_SYMBOLS, SYMBOL_POSITIONS } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
+import { selectSymbolPosition, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -30,6 +31,17 @@ export const SelectAmountConversionToggle = React.memo<Props>(function Conversio
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
 
+    const symbolPosition = useAppSelector(selectSymbolPosition)
+
+    const formattedAmount = useMemo(() => {
+        if (isInputInFiat) return formattedConvertedAmount
+        const currencySymbol = CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS]
+        if (symbolPosition === SYMBOL_POSITIONS.AFTER) {
+            return `${formattedConvertedAmount} ${currencySymbol}`
+        }
+        return `${currencySymbol} ${formattedConvertedAmount}`
+    }, [isInputInFiat, formattedConvertedAmount, currency, symbolPosition])
+
     if (!exchangeRate && !isError) return null
 
     if (isError) {
@@ -45,8 +57,7 @@ export const SelectAmountConversionToggle = React.memo<Props>(function Conversio
             <BaseView flexDirection="row" alignItems="center" gap={4}>
                 <Animated.View key={isInputInFiat ? "token-conv" : "fiat-conv"} entering={FadeIn.duration(300)}>
                     <BaseText color={theme.colors.textLightish} typographyFont="bodySemiBold">
-                        {!isInputInFiat && CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS]}
-                        {formattedConvertedAmount}
+                        {formattedAmount}
                         {isInputInFiat && <Text style={styles.convertedSymbol}> {selectedToken.symbol}</Text>}
                     </BaseText>
                 </Animated.View>
