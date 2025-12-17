@@ -8,7 +8,7 @@ import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, FungibleToken } from "~Model"
 import { AddressUtils, TokenUtils } from "~Utils"
 import CurrencyConfig from "~Constants/Constants/CurrencyConfig/CurrencyConfig"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { selectAccountByAddress, selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AccountIcon } from "~Components/Reusable/Account/AccountIcon"
 
 const PADDING = 16
@@ -115,6 +115,8 @@ const TokenReceiver = ({ address, testID }: { address: string; testID?: string }
     const theme = useTheme()
     const { LL } = useI18nContext()
 
+    const account = useAppSelector(state => selectAccountByAddress(state, address))
+
     const vns = useVns({
         name: "",
         address: address,
@@ -134,7 +136,7 @@ const TokenReceiver = ({ address, testID }: { address: string; testID?: string }
                 <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
                     {displayAddress}
                 </BaseText>
-                <AccountIcon account={{ address, type: DEVICE_TYPE.LOCAL_MNEMONIC }} size={24} />
+                <AccountIcon account={account ?? { address, type: DEVICE_TYPE.LOCAL_MNEMONIC }} size={24} />
             </BaseView>
         </BaseView>
     )
