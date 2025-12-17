@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { Linking, StyleSheet } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { COLORS } from "~Constants"
@@ -18,21 +18,36 @@ type Excluded =
 
 type ExcludedSettingRoutes = Excluded | Routes.BROWSER
 
-export type RowProps = {
-    title: LocalizedString
-    screenName: keyof Omit<RootStackParamListSettings, Excluded> | Routes.BROWSER
-    icon: IconKey
-    showBadge?: boolean
-    url?: string
-}
+export type RowProps =
+    | {
+          title: LocalizedString
+          screenName: keyof Omit<RootStackParamListSettings, Excluded> | Routes.BROWSER
+          icon: IconKey
+          showBadge?: boolean
+          url?: string
+          external: false
+      }
+    | {
+          title: LocalizedString
+          icon: IconKey
+          screenName?: undefined
+          showBadge?: boolean
+          url: string
+          external: true
+      }
 
-export const SettingsRow = ({ title, screenName, icon, url, showBadge }: RowProps) => {
+export const SettingsRow = ({ title, icon, url, showBadge, external, screenName }: RowProps) => {
     const nav = useNavigation()
     const { navigateWithTab } = useBrowserTab()
 
     const theme = useTheme()
 
-    const onPress = useCallback(() => {
+    const onPress = useCallback(async () => {
+        if (external && (await Linking.canOpenURL(url))) {
+            Linking.openURL(url)
+            return
+        }
+
         if (url && screenName === Routes.BROWSER) {
             navigateWithTab({
                 url,
@@ -46,7 +61,7 @@ export const SettingsRow = ({ title, screenName, icon, url, showBadge }: RowProp
         }
 
         nav.navigate(screenName as keyof Omit<RootStackParamListSettings, ExcludedSettingRoutes>)
-    }, [url, screenName, nav, navigateWithTab, title])
+    }, [url, screenName, nav, navigateWithTab, title, external])
 
     const textColor = useMemo(() => {
         return theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE

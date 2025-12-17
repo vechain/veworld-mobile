@@ -6,12 +6,12 @@ import { i18nObject } from "~i18n"
 import {
     Activity,
     ActivityStatus,
+    ActivityType,
+    DEVICE_TYPE,
     FungibleTokenActivity,
     LoginActivityValue,
-    DEVICE_TYPE,
     NonFungibleTokenActivity,
     TypedData,
-    ActivityType,
 } from "~Model"
 import { NAVIGATION_REF, Routes } from "~Navigation"
 import {
@@ -23,7 +23,7 @@ import {
     createSignCertificateActivity,
     createSingTypedDataActivity,
 } from "~Networking"
-import { selectSelectedAccount, selectDevice, selectSelectedNetwork, selectLanguage } from "~Storage/Redux/Selectors"
+import { selectDevice, selectLanguage, selectSelectedAccount, selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { addActivity } from "~Storage/Redux/Slices"
 import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
 
