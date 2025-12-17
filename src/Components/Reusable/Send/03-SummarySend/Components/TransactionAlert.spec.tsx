@@ -126,4 +126,18 @@ describe("TransactionAlert", () => {
 
         expect(alert).toBeTruthy()
     })
+
+    it("does not show price updated alert when exchange rate changes but the difference less than 0.01", async () => {
+        ;(useCurrentExchangeRate as jest.Mock).mockReturnValue({ data: 1.001 })
+
+        renderScreen({ txError: false, hasGasAdjustment: false })
+        const alert = await screen.queryByText(
+            "Displayed amounts have been updated based on the latest market price.",
+            {
+                exact: false,
+            },
+        )
+
+        expect(alert).toBeNull()
+    })
 })
