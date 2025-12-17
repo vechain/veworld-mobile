@@ -1,7 +1,15 @@
 /* eslint-disable max-len */
 import { B3TR, VeDelegate, VET, VOT3, VTHO } from "~Constants"
 import { TokenWithCompleteInfo } from "~Hooks"
-import { FungibleTokenWithBalance, NftData, NFTMediaType, NodeInfo, NonFungibleToken, Token } from "~Model"
+import {
+    DelegationStatus,
+    FungibleTokenWithBalance,
+    NftData,
+    NFTMediaType,
+    NodeInfo,
+    NonFungibleToken,
+    Token,
+} from "~Model"
 
 export const VETWithBalance: FungibleTokenWithBalance = {
     ...VET,
@@ -302,6 +310,8 @@ export const StargateNodeMock: NodeInfo = {
     isLegacyNode: false,
     vetAmountStaked: "0",
     accumulatedRewards: "0",
+    delegationStatus: DelegationStatus.ACTIVE,
+    validatorId: "0x1234567890abcdef",
 }
 
 export const StargateNodeMocks: NodeInfo[] = [
@@ -313,6 +323,8 @@ export const StargateNodeMocks: NodeInfo[] = [
         isLegacyNode: false,
         vetAmountStaked: "0",
         accumulatedRewards: "0",
+        delegationStatus: DelegationStatus.NONE,
+        validatorId: null,
     },
     {
         nodeId: "3",
@@ -321,5 +333,7 @@ export const StargateNodeMocks: NodeInfo[] = [
         isLegacyNode: false,
         vetAmountStaked: "0",
         accumulatedRewards: "0",
+        delegationStatus: DelegationStatus.EXITING,
+        validatorId: "0xfedcba0987654321",
     },
 ]
