@@ -41,7 +41,7 @@ describe("useTransactionCallbacks", () => {
         expect(navigate).not.toHaveBeenCalled()
         expect(onFailure).toHaveBeenCalled()
     })
-    it("should work correctly with the transaction success", () => {
+    it("should work correctly with the transaction success", async () => {
         const navigate = jest.fn()
         const onFailure = jest.fn()
         ;(useNavigation as jest.Mock).mockReturnValue({ navigate })
@@ -52,8 +52,8 @@ describe("useTransactionCallbacks", () => {
             },
         )
 
-        act(() => {
-            result.current.onTransactionSuccess(
+        await act(async () => {
+            await result.current.onTransactionSuccess(
                 Transaction.of({
                     blockRef: "0x00ce27a27f982a6d",
                     chainTag: 39,
