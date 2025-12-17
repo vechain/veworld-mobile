@@ -21,7 +21,7 @@ export const useVetDomainsAvatar = ({ address }: { address: string }) => {
 
     return useQuery({
         queryKey: ["VET_DOMAIN", "AVATAR_OF_ADDRESS", address.toLowerCase(), network.genesis.id],
-        staleTime: 0,
+        staleTime: 1000 * 60 * 5, // 5 minutes
         queryFn: () =>
             VetDomainUtils.getAvatar(name, {
                 thor,
