@@ -36,8 +36,9 @@ import {
 } from "~Storage/Redux/Selectors"
 import { addActivity } from "~Storage/Redux/Slices"
 import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
-import { AddressUtils, AnalyticsUtils, BigNutils } from "~Utils"
+import { AddressUtils, BigNutils } from "~Utils"
 import ObjectUtils from "~Utils/ObjectUtils"
+import AnalyticsUtils from "~Utils/AnalyticsUtils"
 
 type ActivityOptions = {
     appName?: string
