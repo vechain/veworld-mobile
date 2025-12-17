@@ -15,10 +15,9 @@ import { useThemedStyles } from "~Hooks"
 import { useUserNodes } from "~Hooks/Staking"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
-import { DelegationStatus } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { AddressUtils, sortNodesByDelegationStatus } from "~Utils"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
 import { StargateCarouselItem } from "./StargateCarouselItem"
 import { StargateNoStakingCard } from "./StargateNoStakingCard"
@@ -66,16 +65,7 @@ export const StargateCarousel = () => {
                 ? data.filter(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
                 : data.filter(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
 
-        // Sort by delegation status: [no delegation, exiting, delegated]
-        const delegationPriority: Record<DelegationStatus, number> = {
-            [DelegationStatus.NONE]: 0,
-            [DelegationStatus.EXITING]: 1,
-            [DelegationStatus.EXITED]: 2,
-            [DelegationStatus.QUEUED]: 3,
-            [DelegationStatus.ACTIVE]: 4,
-        }
-
-        return filtered.sort((a, b) => delegationPriority[a.delegationStatus] - delegationPriority[b.delegationStatus])
+        return sortNodesByDelegationStatus(filtered)
     }, [data, filter, address])
 
     const cards = useMemo(() => {
