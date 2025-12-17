@@ -6,6 +6,7 @@ import { useCollectibleMetadata } from "~Hooks/useCollectibleMetadata"
 import { useStargateConfig } from "~Hooks/useStargateConfig"
 import { useThemedStyles } from "~Hooks/useTheme"
 import { useI18nContext } from "~i18n/i18n-react"
+import { DelegationStatus } from "~Model"
 import { StargateImage } from "~Screens/Flows/App/BalanceScreen/Components/Staking/StargateImage"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { getTokenLevelName, TokenLevelId } from "~Utils/StargateUtils/StargateUtils"
@@ -39,6 +40,7 @@ export const StargateNodeCard = ({ tokenId, blockNumber }: Props) => {
                 height={40}
                 borderRadius={4}
                 containerStyle={styles.imageContainer}
+                delegationStatus={nodeInfo?.delegationStatus ?? DelegationStatus.NONE}
             />
             <BaseView flexDirection="column" gap={4}>
                 <BaseText typographyFont="bodySemiBold">
