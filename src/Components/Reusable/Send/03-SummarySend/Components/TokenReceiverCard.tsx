@@ -11,7 +11,7 @@ import { useAppSelector } from "~Storage/Redux/Hooks"
 import { selectCurrencyFormat } from "~Storage/Redux/Selectors"
 import { CURRENCY_FORMATS, getNumberFormatter } from "~Constants"
 import { getDecimalSeparator } from "~Utils/BigNumberUtils/BigNumberUtils"
-import { formatFullPrecision } from "~Utils/StandardizedFormatting"
+import { formatFullPrecision, formatWithLessThan } from "~Utils/StandardizedFormatting"
 
 export const TokenReceiverCard = () => {
     const { flowState } = useTokenSendContext()
@@ -98,14 +98,22 @@ export const TokenReceiverCard = () => {
 
         const formattedInteger = formatter.format(Number(integerPart))
 
+        let fiatValue = ""
+
+        if (nextFiatAmount.isLeesThan_0_01) {
+            fiatValue = formatWithLessThan(nextFiatAmount.preciseValue, 0.01, { showZeroAs: "0", locale })
+        } else if (!BigNutils(decimalPart).isZero) {
+            fiatValue = `${formattedInteger}${decimalSeparator}${decimalPart}`
+        } else {
+            fiatValue = formattedInteger
+        }
+
         return {
             displayTokenAmount: formatFullPrecision(parsedTokenAmount, {
                 locale: formatLocale,
                 tokenSymbol: flowState.token!.symbol,
             }),
-            displayFiatAmount: !BigNutils(decimalPart).isZero
-                ? `${formattedInteger}${decimalSeparator}${decimalPart}`
-                : formattedInteger,
+            displayFiatAmount: fiatValue,
         }
     }, [
         decimalSeparator,
