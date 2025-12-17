@@ -2,90 +2,138 @@ import React, { useMemo } from "react"
 import { Animated } from "react-native"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { BigNutils } from "~Utils"
-import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 import { useTokenSendContext } from "../../Provider"
 import { useCurrentExchangeRate } from "../Hooks"
 import { DetailsContainer } from "./DetailsContainer"
+import { truncateToMaxDecimals, useDisplayInput, useSendAmountInput } from "../../01-Amount/Hooks"
+import { ethers } from "ethers"
+import { useAppSelector } from "~Storage/Redux/Hooks"
+import { selectCurrencyFormat } from "~Storage/Redux/Selectors"
+import { CURRENCY_FORMATS, getNumberFormatter } from "~Constants"
+import { getDecimalSeparator } from "~Utils/BigNumberUtils/BigNumberUtils"
+import { formatFullPrecision } from "~Utils/StandardizedFormatting"
 
 export const TokenReceiverCard = () => {
     const { flowState } = useTokenSendContext()
     const { formatLocale } = useFormatFiat()
-
+    const currencyFormat = useAppSelector(selectCurrencyFormat)
     const { data: exchangeRate } = useCurrentExchangeRate()
+
+    const isInputInFiat = useMemo(() => {
+        return flowState.amountInFiat ?? true
+    }, [flowState.amountInFiat])
+
+    const { input, tokenAmount, fiatAmount } = useSendAmountInput({
+        token: flowState.token!,
+        isInputInFiat,
+    })
+
+    const { formattedInput, formattedConverted } = useDisplayInput({
+        input,
+        tokenAmount,
+        fiatAmount,
+        isInputInFiat,
+        token: flowState.token!,
+    })
+
+    const { locale, decimalSeparator } = useMemo(() => {
+        switch (currencyFormat) {
+            case CURRENCY_FORMATS.COMMA:
+                return { locale: "de-DE", decimalSeparator: CURRENCY_FORMATS.COMMA }
+            case CURRENCY_FORMATS.DOT:
+                return { locale: "en-US", decimalSeparator: CURRENCY_FORMATS.DOT }
+            case CURRENCY_FORMATS.SYSTEM:
+            default:
+                return {
+                    locale: formatLocale,
+                    decimalSeparator: getDecimalSeparator(formatLocale) ?? CURRENCY_FORMATS.DOT,
+                }
+        }
+    }, [currencyFormat, formatLocale])
 
     const { displayTokenAmount, displayFiatAmount } = useMemo(() => {
         if (!exchangeRate) {
             return {
-                displayTokenAmount: flowState.amount ?? "0",
-                displayFiatAmount: flowState.fiatAmount,
+                displayTokenAmount: isInputInFiat ? formattedConverted : formattedInput,
+                displayFiatAmount: isInputInFiat ? formattedInput : formattedConverted,
             }
         }
 
         if (flowState.amountInFiat && flowState.fiatAmount != null) {
-            const nextTokenAmount = BigNutils().toTokenConversion(flowState.fiatAmount, exchangeRate).toString
+            const nextTokenAmount = BigNutils().toTokenConversion(
+                ethers.utils.formatUnits(fiatAmount, flowState.token!.decimals),
+                exchangeRate,
+            ).toString
 
             return {
-                displayTokenAmount: nextTokenAmount,
-                displayFiatAmount: flowState.fiatAmount,
+                displayTokenAmount: formatFullPrecision(nextTokenAmount, {
+                    locale: formatLocale,
+                    tokenSymbol: flowState.token!.symbol,
+                }),
+                displayFiatAmount: formattedInput,
             }
         }
 
-        const sourceAmount = flowState.amount ?? "0"
-        const { value } = BigNutils().toCurrencyConversion(sourceAmount, exchangeRate)
+        const parsedTokenAmount = ethers.utils.formatUnits(tokenAmount, flowState.token!.decimals)
+
+        const nextFiatAmount = BigNutils().toCurrencyConversion(
+            ethers.utils.formatUnits(tokenAmount, flowState.token!.decimals),
+            exchangeRate ?? 0,
+            undefined,
+            flowState.token!.decimals,
+        )
+
+        const [integerPart, decimalPart] = truncateToMaxDecimals(
+            nextFiatAmount.value,
+            // Always use 2 decimals for converted value
+            { kind: "fiat" },
+        ).split(/[.,]/)
+
+        const formatter = getNumberFormatter({
+            locale,
+            useGrouping: true,
+            precision: 0,
+            style: "decimal",
+        })
+
+        const formattedInteger = formatter.format(Number(integerPart))
 
         return {
-            displayTokenAmount: sourceAmount,
-            displayFiatAmount: value,
+            displayTokenAmount: formatFullPrecision(parsedTokenAmount, {
+                locale: formatLocale,
+                tokenSymbol: flowState.token!.symbol,
+            }),
+            displayFiatAmount: !BigNutils(decimalPart).isZero
+                ? `${formattedInteger}${decimalSeparator}${decimalPart}`
+                : formattedInteger,
         }
-    }, [exchangeRate, flowState.amount, flowState.amountInFiat, flowState.fiatAmount])
-
-    const formattedTokenAmount = useMemo(() => {
-        if (!flowState.token) return undefined
-
-        const raw = (displayTokenAmount ?? "").trim()
-        if (!raw) return undefined
-
-        // Preserve any special "< 0.00001" style strings just in case
-        if (raw.startsWith("<")) return raw
-
-        return formatFullPrecision(raw, {
-            locale: formatLocale,
-            forceDecimals: 5,
-            tokenSymbol: flowState.token.symbol,
-        })
-    }, [displayTokenAmount, flowState.token, formatLocale])
-
-    const formattedFiatAmount = useMemo(() => {
-        if (displayFiatAmount == null) return undefined
-
-        const trimmed = displayFiatAmount.trim()
-        // Preserve special "< 0.01" style strings
-        if (trimmed.startsWith("<")) return trimmed
-
-        return formatFullPrecision(trimmed, {
-            locale: formatLocale,
-            forceDecimals: 2,
-        })
-    }, [displayFiatAmount, formatLocale])
+    }, [
+        decimalSeparator,
+        exchangeRate,
+        fiatAmount,
+        flowState.amountInFiat,
+        flowState.fiatAmount,
+        flowState.token,
+        formatLocale,
+        formattedConverted,
+        formattedInput,
+        isInputInFiat,
+        locale,
+        tokenAmount,
+    ])
 
     return (
         <Animated.View>
             <DetailsContainer>
-                {flowState.amountInFiat ? (
+                {isInputInFiat ? (
                     <>
-                        {formattedFiatAmount && <DetailsContainer.FiatValue value={formattedFiatAmount} />}
-                        <DetailsContainer.TokenValue
-                            value={formattedTokenAmount ?? displayTokenAmount}
-                            token={flowState.token!}
-                        />
+                        <DetailsContainer.FiatValue value={displayFiatAmount} />
+                        <DetailsContainer.TokenValue value={displayTokenAmount} token={flowState.token!} />
                     </>
                 ) : (
                     <>
-                        <DetailsContainer.TokenValue
-                            value={formattedTokenAmount ?? displayTokenAmount}
-                            token={flowState.token!}
-                        />
-                        {formattedFiatAmount && <DetailsContainer.FiatValue value={formattedFiatAmount} />}
+                        <DetailsContainer.TokenValue value={displayTokenAmount} token={flowState.token!} />
+                        <DetailsContainer.FiatValue value={displayFiatAmount} />
                     </>
                 )}
                 <DetailsContainer.TokenReceiver address={flowState.address!} />
