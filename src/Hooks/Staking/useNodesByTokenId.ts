@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import React, { useMemo } from "react"
 import { IndexerClient, useIndexerClient } from "~Hooks/useIndexerClient"
-import { NodeInfo } from "~Model"
+import { DelegationStatus, NodeInfo } from "~Model"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { getTokenLevelId, StargateLevelName } from "~Utils/StargateUtils"
@@ -36,6 +36,8 @@ const getNodeByTokenId = async (indexer: IndexerClient, tokenId: string): Promis
             vetAmountStaked: r.data[0].vetStaked.toString(),
             accumulatedRewards: BigNutils(r.data[0].totalBootstrapRewardsClaimed).plus(r.data[0].totalRewardsClaimed)
                 .toString,
+            delegationStatus: (r.data[0].delegationStatus as DelegationStatus) ?? DelegationStatus.NONE,
+            validatorId: r.data[0].validatorId ?? null,
         }
     } catch (error) {
         throw new Error(`Error fetching node by token id ${error}`)

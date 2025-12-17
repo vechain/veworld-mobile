@@ -40,6 +40,8 @@ describe("useUserNodes", () => {
                     vetStaked: node.vetAmountStaked,
                     totalBootstrapRewardsClaimed: "1",
                     totalRewardsClaimed: "0",
+                    delegationStatus: "ACTIVE",
+                    validatorId: node.validatorId,
                 })),
                 pagination: {
                     hasNext: false,
@@ -71,6 +73,8 @@ describe("useUserNodes", () => {
                         vetStaked: node.vetAmountStaked,
                         totalBootstrapRewardsClaimed: "1",
                         totalRewardsClaimed: "0",
+                        delegationStatus: "ACTIVE",
+                        validatorId: node.validatorId,
                     })),
                     pagination: {
                         hasNext: true,
@@ -87,6 +91,8 @@ describe("useUserNodes", () => {
                             vetStaked: "1",
                             totalBootstrapRewardsClaimed: "1",
                             totalRewardsClaimed: "0",
+                            delegationStatus: "NONE",
+                            validatorId: null,
                         },
                     ],
                     pagination: {

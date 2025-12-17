@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import React, { useMemo } from "react"
 import { IndexerClient, useIndexerClient } from "~Hooks/useIndexerClient"
-import { NodeInfo } from "~Model"
+import { DelegationStatus, NodeInfo } from "~Model"
 import { DEFAULT_PAGE_SIZE } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
@@ -36,6 +36,8 @@ const getUserNodes = async (indexer: IndexerClient, address: string | undefined)
                     xNodeOwner: u.owner,
                     vetAmountStaked: u.vetStaked.toString(),
                     accumulatedRewards: BigNutils(u.totalBootstrapRewardsClaimed).plus(u.totalRewardsClaimed).toString,
+                    delegationStatus: (u.delegationStatus as DelegationStatus) ?? DelegationStatus.NONE,
+                    validatorId: u.validatorId ?? null,
                 })),
             )
             if (!r.pagination.hasNext) break
