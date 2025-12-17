@@ -6,7 +6,6 @@ import { useTokenSendContext } from "../../Provider"
 import { useCurrentExchangeRate } from "../Hooks"
 import { DetailsContainer } from "./DetailsContainer"
 import { truncateToMaxDecimals, useDisplayInput, useSendAmountInput } from "../../01-Amount/Hooks"
-import { ethers } from "ethers"
 import { useAppSelector } from "~Storage/Redux/Hooks"
 import { selectCurrencyFormat } from "~Storage/Redux/Selectors"
 import { CURRENCY_FORMATS, getNumberFormatter } from "~Constants"
@@ -28,7 +27,7 @@ export const TokenReceiverCard = () => {
         isInputInFiat,
     })
 
-    const { formattedInput, formattedConverted } = useDisplayInput({
+    const { formattedInput } = useDisplayInput({
         input,
         tokenAmount,
         fiatAmount,
@@ -54,17 +53,17 @@ export const TokenReceiverCard = () => {
     const { displayTokenAmount, displayFiatAmount } = useMemo(() => {
         if (!exchangeRate) {
             return {
-                displayTokenAmount: isInputInFiat ? formattedConverted : formattedInput,
-                displayFiatAmount: isInputInFiat ? formattedInput : formattedConverted,
+                displayTokenAmount: formatFullPrecision(flowState.amount ?? "0", {
+                    locale: formatLocale,
+                    tokenSymbol: flowState.token!.symbol,
+                }),
+                displayFiatAmount: flowState.fiatAmount,
             }
         }
 
-        if (flowState.amountInFiat && flowState.fiatAmount != null) {
-            const nextTokenAmount = BigNutils().toTokenConversion(
-                ethers.utils.formatUnits(fiatAmount, flowState.token!.decimals),
-                exchangeRate,
-            ).toString
-
+        // If the amount is in fiat and the fiat amount is not null
+        if (isInputInFiat && flowState.fiatAmount !== undefined) {
+            const nextTokenAmount = BigNutils().toTokenConversion(flowState.fiatAmount ?? "0", exchangeRate).toString
             return {
                 displayTokenAmount: formatFullPrecision(nextTokenAmount, {
                     locale: formatLocale,
@@ -74,10 +73,9 @@ export const TokenReceiverCard = () => {
             }
         }
 
-        const parsedTokenAmount = ethers.utils.formatUnits(tokenAmount, flowState.token!.decimals)
-
+        // If the amount is in token and the token amount
         const nextFiatAmount = BigNutils().toCurrencyConversion(
-            ethers.utils.formatUnits(tokenAmount, flowState.token!.decimals),
+            flowState.amount ?? "0",
             exchangeRate ?? 0,
             undefined,
             flowState.token!.decimals,
@@ -98,7 +96,7 @@ export const TokenReceiverCard = () => {
 
         const formattedInteger = formatter.format(Number(integerPart))
 
-        let fiatValue = ""
+        let fiatValue: string | undefined
 
         if (nextFiatAmount.isLeesThan_0_01) {
             fiatValue = formatWithLessThan(nextFiatAmount.preciseValue, 0.01, { showZeroAs: "0", locale })
@@ -109,7 +107,7 @@ export const TokenReceiverCard = () => {
         }
 
         return {
-            displayTokenAmount: formatFullPrecision(parsedTokenAmount, {
+            displayTokenAmount: formatFullPrecision(flowState.amount ?? "0", {
                 locale: formatLocale,
                 tokenSymbol: flowState.token!.symbol,
             }),
@@ -118,16 +116,13 @@ export const TokenReceiverCard = () => {
     }, [
         decimalSeparator,
         exchangeRate,
-        fiatAmount,
-        flowState.amountInFiat,
+        flowState.amount,
         flowState.fiatAmount,
         flowState.token,
         formatLocale,
-        formattedConverted,
         formattedInput,
         isInputInFiat,
         locale,
-        tokenAmount,
     ])
 
     return (
@@ -135,13 +130,13 @@ export const TokenReceiverCard = () => {
             <DetailsContainer>
                 {isInputInFiat ? (
                     <>
-                        <DetailsContainer.FiatValue value={displayFiatAmount} />
+                        {displayFiatAmount && <DetailsContainer.FiatValue value={displayFiatAmount} />}
                         <DetailsContainer.TokenValue value={displayTokenAmount} token={flowState.token!} />
                     </>
                 ) : (
                     <>
                         <DetailsContainer.TokenValue value={displayTokenAmount} token={flowState.token!} />
-                        <DetailsContainer.FiatValue value={displayFiatAmount} />
+                        {displayFiatAmount && <DetailsContainer.FiatValue value={displayFiatAmount} />}
                     </>
                 )}
                 <DetailsContainer.TokenReceiver address={flowState.address!} />
