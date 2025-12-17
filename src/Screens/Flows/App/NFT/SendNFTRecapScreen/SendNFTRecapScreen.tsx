@@ -13,8 +13,8 @@ import {
     RequireUserPassword,
     TransferCard,
 } from "~Components"
-import { AnalyticsEvent, creteAnalyticsEvent } from "~Constants"
-import { useAnalyticTracking, useTransactionScreen, useTransferAddContact } from "~Hooks"
+import { AnalyticsEvent } from "~Constants"
+import { useTransactionScreen, useTransferAddContact } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { ContactType, DEVICE_TYPE } from "~Model"
 import { Routes } from "~Navigation"
@@ -24,7 +24,6 @@ import {
     selectAccounts,
     selectNFTWithAddressAndTokenId,
     selectSelectedAccount,
-    selectSelectedNetwork,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
@@ -38,9 +37,7 @@ type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.SEND_NFT_RECAP
 export const SendNFTRecapScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
-    const network = useAppSelector(selectSelectedNetwork)
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const nft = useAppSelector(state =>
@@ -58,35 +55,27 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         [selectedAccount.address, route.params.receiverAddress, route.params.contractAddress, route.params.tokenId],
     )
 
-    const onFinish = useCallback(
-        (success: boolean) => {
-            if (success) {
-                track(AnalyticsEvent.WALLET_OPERATION, {
-                    ...creteAnalyticsEvent({
-                        medium: AnalyticsEvent.SEND,
-                        signature: AnalyticsEvent.LOCAL,
-                        network: network.name,
-                        subject: AnalyticsEvent.NFT,
-                        context: AnalyticsEvent.SEND,
-                    }),
-                })
-            }
-
-            dispatch(setIsAppLoading(false))
-            nav.dispatch(StackActions.popToTop())
-        },
-        [dispatch, nav, track, network.name],
-    )
+    const onFinish = useCallback(() => {
+        dispatch(setIsAppLoading(false))
+        nav.dispatch(StackActions.popToTop())
+    }, [dispatch, nav])
 
     const onTransactionSuccess = useCallback(
         (transaction: Transaction) => {
-            dispatch(addPendingNFTtransferTransactionActivity(transaction))
-            onFinish(true)
+            dispatch(
+                addPendingNFTtransferTransactionActivity(transaction, {
+                    medium: AnalyticsEvent.SEND,
+                    signature: AnalyticsEvent.LOCAL,
+                    subject: AnalyticsEvent.NFT,
+                    context: AnalyticsEvent.SEND,
+                }),
+            )
+            onFinish()
         },
         [onFinish, dispatch],
     )
 
-    const onTransactionFailure = useCallback(() => onFinish(false), [onFinish])
+    const onTransactionFailure = useCallback(() => onFinish(), [onFinish])
 
     const {
         selectedDelegationOption,

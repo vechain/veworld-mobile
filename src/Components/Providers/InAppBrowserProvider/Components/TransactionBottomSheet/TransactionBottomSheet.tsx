@@ -8,20 +8,14 @@ import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { DelegationView, GasFeeSpeed, RequireUserPassword, SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
-import { AnalyticsEvent, COLORS, creteAnalyticsEvent, RequestMethods } from "~Constants"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useSetSelectedAccount,
-    useThemedStyles,
-    useTransactionScreen,
-} from "~Hooks"
+import { AnalyticsEvent, COLORS, RequestMethods } from "~Constants"
+import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles, useTransactionScreen } from "~Hooks"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { TransactionRequest } from "~Model"
 import {
     addPendingDappTransactionActivity,
     selectSelectedAccountOrNull,
-    selectSelectedNetwork,
     selectVerifyContext,
     selectVisibleAccountsWithoutObserved,
     setIsAppLoading,
@@ -33,7 +27,6 @@ import { assertDefined } from "~Utils/TypeUtils"
 import { useI18nContext } from "~i18n"
 import { useInAppBrowser } from "../../InAppBrowserProvider"
 import { TransactionDetails } from "./TransactionDetails"
-import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 
 type Props = {
     request: TransactionRequest
@@ -231,10 +224,7 @@ export const TransactionBottomSheet = () => {
     const { transactionBsRef, transactionBsData, setTransactionBsData } = useInteraction()
     const { onClose: onCloseBs } = useBottomSheetModal({ externalRef: transactionBsRef })
     const { ref: selectAccountBsRef } = useBottomSheetModal()
-    const network = useAppSelector(selectSelectedNetwork)
     const { onRejectRequest, onSuccess, onFailure } = useExternalDappConnection()
-
-    const track = useAnalyticTracking()
 
     const { postMessage } = useInAppBrowser()
     const { createSessionIfNotExists } = useLoginSession()
@@ -253,16 +243,6 @@ export const TransactionBottomSheet = () => {
         (success: boolean) => {
             assertDefined(transactionBsData)
             if (success) {
-                track(AnalyticsEvent.WALLET_OPERATION, {
-                    ...creteAnalyticsEvent({
-                        medium: AnalyticsEvent.DAPP,
-                        signature: AnalyticsEvent.LOCAL,
-                        network: network.name,
-                        context:
-                            transactionBsData.type === "in-app" ? AnalyticsEvent.IN_APP : AnalyticsEvent.WALLET_CONNECT,
-                        dappUrl: transactionBsData.appUrl ?? transactionBsData.appName,
-                    }),
-                })
                 createSessionIfNotExists(transactionBsData)
             }
 
@@ -270,7 +250,7 @@ export const TransactionBottomSheet = () => {
             dispatch(setIsAppLoading(false))
             onCloseBs()
         },
-        [transactionBsData, dispatch, onCloseBs, track, network.name, createSessionIfNotExists],
+        [transactionBsData, dispatch, onCloseBs, createSessionIfNotExists],
     )
 
     const onTransactionSuccess = useCallback(
@@ -303,7 +283,14 @@ export const TransactionBottomSheet = () => {
             }
 
             dispatch(
-                addPendingDappTransactionActivity(transaction, transactionBsData.appName, transactionBsData.appUrl),
+                addPendingDappTransactionActivity(transaction, {
+                    appName: transactionBsData.appName,
+                    appUrl: transactionBsData.appUrl,
+                    context:
+                        transactionBsData.type === "in-app" ? AnalyticsEvent.IN_APP : AnalyticsEvent.WALLET_CONNECT,
+                    medium: AnalyticsEvent.DAPP,
+                    signature: AnalyticsEvent.LOCAL,
+                }),
             )
 
             onFinish(true)

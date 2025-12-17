@@ -1,4 +1,4 @@
-import { DIRECTIONS } from "~Constants"
+import { AnalyticsEvent, DIRECTIONS } from "~Constants"
 import { TypedData, TypedDataMessage } from "~Model"
 import { ActivityEvent, ActivityStatus, ActivitySupport, ActivityType } from "./enum"
 import { TokenLevelId } from "~Utils/StargateUtils"
@@ -30,6 +30,13 @@ export interface Activity {
     delegated?: boolean
     outputs?: OutputResponse[]
     levelId?: TokenLevelId
+
+    //Metadata needed for event tracking
+    medium?: AnalyticsEvent.DAPP | AnalyticsEvent.SEND
+    signature?: AnalyticsEvent.LOCAL | AnalyticsEvent.HARDWARE
+    context?: AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT | AnalyticsEvent.SEND
+    dappUrlOrName?: string
+    subject?: AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT
 }
 
 export type IndexedHistoryEvent =

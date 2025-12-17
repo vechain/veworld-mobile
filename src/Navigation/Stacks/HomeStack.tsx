@@ -14,6 +14,7 @@ import {
     FungibleTokenWithBalance,
     LedgerAccountWithDevice,
     TransactionOutcomes,
+    TransactionRequest,
 } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
@@ -91,6 +92,7 @@ export type RootStackParamListHome = {
         delegationSignature?: string
         transaction: Transaction
         initialRoute?: Routes.HOME | Routes.NFTS
+        dappRequest?: TransactionRequest
     }
     [Routes.SWAP]: undefined
     [Routes.HISTORY]:

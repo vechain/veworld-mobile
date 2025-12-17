@@ -21,8 +21,8 @@ import {
     useInAppBrowser,
     useWalletConnect,
 } from "~Components"
-import { AnalyticsEvent, creteAnalyticsEvent, ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useSendTransaction } from "~Hooks"
+import { AnalyticsEvent, ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
+import { useBottomSheetModal, useLedgerDevice, useSendTransaction } from "~Hooks"
 import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { ActivityType } from "~Model"
@@ -31,10 +31,8 @@ import {
     addPendingDappTransactionActivity,
     addPendingNFTtransferTransactionActivity,
     addPendingTransferTransactionActivity,
-    selectSelectedNetwork,
     setIsAppLoading,
     useAppDispatch,
-    useAppSelector,
 } from "~Storage/Redux"
 import { ActivityUtils, debug, error, LedgerUtils } from "~Utils"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
@@ -55,14 +53,11 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const { accountWithDevice, transaction, dappRequest, delegationSignature, initialRoute } = route.params
 
     const nav = useNavigation()
-    const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const { processRequest } = useWalletConnect()
     const { postMessage } = useInAppBrowser()
     const { createSessionIfNotExists } = useLoginSession()
-
-    const network = useAppSelector(selectSelectedNetwork)
 
     const [signature, setSignature] = useState<Buffer>()
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
@@ -103,62 +98,51 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
             switch (activity) {
                 case ActivityType.TRANSFER_VET:
-                    dispatch(addPendingTransferTransactionActivity(tx))
-
-                    track(AnalyticsEvent.WALLET_OPERATION, {
-                        ...creteAnalyticsEvent({
+                    dispatch(
+                        addPendingTransferTransactionActivity(tx, {
                             medium: AnalyticsEvent.SEND,
                             signature: AnalyticsEvent.HARDWARE,
-                            network: network.name,
                             subject: AnalyticsEvent.NATIVE_TOKEN,
                             context: AnalyticsEvent.SEND,
                         }),
-                    })
+                    )
                     break
                 case ActivityType.TRANSFER_FT:
-                    dispatch(addPendingTransferTransactionActivity(tx))
-
-                    track(AnalyticsEvent.WALLET_OPERATION, {
-                        ...creteAnalyticsEvent({
+                    dispatch(
+                        addPendingTransferTransactionActivity(tx, {
                             medium: AnalyticsEvent.SEND,
                             signature: AnalyticsEvent.HARDWARE,
-                            network: network.name,
                             subject: AnalyticsEvent.TOKEN,
                             context: AnalyticsEvent.SEND,
                         }),
-                    })
+                    )
                     break
                 case ActivityType.TRANSFER_NFT:
-                    dispatch(addPendingNFTtransferTransactionActivity(tx))
-
-                    track(AnalyticsEvent.WALLET_OPERATION, {
-                        ...creteAnalyticsEvent({
+                    dispatch(
+                        addPendingNFTtransferTransactionActivity(tx, {
                             medium: AnalyticsEvent.SEND,
                             signature: AnalyticsEvent.HARDWARE,
-                            network: network.name,
                             subject: AnalyticsEvent.NFT,
                             context: AnalyticsEvent.SEND,
                         }),
-                    })
+                    )
 
                     break
                 case ActivityType.DAPP_TRANSACTION:
                     if (dappRequest) {
-                        dispatch(addPendingDappTransactionActivity(tx, dappRequest.appName, dappRequest.appUrl))
-
-                        track(AnalyticsEvent.WALLET_OPERATION, {
-                            ...creteAnalyticsEvent({
+                        dispatch(
+                            addPendingDappTransactionActivity(tx, {
+                                appName: dappRequest.appName,
+                                appUrl: dappRequest.appUrl,
+                                context: AnalyticsEvent.IN_APP,
                                 medium: AnalyticsEvent.DAPP,
                                 signature: AnalyticsEvent.HARDWARE,
-                                network: network.name,
-                                context: AnalyticsEvent.IN_APP,
-                                dappUrl: dappRequest?.appUrl,
                             }),
-                        })
+                        )
                     }
             }
         },
-        [dispatch, track, network.name, dappRequest],
+        [dispatch, dappRequest],
     )
 
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)

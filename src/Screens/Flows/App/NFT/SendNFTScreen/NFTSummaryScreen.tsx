@@ -4,19 +4,18 @@ import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseView } from "~Components"
-import { SendContent } from "~Components/Reusable/Send/Shared"
+import { useNFTSendContext } from "~Components/Reusable/Send"
 import { TransactionAlert } from "~Components/Reusable/Send/03-SummarySend/Components"
 import { TransactionFeeCard } from "~Components/Reusable/Send/03-SummarySend/Components/TransactionFeeCard"
 import { TransactionProvider } from "~Components/Reusable/Send/03-SummarySend/Components/TransactionProvider"
-import { useNFTSendContext } from "~Components/Reusable/Send"
-import { AnalyticsEvent, creteAnalyticsEvent } from "~Constants"
-import { useAnalyticTracking, useThemedStyles, useTransactionScreen } from "~Hooks"
+import { SendContent } from "~Components/Reusable/Send/Shared"
+import { AnalyticsEvent } from "~Constants"
+import { useThemedStyles, useTransactionScreen } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import {
     addPendingNFTtransferTransactionActivity,
     selectSelectedAccount,
-    selectSelectedNetwork,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
@@ -31,44 +30,34 @@ export const NFTSummaryScreen = () => {
     const [txError, setTxError] = useState(false)
 
     const nav = useNavigation()
-    const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
-    const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const { address } = flowState
 
-    const onFinish = useCallback(
-        (txId: string | undefined, success: boolean) => {
-            if (success) {
-                track(AnalyticsEvent.WALLET_OPERATION, {
-                    ...creteAnalyticsEvent({
-                        medium: AnalyticsEvent.SEND,
-                        signature: AnalyticsEvent.LOCAL,
-                        network: network.name,
-                        subject: AnalyticsEvent.NFT,
-                        context: AnalyticsEvent.SEND,
-                    }),
-                })
-            }
-
-            dispatch(setIsAppLoading(false))
-            nav.dispatch(StackActions.popToTop())
-        },
-        [dispatch, nav, track, network.name],
-    )
+    const onFinish = useCallback(() => {
+        dispatch(setIsAppLoading(false))
+        nav.dispatch(StackActions.popToTop())
+    }, [dispatch, nav])
 
     const onTransactionSuccess = useCallback(
         (transaction: Transaction) => {
-            dispatch(addPendingNFTtransferTransactionActivity(transaction))
-            onFinish(transaction.id.toString(), true)
+            dispatch(
+                addPendingNFTtransferTransactionActivity(transaction, {
+                    medium: AnalyticsEvent.SEND,
+                    signature: AnalyticsEvent.LOCAL,
+                    subject: AnalyticsEvent.NFT,
+                    context: AnalyticsEvent.SEND,
+                }),
+            )
+            onFinish()
         },
         [onFinish, dispatch],
     )
 
     const onTransactionFailure = useCallback(() => {
         setTxError(true)
-        onFinish(undefined, false)
+        onFinish()
     }, [onFinish])
 
     const clauses = useMemo(
