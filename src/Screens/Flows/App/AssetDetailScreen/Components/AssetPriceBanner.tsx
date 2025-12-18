@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import Animated, { useAnimatedStyle, useDerivedValue } from "react-native-reanimated"
+import { useAnimatedStyle, useDerivedValue } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 
@@ -26,7 +26,7 @@ export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
 
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const icon = useDerivedValue(() => (priceChangeValue.value > 0 ? "+" : "-"), [priceChangeValue.value])
+    const icon = useDerivedValue<string>(() => (priceChangeValue.value > 0 ? "+" : "-"), [priceChangeValue.value])
     const changeStyles = useAnimatedStyle(
         () => ({
             color: priceChangeValue.value > 0 ? theme.colors.positive : theme.colors.negative,
@@ -72,10 +72,7 @@ export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
                     </>
                 ) : (
                     <BaseView flexDirection="row">
-                        <BaseAnimatedText
-                            text={icon as unknown as Animated.SharedValue<string>}
-                            style={[changeStyles, styles.textTitle, styles.icon]}
-                        />
+                        <BaseAnimatedText text={icon} style={[changeStyles, styles.textTitle, styles.icon]} />
                         <BaseAnimatedText text={formattedPriceChange} style={[changeStyles, styles.textTitle]} />
                     </BaseView>
                 )}

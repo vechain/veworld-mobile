@@ -26,7 +26,7 @@ export const PasswordStrengthIndicator = ({ strength, showComputedStrength = tru
         }
     }, [strength.value])
 
-    const computedStrength = useDerivedValue(() => {
+    const computedStrength = useDerivedValue<string>(() => {
         if (strength.value === 0) return "None"
         if (strength.value === 1) return "Weak"
         if (strength.value === 2) return "Fair"
@@ -44,12 +44,7 @@ export const PasswordStrengthIndicator = ({ strength, showComputedStrength = tru
 
                 <BaseSpacer width={4} />
 
-                {showComputedStrength && (
-                    <BaseAnimatedText
-                        text={computedStrength as unknown as Animated.SharedValue<string>}
-                        style={styles.securityText}
-                    />
-                )}
+                {showComputedStrength && <BaseAnimatedText text={computedStrength} style={styles.securityText} />}
             </BaseView>
             <BaseSpacer height={6} />
             <BaseView style={styles.barBackground}>

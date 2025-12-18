@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import Animated, { useAnimatedProps } from "react-native-reanimated"
+import Animated, { SharedValue, useAnimatedProps } from "react-native-reanimated"
 import { TextInputProps, TextInput, TextProps as RNTextProps, KeyboardTypeOptions } from "react-native"
 import { PlatformUtils } from "~Utils"
 
@@ -8,7 +8,7 @@ import { PlatformUtils } from "~Utils"
 Animated.addWhitelistedNativeProps({ text: true })
 
 interface BaseAnimatedTextProps extends Omit<TextInputProps, "value" | "style"> {
-    text: Animated.SharedValue<string>
+    text: SharedValue<string>
     style?: Animated.AnimateProps<RNTextProps>["style"]
 }
 
@@ -43,7 +43,6 @@ export const BaseAnimatedText = (props: BaseAnimatedTextProps): JSX.Element => {
             autoCorrect={setInputParams.autoCorrect}
             style={[style || undefined]}
             underlineColorAndroid="transparent"
-            value={text.value}
             {...rest}
             {...{ animatedProps }}
         />
