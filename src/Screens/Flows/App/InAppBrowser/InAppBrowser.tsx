@@ -42,6 +42,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         isLoading,
         navigationState,
         onNavigationStateChange,
+        isDappValid,
     } = useInAppBrowser()
 
     const track = useAnalyticTracking()
@@ -121,10 +122,10 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     }, [onAndroidBackPress])
 
     const shouldShowWebview = useMemo(() => {
-        if (dappMetadata) return true
+        if (isDappValid(route.params.url)) return true
         if (selectedNetwork.type !== NETWORK_TYPE.MAIN) return true
         return developerAppsEnabled
-    }, [dappMetadata, developerAppsEnabled, selectedNetwork.type])
+    }, [isDappValid, developerAppsEnabled, selectedNetwork.type, route.params.url])
 
     return (
         <Layout

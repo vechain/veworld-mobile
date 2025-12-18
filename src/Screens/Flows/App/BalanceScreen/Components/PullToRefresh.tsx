@@ -37,8 +37,8 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
         return queryClient.invalidateQueries({
             predicate(query) {
                 const queryKey = query.queryKey as string[]
-                if (["BALANCE_ACTIVITIES", "TOKEN_ACTIVITIES"].includes(queryKey[0])) return false
-                if (queryKey.length <= 4) return false
+                if (!["BALANCE_ACTIVITIES", "TOKEN_ACTIVITIES"].includes(queryKey[0])) return false
+                if (queryKey.length < 4) return false
                 if (queryKey[1] !== selectedNetwork.genesis.id) return false
                 if (!AddressUtils.compareAddresses(queryKey[2], selectedAccountAddress!)) return false
                 return true

@@ -67,3 +67,5 @@ export const VBD_ICON =
 export const TEST_B3TR_ADDRESS = "0xbf64cf86894Ee0877C4e7d03936e35Ee8D8b864F"
 
 export const TEST_VOT3_ADDRESS = "0xa704c45971995467696ee9544da77dd42bc9706e"
+
+export const NON_SENDABLE_TOKENS = [VOT3.symbol, VeDelegate.symbol]

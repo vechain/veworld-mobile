@@ -6,8 +6,6 @@ import { selectUpdatePromptStatus, useAppDispatch, useAppSelector, VersionUpdate
 import { PlatformUtils } from "~Utils"
 import SemanticVersionUtils from "~Utils/SemanticVersionUtils"
 
-const TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24
-
 const VERSION_INFO_URL = process.env.REACT_APP_VERSIONINFO_PROD_URL
 
 const fetchVersionInfo = async (): Promise<VersionManifest> => {
@@ -35,8 +33,6 @@ export const useVersionInfo = () => {
     } = useQuery({
         queryKey: ["versionManifest"],
         queryFn: fetchVersionInfo,
-        staleTime: TWENTY_FOUR_HOURS,
-        gcTime: TWENTY_FOUR_HOURS,
         retry: 3,
     })
 
