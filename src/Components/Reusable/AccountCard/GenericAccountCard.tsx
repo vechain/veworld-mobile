@@ -14,6 +14,7 @@ import { DEVICE_TYPE } from "~Model"
 import AddressUtils from "~Utils/AddressUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { AccountIcon } from "../Account/AccountIcon"
+import { selectAccountByAddress, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     accountName?: string
@@ -42,6 +43,7 @@ export const GenericAccountCard = ({
     const { styles, theme } = useThemedStyles(baseStyles)
     const selectedSV = useSharedValue(Number(selected))
     const { name: vnsName } = useVns({ name: "", address: accountAddress })
+    const account = useAppSelector(state => selectAccountByAddress(state, accountAddress))
 
     const containerAnimatedStyles = useAnimatedStyle(() => {
         return {
@@ -94,7 +96,10 @@ export const GenericAccountCard = ({
             onPress={() => onPress({ accountName, accountAddress })}
             style={[styles.container, containerAnimatedStyles, containerStyle]}>
             <BaseView flexDirection="row" flex={1} gap={12} justifyContent="space-between" alignItems="center">
-                <AccountIcon account={{ address: accountAddress, type: DEVICE_TYPE.LOCAL_MNEMONIC }} size={32} />
+                <AccountIcon
+                    account={account ?? { address: accountAddress, type: DEVICE_TYPE.LOCAL_MNEMONIC }}
+                    size={32}
+                />
                 <BaseView flex={1} flexDirection="column">
                     <BaseText
                         numberOfLines={1}

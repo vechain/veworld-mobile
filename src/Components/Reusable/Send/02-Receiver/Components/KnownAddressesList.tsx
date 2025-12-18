@@ -181,6 +181,7 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
                     ListEmptyComponent={renderEmptyState}
                     showsVerticalScrollIndicator={false}
                     layout={LinearTransition.duration(500)}
+                    scrollEnabled={recentContacts.length > 0}
                 />
             )}
             {selectedItem === "accounts" && (

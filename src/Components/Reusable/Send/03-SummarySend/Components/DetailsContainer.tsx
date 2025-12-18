@@ -3,12 +3,12 @@ import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { CURRENCY, COLORS, ColorThemeType } from "~Constants"
-import { useTheme, useThemedStyles, useVns } from "~Hooks"
+import { useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, FungibleToken } from "~Model"
 import { AddressUtils, TokenUtils } from "~Utils"
 import CurrencyConfig from "~Constants/Constants/CurrencyConfig/CurrencyConfig"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { selectAccountByAddress, selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AccountIcon } from "~Components/Reusable/Account/AccountIcon"
 
 const PADDING = 16
@@ -17,14 +17,14 @@ const GAP_RIGHT = 12
 const DetailsContainer = ({ children }: PropsWithChildren) => {
     const { styles } = useThemedStyles(valueContainerStyles)
     return (
-        <BaseView style={styles.root} borderRadius={16}>
+        <BaseView style={styles.root} borderRadius={16} overflow="hidden" gap={1}>
             {children}
         </BaseView>
     )
 }
 
 const TokenValue = ({ value, token }: { value: string; token: FungibleToken }) => {
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(tokenValueStyles)
     const { LL } = useI18nContext()
     return (
         <BaseView
@@ -32,7 +32,8 @@ const TokenValue = ({ value, token }: { value: string; token: FungibleToken }) =
             justifyContent="space-between"
             py={PADDING}
             px={PADDING}
-            testID={`SEND_SUMMARY_TOKEN_VALUE_${token.symbol}`}>
+            testID={`SEND_SUMMARY_TOKEN_VALUE_${token.symbol}`}
+            style={styles.root}>
             <BaseText
                 typographyFont="bodySemiBold"
                 color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
@@ -94,7 +95,7 @@ const FiatValue = ({ value, testID }: { value: string; testID?: string }) => {
             </BaseText>
             <BaseView flexDirection="row" gap={GAP_RIGHT}>
                 <BaseText
-                    typographyFont="subSubTitleSemiBold"
+                    typographyFont="bodySemiBold"
                     color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}
                     testID={`${testID}_VALUE`}>
                     {value}
@@ -112,8 +113,10 @@ const FiatValue = ({ value, testID }: { value: string; testID?: string }) => {
 }
 
 const TokenReceiver = ({ address, testID }: { address: string; testID?: string }) => {
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(receiverValueStyles)
     const { LL } = useI18nContext()
+
+    const account = useAppSelector(state => selectAccountByAddress(state, address))
 
     const vns = useVns({
         name: "",
@@ -125,7 +128,13 @@ const TokenReceiver = ({ address, testID }: { address: string; testID?: string }
     }, [address, vns])
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" py={PADDING} px={PADDING} testID={testID}>
+        <BaseView
+            flexDirection="row"
+            justifyContent="space-between"
+            py={PADDING}
+            px={PADDING}
+            testID={testID}
+            style={styles.root}>
             <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
                 {LL.ADDITIONAL_DETAIL_RECEIVER()}
             </BaseText>
@@ -134,7 +143,7 @@ const TokenReceiver = ({ address, testID }: { address: string; testID?: string }
                 <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
                     {displayAddress}
                 </BaseText>
-                <AccountIcon account={{ address, type: DEVICE_TYPE.LOCAL_MNEMONIC }} size={24} />
+                <AccountIcon account={account ?? { address, type: DEVICE_TYPE.LOCAL_MNEMONIC }} size={24} />
             </BaseView>
         </BaseView>
     )
@@ -148,15 +157,27 @@ export { DetailsContainer }
 const valueContainerStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
-            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_50,
+            backgroundColor: theme.isDark ? COLORS.APP_BACKGROUND_DARK : COLORS.GREY_100,
         },
     })
 
 const fiatValueStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
-            borderTopWidth: 1,
-            borderBottomWidth: 1,
-            borderColor: theme.isDark ? "#1D173A" : COLORS.GREY_100,
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_50,
+        },
+    })
+
+const tokenValueStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        root: {
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_50,
+        },
+    })
+
+const receiverValueStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        root: {
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_50,
         },
     })

@@ -29,6 +29,7 @@ export const truncateToMaxDecimals = (value: string, opts: Parameters<typeof get
         const separator = parts[1]
         const decimalPart = parts[2]
         const maxDecimals = getMaxDecimals(opts)
+
         return `${integerPart}${separator}${decimalPart.substring(0, maxDecimals)}`
     }
     return value
