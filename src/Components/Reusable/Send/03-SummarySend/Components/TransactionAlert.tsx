@@ -1,10 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { AlertInline, BaseView } from "~Components"
 import { AlertStatus } from "~Components/Reusable/Alert/utils/AlertConfigs"
 import { useI18nContext } from "~i18n"
-import { useTokenSendContext } from "../../Provider"
+import { SendFlowState, useTokenSendContext } from "../../Provider"
 import { useCurrentExchangeRate } from "../Hooks"
 import BalanceUtils from "~Utils/BalanceUtils"
+import BigNutils from "~Utils/BigNumberUtils"
+import { ethers } from "ethers"
 
 type Props = {
     txError: boolean
@@ -13,9 +15,13 @@ type Props = {
 
 export const TransactionAlert = ({ txError, hasGasAdjustment }: Props) => {
     const { LL } = useI18nContext()
-    const { flowState } = useTokenSendContext()
+    const { flowState, setFlowState } = useTokenSendContext()
     const [priceUpdated, setPriceUpdated] = useState(false)
     const { data: exchangeRate } = useCurrentExchangeRate()
+
+    const isInputInFiat = useMemo(() => {
+        return flowState.amountInFiat ?? true
+    }, [flowState.amountInFiat])
 
     const currentFiatAmount = useMemo(() => {
         return BalanceUtils.getPreciseFiatBalance(
@@ -41,14 +47,61 @@ export const TransactionAlert = ({ txError, hasGasAdjustment }: Props) => {
         )
     }, [currentFiatAmount, initialFiatAmount])
 
+    const updateBalances = useCallback(
+        (prevState: SendFlowState) => {
+            const nextTokenAmountDisplay = BigNutils()
+                .toTokenConversion(prevState.fiatAmount ?? "0", exchangeRate ?? 1)
+                .decimals(prevState.token?.decimals ?? 18).toString
+
+            const nextTokenAmount = ethers.utils
+                .parseUnits(nextTokenAmountDisplay, prevState.token?.decimals ?? 18)
+                .toString()
+
+            const maxTokenAmount = BigNutils(prevState.token?.balance.balance ?? "0").toString
+
+            if (nextTokenAmountDisplay === prevState.amount) {
+                return prevState
+            }
+
+            if (BigNutils(nextTokenAmount).isLessThanOrEqual(maxTokenAmount)) {
+                return {
+                    ...prevState,
+                    amount: nextTokenAmountDisplay,
+                }
+            }
+            if (BigNutils(nextTokenAmount).isBiggerThan(maxTokenAmount)) {
+                return {
+                    ...prevState,
+                    fiatAmount: undefined,
+                    amountInFiat: false,
+                    amount: ethers.utils.formatUnits(maxTokenAmount, prevState.token?.decimals ?? 18),
+                }
+            }
+            return prevState
+        },
+        [exchangeRate],
+    )
+
     // Track latest exchange rate vs the one used in the previous step to detect market price updates
     useEffect(() => {
         if (exchangeRate == null || flowState.initialExchangeRate == null) return
 
-        if (!priceUpdated && exchangeRate !== flowState.initialExchangeRate && hasVisiblePriceChange) {
-            setPriceUpdated(true)
+        if (exchangeRate !== flowState.initialExchangeRate && isInputInFiat) {
+            setFlowState(updateBalances)
+
+            if (hasVisiblePriceChange) {
+                setPriceUpdated(true)
+            }
         }
-    }, [exchangeRate, flowState.initialExchangeRate, priceUpdated, hasVisiblePriceChange])
+    }, [
+        exchangeRate,
+        flowState.initialExchangeRate,
+        priceUpdated,
+        hasVisiblePriceChange,
+        isInputInFiat,
+        setFlowState,
+        updateBalances,
+    ])
 
     const alertConfig = useMemo<null | { message: string; status: AlertStatus }>(() => {
         if (txError) {

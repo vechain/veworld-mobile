@@ -1,16 +1,16 @@
 import React, { useMemo } from "react"
 import { Animated } from "react-native"
+import { CURRENCY_FORMATS, getNumberFormatter } from "~Constants"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
+import { useAppSelector } from "~Storage/Redux/Hooks"
+import { selectCurrencyFormat } from "~Storage/Redux/Selectors"
 import { BigNutils } from "~Utils"
+import { getDecimalSeparator } from "~Utils/BigNumberUtils/BigNumberUtils"
+import { formatFullPrecision, formatWithLessThan } from "~Utils/StandardizedFormatting"
+import { truncateToMaxDecimals } from "../../01-Amount/Hooks"
 import { useTokenSendContext } from "../../Provider"
 import { useCurrentExchangeRate } from "../Hooks"
 import { DetailsContainer } from "./DetailsContainer"
-import { truncateToMaxDecimals, useDisplayInput, useSendAmountInput } from "../../01-Amount/Hooks"
-import { useAppSelector } from "~Storage/Redux/Hooks"
-import { selectCurrencyFormat } from "~Storage/Redux/Selectors"
-import { CURRENCY_FORMATS, getNumberFormatter } from "~Constants"
-import { getDecimalSeparator } from "~Utils/BigNumberUtils/BigNumberUtils"
-import { formatFullPrecision, formatWithLessThan } from "~Utils/StandardizedFormatting"
 
 export const TokenReceiverCard = () => {
     const { flowState } = useTokenSendContext()
@@ -21,19 +21,6 @@ export const TokenReceiverCard = () => {
     const isInputInFiat = useMemo(() => {
         return flowState.amountInFiat ?? true
     }, [flowState.amountInFiat])
-
-    const { input, tokenAmount, fiatAmount } = useSendAmountInput({
-        token: flowState.token!,
-        isInputInFiat,
-    })
-
-    const { formattedInput } = useDisplayInput({
-        input,
-        tokenAmount,
-        fiatAmount,
-        isInputInFiat,
-        token: flowState.token!,
-    })
 
     const { locale, decimalSeparator } = useMemo(() => {
         switch (currencyFormat) {
@@ -61,19 +48,6 @@ export const TokenReceiverCard = () => {
             }
         }
 
-        // If the amount is in fiat and the fiat amount is not null
-        if (isInputInFiat && flowState.fiatAmount !== undefined) {
-            const nextTokenAmount = BigNutils().toTokenConversion(flowState.fiatAmount ?? "0", exchangeRate).toString
-            return {
-                displayTokenAmount: formatFullPrecision(nextTokenAmount, {
-                    locale: formatLocale,
-                    tokenSymbol: flowState.token!.symbol,
-                }),
-                displayFiatAmount: formattedInput,
-            }
-        }
-
-        // If the amount is in token and the token amount
         const nextFiatAmount = BigNutils().toCurrencyConversion(
             flowState.amount ?? "0",
             exchangeRate ?? 0,
@@ -113,17 +87,7 @@ export const TokenReceiverCard = () => {
             }),
             displayFiatAmount: fiatValue,
         }
-    }, [
-        decimalSeparator,
-        exchangeRate,
-        flowState.amount,
-        flowState.fiatAmount,
-        flowState.token,
-        formatLocale,
-        formattedInput,
-        isInputInFiat,
-        locale,
-    ])
+    }, [decimalSeparator, exchangeRate, flowState.amount, flowState.fiatAmount, flowState.token, formatLocale, locale])
 
     return (
         <Animated.View>
