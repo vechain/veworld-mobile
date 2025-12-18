@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseView } from "~Components"
 import { useTokenSendContext } from "~Components/Reusable/Send"
-import { VTHO } from "~Constants"
+import { GasPriceCoefficient, VTHO } from "~Constants"
 import { useThemedStyles, useTransactionScreen } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { BigNutils, TransactionUtils } from "~Utils"
@@ -29,6 +29,13 @@ export const SummaryScreen = () => {
     }, [flowState.token])
 
     const [hasGasAdjustment, setHasGasAdjustment] = useState(false)
+    const [enableSameTokenFeeHandling, setEnableSameTokenFeeHandling] = useState(false)
+
+    const [storedGasOptions, setStoredGasOptions] = useState<any>(null)
+    const [storedIsDelegated, setStoredIsDelegated] = useState(false)
+    const [storedSelectedFeeOption, setStoredSelectedFeeOption] = useState<GasPriceCoefficient>(
+        GasPriceCoefficient.REGULAR,
+    )
 
     const onFailure = useCallback(() => setTxError(true), [setTxError])
     const { onTransactionSuccess, onTransactionFailure } = useTransactionCallbacks({
@@ -36,10 +43,38 @@ export const SummaryScreen = () => {
         onFailure,
     })
 
-    const clauses = useMemo(
-        () => TransactionUtils.prepareFungibleClause(flowState.amount!, token, address!),
-        [flowState.amount, token, address],
-    )
+    /**
+     * Calculate the amount to use in transaction clauses.
+     * When using same token for fees, subtract the fee so delegator can add their fee clause.
+     */
+    const clauseAmount = useMemo(() => {
+        if (!enableSameTokenFeeHandling || !storedIsDelegated || !storedGasOptions) {
+            return flowState.amount!
+        }
+
+        const fee = storedGasOptions[storedSelectedFeeOption].maxFee
+
+        const amountInWei = BigNutils(flowState.amount!).multiply(BigNutils(10).toBN.pow(token.decimals))
+
+        const clauseAmountInWei = amountInWei.minus(fee.toBN)
+
+        if (clauseAmountInWei.isLessThanOrEqual("0")) {
+            return flowState.amount!
+        }
+
+        return clauseAmountInWei.toHuman(token.decimals).decimals(4).toString
+    }, [
+        enableSameTokenFeeHandling,
+        storedIsDelegated,
+        storedGasOptions,
+        storedSelectedFeeOption,
+        flowState.amount,
+        token.decimals,
+    ])
+
+    const clauses = useMemo(() => {
+        return TransactionUtils.prepareFungibleClause(clauseAmount, token, address!)
+    }, [clauseAmount, token, address])
 
     const {
         isEnoughGas,
@@ -49,66 +84,88 @@ export const SummaryScreen = () => {
         selectedDelegationToken,
         fallbackToVTHO,
         isDisabledButtonState,
-        onSubmit,
+        onSubmit: originalOnSubmit,
         ...transactionProps
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
         onTransactionFailure,
         autoVTHOFallback: false,
+        enableSameTokenFeeHandling,
     })
 
+    useEffect(() => {
+        if (gasOptions) {
+            setStoredGasOptions(gasOptions)
+        }
+    }, [gasOptions])
+
+    useEffect(() => {
+        setStoredIsDelegated(isDelegated)
+    }, [isDelegated])
+
+    useEffect(() => {
+        setStoredSelectedFeeOption(selectedFeeOption)
+    }, [selectedFeeOption])
+
+    const onSubmit = useCallback(() => {
+        return originalOnSubmit()
+    }, [originalOnSubmit])
+
     /**
-     * If user is sending a token and gas is not enough, we will adjust the amount to send or switch fee token.
+     * When user selects same token for fees, calculate max sendable amount accounting for fees with buffer.
+     * When different token is selected, restore original amount or fallback to VTHO if insufficient balance.
      */
     useEffect(() => {
+        const isSameTokenForFees = selectedDelegationToken.toLowerCase() === token.symbol.toLowerCase()
+        setEnableSameTokenFeeHandling(isSameTokenForFees)
+
         if (isDelegated && selectedDelegationToken === VTHO.symbol) {
             return
         }
-        if (isEnoughGas) {
-            return
-        }
-        // If there's not enough gas with the current delegation token and it's different from the current token that's being sent
-        // Then fallback to VTHO
-        if (selectedDelegationToken.toLowerCase() !== token.symbol.toLowerCase()) {
-            fallbackToVTHO()
+
+        // If different token for fees
+        if (!isSameTokenForFees) {
+            // Fallback to VTHO if not enough gas
+            if (!isEnoughGas) {
+                fallbackToVTHO()
+            }
             return
         }
 
         const gasFees = gasOptions[selectedFeeOption].maxFee
         const balance = BigNutils(token.balance.balance)
-        const amountPlusFees = BigNutils(flowState.amount!).multiply(BigNutils(10).toBN.pow(18)).plus(gasFees.toBN)
-        // If the current amount + fees is < balance, then ignore
-        if (amountPlusFees.isLessThanOrEqual(balance.toBN)) return
-        const newBalance = balance.minus(gasFees.toBN)
-        if (newBalance.isLessThanOrEqual("0")) {
-            // If it cannot even pay for the fees, fallback to VTHO and restore the original amount
+        const amountInWei = BigNutils(flowState.amount!).multiply(BigNutils(10).toBN.pow(18))
+        const maxSendableAmount = balance.minus(gasFees.toBN)
+
+        if (maxSendableAmount.isLessThanOrEqual("0")) {
             fallbackToVTHO()
             setFlowState(prev => ({
                 ...prev,
                 amount: originalAmount.current,
             }))
-        } else {
-            // Deduct from the balance the fees to get the new value
-            const adjustedAmount = newBalance.toHuman(token.decimals).decimals(4).toString
+            return
+        }
+
+        if (amountInWei.plus(gasFees.toBN).isBiggerThan(balance.toBN)) {
+            const adjustedAmount = maxSendableAmount.clone().toHuman(token.decimals).decimals(4).toString
             setFlowState(prev => ({
                 ...prev,
                 amount: adjustedAmount,
                 amountInFiat: false,
             }))
+            setHasGasAdjustment(true)
         }
-
-        setHasGasAdjustment(true)
     }, [
-        fallbackToVTHO,
-        gasOptions,
+        selectedDelegationToken,
+        token.symbol,
         isDelegated,
         isEnoughGas,
-        selectedDelegationToken,
+        gasOptions,
         selectedFeeOption,
         token.balance.balance,
         token.decimals,
-        token.symbol,
+        fallbackToVTHO,
         setFlowState,
         flowState.amount,
     ])
