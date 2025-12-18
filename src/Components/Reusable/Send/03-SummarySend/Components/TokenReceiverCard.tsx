@@ -56,7 +56,7 @@ export const TokenReceiverCard = () => {
         )
 
         const [integerPart, decimalPart] = truncateToMaxDecimals(
-            nextFiatAmount.value,
+            isInputInFiat ? flowState.fiatAmount ?? "0" : nextFiatAmount.value ?? "0",
             // Always use 2 decimals for converted value
             { kind: "fiat" },
         ).split(/[.,]/)
@@ -87,7 +87,16 @@ export const TokenReceiverCard = () => {
             }),
             displayFiatAmount: fiatValue,
         }
-    }, [decimalSeparator, exchangeRate, flowState.amount, flowState.fiatAmount, flowState.token, formatLocale, locale])
+    }, [
+        decimalSeparator,
+        exchangeRate,
+        flowState.amount,
+        flowState.fiatAmount,
+        flowState.token,
+        formatLocale,
+        locale,
+        isInputInFiat,
+    ])
 
     return (
         <Animated.View>
