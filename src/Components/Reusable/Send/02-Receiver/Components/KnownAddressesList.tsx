@@ -181,7 +181,7 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
                     ListEmptyComponent={renderEmptyState}
                     showsVerticalScrollIndicator={false}
                     layout={LinearTransition.duration(500)}
-                    scrollEnabled={false}
+                    scrollEnabled={recentContacts.length > 0}
                 />
             )}
             {selectedItem === "accounts" && (
@@ -243,5 +243,5 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
         },
         list: { flexGrow: 1 },
-        listContentContainer: { flexGrow: 1 },
+        listContentContainer: { flexGrow: 1, paddingBottom: 24 },
     })

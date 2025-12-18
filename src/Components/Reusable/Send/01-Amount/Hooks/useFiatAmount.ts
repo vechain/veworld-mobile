@@ -22,7 +22,10 @@ export const useFiatAmount = ({ token, exchangeRate }: Args) => {
     }, [token?.balance.balance])
 
     return useState(() => {
-        if (flowState.amountInFiat && ethers.utils.parseUnits(flowState.amount ?? "0").toString() !== tokenTotalBalance)
+        if (
+            flowState.amountInFiat &&
+            ethers.utils.parseUnits(flowState.amount ?? "0", token.decimals).toString() !== tokenTotalBalance
+        )
             return ethers.utils.parseUnits(flowState.fiatAmount ?? "0", token.decimals).toString()
         return BigNutils()
             .toCurrencyConversion(

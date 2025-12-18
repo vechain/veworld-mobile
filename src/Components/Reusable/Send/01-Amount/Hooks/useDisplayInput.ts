@@ -8,6 +8,7 @@ import { selectCurrencyFormat, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { getDecimalSeparator } from "~Utils/BigNumberUtils/BigNumberUtils"
 import { truncateToMaxDecimals } from "./useSendAmountInput"
+import { formatWithLessThan } from "~Utils/StandardizedFormatting"
 
 type Args = {
     input: string
@@ -65,8 +66,15 @@ export const useDisplayInput = ({ input, tokenAmount, fiatAmount, isInputInFiat,
 
     const formattedConverted = useMemo(() => {
         const valueToFormat = isInputInFiat ? tokenAmount : fiatAmount
+
+        const parsedValue = ethers.utils.formatUnits(valueToFormat, token.decimals)
+
+        if (BigNutils(parsedValue).isLessThan(0.01)) {
+            return formatWithLessThan(parsedValue, 0.01, { showZeroAs: "0", locale })
+        }
+
         const [integerPart, decimalPart] = truncateToMaxDecimals(
-            ethers.utils.formatUnits(valueToFormat, token.decimals),
+            parsedValue,
             // Always use 2 decimals for converted value
             { kind: "fiat" },
         ).split(/[.,]/)
@@ -78,7 +86,6 @@ export const useDisplayInput = ({ input, tokenAmount, fiatAmount, isInputInFiat,
         }
 
         return formattedInteger
-    }, [isInputInFiat, tokenAmount, fiatAmount, token, formatter, decimalSeparator])
-
+    }, [isInputInFiat, tokenAmount, fiatAmount, token.decimals, formatter, locale, decimalSeparator])
     return useMemo(() => ({ formattedInput, formattedConverted }), [formattedConverted, formattedInput])
 }

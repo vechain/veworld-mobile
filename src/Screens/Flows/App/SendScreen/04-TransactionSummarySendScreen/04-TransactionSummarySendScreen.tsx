@@ -18,8 +18,8 @@ import {
     RequireUserPassword,
     TransferCard,
 } from "~Components"
-import { AnalyticsEvent, COLORS, creteAnalyticsEvent, ERROR_EVENTS, VET, VTHO } from "~Constants"
-import { useAnalyticTracking, useTheme, useTransferAddContact } from "~Hooks"
+import { AnalyticsEvent, COLORS, ERROR_EVENTS, VET, VTHO } from "~Constants"
+import { useTheme, useTransferAddContact } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useTransactionScreen } from "~Hooks/useTransactionScreen"
 import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
@@ -30,7 +30,6 @@ import {
     selectCurrency,
     selectPendingTx,
     selectSelectedAccount,
-    selectSelectedNetwork,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
@@ -47,10 +46,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-    const track = useAnalyticTracking()
     const nav = useNavigation()
 
-    const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const pendingTransaction = useAppSelector(state => selectPendingTx(state, token.address))
     const accounts = useAppSelector(selectAccounts)
@@ -61,51 +58,42 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const { onAddContactPress, handleSaveContact, addContactSheet, selectedContactAddress, closeAddContactSheet } =
         useTransferAddContact()
 
-    const onFinish = useCallback(
-        (success: boolean) => {
-            const isNative =
-                token.symbol.toUpperCase() === VET.symbol.toUpperCase() ||
-                token.symbol.toUpperCase() === VTHO.symbol.toUpperCase()
-
-            if (success) {
-                track(AnalyticsEvent.WALLET_OPERATION, {
-                    ...creteAnalyticsEvent({
-                        medium: AnalyticsEvent.SEND,
-                        signature: AnalyticsEvent.LOCAL,
-                        network: network.name,
-                        subject: isNative ? AnalyticsEvent.NATIVE_TOKEN : AnalyticsEvent.TOKEN,
-                        context: AnalyticsEvent.SEND,
-                    }),
-                })
-            }
-
-            if (navigation)
-                nav.navigate(navigation.route, {
-                    screen: navigation.screen,
-                    params: navigation.params,
-                })
-            else nav.navigate(Routes.HOME)
-            dispatch(setIsAppLoading(false))
-        },
-        [token.symbol, navigation, nav, dispatch, track, network.name],
-    )
+    const onFinish = useCallback(() => {
+        if (navigation)
+            nav.navigate(navigation.route, {
+                screen: navigation.screen,
+                params: navigation.params,
+            })
+        else nav.navigate(Routes.HOME)
+        dispatch(setIsAppLoading(false))
+    }, [navigation, nav, dispatch])
 
     const onTransactionSuccess = useCallback(
         async (transaction: Transaction) => {
             try {
-                dispatch(addPendingTransferTransactionActivity(transaction))
+                const isNative =
+                    token.symbol.toUpperCase() === VET.symbol.toUpperCase() ||
+                    token.symbol.toUpperCase() === VTHO.symbol.toUpperCase()
+                dispatch(
+                    addPendingTransferTransactionActivity(transaction, {
+                        medium: AnalyticsEvent.SEND,
+                        signature: AnalyticsEvent.LOCAL,
+                        subject: isNative ? AnalyticsEvent.NATIVE_TOKEN : AnalyticsEvent.TOKEN,
+                        context: AnalyticsEvent.SEND,
+                    }),
+                )
                 dispatch(setIsAppLoading(false))
-                onFinish(true)
+                onFinish()
             } catch (e) {
                 error(ERROR_EVENTS.SEND, e)
-                onFinish(false)
+                onFinish()
             }
         },
-        [dispatch, onFinish],
+        [dispatch, onFinish, token.symbol],
     )
 
     const onTransactionFailure = useCallback(() => {
-        onFinish(false)
+        onFinish()
     }, [onFinish])
 
     const clauses = useMemo(
