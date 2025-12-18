@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
         position: "absolute",
         bottom: 0,
         width: "100%",
-        height: 24,
         justifyContent: "center",
         alignItems: "center",
+        paddingVertical: 4,
     },
 })
