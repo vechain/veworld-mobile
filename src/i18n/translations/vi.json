@@ -935,6 +935,8 @@
   "NO_TOKENS_AVAILABLE_FOR_FEE": "Không có token nào để trả phí.",
   "NO_VTHO_BALANCE": "Không có số dư VTHO. Hãy chọn một token khác",
   "OCTOBER": "Tháng Mười",
+  "OFFLINE_CHIP": "Bạn đang ngoại tuyến",
+  "OFFLINE_STATUS": "Ngoại tuyến",
   "ONLY_SECONDS": "{seconds:number|toSecondsDuration}",
   "ORIGIN": "Nguồn gốc",
   "OUTCOMES": "Kết quả",

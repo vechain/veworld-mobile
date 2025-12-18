@@ -935,6 +935,8 @@
   "NO_TOKENS_AVAILABLE_FOR_FEE": "शुल्क का भुगतान करने के लिए कोई टोकन उपलब्ध नहीं है।",
   "NO_VTHO_BALANCE": "कोई VTHO बैलेंस नहीं है। कृपया कोई अन्य टोकन चुनें।",
   "OCTOBER": "अक्टूबर",
+  "OFFLINE_CHIP": "आप ऑफलाइन हैं",
+  "OFFLINE_STATUS": "ऑफलाइन",
   "ONLY_SECONDS": "{seconds:number|toSecondsDuration}",
   "ORIGIN": "मूल",
   "OUTCOMES": "परिणाम",

@@ -935,6 +935,8 @@
   "NO_TOKENS_AVAILABLE_FOR_FEE": "手数料を支払うためのトークンがありません。",
   "NO_VTHO_BALANCE": "VTHOの残高がありません。他のトークンを選択してください",
   "OCTOBER": "10月",
+  "OFFLINE_CHIP": "オフラインです",
+  "OFFLINE_STATUS": "オフライン",
   "ONLY_SECONDS": "{seconds:number|toSecondsDuration}",
   "ORIGIN": "出発地",
   "OUTCOMES": "結果",

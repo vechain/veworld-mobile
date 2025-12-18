@@ -935,6 +935,8 @@
   "NO_TOKENS_AVAILABLE_FOR_FEE": "Inga tokens tillgängliga för att betala avgiften.",
   "NO_VTHO_BALANCE": "Inget VTHO-saldo. Välj en annan token",
   "OCTOBER": "oktober",
+  "OFFLINE_CHIP": "Du är offline",
+  "OFFLINE_STATUS": "Offline",
   "ONLY_SECONDS": "{seconds:number|toSecondsDuration}",
   "ORIGIN": "Ursprung",
   "OUTCOMES": "Resultat",

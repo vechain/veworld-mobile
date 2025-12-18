@@ -935,6 +935,8 @@
   "NO_TOKENS_AVAILABLE_FOR_FEE": "Aucun jeton disponible pour payer les frais.",
   "NO_VTHO_BALANCE": "Pas de solde VTHO. Sélectionnez un autre jeton",
   "OCTOBER": "Octobre",
+  "OFFLINE_CHIP": "Vous êtes hors ligne",
+  "OFFLINE_STATUS": "Hors ligne",
   "ONLY_SECONDS": "{seconds:number|toSecondsDuration}",
   "ORIGIN": "Origine",
   "OUTCOMES": "Résultats",

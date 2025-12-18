@@ -935,6 +935,8 @@
   "NO_TOKENS_AVAILABLE_FOR_FEE": "No tokens available to pay the fee.",
   "NO_VTHO_BALANCE": "No VTHO balance. Select another token",
   "OCTOBER": "October",
+  "OFFLINE_CHIP": "You are offline",
+  "OFFLINE_STATUS": "Offline",
   "ONLY_SECONDS": "{seconds:number|toSecondsDuration}",
   "ORIGIN": "Origin",
   "OUTCOMES": "Outcomes",
@@ -1466,7 +1468,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "OFFLINE_STATUS": "Offline",
-  "OFFLINE_CHIP": "You are offline"
+  "YESTERDAY": "Yesterday"
 }
