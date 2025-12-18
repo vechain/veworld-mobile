@@ -35,10 +35,11 @@ const createToken = (overrides: Partial<FungibleTokenWithBalance> = {}): Fungibl
         ...overrides,
     } as FungibleTokenWithBalance)
 
-const InitializeSendFlow: React.FC<{ children: React.ReactNode; token: FungibleTokenWithBalance }> = ({
-    children,
-    token,
-}) => {
+const InitializeSendFlow: React.FC<{
+    children: React.ReactNode
+    token: FungibleTokenWithBalance
+    isInputInFiat: boolean
+}> = ({ children, token, isInputInFiat }) => {
     const { setFlowState } = useTokenSendContext()
 
     useEffect(() => {
@@ -48,15 +49,15 @@ const InitializeSendFlow: React.FC<{ children: React.ReactNode; token: FungibleT
             amount: "1.234",
             address: "0xreceiver",
             fiatAmount: undefined,
-            amountInFiat: false,
+            amountInFiat: isInputInFiat,
             initialExchangeRate: 1,
         })
-    }, [setFlowState, token])
+    }, [setFlowState, token, isInputInFiat])
 
     return <>{children}</>
 }
 
-const renderScreen = (props: ComponentProps<typeof TransactionAlert>) => {
+const renderScreen = (props: ComponentProps<typeof TransactionAlert>, isInputInFiat: boolean = false) => {
     const token = createToken()
 
     return render(
@@ -68,9 +69,9 @@ const renderScreen = (props: ComponentProps<typeof TransactionAlert>) => {
                     amount: "0",
                     fiatAmount: "",
                     address: "",
-                    amountInFiat: false,
+                    amountInFiat: isInputInFiat,
                 }}>
-                <InitializeSendFlow token={token}>
+                <InitializeSendFlow token={token} isInputInFiat={isInputInFiat}>
                     <TransactionAlert {...props} />
                 </InitializeSendFlow>
             </SendContextProvider>
@@ -116,14 +117,26 @@ describe("TransactionAlert", () => {
     })
 
     it("shows price updated alert when exchange rate changes compared to initialExchangeRate", async () => {
-        ;(useCurrentExchangeRate as jest.Mock).mockReturnValue({ data: 2 })
+        ;(useCurrentExchangeRate as jest.Mock).mockReturnValue({ data: 3 })
 
-        renderScreen({ txError: false, hasGasAdjustment: false })
+        renderScreen({ txError: false, hasGasAdjustment: false }, true)
 
-        const alert = await screen.findByText("Displayed amounts have been updated based on the latest market price.", {
-            exact: false,
-        })
+        const alert = await screen.findByText("Displayed amounts have been updated based on the latest market price.")
 
         expect(alert).toBeTruthy()
+    })
+
+    it("does not show price updated alert when exchange rate changes but the difference less than 0.01", async () => {
+        ;(useCurrentExchangeRate as jest.Mock).mockReturnValue({ data: 1.001 })
+
+        renderScreen({ txError: false, hasGasAdjustment: false })
+        const alert = await screen.queryByText(
+            "Displayed amounts have been updated based on the latest market price.",
+            {
+                exact: false,
+            },
+        )
+
+        expect(alert).toBeNull()
     })
 })
