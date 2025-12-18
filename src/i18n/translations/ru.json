@@ -935,6 +935,8 @@
   "NO_TOKENS_AVAILABLE_FOR_FEE": "Нет доступных токенов для оплаты комиссии.",
   "NO_VTHO_BALANCE": "Нет баланса VTHO. Выберите другой токен.",
   "OCTOBER": "Октябрь",
+  "OFFLINE_CHIP": "Вы офлайн",
+  "OFFLINE_STATUS": "Не в сети",
   "ONLY_SECONDS": "{seconds:number|toSecondsDuration}",
   "ORIGIN": "Происхождение",
   "OUTCOMES": "Результаты",

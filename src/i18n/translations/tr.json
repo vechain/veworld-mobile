@@ -935,6 +935,8 @@
   "NO_TOKENS_AVAILABLE_FOR_FEE": "Ücreti ödemek için kullanılabilir token yok.",
   "NO_VTHO_BALANCE": "VTHO bakiyesi yok. Başka bir token seçin",
   "OCTOBER": "Ekim",
+  "OFFLINE_CHIP": "Çevrimdışısınız",
+  "OFFLINE_STATUS": "Çevrimdışı",
   "ONLY_SECONDS": "{seconds:number|toSecondsDuration}",
   "ORIGIN": "Köken",
   "OUTCOMES": "Sonuçlar",
