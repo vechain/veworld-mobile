@@ -1,4 +1,3 @@
-import { useNetInfo } from "@react-native-community/netinfo"
 import React, { useCallback, useEffect, useMemo } from "react"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
@@ -51,8 +50,6 @@ export const BalanceScreen = () => {
     const { data: officialTokens } = useOfficialTokens()
     const dispatch = useAppDispatch()
 
-    const { isConnected } = useNetInfo()
-
     useEffect(() => {
         if (officialTokens?.length)
             dispatch(addOfficialTokens({ network: selectedNetwork.type, tokens: officialTokens }))
@@ -84,11 +81,10 @@ export const BalanceScreen = () => {
     }, [selectedAccount])
 
     const colors = useMemo(() => {
-        if (!isConnected) return [COLORS.APP_BACKGROUND_DARK, "rgba(29, 23, 58, 0.5)", COLORS.RED_800]
         if (isObservedAccount)
             return [COLORS.APP_BACKGROUND_DARK, COLORS.APP_BACKGROUND_DARK, COLORS.APP_BACKGROUND_DARK]
         return [COLORS.APP_BACKGROUND_DARK, "rgba(29, 23, 58, 0.5)", "#423483"]
-    }, [isConnected, isObservedAccount])
+    }, [isObservedAccount])
 
     const balanceActionsAnimatedStyles = useAnimatedStyle(() => {
         return {

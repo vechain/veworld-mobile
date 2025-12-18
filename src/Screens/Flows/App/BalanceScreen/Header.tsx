@@ -190,21 +190,23 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                                 <BaseIcon name="icon-scan-line" color={COLORS.PURPLE_LABEL} size={24} />
                             </BaseView>
                         </TouchableOpacity>
+                        {network.type !== NETWORK_TYPE.MAIN && (
+                            <NetworkSwitcherContextMenu>
+                                <TouchableOpacity onPress={onSwitchNetwork}>
+                                    <BaseView borderRadius={99} p={8}>
+                                        <BaseIcon name="icon-globe" color={COLORS.PURPLE_LABEL} size={24} />
+                                    </BaseView>
+                                </TouchableOpacity>
+                            </NetworkSwitcherContextMenu>
+                        )}
                     </>
                 ) : (
-                    <BaseView borderRadius={99} p={8}>
-                        <BaseIcon name="icon-wifi-off" color={COLORS.PURPLE_LABEL} size={24} />
+                    <BaseView p={8} flexDirection="row" gap={12}>
+                        <BaseText typographyFont="captionSemiBold" color={COLORS.RED_400}>
+                            {LL.OFFLINE_STATUS()}
+                        </BaseText>
+                        <BaseIcon name="icon-wifi-off" color={COLORS.RED_400} size={24} />
                     </BaseView>
-                )}
-
-                {network.type !== NETWORK_TYPE.MAIN && (
-                    <NetworkSwitcherContextMenu>
-                        <TouchableOpacity onPress={onSwitchNetwork}>
-                            <BaseView borderRadius={99} p={8}>
-                                <BaseIcon name="icon-globe" color={COLORS.LIME_GREEN} size={24} />
-                            </BaseView>
-                        </TouchableOpacity>
-                    </NetworkSwitcherContextMenu>
                 )}
             </BaseView>
 
