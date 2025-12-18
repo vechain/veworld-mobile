@@ -191,11 +191,13 @@ export const PrivacyScreen = () => {
 
                         <DevicesBackupState devices={devices} onPress={handleDeviceBackup} />
 
-                        <RequireUserPassword
-                            isOpen={isPasswordPromptOpen}
-                            onClose={closePasswordPrompt}
-                            onSuccess={onPasswordSuccess}
-                        />
+                        {isPasswordPromptOpen && (
+                            <RequireUserPassword
+                                isOpen={isPasswordPromptOpen}
+                                onClose={closePasswordPrompt}
+                                onSuccess={onPasswordSuccess}
+                            />
+                        )}
 
                         <BaseSpacer height={40} />
 

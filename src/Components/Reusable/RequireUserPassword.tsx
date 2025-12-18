@@ -1,5 +1,5 @@
 import React, { memo } from "react"
-import { BaseModal, BaseView, IBaseModal } from "~Components"
+import { BaseModal, IBaseModal, BaseView } from "~Components"
 import { LockScreen } from "~Screens"
 import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 

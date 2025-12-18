@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { Image, StyleSheet, View } from "react-native"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import MaskedView from "@react-native-masked-view/masked-view"
@@ -29,13 +29,22 @@ type Props = {
 export const AnimatedSplashScreen = ({ playAnimation, useFadeOutAnimation, children }: Props): React.ReactElement => {
     const loadingProgress = useSharedValue(0)
     const [animationDone, setAnimationDone] = useState(false)
+    const mountedRef = useRef(true)
 
     const { styles } = useThemedStyles(baseStyles)
 
     useEffect(() => {
+        return () => {
+            mountedRef.current = false
+        }
+    }, [])
+
+    useEffect(() => {
         const startSplashScreenAnimation = () => {
-            loadingProgress.value = withTiming(100, { duration: 800 }, () => {
-                runOnJS(setAnimationDone)(true)
+            loadingProgress.value = withTiming(100, { duration: 800 }, finished => {
+                if (finished && mountedRef.current) {
+                    runOnJS(setAnimationDone)(true)
+                }
             })
         }
 
