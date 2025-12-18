@@ -12,14 +12,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        // For Kotlin Compose compiler artifacts required by Expo SDK 52 / expo-modules-core
-        maven {
-            url 'https://maven.pkg.jetbrains.space/public/p/compose/dev'
-        }
-        // Kotlin compiler dev artifacts (including compose compiler plugin)
-        maven {
-            url 'https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev'
-        }
     }
 
     dependencies {
@@ -43,13 +35,6 @@ allprojects {
 
         google()
         mavenCentral()
-        // Kotlin Compose compiler artifacts
-        maven {
-            url 'https://maven.pkg.jetbrains.space/public/p/compose/dev'
-        }
-        maven {
-            url 'https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev'
-        }
     }
 }
 
