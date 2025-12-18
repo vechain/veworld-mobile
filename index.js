@@ -71,11 +71,17 @@ import { DeepLinksProvider } from "~Components/Providers/DeepLinksProvider"
 import { DeviceProvider } from "~Components/Providers/DeviceProvider"
 import { FeedbackProvider } from "~Components/Providers/FeedbackProvider"
 import { ReceiptProcessorProvider } from "~Components/Providers/ReceiptProcessorProvider"
+import { configureReanimatedLogger, ReanimatedLogLevel } from "react-native-reanimated"
 
 const { fontFamily } = typography
 
 const isHermes = () => !!global.HermesInternal
 info(ERROR_EVENTS.APP, "is Hermes active : ", isHermes())
+
+configureReanimatedLogger({
+    strict: false,
+    level: ReanimatedLogLevel.warn,
+})
 
 if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
     // hide all ui logs
