@@ -3072,6 +3072,11 @@ type RootTranslation = {
 	 */
 	FEEDBACK_FAVORITED: string
 	/**
+	 * {​c​o​u​n​t​}​ ​T​r​a​n​s​f​e​r​s​ ​r​e​c​e​i​v​e​d
+	 * @param {number} count
+	 */
+	FEEDBACK_N_TRANSFERS_RECEIVED: RequiredParams<'count'>
+	/**
 	 * S​e​t​ ​a​s​ ​a​v​a​t​a​r​!
 	 */
 	FEEDBACK_SET_AVATAR: string
@@ -3079,11 +3084,6 @@ type RootTranslation = {
 	 * T​r​a​n​s​f​e​r​ ​r​e​c​e​i​v​e​d
 	 */
 	FEEDBACK_TRANSFER_RECEIVED: string
-	/**
-	 * {​c​o​u​n​t​}​ ​T​r​a​n​s​f​e​r​s​ ​r​e​c​e​i​v​e​d
-	 * @param {number} count
-	 */
-	FEEDBACK_N_TRANSFERS_RECEIVED: RequiredParams<'count'>
 	/**
 	 * F​i​n​g​e​r​p​r​i​n​t
 	 */
@@ -5989,6 +5989,14 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * O​f​f​l​i​n​e
+	 */
+	OFFLINE_STATUS: string
+	/**
+	 * Y​o​u​ ​a​r​e​ ​o​f​f​l​i​n​e
+	 */
+	OFFLINE_CHIP: string
 }
 
 export type TranslationFunctions = {
@@ -9004,6 +9012,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	FEEDBACK_FAVORITED: () => LocalizedString
 	/**
+	 * {count} Transfers received
+	 */
+	FEEDBACK_N_TRANSFERS_RECEIVED: (arg: { count: number }) => LocalizedString
+	/**
 	 * Set as avatar!
 	 */
 	FEEDBACK_SET_AVATAR: () => LocalizedString
@@ -9011,10 +9023,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Transfer received
 	 */
 	FEEDBACK_TRANSFER_RECEIVED: () => LocalizedString
-	/**
-	 * {count} Transfers received
-	 */
-	FEEDBACK_N_TRANSFERS_RECEIVED: (arg: { count: number }) => LocalizedString
 	/**
 	 * Fingerprint
 	 */
@@ -11871,6 +11879,14 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Offline
+	 */
+	OFFLINE_STATUS: () => LocalizedString
+	/**
+	 * You are offline
+	 */
+	OFFLINE_CHIP: () => LocalizedString
 }
 
 export type Formatters = {
