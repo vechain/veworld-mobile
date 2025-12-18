@@ -78,6 +78,9 @@ const { fontFamily } = typography
 const isHermes = () => !!global.HermesInternal
 info(ERROR_EVENTS.APP, "is Hermes active : ", isHermes())
 
+// Strict logger is disabled because it's throwing errors on Shared Values getters
+// Sometimes these are needed in useCallbacks to retrieve values and it's not worth having lots of logs caused by this
+// If you ever want to enable it, check all the usage of the shared values first
 configureReanimatedLogger({
     strict: false,
     level: ReanimatedLogLevel.warn,
