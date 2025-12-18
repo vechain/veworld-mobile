@@ -1,4 +1,4 @@
-import { DelegationStatus, NodeInfo } from "~Model"
+import type { DelegationStatus, NodeInfo } from "~Model"
 import { sortNodesByDelegationStatus } from "./sortNodesByDelegationStatus"
 
 const createNode = (
@@ -19,9 +19,9 @@ const createNode = (
 describe("sortNodesByDelegationStatus", () => {
     it("should sort nodes with NONE status first", () => {
         const nodes = [
-            createNode("1", DelegationStatus.ACTIVE, "0xvalidator"),
-            createNode("2", DelegationStatus.NONE),
-            createNode("3", DelegationStatus.EXITING, "0xvalidator"),
+            createNode("1", "ACTIVE", "0xvalidator"),
+            createNode("2", "NONE"),
+            createNode("3", "EXITING", "0xvalidator"),
         ]
 
         const sorted = sortNodesByDelegationStatus(nodes)
@@ -32,10 +32,7 @@ describe("sortNodesByDelegationStatus", () => {
     })
 
     it("should sort EXITING before EXITED", () => {
-        const nodes = [
-            createNode("1", DelegationStatus.EXITED),
-            createNode("2", DelegationStatus.EXITING, "0xvalidator"),
-        ]
+        const nodes = [createNode("1", "EXITED"), createNode("2", "EXITING", "0xvalidator")]
 
         const sorted = sortNodesByDelegationStatus(nodes)
 
@@ -45,9 +42,9 @@ describe("sortNodesByDelegationStatus", () => {
 
     it("should sort delegated nodes (QUEUED, ACTIVE) last", () => {
         const nodes = [
-            createNode("1", DelegationStatus.ACTIVE, "0xvalidator"),
-            createNode("2", DelegationStatus.QUEUED, "0xvalidator"),
-            createNode("3", DelegationStatus.NONE),
+            createNode("1", "ACTIVE", "0xvalidator"),
+            createNode("2", "QUEUED", "0xvalidator"),
+            createNode("3", "NONE"),
         ]
 
         const sorted = sortNodesByDelegationStatus(nodes)
@@ -59,11 +56,11 @@ describe("sortNodesByDelegationStatus", () => {
 
     it("should maintain correct order: NONE -> EXITING -> EXITED -> QUEUED -> ACTIVE", () => {
         const nodes = [
-            createNode("1", DelegationStatus.ACTIVE, "0xvalidator"),
-            createNode("2", DelegationStatus.QUEUED, "0xvalidator"),
-            createNode("3", DelegationStatus.EXITED),
-            createNode("4", DelegationStatus.EXITING, "0xvalidator"),
-            createNode("5", DelegationStatus.NONE),
+            createNode("1", "ACTIVE", "0xvalidator"),
+            createNode("2", "QUEUED", "0xvalidator"),
+            createNode("3", "EXITED"),
+            createNode("4", "EXITING", "0xvalidator"),
+            createNode("5", "NONE"),
         ]
 
         const sorted = sortNodesByDelegationStatus(nodes)
@@ -76,7 +73,7 @@ describe("sortNodesByDelegationStatus", () => {
     })
 
     it("should not mutate the original array", () => {
-        const nodes = [createNode("1", DelegationStatus.ACTIVE, "0xvalidator"), createNode("2", DelegationStatus.NONE)]
+        const nodes = [createNode("1", "ACTIVE", "0xvalidator"), createNode("2", "NONE")]
 
         const sorted = sortNodesByDelegationStatus(nodes)
 
@@ -91,7 +88,7 @@ describe("sortNodesByDelegationStatus", () => {
     })
 
     it("should handle single node", () => {
-        const nodes = [createNode("1", DelegationStatus.ACTIVE, "0xvalidator")]
+        const nodes = [createNode("1", "ACTIVE", "0xvalidator")]
 
         const sorted = sortNodesByDelegationStatus(nodes)
 
@@ -100,11 +97,7 @@ describe("sortNodesByDelegationStatus", () => {
     })
 
     it("should maintain relative order for nodes with same status", () => {
-        const nodes = [
-            createNode("1", DelegationStatus.NONE),
-            createNode("2", DelegationStatus.NONE),
-            createNode("3", DelegationStatus.NONE),
-        ]
+        const nodes = [createNode("1", "NONE"), createNode("2", "NONE"), createNode("3", "NONE")]
 
         const sorted = sortNodesByDelegationStatus(nodes)
 

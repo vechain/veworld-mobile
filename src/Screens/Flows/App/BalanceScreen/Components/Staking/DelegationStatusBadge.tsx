@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { BaseText, BlurView } from "~Components"
 import { COLORS } from "~Constants"
 import { useI18nContext } from "~i18n"
-import { DelegationStatus } from "~Model"
+import type { DelegationStatus } from "~Model"
 
 type Props = {
     status: DelegationStatus
@@ -27,14 +27,14 @@ export const DelegationStatusBadge = ({ status, exitDays }: Props) => {
 
     const config = useMemo((): StatusConfig => {
         switch (status) {
-            case DelegationStatus.ACTIVE:
-            case DelegationStatus.QUEUED:
+            case "ACTIVE":
+            case "QUEUED":
                 return {
                     label: LL.STARGATE_DELEGATION_STATUS_DELEGATED(),
                     backgroundColor: STATUS_COLORS.DELEGATED,
                     blurAmount: 30,
                 }
-            case DelegationStatus.EXITING:
+            case "EXITING":
                 return {
                     label:
                         exitDays !== undefined
@@ -43,8 +43,8 @@ export const DelegationStatusBadge = ({ status, exitDays }: Props) => {
                     backgroundColor: STATUS_COLORS.EXITING,
                     blurAmount: 65,
                 }
-            case DelegationStatus.NONE:
-            case DelegationStatus.EXITED:
+            case "NONE":
+            case "EXITED":
             default:
                 return {
                     label: LL.STARGATE_DELEGATION_STATUS_NOT_DELEGATED(),

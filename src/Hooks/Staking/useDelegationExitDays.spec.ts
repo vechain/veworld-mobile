@@ -179,7 +179,6 @@ describe("useDelegationExitDays", () => {
         const { result } = renderHook(() => useDelegationExitDays({ validatorId: "0xvalidator" }), {
             wrapper: TestWrapper,
         })
-
         expect(result.current.isLoading).toBe(true)
         expect(result.current.exitDays).toBeUndefined()
     })

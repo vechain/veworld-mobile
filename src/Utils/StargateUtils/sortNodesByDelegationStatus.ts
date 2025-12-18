@@ -7,11 +7,11 @@ import { DelegationStatus, NodeInfo } from "~Model"
  * Sort order: NONE -> EXITING -> EXITED -> QUEUED -> ACTIVE
  */
 const DELEGATION_PRIORITY: Record<DelegationStatus, number> = {
-    [DelegationStatus.NONE]: 0,
-    [DelegationStatus.EXITING]: 1,
-    [DelegationStatus.EXITED]: 2,
-    [DelegationStatus.QUEUED]: 3,
-    [DelegationStatus.ACTIVE]: 4,
+    NONE: 0,
+    EXITING: 1,
+    EXITED: 2,
+    QUEUED: 3,
+    ACTIVE: 4,
 }
 
 /**

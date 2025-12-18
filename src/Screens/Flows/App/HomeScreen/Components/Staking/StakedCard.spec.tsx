@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react-native"
 import { ethers } from "ethers"
 import React from "react"
-import { DelegationStatus, NodeInfo } from "~Model/Staking"
+import type { NodeInfo } from "~Model/Staking"
 import { TestWrapper } from "~Test"
 import { StakedCard } from "./StakedCard"
 
@@ -14,7 +14,7 @@ describe("StakedCard", () => {
             isLegacyNode: false,
             vetAmountStaked: ethers.utils.parseEther("1000").toString(),
             accumulatedRewards: "0",
-            delegationStatus: DelegationStatus.ACTIVE,
+            delegationStatus: "ACTIVE",
             validatorId: "0x1234567890abcdef",
         },
     ]

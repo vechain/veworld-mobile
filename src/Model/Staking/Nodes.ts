@@ -1,10 +1,6 @@
-export enum DelegationStatus {
-    NONE = "NONE",
-    QUEUED = "QUEUED",
-    ACTIVE = "ACTIVE",
-    EXITING = "EXITING",
-    EXITED = "EXITED",
-}
+import { components } from "~Generated/indexer/schema"
+
+export type DelegationStatus = components["schemas"]["StargateToken"]["delegationStatus"]
 
 export interface NodeInfo {
     nodeId: string

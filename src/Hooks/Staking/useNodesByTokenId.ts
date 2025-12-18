@@ -36,7 +36,7 @@ const getNodeByTokenId = async (indexer: IndexerClient, tokenId: string): Promis
             vetAmountStaked: r.data[0].vetStaked.toString(),
             accumulatedRewards: BigNutils(r.data[0].totalBootstrapRewardsClaimed).plus(r.data[0].totalRewardsClaimed)
                 .toString,
-            delegationStatus: (r.data[0].delegationStatus as DelegationStatus) ?? DelegationStatus.NONE,
+            delegationStatus: (r.data[0].delegationStatus as DelegationStatus) ?? "NONE",
             validatorId: r.data[0].validatorId ?? null,
         }
     } catch (error) {

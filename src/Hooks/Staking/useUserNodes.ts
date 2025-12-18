@@ -36,7 +36,7 @@ const getUserNodes = async (indexer: IndexerClient, address: string | undefined)
                     xNodeOwner: u.owner,
                     vetAmountStaked: u.vetStaked.toString(),
                     accumulatedRewards: BigNutils(u.totalBootstrapRewardsClaimed).plus(u.totalRewardsClaimed).toString,
-                    delegationStatus: (u.delegationStatus as DelegationStatus) ?? DelegationStatus.NONE,
+                    delegationStatus: (u.delegationStatus as DelegationStatus) ?? "NONE",
                     validatorId: u.validatorId ?? null,
                 })),
             )

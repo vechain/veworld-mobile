@@ -1,13 +1,12 @@
 import React from "react"
 import { render, screen } from "@testing-library/react-native"
 import { TestWrapper } from "~Test"
-import { DelegationStatus } from "~Model"
 import { DelegationStatusBadge } from "./DelegationStatusBadge"
 
 describe("DelegationStatusBadge", () => {
     describe("label rendering", () => {
         it("should render 'Delegated' for ACTIVE status", () => {
-            render(<DelegationStatusBadge status={DelegationStatus.ACTIVE} />, {
+            render(<DelegationStatusBadge status="ACTIVE" />, {
                 wrapper: TestWrapper,
             })
 
@@ -15,7 +14,7 @@ describe("DelegationStatusBadge", () => {
         })
 
         it("should render 'Delegated' for QUEUED status", () => {
-            render(<DelegationStatusBadge status={DelegationStatus.QUEUED} />, {
+            render(<DelegationStatusBadge status="QUEUED" />, {
                 wrapper: TestWrapper,
             })
 
@@ -23,7 +22,7 @@ describe("DelegationStatusBadge", () => {
         })
 
         it("should render 'Not delegated' for NONE status", () => {
-            render(<DelegationStatusBadge status={DelegationStatus.NONE} />, {
+            render(<DelegationStatusBadge status="NONE" />, {
                 wrapper: TestWrapper,
             })
 
@@ -31,7 +30,7 @@ describe("DelegationStatusBadge", () => {
         })
 
         it("should render 'Not delegated' for EXITED status", () => {
-            render(<DelegationStatusBadge status={DelegationStatus.EXITED} />, {
+            render(<DelegationStatusBadge status="EXITED" />, {
                 wrapper: TestWrapper,
             })
 
@@ -39,7 +38,7 @@ describe("DelegationStatusBadge", () => {
         })
 
         it("should render 'Exiting' for EXITING status without exitDays", () => {
-            render(<DelegationStatusBadge status={DelegationStatus.EXITING} />, {
+            render(<DelegationStatusBadge status="EXITING" />, {
                 wrapper: TestWrapper,
             })
 
@@ -47,7 +46,7 @@ describe("DelegationStatusBadge", () => {
         })
 
         it("should render 'Exiting in X days' for EXITING status with exitDays", () => {
-            render(<DelegationStatusBadge status={DelegationStatus.EXITING} exitDays={5} />, {
+            render(<DelegationStatusBadge status="EXITING" exitDays={5} />, {
                 wrapper: TestWrapper,
             })
 
@@ -55,7 +54,7 @@ describe("DelegationStatusBadge", () => {
         })
 
         it("should render 'Exiting in 0 days' when exitDays is 0", () => {
-            render(<DelegationStatusBadge status={DelegationStatus.EXITING} exitDays={0} />, {
+            render(<DelegationStatusBadge status="EXITING" exitDays={0} />, {
                 wrapper: TestWrapper,
             })
 

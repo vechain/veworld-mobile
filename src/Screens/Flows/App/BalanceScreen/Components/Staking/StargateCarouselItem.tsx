@@ -11,7 +11,7 @@ import { useStargateClaimableRewards } from "~Hooks/useStargateClaimableRewards"
 import { useStargateConfig } from "~Hooks/useStargateConfig"
 import { useThorClient } from "~Hooks/useThorClient"
 import { useI18nContext } from "~i18n"
-import { DelegationStatus, NodeInfo } from "~Model"
+import type { NodeInfo } from "~Model"
 import { getTokenURI } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
@@ -75,7 +75,7 @@ export const StargateCarouselItem = ({ item }: Props) => {
 
     const { data: claimableRewards } = useStargateClaimableRewards({ nodeId: item.nodeId })
 
-    const isExiting = item.delegationStatus === DelegationStatus.EXITING
+    const isExiting = item.delegationStatus === "EXITING"
     const { exitDays } = useDelegationExitDays({
         validatorId: item.validatorId,
         enabled: isExiting,
