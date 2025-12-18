@@ -748,7 +748,7 @@
   "FEBRUARY": "Tháng Hai",
   "FEEDBACK_APP_CONNECTED": "Ứng dụng đã kết nối!",
   "FEEDBACK_FAVORITED": "Đã yêu thích!",
-  "FEEDBACK_N_TRANSFERS_RECEIVED": "Đã nhận {count} giao dịch chuyển khoản",
+  "FEEDBACK_N_TRANSFERS_RECEIVED": "{count: number} chuyển khoản đã nhận",
   "FEEDBACK_SET_AVATAR": "Đặt làm ảnh đại diện!",
   "FEEDBACK_TRANSFER_RECEIVED": "Đã nhận chuyển khoản",
   "FINGERPRINT": "Dấu vân tay",
