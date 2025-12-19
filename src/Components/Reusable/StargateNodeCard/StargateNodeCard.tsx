@@ -39,6 +39,7 @@ export const StargateNodeCard = ({ tokenId, blockNumber }: Props) => {
                 height={40}
                 borderRadius={4}
                 containerStyle={styles.imageContainer}
+                delegationStatus={nodeInfo?.delegationStatus ?? "NONE"}
             />
             <BaseView flexDirection="column" gap={4}>
                 <BaseText typographyFont="bodySemiBold">

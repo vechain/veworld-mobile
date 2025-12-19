@@ -17,7 +17,7 @@ import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { AddressUtils, sortNodesByDelegationStatus } from "~Utils"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
 import { StargateCarouselItem } from "./StargateCarouselItem"
 import { StargateNoStakingCard } from "./StargateNoStakingCard"
@@ -60,9 +60,12 @@ export const StargateCarousel = () => {
     }, [hasOwnedNodes, isLoadingNodes, data.length])
 
     const filteredNodes = useMemo(() => {
-        return filter === StakingFilter.OWN
-            ? data.filter(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
-            : data.filter(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
+        const filtered =
+            filter === StakingFilter.OWN
+                ? data.filter(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
+                : data.filter(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
+
+        return sortNodesByDelegationStatus(filtered)
     }, [data, filter, address])
 
     const cards = useMemo(() => {
