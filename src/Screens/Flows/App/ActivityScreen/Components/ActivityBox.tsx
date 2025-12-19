@@ -430,6 +430,7 @@ const TokenSwap = ({ activity, onPress, ...props }: OverridableActivityBoxProps<
                 </BaseText>
             }
             onPress={onSwapPressHandler}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -500,6 +501,7 @@ const DAppSignCertBox = ({ activity, onPress, ...props }: OverridableActivityBox
             title={title}
             description={description}
             onPress={onPressHandler}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -532,6 +534,7 @@ const NFTTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxProp
             description={validatedCollectionName()}
             onPress={onPressHandler}
             nftImage={image}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -584,6 +587,7 @@ const NFTSale = ({ activity, onPress, ...props }: OverridableActivityBoxProps<NF
             rightAmountDescription={token?.symbol ?? "VET"}
             onPress={onPressHandler}
             nftImage={image}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -607,6 +611,7 @@ const ConnectedAppActivityBox = ({
             timestamp={activity.timestamp}
             title={LL.CONNECTED_APP_TITLE()}
             onPress={onPressHandler}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -626,6 +631,7 @@ const SignedTypedData = ({ activity, onPress, ...props }: OverridableActivityBox
             timestamp={activity.timestamp}
             title={LL.CONNECTED_APP_SIGN_TYPED_DATA()}
             onPress={onPressHandler}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -660,6 +666,7 @@ const B3trAction = ({ activity, onPress, veBetterDaoDapps, ...props }: B3trActio
             rightAmount={`${DIRECTIONS.UP} ${rewardValue}`}
             rightAmountDescription={B3TR.symbol}
             invertedStyles
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -681,6 +688,7 @@ const B3trProposalVote = ({ activity, onPress, ...props }: OverridableActivityBo
             timestamp={activity.timestamp}
             title={LL.B3TR_PROPOSAL_VOTE()}
             onPress={onPressHandler}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -707,6 +715,7 @@ const B3trXAllocationVote = ({
             title={LL.B3TR_XALLOCATION_VOTE({ number: parseInt(activity.roundId, 10) })}
             rightAmountDescription={<StackedApps appVotes={activity.appVotes} roundId={activity.roundId} />}
             onPress={onPressHandler}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -734,6 +743,7 @@ const B3trClaimReward = ({ activity, onPress, ...props }: OverridableActivityBox
             onPress={onPressHandler}
             rightAmount={`${DIRECTIONS.UP} ${rewardValue}`}
             rightAmountDescription={B3TR.symbol}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -756,6 +766,7 @@ const B3trUpgradeGM = ({ activity, onPress, ...props }: OverridableActivityBoxPr
             title={LL.B3TR_UPGRADE_GM()}
             description={activity.newLevel}
             onPress={onPressHandler}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -796,6 +807,7 @@ const B3trSwapB3trToVot3 = ({
                 </BaseText>
             }
             onPress={onSwapPressHandler}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -836,6 +848,7 @@ const B3trSwapVot3ToB3tr = ({
                 </BaseText>
             }
             onPress={onSwapPressHandler}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -861,6 +874,7 @@ const B3trProposalSupport = ({
             timestamp={activity.timestamp}
             title={LL.B3TR_PROPOSAL_SUPPORT()}
             onPress={onPressHandler}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -1105,6 +1119,7 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
             rightAmountDescription={rightAmountDescription}
             onPress={onPressHandler}
             nftImage={imageToShow}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -1125,6 +1140,7 @@ const VeVoteCast = ({ activity, onPress, ...props }: OverridableActivityBoxProps
             title={LL.VEVOTE_CAST_TITLE()}
             description={LL.VEVOTE_CAST_DESCRIPTION()}
             onPress={onPressHandler}
+            activityStatus={activity.status}
             {...props}
         />
     )
@@ -1151,6 +1167,7 @@ const DappLogin = ({ activity, onPress, ...props }: OverridableActivityBoxProps<
             title={LL.DAPP_LOGIN_TITLE()}
             description={description}
             onPress={onPressHandler}
+            activityStatus={activity.status}
             {...props}
         />
     )
