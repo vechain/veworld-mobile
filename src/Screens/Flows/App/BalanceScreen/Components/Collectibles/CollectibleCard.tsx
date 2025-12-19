@@ -6,7 +6,8 @@ import FastImage, { ImageStyle } from "react-native-fast-image"
 import LinearGradient from "react-native-linear-gradient"
 import Animated from "react-native-reanimated"
 import { NFTPlaceholderDarkV2 } from "~Assets"
-import { BaseIcon, BaseText, BaseView, BlurView, NFTImageComponent } from "~Components"
+import { BaseText, BaseView, BlurView, NFTImageComponent } from "~Components"
+import { BaseIcon } from "~Components/Base/BaseIcon"
 import { COLORS } from "~Constants"
 import { useNFTMedia, useThemedStyles } from "~Hooks"
 import { useBlacklistedCollection } from "~Hooks/useBlacklistedCollection"
@@ -73,7 +74,7 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
 
     const isNew = useMemo(() => {
         if (!transferDetails) return false
-        return moment().diff((transferDetails.data?.data[0].blockTimestamp ?? 0) * 1000, "days") <= 5
+        return moment().diff((transferDetails.data?.data[0]?.blockTimestamp ?? 0) * 1000, "days") <= 5
     }, [transferDetails])
 
     const topStyle = useMemo(() => {
