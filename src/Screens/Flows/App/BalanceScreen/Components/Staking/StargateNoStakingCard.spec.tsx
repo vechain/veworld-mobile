@@ -1,10 +1,10 @@
-import React from "react"
-import { TestWrapper } from "~Test"
 import { fireEvent, render, screen } from "@testing-library/react-native"
-import { StargateNoStakingCard } from "./StargateNoStakingCard"
-import { useBrowserNavigation } from "~Hooks/useBrowserSearch"
+import React from "react"
 import { STARGATE_DAPP_URL_HOME_BANNER } from "~Constants"
+import { useBrowserNavigation } from "~Hooks/useBrowserSearch"
 import { useStargateStats } from "~Hooks/useStargateStats"
+import { TestWrapper } from "~Test"
+import { StargateNoStakingCard } from "./StargateNoStakingCard"
 
 jest.mock("~Hooks/useBrowserSearch", () => ({
     useBrowserNavigation: jest.fn(),
@@ -30,7 +30,7 @@ describe("StargateNoStackingCard", () => {
                     total: "6318030000000000000000000000",
                 },
                 rewardsDistributed: "526381931206666467000000000",
-                vthoPerDay: 1181630.68475904,
+                vthoPerDay: "326381931206666467000000000",
             },
             isLoading: false,
             error: undefined,
@@ -54,7 +54,7 @@ describe("StargateNoStackingCard", () => {
                     total: "6318030000000000000000000000",
                 },
                 rewardsDistributed: "526381931206666467000000000",
-                vthoPerDay: 1181630.68475904,
+                vthoPerDay: "326381931206666467000000000",
             },
             isLoading: false,
         }))
@@ -78,7 +78,7 @@ describe("StargateNoStackingCard", () => {
         expect(rewardsDistributed.findByProps({ testID: "STATS_CARD_VALUE" })).toHaveTextContent("526.4M")
 
         expect(rewardsGeneration).toBeOnTheScreen()
-        expect(rewardsGeneration.findByProps({ testID: "STATS_CARD_VALUE" })).toHaveTextContent("1.2M")
+        expect(rewardsGeneration.findByProps({ testID: "STATS_CARD_VALUE" })).toHaveTextContent("326.4M")
     })
 
     it("should navigate to browser when start staking button is pressed", () => {
