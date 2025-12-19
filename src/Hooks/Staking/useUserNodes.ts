@@ -36,6 +36,8 @@ const getUserNodes = async (indexer: IndexerClient, address: string | undefined)
                     xNodeOwner: u.owner,
                     vetAmountStaked: u.vetStaked.toString(),
                     accumulatedRewards: BigNutils(u.totalBootstrapRewardsClaimed).plus(u.totalRewardsClaimed).toString,
+                    delegationStatus: u.delegationStatus ?? "NONE",
+                    validatorId: u.validatorId ?? null,
                 })),
             )
             if (!r.pagination.hasNext) break
