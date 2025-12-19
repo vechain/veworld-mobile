@@ -40,7 +40,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountUtils, AddressUtils, DAppUtils, debug, warn } from "~Utils"
+import { AccountUtils, AddressUtils, DAppUtils, debug, URIUtils, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"
 import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
@@ -108,6 +108,7 @@ type ContextType = {
     isLoading: boolean
     isDapp: boolean
     dappMetadata?: DappMetadata
+    isDappValid: (url: string) => boolean
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -1024,6 +1025,16 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         )
     }, [allDapps, navigationState])
 
+    /**
+     * Check if the current URL is a valid dapp or we should block the webview and show a warning
+     */
+    const isDappValid = useCallback(
+        (url: string) => {
+            return Boolean(allDapps.find(dapp => URIUtils.compareSecondLevelDomains(dapp.href, url)))
+        },
+        [allDapps],
+    )
+
     const dappMetadata = useMemo(() => {
         if (!navigationState?.url) return undefined
 
@@ -1053,7 +1064,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             onScroll,
             postMessage,
             injectVechainScript: () => injectedJs({ locale, packageInfo }),
-
             navigationCanGoBack: nav.canGoBack(),
             canGoBack,
             originWhitelist: ORIGIN_WHITELIST,
@@ -1075,6 +1085,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             isDapp,
             getLoginSession,
             dappMetadata,
+            isDappValid,
         }
     }, [
         isLoading,
@@ -1103,6 +1114,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         packageInfo,
         getLoginSession,
         dappMetadata,
+        isDappValid,
     ])
 
     return (

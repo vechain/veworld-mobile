@@ -42,6 +42,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         isLoading,
         navigationState,
         onNavigationStateChange,
+        isDappValid,
     } = useInAppBrowser()
 
     const track = useAnalyticTracking()
@@ -56,7 +57,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const activeSession = useAppSelector(state =>
         selectSession(state, navigationState?.url ?? "", selectedNetwork.genesis.id),
     )
-    const dappMetadata = useGetDappMetadataFromUrl(route.params.url, false)
+    const dappMetadata = useGetDappMetadataFromUrl(route.params.url)
     const fetchDynamicLogo = useDynamicAppLogo({ size: 48 })
 
     const iconUri = useMemo(() => {
@@ -121,10 +122,10 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     }, [onAndroidBackPress])
 
     const shouldShowWebview = useMemo(() => {
-        if (dappMetadata) return true
+        if (isDappValid(route.params.url)) return true
         if (selectedNetwork.type !== NETWORK_TYPE.MAIN) return true
         return developerAppsEnabled
-    }, [dappMetadata, developerAppsEnabled, selectedNetwork.type])
+    }, [isDappValid, developerAppsEnabled, selectedNetwork.type, route.params.url])
 
     return (
         <Layout

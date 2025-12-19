@@ -362,7 +362,7 @@ export const formatWithLessThan = (
     }
 
     return formatDisplayNumber(value, {
-        ...options,
         showZeroAs: getNumberFormatter({ locale, precision: 2, style: "decimal", useGrouping: false }).format(0),
+        ...options,
     })
 }
