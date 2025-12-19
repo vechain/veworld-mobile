@@ -1,7 +1,9 @@
 import { Transaction } from "@vechain/sdk-core"
-import { ThorClient } from "@vechain/sdk-network"
+import { ThorClient, TransactionReceipt } from "@vechain/sdk-network"
+import { ethers } from "ethers"
 import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { AnalyticsEvent, createAnalyticsEvent, MixPanelTransfers, VTHO } from "~Constants"
 import { i18nObject } from "~i18n"
 import {
     Activity,
@@ -22,10 +24,112 @@ import {
     createPendingTransferActivityFromTx,
     createSignCertificateActivity,
     createSingTypedDataActivity,
+    enrichActivityWithTrackingData,
 } from "~Networking"
-import { selectDevice, selectLanguage, selectSelectedAccount, selectSelectedNetwork } from "~Storage/Redux/Selectors"
+import { ReceiptProcessor } from "~Services/AbiService/ReceiptProcessor"
+import {
+    selectDevice,
+    selectLanguage,
+    selectNetworkVBDTokens,
+    selectSelectedAccount,
+    selectSelectedNetwork,
+} from "~Storage/Redux/Selectors"
 import { addActivity } from "~Storage/Redux/Slices"
 import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
+import { AddressUtils, BigNutils } from "~Utils"
+import ObjectUtils from "~Utils/ObjectUtils"
+import AnalyticsUtils from "~Utils/AnalyticsUtils"
+
+type ActivityOptions = {
+    appName?: string
+    appUrl?: string
+} & Pick<Activity, "medium" | "signature" | "context" | "subject">
+
+const accumulateTransfers = (
+    receipt: TransactionReceipt,
+    { processor, b3trAddress }: { processor: ReceiptProcessor; b3trAddress: string },
+) => {
+    const flattenedOutputs = receipt.outputs.flat()
+
+    const origin = receipt.meta.txOrigin!
+
+    const processedOutputs = processor.analyzeReceipt(flattenedOutputs, origin)
+
+    const accumulatedResults = processedOutputs
+        .filter(
+            evt =>
+                evt.name === "Transfer(indexed address,indexed address,uint256)" ||
+                evt.name === "VET_TRANSFER(address,address,uint256)",
+        )
+        .reduce(
+            (acc, curr) => {
+                switch (curr.name) {
+                    case "VET_TRANSFER(address,address,uint256)":
+                        if (AddressUtils.compareAddresses(curr.params.from, origin)) {
+                            acc.VET_SENT = BigNutils(acc.VET_SENT).plus(curr.params.amount).toString
+                            acc.VET_SENT_COUNT = BigNutils(acc.VET_SENT_COUNT).plus(1).toString
+                            return acc
+                        }
+                        if (AddressUtils.compareAddresses(curr.params.to, origin)) {
+                            acc.VET_RECEIVED = BigNutils(acc.VET_RECEIVED).plus(curr.params.amount).toString
+                            acc.VET_RECEIVED_COUNT = BigNutils(acc.VET_RECEIVED_COUNT).plus(1).toString
+                            return acc
+                        }
+                        return acc
+                    case "Transfer(indexed address,indexed address,uint256)":
+                        if (AddressUtils.compareAddresses(curr.address, VTHO.address)) {
+                            if (AddressUtils.compareAddresses(curr.params.from, origin)) {
+                                acc.VTHO_SENT = BigNutils(acc.VTHO_SENT).plus(curr.params.value).toString
+                                acc.VTHO_SENT_COUNT = BigNutils(acc.VTHO_SENT_COUNT).plus(1).toString
+                                return acc
+                            }
+                            if (AddressUtils.compareAddresses(curr.params.to, origin)) {
+                                acc.VTHO_RECEIVED = BigNutils(acc.VTHO_RECEIVED).plus(curr.params.value).toString
+                                acc.VTHO_RECEIVED_COUNT = BigNutils(acc.VTHO_RECEIVED_COUNT).plus(1).toString
+                                return acc
+                            }
+                            return acc
+                        }
+                        if (AddressUtils.compareAddresses(curr.address, b3trAddress)) {
+                            if (AddressUtils.compareAddresses(curr.params.from, origin)) {
+                                acc.B3TR_SENT = BigNutils(acc.B3TR_SENT).plus(curr.params.value).toString
+                                acc.B3TR_SENT_COUNT = BigNutils(acc.B3TR_SENT_COUNT).plus(1).toString
+                                return acc
+                            }
+                            if (AddressUtils.compareAddresses(curr.params.to, origin)) {
+                                acc.B3TR_RECEIVED = BigNutils(acc.B3TR_RECEIVED).plus(curr.params.value).toString
+                                acc.B3TR_RECEIVED_COUNT = BigNutils(acc.B3TR_RECEIVED_COUNT).plus(1).toString
+                                return acc
+                            }
+                            return acc
+                        }
+                }
+
+                return acc
+            },
+            {
+                VET_SENT: "0",
+                VET_RECEIVED: "0",
+                B3TR_SENT: "0",
+                B3TR_RECEIVED: "0",
+                VTHO_SENT: "0",
+                VTHO_RECEIVED: "0",
+                B3TR_RECEIVED_COUNT: "0",
+                B3TR_SENT_COUNT: "0",
+                VET_RECEIVED_COUNT: "0",
+                VET_SENT_COUNT: "0",
+                VTHO_RECEIVED_COUNT: "0",
+                VTHO_SENT_COUNT: "0",
+            } as Record<keyof MixPanelTransfers, string>,
+        )
+
+    return Object.fromEntries(
+        Object.entries(accumulatedResults).map(([key, value]) => {
+            if (key.endsWith("COUNT")) return [key, Number.parseInt(value, 10)]
+            return [key, Number.parseFloat(ethers.utils.formatEther(value))]
+        }),
+    )
+}
 
 /**
  * This method upserts an activity to the store fetching the transaction details from the chain
@@ -33,18 +137,26 @@ import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
  *
  * @param activity - The activity to be upserted.
  * @param thor - The Connex.Thor instance used for querying the chain.
+ * @param processor - Receipt processor with only Generic and Native enabled
  * @returns A promise which resolves to the upserted activity.
  */
 export const validateAndUpsertActivity = createAppAsyncThunk(
     "activity/upsertTransactionDetails",
-    async ({ activity, thor }: { activity: Activity; thor: ThorClient }, { dispatch, getState }) => {
+    async (
+        { activity, thor, processor }: { activity: Activity; thor: ThorClient; processor: ReceiptProcessor },
+        { dispatch, getState },
+    ) => {
         let updatedActivity = { ...activity }
         const locale = selectLanguage(getState())
         const LL = i18nObject(locale)
+        const selectedNetwork = selectSelectedNetwork(getState())
+        const { B3TR } = selectNetworkVBDTokens(getState())
+
+        let txReceipt: TransactionReceipt | null = null
 
         // If the activity is a transaction, we need to fetch the transaction from the chain
         if (updatedActivity.isTransaction) {
-            const txReceipt = await thor.transactions.getTransactionReceipt(updatedActivity.txId?.toLowerCase() ?? "")
+            txReceipt = await thor.transactions.getTransactionReceipt(updatedActivity.txId?.toLowerCase() ?? "")
 
             updatedActivity.blockNumber = txReceipt?.meta.blockNumber ?? 0
 
@@ -59,8 +171,39 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
         if (Date.now() - updatedActivity.timestamp > 120000 && updatedActivity.status === ActivityStatus.PENDING)
             updatedActivity.status = ActivityStatus.REVERTED
 
+        if (updatedActivity.status === ActivityStatus.PENDING) {
+            dispatch(addActivity(updatedActivity))
+            return updatedActivity
+        }
+
+        if (updatedActivity.subject && updatedActivity.isTransaction) {
+            dispatch(
+                AnalyticsUtils.trackEvent(
+                    AnalyticsEvent.WALLET_OPERATION,
+                    createAnalyticsEvent(
+                        ObjectUtils.trimUndefined({
+                            network: selectedNetwork.name,
+                            medium: updatedActivity.medium,
+                            signature: updatedActivity.signature,
+                            subject: updatedActivity.subject,
+                            context: updatedActivity.context,
+                            failed: updatedActivity.status === ActivityStatus.REVERTED,
+                            dappUrl: updatedActivity.dappUrlOrName,
+                            transactionId: updatedActivity.txId?.toLowerCase(),
+                            ...(txReceipt && {
+                                ...accumulateTransfers(txReceipt, {
+                                    processor,
+                                    b3trAddress: B3TR.address,
+                                }),
+                                origin: txReceipt.meta.txOrigin!.toLowerCase(),
+                            }),
+                        }),
+                    ),
+                ),
+            )
+        }
+
         if (
-            [ActivityStatus.REVERTED, ActivityStatus.SUCCESS].includes(updatedActivity.status!) &&
             [ActivityType.TRANSFER_FT, ActivityType.TRANSFER_NFT, ActivityType.TRANSFER_VET].includes(
                 updatedActivity.type as ActivityType,
             )
@@ -97,7 +240,7 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
  * @returns An asynchronous thunk action that, when dispatched, upserts a pending transfer activity to the Redux store.
  */
 export const addPendingTransferTransactionActivity =
-    (outgoingTx: Transaction): AppThunk<void> =>
+    (outgoingTx: Transaction, options: ActivityOptions): AppThunk<void> =>
     (dispatch, getState) => {
         const locale = selectLanguage(getState())
         const LL = i18nObject(locale)
@@ -108,7 +251,7 @@ export const addPendingTransferTransactionActivity =
         if (!selectedAccount || !outgoingTx.id || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
 
         const pendingActivity: FungibleTokenActivity = createPendingTransferActivityFromTx(outgoingTx)
-        dispatch(addActivity(pendingActivity))
+        dispatch(addActivity(enrichActivityWithTrackingData(pendingActivity, options)))
         Feedback.show({
             severity: FeedbackSeverity.LOADING,
             message: LL.TRANSACTION_IN_PROGRESS(),
@@ -137,7 +280,7 @@ export const addPendingTransferTransactionActivity =
  * @returns An asynchronous thunk action that, when dispatched, upserts a pending NFT transfer activity to the Redux store.
  */
 export const addPendingNFTtransferTransactionActivity =
-    (outgoingTx: Transaction): AppThunk<void> =>
+    (outgoingTx: Transaction, options: ActivityOptions): AppThunk<void> =>
     (dispatch, getState) => {
         const locale = selectLanguage(getState())
         const LL = i18nObject(locale)
@@ -147,7 +290,7 @@ export const addPendingNFTtransferTransactionActivity =
         if (!selectedAccount || !outgoingTx.id || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
 
         const pendingActivity: NonFungibleTokenActivity = createPendingNFTTransferActivityFromTx(outgoingTx)
-        dispatch(addActivity(pendingActivity))
+        dispatch(addActivity(enrichActivityWithTrackingData(pendingActivity, options)))
         Feedback.show({
             severity: FeedbackSeverity.LOADING,
             message: LL.TRANSACTION_IN_PROGRESS(),
@@ -258,19 +401,17 @@ export const addLoginActivity =
  * This method adds a new pending DApp transaction activity to the Redux store.
  *
  * @param tx - The transaction details.
- * @param name - The name of the DApp (optional).
- * @param linkUrl - The URL of the DApp (optional).
  *
  * @returns An asynchronous thunk action that, when dispatched, adds a new pending DApp transaction activity to the Redux store.
  */
 export const addPendingDappTransactionActivity =
-    (tx: Transaction, name?: string, linkUrl?: string): AppThunk<void> =>
+    (tx: Transaction, options: ActivityOptions): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
         const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
 
         if (!selectedAccount || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
 
-        const pendingDappActivity: Activity = createPendingDappTransactionActivity(tx, name, linkUrl)
-        dispatch(addActivity(pendingDappActivity))
+        const pendingDappActivity: Activity = createPendingDappTransactionActivity(tx, options.appName, options.appUrl)
+        dispatch(addActivity(enrichActivityWithTrackingData(pendingDappActivity, options)))
     }

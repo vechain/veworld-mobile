@@ -750,7 +750,7 @@
   "FEEDBACK_FAVORITED": "已收藏!",
   "FEEDBACK_N_TRANSFERS_RECEIVED": "已收到{count}笔转账",
   "FEEDBACK_SET_AVATAR": "设为头像!",
-  "FEEDBACK_TRANSFER_RECEIVED": "已收到转账",
+  "FEEDBACK_TRANSFER_RECEIVED": "收到转账",
   "FINGERPRINT": "指纹",
   "FROM": "来自",
   "GAS_FEE": "燃气费",

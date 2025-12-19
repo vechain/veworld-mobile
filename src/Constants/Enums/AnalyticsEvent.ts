@@ -242,6 +242,13 @@ export enum AnalyticsEvent {
     TOKEN_SWAP_CLICKED = "TOKEN_SWAP_CLICKED",
 }
 
+type TransferKeyAccumulator = {
+    [key in "VET" | "VTHO" | "B3TR"]: `${key}_SENT` | `${key}_RECEIVED` | `${key}_SENT_COUNT` | `${key}_RECEIVED_COUNT`
+}["VET" | "VTHO" | "B3TR"]
+export type MixPanelTransfers = {
+    [key in TransferKeyAccumulator]?: number
+}
+
 /**
  * @description MixPanelEvent type
  */
@@ -254,22 +261,18 @@ type MixPanelEvent = {
 
     failed?: boolean
     dappUrl?: string
-}
+    /**
+     * Origin of the tx
+     */
+    origin?: string
+} & MixPanelTransfers
 
 /**
- * @param {AnalyticsEvent.SEND | AnalyticsEvent.DAPP} medium
- * @param {AnalyticsEvent.LOCAL | AnalyticsEvent.HARDWARE} signature
- * @param {string} network
- * @param {AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT} [subject]
- * @param {AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT | AnalyticsEvent.SEND} [context]
- * @param {boolean} [failed]
- * @param {string} [dappUrl]
- *
- * @description Create a new event for mixpanel
- * @returns {MixPanelEvent} object
+ * Create an event for tracking transactions
+ * @param param0 Args
+ * @returns Mixpanel event
  */
-
-export const creteAnalyticsEvent = ({
+export const createAnalyticsEvent = ({
     medium,
     signature,
     network,
@@ -277,15 +280,8 @@ export const creteAnalyticsEvent = ({
     context,
     failed,
     dappUrl,
-}: {
-    medium: AnalyticsEvent.SEND | AnalyticsEvent.DAPP
-    signature: AnalyticsEvent.LOCAL | AnalyticsEvent.HARDWARE
-    network: string
-    subject?: AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT
-    context?: AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT | AnalyticsEvent.SEND
-    failed?: boolean
-    dappUrl?: string
-}): MixPanelEvent => {
+    ...rest
+}: MixPanelEvent): MixPanelEvent => {
     return {
         subject,
         medium,
@@ -294,5 +290,6 @@ export const creteAnalyticsEvent = ({
         context,
         failed,
         dappUrl,
+        ...rest,
     }
 }
