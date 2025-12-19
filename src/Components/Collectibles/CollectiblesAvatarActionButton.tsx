@@ -62,8 +62,6 @@ export const CollectiblesAvatarActionButton = ({ image, address, tokenId, mimeTy
                 ? `${FileSystem.documentDirectory}${account.profileImage.uri}`
                 : undefined
 
-            setIsPending(false)
-
             dispatch(clearAccountPfp({ accountAddress: account.address }))
             track(AnalyticsEvent.NFT_COLLECTIBLE_AVATAR_DELETED, { collectionAddress: address })
 
