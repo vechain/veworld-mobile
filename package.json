@@ -27,7 +27,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "format": "yarn prettier --write src",
     "format:check": "yarn prettier --check src",
-    "postinstall": "patch-package --exclude 'nothing' && mkdir -p android/build/generated/autolinking && node node_modules/expo-modules-autolinking/bin/expo-modules-autolinking.js react-native-config --platform android --json > android/build/generated/autolinking/autolinking.json",
+    "postinstall": "patch-package --exclude 'nothing'",
     "check-circular-dependencies": "npx madge --circular --warning --extensions js,jsx,ts,tsx .",
     "dapps-index:generate": "ts-node scripts/generate-dapps-index.ts",
     "i18n:types": "typesafe-i18n",
