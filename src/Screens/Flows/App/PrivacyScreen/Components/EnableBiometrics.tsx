@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from "react"
-import { useBottomSheetModal, useDisclosure, useWalletSecurity } from "~Hooks"
 import { BaseButtonGroupHorizontal, BaseSpacer, BaseText, RequireUserPassword } from "~Components"
-import { useSecurityUpgrade } from "../Hooks/useSecurityUpgrade"
+import { useBottomSheetModal, useDisclosure, useWalletSecurity } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { useSecurityButtons } from "../Hooks/useSecurityButtons"
-import { BackupWarningBottomSheet } from "./BackupWarningBottomSheet"
 import { BaseButtonGroupHorizontalType, SecurityLevelType } from "~Model"
+import { useSecurityButtons } from "../Hooks/useSecurityButtons"
+import { useSecurityUpgrade } from "../Hooks/useSecurityUpgrade"
+import { BackupWarningBottomSheet } from "./BackupWarningBottomSheet"
 
 export const EnableBiometrics = () => {
     // State for the current button
@@ -57,11 +57,11 @@ export const EnableBiometrics = () => {
 
     return (
         <>
-            <BaseText mb={4} typographyFont="subSubTitleMedium">
+            <BaseText mb={4} typographyFont="bodySemiBold">
                 {LL.SB_SECURITY_METHOD()}
             </BaseText>
             <BaseSpacer height={4} />
-            <BaseText typographyFont="captionRegular">{LL.BD_SECURITY_METHOD()}</BaseText>
+            <BaseText typographyFont="captionMedium">{LL.BD_SECURITY_METHOD()}</BaseText>
 
             <BaseSpacer height={24} />
 

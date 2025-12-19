@@ -1,4 +1,4 @@
-import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect, useMemo } from "react"
 import { useThor } from "~Components"
 import { selectSelectedAccountAddress, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
@@ -30,7 +30,6 @@ export const useMultipleTokensBalance = (addresses: string[], accountAddress?: s
         queryFn: () => BalanceUtils.getBalancesFromBlockchain(sortedAddresses, address, network, thor),
         staleTime: 10 * 60 * 1000,
         gcTime: 10 * 60 * 1000,
-        placeholderData: keepPreviousData,
     })
 
     useEffect(() => {

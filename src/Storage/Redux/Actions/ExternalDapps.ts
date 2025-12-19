@@ -6,9 +6,9 @@ import { TranslationFunctions } from "~i18n/i18n-types"
 import { AddressUtils } from "~Utils"
 import { selectExternalDappSessions } from "../Selectors/ExternalDapp"
 import { selectNetworks, selectSelectedNetwork } from "../Selectors/Network"
-import { changeSelectedNetwork } from "../Slices"
 import { deleteExternalDappSession, SessionState } from "../Slices/ExternalDapps"
 import { AppThunk } from "../Types"
+import { switchActiveNetwork } from "./Network"
 
 const isValidSession =
     (
@@ -90,7 +90,7 @@ const switchNetwork =
             }),
         })
 
-        dispatch(changeSelectedNetwork(network))
+        dispatch(switchActiveNetwork(network))
 
         return selectExternalDappSessions(state, network.genesis.id)
     }

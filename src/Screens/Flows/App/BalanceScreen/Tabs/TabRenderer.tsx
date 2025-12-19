@@ -4,20 +4,14 @@ import { LayoutChangeEvent, StyleSheet } from "react-native"
 import Animated, { LinearTransition, ZoomIn, ZoomOut } from "react-native-reanimated"
 import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
-import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
-import {
-    useAnalyticTracking,
-    useDappBookmarksList,
-    useHasAnyVeBetterActions,
-    useTabBarBottomMargin,
-    useThemedStyles,
-} from "~Hooks"
+import { AnalyticsEvent, COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
+import { useAnalyticTracking, useDappBookmarksList, useHasAnyVeBetterActions, useThemedStyles } from "~Hooks"
+import { useLayoutScrollviewPadding } from "~Hooks/useLayoutScrollviewPadding"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { useAppSelector } from "~Storage/Redux/Hooks"
 import { selectHideNewUserVeBetterCard, selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { AccountUtils } from "~Utils"
-import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
@@ -45,7 +39,6 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const hideNewUserVeBetterCard = useAppSelector(selectHideNewUserVeBetterCard)
     const { data: hasAnyVeBetterActions } = useHasAnyVeBetterActions()
     const { onDAppPress } = useDAppActions(Routes.HOME)
-    const { iosOnlyTabBarBottomMargin, androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
     const showStakingTab = useShowStakingTab()
     const nav = useNavigation()
     const track = useAnalyticTracking()
@@ -70,15 +63,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
     }, [bookmarkedDApps?.length, selectedAccount])
     const labels = useMemo(() => filteredTabs.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL, filteredTabs])
 
-    // // Empirical data: This is necessary for older devices with the bottom tab bar height issues
-    const ANDROID_ADDITIONAL_PADDING = 72
-
-    const containerPaddingBottom = useMemo(
-        () => (isAndroid() ? androidOnlyTabBarBottomMargin : iosOnlyTabBarBottomMargin),
-        [androidOnlyTabBarBottomMargin, iosOnlyTabBarBottomMargin],
-    )
-
-    const contentExtraBottomPadding = useMemo(() => (isAndroid() ? ANDROID_ADDITIONAL_PADDING : 0), [])
+    const { containerPaddingBottom, contentExtraBottomPadding } = useLayoutScrollviewPadding()
 
     const showNewUserVeBetterCard = useMemo(() => {
         return !hideNewUserVeBetterCard && !hasAnyVeBetterActions && selectedTab === "TOKENS"
@@ -115,8 +100,10 @@ export const TabRenderer = ({ onLayout }: Props) => {
     )
 
     return (
-        <Animated.View style={[styles.root, { paddingBottom: containerPaddingBottom }]} onLayout={onLayout}>
-            <Animated.View layout={LinearTransition.duration(400)} style={styles.animatedContent}>
+        <Animated.View
+            style={[styles.root, { paddingBottom: containerPaddingBottom + contentExtraBottomPadding }]}
+            onLayout={onLayout}>
+            <Animated.View layout={LinearTransition.duration(400)} style={[styles.animatedContent]}>
                 {showFavorites && (
                     <BaseView flexDirection="column">
                         <FavouritesV2
@@ -145,13 +132,13 @@ export const TabRenderer = ({ onLayout }: Props) => {
                     rootStyle={styles.tabs}
                     rightIcon={rightIcon}
                 />
-                <BaseView flexDirection="column" flex={1} pb={contentExtraBottomPadding} px={24}>
+                <BaseView flexDirection="column" flex={1} px={24}>
                     {selectedTab === "TOKENS" && <Tokens isEmptyStateShown={showNewUserVeBetterCard} />}
                     {selectedTab === "STAKING" && <Staking />}
                     {selectedTab === "COLLECTIBLES" && <Collectibles />}
                 </BaseView>
             </Animated.View>
-            {showNewUserVeBetterCard && <BannersCarousel location="home_screen" />}
+            {showNewUserVeBetterCard && <BannersCarousel location="home_screen" baseWidth={SCREEN_WIDTH - 24} />}
         </Animated.View>
     )
 }

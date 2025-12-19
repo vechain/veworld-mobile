@@ -509,6 +509,30 @@ export const enrichActivityWithDappData = (activity: Activity, appName?: string,
 }
 
 /**
+ * This function enriches an existing activity object with tracking data.
+ *
+ * @param activity - The activity to be enriched.
+ * @returns A new activity object enriched with tracking data.
+ */
+export const enrichActivityWithTrackingData = (
+    activity: Activity,
+    {
+        appName,
+        appUrl,
+        ...rest
+    }: {
+        appName?: string
+        appUrl?: string
+    } & Pick<Activity, "medium" | "signature" | "context" | "subject">,
+): Activity => {
+    return {
+        ...activity,
+        dappUrlOrName: appUrl ?? appName,
+        ...rest,
+    }
+}
+
+/**
  * Process an activity based on its type.
  *
  * @param activity - The activity to be processed.

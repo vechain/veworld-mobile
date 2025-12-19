@@ -1,4 +1,5 @@
 import {
+    createRecentContact,
     invalidateUserTokens,
     selectLastReviewTimestamp,
     selectSelectedAccount,
@@ -90,6 +91,7 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
 
             throw e
         } finally {
+            dispatch(createRecentContact(signedTransaction.body.clauses, selectedNetwork.genesis.id))
             // Ensure app loading state is reset even if there's an error
             dispatch(setIsAppLoading(false))
         }

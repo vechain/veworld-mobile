@@ -1,4 +1,4 @@
-import { keepPreviousData, queryOptions } from "@tanstack/react-query"
+import { queryOptions } from "@tanstack/react-query"
 import { ThorClient } from "@vechain/sdk-network"
 import { Network } from "~Model"
 import { BalanceUtils } from "~Utils"
@@ -27,7 +27,14 @@ export const getUseTokenBalanceConfig = ({
     queryOptions({
         queryKey: buildUseTokenBalanceQueryKey({ address, networkGenesisId: network.genesis.id, tokenAddress }),
         queryFn: () =>
-            BalanceUtils.getBalancesFromBlockchain([tokenAddress], address, network, thor).then(res => res[0]),
+            BalanceUtils.getBalancesFromBlockchain([tokenAddress], address, network, thor).then(
+                res =>
+                    res[0] ?? {
+                        balance: "0",
+                        isHidden: false,
+                        timeUpdated: new Date().toISOString(),
+                        tokenAddress,
+                    },
+            ),
         staleTime: 10 * 60 * 1000,
-        placeholderData: keepPreviousData,
     })

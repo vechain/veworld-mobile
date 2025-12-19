@@ -29,6 +29,8 @@ import { DappDetails } from "../DappDetails"
 import { DappDetailsCard } from "../DappDetailsCard"
 import { Signable } from "../Signable"
 import { LedgerDeviceAlert as TypedDataLedgerDeviceAlert } from "../TypedDataBottomSheet/LedgerDeviceAlert"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 
 type Props = {
     request: LoginRequest
@@ -217,6 +219,7 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
 }
 
 export const LoginBottomSheet = () => {
+    const { LL } = useI18nContext()
     const { loginBsRef, loginBsData, setLoginBsData } = useInteraction()
     const { onClose: onCloseBs } = useBottomSheetModal({ externalRef: loginBsRef })
 
@@ -278,6 +281,7 @@ export const LoginBottomSheet = () => {
                 case "certificate": {
                     const { certificate, payload } = buildCertificate(request)!
                     const signature = await signMessage(payload, password)
+
                     return {
                         signature: HexUtils.addPrefix(signature!.toString("hex")),
                         annex: {
@@ -377,6 +381,12 @@ export const LoginBottomSheet = () => {
                     }),
                 )
 
+                Feedback.show({
+                    message: LL.FEEDBACK_APP_CONNECTED(),
+                    type: FeedbackType.ALERT,
+                    severity: FeedbackSeverity.SUCCESS,
+                })
+
                 track(AnalyticsEvent.DAPP_LOGIN_SUCCESS)
                 isUserAction.current = true
             } catch (err) {
@@ -390,7 +400,7 @@ export const LoginBottomSheet = () => {
             }
             onCloseBs()
         },
-        [buildCertificate, dispatch, nav, onCloseBs, postMessage, selectedAccount, signRequest, track],
+        [buildCertificate, dispatch, nav, onCloseBs, postMessage, selectedAccount, signRequest, track, LL],
     )
 
     const rejectRequest = useCallback(

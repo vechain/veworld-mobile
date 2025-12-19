@@ -1,13 +1,46 @@
 import { uniq } from "lodash"
 import { findFirstInvolvedAccount } from "../Helpers"
 import { NFTTransferHandlerProps, TokenTransferHandlerProps } from "./index"
+import AddressUtils from "~Utils/AddressUtils"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { NAVIGATION_REF, Routes } from "~Navigation"
+import { TranslationFunctions } from "~i18n"
+import { FetchIncomingTransfersResponse } from "~Networking/API/Types"
+import { AccountWithDevice } from "~Model"
 
-export const handleNFTTransfers = async ({
-    visibleAccounts,
-    transfers,
-    network,
-    updateNFTs,
-}: NFTTransferHandlerProps) => {
+const showTransferReceivedFeedback = (
+    transfers: FetchIncomingTransfersResponse["data"],
+    selectedAccount: AccountWithDevice,
+    LL: TranslationFunctions,
+) => {
+    const selectedAccountTransfers = transfers.filter(t => AddressUtils.compareAddresses(t.to, selectedAccount.address))
+
+    if (selectedAccountTransfers.length > 0) {
+        Feedback.show({
+            message:
+                selectedAccountTransfers.length > 1
+                    ? LL.FEEDBACK_N_TRANSFERS_RECEIVED({ count: selectedAccountTransfers.length })
+                    : LL.FEEDBACK_TRANSFER_RECEIVED(),
+            severity: FeedbackSeverity.SUCCESS,
+            type: FeedbackType.ALERT,
+            icon: "icon-arrow-down",
+            onPress: () => {
+                NAVIGATION_REF.navigate(Routes.HISTORY_STACK, {
+                    screen: Routes.HISTORY,
+                    params: {
+                        screen: Routes.ACTIVITY_ALL,
+                    },
+                })
+            },
+        })
+    }
+}
+
+export const handleNFTTransfers = async (
+    { visibleAccounts, transfers, selectedAccount, network, updateNFTs }: NFTTransferHandlerProps,
+    LL: TranslationFunctions,
+) => {
     if (transfers.length === 0) return
 
     // Update NFTs for accounts that have been changed
@@ -18,15 +51,22 @@ export const handleNFTTransfers = async ({
     const transfer = transfers[0]
     const foundAccount = findFirstInvolvedAccount(visibleAccounts, transfer)
     if (!foundAccount) return
+
+    showTransferReceivedFeedback(transfers, selectedAccount, LL)
 }
 
-export const handleTokenTransfers = ({ transfers, updateBalances }: TokenTransferHandlerProps) => {
+export const handleTokenTransfers = (
+    { transfers, selectedAccount, updateBalances }: TokenTransferHandlerProps,
+    LL: TranslationFunctions,
+) => {
     if (transfers.length === 0) return
 
     // Update Balances for accounts that have been changed
     const changedAccounts = uniq([...transfers.map(t => t.to), ...transfers.map(t => t.from)])
 
     changedAccounts.forEach(accountAddress => updateBalances({ accountAddress }))
+
+    showTransferReceivedFeedback(transfers, selectedAccount, LL)
 }
 
 export default { handleNFTTransfers, handleTokenTransfers }

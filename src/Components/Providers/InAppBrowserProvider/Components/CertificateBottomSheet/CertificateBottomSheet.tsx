@@ -27,6 +27,8 @@ import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { DappWithDetails } from "../DappWithDetails"
 import { Signable } from "../Signable"
 import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 
 type Request = {
     request: CertificateRequest
@@ -140,6 +142,7 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
 }
 
 export const CertificateBottomSheet = () => {
+    const { LL } = useI18nContext()
     const { certificateBsRef, certificateBsData, setCertificateBsData } = useInteraction()
     const { onClose: onCloseBs } = useBottomSheetModal({ externalRef: certificateBsRef })
 
@@ -148,7 +151,7 @@ export const CertificateBottomSheet = () => {
     const track = useAnalyticTracking()
 
     const { postMessage } = useInAppBrowser()
-    const { createSessionIfNotExists } = useLoginSession()
+    const { getLoginSession, createSessionIfNotExists } = useLoginSession()
 
     const { failRequest, processRequest } = useWalletConnect()
 
@@ -241,6 +244,14 @@ export const CertificateBottomSheet = () => {
 
                 createSessionIfNotExists(request)
 
+                const session = getLoginSession(request.appUrl)
+                if (!session || session.replaceable) {
+                    Feedback.show({
+                        message: LL.FEEDBACK_APP_CONNECTED(),
+                        type: FeedbackType.ALERT,
+                        severity: FeedbackSeverity.SUCCESS,
+                    })
+                }
                 track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
                 isUserAction.current = true
             } catch (err: unknown) {
@@ -263,19 +274,21 @@ export const CertificateBottomSheet = () => {
             onCloseBs()
         },
         [
-            buildCertificate,
-            createSessionIfNotExists,
-            dispatch,
-            failRequest,
-            nav,
             onCloseBs,
-            onFailure,
-            onSuccess,
-            postMessage,
-            processRequest,
+            buildCertificate,
             selectedAccount,
             signMessage,
+            dispatch,
+            createSessionIfNotExists,
+            getLoginSession,
             track,
+            nav,
+            processRequest,
+            onSuccess,
+            postMessage,
+            LL,
+            failRequest,
+            onFailure,
         ],
     )
 

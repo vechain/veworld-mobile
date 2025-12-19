@@ -1,6 +1,8 @@
 import { ProposalTypes, SessionTypes } from "@walletconnect/types"
 import { useCallback, useMemo, useState } from "react"
-import { showErrorToast, showSuccessToast } from "~Components/Base"
+import { showErrorToast } from "~Components/Base"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
@@ -70,10 +72,10 @@ export const useWcConnect = ({ onCloseBs }: { onCloseBs: () => void }) => {
 
                 dispatch(addConnectedAppActivity(request.appName, new URL(request.appUrl).origin, request.description))
 
-                showSuccessToast({
-                    text1: LL.NOTIFICATION_wallet_connect_successfull_connection({
-                        name: request.appName,
-                    }),
+                Feedback.show({
+                    message: LL.FEEDBACK_APP_CONNECTED(),
+                    type: FeedbackType.ALERT,
+                    severity: FeedbackSeverity.SUCCESS,
                 })
             } catch (err: unknown) {
                 error(ERROR_EVENTS.WALLET_CONNECT, err)

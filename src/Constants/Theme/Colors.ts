@@ -75,6 +75,7 @@ export type Colors = {
     accountCard: string
     marketInfoBackground: string
     favoriteHeader: string
+    textInputFocusedBorderColor: string
     successVariant: {
         background: string
         border: string
@@ -366,6 +367,29 @@ export type Colors = {
         title: string
         optionTitle: string
     }
+    defaultIcon: {
+        border: string
+        background: string
+        color: string
+    }
+    sendScreen: {
+        tokenAmountCard: {
+            background: string
+            maxButtonBorder: string
+            maxButtonText: string
+            tokenSelectIcon: string
+            tokenSelectorBorder: string
+            tokenSelectorText: string
+            disabledTokenCardBackground: string
+        }
+        summaryScreen: {
+            background: string
+            caption: string
+            address: string
+        }
+        stepText: string
+        stepBackground: string
+    }
     transak: string
 }
 
@@ -571,6 +595,7 @@ const light: Colors = {
     graphStatsText: COLORS.GREY_600,
     marketInfoBackground: COLORS.GREY_200,
     favoriteHeader: COLORS.PURPLE,
+    textInputFocusedBorderColor: COLORS.PURPLE,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -862,6 +887,29 @@ const light: Colors = {
         title: COLORS.PURPLE,
         optionTitle: COLORS.GREY_600,
     },
+    defaultIcon: {
+        border: COLORS.GREY_200,
+        background: COLORS.GREY_200,
+        color: COLORS.GREY_600,
+    },
+    sendScreen: {
+        tokenAmountCard: {
+            background: COLORS.WHITE,
+            maxButtonBorder: COLORS.GREY_200,
+            maxButtonText: COLORS.GREY_600,
+            tokenSelectIcon: COLORS.GREY_500,
+            tokenSelectorBorder: COLORS.GREY_100,
+            tokenSelectorText: COLORS.GREY_700,
+            disabledTokenCardBackground: COLORS.GREY_100,
+        },
+        summaryScreen: {
+            background: COLORS.GREY_50,
+            caption: COLORS.GREY_500,
+            address: COLORS.GREY_800,
+        },
+        stepText: COLORS.GREY_700,
+        stepBackground: COLORS.GREY_200,
+    },
     transak: COLORS.WHITE,
 }
 
@@ -942,6 +990,7 @@ const dark: Colors = {
     graphStatsText: COLORS.GREY_400,
     marketInfoBackground: COLORS.PURPLE_DISABLED,
     favoriteHeader: COLORS.GREY_50,
+    textInputFocusedBorderColor: COLORS.LIME_GREEN,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,
@@ -1232,6 +1281,29 @@ const dark: Colors = {
         background: COLORS.PURPLE_DISABLED,
         title: COLORS.WHITE,
         optionTitle: COLORS.GREY_300,
+    },
+    defaultIcon: {
+        border: COLORS.PURPLE_DISABLED,
+        background: COLORS.PURPLE_DISABLED,
+        color: COLORS.GREY_100,
+    },
+    sendScreen: {
+        tokenAmountCard: {
+            background: COLORS.PURPLE_DISABLED,
+            maxButtonBorder: COLORS.DARK_PURPLE_DISABLED,
+            maxButtonText: COLORS.GREY_100,
+            tokenSelectIcon: COLORS.GREY_300,
+            tokenSelectorBorder: COLORS.DARK_PURPLE_DISABLED,
+            tokenSelectorText: COLORS.GREY_100,
+            disabledTokenCardBackground: COLORS.PURPLE_DISABLED,
+        },
+        summaryScreen: {
+            background: COLORS.PURPLE_DISABLED,
+            caption: COLORS.GREY_300,
+            address: COLORS.WHITE,
+        },
+        stepText: COLORS.GREY_100,
+        stepBackground: COLORS.PURPLE_DISABLED,
     },
     transak: COLORS.TRANSAK_DARK,
 }

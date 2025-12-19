@@ -1911,6 +1911,18 @@ type RootTranslation = {
 	 */
 	COMMON_24H_VOLUME: string
 	/**
+	 * D​i​s​p​l​a​y​e​d​ ​a​m​o​u​n​t​s​ ​h​a​v​e​ ​b​e​e​n​ ​u​p​d​a​t​e​d​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​l​a​t​e​s​t​ ​m​a​r​k​e​t​ ​p​r​i​c​e​.
+	 */
+	COMMON_ALERT_DISPLAYED_AMOUNTS_UPDATED: string
+	/**
+	 * T​o​k​e​n​ ​a​m​o​u​n​t​ ​a​d​j​u​s​t​e​d​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​.
+	 */
+	COMMON_ALERT_TOKEN_AMOUNT_ADJUSTED_FOR_FEE: string
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	COMMON_ALERT_TRANSACTION_FAILED: string
+	/**
 	 * A​s​s​e​t​s
 	 */
 	COMMON_ASSETS: string
@@ -1922,6 +1934,10 @@ type RootTranslation = {
 	 * A​p​p​l​y
 	 */
 	COMMON_BTN_APPLY: string
+	/**
+	 * B​a​c​k
+	 */
+	COMMON_BTN_BACK: string
 	/**
 	 * C​a​n​c​e​l
 	 */
@@ -2039,6 +2055,10 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_BACK: string
 	/**
+	 * C​l​o​s​e
+	 */
+	COMMON_LBL_CLOSE: string
+	/**
 	 * C​o​m​m​e​n​t
 	 */
 	COMMON_LBL_COMMENT: string
@@ -2067,6 +2087,10 @@ type RootTranslation = {
 	 * F​a​v​o​r​i​t​e​s
 	 */
 	COMMON_LBL_FAVOURITES: string
+	/**
+	 * I​D
+	 */
+	COMMON_LBL_ID: string
 	/**
 	 * I​m​p​o​r​t
 	 */
@@ -2116,6 +2140,10 @@ type RootTranslation = {
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
 	COMMON_MARKET_CAP: string
+	/**
+	 * M​a​x
+	 */
+	COMMON_MAX: string
 	/**
 	 * N​.​A​.
 	 */
@@ -2506,6 +2534,27 @@ type RootTranslation = {
 	 */
 	DAPP_LOGIN_TITLE: string
 	/**
+	 * T​h​i​s​ ​a​p​p​ ​h​a​s​n​'​t​ ​b​e​e​n​ ​v​e​r​i​f​i​e​d​ ​b​y​ ​V​e​W​o​r​l​d​ ​a​n​d​ ​a​c​c​e​s​s​ ​h​a​s​ ​b​e​e​n​ ​b​l​o​c​k​e​d​.​
+​U​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​m​a​l​i​c​i​o​u​s​ ​a​n​d​ ​c​o​u​l​d​ ​p​u​t​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​.
+	 */
+	DAPP_NOT_VERIFIED_BROWSER_WARNING_SUBTITLE: string
+	/**
+	 * A​p​p​ ​n​o​t​ ​v​e​r​i​f​i​e​d
+	 */
+	DAPP_NOT_VERIFIED_BROWSER_WARNING_TITLE: string
+	/**
+	 * S​w​i​t​c​h​ ​n​e​t​w​o​r​k
+	 */
+	DAPP_NOT_VERIFIED_SWITCH_NETWORK: string
+	/**
+	 * A​d​d​ ​y​o​u​r​ ​a​p​p​ ​t​o​ ​t​h​e​ ​a​p​p​ ​h​u​b​ ​t​o​ ​g​e​t​ ​v​e​r​i​f​i​e​d​.
+	 */
+	DAPP_OWNED_DESCRIPTION: string
+	/**
+	 * A​p​p​ ​d​e​v​e​l​o​p​e​r​?
+	 */
+	DAPP_OWNED_TITLE: string
+	/**
 	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	DAPP_SIGN_CERT: string
@@ -2521,6 +2570,14 @@ type RootTranslation = {
 	 * D​A​p​p​ ​T​r​a​n​s​a​c​t​i​o​n
 	 */
 	DAPP_TRANSACTION_TITLE: string
+	/**
+	 * M​a​n​a​g​e​ ​i​n​ ​s​e​t​t​i​n​g​s​.
+	 */
+	DAPP_TRUSTED_DESCRIPTION: string
+	/**
+	 * T​r​u​s​t​ ​t​h​i​s​ ​a​p​p​?
+	 */
+	DAPP_TRUSTED_TITLE: string
 	/**
 	 * D​a​r​k
 	 */
@@ -3007,13 +3064,26 @@ type RootTranslation = {
 	 */
 	FEBRUARY: string
 	/**
+	 * A​p​p​ ​c​o​n​n​e​c​t​e​d​!
+	 */
+	FEEDBACK_APP_CONNECTED: string
+	/**
 	 * F​a​v​o​r​i​t​e​d​!
 	 */
 	FEEDBACK_FAVORITED: string
 	/**
+	 * {​c​o​u​n​t​}​ ​T​r​a​n​s​f​e​r​s​ ​r​e​c​e​i​v​e​d
+	 * @param {number} count
+	 */
+	FEEDBACK_N_TRANSFERS_RECEIVED: RequiredParams<'count'>
+	/**
 	 * S​e​t​ ​a​s​ ​a​v​a​t​a​r​!
 	 */
 	FEEDBACK_SET_AVATAR: string
+	/**
+	 * T​r​a​n​s​f​e​r​ ​r​e​c​e​i​v​e​d
+	 */
+	FEEDBACK_TRANSFER_RECEIVED: string
 	/**
 	 * F​i​n​g​e​r​p​r​i​n​t
 	 */
@@ -3335,6 +3405,50 @@ type RootTranslation = {
 	 */
 	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: string
 	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​n​e​t​w​o​r​k
+	 */
+	NETWORKS_BS_SUBTITLE: string
+	/**
+	 * N​e​t​w​o​r​k​s
+	 */
+	NETWORKS_BS_TITLE: string
+	/**
+	 * N​e​t​w​o​r​k​ ​a​d​d​e​d
+	 */
+	NETWORK_ADDED: string
+	/**
+	 * A​d​d​ ​c​u​s​t​o​m
+	 */
+	NETWORK_ADD_CUSTOM: string
+	/**
+	 * A​d​d​ ​c​u​s​t​o​m​ ​n​e​t​w​o​r​k
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK: string
+	/**
+	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​n​o​d​e​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_DESC: string
+	/**
+	 * N​o​d​e​ ​n​a​m​e
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_LABEL: string
+	/**
+	 * I​n​s​e​r​t​ ​t​h​e​ ​n​a​m​e
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_PLACEHOLDER: string
+	/**
+	 * U​R​L​ ​i​n​v​a​l​i​d​ ​o​r​ ​n​o​d​e​ ​c​o​n​f​i​g​u​r​a​t​i​o​n​ ​i​s​s​u​e
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_ERROR: string
+	/**
+	 * U​R​L
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_LABEL: string
+	/**
+	 * h​t​t​p​s​:​/​/​.​.​.
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_PLACEHOLDER: string
+	/**
 	 * A​d​d​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
 	NETWORK_ADD_CUSTOM_NODE: string
@@ -3371,11 +3485,11 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_MAINNET: string
 	/**
-	 * M​a​i​n​ ​N​e​t​w​o​r​k​s
+	 * M​a​i​n​n​e​t
 	 */
 	NETWORK_LABEL_MAIN_NETWORKS: string
 	/**
-	 * O​t​h​e​r​ ​N​e​t​w​o​r​k​s
+	 * C​u​s​t​o​m​ ​n​e​t​w​o​r​k​s
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: string
 	/**
@@ -3383,13 +3497,21 @@ type RootTranslation = {
 	 */
 	NETWORK_LABEL_TESTNET: string
 	/**
-	 * T​e​s​t​ ​N​e​t​w​o​r​k​s
+	 * T​e​s​t​n​e​t
 	 */
 	NETWORK_LABEL_TEST_NETWORKS: string
 	/**
 	 * M​a​n​a​g​e​ ​n​o​d​e​s
 	 */
 	NETWORK_MANAGE_NODES: string
+	/**
+	 * N​e​t​w​o​r​k​ ​r​e​m​o​v​e​d
+	 */
+	NETWORK_REMOVED: string
+	/**
+	 * N​e​t​w​o​r​k​ ​s​w​i​t​c​h​e​d
+	 */
+	NETWORK_SWITCHED: string
 	/**
 	 * O​n​l​y​ ​V​e​c​h​a​i​n​ ​n​e​t​w​o​r​k​ ​s​u​p​p​o​r​t​e​d
 	 */
@@ -4189,9 +4311,13 @@ type RootTranslation = {
 	 */
 	SB_SECURITY_METHOD: string
 	/**
-	 * S​e​l​e​c​t​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e
+	 * L​a​n​g​u​a​g​e
 	 */
 	SB_SELECT_LANGUAGE: string
+	/**
+	 * C​h​a​n​g​e​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​l​a​n​g​u​a​g​e
+	 */
+	SB_SELECT_LANGUAGE_DESC: string
 	/**
 	 * I​n​s​e​r​t​ ​t​h​e​ ​p​i​n​ ​y​o​u​ ​c​r​e​a​t​e​d​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​.
 	 */
@@ -4305,26 +4431,70 @@ type RootTranslation = {
 	 */
 	SEND_ACCEPT_NO_GAS_TITLE: string
 	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​'​s​ ​a​c​c​o​u​n​t​s​ ​w​i​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​o​n​c​e​ ​a​d​d​e​d​.
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_DESCRIPTION: string
+	/**
+	 * N​o​ ​a​c​c​o​u​n​t​s​ ​f​o​u​n​d​s
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_TITLE: string
+	/**
+	 * M​y​ ​a​c​c​o​u​n​t​s
+	 */
+	SEND_ACCOUNTS_SECTION_TITLE_MY_ACCOUNTS: string
+	/**
+	 * W​a​t​c​h​i​n​g
+	 */
+	SEND_ACCOUNTS_SECTION_TITLE_WATCHING_ACCOUNTS: string
+	/**
 	 * A​m​o​u​n​t
 	 */
 	SEND_AMOUNT: string
+	/**
+	 * A​m​o​u​n​t​ ​e​x​c​e​e​d​s​ ​b​a​l​a​n​c​e
+	 */
+	SEND_AMOUNT_EXCEEDS_BALANCE: string
 	/**
 	 * B​a​l​a​n​c​e​ ​p​e​r​c​e​n​t​a​g​e​:​ ​{​p​e​r​c​e​n​t​a​g​e​}
 	 * @param {string} percentage
 	 */
 	SEND_BALANCE_PERCENTAGE: RequiredParams<'percentage'>
 	/**
-	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
+	 * S​e​n​d​ ​c​o​l​l​e​c​t​i​b​l​e
+	 */
+	SEND_COLLECTIBLE: string
+	/**
+	 * A​d​d​ ​y​o​u​r​ ​f​i​r​s​t​ ​c​o​n​t​a​c​t​ ​t​o​ ​s​e​n​d​ ​f​a​s​t​e​r​ ​a​n​d​ ​a​v​o​i​d​ ​e​r​r​o​r​s​.
+	 */
+	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: string
+	/**
+	 * N​o​ ​c​o​n​t​a​c​t​s​ ​a​d​d​e​d
+	 */
+	SEND_CONTACTS_EMPTY_STATE_TITLE: string
+	/**
+	 * W​a​l​l​e​t​ ​a​d​d​r​e​s​s
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: string
+	/**
+	 * I​n​s​e​r​t​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s
+	 */
+	SEND_CREATE_CONTACT_ADDRESS_PLACEHOLDER: string
 	/**
 	 * C​R​E​A​T​E​ ​C​O​N​T​A​C​T
 	 */
 	SEND_CREATE_CONTACT_CREATE_BUTTON: string
 	/**
-	 * C​o​n​t​a​c​t​ ​n​a​m​e
+	 * A​d​d​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​t​o​ ​M​y​ ​C​o​n​t​a​c​t​s
+	 */
+	SEND_CREATE_CONTACT_DESCRIPTION: string
+	/**
+	 * N​a​m​e
 	 */
 	SEND_CREATE_CONTACT_NAME: string
+	/**
+	 * I​n​s​e​r​t​ ​c​o​n​t​a​c​t​ ​n​a​m​e
+	 */
+	SEND_CREATE_CONTACT_NAME_PLACEHOLDER: string
 	/**
 	 * P​R​O​C​E​E​D​ ​A​N​Y​W​A​Y
 	 */
@@ -4334,7 +4504,7 @@ type RootTranslation = {
 	 */
 	SEND_CREATE_CONTACT_SUBTITLE: string
 	/**
-	 * C​r​e​a​t​e​ ​c​o​n​t​a​c​t
+	 * A​d​d​ ​c​o​n​t​a​c​t
 	 */
 	SEND_CREATE_CONTACT_TITLE: string
 	/**
@@ -4551,6 +4721,56 @@ type RootTranslation = {
 	 */
 	SEND_RANGE_ZERO: string
 	/**
+	 * R​e​c​e​i​v​e​r
+	 */
+	SEND_RECEIVER: string
+	/**
+	 * C​l​e​a​r
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: string
+	/**
+	 * I​n​v​a​l​i​d​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​,​ ​u​s​e​r​n​a​m​e​ ​o​r​ ​d​o​m​a​i​n
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_ERROR: string
+	/**
+	 * W​a​l​l​e​t​ ​a​d​d​r​e​s​s
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_LABEL: string
+	/**
+	 * P​a​s​t​e
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PASTE: string
+	/**
+	 * W​a​l​l​e​t​ ​o​r​ ​d​o​m​a​i​n
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER: string
+	/**
+	 * A​d​d​ ​t​h​i​s​ ​n​e​w​ ​a​d​d​r​e​s​s​ ​t​o​ ​m​y​ ​c​o​n​t​a​c​t​s
+	 */
+	SEND_RECEIVER_ADD_CONTACT_BTN: string
+	/**
+	 * R​e​v​i​e​w​ ​d​e​t​a​i​l​s
+	 */
+	SEND_RECEIVER_DETAILS: string
+	/**
+	 * {​c​u​r​r​e​n​t​}​ ​o​f​ ​{​t​o​t​a​l​}
+	 * @param {number} current
+	 * @param {number} total
+	 */
+	SEND_RECEIVER_DETAILS_COUNT: RequiredParams<'current' | 'total'>
+	/**
+	 * A​c​c​o​u​n​t​s
+	 */
+	SEND_RECEIVER_FILTER_ACCOUNTS: string
+	/**
+	 * C​o​n​t​a​c​t​s
+	 */
+	SEND_RECEIVER_FILTER_CONTACTS: string
+	/**
+	 * R​e​c​e​n​t
+	 */
+	SEND_RECEIVER_FILTER_RECENT: string
+	/**
 	 * R​e​c​e​i​v​e
 	 */
 	SEND_RECEIVE_TAB_RECEIVE: string
@@ -4559,9 +4779,40 @@ type RootTranslation = {
 	 */
 	SEND_RECEIVE_TAB_SCAN: string
 	/**
+	 * O​n​c​e​ ​y​o​u​ ​s​e​n​d​ ​t​o​ ​a​n​ ​a​d​d​r​e​s​s​,​ ​i​t​’​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​f​o​r​ ​q​u​i​c​k​ ​a​c​c​e​s​s​.
+	 */
+	SEND_RECENT_EMPTY_STATE_DESCRIPTION: string
+	/**
+	 * N​o​ ​r​e​c​e​n​t​ ​a​c​t​i​v​i​t​y
+	 */
+	SEND_RECENT_EMPTY_STATE_TITLE: string
+	/**
+	 * R​e​v​i​e​w​ ​d​e​t​a​i​l​s
+	 */
+	SEND_REVIEW_DETAILS: string
+	/**
+	 * {​c​u​r​r​e​n​t​S​t​e​p​}​ ​o​f​ ​{​t​o​t​a​l​S​t​e​p​s​}
+	 * @param {string} currentStep
+	 * @param {string} totalSteps
+	 */
+	SEND_STEP_OF: RequiredParams<'currentStep' | 'totalSteps'>
+	/**
+	 * {​s​t​e​p​N​u​m​b​e​r​}​ ​o​f​ ​3
+	 * @param {string} stepNumber
+	 */
+	SEND_STEP_OF_3: RequiredParams<'stepNumber'>
+	/**
 	 * T​o
 	 */
 	SEND_TO: string
+	/**
+	 * T​o​k​e​n​ ​a​m​o​u​n​t
+	 */
+	SEND_TOKEN_AMOUNT: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d
+	 */
+	SEND_TOKEN_SELECT: string
 	/**
 	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
 	 */
@@ -4604,6 +4855,10 @@ type RootTranslation = {
 	 * S​e​n​d​i​n​g​ ​V​O​T​3
 	 */
 	SEND_VOT3_TITLE: string
+	/**
+	 * V​O​T​3​ ​t​o​k​e​n​s​ ​s​h​o​u​l​d​n​'​t​ ​b​e​ ​s​e​n​t​ ​d​i​r​e​c​t​l​y​ ​t​o​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​.​ ​V​O​T​3​ ​c​a​n​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​t​o​ ​B​3​T​R​ ​t​o​k​e​n​s​ ​a​n​d​ ​s​e​n​t​ ​a​f​t​e​r​w​a​r​d​s​.
+	 */
+	SEND_VOT3_WARNING: string
 	/**
 	 * V​e​c​h​a​i​n​ ​f​a​c​i​l​i​t​a​t​e​s​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​u​s​i​n​g​ ​V​T​H​O​ ​a​s​ ​t​h​e​ ​p​a​y​m​e​n​t​ ​m​e​d​i​u​m​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​O​u​r​ ​M​A​X​ ​c​a​l​c​u​l​a​t​i​o​n​ ​m​e​t​h​o​d​ ​w​i​l​l​ ​d​e​d​u​c​t​ ​a​ ​p​r​e​d​e​f​i​n​e​d​ ​b​a​s​e​ ​f​e​e​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​g​a​s
 	 */
@@ -4704,6 +4959,34 @@ type RootTranslation = {
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: string
 	/**
+	 * Y​e​s​,​ ​a​l​l​o​w
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW: string
+	/**
+	 * N​o​,​ ​g​o​ ​b​a​c​k
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_BACK: string
+	/**
+	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​s​c​a​m​s​ ​a​n​d​ ​c​a​n​ ​l​e​a​d​ ​t​o​ ​a​s​s​e​t​ ​l​o​s​s​.​ ​D​i​s​a​b​l​e​ ​a​f​t​e​r​ ​u​s​e​.
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_SUBTITLE: string
+	/**
+	 * A​l​l​o​w​ ​u​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_TITLE: string
+	/**
+	 * A​l​l​o​w​i​n​g​ ​u​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​l​e​t​s​ ​y​o​u​ ​o​p​e​n​ ​a​p​p​s​ ​t​h​a​t​ ​h​a​v​e​n​'​t​ ​b​e​e​n​ ​r​e​v​i​e​w​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.​ ​T​h​e​s​e​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​m​a​l​i​c​i​o​u​s​ ​a​n​d​ ​c​o​u​l​d​ ​p​u​t​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​.
+	 */
+	SETTING_UNVERIFIED_APP_SUBTITLE: string
+	/**
+	 * U​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_TITLE: string
+	/**
+	 * A​l​l​o​w​ ​u​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_TOGGLE_CTA: string
+	/**
 	 * S​h​a​r​e
 	 */
 	SHARE: string
@@ -4789,6 +5072,23 @@ type RootTranslation = {
 	 * M​a​n​a​g​i​n​g
 	 */
 	STARGATE_DELEGATEE_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​e​d
+	 */
+	STARGATE_DELEGATION_STATUS_DELEGATED: string
+	/**
+	 * E​x​i​t​i​n​g
+	 */
+	STARGATE_DELEGATION_STATUS_EXITING: string
+	/**
+	 * E​x​i​t​i​n​g​ ​i​n​ ​{​d​a​y​s​}​ ​d​a​y​s
+	 * @param {number} days
+	 */
+	STARGATE_DELEGATION_STATUS_EXITING_IN_DAYS: RequiredParams<'days'>
+	/**
+	 * N​o​t​ ​d​e​l​e​g​a​t​e​d
+	 */
+	STARGATE_DELEGATION_STATUS_NOT_DELEGATED: string
 	/**
 	 * L​o​c​k​e​d
 	 */
@@ -5226,6 +5526,10 @@ type RootTranslation = {
 	 */
 	TODAY: string
 	/**
+	 * T​o​k​e​n
+	 */
+	TOKEN: string
+	/**
 	 * B​u​y​ ​t​o​k​e​n
 	 */
 	TOKEN_BUY: string
@@ -5352,6 +5656,38 @@ type RootTranslation = {
 	 * u​s​e​r​n​a​m​e
 	 */
 	USERNAME: string
+	/**
+	 * T​h​e​ ​v​a​l​i​d​a​t​o​r​ ​{​v​a​l​i​d​a​t​o​r​N​a​m​e​}​ ​i​s​ ​n​o​ ​l​o​n​g​e​r​ ​a​c​t​i​v​e​.​ ​A​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r​ ​m​u​s​t​ ​b​e​ ​s​e​l​e​c​t​e​d​ ​t​o​ ​c​o​n​t​i​n​u​e​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​.
+	 * @param {string} validatorName
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION: RequiredParams<'validatorName'>
+	/**
+	 * T​h​e​ ​v​a​l​i​d​a​t​o​r​ ​{​v​a​l​i​d​a​t​o​r​N​a​m​e​s​}​ ​a​r​e​ ​n​o​ ​l​o​n​g​e​r​ ​a​c​t​i​v​e​.​ ​N​e​w​ ​v​a​l​i​d​a​t​o​r​ ​m​u​s​t​ ​b​e​ ​s​e​l​e​c​t​e​d​ ​t​o​ ​c​o​n​t​i​n​u​e​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​.
+	 * @param {string} validatorNames
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION_MULTIPLE: RequiredParams<'validatorNames'>
+	/**
+	 * S​t​a​r​G​a​t​e​ ​n​o​t​i​f​i​c​a​t​i​o​n
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE: string
+	/**
+	 * C​h​o​o​s​e​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR: string
+	/**
+	 * C​h​o​o​s​e​ ​n​e​w​ ​v​a​l​i​d​a​t​o​r​s
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS: string
+	/**
+	 * {​n​o​d​e​L​e​v​e​l​}​ ​n​o​d​e
+	 * @param {string} nodeLevel
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME: RequiredParams<'nodeLevel'>
+	/**
+	 * T​o​k​e​n​ ​I​D​:​ ​{​t​o​k​e​n​I​d​}
+	 * @param {string} tokenId
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID: RequiredParams<'tokenId'>
 	/**
 	 * V​a​l​u​e
 	 */
@@ -7532,6 +7868,18 @@ This action is irreversible.
 	 */
 	COMMON_24H_VOLUME: () => LocalizedString
 	/**
+	 * Displayed amounts have been updated based on the latest market price.
+	 */
+	COMMON_ALERT_DISPLAYED_AMOUNTS_UPDATED: () => LocalizedString
+	/**
+	 * Token amount adjusted for transaction fee.
+	 */
+	COMMON_ALERT_TOKEN_AMOUNT_ADJUSTED_FOR_FEE: () => LocalizedString
+	/**
+	 * Transaction failed. Please try again.
+	 */
+	COMMON_ALERT_TRANSACTION_FAILED: () => LocalizedString
+	/**
 	 * Assets
 	 */
 	COMMON_ASSETS: () => LocalizedString
@@ -7543,6 +7891,10 @@ This action is irreversible.
 	 * Apply
 	 */
 	COMMON_BTN_APPLY: () => LocalizedString
+	/**
+	 * Back
+	 */
+	COMMON_BTN_BACK: () => LocalizedString
 	/**
 	 * Cancel
 	 */
@@ -7660,6 +8012,10 @@ This action is irreversible.
 	 */
 	COMMON_LBL_BACK: () => LocalizedString
 	/**
+	 * Close
+	 */
+	COMMON_LBL_CLOSE: () => LocalizedString
+	/**
 	 * Comment
 	 */
 	COMMON_LBL_COMMENT: () => LocalizedString
@@ -7687,6 +8043,10 @@ This action is irreversible.
 	 * Favorites
 	 */
 	COMMON_LBL_FAVOURITES: () => LocalizedString
+	/**
+	 * ID
+	 */
+	COMMON_LBL_ID: () => LocalizedString
 	/**
 	 * Import
 	 */
@@ -7735,6 +8095,10 @@ This action is irreversible.
 	 * Market Cap
 	 */
 	COMMON_MARKET_CAP: () => LocalizedString
+	/**
+	 * Max
+	 */
+	COMMON_MAX: () => LocalizedString
 	/**
 	 * N.A.
 	 */
@@ -8120,6 +8484,27 @@ This action is irreversible.
 	 */
 	DAPP_LOGIN_TITLE: () => LocalizedString
 	/**
+	 * This app hasn't been verified by VeWorld and access has been blocked.
+Unverified apps may be malicious and could put your assets at risk.
+	 */
+	DAPP_NOT_VERIFIED_BROWSER_WARNING_SUBTITLE: () => LocalizedString
+	/**
+	 * App not verified
+	 */
+	DAPP_NOT_VERIFIED_BROWSER_WARNING_TITLE: () => LocalizedString
+	/**
+	 * Switch network
+	 */
+	DAPP_NOT_VERIFIED_SWITCH_NETWORK: () => LocalizedString
+	/**
+	 * Add your app to the app hub to get verified.
+	 */
+	DAPP_OWNED_DESCRIPTION: () => LocalizedString
+	/**
+	 * App developer?
+	 */
+	DAPP_OWNED_TITLE: () => LocalizedString
+	/**
 	 * Sign certificate
 	 */
 	DAPP_SIGN_CERT: () => LocalizedString
@@ -8135,6 +8520,14 @@ This action is irreversible.
 	 * DApp Transaction
 	 */
 	DAPP_TRANSACTION_TITLE: () => LocalizedString
+	/**
+	 * Manage in settings.
+	 */
+	DAPP_TRUSTED_DESCRIPTION: () => LocalizedString
+	/**
+	 * Trust this app?
+	 */
+	DAPP_TRUSTED_TITLE: () => LocalizedString
 	/**
 	 * Dark
 	 */
@@ -8620,13 +9013,25 @@ This action is irreversible.
 	 */
 	FEBRUARY: () => LocalizedString
 	/**
+	 * App connected!
+	 */
+	FEEDBACK_APP_CONNECTED: () => LocalizedString
+	/**
 	 * Favorited!
 	 */
 	FEEDBACK_FAVORITED: () => LocalizedString
 	/**
+	 * {count} Transfers received
+	 */
+	FEEDBACK_N_TRANSFERS_RECEIVED: (arg: { count: number }) => LocalizedString
+	/**
 	 * Set as avatar!
 	 */
 	FEEDBACK_SET_AVATAR: () => LocalizedString
+	/**
+	 * Transfer received
+	 */
+	FEEDBACK_TRANSFER_RECEIVED: () => LocalizedString
 	/**
 	 * Fingerprint
 	 */
@@ -8948,6 +9353,50 @@ This action is irreversible.
 	 */
 	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
+	 * Select the active network
+	 */
+	NETWORKS_BS_SUBTITLE: () => LocalizedString
+	/**
+	 * Networks
+	 */
+	NETWORKS_BS_TITLE: () => LocalizedString
+	/**
+	 * Network added
+	 */
+	NETWORK_ADDED: () => LocalizedString
+	/**
+	 * Add custom
+	 */
+	NETWORK_ADD_CUSTOM: () => LocalizedString
+	/**
+	 * Add custom network
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK: () => LocalizedString
+	/**
+	 * Add a custom node to connect to
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_DESC: () => LocalizedString
+	/**
+	 * Node name
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_LABEL: () => LocalizedString
+	/**
+	 * Insert the name
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_NAME_INPUT_PLACEHOLDER: () => LocalizedString
+	/**
+	 * URL invalid or node configuration issue
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_ERROR: () => LocalizedString
+	/**
+	 * URL
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_LABEL: () => LocalizedString
+	/**
+	 * https://...
+	 */
+	NETWORK_ADD_CUSTOM_NETWORK_URL_INPUT_PLACEHOLDER: () => LocalizedString
+	/**
 	 * Add custom node
 	 */
 	NETWORK_ADD_CUSTOM_NODE: () => LocalizedString
@@ -8984,11 +9433,11 @@ This action is irreversible.
 	 */
 	NETWORK_LABEL_MAINNET: () => LocalizedString
 	/**
-	 * Main Networks
+	 * Mainnet
 	 */
 	NETWORK_LABEL_MAIN_NETWORKS: () => LocalizedString
 	/**
-	 * Other Networks
+	 * Custom networks
 	 */
 	NETWORK_LABEL_OTHER_NETWORKS: () => LocalizedString
 	/**
@@ -8996,13 +9445,21 @@ This action is irreversible.
 	 */
 	NETWORK_LABEL_TESTNET: () => LocalizedString
 	/**
-	 * Test Networks
+	 * Testnet
 	 */
 	NETWORK_LABEL_TEST_NETWORKS: () => LocalizedString
 	/**
 	 * Manage nodes
 	 */
 	NETWORK_MANAGE_NODES: () => LocalizedString
+	/**
+	 * Network removed
+	 */
+	NETWORK_REMOVED: () => LocalizedString
+	/**
+	 * Network switched
+	 */
+	NETWORK_SWITCHED: () => LocalizedString
 	/**
 	 * Only Vechain network supported
 	 */
@@ -9777,9 +10234,13 @@ This action is irreversible.
 	 */
 	SB_SECURITY_METHOD: () => LocalizedString
 	/**
-	 * Select your language
+	 * Language
 	 */
 	SB_SELECT_LANGUAGE: () => LocalizedString
+	/**
+	 * Change the interface language
+	 */
+	SB_SELECT_LANGUAGE_DESC: () => LocalizedString
 	/**
 	 * Insert the pin you created in order to unlock your wallet.
 	 */
@@ -9893,25 +10354,69 @@ This action is irreversible.
 	 */
 	SEND_ACCEPT_NO_GAS_TITLE: () => LocalizedString
 	/**
+	 * Your wallet's accounts will show up here once added.
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_DESCRIPTION: () => LocalizedString
+	/**
+	 * No accounts founds
+	 */
+	SEND_ACCOUNTS_EMPTY_STATE_TITLE: () => LocalizedString
+	/**
+	 * My accounts
+	 */
+	SEND_ACCOUNTS_SECTION_TITLE_MY_ACCOUNTS: () => LocalizedString
+	/**
+	 * Watching
+	 */
+	SEND_ACCOUNTS_SECTION_TITLE_WATCHING_ACCOUNTS: () => LocalizedString
+	/**
 	 * Amount
 	 */
 	SEND_AMOUNT: () => LocalizedString
+	/**
+	 * Amount exceeds balance
+	 */
+	SEND_AMOUNT_EXCEEDS_BALANCE: () => LocalizedString
 	/**
 	 * Balance percentage: {percentage}
 	 */
 	SEND_BALANCE_PERCENTAGE: (arg: { percentage: string }) => LocalizedString
 	/**
-	 * Contact address
+	 * Send collectible
+	 */
+	SEND_COLLECTIBLE: () => LocalizedString
+	/**
+	 * Add your first contact to send faster and avoid errors.
+	 */
+	SEND_CONTACTS_EMPTY_STATE_DESCRIPTION: () => LocalizedString
+	/**
+	 * No contacts added
+	 */
+	SEND_CONTACTS_EMPTY_STATE_TITLE: () => LocalizedString
+	/**
+	 * Wallet address
 	 */
 	SEND_CREATE_CONTACT_ADDRESS: () => LocalizedString
+	/**
+	 * Insert wallet address
+	 */
+	SEND_CREATE_CONTACT_ADDRESS_PLACEHOLDER: () => LocalizedString
 	/**
 	 * CREATE CONTACT
 	 */
 	SEND_CREATE_CONTACT_CREATE_BUTTON: () => LocalizedString
 	/**
-	 * Contact name
+	 * Add this wallet to My Contacts
+	 */
+	SEND_CREATE_CONTACT_DESCRIPTION: () => LocalizedString
+	/**
+	 * Name
 	 */
 	SEND_CREATE_CONTACT_NAME: () => LocalizedString
+	/**
+	 * Insert contact name
+	 */
+	SEND_CREATE_CONTACT_NAME_PLACEHOLDER: () => LocalizedString
 	/**
 	 * PROCEED ANYWAY
 	 */
@@ -9921,7 +10426,7 @@ This action is irreversible.
 	 */
 	SEND_CREATE_CONTACT_SUBTITLE: () => LocalizedString
 	/**
-	 * Create contact
+	 * Add contact
 	 */
 	SEND_CREATE_CONTACT_TITLE: () => LocalizedString
 	/**
@@ -10137,6 +10642,54 @@ This action is irreversible.
 	 */
 	SEND_RANGE_ZERO: () => LocalizedString
 	/**
+	 * Receiver
+	 */
+	SEND_RECEIVER: () => LocalizedString
+	/**
+	 * Clear
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_CLEAR: () => LocalizedString
+	/**
+	 * Invalid wallet address, username or domain
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_ERROR: () => LocalizedString
+	/**
+	 * Wallet address
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_LABEL: () => LocalizedString
+	/**
+	 * Paste
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PASTE: () => LocalizedString
+	/**
+	 * Wallet or domain
+	 */
+	SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Add this new address to my contacts
+	 */
+	SEND_RECEIVER_ADD_CONTACT_BTN: () => LocalizedString
+	/**
+	 * Review details
+	 */
+	SEND_RECEIVER_DETAILS: () => LocalizedString
+	/**
+	 * {current} of {total}
+	 */
+	SEND_RECEIVER_DETAILS_COUNT: (arg: { current: number, total: number }) => LocalizedString
+	/**
+	 * Accounts
+	 */
+	SEND_RECEIVER_FILTER_ACCOUNTS: () => LocalizedString
+	/**
+	 * Contacts
+	 */
+	SEND_RECEIVER_FILTER_CONTACTS: () => LocalizedString
+	/**
+	 * Recent
+	 */
+	SEND_RECEIVER_FILTER_RECENT: () => LocalizedString
+	/**
 	 * Receive
 	 */
 	SEND_RECEIVE_TAB_RECEIVE: () => LocalizedString
@@ -10145,9 +10698,37 @@ This action is irreversible.
 	 */
 	SEND_RECEIVE_TAB_SCAN: () => LocalizedString
 	/**
+	 * Once you send to an address, it’ll show up here for quick access.
+	 */
+	SEND_RECENT_EMPTY_STATE_DESCRIPTION: () => LocalizedString
+	/**
+	 * No recent activity
+	 */
+	SEND_RECENT_EMPTY_STATE_TITLE: () => LocalizedString
+	/**
+	 * Review details
+	 */
+	SEND_REVIEW_DETAILS: () => LocalizedString
+	/**
+	 * {currentStep} of {totalSteps}
+	 */
+	SEND_STEP_OF: (arg: { currentStep: string, totalSteps: string }) => LocalizedString
+	/**
+	 * {stepNumber} of 3
+	 */
+	SEND_STEP_OF_3: (arg: { stepNumber: string }) => LocalizedString
+	/**
 	 * To
 	 */
 	SEND_TO: () => LocalizedString
+	/**
+	 * Token amount
+	 */
+	SEND_TOKEN_AMOUNT: () => LocalizedString
+	/**
+	 * Select the token you wish to send
+	 */
+	SEND_TOKEN_SELECT: () => LocalizedString
 	/**
 	 * Select the token asset you wish to send:
 	 */
@@ -10189,6 +10770,10 @@ Are you sure you want to continue?
 	 * Sending VOT3
 	 */
 	SEND_VOT3_TITLE: () => LocalizedString
+	/**
+	 * VOT3 tokens shouldn't be sent directly to another wallet. VOT3 can be converted to B3TR tokens and sent afterwards.
+	 */
+	SEND_VOT3_WARNING: () => LocalizedString
 	/**
 	 * Vechain facilitates transactions using VTHO as the payment medium for transaction fees. Our MAX calculation method will deduct a predefined base fee for transaction gas
 	 */
@@ -10286,6 +10871,34 @@ Are you sure you want to continue?
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: () => LocalizedString
 	/**
+	 * Yes, allow
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW: () => LocalizedString
+	/**
+	 * No, go back
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_BACK: () => LocalizedString
+	/**
+	 * Unverified apps may be scams and can lead to asset loss. Disable after use.
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Allow unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_TITLE: () => LocalizedString
+	/**
+	 * Allowing unverified apps lets you open apps that haven't been reviewed by VeWorld. These apps may be malicious and could put your assets at risk.
+	 */
+	SETTING_UNVERIFIED_APP_SUBTITLE: () => LocalizedString
+	/**
+	 * Unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_TITLE: () => LocalizedString
+	/**
+	 * Allow unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_TOGGLE_CTA: () => LocalizedString
+	/**
 	 * Share
 	 */
 	SHARE: () => LocalizedString
@@ -10368,6 +10981,22 @@ Here's what it's all about:
 	 * Managing
 	 */
 	STARGATE_DELEGATEE_LABEL: () => LocalizedString
+	/**
+	 * Delegated
+	 */
+	STARGATE_DELEGATION_STATUS_DELEGATED: () => LocalizedString
+	/**
+	 * Exiting
+	 */
+	STARGATE_DELEGATION_STATUS_EXITING: () => LocalizedString
+	/**
+	 * Exiting in {days} days
+	 */
+	STARGATE_DELEGATION_STATUS_EXITING_IN_DAYS: (arg: { days: number }) => LocalizedString
+	/**
+	 * Not delegated
+	 */
+	STARGATE_DELEGATION_STATUS_NOT_DELEGATED: () => LocalizedString
 	/**
 	 * Locked
 	 */
@@ -10802,6 +11431,10 @@ Available for Google and Apple Pay.
 	 */
 	TODAY: () => LocalizedString
 	/**
+	 * Token
+	 */
+	TOKEN: () => LocalizedString
+	/**
 	 * Buy token
 	 */
 	TOKEN_BUY: () => LocalizedString
@@ -10927,6 +11560,34 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * username
 	 */
 	USERNAME: () => LocalizedString
+	/**
+	 * The validator {validatorName} is no longer active. A new validator must be selected to continue earning rewards.
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION: (arg: { validatorName: string }) => LocalizedString
+	/**
+	 * The validator {validatorNames} are no longer active. New validator must be selected to continue earning rewards.
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_DESCRIPTION_MULTIPLE: (arg: { validatorNames: string }) => LocalizedString
+	/**
+	 * StarGate notification
+	 */
+	VALIDATOR_DELEGATION_EXITED_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
+	 * Choose new validator
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATOR: () => LocalizedString
+	/**
+	 * Choose new validators
+	 */
+	VALIDATOR_DELEGATION_EXITED_CHOOSE_NEW_VALIDATORS: () => LocalizedString
+	/**
+	 * {nodeLevel} node
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME: (arg: { nodeLevel: string }) => LocalizedString
+	/**
+	 * Token ID: {tokenId}
+	 */
+	VALIDATOR_DELEGATION_EXITED_NODE_NAME_TOKEN_ID: (arg: { tokenId: string }) => LocalizedString
 	/**
 	 * Value
 	 */

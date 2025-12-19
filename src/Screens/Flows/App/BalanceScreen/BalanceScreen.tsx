@@ -2,7 +2,13 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { interpolate, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
-import { BaseSpacer, Layout, VersionChangelogBottomSheet, VersionUpdateAvailableBottomSheet } from "~Components"
+import {
+    BaseSpacer,
+    Layout,
+    ValidatorDelegationExitedBottomSheet,
+    VersionChangelogBottomSheet,
+    VersionUpdateAvailableBottomSheet,
+} from "~Components"
 import { COLORS } from "~Constants"
 import { useFetchFeaturedDApps, usePrefetchAllVns, useThemedStyles } from "~Hooks"
 import { useHomeCollectibles } from "~Hooks/useHomeCollectibles"
@@ -15,6 +21,8 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
+import { DeviceBackupBottomSheet, DeviceJailBrokenWarningModal } from "../HomeScreen/Components"
+import { EnableNotificationsBottomSheet } from "../HomeScreen/Components/EnableNotificationsBottomSheet"
 import { BalanceActions } from "./Components/Actions/BalanceActions"
 import { CurrentBalance } from "./Components/Balance/CurrentBalance"
 import { PullToRefresh } from "./Components/PullToRefresh"
@@ -34,11 +42,12 @@ export const BalanceScreen = () => {
     const scrollY = useSharedValue(0)
     const contentOffsetY = useSharedValue(0)
     const headerHeight = useSharedValue(100)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
-    const { styles } = useThemedStyles(baseStyles)
 
-    const { data: officialTokens } = useOfficialTokens()
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+
+    const { styles } = useThemedStyles(baseStyles)
+    const { data: officialTokens } = useOfficialTokens()
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -126,9 +135,14 @@ export const BalanceScreen = () => {
                             <BaseSpacer height={64} />
                         </AnimatedLinearGradient>
                     </Animated.View>
+
+                    <TabRenderer onLayout={onLayout} />
+                    <DeviceBackupBottomSheet />
+                    <DeviceJailBrokenWarningModal />
+                    <EnableNotificationsBottomSheet />
+                    <ValidatorDelegationExitedBottomSheet />
                     <VersionUpdateAvailableBottomSheet />
                     <VersionChangelogBottomSheet />
-                    <TabRenderer onLayout={onLayout} />
                 </Animated.ScrollView>
             }
         />

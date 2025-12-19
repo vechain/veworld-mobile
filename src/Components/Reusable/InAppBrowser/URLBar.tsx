@@ -8,10 +8,9 @@ import { BaseIcon } from "~Components/Base/BaseIcon"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
+import { useCloseBrowser } from "~Hooks/useCloseBrowser"
 import { RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
-import { useAppSelector } from "~Storage/Redux/Hooks"
-import { selectLastNavigationSource } from "~Storage/Redux/Selectors"
 import { DAppUtils } from "~Utils/DAppUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { DAppIcon } from "../DAppIcon"
@@ -20,7 +19,7 @@ import { BrowserBottomSheet } from "./BrowserBottomSheet"
 
 type Props = {
     navigationUrl: string
-    onNavigate?: () => void | Promise<void>
+    onNavigate: () => void | Promise<void>
     returnScreen?:
         | Routes.SETTINGS
         | Routes.HOME
@@ -40,34 +39,15 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
     const { styles } = useThemedStyles(baseStyles)
     const dappMetadata = useGetDappMetadataFromUrl(navigationUrl)
     const fetchDynamicLogo = useDynamicAppLogo()
-    const lastNavigationSource = useAppSelector(selectLastNavigationSource)
 
     const nav =
         useNavigation<
             NativeStackNavigationProp<RootStackParamListSettings & RootStackParamListHome & RootStackParamListApps>
         >()
 
-    const _returnScreen = useMemo(() => {
-        if (returnScreen) return returnScreen
-
-        const validNavigationSources = [Routes.HOME, Routes.APPS, Routes.COLLECTIBLES_COLLECTION_DETAILS]
-        if (lastNavigationSource && validNavigationSources.includes(lastNavigationSource as Routes)) {
-            return lastNavigationSource as Routes.HOME | Routes.APPS | Routes.COLLECTIBLES_COLLECTION_DETAILS
-        }
-        return Routes.APPS
-    }, [returnScreen, lastNavigationSource])
-
     const { onOpen: openBottomSheet, ref: bottomSheetRef, onClose: closeBottomSheet } = useBottomSheetModal()
 
-    const navToDiscover = useCallback(async () => {
-        await onNavigate?.()
-        // Use goBack for routes that require params to avoid crashes
-        if (_returnScreen === Routes.COLLECTIBLES_COLLECTION_DETAILS) {
-            nav.goBack()
-        } else {
-            nav.navigate(_returnScreen as any)
-        }
-    }, [nav, onNavigate, _returnScreen])
+    const navigateBack = useCloseBrowser({ returnScreen, onNavigate })
 
     const navToSearch = useCallback(async () => {
         await onNavigate?.()
@@ -117,7 +97,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                         name="icon-x"
                         color={COLORS.GREY_50}
                         bg={COLORS.PURPLE}
-                        action={navToDiscover}
+                        action={navigateBack}
                         haptics="Light"
                         size={16}
                         p={8}

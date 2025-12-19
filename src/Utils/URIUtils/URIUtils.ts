@@ -196,6 +196,16 @@ const convertHttpToHttps = (url: string) => {
     return url
 }
 
+const getSecondLevelDomain = (url: string) => {
+    if (!isValid(url)) return undefined
+    return new URL(url).hostname.split(".").slice(-2).join(".")
+}
+
+const compareSecondLevelDomains = (url1: string, url2: string) => {
+    if (!isValid(url1) || !isValid(url2)) return false
+    return getSecondLevelDomain(url1) === getSecondLevelDomain(url2)
+}
+
 export default {
     compareURLs,
     clean,
@@ -214,6 +224,7 @@ export default {
     convertHttpToHttps,
     parseUrl,
     parseUrlSafe,
+    compareSecondLevelDomains,
     IPFS_GATEWAY,
     IPFS_GATEWAY_HOSTNAME,
     ARWEAVE_GATEWAY_HOSTNAME,

@@ -7,12 +7,12 @@ export const ExitingToLeftAnimation = (values: ExitAnimationsValues): LayoutAnim
         originX: withTiming(Math.min(values.currentOriginX - values.windowWidth, -values.windowWidth), {
             duration: LAYOUT_DURATION,
         }),
-        transform: [{ scale: withTiming(0.8, { duration: LAYOUT_DURATION }) }],
+        transform: [{ scaleY: withTiming(0.8, { duration: LAYOUT_DURATION }) }],
         opacity: withTiming(0.5, { duration: LAYOUT_DURATION }),
     }
     const initialValues: StyleProps = {
         originX: values.currentOriginX,
-        transform: [{ scale: 1 }],
+        transform: [{ scaleY: 1 }],
         opacity: 1,
         ...values,
     }
@@ -28,12 +28,12 @@ export const ExitingToRightAnimation = (values: ExitAnimationsValues): LayoutAni
         originX: withTiming(Math.max(values.currentOriginX + values.windowWidth, values.windowWidth), {
             duration: LAYOUT_DURATION,
         }),
-        transform: [{ scale: withTiming(0.8, { duration: LAYOUT_DURATION }) }],
+        transform: [{ scaleY: withTiming(0.8, { duration: LAYOUT_DURATION }) }],
         opacity: withTiming(0.5, { duration: LAYOUT_DURATION }),
     }
     const initialValues: StyleProps = {
         originX: values.currentOriginX,
-        transform: [{ scale: 1 }],
+        transform: [{ scaleY: 1 }],
         opacity: 1,
         ...values,
     }

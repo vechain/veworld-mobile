@@ -6,10 +6,9 @@ import { useFeatureFlags } from "~Components"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent, ScanTarget, STARGATE_DAPP_URL } from "~Constants"
 import { useAnalyticTracking, useBrowserNavigation, useCameraBottomSheet, useThemedStyles } from "~Hooks"
-import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
+import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
@@ -24,14 +23,12 @@ export const BalanceActions = ({ style }: Props) => {
     const nav = useNavigation()
     const track = useAnalyticTracking()
 
-    const account = useAppSelector(selectSelectedAccount)
-
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         targets: [ScanTarget.ADDRESS, ScanTarget.WALLET_CONNECT, ScanTarget.HTTPS_URL],
         sourceScreen: Routes.HOME,
     })
 
-    const { rawAmount } = useTotalFiatBalance({ address: account.address, enabled: true })
+    const tokenBalances = useSendableTokensWithBalance()
 
     const onBuy = useCallback(() => {
         nav.navigate(Routes.BUY_FLOW)
@@ -40,7 +37,7 @@ export const BalanceActions = ({ style }: Props) => {
 
     const onSend = useCallback(() => {
         if (betterWorldFeature.balanceScreen?.send?.enabled) {
-            nav.navigate(Routes.SEND_TOKEN)
+            nav.navigate(Routes.SEND_TOKEN, {})
             track(AnalyticsEvent.DASHBOARD_SEND_CLICK)
             return
         }
@@ -58,7 +55,7 @@ export const BalanceActions = ({ style }: Props) => {
         track(AnalyticsEvent.DASHBOARD_SWAP_CLICK)
     }, [nav, track])
 
-    const isSendDisabled = useMemo(() => rawAmount === 0, [rawAmount])
+    const isSendDisabled = useMemo(() => tokenBalances.length === 0, [tokenBalances.length])
 
     const onEarn = useCallback(() => {
         navigateToBrowser(STARGATE_DAPP_URL, url => nav.navigate(Routes.BROWSER, { url, returnScreen: Routes.HOME }))

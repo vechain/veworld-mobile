@@ -6,7 +6,9 @@ import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions
 import {
     ActivityDetailsScreen,
     ActivityScreen,
+    ChangeNetworkScreen,
     InAppBrowser,
+    PrivacyScreen,
     TabsManagerScreen,
     WalletDetailScreen,
     WalletManagementScreen,
@@ -50,6 +52,8 @@ export type HistoryStackParamList = {
     [Routes.APPS_SEARCH]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
+    [Routes.SETTINGS_PRIVACY]: undefined
+    [Routes.SETTINGS_NETWORK]: undefined
 }
 
 const { Navigator, Screen } = createStackNavigator<HistoryStackParamList>()
@@ -108,6 +112,8 @@ export const HistoryStack = () => {
                 options={{ headerShown: false }}
             />
             <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
+            <Screen name={Routes.SETTINGS_PRIVACY} component={PrivacyScreen} options={{ headerShown: false }} />
+            <Screen name={Routes.SETTINGS_NETWORK} component={ChangeNetworkScreen} options={{ headerShown: false }} />
         </Navigator>
     )
 }

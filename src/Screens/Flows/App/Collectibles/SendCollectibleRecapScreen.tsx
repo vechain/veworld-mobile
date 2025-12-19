@@ -13,8 +13,8 @@ import {
     RequireUserPassword,
     TransferCard,
 } from "~Components"
-import { AnalyticsEvent, creteAnalyticsEvent } from "~Constants"
-import { useAnalyticTracking, useTransactionScreen, useTransferAddContact } from "~Hooks"
+import { AnalyticsEvent } from "~Constants"
+import { useTransactionScreen, useTransferAddContact } from "~Hooks"
 import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
 import { useI18nContext } from "~i18n"
 import { ContactType, DEVICE_TYPE, NFTMediaType, NonFungibleToken } from "~Model"
@@ -24,7 +24,6 @@ import {
     addPendingNFTtransferTransactionActivity,
     selectAccounts,
     selectSelectedAccount,
-    selectSelectedNetwork,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
@@ -38,9 +37,7 @@ type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.SEND_NFT_RECAP
 export const SendCollectibleRecapScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
-    const network = useAppSelector(selectSelectedNetwork)
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const collectible = useCollectibleDetails({
@@ -73,40 +70,37 @@ export const SendCollectibleRecapScreen = ({ route }: Props) => {
     ])
 
     const clauses = useMemo(
-        () => prepareNonFungibleClause(selectedAccount.address, route.params.receiverAddress, nft),
-
-        [selectedAccount, route.params.receiverAddress, nft],
+        () =>
+            prepareNonFungibleClause(
+                selectedAccount.address,
+                route.params.receiverAddress,
+                route.params.contractAddress,
+                route.params.tokenId.toString(),
+            ),
+        [selectedAccount.address, route.params.receiverAddress, route.params.contractAddress, route.params.tokenId],
     )
 
-    const onFinish = useCallback(
-        (txId: string | undefined, success: boolean) => {
-            if (success) {
-                track(AnalyticsEvent.WALLET_OPERATION, {
-                    ...creteAnalyticsEvent({
-                        medium: AnalyticsEvent.SEND,
-                        signature: AnalyticsEvent.LOCAL,
-                        network: network.name,
-                        subject: AnalyticsEvent.NFT,
-                        context: AnalyticsEvent.SEND,
-                    }),
-                })
-            }
-
-            dispatch(setIsAppLoading(false))
-            nav.dispatch(StackActions.popToTop())
-        },
-        [dispatch, nav, track, network.name],
-    )
+    const onFinish = useCallback(() => {
+        dispatch(setIsAppLoading(false))
+        nav.dispatch(StackActions.popToTop())
+    }, [dispatch, nav])
 
     const onTransactionSuccess = useCallback(
         (transaction: Transaction) => {
-            dispatch(addPendingNFTtransferTransactionActivity(transaction))
-            onFinish(transaction.id.toString(), true)
+            dispatch(
+                addPendingNFTtransferTransactionActivity(transaction, {
+                    medium: AnalyticsEvent.SEND,
+                    signature: AnalyticsEvent.LOCAL,
+                    subject: AnalyticsEvent.NFT,
+                    context: AnalyticsEvent.SEND,
+                }),
+            )
+            onFinish()
         },
         [onFinish, dispatch],
     )
 
-    const onTransactionFailure = useCallback(() => onFinish(undefined, false), [onFinish])
+    const onTransactionFailure = useCallback(() => onFinish(), [onFinish])
 
     const {
         selectedDelegationOption,

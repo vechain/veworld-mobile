@@ -11,11 +11,11 @@ import { useI18nContext } from "~i18n"
 import { AccountWithDevice } from "~Model"
 import { Routes } from "~Navigation"
 import {
-    changeSelectedNetwork,
     selectNetworks,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
     selectVisibleAccounts,
+    switchActiveNetwork,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -296,7 +296,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
             }
 
             if (selectedNetwork.genesis.id !== network.genesis.id) {
-                dispatch(changeSelectedNetwork(network))
+                dispatch(switchActiveNetwork(network))
                 showInfoToast({
                     text1: LL.NOTIFICATION_WC_NETWORK_CHANGED({
                         network: network.name,

@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import React from "react"
 import { useFeatureFlags } from "~Components"
+import { COLORS, SCREEN_HEIGHT } from "~Constants"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import {
     Activity,
@@ -13,12 +14,12 @@ import {
     FungibleTokenWithBalance,
     LedgerAccountWithDevice,
     TransactionOutcomes,
+    TransactionRequest,
 } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import {
     ActivityDetailsScreen,
-    AddCustomNodeScreen,
     AssetDetailScreen,
     BridgeAssetDetailScreen,
     ChangeNetworkScreen,
@@ -33,20 +34,21 @@ import {
     InAppBrowser,
     InsertAddressSendScreen,
     LedgerSignTransaction,
-    ManageCustomNodesScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
+    PrivacyScreen,
     SelectAmountSendScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
     SelectTokenSendScreen,
+    SendNFTScreen,
+    SendScreen,
     SwapScreen,
     TabsManagerScreen,
     TransactionSummarySendScreen,
     UsernameClaimed,
     WalletDetailScreen,
     WalletManagementScreen,
-    SendScreen,
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AssetDetailScreenSheet } from "~Screens/Flows/App/AssetDetailScreenSheet"
@@ -57,7 +59,6 @@ import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/Co
 import { ReportNFTTransactionScreen } from "~Screens/Flows/App/NFT/NFTReportCollection/ReportNFTTransactionScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
-import { COLORS, SCREEN_HEIGHT } from "~Constants"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -67,7 +68,9 @@ type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
-    [Routes.SEND_TOKEN]: undefined
+    [Routes.SEND_TOKEN]: {
+        token?: FungibleTokenWithBalance
+    }
     [Routes.SELECT_TOKEN_SEND]: undefined
     [Routes.SELECT_AMOUNT_SEND]: {
         token: FungibleTokenWithBalance
@@ -89,6 +92,7 @@ export type RootStackParamListHome = {
         delegationSignature?: string
         transaction: Transaction
         initialRoute?: Routes.HOME | Routes.NFTS
+        dappRequest?: TransactionRequest
     }
     [Routes.SWAP]: undefined
     [Routes.HISTORY]:
@@ -156,8 +160,6 @@ export type RootStackParamListHome = {
             | Routes.COLLECTIBLES_COLLECTION_DETAILS
     }
     [Routes.SETTINGS_NETWORK]: undefined
-    [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
-    [Routes.SETTINGS_MANAGE_CUSTOM_NODES]: undefined
     [Routes.CLAIM_USERNAME]: undefined
     [Routes.USERNAME_CLAIMED]: {
         username: string
@@ -180,12 +182,17 @@ export type RootStackParamListHome = {
         nftAddress: string
         transactionClauses: TransactionClause[]
     }
+    [Routes.SEND_NFT]: {
+        contractAddress: string
+        tokenId: string
+    }
     [Routes.SEND_NFT_RECAP]: {
         contractAddress: string
         tokenId: string
         receiverAddress: string
     }
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
+    [Routes.SETTINGS_PRIVACY]: undefined
 }
 
 const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome>()
@@ -318,17 +325,6 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen
-                    name={Routes.SETTINGS_ADD_CUSTOM_NODE}
-                    component={AddCustomNodeScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Screen
-                    name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
-                    component={ManageCustomNodesScreen}
-                    options={{ headerShown: false }}
-                />
-                <Screen
                     name={Routes.APPS_TABS_MANAGER}
                     component={TabsManagerScreen}
                     options={{
@@ -390,6 +386,10 @@ export const HomeStack = () => {
                         options={{ headerShown: false }}
                     />
                 )}
+                {betterWorldFeature.balanceScreen.sendCollectibles.enabled && (
+                    <Screen name={Routes.SEND_NFT} component={SendNFTScreen} options={{ headerShown: false }} />
+                )}
+
                 {betterWorldFeature.balanceScreen.collectibles.enabled && (
                     <Screen
                         name={Routes.SEND_NFT_RECAP}
@@ -420,6 +420,8 @@ export const HomeStack = () => {
                 <Screen name={Routes.CLAIM_USERNAME} component={ClaimUsername} options={{ headerShown: false }} />
                 <Screen name={Routes.USERNAME_CLAIMED} component={UsernameClaimed} options={{ headerShown: false }} />
             </Group>
+
+            <Screen name={Routes.SETTINGS_PRIVACY} component={PrivacyScreen} options={{ headerShown: false }} />
         </Navigator>
     )
 }

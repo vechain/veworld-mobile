@@ -308,4 +308,13 @@ describe("URIUtils", () => {
             expect(URIUtils.convertHttpToHttps(url)).toBe(url)
         })
     })
+
+    describe("compareSecondLevelDomains", function () {
+        test("should return true for same second level domains", function () {
+            expect(URIUtils.compareSecondLevelDomains("https://app.evearn.com", "https://evearn.com")).toBe(true)
+        })
+        test("should return false for different second level domains", function () {
+            expect(URIUtils.compareSecondLevelDomains("https://app.evearn.com", "https://app.3vearn.com")).toBe(false)
+        })
+    })
 })
