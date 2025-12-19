@@ -7,14 +7,11 @@ import { GasFeeSpeed } from "~Components/Reusable/GasFeeSpeed"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { useTokenSendContext } from "../../Provider"
 import { useTransactionContext } from "./TransactionProvider"
 
 export const TransactionFeeCard = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { flowState } = useTokenSendContext()
-    const token = flowState.token
 
     const {
         selectedDelegationOption,
@@ -67,7 +64,6 @@ export const TransactionFeeCard = () => {
                 hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
                 isFirstTimeLoadingFees={isFirstTimeLoadingFees}
                 hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}
-                sendingTokenSymbol={token?.symbol}
                 containerStyle={styles.gasFeeSpeedContainer}>
                 <DelegationView
                     setNoDelegation={resetDelegation}
