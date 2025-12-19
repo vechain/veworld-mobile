@@ -22,14 +22,28 @@ const getMaxDecimals = (args: { kind: "fiat" } | { kind: "token"; decimals: numb
     return args.decimals
 }
 
-export const truncateToMaxDecimals = (value: string, opts: Parameters<typeof getMaxDecimals>[0]) => {
+const fillWithZeros = (value: string, maxDecimals: number) => {
+    return value.padEnd(maxDecimals, "0")
+}
+
+export const truncateToMaxDecimals = (
+    value: string,
+    opts: Parameters<typeof getMaxDecimals>[0] & { fillWithZeros?: boolean },
+) => {
     const parts = value.split(/([.,])/)
     if (parts.length >= 3) {
         const integerPart = parts[0]
         const separator = parts[1]
         const decimalPart = parts[2]
         const maxDecimals = getMaxDecimals(opts)
-        return `${integerPart}${separator}${decimalPart.substring(0, maxDecimals)}`
+
+        const decimalValue = decimalPart.substring(0, maxDecimals)
+
+        return `${integerPart}${separator}${
+            decimalValue.length < maxDecimals && opts.fillWithZeros
+                ? fillWithZeros(decimalValue, maxDecimals)
+                : decimalValue
+        }`
     }
     return value
 }

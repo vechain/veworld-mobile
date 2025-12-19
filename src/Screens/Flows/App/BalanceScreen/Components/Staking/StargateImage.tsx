@@ -5,6 +5,8 @@ import { NFTPlaceholderDark, NFTPlaceholderLight } from "~Assets"
 import { BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { URIUtils } from "~Utils"
+import { DelegationStatus } from "~Model"
+import { DelegationStatusBadge } from "./DelegationStatusBadge"
 
 type Props = {
     uri?: string
@@ -21,9 +23,20 @@ type Props = {
     height?: number
     borderRadius?: number
     containerStyle?: StyleProp<ViewStyle>
+    delegationStatus?: DelegationStatus
+    exitDays?: number
 }
 
-export const StargateImage = ({ uri, testID, width = 208, height = 208, borderRadius = 8, containerStyle }: Props) => {
+export const StargateImage = ({
+    uri,
+    testID,
+    width = 208,
+    height = 208,
+    borderRadius = 8,
+    containerStyle,
+    delegationStatus,
+    exitDays,
+}: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles({ width, height }))
 
     const placeholderImg = useMemo(() => {
@@ -54,6 +67,7 @@ export const StargateImage = ({ uri, testID, width = 208, height = 208, borderRa
                 }}
                 resizeMode={FastImage.resizeMode.cover}
             />
+            {delegationStatus && <DelegationStatusBadge status={delegationStatus} exitDays={exitDays} />}
         </BaseView>
     )
 }
