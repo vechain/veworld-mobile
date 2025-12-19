@@ -273,7 +273,6 @@ describe("TransactionSummarySendScreen", () => {
             onTransactionSuccess: expect.any(Function),
             onTransactionFailure: expect.any(Function),
             autoVTHOFallback: false,
-            enableSameTokenFeeHandling: true,
             clauses: [
                 {
                     to: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",

@@ -51,10 +51,6 @@ type Props = {
      * Fallback to VTHO for delegation fees if the user doesn't have enough of the selected token
      */
     autoVTHOFallback?: boolean
-    /**
-     * When enabled, skips the clauses value check to allow sending tokens while using them for gas fees
-     */
-    enableSameTokenFeeHandling?: boolean
     onNavigateToLedger?: () => void
 }
 
@@ -106,7 +102,6 @@ export const useTransactionScreen = ({
     initialRoute,
     onNavigateToLedger,
     autoVTHOFallback = true,
-    enableSameTokenFeeHandling = false,
 }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -278,7 +273,6 @@ export const useTransactionScreen = ({
         isLoadingFees: isFirstTimeLoadingFees,
         transactionOutputs,
         origin: selectedAccount.address,
-        enableSameTokenFeeHandling,
     })
 
     const { buildTransaction } = useTransactionBuilder({
