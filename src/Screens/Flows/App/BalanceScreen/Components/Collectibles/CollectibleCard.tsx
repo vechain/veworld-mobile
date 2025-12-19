@@ -73,7 +73,7 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
 
     const isNew = useMemo(() => {
         if (!transferDetails) return false
-        return moment().diff((transferDetails.data?.data[0].blockTimestamp ?? 0) * 1000, "days") <= 5
+        return moment().diff((transferDetails.data?.data[0]?.blockTimestamp ?? 0) * 1000, "days") <= 5
     }, [transferDetails])
 
     const topStyle = useMemo(() => {
