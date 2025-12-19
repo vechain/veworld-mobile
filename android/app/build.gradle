@@ -182,19 +182,6 @@ versionName "2.4.13"
     }
 }
 
-// Work around duplicate PackageList generation (rncli vs autolinking) on RN 0.76:
-// Prefer the new autolinking-generated PackageList and delete the legacy rncli one before Java compilation.
-tasks.configureEach { task ->
-    if (task.name == "compileDebugJavaWithJavac" || task.name == "compileReleaseJavaWithJavac") {
-        task.doFirst {
-            def rncliPackageList = file("$buildDir/generated/rncli/src/main/java/com/facebook/react/PackageList.java")
-            if (rncliPackageList.exists()) {
-                rncliPackageList.delete()
-            }
-        }
-    }
-}
-
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
