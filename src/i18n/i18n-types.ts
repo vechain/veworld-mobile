@@ -5073,6 +5073,23 @@ type RootTranslation = {
 	 */
 	STARGATE_DELEGATEE_LABEL: string
 	/**
+	 * D​e​l​e​g​a​t​e​d
+	 */
+	STARGATE_DELEGATION_STATUS_DELEGATED: string
+	/**
+	 * E​x​i​t​i​n​g
+	 */
+	STARGATE_DELEGATION_STATUS_EXITING: string
+	/**
+	 * E​x​i​t​i​n​g​ ​i​n​ ​{​d​a​y​s​}​ ​d​a​y​s
+	 * @param {number} days
+	 */
+	STARGATE_DELEGATION_STATUS_EXITING_IN_DAYS: RequiredParams<'days'>
+	/**
+	 * N​o​t​ ​d​e​l​e​g​a​t​e​d
+	 */
+	STARGATE_DELEGATION_STATUS_NOT_DELEGATED: string
+	/**
 	 * L​o​c​k​e​d
 	 */
 	STARGATE_LOCKED: string
@@ -10972,6 +10989,22 @@ Here's what it's all about:
 	 * Managing
 	 */
 	STARGATE_DELEGATEE_LABEL: () => LocalizedString
+	/**
+	 * Delegated
+	 */
+	STARGATE_DELEGATION_STATUS_DELEGATED: () => LocalizedString
+	/**
+	 * Exiting
+	 */
+	STARGATE_DELEGATION_STATUS_EXITING: () => LocalizedString
+	/**
+	 * Exiting in {days} days
+	 */
+	STARGATE_DELEGATION_STATUS_EXITING_IN_DAYS: (arg: { days: number }) => LocalizedString
+	/**
+	 * Not delegated
+	 */
+	STARGATE_DELEGATION_STATUS_NOT_DELEGATED: () => LocalizedString
 	/**
 	 * Locked
 	 */

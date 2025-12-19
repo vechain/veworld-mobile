@@ -38,6 +38,8 @@ describe("useNodesByTokenId", () => {
                     vetStaked: node.vetAmountStaked,
                     totalBootstrapRewardsClaimed: "0",
                     totalRewardsClaimed: "0",
+                    delegationStatus: node.delegationStatus,
+                    validatorId: node.validatorId,
                 })),
                 pagination: {
                     hasNext: false,

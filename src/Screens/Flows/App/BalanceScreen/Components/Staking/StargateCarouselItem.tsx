@@ -5,12 +5,13 @@ import { BaseCard, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { COLORS, ColorThemeType, VET, VTHO } from "~Constants"
 import { useFormatFiat, useTheme, useThemedStyles } from "~Hooks"
+import { useDelegationExitDays } from "~Hooks/Staking"
 import { useNFTMetadata } from "~Hooks/useNFTMetadata"
 import { useStargateClaimableRewards } from "~Hooks/useStargateClaimableRewards"
 import { useStargateConfig } from "~Hooks/useStargateConfig"
 import { useThorClient } from "~Hooks/useThorClient"
 import { useI18nContext } from "~i18n"
-import { NodeInfo } from "~Model"
+import type { NodeInfo } from "~Model"
 import { getTokenURI } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
@@ -64,17 +65,29 @@ export const StargateCarouselItem = ({ item }: Props) => {
         enabled: Boolean(stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS),
     })
 
+    // Use the unlocked version of the NFT image (without the status badge baked in)
+    const unlockedTokenURI = useMemo(() => tokenURI?.replace(/_locked$/, ""), [tokenURI])
     const { data } = useQuery({
-        queryKey: ["StargateNftMetadata", network.type, item.nodeId],
-        queryFn: () => fetchMetadata(tokenURI!),
-        enabled: Boolean(tokenURI),
+        queryKey: ["StargateNftMetadata", network.type, item.nodeId, "unlocked"],
+        queryFn: () => fetchMetadata(unlockedTokenURI!),
+        enabled: Boolean(unlockedTokenURI),
     })
 
     const { data: claimableRewards } = useStargateClaimableRewards({ nodeId: item.nodeId })
 
+    const isExiting = item.delegationStatus === "EXITING"
+    const { exitDays } = useDelegationExitDays({
+        validatorId: item.validatorId,
+        enabled: isExiting,
+    })
+
     return (
         <BaseCard containerStyle={styles.root} style={styles.rootContent}>
-            <StargateImage uri={data?.image} />
+            <StargateImage
+                uri={data?.image}
+                delegationStatus={item.delegationStatus}
+                exitDays={isExiting ? exitDays : undefined}
+            />
             <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="bodySemiBold">
                 {getTokenLevelName(
                     (item.nodeLevel ? (item.nodeLevel as TokenLevelId) : undefined) ?? TokenLevelId.None,
