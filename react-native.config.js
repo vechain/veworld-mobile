@@ -5,5 +5,10 @@ module.exports = {
                 ios: null,
             },
         },
+        "json-abi-to-ts": {
+            platforms: {
+                ios: null,
+            },
+        },
     },
 }
