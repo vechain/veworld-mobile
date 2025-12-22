@@ -5,7 +5,7 @@ import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { ERROR_EVENTS } from "~Constants"
-import { useIsOnline } from "~Hooks/useIsOnline"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useI18nContext } from "~i18n"
 import { ConnectAppRequest } from "~Model"
 import {
@@ -25,22 +25,12 @@ export const useWcConnect = ({ onCloseBs }: { onCloseBs: () => void }) => {
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const { approvePendingProposal } = useWalletConnect()
     const [isLoading, setIsLoading] = useState(false)
-    const isOnline = useIsOnline()
 
     /**
      * Handle session proposal
      */
-    const processProposal = useCallback(
+    const processProposalInner = useCallback(
         async (request: Extract<ConnectAppRequest, { type: "wallet-connect" }>) => {
-            if (!isOnline) {
-                Feedback.show({
-                    message: LL.OFFLINE_CHIP(),
-                    severity: FeedbackSeverity.ERROR,
-                    type: FeedbackType.ALERT,
-                })
-                return
-            }
-
             const { params } = request.proposal
 
             const namespaces: SessionTypes.Namespaces = {}
@@ -97,8 +87,10 @@ export const useWcConnect = ({ onCloseBs }: { onCloseBs: () => void }) => {
                 onCloseBs()
             }
         },
-        [approvePendingProposal, dispatch, isOnline, LL, networks, onCloseBs, selectedAccount],
+        [approvePendingProposal, dispatch, LL, networks, onCloseBs, selectedAccount],
     )
+
+    const processProposal = useOfflineCallback(processProposalInner)
 
     const memoized = useMemo(() => ({ processProposal, isLoading, setIsLoading }), [isLoading, processProposal])
 
