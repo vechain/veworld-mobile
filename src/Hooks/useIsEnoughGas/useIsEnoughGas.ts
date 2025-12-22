@@ -96,9 +96,11 @@ export const useIsEnoughGas = ({
                     processor,
                     origin,
                 })
+
                 //Delegation with VTHO should count as "0" for fees
                 if (tokenSymbol === VTHO.symbol && isDelegated)
                     return [tokenSymbol, BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual("0")] as const
+
                 return [
                     tokenSymbol,
                     BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual(allFeeOptions[tokenSymbol].toBN),

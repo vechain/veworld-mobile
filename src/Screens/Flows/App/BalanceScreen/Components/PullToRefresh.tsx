@@ -70,6 +70,19 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
         })
     }, [queryClient, selectedAccountAddress, selectedNetwork.genesis.id])
 
+    const invalidateStargateTotalStats = useCallback(async () => {
+        await queryClient.invalidateQueries({
+            predicate(query) {
+                return [
+                    "STARGATE_TOTAL_SUPPLY",
+                    "STARGATE_TOTAL_VET_STAKED",
+                    "STARGATE_REWARDS_DISTRIBUTED",
+                    "STARGATE_VTHO_PER_DAY",
+                ].includes(query.queryKey[0] as string)
+            },
+        })
+    }, [queryClient])
+
     const onRefresh = useCallback(async () => {
         if (!isOnline) {
             Feedback.show({
@@ -88,6 +101,7 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
             invalidateTokens(),
             invalidateActivity(),
             invalidateCollectiblesQueries(),
+            invalidateStargateTotalStats(),
         ])
 
         setRefreshing(false)
@@ -98,6 +112,7 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
         invalidateBalanceQueries,
         invalidateCollectiblesQueries,
         invalidateStargateQueries,
+        invalidateStargateTotalStats,
         invalidateTokens,
     ])
 

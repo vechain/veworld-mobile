@@ -235,7 +235,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         isEnoughBalance={isEnoughGas}
                         hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
                         isFirstTimeLoadingFees={isFirstTimeLoadingFees}
-                        hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}>
+                        hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}
+                        sendingTokenSymbol={token.symbol}>
                         <DelegationView
                             setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}
