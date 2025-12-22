@@ -40,6 +40,7 @@ export * from "./Logger"
 export * from "./SignMessageUtils"
 export * from "./DAppUtils"
 export * from "./ValidatorUtils"
+export * from "./StargateUtils"
 
 export {
     AddressUtils,

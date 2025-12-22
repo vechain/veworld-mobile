@@ -36,6 +36,8 @@ const getNodeByTokenId = async (indexer: IndexerClient, tokenId: string): Promis
             vetAmountStaked: r.data[0].vetStaked.toString(),
             accumulatedRewards: BigNutils(r.data[0].totalBootstrapRewardsClaimed).plus(r.data[0].totalRewardsClaimed)
                 .toString,
+            delegationStatus: r.data[0].delegationStatus ?? "NONE",
+            validatorId: r.data[0].validatorId ?? null,
         }
     } catch (error) {
         throw new Error(`Error fetching node by token id ${error}`)

@@ -136,9 +136,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         autoVTHOFallback: false,
     })
 
-    /**
-     * If user is sending a token and gas is not enough, we will adjust the amount to send.
-     */
     useEffect(() => {
         if (isDelegated && selectedDelegationToken === VTHO.symbol) {
             return
@@ -231,7 +228,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         isEnoughBalance={isEnoughGas}
                         hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
                         isFirstTimeLoadingFees={isFirstTimeLoadingFees}
-                        hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}>
+                        hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}
+                        sendingTokenSymbol={token.symbol}>
                         <DelegationView
                             setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}
