@@ -2,7 +2,7 @@ name: Generate translations
 
 on:
     push:
-        branches-ignore: [main]
+        branches-ignore: [main, release/*]
         paths:
             - src/i18n/translations/en.json
 
