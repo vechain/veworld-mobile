@@ -748,7 +748,7 @@
   "FEBRUARY": "2月",
   "FEEDBACK_APP_CONNECTED": "アプリが接続されました！",
   "FEEDBACK_FAVORITED": "お気に入りに追加しました！",
-  "FEEDBACK_N_TRANSFERS_RECEIVED": "{count} 件の送金を受信しました",
+  "FEEDBACK_N_TRANSFERS_RECEIVED": "{count: number} 件の送金を受信しました",
   "FEEDBACK_SET_AVATAR": "アバターに設定しました！",
   "FEEDBACK_TRANSFER_RECEIVED": "送金を受信しました",
   "FINGERPRINT": "指紋",
