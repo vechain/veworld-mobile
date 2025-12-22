@@ -55,12 +55,6 @@ env:
 - assertVisible: "VeWorld"
 - tapOn:
       id: "BalanceScreen_WalletManagementButton"
-- runFlow:
-      when:
-          platform: Android
-      commands:
-          - tapOn:
-                id: "DeviceBox"
 - tapOn:
       id: "SelectAccountBottomSheet_SettingsButton"
 - tapOn:

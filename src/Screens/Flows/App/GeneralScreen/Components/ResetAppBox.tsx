@@ -34,6 +34,7 @@ export const ResetAppBox = () => {
                 </BaseText>
             </BaseView>
             <BaseButton
+                testID="ResetAppBox_Button"
                 size="sm"
                 radius={6}
                 style={styles.button}
