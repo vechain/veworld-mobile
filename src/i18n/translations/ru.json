@@ -1240,7 +1240,7 @@
   "STARGATE_CLAIMABLE": "Доступно для получения",
   "STARGATE_DELEGATEE_LABEL": "Управление",
   "STARGATE_DELEGATION_STATUS_DELEGATED": "Делегировано",
-  "STARGATE_DELEGATION_STATUS_EXITING": "Выход из делегации",
+  "STARGATE_DELEGATION_STATUS_EXITING": "Выход из делегирования",
   "STARGATE_DELEGATION_STATUS_EXITING_IN_DAYS": "Выход через {days: number} дн.",
   "STARGATE_DELEGATION_STATUS_NOT_DELEGATED": "Не делегировано",
   "STARGATE_LOCKED": "Заблокировано",

@@ -1241,7 +1241,7 @@
   "STARGATE_DELEGATEE_LABEL": "Quản lý",
   "STARGATE_DELEGATION_STATUS_DELEGATED": "Đã ủy quyền",
   "STARGATE_DELEGATION_STATUS_EXITING": "Đang thoát",
-  "STARGATE_DELEGATION_STATUS_EXITING_IN_DAYS": "Sẽ thoát sau {days: number} ngày",
+  "STARGATE_DELEGATION_STATUS_EXITING_IN_DAYS": "Sẽ thoát trong {days: number} ngày",
   "STARGATE_DELEGATION_STATUS_NOT_DELEGATED": "Chưa ủy quyền",
   "STARGATE_LOCKED": "Đã khóa",
   "STARGATE_MANAGE_STAKING": "Quản lý việc staking của bạn",
