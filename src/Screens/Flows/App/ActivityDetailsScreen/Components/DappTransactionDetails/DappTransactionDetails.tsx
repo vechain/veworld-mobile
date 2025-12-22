@@ -43,11 +43,11 @@ export const DappTransactionDetails: React.FC<Props> = memo(
                 case ActivityStatus.PENDING:
                     return LL.ACTIVITIES_STATUS_pending()
                 case ActivityStatus.REVERTED:
-                    return LL.ACTIVITIES_STATUS_reverted()
+                    return activity.blockNumber ? LL.ACTIVITIES_STATUS_reverted() : LL.ACTIVITIES_STATUS_failed()
                 case ActivityStatus.SUCCESS:
                     return LL.ACTIVITIES_STATUS_success()
             }
-        }, [LL, status])
+        }, [LL, status, activity.blockNumber])
 
         const { onCopyToClipboard } = useCopyClipboard()
 
@@ -55,8 +55,7 @@ export const DappTransactionDetails: React.FC<Props> = memo(
             return activity.blockNumber
         }, [activity.blockNumber])
 
-        // Details List
-        const details: Array<ActivityDetail> = [
+        const baseDetails: ActivityDetail[] = [
             {
                 id: 1,
                 title: LL.COMMON_LBL_NAME(),
@@ -80,14 +79,9 @@ export const DappTransactionDetails: React.FC<Props> = memo(
                 underline: true,
                 isLoading: isLoading,
             },
-            {
-                id: 4,
-                title: LL.ORIGIN(),
-                value: activity.linkUrl || "",
-                typographyFont: "subSubTitleLight",
-                underline: true,
-                // TODO(Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/755) onValuePress opens browser or in-app browser
-            },
+        ]
+
+        const transactionIdDetail: ActivityDetail[] = [
             {
                 id: 5,
                 title: LL.GAS_FEE(),
@@ -108,6 +102,9 @@ export const DappTransactionDetails: React.FC<Props> = memo(
                     if (activity.txId) onCopyToClipboard(activity.txId, LL.TRANSACTION_ID())
                 },
             },
+        ]
+
+        const endDetails: ActivityDetail[] = [
             {
                 id: 7,
                 title: LL.BLOCK_NUMBER(),
@@ -123,6 +120,10 @@ export const DappTransactionDetails: React.FC<Props> = memo(
                 underline: false,
             },
         ]
+
+        const details = activity.blockNumber
+            ? [...baseDetails, ...transactionIdDetail, ...endDetails]
+            : [...baseDetails, ...endDetails]
 
         return (
             <>
