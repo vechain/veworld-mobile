@@ -5,6 +5,7 @@ import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { ERROR_EVENTS } from "~Constants"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useI18nContext } from "~i18n"
 import { ConnectAppRequest } from "~Model"
 import {
@@ -28,7 +29,7 @@ export const useWcConnect = ({ onCloseBs }: { onCloseBs: () => void }) => {
     /**
      * Handle session proposal
      */
-    const processProposal = useCallback(
+    const processProposalInner = useCallback(
         async (request: Extract<ConnectAppRequest, { type: "wallet-connect" }>) => {
             const { params } = request.proposal
 
@@ -86,8 +87,10 @@ export const useWcConnect = ({ onCloseBs }: { onCloseBs: () => void }) => {
                 onCloseBs()
             }
         },
-        [dispatch, networks, selectedAccount, approvePendingProposal, LL, onCloseBs],
+        [approvePendingProposal, dispatch, LL, networks, onCloseBs, selectedAccount],
     )
+
+    const processProposal = useOfflineCallback(processProposalInner)
 
     const memoized = useMemo(() => ({ processProposal, isLoading, setIsLoading }), [isLoading, processProposal])
 

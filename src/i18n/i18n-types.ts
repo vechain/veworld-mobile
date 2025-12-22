@@ -6006,6 +6006,14 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * O​f​f​l​i​n​e
+	 */
+	OFFLINE_STATUS: string
+	/**
+	 * Y​o​u​ ​a​r​e​ ​o​f​f​l​i​n​e
+	 */
+	OFFLINE_CHIP: string
 }
 
 export type TranslationFunctions = {
@@ -11904,6 +11912,14 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Offline
+	 */
+	OFFLINE_STATUS: () => LocalizedString
+	/**
+	 * You are offline
+	 */
+	OFFLINE_CHIP: () => LocalizedString
 }
 
 export type Formatters = {

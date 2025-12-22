@@ -424,6 +424,7 @@ export enum COLORS {
     DARK_RED_ALERT = "#9D1800",
     MEDIUM_RED = "#E02200",
     RED_NEGATIVE = "#E9627B",
+    RED_800 = "#822727",
     RED_700 = "#9B2C2C",
     RED_600 = "#C53030",
     RED_500 = "#E53E3E",

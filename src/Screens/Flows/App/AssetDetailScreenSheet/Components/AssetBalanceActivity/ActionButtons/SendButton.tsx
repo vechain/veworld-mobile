@@ -4,7 +4,7 @@ import React, { useCallback, useMemo } from "react"
 import { useFeatureFlags } from "~Components"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent, VeDelegate } from "~Constants"
-import { useAnalyticTracking } from "~Hooks"
+import { useAnalyticTracking, useIsOnline } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -20,6 +20,7 @@ const useSend = (token: FungibleTokenWithBalance) => {
     const { betterWorldFeature } = useFeatureFlags()
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const isOnline = useIsOnline()
 
     const onSend = useCallback(() => {
         if (betterWorldFeature.balanceScreen?.send?.enabled) {
@@ -39,8 +40,9 @@ const useSend = (token: FungibleTokenWithBalance) => {
         () =>
             BigNutils(token.balance.balance).isZero ||
             AccountUtils.isObservedAccount(selectedAccount) ||
-            token.symbol === VeDelegate.symbol,
-        [selectedAccount, token.balance.balance, token.symbol],
+            token.symbol === VeDelegate.symbol ||
+            !isOnline,
+        [isOnline, selectedAccount, token.balance.balance, token.symbol],
     )
 
     return useMemo(

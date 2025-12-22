@@ -2,7 +2,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import React, { RefObject, useCallback, useMemo } from "react"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useIsOnline } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
@@ -15,13 +15,17 @@ const useConvert = (bsRef: RefObject<BottomSheetModalMethods>) => {
     const track = useAnalyticTracking()
     const { onOpen } = useBottomSheetModal({ externalRef: bsRef })
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const isOnline = useIsOnline()
 
     const onPress = useCallback(() => {
         onOpen()
         track(AnalyticsEvent.TOKEN_CONVERT_CLICKED)
     }, [onOpen, track])
 
-    const disabled = useMemo(() => AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
+    const disabled = useMemo(
+        () => AccountUtils.isObservedAccount(selectedAccount) || !isOnline,
+        [isOnline, selectedAccount],
+    )
 
     return useMemo(
         () => ({

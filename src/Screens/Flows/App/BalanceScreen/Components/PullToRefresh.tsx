@@ -2,7 +2,8 @@ import { useQueryClient } from "@tanstack/react-query"
 import React, { ComponentType, forwardRef, useCallback, useState } from "react"
 import { RefreshControlProps } from "react-native"
 import { NativeViewGestureHandlerProps, RefreshControl } from "react-native-gesture-handler"
-import { useTheme } from "~Hooks"
+import { useIsOnline, useTheme } from "~Hooks"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useStargateInvalidation } from "~Hooks/useStargateInvalidation"
 import {
     invalidateUserTokens,
@@ -24,6 +25,8 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
     const theme = useTheme()
     const dispatch = useAppDispatch()
     const { invalidate: invalidateStargate } = useStargateInvalidation()
+
+    const isOnline = useIsOnline()
 
     const invalidateBalanceQueries = useCallback(async () => {
         await dispatch(updateAccountBalances(selectedAccountAddress!, queryClient))
@@ -77,7 +80,7 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
         })
     }, [queryClient])
 
-    const onRefresh = useCallback(async () => {
+    const onRefreshInner = useCallback(async () => {
         setRefreshing(true)
 
         await Promise.all([
@@ -98,12 +101,16 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
         invalidateStargateTotalStats,
         invalidateTokens,
     ])
+
+    const onRefresh = useOfflineCallback(onRefreshInner)
+
     return (
         <RefreshControl
             onRefresh={onRefresh}
             tintColor={theme.colors.border}
             refreshing={refreshing}
             ref={ref}
+            enabled={isOnline}
             {...props}
         />
     )

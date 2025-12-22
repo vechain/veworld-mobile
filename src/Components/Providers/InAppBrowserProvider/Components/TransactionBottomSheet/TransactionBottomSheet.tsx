@@ -9,7 +9,8 @@ import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConne
 import { DelegationView, GasFeeSpeed, RequireUserPassword, SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { AnalyticsEvent, COLORS, RequestMethods } from "~Constants"
-import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles, useTransactionScreen } from "~Hooks"
+import { useBottomSheetModal, useIsOnline, useSetSelectedAccount, useThemedStyles, useTransactionScreen } from "~Hooks"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { TransactionRequest } from "~Model"
@@ -48,6 +49,7 @@ export const TransactionBottomSheetContent = ({
 }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
+    const isOnline = useIsOnline()
 
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
@@ -116,6 +118,8 @@ export const TransactionBottomSheetContent = ({
         dappRequest: request,
         onNavigateToLedger,
     })
+
+    const guardedOnSubmit = useOfflineCallback(onSubmit)
 
     return (
         <>
@@ -186,13 +190,14 @@ export const TransactionBottomSheetContent = ({
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
                 <BaseButton
-                    action={onSubmit}
+                    action={guardedOnSubmit}
                     flex={1}
                     disabled={
                         AccountUtils.isObservedAccount(selectedAccount) ||
                         isBiometricsEmpty ||
                         !validConnectedApp ||
                         isLoading ||
+                        !isOnline ||
                         !selectedAccount ||
                         isDisabledButtonState
                     }
