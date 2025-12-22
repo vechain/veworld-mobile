@@ -794,7 +794,7 @@
   "LIGHT_THEME": "ライト",
   "LOADING_MORE": "さらに読み込んでいます",
   "LOADING_PAGE_CONTENT": "ページの内容を読み込んでいます",
-  "LOGIN_KEEP_ME_SIGNED_IN": "次回以降のセッションでサインインしたままにする",
+  "LOGIN_KEEP_ME_SIGNED_IN": "サインインしたままにする",
   "LOGIN_REQUEST_CTA": "ログイン",
   "LOGIN_REQUEST_TITLE": "ログイン",
   "MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION": "選択したトークンを追加してもよろしいですか？",

@@ -794,7 +794,7 @@
   "LIGHT_THEME": "淺色",
   "LOADING_MORE": "加載更多",
   "LOADING_PAGE_CONTENT": "正在加載頁面內容",
-  "LOGIN_KEEP_ME_SIGNED_IN": "保持我在未來的工作階段中登入",
+  "LOGIN_KEEP_ME_SIGNED_IN": "保持登入狀態",
   "LOGIN_REQUEST_CTA": "登入",
   "LOGIN_REQUEST_TITLE": "登入",
   "MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION": "確定要添加所選擇的代幣嗎？",
