@@ -1,9 +1,8 @@
-import { useNetInfo } from "@react-native-community/netinfo"
 import { useQueryClient } from "@tanstack/react-query"
 import React, { ComponentType, forwardRef, useCallback, useState } from "react"
 import { RefreshControlProps } from "react-native"
 import { NativeViewGestureHandlerProps, RefreshControl } from "react-native-gesture-handler"
-import { useTheme } from "~Hooks"
+import { useIsOnline, useTheme } from "~Hooks"
 import { useStargateInvalidation } from "~Hooks/useStargateInvalidation"
 import {
     invalidateUserTokens,
@@ -14,10 +13,14 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { useI18nContext } from "~i18n"
 
 type Props = Omit<RefreshControlProps, "onRefresh" | "refreshing" | "tintColor"> & NativeViewGestureHandlerProps
 
 export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function PullToRefresh(props, ref) {
+    const { LL } = useI18nContext()
     const [refreshing, setRefreshing] = useState(false)
     const queryClient = useQueryClient()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
@@ -26,7 +29,7 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
     const dispatch = useAppDispatch()
     const { invalidate: invalidateStargate } = useStargateInvalidation()
 
-    const { isConnected } = useNetInfo()
+    const isOnline = useIsOnline()
 
     const invalidateBalanceQueries = useCallback(async () => {
         await dispatch(updateAccountBalances(selectedAccountAddress!, queryClient))
@@ -81,6 +84,15 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
     }, [queryClient])
 
     const onRefresh = useCallback(async () => {
+        if (!isOnline) {
+            Feedback.show({
+                message: LL.OFFLINE_CHIP(),
+                severity: FeedbackSeverity.ERROR,
+                type: FeedbackType.ALERT,
+            })
+            return
+        }
+
         setRefreshing(true)
 
         await Promise.all([
@@ -94,6 +106,8 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
 
         setRefreshing(false)
     }, [
+        LL,
+        isOnline,
         invalidateActivity,
         invalidateBalanceQueries,
         invalidateCollectiblesQueries,
@@ -108,7 +122,7 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
             tintColor={theme.colors.border}
             refreshing={refreshing}
             ref={ref}
-            enabled={Boolean(isConnected)}
+            enabled={isOnline}
             {...props}
         />
     )

@@ -1,4 +1,3 @@
-import { useNetInfo } from "@react-native-community/netinfo"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
@@ -14,7 +13,7 @@ import {
     StellaPayBottomSheet,
 } from "~Components"
 import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
-import { useBottomSheetModal, useCopyClipboard, useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useCopyClipboard, useIsOnline, useSetSelectedAccount, useThemedStyles } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useCameraBottomSheet } from "~Hooks/useCameraBottomSheet"
 import { useVns } from "~Hooks/useVns"
@@ -48,7 +47,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
     const { onCopyToClipboard } = useCopyClipboard()
     const { navigateWithTab } = useBrowserTab()
 
-    const { isConnected } = useNetInfo()
+    const isOnline = useIsOnline()
 
     const height = useSharedValue(90)
 
@@ -178,7 +177,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
             </BaseView>
 
             <BaseView flexDirection="row" gap={12}>
-                {isConnected ? (
+                {isOnline ? (
                     <>
                         <TouchableOpacity onPress={onStellaPayShortCutPress}>
                             <BaseView borderRadius={99} p={8}>
