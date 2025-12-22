@@ -1,25 +1,27 @@
-import { default as React, useCallback, useMemo, useRef, useState } from "react"
-import { SectionListData } from "react-native"
-import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import { default as React, useCallback, useMemo, useRef } from "react"
+import { SectionListData, StyleSheet } from "react-native"
+import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
+import { BaseSectionListSeparatorProps, SectionListSeparator } from "~Components/Reusable"
 import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
 import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCard"
-import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
+import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, SwitchWalletRequest, WalletRequest, WatchedAccount } from "~Model"
 import { selectSelectedAccountOrNull, selectVisibleAccountsWithoutObserved, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
-import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { DappWithDetails } from "../DappWithDetails"
 
 type Props = {
     request: SwitchWalletRequest | WalletRequest
-    onCancel: (request: SwitchWalletRequest | WalletRequest) => Promise<void>
     onConfirm: (args: { request: SwitchWalletRequest | WalletRequest; selectedAddress: string }) => Promise<void>
 }
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />
+const SectionSeparatorComponent = (props: BaseSectionListSeparatorProps) => {
+    return <SectionListSeparator {...props} headerToHeaderHeight={24} headerToItemsHeight={8} />
+}
 
 const SectionHeader = ({
     section,
@@ -29,12 +31,11 @@ const SectionHeader = ({
     return <BaseText typographyFont="bodyMedium">{section.alias}</BaseText>
 }
 
-const SwitchWalletBottomSheetContent = ({ request, onCancel, onConfirm }: Props) => {
+const SwitchWalletBottomSheetContent = ({ request, onConfirm }: Props) => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyles)
 
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
-    const [internalAccount, setInternalAccount] = useState(selectedAccount)
 
     const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
 
@@ -46,29 +47,32 @@ const SwitchWalletBottomSheetContent = ({ request, onCancel, onConfirm }: Props)
         return Object.entries(groupedAccounts).map(([alias, data]) => ({ alias, data }))
     }, [visibleAccounts])
 
-    const handlePress = useCallback((account: AccountWithDevice | WatchedAccount) => {
-        if (AccountUtils.isObservedAccount(account)) return
-        setInternalAccount(account)
-    }, [])
-
-    const handleConfirm = useCallback(() => {
-        onConfirm({ request, selectedAddress: internalAccount?.address ?? "" })
-    }, [internalAccount?.address, onConfirm, request])
+    const handleConfirm = useCallback(
+        (account: AccountWithDevice | WatchedAccount) => {
+            if (AccountUtils.isObservedAccount(account)) return
+            onConfirm({ request, selectedAddress: account.address })
+        },
+        [onConfirm, request],
+    )
 
     return (
         <>
-            <BaseView flexDirection="row" gap={12} justifyContent="space-between" testID="SWITCH_WALLET_REQUEST_TITLE">
-                <BaseView flex={1} flexDirection="row" gap={12}>
-                    <BaseIcon name="icon-wallet" size={20} color={theme.colors.editSpeedBs.title} />
-                    <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                        {LL.SWITCH_WALLET_REQUEST_TITLE()}
-                    </BaseText>
+            <BaseView pb={12}>
+                <BaseView
+                    flexDirection="row"
+                    gap={12}
+                    justifyContent="space-between"
+                    testID="SWITCH_WALLET_REQUEST_TITLE">
+                    <BaseView flex={1} flexDirection="row" gap={12}>
+                        <BaseIcon name="icon-wallet" size={20} color={theme.colors.editSpeedBs.title} />
+                        <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                            {LL.SWITCH_WALLET_REQUEST_TITLE()}
+                        </BaseText>
+                    </BaseView>
                 </BaseView>
+                <BaseSpacer height={12} />
+                <DappWithDetails appName={request.appName} appUrl={request.appUrl} renderDetailsButton={false} />
             </BaseView>
-            <BaseSpacer height={12} />
-            <DappWithDetails appName={request.appName} appUrl={request.appUrl} renderDetailsButton={false} />
-            <BaseSpacer height={12} />
-
             <BottomSheetSectionList
                 sections={sections}
                 keyExtractor={item => item.address}
@@ -77,38 +81,24 @@ const SwitchWalletBottomSheetContent = ({ request, onCancel, onConfirm }: Props)
                 renderItem={({ item }) => (
                     <SelectableAccountCard
                         account={item}
-                        onPress={handlePress}
-                        selected={item.address === internalAccount?.address}
+                        onPress={handleConfirm}
+                        selected={item.address === selectedAccount?.address}
                         balanceToken={"VET"}
                         testID="SWITCH_WALLET_ACCOUNT_BOX"
                     />
                 )}
                 ItemSeparatorComponent={ItemSeparatorComponent}
-                SectionSeparatorComponent={ItemSeparatorComponent}
+                SectionSeparatorComponent={SectionSeparatorComponent}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 scrollEnabled
+                style={styles.list}
             />
-            <BaseSpacer height={24} />
-            <BaseView flexDirection="row" gap={16} mb={isIOS() ? 16 : 0}>
-                <BaseButton
-                    action={onCancel.bind(null, request)}
-                    variant="outline"
-                    flex={1}
-                    testID="SWITCH_WALLET_REQUEST_BTN_CANCEL">
-                    {LL.COMMON_BTN_CANCEL()}
-                </BaseButton>
-                <BaseButton
-                    action={handleConfirm}
-                    flex={1}
-                    disabled={AccountUtils.isObservedAccount(internalAccount) || !internalAccount}
-                    testID="SWITCH_WALLET_REQUEST_BTN_SIGN">
-                    {LL.SWITCH_WALLET_REQUEST_CTA()}
-                </BaseButton>
-            </BaseView>
         </>
     )
 }
+
+const SNAP_POINTS = ["85%"]
 
 export const SwitchWalletBottomSheet = () => {
     const { switchWalletBsRef, switchWalletBsData, setSwitchWalletBsData } = useInteraction()
@@ -155,15 +145,6 @@ export const SwitchWalletBottomSheet = () => {
         [postMessage, selectedAccount?.address],
     )
 
-    const onCancel = useCallback(
-        async (request: SwitchWalletRequest | WalletRequest) => {
-            await rejectRequest(request)
-            isUserAction.current = true
-            onCloseBs()
-        },
-        [onCloseBs, rejectRequest],
-    )
-
     const onDismiss = useCallback(async () => {
         if (isUserAction.current) {
             setSwitchWalletBsData(null)
@@ -178,17 +159,21 @@ export const SwitchWalletBottomSheet = () => {
 
     return (
         <BaseBottomSheet<Request>
-            dynamicHeight
             ref={switchWalletBsRef}
             onDismiss={onDismiss}
-            enableContentPanningGesture={false}>
+            enableContentPanningGesture={false}
+            scrollable={false}
+            snapPoints={SNAP_POINTS}>
             {switchWalletBsData && (
-                <SwitchWalletBottomSheetContent
-                    onCancel={onCancel}
-                    onConfirm={onConfirm}
-                    request={switchWalletBsData}
-                />
+                <SwitchWalletBottomSheetContent onConfirm={onConfirm} request={switchWalletBsData} />
             )}
         </BaseBottomSheet>
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        list: {
+            flex: 1,
+        },
+    })
