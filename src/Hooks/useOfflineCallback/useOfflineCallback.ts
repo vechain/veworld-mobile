@@ -4,11 +4,13 @@ import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackPr
 import { useIsOnline } from "~Hooks/useIsOnline"
 import { useI18nContext } from "~i18n"
 
-export const useOfflineCallback = <TFunction extends (...args: never[]) => unknown>(cb: TFunction) => {
+export const useOfflineCallback = <TArgs extends unknown[], TReturn>(
+    cb: (...args: TArgs) => TReturn,
+): ((...args: TArgs) => TReturn | undefined) => {
     const { LL } = useI18nContext()
     const isOnline = useIsOnline()
     return useCallback(
-        (...args: Parameters<TFunction>) => {
+        (...args: TArgs) => {
             if (!isOnline) {
                 Feedback.show({
                     message: LL.OFFLINE_CHIP(),
