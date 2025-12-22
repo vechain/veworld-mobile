@@ -1,8 +1,14 @@
 {
   "version": "2.4.14",
-  "major": false,
+  "major": true,
   "descriptions": {
-    "en": [],
+    "en": [
+      "Simplified send experience for tokens and NFTs",
+      "New Recent receivers for faster repeat sends",
+      "Optional contact management",
+      "Improved in-app security",
+      "Fully functional Coinbase on-ramp"
+    ],
     "de": [],
     "es": [],
     "fr": [],
