@@ -3,7 +3,7 @@ import { NavigatorScreenParams } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { AnimatedTabIcon, TabIcon, useFeatureFlags } from "~Components"
-import { useCheckWalletBackup } from "~Hooks"
+import { useCheckWalletBackup, useIsOnline } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { HomeStack, RootStackParamListHome, RootStackParamListSettings, SettingsStack } from "~Navigation/Stacks"
@@ -32,6 +32,7 @@ export const TabStack = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
     const pendingTransactions = useAppSelector(selectActivitiesWithoutFinality)
+    const isOnline = useIsOnline()
 
     const { betterWorldFeature } = useFeatureFlags()
 
@@ -99,7 +100,7 @@ export const TabStack = () => {
                 />
             )}
 
-            {!AccountUtils.isObservedAccount(selectedAccount) && (
+            {!AccountUtils.isObservedAccount(selectedAccount) && isOnline && (
                 <Tab.Screen
                     name="AppsStack"
                     component={AppsStack}

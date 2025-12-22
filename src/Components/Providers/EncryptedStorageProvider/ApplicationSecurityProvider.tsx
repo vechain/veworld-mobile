@@ -1,4 +1,3 @@
-import NetInfo from "@react-native-community/netinfo"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import RNBootSplash from "react-native-bootsplash"
 import { MMKV } from "react-native-mmkv"
@@ -20,7 +19,7 @@ import {
     Wallet,
     WALLET_STATUS,
 } from "~Model"
-import { InternetDownScreen, StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
+import { StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
 import { BackupWalletStack } from "~Screens/Flows/App/SecurityUpgrade_V2/Navigation.standalone"
 import {
     AnalyticsUtils,
@@ -526,8 +525,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         lockApplication,
     ])
 
-    const { isConnected } = NetInfo.useNetInfo()
-
     switch (walletStatus) {
         case WALLET_STATUS.NOT_INITIALISED:
             // App is initialising
@@ -545,11 +542,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             if (!value?.redux) return <></>
 
             //App is onboarding and we're using temporary storage
-            return (
-                <ApplicationSecurityContext.Provider value={value}>
-                    {!isConnected ? <InternetDownScreen /> : children}
-                </ApplicationSecurityContext.Provider>
-            )
+            return <ApplicationSecurityContext.Provider value={value}>{children}</ApplicationSecurityContext.Provider>
         case WALLET_STATUS.LOCKED:
             if (userDisabledBiometrics) return <StandaloneAppBlockedScreen />
 
