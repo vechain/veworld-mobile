@@ -19,6 +19,7 @@ import {
     TransferCard,
 } from "~Components"
 import { AnalyticsEvent, COLORS, ERROR_EVENTS, VET, VTHO } from "~Constants"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useTheme, useTransferAddContact } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useTransactionScreen } from "~Hooks/useTransactionScreen"
@@ -135,6 +136,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         onTransactionFailure,
         autoVTHOFallback: false,
     })
+
+    const guardedOnSubmit = useOfflineCallback(onSubmit)
 
     /**
      * If user is sending a token and gas is not enough, we will adjust the amount to send.
@@ -263,7 +266,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 <FadeoutButton
                     testID="confirm-send-button"
                     title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                    action={onSubmit}
+                    action={guardedOnSubmit}
                     disabled={isDisabledButtonState}
                     bottom={0}
                     mx={0}

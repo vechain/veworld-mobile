@@ -1,4 +1,3 @@
-import { useNetInfo } from "@react-native-community/netinfo"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
@@ -6,7 +5,7 @@ import Animated, { AnimatedStyle, FadeIn, FadeOut, LinearTransition } from "reac
 import { useFeatureFlags } from "~Components"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent, ScanTarget, STARGATE_DAPP_URL } from "~Constants"
-import { useAnalyticTracking, useBrowserNavigation, useCameraBottomSheet, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useBrowserNavigation, useCameraBottomSheet, useIsOnline, useThemedStyles } from "~Hooks"
 import { useSendableTokensWithBalance } from "~Hooks/useSendableTokensWithBalance"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -24,7 +23,7 @@ export const BalanceActions = ({ style }: Props) => {
     const nav = useNavigation()
     const track = useAnalyticTracking()
 
-    const { isConnected } = useNetInfo()
+    const isOnline = useIsOnline()
 
     const { RenderCameraModal, handleOpenCamera } = useCameraBottomSheet({
         targets: [ScanTarget.ADDRESS, ScanTarget.WALLET_CONNECT, ScanTarget.HTTPS_URL],
@@ -78,14 +77,14 @@ export const BalanceActions = ({ style }: Props) => {
                 truncateText
                 typographyFont="captionSemiBold"
                 onPress={onReceive}
-                disabled={!isConnected}
+                disabled={false}
             />
             <GlassButtonWithLabel
                 label={LL.BALANCE_ACTION_SEND()}
                 size="sm"
                 icon="icon-arrow-up"
                 onPress={onSend}
-                disabled={isSendDisabled || !isConnected}
+                disabled={isSendDisabled || !isOnline}
                 typographyFont="captionSemiBold"
                 truncateText
             />
@@ -96,7 +95,7 @@ export const BalanceActions = ({ style }: Props) => {
                 onPress={onSwap}
                 typographyFont="captionSemiBold"
                 truncateText
-                disabled={!isConnected}
+                disabled={!isOnline}
             />
             <GlassButtonWithLabel
                 label={LL.BALANCE_ACTION_BUY()}
@@ -105,7 +104,7 @@ export const BalanceActions = ({ style }: Props) => {
                 onPress={onBuy}
                 typographyFont="captionSemiBold"
                 truncateText
-                disabled={!isConnected}
+                disabled={!isOnline}
             />
             <GlassButtonWithLabel
                 label={LL.BALANCE_ACTION_EARN()}
@@ -114,7 +113,7 @@ export const BalanceActions = ({ style }: Props) => {
                 onPress={onEarn}
                 typographyFont="captionSemiBold"
                 truncateText
-                disabled={!isConnected}
+                disabled={!isOnline}
             />
             {RenderCameraModal}
         </Animated.View>

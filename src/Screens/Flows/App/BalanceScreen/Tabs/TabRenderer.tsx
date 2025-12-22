@@ -1,4 +1,3 @@
-import { useNetInfo } from "@react-native-community/netinfo"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
@@ -6,7 +5,13 @@ import Animated, { LinearTransition, ZoomIn, ZoomOut } from "react-native-reanim
 import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { AnalyticsEvent, COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
-import { useAnalyticTracking, useDappBookmarksList, useHasAnyVeBetterActions, useThemedStyles } from "~Hooks"
+import {
+    useAnalyticTracking,
+    useDappBookmarksList,
+    useHasAnyVeBetterActions,
+    useIsOnline,
+    useThemedStyles,
+} from "~Hooks"
 import { useLayoutScrollviewPadding } from "~Hooks/useLayoutScrollviewPadding"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -45,7 +50,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const track = useAnalyticTracking()
     const { betterWorldFeature } = useFeatureFlags()
 
-    const { isConnected } = useNetInfo()
+    const isOnline = useIsOnline()
 
     const filteredTabs = useMemo(() => {
         return TABS.filter(tab => {
@@ -73,7 +78,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
     }, [hideNewUserVeBetterCard, hasAnyVeBetterActions, selectedTab])
 
     const rightIcon = useMemo(() => {
-        if (selectedTab === "TOKENS" && isConnected) {
+        if (selectedTab === "TOKENS" && isOnline) {
             return (
                 <AnimatedTouchable
                     style={styles.manageTokens}
@@ -90,7 +95,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
         }
 
         return null
-    }, [selectedTab, isConnected, styles.manageTokens, theme.isDark, nav])
+    }, [selectedTab, isOnline, styles.manageTokens, theme.isDark, nav])
 
     const onTabPress = useCallback(
         (tab: (typeof TABS)[number]) => {
