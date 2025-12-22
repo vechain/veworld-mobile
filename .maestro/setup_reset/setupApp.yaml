@@ -61,8 +61,12 @@ env:
             id: "SelectAccountBottomSheet_SettingsButtonIcon"
 - tapOn:
       id: "Wallet_Management_AddWallet"
-- tapOn:
-      id: "CreateOrImportWalletBottomSheet_CreateNewButton"
+- runFlow:
+    when:
+      visible: "Wallet Setup"
+    commands:
+      - tapOn:
+            id: "CreateOrImportWalletBottomSheet_CreateNewButton"
 - repeat:
     times: 6
     commands:
