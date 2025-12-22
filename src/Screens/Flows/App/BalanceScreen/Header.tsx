@@ -154,7 +154,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
             )}
 
             <BaseView flexDirection="row" gap={12} py={4} px={8} borderRadius={99} style={styles.account}>
-                <TouchableOpacity onPress={handleOpenWalletSwitcher}>
+                <TouchableOpacity testID="BalanceScreen_WalletManagementButton" onPress={handleOpenWalletSwitcher}>
                     <AccountIcon account={account} size={32} />
                 </TouchableOpacity>
                 <TouchableOpacity
