@@ -794,7 +794,7 @@
   "LIGHT_THEME": "浅色主题",
   "LOADING_MORE": "加载更多",
   "LOADING_PAGE_CONTENT": "加载页面内容",
-  "LOGIN_KEEP_ME_SIGNED_IN": "保持登录以便将来会话",
+  "LOGIN_KEEP_ME_SIGNED_IN": "保持登录状态",
   "LOGIN_REQUEST_CTA": "登录",
   "LOGIN_REQUEST_TITLE": "登录",
   "MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION": "您确定要添加选定的代币吗？",

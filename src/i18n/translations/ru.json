@@ -794,7 +794,7 @@
   "LIGHT_THEME": "Светлая",
   "LOADING_MORE": "Загрузка дополнительно",
   "LOADING_PAGE_CONTENT": "Загрузка содержимого страницы",
-  "LOGIN_KEEP_ME_SIGNED_IN": "Оставаться в системе для будущих сессий",
+  "LOGIN_KEEP_ME_SIGNED_IN": "Оставаться в системе",
   "LOGIN_REQUEST_CTA": "Войти",
   "LOGIN_REQUEST_TITLE": "Вход",
   "MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION": "Вы уверены, что хотите добавить выбранный токен?",

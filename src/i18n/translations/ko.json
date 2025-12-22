@@ -794,7 +794,7 @@
   "LIGHT_THEME": "라이트",
   "LOADING_MORE": "더 불러오는 중",
   "LOADING_PAGE_CONTENT": "페이지 내용을 불러오는 중",
-  "LOGIN_KEEP_ME_SIGNED_IN": "향후 세션을 위해 로그인 상태 유지",
+  "LOGIN_KEEP_ME_SIGNED_IN": "로그인 상태 유지",
   "LOGIN_REQUEST_CTA": "로그인",
   "LOGIN_REQUEST_TITLE": "로그인",
   "MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION": "선택한 토큰을 추가하시겠습니까?",
