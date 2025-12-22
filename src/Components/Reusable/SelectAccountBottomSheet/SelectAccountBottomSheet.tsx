@@ -180,7 +180,11 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                                 testID="SelectAccountBottomSheet_SettingsButton"
                                 onPress={onSettingsClick}
                                 style={styles.settingsBtn}>
-                                <BaseIcon name="icon-settings" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} />
+                                <BaseIcon
+                                    name="icon-settings"
+                                    testID="SelectAccountBottomSheet_SettingsButtonIcon"
+                                    color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}
+                                />
                             </BSTouchableOpacity>
                         )}
                     </BaseView>

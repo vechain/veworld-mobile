@@ -51,12 +51,14 @@ env:
       id: "NetworkBox_testnet"
 - tapOn:
       id: "wallet-tab"
-## Homepage - Adding accounts
-- assertVisible: "VeWorld"
 - tapOn:
       id: "BalanceScreen_WalletManagementButton"
-- tapOn:
-      id: "SelectAccountBottomSheet_SettingsButton"
+- runFlow:
+    when:
+      visible: "Select the active account"
+    commands:
+      - tapOn:
+            id: "SelectAccountBottomSheet_SettingsButtonIcon"
 - tapOn:
       id: "Wallet_Management_AddWallet"
 - tapOn:
