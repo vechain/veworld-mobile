@@ -616,6 +616,113 @@ describe("ActivityBox", () => {
         })
     })
 
+    describe("Status Indicator Logic", () => {
+        describe("BaseActivityBox Status Display Logic", () => {
+            it("should show status indicator only when activityStatus is REVERTED", () => {
+                const revertedActivity: FungibleTokenActivity = {
+                    id: "test-reverted",
+                    blockNumber: 123,
+                    timestamp: Date.now(),
+                    type: ActivityType.TRANSFER_FT,
+                    amount: "1000000000000000000",
+                    tokenAddress: "0x0",
+                    direction: DIRECTIONS.UP,
+                    from: "0x123",
+                    to: ["0x456"],
+                    status: ActivityStatus.REVERTED,
+                    isTransaction: true,
+                    delegated: false,
+                }
+
+                render(
+                    <TestWrapper preloadedState={mockPreloadedState}>
+                        <ActivityBox.TokenTransfer activity={revertedActivity} onPress={mockOnPress} />
+                    </TestWrapper>,
+                )
+
+                expect(screen.getByText("Failed")).toBeTruthy()
+            })
+
+            it("should not show status indicator when activityStatus is SUCCESS", () => {
+                const successActivity: FungibleTokenActivity = {
+                    id: "test-success",
+                    blockNumber: 123,
+                    timestamp: Date.now(),
+                    type: ActivityType.TRANSFER_FT,
+                    amount: "1000000000000000000",
+                    tokenAddress: "0x0",
+                    direction: DIRECTIONS.UP,
+                    from: "0x123",
+                    to: ["0x456"],
+                    status: ActivityStatus.SUCCESS,
+                    isTransaction: true,
+                    delegated: false,
+                }
+
+                render(
+                    <TestWrapper preloadedState={mockPreloadedState}>
+                        <ActivityBox.TokenTransfer activity={successActivity} onPress={mockOnPress} />
+                    </TestWrapper>,
+                )
+
+                expect(screen.queryByText("Failed")).toBeNull()
+            })
+
+            it("should not show status indicator when activityStatus is undefined", () => {
+                const undefinedStatusActivity: FungibleTokenActivity = {
+                    id: "test-undefined",
+                    blockNumber: 123,
+                    timestamp: Date.now(),
+                    type: ActivityType.TRANSFER_FT,
+                    amount: "1000000000000000000",
+                    tokenAddress: "0x0",
+                    direction: DIRECTIONS.UP,
+                    from: "0x123",
+                    to: ["0x456"],
+                    status: undefined,
+                    isTransaction: true,
+                    delegated: false,
+                }
+
+                render(
+                    <TestWrapper preloadedState={mockPreloadedState}>
+                        <ActivityBox.TokenTransfer activity={undefinedStatusActivity} onPress={mockOnPress} />
+                    </TestWrapper>,
+                )
+
+                expect(screen.queryByText("Failed")).toBeNull()
+            })
+        })
+
+        describe("TokenTransfer Activity Status Prop", () => {
+            it("should pass activity.status to component", () => {
+                const activityWithStatus: FungibleTokenActivity = {
+                    id: "test-status-prop",
+                    blockNumber: 123,
+                    timestamp: Date.now(),
+                    type: ActivityType.TRANSFER_FT,
+                    amount: "1000000000000000000",
+                    tokenAddress: "0x0",
+                    direction: DIRECTIONS.UP,
+                    from: "0x123",
+                    to: ["0x456"],
+                    status: ActivityStatus.REVERTED,
+                    isTransaction: true,
+                    delegated: false,
+                }
+
+                const { getByTestId } = render(
+                    <TestWrapper preloadedState={mockPreloadedState}>
+                        <ActivityBox.TokenTransfer activity={activityWithStatus} onPress={mockOnPress} />
+                    </TestWrapper>,
+                )
+
+                expect(getByTestId(`FT-TRANSFER-${activityWithStatus.id}`)).toBeTruthy()
+                expect(screen.getByText("Failed")).toBeTruthy()
+            })
+        })
+    })
+
     describe("Stargate Activities", () => {
         it("should render stargate stake correctly", () => {
             const activity: StargateActivity = {

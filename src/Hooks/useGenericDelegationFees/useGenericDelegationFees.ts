@@ -41,27 +41,33 @@ const buildTransactionCost = (
             estimatedFee: BigNutils(data.transactionCost[keys[0]][lowerCaseToken]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
-            maxFee: BigNutils(data.transactionCost[keys[0]][lowerCaseToken]).multiply(
-                ethers.utils.parseEther("1").toString(),
-            ),
+            // Add 25% to the max fee given wrong estimation from the delegation
+            maxFee: BigNutils(data.transactionCost[keys[0]][lowerCaseToken])
+                .multiply(ethers.utils.parseEther("1").toString())
+                .multiply(5)
+                .idiv(4),
             priorityFee: BigNutils("0"),
         },
         [GasPriceCoefficient.MEDIUM]: {
             estimatedFee: BigNutils(data.transactionCost[keys[1]][lowerCaseToken]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
-            maxFee: BigNutils(data.transactionCost[keys[1]][lowerCaseToken]).multiply(
-                ethers.utils.parseEther("1").toString(),
-            ),
+            // Add 25% to the max fee given wrong estimation from the delegation
+            maxFee: BigNutils(data.transactionCost[keys[1]][lowerCaseToken])
+                .multiply(ethers.utils.parseEther("1").toString())
+                .multiply(5)
+                .idiv(4),
             priorityFee: BigNutils("0"),
         },
         [GasPriceCoefficient.HIGH]: {
             estimatedFee: BigNutils(data.transactionCost[keys[2]][lowerCaseToken]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
-            maxFee: BigNutils(data.transactionCost[keys[2]][lowerCaseToken]).multiply(
-                ethers.utils.parseEther("1").toString(),
-            ),
+            // Add 25% to the max fee given wrong estimation from the delegation
+            maxFee: BigNutils(data.transactionCost[keys[2]][lowerCaseToken])
+                .multiply(ethers.utils.parseEther("1").toString())
+                .multiply(5)
+                .idiv(4),
             priorityFee: BigNutils("0"),
         },
     }

@@ -1,11 +1,11 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { TestWrapper } from "~Test"
-import { useLevelCirculatingSupplies } from "~Hooks/Staking"
 import { useStargateStats } from "./useStargateStats"
 
 const getStargateTotalSupply = jest.fn()
 const getStargateTotalVet = jest.fn()
 const getStargateRewardsDistributed = jest.fn()
+const getVthoPerDay = jest.fn()
 
 jest.mock("~Hooks/useIndexerClient", () => ({
     ...jest.requireActual("~Hooks/useIndexerClient"),
@@ -18,13 +18,11 @@ jest.mock("~Hooks/useIndexerClient", () => ({
                     return getStargateTotalVet(...args).then((res: any) => ({ data: res }))
                 case "/api/v1/stargate/total-vtho-claimed":
                     return getStargateRewardsDistributed(...args).then((res: any) => ({ data: res }))
+                case "/api/v1/stargate/total-vtho-generated/historic/{range}":
+                    return getVthoPerDay(...args).then((res: any) => ({ data: res }))
             }
         },
     }),
-}))
-
-jest.mock("~Hooks/Staking", () => ({
-    useLevelCirculatingSupplies: jest.fn(),
 }))
 
 describe("useStargateStats", () => {
@@ -64,12 +62,10 @@ describe("useStargateStats", () => {
             },
         })
         ;(getStargateRewardsDistributed as jest.Mock).mockResolvedValue("526381931206666467000000000")
-        ;(useLevelCirculatingSupplies as jest.Mock).mockImplementation(() => ({
-            data: [25, 20, 15, 10, 5, 3, 10, 15, 20, 25],
-            isLoading: false,
-            error: undefined,
-            isError: false,
-        }))
+        ;(getVthoPerDay as jest.Mock).mockResolvedValue([
+            { timestamp: 1, value: "126381931206666467000000000" },
+            { timestamp: 2, value: "226381931206666467000000000" },
+        ])
 
         const { result, waitFor } = renderHook(() => useStargateStats(), {
             wrapper: TestWrapper,
@@ -83,6 +79,6 @@ describe("useStargateStats", () => {
         expect(result.current.data?.totalSupply?.total).toBe(12816)
         expect(result.current.data?.totalVetStaked?.total).toBe("6318030000000000000000000000")
         expect(result.current.data?.rewardsDistributed).toBe("526381931206666467000000000")
-        expect(result.current.data?.vthoPerDay).toBe(1181630.68475904)
+        expect(result.current.data?.vthoPerDay).toBe("226381931206666467000000000")
     })
 })
