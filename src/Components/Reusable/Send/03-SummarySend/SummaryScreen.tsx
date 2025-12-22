@@ -141,7 +141,10 @@ export const SummaryScreen = () => {
             </SendContent.Container>
             <SendContent.Footer>
                 <SendContent.Footer.Back />
-                <SendContent.Footer.Next action={onSubmit} disabled={isDisabledButtonState}>
+                <SendContent.Footer.Next
+                    testID="SummaryScreen_NextButton"
+                    action={onSubmit}
+                    disabled={isDisabledButtonState}>
                     {txError ? LL.COMMON_BTN_TRY_AGAIN() : LL.COMMON_BTN_CONFIRM()}
                 </SendContent.Footer.Next>
             </SendContent.Footer>

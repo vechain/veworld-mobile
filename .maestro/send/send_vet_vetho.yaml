@@ -12,20 +12,19 @@ onFlowComplete:
 ---
 ## User should be able to send tokens - Send VET from Account 1 to Account 2
 - tapOn:
-    id: "sendButton"
-- runFlow:
-    commands:
-      - tapOn:
-          id: "VET"
+    id: "BalanceScreen_SendButton"
 - tapOn:
-    id: "selectAccount"
-    index: 0
-- tapOn: "NEXT"
-- inputText: ${AMOUNT}
+    id: "SelectAmountConversionToggle_Button"
 - tapOn:
-    id: "Select_Amount_Send_Screen"
+    id: "SEND_1_KEY"
 - tapOn:
-    id: "next-button"
+    id: "SelectAmountSendComponent_NextButton"
+- tapOn:
+    id: "AnimatedFilterChips-accounts"
+- tapOn:
+    id: "Send_Receiver_Addresses_List_Accounts_Account 1"
+- tapOn:
+    id: "ReceiverScreen_NextButton"
 - runFlow:
     when:
       visible: "Fee delegation"
@@ -35,33 +34,34 @@ onFlowComplete:
               id: "MAX_FEE_GALACTICA"
           timeout: 10000
       - tapOn:
-          id: "confirm-send-button"
+          id: "SummaryScreen_NextButton"
 - repeat:
-    while:
-      visible: "Insert your 6-digit PIN"
+    times: 6
     commands:
-      - tapOn: "1"
-- assertVisible: "My tokens"
+      - tapOn:
+          id: "numpad-1"
+- assertVisible: "Tokens"
 - evalScript: ${console.log('Send VET from Account 1 to Account 2')}
 
 ## User should be able to send tokens - Send VETHO from Account 1 to Account 2
 - tapOn:
-    id: "wallet-tab"
+    id: "BalanceScreen_SendButton"
 - tapOn:
-    id: "sendButton"
-- runFlow:
-    commands:
-      - tapOn:
-          id: "VTHO"
+    id: "SelectAmountConversionToggle_Button"
 - tapOn:
-    id: "selectAccount"
+    id: "SelectAmountTokenSelector_Button"
 - tapOn:
-    id: "next-button"
-- inputText: ${AMOUNT}
+    id: "TokenSelectionBottomSheet_TokenCard_VTHO"
 - tapOn:
-    id: "Layout_ScrollView"
+    id: "SEND_1_KEY"
 - tapOn:
-    id: "next-button"
+    id: "SelectAmountSendComponent_NextButton"
+- tapOn:
+    id: "AnimatedFilterChips-accounts"
+- tapOn:
+    id: "Send_Receiver_Addresses_List_Accounts_Account 1"
+- tapOn:
+    id: "ReceiverScreen_NextButton"
 - runFlow:
     when:
       visible: "Fee delegation"
@@ -71,56 +71,11 @@ onFlowComplete:
               id: "MAX_FEE_GALACTICA"
           timeout: 10000
       - tapOn:
-          id: "confirm-send-button"
+          id: "SummaryScreen_NextButton"
 - repeat:
-    while:
-      visible: "Insert your 6-digit PIN"
+    times: 6
     commands:
-      - tapOn: "1"
-- assertVisible: "My tokens"
+      - tapOn:
+          id: "numpad-1"
+- assertVisible: "Tokens"
 - evalScript: ${console.log('Send VETHO from Account 1 to Account 2')}
-
-## User should be able to send tokens-Send VET from Account 2 to Account 1
-- tapOn:
-    id: "wallet-tab"
-- extendedWaitUntil:
-    visible:
-       id: "AccountCard_changeAccountButton"
-    timeout: 10000
-- tapOn:
-    id: "AccountCard_changeAccountButton"
-- tapOn:
-    id: "selectAccount"
-    index: 1
-- tapOn:
-    id: "sendButton"
-- runFlow:
-    commands:
-      - tapOn:
-          id: "VET"
-- tapOn:
-    id: "selectAccount"
-    index: 0
-- tapOn: "NEXT"
-- inputText: ${AMOUNT}
-- tapOn:
-    id: "Layout_ScrollView"
-- tapOn:
-    id: "next-button"
-- runFlow:
-    when:
-      visible: "Fee delegation"
-    commands:
-      - extendedWaitUntil:
-          visible:
-              id: "MAX_FEE_GALACTICA"
-          timeout: 10000
-      - tapOn:
-          id: "confirm-send-button"
-- repeat:
-    while:
-      visible: "Insert your 6-digit PIN"
-    commands:
-      - tapOn: "1"
-- assertVisible: "My tokens"
-- evalScript: ${console.log('Send VET from Account 2 to Account 1')}

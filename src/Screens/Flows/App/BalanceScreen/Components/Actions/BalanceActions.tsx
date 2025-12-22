@@ -81,6 +81,7 @@ export const BalanceActions = ({ style }: Props) => {
             />
             <GlassButtonWithLabel
                 label={LL.BALANCE_ACTION_SEND()}
+                testID="BalanceScreen_SendButton"
                 size="sm"
                 icon="icon-arrow-up"
                 onPress={onSend}

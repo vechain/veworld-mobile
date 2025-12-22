@@ -164,7 +164,11 @@ const SelectAmountSendComponentContent = ({
                 </Animated.View>
             </SendContent.Container>
             <SendContent.Footer>
-                <SendContent.Footer.Next action={onSubmit} disabled={isNextDisabled} />
+                <SendContent.Footer.Next
+                    testID="SelectAmountSendComponent_NextButton"
+                    action={onSubmit}
+                    disabled={isNextDisabled}
+                />
             </SendContent.Footer>
             <TokenSelectionBottomSheet
                 ref={bottomSheetRef}

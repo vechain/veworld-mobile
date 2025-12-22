@@ -92,7 +92,7 @@ export const ReceiverScreen = () => {
             </SendContent.Container>
             <SendContent.Footer>
                 {isTokenFlow && <SendContent.Footer.Back />}
-                <SendContent.Footer.Next action={goToNext} disabled={disabled} />
+                <SendContent.Footer.Next testID="ReceiverScreen_NextButton" action={goToNext} disabled={disabled} />
             </SendContent.Footer>
         </SendContent>
     )
