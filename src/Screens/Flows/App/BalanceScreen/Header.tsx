@@ -13,7 +13,7 @@ import {
     StellaPayBottomSheet,
 } from "~Components"
 import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
-import { useBottomSheetModal, useCopyClipboard, useSetSelectedAccount, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useCopyClipboard, useIsOnline, useSetSelectedAccount, useThemedStyles } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useCameraBottomSheet } from "~Hooks/useCameraBottomSheet"
 import { useVns } from "~Hooks/useVns"
@@ -46,6 +46,8 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
     const { LL } = useI18nContext()
     const { onCopyToClipboard } = useCopyClipboard()
     const { navigateWithTab } = useBrowserTab()
+
+    const isOnline = useIsOnline()
 
     const height = useSharedValue(90)
 
@@ -175,24 +177,35 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
             </BaseView>
 
             <BaseView flexDirection="row" gap={12}>
-                <TouchableOpacity onPress={onStellaPayShortCutPress}>
-                    <BaseView borderRadius={99} p={8}>
-                        <BaseIcon name="icon-credit-card" color={COLORS.PURPLE_LABEL} size={24} />
-                    </BaseView>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleOpenQRCode}>
-                    <BaseView borderRadius={99} p={8}>
-                        <BaseIcon name="icon-scan-line" color={COLORS.PURPLE_LABEL} size={24} />
-                    </BaseView>
-                </TouchableOpacity>
-                {network.type !== NETWORK_TYPE.MAIN && (
-                    <NetworkSwitcherContextMenu>
-                        <TouchableOpacity onPress={onSwitchNetwork}>
+                {isOnline ? (
+                    <>
+                        <TouchableOpacity onPress={onStellaPayShortCutPress}>
                             <BaseView borderRadius={99} p={8}>
-                                <BaseIcon name="icon-globe" color={COLORS.LIME_GREEN} size={24} />
+                                <BaseIcon name="icon-credit-card" color={COLORS.PURPLE_LABEL} size={24} />
                             </BaseView>
                         </TouchableOpacity>
-                    </NetworkSwitcherContextMenu>
+                        <TouchableOpacity onPress={handleOpenQRCode}>
+                            <BaseView borderRadius={99} p={8}>
+                                <BaseIcon name="icon-scan-line" color={COLORS.PURPLE_LABEL} size={24} />
+                            </BaseView>
+                        </TouchableOpacity>
+                        {network.type !== NETWORK_TYPE.MAIN && (
+                            <NetworkSwitcherContextMenu>
+                                <TouchableOpacity onPress={onSwitchNetwork}>
+                                    <BaseView borderRadius={99} p={8}>
+                                        <BaseIcon name="icon-globe" color={COLORS.PURPLE_LABEL} size={24} />
+                                    </BaseView>
+                                </TouchableOpacity>
+                            </NetworkSwitcherContextMenu>
+                        )}
+                    </>
+                ) : (
+                    <BaseView p={8} flexDirection="row" gap={12}>
+                        <BaseText typographyFont="captionSemiBold" color={COLORS.RED_400}>
+                            {LL.OFFLINE_STATUS()}
+                        </BaseText>
+                        <BaseIcon name="icon-wifi-off" color={COLORS.RED_400} size={24} />
+                    </BaseView>
                 )}
             </BaseView>
 

@@ -935,6 +935,8 @@
   "NO_TOKENS_AVAILABLE_FOR_FEE": "No hay tokens disponibles para pagar la tarifa.",
   "NO_VTHO_BALANCE": "Sin saldo de VTHO. Selecciona otro token.",
   "OCTOBER": "Octubre",
+  "OFFLINE_CHIP": "Estás sin conexión",
+  "OFFLINE_STATUS": "Sin conexión",
   "ONLY_SECONDS": "{seconds:number|toSecondsDuration}",
   "ORIGIN": "Origen",
   "OUTCOMES": "Resultados",

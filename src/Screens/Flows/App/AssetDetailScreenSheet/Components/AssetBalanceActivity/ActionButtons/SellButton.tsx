@@ -4,7 +4,7 @@ import React, { useCallback, useMemo } from "react"
 import { useFeatureFlags } from "~Components"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent } from "~Constants"
-import { useAnalyticTracking } from "~Hooks"
+import { useAnalyticTracking, useIsOnline } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
@@ -17,6 +17,7 @@ const useSell = (token: FungibleTokenWithBalance) => {
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListSwitch>>()
     const { paymentProvidersFeature } = useFeatureFlags()
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const isOnline = useIsOnline()
 
     const onPress = useCallback(() => {
         nav.replace(Routes.SELL_FLOW)
@@ -24,12 +25,13 @@ const useSell = (token: FungibleTokenWithBalance) => {
     }, [nav, track])
 
     const disabled = useMemo(() => {
+        if (!isOnline) return true
         if (!PlatformUtils.isAndroid()) return true
         if (!paymentProvidersFeature.coinify.android) return true
         if (AccountUtils.isObservedAccount(selectedAccount)) return true
         if (BigNutils(token.balance.balance).isZero) return true
         return false
-    }, [paymentProvidersFeature.coinify.android, selectedAccount, token.balance.balance])
+    }, [isOnline, paymentProvidersFeature.coinify.android, selectedAccount, token.balance.balance])
 
     return useMemo(
         () => ({

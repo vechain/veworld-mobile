@@ -935,6 +935,8 @@
   "NO_TOKENS_AVAILABLE_FOR_FEE": "No tokens available to pay the fee.",
   "NO_VTHO_BALANCE": "No VTHO balance. Select another token",
   "OCTOBER": "October",
+  "OFFLINE_CHIP": "You are offline",
+  "OFFLINE_STATUS": "Offline",
   "ONLY_SECONDS": "{seconds:number|toSecondsDuration}",
   "ORIGIN": "Origin",
   "OUTCOMES": "Outcomes",

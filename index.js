@@ -59,8 +59,6 @@ import "react-native-fast-url/src/polyfill"
 import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { clientPersister, queryClient, RQ_CACHE_MAX_AGE } from "~Api/QueryProvider"
-import NetInfo from "@react-native-community/netinfo"
-import { onlineManager } from "@tanstack/react-query"
 import { NAVIGATION_REF, Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
@@ -71,6 +69,7 @@ import { DeepLinksProvider } from "~Components/Providers/DeepLinksProvider"
 import { DeviceProvider } from "~Components/Providers/DeviceProvider"
 import { FeedbackProvider } from "~Components/Providers/FeedbackProvider"
 import { ReceiptProcessorProvider } from "~Components/Providers/ReceiptProcessorProvider"
+import { useOnlineManager } from "~Hooks/useOnlineManager"
 
 const { fontFamily } = typography
 
@@ -105,11 +104,7 @@ const Main = () => {
 
     // Online status management
     // https://tanstack.com/query/v4/docs/react/react-native#online-status-management
-    onlineManager.setEventListener(setOnline => {
-        return NetInfo.addEventListener(state => {
-            setOnline(!!state.isConnected)
-        })
-    })
+    useOnlineManager()
 
     const isAnalyticsEnabled = useAppSelector(selectAnalyticsTrackingEnabled)
 
@@ -152,17 +147,27 @@ const Main = () => {
      */
     // const shouldDehydrateQuery = useCallback(q => q.meta?.persisted ?? true, [])
     const persistOptions = useMemo(() => {
-        return {
+        /**
+         * @type {Omit<import("@tanstack/react-query-persist-client").PersistQueryClientOptions, 'queryClient'>}
+         */
+        const result = {
             persister: clientPersister,
             maxAge: RQ_CACHE_MAX_AGE,
             dehydrateOptions: {
-                //  shouldDehydrateQuery,
+                shouldDehydrateQuery: query => {
+                    if (query.state.status === "success") return true
+                    if (query.queryKey.length === 0) return false
+                    if (query.queryKey[0] === "TRANSAK") return false
+                    if (query.state.status === "error" && query.state.data) return true
+                    return false
+                },
                 shouldRedactErrors: () => false,
             },
             hydrateOptions: {
                 shouldRedactErrors: () => false,
             },
         }
+        return result
     }, [])
 
     if (!fontsLoaded) return
