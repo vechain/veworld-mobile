@@ -19,8 +19,8 @@ import {
     TransferCard,
 } from "~Components"
 import { AnalyticsEvent, COLORS, ERROR_EVENTS, VET, VTHO } from "~Constants"
+import { useIsOnline, useTheme, useTransferAddContact } from "~Hooks"
 import { useOfflineCallback } from "~Hooks/useOfflineCallback"
-import { useTheme, useTransferAddContact } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useTransactionScreen } from "~Hooks/useTransactionScreen"
 import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
@@ -48,6 +48,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const nav = useNavigation()
+    const isOnline = useIsOnline()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const pendingTransaction = useAppSelector(state => selectPendingTx(state, token.address))
@@ -268,7 +269,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     testID="confirm-send-button"
                     title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
                     action={guardedOnSubmit}
-                    disabled={isDisabledButtonState}
+                    disabled={isDisabledButtonState || !isOnline}
                     bottom={0}
                     mx={0}
                     width={"auto"}
