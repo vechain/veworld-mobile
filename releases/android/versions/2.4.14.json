@@ -9,21 +9,117 @@
       "Improved in-app security",
       "Fully functional Coinbase on-ramp"
     ],
-    "de": [],
-    "es": [],
-    "fr": [],
-    "hi": [],
-    "it": [],
-    "ja": [],
-    "ko": [],
-    "nl": [],
-    "pl": [],
-    "pt": [],
-    "ru": [],
-    "sv": [],
-    "tr": [],
-    "tw": [],
-    "vi": [],
-    "zh": []
+    "de": [
+      "Vereinfachtes Sendeerlebnis für Tokens und NFTs",
+      "Neue letzte Empfänger für schnellere wiederholte Sendungen",
+      "Optionale Kontaktverwaltung",
+      "Verbesserte In-App-Sicherheit",
+      "Voll funktionsfähige Coinbase-Einzahlungsmöglichkeit"
+    ],
+    "es": [
+      "Experiencia de envío simplificada para tokens y NFT",
+      "Nuevos destinatarios recientes para envíos repetidos más rápidos",
+      "Gestión de contactos opcional",
+      "Seguridad mejorada en la aplicación",
+      "Ramp de entrada a Coinbase completamente funcional"
+    ],
+    "fr": [
+      "Expérience d’envoi simplifiée pour les tokens et les NFTs",
+      "Nouveaux destinataires récents pour des envois répétés plus rapides",
+      "Gestion de contacts optionnelle",
+      "Sécurité améliorée dans l’application",
+      "Rampe d’accès Coinbase totalement fonctionnelle"
+    ],
+    "hi": [
+      "टोकन और NFT के लिए सरल भेजने का अनुभव",
+      "तेज़ दोहराए गए भेजने के लिए हाल के रिसीवर",
+      "वैकल्पिक संपर्क प्रबंधन",
+      "ऐप में बेहतर सुरक्षा",
+      "पूर्ण रूप से कार्यात्मक कॉइनबेस ऑन-रैंप"
+    ],
+    "it": [
+      "Esperienza di invio semplificata per token e NFT",
+      "Nuovi destinatari recenti per invii ripetuti più veloci",
+      "Gestione contatti opzionale",
+      "Sicurezza migliorata nell’app",
+      "On-ramp Coinbase completamente funzionante"
+    ],
+    "ja": [
+      "トークンとNFTの送信体験を簡素化",
+      "繰り返し送信が素早くできる新しい最近の受信者",
+      "連絡先管理がオプションで利用可能",
+      "アプリ内セキュリティの強化",
+      "完全機能のCoinbaseオンランプ"
+    ],
+    "ko": [
+      "토큰 및 NFT를 위한 간소화된 전송 경험",
+      "더 빠른 반복 전송을 위한 최근 수신자 기능 추가",
+      "선택적 연락처 관리",
+      "개선된 앱 내 보안",
+      "완전한 기능의 Coinbase 온램프"
+    ],
+    "nl": [
+      "Vereenvoudigde verzendervaring voor tokens en NFT's",
+      "Nieuwe recente ontvangers voor snellere herhaalde verzendingen",
+      "Optioneel contactbeheer",
+      "Verbeterde beveiliging in de app",
+      "Volledig functionele Coinbase on-ramp"
+    ],
+    "pl": [
+      "Uproszczone przesyłanie tokenów i NFT",
+      "Nowi ostatni odbiorcy dla szybszego ponownego wysyłania",
+      "Opcjonalne zarządzanie kontaktami",
+      "Ulepszone bezpieczeństwo w aplikacji",
+      "W pełni funkcjonalny on-ramp Coinbase"
+    ],
+    "pt": [
+      "Experiência simplificada de envio para tokens e NFTs",
+      "Novos destinatários recentes para envios repetidos mais rápidos",
+      "Gerenciamento de contatos opcional",
+      "Segurança aprimorada no aplicativo",
+      "On-ramp Coinbase totalmente funcional"
+    ],
+    "ru": [
+      "Упрощённый процесс отправки токенов и NFT",
+      "Недавно использованные получатели для быстрого повторного перевода",
+      "Необязательное управление контактами",
+      "Улучшенная безопасность в приложении",
+      "Полностью функциональный шлюз пополнения через Coinbase"
+    ],
+    "sv": [
+      "Förenklad sändningsupplevelse för tokens och NFT:er",
+      "Nya senaste mottagare för snabbare återkommande överföringar",
+      "Valfri kontakt­hantering",
+      "Förbättrad säkerhet i appen",
+      "Fullt fungerande Coinbase on-ramp"
+    ],
+    "tr": [
+      "Tokenlar ve NFT'ler için basitleştirilmiş gönderme deneyimi",
+      "Daha hızlı tekrar gönderimler için yeni Son Alıcılar",
+      "Opsiyonel kişi yönetimi",
+      "Geliştirilmiş uygulama içi güvenlik",
+      "Tam işlevli Coinbase giriş seçeneği"
+    ],
+    "tw": [
+      "簡化的代幣和 NFT 傳送體驗",
+      "新增最近收款人，重複傳送更快速",
+      "可選擇的聯絡人管理功能",
+      "提升應用程式內安全性",
+      "完整功能的 Coinbase 入金通道"
+    ],
+    "vi": [
+      "Trải nghiệm gửi token và NFT đơn giản hơn",
+      "Người nhận gần đây mới để gửi lại nhanh hơn",
+      "Quản lý danh bạ tùy chọn",
+      "Cải thiện bảo mật trong ứng dụng",
+      "Tích hợp nạp tiền Coinbase đầy đủ chức năng"
+    ],
+    "zh": [
+      "简化了代币和 NFT 的发送体验",
+      "新增最近接收人，快捷重复发送",
+      "可选的联系人管理",
+      "增强的应用内安全性",
+      "功能齐全的 Coinbase 入金通道"
+    ]
   }
 }
