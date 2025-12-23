@@ -38,17 +38,12 @@ onFlowComplete:
       - tapOn:
           id: "numpad-1"
 - assertVisible: "Tokens"
-- runFlow:
-    commands:
-      - extendedWaitUntil:
-          visible: "Transaction done"
-          timeout: 30000
-      - tapOn:
-          id: "BalanceScreen_WalletManagementButton"
-          retryTapIfNoChange: false
-      - tapOn:
-          id: "selectAccount"
-          index: 1
+- tapOn:
+    id: "BalanceScreen_WalletManagementButton"
+    retryTapIfNoChange: false
+- tapOn:
+    id: "selectAccount"
+    index: 1
 - tapOn: 
     id: "BalanceScreen_SendButton"
 - tapOn:
