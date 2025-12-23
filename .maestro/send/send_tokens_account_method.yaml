@@ -1,10 +1,6 @@
 appId: org.vechain.veworld.app
 tags:
   - pull-request
-env:
-  AMOUNT: 0.01
-  ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
-  ADDRESS: "0x8a9844e4750f5ce5f7988c4d1e04c278c718feea"
 onFlowStart:
   - runFlow: ../setup_reset/setupApp.yaml
 onFlowComplete:
@@ -12,37 +8,70 @@ onFlowComplete:
 ---
 ## User should be able to send tokens delegating with account method
 - tapOn:
-    id: "AccountCard_changeAccountButton"
+    id: "BalanceScreen_SendButton"
 - tapOn:
-    id: "selectAccount"
+    id: "SelectAmountConversionToggle_Button"
+- tapOn:
+    id: "SEND_1_KEY"
+- tapOn:
+    id: "SelectAmountSendComponent_NextButton"
+- tapOn:
+    id: "AnimatedFilterChips-accounts"
+- tapOn:
+    id: "AccountCard_Item"
     index: 0
 - tapOn:
-    id: "sendButton"
-- runFlow:
-    commands:
-      - tapOn:
-          id: "VET"
-- tapOn:
-    id: "Layout_ScrollView"
-- assertVisible:
-    id: "selectAccount"
-    index: 0
-- tapOn:
-    id: "selectAccount"
-    index: 0
-- tapOn:
-    id: "next-button"
-- tapOn:
-    id: "SendScreen_amountInput"
-- inputText: ${AMOUNT}
-- tapOn:
-    id: "Select_Amount_Send_Screen"
-- tapOn:
-    id: "next-button"
+    id: "ReceiverScreen_NextButton"
 - runFlow:
     when:
       visible: "Fee delegation"
     commands:
+      - extendedWaitUntil:
+          visible:
+              id: "MAX_FEE_GALACTICA"
+          timeout: 10000
+      - tapOn:
+          id: "SummaryScreen_NextButton"
+- repeat:
+    times: 6
+    commands:
+      - tapOn:
+          id: "numpad-1"
+- assertVisible: "Tokens"
+- runFlow:
+    commands:
+      - extendedWaitUntil:
+          visible: "Transaction done"
+          timeout: 30000
+      - tapOn:
+          id: "BalanceScreen_WalletManagementButton"
+          retryTapIfNoChange: false
+      - tapOn:
+          id: "selectAccount"
+          index: 1
+- tapOn: 
+    id: "BalanceScreen_SendButton"
+- tapOn:
+    id: "SelectAmountConversionToggle_Button"
+- tapOn:
+    id: "SEND_1_KEY"
+- tapOn:
+    id: "SelectAmountSendComponent_NextButton"
+- tapOn:
+    id: "AnimatedFilterChips-accounts"
+- tapOn:
+    id: "AccountCard_Item"
+    index: 0
+- tapOn:
+    id: "ReceiverScreen_NextButton"
+- runFlow:
+    when:
+      visible: "Fee delegation"
+    commands:
+      - extendedWaitUntil:
+          visible:
+              id: "MAX_FEE_GALACTICA"
+          timeout: 10000
       - tapOn:
           id: "DELEGATE_OPEN"
       - tapOn:
@@ -54,77 +83,14 @@ onFlowComplete:
           id: 'RENDERED_OPTION_BUTTON_BAR_APPLY'
       - extendedWaitUntil:
           visible:
-             id: "MAX_FEE_GALACTICA"
+              id: "SummaryScreen_NextButton"
           timeout: 10000
       - tapOn:
-          id: "confirm-send-button"
-      - repeat:
-          while:
-            visible: "Insert your 6-digit PIN"
-          commands:
-            - tapOn: "1"
-- assertVisible: "My tokens"
-- runFlow:
-    env:
-      AMOUNT: 0.01
+          id: "SummaryScreen_NextButton"
+- repeat:
+    times: 6
     commands:
       - tapOn:
-          id: "sendButton"
-      - runFlow:
-            commands:
-              - tapOn:
-                  id: "VTHO"
-      - tapOn:
-          id: "Layout_ScrollView"      
-      - assertVisible:
-          id: "selectAccount"
-          index: 0
-      - tapOn:
-          id: "selectAccount"
-          index: 0
-      - tapOn:
-          id: "next-button"
-      - tapOn:
-          id: "SendScreen_amountInput"  
-      - inputText: ${AMOUNT}
-      - tapOn:
-          id: "Select_Amount_Send_Screen"  
-      - tapOn:
-          id: "next-button"
-      - tapOn:
-          id: "DELEGATE_OPEN"
-      - tapOn:
-          id: "button-ACCOUNT"
-      - runFlow:
-            when:
-               platform: Android
-            commands:
-               - assertVisible:
-                  id: "DELEGATE_ACCOUNT_CARD_RADIO"
-                  index: 0
-               - tapOn:
-                  id: "DELEGATE_ACCOUNT_CARD_RADIO"
-                  index: 0
-      - runFlow:
-            when:
-               platform: iOS
-            commands:
-               - assertVisible:
-                  id: "DELEGATE_ACCOUNT_CARD_RADIO"
-                  index: 0
-               - tapOn:
-                  id: "DELEGATE_ACCOUNT_CARD_RADIO"
-                  index: 0
-      - tapOn:
-          id: 'RENDERED_OPTION_BUTTON_BAR_APPLY'
-      - extendedWaitUntil:
-          visible:
-             id: "MAX_FEE_GALACTICA"
-          timeout: 10000
-      - tapOn:
-          id: "confirm-send-button"
-      - repeat:
-          while:
-           visible: "Insert your 6-digit PIN"
-          commands:
-            - tapOn: "1"
+          id: "numpad-1"
+- assertVisible: "Tokens"
+- evalScript: ${console.log('Send VET from Account 2 to Account 1 delegating fee to account')}

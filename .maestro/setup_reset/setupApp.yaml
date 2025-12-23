@@ -53,6 +53,7 @@ env:
       id: "wallet-tab"
 - tapOn:
       id: "BalanceScreen_WalletManagementButton"
+      retryTapIfNoChange: false
 - runFlow:
     when:
       visible: "Select the active account"
@@ -61,6 +62,7 @@ env:
             id: "SelectAccountBottomSheet_SettingsButtonIcon"
 - tapOn:
       id: "Wallet_Management_AddWallet"
+      retryTapIfNoChange: false
 - runFlow:
     when:
       visible: "Wallet Setup"
@@ -78,6 +80,7 @@ env:
       id: "wallet-tab"
 - tapOn:
       id: "BalanceScreen_WalletManagementButton"
+      retryTapIfNoChange: false
 - runFlow:
       commands:
           - tapOn:
