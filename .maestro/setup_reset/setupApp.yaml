@@ -74,6 +74,10 @@ env:
     commands:
       - tapOn:
           id: "numpad-1"
+- extendedWaitUntil:
+    visible:
+         id: "Backup_later_button"
+    timeout: 10000
 - tapOn:
       id: "Backup_later_button"
 - tapOn:
