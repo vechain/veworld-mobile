@@ -78,7 +78,7 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
             const isContact = "type" in item && item.type === ContactType.KNOWN
             return (
                 <GenericAccountCard
-                    testID={`Send_Receiver_Addresses_List_Accounts_${item.alias}`}
+                    testID={"AccountCard_Item"}
                     accountName={item.alias}
                     accountAddress={item.address}
                     onPress={({ accountAddress }) => {

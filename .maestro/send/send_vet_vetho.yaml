@@ -22,7 +22,8 @@ onFlowComplete:
 - tapOn:
     id: "AnimatedFilterChips-accounts"
 - tapOn:
-    id: "Send_Receiver_Addresses_List_Accounts_Account 1"
+    id: "AccountCard_Item"
+    index: 0
 - tapOn:
     id: "ReceiverScreen_NextButton"
 - runFlow:
@@ -59,7 +60,8 @@ onFlowComplete:
 - tapOn:
     id: "AnimatedFilterChips-accounts"
 - tapOn:
-    id: "Send_Receiver_Addresses_List_Accounts_Account 1"
+    id: "AccountCard_Item"
+    index: 0
 - tapOn:
     id: "ReceiverScreen_NextButton"
 - runFlow:
