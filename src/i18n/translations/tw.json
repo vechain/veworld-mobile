@@ -935,7 +935,7 @@
   "NO_TOKENS_AVAILABLE_FOR_FEE": "沒有可用來支付費用的代幣。",
   "NO_VTHO_BALANCE": "沒有VTHO餘額。請選擇其他代幣",
   "OCTOBER": "十月",
-  "OFFLINE_CHIP": "你現在處於離線狀態",
+  "OFFLINE_CHIP": "您目前處於離線狀態",
   "OFFLINE_STATUS": "離線",
   "ONLY_SECONDS": "{seconds:number|toSecondsDuration}",
   "ORIGIN": "來源",

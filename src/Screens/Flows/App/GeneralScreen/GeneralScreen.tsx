@@ -37,7 +37,10 @@ export const GeneralScreen = () => {
 
                     <SettingsSection icon="icon-coins" title={LL.SETTINGS_SECTION_CURRENCY_PREFERENCES()}>
                         <SettingsSection.Option>
-                            <BaseText typographyFont="bodyMedium" color={theme.colors.settingsSection.optionTitle}>
+                            <BaseText
+                                testID="ChangeCurrencyFormat_Option"
+                                typographyFont="bodyMedium"
+                                color={theme.colors.settingsSection.optionTitle}>
                                 {LL.BD_CURRENCY_FORMAT()}
                             </BaseText>
                             <ChangeCurrencyFormat />
