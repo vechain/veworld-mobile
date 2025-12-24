@@ -1,6 +1,29 @@
 appId: org.vechain.veworld.app
 
 ---
+# Dismiss any blocking bottom sheets first
+- runFlow:
+    when:
+      visible:
+          id: "Backup_later_button"
+    commands:
+      - tapOn:
+            id: "Backup_later_button"
+- runFlow:
+    when:
+      visible:
+          id: "close-button"
+    commands:
+      - tapOn:
+            id: "close-button"
+# Navigate back if needed
+- repeat:
+    while:
+      visible:
+         id: "BackButtonHeader-BaseIcon-backButton"
+    commands:
+      - tapOn:
+            id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
      id: "settings-tab"
 - repeat:
