@@ -11,9 +11,9 @@ env:
 
 ## welcome screen
 - extendedWaitUntil:
-    visible:
-         id: "dev_demo"
-    timeout: 30000
+      visible:
+          id: "dev_demo"
+      timeout: 30000
 - tapOn:
       id: "dev_demo"
 - runFlow:
@@ -38,18 +38,18 @@ env:
           - tapOn:
                 id: "button_notifications_skip"
 - runFlow:
-    when:
-      visible:
-          id: "Backup_later_button"
-    commands:
-      - tapOn:
-            id: "Backup_later_button"
+      when:
+          visible:
+              id: "Backup_later_button"
+      commands:
+          - tapOn:
+                id: "Backup_later_button"
 - tapOn:
       id: "settings-tab"
 - extendedWaitUntil:
-       visible:
-         id: "Networks"
-       timeout: 10000
+      visible:
+          id: "Networks"
+      timeout: 10000
 - tapOn:
       id: "Networks"
 - tapOn:
@@ -60,63 +60,45 @@ env:
       id: "wallet-tab"
 - tapOn:
       id: "BalanceScreen_WalletManagementButton"
+      retryTapIfNoChange: false
 - runFlow:
-    when:
-      visible: "Select the active account"
-    commands:
-      - tapOn:
-            id: "SelectAccountBottomSheet_SettingsButtonIcon"
+      when:
+          visible: "Select the active account"
+      commands:
+          - tapOn:
+                id: "SelectAccountBottomSheet_SettingsButtonIcon"
 - tapOn:
       id: "Wallet_Management_AddWallet"
+      retryTapIfNoChange: false
+- runFlow:
+      when:
+          visible: "Wallet Setup"
+      commands:
+          - tapOn:
+                id: "CreateOrImportWalletBottomSheet_CreateNewButton"
+- repeat:
+      times: 6
+      commands:
+          - tapOn:
+                id: "numpad-1"
 - extendedWaitUntil:
-    visible:
-        id: "CreateOrImportWalletBottomSheet_CreateNewButton"
-    timeout: 5000
+      visible:
+          id: "Backup_later_button"
+      timeout: 10000
 - tapOn:
-      id: "CreateOrImportWalletBottomSheet_CreateNewButton"
-- extendedWaitUntil:
-    visible:
-        id: "numpad-1"
-    timeout: 5000
-- repeat:
-    times: 6
-    commands:
-      - tapOn:
-          id: "numpad-1"
-# Dismiss backup prompt if visible
-- runFlow:
-    when:
-      visible:
-          id: "Backup_later_button"
-    commands:
-      - tapOn:
-            id: "Backup_later_button"
-# Go back to home screen
-- repeat:
-    while:
-      visible:
-         id: "BackButtonHeader-BaseIcon-backButton"
-    commands:
-      - tapOn:
-            id: "BackButtonHeader-BaseIcon-backButton"
-- runFlow:
-    when:
-      visible:
-          id: "Backup_later_button"
-    commands:
-      - tapOn:
-            id: "Backup_later_button"
+      id: "Backup_later_button"
 - tapOn:
       id: "wallet-tab"
 - runFlow:
-    when:
-      visible:
-          id: "Backup_later_button"
-    commands:
-      - tapOn:
-            id: "Backup_later_button"
+      when:
+          visible:
+              id: "Backup_later_button"
+      commands:
+          - tapOn:
+                id: "Backup_later_button"
 - tapOn:
       id: "BalanceScreen_WalletManagementButton"
+      retryTapIfNoChange: false
 - runFlow:
       commands:
           - tapOn:

@@ -81,6 +81,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
         if (selectedTab === "TOKENS" && isOnline) {
             return (
                 <AnimatedTouchable
+                    testID="BalanceScreen_ManageTokensButton"
                     style={styles.manageTokens}
                     entering={ZoomIn.duration(100)}
                     exiting={ZoomOut.duration(100)}
