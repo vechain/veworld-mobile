@@ -106,7 +106,7 @@ export const NetworkBox: React.FC<Props> = ({ network, onPress, isSelected = fal
         )
 
     return onPress ? (
-        <Pressable onPress={handleOnPress}>
+        <Pressable testID={`NetworkBox_${network.type}`} onPress={handleOnPress}>
             <Body network={network} isSelected={isSelected} />
         </Pressable>
     ) : (

@@ -41,10 +41,12 @@ export const ResetAppScreen = () => {
                         isChecked={isChecked}
                         text={LL.BTN_RESET_APP_CHECKBOX()}
                         checkAction={setIsChecked}
+                        checkboxTestID="reset-app-checkbox"
                         testID="reset-app-checkbox"
                     />
 
                     <BaseButton
+                        testID="ResetAppScreen_Button"
                         haptics="Warning"
                         action={appReset}
                         w={100}

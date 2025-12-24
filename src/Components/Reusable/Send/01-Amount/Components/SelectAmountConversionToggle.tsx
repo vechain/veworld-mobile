@@ -53,7 +53,11 @@ export const SelectAmountConversionToggle = React.memo<Props>(function Conversio
     }
 
     return (
-        <BaseTouchable action={onToggle} haptics="Light" disabled={isError}>
+        <BaseTouchable
+            testID="SelectAmountConversionToggle_Button"
+            action={onToggle}
+            haptics="Light"
+            disabled={isError}>
             <BaseView flexDirection="row" alignItems="center" gap={4}>
                 <Animated.View key={isInputInFiat ? "token-conv" : "fiat-conv"} entering={FadeIn.duration(300)}>
                     <BaseText color={theme.colors.textLightish} typographyFont="bodySemiBold">
