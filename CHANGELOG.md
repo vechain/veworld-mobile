@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.15 (2025-12-24)</small>
+
+* build: init ([07c2736](https://github.com/vechain/veworld-mobile/commit/07c2736))
+* 619 e2e   send flow (#3671) ([99617ba](https://github.com/vechain/veworld-mobile/commit/99617ba)), closes [#3671](https://github.com/vechain/veworld-mobile/issues/3671)
+
 ## <small>2.4.14 (2025-12-18)</small>
 
 * build: init ([883693f](https://github.com/vechain/veworld-mobile/commit/883693f))
