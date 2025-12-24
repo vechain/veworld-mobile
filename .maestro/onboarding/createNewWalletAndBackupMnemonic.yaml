@@ -1,4 +1,4 @@
-#createNewWalletAndBackupMenmonic
+#createNewWalletAndBackupMnemonic
 appId: org.vechain.veworld.app
 tags:
   - pull-request
@@ -25,23 +25,21 @@ onFlowComplete:
 - runFlow:
       when:
           visible:
-              id: "button_notifications_enable"
+              id: "button_notifications_skip"
       commands:
           - tapOn:
                 id: "button_notifications_skip"
+# Dismiss VeBetter card if visible
+- runFlow:
+      when:
+          visible:
+              id: "close-button"
+      commands:
+          - tapOn:
+                id: "close-button"
 #backup mnemonic on privacy and settings screen
-- runFlow:
-      when:
-          platform: Android
-      commands:
-          - tapOn:
-                id: "Backup_now_button"
-- runFlow:
-      when:
-          platform: iOS
-      commands:
-          - tapOn:
-                id: "Backup_now_button"
+- tapOn:
+      id: "Backup_now_button"
 #view and copy mnemonic
 - runFlow:
       when:
@@ -80,4 +78,3 @@ onFlowComplete:
                 id: "BackButtonHeader-BaseIcon-backButton"
           - tapOn:
                 id: "wallet-tab"
-- assertVisible: "My tokens"

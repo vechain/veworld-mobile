@@ -45,22 +45,21 @@ onFlowComplete:
       commands:
           - tapOn:
                 id: "Backup_later_button"
+- runFlow:
+      when:
+          visible:
+              id: "close-button"
+      commands:
+          - tapOn:
+                id: "close-button"
 - tapOn:
-    id: "HomeScreen_WalletManagementButton-wrapper"
+    id: "BalanceScreen_WalletManagementButton"
+- tapOn:
+    id: "SelectAccountBottomSheet_SettingsButtonIcon"
 - tapOn:
     id: "Wallet_Management_AddWallet"
-- runFlow:
-     when:
-       platform: iOS
-     commands:
-            - tapOn:
-                 id: "undefined-wrapper"
-                 index: 2
-- runFlow:
-     when:
-       platform: Android
-     commands:
-            - tapOn: "Local wallet"
+- tapOn:
+    id: "CreateOrImportWalletBottomSheet_ImportLocalWallet"
 - tapOn:
     id: "import-input"
 - inputText: ${PK}
@@ -107,5 +106,4 @@ onFlowComplete:
             - assertVisible: "Wallet 2"
 - tapOn:
     id: "wallet-tab"
-- assertVisible: "My tokens"
 
