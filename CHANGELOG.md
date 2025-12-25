@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.15 (2025-12-22)</small>
+
+* build: init ([22f2b65](https://github.com/vechain/veworld-mobile/commit/22f2b65))
+* Feat: Not Connected State (#3667) ([8019701](https://github.com/vechain/veworld-mobile/commit/8019701)), closes [#3667](https://github.com/vechain/veworld-mobile/issues/3667) [#3654](https://github.com/vechain/veworld-mobile/issues/3654)
+
 ## <small>2.4.14 (2025-12-18)</small>
 
 * build: init ([883693f](https://github.com/vechain/veworld-mobile/commit/883693f))
