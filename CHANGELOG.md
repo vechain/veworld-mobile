@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.15 (2025-12-23)</small>
+
+* build: init ([330e4b8](https://github.com/vechain/veworld-mobile/commit/330e4b8))
+* E2E Setup and Reset flows (#3669) ([2369583](https://github.com/vechain/veworld-mobile/commit/2369583)), closes [#3669](https://github.com/vechain/veworld-mobile/issues/3669)
+
 ## <small>2.4.14 (2025-12-18)</small>
 
 * build: init ([883693f](https://github.com/vechain/veworld-mobile/commit/883693f))
