@@ -11,6 +11,7 @@ import {
     BaseView,
     SectionListSeparator,
 } from "~Components"
+import { BaseBottomSheetV2 } from "~Components/Base/BaseBottomSheetV2"
 import { BaseTabs } from "~Components/Base/BaseTabs"
 import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCard"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -20,7 +21,6 @@ import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { AccountUtils, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { TestBottomSheet } from "./TestBottomSheet"
 
 export enum SelectAccountBottomSheetType {
     PERSONAL = "YOUR_WALLETS",
@@ -134,7 +134,7 @@ export const TestBSImplementation = forwardRef<BottomSheetModalMethods, {}>(func
     const account = useAppSelector(selectSelectedAccount)
 
     return (
-        <TestBottomSheet ref={ref}>
+        <BaseBottomSheetV2 ref={ref}>
             <BaseView
                 flexDirection="column"
                 gap={24}
@@ -186,7 +186,7 @@ export const TestBSImplementation = forwardRef<BottomSheetModalMethods, {}>(func
                 scrollEnabled
                 style={styles.list}
             />
-        </TestBottomSheet>
+        </BaseBottomSheetV2>
     )
 })
 const baseStyles =
