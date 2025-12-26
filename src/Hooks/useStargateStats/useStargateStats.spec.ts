@@ -18,7 +18,7 @@ jest.mock("~Hooks/useIndexerClient", () => ({
                     return getStargateTotalVet(...args).then((res: any) => ({ data: res }))
                 case "/api/v1/stargate/total-vtho-claimed":
                     return getStargateRewardsDistributed(...args).then((res: any) => ({ data: res }))
-                case "/api/v1/stargate/total-vtho-generated/historic/{range}":
+                case "/api/v1/stargate/vtho-generated/{period}":
                     return getVthoPerDay(...args).then((res: any) => ({ data: res }))
             }
         },
@@ -62,10 +62,9 @@ describe("useStargateStats", () => {
             },
         })
         ;(getStargateRewardsDistributed as jest.Mock).mockResolvedValue("526381931206666467000000000")
-        ;(getVthoPerDay as jest.Mock).mockResolvedValue([
-            { timestamp: 1, value: "126381931206666467000000000" },
-            { timestamp: 2, value: "226381931206666467000000000" },
-        ])
+        ;(getVthoPerDay as jest.Mock).mockResolvedValue({
+            data: [{ total: "226381931206666467000000000" }],
+        })
 
         const { result, waitFor } = renderHook(() => useStargateStats(), {
             wrapper: TestWrapper,
