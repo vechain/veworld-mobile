@@ -54,6 +54,7 @@ export const UnlockKeystoreBottomSheet = React.forwardRef<BottomSheetModalMethod
                     />
                     <BaseSpacer height={16} />
                     <BaseButton
+                        testID="unlock-keystore-button"
                         haptics="Medium"
                         disabled={password.length < 1}
                         action={handleUnlock}
