@@ -31,6 +31,7 @@ jest.mock("expo-file-system", () => ({
 describe("CollectiblesAvatarActionButton", () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        deleteAsync.mockResolvedValue(undefined)
     })
     it("should be able to set the correct avatar", async () => {
         getInfoAsync.mockResolvedValue({ exists: true })
@@ -137,6 +138,39 @@ describe("CollectiblesAvatarActionButton", () => {
                     uri: expect.stringMatching(/^pfp\/0xCF130b42Ae33C5531277B4B7c0F1D994B8732957_\d+\.png/),
                 },
             })
+        })
+    })
+
+    it("should clear pending state on failure and allow retry", async () => {
+        getInfoAsync.mockResolvedValue({ exists: true })
+        downloadAsync.mockRejectedValue(new Error("download failed"))
+
+        TestHelpers.render.renderComponentWithProps(
+            <CollectiblesAvatarActionButton
+                address="0x0"
+                tokenId="1"
+                image="https://google.com"
+                mimeType="image/png"
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
+
+        await act(() => {
+            fireEvent.press(screen.getByTestId("COLLECTIBLES_ACTION_AVATAR"))
+        })
+
+        await waitFor(() => {
+            expect(downloadAsync).toHaveBeenCalledTimes(1)
+        })
+
+        await act(() => {
+            fireEvent.press(screen.getByTestId("COLLECTIBLES_ACTION_AVATAR"))
+        })
+
+        await waitFor(() => {
+            expect(downloadAsync).toHaveBeenCalledTimes(2)
         })
     })
 })
