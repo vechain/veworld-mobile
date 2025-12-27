@@ -1,13 +1,5 @@
 appId: org.vechain.veworld.app
 ---
-# Dismiss any blocking bottom sheets first
-- runFlow:
-      when:
-          visible:
-              id: "close-button"
-      commands:
-          - tapOn:
-                id: "close-button"
 # Navigate back if needed
 - repeat:
       while:
