@@ -1,9 +1,9 @@
 #walletImportUsingPrivateKey
 appId: org.vechain.veworld.app
 tags:
-  - pull-request
+    - pull-request
 env:
-   PK: "0x99F0500549792796C14fED62011A51081DC5B5E68FE8BD8A13B86BE829c4FD36"
+    PK: "0x99F0500549792796C14fED62011A51081DC5B5E68FE8BD8A13B86BE829c4FD36"
 onFlowComplete:
     - runFlow: ../setup_reset/resetApp.yaml
 ---
@@ -53,40 +53,40 @@ onFlowComplete:
           - tapOn:
                 id: "close-button"
 - tapOn:
-    id: "BalanceScreen_WalletManagementButton"
+      id: "BalanceScreen_WalletManagementButton"
 - tapOn:
-    id: "SelectAccountBottomSheet_SettingsButtonIcon"
+      id: "SelectAccountBottomSheet_SettingsButtonIcon"
 - tapOn:
-    id: "Wallet_Management_AddWallet"
+      id: "Wallet_Management_AddWallet"
 - tapOn:
-    id: "CreateOrImportWalletBottomSheet_ImportLocalWallet"
+      id: "CreateOrImportWalletBottomSheet_ImportLocalWallet"
 - tapOn:
-    id: "import-input"
+      id: "import-input"
 - inputText: ${PK}
 - runFlow:
-     when:
-       platform: iOS
-     commands:
-            - runFlow:
+      when:
+          platform: iOS
+      commands:
+          - runFlow:
                 when:
-                  visible: "Derivation Path "
+                    visible: "Derivation Path "
                 commands:
-                  - tapOn: "Derivation Path "
-            - runFlow:
+                    - tapOn: "Derivation Path "
+          - runFlow:
                 when:
-                  visible: "Derivation Path for VeChain m/44'/818'/0'/0 "
+                    visible: "Derivation Path for VeChain m/44'/818'/0'/0 "
                 commands:
-                  - tapOn: "Derivation Path for VeChain m/44'/818'/0'/0 "
+                    - tapOn: "Derivation Path for VeChain m/44'/818'/0'/0 "
 - runFlow:
-     when:
-       platform: Android
-     commands:
-            - tapOn: "Back"
+      when:
+          platform: Android
+      commands:
+          - tapOn: "Back"
 - runFlow:
-     when:
-       visible: "Verify"
-     commands:
-            - tapOn: "Verify"
+      when:
+          visible: "Verify"
+      commands:
+          - tapOn: "Verify"
 #Insert wallet pin
 - repeat:
       while:
@@ -94,16 +94,15 @@ onFlowComplete:
       commands:
           - tapOn: "1"
 - runFlow:
-     when:
-       platform: iOS
-     commands:
-            - assertVisible:
-                  id: "Wallet_1"
+      when:
+          platform: iOS
+      commands:
+          - assertVisible:
+                id: "Wallet_1"
 - runFlow:
-     when:
-       platform: Android
-     commands:
-            - assertVisible: "Wallet 2"
+      when:
+          platform: Android
+      commands:
+          - assertVisible: "Wallet 2"
 - tapOn:
-    id: "wallet-tab"
-
+      id: "wallet-tab"

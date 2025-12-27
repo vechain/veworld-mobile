@@ -1,7 +1,7 @@
 #createNewWalletAndBackupMnemonic
 appId: org.vechain.veworld.app
 tags:
-  - pull-request
+    - pull-request
 onFlowComplete:
     - runFlow: ../setup_reset/resetApp.yaml
 ---
