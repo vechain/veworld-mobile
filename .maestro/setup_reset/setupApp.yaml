@@ -89,13 +89,6 @@ env:
       id: "Backup_later_button"
 - tapOn:
       id: "wallet-tab"
-- runFlow:
-      when:
-          visible:
-              id: "Backup_later_button"
-      commands:
-          - tapOn:
-                id: "Backup_later_button"
 - tapOn:
       id: "BalanceScreen_WalletManagementButton"
       retryTapIfNoChange: false
