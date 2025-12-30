@@ -24,7 +24,7 @@ export const BaseBottomSheetV2 = forwardRef<BaseBottomSheetV2Ref, Props>(functio
     return (
         <BaseBottomSheetV2Root onDismiss={onDismiss} ref={ref}>
             <BaseBottomSheetV2Backdrop />
-            <BaseBottomSheetV2Panel>
+            <BaseBottomSheetV2Panel floating>
                 {handle && <BaseBottomSheetV2Handle />}
                 <BaseBottomSheetV2Scrollable>{children}</BaseBottomSheetV2Scrollable>
             </BaseBottomSheetV2Panel>

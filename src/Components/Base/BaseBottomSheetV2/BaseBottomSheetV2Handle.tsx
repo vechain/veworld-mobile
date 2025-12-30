@@ -22,7 +22,7 @@ export const BaseBottomSheetV2Handle = ({ style, ...props }: Partial<BaseBottomS
             .onEnd(() => {
                 "worklet"
                 // If more than 40%, then close the bottomsheet
-                if (translateY.value >= (height.get() * 2) / 5) {
+                if (translateY.get() >= (height.get() * 2) / 5) {
                     runOnJS(onDismiss)()
                     return
                 }

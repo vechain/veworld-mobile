@@ -10,7 +10,14 @@ import { useBaseBottomSheetV2Transition } from "./useBaseBottomSheetV2Transition
 
 const PADDING_BOTTOM = 32
 
-export const BaseBottomSheetV2Panel = ({ children, style, ...props }: AnimatedProps<ViewProps>) => {
+type Props = AnimatedProps<ViewProps> & {
+    /**
+     * Enable floating behavior - detach from the bottom of the screen
+     */
+    floating?: boolean
+}
+
+export const BaseBottomSheetV2Panel = ({ children, style, floating, ...props }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { translateY, height } = useBaseBottomSheetV2()
 
@@ -27,7 +34,7 @@ export const BaseBottomSheetV2Panel = ({ children, style, ...props }: AnimatedPr
     return (
         <GestureDetector gesture={gesture}>
             <Animated.View
-                style={[styles.root, animatedStyle, style]}
+                style={[styles.root, animatedStyle, floating && styles.floating, style]}
                 onLayout={e => {
                     height.value = e.nativeEvent.layout.height
                 }}
@@ -50,6 +57,12 @@ const baseStyles = (theme: ColorThemeType) =>
             overflow: "hidden",
             paddingBottom: PADDING_BOTTOM,
             transformOrigin: "bottom",
-            maxHeight: "100%",
+            maxHeight: "95%",
+        },
+        floating: {
+            marginBottom: 32,
+            borderBottomLeftRadius: 24,
+            borderBottomRightRadius: 24,
+            marginHorizontal: 8,
         },
     })

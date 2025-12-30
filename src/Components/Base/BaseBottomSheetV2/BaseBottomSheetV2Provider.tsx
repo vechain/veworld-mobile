@@ -67,8 +67,8 @@ export const BaseBottomSheetV2Provider = ({ children, dismissOnClose = true, onD
 
     const onDismiss = useCallback(() => {
         closeBs()
-        onDismiss?.()
-    }, [closeBs])
+        _onDismiss?.()
+    }, [_onDismiss, closeBs])
 
     const ctx = useMemo(
         () => ({ translateY, height, scrollY, open: openSV, onClose, onOpen, onDismiss }),
