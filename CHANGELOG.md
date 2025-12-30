@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.15 (2025-12-30)</small>
+
+* build: init ([7d65bef](https://github.com/vechain/veworld-mobile/commit/7d65bef))
+* fix: fix vtho per day (#3675) ([42886fa](https://github.com/vechain/veworld-mobile/commit/42886fa)), closes [#3675](https://github.com/vechain/veworld-mobile/issues/3675)
+
 ## <small>2.4.14 (2025-12-18)</small>
 
 * build: init ([883693f](https://github.com/vechain/veworld-mobile/commit/883693f))
