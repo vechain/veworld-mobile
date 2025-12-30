@@ -1,5 +1,5 @@
-import React, { createContext, PropsWithChildren, useCallback, useContext, useMemo } from "react"
-import { SharedValue, useSharedValue, withSpring } from "react-native-reanimated"
+import React, { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from "react"
+import { runOnJS, SharedValue, useSharedValue, withSpring } from "react-native-reanimated"
 import { SCREEN_HEIGHT } from "~Constants"
 
 type BaseBottomSheetV2ContextProps = {
@@ -24,6 +24,10 @@ type BaseBottomSheetV2ContextProps = {
     onClose: () => void
     onDismiss: () => void
     onOpen: (data?: unknown) => void
+    /**
+     * Data passed through when opening the bottomsheet
+     */
+    data?: unknown
 }
 
 const BaseBottomSheetV2Context = createContext<BaseBottomSheetV2ContextProps | undefined>(undefined)
@@ -44,10 +48,12 @@ export const BaseBottomSheetV2Provider = ({ children, dismissOnClose = true, onD
     const translateY = useSharedValue(SCREEN_HEIGHT)
     const scrollY = useSharedValue(0)
     const openSV = useSharedValue(false)
+    const [data, setData] = useState<unknown>()
 
     const closeBs = useCallback(() => {
         translateY.value = withSpring(height.get(), { mass: 4, damping: 120, stiffness: 900 }, () => {
             openSV.value = false
+            runOnJS(setData)(undefined)
         })
     }, [height, openSV, translateY])
 
@@ -56,14 +62,18 @@ export const BaseBottomSheetV2Provider = ({ children, dismissOnClose = true, onD
         if (dismissOnClose) _onDismiss?.()
     }, [closeBs, dismissOnClose, _onDismiss])
 
-    const onOpen = useCallback(() => {
-        translateY.value = withSpring(BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION, {
-            mass: 4,
-            damping: 120,
-            stiffness: 900,
-        })
-        openSV.value = true
-    }, [openSV, translateY])
+    const onOpen = useCallback(
+        (_data?: unknown) => {
+            translateY.value = withSpring(BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION, {
+                mass: 4,
+                damping: 120,
+                stiffness: 900,
+            })
+            openSV.value = true
+            setData(_data)
+        },
+        [openSV, translateY],
+    )
 
     const onDismiss = useCallback(() => {
         closeBs()
@@ -71,8 +81,8 @@ export const BaseBottomSheetV2Provider = ({ children, dismissOnClose = true, onD
     }, [_onDismiss, closeBs])
 
     const ctx = useMemo(
-        () => ({ translateY, height, scrollY, open: openSV, onClose, onOpen, onDismiss }),
-        [height, onClose, onDismiss, onOpen, openSV, scrollY, translateY],
+        () => ({ translateY, height, scrollY, open: openSV, onClose, onOpen, onDismiss, data }),
+        [data, height, onClose, onDismiss, onOpen, openSV, scrollY, translateY],
     )
 
     return <BaseBottomSheetV2Context.Provider value={ctx}>{children}</BaseBottomSheetV2Context.Provider>

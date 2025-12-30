@@ -1,16 +1,20 @@
-import React, { forwardRef, useCallback } from "react"
+import React, { ReactNode, useCallback } from "react"
 import { ScrollViewProps } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { ScrollView } from "react-native-gesture-handler"
+import { typedForwardRef } from "~Utils/ReactUtils"
 import { useBaseBottomSheetV2 } from "./BaseBottomSheetV2Provider"
 
-type Props = Omit<ScrollViewProps, "onScroll"> & React.RefAttributes<ScrollView>
+type Props<TData = unknown> = Omit<ScrollViewProps, "onScroll" | "children"> &
+    React.RefAttributes<ScrollView> & {
+        children: ReactNode | ((data: TData) => ReactNode)
+    }
 
-export const BaseBottomSheetV2Scrollable = forwardRef<ScrollView, Props>(function BaseBottomSheetV2Scrollable(
-    { children, ...props },
-    ref,
-) {
-    const { scrollY } = useBaseBottomSheetV2()
+const _BaseBottomSheetV2Scrollable = <TData,>(
+    { children, ...props }: Props<TData>,
+    ref: React.ForwardedRef<ScrollView>,
+) => {
+    const { scrollY, data } = useBaseBottomSheetV2()
     const onScrollOffsetChange = useCallback(
         (scrollOffset: number) => {
             scrollY.value = scrollOffset
@@ -25,7 +29,9 @@ export const BaseBottomSheetV2Scrollable = forwardRef<ScrollView, Props>(functio
             onScrollOffsetChange={onScrollOffsetChange}
             ref={ref}
             {...props}>
-            {children}
+            {typeof children === "function" ? (data === undefined ? null : children(data as any)) : children}
         </NestableScrollContainer>
     )
-})
+}
+
+export const BaseBottomSheetV2Scrollable = typedForwardRef(_BaseBottomSheetV2Scrollable)
