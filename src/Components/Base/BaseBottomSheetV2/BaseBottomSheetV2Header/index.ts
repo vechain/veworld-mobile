@@ -1,2 +1,1 @@
-export * from "./BaseBottomSheetV2"
 export * from "./BaseBottomSheetV2Header"

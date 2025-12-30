@@ -3,15 +3,8 @@ import { useNavigation } from "@react-navigation/native"
 import React, { ComponentProps, forwardRef, PropsWithChildren, useCallback, useMemo, useState } from "react"
 import { SectionList, SectionListData, StyleSheet } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import {
-    BaseIcon,
-    BaseSectionListSeparatorProps,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    SectionListSeparator,
-} from "~Components"
-import { BaseBottomSheetV2 } from "~Components/Base/BaseBottomSheetV2"
+import { BaseSectionListSeparatorProps, BaseSpacer, BaseText, BaseView, SectionListSeparator } from "~Components"
+import { BaseBottomSheetV2, BaseBottomSheetV2Header } from "~Components/Base/BaseBottomSheetV2"
 import { BaseTabs } from "~Components/Base/BaseTabs"
 import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCard"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -142,21 +135,17 @@ export const TestBSImplementation = forwardRef<BottomSheetModalMethods, {}>(func
                 px={16}
                 pt={16}
                 bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50}>
-                <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
-                    <BaseView flexDirection="column" gap={8}>
-                        <BaseView flexDirection="row" alignItems="center" gap={12}>
-                            <BaseIcon
-                                name="icon-wallet"
-                                size={20}
-                                color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
-                            />
-                            <BaseText typographyFont="subTitleSemiBold">{LL.SELECT_ACCOUNT_TITLE()}</BaseText>
-                        </BaseView>
-                        <BaseText typographyFont="body" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                <BaseBottomSheetV2Header.Root>
+                    <BaseBottomSheetV2Header.Left>
+                        <BaseBottomSheetV2Header.TitleRoot>
+                            <BaseBottomSheetV2Header.Icon name="icon-wallet" />
+                            <BaseBottomSheetV2Header.Title>{LL.SELECT_ACCOUNT_TITLE()}</BaseBottomSheetV2Header.Title>
+                        </BaseBottomSheetV2Header.TitleRoot>
+                        <BaseBottomSheetV2Header.Description>
                             {LL.SELECT_ACCOUNT_DESCRIPTION()}
-                        </BaseText>
-                    </BaseView>
-                </BaseView>
+                        </BaseBottomSheetV2Header.Description>
+                    </BaseBottomSheetV2Header.Left>
+                </BaseBottomSheetV2Header.Root>
 
                 {keys.length > 1 && (
                     <BaseTabs keys={keys} labels={labels} selectedKey={selectedKey} setSelectedKey={setSelectedKey} />
