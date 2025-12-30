@@ -90,7 +90,7 @@ const defaultTimestampRenderer = (timestamp: number) => moment(timestamp).format
 export type OverridableActivityBoxProps<TActivity extends Activity> = {
     activity: TActivity
     onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
-} & Pick<ActivityBoxProps, "timestampRenderer">
+} & Pick<ActivityBoxProps, "timestampRenderer" | "testID">
 
 const BaseActivityBox = ({
     description,
@@ -374,7 +374,7 @@ const TokenTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxPr
 
     return (
         <BaseActivityBox
-            testID={`FT-TRANSFER-${activity.id}`}
+            testID={props.testID ?? `FT-TRANSFER-${activity.id}`}
             timestamp={timestamp}
             onPress={onPressHandler}
             activityStatus={activity.status}
@@ -415,7 +415,7 @@ const TokenSwap = ({ activity, onPress, ...props }: OverridableActivityBoxProps<
 
     return (
         <BaseActivityBox
-            testID={`SWAP-${activity.id}`}
+            testID={props.testID ?? `SWAP-${activity.id}`}
             icon={icon}
             timestamp={activity.timestamp}
             title={title}
@@ -455,7 +455,7 @@ const DAppTransaction = ({ activity, onPress, ...props }: OverridableActivityBox
 
     return (
         <BaseActivityBox
-            testID={`DAPP-TX-${activity.id}`}
+            testID={props.testID ?? `DAPP-TX-${activity.id}`}
             icon="icon-layout-grid"
             timestamp={activity.timestamp}
             title={title}
@@ -495,7 +495,7 @@ const DAppSignCertBox = ({ activity, onPress, ...props }: OverridableActivityBox
 
     return (
         <BaseActivityBox
-            testID={`DAPP-SIGN-CERT-${activity.id}`}
+            testID={props.testID ?? `DAPP-SIGN-CERT-${activity.id}`}
             icon="icon-edit-2"
             timestamp={activity.timestamp}
             title={title}
@@ -527,7 +527,7 @@ const NFTTransfer = ({ activity, onPress, ...props }: OverridableActivityBoxProp
 
     return (
         <BaseActivityBox
-            testID={`NFT-TRANSFER-${activity.id}`}
+            testID={props.testID ?? `NFT-TRANSFER-${activity.id}`}
             icon="icon-image"
             timestamp={activity.timestamp}
             title={title}
@@ -578,7 +578,7 @@ const NFTSale = ({ activity, onPress, ...props }: OverridableActivityBoxProps<NF
 
     return (
         <BaseActivityBox
-            testID={`NFT-SALE-${activity.id}`}
+            testID={props.testID ?? `NFT-SALE-${activity.id}`}
             icon="icon-image"
             timestamp={activity.timestamp}
             title={title}
@@ -606,7 +606,7 @@ const ConnectedAppActivityBox = ({
 
     return (
         <BaseActivityBox
-            testID={`CONNECTED-APP-${activity.id}`}
+            testID={props.testID ?? `CONNECTED-APP-${activity.id}`}
             icon="icon-laptop"
             timestamp={activity.timestamp}
             title={LL.CONNECTED_APP_TITLE()}
@@ -626,7 +626,7 @@ const SignedTypedData = ({ activity, onPress, ...props }: OverridableActivityBox
 
     return (
         <BaseActivityBox
-            testID={`SIGN-TYPED-DATA-${activity.id}`}
+            testID={props.testID ?? `SIGN-TYPED-DATA-${activity.id}`}
             icon="icon-check-check"
             timestamp={activity.timestamp}
             title={LL.CONNECTED_APP_SIGN_TYPED_DATA()}
@@ -655,7 +655,7 @@ const B3trAction = ({ activity, onPress, veBetterDaoDapps, ...props }: B3trActio
 
     return (
         <BaseActivityBox
-            testID={`B3TR-ACTION-${activity.id}`}
+            testID={props.testID ?? `B3TR-ACTION-${activity.id}`}
             icon="icon-leaf"
             iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
@@ -681,7 +681,7 @@ const B3trProposalVote = ({ activity, onPress, ...props }: OverridableActivityBo
 
     return (
         <BaseActivityBox
-            testID={`B3TR-PROPOSAL-VOTE-${activity.id}`}
+            testID={props.testID ?? `B3TR-PROPOSAL-VOTE-${activity.id}`}
             icon="icon-vote"
             iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
@@ -707,7 +707,7 @@ const B3trXAllocationVote = ({
 
     return (
         <BaseActivityBox
-            testID={`B3TR-XALLOCATION-VOTE-${activity.id}`}
+            testID={props.testID ?? `B3TR-XALLOCATION-VOTE-${activity.id}`}
             icon="icon-vote"
             iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
@@ -734,7 +734,7 @@ const B3trClaimReward = ({ activity, onPress, ...props }: OverridableActivityBox
 
     return (
         <BaseActivityBox
-            testID={`B3TR-CLAIM-REWARD-${activity.id}`}
+            testID={props.testID ?? `B3TR-CLAIM-REWARD-${activity.id}`}
             icon="icon-leaf"
             iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
@@ -758,7 +758,7 @@ const B3trUpgradeGM = ({ activity, onPress, ...props }: OverridableActivityBoxPr
 
     return (
         <BaseActivityBox
-            testID={`B3TR-UPGRADE-GM-${activity.id}`}
+            testID={props.testID ?? `B3TR-UPGRADE-GM-${activity.id}`}
             icon="icon-vote"
             iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
@@ -794,7 +794,7 @@ const B3trSwapB3trToVot3 = ({
 
     return (
         <BaseActivityBox
-            testID={`B3TR-SWAP-B3TR-TO-VOT3-${activity.id}`}
+            testID={props.testID ?? `B3TR-SWAP-B3TR-TO-VOT3-${activity.id}`}
             icon={"icon-convert"}
             iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
@@ -835,7 +835,7 @@ const B3trSwapVot3ToB3tr = ({
 
     return (
         <BaseActivityBox
-            testID={`B3TR-SWAP-VOT3-TO-B3TR-${activity.id}`}
+            testID={props.testID ?? `B3TR-SWAP-VOT3-TO-B3TR-${activity.id}`}
             icon={"icon-convert"}
             iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
@@ -867,7 +867,7 @@ const B3trProposalSupport = ({
 
     return (
         <BaseActivityBox
-            testID={`B3TR-PROPOSAL-SUPPORT-${activity.id}`}
+            testID={props.testID ?? `B3TR-PROPOSAL-SUPPORT-${activity.id}`}
             icon="icon-vote"
             iconColor={COLORS.GREY_700}
             iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
@@ -889,7 +889,7 @@ const UnknownTx = ({ activity, onPress, ...props }: OverridableActivityBoxProps<
 
     return (
         <BaseActivityBox
-            testID={`UNKNOWN-TX-${activity.id}`}
+            testID={props.testID ?? `UNKNOWN-TX-${activity.id}`}
             icon="icon-block"
             timestamp={activity.timestamp}
             title={LL.UNKNOWN_TX()}
@@ -1103,7 +1103,7 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
 
     return (
         <BaseActivityBox
-            testID={`STARGATE-${activity.eventName}-${activity.id}`}
+            testID={props.testID ?? `STARGATE-${activity.eventName}-${activity.id}`}
             iconColor={COLORS.WHITE}
             iconBackgroundColor={{
                 colors: ["#820744", "#211EAB"],
@@ -1134,7 +1134,7 @@ const VeVoteCast = ({ activity, onPress, ...props }: OverridableActivityBoxProps
 
     return (
         <BaseActivityBox
-            testID={`VEVOTE-CAST-${activity.id}`}
+            testID={props.testID ?? `VEVOTE-CAST-${activity.id}`}
             icon="icon-vote"
             timestamp={activity.timestamp}
             title={LL.VEVOTE_CAST_TITLE()}
@@ -1161,7 +1161,7 @@ const DappLogin = ({ activity, onPress, ...props }: OverridableActivityBoxProps<
 
     return (
         <BaseActivityBox
-            testID={`DAPP-LOGIN-${activity.id}`}
+            testID={props.testID ?? `DAPP-LOGIN-${activity.id}`}
             icon="icon-user-check"
             timestamp={activity.timestamp}
             title={LL.DAPP_LOGIN_TITLE()}

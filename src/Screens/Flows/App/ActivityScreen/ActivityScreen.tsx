@@ -79,7 +79,7 @@ export const ActivityScreen = () => {
                         <Tab.Screen
                             name={Routes.ACTIVITY_ALL}
                             component={ActivityAllScreen}
-                            options={{ title: LL.ACTIVITY_ALL_LABEL() }}
+                            options={{ title: LL.ACTIVITY_ALL_LABEL(), tabBarTestID: "ActivityTab_All" }}
                         />
                         <Tab.Screen
                             name={Routes.ACTIVITY_B3TR}
@@ -89,12 +89,12 @@ export const ActivityScreen = () => {
                         <Tab.Screen
                             name={Routes.ACTIVITY_TRANSFER}
                             component={ActivityTransferScreen}
-                            options={{ title: LL.ACTIVITY_TRANSFER_LABEL() }}
+                            options={{ title: LL.ACTIVITY_TRANSFER_LABEL(), tabBarTestID: "ActivityTab_Transfer" }}
                         />
                         <Tab.Screen
                             name={Routes.ACTIVITY_STAKING}
                             component={ActivityStakingScreen}
-                            options={{ title: LL.ACTIVITY_STAKING_LABEL() }}
+                            options={{ title: LL.ACTIVITY_STAKING_LABEL(), tabBarTestID: "ActivityTab_Staking" }}
                         />
                         <Tab.Screen
                             name={Routes.ACTIVITY_SWAP}

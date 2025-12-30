@@ -137,8 +137,14 @@ export const SimpleActivitySectionList = ({ activities, onActivityPress, content
     )
 
     const renderItem = useCallback(
-        ({ item: activity }: SectionListRenderItemInfo<Activity, ActivitySection>) => {
-            return <ActivityItemRenderer activity={activity} onPress={onActivityPress} />
+        ({ item: activity, index }: SectionListRenderItemInfo<Activity, ActivitySection>) => {
+            return (
+                <ActivityItemRenderer
+                    activity={activity}
+                    onPress={onActivityPress}
+                    testID={`ActivityListItem_${index}`}
+                />
+            )
         },
         [onActivityPress],
     )
