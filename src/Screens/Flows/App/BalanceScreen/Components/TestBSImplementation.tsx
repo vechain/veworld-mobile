@@ -4,7 +4,7 @@ import React, { ComponentProps, forwardRef, PropsWithChildren, useCallback, useM
 import { SectionList, SectionListData, StyleSheet } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BaseSectionListSeparatorProps, BaseSpacer, BaseText, BaseView, SectionListSeparator } from "~Components"
-import { BaseBottomSheetV2, BaseBottomSheetV2Header } from "~Components/Base/BaseBottomSheetV2"
+import { BaseBottomSheetV2 } from "~Components/Base/BaseBottomSheetV2"
 import { BaseTabs } from "~Components/Base/BaseTabs"
 import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCard"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -127,55 +127,68 @@ export const TestBSImplementation = forwardRef<BottomSheetModalMethods, {}>(func
     const account = useAppSelector(selectSelectedAccount)
 
     return (
-        <BaseBottomSheetV2 ref={ref}>
-            <BaseView
-                flexDirection="column"
-                gap={24}
-                pb={24}
-                px={16}
-                pt={16}
-                bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50}>
-                <BaseBottomSheetV2Header.Root>
-                    <BaseBottomSheetV2Header.Left>
-                        <BaseBottomSheetV2Header.TitleRoot>
-                            <BaseBottomSheetV2Header.Icon name="icon-wallet" />
-                            <BaseBottomSheetV2Header.Title>{LL.SELECT_ACCOUNT_TITLE()}</BaseBottomSheetV2Header.Title>
-                        </BaseBottomSheetV2Header.TitleRoot>
-                        <BaseBottomSheetV2Header.Description>
-                            {LL.SELECT_ACCOUNT_DESCRIPTION()}
-                        </BaseBottomSheetV2Header.Description>
-                    </BaseBottomSheetV2Header.Left>
-                </BaseBottomSheetV2Header.Root>
+        <BaseBottomSheetV2.Root ref={ref}>
+            <BaseBottomSheetV2.Backdrop />
+            <BaseBottomSheetV2.Panel>
+                <BaseBottomSheetV2.Handle />
+                <BaseView
+                    flexDirection="column"
+                    gap={24}
+                    pb={24}
+                    px={16}
+                    pt={16}
+                    bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50}>
+                    <BaseBottomSheetV2.Header.Root>
+                        <BaseBottomSheetV2.Header.Left>
+                            <BaseBottomSheetV2.Header.TitleRoot>
+                                <BaseBottomSheetV2.Header.Icon name="icon-wallet" />
+                                <BaseBottomSheetV2.Header.Title>
+                                    {LL.SELECT_ACCOUNT_TITLE()}
+                                </BaseBottomSheetV2.Header.Title>
+                            </BaseBottomSheetV2.Header.TitleRoot>
+                            <BaseBottomSheetV2.Header.Description>
+                                {LL.SELECT_ACCOUNT_DESCRIPTION()}
+                            </BaseBottomSheetV2.Header.Description>
+                        </BaseBottomSheetV2.Header.Left>
+                    </BaseBottomSheetV2.Header.Root>
 
-                {keys.length > 1 && (
-                    <BaseTabs keys={keys} labels={labels} selectedKey={selectedKey} setSelectedKey={setSelectedKey} />
-                )}
-            </BaseView>
-            <SectionList
-                sections={sections}
-                contentContainerStyle={styles.contentContainer}
-                keyExtractor={item => item.address}
-                renderSectionHeader={SectionHeader}
-                stickySectionHeadersEnabled={false}
-                renderItem={({ item }) => (
-                    <SelectableAccountCard
-                        account={item}
-                        onPress={handlePress}
-                        selected={item.address === account?.address}
-                        balanceToken={"VET"}
-                        testID="selectAccount"
+                    {keys.length > 1 && (
+                        <BaseTabs
+                            keys={keys}
+                            labels={labels}
+                            selectedKey={selectedKey}
+                            setSelectedKey={setSelectedKey}
+                        />
+                    )}
+                </BaseView>
+                <BaseBottomSheetV2.Scrollable>
+                    <SectionList
+                        sections={sections}
+                        contentContainerStyle={styles.contentContainer}
+                        keyExtractor={item => item.address}
+                        renderSectionHeader={SectionHeader}
+                        stickySectionHeadersEnabled={false}
+                        renderItem={({ item }) => (
+                            <SelectableAccountCard
+                                account={item}
+                                onPress={handlePress}
+                                selected={item.address === account?.address}
+                                balanceToken={"VET"}
+                                testID="selectAccount"
+                            />
+                        )}
+                        ItemSeparatorComponent={ItemSeparatorComponent}
+                        SectionSeparatorComponent={SectionSeparatorComponent}
+                        key={selectedKey}
+                        showsVerticalScrollIndicator={false}
+                        initialNumToRender={15}
+                        alwaysBounceVertical
+                        scrollEnabled
+                        style={styles.list}
                     />
-                )}
-                ItemSeparatorComponent={ItemSeparatorComponent}
-                SectionSeparatorComponent={SectionSeparatorComponent}
-                key={selectedKey}
-                showsVerticalScrollIndicator={false}
-                initialNumToRender={15}
-                alwaysBounceVertical
-                scrollEnabled
-                style={styles.list}
-            />
-        </BaseBottomSheetV2>
+                </BaseBottomSheetV2.Scrollable>
+            </BaseBottomSheetV2.Panel>
+        </BaseBottomSheetV2.Root>
     )
 })
 const baseStyles =
