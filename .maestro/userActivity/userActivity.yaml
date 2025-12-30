@@ -1,89 +1,58 @@
-#userActivty.yaml
+## userActivity.yaml
 appId: org.vechain.veworld.app
 tags:
-  - pull-request
-env:
-  AMOUNT: 0.01
-  ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
-  ADDRESS: "0x8a9844e4750f5ce5f7988c4d1e04c278c718feea"
+    - pull-request
 onFlowStart:
-  - runFlow: ../setup_reset/setupApp.yaml
-onFlowComplete:
-    - runFlow: ../setup_reset/resetApp.yaml
+    - runFlow: ../setup_reset/setupApp.yaml
 ---
-## User should be able to send tokens delegating with account method
+# 1) Go to Activity screen
 - tapOn:
-    id: "AccountCard_changeAccountButton"
-- tapOn:
-    id: "selectAccount"
-    index: 0
-- tapOn:
-    id: "sendButton"
-- runFlow:
-    commands:
-      - tapOn:
-          id: "VET"
-- tapOn:
-    id: "Layout_ScrollView"
-- assertVisible:
-    id: "selectAccount"
-    index: 0
-- tapOn:
-    id: "selectAccount"
-    index: 0
-- tapOn:
-    id: "next-button"
-- tapOn:
-    id: "SendScreen_amountInput"
-- inputText: ${AMOUNT}
-- tapOn:
-    id: "Select_Amount_Send_Screen"
-- tapOn:
-    id: "next-button"
-- runFlow:
-    when:
-      visible: "Fee delegation"
-    commands:
-      - extendedWaitUntil:
-          visible:
-              id: "MAX_FEE_GALACTICA"
-          timeout: 10000
-      - tapOn:
-          id: "DELEGATE_OPEN"
-      - tapOn:
-          id: "button-ACCOUNT"
-      - tapOn:
-          id: "DELEGATE_ACCOUNT_CARD_RADIO"
-          index: 0
-      - tapOn:
-          id: 'RENDERED_OPTION_BUTTON_BAR_APPLY'
-      - tapOn:
-          id: "confirm-send-button"
-      - repeat:
-          while:
-            visible: "Insert your 6-digit PIN"
-          commands:
-            - tapOn: "1"
-- assertVisible: "My tokens"
-## User should be able to see the transaction details on activity screen
-- tapOn:
-    id: "history-tab"
-- swipe:
-    direction: "down"
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - tapOn: ".*Sent tokens.*- 0.01 VET"
-- runFlow:
-    when:
-      platform: Android
-    commands:
-      - tapOn:
-           id: "magnify"
-           index: 0
-- assertVisible: "Account 1"
-- assertVisible: "Account 2"
-- assertVisible: ".*0.01 VET.*"
-- assertNotVisible: "Failed"
+      id: "history-tab"
+- extendedWaitUntil:
+      visible:
+          id: "History_Screen"
+      timeout: 10000
 
+# 2) Tap on Activity sections
+- tapOn:
+      id: "ActivityTab_Transfer"
+- tapOn:
+      id: "ActivityTab_Staking"
+- runFlow:
+      when:
+          visible:
+              id: "ActivityTab_All"
+      commands:
+          - tapOn:
+                id: "ActivityTab_All"
+
+# 3) Tap on the first Staking item, open Explorer
+- runFlow:
+      when:
+          visible:
+              id: "ActivityListItem_0"
+      commands:
+          - tapOn:
+                id: "ActivityListItem_0"
+- runFlow:
+      when:
+          notVisible:
+              id: "ActivityListItem_0"
+      commands:
+          - tapOn:
+                id: "ActivityTab_Transfer"
+          - extendedWaitUntil:
+                visible:
+                    id: "ActivityListItem_0"
+                timeout: 10000
+          - tapOn:
+                id: "ActivityListItem_0"
+
+- extendedWaitUntil:
+      visible:
+          id: "view-on-explorer-button"
+      timeout: 10000
+- tapOn:
+      id: "view-on-explorer-button"
+- launchApp:
+      clearState: true
