@@ -4,10 +4,10 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import { runOnJS, withSpring } from "react-native-reanimated"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { BaseBottomSheetHandle } from "../BaseBottomSheetHandle"
+import { BaseBottomSheetHandle, BaseBottomSheetHandleProps } from "../BaseBottomSheetHandle"
 import { BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION, useBaseBottomSheetV2 } from "./BaseBottomSheetV2Provider"
 
-export const BaseBottomSheetV2Handle = () => {
+export const BaseBottomSheetV2Handle = ({ style, ...props }: Partial<BaseBottomSheetHandleProps>) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const { translateY, height, onDismiss } = useBaseBottomSheetV2()
@@ -38,7 +38,8 @@ export const BaseBottomSheetV2Handle = () => {
         <GestureDetector gesture={gesture}>
             <BaseBottomSheetHandle
                 color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
-                style={styles.handle}
+                style={[styles.handle, style]}
+                {...props}
             />
         </GestureDetector>
     )

@@ -4,12 +4,12 @@ import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseView } from "./BaseView"
 
-type Props = {
+export type BaseBottomSheetHandleProps = {
     color: string
     style?: StyleProp<ViewStyle>
 }
 
-export const BaseBottomSheetHandle = ({ color, style }: Props) => {
+export const BaseBottomSheetHandle = ({ color, style }: BaseBottomSheetHandleProps) => {
     const { styles } = useThemedStyles(baseStyles)
     return (
         <BaseView style={[styles.wrapper, style]}>

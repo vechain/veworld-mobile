@@ -1,7 +1,7 @@
-import React, { PropsWithChildren } from "react"
-import { StyleSheet } from "react-native"
+import React from "react"
+import { StyleSheet, ViewProps } from "react-native"
 import { GestureDetector } from "react-native-gesture-handler"
-import Animated, { useAnimatedStyle } from "react-native-reanimated"
+import Animated, { AnimatedProps, useAnimatedStyle } from "react-native-reanimated"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useBaseBottomSheetV2 } from "./BaseBottomSheetV2Provider"
@@ -10,7 +10,7 @@ import { useBaseBottomSheetV2Transition } from "./useBaseBottomSheetV2Transition
 
 const PADDING_BOTTOM = 32
 
-export const BaseBottomSheetV2Panel = ({ children }: PropsWithChildren) => {
+export const BaseBottomSheetV2Panel = ({ children, style, ...props }: AnimatedProps<ViewProps>) => {
     const { styles } = useThemedStyles(baseStyles)
     const { translateY, height } = useBaseBottomSheetV2()
 
@@ -27,11 +27,12 @@ export const BaseBottomSheetV2Panel = ({ children }: PropsWithChildren) => {
     return (
         <GestureDetector gesture={gesture}>
             <Animated.View
-                style={[styles.root, animatedStyle]}
+                style={[styles.root, animatedStyle, style]}
                 onLayout={e => {
                     height.value = e.nativeEvent.layout.height
                 }}
-                layout={LayoutTransition}>
+                layout={LayoutTransition}
+                {...props}>
                 {children}
             </Animated.View>
         </GestureDetector>
