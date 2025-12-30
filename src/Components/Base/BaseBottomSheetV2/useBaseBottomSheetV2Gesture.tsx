@@ -8,7 +8,7 @@ const INITIAL_POS_Y_SCROLL = 0
 const SCROLL_THRESHOLD = 4
 
 export const useBaseBottomSheetV2Gesture = () => {
-    const { scrollY, onClose } = useBaseBottomSheetV2()
+    const { scrollY, onDismiss } = useBaseBottomSheetV2()
     const nativeGesture = useMemo(() => Gesture.Native(), [])
 
     // This is needed on iOS only because the scroll view works in a different way than on Android
@@ -23,12 +23,12 @@ export const useBaseBottomSheetV2Gesture = () => {
                 .onFinalize(({ translationY }) => {
                     const scrollGoBackAnimation = withTiming(INITIAL_POS_Y_SCROLL)
                     if (translationY >= SCROLL_THRESHOLD && scrollY.get() <= 0) {
-                        runOnJS(onClose)()
+                        runOnJS(onDismiss)()
                         scrollY.value = scrollGoBackAnimation
                     }
                 })
                 .enabled(PlatformUtils.isIOS()),
-        [onClose, scrollY],
+        [onDismiss, scrollY],
     )
 
     return useMemo(() => Gesture.Simultaneous(scrollPanGesture, nativeGesture), [nativeGesture, scrollPanGesture])

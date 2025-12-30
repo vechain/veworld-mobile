@@ -22,6 +22,7 @@ type BaseBottomSheetV2ContextProps = {
     open: SharedValue<boolean>
 
     onClose: () => void
+    onDismiss: () => void
     onOpen: (data?: unknown) => void
 }
 
@@ -29,22 +30,31 @@ const BaseBottomSheetV2Context = createContext<BaseBottomSheetV2ContextProps | u
 
 type Props = PropsWithChildren<{
     onDismiss?: () => void
+    /**
+     * Call `onDismiss` when closing the bottomsheet programmatically
+     * @default true
+     */
+    dismissOnClose?: boolean
 }>
 
 export const BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION = 16
 
-export const BaseBottomSheetV2Provider = ({ children, onDismiss }: Props) => {
+export const BaseBottomSheetV2Provider = ({ children, dismissOnClose = true, onDismiss: _onDismiss }: Props) => {
     const height = useSharedValue(SCREEN_HEIGHT)
     const translateY = useSharedValue(SCREEN_HEIGHT)
     const scrollY = useSharedValue(0)
     const openSV = useSharedValue(false)
 
-    const onClose = useCallback(() => {
+    const closeBs = useCallback(() => {
         translateY.value = withSpring(height.get(), { mass: 4, damping: 120, stiffness: 900 }, () => {
             openSV.value = false
         })
-        onDismiss?.()
-    }, [height, onDismiss, openSV, translateY])
+    }, [height, openSV, translateY])
+
+    const onClose = useCallback(() => {
+        closeBs()
+        if (dismissOnClose) _onDismiss?.()
+    }, [closeBs, dismissOnClose, _onDismiss])
 
     const onOpen = useCallback(() => {
         translateY.value = withSpring(BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION, {
@@ -55,9 +65,14 @@ export const BaseBottomSheetV2Provider = ({ children, onDismiss }: Props) => {
         openSV.value = true
     }, [openSV, translateY])
 
+    const onDismiss = useCallback(() => {
+        closeBs()
+        onDismiss?.()
+    }, [closeBs])
+
     const ctx = useMemo(
-        () => ({ translateY, height, scrollY, open: openSV, onClose, onOpen }),
-        [height, onClose, onOpen, openSV, scrollY, translateY],
+        () => ({ translateY, height, scrollY, open: openSV, onClose, onOpen, onDismiss }),
+        [height, onClose, onDismiss, onOpen, openSV, scrollY, translateY],
     )
 
     return <BaseBottomSheetV2Context.Provider value={ctx}>{children}</BaseBottomSheetV2Context.Provider>
