@@ -2,6 +2,13 @@ import React, { createContext, PropsWithChildren, useCallback, useContext, useMe
 import { runOnJS, SharedValue, useSharedValue, withSpring } from "react-native-reanimated"
 import { SCREEN_HEIGHT } from "~Constants"
 
+export enum BaseBottomSheetV2Status {
+    OPENING = 0,
+    OPEN = 1,
+    CLOSING = 2,
+    CLOSED = 3,
+}
+
 type BaseBottomSheetV2ContextProps = {
     /**
      * TranslateY of the bottomsheet
@@ -17,9 +24,9 @@ type BaseBottomSheetV2ContextProps = {
     scrollY: SharedValue<number>
 
     /**
-     * True if open, false otherwise
+     * Status of the bottomsheet
      */
-    open: SharedValue<boolean>
+    status: SharedValue<BaseBottomSheetV2Status>
 
     onClose: () => void
     onDismiss: () => void
@@ -70,16 +77,17 @@ export const BaseBottomSheetV2Provider = ({
     const height = useSharedValue(SCREEN_HEIGHT)
     const translateY = useSharedValue(SCREEN_HEIGHT)
     const scrollY = useSharedValue(0)
-    const openSV = useSharedValue(false)
+    const status = useSharedValue<BaseBottomSheetV2Status>(BaseBottomSheetV2Status.CLOSED)
     const [data, setData] = useState<unknown>()
     const [snapIndex, _setSnapIndex] = useState(0)
 
     const closeBs = useCallback(() => {
+        status.value = BaseBottomSheetV2Status.CLOSING
         translateY.value = withSpring(height.get(), { mass: 4, damping: 120, stiffness: 900 }, () => {
-            openSV.value = false
+            status.value = BaseBottomSheetV2Status.CLOSED
             runOnJS(setData)(undefined)
         })
-    }, [height, openSV, translateY])
+    }, [height, status, translateY])
 
     const onClose = useCallback(() => {
         closeBs()
@@ -88,15 +96,22 @@ export const BaseBottomSheetV2Provider = ({
 
     const onOpen = useCallback(
         (_data?: unknown) => {
-            translateY.value = withSpring(BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION, {
-                mass: 4,
-                damping: 120,
-                stiffness: 900,
-            })
-            openSV.value = true
+            translateY.value = withSpring(
+                BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION,
+                {
+                    mass: 4,
+                    damping: 120,
+                    stiffness: 900,
+                },
+                () => {
+                    "worklet"
+                    status.value = BaseBottomSheetV2Status.OPEN
+                },
+            )
+            status.value = BaseBottomSheetV2Status.OPENING
             setData(_data)
         },
-        [openSV, translateY],
+        [status, translateY],
     )
 
     const onDismiss = useCallback(() => {
@@ -120,7 +135,7 @@ export const BaseBottomSheetV2Provider = ({
             translateY,
             height,
             scrollY,
-            open: openSV,
+            status,
             onClose,
             onOpen,
             onDismiss,
@@ -137,11 +152,11 @@ export const BaseBottomSheetV2Provider = ({
             onClose,
             onDismiss,
             onOpen,
-            openSV,
             scrollY,
             setSnapIndex,
             snapIndex,
             snapPoints,
+            status,
             translateY,
         ],
     )

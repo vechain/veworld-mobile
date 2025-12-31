@@ -1,14 +1,14 @@
 import { useCallback } from "react"
 import { LayoutAnimation, LayoutAnimationsValues, withTiming } from "react-native-reanimated"
-import { BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION, useBaseBottomSheetV2 } from "./BaseBottomSheetV2Provider"
+import { BaseBottomSheetV2Status, useBaseBottomSheetV2 } from "./BaseBottomSheetV2Provider"
 
 export const useBaseBottomSheetV2Transition = () => {
-    const { translateY } = useBaseBottomSheetV2()
+    const { status } = useBaseBottomSheetV2()
 
     return useCallback(
         (values: LayoutAnimationsValues): LayoutAnimation => {
             "worklet"
-            if (translateY.get() === BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION)
+            if (status.get() === BaseBottomSheetV2Status.OPEN)
                 return {
                     initialValues: {
                         originX: values.currentOriginX,
@@ -33,6 +33,6 @@ export const useBaseBottomSheetV2Transition = () => {
                 },
             }
         },
-        [translateY],
+        [status],
     )
 }

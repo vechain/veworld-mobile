@@ -5,7 +5,7 @@ import Animated, { useAnimatedStyle } from "react-native-reanimated"
 import { SCREEN_HEIGHT } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseView } from "../BaseView"
-import { BaseBottomSheetV2Provider, useBaseBottomSheetV2 } from "./BaseBottomSheetV2Provider"
+import { BaseBottomSheetV2Provider, BaseBottomSheetV2Status, useBaseBottomSheetV2 } from "./BaseBottomSheetV2Provider"
 
 export type BaseBottomSheetV2Ref = {
     present: (data?: unknown) => void
@@ -16,15 +16,15 @@ const _BaseBottomSheetV2Root = forwardRef<BaseBottomSheetV2Ref, PropsWithChildre
     { children },
     ref,
 ) {
-    const { open, onOpen, onClose } = useBaseBottomSheetV2()
+    const { status, onOpen, onClose } = useBaseBottomSheetV2()
     const { styles } = useThemedStyles(baseStyles)
     const rootAnimatedStyles = useAnimatedStyle(() => {
         return {
-            top: open.value ? 0 : SCREEN_HEIGHT,
+            top: status.value === BaseBottomSheetV2Status.CLOSED ? SCREEN_HEIGHT : 0,
             left: 0,
-            zIndex: open.value ? 1000 : -1,
+            zIndex: status.value === BaseBottomSheetV2Status.CLOSED ? -1 : 1000,
         }
-    }, [open])
+    }, [status])
 
     useImperativeHandle(ref, () => ({ present: onOpen, close: onClose }))
 
