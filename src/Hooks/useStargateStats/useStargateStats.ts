@@ -32,13 +32,13 @@ export const useStargateStats = () => {
                 queryKey: getStargateVthoPerDayKey(),
                 queryFn: () =>
                     indexer
-                        .GET("/api/v1/stargate/total-vtho-generated/historic/{range}", {
-                            params: { path: { range: "1-day" } },
+                        .GET("/api/v1/stargate/vtho-generated/{period}", {
+                            params: { path: { period: "DAY" }, query: { direction: "DESC", size: 1 } },
                         })
                         .then(res => {
-                            const data = res.data!
+                            const data = res.data!.data
                             if (data.length === 0) return "0"
-                            return data[data.length - 1].value.toString()
+                            return data[0].total.toString()
                         }),
             },
         ],
