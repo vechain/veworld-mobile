@@ -28,6 +28,23 @@ type BaseBottomSheetV2ContextProps = {
      * Data passed through when opening the bottomsheet
      */
     data?: unknown
+    /**
+     * Snap points. If not specified it'll be just ["95%"]
+     */
+    snapPoints: (`${number}%` | number)[]
+    /**
+     * Current index for the snap point calculation
+     */
+    snapIndex: number
+    /**
+     * Set the snap index based on the `snapPoints` array
+     * @param newValue New index
+     */
+    setSnapIndex: (newValue: number) => void
+    /**
+     * Indicate that the BottomSheet doesn't have any snap point provided
+     */
+    dynamicHeight: boolean
 }
 
 const BaseBottomSheetV2Context = createContext<BaseBottomSheetV2ContextProps | undefined>(undefined)
@@ -39,16 +56,23 @@ type Props = PropsWithChildren<{
      * @default true
      */
     dismissOnClose?: boolean
+    snapPoints?: BaseBottomSheetV2ContextProps["snapPoints"]
 }>
 
 export const BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION = 16
 
-export const BaseBottomSheetV2Provider = ({ children, dismissOnClose = true, onDismiss: _onDismiss }: Props) => {
+export const BaseBottomSheetV2Provider = ({
+    children,
+    dismissOnClose = true,
+    onDismiss: _onDismiss,
+    snapPoints: _snapPoints,
+}: Props) => {
     const height = useSharedValue(SCREEN_HEIGHT)
     const translateY = useSharedValue(SCREEN_HEIGHT)
     const scrollY = useSharedValue(0)
     const openSV = useSharedValue(false)
     const [data, setData] = useState<unknown>()
+    const [snapIndex, _setSnapIndex] = useState(0)
 
     const closeBs = useCallback(() => {
         translateY.value = withSpring(height.get(), { mass: 4, damping: 120, stiffness: 900 }, () => {
@@ -80,9 +104,46 @@ export const BaseBottomSheetV2Provider = ({ children, dismissOnClose = true, onD
         _onDismiss?.()
     }, [_onDismiss, closeBs])
 
-    const ctx = useMemo(
-        () => ({ translateY, height, scrollY, open: openSV, onClose, onOpen, onDismiss, data }),
-        [data, height, onClose, onDismiss, onOpen, openSV, scrollY, translateY],
+    const snapPoints = useMemo(() => _snapPoints ?? (["95%"] as `${number}%`[]), [_snapPoints])
+
+    const setSnapIndex = useCallback(
+        (newValue: number) => {
+            "worklet"
+            if (newValue < 0 || newValue >= snapPoints.length) return
+            runOnJS(_setSnapIndex)(newValue)
+        },
+        [snapPoints.length],
+    )
+
+    const ctx: BaseBottomSheetV2ContextProps = useMemo(
+        () => ({
+            translateY,
+            height,
+            scrollY,
+            open: openSV,
+            onClose,
+            onOpen,
+            onDismiss,
+            data,
+            snapPoints,
+            snapIndex,
+            setSnapIndex,
+            dynamicHeight: !_snapPoints,
+        }),
+        [
+            _snapPoints,
+            data,
+            height,
+            onClose,
+            onDismiss,
+            onOpen,
+            openSV,
+            scrollY,
+            setSnapIndex,
+            snapIndex,
+            snapPoints,
+            translateY,
+        ],
     )
 
     return <BaseBottomSheetV2Context.Provider value={ctx}>{children}</BaseBottomSheetV2Context.Provider>

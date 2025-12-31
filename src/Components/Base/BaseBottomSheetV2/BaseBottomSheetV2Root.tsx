@@ -37,17 +37,20 @@ const _BaseBottomSheetV2Root = forwardRef<BaseBottomSheetV2Ref, PropsWithChildre
     )
 })
 
-export const BaseBottomSheetV2Root = forwardRef<BaseBottomSheetV2Ref, PropsWithChildren<{ onDismiss?: () => void }>>(
-    function BaseBottomSheetV2Root({ children, onDismiss }, ref) {
-        return (
-            <Portal>
-                <BaseBottomSheetV2Provider onDismiss={onDismiss}>
-                    <_BaseBottomSheetV2Root ref={ref}>{children}</_BaseBottomSheetV2Root>
-                </BaseBottomSheetV2Provider>
-            </Portal>
-        )
-    },
-)
+type Props = PropsWithChildren<{ onDismiss?: () => void; snapPoints?: (`${number}%` | number)[] }>
+
+export const BaseBottomSheetV2Root = forwardRef<BaseBottomSheetV2Ref, Props>(function BaseBottomSheetV2Root(
+    { children, onDismiss, snapPoints },
+    ref,
+) {
+    return (
+        <Portal>
+            <BaseBottomSheetV2Provider onDismiss={onDismiss} snapPoints={snapPoints}>
+                <_BaseBottomSheetV2Root ref={ref}>{children}</_BaseBottomSheetV2Root>
+            </BaseBottomSheetV2Provider>
+        </Portal>
+    )
+})
 
 const baseStyles = () =>
     StyleSheet.create({

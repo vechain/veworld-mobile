@@ -10,7 +10,7 @@ import { BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION, useBaseBottomSheetV2 } from ".
 export const BaseBottomSheetV2Handle = ({ style, ...props }: Partial<BaseBottomSheetHandleProps>) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const { translateY, height, onDismiss } = useBaseBottomSheetV2()
+    const { translateY, height, onDismiss, snapIndex, setSnapIndex } = useBaseBottomSheetV2()
 
     const gesture = useMemo(() => {
         return Gesture.Pan()
@@ -21,10 +21,17 @@ export const BaseBottomSheetV2Handle = ({ style, ...props }: Partial<BaseBottomS
             })
             .onEnd(() => {
                 "worklet"
+                //If reached the top, increment the snap index
+                if (translateY.get() === 0) {
+                    setSnapIndex(snapIndex + 1)
+                }
                 // If more than 40%, then close the bottomsheet
                 if (translateY.get() >= (height.get() * 2) / 5) {
                     runOnJS(onDismiss)()
                     return
+                }
+                if (translateY.get() >= 0.1 * height.get()) {
+                    setSnapIndex(snapIndex - 1)
                 }
                 translateY.value = withSpring(BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION, {
                     mass: 4,
@@ -32,7 +39,7 @@ export const BaseBottomSheetV2Handle = ({ style, ...props }: Partial<BaseBottomS
                     stiffness: 900,
                 })
             })
-    }, [height, onDismiss, translateY])
+    }, [height, onDismiss, setSnapIndex, snapIndex, translateY])
 
     return (
         <GestureDetector gesture={gesture}>

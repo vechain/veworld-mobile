@@ -73,6 +73,8 @@ const SectionHeader = ({
 
 const ANIMATION_CONFIG = { stiffness: 90, damping: 15, duration: 300 }
 
+const SNAP_POINTS = ["20%", "50%", "75%"] as `${number}%`[]
+
 // component to select an account
 export const TestBSImplementation = forwardRef<BottomSheetModalMethods, {}>(function TestBSImplementation(props, ref) {
     const { LL } = useI18nContext()
@@ -95,6 +97,7 @@ export const TestBSImplementation = forwardRef<BottomSheetModalMethods, {}>(func
     const sections = useMemo(() => {
         if (selectedKey === SelectAccountBottomSheetType.PERSONAL) {
             const groupedAccounts = accounts
+                .slice(0, 2)
                 .filter(account => !AccountUtils.isObservedAccount(account))
                 .reduce((acc, curr) => {
                     const key = curr.device?.alias ?? curr.alias
@@ -127,7 +130,7 @@ export const TestBSImplementation = forwardRef<BottomSheetModalMethods, {}>(func
     const account = useAppSelector(selectSelectedAccount)
 
     return (
-        <BaseBottomSheetV2.Root ref={ref}>
+        <BaseBottomSheetV2.Root ref={ref} snapPoints={SNAP_POINTS}>
             <BaseBottomSheetV2.Backdrop />
             <BaseBottomSheetV2.Panel>
                 <BaseBottomSheetV2.Handle />

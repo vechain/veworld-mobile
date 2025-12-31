@@ -19,7 +19,7 @@ type Props = AnimatedProps<ViewProps> & {
 
 export const BaseBottomSheetV2Panel = ({ children, style, floating, ...props }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
-    const { translateY, height } = useBaseBottomSheetV2()
+    const { translateY, height, snapPoints, snapIndex, dynamicHeight } = useBaseBottomSheetV2()
 
     const animatedStyle = useAnimatedStyle(() => {
         return {
@@ -34,7 +34,13 @@ export const BaseBottomSheetV2Panel = ({ children, style, floating, ...props }: 
     return (
         <GestureDetector gesture={gesture}>
             <Animated.View
-                style={[styles.root, animatedStyle, floating && styles.floating, style]}
+                style={[
+                    styles.root,
+                    animatedStyle,
+                    floating && styles.floating,
+                    !dynamicHeight && { height: snapPoints[snapIndex] },
+                    style,
+                ]}
                 onLayout={e => {
                     height.value = e.nativeEvent.layout.height
                 }}
