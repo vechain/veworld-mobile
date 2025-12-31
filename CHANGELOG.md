@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.15 (2025-12-19)</small>
+
+* build: init ([c346c3b](https://github.com/vechain/veworld-mobile/commit/c346c3b))
+* 613 bug   align with new stargate platform on stats for empty state (#3664) ([eccb4dc](https://github.com/vechain/veworld-mobile/commit/eccb4dc)), closes [#3664](https://github.com/vechain/veworld-mobile/issues/3664)
+
 ## <small>2.4.14 (2025-12-18)</small>
 
 * build: init ([883693f](https://github.com/vechain/veworld-mobile/commit/883693f))
