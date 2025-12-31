@@ -1,0 +1,74 @@
+import React from "react"
+import { StyleSheet, ViewProps } from "react-native"
+import { GestureDetector } from "react-native-gesture-handler"
+import Animated, { AnimatedProps, useAnimatedStyle } from "react-native-reanimated"
+import { COLORS, ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { useBaseBottomSheetV2 } from "./BaseBottomSheetV2Provider"
+import { useBaseBottomSheetV2Gesture } from "./useBaseBottomSheetV2Gesture"
+import { useBaseBottomSheetV2Transition } from "./useBaseBottomSheetV2Transition"
+
+const PADDING_BOTTOM = 32
+
+type Props = AnimatedProps<ViewProps> & {
+    /**
+     * Enable floating behavior - detach from the bottom of the screen
+     */
+    floating?: boolean
+}
+
+export const BaseBottomSheetV2Panel = ({ children, style, floating, ...props }: Props) => {
+    const { styles } = useThemedStyles(baseStyles)
+    const { translateY, height, snapPoints, snapIndex, dynamicHeight } = useBaseBottomSheetV2()
+
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            transform: [{ translateY: translateY.value }],
+        }
+    }, [translateY])
+
+    const LayoutTransition = useBaseBottomSheetV2Transition()
+
+    const gesture = useBaseBottomSheetV2Gesture()
+
+    return (
+        <GestureDetector gesture={gesture}>
+            <Animated.View
+                style={[
+                    styles.root,
+                    animatedStyle,
+                    floating && styles.floating,
+                    !dynamicHeight && { height: snapPoints[snapIndex] },
+                    style,
+                ]}
+                onLayout={e => {
+                    height.value = e.nativeEvent.layout.height
+                }}
+                layout={LayoutTransition}
+                {...props}>
+                {children}
+            </Animated.View>
+        </GestureDetector>
+    )
+}
+
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        root: {
+            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50,
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+            zIndex: 1,
+            position: "relative",
+            overflow: "hidden",
+            paddingBottom: PADDING_BOTTOM,
+            transformOrigin: "bottom",
+            maxHeight: "95%",
+        },
+        floating: {
+            marginBottom: 32,
+            borderBottomLeftRadius: 24,
+            borderBottomRightRadius: 24,
+            marginHorizontal: 8,
+        },
+    })

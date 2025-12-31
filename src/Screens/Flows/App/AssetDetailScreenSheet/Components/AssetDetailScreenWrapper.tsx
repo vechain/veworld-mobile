@@ -130,6 +130,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                 scrollY.value = scrollGoBackAnimation
             }
         })
+        .enabled(PlatformUtils.isIOS())
 
     const composedGestures = Gesture.Simultaneous(scrollPanGesture, nativeGesture)
 
