@@ -37,13 +37,6 @@ env:
       commands:
           - tapOn:
                 id: "button_notifications_skip"
-- runFlow:
-      when:
-          visible:
-              id: "Backup_later_button"
-      commands:
-          - tapOn:
-                id: "Backup_later_button"
 - tapOn:
       id: "settings-tab"
 - extendedWaitUntil:
