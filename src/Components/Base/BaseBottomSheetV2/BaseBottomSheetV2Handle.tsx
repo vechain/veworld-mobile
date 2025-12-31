@@ -15,9 +15,15 @@ export const BaseBottomSheetV2Handle = ({ style, ...props }: Partial<BaseBottomS
     const gesture = useMemo(() => {
         return Gesture.Pan()
             .onUpdate(v => {
-                translateY.value =
-                    Math.max(v.translationY, -BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION) +
-                    BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION
+                if (v.translationY < 0) {
+                    translateY.value =
+                        Math.max(v.translationY * 0.4, -BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION) +
+                        BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION
+                } else {
+                    translateY.value =
+                        Math.max(v.translationY, -BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION) +
+                        BASE_BOTTOMSHEET_V2_DEFAULT_TRANSLATION
+                }
             })
             .onEnd(() => {
                 "worklet"
