@@ -29,14 +29,17 @@ export const UnlockKeystoreBottomSheet = React.forwardRef<BottomSheetModalMethod
             onHide()
         }, [dispatch, onHide, onUnlock, password])
 
-        const handleSheetChanges = useCallback(() => setPassword(""), [])
+        // Clear password only when sheet is fully dismissed
+        const handleDismiss = useCallback(() => {
+            setPassword("")
+        }, [])
 
         return (
             <BaseBottomSheet
                 dynamicHeight
                 ignoreMinimumSnapPoint
                 ref={ref}
-                onChange={handleSheetChanges}
+                onDismiss={handleDismiss}
                 title={LL.TITLE_UNLOCK_KEYSTORE()}>
                 <BaseView>
                     <BaseText typographyFont="subSubTitleLight" pt={8}>
@@ -54,6 +57,7 @@ export const UnlockKeystoreBottomSheet = React.forwardRef<BottomSheetModalMethod
                     />
                     <BaseSpacer height={16} />
                     <BaseButton
+                        testID="unlock-keystore-button"
                         haptics="Medium"
                         disabled={password.length < 1}
                         action={handleUnlock}

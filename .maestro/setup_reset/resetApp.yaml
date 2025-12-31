@@ -1,32 +1,39 @@
 appId: org.vechain.veworld.app
-
 ---
+# Navigate back if needed
+- repeat:
+      while:
+          visible:
+              id: "BackButtonHeader-BaseIcon-backButton"
+      commands:
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
-     id: "settings-tab"
+      id: "settings-tab"
 - repeat:
-    while:
-      visible:
-         id: "BackButtonHeader-BaseIcon-backButton"
-    commands:
-      - tapOn:
-            id: "BackButtonHeader-BaseIcon-backButton"
+      while:
+          visible:
+              id: "BackButtonHeader-BaseIcon-backButton"
+      commands:
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
 - repeat:
-    while:
-      visible:
-         id: "General settings"
-    commands:
-      - tapOn:
-            id: "General settings"
+      while:
+          visible:
+              id: "General settings"
+      commands:
+          - tapOn:
+                id: "General settings"
 - runFlow:
-    commands:
-      - swipe:
-         from:
-           id: "ChangeCurrencyFormat_Option"
-         direction: "UP"
-      - tapOn:
-          id: "ResetAppBox_Button"
-      - tapOn:
-           id: "reset-app-checkbox"
-      - tapOn:
-          id: "ResetAppScreen_Button"
+      commands:
+          - swipe:
+                from:
+                    id: "ChangeCurrencyFormat_Option"
+                direction: "UP"
+          - tapOn:
+                id: "ResetAppBox_Button"
+          - tapOn:
+                id: "reset-app-checkbox"
+          - tapOn:
+                id: "ResetAppScreen_Button"
 - assertVisible: "DEV:DEMO"
