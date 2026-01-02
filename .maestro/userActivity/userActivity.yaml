@@ -1,58 +1,66 @@
-## userActivity.yaml
+# Tests that user activity is properly indexed and displayed
+# 1. Performs a VET send to guarantee indexer activity
+# 2. Verifies the transaction appears in the Activity list under "Today"
 appId: org.vechain.veworld.app
 tags:
     - pull-request
 onFlowStart:
     - runFlow: ../setup_reset/setupApp.yaml
 ---
-# 1) Go to Activity screen
+# 1) Perform a send transaction to populate the activity list
+- evalScript: ${console.log('Performing VET send to test indexer...')}
+- runFlow: ../send/subflows/send_vet_minimal.yaml
+
+# 2) Wait for the app to stabilize after send
+- extendedWaitUntil:
+      visible: "Tokens"
+      timeout: 15000
+
+# 3) Go to Activity screen
 - tapOn:
       id: "history-tab"
 - extendedWaitUntil:
       visible:
           id: "History_Screen"
+      timeout: 15000
+
+# 4) Wait for tabs to render
+- extendedWaitUntil:
+      visible: "All"
+      timeout: 15000
+- evalScript: ${console.log('Activity screen loaded, tabs visible')}
+
+# 5) Navigate to Transfer tab
+- tapOn: "Transfer"
+
+# 6) Pull to refresh to trigger indexer reload
+- swipe:
+      start: 50%, 30%
+      end: 50%, 80%
+      duration: 500
+
+# 7) Wait for activity items to appear - verify "Today" section (recent transaction)
+- extendedWaitUntil:
+      visible: "Today"
+      timeout: 60000
+- extendedWaitUntil:
+      visible: "Sent tokens"
       timeout: 10000
+- evalScript: ${console.log('Transfer activity item found under Today - indexer working correctly')}
 
-# 2) Tap on Activity sections
+# 8) Tap on the first "Sent tokens" activity item
 - tapOn:
-      id: "ActivityTab_Transfer"
-- tapOn:
-      id: "ActivityTab_Staking"
-- runFlow:
-      when:
-          visible:
-              id: "ActivityTab_All"
-      commands:
-          - tapOn:
-                id: "ActivityTab_All"
+      text: "Sent tokens"
+      index: 0
 
-# 3) Tap on the first Staking item, open Explorer
-- runFlow:
-      when:
-          visible:
-              id: "ActivityListItem_0"
-      commands:
-          - tapOn:
-                id: "ActivityListItem_0"
-- runFlow:
-      when:
-          notVisible:
-              id: "ActivityListItem_0"
-      commands:
-          - tapOn:
-                id: "ActivityTab_Transfer"
-          - extendedWaitUntil:
-                visible:
-                    id: "ActivityListItem_0"
-                timeout: 10000
-          - tapOn:
-                id: "ActivityListItem_0"
-
+# 9) Verify transaction details modal and explorer button
 - extendedWaitUntil:
       visible:
           id: "view-on-explorer-button"
       timeout: 10000
 - tapOn:
       id: "view-on-explorer-button"
+
+# 10) Cleanup
 - launchApp:
       clearState: true
