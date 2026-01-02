@@ -55,15 +55,15 @@ export const DelegationStatusBadge = ({ status, exitDays }: Props) => {
     }, [status, exitDays, LL])
 
     return (
-        <BlurView
-            blurAmount={config.blurAmount}
-            style={[styles.container, { backgroundColor: config.backgroundColor }]}>
-            <BaseView style={styles.textContainer}>
-                <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE} numberOfLines={1}>
-                    {config.label}
-                </BaseText>
-            </BaseView>
-        </BlurView>
+        <BaseView style={styles.container}>
+            <BlurView
+                blurAmount={config.blurAmount}
+                style={[StyleSheet.absoluteFill, { backgroundColor: config.backgroundColor }]}
+            />
+            <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE} numberOfLines={1}>
+                {config.label}
+            </BaseText>
+        </BaseView>
     )
 }
 
@@ -73,9 +73,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         width: "100%",
         paddingVertical: 4,
-    },
-    textContainer: {
-        width: "100%",
         alignItems: "center",
+        justifyContent: "center",
     },
 })
