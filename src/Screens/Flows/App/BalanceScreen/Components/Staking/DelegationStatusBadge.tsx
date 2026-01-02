@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseText, BlurView } from "~Components"
+import { BaseText, BaseView, BlurView } from "~Components"
 import { COLORS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import type { DelegationStatus } from "~Model"
@@ -55,13 +55,15 @@ export const DelegationStatusBadge = ({ status, exitDays }: Props) => {
     }, [status, exitDays, LL])
 
     return (
-        <BlurView
-            blurAmount={config.blurAmount}
-            style={[styles.container, { backgroundColor: config.backgroundColor }]}>
+        <BaseView style={styles.container}>
+            <BlurView
+                blurAmount={config.blurAmount}
+                style={[StyleSheet.absoluteFill, { backgroundColor: config.backgroundColor }]}
+            />
             <BaseText typographyFont="captionSemiBold" color={COLORS.WHITE} numberOfLines={1}>
                 {config.label}
             </BaseText>
-        </BlurView>
+        </BaseView>
     )
 }
 
@@ -70,8 +72,8 @@ const styles = StyleSheet.create({
         position: "absolute",
         bottom: 0,
         width: "100%",
-        justifyContent: "center",
-        alignItems: "center",
         paddingVertical: 4,
+        alignItems: "center",
+        justifyContent: "center",
     },
 })
