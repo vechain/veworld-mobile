@@ -63,12 +63,11 @@ env:
 - tapOn:
       id: "Wallet_Management_AddWallet"
       retryTapIfNoChange: false
-- runFlow:
-    when:
-      visible: "Wallet Setup"
-    commands:
-      - tapOn:
-            id: "CreateOrImportWalletBottomSheet_CreateNewButton"
+- extendedWaitUntil:
+    visible: "Wallet Setup"
+    timeout: 10000
+- tapOn:
+      id: "CreateOrImportWalletBottomSheet_CreateNewButton"
 - repeat:
     times: 6
     commands:
