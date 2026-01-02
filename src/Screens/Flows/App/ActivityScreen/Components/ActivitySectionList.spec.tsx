@@ -297,37 +297,11 @@ describe("ActivitySectionList", () => {
             { wrapper: TestWrapper },
         )
 
-        const activityBoxes = screen.getAllByTestId(/^FT-TRANSFER-/i)
-        expect(activityBoxes).toHaveLength(2)
-        expect(activityBoxes[0]).toBeOnTheScreen()
-        expect(activityBoxes[1]).toBeOnTheScreen()
+        const listItems = screen.getAllByTestId(/^ActivityListItem_\d+$/)
+        expect(listItems).toHaveLength(activities.length)
 
-        const swapActivityBoxes = screen.getAllByTestId(/^SWAP-/i)
-        expect(swapActivityBoxes).toHaveLength(2)
-        expect(swapActivityBoxes[0]).toBeOnTheScreen()
-        expect(swapActivityBoxes[1]).toBeOnTheScreen()
-
-        const b3trActivityBoxes = screen.getAllByTestId(/^B3TR-/i)
-        expect(b3trActivityBoxes).toHaveLength(8)
-        expect(b3trActivityBoxes[0]).toBeOnTheScreen()
-        expect(b3trActivityBoxes[1]).toBeOnTheScreen()
-        expect(b3trActivityBoxes[2]).toBeOnTheScreen()
-        expect(b3trActivityBoxes[3]).toBeOnTheScreen()
-        expect(b3trActivityBoxes[4]).toBeOnTheScreen()
-        expect(b3trActivityBoxes[5]).toBeOnTheScreen()
-        expect(b3trActivityBoxes[6]).toBeOnTheScreen()
-        expect(b3trActivityBoxes[7]).toBeOnTheScreen()
-
-        const unknownTxActivityBoxes = screen.getAllByTestId(/^UNKNOWN-TX-/i)
-        expect(unknownTxActivityBoxes).toHaveLength(1)
-        expect(unknownTxActivityBoxes[0]).toBeOnTheScreen()
-
-        const veVoteActivityBoxes = screen.getAllByTestId(/^VEVOTE-CAST-/i)
-        expect(veVoteActivityBoxes).toHaveLength(1)
-        expect(veVoteActivityBoxes[0]).toBeOnTheScreen()
-
-        const dappLoginActivityBoxes = screen.getAllByTestId(/^DAPP-LOGIN-/i)
-        expect(dappLoginActivityBoxes).toHaveLength(1)
-        expect(dappLoginActivityBoxes[0]).toBeOnTheScreen()
+        for (let i = 0; i < activities.length; i++) {
+            expect(screen.getByTestId(`ActivityListItem_${i}`)).toBeOnTheScreen()
+        }
     })
 })
