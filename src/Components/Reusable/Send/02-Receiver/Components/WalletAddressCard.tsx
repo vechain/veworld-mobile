@@ -72,16 +72,16 @@ export const WalletAddressCard = ({
     })
 
     const isAddressInContactsOrAccounts = useMemo(() => {
-        if (!value || !AddressUtils.isValid(value) || isError) return false
+        if (!address || !AddressUtils.isValid(address) || isError) return false
         return (
-            knownContacts.some(contact => AddressUtils.compareAddresses(contact.address, value)) ||
-            accounts.some(account => AddressUtils.compareAddresses(account.address, value))
+            knownContacts.some(contact => AddressUtils.compareAddresses(contact.address, address)) ||
+            accounts.some(account => AddressUtils.compareAddresses(account.address, address))
         )
-    }, [knownContacts, accounts, value, isError])
+    }, [knownContacts, accounts, address, isError])
 
     const shouldShowAddToContactsButton = useMemo(() => {
-        return !isAddressInContactsOrAccounts && !!value && !isError
-    }, [isAddressInContactsOrAccounts, value, isError])
+        return !isAddressInContactsOrAccounts && !!address && !isError
+    }, [isAddressInContactsOrAccounts, address, isError])
 
     const handleClearAddress = useCallback(() => {
         HapticsService.triggerImpact({ level: "Light" })
