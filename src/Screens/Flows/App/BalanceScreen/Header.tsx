@@ -138,7 +138,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
     }, [hideStellaPayBottomSheet, nav, openStellaPayBottomSheet, navigateWithTab])
 
     return (
-        <BaseView style={styles.root} onLayout={onLayout}>
+        <BaseView testID="BalanceScreen_Header" style={styles.root} onLayout={onLayout}>
             {!isObservedAccount && (
                 <AnimatedLinearGradient
                     colors={[
