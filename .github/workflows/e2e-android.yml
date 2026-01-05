@@ -122,6 +122,11 @@ jobs:
                   is-executable: false
                   working-directory: "."
 
+            - name: Clear Ubuntu junk
+              run: |
+                sudo rm -rf "/usr/local/share/boost"
+                sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
             - name: Build apk
               id: build
               run: |
