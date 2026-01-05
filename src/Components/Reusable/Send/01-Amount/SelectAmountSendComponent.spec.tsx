@@ -174,7 +174,7 @@ describe("SelectAmountSendComponent", () => {
         expect(amountInput).toHaveTextContent("1")
 
         // Check that the next button works
-        const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
+        const btn = await screen.findByTestId("SelectAmountSendComponent_NextButton")
         await act(async () => {
             fireEvent.press(btn)
         })
@@ -195,7 +195,7 @@ describe("SelectAmountSendComponent", () => {
             fireEvent.press(numPad1)
         })
 
-        const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
+        const btn = await screen.findByTestId("SelectAmountSendComponent_NextButton")
         await act(async () => {
             fireEvent.press(btn)
         })
@@ -235,7 +235,7 @@ describe("SelectAmountSendComponent", () => {
         })
 
         // Check that the next button does not work
-        const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
+        const btn = await screen.findByTestId("SelectAmountSendComponent_NextButton")
         await act(async () => {
             fireEvent.press(btn)
         })
@@ -381,7 +381,7 @@ describe("SelectAmountSendComponent", () => {
 
         // Check that the next button works
         await act(async () => {
-            fireEvent.press(screen.getByTestId("SEND_FOOTER_NEXT"))
+            fireEvent.press(screen.getByTestId("SelectAmountSendComponent_NextButton"))
         })
         expect(goToNext).toHaveBeenCalled()
     })

@@ -7,7 +7,7 @@ import { ImageStyle } from "react-native-fast-image"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView, NFTImageComponent } from "~Components/Reusable"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useBottomSheetModal, useNFTMedia, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useIsOnline, useNFTMedia, useThemedStyles } from "~Hooks"
 import { useBlacklistedCollection } from "~Hooks/useBlacklistedCollection"
 import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
 import { useCollectibleTransferDetails } from "~Hooks/useCollectibleTransferDetails"
@@ -32,6 +32,7 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
     const { styles, theme } = useThemedStyles(baseStyles)
     const details = useCollectibleDetails({ address, tokenId })
     const account = useAppSelector(selectSelectedAccount)
+    const isOnline = useIsOnline()
     const { isBlacklisted } = useBlacklistedCollection(address)
     const { data: transferDetails } = useCollectibleTransferDetails({ address, tokenId })
 
@@ -114,7 +115,7 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
                         image={media?.image}
                         mimeType={media?.mediaType}
                     />
-                    {!AccountUtils.isObservedAccount(account) && (
+                    {!AccountUtils.isObservedAccount(account) && isOnline && (
                         <CollectiblesSendActionButton address={address} tokenId={tokenId} onClose={onClose} />
                     )}
                 </BaseView>

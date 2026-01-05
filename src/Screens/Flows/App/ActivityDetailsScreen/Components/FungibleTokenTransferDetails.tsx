@@ -62,8 +62,8 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
     }, [activity.blockNumber])
 
     // Details List
-    const details: Array<ActivityDetailContent> = useMemo(
-        () => [
+    const details: Array<ActivityDetailContent> = useMemo(() => {
+        const baseDetails: ActivityDetailContent[] = [
             {
                 id: 1,
                 title: LL.VALUE_TITLE(),
@@ -72,33 +72,41 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
                 underline: false,
                 valueAdditional: fiatValueTransferred ?? "",
             },
-            {
-                id: 2,
-                title: LL.GAS_FEE(),
-                value: vthoGasFee ? `${vthoGasFee} ${VTHO.symbol}` : "",
-                typographyFont: "subSubTitle",
-                underline: false,
-                valueAdditional: fiatValueGasFeeSpent ?? "",
-                isLoading: isLoading,
-            },
-            {
-                id: 3,
-                title: LL.TRANSACTION_ID(),
-                value: `${transactionIDshort}`,
-                typographyFont: "subSubTitle",
-                underline: false,
-                icon: activity.txId ? "icon-copy" : undefined,
-                onValuePress: () => {
-                    if (activity.txId) onCopyToClipboard(activity.txId, LL.TRANSACTION_ID())
-                },
-            },
-            {
-                id: 4,
-                title: LL.BLOCK_NUMBER(),
-                value: blockNumber ? `${blockNumber}` : "",
-                typographyFont: "subSubTitle",
-                underline: false,
-            },
+        ]
+
+        const transactionDetails: ActivityDetailContent[] = activity.blockNumber
+            ? [
+                  {
+                      id: 2,
+                      title: LL.GAS_FEE(),
+                      value: vthoGasFee ? `${vthoGasFee} ${VTHO.symbol}` : "",
+                      typographyFont: "subSubTitle",
+                      underline: false,
+                      valueAdditional: fiatValueGasFeeSpent ?? "",
+                      isLoading: isLoading,
+                  },
+                  {
+                      id: 3,
+                      title: LL.TRANSACTION_ID(),
+                      value: `${transactionIDshort}`,
+                      typographyFont: "subSubTitle",
+                      underline: false,
+                      icon: activity.txId ? "icon-copy" : undefined,
+                      onValuePress: () => {
+                          if (activity.txId) onCopyToClipboard(activity.txId, LL.TRANSACTION_ID())
+                      },
+                  },
+                  {
+                      id: 4,
+                      title: LL.BLOCK_NUMBER(),
+                      value: blockNumber ? `${blockNumber}` : "",
+                      typographyFont: "subSubTitle",
+                      underline: false,
+                  },
+              ]
+            : []
+
+        const endDetails: ActivityDetailContent[] = [
             {
                 id: 5,
                 title: LL.TITLE_NETWORK(),
@@ -106,23 +114,25 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
                 typographyFont: "subSubTitle",
                 underline: false,
             },
-        ],
-        [
-            LL,
-            activity.txId,
-            amountTransferred,
-            blockNumber,
-            fiatValueGasFeeSpent,
-            fiatValueTransferred,
-            isLoading,
-            network,
-            onCopyToClipboard,
-            symbol,
-            token?.symbol,
-            transactionIDshort,
-            vthoGasFee,
-        ],
-    )
+        ]
+
+        return [...baseDetails, ...transactionDetails, ...endDetails]
+    }, [
+        LL,
+        activity.txId,
+        activity.blockNumber,
+        amountTransferred,
+        blockNumber,
+        fiatValueGasFeeSpent,
+        fiatValueTransferred,
+        isLoading,
+        network,
+        onCopyToClipboard,
+        symbol,
+        token?.symbol,
+        transactionIDshort,
+        vthoGasFee,
+    ])
 
     return (
         <>

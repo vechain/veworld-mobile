@@ -47,7 +47,7 @@ export const SelectAmountTokenSelector = React.memo<Props>(function TokenSelecto
     }, [token])
 
     return (
-        <TouchableOpacity onPress={onOpenSelector}>
+        <TouchableOpacity testID="SelectAmountTokenSelector_Button" onPress={onOpenSelector}>
             <BaseView style={styles.tokenSelector} mx={18}>
                 <BaseView flexDirection="row" alignItems="center" gap={8}>
                     <BaseIcon name="icon-chevrons-up-down" size={16} color={tokenAmountCard.tokenSelectIcon} />

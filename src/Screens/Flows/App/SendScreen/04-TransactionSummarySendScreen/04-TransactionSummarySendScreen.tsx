@@ -19,7 +19,8 @@ import {
     TransferCard,
 } from "~Components"
 import { AnalyticsEvent, COLORS, ERROR_EVENTS, VET, VTHO } from "~Constants"
-import { useTheme, useTransferAddContact } from "~Hooks"
+import { useIsOnline, useTheme, useTransferAddContact } from "~Hooks"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useTransactionScreen } from "~Hooks/useTransactionScreen"
 import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
@@ -47,6 +48,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const nav = useNavigation()
+    const isOnline = useIsOnline()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const pendingTransaction = useAppSelector(state => selectPendingTx(state, token.address))
@@ -135,6 +137,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         onTransactionFailure,
         autoVTHOFallback: false,
     })
+
+    const guardedOnSubmit = useOfflineCallback(onSubmit)
 
     /**
      * If user is sending a token and gas is not enough, we will adjust the amount to send.
@@ -231,7 +235,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         isEnoughBalance={isEnoughGas}
                         hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
                         isFirstTimeLoadingFees={isFirstTimeLoadingFees}
-                        hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}>
+                        hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}
+                        sendingTokenSymbol={token.symbol}>
                         <DelegationView
                             setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}
@@ -263,8 +268,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 <FadeoutButton
                     testID="confirm-send-button"
                     title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
-                    action={onSubmit}
-                    disabled={isDisabledButtonState}
+                    action={guardedOnSubmit}
+                    disabled={isDisabledButtonState || !isOnline}
                     bottom={0}
                     mx={0}
                     width={"auto"}

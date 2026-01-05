@@ -5,7 +5,13 @@ import Animated, { LinearTransition, ZoomIn, ZoomOut } from "react-native-reanim
 import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { AnalyticsEvent, COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
-import { useAnalyticTracking, useDappBookmarksList, useHasAnyVeBetterActions, useThemedStyles } from "~Hooks"
+import {
+    useAnalyticTracking,
+    useDappBookmarksList,
+    useHasAnyVeBetterActions,
+    useIsOnline,
+    useThemedStyles,
+} from "~Hooks"
 import { useLayoutScrollviewPadding } from "~Hooks/useLayoutScrollviewPadding"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -44,6 +50,8 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const track = useAnalyticTracking()
     const { betterWorldFeature } = useFeatureFlags()
 
+    const isOnline = useIsOnline()
+
     const filteredTabs = useMemo(() => {
         return TABS.filter(tab => {
             if (tab === "STAKING") {
@@ -70,9 +78,10 @@ export const TabRenderer = ({ onLayout }: Props) => {
     }, [hideNewUserVeBetterCard, hasAnyVeBetterActions, selectedTab])
 
     const rightIcon = useMemo(() => {
-        if (selectedTab === "TOKENS") {
+        if (selectedTab === "TOKENS" && isOnline) {
             return (
                 <AnimatedTouchable
+                    testID="BalanceScreen_ManageTokensButton"
                     style={styles.manageTokens}
                     entering={ZoomIn.duration(100)}
                     exiting={ZoomOut.duration(100)}
@@ -87,7 +96,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
         }
 
         return null
-    }, [theme.isDark, selectedTab, styles.manageTokens, nav])
+    }, [selectedTab, isOnline, styles.manageTokens, theme.isDark, nav])
 
     const onTabPress = useCallback(
         (tab: (typeof TABS)[number]) => {

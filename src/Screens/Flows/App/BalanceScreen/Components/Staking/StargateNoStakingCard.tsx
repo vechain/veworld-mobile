@@ -38,7 +38,11 @@ export const StargateNoStakingCard = () => {
                     formatLocale,
                     1,
                 ) ?? "0",
-            vthoPerDay: BigNutils(stargateStats?.vthoPerDay ?? "0").toCompactString(formatLocale, 1) ?? "0",
+            vthoPerDay:
+                BigNutils(ethers.utils.formatEther(stargateStats?.vthoPerDay ?? "0")).toCompactString(
+                    formatLocale,
+                    1,
+                ) ?? "0",
         }
     }, [
         stargateStats?.totalSupply?.total,

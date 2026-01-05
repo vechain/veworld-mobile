@@ -52,7 +52,11 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
 
                 <BaseSpacer height={32} />
 
-                <BaseTouchableBox action={handleOnCreateWallet} py={16} haptics="Medium">
+                <BaseTouchableBox
+                    testID="CreateOrImportWalletBottomSheet_CreateNewButton"
+                    action={handleOnCreateWallet}
+                    py={16}
+                    haptics="Medium">
                     <BaseIcon name="icon-plus-circle" size={24} color={theme.colors.text} />
                     <BaseView flex={1} px={12}>
                         <BaseText align="left" typographyFont="subSubTitle">
