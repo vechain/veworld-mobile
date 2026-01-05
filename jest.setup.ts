@@ -11,6 +11,7 @@ import { MMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
 import * as dotenv from "dotenv"
 import { FlatList, SectionList, View } from "react-native"
+import { randomBytes as cryptoRandomBytes } from "crypto"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
 
@@ -22,6 +23,7 @@ jest.mock("jail-monkey", () => require("./src/Test/mocks/jail-monkey"))
 jest.mock("react-native-quick-crypto", () => ({
     getRandomValues: jest.fn(buffer => buffer),
     randomFillSync: jest.fn(buffer => buffer),
+    randomBytes: jest.fn(size => cryptoRandomBytes(size)),
     createCipheriv: jest.fn(() => ({
         update: (first: string) => first,
         final: () => "",
