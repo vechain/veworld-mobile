@@ -1,11 +1,22 @@
-import { act, fireEvent, render, screen } from "@testing-library/react-native"
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react-native"
+import { ethers } from "ethers"
 import React from "react"
+
 import { RootState } from "~Storage/Redux/Types"
 import { TestHelpers, TestWrapper } from "~Test"
+
 import { SendContextProvider } from "../../Provider"
+
 import { WalletAddressCard } from "./WalletAddressCard"
 
 const { account2D1 } = TestHelpers.data
+
+const getVnsAddress = jest.fn()
+
+jest.mock("~Hooks/useVns", () => ({
+    ...jest.requireActual("~Hooks/useVns"),
+    useVns: jest.fn().mockReturnValue({ getVnsAddress: (...args: any[]) => getVnsAddress(...args) }),
+}))
 
 const createWrapper = (preloadedState: Partial<RootState>) => {
     return ({ children }: { children: React.ReactNode }) => (
@@ -26,6 +37,9 @@ const createWrapper = (preloadedState: Partial<RootState>) => {
 }
 
 describe("WalletAddressCard", () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
     it("should render correctly", () => {
         render(<WalletAddressCard onAddressChange={jest.fn()} isError={false} setIsError={jest.fn()} address="" />, {
             wrapper: createWrapper({}),
@@ -140,5 +154,59 @@ describe("WalletAddressCard", () => {
         )
 
         expect(screen.getByTestId("Send_Receiver_Address_Input_Clear_Button")).toBeOnTheScreen()
+    })
+
+    it("should handle vns input", async () => {
+        const onAddressChangeMock = jest.fn()
+        let isError = false
+        const setIsError = jest.fn().mockImplementation((value: boolean) => (isError = value))
+
+        const randomAddr = ethers.Wallet.createRandom().address
+
+        getVnsAddress
+            .mockImplementationOnce(() => Promise.resolve(randomAddr))
+            .mockImplementationOnce(() => Promise.resolve(ethers.constants.AddressZero))
+            .mockImplementationOnce(() => Promise.reject("RANDOM ERROR"))
+
+        render(
+            <WalletAddressCard
+                value=""
+                onAddressChange={onAddressChangeMock}
+                address="0x0"
+                isError={isError}
+                setIsError={setIsError}
+            />,
+            {
+                wrapper: createWrapper({}),
+            },
+        )
+
+        act(() => {
+            fireEvent.changeText(screen.getByTestId("Send_Receiver_Address_Input"), "test1.veworld.vet")
+        })
+
+        await waitFor(() => {
+            expect(onAddressChangeMock).toHaveBeenNthCalledWith(1, "test1.veworld.vet", "test1.veworld.vet")
+            expect(onAddressChangeMock).toHaveBeenNthCalledWith(2, "test1.veworld.vet", randomAddr)
+            expect(setIsError).toHaveBeenNthCalledWith(1, false)
+        })
+
+        act(() => {
+            fireEvent.changeText(screen.getByTestId("Send_Receiver_Address_Input"), "test2.veworld.vet")
+        })
+
+        await waitFor(() => {
+            expect(onAddressChangeMock).toHaveBeenNthCalledWith(3, "test2.veworld.vet", "test2.veworld.vet")
+            expect(setIsError).toHaveBeenNthCalledWith(2, true)
+        })
+
+        act(() => {
+            fireEvent.changeText(screen.getByTestId("Send_Receiver_Address_Input"), "test3.veworld.vet")
+        })
+
+        await waitFor(() => {
+            expect(onAddressChangeMock).toHaveBeenNthCalledWith(4, "test3.veworld.vet", "test3.veworld.vet")
+            expect(setIsError).toHaveBeenNthCalledWith(3, true)
+        })
     })
 })

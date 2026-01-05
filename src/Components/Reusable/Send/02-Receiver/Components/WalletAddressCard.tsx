@@ -97,14 +97,6 @@ export const WalletAddressCard = ({
         setIsFocused(false)
     }, [])
 
-    const handleGetVnsAddress = useCallback(
-        async (vnsName: string) => {
-            const vnsAddress = await getVnsAddress(vnsName)
-            return vnsAddress
-        },
-        [getVnsAddress],
-    )
-
     const handlePasteAddress = useCallback(async () => {
         let isString = await Clipboard.hasStringAsync()
         if (!isString) return
@@ -153,8 +145,9 @@ export const WalletAddressCard = ({
     const onValueChange = useCallback(
         async (str: string) => {
             _onAddressChange(str, str)
+
             if (str.includes(".vet")) {
-                const vnsAddress = await handleGetVnsAddress(str)
+                const vnsAddress = await getVnsAddress(str).catch(() => ZERO_ADDRESS)
 
                 if (vnsAddress === ZERO_ADDRESS) {
                     setIsError(true)
@@ -178,7 +171,7 @@ export const WalletAddressCard = ({
                 }
             }
         },
-        [_onAddressChange, handleGetVnsAddress, setIsError],
+        [_onAddressChange, getVnsAddress, setIsError],
     )
 
     return (
