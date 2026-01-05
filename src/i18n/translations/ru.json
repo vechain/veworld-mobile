@@ -936,7 +936,7 @@
   "NO_VTHO_BALANCE": "Нет баланса VTHO. Выберите другой токен.",
   "OCTOBER": "Октябрь",
   "OFFLINE_CHIP": "Вы офлайн",
-  "OFFLINE_STATUS": "Оффлайн",
+  "OFFLINE_STATUS": "Офлайн",
   "ONLY_SECONDS": "{seconds:number|toSecondsDuration}",
   "ORIGIN": "Происхождение",
   "OUTCOMES": "Результаты",
