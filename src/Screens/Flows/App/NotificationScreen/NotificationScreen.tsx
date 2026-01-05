@@ -12,7 +12,7 @@ import {
     showWarningToast,
     useNotifications,
 } from "~Components"
-import { vechainNewsAndUpdates, voteReminderTagKey } from "~Constants"
+import { STARGATE_NOTIFICATION_CATEGORIES, vechainNewsAndUpdates, voteReminderTagKey } from "~Constants"
 import { useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
@@ -49,12 +49,20 @@ export const NotificationScreen = () => {
         removeTag,
         addAllDAppsTags,
         removeAllDAppsTags,
+        disabledCategories,
+        updateStargatePreference,
     } = useNotifications()
 
     const [tags, setTags] = useState<{ [key: string]: string }>({})
+    const [isUpdatingNftPreference, setIsUpdatingNftPreference] = useState(false)
+    const [isUpdatingRewardsPreference, setIsUpdatingRewardsPreference] = useState(false)
 
     const areNotificationsEnabled = !!isUserOptedIn && !!isNotificationPermissionEnabled
     const hasReachedSubscriptionLimit = Object.keys(tags).length === SUBSCRIPTION_LIMIT
+
+    // StarGate preference computed values
+    const isNftUpdatesEnabled = !disabledCategories.includes(STARGATE_NOTIFICATION_CATEGORIES.NFT_UPDATES)
+    const isRewardsEnabled = !disabledCategories.includes(STARGATE_NOTIFICATION_CATEGORIES.REWARDS)
 
     const updateTags = useCallback(() => {
         getTags().then(setTags)
@@ -138,6 +146,46 @@ export const NotificationScreen = () => {
         updateTags,
     ])
 
+    const toggleNftUpdates = useCallback(
+        async (value: boolean) => {
+            if (isUpdatingNftPreference) return
+
+            setIsUpdatingNftPreference(true)
+
+            const success = await updateStargatePreference(STARGATE_NOTIFICATION_CATEGORIES.NFT_UPDATES, value)
+
+            if (!success) {
+                showErrorToast({
+                    text1: LL.PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE(),
+                    text2: LL.PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC(),
+                })
+            }
+
+            setIsUpdatingNftPreference(false)
+        },
+        [isUpdatingNftPreference, updateStargatePreference, LL],
+    )
+
+    const toggleRewardsUpdates = useCallback(
+        async (value: boolean) => {
+            if (isUpdatingRewardsPreference) return
+
+            setIsUpdatingRewardsPreference(true)
+
+            const success = await updateStargatePreference(STARGATE_NOTIFICATION_CATEGORIES.REWARDS, value)
+
+            if (!success) {
+                showErrorToast({
+                    text1: LL.PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE(),
+                    text2: LL.PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC(),
+                })
+            }
+
+            setIsUpdatingRewardsPreference(false)
+        },
+        [isUpdatingRewardsPreference, updateStargatePreference, LL],
+    )
+
     const ListHeaderComponent = useMemo(() => {
         return (
             <>
@@ -184,6 +232,23 @@ export const NotificationScreen = () => {
                             value={!!tags[voteReminderTagKey]}
                         />
                         <BaseSpacer height={40} />
+
+                        <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_STARGATE_STAKING()}</BaseText>
+                        <BaseSpacer height={16} />
+                        <EnableFeature
+                            title={LL.PUSH_NOTIFICATIONS_STARGATE_NFT_UPDATES()}
+                            typographyFont="bodyMedium"
+                            onValueChange={toggleNftUpdates}
+                            value={isNftUpdatesEnabled}
+                        />
+                        <BaseSpacer height={16} />
+                        <EnableFeature
+                            title={LL.PUSH_NOTIFICATIONS_STARGATE_REWARDS()}
+                            typographyFont="bodyMedium"
+                            onValueChange={toggleRewardsUpdates}
+                            value={isRewardsEnabled}
+                        />
+                        <BaseSpacer height={40} />
                     </>
                 )}
                 <BaseSpacer height={12} />
@@ -198,6 +263,10 @@ export const NotificationScreen = () => {
         toogleSubscriptionSwitch,
         toogleDAppSubscriptionSwitch,
         dappNotifications,
+        toggleNftUpdates,
+        toggleRewardsUpdates,
+        isNftUpdatesEnabled,
+        isRewardsEnabled,
     ])
 
     useEffect(() => {

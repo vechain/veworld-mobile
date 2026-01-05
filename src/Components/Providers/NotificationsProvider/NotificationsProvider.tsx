@@ -23,6 +23,7 @@ import {
     removeRemovedNotificationTag,
     selectDappNotifications,
     selectDappVisitCounter,
+    selectDisabledCategories,
     selectNotificationFeautureEnabled,
     selectNotificationOptedIn,
     selectNotificationPermissionEnabled,
@@ -30,12 +31,15 @@ import {
     selectSelectedNetwork,
     setDappsVisitCounter,
     setDappVisitCounter,
+    setDisabledCategories,
     updateNotificationFeatureFlag,
     updateNotificationOptedIn,
     updateNotificationPermission,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { selectNotificationCenterUrl } from "~Storage/Redux/Selectors/UserPreferences"
+import { updateNotificationPreferences } from "~Networking/NotificationCenter/NotificationCenterAPI"
 import { useFeatureFlags } from "../FeatureFlagsProvider"
 import { error } from "~Utils"
 import { Routes } from "../../../Navigation"
@@ -59,6 +63,8 @@ type ContextType = {
     addAllDAppsTags: () => void
     removeAllDAppsTags: () => void
     addAllTags: () => void
+    disabledCategories: string[]
+    updateStargatePreference: (category: string, enabled: boolean) => Promise<boolean>
 }
 
 const Context = createContext<ContextType | undefined>(undefined)
@@ -78,6 +84,8 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const featureEnabled = useAppSelector(selectNotificationFeautureEnabled)
     const dappsNotifications = useAppSelector(selectDappNotifications)
+    const disabledCategories = useAppSelector(selectDisabledCategories)
+    const customUrl = useAppSelector(selectNotificationCenterUrl)
     const isFetcingTags = useRef(false)
     const [isInitialized, setIsInitialized] = useState(false)
 
@@ -385,6 +393,55 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         [dispatch, featureEnabled, isMainnet],
     )
 
+    const getBaseUrl = useCallback(() => {
+        return (
+            customUrl ??
+            (__DEV__ ? process.env.NOTIFICATION_CENTER_REGISTER_DEV : process.env.NOTIFICATION_CENTER_REGISTER_PROD)
+        )
+    }, [customUrl])
+
+    const updateStargatePreference = useCallback(
+        async (category: string, enabled: boolean): Promise<boolean> => {
+            if (!featureEnabled || !isInitialized) return false
+
+            const baseUrl = getBaseUrl()
+            if (!baseUrl) return false
+
+            try {
+                const subscriptionId = await OneSignal.User.pushSubscription.getIdAsync()
+                if (!subscriptionId) return false
+
+                // Calculate new disabled categories
+                let newDisabledCategories: string[]
+                if (enabled) {
+                    // Remove category from disabled list (enabling it)
+                    newDisabledCategories = disabledCategories.filter(c => c !== category)
+                } else {
+                    // Add category to disabled list (disabling it)
+                    newDisabledCategories = disabledCategories.includes(category)
+                        ? disabledCategories
+                        : [...disabledCategories, category]
+                }
+
+                // Call API
+                const response = await updateNotificationPreferences({
+                    subscriptionId,
+                    disabledCategories: newDisabledCategories,
+                    baseUrl,
+                })
+
+                // Update Redux only after successful API response
+                dispatch(setDisabledCategories(response.disabledCategories))
+
+                return true
+            } catch (err) {
+                error(ERROR_EVENTS.ONE_SIGNAL, err)
+                return false
+            }
+        },
+        [featureEnabled, isInitialized, disabledCategories, dispatch, getBaseUrl],
+    )
+
     const contextValue = useMemo(() => {
         return {
             featureEnabled: featureEnabled,
@@ -403,6 +460,8 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
             addAllDAppsTags: addAllDAppsTags,
             removeAllDAppsTags: removeAllDAppsTags,
             addAllTags: addAllTags,
+            disabledCategories: disabledCategories,
+            updateStargatePreference: updateStargatePreference,
         }
     }, [
         addDAppTag,
@@ -421,6 +480,8 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         addAllDAppsTags,
         removeAllDAppsTags,
         addAllTags,
+        disabledCategories,
+        updateStargatePreference,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>

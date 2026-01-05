@@ -3257,7 +3257,7 @@ type RootTranslation = {
 	 */
 	LOADING_PAGE_CONTENT: string
 	/**
-	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
+	 * S​t​a​y​ ​s​i​g​n​e​d​ ​i​n
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: string
 	/**
@@ -3840,6 +3840,14 @@ type RootTranslation = {
 	 */
 	OCTOBER: string
 	/**
+	 * Y​o​u​ ​a​r​e​ ​o​f​f​l​i​n​e
+	 */
+	OFFLINE_CHIP: string
+	/**
+	 * O​f​f​l​i​n​e
+	 */
+	OFFLINE_STATUS: string
+	/**
 	 * {​s​e​c​o​n​d​s​|​t​o​S​e​c​o​n​d​s​D​u​r​a​t​i​o​n​}
 	 * @param {number} seconds
 	 */
@@ -3928,6 +3936,18 @@ type RootTranslation = {
 	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
+	/**
+	 * S​t​a​r​G​a​t​e​ ​s​t​a​k​i​n​g
+	 */
+	PUSH_NOTIFICATIONS_STARGATE_STAKING: string
+	/**
+	 * N​F​T​ ​u​p​d​a​t​e​s
+	 */
+	PUSH_NOTIFICATIONS_STARGATE_NFT_UPDATES: string
+	/**
+	 * R​e​w​a​r​d​s​ ​u​p​d​a​t​e​s
+	 */
+	PUSH_NOTIFICATIONS_STARGATE_REWARDS: string
 	/**
 	 * E​n​a​b​l​e​ ​y​o​u​r​ ​c​a​m​e​r​a​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​s​c​a​n​ ​a​ ​Q​R​ ​c​o​d​e
 	 */
@@ -6006,14 +6026,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * O​f​f​l​i​n​e
-	 */
-	OFFLINE_STATUS: string
-	/**
-	 * Y​o​u​ ​a​r​e​ ​o​f​f​l​i​n​e
-	 */
-	OFFLINE_CHIP: string
 }
 
 export type TranslationFunctions = {
@@ -9213,7 +9225,7 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	LOADING_PAGE_CONTENT: () => LocalizedString
 	/**
-	 * Keep me signed in for future sessions
+	 * Stay signed in
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
 	/**
@@ -9778,6 +9790,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	OCTOBER: () => LocalizedString
 	/**
+	 * You are offline
+	 */
+	OFFLINE_CHIP: () => LocalizedString
+	/**
+	 * Offline
+	 */
+	OFFLINE_STATUS: () => LocalizedString
+	/**
 	 * {seconds|toSecondsDuration}
 	 */
 	ONLY_SECONDS: (arg: { seconds: number }) => LocalizedString
@@ -9865,6 +9885,18 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Vote reminder
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
+	/**
+	 * StarGate staking
+	 */
+	PUSH_NOTIFICATIONS_STARGATE_STAKING: () => LocalizedString
+	/**
+	 * NFT updates
+	 */
+	PUSH_NOTIFICATIONS_STARGATE_NFT_UPDATES: () => LocalizedString
+	/**
+	 * Rewards updates
+	 */
+	PUSH_NOTIFICATIONS_STARGATE_REWARDS: () => LocalizedString
 	/**
 	 * Enable your camera permissions to scan a QR code
 	 */
@@ -11912,14 +11944,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Offline
-	 */
-	OFFLINE_STATUS: () => LocalizedString
-	/**
-	 * You are offline
-	 */
-	OFFLINE_CHIP: () => LocalizedString
 }
 
 export type Formatters = {
