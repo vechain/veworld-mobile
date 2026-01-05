@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen, waitFor } from "@testing-library/react-
 import { ethers } from "ethers"
 import React from "react"
 
+import * as Clipboard from "expo-clipboard"
 import { RootState } from "~Storage/Redux/Types"
 import { TestHelpers, TestWrapper } from "~Test"
 
@@ -16,6 +17,11 @@ const getVnsAddress = jest.fn()
 jest.mock("~Hooks/useVns", () => ({
     ...jest.requireActual("~Hooks/useVns"),
     useVns: jest.fn().mockReturnValue({ getVnsAddress: (...args: any[]) => getVnsAddress(...args) }),
+}))
+
+jest.mock("expo-clipboard", () => ({
+    hasStringAsync: jest.fn(),
+    getStringAsync: jest.fn(),
 }))
 
 const createWrapper = (preloadedState: Partial<RootState>) => {
@@ -120,22 +126,123 @@ describe("WalletAddressCard", () => {
         expect(screen.getByTestId("Send_Receiver_Address_Add_To_Contacts_Button")).toBeOnTheScreen()
     })
 
-    it("should render paste button when address is not set", async () => {
-        const onAddressChangeMock = jest.fn()
-        render(
-            <WalletAddressCard
-                onAddressChange={onAddressChangeMock}
-                value=""
-                address="0x0"
-                isError={false}
-                setIsError={jest.fn()}
-            />,
-            {
-                wrapper: createWrapper({}),
-            },
-        )
+    describe("Paste", () => {
+        it("should not call anything when there is no string in clipboard", async () => {
+            const onAddressChangeMock = jest.fn()
+            ;(Clipboard.hasStringAsync as jest.Mock).mockResolvedValue(false)
+            render(
+                <WalletAddressCard
+                    onAddressChange={onAddressChangeMock}
+                    value=""
+                    address="0x0"
+                    isError={false}
+                    setIsError={jest.fn()}
+                />,
+                {
+                    wrapper: createWrapper({}),
+                },
+            )
 
-        expect(screen.getByTestId("Send_Receiver_Address_Input_Paste_Button")).toBeOnTheScreen()
+            act(() => {
+                fireEvent.press(screen.getByTestId("Send_Receiver_Address_Input_Paste_Button"))
+            })
+
+            await waitFor(() => {
+                expect(Clipboard.getStringAsync).not.toHaveBeenCalled()
+            })
+        })
+        it("should just call onAddressChange if it is a normal address", async () => {
+            const onAddressChangeMock = jest.fn()
+            const addr = ethers.Wallet.createRandom().address
+            ;(Clipboard.hasStringAsync as jest.Mock).mockResolvedValue(true)
+            ;(Clipboard.getStringAsync as jest.Mock).mockResolvedValue(addr)
+            render(
+                <WalletAddressCard
+                    onAddressChange={onAddressChangeMock}
+                    value=""
+                    address="0x0"
+                    isError={false}
+                    setIsError={jest.fn()}
+                />,
+                {
+                    wrapper: createWrapper({}),
+                },
+            )
+
+            act(() => {
+                fireEvent.press(screen.getByTestId("Send_Receiver_Address_Input_Paste_Button"))
+            })
+
+            await waitFor(() => {
+                expect(onAddressChangeMock).toHaveBeenCalledWith(addr, addr)
+            })
+        })
+        it("should send an empty string as address if no vns has been found", async () => {
+            const onAddressChangeMock = jest.fn()
+            const setIsError = jest.fn()
+            ;(Clipboard.hasStringAsync as jest.Mock).mockResolvedValue(true)
+            ;(Clipboard.getStringAsync as jest.Mock).mockResolvedValue("test.veworld.vet")
+            getVnsAddress.mockResolvedValueOnce(undefined).mockRejectedValue(new Error())
+            render(
+                <WalletAddressCard
+                    onAddressChange={onAddressChangeMock}
+                    value=""
+                    address="0x0"
+                    isError={false}
+                    setIsError={setIsError}
+                />,
+                {
+                    wrapper: createWrapper({}),
+                },
+            )
+
+            act(() => {
+                fireEvent.press(screen.getByTestId("Send_Receiver_Address_Input_Paste_Button"))
+            })
+
+            await waitFor(() => {
+                expect(onAddressChangeMock).toHaveBeenNthCalledWith(1, "test.veworld.vet", "")
+                expect(setIsError).toHaveBeenNthCalledWith(1, true)
+            })
+
+            act(() => {
+                fireEvent.press(screen.getByTestId("Send_Receiver_Address_Input_Paste_Button"))
+            })
+
+            await waitFor(() => {
+                expect(onAddressChangeMock).toHaveBeenNthCalledWith(2, "test.veworld.vet", "")
+                expect(setIsError).toHaveBeenNthCalledWith(2, true)
+            })
+        })
+        it("should send the proper values if vns has been found", async () => {
+            const onAddressChangeMock = jest.fn()
+            const setIsError = jest.fn()
+            const addr = ethers.Wallet.createRandom().address
+            ;(Clipboard.hasStringAsync as jest.Mock).mockResolvedValue(true)
+            ;(Clipboard.getStringAsync as jest.Mock).mockResolvedValue("test.veworld.vet")
+            getVnsAddress.mockResolvedValueOnce(addr)
+            render(
+                <WalletAddressCard
+                    onAddressChange={onAddressChangeMock}
+                    value=""
+                    address="0x0"
+                    isError={false}
+                    setIsError={setIsError}
+                />,
+                {
+                    wrapper: createWrapper({}),
+                },
+            )
+
+            act(() => {
+                fireEvent.press(screen.getByTestId("Send_Receiver_Address_Input_Paste_Button"))
+            })
+
+            await waitFor(() => {
+                expect(onAddressChangeMock).toHaveBeenNthCalledWith(1, "test.veworld.vet", addr)
+                expect(setIsError).toHaveBeenNthCalledWith(1, false)
+            })
+        })
     })
 
     it("should render clear button when address is set", async () => {

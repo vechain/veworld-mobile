@@ -103,15 +103,17 @@ export const WalletAddressCard = ({
         const text = await Clipboard.getStringAsync().then(r => r.trim())
         if (!text.endsWith(".vet")) {
             _onAddressChange(text, text)
+            setIsError(!AddressUtils.isValid(text))
             return
         }
-        const addr = await getVnsAddress(text)
+        const addr = await getVnsAddress(text).catch(() => undefined)
         if (!addr) {
             _onAddressChange(text, "")
             setIsError(true)
             return
         }
         _onAddressChange(text, addr)
+        setIsError(false)
     }, [_onAddressChange, getVnsAddress, setIsError])
 
     const computedInputStyles = useMemo(() => {
