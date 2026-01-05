@@ -40,6 +40,11 @@ jobs:
 
             - name: Checkout repository
               uses: actions/checkout@v3
+            
+            - name: Clear Ubuntu junk
+              run: |
+                sudo rm -rf "/usr/local/share/boost"
+                sudo rm -rf "$AGENT_TOOLSDIRECTORY"
 
             - name: Setup Node
               uses: actions/setup-node@v3
@@ -121,11 +126,6 @@ jobs:
                   filename: ".env.production"
                   is-executable: false
                   working-directory: "."
-
-            - name: Clear Ubuntu junk
-              run: |
-                sudo rm -rf "/usr/local/share/boost"
-                sudo rm -rf "$AGENT_TOOLSDIRECTORY"
 
             - name: Build apk
               id: build
