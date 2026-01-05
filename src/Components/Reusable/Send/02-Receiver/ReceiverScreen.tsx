@@ -74,6 +74,12 @@ const _ReceiverScreen = ({ address: selectedAddress, name }: { address: string |
         [handleAddressChange],
     )
 
+    const onListAddressChange = useCallback(
+        (address: string, ctx: "accounts" | "contacts" | "recent") =>
+            handleAddressChange("list", address, address, ctx),
+        [handleAddressChange],
+    )
+
     const onNext = useCallback(() => {
         setFlowState(prev => ({ ...prev, address: realAddress }))
         goToNext()
@@ -90,7 +96,7 @@ const _ReceiverScreen = ({ address: selectedAddress, name }: { address: string |
                 <KnownAddressesList
                     activeFilter={activeFilter}
                     selectedAddress={listWalletAddresses}
-                    onAddressChange={(address, ctx) => handleAddressChange("list", address, address, ctx)}
+                    onAddressChange={onListAddressChange}
                 />
             </SendContent.Container>
             <SendContent.Footer>
