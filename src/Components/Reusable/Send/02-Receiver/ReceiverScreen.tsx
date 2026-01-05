@@ -23,6 +23,7 @@ const _ReceiverScreen = ({ address: selectedAddress, name }: { address: string |
     const [listWalletAddresses, setListWalletAddresses] = useState<string>(selectedAddress ?? "")
     const [addressChangeCtx, setAddressChangeCtx] = useState<"recent" | "accounts" | "contacts" | null>(null)
     const [realAddress, setRealAddress] = useState(selectedAddress || "")
+    const [isError, setIsError] = useState(false)
     const { styles } = useThemedStyles(baseStyles)
 
     const allAccounts = useAppSelector(selectAccounts)
@@ -58,6 +59,7 @@ const _ReceiverScreen = ({ address: selectedAddress, name }: { address: string |
                 setListWalletAddresses(str)
                 setInputWalletAddress("")
                 setRealAddress(address)
+                setIsError(false)
             }
         },
         [selectedAddress],
@@ -90,8 +92,11 @@ const _ReceiverScreen = ({ address: selectedAddress, name }: { address: string |
             <SendContent.Header />
             <SendContent.Container style={styles.root} layout={LinearTransition}>
                 <WalletAddressCard
-                    selectedAddress={activeFilter ? "" : inputWalletAddress}
+                    value={activeFilter ? "" : inputWalletAddress}
+                    address={realAddress}
                     onAddressChange={onInputAddressChange}
+                    isError={isError}
+                    setIsError={setIsError}
                 />
                 <KnownAddressesList
                     activeFilter={activeFilter}
