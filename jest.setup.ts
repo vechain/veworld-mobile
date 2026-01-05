@@ -103,7 +103,12 @@ jest.mock("expo-modules-core", () => ({
         addListener: jest.fn(),
         removeListeners: jest.fn(),
     })),
+    LegacyEventEmitter: jest.fn().mockImplementation(() => ({
+        addListener: jest.fn(),
+        removeListeners: jest.fn(),
+    })),
     requireNativeModule: jest.fn().mockReturnValue({}), // Mock native modules
+    requireOptionalNativeModule: jest.fn().mockReturnValue({}),
     Platform: {
         OS: "ios",
     },
