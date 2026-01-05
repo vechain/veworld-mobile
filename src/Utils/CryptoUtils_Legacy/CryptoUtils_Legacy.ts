@@ -8,8 +8,6 @@ import HexUtils from "~Utils/HexUtils"
 import { ERROR_EVENTS } from "~Constants"
 import { Cipher, Decipher } from "crypto"
 
-const ZERO_IV = Buffer.alloc(16, 0)
-
 // [START] - Used for testing purposes ONLY
 function encrypt<T>(data: T, encryptionKey: string, salt?: string): string {
     const keyHex = PasswordUtils.hash(encryptionKey, salt)
@@ -21,7 +19,7 @@ function encrypt<T>(data: T, encryptionKey: string, salt?: string): string {
 }
 
 function encryptState<T>(data: T, key: string): string {
-    const cipher = crypto.createCipheriv("aes-256-cbc", key, ZERO_IV) as Cipher
+    const cipher = crypto.createCipheriv("aes-256-cbc", key, null) as Cipher
     let ciph = cipher.update(stringify(data), "utf-8", "hex")
     ciph += cipher.final("hex")
     return ciph as string
@@ -40,7 +38,7 @@ function decrypt<T>(data: string, encryptionKey: string, salt?: string): T {
 }
 
 function decryptState(data: string, key: string) {
-    const decipher = crypto.createDecipheriv("aes-256-cbc", key, ZERO_IV) as Decipher
+    const decipher = crypto.createDecipheriv("aes-256-cbc", key, null) as Decipher
     let txt = decipher.update(data, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()
