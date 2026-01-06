@@ -12,7 +12,7 @@ import {
     showWarningToast,
     useNotifications,
 } from "~Components"
-import { STARGATE_NOTIFICATION_CATEGORIES, vechainNewsAndUpdates, voteReminderTagKey } from "~Constants"
+import { NOTIFICATION_CATEGORIES, vechainNewsAndUpdates, voteReminderTagKey } from "~Constants"
 import { useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
@@ -52,19 +52,17 @@ export const NotificationScreen = () => {
         addAllDAppsTags,
         removeAllDAppsTags,
         disabledCategories,
-        updateStargatePreference,
+        updateNotifCenterPrefs,
     } = useNotifications()
 
     const [tags, setTags] = useState<{ [key: string]: string }>({})
-    const [isUpdatingNftPreference, setIsUpdatingNftPreference] = useState(false)
-    const [isUpdatingRewardsPreference, setIsUpdatingRewardsPreference] = useState(false)
 
     const areNotificationsEnabled = !!isUserOptedIn && !!isNotificationPermissionEnabled
     const hasReachedSubscriptionLimit = Object.keys(tags).length === SUBSCRIPTION_LIMIT
 
-    // StarGate preference computed values
-    const isNftUpdatesEnabled = !disabledCategories.includes(STARGATE_NOTIFICATION_CATEGORIES.NFT_UPDATES)
-    const isRewardsEnabled = !disabledCategories.includes(STARGATE_NOTIFICATION_CATEGORIES.REWARDS)
+    // Notification preference computed values
+    const isNftUpdatesEnabled = !disabledCategories.includes(NOTIFICATION_CATEGORIES.NFT_UPDATES)
+    const isRewardsEnabled = !disabledCategories.includes(NOTIFICATION_CATEGORIES.REWARDS)
 
     const updateTags = useCallback(() => {
         getTags().then(setTags)
@@ -148,50 +146,21 @@ export const NotificationScreen = () => {
         updateTags,
     ])
 
-    const toggleNftUpdates = useCallback(
-        async (value: boolean) => {
-            if (isUpdatingNftPreference) return
-
-            setIsUpdatingNftPreference(true)
-
-            const success = await updateStargatePreference(STARGATE_NOTIFICATION_CATEGORIES.NFT_UPDATES, value)
+    const toggleNotifCenterPreference = useCallback(
+        (category: string) => async (value: boolean) => {
+            const success = await updateNotifCenterPrefs(category, value)
 
             if (!success) {
                 Feedback.show({
                     severity: FeedbackSeverity.ERROR,
                     type: FeedbackType.ALERT,
-                    message: LL.PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC(),
+                    message: LL.NOTIFICATION_CENTER_UPDATE_PREFERENCE_ERROR(),
                     icon: "icon-alert-triangle",
                     duration: 3000,
                 })
             }
-
-            setIsUpdatingNftPreference(false)
         },
-        [isUpdatingNftPreference, updateStargatePreference, LL],
-    )
-
-    const toggleRewardsUpdates = useCallback(
-        async (value: boolean) => {
-            if (isUpdatingRewardsPreference) return
-
-            setIsUpdatingRewardsPreference(true)
-
-            const success = await updateStargatePreference(STARGATE_NOTIFICATION_CATEGORIES.REWARDS, value)
-
-            if (!success) {
-                Feedback.show({
-                    severity: FeedbackSeverity.ERROR,
-                    type: FeedbackType.ALERT,
-                    message: LL.PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC(),
-                    icon: "icon-alert-triangle",
-                    duration: 3000,
-                })
-            }
-
-            setIsUpdatingRewardsPreference(false)
-        },
-        [isUpdatingRewardsPreference, updateStargatePreference, LL],
+        [updateNotifCenterPrefs, LL],
     )
 
     const ListHeaderComponent = useMemo(() => {
@@ -246,14 +215,14 @@ export const NotificationScreen = () => {
                         <EnableFeature
                             title={LL.PUSH_NOTIFICATIONS_STARGATE_NFT_UPDATES()}
                             typographyFont="bodyMedium"
-                            onValueChange={toggleNftUpdates}
+                            onValueChange={toggleNotifCenterPreference(NOTIFICATION_CATEGORIES.NFT_UPDATES)}
                             value={isNftUpdatesEnabled}
                         />
                         <BaseSpacer height={16} />
                         <EnableFeature
                             title={LL.PUSH_NOTIFICATIONS_STARGATE_REWARDS()}
                             typographyFont="bodyMedium"
-                            onValueChange={toggleRewardsUpdates}
+                            onValueChange={toggleNotifCenterPreference(NOTIFICATION_CATEGORIES.REWARDS)}
                             value={isRewardsEnabled}
                         />
                         <BaseSpacer height={40} />
@@ -271,12 +240,10 @@ export const NotificationScreen = () => {
         toogleSubscriptionSwitch,
         toogleDAppSubscriptionSwitch,
         dappNotifications,
-        toggleNftUpdates,
-        toggleRewardsUpdates,
+        toggleNotifCenterPreference,
         isNftUpdatesEnabled,
         isRewardsEnabled,
     ])
-
     useEffect(() => {
         if (error) {
             showErrorToast({

@@ -2,14 +2,13 @@ export const vechainNewsAndUpdates = "vechainNewsAndUpdates"
 export const newDappsListedTagKey = "NewDappsListed"
 export const voteReminderTagKey = "VoteReminder"
 
-// StarGate notification preference categories
-export const STARGATE_NOTIFICATION_CATEGORIES = {
+// Notification preference categories
+export const NOTIFICATION_CATEGORIES = {
     NFT_UPDATES: "NFT_UPDATES",
     REWARDS: "REWARDS",
 } as const
 
-export type StargateNotificationCategory =
-    (typeof STARGATE_NOTIFICATION_CATEGORIES)[keyof typeof STARGATE_NOTIFICATION_CATEGORIES]
+export type NotificationCategory = (typeof NOTIFICATION_CATEGORIES)[keyof typeof NOTIFICATION_CATEGORIES]
 
 export const ecosystemDappIdToVeBetterDappId = {
     "vet.mugshot": "0x2fc30c2ad41a2994061efaf218f1d52dc92bc4a31a0f02a4916490076a7a393a",

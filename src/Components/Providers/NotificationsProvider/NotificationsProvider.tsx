@@ -64,7 +64,7 @@ type ContextType = {
     removeAllDAppsTags: () => void
     addAllTags: () => void
     disabledCategories: string[]
-    updateStargatePreference: (category: string, enabled: boolean) => Promise<boolean>
+    updateNotifCenterPrefs: (category: string, enabled: boolean) => Promise<boolean>
 }
 
 const Context = createContext<ContextType | undefined>(undefined)
@@ -88,6 +88,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const customUrl = useAppSelector(selectNotificationCenterUrl)
     const isFetcingTags = useRef(false)
     const [isInitialized, setIsInitialized] = useState(false)
+    const updatingCategories = useRef<Record<string, boolean>>({})
 
     const { currentState, previousState } = useAppState()
 
@@ -400,16 +401,22 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         )
     }, [customUrl])
 
-    const updateStargatePreference = useCallback(
+    const updateNotifCenterPrefs = useCallback(
         async (category: string, enabled: boolean): Promise<boolean> => {
             if (!featureEnabled || !isInitialized) return false
+            if (updatingCategories.current[category]) return false
 
             const baseUrl = getBaseUrl()
             if (!baseUrl) return false
 
+            updatingCategories.current[category] = true
+
             try {
                 const subscriptionId = await OneSignal.User.pushSubscription.getIdAsync()
-                if (!subscriptionId) return false
+                if (!subscriptionId) {
+                    delete updatingCategories.current[category]
+                    return false
+                }
 
                 // Calculate new disabled categories
                 let newDisabledCategories: string[]
@@ -435,8 +442,10 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
                 return true
             } catch (err) {
-                error(ERROR_EVENTS.ONE_SIGNAL, err)
+                error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
                 return false
+            } finally {
+                delete updatingCategories.current[category]
             }
         },
         [featureEnabled, isInitialized, disabledCategories, dispatch, getBaseUrl],
@@ -461,7 +470,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
             removeAllDAppsTags: removeAllDAppsTags,
             addAllTags: addAllTags,
             disabledCategories: disabledCategories,
-            updateStargatePreference: updateStargatePreference,
+            updateNotifCenterPrefs,
         }
     }, [
         addDAppTag,
@@ -481,7 +490,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         removeAllDAppsTags,
         addAllTags,
         disabledCategories,
-        updateStargatePreference,
+        updateNotifCenterPrefs,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
