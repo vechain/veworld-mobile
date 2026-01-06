@@ -3909,10 +3909,6 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC: string
 	/**
-	 * E​r​r​o​r
-	 */
-	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE: string
-	/**
 	 * S​e​a​r​c​h​ ​D​A​p​p​s
 	 */
 	PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER: string
@@ -9857,10 +9853,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * An error occurred while trying to load your preferences. Please try again.
 	 */
 	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC: () => LocalizedString
-	/**
-	 * Error
-	 */
-	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE: () => LocalizedString
 	/**
 	 * Search DApps
 	 */

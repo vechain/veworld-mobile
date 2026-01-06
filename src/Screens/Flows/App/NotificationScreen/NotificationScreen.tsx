@@ -24,6 +24,8 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { FeedbackSeverity, FeedbackType } from "../../../../Components/Providers/FeedbackProvider/Model"
+import { Feedback } from "../../../../Components/Providers/FeedbackProvider/Events"
 
 const SUBSCRIPTION_LIMIT = 10
 
@@ -155,9 +157,12 @@ export const NotificationScreen = () => {
             const success = await updateStargatePreference(STARGATE_NOTIFICATION_CATEGORIES.NFT_UPDATES, value)
 
             if (!success) {
-                showErrorToast({
-                    text1: LL.PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE(),
-                    text2: LL.PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC(),
+                Feedback.show({
+                    severity: FeedbackSeverity.ERROR,
+                    type: FeedbackType.ALERT,
+                    message: LL.PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC(),
+                    icon: "icon-alert-triangle",
+                    duration: 3000,
                 })
             }
 
@@ -175,9 +180,12 @@ export const NotificationScreen = () => {
             const success = await updateStargatePreference(STARGATE_NOTIFICATION_CATEGORIES.REWARDS, value)
 
             if (!success) {
-                showErrorToast({
-                    text1: LL.PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE(),
-                    text2: LL.PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC(),
+                Feedback.show({
+                    severity: FeedbackSeverity.ERROR,
+                    type: FeedbackType.ALERT,
+                    message: LL.PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC(),
+                    icon: "icon-alert-triangle",
+                    duration: 3000,
                 })
             }
 
