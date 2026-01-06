@@ -1,4 +1,5 @@
 import React from "react"
+import { StyleSheet } from "react-native"
 import { BaseSpacer, BaseSwitch, BaseText, BaseView } from "~Components"
 import { typography } from "~Constants"
 import { useTheme } from "~Hooks"
@@ -8,6 +9,7 @@ type Props = {
     subtitle?: string
     onValueChange: (value: boolean) => void
     value: boolean
+    color?: string
     /**
      * Typography font for the title
      * @default subSubTitleMedium
@@ -25,16 +27,20 @@ export const EnableFeature = ({
     subtitle,
     onValueChange,
     value,
+    color,
     typographyFont = "subSubTitleMedium",
     subtitleTypographyFont = "captionRegular",
 }: Props) => {
     const theme = useTheme()
+    const labelColor = color ?? theme.colors.textLight
     return (
-        <BaseView flexDirection="row" alignItems="center">
+        <BaseView flexDirection="row" alignItems="center" style={styles.container}>
             <BaseView flexDirection="column" flex={1} justifyContent="center">
-                <BaseText typographyFont={typographyFont}>{title}</BaseText>
+                <BaseText typographyFont={typographyFont} color={labelColor} pb={4} pt={4}>
+                    {title}
+                </BaseText>
                 {subtitle && (
-                    <BaseText color={theme.colors.textLight} typographyFont={subtitleTypographyFont} mt={8}>
+                    <BaseText color={labelColor} typographyFont={subtitleTypographyFont} mt={8}>
                         {subtitle}
                     </BaseText>
                 )}
@@ -44,3 +50,9 @@ export const EnableFeature = ({
         </BaseView>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        minHeight: 32,
+    },
+})

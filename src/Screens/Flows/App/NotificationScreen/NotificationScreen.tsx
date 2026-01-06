@@ -2,8 +2,8 @@ import { useFocusEffect } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import {
-    BaseCard,
-    BaseSpacer,
+    BaseIcon,
+    BaseSwitch,
     BaseText,
     BaseView,
     EnableFeature,
@@ -12,7 +12,7 @@ import {
     showWarningToast,
     useNotifications,
 } from "~Components"
-import { NOTIFICATION_CATEGORIES, vechainNewsAndUpdates, voteReminderTagKey } from "~Constants"
+import { COLORS, ColorThemeType, NOTIFICATION_CATEGORIES, vechainNewsAndUpdates, voteReminderTagKey } from "~Constants"
 import { useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
@@ -32,7 +32,7 @@ const SUBSCRIPTION_LIMIT = 10
 export const NotificationScreen = () => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-    const { theme } = useThemedStyles(baseStyle)
+    const { theme, styles } = useThemedStyles(baseStyle)
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const dappNotifications = useAppSelector(selectDappNotifications)
@@ -164,71 +164,75 @@ export const NotificationScreen = () => {
     )
 
     const ListHeaderComponent = useMemo(() => {
+        const itemSwitchColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
         return (
             <>
-                <BaseCard>
-                    <BaseView flex={1} flexDirection="column">
-                        <EnableFeature
-                            title={LL.PUSH_NOTIFICATIONS_ACTIVE()}
-                            onValueChange={toggleNotificationsSwitch}
-                            value={areNotificationsEnabled}
-                        />
+                <BaseView style={styles.container}>
+                    <BaseView style={styles.notificationToggleCardWrapper}>
+                        <BaseView style={styles.notificationToggleCard}>
+                            <BaseIcon name="icon-bell-ring" size={20} color={theme.colors.text} />
+                            <BaseView flex={1}>
+                                <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_ACTIVE()}</BaseText>
+                            </BaseView>
+                            <BaseSwitch onValueChange={toggleNotificationsSwitch} value={areNotificationsEnabled} />
+                        </BaseView>
                     </BaseView>
-                </BaseCard>
-                <BaseSpacer height={24} />
 
-                {areNotificationsEnabled && (
-                    <>
-                        <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_UPDATES()}</BaseText>
-                        <BaseSpacer height={16} />
-                        <EnableFeature
-                            title={LL.VECHAIN_NEWS_AND_UPDATES()}
-                            typographyFont="bodyMedium"
-                            onValueChange={toogleSubscriptionSwitch(vechainNewsAndUpdates)}
-                            value={!!tags[vechainNewsAndUpdates]}
-                        />
-                        <BaseSpacer height={40} />
-
-                        <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_VEBETTERDAO()}</BaseText>
-                        <BaseSpacer height={16} />
-                        {isMainnet && (
-                            <>
+                    {areNotificationsEnabled && (
+                        <BaseView style={styles.sectionsContainer}>
+                            <BaseView style={styles.section}>
+                                <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_UPDATES()}</BaseText>
                                 <EnableFeature
-                                    title={LL.PUSH_NOTIFICATIONS_DAPPS_DESC()}
-                                    typographyFont="bodyMedium"
-                                    onValueChange={toogleDAppSubscriptionSwitch}
-                                    value={dappNotifications}
+                                    title={LL.VECHAIN_NEWS_AND_UPDATES()}
+                                    typographyFont="captionMedium"
+                                    onValueChange={toogleSubscriptionSwitch(vechainNewsAndUpdates)}
+                                    value={!!tags[vechainNewsAndUpdates]}
+                                    color={itemSwitchColor}
                                 />
-                                <BaseSpacer height={16} />
-                            </>
-                        )}
-                        <EnableFeature
-                            title={LL.PUSH_NOTIFICATIONS_VOTE_REMINDER()}
-                            typographyFont="bodyMedium"
-                            onValueChange={toogleSubscriptionSwitch(voteReminderTagKey)}
-                            value={!!tags[voteReminderTagKey]}
-                        />
-                        <BaseSpacer height={40} />
+                            </BaseView>
 
-                        <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_STARGATE_STAKING()}</BaseText>
-                        <BaseSpacer height={16} />
-                        <EnableFeature
-                            title={LL.PUSH_NOTIFICATIONS_STARGATE_NFT_UPDATES()}
-                            typographyFont="bodyMedium"
-                            onValueChange={toggleNotifCenterPreference(NOTIFICATION_CATEGORIES.NFT_UPDATES)}
-                            value={isNftUpdatesEnabled}
-                        />
-                        <BaseSpacer height={16} />
-                        <EnableFeature
-                            title={LL.PUSH_NOTIFICATIONS_STARGATE_REWARDS()}
-                            typographyFont="bodyMedium"
-                            onValueChange={toggleNotifCenterPreference(NOTIFICATION_CATEGORIES.REWARDS)}
-                            value={isRewardsEnabled}
-                        />
-                        <BaseSpacer height={40} />
-                    </>
-                )}
-                <BaseSpacer height={12} />
+                            <BaseView style={styles.section}>
+                                <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_VEBETTERDAO()}</BaseText>
+                                {isMainnet && (
+                                    <EnableFeature
+                                        title={LL.PUSH_NOTIFICATIONS_DAPPS_DESC()}
+                                        typographyFont="captionMedium"
+                                        onValueChange={toogleDAppSubscriptionSwitch}
+                                        value={dappNotifications}
+                                        color={itemSwitchColor}
+                                    />
+                                )}
+                                <EnableFeature
+                                    title={LL.PUSH_NOTIFICATIONS_VOTE_REMINDER()}
+                                    typographyFont="captionMedium"
+                                    onValueChange={toogleSubscriptionSwitch(voteReminderTagKey)}
+                                    value={!!tags[voteReminderTagKey]}
+                                    color={itemSwitchColor}
+                                />
+                            </BaseView>
+
+                            <BaseView style={styles.section}>
+                                <BaseText typographyFont="bodySemiBold">
+                                    {LL.PUSH_NOTIFICATIONS_STARGATE_STAKING()}
+                                </BaseText>
+                                <EnableFeature
+                                    title={LL.PUSH_NOTIFICATIONS_STARGATE_NFT_UPDATES()}
+                                    typographyFont="captionMedium"
+                                    onValueChange={toggleNotifCenterPreference(NOTIFICATION_CATEGORIES.NFT_UPDATES)}
+                                    value={isNftUpdatesEnabled}
+                                    color={itemSwitchColor}
+                                />
+                                <EnableFeature
+                                    title={LL.PUSH_NOTIFICATIONS_STARGATE_REWARDS()}
+                                    typographyFont="captionMedium"
+                                    onValueChange={toggleNotifCenterPreference(NOTIFICATION_CATEGORIES.REWARDS)}
+                                    value={isRewardsEnabled}
+                                    color={itemSwitchColor}
+                                />
+                            </BaseView>
+                        </BaseView>
+                    )}
+                </BaseView>
             </>
         )
     }, [
@@ -243,6 +247,8 @@ export const NotificationScreen = () => {
         toggleNotifCenterPreference,
         isNftUpdatesEnabled,
         isRewardsEnabled,
+        styles,
+        theme,
     ])
     useEffect(() => {
         if (error) {
@@ -272,11 +278,34 @@ export const NotificationScreen = () => {
     )
 }
 
-const baseStyle = () =>
+const baseStyle = (theme: ColorThemeType) =>
     StyleSheet.create({
+        container: {
+            backgroundColor: theme.colors.card,
+            borderRadius: 12,
+        },
         skeletonCard: {
             height: 31,
             width: "100%",
             marginBottom: 12,
+        },
+        notificationToggleCardWrapper: {
+            paddingBottom: 24,
+            borderBottomWidth: 1,
+            borderBottomColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100,
+        },
+        notificationToggleCard: {
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 16,
+            paddingHorizontal: 24,
+            paddingTop: 24,
+        },
+        section: {
+            gap: 8,
+        },
+        sectionsContainer: {
+            padding: 24,
+            gap: 24,
         },
     })
