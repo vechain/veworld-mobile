@@ -123,13 +123,15 @@ export const StargateCarouselItem = ({ item }: Props) => {
     const cyclePeriod = useMemo(() => {
         if (!item.validatorId) return "-"
         return LL.STARGATE_DAYS({
-            days: moment
-                .duration(
-                    BigNutils(validatorDetails?.cyclePeriodLength ?? "0")
-                        .multiply(10)
-                        .multiply(1000).toNumber,
-                )
-                .days(),
+            days: Math.floor(
+                moment
+                    .duration(
+                        BigNutils(validatorDetails?.cyclePeriodLength ?? "0")
+                            .multiply(10)
+                            .multiply(1000).toNumber,
+                    )
+                    .asDays(),
+            ),
         })
     }, [LL, item.validatorId, validatorDetails?.cyclePeriodLength])
 
