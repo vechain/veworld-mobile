@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { Linking, StyleSheet } from "react-native"
 import {
     BaseButton,
+    BaseCard,
     BaseIcon,
     BaseSwitch,
     BaseText,
@@ -172,10 +173,14 @@ export const NotificationScreen = () => {
         const itemSwitchColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
         return (
             <>
-                <BaseView style={styles.container}>
+                <BaseCard containerStyle={styles.cardContainer} style={styles.cardContent}>
                     <BaseView>
                         <BaseView style={styles.notificationToggleCard}>
-                            <BaseIcon name={areNotificationsEnabled ? "icon-bell-ring" : "icon-bell-off"} size={20} color={theme.colors.text} />
+                            <BaseIcon
+                                name={areNotificationsEnabled ? "icon-bell-ring" : "icon-bell-off"}
+                                size={20}
+                                color={theme.colors.text}
+                            />
                             <BaseView flex={1}>
                                 <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_ACTIVE()}</BaseText>
                             </BaseView>
@@ -192,12 +197,19 @@ export const NotificationScreen = () => {
                             <BaseView style={styles.deviceSettingsAlert}>
                                 <BaseView flex={1} gap={8}>
                                     <BaseView style={styles.deviceSettingsAlertTitleRow}>
-                                        <BaseIcon size={16} color={theme.colors.errorAlert.icon} name="icon-alert-triangle" />
+                                        <BaseIcon
+                                            size={16}
+                                            color={theme.colors.errorAlert.icon}
+                                            name="icon-alert-triangle"
+                                        />
                                         <BaseText typographyFont="bodyMedium" color={theme.colors.errorAlert.text}>
                                             {LL.PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE()}
                                         </BaseText>
                                     </BaseView>
-                                    <BaseText typographyFont="captionRegular" color={theme.colors.errorAlert.subText} style={styles.deviceSettingsAlertDesc}>
+                                    <BaseText
+                                        typographyFont="captionRegular"
+                                        color={theme.colors.errorAlert.subText}
+                                        style={styles.deviceSettingsAlertDesc}>
                                         {LL.PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC()}
                                     </BaseText>
                                 </BaseView>
@@ -263,7 +275,7 @@ export const NotificationScreen = () => {
                             </BaseView>
                         </BaseView>
                     )}
-                </BaseView>
+                </BaseCard>
             </>
         )
     }, [
@@ -313,11 +325,11 @@ export const NotificationScreen = () => {
 
 const baseStyle = (theme: ColorThemeType) =>
     StyleSheet.create({
-        container: {
-            backgroundColor: theme.colors.card,
-            borderRadius: 12,
-            gap: 24,
+        cardContainer: {},
+        cardContent: {
+            flexDirection: "column",
             padding: 24,
+            gap: 24,
         },
         notificationToggleCard: {
             flexDirection: "row",
