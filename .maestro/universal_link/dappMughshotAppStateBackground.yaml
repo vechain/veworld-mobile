@@ -17,11 +17,9 @@ env:
           - tapOn:
                 id: "button_notifications_skip"
 - assertVisible:
-      id: "veworld-homepage"
-- assertVisible:
-      id: "buyButton"
+      id: "BalanceScreen_Header"
 - pressKey: home
 - openLink: ${MUGSHOT_DEEPLINK}
-- assertVisible: "mugshot.vet"
+- assertVisible: "Mugshot"
 - tapOn:
-      id: "closeButton"
+    id: "URL-bar-back-button-wrapper"
