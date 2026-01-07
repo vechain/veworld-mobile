@@ -1143,7 +1143,9 @@ const dark: Colors = {
     errorAlert: {
         background: COLORS.RED_100,
         text: COLORS.RED_700,
+        subText: COLORS.GREY_600,
         icon: COLORS.RED_500,
+        border: COLORS.RED_200,
     },
     label: {
         background: COLORS.PURPLE_DISABLED,

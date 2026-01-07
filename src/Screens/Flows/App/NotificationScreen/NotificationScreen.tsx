@@ -217,6 +217,7 @@ export const NotificationScreen = () => {
                             <BaseButton
                                 action={openDeviceSettings}
                                 title={LL.PUSH_NOTIFICATIONS_GO_TO_DEVICE_SETTINGS()}
+                                textColor={COLORS.DARK_PURPLE}
                             />
                         </BaseView>
                     )}
