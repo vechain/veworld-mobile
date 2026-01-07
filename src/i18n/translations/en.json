@@ -1237,7 +1237,10 @@
   "SIGN_TYPED_DATA_REQUEST_CTA": "Sign",
   "SIGN_TYPED_DATA_REQUEST_TITLE": "Sign typed data",
   "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Delegated smart wallet not supported yet",
+  "STARGATE_APY": "APY",
   "STARGATE_CLAIMABLE": "Claimable",
+  "STARGATE_CYCLE_DURATION": "Cycle duration",
+  "STARGATE_DAYS": "{days:number} days",
   "STARGATE_DELEGATEE_LABEL": "Managing",
   "STARGATE_DELEGATION_STATUS_DELEGATED": "Delegated",
   "STARGATE_DELEGATION_STATUS_EXITING": "Exiting",
@@ -1468,8 +1471,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "STARGATE_APY": "APY",
-  "STARGATE_CYCLE_DURATION": "Cycle duration",
-  "STARGATE_DAYS": "{days:number} days"
+  "YESTERDAY": "Yesterday"
 }
