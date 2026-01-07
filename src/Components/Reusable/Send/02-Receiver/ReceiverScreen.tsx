@@ -49,7 +49,7 @@ const _ReceiverScreen = ({ address: selectedAddress, name }: { address: string |
         (source: "input" | "list", str: string, address: string, ctx?: "recent" | "accounts" | "contacts") => {
             if (source === "input") {
                 setAddressChangeCtx(null)
-                if (AddressUtils.compareAddresses(str, selectedAddress)) {
+                if (AddressUtils.compareAddresses(address, selectedAddress)) {
                     return
                 }
                 setInputWalletAddress(str)

@@ -151,7 +151,7 @@ export const WalletAddressCard = ({
             if (str.includes(".vet")) {
                 const vnsAddress = await getVnsAddress(str).catch(() => ZERO_ADDRESS)
 
-                if (vnsAddress === ZERO_ADDRESS) {
+                if (vnsAddress === ZERO_ADDRESS || !vnsAddress) {
                     setIsError(true)
                     return
                 }
