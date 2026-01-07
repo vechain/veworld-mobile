@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.15 (2026-01-07)</small>
+
+* build: init ([457f769](https://github.com/vechain/veworld-mobile/commit/457f769))
+* E2E - Onboarding Flow Refactor (#3674) ([3134e53](https://github.com/vechain/veworld-mobile/commit/3134e53)), closes [#3674](https://github.com/vechain/veworld-mobile/issues/3674)
+
 ## <small>2.4.14 (2025-12-18)</small>
 
 * build: init ([883693f](https://github.com/vechain/veworld-mobile/commit/883693f))
