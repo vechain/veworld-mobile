@@ -28,7 +28,7 @@ const fillWithZeros = (value: string, maxDecimals: number) => {
 
 export const truncateToMaxDecimals = (
     value: string,
-    opts: Parameters<typeof getMaxDecimals>[0] & { fillWithZeros?: boolean },
+    opts: Parameters<typeof getMaxDecimals>[0] & { fillWithZeros?: boolean; removeTrailingZeros?: boolean },
 ) => {
     const parts = value.split(/([.,])/)
     if (parts.length >= 3) {
@@ -38,6 +38,10 @@ export const truncateToMaxDecimals = (
         const maxDecimals = getMaxDecimals(opts)
 
         const decimalValue = decimalPart.substring(0, maxDecimals)
+
+        if (opts.removeTrailingZeros && BigNutils(decimalValue).isZero) {
+            return integerPart
+        }
 
         return `${integerPart}${separator}${
             decimalValue.length < maxDecimals && opts.fillWithZeros
@@ -68,7 +72,9 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
     const [input, setInput] = useState(
         truncateToMaxDecimals(
             (flowState.amountInFiat ? flowState.fiatAmount : flowState.amount) ?? "0",
-            flowState.amountInFiat ? { kind: "fiat" } : { kind: "token", decimals: token.decimals },
+            flowState.amountInFiat
+                ? { kind: "fiat", removeTrailingZeros: true }
+                : { kind: "token", decimals: token.decimals, removeTrailingZeros: true },
         ),
     )
 
@@ -137,6 +143,26 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
         ],
     )
 
+    const onFlip = useCallback(() => {
+        //User flipped to token
+        if (isInputInFiat)
+            setInput(
+                truncateToMaxDecimals(ethers.utils.formatUnits(tokenAmount, token.decimals), {
+                    kind: "token",
+                    decimals: token.decimals,
+                    removeTrailingZeros: true,
+                }),
+            )
+        //User flipped to fiat
+        else
+            setInput(
+                truncateToMaxDecimals(ethers.utils.formatUnits(fiatAmount, token.decimals), {
+                    kind: "fiat",
+                    removeTrailingZeros: true,
+                }),
+            )
+    }, [fiatAmount, isInputInFiat, token.decimals, tokenAmount])
+
     const onMax = useCallback(() => {
         setTokenAmount(tokenTotalBalance)
         const newFiatValue = BigNutils()
@@ -174,7 +200,8 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
             onReset,
             onDeleteAll,
             input,
+            onFlip,
         }),
-        [fiatAmount, input, isBalanceExceeded, onDigit, onMax, onReset, onDeleteAll, tokenAmount],
+        [tokenAmount, fiatAmount, onDigit, onMax, isBalanceExceeded, onReset, onDeleteAll, input, onFlip],
     )
 }

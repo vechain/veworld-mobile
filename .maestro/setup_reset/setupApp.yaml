@@ -19,20 +19,6 @@ env:
 - runFlow:
       when:
           visible:
-              id: "VersionUpdateAvailableBottomSheet"
-      commands:
-          - tapOn:
-                id: "Update_Later_Button"
-- runFlow:
-      when:
-          visible:
-              id: "VersionChangelogBottomSheet"
-      commands:
-          - tapOn:
-                id: "Dismiss_Button"
-- runFlow:
-      when:
-          visible:
               id: "button_notifications_enable"
       commands:
           - tapOn:
