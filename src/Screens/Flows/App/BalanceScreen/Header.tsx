@@ -138,7 +138,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
     }, [hideStellaPayBottomSheet, nav, openStellaPayBottomSheet, navigateWithTab])
 
     return (
-        <BaseView style={styles.root} onLayout={onLayout}>
+        <BaseView testID="BalanceScreen_Header" style={styles.root} onLayout={onLayout}>
             {!isObservedAccount && (
                 <AnimatedLinearGradient
                     colors={[
@@ -193,7 +193,7 @@ export const Header = ({ scrollY, contentOffsetY }: Props) => {
                             <NetworkSwitcherContextMenu>
                                 <TouchableOpacity onPress={onSwitchNetwork}>
                                     <BaseView borderRadius={99} p={8}>
-                                        <BaseIcon name="icon-globe" color={COLORS.PURPLE_LABEL} size={24} />
+                                        <BaseIcon name="icon-globe" color={COLORS.LIME_GREEN} size={24} />
                                     </BaseView>
                                 </TouchableOpacity>
                             </NetworkSwitcherContextMenu>
