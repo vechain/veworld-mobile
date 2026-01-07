@@ -18,8 +18,11 @@ import { DateUtils, HexUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityModalTitle } from "./util"
 
+import { useNavigation } from "@react-navigation/native"
 import { useQuery } from "@tanstack/react-query"
 import { B3TR, VOT3 } from "~Constants"
+import { useIndexerClient } from "~Hooks/useIndexerClient"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import {
     ActivityStatus,
     ActivityType,
@@ -44,15 +47,13 @@ import {
     ConnectedAppDetails,
     DappTransactionDetails,
     FungibleTokenTransferDetails,
-    NonFungibleTokenTransferDetails,
     NonFungibleTokenMarketplaceDetails,
+    NonFungibleTokenTransferDetails,
     SignCertificateDetails,
 } from "./Components"
 import DappLoginDetails from "./Components/DappLoginDetails"
 import { StargateActivityDetails } from "./Components/StakingDetails"
 import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
-import { useIndexerClient } from "~Hooks/useIndexerClient"
-import { useNavigation } from "@react-navigation/native"
 
 type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
@@ -298,6 +299,14 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
         },
         [openAddCustomTokenSheet],
     )
+
+    const _onOpenOnExplorer = useCallback(() => {
+        if (!explorerUrl) return
+        Linking.openURL(explorerUrl)
+    }, [explorerUrl])
+
+    const onOpenOnExplorer = useOfflineCallback(_onOpenOnExplorer)
+
     return (
         <>
             <Layout
@@ -365,9 +374,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                         <FadeoutButton
                             testID="view-on-explorer-button"
                             title={LL.VIEW_ON_EXPLORER().toUpperCase()}
-                            action={() => {
-                                Linking.openURL(explorerUrl)
-                            }}
+                            action={onOpenOnExplorer}
                             bottom={0}
                             mx={0}
                             width={"auto"}
