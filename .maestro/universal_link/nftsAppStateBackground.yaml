@@ -17,10 +17,8 @@ env:
           - tapOn:
                 id: "button_notifications_skip"
 - assertVisible:
-      id: "veworld-homepage"
-- assertVisible:
-      id: "buyButton"
+      id: "BalanceScreen_Header"
 - pressKey: home
 - openLink: ${NFTS_DEEPLINK}
 - assertVisible:
-      id: "nfts_title"
+      id: "CollectionsScreen"
