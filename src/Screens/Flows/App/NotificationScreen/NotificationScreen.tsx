@@ -1,7 +1,8 @@
 import { useFocusEffect } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { StyleSheet } from "react-native"
+import { Linking, StyleSheet } from "react-native"
 import {
+    BaseButton,
     BaseIcon,
     BaseSwitch,
     BaseText,
@@ -102,6 +103,10 @@ export const NotificationScreen = () => {
         })
     }, [LL])
 
+    const openDeviceSettings = useCallback(() => {
+        Linking.openSettings()
+    }, [])
+
     const toogleSubscriptionSwitch = useCallback(
         (tag: string) => (value: boolean) => {
             if (value) {
@@ -168,15 +173,41 @@ export const NotificationScreen = () => {
         return (
             <>
                 <BaseView style={styles.container}>
-                    <BaseView style={styles.notificationToggleCardWrapper}>
+                    <BaseView>
                         <BaseView style={styles.notificationToggleCard}>
-                            <BaseIcon name="icon-bell-ring" size={20} color={theme.colors.text} />
+                            <BaseIcon name={areNotificationsEnabled ? "icon-bell-ring" : "icon-bell-off"} size={20} color={theme.colors.text} />
                             <BaseView flex={1}>
                                 <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_ACTIVE()}</BaseText>
                             </BaseView>
-                            <BaseSwitch onValueChange={toggleNotificationsSwitch} value={areNotificationsEnabled} />
+                            <BaseSwitch
+                                onValueChange={toggleNotificationsSwitch}
+                                value={areNotificationsEnabled}
+                                disabled={isNotificationPermissionEnabled ?? true}
+                            />
                         </BaseView>
                     </BaseView>
+
+                    {!isNotificationPermissionEnabled && (
+                        <BaseView style={styles.deviceSettingsContainer}>
+                            <BaseView style={styles.deviceSettingsAlert}>
+                                <BaseView flex={1} gap={8}>
+                                    <BaseView style={styles.deviceSettingsAlertTitleRow}>
+                                        <BaseIcon size={16} color={theme.colors.errorAlert.icon} name="icon-alert-triangle" />
+                                        <BaseText typographyFont="bodyMedium" color={theme.colors.errorAlert.text}>
+                                            {LL.PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE()}
+                                        </BaseText>
+                                    </BaseView>
+                                    <BaseText typographyFont="captionRegular" color={theme.colors.errorAlert.subText} style={styles.deviceSettingsAlertDesc}>
+                                        {LL.PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC()}
+                                    </BaseText>
+                                </BaseView>
+                            </BaseView>
+                            <BaseButton
+                                action={openDeviceSettings}
+                                title={LL.PUSH_NOTIFICATIONS_GO_TO_DEVICE_SETTINGS()}
+                            />
+                        </BaseView>
+                    )}
 
                     {areNotificationsEnabled && (
                         <BaseView style={styles.sectionsContainer}>
@@ -249,6 +280,8 @@ export const NotificationScreen = () => {
         isRewardsEnabled,
         styles,
         theme,
+        isNotificationPermissionEnabled,
+        openDeviceSettings,
     ])
     useEffect(() => {
         if (error) {
@@ -283,29 +316,40 @@ const baseStyle = (theme: ColorThemeType) =>
         container: {
             backgroundColor: theme.colors.card,
             borderRadius: 12,
-        },
-        skeletonCard: {
-            height: 31,
-            width: "100%",
-            marginBottom: 12,
-        },
-        notificationToggleCardWrapper: {
-            paddingBottom: 24,
-            borderBottomWidth: 1,
-            borderBottomColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100,
+            gap: 24,
+            padding: 24,
         },
         notificationToggleCard: {
             flexDirection: "row",
             alignItems: "center",
             gap: 16,
-            paddingHorizontal: 24,
+        },
+        deviceSettingsContainer: {
+            gap: 16,
+        },
+        deviceSettingsAlert: {
+            backgroundColor: theme.colors.errorAlert.background,
+            borderRadius: 8,
+            padding: 12,
+            borderColor: theme.colors.errorAlert.border,
+            borderWidth: 1,
+        },
+        deviceSettingsAlertTitleRow: {
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 8,
+            minHeight: 20,
+        },
+        deviceSettingsAlertDesc: {
+            paddingLeft: 24, // 16 (icon size) + 8 (gap)
+        },
+        sectionsContainer: {
+            borderTopWidth: 1,
             paddingTop: 24,
+            gap: 24,
+            borderTopColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100,
         },
         section: {
             gap: 8,
-        },
-        sectionsContainer: {
-            padding: 24,
-            gap: 24,
         },
     })

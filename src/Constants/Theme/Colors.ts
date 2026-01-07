@@ -223,7 +223,9 @@ export type Colors = {
     errorAlert: {
         background: string
         text: string
+        subText: string
         icon: string
+        border: string
     }
     label: {
         background: string
@@ -744,7 +746,9 @@ const light: Colors = {
     errorAlert: {
         background: COLORS.RED_50,
         text: COLORS.RED_700,
+        subText: COLORS.GREY_600,
         icon: COLORS.RED_500,
+        border: COLORS.RED_200,
     },
     label: {
         background: COLORS.GREY_200,

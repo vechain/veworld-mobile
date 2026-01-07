@@ -8,6 +8,7 @@ type Props = {
     onValueChange: (newValue: boolean) => void
     value?: boolean
     testID?: string
+    disabled?: boolean
 }
 
 /**
@@ -16,12 +17,13 @@ type Props = {
 const LEFT_TRUE = 22
 const LEFT_FALSE = 2
 
-export const BaseSwitch = ({ onValueChange, value, testID }: Props) => {
+export const BaseSwitch = ({ onValueChange, value, testID, disabled }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const toggleValue = useCallback(() => {
+        if (disabled) return
         onValueChange(!value)
-    }, [onValueChange, value])
+    }, [onValueChange, value, disabled])
 
     const rootAnimatedStyles = useAnimatedStyle(() => {
         return {
@@ -39,7 +41,7 @@ export const BaseSwitch = ({ onValueChange, value, testID }: Props) => {
     }, [value])
 
     return (
-        <Pressable onPress={toggleValue} testID={testID}>
+        <Pressable onPress={toggleValue} testID={testID} style={disabled ? styles.disabled : undefined}>
             <Animated.View style={[styles.root, rootAnimatedStyles]}>
                 <Animated.View style={[styles.ball, ballStyles]} />
             </Animated.View>
@@ -62,5 +64,8 @@ const baseStyles = () =>
             borderRadius: 999,
             position: "absolute",
             top: 2,
+        },
+        disabled: {
+            opacity: 0.5,
         },
     })

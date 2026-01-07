@@ -183,7 +183,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
                         navigation.navigate(route as any, parsedParams)
                     }
                 }
-            } catch {}
+            } catch { }
         },
         [navigation],
     )
