@@ -112,7 +112,7 @@ export const StargateCarouselItem = ({ item }: Props) => {
         if (!item.validatorId) return "-"
         const yieldValue = (validatorDetails?.nftYieldsNextCycle?.[tokenLevelName] as number) ?? 0
         const displayValue = formatDisplayNumber(yieldValue, {
-            forceDecimals: 2,
+            forceDecimals: 1,
             includeSymbol: false,
             locale: formatLocale,
             skipThreshold: true,
