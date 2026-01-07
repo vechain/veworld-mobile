@@ -6,6 +6,7 @@ import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { useDynamicOfflineCallback } from "~Hooks/useOfflineCallback"
 import { IconKey } from "~Model"
 import { RootStackParamListSettings, Routes } from "~Navigation"
 
@@ -42,26 +43,30 @@ export const SettingsRow = ({ title, icon, url, showBadge, external, screenName 
 
     const theme = useTheme()
 
+    const executeOffline = useDynamicOfflineCallback()
+
     const onPress = useCallback(async () => {
         if (external && (await Linking.canOpenURL(url))) {
-            Linking.openURL(url)
+            await executeOffline(() => Linking.openURL(url))
             return
         }
 
         if (url && screenName === Routes.BROWSER) {
-            navigateWithTab({
-                url,
-                title,
-                navigationFn(u) {
-                    nav.navigate(Routes.BROWSER, { url: u, returnScreen: Routes.SETTINGS })
-                },
-            })
+            executeOffline(() =>
+                navigateWithTab({
+                    url,
+                    title,
+                    navigationFn(u) {
+                        nav.navigate(Routes.BROWSER, { url: u, returnScreen: Routes.SETTINGS })
+                    },
+                }),
+            )
 
             return
         }
 
         nav.navigate(screenName as keyof Omit<RootStackParamListSettings, ExcludedSettingRoutes>)
-    }, [url, screenName, nav, navigateWithTab, title, external])
+    }, [external, url, screenName, nav, executeOffline, navigateWithTab, title])
 
     const textColor = useMemo(() => {
         return theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE
