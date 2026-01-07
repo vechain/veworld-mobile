@@ -2,7 +2,8 @@ import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { LinearTransition } from "react-native-reanimated"
 import { BaseView } from "~Components/Base"
-import { useThemedStyles, useVns } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
+import { useVns } from "~Hooks/useVns"
 import {
     selectAccounts,
     selectKnownContacts,
