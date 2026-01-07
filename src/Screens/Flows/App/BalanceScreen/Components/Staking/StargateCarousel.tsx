@@ -14,6 +14,7 @@ import {
 import { useThemedStyles } from "~Hooks"
 import { useUserNodes } from "~Hooks/Staking"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
@@ -95,7 +96,7 @@ export const StargateCarousel = () => {
             ])
     }, [filteredNodes, styles.biggerCarouselItem, styles.carouselItem])
 
-    const onNavigateToStargate = useCallback(() => {
+    const _onNavigateToStargate = useCallback(() => {
         navigateWithTab({
             url: STARGATE_DAPP_URL_MANAGE_STAKING_BANNER,
             title: "Stargate App",
@@ -104,6 +105,8 @@ export const StargateCarousel = () => {
             },
         })
     }, [nav, navigateWithTab])
+
+    const onNavigateToStargate = useOfflineCallback(_onNavigateToStargate)
 
     const filterButtons = useMemo(
         () => [
