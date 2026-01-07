@@ -14,7 +14,7 @@ import {
     showWarningToast,
     useNotifications,
 } from "~Components"
-import { COLORS, ColorThemeType, NOTIFICATION_CATEGORIES, vechainNewsAndUpdates, voteReminderTagKey } from "~Constants"
+import { COLORS, ColorThemeType, NOTIFICATION_CATEGORIES, vechainNewsAndUpdates } from "~Constants"
 import { useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
@@ -246,13 +246,6 @@ export const NotificationScreen = () => {
                                         color={itemSwitchColor}
                                     />
                                 )}
-                                <EnableFeature
-                                    title={LL.PUSH_NOTIFICATIONS_VOTE_REMINDER()}
-                                    typographyFont="captionMedium"
-                                    onValueChange={toogleSubscriptionSwitch(voteReminderTagKey)}
-                                    value={!!tags[voteReminderTagKey]}
-                                    color={itemSwitchColor}
-                                />
                             </BaseView>
 
                             <BaseView style={styles.section}>
@@ -360,7 +353,7 @@ const baseStyle = (theme: ColorThemeType) =>
             borderTopWidth: 1,
             paddingTop: 24,
             gap: 24,
-            borderTopColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100,
+            borderTopColor: theme.isDark ? COLORS.APP_BACKGROUND_DARK : COLORS.GREY_100,
         },
         section: {
             gap: 8,
