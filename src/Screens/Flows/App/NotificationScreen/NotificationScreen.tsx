@@ -187,7 +187,7 @@ export const NotificationScreen = () => {
                             <BaseSwitch
                                 onValueChange={toggleNotificationsSwitch}
                                 value={areNotificationsEnabled}
-                                disabled={isNotificationPermissionEnabled ?? true}
+                                disabled={!isNotificationPermissionEnabled}
                             />
                         </BaseView>
                     </BaseView>
