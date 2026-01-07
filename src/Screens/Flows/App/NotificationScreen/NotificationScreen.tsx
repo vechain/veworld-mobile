@@ -173,9 +173,9 @@ export const NotificationScreen = () => {
         const itemSwitchColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
         return (
             <>
-                <BaseCard containerStyle={styles.cardContainer} style={styles.cardContent}>
+                <BaseCard style={styles.cardContent}>
                     <BaseView>
-                        <BaseView style={styles.notificationToggleCard}>
+                        <BaseView style={styles.allowNotifications}>
                             <BaseIcon
                                 name={areNotificationsEnabled ? "icon-bell-ring" : "icon-bell-off"}
                                 size={20}
@@ -187,16 +187,16 @@ export const NotificationScreen = () => {
                             <BaseSwitch
                                 onValueChange={toggleNotificationsSwitch}
                                 value={areNotificationsEnabled}
-                                disabled={!isNotificationPermissionEnabled}
+                                disabled={isNotificationPermissionEnabled ?? true}
                             />
                         </BaseView>
                     </BaseView>
 
                     {!isNotificationPermissionEnabled && (
-                        <BaseView style={styles.deviceSettingsContainer}>
-                            <BaseView style={styles.deviceSettingsAlert}>
+                        <BaseView gap={16}>
+                            <BaseView style={styles.notificationsDisabledAlert}>
                                 <BaseView flex={1} gap={8}>
-                                    <BaseView style={styles.deviceSettingsAlertTitleRow}>
+                                    <BaseView style={styles.alertTitleRow}>
                                         <BaseIcon
                                             size={16}
                                             color={theme.colors.errorAlert.icon}
@@ -207,9 +207,9 @@ export const NotificationScreen = () => {
                                         </BaseText>
                                     </BaseView>
                                     <BaseText
+                                        pl={24}
                                         typographyFont="captionRegular"
-                                        color={theme.colors.errorAlert.subText}
-                                        style={styles.deviceSettingsAlertDesc}>
+                                        color={theme.colors.errorAlert.subText}>
                                         {LL.PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC()}
                                     </BaseText>
                                 </BaseView>
@@ -223,8 +223,8 @@ export const NotificationScreen = () => {
                     )}
 
                     {areNotificationsEnabled && (
-                        <BaseView style={styles.sectionsContainer}>
-                            <BaseView style={styles.section}>
+                        <BaseView style={styles.notificationPrefs}>
+                            <BaseView gap={8}>
                                 <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_UPDATES()}</BaseText>
                                 <EnableFeature
                                     title={LL.VECHAIN_NEWS_AND_UPDATES()}
@@ -235,7 +235,7 @@ export const NotificationScreen = () => {
                                 />
                             </BaseView>
 
-                            <BaseView style={styles.section}>
+                            <BaseView gap={8}>
                                 <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_VEBETTERDAO()}</BaseText>
                                 {isMainnet && (
                                     <EnableFeature
@@ -248,7 +248,7 @@ export const NotificationScreen = () => {
                                 )}
                             </BaseView>
 
-                            <BaseView style={styles.section}>
+                            <BaseView gap={8}>
                                 <BaseText typographyFont="bodySemiBold">
                                     {LL.PUSH_NOTIFICATIONS_STARGATE_STAKING()}
                                 </BaseText>
@@ -319,43 +319,33 @@ export const NotificationScreen = () => {
 
 const baseStyle = (theme: ColorThemeType) =>
     StyleSheet.create({
-        cardContainer: {},
         cardContent: {
             flexDirection: "column",
             padding: 24,
             gap: 24,
         },
-        notificationToggleCard: {
+        allowNotifications: {
             flexDirection: "row",
             alignItems: "center",
             gap: 16,
         },
-        deviceSettingsContainer: {
-            gap: 16,
-        },
-        deviceSettingsAlert: {
+        notificationsDisabledAlert: {
             backgroundColor: theme.colors.errorAlert.background,
             borderRadius: 8,
             padding: 12,
             borderColor: theme.colors.errorAlert.border,
             borderWidth: 1,
         },
-        deviceSettingsAlertTitleRow: {
+        alertTitleRow: {
             flexDirection: "row",
             alignItems: "center",
             gap: 8,
             minHeight: 20,
         },
-        deviceSettingsAlertDesc: {
-            paddingLeft: 24, // 16 (icon size) + 8 (gap)
-        },
-        sectionsContainer: {
+        notificationPrefs: {
             borderTopWidth: 1,
             paddingTop: 24,
             gap: 24,
             borderTopColor: theme.isDark ? COLORS.APP_BACKGROUND_DARK : COLORS.GREY_100,
-        },
-        section: {
-            gap: 8,
         },
     })
