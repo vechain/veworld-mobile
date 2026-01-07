@@ -148,8 +148,7 @@ export const useSendAmountInput = ({ token, isInputInFiat }: Args) => {
         if (isInputInFiat)
             setInput(
                 truncateToMaxDecimals(ethers.utils.formatUnits(tokenAmount, token.decimals), {
-                    kind: "token",
-                    decimals: token.decimals,
+                    kind: "fiat",
                     removeTrailingZeros: true,
                 }),
             )
