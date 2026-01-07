@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native"
 import { BaseButton, BaseIcon } from "~Components"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useI18nContext } from "~i18n"
 import { AddCustomNetworkBottomSheet } from "./AddCustomNetworkBottomSheet"
 
@@ -11,7 +12,9 @@ export const CustomNetworkFooter = () => {
     const { theme, styles } = useThemedStyles(baseStyles)
     const { ref, onOpen } = useBottomSheetModal()
 
-    const handleOpen = useCallback(() => onOpen(), [onOpen])
+    const _handleOpen = useCallback(() => onOpen(), [onOpen])
+
+    const handleOpen = useOfflineCallback(_handleOpen)
 
     return (
         <>
