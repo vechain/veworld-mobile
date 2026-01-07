@@ -1,18 +1,18 @@
 import { useQuery } from "@tanstack/react-query"
-import React, { useMemo } from "react"
+import moment from "moment"
+import React, { ComponentProps, PropsWithChildren, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseCard, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { COLORS, ColorThemeType, VET, VTHO } from "~Constants"
 import { useFormatFiat, useTheme, useThemedStyles } from "~Hooks"
-import { useDelegationExitDays } from "~Hooks/Staking"
-import { useNFTMetadata } from "~Hooks/useNFTMetadata"
+import { useDelegationExitDays, useValidatorDetails } from "~Hooks/Staking"
+import { getCollectibleMetadataOptions } from "~Hooks/useCollectibleMetadata"
+import { useTokenURI } from "~Hooks/useCollectibleMetadata/useTokenURI"
 import { useStargateClaimableRewards } from "~Hooks/useStargateClaimableRewards"
 import { useStargateConfig } from "~Hooks/useStargateConfig"
-import { useThorClient } from "~Hooks/useThorClient"
 import { useI18nContext } from "~i18n"
 import type { NodeInfo } from "~Model"
-import { getTokenURI } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { formatDisplayNumber } from "~Utils/StandardizedFormatting"
@@ -23,8 +23,34 @@ type Props = {
     item: NodeInfo
 }
 
-const RowItem = ({ label, value, icon, testID }: { label: string; value: string; icon: string; testID: string }) => {
+const SimpleRowItem = ({
+    label,
+    value,
+    testID,
+    children,
+}: PropsWithChildren<{ label: string; value: string; testID: string }>) => {
     const theme = useTheme()
+
+    return (
+        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" py={2} testID={testID}>
+            <BaseText color={theme.colors.assetDetailsCard.text} typographyFont="captionMedium">
+                {label}
+            </BaseText>
+            <BaseView gap={8} flexDirection="row">
+                <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800} typographyFont="captionMedium">
+                    {value}
+                </BaseText>
+                {children}
+            </BaseView>
+        </BaseView>
+    )
+}
+
+const TokenRowItem = ({
+    value,
+    icon,
+    ...props
+}: Omit<ComponentProps<typeof SimpleRowItem>, "children"> & { icon: string }) => {
     const { formatLocale } = useFormatFiat()
 
     const formattedValue = useMemo(() => {
@@ -34,44 +60,36 @@ const RowItem = ({ label, value, icon, testID }: { label: string; value: string;
     }, [value, formatLocale])
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" py={2} testID={testID}>
-            <BaseText color={theme.colors.assetDetailsCard.text} typographyFont="captionMedium">
-                {label}
-            </BaseText>
-            <BaseView gap={8} flexDirection="row">
-                <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800} typographyFont="captionMedium">
-                    {formattedValue}
-                </BaseText>
-                <TokenImage icon={icon} isVechainToken iconSize={16} rounded={true} />
-            </BaseView>
-        </BaseView>
+        <SimpleRowItem value={formattedValue} {...props}>
+            <TokenImage icon={icon} isVechainToken iconSize={16} rounded={true} />
+        </SimpleRowItem>
     )
 }
 
 export const StargateCarouselItem = ({ item }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { fetchMetadata } = useNFTMetadata()
+
+    const { formatLocale } = useFormatFiat()
 
     const network = useAppSelector(selectSelectedNetwork)
 
-    const thor = useThorClient()
-
     const stargateConfig = useStargateConfig(network)
 
-    const { data: tokenURI } = useQuery({
-        queryKey: ["StargateTokenURI", network.type, item.nodeId],
-        queryFn: () => getTokenURI(item.nodeId, stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS!, thor),
-        enabled: Boolean(stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS),
+    const { data: tokenURI, isLoading: isTokenURILoading } = useTokenURI({
+        address: stargateConfig.STARGATE_NFT_CONTRACT_ADDRESS,
+        tokenId: item.nodeId,
     })
 
     // Use the unlocked version of the NFT image (without the status badge baked in)
-    const unlockedTokenURI = useMemo(() => tokenURI?.replace(/_locked$/, ""), [tokenURI])
-    const { data } = useQuery({
-        queryKey: ["StargateNftMetadata", network.type, item.nodeId, "unlocked"],
-        queryFn: () => fetchMetadata(unlockedTokenURI!),
-        enabled: Boolean(unlockedTokenURI),
-    })
+    const unlockedTokenURI = useMemo(() => tokenURI?.replace(/_locked/, ""), [tokenURI])
+
+    const metadataOpts = useMemo(
+        () => getCollectibleMetadataOptions(unlockedTokenURI, isTokenURILoading),
+        [isTokenURILoading, unlockedTokenURI],
+    )
+
+    const { data } = useQuery(metadataOpts)
 
     const { data: claimableRewards } = useStargateClaimableRewards({ nodeId: item.nodeId })
 
@@ -81,6 +99,40 @@ export const StargateCarouselItem = ({ item }: Props) => {
         enabled: isExiting,
     })
 
+    const { data: validatorDetails } = useValidatorDetails({ validatorId: item.validatorId })
+
+    const tokenLevel = useMemo(
+        () => (item.nodeLevel ? (item.nodeLevel as TokenLevelId) : undefined) ?? TokenLevelId.None,
+        [item.nodeLevel],
+    )
+
+    const tokenLevelName = useMemo(() => getTokenLevelName(tokenLevel), [tokenLevel])
+
+    const apy = useMemo(() => {
+        if (!item.validatorId) return "-"
+        const yieldValue = (validatorDetails?.nftYieldsNextCycle?.[tokenLevelName] as number) ?? 0
+        const displayValue = formatDisplayNumber(yieldValue, {
+            forceDecimals: 2,
+            includeSymbol: false,
+            locale: formatLocale,
+            skipThreshold: true,
+        })
+        return `${displayValue}%`
+    }, [formatLocale, item.validatorId, tokenLevelName, validatorDetails?.nftYieldsNextCycle])
+
+    const cyclePeriod = useMemo(() => {
+        if (!item.validatorId) return "-"
+        return LL.STARGATE_DAYS({
+            days: moment
+                .duration(
+                    BigNutils(validatorDetails?.cyclePeriodLength ?? "0")
+                        .multiply(10)
+                        .multiply(1000).toNumber,
+                )
+                .days(),
+        })
+    }, [LL, item.validatorId, validatorDetails?.cyclePeriodLength])
+
     return (
         <BaseCard containerStyle={styles.root} style={styles.rootContent}>
             <StargateImage
@@ -89,24 +141,28 @@ export const StargateCarouselItem = ({ item }: Props) => {
                 exitDays={isExiting ? exitDays : undefined}
             />
             <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="bodySemiBold">
-                {getTokenLevelName(
-                    (item.nodeLevel ? (item.nodeLevel as TokenLevelId) : undefined) ?? TokenLevelId.None,
-                )}
+                {tokenLevelName}
             </BaseText>
             <BaseView flexDirection="column" gap={8}>
-                <RowItem
+                <SimpleRowItem label={LL.STARGATE_APY()} value={apy} testID="STARGATE_CAROUSEL_ITEM_VALUE_APY" />
+                <SimpleRowItem
+                    label={LL.STARGATE_CYCLE_DURATION()}
+                    value={cyclePeriod}
+                    testID="STARGATE_CAROUSEL_ITEM_VALUE_CYCLE_DURATION"
+                />
+                <TokenRowItem
                     label={LL.STARGATE_LOCKED()}
                     value={item.vetAmountStaked ?? "0"}
                     icon={VET.icon}
                     testID="STARGATE_CAROUSEL_ITEM_VALUE_LOCKED"
                 />
-                <RowItem
+                <TokenRowItem
                     label={LL.STARGATE_REWARDS()}
                     value={item.accumulatedRewards ?? "0"}
                     icon={VTHO.icon}
                     testID="STARGATE_CAROUSEL_ITEM_VALUE_REWARDS"
                 />
-                <RowItem
+                <TokenRowItem
                     label={LL.STARGATE_CLAIMABLE()}
                     value={claimableRewards ?? "0"}
                     icon={VTHO.icon}

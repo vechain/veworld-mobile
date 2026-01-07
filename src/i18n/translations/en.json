@@ -1468,5 +1468,8 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "STARGATE_APY": "APY",
+  "STARGATE_CYCLE_DURATION": "Cycle duration",
+  "STARGATE_DAYS": "{days:number} days"
 }
