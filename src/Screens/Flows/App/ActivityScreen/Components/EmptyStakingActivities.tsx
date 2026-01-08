@@ -41,6 +41,7 @@ export const EmptyStakingActivities = ({ onPress }: EmptyB3trActivitiesProps) =>
                 title={LL.ACTIVITY_STAKING_EMPTY_BUTTON()}
                 action={onPress}
                 typographyFont="bodySemiBold"
+                testID="ActivityStaking_Empty_StartEarningButton"
             />
         </BaseView>
     )
