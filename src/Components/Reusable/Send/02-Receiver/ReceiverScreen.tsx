@@ -1,7 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { LinearTransition } from "react-native-reanimated"
+import { BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
+import { useVns } from "~Hooks/useVns"
 import {
     selectAccounts,
     selectKnownContacts,
@@ -15,14 +17,14 @@ import { SendContent } from "../Shared"
 import { KnownAddressesList } from "./Components/KnownAddressesList"
 import { WalletAddressCard } from "./Components/WalletAddressCard"
 
-export const ReceiverScreen = () => {
+const _ReceiverScreen = ({ address: selectedAddress, name }: { address: string | undefined; name?: string }) => {
     const { flowState, setFlowState, goToNext } = useSendContext()
-    const selectedAddress = useMemo(() => flowState.address, [flowState.address])
 
-    const [inputWalletAddress, setInputWalletAddress] = useState<string>("")
-    const [listWalletAddresses, setListWalletAddresses] = useState<string>("")
+    const [inputWalletAddress, setInputWalletAddress] = useState<string>(name ?? selectedAddress ?? "")
+    const [listWalletAddresses, setListWalletAddresses] = useState<string>(selectedAddress ?? "")
     const [addressChangeCtx, setAddressChangeCtx] = useState<"recent" | "accounts" | "contacts" | null>(null)
-
+    const [realAddress, setRealAddress] = useState(selectedAddress || "")
+    const [isError, setIsError] = useState(false)
     const { styles } = useThemedStyles(baseStyles)
 
     const allAccounts = useAppSelector(selectAccounts)
@@ -36,66 +38,94 @@ export const ReceiverScreen = () => {
 
     const activeFilter = useMemo(() => {
         if (addressChangeCtx) return addressChangeCtx
-        if (recentContacts.find(recentContact => AddressUtils.compareAddresses(recentContact.address, selectedAddress)))
+        if (recentContacts.find(recentContact => AddressUtils.compareAddresses(recentContact.address, realAddress)))
             return "recent"
-        if (accounts.find(account => AddressUtils.compareAddresses(account.address, selectedAddress))) return "accounts"
-        if (contacts.find(contact => AddressUtils.compareAddresses(contact.address, selectedAddress))) return "contacts"
+        if (accounts.find(account => AddressUtils.compareAddresses(account.address, realAddress))) return "accounts"
+        if (contacts.find(contact => AddressUtils.compareAddresses(contact.address, realAddress))) return "contacts"
         return undefined
-    }, [selectedAddress, accounts, contacts, recentContacts, addressChangeCtx])
+    }, [addressChangeCtx, recentContacts, accounts, contacts, realAddress])
 
     const handleAddressChange = useCallback(
-        (source: "input" | "list", address: string, ctx?: "recent" | "accounts" | "contacts") => {
+        (source: "input" | "list", str: string, address: string, ctx?: "recent" | "accounts" | "contacts") => {
             if (source === "input") {
                 setAddressChangeCtx(null)
                 if (AddressUtils.compareAddresses(address, selectedAddress)) {
                     return
                 }
-                setInputWalletAddress(address)
+                setInputWalletAddress(str)
                 setListWalletAddresses("")
+                setRealAddress(address)
             } else {
                 setAddressChangeCtx(ctx ?? null)
-                setListWalletAddresses(address)
+                setListWalletAddresses(str)
                 setInputWalletAddress("")
+                setRealAddress(address)
+                setIsError(false)
             }
-            setFlowState(prev => ({ ...prev, address: address }))
         },
-        [setFlowState, selectedAddress],
+        [selectedAddress],
     )
 
-    useEffect(() => {
-        if (!activeFilter) {
-            setInputWalletAddress(selectedAddress ?? "")
-            setListWalletAddresses("")
-            return
-        }
-        setListWalletAddresses(selectedAddress ?? "")
-        setInputWalletAddress("")
-    }, [selectedAddress, activeFilter])
-
-    const disabled = useMemo(() => !selectedAddress || !AddressUtils.isValid(selectedAddress), [selectedAddress])
+    const disabled = useMemo(() => !realAddress || !AddressUtils.isValid(realAddress), [realAddress])
 
     const isTokenFlow = flowState.type === "token"
+
+    const onInputAddressChange = useCallback(
+        (str: string, address: string) => {
+            handleAddressChange("input", str, address)
+        },
+        [handleAddressChange],
+    )
+
+    const onListAddressChange = useCallback(
+        (address: string, ctx: "accounts" | "contacts" | "recent") =>
+            handleAddressChange("list", address, address, ctx),
+        [handleAddressChange],
+    )
+
+    const onNext = useCallback(() => {
+        setFlowState(prev => ({ ...prev, address: realAddress }))
+        goToNext()
+    }, [goToNext, realAddress, setFlowState])
 
     return (
         <SendContent>
             <SendContent.Header />
             <SendContent.Container style={styles.root} layout={LinearTransition}>
                 <WalletAddressCard
-                    selectedAddress={inputWalletAddress}
-                    onAddressChange={address => handleAddressChange("input", address)}
+                    value={activeFilter ? "" : inputWalletAddress}
+                    address={realAddress}
+                    onAddressChange={onInputAddressChange}
+                    isError={isError}
+                    setIsError={setIsError}
                 />
                 <KnownAddressesList
                     activeFilter={activeFilter}
                     selectedAddress={listWalletAddresses}
-                    onAddressChange={(address, ctx) => handleAddressChange("list", address, ctx)}
+                    onAddressChange={onListAddressChange}
                 />
             </SendContent.Container>
             <SendContent.Footer>
                 {isTokenFlow && <SendContent.Footer.Back />}
-                <SendContent.Footer.Next testID="ReceiverScreen_NextButton" action={goToNext} disabled={disabled} />
+                <SendContent.Footer.Next testID="ReceiverScreen_NextButton" action={onNext} disabled={disabled} />
             </SendContent.Footer>
         </SendContent>
     )
+}
+
+export const ReceiverScreen = () => {
+    const { flowState } = useSendContext()
+    const selectedAddress = useMemo(() => flowState.address, [flowState.address])
+
+    const { name: vnsName, isLoading } = useVns({
+        address: selectedAddress ?? "",
+        name: "",
+    })
+
+    if (!selectedAddress) return <_ReceiverScreen address={selectedAddress} />
+    if (isLoading) return <BaseView flex={1} />
+
+    return <_ReceiverScreen address={selectedAddress} name={vnsName || undefined} />
 }
 
 const baseStyles = () =>
