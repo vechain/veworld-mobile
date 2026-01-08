@@ -67,8 +67,9 @@ export const TabRenderer = ({ onLayout }: Props) => {
 
     const showFavorites = useMemo(() => {
         if (!bookmarkedDApps?.length) return false
-        return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount)
-    }, [bookmarkedDApps?.length, selectedAccount])
+        return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount) && isOnline
+    }, [bookmarkedDApps.length, isOnline, selectedAccount])
+
     const labels = useMemo(() => filteredTabs.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL, filteredTabs])
 
     const { containerPaddingBottom, contentExtraBottomPadding } = useLayoutScrollviewPadding()
