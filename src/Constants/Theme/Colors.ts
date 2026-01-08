@@ -35,6 +35,7 @@ export type Colors = {
     card: string
     icon: string
     button: string
+    buttonText: string
     pinFilled: string
     pinEmpty: string
     rightIconHeaderBorder: string
@@ -562,6 +563,7 @@ const light: Colors = {
     pinEmpty: COLORS.GREY_400,
     pinFilled: COLORS.PRIMARY_800,
     button: COLORS.DARK_PURPLE,
+    buttonText: COLORS.WHITE,
     rightIconHeaderBorder: COLORS.GREY_200,
     rightIconHeaderColor: COLORS.GREY_600,
     cardBorder: COLORS.GREY_300,
@@ -959,6 +961,7 @@ const dark: Colors = {
     card: COLORS.PURPLE,
     icon: COLORS.WHITE,
     button: COLORS.LIME_GREEN,
+    buttonText: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.TRANSPARENT,
     rightIconHeaderColor: COLORS.WHITE,
     cardBorder: COLORS.DARK_PURPLE_DISABLED,
