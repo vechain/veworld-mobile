@@ -52,7 +52,7 @@ const SelectAmountSendComponentContent = ({
         vs_currency: currency,
     })
 
-    const { isBalanceExceeded, fiatAmount, tokenAmount, onChange, onMax, onReset, input, onDeleteAll } =
+    const { isBalanceExceeded, fiatAmount, tokenAmount, onChange, onMax, onReset, input, onDeleteAll, onFlip } =
         useSendAmountInput({
             token: selectedToken,
             isInputInFiat,
@@ -73,8 +73,8 @@ const SelectAmountSendComponentContent = ({
 
     const handleToggleInputMode = useCallback(() => {
         setIsInputInFiat(s => !s)
-        onReset()
-    }, [onReset])
+        onFlip()
+    }, [onFlip])
 
     const handleOpenTokenSelector = useCallback(() => {
         bottomSheetRef.current?.present()

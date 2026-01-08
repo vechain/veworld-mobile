@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
-import { useBottomSheetModal } from "~Hooks"
+import { useBottomSheetModal, useIsOnline } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { MoreButtonBottomSheet } from "./MoreButtonBottomSheet"
@@ -13,6 +13,8 @@ type Props = {
 export const MoreButton = ({ openReceiveBottomsheet, token }: Props) => {
     const { LL } = useI18nContext()
     const { ref, onOpen } = useBottomSheetModal()
+
+    const isOnline = useIsOnline()
 
     const onPress = useCallback(() => {
         onOpen()
@@ -27,6 +29,7 @@ export const MoreButton = ({ openReceiveBottomsheet, token }: Props) => {
                 onPress={onPress}
                 themed
                 truncateText
+                disabled={!isOnline}
             />
             <MoreButtonBottomSheet bsRef={ref} openReceiveBottomsheet={openReceiveBottomsheet} token={token} />
         </>
