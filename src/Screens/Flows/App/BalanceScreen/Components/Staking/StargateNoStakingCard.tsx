@@ -28,7 +28,7 @@ export const StargateNoStakingCard = () => {
 
     const formattedStargateStats = useMemo(() => {
         return {
-            totalSupply: BigNutils(stargateStats?.totalSupply?.total ?? "0").toCompactString(formatLocale, 1) ?? "0",
+            totalSupply: BigNutils(stargateStats?.totalSupply ?? "0").toCompactString(formatLocale, 1) ?? "0",
             totalVetStaked:
                 BigNutils(ethers.utils.formatEther(stargateStats?.totalVetStaked?.total ?? "0")).toCompactString(
                     formatLocale,
@@ -46,7 +46,7 @@ export const StargateNoStakingCard = () => {
                 ) ?? "0",
         }
     }, [
-        stargateStats?.totalSupply?.total,
+        stargateStats?.totalSupply,
         stargateStats?.totalVetStaked?.total,
         stargateStats?.rewardsDistributed,
         stargateStats?.vthoPerDay,
