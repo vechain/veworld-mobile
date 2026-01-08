@@ -58,8 +58,8 @@ const isInvalid = (hex?: string | null): boolean => {
  */
 const generateRandom = (size: number): string => {
     if (size < 1) throw Error("Size must be > 0")
-    const buf = Buffer.alloc(Math.ceil(size / 2))
-    const randBuffer = crypto.randomFillSync(buf)
+    const byteCount = Math.ceil(size / 2)
+    const randBuffer = crypto.randomBytes(byteCount)
     if (!randBuffer) throw Error("Failed to generate random hex")
     let _isValid = isValid(`${PREFIX}${randBuffer.toString("hex").substring(0, size)}`)
     if (!_isValid) throw Error("Failed to validate random hex")

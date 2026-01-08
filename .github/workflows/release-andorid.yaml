@@ -48,6 +48,11 @@ jobs:
               env:
                 INPUTS_PR_BRANCH: ${{ inputs.pr_branch }}
 
+            - name: Clear Ubuntu junk
+              run: |
+                sudo rm -rf "/usr/local/share/boost"
+                sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
             - name: Setup Node
               uses: actions/setup-node@v3
               with:

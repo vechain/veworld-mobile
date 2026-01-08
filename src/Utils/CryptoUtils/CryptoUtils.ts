@@ -8,7 +8,8 @@ import { IMPORT_TYPE } from "~Model"
 import fastKeystoreDecrypt from "./Helpers/fastKeystoreDecrypt"
 import HexUtils from "~Utils/HexUtils"
 import { ERROR_EVENTS } from "~Constants"
-import { BinaryLike } from "react-native-quick-crypto/lib/typescript/Utils"
+import { BinaryLike } from "react-native-quick-crypto/lib/typescript/src/Utils"
+import { Cipher, Decipher } from "crypto"
 
 const N = Buffer.from("fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141", "hex")
 const ZERO = Buffer.alloc(32, 0)
@@ -51,10 +52,10 @@ async function encrypt<T>(data: T, encryptionKey: string, salt: string, iv: Uint
         throw new Error("Key is NOT 32 bytes")
     }
 
-    const cipher = crypto.createCipheriv("aes-256-cbc", trimmedKey, iv as BinaryLike)
+    const cipher = crypto.createCipheriv("aes-256-cbc", trimmedKey, iv as BinaryLike) as Cipher
     let ciph = cipher.update(JSON.stringify(data), "utf-8", "hex")
     ciph += cipher.final("hex")
-    return ciph as string
+    return ciph
 }
 
 async function decrypt<T>(data: string, encryptionKey: string, salt: string, iv: Uint8Array): Promise<T> {
@@ -69,7 +70,7 @@ async function decrypt<T>(data: string, encryptionKey: string, salt: string, iv:
         throw new Error("Key is NOT 32 bytes")
     }
 
-    const decipher = crypto.createDecipheriv("aes-256-cbc", trimmedKey, iv as BinaryLike)
+    const decipher = crypto.createDecipheriv("aes-256-cbc", trimmedKey, iv as BinaryLike) as Decipher
     let txt = decipher.update(data, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()
@@ -78,14 +79,14 @@ async function decrypt<T>(data: string, encryptionKey: string, salt: string, iv:
 }
 
 function encryptState<T>(data: T, key: string): string {
-    const cipher = crypto.createCipheriv("aes256", key, null)
+    const cipher = crypto.createCipheriv("aes256", key, null) as Cipher
     let ciph = cipher.update(stringify(data), "utf-8", "hex")
     ciph += cipher.final("hex")
-    return ciph as string
+    return ciph
 }
 
 function decryptState(data: string, key: string) {
-    const decipher = crypto.createDecipheriv("aes256", key, null)
+    const decipher = crypto.createDecipheriv("aes256", key, null) as Decipher
     let txt = decipher.update(data, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()

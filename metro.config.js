@@ -6,7 +6,7 @@ const exts = process.env.RN_SRC_EXT
     ? process.env.RN_SRC_EXT.split(",").concat(defaultConfig.resolver.sourceExts)
     : defaultConfig.resolver.sourceExts
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), {
+module.exports = mergeConfig(defaultConfig, {
     transformer: {
         getTransformOptions: async () => ({
             transform: {
