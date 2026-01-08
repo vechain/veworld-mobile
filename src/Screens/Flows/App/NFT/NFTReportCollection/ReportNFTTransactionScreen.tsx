@@ -18,6 +18,7 @@ import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import {
+    removeAllFavoriteCollectibles,
     reportCollection,
     selectSelectedAccount,
     selectSelectedNetwork,
@@ -68,12 +69,27 @@ export const ReportNFTTransactionScreen = ({ route }: Props) => {
                 accountAddress: selectedAccount.address,
             }),
         )
+        dispatch(
+            removeAllFavoriteCollectibles({
+                address: nftAddress,
+                genesisId: selectedNetwork.genesis.id,
+                owner: selectedAccount.address,
+            }),
+        )
         track(AnalyticsEvent.NFT_COLLECTION_REPORTED, {
             nftAddress: nftAddress,
         })
 
         openBottomSheet()
-    }, [dispatch, openBottomSheet, selectedNetwork, selectedAccount, nftAddress, track])
+    }, [
+        dispatch,
+        openBottomSheet,
+        selectedNetwork.type,
+        selectedNetwork.genesis.id,
+        selectedAccount,
+        nftAddress,
+        track,
+    ])
 
     const onTransactionFailure = useCallback(() => {
         dispatch(setIsAppLoading(false))
