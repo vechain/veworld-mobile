@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.15 (2026-01-08)</small>
+
+* build: init ([3e6d198](https://github.com/vechain/veworld-mobile/commit/3e6d198))
+* 638 enhance   remove nft from favorite when reported (#3696) ([280abe2](https://github.com/vechain/veworld-mobile/commit/280abe2)), closes [#3696](https://github.com/vechain/veworld-mobile/issues/3696)
+
 ## <small>2.4.14 (2025-12-18)</small>
 
 * build: init ([883693f](https://github.com/vechain/veworld-mobile/commit/883693f))
