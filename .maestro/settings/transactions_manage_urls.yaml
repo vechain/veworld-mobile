@@ -32,15 +32,10 @@ onFlowComplete:
 - tapOn:
       id: "AddUrl_input"
 - inputText: "${URL_1}"
-# START FLOW - hide keyboard to prevent errors
-- runFlow:
-      when:
-          platform: Android
-      commands:
-          - hideKeyboard
-# END FLOW
+- hideKeyboard
 - tapOn:
       id: "Add_URL_Submit"
+
 ## User can add multiple delegation URLs with the Manage URLs button
 - extendedWaitUntil:
       visible:
@@ -51,17 +46,12 @@ onFlowComplete:
 - tapOn:
       id: "AddUrl_input"
 - inputText: "${URL_2}"
-# START FLOW - hide keyboard to prevent errors
-- runFlow:
-      when:
-          platform: Android
-      commands:
-          - hideKeyboard
-# END FLOW
+- hideKeyboard
 - tapOn:
       id: "Add_URL_Submit"
 - assertVisible: "${URL_1}"
 - assertVisible: "${URL_2}"
+
 ## User can delete delegation URLs
 - swipe:
       from:

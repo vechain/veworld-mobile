@@ -1237,7 +1237,7 @@
   "SIGN_TYPED_DATA_REQUEST_CTA": "Ký",
   "SIGN_TYPED_DATA_REQUEST_TITLE": "Ký dữ liệu kiểu",
   "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Ủy quyền ví thông minh hiện chưa được hỗ trợ",
-  "STARGATE_APY": "Lãi suất APY",
+  "STARGATE_APY": "Lãi suất hàng năm (APY)",
   "STARGATE_CLAIMABLE": "Có thể yêu cầu",
   "STARGATE_CYCLE_DURATION": "Thời gian chu kỳ",
   "STARGATE_DAYS": "{days:number} ngày",

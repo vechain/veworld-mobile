@@ -1237,7 +1237,7 @@
   "SIGN_TYPED_DATA_REQUEST_CTA": "簽署",
   "SIGN_TYPED_DATA_REQUEST_TITLE": "簽署類型數據",
   "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "不支援委派智能錢包",
-  "STARGATE_APY": "年化收益率",
+  "STARGATE_APY": "年收益率",
   "STARGATE_CLAIMABLE": "可領取",
   "STARGATE_CYCLE_DURATION": "週期時長",
   "STARGATE_DAYS": "{days:number} 天",
