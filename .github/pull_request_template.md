@@ -12,7 +12,7 @@ Closes #
 
 <!-- @mention the person or team responsible for reviewing this pull request. -->
 
-@Doublemme @hughlivingstone @HiiiiD
+@Doublemme @hughlivingstone
 
 # UI/UX Changes
 
