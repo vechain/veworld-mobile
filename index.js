@@ -70,11 +70,17 @@ import { DeviceProvider } from "~Components/Providers/DeviceProvider"
 import { FeedbackProvider } from "~Components/Providers/FeedbackProvider"
 import { ReceiptProcessorProvider } from "~Components/Providers/ReceiptProcessorProvider"
 import { useOnlineManager } from "~Hooks/useOnlineManager"
+import { configureReanimatedLogger, ReanimatedLogLevel } from "react-native-reanimated"
 
 const { fontFamily } = typography
 
 const isHermes = () => !!global.HermesInternal
 info(ERROR_EVENTS.APP, "is Hermes active : ", isHermes())
+
+configureReanimatedLogger({
+    level: ReanimatedLogLevel.warn,
+    strict: false,
+})
 
 if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
     // hide all ui logs
