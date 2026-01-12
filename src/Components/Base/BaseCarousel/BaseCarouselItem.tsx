@@ -4,6 +4,7 @@ import { Animated, Linking, Pressable, StyleProp, StyleSheet, TouchableOpacity, 
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { Routes } from "~Navigation"
 import { BaseIcon } from "../BaseIcon"
 
@@ -96,26 +97,25 @@ export const BaseCarouselItem: React.FC<Props> = ({
         [href, name, navigateWithTab, nav, returnScreen, onPressActivation, propsOnPress],
     )
 
-    const onPress = useCallback(
-        async function () {
-            if (!href) return
+    const _onPress = useCallback(async () => {
+        if (!href) return
 
-            const event: CarouselPressEvent = {
-                name: name ?? "",
-                defaultPrevented: false,
-                preventDefault() {
-                    this.defaultPrevented = true
-                },
-            }
+        const event: CarouselPressEvent = {
+            name: name ?? "",
+            defaultPrevented: false,
+            preventDefault() {
+                this.defaultPrevented = true
+            },
+        }
 
-            if (isExternalLink) {
-                await handleExternalLinkPress(event)
-            } else {
-                handleInternalLinkPress(event)
-            }
-        },
-        [href, name, isExternalLink, handleExternalLinkPress, handleInternalLinkPress],
-    )
+        if (isExternalLink) {
+            await handleExternalLinkPress(event)
+        } else {
+            handleInternalLinkPress(event)
+        }
+    }, [href, name, isExternalLink, handleExternalLinkPress, handleInternalLinkPress])
+
+    const onPress = useOfflineCallback(_onPress)
 
     return (
         <AnimatedTouchableOpacity

@@ -14,11 +14,18 @@ onFlowComplete:
 ---
 ## User should be able to send custom tokens
 - tapOn:
-    id: "EditTokensBar_BaseIcon_manageToken"
+    id: "BalanceScreen_ManageTokensButton"
 - tapOn:
     id: "ManageTokenScreen_AddCustomToken_Button"
 - tapOn:
     id: "AddCustomTokenBottomSheet-TextInput-Address"
+- runFlow:
+      when:
+          visible:
+              id: "android:id/closeButton"
+      commands:
+          - tapOn:
+                id: "android:id/closeButton"
 - inputText: ${ADDRESS}
 - repeat:
     while:
@@ -33,36 +40,38 @@ onFlowComplete:
       - tapOn:
             id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
-    id: "sendButton"
-- runFlow:
-    commands:
-      - tapOn:
-          id: "CARP"
+    id: "BalanceScreen_SendButton"
 - tapOn:
-    id: "selectAccount"
+    id: "SelectAmountConversionToggle_Button"
+- tapOn:
+    id: "SelectAmountTokenSelector_Button"
+- tapOn:
+    id: "TokenSelectionBottomSheet_TokenCard_CARP"
+- tapOn:
+    id: "SEND_1_KEY"
+- tapOn:
+    id: "SelectAmountSendComponent_NextButton"
+- tapOn:
+    id: "AnimatedFilterChips-accounts"
+- tapOn:
+    id: "AccountCard_Item"
     index: 0
 - tapOn:
-    id: "next-button"
-- tapOn:
-    id: "SendScreen_amountInput"
-- inputText: ${AMOUNT}
-- tapOn: "Currency balance"
-- tapOn:
-    id: "next-button"
+    id: "ReceiverScreen_NextButton"
 - runFlow:
     when:
       visible: "Fee delegation"
     commands:
       - extendedWaitUntil:
           visible:
-            id: "MAX_FEE_GALACTICA"
+              id: "MAX_FEE_GALACTICA"
           timeout: 10000
       - tapOn:
-          id: "confirm-send-button"
+          id: "SummaryScreen_NextButton"
 - repeat:
-    while:
-      visible: "Insert your 6-digit PIN"
+    times: 6
     commands:
-      - tapOn: "1"
-- assertVisible: "My tokens"
+      - tapOn:
+          id: "numpad-1"
+- assertVisible: "Tokens"
 - evalScript: ${console.log('Send custom token Ends')}

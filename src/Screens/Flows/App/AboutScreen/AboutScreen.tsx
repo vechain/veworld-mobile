@@ -13,6 +13,9 @@ import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { setDeveloperMenuUnlocked } from "~Storage/Redux/Slices/UserPreferences"
 import { selectDeveloperMenuUnlocked } from "~Storage/Redux/Selectors/UserPreferences"
 import { showSuccessToast } from "~Components/Base/BaseToast"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
+
+type LinkProp = { title: LocalizedString; subtitle: LocalizedString; url: string }
 
 export const AboutScreen = () => {
     const { LL } = useI18nContext()
@@ -34,15 +37,21 @@ export const AboutScreen = () => {
         },
     ]
 
+    const _onPress = useCallback((link: LinkProp) => {
+        HapticsService.triggerImpact({ level: "Light" })
+        Linking.openURL(link.url)
+    }, [])
+
+    const onPress = useOfflineCallback(_onPress)
+
     const renderLinks = useCallback(
-        (link: { title: LocalizedString; subtitle: LocalizedString; url: string }) => (
+        (link: LinkProp) => (
             <BaseView w={100} py={8} key={link.title + link.subtitle}>
                 <BaseCard
                     key={link.url}
                     style={styles.itemCard}
                     onPress={() => {
-                        HapticsService.triggerImpact({ level: "Light" })
-                        Linking.openURL(link.url)
+                        onPress(link)
                     }}>
                     <BaseView flex={1} flexDirection="row" justifyContent="space-between" alignItems="center">
                         <BaseView>
@@ -57,7 +66,7 @@ export const AboutScreen = () => {
                 </BaseCard>
             </BaseView>
         ),
-        [theme.colors.text],
+        [onPress, theme.colors.text],
     )
 
     const handleDevSettingsTap = useCallback(() => {

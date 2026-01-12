@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent, VeDelegate } from "~Constants"
-import { useAnalyticTracking } from "~Hooks"
+import { useAnalyticTracking, useIsOnline } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -15,10 +15,11 @@ type Props = {
 const useSwap = (token: FungibleTokenWithBalance) => {
     const track = useAnalyticTracking()
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
+    const isOnline = useIsOnline()
 
     const disabled = useMemo(() => {
-        return token.symbol === VeDelegate.symbol
-    }, [token.symbol])
+        return token.symbol === VeDelegate.symbol || !isOnline
+    }, [isOnline, token.symbol])
 
     const onPress = useCallback(() => {
         nav.replace(Routes.SWAP)

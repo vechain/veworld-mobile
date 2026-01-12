@@ -23,9 +23,7 @@ describe("StargateNoStackingCard", () => {
         ;(useBrowserNavigation as jest.Mock).mockReturnValue({ navigateToBrowser: jest.fn() })
         ;(useStargateStats as jest.Mock).mockImplementation(() => ({
             data: {
-                totalSupply: {
-                    total: 12816,
-                },
+                totalSupply: "12816",
                 totalVetStaked: {
                     total: "6318030000000000000000000000",
                 },
@@ -47,9 +45,7 @@ describe("StargateNoStackingCard", () => {
         ;(useBrowserNavigation as jest.Mock).mockReturnValue({ navigateToBrowser: jest.fn() })
         ;(useStargateStats as jest.Mock).mockImplementation(() => ({
             data: {
-                totalSupply: {
-                    total: 12816,
-                },
+                totalSupply: "12816",
                 totalVetStaked: {
                     total: "6318030000000000000000000000",
                 },
