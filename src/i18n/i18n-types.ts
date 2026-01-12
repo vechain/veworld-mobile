@@ -3949,10 +3949,6 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
 	/**
-	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
-	 */
-	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
-	/**
 	 * D​e​v​i​c​e​ ​s​e​t​t​i​n​g​s
 	 */
 	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE: string
@@ -9922,10 +9918,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * VeBetter
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
-	/**
-	 * Vote reminder
-	 */
-	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
 	/**
 	 * Device settings
 	 */

@@ -27,8 +27,8 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { FeedbackSeverity, FeedbackType } from "../../../../Components/Providers/FeedbackProvider/Model"
-import { Feedback } from "../../../../Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~/Components/Providers/FeedbackProvider/Model"
+import { Feedback } from "~/Components/Providers/FeedbackProvider/Events"
 
 const SUBSCRIPTION_LIMIT = 10
 
