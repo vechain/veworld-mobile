@@ -183,7 +183,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
                         navigation.navigate(route as any, parsedParams)
                     }
                 }
-            } catch { }
+            } catch {}
         },
         [navigation],
     )
@@ -418,7 +418,6 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
                     return false
                 }
 
-                // Calculate new disabled categories
                 let newDisabledCategories: string[]
                 if (enabled) {
                     // Remove category from disabled list (enabling it)
@@ -430,14 +429,13 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
                         : [...disabledCategories, category]
                 }
 
-                // Call API
                 const response = await updateNotificationPreferences({
                     subscriptionId,
                     disabledCategories: newDisabledCategories,
                     baseUrl,
                 })
 
-                // Update Redux only after successful API response
+                // Update Redux only after successful API response so we stay in sync
                 dispatch(setDisabledCategories(response.disabledCategories))
 
                 return true
