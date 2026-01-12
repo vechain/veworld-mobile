@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5.0 (2026-01-12)
+
+* build: init ([b1296a6](https://github.com/vechain/veworld-mobile/commit/b1296a6))
+* feat: added missing offline elements to be handled (#3702) ([f568a8f](https://github.com/vechain/veworld-mobile/commit/f568a8f)), closes [#3702](https://github.com/vechain/veworld-mobile/issues/3702)
+
 ## <small>2.4.14 (2025-12-18)</small>
 
 * build: init ([883693f](https://github.com/vechain/veworld-mobile/commit/883693f))
