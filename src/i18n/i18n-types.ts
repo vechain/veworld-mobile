@@ -9245,7 +9245,7 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	LOADING_PAGE_CONTENT: () => LocalizedString
 	/**
-	 * Stay signed in
+	 * Keep me signed in for future sessions
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
 	/**
