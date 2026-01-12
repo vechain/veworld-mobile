@@ -3917,10 +3917,6 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE: string
 	/**
-	 * U​p​d​a​t​e​ ​s​u​c​c​e​s​s​f​u​l
-	 */
-	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_SUCCESS_DESC: string
-	/**
 	 * S​e​a​r​c​h​ ​D​A​p​p​s
 	 */
 	PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER: string
