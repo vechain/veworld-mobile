@@ -3965,10 +3965,6 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC: string
 	/**
-	 * G​o​ ​t​o​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s
-	 */
-	PUSH_NOTIFICATIONS_GO_TO_DEVICE_SETTINGS: string
-	/**
 	 * E​n​a​b​l​e​ ​y​o​u​r​ ​c​a​m​e​r​a​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​s​c​a​n​ ​a​ ​Q​R​ ​c​o​d​e
 	 */
 	QR_CODE_CAMERA_PERMS: string
@@ -9886,10 +9882,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE: () => LocalizedString
 	/**
-	 * Update successful
-	 */
-	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_SUCCESS_DESC: () => LocalizedString
-	/**
 	 * Search DApps
 	 */
 	PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER: () => LocalizedString
@@ -9933,10 +9925,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Please go to the device settings and allow VeWorld notifications to be pushed.
 	 */
 	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC: () => LocalizedString
-	/**
-	 * Go to device settings
-	 */
-	PUSH_NOTIFICATIONS_GO_TO_DEVICE_SETTINGS: () => LocalizedString
 	/**
 	 * Enable your camera permissions to scan a QR code
 	 */
