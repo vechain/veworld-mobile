@@ -135,8 +135,6 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     }, [dispatch, isInitialized])
 
     const requestPermission = useCallback(() => {
-        dispatch(updateNotificationPermission(!permissionEnabled))
-
         OneSignal.Notifications.requestPermission(true)
             .then(result => {
                 dispatch(updateNotificationPermission(result))
@@ -144,7 +142,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
             .catch(() => {
                 dispatch(updateNotificationPermission(false))
             })
-    }, [dispatch, permissionEnabled])
+    }, [dispatch])
 
     const optInUser = useCallback(() => {
         OneSignal.User.pushSubscription.optIn()

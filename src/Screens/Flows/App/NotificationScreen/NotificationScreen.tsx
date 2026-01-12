@@ -1,7 +1,7 @@
 import { useFocusEffect } from "@react-navigation/native"
 import { useMutation } from "@tanstack/react-query"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { Linking, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import {
     BaseButton,
     BaseCard,
@@ -121,10 +121,6 @@ export const NotificationScreen = () => {
         })
     }, [LL])
 
-    const openDeviceSettings = useCallback(() => {
-        Linking.openSettings()
-    }, [])
-
     const toogleSubscriptionSwitch = useCallback(
         (tag: string) => (value: boolean) => {
             if (value) {
@@ -222,8 +218,8 @@ export const NotificationScreen = () => {
                                 </BaseView>
                             </BaseView>
                             <BaseButton
-                                action={openDeviceSettings}
-                                title={LL.PUSH_NOTIFICATIONS_GO_TO_DEVICE_SETTINGS()}
+                                action={requestNotficationPermission}
+                                title={LL.ACTIVATE_NOTIFICATION_MODAL_ENABLE_BTN()}
                             />
                         </BaseView>
                     )}
@@ -295,7 +291,7 @@ export const NotificationScreen = () => {
         styles,
         theme,
         isNotificationPermissionEnabled,
-        openDeviceSettings,
+        requestNotficationPermission,
         isUpdatingPrefs,
     ])
     useEffect(() => {
