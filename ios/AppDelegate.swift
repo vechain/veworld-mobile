@@ -1,53 +1,50 @@
 import ExpoModulesCore
 import RNBootSplash
 import React
+import ReactAppDependencyProvider
 import React_RCTAppDelegate
 import UIKit
 
 @main
-class AppDelegate: EXAppDelegateWrapper {
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    var window: UIWindow?
 
-    override func application(
+    var reactNativeDelegate: ReactNativeDelegate?
+    var reactNativeFactory: RCTReactNativeFactory?
+
+    func application(
         _ application: UIApplication,
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         // Clear keychain on first install
         clearKeychainIfNecessary()
 
-        self.moduleName = "VeWorld"
-        self.initialProps = [:]
+        let delegate = ReactNativeDelegate()
+        let factory = RCTReactNativeFactory(delegate: delegate)
+        delegate.dependencyProvider = RCTAppDependencyProvider()
 
-        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-    }
+        reactNativeDelegate = delegate
+        reactNativeFactory = factory
 
-    override func sourceURL(for bridge: RCTBridge) -> URL? {
-        return bundleURL()
-    }
+        window = UIWindow(frame: UIScreen.main.bounds)
+        factory.startReactNative(
+            withModuleName: "VeWorld",
+            in: window,
+            launchOptions: launchOptions
+        )
 
-    override func bundleURL() -> URL? {
-        #if DEBUG
-            return RCTBundleURLProvider.sharedSettings().jsBundleURL(
-                forBundleRoot: ".expo/.virtual-metro-entry")
-        #else
-            return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
-        #endif
-    }
-
-    // MARK: - BootSplash Integration
-    override func customize(_ rootView: RCTRootView) {
-        super.customize(rootView)
-        RNBootSplash.initWithStoryboard("BootSplash", rootView: rootView)
+        return true
     }
 
     // MARK: - Deep Linking Support
-    override func application(
+    func application(
         _ application: UIApplication, open url: URL,
         options: [UIApplication.OpenURLOptionsKey: Any] = [:]
     ) -> Bool {
         return RCTLinkingManager.application(application, open: url, options: options)
     }
 
-    override func application(
+    func application(
         _ application: UIApplication, continue userActivity: NSUserActivity,
         restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
     ) -> Bool {
@@ -56,10 +53,8 @@ class AppDelegate: EXAppDelegateWrapper {
     }
 
     // MARK: - Privacy Screen (Secure View on Background)
-    override func applicationDidEnterBackground(_ application: UIApplication) {
-        let window = self.window
-
-      let secureView = UIView(frame: window.bounds)
+    func applicationDidEnterBackground(_ application: UIApplication) {
+      let secureView = UIView(frame: window?.bounds ?? .zero)
         secureView.tag = 9_824_684
         secureView.backgroundColor = UIColor(
             red: 0.11372549019607843, green: 0.09019607843137255, blue: 0.22745098039215686,
@@ -77,12 +72,12 @@ class AppDelegate: EXAppDelegateWrapper {
         imageView.image = UIImage(named: "BootSplashLogo")
 
         secureView.addSubview(imageView)
-        window.addSubview(secureView)
+        window?.addSubview(secureView)
     }
 
-    override func applicationWillEnterForeground(_ application: UIApplication) {
-        let window = self.window
-        if let secureView = window.viewWithTag(9_824_684) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
+
+        if let secureView = window?.viewWithTag(9_824_684) {
             secureView.removeFromSuperview()
         }
     }
@@ -107,5 +102,25 @@ class AppDelegate: EXAppDelegateWrapper {
                 SecItemDelete(spec as CFDictionary)
             }
         }
+    }
+}
+
+class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
+    override func sourceURL(for bridge: RCTBridge) -> URL? {
+        self.bundleURL()
+    }
+
+    override func bundleURL() -> URL? {
+        #if DEBUG
+            RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+        #else
+            Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+        #endif
+    }
+
+    // MARK: - BootSplash Integration
+    override func customize(_ rootView: RCTRootView) {
+        super.customize(rootView)
+        RNBootSplash.initWithStoryboard("BootSplash", rootView: rootView)
     }
 }
