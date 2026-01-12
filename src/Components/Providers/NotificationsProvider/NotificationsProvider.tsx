@@ -413,9 +413,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
             const newDisabledCategories = enabled
                 ? disabledCategories.filter(c => c !== category)
-                : disabledCategories.includes(category)
-                ? disabledCategories
-                : [...disabledCategories, category]
+                : [...new Set([...disabledCategories, category])]
 
             const response = await updateNotificationPreferences({
                 subscriptionId,
