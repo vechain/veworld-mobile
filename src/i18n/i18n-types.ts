@@ -3257,7 +3257,7 @@ type RootTranslation = {
 	 */
 	LOADING_PAGE_CONTENT: string
 	/**
-	 * S​t​a​y​ ​s​i​g​n​e​d​ ​i​n
+	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: string
 	/**
