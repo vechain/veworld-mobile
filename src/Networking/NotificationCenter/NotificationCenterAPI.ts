@@ -84,5 +84,6 @@ export const updateNotificationPreferences = ({
         url: `${baseUrl}/api/v1/notification-preferences/${subscriptionId}`,
         data: { disabledCategories },
         method: "PUT",
+        timeout: 5000,
     })
 }
