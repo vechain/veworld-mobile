@@ -1,7 +1,3 @@
-// Must be at the very top of the file, before all other imports
-import { install } from "react-native-quick-crypto"
-install()
-
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { AppRegistry, LogBox } from "react-native"
