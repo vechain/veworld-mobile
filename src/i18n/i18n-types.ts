@@ -3257,7 +3257,7 @@ type RootTranslation = {
 	 */
 	LOADING_PAGE_CONTENT: string
 	/**
-	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
+	 * S​t​a​y​ ​s​i​g​n​e​d​ ​i​n
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: string
 	/**
@@ -6042,6 +6042,19 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * A​P​Y
+	 */
+	STARGATE_APY: string
+	/**
+	 * C​y​c​l​e​ ​d​u​r​a​t​i​o​n
+	 */
+	STARGATE_CYCLE_DURATION: string
+	/**
+	 * {​d​a​y​s​}​ ​d​a​y​s
+	 * @param {number} days
+	 */
+	STARGATE_DAYS: RequiredParams<'days'>
 }
 
 export type TranslationFunctions = {
@@ -9241,7 +9254,7 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	LOADING_PAGE_CONTENT: () => LocalizedString
 	/**
-	 * Keep me signed in for future sessions
+	 * Stay signed in
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
 	/**
@@ -11972,6 +11985,18 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * APY
+	 */
+	STARGATE_APY: () => LocalizedString
+	/**
+	 * Cycle duration
+	 */
+	STARGATE_CYCLE_DURATION: () => LocalizedString
+	/**
+	 * {days} days
+	 */
+	STARGATE_DAYS: (arg: { days: number }) => LocalizedString
 }
 
 export type Formatters = {

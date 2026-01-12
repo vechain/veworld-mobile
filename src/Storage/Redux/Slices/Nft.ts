@@ -373,6 +373,23 @@ export const NftSlice = createSlice({
                 }
             }
         },
+        removeAllFavoriteCollectibles: (
+            state,
+            action: PayloadAction<{ address: string; owner: string; genesisId: string }>,
+        ) => {
+            const { address, owner, genesisId } = action.payload
+            const normalizedOwner = HexUtils.normalize(owner)
+            const normalizedAddress = HexUtils.normalize(address)
+            state.favoriteNfts ??= {}
+            state.favoriteNfts[genesisId] ??= {}
+            state.favoriteNfts[genesisId][normalizedOwner] ??= {}
+
+            Object.keys(state.favoriteNfts[genesisId][normalizedOwner])
+                .filter(k => k.startsWith(normalizedAddress))
+                .forEach(k => {
+                    delete state.favoriteNfts![genesisId][normalizedOwner][k]
+                })
+        },
         toggleFavoriteCollection: (
             state,
             action: PayloadAction<{ address: string; owner: string; genesisId: string }>,
@@ -410,4 +427,5 @@ export const {
     refreshNFTs,
     toggleFavorite,
     toggleFavoriteCollection,
+    removeAllFavoriteCollectibles,
 } = NftSlice.actions

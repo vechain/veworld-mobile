@@ -174,7 +174,7 @@ describe("SelectAmountSendComponent", () => {
         expect(amountInput).toHaveTextContent("1")
 
         // Check that the next button works
-        const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
+        const btn = await screen.findByTestId("SelectAmountSendComponent_NextButton")
         await act(async () => {
             fireEvent.press(btn)
         })
@@ -195,7 +195,7 @@ describe("SelectAmountSendComponent", () => {
             fireEvent.press(numPad1)
         })
 
-        const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
+        const btn = await screen.findByTestId("SelectAmountSendComponent_NextButton")
         await act(async () => {
             fireEvent.press(btn)
         })
@@ -235,7 +235,7 @@ describe("SelectAmountSendComponent", () => {
         })
 
         // Check that the next button does not work
-        const btn = await screen.findByTestId("SEND_FOOTER_NEXT")
+        const btn = await screen.findByTestId("SelectAmountSendComponent_NextButton")
         await act(async () => {
             fireEvent.press(btn)
         })
@@ -381,8 +381,36 @@ describe("SelectAmountSendComponent", () => {
 
         // Check that the next button works
         await act(async () => {
-            fireEvent.press(screen.getByTestId("SEND_FOOTER_NEXT"))
+            fireEvent.press(screen.getByTestId("SelectAmountSendComponent_NextButton"))
         })
         expect(goToNext).toHaveBeenCalled()
+    })
+
+    it("should convert from fiat to token and keep the old value", async () => {
+        ;(useExchangeRate as jest.Mock).mockReturnValue({ data: 0.5 })
+        render(<SelectAmountSendComponent />, {
+            wrapper: TestWrapper,
+        })
+
+        await findAmountInput()
+
+        const numPad1 = await screen.findByText("1")
+        await act(async () => {
+            fireEvent.press(numPad1)
+        })
+
+        expect(screen.getByTestId("SendScreen_amountInput")).toHaveTextContent("1")
+
+        act(() => {
+            fireEvent.press(screen.getByTestId("SelectAmountConversionToggle_Button"))
+        })
+
+        expect(screen.getByTestId("SendScreen_amountInput")).toHaveTextContent("0.5")
+
+        act(() => {
+            fireEvent.press(screen.getByTestId("SelectAmountConversionToggle_Button"))
+        })
+
+        expect(screen.getByTestId("SendScreen_amountInput")).toHaveTextContent("1")
     })
 })

@@ -1,33 +1,38 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent } from "~Constants"
-import { useAnalyticTracking } from "~Hooks"
+import { useAnalyticTracking, useIsOnline } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
 
 const useBuy = () => {
     const track = useAnalyticTracking()
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
-    return useCallback(() => {
+
+    const isOnline = useIsOnline()
+    const onPress = useCallback(() => {
         nav.replace(Routes.BUY_FLOW)
         track(AnalyticsEvent.TOKEN_BUY_CLICKED)
     }, [nav, track])
+
+    return useMemo(() => ({ onPress, disabled: !isOnline }), [isOnline, onPress])
 }
 
 const BuyButton = () => {
     const { LL } = useI18nContext()
-    const onBuy = useBuy()
+    const { onPress, disabled } = useBuy()
 
     return (
         <GlassButtonWithLabel
             label={LL.BALANCE_ACTION_BUY()}
             size="sm"
             icon="icon-plus"
-            onPress={onBuy}
+            onPress={onPress}
             themed
             truncateText
+            disabled={disabled}
         />
     )
 }

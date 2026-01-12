@@ -27,9 +27,17 @@ type EnhancedTokenCardProps = {
     selected: boolean
     disabled?: boolean
     onDisabledPress?: () => void
+    testID?: string
 }
 
-const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled, onDisabledPress }: EnhancedTokenCardProps) => {
+const EnhancedTokenCard = ({
+    testID,
+    item,
+    selected,
+    onSelectedToken,
+    disabled,
+    onDisabledPress,
+}: EnhancedTokenCardProps) => {
     const theme = useTheme()
     const { styles } = useThemedStyles(baseTokenCardStyles({ selected }))
     const currency = useAppSelector(selectCurrency)
@@ -90,7 +98,7 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled, onDisabl
     return (
         <BaseTouchableBox
             action={onPress}
-            testID="TOKEN_SELECTOR_BOTTOM_SHEET_TOKEN"
+            testID={testID ? testID : "TOKEN_SELECTOR_BOTTOM_SHEET_TOKEN"}
             py={item.symbol ? typography.lineHeight.body : typography.lineHeight.captionSemiBold}
             flexDirection="row"
             bg={disabled ? theme.colors.sendScreen.tokenAmountCard.disabledTokenCardBackground : theme.colors.card}
@@ -222,6 +230,7 @@ export const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModalMethod
                         return (
                             <React.Fragment key={tk.symbol}>
                                 <EnhancedTokenCard
+                                    testID={`TokenSelectionBottomSheet_TokenCard_${tk.symbol}`}
                                     item={tk}
                                     onSelectedToken={handleTokenSelect}
                                     selected={_selectedToken.symbol === tk.symbol}

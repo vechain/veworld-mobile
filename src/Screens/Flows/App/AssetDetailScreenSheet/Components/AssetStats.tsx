@@ -5,6 +5,7 @@ import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useI18nContext } from "~i18n"
 import { TokenSocialLinks } from "~Model"
 import { Routes } from "~Navigation"
@@ -52,7 +53,7 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, links, isWrappedToke
     const { LL } = useI18nContext()
     const { navigateWithTab } = useBrowserTab(Routes.HOME)
 
-    const handleSocialLinkPress = useCallback(
+    const _handleSocialLinkPress = useCallback(
         (url: string, kind: "website" | "twitter" | "telegram") => {
             if (kind === "website") {
                 navigateWithTab({ url, title: url })
@@ -62,6 +63,8 @@ export const AssetStats = ({ tokenSymbol, tokenDescription, links, isWrappedToke
         },
         [navigateWithTab],
     )
+
+    const handleSocialLinkPress = useOfflineCallback(_handleSocialLinkPress)
 
     const currency = useAppSelector(selectCurrency)
 
