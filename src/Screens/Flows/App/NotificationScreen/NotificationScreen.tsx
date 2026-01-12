@@ -1,4 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native"
+import { useMutation } from "@tanstack/react-query"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { Linking, StyleSheet } from "react-native"
 import {
@@ -54,8 +55,24 @@ export const NotificationScreen = () => {
         addAllDAppsTags,
         removeAllDAppsTags,
         disabledCategories,
-        updateNotifCenterPrefs,
+        updateNotificationCenterPrefs,
     } = useNotifications()
+
+    const { mutate: updatePrefs, isPending: isUpdatingPrefs } = useMutation({
+        mutationKey: ["NOTIFICATION_CENTER", "UPDATE_PREFERENCES"],
+        mutationFn: async ({ category, enabled }: { category: string; enabled: boolean }) => {
+            await updateNotificationCenterPrefs(category, enabled)
+        },
+        onError: () => {
+            Feedback.show({
+                severity: FeedbackSeverity.ERROR,
+                type: FeedbackType.ALERT,
+                message: LL.NOTIFICATION_CENTER_UPDATE_PREFERENCE_ERROR(),
+                icon: "icon-alert-triangle",
+                duration: 3000,
+            })
+        },
+    })
 
     const [tags, setTags] = useState<{ [key: string]: string }>({})
 
@@ -153,20 +170,10 @@ export const NotificationScreen = () => {
     ])
 
     const toggleNotifCenterPreference = useCallback(
-        (category: string) => async (value: boolean) => {
-            const success = await updateNotifCenterPrefs(category, value)
-
-            if (!success) {
-                Feedback.show({
-                    severity: FeedbackSeverity.ERROR,
-                    type: FeedbackType.ALERT,
-                    message: LL.NOTIFICATION_CENTER_UPDATE_PREFERENCE_ERROR(),
-                    icon: "icon-alert-triangle",
-                    duration: 3000,
-                })
-            }
+        (category: string) => (value: boolean) => {
+            updatePrefs({ category, enabled: value })
         },
-        [updateNotifCenterPrefs, LL],
+        [updatePrefs],
     )
 
     const ListHeaderComponent = useMemo(() => {
@@ -257,6 +264,7 @@ export const NotificationScreen = () => {
                                     onValueChange={toggleNotifCenterPreference(NOTIFICATION_CATEGORIES.NFT_UPDATES)}
                                     value={isNftUpdatesEnabled}
                                     color={itemSwitchColor}
+                                    disabled={isUpdatingPrefs}
                                 />
                                 <EnableFeature
                                     title={LL.PUSH_NOTIFICATIONS_STARGATE_REWARDS()}
@@ -264,6 +272,7 @@ export const NotificationScreen = () => {
                                     onValueChange={toggleNotifCenterPreference(NOTIFICATION_CATEGORIES.REWARDS)}
                                     value={isRewardsEnabled}
                                     color={itemSwitchColor}
+                                    disabled={isUpdatingPrefs}
                                 />
                             </BaseView>
                         </BaseView>
@@ -287,6 +296,7 @@ export const NotificationScreen = () => {
         theme,
         isNotificationPermissionEnabled,
         openDeviceSettings,
+        isUpdatingPrefs,
     ])
     useEffect(() => {
         if (error) {

@@ -20,6 +20,7 @@ type Props = {
      * @default captionRegular
      */
     subtitleTypographyFont?: keyof typeof typography.defaults
+    disabled?: boolean
 }
 
 export const EnableFeature = ({
@@ -30,6 +31,7 @@ export const EnableFeature = ({
     color,
     typographyFont = "subSubTitleMedium",
     subtitleTypographyFont = "captionRegular",
+    disabled,
 }: Props) => {
     const theme = useTheme()
     const labelColor = color ?? theme.colors.textLight
@@ -46,7 +48,7 @@ export const EnableFeature = ({
                 )}
             </BaseView>
             <BaseSpacer width={20} />
-            <BaseSwitch onValueChange={onValueChange} value={value} />
+            <BaseSwitch onValueChange={onValueChange} value={value} disabled={disabled} />
         </BaseView>
     )
 }

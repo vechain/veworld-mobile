@@ -64,7 +64,7 @@ type ContextType = {
     removeAllDAppsTags: () => void
     addAllTags: () => void
     disabledCategories: string[]
-    updateNotifCenterPrefs: (category: string, enabled: boolean) => Promise<boolean>
+    updateNotificationCenterPrefs: (category: string, enabled: boolean) => Promise<void>
 }
 
 const Context = createContext<ContextType | undefined>(undefined)
@@ -88,7 +88,6 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const customUrl = useAppSelector(selectNotificationCenterUrl)
     const isFetcingTags = useRef(false)
     const [isInitialized, setIsInitialized] = useState(false)
-    const updatingCategories = useRef<Record<string, boolean>>({})
 
     const { currentState, previousState } = useAppState()
 
@@ -394,59 +393,39 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         [dispatch, featureEnabled, isMainnet],
     )
 
-    const getBaseUrl = useCallback(() => {
-        return (
-            customUrl ??
-            (__DEV__ ? process.env.NOTIFICATION_CENTER_REGISTER_DEV : process.env.NOTIFICATION_CENTER_REGISTER_PROD)
-        )
-    }, [customUrl])
-
-    const updateNotifCenterPrefs = useCallback(
-        async (category: string, enabled: boolean): Promise<boolean> => {
-            if (!featureEnabled || !isInitialized) return false
-            if (updatingCategories.current[category]) return false
-
-            const baseUrl = getBaseUrl()
-            if (!baseUrl) return false
-
-            updatingCategories.current[category] = true
-
-            try {
-                const subscriptionId = await OneSignal.User.pushSubscription.getIdAsync()
-                if (!subscriptionId) {
-                    delete updatingCategories.current[category]
-                    return false
-                }
-
-                let newDisabledCategories: string[]
-                if (enabled) {
-                    // Remove category from disabled list (enabling it)
-                    newDisabledCategories = disabledCategories.filter(c => c !== category)
-                } else {
-                    // Add category to disabled list (disabling it)
-                    newDisabledCategories = disabledCategories.includes(category)
-                        ? disabledCategories
-                        : [...disabledCategories, category]
-                }
-
-                const response = await updateNotificationPreferences({
-                    subscriptionId,
-                    disabledCategories: newDisabledCategories,
-                    baseUrl,
-                })
-
-                // Update Redux only after successful API response so we stay in sync
-                dispatch(setDisabledCategories(response.disabledCategories))
-
-                return true
-            } catch (err) {
-                error(ERROR_EVENTS.NOTIFICATION_CENTER, err)
-                return false
-            } finally {
-                delete updatingCategories.current[category]
+    const updateNotificationCenterPrefs = useCallback(
+        async (category: string, enabled: boolean): Promise<void> => {
+            if (!featureEnabled || !isInitialized) {
+                throw new Error("Notifications not initialized")
             }
+
+            const baseUrl =
+                customUrl ??
+                (__DEV__ ? process.env.NOTIFICATION_CENTER_REGISTER_DEV : process.env.NOTIFICATION_CENTER_REGISTER_PROD)
+            if (!baseUrl) {
+                throw new Error("No base URL configured")
+            }
+
+            const subscriptionId = await OneSignal.User.pushSubscription.getIdAsync()
+            if (!subscriptionId) {
+                throw new Error("No subscription ID")
+            }
+
+            const newDisabledCategories = enabled
+                ? disabledCategories.filter(c => c !== category)
+                : disabledCategories.includes(category)
+                ? disabledCategories
+                : [...disabledCategories, category]
+
+            const response = await updateNotificationPreferences({
+                subscriptionId,
+                disabledCategories: newDisabledCategories,
+                baseUrl,
+            })
+
+            dispatch(setDisabledCategories(response.disabledCategories))
         },
-        [featureEnabled, isInitialized, disabledCategories, dispatch, getBaseUrl],
+        [featureEnabled, isInitialized, customUrl, disabledCategories, dispatch],
     )
 
     const contextValue = useMemo(() => {
@@ -468,7 +447,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
             removeAllDAppsTags: removeAllDAppsTags,
             addAllTags: addAllTags,
             disabledCategories: disabledCategories,
-            updateNotifCenterPrefs,
+            updateNotificationCenterPrefs,
         }
     }, [
         addDAppTag,
@@ -488,7 +467,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         removeAllDAppsTags,
         addAllTags,
         disabledCategories,
-        updateNotifCenterPrefs,
+        updateNotificationCenterPrefs,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
