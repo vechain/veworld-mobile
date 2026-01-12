@@ -10,6 +10,7 @@ module.exports = {
     plugins: [
         ["module:react-native-dotenv"],
         "@babel/plugin-transform-flow-strip-types",
+        "@babel/plugin-transform-export-namespace-from",
         ["@babel/plugin-transform-private-methods", { loose: true }],
         [
             "module-resolver",
@@ -41,6 +42,7 @@ module.exports = {
                     buffer: "@craftzdog/react-native-buffer",
                     "@ethersproject/pbkdf2": "./patches/patch-pbkdf2.js",
                     url: "react-native-fast-url",
+                    jose: "jose/dist/browser/index.js",
                 },
             },
         ],
