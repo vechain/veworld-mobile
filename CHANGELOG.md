@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.15 (2026-01-13)</small>
+
+* build: init ([6377b3a](https://github.com/vechain/veworld-mobile/commit/6377b3a))
+* chore: update codeowners (#3706) ([4e0e3d9](https://github.com/vechain/veworld-mobile/commit/4e0e3d9)), closes [#3706](https://github.com/vechain/veworld-mobile/issues/3706)
+
 ## <small>2.4.14 (2025-12-18)</small>
 
 * build: init ([883693f](https://github.com/vechain/veworld-mobile/commit/883693f))
