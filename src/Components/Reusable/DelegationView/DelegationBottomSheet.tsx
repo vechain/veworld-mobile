@@ -121,7 +121,8 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
             style={styles.root}
             dynamicHeight={hasDynamicHeight}
             ref={ref}
-            snapPoints={hasDynamicHeight ? undefined : computeSnappoints}>
+            snapPoints={hasDynamicHeight ? undefined : computeSnappoints}
+            scrollable={false}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-arrow-link" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
