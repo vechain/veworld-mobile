@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Privacy Screen (Secure View on Background)
     func applicationDidEnterBackground(_ application: UIApplication) {
-      let secureView = UIView(frame: window?.bounds ?? .zero)
+        let secureView = UIView(frame: window?.bounds ?? UIScreen.main.bounds)
         secureView.tag = 9_824_684
         secureView.backgroundColor = UIColor(
             red: 0.11372549019607843, green: 0.09019607843137255, blue: 0.22745098039215686,
