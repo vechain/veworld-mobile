@@ -92,7 +92,7 @@ export const DeviceBackupBottomSheet = () => {
     }
 
     return (
-        <BaseBottomSheet bottomSafeArea dynamicHeight ref={ref}>
+        <BaseBottomSheet bottomSafeArea dynamicHeight ref={ref} scrollable={false}>
             <BaseView style={styles.contentContainer}>
                 <BaseIcon name="icon-shield-alert" size={65} color={theme.colors.text} />
                 <BaseSpacer height={24} />
