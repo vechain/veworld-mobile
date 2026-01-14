@@ -12,7 +12,7 @@ jest.mock("~Hooks/useIndexerClient", () => ({
     useMainnetIndexerClient: jest.fn().mockReturnValue({
         GET: (url: string, ...args: any[]) => {
             switch (url) {
-                case "/api/v1/stargate/nft-holders":
+                case "/api/v1/stargate/total-vet-delegated":
                     return getStargateTotalSupply(...args).then((res: any) => ({ data: res }))
                 case "/api/v1/stargate/total-vet-staked":
                     return getStargateTotalVet(...args).then((res: any) => ({ data: res }))
@@ -32,19 +32,7 @@ describe("useStargateStats", () => {
 
     it("should return the stargate stats", async () => {
         ;(getStargateTotalSupply as jest.Mock).mockResolvedValue({
-            total: 12816,
-            byLevel: {
-                Dawn: 5509,
-                Strength: 920,
-                ThunderX: 117,
-                Flash: 2148,
-                VeThorX: 235,
-                Lightning: 3043,
-                StrengthX: 457,
-                MjolnirX: 98,
-                Mjolnir: 26,
-                Thunder: 263,
-            },
+            totalNftCount: 12816,
         })
         ;(getStargateTotalVet as jest.Mock).mockResolvedValue({
             total: "6318030000000000000000000000",
@@ -75,7 +63,7 @@ describe("useStargateStats", () => {
             expect(result.current.data).toBeDefined()
         })
 
-        expect(result.current.data?.totalSupply?.total).toBe(12816)
+        expect(result.current.data?.totalSupply).toBe("12816")
         expect(result.current.data?.totalVetStaked?.total).toBe("6318030000000000000000000000")
         expect(result.current.data?.rewardsDistributed).toBe("526381931206666467000000000")
         expect(result.current.data?.vthoPerDay).toBe("226381931206666467000000000")

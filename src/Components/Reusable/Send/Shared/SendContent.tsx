@@ -1,20 +1,29 @@
-import React from "react"
+import React, { ReactNode } from "react"
 import { StyleSheet, ViewProps } from "react-native"
-import Animated, { AnimatedProps } from "react-native-reanimated"
+import Animated, { AnimatedProps, LinearTransition } from "react-native-reanimated"
 import { useThemedStyles } from "~Hooks"
 import { SendContentContainer } from "./SendContentContainer"
 import { SendContentFooter } from "./SendContentFooter"
 import { SendContentHeader } from "./SendContentHeader"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-type Props = Omit<AnimatedProps<ViewProps>, "entering" | "exiting">
+type Props = Omit<AnimatedProps<ViewProps>, "entering" | "exiting"> & {
+    showHeader?: boolean
+    footer?: ReactNode
+}
 
-const SendContent = ({ children, style, ...props }: Props) => {
+const SendContent = ({ children, footer, style, showHeader = true, ...props }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
-    const insets = useSafeAreaInsets()
+
     return (
-        <Animated.View style={[styles.root, { paddingBottom: insets.bottom }, style]} {...props}>
-            {children}
+        <Animated.View style={[styles.root, style]} {...props}>
+            {showHeader && <SendContent.Header />}
+            <Animated.ScrollView
+                layout={LinearTransition}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.contentContainer}>
+                {children as ReactNode}
+            </Animated.ScrollView>
+            {footer && <SendContent.Footer>{footer}</SendContent.Footer>}
         </Animated.View>
     )
 }
@@ -24,6 +33,10 @@ const baseStyles = () =>
         root: {
             flex: 1,
             gap: 16,
+        },
+        contentContainer: {
+            flexGrow: 1,
+            justifyContent: "space-between",
         },
     })
 

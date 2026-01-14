@@ -236,9 +236,12 @@ const generateLinkingConfig = () => {
             screens: {
                 TabStack: {
                     screens: {
-                        NFTStack: {
-                            path: "nfts",
-                            initialRouteName: Routes.NFTS,
+                        HomeStack: {
+                            screens: {
+                                [Routes.COLLECTIBLES_COLLECTIONS]: {
+                                    path: "nfts",
+                                },
+                            },
                         },
                         AppsStack: {
                             path: "discover",

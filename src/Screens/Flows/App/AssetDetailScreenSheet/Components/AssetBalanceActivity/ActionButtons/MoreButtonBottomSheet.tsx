@@ -65,12 +65,12 @@ export const MoreButtonBottomSheet = ({ bsRef, openReceiveBottomsheet, token }: 
         onClose()
         onSend()
     }, [onClose, onSend])
-    const onBuy = BuyButton.use()
+    const { onPress: onBuy, disabled: buyDisabled } = BuyButton.use()
     const wrappedBuy = useCallback(() => {
         onClose()
         onBuy()
     }, [onBuy, onClose])
-    const onEarn = EarnButton.use()
+    const { onPress: onEarn, disabled: earnDisabled } = EarnButton.use()
     const wrappedEarn = useCallback(() => {
         onClose()
         onEarn()
@@ -94,8 +94,10 @@ export const MoreButtonBottomSheet = ({ bsRef, openReceiveBottomsheet, token }: 
                     <ActionButton icon="icon-arrow-up" label={LL.BALANCE_ACTION_SEND()} onPress={wrappedSend} />
                 )}
 
-                <ActionButton icon="icon-plus" label={LL.BALANCE_ACTION_BUY()} onPress={wrappedBuy} />
-                <ActionButton icon="icon-stargate" label={LL.BALANCE_ACTION_EARN()} onPress={wrappedEarn} />
+                {!buyDisabled && <ActionButton icon="icon-plus" label={LL.BALANCE_ACTION_BUY()} onPress={wrappedBuy} />}
+                {!earnDisabled && (
+                    <ActionButton icon="icon-stargate" label={LL.BALANCE_ACTION_EARN()} onPress={wrappedEarn} />
+                )}
                 {!swapDisabled && <ActionButton icon="icon-arrow-left-right" label={LL.SWAP()} onPress={wrappedSwap} />}
                 {!sellDisabled && <ActionButton icon="icon-minus" label={LL.BTN_SELL()} onPress={wrappedSell} />}
             </BaseView>

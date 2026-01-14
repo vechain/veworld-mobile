@@ -5,6 +5,7 @@ import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -40,6 +41,8 @@ export const VeBetterDaoActionGroup = ({ onShareCard, isSharing = false }: VeBet
         })
     }, [nav, navigateWithTab])
 
+    const onPressVeBetter = useOfflineCallback(onVeBetterNavigate)
+
     if (isObservedAccount) return null
 
     return (
@@ -50,7 +53,7 @@ export const VeBetterDaoActionGroup = ({ onShareCard, isSharing = false }: VeBet
             gap={16}
             justifyContent="space-between">
             <BaseTouchable
-                action={onVeBetterNavigate}
+                action={onPressVeBetter}
                 testID="VEBETTER_DAO_CARD_GO_TO_VBD"
                 haptics="Medium"
                 activeOpacity={0.2}
