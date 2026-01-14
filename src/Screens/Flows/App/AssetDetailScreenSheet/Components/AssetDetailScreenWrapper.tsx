@@ -130,6 +130,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                 scrollY.value = scrollGoBackAnimation
             }
         })
+        .activeOffsetY(2)
 
     const composedGestures = Gesture.Simultaneous(scrollPanGesture, nativeGesture)
 
@@ -160,6 +161,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                     </GestureDetector>
 
                     <NestableScrollContainer
+                        scrollEnabled
                         bounces={false}
                         showsVerticalScrollIndicator={false}
                         nestedScrollEnabled

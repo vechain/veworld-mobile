@@ -1786,7 +1786,7 @@ PODS:
     - Yoga
   - react-native-restart (0.0.27):
     - React-Core
-  - react-native-safe-area-context (5.4.0):
+  - react-native-safe-area-context (5.5.1):
     - React-Core
   - react-native-skia (2.0.0-next.4):
     - DoubleConversion
@@ -2271,7 +2271,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNGestureHandler (2.24.0):
+  - RNGestureHandler (2.28.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3058,7 +3058,7 @@ SPEC CHECKSUMS:
   react-native-quick-base64: 3bad295dd1d7dfb50e39e934f31cc5c0f6ef1a27
   react-native-quick-crypto: b475b71e7fa4dbf3446be55e8ad4ef2c58ac4f7f
   react-native-restart: 0bc732f4461709022a742bb29bcccf6bbc5b4863
-  react-native-safe-area-context: 9d72abf6d8473da73033b597090a80b709c0b2f1
+  react-native-safe-area-context: 827032edf27079702cbd006f11dc79451a2d744b
   react-native-skia: 3c6311d84e0e5409e954e12d885ae25662de907c
   react-native-slider: 6d03bbb4451b244b1ba954b67de12a1d8698f892
   react-native-view-shot: 44e13d0424a6b0375eae31d89e161fc1153512e5
@@ -3102,7 +3102,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: ae26ae45db3f9937f038a284bcd0a1db8d70db96
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
   RNFlashList: 6be361ee96834c102b441db09862bc75c68b8161
-  RNGestureHandler: ce4a87dba81030b374d7f1993c4376f5c230da2e
+  RNGestureHandler: 05b56a7bf6f70487bfdeed234d1f670916928203
   RNInAppBrowser: 6d3eb68d471b9834335c664704719b8be1bfdb20
   RNKeychain: df33ae4d27df06622fc14190b790ba8749f6be76
   RNLocalize: 15463c4d79c7da45230064b4adcf5e9bb984667e
