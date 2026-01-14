@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { StyleSheet } from "react-native"
+import { Animated, StyleSheet } from "react-native"
 import { LinearTransition } from "react-native-reanimated"
 import { BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
@@ -89,26 +89,29 @@ const _ReceiverScreen = ({ address: selectedAddress, name }: { address: string |
     }, [goToNext, realAddress, setFlowState])
 
     return (
-        <SendContent>
-            <SendContent.Header />
+        <SendContent
+            footer={
+                <>
+                    {isTokenFlow && <SendContent.Footer.Back />}
+                    <SendContent.Footer.Next testID="ReceiverScreen_NextButton" action={onNext} disabled={disabled} />
+                </>
+            }>
             <SendContent.Container style={styles.root} layout={LinearTransition}>
-                <WalletAddressCard
-                    value={activeFilter ? "" : inputWalletAddress}
-                    address={realAddress}
-                    onAddressChange={onInputAddressChange}
-                    isError={isError}
-                    setIsError={setIsError}
-                />
-                <KnownAddressesList
-                    activeFilter={activeFilter}
-                    selectedAddress={listWalletAddresses}
-                    onAddressChange={onListAddressChange}
-                />
+                <Animated.View style={styles.body}>
+                    <WalletAddressCard
+                        value={activeFilter ? "" : inputWalletAddress}
+                        address={realAddress}
+                        onAddressChange={onInputAddressChange}
+                        isError={isError}
+                        setIsError={setIsError}
+                    />
+                    <KnownAddressesList
+                        activeFilter={activeFilter}
+                        selectedAddress={listWalletAddresses}
+                        onAddressChange={onListAddressChange}
+                    />
+                </Animated.View>
             </SendContent.Container>
-            <SendContent.Footer>
-                {isTokenFlow && <SendContent.Footer.Back />}
-                <SendContent.Footer.Next testID="ReceiverScreen_NextButton" action={onNext} disabled={disabled} />
-            </SendContent.Footer>
         </SendContent>
     )
 }
@@ -132,7 +135,10 @@ const baseStyles = () =>
     StyleSheet.create({
         root: {
             flex: 1,
+        },
+        body: {
             flexDirection: "column",
             gap: 8,
+            flex: 1,
         },
     })
