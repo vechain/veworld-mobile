@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.15 (2026-01-14)</small>
+
+* build: init ([9626235](https://github.com/vechain/veworld-mobile/commit/9626235))
+* refactor: enhance SendContent structure and footer handling across multiple components (#3708) ([be58b3a](https://github.com/vechain/veworld-mobile/commit/be58b3a)), closes [#3708](https://github.com/vechain/veworld-mobile/issues/3708)
+
 ## <small>2.4.14 (2025-12-18)</small>
 
 * build: init ([883693f](https://github.com/vechain/veworld-mobile/commit/883693f))
