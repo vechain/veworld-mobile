@@ -20,7 +20,7 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: NumPadProps) => {
     )
 
     return (
-        <BaseView flexDirection="row" flexWrap="wrap" justifyContent="center">
+        <BaseView testID="NumPad_Standalone" flexDirection="row" flexWrap="wrap" justifyContent="center">
             {numPad.map(digit => {
                 const isDeleteKey = digit === "canc"
                 const onPress = isDeleteKey ? onDigitDelete : handleOnDigitPress(digit)
@@ -28,6 +28,7 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: NumPadProps) => {
                     <BaseView style={baseStyles.width} key={digit}>
                         {digit !== "blank" ? (
                             <Pressable
+                                testID={isDeleteKey ? "numpad-canc" : `numpad-${digit}`}
                                 style={({ pressed }) => [baseStyles.pressable, { opacity: pressed ? 0.5 : 1.0 }]}
                                 onPress={onPress}>
                                 {digit !== "canc" ? (

@@ -11,10 +11,10 @@ import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
 import { DEVICE_TYPE } from "~Model"
+import { selectAccountByAddress, useAppSelector } from "~Storage/Redux"
 import AddressUtils from "~Utils/AddressUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { AccountIcon } from "../Account/AccountIcon"
-import { selectAccountByAddress, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     accountName?: string
@@ -123,6 +123,7 @@ export const GenericAccountCard = ({
                         color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE}
                         size={16}
                         style={iconAnimatedStyles}
+                        testID={"GenericAccountCard-selected-icon"}
                     />
                 )}
             </BaseView>

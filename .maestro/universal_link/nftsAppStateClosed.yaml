@@ -17,15 +17,13 @@ env:
           - tapOn:
                 id: "button_notifications_skip"
 - assertVisible:
-      id: "veworld-homepage"
-- assertVisible:
-      id: "buyButton"
+      id: "BalanceScreen_Header"
 - stopApp
 - openLink: ${NFTS_DEEPLINK}
 - repeat:
-      while:
-          visible: "Insert your 6-digit PIN"
-      commands:
-          - tapOn: "1"
+    times: 6
+    commands:
+      - tapOn:
+          id: "numpad-1"
 - assertVisible:
-    id: "nfts_title"
+      id: "CollectionsScreen"

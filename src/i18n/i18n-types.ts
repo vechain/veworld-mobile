@@ -3257,7 +3257,7 @@ type RootTranslation = {
 	 */
 	LOADING_PAGE_CONTENT: string
 	/**
-	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
+	 * S​t​a​y​ ​s​i​g​n​e​d​ ​i​n
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: string
 	/**
@@ -3839,6 +3839,14 @@ type RootTranslation = {
 	 * O​c​t​o​b​e​r
 	 */
 	OCTOBER: string
+	/**
+	 * Y​o​u​ ​a​r​e​ ​o​f​f​l​i​n​e
+	 */
+	OFFLINE_CHIP: string
+	/**
+	 * O​f​f​l​i​n​e
+	 */
+	OFFLINE_STATUS: string
 	/**
 	 * {​s​e​c​o​n​d​s​|​t​o​S​e​c​o​n​d​s​D​u​r​a​t​i​o​n​}
 	 * @param {number} seconds
@@ -6007,13 +6015,18 @@ type RootTranslation = {
 	 */
 	YESTERDAY: string
 	/**
-	 * O​f​f​l​i​n​e
+	 * A​P​Y
 	 */
-	OFFLINE_STATUS: string
+	STARGATE_APY: string
 	/**
-	 * Y​o​u​ ​a​r​e​ ​o​f​f​l​i​n​e
+	 * C​y​c​l​e​ ​d​u​r​a​t​i​o​n
 	 */
-	OFFLINE_CHIP: string
+	STARGATE_CYCLE_DURATION: string
+	/**
+	 * {​d​a​y​s​}​ ​d​a​y​s
+	 * @param {number} days
+	 */
+	STARGATE_DAYS: RequiredParams<'days'>
 }
 
 export type TranslationFunctions = {
@@ -9213,7 +9226,7 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	LOADING_PAGE_CONTENT: () => LocalizedString
 	/**
-	 * Keep me signed in for future sessions
+	 * Stay signed in
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
 	/**
@@ -9777,6 +9790,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * October
 	 */
 	OCTOBER: () => LocalizedString
+	/**
+	 * You are offline
+	 */
+	OFFLINE_CHIP: () => LocalizedString
+	/**
+	 * Offline
+	 */
+	OFFLINE_STATUS: () => LocalizedString
 	/**
 	 * {seconds|toSecondsDuration}
 	 */
@@ -11913,13 +11934,17 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	YESTERDAY: () => LocalizedString
 	/**
-	 * Offline
+	 * APY
 	 */
-	OFFLINE_STATUS: () => LocalizedString
+	STARGATE_APY: () => LocalizedString
 	/**
-	 * You are offline
+	 * Cycle duration
 	 */
-	OFFLINE_CHIP: () => LocalizedString
+	STARGATE_CYCLE_DURATION: () => LocalizedString
+	/**
+	 * {days} days
+	 */
+	STARGATE_DAYS: (arg: { days: number }) => LocalizedString
 }
 
 export type Formatters = {

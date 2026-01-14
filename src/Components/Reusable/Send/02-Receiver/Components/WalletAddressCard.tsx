@@ -1,5 +1,5 @@
 import * as Clipboard from "expo-clipboard"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { Dispatch, SetStateAction, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Animated, { LinearTransition, ZoomInEasyUp, ZoomOutEasyUp } from "react-native-reanimated"
@@ -19,12 +19,20 @@ import { AddressUtils } from "~Utils"
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
 
 type Props = {
-    selectedAddress?: string
-    onAddressChange: (address: string) => void
+    value?: string
+    onAddressChange: (str: string, address: string) => void
+    isError: boolean
+    setIsError: Dispatch<SetStateAction<boolean>>
+    address: string
 }
 
-export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) => {
-    const [isError, setIsError] = useState(false)
+export const WalletAddressCard = ({
+    value,
+    address,
+    onAddressChange: _onAddressChange,
+    isError,
+    setIsError,
+}: Props) => {
     const [isFocused, setIsFocused] = useState(false)
 
     const accounts = useAppSelector(selectAccounts)
@@ -36,11 +44,11 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
     const { ref: createContactBottomSheetRef, onOpen: openCreateContactSheet } = useBottomSheetModal()
 
     const handleScanAddress = useCallback<ScanFunctionRegistry["address"]>(
-        async (address: string) => {
-            onAddressChange(address)
+        async (_address: string) => {
+            _onAddressChange(_address, _address)
             return true
         },
-        [onAddressChange],
+        [_onAddressChange],
     )
 
     const handleScanVns = useCallback<ScanFunctionRegistry["vns"]>(
@@ -50,10 +58,10 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
                 setIsError(true)
                 return false
             }
-            onAddressChange(res.address)
+            _onAddressChange(res.name, res.address)
             return true
         },
-        [onAddressChange],
+        [_onAddressChange, setIsError],
     )
 
     const { RenderCameraModal, handleOpenOnlyScanCamera } = useCameraBottomSheet({
@@ -64,30 +72,22 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
     })
 
     const isAddressInContactsOrAccounts = useMemo(() => {
-        if (!selectedAddress || !AddressUtils.isValid(selectedAddress) || isError) return false
+        if (!address || !AddressUtils.isValid(address) || isError) return false
         return (
-            knownContacts.some(contact => AddressUtils.compareAddresses(contact.address, selectedAddress)) ||
-            accounts.some(account => AddressUtils.compareAddresses(account.address, selectedAddress))
+            knownContacts.some(contact => AddressUtils.compareAddresses(contact.address, address)) ||
+            accounts.some(account => AddressUtils.compareAddresses(account.address, address))
         )
-    }, [knownContacts, accounts, selectedAddress, isError])
+    }, [knownContacts, accounts, address, isError])
 
     const shouldShowAddToContactsButton = useMemo(() => {
-        return !isAddressInContactsOrAccounts && !!selectedAddress && !isError
-    }, [isAddressInContactsOrAccounts, selectedAddress, isError])
-
-    const handlePasteAddress = useCallback(async () => {
-        let isString = await Clipboard.hasStringAsync()
-        if (isString) {
-            let text = await Clipboard.getStringAsync()
-            onAddressChange(text)
-        }
-    }, [onAddressChange])
+        return !isAddressInContactsOrAccounts && !!address && !isError
+    }, [isAddressInContactsOrAccounts, address, isError])
 
     const handleClearAddress = useCallback(() => {
         HapticsService.triggerImpact({ level: "Light" })
-        onAddressChange("")
+        _onAddressChange("", "")
         setIsError(false)
-    }, [onAddressChange])
+    }, [_onAddressChange, setIsError])
 
     const handleFocus = useCallback(() => {
         setIsFocused(true)
@@ -97,43 +97,24 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
         setIsFocused(false)
     }, [])
 
-    const handleGetVnsAddress = useCallback(
-        async (address: string) => {
-            const vnsAddress = await getVnsAddress(address)
-            return vnsAddress
-        },
-        [getVnsAddress],
-    )
-
-    useEffect(() => {
-        const init = async () => {
-            if (selectedAddress && selectedAddress.includes(".vet")) {
-                const vnsAddress = await handleGetVnsAddress(selectedAddress)
-
-                if (vnsAddress === ZERO_ADDRESS) {
-                    setIsError(true)
-                    return
-                }
-
-                if (AddressUtils.isValid(vnsAddress)) {
-                    onAddressChange(vnsAddress ?? "")
-                    setIsError(false)
-                }
-            } else {
-                if (!selectedAddress) {
-                    setIsError(false)
-                    return
-                }
-
-                if (selectedAddress.length === 42 && AddressUtils.isValid(selectedAddress)) {
-                    setIsError(false)
-                } else {
-                    setIsError(true)
-                }
-            }
+    const handlePasteAddress = useCallback(async () => {
+        let isString = await Clipboard.hasStringAsync()
+        if (!isString) return
+        const text = await Clipboard.getStringAsync().then(r => r.trim())
+        if (!text.endsWith(".vet")) {
+            _onAddressChange(text, text)
+            setIsError(!AddressUtils.isValid(text))
+            return
         }
-        init()
-    }, [handleGetVnsAddress, selectedAddress, isError, onAddressChange, isFocused])
+        const addr = await getVnsAddress(text).catch(() => undefined)
+        if (!addr) {
+            _onAddressChange(text, "")
+            setIsError(true)
+            return
+        }
+        _onAddressChange(text, addr)
+        setIsError(false)
+    }, [_onAddressChange, getVnsAddress, setIsError])
 
     const computedInputStyles = useMemo(() => {
         const defaultBorderColor = theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200
@@ -163,6 +144,38 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
         theme.isDark,
     ])
 
+    const onValueChange = useCallback(
+        async (str: string) => {
+            _onAddressChange(str, str)
+
+            if (str.includes(".vet")) {
+                const vnsAddress = await getVnsAddress(str).catch(() => ZERO_ADDRESS)
+
+                if (vnsAddress === ZERO_ADDRESS || !vnsAddress) {
+                    setIsError(true)
+                    return
+                }
+
+                if (AddressUtils.isValid(vnsAddress)) {
+                    _onAddressChange(str, vnsAddress!)
+                    setIsError(false)
+                }
+            } else {
+                if (!str) {
+                    setIsError(false)
+                    return
+                }
+
+                if (str.length === 42 && AddressUtils.isValid(str)) {
+                    setIsError(false)
+                } else {
+                    setIsError(true)
+                }
+            }
+        },
+        [_onAddressChange, getVnsAddress, setIsError],
+    )
+
     return (
         <>
             <Animated.View style={styles.root} layout={LinearTransition}>
@@ -177,24 +190,24 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
                             containerStyle={styles.input}
                             inputContainerStyle={computedInputStyles}
                             placeholderTextColor={COLORS.GREY_400}
-                            value={selectedAddress}
-                            setValue={onAddressChange}
+                            value={value}
                             rightIconAdornment
                             autoComplete="off"
                             autoCapitalize="none"
                             autoCorrect={false}
-                            rightIcon={selectedAddress ? "icon-circle-x" : "icon-paste"}
+                            rightIcon={value ? "icon-circle-x" : "icon-paste"}
                             rightIconColor={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
                             rightIconSize={16}
                             rightIconTestID={
-                                selectedAddress
+                                value
                                     ? "Send_Receiver_Address_Input_Clear_Button"
                                     : "Send_Receiver_Address_Input_Paste_Button"
                             }
-                            onIconPress={selectedAddress ? handleClearAddress : handlePasteAddress}
+                            onIconPress={value ? handleClearAddress : handlePasteAddress}
                             rightIconStyle={styles.rightIcon}
                             handleBlur={handleBlur}
                             handleFocus={handleFocus}
+                            setValue={onValueChange}
                         />
                         <TouchableOpacity
                             testID="Send_Receiver_Address_Scan_Button"
@@ -225,7 +238,7 @@ export const WalletAddressCard = ({ selectedAddress, onAddressChange }: Props) =
                         entering={ZoomInEasyUp}
                         exiting={ZoomOutEasyUp}
                         style={styles.addToContactsButton}
-                        onPress={() => openCreateContactSheet({ address: selectedAddress })}>
+                        onPress={() => openCreateContactSheet({ address })}>
                         <BaseIcon
                             name="icon-plus-circle"
                             size={16}

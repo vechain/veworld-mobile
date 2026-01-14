@@ -61,6 +61,8 @@ describe("MoreButtonBottomSheet", () => {
         ;(SellButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
         ;(SendButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
         ;(SwapButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
+        ;(BuyButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
+        ;(EarnButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
 
         const bsRef = { current: { present: jest.fn(), close: jest.fn() } }
 
@@ -81,13 +83,15 @@ describe("MoreButtonBottomSheet", () => {
         expect(screen.queryByTestId("MORE_BUTTON_BS_ITEM_SELL")).toBeNull()
         expect(screen.queryByTestId("MORE_BUTTON_BS_ITEM_SWAP")).toBeNull()
         expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_RECEIVE")).toBeVisible()
-        expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_BUY")).toBeVisible()
-        expect(screen.getByTestId("MORE_BUTTON_BS_ITEM_EARN")).toBeVisible()
+        expect(screen.queryByTestId("MORE_BUTTON_BS_ITEM_BUY")).toBeNull()
+        expect(screen.queryByTestId("MORE_BUTTON_BS_ITEM_EARN")).toBeNull()
     })
     it("should show sell if not disabled", () => {
         ;(SellButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
         ;(SendButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
         ;(SwapButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
+        ;(BuyButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
+        ;(EarnButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
 
         const bsRef = { current: { present: jest.fn(), close: jest.fn() } }
 
@@ -115,6 +119,8 @@ describe("MoreButtonBottomSheet", () => {
         ;(SellButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
         ;(SendButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
         ;(SwapButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
+        ;(BuyButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
+        ;(EarnButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
 
         const bsRef = { current: { present: jest.fn(), close: jest.fn() } }
 
@@ -142,6 +148,8 @@ describe("MoreButtonBottomSheet", () => {
         ;(SellButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
         ;(SendButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
         ;(SwapButton.use as jest.Mock).mockReturnValue({ disabled: true, onPress: jest.fn() })
+        ;(BuyButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
+        ;(EarnButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: jest.fn() })
 
         const bsRef = { current: { present: jest.fn(), close: jest.fn() } }
 
@@ -173,10 +181,9 @@ describe("MoreButtonBottomSheet", () => {
         const onEarn = jest.fn()
         const onSwap = jest.fn()
         const onSell = jest.fn()
-        ;(BuyButton.use as jest.Mock).mockReturnValue(onBuy)
-        ;(EarnButton.use as jest.Mock).mockReturnValue(onEarn)
+        ;(BuyButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: onBuy })
+        ;(EarnButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: onEarn })
         ;(ReceiveButton.use as jest.Mock).mockReturnValue(onReceive)
-        ;(SwapButton.use as jest.Mock).mockReturnValue(onSwap)
         ;(SellButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: onSell })
         ;(SendButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: onSend })
         ;(SwapButton.use as jest.Mock).mockReturnValue({ disabled: false, onPress: onSwap })

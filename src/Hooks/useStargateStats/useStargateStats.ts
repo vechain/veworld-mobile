@@ -13,7 +13,8 @@ export const useStargateStats = () => {
         queries: [
             {
                 queryKey: getStargateTotalSupplyKey(),
-                queryFn: () => indexer.GET("/api/v1/stargate/nft-holders").then(res => res.data!),
+                queryFn: () =>
+                    indexer.GET("/api/v1/stargate/total-vet-delegated").then(res => res.data!.totalNftCount.toString()),
             },
             {
                 queryKey: getStargateTotalVetStakedKey(),

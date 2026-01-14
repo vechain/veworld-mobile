@@ -385,4 +385,32 @@ describe("SelectAmountSendComponent", () => {
         })
         expect(goToNext).toHaveBeenCalled()
     })
+
+    it("should convert from fiat to token and keep the old value", async () => {
+        ;(useExchangeRate as jest.Mock).mockReturnValue({ data: 0.5 })
+        render(<SelectAmountSendComponent />, {
+            wrapper: TestWrapper,
+        })
+
+        await findAmountInput()
+
+        const numPad1 = await screen.findByText("1")
+        await act(async () => {
+            fireEvent.press(numPad1)
+        })
+
+        expect(screen.getByTestId("SendScreen_amountInput")).toHaveTextContent("1")
+
+        act(() => {
+            fireEvent.press(screen.getByTestId("SelectAmountConversionToggle_Button"))
+        })
+
+        expect(screen.getByTestId("SendScreen_amountInput")).toHaveTextContent("0.5")
+
+        act(() => {
+            fireEvent.press(screen.getByTestId("SelectAmountConversionToggle_Button"))
+        })
+
+        expect(screen.getByTestId("SendScreen_amountInput")).toHaveTextContent("1")
+    })
 })
