@@ -120,8 +120,15 @@ const SelectAmountSendComponentContent = ({
     )
 
     return (
-        <SendContent>
-            <SendContent.Header />
+        <SendContent
+            showHeader
+            footer={
+                <SendContent.Footer.Next
+                    testID="SelectAmountSendComponent_NextButton"
+                    action={onSubmit}
+                    disabled={isNextDisabled}
+                />
+            }>
             <SendContent.Container>
                 <Animated.View style={styles.tokenAmountCard}>
                     <BaseView alignItems="center" gap={8}>
@@ -163,13 +170,7 @@ const SelectAmountSendComponentContent = ({
                     />
                 </Animated.View>
             </SendContent.Container>
-            <SendContent.Footer>
-                <SendContent.Footer.Next
-                    testID="SelectAmountSendComponent_NextButton"
-                    action={onSubmit}
-                    disabled={isNextDisabled}
-                />
-            </SendContent.Footer>
+
             <TokenSelectionBottomSheet
                 ref={bottomSheetRef}
                 selectedToken={selectedToken}

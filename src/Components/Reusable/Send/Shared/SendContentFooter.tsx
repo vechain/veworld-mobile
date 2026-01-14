@@ -6,6 +6,7 @@ import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import ReanimatedUtils from "~Utils/ReanimatedUtils"
 import { useSendContext } from "../Provider"
+import { PlatformUtils } from "~Utils"
 
 const AnimatedBaseView = Animated.createAnimatedComponent(ReanimatedUtils.wrapFunctionComponent(BaseView))
 const AnimatedBaseButton = Animated.createAnimatedComponent(ReanimatedUtils.wrapFunctionComponent(BaseButton))
@@ -28,9 +29,7 @@ const SendContentFooter = ({ children, style, ...props }: BaseViewProps) => {
 
 const baseStyles = () =>
     StyleSheet.create({
-        root: {
-            marginTop: 16,
-        },
+        root: { marginBottom: PlatformUtils.isAndroid() ? 16 : 40 },
     })
 
 const SendContentFooterBack = ({ children, testID, ...props }: Omit<ButtonProps, "action">) => {
