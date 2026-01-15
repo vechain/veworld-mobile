@@ -1,5 +1,5 @@
 {
-  "latest": "2.4.14",
+  "latest": "2.5.0",
   "major": "2.4.14",
   "history": [
     {
@@ -76,6 +76,11 @@
       "version": "2.4.14",
       "key": "releases/android/versions/2.4.14",
       "major": true
+    },
+    {
+      "version": "2.5.0",
+      "key": "releases/android/versions/2.5.0",
+      "major": false
     }
   ]
 }
