@@ -3,6 +3,7 @@ import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StyleSheet 
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { interpolate, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import {
+    BaseButton,
     BaseSpacer,
     Layout,
     ValidatorDelegationExitedBottomSheet,
@@ -10,7 +11,7 @@ import {
     VersionUpdateAvailableBottomSheet,
 } from "~Components"
 import { COLORS } from "~Constants"
-import { useFetchFeaturedDApps, usePrefetchAllVns, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useFetchFeaturedDApps, usePrefetchAllVns, useThemedStyles } from "~Hooks"
 import { useHomeCollectibles } from "~Hooks/useHomeCollectibles"
 import { useOfficialTokens } from "~Hooks/useOfficialTokens"
 import {
@@ -26,6 +27,7 @@ import { EnableNotificationsBottomSheet } from "../HomeScreen/Components/EnableN
 import { BalanceActions } from "./Components/Actions/BalanceActions"
 import { CurrentBalance } from "./Components/Balance/CurrentBalance"
 import { PullToRefresh } from "./Components/PullToRefresh"
+import { TestBSImplementation } from "./Components/TestBSImplementation"
 import { Header } from "./Header"
 import { TabRenderer } from "./Tabs/TabRenderer"
 
@@ -102,6 +104,8 @@ export const BalanceScreen = () => {
         }
     }, [scrollY.value])
 
+    const { ref } = useBottomSheetModal()
+
     return (
         <Layout
             bg={COLORS.APP_BACKGROUND_DARK}
@@ -132,6 +136,8 @@ export const BalanceScreen = () => {
 
                             {!isObservedAccount && <BalanceActions style={balanceActionsAnimatedStyles} />}
 
+                            <BaseButton action={() => ref.current?.present()}>CLICK HERE</BaseButton>
+
                             <BaseSpacer height={64} />
                         </AnimatedLinearGradient>
                     </Animated.View>
@@ -143,6 +149,7 @@ export const BalanceScreen = () => {
                     <ValidatorDelegationExitedBottomSheet />
                     <VersionUpdateAvailableBottomSheet />
                     <VersionChangelogBottomSheet />
+                    <TestBSImplementation ref={ref} />
                 </Animated.ScrollView>
             }
         />

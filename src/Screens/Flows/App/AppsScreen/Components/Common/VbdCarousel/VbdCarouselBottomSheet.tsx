@@ -4,7 +4,6 @@ import { StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
 import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
 import {
-    BaseBottomSheet,
     BaseButton,
     BaseIcon,
     BaseIconProps,
@@ -15,6 +14,7 @@ import {
     BlurView,
     DAppIcon,
 } from "~Components"
+import { BaseBottomSheetV2 } from "~Components/Base/BaseBottomSheetV2"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
 import { useBottomSheetModal, useDappBookmarkToggle, useTheme, useThemedStyles } from "~Hooks"
@@ -261,16 +261,14 @@ export const VbdCarouselBottomSheet = ({ bsRef }: VbdCarouselBottomSheetProps) =
     })
 
     return (
-        <BaseBottomSheet<VbdCarouselBottomSheetMetadata>
-            ref={ref}
-            backgroundStyle={styles.backgroundStyle}
-            enablePanDownToClose={false}
-            dynamicHeight
-            scrollable={false}
-            noMargins
-            floating>
-            {data => <VbdCarouselBottomSheetContent {...data} onClose={onCloseBS} />}
-        </BaseBottomSheet>
+        <BaseBottomSheetV2.Root ref={ref}>
+            <BaseBottomSheetV2.Backdrop />
+            <BaseBottomSheetV2.Panel style={styles.backgroundStyle} floating>
+                <BaseBottomSheetV2.Scrollable<VbdCarouselBottomSheetMetadata>>
+                    {data => <VbdCarouselBottomSheetContent {...data} onClose={onCloseBS} />}
+                </BaseBottomSheetV2.Scrollable>
+            </BaseBottomSheetV2.Panel>
+        </BaseBottomSheetV2.Root>
     )
 }
 

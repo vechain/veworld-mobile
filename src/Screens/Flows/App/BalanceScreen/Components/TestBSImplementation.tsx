@@ -1,0 +1,212 @@
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { useNavigation } from "@react-navigation/native"
+import React, { ComponentProps, forwardRef, PropsWithChildren, useCallback, useMemo, useState } from "react"
+import { SectionList, SectionListData, StyleSheet } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { BaseSectionListSeparatorProps, BaseSpacer, BaseText, BaseView, SectionListSeparator } from "~Components"
+import { BaseBottomSheetV2 } from "~Components/Base/BaseBottomSheetV2"
+import { BaseTabs } from "~Components/Base/BaseTabs"
+import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCard"
+import { COLORS, ColorThemeType } from "~Constants"
+import { useSetSelectedAccount, useTheme, useThemedStyles } from "~Hooks"
+import { AccountWithDevice, WatchedAccount } from "~Model"
+import { Routes } from "~Navigation"
+import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
+import { AccountUtils, PlatformUtils } from "~Utils"
+import { useI18nContext } from "~i18n"
+
+export enum SelectAccountBottomSheetType {
+    PERSONAL = "YOUR_WALLETS",
+    WATCHING = "WATCHING",
+}
+
+type Props = {
+    /**
+     * Called on the bottom sheet dismiss
+     */
+    onDismiss?: () => void
+    /**
+     * Called to close the bottom sheet
+     */
+    closeBottomSheet?: () => void
+    /**
+     * List of accounts to display
+     */
+    accounts: AccountWithDevice[]
+    /**
+     * Called when an account is selected
+     * @param account New selected account
+     */
+    setSelectedAccount: (account: AccountWithDevice | WatchedAccount) => void
+    /**
+     * The selected account
+     */
+    selectedAccount?: AccountWithDevice
+    balanceToken?: ComponentProps<typeof SelectableAccountCard>["balanceToken"]
+    /**
+     * Enable the functionality go to the wallet section.
+     * @default false
+     */
+    goToWalletEnabled?: boolean
+}
+
+const ItemSeparatorComponent = () => <BaseSpacer height={8} />
+const SectionSeparatorComponent = (props: BaseSectionListSeparatorProps) => {
+    return <SectionListSeparator {...props} headerToHeaderHeight={24} headerToItemsHeight={8} />
+}
+
+const SectionHeaderTitle = ({ children }: PropsWithChildren) => {
+    const theme = useTheme()
+    return (
+        <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
+            {children}
+        </BaseText>
+    )
+}
+const SectionHeader = ({
+    section,
+}: {
+    section: SectionListData<AccountWithDevice, { data: AccountWithDevice[]; alias: string }>
+}) => {
+    return <SectionHeaderTitle>{section.alias}</SectionHeaderTitle>
+}
+
+const ANIMATION_CONFIG = { stiffness: 90, damping: 15, duration: 300 }
+
+const SNAP_POINTS = ["20%", "50%", "75%"] as `${number}%`[]
+
+// component to select an account
+export const TestBSImplementation = forwardRef<BottomSheetModalMethods, {}>(function TestBSImplementation(props, ref) {
+    const { LL } = useI18nContext()
+    const { bottom } = useSafeAreaInsets()
+    const nav = useNavigation()
+    const [selectedKey, setSelectedKey] = useState<SelectAccountBottomSheetType>(SelectAccountBottomSheetType.PERSONAL)
+
+    const accounts = useAppSelector(selectVisibleAccounts)
+    const { onSetSelectedAccount } = useSetSelectedAccount()
+
+    const handlePress = useCallback(
+        (account: AccountWithDevice | WatchedAccount) => {
+            onSetSelectedAccount(account)
+        },
+        [onSetSelectedAccount],
+    )
+
+    const { styles, theme } = useThemedStyles(baseStyles({ bottomInset: bottom }))
+
+    const sections = useMemo(() => {
+        if (selectedKey === SelectAccountBottomSheetType.PERSONAL) {
+            const groupedAccounts = accounts
+                .slice(0, 2)
+                .filter(account => !AccountUtils.isObservedAccount(account))
+                .reduce((acc, curr) => {
+                    const key = curr.device?.alias ?? curr.alias
+                    return { ...acc, [key]: [...(acc[key] ?? []), curr] }
+                }, {} as { [alias: string]: AccountWithDevice[] })
+            return Object.entries(groupedAccounts).map(([alias, data]) => ({ alias, data }))
+        }
+
+        return [
+            {
+                alias: LL.SELECT_ACCOUNT_TITLE(),
+                data: accounts.filter(AccountUtils.isObservedAccount),
+            },
+        ]
+    }, [LL, accounts, selectedKey])
+
+    const onSettingsClick = useCallback(() => {
+        nav.navigate(Routes.WALLET_MANAGEMENT)
+    }, [nav])
+
+    const keys = useMemo(() => {
+        const hasObserved = accounts.some(AccountUtils.isObservedAccount)
+        return hasObserved
+            ? [SelectAccountBottomSheetType.PERSONAL, SelectAccountBottomSheetType.WATCHING]
+            : ([SelectAccountBottomSheetType.PERSONAL] as const)
+    }, [accounts])
+
+    const labels = useMemo(() => keys.map(key => LL[`SELECT_ACCOUNT_${key}`]()), [LL, keys])
+
+    const account = useAppSelector(selectSelectedAccount)
+
+    return (
+        <BaseBottomSheetV2.Root ref={ref} snapPoints={SNAP_POINTS}>
+            <BaseBottomSheetV2.Backdrop />
+            <BaseBottomSheetV2.Panel>
+                <BaseBottomSheetV2.Handle />
+                <BaseView
+                    flexDirection="column"
+                    gap={24}
+                    pb={24}
+                    px={16}
+                    pt={16}
+                    bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50}>
+                    <BaseBottomSheetV2.Header.Root>
+                        <BaseBottomSheetV2.Header.Left>
+                            <BaseBottomSheetV2.Header.TitleRoot>
+                                <BaseBottomSheetV2.Header.Icon name="icon-wallet" />
+                                <BaseBottomSheetV2.Header.Title>
+                                    {LL.SELECT_ACCOUNT_TITLE()}
+                                </BaseBottomSheetV2.Header.Title>
+                            </BaseBottomSheetV2.Header.TitleRoot>
+                            <BaseBottomSheetV2.Header.Description>
+                                {LL.SELECT_ACCOUNT_DESCRIPTION()}
+                            </BaseBottomSheetV2.Header.Description>
+                        </BaseBottomSheetV2.Header.Left>
+                    </BaseBottomSheetV2.Header.Root>
+
+                    {keys.length > 1 && (
+                        <BaseTabs
+                            keys={keys}
+                            labels={labels}
+                            selectedKey={selectedKey}
+                            setSelectedKey={setSelectedKey}
+                        />
+                    )}
+                </BaseView>
+                <BaseBottomSheetV2.Scrollable>
+                    <SectionList
+                        sections={sections}
+                        contentContainerStyle={styles.contentContainer}
+                        keyExtractor={item => item.address}
+                        renderSectionHeader={SectionHeader}
+                        stickySectionHeadersEnabled={false}
+                        renderItem={({ item }) => (
+                            <SelectableAccountCard
+                                account={item}
+                                onPress={handlePress}
+                                selected={item.address === account?.address}
+                                balanceToken={"VET"}
+                                testID="selectAccount"
+                            />
+                        )}
+                        ItemSeparatorComponent={ItemSeparatorComponent}
+                        SectionSeparatorComponent={SectionSeparatorComponent}
+                        key={selectedKey}
+                        showsVerticalScrollIndicator={false}
+                        initialNumToRender={15}
+                        alwaysBounceVertical
+                        scrollEnabled
+                        style={styles.list}
+                    />
+                </BaseBottomSheetV2.Scrollable>
+            </BaseBottomSheetV2.Panel>
+        </BaseBottomSheetV2.Root>
+    )
+})
+const baseStyles =
+    ({ bottomInset }: { bottomInset: number }) =>
+    (theme: ColorThemeType) =>
+        StyleSheet.create({
+            settingsBtn: {
+                backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+                padding: 8,
+                borderWidth: 1,
+                borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
+                borderRadius: 6,
+            },
+            contentContainer: {
+                paddingBottom: PlatformUtils.isAndroid() ? bottomInset + 16 : bottomInset,
+            },
+            list: { paddingHorizontal: 16, paddingBottom: 24 },
+        })
