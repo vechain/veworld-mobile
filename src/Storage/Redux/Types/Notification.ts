@@ -13,4 +13,5 @@ export interface NotificationState {
     userTags: Record<string, string>
     dappNotifications: boolean
     registrations: EntityState<Registration>
+    disabledCategories: string[]
 }

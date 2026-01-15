@@ -3629,6 +3629,10 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: string
 	/**
+	 * U​p​d​a​t​e​ ​f​a​i​l​e​d​,​ ​p​l​e​a​s​e​ ​r​e​t​r​y
+	 */
+	NOTIFICATION_CENTER_UPDATE_PREFERENCE_ERROR: string
+	/**
 	 * {​n​a​m​e​}​ ​c​o​p​i​e​d​!
 	 * @param {string} name
 	 */
@@ -3909,13 +3913,25 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC: string
 	/**
-	 * E​r​r​o​r
+	 * U​p​d​a​t​e​ ​f​a​i​l​e​d
 	 */
 	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE: string
 	/**
 	 * S​e​a​r​c​h​ ​D​A​p​p​s
 	 */
 	PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER: string
+	/**
+	 * N​F​T​ ​u​p​d​a​t​e​s
+	 */
+	PUSH_NOTIFICATIONS_STARGATE_NFT_UPDATES: string
+	/**
+	 * R​e​w​a​r​d​s​ ​u​p​d​a​t​e​s
+	 */
+	PUSH_NOTIFICATIONS_STARGATE_REWARDS: string
+	/**
+	 * S​t​a​r​G​a​t​e​ ​s​t​a​k​i​n​g
+	 */
+	PUSH_NOTIFICATIONS_STARGATE_STAKING: string
 	/**
 	 * Y​o​u​'​v​e​ ​r​e​a​c​h​e​d​ ​t​h​e​ ​m​a​x​i​m​u​m​ ​n​u​m​b​e​r​ ​o​f​ ​s​u​b​s​c​r​i​p​t​i​o​n​s​ ​a​l​l​o​w​e​d​.​ ​P​l​e​a​s​e​ ​u​n​s​u​b​s​c​r​i​b​e​ ​f​r​o​m​ ​a​n​o​t​h​e​r​ ​s​u​b​s​c​r​i​p​t​i​o​n​ ​b​e​f​o​r​e​ ​a​d​d​i​n​g​ ​a​ ​n​e​w​ ​o​n​e​.
 	 */
@@ -3933,9 +3949,13 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
 	/**
-	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
+	 * D​e​v​i​c​e​ ​s​e​t​t​i​n​g​s
 	 */
-	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
+	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE: string
+	/**
+	 * P​l​e​a​s​e​ ​g​o​ ​t​o​ ​t​h​e​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​a​l​l​o​w​ ​V​e​W​o​r​l​d​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​t​o​ ​b​e​ ​p​u​s​h​e​d​.
+	 */
+	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC: string
 	/**
 	 * E​n​a​b​l​e​ ​y​o​u​r​ ​c​a​m​e​r​a​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​s​c​a​n​ ​a​ ​Q​R​ ​c​o​d​e
 	 */
@@ -9595,6 +9615,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: () => LocalizedString
 	/**
+	 * Update failed, please retry
+	 */
+	NOTIFICATION_CENTER_UPDATE_PREFERENCE_ERROR: () => LocalizedString
+	/**
 	 * {name} copied!
 	 */
 	NOTIFICATION_COPIED_CLIPBOARD: (arg: { name: string }) => LocalizedString
@@ -9859,13 +9883,25 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC: () => LocalizedString
 	/**
-	 * Error
+	 * Update failed
 	 */
 	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE: () => LocalizedString
 	/**
 	 * Search DApps
 	 */
 	PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER: () => LocalizedString
+	/**
+	 * NFT updates
+	 */
+	PUSH_NOTIFICATIONS_STARGATE_NFT_UPDATES: () => LocalizedString
+	/**
+	 * Rewards updates
+	 */
+	PUSH_NOTIFICATIONS_STARGATE_REWARDS: () => LocalizedString
+	/**
+	 * StarGate staking
+	 */
+	PUSH_NOTIFICATIONS_STARGATE_STAKING: () => LocalizedString
 	/**
 	 * You've reached the maximum number of subscriptions allowed. Please unsubscribe from another subscription before adding a new one.
 	 */
@@ -9883,9 +9919,13 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
 	/**
-	 * Vote reminder
+	 * Device settings
 	 */
-	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
+	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE: () => LocalizedString
+	/**
+	 * Please go to the device settings and allow VeWorld notifications to be pushed.
+	 */
+	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC: () => LocalizedString
 	/**
 	 * Enable your camera permissions to scan a QR code
 	 */

@@ -62,3 +62,28 @@ export const unregisterPushNotification = ({
     baseUrl,
 }: PushNotificationRequest): Promise<NotificationAPIResponse> =>
     sendRequest("DELETE", walletAddresses, subscriptionId, baseUrl)
+
+// Notification Preferences API
+export interface NotificationPreferencesResponse {
+    subscriptionId: string
+    disabledCategories: string[]
+}
+
+type UpdatePreferencesParams = {
+    subscriptionId: string
+    disabledCategories: string[]
+    baseUrl: string
+}
+
+export const updateNotificationPreferences = ({
+    subscriptionId,
+    disabledCategories,
+    baseUrl,
+}: UpdatePreferencesParams): Promise<NotificationPreferencesResponse> => {
+    return requestFromEndpoint<NotificationPreferencesResponse>({
+        url: `${baseUrl}/api/v1/notification-preferences/${subscriptionId}`,
+        data: { disabledCategories },
+        method: "PUT",
+        timeout: 5000,
+    })
+}

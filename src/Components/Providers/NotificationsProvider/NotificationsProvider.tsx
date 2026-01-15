@@ -23,6 +23,7 @@ import {
     removeRemovedNotificationTag,
     selectDappNotifications,
     selectDappVisitCounter,
+    selectDisabledCategories,
     selectNotificationFeautureEnabled,
     selectNotificationOptedIn,
     selectNotificationPermissionEnabled,
@@ -30,12 +31,15 @@ import {
     selectSelectedNetwork,
     setDappsVisitCounter,
     setDappVisitCounter,
+    setDisabledCategories,
     updateNotificationFeatureFlag,
     updateNotificationOptedIn,
     updateNotificationPermission,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { selectNotificationCenterUrl } from "~Storage/Redux/Selectors/UserPreferences"
+import { updateNotificationPreferences } from "~Networking/NotificationCenter/NotificationCenterAPI"
 import { useFeatureFlags } from "../FeatureFlagsProvider"
 import { error } from "~Utils"
 import { Routes } from "../../../Navigation"
@@ -59,6 +63,8 @@ type ContextType = {
     addAllDAppsTags: () => void
     removeAllDAppsTags: () => void
     addAllTags: () => void
+    disabledCategories: string[]
+    updateNotificationCenterPrefs: (category: string, enabled: boolean) => Promise<void>
 }
 
 const Context = createContext<ContextType | undefined>(undefined)
@@ -78,6 +84,8 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const featureEnabled = useAppSelector(selectNotificationFeautureEnabled)
     const dappsNotifications = useAppSelector(selectDappNotifications)
+    const disabledCategories = useAppSelector(selectDisabledCategories)
+    const customUrl = useAppSelector(selectNotificationCenterUrl)
     const isFetcingTags = useRef(false)
     const [isInitialized, setIsInitialized] = useState(false)
 
@@ -127,8 +135,6 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     }, [dispatch, isInitialized])
 
     const requestPermission = useCallback(() => {
-        dispatch(updateNotificationPermission(!permissionEnabled))
-
         OneSignal.Notifications.requestPermission(true)
             .then(result => {
                 dispatch(updateNotificationPermission(result))
@@ -136,7 +142,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
             .catch(() => {
                 dispatch(updateNotificationPermission(false))
             })
-    }, [dispatch, permissionEnabled])
+    }, [dispatch])
 
     const optInUser = useCallback(() => {
         OneSignal.User.pushSubscription.optIn()
@@ -385,6 +391,39 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         [dispatch, featureEnabled, isMainnet],
     )
 
+    const updateNotificationCenterPrefs = useCallback(
+        async (category: string, enabled: boolean): Promise<void> => {
+            if (!featureEnabled || !isInitialized) {
+                throw new Error("Notifications not initialized")
+            }
+
+            const baseUrl =
+                customUrl ??
+                (__DEV__ ? process.env.NOTIFICATION_CENTER_REGISTER_DEV : process.env.NOTIFICATION_CENTER_REGISTER_PROD)
+            if (!baseUrl) {
+                throw new Error("No base URL configured")
+            }
+
+            const subscriptionId = await OneSignal.User.pushSubscription.getIdAsync()
+            if (!subscriptionId) {
+                throw new Error("No subscription ID")
+            }
+
+            const newDisabledCategories = enabled
+                ? (disabledCategories ?? []).filter(c => c !== category)
+                : [...new Set([...(disabledCategories ?? []), category])]
+
+            const response = await updateNotificationPreferences({
+                subscriptionId,
+                disabledCategories: newDisabledCategories,
+                baseUrl,
+            })
+
+            dispatch(setDisabledCategories(response.disabledCategories))
+        },
+        [featureEnabled, isInitialized, customUrl, disabledCategories, dispatch],
+    )
+
     const contextValue = useMemo(() => {
         return {
             featureEnabled: featureEnabled,
@@ -403,6 +442,8 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
             addAllDAppsTags: addAllDAppsTags,
             removeAllDAppsTags: removeAllDAppsTags,
             addAllTags: addAllTags,
+            disabledCategories: disabledCategories,
+            updateNotificationCenterPrefs,
         }
     }, [
         addDAppTag,
@@ -421,6 +462,8 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         addAllDAppsTags,
         removeAllDAppsTags,
         addAllTags,
+        disabledCategories,
+        updateNotificationCenterPrefs,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
