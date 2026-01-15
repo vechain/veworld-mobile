@@ -26,7 +26,7 @@ export const PasswordStrengthIndicator = ({ strength, showComputedStrength = tru
         }
     }, [strength.value])
 
-    const computedStrength = useDerivedValue(() => {
+    const computedStrength = useDerivedValue<string>(() => {
         if (strength.value === 0) return "None"
         if (strength.value === 1) return "Weak"
         if (strength.value === 2) return "Fair"

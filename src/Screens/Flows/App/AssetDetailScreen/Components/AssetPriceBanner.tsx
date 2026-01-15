@@ -26,7 +26,7 @@ export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
 
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const icon = useDerivedValue(() => (priceChangeValue.value > 0 ? "+" : "-"), [priceChangeValue.value])
+    const icon = useDerivedValue<string>(() => (priceChangeValue.value > 0 ? "+" : "-"), [priceChangeValue.value])
     const changeStyles = useAnimatedStyle(
         () => ({
             color: priceChangeValue.value > 0 ? theme.colors.positive : theme.colors.negative,
