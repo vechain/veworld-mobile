@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from "react"
+import React, { RefObject, useCallback, useMemo, useRef } from "react"
 import {
     BaseBottomSheet,
     BaseButton,
@@ -218,7 +218,7 @@ export const ConnectBottomSheet = () => {
                     onConnect={onConnect}
                     onCloseBs={onCloseBs}
                     isLoading={isLoading}
-                    selectAccountBsRef={selectAccountBsRef}
+                    selectAccountBsRef={selectAccountBsRef as RefObject<BottomSheetModalMethods>}
                 />
             )}
         </BaseBottomSheet>
