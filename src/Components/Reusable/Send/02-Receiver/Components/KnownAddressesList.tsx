@@ -3,7 +3,7 @@ import { SectionList, StyleSheet } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { GenericAccountCard } from "~Components/Reusable/AccountCard"
-import { COLORS, ColorThemeType } from "~Constants"
+import { COLORS, ColorThemeType, SCREEN_HEIGHT } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, Contact, ContactType, RecentContact } from "~Model"
@@ -78,6 +78,7 @@ export const KnownAddressesList = ({ selectedAddress, activeFilter, onAddressCha
             const isContact = "type" in item && item.type === ContactType.KNOWN
             return (
                 <GenericAccountCard
+                    testID={"AccountCard_Item"}
                     accountName={item.alias}
                     accountAddress={item.address}
                     onPress={({ accountAddress }) => {
@@ -234,6 +235,7 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingBottom: 0,
             gap: 24,
             flex: 1,
+            maxHeight: SCREEN_HEIGHT * 0.75, // 75% of the screen height
         },
         filterContentContainer: {
             flex: 1,

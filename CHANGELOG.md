@@ -1,5 +1,15 @@
 # Changelog
 
+## <small>2.4.15 (2026-01-14)</small>
+
+* build: init ([41e1d21](https://github.com/vechain/veworld-mobile/commit/41e1d21))
+* refactor: enhance SendContent structure and footer handling across multiple components (#3708) ([be58b3a](https://github.com/vechain/veworld-mobile/commit/be58b3a)), closes [#3708](https://github.com/vechain/veworld-mobile/issues/3708)
+
+## <small>2.4.14 (2025-12-18)</small>
+
+* build: init ([883693f](https://github.com/vechain/veworld-mobile/commit/883693f))
+* Fix :: fiat value on step 3 send flow (#3657) ([e137ef5](https://github.com/vechain/veworld-mobile/commit/e137ef5)), closes [#3657](https://github.com/vechain/veworld-mobile/issues/3657)
+
 ## <small>2.4.13 (2025-12-02)</small>
 
 * build: init ([658831e](https://github.com/vechain/veworld-mobile/commit/658831e))

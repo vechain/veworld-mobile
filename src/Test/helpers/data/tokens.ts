@@ -302,6 +302,8 @@ export const StargateNodeMock: NodeInfo = {
     isLegacyNode: false,
     vetAmountStaked: "0",
     accumulatedRewards: "0",
+    delegationStatus: "ACTIVE",
+    validatorId: "0x1234567890abcdef",
 }
 
 export const StargateNodeMocks: NodeInfo[] = [
@@ -313,6 +315,8 @@ export const StargateNodeMocks: NodeInfo[] = [
         isLegacyNode: false,
         vetAmountStaked: "0",
         accumulatedRewards: "0",
+        delegationStatus: "NONE",
+        validatorId: null,
     },
     {
         nodeId: "3",
@@ -321,5 +325,7 @@ export const StargateNodeMocks: NodeInfo[] = [
         isLegacyNode: false,
         vetAmountStaked: "0",
         accumulatedRewards: "0",
+        delegationStatus: "EXITING",
+        validatorId: "0xfedcba0987654321",
     },
 ]

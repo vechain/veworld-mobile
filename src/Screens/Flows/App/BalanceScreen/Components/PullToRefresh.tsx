@@ -2,7 +2,8 @@ import { useQueryClient } from "@tanstack/react-query"
 import React, { ComponentType, forwardRef, useCallback, useState } from "react"
 import { RefreshControlProps } from "react-native"
 import { NativeViewGestureHandlerProps, RefreshControl } from "react-native-gesture-handler"
-import { useTheme } from "~Hooks"
+import { useIsOnline, useTheme } from "~Hooks"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useStargateInvalidation } from "~Hooks/useStargateInvalidation"
 import {
     invalidateUserTokens,
@@ -24,6 +25,8 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
     const theme = useTheme()
     const dispatch = useAppDispatch()
     const { invalidate: invalidateStargate } = useStargateInvalidation()
+
+    const isOnline = useIsOnline()
 
     const invalidateBalanceQueries = useCallback(async () => {
         await dispatch(updateAccountBalances(selectedAccountAddress!, queryClient))
@@ -64,7 +67,20 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
         })
     }, [queryClient, selectedAccountAddress, selectedNetwork.genesis.id])
 
-    const onRefresh = useCallback(async () => {
+    const invalidateStargateTotalStats = useCallback(async () => {
+        await queryClient.invalidateQueries({
+            predicate(query) {
+                return [
+                    "STARGATE_TOTAL_SUPPLY",
+                    "STARGATE_TOTAL_VET_STAKED",
+                    "STARGATE_REWARDS_DISTRIBUTED",
+                    "STARGATE_VTHO_PER_DAY",
+                ].includes(query.queryKey[0] as string)
+            },
+        })
+    }, [queryClient])
+
+    const onRefreshInner = useCallback(async () => {
         setRefreshing(true)
 
         await Promise.all([
@@ -73,6 +89,7 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
             invalidateTokens(),
             invalidateActivity(),
             invalidateCollectiblesQueries(),
+            invalidateStargateTotalStats(),
         ])
 
         setRefreshing(false)
@@ -81,14 +98,19 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
         invalidateBalanceQueries,
         invalidateCollectiblesQueries,
         invalidateStargateQueries,
+        invalidateStargateTotalStats,
         invalidateTokens,
     ])
+
+    const onRefresh = useOfflineCallback(onRefreshInner)
+
     return (
         <RefreshControl
             onRefresh={onRefresh}
             tintColor={theme.colors.border}
             refreshing={refreshing}
             ref={ref}
+            enabled={isOnline}
             {...props}
         />
     )

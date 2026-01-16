@@ -82,6 +82,124 @@ const SectionHeader = ({
 
 const ANIMATION_CONFIG = { stiffness: 90, damping: 15, duration: 300 }
 
+const Content = ({
+    selectedAccount,
+    accounts,
+    balanceToken = "FIAT",
+    goToWalletEnabled,
+    onAccountPress,
+    onSettingsClick,
+}: Pick<Props, "selectedAccount" | "accounts" | "balanceToken" | "goToWalletEnabled"> & {
+    onAccountPress: (account: AccountWithDevice | WatchedAccount) => void
+    onSettingsClick: () => void
+}) => {
+    const { LL } = useI18nContext()
+    const { bottom } = useSafeAreaInsets()
+    const [selectedKey, setSelectedKey] = useState<SelectAccountBottomSheetType>(
+        AccountUtils.isObservedAccount(selectedAccount) && accounts.some(AccountUtils.isObservedAccount)
+            ? SelectAccountBottomSheetType.WATCHING
+            : SelectAccountBottomSheetType.PERSONAL,
+    )
+
+    const { styles, theme } = useThemedStyles(baseStyles({ bottomInset: bottom }))
+
+    const sections = useMemo(() => {
+        if (selectedKey === SelectAccountBottomSheetType.PERSONAL) {
+            const groupedAccounts = accounts
+                .filter(account => !AccountUtils.isObservedAccount(account))
+                .reduce((acc, curr) => {
+                    const key = curr.device?.alias ?? curr.alias
+                    return { ...acc, [key]: [...(acc[key] ?? []), curr] }
+                }, {} as { [alias: string]: AccountWithDevice[] })
+            return Object.entries(groupedAccounts).map(([alias, data]) => ({ alias, data }))
+        }
+
+        return [
+            {
+                alias: LL.SELECT_ACCOUNT_TITLE(),
+                data: accounts.filter(AccountUtils.isObservedAccount),
+            },
+        ]
+    }, [LL, accounts, selectedKey])
+
+    const keys = useMemo(() => {
+        const hasObserved = accounts.some(AccountUtils.isObservedAccount)
+        return hasObserved
+            ? [SelectAccountBottomSheetType.PERSONAL, SelectAccountBottomSheetType.WATCHING]
+            : ([SelectAccountBottomSheetType.PERSONAL] as const)
+    }, [accounts])
+
+    const labels = useMemo(() => keys.map(key => LL[`SELECT_ACCOUNT_${key}`]()), [LL, keys])
+    return (
+        <>
+            <BaseView
+                flexDirection="column"
+                gap={24}
+                pb={24}
+                px={16}
+                pt={16}
+                bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50}>
+                <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
+                    <BaseView flexDirection="column" gap={8}>
+                        <BaseView flexDirection="row" alignItems="center" gap={12}>
+                            <BaseIcon
+                                name="icon-wallet"
+                                size={20}
+                                color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
+                            />
+                            <BaseText typographyFont="subTitleSemiBold">{LL.SELECT_ACCOUNT_TITLE()}</BaseText>
+                        </BaseView>
+                        <BaseText typographyFont="body" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                            {LL.SELECT_ACCOUNT_DESCRIPTION()}
+                        </BaseText>
+                    </BaseView>
+                    {goToWalletEnabled && (
+                        <BSTouchableOpacity
+                            testID="SelectAccountBottomSheet_SettingsButton"
+                            onPress={onSettingsClick}
+                            style={styles.settingsBtn}>
+                            <BaseIcon
+                                name="icon-settings"
+                                testID="SelectAccountBottomSheet_SettingsButtonIcon"
+                                color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}
+                            />
+                        </BSTouchableOpacity>
+                    )}
+                </BaseView>
+
+                {keys.length > 1 && (
+                    <BaseTabs keys={keys} labels={labels} selectedKey={selectedKey} setSelectedKey={setSelectedKey} />
+                )}
+            </BaseView>
+            <BottomSheetSectionList
+                sections={sections}
+                contentContainerStyle={styles.contentContainer}
+                keyExtractor={item => item.address}
+                renderSectionHeader={SectionHeader}
+                stickySectionHeadersEnabled={false}
+                renderItem={({ item }) => (
+                    <SelectableAccountCard
+                        account={item}
+                        onPress={onAccountPress}
+                        selected={item.address === selectedAccount?.address}
+                        balanceToken={balanceToken}
+                        testID="selectAccount"
+                    />
+                )}
+                ItemSeparatorComponent={ItemSeparatorComponent}
+                SectionSeparatorComponent={SectionSeparatorComponent}
+                key={selectedKey}
+                showsVerticalScrollIndicator={false}
+                layout={LinearTransition.duration(500)}
+                initialNumToRender={15}
+                alwaysBounceVertical
+                scrollEnabled
+                style={styles.list}
+            />
+        </>
+    )
+}
+
 // component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     (
@@ -96,12 +214,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
         },
         ref,
     ) => {
-        const { LL } = useI18nContext()
-        const { bottom } = useSafeAreaInsets()
         const nav = useNavigation()
-        const [selectedKey, setSelectedKey] = useState<SelectAccountBottomSheetType>(
-            SelectAccountBottomSheetType.PERSONAL,
-        )
 
         const handlePress = useCallback(
             (account: AccountWithDevice | WatchedAccount) => {
@@ -111,40 +224,10 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
             [closeBottomSheet, setSelectedAccount],
         )
 
-        const { styles, theme } = useThemedStyles(baseStyles({ bottomInset: bottom }))
-
-        const sections = useMemo(() => {
-            if (selectedKey === SelectAccountBottomSheetType.PERSONAL) {
-                const groupedAccounts = accounts
-                    .filter(account => !AccountUtils.isObservedAccount(account))
-                    .reduce((acc, curr) => {
-                        const key = curr.device?.alias ?? curr.alias
-                        return { ...acc, [key]: [...(acc[key] ?? []), curr] }
-                    }, {} as { [alias: string]: AccountWithDevice[] })
-                return Object.entries(groupedAccounts).map(([alias, data]) => ({ alias, data }))
-            }
-
-            return [
-                {
-                    alias: LL.SELECT_ACCOUNT_TITLE(),
-                    data: accounts.filter(AccountUtils.isObservedAccount),
-                },
-            ]
-        }, [LL, accounts, selectedKey])
-
         const onSettingsClick = useCallback(() => {
             nav.navigate(Routes.WALLET_MANAGEMENT)
             closeBottomSheet?.()
         }, [closeBottomSheet, nav])
-
-        const keys = useMemo(() => {
-            const hasObserved = accounts.some(AccountUtils.isObservedAccount)
-            return hasObserved
-                ? [SelectAccountBottomSheetType.PERSONAL, SelectAccountBottomSheetType.WATCHING]
-                : ([SelectAccountBottomSheetType.PERSONAL] as const)
-        }, [accounts])
-
-        const labels = useMemo(() => keys.map(key => LL[`SELECT_ACCOUNT_${key}`]()), [LL, keys])
 
         return (
             <BaseBottomSheet
@@ -154,67 +237,13 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 animationConfigs={ANIMATION_CONFIG}
                 scrollable={false}
                 noMargins>
-                <BaseView
-                    flexDirection="column"
-                    gap={24}
-                    pb={24}
-                    px={16}
-                    pt={16}
-                    bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_50}>
-                    <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
-                        <BaseView flexDirection="column" gap={8}>
-                            <BaseView flexDirection="row" alignItems="center" gap={12}>
-                                <BaseIcon
-                                    name="icon-wallet"
-                                    size={20}
-                                    color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
-                                />
-                                <BaseText typographyFont="subTitleSemiBold">{LL.SELECT_ACCOUNT_TITLE()}</BaseText>
-                            </BaseView>
-                            <BaseText typographyFont="body" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
-                                {LL.SELECT_ACCOUNT_DESCRIPTION()}
-                            </BaseText>
-                        </BaseView>
-                        {goToWalletEnabled && (
-                            <BSTouchableOpacity onPress={onSettingsClick} style={styles.settingsBtn}>
-                                <BaseIcon name="icon-settings" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} />
-                            </BSTouchableOpacity>
-                        )}
-                    </BaseView>
-
-                    {keys.length > 1 && (
-                        <BaseTabs
-                            keys={keys}
-                            labels={labels}
-                            selectedKey={selectedKey}
-                            setSelectedKey={setSelectedKey}
-                        />
-                    )}
-                </BaseView>
-                <BottomSheetSectionList
-                    sections={sections}
-                    contentContainerStyle={styles.contentContainer}
-                    keyExtractor={item => item.address}
-                    renderSectionHeader={SectionHeader}
-                    stickySectionHeadersEnabled={false}
-                    renderItem={({ item }) => (
-                        <SelectableAccountCard
-                            account={item}
-                            onPress={handlePress}
-                            selected={item.address === selectedAccount?.address}
-                            balanceToken={balanceToken}
-                            testID="selectAccount"
-                        />
-                    )}
-                    ItemSeparatorComponent={ItemSeparatorComponent}
-                    SectionSeparatorComponent={SectionSeparatorComponent}
-                    key={selectedKey}
-                    showsVerticalScrollIndicator={false}
-                    layout={LinearTransition.duration(500)}
-                    initialNumToRender={15}
-                    alwaysBounceVertical
-                    scrollEnabled
-                    style={styles.list}
+                <Content
+                    accounts={accounts}
+                    onAccountPress={handlePress}
+                    onSettingsClick={onSettingsClick}
+                    balanceToken={balanceToken}
+                    goToWalletEnabled={goToWalletEnabled}
+                    selectedAccount={selectedAccount}
                 />
             </BaseBottomSheet>
         )

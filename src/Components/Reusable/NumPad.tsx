@@ -61,6 +61,7 @@ export const NumPad = ({
                     <BaseView style={baseStyles.width} key={digit}>
                         {shouldRender ? (
                             <Pressable
+                                testID={isDeleteKey ? "numpad-delete" : `numpad-${digit}`}
                                 style={({ pressed }) => [baseStyles.pressable, { opacity: pressed ? 0.5 : 1.0 }]}
                                 onPress={onPress}>
                                 {isDeleteKey ? (

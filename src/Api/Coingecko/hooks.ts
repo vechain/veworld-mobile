@@ -221,8 +221,8 @@ export const useVechainStatsTokenInfo = (tokenSymbol: string, enabled: boolean =
         queryKey: getVechainStatsTokenQueryKey(tokenSymbol),
         queryFn: () => getVechainStatsTokensInfo(),
         select: data => {
-            if (!data[tokenSymbol]) return null
-            const exchageRates = data[tokenSymbol]
+            if (!data[tokenSymbol.toLowerCase()]) return null
+            const exchageRates = data[tokenSymbol.toLowerCase()]
             return currency === "USD" ? exchageRates.price_usd : exchageRates.price_eur
         },
         staleTime: getQueryCacheTime(),

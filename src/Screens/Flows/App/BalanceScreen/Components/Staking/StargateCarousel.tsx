@@ -14,10 +14,11 @@ import {
 import { useThemedStyles } from "~Hooks"
 import { useUserNodes } from "~Hooks/Staking"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
-import { AddressUtils } from "~Utils"
+import { AddressUtils, sortNodesByDelegationStatus } from "~Utils"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
 import { StargateCarouselItem } from "./StargateCarouselItem"
 import { StargateNoStakingCard } from "./StargateNoStakingCard"
@@ -60,9 +61,12 @@ export const StargateCarousel = () => {
     }, [hasOwnedNodes, isLoadingNodes, data.length])
 
     const filteredNodes = useMemo(() => {
-        return filter === StakingFilter.OWN
-            ? data.filter(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
-            : data.filter(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
+        const filtered =
+            filter === StakingFilter.OWN
+                ? data.filter(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
+                : data.filter(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
+
+        return sortNodesByDelegationStatus(filtered)
     }, [data, filter, address])
 
     const cards = useMemo(() => {
@@ -92,7 +96,7 @@ export const StargateCarousel = () => {
             ])
     }, [filteredNodes, styles.biggerCarouselItem, styles.carouselItem])
 
-    const onNavigateToStargate = useCallback(() => {
+    const _onNavigateToStargate = useCallback(() => {
         navigateWithTab({
             url: STARGATE_DAPP_URL_MANAGE_STAKING_BANNER,
             title: "Stargate App",
@@ -101,6 +105,8 @@ export const StargateCarousel = () => {
             },
         })
     }, [nav, navigateWithTab])
+
+    const onNavigateToStargate = useOfflineCallback(_onNavigateToStargate)
 
     const filterButtons = useMemo(
         () => [

@@ -11,7 +11,7 @@ type Props = {
 }
 
 /**
- * Calculated by doing 40(width)-2(padding from the left)-16(size of the ball)
+ * Calculated by doing 44(width)-2(padding from the left)-20(size of the ball)
  */
 const LEFT_TRUE = 22
 const LEFT_FALSE = 2
@@ -51,15 +51,15 @@ const baseStyles = () =>
     StyleSheet.create({
         root: {
             borderRadius: 999,
-            width: 40,
-            height: 20,
+            width: 44,
+            height: 24,
             position: "relative",
         },
         ball: {
             backgroundColor: COLORS.WHITE,
-            width: 16,
-            height: 16,
-            borderRadius: 8,
+            width: 20,
+            height: 20,
+            borderRadius: 999,
             position: "absolute",
             top: 2,
         },

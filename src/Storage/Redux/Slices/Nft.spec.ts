@@ -1,6 +1,14 @@
 import { NETWORK_TYPE } from "~Model"
-import { NftSlice, NftSliceState, toggleBlackListCollection, toggleFavorite, toggleFavoriteCollection } from "./Nft"
+import {
+    NftSlice,
+    NftSliceState,
+    removeAllFavoriteCollectibles,
+    toggleBlackListCollection,
+    toggleFavorite,
+    toggleFavoriteCollection,
+} from "./Nft"
 import HexUtils from "~Utils/HexUtils"
+import { AnyAction } from "@reduxjs/toolkit"
 
 const initialState: NftSliceState = {
     nfts: {},
@@ -27,6 +35,10 @@ const initialState: NftSliceState = {
     error: undefined,
     favoriteNfts: {},
     favoriteCollections: {},
+}
+
+const reduceMultiple = (initial: NftSliceState, ...actions: AnyAction[]) => {
+    return actions.reduce((acc, curr) => NftSlice.reducer(acc, curr), initial)
 }
 
 describe("NftSlice", () => {
@@ -140,6 +152,91 @@ describe("NftSlice", () => {
             [NETWORK_TYPE.MAIN]: {
                 ["0xCF130b42Ae33C5531277B4B7c0F1D994B8732957"]: {},
             },
+        })
+    })
+
+    describe("removeAllFavoriteCollectibles", () => {
+        it("should only delete favorite NFTs for that specific collection", () => {
+            const state = reduceMultiple(
+                initialState,
+                toggleFavorite({
+                    address: "0x1234567890abcdef1234567890abcdef12345678",
+                    tokenId: "1",
+                    owner: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
+                }),
+                toggleFavorite({
+                    address: "0x1234567890abcdef1234567890abcdef12345678",
+                    tokenId: "2",
+                    owner: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
+                }),
+                toggleFavorite({
+                    address: "0x1234567890abcdef1234567890abcdef12345679",
+                    tokenId: "2",
+                    owner: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
+                }),
+            )
+            expect(state.favoriteNfts).toMatchObject({
+                ["0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127"]: {
+                    [HexUtils.normalize("0xCF130b42Ae33C5531277B4B7c0F1D994B8732957")]: {
+                        ["0x1234567890abcdef1234567890abcdef12345678_1"]: {
+                            address: "0x1234567890abcdef1234567890abcdef12345678",
+                            tokenId: "1",
+                            createdAt: expect.any(Number),
+                        },
+                        ["0x1234567890abcdef1234567890abcdef12345678_2"]: {
+                            address: "0x1234567890abcdef1234567890abcdef12345678",
+                            tokenId: "2",
+                            createdAt: expect.any(Number),
+                        },
+                        ["0x1234567890abcdef1234567890abcdef12345679_2"]: {
+                            address: "0x1234567890abcdef1234567890abcdef12345679",
+                            tokenId: "2",
+                            createdAt: expect.any(Number),
+                        },
+                    },
+                },
+            })
+
+            const clearState = NftSlice.reducer(
+                state,
+                removeAllFavoriteCollectibles({
+                    address: "0x1234567890abcdef1234567890abcdef12345678",
+                    owner: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
+                }),
+            )
+
+            expect(clearState.favoriteNfts).toMatchObject({
+                ["0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127"]: {
+                    [HexUtils.normalize("0xCF130b42Ae33C5531277B4B7c0F1D994B8732957")]: {
+                        ["0x1234567890abcdef1234567890abcdef12345679_2"]: {
+                            address: "0x1234567890abcdef1234567890abcdef12345679",
+                            tokenId: "2",
+                            createdAt: expect.any(Number),
+                        },
+                    },
+                },
+            })
+        })
+
+        it("should not break if there is an empty state", () => {
+            const clearState = NftSlice.reducer(
+                initialState,
+                removeAllFavoriteCollectibles({
+                    address: "0x1234567890abcdef1234567890abcdef12345678",
+                    owner: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
+                }),
+            )
+
+            expect(clearState.favoriteNfts).toMatchObject({
+                ["0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127"]: {
+                    [HexUtils.normalize("0xCF130b42Ae33C5531277B4B7c0F1D994B8732957")]: {},
+                },
+            })
         })
     })
 })

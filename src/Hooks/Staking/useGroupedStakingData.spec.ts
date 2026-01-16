@@ -2,7 +2,7 @@ import { TestWrapper } from "~Test"
 import { renderHook } from "@testing-library/react-hooks"
 import { useGroupedStakingData } from "./useGroupedStakingData"
 import { useUserNodes } from "./useUserNodes"
-import { NodeInfo } from "~Model/Staking"
+import type { NodeInfo } from "~Model/Staking"
 import { RootState } from "~Storage/Redux/Types"
 import { defaultMainNetwork } from "~Constants"
 
@@ -21,6 +21,8 @@ const testNodes: NodeInfo[] = [
         isLegacyNode: false,
         vetAmountStaked: "10000000000000000000000",
         accumulatedRewards: "10000000000000000000000",
+        delegationStatus: "ACTIVE",
+        validatorId: "1",
     },
     {
         nodeId: "2",
@@ -29,6 +31,8 @@ const testNodes: NodeInfo[] = [
         isLegacyNode: false,
         vetAmountStaked: "20000000000000000000000",
         accumulatedRewards: "20000000000000000000000",
+        delegationStatus: "NONE",
+        validatorId: null,
     },
     {
         nodeId: "3",
@@ -37,6 +41,8 @@ const testNodes: NodeInfo[] = [
         isLegacyNode: false,
         vetAmountStaked: "30000000000000000000000",
         accumulatedRewards: "30000000000000000000000",
+        delegationStatus: "EXITING",
+        validatorId: "0xfedcba0987654321",
     },
 ]
 
@@ -199,6 +205,8 @@ describe("useGroupedStakingData", () => {
                 isLegacyNode: false,
                 accumulatedRewards: "0",
                 vetAmountStaked: "0",
+                delegationStatus: "ACTIVE",
+                validatorId: "0x1234567890abcdef",
             },
             {
                 nodeId: "2",
@@ -207,6 +215,8 @@ describe("useGroupedStakingData", () => {
                 isLegacyNode: false,
                 accumulatedRewards: "0",
                 vetAmountStaked: "0",
+                delegationStatus: "ACTIVE",
+                validatorId: "0x1234567890abcdef",
             },
         ]
 
@@ -239,6 +249,8 @@ describe("useGroupedStakingData", () => {
                 isLegacyNode: false,
                 accumulatedRewards: "0",
                 vetAmountStaked: "0",
+                delegationStatus: "ACTIVE",
+                validatorId: "0x1234567890abcdef",
             },
         ]
 
@@ -268,6 +280,8 @@ describe("useGroupedStakingData", () => {
                 isLegacyNode: false,
                 accumulatedRewards: "0",
                 vetAmountStaked: "0",
+                delegationStatus: "NONE",
+                validatorId: null,
             },
         ]
 
@@ -299,6 +313,8 @@ describe("useGroupedStakingData", () => {
                 isLegacyNode: false,
                 accumulatedRewards: "0",
                 vetAmountStaked: "0",
+                delegationStatus: "NONE",
+                validatorId: null,
             },
         ]
 

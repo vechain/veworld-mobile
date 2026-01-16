@@ -27,7 +27,7 @@ export type BaseIconProps =
           TouchableOpacityProps &
           ViewProps
 
-const BaseIconWithRef = forwardRef<View | TouchableOpacity, BaseIconProps>(function BaseIconWithRef(props, ref) {
+const BaseIconWithRef = forwardRef<View, BaseIconProps>(function BaseIconWithRef(props, ref) {
     const { color, style, borderRadius, testID, haptics, name, ...otherProps } = props
     const theme = useTheme()
 
@@ -62,57 +62,58 @@ export const BaseIcon = memo(BaseIconWithRef)
 
 type BaseIconWrapperProps = BaseIconProps & { children: React.ReactNode }
 
-const BaseIconWrapperWithRef = forwardRef<View | TouchableOpacity, BaseIconWrapperProps>(
-    function BaseIconWrapperWithRef({ style, bg, borderRadius, size, children, action, haptics, ...props }, ref) {
-        const onButtonPress = useCallback(() => {
-            if (!action) return
-            action()
-            haptics && HapticsService.triggerHaptics({ haptics })
-        }, [action, haptics])
+const BaseIconWrapperWithRef = forwardRef<View, BaseIconWrapperProps>(function BaseIconWrapperWithRef(
+    { style, bg, borderRadius, size, children, action, haptics, ...props },
+    ref,
+) {
+    const onButtonPress = useCallback(() => {
+        if (!action) return
+        action()
+        haptics && HapticsService.triggerHaptics({ haptics })
+    }, [action, haptics])
 
-        if (action)
-            return (
-                <TouchableOpacity
-                    onPress={onButtonPress}
-                    ref={ref as RefObject<TouchableOpacity>}
-                    style={[
-                        {
-                            justifyContent: "center",
-                            alignItems: "center",
-                            backgroundColor: bg,
-                            borderRadius: borderRadius ?? (size ? size + 10 / 2 : 50),
-                            opacity: props.disabled ? 0.5 : 1,
-                            margin: props.m,
-                            marginVertical: props.my,
-                            marginHorizontal: props.mx,
-                            padding: props.p ? props.p : bg ? 5 : 0,
-                            paddingVertical: props.py,
-                            paddingHorizontal: props.px,
-                        },
-                        style,
-                    ]}
-                    {...props}>
-                    {children}
-                </TouchableOpacity>
-            )
+    if (action)
         return (
-            <View
+            <TouchableOpacity
+                onPress={onButtonPress}
+                ref={ref as RefObject<View>}
                 style={[
                     {
                         justifyContent: "center",
                         alignItems: "center",
                         backgroundColor: bg,
-                        padding: bg ? 5 : 0,
-                        borderRadius: borderRadius || (size ? size + 10 / 2 : 50),
+                        borderRadius: borderRadius ?? (size ? size + 10 / 2 : 50),
                         opacity: props.disabled ? 0.5 : 1,
+                        margin: props.m,
+                        marginVertical: props.my,
+                        marginHorizontal: props.mx,
+                        padding: props.p ? props.p : bg ? 5 : 0,
+                        paddingVertical: props.py,
+                        paddingHorizontal: props.px,
                     },
                     style,
                 ]}
-                ref={ref as RefObject<View>}
                 {...props}>
                 {children}
-            </View>
+            </TouchableOpacity>
         )
-    },
-)
+    return (
+        <View
+            style={[
+                {
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: bg,
+                    padding: bg ? 5 : 0,
+                    borderRadius: borderRadius || (size ? size + 10 / 2 : 50),
+                    opacity: props.disabled ? 0.5 : 1,
+                },
+                style,
+            ]}
+            ref={ref as RefObject<View>}
+            {...props}>
+            {children}
+        </View>
+    )
+})
 const BaseIconWrapper = memo(BaseIconWrapperWithRef)

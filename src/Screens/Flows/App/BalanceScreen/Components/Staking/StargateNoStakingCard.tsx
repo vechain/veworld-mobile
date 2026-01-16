@@ -1,5 +1,5 @@
 import { ethers } from "ethers"
-import React, { useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import Markdown from "react-native-markdown-display"
@@ -8,6 +8,7 @@ import { BaseButton, BaseIcon, BaseSpacer, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType, STARGATE_DAPP_URL_HOME_BANNER } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { useBrowserNavigation } from "~Hooks/useBrowserSearch"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useStargateStats } from "~Hooks/useStargateStats"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -27,7 +28,7 @@ export const StargateNoStakingCard = () => {
 
     const formattedStargateStats = useMemo(() => {
         return {
-            totalSupply: BigNutils(stargateStats?.totalSupply?.total ?? "0").toCompactString(formatLocale, 1) ?? "0",
+            totalSupply: BigNutils(stargateStats?.totalSupply ?? "0").toCompactString(formatLocale, 1) ?? "0",
             totalVetStaked:
                 BigNutils(ethers.utils.formatEther(stargateStats?.totalVetStaked?.total ?? "0")).toCompactString(
                     formatLocale,
@@ -38,15 +39,22 @@ export const StargateNoStakingCard = () => {
                     formatLocale,
                     1,
                 ) ?? "0",
-            vthoPerDay: BigNutils(stargateStats?.vthoPerDay ?? "0").toCompactString(formatLocale, 1) ?? "0",
+            vthoPerDay:
+                BigNutils(ethers.utils.formatEther(stargateStats?.vthoPerDay ?? "0")).toCompactString(
+                    formatLocale,
+                    1,
+                ) ?? "0",
         }
     }, [
-        stargateStats?.totalSupply?.total,
+        stargateStats?.totalSupply,
         stargateStats?.totalVetStaked?.total,
         stargateStats?.rewardsDistributed,
         stargateStats?.vthoPerDay,
         formatLocale,
     ])
+
+    const _navigateToStargate = useCallback(() => navigateToBrowser(STARGATE_DAPP_URL_HOME_BANNER), [navigateToBrowser])
+    const navigateToStargate = useOfflineCallback(_navigateToStargate)
 
     return (
         <BaseView style={styles.root} testID="STARGATE_NO_STAKING_CARD">
@@ -104,9 +112,7 @@ export const StargateNoStakingCard = () => {
 
                     <BaseButton
                         testID="STARGATE_START_STAKING_BUTTON"
-                        action={() => {
-                            navigateToBrowser(STARGATE_DAPP_URL_HOME_BANNER)
-                        }}
+                        action={navigateToStargate}
                         variant="solid"
                         rightIcon={
                             <BaseIcon

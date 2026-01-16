@@ -1,30 +1,28 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { TestWrapper } from "~Test"
-import { useLevelCirculatingSupplies } from "~Hooks/Staking"
 import { useStargateStats } from "./useStargateStats"
 
 const getStargateTotalSupply = jest.fn()
 const getStargateTotalVet = jest.fn()
 const getStargateRewardsDistributed = jest.fn()
+const getVthoPerDay = jest.fn()
 
 jest.mock("~Hooks/useIndexerClient", () => ({
     ...jest.requireActual("~Hooks/useIndexerClient"),
     useMainnetIndexerClient: jest.fn().mockReturnValue({
         GET: (url: string, ...args: any[]) => {
             switch (url) {
-                case "/api/v1/stargate/nft-holders":
+                case "/api/v1/stargate/total-vet-delegated":
                     return getStargateTotalSupply(...args).then((res: any) => ({ data: res }))
                 case "/api/v1/stargate/total-vet-staked":
                     return getStargateTotalVet(...args).then((res: any) => ({ data: res }))
                 case "/api/v1/stargate/total-vtho-claimed":
                     return getStargateRewardsDistributed(...args).then((res: any) => ({ data: res }))
+                case "/api/v1/stargate/vtho-generated/{period}":
+                    return getVthoPerDay(...args).then((res: any) => ({ data: res }))
             }
         },
     }),
-}))
-
-jest.mock("~Hooks/Staking", () => ({
-    useLevelCirculatingSupplies: jest.fn(),
 }))
 
 describe("useStargateStats", () => {
@@ -34,19 +32,7 @@ describe("useStargateStats", () => {
 
     it("should return the stargate stats", async () => {
         ;(getStargateTotalSupply as jest.Mock).mockResolvedValue({
-            total: 12816,
-            byLevel: {
-                Dawn: 5509,
-                Strength: 920,
-                ThunderX: 117,
-                Flash: 2148,
-                VeThorX: 235,
-                Lightning: 3043,
-                StrengthX: 457,
-                MjolnirX: 98,
-                Mjolnir: 26,
-                Thunder: 263,
-            },
+            totalNftCount: 12816,
         })
         ;(getStargateTotalVet as jest.Mock).mockResolvedValue({
             total: "6318030000000000000000000000",
@@ -64,12 +50,9 @@ describe("useStargateStats", () => {
             },
         })
         ;(getStargateRewardsDistributed as jest.Mock).mockResolvedValue("526381931206666467000000000")
-        ;(useLevelCirculatingSupplies as jest.Mock).mockImplementation(() => ({
-            data: [25, 20, 15, 10, 5, 3, 10, 15, 20, 25],
-            isLoading: false,
-            error: undefined,
-            isError: false,
-        }))
+        ;(getVthoPerDay as jest.Mock).mockResolvedValue({
+            data: [{ total: "226381931206666467000000000" }],
+        })
 
         const { result, waitFor } = renderHook(() => useStargateStats(), {
             wrapper: TestWrapper,
@@ -80,9 +63,9 @@ describe("useStargateStats", () => {
             expect(result.current.data).toBeDefined()
         })
 
-        expect(result.current.data?.totalSupply?.total).toBe(12816)
+        expect(result.current.data?.totalSupply).toBe("12816")
         expect(result.current.data?.totalVetStaked?.total).toBe("6318030000000000000000000000")
         expect(result.current.data?.rewardsDistributed).toBe("526381931206666467000000000")
-        expect(result.current.data?.vthoPerDay).toBe(1181630.68475904)
+        expect(result.current.data?.vthoPerDay).toBe("226381931206666467000000000")
     })
 })

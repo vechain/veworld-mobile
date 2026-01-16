@@ -1,51 +1,39 @@
 appId: org.vechain.veworld.app
-
 ---
+# Navigate back if needed
+- repeat:
+      while:
+          visible:
+              id: "BackButtonHeader-BaseIcon-backButton"
+      commands:
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
-     id: "settings-tab"
+      id: "settings-tab"
 - repeat:
-    while:
-      visible:
-         id: "BackButtonHeader-BaseIcon-backButton"
-    commands:
-      - tapOn:
-            id: "BackButtonHeader-BaseIcon-backButton"
+      while:
+          visible:
+              id: "BackButtonHeader-BaseIcon-backButton"
+      commands:
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
 - repeat:
-    while:
-      visible:
-         id: "General settings"
-    commands:
-      - tapOn:
-            id: "General settings"
+      while:
+          visible:
+              id: "General settings"
+      commands:
+          - tapOn:
+                id: "General settings"
 - runFlow:
-    when:
-      platform: Android
-    commands:
-      - swipe:
-         from:
-           id: "button-light"
-         direction: "UP"
-      - tapOn:
-          text: "Reset App"
-          index: 0
-      - tapOn:
-           id: "reset-app-checkbox"
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - swipe:
-          from:
-            id: "button-light"
-          direction: "UP"
-      - tapOn: "Reset App"
-      - tapOn: "I am aware that this action is irreversible (required)"
-- tapOn: "Reset App"
-- repeat:
-    while:
-      visible:
-         id: "BackButtonHeader-BaseIcon-backButton"
-    commands:
-      - tapOn:
-            id: "BackButtonHeader-BaseIcon-backButton"
+      commands:
+          - swipe:
+                from:
+                    id: "ChangeCurrencyFormat_Option"
+                direction: "UP"
+          - tapOn:
+                id: "ResetAppBox_Button"
+          - tapOn:
+                id: "reset-app-checkbox"
+          - tapOn:
+                id: "ResetAppScreen_Button"
 - assertVisible: "DEV:DEMO"

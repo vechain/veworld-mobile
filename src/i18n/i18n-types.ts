@@ -3072,6 +3072,11 @@ type RootTranslation = {
 	 */
 	FEEDBACK_FAVORITED: string
 	/**
+	 * {​c​o​u​n​t​}​ ​T​r​a​n​s​f​e​r​s​ ​r​e​c​e​i​v​e​d
+	 * @param {number} count
+	 */
+	FEEDBACK_N_TRANSFERS_RECEIVED: RequiredParams<'count'>
+	/**
 	 * S​e​t​ ​a​s​ ​a​v​a​t​a​r​!
 	 */
 	FEEDBACK_SET_AVATAR: string
@@ -3079,11 +3084,6 @@ type RootTranslation = {
 	 * T​r​a​n​s​f​e​r​ ​r​e​c​e​i​v​e​d
 	 */
 	FEEDBACK_TRANSFER_RECEIVED: string
-	/**
-	 * {​c​o​u​n​t​}​ ​T​r​a​n​s​f​e​r​s​ ​r​e​c​e​i​v​e​d
-	 * @param {number} count
-	 */
-	FEEDBACK_N_TRANSFERS_RECEIVED: RequiredParams<'count'>
 	/**
 	 * F​i​n​g​e​r​p​r​i​n​t
 	 */
@@ -3257,7 +3257,7 @@ type RootTranslation = {
 	 */
 	LOADING_PAGE_CONTENT: string
 	/**
-	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
+	 * S​t​a​y​ ​s​i​g​n​e​d​ ​i​n
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: string
 	/**
@@ -3839,6 +3839,14 @@ type RootTranslation = {
 	 * O​c​t​o​b​e​r
 	 */
 	OCTOBER: string
+	/**
+	 * Y​o​u​ ​a​r​e​ ​o​f​f​l​i​n​e
+	 */
+	OFFLINE_CHIP: string
+	/**
+	 * O​f​f​l​i​n​e
+	 */
+	OFFLINE_STATUS: string
 	/**
 	 * {​s​e​c​o​n​d​s​|​t​o​S​e​c​o​n​d​s​D​u​r​a​t​i​o​n​}
 	 * @param {number} seconds
@@ -5073,6 +5081,23 @@ type RootTranslation = {
 	 */
 	STARGATE_DELEGATEE_LABEL: string
 	/**
+	 * D​e​l​e​g​a​t​e​d
+	 */
+	STARGATE_DELEGATION_STATUS_DELEGATED: string
+	/**
+	 * E​x​i​t​i​n​g
+	 */
+	STARGATE_DELEGATION_STATUS_EXITING: string
+	/**
+	 * E​x​i​t​i​n​g​ ​i​n​ ​{​d​a​y​s​}​ ​d​a​y​s
+	 * @param {number} days
+	 */
+	STARGATE_DELEGATION_STATUS_EXITING_IN_DAYS: RequiredParams<'days'>
+	/**
+	 * N​o​t​ ​d​e​l​e​g​a​t​e​d
+	 */
+	STARGATE_DELEGATION_STATUS_NOT_DELEGATED: string
+	/**
 	 * L​o​c​k​e​d
 	 */
 	STARGATE_LOCKED: string
@@ -5989,6 +6014,19 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * A​P​Y
+	 */
+	STARGATE_APY: string
+	/**
+	 * C​y​c​l​e​ ​d​u​r​a​t​i​o​n
+	 */
+	STARGATE_CYCLE_DURATION: string
+	/**
+	 * {​d​a​y​s​}​ ​d​a​y​s
+	 * @param {number} days
+	 */
+	STARGATE_DAYS: RequiredParams<'days'>
 }
 
 export type TranslationFunctions = {
@@ -9004,6 +9042,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	FEEDBACK_FAVORITED: () => LocalizedString
 	/**
+	 * {count} Transfers received
+	 */
+	FEEDBACK_N_TRANSFERS_RECEIVED: (arg: { count: number }) => LocalizedString
+	/**
 	 * Set as avatar!
 	 */
 	FEEDBACK_SET_AVATAR: () => LocalizedString
@@ -9011,10 +9053,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Transfer received
 	 */
 	FEEDBACK_TRANSFER_RECEIVED: () => LocalizedString
-	/**
-	 * {count} Transfers received
-	 */
-	FEEDBACK_N_TRANSFERS_RECEIVED: (arg: { count: number }) => LocalizedString
 	/**
 	 * Fingerprint
 	 */
@@ -9188,7 +9226,7 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	LOADING_PAGE_CONTENT: () => LocalizedString
 	/**
-	 * Keep me signed in for future sessions
+	 * Stay signed in
 	 */
 	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
 	/**
@@ -9752,6 +9790,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * October
 	 */
 	OCTOBER: () => LocalizedString
+	/**
+	 * You are offline
+	 */
+	OFFLINE_CHIP: () => LocalizedString
+	/**
+	 * Offline
+	 */
+	OFFLINE_STATUS: () => LocalizedString
 	/**
 	 * {seconds|toSecondsDuration}
 	 */
@@ -10965,6 +11011,22 @@ Here's what it's all about:
 	 */
 	STARGATE_DELEGATEE_LABEL: () => LocalizedString
 	/**
+	 * Delegated
+	 */
+	STARGATE_DELEGATION_STATUS_DELEGATED: () => LocalizedString
+	/**
+	 * Exiting
+	 */
+	STARGATE_DELEGATION_STATUS_EXITING: () => LocalizedString
+	/**
+	 * Exiting in {days} days
+	 */
+	STARGATE_DELEGATION_STATUS_EXITING_IN_DAYS: (arg: { days: number }) => LocalizedString
+	/**
+	 * Not delegated
+	 */
+	STARGATE_DELEGATION_STATUS_NOT_DELEGATED: () => LocalizedString
+	/**
 	 * Locked
 	 */
 	STARGATE_LOCKED: () => LocalizedString
@@ -11871,6 +11933,18 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * APY
+	 */
+	STARGATE_APY: () => LocalizedString
+	/**
+	 * Cycle duration
+	 */
+	STARGATE_CYCLE_DURATION: () => LocalizedString
+	/**
+	 * {days} days
+	 */
+	STARGATE_DAYS: (arg: { days: number }) => LocalizedString
 }
 
 export type Formatters = {

@@ -11,12 +11,11 @@ env:
 
 ## welcome screen
 - extendedWaitUntil:
-    visible:
-         id: "dev_demo"
-    timeout: 10000
+      visible:
+          id: "dev_demo"
+      timeout: 30000
 - tapOn:
       id: "dev_demo"
-# Turn off push notification bottom sheet
 - runFlow:
       when:
           visible:
@@ -27,41 +26,51 @@ env:
 - tapOn:
       id: "settings-tab"
 - extendedWaitUntil:
-       visible:
-         id: "Networks"
-       timeout: 10000
+      visible:
+          id: "Networks"
+      timeout: 10000
 - tapOn:
       id: "Networks"
 - tapOn:
-      id: "networks_box_mainnet"
+      id: "NetworkBox_mainnet"
 - tapOn:
-      id: "networks_box_testnet"
-- tapOn:
-      id: "wallet-tab"
-## Homepage - Adding accounts
-- assertVisible: "VeWorld"
-- tapOn:
-      id: "HomeScreen_WalletManagementButton"
-- runFlow:
-      when:
-          platform: Android
-      commands:
-          - tapOn:
-                id: "DeviceBox"
-- runFlow:
-      when:
-          platform: iOS
-      commands:
-          - tapOn:
-                id: "Wallet_0"
-- tapOn:
-      id: "WalletDetailScreen_addAccountButton"
-- tapOn:
-      id: "WalletDetailScreen_addAccountButton"
+      id: "NetworkBox_testnet"
 - tapOn:
       id: "wallet-tab"
 - tapOn:
-      id: "AccountCard_changeAccountButton"
+      id: "BalanceScreen_WalletManagementButton"
+      retryTapIfNoChange: false
+- runFlow:
+      when:
+          visible: "Select the active account"
+      commands:
+          - tapOn:
+                id: "SelectAccountBottomSheet_SettingsButtonIcon"
+- tapOn:
+      id: "Wallet_Management_AddWallet"
+      retryTapIfNoChange: false
+- runFlow:
+      when:
+          visible: "Wallet Setup"
+      commands:
+          - tapOn:
+                id: "CreateOrImportWalletBottomSheet_CreateNewButton"
+- repeat:
+      times: 6
+      commands:
+          - tapOn:
+                id: "numpad-1"
+- extendedWaitUntil:
+      visible:
+          id: "Backup_later_button"
+      timeout: 10000
+- tapOn:
+      id: "Backup_later_button"
+- tapOn:
+      id: "wallet-tab"
+- tapOn:
+      id: "BalanceScreen_WalletManagementButton"
+      retryTapIfNoChange: false
 - runFlow:
       commands:
           - tapOn:

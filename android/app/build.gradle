@@ -89,6 +89,8 @@ react {
     entryFile = file(["node", "-e", "require('expo/scripts/resolveAppEntry')", rootDir.getAbsoluteFile().getParentFile().getAbsolutePath(), "android", "absolute"].execute(null, rootDir).text.trim())
     cliFile = new File(["node", "--print", "require.resolve('@expo/cli')"].execute(null, rootDir).text.trim())
     bundleCommand = "export:embed"
+
+    autolinkLibrariesWithApp()
 }
 
 /**
@@ -126,8 +128,8 @@ android {
         applicationId "org.vechain.veworld.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-versionCode 955
-versionName "2.4.13"
+versionCode 984
+versionName "2.4.15"
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -187,7 +189,7 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${rootProject.ext.kotlinVersion}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0"
@@ -209,6 +211,3 @@ dependencies {
         implementation jscFlavor
     }
 }
-
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
-applyNativeModulesAppBuildGradle(project)

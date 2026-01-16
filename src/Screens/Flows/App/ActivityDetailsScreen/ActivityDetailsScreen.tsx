@@ -22,6 +22,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useQuery } from "@tanstack/react-query"
 import { B3TR, VOT3 } from "~Constants"
 import { useIndexerClient } from "~Hooks/useIndexerClient"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import {
     ActivityStatus,
     ActivityType,
@@ -68,6 +69,8 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
     const activityFromStore = useAppSelector(state => selectActivity(state, activity.id))
 
     const indexer = useIndexerClient(network)
+
+    const currentActivity = useMemo(() => activityFromStore ?? activity, [activityFromStore, activity])
 
     const queryFn = useCallback(async () => {
         return indexer
@@ -150,14 +153,18 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
         return !!transaction?.reverted
     }, [transaction?.reverted])
 
+    const activityStatus = useMemo(() => {
+        return currentActivity.status ?? (isPendingOrFailedActivity ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS)
+    }, [currentActivity, isPendingOrFailedActivity])
+
     const isNFTtransfer = useMemo(() => {
         return activity.type === ActivityType.TRANSFER_NFT || activity.type === ActivityType.NFT_SALE
     }, [activity.type])
 
     const explorerUrl = useMemo(() => {
-        if (activity.txId)
+        if (activity.txId && currentActivity.blockNumber)
             return `${getExplorerLink(network, ExplorerLinkType.TRANSACTION)}/${HexUtils.addPrefix(activity.txId)}`
-    }, [activity, network])
+    }, [activity.txId, currentActivity.blockNumber, network])
 
     const renderActivityDetails = useMemo(() => {
         switch (activity.type) {
@@ -166,7 +173,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             case ActivityType.TRANSFER_SF: {
                 return (
                     <FungibleTokenTransferDetails
-                        activity={(activityFromStore ?? activity) as FungibleTokenActivity}
+                        activity={currentActivity as FungibleTokenActivity}
                         token={token}
                         paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
@@ -189,9 +196,9 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             case ActivityType.DAPP_TRANSACTION: {
                 return (
                     <DappTransactionDetails
-                        activity={(activityFromStore ?? activity) as DappTxActivity}
+                        activity={currentActivity as DappTxActivity}
                         clauses={transaction?.clauses}
-                        status={isPendingOrFailedActivity ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS}
+                        status={activityStatus}
                         paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
@@ -200,7 +207,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             case ActivityType.NFT_SALE: {
                 return (
                     <NonFungibleTokenMarketplaceDetails
-                        activity={(activityFromStore ?? activity) as NFTMarketplaceActivity}
+                        activity={currentActivity as NFTMarketplaceActivity}
                         paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
@@ -209,7 +216,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             case ActivityType.TRANSFER_NFT: {
                 return (
                     <NonFungibleTokenTransferDetails
-                        activity={(activityFromStore ?? activity) as NonFungibleTokenActivity}
+                        activity={currentActivity as NonFungibleTokenActivity}
                         paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
@@ -233,30 +240,30 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             case ActivityType.STARGATE_MANAGER_REMOVED:
                 return (
                     <StargateActivityDetails
-                        activity={(activityFromStore ?? activity) as StargateActivity}
+                        activity={currentActivity as StargateActivity}
                         paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
                 )
             case ActivityType.CONNECTED_APP_TRANSACTION: {
-                return <ConnectedAppDetails activity={(activityFromStore ?? activity) as ConnectedAppActivity} />
+                return <ConnectedAppDetails activity={currentActivity as ConnectedAppActivity} />
             }
             case ActivityType.SIGN_CERT: {
-                return <SignCertificateDetails activity={(activityFromStore ?? activity) as SignCertActivity} />
+                return <SignCertificateDetails activity={currentActivity as SignCertActivity} />
             }
             case ActivityType.SIGN_TYPED_DATA: {
-                return <TypedDataTransactionDetails activity={(activityFromStore ?? activity) as TypedDataActivity} />
+                return <TypedDataTransactionDetails activity={currentActivity as TypedDataActivity} />
             }
             case ActivityType.DAPP_LOGIN: {
-                return <DappLoginDetails activity={(activityFromStore ?? activity) as LoginActivity} />
+                return <DappLoginDetails activity={currentActivity as LoginActivity} />
             }
             default:
                 return <></>
         }
     }, [
-        activity,
-        activityFromStore,
-        isPendingOrFailedActivity,
+        activity.type,
+        currentActivity,
+        activityStatus,
         isloadingTxDetails,
         token,
         transaction?.clauses,
@@ -292,6 +299,14 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
         },
         [openAddCustomTokenSheet],
     )
+
+    const _onOpenOnExplorer = useCallback(() => {
+        if (!explorerUrl) return
+        Linking.openURL(explorerUrl)
+    }, [explorerUrl])
+
+    const onOpenOnExplorer = useOfflineCallback(_onOpenOnExplorer)
+
     return (
         <>
             <Layout
@@ -305,9 +320,9 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
                         <BaseSpacer height={16} />
 
-                        {isPendingOrFailedActivity && (
+                        {activityStatus !== ActivityStatus.SUCCESS && (
                             <>
-                                <TransactionStatusBox status={ActivityStatus.REVERTED} />
+                                <TransactionStatusBox status={activityStatus} />
                                 <BaseSpacer height={16} />
                             </>
                         )}
@@ -359,9 +374,7 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                         <FadeoutButton
                             testID="view-on-explorer-button"
                             title={LL.VIEW_ON_EXPLORER().toUpperCase()}
-                            action={() => {
-                                Linking.openURL(explorerUrl)
-                            }}
+                            action={onOpenOnExplorer}
                             bottom={0}
                             mx={0}
                             width={"auto"}

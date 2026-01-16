@@ -90,6 +90,7 @@ export const CollectionsScreen = () => {
     return (
         <Layout
             title={LL.COLLECTIONS()}
+            safeAreaTestID="CollectionsScreen"
             fixedBody={
                 <CollectionsList
                     scrollRef={scrollRef}

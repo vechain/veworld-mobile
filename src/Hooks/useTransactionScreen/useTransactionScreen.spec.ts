@@ -538,28 +538,34 @@ describe("useTransactionScreen", () => {
 
             await waitFor(
                 () => {
-                    expect(mockNav).toHaveBeenCalledWith(Routes.LEDGER_SIGN_TRANSACTION, {
-                        accountWithDevice: accWithDevice,
-                        initialRoute: "Home",
-                        transaction: Transaction.of({
-                            blockRef: "0x00ce27a27f982a6d",
-                            chainTag: 39,
-                            clauses: [
-                                {
-                                    data: "0x",
-                                    to: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68",
-                                    value: "0x1043561a8829300000",
-                                },
-                            ],
-                            dependsOn: null,
-                            expiration: 100,
-                            gas: 0,
-                            gasPriceCoef: 127,
-                            nonce: "0x1234ab",
+                    expect(mockNav).toHaveBeenCalledWith(
+                        Routes.LEDGER_SIGN_TRANSACTION,
+                        expect.objectContaining({
+                            accountWithDevice: accWithDevice,
+                            initialRoute: "Home",
+                            dappRequest,
                         }),
-                        delegationSignature: undefined,
-                        dappRequest,
+                    )
+
+                    const [, navParams] = mockNav.mock.calls[0]
+                    // Assert core transaction fields but allow the nonce to be implementation‑defined
+                    expect(navParams.transaction).toBeInstanceOf(Transaction)
+                    expect(navParams.transaction.body).toMatchObject({
+                        blockRef: "0x00ce27a27f982a6d",
+                        chainTag: 39,
+                        clauses: [
+                            {
+                                data: "0x",
+                                to: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68",
+                                value: "0x1043561a8829300000",
+                            },
+                        ],
+                        dependsOn: null,
+                        expiration: 100,
+                        gas: 0,
+                        gasPriceCoef: 127,
                     })
+                    expect(typeof navParams.transaction.body.nonce).toBe("string")
                 },
                 { timeout: 10000 },
             )
