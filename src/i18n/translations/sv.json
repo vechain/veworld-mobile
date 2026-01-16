@@ -1239,7 +1239,7 @@
   "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Delegerad smart plånbok stöds ännu inte",
   "STARGATE_APY": "APY",
   "STARGATE_CLAIMABLE": "Kan hämtas",
-  "STARGATE_CYCLE_DURATION": "Cykellängd",
+  "STARGATE_CYCLE_DURATION": "Cykelns varaktighet",
   "STARGATE_DAYS": "{days:number} dagar",
   "STARGATE_DELEGATEE_LABEL": "Hantera",
   "STARGATE_DELEGATION_STATUS_DELEGATED": "Delegerad",
