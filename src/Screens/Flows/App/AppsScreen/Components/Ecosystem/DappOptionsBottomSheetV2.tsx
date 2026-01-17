@@ -2,13 +2,14 @@ import { TouchableOpacity } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { default as React, RefObject, useCallback } from "react"
 import { Share, StyleSheet } from "react-native"
-import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components"
+import { BaseBottomSheet, BaseIcon, BaseText, BaseView, DAppIcon } from "~Components"
 import { COLORS, ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useDappBookmarkToggle } from "~Hooks/useDappBookmarkToggle"
 import { useI18nContext } from "~i18n"
 import { useDAppActions } from "../../Hooks"
 import { Routes } from "~Navigation"
+import { useAppLogo } from "~Hooks/useAppLogo"
 
 const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }) => {
     const { LL } = useI18nContext()
@@ -16,6 +17,8 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
 
     const { isBookMarked, toggleBookmark } = useDappBookmarkToggle(dapp.href)
     const { onDAppPress } = useDAppActions(Routes.APPS)
+
+    const iconUri = useAppLogo({ app: dapp, size: 64 })
 
     const onBookmarkPress = useCallback(() => toggleBookmark(), [toggleBookmark])
     const onOpenDappPress = useCallback(async () => {
@@ -32,49 +35,70 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
     }, [LL, dapp.desc, dapp.href, dapp.name])
 
     return (
-        <BaseView px={24} gap={4} pb={16}>
-            <TouchableOpacity style={styles.button} onPress={onOpenDappPress}>
-                <BaseIcon
-                    name="icon-arrow-link"
-                    size={16}
-                    style={styles.icon}
-                    color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
-                />
-                <BaseText
-                    color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600}
-                    typographyFont="bodySemiBold"
-                    testID="DAPP_OPTIONS_V2_OPEN_DAPP">
-                    {LL.BTN_OPEN_DAPP()}
-                </BaseText>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={onBookmarkPress}>
-                <BaseIcon
-                    name={isBookMarked ? "icon-star-on" : "icon-star"}
-                    size={16}
-                    style={styles.icon}
-                    color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
-                />
-                <BaseText
-                    color={theme.colors.dappCard.name}
-                    typographyFont="bodySemiBold"
-                    testID="DAPP_OPTIONS_V2_TOGGLE_FAVORITE">
-                    {isBookMarked ? LL.BTN_REMOVE_FROM_FAVORITE() : LL.BTN_ADD_TO_FAVORITE()}
-                </BaseText>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={onShare}>
-                <BaseIcon
-                    name="icon-share-2"
-                    size={16}
-                    style={styles.icon}
-                    color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
-                />
-                <BaseText
-                    color={theme.colors.dappCard.name}
-                    typographyFont="bodySemiBold"
-                    testID="DAPP_OPTIONS_V2_SHARE">
-                    {LL.BROWSER_SHARE()}
-                </BaseText>
-            </TouchableOpacity>
+        <BaseView px={24} gap={16} pb={16}>
+            <BaseView flexDirection="row" gap={24} alignItems="center">
+                <DAppIcon imageTestID="DAPP_OPTIONS_V2_ICON" size={64} uri={iconUri} />
+                <BaseView flex={1} gap={4}>
+                    <BaseText
+                        testID="DAPP_OPTIONS_V2_NAME"
+                        color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_700}
+                        typographyFont="bodySemiBold">
+                        {dapp.name}
+                    </BaseText>
+                    <BaseText
+                        testID="DAPP_OPTIONS_V2_DESCRIPTION"
+                        numberOfLines={2}
+                        ellipsizeMode="tail"
+                        color={theme.isDark ? COLORS.GREY_400 : COLORS.GREY_500}
+                        typographyFont="captionMedium">
+                        {dapp.desc}
+                    </BaseText>
+                </BaseView>
+            </BaseView>
+            <BaseView gap={4}>
+                <TouchableOpacity style={styles.button} onPress={onOpenDappPress}>
+                    <BaseIcon
+                        name="icon-arrow-link"
+                        size={16}
+                        style={styles.icon}
+                        color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
+                    />
+                    <BaseText
+                        color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600}
+                        typographyFont="bodySemiBold"
+                        testID="DAPP_OPTIONS_V2_OPEN_DAPP">
+                        {LL.BTN_OPEN_DAPP()}
+                    </BaseText>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={onBookmarkPress}>
+                    <BaseIcon
+                        name={isBookMarked ? "icon-star-on" : "icon-star"}
+                        size={16}
+                        style={styles.icon}
+                        color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
+                    />
+                    <BaseText
+                        color={theme.colors.dappCard.name}
+                        typographyFont="bodySemiBold"
+                        testID="DAPP_OPTIONS_V2_TOGGLE_FAVORITE">
+                        {isBookMarked ? LL.BTN_REMOVE_FROM_FAVORITE() : LL.BTN_ADD_TO_FAVORITE()}
+                    </BaseText>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={onShare}>
+                    <BaseIcon
+                        name="icon-share-2"
+                        size={16}
+                        style={styles.icon}
+                        color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
+                    />
+                    <BaseText
+                        color={theme.colors.dappCard.name}
+                        typographyFont="bodySemiBold"
+                        testID="DAPP_OPTIONS_V2_SHARE">
+                        {LL.BROWSER_SHARE()}
+                    </BaseText>
+                </TouchableOpacity>
+            </BaseView>
         </BaseView>
     )
 }
