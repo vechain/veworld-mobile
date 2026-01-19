@@ -124,29 +124,6 @@ PODS:
     - MMKVCore (~> 2.3.0)
   - MMKVCore (2.3.0)
   - MultiplatformBleAdapter (0.2.0)
-  - NitroModules (0.31.10):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.10.14.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-callinvoker
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - OneSignalXCFramework (5.2.10):
     - OneSignalXCFramework/OneSignalComplete (= 5.2.10)
   - OneSignalXCFramework/OneSignal (5.2.10):
@@ -2243,7 +2220,7 @@ PODS:
     - React
   - RNScrypt (1.2.1):
     - React
-  - RNSentry (7.7.0):
+  - RNSentry (7.9.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2264,7 +2241,7 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - Sentry/HybridSDK (= 8.57.3)
+    - Sentry/HybridSDK (= 8.58.0)
     - Yoga
   - RNSVG (15.10.0):
     - React-Core
@@ -2274,7 +2251,7 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (8.57.3)
+  - Sentry/HybridSDK (8.58.0)
   - SocketRocket (0.7.1)
   - UMAppLoader (5.0.1)
   - VisionCamera (4.7.2):
@@ -2323,7 +2300,6 @@ DEPENDENCIES:
   - jail-monkey (from `../node_modules/jail-monkey`)
   - lottie-react-native (from `../node_modules/lottie-react-native`)
   - MixpanelReactNative (from `../node_modules/mixpanel-react-native`)
-  - NitroModules (from `../node_modules/react-native-nitro-modules`)
   - OneSignalXCFramework (< 6.0, >= 5.0.0)
   - OpenSSL-Universal (~> 1.1.1100)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
@@ -2512,8 +2488,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/lottie-react-native"
   MixpanelReactNative:
     :path: "../node_modules/mixpanel-react-native"
-  NitroModules:
-    :path: "../node_modules/react-native-nitro-modules"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -2756,7 +2730,6 @@ SPEC CHECKSUMS:
   MMKV: c953dbaac0da392c24b005e763c03ce2638b4ed7
   MMKVCore: d078dce7d6586a888b2c2ef5343b6242678e3ee8
   MultiplatformBleAdapter: b1fddd0d499b96b607e00f0faa8e60648343dc1d
-  NitroModules: c56624a8c7100a65b6b466aaf942e155f26c3b53
   OneSignalXCFramework: 1a3b28dfbff23aabce585796d23c1bef37772774
   OpenSSL-Universal: ca89c20240633a77c776082ba76b7d90f992bf77
   RCT-Folly: ea9d9256ba7f9322ef911169a9f696e5857b9e17
@@ -2855,15 +2828,15 @@ SPEC CHECKSUMS:
   RNScreens: f75b26fd4777848c216e27b0a09e1bf9c9f4760a
   RNScreenshotPrevent: 5f8473abaa2db2476561ef8f3704b66491ce7b01
   RNScrypt: 3e8612600c93aaa3bfa7849b6d1a4ab61613e2af
-  RNSentry: 7e5d0ac32722a25101ff2be1b73d4721d7aa4180
+  RNSentry: b5e1d0bdfcd2209f8e04a7a8e645de0cfdfaf206
   RNSVG: 6a529f4faed8be4ebfb00f1a29e25cb046d95e61
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: c643eb180df401dd8c734c5036ddd9dd9218daa6
+  Sentry: d587a8fe91ca13503ecd69a1905f3e8a0fcf61be
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   UMAppLoader: 7e7e0eaa7854ffd652c00a68c443afb28c3bedba
   VisionCamera: 30b358b807324c692064f78385e9a732ce1bebfe
-  Yoga: 40f19fff64dce86773bf8b602c7070796c007970
+  Yoga: feb4910aba9742cfedc059e2b2902e22ffe9954a
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
 PODFILE CHECKSUM: 486c8bc788eb4c8028b5f4e4081f277a7f2465f8
