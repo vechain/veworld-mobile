@@ -120,7 +120,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
 
     const scrollPanGesture = Gesture.Pan()
         .withRef(scrollPanGestureRef)
-        .averageTouches(true)
+        .hitSlop({ top: 200 })
         .onUpdate(({ translationY }) => {
             const clampedValue = clamp(translationY, 0, 0)
             scrollY.value = clampedValue
@@ -173,6 +173,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                     <GestureScrollView
                         scrollEnabled={scrollEnabled}
                         nestedScrollEnabled
+                        scrollEventThrottle={16}
                         // Allows the scroll to close the bottom sheet gesture to be used simultaneously with the native gesture
                         simultaneousHandlers={[scrollPanGestureRef, nativeGestureRef]}
                         showsVerticalScrollIndicator={false}
