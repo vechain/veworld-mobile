@@ -182,6 +182,17 @@ versionName "2.4.15"
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force 'io.sentry:sentry:8.27.0'
+        force 'io.sentry:sentry-android:8.27.0'
+        force 'io.sentry:sentry-android-core:8.27.0'
+        force 'io.sentry:sentry-compose:8.27.0'
+        force 'io.sentry:sentry-compose-android:8.27.0'
+        force 'io.sentry:sentry-okhttp:8.27.0'
+    }
+}
+
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
@@ -210,4 +221,10 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+}
+
+sentry {
+	autoInstallation {
+		sentryVersion = "8.27.0"
+	}
 }

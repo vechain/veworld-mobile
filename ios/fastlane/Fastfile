@@ -509,10 +509,10 @@ platform :ios do
       sh("git checkout main")
 
       # delete branch locally
-      sh("git branch -D release-build-#{build}-#{version}")
+      sh("git branch -D release-build-ci-#{build}-#{version}")
       
       # delete branch remotely
-      sh("git push origin --delete release-build-#{build}-#{version}")
+      sh("git push origin --delete release-build-ci-#{build}-#{version}")
 
       if git_tag_exists(tag: "v#{version}-#{build}")
         # delete tag locally
