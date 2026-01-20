@@ -143,7 +143,7 @@
     "react-native-bouncy-checkbox": "^4.1.2",
     "react-native-context-menu-view": "^1.16.0",
     "react-native-device-info": "^13.1.0",
-    "react-native-draggable-flatlist": "^4.0.2",
+    "react-native-draggable-flatlist": "^4.0.3",
     "react-native-drop-shadow": "1.0.0",
     "react-native-fast-image": "^8.6.3",
     "react-native-fast-url": "^0.6.0",
