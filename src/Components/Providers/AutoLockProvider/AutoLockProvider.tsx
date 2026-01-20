@@ -24,7 +24,7 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
         if (triggerAutoLock) {
             debug(ERROR_EVENTS.SECURITY, "Registering auto lock task")
             // Register auto lock task.
-            TaskManager.defineTask(AUTO_LOCK_TASK, () => {
+            TaskManager.defineTask(AUTO_LOCK_TASK, async () => {
                 try {
                     debug(ERROR_EVENTS.SECURITY, "Trigging auto lock")
                     triggerAutoLock()

@@ -52,7 +52,7 @@ const SelectAmountSendComponentContent = ({
         vs_currency: currency,
     })
 
-    const { isBalanceExceeded, fiatAmount, tokenAmount, onChange, onMax, onReset, input, onDeleteAll } =
+    const { isBalanceExceeded, fiatAmount, tokenAmount, onChange, onMax, onReset, input, onDeleteAll, onFlip } =
         useSendAmountInput({
             token: selectedToken,
             isInputInFiat,
@@ -73,8 +73,8 @@ const SelectAmountSendComponentContent = ({
 
     const handleToggleInputMode = useCallback(() => {
         setIsInputInFiat(s => !s)
-        onReset()
-    }, [onReset])
+        onFlip()
+    }, [onFlip])
 
     const handleOpenTokenSelector = useCallback(() => {
         bottomSheetRef.current?.present()
@@ -120,8 +120,15 @@ const SelectAmountSendComponentContent = ({
     )
 
     return (
-        <SendContent>
-            <SendContent.Header />
+        <SendContent
+            showHeader
+            footer={
+                <SendContent.Footer.Next
+                    testID="SelectAmountSendComponent_NextButton"
+                    action={onSubmit}
+                    disabled={isNextDisabled}
+                />
+            }>
             <SendContent.Container>
                 <Animated.View style={styles.tokenAmountCard}>
                     <BaseView alignItems="center" gap={8}>
@@ -163,13 +170,7 @@ const SelectAmountSendComponentContent = ({
                     />
                 </Animated.View>
             </SendContent.Container>
-            <SendContent.Footer>
-                <SendContent.Footer.Next
-                    testID="SelectAmountSendComponent_NextButton"
-                    action={onSubmit}
-                    disabled={isNextDisabled}
-                />
-            </SendContent.Footer>
+
             <TokenSelectionBottomSheet
                 ref={bottomSheetRef}
                 selectedToken={selectedToken}

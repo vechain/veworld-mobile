@@ -23,7 +23,7 @@ export const StandaloneNumPad = ({ onDigitPress, onDigitDelete }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     return (
-        <View style={styles.container}>
+        <View testID="NumPad_Standalone" style={styles.container}>
             {numPad.map(digit => {
                 const isDeleteKey = digit === "canc"
                 const onPress = isDeleteKey ? onDigitDelete : handleOnDigitPress(digit)
@@ -31,6 +31,7 @@ export const StandaloneNumPad = ({ onDigitPress, onDigitDelete }: Props) => {
                     <View style={styles.width} key={digit}>
                         {digit !== "blank" ? (
                             <Pressable
+                                testID={isDeleteKey ? "numpad-canc" : `numpad-${digit}`}
                                 style={({ pressed }) => [styles.pressable, { opacity: pressed ? 0.5 : 1.0 }]}
                                 onPress={onPress}>
                                 {digit !== "canc" ? (

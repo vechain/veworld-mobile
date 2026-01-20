@@ -77,7 +77,7 @@ export const ReceiveTab = () => {
                             ? { logo: { uri: avatarUri }, logoBorderRadius: LOGO_SIZE / 2 }
                             : {
                                   logoSVG: picasso(selectedAccount.address.toLowerCase()),
-                                  logoBorderRadius: 8,
+                                  logoBorderRadius: LOGO_SIZE / 2,
                               })}
                     />
                 </BaseView>

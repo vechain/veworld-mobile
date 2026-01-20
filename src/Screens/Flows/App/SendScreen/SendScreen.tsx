@@ -42,6 +42,7 @@ export const SendScreenContent = (): ReactElement => {
             noBackButton
             headerTitleAlignment="center"
             headerRightElement={headerRightElement}
+            hasTopSafeAreaOnly
             fixedBody={
                 <Animated.View style={[styles.viewContainer, styles.flexElement]} layout={LinearTransition}>
                     {step === "selectAmount" && <SelectAmountSendComponent />}

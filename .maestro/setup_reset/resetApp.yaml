@@ -1,5 +1,13 @@
 appId: org.vechain.veworld.app
 ---
+# Navigate back if needed
+- repeat:
+      while:
+          visible:
+              id: "BackButtonHeader-BaseIcon-backButton"
+      commands:
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
     id: "settings-tab"
 - repeat:

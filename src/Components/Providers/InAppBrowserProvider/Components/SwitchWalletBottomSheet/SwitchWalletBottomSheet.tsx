@@ -161,7 +161,6 @@ export const SwitchWalletBottomSheet = () => {
         <BaseBottomSheet<Request>
             ref={switchWalletBsRef}
             onDismiss={onDismiss}
-            enableContentPanningGesture={false}
             scrollable={false}
             snapPoints={SNAP_POINTS}>
             {switchWalletBsData && (
