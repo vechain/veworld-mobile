@@ -287,7 +287,7 @@ const LineChart = ({
 
         makeMorph(start.toSVGString(), end.toSVGString(), morphProgress.value)
 
-        if (!interpolatedPath.value) return Skia.Path.Make()!
+        if (!interpolatedPath.value) return Skia.Path.Make()
 
         return Skia.Path.MakeFromSVGString(interpolatedPath.value)!
     }, [previousGraph.value, currentGraph.value, morphProgress.value, makeMorph, interpolatedPath.value])

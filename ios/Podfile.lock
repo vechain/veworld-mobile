@@ -1788,7 +1788,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (5.5.1):
     - React-Core
-  - react-native-skia (2.0.0-next.4):
+  - react-native-skia (2.4.14):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3059,7 +3059,7 @@ SPEC CHECKSUMS:
   react-native-quick-crypto: b475b71e7fa4dbf3446be55e8ad4ef2c58ac4f7f
   react-native-restart: 0bc732f4461709022a742bb29bcccf6bbc5b4863
   react-native-safe-area-context: 827032edf27079702cbd006f11dc79451a2d744b
-  react-native-skia: 3c6311d84e0e5409e954e12d885ae25662de907c
+  react-native-skia: ab97322d26c7fea36a5f9b7a8052bc0db1f7db07
   react-native-slider: 6d03bbb4451b244b1ba954b67de12a1d8698f892
   react-native-view-shot: 44e13d0424a6b0375eae31d89e161fc1153512e5
   react-native-webview: 1b5778b306d4ed09d13829a6e7a6550e3c1a644a
