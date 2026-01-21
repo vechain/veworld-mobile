@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
-import { RefreshControl } from "react-native-gesture-handler"
+import { RefreshControl, ScrollView } from "react-native-gesture-handler"
 import { FadeInRight } from "react-native-reanimated"
 import {
     BaseIcon,
@@ -151,7 +151,7 @@ export const HomeScreen = () => {
     })
 
     const [isEdit, setIsEdit] = useState(false)
-    const scrollViewRef = useRef(null)
+    const scrollViewRef = useRef<ScrollView>(undefined!)
 
     useScrollToTop(scrollViewRef)
 
