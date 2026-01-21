@@ -26,7 +26,7 @@ type Props = {
  */
 
 export const useScanLedgerDevices = ({ onAddDevice, readyToScan = true }: Props) => {
-    const subscription = useRef<TransportSubscription>()
+    const subscription = useRef<TransportSubscription | undefined>(undefined)
     const [availableDevices, setAvailableDevices] = useState<ConnectedLedgerDevice[]>([])
 
     const bleObserver: MutableRefObject<TransportObserver<any, HwTransportError>> = useRef({

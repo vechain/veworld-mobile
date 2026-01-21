@@ -1,7 +1,7 @@
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { Transaction } from "@vechain/sdk-core"
-import React, { ComponentProps, useCallback, useMemo, useRef, useState } from "react"
+import React, { ComponentProps, RefObject, useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, showErrorToast } from "~Components/Base"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
@@ -392,7 +392,7 @@ export const TransactionBottomSheet = () => {
                 <TransactionBottomSheetContent
                     onCancel={onCancel}
                     request={transactionBsData}
-                    selectAccountBsRef={selectAccountBsRef}
+                    selectAccountBsRef={selectAccountBsRef as RefObject<BottomSheetModalMethods>}
                     onTransactionFailure={onTransactionFailure}
                     onTransactionSuccess={onTransactionSuccess}
                     onNavigateToLedger={onNavigateToLedger}

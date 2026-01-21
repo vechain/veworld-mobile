@@ -1,5 +1,5 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import React, { RefObject, useCallback, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
@@ -314,7 +314,7 @@ export const TypedDataBottomSheet = () => {
                     onCancel={onCancel}
                     onSign={onSign}
                     request={typedDataBsData}
-                    selectAccountBsRef={selectAccountBsRef}
+                    selectAccountBsRef={selectAccountBsRef as RefObject<BottomSheetModalMethods>}
                     isLoading={isLoading}
                 />
             )}

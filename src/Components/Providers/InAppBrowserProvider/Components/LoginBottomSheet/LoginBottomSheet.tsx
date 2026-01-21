@@ -2,7 +2,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { useNavigation } from "@react-navigation/native"
 import { Blake2b256, Certificate } from "@vechain/sdk-core"
 import { ethers } from "ethers"
-import { default as React, useCallback, useMemo, useRef, useState } from "react"
+import { default as React, RefObject, useCallback, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseSwitch, BaseText, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
@@ -449,7 +449,7 @@ export const LoginBottomSheet = () => {
                     onCancel={onCancel}
                     onSign={onSign}
                     request={loginBsData}
-                    selectAccountBsRef={selectAccountBsRef}
+                    selectAccountBsRef={selectAccountBsRef as RefObject<BottomSheetModalMethods>}
                     isLoading={isLoading}
                 />
             )}

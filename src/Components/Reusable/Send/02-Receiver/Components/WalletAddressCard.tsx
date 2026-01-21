@@ -1,5 +1,6 @@
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import * as Clipboard from "expo-clipboard"
-import React, { Dispatch, SetStateAction, useCallback, useMemo, useState } from "react"
+import React, { Dispatch, RefObject, SetStateAction, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Animated, { LinearTransition, ZoomInEasyUp, ZoomOutEasyUp } from "react-native-reanimated"
@@ -253,7 +254,7 @@ export const WalletAddressCard = ({
 
             {RenderCameraModal}
 
-            <CreateContactBottomSheet bsRef={createContactBottomSheetRef} />
+            <CreateContactBottomSheet bsRef={createContactBottomSheetRef as RefObject<BottomSheetModalMethods>} />
         </>
     )
 }

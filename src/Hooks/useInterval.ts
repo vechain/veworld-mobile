@@ -7,7 +7,7 @@ type Props = {
 }
 
 export const useInterval = ({ callback, delay, enabled = true }: Props) => {
-    const savedCallback = useRef<() => void>()
+    const savedCallback = useRef<() => void | undefined>(undefined)
 
     // Remember the latest callback.
     useEffect(() => {

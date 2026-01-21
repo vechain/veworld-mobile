@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useCallback, useEffect, useMemo } from "react"
+import React, { RefObject, useCallback, useEffect, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import striptags from "striptags"
@@ -15,6 +15,7 @@ import { selectBalanceVisible, selectSelectedAccount, useAppSelector } from "~St
 import { AccountUtils } from "~Utils"
 import { AssetChart, ConvertedBetterBottomSheet, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -86,7 +87,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             isBalanceVisible={isBalanceVisible}
                             openQRCodeSheet={handleOpenOnlyReceiveCamera}
                             isObserved={isObserved}
-                            convertB3trBottomSheetRef={convertB3trBsRef}
+                            convertB3trBottomSheetRef={convertB3trBsRef as RefObject<BottomSheetModalMethods>}
                         />
                         <BaseSpacer height={16} />
 
