@@ -10,6 +10,7 @@ jest.mock("react-native-ble-plx", () => {
             onStateChange: jest.fn(callback => {
                 callback(State.PoweredOn)
             }),
+            destroy: jest.fn(),
         })),
     }
 })
