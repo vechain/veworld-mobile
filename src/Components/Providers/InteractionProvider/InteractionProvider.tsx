@@ -4,21 +4,21 @@ import { useBottomSheetModal } from "~Hooks"
 import {
     CertificateRequest,
     ConnectAppRequest,
+    DisconnectAppRequest,
     LoginRequest,
     SwitchWalletRequest,
     TransactionRequest,
     TypeDataRequest,
-    DisconnectAppRequest,
 } from "~Model"
 
 type ContextType = {
-    connectBsRef: RefObject<BottomSheetModalMethods | null>
-    certificateBsRef: RefObject<BottomSheetModalMethods | null>
-    transactionBsRef: RefObject<BottomSheetModalMethods | null>
-    typedDataBsRef: RefObject<BottomSheetModalMethods | null>
-    loginBsRef: RefObject<BottomSheetModalMethods | null>
-    switchWalletBsRef: RefObject<BottomSheetModalMethods | null>
-    disconnectBsRef: RefObject<BottomSheetModalMethods | null>
+    connectBsRef: RefObject<BottomSheetModalMethods>
+    certificateBsRef: RefObject<BottomSheetModalMethods>
+    transactionBsRef: RefObject<BottomSheetModalMethods>
+    typedDataBsRef: RefObject<BottomSheetModalMethods>
+    loginBsRef: RefObject<BottomSheetModalMethods>
+    switchWalletBsRef: RefObject<BottomSheetModalMethods>
+    disconnectBsRef: RefObject<BottomSheetModalMethods>
     connectBsData: ConnectAppRequest | null
     setConnectBsData: Dispatch<SetStateAction<ConnectAppRequest | null>>
     certificateBsData: CertificateRequest | null

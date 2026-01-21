@@ -12,7 +12,6 @@ import { FiltersSection } from "./FiltersSection"
 import { SortDAppsBottomSheetV2 } from "./SortDAppsBottomSheetV2"
 import { TopSection } from "./TopSection"
 import { DappTypeV2 } from "./types"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 export const EcosystemSection = ({
     defaultFilter,
@@ -119,12 +118,8 @@ export const EcosystemSection = ({
                 animationDirection={animationDirection}
                 onAnimationComplete={handleAnimationComplete}
             />
-            <SortDAppsBottomSheetV2
-                onSortChange={setSelectedSort}
-                selectedSort={selectedSort}
-                bsRef={sortBs as RefObject<BottomSheetModalMethods>}
-            />
-            <DappOptionsBottomSheetV2 bsRef={dappOptionsBs as RefObject<BottomSheetModalMethods>} />
+            <SortDAppsBottomSheetV2 onSortChange={setSelectedSort} selectedSort={selectedSort} bsRef={sortBs} />
+            <DappOptionsBottomSheetV2 bsRef={dappOptionsBs} />
         </View>
     )
 }

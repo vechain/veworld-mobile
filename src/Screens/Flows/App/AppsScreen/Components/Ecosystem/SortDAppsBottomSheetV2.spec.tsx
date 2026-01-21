@@ -7,18 +7,11 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 
 describe("SortDAppsBottomSheetV2", () => {
     it("should render correctly", async () => {
-        const bsRef = { current: null } as RefObject<BottomSheetModalMethods | null>
+        const bsRef = { current: undefined! } as RefObject<BottomSheetModalMethods>
         const onSortChange = jest.fn()
-        render(
-            <SortDAppsBottomSheetV2
-                selectedSort="alphabetic_asc"
-                bsRef={bsRef as RefObject<BottomSheetModalMethods>}
-                onSortChange={onSortChange}
-            />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        render(<SortDAppsBottomSheetV2 selectedSort="alphabetic_asc" bsRef={bsRef} onSortChange={onSortChange} />, {
+            wrapper: TestWrapper,
+        })
 
         await act(() => {
             fireEvent.press(screen.getByTestId("RadioButton-alphabetic_desc"))

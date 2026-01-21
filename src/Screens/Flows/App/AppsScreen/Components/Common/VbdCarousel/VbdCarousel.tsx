@@ -1,4 +1,4 @@
-import React, { RefObject, useCallback, useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -7,7 +7,6 @@ import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 import { VbdCarouselBottomSheet, VbdCarouselBottomSheetMetadata } from "./VbdCarouselBottomSheet"
 import { VbdCarouselItem } from "./VbdCarouselItem"
 import { VbdCarouselItemSkeleton } from "./VbdCarouselItemSkeleton"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 type Props = {
     appIds: string[]
@@ -62,7 +61,7 @@ export const VbdCarousel = ({ appIds, isLoading: propsIsLoading }: Props) => {
                 dotStyles={dotStyles}
             />
 
-            <VbdCarouselBottomSheet bsRef={ref as RefObject<BottomSheetModalMethods>} />
+            <VbdCarouselBottomSheet bsRef={ref} />
         </>
     )
 }

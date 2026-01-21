@@ -1,7 +1,7 @@
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { Transaction } from "@vechain/sdk-core"
-import React, { ComponentProps, RefObject, useCallback, useMemo, useRef, useState } from "react"
+import React, { ComponentProps, useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, showErrorToast } from "~Components/Base"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
@@ -10,9 +10,9 @@ import { DelegationView, GasFeeSpeed, RequireUserPassword, SelectAccountBottomSh
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { AnalyticsEvent, COLORS, RequestMethods } from "~Constants"
 import { useBottomSheetModal, useIsOnline, useSetSelectedAccount, useThemedStyles, useTransactionScreen } from "~Hooks"
-import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useLoginSession } from "~Hooks/useLoginSession"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { TransactionRequest } from "~Model"
 import {
     addPendingDappTransactionActivity,
@@ -392,7 +392,7 @@ export const TransactionBottomSheet = () => {
                 <TransactionBottomSheetContent
                     onCancel={onCancel}
                     request={transactionBsData}
-                    selectAccountBsRef={selectAccountBsRef as RefObject<BottomSheetModalMethods>}
+                    selectAccountBsRef={selectAccountBsRef}
                     onTransactionFailure={onTransactionFailure}
                     onTransactionSuccess={onTransactionSuccess}
                     onNavigateToLedger={onNavigateToLedger}

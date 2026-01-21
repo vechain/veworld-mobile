@@ -1,8 +1,10 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import { Blake2b256, Certificate } from "@vechain/sdk-core"
-import React, { RefObject, useCallback, useMemo, useRef, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConnectProvider"
@@ -10,6 +12,7 @@ import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { AnalyticsEvent, COLORS, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { useI18nContext } from "~i18n"
 import { CertificateRequest, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
@@ -26,9 +29,6 @@ import { AccountUtils, error, HexUtils } from "~Utils"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { DappWithDetails } from "../DappWithDetails"
 import { Signable } from "../Signable"
-import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
-import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
-import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 
 type Request = {
     request: CertificateRequest
@@ -344,7 +344,7 @@ export const CertificateBottomSheet = () => {
                     onCancel={onCancel}
                     onSign={onSign}
                     request={certificateBsData}
-                    selectAccountBsRef={selectAccountBsRef as RefObject<BottomSheetModalMethods>}
+                    selectAccountBsRef={selectAccountBsRef}
                     isLoading={isLoading}
                 />
             )}
