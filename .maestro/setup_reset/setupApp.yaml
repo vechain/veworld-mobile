@@ -6,73 +6,117 @@ env:
     ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
 
 ---
+- evalScript: "${console.log('>>> SETUP - Launching app with clearState')}"
 - launchApp:
       clearState: true
 
 ## welcome screen
+- evalScript: "${console.log('>>> SETUP - Waiting for dev_demo 30s timeout')}"
 - extendedWaitUntil:
       visible:
           id: "dev_demo"
       timeout: 30000
+- evalScript: "${console.log('>>> SETUP - Tapping dev_demo')}"
 - tapOn:
       id: "dev_demo"
+- evalScript: "${console.log('>>> SETUP - Checking for notifications prompt')}"
 - runFlow:
       when:
           visible:
               id: "button_notifications_enable"
       commands:
+          - evalScript: "${console.log('>>> SETUP - Tapping button_notifications_skip')}"
           - tapOn:
                 id: "button_notifications_skip"
+- evalScript: "${console.log('>>> SETUP - Tapping settings-tab')}"
+- extendedWaitUntil:
+      visible:
+          id: "settings-tab"
 - tapOn:
       id: "settings-tab"
+- evalScript: "${console.log('>>> SETUP - Waiting for Networks 10s timeout')}"
 - extendedWaitUntil:
       visible:
           id: "Networks"
       timeout: 10000
+- evalScript: "${console.log('>>> SETUP - Tapping Networks')}"
 - tapOn:
       id: "Networks"
+- evalScript: "${console.log('>>> SETUP - Tapping NetworkBox_mainnet')}"
+- extendedWaitUntil:
+      visible:
+          id: "NetworkBox_mainnet"
 - tapOn:
       id: "NetworkBox_mainnet"
+- evalScript: "${console.log('>>> SETUP - Tapping NetworkBox_testnet')}"
+- extendedWaitUntil:
+      visible:
+          id: "NetworkBox_testnet"
 - tapOn:
       id: "NetworkBox_testnet"
+- evalScript: "${console.log('>>> SETUP - Tapping wallet-tab')}"
+- extendedWaitUntil:
+      visible:
+          id: "wallet-tab"
 - tapOn:
       id: "wallet-tab"
+- evalScript: "${console.log('>>> SETUP - Tapping BalanceScreen_WalletManagementButton')}"
+- extendedWaitUntil:
+      visible:
+          id: "BalanceScreen_WalletManagementButton"
 - tapOn:
       id: "BalanceScreen_WalletManagementButton"
-      retryTapIfNoChange: false
+- evalScript: "${console.log('>>> SETUP - Checking for Select the active account')}"
 - runFlow:
       when:
-          visible: "Select the active account"
+          visible:
+              id: "SelectAccountBottomSheet_SettingsButtonIcon"
       commands:
+          - evalScript: "${console.log('>>> SETUP - Tapping SelectAccountBottomSheet_SettingsButtonIcon')}"
           - tapOn:
                 id: "SelectAccountBottomSheet_SettingsButtonIcon"
+- evalScript: "${console.log('>>> SETUP - Waiting for Wallet_Management_AddWallet')}"
+- extendedWaitUntil:
+      visible:
+          id: "Wallet_Management_AddWallet"
+      timeout: 10000
+- evalScript: "${console.log('>>> SETUP - Tapping Wallet_Management_AddWallet')}"
 - tapOn:
       id: "Wallet_Management_AddWallet"
-      retryTapIfNoChange: false
-- runFlow:
-      when:
-          visible: "Wallet Setup"
-      commands:
-          - tapOn:
-                id: "CreateOrImportWalletBottomSheet_CreateNewButton"
+- evalScript: "${console.log('>>> SETUP - Verifying Create New button is visible')}"
+- extendedWaitUntil:
+      visible:
+          id: "CreateOrImportWalletBottomSheet_CreateNewButton"
+      timeout: 10000
+- evalScript: "${console.log('>>> SETUP - Tapping CreateOrImportWalletBottomSheet_CreateNewButton')}"
+- tapOn:
+      id: "CreateOrImportWalletBottomSheet_CreateNewButton"
+- evalScript: "${console.log('>>> SETUP - Entering PIN 6 times')}"
 - repeat:
       times: 6
       commands:
           - tapOn:
                 id: "numpad-1"
+- evalScript: "${console.log('>>> SETUP - Waiting for Backup_later_button 10s timeout')}"
 - extendedWaitUntil:
       visible:
           id: "Backup_later_button"
       timeout: 10000
+- evalScript: "${console.log('>>> SETUP - Tapping Backup_later_button')}"
 - tapOn:
       id: "Backup_later_button"
+- evalScript: "${console.log('>>> SETUP - Tapping wallet-tab')}"
 - tapOn:
       id: "wallet-tab"
+- evalScript: "${console.log('>>> SETUP - Tapping BalanceScreen_WalletManagementButton')}"
 - tapOn:
       id: "BalanceScreen_WalletManagementButton"
       retryTapIfNoChange: false
+- evalScript: "${console.log('>>> SETUP - Selecting account')}"
 - runFlow:
       commands:
+          - evalScript: "${console.log('>>> SETUP - Tapping selectAccount index 0')}"
           - tapOn:
                 id: "selectAccount"
                 index: 0
+- evalScript: "${console.log('>>> SETUP COMPLETE')}"
