@@ -6,19 +6,20 @@ import { error } from "~Utils/Logger"
 import fastKeystoreDecrypt from "./Helpers/fastKeystoreDecrypt"
 import HexUtils from "~Utils/HexUtils"
 import { ERROR_EVENTS } from "~Constants"
+import { Cipher, Decipher } from "crypto"
 
 // [START] - Used for testing purposes ONLY
 function encrypt<T>(data: T, encryptionKey: string, salt?: string): string {
-    const key = PasswordUtils.hash(encryptionKey, salt)
+    const keyHex = PasswordUtils.hash(encryptionKey, salt)
     const iv = PasswordUtils.getIV()
-    const cipher = crypto.createCipheriv("aes256", key, iv)
+    const cipher = crypto.createCipheriv("aes-256-cbc", keyHex, iv) as Cipher
     let ciph = cipher.update(JSON.stringify(data), "utf-8", "hex")
     ciph += cipher.final("hex")
     return ciph as string
 }
 
 function encryptState<T>(data: T, key: string): string {
-    const cipher = crypto.createCipheriv("aes256", key, null)
+    const cipher = crypto.createCipheriv("aes-256-cbc", key, null) as Cipher
     let ciph = cipher.update(stringify(data), "utf-8", "hex")
     ciph += cipher.final("hex")
     return ciph as string
@@ -26,9 +27,9 @@ function encryptState<T>(data: T, key: string): string {
 // [END] - Used for testing purposes ONLY
 
 function decrypt<T>(data: string, encryptionKey: string, salt?: string): T {
-    const key = PasswordUtils.hash(encryptionKey, salt)
+    const keyHex = PasswordUtils.hash(encryptionKey, salt)
     const iv = PasswordUtils.getIV()
-    const decipher = crypto.createDecipheriv("aes256", key, iv)
+    const decipher = crypto.createDecipheriv("aes-256-cbc", keyHex, iv) as Decipher
     let txt = decipher.update(data, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()
@@ -37,7 +38,7 @@ function decrypt<T>(data: string, encryptionKey: string, salt?: string): T {
 }
 
 function decryptState(data: string, key: string) {
-    const decipher = crypto.createDecipheriv("aes256", key, null)
+    const decipher = crypto.createDecipheriv("aes-256-cbc", key, null) as Decipher
     let txt = decipher.update(data, "hex", "utf-8")
     txt += decipher.final("utf-8")
     let txtToString = txt.toString()

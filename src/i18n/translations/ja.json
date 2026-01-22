@@ -1242,7 +1242,7 @@
   "SIGN_TYPED_DATA_REQUEST_CTA": "署名する",
   "SIGN_TYPED_DATA_REQUEST_TITLE": "型付きデータに署名する",
   "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "委譲されたスマートウォレットはまだサポートされていません",
-  "STARGATE_APY": "年利率",
+  "STARGATE_APY": "年利（APY）",
   "STARGATE_CLAIMABLE": "請求可能",
   "STARGATE_CYCLE_DURATION": "サイクル期間",
   "STARGATE_DAYS": "{days:number}日間",

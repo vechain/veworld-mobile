@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react"
-import { PixelRatio, StyleSheet, TouchableOpacity } from "react-native"
-import Animated, { FadeIn, FadeOut, LinearTransition } from "react-native-reanimated"
+import { PixelRatio, StyleSheet, Text, TouchableOpacity } from "react-native"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseText } from "~Components"
 import { useDevice } from "~Components/Providers/DeviceProvider"
 import { COLORS, SYMBOL_POSITIONS } from "~Constants"
@@ -62,12 +62,7 @@ export const CurrentBalance = () => {
 
                 <Animated.View style={styles.balance}>
                     {splittedText.includes("•") || isLowEndDevice || hasCompactOrSpecialNotation ? (
-                        <Animated.Text
-                            entering={FadeIn.duration(300)}
-                            exiting={FadeOut.duration(300)}
-                            style={styles.text}>
-                            {splittedText.join("")}
-                        </Animated.Text>
+                        <Text style={styles.text}>{splittedText.join("")}</Text>
                     ) : (
                         splittedText.map((value, idx) => <SlotMachineText key={idx} value={value} />)
                     )}

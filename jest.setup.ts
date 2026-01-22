@@ -11,17 +11,19 @@ import { MMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
 import * as dotenv from "dotenv"
 import { FlatList, SectionList, View } from "react-native"
+import { randomBytes as cryptoRandomBytes } from "crypto"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
 
 dotenv.config({ path: "./.env" })
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
-jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
+jest.mock("react-native/src/private/animated/NativeAnimatedHelper.js")
 jest.mock("jail-monkey", () => require("./src/Test/mocks/jail-monkey"))
 jest.mock("react-native-quick-crypto", () => ({
     getRandomValues: jest.fn(buffer => buffer),
     randomFillSync: jest.fn(buffer => buffer),
+    randomBytes: jest.fn(size => cryptoRandomBytes(size)),
     createCipheriv: jest.fn(() => ({
         update: (first: string) => first,
         final: () => "",
@@ -103,7 +105,12 @@ jest.mock("expo-modules-core", () => ({
         addListener: jest.fn(),
         removeListeners: jest.fn(),
     })),
+    LegacyEventEmitter: jest.fn().mockImplementation(() => ({
+        addListener: jest.fn(),
+        removeListeners: jest.fn(),
+    })),
     requireNativeModule: jest.fn().mockReturnValue({}), // Mock native modules
+    requireOptionalNativeModule: jest.fn().mockReturnValue({}),
     Platform: {
         OS: "ios",
     },

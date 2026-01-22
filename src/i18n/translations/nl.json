@@ -1059,7 +1059,7 @@
   "SB_SECURITY": "Om uw wallet te beveiligen, kunt u ofwel de biometrie van uw apparaat gebruiken (zoals een vingerafdruk) of een wachtwoord instellen. U kunt het wachtwoord indien nodig op elk moment wijzigen.",
   "SB_SECURITY_METHOD": "Beveiligingsmethode",
   "SB_SELECT_LANGUAGE": "Taal",
-  "SB_SELECT_LANGUAGE_DESC": "Verander de voertaal van de interface",
+  "SB_SELECT_LANGUAGE_DESC": "Wijzig de interface-taal",
   "SB_UNLOCK_WALLET_PIN": "Voer de pincode in die u heeft aangemaakt om uw wallet te ontgrendelen.",
   "SB_UPGRADE_SECURITY_WARNING_ANDROID": "Ook wordt u gevraagd om voor elke wallet uw biometrische beveiligingsmethode te gebruiken!",
   "SB_USERNAME_CLAIMED": "is succesvol geclaimd voor dit account.",

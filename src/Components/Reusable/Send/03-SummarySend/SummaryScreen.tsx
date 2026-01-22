@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseView } from "~Components"
 import { useTokenSendContext } from "~Components/Reusable/Send"
-import { VTHO } from "~Constants"
+import { SCREEN_HEIGHT, VTHO } from "~Constants"
 import { useThemedStyles, useTransactionScreen } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { BigNutils, TransactionUtils } from "~Utils"
@@ -118,8 +118,18 @@ export const SummaryScreen = () => {
     }
 
     return (
-        <SendContent>
-            <SendContent.Header />
+        <SendContent
+            footer={
+                <>
+                    <SendContent.Footer.Back />
+                    <SendContent.Footer.Next
+                        testID="SummaryScreen_NextButton"
+                        action={onSubmit}
+                        disabled={isDisabledButtonState}>
+                        {txError ? LL.COMMON_BTN_TRY_AGAIN() : LL.COMMON_BTN_CONFIRM()}
+                    </SendContent.Footer.Next>
+                </>
+            }>
             <SendContent.Container>
                 <Animated.View style={styles.root}>
                     <TokenReceiverCard />
@@ -139,15 +149,6 @@ export const SummaryScreen = () => {
                     <TransactionAlert hasGasAdjustment={hasGasAdjustment} txError={txError} />
                 </Animated.View>
             </SendContent.Container>
-            <SendContent.Footer>
-                <SendContent.Footer.Back />
-                <SendContent.Footer.Next
-                    testID="SummaryScreen_NextButton"
-                    action={onSubmit}
-                    disabled={isDisabledButtonState}>
-                    {txError ? LL.COMMON_BTN_TRY_AGAIN() : LL.COMMON_BTN_CONFIRM()}
-                </SendContent.Footer.Next>
-            </SendContent.Footer>
         </SendContent>
     )
 }
@@ -158,5 +159,6 @@ const baseStyles = () =>
             flex: 1,
             flexDirection: "column",
             gap: 16,
+            maxHeight: SCREEN_HEIGHT * 0.75, // 75% of the screen height
         },
     })

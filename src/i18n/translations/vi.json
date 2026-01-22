@@ -1244,7 +1244,7 @@
   "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Ủy quyền ví thông minh hiện chưa được hỗ trợ",
   "STARGATE_APY": "Lãi suất năm (APY)",
   "STARGATE_CLAIMABLE": "Có thể yêu cầu",
-  "STARGATE_CYCLE_DURATION": "Thời gian chu kỳ",
+  "STARGATE_CYCLE_DURATION": "Thời lượng chu kỳ",
   "STARGATE_DAYS": "{days:number} ngày",
   "STARGATE_DELEGATEE_LABEL": "Quản lý",
   "STARGATE_DELEGATION_STATUS_DELEGATED": "Đã ủy quyền",
