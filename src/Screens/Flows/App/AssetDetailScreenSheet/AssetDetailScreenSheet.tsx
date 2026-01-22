@@ -182,7 +182,7 @@ export const AssetDetailScreenSheet = ({ route }: Props) => {
                             <TokenSymbol token={token} typographyFont="bodySemiBold" />
                         </BaseView>
                     </BaseView>
-                    {chartData?.length && <AssertChartBalance />}
+                    {chartData?.length && <AssertChartBalance token={token} />}
                 </BaseView>
                 <BaseSpacer height={24} />
                 {hasTokenChart && token.symbol !== VeDelegate.symbol && (

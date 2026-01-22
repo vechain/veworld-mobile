@@ -2,33 +2,36 @@ import React, { useMemo } from "react"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useLineChart } from "~Components/Reusable/LineChart"
 import { COLORS } from "~Constants"
-import { useFormatFiat, useTheme } from "~Hooks"
+import { TokenWithCompleteInfo, useFormatFiat, useTheme } from "~Hooks"
 import { selectCurrencySymbol, useAppSelector } from "~Storage/Redux"
 import { formatFiatAmount } from "~Utils/StandardizedFormatting"
 
-export const AssertChartBalance = () => {
+type Props = {
+    token: TokenWithCompleteInfo
+}
+
+export const AssertChartBalance = ({ token }: Props) => {
     const { data, selectedPoint } = useLineChart()
     const { formatLocale } = useFormatFiat()
     const theme = useTheme()
     const currencySymbol = useAppSelector(selectCurrencySymbol)
 
     const formatted = useMemo(() => {
-        const value = selectedPoint?.value || data[data.length - 1]?.value || 0
+        const value = selectedPoint?.value || token.exchangeRate || 0
         return formatFiatAmount(value, currencySymbol, {
             locale: formatLocale,
             symbolPosition: "before",
             forceDecimals: 6,
         })
-    }, [selectedPoint?.value, data, currencySymbol, formatLocale])
+    }, [selectedPoint?.value, token.exchangeRate, currencySymbol, formatLocale])
 
     const percentageChange = useMemo(() => {
         if (!data) return 0
 
-        if (!selectedPoint)
-            return ((data[data.length - 1]?.value - (data[0]?.value ?? 0)) / (data[0]?.value ?? 1)) * 100
+        if (!selectedPoint) return (((token.exchangeRate ?? 0) - (data[0]?.value ?? 0)) / (data[0]?.value ?? 1)) * 100
 
         return ((selectedPoint.value - (data[0]?.value ?? 0)) / (data[0]?.value ?? 1)) * 100
-    }, [selectedPoint, data])
+    }, [data, selectedPoint, token.exchangeRate])
 
     const formattedPercentageChange = useMemo(() => {
         return formatFiatAmount(percentageChange, "%", {

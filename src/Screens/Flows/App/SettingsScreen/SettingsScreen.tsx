@@ -16,6 +16,7 @@ import {
 import { AccountUtils } from "~Utils"
 import { RowProps, SettingsRow } from "./Components/SettingsRow"
 import SettingsRowDivider, { RowDividerProps } from "./Components/SettingsRowDivider"
+import { useResetSettingStack } from "../ActivityScreen/Hooks"
 
 type SettingsRowItem = {
     element: "settingsRow"
@@ -33,6 +34,9 @@ type BackupBannerItem = {
 type SettingsItem = SettingsRowItem | DividerItem | BackupBannerItem
 
 export const SettingsScreen = () => {
+    // Reset the setting stack when the current account or network changes
+    useResetSettingStack()
+
     const { LL } = useI18nContext()
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
     const developerMenuUnlocked = useAppSelector(selectDeveloperMenuUnlocked)
