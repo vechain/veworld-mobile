@@ -128,7 +128,7 @@
     "json-abi-to-ts": "file:./cli-tools/json-abi-to-ts",
     "json-stringify-safe": "^5.0.1",
     "jspdf": "^4.0.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "lottie-react-native": "6.7.0",
     "mixpanel-react-native": "^3.0.7",
     "moment": "^2.30.1",
