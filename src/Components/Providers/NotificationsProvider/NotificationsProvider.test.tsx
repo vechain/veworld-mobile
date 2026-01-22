@@ -11,18 +11,14 @@ import { PersistConfig } from "redux-persist/es/types"
 import { OneSignal } from "react-native-onesignal"
 import { FeatureFlagsContext, initialState as ffInitialState } from "../FeatureFlagsProvider"
 
-// Create mock function that will be used by the axios instance
-const mockAxiosRequest = jest.fn()
-
 // Mock axios before any imports use it
-jest.mock("axios", () => {
-    return {
-        create: jest.fn(() => ({
-            request: mockAxiosRequest,
-            get: jest.fn(),
-        })),
-    }
-})
+const mockAxiosRequest = jest.fn()
+jest.mock("axios", () => ({
+    create: jest.fn(() => ({
+        request: (...args: unknown[]) => mockAxiosRequest(...args),
+        get: jest.fn(),
+    })),
+}))
 
 const mockGetIdAsync = jest.fn()
 ;(OneSignal.User.pushSubscription as any).getIdAsync = mockGetIdAsync
