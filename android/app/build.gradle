@@ -89,6 +89,8 @@ react {
     entryFile = file(["node", "-e", "require('expo/scripts/resolveAppEntry')", rootDir.getAbsoluteFile().getParentFile().getAbsolutePath(), "android", "absolute"].execute(null, rootDir).text.trim())
     cliFile = new File(["node", "--print", "require.resolve('@expo/cli')"].execute(null, rootDir).text.trim())
     bundleCommand = "export:embed"
+
+    autolinkLibrariesWithApp()
 }
 
 /**
@@ -126,8 +128,8 @@ android {
         applicationId "org.vechain.veworld.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-versionCode 984
-versionName "2.4.15"
+versionCode 991
+versionName "2.5.0"
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -180,6 +182,17 @@ versionName "2.4.15"
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force 'io.sentry:sentry:8.27.0'
+        force 'io.sentry:sentry-android:8.27.0'
+        force 'io.sentry:sentry-android-core:8.27.0'
+        force 'io.sentry:sentry-compose:8.27.0'
+        force 'io.sentry:sentry-compose-android:8.27.0'
+        force 'io.sentry:sentry-okhttp:8.27.0'
+    }
+}
+
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
@@ -187,7 +200,7 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${rootProject.ext.kotlinVersion}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0"
@@ -210,5 +223,8 @@ dependencies {
     }
 }
 
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
-applyNativeModulesAppBuildGradle(project)
+sentry {
+	autoInstallation {
+		sentryVersion = "8.27.0"
+	}
+}
