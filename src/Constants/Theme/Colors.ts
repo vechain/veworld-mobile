@@ -35,6 +35,7 @@ export type Colors = {
     card: string
     icon: string
     button: string
+    buttonText: string
     pinFilled: string
     pinEmpty: string
     rightIconHeaderBorder: string
@@ -223,7 +224,9 @@ export type Colors = {
     errorAlert: {
         background: string
         text: string
+        subText: string
         icon: string
+        border: string
     }
     label: {
         background: string
@@ -560,6 +563,7 @@ const light: Colors = {
     pinEmpty: COLORS.GREY_400,
     pinFilled: COLORS.PRIMARY_800,
     button: COLORS.DARK_PURPLE,
+    buttonText: COLORS.WHITE,
     rightIconHeaderBorder: COLORS.GREY_200,
     rightIconHeaderColor: COLORS.GREY_600,
     cardBorder: COLORS.GREY_300,
@@ -744,7 +748,9 @@ const light: Colors = {
     errorAlert: {
         background: COLORS.RED_50,
         text: COLORS.RED_700,
+        subText: COLORS.GREY_600,
         icon: COLORS.RED_500,
+        border: COLORS.RED_200,
     },
     label: {
         background: COLORS.GREY_200,
@@ -955,6 +961,7 @@ const dark: Colors = {
     card: COLORS.PURPLE,
     icon: COLORS.WHITE,
     button: COLORS.LIME_GREEN,
+    buttonText: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.TRANSPARENT,
     rightIconHeaderColor: COLORS.WHITE,
     cardBorder: COLORS.DARK_PURPLE_DISABLED,
@@ -1139,7 +1146,9 @@ const dark: Colors = {
     errorAlert: {
         background: COLORS.RED_100,
         text: COLORS.RED_700,
+        subText: COLORS.GREY_600,
         icon: COLORS.RED_500,
+        border: COLORS.RED_200,
     },
     label: {
         background: COLORS.PURPLE_DISABLED,
