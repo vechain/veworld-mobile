@@ -1761,6 +1761,18 @@ type RootTranslation = {
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: string
 	/**
+	 * C​o​n​t​i​n​u​e​ ​w​i​t​h​ ​A​p​p​l​e
+	 */
+	BTN_CONTINUE_WITH_APPLE: string
+	/**
+	 * C​o​n​t​i​n​u​e​ ​w​i​t​h​ ​G​o​o​g​l​e
+	 */
+	BTN_CONTINUE_WITH_GOOGLE: string
+	/**
+	 * S​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t
+	 */
+	BTN_SELF_CUSTODY_WALLET: string
+	/**
 	 * B​u​y​ ​n​e​w​ ​c​o​l​l​e​c​t​i​b​l​e​s
 	 */
 	BUY_NEW_COLLECTIBLES: string
@@ -2136,6 +2148,12 @@ type RootTranslation = {
 	 * V​a​l​u​e
 	 */
 	COMMON_LBL_VALUE: string
+	/**
+	 * B​y​ ​u​s​i​n​g​ ​V​e​W​o​r​l​d​’​s​ ​w​a​l​l​e​t​,​ ​t​h​e​ ​u​s​e​r​ ​a​c​c​e​p​t​s​ ​[​T​e​r​m​s​ ​a​n​d​ ​C​o​n​d​i​t​i​o​n​s​]​(​{​t​e​r​m​s​O​f​S​e​r​v​i​c​e​U​r​l​}​)​ ​a​n​d​ ​[​P​r​i​v​a​c​y​ ​P​o​l​i​c​y​]​(​{​p​r​i​v​a​c​y​P​o​l​i​c​y​U​r​l​}​)​.
+	 * @param {string} privacyPolicyUrl
+	 * @param {string} termsOfServiceUrl
+	 */
+	COMMON_LBL_BY_AGREEMENT: RequiredParams<'privacyPolicyUrl' | 'termsOfServiceUrl'>
 	/**
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
@@ -3889,7 +3907,7 @@ type RootTranslation = {
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: string
 	/**
-	 * P​u​s​h​ ​N​o​t​i​f​i​c​a​t​i​o​n​s
+	 * N​o​t​i​f​i​c​a​t​i​o​n​s
 	 */
 	PUSH_NOTIFICATIONS: string
 	/**
@@ -3908,6 +3926,14 @@ type RootTranslation = {
 	 * K​e​e​p​ ​u​p​ ​t​o​ ​d​a​t​e​ ​w​i​t​h​ ​t​h​e​ ​l​a​t​e​s​t​ ​n​e​w​s​ ​a​n​d​ ​u​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_DESC: string
+	/**
+	 * P​l​e​a​s​e​ ​g​o​ ​t​o​ ​t​h​e​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​a​l​l​o​w​ ​V​e​W​o​r​l​d​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​t​o​ ​b​e​ ​p​u​s​h​e​d​.
+	 */
+	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC: string
+	/**
+	 * D​e​v​i​c​e​ ​s​e​t​t​i​n​g​s
+	 */
+	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE: string
 	/**
 	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​l​o​a​d​ ​y​o​u​r​ ​p​r​e​f​e​r​e​n​c​e​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
@@ -3941,21 +3967,13 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: string
 	/**
-	 * U​p​d​a​t​e​s
+	 * V​e​W​o​r​l​d​ ​&​ ​V​e​C​h​a​i​n
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: string
 	/**
 	 * V​e​B​e​t​t​e​r
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
-	/**
-	 * D​e​v​i​c​e​ ​s​e​t​t​i​n​g​s
-	 */
-	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE: string
-	/**
-	 * P​l​e​a​s​e​ ​g​o​ ​t​o​ ​t​h​e​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​a​l​l​o​w​ ​V​e​W​o​r​l​d​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​t​o​ ​b​e​ ​p​u​s​h​e​d​.
-	 */
-	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC: string
 	/**
 	 * E​n​a​b​l​e​ ​y​o​u​r​ ​c​a​m​e​r​a​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​s​c​a​n​ ​a​ ​Q​R​ ​c​o​d​e
 	 */
@@ -5093,9 +5111,22 @@ type RootTranslation = {
 	 */
 	SMART_WALLET_DELEGATION_NOT_SUPPORTED: string
 	/**
+	 * A​P​Y
+	 */
+	STARGATE_APY: string
+	/**
 	 * C​l​a​i​m​a​b​l​e
 	 */
 	STARGATE_CLAIMABLE: string
+	/**
+	 * C​y​c​l​e​ ​d​u​r​a​t​i​o​n
+	 */
+	STARGATE_CYCLE_DURATION: string
+	/**
+	 * {​d​a​y​s​}​ ​d​a​y​s
+	 * @param {number} days
+	 */
+	STARGATE_DAYS: RequiredParams<'days'>
 	/**
 	 * M​a​n​a​g​i​n​g
 	 */
@@ -5813,7 +5844,7 @@ type RootTranslation = {
 	 */
 	VBD_YOUR_OFFSET: string
 	/**
-	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
+	 * N​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
 	VECHAIN_NEWS_AND_UPDATES: string
 	/**
@@ -6034,19 +6065,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * A​P​Y
-	 */
-	STARGATE_APY: string
-	/**
-	 * C​y​c​l​e​ ​d​u​r​a​t​i​o​n
-	 */
-	STARGATE_CYCLE_DURATION: string
-	/**
-	 * {​d​a​y​s​}​ ​d​a​y​s
-	 * @param {number} days
-	 */
-	STARGATE_DAYS: RequiredParams<'days'>
 }
 
 export type TranslationFunctions = {
@@ -7760,6 +7778,18 @@ Thanks for your patience!
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: () => LocalizedString
 	/**
+	 * Continue with Apple
+	 */
+	BTN_CONTINUE_WITH_APPLE: () => LocalizedString
+	/**
+	 * Continue with Google
+	 */
+	BTN_CONTINUE_WITH_GOOGLE: () => LocalizedString
+	/**
+	 * Self-custody wallet
+	 */
+	BTN_SELF_CUSTODY_WALLET: () => LocalizedString
+	/**
 	 * Buy new collectibles
 	 */
 	BUY_NEW_COLLECTIBLES: () => LocalizedString
@@ -8132,6 +8162,10 @@ This action is irreversible.
 	 * Value
 	 */
 	COMMON_LBL_VALUE: () => LocalizedString
+	/**
+	 * By using VeWorld’s wallet, the user accepts [Terms and Conditions]({termsOfServiceUrl}) and [Privacy Policy]({privacyPolicyUrl}).
+	 */
+	COMMON_LBL_BY_AGREEMENT: (arg: { privacyPolicyUrl: string, termsOfServiceUrl: string }) => LocalizedString
 	/**
 	 * Market Cap
 	 */
@@ -9859,7 +9893,7 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
 	/**
-	 * Push Notifications
+	 * Notifications
 	 */
 	PUSH_NOTIFICATIONS: () => LocalizedString
 	/**
@@ -9878,6 +9912,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Keep up to date with the latest news and updates
 	 */
 	PUSH_NOTIFICATIONS_DESC: () => LocalizedString
+	/**
+	 * Please go to the device settings and allow VeWorld notifications to be pushed.
+	 */
+	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC: () => LocalizedString
+	/**
+	 * Device settings
+	 */
+	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE: () => LocalizedString
 	/**
 	 * An error occurred while trying to load your preferences. Please try again.
 	 */
@@ -9911,21 +9953,13 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: () => LocalizedString
 	/**
-	 * Updates
+	 * VeWorld & VeChain
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: () => LocalizedString
 	/**
 	 * VeBetter
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
-	/**
-	 * Device settings
-	 */
-	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE: () => LocalizedString
-	/**
-	 * Please go to the device settings and allow VeWorld notifications to be pushed.
-	 */
-	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC: () => LocalizedString
 	/**
 	 * Enable your camera permissions to scan a QR code
 	 */
@@ -11043,9 +11077,21 @@ Here's what it's all about:
 	 */
 	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
 	/**
+	 * APY
+	 */
+	STARGATE_APY: () => LocalizedString
+	/**
 	 * Claimable
 	 */
 	STARGATE_CLAIMABLE: () => LocalizedString
+	/**
+	 * Cycle duration
+	 */
+	STARGATE_CYCLE_DURATION: () => LocalizedString
+	/**
+	 * {days} days
+	 */
+	STARGATE_DAYS: (arg: { days: number }) => LocalizedString
 	/**
 	 * Managing
 	 */
@@ -11754,7 +11800,7 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	VBD_YOUR_OFFSET: () => LocalizedString
 	/**
-	 * Vechain news & updates
+	 * News & updates
 	 */
 	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
 	/**
@@ -11973,18 +12019,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * APY
-	 */
-	STARGATE_APY: () => LocalizedString
-	/**
-	 * Cycle duration
-	 */
-	STARGATE_CYCLE_DURATION: () => LocalizedString
-	/**
-	 * {days} days
-	 */
-	STARGATE_DAYS: (arg: { days: number }) => LocalizedString
 }
 
 export type Formatters = {

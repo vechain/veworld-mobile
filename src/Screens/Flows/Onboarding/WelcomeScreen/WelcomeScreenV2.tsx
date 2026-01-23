@@ -1,17 +1,53 @@
 import { StyleSheet } from "react-native"
-import React from "react"
+import React, { useCallback, useEffect } from "react"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseText, BaseView } from "~Components/Base"
 import { VeWorldLogoV2 } from "~Assets/Img"
 import { useThemedStyles } from "~Hooks/useTheme"
-import { COLORS, ColorThemeType } from "~Constants"
+import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
 import { PlatformUtils } from "~Utils"
 import Markdown from "react-native-markdown-display"
+import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
+import * as RNLocalize from "react-native-localize"
+import { languages } from "~Model"
+import { Locales, useI18nContext } from "~i18n"
+import { setLanguage, useAppDispatch } from "~Storage/Redux"
 
 export const WelcomeScreenV2 = () => {
-    const { styles, theme } = useThemedStyles(baseStyles)
-
     const termsOfServiceUrl = process.env.REACT_APP_TERMS_OF_SERVICE_URL
     const privacyPolicyUrl = process.env.REACT_APP_PRIVACY_POLICY_URL
+
+    const { styles, theme } = useThemedStyles(baseStyles)
+    const { LL, setLocale } = useI18nContext()
+
+    const dispatch = useAppDispatch()
+    const track = useAnalyticTracking()
+
+    const getAllLanguageCodes = useCallback(() => {
+        const locales = RNLocalize.getLocales()
+        const languageCodes = locales.map(locale => locale.languageCode)
+        const uniqueLanguageCodes = Array.from(new Set(languageCodes)) // Remove duplicates
+        return uniqueLanguageCodes
+    }, [])
+
+    const handleSelectLanguage = useCallback(
+        (language: Locales) => {
+            dispatch(setLanguage(language))
+            setLocale(language)
+        },
+        [dispatch, setLocale],
+    )
+
+    useEffect(() => {
+        // Track when a new onboarding start
+        track(AnalyticsEvent.ONBOARDING_START)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    useEffect(() => {
+        const currentLanguageCode = getAllLanguageCodes()
+        const newSelectedLanguageCode = languages.find(item => item.code === currentLanguageCode[0])
+        handleSelectLanguage((newSelectedLanguageCode?.code as Locales) ?? "en")
+    }, [getAllLanguageCodes, handleSelectLanguage])
 
     return (
         <BaseSafeArea>
@@ -31,7 +67,7 @@ export const WelcomeScreenV2 = () => {
                                 style={styles.socialButton}
                                 leftIcon={<BaseIcon color={theme.colors.buttonText} name="icon-apple" size={24} />}
                                 textProps={{ typographyFont: "bodyMedium" }}
-                                title="Continue with Apple"
+                                title={LL.BTN_CONTINUE_WITH_APPLE()}
                                 action={() => {}}
                             />
                         )}
@@ -40,16 +76,16 @@ export const WelcomeScreenV2 = () => {
                             style={styles.socialButton}
                             leftIcon={<BaseIcon color={theme.colors.buttonText} name="icon-google" size={24} />}
                             textProps={{ typographyFont: "bodyMedium" }}
-                            title="Continue with Google"
+                            title={LL.BTN_CONTINUE_WITH_GOOGLE()}
                             action={() => {}}
                         />
                         <BaseText align="center" typographyFont="captionMedium">
-                            {"Or"}
+                            {LL.COMMON_OR()}
                         </BaseText>
                         <BaseButton
                             testID="SELF_CUSTODY_WALLET_BUTTON"
                             variant="outline"
-                            title="Self-custody wallet"
+                            title={LL.BTN_SELF_CUSTODY_WALLET()}
                             textProps={{ typographyFont: "bodyMedium" }}
                             action={() => {}}
                         />
@@ -59,9 +95,10 @@ export const WelcomeScreenV2 = () => {
                             style={{
                                 paragraph: styles.markdown,
                             }}>
-                            {`By using VeWorld’s wallet, the user accepts [Terms and Conditions](${
-                                termsOfServiceUrl ?? ""
-                            }) and [Privacy Policy](${privacyPolicyUrl ?? ""}).`}
+                            {LL.COMMON_LBL_BY_AGREEMENT({
+                                termsOfServiceUrl: termsOfServiceUrl ?? "",
+                                privacyPolicyUrl: privacyPolicyUrl ?? "",
+                            })}
                         </Markdown>
                     </BaseView>
                 </BaseView>
