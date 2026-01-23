@@ -1,12 +1,12 @@
 # config.yaml
 flows:
-  - observedWallet/*
+  # - observedWallet/*
   - send/*
   - settings/*
   - contactManagement/contactManagement.yaml
   - contactManagement/addContactsToScroll.yaml
-  - tokenManagement/tokenManagement.yaml
+  # - tokenManagement/tokenManagement.yaml
   - onboarding/*
   - userActivity/userActivity.yaml
-  - universal_link/*
+  # - universal_link/*
   # - discover/* Currently skipped since it will need to be adapted to the new apps screen
