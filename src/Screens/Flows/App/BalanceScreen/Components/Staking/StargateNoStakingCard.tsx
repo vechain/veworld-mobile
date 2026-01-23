@@ -5,17 +5,18 @@ import FastImage, { ImageStyle } from "react-native-fast-image"
 import Markdown from "react-native-markdown-display"
 import { StargateDappBannerB3MO, StargateLogo } from "~Assets"
 import { BaseButton, BaseIcon, BaseSpacer, BaseView } from "~Components/Base"
-import { COLORS, ColorThemeType, STARGATE_DAPP_URL_HOME_BANNER } from "~Constants"
+import { COLORS, ColorThemeType, STARGATE_DAPP_URL_HOME_BANNER, VET } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { useBrowserNavigation } from "~Hooks/useBrowserSearch"
 import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useStargateStats } from "~Hooks/useStargateStats"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
-import { AccountUtils, BigNutils } from "~Utils"
+import { AccountUtils, BigNutils, ValidatorUtils } from "~Utils"
 import FontUtils from "~Utils/FontUtils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { StargateStatsCard } from "./StargateStatsCard"
+import { useValidators } from "~Hooks/useValidators"
 
 export const StargateNoStakingCard = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -24,16 +25,28 @@ export const StargateNoStakingCard = () => {
     const { navigateToBrowser } = useBrowserNavigation()
 
     const { data: stargateStats } = useStargateStats()
+    const { data: validators } = useValidators()
     const account = useAppSelector(selectSelectedAccount)
+
+    const totalVetValidatorStaked = useMemo(() => {
+        if (!validators) return "0"
+
+        const activeValidatorsStaked = validators
+            .filter(v => v.status === "ACTIVE" || v.status === "EXITING")
+            .reduce((acc, validator) => {
+                return acc + ValidatorUtils.getCurrentCycleValidatorStake(validator)
+            }, 0)
+
+        return BigNutils(activeValidatorsStaked)
+            .addTrailingZeros(VET.decimals)
+            .plus(stargateStats?.totalVetStaked?.total ?? "0").toString
+    }, [validators, stargateStats?.totalVetStaked?.total])
 
     const formattedStargateStats = useMemo(() => {
         return {
             totalSupply: BigNutils(stargateStats?.totalSupply ?? "0").toCompactString(formatLocale, 1) ?? "0",
             totalVetStaked:
-                BigNutils(ethers.utils.formatEther(stargateStats?.totalVetStaked?.total ?? "0")).toCompactString(
-                    formatLocale,
-                    1,
-                ) ?? "0",
+                BigNutils(ethers.utils.formatEther(totalVetValidatorStaked)).toCompactString(formatLocale, 1) ?? "0",
             rewardsDistributed:
                 BigNutils(ethers.utils.formatEther(stargateStats?.rewardsDistributed ?? "0")).toCompactString(
                     formatLocale,
@@ -47,10 +60,10 @@ export const StargateNoStakingCard = () => {
         }
     }, [
         stargateStats?.totalSupply,
-        stargateStats?.totalVetStaked?.total,
         stargateStats?.rewardsDistributed,
         stargateStats?.vthoPerDay,
         formatLocale,
+        totalVetValidatorStaked,
     ])
 
     const _navigateToStargate = useCallback(() => navigateToBrowser(STARGATE_DAPP_URL_HOME_BANNER), [navigateToBrowser])
