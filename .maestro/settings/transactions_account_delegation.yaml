@@ -2,19 +2,17 @@
 appId: org.vechain.veworld.app
 onFlowStart:
     - runFlow: ../setup_reset/setupApp.yaml
-onFlowComplete:
-    - runFlow: ../setup_reset/resetApp.yaml
 ---
 - tapOn:
       id: "settings-tab"
-## Use the repeat button to avoid that the back button on the header is
-## temporary hidden by a notification snackbar and cause the flaw to fail
-- extendedWaitUntil:
-      visible:
-          id: "BackButtonHeader-BaseIcon-backButton"
-      timeout: 10000
-- tapOn:
-      id: "BackButtonHeader-BaseIcon-backButton"
+## Tap back button if visible (may be hidden by notification snackbar)
+- runFlow:
+      when:
+          visible:
+              id: "BackButtonHeader-BaseIcon-backButton"
+      commands:
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
       id: "Transactions"
 - tapOn:

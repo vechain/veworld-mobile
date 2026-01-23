@@ -8,63 +8,8 @@ env:
   ADDRESS: "0x8a9844e4750f5ce5f7988c4d1e04c278c718feea"
 onFlowStart:
   - runFlow: ../setup_reset/setupApp.yaml
-onFlowComplete:
-    - runFlow: ../setup_reset/resetApp.yaml
 ---
-## User should be able to send tokens delegating with account method
-- tapOn:
-    id: "AccountCard_changeAccountButton"
-- tapOn:
-    id: "selectAccount"
-    index: 0
-- tapOn:
-    id: "sendButton"
-- runFlow:
-    commands:
-      - tapOn:
-          id: "VET"
-- tapOn:
-    id: "Layout_ScrollView"
-- assertVisible:
-    id: "selectAccount"
-    index: 0
-- tapOn:
-    id: "selectAccount"
-    index: 0
-- tapOn:
-    id: "next-button"
-- tapOn:
-    id: "SendScreen_amountInput"
-- inputText: ${AMOUNT}
-- tapOn:
-    id: "Select_Amount_Send_Screen"
-- tapOn:
-    id: "next-button"
-- runFlow:
-    when:
-      visible: "Fee delegation"
-    commands:
-      - extendedWaitUntil:
-          visible:
-              id: "MAX_FEE_GALACTICA"
-          timeout: 10000
-      - tapOn:
-          id: "DELEGATE_OPEN"
-      - tapOn:
-          id: "button-ACCOUNT"
-      - tapOn:
-          id: "DELEGATE_ACCOUNT_CARD_RADIO"
-          index: 0
-      - tapOn:
-          id: 'RENDERED_OPTION_BUTTON_BAR_APPLY'
-      - tapOn:
-          id: "confirm-send-button"
-      - repeat:
-          while:
-            visible: "Insert your 6-digit PIN"
-          commands:
-            - tapOn: "1"
-- assertVisible: "My tokens"
+- runFlow: ../send/send_vet.yaml
 ## User should be able to see the transaction details on activity screen
 - tapOn:
     id: "history-tab"
@@ -82,8 +27,14 @@ onFlowComplete:
       - tapOn:
            id: "magnify"
            index: 0
-- assertVisible: "Account 1"
-- assertVisible: "Account 2"
-- assertVisible: ".*0.01 VET.*"
+## Assert Account 1 appears twice on screen (in from and to cards)
+## Every new wallet defaults the 1st account to Account 1
+- assertVisible:
+      text: "Account 1"
+      index: 0
+- assertVisible:
+      text: "Account 1"
+      index: 1
+- assertVisible: ".*1.00 VET.*"
 - assertNotVisible: "Failed"
 

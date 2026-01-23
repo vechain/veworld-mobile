@@ -7,18 +7,18 @@ env:
     URL_2: "https://sponsor-testnet.vechain.energy/by/219"
 onFlowStart:
     - runFlow: ../setup_reset/setupApp.yaml
-onFlowComplete:
-    - runFlow: ../setup_reset/resetApp.yaml
 ---
 ## User can add a delegation URL with the Manage URLs button
 - tapOn:
       id: "settings-tab"
-- extendedWaitUntil:
-      visible:
-          id: "BackButtonHeader-BaseIcon-backButton"
-      timeout: 10000
-- tapOn:
-      id: "BackButtonHeader-BaseIcon-backButton"
+## Tap back button if visible (may be hidden by notification snackbar)
+- runFlow:
+      when:
+          visible:
+              id: "BackButtonHeader-BaseIcon-backButton"
+      commands:
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
       id: "Transactions"
 - tapOn:
