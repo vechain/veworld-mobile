@@ -1423,6 +1423,14 @@ type RootTranslation = {
 	 */
 	BTN_CONTINUE: string
 	/**
+	 * C​o​n​t​i​n​u​e​ ​w​i​t​h​ ​A​p​p​l​e
+	 */
+	BTN_CONTINUE_WITH_APPLE: string
+	/**
+	 * C​o​n​t​i​n​u​e​ ​w​i​t​h​ ​G​o​o​g​l​e
+	 */
+	BTN_CONTINUE_WITH_GOOGLE: string
+	/**
 	 * C​o​n​v​e​r​t
 	 */
 	BTN_CONVERT: string
@@ -1693,6 +1701,10 @@ type RootTranslation = {
 	 */
 	BTN_SELECT_DERIVATION_PATH_VET: string
 	/**
+	 * S​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t
+	 */
+	BTN_SELF_CUSTODY_WALLET: string
+	/**
 	 * S​e​l​l
 	 */
 	BTN_SELL: string
@@ -1760,18 +1772,6 @@ type RootTranslation = {
 	 * W​r​i​t​e​ ​r​e​c​o​v​e​r​y​ ​p​a​s​s​w​o​r​d
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: string
-	/**
-	 * C​o​n​t​i​n​u​e​ ​w​i​t​h​ ​A​p​p​l​e
-	 */
-	BTN_CONTINUE_WITH_APPLE: string
-	/**
-	 * C​o​n​t​i​n​u​e​ ​w​i​t​h​ ​G​o​o​g​l​e
-	 */
-	BTN_CONTINUE_WITH_GOOGLE: string
-	/**
-	 * S​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t
-	 */
-	BTN_SELF_CUSTODY_WALLET: string
 	/**
 	 * B​u​y​ ​n​e​w​ ​c​o​l​l​e​c​t​i​b​l​e​s
 	 */
@@ -2067,6 +2067,12 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_BACK: string
 	/**
+	 * B​y​ ​u​s​i​n​g​ ​V​e​W​o​r​l​d​’​s​ ​w​a​l​l​e​t​,​ ​t​h​e​ ​u​s​e​r​ ​a​c​c​e​p​t​s​ ​[​T​e​r​m​s​ ​a​n​d​ ​C​o​n​d​i​t​i​o​n​s​]​(​{​t​e​r​m​s​O​f​S​e​r​v​i​c​e​U​r​l​}​)​ ​a​n​d​ ​[​P​r​i​v​a​c​y​ ​P​o​l​i​c​y​]​(​{​p​r​i​v​a​c​y​P​o​l​i​c​y​U​r​l​}​)​.
+	 * @param {string} privacyPolicyUrl
+	 * @param {string} termsOfServiceUrl
+	 */
+	COMMON_LBL_BY_AGREEMENT: RequiredParams<'privacyPolicyUrl' | 'termsOfServiceUrl'>
+	/**
 	 * C​l​o​s​e
 	 */
 	COMMON_LBL_CLOSE: string
@@ -2148,12 +2154,6 @@ type RootTranslation = {
 	 * V​a​l​u​e
 	 */
 	COMMON_LBL_VALUE: string
-	/**
-	 * B​y​ ​u​s​i​n​g​ ​V​e​W​o​r​l​d​’​s​ ​w​a​l​l​e​t​,​ ​t​h​e​ ​u​s​e​r​ ​a​c​c​e​p​t​s​ ​[​T​e​r​m​s​ ​a​n​d​ ​C​o​n​d​i​t​i​o​n​s​]​(​{​t​e​r​m​s​O​f​S​e​r​v​i​c​e​U​r​l​}​)​ ​a​n​d​ ​[​P​r​i​v​a​c​y​ ​P​o​l​i​c​y​]​(​{​p​r​i​v​a​c​y​P​o​l​i​c​y​U​r​l​}​)​.
-	 * @param {string} privacyPolicyUrl
-	 * @param {string} termsOfServiceUrl
-	 */
-	COMMON_LBL_BY_AGREEMENT: RequiredParams<'privacyPolicyUrl' | 'termsOfServiceUrl'>
 	/**
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
@@ -7442,6 +7442,14 @@ Thanks for your patience!
 	 */
 	BTN_CONTINUE: () => LocalizedString
 	/**
+	 * Continue with Apple
+	 */
+	BTN_CONTINUE_WITH_APPLE: () => LocalizedString
+	/**
+	 * Continue with Google
+	 */
+	BTN_CONTINUE_WITH_GOOGLE: () => LocalizedString
+	/**
 	 * Convert
 	 */
 	BTN_CONVERT: () => LocalizedString
@@ -7710,6 +7718,10 @@ Thanks for your patience!
 	 */
 	BTN_SELECT_DERIVATION_PATH_VET: () => LocalizedString
 	/**
+	 * Self-custody wallet
+	 */
+	BTN_SELF_CUSTODY_WALLET: () => LocalizedString
+	/**
 	 * Sell
 	 */
 	BTN_SELL: () => LocalizedString
@@ -7777,18 +7789,6 @@ Thanks for your patience!
 	 * Write recovery password
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: () => LocalizedString
-	/**
-	 * Continue with Apple
-	 */
-	BTN_CONTINUE_WITH_APPLE: () => LocalizedString
-	/**
-	 * Continue with Google
-	 */
-	BTN_CONTINUE_WITH_GOOGLE: () => LocalizedString
-	/**
-	 * Self-custody wallet
-	 */
-	BTN_SELF_CUSTODY_WALLET: () => LocalizedString
 	/**
 	 * Buy new collectibles
 	 */
@@ -8083,6 +8083,10 @@ This action is irreversible.
 	 */
 	COMMON_LBL_BACK: () => LocalizedString
 	/**
+	 * By using VeWorld’s wallet, the user accepts [Terms and Conditions]({termsOfServiceUrl}) and [Privacy Policy]({privacyPolicyUrl}).
+	 */
+	COMMON_LBL_BY_AGREEMENT: (arg: { privacyPolicyUrl: string, termsOfServiceUrl: string }) => LocalizedString
+	/**
 	 * Close
 	 */
 	COMMON_LBL_CLOSE: () => LocalizedString
@@ -8162,10 +8166,6 @@ This action is irreversible.
 	 * Value
 	 */
 	COMMON_LBL_VALUE: () => LocalizedString
-	/**
-	 * By using VeWorld’s wallet, the user accepts [Terms and Conditions]({termsOfServiceUrl}) and [Privacy Policy]({privacyPolicyUrl}).
-	 */
-	COMMON_LBL_BY_AGREEMENT: (arg: { privacyPolicyUrl: string, termsOfServiceUrl: string }) => LocalizedString
 	/**
 	 * Market Cap
 	 */
