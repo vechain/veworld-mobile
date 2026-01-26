@@ -1,5 +1,12 @@
 
 
+## 2.5.1 (2026-01-26)
+
+
+### Bug Fixes
+
+* unverified dapp urls ([#3728](https://github.com/vechain/veworld-mobile/issues/3728)) ([b4f6bf8](https://github.com/vechain/veworld-mobile/commit/b4f6bf8b76cd30842e6a957488d87b83185c9ba1))
+
 ## 2.4.16 (2026-01-19)
 
 # Changelog
