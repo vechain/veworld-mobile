@@ -408,7 +408,7 @@
   "BTN_SELECT_DERIVATION_PATH": "Wählen Sie den Ableitungspfad für Ihre Wallet",
   "BTN_SELECT_DERIVATION_PATH_ETH": "Ableitungspfad für Ethereum",
   "BTN_SELECT_DERIVATION_PATH_VET": "Ableitungspfad für VeChain",
-  "BTN_SELF_CUSTODY_WALLET": "Selbstverwahrte Wallet",
+  "BTN_SELF_CUSTODY_WALLET": "Mit Selbstverwahrung fortfahren",
   "BTN_SELL": "Verkaufen",
   "BTN_SEND": "Senden",
   "BTN_SEND_ANYWAY": "Ja, trotzdem senden",

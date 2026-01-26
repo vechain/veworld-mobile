@@ -408,7 +408,7 @@
   "BTN_SELECT_DERIVATION_PATH": "Chọn đường dẫn dẫn xuất cho ví của bạn",
   "BTN_SELECT_DERIVATION_PATH_ETH": "Đường dẫn dẫn xuất cho Ethereum",
   "BTN_SELECT_DERIVATION_PATH_VET": "Đường dẫn dẫn xuất cho VeChain",
-  "BTN_SELF_CUSTODY_WALLET": "Ví tự lưu trữ",
+  "BTN_SELF_CUSTODY_WALLET": "Tiếp tục với ví tự lưu ký",
   "BTN_SELL": "Bán",
   "BTN_SEND": "Gửi",
   "BTN_SEND_ANYWAY": "Vâng, vẫn gửi",

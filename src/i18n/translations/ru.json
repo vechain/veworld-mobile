@@ -408,7 +408,7 @@
   "BTN_SELECT_DERIVATION_PATH": "Выберите путь деривации для вашего кошелька",
   "BTN_SELECT_DERIVATION_PATH_ETH": "Путь деривации для Ethereum",
   "BTN_SELECT_DERIVATION_PATH_VET": "Путь деривации для VeChain",
-  "BTN_SELF_CUSTODY_WALLET": "Кошелек c самостоятельным хранением",
+  "BTN_SELF_CUSTODY_WALLET": "Продолжить с самостоятельным хранением",
   "BTN_SELL": "Продать",
   "BTN_SEND": "Отправить",
   "BTN_SEND_ANYWAY": "Да, отправить все равно",

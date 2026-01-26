@@ -408,7 +408,7 @@
   "BTN_SELECT_DERIVATION_PATH": "지갑에 대한 파생 경로 선택",
   "BTN_SELECT_DERIVATION_PATH_ETH": "이더리움 파생 경로",
   "BTN_SELECT_DERIVATION_PATH_VET": "VeChain 파생 경로",
-  "BTN_SELF_CUSTODY_WALLET": "자가 관리 지갑",
+  "BTN_SELF_CUSTODY_WALLET": "자가 관리로 계속하기",
   "BTN_SELL": "판매",
   "BTN_SEND": "발송",
   "BTN_SEND_ANYWAY": "네, 어쨌든 발송",

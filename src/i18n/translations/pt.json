@@ -408,7 +408,7 @@
   "BTN_SELECT_DERIVATION_PATH": "Selecionar caminho de derivação para sua carteira",
   "BTN_SELECT_DERIVATION_PATH_ETH": "Caminho de Derivação para Ethereum",
   "BTN_SELECT_DERIVATION_PATH_VET": "Caminho de Derivação para VeChain",
-  "BTN_SELF_CUSTODY_WALLET": "Carteira de autocustódia",
+  "BTN_SELF_CUSTODY_WALLET": "Continuar com autocustódia",
   "BTN_SELL": "Vender",
   "BTN_SEND": "Enviar",
   "BTN_SEND_ANYWAY": "Sim, enviar mesmo assim",

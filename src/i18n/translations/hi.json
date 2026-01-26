@@ -408,7 +408,7 @@
   "BTN_SELECT_DERIVATION_PATH": "अपने वॉलेट के लिए व्युत्पत्ति पथ चुनें",
   "BTN_SELECT_DERIVATION_PATH_ETH": "एथेरियम के लिए व्युत्पत्ति पथ",
   "BTN_SELECT_DERIVATION_PATH_VET": "वीचेन के लिए व्युत्पत्ति पथ",
-  "BTN_SELF_CUSTODY_WALLET": "स्व-हिरासत वॉलेट",
+  "BTN_SELF_CUSTODY_WALLET": "स्वयं-कस्टडी के साथ जारी रखें",
   "BTN_SELL": "बेचें",
   "BTN_SEND": "भेजें",
   "BTN_SEND_ANYWAY": "हां, फिर भी भेजें",

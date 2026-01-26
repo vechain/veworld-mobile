@@ -408,7 +408,7 @@
   "BTN_SELECT_DERIVATION_PATH": "为您的钱包选择派生路径",
   "BTN_SELECT_DERIVATION_PATH_ETH": "以太坊的派生路径",
   "BTN_SELECT_DERIVATION_PATH_VET": "唯链的派生路径",
-  "BTN_SELF_CUSTODY_WALLET": "自主管理钱包",
+  "BTN_SELF_CUSTODY_WALLET": "继续使用自托管",
   "BTN_SELL": "出售",
   "BTN_SEND": "发送",
   "BTN_SEND_ANYWAY": "是的，仍然发送",

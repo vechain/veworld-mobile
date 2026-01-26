@@ -408,7 +408,7 @@
   "BTN_SELECT_DERIVATION_PATH": "選擇錢包的推導路徑",
   "BTN_SELECT_DERIVATION_PATH_ETH": "以太坊推導路徑",
   "BTN_SELECT_DERIVATION_PATH_VET": "VeChain 推導路徑",
-  "BTN_SELF_CUSTODY_WALLET": "自我託管錢包",
+  "BTN_SELF_CUSTODY_WALLET": "繼續使用自主管理錢包",
   "BTN_SELL": "出售",
   "BTN_SEND": "發送",
   "BTN_SEND_ANYWAY": "是的，無論如何發送",

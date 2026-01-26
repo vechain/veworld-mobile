@@ -408,7 +408,7 @@
   "BTN_SELECT_DERIVATION_PATH": "Välj härledningsväg för din plånbok",
   "BTN_SELECT_DERIVATION_PATH_ETH": "Härledningsväg för Ethereum",
   "BTN_SELECT_DERIVATION_PATH_VET": "Härledningsväg för VeChain",
-  "BTN_SELF_CUSTODY_WALLET": "Självförvaringsplånbok",
+  "BTN_SELF_CUSTODY_WALLET": "Fortsätt med självförvar",
   "BTN_SELL": "Sälj",
   "BTN_SEND": "Skicka",
   "BTN_SEND_ANYWAY": "Ja, skicka ändå",

@@ -408,7 +408,7 @@
   "BTN_SELECT_DERIVATION_PATH": "ウォレットの派生パスを選択",
   "BTN_SELECT_DERIVATION_PATH_ETH": "Ethereumの派生パス",
   "BTN_SELECT_DERIVATION_PATH_VET": "VeChainの派生パス",
-  "BTN_SELF_CUSTODY_WALLET": "セルフカストディウォレット",
+  "BTN_SELF_CUSTODY_WALLET": "セルフカストディで続行",
   "BTN_SELL": "売る",
   "BTN_SEND": "送信",
   "BTN_SEND_ANYWAY": "はい、送信します",

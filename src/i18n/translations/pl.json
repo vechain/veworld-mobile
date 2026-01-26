@@ -408,7 +408,7 @@
   "BTN_SELECT_DERIVATION_PATH": "Wybierz ścieżkę pochodną dla swojego portfela",
   "BTN_SELECT_DERIVATION_PATH_ETH": "Ścieżka pochodna dla Ethereum",
   "BTN_SELECT_DERIVATION_PATH_VET": "Ścieżka pochodna dla VeChain",
-  "BTN_SELF_CUSTODY_WALLET": "Portfel samodzielnej obsługi",
+  "BTN_SELF_CUSTODY_WALLET": "Kontynuuj z portfelem samodzielnej kontroli",
   "BTN_SELL": "Sprzedaj",
   "BTN_SEND": "Wyślij",
   "BTN_SEND_ANYWAY": "Tak, wyślij mimo to",

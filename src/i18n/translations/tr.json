@@ -408,7 +408,7 @@
   "BTN_SELECT_DERIVATION_PATH": "Cüzdanınız için türetme yolunu seçin",
   "BTN_SELECT_DERIVATION_PATH_ETH": "Ethereum için Türetme Yolu",
   "BTN_SELECT_DERIVATION_PATH_VET": "VeChain için Türetme Yolu",
-  "BTN_SELF_CUSTODY_WALLET": "Kendi velayet cüzdanı",
+  "BTN_SELF_CUSTODY_WALLET": "Kendi saklama cüzdanı ile devam et",
   "BTN_SELL": "Sat",
   "BTN_SEND": "Gönder",
   "BTN_SEND_ANYWAY": "Evet, yine de gönder",
