@@ -1,5 +1,12 @@
 
 
+## 2.5.1 (2026-01-26)
+
+
+### Bug Fixes
+
+* app crashing when clicking on hidden collections ([#3726](https://github.com/vechain/veworld-mobile/issues/3726)) ([be6e97e](https://github.com/vechain/veworld-mobile/commit/be6e97e194874239002f2754a5b30546a5a8eb23))
+
 ## 2.4.16 (2026-01-19)
 
 # Changelog
