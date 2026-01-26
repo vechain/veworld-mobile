@@ -1451,6 +1451,10 @@ type RootTranslation = {
 	 */
 	BTN_CREATE_WALLET_TYPE_CREATE_NEW: string
 	/**
+	 * Continue with Google
+	 */
+	BTN_CONTINUE_WITH_GOOGLE: string
+	/**
 	 * Y​o​u​ ​w​i​l​l​ ​c​r​e​a​t​e​ ​a​ ​n​e​w​ ​e​m​p​t​y​ ​w​a​l​l​e​t
 	 */
 	BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: string
@@ -7439,6 +7443,10 @@ Thanks for your patience!
 	 * Create wallet
 	 */
 	BTN_CREATE_WALLET: () => LocalizedString
+	/**
+	 * Continue with Google
+	 */
+	BTN_CONTINUE_WITH_GOOGLE: () => LocalizedString
 	/**
 	 * Advanced setup
 	 */

@@ -22,7 +22,9 @@ import {
     useAnalyticTracking,
     useBottomSheetModal,
     useCloudBackup,
+    useCreateWallet,
     useDisclosure,
+    useSmartWallet,
     useTheme,
     useThemedStyles,
 } from "~Hooks"
@@ -35,9 +37,11 @@ import { CloudKitWallet, DrivetWallet, languages } from "~Model"
 import { Routes } from "~Navigation"
 import { selectLanguage, setLanguage, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
+
 const assetImage = require("~Assets/Img/Clouds.png")
 
 export const WelcomeScreen = () => {
+    const { login, isAuthenticated, smartAccountAddress } = useSmartWallet()
     const { LL, setLocale } = useI18nContext()
     const nav = useNavigation()
     const { styles, theme } = useThemedStyles(baseStyle)
@@ -128,7 +132,12 @@ export const WelcomeScreen = () => {
     }, [getAllLanguageCodes, handleSelectLanguage])
 
     const DEV_DEMO_BUTTON = useDemoWallet()
-    const { onCreateWallet, isOpen, isError, onSuccess, onClose: onCloseCreateFlow } = useHandleWalletCreation()
+    const { onCreateWallet, isOpen, isError, onSuccess, onSmartWalletPinSuccess, onClose: onCloseCreateFlow, onCreateSmartWallet } = useHandleWalletCreation()
+    const [pendingSmartAccountAddress, setPendingSmartAccountAddress] = useState<string | null>(null)
+
+    const onNewGoogleWallet = useCallback(async () => {
+        await login({ provider: "google", oauthRedirectUri: "veworld://" })
+    }, [login])
 
     const onNewWallet = useCallback(async () => {
         await onCreateWallet({ derivationPath: DerivationPath.VET })
@@ -147,6 +156,13 @@ export const WelcomeScreen = () => {
                 .toUpperCase(),
         [selectedLanguageCode],
     )
+
+    useEffect(() => {
+        if (isAuthenticated && smartAccountAddress) {
+            setPendingSmartAccountAddress(smartAccountAddress)
+            onCreateSmartWallet({ address: smartAccountAddress })
+        }
+    }, [isAuthenticated, smartAccountAddress, onCreateSmartWallet])
 
     return (
         <>
@@ -181,6 +197,16 @@ export const WelcomeScreen = () => {
                                 {isError}
                             </BaseText>
                         )}
+                        <BaseButton
+                            action={() => onNewGoogleWallet()}
+                            w={100}
+                            title={LL.BTN_CONTINUE_WITH_GOOGLE()}
+                            testID="CONTINUE_WITH_GOOGLE_BTN"
+                            haptics="Medium"
+                            isLoading={isLoading}
+                        />
+
+                        <BaseSpacer height={12} />
 
                         <BaseButton
                             action={() => onNewWallet()}
@@ -280,13 +306,24 @@ export const WelcomeScreen = () => {
 
             <CreatePasswordModal
                 isOpen={isOpen}
-                onClose={onCloseCreateFlow}
-                onSuccess={pin =>
-                    onSuccess({
-                        pin,
-                        derivationPath: DerivationPath.VET,
-                    })
-                }
+                onClose={() => {
+                    setPendingSmartAccountAddress(null)
+                    onCloseCreateFlow()
+                }}
+                onSuccess={pin => {
+                    if (pendingSmartAccountAddress) {
+                        onSmartWalletPinSuccess({
+                            pin,
+                            address: pendingSmartAccountAddress,
+                        })
+                        setPendingSmartAccountAddress(null)
+                    } else {
+                        onSuccess({
+                            pin,
+                            derivationPath: DerivationPath.VET,
+                        })
+                    }
+                }}
             />
 
             <SelectLanguageBottomSheet bsRef={selectLanguageSheetRef} />

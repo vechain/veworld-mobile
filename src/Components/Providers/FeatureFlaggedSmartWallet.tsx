@@ -14,23 +14,23 @@ export const FeatureFlaggedSmartWallet = ({
 }) => {
     const featureFlags = useFeatureFlags()
 
-    if (featureFlags?.smartWalletFeature?.enabled) {
-        return (
-            <SmartWalletWithPrivyProvider
-                config={{
-                    providerConfig: {
-                        appId: process.env.PRIVY_APP_ID || "",
-                        clientId: process.env.PRIVY_CLIENT_ID || "",
-                    },
-                    networkConfig: {
-                        nodeUrl,
-                        networkType,
-                    },
-                }}>
-                {children}
-            </SmartWalletWithPrivyProvider>
-        )
-    }
+    // if (featureFlags?.smartWalletFeature?.enabled) {
+    return (
+        <SmartWalletWithPrivyProvider
+            config={{
+                providerConfig: {
+                    appId: process.env.PRIVY_APP_ID || "",
+                    clientId: process.env.PRIVY_CLIENT_ID || "",
+                },
+                networkConfig: {
+                    nodeUrl,
+                    networkType,
+                },
+            }}>
+            {children}
+        </SmartWalletWithPrivyProvider>
+    )
+    // }
 
     return <SmartWalletFallbackProvider>{children}</SmartWalletFallbackProvider>
 }

@@ -1030,7 +1030,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
      */
     const isDappValid = useCallback(
         (url: string) => {
-            return Boolean(allDapps.find(dapp => URIUtils.compareSecondLevelDomains(dapp.href, url)))
+            return Boolean(allDapps.find(dapp => URIUtils.compareSecondLevelDomains(dapp.href.toLowerCase(), url.toLowerCase())))
         },
         [allDapps],
     )
