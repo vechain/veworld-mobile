@@ -523,6 +523,7 @@ export const designSystemIconMap = {
     "icon-layout-template": 60405,
     "icon-leaf": 60407,
     "icon-leafs": 60818,
+    "icon-ledger": 60823,
     "icon-library": 60408,
     "icon-life-buoy": 60409,
     "icon-lightbulb": 60411,

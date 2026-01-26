@@ -1480,5 +1480,15 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "SB_TITLE_SELF_CUSTODY_WALLET": "Self-custody wallet",
+  "SB_DESCRIPTION_SELF_CUSTODY_WALLET": "Select an option to add a wallet",
+  "SB_TITLE_CREATE_WALLET": "New wallet",
+  "SB_DESCRIPTION_CREATE_WALLET": "Create a new self-custody wallet",
+  "SB_TITLE_IMPORT_FROM_CLOUD": "Cloud backups",
+  "SB_DESCRIPTION_IMPORT_FROM_CLOUD": "Recover a wallet from cloud",
+  "SB_TITLE_IMPORT_WITH_KEYS": "Import with keys",
+  "SB_DESCRIPTION_IMPORT_WITH_KEYS": "Use Recovery phrase or private keys",
+  "SB_TITLE_IMPORT_HARDWARE": "Ledger devices",
+  "SB_DESCRIPTION_IMPORT_HARDWARE": "Use a bluetooth hardware wallet"
 }

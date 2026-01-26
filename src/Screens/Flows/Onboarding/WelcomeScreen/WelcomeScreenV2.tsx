@@ -11,6 +11,8 @@ import * as RNLocalize from "react-native-localize"
 import { languages } from "~Model"
 import { Locales, useI18nContext } from "~i18n"
 import { setLanguage, useAppDispatch } from "~Storage/Redux"
+import { useBottomSheetModal } from "~Hooks/useBottomSheet"
+import { SelfCustodyOptionsBottomSheet } from "../Components"
 
 export const WelcomeScreenV2 = () => {
     const termsOfServiceUrl = process.env.REACT_APP_TERMS_OF_SERVICE_URL
@@ -21,6 +23,8 @@ export const WelcomeScreenV2 = () => {
 
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
+
+    const { ref: selfCustodyOptionsBottomSheetRef, onOpen: openSelfCustodyOptionsBottomSheet } = useBottomSheetModal()
 
     const getAllLanguageCodes = useCallback(() => {
         const locales = RNLocalize.getLocales()
@@ -87,7 +91,7 @@ export const WelcomeScreenV2 = () => {
                             variant="outline"
                             title={LL.BTN_SELF_CUSTODY_WALLET()}
                             textProps={{ typographyFont: "bodyMedium" }}
-                            action={() => {}}
+                            action={openSelfCustodyOptionsBottomSheet}
                         />
                     </BaseView>
                     <BaseView mx={64} alignItems="center">
@@ -103,6 +107,7 @@ export const WelcomeScreenV2 = () => {
                     </BaseView>
                 </BaseView>
             </BaseView>
+            <SelfCustodyOptionsBottomSheet bsRef={selfCustodyOptionsBottomSheetRef} />
         </BaseSafeArea>
     )
 }
