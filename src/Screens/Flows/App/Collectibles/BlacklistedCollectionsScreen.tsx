@@ -20,6 +20,7 @@ export const BlacklistedCollectionsScreen = () => {
 
     return (
         <Layout
+            hasSafeArea={false}
             title={LL.HIDDEN_COLLECTIONS()}
             fixedBody={<CollectionsList scrollRef={scrollRef} data={blacklistedCollections} />}
         />
