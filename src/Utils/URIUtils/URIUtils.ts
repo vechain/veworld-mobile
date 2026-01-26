@@ -202,8 +202,10 @@ const getSecondLevelDomain = (url: string) => {
 }
 
 const compareSecondLevelDomains = (url1: string, url2: string) => {
-    if (!isValid(url1) || !isValid(url2)) return false
-    return getSecondLevelDomain(url1) === getSecondLevelDomain(url2)
+    const ur1Lower = url1.toLowerCase()
+    const ur2Lower = url2.toLowerCase()
+    if (!isValid(ur1Lower) || !isValid(ur2Lower)) return false
+    return getSecondLevelDomain(ur1Lower) === getSecondLevelDomain(ur2Lower)
 }
 
 export default {
