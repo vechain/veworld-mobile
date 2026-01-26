@@ -69,7 +69,9 @@ export const SelfCustodyOptionsBottomSheet = ({ bsRef }: Props) => {
                 title: LL.SB_TITLE_CREATE_WALLET(),
                 description: LL.SB_DESCRIPTION_CREATE_WALLET(),
                 icon: "icon-plus-circle",
-                action: () => onNewWallet(),
+                action: () => {
+                    onNewWallet()
+                },
             },
             {
                 id: "cloud",

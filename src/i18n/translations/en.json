@@ -1042,7 +1042,7 @@
   "SB_CREATE_ONE": "Create one",
   "SB_DELETING_CLOUD_BACKUP": "Deleting backup...",
   "SB_DESCRIPTION": "Description",
-  "SB_DESCRIPTION_CREATE_WALLET": "Create a new self-custody wallet",
+  "SB_DESCRIPTION_CREATE_WALLET": "Generate a new recovery phrase",
   "SB_DESCRIPTION_IMPORT_FROM_CLOUD": "Recover a wallet from cloud",
   "SB_DESCRIPTION_IMPORT_HARDWARE": "Use a bluetooth hardware wallet",
   "SB_DESCRIPTION_IMPORT_WITH_KEYS": "Use Recovery phrase or private keys",

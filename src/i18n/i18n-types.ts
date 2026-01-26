@@ -4276,6 +4276,26 @@ type RootTranslation = {
 	 */
 	SB_DESCRIPTION: string
 	/**
+	 * G​e​n​e​r​a​t​e​ ​a​ ​n​e​w​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 */
+	SB_DESCRIPTION_CREATE_WALLET: string
+	/**
+	 * R​e​c​o​v​e​r​ ​a​ ​w​a​l​l​e​t​ ​f​r​o​m​ ​c​l​o​u​d
+	 */
+	SB_DESCRIPTION_IMPORT_FROM_CLOUD: string
+	/**
+	 * U​s​e​ ​a​ ​b​l​u​e​t​o​o​t​h​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t
+	 */
+	SB_DESCRIPTION_IMPORT_HARDWARE: string
+	/**
+	 * U​s​e​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​o​r​ ​p​r​i​v​a​t​e​ ​k​e​y​s
+	 */
+	SB_DESCRIPTION_IMPORT_WITH_KEYS: string
+	/**
+	 * S​e​l​e​c​t​ ​a​n​ ​o​p​t​i​o​n​ ​t​o​ ​a​d​d​ ​a​ ​w​a​l​l​e​t
+	 */
+	SB_DESCRIPTION_SELF_CUSTODY_WALLET: string
+	/**
 	 * E​d​i​t​ ​c​o​n​t​a​c​t
 	 */
 	SB_EDIT_CONTACT: string
@@ -4364,6 +4384,26 @@ type RootTranslation = {
 	 * C​h​a​n​g​e​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​l​a​n​g​u​a​g​e
 	 */
 	SB_SELECT_LANGUAGE_DESC: string
+	/**
+	 * N​e​w​ ​w​a​l​l​e​t
+	 */
+	SB_TITLE_CREATE_WALLET: string
+	/**
+	 * C​l​o​u​d​ ​b​a​c​k​u​p​s
+	 */
+	SB_TITLE_IMPORT_FROM_CLOUD: string
+	/**
+	 * L​e​d​g​e​r​ ​d​e​v​i​c​e​s
+	 */
+	SB_TITLE_IMPORT_HARDWARE: string
+	/**
+	 * I​m​p​o​r​t​ ​w​i​t​h​ ​k​e​y​s
+	 */
+	SB_TITLE_IMPORT_WITH_KEYS: string
+	/**
+	 * S​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t
+	 */
+	SB_TITLE_SELF_CUSTODY_WALLET: string
 	/**
 	 * I​n​s​e​r​t​ ​t​h​e​ ​p​i​n​ ​y​o​u​ ​c​r​e​a​t​e​d​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​.
 	 */
@@ -6065,46 +6105,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * S​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t
-	 */
-	SB_TITLE_SELF_CUSTODY_WALLET: string
-	/**
-	 * S​e​l​e​c​t​ ​a​n​ ​o​p​t​i​o​n​ ​t​o​ ​a​d​d​ ​a​ ​w​a​l​l​e​t
-	 */
-	SB_DESCRIPTION_SELF_CUSTODY_WALLET: string
-	/**
-	 * N​e​w​ ​w​a​l​l​e​t
-	 */
-	SB_TITLE_CREATE_WALLET: string
-	/**
-	 * C​r​e​a​t​e​ ​a​ ​n​e​w​ ​s​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t
-	 */
-	SB_DESCRIPTION_CREATE_WALLET: string
-	/**
-	 * C​l​o​u​d​ ​b​a​c​k​u​p​s
-	 */
-	SB_TITLE_IMPORT_FROM_CLOUD: string
-	/**
-	 * R​e​c​o​v​e​r​ ​a​ ​w​a​l​l​e​t​ ​f​r​o​m​ ​c​l​o​u​d
-	 */
-	SB_DESCRIPTION_IMPORT_FROM_CLOUD: string
-	/**
-	 * I​m​p​o​r​t​ ​w​i​t​h​ ​k​e​y​s
-	 */
-	SB_TITLE_IMPORT_WITH_KEYS: string
-	/**
-	 * U​s​e​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​o​r​ ​p​r​i​v​a​t​e​ ​k​e​y​s
-	 */
-	SB_DESCRIPTION_IMPORT_WITH_KEYS: string
-	/**
-	 * L​e​d​g​e​r​ ​d​e​v​i​c​e​s
-	 */
-	SB_TITLE_IMPORT_HARDWARE: string
-	/**
-	 * U​s​e​ ​a​ ​b​l​u​e​t​o​o​t​h​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t
-	 */
-	SB_DESCRIPTION_IMPORT_HARDWARE: string
 }
 
 export type TranslationFunctions = {
@@ -10297,6 +10297,26 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	SB_DESCRIPTION: () => LocalizedString
 	/**
+	 * Generate a new recovery phrase
+	 */
+	SB_DESCRIPTION_CREATE_WALLET: () => LocalizedString
+	/**
+	 * Recover a wallet from cloud
+	 */
+	SB_DESCRIPTION_IMPORT_FROM_CLOUD: () => LocalizedString
+	/**
+	 * Use a bluetooth hardware wallet
+	 */
+	SB_DESCRIPTION_IMPORT_HARDWARE: () => LocalizedString
+	/**
+	 * Use Recovery phrase or private keys
+	 */
+	SB_DESCRIPTION_IMPORT_WITH_KEYS: () => LocalizedString
+	/**
+	 * Select an option to add a wallet
+	 */
+	SB_DESCRIPTION_SELF_CUSTODY_WALLET: () => LocalizedString
+	/**
 	 * Edit contact
 	 */
 	SB_EDIT_CONTACT: () => LocalizedString
@@ -10384,6 +10404,26 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Change the interface language
 	 */
 	SB_SELECT_LANGUAGE_DESC: () => LocalizedString
+	/**
+	 * New wallet
+	 */
+	SB_TITLE_CREATE_WALLET: () => LocalizedString
+	/**
+	 * Cloud backups
+	 */
+	SB_TITLE_IMPORT_FROM_CLOUD: () => LocalizedString
+	/**
+	 * Ledger devices
+	 */
+	SB_TITLE_IMPORT_HARDWARE: () => LocalizedString
+	/**
+	 * Import with keys
+	 */
+	SB_TITLE_IMPORT_WITH_KEYS: () => LocalizedString
+	/**
+	 * Self-custody wallet
+	 */
+	SB_TITLE_SELF_CUSTODY_WALLET: () => LocalizedString
 	/**
 	 * Insert the pin you created in order to unlock your wallet.
 	 */
@@ -12059,46 +12099,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Self-custody wallet
-	 */
-	SB_TITLE_SELF_CUSTODY_WALLET: () => LocalizedString
-	/**
-	 * Select an option to add a wallet
-	 */
-	SB_DESCRIPTION_SELF_CUSTODY_WALLET: () => LocalizedString
-	/**
-	 * New wallet
-	 */
-	SB_TITLE_CREATE_WALLET: () => LocalizedString
-	/**
-	 * Create a new self-custody wallet
-	 */
-	SB_DESCRIPTION_CREATE_WALLET: () => LocalizedString
-	/**
-	 * Cloud backups
-	 */
-	SB_TITLE_IMPORT_FROM_CLOUD: () => LocalizedString
-	/**
-	 * Recover a wallet from cloud
-	 */
-	SB_DESCRIPTION_IMPORT_FROM_CLOUD: () => LocalizedString
-	/**
-	 * Import with keys
-	 */
-	SB_TITLE_IMPORT_WITH_KEYS: () => LocalizedString
-	/**
-	 * Use Recovery phrase or private keys
-	 */
-	SB_DESCRIPTION_IMPORT_WITH_KEYS: () => LocalizedString
-	/**
-	 * Ledger devices
-	 */
-	SB_TITLE_IMPORT_HARDWARE: () => LocalizedString
-	/**
-	 * Use a bluetooth hardware wallet
-	 */
-	SB_DESCRIPTION_IMPORT_HARDWARE: () => LocalizedString
 }
 
 export type Formatters = {
