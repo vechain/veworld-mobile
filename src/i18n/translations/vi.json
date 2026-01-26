@@ -1042,7 +1042,7 @@
   "SB_CREATE_ONE": "Tạo một",
   "SB_DELETING_CLOUD_BACKUP": "Đang xóa bản sao lưu...",
   "SB_DESCRIPTION": "Mô tả",
-  "SB_DESCRIPTION_CREATE_WALLET": "Tạo ví tự quản mới",
+  "SB_DESCRIPTION_CREATE_WALLET": "Tạo mới cụm từ khôi phục",
   "SB_DESCRIPTION_IMPORT_FROM_CLOUD": "Khôi phục ví từ đám mây",
   "SB_DESCRIPTION_IMPORT_HARDWARE": "Sử dụng ví phần cứng bluetooth",
   "SB_DESCRIPTION_IMPORT_WITH_KEYS": "Sử dụng cụm từ khôi phục hoặc khóa riêng",

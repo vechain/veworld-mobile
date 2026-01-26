@@ -1042,7 +1042,7 @@
   "SB_CREATE_ONE": "Créez-en un",
   "SB_DELETING_CLOUD_BACKUP": "Suppression de la sauvegarde...",
   "SB_DESCRIPTION": "Description",
-  "SB_DESCRIPTION_CREATE_WALLET": "Créer un nouveau portefeuille en auto-garde",
+  "SB_DESCRIPTION_CREATE_WALLET": "Générer une nouvelle phrase de récupération",
   "SB_DESCRIPTION_IMPORT_FROM_CLOUD": "Restaurer un portefeuille depuis le cloud",
   "SB_DESCRIPTION_IMPORT_HARDWARE": "Utiliser un portefeuille matériel Bluetooth",
   "SB_DESCRIPTION_IMPORT_WITH_KEYS": "Utiliser une phrase de récupération ou des clés privées",

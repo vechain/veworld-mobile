@@ -1042,7 +1042,7 @@
   "SB_CREATE_ONE": "Maak er een aan",
   "SB_DELETING_CLOUD_BACKUP": "Back-up verwijderen...",
   "SB_DESCRIPTION": "Beschrijving",
-  "SB_DESCRIPTION_CREATE_WALLET": "Maak een nieuwe self-custody wallet aan",
+  "SB_DESCRIPTION_CREATE_WALLET": "Genereer een nieuwe herstelzin",
   "SB_DESCRIPTION_IMPORT_FROM_CLOUD": "Herstel een wallet vanuit de cloud",
   "SB_DESCRIPTION_IMPORT_HARDWARE": "Gebruik een bluetooth hardware wallet",
   "SB_DESCRIPTION_IMPORT_WITH_KEYS": "Gebruik herstelzin of privésleutels",

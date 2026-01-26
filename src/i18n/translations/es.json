@@ -1042,7 +1042,7 @@
   "SB_CREATE_ONE": "Crea uno",
   "SB_DELETING_CLOUD_BACKUP": "Eliminando copia de seguridad...",
   "SB_DESCRIPTION": "Descripción",
-  "SB_DESCRIPTION_CREATE_WALLET": "Crear una nueva billetera de autocustodia",
+  "SB_DESCRIPTION_CREATE_WALLET": "Generar una nueva frase de recuperación",
   "SB_DESCRIPTION_IMPORT_FROM_CLOUD": "Recuperar una billetera desde la nube",
   "SB_DESCRIPTION_IMPORT_HARDWARE": "Usar una billetera de hardware bluetooth",
   "SB_DESCRIPTION_IMPORT_WITH_KEYS": "Usar frase de recuperación o llaves privadas",

@@ -1042,7 +1042,7 @@
   "SB_CREATE_ONE": "एक बनाएं",
   "SB_DELETING_CLOUD_BACKUP": "बैकअप हटाया जा रहा है...",
   "SB_DESCRIPTION": "विवरण",
-  "SB_DESCRIPTION_CREATE_WALLET": "नई स्वयं-कस्टडी वॉलेट बनाएं",
+  "SB_DESCRIPTION_CREATE_WALLET": "एक नया रिकवरी वाक्यांश जनरेट करें",
   "SB_DESCRIPTION_IMPORT_FROM_CLOUD": "क्लाउड से वॉलेट रिकवर करें",
   "SB_DESCRIPTION_IMPORT_HARDWARE": "ब्लूटूथ हार्डवेयर वॉलेट का उपयोग करें",
   "SB_DESCRIPTION_IMPORT_WITH_KEYS": "रिकवरी फ्रेज़ या प्राइवेट कीज का उपयोग करें",

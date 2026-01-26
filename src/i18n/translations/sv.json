@@ -1042,7 +1042,7 @@
   "SB_CREATE_ONE": "Skapa en",
   "SB_DELETING_CLOUD_BACKUP": "Tar bort säkerhetskopia...",
   "SB_DESCRIPTION": "Beskrivning",
-  "SB_DESCRIPTION_CREATE_WALLET": "Skapa en ny plånbok med självförvaring",
+  "SB_DESCRIPTION_CREATE_WALLET": "Skapa en ny återställningsfras",
   "SB_DESCRIPTION_IMPORT_FROM_CLOUD": "Återställ en plånbok från molnet",
   "SB_DESCRIPTION_IMPORT_HARDWARE": "Använd en bluetooth-hårdvaruplånbok",
   "SB_DESCRIPTION_IMPORT_WITH_KEYS": "Använd återställningsfras eller privata nycklar",

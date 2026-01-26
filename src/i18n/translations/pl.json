@@ -1042,7 +1042,7 @@
   "SB_CREATE_ONE": "Utwórz jeden",
   "SB_DELETING_CLOUD_BACKUP": "Usuwanie kopii zapasowej...",
   "SB_DESCRIPTION": "Opis",
-  "SB_DESCRIPTION_CREATE_WALLET": "Utwórz nowy portfel samodzielnej opieki",
+  "SB_DESCRIPTION_CREATE_WALLET": "Wygeneruj nową frazę odzyskiwania",
   "SB_DESCRIPTION_IMPORT_FROM_CLOUD": "Odzyskaj portfel z chmury",
   "SB_DESCRIPTION_IMPORT_HARDWARE": "Użyj portfela sprzętowego przez Bluetooth",
   "SB_DESCRIPTION_IMPORT_WITH_KEYS": "Użyj frazy odzyskiwania lub kluczy prywatnych",

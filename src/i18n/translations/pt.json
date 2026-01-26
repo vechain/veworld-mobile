@@ -1042,7 +1042,7 @@
   "SB_CREATE_ONE": "Crie um",
   "SB_DELETING_CLOUD_BACKUP": "Excluindo o backup...",
   "SB_DESCRIPTION": "Descrição",
-  "SB_DESCRIPTION_CREATE_WALLET": "Crie uma nova carteira de autocustódia",
+  "SB_DESCRIPTION_CREATE_WALLET": "Gerar uma nova frase de recuperação",
   "SB_DESCRIPTION_IMPORT_FROM_CLOUD": "Recupere uma carteira da nuvem",
   "SB_DESCRIPTION_IMPORT_HARDWARE": "Use uma carteira de hardware via bluetooth",
   "SB_DESCRIPTION_IMPORT_WITH_KEYS": "Use frase de recuperação ou chaves privadas",
