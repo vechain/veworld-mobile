@@ -1701,7 +1701,7 @@ type RootTranslation = {
 	 */
 	BTN_SELECT_DERIVATION_PATH_VET: string
 	/**
-	 * S​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t
+	 * C​o​n​t​i​n​u​e​ ​w​i​t​h​ ​s​e​l​f​-​c​u​s​t​o​d​y
 	 */
 	BTN_SELF_CUSTODY_WALLET: string
 	/**
@@ -7718,7 +7718,7 @@ Thanks for your patience!
 	 */
 	BTN_SELECT_DERIVATION_PATH_VET: () => LocalizedString
 	/**
-	 * Self-custody wallet
+	 * Continue with self-custody
 	 */
 	BTN_SELF_CUSTODY_WALLET: () => LocalizedString
 	/**

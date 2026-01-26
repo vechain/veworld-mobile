@@ -408,7 +408,7 @@
   "BTN_SELECT_DERIVATION_PATH": "Select derivation path for your wallet",
   "BTN_SELECT_DERIVATION_PATH_ETH": "Derivation Path for Ethereum",
   "BTN_SELECT_DERIVATION_PATH_VET": "Derivation Path for VeChain",
-  "BTN_SELF_CUSTODY_WALLET": "Self-custody wallet",
+  "BTN_SELF_CUSTODY_WALLET": "Continue with self-custody",
   "BTN_SELL": "Sell",
   "BTN_SEND": "Send",
   "BTN_SEND_ANYWAY": "Yes, send anyway",
