@@ -58,7 +58,7 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
 
     const isNew = useMemo(() => {
         if (!transferDetails || transferDetails.error) return false
-        return moment().diff((transferDetails.data?.data[0].blockTimestamp ?? 0) * 1000, "days") <= 5
+        return moment().diff((transferDetails.data?.data?.[0]?.blockTimestamp ?? 0) * 1000, "days") <= 5
     }, [transferDetails])
 
     const topStyle = useMemo(() => {

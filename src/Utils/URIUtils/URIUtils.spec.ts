@@ -15,6 +15,10 @@ describe("URIUtils", () => {
             expect(URIUtils.compareURLs("https://www.google.com", "https://www.facebook.com")).toBe(false)
         })
 
+        test("should return true for same URLs with different casing", function () {
+            expect(URIUtils.compareURLs("https://www.Google.Com", "https://www.google.com")).toBe(true)
+        })
+
         it("should return false if no urls provided", () => {
             expect(URIUtils.compareURLs()).toBe(false)
         })
@@ -315,6 +319,9 @@ describe("URIUtils", () => {
         })
         test("should return false for different second level domains", function () {
             expect(URIUtils.compareSecondLevelDomains("https://app.evearn.com", "https://app.3vearn.com")).toBe(false)
+        })
+        test("should return true for same second level domains with different casing", function () {
+            expect(URIUtils.compareSecondLevelDomains("https://app.EvEarn.Com", "https://evearn.com")).toBe(true)
         })
     })
 })

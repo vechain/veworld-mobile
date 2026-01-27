@@ -113,6 +113,7 @@ export const BalanceScreen = () => {
                     refreshControl={<PullToRefresh />}
                     onScroll={onScroll}
                     stickyHeaderIndices={[0]}
+                    showsVerticalScrollIndicator={false}
                     style={styles.scrollViewRoot}
                     contentContainerStyle={styles.scrollViewContent}>
                     <Animated.View>

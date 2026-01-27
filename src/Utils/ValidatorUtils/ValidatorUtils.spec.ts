@@ -1,5 +1,8 @@
 import { Validator } from "~Constants"
+import { TestHelpers } from "~Test"
 import { ValidatorUtils } from "./ValidatorUtils"
+
+const { mockedValidators: indexerValidators } = TestHelpers.data
 
 const mockValidators: Validator[] = [
     {
@@ -127,6 +130,13 @@ describe("ValidatorUtils", () => {
                 const name = ValidatorUtils.getValidatorName(mockValidators, mockValidator.address)
                 expect(name).toBe(mockValidator.name)
             })
+        })
+    })
+
+    describe("getCurrentCycleValidatorStake", () => {
+        it("should return the current cycle validator stake", () => {
+            const stake = ValidatorUtils.getCurrentCycleValidatorStake(indexerValidators[0])
+            expect(stake).toBe(67185283)
         })
     })
 })

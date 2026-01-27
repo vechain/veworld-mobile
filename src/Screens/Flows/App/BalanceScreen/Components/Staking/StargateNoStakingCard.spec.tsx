@@ -3,8 +3,11 @@ import React from "react"
 import { STARGATE_DAPP_URL_HOME_BANNER } from "~Constants"
 import { useBrowserNavigation } from "~Hooks/useBrowserSearch"
 import { useStargateStats } from "~Hooks/useStargateStats"
-import { TestWrapper } from "~Test"
+import { TestHelpers, TestWrapper } from "~Test"
 import { StargateNoStakingCard } from "./StargateNoStakingCard"
+import { useValidators } from "~Hooks/useValidators"
+
+const { mockedValidators } = TestHelpers.data
 
 jest.mock("~Hooks/useBrowserSearch", () => ({
     useBrowserNavigation: jest.fn(),
@@ -14,6 +17,10 @@ jest.mock("~Hooks/useStargateStats", () => ({
     useStargateStats: jest.fn(),
 }))
 
+jest.mock("~Hooks/useValidators", () => ({
+    useValidators: jest.fn(),
+}))
+
 describe("StargateNoStackingCard", () => {
     beforeEach(() => {
         jest.restoreAllMocks()
@@ -21,6 +28,10 @@ describe("StargateNoStackingCard", () => {
 
     it("should render", () => {
         ;(useBrowserNavigation as jest.Mock).mockReturnValue({ navigateToBrowser: jest.fn() })
+        ;(useValidators as jest.Mock).mockImplementation(() => ({
+            data: mockedValidators,
+            isLoading: false,
+        }))
         ;(useStargateStats as jest.Mock).mockImplementation(() => ({
             data: {
                 totalSupply: "12816",
@@ -34,6 +45,7 @@ describe("StargateNoStackingCard", () => {
             error: undefined,
             isError: false,
         }))
+
         render(<StargateNoStakingCard />, {
             wrapper: TestWrapper,
         })
@@ -43,6 +55,10 @@ describe("StargateNoStackingCard", () => {
 
     it("should render the stats cards", () => {
         ;(useBrowserNavigation as jest.Mock).mockReturnValue({ navigateToBrowser: jest.fn() })
+        ;(useValidators as jest.Mock).mockImplementation(() => ({
+            data: mockedValidators,
+            isLoading: false,
+        }))
         ;(useStargateStats as jest.Mock).mockImplementation(() => ({
             data: {
                 totalSupply: "12816",
@@ -65,7 +81,7 @@ describe("StargateNoStackingCard", () => {
         const rewardsGeneration = screen.getByTestId("STATS_CARD_REWARDS GENERATION")
 
         expect(totalStaked).toBeOnTheScreen()
-        expect(totalStaked.findByProps({ testID: "STATS_CARD_VALUE" })).toHaveTextContent("6.3B")
+        expect(totalStaked.findByProps({ testID: "STATS_CARD_VALUE" })).toHaveTextContent("6.4B")
 
         expect(totalSupply).toBeOnTheScreen()
         expect(totalSupply.findByProps({ testID: "STATS_CARD_VALUE" })).toHaveTextContent("12.8K")
