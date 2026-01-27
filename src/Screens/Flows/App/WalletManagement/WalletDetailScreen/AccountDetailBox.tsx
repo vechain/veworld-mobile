@@ -76,7 +76,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                         </BaseTouchable>
 
                         <BaseSpacer height={4} />
-                        <AccountDetailFiatBalance account={account} isVisible={isBalanceVisible} isLoading={false} />
+                        <AccountDetailFiatBalance account={account} isVisible={isBalanceVisible} />
                     </BaseView>
                 </BaseView>
                 {/* Actions */}

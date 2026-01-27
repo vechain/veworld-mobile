@@ -1,9 +1,12 @@
 import { useFocusEffect } from "@react-navigation/native"
+import { useMutation } from "@tanstack/react-query"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import {
+    BaseButton,
     BaseCard,
-    BaseSpacer,
+    BaseIcon,
+    BaseSwitch,
     BaseText,
     BaseView,
     EnableFeature,
@@ -12,7 +15,7 @@ import {
     showWarningToast,
     useNotifications,
 } from "~Components"
-import { vechainNewsAndUpdates, voteReminderTagKey } from "~Constants"
+import { COLORS, ColorThemeType, NOTIFICATION_CATEGORIES, vechainNewsAndUpdates } from "~Constants"
 import { useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
@@ -24,13 +27,15 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 
 const SUBSCRIPTION_LIMIT = 10
 
 export const NotificationScreen = () => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-    const { theme } = useThemedStyles(baseStyle)
+    const { theme, styles } = useThemedStyles(baseStyle)
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const dappNotifications = useAppSelector(selectDappNotifications)
@@ -49,12 +54,34 @@ export const NotificationScreen = () => {
         removeTag,
         addAllDAppsTags,
         removeAllDAppsTags,
+        disabledCategories,
+        updateNotificationCenterPrefs,
     } = useNotifications()
+
+    const { mutate: updatePrefs, isPending: isUpdatingPrefs } = useMutation({
+        mutationKey: ["NOTIFICATION_CENTER", "UPDATE_PREFERENCES"],
+        mutationFn: async ({ category, enabled }: { category: string; enabled: boolean }) => {
+            await updateNotificationCenterPrefs(category, enabled)
+        },
+        onError: () => {
+            Feedback.show({
+                severity: FeedbackSeverity.ERROR,
+                type: FeedbackType.ALERT,
+                message: LL.NOTIFICATION_CENTER_UPDATE_PREFERENCE_ERROR(),
+                icon: "icon-alert-triangle",
+                duration: 3000,
+            })
+        },
+    })
 
     const [tags, setTags] = useState<{ [key: string]: string }>({})
 
     const areNotificationsEnabled = !!isUserOptedIn && !!isNotificationPermissionEnabled
     const hasReachedSubscriptionLimit = Object.keys(tags).length === SUBSCRIPTION_LIMIT
+
+    // Notification preference computed values
+    const isNftUpdatesEnabled = !disabledCategories.includes(NOTIFICATION_CATEGORIES.NFT_UPDATES)
+    const isRewardsEnabled = !disabledCategories.includes(NOTIFICATION_CATEGORIES.REWARDS)
 
     const updateTags = useCallback(() => {
         getTags().then(setTags)
@@ -138,56 +165,114 @@ export const NotificationScreen = () => {
         updateTags,
     ])
 
+    const toggleNotifCenterPreference = useCallback(
+        (category: string) => (value: boolean) => {
+            updatePrefs({ category, enabled: value })
+        },
+        [updatePrefs],
+    )
+
     const ListHeaderComponent = useMemo(() => {
+        const itemSwitchColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
         return (
-            <>
-                <BaseCard>
-                    <BaseView flex={1} flexDirection="column">
-                        <EnableFeature
-                            title={LL.PUSH_NOTIFICATIONS_ACTIVE()}
+            <BaseCard style={styles.cardContent}>
+                <BaseView>
+                    <BaseView style={styles.allowNotifications}>
+                        <BaseIcon
+                            name={areNotificationsEnabled ? "icon-bell-ring" : "icon-bell-off"}
+                            size={20}
+                            color={theme.colors.text}
+                        />
+                        <BaseView flex={1}>
+                            <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_ACTIVE()}</BaseText>
+                        </BaseView>
+                        <BaseSwitch
                             onValueChange={toggleNotificationsSwitch}
                             value={areNotificationsEnabled}
+                            disabled={!isNotificationPermissionEnabled}
                         />
                     </BaseView>
-                </BaseCard>
-                <BaseSpacer height={24} />
+                </BaseView>
+
+                {!isNotificationPermissionEnabled && (
+                    <BaseView gap={16}>
+                        <BaseView style={styles.notificationsDisabledAlert}>
+                            <BaseView flex={1} gap={8}>
+                                <BaseView style={styles.alertTitleRow}>
+                                    <BaseIcon
+                                        size={16}
+                                        color={theme.colors.errorAlert.icon}
+                                        name="icon-alert-triangle"
+                                    />
+                                    <BaseText typographyFont="bodyMedium" color={theme.colors.errorAlert.text}>
+                                        {LL.PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE()}
+                                    </BaseText>
+                                </BaseView>
+                                <BaseText
+                                    pl={24}
+                                    typographyFont="captionRegular"
+                                    color={theme.colors.errorAlert.subText}>
+                                    {LL.PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC()}
+                                </BaseText>
+                            </BaseView>
+                        </BaseView>
+                        <BaseButton
+                            action={requestNotficationPermission}
+                            title={LL.ACTIVATE_NOTIFICATION_MODAL_ENABLE_BTN()}
+                        />
+                    </BaseView>
+                )}
 
                 {areNotificationsEnabled && (
-                    <>
-                        <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_UPDATES()}</BaseText>
-                        <BaseSpacer height={16} />
-                        <EnableFeature
-                            title={LL.VECHAIN_NEWS_AND_UPDATES()}
-                            typographyFont="bodyMedium"
-                            onValueChange={toogleSubscriptionSwitch(vechainNewsAndUpdates)}
-                            value={!!tags[vechainNewsAndUpdates]}
-                        />
-                        <BaseSpacer height={40} />
+                    <BaseView style={styles.notificationPrefs}>
+                        <BaseView gap={8}>
+                            <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_UPDATES()}</BaseText>
+                            <EnableFeature
+                                title={LL.VECHAIN_NEWS_AND_UPDATES()}
+                                typographyFont="captionMedium"
+                                onValueChange={toogleSubscriptionSwitch(vechainNewsAndUpdates)}
+                                value={!!tags[vechainNewsAndUpdates]}
+                                color={itemSwitchColor}
+                            />
+                        </BaseView>
 
-                        <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_VEBETTERDAO()}</BaseText>
-                        <BaseSpacer height={16} />
-                        {isMainnet && (
-                            <>
+                        <BaseView gap={8}>
+                            <BaseText typographyFont="bodySemiBold">{LL.PUSH_NOTIFICATIONS_VEBETTERDAO()}</BaseText>
+                            {isMainnet && (
                                 <EnableFeature
                                     title={LL.PUSH_NOTIFICATIONS_DAPPS_DESC()}
-                                    typographyFont="bodyMedium"
+                                    typographyFont="captionMedium"
                                     onValueChange={toogleDAppSubscriptionSwitch}
                                     value={dappNotifications}
+                                    color={itemSwitchColor}
                                 />
-                                <BaseSpacer height={16} />
-                            </>
-                        )}
-                        <EnableFeature
-                            title={LL.PUSH_NOTIFICATIONS_VOTE_REMINDER()}
-                            typographyFont="bodyMedium"
-                            onValueChange={toogleSubscriptionSwitch(voteReminderTagKey)}
-                            value={!!tags[voteReminderTagKey]}
-                        />
-                        <BaseSpacer height={40} />
-                    </>
+                            )}
+                        </BaseView>
+
+                        <BaseView gap={8}>
+                            <BaseText typographyFont="bodySemiBold">
+                                {LL.PUSH_NOTIFICATIONS_STARGATE_STAKING()}
+                            </BaseText>
+                            <EnableFeature
+                                title={LL.PUSH_NOTIFICATIONS_STARGATE_NFT_UPDATES()}
+                                typographyFont="captionMedium"
+                                onValueChange={toggleNotifCenterPreference(NOTIFICATION_CATEGORIES.NFT_UPDATES)}
+                                value={isNftUpdatesEnabled}
+                                color={itemSwitchColor}
+                                disabled={isUpdatingPrefs}
+                            />
+                            <EnableFeature
+                                title={LL.PUSH_NOTIFICATIONS_STARGATE_REWARDS()}
+                                typographyFont="captionMedium"
+                                onValueChange={toggleNotifCenterPreference(NOTIFICATION_CATEGORIES.REWARDS)}
+                                value={isRewardsEnabled}
+                                color={itemSwitchColor}
+                                disabled={isUpdatingPrefs}
+                            />
+                        </BaseView>
+                    </BaseView>
                 )}
-                <BaseSpacer height={12} />
-            </>
+            </BaseCard>
         )
     }, [
         LL,
@@ -198,8 +283,15 @@ export const NotificationScreen = () => {
         toogleSubscriptionSwitch,
         toogleDAppSubscriptionSwitch,
         dappNotifications,
+        toggleNotifCenterPreference,
+        isNftUpdatesEnabled,
+        isRewardsEnabled,
+        styles,
+        theme,
+        isNotificationPermissionEnabled,
+        requestNotficationPermission,
+        isUpdatingPrefs,
     ])
-
     useEffect(() => {
         if (error) {
             showErrorToast({
@@ -228,11 +320,35 @@ export const NotificationScreen = () => {
     )
 }
 
-const baseStyle = () =>
+const baseStyle = (theme: ColorThemeType) =>
     StyleSheet.create({
-        skeletonCard: {
-            height: 31,
-            width: "100%",
-            marginBottom: 12,
+        cardContent: {
+            flexDirection: "column",
+            padding: 24,
+            gap: 24,
+        },
+        allowNotifications: {
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 16,
+        },
+        notificationsDisabledAlert: {
+            backgroundColor: theme.colors.errorAlert.background,
+            borderRadius: 8,
+            padding: 12,
+            borderColor: theme.colors.errorAlert.border,
+            borderWidth: 1,
+        },
+        alertTitleRow: {
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 8,
+            minHeight: 20,
+        },
+        notificationPrefs: {
+            borderTopWidth: 1,
+            paddingTop: 24,
+            gap: 24,
+            borderTopColor: theme.isDark ? COLORS.APP_BACKGROUND_DARK : COLORS.GREY_100,
         },
     })

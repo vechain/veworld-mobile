@@ -119,9 +119,10 @@ const convertUriToUrl = (uri: string) => {
 }
 
 function parseUrl(url: string) {
-    if (isHttps(url)) return url
-    if (isHttp(url)) return `http://${url.slice(7)}`
-    return `https://${url}`
+    const trimmedUrl = url.trim()
+    if (isHttps(trimmedUrl)) return `https://${trimmedUrl.slice(8)}`
+    if (isHttp(trimmedUrl)) return `http://${trimmedUrl.slice(7)}`
+    return `https://${trimmedUrl}`
 }
 
 function parseUrlSafe(url: string) {
@@ -202,8 +203,10 @@ const getSecondLevelDomain = (url: string) => {
 }
 
 const compareSecondLevelDomains = (url1: string, url2: string) => {
-    if (!isValid(url1) || !isValid(url2)) return false
-    return getSecondLevelDomain(url1) === getSecondLevelDomain(url2)
+    const ur1Lower = url1.toLowerCase()
+    const ur2Lower = url2.toLowerCase()
+    if (!isValid(ur1Lower) || !isValid(ur2Lower)) return false
+    return getSecondLevelDomain(ur1Lower) === getSecondLevelDomain(ur2Lower)
 }
 
 export default {

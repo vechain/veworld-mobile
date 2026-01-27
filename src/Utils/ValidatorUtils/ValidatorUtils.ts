@@ -1,5 +1,6 @@
 import { Validator } from "~Constants"
 import AddressUtils from "../AddressUtils"
+import { components } from "~Generated/indexer/schema"
 
 /**
  * Get validator information by address from the validators list
@@ -22,7 +23,15 @@ export const getValidatorName = (validators: Validator[], address: string): stri
     return validator?.name
 }
 
+export const getCurrentCycleValidatorStake = (
+    validator: components["schemas"]["PaginatedResponseValidator"]["data"][number],
+): number => {
+    if (!validator) return 0
+    return validator.validatorVetStaked ?? 0
+}
+
 export const ValidatorUtils = {
     getValidatorByAddress,
     getValidatorName,
+    getCurrentCycleValidatorStake,
 }

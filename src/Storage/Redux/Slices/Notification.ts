@@ -16,6 +16,7 @@ export const initialNotificationState: NotificationState = {
     userTags: {},
     dappNotifications: true,
     registrations: registrationsAdapter.getInitialState(),
+    disabledCategories: [],
 }
 
 export const Notification = createSlice({
@@ -71,6 +72,9 @@ export const Notification = createSlice({
         removeRegistrations: (state, action) => {
             registrationsAdapter.removeMany(state.registrations, action.payload)
         },
+        setDisabledCategories: (state, action: PayloadAction<string[]>) => {
+            state.disabledCategories = action.payload
+        },
     },
 })
 
@@ -86,6 +90,7 @@ export const {
     removeDappsVisitCounter,
     upsertRegistrations,
     removeRegistrations,
+    setDisabledCategories,
 } = Notification.actions
 
 export { registrationsAdapter }

@@ -2,6 +2,14 @@ export const vechainNewsAndUpdates = "vechainNewsAndUpdates"
 export const newDappsListedTagKey = "NewDappsListed"
 export const voteReminderTagKey = "VoteReminder"
 
+// Notification preference categories
+export const NOTIFICATION_CATEGORIES = {
+    NFT_UPDATES: "NFT_UPDATES",
+    REWARDS: "REWARDS",
+} as const
+
+export type NotificationCategory = (typeof NOTIFICATION_CATEGORIES)[keyof typeof NOTIFICATION_CATEGORIES]
+
 export const ecosystemDappIdToVeBetterDappId = {
     "vet.mugshot": "0x2fc30c2ad41a2994061efaf218f1d52dc92bc4a31a0f02a4916490076a7a393a",
     "vet.cleanify": "0x899de0d0f0b39e484c8835b2369194c4c102b230c813862db383d44a4efe14d3",

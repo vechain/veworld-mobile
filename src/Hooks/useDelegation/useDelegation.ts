@@ -8,6 +8,7 @@ import {
     selectSelectedAccount,
     useAppSelector,
 } from "~Storage/Redux"
+import { URIUtils } from "~Utils"
 
 type Props = {
     providedUrl?: string
@@ -25,7 +26,8 @@ export const useDelegation = ({ providedUrl, setGasPayer }: Props) => {
     const defaultDelegationUrl = useAppSelector(getDefaultDelegationUrl)
 
     const handleSetSelectedDelegationUrl = useCallback((url: string) => {
-        setSelectedDelegationUrl(url)
+        const normalizedUrl = URIUtils.parseUrlSafe(url) || url
+        setSelectedDelegationUrl(normalizedUrl)
         setSelectedDelegationOption(DelegationType.URL)
         setSelectedDelegationAccount(undefined)
     }, [])
