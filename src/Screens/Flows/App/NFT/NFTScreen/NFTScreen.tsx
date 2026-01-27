@@ -19,6 +19,7 @@ import { NetworkErrorView } from "./Components/NetworkErrorView"
 import { NFTList } from "./Components/NFTList"
 import { NftLoader } from "./Components/NftLoader"
 import { useFetchCollections } from "./useFetchCollections"
+import { FlatList } from "react-native"
 
 export const NFTScreen = () => {
     const nav = useNavigation()
@@ -62,7 +63,7 @@ export const NFTScreen = () => {
         if (isShowImportNFTs) return <ImportNFTView onImportPress={handleOpenOnlyReceiveCamera} />
     }, [handleOpenOnlyReceiveCamera, isShowImportNFTs])
 
-    const flatListRef = useRef(null)
+    const flatListRef = useRef<FlatList>(undefined!)
 
     useScrollToTop(flatListRef)
 

@@ -115,6 +115,7 @@ export const BalanceScreen = () => {
                     stickyHeaderIndices={[0]}
                     showsVerticalScrollIndicator={false}
                     style={styles.scrollViewRoot}
+                    showsVerticalScrollIndicator={false}
                     contentContainerStyle={styles.scrollViewContent}>
                     <Animated.View>
                         <AnimatedLinearGradient

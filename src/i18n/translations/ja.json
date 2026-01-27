@@ -886,7 +886,7 @@
   "NOTIFIACTION_INCOMING_NFT_ACTION": "NFTに移動",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} が {to: string} に正常に送信されました。",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "関連付けられているウォレットには1つのアカウントしかありません。このアカウントを削除するにはウォレットを削除してください。",
-  "NOTIFICATION_CENTER_UPDATE_PREFERENCE_ERROR": "更新に失敗しました。もう一度お試しください。",
+  "NOTIFICATION_CENTER_UPDATE_PREFERENCE_ERROR": "更新に失敗しました。再試行してください。",
   "NOTIFICATION_COPIED_CLIPBOARD": "{name : string} がコピーされました！",
   "NOTIFICATION_DAPP_INVALID_REQUEST": "DAppが無効なリクエストを行いました",
   "NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND": "DAppが要求したアカウントが見つかりませんでした",
