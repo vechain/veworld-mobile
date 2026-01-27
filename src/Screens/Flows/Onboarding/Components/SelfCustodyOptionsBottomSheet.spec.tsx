@@ -1,16 +1,27 @@
+import { fireEvent, render, screen, waitFor } from "@testing-library/react-native"
 import React from "react"
-import { render, screen, waitFor } from "@testing-library/react-native"
-import { setPlatform, TestWrapper } from "~Test"
-import { useCloudBackup } from "~Hooks/useCloudBackup"
-import { SelfCustodyOptionsBottomSheet } from "./SelfCustodyOptionsBottomSheet"
-import { CloudKitWallet } from "~Model"
 import { DerivationPath } from "~Constants"
+import { useCloudBackup } from "~Hooks/useCloudBackup"
+import { CloudKitWallet } from "~Model"
+import { setPlatform, TestWrapper } from "~Test"
+import { useHandleWalletCreation } from "../WelcomeScreen/useHandleWalletCreation"
+import { SelfCustodyOptionsBottomSheet } from "./SelfCustodyOptionsBottomSheet"
 
 jest.mock("~Hooks/useCloudBackup", () => ({
     useCloudBackup: jest.fn(() => ({
         isCloudAvailable: true,
         getAllWalletFromCloud: jest.fn(),
     })),
+}))
+
+jest.mock("../WelcomeScreen/useHandleWalletCreation", () => ({
+    useHandleWalletCreation: jest.fn().mockReturnValue({
+        onCreateWallet: jest.fn(),
+        isOpen: false,
+        isError: false,
+        onSuccess: jest.fn(),
+        onClose: jest.fn(),
+    }),
 }))
 
 const mockCloudKitWallet: CloudKitWallet = {
@@ -88,5 +99,34 @@ describe("SelfCustodyOptionsBottomSheet", () => {
         })
 
         expect(screen.queryByTestId("SELF_CUSTODY_OPTIONS_CLOUD")).not.toBeOnTheScreen()
+    })
+
+    it("should call onNewWallet when create option is pressed", async () => {
+        const onNewWallet = jest.fn()
+        ;(useCloudBackup as jest.Mock).mockReturnValue({
+            isCloudAvailable: true,
+            getAllWalletFromCloud: jest.fn().mockResolvedValue([]),
+        })
+        ;(useHandleWalletCreation as jest.Mock).mockReturnValue({
+            onCreateWallet: onNewWallet,
+            isOpen: false,
+            isError: false,
+            onSuccess: jest.fn(),
+            onClose: jest.fn(),
+        })
+
+        const ref = {
+            current: { present: jest.fn(), close: jest.fn() },
+        }
+
+        render(<SelfCustodyOptionsBottomSheet bsRef={ref as any} />, {
+            wrapper: TestWrapper,
+        })
+
+        const createOption = screen.getByTestId("SELF_CUSTODY_OPTIONS_CREATE")
+
+        fireEvent.press(createOption)
+
+        expect(onNewWallet).toHaveBeenCalled()
     })
 })
