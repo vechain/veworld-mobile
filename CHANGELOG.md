@@ -1,5 +1,12 @@
 
 
+## 2.5.1 (2026-01-27)
+
+
+### Bug Fixes
+
+* normalize delegation url protocol casing ([#3729](https://github.com/vechain/veworld-mobile/issues/3729)) ([8387df2](https://github.com/vechain/veworld-mobile/commit/8387df20ec04e69d33b78a42f5b8a097f35d86cd))
+
 ## 2.4.16 (2026-01-19)
 
 # Changelog
