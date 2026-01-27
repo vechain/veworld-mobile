@@ -77,6 +77,9 @@ export const initialState: FeatureFlags = {
                 enabled: false,
             },
         },
+        onboardingScreen: {
+            enabled: false,
+        },
     },
     notificationCenter: {
         registration: {
