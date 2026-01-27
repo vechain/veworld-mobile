@@ -160,6 +160,7 @@ export const SelfCustodyOptionsBottomSheet = ({ bsRef }: Props) => {
                 bounces={false}
                 renderItem={({ item }) => (
                     <CardListItem
+                        testID={`SELF_CUSTODY_OPTIONS_${item.id.toUpperCase()}`}
                         icon={item.icon as IconKey}
                         title={item.title}
                         subtitle={item.description}
