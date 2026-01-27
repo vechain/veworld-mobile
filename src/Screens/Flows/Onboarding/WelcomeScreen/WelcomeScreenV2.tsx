@@ -61,7 +61,7 @@ export const WelcomeScreenV2 = () => {
                     <VeWorldLogoV2 color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE} />
                 </BaseView>
                 {/* Body */}
-                <BaseView flex={1} style={styles.bodyContainer} bg="darkblue" />
+                <BaseView flex={1} style={styles.bodyContainer} bg="transparent" />
                 {/* Footer */}
                 <BaseView gap={16} justifyContent="flex-end">
                     <BaseView gap={16}>

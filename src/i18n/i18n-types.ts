@@ -6105,6 +6105,14 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * I​m​p​o​r​t​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​ ​b​y​ ​u​s​i​n​g​ ​a​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​a​ ​P​r​i​v​a​t​e​ ​K​e​y​ ​o​r​ ​a​ ​K​e​y​s​t​o​r​e​ ​f​i​l​e​.
+	 */
+	WALLET_IMPORT_LOCAL_DESCRIPTION: string
+	/**
+	 * P​a​s​t​e​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​c​r​e​d​e​n​t​i​a​l​s​ ​h​e​r​e
+	 */
+	WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER: string
 }
 
 export type TranslationFunctions = {
@@ -12099,6 +12107,14 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Import an existing wallet by using a Recovery phrase, a Private Key or a Keystore file.
+	 */
+	WALLET_IMPORT_LOCAL_DESCRIPTION: () => LocalizedString
+	/**
+	 * Paste your wallet credentials here
+	 */
+	WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER: () => LocalizedString
 }
 
 export type Formatters = {

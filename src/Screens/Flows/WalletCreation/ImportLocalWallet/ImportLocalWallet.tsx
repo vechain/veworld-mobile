@@ -1,40 +1,33 @@
-import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import * as Clipboard from "expo-clipboard"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { Keyboard, StyleSheet } from "react-native"
 import {
+    AlertInline,
     BaseButton,
     BaseIcon,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
     BaseView,
+    CreatePasswordModal,
     DismissKeyboardView,
     Layout,
     RequireUserPassword,
     SelectDerivationPathBottomSheet,
-    CreatePasswordModal,
 } from "~Components"
-import { AnalyticsEvent, DerivationPath } from "~Constants"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useCheckIdentity,
-    useCloudBackup,
-    useDeviceUtils,
-    useTheme,
-} from "~Hooks"
+import { AnalyticsEvent, COLORS, ColorThemeType, DerivationPath } from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useCheckIdentity, useDeviceUtils, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { CloudKitWallet, DEVICE_CREATION_ERRORS as ERRORS, DrivetWallet, IMPORT_TYPE } from "~Model"
-import { Routes } from "~Navigation"
+import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
 import HapticsService from "~Services/HapticsService"
-import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
+import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 import { CryptoUtils, PlatformUtils } from "~Utils"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
 import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
 
-const DEMO_MNEMONIC = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
+// const DEMO_MNEMONIC = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
 
 enum ButtonType {
     local,
@@ -45,7 +38,7 @@ enum ButtonType {
 
 export const ImportLocalWallet = () => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyles)
     const track = useAnalyticTracking()
     const nav = useNavigation()
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
@@ -59,58 +52,20 @@ export const ImportLocalWallet = () => {
         onClose: onCloseCreateFlow,
     } = useHandleWalletCreation()
 
-    const areDevFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
+    // const areDevFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const [textValue, setTextValue] = useState<string>("")
     const [isError, setIsError] = useState<string>("")
 
     const { checkCanImportDevice } = useDeviceUtils()
 
-    const { isCloudAvailable, getAllWalletFromCloud, googleAccountSignOut } = useCloudBackup()
-
-    const [wallets, setWallets] = useState<CloudKitWallet[] | DrivetWallet[]>([])
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-
-    const goToImportFromCloud = useCallback(() => {
-        nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets })
-    }, [nav, wallets])
-
-    const getWalletsFromICloud = useCallback(async () => {
-        setIsLoading(true)
-        const _wallets: CloudKitWallet[] = await getAllWalletFromCloud()
-        setIsLoading(false)
-        setWallets(_wallets)
-    }, [getAllWalletFromCloud])
-
-    const getWalletsFromDrive = useCallback(async () => {
-        setIsLoading(true)
-        const _wallets: DrivetWallet[] = await getAllWalletFromCloud()
-        setIsLoading(false)
-
-        if (_wallets?.length) {
-            nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets: _wallets })
-        } else {
-            await googleAccountSignOut()
-        }
-    }, [getAllWalletFromCloud, googleAccountSignOut, nav])
-
-    useFocusEffect(
-        useCallback(() => {
-            isCloudAvailable && PlatformUtils.isIOS() && getWalletsFromICloud()
-        }, [getWalletsFromICloud, isCloudAvailable]),
-    )
-
     const computeButtonType = useMemo(() => {
         if (textValue.length || PlatformUtils.isAndroid()) {
             return ButtonType.local
         }
 
-        if (isCloudAvailable && !textValue.length && !!wallets?.length) {
-            return ButtonType.icloud
-        }
-
         return ButtonType.unknown
-    }, [wallets?.length, isCloudAvailable, textValue.length])
+    }, [textValue.length])
 
     const {
         ref: unlockKeystoreBottomSheetRef,
@@ -296,10 +251,10 @@ export const ImportLocalWallet = () => {
         [importMnemonic, importPrivateKey, openUnlockKeystoreBottomSheet, LL],
     )
 
-    const onDemoMnemonicClick = () => {
-        setTextValue(DEMO_MNEMONIC)
-        onVerify(DEMO_MNEMONIC, IMPORT_TYPE.MNEMONIC)
-    }
+    // const onDemoMnemonicClick = () => {
+    //     setTextValue(DEMO_MNEMONIC)
+    //     onVerify(DEMO_MNEMONIC, IMPORT_TYPE.MNEMONIC)
+    // }
 
     const onChangeText = (text: string) => {
         setIsError("")
@@ -328,42 +283,20 @@ export const ImportLocalWallet = () => {
     const handleVerify = useCallback(() => onVerify(textValue, importType), [onVerify, textValue, importType])
     const disabledAction = useCallback(() => setIsError(LL.ERROR_INVALID_IMPORT_DATA()), [LL])
 
-    const footerButtonLeftIcon = useMemo(() => {
-        switch (computeButtonType) {
-            case ButtonType.icloud:
-                return "icon-cloud"
-            default:
-                return undefined
-        }
-    }, [computeButtonType])
-
-    const footerButtonTitle = useMemo(() => {
-        switch (computeButtonType) {
-            case ButtonType.icloud:
-                return "or use iCloud"
-            default:
-                return LL.BTN_IMPORT_WALLET_VERIFY()
-        }
-    }, [LL, computeButtonType])
-
     const footerButtonDisabled = useMemo(() => {
         return computeButtonType === ButtonType.unknown || (!textValue.length && computeButtonType === ButtonType.local)
     }, [computeButtonType, textValue.length])
 
-    const footerButtonAction = useCallback(() => {
-        computeButtonType === ButtonType.icloud ? goToImportFromCloud() : handleVerify()
-    }, [computeButtonType, goToImportFromCloud, handleVerify])
-
     return (
         <DismissKeyboardView>
             <Layout
-                preventGoBack={isLoading && PlatformUtils.isAndroid()}
-                title={LL.TITLE_WALLET_IMPORT_LOCAL()}
+                title={LL.SB_TITLE_IMPORT_WITH_KEYS()}
+                headerRightElement={<BaseIcon name="icon-info" size={20} color={theme.colors.text} action={() => {}} />}
                 body={
                     <>
                         <BaseView justifyContent="space-between">
                             <BaseView>
-                                <BaseView flexDirection="row" w={100}>
+                                {/* <BaseView flexDirection="row" w={100}>
                                     {areDevFeaturesEnabled && (
                                         <BaseButton
                                             size="md"
@@ -372,33 +305,36 @@ export const ImportLocalWallet = () => {
                                             title="DEV:DEMO"
                                         />
                                     )}
-                                </BaseView>
-                                <BaseText typographyFont="body" my={10}>
-                                    {LL.BD_WALLET_IMPORT_LOCAL()}
+                                </BaseView> */}
+                                <BaseText typographyFont="bodyMedium" my={10} align="center">
+                                    {LL.WALLET_IMPORT_LOCAL_DESCRIPTION()}
                                 </BaseText>
 
                                 <BaseSpacer height={20} />
 
-                                <BaseView flexDirection="row" alignSelf="flex-end">
-                                    <BaseIcon
-                                        name={"icon-copy"}
-                                        size={32}
-                                        style={styles.icon}
-                                        bg={theme.colors.secondary}
-                                        action={onPasteFromClipboard}
-                                    />
-                                    <BaseIcon
-                                        name={"icon-trash"}
-                                        size={32}
-                                        bg={theme.colors.secondary}
-                                        action={onClearSeed}
-                                    />
-                                </BaseView>
-
-                                <BaseSpacer height={40} />
-
                                 <ImportWalletInput value={textValue} onChangeText={onChangeText} isError={!!isError} />
 
+                                <BaseSpacer height={12} />
+                                <BaseView flexDirection="row" alignItems="center" justifyContent="flex-end">
+                                    <BaseButton
+                                        rightIcon={
+                                            <BaseIcon
+                                                name={textValue.length ? "icon-circle-x" : "icon-paste"}
+                                                size={16}
+                                                color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}
+                                            />
+                                        }
+                                        title={
+                                            textValue.length
+                                                ? LL.SEND_RECEIVER_ADDRESS_INPUT_CLEAR()
+                                                : LL.SEND_RECEIVER_ADDRESS_INPUT_PASTE()
+                                        }
+                                        textColor={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}
+                                        typographyFont="captionSemiBold"
+                                        style={styles.copyPasteButton}
+                                        action={textValue.length ? onClearSeed : onPasteFromClipboard}
+                                    />
+                                </BaseView>
                                 <BaseSpacer height={12} />
 
                                 <BaseTouchableBox
@@ -451,53 +387,20 @@ export const ImportLocalWallet = () => {
                 footer={
                     <BaseView w={100}>
                         {!!isCreateError && (
-                            <BaseText my={10} color={theme.colors.danger}>
-                                {isCreateError}
-                            </BaseText>
+                            <BaseView flexDirection="row" alignItems="center" justifyContent="center">
+                                <AlertInline message={LL.ERROR_GENERIC_WITH_RETRY_SUBTITLE()} status="error" />
+                            </BaseView>
                         )}
 
                         <BaseButton
-                            isLoading={isLoading && PlatformUtils.isIOS()}
-                            leftIcon={
-                                footerButtonLeftIcon ? (
-                                    <BaseIcon
-                                        name={footerButtonLeftIcon}
-                                        color={theme.colors.textReversed}
-                                        style={styles.ickoudIcon}
-                                    />
-                                ) : undefined
-                            }
-                            action={footerButtonAction}
+                            action={handleVerify}
                             style={styles.button}
-                            title={footerButtonTitle}
+                            title={LL.BTN_IMPORT()}
                             disabled={footerButtonDisabled}
                             disabledAction={disabledAction}
                             disabledActionHaptics="Heavy"
                             haptics="Light"
                         />
-
-                        {PlatformUtils.isAndroid() && isCloudAvailable && (
-                            <>
-                                <BaseSpacer height={8} />
-                                <BaseButton
-                                    isLoading={isLoading}
-                                    leftIcon={
-                                        <BaseIcon
-                                            name={"icon-google-drive"}
-                                            color={theme.colors.textReversed}
-                                            style={styles.ickoudIcon}
-                                        />
-                                    }
-                                    action={getWalletsFromDrive}
-                                    style={styles.button}
-                                    title={"or use Google Drive"}
-                                    disabled={!isCloudAvailable || isLoading}
-                                    disabledAction={disabledAction}
-                                    disabledActionHaptics="Heavy"
-                                    haptics="Light"
-                                />
-                            </>
-                        )}
 
                         <RequireUserPassword
                             isOpen={isPasswordPromptOpen_1}
@@ -511,8 +414,17 @@ export const ImportLocalWallet = () => {
     )
 }
 
-const styles = StyleSheet.create({
-    icon: { marginHorizontal: 20 },
-    ickoudIcon: { marginLeft: -12, marginRight: 12 },
-    button: { justifyContent: "center", height: 48 },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        icon: { marginHorizontal: 20 },
+        ickoudIcon: { marginLeft: -12, marginRight: 12 },
+        button: { justifyContent: "center", height: 48 },
+        copyPasteButton: {
+            gap: 12,
+            borderWidth: 1,
+            borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
+            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.WHITE,
+            paddingVertical: 8,
+            paddingHorizontal: 12,
+        },
+    })

@@ -36,12 +36,14 @@ export const CardListItem = ({ icon, title, subtitle, action, testID, disabled }
                     <BaseText typographyFont="bodySemiBold" numberOfLines={1}>
                         {title}
                     </BaseText>
-                    <BaseText
-                        typographyFont="smallCaptionMedium"
-                        color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                        numberOfLines={1}>
-                        {subtitle}
-                    </BaseText>
+                    {subtitle && (
+                        <BaseText
+                            typographyFont="smallCaptionMedium"
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
+                            numberOfLines={1}>
+                            {subtitle}
+                        </BaseText>
+                    )}
                 </BaseView>
             </BaseView>
             <BaseIcon name="icon-chevron-right" size={16} color={theme.colors.editSpeedBs.title} />

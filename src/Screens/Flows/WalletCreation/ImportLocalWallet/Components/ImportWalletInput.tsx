@@ -3,8 +3,9 @@ import React from "react"
 
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
-import { typography } from "~Constants/Theme"
+import { COLORS, typography } from "~Constants/Theme"
 import FontUtils from "~Utils/FontUtils"
+import { useI18nContext } from "~i18n"
 
 const { defaults: defaultTypography } = typography
 type Props = {
@@ -14,13 +15,14 @@ type Props = {
 }
 
 export const ImportWalletInput = ({ value, onChangeText, isError }: Props) => {
-    const { styles: themedStyles, theme } = useThemedStyles(baseStyles(isError))
+    const { styles: themedStyles } = useThemedStyles(baseStyles(isError))
+    const { LL } = useI18nContext()
     return (
         <TextInput
             style={themedStyles.container}
             autoCapitalize="none"
-            placeholder="Enter your Mnemonic phrase, Private Key or Keystore file here"
-            placeholderTextColor={theme.colors.text}
+            placeholder={LL.WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER()}
+            placeholderTextColor={COLORS.GREY_400}
             autoCorrect={false}
             autoComplete="off"
             multiline={true}
@@ -39,14 +41,13 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             width: "100%",
             color: theme.colors.text,
             backgroundColor: theme.colors.card,
-            borderColor: isError ? theme.colors.danger : theme.colors.transparent,
+            borderColor: isError ? theme.colors.danger : COLORS.GREY_400,
             borderWidth: 1,
             borderRadius: 8,
-            paddingVertical: 20,
-            paddingHorizontal: 10,
-            height: 180,
-            lineHeight: 28,
-            fontSize: FontUtils.font(defaultTypography.bodyAccent.fontSize),
-            fontFamily: defaultTypography.bodyAccent.fontFamily,
+            padding: 16,
+            height: 150,
+            lineHeight: 20,
+            fontSize: FontUtils.font(defaultTypography.body.fontSize),
+            fontFamily: defaultTypography.body.fontFamily,
         },
     })
