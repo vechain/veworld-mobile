@@ -170,7 +170,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 const gasResult = await thor.gas.estimateGas(finalClauses, ownerAddress, {
                     gasPadding: 1,
                 })
-
+                console.log("Gas result", gasResult)
                 const parsedGasLimit = Math.max(gasResult.totalGas, options?.gas ?? 0)
 
                 // Build the transaction in VeChain format

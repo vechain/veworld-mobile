@@ -136,7 +136,16 @@ export const WelcomeScreen = () => {
     const [pendingSmartAccountAddress, setPendingSmartAccountAddress] = useState<string | null>(null)
 
     const onNewGoogleWallet = useCallback(async () => {
-        await login({ provider: "google", oauthRedirectUri: "veworld://" })
+        // Interstingly, privy stores its own access/refresh tokens in the keychain under its
+        // own domain path so when we uninstall the app it does not get wiped.  Thus
+        // there is a case where on a fresh install we have an privy login and don't need to 
+        // login to google again.
+        if (!isAuthenticated) {
+            await login({ provider: "google", oauthRedirectUri: "veworld://" })
+        }
+        setPendingSmartAccountAddress(smartAccountAddress)
+        console.log("onNewGoogleWallet after login")
+        onCreateSmartWallet({ address: smartAccountAddress })
     }, [login])
 
     const onNewWallet = useCallback(async () => {
@@ -159,8 +168,8 @@ export const WelcomeScreen = () => {
 
     useEffect(() => {
         if (isAuthenticated && smartAccountAddress) {
-            setPendingSmartAccountAddress(smartAccountAddress)
-            onCreateSmartWallet({ address: smartAccountAddress })
+            console.log("authetnicated smartAccountAddress", smartAccountAddress)
+
         }
     }, [isAuthenticated, smartAccountAddress, onCreateSmartWallet])
 

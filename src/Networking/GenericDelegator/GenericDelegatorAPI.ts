@@ -4,7 +4,7 @@ import { fetchFromEndpoint, requestFromEndpoint } from "~Networking/API"
 import { URIUtils } from "~Utils"
 
 export const GENERIC_DELEGATOR_BASE_URL = {
-    [NETWORK_TYPE.MAIN]: process.env.REACT_APP_GENERIC_DELEGATOR_MAINNET_URL,
+    [NETWORK_TYPE.MAIN]: "http://192.168.0.19:3000",
     [NETWORK_TYPE.TEST]: process.env.REACT_APP_GENERIC_DELEGATOR_TESTNET_URL,
 }
 
@@ -20,6 +20,8 @@ const executeIfValidNetwork = <TReturnType>(
     path: string,
     cb: (url: string) => TReturnType,
 ): TReturnType => {
+    const url = `${GENERIC_DELEGATOR_BASE_URL[networkType]}${path}`
+    console.log("executeIfValidNetwork", url)
     if (isValidGenericDelegatorNetwork(networkType)) return cb(`${GENERIC_DELEGATOR_BASE_URL[networkType]}${path}`)
     throw new Error("[GENERIC DELEGATOR]: Invalid Network")
 }
@@ -37,32 +39,46 @@ type EstimateGenericDelegatorFeesRequest = {
     networkType: NETWORK_TYPE
     clauses: TransactionClause[]
     signer: string
+    token?: string
 }
 
 export type EstimateGenericDelegatorFeesResponseItem = {
     [token: string]: number
 }
 
-export type EstimateGenericDelegatorFeesResponse = {
-    transactionCost: {
-        regular: EstimateGenericDelegatorFeesResponseItem
-        medium: EstimateGenericDelegatorFeesResponseItem
-        high: EstimateGenericDelegatorFeesResponseItem
-        legacy: EstimateGenericDelegatorFeesResponseItem
-    }
+export type EstimateGenericDelegatorFeesResponseObject = {
+    regular: EstimateGenericDelegatorFeesResponseItem
+    medium: EstimateGenericDelegatorFeesResponseItem
+    high: EstimateGenericDelegatorFeesResponseItem
+    legacy: EstimateGenericDelegatorFeesResponseItem
 }
 
-export const estimateGenericDelegatorFees = ({ networkType, clauses, signer }: EstimateGenericDelegatorFeesRequest) =>
-    executeIfValidNetwork(networkType, "/api/v1/estimate/clauses/,", url =>
-        requestFromEndpoint<EstimateGenericDelegatorFeesResponse>({
-            url: url,
-            data: {
-                signer,
-                clauses: clauses.map(({ to, data, value }) => ({ to, data, value })),
-            },
-            method: "POST",
-        }),
+export type EstimateGenericDelegatorFeesResponse = {
+    transactionCost: number | EstimateGenericDelegatorFeesResponseObject
+}
+
+export const estimateGenericDelegatorFees = ({
+    networkType,
+    clauses,
+    signer,
+    token,
+}: EstimateGenericDelegatorFeesRequest) => {
+    console.log("estimating generic delegator fees", { networkType, clauses, signer, token })
+    return executeIfValidNetwork(
+        networkType,
+        token ? `/api/v1/estimate/clauses/${token}` : "/api/v1/estimate/clauses/,",
+        url =>
+            requestFromEndpoint<EstimateGenericDelegatorFeesResponse>({
+                url: url,
+                data: {
+                    signer,
+                    clauses: clauses.map(({ to, data, value }) => ({ to, data, value })),
+                },
+                method: "POST",
+            }),
     )
+}
+
 export const delegateGenericDelegator = ({
     raw,
     origin,

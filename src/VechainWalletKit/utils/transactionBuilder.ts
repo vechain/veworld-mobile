@@ -274,14 +274,31 @@ export async function buildSmartAccountTransaction(params: {
     const { txClauses, smartAccountConfig, signTypedDataFn, chainId, genericDelgationDetails, ownerAddress } = params
     const { hasV1Account } = smartAccountConfig
 
+    console.log("buildSmartAccountTransaction called:", {
+        txClausesCount: txClauses.length,
+        hasGenericDelegationDetails: !!genericDelgationDetails,
+        genericDelgationDetails: genericDelgationDetails
+            ? {
+                  token: genericDelgationDetails.token,
+                  tokenAddress: genericDelgationDetails.tokenAddress,
+                  depositAccount: genericDelgationDetails.depositAccount,
+                  fee: genericDelgationDetails.fee?.toBN,
+              }
+            : undefined,
+    })
+
     const clauses: TransactionClause[] = [...txClauses]
     // Determine execution strategy based on smart account version
     const shouldUseBatchExecution = !hasV1Account
 
     if (genericDelgationDetails) {
         const { token, tokenAddress, depositAccount, fee } = genericDelgationDetails
+        console.log("Adding transfer clause for generic delegation:", { token, tokenAddress, depositAccount, fee: fee?.toBN })
         const transferClause = getTransferClause(token, tokenAddress, depositAccount, fee)
+        console.log("Transfer clause:", transferClause)
         clauses.push(...transferClause)
+    } else {
+        console.log("No genericDelgationDetails, skipping transfer clause")
     }
 
     if (shouldUseBatchExecution) {

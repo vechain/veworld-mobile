@@ -76,30 +76,61 @@ export const useIsEnoughGas = ({
     const hasEnoughBalanceOnToken = useMemo(() => {
         return Object.fromEntries(
             DELEGATION_TOKENS.map(tokenSymbol => {
+                if (tokenSymbol === VET.symbol) {
+                    console.log("tokenSymbol in", tokenSymbol)
+                }
                 //Always return true if it's either loading fees, fee options are not loaded yet or there are no transaction outputs.
-                if (isLoadingFees || allFeeOptions === undefined || !transactionOutputs)
+                if (isLoadingFees || allFeeOptions === undefined || !transactionOutputs) {
+                    if (tokenSymbol === VET.symbol) {
+                        console.log("VET exiting early")
+                        console.log("VET allFeeOptions", allFeeOptions)
+                        console.log("VET transactionOutputs", transactionOutputs)
+                    }
                     return [tokenSymbol, true] as const
+                }
                 //If the generic delegator fails and doesn't have the specific symbol, return false to not break the UI
-                if (allFeeOptions[tokenSymbol] === undefined) return [tokenSymbol, false] as const
+                if (allFeeOptions[tokenSymbol] === undefined) {
+                    if (tokenSymbol === VET.symbol) {
+                        console.log("Gen del fails, allFeeOptions", allFeeOptions[tokenSymbol], allFeeOptions)
+                    }
+                    return [tokenSymbol, false] as const
+                }
                 const foundTmpToken = officialTokens.find(tk => tk.symbol === tokenSymbol)
+
                 //If the token is not found in the list of official tokens, which is unlikely, return false.
                 if (!foundTmpToken) return [tokenSymbol, false]
                 const foundBalance = balances?.find(tk =>
                     AddressUtils.compareAddresses(tk.tokenAddress, foundTmpToken.address),
                 )
+                if (tokenSymbol === VET.symbol) {
+                    console.log("foundBalance", foundBalance)
+                }
                 //If the balance is not found, then it's probably loading
                 if (!foundBalance) return [tokenSymbol, true]
                 const balance = foundBalance.balance
+
                 const clausesValue = calculateClausesValue({
                     transactionOutputs,
                     selectedToken: foundTmpToken,
                     processor,
                     origin,
                 })
-
                 //Delegation with VTHO should count as "0" for fees
                 if (tokenSymbol === VTHO.symbol && isDelegated)
                     return [tokenSymbol, BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual("0")] as const
+
+                if (tokenSymbol === VET.symbol) {
+                    const balanceMinusClauses = BigNutils(balance).minus(clausesValue.toBN)
+                    const feeRequired = allFeeOptions[tokenSymbol].toBN
+                    const hasEnough = balanceMinusClauses.isBiggerThanOrEqual(feeRequired)
+                    console.log("VET balance check:", {
+                        balance,
+                        clausesValue: clausesValue.toBN,
+                        balanceMinusClauses: balanceMinusClauses.toBN,
+                        feeRequired,
+                        hasEnough,
+                    })
+                }
 
                 return [
                     tokenSymbol,
@@ -109,6 +140,7 @@ export const useIsEnoughGas = ({
         )
     }, [isLoadingFees, allFeeOptions, transactionOutputs, officialTokens, balances, processor, origin, isDelegated])
 
+    // console.log("hasEnoughBalanceOnToken", hasEnoughBalanceOnToken)
     const hasEnoughBalanceOnAny = useMemo(() => {
         return Object.values(hasEnoughBalanceOnToken).some(Boolean)
     }, [hasEnoughBalanceOnToken])

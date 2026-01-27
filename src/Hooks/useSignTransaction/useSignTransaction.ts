@@ -207,7 +207,13 @@ export const useSignTransaction = ({
     ): Promise<{ transaction: Transaction; signature: Buffer | SignStatus.DELEGATION_FAILURE | undefined }> => {
         switch (selectedDelegationOption) {
             case DelegationType.URL: {
-                if (selectedDelegationToken === VTHO.symbol || genericDelegatorFee === undefined)
+                // For smart accounts, always use generic delegator (including VTHO)
+                // For non-smart accounts with VTHO, use standard URL delegation
+                const shouldUseStandardUrlDelegation =
+                    senderDevice?.type !== DEVICE_TYPE.SMART_WALLET &&
+                    (selectedDelegationToken === VTHO.symbol || genericDelegatorFee === undefined)
+
+                if (shouldUseStandardUrlDelegation)
                     return { transaction, signature: await getUrlDelegationSignature(transaction) }
                 const result = await getGenericDelegationTransaction(transaction)
                 if (result === SignStatus.DELEGATION_FAILURE)
