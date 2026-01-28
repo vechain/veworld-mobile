@@ -358,8 +358,8 @@ export const ImportLocalWallet = () => {
 
                                     <BaseSpacer height={12} />
                                     <BaseView style={styles.copyPasteButtonContainer}>
-                                        <BaseView>
-                                            {!!isError && <BaseText color={theme.colors.danger}>{isError}</BaseText>}
+                                        <BaseView flex={1}>
+                                            {!!isError && <AlertInline message={isError} status="error" />}
                                         </BaseView>
                                         <BaseButton
                                             rightIcon={
@@ -466,6 +466,7 @@ const baseStyles = (theme: ColorThemeType) =>
         contentContainer: {
             flex: 1,
             justifyContent: "space-between",
+            marginTop: 16,
         },
         alertContainer: {
             marginBottom: 16,

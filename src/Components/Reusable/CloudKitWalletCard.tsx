@@ -1,25 +1,28 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, TouchableOpacity } from "react-native"
 import { getTimeZone } from "react-native-localize"
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components/Base"
-import { ColorThemeType, DerivationPath, VET } from "~Constants"
+import Animated, { interpolateColor, useAnimatedStyle, withTiming, ZoomIn, ZoomOut } from "react-native-reanimated"
+import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import { COLORS, ColorThemeType, DerivationPath } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { CloudKitWallet } from "~Model"
-import { selectDevices, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BalanceUtils, BigNutils, DateUtils, PlatformUtils } from "~Utils"
-import { AccountIcon } from "./Account"
+import { selectDevices, useAppSelector } from "~Storage/Redux"
+import { AddressUtils, DateUtils, PlatformUtils } from "~Utils"
+
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
 
 export const CloudKitWalletCard = ({
     wallet,
     selected,
+    onPress,
 }: {
     wallet: CloudKitWallet
     selected: CloudKitWallet | null
+    onPress: () => void
 }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { getVnsName } = useVns()
-    const network = useAppSelector(selectSelectedNetwork)
     const { locale } = useI18nContext()
     const devices = useAppSelector(selectDevices)
     const [isImported, setisImported] = useState(false)
@@ -45,16 +48,6 @@ export const CloudKitWalletCard = ({
         init()
     }, [getVnsName, wallet.firstAccountAddress])
 
-    const [balance, setBalance] = useState("0")
-    useEffect(() => {
-        const init = async () => {
-            const _balance = await BalanceUtils.getVetAndVthoBalancesFromBlockchain(wallet.firstAccountAddress, network)
-            const formattedBalance = BigNutils(_balance.balance).toHuman(VET.decimals).toTokenFormat_string(2)
-            setBalance(formattedBalance)
-        }
-        init()
-    }, [network, wallet.firstAccountAddress])
-
     const [creationDate, setCreationDate] = useState("...")
     useEffect(() => {
         const date = DateUtils.formatDateTime(
@@ -65,33 +58,40 @@ export const CloudKitWalletCard = ({
         setCreationDate(date)
     }, [locale, wallet.creationDate])
 
-    const iconWallet = useMemo(() => ({ address: wallet.firstAccountAddress }), [wallet.firstAccountAddress])
+    const isSelected = useMemo(
+        () => AddressUtils.compareAddresses(selected?.rootAddress, wallet.rootAddress),
+        [selected?.rootAddress, wallet.rootAddress],
+    )
+    const containerAnimatedStyles = useAnimatedStyle(() => {
+        const selectedBorderColor = theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE
+        const unselectedBorderColor = theme.isDark ? COLORS.TRANSPARENT : COLORS.GREY_200
+
+        return {
+            borderWidth: withTiming(isSelected ? 2 : 1, { duration: 300 }),
+            borderColor: interpolateColor(isSelected ? 1 : 0, [0, 1], [unselectedBorderColor, selectedBorderColor]),
+        }
+    }, [isSelected, theme.isDark])
 
     return (
-        <BaseView w={100} flexDirection="row">
-            <BaseTouchableBox
-                disabled={isImported}
-                haptics="Light"
-                justifyContent="space-between"
-                containerStyle={[
-                    styles.container,
-                    selected?.rootAddress === wallet.rootAddress ? styles.selectedContainer : {},
-                ]}>
-                <BaseView flexDirection="row" pr={10} alignItems="center">
-                    <AccountIcon account={iconWallet} />
-                    <BaseSpacer width={12} />
-
+        <AnimatedTouchableOpacity
+            activeOpacity={0.9}
+            disabled={isImported}
+            style={[styles.container, containerAnimatedStyles]}
+            onPress={onPress}>
+            <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
+                <BaseView flexDirection="column" flex={1}>
                     <BaseView justifyContent="space-between">
                         <BaseView flexDirection="row">
                             <BaseView alignSelf="flex-start" alignItems="flex-start">
-                                <BaseView flexDirection="row" style={styles.icloudTag}>
+                                <BaseView flexDirection="row" style={styles.icloudTag} alignItems="center" gap={8}>
                                     <BaseIcon
-                                        size={18}
-                                        name={PlatformUtils.isIOS() ? "icon-cloud" : "icon-google-drive"}
-                                        color={theme.colors.textReversed}
-                                        style={styles.cloudIcon}
+                                        size={14}
+                                        name={PlatformUtils.isIOS() ? "icon-apple" : "icon-google-drive"}
+                                        color={theme.isDark ? COLORS.GREY_100 : COLORS.PURPLE}
                                     />
-                                    <BaseText fontSize={12} color={theme.colors.textReversed}>
+                                    <BaseText
+                                        typographyFont="captionMedium"
+                                        color={theme.isDark ? COLORS.GREY_100 : COLORS.PURPLE}>
                                         {PlatformUtils.isIOS() ? "iCloud" : "Google Drive"}
                                     </BaseText>
                                 </BaseView>
@@ -105,39 +105,40 @@ export const CloudKitWalletCard = ({
                             )}
                         </BaseView>
 
-                        <BaseSpacer height={4} />
+                        <BaseSpacer height={16} />
 
-                        <BaseText style={styles.address} fontSize={10}>
+                        <BaseText typographyFont="bodySemiBold">{nameOrAddress}</BaseText>
+                        <BaseSpacer height={8} />
+                        <BaseText
+                            typographyFont="captionRegular"
+                            color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
                             {creationDate}
                         </BaseText>
                     </BaseView>
                 </BaseView>
-
-                <BaseView style={styles.rightSubContainer}>
-                    <BaseText style={styles.address} fontSize={10}>
-                        {nameOrAddress}
-                    </BaseText>
-
-                    <BaseSpacer height={4} />
-                    <BaseText fontSize={10}>
-                        {balance} {VET.symbol.toUpperCase()}
-                    </BaseText>
-                </BaseView>
-            </BaseTouchableBox>
-        </BaseView>
+                {isSelected && (
+                    <Animated.View entering={ZoomIn} exiting={ZoomOut} style={styles.selectedIcon}>
+                        <BaseIcon
+                            name="icon-check"
+                            size={16}
+                            color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE}
+                        />
+                    </Animated.View>
+                )}
+            </BaseView>
+        </AnimatedTouchableOpacity>
     )
 }
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        address: {
-            opacity: 0.7,
-        },
         container: {
             flex: 1,
-            pointerEvents: "none",
             borderWidth: 1,
-            borderColor: theme.colors.transparent,
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+            padding: 16,
+            borderColor: theme.isDark ? COLORS.TRANSPARENT : COLORS.GREY_200,
+            borderRadius: 16,
         },
         selectedContainer: {
             borderWidth: 1,
@@ -148,13 +149,13 @@ const baseStyles = (theme: ColorThemeType) =>
             flexDirection: "column",
             alignItems: "flex-end",
         },
-        cloudIcon: {
-            marginRight: 4,
-        },
         icloudTag: {
             borderRadius: 4,
-            paddingHorizontal: 6,
-            paddingVertical: 2,
-            backgroundColor: theme.colors.primary,
+            paddingHorizontal: 8,
+            paddingVertical: 4,
+            backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_200,
+        },
+        selectedIcon: {
+            alignSelf: "flex-start",
         },
     })

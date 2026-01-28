@@ -1335,6 +1335,14 @@ type RootTranslation = {
 	 */
 	BS_INFO_IMPORTING_WITH_KEYS_TITLE: string
 	/**
+	 * C​l​o​u​d​ ​b​a​c​k​u​p​s​ ​l​e​t​ ​y​o​u​ ​r​e​s​t​o​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​o​n​ ​a​n​y​ ​d​e​v​i​c​e​ ​w​i​t​h​o​u​t​ ​m​a​n​u​a​l​l​y​ ​e​n​t​e​r​i​n​g​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​Y​o​u​r​ ​b​a​c​k​u​p​ ​i​s​ ​e​n​c​r​y​p​t​e​d​ ​w​i​t​h​ ​a​ ​p​a​s​s​w​o​r​d​ ​o​n​l​y​ ​y​o​u​ ​k​n​o​w​.​ ​K​e​e​p​ ​t​h​i​s​ ​p​a​s​s​w​o​r​d​ ​s​a​f​e​,​ ​a​s​ ​i​t​'​s​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​b​a​c​k​u​p​.
+	 */
+	BS_INFO_IMPORTING_FROM_CLOUD_DESCRIPTION: string
+	/**
+	 * I​m​p​o​r​t​i​n​g​ ​f​r​o​m​ ​C​l​o​u​d
+	 */
+	BS_INFO_IMPORTING_FROM_CLOUD_TITLE: string
+	/**
 	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
 	BTN_ADD_ACCOUNT: string
@@ -5472,11 +5480,11 @@ type RootTranslation = {
 	 */
 	TITLE_GIVE_FEEDBACK: string
 	/**
-	 * I​m​p​o​r​t​ ​W​a​l​l​e​t​ ​f​r​o​m​ ​G​o​o​g​l​e​ ​D​r​i​v​e
+	 * I​m​p​o​r​t​ ​f​r​o​m​ ​G​o​o​g​l​e​ ​D​r​i​v​e
 	 */
 	TITLE_IMPORT_WALLET_FROM_DRIVE: string
 	/**
-	 * I​m​p​o​r​t​ ​W​a​l​l​e​t​ ​f​r​o​m​ ​i​C​l​o​u​d
+	 * I​m​p​o​r​t​ ​f​r​o​m​ ​i​C​l​o​u​d
 	 */
 	TITLE_IMPORT_WALLET_FROM_ICLOUD: string
 	/**
@@ -7409,6 +7417,14 @@ Thanks for your patience!
 	 * Importing with keys
 	 */
 	BS_INFO_IMPORTING_WITH_KEYS_TITLE: () => LocalizedString
+	/**
+	 * Cloud backups let you restore your wallet on any device without manually entering your recovery phrase. Your backup is encrypted with a password only you know. Keep this password safe, as it's required to access your backup.
+	 */
+	BS_INFO_IMPORTING_FROM_CLOUD_DESCRIPTION: () => LocalizedString
+	/**
+	 * Importing from Cloud
+	 */
+	BS_INFO_IMPORTING_FROM_CLOUD_TITLE: () => LocalizedString
 	/**
 	 * ADD ACCOUNT
 	 */
@@ -11490,11 +11506,11 @@ Available for Google and Apple Pay.
 	 */
 	TITLE_GIVE_FEEDBACK: () => LocalizedString
 	/**
-	 * Import Wallet from Google Drive
+	 * Import from Google Drive
 	 */
 	TITLE_IMPORT_WALLET_FROM_DRIVE: () => LocalizedString
 	/**
-	 * Import Wallet from iCloud
+	 * Import from iCloud
 	 */
 	TITLE_IMPORT_WALLET_FROM_ICLOUD: () => LocalizedString
 	/**

@@ -1,46 +1,43 @@
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { FlatList, StyleSheet } from "react-native"
-
-import { RouteProp, StackActions, useNavigation, useRoute } from "@react-navigation/native"
+import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import {
-    AnimatedFloatingButton,
+    BaseButton,
+    BaseIcon,
     BaseSkeleton,
     BaseSpacer,
+    BaseText,
     BaseView,
     CloudKitWalletCard,
-    DeleteCloudKitWalletBottomSheet,
+    InfoBottomSheet,
     Layout,
-    SwipeableRow,
 } from "~Components"
+import { COLORS } from "~Constants/Theme"
 import { useBottomSheetModal, useCloudBackup, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { CloudKitWallet, DrivetWallet } from "~Model"
 import { RootStackParamListOnboarding, Routes } from "~Navigation"
-import { selectDevices, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
 
 const skeletonArray = [1, 2, 3, 4]
 
 export const ImportFromCloudScreen = () => {
-    const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const nav = useNavigation()
 
     const route = useRoute<RouteProp<RootStackParamListOnboarding, Routes.IMPORT_FROM_CLOUD>>()
     const { wallets } = route.params
 
     const theme = useTheme()
-    const { getAllWalletFromCloud, deleteWallet } = useCloudBackup()
+    const { getAllWalletFromCloud } = useCloudBackup()
     const { LL } = useI18nContext()
     const [cloudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | DrivetWallet[]>(wallets ?? [])
     const [selected, setSelected] = useState<CloudKitWallet | null>(null)
-    const [selectedToDelete, setSelectedToDelete] = useState<CloudKitWallet | null>(null)
-    const devices = useAppSelector(selectDevices)
 
     const [isLoading, setIsLoading] = useState(false)
 
     const Seperator = useMemo(() => <BaseSpacer height={16} />, [])
-    const variableSeperator = useCallback((height: number) => <BaseSpacer height={height} />, [])
 
     useEffect(() => {
         const init = async () => {
@@ -52,9 +49,6 @@ export const ImportFromCloudScreen = () => {
         cloudKitWallets.length <= 0 && init()
     }, [cloudKitWallets.length, getAllWalletFromCloud])
 
-    // - [START] - Swippable Actions
-    const [walletToRemove, setWalletToRemove] = useState<CloudKitWallet>()
-
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
     const closeOtherSwipeableItems = useCallback(() => {
         swipeableItemRefs?.current.forEach(ref => {
@@ -62,19 +56,7 @@ export const ImportFromCloudScreen = () => {
         })
     }, [swipeableItemRefs])
 
-    const {
-        ref: removeWalletBottomSheetRef,
-        onOpen: openRemoveWalletBottomSheet,
-        onClose: closeRemoveWalletBottomSheet,
-    } = useBottomSheetModal()
-
-    const onTrashIconPress = useCallback(
-        (item: CloudKitWallet) => () => {
-            setSelectedToDelete(item)
-            openRemoveWalletBottomSheet()
-        },
-        [openRemoveWalletBottomSheet],
-    )
+    const { ref: infoBottomSheetRef, onOpen: openInfoBottomSheet } = useBottomSheetModal()
 
     const onWalletSelected = useCallback(
         (wallet: CloudKitWallet) => {
@@ -88,110 +70,95 @@ export const ImportFromCloudScreen = () => {
         [closeOtherSwipeableItems, selected?.rootAddress],
     )
 
-    const handleOnDeleteFromCloud = useCallback(async () => {
-        if (selectedToDelete) {
-            closeRemoveWalletBottomSheet()
-            setIsLoading(true)
-            await deleteWallet(selectedToDelete.rootAddress)
-            const newWallets = cloudKitWallets.filter(w => w.rootAddress !== selectedToDelete.rootAddress)
-            setIsLoading(false)
-            if (!newWallets.length) {
-                nav.dispatch(StackActions.popToTop())
-            } else {
-                setCloudKitWallets(newWallets)
-            }
-        }
-    }, [closeRemoveWalletBottomSheet, cloudKitWallets, deleteWallet, nav, selectedToDelete])
-
-    const isWalletActive = useCallback(
-        (wallet: CloudKitWallet) => devices.find(w => w.rootAddress === wallet.rootAddress),
-        [devices],
+    const renderItem = useCallback(
+        ({ item }: ListRenderItemInfo<CloudKitWallet>) => {
+            return <CloudKitWalletCard wallet={item} selected={selected} onPress={() => onWalletSelected(item)} />
+        },
+        [selected, onWalletSelected],
     )
 
-    const computeButtonPadding = useMemo(() => {
-        if (userHasOnboarded && !selected) {
-            return 16
+    const renderContent = useCallback(() => {
+        if (isLoading) {
+            return (
+                <FlatList
+                    data={skeletonArray}
+                    contentContainerStyle={styles.listContentContainer_Skeleton}
+                    ItemSeparatorComponent={() => Seperator}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={() => (
+                        <BaseSkeleton
+                            height={74}
+                            boneColor={theme.colors.skeletonBoneColor}
+                            highlightColor={theme.colors.skeletonHighlightColor}
+                            containerStyle={styles.skeletonCard}
+                            borderRadius={16}
+                        />
+                    )}
+                    showsVerticalScrollIndicator={false}
+                />
+            )
         }
 
-        if (userHasOnboarded && !!selected) {
-            return 96
+        if (cloudKitWallets) {
+            return (
+                <Animated.FlatList
+                    layout={LinearTransition}
+                    data={cloudKitWallets}
+                    contentContainerStyle={styles.listContentContainer}
+                    ItemSeparatorComponent={() => Seperator}
+                    keyExtractor={item => item.rootAddress}
+                    renderItem={renderItem}
+                    showsVerticalScrollIndicator={false}
+                />
+            )
         }
 
-        if (!userHasOnboarded && !!selected) {
-            return 112
-        }
-
-        return 0
-    }, [selected, userHasOnboarded])
+        return null
+    }, [
+        renderItem,
+        isLoading,
+        cloudKitWallets,
+        Seperator,
+        theme.colors.skeletonBoneColor,
+        theme.colors.skeletonHighlightColor,
+    ])
 
     return (
         <Layout
             title={PlatformUtils.isIOS() ? LL.TITLE_IMPORT_WALLET_FROM_ICLOUD() : LL.TITLE_IMPORT_WALLET_FROM_DRIVE()}
+            headerRightElement={
+                <BaseIcon name="icon-info" size={20} color={theme.colors.text} action={openInfoBottomSheet} />
+            }
             fixedBody={
-                <BaseView flex={1}>
-                    {isLoading ? (
-                        <FlatList
-                            data={skeletonArray}
-                            contentContainerStyle={styles.listContentContainer_Skeleton}
-                            ItemSeparatorComponent={() => Seperator}
-                            keyExtractor={(item, index) => index.toString()}
-                            renderItem={() => (
-                                <BaseSkeleton
-                                    height={74}
-                                    boneColor={theme.colors.skeletonBoneColor}
-                                    highlightColor={theme.colors.skeletonHighlightColor}
-                                    containerStyle={styles.skeletonCard}
-                                    borderRadius={16}
-                                />
-                            )}
-                            showsVerticalScrollIndicator={false}
-                        />
-                    ) : cloudKitWallets ? (
-                        <FlatList
-                            data={cloudKitWallets}
-                            contentContainerStyle={styles.listContentContainer}
-                            ItemSeparatorComponent={() => Seperator}
-                            keyExtractor={item => item.rootAddress}
-                            renderItem={({ item }) => (
-                                <SwipeableRow
-                                    item={item}
-                                    itemKey={item.rootAddress}
-                                    swipeableItemRefs={swipeableItemRefs}
-                                    handleTrashIconPress={onTrashIconPress(item)}
-                                    setSelectedItem={setWalletToRemove}
-                                    swipeEnabled={!isWalletActive(item)}
-                                    isLogPressEnabled={!isWalletActive(item)}
-                                    onPress={_item => (!isWalletActive(item) ? onWalletSelected(_item) : undefined)}
-                                    isOpen={walletToRemove === item}
-                                    yMargins={0}>
-                                    <CloudKitWalletCard wallet={item} selected={selected} />
-                                </SwipeableRow>
-                            )}
-                            showsVerticalScrollIndicator={false}
-                            ListFooterComponent={variableSeperator(computeButtonPadding)}
-                        />
-                    ) : null}
+                <BaseView flex={1} gap={24} mt={16} px={24}>
+                    <BaseIcon name="icon-cloud" size={48} color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE} />
+                    <BaseText
+                        typographyFont="bodyMedium"
+                        align="center"
+                        color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                        {"Select the cloud backup of wallet that you wish to import to this device."}
+                    </BaseText>
 
-                    <AnimatedFloatingButton
-                        title={LL.BTN_IMPORT()}
-                        extraBottom={userHasOnboarded ? 0 : 24}
-                        isVisible={!!selected}
-                        onPress={() => {
-                            if (selected) {
-                                nav.navigate(Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD, { wallet: selected })
-                            }
-                        }}
-                        isDisabled={!selected}
-                        isLoading={isLoading}
-                    />
+                    {renderContent()}
 
-                    <DeleteCloudKitWalletBottomSheet
-                        ref={removeWalletBottomSheetRef}
-                        onClose={closeRemoveWalletBottomSheet}
-                        onConfirm={handleOnDeleteFromCloud}
-                        selectedWallet={selectedToDelete!}
+                    <InfoBottomSheet
+                        bsRef={infoBottomSheetRef}
+                        title={LL.BS_INFO_IMPORTING_FROM_CLOUD_TITLE()}
+                        description={LL.BS_INFO_IMPORTING_FROM_CLOUD_DESCRIPTION()}
                     />
                 </BaseView>
+            }
+            footer={
+                <BaseButton
+                    title={LL.BTN_IMPORT()}
+                    action={() => {
+                        if (selected) {
+                            nav.navigate(Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD, { wallet: selected })
+                        }
+                    }}
+                    disabled={!selected}
+                    isLoading={isLoading}
+                />
             }
         />
     )
@@ -215,7 +182,6 @@ const styles = StyleSheet.create({
     listContentContainer_Skeleton: {
         flexGrow: 1,
         paddingTop: 12,
-        paddingHorizontal: 24,
     },
     listContentContainer: {
         flexGrow: 1,
