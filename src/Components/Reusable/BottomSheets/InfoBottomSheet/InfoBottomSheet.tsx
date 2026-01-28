@@ -23,6 +23,7 @@ export const InfoBottomSheet = ({ bsRef, title, description }: BaseInfoBottomShe
             enableBackToClose={false}
             enablePanDownToClose={false}
             floating
+            backgroundStyle={styles.bottomSheetBackground}
             scrollable={false}>
             <TouchableOpacity activeOpacity={0.8} onPress={onClose} style={styles.closeButton}>
                 <BaseIcon name="icon-x" size={16} color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} />
@@ -48,6 +49,9 @@ export const InfoBottomSheet = ({ bsRef, title, description }: BaseInfoBottomShe
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
+        bottomSheetBackground: {
+            backgroundColor: theme.colors.newBottomSheet.background,
+        },
         closeButton: {
             position: "absolute",
             right: 16,

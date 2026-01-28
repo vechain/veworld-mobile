@@ -1327,6 +1327,14 @@ type RootTranslation = {
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: string
 	/**
+	 * A​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​o​r​ ​i​s​ ​a​ ​s​e​c​r​e​t​ ​s​e​t​ ​o​f​ ​w​o​r​d​s​ ​t​h​a​t​ ​a​c​t​ ​a​s​ ​t​h​e​ ​m​a​s​t​e​r​ ​k​e​y​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​K​e​e​p​ ​i​t​ ​s​a​f​e​,​ ​a​s​ ​a​n​y​o​n​e​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​e​d​ ​p​h​r​a​s​e​ ​c​a​n​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​a​s​s​e​t​s​.
+	 */
+	BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION: string
+	/**
+	 * I​m​p​o​r​t​i​n​g​ ​w​i​t​h​ ​k​e​y​s
+	 */
+	BS_INFO_IMPORTING_WITH_KEYS_TITLE: string
+	/**
 	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
 	BTN_ADD_ACCOUNT: string
@@ -6113,14 +6121,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * I​m​p​o​r​t​i​n​g​ ​w​i​t​h​ ​k​e​y​s
-	 */
-	BS_INFO_IMPORTING_WITH_KEYS_TITLE: string
-	/**
-	 * A​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​o​r​ ​i​s​ ​a​ ​s​e​c​r​e​t​ ​s​e​t​ ​o​f​ ​w​o​r​d​s​ ​t​h​a​t​ ​a​c​t​ ​a​s​ ​t​h​e​ ​m​a​s​t​e​r​ ​k​e​y​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​K​e​e​p​ ​i​t​ ​s​a​f​e​,​ ​a​s​ ​a​n​y​o​n​e​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​e​d​ ​p​h​r​a​s​e​ ​c​a​n​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​a​s​s​e​t​s​.
-	 */
-	BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION: string
 }
 
 export type TranslationFunctions = {
@@ -7401,6 +7401,14 @@ Thanks for your patience!
 	 * Tabs
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: () => LocalizedString
+	/**
+	 * A Recovery phrase or is a secret set of words that act as the master key to your wallet. Keep it safe, as anyone with your seed phrase can access your assets.
+	 */
+	BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION: () => LocalizedString
+	/**
+	 * Importing with keys
+	 */
+	BS_INFO_IMPORTING_WITH_KEYS_TITLE: () => LocalizedString
 	/**
 	 * ADD ACCOUNT
 	 */
@@ -12123,14 +12131,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Importing with keys
-	 */
-	BS_INFO_IMPORTING_WITH_KEYS_TITLE: () => LocalizedString
-	/**
-	 * A Recovery phrase or is a secret set of words that act as the master key to your wallet. Keep it safe, as anyone with your seed phrase can access your assets.
-	 */
-	BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION: () => LocalizedString
 }
 
 export type Formatters = {
