@@ -315,6 +315,8 @@
   "BROWSER_SEE_ALL_TABS": "Açık tüm sekmeleri gör",
   "BROWSER_SHARE": "Paylaş",
   "BROWSER_TAB_MANAGEMENT_TITLE": "Sekmeler",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Bir Kurtarma ifadesi, cüzdanınızın ana anahtarı olarak görev yapan gizli bir kelime grubudur. Güvende tutun, çünkü kurtarma ifadenize sahip olan herkes varlıklarınıza erişebilir.",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Anahtarlarla içe aktarma",
   "BTN_ADD_ACCOUNT": "HESAP EKLE",
   "BTN_ADD_CONTACT": "Kişi ekle",
   "BTN_ADD_CUSTOM_NODE": "Özel bir düğüm ekle",

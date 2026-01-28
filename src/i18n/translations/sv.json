@@ -315,6 +315,8 @@
   "BROWSER_SEE_ALL_TABS": "Se alla öppna flikar",
   "BROWSER_SHARE": "Dela",
   "BROWSER_TAB_MANAGEMENT_TITLE": "Flikar",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "En återställningsfras är en hemlig uppsättning ord som fungerar som huvudnyckeln till din plånbok. Förvara den säkert, eftersom alla som har din seed-fras kan få tillgång till dina tillgångar.",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importera med nycklar",
   "BTN_ADD_ACCOUNT": "LÄGG TILL KONTO",
   "BTN_ADD_CONTACT": "Lägg till kontakt",
   "BTN_ADD_CUSTOM_NODE": "Lägg till en anpassad nod",

@@ -315,6 +315,8 @@
   "BROWSER_SEE_ALL_TABS": "Ver todas las pestañas abiertas",
   "BROWSER_SHARE": "Compartir",
   "BROWSER_TAB_MANAGEMENT_TITLE": "Pestañas",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Una frase de recuperación es un conjunto secreto de palabras que actúan como la clave maestra de tu billetera. Mantenla a salvo, ya que cualquiera con tu frase semilla puede acceder a tus activos.",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importando con claves",
   "BTN_ADD_ACCOUNT": "AGREGAR CUENTA",
   "BTN_ADD_CONTACT": "Agregar contacto",
   "BTN_ADD_CUSTOM_NODE": "Agregar un nodo personalizado",

@@ -315,6 +315,8 @@
   "BROWSER_SEE_ALL_TABS": "Alle geöffneten Tabs anzeigen",
   "BROWSER_SHARE": "Teilen",
   "BROWSER_TAB_MANAGEMENT_TITLE": "Tabs",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Eine Wiederherstellungsphrase ist eine geheime Wortfolge, die als Hauptschlüssel zu deiner Wallet dient. Bewahre sie sicher auf, denn jeder, der deine Seed-Phrase kennt, kann auf deine Vermögenswerte zugreifen.",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importieren mit Schlüsseln",
   "BTN_ADD_ACCOUNT": "KONTO HINZUFÜGEN",
   "BTN_ADD_CONTACT": "Kontakt hinzufügen",
   "BTN_ADD_CUSTOM_NODE": "Benutzerdefinierten Knoten hinzufügen",

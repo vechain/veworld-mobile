@@ -315,6 +315,8 @@
   "BROWSER_SEE_ALL_TABS": "Voir tous les onglets ouverts",
   "BROWSER_SHARE": "Partager",
   "BROWSER_TAB_MANAGEMENT_TITLE": "Onglets",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Une phrase de récupération est un ensemble de mots secrets qui servent de clé principale à votre portefeuille. Gardez-la en sécurité, car toute personne possédant votre phrase de récupération pourra accéder à vos actifs.",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importer avec des clés",
   "BTN_ADD_ACCOUNT": "AJOUTER UN COMPTE",
   "BTN_ADD_CONTACT": "Ajouter un contact",
   "BTN_ADD_CUSTOM_NODE": "Ajouter un nœud personnalisé",

@@ -315,6 +315,8 @@
   "BROWSER_SEE_ALL_TABS": "すべてのタブを開く",
   "BROWSER_SHARE": "共有する",
   "BROWSER_TAB_MANAGEMENT_TITLE": "タブ",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "リカバリーフレーズとは、ウォレットのマスターキーとなる秘密の単語のセットです。安全に保管してください。シードフレーズを持つ人は誰でもあなたの資産にアクセスできます。",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "キーによるインポート",
   "BTN_ADD_ACCOUNT": "アカウントを追加する",
   "BTN_ADD_CONTACT": "連絡先を追加する",
   "BTN_ADD_CUSTOM_NODE": "カスタムノードを追加する",

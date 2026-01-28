@@ -315,6 +315,8 @@
   "BROWSER_SEE_ALL_TABS": "सभी खुले टैब देखें",
   "BROWSER_SHARE": "साझा करें",
   "BROWSER_TAB_MANAGEMENT_TITLE": "टैब्स",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "रिकवरी वाक्यांश या कीज़ का एक गुप्त सेट होता है जो आपके वॉलेट की मास्टर कुंजी के रूप में कार्य करता है। इसे सुरक्षित रखें, क्योंकि आपके सीड वाक्यांश के साथ कोई भी आपकी सम्पत्तियों तक पहुंच सकता है।",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "कुंजियों के साथ आयात करना",
   "BTN_ADD_ACCOUNT": "खाता जोड़ें",
   "BTN_ADD_CONTACT": "संपर्क जोड़ें",
   "BTN_ADD_CUSTOM_NODE": "एक कस्टम नोड जोड़ें",

@@ -315,6 +315,8 @@
   "BROWSER_SEE_ALL_TABS": "Zobacz wszystkie otwarte karty",
   "BROWSER_SHARE": "Udostępnij",
   "BROWSER_TAB_MANAGEMENT_TITLE": "Karty",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Fraza odzyskiwania lub klucz to tajny zestaw słów, które stanowią główny klucz do Twojego portfela. Przechowuj go w bezpiecznym miejscu, ponieważ każdy, kto posiada Twoją frazę seed, ma dostęp do Twoich środków.",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importowanie za pomocą kluczy",
   "BTN_ADD_ACCOUNT": "DODAJ KONTO",
   "BTN_ADD_CONTACT": "Dodaj kontakt",
   "BTN_ADD_CUSTOM_NODE": "Dodaj niestandardowy węzeł",

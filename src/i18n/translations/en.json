@@ -315,6 +315,8 @@
   "BROWSER_SEE_ALL_TABS": "See all tabs open",
   "BROWSER_SHARE": "Share",
   "BROWSER_TAB_MANAGEMENT_TITLE": "Tabs",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "A Recovery phrase or is a secret set of words that act as the master key to your wallet. Keep it safe, as anyone with your seed phrase can access your assets.",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importing with keys",
   "BTN_ADD_ACCOUNT": "ADD ACCOUNT",
   "BTN_ADD_CONTACT": "Add contact",
   "BTN_ADD_CUSTOM_NODE": "Add a custom node",
@@ -1492,7 +1494,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importing with keys",
-  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "A Recovery phrase or is a secret set of words that act as the master key to your wallet. Keep it safe, as anyone with your seed phrase can access your assets."
+  "YESTERDAY": "Yesterday"
 }

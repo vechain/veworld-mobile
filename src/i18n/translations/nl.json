@@ -315,6 +315,8 @@
   "BROWSER_SEE_ALL_TABS": "Alle open tabbladen bekijken",
   "BROWSER_SHARE": "Delen",
   "BROWSER_TAB_MANAGEMENT_TITLE": "Tabbladen",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Een herstelzin is een geheime set woorden die fungeert als de hoofdsleutel tot je portemonnee. Bewaar deze goed, want iedereen met jouw herstelzin heeft toegang tot je bezittingen.",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importeren met sleutels",
   "BTN_ADD_ACCOUNT": "ACCOUNT TOEVOEGEN",
   "BTN_ADD_CONTACT": "Contactpersoon toevoegen",
   "BTN_ADD_CUSTOM_NODE": "Voeg een aangepaste node toe",

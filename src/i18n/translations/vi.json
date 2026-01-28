@@ -315,6 +315,8 @@
   "BROWSER_SEE_ALL_TABS": "Xem tất cả thẻ đang mở",
   "BROWSER_SHARE": "Chia sẻ",
   "BROWSER_TAB_MANAGEMENT_TITLE": "Các Thẻ",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Cụm từ khôi phục là một chuỗi bí mật gồm các từ dùng làm chìa khóa chính cho ví của bạn. Hãy giữ an toàn, vì bất kỳ ai có cụm từ này đều có thể truy cập tài sản của bạn.",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Nhập bằng khóa",
   "BTN_ADD_ACCOUNT": "THÊM TÀI KHOẢN",
   "BTN_ADD_CONTACT": "Thêm liên hệ",
   "BTN_ADD_CUSTOM_NODE": "Thêm nút tùy chỉnh",

@@ -315,6 +315,8 @@
   "BROWSER_SEE_ALL_TABS": "查看所有打开的标签",
   "BROWSER_SHARE": "分享",
   "BROWSER_TAB_MANAGEMENT_TITLE": "标签",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "恢复短语是一组秘密单词，它们作为您钱包的主密钥。请妥善保管，因为任何拥有您的助记词的人都可以访问您的资产。",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "通过密钥导入",
   "BTN_ADD_ACCOUNT": "添加账户",
   "BTN_ADD_CONTACT": "添加联系人",
   "BTN_ADD_CUSTOM_NODE": "添加自定义节点",

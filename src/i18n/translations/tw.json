@@ -315,6 +315,8 @@
   "BROWSER_SEE_ALL_TABS": "查看所有開啟的分頁",
   "BROWSER_SHARE": "分享",
   "BROWSER_TAB_MANAGEMENT_TITLE": "分頁",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "恢復助記詞是一組秘密的單字，可作為您的錢包主密鑰。請妥善保管，因為只要持有助記詞，任何人都可以存取您的資產。",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "透過金鑰匯入",
   "BTN_ADD_ACCOUNT": "新增帳戶",
   "BTN_ADD_CONTACT": "新增聯絡人",
   "BTN_ADD_CUSTOM_NODE": "新增自訂節點",
