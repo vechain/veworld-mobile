@@ -245,13 +245,23 @@ export const addPendingTransferTransactionActivity =
         const locale = selectLanguage(getState())
         const LL = i18nObject(locale)
         const selectedAccount = selectSelectedAccount(getState())
-        const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
 
-        // Ignore if the selected account is a smart wallet for now
-        if (!selectedAccount || !outgoingTx.id || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
+        console.log("addPendingTransferTransactionActivity called:", {
+            hasSelectedAccount: !!selectedAccount,
+            hasTxId: !!outgoingTx.id,
+            txId: outgoingTx.id?.toString()
+        })
+        if (!selectedAccount || !outgoingTx.id) return
 
-        const pendingActivity: FungibleTokenActivity = createPendingTransferActivityFromTx(outgoingTx)
-        dispatch(addActivity(enrichActivityWithTrackingData(pendingActivity, options)))
+        try {
+            const pendingActivity: FungibleTokenActivity = createPendingTransferActivityFromTx(outgoingTx)
+            console.log("addPendingTransferTransactionActivity pendingActivity created:", { id: pendingActivity.id, type: pendingActivity.type })
+            const enrichedActivity = enrichActivityWithTrackingData(pendingActivity, options)
+            console.log("addPendingTransferTransactionActivity dispatching activity:", { id: enrichedActivity.id, type: enrichedActivity.type, from: enrichedActivity.from })
+            dispatch(addActivity(enrichedActivity))
+        } catch (err) {
+            console.error("addPendingTransferTransactionActivity error:", err)
+        }
         Feedback.show({
             severity: FeedbackSeverity.LOADING,
             message: LL.TRANSACTION_IN_PROGRESS(),
