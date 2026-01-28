@@ -270,10 +270,16 @@ export const useTransactionScreen = ({
     })
 
     const gasOptions = useMemo(() => {
+        // For smart accounts, always use genericDelegatorFees (includes smart account overhead)
+        // For non-smart accounts with VTHO, use regular transactionFeesResponse
+        const isSmartAccount = selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET
+        if (isSmartAccount) {
+            return genericDelegatorFees.options ?? transactionFeesResponse.options
+        }
         if (selectedDelegationToken === VTHO.symbol || genericDelegatorFees.options === undefined)
             return transactionFeesResponse.options
         return genericDelegatorFees.options
-    }, [genericDelegatorFees.options, selectedDelegationToken, transactionFeesResponse.options])
+    }, [genericDelegatorFees.options, selectedDelegationToken, transactionFeesResponse.options, selectedAccount.device.type])
 
     const selectedFeeAllTokenOptions = useMemo(() => {
         console.log("selectedFeeAllTokenOptions building:", {
