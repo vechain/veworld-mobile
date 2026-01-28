@@ -306,11 +306,23 @@ export const ImportLocalWallet = () => {
                                         />
                                     )}
                                 </BaseView> */}
-                                <BaseText typographyFont="bodyMedium" my={10} align="center">
+                                <BaseView alignItems="center" justifyContent="center">
+                                    <BaseIcon
+                                        name="icon-file-spreadsheet"
+                                        size={48}
+                                        color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE}
+                                    />
+                                </BaseView>
+                                <BaseSpacer height={16} />
+                                <BaseText
+                                    typographyFont="bodyMedium"
+                                    my={10}
+                                    align="center"
+                                    color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
                                     {LL.WALLET_IMPORT_LOCAL_DESCRIPTION()}
                                 </BaseText>
 
-                                <BaseSpacer height={20} />
+                                <BaseSpacer height={24} />
 
                                 <ImportWalletInput value={textValue} onChangeText={onChangeText} isError={!!isError} />
 

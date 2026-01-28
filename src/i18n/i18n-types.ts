@@ -6110,7 +6110,7 @@ type RootTranslation = {
 	 */
 	WALLET_IMPORT_LOCAL_DESCRIPTION: string
 	/**
-	 * P​a​s​t​e​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​c​r​e​d​e​n​t​i​a​l​s​ ​h​e​r​e
+	 * E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​c​r​e​d​e​n​t​i​a​l​s​ ​h​e​r​e
 	 */
 	WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER: string
 }
@@ -12112,7 +12112,7 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	WALLET_IMPORT_LOCAL_DESCRIPTION: () => LocalizedString
 	/**
-	 * Paste your wallet credentials here
+	 * Enter your wallet credentials here
 	 */
 	WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER: () => LocalizedString
 }

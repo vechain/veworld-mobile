@@ -1492,5 +1492,5 @@
   "WOULD_YOU_LIKE_TO": "Would you like to ",
   "YESTERDAY": "Yesterday",
   "WALLET_IMPORT_LOCAL_DESCRIPTION": "Import an existing wallet by using a Recovery phrase, a Private Key or a Keystore file.",
-  "WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER": "Paste your wallet credentials here"
+  "WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER": "Enter your wallet credentials here"
 }

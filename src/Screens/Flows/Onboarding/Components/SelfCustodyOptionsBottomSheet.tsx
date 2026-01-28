@@ -187,7 +187,7 @@ export const SelfCustodyOptionsBottomSheet = ({ bsRef }: Props) => {
 const baseStyles = (theme: ColorThemeType) => {
     return StyleSheet.create({
         rootSheet: {
-            backgroundColor: theme.colors.actionBottomSheet.background,
+            backgroundColor: theme.colors.newBottomSheet.background,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
         },
