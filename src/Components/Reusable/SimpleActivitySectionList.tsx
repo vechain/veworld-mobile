@@ -95,6 +95,14 @@ export const SimpleActivitySectionList = ({ activities, onActivityPress, content
         return result
     }, [activities, addItemToSection, isToday, isYesterday])
 
+    const activityIndexByRef = useMemo(() => {
+        const map = new Map<Activity, number>()
+        for (let i = 0; i < activities.length; i++) {
+            map.set(activities[i], i)
+        }
+        return map
+    }, [activities])
+
     const renderSectionHeader = useCallback(
         ({ section }: { section: SectionListData<Activity, ActivitySection> }) => {
             const isTodaySection = section.title === SectionName.TODAY
@@ -137,10 +145,17 @@ export const SimpleActivitySectionList = ({ activities, onActivityPress, content
     )
 
     const renderItem = useCallback(
-        ({ item: activity }: SectionListRenderItemInfo<Activity, ActivitySection>) => {
-            return <ActivityItemRenderer activity={activity} onPress={onActivityPress} />
+        ({ item: activity, index }: SectionListRenderItemInfo<Activity, ActivitySection>) => {
+            const globalIndex = activityIndexByRef.get(activity) ?? index
+            return (
+                <ActivityItemRenderer
+                    activity={activity}
+                    onPress={onActivityPress}
+                    testID={`ActivityListItem_${globalIndex}`}
+                />
+            )
         },
-        [onActivityPress],
+        [activityIndexByRef, onActivityPress],
     )
 
     const keyExtractor = useCallback(
