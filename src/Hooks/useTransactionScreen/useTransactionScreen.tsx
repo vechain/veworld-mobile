@@ -176,6 +176,7 @@ export const useTransactionScreen = ({
     useEffect(() => {
         const buildClauses = async () => {
             if (selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET) {
+                console.log("Building clauses with smart wallet")
                 setIsLoadingClauses(true)
                 try {
                     console.log("Building clauses with smart wallet")
@@ -393,6 +394,7 @@ export const useTransactionScreen = ({
     const signAndSendTransaction = useCallback(
         async (password?: string) => {
             setLoading(true)
+            console.log("signAndSendTransaction called")
 
             try {
                 const transaction: SignTransactionResponse = await signTransaction(password)
