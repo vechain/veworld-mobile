@@ -315,10 +315,10 @@
   "BROWSER_SEE_ALL_TABS": "See all tabs open",
   "BROWSER_SHARE": "Share",
   "BROWSER_TAB_MANAGEMENT_TITLE": "Tabs",
-  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "A Recovery phrase or is a secret set of words that act as the master key to your wallet. Keep it safe, as anyone with your seed phrase can access your assets.",
-  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importing with keys",
   "BS_INFO_IMPORTING_FROM_CLOUD_DESCRIPTION": "Cloud backups let you restore your wallet on any device without manually entering your recovery phrase. Your backup is encrypted with a password only you know. Keep this password safe, as it's required to access your backup.",
   "BS_INFO_IMPORTING_FROM_CLOUD_TITLE": "Importing from Cloud",
+  "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "A Recovery phrase or is a secret set of words that act as the master key to your wallet. Keep it safe, as anyone with your seed phrase can access your assets.",
+  "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importing with keys",
   "BTN_ADD_ACCOUNT": "ADD ACCOUNT",
   "BTN_ADD_CONTACT": "Add contact",
   "BTN_ADD_CUSTOM_NODE": "Add a custom node",
@@ -1450,6 +1450,7 @@
   "WALLETS_SAVED_ON_ICLOUD": "wallets saved on iCloud.",
   "WALLET_CONNECT_SUPPORTED": "WalletConnect supported",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} accounts",
+  "WALLET_IMPORT_CLOUD_DESCRIPTION": "Select the cloud backup of wallet that you wish to import to this device.",
   "WALLET_IMPORT_LOCAL_DESCRIPTION": "Import an existing wallet by using a Recovery phrase, a Private Key or a Keystore file.",
   "WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER": "Enter your wallet credentials here",
   "WALLET_LABEL_ACCOUNT": "Account",
@@ -1496,6 +1497,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "WALLET_IMPORT_CLOUD_DESCRIPTION": "Select the cloud backup of wallet that you wish to import to this device."
+  "YESTERDAY": "Yesterday"
 }
