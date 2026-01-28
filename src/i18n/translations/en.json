@@ -1496,5 +1496,6 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "WALLET_IMPORT_CLOUD_DESCRIPTION": "Select the cloud backup of wallet that you wish to import to this device."
 }

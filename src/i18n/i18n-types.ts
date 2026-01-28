@@ -6129,6 +6129,10 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​c​l​o​u​d​ ​b​a​c​k​u​p​ ​o​f​ ​w​a​l​l​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​i​m​p​o​r​t​ ​t​o​ ​t​h​i​s​ ​d​e​v​i​c​e​.
+	 */
+	WALLET_IMPORT_CLOUD_DESCRIPTION: string
 }
 
 export type TranslationFunctions = {
@@ -12147,6 +12151,10 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Select the cloud backup of wallet that you wish to import to this device.
+	 */
+	WALLET_IMPORT_CLOUD_DESCRIPTION: () => LocalizedString
 }
 
 export type Formatters = {

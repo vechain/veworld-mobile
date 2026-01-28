@@ -76,7 +76,7 @@ export const CloudKitWalletCard = ({
         <AnimatedTouchableOpacity
             activeOpacity={0.9}
             disabled={isImported}
-            style={[styles.container, containerAnimatedStyles]}
+            style={[styles.container, isImported && styles.importedContainer, containerAnimatedStyles]}
             onPress={onPress}>
             <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
                 <BaseView flexDirection="column" flex={1}>
@@ -139,6 +139,9 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 16,
             borderColor: theme.isDark ? COLORS.TRANSPARENT : COLORS.GREY_200,
             borderRadius: 16,
+        },
+        importedContainer: {
+            opacity: 0.5,
         },
         selectedContainer: {
             borderWidth: 1,

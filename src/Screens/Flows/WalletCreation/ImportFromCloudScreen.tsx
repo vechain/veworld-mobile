@@ -136,7 +136,7 @@ export const ImportFromCloudScreen = () => {
                         typographyFont="bodyMedium"
                         align="center"
                         color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
-                        {"Select the cloud backup of wallet that you wish to import to this device."}
+                        {LL.WALLET_IMPORT_CLOUD_DESCRIPTION()}
                     </BaseText>
 
                     {renderContent()}
@@ -150,7 +150,7 @@ export const ImportFromCloudScreen = () => {
             }
             footer={
                 <BaseButton
-                    title={LL.BTN_IMPORT()}
+                    title={LL.BTN_CONTINUE()}
                     action={() => {
                         if (selected) {
                             nav.navigate(Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD, { wallet: selected })
