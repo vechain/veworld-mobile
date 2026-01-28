@@ -5925,6 +5925,14 @@ type RootTranslation = {
 	 */
 	WALLET_DETAIL_ACCOUNTS_NUMER: RequiredParams<'count'>
 	/**
+	 * I​m​p​o​r​t​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​ ​b​y​ ​u​s​i​n​g​ ​a​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​a​ ​P​r​i​v​a​t​e​ ​K​e​y​ ​o​r​ ​a​ ​K​e​y​s​t​o​r​e​ ​f​i​l​e​.
+	 */
+	WALLET_IMPORT_LOCAL_DESCRIPTION: string
+	/**
+	 * E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​c​r​e​d​e​n​t​i​a​l​s​ ​h​e​r​e
+	 */
+	WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER: string
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -6106,13 +6114,13 @@ type RootTranslation = {
 	 */
 	YESTERDAY: string
 	/**
-	 * I​m​p​o​r​t​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​ ​b​y​ ​u​s​i​n​g​ ​a​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​a​ ​P​r​i​v​a​t​e​ ​K​e​y​ ​o​r​ ​a​ ​K​e​y​s​t​o​r​e​ ​f​i​l​e​.
+	 * I​m​p​o​r​t​i​n​g​ ​w​i​t​h​ ​k​e​y​s
 	 */
-	WALLET_IMPORT_LOCAL_DESCRIPTION: string
+	BS_INFO_IMPORTING_WITH_KEYS_TITLE: string
 	/**
-	 * E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​c​r​e​d​e​n​t​i​a​l​s​ ​h​e​r​e
+	 * A​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​o​r​ ​i​s​ ​a​ ​s​e​c​r​e​t​ ​s​e​t​ ​o​f​ ​w​o​r​d​s​ ​t​h​a​t​ ​a​c​t​ ​a​s​ ​t​h​e​ ​m​a​s​t​e​r​ ​k​e​y​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​K​e​e​p​ ​i​t​ ​s​a​f​e​,​ ​a​s​ ​a​n​y​o​n​e​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​e​d​ ​p​h​r​a​s​e​ ​c​a​n​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​a​s​s​e​t​s​.
 	 */
-	WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER: string
+	BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION: string
 }
 
 export type TranslationFunctions = {
@@ -11928,6 +11936,14 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	WALLET_DETAIL_ACCOUNTS_NUMER: (arg: { count: number }) => LocalizedString
 	/**
+	 * Import an existing wallet by using a Recovery phrase, a Private Key or a Keystore file.
+	 */
+	WALLET_IMPORT_LOCAL_DESCRIPTION: () => LocalizedString
+	/**
+	 * Enter your wallet credentials here
+	 */
+	WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER: () => LocalizedString
+	/**
 	 * Account
 	 */
 	WALLET_LABEL_ACCOUNT: () => LocalizedString
@@ -12108,13 +12124,13 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	YESTERDAY: () => LocalizedString
 	/**
-	 * Import an existing wallet by using a Recovery phrase, a Private Key or a Keystore file.
+	 * Importing with keys
 	 */
-	WALLET_IMPORT_LOCAL_DESCRIPTION: () => LocalizedString
+	BS_INFO_IMPORTING_WITH_KEYS_TITLE: () => LocalizedString
 	/**
-	 * Enter your wallet credentials here
+	 * A Recovery phrase or is a secret set of words that act as the master key to your wallet. Keep it safe, as anyone with your seed phrase can access your assets.
 	 */
-	WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER: () => LocalizedString
+	BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION: () => LocalizedString
 }
 
 export type Formatters = {

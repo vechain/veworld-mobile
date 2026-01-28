@@ -12,6 +12,7 @@ import {
     BaseView,
     CreatePasswordModal,
     DismissKeyboardView,
+    InfoBottomSheet,
     Layout,
     RequireUserPassword,
     SelectDerivationPathBottomSheet,
@@ -78,6 +79,8 @@ export const ImportLocalWallet = () => {
         onOpen: onOpenDerivationPath,
         onClose: onCloseDerivationPath,
     } = useBottomSheetModal()
+
+    const { ref: infoBottomSheetRef, onOpen: onOpenInfoBottomSheet } = useBottomSheetModal()
 
     const mnemonicCache = useRef<string[]>()
     const privateKeyCache = useRef<string>()
@@ -291,7 +294,9 @@ export const ImportLocalWallet = () => {
         <DismissKeyboardView>
             <Layout
                 title={LL.SB_TITLE_IMPORT_WITH_KEYS()}
-                headerRightElement={<BaseIcon name="icon-info" size={20} color={theme.colors.text} action={() => {}} />}
+                headerRightElement={
+                    <BaseIcon name="icon-info" size={20} color={theme.colors.text} action={onOpenInfoBottomSheet} />
+                }
                 body={
                     <>
                         <BaseView justifyContent="space-between">
@@ -393,6 +398,12 @@ export const ImportLocalWallet = () => {
                                     importType,
                                 })
                             }
+                        />
+
+                        <InfoBottomSheet
+                            bsRef={infoBottomSheetRef}
+                            title={LL.BS_INFO_IMPORTING_WITH_KEYS_TITLE()}
+                            description={LL.BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION()}
                         />
                     </>
                 }
