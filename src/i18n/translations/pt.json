@@ -1446,6 +1446,8 @@
   "WALLETS_SAVED_ON_ICLOUD": "carteiras salvas no iCloud.",
   "WALLET_CONNECT_SUPPORTED": "WalletConnect suportado",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} contas",
+  "WALLET_IMPORT_LOCAL_DESCRIPTION": "Importe uma carteira existente usando uma frase de recuperação, uma chave privada ou um arquivo Keystore.",
+  "WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER": "Digite as credenciais da sua carteira aqui",
   "WALLET_LABEL_ACCOUNT": "Conta",
   "WALLET_LABEL_WALLET": "Carteira",
   "WALLET_LEDGER_ASK_PERMISSIONS_BUTTON": "Dar permissões",

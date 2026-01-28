@@ -1446,6 +1446,8 @@
   "WALLETS_SAVED_ON_ICLOUD": "iCloud에 저장된 지갑.",
   "WALLET_CONNECT_SUPPORTED": "WalletConnect 지원",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} 계정",
+  "WALLET_IMPORT_LOCAL_DESCRIPTION": "복구 구문, 개인 키 또는 키스토어 파일을 사용하여 기존 지갑을 가져옵니다.",
+  "WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER": "여기에 지갑 자격 증명을 입력하세요",
   "WALLET_LABEL_ACCOUNT": "계정",
   "WALLET_LABEL_WALLET": "지갑",
   "WALLET_LEDGER_ASK_PERMISSIONS_BUTTON": "권한 부여",

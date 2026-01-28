@@ -1446,6 +1446,8 @@
   "WALLETS_SAVED_ON_ICLOUD": "iCloud पर सेव किए गए वालेट्स।",
   "WALLET_CONNECT_SUPPORTED": "वॉलेटकनेक्ट समर्थित",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: संख्या} खाते",
+  "WALLET_IMPORT_LOCAL_DESCRIPTION": "एक मौजूदा वॉलेट को रीकवरी वाक्यांश, प्राइवेट की या कीस्टोर फाइल का उपयोग करके इम्पोर्ट करें।",
+  "WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER": "अपने वॉलेट क्रेडेंशियल्स यहां दर्ज करें",
   "WALLET_LABEL_ACCOUNT": "खाता",
   "WALLET_LABEL_WALLET": "वॉलेट",
   "WALLET_LEDGER_ASK_PERMISSIONS_BUTTON": "अनुमतियां दें",

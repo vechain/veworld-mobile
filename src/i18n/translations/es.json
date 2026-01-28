@@ -1446,6 +1446,8 @@
   "WALLETS_SAVED_ON_ICLOUD": "billeteras guardadas en iCloud.",
   "WALLET_CONNECT_SUPPORTED": "WalletConnect compatible",
   "WALLET_DETAIL_ACCOUNTS_NUMER": "{count: number} cuentas",
+  "WALLET_IMPORT_LOCAL_DESCRIPTION": "Importa una billetera existente usando una frase de recuperación, una clave privada o un archivo Keystore.",
+  "WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER": "Ingresa las credenciales de tu billetera aquí",
   "WALLET_LABEL_ACCOUNT": "Cuenta",
   "WALLET_LABEL_WALLET": "Billetera",
   "WALLET_LEDGER_ASK_PERMISSIONS_BUTTON": "Dar permisos",
