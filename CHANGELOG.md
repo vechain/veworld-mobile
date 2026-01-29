@@ -1,5 +1,12 @@
 
 
+## 2.5.2 (2026-01-29)
+
+
+### Bug Fixes
+
+* bundle config ([#3735](https://github.com/vechain/veworld-mobile/issues/3735)) ([91c5f3b](https://github.com/vechain/veworld-mobile/commit/91c5f3b4e4a3c27f789f068c73d789185cb76eec))
+
 ## 2.5.1 (2026-01-27)
 
 
