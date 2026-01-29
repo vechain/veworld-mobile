@@ -1,5 +1,6 @@
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { TransactionOptions, SignOptions, TypedDataPayload, GenericDelegationDetails } from "./transaction"
+import { SmartAccountTransactionConfig } from "./smartAccountTransaction"
 export interface SigningOperations {
     signMessage: (message: Buffer) => Promise<Buffer>
     signTransaction: (tx: Transaction, options?: SignOptions) => Promise<Buffer>
@@ -25,6 +26,7 @@ export interface SmartWalletContext extends WalletContext, AuthenticationOperati
     isInitialized: boolean
     ownerAddress: string
     smartAccountAddress: string
+    smartAccountConfig: SmartAccountTransactionConfig | null
     initialiseWallet: () => Promise<void>
 }
 export interface SmartAccountAdapter extends SigningOperations, AuthenticationOperations {

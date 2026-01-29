@@ -87,10 +87,12 @@ const getGenericDelegationForSmartWallet = (
 
     // For smart accounts, use genericDelegatorFees for ALL tokens (including VTHO)
     // because it accounts for smart account gas overhead
+    // Use estimatedFee (not maxFee) because SmartWalletProvider recalculates the fee
+    // and using maxFee (with 25% buffer) causes validation to fail due to variance > 30%
     const feeMap: Record<string, BigNumberUtils | undefined> = {
-        [VET.symbol]: genericDelegatorFees.allOptions?.[VET.symbol]?.[selectedFeeOption]?.maxFee,
-        [B3TR.symbol]: genericDelegatorFees.allOptions?.[B3TR.symbol]?.[selectedFeeOption]?.maxFee,
-        [VTHO.symbol]: genericDelegatorFees.allOptions?.[VTHO.symbol]?.[selectedFeeOption]?.maxFee ?? vthoFee,
+        [VET.symbol]: genericDelegatorFees.allOptions?.[VET.symbol]?.[selectedFeeOption]?.estimatedFee,
+        [B3TR.symbol]: genericDelegatorFees.allOptions?.[B3TR.symbol]?.[selectedFeeOption]?.estimatedFee,
+        [VTHO.symbol]: genericDelegatorFees.allOptions?.[VTHO.symbol]?.[selectedFeeOption]?.estimatedFee ?? vthoFee,
     }
 
     // If fee is not available yet (still loading), return undefined
@@ -240,6 +242,7 @@ export const useTransactionScreen = ({
         signer: selectedAccount.address,
         token: selectedDelegationToken,
         isGalactica,
+        deviceType: selectedAccount.device.type,
     })
     const genericDelegatorRates = useGenericDelegatorRates()
 
@@ -261,18 +264,21 @@ export const useTransactionScreen = ({
             transactionFeesResponse.options === undefined
         )
             return undefined
+
+        // For smart accounts, allOptions includes VTHO (calculated locally with smart account overhead)
+        // For non-smart accounts, allOptions doesn't include VTHO, so use transactionFeesResponse
+        const hasVthoInAllOptions = genericDelegatorFees.allOptions?.[VTHO.symbol] !== undefined
+
         const result = Object.fromEntries(
             Object.entries(genericDelegatorFees.allOptions ?? {})
                 .map(([token, value]) => [token, value[selectedFeeOption].maxFee] as const)
-                .concat([[VTHO.symbol, transactionFeesResponse.options[selectedFeeOption].maxFee]]),
+                .concat(
+                    // Only add VTHO from transactionFeesResponse if not already in allOptions
+                    hasVthoInAllOptions ? [] : [[VTHO.symbol, transactionFeesResponse.options[selectedFeeOption].maxFee]],
+                ),
         )
         return result
-    }, [
-        genericDelegatorFees.allOptions,
-        genericDelegatorFees.isLoading,
-        selectedFeeOption,
-        transactionFeesResponse.options,
-    ])
+    }, [genericDelegatorFees.allOptions, genericDelegatorFees.isLoading, selectedFeeOption, transactionFeesResponse.options])
 
     const isFirstTimeLoadingFees = useMemo(
         () =>
@@ -325,7 +331,7 @@ export const useTransactionScreen = ({
         dappRequest,
         initialRoute,
         selectedDelegationToken,
-        genericDelegatorFee: genericDelegatorFees.options?.[selectedFeeOption].maxFee,
+        genericDelegatorFee: genericDelegatorFees.options?.[selectedFeeOption].estimatedFee,
         genericDelegatorDepositAccount: depositAccount,
     })
 

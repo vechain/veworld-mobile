@@ -61,18 +61,15 @@ export const estimateGenericDelegatorFees = ({
     signer,
     token,
 }: EstimateGenericDelegatorFeesRequest) => {
-    return executeIfValidNetwork(
-        networkType,
-        token ? `/api/v1/estimate/clauses/${token}` : "/api/v1/estimate/clauses/,",
-        url =>
-            requestFromEndpoint<EstimateGenericDelegatorFeesResponse>({
-                url: url,
-                data: {
-                    signer,
-                    clauses: clauses.map(({ to, data, value }) => ({ to, data, value })),
-                },
-                method: "POST",
-            }),
+    return executeIfValidNetwork(networkType, "/api/v1/estimate/clauses/,", url =>
+        requestFromEndpoint<EstimateGenericDelegatorFeesResponse>({
+            url: url,
+            data: {
+                signer,
+                clauses: clauses.map(({ to, data, value }) => ({ to, data, value })),
+            },
+            method: "POST",
+        }),
     )
 }
 

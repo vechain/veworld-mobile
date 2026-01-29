@@ -253,6 +253,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         () => ({
             ownerAddress,
             smartAccountAddress,
+            smartAccountConfig,
             isLoading,
             isInitialized: isInitialised,
             isAuthenticated: adapter.isAuthenticated,
@@ -268,6 +269,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             ownerAddress,
             adapter.isAuthenticated,
             smartAccountAddress,
+            smartAccountConfig,
             isLoading,
             isInitialised,
             initialiseWallet,

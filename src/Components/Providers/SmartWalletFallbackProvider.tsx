@@ -30,6 +30,7 @@ export const SmartWalletFallbackProvider: React.FC<SmartWalletFallbackProviderPr
             // Addresses - empty when disabled
             ownerAddress: "",
             smartAccountAddress: "",
+            smartAccountConfig: null,
 
             // Authentication operations - throw descriptive errors
             login: async (_options: LoginOptions): Promise<void> => {
