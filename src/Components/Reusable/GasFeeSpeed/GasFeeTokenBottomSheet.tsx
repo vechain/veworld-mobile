@@ -145,12 +145,6 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             <BaseView flexDirection="column" gap={8}>
                 {tokenList.map(tk => {
                     const isDisabled = !hasEnoughBalanceOnToken[tk.symbol] && tk.symbol !== sendingTokenSymbol
-                    console.log("Token disabled check:", {
-                        symbol: tk.symbol,
-                        hasEnoughBalance: hasEnoughBalanceOnToken[tk.symbol],
-                        sendingTokenSymbol,
-                        isDisabled,
-                    })
                     return (
                         <EnhancedTokenCard
                             item={tk}

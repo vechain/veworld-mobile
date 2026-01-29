@@ -174,13 +174,11 @@ export const useSignTransaction = ({
             }
             let newTx
             if (senderDevice?.type === DEVICE_TYPE.SMART_WALLET) {
-                console.log("getGenericDelegationTransaction called:")
                 newTx = await delegateGenericDelegatorSmartAccount({
                     ...sponsorRequest,
                     token: selectedDelegationToken,
                     networkType: selectedNetwork.type,
                 })
-                console.log("getGenericDelegationTransaction done:")
             } else {
                 newTx = await delegateGenericDelegator({
                     ...sponsorRequest,
@@ -194,11 +192,6 @@ export const useSignTransaction = ({
             }
 
             const decodedTx = Transaction.decode(Buffer.from(newTx.raw.substring(2), "hex"), false)
-            console.log("Delegator returned transaction:", {
-                reserved: decodedTx.body.reserved,
-                clausesCount: decodedTx.body.clauses.length,
-                gas: decodedTx.body.gas,
-            })
             return {
                 signature: Buffer.from(newTx.signature.substring(2), "hex"),
                 transaction: Transaction.of(decodedTx.body),
@@ -228,14 +221,6 @@ export const useSignTransaction = ({
                     return { transaction, signature: SignStatus.DELEGATION_FAILURE }
 
                 if (senderDevice?.type === DEVICE_TYPE.SMART_WALLET) {
-                    console.log(
-                        "Smart wallet delegation - token:",
-                        selectedDelegationToken,
-                        "fee:",
-                        genericDelegatorFee?.toBN,
-                        "depositAccount:",
-                        genericDelegatorDepositAccount,
-                    )
                     if (genericDelegatorDepositAccount === undefined) {
                         return { transaction, signature: SignStatus.DELEGATION_FAILURE }
                     }
@@ -245,7 +230,6 @@ export const useSignTransaction = ({
                         genericDelegatorFee,
                         genericDelegatorDepositAccount,
                     )
-                    console.log("gen del sign", validationResult)
                     if (!validationResult.valid) {
                         debug("SIGN", validationResult.reason, validationResult.metadata)
                         return { transaction, signature: SignStatus.DELEGATION_FAILURE }
@@ -313,11 +297,9 @@ export const useSignTransaction = ({
             transaction,
             password,
         )
-        console.log("gen del sign", delegationSignature)
 
         let senderSignature: Buffer
         if (senderDevice.type === DEVICE_TYPE.SMART_WALLET) {
-            console.log("useSignTransaction.signTransaction called:", JSON.stringify(transaction))
             senderSignature = await signTransactionWithSmartWallet(transaction)
         } else {
             //local mnemonic, identity already verified via useCheckIdentity
@@ -333,7 +315,6 @@ export const useSignTransaction = ({
             senderSignature = await getSignature(newTx, senderWallet)
         }
 
-        console.log("smart sig", senderSignature, "delegation sig", delegationSignature)
         if (delegationSignature === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
 
         return Transaction.of(

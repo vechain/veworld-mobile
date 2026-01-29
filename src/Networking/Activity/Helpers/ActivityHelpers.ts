@@ -85,27 +85,20 @@ const extractClausesFromExecute = (clause: TransactionClause | Transaction.Claus
  * If the clause is not a smart account transaction, returns the original clauses.
  */
 const extractInnerClausesFromSmartAccount = (clauses: Transaction.Clause[]): Transaction.Clause[] => {
-    console.log("extractInnerClausesFromSmartAccount called:", { clausesCount: clauses.length })
     if (clauses.length === 0) return clauses
 
     const firstClause = clauses[0]
     const isSmartAccount = isSmartAccountTransaction(firstClause)
-    console.log("extractInnerClausesFromSmartAccount:", { isSmartAccount, firstClauseData: firstClause.data?.substring(0, 20) })
 
     if (!isSmartAccount) return clauses
 
     const parsed = parseSmartAccountData(firstClause.data)
-    console.log("extractInnerClausesFromSmartAccount parsed:", { name: parsed?.name })
 
     if (parsed?.name === "executeBatchWithAuthorization") {
-        const extracted = extractClausesFromExecuteBatch(firstClause)
-        console.log("extractInnerClausesFromSmartAccount extracted batch:", { extractedCount: extracted.length, extracted })
-        return extracted
+        return extractClausesFromExecuteBatch(firstClause)
     }
     if (parsed?.name === "executeWithAuthorization") {
-        const extracted = extractClausesFromExecute(firstClause)
-        console.log("extractInnerClausesFromSmartAccount extracted single:", { extractedCount: extracted.length, extracted })
-        return extracted
+        return extractClausesFromExecute(firstClause)
     }
 
     return clauses
@@ -122,10 +115,8 @@ const extractInnerClausesFromSmartAccount = (clauses: Transaction.Clause[]): Tra
  * @returns A new activity object based on the given transaction.
  */
 const createBaseActivityFromTx = (tx: SDKTransaction) => {
-    console.log("createBaseActivityFromTx called")
     const { id, origin, isDelegated, body } = tx
     const { clauses, gas, chainTag } = body
-    console.log("createBaseActivityFromTx:", { clausesCount: clauses.length, gas, chainTag })
 
     // For smart account transactions, extract the inner clauses for activity type detection
     const innerClauses = extractInnerClausesFromSmartAccount(clauses)
@@ -135,7 +126,6 @@ const createBaseActivityFromTx = (tx: SDKTransaction) => {
     // This ensures the activity is associated with the smart account, not the EOA owner
     const isSmartAccount = clauses.length > 0 && isSmartAccountTransaction(clauses[0])
     const fromAddress = isSmartAccount && clauses[0].to ? clauses[0].to : origin?.toString() ?? ""
-    console.log("createBaseActivityFromTx result:", { innerClausesCount: innerClauses.length, type, isSmartAccount, fromAddress })
 
     return {
         from: fromAddress,
@@ -182,30 +172,22 @@ const getAddressFromClause = (clause: Transaction.Clause) => {
  * @throws {Error} If the amount cannot be extracted from the transaction.
  */
 export const createPendingTransferActivityFromTx = (tx: SDKTransaction): FungibleTokenActivity => {
-    console.log("createPendingTransferActivityFromTx called")
     const baseActivity = createBaseActivityFromTx(tx)
-
-    console.log("createPendingTransferActivityFromTx baseActivity:", { type: baseActivity.type, clausesCount: baseActivity.clauses.length })
 
     if (baseActivity.type !== ActivityType.TRANSFER_VET && baseActivity.type !== ActivityType.TRANSFER_FT)
         throw new Error("Invalid transaction type")
 
     const tokenAddress = getAddressFromClause(baseActivity.clauses[0])
-    console.log("createPendingTransferActivityFromTx tokenAddress:", tokenAddress)
-
     const amount = TransactionUtils.getAmountFromClause(baseActivity.clauses[0])
-    console.log("createPendingTransferActivityFromTx amount:", amount)
 
     if (!amount) throw new Error("Invalid amount")
 
-    const result = {
+    return {
         ...baseActivity,
         type: baseActivity.type,
         amount,
         tokenAddress,
-    }
-    console.log("createPendingTransferActivityFromTx result:", { id: result.id, type: result.type, amount: result.amount, tokenAddress: result.tokenAddress })
-    return result as FungibleTokenActivity
+    } as FungibleTokenActivity
 }
 
 /**

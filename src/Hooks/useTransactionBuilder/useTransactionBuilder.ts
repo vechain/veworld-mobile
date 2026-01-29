@@ -39,21 +39,7 @@ export const useTransactionBuilder = ({
 
         const txGas = gas?.gas ?? 0
 
-        console.log("useTransactionBuilder.buildTransaction called:", {
-            deviceType,
-            hasGenericDelegationDetails: !!genericDelgationDetails,
-            genericDelgationDetails: genericDelgationDetails
-                ? {
-                      token: genericDelgationDetails.token,
-                      tokenAddress: genericDelgationDetails.tokenAddress,
-                      depositAccount: genericDelgationDetails.depositAccount,
-                      fee: genericDelgationDetails.fee?.toBN,
-                  }
-                : undefined,
-        })
-
         if (deviceType === DEVICE_TYPE.SMART_WALLET) {
-            console.log("Building transaction with smart wallet, passing genericDelgationDetails")
             return buildTransactionWithSmartWallet(
                 clauses,
                 {

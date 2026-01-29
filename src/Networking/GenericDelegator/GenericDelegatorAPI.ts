@@ -4,7 +4,7 @@ import { fetchFromEndpoint, requestFromEndpoint } from "~Networking/API"
 import { URIUtils } from "~Utils"
 
 export const GENERIC_DELEGATOR_BASE_URL = {
-    [NETWORK_TYPE.MAIN]: "http://192.168.86.25:3000",
+    [NETWORK_TYPE.MAIN]: "http://192.168.86.186:3000",
     [NETWORK_TYPE.TEST]: process.env.REACT_APP_GENERIC_DELEGATOR_TESTNET_URL,
 }
 
@@ -20,8 +20,6 @@ const executeIfValidNetwork = <TReturnType>(
     path: string,
     cb: (url: string) => TReturnType,
 ): TReturnType => {
-    const url = `${GENERIC_DELEGATOR_BASE_URL[networkType]}${path}`
-    console.log("executeIfValidNetwork", url)
     if (isValidGenericDelegatorNetwork(networkType)) return cb(`${GENERIC_DELEGATOR_BASE_URL[networkType]}${path}`)
     throw new Error("[GENERIC DELEGATOR]: Invalid Network")
 }
@@ -63,7 +61,6 @@ export const estimateGenericDelegatorFees = ({
     signer,
     token,
 }: EstimateGenericDelegatorFeesRequest) => {
-    console.log("estimating generic delegator fees", { networkType, clauses, signer, token })
     return executeIfValidNetwork(
         networkType,
         token ? `/api/v1/estimate/clauses/${token}` : "/api/v1/estimate/clauses/,",
@@ -127,3 +124,15 @@ export const getDelegatorDepositAddress = ({ networkType }: { networkType: NETWO
     executeIfValidNetwork(networkType, "/api/v1/deposit/account", url =>
         fetchFromEndpoint<{ depositAccount: string }>(url),
     )
+
+export type GenericDelegatorRatesResponse = {
+    rate: {
+        vtho: number
+        vet: number
+        b3tr: number
+    }
+    serviceFee: number
+}
+
+export const getGenericDelegatorRates = ({ networkType }: { networkType: NETWORK_TYPE }) =>
+    executeIfValidNetwork(networkType, "/api/v1/rates", url => fetchFromEndpoint<GenericDelegatorRatesResponse>(url))

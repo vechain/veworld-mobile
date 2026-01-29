@@ -246,21 +246,14 @@ export const addPendingTransferTransactionActivity =
         const LL = i18nObject(locale)
         const selectedAccount = selectSelectedAccount(getState())
 
-        console.log("addPendingTransferTransactionActivity called:", {
-            hasSelectedAccount: !!selectedAccount,
-            hasTxId: !!outgoingTx.id,
-            txId: outgoingTx.id?.toString()
-        })
         if (!selectedAccount || !outgoingTx.id) return
 
         try {
             const pendingActivity: FungibleTokenActivity = createPendingTransferActivityFromTx(outgoingTx)
-            console.log("addPendingTransferTransactionActivity pendingActivity created:", { id: pendingActivity.id, type: pendingActivity.type })
             const enrichedActivity = enrichActivityWithTrackingData(pendingActivity, options)
-            console.log("addPendingTransferTransactionActivity dispatching activity:", { id: enrichedActivity.id, type: enrichedActivity.type, from: enrichedActivity.from })
             dispatch(addActivity(enrichedActivity))
-        } catch (err) {
-            console.error("addPendingTransferTransactionActivity error:", err)
+        } catch {
+            // Silently fail - activity will be picked up from chain
         }
         Feedback.show({
             severity: FeedbackSeverity.LOADING,

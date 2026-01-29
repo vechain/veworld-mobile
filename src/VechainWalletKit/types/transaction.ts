@@ -20,9 +20,19 @@ export interface TransactionOptions {
     maxPriorityFeePerGas?: string
 }
 
+export interface GenericDelegatorRates {
+    rate: {
+        vtho: number
+        vet: number
+        b3tr: number
+    }
+    serviceFee: number
+}
+
 export interface GenericDelegationDetails {
     token: string
     tokenAddress: string
     fee: BigNumberUtils | undefined
     depositAccount: string
+    rates: GenericDelegatorRates | undefined
 }

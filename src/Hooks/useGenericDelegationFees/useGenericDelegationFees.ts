@@ -36,7 +36,6 @@ const buildTransactionCost = (
 ) => {
     if (!data || keys.length !== 3) return undefined
     const lowerCaseToken = token.toLowerCase()
-    console.log("buildTransactionCost", data, lowerCaseToken)
 
     // Helper to get cost value - handles both number and object response formats
     const getCostValue = (keyIndex: number): number => {
@@ -52,28 +51,19 @@ const buildTransactionCost = (
         [GasPriceCoefficient.REGULAR]: {
             estimatedFee: BigNutils(getCostValue(0)).multiply(ethers.utils.parseEther("1").toString()),
             // Add 25% to the max fee given wrong estimation from the delegation
-            maxFee: BigNutils(getCostValue(0))
-                .multiply(ethers.utils.parseEther("1").toString())
-                .multiply(5)
-                .idiv(4),
+            maxFee: BigNutils(getCostValue(0)).multiply(ethers.utils.parseEther("1").toString()).multiply(5).idiv(4),
             priorityFee: BigNutils("0"),
         },
         [GasPriceCoefficient.MEDIUM]: {
             estimatedFee: BigNutils(getCostValue(1)).multiply(ethers.utils.parseEther("1").toString()),
             // Add 25% to the max fee given wrong estimation from the delegation
-            maxFee: BigNutils(getCostValue(1))
-                .multiply(ethers.utils.parseEther("1").toString())
-                .multiply(5)
-                .idiv(4),
+            maxFee: BigNutils(getCostValue(1)).multiply(ethers.utils.parseEther("1").toString()).multiply(5).idiv(4),
             priorityFee: BigNutils("0"),
         },
         [GasPriceCoefficient.HIGH]: {
             estimatedFee: BigNutils(getCostValue(2)).multiply(ethers.utils.parseEther("1").toString()),
             // Add 25% to the max fee given wrong estimation from the delegation
-            maxFee: BigNutils(getCostValue(2))
-                .multiply(ethers.utils.parseEther("1").toString())
-                .multiply(5)
-                .idiv(4),
+            maxFee: BigNutils(getCostValue(2)).multiply(ethers.utils.parseEther("1").toString()).multiply(5).idiv(4),
             priorityFee: BigNutils("0"),
         },
     }
@@ -83,7 +73,6 @@ const ALL_DELEGATION_TOKENS = [VET.symbol, B3TR.symbol]
 
 export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }: Args) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    console.log("userGenericDelFees")
     const {
         data,
         isFetching: isLoading,
@@ -96,7 +85,6 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
         // put cache back
         gcTime: 0,
     })
-    console.log("data", data)
 
     // When transactionCost is a number (smart account), only build options for the requested token
     // When it's an object, we have prices for all tokens
@@ -112,7 +100,6 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
         )
     }, [data, allowedTokens])
 
-    console.log("gen del data")
     const allGalacticaOptions = useMemo(() => {
         if (data === undefined) return undefined
         return Object.fromEntries(
@@ -144,6 +131,5 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
         () => ({ isLoading, options, allOptions, isFirstTimeLoading }),
         [allOptions, isFirstTimeLoading, isLoading, options],
     )
-    console.log("allOptions", allOptions)
     return memoized
 }
