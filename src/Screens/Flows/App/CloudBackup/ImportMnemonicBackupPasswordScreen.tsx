@@ -37,7 +37,7 @@ export const ImportMnemonicBackupPasswordScreen = () => {
     const { getSalt, getIV } = useCloudBackup()
     const { checkCanImportDevice } = useDeviceUtils()
 
-    const mnemonicCache = useRef<string[]>()
+    const mnemonicCache = useRef<string[]>([])
 
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
 

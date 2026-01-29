@@ -4,11 +4,11 @@ import { useBottomSheetModal } from "~Hooks"
 import {
     CertificateRequest,
     ConnectAppRequest,
+    DisconnectAppRequest,
     LoginRequest,
     SwitchWalletRequest,
     TransactionRequest,
     TypeDataRequest,
-    DisconnectAppRequest,
 } from "~Model"
 
 type ContextType = {

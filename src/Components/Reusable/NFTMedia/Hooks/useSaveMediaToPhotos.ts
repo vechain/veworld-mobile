@@ -10,7 +10,7 @@ import { ERROR_EVENTS } from "~Constants"
 export const useSaveMediaToPhotos = (image?: NFTMedia, nftName: string = "VeWorld NFT") => {
     const { LL } = useI18nContext()
     const [progress, setProgress] = useState(0)
-    const imageToFlush = useRef<FetchBlobResponse | undefined>()
+    const imageToFlush = useRef<FetchBlobResponse | undefined>(undefined)
     const [task, setTask] = useState<StatefulPromise<FetchBlobResponse> | undefined>()
 
     const LongPressItems = useMemo(

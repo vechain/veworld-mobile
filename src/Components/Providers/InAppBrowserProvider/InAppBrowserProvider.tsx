@@ -103,7 +103,7 @@ type ContextType = {
     addAppAndNavToRequest: (request: InAppRequest) => void
     handleCloseChangeAccountNetworkBottomSheet: (event: TargetEvent) => void
     handleConfirmChangeAccountNetworkBottomSheet: (event: TargetEvent) => void
-    ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModalMethods>
+    ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModalMethods | null>
     switchAccount: (request: WindowRequest) => void
     isLoading: boolean
     isDapp: boolean
@@ -192,7 +192,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const track = useAnalyticTracking()
     let prevY = useRef<number>(0) // Used to detect the scroll direction of the web view
-    const webviewRef = useRef<WebView | undefined>()
+    const webviewRef = useRef<WebView | undefined>(undefined)
 
     const postWebviewMessage = usePostWebviewMessage(webviewRef)
 
@@ -1056,7 +1056,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         }
     }, [allDapps, fetchDynamicAppLogo, navigationState?.url])
 
-    const contextValue = React.useMemo(() => {
+    const contextValue: ContextType = React.useMemo(() => {
         return {
             isLoading,
             webviewRef,

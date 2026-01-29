@@ -9,6 +9,7 @@ import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { TypedDataRenderer } from "~Components/Reusable/TypedDataRenderer"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { useSignTypedMessage } from "~Hooks/useSignTypedData"
 import { useI18nContext } from "~i18n"
@@ -27,7 +28,6 @@ import { DappDetails } from "../DappDetails"
 import { DappDetailsCard } from "../DappDetailsCard"
 import { Signable } from "../Signable"
 import { LedgerDeviceAlert } from "./LedgerDeviceAlert"
-import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 
 type Props = {
     request: TypeDataRequest

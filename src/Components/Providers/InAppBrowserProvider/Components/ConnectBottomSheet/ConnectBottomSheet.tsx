@@ -1,3 +1,4 @@
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useMemo, useRef } from "react"
 import {
     BaseBottomSheet,
@@ -10,8 +11,10 @@ import {
 } from "~Components"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
+import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { ERROR_EVENTS } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useI18nContext } from "~i18n"
 import { ConnectAppRequest } from "~Model"
 import {
@@ -26,9 +29,6 @@ import { DappDetails } from "../DappDetails"
 import { DappWithDetails } from "../DappWithDetails"
 import { useWcConnect } from "./useWcConnect"
 import { useWcSwitchChain } from "./useWcSwitchChain"
-import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
-import { AccountSelector } from "~Components/Reusable/AccountSelector"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 type Request = {
     request: ConnectAppRequest
