@@ -222,7 +222,7 @@
     "@formatjs/intl-locale": "^4.0.2",
     "@formatjs/intl-pluralrules": "^5.2.16",
     "@ledgerhq/hw-transport-mocker": "^6.29.4",
-    "@react-native-community/cli": "18.0.0",
+    "@react-native-community/cli": "18.0.1",
     "@react-native-community/cli-platform-android": "18.0.0",
     "@react-native-community/cli-platform-ios": "18.0.0",
     "@react-native/babel-preset": "0.79.7",
