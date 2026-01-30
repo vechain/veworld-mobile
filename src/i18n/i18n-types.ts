@@ -1327,14 +1327,6 @@ type RootTranslation = {
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: string
 	/**
-	 * A​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​o​r​ ​i​s​ ​a​ ​s​e​c​r​e​t​ ​s​e​t​ ​o​f​ ​w​o​r​d​s​ ​t​h​a​t​ ​a​c​t​ ​a​s​ ​t​h​e​ ​m​a​s​t​e​r​ ​k​e​y​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​K​e​e​p​ ​i​t​ ​s​a​f​e​,​ ​a​s​ ​a​n​y​o​n​e​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​e​d​ ​p​h​r​a​s​e​ ​c​a​n​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​a​s​s​e​t​s​.
-	 */
-	BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION: string
-	/**
-	 * I​m​p​o​r​t​i​n​g​ ​w​i​t​h​ ​k​e​y​s
-	 */
-	BS_INFO_IMPORTING_WITH_KEYS_TITLE: string
-	/**
 	 * C​l​o​u​d​ ​b​a​c​k​u​p​s​ ​l​e​t​ ​y​o​u​ ​r​e​s​t​o​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​o​n​ ​a​n​y​ ​d​e​v​i​c​e​ ​w​i​t​h​o​u​t​ ​m​a​n​u​a​l​l​y​ ​e​n​t​e​r​i​n​g​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​Y​o​u​r​ ​b​a​c​k​u​p​ ​i​s​ ​e​n​c​r​y​p​t​e​d​ ​w​i​t​h​ ​a​ ​p​a​s​s​w​o​r​d​ ​o​n​l​y​ ​y​o​u​ ​k​n​o​w​.​ ​K​e​e​p​ ​t​h​i​s​ ​p​a​s​s​w​o​r​d​ ​s​a​f​e​,​ ​a​s​ ​i​t​'​s​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​b​a​c​k​u​p​.
 	 */
 	BS_INFO_IMPORTING_FROM_CLOUD_DESCRIPTION: string
@@ -1342,6 +1334,14 @@ type RootTranslation = {
 	 * I​m​p​o​r​t​i​n​g​ ​f​r​o​m​ ​C​l​o​u​d
 	 */
 	BS_INFO_IMPORTING_FROM_CLOUD_TITLE: string
+	/**
+	 * A​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​o​r​ ​i​s​ ​a​ ​s​e​c​r​e​t​ ​s​e​t​ ​o​f​ ​w​o​r​d​s​ ​t​h​a​t​ ​a​c​t​ ​a​s​ ​t​h​e​ ​m​a​s​t​e​r​ ​k​e​y​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​K​e​e​p​ ​i​t​ ​s​a​f​e​,​ ​a​s​ ​a​n​y​o​n​e​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​e​d​ ​p​h​r​a​s​e​ ​c​a​n​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​a​s​s​e​t​s​.
+	 */
+	BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION: string
+	/**
+	 * I​m​p​o​r​t​i​n​g​ ​w​i​t​h​ ​k​e​y​s
+	 */
+	BS_INFO_IMPORTING_WITH_KEYS_TITLE: string
 	/**
 	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
@@ -5941,6 +5941,10 @@ type RootTranslation = {
 	 */
 	WALLET_DETAIL_ACCOUNTS_NUMER: RequiredParams<'count'>
 	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​c​l​o​u​d​ ​b​a​c​k​u​p​ ​o​f​ ​w​a​l​l​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​i​m​p​o​r​t​ ​t​o​ ​t​h​i​s​ ​d​e​v​i​c​e​.
+	 */
+	WALLET_IMPORT_CLOUD_DESCRIPTION: string
+	/**
 	 * I​m​p​o​r​t​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​ ​b​y​ ​u​s​i​n​g​ ​a​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​a​ ​P​r​i​v​a​t​e​ ​K​e​y​ ​o​r​ ​a​ ​K​e​y​s​t​o​r​e​ ​f​i​l​e​.
 	 */
 	WALLET_IMPORT_LOCAL_DESCRIPTION: string
@@ -6090,11 +6094,12 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ONE_DEVICE_FOUND: string
 	/**
-	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​,​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​o​n​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
+	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​ ​t​h​r​o​u​g​h​ ​b​l​u​e​t​o​o​t​h​.​
+​M​a​k​e​ ​s​u​r​e​ ​t​h​a​t​ ​i​t​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​a​n​d​ ​t​h​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​e​n​a​b​l​e​d​.
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: string
 	/**
-	 * I​m​p​o​r​t​ ​l​e​d​g​e​r
+	 * I​m​p​o​r​t​ ​f​r​o​m​ ​L​e​d​g​e​r
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_TITLE: string
 	/**
@@ -6130,9 +6135,17 @@ type RootTranslation = {
 	 */
 	YESTERDAY: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​c​l​o​u​d​ ​b​a​c​k​u​p​ ​o​f​ ​w​a​l​l​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​i​m​p​o​r​t​ ​t​o​ ​t​h​i​s​ ​d​e​v​i​c​e​.
+	 * C​l​o​u​d​ ​B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d
 	 */
-	WALLET_IMPORT_CLOUD_DESCRIPTION: string
+	TITLE_CLOUD_BACKUP_PASSWORD: string
+	/**
+	 * I​m​p​o​r​t​i​n​g​ ​f​r​o​m​ ​L​e​d​g​e​r
+	 */
+	BS_INFO_IMPORTING_FROM_LEDGER_TITLE: string
+	/**
+	 * L​e​d​g​e​r​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​s​ ​k​e​e​p​ ​y​o​u​r​ ​p​r​i​v​a​t​e​ ​k​e​y​s​ ​s​e​c​u​r​e​ ​a​n​d​ ​o​f​f​l​i​n​e​.​ ​A​l​l​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​a​r​e​ ​s​i​g​n​e​d​ ​d​i​r​e​c​t​l​y​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​,​ ​s​o​ ​y​o​u​r​ ​k​e​y​s​ ​a​r​e​ ​n​e​v​e​r​ ​e​x​p​o​s​e​d​.​ ​C​o​n​n​e​c​t​ ​v​i​a​ ​B​l​u​e​t​o​o​t​h​ ​w​i​t​h​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​o​p​e​n​ ​t​o​ ​g​e​t​ ​s​t​a​r​t​e​d​.
+	 */
+	BS_INFO_IMPORTING_FROM_LEDGER_DESCRIPTION: string
 }
 
 export type TranslationFunctions = {
@@ -7414,14 +7427,6 @@ Thanks for your patience!
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: () => LocalizedString
 	/**
-	 * A Recovery phrase or is a secret set of words that act as the master key to your wallet. Keep it safe, as anyone with your seed phrase can access your assets.
-	 */
-	BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION: () => LocalizedString
-	/**
-	 * Importing with keys
-	 */
-	BS_INFO_IMPORTING_WITH_KEYS_TITLE: () => LocalizedString
-	/**
 	 * Cloud backups let you restore your wallet on any device without manually entering your recovery phrase. Your backup is encrypted with a password only you know. Keep this password safe, as it's required to access your backup.
 	 */
 	BS_INFO_IMPORTING_FROM_CLOUD_DESCRIPTION: () => LocalizedString
@@ -7429,6 +7434,14 @@ Thanks for your patience!
 	 * Importing from Cloud
 	 */
 	BS_INFO_IMPORTING_FROM_CLOUD_TITLE: () => LocalizedString
+	/**
+	 * A Recovery phrase or is a secret set of words that act as the master key to your wallet. Keep it safe, as anyone with your seed phrase can access your assets.
+	 */
+	BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION: () => LocalizedString
+	/**
+	 * Importing with keys
+	 */
+	BS_INFO_IMPORTING_WITH_KEYS_TITLE: () => LocalizedString
 	/**
 	 * ADD ACCOUNT
 	 */
@@ -11964,6 +11977,10 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	WALLET_DETAIL_ACCOUNTS_NUMER: (arg: { count: number }) => LocalizedString
 	/**
+	 * Select the cloud backup of wallet that you wish to import to this device.
+	 */
+	WALLET_IMPORT_CLOUD_DESCRIPTION: () => LocalizedString
+	/**
 	 * Import an existing wallet by using a Recovery phrase, a Private Key or a Keystore file.
 	 */
 	WALLET_IMPORT_LOCAL_DESCRIPTION: () => LocalizedString
@@ -12112,11 +12129,12 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	WALLET_LEDGER_ONE_DEVICE_FOUND: () => LocalizedString
 	/**
-	 * Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on (only ledgers with bluetooth are supported at this time)
+	 * Connect your Ledger device through bluetooth.
+Make sure that it is unlocked and the location services are enabled.
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: () => LocalizedString
 	/**
-	 * Import ledger
+	 * Import from Ledger
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_TITLE: () => LocalizedString
 	/**
@@ -12152,9 +12170,17 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	YESTERDAY: () => LocalizedString
 	/**
-	 * Select the cloud backup of wallet that you wish to import to this device.
+	 * Cloud Backup Password
 	 */
-	WALLET_IMPORT_CLOUD_DESCRIPTION: () => LocalizedString
+	TITLE_CLOUD_BACKUP_PASSWORD: () => LocalizedString
+	/**
+	 * Importing from Ledger
+	 */
+	BS_INFO_IMPORTING_FROM_LEDGER_TITLE: () => LocalizedString
+	/**
+	 * Ledger hardware wallets keep your private keys secure and offline. All transactions are signed directly on your device, so your keys are never exposed. Connect via Bluetooth with the VeChain app open to get started.
+	 */
+	BS_INFO_IMPORTING_FROM_LEDGER_DESCRIPTION: () => LocalizedString
 }
 
 export type Formatters = {

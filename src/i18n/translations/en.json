@@ -1488,8 +1488,8 @@
   "WALLET_LEDGER_NO_DEVICES_DESC": "We couldn't find any Ledger devices to connect to",
   "WALLET_LEDGER_NO_DEVICES_FOUND": "No devices found",
   "WALLET_LEDGER_ONE_DEVICE_FOUND": "1 device found",
-  "WALLET_LEDGER_SELECT_DEVICE_SB": "Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on (only ledgers with bluetooth are supported at this time)",
-  "WALLET_LEDGER_SELECT_DEVICE_TITLE": "Import ledger",
+  "WALLET_LEDGER_SELECT_DEVICE_SB": "Connect your Ledger device through bluetooth.\nMake sure that it is unlocked and the location services are enabled.",
+  "WALLET_LEDGER_SELECT_DEVICE_TITLE": "Import from Ledger",
   "WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR": "Failed to create account",
   "WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS": "Account created successfully",
   "WALLET_MANAGEMENT_NOTIFICATION_LAST_WALLET": "You can not delete the last wallet, but you can reset the app by going to Settings > General > Reset App",
@@ -1497,5 +1497,8 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "TITLE_CLOUD_BACKUP_PASSWORD": "Cloud Backup Password",
+  "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Importing from Ledger",
+  "BS_INFO_IMPORTING_FROM_LEDGER_DESCRIPTION": "Ledger hardware wallets keep your private keys secure and offline. All transactions are signed directly on your device, so your keys are never exposed. Connect via Bluetooth with the VeChain app open to get started."
 }

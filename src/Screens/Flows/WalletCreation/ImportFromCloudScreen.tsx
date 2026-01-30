@@ -127,7 +127,12 @@ export const ImportFromCloudScreen = () => {
         <Layout
             title={PlatformUtils.isIOS() ? LL.TITLE_IMPORT_WALLET_FROM_ICLOUD() : LL.TITLE_IMPORT_WALLET_FROM_DRIVE()}
             headerRightElement={
-                <BaseIcon name="icon-info" size={20} color={theme.colors.text} action={openInfoBottomSheet} />
+                <BaseIcon
+                    name="icon-info"
+                    size={20}
+                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                    action={openInfoBottomSheet}
+                />
             }
             fixedBody={
                 <BaseView flex={1} gap={24} mt={16} px={24}>

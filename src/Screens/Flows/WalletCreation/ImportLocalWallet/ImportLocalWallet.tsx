@@ -294,7 +294,12 @@ export const ImportLocalWallet = () => {
             <Layout
                 title={LL.SB_TITLE_IMPORT_WITH_KEYS()}
                 headerRightElement={
-                    <BaseIcon name="icon-info" size={20} color={theme.colors.text} action={onOpenInfoBottomSheet} />
+                    <BaseIcon
+                        name="icon-info"
+                        size={20}
+                        color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                        action={onOpenInfoBottomSheet}
+                    />
                 }
                 body={
                     <>

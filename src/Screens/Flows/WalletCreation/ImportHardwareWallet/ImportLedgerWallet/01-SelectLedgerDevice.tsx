@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
     BaseButton,
+    BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -8,6 +9,7 @@ import {
     BluetoothStatusBottomSheet,
     DismissKeyboardView,
     FadeoutButton,
+    InfoBottomSheet,
     Layout,
     LocationStatusBottomSheet,
 } from "~Components"
@@ -22,13 +24,14 @@ import Lottie from "lottie-react-native"
 import { BlePairingDark } from "~Assets/Lottie"
 import * as Haptics from "expo-haptics"
 import { LedgerAndroidPermissions } from "../Hooks/LedgerAndroidPermissions"
-import { useAnalyticTracking, useScanLedgerDevices } from "~Hooks"
-import { AnalyticsEvent } from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useScanLedgerDevices, useTheme } from "~Hooks"
+import { AnalyticsEvent, COLORS } from "~Constants"
 import { PlatformUtils } from "~Utils"
 import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
+    const theme = useTheme()
     const nav = useNavigation()
     const track = useAnalyticTracking()
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
@@ -39,6 +42,7 @@ export const SelectLedgerDevice = () => {
         setSelectedDevice(device)
     }, [])
 
+    const { ref: infoBottomSheetRef, onOpenPlain: onOpenInfoBottomSheet } = useBottomSheetModal()
     const { androidPermissionsGranted, checkPermissions } = LedgerAndroidPermissions()
 
     const onAddDevice = useCallback(
@@ -115,16 +119,33 @@ export const SelectLedgerDevice = () => {
             safeAreaTestID="Select_Hw_Device_Screen"
             noStaticBottomPadding
             title={LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
+            headerRightElement={
+                <BaseIcon
+                    name="icon-info"
+                    size={20}
+                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                    action={onOpenInfoBottomSheet}
+                />
+            }
             fixedHeader={
                 <>
-                    <BaseView>
-                        <BaseText typographyFont="body" my={16}>
+                    <BaseView pt={16} gap={24}>
+                        <BaseIcon
+                            name="icon-ledger"
+                            size={48}
+                            color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE}
+                        />
+                        <BaseText
+                            typographyFont="bodyMedium"
+                            align="center"
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
                             {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
                         </BaseText>
                     </BaseView>
-                    <BaseView alignSelf="flex-start" w={100}>
+                    <BaseSpacer height={24} />
+                    <BaseView alignSelf="flex-start" w={100} gap={16}>
                         <Lottie source={BlePairingDark} autoPlay loop style={styles.lottie} />
-                        <BaseText align="center" typographyFont="subTitleBold" my={10}>
+                        <BaseText align="center" typographyFont="subSubTitleSemiBold" my={10}>
                             {devicesFoundMessage}
                         </BaseText>
                     </BaseView>
@@ -152,6 +173,11 @@ export const SelectLedgerDevice = () => {
                         <BaseSpacer height={40} />
                         <BluetoothStatusBottomSheet />
                         <LocationStatusBottomSheet />
+                        <InfoBottomSheet
+                            bsRef={infoBottomSheetRef}
+                            title={LL.BS_INFO_IMPORTING_FROM_LEDGER_TITLE()}
+                            description={LL.BS_INFO_IMPORTING_FROM_LEDGER_DESCRIPTION()}
+                        />
                     </BaseSafeArea>
                 </DismissKeyboardView>
             }
@@ -169,7 +195,7 @@ export const SelectLedgerDevice = () => {
                 ) : (
                     <FadeoutButton
                         action={onImportClick}
-                        title={LL.COMMON_LBL_IMPORT()}
+                        title={LL.CONNECTION_REQUEST_CTA()}
                         disabled={!selectedDevice}
                         bottom={0}
                         mx={0}
