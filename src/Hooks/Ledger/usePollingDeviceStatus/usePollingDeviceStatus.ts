@@ -20,7 +20,7 @@ export const usePollingDeviceStatus = ({
 }) => {
     const withTransport = useWithTransport()
     const pollingAttempts = useRef<number>(0)
-    const pollingStatusInterval = useRef<NodeJS.Timeout | undefined>(undefined)
+    const pollingStatusInterval = useRef<NodeJS.Timeout | undefined>()
 
     const stopPollingDeviceStatus = useCallback(() => {
         debug(ERROR_EVENTS.LEDGER, "[usePollingDeviceStatus] - stopPollingDeviceStatus")

@@ -1,20 +1,9 @@
 diff --git a/node_modules/react-native-wagmi-charts/src/charts/line/Gradient.tsx b/node_modules/react-native-wagmi-charts/src/charts/line/Gradient.tsx
-index 4c3d82f..904880b 100644
+index eca4232..907e73f 100644
 --- a/node_modules/react-native-wagmi-charts/src/charts/line/Gradient.tsx
 +++ b/node_modules/react-native-wagmi-charts/src/charts/line/Gradient.tsx
-@@ -1,5 +1,5 @@
- import * as React from 'react';
--import Animated from 'react-native-reanimated';
-+import Animated,{AnimatedProps} from 'react-native-reanimated';
- import { Defs, LinearGradient, Stop, Path, PathProps } from 'react-native-svg';
- 
- import { LineChartDimensionsContext } from './Chart';
-@@ -8,9 +8,10 @@ import useAnimatedPath from './useAnimatedPath';
- 
- const AnimatedPath = Animated.createAnimatedComponent(Path);
- 
--export type LineChartGradientProps = Animated.AnimateProps<PathProps> & {
-+export type LineChartGradientProps = AnimatedProps<PathProps> & {
+@@ -11,6 +11,7 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
+ export type LineChartGradientProps = Animated.AnimateProps<PathProps> & {
    color?: string;
    children?: React.ReactNode;
 +  lastGradientValue?: number
@@ -38,7 +27,7 @@ index 4c3d82f..904880b 100644
    return (
      <>
        {children ? (
-@@ -65,9 +69,11 @@ export function LineChartGradient({
+@@ -64,9 +68,11 @@ export function LineChartGradient({
              y1="0"
              y2="100%"
            >

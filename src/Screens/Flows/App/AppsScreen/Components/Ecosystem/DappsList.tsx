@@ -27,7 +27,7 @@ export const DAppsList = ({
     animationDirection,
     onAnimationComplete,
 }: Props) => {
-    const flatListRef = useRef<FlatList<DiscoveryDApp>>(null!)
+    const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
 
     const { animatedStyle } = useContentSwipeAnimation({

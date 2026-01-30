@@ -20,7 +20,7 @@ export const usePollingCorrectDeviceSettings = ({
     detachedDisconnectedOnPurpose: MutableRefObject<boolean>
 }) => {
     const pollingAttempts = useRef<number>(0)
-    const pollingCorrectDeviceSettingsInterval = useRef<NodeJS.Timeout | undefined>(undefined)
+    const pollingCorrectDeviceSettingsInterval = useRef<NodeJS.Timeout | undefined>()
     const withTransport = useWithTransport()
 
     const stopPollingCorrectDeviceSettings = useCallback(() => {

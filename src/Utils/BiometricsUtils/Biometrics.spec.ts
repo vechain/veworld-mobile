@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import { LocalAuthenticationResult } from "expo-local-authentication"
 import * as LocalAuthentication from "expo-local-authentication"
 import { AuthenticationType, SecurityLevelType, WALLET_STATUS } from "~Model"
 import PlatformUtils from "../PlatformUtils"
@@ -65,7 +64,7 @@ describe("authentication functions", () => {
 
     describe("authenticateWithBiometrics", () => {
         it("should authenticate the user with the biometric authentication type available on the device", async () => {
-            const mockResult = { success: true } as LocalAuthenticationResult
+            const mockResult = { success: true, error: "" }
 
             jest.spyOn(LocalAuthentication, "authenticateAsync").mockResolvedValueOnce(mockResult)
 
@@ -76,7 +75,7 @@ describe("authentication functions", () => {
         })
 
         it("should not pass promptMessage on Android", async () => {
-            const mockResult = { success: true } as LocalAuthenticationResult
+            const mockResult = { success: true, error: "" }
 
             ;(PlatformUtils.isAndroid as jest.Mock).mockReturnValue(true)
 

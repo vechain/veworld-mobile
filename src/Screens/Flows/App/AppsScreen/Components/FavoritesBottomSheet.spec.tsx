@@ -97,7 +97,7 @@ const mockDAppRefs: DAppReference[] = [
 
 describe("FavoritesBottomSheet", () => {
     const mockOnClose = jest.fn()
-    const ref = { current: null } as React.RefObject<BottomSheetModalMethods | null>
+    const ref = { current: null } as React.RefObject<BottomSheetModalMethods>
 
     const renderWithFavorites = (
         favoriteRefs: DAppReference[] = mockDAppRefs,

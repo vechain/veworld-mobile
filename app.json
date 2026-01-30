@@ -1,19 +1,17 @@
 {
-  "name": "VeWorld",
-  "displayName": "VeWorld",
-  "plugins": [
-    "expo-font",
-    "expo-secure-store",
-    [
-      "expo-local-authentication",
-      {
-        "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
-      }
+    "name": "VeWorld",
+    "displayName": "VeWorld",
+    "plugins": [
+        "expo-font",
+        "expo-secure-store",
+        [
+            "expo-local-authentication",
+            {
+                "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
+            }
+        ]
     ],
-    "expo-web-browser",
-    "react-native-bootsplash"
-  ],
-  "ios": {
-    "scheme": "VeWorld"
-  }
+    "ios": {
+        "scheme": "VeWorld"
+    }
 }

@@ -4,7 +4,6 @@ import { getName, getTokenURI } from "~Networking"
 import * as logger from "~Utils/Logger/Logger"
 import { NFTMediaType, NFTMetadata } from "~Model"
 import { useThorClient } from "~Hooks/useThorClient"
-import { waitFor } from "@testing-library/react-native"
 
 jest.mock("~Networking", () => ({
     getName: jest.fn(),
@@ -65,16 +64,16 @@ describe("useNFTInfo", () => {
         fetchMetadata.mockResolvedValue(nftMetaMock)
         ;(useThorClient as jest.Mock).mockReturnValue(thor)
 
-        const { result } = renderHook(() => useNFTInfo(tokenId, address))
+        const { result, waitForNextUpdate } = renderHook(() => useNFTInfo(tokenId, address))
 
-        await waitFor(() => {
-            expect(result.current.collectionName).toEqual(nameMock)
-            expect(result.current.tokenMetadata).toEqual(nftMetaMock)
-            expect(result.current.isMediaLoading).toBeFalsy()
-            expect(getTokenURI).toHaveBeenCalledWith(tokenId, address, thor)
-            expect(getName).toHaveBeenCalledWith(address, thor)
-            expect(fetchMetadata).toHaveBeenCalledWith(tokenUriMock)
-        })
+        await waitForNextUpdate({ timeout: 10000 })
+
+        expect(result.current.collectionName).toEqual(nameMock)
+        expect(result.current.tokenMetadata).toEqual(nftMetaMock)
+        expect(result.current.isMediaLoading).toBeFalsy()
+        expect(getTokenURI).toHaveBeenCalledWith(tokenId, address, thor)
+        expect(getName).toHaveBeenCalledWith(address, thor)
+        expect(fetchMetadata).toHaveBeenCalledWith(tokenUriMock)
     })
 
     it("should handle error when fetching NFT info", async () => {
@@ -90,15 +89,14 @@ describe("useNFTInfo", () => {
 
         const consoleErrorSpy = jest.spyOn(logger, "warn")
 
-        const { result } = renderHook(() => useNFTInfo(tokenId, contractAddress))
+        const { result, waitForNextUpdate } = renderHook(() => useNFTInfo(tokenId, contractAddress))
 
-        await waitFor(() => {
-            expect(result.current.isMediaLoading).toBeFalsy()
-        })
+        await waitForNextUpdate({ timeout: 10000 })
 
         expect(consoleErrorSpy).toHaveBeenCalled()
         expect(result.current.collectionName).toBeUndefined()
         expect(result.current.tokenMetadata).toBeUndefined()
+        expect(result.current.isMediaLoading).toBeFalsy()
     })
 
     it("should handle error when token uri generates error", async () => {
@@ -115,15 +113,15 @@ describe("useNFTInfo", () => {
         fetchMetadata.mockRejectedValueOnce(new Error("Error"))
         ;(useThorClient as jest.Mock).mockReturnValue(thor)
 
-        const { result } = renderHook(() => useNFTInfo(tokenId, contractAddress))
+        const { result, waitForNextUpdate } = renderHook(() => useNFTInfo(tokenId, contractAddress))
 
-        await waitFor(() => {
-            expect(consoleErrorSpy).toHaveBeenCalled()
-            expect(result.current.collectionName).toEqual(nameMock)
-            expect(result.current.isMediaLoading).toBeFalsy()
-            expect(getTokenURI).toHaveBeenCalledWith(tokenId, contractAddress, thor)
-            expect(getName).toHaveBeenCalledWith(contractAddress, thor)
-            expect(fetchMetadata).toHaveBeenCalledWith(tokenUriMock)
-        })
+        await waitForNextUpdate({ timeout: 10000 })
+
+        expect(consoleErrorSpy).toHaveBeenCalled()
+        expect(result.current.collectionName).toEqual(nameMock)
+        expect(result.current.isMediaLoading).toBeFalsy()
+        expect(getTokenURI).toHaveBeenCalledWith(tokenId, contractAddress, thor)
+        expect(getName).toHaveBeenCalledWith(contractAddress, thor)
+        expect(fetchMetadata).toHaveBeenCalledWith(tokenUriMock)
     })
 })

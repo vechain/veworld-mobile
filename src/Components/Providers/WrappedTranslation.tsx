@@ -3,7 +3,7 @@ import { LocalizedString } from "typesafe-i18n"
 
 interface WrapTranslationPropsType {
     message: LocalizedString
-    renderComponent: (messagePart: LocalizedString) => React.ReactNode
+    renderComponent: (messagePart: LocalizedString) => JSX.Element
 }
 
 // creates a component that handles the translated message

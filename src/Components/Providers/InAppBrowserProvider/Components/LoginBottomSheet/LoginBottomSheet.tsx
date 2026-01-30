@@ -4,8 +4,6 @@ import { Blake2b256, Certificate } from "@vechain/sdk-core"
 import { ethers } from "ethers"
 import { default as React, useCallback, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseSwitch, BaseText, BaseView } from "~Components/Base"
-import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
-import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { SelectAccountBottomSheet } from "~Components/Reusable"
@@ -31,6 +29,8 @@ import { DappDetails } from "../DappDetails"
 import { DappDetailsCard } from "../DappDetailsCard"
 import { Signable } from "../Signable"
 import { LedgerDeviceAlert as TypedDataLedgerDeviceAlert } from "../TypedDataBottomSheet/LedgerDeviceAlert"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 
 type Props = {
     request: LoginRequest
