@@ -1,4 +1,10 @@
+import { useNavigation } from "@react-navigation/native"
+import * as Haptics from "expo-haptics"
+import Lottie from "lottie-react-native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { Platform, StyleSheet } from "react-native"
+import Animated, { LinearTransition } from "react-native-reanimated"
+import { BlePairingDark } from "~Assets/Lottie"
 import {
     BaseButton,
     BaseIcon,
@@ -13,21 +19,15 @@ import {
     Layout,
     LocationStatusBottomSheet,
 } from "~Components"
-import { useI18nContext } from "~i18n"
-import { Platform, StyleSheet } from "react-native"
-import { useNavigation } from "@react-navigation/native"
-import { LedgerDeviceBox } from "../components"
-import { FlatList } from "react-native-gesture-handler"
-import { Routes } from "~Navigation"
-import { ConnectedLedgerDevice } from "~Model"
-import Lottie from "lottie-react-native"
-import { BlePairingDark } from "~Assets/Lottie"
-import * as Haptics from "expo-haptics"
-import { LedgerAndroidPermissions } from "../Hooks/LedgerAndroidPermissions"
-import { useAnalyticTracking, useBottomSheetModal, useScanLedgerDevices, useTheme } from "~Hooks"
 import { AnalyticsEvent, COLORS } from "~Constants"
-import { PlatformUtils } from "~Utils"
+import { useAnalyticTracking, useBottomSheetModal, useScanLedgerDevices, useTheme } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { ConnectedLedgerDevice } from "~Model"
+import { Routes } from "~Navigation"
 import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
+import { PlatformUtils } from "~Utils"
+import { LedgerDeviceBox } from "../components"
+import { LedgerAndroidPermissions } from "../Hooks/LedgerAndroidPermissions"
 
 export const SelectLedgerDevice = () => {
     const { LL } = useI18nContext()
@@ -156,7 +156,7 @@ export const SelectLedgerDevice = () => {
                     <BaseSafeArea grow={1} style={styles.safeArea}>
                         <BaseView alignItems="center" justifyContent="space-between" flexGrow={1}>
                             {availableDevices.length > 0 && (
-                                <FlatList
+                                <Animated.FlatList<ConnectedLedgerDevice>
                                     style={styles.container}
                                     data={availableDevices}
                                     numColumns={1}
@@ -166,6 +166,7 @@ export const SelectLedgerDevice = () => {
                                     showsVerticalScrollIndicator={false}
                                     ItemSeparatorComponent={renderSeparator}
                                     keyExtractor={item => item.id}
+                                    layout={LinearTransition}
                                 />
                             )}
                         </BaseView>
