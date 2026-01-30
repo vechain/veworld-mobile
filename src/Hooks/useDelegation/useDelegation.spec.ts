@@ -59,6 +59,20 @@ describe("useDelegation", () => {
         expect(result.current.selectedDelegationUrl).toEqual(url)
     })
 
+    it("should normalize delegation url protocol casing", async () => {
+        const url = "Https://test.com"
+
+        const { result } = renderHook(() => useDelegation({ setGasPayer }), {
+            wrapper: TestWrapper,
+        })
+
+        await act(async () => {
+            await result.current.setSelectedDelegationUrl(url)
+        })
+
+        expect(result.current.selectedDelegationUrl).toEqual("https://test.com")
+    })
+
     it("should set selected delegation account", async () => {
         const account = {
             ...account1D1,
@@ -104,7 +118,7 @@ describe("useDelegation", () => {
     })
 
     it("using provided URL should automatically set delegation option", async () => {
-        const url = "https://test.com"
+        const url = "Https://test.com"
 
         const { result } = renderHook(() => useDelegation({ setGasPayer, providedUrl: url }), {
             wrapper: TestWrapper,
@@ -112,7 +126,7 @@ describe("useDelegation", () => {
 
         expect(result.current.isDelegated).toBeTruthy()
         expect(result.current.selectedDelegationOption).toEqual(DelegationType.URL)
-        expect(result.current.selectedDelegationUrl).toEqual(url)
+        expect(result.current.selectedDelegationUrl).toEqual("https://test.com")
     })
 
     it("should reset all delegation", async () => {

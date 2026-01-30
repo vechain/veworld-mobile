@@ -119,9 +119,10 @@ const convertUriToUrl = (uri: string) => {
 }
 
 function parseUrl(url: string) {
-    if (isHttps(url)) return url
-    if (isHttp(url)) return `http://${url.slice(7)}`
-    return `https://${url}`
+    const trimmedUrl = url.trim()
+    if (isHttps(trimmedUrl)) return `https://${trimmedUrl.slice(8)}`
+    if (isHttp(trimmedUrl)) return `http://${trimmedUrl.slice(7)}`
+    return `https://${trimmedUrl}`
 }
 
 function parseUrlSafe(url: string) {
