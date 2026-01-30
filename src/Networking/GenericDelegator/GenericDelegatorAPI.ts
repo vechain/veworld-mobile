@@ -4,7 +4,7 @@ import { fetchFromEndpoint, requestFromEndpoint } from "~Networking/API"
 import { URIUtils } from "~Utils"
 
 export const GENERIC_DELEGATOR_BASE_URL = {
-    [NETWORK_TYPE.MAIN]: "http://192.168.86.186:3000",
+    [NETWORK_TYPE.MAIN]: "http://127.0.0.1:3000",
     [NETWORK_TYPE.TEST]: process.env.REACT_APP_GENERIC_DELEGATOR_TESTNET_URL,
 }
 
