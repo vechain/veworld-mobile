@@ -266,14 +266,15 @@ export const useTransactionScreen = ({
         ],
     )
 
-    const { hasEnoughBalance, hasEnoughBalanceOnAny, hasEnoughBalanceOnToken } = useIsEnoughGas({
-        selectedToken: selectedDelegationToken,
-        isDelegated,
-        allFeeOptions: selectedFeeAllTokenOptions,
-        isLoadingFees: isFirstTimeLoadingFees,
-        transactionOutputs,
-        origin: selectedAccount.address,
-    })
+    const { hasEnoughBalance, hasEnoughBalanceOnAny, hasEnoughBalanceOnToken, hasEnoughBalanceForFeeOnly } =
+        useIsEnoughGas({
+            selectedToken: selectedDelegationToken,
+            isDelegated,
+            allFeeOptions: selectedFeeAllTokenOptions,
+            isLoadingFees: isFirstTimeLoadingFees,
+            transactionOutputs,
+            origin: selectedAccount.address,
+        })
 
     const { buildTransaction } = useTransactionBuilder({
         clauses,
@@ -419,8 +420,11 @@ export const useTransactionScreen = ({
     )
 
     const fallbackToVTHO = useCallback(() => {
-        if (!hasEnoughBalance && selectedDelegationToken !== VTHO.symbol) setSelectedDelegationToken(VTHO.symbol)
-    }, [hasEnoughBalance, selectedDelegationToken])
+        // Only fallback if the token's total balance can't cover the fee at all
+        // This allows tokens being sent to stay selected (send amount will be reduced)
+        const canCoverFee = hasEnoughBalanceForFeeOnly[selectedDelegationToken]
+        if (!canCoverFee && selectedDelegationToken !== VTHO.symbol) setSelectedDelegationToken(VTHO.symbol)
+    }, [hasEnoughBalanceForFeeOnly, selectedDelegationToken])
 
     useEffect(() => {
         if (autoVTHOFallback) fallbackToVTHO()
@@ -473,6 +477,7 @@ export const useTransactionScreen = ({
         hasEnoughBalanceOnAny,
         isFirstTimeLoadingFees,
         hasEnoughBalanceOnToken,
+        hasEnoughBalanceForFeeOnly,
         isBiometricsEmpty,
         transactionOutputs,
     }

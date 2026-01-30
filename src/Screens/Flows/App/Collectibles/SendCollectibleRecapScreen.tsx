@@ -128,6 +128,7 @@ export const SendCollectibleRecapScreen = ({ route }: Props) => {
         hasEnoughBalanceOnAny,
         isFirstTimeLoadingFees,
         hasEnoughBalanceOnToken,
+        hasEnoughBalanceForFeeOnly,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -185,7 +186,8 @@ export const SendCollectibleRecapScreen = ({ route }: Props) => {
                             setDelegationToken={setSelectedDelegationToken}
                             hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
                             isFirstTimeLoadingFees={isFirstTimeLoadingFees}
-                            hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}>
+                            hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}
+                            hasEnoughBalanceForFeeOnly={hasEnoughBalanceForFeeOnly}>
                             <DelegationView
                                 setNoDelegation={resetDelegation}
                                 selectedDelegationOption={selectedDelegationOption}

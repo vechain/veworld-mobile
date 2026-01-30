@@ -31,6 +31,9 @@ type Props = {
     hasEnoughBalanceOnToken: {
         [token: string]: boolean
     }
+    hasEnoughBalanceForFeeOnly: {
+        [token: string]: boolean
+    }
     containerStyle?: StyleProp<ViewStyle>
     sendingTokenSymbol?: string
 }
@@ -53,6 +56,7 @@ export const GasFeeSpeed = ({
     hasEnoughBalanceOnAny,
     isFirstTimeLoadingFees,
     hasEnoughBalanceOnToken,
+    hasEnoughBalanceForFeeOnly,
     containerStyle,
     sendingTokenSymbol,
 }: PropsWithChildren<Props>) => {
@@ -122,6 +126,7 @@ export const GasFeeSpeed = ({
                 selectedToken={delegationToken}
                 setSelectedToken={setDelegationToken}
                 hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}
+                hasEnoughBalanceForFeeOnly={hasEnoughBalanceForFeeOnly}
                 sendingTokenSymbol={sendingTokenSymbol}
             />
         </AnimatedBaseCard>

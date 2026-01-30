@@ -10,9 +10,9 @@ import { DelegationView, GasFeeSpeed, RequireUserPassword, SelectAccountBottomSh
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { AnalyticsEvent, COLORS, RequestMethods } from "~Constants"
 import { useBottomSheetModal, useIsOnline, useSetSelectedAccount, useThemedStyles, useTransactionScreen } from "~Hooks"
+import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useLoginSession } from "~Hooks/useLoginSession"
-import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { TransactionRequest } from "~Model"
 import {
     addPendingDappTransactionActivity,
@@ -109,6 +109,7 @@ export const TransactionBottomSheetContent = ({
         hasEnoughBalanceOnAny,
         isFirstTimeLoadingFees,
         hasEnoughBalanceOnToken,
+        hasEnoughBalanceForFeeOnly,
         isBiometricsEmpty,
         transactionOutputs,
     } = useTransactionScreen({
@@ -168,6 +169,7 @@ export const TransactionBottomSheetContent = ({
                     hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
                     isFirstTimeLoadingFees={isFirstTimeLoadingFees}
                     hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}
+                    hasEnoughBalanceForFeeOnly={hasEnoughBalanceForFeeOnly}
                     containerStyle={styles.gasFeeSpeedContainer}>
                     <DelegationView
                         setNoDelegation={resetDelegation}

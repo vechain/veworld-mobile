@@ -121,6 +121,7 @@ describe("GasFeeSpeed", () => {
                     hasEnoughBalanceOnAny
                     isFirstTimeLoadingFees={false}
                     hasEnoughBalanceOnToken={{ VTHO: true }}
+                    hasEnoughBalanceForFeeOnly={{ VTHO: true }}
                 />,
                 { wrapper: PreloadedWrapper },
             )
@@ -151,6 +152,7 @@ describe("GasFeeSpeed", () => {
                     hasEnoughBalanceOnAny
                     isFirstTimeLoadingFees={false}
                     hasEnoughBalanceOnToken={{ VTHO: true }}
+                    hasEnoughBalanceForFeeOnly={{ VTHO: true }}
                 />,
                 { wrapper: PreloadedWrapper },
             )
@@ -192,6 +194,7 @@ describe("GasFeeSpeed", () => {
                 hasEnoughBalanceOnAny
                 isFirstTimeLoadingFees={false}
                 hasEnoughBalanceOnToken={{ VTHO: true }}
+                hasEnoughBalanceForFeeOnly={{ VTHO: true }}
             />,
             { wrapper: PreloadedWrapper },
         )
@@ -216,6 +219,7 @@ describe("GasFeeSpeed", () => {
                 hasEnoughBalanceOnAny
                 isFirstTimeLoadingFees={false}
                 hasEnoughBalanceOnToken={{ VTHO: true }}
+                hasEnoughBalanceForFeeOnly={{ VTHO: true }}
             />,
             { wrapper: PreloadedWrapper },
         )
@@ -240,6 +244,7 @@ describe("GasFeeSpeed", () => {
                 hasEnoughBalanceOnAny
                 isFirstTimeLoadingFees={false}
                 hasEnoughBalanceOnToken={{ VTHO: true }}
+                hasEnoughBalanceForFeeOnly={{ VTHO: true }}
             />,
             { wrapper: PreloadedWrapper },
         )

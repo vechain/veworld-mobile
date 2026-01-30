@@ -27,7 +27,9 @@ type Props = {
     hasEnoughBalanceOnToken: {
         [token: string]: boolean
     }
-
+    hasEnoughBalanceForFeeOnly: {
+        [token: string]: boolean
+    }
     sendingTokenSymbol?: string
 }
 
@@ -51,7 +53,15 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled }: Enhanc
 }
 
 export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function GasFeeSpeedBottomSheet(
-    { selectedToken, setSelectedToken, onClose, availableTokens, hasEnoughBalanceOnToken, sendingTokenSymbol },
+    {
+        selectedToken,
+        setSelectedToken,
+        onClose,
+        availableTokens,
+        hasEnoughBalanceOnToken,
+        hasEnoughBalanceForFeeOnly,
+        sendingTokenSymbol,
+    },
     ref,
 ) {
     const { LL } = useI18nContext()
@@ -130,8 +140,7 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             ref={ref}
             dynamicHeight
             contentStyle={styles.rootContent}
-            backgroundStyle={styles.rootContentBackground}
-            scrollable={false}>
+            backgroundStyle={styles.rootContentBackground}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-coins" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
@@ -144,15 +153,23 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             </BaseText>
             <BaseSpacer height={24} />
             <BaseView flexDirection="column" gap={8}>
-                {tokenList.map(tk => (
-                    <EnhancedTokenCard
-                        item={tk}
-                        key={tk.symbol}
-                        onSelectedToken={setInternalToken}
-                        selected={internalToken === tk.symbol}
-                        disabled={!hasEnoughBalanceOnToken[tk.symbol] && tk.symbol !== sendingTokenSymbol}
-                    />
-                ))}
+                {tokenList.map(tk => {
+                    // For the sending token, check if total balance covers the fee (send amount can be reduced)
+                    // For other tokens, check if balance minus send amount covers the fee
+                    const isDisabled =
+                        tk.symbol === sendingTokenSymbol
+                            ? !hasEnoughBalanceForFeeOnly[tk.symbol]
+                            : !hasEnoughBalanceOnToken[tk.symbol]
+                    return (
+                        <EnhancedTokenCard
+                            item={tk}
+                            key={tk.symbol}
+                            onSelectedToken={setInternalToken}
+                            selected={internalToken === tk.symbol}
+                            disabled={isDisabled}
+                        />
+                    )
+                })}
             </BaseView>
             <BaseSpacer height={24} />
             {defaultToken !== internalToken && (

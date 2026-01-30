@@ -209,6 +209,11 @@ describe("TransactionSummarySendScreen", () => {
                 VTHO: false,
                 B3TR: false,
             },
+            hasEnoughBalanceForFeeOnly: {
+                VET: false,
+                VTHO: false,
+                B3TR: false,
+            },
         })
     })
     afterEach(() => {
