@@ -124,9 +124,9 @@ export const ImportLocalWallet = () => {
         onClose: onCloseDerivationPath,
     } = useBottomSheetModal()
 
-    const mnemonicCache = useRef<string[]>([])
-    const privateKeyCache = useRef<string>("")
-    const derivationPathCache = useRef<DerivationPath>(DerivationPath.VET)
+    const mnemonicCache = useRef<string[]>()
+    const privateKeyCache = useRef<string>()
+    const derivationPathCache = useRef<DerivationPath>()
 
     const handleOnCloseDerivationPathSheet = useCallback(
         (path: DerivationPath) => {

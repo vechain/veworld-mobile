@@ -82,7 +82,10 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
                             <LineChart.Provider data={chartData ?? DEFAULT_LINE_CHART_DATA}>
                                 <LineChart width={SCREEN_WIDTH - 32} height={HEIGHT} yGutter={20}>
                                     <LineChart.Path color={theme.colors.graphLine} width={2}>
-                                        <LineChart.Gradient color={theme.colors.graphGradient} />
+                                        <LineChart.Gradient
+                                            color={theme.colors.graphGradient}
+                                            lastGradientValue={0.3}
+                                        />
                                     </LineChart.Path>
                                 </LineChart>
                             </LineChart.Provider>

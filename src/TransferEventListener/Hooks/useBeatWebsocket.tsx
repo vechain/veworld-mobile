@@ -18,8 +18,8 @@ const BASE_PATH = "/subscriptions/beat2"
 export const useBeatWebsocket = (currentNetworkUrl: string, onMessage: (beat: Beat) => void) => {
     const dispatch = useAppDispatch()
     const { currentState, previousState } = useAppState()
-    const ws = useRef<WebSocket>(undefined!)
-    const lastMessage = useRef<LastMessage | undefined>(undefined)
+    const ws = useRef<WebSocket>()
+    const lastMessage = useRef<LastMessage>()
     const { count, increment } = useCounter()
     const [retryTimeoutId, setRetryTimeoutId] = useState<NodeJS.Timeout | null>(null)
 

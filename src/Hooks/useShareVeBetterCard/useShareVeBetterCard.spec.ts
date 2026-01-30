@@ -1,10 +1,13 @@
-import { act, renderHook } from "@testing-library/react-hooks"
+import { renderHook } from "@testing-library/react-hooks"
 import { Share } from "react-native"
 import { captureRef, releaseCapture } from "react-native-view-shot"
 import { TestWrapper } from "~Test"
 import { useShareVeBetterCard } from "./useShareVeBetterCard"
 
 jest.mock("react-native-view-shot")
+jest.mock("react-native/Libraries/Share/Share", () => ({
+    share: jest.fn(),
+}))
 
 const mockUri = "file:///path/to/screenshot.png"
 
@@ -23,7 +26,6 @@ describe("useShareVeBetterCard", () => {
 
     it("should not capture or share when cardRef is not set", async () => {
         const { result } = renderHook(() => useShareVeBetterCard(), { wrapper: TestWrapper })
-        jest.spyOn(Share, "share").mockResolvedValue({ action: "sharedAction" })
 
         await result.current.shareCard()
 
@@ -33,7 +35,7 @@ describe("useShareVeBetterCard", () => {
 
     it("should capture and share the view successfully", async () => {
         ;(captureRef as jest.Mock).mockResolvedValue(mockUri)
-        jest.spyOn(Share, "share").mockResolvedValue({ action: "sharedAction" })
+        ;(Share.share as jest.Mock).mockResolvedValue({ action: "sharedAction" })
 
         const { result } = renderHook(() => useShareVeBetterCard(), { wrapper: TestWrapper })
         const mockRefValue = {} as any
@@ -73,7 +75,7 @@ describe("useShareVeBetterCard", () => {
 
     it("should clean up resources when user cancels share", async () => {
         ;(captureRef as jest.Mock).mockResolvedValue(mockUri)
-        jest.spyOn(Share, "share").mockRejectedValue(new Error("User did not share"))
+        ;(Share.share as jest.Mock).mockRejectedValue(new Error("User did not share"))
 
         const { result } = renderHook(() => useShareVeBetterCard(), { wrapper: TestWrapper })
         const mockRefValue = {} as any
@@ -87,7 +89,6 @@ describe("useShareVeBetterCard", () => {
     })
 
     it("should prevent duplicate share operations", async () => {
-        jest.spyOn(Share, "share").mockResolvedValue({ action: "sharedAction" })
         ;(captureRef as jest.Mock).mockImplementation(
             () =>
                 new Promise(resolve => {
@@ -100,10 +101,10 @@ describe("useShareVeBetterCard", () => {
         // @ts-ignore - Assigning to ref.current in tests
         result.current.cardRef.current = mockRefValue
 
-        act(async () => {
-            await result.current.shareCard()
-            await result.current.shareCard()
-        })
+        const promise1 = result.current.shareCard()
+        const promise2 = result.current.shareCard()
+
+        await Promise.all([promise1, promise2])
 
         expect(captureRef).toHaveBeenCalledTimes(1)
     })

@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { act, renderHook } from "@testing-library/react-hooks"
+import { renderHook } from "@testing-library/react-hooks"
+import { act } from "@testing-library/react-native"
 import { TESTNET_NETWORK } from "@vechain/sdk-core"
 import React from "react"
 import { PlatformOSType } from "react-native"
@@ -18,7 +19,6 @@ import { InAppBrowserProvider, useInAppBrowser } from "./InAppBrowserProvider"
 import { ethers } from "ethers"
 import _ from "lodash"
 import { usePostWebviewMessage } from "~Hooks/usePostWebviewMessage"
-import { waitFor } from "@testing-library/react-native"
 
 jest.mock("../InteractionProvider")
 jest.mock("../DeepLinksProvider")
@@ -127,18 +127,19 @@ describe("useInAppBrowser hook", () => {
     // This is to inform Dapps that the app is officialy signed.
     it("should inject integrity script on Android informing if the app is officially signed", async () => {
         jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({} as any)
-        const { result } = renderHook(() => useInAppBrowser(), {
+        const { result, waitForNextUpdate } = renderHook(() => useInAppBrowser(), {
             wrapper: createWrapper("android"),
         })
 
-        await waitFor(() => {
-            expect(result.current.isLoading).toBe(false)
+        await act(async () => {
+            await waitForNextUpdate()
         })
 
         const injectVechainScript = result.current.injectVechainScript()
         expect(injectVechainScript).toContain(
             'integrity: {"packageName":"com.veworld.app","versionName":"1.0.0","versionCode":1,"isOfficial":true}',
         )
+        expect(result.current.isLoading).toBe(false)
     })
 
     it("should not inject the integrity script on iOS", async () => {

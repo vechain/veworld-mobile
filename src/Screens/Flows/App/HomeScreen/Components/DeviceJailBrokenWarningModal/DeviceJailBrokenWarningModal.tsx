@@ -41,7 +41,7 @@ export const DeviceJailBrokenWarningModal = () => {
     }
 
     return (
-        <BaseBottomSheet bottomSafeArea dynamicHeight blurBackdrop ref={ref} scrollable={false}>
+        <BaseBottomSheet bottomSafeArea dynamicHeight blurBackdrop ref={ref}>
             <BaseView style={styles.contentContainer}>
                 <SecurityAlertLight />
                 <BaseSpacer height={24} />

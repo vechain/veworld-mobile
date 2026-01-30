@@ -63,7 +63,7 @@ target 'VeWorld' do
   )
 
   # Force OpenSSL version for react-native-quick-crypto
-  # pod 'OpenSSL-Universal', '~> 1.1.1100'
+  pod 'OpenSSL-Universal', '~> 1.1.1100'
   pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
 
   target 'VeWorldTests' do

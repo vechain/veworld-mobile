@@ -71,7 +71,7 @@ export const EnableNotificationsBottomSheet = () => {
     )
 
     return (
-        <BaseBottomSheet bottomSafeArea dynamicHeight ref={ref} scrollable={false}>
+        <BaseBottomSheet bottomSafeArea dynamicHeight ref={ref}>
             <BaseView style={styles.contentContainer}>
                 <BaseIcon color={theme.colors.text} name={"icon-bell-ring"} size={40} />
                 <BaseSpacer height={24} />

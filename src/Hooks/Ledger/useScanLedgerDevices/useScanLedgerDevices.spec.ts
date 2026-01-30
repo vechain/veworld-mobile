@@ -1,9 +1,9 @@
+import { useScanLedgerDevices } from "~Hooks"
 import { act, renderHook } from "@testing-library/react-hooks"
 import { TestHelpers } from "~Test"
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
-import { useScanLedgerDevices } from "./useScanLedgerDevices"
 
-const { mockedDevice, mockDeviceModel, mockedTransport } = TestHelpers.data
+const { mockedDevice, mockDeviceModel } = TestHelpers.data
 
 const listenFunction = jest.fn()
 
@@ -11,7 +11,7 @@ describe("useScanLedgerDevices", () => {
     beforeEach(() => {
         jest.clearAllMocks()
         jest.mock("@ledgerhq/react-native-hw-transport-ble", () => ({
-            default: mockedTransport,
+            default: TestHelpers.data.mockedTransport,
         }))
         BleTransport.listen = listenFunction
     })
@@ -23,12 +23,10 @@ describe("useScanLedgerDevices", () => {
             result.current.scanForDevices()
         })
 
-        act(() => {
-            listenFunction.mock.calls[0][0].next({
-                type: "add",
-                descriptor: mockedDevice,
-                deviceModel: mockDeviceModel,
-            })
+        listenFunction.mock.calls[0][0].next({
+            type: "add",
+            descriptor: mockedDevice,
+            deviceModel: mockDeviceModel,
         })
 
         expect(result.current.availableDevices).toHaveLength(1)
@@ -46,12 +44,10 @@ describe("useScanLedgerDevices", () => {
             isConnectable: true,
         }
 
-        act(() => {
-            listenFunction.mock.calls[0][0].next({
-                type: "add",
-                descriptor,
-                deviceModel: mockDeviceModel,
-            })
+        listenFunction.mock.calls[0][0].next({
+            type: "add",
+            descriptor,
+            deviceModel: mockDeviceModel,
         })
 
         expect(result.current.availableDevices).toHaveLength(1)

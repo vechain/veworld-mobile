@@ -4,7 +4,6 @@ import { VET } from "~Constants"
 import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
 import { useThor } from "~Components"
 import * as logger from "~Utils/Logger/Logger"
-import { waitFor } from "@testing-library/react-native"
 
 jest.mock("~Networking", () => ({
     getTokenDecimals: jest.fn(),
@@ -33,27 +32,25 @@ describe("useFungibleTokenInfo", () => {
         ;(useThor as jest.Mock).mockReturnValue(thor)
         ;(getTokenName as jest.Mock).mockResolvedValue(nameMock)
 
-        const { result } = renderHook(() => useFungibleTokenInfo(tokenAddress))
+        const { result, waitForNextUpdate } = renderHook(() => useFungibleTokenInfo(tokenAddress))
 
-        await waitFor(() => {
-            expect(result.current.symbol).toEqual(symbolMock)
-            expect(result.current.decimals).toEqual(decimalsMock)
-            expect(getTokenSymbol).toHaveBeenCalledWith(tokenAddress, thor)
-            expect(getTokenDecimals).toHaveBeenCalledWith(tokenAddress, thor)
-            expect(getTokenName).toHaveBeenCalledWith(tokenAddress, thor)
-        })
+        await waitForNextUpdate({ timeout: 10000 })
+
+        expect(result.current.symbol).toEqual(symbolMock)
+        expect(result.current.decimals).toEqual(decimalsMock)
+        expect(getTokenSymbol).toHaveBeenCalledWith(tokenAddress, thor)
+        expect(getTokenDecimals).toHaveBeenCalledWith(tokenAddress, thor)
+        expect(getTokenName).toHaveBeenCalledWith(tokenAddress, thor)
     })
 
-    it("should return vet token when token is VET", async () => {
+    it("should return vet token when token is VET", () => {
         const tokenAddress = VET.address
 
         const { result } = renderHook(() => useFungibleTokenInfo(tokenAddress))
 
-        await waitFor(() => {
-            expect(result.current.address).toEqual(VET.address)
-            expect(result.current.symbol).toEqual(VET.symbol)
-            expect(result.current.decimals).toEqual(VET.decimals)
-        })
+        expect(result.current.address).toEqual(VET.address)
+        expect(result.current.symbol).toEqual(VET.symbol)
+        expect(result.current.decimals).toEqual(VET.decimals)
     })
 
     it("should handle error when fetching token info", async () => {
@@ -68,15 +65,15 @@ describe("useFungibleTokenInfo", () => {
 
         const consoleErrorSpy = jest.spyOn(logger, "warn")
 
-        const { result } = renderHook(() => useFungibleTokenInfo(tokenAddress))
+        const { result, waitForNextUpdate } = renderHook(() => useFungibleTokenInfo(tokenAddress))
 
-        await waitFor(() => {
-            expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-            expect(result.current.symbol).toBeUndefined()
-            expect(result.current.decimals).toBeUndefined()
-            expect(result.current.name).toBeUndefined()
-            expect(result.current.error).toEqual(errorMock)
-        })
+        await waitForNextUpdate({ timeout: 10000 })
+
+        expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
+        expect(result.current.symbol).toBeUndefined()
+        expect(result.current.decimals).toBeUndefined()
+        expect(result.current.name).toBeUndefined()
+        expect(result.current.error).toEqual(errorMock)
     })
 
     it("fetchData should correctly fetch token info for a provided address", async () => {

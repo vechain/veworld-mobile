@@ -152,7 +152,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
 
         return (
             <>
-                <BaseBottomSheet dynamicHeight ref={ref} onDismiss={handleOnDismissModal} scrollable={false}>
+                <BaseBottomSheet dynamicHeight ref={ref} onDismiss={handleOnDismissModal}>
                     <BaseText typographyFont="subTitleBold">{LL.MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE()}</BaseText>
                     <BaseText typographyFont="subSubTitleLight" pt={12}>
                         {LL.MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION()}
