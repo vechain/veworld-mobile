@@ -317,6 +317,8 @@
   "BROWSER_TAB_MANAGEMENT_TITLE": "Tabs",
   "BS_INFO_IMPORTING_FROM_CLOUD_DESCRIPTION": "Cloud backups let you restore your wallet on any device without manually entering your recovery phrase. Your backup is encrypted with a password only you know. Keep this password safe, as it's required to access your backup.",
   "BS_INFO_IMPORTING_FROM_CLOUD_TITLE": "Importing from Cloud",
+  "BS_INFO_IMPORTING_FROM_LEDGER_DESCRIPTION": "Ledger hardware wallets keep your private keys secure and offline. All transactions are signed directly on your device, so your keys are never exposed. Connect via Bluetooth with the VeChain app open to get started.",
+  "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Importing from Ledger",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "A Recovery phrase or is a secret set of words that act as the master key to your wallet. Keep it safe, as anyone with your seed phrase can access your assets.",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importing with keys",
   "BTN_ADD_ACCOUNT": "ADD ACCOUNT",
@@ -1326,6 +1328,7 @@
   "TITLE_BACKUP_YOUR_PHRASE": "Backup your phrase",
   "TITLE_BUY": "Buy",
   "TITLE_CLAIM_USERNAME": "Username",
+  "TITLE_CLOUD_BACKUP_PASSWORD": "Cloud Backup Password",
   "TITLE_CONFIRM_MNEMONIC": "Confirm your mnemonic",
   "TITLE_CONNECTED_APPS": "Connected apps",
   "TITLE_CONTACTS": "My Contacts",
@@ -1497,8 +1500,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "TITLE_CLOUD_BACKUP_PASSWORD": "Cloud Backup Password",
-  "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Importing from Ledger",
-  "BS_INFO_IMPORTING_FROM_LEDGER_DESCRIPTION": "Ledger hardware wallets keep your private keys secure and offline. All transactions are signed directly on your device, so your keys are never exposed. Connect via Bluetooth with the VeChain app open to get started."
+  "YESTERDAY": "Yesterday"
 }
