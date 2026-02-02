@@ -196,7 +196,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
         [selectedAccountsIndex],
     )
 
-    const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
+    const renderSeparator = useCallback(() => <BaseSpacer height={8} />, [])
 
     const checkViewableItems = useCallback(
         ({ viewableItems }: { viewableItems: ViewToken[] }) => {
