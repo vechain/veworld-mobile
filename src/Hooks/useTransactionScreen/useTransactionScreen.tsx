@@ -99,47 +99,6 @@ const getGenericDelegationForSmartWallet = (
         return undefined
     }
 
-    // Detailed logging for transfer clause fee calculation
-    const selectedTokenAllOptions = genericDelegatorFees.allOptions?.[token]
-    console.log("=== Transfer Clause Fee Calculation ===")
-    console.log("Selected token:", token)
-    console.log("Selected fee option (speed tier):", selectedFeeOption)
-    console.log("All options for selected token:", {
-        REGULAR: selectedTokenAllOptions?.[GasPriceCoefficient.REGULAR]
-            ? {
-                  estimatedFee: selectedTokenAllOptions[GasPriceCoefficient.REGULAR].estimatedFee?.toString,
-                  maxFee: selectedTokenAllOptions[GasPriceCoefficient.REGULAR].maxFee?.toString,
-              }
-            : undefined,
-        MEDIUM: selectedTokenAllOptions?.[GasPriceCoefficient.MEDIUM]
-            ? {
-                  estimatedFee: selectedTokenAllOptions[GasPriceCoefficient.MEDIUM].estimatedFee?.toString,
-                  maxFee: selectedTokenAllOptions[GasPriceCoefficient.MEDIUM].maxFee?.toString,
-              }
-            : undefined,
-        HIGH: selectedTokenAllOptions?.[GasPriceCoefficient.HIGH]
-            ? {
-                  estimatedFee: selectedTokenAllOptions[GasPriceCoefficient.HIGH].estimatedFee?.toString,
-                  maxFee: selectedTokenAllOptions[GasPriceCoefficient.HIGH].maxFee?.toString,
-              }
-            : undefined,
-    })
-    console.log("Fee being used for transfer clause (wei):", feeMap[token]?.toString)
-    console.log("Rates:", rates.rate, "Service fee:", rates.serviceFee)
-    console.log("")
-    console.log("FRONTEND CALCULATION PATH (ITERATIVE):")
-    console.log("  1. Build clauses WITH mock transfer clause")
-    console.log("  2. gasUsed = thor.gas.estimateGas(fullClauses) // WITH transfer clause")
-    console.log("  3. gasPriceForTier = maxFeePerGas + maxPriorityFeePerGas")
-    console.log("  4. feeWei = gasPrice * gasUsed * tokenRate * (1 + serviceFee)")
-    console.log("  5. feeEther = feeWei / 1e18 (stored in transactionCost)")
-    console.log("  6. estimatedFee = feeEther * 1e18 (buildTransactionCost)")
-    console.log("")
-    console.log("BACKEND EXPECTED CALCULATION (isERC20ExecuteAuthorized):")
-    console.log("  1. estimatedGas = tx.body.gas // Full transaction gas limit")
-    console.log("  2. gasPriceVTHO = maxFeePerGas + maxPriorityFeePerGas")
-    console.log("  3. expectedCost = estimatedGas * gasPriceVTHO * (1 + SERVICE_FEE)")
-    console.log("========================================")
 
     const result = {
         token,
@@ -302,15 +261,7 @@ export const useTransactionScreen = ({
             medium: getGasPrice(mediumOpt),
             high: getGasPrice(highOpt),
         }
-        console.log("=== Gas Prices from txOptions (input to fee calculation) ===")
-        console.log("Source: transactionFeesResponse.txOptions (from useTransactionFees)")
-        console.log("Gas prices per tier (maxFeePerGas + maxPriorityFeePerGas in wei):", result)
-        console.log("Raw txOptions:", {
-            regular: "maxFeePerGas" in regularOpt ? { maxFeePerGas: regularOpt.maxFeePerGas, maxPriorityFeePerGas: regularOpt.maxPriorityFeePerGas } : regularOpt,
-            medium: "maxFeePerGas" in mediumOpt ? { maxFeePerGas: mediumOpt.maxFeePerGas, maxPriorityFeePerGas: mediumOpt.maxPriorityFeePerGas } : mediumOpt,
-            high: "maxFeePerGas" in highOpt ? { maxFeePerGas: highOpt.maxFeePerGas, maxPriorityFeePerGas: highOpt.maxPriorityFeePerGas } : highOpt,
-        })
-        console.log("============================================================")
+
         return result
     }, [isGalactica, transactionFeesResponse.txOptions])
 
@@ -532,11 +483,6 @@ export const useTransactionScreen = ({
     )
 
     const fallbackToVTHO = useCallback(() => {
-        console.log("fallbackToVTHO called:", {
-            hasEnoughBalance,
-            selectedDelegationToken,
-            willFallback: !hasEnoughBalance && selectedDelegationToken !== VTHO.symbol,
-        })
         if (!hasEnoughBalance && selectedDelegationToken !== VTHO.symbol) setSelectedDelegationToken(VTHO.symbol)
     }, [hasEnoughBalance, selectedDelegationToken])
 

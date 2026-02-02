@@ -44,7 +44,6 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
                     throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, errormessage)
                 }
 
-                console.log("Signing message")
                 try {
                     const privyProvider = await currentWallets[0].getProvider()
                     const privyAccount = currentWallets[0].address

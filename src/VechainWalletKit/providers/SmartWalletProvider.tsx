@@ -151,27 +151,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 )
             }
 
-            console.log("=== buildTransaction INPUTS ===")
-            console.log("INPUT clauses count:", clauses.length)
-            console.log("INPUT clauses:", clauses.map((c, i) => ({
-                index: i,
-                to: c.to,
-                value: String(c.value),
-                dataLength: typeof c.data === "string" ? c.data.length : "object",
-            })))
-            console.log("smartAccountConfig.isDeployed:", smartAccountConfig.isDeployed)
-            console.log("options?.maxFeePerGas:", options?.maxFeePerGas)
-            console.log("options?.maxPriorityFeePerGas:", options?.maxPriorityFeePerGas)
-            console.log(
-                "Expected gasPrice on tx (maxFeePerGas + maxPriorityFeePerGas):",
-                options?.maxFeePerGas && options?.maxPriorityFeePerGas
-                    ? (BigInt(options.maxFeePerGas) + BigInt(options.maxPriorityFeePerGas)).toString()
-                    : "undefined - WILL USE DEFAULT",
-            )
-            console.log("genericDelgationDetails?.token:", genericDelgationDetails?.token)
-            console.log("genericDelgationDetails?.fee (wei):", genericDelgationDetails?.fee?.toString)
-            console.log("NOTE: VET = simple transfer (cheap), VTHO/B3TR = ERC20 transfer (expensive)")
-            console.log("================================")
 
             try {
                 const genesisBlock = await thor.blocks.getGenesisBlock()
@@ -188,13 +167,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     ownerAddress,
                 })
 
-                console.log("OUTPUT finalClauses count:", finalClauses.length)
-                console.log("OUTPUT finalClauses:", finalClauses.map((c, i) => ({
-                    index: i,
-                    to: c.to,
-                    value: String(c.value),
-                    dataLength: typeof c.data === "string" ? c.data.length : "object",
-                })))
 
                 // Estimate gas
                 const gasResult = await thor.gas.estimateGas(finalClauses, ownerAddress, {
@@ -212,21 +184,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     maxPriorityFeePerGas: options?.maxPriorityFeePerGas,
                 })
 
-                console.log("=== Final Transaction Built (SmartWalletProvider) ===")
-                console.log("Gas estimation on final clauses (WITH transfer clause):", gasResult.totalGas)
-                console.log("parsedGasLimit (tx.body.gas):", parsedGasLimit)
-                console.log("maxFeePerGas:", options?.maxFeePerGas)
-                console.log("maxPriorityFeePerGas:", options?.maxPriorityFeePerGas)
-                console.log("Number of clauses:", finalClauses.length)
-                if (options?.maxFeePerGas && options?.maxPriorityFeePerGas) {
-                    const gasPriceTotal = BigInt(options.maxFeePerGas) + BigInt(options.maxPriorityFeePerGas)
-                    const expectedCostWei = BigInt(parsedGasLimit) * gasPriceTotal
-                    console.log("BACKEND WOULD EXPECT (approx):")
-                    console.log("  gasPriceVTHO = maxFeePerGas + maxPriorityFeePerGas =", gasPriceTotal.toString())
-                    console.log("  expectedCost = parsedGasLimit * gasPriceVTHO * (1 + serviceFee)")
-                    console.log("  expectedCost (without serviceFee) =", expectedCostWei.toString(), "wei")
-                }
-                console.log("=====================================================")
 
                 return Transaction.of(txBody)
             } catch (error) {
