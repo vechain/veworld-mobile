@@ -94,10 +94,10 @@ export const WelcomeScreenV2 = () => {
                             action={openSelfCustodyOptionsBottomSheet}
                         />
                     </BaseView>
-                    <BaseView mx={64} alignItems="center">
+                    <BaseView alignItems="center">
                         <Markdown
                             style={{
-                                paragraph: styles.markdown,
+                                body: styles.markdown,
                             }}>
                             {LL.COMMON_LBL_BY_AGREEMENT({
                                 termsOfServiceUrl: termsOfServiceUrl ?? "",

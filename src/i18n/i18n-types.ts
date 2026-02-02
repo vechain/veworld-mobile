@@ -1335,6 +1335,14 @@ type RootTranslation = {
 	 */
 	BS_INFO_IMPORTING_FROM_CLOUD_TITLE: string
 	/**
+	 * L​e​d​g​e​r​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​s​ ​k​e​e​p​ ​y​o​u​r​ ​p​r​i​v​a​t​e​ ​k​e​y​s​ ​s​e​c​u​r​e​ ​a​n​d​ ​o​f​f​l​i​n​e​.​ ​A​l​l​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​a​r​e​ ​s​i​g​n​e​d​ ​d​i​r​e​c​t​l​y​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​,​ ​s​o​ ​y​o​u​r​ ​k​e​y​s​ ​a​r​e​ ​n​e​v​e​r​ ​e​x​p​o​s​e​d​.​ ​C​o​n​n​e​c​t​ ​v​i​a​ ​B​l​u​e​t​o​o​t​h​ ​w​i​t​h​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​o​p​e​n​ ​t​o​ ​g​e​t​ ​s​t​a​r​t​e​d​.
+	 */
+	BS_INFO_IMPORTING_FROM_LEDGER_DESCRIPTION: string
+	/**
+	 * I​m​p​o​r​t​i​n​g​ ​f​r​o​m​ ​L​e​d​g​e​r
+	 */
+	BS_INFO_IMPORTING_FROM_LEDGER_TITLE: string
+	/**
 	 * A​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​o​r​ ​i​s​ ​a​ ​s​e​c​r​e​t​ ​s​e​t​ ​o​f​ ​w​o​r​d​s​ ​t​h​a​t​ ​a​c​t​ ​a​s​ ​t​h​e​ ​m​a​s​t​e​r​ ​k​e​y​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​K​e​e​p​ ​i​t​ ​s​a​f​e​,​ ​a​s​ ​a​n​y​o​n​e​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​e​d​ ​p​h​r​a​s​e​ ​c​a​n​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​a​s​s​e​t​s​.
 	 */
 	BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION: string
@@ -5436,6 +5444,10 @@ type RootTranslation = {
 	 */
 	TITLE_CLAIM_USERNAME: string
 	/**
+	 * C​l​o​u​d​ ​B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d
+	 */
+	TITLE_CLOUD_BACKUP_PASSWORD: string
+	/**
 	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
 	 */
 	TITLE_CONFIRM_MNEMONIC: string
@@ -6135,17 +6147,9 @@ type RootTranslation = {
 	 */
 	YESTERDAY: string
 	/**
-	 * C​l​o​u​d​ ​B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d
+	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​i​m​p​o​r​t​:
 	 */
-	TITLE_CLOUD_BACKUP_PASSWORD: string
-	/**
-	 * I​m​p​o​r​t​i​n​g​ ​f​r​o​m​ ​L​e​d​g​e​r
-	 */
-	BS_INFO_IMPORTING_FROM_LEDGER_TITLE: string
-	/**
-	 * L​e​d​g​e​r​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​s​ ​k​e​e​p​ ​y​o​u​r​ ​p​r​i​v​a​t​e​ ​k​e​y​s​ ​s​e​c​u​r​e​ ​a​n​d​ ​o​f​f​l​i​n​e​.​ ​A​l​l​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​a​r​e​ ​s​i​g​n​e​d​ ​d​i​r​e​c​t​l​y​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​,​ ​s​o​ ​y​o​u​r​ ​k​e​y​s​ ​a​r​e​ ​n​e​v​e​r​ ​e​x​p​o​s​e​d​.​ ​C​o​n​n​e​c​t​ ​v​i​a​ ​B​l​u​e​t​o​o​t​h​ ​w​i​t​h​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​o​p​e​n​ ​t​o​ ​g​e​t​ ​s​t​a​r​t​e​d​.
-	 */
-	BS_INFO_IMPORTING_FROM_LEDGER_DESCRIPTION: string
+	WALLET_LEDGER_SELECT_ACCOUNTS_SB: string
 }
 
 export type TranslationFunctions = {
@@ -7434,6 +7438,14 @@ Thanks for your patience!
 	 * Importing from Cloud
 	 */
 	BS_INFO_IMPORTING_FROM_CLOUD_TITLE: () => LocalizedString
+	/**
+	 * Ledger hardware wallets keep your private keys secure and offline. All transactions are signed directly on your device, so your keys are never exposed. Connect via Bluetooth with the VeChain app open to get started.
+	 */
+	BS_INFO_IMPORTING_FROM_LEDGER_DESCRIPTION: () => LocalizedString
+	/**
+	 * Importing from Ledger
+	 */
+	BS_INFO_IMPORTING_FROM_LEDGER_TITLE: () => LocalizedString
 	/**
 	 * A Recovery phrase or is a secret set of words that act as the master key to your wallet. Keep it safe, as anyone with your seed phrase can access your assets.
 	 */
@@ -11479,6 +11491,10 @@ Available for Google and Apple Pay.
 	 */
 	TITLE_CLAIM_USERNAME: () => LocalizedString
 	/**
+	 * Cloud Backup Password
+	 */
+	TITLE_CLOUD_BACKUP_PASSWORD: () => LocalizedString
+	/**
 	 * Confirm your mnemonic
 	 */
 	TITLE_CONFIRM_MNEMONIC: () => LocalizedString
@@ -12170,17 +12186,9 @@ Make sure that it is unlocked and the location services are enabled.
 	 */
 	YESTERDAY: () => LocalizedString
 	/**
-	 * Cloud Backup Password
+	 * Select accounts to import:
 	 */
-	TITLE_CLOUD_BACKUP_PASSWORD: () => LocalizedString
-	/**
-	 * Importing from Ledger
-	 */
-	BS_INFO_IMPORTING_FROM_LEDGER_TITLE: () => LocalizedString
-	/**
-	 * Ledger hardware wallets keep your private keys secure and offline. All transactions are signed directly on your device, so your keys are never exposed. Connect via Bluetooth with the VeChain app open to get started.
-	 */
-	BS_INFO_IMPORTING_FROM_LEDGER_DESCRIPTION: () => LocalizedString
+	WALLET_LEDGER_SELECT_ACCOUNTS_SB: () => LocalizedString
 }
 
 export type Formatters = {

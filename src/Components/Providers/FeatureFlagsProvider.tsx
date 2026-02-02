@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import DeviceInfo from "react-native-device-info"
 import { FeatureFlags, getFeatureFlags } from "~Api/FeatureFlags"
 import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
@@ -88,7 +88,11 @@ export const initialState: FeatureFlags = {
     },
 }
 
-export const FeatureFlagsContext = React.createContext<FeatureFlags | undefined>(initialState)
+type FeatureFlagsContextType = FeatureFlags & {
+    isLoading: boolean
+}
+
+export const FeatureFlagsContext = React.createContext<FeatureFlagsContextType | undefined>(undefined)
 
 export const featureFlagsQueryKey = ["Feature", "Flags"]
 
@@ -134,7 +138,7 @@ export const FeatureFlagsProvider = ({ children }: { children: React.ReactNode }
         [parseFeature],
     )
 
-    const { data } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: featureFlagsQueryKey,
         queryFn: getFeatureFlags,
         staleTime: 0,
@@ -142,7 +146,14 @@ export const FeatureFlagsProvider = ({ children }: { children: React.ReactNode }
         select: parseFeatureFlags,
     })
 
-    return <FeatureFlagsContext.Provider value={data ?? initialState}>{children}</FeatureFlagsContext.Provider>
+    const value = useMemo(() => {
+        return {
+            ...(data ?? initialState),
+            isLoading: isLoading,
+        }
+    }, [data, isLoading])
+
+    return <FeatureFlagsContext.Provider value={value}>{children}</FeatureFlagsContext.Provider>
 }
 
 export const useFeatureFlags = () => {
