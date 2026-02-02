@@ -1491,6 +1491,7 @@
   "WALLET_LEDGER_NO_DEVICES_DESC": "接続できるレジャーデバイスが見つかりませんでした",
   "WALLET_LEDGER_NO_DEVICES_FOUND": "デバイスが見つかりません",
   "WALLET_LEDGER_ONE_DEVICE_FOUND": "1 台のデバイスが見つかりました",
+  "WALLET_LEDGER_SELECT_ACCOUNTS_SB": "インポートするアカウントを選択してください：",
   "WALLET_LEDGER_SELECT_DEVICE_SB": "お使いのレジャーがロック解除され、Bluetoothが有効で、位置情報サービスがオンになっていることを確認してください（現在Bluetoothに対応しているレジャーデバイスのみサポートされています）",
   "WALLET_LEDGER_SELECT_DEVICE_TITLE": "レジャーをインポート",
   "WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR": "アカウントの作成に失敗しました",

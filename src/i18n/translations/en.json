@@ -1491,6 +1491,7 @@
   "WALLET_LEDGER_NO_DEVICES_DESC": "We couldn't find any Ledger devices to connect to",
   "WALLET_LEDGER_NO_DEVICES_FOUND": "No devices found",
   "WALLET_LEDGER_ONE_DEVICE_FOUND": "1 device found",
+  "WALLET_LEDGER_SELECT_ACCOUNTS_SB": "Select accounts to import:",
   "WALLET_LEDGER_SELECT_DEVICE_SB": "Connect your Ledger device through bluetooth.\nMake sure that it is unlocked and the location services are enabled.",
   "WALLET_LEDGER_SELECT_DEVICE_TITLE": "Import from Ledger",
   "WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR": "Failed to create account",
@@ -1500,6 +1501,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "WALLET_LEDGER_SELECT_ACCOUNTS_SB": "Select accounts to import:"
+  "YESTERDAY": "Yesterday"
 }

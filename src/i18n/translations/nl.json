@@ -1491,6 +1491,7 @@
   "WALLET_LEDGER_NO_DEVICES_DESC": "We konden geen Ledger-apparaten vinden om mee te verbinden",
   "WALLET_LEDGER_NO_DEVICES_FOUND": "Geen apparaten gevonden",
   "WALLET_LEDGER_ONE_DEVICE_FOUND": "1 apparaat gevonden",
+  "WALLET_LEDGER_SELECT_ACCOUNTS_SB": "Selecteer accounts om te importeren:",
   "WALLET_LEDGER_SELECT_DEVICE_SB": "Zorg ervoor dat je Ledger ontgrendeld is, bluetooth is ingeschakeld en locatievoorzieningen zijn aan (alleen ledgers met bluetooth worden momenteel ondersteund)",
   "WALLET_LEDGER_SELECT_DEVICE_TITLE": "Ledger importeren",
   "WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR": "Account aanmaken mislukt",

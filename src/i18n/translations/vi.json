@@ -1491,6 +1491,7 @@
   "WALLET_LEDGER_NO_DEVICES_DESC": "Chúng tôi không thể tìm thấy bất kỳ thiết bị Ledger nào để kết nối",
   "WALLET_LEDGER_NO_DEVICES_FOUND": "Không tìm thấy thiết bị nào",
   "WALLET_LEDGER_ONE_DEVICE_FOUND": "1 thiết bị được tìm thấy",
+  "WALLET_LEDGER_SELECT_ACCOUNTS_SB": "Chọn tài khoản để nhập:",
   "WALLET_LEDGER_SELECT_DEVICE_SB": "Vui lòng đảm bảo rằng Ledger của bạn đã được mở khóa, bluetooth được bật và dịch vụ vị trí được kích hoạt (chỉ hỗ trợ các Ledger có bluetooth tại thời điểm này)",
   "WALLET_LEDGER_SELECT_DEVICE_TITLE": "Nhập ledger",
   "WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR": "Tạo tài khoản thất bại",

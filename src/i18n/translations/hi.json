@@ -1491,6 +1491,7 @@
   "WALLET_LEDGER_NO_DEVICES_DESC": "हम कनेक्ट करने के लिए कोई लेजर डिवाइस नहीं खोज सके",
   "WALLET_LEDGER_NO_DEVICES_FOUND": "कोई डिवाइस नहीं मिला",
   "WALLET_LEDGER_ONE_DEVICE_FOUND": "1 डिवाइस मिला",
+  "WALLET_LEDGER_SELECT_ACCOUNTS_SB": "आयात करने के लिए खाते चुनें:",
   "WALLET_LEDGER_SELECT_DEVICE_SB": "कृपया सुनिश्चित करें कि आपका लेजर अनलॉक है, ब्लूटूथ सक्षम है और स्थान सेवाएं चालू हैं (इस समय केवल ब्लूटूथ वाले लेजर का समर्थन किया जाता है)",
   "WALLET_LEDGER_SELECT_DEVICE_TITLE": "लेजर आयात करें",
   "WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR": "खाता बनाने में विफल",

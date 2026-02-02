@@ -1491,6 +1491,7 @@
   "WALLET_LEDGER_NO_DEVICES_DESC": "Мы не смогли найти устройства Ledger для подключения",
   "WALLET_LEDGER_NO_DEVICES_FOUND": "Устройства не найдены",
   "WALLET_LEDGER_ONE_DEVICE_FOUND": "Найдено 1 устройство",
+  "WALLET_LEDGER_SELECT_ACCOUNTS_SB": "Выберите аккаунты для импорта:",
   "WALLET_LEDGER_SELECT_DEVICE_SB": "Пожалуйста, убедитесь, что ваш Ledger разблокирован, bluetooth включен, а службы геолокации активированы (в данный момент поддерживаются только устройства с bluetooth)",
   "WALLET_LEDGER_SELECT_DEVICE_TITLE": "Импортировать Ledger",
   "WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR": "Не удалось создать учетную запись",

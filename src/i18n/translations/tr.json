@@ -1491,6 +1491,7 @@
   "WALLET_LEDGER_NO_DEVICES_DESC": "Bağlanacak herhangi bir Ledger cihazı bulamadık",
   "WALLET_LEDGER_NO_DEVICES_FOUND": "Cihaz bulunamadı",
   "WALLET_LEDGER_ONE_DEVICE_FOUND": "1 cihaz bulundu",
+  "WALLET_LEDGER_SELECT_ACCOUNTS_SB": "İçe aktarılacak hesapları seçin:",
   "WALLET_LEDGER_SELECT_DEVICE_SB": "Lütfen Ledger cihazınızın kilidinin açık, bluetooth'un etkin ve konum servislerinin açık olduğundan emin olun (şu anda sadece bluetooth özelliği olan ledger cihazları desteklenmektedir)",
   "WALLET_LEDGER_SELECT_DEVICE_TITLE": "Ledger ithal et",
   "WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR": "Hesap oluşturma başarısız oldu",

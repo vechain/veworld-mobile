@@ -1491,6 +1491,7 @@
   "WALLET_LEDGER_NO_DEVICES_DESC": "Nie mogliśmy znaleźć żadnych urządzeń Ledger do połączenia",
   "WALLET_LEDGER_NO_DEVICES_FOUND": "Nie znaleziono urządzeń",
   "WALLET_LEDGER_ONE_DEVICE_FOUND": "Znaleziono 1 urządzenie",
+  "WALLET_LEDGER_SELECT_ACCOUNTS_SB": "Wybierz konta do zaimportowania:",
   "WALLET_LEDGER_SELECT_DEVICE_SB": "Upewnij się, że twój Ledger jest odblokowany, bluetooth włączony i usługi lokalizacyjne są aktywne (obecnie obsługiwane są tylko ledgery z bluetooth)",
   "WALLET_LEDGER_SELECT_DEVICE_TITLE": "Importuj ledger",
   "WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR": "Nie udało się utworzyć konta",

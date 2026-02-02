@@ -1491,6 +1491,7 @@
   "WALLET_LEDGER_NO_DEVICES_DESC": "Vi kunde inte hitta några ledger-enheter att ansluta till",
   "WALLET_LEDGER_NO_DEVICES_FOUND": "Inga enheter hittades",
   "WALLET_LEDGER_ONE_DEVICE_FOUND": "1 enhet hittades",
+  "WALLET_LEDGER_SELECT_ACCOUNTS_SB": "Välj konton att importera:",
   "WALLET_LEDGER_SELECT_DEVICE_SB": "Se till att din Ledger är upplåst, att Bluetooth är aktiverat och att platstjänster är på (endast ledgers med Bluetooth stöds för närvarande)",
   "WALLET_LEDGER_SELECT_DEVICE_TITLE": "Importera ledger",
   "WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR": "Misslyckades med att skapa konto",

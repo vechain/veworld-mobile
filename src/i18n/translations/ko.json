@@ -1491,6 +1491,7 @@
   "WALLET_LEDGER_NO_DEVICES_DESC": "연결할 Ledger 장치를 찾을 수 없습니다.",
   "WALLET_LEDGER_NO_DEVICES_FOUND": "장치가 발견되지 않음",
   "WALLET_LEDGER_ONE_DEVICE_FOUND": "1개 장치 발견",
+  "WALLET_LEDGER_SELECT_ACCOUNTS_SB": "가져올 계정을 선택하세요:",
   "WALLET_LEDGER_SELECT_DEVICE_SB": "Ledger가 잠금 해제되고 Bluetooth가 활성화되어 있으며 위치 서비스가 켜져 있는지 확인하십시오 (현재 Bluetooth를 지원하는 Ledger만 지원됩니다)",
   "WALLET_LEDGER_SELECT_DEVICE_TITLE": "Ledger 가져오기",
   "WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_ERROR": "계정 생성 실패",
