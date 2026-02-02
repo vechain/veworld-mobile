@@ -8,8 +8,6 @@ import { getSmartAccount } from "../utils/smartAccount"
 import { WalletError, WalletErrorType } from "../utils/errors"
 import { SmartAccountTransactionConfig, SmartWalletContext } from "../types"
 import { buildSmartAccountTransaction } from "../utils/transactionBuilder"
-import BigNutils from "../../Utils/BigNumberUtils"
-import BigNumber from "bignumber.js"
 export interface SmartWalletProps {
     children: React.ReactNode
     config: VechainWalletSDKConfig
@@ -153,13 +151,35 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 )
             }
 
+            console.log("=== buildTransaction INPUTS ===")
+            console.log("INPUT clauses count:", clauses.length)
+            console.log("INPUT clauses:", clauses.map((c, i) => ({
+                index: i,
+                to: c.to,
+                value: String(c.value),
+                dataLength: typeof c.data === "string" ? c.data.length : "object",
+            })))
+            console.log("smartAccountConfig.isDeployed:", smartAccountConfig.isDeployed)
+            console.log("options?.maxFeePerGas:", options?.maxFeePerGas)
+            console.log("options?.maxPriorityFeePerGas:", options?.maxPriorityFeePerGas)
+            console.log(
+                "Expected gasPrice on tx (maxFeePerGas + maxPriorityFeePerGas):",
+                options?.maxFeePerGas && options?.maxPriorityFeePerGas
+                    ? (BigInt(options.maxFeePerGas) + BigInt(options.maxPriorityFeePerGas)).toString()
+                    : "undefined - WILL USE DEFAULT",
+            )
+            console.log("genericDelgationDetails?.token:", genericDelgationDetails?.token)
+            console.log("genericDelgationDetails?.fee (wei):", genericDelgationDetails?.fee?.toString)
+            console.log("NOTE: VET = simple transfer (cheap), VTHO/B3TR = ERC20 transfer (expensive)")
+            console.log("================================")
+
             try {
                 const genesisBlock = await thor.blocks.getGenesisBlock()
                 if (!genesisBlock) {
                     throw new WalletError(WalletErrorType.NETWORK_ERROR, "Genesis block not found")
                 }
 
-                const preClauses = await buildSmartAccountTransaction({
+                const finalClauses = await buildSmartAccountTransaction({
                     txClauses: clauses,
                     smartAccountConfig,
                     chainId: genesisBlock.id,
@@ -168,53 +188,19 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     ownerAddress,
                 })
 
+                console.log("OUTPUT finalClauses count:", finalClauses.length)
+                console.log("OUTPUT finalClauses:", finalClauses.map((c, i) => ({
+                    index: i,
+                    to: c.to,
+                    value: String(c.value),
+                    dataLength: typeof c.data === "string" ? c.data.length : "object",
+                })))
+
                 // Estimate gas
-                const gasResult = await thor.gas.estimateGas(preClauses, ownerAddress, {
+                const gasResult = await thor.gas.estimateGas(finalClauses, ownerAddress, {
                     gasPadding: 1,
                 })
 
-                // Calculate VTHO gas fee from the estimated gas
-                const baseGasPrice = BigInt("10000000000000") // 10^13 wei
-                const gasUsed = BigInt(gasResult.totalGas)
-                // For EIP-1559, use maxFeePerGas; for legacy, use base gas price
-                const effectiveGasPrice = options?.maxFeePerGas
-                    ? BigInt(options.maxFeePerGas)
-                    : baseGasPrice
-                const vthoFeeWei = effectiveGasPrice * gasUsed
-                const vthoFee = BigNutils(vthoFeeWei.toString())
-
-                // Convert VTHO fee to the selected token using rates
-                let feeForToken = vthoFee
-                if (genericDelgationDetails?.rates) {
-                    const rates = genericDelgationDetails.rates
-                    let rate = rates.rate.vtho
-                    if (genericDelgationDetails.token === "VET") {
-                        rate = rates.rate.vet
-                    } else if (genericDelgationDetails.token === "B3TR") {
-                        rate = rates.rate.b3tr
-                    }
-                    // Apply rate, service fee, and gas buffer: fee = vthoFee * rate * (1 + serviceFee) * (1 + gasBuffer)
-                    const gasBuffer = 0.05 // 5% buffer for gas estimation variance
-                    const feeWithServiceFee = new BigNumber(vthoFee.toString)
-                        .times(rate)
-                        .times(1 + rates.serviceFee)
-                        .times(1 + gasBuffer)
-                    feeForToken = BigNutils(feeWithServiceFee.toFixed(0))
-                }
-
-                const newDetails = genericDelgationDetails
-                    ? { ...genericDelgationDetails, fee: feeForToken }
-                    : undefined
-
-                const finalClauses = await buildSmartAccountTransaction({
-                    txClauses: clauses,
-                    smartAccountConfig,
-                    chainId: genesisBlock.id,
-                    signTypedDataFn: signTypedData,
-                    genericDelgationDetails: newDetails,
-                    ownerAddress,
-                })
-                console.log("fee comparason gen del", genericDelgationDetails?.fee, "my fee", feeForToken)
 
                 const parsedGasLimit = Math.max(gasResult.totalGas, options?.gas ?? 0)
 
@@ -225,6 +211,22 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     maxFeePerGas: options?.maxFeePerGas,
                     maxPriorityFeePerGas: options?.maxPriorityFeePerGas,
                 })
+
+                console.log("=== Final Transaction Built (SmartWalletProvider) ===")
+                console.log("Gas estimation on final clauses (WITH transfer clause):", gasResult.totalGas)
+                console.log("parsedGasLimit (tx.body.gas):", parsedGasLimit)
+                console.log("maxFeePerGas:", options?.maxFeePerGas)
+                console.log("maxPriorityFeePerGas:", options?.maxPriorityFeePerGas)
+                console.log("Number of clauses:", finalClauses.length)
+                if (options?.maxFeePerGas && options?.maxPriorityFeePerGas) {
+                    const gasPriceTotal = BigInt(options.maxFeePerGas) + BigInt(options.maxPriorityFeePerGas)
+                    const expectedCostWei = BigInt(parsedGasLimit) * gasPriceTotal
+                    console.log("BACKEND WOULD EXPECT (approx):")
+                    console.log("  gasPriceVTHO = maxFeePerGas + maxPriorityFeePerGas =", gasPriceTotal.toString())
+                    console.log("  expectedCost = parsedGasLimit * gasPriceVTHO * (1 + serviceFee)")
+                    console.log("  expectedCost (without serviceFee) =", expectedCostWei.toString(), "wei")
+                }
+                console.log("=====================================================")
 
                 return Transaction.of(txBody)
             } catch (error) {

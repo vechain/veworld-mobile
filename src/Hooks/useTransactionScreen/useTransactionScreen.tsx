@@ -87,8 +87,7 @@ const getGenericDelegationForSmartWallet = (
 
     // For smart accounts, use genericDelegatorFees for ALL tokens (including VTHO)
     // because it accounts for smart account gas overhead
-    // Use estimatedFee (not maxFee) because SmartWalletProvider recalculates the fee
-    // and using maxFee (with 25% buffer) causes validation to fail due to variance > 30%
+    // Use estimatedFee (with 5% buffer built into the calculation)
     const feeMap: Record<string, BigNumberUtils | undefined> = {
         [VET.symbol]: genericDelegatorFees.allOptions?.[VET.symbol]?.[selectedFeeOption]?.estimatedFee,
         [B3TR.symbol]: genericDelegatorFees.allOptions?.[B3TR.symbol]?.[selectedFeeOption]?.estimatedFee,
@@ -99,6 +98,48 @@ const getGenericDelegationForSmartWallet = (
     if (feeMap[token] === undefined) {
         return undefined
     }
+
+    // Detailed logging for transfer clause fee calculation
+    const selectedTokenAllOptions = genericDelegatorFees.allOptions?.[token]
+    console.log("=== Transfer Clause Fee Calculation ===")
+    console.log("Selected token:", token)
+    console.log("Selected fee option (speed tier):", selectedFeeOption)
+    console.log("All options for selected token:", {
+        REGULAR: selectedTokenAllOptions?.[GasPriceCoefficient.REGULAR]
+            ? {
+                  estimatedFee: selectedTokenAllOptions[GasPriceCoefficient.REGULAR].estimatedFee?.toString,
+                  maxFee: selectedTokenAllOptions[GasPriceCoefficient.REGULAR].maxFee?.toString,
+              }
+            : undefined,
+        MEDIUM: selectedTokenAllOptions?.[GasPriceCoefficient.MEDIUM]
+            ? {
+                  estimatedFee: selectedTokenAllOptions[GasPriceCoefficient.MEDIUM].estimatedFee?.toString,
+                  maxFee: selectedTokenAllOptions[GasPriceCoefficient.MEDIUM].maxFee?.toString,
+              }
+            : undefined,
+        HIGH: selectedTokenAllOptions?.[GasPriceCoefficient.HIGH]
+            ? {
+                  estimatedFee: selectedTokenAllOptions[GasPriceCoefficient.HIGH].estimatedFee?.toString,
+                  maxFee: selectedTokenAllOptions[GasPriceCoefficient.HIGH].maxFee?.toString,
+              }
+            : undefined,
+    })
+    console.log("Fee being used for transfer clause (wei):", feeMap[token]?.toString)
+    console.log("Rates:", rates.rate, "Service fee:", rates.serviceFee)
+    console.log("")
+    console.log("FRONTEND CALCULATION PATH (ITERATIVE):")
+    console.log("  1. Build clauses WITH mock transfer clause")
+    console.log("  2. gasUsed = thor.gas.estimateGas(fullClauses) // WITH transfer clause")
+    console.log("  3. gasPriceForTier = maxFeePerGas + maxPriorityFeePerGas")
+    console.log("  4. feeWei = gasPrice * gasUsed * tokenRate * (1 + serviceFee)")
+    console.log("  5. feeEther = feeWei / 1e18 (stored in transactionCost)")
+    console.log("  6. estimatedFee = feeEther * 1e18 (buildTransactionCost)")
+    console.log("")
+    console.log("BACKEND EXPECTED CALCULATION (isERC20ExecuteAuthorized):")
+    console.log("  1. estimatedGas = tx.body.gas // Full transaction gas limit")
+    console.log("  2. gasPriceVTHO = maxFeePerGas + maxPriorityFeePerGas")
+    console.log("  3. expectedCost = estimatedGas * gasPriceVTHO * (1 + SERVICE_FEE)")
+    console.log("========================================")
 
     const result = {
         token,
@@ -237,12 +278,54 @@ export const useTransactionScreen = ({
         isGalactica,
     })
 
+    // Extract gas prices from txOptions for Galactica (EIP-1559) transactions
+    // Backend validates using maxFeePerGas + maxPriorityFeePerGas, so we need to include both
+    const gasPricesForDelegation = useMemo(() => {
+        if (!isGalactica || !transactionFeesResponse.txOptions) return undefined
+        const txOpts = transactionFeesResponse.txOptions
+        const regularOpt = txOpts[GasPriceCoefficient.REGULAR]
+        const mediumOpt = txOpts[GasPriceCoefficient.MEDIUM]
+        const highOpt = txOpts[GasPriceCoefficient.HIGH]
+        // Check if txOptions has maxFeePerGas (Galactica) vs gasPriceCoef (legacy)
+        if (!("maxFeePerGas" in regularOpt)) return undefined
+
+        // Backend uses: maxFeePerGas + maxPriorityFeePerGas for gas price validation
+        const getGasPrice = (opt: { maxFeePerGas: string; maxPriorityFeePerGas: string } | { gasPriceCoef: number }) => {
+            if (!("maxFeePerGas" in opt)) return undefined
+            const maxFee = BigInt(opt.maxFeePerGas)
+            const priorityFee = BigInt(opt.maxPriorityFeePerGas || "0")
+            return (maxFee + priorityFee).toString()
+        }
+
+        const result = {
+            regular: getGasPrice(regularOpt),
+            medium: getGasPrice(mediumOpt),
+            high: getGasPrice(highOpt),
+        }
+        console.log("=== Gas Prices from txOptions (input to fee calculation) ===")
+        console.log("Source: transactionFeesResponse.txOptions (from useTransactionFees)")
+        console.log("Gas prices per tier (maxFeePerGas + maxPriorityFeePerGas in wei):", result)
+        console.log("Raw txOptions:", {
+            regular: "maxFeePerGas" in regularOpt ? { maxFeePerGas: regularOpt.maxFeePerGas, maxPriorityFeePerGas: regularOpt.maxPriorityFeePerGas } : regularOpt,
+            medium: "maxFeePerGas" in mediumOpt ? { maxFeePerGas: mediumOpt.maxFeePerGas, maxPriorityFeePerGas: mediumOpt.maxPriorityFeePerGas } : mediumOpt,
+            high: "maxFeePerGas" in highOpt ? { maxFeePerGas: highOpt.maxFeePerGas, maxPriorityFeePerGas: highOpt.maxPriorityFeePerGas } : highOpt,
+        })
+        console.log("============================================================")
+        return result
+    }, [isGalactica, transactionFeesResponse.txOptions])
+
+    // For smart wallets, use original clauses since estimateSmartAccountFees will build them itself
+    // Using transactionClauses (pre-built) would cause double-wrapping and incorrect gas estimation
+    const isSmartWallet = selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET
+    const clausesForDelegationFees = isSmartWallet ? clauses : transactionClauses
+
     const genericDelegatorFees = useGenericDelegationFees({
-        clauses: isLoadingClauses ? [] : transactionClauses,
+        clauses: isLoadingClauses ? [] : clausesForDelegationFees,
         signer: selectedAccount.address,
         token: selectedDelegationToken,
         isGalactica,
         deviceType: selectedAccount.device.type,
+        gasPrices: gasPricesForDelegation,
     })
     const genericDelegatorRates = useGenericDelegatorRates()
 
