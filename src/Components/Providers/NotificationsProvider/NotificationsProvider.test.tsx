@@ -66,8 +66,8 @@ const createWrapper =
                     <FeatureFlagsContext.Provider
                         value={{
                             ...ffInitialState,
-                            isLoading: false,
                             pushNotificationFeature: { enabled: pushNotificationEnabled },
+                            isLoading: false,
                         }}>
                         <NavigationContainer>
                             <NotificationsProvider>{children}</NotificationsProvider>

@@ -13,6 +13,8 @@ import { Locales, useI18nContext } from "~i18n"
 import { setLanguage, useAppDispatch } from "~Storage/Redux"
 import { useBottomSheetModal } from "~Hooks/useBottomSheet"
 import { SelfCustodyOptionsBottomSheet } from "../Components"
+import LottieView from "lottie-react-native"
+import { OnboardingB3MO, OnboardingStardust } from "~Assets/Lottie"
 
 export const WelcomeScreenV2 = () => {
     const termsOfServiceUrl = process.env.REACT_APP_TERMS_OF_SERVICE_URL
@@ -54,16 +56,29 @@ export const WelcomeScreenV2 = () => {
     }, [getAllLanguageCodes, handleSelectLanguage])
 
     return (
-        <BaseSafeArea>
+        <BaseSafeArea style={styles.root}>
+            <LottieView source={OnboardingStardust} autoPlay loop speed={1} style={styles.stardustBackground} />
             <BaseView flex={1} gap={16} p={24} justifyContent="space-between">
                 {/* Header */}
-                <BaseView flexDirection="row" justifyContent="center" alignItems="center">
+                <BaseView flexDirection="row" justifyContent="center" alignItems="center" pb={30}>
                     <VeWorldLogoV2 color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE} />
                 </BaseView>
                 {/* Body */}
-                <BaseView flex={1} style={styles.bodyContainer} bg="transparent" />
+                <BaseView flex={1} style={styles.bodyContainer}>
+                    <LottieView source={OnboardingB3MO} autoPlay loop speed={0.4} style={styles.onboardingB3MO} />
+                    <BaseView gap={8} alignItems="center">
+                        <BaseText
+                            typographyFont="subTitleSemiBold"
+                            color={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE}>
+                            {"Crypto, simplified."}
+                        </BaseText>
+                        <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
+                            {"The easiest way to explore VeChain."}
+                        </BaseText>
+                    </BaseView>
+                </BaseView>
                 {/* Footer */}
-                <BaseView gap={16} justifyContent="flex-end">
+                <BaseView gap={16} justifyContent="flex-end" flex={1}>
                     <BaseView gap={16}>
                         {PlatformUtils.isIOS() && (
                             <BaseButton
@@ -114,9 +129,26 @@ export const WelcomeScreenV2 = () => {
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        bodyContainer: {
-            maxHeight: 380,
+        root: {
+            position: "relative",
+        },
+        stardustBackground: {
+            width: "100%",
             height: "100%",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            opacity: 0.5,
+        },
+        onboardingB3MO: {
+            width: 350,
+            height: 350,
+        },
+        bodyContainer: {
+            alignItems: "center",
+            justifyContent: "center",
         },
         socialButton: {
             alignItems: "center",
