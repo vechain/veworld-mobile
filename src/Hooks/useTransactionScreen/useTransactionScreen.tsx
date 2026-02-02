@@ -14,7 +14,7 @@ import {
     useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
-import { useGenericDelegationFees } from "~Hooks/useGenericDelegationFees"
+import { useGenericDelegationFees, DelegationToken } from "~Hooks/useGenericDelegationFees"
 import { useGenericDelegationTokens } from "~Hooks/useGenericDelegationTokens"
 import { useDelegatorDepositAddress } from "~Hooks/useDelegatorDepositAddress"
 import { useIsEnoughGas } from "~Hooks/useIsEnoughGas"
@@ -273,7 +273,7 @@ export const useTransactionScreen = ({
     const genericDelegatorFees = useGenericDelegationFees({
         clauses: isLoadingClauses ? [] : clausesForDelegationFees,
         signer: selectedAccount.address,
-        token: selectedDelegationToken,
+        token: selectedDelegationToken as DelegationToken,
         isGalactica,
         deviceType: selectedAccount.device.type,
         gasPrices: gasPricesForDelegation,

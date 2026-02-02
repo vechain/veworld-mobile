@@ -14,6 +14,14 @@ export interface WalletContext extends SigningOperations {
         options?: TransactionOptions,
         genericDelgation?: GenericDelegationDetails,
     ) => Promise<Transaction>
+    /**
+     * Estimate gas for a smart account transaction.
+     * Builds the full smart account clauses (including any delegation transfer) and returns total gas.
+     * @param clauses - The transaction clauses to estimate gas for
+     * @param genericDelegation - Optional delegation details (uses mock fee internally for estimation)
+     * @returns The total gas estimate
+     */
+    estimateGas: (clauses: TransactionClause[], genericDelegation?: GenericDelegationDetails) => Promise<number>
 }
 export interface AuthenticationOperations {
     isAuthenticated: boolean

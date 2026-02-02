@@ -88,6 +88,17 @@ export const SmartWalletFallbackProvider: React.FC<SmartWalletFallbackProviderPr
                     "Smart wallet functionality is currently disabled. Please enable the smartWalletFeature flag.",
                 )
             },
+
+            // Gas estimation - throw descriptive error
+            estimateGas: async (
+                _clauses: TransactionClause[],
+                _genericDelegation?: GenericDelegationDetails,
+            ): Promise<number> => {
+                throw new WalletError(
+                    WalletErrorType.WALLET_NOT_FOUND,
+                    "Smart wallet functionality is currently disabled. Please enable the smartWalletFeature flag.",
+                )
+            },
         }),
         [],
     )

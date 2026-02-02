@@ -1,7 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { TransactionClause } from "@vechain/sdk-core"
-import { ThorClient } from "@vechain/sdk-network"
-import BigNumber from "bignumber.js"
 import { ethers } from "ethers"
 import { useMemo } from "react"
 import { B3TR, GasPriceCoefficient, VET, VTHO } from "~Constants"
@@ -16,138 +14,36 @@ import { BigNutils } from "~Utils"
 import { DEVICE_TYPE } from "../../Model"
 import { useGenericDelegatorRates } from "../useGenericDelegatorRates"
 import { useSmartWallet } from "../useSmartWallet"
-import { useThorClient } from "../useThorClient"
-import {
-    SmartAccountTransactionConfig,
-    TransactionSigningFunction,
-} from "../../VechainWalletKit/types/smartAccountTransaction"
-import { buildSmartAccountTransaction } from "../../VechainWalletKit/utils/transactionBuilder"
+import { estimateSmartAccountFees, GasPrices } from "./estimateSmartAccountFees"
 
-const BASE_GAS_PRICE = BigInt("10000000000000") // 10^13 wei
+const MAX_FEE_MULTIPLIER_NUMERATOR = 5
+const MAX_FEE_MULTIPLIER_DENOMINATOR = 4 // 5/4 = 1.25x
 
-type GasPrices = {
-    regular?: string
-    medium?: string
-    high?: string
-}
+export type DelegationToken = "VET" | "VTHO" | "B3TR"
 
-type EstimateSmartAccountFeesArgs = {
-    clauses: TransactionClause[]
-    thor: ThorClient
-    ownerAddress: string
-    smartAccountConfig: SmartAccountTransactionConfig
-    signTypedDataFn: TransactionSigningFunction
-    rate: { vtho: number; vet: number; b3tr: number }
-    serviceFee: number
-    gasPrices?: GasPrices
-}
-
-/**
- * Estimate fees for smart account transactions locally without calling the delegator service.
- * Uses iterative gas estimation like the backend:
- * 1. Build clauses with a mock transfer fee to get the structure
- * 2. Estimate gas on the full clauses (including transfer)
- * 3. Calculate the actual fee based on that gas estimate
- */
-async function estimateSmartAccountFees({
-    clauses,
-    thor,
-    ownerAddress,
-    smartAccountConfig,
-    signTypedDataFn,
-    rate,
-    serviceFee,
-    gasPrices,
-}: EstimateSmartAccountFeesArgs): Promise<EstimateGenericDelegatorFeesResponse> {
-    // Get genesis block for chain ID
-    const genesisBlock = await thor.blocks.getGenesisBlock()
-    if (!genesisBlock) {
-        throw new Error("Genesis block not found")
-    }
-
-    // Get gas prices for each tier, falling back to BASE_GAS_PRICE
-    const gasPriceRegular = gasPrices?.regular ? BigInt(gasPrices.regular) : BASE_GAS_PRICE
-    const gasPriceMedium = gasPrices?.medium ? BigInt(gasPrices.medium) : BASE_GAS_PRICE
-    const gasPriceHigh = gasPrices?.high ? BigInt(gasPrices.high) : BASE_GAS_PRICE
-
-    // Calculate fee for a given gas amount and price (returns value in ether format)
-    const calculateTokenFeeWei = (gasUsed: bigint, gasPrice: bigint, tokenRate: number): bigint => {
-        const vthoFeeWei = gasPrice * gasUsed
-        // fee = vthoFeeWei * rate * (1 + serviceFee)
-        const feeWei = new BigNumber(vthoFeeWei.toString()).times(tokenRate).times(1 + serviceFee)
-        return BigInt(feeWei.toFixed(0))
-    }
-
-    // Use VTHO for gas estimation since rate is 1 (simplest calculation)
-    // We'll use the HIGH gas price to ensure the mock fee is large enough
-    const MOCK_FEE_WEI = BigInt("1000000000000000000") // 1 token as mock fee
-
-    // Build smart account transaction clauses WITH a mock transfer fee
-    // This gives us the full clause structure including the transfer
-    const fullClauses = await buildSmartAccountTransaction({
-        txClauses: clauses,
-        smartAccountConfig,
-        chainId: genesisBlock.id,
-        signTypedDataFn,
-        ownerAddress,
-        genericDelgationDetails: {
-            token: "VTHO", // Use VTHO for estimation (rate=1)
-            tokenAddress: VTHO.address,
-            depositAccount: ownerAddress, // Doesn't matter for gas estimation
-            fee: BigNutils(MOCK_FEE_WEI.toString()),
-            rates: { rate, serviceFee },
-        },
-    })
-
-    // Estimate gas on the FULL clauses (including transfer clause)
-    const gasResult = await thor.gas.estimateGas(fullClauses, ownerAddress, {
-        gasPadding: 1,
-    })
-    const gasUsed = BigInt(gasResult.totalGas)
-
-    // Calculate fees for each tier and token using the FULL gas estimate
-    const calculateFeesForGasPrice = (gasPrice: bigint, tier: string) => {
-        const vthoFeeWei = gasPrice * gasUsed
-        const vetFeeWei = calculateTokenFeeWei(gasUsed, gasPrice, rate.vet)
-        const b3trFeeWei = calculateTokenFeeWei(gasUsed, gasPrice, rate.b3tr)
-        const vthoFee = calculateTokenFeeWei(gasUsed, gasPrice, rate.vtho)
-
-        return {
-            vet: new BigNumber(vetFeeWei.toString()).dividedBy(1e18).toNumber(),
-            b3tr: new BigNumber(b3trFeeWei.toString()).dividedBy(1e18).toNumber(),
-            vtho: new BigNumber(vthoFee.toString()).dividedBy(1e18).toNumber(),
-        }
-    }
-
-    const regularFees = calculateFeesForGasPrice(gasPriceRegular, "REGULAR")
-    const mediumFees = calculateFeesForGasPrice(gasPriceMedium, "MEDIUM")
-    const highFees = calculateFeesForGasPrice(gasPriceHigh, "HIGH")
-    const legacyFees = calculateFeesForGasPrice(BASE_GAS_PRICE, "LEGACY")
-
-    // Return different fees for each speed tier
-    return {
-        transactionCost: {
-            regular: regularFees,
-            medium: mediumFees,
-            high: highFees,
-            legacy: legacyFees,
-        },
-    }
-}
-
-type Args = {
+type UseGenericDelegationFeesArgs = {
     clauses: TransactionClause[]
     signer: string
     /**
-     * Selected delegation token. Technically it should only be: VET, VTHO, B3TR
+     * Selected delegation token
      */
-    token: string
+    token: DelegationToken
     isGalactica: boolean
     deviceType?: DEVICE_TYPE
     /**
      * Gas prices for each speed tier (in wei). Used for smart account fee calculation.
      */
     gasPrices?: GasPrices
+}
+
+/**
+ * Calculate estimated and max fee from a base value
+ */
+const calculateFeeWithMax = (baseValue: number) => {
+    const weiMultiplier = ethers.utils.parseEther("1").toString()
+    const estimatedFee = BigNutils(baseValue).multiply(weiMultiplier)
+    const maxFee = estimatedFee.multiply(MAX_FEE_MULTIPLIER_NUMERATOR).idiv(MAX_FEE_MULTIPLIER_DENOMINATOR)
+    return { estimatedFee, maxFee, priorityFee: BigNutils("0") }
 }
 
 /**
@@ -160,62 +56,40 @@ type Args = {
 const buildTransactionCost = (
     data: EstimateGenericDelegatorFeesResponse | undefined,
     keys: (keyof EstimateGenericDelegatorFeesResponseObject)[],
-    token: string,
+    token: DelegationToken,
 ) => {
     if (!data || keys.length !== 3 || typeof data.transactionCost === "number") return undefined
     const lowerCaseToken = token.toLowerCase()
     const transactionCost = data.transactionCost
 
-    //Values returned from the endpoint are in WEI, they're in Ether. So, in order to be compliant with our interface, we should multiply the numbers by 1 ETH (10^18 WEI)
-    const regularEstimatedFee = BigNutils(transactionCost[keys[0]][lowerCaseToken]).multiply(
-        ethers.utils.parseEther("1").toString(),
-    )
-    const regularMaxFee = BigNutils(transactionCost[keys[0]][lowerCaseToken])
-        .multiply(ethers.utils.parseEther("1").toString())
-        .multiply(5)
-        .idiv(4)
-    const mediumEstimatedFee = BigNutils(transactionCost[keys[1]][lowerCaseToken]).multiply(
-        ethers.utils.parseEther("1").toString(),
-    )
-    const mediumMaxFee = BigNutils(transactionCost[keys[1]][lowerCaseToken])
-        .multiply(ethers.utils.parseEther("1").toString())
-        .multiply(5)
-        .idiv(4)
-    const highEstimatedFee = BigNutils(transactionCost[keys[2]][lowerCaseToken]).multiply(
-        ethers.utils.parseEther("1").toString(),
-    )
-    const highMaxFee = BigNutils(transactionCost[keys[2]][lowerCaseToken])
-        .multiply(ethers.utils.parseEther("1").toString())
-        .multiply(5)
-        .idiv(4)
+    const tiers = [GasPriceCoefficient.REGULAR, GasPriceCoefficient.MEDIUM, GasPriceCoefficient.HIGH] as const
 
-    return {
-        [GasPriceCoefficient.REGULAR]: {
-            estimatedFee: regularEstimatedFee,
-            maxFee: regularMaxFee,
-            priorityFee: BigNutils("0"),
-        },
-        [GasPriceCoefficient.MEDIUM]: {
-            estimatedFee: mediumEstimatedFee,
-            maxFee: mediumMaxFee,
-            priorityFee: BigNutils("0"),
-        },
-        [GasPriceCoefficient.HIGH]: {
-            estimatedFee: highEstimatedFee,
-            maxFee: highMaxFee,
-            priorityFee: BigNutils("0"),
-        },
-    }
+    return Object.fromEntries(
+        tiers.map((tier, i) => [tier, calculateFeeWithMax(transactionCost[keys[i]][lowerCaseToken])]),
+    ) as Record<
+        GasPriceCoefficient,
+        {
+            estimatedFee: ReturnType<typeof BigNutils>
+            maxFee: ReturnType<typeof BigNutils>
+            priorityFee: ReturnType<typeof BigNutils>
+        }
+    >
 }
 
-const allowedTokens = [VET.symbol, B3TR.symbol, VTHO.symbol]
+const ALLOWED_TOKENS: DelegationToken[] = [VET.symbol, B3TR.symbol, VTHO.symbol] as DelegationToken[]
 
-export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica, deviceType, gasPrices }: Args) => {
+export const useGenericDelegationFees = ({
+    clauses,
+    signer,
+    token,
+    isGalactica,
+    deviceType,
+    gasPrices,
+}: UseGenericDelegationFeesArgs) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    const thor = useThorClient()
 
     const { rate, serviceFee, isLoading: isLoadingRates } = useGenericDelegatorRates()
-    const { ownerAddress, smartAccountConfig, signTypedData } = useSmartWallet()
+    const { ownerAddress, smartAccountConfig, estimateGas } = useSmartWallet()
 
     const isSmartWallet = deviceType === DEVICE_TYPE.SMART_WALLET
 
@@ -241,10 +115,8 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica, 
             if (isSmartWallet && smartAccountConfig && rate && serviceFee !== undefined) {
                 return estimateSmartAccountFees({
                     clauses,
-                    thor,
+                    estimateGasFn: estimateGas,
                     ownerAddress,
-                    smartAccountConfig,
-                    signTypedDataFn: signTypedData,
                     rate,
                     serviceFee,
                     gasPrices,
@@ -258,44 +130,24 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica, 
         placeholderData: keepPreviousData,
     })
 
-    const allLegacyOptions = useMemo(() => {
-        if (data === undefined) return undefined
-        return Object.fromEntries(
-            allowedTokens.map(tk => [tk, buildTransactionCost(data, ["legacy", "legacy", "legacy"], tk)!]),
+    const { options, allOptions } = useMemo(() => {
+        if (data === undefined) {
+            return { options: undefined, allOptions: undefined }
+        }
+
+        const keys = isGalactica
+            ? (["regular", "medium", "high"] as const)
+            : (["legacy", "legacy", "legacy"] as const)
+
+        const allOpts = Object.fromEntries(
+            ALLOWED_TOKENS.map(tk => [tk, buildTransactionCost(data, [...keys], tk)!]),
         )
-    }, [data])
 
-    const allGalacticaOptions = useMemo(() => {
-        if (data === undefined) return undefined
-        return Object.fromEntries(
-            allowedTokens.map(tk => [tk, buildTransactionCost(data, ["regular", "medium", "high"], tk)!]),
-        )
-    }, [data])
+        return { options: allOpts[token], allOptions: allOpts }
+    }, [data, isGalactica, token])
 
-    const legacyOptions = useMemo(() => {
-        if (allLegacyOptions === undefined) return undefined
-        return allLegacyOptions[token]
-    }, [allLegacyOptions, token])
-
-    const galacticaOptions = useMemo(() => {
-        if (allGalacticaOptions === undefined) return undefined
-        return allGalacticaOptions[token]
-    }, [allGalacticaOptions, token])
-
-    const options = useMemo(
-        () => (isGalactica ? galacticaOptions : legacyOptions),
-        [galacticaOptions, isGalactica, legacyOptions],
-    )
-
-    const allOptions = useMemo(
-        () => (isGalactica ? allGalacticaOptions : allLegacyOptions),
-        [allGalacticaOptions, allLegacyOptions, isGalactica],
-    )
-
-    const memoized = useMemo(
+    return useMemo(
         () => ({ isLoading, options, allOptions, isFirstTimeLoading }),
         [allOptions, isFirstTimeLoading, isLoading, options],
     )
-
-    return memoized
 }

@@ -2,7 +2,12 @@ import React, { createContext, useContext, useCallback, useMemo, useState, useEf
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { NetworkConfig, VechainWalletSDKConfig } from "../types/config"
-import { SignOptions, TransactionOptions, TypedDataPayload, GenericDelegationDetails } from "../types/transaction"
+import {
+    SignOptions,
+    TransactionOptions,
+    TypedDataPayload,
+    GenericDelegationDetails,
+} from "../types/transaction"
 import { LoginOptions, SmartAccountAdapter } from "../types/wallet"
 import { getSmartAccount } from "../utils/smartAccount"
 import { WalletError, WalletErrorType } from "../utils/errors"
@@ -193,6 +198,45 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         [ownerAddress, thor, signTypedData, smartAccountConfig, adapter.isAuthenticated],
     )
 
+    const estimateGas = useCallback(
+        async (clauses: TransactionClause[], genericDelegation?: GenericDelegationDetails): Promise<number> => {
+            if (!adapter.isAuthenticated || !ownerAddress) {
+                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
+            }
+            if (!smartAccountConfig) {
+                throw new WalletError(
+                    WalletErrorType.WALLET_NOT_FOUND,
+                    "Smart wallet not initialized, call initialiseWallet first",
+                )
+            }
+
+            try {
+                const genesisBlock = await thor.blocks.getGenesisBlock()
+                if (!genesisBlock) {
+                    throw new WalletError(WalletErrorType.NETWORK_ERROR, "Genesis block not found")
+                }
+
+                const finalClauses = await buildSmartAccountTransaction({
+                    txClauses: clauses,
+                    smartAccountConfig,
+                    chainId: genesisBlock.id,
+                    signTypedDataFn: signTypedData,
+                    genericDelgationDetails: genericDelegation,
+                    ownerAddress,
+                })
+
+                const gasResult = await thor.gas.estimateGas(finalClauses, ownerAddress, {
+                    gasPadding: 1,
+                })
+
+                return gasResult.totalGas
+            } catch (error) {
+                throw new WalletError(WalletErrorType.BUILDING_TRANSACTION_ERROR, "Error estimating gas", error)
+            }
+        },
+        [ownerAddress, thor, signTypedData, smartAccountConfig, adapter.isAuthenticated],
+    )
+
     const login = useCallback(
         async (options: LoginOptions): Promise<void> => {
             await adapter.login(options)
@@ -221,6 +265,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             signTransaction,
             signTypedData,
             buildTransaction,
+            estimateGas,
             login,
             logout,
         }),
@@ -236,6 +281,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             signTransaction,
             signTypedData,
             buildTransaction,
+            estimateGas,
             login,
             logout,
         ],
