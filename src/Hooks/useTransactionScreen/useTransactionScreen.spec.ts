@@ -576,6 +576,13 @@ describe("useTransactionScreen", () => {
             ;(useSendTransaction as jest.Mock).mockImplementation(
                 jest.requireActual("~Hooks/useSendTransaction").useSendTransaction,
             )
+
+            // Mock deposit address with a valid address for smart wallet transaction
+            mockedUseDelegatorDepositAddress.mockReturnValue({
+                depositAccount: "0x5555555555555555555555555555555555555555",
+                isLoading: false,
+            })
+
             // Set up authenticated user
             setAuthenticatedUser("test-user-v3-deployed")
             setMockPrivyProviderResp(
