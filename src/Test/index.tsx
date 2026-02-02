@@ -150,7 +150,11 @@ export const TestWrapper = ({
                         <ConnexContext.Provider value={TestHelpers.thor.mockThorInstance({})}>
                             <BottomSheetModalProvider>
                                 <FeatureFlagsContext.Provider
-                                    value={{ ...ffInitialState, pushNotificationFeature: { enabled: false } }}>
+                                    value={{
+                                        ...ffInitialState,
+                                        pushNotificationFeature: { enabled: false },
+                                        isLoading: false,
+                                    }}>
                                     <NavigationProvider>
                                         <NotificationsProvider>
                                             <TestTranslationProvider>{children}</TestTranslationProvider>

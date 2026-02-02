@@ -19,7 +19,7 @@ export const CloudKitWalletCard = ({
 }: {
     wallet: CloudKitWallet
     selected: CloudKitWallet | null
-    onPress: () => void
+    onPress?: () => void
 }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { getVnsName } = useVns()
