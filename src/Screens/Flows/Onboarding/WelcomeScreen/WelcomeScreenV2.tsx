@@ -56,7 +56,7 @@ export const WelcomeScreenV2 = () => {
     }, [getAllLanguageCodes, handleSelectLanguage])
 
     return (
-        <BaseSafeArea style={styles.root}>
+        <BaseSafeArea testID="WELCOME_SCREEN_V2" style={styles.root}>
             <LottieView source={OnboardingStardust} autoPlay loop speed={1} style={styles.stardustBackground} />
             <BaseView flex={1} gap={16} p={24} justifyContent="space-between">
                 {/* Header */}
@@ -65,14 +65,25 @@ export const WelcomeScreenV2 = () => {
                 </BaseView>
                 {/* Body */}
                 <BaseView flex={1} style={styles.bodyContainer}>
-                    <LottieView source={OnboardingB3MO} autoPlay loop speed={0.4} style={styles.onboardingB3MO} />
+                    <LottieView
+                        testID="ONBOARDING_B3MO"
+                        source={OnboardingB3MO}
+                        autoPlay
+                        loop
+                        speed={0.4}
+                        style={styles.onboardingB3MO}
+                    />
                     <BaseView gap={8} alignItems="center">
                         <BaseText
+                            testID="ONBOARDING_B3MO_TITLE"
                             typographyFont="subTitleSemiBold"
                             color={theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE}>
                             {"Crypto, simplified."}
                         </BaseText>
-                        <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
+                        <BaseText
+                            testID="ONBOARDING_B3MO_DESCRIPTION"
+                            typographyFont="bodyMedium"
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
                             {"The easiest way to explore VeChain."}
                         </BaseText>
                     </BaseView>
