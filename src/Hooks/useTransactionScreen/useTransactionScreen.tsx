@@ -211,13 +211,12 @@ export const useTransactionScreen = ({
     const gasPricesForDelegation = useMemo(() => {
         const txOpts = transactionFeesResponse.txOptions
 
-        const getGasPrice = (
-            opt: { maxFeePerGas: string; maxPriorityFeePerGas: string } | { gasPriceCoef: number },
-        ) => {
+        // gasPriceCoef is legacy but we need the type to make the linter happy
+        // we can remove when we remove the legacy support.
+        const getGasPrice = (opt: { maxFeePerGas: string } | { gasPriceCoef: number }) => {
             if (!("maxFeePerGas" in opt)) return undefined
             const maxFee = BigInt(opt.maxFeePerGas)
-            const priorityFee = BigInt(opt.maxPriorityFeePerGas || "0")
-            return (maxFee + priorityFee).toString()
+            return maxFee.toString()
         }
 
         const result = {
