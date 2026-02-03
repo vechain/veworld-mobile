@@ -8,30 +8,42 @@ import { useThemedStyles } from "~Hooks"
 type AlertInlineVariant = "banner" | "inline"
 
 interface AlertInlineProps {
+    testID?: string
     message: string
     status: AlertStatus
     variant?: AlertInlineVariant
     justifyContent?: "flex-start" | "center" | "flex-end"
+    textAlign?: "left" | "center" | "right"
     style?: StyleProp<ViewStyle>
+    contentStyle?: StyleProp<ViewStyle>
 }
 
 export const AlertInline = memo(
-    ({ message, status, variant = "inline", justifyContent = "flex-start", style }: AlertInlineProps) => {
+    ({
+        testID,
+        message,
+        status,
+        variant = "inline",
+        justifyContent = "flex-start",
+        textAlign = "left",
+        style,
+        contentStyle,
+    }: AlertInlineProps) => {
         const statusVariant = StatusColorVariant[status]
         const isInline = useMemo(() => variant === "inline", [variant])
         const { styles, theme } = useThemedStyles(baseStyles(isInline, statusVariant))
         const colors = theme.colors[statusVariant]
 
         return (
-            <BaseView style={[styles.container, style]} justifyContent={justifyContent}>
-                <BaseView style={styles.row} justifyContent={justifyContent}>
+            <BaseView testID={testID} style={[styles.container, style]} justifyContent={justifyContent}>
+                <BaseView style={[styles.row, contentStyle]} justifyContent={justifyContent}>
                     <BaseIcon name={ICON_NAMES[status]} size={16} color={colors.icon} />
-
-                    <BaseView flex={1}>
-                        <BaseText typographyFont="captionRegular" color={isInline ? colors.titleInline : colors.title}>
-                            {message}
-                        </BaseText>
-                    </BaseView>
+                    <BaseText
+                        typographyFont="captionRegular"
+                        color={isInline ? colors.titleInline : colors.title}
+                        align={textAlign}>
+                        {message}
+                    </BaseText>
                 </BaseView>
             </BaseView>
         )
@@ -42,13 +54,14 @@ const baseStyles = (isInline: boolean, status: StatusColorVariant) => (theme: Co
     StyleSheet.create({
         container: {
             flexDirection: "row",
-            alignItems: "flex-start",
+            alignItems: "center",
             paddingHorizontal: isInline ? 0 : 12,
             paddingVertical: isInline ? 0 : 8,
             backgroundColor: isInline ? theme.colors.transparent : theme.colors[status].background,
             borderRadius: isInline ? 0 : 6,
         },
         row: {
+            flex: 1,
             gap: 8,
             flexDirection: "row",
             alignItems: "flex-start",

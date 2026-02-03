@@ -41,8 +41,7 @@ export const SelfCustodyOptionsBottomSheet = ({ bsRef }: Props) => {
     const onNewWallet = useCallback(async () => {
         track(AnalyticsEvent.SELECT_WALLET_CREATE_WALLET)
         await onCreateWallet({ derivationPath: DerivationPath.VET })
-        onClose()
-    }, [onCreateWallet, track, onClose])
+    }, [onCreateWallet, track])
 
     const goToImportFromCloud = useCallback(() => {
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_CLOUD)
@@ -187,7 +186,7 @@ export const SelfCustodyOptionsBottomSheet = ({ bsRef }: Props) => {
 const baseStyles = (theme: ColorThemeType) => {
     return StyleSheet.create({
         rootSheet: {
-            backgroundColor: theme.colors.actionBottomSheet.background,
+            backgroundColor: theme.colors.newBottomSheet.background,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
         },

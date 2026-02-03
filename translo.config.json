@@ -76,7 +76,10 @@
             "veWorld": "veWorld",
             "Better": "Better",
             "On-chain": "On-chain",
-            "Coinbase": "Coinbase"
+            "Coinbase": "Coinbase",
+            "Self-custody": "Self-custody",
+            "self-custody": "self-custody",
+            "Ledger": "Ledger"
         },
         "it": {
             "Recycling": "Riciclo"

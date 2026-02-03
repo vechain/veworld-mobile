@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { InteractionManager, NativeModules } from "react-native"
 import RNBootSplash from "react-native-bootsplash"
 import RNScreenshotPrevent from "react-native-screenshot-prevent"
-import { AutoLockProvider, BaseStatusBar, ErrorBoundary, useApplicationSecurity } from "~Components"
+import { AutoLockProvider, BaseStatusBar, ErrorBoundary, useApplicationSecurity, useFeatureFlags } from "~Components"
 import { SecurityLevelType } from "~Model"
 import { SwitchStack } from "~Navigation"
 import { PlatformUtils } from "~Utils"
@@ -12,13 +12,17 @@ const { ScreenShieldRN } = NativeModules
 
 export const EntryPoint = () => {
     const { setIsAppReady, securityType } = useApplicationSecurity()
+    const { isLoading } = useFeatureFlags()
 
     useEffect(() => {
-        RNBootSplash.hide({ fade: false })
-        setIsAppReady(true)
+        // If the feature flags are still loading, don't hide the splash screen
+        if (!isLoading) {
+            RNBootSplash.hide({ fade: false })
+            setIsAppReady(true)
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [isLoading])
 
     useEffect(() => {
         // NOTE -- DO NOT REMOVE -- Feature dissabled for the time beeing

@@ -32,18 +32,22 @@ export const CardListItem = ({ icon, title, subtitle, action, testID, disabled }
                     bg={theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.LIGHT_GRAY}
                     color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.GREY_500}
                 />
-                <BaseView flexGrow={1} flexDirection="column" gap={4}>
+                <BaseView flexDirection="column" gap={4} flexShrink={1} flexGrow={1}>
                     <BaseText typographyFont="bodySemiBold" numberOfLines={1}>
                         {title}
                     </BaseText>
-                    <BaseText
-                        typographyFont="smallCaptionMedium"
-                        color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
-                        numberOfLines={1}>
-                        {subtitle}
-                    </BaseText>
+                    {subtitle && (
+                        <BaseText
+                            typographyFont="smallCaptionMedium"
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
+                            ellipsizeMode="tail"
+                            numberOfLines={2}>
+                            {subtitle}
+                        </BaseText>
+                    )}
                 </BaseView>
             </BaseView>
+
             <BaseIcon name="icon-chevron-right" size={16} color={theme.colors.editSpeedBs.title} />
         </TouchableOpacity>
     )
@@ -59,13 +63,15 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingHorizontal: 16,
             borderRadius: 16,
             borderWidth: 1,
+            gap: 12,
             borderColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_100,
         },
         disabled: {
-            // backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_100,
             opacity: 0.5,
         },
         content: {
+            flexGrow: 1,
+            flexBasis: 200,
             gap: 16,
             flexDirection: "row",
             alignItems: "center",
