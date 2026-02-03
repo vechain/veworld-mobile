@@ -58,10 +58,14 @@ export const NotificationScreen = () => {
         updateNotificationCenterPrefs,
     } = useNotifications()
 
+    const [updatingCategory, setUpdatingCategory] = useState<string | null>(null)
     const { mutate: updatePrefs, isPending: isUpdatingPrefs } = useMutation({
         mutationKey: ["NOTIFICATION_CENTER", "UPDATE_PREFERENCES"],
         mutationFn: async ({ category, enabled }: { category: string; enabled: boolean }) => {
             await updateNotificationCenterPrefs(category, enabled)
+        },
+        onMutate: ({ category }) => {
+            setUpdatingCategory(category)
         },
         onError: () => {
             Feedback.show({
@@ -71,6 +75,11 @@ export const NotificationScreen = () => {
                 icon: "icon-alert-triangle",
                 duration: 3000,
             })
+        },
+        onSettled: (_, __, variables) => {
+            setUpdatingCategory(current =>
+                current && variables?.category && current === variables.category ? null : current,
+            )
         },
     })
 
@@ -259,7 +268,9 @@ export const NotificationScreen = () => {
                                 onValueChange={toggleNotifCenterPreference(NOTIFICATION_CATEGORIES.NFT_UPDATES)}
                                 value={isNftUpdatesEnabled}
                                 color={itemSwitchColor}
-                                disabled={isUpdatingPrefs}
+                                disabled={
+                                    isUpdatingPrefs && updatingCategory === NOTIFICATION_CATEGORIES.NFT_UPDATES
+                                }
                             />
                             <EnableFeature
                                 title={LL.PUSH_NOTIFICATIONS_STARGATE_REWARDS()}
@@ -267,7 +278,7 @@ export const NotificationScreen = () => {
                                 onValueChange={toggleNotifCenterPreference(NOTIFICATION_CATEGORIES.REWARDS)}
                                 value={isRewardsEnabled}
                                 color={itemSwitchColor}
-                                disabled={isUpdatingPrefs}
+                                disabled={isUpdatingPrefs && updatingCategory === NOTIFICATION_CATEGORIES.REWARDS}
                             />
                         </BaseView>
                     </BaseView>
@@ -291,6 +302,7 @@ export const NotificationScreen = () => {
         isNotificationPermissionEnabled,
         requestNotficationPermission,
         isUpdatingPrefs,
+        updatingCategory,
     ])
     useEffect(() => {
         if (error) {
