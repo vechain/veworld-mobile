@@ -8,9 +8,9 @@ import Animated, {
     ZoomIn,
     ZoomOut,
 } from "react-native-reanimated"
-import { BaseIcon, BaseText, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles } from "~Hooks/useTheme"
 import { ConnectedLedgerDevice } from "~Model"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 
@@ -43,6 +43,7 @@ export const LedgerDeviceBox: React.FC<Props> = ({ device, onPress, isSelected }
 
     return (
         <AnimatedTouchableOpacity
+            testID={`LEDGER_DEVICE_BOX_${device.id}`}
             onPress={onPress}
             style={[themedStyles.root, containerAnimatedStyles]}
             layout={LinearTransition}>
@@ -55,7 +56,11 @@ export const LedgerDeviceBox: React.FC<Props> = ({ device, onPress, isSelected }
                 </BaseText>
             </BaseView>
             {isSelected && (
-                <Animated.View entering={ZoomIn} exiting={ZoomOut} layout={LinearTransition}>
+                <Animated.View
+                    testID={`LEDGER_DEVICE_BOX_SELECTED_ICON_${device.id}`}
+                    entering={ZoomIn}
+                    exiting={ZoomOut}
+                    layout={LinearTransition}>
                     <BaseIcon name="icon-check" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} size={20} />
                 </Animated.View>
             )}

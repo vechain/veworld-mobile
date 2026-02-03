@@ -96,7 +96,11 @@ const LedgerAccountBox: React.FC<Props> = ({ account, index, isSelected, onAccou
                 </Animated.View>
             </Animated.View>
             {isSelected && (
-                <Animated.View entering={ZoomIn} exiting={ZoomOut} layout={LinearTransition}>
+                <Animated.View
+                    testID="LEDGER_ACCOUNT_BOX_SELECTED_ICON"
+                    entering={ZoomIn}
+                    exiting={ZoomOut}
+                    layout={LinearTransition}>
                     <BaseIcon name="icon-check" color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE} size={20} />
                 </Animated.View>
             )}
