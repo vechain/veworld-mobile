@@ -39,8 +39,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { BigNutils, BigNumberUtils, error } from "~Utils"
-import { useSmartWallet } from "../useSmartWallet"
-import { useGenericDelegatorRates } from "../useGenericDelegatorRates"
 
 type Props = {
     clauses: TransactionClause[]
@@ -73,7 +71,6 @@ const getGenericDelegationForSmartWallet = (
     selectedFeeOption: GasPriceCoefficient,
     depositAccount: string,
     vthoFee: BigNumberUtils | undefined,
-    rates: ReturnType<typeof useGenericDelegatorRates>,
 ) => {
     if (deviceType !== DEVICE_TYPE.SMART_WALLET) {
         return undefined
@@ -86,8 +83,6 @@ const getGenericDelegationForSmartWallet = (
     }
 
     // For smart accounts, use genericDelegatorFees for ALL tokens (including VTHO)
-    // because it accounts for smart account gas overhead
-    // Use estimatedFee (with 5% buffer built into the calculation)
     const feeMap: Record<string, BigNumberUtils | undefined> = {
         [VET.symbol]: genericDelegatorFees.allOptions?.[VET.symbol]?.[selectedFeeOption]?.estimatedFee,
         [B3TR.symbol]: genericDelegatorFees.allOptions?.[B3TR.symbol]?.[selectedFeeOption]?.estimatedFee,
@@ -105,7 +100,10 @@ const getGenericDelegationForSmartWallet = (
         tokenAddress: tokenAddressMap[token],
         fee: feeMap[token],
         depositAccount: depositAccount ?? "",
-        rates: rates.rate && rates.serviceFee !== undefined ? { rate: rates.rate, serviceFee: rates.serviceFee } : undefined,
+        rates:
+            genericDelegatorFees.rate && genericDelegatorFees.serviceFee !== undefined
+                ? { rate: genericDelegatorFees.rate, serviceFee: genericDelegatorFees.serviceFee }
+                : undefined,
     }
     return result
 }
@@ -215,17 +213,9 @@ export const useTransactionScreen = ({
     })
 
     // Extract gas prices from txOptions for Galactica (EIP-1559) transactions
-    // Backend validates using maxFeePerGas + maxPriorityFeePerGas, so we need to include both
     const gasPricesForDelegation = useMemo(() => {
-        if (!isGalactica || !transactionFeesResponse.txOptions) return undefined
         const txOpts = transactionFeesResponse.txOptions
-        const regularOpt = txOpts[GasPriceCoefficient.REGULAR]
-        const mediumOpt = txOpts[GasPriceCoefficient.MEDIUM]
-        const highOpt = txOpts[GasPriceCoefficient.HIGH]
-        // Check if txOptions has maxFeePerGas (Galactica) vs gasPriceCoef (legacy)
-        if (!("maxFeePerGas" in regularOpt)) return undefined
 
-        // Backend uses: maxFeePerGas + maxPriorityFeePerGas for gas price validation
         const getGasPrice = (opt: { maxFeePerGas: string; maxPriorityFeePerGas: string } | { gasPriceCoef: number }) => {
             if (!("maxFeePerGas" in opt)) return undefined
             const maxFee = BigInt(opt.maxFeePerGas)
@@ -234,13 +224,13 @@ export const useTransactionScreen = ({
         }
 
         const result = {
-            regular: getGasPrice(regularOpt),
-            medium: getGasPrice(mediumOpt),
-            high: getGasPrice(highOpt),
+            regular: getGasPrice(txOpts[GasPriceCoefficient.REGULAR]),
+            medium: getGasPrice(txOpts[GasPriceCoefficient.MEDIUM]),
+            high: getGasPrice(txOpts[GasPriceCoefficient.HIGH]),
         }
 
         return result
-    }, [isGalactica, transactionFeesResponse.txOptions])
+    }, [transactionFeesResponse.txOptions])
 
     const genericDelegatorFees = useGenericDelegationFees({
         clauses,
@@ -250,7 +240,6 @@ export const useTransactionScreen = ({
         deviceType: selectedAccount.device.type,
         gasPrices: gasPricesForDelegation,
     })
-    const genericDelegatorRates = useGenericDelegatorRates()
 
     const gasOptions = useMemo(() => {
         // For smart accounts, always use genericDelegatorFees (includes smart account overhead)
@@ -322,7 +311,6 @@ export const useTransactionScreen = ({
             selectedFeeOption,
             depositAccount,
             transactionFeesResponse.options?.[selectedFeeOption]?.maxFee,
-            genericDelegatorRates,
         ),
     })
 

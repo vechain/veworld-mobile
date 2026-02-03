@@ -153,7 +153,7 @@ export const useGenericDelegationFees = ({
     }, [data, isGalactica, token])
 
     return useMemo(
-        () => ({ isLoading, options, allOptions, isFirstTimeLoading }),
-        [allOptions, isFirstTimeLoading, isLoading, options],
+        () => ({ isLoading, options, allOptions, isFirstTimeLoading, rate, serviceFee }),
+        [allOptions, isFirstTimeLoading, isLoading, options, rate, serviceFee],
     )
 }
