@@ -28,8 +28,6 @@ import { CryptoUtils, PlatformUtils } from "~Utils"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
 import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
 
-// const DEMO_MNEMONIC = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
-
 enum ButtonType {
     local,
     icloud,
@@ -54,7 +52,6 @@ export const ImportLocalWallet = () => {
         onClose: onCloseCreateFlow,
     } = useHandleWalletCreation()
 
-    // const areDevFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
     const currentDerivedPath = useAppSelector(selectDerivedPath)
     const [derivationPath, setDerivationPath] = useState<DerivationPath>(currentDerivedPath ?? DerivationPath.VET)
     const [textValue, setTextValue] = useState<string>("")
@@ -244,11 +241,6 @@ export const ImportLocalWallet = () => {
         [importMnemonic, importPrivateKey, openUnlockKeystoreBottomSheet, LL],
     )
 
-    // const onDemoMnemonicClick = () => {
-    //     setTextValue(DEMO_MNEMONIC)
-    //     onVerify(DEMO_MNEMONIC, IMPORT_TYPE.MNEMONIC)
-    // }
-
     const onChangeText = (text: string) => {
         setIsError("")
         setTextValue(text)
@@ -305,16 +297,6 @@ export const ImportLocalWallet = () => {
                     <>
                         <Animated.View layout={LinearTransition} style={styles.contentContainer}>
                             <BaseView>
-                                {/* <BaseView flexDirection="row" w={100}>
-                                    {areDevFeaturesEnabled && (
-                                        <BaseButton
-                                            size="md"
-                                            variant="link"
-                                            action={onDemoMnemonicClick}
-                                            title="DEV:DEMO"
-                                        />
-                                    )}
-                                </BaseView> */}
                                 <BaseView alignItems="center" justifyContent="center">
                                     <BaseIcon
                                         name="icon-file-spreadsheet"
