@@ -279,7 +279,7 @@ export async function buildSmartAccountTransaction(params: {
     const shouldUseBatchExecution = !hasV1Account
 
     if (genericDelgationDetails) {
-        const { token, tokenAddress, depositAccount, fee, rates } = genericDelgationDetails
+        const { token, tokenAddress, depositAccount, fee } = genericDelgationDetails
         const transferClause = getTransferClause(token, tokenAddress, depositAccount, fee)
         clauses.push(...transferClause)
     }

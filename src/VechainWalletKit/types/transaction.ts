@@ -34,5 +34,4 @@ export interface GenericDelegationDetails {
     tokenAddress: string
     fee: BigNumberUtils | undefined
     depositAccount: string
-    rates: GenericDelegatorRates | undefined
 }
