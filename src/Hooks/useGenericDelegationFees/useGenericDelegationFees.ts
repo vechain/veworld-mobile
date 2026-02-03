@@ -89,17 +89,16 @@ export const useGenericDelegationFees = ({
 
     const isSmartWallet = deviceType === DEVICE_TYPE.SMART_WALLET
 
-    const canRunSmartWalletQuery =
-        isSmartWallet &&
-        smartAccountConfig !== null &&
-        !isLoadingRates &&
-        rate !== undefined &&
-        serviceFee !== undefined &&
-        isValidGenericDelegatorNetwork(selectedNetwork.type) &&
-        clauses.length > 0
+    // Common prerequisites for any delegation query
+    const canRunDelegationQuery = isValidGenericDelegatorNetwork(selectedNetwork.type) && clauses.length > 0
 
-    const canRunServiceQuery =
-        !isSmartWallet && isValidGenericDelegatorNetwork(selectedNetwork.type) && clauses.length > 0
+    // Smart wallet needs rates loaded and smart account configured
+    const hasRatesLoaded = !isLoadingRates && rate !== undefined && serviceFee !== undefined
+
+    const canRunSmartWalletQuery =
+        isSmartWallet && canRunDelegationQuery && smartAccountConfig !== null && hasRatesLoaded
+
+    const canRunServiceQuery = !isSmartWallet && canRunDelegationQuery
 
     // Smart wallet fee estimation query
     const {
