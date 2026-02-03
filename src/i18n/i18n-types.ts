@@ -1327,6 +1327,30 @@ type RootTranslation = {
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: string
 	/**
+	 * C​l​o​u​d​ ​b​a​c​k​u​p​s​ ​l​e​t​ ​y​o​u​ ​r​e​s​t​o​r​e​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​o​n​ ​a​n​y​ ​d​e​v​i​c​e​ ​w​i​t​h​o​u​t​ ​m​a​n​u​a​l​l​y​ ​e​n​t​e​r​i​n​g​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​.​ ​Y​o​u​r​ ​b​a​c​k​u​p​ ​i​s​ ​e​n​c​r​y​p​t​e​d​ ​w​i​t​h​ ​a​ ​p​a​s​s​w​o​r​d​ ​o​n​l​y​ ​y​o​u​ ​k​n​o​w​.​ ​K​e​e​p​ ​t​h​i​s​ ​p​a​s​s​w​o​r​d​ ​s​a​f​e​,​ ​a​s​ ​i​t​'​s​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​b​a​c​k​u​p​.
+	 */
+	BS_INFO_IMPORTING_FROM_CLOUD_DESCRIPTION: string
+	/**
+	 * I​m​p​o​r​t​i​n​g​ ​f​r​o​m​ ​C​l​o​u​d
+	 */
+	BS_INFO_IMPORTING_FROM_CLOUD_TITLE: string
+	/**
+	 * L​e​d​g​e​r​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​s​ ​k​e​e​p​ ​y​o​u​r​ ​p​r​i​v​a​t​e​ ​k​e​y​s​ ​s​e​c​u​r​e​ ​a​n​d​ ​o​f​f​l​i​n​e​.​ ​A​l​l​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​a​r​e​ ​s​i​g​n​e​d​ ​d​i​r​e​c​t​l​y​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​,​ ​s​o​ ​y​o​u​r​ ​k​e​y​s​ ​a​r​e​ ​n​e​v​e​r​ ​e​x​p​o​s​e​d​.​ ​C​o​n​n​e​c​t​ ​v​i​a​ ​B​l​u​e​t​o​o​t​h​ ​w​i​t​h​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​a​p​p​ ​o​p​e​n​ ​t​o​ ​g​e​t​ ​s​t​a​r​t​e​d​.
+	 */
+	BS_INFO_IMPORTING_FROM_LEDGER_DESCRIPTION: string
+	/**
+	 * I​m​p​o​r​t​i​n​g​ ​f​r​o​m​ ​L​e​d​g​e​r
+	 */
+	BS_INFO_IMPORTING_FROM_LEDGER_TITLE: string
+	/**
+	 * A​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​o​r​ ​i​s​ ​a​ ​s​e​c​r​e​t​ ​s​e​t​ ​o​f​ ​w​o​r​d​s​ ​t​h​a​t​ ​a​c​t​ ​a​s​ ​t​h​e​ ​m​a​s​t​e​r​ ​k​e​y​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​K​e​e​p​ ​i​t​ ​s​a​f​e​,​ ​a​s​ ​a​n​y​o​n​e​ ​w​i​t​h​ ​y​o​u​r​ ​s​e​e​d​ ​p​h​r​a​s​e​ ​c​a​n​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​a​s​s​e​t​s​.
+	 */
+	BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION: string
+	/**
+	 * I​m​p​o​r​t​i​n​g​ ​w​i​t​h​ ​k​e​y​s
+	 */
+	BS_INFO_IMPORTING_WITH_KEYS_TITLE: string
+	/**
 	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
 	BTN_ADD_ACCOUNT: string
@@ -1422,6 +1446,14 @@ type RootTranslation = {
 	 * C​o​n​t​i​n​u​e
 	 */
 	BTN_CONTINUE: string
+	/**
+	 * C​o​n​t​i​n​u​e​ ​w​i​t​h​ ​A​p​p​l​e
+	 */
+	BTN_CONTINUE_WITH_APPLE: string
+	/**
+	 * C​o​n​t​i​n​u​e​ ​w​i​t​h​ ​G​o​o​g​l​e
+	 */
+	BTN_CONTINUE_WITH_GOOGLE: string
 	/**
 	 * C​o​n​v​e​r​t
 	 */
@@ -1692,6 +1724,10 @@ type RootTranslation = {
 	 * D​e​r​i​v​a​t​i​o​n​ ​P​a​t​h​ ​f​o​r​ ​V​e​C​h​a​i​n
 	 */
 	BTN_SELECT_DERIVATION_PATH_VET: string
+	/**
+	 * C​o​n​t​i​n​u​e​ ​w​i​t​h​ ​s​e​l​f​-​c​u​s​t​o​d​y
+	 */
+	BTN_SELF_CUSTODY_WALLET: string
 	/**
 	 * S​e​l​l
 	 */
@@ -2054,6 +2090,12 @@ type RootTranslation = {
 	 * B​a​c​k
 	 */
 	COMMON_LBL_BACK: string
+	/**
+	 * B​y​ ​u​s​i​n​g​ ​V​e​W​o​r​l​d​’​s​ ​w​a​l​l​e​t​,​ ​t​h​e​ ​u​s​e​r​ ​a​c​c​e​p​t​s​ ​[​T​e​r​m​s​ ​a​n​d​ ​C​o​n​d​i​t​i​o​n​s​]​(​{​t​e​r​m​s​O​f​S​e​r​v​i​c​e​U​r​l​}​)​ ​a​n​d​ ​[​P​r​i​v​a​c​y​ ​P​o​l​i​c​y​]​(​{​p​r​i​v​a​c​y​P​o​l​i​c​y​U​r​l​}​)​.
+	 * @param {string} privacyPolicyUrl
+	 * @param {string} termsOfServiceUrl
+	 */
+	COMMON_LBL_BY_AGREEMENT: RequiredParams<'privacyPolicyUrl' | 'termsOfServiceUrl'>
 	/**
 	 * C​l​o​s​e
 	 */
@@ -3889,7 +3931,7 @@ type RootTranslation = {
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: string
 	/**
-	 * P​u​s​h​ ​N​o​t​i​f​i​c​a​t​i​o​n​s
+	 * N​o​t​i​f​i​c​a​t​i​o​n​s
 	 */
 	PUSH_NOTIFICATIONS: string
 	/**
@@ -3908,6 +3950,14 @@ type RootTranslation = {
 	 * K​e​e​p​ ​u​p​ ​t​o​ ​d​a​t​e​ ​w​i​t​h​ ​t​h​e​ ​l​a​t​e​s​t​ ​n​e​w​s​ ​a​n​d​ ​u​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_DESC: string
+	/**
+	 * P​l​e​a​s​e​ ​g​o​ ​t​o​ ​t​h​e​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​a​l​l​o​w​ ​V​e​W​o​r​l​d​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​t​o​ ​b​e​ ​p​u​s​h​e​d​.
+	 */
+	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC: string
+	/**
+	 * D​e​v​i​c​e​ ​s​e​t​t​i​n​g​s
+	 */
+	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE: string
 	/**
 	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​l​o​a​d​ ​y​o​u​r​ ​p​r​e​f​e​r​e​n​c​e​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
@@ -3941,21 +3991,13 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: string
 	/**
-	 * U​p​d​a​t​e​s
+	 * V​e​W​o​r​l​d​ ​&​ ​V​e​C​h​a​i​n
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: string
 	/**
 	 * V​e​B​e​t​t​e​r
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
-	/**
-	 * D​e​v​i​c​e​ ​s​e​t​t​i​n​g​s
-	 */
-	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE: string
-	/**
-	 * P​l​e​a​s​e​ ​g​o​ ​t​o​ ​t​h​e​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​a​l​l​o​w​ ​V​e​W​o​r​l​d​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​t​o​ ​b​e​ ​p​u​s​h​e​d​.
-	 */
-	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC: string
 	/**
 	 * E​n​a​b​l​e​ ​y​o​u​r​ ​c​a​m​e​r​a​ ​p​e​r​m​i​s​s​i​o​n​s​ ​t​o​ ​s​c​a​n​ ​a​ ​Q​R​ ​c​o​d​e
 	 */
@@ -4258,6 +4300,26 @@ type RootTranslation = {
 	 */
 	SB_DESCRIPTION: string
 	/**
+	 * G​e​n​e​r​a​t​e​ ​a​ ​n​e​w​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
+	 */
+	SB_DESCRIPTION_CREATE_WALLET: string
+	/**
+	 * R​e​c​o​v​e​r​ ​a​ ​w​a​l​l​e​t​ ​f​r​o​m​ ​c​l​o​u​d
+	 */
+	SB_DESCRIPTION_IMPORT_FROM_CLOUD: string
+	/**
+	 * U​s​e​ ​a​ ​b​l​u​e​t​o​o​t​h​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t
+	 */
+	SB_DESCRIPTION_IMPORT_HARDWARE: string
+	/**
+	 * U​s​e​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​o​r​ ​p​r​i​v​a​t​e​ ​k​e​y​s
+	 */
+	SB_DESCRIPTION_IMPORT_WITH_KEYS: string
+	/**
+	 * S​e​l​e​c​t​ ​a​n​ ​o​p​t​i​o​n​ ​t​o​ ​a​d​d​ ​a​ ​w​a​l​l​e​t
+	 */
+	SB_DESCRIPTION_SELF_CUSTODY_WALLET: string
+	/**
 	 * E​d​i​t​ ​c​o​n​t​a​c​t
 	 */
 	SB_EDIT_CONTACT: string
@@ -4346,6 +4408,26 @@ type RootTranslation = {
 	 * C​h​a​n​g​e​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​l​a​n​g​u​a​g​e
 	 */
 	SB_SELECT_LANGUAGE_DESC: string
+	/**
+	 * N​e​w​ ​w​a​l​l​e​t
+	 */
+	SB_TITLE_CREATE_WALLET: string
+	/**
+	 * C​l​o​u​d​ ​b​a​c​k​u​p​s
+	 */
+	SB_TITLE_IMPORT_FROM_CLOUD: string
+	/**
+	 * L​e​d​g​e​r​ ​d​e​v​i​c​e​s
+	 */
+	SB_TITLE_IMPORT_HARDWARE: string
+	/**
+	 * I​m​p​o​r​t​ ​w​i​t​h​ ​k​e​y​s
+	 */
+	SB_TITLE_IMPORT_WITH_KEYS: string
+	/**
+	 * S​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t
+	 */
+	SB_TITLE_SELF_CUSTODY_WALLET: string
 	/**
 	 * I​n​s​e​r​t​ ​t​h​e​ ​p​i​n​ ​y​o​u​ ​c​r​e​a​t​e​d​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​w​a​l​l​e​t​.
 	 */
@@ -5093,9 +5175,22 @@ type RootTranslation = {
 	 */
 	SMART_WALLET_DELEGATION_NOT_SUPPORTED: string
 	/**
+	 * A​P​Y
+	 */
+	STARGATE_APY: string
+	/**
 	 * C​l​a​i​m​a​b​l​e
 	 */
 	STARGATE_CLAIMABLE: string
+	/**
+	 * C​y​c​l​e​ ​d​u​r​a​t​i​o​n
+	 */
+	STARGATE_CYCLE_DURATION: string
+	/**
+	 * {​d​a​y​s​}​ ​d​a​y​s
+	 * @param {number} days
+	 */
+	STARGATE_DAYS: RequiredParams<'days'>
 	/**
 	 * M​a​n​a​g​i​n​g
 	 */
@@ -5349,6 +5444,10 @@ type RootTranslation = {
 	 */
 	TITLE_CLAIM_USERNAME: string
 	/**
+	 * C​l​o​u​d​ ​B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d
+	 */
+	TITLE_CLOUD_BACKUP_PASSWORD: string
+	/**
 	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
 	 */
 	TITLE_CONFIRM_MNEMONIC: string
@@ -5393,11 +5492,11 @@ type RootTranslation = {
 	 */
 	TITLE_GIVE_FEEDBACK: string
 	/**
-	 * I​m​p​o​r​t​ ​W​a​l​l​e​t​ ​f​r​o​m​ ​G​o​o​g​l​e​ ​D​r​i​v​e
+	 * I​m​p​o​r​t​ ​f​r​o​m​ ​G​o​o​g​l​e​ ​D​r​i​v​e
 	 */
 	TITLE_IMPORT_WALLET_FROM_DRIVE: string
 	/**
-	 * I​m​p​o​r​t​ ​W​a​l​l​e​t​ ​f​r​o​m​ ​i​C​l​o​u​d
+	 * I​m​p​o​r​t​ ​f​r​o​m​ ​i​C​l​o​u​d
 	 */
 	TITLE_IMPORT_WALLET_FROM_ICLOUD: string
 	/**
@@ -5813,7 +5912,7 @@ type RootTranslation = {
 	 */
 	VBD_YOUR_OFFSET: string
 	/**
-	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
+	 * N​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
 	VECHAIN_NEWS_AND_UPDATES: string
 	/**
@@ -5853,6 +5952,18 @@ type RootTranslation = {
 	 * @param {number} count
 	 */
 	WALLET_DETAIL_ACCOUNTS_NUMER: RequiredParams<'count'>
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​c​l​o​u​d​ ​b​a​c​k​u​p​ ​o​f​ ​w​a​l​l​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​i​m​p​o​r​t​ ​t​o​ ​t​h​i​s​ ​d​e​v​i​c​e​.
+	 */
+	WALLET_IMPORT_CLOUD_DESCRIPTION: string
+	/**
+	 * I​m​p​o​r​t​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​ ​b​y​ ​u​s​i​n​g​ ​a​ ​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​a​ ​P​r​i​v​a​t​e​ ​K​e​y​ ​o​r​ ​a​ ​K​e​y​s​t​o​r​e​ ​f​i​l​e​.
+	 */
+	WALLET_IMPORT_LOCAL_DESCRIPTION: string
+	/**
+	 * E​n​t​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​c​r​e​d​e​n​t​i​a​l​s​ ​h​e​r​e
+	 */
+	WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER: string
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -5995,11 +6106,12 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ONE_DEVICE_FOUND: string
 	/**
-	 * P​l​e​a​s​e​ ​m​a​k​e​ ​s​u​r​e​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​i​s​ ​u​n​l​o​c​k​e​d​,​ ​t​h​e​ ​b​l​u​e​t​o​o​t​h​ ​e​n​a​b​l​e​d​ ​a​n​d​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​o​n​ ​(​o​n​l​y​ ​l​e​d​g​e​r​s​ ​w​i​t​h​ ​b​l​u​e​t​o​o​t​h​ ​a​r​e​ ​s​u​p​p​o​r​t​e​d​ ​a​t​ ​t​h​i​s​ ​t​i​m​e​)
+	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​ ​t​h​r​o​u​g​h​ ​b​l​u​e​t​o​o​t​h​.​
+​M​a​k​e​ ​s​u​r​e​ ​t​h​a​t​ ​i​t​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​a​n​d​ ​t​h​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​e​n​a​b​l​e​d​.
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: string
 	/**
-	 * I​m​p​o​r​t​ ​l​e​d​g​e​r
+	 * I​m​p​o​r​t​ ​f​r​o​m​ ​L​e​d​g​e​r
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_TITLE: string
 	/**
@@ -6035,18 +6147,9 @@ type RootTranslation = {
 	 */
 	YESTERDAY: string
 	/**
-	 * A​P​Y
+	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​i​m​p​o​r​t​:
 	 */
-	STARGATE_APY: string
-	/**
-	 * C​y​c​l​e​ ​d​u​r​a​t​i​o​n
-	 */
-	STARGATE_CYCLE_DURATION: string
-	/**
-	 * {​d​a​y​s​}​ ​d​a​y​s
-	 * @param {number} days
-	 */
-	STARGATE_DAYS: RequiredParams<'days'>
+	WALLET_LEDGER_SELECT_ACCOUNTS_SB: string
 }
 
 export type TranslationFunctions = {
@@ -7328,6 +7431,30 @@ Thanks for your patience!
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: () => LocalizedString
 	/**
+	 * Cloud backups let you restore your wallet on any device without manually entering your recovery phrase. Your backup is encrypted with a password only you know. Keep this password safe, as it's required to access your backup.
+	 */
+	BS_INFO_IMPORTING_FROM_CLOUD_DESCRIPTION: () => LocalizedString
+	/**
+	 * Importing from Cloud
+	 */
+	BS_INFO_IMPORTING_FROM_CLOUD_TITLE: () => LocalizedString
+	/**
+	 * Ledger hardware wallets keep your private keys secure and offline. All transactions are signed directly on your device, so your keys are never exposed. Connect via Bluetooth with the VeChain app open to get started.
+	 */
+	BS_INFO_IMPORTING_FROM_LEDGER_DESCRIPTION: () => LocalizedString
+	/**
+	 * Importing from Ledger
+	 */
+	BS_INFO_IMPORTING_FROM_LEDGER_TITLE: () => LocalizedString
+	/**
+	 * A Recovery phrase or is a secret set of words that act as the master key to your wallet. Keep it safe, as anyone with your seed phrase can access your assets.
+	 */
+	BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION: () => LocalizedString
+	/**
+	 * Importing with keys
+	 */
+	BS_INFO_IMPORTING_WITH_KEYS_TITLE: () => LocalizedString
+	/**
 	 * ADD ACCOUNT
 	 */
 	BTN_ADD_ACCOUNT: () => LocalizedString
@@ -7423,6 +7550,14 @@ Thanks for your patience!
 	 * Continue
 	 */
 	BTN_CONTINUE: () => LocalizedString
+	/**
+	 * Continue with Apple
+	 */
+	BTN_CONTINUE_WITH_APPLE: () => LocalizedString
+	/**
+	 * Continue with Google
+	 */
+	BTN_CONTINUE_WITH_GOOGLE: () => LocalizedString
 	/**
 	 * Convert
 	 */
@@ -7691,6 +7826,10 @@ Thanks for your patience!
 	 * Derivation Path for VeChain
 	 */
 	BTN_SELECT_DERIVATION_PATH_VET: () => LocalizedString
+	/**
+	 * Continue with self-custody
+	 */
+	BTN_SELF_CUSTODY_WALLET: () => LocalizedString
 	/**
 	 * Sell
 	 */
@@ -8052,6 +8191,10 @@ This action is irreversible.
 	 * Back
 	 */
 	COMMON_LBL_BACK: () => LocalizedString
+	/**
+	 * By using VeWorld’s wallet, the user accepts [Terms and Conditions]({termsOfServiceUrl}) and [Privacy Policy]({privacyPolicyUrl}).
+	 */
+	COMMON_LBL_BY_AGREEMENT: (arg: { privacyPolicyUrl: string, termsOfServiceUrl: string }) => LocalizedString
 	/**
 	 * Close
 	 */
@@ -9859,7 +10002,7 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
 	/**
-	 * Push Notifications
+	 * Notifications
 	 */
 	PUSH_NOTIFICATIONS: () => LocalizedString
 	/**
@@ -9878,6 +10021,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Keep up to date with the latest news and updates
 	 */
 	PUSH_NOTIFICATIONS_DESC: () => LocalizedString
+	/**
+	 * Please go to the device settings and allow VeWorld notifications to be pushed.
+	 */
+	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC: () => LocalizedString
+	/**
+	 * Device settings
+	 */
+	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE: () => LocalizedString
 	/**
 	 * An error occurred while trying to load your preferences. Please try again.
 	 */
@@ -9911,21 +10062,13 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: () => LocalizedString
 	/**
-	 * Updates
+	 * VeWorld & VeChain
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: () => LocalizedString
 	/**
 	 * VeBetter
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
-	/**
-	 * Device settings
-	 */
-	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_TITLE: () => LocalizedString
-	/**
-	 * Please go to the device settings and allow VeWorld notifications to be pushed.
-	 */
-	PUSH_NOTIFICATIONS_DEVICE_SETTINGS_DESC: () => LocalizedString
 	/**
 	 * Enable your camera permissions to scan a QR code
 	 */
@@ -10223,6 +10366,26 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	SB_DESCRIPTION: () => LocalizedString
 	/**
+	 * Generate a new recovery phrase
+	 */
+	SB_DESCRIPTION_CREATE_WALLET: () => LocalizedString
+	/**
+	 * Recover a wallet from cloud
+	 */
+	SB_DESCRIPTION_IMPORT_FROM_CLOUD: () => LocalizedString
+	/**
+	 * Use a bluetooth hardware wallet
+	 */
+	SB_DESCRIPTION_IMPORT_HARDWARE: () => LocalizedString
+	/**
+	 * Use Recovery phrase or private keys
+	 */
+	SB_DESCRIPTION_IMPORT_WITH_KEYS: () => LocalizedString
+	/**
+	 * Select an option to add a wallet
+	 */
+	SB_DESCRIPTION_SELF_CUSTODY_WALLET: () => LocalizedString
+	/**
 	 * Edit contact
 	 */
 	SB_EDIT_CONTACT: () => LocalizedString
@@ -10310,6 +10473,26 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Change the interface language
 	 */
 	SB_SELECT_LANGUAGE_DESC: () => LocalizedString
+	/**
+	 * New wallet
+	 */
+	SB_TITLE_CREATE_WALLET: () => LocalizedString
+	/**
+	 * Cloud backups
+	 */
+	SB_TITLE_IMPORT_FROM_CLOUD: () => LocalizedString
+	/**
+	 * Ledger devices
+	 */
+	SB_TITLE_IMPORT_HARDWARE: () => LocalizedString
+	/**
+	 * Import with keys
+	 */
+	SB_TITLE_IMPORT_WITH_KEYS: () => LocalizedString
+	/**
+	 * Self-custody wallet
+	 */
+	SB_TITLE_SELF_CUSTODY_WALLET: () => LocalizedString
 	/**
 	 * Insert the pin you created in order to unlock your wallet.
 	 */
@@ -11043,9 +11226,21 @@ Here's what it's all about:
 	 */
 	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
 	/**
+	 * APY
+	 */
+	STARGATE_APY: () => LocalizedString
+	/**
 	 * Claimable
 	 */
 	STARGATE_CLAIMABLE: () => LocalizedString
+	/**
+	 * Cycle duration
+	 */
+	STARGATE_CYCLE_DURATION: () => LocalizedString
+	/**
+	 * {days} days
+	 */
+	STARGATE_DAYS: (arg: { days: number }) => LocalizedString
 	/**
 	 * Managing
 	 */
@@ -11296,6 +11491,10 @@ Available for Google and Apple Pay.
 	 */
 	TITLE_CLAIM_USERNAME: () => LocalizedString
 	/**
+	 * Cloud Backup Password
+	 */
+	TITLE_CLOUD_BACKUP_PASSWORD: () => LocalizedString
+	/**
 	 * Confirm your mnemonic
 	 */
 	TITLE_CONFIRM_MNEMONIC: () => LocalizedString
@@ -11340,11 +11539,11 @@ Available for Google and Apple Pay.
 	 */
 	TITLE_GIVE_FEEDBACK: () => LocalizedString
 	/**
-	 * Import Wallet from Google Drive
+	 * Import from Google Drive
 	 */
 	TITLE_IMPORT_WALLET_FROM_DRIVE: () => LocalizedString
 	/**
-	 * Import Wallet from iCloud
+	 * Import from iCloud
 	 */
 	TITLE_IMPORT_WALLET_FROM_ICLOUD: () => LocalizedString
 	/**
@@ -11754,7 +11953,7 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	VBD_YOUR_OFFSET: () => LocalizedString
 	/**
-	 * Vechain news & updates
+	 * News & updates
 	 */
 	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
 	/**
@@ -11793,6 +11992,18 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * {count} accounts
 	 */
 	WALLET_DETAIL_ACCOUNTS_NUMER: (arg: { count: number }) => LocalizedString
+	/**
+	 * Select the cloud backup of wallet that you wish to import to this device.
+	 */
+	WALLET_IMPORT_CLOUD_DESCRIPTION: () => LocalizedString
+	/**
+	 * Import an existing wallet by using a Recovery phrase, a Private Key or a Keystore file.
+	 */
+	WALLET_IMPORT_LOCAL_DESCRIPTION: () => LocalizedString
+	/**
+	 * Enter your wallet credentials here
+	 */
+	WALLET_IMPORT_TEXT_INPUT_PLACEHOLDER: () => LocalizedString
 	/**
 	 * Account
 	 */
@@ -11934,11 +12145,12 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	WALLET_LEDGER_ONE_DEVICE_FOUND: () => LocalizedString
 	/**
-	 * Please make sure your Ledger is unlocked, the bluetooth enabled and location services are on (only ledgers with bluetooth are supported at this time)
+	 * Connect your Ledger device through bluetooth.
+Make sure that it is unlocked and the location services are enabled.
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_SB: () => LocalizedString
 	/**
-	 * Import ledger
+	 * Import from Ledger
 	 */
 	WALLET_LEDGER_SELECT_DEVICE_TITLE: () => LocalizedString
 	/**
@@ -11974,17 +12186,9 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	YESTERDAY: () => LocalizedString
 	/**
-	 * APY
+	 * Select accounts to import:
 	 */
-	STARGATE_APY: () => LocalizedString
-	/**
-	 * Cycle duration
-	 */
-	STARGATE_CYCLE_DURATION: () => LocalizedString
-	/**
-	 * {days} days
-	 */
-	STARGATE_DAYS: (arg: { days: number }) => LocalizedString
+	WALLET_LEDGER_SELECT_ACCOUNTS_SB: () => LocalizedString
 }
 
 export type Formatters = {

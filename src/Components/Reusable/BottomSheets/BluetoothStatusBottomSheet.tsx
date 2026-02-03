@@ -80,8 +80,8 @@ export const BluetoothStatusBottomSheet: React.FC = () => {
     }, [LL, isAuthorized, isEnabled, isUnsupported])
 
     return (
-        <BaseBottomSheet enablePanDownToClose={false} dynamicHeight ref={ref}>
-            <BaseView alignItems="center">
+        <BaseBottomSheet dynamicHeight ref={ref} enablePanDownToClose={false}>
+            <BaseView alignItems="center" pt={8}>
                 <BaseView alignSelf="flex-start">
                     <BaseText typographyFont="subTitleBold">{content.title}</BaseText>
                     <BaseSpacer height={16} />
