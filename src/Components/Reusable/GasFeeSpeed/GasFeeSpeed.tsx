@@ -70,7 +70,6 @@ export const GasFeeSpeed = ({
 
     useInterval(intervalFn, 200)
 
-
     return (
         <AnimatedBaseCard
             containerStyle={[styles.cardContainer, containerStyle]}

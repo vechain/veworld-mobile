@@ -190,6 +190,8 @@ describe("useTransactionScreen", () => {
             allOptions: undefined,
             isLoading: true,
             isFirstTimeLoading: false,
+            rate: undefined,
+            serviceFee: undefined,
         })
 
         mockedUseDelegatorDepositAddress.mockReturnValue({
@@ -703,6 +705,8 @@ describe("useTransactionScreen", () => {
                 allOptions: undefined,
                 isLoading: true,
                 isFirstTimeLoading: true,
+                rate: undefined,
+                serviceFee: undefined,
             })
 
             mockedUseDelegatorDepositAddress.mockReturnValueOnce({

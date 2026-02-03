@@ -45,7 +45,7 @@ export const useTransactionBuilder = ({
                 {
                     maxFeePerGas: `0x${BigInt(maxFeePerGas ?? 0).toString(16)}`,
                     maxPriorityFeePerGas: `0x${BigInt(maxPriorityFeePerGas ?? 0).toString(16)}`,
-                    isDelegated: true,
+                    isDelegated,
                     gasPriceCoef,
                 },
                 genericDelgationDetails,

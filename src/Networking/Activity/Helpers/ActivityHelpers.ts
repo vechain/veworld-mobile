@@ -129,7 +129,9 @@ const createBaseActivityFromTx = (tx: SDKTransaction) => {
 
     return {
         from: fromAddress,
-        to: innerClauses.map((clause: Transaction.Clause) => ActivityUtils.getDestinationAddressFromClause(clause) ?? ""),
+        to: innerClauses.map(
+            (clause: Transaction.Clause) => ActivityUtils.getDestinationAddressFromClause(clause) ?? "",
+        ),
         id: id.toString() ?? "",
         txId: id.toString() ?? "",
         genesisId: chainTagToGenesisId[chainTag],

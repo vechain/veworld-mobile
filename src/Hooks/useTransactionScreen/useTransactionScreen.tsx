@@ -93,7 +93,6 @@ const getGenericDelegationForSmartWallet = (
         return undefined
     }
 
-
     const result = {
         token,
         tokenAddress: tokenAddressMap[token],
@@ -143,7 +142,6 @@ export const useTransactionScreen = ({
 
     const { tokens: availableTokens, isLoading: isLoadingTokens } = useGenericDelegationTokens()
     const { depositAccount, isLoading: isLoadingDepositAccount } = useDelegatorDepositAddress()
-
 
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
@@ -213,7 +211,9 @@ export const useTransactionScreen = ({
     const gasPricesForDelegation = useMemo(() => {
         const txOpts = transactionFeesResponse.txOptions
 
-        const getGasPrice = (opt: { maxFeePerGas: string; maxPriorityFeePerGas: string } | { gasPriceCoef: number }) => {
+        const getGasPrice = (
+            opt: { maxFeePerGas: string; maxPriorityFeePerGas: string } | { gasPriceCoef: number },
+        ) => {
             if (!("maxFeePerGas" in opt)) return undefined
             const maxFee = BigInt(opt.maxFeePerGas)
             const priorityFee = BigInt(opt.maxPriorityFeePerGas || "0")
@@ -248,7 +248,12 @@ export const useTransactionScreen = ({
         if (selectedDelegationToken === VTHO.symbol || genericDelegatorFees.options === undefined)
             return transactionFeesResponse.options
         return genericDelegatorFees.options
-    }, [genericDelegatorFees.options, selectedDelegationToken, transactionFeesResponse.options, selectedAccount.device.type])
+    }, [
+        genericDelegatorFees.options,
+        selectedDelegationToken,
+        transactionFeesResponse.options,
+        selectedAccount.device.type,
+    ])
 
     const selectedFeeAllTokenOptions = useMemo(() => {
         if (
@@ -266,22 +271,22 @@ export const useTransactionScreen = ({
                 .map(([token, value]) => [token, value[selectedFeeOption].maxFee] as const)
                 .concat(
                     // Only add VTHO from transactionFeesResponse if not already in allOptions
-                    hasVthoInAllOptions ? [] : [[VTHO.symbol, transactionFeesResponse.options[selectedFeeOption].maxFee]],
+                    hasVthoInAllOptions
+                        ? []
+                        : [[VTHO.symbol, transactionFeesResponse.options[selectedFeeOption].maxFee]],
                 ),
         )
         return result
-    }, [genericDelegatorFees.allOptions, genericDelegatorFees.isLoading, selectedFeeOption, transactionFeesResponse.options])
+    }, [
+        genericDelegatorFees.allOptions,
+        genericDelegatorFees.isLoading,
+        selectedFeeOption,
+        transactionFeesResponse.options,
+    ])
 
     const isFirstTimeLoadingFees = useMemo(
-        () =>
-            genericDelegatorFees.isFirstTimeLoading ||
-            transactionFeesResponse.isFirstTimeLoading ||
-            loadingGas,
-        [
-            genericDelegatorFees.isFirstTimeLoading,
-            loadingGas,
-            transactionFeesResponse.isFirstTimeLoading,
-        ],
+        () => genericDelegatorFees.isFirstTimeLoading || transactionFeesResponse.isFirstTimeLoading || loadingGas,
+        [genericDelegatorFees.isFirstTimeLoading, loadingGas, transactionFeesResponse.isFirstTimeLoading],
     )
 
     const { hasEnoughBalance, hasEnoughBalanceOnAny, hasEnoughBalanceOnToken } = useIsEnoughGas({
@@ -463,7 +468,6 @@ export const useTransactionScreen = ({
         )
             resetDelegation()
     }, [resetDelegation, selectedAccount.device.type, selectedDelegationToken, selectedDelegationUrl])
-
 
     const isDisabledButtonState = useMemo(
         () => !hasEnoughBalance || loading || isSubmitting.current || (gas?.gas ?? 0) === 0 || isSmartWalletLoading,

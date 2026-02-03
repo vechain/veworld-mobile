@@ -22,7 +22,6 @@ import {
     useAnalyticTracking,
     useBottomSheetModal,
     useCloudBackup,
-    useCreateWallet,
     useDisclosure,
     useSmartWallet,
     useTheme,
@@ -132,7 +131,15 @@ export const WelcomeScreen = () => {
     }, [getAllLanguageCodes, handleSelectLanguage])
 
     const DEV_DEMO_BUTTON = useDemoWallet()
-    const { onCreateWallet, isOpen, isError, onSuccess, onSmartWalletPinSuccess, onClose: onCloseCreateFlow, onCreateSmartWallet } = useHandleWalletCreation()
+    const {
+        onCreateWallet,
+        isOpen,
+        isError,
+        onSuccess,
+        onSmartWalletPinSuccess,
+        onClose: onCloseCreateFlow,
+        onCreateSmartWallet,
+    } = useHandleWalletCreation()
     const [pendingSmartAccountAddress, setPendingSmartAccountAddress] = useState<string | null>(null)
 
     const onNewGoogleWallet = useCallback(async () => {
@@ -145,7 +152,7 @@ export const WelcomeScreen = () => {
         }
         setPendingSmartAccountAddress(smartAccountAddress)
         onCreateSmartWallet({ address: smartAccountAddress })
-    }, [login])
+    }, [isAuthenticated, login, onCreateSmartWallet, smartAccountAddress])
 
     const onNewWallet = useCallback(async () => {
         await onCreateWallet({ derivationPath: DerivationPath.VET })

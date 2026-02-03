@@ -82,7 +82,6 @@ export async function estimateSmartAccountFees({
         tokenAddress: VTHO.address,
         depositAccount: ownerAddress, // Doesn't matter for gas estimation
         fee: BigNutils(MOCK_FEE_WEI.toString()),
-        rates: { rate, serviceFee },
     })
     const gasUsed = BigInt(totalGas)
 
