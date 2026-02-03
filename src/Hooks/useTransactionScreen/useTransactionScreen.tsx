@@ -144,39 +144,16 @@ export const useTransactionScreen = ({
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
-    const { buildTransaction: buildTransactionWithSmartWallet } = useSmartWallet()
+    // const { buildTransaction: buildTransactionWithSmartWallet } = useSmartWallet()
     const { tokens: availableTokens, isLoading: isLoadingTokens } = useGenericDelegationTokens()
     const { depositAccount, isLoading: isLoadingDepositAccount } = useDelegatorDepositAddress()
 
-    const [transactionClauses, setTransactionClauses] = useState<TransactionClause[]>(clauses)
-    const [isLoadingClauses, setIsLoadingClauses] = useState(false)
-
-    useEffect(() => {
-        const buildClauses = async () => {
-            if (selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET) {
-                setIsLoadingClauses(true)
-                try {
-                    const smartWalletTx = await buildTransactionWithSmartWallet(clauses)
-                    setTransactionClauses(smartWalletTx.body.clauses)
-                } catch (e) {
-                    error(ERROR_EVENTS.SEND, e)
-                    setTransactionClauses(clauses)
-                } finally {
-                    setIsLoadingClauses(false)
-                }
-            } else {
-                setTransactionClauses(clauses)
-            }
-        }
-
-        buildClauses()
-    }, [selectedAccount.device.type, buildTransactionWithSmartWallet, clauses])
 
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
-        clauses: isLoadingClauses ? [] : transactionClauses,
+        clauses: clauses,
         providedGas: dappRequest?.options?.gas,
-        disabled: isLoadingClauses,
+        // disabled: isLoadingClauses,
     })
 
     const transactionOutputs = useMemo(() => gas?.outputs, [gas?.outputs])
@@ -265,13 +242,8 @@ export const useTransactionScreen = ({
         return result
     }, [isGalactica, transactionFeesResponse.txOptions])
 
-    // For smart wallets, use original clauses since estimateSmartAccountFees will build them itself
-    // Using transactionClauses (pre-built) would cause double-wrapping and incorrect gas estimation
-    const isSmartWallet = selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET
-    const clausesForDelegationFees = isSmartWallet ? clauses : transactionClauses
-
     const genericDelegatorFees = useGenericDelegationFees({
-        clauses: isLoadingClauses ? [] : clausesForDelegationFees,
+        clauses,
         signer: selectedAccount.address,
         token: selectedDelegationToken as DelegationToken,
         isGalactica,
@@ -318,13 +290,11 @@ export const useTransactionScreen = ({
         () =>
             genericDelegatorFees.isFirstTimeLoading ||
             transactionFeesResponse.isFirstTimeLoading ||
-            loadingGas ||
-            isLoadingClauses,
+            loadingGas,
         [
             genericDelegatorFees.isFirstTimeLoading,
             loadingGas,
             transactionFeesResponse.isFirstTimeLoading,
-            isLoadingClauses,
         ],
     )
 
@@ -473,13 +443,13 @@ export const useTransactionScreen = ({
     const isSmartWalletLoading = useMemo(
         () =>
             selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET &&
-            (isLoadingClauses || isLoadingDepositAccount || genericDelegatorFees.isLoading),
-        [selectedAccount.device.type, isLoadingClauses, isLoadingDepositAccount, genericDelegatorFees.isLoading],
+            (isLoadingDepositAccount || genericDelegatorFees.isLoading),
+        [selectedAccount.device.type, isLoadingDepositAccount, genericDelegatorFees.isLoading],
     )
 
     const isLoading = useMemo(
-        () => loading || loadingGas || isBiometricsEmpty || isLoadingClauses || isSmartWalletLoading,
-        [loading, loadingGas, isBiometricsEmpty, isLoadingClauses, isSmartWalletLoading],
+        () => loading || loadingGas || isBiometricsEmpty || isSmartWalletLoading,
+        [loading, loadingGas, isBiometricsEmpty, isSmartWalletLoading],
     )
 
     const fallbackToVTHO = useCallback(() => {
