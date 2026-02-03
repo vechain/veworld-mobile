@@ -81,6 +81,7 @@ export const ImportFromCloudScreen = () => {
         if (isLoading) {
             return (
                 <FlatList
+                    testID="IMPORT_FROM_CLOUD_LIST_SKELETON"
                     data={skeletonArray}
                     contentContainerStyle={styles.listContentContainer_Skeleton}
                     ItemSeparatorComponent={() => Seperator}
@@ -102,6 +103,7 @@ export const ImportFromCloudScreen = () => {
         if (cloudKitWallets) {
             return (
                 <Animated.FlatList
+                    testID="IMPORT_FROM_CLOUD_LIST"
                     layout={LinearTransition}
                     data={cloudKitWallets}
                     contentContainerStyle={styles.listContentContainer}
@@ -155,6 +157,7 @@ export const ImportFromCloudScreen = () => {
             }
             footer={
                 <BaseButton
+                    testID="IMPORT_FROM_CLOUD_CONTINUE_BUTTON"
                     title={LL.BTN_CONTINUE()}
                     action={() => {
                         if (selected) {

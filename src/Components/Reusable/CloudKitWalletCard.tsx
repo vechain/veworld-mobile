@@ -74,6 +74,7 @@ export const CloudKitWalletCard = ({
 
     return (
         <AnimatedTouchableOpacity
+            testID={`IMPORT_FROM_CLOUD_WALLET_CARD_${wallet.rootAddress}`}
             activeOpacity={0.9}
             disabled={isImported}
             style={[styles.container, isImported && styles.importedContainer, containerAnimatedStyles]}
