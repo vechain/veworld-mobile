@@ -2,12 +2,7 @@ import React, { createContext, useContext, useCallback, useMemo, useState, useEf
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { NetworkConfig, VechainWalletSDKConfig } from "../types/config"
-import {
-    SignOptions,
-    TransactionOptions,
-    TypedDataPayload,
-    GenericDelegationDetails,
-} from "../types/transaction"
+import { SignOptions, TransactionOptions, TypedDataPayload, GenericDelegationDetails } from "../types/transaction"
 import { LoginOptions, SmartAccountAdapter } from "../types/wallet"
 import { getSmartAccount } from "../utils/smartAccount"
 import { WalletError, WalletErrorType } from "../utils/errors"
@@ -156,7 +151,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 )
             }
 
-
             try {
                 const genesisBlock = await thor.blocks.getGenesisBlock()
                 if (!genesisBlock) {
@@ -172,12 +166,10 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     ownerAddress,
                 })
 
-
                 // Estimate gas
                 const gasResult = await thor.gas.estimateGas(finalClauses, ownerAddress, {
                     gasPadding: 1,
                 })
-
 
                 const parsedGasLimit = Math.max(gasResult.totalGas, options?.gas ?? 0)
 
@@ -189,7 +181,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     maxPriorityFeePerGas: options?.maxPriorityFeePerGas,
                 })
 
-
                 return Transaction.of(txBody)
             } catch (error) {
                 throw new WalletError(WalletErrorType.BUILDING_TRANSACTION_ERROR, "Error building transaction", error)
@@ -198,6 +189,8 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         [ownerAddress, thor, signTypedData, smartAccountConfig, adapter.isAuthenticated],
     )
 
+    // Gas estimation - pass in standard clauses and this function will do all the necessary
+    // transaction wrapping required to send the tx via the smart account contract.
     const estimateGas = useCallback(
         async (clauses: TransactionClause[], genericDelegation?: GenericDelegationDetails): Promise<number> => {
             if (!adapter.isAuthenticated || !ownerAddress) {

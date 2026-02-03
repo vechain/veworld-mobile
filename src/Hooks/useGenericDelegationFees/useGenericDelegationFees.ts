@@ -58,7 +58,7 @@ const buildTransactionCost = (
     keys: (keyof EstimateGenericDelegatorFeesResponseObject)[],
     token: DelegationToken,
 ) => {
-    if (!data || keys.length !== 3 || typeof data.transactionCost === "number") return undefined
+    if (!data || keys.length !== 3) return undefined
     const lowerCaseToken = token.toLowerCase()
     const transactionCost = data.transactionCost
 
@@ -135,13 +135,9 @@ export const useGenericDelegationFees = ({
             return { options: undefined, allOptions: undefined }
         }
 
-        const keys = isGalactica
-            ? (["regular", "medium", "high"] as const)
-            : (["legacy", "legacy", "legacy"] as const)
+        const keys = isGalactica ? (["regular", "medium", "high"] as const) : (["legacy", "legacy", "legacy"] as const)
 
-        const allOpts = Object.fromEntries(
-            ALLOWED_TOKENS.map(tk => [tk, buildTransactionCost(data, [...keys], tk)!]),
-        )
+        const allOpts = Object.fromEntries(ALLOWED_TOKENS.map(tk => [tk, buildTransactionCost(data, [...keys], tk)!]))
 
         return { options: allOpts[token], allOptions: allOpts }
     }, [data, isGalactica, token])
