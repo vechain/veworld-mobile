@@ -100,7 +100,9 @@ export const useGenericDelegationFees = ({
 
     const canRunServiceQuery = !isSmartWallet && canRunDelegationQuery
 
-    // Smart wallet fee estimation query
+    // Smart wallet fee estimation query.  The estimate fee on the generic delegator does not work accuratley for smart accounts.
+    // To simulate the TX the generic delegator would need the TX signed but it does not have that in the estimate phase.
+    // We have the signature locally so we do our own estiamtion using the rates for the relevant payment tokens from the generic delegator
     const {
         data: smartWalletData,
         isFetching: isLoadingSmartWallet,
