@@ -161,6 +161,44 @@ export const useSignTransaction = ({
         }
     }
 
+    const validateGenericDelegatorResult = async (
+        originalTransaction: Transaction,
+        delegatedTransaction: Transaction,
+        delegatorDepositAccount?: string,
+    ): Promise<{ valid: boolean }> => {
+        if (genericDelegatorFee === undefined) {
+            return { valid: false }
+        }
+        if (senderDevice?.type === DEVICE_TYPE.SMART_WALLET) {
+            if (delegatorDepositAccount === undefined) {
+                return { valid: false }
+            }
+            const validationResult = await validateGenericDelegatorTxSmartAccount(
+                delegatedTransaction,
+                selectedDelegationToken,
+                genericDelegatorFee,
+                delegatorDepositAccount,
+            )
+            if (!validationResult.valid) {
+                debug("SIGN", validationResult.reason, validationResult.metadata)
+                return { valid: false }
+            }
+            return { valid: true }
+        }
+
+        const validationResult = await validateGenericDelegatorTx(
+            originalTransaction,
+            delegatedTransaction,
+            selectedDelegationToken,
+            genericDelegatorFee,
+        )
+        if (!validationResult.valid) {
+            debug("SIGN", validationResult.reason, validationResult.metadata)
+            return { valid: false }
+        }
+        return { valid: true }
+    }
+
     const getGenericDelegationTransaction = async (transaction: Transaction) => {
         try {
             // build hex encoded version of the transaction for signing request
@@ -191,10 +229,9 @@ export const useSignTransaction = ({
                 throw new Error("[GENERIC DELEGATOR]: Error getting delegator signature")
             }
 
-            const decodedTx = Transaction.decode(Buffer.from(newTx.raw.substring(2), "hex"), false)
             return {
                 signature: Buffer.from(newTx.signature.substring(2), "hex"),
-                transaction: Transaction.of(decodedTx.body),
+                transaction: Transaction.of(Transaction.decode(Buffer.from(newTx.raw.substring(2), "hex"), false).body),
             }
         } catch (e) {
             warn(ERROR_EVENTS.SIGN, "Error getting URL delegator signature", e)
@@ -210,41 +247,22 @@ export const useSignTransaction = ({
             case DelegationType.URL: {
                 // For smart accounts, always use generic delegator (including VTHO)
                 // For non-smart accounts with VTHO, use standard URL delegation
-                const shouldUseStandardUrlDelegation =
+                if (
                     senderDevice?.type !== DEVICE_TYPE.SMART_WALLET &&
                     (selectedDelegationToken === VTHO.symbol || genericDelegatorFee === undefined)
-
-                if (shouldUseStandardUrlDelegation)
+                )
                     return { transaction, signature: await getUrlDelegationSignature(transaction) }
+
                 const result = await getGenericDelegationTransaction(transaction)
                 if (result === SignStatus.DELEGATION_FAILURE)
                     return { transaction, signature: SignStatus.DELEGATION_FAILURE }
 
-                if (senderDevice?.type === DEVICE_TYPE.SMART_WALLET) {
-                    if (genericDelegatorDepositAccount === undefined) {
-                        return { transaction, signature: SignStatus.DELEGATION_FAILURE }
-                    }
-                    const validationResult = await validateGenericDelegatorTxSmartAccount(
-                        result.transaction,
-                        selectedDelegationToken,
-                        genericDelegatorFee,
-                        genericDelegatorDepositAccount,
-                    )
-                    if (!validationResult.valid) {
-                        debug("SIGN", validationResult.reason, validationResult.metadata)
-                        return { transaction, signature: SignStatus.DELEGATION_FAILURE }
-                    }
-                    return { transaction: result.transaction, signature: result.signature }
-                }
-
-                const validationResult = await validateGenericDelegatorTx(
+                const validationResult = await validateGenericDelegatorResult(
                     transaction,
                     result.transaction,
-                    selectedDelegationToken,
-                    genericDelegatorFee,
+                    genericDelegatorDepositAccount,
                 )
                 if (!validationResult.valid) {
-                    debug("SIGN", validationResult.reason, validationResult.metadata)
                     return { transaction, signature: SignStatus.DELEGATION_FAILURE }
                 }
                 return { transaction: result.transaction, signature: result.signature }

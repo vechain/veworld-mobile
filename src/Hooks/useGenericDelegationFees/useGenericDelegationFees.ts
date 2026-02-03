@@ -6,7 +6,6 @@ import { B3TR, GasPriceCoefficient, VET, VTHO } from "~Constants"
 import {
     estimateGenericDelegatorFees,
     EstimateGenericDelegatorFeesResponse,
-    EstimateGenericDelegatorFeesResponseObject,
     isValidGenericDelegatorNetwork,
 } from "~Networking/GenericDelegator"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
@@ -16,6 +15,7 @@ import { useGenericDelegatorRates } from "../useGenericDelegatorRates"
 import { useSmartWallet } from "../useSmartWallet"
 import { estimateSmartAccountFees, GasPrices } from "./estimateSmartAccountFees"
 
+// Add 25% to the max fee given wrong estimation from the delegation
 const MAX_FEE_MULTIPLIER_NUMERATOR = 5
 const MAX_FEE_MULTIPLIER_DENOMINATOR = 4 // 5/4 = 1.25x
 
@@ -49,31 +49,27 @@ const calculateFeeWithMax = (baseValue: number) => {
 /**
  * Build transaction cost object
  * @param data Data from server API
- * @param keys Keys in order: first element = regular, second = medium, third = high
+ * @param isGalactica Whether to use Galactica gas tiers or legacy
  * @param token Token to use
  * @returns The transaction cost per token per speed
  */
 const buildTransactionCost = (
     data: EstimateGenericDelegatorFeesResponse | undefined,
-    keys: (keyof EstimateGenericDelegatorFeesResponseObject)[],
+    isGalactica: boolean,
     token: DelegationToken,
 ) => {
-    if (!data || keys.length !== 3) return undefined
+    if (!data) return undefined
+
+    const keys = isGalactica ? (["regular", "medium", "high"] as const) : (["legacy", "legacy", "legacy"] as const)
+
     const lowerCaseToken = token.toLowerCase()
     const transactionCost = data.transactionCost
 
-    const tiers = [GasPriceCoefficient.REGULAR, GasPriceCoefficient.MEDIUM, GasPriceCoefficient.HIGH] as const
-
-    return Object.fromEntries(
-        tiers.map((tier, i) => [tier, calculateFeeWithMax(transactionCost[keys[i]][lowerCaseToken])]),
-    ) as Record<
-        GasPriceCoefficient,
-        {
-            estimatedFee: ReturnType<typeof BigNutils>
-            maxFee: ReturnType<typeof BigNutils>
-            priorityFee: ReturnType<typeof BigNutils>
-        }
-    >
+    return {
+        [GasPriceCoefficient.REGULAR]: calculateFeeWithMax(transactionCost[keys[0]][lowerCaseToken]),
+        [GasPriceCoefficient.MEDIUM]: calculateFeeWithMax(transactionCost[keys[1]][lowerCaseToken]),
+        [GasPriceCoefficient.HIGH]: calculateFeeWithMax(transactionCost[keys[2]][lowerCaseToken]),
+    }
 }
 
 const ALLOWED_TOKENS: DelegationToken[] = [VET.symbol, B3TR.symbol, VTHO.symbol] as DelegationToken[]
@@ -93,51 +89,65 @@ export const useGenericDelegationFees = ({
 
     const isSmartWallet = deviceType === DEVICE_TYPE.SMART_WALLET
 
-    // Determine if we can run the query
     const canRunSmartWalletQuery =
         isSmartWallet &&
         smartAccountConfig !== null &&
         !isLoadingRates &&
         rate !== undefined &&
         serviceFee !== undefined &&
+        isValidGenericDelegatorNetwork(selectedNetwork.type) &&
         clauses.length > 0
 
     const canRunServiceQuery =
         !isSmartWallet && isValidGenericDelegatorNetwork(selectedNetwork.type) && clauses.length > 0
 
+    // Smart wallet fee estimation query
     const {
-        data,
-        isFetching: isLoading,
-        isLoading: isFirstTimeLoading,
+        data: smartWalletData,
+        isFetching: isLoadingSmartWallet,
+        isLoading: isFirstTimeLoadingSmartWallet,
     } = useQuery({
-        queryKey: ["GenericDelegatorEstimate", clauses, signer, isSmartWallet ? "smart" : "service", gasPrices],
-        queryFn: async () => {
-            if (isSmartWallet && smartAccountConfig && rate && serviceFee !== undefined) {
-                return estimateSmartAccountFees({
-                    clauses,
-                    estimateGasFn: estimateGas,
-                    ownerAddress,
-                    rate,
-                    serviceFee,
-                    gasPrices,
-                })
-            }
-            return estimateGenericDelegatorFees({ clauses, signer, networkType: selectedNetwork.type })
-        },
-        enabled: canRunSmartWalletQuery || canRunServiceQuery,
+        queryKey: ["SmartAccountFeeEstimate", clauses, ownerAddress, gasPrices],
+        queryFn: () =>
+            estimateSmartAccountFees({
+                clauses,
+                estimateGasFn: estimateGas,
+                ownerAddress,
+                rate: rate!,
+                serviceFee: serviceFee!,
+                gasPrices,
+            }),
+        enabled: canRunSmartWalletQuery,
         refetchInterval: 10000,
         gcTime: 1000 * 60 * 5,
         placeholderData: keepPreviousData,
     })
+
+    // Generic delegator fee estimation query (non-smart wallet)
+    const {
+        data: serviceData,
+        isFetching: isLoadingService,
+        isLoading: isFirstTimeLoadingService,
+    } = useQuery({
+        queryKey: ["GenericDelegatorEstimate", clauses, signer],
+        queryFn: () => estimateGenericDelegatorFees({ clauses, signer, networkType: selectedNetwork.type }),
+        enabled: canRunServiceQuery,
+        refetchInterval: 10000,
+        gcTime: 1000 * 60 * 5,
+        placeholderData: keepPreviousData,
+    })
+
+    // Combine results based on wallet type
+    const data = isSmartWallet ? smartWalletData : serviceData
+    const isLoading = isSmartWallet ? isLoadingSmartWallet : isLoadingService
+    const isFirstTimeLoading = isSmartWallet ? isFirstTimeLoadingSmartWallet : isFirstTimeLoadingService
 
     const { options, allOptions } = useMemo(() => {
         if (data === undefined) {
             return { options: undefined, allOptions: undefined }
         }
 
-        const keys = isGalactica ? (["regular", "medium", "high"] as const) : (["legacy", "legacy", "legacy"] as const)
-
-        const allOpts = Object.fromEntries(ALLOWED_TOKENS.map(tk => [tk, buildTransactionCost(data, [...keys], tk)!]))
+        const allOpts = Object.fromEntries(ALLOWED_TOKENS.map(tk => [tk, buildTransactionCost(data, isGalactica, tk)!]))
 
         return { options: allOpts[token], allOptions: allOpts }
     }, [data, isGalactica, token])

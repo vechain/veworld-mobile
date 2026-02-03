@@ -37,14 +37,8 @@ type EstimateSmartAccountFeesArgs = {
 /**
  * Calculate fee in wei for a given gas amount, price, and token rate
  */
-const calculateTokenFeeWei = (
-    gasUsed: bigint,
-    gasPrice: bigint,
-    tokenRate: number,
-    serviceFee: number,
-): bigint => {
+const calculateTokenFeeWei = (gasUsed: bigint, gasPrice: bigint, tokenRate: number, serviceFee: number): bigint => {
     const vthoFeeWei = gasPrice * gasUsed
-    // fee = vthoFeeWei * rate * (1 + serviceFee)
     const feeWei = new BigNumber(vthoFeeWei.toString()).times(tokenRate).times(1 + serviceFee)
     return BigInt(feeWei.toFixed(0))
 }
@@ -52,12 +46,7 @@ const calculateTokenFeeWei = (
 /**
  * Calculate fees for all tokens at a given gas price
  */
-const calculateFeesForGasPrice = (
-    gasUsed: bigint,
-    gasPrice: bigint,
-    rate: TokenRates,
-    serviceFee: number,
-) => {
+const calculateFeesForGasPrice = (gasUsed: bigint, gasPrice: bigint, rate: TokenRates, serviceFee: number) => {
     const vetFeeWei = calculateTokenFeeWei(gasUsed, gasPrice, rate.vet, serviceFee)
     const b3trFeeWei = calculateTokenFeeWei(gasUsed, gasPrice, rate.b3tr, serviceFee)
     const vthoFeeWei = calculateTokenFeeWei(gasUsed, gasPrice, rate.vtho, serviceFee)
