@@ -364,9 +364,20 @@ export const ImportLocalWallet = () => {
                                     <BaseSpacer height={12} />
                                     <BaseView style={styles.copyPasteButtonContainer}>
                                         <BaseView flex={1}>
-                                            {!!isError && <AlertInline message={isError} status="error" />}
+                                            {!!isError && (
+                                                <AlertInline
+                                                    testID={"IMPORT_LOCAL_WALLET_ERROR"}
+                                                    message={isError}
+                                                    status="error"
+                                                />
+                                            )}
                                         </BaseView>
                                         <BaseButton
+                                            testID={
+                                                textValue.length
+                                                    ? "IMPORT_LOCAL_WALLET_CLEAR_BUTTON"
+                                                    : "IMPORT_LOCAL_WALLET_PASTE_BUTTON"
+                                            }
                                             rightIcon={
                                                 <BaseIcon
                                                     name={textValue.length ? "icon-circle-x" : "icon-paste"}
@@ -420,6 +431,7 @@ export const ImportLocalWallet = () => {
                     <BaseView w={100}>
                         {!!isCreateError && (
                             <AlertInline
+                                testID="IMPORT_LOCAL_WALLET_CREATE_ERROR"
                                 message={LL.ERROR_GENERIC_WITH_RETRY_SUBTITLE()}
                                 status="error"
                                 justifyContent="center"
@@ -429,6 +441,7 @@ export const ImportLocalWallet = () => {
                         )}
 
                         <BaseButton
+                            testID={"IMPORT_LOCAL_WALLET_IMPORT_BUTTON"}
                             action={handleVerify}
                             style={styles.button}
                             title={isCreateError ? LL.BTN_TRY_AGAIN() : LL.BTN_IMPORT()}

@@ -8,6 +8,7 @@ import { useThemedStyles } from "~Hooks"
 type AlertInlineVariant = "banner" | "inline"
 
 interface AlertInlineProps {
+    testID?: string
     message: string
     status: AlertStatus
     variant?: AlertInlineVariant
@@ -19,6 +20,7 @@ interface AlertInlineProps {
 
 export const AlertInline = memo(
     ({
+        testID,
         message,
         status,
         variant = "inline",
@@ -33,7 +35,7 @@ export const AlertInline = memo(
         const colors = theme.colors[statusVariant]
 
         return (
-            <BaseView style={[styles.container, style]} justifyContent={justifyContent}>
+            <BaseView testID={testID} style={[styles.container, style]} justifyContent={justifyContent}>
                 <BaseView style={[styles.row, contentStyle]} justifyContent={justifyContent}>
                     <BaseIcon name={ICON_NAMES[status]} size={16} color={colors.icon} />
                     <BaseText
