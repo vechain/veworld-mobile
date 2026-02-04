@@ -1,9 +1,9 @@
 import { StyleSheet } from "react-native"
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseText, BaseView } from "~Components/Base"
 import { VeWorldLogoV2 } from "~Assets/Img"
 import { useThemedStyles } from "~Hooks/useTheme"
-import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
+import { AnalyticsEvent, COLORS, ColorThemeType, DerivationPath } from "~Constants"
 import { PlatformUtils } from "~Utils"
 import Markdown from "react-native-markdown-display"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
@@ -15,6 +15,9 @@ import { useBottomSheetModal } from "~Hooks/useBottomSheet"
 import { SelfCustodyOptionsBottomSheet } from "../Components"
 import LottieView from "lottie-react-native"
 import { OnboardingB3MO, OnboardingStardust } from "~Assets/Lottie"
+import { useHandleWalletCreation } from "./useHandleWalletCreation"
+import { useSmartWallet } from "~Hooks/useSmartWallet"
+import { CreatePasswordModal } from "../../../../Components"
 
 export const WelcomeScreenV2 = () => {
     const termsOfServiceUrl = process.env.REACT_APP_TERMS_OF_SERVICE_URL
@@ -22,6 +25,7 @@ export const WelcomeScreenV2 = () => {
 
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL, setLocale } = useI18nContext()
+    const { login, isAuthenticated, smartAccountAddress } = useSmartWallet()
 
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
@@ -42,6 +46,40 @@ export const WelcomeScreenV2 = () => {
         },
         [dispatch, setLocale],
     )
+    const {
+        isOpen,
+        onSuccess,
+        onSmartWalletPinSuccess,
+        onClose: onCloseCreateFlow,
+        onCreateSmartWallet,
+    } = useHandleWalletCreation()
+    const [pendingSmartAccountAddress, setPendingSmartAccountAddress] = useState<string | null>(null)
+    const [pendingGoogleLogin, setPendingGoogleLogin] = useState(false)
+
+    const onNewGoogleWallet = useCallback(async () => {
+        // Interestingly, privy stores its own access/refresh tokens in the keychain under its
+        // own domain path so when we uninstall the app it does not get wiped. Thus
+        // there is a case where on a fresh install we have a privy login and don't need to
+        // login to google again.
+        if (!isAuthenticated) {
+            setPendingGoogleLogin(true)
+            await login({ provider: "google", oauthRedirectUri: "veworld://" })
+            // Don't proceed here - wait for useEffect to detect smartAccountAddress is populated
+        } else if (smartAccountAddress) {
+            // Already authenticated with address available
+            setPendingSmartAccountAddress(smartAccountAddress)
+            onCreateSmartWallet({ address: smartAccountAddress })
+        }
+    }, [isAuthenticated, login, onCreateSmartWallet, smartAccountAddress])
+
+    // Wait for smartAccountAddress to be populated after Google login
+    useEffect(() => {
+        if (pendingGoogleLogin && isAuthenticated && smartAccountAddress) {
+            setPendingGoogleLogin(false)
+            setPendingSmartAccountAddress(smartAccountAddress)
+            onCreateSmartWallet({ address: smartAccountAddress })
+        }
+    }, [pendingGoogleLogin, isAuthenticated, smartAccountAddress, onCreateSmartWallet])
 
     useEffect(() => {
         // Track when a new onboarding start
@@ -107,7 +145,9 @@ export const WelcomeScreenV2 = () => {
                             leftIcon={<BaseIcon color={theme.colors.buttonText} name="icon-google" size={24} />}
                             textProps={{ typographyFont: "bodyMedium" }}
                             title={LL.BTN_CONTINUE_WITH_GOOGLE()}
-                            action={() => {}}
+                            action={() => {
+                                onNewGoogleWallet()
+                            }}
                         />
                         <BaseText align="center" typographyFont="captionMedium">
                             {LL.COMMON_OR()}
@@ -133,6 +173,27 @@ export const WelcomeScreenV2 = () => {
                     </BaseView>
                 </BaseView>
             </BaseView>
+            <CreatePasswordModal
+                isOpen={isOpen}
+                onClose={() => {
+                    setPendingSmartAccountAddress(null)
+                    onCloseCreateFlow()
+                }}
+                onSuccess={pin => {
+                    if (pendingSmartAccountAddress) {
+                        onSmartWalletPinSuccess({
+                            pin,
+                            address: pendingSmartAccountAddress,
+                        })
+                        setPendingSmartAccountAddress(null)
+                    } else {
+                        onSuccess({
+                            pin,
+                            derivationPath: DerivationPath.VET,
+                        })
+                    }
+                }}
+            />
             <SelfCustodyOptionsBottomSheet bsRef={selfCustodyOptionsBottomSheetRef} />
         </BaseSafeArea>
     )
