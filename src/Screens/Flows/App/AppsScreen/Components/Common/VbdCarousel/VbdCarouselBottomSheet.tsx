@@ -1,7 +1,10 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { ElementType, useCallback, useMemo, useState } from "react"
-import { StyleSheet } from "react-native"
+import { SkSize } from "@shopify/react-native-skia"
+import React, { ElementType, useCallback, useEffect, useMemo, useState } from "react"
+import { LayoutChangeEvent, StyleSheet, View } from "react-native"
+import { GestureDetector } from "react-native-gesture-handler"
 import { getTimeZone } from "react-native-localize"
+import Animated, { FadeIn, FadeOut, useAnimatedRef } from "react-native-reanimated"
 import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
 import {
     BaseBottomSheet,
@@ -15,23 +18,20 @@ import {
     BlurView,
     DAppIcon,
 } from "~Components"
+import { EdgeSwipeIndicator, useEdgeSwipeGesture } from "~Components/Reusable"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
 import { useBottomSheetModal, useDappBookmarkToggle, useTheme, useThemedStyles } from "~Hooks"
+import { useAppLogo } from "~Hooks/useAppLogo"
 import { useAppOverview } from "~Hooks/useAppOverview"
 import { useI18nContext } from "~i18n"
 import { VbdDApp } from "~Model"
 import { Routes } from "~Navigation"
+import HapticsService from "~Services/HapticsService"
 import { addBookmark, removeBookmark, useAppDispatch } from "~Storage/Redux"
 import { BigNutils, DateUtils, URIUtils } from "~Utils"
 import { useDAppActions } from "../../../Hooks"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
-import { Gesture, GestureDetector } from "react-native-gesture-handler"
-import Animated, { FadeOut, FadeIn, runOnJS } from "react-native-reanimated"
-import { useAppLogo } from "~Hooks/useAppLogo"
-import HapticsService from "~Services/HapticsService"
-
-const GESTURE_ACTIVE_THRESHOLD = 10
 
 export type VbdCarouselBottomSheetMetadata = {
     bannerUri?: string
@@ -58,7 +58,7 @@ const VbdInfoColumn = ({
     isLoading?: boolean
 }) => {
     const theme = useTheme()
-    const color = useMemo(() => (!theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.LIME_GREEN), [theme.isDark])
+    const color = useMemo(() => (theme.isDark ? COLORS.LIME_GREEN : COLORS.DARK_PURPLE_DISABLED), [theme.isDark])
     const titleColor = useMemo(() => (theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500), [theme.isDark])
     const descriptionColor = useMemo(() => (theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700), [theme.isDark])
 
@@ -96,6 +96,8 @@ const VbdCarouselBottomSheetContent = ({
 }: VbdCarouselBottomSheetMetadata & { onClose: () => void }) => {
     const [selectedApp, setSelectedApp] = useState<VbdDApp>(app)
     const [selectedAppIndex, setSelectedAppIndex] = useState<number>(carouselIndex)
+    const [canvasSize, setCanvasSize] = useState<SkSize>({ width: 0, height: 0 })
+    const backgroundRef = useAnimatedRef<View>()
 
     const { LL, locale } = useI18nContext()
     const theme = useTheme()
@@ -104,6 +106,31 @@ const VbdCarouselBottomSheetContent = ({
     const dispatch = useAppDispatch()
     const { onDAppPress } = useDAppActions(Routes.APPS)
     const { data: appOverview, isLoading } = useAppOverview(selectedApp.id)
+
+    const onSwipeLeft = useCallback(() => {
+        if (selectedAppIndex === carouselDapps.length - 1) return
+
+        HapticsService.triggerHaptics({ haptics: "Success" })
+
+        setSelectedApp(carouselDapps[selectedAppIndex + 1])
+        setSelectedAppIndex(selectedAppIndex + 1)
+    }, [selectedAppIndex, carouselDapps])
+
+    const onSwipeRight = useCallback(() => {
+        if (selectedAppIndex === 0) return
+
+        HapticsService.triggerHaptics({ haptics: "Success" })
+
+        setSelectedApp(carouselDapps[selectedAppIndex - 1])
+        setSelectedAppIndex(selectedAppIndex - 1)
+    }, [selectedAppIndex, carouselDapps])
+
+    const { swipeDirection, leftPatch, rightPatch, swipeGesture, viewImage, takeViewSnapshot } = useEdgeSwipeGesture({
+        viewRef: backgroundRef,
+        canvasSize,
+        onSwipeLeft,
+        onSwipeRight,
+    })
 
     const bannerUri = useMemo(() => {
         const uri = selectedApp.ve_world?.featured_image ?? selectedApp.ve_world?.banner
@@ -186,49 +213,34 @@ const VbdCarouselBottomSheetContent = ({
         }
     }, [isBookMarked, theme.isDark])
 
-    const onSwipeLeft = useCallback(() => {
-        if (selectedAppIndex === carouselDapps.length - 1) return
+    useEffect(() => {
+        if (bannerUri && backgroundRef.current) {
+            takeViewSnapshot()
+        }
+    }, [bannerUri, backgroundRef, takeViewSnapshot])
 
-        HapticsService.triggerHaptics({ haptics: "Success" })
-
-        setSelectedApp(carouselDapps[selectedAppIndex + 1])
-        setSelectedAppIndex(selectedAppIndex + 1)
-    }, [selectedAppIndex, carouselDapps])
-
-    const onSwipeRight = useCallback(() => {
-        if (selectedAppIndex === 0) return
-
-        HapticsService.triggerHaptics({ haptics: "Success" })
-
-        setSelectedApp(carouselDapps[selectedAppIndex - 1])
-        setSelectedAppIndex(selectedAppIndex - 1)
-    }, [selectedAppIndex, carouselDapps])
-
-    const changeAppActionGesture = useMemo(() => {
-        let startX = 0
-        return Gesture.Pan()
-            .onBegin(({ translationX }) => {
-                startX = translationX
-            })
-            .onEnd(({ translationX }) => {
-                if (startX > translationX) {
-                    runOnJS(onSwipeLeft)()
-                    return
-                }
-
-                if (startX < translationX) {
-                    runOnJS(onSwipeRight)()
-                }
-            })
-            .activeOffsetX([-GESTURE_ACTIVE_THRESHOLD, GESTURE_ACTIVE_THRESHOLD])
-    }, [onSwipeLeft, onSwipeRight])
+    const onLayout = useCallback(
+        (event: LayoutChangeEvent) => {
+            setCanvasSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })
+        },
+        [setCanvasSize],
+    )
 
     return (
         <>
             {bannerUri ? (
-                <GestureDetector gesture={changeAppActionGesture}>
-                    <Animated.View key={selectedApp.id} entering={FadeIn.duration(300)} exiting={FadeOut.duration(300)}>
-                        <FastImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_BS">
+                <GestureDetector gesture={swipeGesture}>
+                    <Animated.View
+                        onLayout={onLayout}
+                        key={selectedApp.id}
+                        entering={FadeIn.duration(300)}
+                        exiting={FadeOut.duration(300)}
+                        style={styles.wrapper}>
+                        <FastImageBackground
+                            ref={backgroundRef}
+                            source={{ uri: bannerUri }}
+                            style={styles.root}
+                            testID="VBD_CAROUSEL_BS">
                             <BaseIcon
                                 style={styles.closeBtn}
                                 color={COLORS.WHITE}
@@ -272,6 +284,14 @@ const VbdCarouselBottomSheetContent = ({
                                     </BaseText>
                                 </BaseView>
                             </BlurView>
+
+                            <EdgeSwipeIndicator
+                                canvasSize={canvasSize}
+                                swipeDirection={swipeDirection}
+                                viewImage={viewImage}
+                                leftPatch={leftPatch}
+                                rightPatch={rightPatch}
+                            />
                         </FastImageBackground>
                     </Animated.View>
                 </GestureDetector>
@@ -340,6 +360,17 @@ export const VbdCarouselBottomSheet = ({ bsRef }: VbdCarouselBottomSheetProps) =
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
+        wrapper: {
+            position: "relative",
+        },
+        canvas: {
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: 1,
+        },
         root: {
             height: isSmallScreen ? 320 : 360,
             position: "relative",
@@ -373,5 +404,6 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: "rgba(0, 0, 0, 0.50)",
             borderRadius: 100,
             padding: 10,
+            zIndex: 3,
         },
     })
