@@ -57,6 +57,9 @@ export const WelcomeScreenV2 = () => {
     const [pendingGoogleLogin, setPendingGoogleLogin] = useState(false)
 
     const onNewGoogleWallet = useCallback(async () => {
+        // Guard against duplicate login triggers while pending
+        if (pendingGoogleLogin) return
+
         // Interestingly, privy stores its own access/refresh tokens in the keychain under its
         // own domain path so when we uninstall the app it does not get wiped. Thus
         // there is a case where on a fresh install we have a privy login and don't need to
@@ -70,7 +73,7 @@ export const WelcomeScreenV2 = () => {
             setPendingSmartAccountAddress(smartAccountAddress)
             onCreateSmartWallet({ address: smartAccountAddress })
         }
-    }, [isAuthenticated, login, onCreateSmartWallet, smartAccountAddress])
+    }, [isAuthenticated, login, onCreateSmartWallet, pendingGoogleLogin, smartAccountAddress])
 
     // Wait for smartAccountAddress to be populated after Google login
     useEffect(() => {
