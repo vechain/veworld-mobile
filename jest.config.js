@@ -7,7 +7,7 @@ module.exports = {
     preset: "react-native",
     setupFiles: ["./node_modules/react-native-gesture-handler/jestSetup.js"],
     setupFilesAfterEnv: ["<rootDir>/jest.setup.ts", "@shopify/react-native-skia/jestSetup.js"],
-    coverageReporters: ["json", "lcov", "text", "text-summary", "clover", "json-summary"],
+    coverageReporters: ["json", "text", "json-summary", "html"],
     testTimeout: 10000,
     transform: {
         "^.+\\.jsx$": "babel-jest",

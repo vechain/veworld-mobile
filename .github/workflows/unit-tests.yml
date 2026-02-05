@@ -80,16 +80,14 @@ jobs:
             - name: Jest Coverage Comment
               uses: MishaKav/jest-coverage-comment@174f9cbf582b7cc2a7a3acce14dcfc8362e9d37f
               with:
-                  coverage-summary-path: ./coverage/coverage-final.json
+                  coverage-summary-path: ./merged-coverage/final-coverage.json
                   title: Jest Report
                   summary-title: Summary
                   badge-title: Coverage
+                  text-instead-badge: false
                   hide-comment: false
                   create-new-comment: false
                   hide-summary: false
-                  coverage-title: Coverage
-                  coverage-path: ./coverage.txt
-                  junitxml-title: Tests
-                  junitxml-path: junit.xml
                   remove-links-to-files: true
                   remove-links-to-lines: true
+                  report-only-changed-files: true
