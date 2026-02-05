@@ -1,5 +1,5 @@
 import { renderHook, act, waitFor } from "@testing-library/react-native"
-import { useSocialWalletLogin } from "./useOAuthWalletLogin"
+import { useSocialWalletLogin } from "./useSocialWalletLogin"
 
 // Mock state for useSmartWallet
 let mockSmartWalletState = {
@@ -59,15 +59,14 @@ const setAuthenticatedWithoutAddress = () => {
     }
 }
 
-describe("useOAuthWalletLogin", () => {
+describe("useSocialWalletLogin", () => {
     const mockOnCreateSmartWallet = jest.fn()
     const mockOnSmartWalletPinSuccess = jest.fn()
 
-    const createDefaultParams = (provider: "google" | "apple" | "twitter" = "google") => ({
-        provider,
+    const defaultParams = {
         onCreateSmartWallet: mockOnCreateSmartWallet,
         onSmartWalletPinSuccess: mockOnSmartWalletPinSuccess,
-    })
+    }
 
     beforeEach(() => {
         jest.clearAllMocks()
@@ -76,9 +75,10 @@ describe("useOAuthWalletLogin", () => {
 
     describe("initial state", () => {
         it("should return initial state with no pending operations", () => {
-            const { result } = renderHook(() => useSocialWalletLogin(createDefaultParams()))
+            const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
             expect(result.current.isLoginPending).toBe(false)
+            expect(result.current.pendingProvider).toBeNull()
             expect(result.current.pendingAddress).toBeNull()
             expect(typeof result.current.handleLogin).toBe("function")
             expect(typeof result.current.handlePinSuccess).toBe("function")
@@ -91,10 +91,10 @@ describe("useOAuthWalletLogin", () => {
             setUnauthenticated()
             mockSmartWalletState.login.mockResolvedValue(undefined)
 
-            const { result } = renderHook(() => useSocialWalletLogin(createDefaultParams(provider)))
+            const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
             await act(async () => {
-                await result.current.handleLogin()
+                await result.current.handleLogin(provider)
             })
 
             expect(mockSmartWalletState.login).toHaveBeenCalledWith({
@@ -102,45 +102,48 @@ describe("useOAuthWalletLogin", () => {
                 oauthRedirectUri: "/auth/callback",
             })
             expect(result.current.isLoginPending).toBe(true)
+            expect(result.current.pendingProvider).toBe(provider)
         })
 
         it("should call onCreateSmartWallet directly when already authenticated with address", async () => {
             const testAddress = "0x1234567890123456789012345678901234567890"
             setAuthenticatedWithAddress(testAddress)
 
-            const { result } = renderHook(() => useSocialWalletLogin(createDefaultParams(provider)))
+            const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
             await act(async () => {
-                await result.current.handleLogin()
+                await result.current.handleLogin(provider)
             })
 
             expect(mockSmartWalletState.login).not.toHaveBeenCalled()
             expect(mockOnCreateSmartWallet).toHaveBeenCalledWith({ address: testAddress })
             expect(result.current.pendingAddress).toBe(testAddress)
+            expect(result.current.pendingProvider).toBe(provider)
         })
 
         it("should set pending state when authenticated but address not yet available", async () => {
             setAuthenticatedWithoutAddress()
 
-            const { result } = renderHook(() => useSocialWalletLogin(createDefaultParams(provider)))
+            const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
             await act(async () => {
-                await result.current.handleLogin()
+                await result.current.handleLogin(provider)
             })
 
             expect(mockSmartWalletState.login).not.toHaveBeenCalled()
             expect(mockOnCreateSmartWallet).not.toHaveBeenCalled()
             expect(result.current.isLoginPending).toBe(true)
+            expect(result.current.pendingProvider).toBe(provider)
         })
 
         it("should show error feedback when login fails", async () => {
             setUnauthenticated()
             mockSmartWalletState.login.mockRejectedValue(new Error("Login failed"))
 
-            const { result } = renderHook(() => useSocialWalletLogin(createDefaultParams(provider)))
+            const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
             await act(async () => {
-                await result.current.handleLogin()
+                await result.current.handleLogin(provider)
             })
 
             expect(mockFeedbackShow).toHaveBeenCalledWith({
@@ -150,6 +153,7 @@ describe("useOAuthWalletLogin", () => {
                 icon: "icon-alert-circle",
             })
             expect(result.current.isLoginPending).toBe(false)
+            expect(result.current.pendingProvider).toBeNull()
         })
 
         it("should guard against duplicate login triggers", async () => {
@@ -157,16 +161,16 @@ describe("useOAuthWalletLogin", () => {
             // Make login hang indefinitely
             mockSmartWalletState.login.mockImplementation(() => new Promise(() => {}))
 
-            const { result } = renderHook(() => useSocialWalletLogin(createDefaultParams(provider)))
+            const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
             // First call
             act(() => {
-                result.current.handleLogin()
+                result.current.handleLogin(provider)
             })
 
             // Second call while first is pending
             await act(async () => {
-                await result.current.handleLogin()
+                await result.current.handleLogin(provider)
             })
 
             // Login should only be called once
@@ -180,11 +184,11 @@ describe("useOAuthWalletLogin", () => {
             setUnauthenticated()
             mockSmartWalletState.login.mockResolvedValue(undefined)
 
-            const { result, rerender } = renderHook(() => useSocialWalletLogin(createDefaultParams()))
+            const { result, rerender } = renderHook(() => useSocialWalletLogin(defaultParams))
 
             // Trigger login
             await act(async () => {
-                await result.current.handleLogin()
+                await result.current.handleLogin("google")
             })
 
             expect(result.current.isLoginPending).toBe(true)
@@ -198,45 +202,41 @@ describe("useOAuthWalletLogin", () => {
                 expect(mockOnCreateSmartWallet).toHaveBeenCalledWith({ address: testAddress })
             })
 
-            expect(result.current.isLoginPending).toBe(false)
             expect(result.current.pendingAddress).toBe(testAddress)
         })
     })
 
     describe("handlePinSuccess", () => {
-        it("should call onSmartWalletPinSuccess and return true when pendingAddress exists", async () => {
+        it("should call onSmartWalletPinSuccess when pendingAddress exists", async () => {
             const testAddress = "0x1234567890123456789012345678901234567890"
             setAuthenticatedWithAddress(testAddress)
 
-            const { result } = renderHook(() => useSocialWalletLogin(createDefaultParams()))
+            const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
             // Trigger login to set pending address
             await act(async () => {
-                await result.current.handleLogin()
+                await result.current.handleLogin("google")
             })
 
-            let returnValue: boolean = false
             act(() => {
-                returnValue = result.current.handlePinSuccess("123456")
+                result.current.handlePinSuccess("123456")
             })
 
-            expect(returnValue).toBe(true)
             expect(mockOnSmartWalletPinSuccess).toHaveBeenCalledWith({
                 pin: "123456",
                 address: testAddress,
             })
             expect(result.current.pendingAddress).toBeNull()
+            expect(result.current.pendingProvider).toBeNull()
         })
 
-        it("should return false when no pendingAddress exists", () => {
-            const { result } = renderHook(() => useSocialWalletLogin(createDefaultParams()))
+        it("should do nothing when no pendingAddress exists", () => {
+            const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
-            let returnValue: boolean = true
             act(() => {
-                returnValue = result.current.handlePinSuccess("123456")
+                result.current.handlePinSuccess("123456")
             })
 
-            expect(returnValue).toBe(false)
             expect(mockOnSmartWalletPinSuccess).not.toHaveBeenCalled()
         })
     })
@@ -246,14 +246,15 @@ describe("useOAuthWalletLogin", () => {
             const testAddress = "0x1234567890123456789012345678901234567890"
             setAuthenticatedWithAddress(testAddress)
 
-            const { result } = renderHook(() => useSocialWalletLogin(createDefaultParams()))
+            const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
             // Set up pending state
             await act(async () => {
-                await result.current.handleLogin()
+                await result.current.handleLogin("apple")
             })
 
             expect(result.current.pendingAddress).toBe(testAddress)
+            expect(result.current.pendingProvider).toBe("apple")
 
             // Clear state
             act(() => {
@@ -261,6 +262,7 @@ describe("useOAuthWalletLogin", () => {
             })
 
             expect(result.current.pendingAddress).toBeNull()
+            expect(result.current.pendingProvider).toBeNull()
             expect(result.current.isLoginPending).toBe(false)
         })
     })

@@ -16,7 +16,7 @@ import { SelfCustodyOptionsBottomSheet } from "../Components"
 import LottieView from "lottie-react-native"
 import { OnboardingB3MO, OnboardingStardust } from "~Assets/Lottie"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
-import { useOAuthWalletLogin } from "./useOAuthWalletLogin"
+import { useSocialWalletLogin } from "./useSocialWalletLogin"
 import { CreatePasswordModal } from "../../../../Components"
 
 export const WelcomeScreenV2 = () => {
@@ -55,42 +55,36 @@ export const WelcomeScreenV2 = () => {
     } = useHandleWalletCreation()
 
     const {
-        handleLogin: handleGoogleLogin,
-        handlePinSuccess: handleGooglePinSuccess,
-        clearPendingState: clearGooglePendingState,
-    } = useOAuthWalletLogin({
-        provider: "google",
+        handleLogin: handleSocialLogin,
+        handlePinSuccess: handleSocialPinSuccess,
+        clearPendingState: clearSocialPendingState,
+        pendingAddress: socialPendingAddress,
+    } = useSocialWalletLogin({
         onCreateSmartWallet,
         onSmartWalletPinSuccess,
     })
 
-    const {
-        handleLogin: handleAppleLogin,
-        handlePinSuccess: handleApplePinSuccess,
-        clearPendingState: clearApplePendingState,
-    } = useOAuthWalletLogin({
-        provider: "apple",
-        onCreateSmartWallet,
-        onSmartWalletPinSuccess,
-    })
+    const handleGoogleLogin = useCallback(() => handleSocialLogin("google"), [handleSocialLogin])
+    const handleAppleLogin = useCallback(() => handleSocialLogin("apple"), [handleSocialLogin])
 
     const handleModalClose = useCallback(() => {
-        clearGooglePendingState()
-        clearApplePendingState()
+        clearSocialPendingState()
         onCloseCreateFlow()
-    }, [clearGooglePendingState, clearApplePendingState, onCloseCreateFlow])
+    }, [clearSocialPendingState, onCloseCreateFlow])
 
     const handlePasswordSuccess = useCallback(
         (pin: string) => {
-            // Try smart wallet flow first (Google or Apple), fall back to regular wallet creation
-            if (!handleGooglePinSuccess(pin) && !handleApplePinSuccess(pin)) {
+            if (socialPendingAddress) {
+                handleSocialPinSuccess(pin)
+            } else {
+                // Self-custody wallet flow
                 onSuccess({
                     pin,
                     derivationPath: DerivationPath.VET,
                 })
             }
         },
-        [handleGooglePinSuccess, handleApplePinSuccess, onSuccess],
+        [socialPendingAddress, handleSocialPinSuccess, onSuccess],
     )
 
     useEffect(() => {
