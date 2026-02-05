@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect } from "react"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseText, BaseView } from "~Components/Base"
 import { VeWorldLogoV2 } from "~Assets/Img"
 import { useThemedStyles } from "~Hooks/useTheme"
@@ -16,10 +16,8 @@ import { SelfCustodyOptionsBottomSheet } from "../Components"
 import LottieView from "lottie-react-native"
 import { OnboardingB3MO, OnboardingStardust } from "~Assets/Lottie"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
-import { useSmartWallet } from "~Hooks/useSmartWallet"
+import { useOAuthWalletLogin } from "./useOAuthWalletLogin"
 import { CreatePasswordModal } from "../../../../Components"
-import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
-import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 
 export const WelcomeScreenV2 = () => {
     const termsOfServiceUrl = process.env.REACT_APP_TERMS_OF_SERVICE_URL
@@ -27,7 +25,6 @@ export const WelcomeScreenV2 = () => {
 
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL, setLocale } = useI18nContext()
-    const { login, isAuthenticated, smartAccountAddress } = useSmartWallet()
 
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
@@ -48,6 +45,7 @@ export const WelcomeScreenV2 = () => {
         },
         [dispatch, setLocale],
     )
+
     const {
         isOpen,
         onSuccess,
@@ -55,46 +53,45 @@ export const WelcomeScreenV2 = () => {
         onClose: onCloseCreateFlow,
         onCreateSmartWallet,
     } = useHandleWalletCreation()
-    const [pendingSmartAccountAddress, setPendingSmartAccountAddress] = useState<string | null>(null)
-    const [pendingGoogleLogin, setPendingGoogleLogin] = useState(false)
 
-    const onNewGoogleWallet = useCallback(async () => {
-        // Guard against duplicate login triggers while pending
-        if (pendingGoogleLogin) return
+    const {
+        handleLogin: handleGoogleLogin,
+        handlePinSuccess: handleGooglePinSuccess,
+        clearPendingState: clearGooglePendingState,
+    } = useOAuthWalletLogin({
+        provider: "google",
+        onCreateSmartWallet,
+        onSmartWalletPinSuccess,
+    })
 
-        // Interestingly, privy stores its own access/refresh tokens in the keychain under its
-        // own domain path so when we uninstall the app it does not get wiped. Thus
-        // there is a case where on a fresh install we have a privy login and don't need to
-        // login to google again.
-        if (!isAuthenticated) {
-            setPendingGoogleLogin(true)
-            try {
-                await login({ provider: "google", oauthRedirectUri: "/auth/callback" })
-                // Don't proceed here - wait for useEffect to detect smartAccountAddress is populated
-            } catch (error) {
-                setPendingGoogleLogin(false)
-                Feedback.show({
-                    severity: FeedbackSeverity.ERROR,
-                    type: FeedbackType.ALERT,
-                    message: LL.COMMON_BTN_TRY_AGAIN(),
-                    icon: "icon-alert-circle",
+    const {
+        handleLogin: handleAppleLogin,
+        handlePinSuccess: handleApplePinSuccess,
+        clearPendingState: clearApplePendingState,
+    } = useOAuthWalletLogin({
+        provider: "apple",
+        onCreateSmartWallet,
+        onSmartWalletPinSuccess,
+    })
+
+    const handleModalClose = useCallback(() => {
+        clearGooglePendingState()
+        clearApplePendingState()
+        onCloseCreateFlow()
+    }, [clearGooglePendingState, clearApplePendingState, onCloseCreateFlow])
+
+    const handlePasswordSuccess = useCallback(
+        (pin: string) => {
+            // Try smart wallet flow first (Google or Apple), fall back to regular wallet creation
+            if (!handleGooglePinSuccess(pin) && !handleApplePinSuccess(pin)) {
+                onSuccess({
+                    pin,
+                    derivationPath: DerivationPath.VET,
                 })
             }
-        } else if (smartAccountAddress) {
-            // Already authenticated with address available
-            setPendingSmartAccountAddress(smartAccountAddress)
-            onCreateSmartWallet({ address: smartAccountAddress })
-        }
-    }, [LL, isAuthenticated, login, onCreateSmartWallet, pendingGoogleLogin, smartAccountAddress])
-
-    // Wait for smartAccountAddress to be populated after Google login
-    useEffect(() => {
-        if (pendingGoogleLogin && isAuthenticated && smartAccountAddress) {
-            setPendingGoogleLogin(false)
-            setPendingSmartAccountAddress(smartAccountAddress)
-            onCreateSmartWallet({ address: smartAccountAddress })
-        }
-    }, [pendingGoogleLogin, isAuthenticated, smartAccountAddress, onCreateSmartWallet])
+        },
+        [handleGooglePinSuccess, handleApplePinSuccess, onSuccess],
+    )
 
     useEffect(() => {
         // Track when a new onboarding start
@@ -151,7 +148,7 @@ export const WelcomeScreenV2 = () => {
                                 leftIcon={<BaseIcon color={theme.colors.buttonText} name="icon-apple" size={24} />}
                                 textProps={{ typographyFont: "bodyMedium" }}
                                 title={LL.BTN_CONTINUE_WITH_APPLE()}
-                                action={() => {}}
+                                action={handleAppleLogin}
                             />
                         )}
                         <BaseButton
@@ -160,9 +157,7 @@ export const WelcomeScreenV2 = () => {
                             leftIcon={<BaseIcon color={theme.colors.buttonText} name="icon-google" size={24} />}
                             textProps={{ typographyFont: "bodyMedium" }}
                             title={LL.BTN_CONTINUE_WITH_GOOGLE()}
-                            action={() => {
-                                onNewGoogleWallet()
-                            }}
+                            action={handleGoogleLogin}
                         />
                         <BaseText align="center" typographyFont="captionMedium">
                             {LL.COMMON_OR()}
@@ -188,27 +183,7 @@ export const WelcomeScreenV2 = () => {
                     </BaseView>
                 </BaseView>
             </BaseView>
-            <CreatePasswordModal
-                isOpen={isOpen}
-                onClose={() => {
-                    setPendingSmartAccountAddress(null)
-                    onCloseCreateFlow()
-                }}
-                onSuccess={pin => {
-                    if (pendingSmartAccountAddress) {
-                        onSmartWalletPinSuccess({
-                            pin,
-                            address: pendingSmartAccountAddress,
-                        })
-                        setPendingSmartAccountAddress(null)
-                    } else {
-                        onSuccess({
-                            pin,
-                            derivationPath: DerivationPath.VET,
-                        })
-                    }
-                }}
-            />
+            <CreatePasswordModal isOpen={isOpen} onClose={handleModalClose} onSuccess={handlePasswordSuccess} />
             <SelfCustodyOptionsBottomSheet bsRef={selfCustodyOptionsBottomSheetRef} />
         </BaseSafeArea>
     )
