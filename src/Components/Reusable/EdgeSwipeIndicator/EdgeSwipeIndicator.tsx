@@ -1,16 +1,15 @@
-import { StyleSheet } from "react-native"
+import { Canvas, Group, Patch, PatchProps } from "@shopify/react-native-skia"
 import React, { useMemo } from "react"
-import { useThemedStyles } from "~Hooks/useTheme"
-import { Canvas, Patch, Group, PatchProps, SkImage, Image } from "@shopify/react-native-skia"
+import { StyleSheet } from "react-native"
 import { SharedValue, useDerivedValue } from "react-native-reanimated"
 import { COLORS } from "~Constants"
+import { useThemedStyles } from "~Hooks/useTheme"
 
 export type SwipeDirection = "left" | "right" | "none"
 
 type EdgeSwipeIndicatorProps = {
     canvasSize: { width: number; height: number }
     swipeDirection: SharedValue<SwipeDirection>
-    viewImage: SkImage | null
     leftPatch: PatchProps["patch"] | SharedValue<PatchProps["patch"]>
     rightPatch: PatchProps["patch"] | SharedValue<PatchProps["patch"]>
     colors?: string[]
@@ -21,7 +20,6 @@ export const EdgeSwipeIndicator = ({
     canvasSize,
     swipeDirection,
     colors,
-    viewImage,
     leftPatch,
     rightPatch,
     edgeOpacity = 0.45,
@@ -43,16 +41,15 @@ export const EdgeSwipeIndicator = ({
     }, [colors, theme.isDark])
 
     const leftPatchOpacity = useDerivedValue(() => {
-        return swipeDirection.value === "left" ? edgeOpacity : 0
+        return swipeDirection.value === "left" ? 1 : 0
     })
 
     const rightPatchOpacity = useDerivedValue(() => {
-        return swipeDirection.value === "right" ? edgeOpacity : 0
+        return swipeDirection.value === "right" ? 1 : 0
     })
 
     return (
-        <Canvas style={[styles.canvas, { width: canvasSize.width, height: canvasSize.height }]}>
-            <Image image={viewImage} x={0} y={0} width={viewImage?.width() ?? 0} height={viewImage?.height() ?? 0} />
+        <Canvas style={[styles.canvas, { width: canvasSize.width, height: canvasSize.height, opacity: edgeOpacity }]}>
             {/* Left edge bulge (when swiping right) */}
             <Group opacity={leftPatchOpacity}>
                 <Patch colors={patchColors} patch={leftPatch} />

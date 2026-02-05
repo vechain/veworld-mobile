@@ -1,10 +1,10 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { SkSize } from "@shopify/react-native-skia"
-import React, { ElementType, useCallback, useEffect, useMemo, useState } from "react"
-import { LayoutChangeEvent, StyleSheet, View } from "react-native"
+import React, { ElementType, useCallback, useMemo, useState } from "react"
+import { LayoutChangeEvent, StyleSheet } from "react-native"
 import { GestureDetector } from "react-native-gesture-handler"
 import { getTimeZone } from "react-native-localize"
-import Animated, { FadeIn, FadeOut, useAnimatedRef } from "react-native-reanimated"
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated"
 import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
 import {
     BaseBottomSheet,
@@ -97,7 +97,6 @@ const VbdCarouselBottomSheetContent = ({
     const [selectedApp, setSelectedApp] = useState<VbdDApp>(app)
     const [selectedAppIndex, setSelectedAppIndex] = useState<number>(carouselIndex)
     const [canvasSize, setCanvasSize] = useState<SkSize>({ width: 0, height: 0 })
-    const backgroundRef = useAnimatedRef<View>()
 
     const { LL, locale } = useI18nContext()
     const theme = useTheme()
@@ -125,8 +124,7 @@ const VbdCarouselBottomSheetContent = ({
         setSelectedAppIndex(selectedAppIndex - 1)
     }, [selectedAppIndex, carouselDapps])
 
-    const { swipeDirection, leftPatch, rightPatch, swipeGesture, viewImage, takeViewSnapshot } = useEdgeSwipeGesture({
-        viewRef: backgroundRef,
+    const { swipeDirection, leftPatch, rightPatch, swipeGesture } = useEdgeSwipeGesture({
         canvasSize,
         onSwipeLeft,
         onSwipeRight,
@@ -213,12 +211,6 @@ const VbdCarouselBottomSheetContent = ({
         }
     }, [isBookMarked, theme.isDark])
 
-    useEffect(() => {
-        if (bannerUri && backgroundRef.current) {
-            takeViewSnapshot()
-        }
-    }, [bannerUri, backgroundRef, takeViewSnapshot])
-
     const onLayout = useCallback(
         (event: LayoutChangeEvent) => {
             setCanvasSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })
@@ -237,11 +229,7 @@ const VbdCarouselBottomSheetContent = ({
                         entering={FadeIn.duration(300)}
                         exiting={FadeOut.duration(300)}
                         style={styles.wrapper}>
-                        <FastImageBackground
-                            ref={backgroundRef}
-                            source={{ uri: bannerUri }}
-                            style={styles.root}
-                            collapsable={false}>
+                        <FastImageBackground source={{ uri: bannerUri }} style={styles.root} collapsable={false}>
                             <BaseIcon
                                 style={styles.closeBtn}
                                 color={COLORS.WHITE}
@@ -289,7 +277,6 @@ const VbdCarouselBottomSheetContent = ({
                             <EdgeSwipeIndicator
                                 canvasSize={canvasSize}
                                 swipeDirection={swipeDirection}
-                                viewImage={viewImage}
                                 leftPatch={leftPatch}
                                 rightPatch={rightPatch}
                             />

@@ -1,13 +1,10 @@
-import { PatchProps, Skia, SkImage, SkSize, vec } from "@shopify/react-native-skia"
+import { PatchProps, SkSize, vec } from "@shopify/react-native-skia"
+import { useMemo } from "react"
+import { Gesture } from "react-native-gesture-handler"
 import { runOnJS, useDerivedValue, useSharedValue, withSpring } from "react-native-reanimated"
 import { SwipeDirection } from "./EdgeSwipeIndicator"
-import { useCallback, useMemo, useState } from "react"
-import { Gesture } from "react-native-gesture-handler"
-import { View } from "react-native"
-import { captureRef, releaseCapture } from "react-native-view-shot"
 
 type UseEdgeSwipeGestureProps = {
-    viewRef: React.RefObject<View | undefined>
     onSwipeLeft: () => void
     onSwipeRight: () => void
     canvasSize: SkSize
@@ -21,24 +18,14 @@ type UseEdgeSwipeGestureProps = {
 const GESTURE_ACTIVE_THRESHOLD = 10
 
 export const useEdgeSwipeGesture = ({
-    viewRef,
     canvasSize,
     onSwipeLeft,
     onSwipeRight,
     activationThreshold = GESTURE_ACTIVE_THRESHOLD,
 }: UseEdgeSwipeGestureProps) => {
-    const [image, setImage] = useState<SkImage | null>(null)
     const swipeDirection = useSharedValue<SwipeDirection>("none")
     const tx = useSharedValue(0)
     const ty = useSharedValue(0)
-
-    const takeViewSnapshot = useCallback(async () => {
-        if (!viewRef.current) throw new Error("View reference is not set")
-        const snap = await captureRef(viewRef, { format: "png", quality: 1, result: "tmpfile" })
-        const data = Skia.Data.fromBase64(snap)
-        setImage(Skia.Image.MakeImageFromEncoded(data))
-        releaseCapture(snap)
-    }, [viewRef])
 
     const leftPatch = useDerivedValue<PatchProps["patch"]>(() => {
         const dragX = Math.max(0, tx.value)
@@ -162,9 +149,7 @@ export const useEdgeSwipeGesture = ({
             leftPatch,
             rightPatch,
             swipeGesture,
-            viewImage: image,
-            takeViewSnapshot,
         }),
-        [swipeDirection, leftPatch, rightPatch, swipeGesture, image, takeViewSnapshot],
+        [swipeDirection, leftPatch, rightPatch, swipeGesture],
     )
 }
