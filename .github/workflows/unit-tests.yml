@@ -78,7 +78,7 @@ jobs:
                   npx nyc merge ${{ env.COVERAGE_PARENT_FOLDER }} merged-coverage/final-coverage.json
 
             - name: Jest Coverage Comment
-              uses: MishaKav/jest-coverage-comment@main
+              uses: MishaKav/jest-coverage-comment@174f9cbf582b7cc2a7a3acce14dcfc8362e9d37f
               with:
                   coverage-summary-path: ./coverage/coverage-final.json
                   title: Jest Report
