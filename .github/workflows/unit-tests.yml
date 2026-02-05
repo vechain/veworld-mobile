@@ -76,11 +76,12 @@ jobs:
               run: |
                   mkdir merged-coverage
                   npx nyc merge ${{ env.COVERAGE_PARENT_FOLDER }} merged-coverage/final-coverage.json
+                  npx nyc report --temp-dir merged-coverage --reporter=json-summary --report-dir merged-coverage
 
             - name: Jest Coverage Comment
               uses: MishaKav/jest-coverage-comment@174f9cbf582b7cc2a7a3acce14dcfc8362e9d37f
               with:
-                  coverage-summary-path: ./merged-coverage/final-coverage.json
+                  coverage-summary-path: ./merged-coverage/coverage-summary.json
                   title: Jest Report
                   summary-title: Summary
                   badge-title: Coverage
