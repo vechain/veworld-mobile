@@ -18,6 +18,8 @@ import { OnboardingB3MO, OnboardingStardust } from "~Assets/Lottie"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
 import { useSmartWallet } from "~Hooks/useSmartWallet"
 import { CreatePasswordModal } from "../../../../Components"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 
 export const WelcomeScreenV2 = () => {
     const termsOfServiceUrl = process.env.REACT_APP_TERMS_OF_SERVICE_URL
@@ -66,14 +68,24 @@ export const WelcomeScreenV2 = () => {
         // login to google again.
         if (!isAuthenticated) {
             setPendingGoogleLogin(true)
-            await login({ provider: "google", oauthRedirectUri: "/auth/callback" })
-            // Don't proceed here - wait for useEffect to detect smartAccountAddress is populated
+            try {
+                await login({ provider: "google", oauthRedirectUri: "/auth/callback" })
+                // Don't proceed here - wait for useEffect to detect smartAccountAddress is populated
+            } catch (error) {
+                setPendingGoogleLogin(false)
+                Feedback.show({
+                    severity: FeedbackSeverity.ERROR,
+                    type: FeedbackType.ALERT,
+                    message: LL.COMMON_BTN_TRY_AGAIN(),
+                    icon: "icon-alert-circle",
+                })
+            }
         } else if (smartAccountAddress) {
             // Already authenticated with address available
             setPendingSmartAccountAddress(smartAccountAddress)
             onCreateSmartWallet({ address: smartAccountAddress })
         }
-    }, [isAuthenticated, login, onCreateSmartWallet, pendingGoogleLogin, smartAccountAddress])
+    }, [LL, isAuthenticated, login, onCreateSmartWallet, pendingGoogleLogin, smartAccountAddress])
 
     // Wait for smartAccountAddress to be populated after Google login
     useEffect(() => {
