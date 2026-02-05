@@ -23,7 +23,6 @@ import {
     useBottomSheetModal,
     useCloudBackup,
     useDisclosure,
-    useSmartWallet,
     useTheme,
     useThemedStyles,
 } from "~Hooks"
@@ -36,11 +35,9 @@ import { CloudKitWallet, DrivetWallet, languages } from "~Model"
 import { Routes } from "~Navigation"
 import { selectLanguage, setLanguage, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
-
 const assetImage = require("~Assets/Img/Clouds.png")
 
 export const WelcomeScreen = () => {
-    const { login, isAuthenticated, smartAccountAddress } = useSmartWallet()
     const { LL, setLocale } = useI18nContext()
     const nav = useNavigation()
     const { styles, theme } = useThemedStyles(baseStyle)
@@ -131,28 +128,7 @@ export const WelcomeScreen = () => {
     }, [getAllLanguageCodes, handleSelectLanguage])
 
     const DEV_DEMO_BUTTON = useDemoWallet()
-    const {
-        onCreateWallet,
-        isOpen,
-        isError,
-        onSuccess,
-        onSmartWalletPinSuccess,
-        onClose: onCloseCreateFlow,
-        onCreateSmartWallet,
-    } = useHandleWalletCreation()
-    const [pendingSmartAccountAddress, setPendingSmartAccountAddress] = useState<string | null>(null)
-
-    const onNewGoogleWallet = useCallback(async () => {
-        // Interstingly, privy stores its own access/refresh tokens in the keychain under its
-        // own domain path so when we uninstall the app it does not get wiped.  Thus
-        // there is a case where on a fresh install we have an privy login and don't need to
-        // login to google again.
-        if (!isAuthenticated) {
-            await login({ provider: "google", oauthRedirectUri: "veworld://" })
-        }
-        setPendingSmartAccountAddress(smartAccountAddress)
-        onCreateSmartWallet({ address: smartAccountAddress })
-    }, [isAuthenticated, login, onCreateSmartWallet, smartAccountAddress])
+    const { onCreateWallet, isOpen, isError, onSuccess, onClose: onCloseCreateFlow } = useHandleWalletCreation()
 
     const onNewWallet = useCallback(async () => {
         await onCreateWallet({ derivationPath: DerivationPath.VET })
@@ -205,16 +181,6 @@ export const WelcomeScreen = () => {
                                 {isError}
                             </BaseText>
                         )}
-                        <BaseButton
-                            action={() => onNewGoogleWallet()}
-                            w={100}
-                            title={LL.BTN_CONTINUE_WITH_GOOGLE()}
-                            testID="CONTINUE_WITH_GOOGLE_BTN"
-                            haptics="Medium"
-                            isLoading={isLoading}
-                        />
-
-                        <BaseSpacer height={12} />
 
                         <BaseButton
                             action={() => onNewWallet()}
@@ -314,24 +280,13 @@ export const WelcomeScreen = () => {
 
             <CreatePasswordModal
                 isOpen={isOpen}
-                onClose={() => {
-                    setPendingSmartAccountAddress(null)
-                    onCloseCreateFlow()
-                }}
-                onSuccess={pin => {
-                    if (pendingSmartAccountAddress) {
-                        onSmartWalletPinSuccess({
-                            pin,
-                            address: pendingSmartAccountAddress,
-                        })
-                        setPendingSmartAccountAddress(null)
-                    } else {
-                        onSuccess({
-                            pin,
-                            derivationPath: DerivationPath.VET,
-                        })
-                    }
-                }}
+                onClose={onCloseCreateFlow}
+                onSuccess={pin =>
+                    onSuccess({
+                        pin,
+                        derivationPath: DerivationPath.VET,
+                    })
+                }
             />
 
             <SelectLanguageBottomSheet bsRef={selectLanguageSheetRef} />

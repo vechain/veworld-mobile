@@ -63,7 +63,7 @@ export const WelcomeScreenV2 = () => {
         // login to google again.
         if (!isAuthenticated) {
             setPendingGoogleLogin(true)
-            await login({ provider: "google", oauthRedirectUri: "veworld://" })
+            await login({ provider: "google", oauthRedirectUri: "/auth/callback" })
             // Don't proceed here - wait for useEffect to detect smartAccountAddress is populated
         } else if (smartAccountAddress) {
             // Already authenticated with address available
