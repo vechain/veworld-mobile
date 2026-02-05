@@ -2,31 +2,24 @@ import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useBottomSheetModal, useNewDAppsV2, useThemedStyles, useTrendingDAppsV2 } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 import { VbdCarouselBottomSheet, VbdCarouselBottomSheetMetadata } from "./VbdCarouselBottomSheet"
 import { VbdCarouselItem } from "./VbdCarouselItem"
 import { VbdCarouselItemSkeleton } from "./VbdCarouselItemSkeleton"
 
 type Props = {
-    filterType: "new" | "popular"
     appIds: string[]
     isLoading?: boolean
 }
 
-export const VbdCarousel = ({ filterType, appIds, isLoading: propsIsLoading }: Props) => {
+export const VbdCarousel = ({ appIds, isLoading: propsIsLoading }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { data: vbdApps, isLoading: vbdLoading } = useVeBetterDaoDapps(true)
 
-    const { newDapps, isLoading: isLoadingNewDapps } = useNewDAppsV2()
-    const { trendingDapps, isLoading: isLoadingTrendingDapps } = useTrendingDAppsV2()
-
     const { ref, onOpen } = useBottomSheetModal()
 
-    const isLoading = useMemo(
-        () => propsIsLoading || vbdLoading || isLoadingNewDapps || isLoadingTrendingDapps,
-        [propsIsLoading, vbdLoading, isLoadingNewDapps, isLoadingTrendingDapps],
-    )
+    const isLoading = useMemo(() => propsIsLoading || vbdLoading, [propsIsLoading, vbdLoading])
 
     const onPressItem = useCallback(
         (newMetadata: VbdCarouselBottomSheetMetadata) => {
@@ -36,9 +29,14 @@ export const VbdCarousel = ({ filterType, appIds, isLoading: propsIsLoading }: P
     )
 
     const carouselDapps = useMemo(() => {
-        if (filterType === "new") return newDapps
-        return trendingDapps
-    }, [filterType, newDapps, trendingDapps])
+        if (!vbdApps || !appIds?.length) return []
+        return (
+            vbdApps
+                .filter(app => appIds.includes(app.id))
+                // Sort the apps in the order of appIds
+                .sort((a, b) => appIds.indexOf(a.id) - appIds.indexOf(b.id))
+        )
+    }, [appIds, vbdApps])
 
     const items = useMemo(() => {
         if (isLoading || !vbdApps?.length || !appIds.length) {

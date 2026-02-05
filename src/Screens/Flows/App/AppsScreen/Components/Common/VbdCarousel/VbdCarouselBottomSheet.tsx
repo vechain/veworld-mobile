@@ -18,7 +18,7 @@ import {
     BlurView,
     DAppIcon,
 } from "~Components"
-import { EdgeSwipeIndicator, useEdgeSwipeGesture } from "~Components/Reusable"
+import { EdgeSwipeIndicator, useEdgeSwipeGesture } from "~Components/Reusable/EdgeSwipeIndicator"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
 import { useBottomSheetModal, useDappBookmarkToggle, useTheme, useThemedStyles } from "~Hooks"
@@ -231,6 +231,7 @@ const VbdCarouselBottomSheetContent = ({
             {bannerUri ? (
                 <GestureDetector gesture={swipeGesture}>
                     <Animated.View
+                        testID="VBD_CAROUSEL_BS"
                         onLayout={onLayout}
                         key={selectedApp.id}
                         entering={FadeIn.duration(300)}
@@ -240,7 +241,7 @@ const VbdCarouselBottomSheetContent = ({
                             ref={backgroundRef}
                             source={{ uri: bannerUri }}
                             style={styles.root}
-                            testID="VBD_CAROUSEL_BS">
+                            collapsable={false}>
                             <BaseIcon
                                 style={styles.closeBtn}
                                 color={COLORS.WHITE}

@@ -40,7 +40,7 @@ export const ForYouCarousel = () => {
                     onItemPress={onFilterPress}
                 />
             </BaseView>
-            <VbdCarousel filterType={filter} appIds={appIds} isLoading={isLoading} />
+            <VbdCarousel appIds={appIds} isLoading={isLoading} />
         </BaseView>
     )
 }
