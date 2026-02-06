@@ -6,6 +6,7 @@ import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useBottomSheetModal, useCheckWalletBackup, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { DEVICE_TYPE } from "~Model"
 import { Routes, TabStackParamList } from "~Navigation"
 import {
     selectLastBackupRequestTimestamp,
@@ -28,6 +29,14 @@ export const DeviceBackupBottomSheet = () => {
     const isBackupNeeded = useCheckWalletBackup(selectedAccount)
 
     useEffect(() => {
+        // skip for smart wallet and ledger devices
+        if (
+            selectedAccount.device?.type === DEVICE_TYPE.SMART_WALLET ||
+            selectedAccount.device?.type === DEVICE_TYPE.LEDGER
+        ) {
+            return
+        }
+
         const address = selectedAccount.device?.rootAddress ?? ""
 
         if (!isBackupNeeded) {
@@ -83,7 +92,15 @@ export const DeviceBackupBottomSheet = () => {
                 }
             }
         }
-    }, [dispatch, isBackupNeeded, lastBackupRequestTimestamp, onClose, onOpen, selectedAccount.device?.rootAddress])
+    }, [
+        dispatch,
+        isBackupNeeded,
+        lastBackupRequestTimestamp,
+        onClose,
+        onOpen,
+        selectedAccount.device?.rootAddress,
+        selectedAccount.device?.type,
+    ])
 
     const goToPrivacyScreen = () => {
         onClose()
