@@ -28,7 +28,7 @@ jest.mock("viem", () => ({
 
 // Dynamic mock state for different test scenarios
 let mockUserState: {
-    user: { id: string } | null
+    user: { id: string; linked_accounts?: any[] } | null
     logout: jest.MockedFunction<() => void>
 } = {
     user: { id: "test-user" },
@@ -111,6 +111,53 @@ describe("usePrivyExpoAdapter", () => {
         setAuthenticatedUser()
         setMockWalletWithProvider("0xmocksignature")
         mockTransaction.getTransactionHash.mockReturnValue("0xabcdef123456")
+    })
+
+    describe("userDisplayName", () => {
+        it("should return Google name when available", () => {
+            mockUserState = {
+                user: {
+                    id: "test-user",
+                    linked_accounts: [{ type: "google_oauth", name: "John Doe", email: "john@example.com" }],
+                },
+                logout: jest.fn(),
+            }
+            const { result } = renderHook(() => usePrivyExpoAdapter())
+            expect(result.current.userDisplayName).toBe("John Doe")
+        })
+
+        it("should fall back to Google email when name is null", () => {
+            mockUserState = {
+                user: {
+                    id: "test-user",
+                    linked_accounts: [{ type: "google_oauth", name: null, email: "john@example.com" }],
+                },
+                logout: jest.fn(),
+            }
+            const { result } = renderHook(() => usePrivyExpoAdapter())
+            expect(result.current.userDisplayName).toBe("john@example.com")
+        })
+
+        it("should return Apple email", () => {
+            mockUserState = {
+                user: {
+                    id: "test-user",
+                    linked_accounts: [{ type: "apple_oauth", email: "apple@icloud.com" }],
+                },
+                logout: jest.fn(),
+            }
+            const { result } = renderHook(() => usePrivyExpoAdapter())
+            expect(result.current.userDisplayName).toBe("apple@icloud.com")
+        })
+
+        it("should return null when no OAuth accounts exist", () => {
+            mockUserState = {
+                user: { id: "test-user", linked_accounts: [] },
+                logout: jest.fn(),
+            }
+            const { result } = renderHook(() => usePrivyExpoAdapter())
+            expect(result.current.userDisplayName).toBeNull()
+        })
     })
 
     describe("signTransaction", () => {

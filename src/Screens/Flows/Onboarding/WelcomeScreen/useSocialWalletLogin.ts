@@ -45,13 +45,22 @@ export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSucc
         [LL, login, pendingProvider],
     )
 
-    // Wait for smartAccountAddress to be populated after OAuth login
+    // Wait for smartAccountAddress to be populated after OAuth login.
+    // Guard with !pendingSmartAccountAddress to prevent duplicate calls if
+    // userDisplayName updates in a later render cycle.
     useEffect(() => {
-        if (pendingProvider && isAuthenticated && smartAccountAddress) {
+        if (pendingProvider && isAuthenticated && smartAccountAddress && !pendingSmartAccountAddress) {
             setPendingSmartAccountAddress(smartAccountAddress)
             onCreateSmartWallet({ address: smartAccountAddress, name: userDisplayName ?? undefined })
         }
-    }, [pendingProvider, isAuthenticated, smartAccountAddress, userDisplayName, onCreateSmartWallet])
+    }, [
+        pendingProvider,
+        isAuthenticated,
+        smartAccountAddress,
+        userDisplayName,
+        onCreateSmartWallet,
+        pendingSmartAccountAddress,
+    ])
 
     const handlePinSuccess = useCallback(
         (pin: string) => {
