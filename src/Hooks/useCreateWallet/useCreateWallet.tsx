@@ -159,7 +159,7 @@ export const useCreateWallet = () => {
      * @returns void
      */
     const createSmartWallet = useCallback(
-        async ({ address, onError }: { address: string; onError?: (error: unknown) => void }) => {
+        async ({ address, name, onError }: { address: string; name?: string; onError?: (error: unknown) => void }) => {
             try {
                 //Create the new Smart Wallet device and persist it
                 const smartWalletDevice = {
@@ -167,6 +167,7 @@ export const useCreateWallet = () => {
                     type: DEVICE_TYPE.SMART_WALLET as const,
                     alias: "Smart Wallet",
                     position: 0, // this will be updated when the device is added to the redux store
+                    accountName: name,
                 }
 
                 // add the device and account to redux

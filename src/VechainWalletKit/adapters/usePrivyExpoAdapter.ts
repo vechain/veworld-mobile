@@ -27,11 +27,26 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
             }))
     }, [user?.linked_accounts])
 
+    const userDisplayName: string | null = useMemo(() => {
+        if (!user?.linked_accounts) return null
+
+        for (const account of user.linked_accounts) {
+            if (account.type === "google_oauth") {
+                return account.name ?? account.email
+            }
+            if (account.type === "apple_oauth") {
+                return account.email ?? null
+            }
+        }
+        return null
+    }, [user?.linked_accounts])
+
     return useMemo(() => {
         const currentWallets = wallets ?? []
         return {
             isAuthenticated,
             linkedAccounts,
+            userDisplayName,
 
             async login(options: LoginOptions): Promise<void> {
                 const provider = options.provider as any
@@ -148,7 +163,7 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
                 return currentWallets[0]?.address ?? ""
             },
         }
-    }, [isAuthenticated, linkedAccounts, wallets, oauth, logout, create])
+    }, [isAuthenticated, linkedAccounts, userDisplayName, wallets, oauth, logout, create])
 }
 
 export const findPrimaryType = (types: Record<string, any>, message: any): string => {

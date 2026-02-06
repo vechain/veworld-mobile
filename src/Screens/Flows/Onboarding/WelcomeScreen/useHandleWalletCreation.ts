@@ -76,12 +76,13 @@ export const useHandleWalletCreation = () => {
     )
 
     const onCreateSmartWallet = useCallback(
-        async ({ address }: { address: string }) => {
+        async ({ address, name }: { address: string; name?: string }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
                 dispatch(setIsAppLoading(true))
                 await WalletEncryptionKeyHelper.init()
                 await createSmartWallet({
                     address,
+                    name,
                     onError: onWalletCreationError,
                 })
                 await migrateOnboarding(SecurityLevelType.BIOMETRIC)
@@ -127,12 +128,13 @@ export const useHandleWalletCreation = () => {
     )
 
     const onSmartWalletPinSuccess = useCallback(
-        async ({ pin, address }: { pin: string; address: string }) => {
+        async ({ pin, address, name }: { pin: string; address: string; name?: string }) => {
             onClose()
             dispatch(setIsAppLoading(true))
             await WalletEncryptionKeyHelper.init(pin)
             await createSmartWallet({
                 address,
+                name,
                 onError: onWalletCreationError,
             })
             await migrateOnboarding(SecurityLevelType.SECRET, pin)

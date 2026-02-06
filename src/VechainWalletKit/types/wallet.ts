@@ -36,12 +36,14 @@ export interface SmartWalletContext extends WalletContext, AuthenticationOperati
     smartAccountAddress: string
     smartAccountConfig: SmartAccountTransactionConfig | null
     linkedAccounts: LinkedAccount[]
+    userDisplayName: string | null
     initialiseWallet: () => Promise<void>
 }
 export interface SmartAccountAdapter extends SigningOperations, AuthenticationOperations {
     getAccount(): string
     createWallet(): Promise<string>
     linkedAccounts: LinkedAccount[]
+    userDisplayName: string | null
 }
 
 export interface LoginOptions {

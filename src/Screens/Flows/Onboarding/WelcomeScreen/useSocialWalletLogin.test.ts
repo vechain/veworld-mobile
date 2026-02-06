@@ -2,10 +2,16 @@ import { renderHook, act, waitFor } from "@testing-library/react-native"
 import { useSocialWalletLogin } from "./useSocialWalletLogin"
 
 // Mock state for useSmartWallet
-let mockSmartWalletState = {
+let mockSmartWalletState: {
+    login: jest.Mock
+    isAuthenticated: boolean
+    smartAccountAddress: string
+    userDisplayName?: string | null
+} = {
     login: jest.fn(),
     isAuthenticated: false,
     smartAccountAddress: "",
+    userDisplayName: null,
 }
 
 jest.mock("~Hooks/useSmartWallet", () => ({
@@ -40,14 +46,16 @@ const setUnauthenticated = () => {
         login: jest.fn(),
         isAuthenticated: false,
         smartAccountAddress: "",
+        userDisplayName: null,
     }
 }
 
-const setAuthenticatedWithAddress = (address: string) => {
+const setAuthenticatedWithAddress = (address: string, userDisplayName?: string | null) => {
     mockSmartWalletState = {
         login: jest.fn(),
         isAuthenticated: true,
         smartAccountAddress: address,
+        userDisplayName: userDisplayName ?? null,
     }
 }
 
@@ -56,6 +64,7 @@ const setAuthenticatedWithoutAddress = () => {
         login: jest.fn(),
         isAuthenticated: true,
         smartAccountAddress: "",
+        userDisplayName: null,
     }
 }
 
@@ -211,6 +220,47 @@ describe("useSocialWalletLogin", () => {
             })
 
             expect(result.current.pendingAddress).toBe(testAddress)
+        })
+    })
+
+    describe("userDisplayName passthrough", () => {
+        it("should pass userDisplayName as name to onCreateSmartWallet", async () => {
+            const testAddress = "0x1234567890123456789012345678901234567890"
+            setAuthenticatedWithAddress(testAddress, "John Doe")
+            mockSmartWalletState.login.mockResolvedValue(undefined)
+
+            const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
+
+            await act(async () => {
+                await result.current.handleLogin("google")
+            })
+
+            expect(mockOnCreateSmartWallet).toHaveBeenCalledWith({
+                address: testAddress,
+                name: "John Doe",
+            })
+        })
+
+        it("should pass userDisplayName as name to onSmartWalletPinSuccess", async () => {
+            const testAddress = "0x1234567890123456789012345678901234567890"
+            setAuthenticatedWithAddress(testAddress, "Jane Doe")
+            mockSmartWalletState.login.mockResolvedValue(undefined)
+
+            const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
+
+            await act(async () => {
+                await result.current.handleLogin("google")
+            })
+
+            act(() => {
+                result.current.handlePinSuccess("123456")
+            })
+
+            expect(mockOnSmartWalletPinSuccess).toHaveBeenCalledWith({
+                pin: "123456",
+                address: testAddress,
+                name: "Jane Doe",
+            })
         })
     })
 
