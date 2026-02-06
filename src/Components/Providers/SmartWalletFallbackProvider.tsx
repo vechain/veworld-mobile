@@ -30,6 +30,8 @@ export const SmartWalletFallbackProvider: React.FC<SmartWalletFallbackProviderPr
             // Addresses - empty when disabled
             ownerAddress: "",
             smartAccountAddress: "",
+            smartAccountConfig: null,
+            linkedAccounts: [],
 
             // Authentication operations - throw descriptive errors
             login: async (_options: LoginOptions): Promise<void> => {
@@ -82,6 +84,17 @@ export const SmartWalletFallbackProvider: React.FC<SmartWalletFallbackProviderPr
                 _options?: TransactionOptions,
                 _genericDelgation?: GenericDelegationDetails,
             ): Promise<Transaction> => {
+                throw new WalletError(
+                    WalletErrorType.WALLET_NOT_FOUND,
+                    "Smart wallet functionality is currently disabled. Please enable the smartWalletFeature flag.",
+                )
+            },
+
+            // Gas estimation - throw descriptive error
+            estimateGas: async (
+                _clauses: TransactionClause[],
+                _genericDelegation?: GenericDelegationDetails,
+            ): Promise<number> => {
                 throw new WalletError(
                     WalletErrorType.WALLET_NOT_FOUND,
                     "Smart wallet functionality is currently disabled. Please enable the smartWalletFeature flag.",

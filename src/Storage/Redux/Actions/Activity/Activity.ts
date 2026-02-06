@@ -245,13 +245,16 @@ export const addPendingTransferTransactionActivity =
         const locale = selectLanguage(getState())
         const LL = i18nObject(locale)
         const selectedAccount = selectSelectedAccount(getState())
-        const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
 
-        // Ignore if the selected account is a smart wallet for now
-        if (!selectedAccount || !outgoingTx.id || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
+        if (!selectedAccount || !outgoingTx.id) return
 
-        const pendingActivity: FungibleTokenActivity = createPendingTransferActivityFromTx(outgoingTx)
-        dispatch(addActivity(enrichActivityWithTrackingData(pendingActivity, options)))
+        try {
+            const pendingActivity: FungibleTokenActivity = createPendingTransferActivityFromTx(outgoingTx)
+            const enrichedActivity = enrichActivityWithTrackingData(pendingActivity, options)
+            dispatch(addActivity(enrichedActivity))
+        } catch {
+            // Silently fail - activity will be picked up from chain
+        }
         Feedback.show({
             severity: FeedbackSeverity.LOADING,
             message: LL.TRANSACTION_IN_PROGRESS(),

@@ -39,12 +39,19 @@
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
+      <!-- Custom scheme handler for OAuth callbacks and WalletConnect -->
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="wc"/>
         <data android:scheme="veworld"/>
+        <data android:scheme="wc"/>
+      </intent-filter>
+      <!-- HTTPS deep links -->
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="https"/>
         <data android:host="www.veworld.com"/>
         <data android:host="veworld.com"/>

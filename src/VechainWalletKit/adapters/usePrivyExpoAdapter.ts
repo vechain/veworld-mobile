@@ -1,10 +1,16 @@
 import { useMemo } from "react"
 import { usePrivy, useEmbeddedEthereumWallet, useLoginWithOAuth } from "@privy-io/expo"
 import { Transaction } from "@vechain/sdk-core"
-import { SmartAccountAdapter, LoginOptions } from "../types/wallet"
+import { SmartAccountAdapter, LoginOptions, LinkedAccount, SocialProvider } from "../types/wallet"
 import { TypedDataPayload } from "../types/transaction"
 import { WalletError, WalletErrorType } from "../utils/errors"
 import HexUtils from "../../Utils/HexUtils"
+
+const OAUTH_TYPE_TO_PROVIDER: Record<string, SocialProvider> = {
+    google_oauth: "google",
+    apple_oauth: "apple",
+    twitter_oauth: "twitter",
+}
 
 export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
     const { user, logout } = usePrivy()
@@ -12,10 +18,20 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
     const oauth = useLoginWithOAuth()
     const isAuthenticated = !!user
 
+    const linkedAccounts: LinkedAccount[] = useMemo(() => {
+        if (!user?.linked_accounts) return []
+        return user.linked_accounts
+            .filter(account => account.type in OAUTH_TYPE_TO_PROVIDER)
+            .map(account => ({
+                type: OAUTH_TYPE_TO_PROVIDER[account.type],
+            }))
+    }, [user?.linked_accounts])
+
     return useMemo(() => {
         const currentWallets = wallets ?? []
         return {
             isAuthenticated,
+            linkedAccounts,
 
             async login(options: LoginOptions): Promise<void> {
                 const provider = options.provider as any
@@ -132,7 +148,7 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
                 return currentWallets[0]?.address ?? ""
             },
         }
-    }, [isAuthenticated, wallets, oauth, logout, create])
+    }, [isAuthenticated, linkedAccounts, wallets, oauth, logout, create])
 }
 
 export const findPrimaryType = (types: Record<string, any>, message: any): string => {

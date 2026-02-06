@@ -143,15 +143,18 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             </BaseText>
             <BaseSpacer height={24} />
             <BaseView flexDirection="column" gap={8}>
-                {tokenList.map(tk => (
-                    <EnhancedTokenCard
-                        item={tk}
-                        key={tk.symbol}
-                        onSelectedToken={setInternalToken}
-                        selected={internalToken === tk.symbol}
-                        disabled={!hasEnoughBalanceOnToken[tk.symbol] && tk.symbol !== sendingTokenSymbol}
-                    />
-                ))}
+                {tokenList.map(tk => {
+                    const isDisabled = !hasEnoughBalanceOnToken[tk.symbol] && tk.symbol !== sendingTokenSymbol
+                    return (
+                        <EnhancedTokenCard
+                            item={tk}
+                            key={tk.symbol}
+                            onSelectedToken={setInternalToken}
+                            selected={internalToken === tk.symbol}
+                            disabled={isDisabled}
+                        />
+                    )
+                })}
             </BaseView>
             <BaseSpacer height={24} />
             {defaultToken !== internalToken && (

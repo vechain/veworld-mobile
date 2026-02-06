@@ -68,12 +68,14 @@ jest.mock("~Networking/GenericDelegator", () => {
     return {
         ...actual,
         delegateGenericDelegator: jest.fn(),
+        delegateGenericDelegatorSmartAccount: jest.fn(),
     }
 })
 
 jest.mock("~Utils/GenericDelegatorUtils", () => ({
     ...jest.requireActual("~Utils/GenericDelegatorUtils"),
     validateGenericDelegatorTx: jest.fn().mockResolvedValue({ valid: true }),
+    validateGenericDelegatorTxSmartAccount: jest.fn().mockResolvedValue({ valid: true }),
 }))
 
 describe("useSignTransaction", () => {
@@ -361,6 +363,20 @@ describe("useSignTransaction - SMART_WALLET", () => {
     it("URL delegation uses smart wallet owner address as origin", async () => {
         __senderDevice = smartWalletDevice
 
+        // Smart wallets always use the generic delegator path (even for VTHO)
+        // Build a raw transaction for the mock response
+        const rawTx = `0x${Buffer.from(vetTransaction1.encoded).toString("hex")}`
+
+        const { delegateGenericDelegatorSmartAccount } = require("~Networking/GenericDelegator") as {
+            delegateGenericDelegatorSmartAccount: jest.Mock
+        }
+        delegateGenericDelegatorSmartAccount.mockResolvedValue({
+            signature: "0x" + "a".repeat(128) + "00", // 65 bytes signature hex
+            address: "0x1111111111111111111111111111111111111111",
+            origin: mockSmartwalletOwnerAddress,
+            raw: rawTx,
+        })
+
         const { result } = renderHook(
             () =>
                 useSignTransaction({
@@ -368,21 +384,20 @@ describe("useSignTransaction - SMART_WALLET", () => {
                     selectedDelegationOption: DelegationType.URL,
                     selectedDelegationUrl: "https://sponsor.service",
                     selectedDelegationToken: "VTHO",
+                    genericDelegatorFee: {} as any, // Required for validation to pass
+                    genericDelegatorDepositAccount: "0x3333333333333333333333333333333333333333",
                 }),
             { wrapper: TestWrapper },
         )
-
-        ;(axios.post as jest.Mock).mockResolvedValueOnce({ data: { signature: "0xdeadbeef" } })
 
         const tx = (await result.current.signTransaction()) as Transaction
 
         expect(tx).toBeInstanceOf(Transaction)
 
-        const [[calledUrl, sponsorRequest]] = (axios.post as jest.Mock).mock.calls
-        expect(calledUrl).toBe("https://sponsor.service")
-        expect(sponsorRequest).toEqual(
+        // Verify delegateGenericDelegatorSmartAccount was called with the smart wallet owner address as origin
+        expect(delegateGenericDelegatorSmartAccount).toHaveBeenCalledWith(
             expect.objectContaining({
-                origin: mockSmartwalletOwnerAddress,
+                origin: mockSmartwalletOwnerAddress.toLowerCase(),
                 raw: expect.stringMatching(/^0x[0-9a-f]+$/),
             }),
         )

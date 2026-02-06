@@ -268,9 +268,7 @@ export const NotificationScreen = () => {
                                 onValueChange={toggleNotifCenterPreference(NOTIFICATION_CATEGORIES.NFT_UPDATES)}
                                 value={isNftUpdatesEnabled}
                                 color={itemSwitchColor}
-                                disabled={
-                                    isUpdatingPrefs && updatingCategory === NOTIFICATION_CATEGORIES.NFT_UPDATES
-                                }
+                                disabled={isUpdatingPrefs && updatingCategory === NOTIFICATION_CATEGORIES.NFT_UPDATES}
                             />
                             <EnableFeature
                                 title={LL.PUSH_NOTIFICATIONS_STARGATE_REWARDS()}

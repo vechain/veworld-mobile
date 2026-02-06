@@ -3,7 +3,7 @@ import React, { useCallback, useEffect } from "react"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseText, BaseView } from "~Components/Base"
 import { VeWorldLogoV2 } from "~Assets/Img"
 import { useThemedStyles } from "~Hooks/useTheme"
-import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
+import { AnalyticsEvent, COLORS, ColorThemeType, DerivationPath } from "~Constants"
 import { PlatformUtils } from "~Utils"
 import Markdown from "react-native-markdown-display"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
@@ -15,6 +15,9 @@ import { useBottomSheetModal } from "~Hooks/useBottomSheet"
 import { SelfCustodyOptionsBottomSheet } from "../Components"
 import LottieView from "lottie-react-native"
 import { OnboardingB3MO, OnboardingStardust } from "~Assets/Lottie"
+import { useHandleWalletCreation } from "./useHandleWalletCreation"
+import { useSocialWalletLogin } from "./useSocialWalletLogin"
+import { CreatePasswordModal } from "../../../../Components"
 
 export const WelcomeScreenV2 = () => {
     const termsOfServiceUrl = process.env.REACT_APP_TERMS_OF_SERVICE_URL
@@ -41,6 +44,47 @@ export const WelcomeScreenV2 = () => {
             setLocale(language)
         },
         [dispatch, setLocale],
+    )
+
+    const {
+        isOpen,
+        onSuccess,
+        onSmartWalletPinSuccess,
+        onClose: onCloseCreateFlow,
+        onCreateSmartWallet,
+    } = useHandleWalletCreation()
+
+    const {
+        handleLogin: handleSocialLogin,
+        handlePinSuccess: handleSocialPinSuccess,
+        clearPendingState: clearSocialPendingState,
+        pendingAddress: socialPendingAddress,
+    } = useSocialWalletLogin({
+        onCreateSmartWallet,
+        onSmartWalletPinSuccess,
+    })
+
+    const handleGoogleLogin = useCallback(() => handleSocialLogin("google"), [handleSocialLogin])
+    const handleAppleLogin = useCallback(() => handleSocialLogin("apple"), [handleSocialLogin])
+
+    const handleModalClose = useCallback(() => {
+        clearSocialPendingState()
+        onCloseCreateFlow()
+    }, [clearSocialPendingState, onCloseCreateFlow])
+
+    const handlePasswordSuccess = useCallback(
+        (pin: string) => {
+            if (socialPendingAddress) {
+                handleSocialPinSuccess(pin)
+            } else {
+                // Self-custody wallet flow
+                onSuccess({
+                    pin,
+                    derivationPath: DerivationPath.VET,
+                })
+            }
+        },
+        [socialPendingAddress, handleSocialPinSuccess, onSuccess],
     )
 
     useEffect(() => {
@@ -98,7 +142,7 @@ export const WelcomeScreenV2 = () => {
                                 leftIcon={<BaseIcon color={theme.colors.buttonText} name="icon-apple" size={24} />}
                                 textProps={{ typographyFont: "bodyMedium" }}
                                 title={LL.BTN_CONTINUE_WITH_APPLE()}
-                                action={() => {}}
+                                action={handleAppleLogin}
                             />
                         )}
                         <BaseButton
@@ -107,7 +151,7 @@ export const WelcomeScreenV2 = () => {
                             leftIcon={<BaseIcon color={theme.colors.buttonText} name="icon-google" size={24} />}
                             textProps={{ typographyFont: "bodyMedium" }}
                             title={LL.BTN_CONTINUE_WITH_GOOGLE()}
-                            action={() => {}}
+                            action={handleGoogleLogin}
                         />
                         <BaseText align="center" typographyFont="captionMedium">
                             {LL.COMMON_OR()}
@@ -133,6 +177,7 @@ export const WelcomeScreenV2 = () => {
                     </BaseView>
                 </BaseView>
             </BaseView>
+            <CreatePasswordModal isOpen={isOpen} onClose={handleModalClose} onSuccess={handlePasswordSuccess} />
             <SelfCustodyOptionsBottomSheet bsRef={selfCustodyOptionsBottomSheetRef} />
         </BaseSafeArea>
     )
