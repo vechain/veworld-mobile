@@ -110,10 +110,11 @@ const addSmartWalletDeviceAndAccount =
             AddressUtils.compareAddresses(existingDevice.rootAddress, device.rootAddress),
         )
 
+        const accountName = device.alias === "Smart Wallet" ? "Smart Wallet Account" : device.alias
         if (deviceExists) {
             // Return existing account if device already exists
             const existingAccount: WalletAccount = {
-                alias: "Smart Wallet Account",
+                alias: accountName,
                 address: deviceExists.rootAddress,
                 rootAddress: deviceExists.rootAddress,
                 index: deviceExists.index,
@@ -131,7 +132,7 @@ const addSmartWalletDeviceAndAccount =
         dispatch(addDevice(deviceWithIndex))
 
         let account: WalletAccount = {
-            alias: "Smart Wallet Account",
+            alias: accountName,
             address: device.rootAddress,
             rootAddress: device.rootAddress,
             index: -1,
