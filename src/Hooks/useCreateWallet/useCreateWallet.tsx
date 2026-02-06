@@ -165,8 +165,9 @@ export const useCreateWallet = () => {
                 const smartWalletDevice = {
                     rootAddress: address,
                     type: DEVICE_TYPE.SMART_WALLET as const,
-                    alias: name ?? "Smart Wallet",
+                    alias: "Smart Wallet",
                     position: 0, // this will be updated when the device is added to the redux store
+                    accountName: name,
                 }
 
                 // add the device and account to redux
