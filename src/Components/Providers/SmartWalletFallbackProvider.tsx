@@ -31,6 +31,7 @@ export const SmartWalletFallbackProvider: React.FC<SmartWalletFallbackProviderPr
             ownerAddress: "",
             smartAccountAddress: "",
             smartAccountConfig: null,
+            linkedAccounts: [],
 
             // Authentication operations - throw descriptive errors
             login: async (_options: LoginOptions): Promise<void> => {

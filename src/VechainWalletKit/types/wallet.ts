@@ -35,14 +35,22 @@ export interface SmartWalletContext extends WalletContext, AuthenticationOperati
     ownerAddress: string
     smartAccountAddress: string
     smartAccountConfig: SmartAccountTransactionConfig | null
+    linkedAccounts: LinkedAccount[]
     initialiseWallet: () => Promise<void>
 }
 export interface SmartAccountAdapter extends SigningOperations, AuthenticationOperations {
     getAccount(): string
     createWallet(): Promise<string>
+    linkedAccounts: LinkedAccount[]
 }
 
 export interface LoginOptions {
     provider: "google" | "apple" | "twitter"
     oauthRedirectUri: string
+}
+
+export type SocialProvider = "google" | "apple" | "twitter"
+
+export interface LinkedAccount {
+    type: SocialProvider
 }

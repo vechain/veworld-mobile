@@ -105,9 +105,10 @@ describe("useSocialWalletLogin", () => {
             expect(result.current.pendingProvider).toBe(provider)
         })
 
-        it("should call onCreateSmartWallet directly when already authenticated with address", async () => {
+        it("should call login and then onCreateSmartWallet when already authenticated with address", async () => {
             const testAddress = "0x1234567890123456789012345678901234567890"
             setAuthenticatedWithAddress(testAddress)
+            mockSmartWalletState.login.mockResolvedValue(undefined)
 
             const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
@@ -115,14 +116,18 @@ describe("useSocialWalletLogin", () => {
                 await result.current.handleLogin(provider)
             })
 
-            expect(mockSmartWalletState.login).not.toHaveBeenCalled()
+            expect(mockSmartWalletState.login).toHaveBeenCalledWith({
+                provider,
+                oauthRedirectUri: "/auth/callback",
+            })
             expect(mockOnCreateSmartWallet).toHaveBeenCalledWith({ address: testAddress })
             expect(result.current.pendingAddress).toBe(testAddress)
             expect(result.current.pendingProvider).toBe(provider)
         })
 
-        it("should set pending state when authenticated but address not yet available", async () => {
+        it("should call login and set pending state when authenticated but address not yet available", async () => {
             setAuthenticatedWithoutAddress()
+            mockSmartWalletState.login.mockResolvedValue(undefined)
 
             const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
@@ -130,7 +135,10 @@ describe("useSocialWalletLogin", () => {
                 await result.current.handleLogin(provider)
             })
 
-            expect(mockSmartWalletState.login).not.toHaveBeenCalled()
+            expect(mockSmartWalletState.login).toHaveBeenCalledWith({
+                provider,
+                oauthRedirectUri: "/auth/callback",
+            })
             expect(mockOnCreateSmartWallet).not.toHaveBeenCalled()
             expect(result.current.isLoginPending).toBe(true)
             expect(result.current.pendingProvider).toBe(provider)

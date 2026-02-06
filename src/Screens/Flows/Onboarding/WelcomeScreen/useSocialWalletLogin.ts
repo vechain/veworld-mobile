@@ -23,35 +23,26 @@ export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSucc
             // Guard against duplicate login triggers while pending
             if (pendingProvider) return
 
-            // Privy stores its own access/refresh tokens in the keychain under its
-            // own domain path so when we uninstall the app it does not get wiped. Thus
-            // there is a case where on a fresh install we have a privy login and don't need to
-            // login again.
-            if (!isAuthenticated) {
-                setPendingProvider(provider)
-                try {
-                    await login({ provider, oauthRedirectUri: "/auth/callback" })
-                    // Don't proceed here - wait for useEffect to detect smartAccountAddress is populated
-                } catch (error) {
-                    setPendingProvider(null)
-                    Feedback.show({
-                        severity: FeedbackSeverity.ERROR,
-                        type: FeedbackType.ALERT,
-                        message: LL.COMMON_BTN_TRY_AGAIN(),
-                        icon: "icon-alert-circle",
-                    })
-                }
-            } else if (smartAccountAddress) {
-                // Already authenticated with address available
-                setPendingProvider(provider)
-                setPendingSmartAccountAddress(smartAccountAddress)
-                onCreateSmartWallet({ address: smartAccountAddress })
-            } else {
-                // Authenticated but address still loading - wait for useEffect to trigger
-                setPendingProvider(provider)
+            setPendingProvider(provider)
+            try {
+                // SmartWalletProvider.login() handles all cases:
+                // - Not authenticated → runs OAuth flow
+                // - Authenticated with same provider → no-op
+                // - Authenticated with different provider → logout + re-login
+                await login({ provider, oauthRedirectUri: "/auth/callback" })
+                // After login resolves, wait for useEffect to detect
+                // smartAccountAddress is populated by privy
+            } catch (error) {
+                setPendingProvider(null)
+                Feedback.show({
+                    severity: FeedbackSeverity.ERROR,
+                    type: FeedbackType.ALERT,
+                    message: LL.COMMON_BTN_TRY_AGAIN(),
+                    icon: "icon-alert-circle",
+                })
             }
         },
-        [LL, isAuthenticated, login, onCreateSmartWallet, pendingProvider, smartAccountAddress],
+        [LL, login, pendingProvider],
     )
 
     // Wait for smartAccountAddress to be populated after OAuth login

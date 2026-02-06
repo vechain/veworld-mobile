@@ -232,6 +232,21 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const login = useCallback(
         async (options: LoginOptions): Promise<void> => {
+            if (adapter.isAuthenticated && adapter.linkedAccounts.length > 0) {
+                const authenticatedWithSameProvider = adapter.linkedAccounts.some(
+                    account => account.type === options.provider,
+                )
+
+                if (authenticatedWithSameProvider) {
+                    // Already authenticated with the requested provider - nothing to do
+                    return
+                }
+
+                // Authenticated with a different provider (e.g. Apple session persisted in keychain
+                // but user is now requesting Google login) - logout first so the correct OAuth flow runs.
+                await adapter.logout()
+            }
+
             await adapter.login(options)
         },
         [adapter],
@@ -253,6 +268,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             isLoading,
             isInitialized: isInitialised,
             isAuthenticated: adapter.isAuthenticated,
+            linkedAccounts: adapter.linkedAccounts,
             initialiseWallet,
             signMessage,
             signTransaction,
@@ -265,6 +281,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         [
             ownerAddress,
             adapter.isAuthenticated,
+            adapter.linkedAccounts,
             smartAccountAddress,
             smartAccountConfig,
             isLoading,
