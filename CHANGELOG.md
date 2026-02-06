@@ -1,5 +1,12 @@
 
 
+## 2.6.0 (2026-02-06)
+
+
+### Features
+
+* use name/email for account name for social login ([#3753](https://github.com/vechain/veworld-mobile/issues/3753)) ([e203ba7](https://github.com/vechain/veworld-mobile/commit/e203ba72de6dff2ae7c1e7a1732a09d947694781))
+
 ## 2.5.1 (2026-01-27)
 
 
