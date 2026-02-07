@@ -42,7 +42,7 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
         queryKey: ["COLLECTIBLES", "MEDIA", details.image],
         queryFn: () => fetchMedia(details.image!),
         enabled: !!details.image,
-        staleTime: 5 * 60 * 1000,
+        staleTime: 0,
     })
 
     const handlePress = useCallback(() => {
@@ -60,7 +60,7 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
 
     const RenderMedia = useMemo(() => {
         if (media?.mediaType === NFTMediaType.IMAGE) {
-            return <NFTImageComponent style={styles.image as ImageStyle} uri={media.image} />
+            return <NFTImageComponent style={styles.image as ImageStyle} uri={media.image} mime={media.mime} />
         }
 
         return (
@@ -70,7 +70,7 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
                 resizeMode={FastImage.resizeMode.cover}
             />
         )
-    }, [media?.mediaType, media?.image, styles.image])
+    }, [styles.image, media?.mediaType, media?.image, media?.mime])
 
     const isNew = useMemo(() => {
         if (!transferDetails) return false
