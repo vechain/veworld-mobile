@@ -1507,5 +1507,8 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "SMART_WALLET_LINK_MODAL_TITLE": "Link your account",
+  "SMART_WALLET_LINK_MODAL_SUBTITLE": "Link your smart wallet to another account so you can sign in on different platforms and recover your wallet if needed. This also improves security by giving you more ways to access and protect your funds.",
+  "SMART_WALLET_LINK_MODAL_BUTTON": "Link now"
 }

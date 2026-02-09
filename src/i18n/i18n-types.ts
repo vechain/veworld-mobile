@@ -3114,6 +3114,22 @@ type RootTranslation = {
 	 */
 	FEBRUARY: string
 	/**
+	 * A​c​c​o​u​n​t​ ​l​i​n​k​e​d​!
+	 */
+	FEEDBACK_ACCOUNT_LINKED: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​l​i​n​k​ ​a​c​c​o​u​n​t
+	 */
+	FEEDBACK_ACCOUNT_LINKED_FAIL: string
+	/**
+	 * A​c​c​o​u​n​t​ ​u​n​l​i​n​k​e​d​!
+	 */
+	FEEDBACK_ACCOUNT_UNLINKED: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​u​n​l​i​n​k​ ​a​c​c​o​u​n​t
+	 */
+	FEEDBACK_ACCOUNT_UNLINKED_FAIL: string
+	/**
 	 * A​p​p​ ​c​o​n​n​e​c​t​e​d​!
 	 */
 	FEEDBACK_APP_CONNECTED: string
@@ -3134,22 +3150,6 @@ type RootTranslation = {
 	 * T​r​a​n​s​f​e​r​ ​r​e​c​e​i​v​e​d
 	 */
 	FEEDBACK_TRANSFER_RECEIVED: string
-	/**
-	 * A​c​c​o​u​n​t​ ​l​i​n​k​e​d​!
-	 */
-	FEEDBACK_ACCOUNT_LINKED: string
-	/**
-	 * A​c​c​o​u​n​t​ ​u​n​l​i​n​k​e​d​!
-	 */
-	FEEDBACK_ACCOUNT_UNLINKED: string
-	/**
-	 * F​a​i​l​e​d​ ​t​o​ ​l​i​n​k​ ​a​c​c​o​u​n​t
-	 */
-	FEEDBACK_ACCOUNT_LINKED_FAIL: string
-	/**
-	 * F​a​i​l​e​d​ ​t​o​ ​u​n​l​i​n​k​ ​a​c​c​o​u​n​t
-	 */
-	FEEDBACK_ACCOUNT_UNLINKED_FAIL: string
 	/**
 	 * F​i​n​g​e​r​p​r​i​n​t
 	 */
@@ -6174,6 +6174,18 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * L​i​n​k​ ​y​o​u​r​ ​a​c​c​o​u​n​t
+	 */
+	SMART_WALLET_LINK_MODAL_TITLE: string
+	/**
+	 * L​i​n​k​ ​y​o​u​r​ ​s​m​a​r​t​ ​w​a​l​l​e​t​ ​t​o​ ​a​n​o​t​h​e​r​ ​a​c​c​o​u​n​t​ ​s​o​ ​y​o​u​ ​c​a​n​ ​s​i​g​n​ ​i​n​ ​o​n​ ​d​i​f​f​e​r​e​n​t​ ​p​l​a​t​f​o​r​m​s​ ​a​n​d​ ​r​e​c​o​v​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​f​ ​n​e​e​d​e​d​.​ ​T​h​i​s​ ​a​l​s​o​ ​i​m​p​r​o​v​e​s​ ​s​e​c​u​r​i​t​y​ ​b​y​ ​g​i​v​i​n​g​ ​y​o​u​ ​m​o​r​e​ ​w​a​y​s​ ​t​o​ ​a​c​c​e​s​s​ ​a​n​d​ ​p​r​o​t​e​c​t​ ​y​o​u​r​ ​f​u​n​d​s​.
+	 */
+	SMART_WALLET_LINK_MODAL_SUBTITLE: string
+	/**
+	 * L​i​n​k​ ​n​o​w
+	 */
+	SMART_WALLET_LINK_MODAL_BUTTON: string
 }
 
 export type TranslationFunctions = {
@@ -9229,6 +9241,22 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	FEBRUARY: () => LocalizedString
 	/**
+	 * Account linked!
+	 */
+	FEEDBACK_ACCOUNT_LINKED: () => LocalizedString
+	/**
+	 * Failed to link account
+	 */
+	FEEDBACK_ACCOUNT_LINKED_FAIL: () => LocalizedString
+	/**
+	 * Account unlinked!
+	 */
+	FEEDBACK_ACCOUNT_UNLINKED: () => LocalizedString
+	/**
+	 * Failed to unlink account
+	 */
+	FEEDBACK_ACCOUNT_UNLINKED_FAIL: () => LocalizedString
+	/**
 	 * App connected!
 	 */
 	FEEDBACK_APP_CONNECTED: () => LocalizedString
@@ -9248,22 +9276,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Transfer received
 	 */
 	FEEDBACK_TRANSFER_RECEIVED: () => LocalizedString
-	/**
-	 * Account linked!
-	 */
-	FEEDBACK_ACCOUNT_LINKED: () => LocalizedString
-	/**
-	 * Account unlinked!
-	 */
-	FEEDBACK_ACCOUNT_UNLINKED: () => LocalizedString
-	/**
-	 * Failed to link account
-	 */
-	FEEDBACK_ACCOUNT_LINKED_FAIL: () => LocalizedString
-	/**
-	 * Failed to unlink account
-	 */
-	FEEDBACK_ACCOUNT_UNLINKED_FAIL: () => LocalizedString
 	/**
 	 * Fingerprint
 	 */
@@ -12237,6 +12249,18 @@ Make sure that it is unlocked and the location services are enabled.
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Link your account
+	 */
+	SMART_WALLET_LINK_MODAL_TITLE: () => LocalizedString
+	/**
+	 * Link your smart wallet to another account so you can sign in on different platforms and recover your wallet if needed. This also improves security by giving you more ways to access and protect your funds.
+	 */
+	SMART_WALLET_LINK_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Link now
+	 */
+	SMART_WALLET_LINK_MODAL_BUTTON: () => LocalizedString
 }
 
 export type Formatters = {
