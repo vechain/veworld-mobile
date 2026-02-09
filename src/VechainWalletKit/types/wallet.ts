@@ -37,6 +37,7 @@ export interface SmartWalletContext extends WalletContext, AuthenticationOperati
     smartAccountAddress: string
     smartAccountConfig: SmartAccountTransactionConfig | null
     linkedAccounts: LinkedAccount[]
+    userDisplayName: string | null
     hasMultipleSocials: boolean
     initialiseWallet: () => Promise<void>
     linkOAuth: (
@@ -52,6 +53,7 @@ export interface SmartAccountAdapter extends SigningOperations, AuthenticationOp
     unlinkOAuth: (provider: SocialProvider, subject: string) => Promise<PrivyUser | undefined>
     linkOAuthState: OAuthFlowState
     linkedAccounts: LinkedAccount[]
+    userDisplayName: string | null
     hasMultipleSocials: boolean
 }
 

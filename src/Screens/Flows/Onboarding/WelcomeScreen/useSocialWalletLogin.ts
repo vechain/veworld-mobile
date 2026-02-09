@@ -7,13 +7,13 @@ import { useI18nContext } from "~i18n"
 type SocialProvider = "google" | "apple"
 
 type UseSocialWalletLoginParams = {
-    onCreateSmartWallet: (params: { address: string }) => void
-    onSmartWalletPinSuccess: (params: { pin: string; address: string }) => void
+    onCreateSmartWallet: (params: { address: string; name?: string }) => void
+    onSmartWalletPinSuccess: (params: { pin: string; address: string; name?: string }) => void
 }
 
 export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSuccess }: UseSocialWalletLoginParams) => {
     const { LL } = useI18nContext()
-    const { login, isAuthenticated, smartAccountAddress } = useSmartWallet()
+    const { login, isAuthenticated, smartAccountAddress, userDisplayName } = useSmartWallet()
 
     const [pendingProvider, setPendingProvider] = useState<SocialProvider | null>(null)
     const [pendingSmartAccountAddress, setPendingSmartAccountAddress] = useState<string | null>(null)
@@ -45,13 +45,22 @@ export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSucc
         [LL, login, pendingProvider],
     )
 
-    // Wait for smartAccountAddress to be populated after OAuth login
+    // Wait for smartAccountAddress to be populated after OAuth login.
+    // Guard with !pendingSmartAccountAddress to prevent duplicate calls if
+    // userDisplayName updates in a later render cycle.
     useEffect(() => {
-        if (pendingProvider && isAuthenticated && smartAccountAddress) {
+        if (pendingProvider && isAuthenticated && smartAccountAddress && !pendingSmartAccountAddress) {
             setPendingSmartAccountAddress(smartAccountAddress)
-            onCreateSmartWallet({ address: smartAccountAddress })
+            onCreateSmartWallet({ address: smartAccountAddress, name: userDisplayName ?? undefined })
         }
-    }, [pendingProvider, isAuthenticated, smartAccountAddress, onCreateSmartWallet])
+    }, [
+        pendingProvider,
+        isAuthenticated,
+        smartAccountAddress,
+        userDisplayName,
+        onCreateSmartWallet,
+        pendingSmartAccountAddress,
+    ])
 
     const handlePinSuccess = useCallback(
         (pin: string) => {
@@ -59,12 +68,13 @@ export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSucc
                 onSmartWalletPinSuccess({
                     pin,
                     address: pendingSmartAccountAddress,
+                    name: userDisplayName ?? undefined,
                 })
                 setPendingSmartAccountAddress(null)
                 setPendingProvider(null)
             }
         },
-        [onSmartWalletPinSuccess, pendingSmartAccountAddress],
+        [onSmartWalletPinSuccess, pendingSmartAccountAddress, userDisplayName],
     )
 
     const clearPendingState = useCallback(() => {
