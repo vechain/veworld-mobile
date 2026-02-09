@@ -1,6 +1,7 @@
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { TransactionOptions, SignOptions, TypedDataPayload, GenericDelegationDetails } from "./transaction"
 import { SmartAccountTransactionConfig } from "./smartAccountTransaction"
+import { LinkWithOAuthInput, OAuthFlowState, PrivyUser } from "@privy-io/expo"
 export interface SigningOperations {
     signMessage: (message: Buffer) => Promise<Buffer>
     signTransaction: (tx: Transaction, options?: SignOptions) => Promise<Buffer>
@@ -36,12 +37,22 @@ export interface SmartWalletContext extends WalletContext, AuthenticationOperati
     smartAccountAddress: string
     smartAccountConfig: SmartAccountTransactionConfig | null
     linkedAccounts: LinkedAccount[]
+    hasMultipleSocials: boolean
     initialiseWallet: () => Promise<void>
+    linkOAuth: (
+        provider: SocialProvider,
+        opts?: Omit<LinkWithOAuthInput, "provider" | "redirectUri">,
+    ) => Promise<PrivyUser | undefined>
+    unlinkOAuth: (provider: SocialProvider, subject: string) => Promise<PrivyUser | undefined>
 }
 export interface SmartAccountAdapter extends SigningOperations, AuthenticationOperations {
     getAccount(): string
     createWallet(): Promise<string>
+    linkOAuth: (provider: SocialProvider, opts: Omit<LinkWithOAuthInput, "provider">) => Promise<PrivyUser | undefined>
+    unlinkOAuth: (provider: SocialProvider, subject: string) => Promise<PrivyUser | undefined>
+    linkOAuthState: OAuthFlowState
     linkedAccounts: LinkedAccount[]
+    hasMultipleSocials: boolean
 }
 
 export interface LoginOptions {
@@ -53,4 +64,6 @@ export type SocialProvider = "google" | "apple" | "twitter"
 
 export interface LinkedAccount {
     type: SocialProvider
+    email?: string | null
+    subject: string
 }

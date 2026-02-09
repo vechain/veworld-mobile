@@ -1,5 +1,12 @@
 import { useMemo } from "react"
-import { usePrivy, useEmbeddedEthereumWallet, useLoginWithOAuth } from "@privy-io/expo"
+import {
+    usePrivy,
+    useEmbeddedEthereumWallet,
+    useLoginWithOAuth,
+    useLinkWithOAuth,
+    useUnlinkOAuth,
+    LinkWithOAuthInput,
+} from "@privy-io/expo"
 import { Transaction } from "@vechain/sdk-core"
 import { SmartAccountAdapter, LoginOptions, LinkedAccount, SocialProvider } from "../types/wallet"
 import { TypedDataPayload } from "../types/transaction"
@@ -16,6 +23,9 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
     const { user, logout } = usePrivy()
     const { wallets, create } = useEmbeddedEthereumWallet()
     const oauth = useLoginWithOAuth()
+    const unlinkOAuth = useUnlinkOAuth()
+    const linkOAuth = useLinkWithOAuth()
+
     const isAuthenticated = !!user
 
     const linkedAccounts: LinkedAccount[] = useMemo(() => {
@@ -24,14 +34,22 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
             .filter(account => account.type in OAUTH_TYPE_TO_PROVIDER)
             .map(account => ({
                 type: OAUTH_TYPE_TO_PROVIDER[account.type],
+                email: "email" in account ? account.email : undefined,
+                subject: "subject" in account ? account.subject : "",
             }))
     }, [user?.linked_accounts])
+
+    const hasMultipleSocials = useMemo(() => {
+        return linkedAccounts.length > 1
+    }, [linkedAccounts])
 
     return useMemo(() => {
         const currentWallets = wallets ?? []
         return {
             isAuthenticated,
             linkedAccounts,
+            hasMultipleSocials,
+            linkOAuthState: linkOAuth.state,
 
             async login(options: LoginOptions): Promise<void> {
                 const provider = options.provider as any
@@ -41,6 +59,14 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
 
             async logout(): Promise<void> {
                 await logout()
+            },
+
+            async linkOAuth(provider: SocialProvider, opts: Omit<LinkWithOAuthInput, "provider" | "redirectUri">) {
+                return await linkOAuth.link({ provider, ...opts })
+            },
+
+            async unlinkOAuth(provider: SocialProvider, subject?: string) {
+                return await unlinkOAuth.unlinkOAuth({ provider, subject: subject ?? "" })
             },
 
             // Will create only one wallet for the user even if called multiple times.
@@ -148,7 +174,7 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
                 return currentWallets[0]?.address ?? ""
             },
         }
-    }, [isAuthenticated, linkedAccounts, wallets, oauth, logout, create])
+    }, [isAuthenticated, linkedAccounts, wallets, oauth, hasMultipleSocials, logout, create, linkOAuth, unlinkOAuth])
 }
 
 export const findPrimaryType = (types: Record<string, any>, message: any): string => {
