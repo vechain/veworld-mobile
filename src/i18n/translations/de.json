@@ -321,6 +321,8 @@
   "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Vom Ledger importieren",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Eine Wiederherstellungsphrase ist eine geheime Wortfolge, die als Hauptschlüssel für Ihre Wallet dient. Bewahren Sie sie sicher auf, denn jeder, der Ihre Seed-Phrase kennt, kann auf Ihre Vermögenswerte zugreifen.",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Mit Schlüsseln importieren",
+  "BS_INFO_LINKING_ACCOUNTS_DESCRIPTION": "Das Verknüpfen Ihrer Wallet mit mehreren Konten ermöglicht es Ihnen, dieselbe Wallet auf verschiedenen Plattformen und mit unterschiedlichen Anmeldemethoden wiederherzustellen. Dies erhöht die Sicherheit und verringert das Risiko, den Zugriff auf Ihre Wallet zu verlieren, erheblich.",
+  "BS_INFO_LINKING_ACCOUNTS_TITLE": "Konten Verknüpfen",
   "BTN_ADD_ACCOUNT": "KONTO HINZUFÜGEN",
   "BTN_ADD_CONTACT": "Kontakt hinzufügen",
   "BTN_ADD_CUSTOM_NODE": "Benutzerdefinierten Knoten hinzufügen",

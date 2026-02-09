@@ -321,6 +321,8 @@
   "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Ledger에서 가져오기",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "복구 구문 또는 시드 구문은 지갑의 마스터 키 역할을 하는 비밀 단어 세트입니다. 이 구문을 안전하게 보관하세요. 누구든 이 시드 구문을 알면 자산에 접근할 수 있습니다.",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "키로 가져오기",
+  "BS_INFO_LINKING_ACCOUNTS_DESCRIPTION": "지갑을 여러 계정에 연결하면 다양한 플랫폼과 로그인 방식에서 동일한 지갑을 복구할 수 있습니다. 이렇게 하면 보안이 강화되고 지갑 접근 권한을 잃을 위험이 크게 줄어듭니다.",
+  "BS_INFO_LINKING_ACCOUNTS_TITLE": "계정 연결",
   "BTN_ADD_ACCOUNT": "계정 추가",
   "BTN_ADD_CONTACT": "연락처 추가",
   "BTN_ADD_CUSTOM_NODE": "커스텀 노드 추가",

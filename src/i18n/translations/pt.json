@@ -321,6 +321,8 @@
   "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Importando do Ledger",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Uma frase de recuperação é um conjunto secreto de palavras que serve como chave mestra da sua carteira. Guarde em segurança, pois qualquer pessoa com sua frase-semente pode acessar seus ativos.",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importando com chaves",
+  "BS_INFO_LINKING_ACCOUNTS_DESCRIPTION": "Vincular sua carteira a várias contas permite que você recupere a mesma carteira em diferentes plataformas e com diferentes métodos de login. Isso melhora a segurança e reduz muito o risco de perder o acesso à sua carteira.",
+  "BS_INFO_LINKING_ACCOUNTS_TITLE": "Vinculação de Contas",
   "BTN_ADD_ACCOUNT": "ADICIONAR CONTA",
   "BTN_ADD_CONTACT": "Adicionar contato",
   "BTN_ADD_CUSTOM_NODE": "Adicionar um nó personalizado",

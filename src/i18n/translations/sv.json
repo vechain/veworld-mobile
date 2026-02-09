@@ -321,6 +321,8 @@
   "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Importera från Ledger",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "En återställningsfras är en hemlig uppsättning ord som fungerar som huvudnyckel till din plånbok. Förvara den säkert, eftersom alla som har din seed phrase kan få tillgång till dina tillgångar.",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importera med nycklar",
+  "BS_INFO_LINKING_ACCOUNTS_DESCRIPTION": "Att länka din plånbok till flera konton gör att du kan återställa samma plånbok på olika plattformar och med olika inloggningsmetoder. Detta förbättrar säkerheten och minskar risken för att förlora tillgången till din plånbok avsevärt.",
+  "BS_INFO_LINKING_ACCOUNTS_TITLE": "Länka konton",
   "BTN_ADD_ACCOUNT": "LÄGG TILL KONTO",
   "BTN_ADD_CONTACT": "Lägg till kontakt",
   "BTN_ADD_CUSTOM_NODE": "Lägg till en anpassad nod",

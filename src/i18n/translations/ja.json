@@ -321,6 +321,8 @@
   "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Ledgerからのインポート",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "リカバリーフレーズは、ウォレットのマスターキーとして機能する秘密の単語のセットです。これを安全に保管してください。シードフレーズを持つ人は誰でもあなたの資産にアクセスできます。",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "キーによるインポート",
+  "BS_INFO_LINKING_ACCOUNTS_DESCRIPTION": "ウォレットを複数のアカウントに連携することで、異なるプラットフォームやサインイン方法でも同じウォレットを復元できます。これによりセキュリティが向上し、ウォレットへのアクセスを失うリスクが大幅に減少します。",
+  "BS_INFO_LINKING_ACCOUNTS_TITLE": "アカウントの連携",
   "BTN_ADD_ACCOUNT": "アカウントを追加する",
   "BTN_ADD_CONTACT": "連絡先を追加する",
   "BTN_ADD_CUSTOM_NODE": "カスタムノードを追加する",

@@ -321,6 +321,8 @@
   "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Importation depuis Ledger",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Une phrase de récupération est un ensemble secret de mots qui sert de clé principale à votre portefeuille. Gardez-la en sécurité, car toute personne ayant votre phrase de récupération peut accéder à vos actifs.",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importation avec les clés",
+  "BS_INFO_LINKING_ACCOUNTS_DESCRIPTION": "Lier votre portefeuille à plusieurs comptes vous permet de récupérer le même portefeuille sur différentes plateformes et avec différentes méthodes de connexion. Cela améliore la sécurité et réduit considérablement le risque de perdre l'accès à votre portefeuille.",
+  "BS_INFO_LINKING_ACCOUNTS_TITLE": "Liaison des comptes",
   "BTN_ADD_ACCOUNT": "AJOUTER UN COMPTE",
   "BTN_ADD_CONTACT": "Ajouter un contact",
   "BTN_ADD_CUSTOM_NODE": "Ajouter un nœud personnalisé",

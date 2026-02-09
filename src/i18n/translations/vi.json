@@ -321,6 +321,8 @@
   "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Nhập từ Ledger",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Cụm từ khôi phục là một dãy từ bí mật, đóng vai trò như chìa khóa chính cho ví của bạn. Hãy giữ an toàn, vì bất kỳ ai có cụm từ này đều có thể truy cập tài sản của bạn.",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Nhập bằng khóa",
+  "BS_INFO_LINKING_ACCOUNTS_DESCRIPTION": "Liên kết ví của bạn với nhiều tài khoản cho phép bạn khôi phục cùng một ví trên các nền tảng khác nhau và với các phương thức đăng nhập khác nhau. Điều này giúp tăng cường bảo mật và giảm thiểu rủi ro mất quyền truy cập vào ví của bạn.",
+  "BS_INFO_LINKING_ACCOUNTS_TITLE": "Liên Kết Tài Khoản",
   "BTN_ADD_ACCOUNT": "THÊM TÀI KHOẢN",
   "BTN_ADD_CONTACT": "Thêm liên hệ",
   "BTN_ADD_CUSTOM_NODE": "Thêm nút tùy chỉnh",

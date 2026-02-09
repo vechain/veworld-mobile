@@ -321,6 +321,8 @@
   "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Importa da Ledger",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Una frase di recupero è un insieme segreto di parole che funge da chiave principale del tuo wallet. Conservala con cura, perché chiunque possegga la tua seed phrase può accedere ai tuoi asset.",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importa con chiavi",
+  "BS_INFO_LINKING_ACCOUNTS_DESCRIPTION": "Collegare il tuo wallet a più account ti consente di recuperare lo stesso wallet su diverse piattaforme e con diversi metodi di accesso. Questo migliora la sicurezza e riduce notevolmente il rischio di perdere l’accesso al tuo wallet.",
+  "BS_INFO_LINKING_ACCOUNTS_TITLE": "Collegamento Account",
   "BTN_ADD_ACCOUNT": "AGGIUNGI ACCOUNT",
   "BTN_ADD_CONTACT": "Aggiungi contatto",
   "BTN_ADD_CUSTOM_NODE": "Aggiungi un nodo personalizzato",

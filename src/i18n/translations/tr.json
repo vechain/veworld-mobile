@@ -321,6 +321,8 @@
   "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Ledger'dan İçe Aktarma",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Bir Kurtarma ifadesi, cüzdanınızın ana anahtarı olarak işlev gören gizli bir kelime setidir. Bunu güvende tutun; çünkü kurtarma ifadenizi bilen herkes varlıklarınıza erişebilir.",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Anahtarlarla İçe Aktarma",
+  "BS_INFO_LINKING_ACCOUNTS_DESCRIPTION": "Cüzdanınızı birden fazla hesaba bağlamak, aynı cüzdanı farklı platformlarda ve farklı giriş yöntemleriyle kurtarmanıza olanak tanır. Bu, güvenliği artırır ve cüzdanınıza erişimi kaybetme riskinizi büyük ölçüde azaltır.",
+  "BS_INFO_LINKING_ACCOUNTS_TITLE": "Hesapları Bağlama",
   "BTN_ADD_ACCOUNT": "HESAP EKLE",
   "BTN_ADD_CONTACT": "Kişi ekle",
   "BTN_ADD_CUSTOM_NODE": "Özel bir düğüm ekle",

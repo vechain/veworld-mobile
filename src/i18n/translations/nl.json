@@ -321,6 +321,8 @@
   "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Importeren vanaf Ledger",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "Een herstelzin is een geheime reeks woorden die fungeert als de hoofdsleutel tot je wallet. Bewaar deze goed, want iedereen met jouw seed phrase heeft toegang tot je vermogen.",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importeren met sleutels",
+  "BS_INFO_LINKING_ACCOUNTS_DESCRIPTION": "Door je wallet aan meerdere accounts te koppelen, kun je dezelfde wallet herstellen op verschillende platforms en met verschillende inlogmethoden. Dit verbetert de beveiliging en verkleint het risico dat je toegang tot je wallet verliest aanzienlijk.",
+  "BS_INFO_LINKING_ACCOUNTS_TITLE": "Accounts Koppelen",
   "BTN_ADD_ACCOUNT": "ACCOUNT TOEVOEGEN",
   "BTN_ADD_CONTACT": "Contactpersoon toevoegen",
   "BTN_ADD_CUSTOM_NODE": "Voeg een aangepaste node toe",

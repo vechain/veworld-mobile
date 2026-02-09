@@ -321,6 +321,8 @@
   "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "從 Ledger 匯入",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "助記詞是一組秘密單字，是您錢包的主鑰。請妥善保管，因為任何獲取您助記詞的人都能存取您的資產。",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "以私鑰/助記詞匯入",
+  "BS_INFO_LINKING_ACCOUNTS_DESCRIPTION": "將您的錢包連結到多個帳號，可以讓您在不同平台和使用不同登入方式時恢復相同的錢包。這樣能提升安全性，也大幅減少遺失錢包存取權的風險。",
+  "BS_INFO_LINKING_ACCOUNTS_TITLE": "連結帳號",
   "BTN_ADD_ACCOUNT": "新增帳戶",
   "BTN_ADD_CONTACT": "新增聯絡人",
   "BTN_ADD_CUSTOM_NODE": "新增自訂節點",

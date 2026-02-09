@@ -321,6 +321,8 @@
   "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "从 Ledger 导入",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "恢复助记词是一组秘密单词，是您钱包的主密钥。请务必妥善保存，任何获得您的助记词的人都可以访问您的资产。",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "通过密钥导入",
+  "BS_INFO_LINKING_ACCOUNTS_DESCRIPTION": "将您的钱包关联到多个账户，允许您在不同平台和不同登录方式下恢复同一个钱包。这可以提升安全性，并大大降低丢失钱包访问权限的风险。",
+  "BS_INFO_LINKING_ACCOUNTS_TITLE": "账户关联",
   "BTN_ADD_ACCOUNT": "添加账户",
   "BTN_ADD_CONTACT": "添加联系人",
   "BTN_ADD_CUSTOM_NODE": "添加自定义节点",
