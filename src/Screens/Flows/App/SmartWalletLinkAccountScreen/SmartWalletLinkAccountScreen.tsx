@@ -26,6 +26,7 @@ export const SmartWalletLinkAccountScreen = ({ route }: Props) => {
 
     const availableLinkedAccounts = useMemo(() => {
         return LINKED_ACCOUNT_TYPES.filter(account => {
+            //filter out apple on android because it's not supported
             if (PlatformUtils.isAndroid() && account === "apple") {
                 return false
             }

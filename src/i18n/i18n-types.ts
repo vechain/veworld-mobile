@@ -1351,13 +1351,13 @@ type RootTranslation = {
 	 */
 	BS_INFO_IMPORTING_WITH_KEYS_TITLE: string
 	/**
-	 * L​i​n​k​i​n​g​ ​A​c​c​o​u​n​t​s
-	 */
-	BS_INFO_LINKING_ACCOUNTS_TITLE: string
-	/**
 	 * L​i​n​k​i​n​g​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​t​o​ ​m​u​l​t​i​p​l​e​ ​a​c​c​o​u​n​t​s​ ​l​e​t​s​ ​y​o​u​ ​r​e​c​o​v​e​r​ ​t​h​e​ ​s​a​m​e​ ​w​a​l​l​e​t​ ​o​n​ ​d​i​f​f​e​r​e​n​t​ ​p​l​a​t​f​o​r​m​s​ ​a​n​d​ ​w​i​t​h​ ​d​i​f​f​e​r​e​n​t​ ​s​i​g​n​-​i​n​ ​m​e​t​h​o​d​s​.​ ​T​h​i​s​ ​i​m​p​r​o​v​e​s​ ​s​e​c​u​r​i​t​y​ ​a​n​d​ ​g​r​e​a​t​l​y​ ​r​e​d​u​c​e​s​ ​t​h​e​ ​r​i​s​k​ ​o​f​ ​l​o​s​i​n​g​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.
 	 */
 	BS_INFO_LINKING_ACCOUNTS_DESCRIPTION: string
+	/**
+	 * L​i​n​k​i​n​g​ ​A​c​c​o​u​n​t​s
+	 */
+	BS_INFO_LINKING_ACCOUNTS_TITLE: string
 	/**
 	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
@@ -3134,6 +3134,22 @@ type RootTranslation = {
 	 * T​r​a​n​s​f​e​r​ ​r​e​c​e​i​v​e​d
 	 */
 	FEEDBACK_TRANSFER_RECEIVED: string
+	/**
+	 * A​c​c​o​u​n​t​ ​l​i​n​k​e​d​!
+	 */
+	FEEDBACK_ACCOUNT_LINKED: string
+	/**
+	 * A​c​c​o​u​n​t​ ​u​n​l​i​n​k​e​d​!
+	 */
+	FEEDBACK_ACCOUNT_UNLINKED: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​l​i​n​k​ ​a​c​c​o​u​n​t
+	 */
+	FEEDBACK_ACCOUNT_LINKED_FAIL: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​u​n​l​i​n​k​ ​a​c​c​o​u​n​t
+	 */
+	FEEDBACK_ACCOUNT_UNLINKED_FAIL: string
 	/**
 	 * F​i​n​g​e​r​p​r​i​n​t
 	 */
@@ -7463,13 +7479,13 @@ Thanks for your patience!
 	 */
 	BS_INFO_IMPORTING_WITH_KEYS_TITLE: () => LocalizedString
 	/**
-	 * Linking Accounts
-	 */
-	BS_INFO_LINKING_ACCOUNTS_TITLE: () => LocalizedString
-	/**
 	 * Linking your wallet to multiple accounts lets you recover the same wallet on different platforms and with different sign-in methods. This improves security and greatly reduces the risk of losing access to your wallet.
 	 */
 	BS_INFO_LINKING_ACCOUNTS_DESCRIPTION: () => LocalizedString
+	/**
+	 * Linking Accounts
+	 */
+	BS_INFO_LINKING_ACCOUNTS_TITLE: () => LocalizedString
 	/**
 	 * ADD ACCOUNT
 	 */
@@ -9232,6 +9248,22 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Transfer received
 	 */
 	FEEDBACK_TRANSFER_RECEIVED: () => LocalizedString
+	/**
+	 * Account linked!
+	 */
+	FEEDBACK_ACCOUNT_LINKED: () => LocalizedString
+	/**
+	 * Account unlinked!
+	 */
+	FEEDBACK_ACCOUNT_UNLINKED: () => LocalizedString
+	/**
+	 * Failed to link account
+	 */
+	FEEDBACK_ACCOUNT_LINKED_FAIL: () => LocalizedString
+	/**
+	 * Failed to unlink account
+	 */
+	FEEDBACK_ACCOUNT_UNLINKED_FAIL: () => LocalizedString
 	/**
 	 * Fingerprint
 	 */

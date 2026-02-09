@@ -11,6 +11,7 @@ import { buildSmartAccountTransaction } from "../utils/transactionBuilder"
 import { LinkWithOAuthInput } from "@privy-io/expo"
 import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { useI18nContext } from "~i18n"
 export interface SmartWalletProps {
     children: React.ReactNode
     config: VechainWalletSDKConfig
@@ -33,6 +34,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
     const [smartAccountConfig, setSmartAccountConfig] = useState<SmartAccountTransactionConfig | null>(null)
     const [isInitialised, setIsInitialised] = useState(false)
 
+    const { LL } = useI18nContext()
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
     const previousConfigRef = useRef<NetworkConfig | null>(null)
 
@@ -103,20 +105,20 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 Feedback.show({
                     severity: FeedbackSeverity.SUCCESS,
                     type: FeedbackType.ALERT,
-                    message: "Account linked!",
+                    message: LL.FEEDBACK_ACCOUNT_LINKED(),
                 })
                 break
             case "error":
                 Feedback.show({
                     severity: FeedbackSeverity.ERROR,
                     type: FeedbackType.ALERT,
-                    message: "Failed to link account",
+                    message: LL.FEEDBACK_ACCOUNT_LINKED_FAIL(),
                 })
                 break
             default:
                 break
         }
-    }, [adapter.linkOAuthState])
+    }, [adapter.linkOAuthState, LL])
 
     // Reset state when authentication changes
     useEffect(() => {
@@ -293,9 +295,23 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const unlinkOAuth = useCallback(
         async (provider: SocialProvider, subject: string) => {
-            return await adapter.unlinkOAuth(provider, subject)
+            try {
+                const result = await adapter.unlinkOAuth(provider, subject)
+                Feedback.show({
+                    severity: FeedbackSeverity.SUCCESS,
+                    type: FeedbackType.ALERT,
+                    message: LL.FEEDBACK_ACCOUNT_UNLINKED(),
+                })
+                return result
+            } catch {
+                Feedback.show({
+                    severity: FeedbackSeverity.ERROR,
+                    type: FeedbackType.ALERT,
+                    message: LL.FEEDBACK_ACCOUNT_UNLINKED_FAIL(),
+                })
+            }
         },
-        [adapter],
+        [adapter, LL],
     )
 
     const contextValue = useMemo(
