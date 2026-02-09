@@ -1,5 +1,12 @@
 
 
+## 2.5.2 (2026-02-09)
+
+
+### Bug Fixes
+
+* race condition causing crash in onboarding social wallets ([#3758](https://github.com/vechain/veworld-mobile/issues/3758)) ([60a3fbf](https://github.com/vechain/veworld-mobile/commit/60a3fbf2b094a9c9418732bd9b6883b56d822990))
+
 ## 2.5.1 (2026-01-27)
 
 
