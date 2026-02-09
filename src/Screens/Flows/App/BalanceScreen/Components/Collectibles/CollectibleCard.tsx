@@ -42,7 +42,7 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
         queryKey: ["COLLECTIBLES", "MEDIA", details.image],
         queryFn: () => fetchMedia(details.image!),
         enabled: !!details.image,
-        staleTime: 0,
+        staleTime: 5 * 60 * 1000,
     })
 
     const handlePress = useCallback(() => {
