@@ -321,6 +321,8 @@
   "BS_INFO_IMPORTING_FROM_LEDGER_TITLE": "Importing from Ledger",
   "BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION": "A Recovery phrase or is a secret set of words that act as the master key to your wallet. Keep it safe, as anyone with your seed phrase can access your assets.",
   "BS_INFO_IMPORTING_WITH_KEYS_TITLE": "Importing with keys",
+  "BS_INFO_LINKING_ACCOUNTS_TITLE": "Linking Accounts",
+  "BS_INFO_LINKING_ACCOUNTS_DESCRIPTION": "Linking your wallet to multiple accounts lets you recover the same wallet on different platforms and with different sign-in methods. This improves security and greatly reduces the risk of losing access to your wallet.",
   "BTN_ADD_ACCOUNT": "ADD ACCOUNT",
   "BTN_ADD_CONTACT": "Add contact",
   "BTN_ADD_CUSTOM_NODE": "Add a custom node",

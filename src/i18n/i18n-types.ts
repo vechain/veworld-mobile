@@ -1351,6 +1351,14 @@ type RootTranslation = {
 	 */
 	BS_INFO_IMPORTING_WITH_KEYS_TITLE: string
 	/**
+	 * L​i​n​k​i​n​g​ ​A​c​c​o​u​n​t​s
+	 */
+	BS_INFO_LINKING_ACCOUNTS_TITLE: string
+	/**
+	 * L​i​n​k​i​n​g​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​t​o​ ​m​u​l​t​i​p​l​e​ ​a​c​c​o​u​n​t​s​ ​l​e​t​s​ ​y​o​u​ ​r​e​c​o​v​e​r​ ​t​h​e​ ​s​a​m​e​ ​w​a​l​l​e​t​ ​o​n​ ​d​i​f​f​e​r​e​n​t​ ​p​l​a​t​f​o​r​m​s​ ​a​n​d​ ​w​i​t​h​ ​d​i​f​f​e​r​e​n​t​ ​s​i​g​n​-​i​n​ ​m​e​t​h​o​d​s​.​ ​T​h​i​s​ ​i​m​p​r​o​v​e​s​ ​s​e​c​u​r​i​t​y​ ​a​n​d​ ​g​r​e​a​t​l​y​ ​r​e​d​u​c​e​s​ ​t​h​e​ ​r​i​s​k​ ​o​f​ ​l​o​s​i​n​g​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	BS_INFO_LINKING_ACCOUNTS_DESCRIPTION: string
+	/**
 	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
 	BTN_ADD_ACCOUNT: string
@@ -1482,10 +1490,6 @@ type RootTranslation = {
 	 * C​r​e​a​t​e​ ​n​e​w​ ​w​a​l​l​e​t
 	 */
 	BTN_CREATE_WALLET_TYPE_CREATE_NEW: string
-	/**
-	 * Continue with Google
-	 */
-	BTN_CONTINUE_WITH_GOOGLE: string
 	/**
 	 * Y​o​u​ ​w​i​l​l​ ​c​r​e​a​t​e​ ​a​ ​n​e​w​ ​e​m​p​t​y​ ​w​a​l​l​e​t
 	 */
@@ -6110,6 +6114,10 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ONE_DEVICE_FOUND: string
 	/**
+	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​i​m​p​o​r​t​:
+	 */
+	WALLET_LEDGER_SELECT_ACCOUNTS_SB: string
+	/**
 	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​ ​t​h​r​o​u​g​h​ ​b​l​u​e​t​o​o​t​h​.​
 ​M​a​k​e​ ​s​u​r​e​ ​t​h​a​t​ ​i​t​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​a​n​d​ ​t​h​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​e​n​a​b​l​e​d​.
 	 */
@@ -6150,10 +6158,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​i​m​p​o​r​t​:
-	 */
-	WALLET_LEDGER_SELECT_ACCOUNTS_SB: string
 }
 
 export type TranslationFunctions = {
@@ -7459,6 +7463,14 @@ Thanks for your patience!
 	 */
 	BS_INFO_IMPORTING_WITH_KEYS_TITLE: () => LocalizedString
 	/**
+	 * Linking Accounts
+	 */
+	BS_INFO_LINKING_ACCOUNTS_TITLE: () => LocalizedString
+	/**
+	 * Linking your wallet to multiple accounts lets you recover the same wallet on different platforms and with different sign-in methods. This improves security and greatly reduces the risk of losing access to your wallet.
+	 */
+	BS_INFO_LINKING_ACCOUNTS_DESCRIPTION: () => LocalizedString
+	/**
 	 * ADD ACCOUNT
 	 */
 	BTN_ADD_ACCOUNT: () => LocalizedString
@@ -7578,10 +7590,6 @@ Thanks for your patience!
 	 * Create wallet
 	 */
 	BTN_CREATE_WALLET: () => LocalizedString
-	/**
-	 * Continue with Google
-	 */
-	BTN_CONTINUE_WITH_GOOGLE: () => LocalizedString
 	/**
 	 * Advanced setup
 	 */
@@ -12153,6 +12161,10 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	WALLET_LEDGER_ONE_DEVICE_FOUND: () => LocalizedString
 	/**
+	 * Select accounts to import:
+	 */
+	WALLET_LEDGER_SELECT_ACCOUNTS_SB: () => LocalizedString
+	/**
 	 * Connect your Ledger device through bluetooth.
 Make sure that it is unlocked and the location services are enabled.
 	 */
@@ -12193,10 +12205,6 @@ Make sure that it is unlocked and the location services are enabled.
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Select accounts to import:
-	 */
-	WALLET_LEDGER_SELECT_ACCOUNTS_SB: () => LocalizedString
 }
 
 export type Formatters = {
