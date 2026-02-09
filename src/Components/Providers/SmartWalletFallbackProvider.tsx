@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from "react"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
-import { SmartWalletContext, LoginOptions } from "../../VechainWalletKit/types/wallet"
+import { SmartWalletContext, LoginOptions, SocialProvider } from "../../VechainWalletKit/types/wallet"
 import {
     TransactionOptions,
     SignOptions,
@@ -8,6 +8,7 @@ import {
     GenericDelegationDetails,
 } from "../../VechainWalletKit/types/transaction"
 import { WalletError, WalletErrorType } from "../../VechainWalletKit/utils/errors"
+import { LinkWithOAuthInput, PrivyUser } from "@privy-io/expo"
 
 export const SmartWalletFallbackContext = createContext<SmartWalletContext | null>(null)
 
@@ -33,6 +34,7 @@ export const SmartWalletFallbackProvider: React.FC<SmartWalletFallbackProviderPr
             smartAccountConfig: null,
             linkedAccounts: [],
             userDisplayName: null,
+            hasMultipleSocials: false,
 
             // Authentication operations - throw descriptive errors
             login: async (_options: LoginOptions): Promise<void> => {
@@ -43,6 +45,23 @@ export const SmartWalletFallbackProvider: React.FC<SmartWalletFallbackProviderPr
             },
 
             logout: async (): Promise<void> => {
+                throw new WalletError(
+                    WalletErrorType.WALLET_NOT_FOUND,
+                    "Smart wallet functionality is currently disabled. Please enable the smartWalletFeature flag.",
+                )
+            },
+
+            linkOAuth: async (
+                _provider: SocialProvider,
+                _opts?: Omit<LinkWithOAuthInput, "provider" | "redirectUri">,
+            ): Promise<PrivyUser | undefined> => {
+                throw new WalletError(
+                    WalletErrorType.WALLET_NOT_FOUND,
+                    "Smart wallet functionality is currently disabled. Please enable the smartWalletFeature flag.",
+                )
+            },
+
+            unlinkOAuth: async (_provider: SocialProvider, _subject: string): Promise<PrivyUser | undefined> => {
                 throw new WalletError(
                     WalletErrorType.WALLET_NOT_FOUND,
                     "Smart wallet functionality is currently disabled. Please enable the smartWalletFeature flag.",
