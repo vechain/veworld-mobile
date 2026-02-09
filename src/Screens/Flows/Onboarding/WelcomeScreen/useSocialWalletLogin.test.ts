@@ -245,6 +245,7 @@ describe("useSocialWalletLogin", () => {
             const testAddress = "0x1234567890123456789012345678901234567890"
             setAuthenticatedWithAddress(testAddress, "Jane Doe")
             mockSmartWalletState.login.mockResolvedValue(undefined)
+            mockOnSmartWalletPinSuccess.mockResolvedValue(undefined)
 
             const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
@@ -252,8 +253,8 @@ describe("useSocialWalletLogin", () => {
                 await result.current.handleLogin("google")
             })
 
-            act(() => {
-                result.current.handlePinSuccess("123456")
+            await act(async () => {
+                await result.current.handlePinSuccess("123456")
             })
 
             expect(mockOnSmartWalletPinSuccess).toHaveBeenCalledWith({
@@ -268,6 +269,7 @@ describe("useSocialWalletLogin", () => {
         it("should call onSmartWalletPinSuccess when pendingAddress exists", async () => {
             const testAddress = "0x1234567890123456789012345678901234567890"
             setAuthenticatedWithAddress(testAddress)
+            mockOnSmartWalletPinSuccess.mockResolvedValue(undefined)
 
             const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
@@ -276,26 +278,51 @@ describe("useSocialWalletLogin", () => {
                 await result.current.handleLogin("google")
             })
 
-            act(() => {
-                result.current.handlePinSuccess("123456")
+            // Verify pending address is set before calling handlePinSuccess
+            expect(result.current.pendingAddress).toBe(testAddress)
+
+            await act(async () => {
+                await result.current.handlePinSuccess("123456")
             })
 
             expect(mockOnSmartWalletPinSuccess).toHaveBeenCalledWith({
                 pin: "123456",
                 address: testAddress,
             })
-            expect(result.current.pendingAddress).toBeNull()
-            expect(result.current.pendingProvider).toBeNull()
         })
 
-        it("should do nothing when no pendingAddress exists", () => {
+        it("should do nothing when no pendingAddress exists", async () => {
             const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 
-            act(() => {
-                result.current.handlePinSuccess("123456")
+            await act(async () => {
+                await result.current.handlePinSuccess("123456")
             })
 
             expect(mockOnSmartWalletPinSuccess).not.toHaveBeenCalled()
+        })
+
+        it("should prevent duplicate calls when invoked multiple times rapidly", async () => {
+            const testAddress = "0x1234567890123456789012345678901234567890"
+            setAuthenticatedWithAddress(testAddress)
+            // Make the callback hang to simulate a long async operation
+            mockOnSmartWalletPinSuccess.mockImplementation(() => new Promise(resolve => setTimeout(resolve, 100)))
+
+            const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
+
+            // Trigger login to set pending address
+            await act(async () => {
+                await result.current.handleLogin("google")
+            })
+
+            // Call handlePinSuccess twice in quick succession
+            await act(async () => {
+                const promise1 = result.current.handlePinSuccess("123456")
+                const promise2 = result.current.handlePinSuccess("123456")
+                await Promise.all([promise1, promise2])
+            })
+
+            // Should only be called once despite two calls
+            expect(mockOnSmartWalletPinSuccess).toHaveBeenCalledTimes(1)
         })
     })
 

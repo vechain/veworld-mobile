@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useSmartWallet } from "~Hooks/useSmartWallet"
 import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
@@ -8,7 +8,7 @@ type SocialProvider = "google" | "apple"
 
 type UseSocialWalletLoginParams = {
     onCreateSmartWallet: (params: { address: string; name?: string }) => void
-    onSmartWalletPinSuccess: (params: { pin: string; address: string; name?: string }) => void
+    onSmartWalletPinSuccess: (params: { pin: string; address: string; name?: string }) => Promise<void>
 }
 
 export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSuccess }: UseSocialWalletLoginParams) => {
@@ -17,6 +17,7 @@ export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSucc
 
     const [pendingProvider, setPendingProvider] = useState<SocialProvider | null>(null)
     const [pendingSmartAccountAddress, setPendingSmartAccountAddress] = useState<string | null>(null)
+    const isPinProcessingRef = useRef(false)
 
     const handleLogin = useCallback(
         async (provider: SocialProvider) => {
@@ -63,13 +64,18 @@ export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSucc
     ])
 
     const handlePinSuccess = useCallback(
-        (pin: string) => {
-            if (pendingSmartAccountAddress) {
-                onSmartWalletPinSuccess({
+        async (pin: string) => {
+            if (!pendingSmartAccountAddress || isPinProcessingRef.current) return
+            isPinProcessingRef.current = true
+
+            try {
+                await onSmartWalletPinSuccess({
                     pin,
                     address: pendingSmartAccountAddress,
                     name: userDisplayName ?? undefined,
                 })
+            } finally {
+                isPinProcessingRef.current = false
                 setPendingSmartAccountAddress(null)
                 setPendingProvider(null)
             }
