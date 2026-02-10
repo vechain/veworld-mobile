@@ -4308,6 +4308,15 @@ type RootTranslation = {
 	 */
 	SB_CONFIRM_PIN: string
 	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​u​n​l​i​n​k​ ​t​h​i​s​ ​a​c​c​o​u​n​t​?​ ​B​y​ ​u​n​l​i​n​k​i​n​g​ ​y​o​u​r​ ​a​c​c​o​u​n​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​o​ ​l​o​n​g​e​r​ ​b​e​ ​a​b​l​e​ ​t​o​ ​a​c​c​e​s​s​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​{​p​r​o​v​i​d​e​r​}
+	 * @param {string} provider
+	 */
+	SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION: RequiredParams<'provider'>
+	/**
+	 * U​n​l​i​n​k​ ​a​c​c​o​u​n​t
+	 */
+	SB_CONFIRM_UNLINK_ACCOUNT_TITLE: string
+	/**
 	 * Y​o​u​r​ ​c​o​n​t​a​c​t​ ​l​i​s​t​ ​i​s​ ​e​m​p​t​y
 	 */
 	SB_CONTACT_LIST_EMPTY: string
@@ -6186,15 +6195,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * U​n​l​i​n​k​ ​a​c​c​o​u​n​t
-	 */
-	SB_CONFIRM_UNLINK_ACCOUNT_TITLE: string
-	/**
-	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​u​n​l​i​n​k​ ​t​h​i​s​ ​a​c​c​o​u​n​t​?​ ​B​y​ ​u​n​l​i​n​k​i​n​g​ ​y​o​u​r​ ​a​c​c​o​u​n​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​o​ ​l​o​n​g​e​r​ ​b​e​ ​a​b​l​e​ ​t​o​ ​a​c​c​e​s​s​ ​t​o​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​{​p​r​o​v​i​d​e​r​}​.
-	 * @param {string} provider
-	 */
-	SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION: RequiredParams<'provider'>
 }
 
 export type TranslationFunctions = {
@@ -10419,6 +10419,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	SB_CONFIRM_PIN: () => LocalizedString
 	/**
+	 * Are you sure you want to unlink this account? By unlinking your account, you will no longer be able to access this wallet with {provider}
+	 */
+	SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION: (arg: { provider: string }) => LocalizedString
+	/**
+	 * Unlink account
+	 */
+	SB_CONFIRM_UNLINK_ACCOUNT_TITLE: () => LocalizedString
+	/**
 	 * Your contact list is empty
 	 */
 	SB_CONTACT_LIST_EMPTY: () => LocalizedString
@@ -12270,14 +12278,6 @@ Make sure that it is unlocked and the location services are enabled.
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Unlink account
-	 */
-	SB_CONFIRM_UNLINK_ACCOUNT_TITLE: () => LocalizedString
-	/**
-	 * Are you sure you want to unlink this account? By unlinking your account, you will no longer be able to access to this wallet with {provider}.
-	 */
-	SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION: (arg: { provider: string }) => LocalizedString
 }
 
 export type Formatters = {
