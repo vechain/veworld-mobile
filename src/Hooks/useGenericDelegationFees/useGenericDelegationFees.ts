@@ -123,6 +123,7 @@ export const useGenericDelegationFees = ({
                 rate: rate!,
                 serviceFee: serviceFee!,
                 gasPrices,
+                selectedNetworkId: selectedNetwork.id,
             }),
         enabled: canRunSmartWalletQuery,
         refetchInterval: 10000,
