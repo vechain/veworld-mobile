@@ -1,5 +1,5 @@
 import { TransactionClause } from "@vechain/sdk-core"
-import { estimateSmartAccountFees } from "./estimateSmartAccountFees"
+import { estimateSmartAccountFees, clearGasEstimationCache } from "./estimateSmartAccountFees"
 
 describe("estimateSmartAccountFees", () => {
     const mockClauses: TransactionClause[] = [
@@ -29,8 +29,8 @@ describe("estimateSmartAccountFees", () => {
     const mockSelectedNetworkId = "test-network-id"
 
     beforeEach(() => {
-        // Clear the module cache to reset the gasEstimationCache between tests
-        jest.resetModules()
+        // Clear the gas estimation cache between tests to ensure test isolation
+        clearGasEstimationCache()
     })
 
     describe("caching behavior", () => {
@@ -52,13 +52,10 @@ describe("estimateSmartAccountFees", () => {
         })
 
         it("should use cached result on second call with same clauses", async () => {
-            // Import the module fresh to test caching within the same test
-            const { estimateSmartAccountFees: freshEstimate } = require("./estimateSmartAccountFees")
-
             const mockEstimateGasFn = jest.fn().mockResolvedValue(21000)
 
             // First call
-            const result1 = await freshEstimate({
+            const result1 = await estimateSmartAccountFees({
                 clauses: mockClauses,
                 estimateGasFn: mockEstimateGasFn,
                 ownerAddress: mockOwnerAddress,
@@ -69,7 +66,7 @@ describe("estimateSmartAccountFees", () => {
             })
 
             // Second call with same clauses
-            const result2 = await freshEstimate({
+            const result2 = await estimateSmartAccountFees({
                 clauses: mockClauses,
                 estimateGasFn: mockEstimateGasFn,
                 ownerAddress: mockOwnerAddress,
@@ -87,8 +84,6 @@ describe("estimateSmartAccountFees", () => {
         })
 
         it("should call estimateGasFn again with different clauses", async () => {
-            const { estimateSmartAccountFees: freshEstimate } = require("./estimateSmartAccountFees")
-
             const mockEstimateGasFn = jest.fn().mockResolvedValue(21000)
 
             const differentClauses: TransactionClause[] = [
@@ -100,7 +95,7 @@ describe("estimateSmartAccountFees", () => {
             ]
 
             // First call
-            await freshEstimate({
+            await estimateSmartAccountFees({
                 clauses: mockClauses,
                 estimateGasFn: mockEstimateGasFn,
                 ownerAddress: mockOwnerAddress,
@@ -111,7 +106,7 @@ describe("estimateSmartAccountFees", () => {
             })
 
             // Second call with different clauses
-            await freshEstimate({
+            await estimateSmartAccountFees({
                 clauses: differentClauses,
                 estimateGasFn: mockEstimateGasFn,
                 ownerAddress: mockOwnerAddress,
@@ -126,14 +121,12 @@ describe("estimateSmartAccountFees", () => {
         })
 
         it("should call estimateGasFn again with different network IDs", async () => {
-            const { estimateSmartAccountFees: freshEstimate } = require("./estimateSmartAccountFees")
-
             const mockEstimateGasFn = jest.fn().mockResolvedValue(21000)
 
             const differentNetworkId = "different-network-id"
 
             // First call
-            await freshEstimate({
+            await estimateSmartAccountFees({
                 clauses: mockClauses,
                 estimateGasFn: mockEstimateGasFn,
                 ownerAddress: mockOwnerAddress,
@@ -144,7 +137,7 @@ describe("estimateSmartAccountFees", () => {
             })
 
             // Second call with different network ID
-            await freshEstimate({
+            await estimateSmartAccountFees({
                 clauses: mockClauses,
                 estimateGasFn: mockEstimateGasFn,
                 ownerAddress: mockOwnerAddress,

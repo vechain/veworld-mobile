@@ -12,6 +12,13 @@ const MOCK_FEE_WEI = BigInt("1000000000000000000") // 1 token as mock fee
 const gasEstimationCache = new Map<string, number>()
 
 /**
+ * Clear the gas estimation cache - useful for testing
+ */
+export const clearGasEstimationCache = (): void => {
+    gasEstimationCache.clear()
+}
+
+/**
  * Generate a cache key from clauses and network ID
  */
 const getCacheKey = (clauses: TransactionClause[], selectedNetworkId: string): string => {
@@ -93,7 +100,7 @@ export async function estimateSmartAccountFees({
     let totalGas = gasEstimationCache.get(cacheKey)
 
     if (totalGas === undefined) {
-        // Use provider's estimateGas with mock transfer details to generic delgator
+        // Use provider's estimateGas with mock transfer details to generic delegator
         totalGas = await estimateGasFn(clauses, {
             token: "VTHO", // Use VTHO for estimation (rate=1)
             tokenAddress: VTHO.address,
