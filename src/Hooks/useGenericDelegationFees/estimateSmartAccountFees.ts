@@ -8,6 +8,16 @@ import { GenericDelegationDetails } from "../../VechainWalletKit/types/transacti
 const BASE_GAS_PRICE = BigInt("10000000000000") // 10^13 wei
 const MOCK_FEE_WEI = BigInt("1000000000000000000") // 1 token as mock fee
 
+// Cache for gas estimations to avoid redundant calls
+const gasEstimationCache = new Map<string, number>()
+
+/**
+ * Generate a cache key from clauses
+ */
+const getCacheKey = (clauses: TransactionClause[]): string => {
+    return JSON.stringify(clauses)
+}
+
 export type GasPrices = {
     regular?: string
     medium?: string
@@ -76,13 +86,21 @@ export async function estimateSmartAccountFees({
     const gasPriceMedium = gasPrices?.medium ? BigInt(gasPrices.medium) : BASE_GAS_PRICE
     const gasPriceHigh = gasPrices?.high ? BigInt(gasPrices.high) : BASE_GAS_PRICE
 
-    // Use provider's estimateGas with mock delegation details
-    const totalGas = await estimateGasFn(clauses, {
-        token: "VTHO", // Use VTHO for estimation (rate=1)
-        tokenAddress: VTHO.address,
-        depositAccount: ownerAddress, // Doesn't matter for gas estimation
-        fee: BigNutils(MOCK_FEE_WEI.toString()),
-    })
+    // Cache to reduce provider calls to privy (estimation requires signing, called every 10s)
+    const cacheKey = getCacheKey(clauses)
+    let totalGas = gasEstimationCache.get(cacheKey)
+
+    if (totalGas === undefined) {
+        // Use provider's estimateGas with mock transfer details to generic delgator
+        totalGas = await estimateGasFn(clauses, {
+            token: "VTHO", // Use VTHO for estimation (rate=1)
+            tokenAddress: VTHO.address,
+            depositAccount: ownerAddress, // Doesn't matter for gas estimation
+            fee: BigNutils(MOCK_FEE_WEI.toString()),
+        })
+        gasEstimationCache.set(cacheKey, totalGas)
+    }
+
     const gasUsed = BigInt(totalGas)
 
     // Calculate fees for each tier
