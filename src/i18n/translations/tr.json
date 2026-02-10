@@ -1050,7 +1050,7 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "{cloudType: string} yedekleme ifadesini silmek istediğinizden emin misiniz? Daha sonra yeniden yedekleyebilirsiniz.",
   "SB_CONFIRM_OPERATION": "İşlemi onaylıyor musunuz?",
   "SB_CONFIRM_PIN": "Talep edilen işlemi gerçekleştirmek için oluşturduğunuz pini girin.",
-  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Bu hesabın bağlantısını kaldırmak istediğinizden emin misiniz? Hesabınızın bağlantısını kaldırdığınızda, {provider: string} ile bu cüzdana artık erişemeyeceksiniz.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Bu hesabın bağlantısını kaldırmak istediğinizden emin misiniz? Hesabınızın bağlantısını kaldırırsanız, bu cüzdana artık {provider: string} ile erişemezsiniz.",
   "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "Hesabın bağlantısını kaldır",
   "SB_CONTACT_LIST_EMPTY": "Kişi listeniz boş",
   "SB_CREATE_ONE": "Bir tane oluşturun",

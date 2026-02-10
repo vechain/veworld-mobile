@@ -1050,7 +1050,7 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "Czy na pewno chcesz usunąć kopię zapasową swojej frazy odzyskiwania z {cloudType: string}? Możesz ją ponownie zarchiwizować później.",
   "SB_CONFIRM_OPERATION": "Potwierdzasz operację?",
   "SB_CONFIRM_PIN": "Wprowadź pin, który utworzyłeś, aby wykonać żądaną operację.",
-  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Czy na pewno chcesz odłączyć to konto? Po odłączeniu konta nie będziesz mieć już dostępu do tego portfela za pomocą {provider: string}.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Czy na pewno chcesz odłączyć to konto? Po odłączeniu konta nie będziesz już mógł uzyskać dostępu do tego portfela za pomocą {provider: string}",
   "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "Odłącz konto",
   "SB_CONTACT_LIST_EMPTY": "Twoja lista kontaktów jest pusta",
   "SB_CREATE_ONE": "Utwórz jeden",

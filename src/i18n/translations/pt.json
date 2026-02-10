@@ -1050,7 +1050,7 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "Tem certeza de que deseja excluir o backup da sua frase de recuperação de {cloudType: string}? Você pode fazer backup novamente mais tarde.",
   "SB_CONFIRM_OPERATION": "Confirma a operação?",
   "SB_CONFIRM_PIN": "Insira o PIN que você criou para realizar a operação solicitada.",
-  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Tem certeza de que deseja desvincular esta conta? Ao desvincular sua conta, você não poderá mais acessar esta carteira com {provider: string}.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Tem certeza de que deseja desvincular esta conta? Ao desvincular sua conta, você não poderá mais acessar esta carteira com {provider: string}",
   "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "Desvincular conta",
   "SB_CONTACT_LIST_EMPTY": "Sua lista de contatos está vazia",
   "SB_CREATE_ONE": "Crie um",

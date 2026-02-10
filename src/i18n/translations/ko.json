@@ -1050,7 +1050,7 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "{cloudType: string}에서 복구 구문 백업을 삭제하시겠습니까? 나중에 다시 백업할 수 있습니다.",
   "SB_CONFIRM_OPERATION": "작업을 확인하시겠습니까?",
   "SB_CONFIRM_PIN": "요청된 작업을 수행하려면 생성한 핀을 입력하세요.",
-  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "정말로 이 계정을 연결 해제하시겠습니까? 계정을 연결 해제하면 {provider: string}을(를) 통해 이 지갑에 더 이상 접근할 수 없습니다.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "이 계정의 연결을 해제하시겠습니까? 계정 연결을 해제하면 {provider: string}으로(로) 이 지갑에 더 이상 액세스할 수 없습니다.",
   "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "계정 연결 해제",
   "SB_CONTACT_LIST_EMPTY": "연락처 목록이 비어 있습니다",
   "SB_CREATE_ONE": "하나 생성",

@@ -1050,7 +1050,7 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "您确定要从 {cloudType: string} 删除恢复短语的备份吗？您可以稍后再次备份。",
   "SB_CONFIRM_OPERATION": "确认操作？",
   "SB_CONFIRM_PIN": "输入您创建的 PIN 码以执行请求的操作。",
-  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "您确定要取消绑定此账户吗？取消绑定后，您将无法再通过 {provider: string} 访问此钱包。",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "您确定要解除该账户的关联吗？解除关联后，您将无法通过{provider: string}访问此钱包。",
   "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "解除账户绑定",
   "SB_CONTACT_LIST_EMPTY": "您的联系人列表为空",
   "SB_CREATE_ONE": "创建一个",

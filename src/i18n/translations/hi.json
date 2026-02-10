@@ -1050,7 +1050,7 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "क्या आप वाकई {cloudType: string} से अपनी रिकवरी वाक्यांश का बैकअप हटाना चाहते हैं? आप बाद में फिर से बैकअप ले सकते हैं।",
   "SB_CONFIRM_OPERATION": "क्या आप इस ऑपरेशन की पुष्टि करते हैं?",
   "SB_CONFIRM_PIN": "अनुरोधित ऑपरेशन करने के लिए आप द्वारा बनाया गया पिन डालें।",
-  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "क्या आप वाकई इस खाते को अनलिंक करना चाहते हैं? खाते को अनलिंक करने के बाद, आप {provider: string} के साथ इस वॉलेट तक पहुंच नहीं पाएंगे।",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "क्या आप वाकई इस खाते को अनलिंक करना चाहते हैं? खाते को अनलिंक करने के बाद, आप {provider: string} के साथ इस वॉलेट को एक्सेस नहीं कर पाएंगे।",
   "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "खाता अनलिंक करें",
   "SB_CONTACT_LIST_EMPTY": "आपकी संपर्क सूची खाली है",
   "SB_CREATE_ONE": "एक बनाएं",

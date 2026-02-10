@@ -1050,7 +1050,7 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "{cloudType: string} からのリカバリーフレーズのバックアップを削除してもよろしいですか？後で再度バックアップできます。",
   "SB_CONFIRM_OPERATION": "操作を確認しますか？",
   "SB_CONFIRM_PIN": "要求された操作を実行するために作成したピンを入力してください。",
-  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "本当にこのアカウントのリンクを解除しますか？アカウントのリンクを解除すると、{provider: string}でこのウォレットにアクセスできなくなります。",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "本当にこのアカウントのリンクを解除しますか？アカウントのリンクを解除すると、{provider: string} でこのウォレットにアクセスできなくなります。",
   "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "アカウントのリンク解除",
   "SB_CONTACT_LIST_EMPTY": "連絡先リストが空です",
   "SB_CREATE_ONE": "作成する",

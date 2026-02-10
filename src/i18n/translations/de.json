@@ -1050,7 +1050,7 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "Möchten Sie das Backup Ihrer Wiederherstellungsphrase aus {cloudType: string} wirklich löschen? Sie können später erneut sichern.",
   "SB_CONFIRM_OPERATION": "Möchten Sie die Aktion bestätigen?",
   "SB_CONFIRM_PIN": "Geben Sie die von Ihnen erstellte PIN ein, um die gewünschte Aktion durchzuführen.",
-  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Sind Sie sicher, dass Sie dieses Konto trennen möchten? Wenn Sie Ihr Konto trennen, können Sie mit {provider: string} nicht mehr auf diese Wallet zugreifen.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Sind Sie sicher, dass Sie dieses Konto trennen möchten? Durch das Trennen Ihres Kontos können Sie mit {provider: string} nicht mehr auf diese Wallet zugreifen.",
   "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "Konto trennen",
   "SB_CONTACT_LIST_EMPTY": "Ihre Kontaktliste ist leer",
   "SB_CREATE_ONE": "Erstellen Sie eins",
