@@ -1510,5 +1510,7 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "Unlink account",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Are you sure you want to unlink this account? By unlinking your account, you will no longer be able to access to this wallet with {provider: string}."
 }

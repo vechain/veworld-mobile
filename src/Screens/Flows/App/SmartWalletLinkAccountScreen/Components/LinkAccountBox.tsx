@@ -6,31 +6,41 @@ import { useSmartWallet, useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
 import { IconKey } from "~Model"
 
-type Props = ListRenderItemInfo<SocialProvider>
+type Props = ListRenderItemInfo<SocialProvider> & {
+    onUnlink?: (provider: SocialProvider, subject: string) => void
+}
 
 const ICON_MAP: Record<string, IconKey> = {
     google: "icon-google",
     apple: "icon-apple",
 }
 
-export const LinkAccountBox = ({ item }: Props) => {
+export const LinkAccountBox = ({ item, onUnlink }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { linkedAccounts, linkOAuth, unlinkOAuth } = useSmartWallet()
 
     const linkedAccount = useMemo(() => linkedAccounts.find(account => account.type === item), [linkedAccounts, item])
 
     const isDisabled = useMemo(
-        () => linkedAccounts.length === 1 && Boolean(linkedAccount),
-        [linkedAccounts, linkedAccount],
+        /**
+         * If there is only one linked account and it is the same as the item, disable the button
+         * If the first linked account is the same as the item, disable the button
+         */
+        () => (linkedAccounts.length === 1 && Boolean(linkedAccount)) || linkedAccounts[0].type === item,
+        [linkedAccounts, linkedAccount, item],
     )
 
     const onPress = useCallback(() => {
         if (linkedAccount) {
+            if (onUnlink) {
+                onUnlink(item, linkedAccount.subject)
+                return
+            }
             unlinkOAuth(item, linkedAccount.subject)
         } else {
             linkOAuth(item)
         }
-    }, [item, linkedAccount, linkOAuth, unlinkOAuth])
+    }, [item, linkedAccount, linkOAuth, unlinkOAuth, onUnlink])
 
     return (
         <BaseView
@@ -59,7 +69,7 @@ export const LinkAccountBox = ({ item }: Props) => {
                     </BaseText>
                 )}
             </BaseView>
-            <BaseTouchable disabled={isDisabled} action={onPress}>
+            <BaseTouchable disabled={isDisabled} action={onPress} style={isDisabled ? styles.disabled : undefined}>
                 <BaseIcon
                     name={linkedAccount ? "icon-unlink" : "icon-link"}
                     style={styles.linkBtn}
@@ -80,5 +90,8 @@ const baseStyles = (theme: ColorThemeType) =>
         linkBtn: {
             borderWidth: 1,
             borderColor: theme.colors.actionBanner.buttonBorder,
+        },
+        disabled: {
+            opacity: 0.5,
         },
     })

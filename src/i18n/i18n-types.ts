@@ -5199,6 +5199,18 @@ type RootTranslation = {
 	 */
 	SMART_WALLET_DELEGATION_NOT_SUPPORTED: string
 	/**
+	 * L​i​n​k​ ​n​o​w
+	 */
+	SMART_WALLET_LINK_MODAL_BUTTON: string
+	/**
+	 * L​i​n​k​ ​y​o​u​r​ ​s​m​a​r​t​ ​w​a​l​l​e​t​ ​t​o​ ​a​n​o​t​h​e​r​ ​a​c​c​o​u​n​t​ ​s​o​ ​y​o​u​ ​c​a​n​ ​s​i​g​n​ ​i​n​ ​o​n​ ​d​i​f​f​e​r​e​n​t​ ​p​l​a​t​f​o​r​m​s​ ​a​n​d​ ​r​e​c​o​v​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​f​ ​n​e​e​d​e​d​.​ ​T​h​i​s​ ​a​l​s​o​ ​i​m​p​r​o​v​e​s​ ​s​e​c​u​r​i​t​y​ ​b​y​ ​g​i​v​i​n​g​ ​y​o​u​ ​m​o​r​e​ ​w​a​y​s​ ​t​o​ ​a​c​c​e​s​s​ ​a​n​d​ ​p​r​o​t​e​c​t​ ​y​o​u​r​ ​f​u​n​d​s​.
+	 */
+	SMART_WALLET_LINK_MODAL_SUBTITLE: string
+	/**
+	 * L​i​n​k​ ​y​o​u​r​ ​a​c​c​o​u​n​t
+	 */
+	SMART_WALLET_LINK_MODAL_TITLE: string
+	/**
 	 * A​P​Y
 	 */
 	STARGATE_APY: string
@@ -6175,17 +6187,14 @@ type RootTranslation = {
 	 */
 	YESTERDAY: string
 	/**
-	 * L​i​n​k​ ​y​o​u​r​ ​a​c​c​o​u​n​t
+	 * U​n​l​i​n​k​ ​a​c​c​o​u​n​t
 	 */
-	SMART_WALLET_LINK_MODAL_TITLE: string
+	SB_CONFIRM_UNLINK_ACCOUNT_TITLE: string
 	/**
-	 * L​i​n​k​ ​y​o​u​r​ ​s​m​a​r​t​ ​w​a​l​l​e​t​ ​t​o​ ​a​n​o​t​h​e​r​ ​a​c​c​o​u​n​t​ ​s​o​ ​y​o​u​ ​c​a​n​ ​s​i​g​n​ ​i​n​ ​o​n​ ​d​i​f​f​e​r​e​n​t​ ​p​l​a​t​f​o​r​m​s​ ​a​n​d​ ​r​e​c​o​v​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​f​ ​n​e​e​d​e​d​.​ ​T​h​i​s​ ​a​l​s​o​ ​i​m​p​r​o​v​e​s​ ​s​e​c​u​r​i​t​y​ ​b​y​ ​g​i​v​i​n​g​ ​y​o​u​ ​m​o​r​e​ ​w​a​y​s​ ​t​o​ ​a​c​c​e​s​s​ ​a​n​d​ ​p​r​o​t​e​c​t​ ​y​o​u​r​ ​f​u​n​d​s​.
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​u​n​l​i​n​k​ ​t​h​i​s​ ​a​c​c​o​u​n​t​?​ ​B​y​ ​u​n​l​i​n​k​i​n​g​ ​y​o​u​r​ ​a​c​c​o​u​n​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​o​ ​l​o​n​g​e​r​ ​b​e​ ​a​b​l​e​ ​t​o​ ​a​c​c​e​s​s​ ​t​o​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​{​p​r​o​v​i​d​e​r​}​.
+	 * @param {string} provider
 	 */
-	SMART_WALLET_LINK_MODAL_SUBTITLE: string
-	/**
-	 * L​i​n​k​ ​n​o​w
-	 */
-	SMART_WALLET_LINK_MODAL_BUTTON: string
+	SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION: RequiredParams<'provider'>
 }
 
 export type TranslationFunctions = {
@@ -11286,6 +11295,18 @@ Here's what it's all about:
 	 */
 	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
 	/**
+	 * Link now
+	 */
+	SMART_WALLET_LINK_MODAL_BUTTON: () => LocalizedString
+	/**
+	 * Link your smart wallet to another account so you can sign in on different platforms and recover your wallet if needed. This also improves security by giving you more ways to access and protect your funds.
+	 */
+	SMART_WALLET_LINK_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Link your account
+	 */
+	SMART_WALLET_LINK_MODAL_TITLE: () => LocalizedString
+	/**
 	 * APY
 	 */
 	STARGATE_APY: () => LocalizedString
@@ -12250,17 +12271,13 @@ Make sure that it is unlocked and the location services are enabled.
 	 */
 	YESTERDAY: () => LocalizedString
 	/**
-	 * Link your account
+	 * Unlink account
 	 */
-	SMART_WALLET_LINK_MODAL_TITLE: () => LocalizedString
+	SB_CONFIRM_UNLINK_ACCOUNT_TITLE: () => LocalizedString
 	/**
-	 * Link your smart wallet to another account so you can sign in on different platforms and recover your wallet if needed. This also improves security by giving you more ways to access and protect your funds.
+	 * Are you sure you want to unlink this account? By unlinking your account, you will no longer be able to access to this wallet with {provider}.
 	 */
-	SMART_WALLET_LINK_MODAL_SUBTITLE: () => LocalizedString
-	/**
-	 * Link now
-	 */
-	SMART_WALLET_LINK_MODAL_BUTTON: () => LocalizedString
+	SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION: (arg: { provider: string }) => LocalizedString
 }
 
 export type Formatters = {

@@ -12,6 +12,7 @@ import { LinkAccountBox } from "./Components"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { ConfirmUnlinkAccountBottomSheet } from "./Components/ConfirmUnlinkAccountBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListSettings, Routes.SMART_WALLET_LINK_ACCOUNT>
 
@@ -23,6 +24,7 @@ export const SmartWalletLinkAccountScreen = ({ route }: Props) => {
     const theme = useTheme()
 
     const { ref: infoBottomSheetRef, onOpen: openInfoBottomSheet } = useBottomSheetModal()
+    const { ref: confirmUnlinkBottomSheetRef, onOpen: openConfirmUnlinkBottomSheet } = useBottomSheetModal()
 
     const availableLinkedAccounts = useMemo(() => {
         return LINKED_ACCOUNT_TYPES.filter(account => {
@@ -34,9 +36,17 @@ export const SmartWalletLinkAccountScreen = ({ route }: Props) => {
         })
     }, [])
 
-    const renderItem = useCallback((props: ListRenderItemInfo<SocialProvider>) => {
-        return <LinkAccountBox {...props} />
-    }, [])
+    const renderItem = useCallback(
+        (props: ListRenderItemInfo<SocialProvider>) => {
+            return (
+                <LinkAccountBox
+                    {...props}
+                    onUnlink={(provider, subject) => openConfirmUnlinkBottomSheet({ provider, subject })}
+                />
+            )
+        },
+        [openConfirmUnlinkBottomSheet],
+    )
 
     const renderSeparator = useCallback(() => {
         return <BaseSpacer height={16} />
@@ -66,6 +76,7 @@ export const SmartWalletLinkAccountScreen = ({ route }: Props) => {
                         title={LL.BS_INFO_LINKING_ACCOUNTS_TITLE()}
                         description={LL.BS_INFO_LINKING_ACCOUNTS_DESCRIPTION()}
                     />
+                    <ConfirmUnlinkAccountBottomSheet bsRef={confirmUnlinkBottomSheetRef} />
                 </BaseView>
             }
         />
