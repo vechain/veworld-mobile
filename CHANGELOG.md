@@ -1,5 +1,12 @@
 
 
+## 2.5.2 (2026-02-10)
+
+
+### Bug Fixes
+
+* cache gas estimate for smart contract ([#3761](https://github.com/vechain/veworld-mobile/issues/3761)) ([3dc111c](https://github.com/vechain/veworld-mobile/commit/3dc111cab900db4f923f2254d8fd621635e04e86))
+
 ## 2.5.1 (2026-01-27)
 
 
