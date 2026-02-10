@@ -26,6 +26,8 @@ describe("estimateSmartAccountFees", () => {
         high: "20000000000000",
     }
 
+    const mockSelectedNetworkId = "test-network-id"
+
     beforeEach(() => {
         // Clear the module cache to reset the gasEstimationCache between tests
         jest.resetModules()
@@ -42,6 +44,7 @@ describe("estimateSmartAccountFees", () => {
                 rate: mockRate,
                 serviceFee: mockServiceFee,
                 gasPrices: mockGasPrices,
+                selectedNetworkId: mockSelectedNetworkId,
             })
 
             expect(mockEstimateGasFn).toHaveBeenCalledTimes(1)
@@ -62,6 +65,7 @@ describe("estimateSmartAccountFees", () => {
                 rate: mockRate,
                 serviceFee: mockServiceFee,
                 gasPrices: mockGasPrices,
+                selectedNetworkId: mockSelectedNetworkId,
             })
 
             // Second call with same clauses
@@ -72,6 +76,7 @@ describe("estimateSmartAccountFees", () => {
                 rate: mockRate,
                 serviceFee: mockServiceFee,
                 gasPrices: mockGasPrices,
+                selectedNetworkId: mockSelectedNetworkId,
             })
 
             // Should only call estimateGasFn once (cached on second call)
@@ -102,6 +107,7 @@ describe("estimateSmartAccountFees", () => {
                 rate: mockRate,
                 serviceFee: mockServiceFee,
                 gasPrices: mockGasPrices,
+                selectedNetworkId: mockSelectedNetworkId,
             })
 
             // Second call with different clauses
@@ -112,9 +118,43 @@ describe("estimateSmartAccountFees", () => {
                 rate: mockRate,
                 serviceFee: mockServiceFee,
                 gasPrices: mockGasPrices,
+                selectedNetworkId: mockSelectedNetworkId,
             })
 
             // Should call estimateGasFn twice (different clauses = cache miss)
+            expect(mockEstimateGasFn).toHaveBeenCalledTimes(2)
+        })
+
+        it("should call estimateGasFn again with different network IDs", async () => {
+            const { estimateSmartAccountFees: freshEstimate } = await import("./estimateSmartAccountFees")
+
+            const mockEstimateGasFn = jest.fn().mockResolvedValue(21000)
+
+            const differentNetworkId = "different-network-id"
+
+            // First call
+            await freshEstimate({
+                clauses: mockClauses,
+                estimateGasFn: mockEstimateGasFn,
+                ownerAddress: mockOwnerAddress,
+                rate: mockRate,
+                serviceFee: mockServiceFee,
+                gasPrices: mockGasPrices,
+                selectedNetworkId: mockSelectedNetworkId,
+            })
+
+            // Second call with different network ID
+            await freshEstimate({
+                clauses: mockClauses,
+                estimateGasFn: mockEstimateGasFn,
+                ownerAddress: mockOwnerAddress,
+                rate: mockRate,
+                serviceFee: mockServiceFee,
+                gasPrices: mockGasPrices,
+                selectedNetworkId: differentNetworkId,
+            })
+
+            // Should call estimateGasFn twice (different network ID = cache miss)
             expect(mockEstimateGasFn).toHaveBeenCalledTimes(2)
         })
 
@@ -128,6 +168,7 @@ describe("estimateSmartAccountFees", () => {
                 rate: mockRate,
                 serviceFee: mockServiceFee,
                 gasPrices: mockGasPrices,
+                selectedNetworkId: mockSelectedNetworkId,
             })
 
             expect(result).toHaveProperty("transactionCost")

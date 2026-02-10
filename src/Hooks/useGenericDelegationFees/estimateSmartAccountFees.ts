@@ -12,10 +12,10 @@ const MOCK_FEE_WEI = BigInt("1000000000000000000") // 1 token as mock fee
 const gasEstimationCache = new Map<string, number>()
 
 /**
- * Generate a cache key from clauses
+ * Generate a cache key from clauses and network ID
  */
-const getCacheKey = (clauses: TransactionClause[]): string => {
-    return JSON.stringify(clauses)
+const getCacheKey = (clauses: TransactionClause[], selectedNetworkId: string): string => {
+    return JSON.stringify({ clauses, selectedNetworkId })
 }
 
 export type GasPrices = {
@@ -42,6 +42,7 @@ type EstimateSmartAccountFeesArgs = {
     rate: TokenRates
     serviceFee: number
     gasPrices?: GasPrices
+    selectedNetworkId: string
 }
 
 /**
@@ -80,6 +81,7 @@ export async function estimateSmartAccountFees({
     rate,
     serviceFee,
     gasPrices,
+    selectedNetworkId,
 }: EstimateSmartAccountFeesArgs): Promise<EstimateGenericDelegatorFeesResponse> {
     // Get gas prices for each tier, falling back to BASE_GAS_PRICE
     const gasPriceRegular = gasPrices?.regular ? BigInt(gasPrices.regular) : BASE_GAS_PRICE
@@ -87,7 +89,7 @@ export async function estimateSmartAccountFees({
     const gasPriceHigh = gasPrices?.high ? BigInt(gasPrices.high) : BASE_GAS_PRICE
 
     // Cache to reduce provider calls to privy (estimation requires signing, called every 10s)
-    const cacheKey = getCacheKey(clauses)
+    const cacheKey = getCacheKey(clauses, selectedNetworkId)
     let totalGas = gasEstimationCache.get(cacheKey)
 
     if (totalGas === undefined) {
