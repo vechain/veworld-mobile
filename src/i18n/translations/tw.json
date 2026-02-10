@@ -1050,6 +1050,8 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "您確定要從 {cloudType: string} 刪除恢復短語的備份嗎？您可以稍後再次備份。",
   "SB_CONFIRM_OPERATION": "確認操作？",
   "SB_CONFIRM_PIN": "請輸入您創建的 PIN 以執行請求的操作。",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "您確定要解除連結這個帳戶嗎？解除連結後，您將無法再使用 {provider: string} 登入這個錢包。",
+  "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "解除連結帳戶",
   "SB_CONTACT_LIST_EMPTY": "您的聯絡人列表是空的",
   "SB_CREATE_ONE": "創建一個",
   "SB_DELETING_CLOUD_BACKUP": "正在刪除備份...",

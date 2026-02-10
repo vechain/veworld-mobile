@@ -1050,6 +1050,8 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "Êtes-vous sûr de vouloir supprimer la sauvegarde de votre phrase de récupération de {cloudType: string}? Vous pouvez faire une sauvegarde à nouveau plus tard.",
   "SB_CONFIRM_OPERATION": "Confirmer l'opération?",
   "SB_CONFIRM_PIN": "Insérez le code PIN que vous avez créé pour effectuer l'opération demandée.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Êtes-vous sûr de vouloir dissocier ce compte ? En dissociant votre compte, vous ne pourrez plus accéder à ce portefeuille avec {provider: string}.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "Dissocier le compte",
   "SB_CONTACT_LIST_EMPTY": "Votre liste de contacts est vide",
   "SB_CREATE_ONE": "Créez-en un",
   "SB_DELETING_CLOUD_BACKUP": "Suppression de la sauvegarde...",

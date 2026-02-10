@@ -1050,6 +1050,8 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "Är du säker på att du vill radera säkerhetskopian av din återställningsfras från {cloudType: string}? Du kan säkerhetskopiera igen senare.",
   "SB_CONFIRM_OPERATION": "Bekräfta operationen?",
   "SB_CONFIRM_PIN": "Ange den pin-kod du skapade för att utföra den begärda operationen.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Är du säker på att du vill koppla bort detta konto? Genom att koppla bort ditt konto kommer du inte längre kunna få åtkomst till denna plånbok med {provider: string}.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "Koppla bort konto",
   "SB_CONTACT_LIST_EMPTY": "Din kontaktlista är tom",
   "SB_CREATE_ONE": "Skapa en",
   "SB_DELETING_CLOUD_BACKUP": "Tar bort säkerhetskopia...",

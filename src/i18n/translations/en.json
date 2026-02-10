@@ -1050,6 +1050,8 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "Are you sure you want to delete the backup of your recovery phrase from {cloudType: string}? You can backup again later.",
   "SB_CONFIRM_OPERATION": "Confirm the operation?",
   "SB_CONFIRM_PIN": "Insert the pin you created in order to perform the requested operation.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Are you sure you want to unlink this account? By unlinking your account, you will no longer be able to access to this wallet with {provider: string}.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "Unlink account",
   "SB_CONTACT_LIST_EMPTY": "Your contact list is empty",
   "SB_CREATE_ONE": "Create one",
   "SB_DELETING_CLOUD_BACKUP": "Deleting backup...",
@@ -1510,7 +1512,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "Unlink account",
-  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Are you sure you want to unlink this account? By unlinking your account, you will no longer be able to access to this wallet with {provider: string}."
+  "YESTERDAY": "Yesterday"
 }

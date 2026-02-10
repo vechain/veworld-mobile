@@ -1050,6 +1050,8 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "¿Estás seguro de que deseas eliminar la copia de seguridad de tu frase de recuperación de {cloudType: string}? Puedes hacer una copia de seguridad nuevamente más tarde.",
   "SB_CONFIRM_OPERATION": "¿Confirmar la operación?",
   "SB_CONFIRM_PIN": "Inserta el pin que creaste para realizar la operación solicitada.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "¿Estás seguro de que quieres desvincular esta cuenta? Al desvincular tu cuenta, ya no podrás acceder a esta billetera con {provider: string}.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "Desvincular cuenta",
   "SB_CONTACT_LIST_EMPTY": "Tu lista de contactos está vacía",
   "SB_CREATE_ONE": "Crea uno",
   "SB_DELETING_CLOUD_BACKUP": "Eliminando copia de seguridad...",

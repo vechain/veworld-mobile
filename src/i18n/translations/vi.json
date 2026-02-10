@@ -1050,6 +1050,8 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "Bạn có chắc chắn muốn xóa bản sao lưu của cụm từ khôi phục từ {cloudType: string}? Bạn có thể sao lưu lại sau.",
   "SB_CONFIRM_OPERATION": "Xác nhận hoạt động?",
   "SB_CONFIRM_PIN": "Nhập mã pin bạn đã tạo để thực hiện hoạt động yêu cầu.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Bạn có chắc chắn muốn hủy liên kết tài khoản này không? Khi hủy liên kết, bạn sẽ không thể truy cập vào ví này bằng {provider: string} nữa.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "Hủy liên kết tài khoản",
   "SB_CONTACT_LIST_EMPTY": "Danh sách liên hệ của bạn trống",
   "SB_CREATE_ONE": "Tạo một",
   "SB_DELETING_CLOUD_BACKUP": "Đang xóa bản sao lưu...",

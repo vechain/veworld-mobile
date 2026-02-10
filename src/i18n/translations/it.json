@@ -1050,6 +1050,8 @@
   "SB_CONFIRM_DELETE_DESCRIPTION": "Sei sicuro di voler eliminare il backup della tua frase di recupero da {cloudType: string}? Puoi fare un backup nuovamente più tardi.",
   "SB_CONFIRM_OPERATION": "Confermi l'operazione?",
   "SB_CONFIRM_PIN": "Inserisci il PIN creato per eseguire l'operazione richiesta.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION": "Sei sicuro di voler scollegare questo account? Scollegando il tuo account, non potrai più accedere a questo wallet con {provider: string}.",
+  "SB_CONFIRM_UNLINK_ACCOUNT_TITLE": "Scollega account",
   "SB_CONTACT_LIST_EMPTY": "La tua lista contatti è vuota",
   "SB_CREATE_ONE": "Creane uno",
   "SB_DELETING_CLOUD_BACKUP": "Eliminazione del backup...",
