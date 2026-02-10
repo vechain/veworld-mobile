@@ -73,12 +73,12 @@ export const WelcomeScreenV2 = () => {
     }, [clearSocialPendingState, onCloseCreateFlow])
 
     const handlePasswordSuccess = useCallback(
-        (pin: string) => {
+        async (pin: string) => {
             if (socialPendingAddress) {
-                handleSocialPinSuccess(pin)
+                await handleSocialPinSuccess(pin)
             } else {
                 // Self-custody wallet flow
-                onSuccess({
+                await onSuccess({
                     pin,
                     derivationPath: DerivationPath.VET,
                 })
