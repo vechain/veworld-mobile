@@ -9,11 +9,12 @@ import { DEVICE_TYPE } from "~Model/Wallet"
 import { Routes } from "~Navigation"
 import { setDeviceIsBackup, setLastBackupRequestTimestamp } from "~Storage/Redux"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux/Hooks"
-import { selectSelectedAccount } from "~Storage/Redux/Selectors"
+import { selectLastBackupRequestTimestamp, selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { PlatformUtils } from "~Utils"
 
 export const SmartWalletBackupBottomSheet = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const lastBackupRequestTimestamp = useAppSelector(selectLastBackupRequestTimestamp)
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
     const { hasMultipleSocials, isLoading, isAuthenticated } = useSmartWallet()
@@ -43,7 +44,13 @@ export const SmartWalletBackupBottomSheet = () => {
 
     const onLaterPress = useCallback(() => {
         onClose()
-    }, [onClose])
+        dispatch(
+            setLastBackupRequestTimestamp({
+                address: selectedAccount.device?.rootAddress ?? "",
+                timestamp: undefined,
+            }),
+        )
+    }, [onClose, dispatch, selectedAccount.device?.rootAddress])
 
     const secondaryButton = useMemo(() => {
         return <BaseButton w={100} title={LL.BTN_ILL_DO_IT_LATER()} variant="outline" action={onLaterPress} />
@@ -73,22 +80,42 @@ export const SmartWalletBackupBottomSheet = () => {
             return
         }
 
-        dispatch(
-            setLastBackupRequestTimestamp({
-                address,
-                timestamp: now.unix(),
-            }),
-        )
-        onOpen()
+        const timeStamp = lastBackupRequestTimestamp?.[address]
+
+        if (!timeStamp) {
+            dispatch(
+                setLastBackupRequestTimestamp({
+                    address,
+                    timestamp: now.unix(),
+                }),
+            )
+            onOpen()
+            return
+        }
+
+        const lastRequest = moment.unix(timeStamp)
+        const shouldOpen = now.diff(lastRequest, "weeks") >= 1
+
+        if (shouldOpen) {
+            dispatch(
+                setLastBackupRequestTimestamp({
+                    address,
+                    timestamp: now.unix(),
+                }),
+            )
+            onOpen()
+        }
     }, [
         isSmartWallet,
         hasMultipleSocials,
         isBackedUp,
-        onOpen,
         dispatch,
         selectedAccount.device?.rootAddress,
+        selectedAccount.device?.type,
         isLoading,
         isAuthenticated,
+        lastBackupRequestTimestamp,
+        onOpen,
     ])
 
     return (
