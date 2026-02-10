@@ -10,7 +10,7 @@ import { HomeStack, RootStackParamListHome, RootStackParamListSettings, Settings
 import { AppsStack, RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
-import { selectActivitiesWithoutFinality, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { selectActivitiesWithoutFinality, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import PlatformUtils from "~Utils/PlatformUtils"
 import { useI18nContext } from "~i18n"
@@ -29,8 +29,8 @@ const Tab = createBottomTabNavigator<TabStackParamList>()
 export const TabStack = () => {
     const { LL } = useI18nContext()
 
-    const selectedAccount = useAppSelector(selectSelectedAccount)
-    const isShowBackupModal = useCheckWalletBackup(selectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
+    const isShowBackupModal = useCheckWalletBackup(selectedAccount ?? null)
     const pendingTransactions = useAppSelector(selectActivitiesWithoutFinality)
     const isOnline = useIsOnline()
 

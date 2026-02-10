@@ -15,7 +15,7 @@ export type AccountSliceState = {
 }
 export const initialAccountState: AccountSliceState = {
     accounts: [],
-    selectedAccount: undefined,
+    selectedAccount: "",
 }
 
 export const AccountSlice = createSlice({
