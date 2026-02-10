@@ -53,7 +53,7 @@ describe("estimateSmartAccountFees", () => {
 
         it("should use cached result on second call with same clauses", async () => {
             // Import the module fresh to test caching within the same test
-            const { estimateSmartAccountFees: freshEstimate } = await import("./estimateSmartAccountFees")
+            const { estimateSmartAccountFees: freshEstimate } = require("./estimateSmartAccountFees")
 
             const mockEstimateGasFn = jest.fn().mockResolvedValue(21000)
 
@@ -87,7 +87,7 @@ describe("estimateSmartAccountFees", () => {
         })
 
         it("should call estimateGasFn again with different clauses", async () => {
-            const { estimateSmartAccountFees: freshEstimate } = await import("./estimateSmartAccountFees")
+            const { estimateSmartAccountFees: freshEstimate } = require("./estimateSmartAccountFees")
 
             const mockEstimateGasFn = jest.fn().mockResolvedValue(21000)
 
@@ -126,7 +126,7 @@ describe("estimateSmartAccountFees", () => {
         })
 
         it("should call estimateGasFn again with different network IDs", async () => {
-            const { estimateSmartAccountFees: freshEstimate } = await import("./estimateSmartAccountFees")
+            const { estimateSmartAccountFees: freshEstimate } = require("./estimateSmartAccountFees")
 
             const mockEstimateGasFn = jest.fn().mockResolvedValue(21000)
 
