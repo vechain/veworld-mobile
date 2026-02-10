@@ -5,6 +5,7 @@ import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useSmartWallet, useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
 import { IconKey } from "~Model"
+import { PlatformUtils } from "~Utils"
 
 type Props = ListRenderItemInfo<SocialProvider> & {
     onUnlink?: (provider: SocialProvider, subject: string) => void
@@ -24,10 +25,11 @@ export const LinkAccountBox = ({ item, onUnlink }: Props) => {
     const isDisabled = useMemo(
         /**
          * If there is only one linked account and it is the same as the item, disable the button
-         * If the first linked account is the same as the item, disable the button
+         * If on android, disable the button because apple is not supported
+         * TODO: Remove the android check when other socials are supported
          */
-        () => (linkedAccounts.length === 1 && Boolean(linkedAccount)) || linkedAccounts[0].type === item,
-        [linkedAccounts, linkedAccount, item],
+        () => (linkedAccounts.length === 1 && Boolean(linkedAccount)) || PlatformUtils.isAndroid(),
+        [linkedAccounts, linkedAccount],
     )
 
     const onPress = useCallback(() => {
