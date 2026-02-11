@@ -212,16 +212,6 @@ const baseStyles = (hasAlternativeWallets: boolean, bottomInset: number) => (_th
             justifyContent: "space-between",
             paddingBottom: hasAlternativeWallets ? 0 : bottomInset,
         },
-        smartAccountCard: {
-            flexDirection: "row",
-            alignItems: "center",
-            borderRadius: 8,
-            borderWidth: 1,
-            borderColor: _theme.isDark ? _theme.colors.transparent : COLORS.GREY_200,
-            backgroundColor: _theme.colors.card,
-            paddingHorizontal: 12,
-            paddingVertical: 12,
-        },
         socialButton: {
             alignItems: "center",
             justifyContent: "center",
@@ -231,9 +221,6 @@ const baseStyles = (hasAlternativeWallets: boolean, bottomInset: number) => (_th
             flexDirection: "column",
             alignItems: "center",
             gap: 8,
-        },
-        flexSpacer: {
-            flex: 1,
         },
         list: {
             flex: 1,

@@ -2199,10 +2199,6 @@ type RootTranslation = {
 	 */
 	COMMON_NOT_AVAILABLE: string
 	/**
-	 * a​n​d
-	 */
-	COMMON_AND: string
-	/**
 	 * O​o​p​s​!
 	 */
 	COMMON_OOPS: string
@@ -5216,13 +5212,9 @@ type RootTranslation = {
 	 */
 	SMART_WALLET_REAUTH_TITLE: string
 	/**
-	 * S​i​g​n​ ​i​n​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​s​m​a​r​t​ ​a​c​c​o​u​n​t
+	 * S​i​g​n​ ​b​a​c​k​ ​i​n​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​s​m​a​r​t​ ​a​c​c​o​u​n​t
 	 */
 	SMART_WALLET_REAUTH_DESCRIPTION: string
-	/**
-	 * S​m​a​r​t​ ​A​c​c​o​u​n​t
-	 */
-	SMART_WALLET_REAUTH_SMART_ACCOUNT_LABEL: string
 	/**
 	 * W​h​y​ ​d​o​ ​I​ ​n​e​e​d​ ​t​o​ ​s​i​g​n​ ​i​n​?
 	 */
@@ -5235,10 +5227,6 @@ type RootTranslation = {
 	 * U​s​e​ ​a​ ​s​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t
 	 */
 	SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE: string
-	/**
-	 * S​w​i​t​c​h​ ​t​h​e​ ​a​c​t​i​v​e​ ​w​a​l​l​e​t​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.​ ​T​h​i​s​ ​w​o​n​'​t​ ​m​o​v​e​ ​a​n​y​ ​f​u​n​d​s​.
-	 */
-	SMART_WALLET_REAUTH_SELF_CUSTODY_DESCRIPTION: string
 	/**
 	 * L​i​n​k​ ​n​o​w
 	 */
@@ -8373,10 +8361,6 @@ This action is irreversible.
 	 */
 	COMMON_NOT_AVAILABLE: () => LocalizedString
 	/**
-	 * and
-	 */
-	COMMON_AND: () => LocalizedString
-	/**
 	 * Oops!
 	 */
 	COMMON_OOPS: () => LocalizedString
@@ -11343,13 +11327,9 @@ Here's what it's all about:
 	 */
 	SMART_WALLET_REAUTH_TITLE: () => LocalizedString
 	/**
-	 * Sign in to unlock your smart account
+	 * Sign back in to unlock your smart account
 	 */
 	SMART_WALLET_REAUTH_DESCRIPTION: () => LocalizedString
-	/**
-	 * Smart Account
-	 */
-	SMART_WALLET_REAUTH_SMART_ACCOUNT_LABEL: () => LocalizedString
 	/**
 	 * Why do I need to sign in?
 	 */
@@ -11362,10 +11342,6 @@ Here's what it's all about:
 	 * Use a self-custody wallet
 	 */
 	SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE: () => LocalizedString
-	/**
-	 * Switch the active wallet on this device. This won't move any funds.
-	 */
-	SMART_WALLET_REAUTH_SELF_CUSTODY_DESCRIPTION: () => LocalizedString
 	/**
 	 * Link now
 	 */
