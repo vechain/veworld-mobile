@@ -1483,10 +1483,6 @@ type RootTranslation = {
 	 */
 	BTN_CREATE_WALLET_TYPE_CREATE_NEW: string
 	/**
-	 * Continue with Google
-	 */
-	BTN_CONTINUE_WITH_GOOGLE: string
-	/**
 	 * Y​o​u​ ​w​i​l​l​ ​c​r​e​a​t​e​ ​a​ ​n​e​w​ ​e​m​p​t​y​ ​w​a​l​l​e​t
 	 */
 	BTN_CREATE_WALLET_TYPE_CREATE_NEW_SUBTITLE: string
@@ -2194,6 +2190,10 @@ type RootTranslation = {
 	 * N​.​A​.
 	 */
 	COMMON_NOT_AVAILABLE: string
+	/**
+	 * a​n​d
+	 */
+	COMMON_AND: string
 	/**
 	 * O​o​p​s​!
 	 */
@@ -5179,21 +5179,38 @@ type RootTranslation = {
 	 */
 	SMART_WALLET_DELEGATION_NOT_SUPPORTED: string
 	/**
-	 * Re-authentication Required
+	 * S​i​g​n​ ​i​n​ ​t​o​ ​c​o​n​t​i​n​u​e
 	 */
 	SMART_WALLET_REAUTH_TITLE: string
 	/**
-	 * Please authenticate to continue
+	 * Y​o​u​r​ ​S​m​a​r​t​ ​A​c​c​o​u​n​t​ ​"​{​n​a​m​e​}​"​ ​(​{​a​d​d​r​e​s​s​}​)​ ​i​s​ ​l​i​n​k​e​d​ ​t​o​ ​{​p​r​o​v​i​d​e​r​s​}​.​ ​S​i​g​n​ ​i​n​ ​t​o​ ​k​e​e​p​ ​u​s​i​n​g​ ​i​t​,​ ​o​r​ ​s​w​i​t​c​h​ ​t​o​ ​a​ ​s​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t​ ​b​e​l​o​w​.
+	 * @param {string} address
+	 * @param {string} name
+	 * @param {string} providers
 	 */
-	SMART_WALLET_REAUTH_DESCRIPTION: string
+	SMART_WALLET_REAUTH_DESCRIPTION: RequiredParams<'address' | 'name' | 'providers'>
 	/**
-	 * Please authenticate your smart account to continue
+	 * Y​o​u​r​ ​S​m​a​r​t​ ​A​c​c​o​u​n​t​ ​"​{​n​a​m​e​}​"​ ​(​{​a​d​d​r​e​s​s​}​)​ ​r​e​q​u​i​r​e​s​ ​r​e​-​a​u​t​h​e​n​t​i​c​a​t​i​o​n​.​ ​S​i​g​n​ ​i​n​ ​t​o​ ​k​e​e​p​ ​u​s​i​n​g​ ​i​t​,​ ​o​r​ ​s​w​i​t​c​h​ ​t​o​ ​a​ ​s​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t​ ​b​e​l​o​w​.
+	 * @param {string} address
+	 * @param {string} name
 	 */
-	SMART_WALLET_REAUTH_DESCRIPTION_GENERIC: string
+	SMART_WALLET_REAUTH_DESCRIPTION_NO_PROVIDERS: RequiredParams<'address' | 'name'>
 	/**
-	 * Switch to other wallet
+	 * W​h​y​ ​d​o​ ​I​ ​n​e​e​d​ ​t​o​ ​s​i​g​n​ ​i​n​?
 	 */
-	SMART_WALLET_REAUTH_SWITCH_WALLET: string
+	SMART_WALLET_REAUTH_WHY_SIGN_IN: string
+	/**
+	 * Y​o​u​r​ ​s​e​s​s​i​o​n​ ​e​x​p​i​r​e​d​.​ ​S​i​g​n​i​n​g​ ​i​n​ ​a​g​a​i​n​ ​p​r​o​v​e​s​ ​i​t​'​s​ ​y​o​u​ ​a​n​d​ ​u​n​l​o​c​k​s​ ​t​h​i​s​ ​S​m​a​r​t​ ​A​c​c​o​u​n​t​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.​ ​W​e​ ​d​o​n​'​t​ ​m​o​v​e​ ​f​u​n​d​s​ ​w​h​e​n​ ​y​o​u​ ​s​w​i​t​c​h​ ​w​a​l​l​e​t​s​.
+	 */
+	SMART_WALLET_REAUTH_WHY_SIGN_IN_DESCRIPTION: string
+	/**
+	 * U​s​e​ ​a​ ​s​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t
+	 */
+	SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE: string
+	/**
+	 * S​w​i​t​c​h​ ​t​h​e​ ​a​c​t​i​v​e​ ​w​a​l​l​e​t​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.​ ​T​h​i​s​ ​w​o​n​'​t​ ​m​o​v​e​ ​a​n​y​ ​f​u​n​d​s​.
+	 */
+	SMART_WALLET_REAUTH_SELF_CUSTODY_DESCRIPTION: string
 	/**
 	 * A​P​Y
 	 */
@@ -6126,6 +6143,10 @@ type RootTranslation = {
 	 */
 	WALLET_LEDGER_ONE_DEVICE_FOUND: string
 	/**
+	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​i​m​p​o​r​t​:
+	 */
+	WALLET_LEDGER_SELECT_ACCOUNTS_SB: string
+	/**
 	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​ ​t​h​r​o​u​g​h​ ​b​l​u​e​t​o​o​t​h​.​
 ​M​a​k​e​ ​s​u​r​e​ ​t​h​a​t​ ​i​t​ ​i​s​ ​u​n​l​o​c​k​e​d​ ​a​n​d​ ​t​h​e​ ​l​o​c​a​t​i​o​n​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​e​n​a​b​l​e​d​.
 	 */
@@ -6166,10 +6187,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​i​m​p​o​r​t​:
-	 */
-	WALLET_LEDGER_SELECT_ACCOUNTS_SB: string
 }
 
 export type TranslationFunctions = {
@@ -7595,10 +7612,6 @@ Thanks for your patience!
 	 */
 	BTN_CREATE_WALLET: () => LocalizedString
 	/**
-	 * Continue with Google
-	 */
-	BTN_CONTINUE_WITH_GOOGLE: () => LocalizedString
-	/**
 	 * Advanced setup
 	 */
 	BTN_CREATE_WALLET_ADVANCED_SETUP: () => LocalizedString
@@ -8311,6 +8324,10 @@ This action is irreversible.
 	 * N.A.
 	 */
 	COMMON_NOT_AVAILABLE: () => LocalizedString
+	/**
+	 * and
+	 */
+	COMMON_AND: () => LocalizedString
 	/**
 	 * Oops!
 	 */
@@ -11250,21 +11267,33 @@ Here's what it's all about:
 	 */
 	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
 	/**
-	 * Re-authentication Required
+	 * Sign in to continue
 	 */
 	SMART_WALLET_REAUTH_TITLE: () => LocalizedString
 	/**
-	 * Please authenticate to continue
+	 * Your Smart Account "{name}" ({address}) is linked to {providers}. Sign in to keep using it, or switch to a self-custody wallet below.
 	 */
-	SMART_WALLET_REAUTH_DESCRIPTION: () => LocalizedString
+	SMART_WALLET_REAUTH_DESCRIPTION: (arg: { address: string, name: string, providers: string }) => LocalizedString
 	/**
-	 * Please authenticate your smart account to continue
+	 * Your Smart Account "{name}" ({address}) requires re-authentication. Sign in to keep using it, or switch to a self-custody wallet below.
 	 */
-	SMART_WALLET_REAUTH_DESCRIPTION_GENERIC: () => LocalizedString
+	SMART_WALLET_REAUTH_DESCRIPTION_NO_PROVIDERS: (arg: { address: string, name: string }) => LocalizedString
 	/**
-	 * Switch to other wallet
+	 * Why do I need to sign in?
 	 */
-	SMART_WALLET_REAUTH_SWITCH_WALLET: () => LocalizedString
+	SMART_WALLET_REAUTH_WHY_SIGN_IN: () => LocalizedString
+	/**
+	 * Your session expired. Signing in again proves it's you and unlocks this Smart Account on this device. We don't move funds when you switch wallets.
+	 */
+	SMART_WALLET_REAUTH_WHY_SIGN_IN_DESCRIPTION: () => LocalizedString
+	/**
+	 * Use a self-custody wallet
+	 */
+	SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE: () => LocalizedString
+	/**
+	 * Switch the active wallet on this device. This won't move any funds.
+	 */
+	SMART_WALLET_REAUTH_SELF_CUSTODY_DESCRIPTION: () => LocalizedString
 	/**
 	 * APY
 	 */
@@ -12185,6 +12214,10 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	WALLET_LEDGER_ONE_DEVICE_FOUND: () => LocalizedString
 	/**
+	 * Select accounts to import:
+	 */
+	WALLET_LEDGER_SELECT_ACCOUNTS_SB: () => LocalizedString
+	/**
 	 * Connect your Ledger device through bluetooth.
 Make sure that it is unlocked and the location services are enabled.
 	 */
@@ -12225,10 +12258,6 @@ Make sure that it is unlocked and the location services are enabled.
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Select accounts to import:
-	 */
-	WALLET_LEDGER_SELECT_ACCOUNTS_SB: () => LocalizedString
 }
 
 export type Formatters = {
