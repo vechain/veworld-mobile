@@ -42,7 +42,6 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
     const { onSetSelectedAccount } = useSetSelectedAccount()
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const safeAreaInset = useSafeAreaInsets()
-    const { styles, theme } = useThemedStyles(baseStyles(false, safeAreaInset.bottom))
     const { LL } = useI18nContext()
     const { ref: infoBsRef, onOpenPlain: openInfoBs } = useBottomSheetModal()
 
@@ -52,6 +51,9 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
         () => visibleAccounts.filter(account => account.device.type !== DEVICE_TYPE.SMART_WALLET),
         [visibleAccounts],
     )
+
+    const hasAlternativeWallets = alternativeWallets.length > 0
+    const { styles, theme } = useThemedStyles(baseStyles(hasAlternativeWallets, safeAreaInset.bottom))
 
     const sections = useMemo(() => {
         const groupedAccounts = alternativeWallets.reduce((acc, curr) => {
@@ -77,8 +79,6 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
 
     const needsAuth = walletStatus === WALLET_STATUS.UNLOCKED && isSmartAccount && isReady && !isAuthenticated
     if (!needsAuth) return null
-
-    const hasAlternativeWallets = alternativeWallets.length > 0
     const smartDevice = isSmartAccount ? (selectedAccount.device as SmartWalletDevice) : null
     const linkedProviders: SocialProvider[] = smartDevice?.linkedProviders || []
 
