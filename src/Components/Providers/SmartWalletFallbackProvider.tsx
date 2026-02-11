@@ -51,14 +51,17 @@ export const SmartWalletFallbackProvider: React.FC<SmartWalletFallbackProviderPr
                 )
             },
 
-            linkOAuth: async (
-                _provider: SocialProvider,
-                _opts?: Omit<LinkWithOAuthInput, "provider" | "redirectUri">,
-            ): Promise<PrivyUser | undefined> => {
-                throw new WalletError(
-                    WalletErrorType.WALLET_NOT_FOUND,
-                    "Smart wallet functionality is currently disabled. Please enable the smartWalletFeature flag.",
-                )
+            linkOAuth: {
+                status: "initial",
+                link: async (
+                    _provider: SocialProvider,
+                    _opts?: Omit<LinkWithOAuthInput, "provider" | "redirectUri">,
+                ): Promise<PrivyUser | undefined> => {
+                    throw new WalletError(
+                        WalletErrorType.WALLET_NOT_FOUND,
+                        "Smart wallet functionality is currently disabled. Please enable the smartWalletFeature flag.",
+                    )
+                },
             },
 
             unlinkOAuth: async (_provider: SocialProvider, _subject: string): Promise<PrivyUser | undefined> => {
