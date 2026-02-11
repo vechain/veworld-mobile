@@ -1,17 +1,14 @@
-import React, { createContext, useContext, useCallback, useMemo, useState, useEffect, useRef } from "react"
+import { LinkWithOAuthInput } from "@privy-io/expo"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
-import { NetworkConfig, VechainWalletSDKConfig } from "../types/config"
-import { SignOptions, TransactionOptions, TypedDataPayload, GenericDelegationDetails } from "../types/transaction"
-import { LoginOptions, SmartAccountAdapter, SocialProvider } from "../types/wallet"
-import { getSmartAccount } from "../utils/smartAccount"
-import { WalletError, WalletErrorType } from "../utils/errors"
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import { SmartAccountTransactionConfig, SmartWalletContext } from "../types"
+import { NetworkConfig, VechainWalletSDKConfig } from "../types/config"
+import { GenericDelegationDetails, SignOptions, TransactionOptions, TypedDataPayload } from "../types/transaction"
+import { LinkWithOAuth, LoginOptions, SmartAccountAdapter, SocialProvider } from "../types/wallet"
+import { WalletError, WalletErrorType } from "../utils/errors"
+import { getSmartAccount } from "../utils/smartAccount"
 import { buildSmartAccountTransaction } from "../utils/transactionBuilder"
-import { LinkWithOAuthInput } from "@privy-io/expo"
-import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
-import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
-import { useI18nContext } from "~i18n"
 export interface SmartWalletProps {
     children: React.ReactNode
     config: VechainWalletSDKConfig
@@ -34,7 +31,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
     const [smartAccountConfig, setSmartAccountConfig] = useState<SmartAccountTransactionConfig | null>(null)
     const [isInitialised, setIsInitialised] = useState(false)
 
-    const { LL } = useI18nContext()
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
     const previousConfigRef = useRef<NetworkConfig | null>(null)
 
@@ -98,27 +94,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
         updateOnConfigChange()
     }, [config.networkConfig, thor, isInitialised, adapter.isAuthenticated, ownerAddress, adapter])
-
-    useEffect(() => {
-        switch (adapter.linkOAuthState.status) {
-            case "done":
-                Feedback.show({
-                    severity: FeedbackSeverity.SUCCESS,
-                    type: FeedbackType.ALERT,
-                    message: LL.FEEDBACK_ACCOUNT_LINKED(),
-                })
-                break
-            case "error":
-                Feedback.show({
-                    severity: FeedbackSeverity.ERROR,
-                    type: FeedbackType.ALERT,
-                    message: LL.FEEDBACK_ACCOUNT_LINKED_FAIL(),
-                })
-                break
-            default:
-                break
-        }
-    }, [adapter.linkOAuthState, LL])
 
     // Reset state when authentication changes
     useEffect(() => {
@@ -286,33 +261,14 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         setIsInitialised(false)
     }, [adapter])
 
-    const linkOAuth = useCallback(
-        async (provider: SocialProvider, opts?: Omit<LinkWithOAuthInput, "provider" | "redirectUri">) => {
-            return await adapter.linkOAuth(provider, { redirectUri: "auth/callback", ...opts })
-        },
-        [adapter],
-    )
-
-    const unlinkOAuth = useCallback(
-        async (provider: SocialProvider, subject: string) => {
-            try {
-                const result = await adapter.unlinkOAuth(provider, subject)
-                Feedback.show({
-                    severity: FeedbackSeverity.SUCCESS,
-                    type: FeedbackType.ALERT,
-                    message: LL.FEEDBACK_ACCOUNT_UNLINKED(),
-                })
-                return result
-            } catch {
-                Feedback.show({
-                    severity: FeedbackSeverity.ERROR,
-                    type: FeedbackType.ALERT,
-                    message: LL.FEEDBACK_ACCOUNT_UNLINKED_FAIL(),
-                })
-            }
-        },
-        [adapter, LL],
-    )
+    const linkOAuth: LinkWithOAuth = useMemo(() => {
+        return {
+            ...adapter.linkOAuth,
+            link: async (provider: SocialProvider, opts?: Omit<LinkWithOAuthInput, "provider" | "redirectUri">) => {
+                return await adapter.linkOAuth.link(provider, { redirectUri: "auth/callback", ...opts })
+            },
+        }
+    }, [adapter])
 
     const contextValue = useMemo(
         () => ({
@@ -326,7 +282,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             userDisplayName: adapter.userDisplayName,
             hasMultipleSocials: adapter.hasMultipleSocials,
             linkOAuth,
-            unlinkOAuth,
+            unlinkOAuth: adapter.unlinkOAuth,
             initialiseWallet,
             signMessage,
             signTransaction,
@@ -355,7 +311,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             logout,
             adapter.hasMultipleSocials,
             linkOAuth,
-            unlinkOAuth,
+            adapter.unlinkOAuth,
         ],
     )
 

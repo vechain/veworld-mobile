@@ -64,7 +64,12 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
             linkedAccounts,
             userDisplayName,
             hasMultipleSocials,
-            linkOAuthState: linkOAuth.state,
+            linkOAuth: {
+                ...linkOAuth.state,
+                link: async (provider: SocialProvider, opts?: Omit<LinkWithOAuthInput, "provider">) => {
+                    return await linkOAuth.link({ provider, redirectUri: "auth/callback", ...opts })
+                },
+            },
 
             async login(options: LoginOptions): Promise<void> {
                 const provider = options.provider as any
@@ -74,10 +79,6 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
 
             async logout(): Promise<void> {
                 await logout()
-            },
-
-            async linkOAuth(provider: SocialProvider, opts: Omit<LinkWithOAuthInput, "provider" | "redirectUri">) {
-                return await linkOAuth.link({ provider, ...opts })
             },
 
             async unlinkOAuth(provider: SocialProvider, subject?: string) {

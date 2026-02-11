@@ -1,11 +1,14 @@
 import { ListRenderItemInfo, StyleSheet } from "react-native"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { SocialProvider } from "~VechainWalletKit"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useSmartWallet, useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
 import { IconKey } from "~Model"
 import { PlatformUtils } from "~Utils"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
+import { useI18nContext } from "~i18n"
 
 type Props = ListRenderItemInfo<SocialProvider> & {
     onUnlink?: (provider: SocialProvider, subject: string) => void
@@ -17,8 +20,11 @@ const ICON_MAP: Record<string, IconKey> = {
 }
 
 export const LinkAccountBox = ({ item, onUnlink }: Props) => {
+    const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { linkedAccounts, linkOAuth, unlinkOAuth } = useSmartWallet()
+
+    const { link, status } = linkOAuth
 
     const linkedAccount = useMemo(() => linkedAccounts.find(account => account.type === item), [linkedAccounts, item])
 
@@ -32,6 +38,27 @@ export const LinkAccountBox = ({ item, onUnlink }: Props) => {
         [linkedAccounts, linkedAccount],
     )
 
+    useEffect(() => {
+        switch (status) {
+            case "done":
+                Feedback.show({
+                    severity: FeedbackSeverity.SUCCESS,
+                    type: FeedbackType.ALERT,
+                    message: LL.FEEDBACK_ACCOUNT_LINKED(),
+                })
+                break
+            case "error":
+                Feedback.show({
+                    severity: FeedbackSeverity.ERROR,
+                    type: FeedbackType.ALERT,
+                    message: LL.FEEDBACK_ACCOUNT_LINKED_FAIL(),
+                })
+                break
+            default:
+                break
+        }
+    }, [status, LL])
+
     const onPress = useCallback(() => {
         if (linkedAccount) {
             if (onUnlink) {
@@ -40,9 +67,9 @@ export const LinkAccountBox = ({ item, onUnlink }: Props) => {
             }
             unlinkOAuth(item, linkedAccount.subject)
         } else {
-            linkOAuth(item)
+            link(item)
         }
-    }, [item, linkedAccount, linkOAuth, unlinkOAuth, onUnlink])
+    }, [item, linkedAccount, link, unlinkOAuth, onUnlink])
 
     return (
         <BaseView

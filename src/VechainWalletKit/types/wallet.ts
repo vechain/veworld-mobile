@@ -30,6 +30,10 @@ export interface AuthenticationOperations {
     logout: () => Promise<void>
 }
 
+export type LinkWithOAuth = {
+    link: (provider: SocialProvider, opts?: Omit<LinkWithOAuthInput, "provider">) => Promise<PrivyUser | undefined>
+} & OAuthFlowState
+
 export interface SmartWalletContext extends WalletContext, AuthenticationOperations {
     isLoading: boolean
     isInitialized: boolean
@@ -40,18 +44,15 @@ export interface SmartWalletContext extends WalletContext, AuthenticationOperati
     userDisplayName: string | null
     hasMultipleSocials: boolean
     initialiseWallet: () => Promise<void>
-    linkOAuth: (
-        provider: SocialProvider,
-        opts?: Omit<LinkWithOAuthInput, "provider" | "redirectUri">,
-    ) => Promise<PrivyUser | undefined>
+    linkOAuth: LinkWithOAuth
     unlinkOAuth: (provider: SocialProvider, subject: string) => Promise<PrivyUser | undefined>
 }
+
 export interface SmartAccountAdapter extends SigningOperations, AuthenticationOperations {
     getAccount(): string
     createWallet(): Promise<string>
-    linkOAuth: (provider: SocialProvider, opts: Omit<LinkWithOAuthInput, "provider">) => Promise<PrivyUser | undefined>
+    linkOAuth: LinkWithOAuth
     unlinkOAuth: (provider: SocialProvider, subject: string) => Promise<PrivyUser | undefined>
-    linkOAuthState: OAuthFlowState
     linkedAccounts: LinkedAccount[]
     userDisplayName: string | null
     hasMultipleSocials: boolean

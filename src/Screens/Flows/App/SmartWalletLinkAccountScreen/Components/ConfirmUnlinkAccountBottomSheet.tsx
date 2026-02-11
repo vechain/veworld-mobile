@@ -3,6 +3,8 @@ import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet } from "~Components"
 import { BaseButton, BaseIcon, BaseText, BaseView } from "~Components/Base"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useSmartWallet } from "~Hooks"
 import { useBottomSheetModal } from "~Hooks/useBottomSheet"
@@ -28,10 +30,24 @@ export const ConfirmUnlinkAccountBottomSheet = ({ bsRef }: Props) => {
 
     const onConfirm = useCallback(
         async (data: ConfirmUnlinkAccountBottomSheetData) => {
-            await unlinkOAuth(data.provider, data.subject)
-            onClose()
+            try {
+                await unlinkOAuth(data.provider, data.subject)
+                Feedback.show({
+                    severity: FeedbackSeverity.SUCCESS,
+                    type: FeedbackType.ALERT,
+                    message: LL.FEEDBACK_ACCOUNT_UNLINKED(),
+                })
+                onClose()
+            } catch {
+                Feedback.show({
+                    severity: FeedbackSeverity.ERROR,
+                    type: FeedbackType.ALERT,
+                    message: LL.FEEDBACK_ACCOUNT_UNLINKED_FAIL(),
+                })
+                onClose()
+            }
         },
-        [unlinkOAuth, onClose],
+        [unlinkOAuth, onClose, LL],
     )
 
     return (
