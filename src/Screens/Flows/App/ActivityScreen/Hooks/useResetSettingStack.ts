@@ -1,18 +1,18 @@
 import { CommonActions, useNavigation } from "@react-navigation/native"
 import { useEffect, useRef } from "react"
 import { Routes } from "~Navigation"
-import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccountOrNull, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
 export const useResetSettingStack = () => {
     const navigation = useNavigation()
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const previousSelectedAccountAddress = useRef(selectedAccount?.address)
     const previousSelectedNetwork = useRef(selectedNetwork)
 
     const hasAccountChanged = !AddressUtils.compareAddresses(
-        selectedAccount.address,
+        selectedAccount?.address,
         previousSelectedAccountAddress.current,
     )
 
@@ -20,7 +20,7 @@ export const useResetSettingStack = () => {
 
     useEffect(() => {
         if (hasAccountChanged || hasNetworkChanged) {
-            previousSelectedAccountAddress.current = selectedAccount.address
+            previousSelectedAccountAddress.current = selectedAccount?.address
             previousSelectedNetwork.current = selectedNetwork
 
             navigation.dispatch(state => {
@@ -33,5 +33,5 @@ export const useResetSettingStack = () => {
                 })
             })
         }
-    }, [hasAccountChanged, hasNetworkChanged, navigation, selectedAccount.address, selectedNetwork])
+    }, [hasAccountChanged, hasNetworkChanged, navigation, selectedAccount?.address, selectedNetwork])
 }

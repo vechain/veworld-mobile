@@ -1,12 +1,13 @@
-import React, { createContext, useContext, useCallback, useMemo, useState, useEffect, useRef } from "react"
+import { LinkWithOAuthInput } from "@privy-io/expo"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
-import { NetworkConfig, VechainWalletSDKConfig } from "../types/config"
-import { SignOptions, TransactionOptions, TypedDataPayload, GenericDelegationDetails } from "../types/transaction"
-import { LoginOptions, SmartAccountAdapter } from "../types/wallet"
-import { getSmartAccount } from "../utils/smartAccount"
-import { WalletError, WalletErrorType } from "../utils/errors"
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import { SmartAccountTransactionConfig, SmartWalletContext } from "../types"
+import { NetworkConfig, VechainWalletSDKConfig } from "../types/config"
+import { GenericDelegationDetails, SignOptions, TransactionOptions, TypedDataPayload } from "../types/transaction"
+import { LinkWithOAuth, LoginOptions, SmartAccountAdapter, SocialProvider } from "../types/wallet"
+import { WalletError, WalletErrorType } from "../utils/errors"
+import { getSmartAccount } from "../utils/smartAccount"
 import { buildSmartAccountTransaction } from "../utils/transactionBuilder"
 export interface SmartWalletProps {
     children: React.ReactNode
@@ -260,6 +261,15 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         setIsInitialised(false)
     }, [adapter])
 
+    const linkOAuth: LinkWithOAuth = useMemo(() => {
+        return {
+            ...adapter.linkOAuth,
+            link: async (provider: SocialProvider, opts?: Omit<LinkWithOAuthInput, "provider" | "redirectUri">) => {
+                return await adapter.linkOAuth.link(provider, { redirectUri: "auth/callback", ...opts })
+            },
+        }
+    }, [adapter])
+
     const contextValue = useMemo(
         () => ({
             ownerAddress,
@@ -270,6 +280,9 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             isAuthenticated: adapter.isAuthenticated,
             linkedAccounts: adapter.linkedAccounts,
             userDisplayName: adapter.userDisplayName,
+            hasMultipleSocials: adapter.hasMultipleSocials,
+            linkOAuth,
+            unlinkOAuth: adapter.unlinkOAuth,
             initialiseWallet,
             signMessage,
             signTransaction,
@@ -296,6 +309,9 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             estimateGas,
             login,
             logout,
+            adapter.hasMultipleSocials,
+            linkOAuth,
+            adapter.unlinkOAuth,
         ],
     )
 

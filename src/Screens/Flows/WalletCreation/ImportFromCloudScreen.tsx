@@ -17,7 +17,7 @@ import {
 import { COLORS } from "~Constants/Theme"
 import { useBottomSheetModal, useCloudBackup, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { CloudKitWallet, DrivetWallet } from "~Model"
+import { CloudKitWallet, DriveWallet } from "~Model"
 import { RootStackParamListOnboarding, Routes } from "~Navigation"
 import { PlatformUtils } from "~Utils"
 
@@ -32,7 +32,7 @@ export const ImportFromCloudScreen = () => {
     const theme = useTheme()
     const { getAllWalletFromCloud } = useCloudBackup()
     const { LL } = useI18nContext()
-    const [cloudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | DrivetWallet[]>(wallets ?? [])
+    const [cloudKitWallets, setCloudKitWallets] = useState<CloudKitWallet[] | DriveWallet[]>(wallets ?? [])
     const [selected, setSelected] = useState<CloudKitWallet | null>(null)
 
     const [isLoading, setIsLoading] = useState(false)

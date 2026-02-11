@@ -16,7 +16,7 @@ import {
 import { COLORS, ERROR_EVENTS } from "~Constants"
 import { useCheckIdentity, useCloudBackup, useDeviceUtils, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { DrivetWallet, IMPORT_TYPE } from "~Model"
+import { DriveWallet, IMPORT_TYPE } from "~Model"
 import { RootStackParamListOnboarding, Routes } from "~Navigation"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
 import { selectHasOnboarded, selectIsAppLoading, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
@@ -70,8 +70,8 @@ export const ImportMnemonicBackupPasswordScreen = () => {
 
     const importWallet = useCallback(async () => {
         dispatch(setIsAppLoading(true))
-        const { salt } = PlatformUtils.isAndroid() ? (wallet as DrivetWallet) : await getSalt(wallet.rootAddress)
-        const { iv } = PlatformUtils.isAndroid() ? (wallet as DrivetWallet) : await getIV(wallet.rootAddress)
+        const { salt } = PlatformUtils.isAndroid() ? (wallet as DriveWallet) : await getSalt(wallet.rootAddress)
+        const { iv } = PlatformUtils.isAndroid() ? (wallet as DriveWallet) : await getIV(wallet.rootAddress)
 
         if (!salt || !iv) {
             showErrorToast({

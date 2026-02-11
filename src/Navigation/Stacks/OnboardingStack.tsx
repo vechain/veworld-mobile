@@ -2,7 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
 import { useDevice } from "~Components/Providers/DeviceProvider"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
-import { CloudKitWallet, ConnectedLedgerDevice, DrivetWallet } from "~Model"
+import { CloudKitWallet, ConnectedLedgerDevice, DriveWallet } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import {
     EnableAdditionalSettings,
@@ -26,10 +26,10 @@ export type RootStackParamListOnboarding = {
         device: ConnectedLedgerDevice
     }
     [Routes.IMPORT_FROM_CLOUD]: {
-        wallets: CloudKitWallet[] | DrivetWallet[]
+        wallets: CloudKitWallet[] | DriveWallet[]
     }
     [Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD]: {
-        wallet: CloudKitWallet | DrivetWallet
+        wallet: CloudKitWallet | DriveWallet
     }
 }
 
