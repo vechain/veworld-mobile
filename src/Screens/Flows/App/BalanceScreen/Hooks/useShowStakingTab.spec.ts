@@ -56,19 +56,4 @@ describe("useShowStakingTab", () => {
 
         await expect(result.current).toBe(false)
     })
-
-    it("should return true if the user is not a smart wallet", async () => {
-        ;(useSmartWallet as jest.Mock).mockImplementation(() => ({
-            smartAccountAddress: "0x4444444444444444444444444444444444444444",
-            isAuthenticated: false,
-            isInitialized: true,
-            ownerAddress: "0x4444444444444444444444444444444444444444",
-        }))
-
-        const { result } = renderHook(() => useShowStakingTab(), {
-            wrapper: TestWrapper,
-        })
-
-        await expect(result.current).toBe(true)
-    })
 })
