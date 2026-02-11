@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { FlatList, ListRenderItemInfo } from "react-native"
 import { InfoBottomSheet, Layout } from "~Components"
 import { BaseIcon, BaseSpacer, BaseView } from "~Components/Base"
@@ -10,9 +10,11 @@ import { PlatformUtils } from "~Utils"
 import { SocialProvider } from "~VechainWalletKit"
 import { LinkAccountBox } from "./Components"
 import { COLORS } from "~Constants"
-import { useBottomSheetModal } from "~Hooks"
+import { useBottomSheetModal, useSmartWallet } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { ConfirmUnlinkAccountBottomSheet } from "./Components/ConfirmUnlinkAccountBottomSheet"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 
 type Props = NativeStackScreenProps<RootStackParamListSettings, Routes.SMART_WALLET_LINK_ACCOUNT>
 
@@ -22,6 +24,10 @@ export const SmartWalletLinkAccountScreen = ({ route }: Props) => {
     const { device } = route.params
     const { LL } = useI18nContext()
     const theme = useTheme()
+
+    const { linkOAuth } = useSmartWallet()
+
+    const { link, status } = linkOAuth
 
     const { ref: infoBottomSheetRef, onOpen: openInfoBottomSheet } = useBottomSheetModal()
     const { ref: confirmUnlinkBottomSheetRef, onOpen: openConfirmUnlinkBottomSheet } = useBottomSheetModal()
@@ -36,16 +42,38 @@ export const SmartWalletLinkAccountScreen = ({ route }: Props) => {
         })
     }, [])
 
+    useEffect(() => {
+        switch (status) {
+            case "done":
+                Feedback.show({
+                    severity: FeedbackSeverity.SUCCESS,
+                    type: FeedbackType.ALERT,
+                    message: LL.FEEDBACK_ACCOUNT_LINKED(),
+                })
+                break
+            case "error":
+                Feedback.show({
+                    severity: FeedbackSeverity.ERROR,
+                    type: FeedbackType.ALERT,
+                    message: LL.FEEDBACK_ACCOUNT_LINKED_FAIL(),
+                })
+                break
+            default:
+                break
+        }
+    }, [status, LL])
+
     const renderItem = useCallback(
         (props: ListRenderItemInfo<SocialProvider>) => {
             return (
                 <LinkAccountBox
                     {...props}
                     onUnlink={(provider, subject) => openConfirmUnlinkBottomSheet({ provider, subject })}
+                    onLink={provider => link(provider)}
                 />
             )
         },
-        [openConfirmUnlinkBottomSheet],
+        [openConfirmUnlinkBottomSheet, link],
     )
 
     const renderSeparator = useCallback(() => {
