@@ -1,21 +1,44 @@
 import React, { useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
-import { BaseButton, BaseIcon, BaseText, BaseView, Layout } from "~Components"
+import { SectionList, SectionListData, StyleSheet } from "react-native"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
+import { SectionListSeparator } from "~Components/Reusable"
+import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCard"
 import { useWalletStatus } from "~Components/Providers/EncryptedStorageProvider/ApplicationSecurityProvider"
 import { useSmartWallet } from "~Hooks/useSmartWallet"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 import { useThemedStyles } from "~Hooks"
-import { ColorThemeType, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
-import { DEVICE_TYPE, SmartWalletDevice, WALLET_STATUS } from "~Model"
+import { COLORS, ColorThemeType, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
+import { AccountWithDevice, DEVICE_TYPE, SmartWalletDevice, WALLET_STATUS } from "~Model"
 import { PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { SocialProvider } from "~VechainWalletKit/types/wallet"
+import { BaseSectionListSeparatorProps } from "~Components/Reusable"
+
+const ItemSeparatorComponent = () => <BaseSpacer height={8} />
+const SectionSeparatorComponent = (props: BaseSectionListSeparatorProps) => {
+    return <SectionListSeparator {...props} headerToHeaderHeight={24} headerToItemsHeight={8} />
+}
+
+const SectionHeader = ({
+    section,
+}: {
+    section: SectionListData<AccountWithDevice, { data: AccountWithDevice[]; alias: string }>
+}) => {
+    return <BaseText typographyFont="bodyMedium">{section.alias}</BaseText>
+}
 
 export const SmartWalletAuthGate = () => {
+    const walletStatus = useWalletStatus()
+
+    if (walletStatus === WALLET_STATUS.FIRST_TIME_ACCESS) return null
+
+    return <SmartWalletAuthGateContent walletStatus={walletStatus} />
+}
+
+const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STATUS }) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
-    const walletStatus = useWalletStatus()
     const { login, isAuthenticated, isReady } = useSmartWallet()
     const { onSetSelectedAccount } = useSetSelectedAccount()
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -24,7 +47,6 @@ export const SmartWalletAuthGate = () => {
     const isSmartAccount = selectedAccount?.device?.type === DEVICE_TYPE.SMART_WALLET
     const smartDevice = isSmartAccount ? (selectedAccount.device as SmartWalletDevice) : null
     const linkedProviders: SocialProvider[] = smartDevice?.linkedProviders || []
-    const accountName = smartDevice?.accountName
 
     const needsAuth = walletStatus === WALLET_STATUS.UNLOCKED && isSmartAccount && isReady && !isAuthenticated
 
@@ -33,7 +55,17 @@ export const SmartWalletAuthGate = () => {
         [visibleAccounts],
     )
     const hasAlternativeWallets = alternativeWallets.length > 0
-    const alternativeWalletAddress = alternativeWallets[0]?.address
+
+    const sections = useMemo(() => {
+        const groupedAccounts = alternativeWallets.reduce(
+            (acc, curr) => {
+                const key = curr.device?.alias ?? curr.alias
+                return { ...acc, [key]: [...(acc[key] ?? []), curr] }
+            },
+            {} as { [alias: string]: AccountWithDevice[] },
+        )
+        return Object.entries(groupedAccounts).map(([alias, data]) => ({ alias, data }))
+    }, [alternativeWallets])
 
     const handleProviderLogin = useCallback(
         async (provider: SocialProvider) => {
@@ -42,11 +74,12 @@ export const SmartWalletAuthGate = () => {
         [login],
     )
 
-    const handleSwitchToAlternativeWallet = useCallback(() => {
-        if (alternativeWalletAddress) {
-            onSetSelectedAccount({ address: alternativeWalletAddress })
-        }
-    }, [alternativeWalletAddress, onSetSelectedAccount])
+    const handleSelectAccount = useCallback(
+        (account: AccountWithDevice) => {
+            onSetSelectedAccount({ address: account.address })
+        },
+        [onSetSelectedAccount],
+    )
 
     // Fallback: show both buttons if no providers stored (legacy accounts)
     const showGoogle = linkedProviders.length === 0 || linkedProviders.includes("google")
@@ -61,12 +94,12 @@ export const SmartWalletAuthGate = () => {
                 title={LL.SMART_WALLET_REAUTH_TITLE()}
                 fixedBody={
                     <BaseView style={styles.contentContainer}>
-                        <BaseText typographyFont="bodyMedium" color={theme.colors.text} align="center">
-                            {accountName
-                                ? LL.SMART_WALLET_REAUTH_DESCRIPTION()
-                                : LL.SMART_WALLET_REAUTH_DESCRIPTION_GENERIC()}
-                        </BaseText>
-
+                        {/* <BaseText
+                            typographyFont="bodyMedium"
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
+                        >
+                            {LL.SMART_WALLET_REAUTH_DESCRIPTION()}
+                        </BaseText> */}
                         <BaseView gap={16} w={100}>
                             {showApple && (
                                 <BaseButton
@@ -93,26 +126,56 @@ export const SmartWalletAuthGate = () => {
                                     action={() => handleProviderLogin("google")}
                                 />
                             )}
-
-                            {hasAlternativeWallets && (
-                                <>
-                                    <BaseText align="center" typographyFont="captionMedium">
-                                        {LL.COMMON_OR()}
-                                    </BaseText>
-                                    <BaseButton
-                                        variant="outline"
-                                        title={LL.SMART_WALLET_REAUTH_SWITCH_WALLET()}
-                                        textProps={{ typographyFont: "bodyMedium" }}
-                                        action={handleSwitchToAlternativeWallet}
-                                        testID="RELOGIN_SWITCH_WALLET_BUTTON"
-                                    />
-                                </>
-                            )}
                         </BaseView>
+
+                        {hasAlternativeWallets && (
+                            <>
+                                <BaseText align="center" typographyFont="captionMedium">
+                                    {LL.COMMON_OR()}
+                                </BaseText>
+
+                                <BaseView style={styles.walletHeader}>
+                                    <BaseView flexDirection="row" alignItems="center" gap={12}>
+                                        <BaseIcon
+                                            name="icon-wallet"
+                                            size={20}
+                                            color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
+                                        />
+                                        <BaseText typographyFont="subTitleSemiBold">
+                                            {LL.SELECT_ACCOUNT_TITLE()}
+                                        </BaseText>
+                                    </BaseView>
+                                    <BaseText
+                                        typographyFont="body"
+                                        color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                                        {LL.SELECT_ACCOUNT_DESCRIPTION()}
+                                    </BaseText>
+                                </BaseView>
+
+                                <SectionList
+                                    sections={sections}
+                                    keyExtractor={item => item.address}
+                                    renderSectionHeader={SectionHeader}
+                                    stickySectionHeadersEnabled={false}
+                                    renderItem={({ item }) => (
+                                        <SelectableAccountCard
+                                            account={item}
+                                            onPress={handleSelectAccount}
+                                            balanceToken="VET"
+                                            testID="RELOGIN_ACCOUNT_CARD"
+                                        />
+                                    )}
+                                    ItemSeparatorComponent={ItemSeparatorComponent}
+                                    SectionSeparatorComponent={SectionSeparatorComponent}
+                                    showsVerticalScrollIndicator={false}
+                                    style={styles.list}
+                                />
+                            </>
+                        )}
                     </BaseView>
                 }
             />
-        </BaseView>
+        </BaseView >
     )
 }
 
@@ -129,14 +192,20 @@ const baseStyles = (_theme: ColorThemeType) =>
         },
         contentContainer: {
             flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
             gap: 24,
             paddingHorizontal: 24,
+            paddingTop: 16,
         },
         socialButton: {
             alignItems: "center",
             justifyContent: "center",
             gap: 12,
+        },
+        walletHeader: {
+            flexDirection: "column",
+            gap: 8,
+        },
+        list: {
+            flex: 1,
         },
     })
