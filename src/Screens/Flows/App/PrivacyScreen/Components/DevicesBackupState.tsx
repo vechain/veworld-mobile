@@ -48,7 +48,11 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
                 }
             }
 
-            if (item.isBuckedUp || item.isBackedUpManual || hasMultipleSocials) {
+            if (
+                item.isBuckedUp ||
+                item.isBackedUpManual ||
+                (item.type === DEVICE_TYPE.SMART_WALLET && hasMultipleSocials)
+            ) {
                 return { variant: "success" }
             }
             return { variant: "error" }

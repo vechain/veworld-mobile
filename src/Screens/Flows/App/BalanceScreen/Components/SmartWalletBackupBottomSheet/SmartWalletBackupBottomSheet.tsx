@@ -47,7 +47,7 @@ export const SmartWalletBackupBottomSheet = () => {
         dispatch(
             setLastBackupRequestTimestamp({
                 address: selectedAccount.device?.rootAddress ?? "",
-                timestamp: undefined,
+                timestamp: moment().unix(),
             }),
         )
     }, [onClose, dispatch, selectedAccount.device?.rootAddress])

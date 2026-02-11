@@ -1,5 +1,5 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet } from "~Components"
 import { BaseButton, BaseIcon, BaseText, BaseView } from "~Components/Base"
@@ -22,6 +22,7 @@ type ConfirmUnlinkAccountBottomSheetData = {
 }
 
 export const ConfirmUnlinkAccountBottomSheet = ({ bsRef }: Props) => {
+    const [isLoading, setIsLoading] = useState(false)
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { unlinkOAuth } = useSmartWallet()
@@ -30,6 +31,7 @@ export const ConfirmUnlinkAccountBottomSheet = ({ bsRef }: Props) => {
 
     const onConfirm = useCallback(
         async (data: ConfirmUnlinkAccountBottomSheetData) => {
+            setIsLoading(true)
             try {
                 await unlinkOAuth(data.provider, data.subject)
                 Feedback.show({
@@ -38,6 +40,7 @@ export const ConfirmUnlinkAccountBottomSheet = ({ bsRef }: Props) => {
                     message: LL.FEEDBACK_ACCOUNT_UNLINKED(),
                 })
                 onClose()
+                setIsLoading(false)
             } catch {
                 Feedback.show({
                     severity: FeedbackSeverity.ERROR,
@@ -45,6 +48,7 @@ export const ConfirmUnlinkAccountBottomSheet = ({ bsRef }: Props) => {
                     message: LL.FEEDBACK_ACCOUNT_UNLINKED_FAIL(),
                 })
                 onClose()
+                setIsLoading(false)
             }
         },
         [unlinkOAuth, onClose, LL],
@@ -81,6 +85,7 @@ export const ConfirmUnlinkAccountBottomSheet = ({ bsRef }: Props) => {
                                 action={() => onConfirm(data)}
                                 style={styles.dangerButton}
                                 textColor={COLORS.WHITE}
+                                isLoading={isLoading}
                             />
                             <BaseButton
                                 title={LL.COMMON_BTN_CANCEL()}
@@ -88,6 +93,7 @@ export const ConfirmUnlinkAccountBottomSheet = ({ bsRef }: Props) => {
                                 action={onClose}
                                 style={styles.secondaryButton}
                                 textColor={theme.colors.text}
+                                disabled={isLoading}
                             />
                         </BaseView>
                     </BaseView>
