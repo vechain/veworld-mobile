@@ -13,6 +13,7 @@ import { PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { SocialProvider } from "~VechainWalletKit/types/wallet"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />
 const SectionSeparatorComponent = (props: BaseSectionListSeparatorProps) => {
@@ -40,7 +41,13 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
     const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const { login, isAuthenticated, isReady } = useSmartWallet()
     const { onSetSelectedAccount } = useSetSelectedAccount()
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const alternativeWallets = useMemo(
+        () => visibleAccounts.filter(account => account.device.type !== DEVICE_TYPE.SMART_WALLET),
+        [visibleAccounts],
+    )
+    const hasAlternativeWallets = alternativeWallets.length > 0
+    const safeAreInset = useSafeAreaInsets()
+    const { styles, theme } = useThemedStyles(baseStyles(false, safeAreInset.bottom))
     const { LL } = useI18nContext()
     const { ref: infoBsRef, onOpenPlain: openInfoBs } = useBottomSheetModal()
 
@@ -49,12 +56,6 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
     const linkedProviders: SocialProvider[] = smartDevice?.linkedProviders || []
 
     const needsAuth = walletStatus === WALLET_STATUS.UNLOCKED && isSmartAccount && isReady && !isAuthenticated
-
-    const alternativeWallets = useMemo(
-        () => visibleAccounts.filter(account => account.device.type !== DEVICE_TYPE.SMART_WALLET),
-        [visibleAccounts],
-    )
-    const hasAlternativeWallets = alternativeWallets.length > 0
 
     const sections = useMemo(() => {
         const groupedAccounts = alternativeWallets.reduce((acc, curr) => {
@@ -96,22 +97,30 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
                     />
                 }
                 noBackButton
+                hasSafeArea={true}
                 title={LL.SMART_WALLET_REAUTH_TITLE()}
                 fixedBody={
                     <BaseView style={styles.contentContainer}>
-                        <BaseText
-                            typographyFont="bodyMedium"
-                            align="center"
-                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
-                            {LL.SMART_WALLET_REAUTH_DESCRIPTION()}
-                        </BaseText>
+                        <BaseView gap={24}>
+                            <BaseIcon
+                                name="icon-log-in"
+                                size={48}
+                                color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE}
+                            />
+                            <BaseText
+                                typographyFont="bodyMedium"
+                                align="center"
+                                color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
+                                {LL.SMART_WALLET_REAUTH_DESCRIPTION()}
+                            </BaseText>
 
-                        <SelectableAccountCard
-                            account={selectedAccount}
-                            disabled
-                            balanceToken="VET"
-                            testID="RELOGIN_SMART_ACCOUNT_CARD"
-                        />
+                            <SelectableAccountCard
+                                account={selectedAccount}
+                                disabled
+                                balanceToken="FIAT"
+                                testID="RELOGIN_SMART_ACCOUNT_CARD"
+                            />
+                        </BaseView>
 
                         <BaseView gap={16} w={100}>
                             {showApple && (
@@ -136,21 +145,18 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
                                 />
                             )}
                         </BaseView>
-
                         {hasAlternativeWallets && (
-                            <>
-                                <BaseText align="center" typographyFont="captionMedium">
+                            <BaseView gap={16} flex={1}>
+                                <BaseText
+                                    align="center"
+                                    typographyFont="captionMedium"
+                                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>
                                     {LL.COMMON_OR()}
                                 </BaseText>
 
                                 <BaseView style={styles.walletHeader}>
-                                    <BaseText typographyFont="subTitleSemiBold">
+                                    <BaseText typographyFont="subSubTitleSemiBold">
                                         {LL.SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE()}
-                                    </BaseText>
-                                    <BaseText
-                                        typographyFont="body"
-                                        color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
-                                        {LL.SMART_WALLET_REAUTH_SELF_CUSTODY_DESCRIPTION()}
                                     </BaseText>
                                 </BaseView>
 
@@ -163,7 +169,7 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
                                         <SelectableAccountCard
                                             account={item}
                                             onPress={handleSelectAccount}
-                                            balanceToken="VET"
+                                            balanceToken="FIAT"
                                             testID="RELOGIN_ACCOUNT_CARD"
                                         />
                                     )}
@@ -172,7 +178,7 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
                                     showsVerticalScrollIndicator={false}
                                     style={styles.list}
                                 />
-                            </>
+                            </BaseView>
                         )}
 
                         <InfoBottomSheet
@@ -187,14 +193,14 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
     )
 }
 
-const baseStyles = (_theme: ColorThemeType) =>
+const baseStyles = (hasAlternativeWallets: boolean, bottomInset: number) => (_theme: ColorThemeType) =>
     StyleSheet.create({
         overlay: {
             position: "absolute",
             top: 0,
             left: 0,
             width: SCREEN_WIDTH,
-            height: SCREEN_HEIGHT * 1.1,
+            height: SCREEN_HEIGHT,
             zIndex: 1,
             backgroundColor: _theme.colors.background,
         },
@@ -203,6 +209,8 @@ const baseStyles = (_theme: ColorThemeType) =>
             gap: 24,
             paddingHorizontal: 24,
             paddingTop: 16,
+            justifyContent: "space-between",
+            paddingBottom: hasAlternativeWallets ? 0 : bottomInset,
         },
         smartAccountCard: {
             flexDirection: "row",
@@ -223,6 +231,9 @@ const baseStyles = (_theme: ColorThemeType) =>
             flexDirection: "column",
             alignItems: "center",
             gap: 8,
+        },
+        flexSpacer: {
+            flex: 1,
         },
         list: {
             flex: 1,
