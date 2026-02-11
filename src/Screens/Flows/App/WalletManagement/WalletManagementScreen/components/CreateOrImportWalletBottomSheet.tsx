@@ -6,7 +6,7 @@ import { BaseBottomSheet, BaseSpacer, BaseText, BaseView, CardListItem } from "~
 import { AnalyticsEvent, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useCloudBackup, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { CloudKitWallet, DrivetWallet, IconKey } from "~Model"
+import { CloudKitWallet, DriveWallet, IconKey } from "~Model"
 import { Routes } from "~Navigation"
 import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
@@ -18,7 +18,7 @@ type Props = {
 
 export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ onClose, handleOnCreateWallet }, ref) => {
-        const [wallets, setWallets] = useState<CloudKitWallet[] | DrivetWallet[]>([])
+        const [wallets, setWallets] = useState<CloudKitWallet[] | DriveWallet[]>([])
 
         const { LL } = useI18nContext()
         const nav = useNavigation()

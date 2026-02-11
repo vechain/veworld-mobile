@@ -1,6 +1,6 @@
 import { DerivationPath } from "~Constants"
 
-export type DrivetWallet = {
+export type DriveWallet = {
     rootAddress: string
     data: string
     walletType: string

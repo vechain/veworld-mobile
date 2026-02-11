@@ -31,7 +31,7 @@ import { useDemoWallet } from "./useDemoWallet"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
 
 import * as RNLocalize from "react-native-localize"
-import { CloudKitWallet, DrivetWallet, languages } from "~Model"
+import { CloudKitWallet, DriveWallet, languages } from "~Model"
 import { Routes } from "~Navigation"
 import { selectLanguage, setLanguage, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
@@ -55,7 +55,7 @@ export const WelcomeScreen = () => {
     } = useBottomSheetModal()
 
     const [isLoading, setIsLoading] = useState(false)
-    const [wallets, setWallets] = useState<CloudKitWallet[] | DrivetWallet[]>([])
+    const [wallets, setWallets] = useState<CloudKitWallet[] | DriveWallet[]>([])
 
     const getAllLanguageCodes = useCallback(() => {
         const locales = RNLocalize.getLocales()
