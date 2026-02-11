@@ -5216,24 +5216,19 @@ type RootTranslation = {
 	 */
 	SMART_WALLET_REAUTH_TITLE: string
 	/**
-	 * Y​o​u​r​ ​S​m​a​r​t​ ​A​c​c​o​u​n​t​ ​"​{​n​a​m​e​}​"​ ​(​{​a​d​d​r​e​s​s​}​)​ ​i​s​ ​l​i​n​k​e​d​ ​t​o​ ​{​p​r​o​v​i​d​e​r​s​}​.​ ​S​i​g​n​ ​i​n​ ​t​o​ ​k​e​e​p​ ​u​s​i​n​g​ ​i​t​,​ ​o​r​ ​s​w​i​t​c​h​ ​t​o​ ​a​ ​s​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t​ ​b​e​l​o​w​.
-	 * @param {string} address
-	 * @param {string} name
-	 * @param {string} providers
+	 * S​i​g​n​ ​i​n​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​s​m​a​r​t​ ​a​c​c​o​u​n​t
 	 */
-	SMART_WALLET_REAUTH_DESCRIPTION: RequiredParams<'address' | 'name' | 'providers'>
+	SMART_WALLET_REAUTH_DESCRIPTION: string
 	/**
-	 * Y​o​u​r​ ​S​m​a​r​t​ ​A​c​c​o​u​n​t​ ​"​{​n​a​m​e​}​"​ ​(​{​a​d​d​r​e​s​s​}​)​ ​r​e​q​u​i​r​e​s​ ​r​e​-​a​u​t​h​e​n​t​i​c​a​t​i​o​n​.​ ​S​i​g​n​ ​i​n​ ​t​o​ ​k​e​e​p​ ​u​s​i​n​g​ ​i​t​,​ ​o​r​ ​s​w​i​t​c​h​ ​t​o​ ​a​ ​s​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t​ ​b​e​l​o​w​.
-	 * @param {string} address
-	 * @param {string} name
+	 * S​m​a​r​t​ ​A​c​c​o​u​n​t
 	 */
-	SMART_WALLET_REAUTH_DESCRIPTION_NO_PROVIDERS: RequiredParams<'address' | 'name'>
+	SMART_WALLET_REAUTH_SMART_ACCOUNT_LABEL: string
 	/**
 	 * W​h​y​ ​d​o​ ​I​ ​n​e​e​d​ ​t​o​ ​s​i​g​n​ ​i​n​?
 	 */
 	SMART_WALLET_REAUTH_WHY_SIGN_IN: string
 	/**
-	 * Y​o​u​r​ ​s​e​s​s​i​o​n​ ​e​x​p​i​r​e​d​.​ ​S​i​g​n​i​n​g​ ​i​n​ ​a​g​a​i​n​ ​p​r​o​v​e​s​ ​i​t​'​s​ ​y​o​u​ ​a​n​d​ ​u​n​l​o​c​k​s​ ​t​h​i​s​ ​S​m​a​r​t​ ​A​c​c​o​u​n​t​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.​ ​W​e​ ​d​o​n​'​t​ ​m​o​v​e​ ​f​u​n​d​s​ ​w​h​e​n​ ​y​o​u​ ​s​w​i​t​c​h​ ​w​a​l​l​e​t​s​.
+	 * Y​o​u​r​ ​s​e​s​s​i​o​n​ ​e​x​p​i​r​e​d​.​ ​S​i​g​n​i​n​g​ ​i​n​ ​a​g​a​i​n​ ​p​r​o​v​e​s​ ​i​t​'​s​ ​y​o​u​ ​a​n​d​ ​u​n​l​o​c​k​s​ ​t​h​i​s​ ​S​m​a​r​t​ ​A​c​c​o​u​n​t​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.
 	 */
 	SMART_WALLET_REAUTH_WHY_SIGN_IN_DESCRIPTION: string
 	/**
@@ -11348,19 +11343,19 @@ Here's what it's all about:
 	 */
 	SMART_WALLET_REAUTH_TITLE: () => LocalizedString
 	/**
-	 * Your Smart Account "{name}" ({address}) is linked to {providers}. Sign in to keep using it, or switch to a self-custody wallet below.
+	 * Sign in to unlock your smart account
 	 */
-	SMART_WALLET_REAUTH_DESCRIPTION: (arg: { address: string, name: string, providers: string }) => LocalizedString
+	SMART_WALLET_REAUTH_DESCRIPTION: () => LocalizedString
 	/**
-	 * Your Smart Account "{name}" ({address}) requires re-authentication. Sign in to keep using it, or switch to a self-custody wallet below.
+	 * Smart Account
 	 */
-	SMART_WALLET_REAUTH_DESCRIPTION_NO_PROVIDERS: (arg: { address: string, name: string }) => LocalizedString
+	SMART_WALLET_REAUTH_SMART_ACCOUNT_LABEL: () => LocalizedString
 	/**
 	 * Why do I need to sign in?
 	 */
 	SMART_WALLET_REAUTH_WHY_SIGN_IN: () => LocalizedString
 	/**
-	 * Your session expired. Signing in again proves it's you and unlocks this Smart Account on this device. We don't move funds when you switch wallets.
+	 * Your session expired. Signing in again proves it's you and unlocks this Smart Account on this device.
 	 */
 	SMART_WALLET_REAUTH_WHY_SIGN_IN_DESCRIPTION: () => LocalizedString
 	/**
@@ -11371,7 +11366,7 @@ Here's what it's all about:
 	 * Switch the active wallet on this device. This won't move any funds.
 	 */
 	SMART_WALLET_REAUTH_SELF_CUSTODY_DESCRIPTION: () => LocalizedString
-	/*
+	/**
 	 * Link now
 	 */
 	SMART_WALLET_LINK_MODAL_BUTTON: () => LocalizedString

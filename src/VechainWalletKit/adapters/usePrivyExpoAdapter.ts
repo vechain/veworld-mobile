@@ -26,7 +26,7 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
     const unlinkOAuth = useUnlinkOAuth()
     const linkOAuth = useLinkWithOAuth()
 
-    const isAuthenticated = !!user
+    const isAuthenticated = false
 
     const linkedAccounts: LinkedAccount[] = useMemo(() => {
         if (!user?.linked_accounts) return []
