@@ -65,6 +65,10 @@ export const SmartWalletBackupBottomSheet = () => {
             return
         }
 
+        if (isLoading) {
+            return
+        }
+
         const address = selectedAccount.device?.rootAddress ?? ""
         const now = moment()
 
