@@ -8,6 +8,7 @@ import { SwitchStack } from "~Navigation"
 import { PlatformUtils } from "~Utils"
 import { AnimatedSplashScreen } from "./AnimatedSplashScreen"
 import { AppLoader } from "./AppLoader"
+import { SmartWalletAuthGate } from "~Components/Providers/SmartWalletAuthGate"
 const { ScreenShieldRN } = NativeModules
 
 export const EntryPoint = () => {
@@ -54,6 +55,7 @@ export const EntryPoint = () => {
                     <AppLoader>
                         <BaseStatusBar root />
                         <SwitchStack />
+                        <SmartWalletAuthGate />
                     </AppLoader>
                 </AnimatedSplashScreen>
             </PlatformAutolock>

@@ -24,6 +24,7 @@ export const SmartWalletFallbackProvider: React.FC<SmartWalletFallbackProviderPr
         (): SmartWalletContext => ({
             // Authentication state - always disabled
             isAuthenticated: false,
+            isReady: true,
             isLoading: false,
             isInitialized: false,
 

@@ -8,6 +8,8 @@ import { getSmartAccount } from "../utils/smartAccount"
 import { WalletError, WalletErrorType } from "../utils/errors"
 import { SmartAccountTransactionConfig, SmartWalletContext } from "../types"
 import { buildSmartAccountTransaction } from "../utils/transactionBuilder"
+import { useAppDispatch } from "~Storage/Redux"
+import { updateDeviceLinkedProviders } from "~Storage/Redux/Slices/Device"
 export interface SmartWalletProps {
     children: React.ReactNode
     config: VechainWalletSDKConfig
@@ -32,6 +34,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
     const previousConfigRef = useRef<NetworkConfig | null>(null)
+    const dispatch = useAppDispatch()
 
     const initialiseWallet = useCallback(async (): Promise<void> => {
         if (!adapter.isAuthenticated) {
@@ -104,6 +107,19 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             setIsLoading(false)
         }
     }, [adapter.isAuthenticated])
+
+    // Sync linked providers from Privy to Redux when wallet is initialized
+    useEffect(() => {
+        if (isInitialised && smartAccountAddress && adapter.linkedAccounts.length > 0) {
+            const linkedProviders = adapter.linkedAccounts.map(acc => acc.type)
+            dispatch(
+                updateDeviceLinkedProviders({
+                    rootAddress: smartAccountAddress,
+                    linkedProviders,
+                }),
+            )
+        }
+    }, [isInitialised, smartAccountAddress, adapter.linkedAccounts, dispatch])
 
     const signMessage = useCallback(
         async (message: Buffer): Promise<Buffer> => {
@@ -268,6 +284,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             isLoading,
             isInitialized: isInitialised,
             isAuthenticated: adapter.isAuthenticated,
+            isReady: adapter.isReady,
             linkedAccounts: adapter.linkedAccounts,
             userDisplayName: adapter.userDisplayName,
             initialiseWallet,
@@ -282,6 +299,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         [
             ownerAddress,
             adapter.isAuthenticated,
+            adapter.isReady,
             adapter.linkedAccounts,
             adapter.userDisplayName,
             smartAccountAddress,

@@ -18,6 +18,7 @@ import { OnboardingB3MO, OnboardingStardust } from "~Assets/Lottie"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
 import { useSocialWalletLogin } from "./useSocialWalletLogin"
 import { CreatePasswordModal } from "../../../../Components"
+import { useSmartWallet } from "~Hooks/useSmartWallet"
 
 export const WelcomeScreenV2 = () => {
     const termsOfServiceUrl = process.env.REACT_APP_TERMS_OF_SERVICE_URL
@@ -46,6 +47,8 @@ export const WelcomeScreenV2 = () => {
         [dispatch, setLocale],
     )
 
+    const { linkedAccounts } = useSmartWallet()
+
     const {
         isOpen,
         onSuccess,
@@ -60,8 +63,22 @@ export const WelcomeScreenV2 = () => {
         clearPendingState: clearSocialPendingState,
         pendingAddress: socialPendingAddress,
     } = useSocialWalletLogin({
-        onCreateSmartWallet,
-        onSmartWalletPinSuccess,
+        onCreateSmartWallet: useCallback(
+            async ({ address, name }) => {
+                // Convert linkedAccounts to provider array
+                const linkedProviders = linkedAccounts.map(acc => acc.type)
+                await onCreateSmartWallet({ address, name, linkedProviders })
+            },
+            [linkedAccounts, onCreateSmartWallet],
+        ),
+        onSmartWalletPinSuccess: useCallback(
+            async ({ pin, address, name }) => {
+                // Convert linkedAccounts to provider array
+                const linkedProviders = linkedAccounts.map(acc => acc.type)
+                await onSmartWalletPinSuccess({ pin, address, name, linkedProviders })
+            },
+            [linkedAccounts, onSmartWalletPinSuccess],
+        ),
     })
 
     const handleGoogleLogin = useCallback(() => handleSocialLogin("google"), [handleSocialLogin])

@@ -9,6 +9,7 @@ import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
 import { isEmpty } from "lodash"
 import { DerivationPath } from "~Constants"
+import { SocialProvider } from "~VechainWalletKit/types/wallet"
 
 export const useHandleWalletCreation = () => {
     const biometrics = useBiometrics()
@@ -76,13 +77,22 @@ export const useHandleWalletCreation = () => {
     )
 
     const onCreateSmartWallet = useCallback(
-        async ({ address, name }: { address: string; name?: string }) => {
+        async ({
+            address,
+            name,
+            linkedProviders,
+        }: {
+            address: string
+            name?: string
+            linkedProviders?: SocialProvider[]
+        }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
                 dispatch(setIsAppLoading(true))
                 await WalletEncryptionKeyHelper.init()
                 await createSmartWallet({
                     address,
                     name,
+                    linkedProviders,
                     onError: onWalletCreationError,
                 })
                 await migrateOnboarding(SecurityLevelType.BIOMETRIC)
@@ -128,13 +138,24 @@ export const useHandleWalletCreation = () => {
     )
 
     const onSmartWalletPinSuccess = useCallback(
-        async ({ pin, address, name }: { pin: string; address: string; name?: string }) => {
+        async ({
+            pin,
+            address,
+            name,
+            linkedProviders,
+        }: {
+            pin: string
+            address: string
+            name?: string
+            linkedProviders?: SocialProvider[]
+        }) => {
             onClose()
             dispatch(setIsAppLoading(true))
             await WalletEncryptionKeyHelper.init(pin)
             await createSmartWallet({
                 address,
                 name,
+                linkedProviders,
                 onError: onWalletCreationError,
             })
             await migrateOnboarding(SecurityLevelType.SECRET, pin)

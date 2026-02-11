@@ -5179,6 +5179,22 @@ type RootTranslation = {
 	 */
 	SMART_WALLET_DELEGATION_NOT_SUPPORTED: string
 	/**
+	 * Re-authentication Required
+	 */
+	SMART_WALLET_REAUTH_TITLE: string
+	/**
+	 * Please authenticate to continue
+	 */
+	SMART_WALLET_REAUTH_DESCRIPTION: string
+	/**
+	 * Please authenticate your smart account to continue
+	 */
+	SMART_WALLET_REAUTH_DESCRIPTION_GENERIC: string
+	/**
+	 * Switch to other wallet
+	 */
+	SMART_WALLET_REAUTH_SWITCH_WALLET: string
+	/**
 	 * A​P​Y
 	 */
 	STARGATE_APY: string
@@ -11233,6 +11249,22 @@ Here's what it's all about:
 	 * Delegated smart wallet not supported yet
 	 */
 	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
+	/**
+	 * Re-authentication Required
+	 */
+	SMART_WALLET_REAUTH_TITLE: () => LocalizedString
+	/**
+	 * Please authenticate to continue
+	 */
+	SMART_WALLET_REAUTH_DESCRIPTION: () => LocalizedString
+	/**
+	 * Please authenticate your smart account to continue
+	 */
+	SMART_WALLET_REAUTH_DESCRIPTION_GENERIC: () => LocalizedString
+	/**
+	 * Switch to other wallet
+	 */
+	SMART_WALLET_REAUTH_SWITCH_WALLET: () => LocalizedString
 	/**
 	 * APY
 	 */
