@@ -649,7 +649,7 @@ const light: Colors = {
         borderLight: COLORS.ORANGE_100,
         icon: COLORS.ORANGE_500,
         title: COLORS.ORANGE_700,
-        titleInline: COLORS.ORANGE_100,
+        titleInline: COLORS.ORANGE_700,
     },
     actionBanner: {
         background: COLORS.PRIMARY_100,
@@ -1055,7 +1055,7 @@ const dark: Colors = {
         borderLight: COLORS.ORANGE_100,
         icon: COLORS.ORANGE_500,
         title: COLORS.ORANGE_700,
-        titleInline: COLORS.ORANGE_100,
+        titleInline: COLORS.ORANGE_200,
     },
     actionBanner: {
         background: COLORS.PURPLE,
