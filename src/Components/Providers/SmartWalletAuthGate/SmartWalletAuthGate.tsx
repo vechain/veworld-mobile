@@ -38,24 +38,20 @@ export const SmartWalletAuthGate = () => {
 
 const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STATUS }) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    const visibleAccounts = useAppSelector(selectVisibleAccounts)
     const { login, isAuthenticated, isReady } = useSmartWallet()
     const { onSetSelectedAccount } = useSetSelectedAccount()
-    const alternativeWallets = useMemo(
-        () => visibleAccounts.filter(account => account.device.type !== DEVICE_TYPE.SMART_WALLET),
-        [visibleAccounts],
-    )
-    const hasAlternativeWallets = alternativeWallets.length > 0
-    const safeAreInset = useSafeAreaInsets()
-    const { styles, theme } = useThemedStyles(baseStyles(false, safeAreInset.bottom))
+    const visibleAccounts = useAppSelector(selectVisibleAccounts)
+    const safeAreaInset = useSafeAreaInsets()
+    const { styles, theme } = useThemedStyles(baseStyles(false, safeAreaInset.bottom))
     const { LL } = useI18nContext()
     const { ref: infoBsRef, onOpenPlain: openInfoBs } = useBottomSheetModal()
 
     const isSmartAccount = selectedAccount?.device?.type === DEVICE_TYPE.SMART_WALLET
-    const smartDevice = isSmartAccount ? (selectedAccount.device as SmartWalletDevice) : null
-    const linkedProviders: SocialProvider[] = smartDevice?.linkedProviders || []
 
-    const needsAuth = walletStatus === WALLET_STATUS.UNLOCKED && isSmartAccount && isReady && !isAuthenticated
+    const alternativeWallets = useMemo(
+        () => visibleAccounts.filter(account => account.device.type !== DEVICE_TYPE.SMART_WALLET),
+        [visibleAccounts],
+    )
 
     const sections = useMemo(() => {
         const groupedAccounts = alternativeWallets.reduce((acc, curr) => {
@@ -79,11 +75,16 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
         [onSetSelectedAccount],
     )
 
-    // Fallback: show both buttons if no providers stored (legacy accounts)
+    const needsAuth = walletStatus === WALLET_STATUS.UNLOCKED && isSmartAccount && isReady && !isAuthenticated
+    if (!needsAuth) return null
+
+    const hasAlternativeWallets = alternativeWallets.length > 0
+    const smartDevice = isSmartAccount ? (selectedAccount.device as SmartWalletDevice) : null
+    const linkedProviders: SocialProvider[] = smartDevice?.linkedProviders || []
+
+    // Fallback: show both buttons if no providers stored
     const showGoogle = linkedProviders.length === 0 || linkedProviders.includes("google")
     const showApple = (linkedProviders.length === 0 || linkedProviders.includes("apple")) && PlatformUtils.isIOS()
-
-    if (!needsAuth) return null
 
     return (
         <BaseView style={styles.overlay}>
