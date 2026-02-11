@@ -94,7 +94,6 @@ export const HomeScreen = () => {
         dispatch(setAppResetTimestamp())
     }, [dispatch])
 
-
     const { LL } = useI18nContext()
     // Pull down to refresh
     const [refreshing, setRefreshing] = React.useState(false)
