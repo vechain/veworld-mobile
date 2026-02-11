@@ -1351,6 +1351,14 @@ type RootTranslation = {
 	 */
 	BS_INFO_IMPORTING_WITH_KEYS_TITLE: string
 	/**
+	 * L​i​n​k​i​n​g​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​t​o​ ​m​u​l​t​i​p​l​e​ ​a​c​c​o​u​n​t​s​ ​l​e​t​s​ ​y​o​u​ ​r​e​c​o​v​e​r​ ​t​h​e​ ​s​a​m​e​ ​w​a​l​l​e​t​ ​o​n​ ​d​i​f​f​e​r​e​n​t​ ​p​l​a​t​f​o​r​m​s​ ​a​n​d​ ​w​i​t​h​ ​d​i​f​f​e​r​e​n​t​ ​s​i​g​n​-​i​n​ ​m​e​t​h​o​d​s​.​ ​T​h​i​s​ ​i​m​p​r​o​v​e​s​ ​s​e​c​u​r​i​t​y​ ​a​n​d​ ​g​r​e​a​t​l​y​ ​r​e​d​u​c​e​s​ ​t​h​e​ ​r​i​s​k​ ​o​f​ ​l​o​s​i​n​g​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	BS_INFO_LINKING_ACCOUNTS_DESCRIPTION: string
+	/**
+	 * L​i​n​k​i​n​g​ ​A​c​c​o​u​n​t​s
+	 */
+	BS_INFO_LINKING_ACCOUNTS_TITLE: string
+	/**
 	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
 	BTN_ADD_ACCOUNT: string
@@ -3110,6 +3118,22 @@ type RootTranslation = {
 	 */
 	FEBRUARY: string
 	/**
+	 * A​c​c​o​u​n​t​ ​l​i​n​k​e​d​!
+	 */
+	FEEDBACK_ACCOUNT_LINKED: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​l​i​n​k​ ​a​c​c​o​u​n​t
+	 */
+	FEEDBACK_ACCOUNT_LINKED_FAIL: string
+	/**
+	 * A​c​c​o​u​n​t​ ​u​n​l​i​n​k​e​d​!
+	 */
+	FEEDBACK_ACCOUNT_UNLINKED: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​u​n​l​i​n​k​ ​a​c​c​o​u​n​t
+	 */
+	FEEDBACK_ACCOUNT_UNLINKED_FAIL: string
+	/**
 	 * A​p​p​ ​c​o​n​n​e​c​t​e​d​!
 	 */
 	FEEDBACK_APP_CONNECTED: string
@@ -4288,6 +4312,15 @@ type RootTranslation = {
 	 */
 	SB_CONFIRM_PIN: string
 	/**
+	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​u​n​l​i​n​k​ ​t​h​i​s​ ​a​c​c​o​u​n​t​?​ ​B​y​ ​u​n​l​i​n​k​i​n​g​ ​y​o​u​r​ ​a​c​c​o​u​n​t​,​ ​y​o​u​ ​w​i​l​l​ ​n​o​ ​l​o​n​g​e​r​ ​b​e​ ​a​b​l​e​ ​t​o​ ​a​c​c​e​s​s​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​{​p​r​o​v​i​d​e​r​}
+	 * @param {string} provider
+	 */
+	SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION: RequiredParams<'provider'>
+	/**
+	 * U​n​l​i​n​k​ ​a​c​c​o​u​n​t
+	 */
+	SB_CONFIRM_UNLINK_ACCOUNT_TITLE: string
+	/**
 	 * Y​o​u​r​ ​c​o​n​t​a​c​t​ ​l​i​s​t​ ​i​s​ ​e​m​p​t​y
 	 */
 	SB_CONTACT_LIST_EMPTY: string
@@ -5211,6 +5244,18 @@ type RootTranslation = {
 	 * S​w​i​t​c​h​ ​t​h​e​ ​a​c​t​i​v​e​ ​w​a​l​l​e​t​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.​ ​T​h​i​s​ ​w​o​n​'​t​ ​m​o​v​e​ ​a​n​y​ ​f​u​n​d​s​.
 	 */
 	SMART_WALLET_REAUTH_SELF_CUSTODY_DESCRIPTION: string
+	/**
+	 * L​i​n​k​ ​n​o​w
+	 */
+	SMART_WALLET_LINK_MODAL_BUTTON: string
+	/**
+	 * L​i​n​k​ ​y​o​u​r​ ​s​m​a​r​t​ ​w​a​l​l​e​t​ ​t​o​ ​a​n​o​t​h​e​r​ ​a​c​c​o​u​n​t​ ​s​o​ ​y​o​u​ ​c​a​n​ ​s​i​g​n​ ​i​n​ ​o​n​ ​d​i​f​f​e​r​e​n​t​ ​p​l​a​t​f​o​r​m​s​ ​a​n​d​ ​r​e​c​o​v​e​r​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​f​ ​n​e​e​d​e​d​.​ ​T​h​i​s​ ​a​l​s​o​ ​i​m​p​r​o​v​e​s​ ​s​e​c​u​r​i​t​y​ ​b​y​ ​g​i​v​i​n​g​ ​y​o​u​ ​m​o​r​e​ ​w​a​y​s​ ​t​o​ ​a​c​c​e​s​s​ ​a​n​d​ ​p​r​o​t​e​c​t​ ​y​o​u​r​ ​f​u​n​d​s​.
+	 */
+	SMART_WALLET_LINK_MODAL_SUBTITLE: string
+	/**
+	 * L​i​n​k​ ​y​o​u​r​ ​a​c​c​o​u​n​t
+	 */
+	SMART_WALLET_LINK_MODAL_TITLE: string
 	/**
 	 * A​P​Y
 	 */
@@ -7492,6 +7537,14 @@ Thanks for your patience!
 	 */
 	BS_INFO_IMPORTING_WITH_KEYS_TITLE: () => LocalizedString
 	/**
+	 * Linking your wallet to multiple accounts lets you recover the same wallet on different platforms and with different sign-in methods. This improves security and greatly reduces the risk of losing access to your wallet.
+	 */
+	BS_INFO_LINKING_ACCOUNTS_DESCRIPTION: () => LocalizedString
+	/**
+	 * Linking Accounts
+	 */
+	BS_INFO_LINKING_ACCOUNTS_TITLE: () => LocalizedString
+	/**
 	 * ADD ACCOUNT
 	 */
 	BTN_ADD_ACCOUNT: () => LocalizedString
@@ -9238,6 +9291,22 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	FEBRUARY: () => LocalizedString
 	/**
+	 * Account linked!
+	 */
+	FEEDBACK_ACCOUNT_LINKED: () => LocalizedString
+	/**
+	 * Failed to link account
+	 */
+	FEEDBACK_ACCOUNT_LINKED_FAIL: () => LocalizedString
+	/**
+	 * Account unlinked!
+	 */
+	FEEDBACK_ACCOUNT_UNLINKED: () => LocalizedString
+	/**
+	 * Failed to unlink account
+	 */
+	FEEDBACK_ACCOUNT_UNLINKED_FAIL: () => LocalizedString
+	/**
 	 * App connected!
 	 */
 	FEEDBACK_APP_CONNECTED: () => LocalizedString
@@ -10391,6 +10460,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	SB_CONFIRM_PIN: () => LocalizedString
 	/**
+	 * Are you sure you want to unlink this account? By unlinking your account, you will no longer be able to access this wallet with {provider}
+	 */
+	SB_CONFIRM_UNLINK_ACCOUNT_DESCRIPTION: (arg: { provider: string }) => LocalizedString
+	/**
+	 * Unlink account
+	 */
+	SB_CONFIRM_UNLINK_ACCOUNT_TITLE: () => LocalizedString
+	/**
 	 * Your contact list is empty
 	 */
 	SB_CONTACT_LIST_EMPTY: () => LocalizedString
@@ -11294,6 +11371,18 @@ Here's what it's all about:
 	 * Switch the active wallet on this device. This won't move any funds.
 	 */
 	SMART_WALLET_REAUTH_SELF_CUSTODY_DESCRIPTION: () => LocalizedString
+	/*
+	 * Link now
+	 */
+	SMART_WALLET_LINK_MODAL_BUTTON: () => LocalizedString
+	/**
+	 * Link your smart wallet to another account so you can sign in on different platforms and recover your wallet if needed. This also improves security by giving you more ways to access and protect your funds.
+	 */
+	SMART_WALLET_LINK_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Link your account
+	 */
+	SMART_WALLET_LINK_MODAL_TITLE: () => LocalizedString
 	/**
 	 * APY
 	 */

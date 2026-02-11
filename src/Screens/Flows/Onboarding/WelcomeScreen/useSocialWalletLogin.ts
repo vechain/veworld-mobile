@@ -33,12 +33,12 @@ export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSucc
                 await login({ provider, oauthRedirectUri: "/auth/callback" })
                 // After login resolves, wait for useEffect to detect
                 // smartAccountAddress is populated by privy
-            } catch (error) {
+            } catch {
                 setPendingProvider(null)
                 Feedback.show({
                     severity: FeedbackSeverity.ERROR,
                     type: FeedbackType.ALERT,
-                    message: LL.COMMON_BTN_TRY_AGAIN(),
+                    message: LL.ERROR_GENERIC_SUBTITLE(),
                     icon: "icon-alert-circle",
                 })
             }

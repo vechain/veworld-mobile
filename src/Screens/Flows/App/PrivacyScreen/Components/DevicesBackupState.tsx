@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from "react"
 import { FlatList } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, CardWithHeader, WalletBackupStatusRow } from "~Components"
 import { COLORS } from "~Constants"
+import { useSmartWallet } from "~Hooks/useSmartWallet"
 import { useI18nContext } from "~i18n"
 import { BaseDevice, DEVICE_TYPE, LocalDevice } from "~Model"
 
@@ -11,7 +12,7 @@ type Props = {
 }
 
 type StatusConfig = {
-    variant: "success" | "error" | "neutral"
+    variant: "success" | "error" | "warning" | "neutral"
     statusText?: string
 }
 
@@ -19,6 +20,7 @@ const ItemSeparator = React.memo(() => <BaseSpacer height={4} />)
 
 export const DevicesBackupState = ({ devices, onPress }: Props) => {
     const { LL } = useI18nContext()
+    const { hasMultipleSocials } = useSmartWallet()
 
     const handlePress = useCallback(
         (item: BaseDevice) => {
@@ -31,18 +33,31 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
 
     const getStatusConfig = useCallback(
         (item: BaseDevice): StatusConfig => {
-            if (item.type !== DEVICE_TYPE.LOCAL_MNEMONIC && item.type !== DEVICE_TYPE.LOCAL_PRIVATE_KEY) {
+            if (item.type === DEVICE_TYPE.SMART_WALLET && !hasMultipleSocials) {
+                return { variant: "warning" }
+            }
+
+            if (
+                item.type !== DEVICE_TYPE.LOCAL_MNEMONIC &&
+                item.type !== DEVICE_TYPE.LOCAL_PRIVATE_KEY &&
+                item.type !== DEVICE_TYPE.SMART_WALLET
+            ) {
                 return {
                     variant: "neutral",
                     statusText: LL.BD_CANT_BE_BACKED_UP(),
                 }
             }
-            if (item.isBuckedUp || item.isBackedUpManual) {
+
+            if (
+                item.isBuckedUp ||
+                item.isBackedUpManual ||
+                (item.type === DEVICE_TYPE.SMART_WALLET && hasMultipleSocials)
+            ) {
                 return { variant: "success" }
             }
             return { variant: "error" }
         },
-        [LL],
+        [LL, hasMultipleSocials],
     )
 
     const keyExtractor = useCallback((device: BaseDevice) => device.rootAddress, [])

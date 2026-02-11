@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
-import { Device, LocalDevice } from "~Model"
+import { Device, LocalDevice, SmartWalletDevice } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import {
@@ -19,6 +19,7 @@ import {
     ResetAppScreen,
     SettingsScreen,
     SettingsTransactionsScreen,
+    SmartWalletLinkAccountScreen,
     TabsManagerScreen,
     UsernameClaimed,
     WalletDetailScreen,
@@ -64,6 +65,9 @@ export type RootStackParamListSettings = {
             | Routes.ACTIVITY_STAKING
             | Routes.APPS
             | Routes.COLLECTIBLES_COLLECTION_DETAILS
+    }
+    [Routes.SMART_WALLET_LINK_ACCOUNT]: {
+        device: SmartWalletDevice
     }
 }
 
@@ -202,6 +206,11 @@ export const SettingsStack = () => {
                     gestureDirection: "vertical",
                     gestureEnabled: true,
                 }}
+            />
+            <Settings.Screen
+                name={Routes.SMART_WALLET_LINK_ACCOUNT}
+                component={SmartWalletLinkAccountScreen}
+                options={{ headerShown: false }}
             />
         </Settings.Navigator>
     )

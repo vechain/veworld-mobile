@@ -2,7 +2,7 @@ import { createSelector } from "@reduxjs/toolkit"
 import { ActivityStatus } from "~Model"
 import { ActivityUtils, AddressUtils } from "~Utils"
 import { RootState } from "../Types"
-import { selectSelectedAccount } from "./Account"
+import { selectSelectedAccountOrNull } from "./Account"
 import { selectSelectedNetwork } from "./Network"
 
 export const selectActivitiesState = (state: RootState) => state.activities
@@ -16,8 +16,11 @@ export const selectAllActivities = createSelector(selectActivitiesState, state =
 })
 
 export const selectAllActivitiesByAccountAddressAndNetwork = createSelector(
-    [selectAllActivities, selectSelectedNetwork, selectSelectedAccount],
+    [selectAllActivities, selectSelectedNetwork, selectSelectedAccountOrNull],
     (activities, network, account) => {
+        if (!account) {
+            return []
+        }
         return activities.filter(
             activity =>
                 AddressUtils.compareAddresses(activity.from, account.address) &&

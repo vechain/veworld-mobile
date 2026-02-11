@@ -1,14 +1,15 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { FlatList, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseSpacer, BaseText, BaseView, CardListItem } from "~Components"
 import { AnalyticsEvent, ColorThemeType } from "~Constants"
-import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useCloudBackup, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { IconKey } from "~Model"
+import { CloudKitWallet, DriveWallet, IconKey } from "~Model"
 import { Routes } from "~Navigation"
 import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
+import { PlatformUtils } from "~Utils"
 
 type Props = {
     onClose: () => void
@@ -17,11 +18,29 @@ type Props = {
 
 export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ onClose, handleOnCreateWallet }, ref) => {
+        const [wallets, setWallets] = useState<CloudKitWallet[] | DriveWallet[]>([])
+
         const { LL } = useI18nContext()
         const nav = useNavigation()
         const { styles } = useThemedStyles(baseStyles)
         const track = useAnalyticTracking()
         const userHasOnboarded = useAppSelector(selectHasOnboarded)
+        const { isCloudAvailable, getAllWalletFromCloud } = useCloudBackup()
+
+        useEffect(() => {
+            const init = async () => {
+                const _wallets = await getAllWalletFromCloud()
+                setWallets(_wallets)
+            }
+
+            if (isCloudAvailable && PlatformUtils.isIOS()) init()
+        }, [isCloudAvailable, getAllWalletFromCloud])
+
+        const navigateToImportFromCloud = useCallback(() => {
+            track(AnalyticsEvent.SELECT_WALLET_IMPORT_CLOUD)
+            onClose()
+            nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets })
+        }, [nav, onClose, track, wallets])
 
         const navigateToImportLocalWallet = useCallback(() => {
             track(AnalyticsEvent.SELECT_WALLET_IMPORT_MNEMONIC)
@@ -53,6 +72,13 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
                     action: handleOnCreateWallet,
                 },
                 {
+                    id: "cloud",
+                    title: LL.SB_TITLE_IMPORT_FROM_CLOUD(),
+                    description: LL.SB_DESCRIPTION_IMPORT_FROM_CLOUD(),
+                    icon: "icon-cloud",
+                    action: navigateToImportFromCloud,
+                },
+                {
                     id: "import",
                     title: LL.SB_TITLE_IMPORT_WITH_KEYS(),
                     description: LL.SB_DESCRIPTION_IMPORT_WITH_KEYS(),
@@ -74,7 +100,14 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
                     action: onObserveWallet,
                 },
             ]
-        }, [LL, handleOnCreateWallet, navigateToImportLocalWallet, navigateToImportHardwareWallet, onObserveWallet])
+        }, [
+            LL,
+            handleOnCreateWallet,
+            navigateToImportFromCloud,
+            navigateToImportLocalWallet,
+            navigateToImportHardwareWallet,
+            onObserveWallet,
+        ])
 
         const ItemsSeparator = useCallback(() => {
             return <BaseSpacer height={16} />
@@ -84,6 +117,9 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
             return options.filter(option => {
                 if (option.id === "observe") {
                     return userHasOnboarded
+                }
+                if (option.id === "cloud") {
+                    return PlatformUtils.isIOS()
                 }
                 return true
             })

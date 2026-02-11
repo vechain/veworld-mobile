@@ -38,6 +38,11 @@ jest.mock("@privy-io/expo", () => ({
     usePrivy: jest.fn(() => mockUserState),
     useEmbeddedEthereumWallet: jest.fn(() => mockWalletState),
     useLoginWithOAuth: jest.fn(() => mockOAuthState),
+    useUnlinkOAuth: jest.fn(() => ({ unlinkOAuth: jest.fn() })),
+    useLinkWithOAuth: jest.fn(() => ({
+        link: jest.fn(),
+        state: "none",
+    })),
     // Mock PrivyProvider to simply render children
     PrivyProvider: ({ children }: { children: React.ReactNode }) => children,
 }))

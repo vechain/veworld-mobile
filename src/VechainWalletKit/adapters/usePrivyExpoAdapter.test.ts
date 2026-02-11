@@ -55,6 +55,11 @@ jest.mock("@privy-io/expo", () => ({
     usePrivy: jest.fn(() => mockUserState),
     useEmbeddedEthereumWallet: jest.fn(() => mockWalletState),
     useLoginWithOAuth: jest.fn(() => mockOAuthState),
+    useUnlinkOAuth: jest.fn(() => jest.fn()),
+    useLinkWithOAuth: jest.fn(() => ({
+        link: jest.fn(),
+        state: "none",
+    })),
 }))
 
 // Helper functions to set mock states

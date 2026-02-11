@@ -7,6 +7,7 @@ import { selectRecentContacts } from "./Contacts"
 
 jest.mock("./Account", () => ({
     selectSelectedAccountAddress: jest.fn(),
+    selectSelectedAccountOrNull: jest.fn(),
     selectSelectedAccount: jest.fn(),
 }))
 

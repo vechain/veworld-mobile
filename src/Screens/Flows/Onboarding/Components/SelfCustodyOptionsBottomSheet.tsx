@@ -10,7 +10,7 @@ import { useBottomSheetModal } from "~Hooks/useBottomSheet"
 import { useCloudBackup } from "~Hooks/useCloudBackup"
 import { useThemedStyles } from "~Hooks/useTheme"
 import { useI18nContext } from "~i18n/i18n-react"
-import { CloudKitWallet, DrivetWallet, IconKey } from "~Model"
+import { CloudKitWallet, DriveWallet, IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { PlatformUtils } from "~Utils"
 import { useHandleWalletCreation } from "../WelcomeScreen/useHandleWalletCreation"
@@ -23,7 +23,7 @@ type Props = {
 
 export const SelfCustodyOptionsBottomSheet = ({ bsRef }: Props) => {
     const [isLoading, setIsLoading] = useState(false)
-    const [wallets, setWallets] = useState<CloudKitWallet[] | DrivetWallet[]>([])
+    const [wallets, setWallets] = useState<CloudKitWallet[] | DriveWallet[]>([])
 
     const { ref: bottomSheetRef, onClose } = useBottomSheetModal({ externalRef: bsRef })
     const { LL } = useI18nContext()

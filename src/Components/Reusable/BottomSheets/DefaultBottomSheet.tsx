@@ -23,6 +23,7 @@ type Props = {
      * @default 12
      */
     buttonsGap?: number
+    scrollable?: boolean
 }
 
 export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
@@ -40,6 +41,7 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
             backgroundColor,
             textColor,
             buttonsGap = 12,
+            scrollable = true,
         },
         ref,
     ) => {
@@ -67,6 +69,7 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 ref={ref}
                 dynamicHeight
                 noMargins
+                scrollable={scrollable}
                 style={styles.bottomSheet}
                 backgroundStyle={{ ...styles.bottomSheet, backgroundColor }}
                 enablePanDownToClose={enablePanDownToClose}

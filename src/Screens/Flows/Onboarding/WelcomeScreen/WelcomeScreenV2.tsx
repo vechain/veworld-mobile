@@ -58,6 +58,7 @@ export const WelcomeScreenV2 = () => {
     } = useHandleWalletCreation()
 
     const {
+        isLoginPending: isSocialLoginPending,
         handleLogin: handleSocialLogin,
         handlePinSuccess: handleSocialPinSuccess,
         clearPendingState: clearSocialPendingState,
@@ -90,12 +91,12 @@ export const WelcomeScreenV2 = () => {
     }, [clearSocialPendingState, onCloseCreateFlow])
 
     const handlePasswordSuccess = useCallback(
-        async (pin: string) => {
+        (pin: string) => {
             if (socialPendingAddress) {
-                await handleSocialPinSuccess(pin)
+                handleSocialPinSuccess(pin)
             } else {
                 // Self-custody wallet flow
-                await onSuccess({
+                onSuccess({
                     pin,
                     derivationPath: DerivationPath.VET,
                 })
@@ -160,6 +161,7 @@ export const WelcomeScreenV2 = () => {
                                 textProps={{ typographyFont: "bodyMedium" }}
                                 title={LL.BTN_CONTINUE_WITH_APPLE()}
                                 action={handleAppleLogin}
+                                disabled={isSocialLoginPending}
                             />
                         )}
                         <BaseButton
@@ -169,6 +171,7 @@ export const WelcomeScreenV2 = () => {
                             textProps={{ typographyFont: "bodyMedium" }}
                             title={LL.BTN_CONTINUE_WITH_GOOGLE()}
                             action={handleGoogleLogin}
+                            disabled={isSocialLoginPending}
                         />
                         <BaseText align="center" typographyFont="captionMedium">
                             {LL.COMMON_OR()}
@@ -179,6 +182,7 @@ export const WelcomeScreenV2 = () => {
                             title={LL.BTN_SELF_CUSTODY_WALLET()}
                             textProps={{ typographyFont: "bodyMedium" }}
                             action={openSelfCustodyOptionsBottomSheet}
+                            disabled={isSocialLoginPending}
                         />
                     </BaseView>
                     <BaseView alignItems="center">
