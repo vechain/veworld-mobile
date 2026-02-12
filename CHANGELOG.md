@@ -1,5 +1,12 @@
 
 
+## 2.5.2 (2026-02-12)
+
+
+### Bug Fixes
+
+* social relogin ([#3765](https://github.com/vechain/veworld-mobile/issues/3765)) ([52a9764](https://github.com/vechain/veworld-mobile/commit/52a97649a6c1fa7ff7e1936316ac00df04fff616))
+
 ## 2.5.1 (2026-01-27)
 
 
