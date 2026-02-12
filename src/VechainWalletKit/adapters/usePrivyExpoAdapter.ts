@@ -20,7 +20,7 @@ const OAUTH_TYPE_TO_PROVIDER: Record<string, SocialProvider> = {
 }
 
 export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
-    const { user, logout } = usePrivy()
+    const { user, isReady, logout } = usePrivy()
     const { wallets, create } = useEmbeddedEthereumWallet()
     const oauth = useLoginWithOAuth()
     const unlinkOAuth = useUnlinkOAuth()
@@ -61,6 +61,7 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
         const currentWallets = wallets ?? []
         return {
             isAuthenticated,
+            isReady,
             linkedAccounts,
             userDisplayName,
             hasMultipleSocials,
@@ -199,6 +200,7 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
         hasMultipleSocials,
         logout,
         create,
+        isReady,
         linkOAuth,
         unlinkOAuth,
     ])

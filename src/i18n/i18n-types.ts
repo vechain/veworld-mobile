@@ -5220,6 +5220,30 @@ type RootTranslation = {
 	 */
 	SMART_WALLET_LINK_MODAL_TITLE: string
 	/**
+	 * L​o​g​i​n​ ​f​a​i​l​e​d​,​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r
+	 */
+	SMART_WALLET_LOGIN_FAILED: string
+	/**
+	 * S​i​g​n​ ​b​a​c​k​ ​i​n​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​s​m​a​r​t​ ​w​a​l​l​e​t
+	 */
+	SMART_WALLET_REAUTH_DESCRIPTION: string
+	/**
+	 * U​s​e​ ​a​ ​s​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t
+	 */
+	SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE: string
+	/**
+	 * S​i​g​n​ ​i​n​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	SMART_WALLET_REAUTH_TITLE: string
+	/**
+	 * W​h​y​ ​d​o​ ​I​ ​n​e​e​d​ ​t​o​ ​s​i​g​n​ ​i​n​?
+	 */
+	SMART_WALLET_REAUTH_WHY_SIGN_IN: string
+	/**
+	 * Y​o​u​r​ ​s​e​s​s​i​o​n​ ​e​x​p​i​r​e​d​.​ ​S​i​g​n​i​n​g​ ​i​n​ ​a​g​a​i​n​ ​p​r​o​v​e​s​ ​i​t​'​s​ ​y​o​u​ ​a​n​d​ ​u​n​l​o​c​k​s​ ​t​h​i​s​ ​s​m​a​r​t​ ​w​a​l​l​e​t​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.
+	 */
+	SMART_WALLET_REAUTH_WHY_SIGN_IN_DESCRIPTION: string
+	/**
 	 * A​P​Y
 	 */
 	STARGATE_APY: string
@@ -11314,6 +11338,30 @@ Here's what it's all about:
 	 * Link your account
 	 */
 	SMART_WALLET_LINK_MODAL_TITLE: () => LocalizedString
+	/**
+	 * Login failed, try again later
+	 */
+	SMART_WALLET_LOGIN_FAILED: () => LocalizedString
+	/**
+	 * Sign back in to unlock your smart wallet
+	 */
+	SMART_WALLET_REAUTH_DESCRIPTION: () => LocalizedString
+	/**
+	 * Use a self-custody wallet
+	 */
+	SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE: () => LocalizedString
+	/**
+	 * Sign in to continue
+	 */
+	SMART_WALLET_REAUTH_TITLE: () => LocalizedString
+	/**
+	 * Why do I need to sign in?
+	 */
+	SMART_WALLET_REAUTH_WHY_SIGN_IN: () => LocalizedString
+	/**
+	 * Your session expired. Signing in again proves it's you and unlocks this smart wallet on this device.
+	 */
+	SMART_WALLET_REAUTH_WHY_SIGN_IN_DESCRIPTION: () => LocalizedString
 	/**
 	 * APY
 	 */

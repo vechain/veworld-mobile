@@ -33,7 +33,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
     const previousConfigRef = useRef<NetworkConfig | null>(null)
-
     const initialiseWallet = useCallback(async (): Promise<void> => {
         if (!adapter.isAuthenticated) {
             throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
@@ -278,6 +277,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             isLoading,
             isInitialized: isInitialised,
             isAuthenticated: adapter.isAuthenticated,
+            isReady: adapter.isReady,
             linkedAccounts: adapter.linkedAccounts,
             userDisplayName: adapter.userDisplayName,
             hasMultipleSocials: adapter.hasMultipleSocials,
@@ -295,6 +295,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         [
             ownerAddress,
             adapter.isAuthenticated,
+            adapter.isReady,
             adapter.linkedAccounts,
             adapter.userDisplayName,
             smartAccountAddress,
