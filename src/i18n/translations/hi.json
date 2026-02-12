@@ -1273,6 +1273,7 @@
   "SMART_WALLET_LINK_MODAL_BUTTON": "अब लिंक करें",
   "SMART_WALLET_LINK_MODAL_SUBTITLE": "अपने स्मार्ट वॉलेट को किसी अन्य खाते से लिंक करें ताकि आप विभिन्न प्लेटफार्मों पर साइन इन कर सकें और आवश्यकता पड़ने पर अपने वॉलेट को रिकवर कर सकें। यह आपको अपने फंड्स तक पहुंच और सुरक्षा के अधिक विकल्प देकर सुरक्षा भी बढ़ाता है।",
   "SMART_WALLET_LINK_MODAL_TITLE": "अपना खाता लिंक करें",
+  "SMART_WALLET_LOGIN_FAILED": "लॉगिन विफल रहा, बाद में पुनः प्रयास करें",
   "SMART_WALLET_REAUTH_DESCRIPTION": "अपने स्मार्ट अकाउंट को अनलॉक करने के लिए फिर से साइन इन करें",
   "SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE": "स्व-हिरासत वॉलेट का उपयोग करें",
   "SMART_WALLET_REAUTH_TITLE": "जारी रखने के लिए साइन इन करें",
