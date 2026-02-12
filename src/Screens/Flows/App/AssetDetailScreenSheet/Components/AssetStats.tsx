@@ -10,7 +10,7 @@ import { useI18nContext } from "~i18n"
 import { TokenSocialLinks } from "~Model"
 import { Routes } from "~Navigation"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { MarketInfo, useFormattedMarketInfo } from "../../AssetDetailScreen/Hooks/useFormattedMarketInfo"
+import { MarketInfo, useFormattedMarketInfo } from "../Hooks"
 import { AssetDescription } from "./AssetDescription"
 import { SocialLinksButtons } from "./SocialLinksButtons"
 

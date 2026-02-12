@@ -7,7 +7,7 @@ import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { useMultipleTokensBalance } from "~Hooks/useTokenBalance/useMultipleTokensBalance"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance, NETWORK_TYPE } from "~Model"
-import { AnimatedTokenCard } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/AnimatedTokenCard"
+import { AnimatedTokenCard } from "../Tokens"
 import {
     selectAllTokens,
     selectDefaultDelegationToken,

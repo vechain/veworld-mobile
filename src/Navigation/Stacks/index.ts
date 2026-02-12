@@ -3,7 +3,6 @@ export * from "./OnboardingStack"
 export * from "./SwitchStack"
 export * from "./SettingsStack"
 export * from "./CreateWalletAppStack"
-export * from "./NFTStack"
 export * from "./BuyStack"
 export * from "./HistoryStack"
 export * from "./AppsStack"
@@ -13,7 +12,6 @@ import { RootStackParamListHome } from "./HomeStack"
 import { RootStackParamListSettings } from "./SettingsStack"
 import { RootStackParamListCreateWalletApp } from "./CreateWalletAppStack"
 import { RootStackParamListSwitch } from "./SwitchStack"
-import { RootStackParamListNFT } from "./NFTStack"
 import { RootStackParamListBuy } from "./BuyStack"
 import { HistoryStackParamList } from "./HistoryStack"
 import { RootStackParamListBackupWallet } from "~Screens/Flows/App/SecurityUpgrade_V2/Navigation.standalone"
@@ -25,7 +23,6 @@ export type ScreenRootParams = RootStackParamListSwitch &
     RootStackParamListHome &
     RootStackParamListSettings &
     RootStackParamListCreateWalletApp &
-    RootStackParamListNFT &
     RootStackParamListBuy &
     HistoryStackParamList &
     RootStackParamListBackupWallet &

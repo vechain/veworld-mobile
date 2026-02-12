@@ -86,7 +86,7 @@ describe("useSignTransaction", () => {
 
     it("should render correctly", async () => {
         const { result } = renderHook(
-            () => useSignTransaction({ ...defaultProps, initialRoute: Routes.NFTS, selectedDelegationToken: "VTHO" }),
+            () => useSignTransaction({ ...defaultProps, initialRoute: Routes.HOME, selectedDelegationToken: "VTHO" }),
             {
                 wrapper: TestWrapper,
             },
@@ -104,7 +104,7 @@ describe("useSignTransaction", () => {
         })
 
         const { result } = renderHook(
-            () => useSignTransaction({ ...defaultProps, initialRoute: Routes.NFTS, selectedDelegationToken: "VTHO" }),
+            () => useSignTransaction({ ...defaultProps, initialRoute: Routes.HOME, selectedDelegationToken: "VTHO" }),
             {
                 wrapper: TestWrapper,
             },
@@ -119,7 +119,7 @@ describe("useSignTransaction", () => {
 
     it("signAndSendTransaction - no delegation works as expected", async () => {
         const { result } = renderHook(
-            () => useSignTransaction({ ...defaultProps, initialRoute: Routes.NFTS, selectedDelegationToken: "VTHO" }),
+            () => useSignTransaction({ ...defaultProps, initialRoute: Routes.HOME, selectedDelegationToken: "VTHO" }),
             {
                 wrapper: TestWrapper,
             },
@@ -195,7 +195,7 @@ describe("useSignTransaction", () => {
                         ...defaultProps,
                         selectedDelegationOption: DelegationType.URL,
                         selectedDelegationUrl: "https://vechainstats.com",
-                        initialRoute: Routes.NFTS,
+                        initialRoute: Routes.HOME,
                         selectedDelegationToken: "VTHO",
                     }),
                 { wrapper: TestWrapper },
@@ -291,7 +291,7 @@ describe("useSignTransaction", () => {
                 () =>
                     useSignTransaction({
                         buildTransaction: async () => vetTransaction1,
-                        initialRoute: Routes.NFTS,
+                        initialRoute: Routes.HOME,
                         selectedDelegationOption: DelegationType.URL,
                         // Non-VTHO token and present fee → triggers generic delegator flow
                         selectedDelegationToken: "B3TR",
