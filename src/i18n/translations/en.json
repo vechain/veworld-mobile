@@ -1278,6 +1278,7 @@
   "SMART_WALLET_REAUTH_TITLE": "Sign in to continue",
   "SMART_WALLET_REAUTH_WHY_SIGN_IN": "Why do I need to sign in?",
   "SMART_WALLET_REAUTH_WHY_SIGN_IN_DESCRIPTION": "Your session expired. Signing in again proves it's you and unlocks this Smart Account on this device.",
+  "SMART_WALLET_LOGIN_FAILED": "Login failed, try again later",
   "STARGATE_APY": "APY",
   "STARGATE_CLAIMABLE": "Claimable",
   "STARGATE_CYCLE_DURATION": "Cycle duration",

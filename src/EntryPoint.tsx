@@ -13,7 +13,7 @@ const { ScreenShieldRN } = NativeModules
 
 export const EntryPoint = () => {
     const { setIsAppReady, securityType } = useApplicationSecurity()
-    const { isLoading } = useFeatureFlags()
+    const { isLoading, smartWalletFeature } = useFeatureFlags()
 
     useEffect(() => {
         // If the feature flags are still loading, don't hide the splash screen
@@ -55,7 +55,7 @@ export const EntryPoint = () => {
                     <AppLoader>
                         <BaseStatusBar root />
                         <SwitchStack />
-                        <SmartWalletAuthGate />
+                        {smartWalletFeature?.enabled && <SmartWalletAuthGate />}
                     </AppLoader>
                 </AnimatedSplashScreen>
             </PlatformAutolock>

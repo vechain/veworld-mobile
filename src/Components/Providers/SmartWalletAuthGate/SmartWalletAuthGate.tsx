@@ -14,6 +14,8 @@ import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { SocialProvider } from "~VechainWalletKit/types/wallet"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { FeedbackSeverity, FeedbackType } from "../FeedbackProvider/Model"
+import { Feedback } from "../FeedbackProvider/Events"
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />
 const SectionSeparatorComponent = (props: BaseSectionListSeparatorProps) => {
@@ -65,9 +67,18 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
 
     const handleProviderLogin = useCallback(
         async (provider: SocialProvider) => {
-            await login({ provider, oauthRedirectUri: "/auth/callback" })
+            try {
+                await login({ provider, oauthRedirectUri: "/auth/callback" })
+            } catch (e) {
+                Feedback.show({
+                    severity: FeedbackSeverity.ERROR,
+                    type: FeedbackType.ALERT,
+                    message: LL.SMART_WALLET_LOGIN_FAILED(),
+                    icon: "icon-alert-circle",
+                })
+            }
         },
-        [login],
+        [login, LL],
     )
 
     const handleSelectAccount = useCallback(

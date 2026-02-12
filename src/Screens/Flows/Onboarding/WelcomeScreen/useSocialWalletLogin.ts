@@ -38,7 +38,7 @@ export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSucc
                 Feedback.show({
                     severity: FeedbackSeverity.ERROR,
                     type: FeedbackType.ALERT,
-                    message: LL.ERROR_GENERIC_SUBTITLE(),
+                    message: LL.SMART_WALLET_LOGIN_FAILED(),
                     icon: "icon-alert-circle",
                 })
             }
