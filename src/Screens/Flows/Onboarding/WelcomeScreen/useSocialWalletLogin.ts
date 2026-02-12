@@ -35,7 +35,7 @@ export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSucc
                 await login({ provider, oauthRedirectUri: "/auth/callback" })
                 // After login resolves, wait for useEffect to detect
                 // smartAccountAddress is populated by privy
-            } catch {
+            } catch (e) {
                 setPendingProvider(null)
                 error(ERROR_EVENTS.SMART_WALLET, "Social onboarding login failed", e)
                 Feedback.show({
