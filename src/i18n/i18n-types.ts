@@ -5220,7 +5220,11 @@ type RootTranslation = {
 	 */
 	SMART_WALLET_LINK_MODAL_TITLE: string
 	/**
-	 * S​i​g​n​ ​b​a​c​k​ ​i​n​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​s​m​a​r​t​ ​a​c​c​o​u​n​t
+	 * L​o​g​i​n​ ​f​a​i​l​e​d​,​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r
+	 */
+	SMART_WALLET_LOGIN_FAILED: string
+	/**
+	 * S​i​g​n​ ​b​a​c​k​ ​i​n​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​s​m​a​r​t​ ​w​a​l​l​e​t
 	 */
 	SMART_WALLET_REAUTH_DESCRIPTION: string
 	/**
@@ -5236,13 +5240,9 @@ type RootTranslation = {
 	 */
 	SMART_WALLET_REAUTH_WHY_SIGN_IN: string
 	/**
-	 * Y​o​u​r​ ​s​e​s​s​i​o​n​ ​e​x​p​i​r​e​d​.​ ​S​i​g​n​i​n​g​ ​i​n​ ​a​g​a​i​n​ ​p​r​o​v​e​s​ ​i​t​'​s​ ​y​o​u​ ​a​n​d​ ​u​n​l​o​c​k​s​ ​t​h​i​s​ ​S​m​a​r​t​ ​A​c​c​o​u​n​t​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.
+	 * Y​o​u​r​ ​s​e​s​s​i​o​n​ ​e​x​p​i​r​e​d​.​ ​S​i​g​n​i​n​g​ ​i​n​ ​a​g​a​i​n​ ​p​r​o​v​e​s​ ​i​t​'​s​ ​y​o​u​ ​a​n​d​ ​u​n​l​o​c​k​s​ ​t​h​i​s​ ​s​m​a​r​t​ ​w​a​l​l​e​t​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.
 	 */
 	SMART_WALLET_REAUTH_WHY_SIGN_IN_DESCRIPTION: string
-	/**
-	 * L​o​g​i​n​ ​f​a​i​l​e​d​,​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r
-	 */
-	SMART_WALLET_LOGIN_FAILED: string
 	/**
 	 * A​P​Y
 	 */
@@ -11339,7 +11339,11 @@ Here's what it's all about:
 	 */
 	SMART_WALLET_LINK_MODAL_TITLE: () => LocalizedString
 	/**
-	 * Sign back in to unlock your smart account
+	 * Login failed, try again later
+	 */
+	SMART_WALLET_LOGIN_FAILED: () => LocalizedString
+	/**
+	 * Sign back in to unlock your smart wallet
 	 */
 	SMART_WALLET_REAUTH_DESCRIPTION: () => LocalizedString
 	/**
@@ -11355,13 +11359,9 @@ Here's what it's all about:
 	 */
 	SMART_WALLET_REAUTH_WHY_SIGN_IN: () => LocalizedString
 	/**
-	 * Your session expired. Signing in again proves it's you and unlocks this Smart Account on this device.
+	 * Your session expired. Signing in again proves it's you and unlocks this smart wallet on this device.
 	 */
 	SMART_WALLET_REAUTH_WHY_SIGN_IN_DESCRIPTION: () => LocalizedString
-	/**
-	 * Login failed, try again later
-	 */
-	SMART_WALLET_LOGIN_FAILED: () => LocalizedString
 	/**
 	 * APY
 	 */
