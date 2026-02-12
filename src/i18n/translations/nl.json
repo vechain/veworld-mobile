@@ -1273,6 +1273,7 @@
   "SMART_WALLET_LINK_MODAL_BUTTON": "Nu koppelen",
   "SMART_WALLET_LINK_MODAL_SUBTITLE": "Koppel je smart wallet aan een ander account zodat je kunt inloggen op verschillende platforms en je wallet kunt herstellen als dat nodig is. Dit verbetert ook de beveiliging doordat je meer manieren hebt om toegang te krijgen tot en je geld te beschermen.",
   "SMART_WALLET_LINK_MODAL_TITLE": "Koppel je account",
+  "SMART_WALLET_LOGIN_FAILED": "Inloggen mislukt, probeer het later opnieuw",
   "SMART_WALLET_REAUTH_DESCRIPTION": "Log opnieuw in om je slimme account te ontgrendelen",
   "SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE": "Gebruik een self-custody wallet",
   "SMART_WALLET_REAUTH_TITLE": "Log in om door te gaan",

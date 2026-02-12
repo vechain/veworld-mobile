@@ -1273,6 +1273,7 @@
   "SMART_WALLET_LINK_MODAL_BUTTON": "Lier maintenant",
   "SMART_WALLET_LINK_MODAL_SUBTITLE": "Liez votre portefeuille intelligent à un autre compte afin de pouvoir vous connecter sur différentes plateformes et récupérer votre portefeuille si nécessaire. Cela améliore également la sécurité en vous offrant plus de moyens d'accéder à vos fonds et de les protéger.",
   "SMART_WALLET_LINK_MODAL_TITLE": "Liez votre compte",
+  "SMART_WALLET_LOGIN_FAILED": "Échec de la connexion, veuillez réessayer plus tard",
   "SMART_WALLET_REAUTH_DESCRIPTION": "Reconnectez-vous pour déverrouiller votre compte intelligent",
   "SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE": "Utiliser un portefeuille en auto-garde",
   "SMART_WALLET_REAUTH_TITLE": "Connectez-vous pour continuer",

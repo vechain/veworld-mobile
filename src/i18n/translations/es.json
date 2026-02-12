@@ -1273,6 +1273,7 @@
   "SMART_WALLET_LINK_MODAL_BUTTON": "Vincular ahora",
   "SMART_WALLET_LINK_MODAL_SUBTITLE": "Vincula tu billetera inteligente a otra cuenta para poder iniciar sesión en diferentes plataformas y recuperar tu billetera si es necesario. Esto también mejora la seguridad al ofrecerte más formas de acceder y proteger tus fondos.",
   "SMART_WALLET_LINK_MODAL_TITLE": "Vincula tu cuenta",
+  "SMART_WALLET_LOGIN_FAILED": "Error de inicio de sesión, inténtalo de nuevo más tarde",
   "SMART_WALLET_REAUTH_DESCRIPTION": "Vuelve a iniciar sesión para desbloquear tu cuenta inteligente",
   "SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE": "Usar una cartera de autocustodia",
   "SMART_WALLET_REAUTH_TITLE": "Inicia sesión para continuar",

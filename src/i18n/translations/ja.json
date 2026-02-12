@@ -1273,6 +1273,7 @@
   "SMART_WALLET_LINK_MODAL_BUTTON": "今すぐリンク",
   "SMART_WALLET_LINK_MODAL_SUBTITLE": "スマートウォレットを他のアカウントにリンクすることで、さまざまなプラットフォームでサインインしたり、必要に応じてウォレットを復旧したりできます。また、複数の方法で資金へアクセス・保護できるため、セキュリティも向上します。",
   "SMART_WALLET_LINK_MODAL_TITLE": "アカウントをリンクする",
+  "SMART_WALLET_LOGIN_FAILED": "ログインに失敗しました。後でもう一度お試しください。",
   "SMART_WALLET_REAUTH_DESCRIPTION": "スマートアカウントを解除するには再度サインインしてください",
   "SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE": "セルフカストディウォレットを使う",
   "SMART_WALLET_REAUTH_TITLE": "続行するにはサインインしてください",

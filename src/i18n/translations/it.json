@@ -1273,6 +1273,7 @@
   "SMART_WALLET_LINK_MODAL_BUTTON": "Collega ora",
   "SMART_WALLET_LINK_MODAL_SUBTITLE": "Collega il tuo smart wallet a un altro account per accedere da diverse piattaforme e recuperare il tuo wallet se necessario. Questo migliora anche la sicurezza, dandoti più modi per accedere e proteggere i tuoi fondi.",
   "SMART_WALLET_LINK_MODAL_TITLE": "Collega il tuo account",
+  "SMART_WALLET_LOGIN_FAILED": "Accesso non riuscito, riprova più tardi",
   "SMART_WALLET_REAUTH_DESCRIPTION": "Accedi nuovamente per sbloccare il tuo smart account",
   "SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE": "Usa un wallet self-custody",
   "SMART_WALLET_REAUTH_TITLE": "Accedi per continuare",

@@ -1273,6 +1273,7 @@
   "SMART_WALLET_LINK_MODAL_BUTTON": "立即链接",
   "SMART_WALLET_LINK_MODAL_SUBTITLE": "将您的智能钱包与其他账户关联，这样您就可以在不同平台上登录，并在需要时找回钱包。这还能通过为您提供更多访问和保护资金的方式来提升安全性。",
   "SMART_WALLET_LINK_MODAL_TITLE": "关联您的账户",
+  "SMART_WALLET_LOGIN_FAILED": "登录失败，请稍后重试",
   "SMART_WALLET_REAUTH_DESCRIPTION": "重新登录以解锁您的智能账户",
   "SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE": "使用自托管钱包",
   "SMART_WALLET_REAUTH_TITLE": "请登录以继续",
