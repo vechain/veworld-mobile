@@ -3,6 +3,8 @@ import { useSmartWallet } from "~Hooks/useSmartWallet"
 import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { useI18nContext } from "~i18n"
+import { error } from "~Utils"
+import { ERROR_EVENTS } from "~Constants"
 
 type SocialProvider = "google" | "apple"
 
@@ -35,6 +37,7 @@ export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSucc
                 // smartAccountAddress is populated by privy
             } catch {
                 setPendingProvider(null)
+                error(ERROR_EVENTS.SMART_WALLET, "Social onboarding login failed", e)
                 Feedback.show({
                     severity: FeedbackSeverity.ERROR,
                     type: FeedbackType.ALERT,

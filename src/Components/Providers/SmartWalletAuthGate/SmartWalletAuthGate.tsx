@@ -7,9 +7,9 @@ import { useWalletStatus } from "~Components/Providers/EncryptedStorageProvider/
 import { useSmartWallet } from "~Hooks/useSmartWallet"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
-import { COLORS, ColorThemeType, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
+import { COLORS, ColorThemeType, ERROR_EVENTS, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 import { AccountWithDevice, DEVICE_TYPE, SmartWalletDevice, WALLET_STATUS } from "~Model"
-import { PlatformUtils } from "~Utils"
+import { error, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { SocialProvider } from "~VechainWalletKit/types/wallet"
@@ -70,6 +70,7 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
             try {
                 await login({ provider, oauthRedirectUri: "/auth/callback" })
             } catch (e) {
+                error(ERROR_EVENTS.SMART_WALLET, "Social re-login failed", e)
                 Feedback.show({
                     severity: FeedbackSeverity.ERROR,
                     type: FeedbackType.ALERT,
