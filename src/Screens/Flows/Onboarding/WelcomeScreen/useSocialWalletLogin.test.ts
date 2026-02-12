@@ -35,7 +35,7 @@ jest.mock("~Components/Providers/FeedbackProvider/Model", () => ({
 jest.mock("~i18n", () => ({
     useI18nContext: () => ({
         LL: {
-            ERROR_GENERIC_SUBTITLE: () => "Error",
+            SMART_WALLET_LOGIN_FAILED: () => "Login failed",
         },
     }),
 }))
@@ -166,7 +166,7 @@ describe("useSocialWalletLogin", () => {
             expect(mockFeedbackShow).toHaveBeenCalledWith({
                 severity: "error",
                 type: "alert",
-                message: "Error",
+                message: "Login failed",
                 icon: "icon-alert-circle",
             })
             expect(result.current.isLoginPending).toBe(false)
