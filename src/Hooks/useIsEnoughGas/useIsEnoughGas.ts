@@ -20,6 +20,7 @@ type Args = {
     isLoadingFees: boolean
     transactionOutputs: InspectableOutput[] | undefined
     origin: string
+    isSmartWallet?: boolean
 }
 
 const calculateClausesValue = ({
@@ -65,6 +66,7 @@ export const useIsEnoughGas = ({
     isLoadingFees,
     transactionOutputs,
     origin,
+    isSmartWallet = false,
 }: Args) => {
     const officialTokens = useAppSelector(selectOfficialTokens)
     const { B3TR: networkB3TR } = useAppSelector(selectNetworkVBDTokens)
@@ -97,8 +99,9 @@ export const useIsEnoughGas = ({
                     origin,
                 })
 
-                //Delegation with VTHO should count as "0" for fees
-                if (tokenSymbol === VTHO.symbol && isDelegated)
+                //Delegation with VTHO should count as "0" for fees (only for non-smart wallets,
+                //since smart wallets pay VTHO fees via the generic delegator)
+                if (tokenSymbol === VTHO.symbol && isDelegated && !isSmartWallet)
                     return [tokenSymbol, BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual("0")] as const
 
                 return [
@@ -107,7 +110,17 @@ export const useIsEnoughGas = ({
                 ] as const
             }),
         )
-    }, [isLoadingFees, allFeeOptions, transactionOutputs, officialTokens, balances, processor, origin, isDelegated])
+    }, [
+        isLoadingFees,
+        allFeeOptions,
+        transactionOutputs,
+        officialTokens,
+        balances,
+        processor,
+        origin,
+        isDelegated,
+        isSmartWallet,
+    ])
 
     const hasEnoughBalanceOnAny = useMemo(() => {
         return Object.values(hasEnoughBalanceOnToken).some(Boolean)

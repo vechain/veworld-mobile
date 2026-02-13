@@ -348,6 +348,64 @@ describe("useIsEnoughGas", () => {
 
         expect(result.current.hasEnoughBalance).toBe(true)
     })
+    it("should return false for smart wallet if user doesn't have enough VTHO to cover fees", () => {
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
+            balanceMocker({
+                VET: "0",
+                B3TR: "0",
+                VTHO: "1",
+            }),
+        )
+        const { result } = renderHook(
+            () =>
+                useIsEnoughGas({
+                    selectedToken: "VTHO",
+                    transactionOutputs: [],
+                    origin: "0x0",
+                    isDelegated: true,
+                    allFeeOptions: { B3TR: BigNutils("0"), VTHO: BigNutils("2"), VET: BigNutils("0") },
+                    isLoadingFees: false,
+                    isSmartWallet: true,
+                }),
+            {
+                wrapper: TestWrapper,
+                initialProps: {
+                    preloadedState: createPreloadedState(),
+                },
+            },
+        )
+
+        expect(result.current.hasEnoughBalance).toBe(false)
+    })
+    it("should return true for smart wallet if user has enough VTHO to cover fees when delegated", () => {
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
+            balanceMocker({
+                VET: "0",
+                B3TR: "0",
+                VTHO: "3",
+            }),
+        )
+        const { result } = renderHook(
+            () =>
+                useIsEnoughGas({
+                    selectedToken: "VTHO",
+                    transactionOutputs: [],
+                    origin: "0x0",
+                    isDelegated: true,
+                    allFeeOptions: { B3TR: BigNutils("0"), VTHO: BigNutils("2"), VET: BigNutils("0") },
+                    isLoadingFees: false,
+                    isSmartWallet: true,
+                }),
+            {
+                wrapper: TestWrapper,
+                initialProps: {
+                    preloadedState: createPreloadedState(),
+                },
+            },
+        )
+
+        expect(result.current.hasEnoughBalance).toBe(true)
+    })
     it("should return false if user has enough to cover clauses (but not fees) if using B3TR & tx is delegated", () => {
         ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
             balanceMocker({

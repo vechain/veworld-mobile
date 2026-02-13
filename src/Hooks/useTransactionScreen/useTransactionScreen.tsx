@@ -295,6 +295,7 @@ export const useTransactionScreen = ({
         isLoadingFees: isFirstTimeLoadingFees,
         transactionOutputs,
         origin: selectedAccount.address,
+        isSmartWallet: selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET,
     })
 
     const { buildTransaction } = useTransactionBuilder({
