@@ -95,7 +95,6 @@ export const NFTSummaryScreen = () => {
 
     return (
         <SendContent>
-            <SendContent.Header />
             <SendContent.Container>
                 <Animated.View style={styles.root}>
                     <NFTReceiverCard />
