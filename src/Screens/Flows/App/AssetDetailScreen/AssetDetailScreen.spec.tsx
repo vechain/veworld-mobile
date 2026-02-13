@@ -104,6 +104,9 @@ const mockedFeatureFlags: FeatureFlags = {
             send: { enabled: false },
             sendCollectibles: { enabled: false },
         },
+        onboardingScreen: {
+            enabled: false,
+        },
     },
     smartWalletFeature: {
         enabled: false,

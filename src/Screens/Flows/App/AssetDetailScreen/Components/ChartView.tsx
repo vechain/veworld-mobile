@@ -35,7 +35,7 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
                 <BaseView flexDirection="row" w={100} alignItems="flex-end" style={[styles.container]}>
                     <LineChart height={150} width={SCREEN_WIDTH - 32} yGutter={30}>
                         <LineChart.Path color={theme.colors.graphLine} width={2}>
-                            <LineChart.Gradient color={theme.colors.graphGradient} />
+                            <LineChart.Gradient color={theme.colors.graphGradient} lastGradientValue={0.02} />
                         </LineChart.Path>
 
                         <LineChart.CursorCrosshair onActivated={invokeHaptic} onEnded={invokeHaptic} />
@@ -50,7 +50,7 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
                     <BaseView>
                         <LineChart height={150} style={styles.opacity}>
                             <LineChart.Path color={theme.colors.graphLine} width={0}>
-                                <LineChart.Gradient color={theme.colors.graphGradient} />
+                                <LineChart.Gradient color={theme.colors.graphGradient} lastGradientValue={0} />
                             </LineChart.Path>
                         </LineChart>
                         <BaseView justifyContent="center" alignItems="center">

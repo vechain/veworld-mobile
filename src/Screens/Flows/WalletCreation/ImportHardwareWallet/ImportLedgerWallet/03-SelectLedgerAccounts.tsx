@@ -1,30 +1,32 @@
+import { StackActions, useNavigation } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { FlashList, ViewToken } from "@shopify/flash-list"
+import * as Haptics from "expo-haptics"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { StyleSheet } from "react-native"
 import {
     BaseActivityIndicator,
     BaseButton,
+    BaseIcon,
     BaseSpacer,
     BaseText,
-    BaseTouchableBox,
     BaseView,
     ConnectionErrorBottomSheet,
+    CreatePasswordModal,
+    InfoBottomSheet,
     Layout,
     RequireUserPassword,
     showErrorToast,
-    CreatePasswordModal,
 } from "~Components"
-import { useI18nContext } from "~i18n"
+import { AnalyticsEvent, COLORS, ColorThemeType, VETLedgerAccount } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useCheckIdentity, useLedgerDevice, useThemedStyles } from "~Hooks"
-import { AnalyticsEvent, ColorThemeType, VET, VETLedgerAccount } from "~Constants"
-import { BigNutils, AddressUtils, LedgerUtils } from "~Utils"
-import { StyleSheet } from "react-native"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { RootStackParamListCreateWalletApp, RootStackParamListOnboarding, Routes } from "~Navigation"
-import { selectHasOnboarded, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { FlashList, ViewToken } from "@shopify/flash-list"
-import * as Haptics from "expo-haptics"
+import { useI18nContext } from "~i18n"
 import { LedgerAccount, NewLedgerDevice } from "~Model"
+import { RootStackParamListCreateWalletApp, RootStackParamListOnboarding, Routes } from "~Navigation"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
-import { StackActions, useNavigation } from "@react-navigation/native"
+import { selectHasOnboarded, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { LedgerUtils } from "~Utils"
+import LedgerAccountBox from "../components/LedgerAccountBox"
 
 type Props = {} & NativeStackScreenProps<
     RootStackParamListOnboarding & RootStackParamListCreateWalletApp,
@@ -34,7 +36,7 @@ type Props = {} & NativeStackScreenProps<
 export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const { device } = route.params
     const { LL } = useI18nContext()
-    const { styles: themedStyles } = useThemedStyles(styles)
+    const { styles: themedStyles, theme } = useThemedStyles(styles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const track = useAnalyticTracking()
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
@@ -82,6 +84,8 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const [selectedAccountsIndex, setSelectedAccountsIndex] = useState<number[]>([])
     const [isScrollable, setIsScrollable] = useState(false)
     const ledgerCache = useRef<NewLedgerDevice | null>(null)
+
+    const { ref: infoBottomSheetRef, onOpenPlain: onOpenInfoBottomSheet } = useBottomSheetModal()
 
     const {
         isPasswordPromptOpen: isPasswordPromptOpen_1,
@@ -165,48 +169,34 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
         getLedgerAccounts()
     }, [rootAccount, selectedNetwork])
 
-    const renderItem = ({ item, index }: { item: LedgerAccount; index: number }) => {
-        const isSelected = selectedAccountsIndex.some(ind => ind === index)
+    const renderItem = useCallback(
+        ({ item, index }: { item: LedgerAccount; index: number }) => {
+            const isSelected = selectedAccountsIndex.some(ind => ind === index)
 
-        const style = isSelected ? themedStyles.selected : themedStyles.notSelected
+            const onAccountClick = () => {
+                setSelectedAccountsIndex(prev => {
+                    const alreadySelected = prev.findIndex(ind => ind === index)
+                    if (alreadySelected >= 0) {
+                        return prev.filter(ind => index !== ind)
+                    } else {
+                        return [...prev, index]
+                    }
+                })
+            }
 
-        const onAccountClick = () => {
-            setSelectedAccountsIndex(prev => {
-                const alreadySelected = prev.findIndex(ind => ind === index)
-                if (alreadySelected >= 0) {
-                    return prev.filter(ind => index !== ind)
-                } else {
-                    return [...prev, index]
-                }
-            })
-        }
+            return (
+                <LedgerAccountBox
+                    account={item}
+                    index={index}
+                    isSelected={isSelected}
+                    onAccountClick={onAccountClick}
+                />
+            )
+        },
+        [selectedAccountsIndex],
+    )
 
-        const formatBalance = (balance: string) => {
-            return BigNutils(balance).toHuman(VET.decimals).toTokenFormat_string(2)
-        }
-
-        return (
-            <BaseTouchableBox
-                key={item.address}
-                action={onAccountClick}
-                innerContainerStyle={style}
-                flexDirection="row"
-                justifyContent="space-between">
-                <BaseView flexDirection="column" alignItems="flex-start">
-                    <BaseText typographyFont="subSubTitle">
-                        {LL.WALLET_LABEL_ACCOUNT()} {index + 1}
-                    </BaseText>
-                    <BaseSpacer height={6} />
-                    <BaseText typographyFont="captionRegular">{AddressUtils.humanAddress(item.address)}</BaseText>
-                </BaseView>
-                <BaseText typographyFont="captionRegular">
-                    {item.balance && formatBalance(item.balance.balance)} {VET.symbol}
-                </BaseText>
-            </BaseTouchableBox>
-        )
-    }
-
-    const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
+    const renderSeparator = useCallback(() => <BaseSpacer height={8} />, [])
 
     const checkViewableItems = useCallback(
         ({ viewableItems }: { viewableItems: ViewToken[] }) => {
@@ -217,21 +207,41 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
 
     return (
         <Layout
+            safeAreaTestID="Select_Ledger_Accounts_Screen"
             beforeNavigating={disconnectLedger}
             title={LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
+            noStaticBottomPadding
+            headerRightElement={
+                <BaseIcon
+                    name="icon-info"
+                    size={20}
+                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                    onPress={onOpenInfoBottomSheet}
+                />
+            }
             fixedHeader={
-                <BaseView>
-                    <BaseText typographyFont="body" my={16}>
-                        {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
+                <BaseView gap={24} pt={16} px={8}>
+                    <BaseView flexDirection="row" gap={12}>
+                        <BaseView
+                            p={12}
+                            bg={theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_200}
+                            borderRadius={100}>
+                            <BaseIcon
+                                name="icon-ledger"
+                                size={20}
+                                color={theme.isDark ? COLORS.GREY_100 : COLORS.PURPLE}
+                            />
+                        </BaseView>
+                        <BaseText
+                            typographyFont="subSubTitleSemiBold"
+                            align="center"
+                            color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}>
+                            {device.localName}
+                        </BaseText>
+                    </BaseView>
+                    <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
+                        {LL.WALLET_LEDGER_SELECT_ACCOUNTS_SB()}
                     </BaseText>
-
-                    <BaseButton
-                        action={onConfirm}
-                        w={100}
-                        title={LL.COMMON_LBL_IMPORT()}
-                        isLoading={!rootAcc}
-                        disabled={!selectedAccountsIndex.length}
-                    />
                 </BaseView>
             }
             fixedBody={
@@ -271,7 +281,24 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                         onClose={onCloseCreateFlow}
                         onSuccess={pin => onLedgerPinSuccess({ pin, newLedger: ledgerCache.current, disconnectLedger })}
                     />
+
+                    <InfoBottomSheet
+                        bsRef={infoBottomSheetRef}
+                        title={LL.BS_INFO_IMPORTING_FROM_LEDGER_TITLE()}
+                        description={LL.BS_INFO_IMPORTING_FROM_LEDGER_DESCRIPTION()}
+                    />
                 </>
+            }
+            footer={
+                <BaseView>
+                    <BaseButton
+                        action={onConfirm}
+                        w={100}
+                        title={LL.COMMON_LBL_IMPORT()}
+                        isLoading={!rootAcc}
+                        disabled={!selectedAccountsIndex.length}
+                    />
+                </BaseView>
             }
         />
     )

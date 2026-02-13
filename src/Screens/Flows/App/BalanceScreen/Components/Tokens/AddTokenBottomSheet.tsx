@@ -103,7 +103,6 @@ export const AddTokenBottomSheet = ({ bottomSheetRef, onQrCodePress }: AddTokenB
             dynamicHeight
             backgroundStyle={styles.bg}
             ref={bottomSheetRef}
-            scrollable={false}
             onDismiss={bottomSheetRef?.current?.close}
             floating>
             <BaseText typographyFont="subSubTitleSemiBold">{LL.MANAGE_TOKEN_ADD_SUGGESTED_TOKENS()}</BaseText>

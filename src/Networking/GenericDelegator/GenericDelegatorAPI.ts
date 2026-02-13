@@ -52,8 +52,9 @@ export type EstimateGenericDelegatorFeesResponse = {
     }
 }
 
-export const estimateGenericDelegatorFees = ({ networkType, clauses, signer }: EstimateGenericDelegatorFeesRequest) =>
-    executeIfValidNetwork(networkType, "/api/v1/estimate/clauses/,", url =>
+export const estimateGenericDelegatorFees = ({ networkType, clauses, signer }: EstimateGenericDelegatorFeesRequest) => {
+    // the ","" is an existing hack to make the generic delegator send back prices for all tokens
+    return executeIfValidNetwork(networkType, "/api/v1/estimate/clauses/,", url =>
         requestFromEndpoint<EstimateGenericDelegatorFeesResponse>({
             url: url,
             data: {
@@ -63,6 +64,8 @@ export const estimateGenericDelegatorFees = ({ networkType, clauses, signer }: E
             method: "POST",
         }),
     )
+}
+
 export const delegateGenericDelegator = ({
     raw,
     origin,
@@ -111,3 +114,15 @@ export const getDelegatorDepositAddress = ({ networkType }: { networkType: NETWO
     executeIfValidNetwork(networkType, "/api/v1/deposit/account", url =>
         fetchFromEndpoint<{ depositAccount: string }>(url),
     )
+
+export type GenericDelegatorRatesResponse = {
+    rate: {
+        vtho: number
+        vet: number
+        b3tr: number
+    }
+    serviceFee: number
+}
+
+export const getGenericDelegatorRates = ({ networkType }: { networkType: NETWORK_TYPE }) =>
+    executeIfValidNetwork(networkType, "/api/v1/rates", url => fetchFromEndpoint<GenericDelegatorRatesResponse>(url))

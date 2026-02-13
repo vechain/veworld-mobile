@@ -142,26 +142,33 @@ export const TestWrapper = ({
         },
     })
 
+    const featureFlags = useMemo(() => {
+        return {
+            ...ffInitialState,
+            pushNotificationFeature: { enabled: false },
+            isLoading: false,
+        }
+    }, [])
+
     return (
         <Provider store={getStore(preloadedState)}>
             <QueryClientProvider client={queryClient}>
-                <FeatureFlaggedSmartWallet nodeUrl="https://testnet.vechain.com" networkType="testnet">
-                    <GestureHandlerRootView>
-                        <ConnexContext.Provider value={TestHelpers.thor.mockThorInstance({})}>
-                            <BottomSheetModalProvider>
-                                <FeatureFlagsContext.Provider
-                                    value={{ ...ffInitialState, pushNotificationFeature: { enabled: false } }}>
+                <GestureHandlerRootView>
+                    <ConnexContext.Provider value={TestHelpers.thor.mockThorInstance({})}>
+                        <BottomSheetModalProvider>
+                            <FeatureFlagsContext.Provider value={featureFlags}>
+                                <FeatureFlaggedSmartWallet nodeUrl="https://testnet.vechain.com" networkType="testnet">
                                     <NavigationProvider>
                                         <NotificationsProvider>
                                             <TestTranslationProvider>{children}</TestTranslationProvider>
                                         </NotificationsProvider>
                                     </NavigationProvider>
-                                </FeatureFlagsContext.Provider>
-                            </BottomSheetModalProvider>
-                            <BaseToast />
-                        </ConnexContext.Provider>
-                    </GestureHandlerRootView>
-                </FeatureFlaggedSmartWallet>
+                                </FeatureFlaggedSmartWallet>
+                            </FeatureFlagsContext.Provider>
+                        </BottomSheetModalProvider>
+                        <BaseToast />
+                    </ConnexContext.Provider>
+                </GestureHandlerRootView>
             </QueryClientProvider>
         </Provider>
     )

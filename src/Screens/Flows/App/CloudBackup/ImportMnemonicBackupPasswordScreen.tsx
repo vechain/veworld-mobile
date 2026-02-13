@@ -16,7 +16,7 @@ import {
 import { COLORS, ERROR_EVENTS } from "~Constants"
 import { useCheckIdentity, useCloudBackup, useDeviceUtils, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { DrivetWallet, IMPORT_TYPE } from "~Model"
+import { DriveWallet, IMPORT_TYPE } from "~Model"
 import { RootStackParamListOnboarding, Routes } from "~Navigation"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
 import { selectHasOnboarded, selectIsAppLoading, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
@@ -37,7 +37,7 @@ export const ImportMnemonicBackupPasswordScreen = () => {
     const { getSalt, getIV } = useCloudBackup()
     const { checkCanImportDevice } = useDeviceUtils()
 
-    const mnemonicCache = useRef<string[]>([])
+    const mnemonicCache = useRef<string[]>()
 
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
@@ -70,8 +70,8 @@ export const ImportMnemonicBackupPasswordScreen = () => {
 
     const importWallet = useCallback(async () => {
         dispatch(setIsAppLoading(true))
-        const { salt } = PlatformUtils.isAndroid() ? (wallet as DrivetWallet) : await getSalt(wallet.rootAddress)
-        const { iv } = PlatformUtils.isAndroid() ? (wallet as DrivetWallet) : await getIV(wallet.rootAddress)
+        const { salt } = PlatformUtils.isAndroid() ? (wallet as DriveWallet) : await getSalt(wallet.rootAddress)
+        const { iv } = PlatformUtils.isAndroid() ? (wallet as DriveWallet) : await getIV(wallet.rootAddress)
 
         if (!salt || !iv) {
             showErrorToast({
@@ -147,17 +147,21 @@ export const ImportMnemonicBackupPasswordScreen = () => {
 
     return (
         <Layout
+            title={LL.TITLE_CLOUD_BACKUP_PASSWORD()}
             body={
                 <BaseView style={styles.rootContainer}>
                     <BaseView justifyContent="center" alignItems="center" style={styles.keyIcon}>
-                        <BaseIcon name="icon-key" size={64} color={theme.colors.text} />
-                        <BaseSpacer height={20} />
+                        <BaseIcon
+                            name="icon-key"
+                            size={48}
+                            color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE}
+                        />
+                        <BaseSpacer height={24} />
                         <BaseView justifyContent="center" alignItems="center">
-                            <BaseText align="center" typographyFont="subSubTitleMedium">
-                                {PlatformUtils.isIOS() ? LL.BD_CLOUD_BACKUP_PASSWORD() : LL.BD_DRIVE_BACKUP_PASSWORD()}
-                            </BaseText>
-                            <BaseSpacer height={8} />
-                            <BaseText align="center" typographyFont="body">
+                            <BaseText
+                                align="center"
+                                typographyFont="bodyMedium"
+                                color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
                                 {LL.BD_CLOUD_INSERT_PASSWORD()}
                             </BaseText>
                             <BaseSpacer height={8} />
@@ -191,15 +195,6 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                             {isCreateError}
                         </BaseText>
                     )}
-                    <BaseButton
-                        typographyFont="bodyMedium"
-                        w={100}
-                        disabled={isAppLoading}
-                        haptics="Light"
-                        title={LL.COMMON_PROCEED()}
-                        action={importWallet}
-                    />
-                    <BaseSpacer height={16} />
 
                     <CreatePasswordModal
                         isOpen={isOpen}
@@ -220,6 +215,14 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                         onSuccess={userPinSuccss}
                     />
                 </BaseView>
+            }
+            footer={
+                <BaseButton
+                    title={LL.BTN_IMPORT()}
+                    action={importWallet}
+                    disabled={isAppLoading}
+                    isLoading={isAppLoading}
+                />
             }
         />
     )

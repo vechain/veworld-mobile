@@ -9,11 +9,12 @@ import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
 import { isEmpty } from "lodash"
 import { DerivationPath } from "~Constants"
+import { SocialProvider } from "~VechainWalletKit/types/wallet"
 
 export const useHandleWalletCreation = () => {
     const biometrics = useBiometrics()
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const { createLocalWallet, createLedgerWallet } = useCreateWallet()
+    const { createLocalWallet, createLedgerWallet, createSmartWallet } = useCreateWallet()
     const { migrateOnboarding } = useApplicationSecurity()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
@@ -75,6 +76,34 @@ export const useHandleWalletCreation = () => {
         [biometrics, createLocalWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
     )
 
+    const onCreateSmartWallet = useCallback(
+        async ({
+            address,
+            name,
+            linkedProviders,
+        }: {
+            address: string
+            name?: string
+            linkedProviders?: SocialProvider[]
+        }) => {
+            if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
+                dispatch(setIsAppLoading(true))
+                await WalletEncryptionKeyHelper.init()
+                await createSmartWallet({
+                    address,
+                    name,
+                    linkedProviders,
+                    onError: onWalletCreationError,
+                })
+                await migrateOnboarding(SecurityLevelType.BIOMETRIC)
+                dispatch(setIsAppLoading(false))
+            } else {
+                onOpen()
+            }
+        },
+        [biometrics, createSmartWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
+    )
+
     const onSuccess = useCallback(
         async ({
             pin,
@@ -106,6 +135,33 @@ export const useHandleWalletCreation = () => {
             dispatch(setIsAppLoading(false))
         },
         [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
+    )
+
+    const onSmartWalletPinSuccess = useCallback(
+        async ({
+            pin,
+            address,
+            name,
+            linkedProviders,
+        }: {
+            pin: string
+            address: string
+            name?: string
+            linkedProviders?: SocialProvider[]
+        }) => {
+            onClose()
+            dispatch(setIsAppLoading(true))
+            await WalletEncryptionKeyHelper.init(pin)
+            await createSmartWallet({
+                address,
+                name,
+                linkedProviders,
+                onError: onWalletCreationError,
+            })
+            await migrateOnboarding(SecurityLevelType.SECRET, pin)
+            dispatch(setIsAppLoading(false))
+        },
+        [createSmartWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
     )
 
     const migrateFromOnboarding = useCallback(
@@ -247,8 +303,10 @@ export const useHandleWalletCreation = () => {
         isOpen,
         isError,
         onSuccess,
+        onSmartWalletPinSuccess,
         onClose,
         onCreateLedgerWallet,
+        onCreateSmartWallet,
         onLedgerPinSuccess,
         createOnboardedWallet,
         importOnboardedWallet,

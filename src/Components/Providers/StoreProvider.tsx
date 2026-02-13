@@ -37,12 +37,17 @@ type StoreContextProviderProps = { children: React.ReactNode }
 const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     const { redux: reduxStorage } = useApplicationSecurity()
 
-    const store = useRef<
-        | ReturnType<
-              typeof configureStore<RootState, AnyAction, MiddlewareArray<[ThunkMiddleware<any, AnyAction, {}>]>, any[]>
-          >
-        | undefined
-    >(undefined)
+    const store =
+        useRef<
+            ReturnType<
+                typeof configureStore<
+                    RootState,
+                    AnyAction,
+                    MiddlewareArray<[ThunkMiddleware<any, AnyAction, {}>]>,
+                    any[]
+                >
+            >
+        >()
 
     //Store that is reactive when the app goes back to the foreground
     const [reactiveStore, setReactiveStore] =

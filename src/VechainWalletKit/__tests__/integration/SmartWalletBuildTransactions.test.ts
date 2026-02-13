@@ -111,6 +111,11 @@ jest.mock("@privy-io/expo", () => ({
     useLoginWithOAuth: jest.fn(() => ({
         login: jest.fn(),
     })),
+    useUnlinkOAuth: jest.fn(() => jest.fn()),
+    useLinkWithOAuth: jest.fn(() => ({
+        link: jest.fn(),
+        state: "none",
+    })),
 }))
 
 // Helper to set mock address for different test scenarios

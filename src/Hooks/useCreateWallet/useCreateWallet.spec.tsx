@@ -159,7 +159,6 @@ describe("useCreateWallet", () => {
                 },
             })
             expect(setMnemonic).toHaveBeenCalledWith(undefined)
-            await waitFor(() => result.current.isComplete)
             expect(result.current.isComplete).toBe(true)
         })
     })

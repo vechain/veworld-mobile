@@ -14,7 +14,7 @@ import {
     useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
-import { useGenericDelegationFees } from "~Hooks/useGenericDelegationFees"
+import { useGenericDelegationFees, DelegationToken } from "~Hooks/useGenericDelegationFees"
 import { useGenericDelegationTokens } from "~Hooks/useGenericDelegationTokens"
 import { useDelegatorDepositAddress } from "~Hooks/useDelegatorDepositAddress"
 import { useIsEnoughGas } from "~Hooks/useIsEnoughGas"
@@ -38,8 +38,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { BigNutils, error } from "~Utils"
-import { useSmartWallet } from "../useSmartWallet"
+import { BigNutils, BigNumberUtils, error } from "~Utils"
 
 type Props = {
     clauses: TransactionClause[]
@@ -72,26 +71,39 @@ const getGenericDelegationForSmartWallet = (
     selectedFeeOption: GasPriceCoefficient,
     depositAccount: string,
 ) => {
-    if (deviceType !== DEVICE_TYPE.SMART_WALLET || genericDelegatorFees.allOptions === undefined) return undefined
+    if (deviceType !== DEVICE_TYPE.SMART_WALLET) {
+        return undefined
+    }
 
-    const tokenAddressMap = {
+    const tokenAddressMap: Record<string, string> = {
         [VET.symbol]: VET.address,
         [B3TR.symbol]: B3TR.address,
-        // [VTHO.symbol]: VTHO.address,
+        [VTHO.symbol]: VTHO.address,
     }
 
-    const feeMap = {
-        [VET.symbol]: genericDelegatorFees.allOptions?.vetWithSmartAccount[selectedFeeOption].maxFee,
-        [B3TR.symbol]: genericDelegatorFees.allOptions?.b3trWithSmartAccount[selectedFeeOption].maxFee,
-        // [VTHO.symbol]: genericDelegatorFees.allOptions?.vthoWithSmartAccount[selectedFeeOption].maxFee,
+    // For smart accounts, use genericDelegatorFees for ALL tokens (including VTHO)
+    const feeMap: Record<string, BigNumberUtils | undefined> = {
+        [VET.symbol]: genericDelegatorFees.allOptions?.[VET.symbol]?.[selectedFeeOption]?.estimatedFee,
+        [B3TR.symbol]: genericDelegatorFees.allOptions?.[B3TR.symbol]?.[selectedFeeOption]?.estimatedFee,
+        [VTHO.symbol]: genericDelegatorFees.allOptions?.[VTHO.symbol]?.[selectedFeeOption]?.estimatedFee,
     }
 
-    return {
+    // If fee is not available yet (still loading), return undefined
+    if (feeMap[token] === undefined) {
+        return undefined
+    }
+
+    const result = {
         token,
         tokenAddress: tokenAddressMap[token],
         fee: feeMap[token],
         depositAccount: depositAccount ?? "",
+        rates:
+            genericDelegatorFees.rate && genericDelegatorFees.serviceFee !== undefined
+                ? { rate: genericDelegatorFees.rate, serviceFee: genericDelegatorFees.serviceFee }
+                : undefined,
     }
+    return result
 }
 
 export const useTransactionScreen = ({
@@ -128,39 +140,13 @@ export const useTransactionScreen = ({
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
-    const { buildTransaction: buildTransactionWithSmartWallet } = useSmartWallet()
     const { tokens: availableTokens, isLoading: isLoadingTokens } = useGenericDelegationTokens()
     const { depositAccount, isLoading: isLoadingDepositAccount } = useDelegatorDepositAddress()
 
-    const [transactionClauses, setTransactionClauses] = useState<TransactionClause[]>(clauses)
-    const [isLoadingClauses, setIsLoadingClauses] = useState(false)
-
-    useEffect(() => {
-        const buildClauses = async () => {
-            if (selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET) {
-                setIsLoadingClauses(true)
-                try {
-                    const smartWalletTx = await buildTransactionWithSmartWallet(clauses)
-                    setTransactionClauses(smartWalletTx.body.clauses)
-                } catch (e) {
-                    error(ERROR_EVENTS.SEND, e)
-                    setTransactionClauses(clauses)
-                } finally {
-                    setIsLoadingClauses(false)
-                }
-            } else {
-                setTransactionClauses(clauses)
-            }
-        }
-
-        buildClauses()
-    }, [selectedAccount.device.type, buildTransactionWithSmartWallet, clauses])
-
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
-        clauses: isLoadingClauses ? [] : transactionClauses,
+        clauses: clauses,
         providedGas: dappRequest?.options?.gas,
-        disabled: isLoadingClauses,
     })
 
     const transactionOutputs = useMemo(() => gas?.outputs, [gas?.outputs])
@@ -221,18 +207,52 @@ export const useTransactionScreen = ({
         isGalactica,
     })
 
+    // Extract gas prices from txOptions for Galactica (EIP-1559) transactions
+    const gasPricesForDelegation = useMemo(() => {
+        const txOpts = transactionFeesResponse.txOptions
+
+        // gasPriceCoef is legacy but we need the type to make the linter happy
+        // we can remove when we remove the legacy support.
+        const getGasPrice = (opt: { maxFeePerGas: string } | { gasPriceCoef: number }) => {
+            if (!("maxFeePerGas" in opt)) return undefined
+            const maxFee = BigInt(opt.maxFeePerGas)
+            return maxFee.toString()
+        }
+
+        const result = {
+            regular: getGasPrice(txOpts[GasPriceCoefficient.REGULAR]),
+            medium: getGasPrice(txOpts[GasPriceCoefficient.MEDIUM]),
+            high: getGasPrice(txOpts[GasPriceCoefficient.HIGH]),
+        }
+
+        return result
+    }, [transactionFeesResponse.txOptions])
+
     const genericDelegatorFees = useGenericDelegationFees({
-        clauses: isLoadingClauses ? [] : transactionClauses,
+        clauses,
         signer: selectedAccount.address,
-        token: selectedDelegationToken,
+        token: selectedDelegationToken as DelegationToken,
         isGalactica,
+        deviceType: selectedAccount.device.type,
+        gasPrices: gasPricesForDelegation,
     })
 
     const gasOptions = useMemo(() => {
+        // For smart accounts, always use genericDelegatorFees (includes smart account overhead)
+        // For non-smart accounts with VTHO, use regular transactionFeesResponse
+        const isSmartAccount = selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET
+        if (isSmartAccount) {
+            return genericDelegatorFees.options ?? transactionFeesResponse.options
+        }
         if (selectedDelegationToken === VTHO.symbol || genericDelegatorFees.options === undefined)
             return transactionFeesResponse.options
         return genericDelegatorFees.options
-    }, [genericDelegatorFees.options, selectedDelegationToken, transactionFeesResponse.options])
+    }, [
+        genericDelegatorFees.options,
+        selectedDelegationToken,
+        transactionFeesResponse.options,
+        selectedAccount.device.type,
+    ])
 
     const selectedFeeAllTokenOptions = useMemo(() => {
         if (
@@ -240,11 +260,22 @@ export const useTransactionScreen = ({
             transactionFeesResponse.options === undefined
         )
             return undefined
-        return Object.fromEntries(
+
+        // For smart accounts, allOptions includes VTHO (calculated locally with smart account overhead)
+        // For non-smart accounts, allOptions doesn't include VTHO, so use transactionFeesResponse
+        const hasVthoInAllOptions = genericDelegatorFees.allOptions?.[VTHO.symbol] !== undefined
+
+        const result = Object.fromEntries(
             Object.entries(genericDelegatorFees.allOptions ?? {})
                 .map(([token, value]) => [token, value[selectedFeeOption].maxFee] as const)
-                .concat([[VTHO.symbol, transactionFeesResponse.options[selectedFeeOption].maxFee]]),
+                .concat(
+                    // Only add VTHO from transactionFeesResponse if not already in allOptions
+                    hasVthoInAllOptions
+                        ? []
+                        : [[VTHO.symbol, transactionFeesResponse.options[selectedFeeOption].maxFee]],
+                ),
         )
+        return result
     }, [
         genericDelegatorFees.allOptions,
         genericDelegatorFees.isLoading,
@@ -253,17 +284,8 @@ export const useTransactionScreen = ({
     ])
 
     const isFirstTimeLoadingFees = useMemo(
-        () =>
-            genericDelegatorFees.isFirstTimeLoading ||
-            transactionFeesResponse.isFirstTimeLoading ||
-            loadingGas ||
-            isLoadingClauses,
-        [
-            genericDelegatorFees.isFirstTimeLoading,
-            loadingGas,
-            transactionFeesResponse.isFirstTimeLoading,
-            isLoadingClauses,
-        ],
+        () => genericDelegatorFees.isFirstTimeLoading || transactionFeesResponse.isFirstTimeLoading || loadingGas,
+        [genericDelegatorFees.isFirstTimeLoading, loadingGas, transactionFeesResponse.isFirstTimeLoading],
     )
 
     const { hasEnoughBalance, hasEnoughBalanceOnAny, hasEnoughBalanceOnToken, hasEnoughBalanceForFeeOnly } =
@@ -302,7 +324,7 @@ export const useTransactionScreen = ({
         dappRequest,
         initialRoute,
         selectedDelegationToken,
-        genericDelegatorFee: genericDelegatorFees.options?.[selectedFeeOption].maxFee,
+        genericDelegatorFee: genericDelegatorFees.options?.[selectedFeeOption].estimatedFee,
         genericDelegatorDepositAccount: depositAccount,
     })
 
@@ -410,13 +432,13 @@ export const useTransactionScreen = ({
     const isSmartWalletLoading = useMemo(
         () =>
             selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET &&
-            (isLoadingClauses || isLoadingDepositAccount || genericDelegatorFees.isLoading),
-        [selectedAccount.device.type, isLoadingClauses, isLoadingDepositAccount, genericDelegatorFees.isLoading],
+            (isLoadingDepositAccount || genericDelegatorFees.isLoading),
+        [selectedAccount.device.type, isLoadingDepositAccount, genericDelegatorFees.isLoading],
     )
 
     const isLoading = useMemo(
-        () => loading || loadingGas || isBiometricsEmpty || isLoadingClauses || isSmartWalletLoading,
-        [loading, loadingGas, isBiometricsEmpty, isLoadingClauses, isSmartWalletLoading],
+        () => loading || loadingGas || isBiometricsEmpty || isSmartWalletLoading,
+        [loading, loadingGas, isBiometricsEmpty, isSmartWalletLoading],
     )
 
     const fallbackToVTHO = useCallback(() => {
@@ -431,14 +453,24 @@ export const useTransactionScreen = ({
     }, [autoVTHOFallback, fallbackToVTHO, hasEnoughBalance, selectedDelegationToken])
 
     useEffect(() => {
-        if (selectedDelegationToken !== VTHO.symbol && isValidGenericDelegatorNetwork(selectedNetwork.type))
+        // For smart accounts, always use generic delegator regardless of token
+        // For non-smart accounts, only use generic delegator for non-VTHO tokens
+        const shouldUseGenericDelegator =
+            selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET || selectedDelegationToken !== VTHO.symbol
+
+        if (shouldUseGenericDelegator && isValidGenericDelegatorNetwork(selectedNetwork.type))
             setSelectedDelegationUrl(GENERIC_DELEGATOR_BASE_URL[selectedNetwork.type])
-    }, [selectedDelegationToken, selectedNetwork.type, setSelectedDelegationUrl])
+    }, [selectedAccount.device.type, selectedDelegationToken, selectedNetwork.type, setSelectedDelegationUrl])
 
     useEffect(() => {
-        if (selectedDelegationToken === VTHO.symbol && isGenericDelegatorUrl(selectedDelegationUrl ?? ""))
+        // Only reset delegation for VTHO on non-smart accounts
+        if (
+            selectedAccount.device.type !== DEVICE_TYPE.SMART_WALLET &&
+            selectedDelegationToken === VTHO.symbol &&
+            isGenericDelegatorUrl(selectedDelegationUrl ?? "")
+        )
             resetDelegation()
-    }, [resetDelegation, selectedDelegationToken, selectedDelegationUrl])
+    }, [resetDelegation, selectedAccount.device.type, selectedDelegationToken, selectedDelegationUrl])
 
     const isDisabledButtonState = useMemo(
         () => !hasEnoughBalance || loading || isSubmitting.current || (gas?.gas ?? 0) === 0 || isSmartWalletLoading,

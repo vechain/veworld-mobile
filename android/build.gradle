@@ -1,11 +1,12 @@
 buildscript {
     ext {
-        buildToolsVersion = "35.0.0"
+        buildToolsVersion = "34.0.0"
         minSdkVersion = 24
         compileSdkVersion = 35
         targetSdkVersion = 35
-        ndkVersion = "27.1.12297006"
-        kotlinVersion = "2.0.21"
+        ndkVersion = "26.1.10909125"
+        // Expo SDK 52 / expo-modules-core support Kotlin 1.9.25 with Compose compiler 1.5.15.
+        kotlinVersion = "1.9.25"
         androidXBrowser = "1.8.0"
     }
     repositories {
@@ -16,8 +17,6 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
-        // Pin Kotlin Gradle plugin to the same version required by Compose (Expo SDK 52)
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         // Pin Kotlin Gradle plugin to the same version required by Compose (Expo SDK 52)
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("io.sentry:sentry-android-gradle-plugin:5.3.0")
@@ -42,7 +41,6 @@ allprojects {
 subprojects {
     afterEvaluate { project ->
         if (project.name == 'react-native-quick-crypto') {
-            project.android.defaultConfig.minSdkVersion = 24
             project.android.defaultConfig.minSdkVersion = 24
         }
     }

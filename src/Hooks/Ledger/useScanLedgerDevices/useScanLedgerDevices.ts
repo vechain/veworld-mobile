@@ -1,6 +1,6 @@
 import { debug, error, warn } from "~Utils"
 import { ConnectedLedgerDevice } from "~Model"
-import { RefObject, useCallback, useRef, useState } from "react"
+import { MutableRefObject, useCallback, useRef, useState } from "react"
 import { Device } from "react-native-ble-plx"
 import { DeviceModel } from "@ledgerhq/devices"
 import { Observer as TransportObserver, Subscription as TransportSubscription } from "@ledgerhq/hw-transport"
@@ -26,10 +26,10 @@ type Props = {
  */
 
 export const useScanLedgerDevices = ({ onAddDevice, readyToScan = true }: Props) => {
-    const subscription = useRef<TransportSubscription | undefined>(undefined)
+    const subscription = useRef<TransportSubscription>()
     const [availableDevices, setAvailableDevices] = useState<ConnectedLedgerDevice[]>([])
 
-    const bleObserver: RefObject<TransportObserver<any, HwTransportError>> = useRef({
+    const bleObserver: MutableRefObject<TransportObserver<any, HwTransportError>> = useRef({
         complete: () => {
             debug(ERROR_EVENTS.LEDGER, "[useScanLedgerDevices] - observer - complete")
         },

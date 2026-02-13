@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react"
  * @returns previous value of `elem`
  */
 export const usePrevious = <T,>(elem: T): T | undefined => {
-    const ref = useRef<T | undefined>(undefined)
+    const ref = useRef<T>()
     useEffect(() => {
         ref.current = elem
     }, [elem])

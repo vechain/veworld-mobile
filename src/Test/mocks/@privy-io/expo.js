@@ -32,6 +32,17 @@ function useLoginWithOAuth() {
     return mockOAuthState
 }
 
+function useUnlinkOAuth() {
+    return jest.fn()
+}
+
+function useLinkWithOAuth() {
+    return {
+        link: jest.fn(),
+        state: "none",
+    }
+}
+
 // Mock Provider component
 function PrivyProvider({ children }) {
     return React.createElement("div", { "data-testid": "privy-provider" }, children)
@@ -130,6 +141,8 @@ export {
     usePrivy,
     useEmbeddedEthereumWallet,
     useLoginWithOAuth,
+    useUnlinkOAuth,
+    useLinkWithOAuth,
     PrivyProvider,
     // Helper functions for dynamic configuration
     setAuthenticatedUser,

@@ -108,6 +108,14 @@ export type Colors = {
         title: string
         titleInline: string
     }
+    warningVariant: {
+        background: string
+        border: string
+        borderLight: string
+        icon: string
+        title: string
+        titleInline: string
+    }
     actionBanner: {
         background: string
         border: string
@@ -477,8 +485,11 @@ export enum COLORS {
     GREY_50 = "#F9F9FA",
     ORANGE_50 = "#FFFAF0",
     ORANGE_100 = "#FEEBCB",
+    ORANGE_200 = "#FBD38D",
     ORANGE_300 = "#F6AD55",
+    ORANGE_400 = "#ED8936",
     ORANGE_500 = "#DD6B20",
+    ORANGE_600 = "#C05621",
     ORANGE_700 = "#9C4221",
     PRIMARY_50 = "#F9F8FB",
     PRIMARY_100 = "#F0EEFC",
@@ -631,6 +642,14 @@ const light: Colors = {
         icon: COLORS.MEDIUM_BLUE,
         title: COLORS.BLUE_700,
         titleInline: COLORS.BLUE_700,
+    },
+    warningVariant: {
+        background: COLORS.ORANGE_50,
+        border: COLORS.ORANGE_200,
+        borderLight: COLORS.ORANGE_100,
+        icon: COLORS.ORANGE_500,
+        title: COLORS.ORANGE_700,
+        titleInline: COLORS.ORANGE_700,
     },
     actionBanner: {
         background: COLORS.PRIMARY_100,
@@ -1029,6 +1048,14 @@ const dark: Colors = {
         icon: COLORS.MEDIUM_BLUE,
         title: COLORS.BLUE_700,
         titleInline: COLORS.LIGHT_BLUE,
+    },
+    warningVariant: {
+        background: COLORS.ORANGE_50,
+        border: COLORS.ORANGE_200,
+        borderLight: COLORS.ORANGE_100,
+        icon: COLORS.ORANGE_500,
+        title: COLORS.ORANGE_700,
+        titleInline: COLORS.ORANGE_200,
     },
     actionBanner: {
         background: COLORS.PURPLE,

@@ -2,7 +2,6 @@ import { renderHook } from "@testing-library/react-hooks"
 import { BiometricsUtils } from "~Utils"
 import { useBiometrics } from "./useBiometrics"
 import { AppStateType, SecurityLevelType } from "~Model"
-import { waitFor } from "@testing-library/react-native"
 
 // mock delle funzioni di BiometricsUtils
 jest.mock("~Utils/BiometricsUtils", () => ({
@@ -19,16 +18,16 @@ describe("useBiometrics", () => {
         ;(BiometricsUtils.getIsDeviceEnrolled as jest.Mock).mockResolvedValue(true)
         ;(BiometricsUtils.getBiometricTypeAvailable as jest.Mock).mockResolvedValue("touch")
 
-        const { result } = renderHook(() => useBiometrics())
+        const { result, waitForNextUpdate } = renderHook(() => useBiometrics())
 
-        await waitFor(() => {
-            expect(result.current).toEqual({
-                currentSecurityLevel: SecurityLevelType.BIOMETRIC,
-                authTypeAvailable: "touch",
-                isDeviceEnrolled: true,
-                isHardwareAvailable: true,
-                accessControl: true,
-            })
+        await waitForNextUpdate({ timeout: 10000 })
+
+        expect(result.current).toEqual({
+            currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+            authTypeAvailable: "touch",
+            isDeviceEnrolled: true,
+            isHardwareAvailable: true,
+            accessControl: true,
         })
     })
 
@@ -45,21 +44,21 @@ describe("useBiometrics", () => {
             }
         })
 
-        const { result } = renderHook(() => useBiometrics())
+        const { result, waitForNextUpdate } = renderHook(() => useBiometrics())
+
+        await waitForNextUpdate({ timeout: 10000 })
 
         mockUseAppState.mockReturnValue({
             previousState: AppStateType.ACTIVE,
             currentState: AppStateType.ACTIVE,
         })
 
-        await waitFor(() => {
-            expect(result.current).toEqual({
-                currentSecurityLevel: SecurityLevelType.BIOMETRIC,
-                authTypeAvailable: "touch",
-                isDeviceEnrolled: true,
-                isHardwareAvailable: true,
-                accessControl: true,
-            })
+        expect(result.current).toEqual({
+            currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+            authTypeAvailable: "touch",
+            isDeviceEnrolled: true,
+            isHardwareAvailable: true,
+            accessControl: true,
         })
     })
 })

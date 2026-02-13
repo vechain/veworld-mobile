@@ -10,7 +10,7 @@ import { Routes } from "~Navigation"
 import {
     selectAreDevFeaturesEnabled,
     selectDeveloperMenuUnlocked,
-    selectSelectedAccount,
+    selectSelectedAccountOrNull,
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
@@ -46,7 +46,7 @@ export const SettingsScreen = () => {
     const { unclaimedAddresses } = useClaimableUsernames()
     const { styles: themedStyles } = useThemedStyles(baseStyles)
 
-    const flatSettingListRef = useRef<FlatList>(undefined!)
+    const flatSettingListRef = useRef(null)
 
     useScrollToTop(flatSettingListRef)
 
@@ -61,8 +61,8 @@ export const SettingsScreen = () => {
         [unclaimedAddresses],
     )
 
-    const selectedAccount = useAppSelector(selectSelectedAccount)
-    const isShowBackupModal = useCheckWalletBackup(selectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
+    const isShowBackupModal = useCheckWalletBackup(selectedAccount ?? null)
 
     const { settingsList } = useMemo(
         () =>

@@ -28,20 +28,35 @@ export const VbdCarousel = ({ appIds, isLoading: propsIsLoading }: Props) => {
         [onOpen],
     )
 
+    const carouselDapps = useMemo(() => {
+        if (!vbdApps || !appIds?.length) return []
+        return (
+            vbdApps
+                .filter(app => appIds.includes(app.id))
+                // Sort the apps in the order of appIds
+                .sort((a, b) => appIds.indexOf(a.id) - appIds.indexOf(b.id))
+        )
+    }, [appIds, vbdApps])
+
     const items = useMemo(() => {
         if (isLoading || !vbdApps?.length || !appIds.length) {
             const ids = appIds.length ? appIds : ["1", "2", "3"]
             return ids.map(appId => ({ content: <VbdCarouselItemSkeleton />, name: appId } satisfies CarouselSlideItem))
         }
 
-        return appIds.map(appId => {
+        return appIds.map((appId, index) => {
             const app = vbdApps?.find(_app => _app.id === appId)
             return {
-                content: <VbdCarouselItem app={app!} onPressItem={onPressItem} />,
+                content: (
+                    <VbdCarouselItem
+                        app={app!}
+                        onPressItem={metadata => onPressItem({ ...metadata, carouselIndex: index, carouselDapps })}
+                    />
+                ),
                 name: appId,
             } satisfies CarouselSlideItem
         })
-    }, [appIds, isLoading, onPressItem, vbdApps])
+    }, [appIds, isLoading, onPressItem, carouselDapps, vbdApps])
 
     const dotStyles = useMemo(() => {
         return {
