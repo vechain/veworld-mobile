@@ -1,17 +1,13 @@
 import { useCallback, useState } from "react"
 import { DEVICE_TYPE, IMPORT_TYPE, NewLedgerDevice } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { setMnemonic, setPrivateKey, setSelectedAccount, setNewLedgerDevice } from "~Storage/Redux/Slices"
 import {
     addDeviceAndAccounts,
     addSmartWalletDeviceAndAccount,
     addLedgerDeviceAndAccounts,
-    setMnemonic,
-    setNewLedgerDevice,
-    setPrivateKey,
-    setSelectedAccount,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+} from "~Storage/Redux/Actions"
 import { selectAccountsState, selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { warn } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
