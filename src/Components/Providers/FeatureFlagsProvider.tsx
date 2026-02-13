@@ -20,7 +20,7 @@ export const initialState: FeatureFlags = {
     paymentProvidersFeature: {
         "coinbase-pay": {
             android: true,
-            iOS: false,
+            iOS: true,
             url: "https://onramp-proxy.vechain.org",
         },
         transak: {
@@ -35,8 +35,8 @@ export const initialState: FeatureFlags = {
     },
     discoveryFeature: {
         bannersAutoplay: true,
-        showStellaPayBanner: false,
-        showStargateBanner: false,
+        showStellaPayBanner: true,
+        showStargateBanner: true,
     },
     forks: {
         GALACTICA: {
@@ -65,16 +65,16 @@ export const initialState: FeatureFlags = {
         balanceScreen: {
             enabled: true,
             collectibles: {
-                enabled: false,
+                enabled: true,
             },
             tokens: {
-                enabled: false,
+                enabled: true,
             },
             send: {
-                enabled: false,
+                enabled: true,
             },
             sendCollectibles: {
-                enabled: false,
+                enabled: true,
             },
         },
         onboardingScreen: {

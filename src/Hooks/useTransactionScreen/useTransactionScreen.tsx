@@ -44,7 +44,7 @@ type Props = {
     clauses: TransactionClause[]
     onTransactionSuccess: (transaction: Transaction, txId: string) => void | Promise<void>
     onTransactionFailure: (error: unknown) => void | Promise<void>
-    initialRoute?: Routes.HOME | Routes.NFTS
+    initialRoute?: Routes.HOME
     dappRequest?: TransactionRequest
     /**
      * Fallback to VTHO for delegation fees if the user doesn't have enough of the selected token

@@ -28,18 +28,16 @@ import {
     TypeDataRequest,
     WalletRequest,
 } from "~Model"
+import { deleteSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { switchActiveNetwork } from "~Storage/Redux/Actions"
 import {
-    deleteSession,
     selectAccounts,
     selectFeaturedDapps,
     selectNetworks,
     selectSelectedAccountAddress,
     selectSelectedAccountOrNull,
     selectSelectedNetwork,
-    switchActiveNetwork,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+} from "~Storage/Redux/Selectors"
 import { AccountUtils, AddressUtils, DAppUtils, debug, URIUtils, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"

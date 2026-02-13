@@ -42,11 +42,11 @@ import {
     WalletPreferencesSlice,
     resetWalletPreferencesState,
 } from "./Slices"
-import { migrationUpdates } from "~Storage/Redux/Migrations"
+import { migrationUpdates } from "./Migrations"
 import { createMigrate } from "redux-persist"
 import { PersistConfig } from "redux-persist/es/types"
-import { RootState } from "~Storage/Redux/Types"
-import { newStorage } from "~Storage/Redux/Storage"
+import { RootState } from "./Types"
+import { newStorage } from "./Storage"
 import { MMKV } from "react-native-mmkv"
 import { ERROR_EVENTS } from "~Constants"
 

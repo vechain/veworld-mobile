@@ -1,6 +1,6 @@
 import { ERROR_EVENTS } from "~Constants"
-import { resetActions } from "~Storage/Redux"
-import { AppThunk } from "~Storage/Redux/Types"
+import { resetActions } from "../../Helpers"
+import { AppThunk } from "../../Types"
 import { error } from "~Utils"
 
 /**

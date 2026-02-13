@@ -2,18 +2,18 @@ import { useNavigation } from "@react-navigation/native"
 import { default as React, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChartV2 } from "~Api/Coingecko"
-import { BaseIcon, BaseText, BaseTouchableBox, BaseView, TokenSymbol, useFeatureFlags } from "~Components"
+import { BaseIcon, BaseText, BaseTouchableBox, BaseView, TokenSymbol } from "~Components"
 import { useDevice } from "~Components/Providers/DeviceProvider"
 import { TokenImage } from "~Components/Reusable/TokenImage"
-import { B3TR, COLORS, isSmallScreen, typography, VeDelegate, VET, VTHO } from "~Constants"
+import { COLORS, isSmallScreen, typography, VeDelegate } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
 import { useTokenDisplayName } from "~Hooks/useTokenDisplayName"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
-import { selectBalanceVisible, selectCurrency, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
-import { AccountUtils, AddressUtils, BalanceUtils } from "~Utils"
+import { selectBalanceVisible, selectCurrency, useAppSelector } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
 import ChartUtils from "~Utils/ChartUtils"
 import { Chart, CHART_WIDTH } from "./Chart"
 
@@ -28,8 +28,6 @@ export const TokenCard = ({ token }: Props) => {
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
     const { isLowEndDevice } = useDevice()
-    const selectedAccount = useAppSelector(selectSelectedAccount)
-    const { betterWorldFeature } = useFeatureFlags()
 
     // Check if token supports charts (has CoinGecko ID) and exclude VeDelegate
     const isTokenSupported = useMemo(
@@ -85,47 +83,11 @@ export const TokenCard = ({ token }: Props) => {
 
     const isCrossChainToken = useMemo(() => !!token.crossChainProvider, [token.crossChainProvider])
 
-    // Only allow navigation for tokens with detailed information available
-    const isVechainToken = useMemo(() => [B3TR.symbol, VET.symbol, VTHO.symbol].includes(token.symbol), [token.symbol])
-
     const handlePress = useCallback(() => {
-        if (betterWorldFeature?.balanceScreen?.tokens?.enabled) {
-            navigation.navigate(Routes.TOKEN_DETAILS, {
-                token: tokenWithCompleteInfo,
-            })
-            return
-        }
-        if (!isVechainToken) {
-            if (AccountUtils.isObservedAccount(selectedAccount)) return
-            if (isCrossChainToken) {
-                navigation.navigate(Routes.BRIDGE_TOKEN_DETAILS, {
-                    token,
-                })
-                return
-            }
-
-            const isTokenBalance = BalanceUtils.getIsTokenWithBalance(token)
-
-            if (!isTokenBalance) return
-
-            navigation.navigate(Routes.INSERT_ADDRESS_SEND, {
-                token,
-            })
-            return
-        }
-
         navigation.navigate(Routes.TOKEN_DETAILS, {
             token: tokenWithCompleteInfo,
         })
-    }, [
-        isVechainToken,
-        navigation,
-        tokenWithCompleteInfo,
-        selectedAccount,
-        betterWorldFeature?.balanceScreen?.tokens?.enabled,
-        isCrossChainToken,
-        token,
-    ])
+    }, [navigation, tokenWithCompleteInfo])
 
     return (
         <BaseTouchableBox

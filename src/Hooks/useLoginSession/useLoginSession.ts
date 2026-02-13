@@ -1,14 +1,7 @@
 import { useCallback, useMemo } from "react"
 import { CertificateRequest, TransactionRequest, TypeDataRequest } from "~Model"
-import {
-    addConnectedDiscoveryApp,
-    addSession,
-    selectSelectedAccountOrNull,
-    selectSelectedNetwork,
-    selectSessions,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { addConnectedDiscoveryApp, addSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectSelectedNetwork, selectSelectedAccountOrNull, selectSessions } from "~Storage/Redux/Selectors"
 
 export const useLoginSession = () => {
     const loginSessions = useAppSelector(selectSessions)
