@@ -664,6 +664,8 @@
   "DEVELOPER_SETTING_INDEXER_TITLE": "索引器",
   "DEVELOPER_SETTING_INDEXER_UPDATED": "索引器 URL 已更新",
   "DEVELOPER_SETTING_NOTIFICATION_URL": "通知 URL",
+  "DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION": "退出你的智能钱包",
+  "DEVELOPER_SETTING_SMART_WALLET_TITLE": "社交登录",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "一个或多个账户的恢复短语尚未备份。请确保备份以避免丢失对加密货币的访问。",
   "DEVICE_BACKUP_MODAL_TITLE": "立即备份",
   "DEVICE_JAILBROKE_MODAL_SUBTITLE": "我们检测到您的设备已越狱，这可能会影响您的钱包安全。我们强烈建议您备份恢复短语、在常规设置中重置 VeWorld，并在未越狱的设备上导入您的钱包。",

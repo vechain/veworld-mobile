@@ -664,6 +664,8 @@
   "DEVELOPER_SETTING_INDEXER_TITLE": "Chỉ mục",
   "DEVELOPER_SETTING_INDEXER_UPDATED": "Đã cập nhật URL chỉ mục",
   "DEVELOPER_SETTING_NOTIFICATION_URL": "URL thông báo",
+  "DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION": "Đăng xuất khỏi ví thông minh của bạn",
+  "DEVELOPER_SETTING_SMART_WALLET_TITLE": "Đăng nhập xã hội",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Một hoặc nhiều cụm từ khôi phục tài khoản của bạn chưa được sao lưu. Hãy đảm bảo thực hiện sao lưu để không bao giờ mất quyền truy cập vào tiền điện tử của bạn.",
   "DEVICE_BACKUP_MODAL_TITLE": "Sao lưu ngay",
   "DEVICE_JAILBROKE_MODAL_SUBTITLE": "Chúng tôi đã phát hiện ra rằng thiết bị của bạn đã bị jailbreak, điều này có thể làm suy giảm bảo mật của ví của bạn. Chúng tôi khuyên bạn nên sao lưu cụm từ khôi phục, đặt lại VeWorld trong cài đặt chung và nhập ví của bạn trên một thiết bị chưa jailbreak.",

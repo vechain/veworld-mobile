@@ -664,6 +664,8 @@
   "DEVELOPER_SETTING_INDEXER_TITLE": "इंडेक्सर",
   "DEVELOPER_SETTING_INDEXER_UPDATED": "इंडेक्सर URL अपडेट किया गया",
   "DEVELOPER_SETTING_NOTIFICATION_URL": "सूचना URL",
+  "DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION": "अपने स्मार्ट वॉलेट से लॉगआउट करें",
+  "DEVELOPER_SETTING_SMART_WALLET_TITLE": "सोशल लॉगिन",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "आपकी एक या एक से अधिक खातों की रिकवरी वाक्यांश अभी तक बैकअप नहीं लिया गया है। अपने क्रिप्टो तक पहुंच को कभी नहीं खोने के लिए बैकअप लेना सुनिश्चित करें।",
   "DEVICE_BACKUP_MODAL_TITLE": "अब बैकअप लें",
   "DEVICE_JAILBROKE_MODAL_SUBTITLE": "हमने पाया है कि आपका डिवाइस जेलब्रोकन है, जो आपके वॉलेट की सुरक्षा से समझौता कर सकता है। हम आपके रिकवरी वाक्यांश का बैकअप लेने, सामान्य सेटिंग्स में VeWorld को रीसेट करने, और आपके वॉलेट को गैर-जेलब्रोकन डिवाइस पर इम्पोर्ट करने की सिफारिश करते हैं।",

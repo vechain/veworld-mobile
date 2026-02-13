@@ -664,6 +664,8 @@
   "DEVELOPER_SETTING_INDEXER_TITLE": "Indexer",
   "DEVELOPER_SETTING_INDEXER_UPDATED": "Indexer-URL aktualisiert",
   "DEVELOPER_SETTING_NOTIFICATION_URL": "Benachrichtigungs-URL",
+  "DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION": "Melden Sie sich von Ihrem Smart Wallet ab",
+  "DEVELOPER_SETTING_SMART_WALLET_TITLE": "Soziales Login",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Eine oder mehrere Ihrer Kontowiederherstellungs-Phrasen wurden noch nicht gesichert. Stellen Sie sicher, dass Sie ein Backup erstellen, um nie den Zugriff auf Ihre Kryptowährung zu verlieren.",
   "DEVICE_BACKUP_MODAL_TITLE": "Jetzt Backup erstellen",
   "DEVICE_JAILBROKE_MODAL_SUBTITLE": "Wir haben festgestellt, dass Ihr Gerät einen Jailbreak hat, was die Sicherheit Ihres Wallets gefährden kann. Wir empfehlen dringend, Ihre Wiederherstellungs-Phrase zu sichern, VeWorld in den allgemeinen Einstellungen zurückzusetzen und Ihr Wallet auf einem nicht-gejailbreakten Gerät zu importieren.",

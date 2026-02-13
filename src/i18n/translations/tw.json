@@ -664,6 +664,8 @@
   "DEVELOPER_SETTING_INDEXER_TITLE": "索引器",
   "DEVELOPER_SETTING_INDEXER_UPDATED": "索引器網址已更新",
   "DEVELOPER_SETTING_NOTIFICATION_URL": "通知網址",
+  "DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION": "登出你的智慧錢包",
+  "DEVELOPER_SETTING_SMART_WALLET_TITLE": "社交登入",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "您的一個或多個帳戶恢復密語尚未備份。確保備份以永不丟失對加密貨幣的訪問。",
   "DEVICE_BACKUP_MODAL_TITLE": "立即備份",
   "DEVICE_JAILBROKE_MODAL_SUBTITLE": "我們檢測到您的設備已越獄，這可能會危及您的錢包安全。我們強烈建議您備份恢復密語，重置 VeWorld 在「一般設定」中，並在非越獄設備上導入您的錢包。",
