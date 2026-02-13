@@ -664,6 +664,8 @@
   "DEVELOPER_SETTING_INDEXER_TITLE": "Indicizzatore",
   "DEVELOPER_SETTING_INDEXER_UPDATED": "URL dell'indicizzatore aggiornato",
   "DEVELOPER_SETTING_NOTIFICATION_URL": "URL notifiche",
+  "DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION": "Esci dal tuo smart wallet",
+  "DEVELOPER_SETTING_SMART_WALLET_TITLE": "Login sociale",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Una o più frasi di recupero dei tuoi account non sono state ancora salvate. Assicurati di eseguire il backup per non perdere mai l'accesso alla tua criptovaluta.",
   "DEVICE_BACKUP_MODAL_TITLE": "Esporta ora",
   "DEVICE_JAILBROKE_MODAL_SUBTITLE": "Abbiamo rilevato che il tuo dispositivo è jailbroken, il che potrebbe compromettere la sicurezza del tuo wallet. Ti consigliamo vivamente di eseguire il backup della tua frase di recupero, di resettare VeWorld nelle Impostazioni Generali e di importare il tuo wallet su un dispositivo non jailbroken.",

@@ -664,6 +664,8 @@
   "DEVELOPER_SETTING_INDEXER_TITLE": "Indexer",
   "DEVELOPER_SETTING_INDEXER_UPDATED": "Indexer URL'si güncellendi",
   "DEVELOPER_SETTING_NOTIFICATION_URL": "Bildirim URL'si",
+  "DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION": "Akıllı cüzdanınızdan çıkış yapın",
+  "DEVELOPER_SETTING_SMART_WALLET_TITLE": "Sosyal giriş",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Hesap kurtarma ifadelerinizden biri veya birkaçı henüz yedeklenmedi. Erişimi asla kaybetmemek için yedeklediğinizden emin olun.",
   "DEVICE_BACKUP_MODAL_TITLE": "Şimdi yedekle",
   "DEVICE_JAILBROKE_MODAL_SUBTITLE": "Cihazınızın jailbreak yapıldığını tespit ettik, bu da cüzdanınızın güvenliğini tehlikeye atabilir. Kurtarma ifadenizi yedeklemenizi, Genel Ayarlar'da VeWorld'ü sıfırlamanızı ve cüzdanınızı jailbreak yapılmamış bir cihaza aktarmanızı şiddetle öneririz.",

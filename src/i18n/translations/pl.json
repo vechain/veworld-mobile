@@ -664,6 +664,8 @@
   "DEVELOPER_SETTING_INDEXER_TITLE": "Indeksator",
   "DEVELOPER_SETTING_INDEXER_UPDATED": "Zaktualizowano adres URL indeksatora",
   "DEVELOPER_SETTING_NOTIFICATION_URL": "Adres URL powiadomień",
+  "DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION": "Wyloguj się ze swojego smart portfela",
+  "DEVELOPER_SETTING_SMART_WALLET_TITLE": "Logowanie społecznościowe",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Jedno lub więcej Twoich kont nie mają jeszcze kopii zapasowej frazy odzyskiwania. Upewnij się, że wykonasz kopię zapasową, aby nigdy nie stracić dostępu do swojej kryptowaluty.",
   "DEVICE_BACKUP_MODAL_TITLE": "Zrób kopię zapasową",
   "DEVICE_JAILBROKE_MODAL_SUBTITLE": "Wykryliśmy, że Twoje urządzenie zostało zrootowane, co może zagrażać bezpieczeństwu Twojego portfela. Zdecydowanie zalecamy wykonanie kopii zapasowej frazy odzyskiwania, zresetowanie VeWorld w ustawieniach ogólnych i zaimportowanie portfela na urządzeniu bez rootowania.",

@@ -664,6 +664,8 @@
   "DEVELOPER_SETTING_INDEXER_TITLE": "Indexeur",
   "DEVELOPER_SETTING_INDEXER_UPDATED": "URL de l’indexeur mise à jour",
   "DEVELOPER_SETTING_NOTIFICATION_URL": "URL de notification",
+  "DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION": "Se déconnecter de votre portefeuille intelligent",
+  "DEVELOPER_SETTING_SMART_WALLET_TITLE": "Connexion sociale",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Une ou plusieurs phrases de récupération de vos comptes n'ont pas encore été sauvegardées. Assurez-vous de faire une sauvegarde pour ne jamais perdre l'accès à votre crypto.",
   "DEVICE_BACKUP_MODAL_TITLE": "Sauvegardez maintenant",
   "DEVICE_JAILBROKE_MODAL_SUBTITLE": "Nous avons détecté que votre appareil est jailbreaké, ce qui peut compromettre la sécurité de votre portefeuille. Nous vous recommandons fortement de sauvegarder votre phrase de récupération, de réinitialiser VeWorld dans les Paramètres généraux et d'importer votre portefeuille sur un appareil non jailbreaké.",
