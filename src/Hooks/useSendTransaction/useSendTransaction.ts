@@ -41,7 +41,6 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
 
         try {
             response = await axios.post(`${selectedNetwork.currentUrl}/transactions`, encodedRawTx)
-
             id = response.data.id
             await onSuccess(signedTransaction, id)
 
