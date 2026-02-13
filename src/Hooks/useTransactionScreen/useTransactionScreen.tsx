@@ -70,8 +70,15 @@ const getGenericDelegationForSmartWallet = (
     genericDelegatorFees: ReturnType<typeof useGenericDelegationFees>,
     selectedFeeOption: GasPriceCoefficient,
     depositAccount: string,
+    delegationUrl?: string,
 ) => {
     if (deviceType !== DEVICE_TYPE.SMART_WALLET) {
+        return undefined
+    }
+
+    // Only add generic delegation transfer clause when actually using the generic delegator.
+    // When delegating via a URL (e.g. dApp-provided) or another account, the delegator pays the fee.
+    if (!delegationUrl || !isGenericDelegatorUrl(delegationUrl)) {
         return undefined
     }
 
@@ -311,6 +318,7 @@ export const useTransactionScreen = ({
             genericDelegatorFees,
             selectedFeeOption,
             depositAccount,
+            selectedDelegationUrl,
         ),
     })
 
