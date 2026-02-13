@@ -1,5 +1,12 @@
 
 
+## 2.5.2 (2026-02-13)
+
+
+### Bug Fixes
+
+* handle optional device type in SmartWalletAuthGate component ([#3773](https://github.com/vechain/veworld-mobile/issues/3773)) ([d6ffe94](https://github.com/vechain/veworld-mobile/commit/d6ffe944d1fa65f89ea508f8d9dd1976f9adb20f))
+
 ## 2.5.1 (2026-01-27)
 
 
