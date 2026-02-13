@@ -50,7 +50,7 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
     const isSmartAccount = selectedAccount?.device?.type === DEVICE_TYPE.SMART_WALLET
 
     const alternativeWallets = useMemo(
-        () => visibleAccounts.filter(account => account.device.type !== DEVICE_TYPE.SMART_WALLET),
+        () => visibleAccounts.filter(account => account.device?.type !== DEVICE_TYPE.SMART_WALLET),
         [visibleAccounts],
     )
 
