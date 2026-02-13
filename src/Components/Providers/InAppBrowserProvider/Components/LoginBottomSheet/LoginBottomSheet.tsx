@@ -15,14 +15,7 @@ import { useSignTypedMessage } from "~Hooks/useSignTypedData"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, LedgerAccountWithDevice, LoginActivityValue, LoginRequest, TypedDataMessage } from "~Model"
 import { Routes } from "~Navigation"
-import {
-    addLoginActivity,
-    addSession,
-    selectSelectedAccountOrNull,
-    selectVisibleAccountsWithoutObserved,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { addLoginActivity, addSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { AccountUtils, error, HexUtils } from "~Utils"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { DappDetails } from "../DappDetails"
@@ -31,6 +24,7 @@ import { Signable } from "../Signable"
 import { LedgerDeviceAlert as TypedDataLedgerDeviceAlert } from "../TypedDataBottomSheet/LedgerDeviceAlert"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
+import { selectSelectedAccountOrNull, selectVisibleAccountsWithoutObserved } from "~Storage/Redux/Selectors"
 
 type Props = {
     request: LoginRequest

@@ -29,7 +29,7 @@ describe("CollectiblesSendActionButton", () => {
 
         expect(onClose).toHaveBeenCalled()
 
-        expect(navigate).toHaveBeenCalledWith(Routes.INSERT_ADDRESS_SEND, {
+        expect(navigate).toHaveBeenCalledWith(Routes.SEND_NFT, {
             contractAddress: "0x0",
             tokenId: "1",
         })

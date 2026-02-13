@@ -3,7 +3,6 @@ import React, { useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
 import Animated, { LinearTransition, ZoomIn, ZoomOut } from "react-native-reanimated"
 import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
-import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { AnalyticsEvent, COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
 import {
     useAnalyticTracking,
@@ -48,7 +47,6 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const showStakingTab = useShowStakingTab()
     const nav = useNavigation()
     const track = useAnalyticTracking()
-    const { betterWorldFeature } = useFeatureFlags()
 
     const isOnline = useIsOnline()
 
@@ -57,13 +55,10 @@ export const TabRenderer = ({ onLayout }: Props) => {
             if (tab === "STAKING") {
                 return showStakingTab
             }
-            if (tab === "COLLECTIBLES") {
-                return betterWorldFeature.balanceScreen?.collectibles?.enabled
-            }
 
             return true
         }) as (typeof TABS)[number][]
-    }, [showStakingTab, betterWorldFeature.balanceScreen?.collectibles?.enabled])
+    }, [showStakingTab])
 
     const showFavorites = useMemo(() => {
         if (!bookmarkedDApps?.length) return false
