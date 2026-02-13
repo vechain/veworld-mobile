@@ -2733,6 +2733,14 @@ type RootTranslation = {
 	 */
 	DEVELOPER_SETTING_INDEXER_UPDATED: string
 	/**
+	 * L​o​g​o​u​t​ ​o​f​ ​y​o​u​r​ ​s​m​a​r​t​ ​w​a​l​l​e​t
+	 */
+	DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION: string
+	/**
+	 * S​o​c​i​a​l​ ​l​o​g​i​n
+	 */
+	DEVELOPER_SETTING_SMART_WALLET_TITLE: string
+	/**
 	 * N​o​t​i​f​i​c​a​t​i​o​n​ ​U​R​L
 	 */
 	DEVELOPER_SETTING_NOTIFICATION_URL: string
@@ -8893,6 +8901,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Indexer URL updated
 	 */
 	DEVELOPER_SETTING_INDEXER_UPDATED: () => LocalizedString
+	/**
+	 * Logout of your smart wallet
+	 */
+	DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION: () => LocalizedString
+	/**
+	 * Social login
+	 */
+	DEVELOPER_SETTING_SMART_WALLET_TITLE: () => LocalizedString
 	/**
 	 * Notification URL
 	 */

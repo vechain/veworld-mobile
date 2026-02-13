@@ -663,6 +663,8 @@
   "DEVELOPER_SETTING_INDEXER_DESCRIPTION": "Configure the indexer URLs for each network. Support is partial",
   "DEVELOPER_SETTING_INDEXER_TITLE": "Indexer",
   "DEVELOPER_SETTING_INDEXER_UPDATED": "Indexer URL updated",
+  "DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION": "Logout of your smart wallet",
+  "DEVELOPER_SETTING_SMART_WALLET_TITLE": "Social login",
   "DEVELOPER_SETTING_NOTIFICATION_URL": "Notification URL",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "One or more of your accounts recovery phrase haven’t been backed up yet. Make sure to backup to never lose access to your crypto.",
   "DEVICE_BACKUP_MODAL_TITLE": "Backup now",
