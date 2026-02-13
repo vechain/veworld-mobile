@@ -320,6 +320,11 @@ describe("useTransactionScreen", () => {
             setSelectedDelegationToken: expect.any(Function),
             fallbackToVTHO: expect.any(Function),
             availableTokens: ["VTHO"],
+            hasEnoughBalanceForFeeOnly: {
+                B3TR: true,
+                VET: true,
+                VTHO: true,
+            },
             hasEnoughBalanceOnAny: true,
             hasEnoughBalanceOnToken: {
                 B3TR: true,
