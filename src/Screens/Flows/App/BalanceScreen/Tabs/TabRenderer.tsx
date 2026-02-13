@@ -22,7 +22,6 @@ import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
 import { BannersCarousel } from "../Components/BannerCarousel"
 import { NewUserVeBetterCard } from "../Components/VeBetterDao/NewUserVeBetterCard"
-import { useShowStakingTab } from "../Hooks/useShowStakingTab"
 import { Collectibles } from "./Collectibles"
 import { Staking } from "./Staking"
 import { Tokens } from "./Tokens"
@@ -44,28 +43,17 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const hideNewUserVeBetterCard = useAppSelector(selectHideNewUserVeBetterCard)
     const { data: hasAnyVeBetterActions } = useHasAnyVeBetterActions()
     const { onDAppPress } = useDAppActions(Routes.HOME)
-    const showStakingTab = useShowStakingTab()
     const nav = useNavigation()
     const track = useAnalyticTracking()
 
     const isOnline = useIsOnline()
-
-    const filteredTabs = useMemo(() => {
-        return TABS.filter(tab => {
-            if (tab === "STAKING") {
-                return showStakingTab
-            }
-
-            return true
-        }) as (typeof TABS)[number][]
-    }, [showStakingTab])
 
     const showFavorites = useMemo(() => {
         if (!bookmarkedDApps?.length) return false
         return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount) && isOnline
     }, [bookmarkedDApps.length, isOnline, selectedAccount])
 
-    const labels = useMemo(() => filteredTabs.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL, filteredTabs])
+    const labels = useMemo(() => TABS.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL])
 
     const { containerPaddingBottom, contentExtraBottomPadding } = useLayoutScrollviewPadding()
 
@@ -130,7 +118,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                 )}
 
                 <BaseSimpleTabs
-                    keys={filteredTabs}
+                    keys={TABS}
                     labels={labels}
                     selectedKey={selectedTab}
                     setSelectedKey={onTabPress}

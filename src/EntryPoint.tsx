@@ -8,11 +8,12 @@ import { SwitchStack } from "~Navigation"
 import { PlatformUtils } from "~Utils"
 import { AnimatedSplashScreen } from "./AnimatedSplashScreen"
 import { AppLoader } from "./AppLoader"
+import { SmartWalletAuthGate } from "~Components/Providers/SmartWalletAuthGate"
 const { ScreenShieldRN } = NativeModules
 
 export const EntryPoint = () => {
     const { setIsAppReady, securityType } = useApplicationSecurity()
-    const { isLoading } = useFeatureFlags()
+    const { isLoading, smartWalletFeature } = useFeatureFlags()
 
     useEffect(() => {
         // If the feature flags are still loading, don't hide the splash screen
@@ -54,6 +55,7 @@ export const EntryPoint = () => {
                     <AppLoader>
                         <BaseStatusBar root />
                         <SwitchStack />
+                        {smartWalletFeature?.enabled && <SmartWalletAuthGate />}
                     </AppLoader>
                 </AnimatedSplashScreen>
             </PlatformAutolock>

@@ -10,6 +10,8 @@ jest.mock("~Hooks/useSmartWallet", () => ({
         login: jest.fn(),
         isAuthenticated: false,
         smartAccountAddress: "",
+        linkedAccounts: [],
+        userDisplayName: undefined,
     })),
 }))
 
@@ -117,6 +119,8 @@ describe("WelcomeScreenV2", () => {
                 login: jest.fn(),
                 isAuthenticated: true,
                 smartAccountAddress: mockSmartAccountAddress,
+                linkedAccounts: [{ type: "google" }],
+                userDisplayName: undefined,
             })
             ;(useHandleWalletCreation as jest.Mock).mockReturnValue({
                 isOpen: false,
@@ -136,6 +140,8 @@ describe("WelcomeScreenV2", () => {
             await waitFor(() => {
                 expect(mockOnCreateSmartWallet).toHaveBeenCalledWith({
                     address: mockSmartAccountAddress,
+                    name: undefined,
+                    linkedProviders: ["google"],
                 })
             })
         })

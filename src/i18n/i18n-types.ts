@@ -2733,6 +2733,14 @@ type RootTranslation = {
 	 */
 	DEVELOPER_SETTING_INDEXER_UPDATED: string
 	/**
+	 * L​o​g​o​u​t​ ​o​f​ ​y​o​u​r​ ​s​m​a​r​t​ ​w​a​l​l​e​t
+	 */
+	DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION: string
+	/**
+	 * S​o​c​i​a​l​ ​l​o​g​i​n
+	 */
+	DEVELOPER_SETTING_SMART_WALLET_TITLE: string
+	/**
 	 * N​o​t​i​f​i​c​a​t​i​o​n​ ​U​R​L
 	 */
 	DEVELOPER_SETTING_NOTIFICATION_URL: string
@@ -5219,6 +5227,30 @@ type RootTranslation = {
 	 * L​i​n​k​ ​y​o​u​r​ ​a​c​c​o​u​n​t
 	 */
 	SMART_WALLET_LINK_MODAL_TITLE: string
+	/**
+	 * L​o​g​i​n​ ​f​a​i​l​e​d​,​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r
+	 */
+	SMART_WALLET_LOGIN_FAILED: string
+	/**
+	 * S​i​g​n​ ​b​a​c​k​ ​i​n​ ​t​o​ ​u​n​l​o​c​k​ ​y​o​u​r​ ​s​m​a​r​t​ ​w​a​l​l​e​t
+	 */
+	SMART_WALLET_REAUTH_DESCRIPTION: string
+	/**
+	 * U​s​e​ ​a​ ​s​e​l​f​-​c​u​s​t​o​d​y​ ​w​a​l​l​e​t
+	 */
+	SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE: string
+	/**
+	 * S​i​g​n​ ​i​n​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	SMART_WALLET_REAUTH_TITLE: string
+	/**
+	 * W​h​y​ ​d​o​ ​I​ ​n​e​e​d​ ​t​o​ ​s​i​g​n​ ​i​n​?
+	 */
+	SMART_WALLET_REAUTH_WHY_SIGN_IN: string
+	/**
+	 * Y​o​u​r​ ​s​e​s​s​i​o​n​ ​e​x​p​i​r​e​d​.​ ​S​i​g​n​i​n​g​ ​i​n​ ​a​g​a​i​n​ ​p​r​o​v​e​s​ ​i​t​'​s​ ​y​o​u​ ​a​n​d​ ​u​n​l​o​c​k​s​ ​t​h​i​s​ ​s​m​a​r​t​ ​w​a​l​l​e​t​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.
+	 */
+	SMART_WALLET_REAUTH_WHY_SIGN_IN_DESCRIPTION: string
 	/**
 	 * A​P​Y
 	 */
@@ -8870,6 +8902,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	DEVELOPER_SETTING_INDEXER_UPDATED: () => LocalizedString
 	/**
+	 * Logout of your smart wallet
+	 */
+	DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION: () => LocalizedString
+	/**
+	 * Social login
+	 */
+	DEVELOPER_SETTING_SMART_WALLET_TITLE: () => LocalizedString
+	/**
 	 * Notification URL
 	 */
 	DEVELOPER_SETTING_NOTIFICATION_URL: () => LocalizedString
@@ -11314,6 +11354,30 @@ Here's what it's all about:
 	 * Link your account
 	 */
 	SMART_WALLET_LINK_MODAL_TITLE: () => LocalizedString
+	/**
+	 * Login failed, try again later
+	 */
+	SMART_WALLET_LOGIN_FAILED: () => LocalizedString
+	/**
+	 * Sign back in to unlock your smart wallet
+	 */
+	SMART_WALLET_REAUTH_DESCRIPTION: () => LocalizedString
+	/**
+	 * Use a self-custody wallet
+	 */
+	SMART_WALLET_REAUTH_SELF_CUSTODY_TITLE: () => LocalizedString
+	/**
+	 * Sign in to continue
+	 */
+	SMART_WALLET_REAUTH_TITLE: () => LocalizedString
+	/**
+	 * Why do I need to sign in?
+	 */
+	SMART_WALLET_REAUTH_WHY_SIGN_IN: () => LocalizedString
+	/**
+	 * Your session expired. Signing in again proves it's you and unlocks this smart wallet on this device.
+	 */
+	SMART_WALLET_REAUTH_WHY_SIGN_IN_DESCRIPTION: () => LocalizedString
 	/**
 	 * APY
 	 */

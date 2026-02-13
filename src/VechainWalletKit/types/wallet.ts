@@ -26,6 +26,7 @@ export interface WalletContext extends SigningOperations {
 }
 export interface AuthenticationOperations {
     isAuthenticated: boolean
+    isReady: boolean
     login: (options: LoginOptions) => Promise<void>
     logout: () => Promise<void>
 }
