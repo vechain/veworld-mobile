@@ -22,6 +22,7 @@ import { useIsGalactica } from "~Hooks/useIsGalactica"
 import { useSendTransaction } from "~Hooks/useSendTransaction"
 import { useTransactionFees } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
+import { DelegationType } from "~Model/Delegation"
 import { DEVICE_TYPE, NETWORK_TYPE, TransactionRequest } from "~Model"
 import { Routes } from "~Navigation"
 import {
@@ -295,9 +296,20 @@ export const useTransactionScreen = ({
         [genericDelegatorFees.isFirstTimeLoading, loadingGas, transactionFeesResponse.isFirstTimeLoading],
     )
 
+    const isUsingGenericDelegator = useMemo(
+        () => selectedDelegationOption === DelegationType.URL && isGenericDelegatorUrl(selectedDelegationUrl ?? ""),
+        [selectedDelegationOption, selectedDelegationUrl],
+    )
+
+    const isGasFeeSponsored = useMemo(
+        () => isDelegated && !isUsingGenericDelegator,
+        [isDelegated, isUsingGenericDelegator],
+    )
+
     const { hasEnoughBalance, hasEnoughBalanceOnAny, hasEnoughBalanceOnToken } = useIsEnoughGas({
         selectedToken: selectedDelegationToken,
         isDelegated,
+        isGasFeeSponsored,
         allFeeOptions: selectedFeeAllTokenOptions,
         isLoadingFees: isFirstTimeLoadingFees,
         transactionOutputs,
