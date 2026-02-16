@@ -1,5 +1,12 @@
 
 
+## 2.5.2 (2026-02-16)
+
+
+### Bug Fixes
+
+* smart account account delegation ([#3775](https://github.com/vechain/veworld-mobile/issues/3775)) ([0016843](https://github.com/vechain/veworld-mobile/commit/0016843e4dba3e38a36c51ce3ff35a707d76d79d))
+
 ## 2.5.1 (2026-01-27)
 
 
