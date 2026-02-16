@@ -1,17 +1,11 @@
-import { AppThunk } from "../Types"
-import { Contact, ContactType } from "~Model"
-import { deleteContact, insertContact } from "../Slices"
-import { AddressUtils, FormUtils, error } from "~Utils"
-import { updateContact, upsertRecentContact } from "../Slices/Contacts"
 import { address } from "thor-devkit"
 import { ERROR_EVENTS } from "~Constants"
-import {
-    decodeNonFungibleTokenTransferClause,
-    decodeTokenTransferClause,
-    isNFTTransferClause,
-    isTokenTransferClause,
-    isVETtransferClause,
-} from "~Utils/TransactionUtils/TransactionUtils"
+import { Contact, ContactType } from "~Model"
+import { AddressUtils, FormUtils, error } from "~Utils"
+import TransactionUtils from "~Utils/TransactionUtils"
+import { deleteContact, insertContact } from "../Slices"
+import { updateContact, upsertRecentContact } from "../Slices/Contacts"
+import { AppThunk } from "../Types"
 
 /**
  * createContact: A utility function to create a Contact object.
@@ -114,24 +108,16 @@ const createRecentContact =
     (clauses: Connex.VM.Clause[], genesisId: string): AppThunk =>
     (dispatch, getState) => {
         const { accounts: accountsState, contacts: contactsState } = getState()
-        const selectedAccount = accountsState.selectedAccount
+        const selectedAccountAddress = accountsState.selectedAccount
+
         let recipientAddress = ""
 
-        if (!selectedAccount) {
+        if (!selectedAccountAddress) {
             error(ERROR_EVENTS.SETTINGS, "No selected account found!")
             return
         }
 
-        if (isVETtransferClause(clauses[0])) {
-            recipientAddress = clauses[0].to ?? ""
-        } else if (isTokenTransferClause(clauses[0])) {
-            recipientAddress = decodeTokenTransferClause(clauses[0])?.to ?? ""
-        } else if (isNFTTransferClause(clauses[0])) {
-            recipientAddress = decodeNonFungibleTokenTransferClause(clauses[0])?.to ?? ""
-        } else {
-            error(ERROR_EVENTS.SETTINGS, "Invalid clause type!")
-            return
-        }
+        recipientAddress = TransactionUtils.getRecipientAddressFromClause(clauses) ?? ""
 
         if (!recipientAddress) {
             error(ERROR_EVENTS.SETTINGS, "Can't create recent contact with invalid recipient address!")
@@ -159,11 +145,11 @@ const createRecentContact =
 
         dispatch(
             upsertRecentContact({
-                selectedAccountAddress: selectedAccount,
+                selectedAccountAddress: selectedAccountAddress,
                 genesisId,
                 contact: { address: recipientAddress, alias: alias, timestamp },
             }),
         )
     }
 
-export { addContact, removeContact, editContact, createContact, createRecentContact }
+export { addContact, createContact, createRecentContact, editContact, removeContact }
