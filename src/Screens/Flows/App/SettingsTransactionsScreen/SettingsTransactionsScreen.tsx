@@ -1,8 +1,9 @@
 import { useNavigation } from "@react-navigation/native"
 import React from "react"
 import { StyleSheet } from "react-native"
-import { BaseButton, BaseCard, BaseText, BaseView, DelegationOptions, Layout, useThor } from "~Components"
+import { BaseButton, BaseIcon, BaseText, BaseView, DelegationOptions, Layout, useThor } from "~Components"
 import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCard"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks/useTheme"
 import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
@@ -122,12 +123,24 @@ export const SettingsTransactionsScreen = () => {
                                     account={selectedDelegationAccount}
                                     balanceToken="FIAT"
                                     disabled
+                                    containerStyle={styles.delegationAccountCard}
                                 />
                             )}
                             {selectedDelegationUrl && (
-                                <BaseCard>
-                                    <BaseText py={8}>{selectedDelegationUrl}</BaseText>
-                                </BaseCard>
+                                <BaseView
+                                    flexDirection="row"
+                                    alignItems="center"
+                                    gap={12}
+                                    style={styles.delegationUrlCard}>
+                                    <BaseView
+                                        flexDirection="row"
+                                        alignItems="center"
+                                        gap={8}
+                                        style={styles.delegationUrlIcon}>
+                                        <BaseIcon name="icon-link" size={16} color={theme.colors.textLight} />
+                                    </BaseView>
+                                    <BaseText py={12}>{selectedDelegationUrl}</BaseText>
+                                </BaseView>
                             )}
                         </SettingsSection.Option>
                         <SettingsSection.Option>
@@ -164,8 +177,26 @@ export const SettingsTransactionsScreen = () => {
     )
 }
 
-const baseStyles = () => {
+const baseStyles = (theme: ColorThemeType) => {
     return StyleSheet.create({
+        delegationAccountCard: {
+            borderColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : theme.colors.neutralVariant.border,
+        },
+        delegationUrlCard: {
+            backgroundColor: theme.colors.card,
+            borderRadius: 8,
+            paddingRight: 12,
+            borderWidth: 1,
+            borderColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : theme.colors.neutralVariant.border,
+        },
+        delegationUrlIcon: {
+            backgroundColor: theme.isDark ? COLORS.PURPLE : theme.colors.neutralVariant.background,
+            borderRightWidth: 1,
+            borderRightColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : theme.colors.neutralVariant.border,
+            borderTopLeftRadius: 7,
+            borderBottomLeftRadius: 7,
+            padding: 12,
+        },
         cardButton: {
             borderWidth: 1,
         },
