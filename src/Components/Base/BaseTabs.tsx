@@ -10,7 +10,6 @@ type Props<TKeys extends string[] | readonly string[]> = {
     labels: string[]
     selectedKey: TKeys[number]
     setSelectedKey: (key: TKeys[number]) => void
-    disabledKeys?: TKeys[number][]
     rootStyle?: StyleProp<ViewStyle>
     showBorder?: boolean
     indicatorBackgroundColor?: string
@@ -26,7 +25,6 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
     selectedKey,
     setSelectedKey,
     rootStyle,
-    disabledKeys,
     showBorder = true,
     indicatorBackgroundColor,
     containerBackgroundColor,
@@ -77,7 +75,6 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
                 return (
                     <TouchableOpacity
                         key={key}
-                        disabled={disabledKeys?.includes(key)}
                         style={styles.tab}
                         onPress={() => setSelectedKey(key)}
                         onLayout={e => {

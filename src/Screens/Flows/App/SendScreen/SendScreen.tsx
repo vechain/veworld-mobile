@@ -10,15 +10,11 @@ import {
     ReceiverScreen,
     SelectAmountSendComponent,
     SendContextProvider,
-    SendFlowState,
     SummaryScreen,
     useTokenSendContext,
 } from "~Components/Reusable/Send"
 import { useThemedStyles } from "~Hooks"
-import { AmountInputMode } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { useAppSelector } from "~Storage/Redux/Hooks"
-import { selectDefaultAmountInputMode } from "~Storage/Redux/Selectors/UserPreferences"
 import { useI18nContext } from "~i18n"
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SEND_TOKEN>
@@ -60,24 +56,16 @@ export const SendScreenContent = (): ReactElement => {
 
 export const SendScreen = () => {
     const route = useRoute<RouteProps>()
-    const defaultAmountInputMode = useAppSelector(selectDefaultAmountInputMode)
-
-    const isInputInFiat = useMemo(() => defaultAmountInputMode === AmountInputMode.FIAT, [defaultAmountInputMode])
-
-    const initialFlowState: SendFlowState = useMemo(
-        () => ({
-            type: "token",
-            token: route.params?.token,
-            amount: "0",
-            fiatAmount: isInputInFiat ? "0" : "",
-            address: "",
-            amountInFiat: isInputInFiat,
-        }),
-        [route.params?.token, isInputInFiat],
-    )
 
     return (
-        <SendContextProvider initialFlowState={initialFlowState}>
+        <SendContextProvider
+            initialFlowState={{
+                type: "token",
+                token: route.params?.token,
+                amount: "0",
+                fiatAmount: "",
+                address: "",
+            }}>
             <SendScreenContent />
         </SendContextProvider>
     )

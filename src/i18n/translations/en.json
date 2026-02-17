@@ -1520,10 +1520,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "TRANSACTIONS_SETTINGS_SEND_PREFERENCES": "Send preferences",
-  "TRANSACTIONS_SETTINGS_DELEGATION_PREFERENCES": "Delegation preferences",
-  "BD_DEFAULT_AMOUNT_VALUE": "Default amount value",
-  "BD_DEFAULT_AMOUNT_VALUE_CURRENCY": "Currency",
-  "BD_DEFAULT_AMOUNT_VALUE_TOKEN": "Token"
+  "YESTERDAY": "Yesterday"
 }

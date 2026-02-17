@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo } from "react"
+import { BaseButtonGroupHorizontal, BaseSpacer, BaseText } from "~Components"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, LocalAccountWithDevice } from "~Model"
+import { AccountWithDevice, BaseButtonGroupHorizontalType, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { useBottomSheetModal } from "~Hooks"
 import { selectDelegationAccounts, useAppSelector } from "~Storage/Redux"
 import { SelectUrlBottomSheet } from "./SelectUrlBottomSheet"
 import { SelectDelegationAccountBottomSheet } from "./SelectDelegationAccountBottomSheet"
-import { BaseTabs } from "~Components/Base/BaseTabs"
 
 type Props = {
     selectedDelegationUrl?: string
@@ -15,6 +15,7 @@ type Props = {
     setNoDelegation: () => void
     setSelectedDelegationAccount: (account: AccountWithDevice) => void
     selectedDelegationAccount?: LocalAccountWithDevice
+    disabled?: boolean
 }
 
 // this component shows delegation options
@@ -25,6 +26,7 @@ export const DelegationOptions = ({
     selectedDelegationAccount,
     selectedDelegationUrl,
     setSelectedDelegationUrl,
+    disabled,
 }: Props) => {
     const { LL } = useI18nContext()
 
@@ -41,29 +43,32 @@ export const DelegationOptions = ({
         onClose: closeSelectDelegationUrlBottonSheet,
     } = useBottomSheetModal()
 
-    const delegationOptionIds = useMemo(
-        () => [DelegationType.NONE, DelegationType.ACCOUNT, DelegationType.URL] as const,
-        [],
-    )
-
-    const delegationOptionLabels = useMemo(
-        () => [LL.SEND_DELEGATION_NONE(), LL.SEND_DELEGATION_ACCOUNT(), LL.SEND_DELEGATION_URL()],
-        [LL],
-    )
-
-    const disabledKeys = useMemo(() => {
-        if (accounts.length === 0) return [DelegationType.ACCOUNT]
-        return []
-    }, [accounts.length])
+    const options: Array<BaseButtonGroupHorizontalType> = useMemo(() => {
+        return [
+            {
+                id: DelegationType.NONE,
+                label: LL.SEND_DELEGATION_NONE(),
+            },
+            {
+                id: DelegationType.ACCOUNT,
+                label: LL.SEND_DELEGATION_ACCOUNT(),
+                disabled: accounts.length === 0,
+            },
+            {
+                id: DelegationType.URL,
+                label: LL.SEND_DELEGATION_URL(),
+            },
+        ]
+    }, [LL, accounts.length])
 
     // this function is called when a delegation option is selected
     const handleSelectDelegationOption = useCallback(
-        (option: DelegationType) => {
-            if (option === DelegationType.NONE) {
+        (button: BaseButtonGroupHorizontalType) => {
+            if (button.id === DelegationType.NONE) {
                 setNoDelegation()
-            } else if (option === DelegationType.ACCOUNT) {
+            } else if (button.id === DelegationType.ACCOUNT) {
                 openSelectAccountBottomSheet()
-            } else if (option === DelegationType.URL) {
+            } else if (button.id === DelegationType.URL) {
                 openSelectDelegationUrlBottomSheet()
             }
         },
@@ -72,12 +77,15 @@ export const DelegationOptions = ({
 
     return (
         <>
-            <BaseTabs
-                selectedKey={selectedDelegationOption}
-                setSelectedKey={handleSelectDelegationOption}
-                keys={delegationOptionIds}
-                labels={delegationOptionLabels}
-                disabledKeys={disabledKeys}
+            <BaseSpacer height={24} />
+            <BaseText typographyFont="subTitleBold">{LL.SEND_DELEGATION_TITLE()}</BaseText>
+            <BaseSpacer height={15} />
+
+            <BaseButtonGroupHorizontal
+                selectedButtonIds={[selectedDelegationOption]}
+                buttons={options}
+                action={handleSelectDelegationOption}
+                disabled={disabled}
             />
 
             <SelectDelegationAccountBottomSheet
