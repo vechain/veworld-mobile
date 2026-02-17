@@ -205,6 +205,9 @@
   "BD_CURRENCY_FORMAT_OPTION_system": "System",
   "BD_CUSTOM_NODES": "Custom nodes",
   "BD_CUSTOM_NODES_DESC": "Manage your custom nodes",
+  "BD_DEFAULT_AMOUNT_VALUE": "Default amount value",
+  "BD_DEFAULT_AMOUNT_VALUE_CURRENCY": "Currency",
+  "BD_DEFAULT_AMOUNT_VALUE_TOKEN": "Token",
   "BD_DRIVE_BACKUP_PASSWORD": "Google Drive Backup Password",
   "BD_EUR": "EUR",
   "BD_GAS_REQUIRED_FOR_CONVERSION": "VTHO balance is required to pay for the conversion gas fees",
@@ -1417,6 +1420,8 @@
   "TOKEN_TRANSFER_SENT": "Sent tokens",
   "TOTAL": "Total",
   "TOUCH_ID": "Touch ID",
+  "TRANSACTIONS_SETTINGS_DELEGATION_PREFERENCES": "Delegation preferences",
+  "TRANSACTIONS_SETTINGS_SEND_PREFERENCES": "Send preferences",
   "TRANSACTION_DONE": "Transaction done",
   "TRANSACTION_FAILED": "Transaction failed",
   "TRANSACTION_FEE": "Transaction fee",
@@ -1520,10 +1525,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "TRANSACTIONS_SETTINGS_SEND_PREFERENCES": "Send preferences",
-  "TRANSACTIONS_SETTINGS_DELEGATION_PREFERENCES": "Delegation preferences",
-  "BD_DEFAULT_AMOUNT_VALUE": "Default amount value",
-  "BD_DEFAULT_AMOUNT_VALUE_CURRENCY": "Currency",
-  "BD_DEFAULT_AMOUNT_VALUE_TOKEN": "Token"
+  "YESTERDAY": "Yesterday"
 }
