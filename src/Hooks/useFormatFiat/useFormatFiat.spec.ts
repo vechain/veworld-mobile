@@ -1,6 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { TestWrapper } from "~Test"
 import { CURRENCY, CURRENCY_FORMATS, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
+import { AmountInputMode } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
 import { useFormatFiat } from "./useFormatFiat"
 
@@ -21,6 +22,7 @@ const createPreloadedState = (): Partial<RootState> => {
             lastReviewTimestamp: "",
             lastVersionCheck: "",
             lastNotificationReminder: null,
+            defaultAmountInputMode: AmountInputMode.FIAT,
         },
     }
 }
