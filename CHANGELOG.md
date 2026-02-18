@@ -1,5 +1,12 @@
 
 
+## 2.6.0 (2026-02-18)
+
+
+### Features
+
+* enhance activity tracking for smart wallets ([#3782](https://github.com/vechain/veworld-mobile/issues/3782)) ([be3addc](https://github.com/vechain/veworld-mobile/commit/be3addc290cc54737cc356011f3ea33d47f43f04))
+
 ## 2.5.1 (2026-01-27)
 
 
