@@ -186,6 +186,7 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
                             signature: updatedActivity.signature,
                             subject: updatedActivity.subject,
                             context: updatedActivity.context,
+                            smartWalletAddress: updatedActivity.smartWalletAddress,
                             failed: updatedActivity.status === ActivityStatus.REVERTED,
                             dappUrl: updatedActivity.dappUrlOrName,
                             transactionId: updatedActivity.txId?.toLowerCase(),
