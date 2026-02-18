@@ -12,6 +12,7 @@ import AddressUtils from "~Utils/AddressUtils"
 type Args = {
     selectedToken: string
     isDelegated: boolean
+    isGasFeeSponsored?: boolean
     allFeeOptions:
         | {
               [token: string]: BigNumberUtils
@@ -62,6 +63,7 @@ const DELEGATION_TOKENS = [VTHO.symbol, B3TR.symbol, VET.symbol]
 export const useIsEnoughGas = ({
     selectedToken,
     isDelegated,
+    isGasFeeSponsored = false,
     allFeeOptions,
     isLoadingFees,
     transactionOutputs,
@@ -99,6 +101,11 @@ export const useIsEnoughGas = ({
                     origin,
                 })
 
+                // When delegation sponsorship covers gas fees (account delegation or custom URL delegator),
+                // only ensure balance can cover the transfer clauses.
+                if (isGasFeeSponsored)
+                    return [tokenSymbol, BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual("0")] as const
+
                 //Delegation with VTHO should count as "0" for fees (only for non-smart wallets,
                 //since smart wallets pay VTHO fees via the generic delegator)
                 if (tokenSymbol === VTHO.symbol && isDelegated && !isSmartWallet)
@@ -119,6 +126,7 @@ export const useIsEnoughGas = ({
         processor,
         origin,
         isDelegated,
+        isGasFeeSponsored,
         isSmartWallet,
     ])
 

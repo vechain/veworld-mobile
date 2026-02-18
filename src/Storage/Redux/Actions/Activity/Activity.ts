@@ -288,12 +288,14 @@ export const addPendingNFTtransferTransactionActivity =
         const locale = selectLanguage(getState())
         const LL = i18nObject(locale)
         const selectedAccount = selectSelectedAccount(getState())
-        const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
-        // Ignore if the selected account is a smart wallet for now
-        if (!selectedAccount || !outgoingTx.id || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
+        if (!selectedAccount || !outgoingTx.id) return
 
-        const pendingActivity: NonFungibleTokenActivity = createPendingNFTTransferActivityFromTx(outgoingTx)
-        dispatch(addActivity(enrichActivityWithTrackingData(pendingActivity, options)))
+        try {
+            const pendingActivity: NonFungibleTokenActivity = createPendingNFTTransferActivityFromTx(outgoingTx)
+            dispatch(addActivity(enrichActivityWithTrackingData(pendingActivity, options)))
+        } catch {
+            // Silently fail - activity will be picked up from chain
+        }
         Feedback.show({
             severity: FeedbackSeverity.LOADING,
             message: LL.TRANSACTION_IN_PROGRESS(),

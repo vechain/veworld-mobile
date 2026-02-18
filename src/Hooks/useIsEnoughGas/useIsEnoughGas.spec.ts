@@ -377,6 +377,36 @@ describe("useIsEnoughGas", () => {
 
         expect(result.current.hasEnoughBalance).toBe(false)
     })
+    it("should return true for smart wallet when gas fee is sponsored by delegator", () => {
+        ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
+            balanceMocker({
+                VET: "0",
+                B3TR: "0",
+                VTHO: "1",
+            }),
+        )
+        const { result } = renderHook(
+            () =>
+                useIsEnoughGas({
+                    selectedToken: "VTHO",
+                    transactionOutputs: [],
+                    origin: "0x0",
+                    isDelegated: true,
+                    isGasFeeSponsored: true,
+                    allFeeOptions: { B3TR: BigNutils("0"), VTHO: BigNutils("2"), VET: BigNutils("0") },
+                    isLoadingFees: false,
+                    isSmartWallet: true,
+                }),
+            {
+                wrapper: TestWrapper,
+                initialProps: {
+                    preloadedState: createPreloadedState(),
+                },
+            },
+        )
+
+        expect(result.current.hasEnoughBalance).toBe(true)
+    })
     it("should return true for smart wallet if user has enough VTHO to cover fees when delegated", () => {
         ;(useMultipleTokensBalance as jest.Mock).mockReturnValue(
             balanceMocker({
