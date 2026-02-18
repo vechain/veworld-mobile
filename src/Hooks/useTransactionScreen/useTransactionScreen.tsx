@@ -90,10 +90,11 @@ const getGenericDelegationForSmartWallet = (
     }
 
     // For smart accounts, use genericDelegatorFees for ALL tokens (including VTHO)
+    // Use maxFee (includes 10% padding) to ensure the delegator receives enough to cover the actual fee
     const feeMap: Record<string, BigNumberUtils | undefined> = {
-        [VET.symbol]: genericDelegatorFees.allOptions?.[VET.symbol]?.[selectedFeeOption]?.estimatedFee,
-        [B3TR.symbol]: genericDelegatorFees.allOptions?.[B3TR.symbol]?.[selectedFeeOption]?.estimatedFee,
-        [VTHO.symbol]: genericDelegatorFees.allOptions?.[VTHO.symbol]?.[selectedFeeOption]?.estimatedFee,
+        [VET.symbol]: genericDelegatorFees.allOptions?.[VET.symbol]?.[selectedFeeOption]?.maxFee,
+        [B3TR.symbol]: genericDelegatorFees.allOptions?.[B3TR.symbol]?.[selectedFeeOption]?.maxFee,
+        [VTHO.symbol]: genericDelegatorFees.allOptions?.[VTHO.symbol]?.[selectedFeeOption]?.maxFee,
     }
 
     // If fee is not available yet (still loading), return undefined
