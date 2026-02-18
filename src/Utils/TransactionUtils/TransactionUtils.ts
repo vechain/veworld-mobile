@@ -1,5 +1,5 @@
 import { abi, Transaction } from "thor-devkit"
-import { debug } from "~Utils/Logger"
+import { debug, error } from "~Utils/Logger"
 import {
     ClauseType,
     ClauseWithMetadata,
@@ -45,6 +45,13 @@ export const SWAP_EVENT_SIG = new abi.Event(abis.UniswapPairV2.SwapEvent).signat
 export const TRANSFER_EVENT_SIG = new abi.Event(abis.VIP180.TransferEvent).signature
 
 /**
+ * The signature of the executeBatchWithAuthorization function of the SocialLoginSmartAccount contract.
+ */
+export const SOCIAL_LOGIN_SMART_ACCOUNT_SIG = new abi.Function(
+    abis.SocialLoginSmartAccount.executeBatchWithAuthorization,
+).signature
+
+/**
  * Checks if a clause represents a VET transfer.
  *
  * @param clause - The clause to check.
@@ -73,6 +80,16 @@ export const isTokenTransferClause = (clause: Connex.VM.Clause): boolean => {
  */
 export const isNFTTransferClause = (clause: Connex.VM.Clause): boolean => {
     return clause.data?.startsWith(NFT_TRANSFER_SIG) || false
+}
+
+/**
+ * Checks if a clause represents a SocialLoginSmartAccount transaction.
+ *
+ * @param clause - The clause to check.
+ * @returns true if the clause represents a SocialLoginSmartAccount transaction, false otherwise.
+ */
+export const isSocialLoginSmartAccountClause = (clause: Connex.VM.Clause): boolean => {
+    return clause.data?.startsWith(SOCIAL_LOGIN_SMART_ACCOUNT_SIG) || false
 }
 
 /**
@@ -408,6 +425,39 @@ export const decodeAsTokenTransferClause = (
     let to = clause.to?.toLowerCase()
 
     return to === token.address ? decodeTokenTransferClause(clause) : null
+}
+
+export const decodeAsSmartWalletClause = (
+    clause: Connex.VM.Clause,
+): {
+    to: string[]
+    value: string[]
+    data: string[]
+    validAfter: string
+    validBefore: string
+    nonce: string
+    signature: string
+} | null => {
+    if (isSocialLoginSmartAccountClause(clause)) {
+        try {
+            const decoded = abi.decodeParameters(
+                abis.SocialLoginSmartAccount.executeBatchWithAuthorization.inputs,
+                "0x" + (clause.data?.slice(SOCIAL_LOGIN_SMART_ACCOUNT_SIG.length) ?? ""),
+            )
+            return {
+                to: decoded.to,
+                value: decoded.value,
+                data: decoded.data,
+                validAfter: decoded.validAfter,
+                validBefore: decoded.validBefore,
+                nonce: decoded.nonce,
+                signature: decoded.signature,
+            }
+        } catch (e) {
+            debug(ERROR_EVENTS.UTILS, "Failed to decode parameters", e)
+        }
+    }
+    return null
 }
 
 /**
@@ -810,4 +860,67 @@ export const decodeTransferEvent = (event: Connex.VM.Event): TransferEventResult
     }
 
     return null
+}
+
+/**
+ * Gets the recipient address from the smart wallet clauses.
+ * @param clause - The clause to get the recipient address from.
+ * @returns The recipient address from the clauses or undefined if the clause type is invalid.
+ */
+export const getRecipientAddressFromSmartWalletClause = (clause: Connex.VM.Clause): string | undefined => {
+    let recipientAddress: string
+
+    const decodedClause = decodeAsSmartWalletClause(clause)
+
+    if (!decodedClause) {
+        error(ERROR_EVENTS.APP, "Failed to decode smart wallet clause!")
+        return
+    }
+
+    if (decodedClause.data[0] === "0x" && Number(decodedClause.value[0]) > 0) {
+        recipientAddress = decodedClause.to[0] ?? ""
+    } else if (decodedClause.data[0]?.startsWith(TRANSFER_SIG)) {
+        recipientAddress =
+            decodeTokenTransferClause({
+                data: decodedClause.data[0],
+                to: decodedClause.to[0],
+                value: decodedClause.value[0],
+            })?.to ?? ""
+    } else if (decodedClause.data[0]?.startsWith(NFT_TRANSFER_SIG)) {
+        recipientAddress =
+            decodeNonFungibleTokenTransferClause({
+                data: decodedClause.data[0],
+                to: decodedClause.to[0],
+                value: decodedClause.value[0],
+            })?.to ?? ""
+    } else {
+        error(ERROR_EVENTS.APP, "Failed to get recipient address from smart wallet clause!")
+        return
+    }
+
+    return recipientAddress
+}
+
+/**
+ * Gets the recipient address from the clauses.
+ * @param clauses - The clauses to get the recipient address from.
+ * @returns The recipient address from the clauses or undefined if the clause type is invalid.
+ */
+export const getRecipientAddressFromClause = (clauses: Connex.VM.Clause[]): string | undefined => {
+    let recipientAddress: string
+
+    if (isVETtransferClause(clauses[0])) {
+        recipientAddress = clauses[0].to ?? ""
+    } else if (isTokenTransferClause(clauses[0])) {
+        recipientAddress = decodeTokenTransferClause(clauses[0])?.to ?? ""
+    } else if (isNFTTransferClause(clauses[0])) {
+        recipientAddress = decodeNonFungibleTokenTransferClause(clauses[0])?.to ?? ""
+    } else if (isSocialLoginSmartAccountClause(clauses[0])) {
+        recipientAddress = getRecipientAddressFromSmartWalletClause(clauses[0]) ?? ""
+    } else {
+        error(ERROR_EVENTS.APP, "Invalid clause type!")
+        return
+    }
+
+    return recipientAddress
 }
