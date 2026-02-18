@@ -602,6 +602,7 @@ export const enrichActivityWithTrackingData = (
     }: {
         appName?: string
         appUrl?: string
+        smartWalletAddress?: string
     } & Pick<Activity, "medium" | "signature" | "context" | "subject">,
 ): Activity => {
     return {
