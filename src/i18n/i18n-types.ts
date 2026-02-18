@@ -2733,6 +2733,10 @@ type RootTranslation = {
 	 */
 	DEVELOPER_SETTING_INDEXER_UPDATED: string
 	/**
+	 * N​o​t​i​f​i​c​a​t​i​o​n​ ​U​R​L
+	 */
+	DEVELOPER_SETTING_NOTIFICATION_URL: string
+	/**
 	 * L​o​g​o​u​t​ ​o​f​ ​y​o​u​r​ ​s​m​a​r​t​ ​w​a​l​l​e​t
 	 */
 	DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION: string
@@ -2740,10 +2744,6 @@ type RootTranslation = {
 	 * S​o​c​i​a​l​ ​l​o​g​i​n
 	 */
 	DEVELOPER_SETTING_SMART_WALLET_TITLE: string
-	/**
-	 * N​o​t​i​f​i​c​a​t​i​o​n​ ​U​R​L
-	 */
-	DEVELOPER_SETTING_NOTIFICATION_URL: string
 	/**
 	 * O​n​e​ ​o​r​ ​m​o​r​e​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​h​a​v​e​n​’​t​ ​b​e​e​n​ ​b​a​c​k​e​d​ ​u​p​ ​y​e​t​.​ ​M​a​k​e​ ​s​u​r​e​ ​t​o​ ​b​a​c​k​u​p​ ​t​o​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​c​r​y​p​t​o​.
 	 */
@@ -6227,6 +6227,26 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * S​e​n​d​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	TRANSACTIONS_SETTINGS_SEND_PREFERENCES: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	TRANSACTIONS_SETTINGS_DELEGATION_PREFERENCES: string
+	/**
+	 * D​e​f​a​u​l​t​ ​a​m​o​u​n​t​ ​v​a​l​u​e
+	 */
+	BD_DEFAULT_AMOUNT_VALUE: string
+	/**
+	 * C​u​r​r​e​n​c​y
+	 */
+	BD_DEFAULT_AMOUNT_VALUE_CURRENCY: string
+	/**
+	 * T​o​k​e​n
+	 */
+	BD_DEFAULT_AMOUNT_VALUE_TOKEN: string
 }
 
 export type TranslationFunctions = {
@@ -8902,6 +8922,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	DEVELOPER_SETTING_INDEXER_UPDATED: () => LocalizedString
 	/**
+	 * Notification URL
+	 */
+	DEVELOPER_SETTING_NOTIFICATION_URL: () => LocalizedString
+	/**
 	 * Logout of your smart wallet
 	 */
 	DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION: () => LocalizedString
@@ -8909,10 +8933,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Social login
 	 */
 	DEVELOPER_SETTING_SMART_WALLET_TITLE: () => LocalizedString
-	/**
-	 * Notification URL
-	 */
-	DEVELOPER_SETTING_NOTIFICATION_URL: () => LocalizedString
 	/**
 	 * One or more of your accounts recovery phrase haven’t been backed up yet. Make sure to backup to never lose access to your crypto.
 	 */
@@ -12342,6 +12362,26 @@ Make sure that it is unlocked and the location services are enabled.
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Send preferences
+	 */
+	TRANSACTIONS_SETTINGS_SEND_PREFERENCES: () => LocalizedString
+	/**
+	 * Delegation preferences
+	 */
+	TRANSACTIONS_SETTINGS_DELEGATION_PREFERENCES: () => LocalizedString
+	/**
+	 * Default amount value
+	 */
+	BD_DEFAULT_AMOUNT_VALUE: () => LocalizedString
+	/**
+	 * Currency
+	 */
+	BD_DEFAULT_AMOUNT_VALUE_CURRENCY: () => LocalizedString
+	/**
+	 * Token
+	 */
+	BD_DEFAULT_AMOUNT_VALUE_TOKEN: () => LocalizedString
 }
 
 export type Formatters = {

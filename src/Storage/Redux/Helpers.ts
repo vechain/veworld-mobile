@@ -75,7 +75,7 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
     return {
         key: "root",
         storage,
-        version: 35,
+        version: 36,
         blacklist: [NftSlice.name, PendingSlice.name],
         whitelist: [
             CurrencySlice.name,
