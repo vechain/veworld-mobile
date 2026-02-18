@@ -1,5 +1,12 @@
 
 
+## 2.5.2 (2026-02-18)
+
+
+### Bug Fixes
+
+* paying with b3tr token ([#3784](https://github.com/vechain/veworld-mobile/issues/3784)) ([752c005](https://github.com/vechain/veworld-mobile/commit/752c005a6d4953460cffe2394a47ba09bfce4519))
+
 ## 2.5.1 (2026-01-27)
 
 
