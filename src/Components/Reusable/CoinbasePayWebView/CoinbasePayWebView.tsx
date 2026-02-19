@@ -41,15 +41,16 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
     const senderDevice = useAppSelector(state => selectDevice(state, account?.address))
     const { signMessage } = useSignMessage()
     const { ownerAddress } = useSmartWallet()
+    // isSmartAccount is only true when ownerAddress is available,
+    // keeping it consistent with resolvedDestinationAddress.
+    const isSmartAccount = senderDevice?.type === DEVICE_TYPE.SMART_WALLET && !!ownerAddress
 
-    // The lambda will verify the signature against the ownerAddress as that is what signs the message
-    // The smart account address will then be obtained by the lambda
     const resolvedDestinationAddress = useMemo(() => {
-        if (senderDevice?.type === DEVICE_TYPE.SMART_WALLET && ownerAddress) {
-            return ownerAddress
+        if (isSmartAccount) {
+            return ownerAddress!
         }
         return destinationAddress
-    }, [destinationAddress, senderDevice?.type, ownerAddress])
+    }, [destinationAddress, isSmartAccount, ownerAddress])
 
     // State for signature and timestamp
     const [signature, setSignature] = useState<string | undefined>()
