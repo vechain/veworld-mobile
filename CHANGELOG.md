@@ -1,5 +1,12 @@
 
 
+## 2.5.2 (2026-02-19)
+
+
+### Bug Fixes
+
+* coinbase support for smart account ([#3787](https://github.com/vechain/veworld-mobile/issues/3787)) ([7bc60a2](https://github.com/vechain/veworld-mobile/commit/7bc60a2eb94757dbd367c5602b4ccc7e81917f73))
+
 ## 2.5.1 (2026-01-27)
 
 
