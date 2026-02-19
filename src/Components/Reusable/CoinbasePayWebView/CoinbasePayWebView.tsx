@@ -125,6 +125,7 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
                 paymentProvidersFeature["coinbase-pay"].url,
                 signature,
                 timestamp,
+                senderDevice?.type === DEVICE_TYPE.SMART_WALLET,
             ),
         enabled: !!signature && !!timestamp, // Only run when signature is available
         staleTime: 0,
