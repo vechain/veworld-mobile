@@ -87,18 +87,17 @@ const extractClausesFromExecute = (clause: TransactionClause | Transaction.Claus
 const extractInnerClausesFromSmartAccount = (clauses: Transaction.Clause[]): Transaction.Clause[] => {
     if (clauses.length === 0) return clauses
 
-    const firstClause = clauses[0]
-    const isSmartAccount = isSmartAccountTransaction(firstClause)
+    const smartClause = clauses.find(isSmartAccountTransaction)
 
-    if (!isSmartAccount) return clauses
+    if (!smartClause) return clauses
 
-    const parsed = parseSmartAccountData(firstClause.data)
+    const parsed = parseSmartAccountData(smartClause.data)
 
     if (parsed?.name === "executeBatchWithAuthorization") {
-        return extractClausesFromExecuteBatch(firstClause)
+        return extractClausesFromExecuteBatch(smartClause)
     }
     if (parsed?.name === "executeWithAuthorization") {
-        return extractClausesFromExecute(firstClause)
+        return extractClausesFromExecute(smartClause)
     }
 
     return clauses
@@ -124,8 +123,8 @@ const createBaseActivityFromTx = (tx: SDKTransaction) => {
 
     // For smart account transactions, use the smart account address (the `to` of the wrapper clause) as the `from`
     // This ensures the activity is associated with the smart account, not the EOA owner
-    const isSmartAccount = clauses.length > 0 && isSmartAccountTransaction(clauses[0])
-    const fromAddress = isSmartAccount && clauses[0].to ? clauses[0].to : origin?.toString() ?? ""
+    const smartAccountClause = clauses.find(isSmartAccountTransaction)
+    const fromAddress = smartAccountClause?.to ? smartAccountClause.to : origin?.toString() ?? ""
 
     return {
         from: fromAddress,

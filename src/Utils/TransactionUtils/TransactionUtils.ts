@@ -867,10 +867,17 @@ export const decodeTransferEvent = (event: Connex.VM.Event): TransferEventResult
  * @param clause - The clause to get the recipient address from.
  * @returns The recipient address from the clauses or undefined if the clause type is invalid.
  */
-export const getRecipientAddressFromSmartWalletClause = (clause: Connex.VM.Clause): string | undefined => {
+export const getRecipientAddressFromSmartWalletClause = (clauses: Connex.VM.Clause[]): string | undefined => {
     let recipientAddress: string
 
-    const decodedClause = decodeAsSmartWalletClause(clause)
+    const smartClause = clauses.find(isSocialLoginSmartAccountClause)
+
+    if (!smartClause) {
+        error(ERROR_EVENTS.APP, "Failed to find smart wallet clause!")
+        return
+    }
+
+    const decodedClause = decodeAsSmartWalletClause(smartClause)
 
     if (!decodedClause) {
         error(ERROR_EVENTS.APP, "Failed to decode smart wallet clause!")
@@ -915,8 +922,8 @@ export const getRecipientAddressFromClause = (clauses: Connex.VM.Clause[]): stri
         recipientAddress = decodeTokenTransferClause(clauses[0])?.to ?? ""
     } else if (isNFTTransferClause(clauses[0])) {
         recipientAddress = decodeNonFungibleTokenTransferClause(clauses[0])?.to ?? ""
-    } else if (isSocialLoginSmartAccountClause(clauses[0])) {
-        recipientAddress = getRecipientAddressFromSmartWalletClause(clauses[0]) ?? ""
+    } else if (clauses.some(isSocialLoginSmartAccountClause)) {
+        recipientAddress = getRecipientAddressFromSmartWalletClause(clauses) ?? ""
     } else {
         error(ERROR_EVENTS.APP, "Invalid clause type!")
         return

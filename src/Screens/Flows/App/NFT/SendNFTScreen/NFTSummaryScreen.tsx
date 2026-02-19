@@ -42,15 +42,18 @@ export const NFTSummaryScreen = () => {
 
     const onTransactionSuccess = useCallback(
         (transaction: Transaction) => {
-            dispatch(
-                addPendingNFTtransferTransactionActivity(transaction, {
-                    medium: AnalyticsEvent.SEND,
-                    signature: AnalyticsEvent.LOCAL,
-                    subject: AnalyticsEvent.NFT,
-                    context: AnalyticsEvent.SEND,
-                }),
-            )
-            onFinish()
+            try {
+                dispatch(
+                    addPendingNFTtransferTransactionActivity(transaction, {
+                        medium: AnalyticsEvent.SEND,
+                        signature: AnalyticsEvent.LOCAL,
+                        subject: AnalyticsEvent.NFT,
+                        context: AnalyticsEvent.SEND,
+                    }),
+                )
+            } finally {
+                onFinish()
+            }
         },
         [onFinish, dispatch],
     )
