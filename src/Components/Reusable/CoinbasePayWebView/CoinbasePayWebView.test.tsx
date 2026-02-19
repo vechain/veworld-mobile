@@ -69,11 +69,11 @@ jest.mock("~Hooks/useSignMessage", () => ({
 }))
 
 // Mock useSmartWallet
-let mockSmartAccountAddress: string | undefined
+let mockOwnerAddress: string | undefined
 jest.mock("~Hooks/useSmartWallet", () => ({
     ...jest.requireActual("~Hooks/useSmartWallet"),
     useSmartWallet: () => ({
-        smartAccountAddress: mockSmartAccountAddress,
+        ownerAddress: mockOwnerAddress,
     }),
 }))
 
@@ -102,7 +102,7 @@ describe("CoinbasePayWebView", () => {
         mockIsPasswordPromptOpen = false
         mockIsBiometricsEmpty = false
         onIdentityConfirmedCallback = null
-        mockSmartAccountAddress = undefined
+        mockOwnerAddress = undefined
 
         // Default mock implementation for signMessage
         // Returns a 65-byte signature (130 hex chars)
@@ -268,8 +268,8 @@ describe("CoinbasePayWebView", () => {
 
     describe("Smart account flag", () => {
         it("should send isSmartAccount=true when device is a smart wallet", async () => {
-            const smartAddress = "0xABCDEF1234567890ABCDEF1234567890ABCDEF12"
-            mockSmartAccountAddress = smartAddress
+            const ownerAddr = "0xABCDEF1234567890ABCDEF1234567890ABCDEF12"
+            mockOwnerAddress = ownerAddr
 
             axiosMock.onGet().reply(200, { url: "https://coinbase.example.com/onramp?session=smart" })
 
@@ -302,9 +302,9 @@ describe("CoinbasePayWebView", () => {
             expect(request.params.isSmartAccount).toBe(false)
         })
 
-        it("should use smartAccountAddress as destination when device is a smart wallet", async () => {
-            const smartAddress = "0xABCDEF1234567890ABCDEF1234567890ABCDEF12"
-            mockSmartAccountAddress = smartAddress
+        it("should use ownerAddress as destination when device is a smart wallet", async () => {
+            const ownerAddr = "0xABCDEF1234567890ABCDEF1234567890ABCDEF12"
+            mockOwnerAddress = ownerAddr
 
             axiosMock.onGet().reply(200, { url: "https://coinbase.example.com/onramp?session=smart-addr" })
 
@@ -318,7 +318,7 @@ describe("CoinbasePayWebView", () => {
             )
 
             const request = axiosMock.history.get[0]
-            expect(request.params.address).toBe(smartAddress)
+            expect(request.params.address).toBe(ownerAddr)
         })
 
         it("should use destinationAddress prop when device is not a smart wallet", async () => {
