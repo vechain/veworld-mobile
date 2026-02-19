@@ -9,7 +9,7 @@ import { TransactionAlert } from "~Components/Reusable/Send/03-SummarySend/Compo
 import { TransactionFeeCard } from "~Components/Reusable/Send/03-SummarySend/Components/TransactionFeeCard"
 import { TransactionProvider } from "~Components/Reusable/Send/03-SummarySend/Components/TransactionProvider"
 import { SendContent } from "~Components/Reusable/Send/Shared"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { useThemedStyles, useTransactionScreen } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -22,6 +22,7 @@ import {
 } from "~Storage/Redux"
 import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { NFTReceiverCard } from "./Components"
+import { error } from "console"
 
 export const NFTSummaryScreen = () => {
     const { LL } = useI18nContext()
@@ -51,6 +52,8 @@ export const NFTSummaryScreen = () => {
                         context: AnalyticsEvent.SEND,
                     }),
                 )
+            } catch (e) {
+                error(ERROR_EVENTS.SEND, "Error adding pending NFT transfer activity", e)
             } finally {
                 onFinish()
             }
