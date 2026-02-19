@@ -2,12 +2,14 @@ import React, { useCallback, useMemo } from "react"
 import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
 import { CarouselPressEvent } from "~Components/Base/BaseCarousel/BaseCarouselItem"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
-import { StargateBannerClosable } from "~Components/Reusable"
+import { StargateBannerClosable, StargateXVeBetterBannerClosable } from "~Components/Reusable"
 import { AnalyticsEvent, SCREEN_WIDTH, STARGATE_DAPP_URL_HOME_BANNER } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import {
     selectHideStargateBannerHomeScreen,
+    selectHideStargateXVeBetterBanner,
     setHideStargateBannerHomeScreen,
+    setHideStargateXVeBetterBanner,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -29,11 +31,23 @@ export const BannersCarousel = ({ location, baseWidth = SCREEN_WIDTH - 32, paddi
     const featureFlags = useFeatureFlags()
     const track = useAnalyticTracking()
     const hideStargateBannerHomeScreen = useAppSelector(selectHideStargateBannerHomeScreen)
+    const hideStargateXVeBetterBanner = useAppSelector(selectHideStargateXVeBetterBanner)
 
     const dispatch = useAppDispatch()
 
     const banners: CarouselSlideItem[] = useMemo(
         () => [
+            {
+                testID: "StargateXVbd_banner",
+                name: "StargateXVeBetter",
+                href: STARGATE_DAPP_URL_HOME_BANNER,
+                content: <StargateXVeBetterBannerClosable />,
+                closable: true,
+                onClose: () => {
+                    dispatch(setHideStargateXVeBetterBanner(true))
+                    track(AnalyticsEvent.DISCOVERY_STARGATE_X_VEBETTER_BANNER_CLOSED)
+                },
+            },
             {
                 testID: "Stargate_banner",
                 name: "Stargate",
@@ -60,9 +74,18 @@ export const BannersCarousel = ({ location, baseWidth = SCREEN_WIDTH - 32, paddi
                         (location === "home_screen" ? !hideStargateBannerHomeScreen : true)
                     )
                 }
+                if (banner.name === "StargateXVeBetter") {
+                    return !hideStargateXVeBetterBanner
+                }
                 return true
             }),
-        [banners, featureFlags.discoveryFeature.showStargateBanner, hideStargateBannerHomeScreen, location],
+        [
+            banners,
+            featureFlags.discoveryFeature.showStargateBanner,
+            hideStargateBannerHomeScreen,
+            location,
+            hideStargateXVeBetterBanner,
+        ],
     )
 
     const onSlidePress = useCallback(
@@ -84,7 +107,7 @@ export const BannersCarousel = ({ location, baseWidth = SCREEN_WIDTH - 32, paddi
             testID={`${location}_carousel`}
             onSlidePressActivation="before"
             onSlidePress={onSlidePress}
-            gap={0}
+            gap={8}
             // Remove the -16 if you need to have another item
             baseWidth={baseWidth}
             padding={padding}

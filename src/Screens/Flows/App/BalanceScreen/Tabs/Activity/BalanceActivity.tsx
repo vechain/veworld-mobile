@@ -85,7 +85,7 @@ export const BalanceActivity = ({ tab }: { tab: BalanceTab }) => {
     if (!isLoading && !data?.length) return null
 
     return (
-        <>
+        <BaseView px={24}>
             <BaseSpacer height={32} />
             <BaseView flexDirection="column" gap={16}>
                 <BaseText
@@ -110,6 +110,6 @@ export const BalanceActivity = ({ tab }: { tab: BalanceTab }) => {
                     />
                 )}
             </BaseView>
-        </>
+        </BaseView>
     )
 }

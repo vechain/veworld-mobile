@@ -137,7 +137,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                     rootStyle={styles.tabs}
                     rightIcon={rightIcon}
                 />
-                <BaseView flexDirection="column" flex={1} px={24}>
+                <BaseView flexDirection="column" flex={1}>
                     {selectedTab === "TOKENS" && <Tokens isEmptyStateShown={showNewUserVeBetterCard} />}
                     {selectedTab === "STAKING" && <Staking />}
                     {selectedTab === "COLLECTIBLES" && <Collectibles />}
