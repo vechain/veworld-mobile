@@ -64,8 +64,13 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
                 const normalizedAddress = resolvedDestinationAddress.toLowerCase()
                 const message = `${SIGNATURE_PREFIX}|${normalizedAddress}|${ts}`
 
-                const hash = SignMessageUtils.hashMessage(message, "eip155")
-                const sig = await signMessage(hash, password)
+                let sig
+                if (isSmartAccount) {
+                    sig = await signMessage(Buffer.from(message), password)
+                } else {
+                    const hash = SignMessageUtils.hashMessage(message, "eip155")
+                    sig = await signMessage(hash, password)
+                }
 
                 if (!sig) {
                     throw new Error("Signature generation failed")
@@ -89,7 +94,7 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
                 throw err
             }
         },
-        [resolvedDestinationAddress, signMessage, nav, LL],
+        [resolvedDestinationAddress, signMessage, nav, LL, isSmartAccount],
     )
 
     // When identity is confirmed, generate signature
