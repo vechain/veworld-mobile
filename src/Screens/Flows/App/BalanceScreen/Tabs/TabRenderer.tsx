@@ -143,7 +143,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                     {selectedTab === "COLLECTIBLES" && <Collectibles />}
                 </BaseView>
             </Animated.View>
-            {showNewUserVeBetterCard && <BannersCarousel location="home_screen" baseWidth={SCREEN_WIDTH - 24} />}
+            {showNewUserVeBetterCard && <BannersCarousel location="home_screen" baseWidth={SCREEN_WIDTH} />}
         </Animated.View>
     )
 }

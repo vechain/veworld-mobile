@@ -40,7 +40,7 @@ export const BannersCarousel = ({ location, baseWidth = SCREEN_WIDTH - 32, paddi
             {
                 testID: "StargateXVbd_banner",
                 name: "StargateXVeBetter",
-                href: STARGATE_DAPP_URL_HOME_BANNER,
+                href: "https://governance.vebetterdao.org/nodes",
                 content: <StargateXVeBetterBannerClosable />,
                 closable: true,
                 onClose: () => {
@@ -60,9 +60,14 @@ export const BannersCarousel = ({ location, baseWidth = SCREEN_WIDTH - 32, paddi
                     }
                     track(AnalyticsEvent.DISCOVERY_STARGATE_BANNER_CLOSED, { location })
                 },
+                closeButtonStyle: {
+                    // If the stargate banner is hidden, move the close button to the right
+                    // to avoid the close button from being hidden by the banner
+                    right: hideStargateBannerHomeScreen ? 0 : 30,
+                },
             },
         ],
-        [location, dispatch, track],
+        [location, dispatch, track, hideStargateBannerHomeScreen],
     )
 
     const filteredBanners = useMemo(
@@ -97,6 +102,13 @@ export const BannersCarousel = ({ location, baseWidth = SCREEN_WIDTH - 32, paddi
         [track, location],
     )
 
+    const calculatedBaseWidth = useMemo(() => {
+        if (filteredBanners.length === 1) {
+            return baseWidth - 24
+        }
+        return baseWidth
+    }, [filteredBanners.length, baseWidth])
+
     if (filteredBanners.length === 0) return null
 
     return (
@@ -109,7 +121,7 @@ export const BannersCarousel = ({ location, baseWidth = SCREEN_WIDTH - 32, paddi
             onSlidePress={onSlidePress}
             gap={8}
             // Remove the -16 if you need to have another item
-            baseWidth={baseWidth}
+            baseWidth={calculatedBaseWidth}
             padding={padding}
             rootStyle={{ marginTop: mt }}
         />
