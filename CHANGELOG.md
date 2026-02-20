@@ -1,5 +1,12 @@
 
 
+## 2.6.0 (2026-02-20)
+
+
+### Features
+
+* add StargateXVeBetterBanner component and related assets ([#3789](https://github.com/vechain/veworld-mobile/issues/3789)) ([c7144c4](https://github.com/vechain/veworld-mobile/commit/c7144c44f77003ed6eae3e7681c28317dc28f16e))
+
 ## 2.5.1 (2026-01-27)
 
 
