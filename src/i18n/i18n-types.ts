@@ -2733,6 +2733,10 @@ type RootTranslation = {
 	 */
 	DEVELOPER_SETTING_INDEXER_UPDATED: string
 	/**
+	 * N​o​t​i​f​i​c​a​t​i​o​n​ ​U​R​L
+	 */
+	DEVELOPER_SETTING_NOTIFICATION_URL: string
+	/**
 	 * L​o​g​o​u​t​ ​o​f​ ​y​o​u​r​ ​s​m​a​r​t​ ​w​a​l​l​e​t
 	 */
 	DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION: string
@@ -2740,10 +2744,6 @@ type RootTranslation = {
 	 * S​o​c​i​a​l​ ​l​o​g​i​n
 	 */
 	DEVELOPER_SETTING_SMART_WALLET_TITLE: string
-	/**
-	 * N​o​t​i​f​i​c​a​t​i​o​n​ ​U​R​L
-	 */
-	DEVELOPER_SETTING_NOTIFICATION_URL: string
 	/**
 	 * O​n​e​ ​o​r​ ​m​o​r​e​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​h​a​v​e​n​’​t​ ​b​e​e​n​ ​b​a​c​k​e​d​ ​u​p​ ​y​e​t​.​ ​M​a​k​e​ ​s​u​r​e​ ​t​o​ ​b​a​c​k​u​p​ ​t​o​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​c​r​y​p​t​o​.
 	 */
@@ -6227,6 +6227,10 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * N​o​d​e​ ​h​o​l​d​e​r​s​ ​c​a​n​ ​e​n​d​o​r​s​e​ ​m​u​l​t​i​p​l​e​ ​a​p​p​s​ ​o​n​ ​*​*​V​e​B​e​t​t​e​r​*​*​!
+	 */
+	BANNER_STARGATE_X_VEBETTER_DESC: string
 }
 
 export type TranslationFunctions = {
@@ -8902,6 +8906,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	DEVELOPER_SETTING_INDEXER_UPDATED: () => LocalizedString
 	/**
+	 * Notification URL
+	 */
+	DEVELOPER_SETTING_NOTIFICATION_URL: () => LocalizedString
+	/**
 	 * Logout of your smart wallet
 	 */
 	DEVELOPER_SETTING_SMART_WALLET_DESCRIPTION: () => LocalizedString
@@ -8909,10 +8917,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Social login
 	 */
 	DEVELOPER_SETTING_SMART_WALLET_TITLE: () => LocalizedString
-	/**
-	 * Notification URL
-	 */
-	DEVELOPER_SETTING_NOTIFICATION_URL: () => LocalizedString
 	/**
 	 * One or more of your accounts recovery phrase haven’t been backed up yet. Make sure to backup to never lose access to your crypto.
 	 */
@@ -12342,6 +12346,10 @@ Make sure that it is unlocked and the location services are enabled.
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Node holders can endorse multiple apps on **VeBetter**!
+	 */
+	BANNER_STARGATE_X_VEBETTER_DESC: () => LocalizedString
 }
 
 export type Formatters = {

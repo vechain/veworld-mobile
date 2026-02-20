@@ -20,21 +20,24 @@ export const Tokens = ({ isEmptyStateShown = false }: Props) => {
 
     return (
         <BaseView flexDirection="column">
-            <TokensTopSection />
-            <AddTokensCard />
-            <BalanceActivity tab="TOKENS" />
+            <BaseView px={24}>
+                <TokensTopSection />
+                <AddTokensCard />
+            </BaseView>
             {!isEmptyStateShown && (
                 <>
                     {/* 36 because the activity above may have a See all button that has a padding of 4px.
                         Setting to 40 will look off compared to the card below when the banner is visible */}
-                    <BannersCarousel location="home_screen" baseWidth={SCREEN_WIDTH - 48} padding={0} mt={36} />
+                    <BannersCarousel location="home_screen" baseWidth={SCREEN_WIDTH} padding={24} mt={36} />
+
+                    <BalanceActivity tab="TOKENS" />
 
                     {isVeBetterUser && (
-                        <>
+                        <BaseView px={24}>
                             <BaseSpacer height={40} />
                             <VeBetterDaoCard ref={cardRef} />
                             <VeBetterDaoActionGroup onShareCard={shareCard} isSharing={isSharing} />
-                        </>
+                        </BaseView>
                     )}
                 </>
             )}
