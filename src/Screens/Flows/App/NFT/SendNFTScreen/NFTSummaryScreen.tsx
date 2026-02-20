@@ -22,7 +22,7 @@ import {
 } from "~Storage/Redux"
 import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { NFTReceiverCard } from "./Components"
-import { error } from "console"
+import { error } from "~Utils/Logger"
 
 export const NFTSummaryScreen = () => {
     const { LL } = useI18nContext()
