@@ -69,7 +69,6 @@ export const BannersCarousel = ({ location, baseWidth = SCREEN_WIDTH - 32, paddi
         ],
         [location, dispatch, track, hideStargateBannerHomeScreen],
     )
-
     const filteredBanners = useMemo(
         () =>
             banners.filter(banner => {
