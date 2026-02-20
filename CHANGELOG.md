@@ -1,5 +1,12 @@
 
 
+## 2.6.0 (2026-02-20)
+
+
+### Features
+
+* enhance AccountIcon component with social badge support ([#3794](https://github.com/vechain/veworld-mobile/issues/3794)) ([963bc71](https://github.com/vechain/veworld-mobile/commit/963bc719313da6e75e05d26fb30fb4b9cd553b89))
+
 ## 2.5.1 (2026-01-27)
 
 
