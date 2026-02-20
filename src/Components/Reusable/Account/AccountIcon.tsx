@@ -32,7 +32,7 @@ export const AccountIcon: React.FC<AccountIconProps> = memo(
     ({ account, size, borderRadius, hideLedger, hideSocialBadge }) => {
         const { theme, styles } = useThemedStyles(accountIconStyles)
 
-        const { linkedAccounts } = useSmartWallet()
+        const { linkedAccounts, isAuthenticated } = useSmartWallet()
 
         const showLedger = useMemo(() => {
             if (hideLedger) return false
@@ -42,17 +42,19 @@ export const AccountIcon: React.FC<AccountIconProps> = memo(
         }, [account.device?.type, account.type, hideLedger])
 
         const showSocialBadge = useMemo(() => {
+            if (!isAuthenticated) return false
             if (hideSocialBadge) return false
             if (account.device?.type === DEVICE_TYPE.SMART_WALLET) return true
             return false
-        }, [account.device?.type, hideSocialBadge])
+        }, [account.device?.type, hideSocialBadge, isAuthenticated])
 
         const socialBadgeIcon = useMemo(() => {
+            if (!isAuthenticated) return null
             if (linkedAccounts.length === 0) return null
             if (linkedAccounts[0].type === "google") return "icon-google" as IconKey
             if (linkedAccounts[0].type === "apple") return "icon-apple" as IconKey
             return null
-        }, [linkedAccounts])
+        }, [linkedAccounts, isAuthenticated])
 
         return (
             <BaseView style={styles.container}>
