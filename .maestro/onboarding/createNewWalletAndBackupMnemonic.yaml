@@ -29,14 +29,14 @@ onFlowComplete:
       commands:
           - tapOn:
                 id: "button_notifications_skip"
-# Dismiss VeBetter card if visible
-- runFlow:
-      when:
-          visible:
-              id: "close-button"
-      commands:
-          - tapOn:
-                id: "close-button"
+# # Dismiss VeBetter card if visible
+# - runFlow:
+#       when:
+#           visible:
+#               id: "close-button"
+#       commands:
+#           - tapOn:
+#                 id: "close-button"
 #backup mnemonic on privacy and settings screen
 - tapOn:
       id: "Backup_now_button"

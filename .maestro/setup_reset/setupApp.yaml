@@ -23,6 +23,9 @@ env:
       commands:
           - tapOn:
                 id: "button_notifications_skip"
+- extendedWaitUntil:
+      visible:
+          id: "settings-tab"
 - tapOn:
       id: "settings-tab"
 - extendedWaitUntil:
@@ -31,30 +34,45 @@ env:
       timeout: 10000
 - tapOn:
       id: "Networks"
+- extendedWaitUntil:
+      visible:
+          id: "NetworkBox_mainnet"
 - tapOn:
       id: "NetworkBox_mainnet"
+- extendedWaitUntil:
+      visible:
+          id: "NetworkBox_testnet"
 - tapOn:
       id: "NetworkBox_testnet"
+- extendedWaitUntil:
+      visible:
+          id: "wallet-tab"
 - tapOn:
       id: "wallet-tab"
+- extendedWaitUntil:
+      visible:
+          id: "BalanceScreen_WalletManagementButton"
 - tapOn:
       id: "BalanceScreen_WalletManagementButton"
-      retryTapIfNoChange: false
 - runFlow:
       when:
-          visible: "Select the active account"
+          visible:
+              id: "SelectAccountBottomSheet_SettingsButtonIcon"
       commands:
           - tapOn:
                 id: "SelectAccountBottomSheet_SettingsButtonIcon"
+- extendedWaitUntil:
+      visible:
+          id: "Wallet_Management_AddWallet"
+      timeout: 10000
 - tapOn:
       id: "Wallet_Management_AddWallet"
-      retryTapIfNoChange: false
-- runFlow:
-      when:
-          visible: "Wallet Setup"
-      commands:
-          - tapOn:
-                id: "CreateOrImportWalletBottomSheet_CreateNewButton"
+- extendedWaitUntil:
+      visible:
+          id: "CreateOrImportWalletBottomSheet_CreateNewButton"
+      timeout: 10000
+- tapOn:
+      id: "CreateOrImportWalletBottomSheet_CreateNewButton"
 - repeat:
       times: 6
       commands:

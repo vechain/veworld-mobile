@@ -1,0 +1,34 @@
+# Send VET from Account 1 to Account 2
+appId: org.vechain.veworld.app
+---
+- tapOn:
+      id: "BalanceScreen_SendButton"
+- tapOn:
+      id: "SelectAmountConversionToggle_Button"
+- tapOn:
+      id: "SEND_1_KEY"
+- tapOn:
+      id: "SelectAmountSendComponent_NextButton"
+- tapOn:
+      id: "AnimatedFilterChips-accounts"
+- tapOn:
+      id: "AccountCard_Item"
+      index: 0
+- tapOn:
+      id: "ReceiverScreen_NextButton"
+- runFlow:
+      when:
+          visible: "Fee delegation"
+      commands:
+          - extendedWaitUntil:
+                visible:
+                    id: "MAX_FEE_GALACTICA"
+                timeout: 10000
+          - tapOn:
+                id: "SummaryScreen_NextButton"
+- repeat:
+      times: 6
+      commands:
+          - tapOn:
+                id: "numpad-1"
+- assertVisible: "Tokens"
