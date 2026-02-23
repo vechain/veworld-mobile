@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { error, debug, info } from "~Utils"
 import * as BackgroundFetch from "expo-background-fetch"
 import * as TaskManager from "expo-task-manager"
@@ -12,6 +12,21 @@ type ProviderProps = { children: React.ReactNode }
 const AUTO_LOCK_TASK = "AUTO_LOCK_TASK"
 const FIVE_MINUTES = 5 * 60 * 1000
 
+// Module-level ref so the background task can access the latest callback
+let triggerAutoLockRef: (() => void) | null = null
+
+// defineTask must be called at module scope per Expo's requirements
+TaskManager.defineTask(AUTO_LOCK_TASK, async () => {
+    try {
+        debug(ERROR_EVENTS.SECURITY, "Trigging auto lock")
+        triggerAutoLockRef?.()
+        return BackgroundFetch.BackgroundFetchResult.NewData
+    } catch (err) {
+        error(ERROR_EVENTS.SECURITY, err)
+        return BackgroundFetch.BackgroundFetchResult.Failed
+    }
+})
+
 const AutoLockContext = React.createContext(null)
 
 export const AutoLockProvider = ({ children }: ProviderProps) => {
@@ -20,27 +35,9 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
     const { activeToBackground, backgroundToActive } = useAppStateTransitions()
     const [inactivityStartTime, setInactivityStartTime] = useState<number>(0)
 
-    const registerAutoLockTask = useCallback(() => {
-        if (triggerAutoLock) {
-            debug(ERROR_EVENTS.SECURITY, "Registering auto lock task")
-            // Register auto lock task.
-            TaskManager.defineTask(AUTO_LOCK_TASK, async () => {
-                try {
-                    debug(ERROR_EVENTS.SECURITY, "Trigging auto lock")
-                    triggerAutoLock()
-                    return BackgroundFetch.BackgroundFetchResult.NewData
-                } catch (err) {
-                    error(ERROR_EVENTS.SECURITY, err)
-                    return BackgroundFetch.BackgroundFetchResult.Failed
-                }
-            })
-        }
-    }, [triggerAutoLock])
-
     // Function to configure BackgroundFetch
     const configureBackgroundFetch = async () => {
         try {
-            await stopBackgroundFetch()
             debug(ERROR_EVENTS.SECURITY, "Starting auto lock listener")
             await BackgroundFetch.registerTaskAsync(AUTO_LOCK_TASK, {
                 minimumInterval: 600,
@@ -52,23 +49,12 @@ export const AutoLockProvider = ({ children }: ProviderProps) => {
         }
     }
 
-    const stopBackgroundFetch = async () => {
-        const isRegistered = await TaskManager.isTaskRegisteredAsync(AUTO_LOCK_TASK)
-        if (isRegistered) {
-            debug(ERROR_EVENTS.SECURITY, "Stopping auto lock listener")
-            await BackgroundFetch.unregisterTaskAsync(AUTO_LOCK_TASK)
-        }
-    }
     useEffect(() => {
-        registerAutoLockTask()
-    }, [registerAutoLockTask])
+        triggerAutoLockRef = triggerAutoLock
+    }, [triggerAutoLock])
 
     useEffect(() => {
         configureBackgroundFetch()
-        return () => {
-            stopBackgroundFetch()
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
