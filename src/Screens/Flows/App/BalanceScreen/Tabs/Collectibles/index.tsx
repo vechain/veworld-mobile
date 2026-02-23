@@ -5,7 +5,7 @@ import { CollectiblesTopSection } from "./CollectiblesTopSection"
 
 export const Collectibles = () => {
     return (
-        <BaseView flexDirection="column">
+        <BaseView px={24} flexDirection="column">
             <CollectiblesTopSection />
             <BaseSpacer height={32} />
             <BalanceActivity tab="COLLECTIBLES" />
