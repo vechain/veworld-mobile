@@ -1,5 +1,12 @@
 
 
+## 2.5.2 (2026-02-23)
+
+
+### Bug Fixes
+
+* ios crash on startup ([#3797](https://github.com/vechain/veworld-mobile/issues/3797)) ([27e67eb](https://github.com/vechain/veworld-mobile/commit/27e67ebbbd0b11d64e026977f24fa1d420121afe))
+
 ## 2.5.1 (2026-01-27)
 
 
