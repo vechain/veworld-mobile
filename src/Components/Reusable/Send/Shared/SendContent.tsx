@@ -1,10 +1,11 @@
-import React, { ReactNode } from "react"
+import React, { ReactNode, useMemo } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import Animated, { AnimatedProps, LinearTransition } from "react-native-reanimated"
 import { useThemedStyles } from "~Hooks"
 import { SendContentContainer } from "./SendContentContainer"
 import { SendContentFooter } from "./SendContentFooter"
 import { SendContentHeader } from "./SendContentHeader"
+import { useSendContext } from "../Provider"
 
 type Props = Omit<AnimatedProps<ViewProps>, "entering" | "exiting"> & {
     showHeader?: boolean
@@ -13,16 +14,25 @@ type Props = Omit<AnimatedProps<ViewProps>, "entering" | "exiting"> & {
 
 const SendContent = ({ children, footer, style, showHeader = true, ...props }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
-
-    return (
-        <Animated.View style={[styles.root, style]} {...props}>
-            {showHeader && <SendContent.Header />}
+    const { step } = useSendContext()
+    const RenderContent = useMemo(() => {
+        if (step === "insertAddress") {
+            return children
+        }
+        return (
             <Animated.ScrollView
                 layout={LinearTransition}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.contentContainer}>
                 {children as ReactNode}
             </Animated.ScrollView>
+        )
+    }, [children, step, styles.contentContainer])
+
+    return (
+        <Animated.View style={[styles.root, style]} {...props}>
+            {showHeader && <SendContent.Header />}
+            {RenderContent as ReactNode}
             {footer && <SendContent.Footer>{footer}</SendContent.Footer>}
         </Animated.View>
     )
