@@ -295,6 +295,7 @@ export const KnownAddressesList = ({ realAddress, activeFilter, onAddressChange 
                 list.scrollToIndex({
                     index: contactIndex,
                     animated: true,
+                    viewOffset: 50,
                 })
             })
         },
@@ -317,6 +318,7 @@ export const KnownAddressesList = ({ realAddress, activeFilter, onAddressChange 
                 list.scrollToIndex({
                     index: recentIndex,
                     animated: true,
+                    viewOffset: 24,
                 })
             })
         },
@@ -381,7 +383,7 @@ export const KnownAddressesList = ({ realAddress, activeFilter, onAddressChange 
                     extraData={{ context: "accounts" }}
                     renderSectionHeader={renderSectionHeader}
                     renderItem={({ item }) => renderItem({ item, context: "accounts" })}
-                    contentContainerStyle={styles.listContentContainer}
+                    contentContainerStyle={styles.sectionListContentContainer}
                     style={styles.list}
                     keyExtractor={item => item.address}
                     ItemSeparatorComponent={renderItemSeparator}
@@ -439,5 +441,6 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
         },
         list: { flexGrow: 1 },
-        listContentContainer: { flexGrow: 1 },
+        sectionListContentContainer: { flexGrow: 1 },
+        listContentContainer: { flexGrow: 1, paddingBottom: 24 },
     })
