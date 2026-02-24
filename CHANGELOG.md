@@ -1,5 +1,12 @@
 
 
+## 2.5.2 (2026-02-24)
+
+
+### Bug Fixes
+
+* testnet for smart wallets ([#3800](https://github.com/vechain/veworld-mobile/issues/3800)) ([c27a415](https://github.com/vechain/veworld-mobile/commit/c27a41598d48cc65a3a4e3e7cbce50ee496757f4))
+
 ## 2.5.1 (2026-01-27)
 
 
