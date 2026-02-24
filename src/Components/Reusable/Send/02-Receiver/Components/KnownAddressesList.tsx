@@ -224,8 +224,6 @@ export const KnownAddressesList = ({ realAddress, activeFilter, onAddressChange 
 
     const onScrollToIndexFailed = useCallback(
         (info: { index: number; highestMeasuredFrameIndex: number; averageItemLength: number }) => {
-            warn(ERROR_EVENTS.APP, "Failed to scroll to index", JSON.stringify(info))
-
             const pending = pendingScrollRef.current
             if (!pending) return
 
@@ -271,16 +269,14 @@ export const KnownAddressesList = ({ realAddress, activeFilter, onAddressChange 
                 retries: 0,
             }
 
-            setTimeout(() => {
-                runAccountsWhenReady(list => {
-                    list.scrollToLocation({
-                        sectionIndex: target.sectionIndex,
-                        itemIndex: target.itemIndex,
-                        animated: true,
-                        viewOffset: 24,
-                    })
+            runAccountsWhenReady(list => {
+                list.scrollToLocation({
+                    sectionIndex: target.sectionIndex,
+                    itemIndex: target.itemIndex,
+                    animated: true,
+                    viewOffset: 24,
                 })
-            }, 100)
+            })
         },
         [accountsSection, runAccountsWhenReady],
     )
