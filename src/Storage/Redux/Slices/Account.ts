@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AccountUtils, AddressUtils, HexUtils } from "~Utils"
 import { AccountWithDevice, WalletAccount } from "~Model"
 import { isEmpty } from "lodash"
+import { swapSmartWalletNetwork } from "../Actions/SmartWalletNetworkSwap"
 
 /**
  * The state of the account slice
@@ -193,6 +194,26 @@ export const AccountSlice = createSlice({
                 }
             })
         },
+    },
+    extraReducers: builder => {
+        builder.addCase(swapSmartWalletNetwork, (state, action) => {
+            const { oldRootAddress, newRootAddress } = action.payload
+
+            state.accounts.forEach((account, index) => {
+                if (AddressUtils.compareAddresses(account.rootAddress, oldRootAddress)) {
+                    state.accounts[index] = {
+                        ...account,
+                        rootAddress: newRootAddress,
+                        // Smart wallet root accounts (index -1) have address === rootAddress
+                        address: account.index === -1 ? newRootAddress : account.address,
+                    }
+                }
+            })
+
+            if (state.selectedAccount && AddressUtils.compareAddresses(state.selectedAccount, oldRootAddress)) {
+                state.selectedAccount = newRootAddress
+            }
+        })
     },
 })
 

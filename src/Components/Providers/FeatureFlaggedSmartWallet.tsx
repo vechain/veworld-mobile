@@ -4,20 +4,29 @@ import { useFeatureFlags } from "./FeatureFlagsProvider"
 import { SmartWalletFallbackProvider } from "./SmartWalletFallbackProvider"
 import { useAppDispatch } from "~Storage/Redux"
 import { updateDeviceLinkedProviders } from "~Storage/Redux/Slices/Device"
+import { handleSmartWalletNetworkSwap } from "~Storage/Redux/Actions/SmartWalletNetworkSwap"
 
 /**
- * Headless component that syncs linked OAuth providers from the SmartWallet context to Redux.
+ * Headless component that syncs smart wallet state from VechainWalletKit context to Redux.
  * Runs inside the SmartWalletProvider so it has access to the wallet context.
  * Fault tolerant: if the device doesn't exist in Redux yet (e.g. during onboarding),
  * the reducer is a no-op. On next app open, the wallet re-initialises and this effect
  * re-fires, correcting the state.
  */
 const LinkedProviderSync = () => {
-    const { isInitialized, smartAccountAddress, linkedAccounts } = useSmartWallet()
+    const { isInitialized, isLoading, smartAccountAddress, linkedAccounts } = useSmartWallet()
     const dispatch = useAppDispatch()
 
+    // Swap device/account rootAddress when smart account address changes (network switch)
     useEffect(() => {
-        if (isInitialized && smartAccountAddress && linkedAccounts.length > 0) {
+        if (isInitialized && !isLoading && smartAccountAddress) {
+            dispatch(handleSmartWalletNetworkSwap(smartAccountAddress))
+        }
+    }, [isInitialized, isLoading, smartAccountAddress, dispatch])
+
+    // Sync linked OAuth providers to Redux
+    useEffect(() => {
+        if (isInitialized && !isLoading && smartAccountAddress && linkedAccounts.length > 0) {
             const linkedProviders = linkedAccounts.map(acc => acc.type)
             dispatch(
                 updateDeviceLinkedProviders({
@@ -26,7 +35,7 @@ const LinkedProviderSync = () => {
                 }),
             )
         }
-    }, [isInitialized, smartAccountAddress, linkedAccounts, dispatch])
+    }, [isInitialized, isLoading, smartAccountAddress, linkedAccounts, dispatch])
 
     return null
 }
