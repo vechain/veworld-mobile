@@ -68,6 +68,15 @@ jest.mock("~Hooks/useSignMessage", () => ({
     }),
 }))
 
+// Mock useSmartWallet
+let mockOwnerAddress: string | undefined
+jest.mock("~Hooks/useSmartWallet", () => ({
+    ...jest.requireActual("~Hooks/useSmartWallet"),
+    useSmartWallet: () => ({
+        ownerAddress: mockOwnerAddress,
+    }),
+}))
+
 // Mock useInAppBrowser hook
 jest.mock("~Components/Providers/InAppBrowserProvider/InAppBrowserProvider", () => ({
     useInAppBrowser: () => ({
@@ -93,6 +102,7 @@ describe("CoinbasePayWebView", () => {
         mockIsPasswordPromptOpen = false
         mockIsBiometricsEmpty = false
         onIdentityConfirmedCallback = null
+        mockOwnerAddress = undefined
 
         // Default mock implementation for signMessage
         // Returns a 65-byte signature (130 hex chars)
@@ -221,6 +231,112 @@ describe("CoinbasePayWebView", () => {
                 },
                 { timeout: 3000 },
             )
+        })
+    })
+
+    const renderSmartWalletComponent = (props = {}) => {
+        const testAddress = "0x1234567890123456789012345678901234567890"
+        return render(
+            <TestWrapper
+                preloadedState={{
+                    accounts: {
+                        accounts: [
+                            {
+                                address: testAddress,
+                                alias: "Test Account",
+                                index: 0,
+                                rootAddress: testAddress,
+                                visible: true,
+                            },
+                        ],
+                        selectedAccount: testAddress,
+                    },
+                    devices: [
+                        {
+                            alias: "Smart Wallet",
+                            index: 0,
+                            rootAddress: testAddress,
+                            type: DEVICE_TYPE.SMART_WALLET,
+                            position: 0,
+                        },
+                    ],
+                }}>
+                <CoinbasePayWebView destinationAddress={testAddress} {...props} />
+            </TestWrapper>,
+        )
+    }
+
+    describe("Smart account flag", () => {
+        it("should send isSmartAccount=true when device is a smart wallet", async () => {
+            const ownerAddr = "0xABCDEF1234567890ABCDEF1234567890ABCDEF12"
+            mockOwnerAddress = ownerAddr
+
+            axiosMock.onGet().reply(200, { url: "https://coinbase.example.com/onramp?session=smart" })
+
+            renderSmartWalletComponent()
+
+            await waitFor(
+                () => {
+                    expect(axiosMock.history.get.length).toBe(1)
+                },
+                { timeout: 3000 },
+            )
+
+            const request = axiosMock.history.get[0]
+            expect(request.params.isSmartAccount).toBe(true)
+        })
+
+        it("should send isSmartAccount=false when device is not a smart wallet", async () => {
+            axiosMock.onGet().reply(200, { url: "https://coinbase.example.com/onramp?session=regular" })
+
+            renderComponent()
+
+            await waitFor(
+                () => {
+                    expect(axiosMock.history.get.length).toBe(1)
+                },
+                { timeout: 3000 },
+            )
+
+            const request = axiosMock.history.get[0]
+            expect(request.params.isSmartAccount).toBe(false)
+        })
+
+        it("should use ownerAddress as destination when device is a smart wallet", async () => {
+            const ownerAddr = "0xABCDEF1234567890ABCDEF1234567890ABCDEF12"
+            mockOwnerAddress = ownerAddr
+
+            axiosMock.onGet().reply(200, { url: "https://coinbase.example.com/onramp?session=smart-addr" })
+
+            renderSmartWalletComponent()
+
+            await waitFor(
+                () => {
+                    expect(axiosMock.history.get.length).toBe(1)
+                },
+                { timeout: 3000 },
+            )
+
+            const request = axiosMock.history.get[0]
+            expect(request.params.address).toBe(ownerAddr)
+        })
+
+        it("should use destinationAddress prop when device is not a smart wallet", async () => {
+            const destinationAddress = "0x1234567890123456789012345678901234567890"
+
+            axiosMock.onGet().reply(200, { url: "https://coinbase.example.com/onramp?session=regular-addr" })
+
+            renderComponent({ destinationAddress })
+
+            await waitFor(
+                () => {
+                    expect(axiosMock.history.get.length).toBe(1)
+                },
+                { timeout: 3000 },
+            )
+
+            const request = axiosMock.history.get[0]
+            expect(request.params.address).toBe(destinationAddress)
         })
     })
 

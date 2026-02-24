@@ -19,6 +19,11 @@ import { estimateSmartAccountFees, GasPrices } from "./estimateSmartAccountFees"
 const MAX_FEE_MULTIPLIER_NUMERATOR = 5
 const MAX_FEE_MULTIPLIER_DENOMINATOR = 4 // 5/4 = 1.25x
 
+// Add 10% to the max fee for smart account transactions, whilst our gas estimate is accurate the
+// fee can sometimes be slightly off
+const SMART_ACCOUNT_FEE_MULTIPLIER_NUMERATOR = 11
+const SMART_ACCOUNT_FEE_MULTIPLIER_DENOMINATOR = 10 // 11/10 = 1.10x
+
 export type DelegationToken = "VET" | "VTHO" | "B3TR"
 
 type UseGenericDelegationFeesArgs = {
@@ -39,13 +44,13 @@ type UseGenericDelegationFeesArgs = {
 /**
  * Calculate estimated and max fee from a base value
  * @param baseValue The base fee value
- * @param skipPadding If true, maxFee equals estimatedFee (no 25% buffer)
+ * @param isSmartAccount If true, adds 10% padding; otherwise adds 25% padding
  */
-const calculateFeeWithMax = (baseValue: number, skipPadding = false) => {
+const calculateFeeWithMax = (baseValue: number, isSmartAccount = false) => {
     const weiMultiplier = ethers.utils.parseEther("1").toString()
     const estimatedFee = BigNutils(baseValue).multiply(weiMultiplier)
-    const maxFee = skipPadding
-        ? estimatedFee
+    const maxFee = isSmartAccount
+        ? estimatedFee.multiply(SMART_ACCOUNT_FEE_MULTIPLIER_NUMERATOR).idiv(SMART_ACCOUNT_FEE_MULTIPLIER_DENOMINATOR)
         : estimatedFee.multiply(MAX_FEE_MULTIPLIER_NUMERATOR).idiv(MAX_FEE_MULTIPLIER_DENOMINATOR)
     return { estimatedFee, maxFee, priorityFee: BigNutils("0") }
 }
@@ -55,14 +60,14 @@ const calculateFeeWithMax = (baseValue: number, skipPadding = false) => {
  * @param data Data from server API
  * @param isGalactica Whether to use Galactica gas tiers or legacy
  * @param token Token to use
- * @param skipPadding If true, skip the 25% fee padding (used for smart wallet transactions where estimation is accurate)
+ * @param isSmartAccount If true, adds 10% padding; otherwise adds 25% padding
  * @returns The transaction cost per token per speed
  */
 const buildTransactionCost = (
     data: EstimateGenericDelegatorFeesResponse | undefined,
     isGalactica: boolean,
     token: DelegationToken,
-    skipPadding = false,
+    isSmartAccount = false,
 ) => {
     if (!data) return undefined
 
@@ -72,9 +77,9 @@ const buildTransactionCost = (
     const transactionCost = data.transactionCost
 
     return {
-        [GasPriceCoefficient.REGULAR]: calculateFeeWithMax(transactionCost[keys[0]][lowerCaseToken], skipPadding),
-        [GasPriceCoefficient.MEDIUM]: calculateFeeWithMax(transactionCost[keys[1]][lowerCaseToken], skipPadding),
-        [GasPriceCoefficient.HIGH]: calculateFeeWithMax(transactionCost[keys[2]][lowerCaseToken], skipPadding),
+        [GasPriceCoefficient.REGULAR]: calculateFeeWithMax(transactionCost[keys[0]][lowerCaseToken], isSmartAccount),
+        [GasPriceCoefficient.MEDIUM]: calculateFeeWithMax(transactionCost[keys[1]][lowerCaseToken], isSmartAccount),
+        [GasPriceCoefficient.HIGH]: calculateFeeWithMax(transactionCost[keys[2]][lowerCaseToken], isSmartAccount),
     }
 }
 
@@ -155,7 +160,7 @@ export const useGenericDelegationFees = ({
             return { options: undefined, allOptions: undefined }
         }
 
-        // Skip fee padding for smart wallet transactions since gas estimation is accurate
+        // Smart wallet transactions get 10% padding; others get 25% padding
         const allOpts = Object.fromEntries(
             ALLOWED_TOKENS.map(tk => [tk, buildTransactionCost(data, isGalactica, tk, isSmartWallet)!]),
         )

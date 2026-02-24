@@ -150,8 +150,8 @@ export const SelectableAccountCard = <TAccountType extends AccountWithDevice | W
                 accessibilityValue={{ text: selected ? "selected" : "not selected" }}>
                 <BaseView flexDirection="row" gap={12} alignItems="center" flex={1}>
                     <AccountIcon account={account} size={32} />
-                    <BaseView flexDirection="column" gap={4}>
-                        <Animated.Text numberOfLines={1} style={textAnimatedStyles}>
+                    <BaseView flexDirection="column" gap={4} style={styles.accountInfoContainer}>
+                        <Animated.Text numberOfLines={1} ellipsizeMode="middle" style={textAnimatedStyles}>
                             {vnsName || account.alias}
                         </Animated.Text>
                         <BaseText typographyFont="caption" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
@@ -210,5 +210,9 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         innerTouchable: {
             borderRadius: 8,
+        },
+        accountInfoContainer: {
+            flex: 1,
+            minWidth: 0,
         },
     })

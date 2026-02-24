@@ -16,7 +16,11 @@ import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
 import { sponsorTransaction } from "~Networking"
 import { useSmartWallet } from "../useSmartWallet"
-import { delegateGenericDelegator, delegateGenericDelegatorSmartAccount } from "~Networking/GenericDelegator"
+import {
+    delegateGenericDelegator,
+    delegateGenericDelegatorSmartAccount,
+    isGenericDelegatorUrl,
+} from "~Networking/GenericDelegator"
 import { selectDevice, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNumberUtils, debug, HexUtils, warn } from "~Utils"
 import { validateGenericDelegatorTx, validateGenericDelegatorTxSmartAccount } from "~Utils/GenericDelegatorUtils"
@@ -245,11 +249,15 @@ export const useSignTransaction = ({
     ): Promise<{ transaction: Transaction; signature: Buffer | SignStatus.DELEGATION_FAILURE | undefined }> => {
         switch (selectedDelegationOption) {
             case DelegationType.URL: {
+                const isGenericDelegationUrl = isGenericDelegatorUrl(selectedDelegationUrl ?? "")
+
                 // For smart accounts, always use generic delegator (including VTHO)
-                // For non-smart accounts with VTHO, use standard URL delegation
+                // if and only if the selected URL is the generic delegator URL.
+                // For non-smart accounts with VTHO, or when generic fees are unavailable, use standard URL delegation.
                 if (
-                    senderDevice?.type !== DEVICE_TYPE.SMART_WALLET &&
-                    (selectedDelegationToken === VTHO.symbol || genericDelegatorFee === undefined)
+                    !isGenericDelegationUrl ||
+                    (senderDevice?.type !== DEVICE_TYPE.SMART_WALLET &&
+                        (selectedDelegationToken === VTHO.symbol || genericDelegatorFee === undefined))
                 )
                     return { transaction, signature: await getUrlDelegationSignature(transaction) }
 
