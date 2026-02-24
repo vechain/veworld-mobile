@@ -106,6 +106,8 @@ export const DeviceSlice = createSlice({
             }>,
         ) => action.payload.updatedDevices,
     },
+    // extraReducers used so both DeviceSlice and AccountSlice handle the same
+    // action atomically — one dispatch updates both slices before any selector runs.
     extraReducers: builder => {
         builder.addCase(swapSmartWalletNetwork, (state, action) => {
             const { oldRootAddress, newRootAddress } = action.payload
