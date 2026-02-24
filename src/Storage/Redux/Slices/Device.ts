@@ -116,10 +116,8 @@ export const DeviceSlice = createSlice({
             )
             if (deviceIndex === -1) return
 
-            const device = state[deviceIndex] as SmartWalletDevice
             state[deviceIndex] = {
-                ...device,
-                rootTestnetAddress: oldRootAddress,
+                ...state[deviceIndex],
                 rootAddress: newRootAddress,
             }
         })

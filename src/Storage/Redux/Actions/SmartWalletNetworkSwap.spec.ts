@@ -58,7 +58,7 @@ const createStore = (
 
 describe("swapSmartWalletNetwork action", () => {
     describe("DeviceSlice extraReducers", () => {
-        it("should swap rootAddress and store old address as rootTestnetAddress", () => {
+        it("should update rootAddress to the new address", () => {
             const store = createStore()
 
             store.dispatch(
@@ -70,7 +70,6 @@ describe("swapSmartWalletNetwork action", () => {
 
             const device = store.getState().devices[0] as SmartWalletDevice
             expect(device.rootAddress).toBe(TESTNET_ADDRESS)
-            expect(device.rootTestnetAddress).toBe(MAINNET_ADDRESS)
         })
 
         it("should be a no-op if device not found", () => {
@@ -113,7 +112,6 @@ describe("swapSmartWalletNetwork action", () => {
 
             let device = store.getState().devices[0] as SmartWalletDevice
             expect(device.rootAddress).toBe(TESTNET_ADDRESS)
-            expect(device.rootTestnetAddress).toBe(MAINNET_ADDRESS)
 
             // Second swap: testnet -> mainnet
             store.dispatch(
@@ -125,7 +123,6 @@ describe("swapSmartWalletNetwork action", () => {
 
             device = store.getState().devices[0] as SmartWalletDevice
             expect(device.rootAddress).toBe(MAINNET_ADDRESS)
-            expect(device.rootTestnetAddress).toBe(TESTNET_ADDRESS)
         })
     })
 
@@ -234,7 +231,6 @@ describe("handleSmartWalletNetworkSwap thunk", () => {
 
         const device = store.getState().devices[0] as SmartWalletDevice
         expect(device.rootAddress).toBe(MAINNET_ADDRESS)
-        expect(device.rootTestnetAddress).toBeUndefined()
     })
 
     it("should be a no-op when no smart wallet device exists", () => {

@@ -13,7 +13,7 @@ import { handleSmartWalletNetworkSwap } from "~Storage/Redux/Actions/SmartWallet
  * the reducer is a no-op. On next app open, the wallet re-initialises and this effect
  * re-fires, correcting the state.
  */
-const LinkedProviderSync = () => {
+const SmartWalletStateSync = () => {
     const { isInitialized, isLoading, smartAccountAddress, linkedAccounts } = useSmartWallet()
     const dispatch = useAppDispatch()
 
@@ -64,7 +64,7 @@ export const FeatureFlaggedSmartWallet = ({
                         networkType,
                     },
                 }}>
-                <LinkedProviderSync />
+                <SmartWalletStateSync />
                 {children}
             </SmartWalletWithPrivyProvider>
         )
