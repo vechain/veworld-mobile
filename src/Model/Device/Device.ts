@@ -46,7 +46,6 @@ export interface SmartWalletDevice extends BaseDevice {
     readonly type: DEVICE_TYPE.SMART_WALLET
     accountName?: string
     linkedProviders?: SocialProvider[] // Array of linked OAuth providers (Google, Apple)
-    rootTestnetAddress?: string
 }
 
 export type WalletAndDevice = {
