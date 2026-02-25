@@ -21,7 +21,6 @@ const _ReceiverScreen = ({ address: selectedAddress, name }: { address: string |
     const { flowState, setFlowState, goToNext } = useSendContext()
 
     const [inputWalletAddress, setInputWalletAddress] = useState<string>(name ?? selectedAddress ?? "")
-    const [listWalletAddresses, setListWalletAddresses] = useState<string>(selectedAddress ?? "")
     const [addressChangeCtx, setAddressChangeCtx] = useState<"recent" | "accounts" | "contacts" | null>(null)
     const [realAddress, setRealAddress] = useState(selectedAddress || "")
     const [isError, setIsError] = useState(false)
@@ -49,15 +48,13 @@ const _ReceiverScreen = ({ address: selectedAddress, name }: { address: string |
         (source: "input" | "list", str: string, address: string, ctx?: "recent" | "accounts" | "contacts") => {
             if (source === "input") {
                 setAddressChangeCtx(null)
-                if (AddressUtils.compareAddresses(address, selectedAddress)) {
+                if (AddressUtils.compareAddresses(str, selectedAddress)) {
                     return
                 }
                 setInputWalletAddress(str)
-                setListWalletAddresses("")
                 setRealAddress(address)
             } else {
                 setAddressChangeCtx(ctx ?? null)
-                setListWalletAddresses(str)
                 setInputWalletAddress("")
                 setRealAddress(address)
                 setIsError(false)
@@ -106,8 +103,8 @@ const _ReceiverScreen = ({ address: selectedAddress, name }: { address: string |
                         setIsError={setIsError}
                     />
                     <KnownAddressesList
+                        realAddress={realAddress}
                         activeFilter={activeFilter}
-                        selectedAddress={listWalletAddresses}
                         onAddressChange={onListAddressChange}
                     />
                 </Animated.View>
