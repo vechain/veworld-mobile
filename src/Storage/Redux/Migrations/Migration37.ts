@@ -5,7 +5,7 @@ import { debug } from "~Utils"
 import { UserPreferenceState } from "../Slices"
 
 export const Migration37 = (state: PersistedState): PersistedState => {
-    debug(ERROR_EVENTS.SECURITY, "Performing migration 37: Setting hideStargateXVeBetterBanner to false")
+    debug(ERROR_EVENTS.SECURITY, "Performing migration 37: Setting default amount input mode to fiat")
 
     // @ts-expect-error
     const currentUserPreferenceState: UserPreferenceState = state.userPreferences
