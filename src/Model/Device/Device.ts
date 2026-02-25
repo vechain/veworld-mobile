@@ -1,6 +1,7 @@
 import { DerivationPath } from "~Constants"
 import { XPub } from "../Crypto"
 import { DEVICE_TYPE, Wallet } from "../Wallet"
+import { SocialProvider } from "~VechainWalletKit/types/wallet"
 
 /** A general model for storing data about devices in the wallet
  * @field `xPub` - used to generate new address without accessing the device directly
@@ -43,6 +44,8 @@ export interface LedgerDevice extends BaseDevice {
 
 export interface SmartWalletDevice extends BaseDevice {
     readonly type: DEVICE_TYPE.SMART_WALLET
+    accountName?: string
+    linkedProviders?: SocialProvider[] // Array of linked OAuth providers (Google, Apple)
 }
 
 export type WalletAndDevice = {

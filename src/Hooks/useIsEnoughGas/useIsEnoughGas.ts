@@ -12,6 +12,7 @@ import AddressUtils from "~Utils/AddressUtils"
 type Args = {
     selectedToken: string
     isDelegated: boolean
+    isGasFeeSponsored?: boolean
     allFeeOptions:
         | {
               [token: string]: BigNumberUtils
@@ -20,6 +21,7 @@ type Args = {
     isLoadingFees: boolean
     transactionOutputs: InspectableOutput[] | undefined
     origin: string
+    isSmartWallet?: boolean
 }
 
 const calculateClausesValue = ({
@@ -61,10 +63,12 @@ const DELEGATION_TOKENS = [VTHO.symbol, B3TR.symbol, VET.symbol]
 export const useIsEnoughGas = ({
     selectedToken,
     isDelegated,
+    isGasFeeSponsored = false,
     allFeeOptions,
     isLoadingFees,
     transactionOutputs,
     origin,
+    isSmartWallet = false,
 }: Args) => {
     const officialTokens = useAppSelector(selectOfficialTokens)
     const { B3TR: networkB3TR } = useAppSelector(selectNetworkVBDTokens)
@@ -97,8 +101,14 @@ export const useIsEnoughGas = ({
                     origin,
                 })
 
-                //Delegation with VTHO should count as "0" for fees
-                if (tokenSymbol === VTHO.symbol && isDelegated)
+                // When delegation sponsorship covers gas fees (account delegation or custom URL delegator),
+                // only ensure balance can cover the transfer clauses.
+                if (isGasFeeSponsored)
+                    return [tokenSymbol, BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual("0")] as const
+
+                //Delegation with VTHO should count as "0" for fees (only for non-smart wallets,
+                //since smart wallets pay VTHO fees via the generic delegator)
+                if (tokenSymbol === VTHO.symbol && isDelegated && !isSmartWallet)
                     return [tokenSymbol, BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual("0")] as const
 
                 return [
@@ -107,7 +117,18 @@ export const useIsEnoughGas = ({
                 ] as const
             }),
         )
-    }, [isLoadingFees, allFeeOptions, transactionOutputs, officialTokens, balances, processor, origin, isDelegated])
+    }, [
+        isLoadingFees,
+        allFeeOptions,
+        transactionOutputs,
+        officialTokens,
+        balances,
+        processor,
+        origin,
+        isDelegated,
+        isGasFeeSponsored,
+        isSmartWallet,
+    ])
 
     const hasEnoughBalanceOnAny = useMemo(() => {
         return Object.values(hasEnoughBalanceOnToken).some(Boolean)

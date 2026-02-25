@@ -9,6 +9,7 @@ export * from "./NFTPlaceholderLight"
 export * from "./CoinbaseLogoSmallSvg"
 export * from "./CoinbaseLogoSvg"
 export * from "./StargateLogo"
+export * from "./VeWorldLogoV2"
 
 const dark_nft_placeholder = require("./NFTPlaceholder_Dark.png")
 const light_nft_placeholder = require("./NFTPlaceholder_Light.png")
@@ -23,6 +24,7 @@ export const StargateDappLogo = require("./Stargate_dApp_logo.png")
 export const StargateAvatar = require("./StargateAvatar.png")
 export const NFTPlaceholderDarkV2 = require("./no_NFT_image_placeholder.png")
 export const StellaPayCard = require("./stella_pay_card.png")
+export const StargateXVeBetterBannerB3MO = require("./stargate_X_vb_b3mos.png")
 
 export const NFTPlaceholderDark = dark_nft_placeholder
 export const NFTPlaceholderLight = light_nft_placeholder

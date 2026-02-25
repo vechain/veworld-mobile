@@ -19,6 +19,7 @@ import { InAppBrowserProvider, useInAppBrowser } from "./InAppBrowserProvider"
 import { ethers } from "ethers"
 import _ from "lodash"
 import { usePostWebviewMessage } from "~Hooks/usePostWebviewMessage"
+import { FeatureFlagsProvider } from "../FeatureFlagsProvider"
 
 jest.mock("../InteractionProvider")
 jest.mock("../DeepLinksProvider")
@@ -103,14 +104,16 @@ const createWrapper = (platform: PlatformOSType) => {
         return (
             <TestTranslationProvider>
                 <Provider store={getStore(preloadedState)}>
-                    <FeatureFlaggedSmartWallet nodeUrl="https://testnet.vechain.com" networkType="testnet">
-                        <QueryClientProvider client={queryClient}>
-                            <InAppBrowserProvider platform={platform}>
-                                {children}
-                                <BaseToast />
-                            </InAppBrowserProvider>
-                        </QueryClientProvider>
-                    </FeatureFlaggedSmartWallet>
+                    <QueryClientProvider client={queryClient}>
+                        <FeatureFlagsProvider>
+                            <FeatureFlaggedSmartWallet nodeUrl="https://testnet.vechain.com" networkType="testnet">
+                                <InAppBrowserProvider platform={platform}>
+                                    {children}
+                                    <BaseToast />
+                                </InAppBrowserProvider>
+                            </FeatureFlaggedSmartWallet>
+                        </FeatureFlagsProvider>
+                    </QueryClientProvider>
                 </Provider>
             </TestTranslationProvider>
         )

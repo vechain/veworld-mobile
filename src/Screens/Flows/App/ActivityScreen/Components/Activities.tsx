@@ -6,6 +6,7 @@ import { filterValues } from "../constants"
 import { useAccountActivities } from "../Hooks"
 import { ActivitySectionList } from "./ActivitySectionList"
 import { SkeletonActivityBox } from "./SkeletonActivityBox"
+import { ActivityStatus } from "~Model"
 
 type ActivitiesProps = {
     filter:
@@ -30,17 +31,21 @@ export const Activities = ({ filter, emptyComponent }: ActivitiesProps) => {
     )
     const { isPending } = useVeBetterDaoDapps()
 
+    const filteredActivities = useMemo(() => {
+        return activities.filter(activity => activity.status !== ActivityStatus.PENDING)
+    }, [activities])
+
     const renderActivitiesList = useMemo(() => {
         return (
             <ActivitySectionList
-                activities={activities}
+                activities={filteredActivities}
                 fetchActivities={fetchActivities}
                 refreshActivities={refreshActivities}
                 isFetching={isFetching || isPending}
                 isRefreshing={isRefreshing}
             />
         )
-    }, [activities, fetchActivities, isFetching, isPending, isRefreshing, refreshActivities])
+    }, [filteredActivities, fetchActivities, isFetching, isPending, isRefreshing, refreshActivities])
 
     const renderSkeletonList = useMemo(() => {
         return (
@@ -54,14 +59,14 @@ export const Activities = ({ filter, emptyComponent }: ActivitiesProps) => {
                 }}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
-                scrollEnabled={!isFetching || activities?.length > 0}
+                scrollEnabled={!isFetching || filteredActivities?.length > 0}
             />
         )
-    }, [activities?.length, isFetching, styles.list])
+    }, [filteredActivities?.length, isFetching, styles.list])
 
-    if (activities.length > 0) {
+    if (filteredActivities.length > 0) {
         return renderActivitiesList
-    } else if (isFetching && activities.length === 0) {
+    } else if (isFetching && filteredActivities.length === 0) {
         return renderSkeletonList
     } else {
         return emptyComponent

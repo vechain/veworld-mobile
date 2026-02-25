@@ -19,7 +19,11 @@ const FeatureFlagsWrapper = ({
     return (
         <TestWrapper preloadedState={{}}>
             <FeatureFlagsContext.Provider
-                value={{ ...initialState, forks: { ...initialState.forks, HAYABUSA: { stargate: featureFlags } } }}>
+                value={{
+                    ...initialState,
+                    forks: { ...initialState.forks, HAYABUSA: { stargate: featureFlags } },
+                    isLoading: false,
+                }}>
                 {children}
             </FeatureFlagsContext.Provider>
         </TestWrapper>

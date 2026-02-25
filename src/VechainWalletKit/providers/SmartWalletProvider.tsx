@@ -1,12 +1,13 @@
-import React, { createContext, useContext, useCallback, useMemo, useState, useEffect, useRef } from "react"
+import { LinkWithOAuthInput } from "@privy-io/expo"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
-import { NetworkConfig, VechainWalletSDKConfig } from "../types/config"
-import { SignOptions, TransactionOptions, TypedDataPayload, GenericDelegationDetails } from "../types/transaction"
-import { LoginOptions, SmartAccountAdapter } from "../types/wallet"
-import { getSmartAccount } from "../utils/smartAccount"
-import { WalletError, WalletErrorType } from "../utils/errors"
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import { SmartAccountTransactionConfig, SmartWalletContext } from "../types"
+import { NetworkConfig, VechainWalletSDKConfig } from "../types/config"
+import { GenericDelegationDetails, SignOptions, TransactionOptions, TypedDataPayload } from "../types/transaction"
+import { LinkWithOAuth, LoginOptions, SmartAccountAdapter, SocialProvider } from "../types/wallet"
+import { WalletError, WalletErrorType } from "../utils/errors"
+import { getSmartAccount } from "../utils/smartAccount"
 import { buildSmartAccountTransaction } from "../utils/transactionBuilder"
 export interface SmartWalletProps {
     children: React.ReactNode
@@ -32,7 +33,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
     const previousConfigRef = useRef<NetworkConfig | null>(null)
-
     const initialiseWallet = useCallback(async (): Promise<void> => {
         if (!adapter.isAuthenticated) {
             throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
@@ -189,8 +189,64 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         [ownerAddress, thor, signTypedData, smartAccountConfig, adapter.isAuthenticated],
     )
 
+    // Gas estimation - pass in standard clauses and this function will do all the necessary
+    // transaction wrapping required to send the tx via the smart account contract.
+    const estimateGas = useCallback(
+        async (clauses: TransactionClause[], genericDelegation?: GenericDelegationDetails): Promise<number> => {
+            if (!adapter.isAuthenticated || !ownerAddress) {
+                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
+            }
+            if (!smartAccountConfig) {
+                throw new WalletError(
+                    WalletErrorType.WALLET_NOT_FOUND,
+                    "Smart wallet not initialized, call initialiseWallet first",
+                )
+            }
+
+            try {
+                const genesisBlock = await thor.blocks.getGenesisBlock()
+                if (!genesisBlock) {
+                    throw new WalletError(WalletErrorType.NETWORK_ERROR, "Genesis block not found")
+                }
+
+                const finalClauses = await buildSmartAccountTransaction({
+                    txClauses: clauses,
+                    smartAccountConfig,
+                    chainId: genesisBlock.id,
+                    signTypedDataFn: signTypedData,
+                    genericDelgationDetails: genericDelegation,
+                    ownerAddress,
+                })
+
+                const gasResult = await thor.gas.estimateGas(finalClauses, ownerAddress, {
+                    gasPadding: 1,
+                })
+
+                return gasResult.totalGas
+            } catch (error) {
+                throw new WalletError(WalletErrorType.BUILDING_TRANSACTION_ERROR, "Error estimating gas", error)
+            }
+        },
+        [ownerAddress, thor, signTypedData, smartAccountConfig, adapter.isAuthenticated],
+    )
+
     const login = useCallback(
         async (options: LoginOptions): Promise<void> => {
+            if (adapter.isAuthenticated && adapter.linkedAccounts.length > 0) {
+                const authenticatedWithSameProvider = adapter.linkedAccounts.some(
+                    account => account.type === options.provider,
+                )
+
+                if (authenticatedWithSameProvider) {
+                    // Already authenticated with the requested provider - nothing to do
+                    return
+                }
+
+                // Authenticated with a different provider (e.g. Apple session persisted in keychain
+                // but user is now requesting Google login) - logout first so the correct OAuth flow runs.
+                await adapter.logout()
+            }
+
             await adapter.login(options)
         },
         [adapter],
@@ -204,25 +260,46 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         setIsInitialised(false)
     }, [adapter])
 
+    const linkOAuth: LinkWithOAuth = useMemo(() => {
+        return {
+            ...adapter.linkOAuth,
+            link: async (provider: SocialProvider, opts?: Omit<LinkWithOAuthInput, "provider" | "redirectUri">) => {
+                return await adapter.linkOAuth.link(provider, { redirectUri: "auth/callback", ...opts })
+            },
+        }
+    }, [adapter])
+
     const contextValue = useMemo(
         () => ({
             ownerAddress,
             smartAccountAddress,
+            smartAccountConfig,
             isLoading,
             isInitialized: isInitialised,
             isAuthenticated: adapter.isAuthenticated,
+            isReady: adapter.isReady,
+            linkedAccounts: adapter.linkedAccounts,
+            userDisplayName: adapter.userDisplayName,
+            hasMultipleSocials: adapter.hasMultipleSocials,
+            linkOAuth,
+            unlinkOAuth: adapter.unlinkOAuth,
             initialiseWallet,
             signMessage,
             signTransaction,
             signTypedData,
             buildTransaction,
+            estimateGas,
             login,
             logout,
         }),
         [
             ownerAddress,
             adapter.isAuthenticated,
+            adapter.isReady,
+            adapter.linkedAccounts,
+            adapter.userDisplayName,
             smartAccountAddress,
+            smartAccountConfig,
             isLoading,
             isInitialised,
             initialiseWallet,
@@ -230,8 +307,12 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             signTransaction,
             signTypedData,
             buildTransaction,
+            estimateGas,
             login,
             logout,
+            adapter.hasMultipleSocials,
+            linkOAuth,
+            adapter.unlinkOAuth,
         ],
     )
 

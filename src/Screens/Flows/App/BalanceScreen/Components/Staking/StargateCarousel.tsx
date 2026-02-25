@@ -122,10 +122,15 @@ export const StargateCarousel = () => {
         [theme.isDark],
     )
 
-    if (!isLoadingNodes && data.length === 0) return <StargateNoStakingCard />
+    if (!isLoadingNodes && data.length === 0)
+        return (
+            <BaseView px={24}>
+                <StargateNoStakingCard />
+            </BaseView>
+        )
 
     return (
-        <BaseView flexDirection="column" gap={12} w={100}>
+        <BaseView px={24} flexDirection="column" gap={12} w={100}>
             <BaseView style={styles.card}>
                 {hasOwnedNodes && hasManagedNodes && (
                     <BaseView px={16}>

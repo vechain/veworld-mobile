@@ -1,6 +1,7 @@
 {
     "name": "VeWorld",
     "displayName": "VeWorld",
+    "scheme": "veworld",
     "plugins": [
         "expo-font",
         "expo-secure-store",

@@ -1,40 +1,32 @@
-import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import * as Clipboard from "expo-clipboard"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { Keyboard, StyleSheet } from "react-native"
+import Animated, { FadeIn, FadeOut, LinearTransition } from "react-native-reanimated"
 import {
+    AlertInline,
     BaseButton,
     BaseIcon,
     BaseSpacer,
     BaseText,
-    BaseTouchableBox,
     BaseView,
+    CreatePasswordModal,
     DismissKeyboardView,
+    InfoBottomSheet,
     Layout,
     RequireUserPassword,
-    SelectDerivationPathBottomSheet,
-    CreatePasswordModal,
 } from "~Components"
-import { AnalyticsEvent, DerivationPath } from "~Constants"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useCheckIdentity,
-    useCloudBackup,
-    useDeviceUtils,
-    useTheme,
-} from "~Hooks"
+import { BaseTabs } from "~Components/Base/BaseTabs"
+import { AnalyticsEvent, COLORS, ColorThemeType, DerivationPath } from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useCheckIdentity, useDeviceUtils, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { CloudKitWallet, DEVICE_CREATION_ERRORS as ERRORS, DrivetWallet, IMPORT_TYPE } from "~Model"
-import { Routes } from "~Navigation"
+import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
 import HapticsService from "~Services/HapticsService"
-import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
+import { selectDerivedPath, selectHasOnboarded, setDerivedPath, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { CryptoUtils, PlatformUtils } from "~Utils"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
 import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
-
-const DEMO_MNEMONIC = "denial kitchen pet squirrel other broom bar gas better priority spoil cross"
 
 enum ButtonType {
     local,
@@ -45,9 +37,10 @@ enum ButtonType {
 
 export const ImportLocalWallet = () => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyles)
     const track = useAnalyticTracking()
     const nav = useNavigation()
+    const dispatch = useAppDispatch()
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
 
     const {
@@ -59,58 +52,20 @@ export const ImportLocalWallet = () => {
         onClose: onCloseCreateFlow,
     } = useHandleWalletCreation()
 
-    const areDevFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
-
+    const currentDerivedPath = useAppSelector(selectDerivedPath)
+    const [derivationPath, setDerivationPath] = useState<DerivationPath>(currentDerivedPath ?? DerivationPath.VET)
     const [textValue, setTextValue] = useState<string>("")
     const [isError, setIsError] = useState<string>("")
 
     const { checkCanImportDevice } = useDeviceUtils()
-
-    const { isCloudAvailable, getAllWalletFromCloud, googleAccountSignOut } = useCloudBackup()
-
-    const [wallets, setWallets] = useState<CloudKitWallet[] | DrivetWallet[]>([])
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-
-    const goToImportFromCloud = useCallback(() => {
-        nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets })
-    }, [nav, wallets])
-
-    const getWalletsFromICloud = useCallback(async () => {
-        setIsLoading(true)
-        const _wallets: CloudKitWallet[] = await getAllWalletFromCloud()
-        setIsLoading(false)
-        setWallets(_wallets)
-    }, [getAllWalletFromCloud])
-
-    const getWalletsFromDrive = useCallback(async () => {
-        setIsLoading(true)
-        const _wallets: DrivetWallet[] = await getAllWalletFromCloud()
-        setIsLoading(false)
-
-        if (_wallets?.length) {
-            nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets: _wallets })
-        } else {
-            await googleAccountSignOut()
-        }
-    }, [getAllWalletFromCloud, googleAccountSignOut, nav])
-
-    useFocusEffect(
-        useCallback(() => {
-            isCloudAvailable && PlatformUtils.isIOS() && getWalletsFromICloud()
-        }, [getWalletsFromICloud, isCloudAvailable]),
-    )
 
     const computeButtonType = useMemo(() => {
         if (textValue.length || PlatformUtils.isAndroid()) {
             return ButtonType.local
         }
 
-        if (isCloudAvailable && !textValue.length && !!wallets?.length) {
-            return ButtonType.icloud
-        }
-
         return ButtonType.unknown
-    }, [wallets?.length, isCloudAvailable, textValue.length])
+    }, [textValue.length])
 
     const {
         ref: unlockKeystoreBottomSheetRef,
@@ -118,23 +73,10 @@ export const ImportLocalWallet = () => {
         onClose: closeUnlockKeystoreBottomSheet,
     } = useBottomSheetModal()
 
-    const {
-        ref: derivationPathRef,
-        onOpen: onOpenDerivationPath,
-        onClose: onCloseDerivationPath,
-    } = useBottomSheetModal()
+    const { ref: infoBottomSheetRef, onOpen: onOpenInfoBottomSheet } = useBottomSheetModal()
 
     const mnemonicCache = useRef<string[]>()
     const privateKeyCache = useRef<string>()
-    const derivationPathCache = useRef<DerivationPath>()
-
-    const handleOnCloseDerivationPathSheet = useCallback(
-        (path: DerivationPath) => {
-            derivationPathCache.current = path
-            onCloseDerivationPath()
-        },
-        [onCloseDerivationPath],
-    )
 
     const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
 
@@ -149,7 +91,7 @@ export const ImportLocalWallet = () => {
                 importMnemonic: mnemonicCache.current,
                 privateKey: privateKeyCache.current,
                 pin,
-                derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                derivationPath: derivationPath,
                 importType,
             })
             nav.goBack()
@@ -183,7 +125,7 @@ export const ImportLocalWallet = () => {
         (_mnemonic: string) => {
             try {
                 const mnemonic = CryptoUtils.mnemonicStringToArray(_mnemonic)
-                checkCanImportDevice(derivationPathCache.current ?? DerivationPath.VET, mnemonic)
+                checkCanImportDevice(derivationPath, mnemonic)
                 mnemonicCache.current = mnemonic
                 track(AnalyticsEvent.IMPORT_MNEMONIC_SUBMITTED)
                 if (userHasOnboarded) {
@@ -191,7 +133,7 @@ export const ImportLocalWallet = () => {
                 } else {
                     onCreateWallet({
                         importMnemonic: mnemonic,
-                        derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                        derivationPath: derivationPath,
                         importType: IMPORT_TYPE.MNEMONIC,
                     })
                 }
@@ -206,6 +148,7 @@ export const ImportLocalWallet = () => {
             userHasOnboarded,
             checkIdentityBeforeOpening_1,
             onCreateWallet,
+            derivationPath,
             processErrorMessage,
         ],
     )
@@ -213,7 +156,7 @@ export const ImportLocalWallet = () => {
     const importPrivateKey = useCallback(
         (_privKey: string) => {
             try {
-                checkCanImportDevice(derivationPathCache.current ?? DerivationPath.VET, undefined, _privKey)
+                checkCanImportDevice(derivationPath, undefined, _privKey)
                 privateKeyCache.current = _privKey
                 track(AnalyticsEvent.IMPORT_PRIVATE_KEY_SUBMITTED)
                 if (userHasOnboarded) {
@@ -221,7 +164,7 @@ export const ImportLocalWallet = () => {
                 } else {
                     onCreateWallet({
                         privateKey: _privKey,
-                        derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                        derivationPath: derivationPath,
                         importType: IMPORT_TYPE.PRIVATE_KEY,
                     })
                 }
@@ -232,6 +175,7 @@ export const ImportLocalWallet = () => {
         },
         [
             checkCanImportDevice,
+            derivationPath,
             track,
             userHasOnboarded,
             checkIdentityBeforeOpening_1,
@@ -244,7 +188,7 @@ export const ImportLocalWallet = () => {
         async (pwd: string) => {
             try {
                 const privateKey = await CryptoUtils.decryptKeystoreFile(textValue, pwd)
-                checkCanImportDevice(derivationPathCache.current ?? DerivationPath.VET, undefined, privateKey)
+                checkCanImportDevice(derivationPath, undefined, privateKey)
                 privateKeyCache.current = privateKey
                 track(AnalyticsEvent.IMPORT_KEYSTORE_FILE_SUBMITTED)
                 if (userHasOnboarded) {
@@ -252,7 +196,7 @@ export const ImportLocalWallet = () => {
                 } else {
                     onCreateWallet({
                         privateKey,
-                        derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                        derivationPath: derivationPath,
                         importType: IMPORT_TYPE.KEYSTORE_FILE,
                     })
                 }
@@ -264,6 +208,7 @@ export const ImportLocalWallet = () => {
         [
             textValue,
             checkCanImportDevice,
+            derivationPath,
             track,
             userHasOnboarded,
             checkIdentityBeforeOpening_1,
@@ -296,11 +241,6 @@ export const ImportLocalWallet = () => {
         [importMnemonic, importPrivateKey, openUnlockKeystoreBottomSheet, LL],
     )
 
-    const onDemoMnemonicClick = () => {
-        setTextValue(DEMO_MNEMONIC)
-        onVerify(DEMO_MNEMONIC, IMPORT_TYPE.MNEMONIC)
-    }
-
     const onChangeText = (text: string) => {
         setIsError("")
         setTextValue(text)
@@ -325,113 +265,128 @@ export const ImportLocalWallet = () => {
         setIsError("")
     }
 
+    const handleSelectDerivationPath = useCallback(
+        (path: DerivationPath) => {
+            setDerivationPath(path)
+            track(AnalyticsEvent.WALLET_ADD_DERIVATION_PATH_TYPE, { path })
+            dispatch(setDerivedPath(path))
+        },
+        [track, dispatch],
+    )
+
     const handleVerify = useCallback(() => onVerify(textValue, importType), [onVerify, textValue, importType])
     const disabledAction = useCallback(() => setIsError(LL.ERROR_INVALID_IMPORT_DATA()), [LL])
-
-    const footerButtonLeftIcon = useMemo(() => {
-        switch (computeButtonType) {
-            case ButtonType.icloud:
-                return "icon-cloud"
-            default:
-                return undefined
-        }
-    }, [computeButtonType])
-
-    const footerButtonTitle = useMemo(() => {
-        switch (computeButtonType) {
-            case ButtonType.icloud:
-                return "or use iCloud"
-            default:
-                return LL.BTN_IMPORT_WALLET_VERIFY()
-        }
-    }, [LL, computeButtonType])
 
     const footerButtonDisabled = useMemo(() => {
         return computeButtonType === ButtonType.unknown || (!textValue.length && computeButtonType === ButtonType.local)
     }, [computeButtonType, textValue.length])
 
-    const footerButtonAction = useCallback(() => {
-        computeButtonType === ButtonType.icloud ? goToImportFromCloud() : handleVerify()
-    }, [computeButtonType, goToImportFromCloud, handleVerify])
-
     return (
         <DismissKeyboardView>
             <Layout
-                preventGoBack={isLoading && PlatformUtils.isAndroid()}
-                title={LL.TITLE_WALLET_IMPORT_LOCAL()}
+                title={LL.SB_TITLE_IMPORT_WITH_KEYS()}
+                headerRightElement={
+                    <BaseIcon
+                        name="icon-info"
+                        size={20}
+                        color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                        action={onOpenInfoBottomSheet}
+                    />
+                }
                 body={
                     <>
-                        <BaseView justifyContent="space-between">
+                        <Animated.View layout={LinearTransition} style={styles.contentContainer}>
                             <BaseView>
-                                <BaseView flexDirection="row" w={100}>
-                                    {areDevFeaturesEnabled && (
-                                        <BaseButton
-                                            size="md"
-                                            variant="link"
-                                            action={onDemoMnemonicClick}
-                                            title="DEV:DEMO"
-                                        />
-                                    )}
+                                <BaseView alignItems="center" justifyContent="center">
+                                    <BaseIcon
+                                        name="icon-file-spreadsheet"
+                                        size={48}
+                                        color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.PURPLE}
+                                    />
                                 </BaseView>
-                                <BaseText typographyFont="body" my={10}>
-                                    {LL.BD_WALLET_IMPORT_LOCAL()}
+                                <BaseSpacer height={16} />
+                                <BaseText
+                                    typographyFont="bodyMedium"
+                                    my={10}
+                                    align="center"
+                                    color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                                    {LL.WALLET_IMPORT_LOCAL_DESCRIPTION()}
                                 </BaseText>
 
-                                <BaseSpacer height={20} />
+                                <BaseSpacer height={24} />
 
-                                <BaseView flexDirection="row" alignSelf="flex-end">
-                                    <BaseIcon
-                                        name={"icon-copy"}
-                                        size={32}
-                                        style={styles.icon}
-                                        bg={theme.colors.secondary}
-                                        action={onPasteFromClipboard}
+                                {Boolean(textValue.length) && (
+                                    <Animated.View layout={LinearTransition} entering={FadeIn} exiting={FadeOut}>
+                                        <BaseView flex={1}>
+                                            <BaseText
+                                                align="left"
+                                                typographyFont="captionMedium"
+                                                color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                                                {"Derivation Path"}
+                                            </BaseText>
+                                        </BaseView>
+                                        <BaseSpacer height={8} />
+                                        <BaseTabs
+                                            keys={[DerivationPath.VET, DerivationPath.ETH]}
+                                            labels={["VeChain", "Ethereum"]}
+                                            selectedKey={derivationPath}
+                                            setSelectedKey={handleSelectDerivationPath}
+                                        />
+                                        <BaseSpacer height={12} />
+                                    </Animated.View>
+                                )}
+
+                                <Animated.View layout={LinearTransition}>
+                                    <ImportWalletInput
+                                        value={textValue}
+                                        onChangeText={onChangeText}
+                                        isError={!!isError}
                                     />
-                                    <BaseIcon
-                                        name={"icon-trash"}
-                                        size={32}
-                                        bg={theme.colors.secondary}
-                                        action={onClearSeed}
-                                    />
-                                </BaseView>
 
-                                <BaseSpacer height={40} />
-
-                                <ImportWalletInput value={textValue} onChangeText={onChangeText} isError={!!isError} />
-
-                                <BaseSpacer height={12} />
-
-                                <BaseTouchableBox
-                                    bg="transparent"
-                                    haptics="Medium"
-                                    action={onOpenDerivationPath}
-                                    px={4}
-                                    justifyContent="space-between">
-                                    <BaseView flex={1}>
-                                        <BaseText align="left" typographyFont="bodyBold">
-                                            {"Derivation Path"}
-                                        </BaseText>
+                                    <BaseSpacer height={12} />
+                                    <BaseView style={styles.copyPasteButtonContainer}>
+                                        <BaseView flex={1}>
+                                            {!!isError && (
+                                                <AlertInline
+                                                    testID={"IMPORT_LOCAL_WALLET_ERROR"}
+                                                    message={isError}
+                                                    status="error"
+                                                />
+                                            )}
+                                        </BaseView>
+                                        <BaseButton
+                                            testID={
+                                                textValue.length
+                                                    ? "IMPORT_LOCAL_WALLET_CLEAR_BUTTON"
+                                                    : "IMPORT_LOCAL_WALLET_PASTE_BUTTON"
+                                            }
+                                            rightIcon={
+                                                <BaseIcon
+                                                    name={textValue.length ? "icon-circle-x" : "icon-paste"}
+                                                    size={16}
+                                                    color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}
+                                                />
+                                            }
+                                            title={
+                                                textValue.length
+                                                    ? LL.SEND_RECEIVER_ADDRESS_INPUT_CLEAR()
+                                                    : LL.SEND_RECEIVER_ADDRESS_INPUT_PASTE()
+                                            }
+                                            textColor={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}
+                                            typographyFont="captionSemiBold"
+                                            style={styles.copyPasteButton}
+                                            action={textValue.length ? onClearSeed : onPasteFromClipboard}
+                                        />
                                     </BaseView>
-                                    <BaseIcon name="icon-chevron-right" size={24} color={theme.colors.text} />
-                                </BaseTouchableBox>
+                                </Animated.View>
 
                                 <UnlockKeystoreBottomSheet
                                     ref={unlockKeystoreBottomSheetRef}
                                     onHide={closeUnlockKeystoreBottomSheet}
                                     onUnlock={onUnlockKeyStoreFile}
                                 />
-                                {!!isError && (
-                                    <BaseText my={10} color={theme.colors.danger}>
-                                        {isError}
-                                    </BaseText>
-                                )}
                             </BaseView>
-                        </BaseView>
-
-                        <SelectDerivationPathBottomSheet
-                            ref={derivationPathRef}
-                            onClose={handleOnCloseDerivationPathSheet}
-                        />
+                        </Animated.View>
 
                         <CreatePasswordModal
                             isOpen={isOpen}
@@ -441,63 +396,42 @@ export const ImportLocalWallet = () => {
                                     pin,
                                     mnemonic: mnemonicCache.current,
                                     privateKey: privateKeyCache.current,
-                                    derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                                    derivationPath: derivationPath,
                                     importType,
                                 })
                             }
+                        />
+
+                        <InfoBottomSheet
+                            bsRef={infoBottomSheetRef}
+                            title={LL.BS_INFO_IMPORTING_WITH_KEYS_TITLE()}
+                            description={LL.BS_INFO_IMPORTING_WITH_KEYS_DESCRIPTION()}
                         />
                     </>
                 }
                 footer={
                     <BaseView w={100}>
                         {!!isCreateError && (
-                            <BaseText my={10} color={theme.colors.danger}>
-                                {isCreateError}
-                            </BaseText>
+                            <AlertInline
+                                testID="IMPORT_LOCAL_WALLET_CREATE_ERROR"
+                                message={LL.ERROR_GENERIC_WITH_RETRY_SUBTITLE()}
+                                status="error"
+                                justifyContent="center"
+                                textAlign="center"
+                                style={styles.alertContainer}
+                            />
                         )}
 
                         <BaseButton
-                            isLoading={isLoading && PlatformUtils.isIOS()}
-                            leftIcon={
-                                footerButtonLeftIcon ? (
-                                    <BaseIcon
-                                        name={footerButtonLeftIcon}
-                                        color={theme.colors.textReversed}
-                                        style={styles.ickoudIcon}
-                                    />
-                                ) : undefined
-                            }
-                            action={footerButtonAction}
+                            testID={"IMPORT_LOCAL_WALLET_IMPORT_BUTTON"}
+                            action={handleVerify}
                             style={styles.button}
-                            title={footerButtonTitle}
+                            title={isCreateError ? LL.BTN_TRY_AGAIN() : LL.BTN_IMPORT()}
                             disabled={footerButtonDisabled}
                             disabledAction={disabledAction}
                             disabledActionHaptics="Heavy"
                             haptics="Light"
                         />
-
-                        {PlatformUtils.isAndroid() && isCloudAvailable && (
-                            <>
-                                <BaseSpacer height={8} />
-                                <BaseButton
-                                    isLoading={isLoading}
-                                    leftIcon={
-                                        <BaseIcon
-                                            name={"icon-google-drive"}
-                                            color={theme.colors.textReversed}
-                                            style={styles.ickoudIcon}
-                                        />
-                                    }
-                                    action={getWalletsFromDrive}
-                                    style={styles.button}
-                                    title={"or use Google Drive"}
-                                    disabled={!isCloudAvailable || isLoading}
-                                    disabledAction={disabledAction}
-                                    disabledActionHaptics="Heavy"
-                                    haptics="Light"
-                                />
-                            </>
-                        )}
 
                         <RequireUserPassword
                             isOpen={isPasswordPromptOpen_1}
@@ -511,8 +445,30 @@ export const ImportLocalWallet = () => {
     )
 }
 
-const styles = StyleSheet.create({
-    icon: { marginHorizontal: 20 },
-    ickoudIcon: { marginLeft: -12, marginRight: 12 },
-    button: { justifyContent: "center", height: 48 },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        icon: { marginHorizontal: 20 },
+        ickoudIcon: { marginLeft: -12, marginRight: 12 },
+        button: { justifyContent: "center", height: 48 },
+        copyPasteButtonContainer: {
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+        },
+        copyPasteButton: {
+            gap: 12,
+            borderWidth: 1,
+            borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
+            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.WHITE,
+            paddingVertical: 8,
+            paddingHorizontal: 12,
+        },
+        contentContainer: {
+            flex: 1,
+            justifyContent: "space-between",
+            marginTop: 16,
+        },
+        alertContainer: {
+            marginBottom: 16,
+        },
+    })

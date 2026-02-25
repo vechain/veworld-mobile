@@ -100,4 +100,7 @@ export enum Routes {
     // Collectibles
     COLLECTIBLES_COLLECTIONS = "Collectibles_Collections",
     COLLECTIBLES_COLLECTION_DETAILS = "Collectibles_Collection_Details",
+
+    // Smart Wallet
+    SMART_WALLET_LINK_ACCOUNT = "Smart_Wallet_Link_Account",
 }

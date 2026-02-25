@@ -9,7 +9,7 @@ import {
     CloudKitWallet,
     ConnectedLedgerDevice,
     Device,
-    DrivetWallet,
+    DriveWallet,
     FungibleToken,
     FungibleTokenWithBalance,
     LedgerAccountWithDevice,
@@ -143,10 +143,10 @@ export type RootStackParamListHome = {
         device: ConnectedLedgerDevice
     }
     [Routes.IMPORT_FROM_CLOUD]: {
-        wallets: CloudKitWallet[] | DrivetWallet[]
+        wallets: CloudKitWallet[] | DriveWallet[]
     }
     [Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD]: {
-        wallet: CloudKitWallet | DrivetWallet
+        wallet: CloudKitWallet | DriveWallet
     }
     [Routes.BROWSER]: {
         url: string

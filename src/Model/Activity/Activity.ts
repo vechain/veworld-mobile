@@ -37,6 +37,7 @@ export interface Activity {
     context?: AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT | AnalyticsEvent.SEND
     dappUrlOrName?: string
     subject?: AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT
+    smartWalletAddress?: string
 }
 
 export type IndexedHistoryEvent =

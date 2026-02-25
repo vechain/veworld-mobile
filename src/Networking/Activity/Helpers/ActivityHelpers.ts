@@ -1,7 +1,9 @@
 import uuid from "react-native-uuid"
 import { Transaction } from "thor-devkit"
-import { Transaction as SDKTransaction } from "@vechain/sdk-core"
+import { Transaction as SDKTransaction, TransactionClause } from "@vechain/sdk-core"
+import { ethers } from "ethers"
 import { chainTagToGenesisId, DIRECTIONS, ERROR_EVENTS, VET } from "~Constants"
+import { SimpleAccountABI } from "../../../VechainWalletKit/utils/abi"
 import {
     Activity,
     ActivityEvent,
@@ -35,11 +37,78 @@ import {
 import { ActivityUtils, AddressUtils, debug, TransactionUtils } from "~Utils"
 import { components } from "~Generated/indexer/schema"
 
+/* -------------------------- Smart Account Helpers -------------------------- */
+const simpleAccountIface = new ethers.utils.Interface(SimpleAccountABI)
+
+const parseSmartAccountData = (data?: string) => {
+    if (!data || data === "0x") return null
+    try {
+        return simpleAccountIface.parseTransaction({ data })
+    } catch {
+        return null
+    }
+}
+
+const isSmartAccountTransaction = (clause: TransactionClause | Transaction.Clause): boolean => {
+    const parsed = parseSmartAccountData(clause.data)
+    return parsed?.name === "executeBatchWithAuthorization" || parsed?.name === "executeWithAuthorization"
+}
+
+const extractClausesFromExecuteBatch = (clause: TransactionClause | Transaction.Clause): Transaction.Clause[] => {
+    const parsed = parseSmartAccountData(clause.data)
+    if (!parsed || parsed.name !== "executeBatchWithAuthorization") return []
+
+    const [addrs, values, datas] = parsed.args as [string[], ethers.BigNumber[], string[]]
+    return addrs.map((to, i) => ({
+        to: to || null,
+        value: values[i].toHexString(),
+        data: datas[i],
+    }))
+}
+
+const extractClausesFromExecute = (clause: TransactionClause | Transaction.Clause): Transaction.Clause[] => {
+    const parsed = parseSmartAccountData(clause.data)
+    if (!parsed || parsed.name !== "executeWithAuthorization") return []
+
+    const [to, value, calldata] = parsed.args as [string, ethers.BigNumber, string]
+    return [
+        {
+            to: to || null,
+            value: value.toHexString(),
+            data: calldata,
+        },
+    ]
+}
+
+/**
+ * Extracts the inner clauses from a smart account transaction.
+ * If the clause is not a smart account transaction, returns the original clauses.
+ */
+const extractInnerClausesFromSmartAccount = (clauses: Transaction.Clause[]): Transaction.Clause[] => {
+    if (clauses.length === 0) return clauses
+
+    const smartClause = clauses.find(isSmartAccountTransaction)
+
+    if (!smartClause) return clauses
+
+    const parsed = parseSmartAccountData(smartClause.data)
+
+    if (parsed?.name === "executeBatchWithAuthorization") {
+        return extractClausesFromExecuteBatch(smartClause)
+    }
+    if (parsed?.name === "executeWithAuthorization") {
+        return extractClausesFromExecute(smartClause)
+    }
+
+    return clauses
+}
+
 /**
  * Creates a base activity from a given transaction.
  *
  * The function extracts necessary details from the transaction such as its id, origin, delegated status, delegator, body and more.
  * It also determines the activity type based on the transaction's clauses.
+ * For smart account transactions, it extracts the inner clauses to determine the actual activity type.
  *
  * @param tx - The transaction from which to create the base activity.
  * @returns A new activity object based on the given transaction.
@@ -47,16 +116,26 @@ import { components } from "~Generated/indexer/schema"
 const createBaseActivityFromTx = (tx: SDKTransaction) => {
     const { id, origin, isDelegated, body } = tx
     const { clauses, gas, chainTag } = body
-    const type = ActivityUtils.getActivityTypeFromClause(clauses)
+
+    // For smart account transactions, extract the inner clauses for activity type detection
+    const innerClauses = extractInnerClausesFromSmartAccount(clauses)
+    const type = ActivityUtils.getActivityTypeFromClause(innerClauses)
+
+    // For smart account transactions, use the smart account address (the `to` of the wrapper clause) as the `from`
+    // This ensures the activity is associated with the smart account, not the EOA owner
+    const smartAccountClause = clauses.find(isSmartAccountTransaction)
+    const fromAddress = smartAccountClause?.to ? smartAccountClause.to : origin?.toString() ?? ""
 
     return {
-        from: origin?.toString() ?? "",
-        to: clauses.map((clause: Transaction.Clause) => ActivityUtils.getDestinationAddressFromClause(clause) ?? ""),
+        from: fromAddress,
+        to: innerClauses.map(
+            (clause: Transaction.Clause) => ActivityUtils.getDestinationAddressFromClause(clause) ?? "",
+        ),
         id: id.toString() ?? "",
         txId: id.toString() ?? "",
         genesisId: chainTagToGenesisId[chainTag],
         gasUsed: Number(gas),
-        clauses,
+        clauses: innerClauses, // Use inner clauses for data extraction
         delegated: isDelegated,
         status: ActivityStatus.PENDING,
         isTransaction: true,
@@ -100,7 +179,6 @@ export const createPendingTransferActivityFromTx = (tx: SDKTransaction): Fungibl
         throw new Error("Invalid transaction type")
 
     const tokenAddress = getAddressFromClause(baseActivity.clauses[0])
-
     const amount = TransactionUtils.getAmountFromClause(baseActivity.clauses[0])
 
     if (!amount) throw new Error("Invalid amount")
@@ -110,7 +188,7 @@ export const createPendingTransferActivityFromTx = (tx: SDKTransaction): Fungibl
         type: baseActivity.type,
         amount,
         tokenAddress,
-    }
+    } as FungibleTokenActivity
 }
 
 /**
@@ -523,6 +601,7 @@ export const enrichActivityWithTrackingData = (
     }: {
         appName?: string
         appUrl?: string
+        smartWalletAddress?: string
     } & Pick<Activity, "medium" | "signature" | "context" | "subject">,
 ): Activity => {
     return {

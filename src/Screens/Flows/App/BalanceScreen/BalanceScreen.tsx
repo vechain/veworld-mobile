@@ -28,6 +28,7 @@ import { CurrentBalance } from "./Components/Balance/CurrentBalance"
 import { PullToRefresh } from "./Components/PullToRefresh"
 import { Header } from "./Header"
 import { TabRenderer } from "./Tabs/TabRenderer"
+import { SmartWalletBackupBottomSheet } from "./Components/SmartWalletBackupBottomSheet"
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 
@@ -139,6 +140,7 @@ export const BalanceScreen = () => {
 
                     <TabRenderer onLayout={onLayout} />
                     <DeviceBackupBottomSheet />
+                    <SmartWalletBackupBottomSheet />
                     <DeviceJailBrokenWarningModal />
                     <EnableNotificationsBottomSheet />
                     <ValidatorDelegationExitedBottomSheet />

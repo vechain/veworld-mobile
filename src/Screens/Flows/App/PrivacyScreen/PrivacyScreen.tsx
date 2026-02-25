@@ -14,7 +14,7 @@ import { ERROR_EVENTS } from "~Constants"
 import { useBottomSheetModal, useCheckWalletBackup, useDisclosure, useInterval, useWalletSecurity } from "~Hooks"
 import { useLayoutScrollviewPadding } from "~Hooks/useLayoutScrollviewPadding"
 import { useI18nContext } from "~i18n"
-import { DEVICE_TYPE, LocalDevice } from "~Model"
+import { DEVICE_TYPE, LocalDevice, SmartWalletDevice } from "~Model"
 import { Routes } from "~Navigation"
 import {
     selectAnalyticsTrackingEnabled,
@@ -102,11 +102,30 @@ export const PrivacyScreen = () => {
         openBackupWarningSheet()
     }, [selectedAccount, LL, openBackupWarningSheet])
 
-    const handleDeviceBackup = useCallback(
-        (device: LocalDevice) => {
-            handleOnSelectedWallet(device)
+    const handleSmartWalletBackup = useCallback(
+        (device: SmartWalletDevice) => {
+            nav.navigate(Routes.SMART_WALLET_LINK_ACCOUNT, {
+                device,
+            })
         },
-        [handleOnSelectedWallet],
+        [nav],
+    )
+
+    const handleDeviceBackup = useCallback(
+        (device: LocalDevice | SmartWalletDevice) => {
+            switch (device.type) {
+                case DEVICE_TYPE.LOCAL_MNEMONIC:
+                case DEVICE_TYPE.LOCAL_PRIVATE_KEY:
+                    handleOnSelectedWallet(device)
+                    break
+                case DEVICE_TYPE.SMART_WALLET:
+                    handleSmartWalletBackup(device)
+                    break
+                default:
+                    break
+            }
+        },
+        [handleOnSelectedWallet, handleSmartWalletBackup],
     )
 
     // [END] - Hooks setup

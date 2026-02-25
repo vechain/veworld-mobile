@@ -16,6 +16,7 @@ type Excluded =
     | Routes.CHOOSE_DETAILS_BACKUP_PASSWORD
     | Routes.CLAIM_USERNAME
     | Routes.USERNAME_CLAIMED
+    | Routes.SMART_WALLET_LINK_ACCOUNT
 
 type ExcludedSettingRoutes = Excluded | Routes.BROWSER
 
