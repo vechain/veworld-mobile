@@ -12,8 +12,7 @@ on:
 jobs:
     build-e2e-ios:
         name: Build & Test iOS
-        # down bump due to  xcode16.3 incompatibility
-        runs-on: macos-14-xlarge
+        runs-on: macos-26-xlarge
         environment: ios-release
         outputs:
             resultUrl: ${{ steps.test-result.outputs.resultUrl }}
