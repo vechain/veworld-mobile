@@ -1,10 +1,5 @@
-import {
-    selectSelectedAccountOrNull,
-    selectSelectedNetwork,
-    setSelectedAccount,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { useAppDispatch, useAppSelector, setSelectedAccount } from "~Storage/Redux"
+import { selectSelectedNetwork, selectSelectedAccountOrNull } from "~Storage/Redux/Selectors"
 import { useResetStacks } from "./useResetStacks"
 import { AddressUtils } from "~Utils"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"

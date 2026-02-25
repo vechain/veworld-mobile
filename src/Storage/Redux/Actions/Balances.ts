@@ -1,7 +1,7 @@
 import { Dispatch } from "@reduxjs/toolkit"
 import { QueryClient } from "@tanstack/react-query"
-import { selectSelectedNetwork } from "~Storage/Redux"
-import { RootState } from "~Storage/Redux/Types"
+import { selectSelectedNetwork } from "../Selectors"
+import { RootState } from "../Types"
 import { AddressUtils } from "~Utils"
 
 /**
