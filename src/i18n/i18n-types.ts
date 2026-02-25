@@ -2736,6 +2736,7 @@ type RootTranslation = {
 	 * N​o​t​i​f​i​c​a​t​i​o​n​ ​U​R​L
 	 */
 	DEVELOPER_SETTING_NOTIFICATION_URL: string
+
 	/**
 	 * L​o​g​o​u​t​ ​o​f​ ​y​o​u​r​ ​s​m​a​r​t​ ​w​a​l​l​e​t
 	 */
@@ -6231,6 +6232,26 @@ type RootTranslation = {
 	 * N​o​d​e​ ​h​o​l​d​e​r​s​ ​c​a​n​ ​e​n​d​o​r​s​e​ ​m​u​l​t​i​p​l​e​ ​a​p​p​s​ ​o​n​ ​*​*​V​e​B​e​t​t​e​r​*​*​!
 	 */
 	BANNER_STARGATE_X_VEBETTER_DESC: string
+	/**
+	 * S​e​n​d​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	TRANSACTIONS_SETTINGS_SEND_PREFERENCES: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	TRANSACTIONS_SETTINGS_DELEGATION_PREFERENCES: string
+	/**
+	 * D​e​f​a​u​l​t​ ​a​m​o​u​n​t​ ​v​a​l​u​e
+	 */
+	BD_DEFAULT_AMOUNT_VALUE: string
+	/**
+	 * C​u​r​r​e​n​c​y
+	 */
+	BD_DEFAULT_AMOUNT_VALUE_CURRENCY: string
+	/**
+	 * T​o​k​e​n
+	 */
+	BD_DEFAULT_AMOUNT_VALUE_TOKEN: string
 }
 
 export type TranslationFunctions = {
@@ -12350,6 +12371,26 @@ Make sure that it is unlocked and the location services are enabled.
 	 * Node holders can endorse multiple apps on **VeBetter**!
 	 */
 	BANNER_STARGATE_X_VEBETTER_DESC: () => LocalizedString
+	/**
+	 * Send preferences
+	 */
+	TRANSACTIONS_SETTINGS_SEND_PREFERENCES: () => LocalizedString
+	/**
+	 * Delegation preferences
+	 */
+	TRANSACTIONS_SETTINGS_DELEGATION_PREFERENCES: () => LocalizedString
+	/**
+	 * Default amount value
+	 */
+	BD_DEFAULT_AMOUNT_VALUE: () => LocalizedString
+	/**
+	 * Currency
+	 */
+	BD_DEFAULT_AMOUNT_VALUE_CURRENCY: () => LocalizedString
+	/**
+	 * Token
+	 */
+	BD_DEFAULT_AMOUNT_VALUE_TOKEN: () => LocalizedString
 }
 
 export type Formatters = {
