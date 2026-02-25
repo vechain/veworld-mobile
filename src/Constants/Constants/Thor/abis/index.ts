@@ -6,5 +6,16 @@ import * as UniswapPairV2 from "./UniswapPairV2.abi"
 import * as VeBetterDao from "./VeBetterDao.abi"
 import * as VetDomains from "./VetDomains.abi"
 import * as NFTBlacklist from "./NFTBlacklist.abi"
+import * as SocialLoginSmartAccount from "./SocialLoginSmartAccount.abi"
 
-export { VIP180, VIP181, RouterV2, UniswapRouterV2, UniswapPairV2, VeBetterDao, VetDomains, NFTBlacklist }
+export {
+    VIP180,
+    VIP181,
+    RouterV2,
+    UniswapRouterV2,
+    UniswapPairV2,
+    VeBetterDao,
+    VetDomains,
+    NFTBlacklist,
+    SocialLoginSmartAccount,
+}

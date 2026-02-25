@@ -1,7 +1,44 @@
-import React from "react"
-import { SmartWalletWithPrivyProvider } from "../../VechainWalletKit"
+import React, { useEffect } from "react"
+import { SmartWalletWithPrivyProvider, useSmartWallet } from "../../VechainWalletKit"
 import { useFeatureFlags } from "./FeatureFlagsProvider"
 import { SmartWalletFallbackProvider } from "./SmartWalletFallbackProvider"
+import { useAppDispatch } from "~Storage/Redux"
+import { updateDeviceLinkedProviders } from "~Storage/Redux/Slices/Device"
+import { handleSmartWalletNetworkSwap } from "~Storage/Redux/Actions/SmartWalletNetworkSwap"
+
+/**
+ * Headless component that syncs smart wallet state from VechainWalletKit context to Redux.
+ * Runs inside the SmartWalletProvider so it has access to the wallet context.
+ * Fault tolerant: if the device doesn't exist in Redux yet (e.g. during onboarding),
+ * the reducer is a no-op. On next app open, the wallet re-initialises and this effect
+ * re-fires, correcting the state.
+ */
+const SmartWalletStateSync = () => {
+    const { isInitialized, isLoading, smartAccountAddress, linkedAccounts } = useSmartWallet()
+    const dispatch = useAppDispatch()
+
+    // Swap device/account rootAddress when smart account address changes (network switch)
+    useEffect(() => {
+        if (isInitialized && !isLoading && smartAccountAddress) {
+            dispatch(handleSmartWalletNetworkSwap(smartAccountAddress))
+        }
+    }, [isInitialized, isLoading, smartAccountAddress, dispatch])
+
+    // Sync linked OAuth providers to Redux
+    useEffect(() => {
+        if (isInitialized && !isLoading && smartAccountAddress && linkedAccounts.length > 0) {
+            const linkedProviders = linkedAccounts.map(acc => acc.type)
+            dispatch(
+                updateDeviceLinkedProviders({
+                    rootAddress: smartAccountAddress,
+                    linkedProviders,
+                }),
+            )
+        }
+    }, [isInitialized, isLoading, smartAccountAddress, linkedAccounts, dispatch])
+
+    return null
+}
 
 export const FeatureFlaggedSmartWallet = ({
     children,
@@ -27,6 +64,7 @@ export const FeatureFlaggedSmartWallet = ({
                         networkType,
                     },
                 }}>
+                <SmartWalletStateSync />
                 {children}
             </SmartWalletWithPrivyProvider>
         )

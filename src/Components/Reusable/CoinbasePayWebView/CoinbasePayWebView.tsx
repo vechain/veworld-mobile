@@ -40,14 +40,17 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
     const account = useAppSelector(selectSelectedAccountOrNull)
     const senderDevice = useAppSelector(state => selectDevice(state, account?.address))
     const { signMessage } = useSignMessage()
-    const { smartAccountAddress } = useSmartWallet()
+    const { ownerAddress } = useSmartWallet()
+    // isSmartAccount is only true when ownerAddress is available,
+    // keeping it consistent with resolvedDestinationAddress.
+    const isSmartAccount = senderDevice?.type === DEVICE_TYPE.SMART_WALLET && !!ownerAddress
 
     const resolvedDestinationAddress = useMemo(() => {
-        if (senderDevice?.type === DEVICE_TYPE.SMART_WALLET && smartAccountAddress) {
-            return smartAccountAddress
+        if (isSmartAccount) {
+            return ownerAddress!
         }
         return destinationAddress
-    }, [destinationAddress, senderDevice?.type, smartAccountAddress])
+    }, [destinationAddress, isSmartAccount, ownerAddress])
 
     // State for signature and timestamp
     const [signature, setSignature] = useState<string | undefined>()
@@ -61,8 +64,13 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
                 const normalizedAddress = resolvedDestinationAddress.toLowerCase()
                 const message = `${SIGNATURE_PREFIX}|${normalizedAddress}|${ts}`
 
-                const hash = SignMessageUtils.hashMessage(message, "eip155")
-                const sig = await signMessage(hash, password)
+                let sig
+                if (isSmartAccount) {
+                    sig = await signMessage(Buffer.from(message), password)
+                } else {
+                    const hash = SignMessageUtils.hashMessage(message, "eip155")
+                    sig = await signMessage(hash, password)
+                }
 
                 if (!sig) {
                     throw new Error("Signature generation failed")
@@ -86,7 +94,7 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
                 throw err
             }
         },
-        [resolvedDestinationAddress, signMessage, nav, LL],
+        [resolvedDestinationAddress, signMessage, nav, LL, isSmartAccount],
     )
 
     // When identity is confirmed, generate signature
@@ -125,6 +133,7 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
                 paymentProvidersFeature["coinbase-pay"].url,
                 signature,
                 timestamp,
+                isSmartAccount,
             ),
         enabled: !!signature && !!timestamp, // Only run when signature is available
         staleTime: 0,

@@ -5,18 +5,20 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 
-type BackupStatusVariant = "success" | "error" | "neutral"
+type BackupStatusVariant = "success" | "error" | "neutral" | "warning"
 
 enum StatusColorVariant {
     "success" = "successVariant",
     "error" = "errorVariant",
     "neutral" = "neutralVariant",
+    "warning" = "warningVariant",
 }
 
 const ICON_NAMES: Record<BackupStatusVariant, IconKey> = {
     success: "icon-check-circle-2",
     error: "icon-x-circle",
     neutral: "icon-info",
+    warning: "icon-alert-circle",
 }
 
 type Props = {

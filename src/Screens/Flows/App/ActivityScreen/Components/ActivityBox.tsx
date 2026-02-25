@@ -111,7 +111,8 @@ const BaseActivityBox = ({
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const showDescription = !!description
-    const showActivityStatus = !!activityStatus && activityStatus !== ActivityStatus.SUCCESS
+    const showActivityStatus =
+        !!activityStatus && activityStatus !== ActivityStatus.SUCCESS && activityStatus !== ActivityStatus.PENDING
     const showRightAmount = !!rightAmount
     const showrightAmountDescription = !!rightAmountDescription
     const showNftImage = !!nftImage

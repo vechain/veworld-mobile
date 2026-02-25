@@ -28,7 +28,6 @@ import {
 } from "~Networking"
 import { ReceiptProcessor } from "~Services/AbiService/ReceiptProcessor"
 import {
-    selectDevice,
     selectLanguage,
     selectNetworkVBDTokens,
     selectSelectedAccount,
@@ -187,6 +186,7 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
                             signature: updatedActivity.signature,
                             subject: updatedActivity.subject,
                             context: updatedActivity.context,
+                            smartWalletAddress: updatedActivity.smartWalletAddress,
                             failed: updatedActivity.status === ActivityStatus.REVERTED,
                             dappUrl: updatedActivity.dappUrlOrName,
                             transactionId: updatedActivity.txId?.toLowerCase(),
@@ -245,13 +245,18 @@ export const addPendingTransferTransactionActivity =
         const locale = selectLanguage(getState())
         const LL = i18nObject(locale)
         const selectedAccount = selectSelectedAccount(getState())
-        const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
 
-        // Ignore if the selected account is a smart wallet for now
-        if (!selectedAccount || !outgoingTx.id || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
+        const isSmartWallet = selectedAccount?.device?.type === DEVICE_TYPE.SMART_WALLET
+
+        if (!selectedAccount || !outgoingTx.id) return
 
         const pendingActivity: FungibleTokenActivity = createPendingTransferActivityFromTx(outgoingTx)
-        dispatch(addActivity(enrichActivityWithTrackingData(pendingActivity, options)))
+        const enrichedActivity = enrichActivityWithTrackingData(pendingActivity, {
+            ...options,
+            smartWalletAddress: isSmartWallet ? selectedAccount.address : undefined,
+        })
+        dispatch(addActivity(enrichedActivity))
+
         Feedback.show({
             severity: FeedbackSeverity.LOADING,
             message: LL.TRANSACTION_IN_PROGRESS(),
@@ -285,12 +290,17 @@ export const addPendingNFTtransferTransactionActivity =
         const locale = selectLanguage(getState())
         const LL = i18nObject(locale)
         const selectedAccount = selectSelectedAccount(getState())
-        const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
-        // Ignore if the selected account is a smart wallet for now
-        if (!selectedAccount || !outgoingTx.id || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
+        const isSmartWallet = selectedAccount?.device?.type === DEVICE_TYPE.SMART_WALLET
+
+        if (!selectedAccount || !outgoingTx.id) return
 
         const pendingActivity: NonFungibleTokenActivity = createPendingNFTTransferActivityFromTx(outgoingTx)
-        dispatch(addActivity(enrichActivityWithTrackingData(pendingActivity, options)))
+        const enrichedActivity = enrichActivityWithTrackingData(pendingActivity, {
+            ...options,
+            smartWalletAddress: isSmartWallet ? selectedAccount.address : undefined,
+        })
+        dispatch(addActivity(enrichedActivity))
+
         Feedback.show({
             severity: FeedbackSeverity.LOADING,
             message: LL.TRANSACTION_IN_PROGRESS(),
@@ -408,10 +418,15 @@ export const addPendingDappTransactionActivity =
     (tx: Transaction, options: ActivityOptions): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
-        const selectedDevice = selectDevice(getState(), selectedAccount?.rootAddress)
 
-        if (!selectedAccount || selectedDevice?.type === DEVICE_TYPE.SMART_WALLET) return
+        const isSmartWallet = selectedAccount?.device?.type === DEVICE_TYPE.SMART_WALLET
+
+        if (!selectedAccount) return
 
         const pendingDappActivity: Activity = createPendingDappTransactionActivity(tx, options.appName, options.appUrl)
-        dispatch(addActivity(enrichActivityWithTrackingData(pendingDappActivity, options)))
+        const enrichedActivity = enrichActivityWithTrackingData(pendingDappActivity, {
+            ...options,
+            smartWalletAddress: isSmartWallet ? selectedAccount.address : undefined,
+        })
+        dispatch(addActivity(enrichedActivity))
     }

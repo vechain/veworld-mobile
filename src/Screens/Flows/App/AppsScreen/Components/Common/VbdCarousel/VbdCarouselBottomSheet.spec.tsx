@@ -8,10 +8,18 @@ import { RootState } from "~Storage/Redux/Types"
 import { TestHelpers, TestWrapper } from "~Test"
 import { useDAppActions } from "../../../Hooks"
 import { VbdCarouselBottomSheet } from "./VbdCarouselBottomSheet"
+import { useEdgeSwipeGesture } from "~Components/Reusable/EdgeSwipeIndicator"
+import { Gesture } from "react-native-gesture-handler"
 
 // Mock the external dependencies
 jest.mock("../../../Hooks", () => ({
     useDAppActions: jest.fn(),
+}))
+
+// Mock the edge swipe gesture hook to avoid Skia issues in tests
+jest.mock("~Components/Reusable/EdgeSwipeIndicator", () => ({
+    ...jest.requireActual("~Components/Reusable/EdgeSwipeIndicator"),
+    useEdgeSwipeGesture: jest.fn(),
 }))
 
 let mockVbdDAppsData: VbdDApp[] = []
@@ -46,7 +54,11 @@ const mockVbdDApp: VbdDApp = {
     screenshots: ["https://example.com/screenshot1.png"],
     social_urls: [{ name: "twitter", url: "https://twitter.com/testdapp" }],
     app_urls: [{ code: "en", url: "https://test-dapp.com" }],
-    categories: [X2ECategoryType.PETS],
+    categories: [X2ECategoryType.GREEN_FINANCE_DEFI],
+    ve_world: {
+        banner: "https://example.com/banner.png",
+        featured_image: "https://example.com/featured.png",
+    },
 }
 
 describe("VbdCarouselBottomSheet", () => {
@@ -85,6 +97,8 @@ describe("VbdCarouselBottomSheet", () => {
         iconUri: "https://example.com/icon.png",
         category: "green-finance-defi" as const,
         app: mockVbdDApp,
+        carouselIndex: 0,
+        carouselDapps: [mockVbdDApp],
     }
 
     const defaultProps = {
@@ -134,6 +148,14 @@ describe("VbdCarouselBottomSheet", () => {
             onDAppPress: mockOnDAppPress,
         })
         ;(useAppOverview as jest.Mock).mockReturnValue({ data: mockAppOverview, isLoading: false })
+        ;(useEdgeSwipeGesture as jest.Mock).mockReturnValue({
+            swipeDirection: { value: "none" },
+            leftPatch: { value: [] },
+            rightPatch: { value: [] },
+            swipeGesture: Gesture.Pan(),
+            viewImage: null,
+            takeViewSnapshot: jest.fn(),
+        })
     })
 
     describe("Rendering", () => {
@@ -178,17 +200,27 @@ describe("VbdCarouselBottomSheet", () => {
         })
 
         it("should not render category chip when category is not provided", async () => {
+            // Create a mock app with no valid categories
+            const appWithNoCategory = {
+                ...mockVbdDApp,
+                categories: undefined,
+            }
+
             TestHelpers.render.renderComponentWithProps(<VbdCarouselBottomSheet {...defaultProps} />, {
                 wrapper: TestWrapper,
                 initialProps: { preloadedState: mockState },
             })
 
             await act(() => {
-                defaultProps.bsRef.current.present(_.omit(appMetadata, "category"))
+                defaultProps.bsRef.current.present({
+                    ...appMetadata,
+                    app: appWithNoCategory,
+                    carouselDapps: [appWithNoCategory],
+                })
             })
 
-            // Category chip should not be rendered
-            expect(screen.queryByText("pets")).not.toBeOnTheScreen()
+            // Category chip should not be rendered when app has no categories
+            expect(screen.queryByTestId("CATEGORY_CHIP")).not.toBeOnTheScreen()
         })
 
         it("should render loading skeletons when app overview is loading", async () => {

@@ -9,7 +9,7 @@ import { TransactionAlert } from "~Components/Reusable/Send/03-SummarySend/Compo
 import { TransactionFeeCard } from "~Components/Reusable/Send/03-SummarySend/Components/TransactionFeeCard"
 import { TransactionProvider } from "~Components/Reusable/Send/03-SummarySend/Components/TransactionProvider"
 import { SendContent } from "~Components/Reusable/Send/Shared"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { useThemedStyles, useTransactionScreen } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -22,6 +22,7 @@ import {
 } from "~Storage/Redux"
 import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { NFTReceiverCard } from "./Components"
+import { error } from "~Utils/Logger"
 
 export const NFTSummaryScreen = () => {
     const { LL } = useI18nContext()
@@ -42,15 +43,20 @@ export const NFTSummaryScreen = () => {
 
     const onTransactionSuccess = useCallback(
         (transaction: Transaction) => {
-            dispatch(
-                addPendingNFTtransferTransactionActivity(transaction, {
-                    medium: AnalyticsEvent.SEND,
-                    signature: AnalyticsEvent.LOCAL,
-                    subject: AnalyticsEvent.NFT,
-                    context: AnalyticsEvent.SEND,
-                }),
-            )
-            onFinish()
+            try {
+                dispatch(
+                    addPendingNFTtransferTransactionActivity(transaction, {
+                        medium: AnalyticsEvent.SEND,
+                        signature: AnalyticsEvent.LOCAL,
+                        subject: AnalyticsEvent.NFT,
+                        context: AnalyticsEvent.SEND,
+                    }),
+                )
+            } catch (e) {
+                error(ERROR_EVENTS.SEND, "Error adding pending NFT transfer activity", e)
+            } finally {
+                onFinish()
+            }
         },
         [onFinish, dispatch],
     )
@@ -95,7 +101,6 @@ export const NFTSummaryScreen = () => {
 
     return (
         <SendContent>
-            <SendContent.Header />
             <SendContent.Container>
                 <Animated.View style={styles.root}>
                     <NFTReceiverCard />

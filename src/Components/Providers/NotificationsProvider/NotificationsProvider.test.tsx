@@ -67,6 +67,7 @@ const createWrapper =
                         value={{
                             ...ffInitialState,
                             pushNotificationFeature: { enabled: pushNotificationEnabled },
+                            isLoading: false,
                         }}>
                         <NavigationContainer>
                             <NotificationsProvider>{children}</NotificationsProvider>

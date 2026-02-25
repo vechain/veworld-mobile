@@ -6,6 +6,7 @@ import { hdnode1 } from "./wallets"
 import { Characteristic } from "@ledgerhq/react-native-hw-transport-ble/lib/types"
 import { DeviceModel, DeviceModelId } from "@ledgerhq/devices"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
+import { ConnectedLedgerDevice } from "~Model"
 /*eslint-disable no-console*/
 const publicKey =
     // eslint-disable-next-line max-len
@@ -92,4 +93,13 @@ export const mockLedgerApp: VETLedgerApp = {
     getAppConfiguration: (): Promise<Buffer> => {
         return Promise.resolve(Buffer.from(LedgerConfig.CLAUSE_AND_CONTRACT_ENABLED, "hex"))
     },
+}
+
+export const connectedLedgerDevice: ConnectedLedgerDevice = {
+    id: "my-id-123",
+    isConnectable: true,
+    localName: "Nano X B7F6",
+    name: "Nano X B7F6",
+    rssi: 0,
+    productName: "Ledger Nano X",
 }

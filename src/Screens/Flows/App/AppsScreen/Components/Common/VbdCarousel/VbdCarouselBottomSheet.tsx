@@ -1,7 +1,10 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { ElementType, useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { SkSize } from "@shopify/react-native-skia"
+import React, { ElementType, useCallback, useMemo, useState } from "react"
+import { LayoutChangeEvent, StyleSheet } from "react-native"
+import { GestureDetector } from "react-native-gesture-handler"
 import { getTimeZone } from "react-native-localize"
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated"
 import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
 import {
     BaseBottomSheet,
@@ -15,15 +18,18 @@ import {
     BlurView,
     DAppIcon,
 } from "~Components"
+import { EdgeSwipeIndicator, useEdgeSwipeGesture } from "~Components/Reusable/EdgeSwipeIndicator"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
 import { useBottomSheetModal, useDappBookmarkToggle, useTheme, useThemedStyles } from "~Hooks"
+import { useAppLogo } from "~Hooks/useAppLogo"
 import { useAppOverview } from "~Hooks/useAppOverview"
 import { useI18nContext } from "~i18n"
 import { VbdDApp } from "~Model"
 import { Routes } from "~Navigation"
+import HapticsService from "~Services/HapticsService"
 import { addBookmark, removeBookmark, useAppDispatch } from "~Storage/Redux"
-import { BigNutils, DateUtils } from "~Utils"
+import { BigNutils, DateUtils, URIUtils } from "~Utils"
 import { useDAppActions } from "../../../Hooks"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
 
@@ -32,6 +38,8 @@ export type VbdCarouselBottomSheetMetadata = {
     iconUri?: string
     category?: (typeof AVAILABLE_CATEGORIES)[number]
     app: VbdDApp
+    carouselIndex: number
+    carouselDapps: VbdDApp[]
 }
 
 type VbdCarouselBottomSheetProps = {
@@ -50,7 +58,7 @@ const VbdInfoColumn = ({
     isLoading?: boolean
 }) => {
     const theme = useTheme()
-    const color = useMemo(() => (!theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.LIME_GREEN), [theme.isDark])
+    const color = useMemo(() => (theme.isDark ? COLORS.LIME_GREEN : COLORS.DARK_PURPLE_DISABLED), [theme.isDark])
     const titleColor = useMemo(() => (theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500), [theme.isDark])
     const descriptionColor = useMemo(() => (theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700), [theme.isDark])
 
@@ -82,43 +90,83 @@ const LeafIcon = (props: Partial<BaseIconProps>) => <BaseIcon name="icon-leaf" {
 
 const VbdCarouselBottomSheetContent = ({
     app,
-    bannerUri,
-    category,
-    iconUri,
+    carouselIndex,
+    carouselDapps,
     onClose,
 }: VbdCarouselBottomSheetMetadata & { onClose: () => void }) => {
+    const [selectedApp, setSelectedApp] = useState<VbdDApp>(app)
+    const [selectedAppIndex, setSelectedAppIndex] = useState<number>(carouselIndex)
+    const [canvasSize, setCanvasSize] = useState<SkSize>({ width: 0, height: 0 })
+
     const { LL, locale } = useI18nContext()
     const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
 
     const dispatch = useAppDispatch()
     const { onDAppPress } = useDAppActions(Routes.APPS)
-    const { data: appOverview, isLoading } = useAppOverview(app.id)
+    const { data: appOverview, isLoading } = useAppOverview(selectedApp.id)
 
-    const { isBookMarked } = useDappBookmarkToggle(app?.external_url, app.name)
+    const onSwipeLeft = useCallback(() => {
+        if (selectedAppIndex === carouselDapps.length - 1) return
+
+        HapticsService.triggerHaptics({ haptics: "Success" })
+
+        setSelectedApp(carouselDapps[selectedAppIndex + 1])
+        setSelectedAppIndex(selectedAppIndex + 1)
+    }, [selectedAppIndex, carouselDapps])
+
+    const onSwipeRight = useCallback(() => {
+        if (selectedAppIndex === 0) return
+
+        HapticsService.triggerHaptics({ haptics: "Success" })
+
+        setSelectedApp(carouselDapps[selectedAppIndex - 1])
+        setSelectedAppIndex(selectedAppIndex - 1)
+    }, [selectedAppIndex, carouselDapps])
+
+    const { swipeDirection, leftPatch, rightPatch, swipeGesture } = useEdgeSwipeGesture({
+        canvasSize,
+        onSwipeLeft,
+        onSwipeRight,
+    })
+
+    const bannerUri = useMemo(() => {
+        const uri = selectedApp.ve_world?.featured_image ?? selectedApp.ve_world?.banner
+        return uri ? URIUtils.convertUriToUrl(uri) : undefined
+    }, [selectedApp])
+
+    const iconUri = useAppLogo({ app: selectedApp, size: 24 })
+
+    const category = useMemo(() => {
+        return selectedApp.categories?.find(cat => AVAILABLE_CATEGORIES.includes(cat as any)) as
+            | (typeof AVAILABLE_CATEGORIES)[number]
+            | undefined
+    }, [selectedApp.categories])
+
+    const { isBookMarked } = useDappBookmarkToggle(selectedApp?.external_url, selectedApp.name)
 
     const onToggleFavorite = useCallback(() => {
-        if (!isBookMarked && app) {
-            return dispatch(addBookmark(app))
+        if (!isBookMarked && selectedApp) {
+            return dispatch(addBookmark(selectedApp))
         } else {
-            dispatch(removeBookmark({ href: app?.external_url ?? "" }))
+            dispatch(removeBookmark({ href: selectedApp?.external_url ?? "" }))
         }
-    }, [app, dispatch, isBookMarked])
+    }, [selectedApp, dispatch, isBookMarked])
 
     const onOpenApp = useCallback(() => {
         onClose()
-        onDAppPress(app)
-    }, [app, onClose, onDAppPress])
+        onDAppPress(selectedApp)
+    }, [selectedApp, onClose, onDAppPress])
 
     const date = useMemo(
         () =>
             DateUtils.formatDateTime(
-                Number(app?.createdAtTimestamp) * 1000,
+                Number(selectedApp?.createdAtTimestamp) * 1000,
                 locale,
                 getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
                 { hideTime: true, hideDay: true },
             ),
-        [app?.createdAtTimestamp, locale],
+        [selectedApp?.createdAtTimestamp, locale],
     )
 
     const usersNum = useMemo(
@@ -163,54 +211,78 @@ const VbdCarouselBottomSheetContent = ({
         }
     }, [isBookMarked, theme.isDark])
 
+    const onLayout = useCallback(
+        (event: LayoutChangeEvent) => {
+            setCanvasSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })
+        },
+        [setCanvasSize],
+    )
+
     return (
         <>
             {bannerUri ? (
-                <FastImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_BS">
-                    <BaseIcon
-                        style={styles.closeBtn}
-                        color={COLORS.WHITE}
-                        size={22}
-                        name="icon-x"
-                        action={onClose}
-                        testID="bottom-sheet-close-btn"
-                    />
-                    <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={18}>
-                        <BaseView flexDirection="column" gap={16} px={24} py={16}>
-                            <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
-                                <BaseView flexDirection="row" alignItems="center" flex={1}>
-                                    <DAppIcon size={24} uri={iconUri} />
-                                    <BaseSpacer width={12} flexShrink={0} />
+                <GestureDetector gesture={swipeGesture}>
+                    <Animated.View
+                        testID="VBD_CAROUSEL_BS"
+                        onLayout={onLayout}
+                        key={selectedApp.id}
+                        entering={FadeIn.duration(300)}
+                        exiting={FadeOut.duration(300)}
+                        style={styles.wrapper}>
+                        <FastImageBackground source={{ uri: bannerUri }} style={styles.root} collapsable={false}>
+                            <BaseIcon
+                                style={styles.closeBtn}
+                                color={COLORS.WHITE}
+                                size={22}
+                                name="icon-x"
+                                action={onClose}
+                                testID="bottom-sheet-close-btn"
+                            />
+                            <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={18}>
+                                <BaseView flexDirection="column" gap={16} px={24} py={16}>
+                                    <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
+                                        <BaseView flexDirection="row" alignItems="center" flex={1}>
+                                            <DAppIcon size={24} uri={iconUri} />
+                                            <BaseSpacer width={12} flexShrink={0} />
+                                            <BaseText
+                                                numberOfLines={1}
+                                                typographyFont="subSubTitleSemiBold"
+                                                color={COLORS.GREY_50}
+                                                testID="VBD_CAROUSEL_BS_APP_NAME"
+                                                flexDirection="row"
+                                                flex={1}>
+                                                {selectedApp?.name}
+                                            </BaseText>
+                                        </BaseView>
+                                        <BaseView flexDirection="row">
+                                            {category && (
+                                                <BaseView flexDirection="row" alignItems="center">
+                                                    <BaseSpacer width={24} flexShrink={0} />
+                                                    <CategoryChip category={category} />
+                                                </BaseView>
+                                            )}
+                                        </BaseView>
+                                    </BaseView>
                                     <BaseText
-                                        numberOfLines={1}
-                                        typographyFont="subSubTitleSemiBold"
-                                        color={COLORS.GREY_50}
-                                        testID="VBD_CAROUSEL_BS_APP_NAME"
+                                        typographyFont="captionMedium"
+                                        color={COLORS.WHITE_RGBA_85}
+                                        numberOfLines={5}
                                         flexDirection="row"
-                                        flex={1}>
-                                        {app?.name}
+                                        testID="VBD_CAROUSEL_BS_APP_DESCRIPTION">
+                                        {selectedApp?.description}
                                     </BaseText>
                                 </BaseView>
-                                <BaseView flexDirection="row">
-                                    {category && (
-                                        <BaseView flexDirection="row" alignItems="center">
-                                            <BaseSpacer width={24} flexShrink={0} />
-                                            <CategoryChip category={category} />
-                                        </BaseView>
-                                    )}
-                                </BaseView>
-                            </BaseView>
-                            <BaseText
-                                typographyFont="captionMedium"
-                                color={COLORS.WHITE_RGBA_85}
-                                numberOfLines={5}
-                                flexDirection="row"
-                                testID="VBD_CAROUSEL_BS_APP_DESCRIPTION">
-                                {app?.description}
-                            </BaseText>
-                        </BaseView>
-                    </BlurView>
-                </FastImageBackground>
+                            </BlurView>
+
+                            <EdgeSwipeIndicator
+                                canvasSize={canvasSize}
+                                swipeDirection={swipeDirection}
+                                leftPatch={leftPatch}
+                                rightPatch={rightPatch}
+                            />
+                        </FastImageBackground>
+                    </Animated.View>
+                </GestureDetector>
             ) : null}
 
             <BaseView style={styles.infoContainer} bg={theme.colors.actionBottomSheet.background}>
@@ -276,6 +348,17 @@ export const VbdCarouselBottomSheet = ({ bsRef }: VbdCarouselBottomSheetProps) =
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
+        wrapper: {
+            position: "relative",
+        },
+        canvas: {
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: 1,
+        },
         root: {
             height: isSmallScreen ? 320 : 360,
             position: "relative",
@@ -309,5 +392,6 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: "rgba(0, 0, 0, 0.50)",
             borderRadius: 100,
             padding: 10,
+            zIndex: 3,
         },
     })

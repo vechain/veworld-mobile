@@ -84,6 +84,9 @@ export type FeatureFlags = {
                 enabled: boolean
             }
         }
+        onboardingScreen: {
+            enabled: boolean
+        }
     }
     notificationCenter: {
         registration: {

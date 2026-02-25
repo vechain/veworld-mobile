@@ -17,6 +17,7 @@ export const generateCoinbaseOnRampURL = async (
     baseURL: string = "https://onramp-proxy.vechain.org",
     signature?: string,
     timestamp?: number,
+    isSmartAccount?: boolean,
 ) => {
     let result: AxiosResponse<GenerateUrlResponse>
 
@@ -24,6 +25,7 @@ export const generateCoinbaseOnRampURL = async (
         params: {
             address,
             provider: "coinbase",
+            isSmartAccount,
         },
         headers:
             signature && timestamp

@@ -15,25 +15,45 @@ type Props = Omit<FastImageProps, "style"> & {
  * @param param0 Props
  * @returns a component that can be used in place of ImageBackground
  */
-export const FastImageBackground = ({
-    children,
-    style,
-    imageStyle,
-    importantForAccessibility,
-    blurred,
-    ...props
-}: Props) => {
-    const flattenedStyle = useMemo(() => {
-        return StyleSheet.flatten(style)
-    }, [style])
+export const FastImageBackground = React.forwardRef<View, Props>(
+    ({ children, style, imageStyle, importantForAccessibility, blurred, ...props }, ref) => {
+        const flattenedStyle = useMemo(() => {
+            return StyleSheet.flatten(style)
+        }, [style])
 
-    return (
-        <View
-            accessibilityIgnoresInvertColors={true}
-            importantForAccessibility={importantForAccessibility}
-            style={style}>
-            {blurred ? (
-                <>
+        return (
+            <View
+                ref={ref}
+                accessibilityIgnoresInvertColors={true}
+                importantForAccessibility={importantForAccessibility}
+                style={style}>
+                {blurred ? (
+                    <>
+                        <FastImage
+                            {...props}
+                            importantForAccessibility={importantForAccessibility}
+                            style={[
+                                StyleSheet.absoluteFill,
+                                {
+                                    width: flattenedStyle?.width,
+                                    height: flattenedStyle?.height,
+                                },
+                                imageStyle,
+                            ]}
+                        />
+                        <BlurView
+                            style={[
+                                StyleSheet.absoluteFill,
+                                {
+                                    width: flattenedStyle?.width,
+                                    height: flattenedStyle?.height,
+                                },
+                            ]}
+                            overlayColor="transparent"
+                            blurAmount={20}
+                        />
+                    </>
+                ) : (
                     <FastImage
                         {...props}
                         importantForAccessibility={importantForAccessibility}
@@ -46,34 +66,10 @@ export const FastImageBackground = ({
                             imageStyle,
                         ]}
                     />
-                    <BlurView
-                        style={[
-                            StyleSheet.absoluteFill,
-                            {
-                                width: flattenedStyle?.width,
-                                height: flattenedStyle?.height,
-                            },
-                        ]}
-                        overlayColor="transparent"
-                        blurAmount={20}
-                    />
-                </>
-            ) : (
-                <FastImage
-                    {...props}
-                    importantForAccessibility={importantForAccessibility}
-                    style={[
-                        StyleSheet.absoluteFill,
-                        {
-                            width: flattenedStyle?.width,
-                            height: flattenedStyle?.height,
-                        },
-                        imageStyle,
-                    ]}
-                />
-            )}
+                )}
 
-            {children}
-        </View>
-    )
-}
+                {children}
+            </View>
+        )
+    },
+)

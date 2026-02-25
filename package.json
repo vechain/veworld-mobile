@@ -1,6 +1,6 @@
 {
   "name": "veworld",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf android/app/build && cd ios && pod deintegrate && cd ..",
@@ -127,7 +127,7 @@
     "jsdoc": "^4.0.3",
     "json-abi-to-ts": "file:./cli-tools/json-abi-to-ts",
     "json-stringify-safe": "^5.0.1",
-    "jspdf": "^4.0.0",
+    "jspdf": "^4.2.0",
     "lodash": "^4.17.23",
     "lottie-react-native": "7.3.3",
     "mixpanel-react-native": "^3.0.7",

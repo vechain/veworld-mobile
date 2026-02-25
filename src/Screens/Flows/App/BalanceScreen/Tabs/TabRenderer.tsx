@@ -23,7 +23,6 @@ import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
 import { BannersCarousel } from "../Components/BannerCarousel"
 import { NewUserVeBetterCard } from "../Components/VeBetterDao/NewUserVeBetterCard"
-import { useShowStakingTab } from "../Hooks/useShowStakingTab"
 import { Collectibles } from "./Collectibles"
 import { Staking } from "./Staking"
 import { Tokens } from "./Tokens"
@@ -45,7 +44,6 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const hideNewUserVeBetterCard = useAppSelector(selectHideNewUserVeBetterCard)
     const { data: hasAnyVeBetterActions } = useHasAnyVeBetterActions()
     const { onDAppPress } = useDAppActions(Routes.HOME)
-    const showStakingTab = useShowStakingTab()
     const nav = useNavigation()
     const track = useAnalyticTracking()
     const { betterWorldFeature } = useFeatureFlags()
@@ -54,16 +52,13 @@ export const TabRenderer = ({ onLayout }: Props) => {
 
     const filteredTabs = useMemo(() => {
         return TABS.filter(tab => {
-            if (tab === "STAKING") {
-                return showStakingTab
-            }
             if (tab === "COLLECTIBLES") {
                 return betterWorldFeature.balanceScreen?.collectibles?.enabled
             }
 
             return true
         }) as (typeof TABS)[number][]
-    }, [showStakingTab, betterWorldFeature.balanceScreen?.collectibles?.enabled])
+    }, [betterWorldFeature.balanceScreen?.collectibles?.enabled])
 
     const showFavorites = useMemo(() => {
         if (!bookmarkedDApps?.length) return false
@@ -142,13 +137,13 @@ export const TabRenderer = ({ onLayout }: Props) => {
                     rootStyle={styles.tabs}
                     rightIcon={rightIcon}
                 />
-                <BaseView flexDirection="column" flex={1} px={24}>
+                <BaseView flexDirection="column" flex={1}>
                     {selectedTab === "TOKENS" && <Tokens isEmptyStateShown={showNewUserVeBetterCard} />}
                     {selectedTab === "STAKING" && <Staking />}
                     {selectedTab === "COLLECTIBLES" && <Collectibles />}
                 </BaseView>
             </Animated.View>
-            {showNewUserVeBetterCard && <BannersCarousel location="home_screen" baseWidth={SCREEN_WIDTH - 24} />}
+            {showNewUserVeBetterCard && <BannersCarousel location="home_screen" baseWidth={SCREEN_WIDTH} />}
         </Animated.View>
     )
 }

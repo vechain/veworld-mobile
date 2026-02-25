@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query"
 import moment from "moment"
 import React, { RefObject, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { ImageStyle } from "react-native-fast-image"
+import FastImage, { ImageStyle } from "react-native-fast-image"
+import { NFTPlaceholderDarkV2 } from "~Assets"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components/Base"
 import { BlurView, NFTImageComponent } from "~Components/Reusable"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -12,6 +13,7 @@ import { useBlacklistedCollection } from "~Hooks/useBlacklistedCollection"
 import { useCollectibleDetails } from "~Hooks/useCollectibleDetails"
 import { useCollectibleTransferDetails } from "~Hooks/useCollectibleTransferDetails"
 import { useI18nContext } from "~i18n"
+import { NFTMediaType } from "~Model"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { CollectiblesAvatarActionButton } from "./CollectiblesAvatarActionButton"
@@ -47,13 +49,27 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
 
     const isNew = useMemo(() => {
         if (!transferDetails) return false
-        return moment().diff((transferDetails.data?.data[0].blockTimestamp ?? 0) * 1000, "days") <= 5
+        return moment().diff((transferDetails.data?.data[0]?.blockTimestamp ?? 0) * 1000, "days") <= 5
     }, [transferDetails])
+
+    const RenderMedia = useMemo(() => {
+        if (media?.mediaType === NFTMediaType.IMAGE) {
+            return <NFTImageComponent style={styles.image as ImageStyle} uri={media.image} mime={media.mime} />
+        }
+
+        return (
+            <FastImage
+                source={NFTPlaceholderDarkV2}
+                style={styles.image as ImageStyle}
+                resizeMode={FastImage.resizeMode.cover}
+            />
+        )
+    }, [styles.image, media?.mediaType, media?.image, media?.mime])
 
     return (
         <BaseView flexDirection="column">
             <BaseView w={100} style={styles.rootImage} position="relative">
-                <NFTImageComponent style={styles.image as ImageStyle} uri={media?.image} />
+                {RenderMedia}
 
                 {isBlacklisted && (
                     <BlurView style={[StyleSheet.absoluteFill]} overlayColor="transparent" blurAmount={20} />

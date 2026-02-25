@@ -9,6 +9,7 @@ export const cloudBackupPasswordStyle = (theme: ColorThemeType) =>
         rootContainer: {
             flex: 1,
             backgroundColor: theme.colors.background,
+            paddingTop: 16,
         },
         keyIcon: {
             color: theme.colors.text,

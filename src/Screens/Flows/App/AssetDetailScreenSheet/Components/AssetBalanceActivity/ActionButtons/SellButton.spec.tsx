@@ -51,7 +51,11 @@ describe("SellButton", () => {
         const wrappedWrapper = (props: PropsWithChildren<{ preloadedState: Partial<RootState> }>) => {
             return (
                 <FeatureFlagsContext.Provider
-                    value={_.setWith(initialState, "paymentProvidersFeature.coinify.android", false)}>
+                    value={_.setWith(
+                        { ...initialState, isLoading: false },
+                        "paymentProvidersFeature.coinify.android",
+                        false,
+                    )}>
                     <TestWrapper {...props} />
                 </FeatureFlagsContext.Provider>
             )

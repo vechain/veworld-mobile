@@ -12,7 +12,7 @@ import { VbdCarouselBottomSheetMetadata } from "./VbdCarouselBottomSheet"
 
 type VbdCarouselItemProps = {
     app: VbdDApp
-    onPressItem: (props: VbdCarouselBottomSheetMetadata) => void
+    onPressItem: (props: Omit<VbdCarouselBottomSheetMetadata, "carouselIndex" | "carouselDapps">) => void
 }
 
 export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {

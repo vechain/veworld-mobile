@@ -1,0 +1,1 @@
+export { useGenericDelegatorRates } from "./useGenericDelegatorRates"

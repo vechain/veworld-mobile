@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { BaseDevice, LedgerDevice, LocalDevice, SmartWalletDevice } from "~Model"
+import { BaseDevice, LedgerDevice, LocalDevice, SmartWalletDevice, DEVICE_TYPE } from "~Model"
 import { AddressUtils } from "~Utils"
+import { SocialProvider } from "~VechainWalletKit/types/wallet"
+import { swapSmartWalletNetwork } from "../Actions/SmartWalletNetworkSwap"
 
 type Device = LedgerDevice | LocalDevice | SmartWalletDevice
 export const initialDeviceState: Device[] = []
@@ -84,6 +86,18 @@ export const DeviceSlice = createSlice({
             state[deviceExistsIndex].lastBackupDate = date
             state[deviceExistsIndex].isBackedUpManual = isBackupManual
         },
+        updateDeviceLinkedProviders: (
+            state,
+            action: PayloadAction<{ rootAddress: string; linkedProviders: SocialProvider[] }>,
+        ) => {
+            const { rootAddress, linkedProviders } = action.payload
+            const deviceIndex = state.findIndex(device =>
+                AddressUtils.compareAddresses(device.rootAddress, rootAddress),
+            )
+            if (deviceIndex !== -1 && state[deviceIndex].type === DEVICE_TYPE.SMART_WALLET) {
+                ;(state[deviceIndex] as SmartWalletDevice).linkedProviders = linkedProviders
+            }
+        },
         resetDeviceState: () => initialDeviceState,
         setDeviceState: (
             state: Device[],
@@ -91,6 +105,24 @@ export const DeviceSlice = createSlice({
                 updatedDevices: Device[]
             }>,
         ) => action.payload.updatedDevices,
+    },
+    // extraReducers used so both DeviceSlice and AccountSlice handle the same
+    // action atomically — one dispatch updates both slices before any selector runs.
+    extraReducers: builder => {
+        builder.addCase(swapSmartWalletNetwork, (state, action) => {
+            const { oldRootAddress, newRootAddress } = action.payload
+            const deviceIndex = state.findIndex(
+                device =>
+                    device.type === DEVICE_TYPE.SMART_WALLET &&
+                    AddressUtils.compareAddresses(device.rootAddress, oldRootAddress),
+            )
+            if (deviceIndex === -1) return
+
+            state[deviceIndex] = {
+                ...state[deviceIndex],
+                rootAddress: newRootAddress,
+            }
+        })
     },
 })
 
@@ -103,4 +135,5 @@ export const {
     resetDeviceState,
     setDeviceState,
     setDeviceIsBackup,
+    updateDeviceLinkedProviders,
 } = DeviceSlice.actions

@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react"
 import { DEVICE_TYPE, IMPORT_TYPE, NewLedgerDevice } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
+import { SocialProvider } from "~VechainWalletKit/types/wallet"
 import {
     addDeviceAndAccounts,
     addSmartWalletDeviceAndAccount,
@@ -155,11 +156,23 @@ export const useCreateWallet = () => {
     /**
      * Insert new Smart Wallet in store
      * @param address the address for the owner private key of the smart account contract
+     * @param name optional account name
+     * @param linkedProviders optional array of social providers linked to this account
      * @param onError callback called if error
      * @returns void
      */
     const createSmartWallet = useCallback(
-        async ({ address, onError }: { address: string; onError?: (error: unknown) => void }) => {
+        async ({
+            address,
+            name,
+            linkedProviders,
+            onError,
+        }: {
+            address: string
+            name?: string
+            linkedProviders?: SocialProvider[]
+            onError?: (error: unknown) => void
+        }) => {
             try {
                 //Create the new Smart Wallet device and persist it
                 const smartWalletDevice = {
@@ -167,6 +180,8 @@ export const useCreateWallet = () => {
                     type: DEVICE_TYPE.SMART_WALLET as const,
                     alias: "Smart Wallet",
                     position: 0, // this will be updated when the device is added to the redux store
+                    accountName: name,
+                    linkedProviders,
                 }
 
                 // add the device and account to redux
