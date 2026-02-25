@@ -1,23 +1,18 @@
 import { render } from "@testing-library/react-native"
 import React from "react"
 import { useTabBarBottomMargin } from "~Hooks"
-import { TestWrapper } from "~Test"
+import { setPlatform, TestWrapper } from "~Test"
 import { TabRenderer } from "./TabRenderer"
 
 jest.mock("~Hooks/useTabBarBottomMargin", () => ({
     useTabBarBottomMargin: jest.fn(),
 }))
 
-jest.mock("~Utils/PlatformUtils/PlatformUtils", () => {
-    const actual = jest.requireActual("~Utils/PlatformUtils/PlatformUtils")
+jest.mock("@react-navigation/native", () => ({
+    ...jest.requireActual("@react-navigation/native"),
+    useNavigationState: jest.fn(),
+}))
 
-    return {
-        ...actual,
-        isAndroid: jest.fn(),
-    }
-})
-
-const mockedIsAndroid = jest.requireMock("~Utils/PlatformUtils/PlatformUtils").isAndroid as jest.Mock
 const mockedUseTabBarBottomMargin = useTabBarBottomMargin as jest.MockedFunction<typeof useTabBarBottomMargin>
 
 describe("BalanceScreen -> TabRenderer", () => {
@@ -26,7 +21,7 @@ describe("BalanceScreen -> TabRenderer", () => {
     })
 
     it("uses androidOnlyTabBarBottomMargin on Android", () => {
-        mockedIsAndroid.mockReturnValue(true)
+        setPlatform("android")
         mockedUseTabBarBottomMargin.mockReturnValue({
             iosOnlyTabBarBottomMargin: 5,
             androidOnlyTabBarBottomMargin: 42,
@@ -46,7 +41,7 @@ describe("BalanceScreen -> TabRenderer", () => {
     })
 
     it("uses iosOnlyTabBarBottomMargin when not Android", () => {
-        mockedIsAndroid.mockReturnValue(false)
+        setPlatform("ios")
         mockedUseTabBarBottomMargin.mockReturnValue({
             iosOnlyTabBarBottomMargin: 10,
             androidOnlyTabBarBottomMargin: 0,

@@ -137,13 +137,13 @@ export const TabRenderer = ({ onLayout }: Props) => {
                     rootStyle={styles.tabs}
                     rightIcon={rightIcon}
                 />
-                <BaseView flexDirection="column" flex={1} px={24}>
+                <BaseView flexDirection="column" flex={1}>
                     {selectedTab === "TOKENS" && <Tokens isEmptyStateShown={showNewUserVeBetterCard} />}
                     {selectedTab === "STAKING" && <Staking />}
                     {selectedTab === "COLLECTIBLES" && <Collectibles />}
                 </BaseView>
             </Animated.View>
-            {showNewUserVeBetterCard && <BannersCarousel location="home_screen" baseWidth={SCREEN_WIDTH - 24} />}
+            {showNewUserVeBetterCard && <BannersCarousel location="home_screen" baseWidth={SCREEN_WIDTH} />}
         </Animated.View>
     )
 }

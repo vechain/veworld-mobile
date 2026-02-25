@@ -42,6 +42,7 @@ export const GenericAccountCard = ({
 }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const selectedSV = useSharedValue(Number(selected))
+
     const { name: vnsName } = useVns({ name: "", address: accountAddress })
     const account = useAppSelector(state => selectAccountByAddress(state, accountAddress))
 

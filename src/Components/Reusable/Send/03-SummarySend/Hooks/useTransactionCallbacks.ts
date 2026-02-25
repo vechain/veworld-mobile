@@ -42,7 +42,9 @@ export const useTransactionCallbacks = ({ token, onFailure }: { token: Token; on
                 onFinish(true)
             } catch (e) {
                 error(ERROR_EVENTS.SEND, e)
-                onFinish(false)
+                // The TX was succesful but we failed to add a pending activity card
+                // so we navigate to the home screen anyway
+                onFinish(true)
             }
         },
         [dispatch, onFinish, token.symbol],

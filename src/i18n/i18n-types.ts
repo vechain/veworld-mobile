@@ -2736,6 +2736,7 @@ type RootTranslation = {
 	 * N​o​t​i​f​i​c​a​t​i​o​n​ ​U​R​L
 	 */
 	DEVELOPER_SETTING_NOTIFICATION_URL: string
+
 	/**
 	 * L​o​g​o​u​t​ ​o​f​ ​y​o​u​r​ ​s​m​a​r​t​ ​w​a​l​l​e​t
 	 */
@@ -6227,6 +6228,10 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * N​o​d​e​ ​h​o​l​d​e​r​s​ ​c​a​n​ ​e​n​d​o​r​s​e​ ​m​u​l​t​i​p​l​e​ ​a​p​p​s​ ​o​n​ ​*​*​V​e​B​e​t​t​e​r​*​*​!
+	 */
+	BANNER_STARGATE_X_VEBETTER_DESC: string
 	/**
 	 * S​e​n​d​ ​p​r​e​f​e​r​e​n​c​e​s
 	 */
@@ -12362,6 +12367,10 @@ Make sure that it is unlocked and the location services are enabled.
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Node holders can endorse multiple apps on **VeBetter**!
+	 */
+	BANNER_STARGATE_X_VEBETTER_DESC: () => LocalizedString
 	/**
 	 * Send preferences
 	 */

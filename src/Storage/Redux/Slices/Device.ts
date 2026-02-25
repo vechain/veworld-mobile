@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { BaseDevice, LedgerDevice, LocalDevice, SmartWalletDevice, DEVICE_TYPE } from "~Model"
 import { AddressUtils } from "~Utils"
 import { SocialProvider } from "~VechainWalletKit/types/wallet"
+import { swapSmartWalletNetwork } from "../Actions/SmartWalletNetworkSwap"
 
 type Device = LedgerDevice | LocalDevice | SmartWalletDevice
 export const initialDeviceState: Device[] = []
@@ -104,6 +105,24 @@ export const DeviceSlice = createSlice({
                 updatedDevices: Device[]
             }>,
         ) => action.payload.updatedDevices,
+    },
+    // extraReducers used so both DeviceSlice and AccountSlice handle the same
+    // action atomically — one dispatch updates both slices before any selector runs.
+    extraReducers: builder => {
+        builder.addCase(swapSmartWalletNetwork, (state, action) => {
+            const { oldRootAddress, newRootAddress } = action.payload
+            const deviceIndex = state.findIndex(
+                device =>
+                    device.type === DEVICE_TYPE.SMART_WALLET &&
+                    AddressUtils.compareAddresses(device.rootAddress, oldRootAddress),
+            )
+            if (deviceIndex === -1) return
+
+            state[deviceIndex] = {
+                ...state[deviceIndex],
+                rootAddress: newRootAddress,
+            }
+        })
     },
 })
 

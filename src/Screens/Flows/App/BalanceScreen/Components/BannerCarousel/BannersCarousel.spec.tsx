@@ -23,6 +23,7 @@ const createWrapper = (preloadedState: Partial<RootState>) => {
 const mockedState: Partial<RootState> = {
     userPreferences: {
         hideStargateBannerHomeScreen: false,
+        hideStargateXVeBetterBanner: false,
         hideStargateBannerVETScreen: false,
         theme: ThemeEnum.DARK,
         hideTokensWithNoBalance: false,
@@ -154,6 +155,28 @@ describe("BannersCarousel", () => {
         render(<BannersCarousel location="home_screen" />, {
             wrapper: createWrapper(mockedState),
         })
-        expect(screen.queryByTestId("home_screen_carousel")).not.toBeTruthy()
+        expect(screen.queryByTestId("Stargate_banner")).not.toBeTruthy()
+    })
+
+    it("should render StargateXVeBetter banner when not hidden", () => {
+        render(<BannersCarousel location="home_screen" />, {
+            wrapper: createWrapper(mockedState),
+        })
+
+        expect(screen.queryByTestId("StargateXVbd_banner")).toBeTruthy()
+    })
+
+    it("should not render StargateXVeBetter banner when hidden", () => {
+        render(<BannersCarousel location="home_screen" />, {
+            wrapper: createWrapper({
+                ...mockedState,
+                userPreferences: {
+                    ...mockedState.userPreferences!,
+                    hideStargateXVeBetterBanner: true,
+                },
+            }),
+        })
+
+        expect(screen.queryByTestId("StargateXVbd_banner")).not.toBeTruthy()
     })
 })

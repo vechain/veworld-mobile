@@ -1,0 +1,45 @@
+import { abi } from "thor-devkit"
+
+export const executeBatchWithAuthorization: abi.Function.Definition = {
+    inputs: [
+        {
+            internalType: "address[]",
+            name: "to",
+            type: "address[]",
+        },
+        {
+            internalType: "uint256[]",
+            name: "value",
+            type: "uint256[]",
+        },
+        {
+            internalType: "bytes[]",
+            name: "data",
+            type: "bytes[]",
+        },
+        {
+            internalType: "uint256",
+            name: "validAfter",
+            type: "uint256",
+        },
+        {
+            internalType: "uint256",
+            name: "validBefore",
+            type: "uint256",
+        },
+        {
+            internalType: "bytes32",
+            name: "nonce",
+            type: "bytes32",
+        },
+        {
+            internalType: "bytes",
+            name: "signature",
+            type: "bytes",
+        },
+    ],
+    name: "executeBatchWithAuthorization",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+}
