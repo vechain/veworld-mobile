@@ -58,7 +58,6 @@ jobs:
                   brew install applesimutils
                   brew install fastlane
                   gem install cocoapods # Install CocoaPods globally
-                  sudo xcode-select -s /Applications/Xcode_16.2.app
 
                   bundle install
               env:
