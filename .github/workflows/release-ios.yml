@@ -26,7 +26,7 @@ on:
 jobs:
     build-release-ios:
         name: Build release for iOS
-        runs-on: macos-14-xlarge
+        runs-on: macos-26-xlarge
         environment: ios-release
 
         # Proceed only if it's either not a release event or it's a pre-release.
@@ -49,7 +49,7 @@ jobs:
 
             - name: Install Node.js dependencies
               run: |
-                yarn install:all
+                  yarn install:all
 
             # Install Homebrew and applesimutils for Detox
             - name: Install macOS dependencies
@@ -58,7 +58,6 @@ jobs:
                   brew install applesimutils
                   brew install fastlane
                   gem install cocoapods # Install CocoaPods globally
-                  sudo xcode-select -s /Applications/Xcode_16.2.app
 
                   bundle install
               env:
