@@ -68,5 +68,3 @@ env:
       direction: DOWN
       timeout: 30000
 
-# Reset the app
-- runFlow: ../setup_reset/resetApp.yaml

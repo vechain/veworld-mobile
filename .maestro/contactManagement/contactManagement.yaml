@@ -116,7 +116,3 @@ env:
           id: "ContactsScreen"
       timeout: 10000
 
-########################################
-# Reset the app
-########################################
-- runFlow: ../setup_reset/resetApp.yaml
