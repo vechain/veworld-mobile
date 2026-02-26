@@ -26,16 +26,13 @@ export const BaseCard = memo(
         const { styles } = useThemedStyles(baseStyles)
 
         const renderChildren = useMemo(() => {
-            return (
-                <BaseView style={[styles.view, style]} testID={testID}>
-                    {children}
-                </BaseView>
-            )
-        }, [children, style, styles.view, testID])
+            return <BaseView style={[styles.view, style]}>{children}</BaseView>
+        }, [children, style, styles.view])
 
         return (
             <BaseView
                 {...otherProps}
+                testID={onPress ? undefined : testID}
                 style={[
                     styles.container,
                     selected ? styles.selectedContainer : styles.unselectedContainer,
@@ -43,6 +40,7 @@ export const BaseCard = memo(
                 ]}>
                 {onPress ? (
                     <TouchableOpacity
+                        testID={testID}
                         onPress={onPress}
                         containerStyle={styles.touchableContainer}
                         activeOpacity={disableOpacityOnPressing || !onPress ? 1 : 0.2}>
