@@ -206,7 +206,7 @@
   "BD_CURRENCY_FORMAT_OPTION_system": "Sistema",
   "BD_CUSTOM_NODES": "Nodos personalizados",
   "BD_CUSTOM_NODES_DESC": "Gestiona tus nodos personalizados",
-  "BD_DEFAULT_AMOUNT_VALUE": "Valor predeterminado de la cantidad",
+  "BD_DEFAULT_AMOUNT_VALUE": "Valor de cantidad predeterminado",
   "BD_DEFAULT_AMOUNT_VALUE_CURRENCY": "Moneda",
   "BD_DEFAULT_AMOUNT_VALUE_TOKEN": "Token",
   "BD_DRIVE_BACKUP_PASSWORD": "Contraseña de copia de seguridad de Google Drive",

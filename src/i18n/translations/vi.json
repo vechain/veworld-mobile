@@ -207,7 +207,7 @@
   "BD_CUSTOM_NODES": "Nút tùy chỉnh",
   "BD_CUSTOM_NODES_DESC": "Quản lý các nút tùy chỉnh của bạn",
   "BD_DEFAULT_AMOUNT_VALUE": "Giá trị số tiền mặc định",
-  "BD_DEFAULT_AMOUNT_VALUE_CURRENCY": "Tiền tệ",
+  "BD_DEFAULT_AMOUNT_VALUE_CURRENCY": "Đơn vị tiền tệ",
   "BD_DEFAULT_AMOUNT_VALUE_TOKEN": "Token",
   "BD_DRIVE_BACKUP_PASSWORD": "Mật khẩu sao lưu Google Drive",
   "BD_EUR": "EUR",
