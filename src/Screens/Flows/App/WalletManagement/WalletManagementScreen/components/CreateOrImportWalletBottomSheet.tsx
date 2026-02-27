@@ -1,15 +1,16 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { FlatList, StyleSheet } from "react-native"
-import { BaseBottomSheet, BaseSpacer, BaseText, BaseView, CardListItem } from "~Components"
-import { AnalyticsEvent, ColorThemeType } from "~Constants"
-import { useAnalyticTracking, useCloudBackup, useThemedStyles } from "~Hooks"
+import React, { useCallback, useMemo, useState } from "react"
+import { StyleSheet } from "react-native"
+import Animated, { LinearTransition, StretchInY, StretchOutY } from "react-native-reanimated"
+import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, CardListItem } from "~Components"
+import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
+import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { CloudKitWallet, DriveWallet, IconKey } from "~Model"
+import { IconKey } from "~Model"
 import { Routes } from "~Navigation"
-import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
-import { PlatformUtils } from "~Utils"
+import { selectHasOnboarded, selectUserHasSmartWallet, useAppSelector } from "~Storage/Redux"
+import { ImportWalletOptions, SocialWalletOptions } from "./CreateOrImportBottomsheetViews"
 
 type Props = {
     onClose: () => void
@@ -18,41 +19,14 @@ type Props = {
 
 export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ onClose, handleOnCreateWallet }, ref) => {
-        const [wallets, setWallets] = useState<CloudKitWallet[] | DriveWallet[]>([])
+        const [navigationState, setNavigationState] = useState<"root" | "social" | "import">("root")
 
         const { LL } = useI18nContext()
         const nav = useNavigation()
-        const { styles } = useThemedStyles(baseStyles)
+        const { styles, theme } = useThemedStyles(baseStyles)
         const track = useAnalyticTracking()
         const userHasOnboarded = useAppSelector(selectHasOnboarded)
-        const { isCloudAvailable, getAllWalletFromCloud } = useCloudBackup()
-
-        useEffect(() => {
-            const init = async () => {
-                const _wallets = await getAllWalletFromCloud()
-                setWallets(_wallets)
-            }
-
-            if (isCloudAvailable && PlatformUtils.isIOS()) init()
-        }, [isCloudAvailable, getAllWalletFromCloud])
-
-        const navigateToImportFromCloud = useCallback(() => {
-            track(AnalyticsEvent.SELECT_WALLET_IMPORT_CLOUD)
-            onClose()
-            nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets })
-        }, [nav, onClose, track, wallets])
-
-        const navigateToImportLocalWallet = useCallback(() => {
-            track(AnalyticsEvent.SELECT_WALLET_IMPORT_MNEMONIC)
-            onClose()
-            nav.navigate(Routes.IMPORT_MNEMONIC)
-        }, [nav, onClose, track])
-
-        const navigateToImportHardwareWallet = useCallback(() => {
-            track(AnalyticsEvent.SELECT_WALLET_IMPORT_HARDWARE)
-            onClose()
-            nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_DEVICE)
-        }, [track, onClose, nav])
+        const hasSocialWallet = useAppSelector(selectUserHasSmartWallet)
 
         const onObserveWallet = useCallback(() => {
             onClose()
@@ -65,33 +39,31 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
         const options = useMemo(() => {
             return [
                 {
+                    id: "social",
+                    title: LL.SB_TITLE_CONTINUE_WITH_SOCIAL_LOGIN(),
+                    description: LL.SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN(),
+                    icon: "icon-at-sign",
+                    action: () => {
+                        setNavigationState("social")
+                    },
+                },
+                {
                     id: "create",
-                    title: LL.SB_TITLE_CREATE_WALLET(),
+                    title: LL.BTN_CREATE_WALLET(),
                     description: LL.SB_DESCRIPTION_CREATE_WALLET(),
                     icon: "icon-plus-circle",
                     action: handleOnCreateWallet,
                 },
                 {
-                    id: "cloud",
-                    title: LL.SB_TITLE_IMPORT_FROM_CLOUD(),
-                    description: LL.SB_DESCRIPTION_IMPORT_FROM_CLOUD(),
-                    icon: "icon-cloud",
-                    action: navigateToImportFromCloud,
-                },
-                {
                     id: "import",
-                    title: LL.SB_TITLE_IMPORT_WITH_KEYS(),
-                    description: LL.SB_DESCRIPTION_IMPORT_WITH_KEYS(),
-                    icon: "icon-phrase",
-                    action: navigateToImportLocalWallet,
+                    title: LL.SB_TITLE_ADD_EXISTING_WALLET(),
+                    description: LL.SB_DESCRIPTION_ADD_EXISTING_WALLET(),
+                    icon: "icon-rotate-cw",
+                    action: () => {
+                        setNavigationState("import")
+                    },
                 },
-                {
-                    id: "hardware",
-                    title: LL.SB_TITLE_IMPORT_HARDWARE(),
-                    description: LL.SB_DESCRIPTION_IMPORT_HARDWARE(),
-                    icon: "icon-ledger",
-                    action: navigateToImportHardwareWallet,
-                },
+
                 {
                     id: "observe",
                     title: LL.BTN_OBSERVE_WALLET(),
@@ -100,14 +72,7 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
                     action: onObserveWallet,
                 },
             ]
-        }, [
-            LL,
-            handleOnCreateWallet,
-            navigateToImportFromCloud,
-            navigateToImportLocalWallet,
-            navigateToImportHardwareWallet,
-            onObserveWallet,
-        ])
+        }, [LL, handleOnCreateWallet, onObserveWallet])
 
         const ItemsSeparator = useCallback(() => {
             return <BaseSpacer height={16} />
@@ -115,41 +80,99 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
 
         const avaliableOptions = useMemo(() => {
             return options.filter(option => {
+                if (option.id === "social" && hasSocialWallet) {
+                    return false
+                }
                 if (option.id === "observe") {
                     return userHasOnboarded
                 }
-                if (option.id === "cloud") {
-                    return PlatformUtils.isIOS()
-                }
                 return true
             })
-        }, [options, userHasOnboarded])
+        }, [hasSocialWallet, options, userHasOnboarded])
+
+        const modalTitle = useMemo(() => {
+            if (navigationState === "social") {
+                return LL.SB_TITLE_CONTINUE_WITH_SOCIAL_LOGIN()
+            }
+            if (navigationState === "import") {
+                return LL.SB_TITLE_ADD_EXISTING_WALLET()
+            }
+            return LL.TITLE_CREATE_WALLET_TYPE()
+        }, [navigationState, LL])
+
+        const modalDescription = useMemo(() => {
+            if (navigationState === "social") {
+                return LL.SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN()
+            }
+            if (navigationState === "import") {
+                return LL.SB_DESCRIPTION_ADD_EXISTING_WALLET()
+            }
+            return LL.BD_CREATE_WALLET_TYPE()
+        }, [navigationState, LL])
+
+        const onDismiss = useCallback(() => {
+            setNavigationState("root")
+        }, [])
+
+        const onGoBack = useCallback(() => {
+            if (navigationState !== "root") {
+                setNavigationState("root")
+                return
+            }
+            onClose()
+        }, [navigationState, onClose])
 
         return (
-            <BaseBottomSheet dynamicHeight ref={ref} scrollable={false} floating backgroundStyle={styles.rootSheet}>
-                <BaseView flexDirection="column" w={100}>
-                    <BaseText typographyFont="subTitleBold">{LL.TITLE_CREATE_WALLET_TYPE()}</BaseText>
+            <BaseBottomSheet
+                dynamicHeight
+                ref={ref}
+                scrollable={false}
+                floating
+                backgroundStyle={styles.rootSheet}
+                handleComponent={() => <BaseView p={8} />}
+                onDismiss={onDismiss}>
+                <BaseView flexDirection="column" w={100} position="relative">
+                    <BaseTouchable style={styles.closeButton} action={onGoBack}>
+                        <BaseIcon
+                            name="icon-x"
+                            size={24}
+                            color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.GREY_500}
+                        />
+                    </BaseTouchable>
+                    <BaseText typographyFont="subTitleBold">{modalTitle}</BaseText>
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="body">{LL.BD_CREATE_WALLET_TYPE()}</BaseText>
+                    <BaseText typographyFont="body">{modalDescription}</BaseText>
                 </BaseView>
 
                 <BaseSpacer height={24} />
 
-                <FlatList
-                    data={avaliableOptions}
-                    keyExtractor={item => item.id}
-                    bounces={false}
-                    ItemSeparatorComponent={ItemsSeparator}
-                    renderItem={({ item }) => (
-                        <CardListItem
-                            testID={`SELF_CUSTODY_OPTIONS_${item.id.toUpperCase()}`}
-                            icon={item.icon as IconKey}
-                            title={item.title}
-                            subtitle={item.description}
-                            action={item.action}
+                {navigationState === "root" && (
+                    <Animated.View
+                        style={styles.rootSheetContent}
+                        entering={StretchInY.duration(200)}
+                        exiting={StretchOutY.duration(200)}
+                        layout={LinearTransition}>
+                        <Animated.FlatList
+                            data={avaliableOptions}
+                            keyExtractor={item => item.id}
+                            bounces={false}
+                            ItemSeparatorComponent={ItemsSeparator}
+                            renderItem={({ item }) => (
+                                <CardListItem
+                                    testID={`SELF_CUSTODY_OPTIONS_${item.id.toUpperCase()}`}
+                                    icon={item.icon as IconKey}
+                                    title={item.title}
+                                    subtitle={item.description}
+                                    action={item.action}
+                                />
+                            )}
                         />
-                    )}
-                />
+                    </Animated.View>
+                )}
+
+                {navigationState === "social" && <SocialWalletOptions onClose={onClose} />}
+
+                {navigationState === "import" && <ImportWalletOptions onClose={onClose} />}
             </BaseBottomSheet>
         )
     },
@@ -161,5 +184,22 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.colors.newBottomSheet.background,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
+        },
+        rootSheetContent: {
+            transformOrigin: "top center",
+        },
+        titleContainer: {
+            flexDirection: "row",
+            gap: 12,
+            alignItems: "center",
+        },
+        closeButton: {
+            position: "absolute",
+            right: -8,
+            top: -16,
+            borderRadius: 99,
+            padding: 8,
+            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200,
+            zIndex: 5,
         },
     })

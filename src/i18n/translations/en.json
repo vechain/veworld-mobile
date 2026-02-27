@@ -1526,5 +1526,11 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "SB_TITLE_CONTINUE_WITH_SOCIAL_LOGIN": "Continue with social login",
+  "SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN": "Sign in with your social account to use your wallet.",
+  "SB_TITLE_ADD_EXISTING_WALLET": "Add existing wallet",
+  "SB_DESCRIPTION_ADD_EXISTING_WALLET": "Add an existing wallet by importing or restoring.",
+  "SB_DESCRIPTION_APPLE_LOGIN":"Sign in with Apple to access your wallet.",
+  "SB_DESCRIPTION_GOOGLE_LOGIN":"Sign in with Google to access your wallet."
 }
