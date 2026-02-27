@@ -9,14 +9,7 @@ import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConne
 import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { AnalyticsEvent, COLORS, ERROR_EVENTS, RequestMethods } from "~Constants"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useSetSelectedAccount,
-    useSignMessage,
-    useSmartWallet,
-    useTheme,
-} from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { useI18nContext } from "~i18n"
 import { CertificateRequest, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
@@ -165,9 +158,6 @@ export const CertificateBottomSheet = () => {
     const { onSuccess, onFailure, onRejectRequest } = useExternalDappConnection()
 
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
-    const { ownerAddress } = useSmartWallet()
-    const smartAccountOwnerAddress =
-        selectedAccount?.device.type === DEVICE_TYPE.SMART_WALLET && ownerAddress ? ownerAddress : undefined
 
     const nav = useNavigation()
 
@@ -222,14 +212,13 @@ export const CertificateBottomSheet = () => {
                     throw new Error("Signature is empty")
                 }
 
-                const res = {
+                const res: Connex.Vendor.CertResponse = {
                     signature: HexUtils.addPrefix(signature.toString("hex")),
                     annex: {
                         domain: certificate.domain,
                         timestamp: certificate.timestamp,
                         signer: certificate.signer,
                     },
-                    ...(smartAccountOwnerAddress && { smartAccountOwnerAddress }),
                 }
 
                 if (request.type === "wallet-connect") {
@@ -300,7 +289,6 @@ export const CertificateBottomSheet = () => {
             LL,
             failRequest,
             onFailure,
-            smartAccountOwnerAddress,
         ],
     )
 

@@ -75,8 +75,8 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
         async (
             requestEvent: PendingRequestTypes.Struct,
             result:
-                | (Connex.Vendor.CertResponse & { smartAccountOwnerAddress?: string }) //Connex Certificate
-                | (Connex.Vendor.TxResponse & { smartAccountOwnerAddress?: string }) //Connex Transaction
+                | Connex.Vendor.CertResponse //Connex Certificate
+                | Connex.Vendor.TxResponse //Connex Transaction
                 | string, // Personal Sign / Typed Data
         ) => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()

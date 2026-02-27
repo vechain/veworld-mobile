@@ -3,11 +3,8 @@ import { RequestMethods } from "~Constants"
 
 export type ConnectResponse =
     | Connex.Vendor.CertResponse
-    | (Connex.Vendor.CertResponse & { smartAccountOwnerAddress: string })
     | { signer: string; signature: string }
-    | { signer: string; signature: string; smartAccountOwnerAddress: string }
     | { signer: string }
-    | { signer: string; smartAccountOwnerAddress: string }
     | null
 
 type ErrorResponse = {
