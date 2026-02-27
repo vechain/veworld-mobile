@@ -77,7 +77,6 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
             result:
                 | (Connex.Vendor.CertResponse & { smartAccountOwnerAddress?: string }) //Connex Certificate
                 | (Connex.Vendor.TxResponse & { smartAccountOwnerAddress?: string }) //Connex Transaction
-                | { signature: string; smartAccountOwnerAddress: string } // Typed Data (smart wallet)
                 | string, // Personal Sign / Typed Data
         ) => {
             const web3Wallet = await WalletConnectUtils.getWeb3Wallet()

@@ -18,13 +18,7 @@ type ErrorResponse = {
 
 type SuccessResponse = {
     id: string
-    data:
-        | Connex.Vendor.CertResponse
-        | Connex.Vendor.TxResponse
-        | string
-        | ConnectResponse
-        | string[]
-        | { signature: string; smartAccountOwnerAddress: string }
+    data: Connex.Vendor.CertResponse | Connex.Vendor.TxResponse | string | ConnectResponse | string[]
     method: (typeof RequestMethods)[keyof typeof RequestMethods]
 }
 
