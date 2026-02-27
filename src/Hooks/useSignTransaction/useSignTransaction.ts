@@ -29,7 +29,7 @@ type Props = {
     selectedDelegationAccount?: AccountWithDevice
     selectedDelegationOption: DelegationType
     selectedDelegationUrl?: string
-    initialRoute?: Routes.NFTS | Routes.HOME
+    initialRoute?: Routes.HOME
     buildTransaction: () => Promise<Transaction>
     dappRequest?: TransactionRequest
     selectedDelegationToken: string

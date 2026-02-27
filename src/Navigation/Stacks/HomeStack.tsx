@@ -1,7 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import React from "react"
-import { useFeatureFlags } from "~Components"
 import { COLORS, SCREEN_HEIGHT } from "~Constants"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import {
@@ -20,28 +19,20 @@ import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import {
     ActivityDetailsScreen,
-    AssetDetailScreen,
-    BridgeAssetDetailScreen,
     ChangeNetworkScreen,
     ClaimUsername,
     ConnectedAppsScreen,
-    ConvertTransactionScreen,
     EnableAdditionalSettings,
-    HomeScreen,
     ImportFromCloudScreen,
     ImportLocalWallet,
     ImportMnemonicBackupPasswordScreen,
     InAppBrowser,
-    InsertAddressSendScreen,
     LedgerSignTransaction,
     ManageTokenScreen,
     ObserveWalletScreen,
     PrivacyScreen,
-    SelectAmountSendScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
-    SelectTokenSendScreen,
-    SendNFTScreen,
     SendScreen,
     SwapScreen,
     TabsManagerScreen,
@@ -53,12 +44,13 @@ import {
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AssetDetailScreenSheet } from "~Screens/Flows/App/AssetDetailScreenSheet"
 import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
-import { CollectionsScreen, SendCollectibleRecapScreen } from "~Screens/Flows/App/Collectibles"
+import { CollectionsScreen, SendCollectibleScreen } from "~Screens/Flows/App/Collectibles"
 import { BlacklistedCollectionsScreen } from "~Screens/Flows/App/Collectibles/BlacklistedCollectionsScreen"
 import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/CollectibleCollectionDetails"
-import { ReportNFTTransactionScreen } from "~Screens/Flows/App/NFT/NFTReportCollection/ReportNFTTransactionScreen"
+import { ReportNFTTransactionScreen } from "~Screens/Flows/App/Collectibles/NFTReportCollection"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
+import { ConvertTransactionScreen } from "~Screens/Flows/App/BalanceScreen/ConvertBetterScreen"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -71,16 +63,6 @@ export type RootStackParamListHome = {
     [Routes.SEND_TOKEN]: {
         token?: FungibleTokenWithBalance
     }
-    [Routes.SELECT_TOKEN_SEND]: undefined
-    [Routes.SELECT_AMOUNT_SEND]: {
-        token: FungibleTokenWithBalance
-        address: string
-    }
-    [Routes.INSERT_ADDRESS_SEND]: {
-        token?: FungibleTokenWithBalance
-        contractAddress?: string
-        tokenId?: string
-    }
     [Routes.TRANSACTION_SUMMARY_SEND]: {
         token: FungibleTokenWithBalance
         amount: string
@@ -91,7 +73,7 @@ export type RootStackParamListHome = {
         accountWithDevice: LedgerAccountWithDevice
         delegationSignature?: string
         transaction: Transaction
-        initialRoute?: Routes.HOME | Routes.NFTS
+        initialRoute?: Routes.HOME
         dappRequest?: TransactionRequest
     }
     [Routes.SWAP]: undefined
@@ -124,9 +106,7 @@ export type RootStackParamListHome = {
             txId: string
         }
     }
-    [Routes.BRIDGE_TOKEN_DETAILS]: {
-        token: FungibleTokenWithBalance
-    }
+
     [Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN]: {
         token: TokenWithCompleteInfo
         amount: string
@@ -186,11 +166,6 @@ export type RootStackParamListHome = {
         contractAddress: string
         tokenId: string
     }
-    [Routes.SEND_NFT_RECAP]: {
-        contractAddress: string
-        tokenId: string
-        receiverAddress: string
-    }
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
     [Routes.SETTINGS_PRIVACY]: undefined
 }
@@ -198,35 +173,15 @@ export type RootStackParamListHome = {
 const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome>()
 
 export const HomeStack = () => {
-    const { betterWorldFeature } = useFeatureFlags()
     const theme = useTheme()
 
     return (
         <Navigator id="HomeStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
-                <Screen
-                    name={Routes.HOME}
-                    component={betterWorldFeature.balanceScreen?.enabled ? BalanceScreen : HomeScreen}
-                    options={{ headerShown: false }}
-                />
-                {betterWorldFeature.balanceScreen?.send?.enabled && (
-                    <Screen name={Routes.SEND_TOKEN} component={SendScreen} options={{ headerShown: false }} />
-                )}
-                <Screen
-                    name={Routes.SELECT_TOKEN_SEND}
-                    component={SelectTokenSendScreen}
-                    options={{ headerShown: false }}
-                />
-                <Screen
-                    name={Routes.SELECT_AMOUNT_SEND}
-                    component={SelectAmountSendScreen}
-                    options={{ headerShown: false }}
-                />
-                <Screen
-                    name={Routes.INSERT_ADDRESS_SEND}
-                    component={InsertAddressSendScreen}
-                    options={{ headerShown: false }}
-                />
+                <Screen name={Routes.HOME} component={BalanceScreen} options={{ headerShown: false }} />
+
+                <Screen name={Routes.SEND_TOKEN} component={SendScreen} options={{ headerShown: false }} />
+
                 <Screen
                     name={Routes.TRANSACTION_SUMMARY_SEND}
                     component={TransactionSummarySendScreen}
@@ -245,31 +200,18 @@ export const HomeStack = () => {
                 />
                 <Screen name={Routes.MANAGE_TOKEN} component={ManageTokenScreen} options={{ headerShown: false }} />
 
-                {betterWorldFeature?.balanceScreen?.tokens?.enabled ? (
-                    <Screen
-                        name={Routes.TOKEN_DETAILS}
-                        component={AssetDetailScreenSheet}
-                        options={{
-                            headerShown: false,
-                            presentation: "transparentModal",
-                            gestureDirection: "vertical",
-                            gestureEnabled: true,
-                            gestureResponseDistance: SCREEN_HEIGHT,
-                        }}
-                    />
-                ) : (
-                    <Screen
-                        name={Routes.TOKEN_DETAILS}
-                        component={AssetDetailScreen}
-                        options={{ headerShown: false }}
-                    />
-                )}
-
                 <Screen
-                    name={Routes.BRIDGE_TOKEN_DETAILS}
-                    component={BridgeAssetDetailScreen}
-                    options={{ headerShown: false }}
+                    name={Routes.TOKEN_DETAILS}
+                    component={AssetDetailScreenSheet}
+                    options={{
+                        headerShown: false,
+                        presentation: "transparentModal",
+                        gestureDirection: "vertical",
+                        gestureEnabled: true,
+                        gestureResponseDistance: SCREEN_HEIGHT,
+                    }}
                 />
+
                 <Screen
                     name={Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN}
                     component={ConvertTransactionScreen}
@@ -365,47 +307,34 @@ export const HomeStack = () => {
                         },
                     }}
                 />
-                {betterWorldFeature.balanceScreen.collectibles.enabled && (
-                    <Screen
-                        name={Routes.COLLECTIBLES_COLLECTIONS}
-                        component={CollectionsScreen}
-                        options={{ headerShown: false }}
-                    />
-                )}
-                {betterWorldFeature.balanceScreen.collectibles.enabled && (
-                    <Screen
-                        name={Routes.COLLECTIBLES_COLLECTION_DETAILS}
-                        component={CollectibleCollectionDetails}
-                        options={{ headerShown: false }}
-                    />
-                )}
-                {betterWorldFeature.balanceScreen.collectibles.enabled && (
-                    <Screen
-                        name={Routes.REPORT_NFT_TRANSACTION_SCREEN}
-                        component={ReportNFTTransactionScreen}
-                        options={{ headerShown: false }}
-                    />
-                )}
-                {betterWorldFeature.balanceScreen.sendCollectibles.enabled && (
-                    <Screen name={Routes.SEND_NFT} component={SendNFTScreen} options={{ headerShown: false }} />
-                )}
 
-                {betterWorldFeature.balanceScreen.collectibles.enabled && (
-                    <Screen
-                        name={Routes.SEND_NFT_RECAP}
-                        component={SendCollectibleRecapScreen}
-                        options={{ headerShown: false }}
-                    />
-                )}
-                {betterWorldFeature.balanceScreen.collectibles.enabled && (
-                    <Screen
-                        name={Routes.BLACKLISTED_COLLECTIONS}
-                        component={BlacklistedCollectionsScreen}
-                        options={{
-                            presentation: "modal",
-                        }}
-                    />
-                )}
+                <Screen
+                    name={Routes.COLLECTIBLES_COLLECTIONS}
+                    component={CollectionsScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.COLLECTIBLES_COLLECTION_DETAILS}
+                    component={CollectibleCollectionDetails}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.REPORT_NFT_TRANSACTION_SCREEN}
+                    component={ReportNFTTransactionScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen name={Routes.SEND_NFT} component={SendCollectibleScreen} options={{ headerShown: false }} />
+
+                <Screen
+                    name={Routes.BLACKLISTED_COLLECTIONS}
+                    component={BlacklistedCollectionsScreen}
+                    options={{
+                        presentation: "modal",
+                    }}
+                />
             </Group>
 
             <Group>

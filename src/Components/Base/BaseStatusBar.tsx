@@ -1,6 +1,5 @@
 import React, { memo, useMemo } from "react"
 import { StatusBar, StatusBarProps } from "react-native"
-import { useFeatureFlags } from "~Components/Providers"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -20,7 +19,6 @@ export const BaseStatusBar = memo((props: Props) => {
     const theme = useTheme()
 
     const routeName = useAppSelector(selectCurrentScreen)
-    const featureFlags = useFeatureFlags()
 
     const barStyle = useMemo(() => {
         if (!props.root) return computeBarStyle(props.hero, theme.isDark)
@@ -29,21 +27,13 @@ export const BaseStatusBar = memo((props: Props) => {
             case Routes.APPS_SEARCH:
             case Routes.APPS_TABS_MANAGER:
             case Routes.BROWSER:
-                return "light-content"
             case Routes.TOKEN_DETAILS:
-                return featureFlags?.betterWorldFeature?.balanceScreen?.tokens?.enabled
-                    ? "light-content"
-                    : computeBarStyle(props.hero, theme.isDark)
+                return "light-content"
+
             default:
                 return computeBarStyle(props.hero, theme.isDark)
         }
-    }, [
-        featureFlags?.betterWorldFeature?.balanceScreen?.tokens?.enabled,
-        props.hero,
-        props.root,
-        routeName,
-        theme.isDark,
-    ])
+    }, [props.hero, props.root, routeName, theme.isDark])
 
     const backgroundColor = useMemo(() => {
         if (!props.root) return props.transparent ? theme.colors.transparent : theme.colors.background
@@ -54,19 +44,11 @@ export const BaseStatusBar = memo((props: Props) => {
             case Routes.BROWSER:
                 return COLORS.BALANCE_BACKGROUND
             case Routes.TOKEN_DETAILS:
-                if (featureFlags?.betterWorldFeature?.balanceScreen?.tokens?.enabled) return COLORS.BLACK
-                return props.transparent ? theme.colors.transparent : theme.colors.background
+                return COLORS.BLACK
             default:
                 return props.transparent ? theme.colors.transparent : theme.colors.background
         }
-    }, [
-        featureFlags?.betterWorldFeature?.balanceScreen?.tokens?.enabled,
-        props.root,
-        props.transparent,
-        routeName,
-        theme.colors.background,
-        theme.colors.transparent,
-    ])
+    }, [props.root, props.transparent, routeName, theme.colors.background, theme.colors.transparent])
 
     return <StatusBar translucent={props.hero} barStyle={barStyle} backgroundColor={backgroundColor} {...props} />
 })

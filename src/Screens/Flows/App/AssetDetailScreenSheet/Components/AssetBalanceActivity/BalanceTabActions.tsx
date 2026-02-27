@@ -5,7 +5,7 @@ import { useBottomSheetModal, useCameraBottomSheet } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 
-import { ConvertBetterBottomSheet, ConvertedBetterBottomSheet } from "~Screens/Flows/App/AssetDetailScreen/Components"
+import { ConvertBetterBottomSheet, ConvertedBetterBottomSheet } from "~Components/Reusable/BottomSheets"
 import { BuyButton } from "./ActionButtons/BuyButton"
 import { ConvertButton } from "./ActionButtons/ConvertButton"
 import { EarnButton } from "./ActionButtons/EarnButton"
