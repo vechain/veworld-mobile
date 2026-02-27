@@ -3,6 +3,15 @@ import { render, screen, fireEvent } from "@testing-library/react-native"
 import { TestWrapper } from "~Test"
 import { CardListItem } from "./CardListItem"
 
+jest.mock("react-native-gesture-handler", () => {
+    const actual = jest.requireActual("react-native-gesture-handler")
+    const RN = jest.requireActual("react-native")
+    return {
+        ...actual,
+        TouchableOpacity: RN.TouchableOpacity,
+    }
+})
+
 describe("CardListItem", () => {
     beforeEach(() => {
         jest.clearAllMocks()
