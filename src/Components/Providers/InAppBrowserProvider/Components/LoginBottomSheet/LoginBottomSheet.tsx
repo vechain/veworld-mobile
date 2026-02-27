@@ -10,7 +10,14 @@ import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { TypedDataRenderer } from "~Components/Reusable/TypedDataRenderer"
 import { AnalyticsEvent, COLORS, ERROR_EVENTS } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useSetSelectedAccount,
+    useSignMessage,
+    useSmartWallet,
+    useTheme,
+} from "~Hooks"
 import { useSignTypedMessage } from "~Hooks/useSignTypedData"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, LedgerAccountWithDevice, LoginActivityValue, LoginRequest, TypedDataMessage } from "~Model"
@@ -222,6 +229,9 @@ export const LoginBottomSheet = () => {
     const { postMessage } = useInAppBrowser()
 
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
+    const { ownerAddress } = useSmartWallet()
+    const smartAccountOwnerAddress =
+        selectedAccount?.device.type === DEVICE_TYPE.SMART_WALLET && ownerAddress ? ownerAddress : undefined
 
     const isUserAction = useRef(false)
 
@@ -271,7 +281,10 @@ export const LoginBottomSheet = () => {
         async (request: LoginRequest, password?: string) => {
             switch (request.kind) {
                 case "simple":
-                    return { signer: selectedAccount?.address ?? "" }
+                    return {
+                        signer: selectedAccount?.address ?? "",
+                        ...(smartAccountOwnerAddress && { smartAccountOwnerAddress }),
+                    }
                 case "certificate": {
                     const { certificate, payload } = buildCertificate(request)!
                     const signature = await signMessage(payload, password)
@@ -283,6 +296,7 @@ export const LoginBottomSheet = () => {
                             timestamp: certificate.timestamp,
                             signer: certificate.signer,
                         },
+                        ...(smartAccountOwnerAddress && { smartAccountOwnerAddress }),
                     }
                 }
                 case "typed-data": {
@@ -291,11 +305,19 @@ export const LoginBottomSheet = () => {
                     return {
                         signature: signature!,
                         signer: selectedAccount?.address ?? "",
+                        ...(smartAccountOwnerAddress && { smartAccountOwnerAddress }),
                     }
                 }
             }
         },
-        [buildCertificate, buildTypedData, selectedAccount?.address, signMessage, signTypedData],
+        [
+            buildCertificate,
+            buildTypedData,
+            selectedAccount?.address,
+            signMessage,
+            signTypedData,
+            smartAccountOwnerAddress,
+        ],
     )
 
     const onSign = useCallback(

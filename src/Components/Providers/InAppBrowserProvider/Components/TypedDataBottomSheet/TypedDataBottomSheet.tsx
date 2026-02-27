@@ -8,7 +8,7 @@ import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { TypedDataRenderer } from "~Components/Reusable/TypedDataRenderer"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSmartWallet, useTheme } from "~Hooks"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { useSignTypedMessage } from "~Hooks/useSignTypedData"
 import { useI18nContext } from "~i18n"
@@ -165,6 +165,9 @@ export const TypedDataBottomSheet = () => {
     const { onSuccess, onFailure, onRejectRequest } = useExternalDappConnection()
 
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
+    const { ownerAddress } = useSmartWallet()
+    const smartAccountOwnerAddress =
+        selectedAccount?.device.type === DEVICE_TYPE.SMART_WALLET && ownerAddress ? ownerAddress : undefined
 
     const dispatch = useAppDispatch()
 
@@ -205,19 +208,22 @@ export const TypedDataBottomSheet = () => {
                 }
 
                 if (request.type === "wallet-connect") {
-                    await processRequest(request.requestEvent, signature)
+                    await processRequest(
+                        request.requestEvent,
+                        smartAccountOwnerAddress ? { signature, smartAccountOwnerAddress } : signature,
+                    )
                 } else if (request.type === "external-app") {
                     await onSuccess({
                         redirectUrl: request.redirectUrl,
-                        data: {
-                            signature,
-                        },
+                        data: smartAccountOwnerAddress ? { signature, smartAccountOwnerAddress } : { signature },
                         publicKey: request.publicKey,
                     })
                 } else {
                     postMessage({
                         id: request.id,
-                        data: signedTypedData.signature!,
+                        data: smartAccountOwnerAddress
+                            ? { signature: signedTypedData.signature!, smartAccountOwnerAddress }
+                            : signedTypedData.signature!,
                         method: RequestMethods.SIGN_TYPED_DATA,
                     })
                 }
@@ -258,6 +264,7 @@ export const TypedDataBottomSheet = () => {
             postMessage,
             processRequest,
             signTypedData,
+            smartAccountOwnerAddress,
             track,
         ],
     )

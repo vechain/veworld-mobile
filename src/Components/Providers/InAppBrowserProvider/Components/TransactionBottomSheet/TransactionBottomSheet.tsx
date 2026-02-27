@@ -9,11 +9,18 @@ import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConne
 import { DelegationView, GasFeeSpeed, RequireUserPassword, SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { AnalyticsEvent, COLORS, RequestMethods } from "~Constants"
-import { useBottomSheetModal, useIsOnline, useSetSelectedAccount, useThemedStyles, useTransactionScreen } from "~Hooks"
+import {
+    useBottomSheetModal,
+    useIsOnline,
+    useSetSelectedAccount,
+    useSmartWallet,
+    useThemedStyles,
+    useTransactionScreen,
+} from "~Hooks"
 import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useLoginSession } from "~Hooks/useLoginSession"
-import { TransactionRequest } from "~Model"
+import { DEVICE_TYPE, TransactionRequest } from "~Model"
 import {
     addPendingDappTransactionActivity,
     selectSelectedAccountOrNull,
@@ -237,6 +244,9 @@ export const TransactionBottomSheet = () => {
     const { failRequest, processRequest } = useWalletConnect()
 
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
+    const { ownerAddress } = useSmartWallet()
+    const smartAccountOwnerAddress =
+        selectedAccount?.device.type === DEVICE_TYPE.SMART_WALLET && ownerAddress ? ownerAddress : undefined
 
     const dispatch = useAppDispatch()
 
@@ -266,6 +276,7 @@ export const TransactionBottomSheet = () => {
                 await processRequest(transactionBsData.requestEvent, {
                     txid: id,
                     signer: selectedAccount.address,
+                    ...(smartAccountOwnerAddress && { smartAccountOwnerAddress }),
                 })
             } else if (transactionBsData.type === "external-app") {
                 await onSuccess({
@@ -273,6 +284,7 @@ export const TransactionBottomSheet = () => {
                     data: {
                         id,
                         transaction,
+                        ...(smartAccountOwnerAddress && { smartAccountOwnerAddress }),
                     },
                     publicKey: transactionBsData.publicKey,
                 })
@@ -282,6 +294,7 @@ export const TransactionBottomSheet = () => {
                     data: {
                         txid: id,
                         signer: selectedAccount.address,
+                        ...(smartAccountOwnerAddress && { smartAccountOwnerAddress }),
                     },
                     method: RequestMethods.REQUEST_TRANSACTION,
                 })
@@ -300,7 +313,16 @@ export const TransactionBottomSheet = () => {
 
             onFinish(true)
         },
-        [transactionBsData, selectedAccount, dispatch, onFinish, processRequest, postMessage, onSuccess],
+        [
+            transactionBsData,
+            selectedAccount,
+            dispatch,
+            onFinish,
+            processRequest,
+            postMessage,
+            onSuccess,
+            smartAccountOwnerAddress,
+        ],
     )
 
     const onTransactionFailure = useCallback(async () => {
