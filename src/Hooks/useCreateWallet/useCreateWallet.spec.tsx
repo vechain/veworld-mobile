@@ -1,12 +1,8 @@
 /* eslint-disable max-len */
 import { renderHook } from "@testing-library/react-hooks"
 import { waitFor } from "@testing-library/react-native"
-import {
-    addDeviceAndAccounts,
-    addLedgerDeviceAndAccounts,
-    addSmartWalletDeviceAndAccount,
-    setMnemonic,
-} from "~Storage/Redux"
+import { addDeviceAndAccounts, addLedgerDeviceAndAccounts, addSmartWalletDeviceAndAccount } from "~Storage/Redux"
+import { setMnemonic } from "~Storage/Redux/Slices"
 import { TestWrapper } from "~Test"
 import { useCreateWallet } from "./useCreateWallet"
 import { IMPORT_TYPE, NewLedgerDevice } from "~Model"
@@ -82,25 +78,24 @@ jest.mock("../useBiometrics", () => ({
     })),
 }))
 
+jest.mock("~Storage/Redux/Slices/Cache", () => ({
+    ...jest.requireActual("~Storage/Redux/Slices/Cache"),
+    setMnemonic: jest.fn(payload => ({ type: "cache/setMnemonic", payload })),
+    setPrivateKey: jest.fn(payload => ({ type: "cache/setPrivateKey", payload })),
+}))
+
 jest.mock("~Storage/Redux/Actions", () => ({
     ...jest.requireActual("~Storage/Redux/Actions"),
     addDeviceAndAccounts: jest.fn(jest.requireActual("~Storage/Redux/Actions").addDeviceAndAccounts),
-    setSelectedAccount: jest.fn(jest.requireActual("~Storage/Redux/Actions").setSelectedAccount),
-    setUserSelectedSecurity: jest.fn(jest.requireActual("~Storage/Redux/Actions").setUserSelectedSecurity),
-    setMnemonic: jest.fn(jest.requireActual("~Storage/Redux/Actions").setMnemonic),
     addLedgerDeviceAndAccounts: jest.fn(jest.requireActual("~Storage/Redux/Actions").addLedgerDeviceAndAccounts),
     addSmartWalletDeviceAndAccount: jest.fn(
         jest.requireActual("~Storage/Redux/Actions").addSmartWalletDeviceAndAccount,
     ),
 }))
 
-jest.mock("~Storage/Redux/Selectors", () => ({
-    ...jest.requireActual("~Storage/Redux/Selectors"),
-    selectSelectedAccount: jest.fn(),
-}))
-
 describe("useCreateWallet", () => {
     beforeEach(() => {
+        jest.clearAllMocks()
         ;(WalletEncryptionKeyHelper.encryptWallet as jest.Mock).mockResolvedValue(JSON.stringify(wallet))
     })
 

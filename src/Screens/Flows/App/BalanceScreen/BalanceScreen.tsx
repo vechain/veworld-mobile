@@ -21,8 +21,9 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
-import { DeviceBackupBottomSheet, DeviceJailBrokenWarningModal } from "../HomeScreen/Components"
-import { EnableNotificationsBottomSheet } from "../HomeScreen/Components/EnableNotificationsBottomSheet"
+import { DeviceJailBrokenWarningModal } from "./Components/DeviceJailBrokenWarningModal"
+import { DeviceBackupBottomSheet } from "./Components/DeviceBackupModal"
+import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
 import { BalanceActions } from "./Components/Actions/BalanceActions"
 import { CurrentBalance } from "./Components/Balance/CurrentBalance"
 import { PullToRefresh } from "./Components/PullToRefresh"

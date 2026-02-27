@@ -42,11 +42,11 @@ import {
     WalletPreferencesSlice,
     resetWalletPreferencesState,
 } from "./Slices"
-import { migrationUpdates } from "~Storage/Redux/Migrations"
+import { migrationUpdates } from "./Migrations"
 import { createMigrate } from "redux-persist"
 import { PersistConfig } from "redux-persist/es/types"
-import { RootState } from "~Storage/Redux/Types"
-import { newStorage } from "~Storage/Redux/Storage"
+import { RootState } from "./Types"
+import { newStorage } from "./Storage"
 import { MMKV } from "react-native-mmkv"
 import { ERROR_EVENTS } from "~Constants"
 
@@ -75,7 +75,7 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
     return {
         key: "root",
         storage,
-        version: 36,
+        version: 37,
         blacklist: [NftSlice.name, PendingSlice.name],
         whitelist: [
             CurrencySlice.name,

@@ -1,14 +1,7 @@
 import { BaseDevice, WalletAccount } from "~Model"
-import {
-    setSelectedAccount,
-    renameAccount,
-    removeAccountsByDevice,
-    setAccountVisibility,
-    toggleAccountVisibility,
-    addAccount,
-} from "../Slices/Account"
 import { AppThunk } from "../Types"
 import { AddressUtils, AccountUtils } from "~Utils"
+import { addAccount } from "../Slices/Account"
 
 const addAccountForDevice =
     (device: BaseDevice): AppThunk<WalletAccount> =>
@@ -39,11 +32,4 @@ const addAccountForDevice =
         return newAccount
     }
 
-export {
-    setSelectedAccount,
-    renameAccount,
-    removeAccountsByDevice,
-    setAccountVisibility,
-    toggleAccountVisibility,
-    addAccountForDevice,
-}
+export { addAccountForDevice }

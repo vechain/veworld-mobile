@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
-import { WalletConnectState } from "~Storage/Redux"
+import type { WalletConnectState } from "../Slices/WalletConnect"
 
 export const selectWcState = (state: RootState) => state.sessions
 

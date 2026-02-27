@@ -3,7 +3,6 @@ import React, { useCallback } from "react"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { CollectiblesActionButton } from "./CollectiblesActionButton"
-import { useFeatureFlags } from "~Components"
 
 type Props = {
     address: string
@@ -14,22 +13,15 @@ export const CollectiblesSendActionButton = ({ address, tokenId, onClose }: Prop
     const { LL } = useI18nContext()
 
     const nav = useNavigation()
-    const { betterWorldFeature } = useFeatureFlags()
 
     const onPress = useCallback(async () => {
         onClose()
-        if (betterWorldFeature.balanceScreen?.sendCollectibles?.enabled) {
-            nav.navigate(Routes.SEND_NFT, {
-                contractAddress: address,
-                tokenId,
-            })
-            return
-        }
-        nav.navigate(Routes.INSERT_ADDRESS_SEND, {
+
+        nav.navigate(Routes.SEND_NFT, {
             contractAddress: address,
             tokenId,
         })
-    }, [address, nav, onClose, tokenId, betterWorldFeature.balanceScreen?.sendCollectibles?.enabled])
+    }, [address, nav, onClose, tokenId])
 
     return (
         <CollectiblesActionButton
