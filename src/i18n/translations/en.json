@@ -1062,7 +1062,11 @@
   "SB_CREATE_ONE": "Create one",
   "SB_DELETING_CLOUD_BACKUP": "Deleting backup...",
   "SB_DESCRIPTION": "Description",
+  "SB_DESCRIPTION_ADD_EXISTING_WALLET": "Add an existing wallet by importing or restoring.",
+  "SB_DESCRIPTION_APPLE_LOGIN": "Sign in with Apple to access your wallet.",
+  "SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN": "Sign in with your social account to use your wallet.",
   "SB_DESCRIPTION_CREATE_WALLET": "Generate a new recovery phrase",
+  "SB_DESCRIPTION_GOOGLE_LOGIN": "Sign in with Google to access your wallet.",
   "SB_DESCRIPTION_IMPORT_FROM_CLOUD": "Recover a wallet from cloud",
   "SB_DESCRIPTION_IMPORT_HARDWARE": "Use a bluetooth hardware wallet",
   "SB_DESCRIPTION_IMPORT_WITH_KEYS": "Use Recovery phrase or private keys",
@@ -1089,6 +1093,8 @@
   "SB_SECURITY_METHOD": "Security method",
   "SB_SELECT_LANGUAGE": "Language",
   "SB_SELECT_LANGUAGE_DESC": "Change the interface language",
+  "SB_TITLE_ADD_EXISTING_WALLET": "Add existing wallet",
+  "SB_TITLE_CONTINUE_WITH_SOCIAL_LOGIN": "Continue with social login",
   "SB_TITLE_CREATE_WALLET": "New wallet",
   "SB_TITLE_IMPORT_FROM_CLOUD": "Cloud backups",
   "SB_TITLE_IMPORT_HARDWARE": "Ledger devices",
@@ -1526,11 +1532,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "SB_TITLE_CONTINUE_WITH_SOCIAL_LOGIN": "Continue with social login",
-  "SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN": "Sign in with your social account to use your wallet.",
-  "SB_TITLE_ADD_EXISTING_WALLET": "Add existing wallet",
-  "SB_DESCRIPTION_ADD_EXISTING_WALLET": "Add an existing wallet by importing or restoring.",
-  "SB_DESCRIPTION_APPLE_LOGIN":"Sign in with Apple to access your wallet.",
-  "SB_DESCRIPTION_GOOGLE_LOGIN":"Sign in with Google to access your wallet."
+  "YESTERDAY": "Yesterday"
 }
