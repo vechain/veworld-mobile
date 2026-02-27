@@ -1,5 +1,5 @@
 import { debug } from "~Utils/Logger"
-import { BaseDevice, Contact, DEVICE_TYPE, WalletAccount, WatchedAccount } from "~Model"
+import { BaseDevice, Contact, DEVICE_TYPE, SmartWalletDevice, WalletAccount, WatchedAccount } from "~Model"
 import AddressUtils from "../AddressUtils"
 import { ERROR_EVENTS } from "~Constants"
 import { Vns } from "~Model/Vns"
@@ -41,6 +41,10 @@ export const getAccountForIndex = (walletIndex: number, device: BaseDevice, acco
 
 export function isObservedAccount(obj: any): obj is WatchedAccount {
     return obj && typeof obj === "object" && "type" in obj && obj.type === DEVICE_TYPE.LOCAL_WATCHED
+}
+
+export function isSmartWalletAccount(obj: any): obj is SmartWalletDevice {
+    return obj?.device?.type === DEVICE_TYPE.SMART_WALLET
 }
 
 export const updateAccountVns = (account: Contact | WalletAccount, vnsData: Vns[]) => {

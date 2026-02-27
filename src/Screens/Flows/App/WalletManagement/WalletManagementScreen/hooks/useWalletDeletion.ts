@@ -13,7 +13,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils, AddressUtils } from "~Utils"
-import { useSetSelectedAccount } from "~Hooks"
+import { useSetSelectedAccount, useSmartWallet } from "~Hooks"
 
 export const useWalletDeletion = (device?: BaseDevice) => {
     const devices = useAppSelector(selectDevices)
@@ -23,6 +23,7 @@ export const useWalletDeletion = (device?: BaseDevice) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
+    const { logout } = useSmartWallet()
     const dispatch = useDispatch()
 
     const removeFromStorage = useCallback(() => {
@@ -59,16 +60,20 @@ export const useWalletDeletion = (device?: BaseDevice) => {
         selectedNetwork.type,
     ])
 
-    const deleteWallet = useCallback(() => {
+    const deleteWallet = useCallback(async () => {
         if (!device?.rootAddress) return
 
         if (AccountUtils.isObservedAccount(device)) {
+            removeFromStorage()
+        } else if (AccountUtils.isSmartWalletAccount(device)) {
+            if (devices.length <= 1) throw new Error("Cannot delete the last device!")
+            await logout()
             removeFromStorage()
         } else {
             if (devices.length <= 1) throw new Error("Cannot delete the last device!")
             removeFromStorage()
         }
-    }, [device, removeFromStorage, devices.length])
+    }, [device, removeFromStorage, devices.length, logout])
 
     return {
         deleteWallet,
