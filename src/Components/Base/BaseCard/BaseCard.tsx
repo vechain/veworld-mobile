@@ -1,9 +1,8 @@
 import React, { memo, useMemo } from "react"
-import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
+import { StyleProp, StyleSheet, ViewProps, ViewStyle, TouchableOpacity } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
 import { BaseView } from "../BaseView"
-import { TouchableOpacity } from "react-native-gesture-handler"
 
 type Props = {
     containerStyle?: StyleProp<ViewStyle>
@@ -44,7 +43,7 @@ export const BaseCard = memo(
                 {onPress ? (
                     <TouchableOpacity
                         onPress={onPress}
-                        containerStyle={styles.touchableContainer}
+                        style={styles.touchableContainer}
                         activeOpacity={disableOpacityOnPressing || !onPress ? 1 : 0.2}>
                         {renderChildren}
                     </TouchableOpacity>

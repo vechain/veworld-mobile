@@ -1,12 +1,13 @@
 import { act, fireEvent, render, screen } from "@testing-library/react-native"
-import React from "react"
+import React, { RefObject } from "react"
 import { TestWrapper } from "~Test"
 
 import { SortDAppsBottomSheetV2 } from "./SortDAppsBottomSheetV2"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 describe("SortDAppsBottomSheetV2", () => {
     it("should render correctly", async () => {
-        const bsRef = { current: null }
+        const bsRef = { current: undefined! } as RefObject<BottomSheetModalMethods>
         const onSortChange = jest.fn()
         render(<SortDAppsBottomSheetV2 selectedSort="alphabetic_asc" bsRef={bsRef} onSortChange={onSortChange} />, {
             wrapper: TestWrapper,

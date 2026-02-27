@@ -130,7 +130,8 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             ref={ref}
             dynamicHeight
             contentStyle={styles.rootContent}
-            backgroundStyle={styles.rootContentBackground}>
+            backgroundStyle={styles.rootContentBackground}
+            scrollable={false}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-coins" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>

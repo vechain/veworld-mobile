@@ -917,7 +917,6 @@ const Staking = ({ activity, onPress, ...props }: OverridableActivityBoxProps<St
         tokenId: activity.tokenId,
         blockNumber: activity.blockNumber,
     })
-
     const onPressHandler = useCallback(() => {
         onPress(activity)
     }, [activity, onPress])

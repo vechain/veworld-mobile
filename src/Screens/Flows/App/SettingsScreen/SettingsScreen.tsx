@@ -46,7 +46,7 @@ export const SettingsScreen = () => {
     const { unclaimedAddresses } = useClaimableUsernames()
     const { styles: themedStyles } = useThemedStyles(baseStyles)
 
-    const flatSettingListRef = useRef(null)
+    const flatSettingListRef = useRef<FlatList>(undefined!)
 
     useScrollToTop(flatSettingListRef)
 

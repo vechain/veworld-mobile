@@ -1,5 +1,5 @@
 module.exports = {
-    presets: ["module:@react-native/babel-preset"],
+    presets: [["module:@react-native/babel-preset", { enableBabelRuntime: false }]],
 
     env: {
         production: {
@@ -10,6 +10,7 @@ module.exports = {
     plugins: [
         ["module:react-native-dotenv"],
         "@babel/plugin-transform-flow-strip-types",
+        // "@babel/plugin-transform-export-namespace-from",
         ["@babel/plugin-transform-private-methods", { loose: true }],
         [
             "module-resolver",

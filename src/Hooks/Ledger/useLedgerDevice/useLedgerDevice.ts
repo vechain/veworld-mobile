@@ -45,7 +45,7 @@ interface UseLedgerDeviceProps {
 }
 
 export const useLedgerDevice = ({ deviceId }: { deviceId: string }): UseLedgerDeviceProps => {
-    const transport = useRef<BleTransport | undefined>()
+    const transport = useRef<BleTransport | undefined>(undefined)
     const [appOpen, setAppOpen] = useState<boolean>(false) // check if vechain embedded app is open
     const [isConnecting, setIsConnecting] = useState<boolean>(false)
     const [rootAccount, setRootAccount] = useState<VETLedgerAccount>()

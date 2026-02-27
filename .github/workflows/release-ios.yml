@@ -58,7 +58,6 @@ jobs:
                   brew install applesimutils
                   brew install fastlane
                   gem install cocoapods # Install CocoaPods globally
-
                   bundle install
               env:
                   HOMEBREW_NO_AUTO_UPDATE: 1
