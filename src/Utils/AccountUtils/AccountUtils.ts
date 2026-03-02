@@ -44,7 +44,7 @@ export function isObservedAccount(obj: any): obj is WatchedAccount {
 }
 
 export function isSmartWalletAccount(obj: any): obj is SmartWalletDevice {
-    return obj?.device?.type === DEVICE_TYPE.SMART_WALLET
+    return obj && typeof obj === "object" && "type" in obj && obj.type === DEVICE_TYPE.SMART_WALLET
 }
 
 export const updateAccountVns = (account: Contact | WalletAccount, vnsData: Vns[]) => {
