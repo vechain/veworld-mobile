@@ -226,6 +226,7 @@
   "BD_MNEMONIC_PASSWORD_WARNING": "Caso você perca seu dispositivo ou o aplicativo seja desinstalado, você pode usar as 12 palavras abaixo para recuperar esta carteira e todos os seus ativos.",
   "BD_MNEMONIC_SUBTITLE": "Sua Frase de Recuperação Secreta facilita o backup e a restauração da sua conta.",
   "BD_MNEMONIC_WARMNING": "Nunca compartilhe as palavras e a ordem específica. Qualquer pessoa que as aprender pode roubar todos os seus ativos digitais.",
+  "BD_NEW_WALLET_TITLE": "Nova Carteira",
   "BD_NFT_DESC_PLACEHOLDER": "Descrição da coleção de NFTs aleatória no caso da coleção de NFTs não ter uma",
   "BD_NOT_BACKED_UP_TO_CLOUD": "Não foi feito backup no iCloud",
   "BD_NOT_BACKED_UP_TO_DRIVE": "Não foi feito backup no Google Drive",

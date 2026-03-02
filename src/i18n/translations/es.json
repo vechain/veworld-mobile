@@ -226,6 +226,7 @@
   "BD_MNEMONIC_PASSWORD_WARNING": "En caso de que pierdas tu dispositivo o la aplicación sea desinstalada, puedes usar las 12 palabras a continuación para recuperar esta billetera y todos tus activos.",
   "BD_MNEMONIC_SUBTITLE": "Tu Frase de Recuperación Secreta facilita la copia de seguridad y restauración de tu cuenta.",
   "BD_MNEMONIC_WARMNING": "Nunca compartas las palabras y el orden específico. Cualquiera que las aprenda puede robar todos tus activos de criptomonedas.",
+  "BD_NEW_WALLET_TITLE": "Nueva Billetera",
   "BD_NFT_DESC_PLACEHOLDER": "Descripción aleatoria de colección NFT en caso de que la colección NFT no tenga una",
   "BD_NOT_BACKED_UP_TO_CLOUD": "No respaldado en iCloud",
   "BD_NOT_BACKED_UP_TO_DRIVE": "No respaldado en Google Drive",

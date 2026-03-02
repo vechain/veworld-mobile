@@ -226,6 +226,7 @@
   "BD_MNEMONIC_PASSWORD_WARNING": "Als je je apparaat verliest of de app is verwijderd, kun je de onderstaande 12 woorden gebruiken om deze wallet en al je activa te herstellen.",
   "BD_MNEMONIC_SUBTITLE": "Je geheime herstelzin maakt het eenvoudig om je account te back-uppen en te herstellen.",
   "BD_MNEMONIC_WARMNING": "Deel nooit de woorden en volgorde. Iedereen die ze kent, kan al je crypto-activa stelen.",
+  "BD_NEW_WALLET_TITLE": "Nieuwe portemonnee",
   "BD_NFT_DESC_PLACEHOLDER": "Willekeurige NFT-collectiebeschrijving als de NFT-collectie er geen heeft",
   "BD_NOT_BACKED_UP_TO_CLOUD": "Niet geback-upt naar iCloud",
   "BD_NOT_BACKED_UP_TO_DRIVE": "Niet geback-upt naar Google Drive",

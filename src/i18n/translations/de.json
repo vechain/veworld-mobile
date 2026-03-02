@@ -226,6 +226,7 @@
   "BD_MNEMONIC_PASSWORD_WARNING": "Falls Sie Ihr Gerät verlieren oder die App deinstalliert wird, können Sie die folgenden 12 Wörter verwenden, um dieses Wallet und all Ihre Vermögenswerte wiederherzustellen.",
   "BD_MNEMONIC_SUBTITLE": "Ihre geheime Wiederherstellungsphrase erleichtert das Sichern und Wiederherstellen Ihres Kontos.",
   "BD_MNEMONIC_WARMNING": "Teilen Sie niemals die Wörter und deren spezifische Reihenfolge. Jeder, der sie kennt, kann all Ihre Kryptowerte stehlen.",
+  "BD_NEW_WALLET_TITLE": "Neue Wallet",
   "BD_NFT_DESC_PLACEHOLDER": "Zufälliger Platzhalter für die Beschreibung der NFT-Sammlung, falls die NFT-Sammlung keine hat",
   "BD_NOT_BACKED_UP_TO_CLOUD": "Nicht auf iCloud gesichert",
   "BD_NOT_BACKED_UP_TO_DRIVE": "Nicht auf Google Drive gesichert",

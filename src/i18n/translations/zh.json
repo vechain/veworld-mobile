@@ -226,6 +226,7 @@
   "BD_MNEMONIC_PASSWORD_WARNING": "如果您丢失设备或卸载应用程序，可以使用以下 12 个单词恢复此钱包及其所有资产。",
   "BD_MNEMONIC_SUBTITLE": "您的秘密恢复短语让您轻松备份和恢复帐户。",
   "BD_MNEMONIC_WARMNING": "切勿分享这些单词和特定顺序。任何知晓这些信息的人都可以窃取您所有的加密资产。",
+  "BD_NEW_WALLET_TITLE": "新钱包",
   "BD_NFT_DESC_PLACEHOLDER": "随机 NFT 收藏描述占位符，如果 NFT 收藏没有描述",
   "BD_NOT_BACKED_UP_TO_CLOUD": "未备份到 iCloud",
   "BD_NOT_BACKED_UP_TO_DRIVE": "未备份到 Google Drive",

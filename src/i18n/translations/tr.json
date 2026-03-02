@@ -226,6 +226,7 @@
   "BD_MNEMONIC_PASSWORD_WARNING": "Cihazınızı kaybetmeniz veya uygulamanın kaldırılması durumunda, aşağıdaki 12 kelimeyi kullanarak bu cüzdanı ve tüm varlıklarınızı geri yükleyebilirsiniz.",
   "BD_MNEMONIC_SUBTITLE": "Gizli Kurtarma Cümleniz, hesabınızı yedeklemeyi ve geri yüklemeyi kolaylaştırır.",
   "BD_MNEMONIC_WARMNING": "Kelime ve belirli sırayı asla paylaşmayın. Onları öğrenen herkes tüm kripto varlıklarınızı çalabilir.",
+  "BD_NEW_WALLET_TITLE": "Yeni Cüzdan",
   "BD_NFT_DESC_PLACEHOLDER": "NFT koleksiyonunun bir açıklaması yoksa, rastgele bir NFT koleksiyonu açıklama yer tutucusu",
   "BD_NOT_BACKED_UP_TO_CLOUD": "iCloud'a yedeklenmedi",
   "BD_NOT_BACKED_UP_TO_DRIVE": "Google Drive'a yedeklenmedi",

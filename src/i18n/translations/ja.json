@@ -226,6 +226,7 @@
   "BD_MNEMONIC_PASSWORD_WARNING": "デバイスを紛失した場合やアプリがアンインストールされた場合には、以下の12語を使用してこのウォレットとすべての資産を復元できます。",
   "BD_MNEMONIC_SUBTITLE": "シークレットリカバリーフレーズにより、アカウントのバックアップと復元が容易になります。",
   "BD_MNEMONIC_WARMNING": "これらの単語とその順序を他人と共有しないでください。知っている人は誰でもあなたの暗号資産をすべて盗むことができます。",
+  "BD_NEW_WALLET_TITLE": "新しいウォレット",
   "BD_NFT_DESC_PLACEHOLDER": "NFTコレクションに説明がない場合のランダムなNFTコレクション説明プレースホルダー",
   "BD_NOT_BACKED_UP_TO_CLOUD": "iCloudにバックアップされていません",
   "BD_NOT_BACKED_UP_TO_DRIVE": "Googleドライブにバックアップされていません",

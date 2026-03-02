@@ -226,6 +226,7 @@
   "BD_MNEMONIC_PASSWORD_WARNING": "Jeśli zgubisz swoje urządzenie lub aplikacja zostanie odinstalowana, możesz użyć poniższych 12 słów, aby odzyskać ten portfel i wszystkie swoje środki.",
   "BD_MNEMONIC_SUBTITLE": "Twoja Tajna Fraza Odzyskiwania ułatwia tworzenie kopii zapasowych i przywracanie konta.",
   "BD_MNEMONIC_WARMNING": "Nigdy nie udostępniaj słów i ich konkretnego porządku. Każdy, kto je pozna, może ukraść wszystkie Twoje zasoby kryptograficzne.",
+  "BD_NEW_WALLET_TITLE": "Nowy portfel",
   "BD_NFT_DESC_PLACEHOLDER": "Losowy opis kolekcji NFT na wypadek, gdyby kolekcja NFT nie miała swojego opisu",
   "BD_NOT_BACKED_UP_TO_CLOUD": "Nie zarchiwizowano w iCloud",
   "BD_NOT_BACKED_UP_TO_DRIVE": "Nie zarchiwizowano w Google Drive",

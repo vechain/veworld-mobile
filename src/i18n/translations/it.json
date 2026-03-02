@@ -226,6 +226,7 @@
   "BD_MNEMONIC_PASSWORD_WARNING": "In caso di perdita del dispositivo o disinstallazione dell'app, puoi utilizzare le 12 parole sottostanti per recuperare questo portafoglio e tutte le tue risorse.",
   "BD_MNEMONIC_SUBTITLE": "La tua Frase Segreta di Recupero rende facile eseguire il backup e il ripristino del tuo account.",
   "BD_MNEMONIC_WARMNING": "Non condividere mai le parole e l'ordine specifico. Chiunque le apprenda può rubare tutti i tuoi asset crittografici.",
+  "BD_NEW_WALLET_TITLE": "Nuovo Portafoglio",
   "BD_NFT_DESC_PLACEHOLDER": "Descrizione segnaposto della collezione NFT casuale nel caso in cui la collezione NFT non ne abbia una",
   "BD_NOT_BACKED_UP_TO_CLOUD": "Non eseguito il backup su iCloud",
   "BD_NOT_BACKED_UP_TO_DRIVE": "Non eseguito il backup su Google Drive",
