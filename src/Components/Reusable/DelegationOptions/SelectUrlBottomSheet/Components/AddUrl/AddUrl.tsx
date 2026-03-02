@@ -41,9 +41,11 @@ export const AddUrl = ({
     const { LL } = useI18nContext()
     const thor = useThor()
     const handleAddUrl = () => {
+        const normalizedUrl = newUrl.toLowerCase()
+
         dispatch(
             addDelegationUrl({
-                url: newUrl,
+                url: normalizedUrl,
                 genesisId: thor.genesis.id,
                 callbackIfAlreadyPresent: () => {
                     showWarningToast({
@@ -53,7 +55,7 @@ export const AddUrl = ({
             }),
         )
         setNewUrl("")
-        setSelectedDelegationUrl(newUrl)
+        setSelectedDelegationUrl(normalizedUrl)
         onCloseBottomSheet()
     }
     const closeAddMode = () => {
@@ -75,7 +77,7 @@ export const AddUrl = ({
                 <BaseSpacer height={24} />
                 <BaseBottomSheetTextInput
                     value={newUrl}
-                    onChangeText={setNewUrl}
+                    onChangeText={value => setNewUrl(value.toLowerCase())}
                     placeholder={LL.SEND_DELEGATION_ADD_URL_PLACEHOLDER()}
                     testID="AddUrl_input"
                 />
