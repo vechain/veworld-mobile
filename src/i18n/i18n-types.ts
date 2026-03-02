@@ -4357,9 +4357,25 @@ type RootTranslation = {
 	 */
 	SB_DESCRIPTION: string
 	/**
+	 * A​d​d​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​ ​b​y​ ​i​m​p​o​r​t​i​n​g​ ​o​r​ ​r​e​s​t​o​r​i​n​g​.
+	 */
+	SB_DESCRIPTION_ADD_EXISTING_WALLET: string
+	/**
+	 * S​i​g​n​ ​i​n​ ​w​i​t​h​ ​A​p​p​l​e​ ​t​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	SB_DESCRIPTION_APPLE_LOGIN: string
+	/**
+	 * S​i​g​n​ ​i​n​ ​w​i​t​h​ ​y​o​u​r​ ​s​o​c​i​a​l​ ​a​c​c​o​u​n​t​ ​t​o​ ​u​s​e​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN: string
+	/**
 	 * G​e​n​e​r​a​t​e​ ​a​ ​n​e​w​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
 	 */
 	SB_DESCRIPTION_CREATE_WALLET: string
+	/**
+	 * S​i​g​n​ ​i​n​ ​w​i​t​h​ ​G​o​o​g​l​e​ ​t​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	SB_DESCRIPTION_GOOGLE_LOGIN: string
 	/**
 	 * R​e​c​o​v​e​r​ ​a​ ​w​a​l​l​e​t​ ​f​r​o​m​ ​c​l​o​u​d
 	 */
@@ -4465,6 +4481,14 @@ type RootTranslation = {
 	 * C​h​a​n​g​e​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​l​a​n​g​u​a​g​e
 	 */
 	SB_SELECT_LANGUAGE_DESC: string
+	/**
+	 * A​d​d​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t
+	 */
+	SB_TITLE_ADD_EXISTING_WALLET: string
+	/**
+	 * C​o​n​t​i​n​u​e​ ​w​i​t​h​ ​s​o​c​i​a​l​ ​l​o​g​i​n
+	 */
+	SB_TITLE_CONTINUE_WITH_SOCIAL_LOGIN: string
 	/**
 	 * N​e​w​ ​w​a​l​l​e​t
 	 */
@@ -6252,29 +6276,9 @@ type RootTranslation = {
 	 */
 	YESTERDAY: string
 	/**
-	 * C​o​n​t​i​n​u​e​ ​w​i​t​h​ ​s​o​c​i​a​l​ ​l​o​g​i​n
+	 * N​e​w​ ​W​a​l​l​e​t
 	 */
-	SB_TITLE_CONTINUE_WITH_SOCIAL_LOGIN: string
-	/**
-	 * S​i​g​n​ ​i​n​ ​w​i​t​h​ ​y​o​u​r​ ​s​o​c​i​a​l​ ​a​c​c​o​u​n​t​ ​t​o​ ​u​s​e​ ​y​o​u​r​ ​w​a​l​l​e​t​.
-	 */
-	SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN: string
-	/**
-	 * A​d​d​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t
-	 */
-	SB_TITLE_ADD_EXISTING_WALLET: string
-	/**
-	 * A​d​d​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​ ​b​y​ ​i​m​p​o​r​t​i​n​g​ ​o​r​ ​r​e​s​t​o​r​i​n​g​.
-	 */
-	SB_DESCRIPTION_ADD_EXISTING_WALLET: string
-	/**
-	 * S​i​g​n​ ​i​n​ ​w​i​t​h​ ​A​p​p​l​e​ ​t​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​w​a​l​l​e​t​.
-	 */
-	SB_DESCRIPTION_APPLE_LOGIN: string
-	/**
-	 * S​i​g​n​ ​i​n​ ​w​i​t​h​ ​G​o​o​g​l​e​ ​t​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​w​a​l​l​e​t​.
-	 */
-	SB_DESCRIPTION_GOOGLE_LOGIN: string
+	BD_NEW_WALLET_TITLE: string
 }
 
 export type TranslationFunctions = {
@@ -10547,9 +10551,25 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	SB_DESCRIPTION: () => LocalizedString
 	/**
+	 * Add an existing wallet by importing or restoring.
+	 */
+	SB_DESCRIPTION_ADD_EXISTING_WALLET: () => LocalizedString
+	/**
+	 * Sign in with Apple to access your wallet.
+	 */
+	SB_DESCRIPTION_APPLE_LOGIN: () => LocalizedString
+	/**
+	 * Sign in with your social account to use your wallet.
+	 */
+	SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN: () => LocalizedString
+	/**
 	 * Generate a new recovery phrase
 	 */
 	SB_DESCRIPTION_CREATE_WALLET: () => LocalizedString
+	/**
+	 * Sign in with Google to access your wallet.
+	 */
+	SB_DESCRIPTION_GOOGLE_LOGIN: () => LocalizedString
 	/**
 	 * Recover a wallet from cloud
 	 */
@@ -10654,6 +10674,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Change the interface language
 	 */
 	SB_SELECT_LANGUAGE_DESC: () => LocalizedString
+	/**
+	 * Add existing wallet
+	 */
+	SB_TITLE_ADD_EXISTING_WALLET: () => LocalizedString
+	/**
+	 * Continue with social login
+	 */
+	SB_TITLE_CONTINUE_WITH_SOCIAL_LOGIN: () => LocalizedString
 	/**
 	 * New wallet
 	 */
@@ -12415,29 +12443,9 @@ Make sure that it is unlocked and the location services are enabled.
 	 */
 	YESTERDAY: () => LocalizedString
 	/**
-	 * Continue with social login
+	 * New Wallet
 	 */
-	SB_TITLE_CONTINUE_WITH_SOCIAL_LOGIN: () => LocalizedString
-	/**
-	 * Sign in with your social account to use your wallet.
-	 */
-	SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN: () => LocalizedString
-	/**
-	 * Add existing wallet
-	 */
-	SB_TITLE_ADD_EXISTING_WALLET: () => LocalizedString
-	/**
-	 * Add an existing wallet by importing or restoring.
-	 */
-	SB_DESCRIPTION_ADD_EXISTING_WALLET: () => LocalizedString
-	/**
-	 * Sign in with Apple to access your wallet.
-	 */
-	SB_DESCRIPTION_APPLE_LOGIN: () => LocalizedString
-	/**
-	 * Sign in with Google to access your wallet.
-	 */
-	SB_DESCRIPTION_GOOGLE_LOGIN: () => LocalizedString
+	BD_NEW_WALLET_TITLE: () => LocalizedString
 }
 
 export type Formatters = {
