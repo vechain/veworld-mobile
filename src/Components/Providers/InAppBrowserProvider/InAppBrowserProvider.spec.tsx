@@ -19,12 +19,25 @@ import { InAppBrowserProvider, useInAppBrowser } from "./InAppBrowserProvider"
 import { ethers } from "ethers"
 import _ from "lodash"
 import { usePostWebviewMessage } from "~Hooks/usePostWebviewMessage"
+import { useSmartWallet } from "~Hooks/useSmartWallet"
+import { DEVICE_TYPE } from "~Model"
 import { FeatureFlagsProvider } from "../FeatureFlagsProvider"
 
 jest.mock("../InteractionProvider")
 jest.mock("../DeepLinksProvider")
 jest.mock("~Hooks/usePostWebviewMessage", () => ({
     usePostWebviewMessage: jest.fn(),
+}))
+jest.mock("~Hooks/useSmartWallet", () => ({
+    useSmartWallet: jest.fn(() => ({
+        ownerAddress: "",
+        smartAccountAddress: "",
+        isLoading: false,
+        isInitialized: false,
+        linkedAccounts: [],
+        userDisplayName: null,
+        hasMultipleSocials: false,
+    })),
 }))
 const addSession = jest.fn().mockImplementation(payload => ({ type: "discovery/addSession", payload }))
 
@@ -153,6 +166,64 @@ describe("useInAppBrowser hook", () => {
 
         expect(result.current.injectVechainScript()).toContain("integrity: {}")
         expect(result.current.isLoading).toBe(false)
+    })
+
+    it("should not include smartAccountOwnerAddress for non-smart-wallet accounts", async () => {
+        jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({} as any)
+        const { result } = renderHook(() => useInAppBrowser(), {
+            wrapper: createWrapper("ios"),
+        })
+
+        const script = result.current.injectVechainScript()
+        expect(script).toContain("smartAccountOwnerAddress: undefined")
+    })
+
+    it("should include smartAccountOwnerAddress for smart wallet accounts", async () => {
+        const smartOwner = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ;(useSmartWallet as jest.Mock).mockReturnValue({
+            ownerAddress: smartOwner,
+            smartAccountAddress: "",
+            isLoading: false,
+            isInitialized: true,
+            linkedAccounts: [],
+            userDisplayName: null,
+            hasMultipleSocials: false,
+        })
+
+        jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({} as any)
+
+        const smartAccountAddress = "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        const { result } = renderHook(() => useInAppBrowser(), {
+            wrapper: createWrapper("ios"),
+            initialProps: {
+                preloadedState: {
+                    accounts: {
+                        accounts: [
+                            {
+                                alias: "Smart Account",
+                                address: smartAccountAddress,
+                                rootAddress: smartAccountAddress,
+                                index: -1,
+                                visible: true,
+                            },
+                        ],
+                        selectedAccount: smartAccountAddress,
+                    },
+                    devices: [
+                        {
+                            alias: "Smart Wallet Device",
+                            rootAddress: smartAccountAddress,
+                            type: DEVICE_TYPE.SMART_WALLET,
+                            index: 0,
+                            position: 0,
+                        },
+                    ],
+                },
+            },
+        })
+
+        const script = result.current.injectVechainScript()
+        expect(script).toContain(`smartAccountOwnerAddress: "${smartOwner}"`)
     })
 
     describe("onMessage", () => {
