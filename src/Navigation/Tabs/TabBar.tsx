@@ -31,7 +31,10 @@ const getHeightMultiplierByScreen = (currentScreen: string) => {
         case Routes.OBSERVE_WALLET:
         case Routes.IMPORT_MNEMONIC:
         case Routes.IMPORT_FROM_CLOUD:
+        case Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD:
         case Routes.IMPORT_HW_LEDGER_SELECT_DEVICE:
+        case Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS:
+        case Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS:
             return 0
 
         case "":
