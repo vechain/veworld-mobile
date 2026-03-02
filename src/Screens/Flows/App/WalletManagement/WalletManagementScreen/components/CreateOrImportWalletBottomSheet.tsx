@@ -97,7 +97,7 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
             if (navigationState === "import") {
                 return LL.SB_TITLE_ADD_EXISTING_WALLET()
             }
-            return LL.TITLE_CREATE_WALLET_TYPE()
+            return LL.BD_NEW_WALLET_TITLE()
         }, [navigationState, LL])
 
         const modalDescription = useMemo(() => {
@@ -139,9 +139,11 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
                             color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.GREY_500}
                         />
                     </BaseTouchable>
-                    <BaseText typographyFont="subTitleBold">{modalTitle}</BaseText>
+                    <BaseText typographyFont="subTitleSemiBold">{modalTitle}</BaseText>
                     <BaseSpacer height={16} />
-                    <BaseText typographyFont="body">{modalDescription}</BaseText>
+                    <BaseText typographyFont="caption" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                        {modalDescription}
+                    </BaseText>
                 </BaseView>
 
                 <BaseSpacer height={24} />
