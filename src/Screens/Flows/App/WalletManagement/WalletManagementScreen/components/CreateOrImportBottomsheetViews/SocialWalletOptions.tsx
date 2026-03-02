@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import Animated, { LinearTransition, StretchInY, StretchOutY } from "react-native-reanimated"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseSpacer } from "~Components/Base"
 import { CardListItem, RequireUserPassword } from "~Components/Reusable"
 import { useSmartWallet, useThemedStyles } from "~Hooks"
@@ -81,11 +81,7 @@ export const SocialWalletOptions = ({ onClose }: Props) => {
     }, [options])
 
     return (
-        <Animated.View
-            style={styles.rootSheetContent}
-            entering={StretchInY.duration(200)}
-            exiting={StretchOutY.duration(200)}
-            layout={LinearTransition}>
+        <Animated.View style={styles.rootSheetContent} layout={LinearTransition}>
             <Animated.FlatList
                 data={filteredOptions}
                 keyExtractor={item => item.id}

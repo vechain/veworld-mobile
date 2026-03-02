@@ -2,7 +2,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import Animated, { LinearTransition, StretchInY, StretchOutY } from "react-native-reanimated"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, CardListItem } from "~Components"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
@@ -147,11 +147,7 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
                 <BaseSpacer height={24} />
 
                 {navigationState === "root" && (
-                    <Animated.View
-                        style={styles.rootSheetContent}
-                        entering={StretchInY.duration(200)}
-                        exiting={StretchOutY.duration(200)}
-                        layout={LinearTransition}>
+                    <Animated.View style={styles.rootSheetContent} layout={LinearTransition}>
                         <Animated.FlatList
                             data={avaliableOptions}
                             keyExtractor={item => item.id}
