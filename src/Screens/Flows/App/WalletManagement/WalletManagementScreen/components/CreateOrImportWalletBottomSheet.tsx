@@ -78,7 +78,7 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
             return <BaseSpacer height={16} />
         }, [])
 
-        const avaliableOptions = useMemo(() => {
+        const availableOptions = useMemo(() => {
             return options.filter(option => {
                 if (option.id === "social" && hasSocialWallet) {
                     return false
@@ -151,7 +151,7 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
                 {navigationState === "root" && (
                     <Animated.View style={styles.rootSheetContent} layout={LinearTransition}>
                         <Animated.FlatList
-                            data={avaliableOptions}
+                            data={availableOptions}
                             keyExtractor={item => item.id}
                             bounces={false}
                             ItemSeparatorComponent={ItemsSeparator}

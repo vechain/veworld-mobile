@@ -94,9 +94,7 @@ describe("useWalletDeletion", () => {
             },
         })
 
-        await expect(async () => {
-            await result.current.deleteWallet()
-        }).rejects.toThrow("Cannot delete the last device!")
+        await expect(result.current.deleteWallet()).rejects.toThrow("Cannot delete the last device!")
     })
 
     it("should delete a smart wallet", async () => {

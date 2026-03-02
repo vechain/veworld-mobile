@@ -169,5 +169,5 @@ export const selectVnsNameOrAddress = createSelector(
 )
 
 export const selectUserHasSmartWallet = createSelector([selectAccounts], accounts => {
-    return accounts.some(account => account.device.type === DEVICE_TYPE.SMART_WALLET)
+    return accounts.some(account => account.device?.type === DEVICE_TYPE.SMART_WALLET)
 })

@@ -87,11 +87,11 @@ export const ImportWalletOptions = ({ onClose }: Props) => {
     const filteredOptions = useMemo(() => {
         return options.filter(option => {
             if (option.id === "cloud") {
-                return PlatformUtils.isIOS()
+                return PlatformUtils.isIOS() && isCloudAvailable
             }
             return true
         })
-    }, [options])
+    }, [options, isCloudAvailable])
 
     const ItemsSeparator = useCallback(() => {
         return <BaseSpacer height={16} />

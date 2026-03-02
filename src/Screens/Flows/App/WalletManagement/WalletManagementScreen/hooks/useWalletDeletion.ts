@@ -27,7 +27,7 @@ export const useWalletDeletion = (device?: BaseDevice) => {
     const { logout } = useSmartWallet()
     const dispatch = useDispatch()
 
-    const removeFromStorage = useCallback(() => {
+    const removeFromStorage = useCallback(async () => {
         if (!device?.rootAddress) return
         const { rootAddress } = device
 
@@ -54,7 +54,7 @@ export const useWalletDeletion = (device?: BaseDevice) => {
 
         // Logout the smart wallet if it is the device being deleted
         if (AccountUtils.isSmartWalletAccount(device)) {
-            logout()
+            await logout()
         }
     }, [
         device,
@@ -71,10 +71,10 @@ export const useWalletDeletion = (device?: BaseDevice) => {
         if (!device?.rootAddress) return
 
         if (AccountUtils.isObservedAccount(device)) {
-            removeFromStorage()
+            await removeFromStorage()
         } else {
             if (devices.length <= 1) throw new Error("Cannot delete the last device!")
-            removeFromStorage()
+            await removeFromStorage()
         }
     }, [device, removeFromStorage, devices.length])
 
