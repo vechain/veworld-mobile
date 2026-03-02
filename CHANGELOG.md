@@ -1,5 +1,12 @@
 
 
+## 2.6.0 (2026-03-02)
+
+
+### Features
+
+* expose smartAccountOwnerAddress to dApps via InAppBrowserProvider ([#3807](https://github.com/vechain/veworld-mobile/issues/3807)) ([07ce6a4](https://github.com/vechain/veworld-mobile/commit/07ce6a4c0ba269bd42662500e5df247880e93a90))
+
 ## 2.5.2 (2026-02-23)
 
 
