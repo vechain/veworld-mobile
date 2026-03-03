@@ -1,5 +1,4 @@
-import { useNavigation } from "@react-navigation/native"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { Transaction } from "@vechain/sdk-core"
 import { Buffer } from "buffer"
 import * as Haptics from "expo-haptics"
@@ -26,7 +25,8 @@ import { useBottomSheetModal, useLedgerDevice, useSendTransaction } from "~Hooks
 import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { ActivityType } from "~Model"
-import { RootStackParamListHome, RootStackParamListSwitch, Routes } from "~Navigation"
+import { Routes } from "~Navigation"
+import { RootStackParamListWallet } from "~Navigation/Stacks/WalletStack"
 import {
     addPendingDappTransactionActivity,
     addPendingNFTtransferTransactionActivity,
@@ -40,7 +40,7 @@ import { useI18nContext } from "~i18n"
 
 const MUTEX_TIMEOUT = 1000
 
-type Props = NativeStackScreenProps<RootStackParamListHome & RootStackParamListSwitch, Routes.LEDGER_SIGN_TRANSACTION>
+type LedgerSignTransactionRoute = RouteProp<RootStackParamListWallet, Routes.LEDGER_SIGN_TRANSACTION>
 
 enum SignSteps {
     CONNECTING = 0,
@@ -49,10 +49,11 @@ enum SignSteps {
     DONE = 3,
 }
 
-export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
+export const LedgerSignTransaction: React.FC = () => {
+    const route = useRoute<LedgerSignTransactionRoute>()
+    const navigation = useNavigation<NavigationProp<ParamListBase>>()
     const { accountWithDevice, transaction, dappRequest, delegationSignature, initialRoute } = route.params
 
-    const nav = useNavigation()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const { processRequest } = useWalletConnect()
@@ -296,15 +297,15 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         dispatch(setIsAppLoading(false))
 
         if (dappRequest) {
-            nav.goBack()
+            navigation.goBack()
         } else {
-            if (initialRoute) {
-                nav.navigate(initialRoute)
+            if (initialRoute === Routes.HOME) {
+                navigation.navigate(Routes.HOME)
             } else {
-                nav.navigate(Routes.HOME)
+                navigation.navigate(Routes.WALLET)
             }
         }
-    }, [initialRoute, dappRequest, dispatch, nav])
+    }, [initialRoute, dappRequest, dispatch, navigation])
 
     const handleOnConfirm = useCallback(async () => {
         try {
@@ -364,7 +365,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             if (dappRequest) {
-                nav.goBack()
+                navigation.goBack()
             }
         } finally {
             setIsSending(false)
@@ -384,7 +385,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         onSuccess,
         postMessage,
         LL,
-        nav,
+        navigation,
     ])
 
     const handleOnRetry = useCallback(() => {

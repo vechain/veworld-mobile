@@ -27,7 +27,9 @@ export type RootStackParamListApps = {
         ul?: boolean
         returnScreen?:
             | Routes.SETTINGS
+            | Routes.WALLET
             | Routes.HOME
+            | Routes.EARN
             | Routes.ACTIVITY_STAKING
             | Routes.APPS
             | Routes.SWAP

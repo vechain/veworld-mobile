@@ -16,12 +16,15 @@ import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { DAppIcon } from "../DAppIcon"
 import { Spinner } from "../Spinner"
 import { BrowserBottomSheet } from "./BrowserBottomSheet"
+import { RootStackParamListWallet } from "~Navigation/Stacks/WalletStack"
 
 type Props = {
     navigationUrl: string
     onNavigate: () => void | Promise<void>
     returnScreen?:
         | Routes.SETTINGS
+        | Routes.WALLET
+        | Routes.EARN
         | Routes.HOME
         | Routes.ACTIVITY_STAKING
         | Routes.APPS
@@ -42,7 +45,9 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
 
     const nav =
         useNavigation<
-            NativeStackNavigationProp<RootStackParamListSettings & RootStackParamListHome & RootStackParamListApps>
+            NativeStackNavigationProp<
+                RootStackParamListSettings & RootStackParamListHome & RootStackParamListApps & RootStackParamListWallet
+            >
         >()
 
     const { onOpen: openBottomSheet, ref: bottomSheetRef, onClose: closeBottomSheet } = useBottomSheetModal()

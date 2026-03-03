@@ -51,6 +51,8 @@ type Props = {
     onNavigate: () => void | Promise<void>
     returnScreen?:
         | Routes.SETTINGS
+        | Routes.WALLET
+        | Routes.EARN
         | Routes.HOME
         | Routes.ACTIVITY_STAKING
         | Routes.APPS

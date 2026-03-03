@@ -27,8 +27,12 @@ import {
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 import { DappNotVerified } from "./Components/DappNotVerified"
+import { RootStackParamListWallet } from "~Navigation/Stacks/WalletStack"
 
-type Props = NativeStackScreenProps<RootStackParamListApps | RootStackParamListHome, Routes.BROWSER>
+type Props = NativeStackScreenProps<
+    RootStackParamListApps | RootStackParamListHome | RootStackParamListWallet,
+    Routes.BROWSER
+>
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const {

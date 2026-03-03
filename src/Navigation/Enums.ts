@@ -11,6 +11,8 @@ export enum Routes {
     IMPORT_MNEMONIC = "Import_Mnemonic",
     BROWSER = "Browser",
     HOME_STACK = "HomeStack",
+    WALLET_STACK = "WalletStack",
+    EARN_STACK = "EarnStack",
     APPS_STACK = "AppsStack",
     SETTINGS_STACK = "SettingsStack",
 
@@ -26,6 +28,8 @@ export enum Routes {
     CREATE_WALLET_FLOW = "Create_Wallet_Flow",
     WALLET_SUCCESS = "Wallet_Success",
     HOME = "Home",
+    WALLET = "Wallet",
+    EARN = "Earn",
     MANAGE_TOKEN = "Manage_Token",
     BUY_FLOW = "Buy_Flow",
     BUY = "Buy",

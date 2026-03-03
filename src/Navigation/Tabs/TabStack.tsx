@@ -14,12 +14,15 @@ import { AccountUtils } from "~Utils"
 import PlatformUtils from "~Utils/PlatformUtils"
 import { useI18nContext } from "~i18n"
 import { TabBar } from "./TabBar"
+import { WalletStack } from "~Navigation/Stacks/WalletStack"
 
 export type TabStackParamList = {
     HomeStack: NavigatorScreenParams<RootStackParamListHome>
     SettingsStack: NavigatorScreenParams<RootStackParamListSettings>
     [Routes.HISTORY_STACK]: NavigatorScreenParams<HistoryStackParamList>
     AppsStack: NavigatorScreenParams<RootStackParamListApps>
+    EarnStack: undefined
+    WalletStack: undefined
 }
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
@@ -84,7 +87,27 @@ export const TabStack = () => {
                 }}
             />
 
-            {!AccountUtils.isObservedAccount(selectedAccount) && isOnline && (
+            <Tab.Screen
+                name="EarnStack"
+                component={() => <></>}
+                options={{
+                    tabBarLabel: "Earn",
+                    tabBarTestID: "earn-tab",
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-stargate", "Earn"),
+                }}
+            />
+
+            <Tab.Screen
+                name="WalletStack"
+                component={WalletStack}
+                options={{
+                    tabBarLabel: "Wallet",
+                    tabBarTestID: "wallet-tab",
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-wallet", "Wallet"),
+                }}
+            />
+
+            {/* {!AccountUtils.isObservedAccount(selectedAccount) && isOnline && (
                 <Tab.Screen
                     name="AppsStack"
                     component={AppsStack}
@@ -94,7 +117,7 @@ export const TabStack = () => {
                         tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-apps", LL.TAB_TITLE_APPS()),
                     }}
                 />
-            )}
+            )} */}
 
             <Tab.Screen
                 name={Routes.HISTORY_STACK}
