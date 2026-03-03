@@ -3,26 +3,26 @@ import { NavigatorScreenParams } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { AnimatedTabIcon, TabIcon } from "~Components"
-import { useCheckWalletBackup, useIsOnline } from "~Hooks"
+import { useCheckWalletBackup } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { HomeStack, RootStackParamListHome, RootStackParamListSettings, SettingsStack } from "~Navigation/Stacks"
-import { AppsStack, RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
+import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
+import { EarnStack, RootStackParamListEarn } from "~Navigation/Stacks/EarnStack"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
+import { RootStackParamListWallet, WalletStack } from "~Navigation/Stacks/WalletStack"
 import { selectActivitiesWithoutFinality, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
-import { AccountUtils } from "~Utils"
 import PlatformUtils from "~Utils/PlatformUtils"
 import { useI18nContext } from "~i18n"
 import { TabBar } from "./TabBar"
-import { WalletStack } from "~Navigation/Stacks/WalletStack"
 
 export type TabStackParamList = {
     HomeStack: NavigatorScreenParams<RootStackParamListHome>
     SettingsStack: NavigatorScreenParams<RootStackParamListSettings>
     [Routes.HISTORY_STACK]: NavigatorScreenParams<HistoryStackParamList>
     AppsStack: NavigatorScreenParams<RootStackParamListApps>
-    EarnStack: undefined
-    WalletStack: undefined
+    EarnStack: NavigatorScreenParams<RootStackParamListEarn>
+    WalletStack: NavigatorScreenParams<RootStackParamListWallet>
 }
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
@@ -33,7 +33,7 @@ export const TabStack = () => {
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount ?? null)
     const pendingTransactions = useAppSelector(selectActivitiesWithoutFinality)
-    const isOnline = useIsOnline()
+    // const isOnline = useIsOnline()
 
     const renderTabBarIcon = useCallback(
         (focused: boolean, iconName: IconKey, label: string) => {
@@ -89,7 +89,7 @@ export const TabStack = () => {
 
             <Tab.Screen
                 name="EarnStack"
-                component={() => <></>}
+                component={EarnStack}
                 options={{
                     tabBarLabel: "Earn",
                     tabBarTestID: "earn-tab",

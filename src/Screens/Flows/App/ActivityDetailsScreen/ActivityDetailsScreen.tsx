@@ -55,15 +55,25 @@ import DappLoginDetails from "./Components/DappLoginDetails"
 import { StargateActivityDetails } from "./Components/StakingDetails"
 import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
 import { RootStackParamListWallet } from "~Navigation/Stacks/WalletStack"
+import { RootStackParamListEarn } from "~Navigation/Stacks/EarnStack"
+import { RootStackParamListHome } from "~Navigation/Stacks/HomeStack"
 
-type Props = NativeStackScreenProps<HistoryStackParamList & RootStackParamListWallet, Routes.ACTIVITY_DETAILS>
+type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
 export const ActivityDetailsScreen = ({ route }: Props) => {
     const { activity, token, isSwap, returnScreen = Routes.HISTORY } = route.params
 
     const network = useAppSelector(selectSelectedNetwork)
     const navigation =
-        useNavigation<NativeStackNavigationProp<HistoryStackParamList & TabStackParamList & RootStackParamListWallet>>()
+        useNavigation<
+            NativeStackNavigationProp<
+                HistoryStackParamList &
+                    TabStackParamList &
+                    RootStackParamListWallet &
+                    RootStackParamListEarn &
+                    RootStackParamListHome
+            >
+        >()
     const { LL, locale } = useI18nContext()
 
     const [customTokenAddress, setCustomTokenAddress] = useState<string>()
@@ -282,6 +292,12 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     },
                 })
                 break
+            case Routes.HOME:
+                navigation.navigate(Routes.HOME_STACK, {
+                    screen: Routes.HOME,
+                })
+                break
+
             case Routes.WALLET:
                 navigation.navigate(Routes.WALLET_STACK, {
                     screen: Routes.WALLET,
@@ -292,12 +308,6 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     screen: Routes.EARN,
                 })
                 break
-            case Routes.HOME:
-                navigation.navigate(Routes.HOME_STACK, {
-                    screen: Routes.HOME,
-                })
-                break
-
             default:
                 navigation.navigate(returnScreen)
         }

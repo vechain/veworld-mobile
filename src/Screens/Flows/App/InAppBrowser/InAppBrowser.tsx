@@ -28,9 +28,10 @@ import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 import { DappNotVerified } from "./Components/DappNotVerified"
 import { RootStackParamListWallet } from "~Navigation/Stacks/WalletStack"
+import { RootStackParamListEarn } from "~Navigation/Stacks/EarnStack"
 
 type Props = NativeStackScreenProps<
-    RootStackParamListApps | RootStackParamListHome | RootStackParamListWallet,
+    RootStackParamListApps | RootStackParamListHome | RootStackParamListWallet | RootStackParamListEarn,
     Routes.BROWSER
 >
 

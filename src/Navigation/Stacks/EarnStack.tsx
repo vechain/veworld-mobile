@@ -52,14 +52,14 @@ import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { BuyStack } from "./BuyStack"
 import { ConvertTransactionScreen } from "~Screens/Flows/App/BalanceScreen/ConvertBetterScreen"
 
-type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
+type NavigationMetadata<RouteName extends keyof RootStackParamListEarn> = {
     route: RouteName
-    params: RootStackParamListHome[RouteName]
+    params: RootStackParamListEarn[RouteName]
     screen?: Routes
 }
 
-export type RootStackParamListHome = {
-    [Routes.HOME]: undefined
+export type RootStackParamListEarn = {
+    [Routes.EARN]: undefined
     [Routes.SEND_TOKEN]: {
         token?: FungibleTokenWithBalance
     }
@@ -73,7 +73,7 @@ export type RootStackParamListHome = {
         accountWithDevice: LedgerAccountWithDevice
         delegationSignature?: string
         transaction: Transaction
-        initialRoute?: Routes.HOME
+        initialRoute?: Routes.EARN
         dappRequest?: TransactionRequest
     }
     [Routes.SWAP]: undefined
@@ -134,6 +134,8 @@ export type RootStackParamListHome = {
         returnScreen?:
             | Routes.SETTINGS
             | Routes.HOME
+            | Routes.EARN
+            | Routes.WALLET
             | Routes.ACTIVITY_STAKING
             | Routes.APPS
             | Routes.SWAP
@@ -151,7 +153,7 @@ export type RootStackParamListHome = {
         token?: FungibleToken
         isSwap?: boolean
         decodedClauses?: TransactionOutcomes
-        returnScreen?: Routes.HOME | Routes.HISTORY
+        returnScreen?: Routes.HOME | Routes.HISTORY | Routes.WALLET | Routes.EARN
     }
     [Routes.BUY_FLOW]: undefined
     [Routes.COLLECTIBLES_COLLECTIONS]: undefined
@@ -170,15 +172,15 @@ export type RootStackParamListHome = {
     [Routes.SETTINGS_PRIVACY]: undefined
 }
 
-const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome>()
+const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListEarn>()
 
-export const HomeStack = () => {
+export const EarnStack = () => {
     const theme = useTheme()
 
     return (
-        <Navigator id="HomeStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
+        <Navigator id="EarnStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
-                <Screen name={Routes.HOME} component={BalanceScreen} options={{ headerShown: false }} />
+                <Screen name={Routes.EARN} component={BalanceScreen} options={{ headerShown: false }} />
 
                 <Screen name={Routes.SEND_TOKEN} component={SendScreen} options={{ headerShown: false }} />
 
