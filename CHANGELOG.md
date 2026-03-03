@@ -1,5 +1,12 @@
 
 
+## 2.5.3 (2026-03-03)
+
+
+### Features
+
+* smart wallet for existing users ([#3808](https://github.com/vechain/veworld-mobile/issues/3808)) ([79344fc](https://github.com/vechain/veworld-mobile/commit/79344fcdd394367cee6f0315ecc26fccfc880cd7))
+
 ## 2.5.2 (2026-02-23)
 
 
