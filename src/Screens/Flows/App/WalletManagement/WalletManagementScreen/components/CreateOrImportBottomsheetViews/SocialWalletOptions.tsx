@@ -34,12 +34,6 @@ export const SocialWalletOptions = ({ onClose }: Props) => {
             const linkedProviders = linkedAccounts.map(acc => acc.type)
             await importOnboardedSmartWallet({ address, name, linkedProviders })
         },
-        onSmartWalletPinSuccess: async ({ address, name }) => {
-            onClose()
-            // Convert linkedAccounts to provider array
-            const linkedProviders = linkedAccounts.map(acc => acc.type)
-            await importOnboardedSmartWallet({ address, name, linkedProviders })
-        },
     })
 
     const options = useMemo(() => {
