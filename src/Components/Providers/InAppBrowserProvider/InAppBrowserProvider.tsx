@@ -176,7 +176,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const { ownerAddress } = useSmartWallet()
     const smartAccountOwnerAddress =
-        selectedAccount?.device.type === DEVICE_TYPE.SMART_WALLET && ownerAddress ? ownerAddress : undefined
+        selectedAccount?.device?.type === DEVICE_TYPE.SMART_WALLET && ownerAddress ? ownerAddress : undefined
 
     const allDapps = useAppSelector(selectFeaturedDapps)
     const {
