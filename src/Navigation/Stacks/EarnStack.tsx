@@ -1,8 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack"
-import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import React from "react"
-import { COLORS, SCREEN_HEIGHT } from "~Constants"
-import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import {
     Activity,
     CloudKitWallet,
@@ -10,10 +7,7 @@ import {
     Device,
     DriveWallet,
     FungibleToken,
-    FungibleTokenWithBalance,
-    LedgerAccountWithDevice,
     TransactionOutcomes,
-    TransactionRequest,
 } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
@@ -21,62 +15,26 @@ import {
     ActivityDetailsScreen,
     ChangeNetworkScreen,
     ClaimUsername,
-    ConnectedAppsScreen,
     EnableAdditionalSettings,
     ImportFromCloudScreen,
     ImportLocalWallet,
     ImportMnemonicBackupPasswordScreen,
     InAppBrowser,
-    LedgerSignTransaction,
-    ManageTokenScreen,
     ObserveWalletScreen,
     PrivacyScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
-    SendScreen,
-    SwapScreen,
     TabsManagerScreen,
-    TransactionSummarySendScreen,
     UsernameClaimed,
     WalletDetailScreen,
     WalletManagementScreen,
 } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
-import { AssetDetailScreenSheet } from "~Screens/Flows/App/AssetDetailScreenSheet"
 import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
-import { CollectionsScreen, SendCollectibleScreen } from "~Screens/Flows/App/Collectibles"
-import { BlacklistedCollectionsScreen } from "~Screens/Flows/App/Collectibles/BlacklistedCollectionsScreen"
-import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/CollectibleCollectionDetails"
-import { ReportNFTTransactionScreen } from "~Screens/Flows/App/Collectibles/NFTReportCollection"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
-import { BuyStack } from "./BuyStack"
-import { ConvertTransactionScreen } from "~Screens/Flows/App/BalanceScreen/ConvertBetterScreen"
-
-type NavigationMetadata<RouteName extends keyof RootStackParamListEarn> = {
-    route: RouteName
-    params: RootStackParamListEarn[RouteName]
-    screen?: Routes
-}
 
 export type RootStackParamListEarn = {
     [Routes.EARN]: undefined
-    [Routes.SEND_TOKEN]: {
-        token?: FungibleTokenWithBalance
-    }
-    [Routes.TRANSACTION_SUMMARY_SEND]: {
-        token: FungibleTokenWithBalance
-        amount: string
-        address: string
-        navigation?: NavigationMetadata<any>
-    }
-    [Routes.LEDGER_SIGN_TRANSACTION]: {
-        accountWithDevice: LedgerAccountWithDevice
-        delegationSignature?: string
-        transaction: Transaction
-        initialRoute?: Routes.EARN
-        dappRequest?: TransactionRequest
-    }
-    [Routes.SWAP]: undefined
     [Routes.HISTORY]:
         | {
               screen?:
@@ -90,29 +48,9 @@ export type RootStackParamListEarn = {
                   | Routes.ACTIVITY_OTHER
           }
         | undefined
-    [Routes.MANAGE_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.CREATE_WALLET_FLOW]: undefined
-    [Routes.TOKEN_DETAILS]: {
-        token: TokenWithCompleteInfo
-        /**
-         * Provided when user convert B3TR/VOT3 token to display bottom sheet result
-         */
-        betterConversionResult?: {
-            from?: FungibleToken
-            to?: FungibleToken
-            amount: string
-            txId: string
-        }
-    }
-
-    [Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN]: {
-        token: TokenWithCompleteInfo
-        amount: string
-        transactionClauses: TransactionClause[]
-    }
-    [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.OBSERVE_WALLET]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
     [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: undefined
@@ -155,70 +93,17 @@ export type RootStackParamListEarn = {
         decodedClauses?: TransactionOutcomes
         returnScreen?: Routes.HOME | Routes.HISTORY | Routes.WALLET | Routes.EARN
     }
-    [Routes.BUY_FLOW]: undefined
-    [Routes.COLLECTIBLES_COLLECTIONS]: undefined
-    [Routes.COLLECTIBLES_COLLECTION_DETAILS]: {
-        collectionAddress: string
-    }
-    [Routes.REPORT_NFT_TRANSACTION_SCREEN]: {
-        nftAddress: string
-        transactionClauses: TransactionClause[]
-    }
-    [Routes.SEND_NFT]: {
-        contractAddress: string
-        tokenId: string
-    }
-    [Routes.BLACKLISTED_COLLECTIONS]: undefined
     [Routes.SETTINGS_PRIVACY]: undefined
 }
 
 const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListEarn>()
 
 export const EarnStack = () => {
-    const theme = useTheme()
-
     return (
         <Navigator id="EarnStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
                 <Screen name={Routes.EARN} component={BalanceScreen} options={{ headerShown: false }} />
 
-                <Screen name={Routes.SEND_TOKEN} component={SendScreen} options={{ headerShown: false }} />
-
-                <Screen
-                    name={Routes.TRANSACTION_SUMMARY_SEND}
-                    component={TransactionSummarySendScreen}
-                    options={{ headerShown: false }}
-                />
-                <Screen
-                    name={Routes.LEDGER_SIGN_TRANSACTION}
-                    component={LedgerSignTransaction}
-                    options={{ headerShown: false }}
-                />
-                <Screen name={Routes.SWAP} component={SwapScreen} options={{ headerShown: false }} />
-                <Screen
-                    name={Routes.SETTINGS_CONNECTED_APPS}
-                    component={ConnectedAppsScreen}
-                    options={{ headerShown: false }}
-                />
-                <Screen name={Routes.MANAGE_TOKEN} component={ManageTokenScreen} options={{ headerShown: false }} />
-
-                <Screen
-                    name={Routes.TOKEN_DETAILS}
-                    component={AssetDetailScreenSheet}
-                    options={{
-                        headerShown: false,
-                        presentation: "transparentModal",
-                        gestureDirection: "vertical",
-                        gestureEnabled: true,
-                        gestureResponseDistance: SCREEN_HEIGHT,
-                    }}
-                />
-
-                <Screen
-                    name={Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN}
-                    component={ConvertTransactionScreen}
-                    options={{ headerShown: false }}
-                />
                 <Screen name={Routes.OBSERVE_WALLET} component={ObserveWalletScreen} options={{ headerShown: false }} />
                 <Screen name={Routes.IMPORT_MNEMONIC} component={ImportLocalWallet} options={{ headerShown: false }} />
 
@@ -296,46 +181,6 @@ export const EarnStack = () => {
                     name={Routes.ACTIVITY_DETAILS}
                     component={ActivityDetailsScreen}
                     options={{ headerShown: false }}
-                />
-                <Screen
-                    name={Routes.BUY_FLOW}
-                    component={BuyStack}
-                    options={{
-                        presentation: "modal",
-                        cardStyle: {
-                            paddingTop: 16,
-                            borderRadius: 24,
-                            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
-                        },
-                    }}
-                />
-
-                <Screen
-                    name={Routes.COLLECTIBLES_COLLECTIONS}
-                    component={CollectionsScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Screen
-                    name={Routes.COLLECTIBLES_COLLECTION_DETAILS}
-                    component={CollectibleCollectionDetails}
-                    options={{ headerShown: false }}
-                />
-
-                <Screen
-                    name={Routes.REPORT_NFT_TRANSACTION_SCREEN}
-                    component={ReportNFTTransactionScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Screen name={Routes.SEND_NFT} component={SendCollectibleScreen} options={{ headerShown: false }} />
-
-                <Screen
-                    name={Routes.BLACKLISTED_COLLECTIONS}
-                    component={BlacklistedCollectionsScreen}
-                    options={{
-                        presentation: "modal",
-                    }}
                 />
             </Group>
 

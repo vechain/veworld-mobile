@@ -1,8 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import React from "react"
-import { COLORS, SCREEN_HEIGHT } from "~Constants"
-import { TokenWithCompleteInfo, useTheme } from "~Hooks"
+import { SCREEN_HEIGHT } from "~Constants"
+import { TokenWithCompleteInfo } from "~Hooks"
 import {
     Activity,
     CloudKitWallet,
@@ -28,7 +28,6 @@ import {
     ImportMnemonicBackupPasswordScreen,
     InAppBrowser,
     LedgerSignTransaction,
-    ManageTokenScreen,
     ObserveWalletScreen,
     PrivacyScreen,
     SelectLedgerAccounts,
@@ -44,13 +43,8 @@ import {
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AssetDetailScreenSheet } from "~Screens/Flows/App/AssetDetailScreenSheet"
 import { BalanceScreen } from "~Screens/Flows/App/BalanceScreen/BalanceScreen"
-import { CollectionsScreen, SendCollectibleScreen } from "~Screens/Flows/App/Collectibles"
-import { BlacklistedCollectionsScreen } from "~Screens/Flows/App/Collectibles/BlacklistedCollectionsScreen"
-import { CollectibleCollectionDetails } from "~Screens/Flows/App/Collectibles/CollectibleCollectionDetails"
-import { ReportNFTTransactionScreen } from "~Screens/Flows/App/Collectibles/NFTReportCollection"
-import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
-import { BuyStack } from "./BuyStack"
 import { ConvertTransactionScreen } from "~Screens/Flows/App/BalanceScreen/ConvertBetterScreen"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -90,7 +84,6 @@ export type RootStackParamListHome = {
                   | Routes.ACTIVITY_OTHER
           }
         | undefined
-    [Routes.MANAGE_TOKEN]: undefined
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.CREATE_WALLET_FLOW]: undefined
@@ -134,6 +127,8 @@ export type RootStackParamListHome = {
         returnScreen?:
             | Routes.SETTINGS
             | Routes.HOME
+            | Routes.EARN
+            | Routes.WALLET
             | Routes.ACTIVITY_STAKING
             | Routes.APPS
             | Routes.SWAP
@@ -153,28 +148,12 @@ export type RootStackParamListHome = {
         decodedClauses?: TransactionOutcomes
         returnScreen?: Routes.HOME | Routes.HISTORY
     }
-    [Routes.BUY_FLOW]: undefined
-    [Routes.COLLECTIBLES_COLLECTIONS]: undefined
-    [Routes.COLLECTIBLES_COLLECTION_DETAILS]: {
-        collectionAddress: string
-    }
-    [Routes.REPORT_NFT_TRANSACTION_SCREEN]: {
-        nftAddress: string
-        transactionClauses: TransactionClause[]
-    }
-    [Routes.SEND_NFT]: {
-        contractAddress: string
-        tokenId: string
-    }
-    [Routes.BLACKLISTED_COLLECTIONS]: undefined
     [Routes.SETTINGS_PRIVACY]: undefined
 }
 
 const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome>()
 
 export const HomeStack = () => {
-    const theme = useTheme()
-
     return (
         <Navigator id="HomeStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
@@ -198,7 +177,6 @@ export const HomeStack = () => {
                     component={ConnectedAppsScreen}
                     options={{ headerShown: false }}
                 />
-                <Screen name={Routes.MANAGE_TOKEN} component={ManageTokenScreen} options={{ headerShown: false }} />
 
                 <Screen
                     name={Routes.TOKEN_DETAILS}
@@ -294,46 +272,6 @@ export const HomeStack = () => {
                     name={Routes.ACTIVITY_DETAILS}
                     component={ActivityDetailsScreen}
                     options={{ headerShown: false }}
-                />
-                <Screen
-                    name={Routes.BUY_FLOW}
-                    component={BuyStack}
-                    options={{
-                        presentation: "modal",
-                        cardStyle: {
-                            paddingTop: 16,
-                            borderRadius: 24,
-                            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
-                        },
-                    }}
-                />
-
-                <Screen
-                    name={Routes.COLLECTIBLES_COLLECTIONS}
-                    component={CollectionsScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Screen
-                    name={Routes.COLLECTIBLES_COLLECTION_DETAILS}
-                    component={CollectibleCollectionDetails}
-                    options={{ headerShown: false }}
-                />
-
-                <Screen
-                    name={Routes.REPORT_NFT_TRANSACTION_SCREEN}
-                    component={ReportNFTTransactionScreen}
-                    options={{ headerShown: false }}
-                />
-
-                <Screen name={Routes.SEND_NFT} component={SendCollectibleScreen} options={{ headerShown: false }} />
-
-                <Screen
-                    name={Routes.BLACKLISTED_COLLECTIONS}
-                    component={BlacklistedCollectionsScreen}
-                    options={{
-                        presentation: "modal",
-                    }}
                 />
             </Group>
 

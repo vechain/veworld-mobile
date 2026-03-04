@@ -7,20 +7,20 @@ import { ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation/Enums"
-import { RootStackParamListHome } from "~Navigation/Stacks/HomeStack"
 import { CollectionActionsBottomSheet } from "./BottomSheets/CollectionActionsBottomSheet"
 import { HiddenCollectionBottomSheet } from "./BottomSheets/HiddenCollectionBottomSheet"
 import { ReportCollectionBottomsheet } from "./BottomSheets/ReportCollectionBottomSheet"
 import { CollectiblesDetailsCard } from "./Components/CollectiblesDetailsCard"
 import { CollectionNftsList } from "./Components/CollectionNftsList"
 import { useCollectionMetadata } from "./Hooks/useCollectionMetadata"
+import { RootStackParamListWallet } from "~Navigation/Stacks/WalletStack"
 
 export enum CollectiblesViewMode {
     GALLERY = "GALLERY",
     DETAILS = "DETAILS",
 }
 
-type Props = NativeStackScreenProps<RootStackParamListHome, Routes.COLLECTIBLES_COLLECTION_DETAILS>
+type Props = NativeStackScreenProps<RootStackParamListWallet, Routes.COLLECTIBLES_COLLECTION_DETAILS>
 
 export const CollectibleCollectionDetails: React.FC<Props> = ({ route }: Props) => {
     const { LL } = useI18nContext()
