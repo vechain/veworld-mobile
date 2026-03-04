@@ -6,6 +6,7 @@ import { TestHelpers, TestWrapper } from "~Test"
 
 import moment from "moment"
 import { CURRENCY, CURRENCY_FORMATS, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
+import { AmountInputMode } from "~Model"
 import { UnverifiedApps } from "./UnverifiedApps"
 
 const setDeveloperAppsEnabled = jest
@@ -72,6 +73,7 @@ describe("UnverifiedApps", () => {
                         lastVersionCheck: moment().toISOString(),
                         lastNotificationReminder: null,
                         developerAppsEnabled: true,
+                        defaultAmountInputMode: AmountInputMode.FIAT,
                     },
                 },
             },

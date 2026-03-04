@@ -5,6 +5,7 @@ import { useExchangeRate } from "~Api/Coingecko"
 import { useTokenCardBalance } from "./useTokenCardBalance"
 import { ethers } from "ethers"
 import { CURRENCY, ThemeEnum, CURRENCY_FORMATS, SYMBOL_POSITIONS } from "~Constants"
+import { AmountInputMode } from "~Model"
 
 jest.mock("~Api/Coingecko", () => ({
     ...jest.requireActual("~Api/Coingecko"),
@@ -57,6 +58,7 @@ describe("useTokenCardBalance", () => {
                             lastReviewTimestamp: "",
                             lastVersionCheck: "",
                             lastNotificationReminder: null,
+                            defaultAmountInputMode: AmountInputMode.FIAT,
                         },
                     },
                 },

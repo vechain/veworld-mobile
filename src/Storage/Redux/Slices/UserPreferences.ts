@@ -4,6 +4,7 @@ import moment from "moment"
 import { CURRENCY, CURRENCY_FORMATS, SYMBOL_POSITIONS, ThemeEnum } from "~Constants/Enums"
 import { Locales } from "~i18n"
 import { KeyPair } from "./ExternalDapps"
+import { AmountInputMode } from "~Model"
 
 /**
  * @typedef {Object} UserPreferenceState
@@ -67,6 +68,7 @@ export interface UserPreferenceState {
      * By default it's false.
      */
     developerAppsEnabled?: boolean
+    defaultAmountInputMode: AmountInputMode
 }
 
 export const initialUserPreferencesState: UserPreferenceState = {
@@ -96,6 +98,7 @@ export const initialUserPreferencesState: UserPreferenceState = {
     developerMenuUnlocked: false,
     hideStellaPayBottomSheet: false,
     hideStargateXVeBetterBanner: false,
+    defaultAmountInputMode: AmountInputMode.FIAT,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -240,6 +243,9 @@ export const UserPreferencesSlice = createSlice({
         setDeveloperAppsEnabled: (state, action: PayloadAction<boolean>) => {
             state.developerAppsEnabled = action.payload
         },
+        setDefaultAmountInputMode: (state, action: PayloadAction<AmountInputMode>) => {
+            state.defaultAmountInputMode = action.payload
+        },
     },
 })
 
@@ -273,4 +279,5 @@ export const {
     setIndexerUrl,
     setHideStellaPayBottomSheet,
     setDeveloperAppsEnabled,
+    setDefaultAmountInputMode,
 } = UserPreferencesSlice.actions

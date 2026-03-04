@@ -9,7 +9,8 @@ import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCar
 import { useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, SwitchWalletRequest, WalletRequest, WatchedAccount } from "~Model"
-import { selectSelectedAccountOrNull, selectVisibleAccountsWithoutObserved, useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccountOrNull, selectVisibleAccountsWithoutObserved } from "~Storage/Redux/Selectors"
+import { useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { DappWithDetails } from "../DappWithDetails"
 

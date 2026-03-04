@@ -1,2 +1,3 @@
 export * from "./CollectionsScreen"
-export * from "./SendCollectibleRecapScreen"
+export * from "./SendCollectibleScreen"
+export * from "./SendCollectibleSummaryScreen"

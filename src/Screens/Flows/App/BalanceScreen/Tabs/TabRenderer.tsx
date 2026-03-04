@@ -3,7 +3,6 @@ import React, { useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
 import Animated, { LinearTransition, ZoomIn, ZoomOut } from "react-native-reanimated"
 import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
-import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { AnalyticsEvent, COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
 import {
     useAnalyticTracking,
@@ -46,26 +45,15 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const { onDAppPress } = useDAppActions(Routes.HOME)
     const nav = useNavigation()
     const track = useAnalyticTracking()
-    const { betterWorldFeature } = useFeatureFlags()
 
     const isOnline = useIsOnline()
-
-    const filteredTabs = useMemo(() => {
-        return TABS.filter(tab => {
-            if (tab === "COLLECTIBLES") {
-                return betterWorldFeature.balanceScreen?.collectibles?.enabled
-            }
-
-            return true
-        }) as (typeof TABS)[number][]
-    }, [betterWorldFeature.balanceScreen?.collectibles?.enabled])
 
     const showFavorites = useMemo(() => {
         if (!bookmarkedDApps?.length) return false
         return bookmarkedDApps.length > 0 && !AccountUtils.isObservedAccount(selectedAccount) && isOnline
     }, [bookmarkedDApps.length, isOnline, selectedAccount])
 
-    const labels = useMemo(() => filteredTabs.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL, filteredTabs])
+    const labels = useMemo(() => TABS.map(tab => LL[`BALANCE_TAB_${tab}`]()), [LL])
 
     const { containerPaddingBottom, contentExtraBottomPadding } = useLayoutScrollviewPadding()
 
@@ -130,7 +118,7 @@ export const TabRenderer = ({ onLayout }: Props) => {
                 )}
 
                 <BaseSimpleTabs
-                    keys={filteredTabs}
+                    keys={TABS}
                     labels={labels}
                     selectedKey={selectedTab}
                     setSelectedKey={onTabPress}

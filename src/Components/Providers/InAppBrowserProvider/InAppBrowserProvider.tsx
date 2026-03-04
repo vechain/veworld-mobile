@@ -14,7 +14,7 @@ import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-we
 import { showInfoToast, showWarningToast } from "~Components"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSmartWallet } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { usePostWebviewMessage } from "~Hooks/usePostWebviewMessage"
@@ -22,24 +22,23 @@ import { Locales, useI18nContext } from "~i18n"
 import {
     AccountWithDevice,
     CertificateRequest,
+    DEVICE_TYPE,
     InAppRequest,
     SwitchWalletRequest,
     TransactionRequest,
     TypeDataRequest,
     WalletRequest,
 } from "~Model"
+import { deleteSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { switchActiveNetwork } from "~Storage/Redux/Actions"
 import {
-    deleteSession,
     selectAccounts,
     selectFeaturedDapps,
     selectNetworks,
     selectSelectedAccountAddress,
     selectSelectedAccountOrNull,
     selectSelectedNetwork,
-    switchActiveNetwork,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+} from "~Storage/Redux/Selectors"
 import { AccountUtils, AddressUtils, DAppUtils, debug, URIUtils, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"
@@ -175,6 +174,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const { LL, locale } = useI18nContext()
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
+    const { ownerAddress } = useSmartWallet()
+    const smartAccountOwnerAddress =
+        selectedAccount?.device?.type === DEVICE_TYPE.SMART_WALLET && ownerAddress ? ownerAddress : undefined
 
     const allDapps = useAppSelector(selectFeaturedDapps)
     const {
@@ -195,6 +197,17 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const webviewRef = useRef<WebView | undefined>()
 
     const postWebviewMessage = usePostWebviewMessage(webviewRef)
+
+    useEffect(() => {
+        webviewRef.current?.injectJavaScript(`
+            if (window.vechain) {
+                window.vechain.smartAccountOwnerAddress = ${
+                    smartAccountOwnerAddress ? `"${smartAccountOwnerAddress}"` : "undefined"
+                };
+            }
+            true;
+        `)
+    }, [smartAccountOwnerAddress])
 
     const [navigationState, setNavigationState] = useState<WebViewNavigation | undefined>(undefined)
 
@@ -1063,7 +1076,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             onMessage,
             onScroll,
             postMessage,
-            injectVechainScript: () => injectedJs({ locale, packageInfo }),
+            injectVechainScript: () => injectedJs({ locale, packageInfo, smartAccountOwnerAddress }),
             navigationCanGoBack: nav.canGoBack(),
             canGoBack,
             originWhitelist: ORIGIN_WHITELIST,
@@ -1112,6 +1125,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         isDapp,
         locale,
         packageInfo,
+        smartAccountOwnerAddress,
         getLoginSession,
         dappMetadata,
         isDappValid,
@@ -1161,7 +1175,15 @@ export const useInAppBrowserOrNull = () => {
 //     error: (log, data1, data2) => consoleLog('error', log, data1, data2),
 // };
 
-const injectedJs = ({ locale, packageInfo }: { locale: Locales; packageInfo: PackageInfoResponse | null }) => {
+const injectedJs = ({
+    locale,
+    packageInfo,
+    smartAccountOwnerAddress,
+}: {
+    locale: Locales
+    packageInfo: PackageInfoResponse | null
+    smartAccountOwnerAddress?: string
+}) => {
     const script = `
 function newResponseHandler(id) {
     return new Promise((resolve, reject) => {
@@ -1191,6 +1213,7 @@ window.vechain = {
     isInAppBrowser: true,
     acceptLanguage: "${locale}",
     integrity: ${JSON.stringify(packageInfo || {})},
+    smartAccountOwnerAddress: ${smartAccountOwnerAddress ? `"${smartAccountOwnerAddress}"` : "undefined"},
     
     newConnexSigner: function (genesisId) {
         return {

@@ -35,7 +35,7 @@ export const useInformUser = ({ network }: { network: Network }) => {
                 Linking.openURL(`${network.explorerUrl ?? defaultMainNetwork.explorerUrl}/transactions/${params.txId}`)
             } else {
                 // 1. User received NFT
-                nav.navigate(Routes.NFTS)
+                nav.navigate(Routes.HOME)
                 disptach(
                     setSelectedAccount({
                         address: params.accountAddress,

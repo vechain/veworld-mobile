@@ -126,3 +126,7 @@ export const selectHideStellaPayBottomSheet = createSelector(reducer, state => {
 export const selectDeveloperAppsEnabled = createSelector(reducer, state => {
     return state.developerAppsEnabled ?? false
 })
+
+export const selectDefaultAmountInputMode = createSelector(reducer, state => {
+    return state.defaultAmountInputMode
+})
