@@ -46,7 +46,8 @@
     "abi:generate": "yarn abi:generate-json-abi-file && yarn abi:generate-ts-abi-file && yarn abi:generate-business-events-directory && yarn abi:generate-ts-business-events-file",
     "abi:all": "yarn abi:install && yarn abi:build && yarn abi:generate",
     "ts-check": "tsc --noEmit",
-    "generate:indexer-schema:mainnet": "openapi-typescript https://indexer.mainnet.vechain.org/api-docs -o ./src/Generated/indexer/schema.d.ts"
+    "generate:indexer-schema:mainnet": "openapi-typescript https://indexer.mainnet.vechain.org/api-docs -o ./src/Generated/indexer/schema.d.ts",
+    "generate:notes": "ts-node scripts/generate-release-notes.ts"
   },
   "dependencies": {
     "@coinbase/cbpay-js": "^2.2.1",
