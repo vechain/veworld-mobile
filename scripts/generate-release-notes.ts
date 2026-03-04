@@ -1,3 +1,24 @@
+/**
+ * Generate Release Notes
+ *
+ * Updates the release version files and manifests for both iOS and Android
+ * with English release note descriptions.
+ *
+ * What it does:
+ *   1. Extracts the version number from the current git branch name
+ *      (expects format: release/ios-X.Y.Z-android-X.Y.Z)
+ *   2. Sets the "en" descriptions in releases/{ios,android}/versions/{version}.json
+ *   3. Sets "major": true in the version files
+ *   4. Sets "major" to match "latest" in releases/{ios,android}/manifest.json
+ *   5. Marks the version's history entry as major in the manifests
+ *
+ * Usage:
+ *   yarn generate:notes "Feature one" "Feature two" ...
+ *
+ * Example:
+ *   yarn generate:notes "Create a social wallet directly from the wallet switcher" "Choose your default send currency unit in Settings"
+ */
+
 const fs = require("fs")
 const path = require("path")
 const { execSync } = require("child_process")
