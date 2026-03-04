@@ -1,8 +1,11 @@
 {
   "version": "2.5.3",
-  "major": false,
+  "major": true,
   "descriptions": {
-    "en": [],
+    "en": [
+      "Create a social wallet directly from the wallet switcher",
+      "Choose your default send currency unit in Settings"
+    ],
     "de": [],
     "es": [],
     "fr": [],
