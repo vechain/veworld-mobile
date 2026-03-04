@@ -6,21 +6,54 @@
             "Create a social wallet directly from the wallet switcher",
             "Choose your default send currency unit in Settings"
         ],
-        "de": [],
-        "es": [],
-        "fr": [],
-        "hi": [],
-        "it": [],
-        "ja": [],
-        "ko": [],
-        "nl": [],
-        "pl": [],
-        "pt": [],
-        "ru": [],
-        "sv": [],
-        "tr": [],
-        "tw": [],
-        "vi": [],
-        "zh": []
+        "de": [
+            "Erstelle eine Social Wallet direkt über den Wallet-Umschalter",
+            "Wähle deine Standard-Sendeeinheit für Währungen in den Einstellungen"
+        ],
+        "es": [
+            "Crea una cartera social directamente desde el selector de carteras",
+            "Elige tu unidad de moneda predeterminada para enviar en Configuración"
+        ],
+        "fr": [
+            "Créez un portefeuille social directement depuis le sélecteur de portefeuilles",
+            "Choisissez votre unité de devise d'envoi par défaut dans les paramètres"
+        ],
+        "hi": ["वॉलेट स्विचर से सीधे एक सोशल वॉलेट बनाएं", "सेटिंग्स में अपनी डिफ़ॉल्ट भेजने की मुद्रा इकाई चुनें"],
+        "it": [
+            "Crea un portafoglio sociale direttamente dal selettore di portafogli",
+            "Scegli la tua unità di valuta predefinita per l'invio nelle Impostazioni"
+        ],
+        "ja": [
+            "ウォレット切り替え画面からソーシャルウォレットを直接作成できます",
+            "設定で送信通貨単位のデフォルトを選択できます"
+        ],
+        "ko": ["지갑 전환기에서 소셜 지갑을 바로 생성하세요", "설정에서 기본 송금 통화 단위를 선택하세요"],
+        "nl": [
+            "Maak een sociale wallet direct aan via de walletwisselaar",
+            "Kies je standaard verzendvaluta-eenheid in Instellingen"
+        ],
+        "pl": [
+            "Utwórz portfel społecznościowy bezpośrednio z przełącznika portfeli",
+            "Wybierz domyślną jednostkę waluty do wysyłania w Ustawieniach"
+        ],
+        "pt": [
+            "Crie uma carteira social diretamente no seletor de carteiras",
+            "Escolha sua unidade padrão de envio de moeda nas Configurações"
+        ],
+        "ru": [
+            "Создайте социальный кошелек прямо из переключателя кошельков",
+            "Выберите валюту по умолчанию для отправки в Настройках"
+        ],
+        "sv": [
+            "Skapa en social plånbok direkt från plånboksväljaren",
+            "Välj din standardvaluta för överföringar i Inställningar"
+        ],
+        "tr": [
+            "Cüzdan değiştiricisinden doğrudan bir sosyal cüzdan oluşturun",
+            "Ayarlar'dan varsayılan gönderim para birimini seçin"
+        ],
+        "tw": ["直接從錢包切換器建立社交錢包", "在設定中選擇你的預設發送貨幣單位"],
+        "vi": ["Tạo ví xã hội trực tiếp từ bộ chuyển đổi ví", "Chọn đơn vị tiền gửi mặc định trong Cài đặt"],
+        "zh": ["直接从钱包切换器创建社交钱包", "在设置中选择默认的发送货币单位"]
     }
 }
