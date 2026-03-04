@@ -24,8 +24,6 @@ import { i18nObject } from "~i18n"
 import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 
-export * from "../Slices/Network"
-
 const validateCustomNode = async ({ url, name }: { url: string; name: string }) => {
     if (!URIUtils.isAllowed(url)) throw new Error("URL must be secure (https or localhost)")
     try {

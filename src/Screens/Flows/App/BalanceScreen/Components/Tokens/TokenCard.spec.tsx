@@ -249,7 +249,7 @@ describe("TokenCard", () => {
             const tokenCard = getByTestId("TOKEN_CARD_NAME").parent?.parent?.parent?.parent
             fireEvent.press(tokenCard!)
 
-            expect(mockedNavigate).toHaveBeenCalledWith(Routes.INSERT_ADDRESS_SEND, {
+            expect(mockedNavigate).toHaveBeenCalledWith(Routes.TOKEN_DETAILS, {
                 token: expect.objectContaining({
                     symbol: "PLA",
                     address: "0x89827f7bb951fd8a56f8ef13c5bfee38522f2e1f",

@@ -3,9 +3,6 @@ import { components } from "~Generated/indexer/schema"
 export const mockedValidators: components["schemas"]["PaginatedResponseValidator"]["data"] = [
     {
         id: "0x1f66de57049ffd2cbc85d7a7ba5d1d76d6937678",
-        blockId: "0x016c030b55a9391618753e9383be0b660fce038e435d61ef4a4daba655b573f4",
-        blockNumber: 23855883,
-        blockTimestamp: 1769089590,
         endorser: "0x288b5361faa4daadd750ce997a9c8cab696994ef",
         beneficiary: "0x288b5361faa4daadd750ce997a9c8cab696994ef",
         status: "ACTIVE",
@@ -49,9 +46,6 @@ export const mockedValidators: components["schemas"]["PaginatedResponseValidator
     },
     {
         id: "0x6d9637495605065b499cc9a9e8c057e31f972067",
-        blockId: "0x016c030b55a9391618753e9383be0b660fce038e435d61ef4a4daba655b573f4",
-        blockNumber: 23855883,
-        blockTimestamp: 1769089590,
         endorser: "0xd5efb9c70c006bcf92b9ce60cda27a282229011d",
         status: "ACTIVE",
         vetStaked: 66720000,
@@ -98,9 +92,6 @@ export const mockedValidators: components["schemas"]["PaginatedResponseValidator
     },
     {
         id: "0x3970329d7964b9eaa7244c936d18b0846522cd96",
-        blockId: "0x016c030b55a9391618753e9383be0b660fce038e435d61ef4a4daba655b573f4",
-        blockNumber: 23855883,
-        blockTimestamp: 1769089590,
         endorser: "0x807f7a34045eec8796cf9c1fca049348544361a9",
         status: "QUEUED",
         vetStaked: 81370000,

@@ -6,6 +6,7 @@ import { TestWrapper } from "~Test"
 import { FeatureFlags } from "~Api/FeatureFlags/endpoint"
 import { FeatureFlagsProvider, useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { CURRENCY, CURRENCY_FORMATS, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
+import { AmountInputMode } from "~Model"
 import { Routes } from "~Navigation"
 import { RootState } from "~Storage/Redux/Types"
 
@@ -38,6 +39,7 @@ const mockedState: Partial<RootState> = {
         lastReviewTimestamp: "0",
         lastVersionCheck: "1",
         lastNotificationReminder: 1,
+        defaultAmountInputMode: AmountInputMode.FIAT,
     },
 }
 

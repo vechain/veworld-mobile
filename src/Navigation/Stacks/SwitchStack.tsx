@@ -9,7 +9,8 @@ import { CertificateRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS
 import { LoginRequest, TransactionRequest } from "~Model/DApp"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import { TabStack, TabStackParamList } from "~Navigation/Tabs"
-import { BlackListedCollectionsScreen, ChooseBackupDetailsPassword, DetailsBackupScreen } from "~Screens"
+import { ChooseBackupDetailsPassword, DetailsBackupScreen } from "~Screens"
+import { BlacklistedCollectionsScreen } from "~Screens/Flows/App/Collectibles/BlacklistedCollectionsScreen"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { LedgerSignCertificate, LedgerSignTransaction } from "~Screens/Flows/App/LedgerScreen"
 import { LedgerSignMessage } from "~Screens/Flows/App/LedgerScreen/LedgerSignMessage"
@@ -41,7 +42,7 @@ export type RootStackParamListSwitch = {
         delegationSignature?: string
         transaction: Transaction
         dappRequest?: TransactionRequest
-        initialRoute?: Routes.HOME | Routes.NFTS
+        initialRoute?: Routes.HOME
     }
     [Routes.LEDGER_SIGN_MESSAGE]: {
         requestEvent: PendingRequestTypes.Struct
@@ -83,7 +84,7 @@ export const SwitchStack = () => {
                         {!featureFlags?.betterWorldFeature?.balanceScreen?.collectibles?.enabled && (
                             <Switch.Screen
                                 name={Routes.BLACKLISTED_COLLECTIONS}
-                                component={BlackListedCollectionsScreen}
+                                component={BlacklistedCollectionsScreen}
                                 options={{
                                     presentation: "modal",
                                 }}

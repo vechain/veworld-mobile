@@ -685,6 +685,10 @@ type RootTranslation = {
 	 */
 	BANNER_STARGATE_DESC: string
 	/**
+	 * N​o​d​e​ ​h​o​l​d​e​r​s​ ​c​a​n​ ​e​n​d​o​r​s​e​ ​m​u​l​t​i​p​l​e​ ​a​p​p​s​ ​o​n​ ​*​*​V​e​B​e​t​t​e​r​*​*​!
+	 */
+	BANNER_STARGATE_X_VEBETTER_DESC: string
+	/**
 	 * G​e​t​ ​y​o​u​r​ ​*​*​V​e​B​e​t​t​e​r​ ​c​r​e​d​i​t​ ​c​a​r​d​*​*​ ​o​n​ ​*​*​S​t​e​l​l​a​ ​p​a​y​!​*​*
 	 */
 	BANNER_STELLAPAY_DESC: string
@@ -881,6 +885,18 @@ type RootTranslation = {
 	 * M​a​n​a​g​e​ ​y​o​u​r​ ​c​u​s​t​o​m​ ​n​o​d​e​s
 	 */
 	BD_CUSTOM_NODES_DESC: string
+	/**
+	 * D​e​f​a​u​l​t​ ​a​m​o​u​n​t​ ​v​a​l​u​e
+	 */
+	BD_DEFAULT_AMOUNT_VALUE: string
+	/**
+	 * C​u​r​r​e​n​c​y
+	 */
+	BD_DEFAULT_AMOUNT_VALUE_CURRENCY: string
+	/**
+	 * T​o​k​e​n
+	 */
+	BD_DEFAULT_AMOUNT_VALUE_TOKEN: string
 	/**
 	 * G​o​o​g​l​e​ ​D​r​i​v​e​ ​B​a​c​k​u​p​ ​P​a​s​s​w​o​r​d
 	 */
@@ -4341,9 +4357,25 @@ type RootTranslation = {
 	 */
 	SB_DESCRIPTION: string
 	/**
+	 * A​d​d​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t​ ​b​y​ ​i​m​p​o​r​t​i​n​g​ ​o​r​ ​r​e​s​t​o​r​i​n​g​.
+	 */
+	SB_DESCRIPTION_ADD_EXISTING_WALLET: string
+	/**
+	 * S​i​g​n​ ​i​n​ ​w​i​t​h​ ​A​p​p​l​e​ ​t​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	SB_DESCRIPTION_APPLE_LOGIN: string
+	/**
+	 * S​i​g​n​ ​i​n​ ​w​i​t​h​ ​y​o​u​r​ ​s​o​c​i​a​l​ ​a​c​c​o​u​n​t​ ​t​o​ ​u​s​e​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN: string
+	/**
 	 * G​e​n​e​r​a​t​e​ ​a​ ​n​e​w​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
 	 */
 	SB_DESCRIPTION_CREATE_WALLET: string
+	/**
+	 * S​i​g​n​ ​i​n​ ​w​i​t​h​ ​G​o​o​g​l​e​ ​t​o​ ​a​c​c​e​s​s​ ​y​o​u​r​ ​w​a​l​l​e​t​.
+	 */
+	SB_DESCRIPTION_GOOGLE_LOGIN: string
 	/**
 	 * R​e​c​o​v​e​r​ ​a​ ​w​a​l​l​e​t​ ​f​r​o​m​ ​c​l​o​u​d
 	 */
@@ -4449,6 +4481,14 @@ type RootTranslation = {
 	 * C​h​a​n​g​e​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​l​a​n​g​u​a​g​e
 	 */
 	SB_SELECT_LANGUAGE_DESC: string
+	/**
+	 * A​d​d​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t
+	 */
+	SB_TITLE_ADD_EXISTING_WALLET: string
+	/**
+	 * C​o​n​t​i​n​u​e​ ​w​i​t​h​ ​s​o​c​i​a​l​ ​l​o​g​i​n
+	 */
+	SB_TITLE_CONTINUE_WITH_SOCIAL_LOGIN: string
 	/**
 	 * N​e​w​ ​w​a​l​l​e​t
 	 */
@@ -5804,6 +5844,14 @@ type RootTranslation = {
 	 */
 	TOUCH_ID: string
 	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	TRANSACTIONS_SETTINGS_DELEGATION_PREFERENCES: string
+	/**
+	 * S​e​n​d​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	TRANSACTIONS_SETTINGS_SEND_PREFERENCES: string
+	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​d​o​n​e
 	 */
 	TRANSACTION_DONE: string
@@ -6228,9 +6276,9 @@ type RootTranslation = {
 	 */
 	YESTERDAY: string
 	/**
-	 * N​o​d​e​ ​h​o​l​d​e​r​s​ ​c​a​n​ ​e​n​d​o​r​s​e​ ​m​u​l​t​i​p​l​e​ ​a​p​p​s​ ​o​n​ ​*​*​V​e​B​e​t​t​e​r​*​*​!
+	 * N​e​w​ ​W​a​l​l​e​t
 	 */
-	BANNER_STARGATE_X_VEBETTER_DESC: string
+	BD_NEW_WALLET_TITLE: string
 }
 
 export type TranslationFunctions = {
@@ -6874,6 +6922,10 @@ Try reconnect your device to the internet.
 	 */
 	BANNER_STARGATE_DESC: () => LocalizedString
 	/**
+	 * Node holders can endorse multiple apps on **VeBetter**!
+	 */
+	BANNER_STARGATE_X_VEBETTER_DESC: () => LocalizedString
+	/**
 	 * Get your **VeBetter credit card** on **Stella pay!**
 	 */
 	BANNER_STELLAPAY_DESC: () => LocalizedString
@@ -7069,6 +7121,18 @@ Try reconnect your device to the internet.
 	 * Manage your custom nodes
 	 */
 	BD_CUSTOM_NODES_DESC: () => LocalizedString
+	/**
+	 * Default amount value
+	 */
+	BD_DEFAULT_AMOUNT_VALUE: () => LocalizedString
+	/**
+	 * Currency
+	 */
+	BD_DEFAULT_AMOUNT_VALUE_CURRENCY: () => LocalizedString
+	/**
+	 * Token
+	 */
+	BD_DEFAULT_AMOUNT_VALUE_TOKEN: () => LocalizedString
 	/**
 	 * Google Drive Backup Password
 	 */
@@ -10487,9 +10551,25 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	SB_DESCRIPTION: () => LocalizedString
 	/**
+	 * Add an existing wallet by importing or restoring.
+	 */
+	SB_DESCRIPTION_ADD_EXISTING_WALLET: () => LocalizedString
+	/**
+	 * Sign in with Apple to access your wallet.
+	 */
+	SB_DESCRIPTION_APPLE_LOGIN: () => LocalizedString
+	/**
+	 * Sign in with your social account to use your wallet.
+	 */
+	SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN: () => LocalizedString
+	/**
 	 * Generate a new recovery phrase
 	 */
 	SB_DESCRIPTION_CREATE_WALLET: () => LocalizedString
+	/**
+	 * Sign in with Google to access your wallet.
+	 */
+	SB_DESCRIPTION_GOOGLE_LOGIN: () => LocalizedString
 	/**
 	 * Recover a wallet from cloud
 	 */
@@ -10594,6 +10674,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Change the interface language
 	 */
 	SB_SELECT_LANGUAGE_DESC: () => LocalizedString
+	/**
+	 * Add existing wallet
+	 */
+	SB_TITLE_ADD_EXISTING_WALLET: () => LocalizedString
+	/**
+	 * Continue with social login
+	 */
+	SB_TITLE_CONTINUE_WITH_SOCIAL_LOGIN: () => LocalizedString
 	/**
 	 * New wallet
 	 */
@@ -11930,6 +12018,14 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	TOUCH_ID: () => LocalizedString
 	/**
+	 * Delegation preferences
+	 */
+	TRANSACTIONS_SETTINGS_DELEGATION_PREFERENCES: () => LocalizedString
+	/**
+	 * Send preferences
+	 */
+	TRANSACTIONS_SETTINGS_SEND_PREFERENCES: () => LocalizedString
+	/**
 	 * Transaction done
 	 */
 	TRANSACTION_DONE: () => LocalizedString
@@ -12347,9 +12443,9 @@ Make sure that it is unlocked and the location services are enabled.
 	 */
 	YESTERDAY: () => LocalizedString
 	/**
-	 * Node holders can endorse multiple apps on **VeBetter**!
+	 * New Wallet
 	 */
-	BANNER_STARGATE_X_VEBETTER_DESC: () => LocalizedString
+	BD_NEW_WALLET_TITLE: () => LocalizedString
 }
 
 export type Formatters = {
