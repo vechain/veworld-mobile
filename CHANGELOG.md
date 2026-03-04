@@ -1,5 +1,12 @@
 
 
+## 2.5.3 (2026-03-03)
+
+
+### Bug Fixes
+
+* handle optional chaining for device type in InAppBrowserProvider ([#3812](https://github.com/vechain/veworld-mobile/issues/3812)) ([6ec8efb](https://github.com/vechain/veworld-mobile/commit/6ec8efb3f033dc202f2c311f5b55302648687ede))
+
 ## 2.5.2 (2026-02-23)
 
 
