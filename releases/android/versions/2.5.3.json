@@ -1,23 +1,26 @@
 {
-  "version": "2.5.3",
-  "major": false,
-  "descriptions": {
-    "en": [],
-    "de": [],
-    "es": [],
-    "fr": [],
-    "hi": [],
-    "it": [],
-    "ja": [],
-    "ko": [],
-    "nl": [],
-    "pl": [],
-    "pt": [],
-    "ru": [],
-    "sv": [],
-    "tr": [],
-    "tw": [],
-    "vi": [],
-    "zh": []
-  }
+    "version": "2.5.3",
+    "major": false,
+    "descriptions": {
+        "en": [
+            "Create a social wallet directly from the wallet switcher",
+            "Choose your default send currency unit in Settings"
+        ],
+        "de": [],
+        "es": [],
+        "fr": [],
+        "hi": [],
+        "it": [],
+        "ja": [],
+        "ko": [],
+        "nl": [],
+        "pl": [],
+        "pt": [],
+        "ru": [],
+        "sv": [],
+        "tr": [],
+        "tw": [],
+        "vi": [],
+        "zh": []
+    }
 }
