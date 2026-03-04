@@ -100,7 +100,7 @@
         {
             "version": "2.5.3",
             "key": "releases/android/versions/2.5.3",
-            "major": false
+            "major": true
         }
     ]
 }

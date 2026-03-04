@@ -18,7 +18,10 @@
             "Créez un portefeuille social directement depuis le changeur de portefeuille",
             "Choisissez votre unité de monnaie d’envoi par défaut dans les paramètres"
         ],
-        "hi": ["वॉलेट स्विचर से सीधे एक सोशल वॉलेट बनाएं", "सेटिंग्स में अपनी डिफ़ॉल्ट भेजने की मुद्रा चुनें"],
+        "hi": [
+            "वॉलेट स्विचर से सीधे एक सोशल वॉलेट बनाएं",
+            "सेटिंग्स में अपनी डिफ़ॉल्ट भेजने की मुद्रा चुनें"
+        ],
         "it": [
             "Crea un portafoglio sociale direttamente dal selettore di portafogli",
             "Scegli la tua unità di valuta predefinita per l'invio nelle Impostazioni"
@@ -27,7 +30,10 @@
             "ウォレットスイッチャーから直接ソーシャルウォレットを作成できます",
             "設定で送金時のデフォルト通貨単位を選択できます"
         ],
-        "ko": ["지갑 전환기에서 직접 소셜 지갑을 생성하세요", "설정에서 기본 송금 화폐 단위를 선택하세요"],
+        "ko": [
+            "지갑 전환기에서 직접 소셜 지갑을 생성하세요",
+            "설정에서 기본 송금 화폐 단위를 선택하세요"
+        ],
         "nl": [
             "Maak een sociale portemonnee direct aan via de portemonnee-wisselaar",
             "Kies je standaard verzendvaluta-eenheid in Instellingen"
@@ -52,8 +58,17 @@
             "Sosyal cüzdanı doğrudan cüzdan değiştiriciden oluşturun",
             "Ayarlar bölümünde varsayılan gönderim para birimini seçin"
         ],
-        "tw": ["直接從錢包切換器創建社交錢包", "在設定中選擇你預設的發送貨幣單位"],
-        "vi": ["Tạo ví xã hội trực tiếp từ trình chuyển đổi ví", "Chọn đơn vị tiền tệ gửi mặc định trong Cài đặt"],
-        "zh": ["直接从钱包切换器创建社交钱包", "在设置中选择你的默认发送货币单位"]
+        "tw": [
+            "直接從錢包切換器創建社交錢包",
+            "在設定中選擇你預設的發送貨幣單位"
+        ],
+        "vi": [
+            "Tạo ví xã hội trực tiếp từ trình chuyển đổi ví",
+            "Chọn đơn vị tiền tệ gửi mặc định trong Cài đặt"
+        ],
+        "zh": [
+            "直接从钱包切换器创建社交钱包",
+            "在设置中选择你的默认发送货币单位"
+        ]
     }
 }
