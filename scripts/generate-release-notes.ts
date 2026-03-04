@@ -19,13 +19,13 @@
  *   yarn generate:notes "Create a social wallet directly from the wallet switcher" "Choose your default send currency unit in Settings"
  */
 
-const fs = require("fs")
-const path = require("path")
-const { execSync } = require("child_process")
+import * as fs from "fs"
+import * as path from "path"
+import { execSync } from "child_process"
 
 const RELEASES_DIR = path.resolve(__dirname, "..", "releases")
 const PLATFORMS = ["ios", "android"]
-
+1
 function getVersionFromBranch(): string {
     const branch = execSync("git rev-parse --abbrev-ref HEAD", {
         encoding: "utf-8",
