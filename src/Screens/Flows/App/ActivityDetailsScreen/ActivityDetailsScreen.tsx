@@ -285,7 +285,11 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     screen: Routes.HOME,
                 })
                 break
-
+            case Routes.PROFILE:
+                navigation.navigate(Routes.PROFILE_STACK, {
+                    screen: Routes.PROFILE,
+                })
+                break
             default:
                 navigation.navigate(returnScreen)
         }

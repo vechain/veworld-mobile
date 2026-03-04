@@ -1,7 +1,13 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { useCallback, useMemo } from "react"
-import { RootStackParamListApps, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
+import {
+    RootStackParamListApps,
+    RootStackParamListHome,
+    RootStackParamListProfile,
+    RootStackParamListSettings,
+    Routes,
+} from "~Navigation"
 import { selectLastNavigationSource, useAppSelector } from "~Storage/Redux"
 
 type Args = Pick<RootStackParamListApps["Browser"], "returnScreen"> & {
@@ -18,7 +24,9 @@ export const useCloseBrowser = ({ returnScreen, onNavigate }: Args) => {
 
     const nav =
         useNavigation<
-            NativeStackNavigationProp<RootStackParamListSettings & RootStackParamListHome & RootStackParamListApps>
+            NativeStackNavigationProp<
+                RootStackParamListSettings & RootStackParamListHome & RootStackParamListApps & RootStackParamListProfile
+            >
         >()
 
     const _returnScreen = useMemo(() => {

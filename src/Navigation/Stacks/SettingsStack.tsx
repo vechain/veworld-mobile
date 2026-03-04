@@ -65,6 +65,7 @@ export type RootStackParamListSettings = {
             | Routes.ACTIVITY_STAKING
             | Routes.APPS
             | Routes.COLLECTIBLES_COLLECTION_DETAILS
+            | Routes.PROFILE
     }
     [Routes.SMART_WALLET_LINK_ACCOUNT]: {
         device: SmartWalletDevice

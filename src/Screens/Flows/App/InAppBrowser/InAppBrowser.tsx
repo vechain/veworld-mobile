@@ -13,7 +13,7 @@ import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
-import { Routes } from "~Navigation"
+import { RootStackParamListProfile, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { RootStackParamListHome } from "~Navigation/Stacks/HomeStack"
 import {
@@ -28,7 +28,10 @@ import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 import { DappNotVerified } from "./Components/DappNotVerified"
 
-type Props = NativeStackScreenProps<RootStackParamListApps | RootStackParamListHome, Routes.BROWSER>
+type Props = NativeStackScreenProps<
+    RootStackParamListApps | RootStackParamListHome | RootStackParamListProfile,
+    Routes.BROWSER
+>
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const {

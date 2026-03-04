@@ -35,7 +35,7 @@ export type HistoryStackParamList = {
         token?: FungibleToken
         isSwap?: boolean
         decodedClauses?: TransactionOutcomes
-        returnScreen?: Routes.HOME | Routes.HISTORY | Routes.TOKEN_DETAILS
+        returnScreen?: Routes.HOME | Routes.HISTORY | Routes.TOKEN_DETAILS | Routes.PROFILE
     }
     [Routes.BROWSER]: {
         url: string
@@ -47,6 +47,7 @@ export type HistoryStackParamList = {
             | Routes.APPS
             | Routes.SWAP
             | Routes.COLLECTIBLES_COLLECTION_DETAILS
+            | Routes.PROFILE
     }
     [Routes.APPS_TABS_MANAGER]: undefined
     [Routes.APPS_SEARCH]: undefined

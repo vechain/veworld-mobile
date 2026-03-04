@@ -9,7 +9,7 @@ import { COLORS } from "~Constants"
 import { useBottomSheetModal, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useCloseBrowser } from "~Hooks/useCloseBrowser"
-import { RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
+import { RootStackParamListHome, RootStackParamListProfile, RootStackParamListSettings, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { DAppUtils } from "~Utils/DAppUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
@@ -27,6 +27,7 @@ type Props = {
         | Routes.APPS
         | Routes.SWAP
         | Routes.COLLECTIBLES_COLLECTION_DETAILS
+        | Routes.PROFILE
     isLoading?: boolean
 }
 
@@ -42,7 +43,9 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
 
     const nav =
         useNavigation<
-            NativeStackNavigationProp<RootStackParamListSettings & RootStackParamListHome & RootStackParamListApps>
+            NativeStackNavigationProp<
+                RootStackParamListSettings & RootStackParamListHome & RootStackParamListApps & RootStackParamListProfile
+            >
         >()
 
     const { onOpen: openBottomSheet, ref: bottomSheetRef, onClose: closeBottomSheet } = useBottomSheetModal()

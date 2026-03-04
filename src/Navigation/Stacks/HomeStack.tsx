@@ -138,6 +138,7 @@ export type RootStackParamListHome = {
             | Routes.APPS
             | Routes.SWAP
             | Routes.COLLECTIBLES_COLLECTION_DETAILS
+            | Routes.PROFILE
     }
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.CLAIM_USERNAME]: undefined
@@ -151,7 +152,7 @@ export type RootStackParamListHome = {
         token?: FungibleToken
         isSwap?: boolean
         decodedClauses?: TransactionOutcomes
-        returnScreen?: Routes.HOME | Routes.HISTORY
+        returnScreen?: Routes.HOME | Routes.HISTORY | Routes.PROFILE
     }
     [Routes.BUY_FLOW]: undefined
     [Routes.COLLECTIBLES_COLLECTIONS]: undefined

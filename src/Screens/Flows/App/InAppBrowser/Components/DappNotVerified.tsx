@@ -56,6 +56,7 @@ type Props = {
         | Routes.APPS
         | Routes.SWAP
         | Routes.COLLECTIBLES_COLLECTION_DETAILS
+        | Routes.PROFILE
 }
 
 export const DappNotVerified = ({ returnScreen, onNavigate }: Props) => {

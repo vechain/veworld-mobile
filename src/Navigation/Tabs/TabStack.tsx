@@ -6,7 +6,14 @@ import { AnimatedTabIcon, TabIcon } from "~Components"
 import { useCheckWalletBackup, useIsOnline } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
-import { HomeStack, RootStackParamListHome, RootStackParamListSettings, SettingsStack } from "~Navigation/Stacks"
+import {
+    HomeStack,
+    ProfileStack,
+    RootStackParamListHome,
+    RootStackParamListProfile,
+    RootStackParamListSettings,
+    SettingsStack,
+} from "~Navigation/Stacks"
 import { AppsStack, RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { selectActivitiesWithoutFinality, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
@@ -20,6 +27,7 @@ export type TabStackParamList = {
     SettingsStack: NavigatorScreenParams<RootStackParamListSettings>
     [Routes.HISTORY_STACK]: NavigatorScreenParams<HistoryStackParamList>
     AppsStack: NavigatorScreenParams<RootStackParamListApps>
+    ProfileStack: NavigatorScreenParams<RootStackParamListProfile>
 }
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
@@ -103,6 +111,16 @@ export const TabStack = () => {
                     tabBarLabel: Routes.HISTORY,
                     tabBarTestID: "history-tab",
                     tabBarIcon: ({ focused }) => renderActivityIcon(focused, "icon-history", LL.TAB_TITLE_ACTIVITY()),
+                }}
+            />
+
+            <Tab.Screen
+                name="ProfileStack"
+                component={ProfileStack}
+                options={{
+                    tabBarLabel: "Profile",
+                    tabBarTestID: "profile-tab",
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-user", "Profile"),
                 }}
             />
 
