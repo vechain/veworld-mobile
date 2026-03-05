@@ -22,6 +22,7 @@ import { VeBetterDaoCard } from "../BalanceScreen/Components/VeBetterDao/VeBette
 import { NewUserVeBetterCard } from "../BalanceScreen/Components/VeBetterDao/NewUserVeBetterCard"
 import { NonVotedProposalsList } from "./Components/NonVotedProposalsList"
 import { VoteReminderCard } from "./Components/VoteReminderCard"
+import { StargateCarousel } from "../BalanceScreen/Components/Staking/StargateCarousel"
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
@@ -115,24 +116,41 @@ export const ProfileScreen = () => {
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={styles.scrollContent}>
                         <View style={styles.heroSpacer} />
-                        <Animated.View style={styles.blocksContainer}>
+                        <Animated.View style={styles.blocksContainer} layout={LinearTransition}>
                             {isVeBetterUser ? (
-                                <BaseView px={24}>
+                                <Animated.View style={styles.contentContainer} layout={LinearTransition}>
                                     <VoteReminderCard />
                                     <NonVotedProposalsList />
-                                    <BaseSpacer height={40} />
-                                    <VeBetterDaoCard ref={cardRef} />
-                                    <VeBetterDaoActionGroup onShareCard={shareCard} isSharing={isSharing} />
-                                </BaseView>
+                                    <BaseView>
+                                        <VeBetterDaoCard ref={cardRef} />
+                                        <VeBetterDaoActionGroup onShareCard={shareCard} isSharing={isSharing} />
+                                    </BaseView>
+                                </Animated.View>
                             ) : (
                                 <Animated.View layout={LinearTransition.duration(400)}>
                                     <NewUserVeBetterCard isClosable={false} />
                                     <BaseSpacer height={18} />
                                 </Animated.View>
                             )}
+
+                            <Animated.View layout={LinearTransition.duration(400)}>
+                                <BaseSpacer height={40} />
+                                <BaseView px={24}>
+                                    <BaseText
+                                        typographyFont="subSubTitleSemiBold"
+                                        color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}>
+                                        {"Staking Overview"}
+                                    </BaseText>
+                                    <BaseSpacer height={16} />
+                                </BaseView>
+                                <StargateCarousel />
+                            </Animated.View>
                         </Animated.View>
                     </Animated.ScrollView>
 
+                    {/**
+                     * Profile screen content
+                     */}
                     <Animated.View style={[styles.iconWrapper, iconAnimatedStyle]}>
                         <AccountIcon account={selectedAccount} size={ICON_SIZE} />
                         <Animated.View style={[styles.profileInfoWrapper, addressAnimatedStyle]}>
@@ -182,6 +200,10 @@ const baseStyles = (theme: ColorThemeType) =>
         heroSpacer: {
             height: HERO_HEIGHT,
             backgroundColor: theme.colors.background,
+        },
+        contentContainer: {
+            paddingHorizontal: 24,
+            gap: 40,
         },
         iconWrapper: {
             position: "absolute",
