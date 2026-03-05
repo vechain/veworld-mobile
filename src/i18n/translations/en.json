@@ -1537,6 +1537,6 @@
   "VBD_ALERT_TITLE_ROUND_ENDING_SOON": "Round {roundNumber: number} ending soon!",
   "VBD_ALERT_TITLE_ROUND_IS_LIVE": "Round {roundNumber: number} is live!",
   "VBD_ALERT_DESCRIPTION_ROUND_VOTE": "Don't forget to cast your votes to earn rewards.",
-  "VBD_ALERT_BUTTON_VOTE_NOW": "Vote now!",
+  "VBD_ALERT_BUTTON_VOTE_NOW": "Vote",
   "VBD_PROPOSALS_SECTION_TITLE": "Proposals to Vote"
 }

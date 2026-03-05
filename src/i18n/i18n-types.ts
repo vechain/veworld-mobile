@@ -6294,7 +6294,7 @@ type RootTranslation = {
 	 */
 	VBD_ALERT_DESCRIPTION_ROUND_VOTE: string
 	/**
-	 * V​o​t​e​ ​n​o​w​!
+	 * V​o​t​e
 	 */
 	VBD_ALERT_BUTTON_VOTE_NOW: string
 	/**
@@ -12481,7 +12481,7 @@ Make sure that it is unlocked and the location services are enabled.
 	 */
 	VBD_ALERT_DESCRIPTION_ROUND_VOTE: () => LocalizedString
 	/**
-	 * Vote now!
+	 * Vote
 	 */
 	VBD_ALERT_BUTTON_VOTE_NOW: () => LocalizedString
 	/**
