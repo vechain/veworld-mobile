@@ -70,7 +70,7 @@ export const AccountIcon: React.FC<AccountIconProps> = memo(
                     <BaseView borderRadius={99} p={4} style={styles.badgeContainer}>
                         <BaseIcon
                             name={socialBadgeIcon}
-                            size={10}
+                            size={size ? size * 0.3 : 10}
                             color={theme.isDark ? COLORS.GREY_700 : COLORS.WHITE}
                         />
                     </BaseView>

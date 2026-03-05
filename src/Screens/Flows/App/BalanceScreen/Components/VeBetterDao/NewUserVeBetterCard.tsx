@@ -33,7 +33,11 @@ const StatItem: React.FC<StatItemProps> = ({ icon, label, value, isDark }) => (
     </BaseView>
 )
 
-export const NewUserVeBetterCard = () => {
+type Props = {
+    isClosable?: boolean
+}
+
+export const NewUserVeBetterCard = ({ isClosable = true }: Props) => {
     const { styles, theme } = useThemedStyles(style)
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -51,9 +55,11 @@ export const NewUserVeBetterCard = () => {
 
     return (
         <BaseView style={styles.root} testID="VEBETTER_DAO_NEW_USER_CARD">
-            <BaseTouchable style={styles.closeIcon} action={closeCard} haptics="Light" testID="close-button">
-                <Icon name="icon-x" color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE} size={16} />
-            </BaseTouchable>
+            {isClosable && (
+                <BaseTouchable style={styles.closeIcon} action={closeCard} haptics="Light" testID="close-button">
+                    <Icon name="icon-x" color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE} size={16} />
+                </BaseTouchable>
+            )}
             <BaseView flexDirection="column" gap={16}>
                 <BaseView flexDirection="row" gap={6}>
                     <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.WHITE : COLORS.PURPLE}>

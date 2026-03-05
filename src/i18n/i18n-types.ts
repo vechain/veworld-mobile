@@ -967,6 +967,10 @@ type RootTranslation = {
 	 */
 	BD_MNEMONIC_WARMNING: string
 	/**
+	 * N​e​w​ ​W​a​l​l​e​t
+	 */
+	BD_NEW_WALLET_TITLE: string
+	/**
 	 * R​a​n​d​o​m​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​e​s​c​r​i​p​t​i​o​n​ ​p​l​a​c​e​h​o​l​d​e​r​ ​i​n​ ​c​a​s​e​ ​t​h​e​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​o​e​s​n​'​t​ ​h​a​v​e​ ​o​n​e
 	 */
 	BD_NFT_DESC_PLACEHOLDER: string
@@ -6276,9 +6280,27 @@ type RootTranslation = {
 	 */
 	YESTERDAY: string
 	/**
-	 * N​e​w​ ​W​a​l​l​e​t
+	 * R​o​u​n​d​ ​{​r​o​u​n​d​N​u​m​b​e​r​}​ ​e​n​d​i​n​g​ ​s​o​o​n​!
+	 * @param {number} roundNumber
 	 */
-	BD_NEW_WALLET_TITLE: string
+	VBD_ALERT_TITLE_ROUND_ENDING_SOON: RequiredParams<'roundNumber'>
+	/**
+	 * R​o​u​n​d​ ​{​r​o​u​n​d​N​u​m​b​e​r​}​ ​i​s​ ​l​i​v​e​!
+	 * @param {number} roundNumber
+	 */
+	VBD_ALERT_TITLE_ROUND_IS_LIVE: RequiredParams<'roundNumber'>
+	/**
+	 * D​o​n​'​t​ ​f​o​r​g​e​t​ ​t​o​ ​c​a​s​t​ ​y​o​u​r​ ​v​o​t​e​s​ ​t​o​ ​e​a​r​n​ ​r​e​w​a​r​d​s​.
+	 */
+	VBD_ALERT_DESCRIPTION_ROUND_VOTE: string
+	/**
+	 * V​o​t​e​ ​n​o​w​!
+	 */
+	VBD_ALERT_BUTTON_VOTE_NOW: string
+	/**
+	 * P​r​o​p​o​s​a​l​s​ ​t​o​ ​V​o​t​e
+	 */
+	VBD_PROPOSALS_SECTION_TITLE: string
 }
 
 export type TranslationFunctions = {
@@ -7201,6 +7223,10 @@ Try reconnect your device to the internet.
 	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
 	 */
 	BD_MNEMONIC_WARMNING: () => LocalizedString
+	/**
+	 * New Wallet
+	 */
+	BD_NEW_WALLET_TITLE: () => LocalizedString
 	/**
 	 * Random NFT collection description placeholder in case the NFT collection doesn't have one
 	 */
@@ -12443,9 +12469,25 @@ Make sure that it is unlocked and the location services are enabled.
 	 */
 	YESTERDAY: () => LocalizedString
 	/**
-	 * New Wallet
+	 * Round {roundNumber} ending soon!
 	 */
-	BD_NEW_WALLET_TITLE: () => LocalizedString
+	VBD_ALERT_TITLE_ROUND_ENDING_SOON: (arg: { roundNumber: number }) => LocalizedString
+	/**
+	 * Round {roundNumber} is live!
+	 */
+	VBD_ALERT_TITLE_ROUND_IS_LIVE: (arg: { roundNumber: number }) => LocalizedString
+	/**
+	 * Don't forget to cast your votes to earn rewards.
+	 */
+	VBD_ALERT_DESCRIPTION_ROUND_VOTE: () => LocalizedString
+	/**
+	 * Vote now!
+	 */
+	VBD_ALERT_BUTTON_VOTE_NOW: () => LocalizedString
+	/**
+	 * Proposals to Vote
+	 */
+	VBD_PROPOSALS_SECTION_TITLE: () => LocalizedString
 }
 
 export type Formatters = {
