@@ -166,6 +166,9 @@ export const VoteReminderCard = () => {
                     action={onPressVoteReminder}
                     style={styles.voteReminderButton}
                     py={0}
+                    leftIcon={
+                        <BaseIcon name="icon-vote" size={16} color={theme.isDark ? COLORS.PURPLE : COLORS.WHITE} />
+                    }
                     typographyFont="bodySemiBold"
                     textColor={theme.isDark ? COLORS.PURPLE : COLORS.WHITE}
                     bgColor={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE}>
@@ -192,7 +195,6 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 16,
             gap: 12,
             zIndex: 2,
-
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
         },
         waveFill: {
@@ -226,5 +228,6 @@ const baseStyles = (theme: ColorThemeType) =>
             height: 42,
             justifyContent: "center",
             alignItems: "center",
+            gap: 8,
         },
     })
