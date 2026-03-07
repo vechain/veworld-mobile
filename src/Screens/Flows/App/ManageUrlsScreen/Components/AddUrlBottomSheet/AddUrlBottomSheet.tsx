@@ -15,6 +15,9 @@ import { addDelegationUrl, useAppDispatch } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { StyleSheet } from "react-native"
 
+const normalizeUrlScheme = (url: string) =>
+    url.replace(/^([a-z][a-z0-9+.-]*):\/\//i, (_, scheme) => `${scheme.toLowerCase()}://`)
+
 type Props = {
     handleClose: () => void
 }
@@ -25,9 +28,11 @@ export const AddUrlBottomSheet = React.forwardRef<BottomSheetModalMethods, Props
     const { LL } = useI18nContext()
     const thor = useThor()
     const handleAddUrl = () => {
+        const normalizedUrl = normalizeUrlScheme(newUrl)
+
         dispatch(
             addDelegationUrl({
-                url: newUrl,
+                url: normalizedUrl,
                 genesisId: thor.genesis.id,
                 callbackIfAlreadyPresent: () => {
                     showWarningToast({
@@ -49,7 +54,7 @@ export const AddUrlBottomSheet = React.forwardRef<BottomSheetModalMethods, Props
                     <BaseSpacer height={24} />
                     <BaseBottomSheetTextInput
                         value={newUrl}
-                        onChangeText={newValue => setNewUrl(newValue)}
+                        onChangeText={newValue => setNewUrl(normalizeUrlScheme(newValue))}
                         placeholder={LL.SEND_DELEGATION_ADD_URL_PLACEHOLDER()}
                         testID="AddUrl_input"
                     />
