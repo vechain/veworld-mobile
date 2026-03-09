@@ -1063,7 +1063,7 @@
   "SB_CREATE_ONE": "作成する",
   "SB_DELETING_CLOUD_BACKUP": "バックアップを削除しています...",
   "SB_DESCRIPTION": "説明",
-  "SB_DESCRIPTION_ADD_EXISTING_WALLET": "ウォレットをインポートまたは復元して既存のウォレットを追加します。",
+  "SB_DESCRIPTION_ADD_EXISTING_WALLET": "インポートまたは復元して既存のウォレットを追加します。",
   "SB_DESCRIPTION_APPLE_LOGIN": "Appleでサインインしてウォレットにアクセスします。",
   "SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN": "ソーシャルアカウントでサインインしてウォレットを利用します。",
   "SB_DESCRIPTION_CREATE_WALLET": "新しいリカバリーフレーズを生成",

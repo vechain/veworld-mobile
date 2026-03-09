@@ -1063,7 +1063,7 @@
   "SB_CREATE_ONE": "하나 생성",
   "SB_DELETING_CLOUD_BACKUP": "백업 삭제 중...",
   "SB_DESCRIPTION": "설명",
-  "SB_DESCRIPTION_ADD_EXISTING_WALLET": "지갑을 가져오기 또는 복원을 통해 기존 지갑을 추가하세요.",
+  "SB_DESCRIPTION_ADD_EXISTING_WALLET": "기존 지갑을 가져오기 또는 복원하여 추가하세요.",
   "SB_DESCRIPTION_APPLE_LOGIN": "Apple로 로그인하여 지갑에 접근하세요.",
   "SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN": "소셜 계정으로 로그인하여 지갑을 사용하세요.",
   "SB_DESCRIPTION_CREATE_WALLET": "새 복구 구문 생성",

@@ -1063,7 +1063,7 @@
   "SB_CREATE_ONE": "Bir tane oluşturun",
   "SB_DELETING_CLOUD_BACKUP": "Yedekleme siliniyor...",
   "SB_DESCRIPTION": "Açıklama",
-  "SB_DESCRIPTION_ADD_EXISTING_WALLET": "Mevcut bir cüzdanı içe aktararak veya geri yükleyerek ekleyin.",
+  "SB_DESCRIPTION_ADD_EXISTING_WALLET": "Var olan bir cüzdanı içe aktararak veya kurtararak ekleyin.",
   "SB_DESCRIPTION_APPLE_LOGIN": "Cüzdanınıza erişmek için Apple ile giriş yapın.",
   "SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN": "Cüzdanınızı kullanmak için sosyal hesabınızla giriş yapın.",
   "SB_DESCRIPTION_CREATE_WALLET": "Yeni bir kurtarma ifadesi oluştur",
