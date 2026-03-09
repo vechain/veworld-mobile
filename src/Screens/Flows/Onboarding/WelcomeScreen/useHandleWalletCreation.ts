@@ -278,6 +278,27 @@ export const useHandleWalletCreation = () => {
         [biometrics, createLocalWallet, dispatch, onWalletCreationError],
     )
 
+    const importOnboardedSmartWallet = useCallback(
+        async ({
+            address,
+            name,
+            linkedProviders,
+        }: {
+            address: string
+            name?: string
+            linkedProviders?: SocialProvider[]
+        }) => {
+            dispatch(setIsAppLoading(true))
+            await createSmartWallet({
+                address,
+                name,
+                linkedProviders,
+                onError: onWalletCreationError,
+            })
+            dispatch(setIsAppLoading(false))
+        },
+        [createSmartWallet, dispatch, onWalletCreationError],
+    )
     const importLedgerWallet = useCallback(
         async ({
             newLedger,
@@ -310,6 +331,7 @@ export const useHandleWalletCreation = () => {
         onLedgerPinSuccess,
         createOnboardedWallet,
         importOnboardedWallet,
+        importOnboardedSmartWallet,
         importLedgerWallet,
     }
 }

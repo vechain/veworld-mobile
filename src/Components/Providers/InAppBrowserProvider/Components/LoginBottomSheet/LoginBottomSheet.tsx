@@ -271,7 +271,9 @@ export const LoginBottomSheet = () => {
         async (request: LoginRequest, password?: string) => {
             switch (request.kind) {
                 case "simple":
-                    return { signer: selectedAccount?.address ?? "" }
+                    return {
+                        signer: selectedAccount?.address ?? "",
+                    }
                 case "certificate": {
                     const { certificate, payload } = buildCertificate(request)!
                     const signature = await signMessage(payload, password)
