@@ -33,7 +33,9 @@ export const selectCachedContacts = createSelector(selectContactsState, state =>
  * @returns {Contact[]} - An array of known contacts.
  */
 export const selectKnownContacts = createSelector(selectContactsState, state => {
-    return state.contacts.filter((contact: Contact) => contact.type === ContactType.KNOWN)
+    return state.contacts
+        .filter((contact: Contact) => contact.type === ContactType.KNOWN)
+        .sort((a, b) => a.alias.localeCompare(b.alias, undefined, { sensitivity: "base" }))
 })
 
 /**
