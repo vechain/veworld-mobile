@@ -118,6 +118,11 @@ export const FeatureFlagsProvider = ({ children }: { children: React.ReactNode }
                 return isFeatureEnabled(feature)
             }
 
+            // If the feature is an array, return as is
+            if (Array.isArray(feature)) {
+                return feature
+            }
+
             // Recursively process all keys if no availability keys at this level
             const parsedEntries = Object.entries(feature).map(([key, value]) => {
                 return [key, parseFeature(value)]
