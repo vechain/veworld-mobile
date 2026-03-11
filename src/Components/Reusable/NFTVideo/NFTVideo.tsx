@@ -12,7 +12,12 @@ type Props = {
 
 // Workaround to play audio on iOS
 // https://stackoverflow.com/a/74493514/7977491
-const triggerAudio = async (ref: React.RefObject<Video>) => {
+const triggerAudio = async (ref: React.RefObject<Video | null>) => {
+    if (!ref.current) {
+        Promise.reject(new Error("Video reference is null"))
+        return
+    }
+
     await Audio.setAudioModeAsync({
         playsInSilentModeIOS: true, // play audio even when phone is on silent mode
         interruptionModeAndroid: InterruptionModeAndroid.DoNotMix, // interrupt other apps' audio
@@ -24,7 +29,7 @@ const triggerAudio = async (ref: React.RefObject<Video>) => {
 
 export const NFTVideo = memo((props: Props) => {
     const { uri, style, isPlayAudio } = props
-    const ref = useRef<Video>(null)
+    const ref = useRef<Video | null>(null)
     const firstLoadRef = useRef(true)
 
     const initPLayback = useCallback(async () => {

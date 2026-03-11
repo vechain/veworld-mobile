@@ -75,8 +75,8 @@ export const ImportLocalWallet = () => {
 
     const { ref: infoBottomSheetRef, onOpen: onOpenInfoBottomSheet } = useBottomSheetModal()
 
-    const mnemonicCache = useRef<string[]>()
-    const privateKeyCache = useRef<string>()
+    const mnemonicCache = useRef<string[]>([])
+    const privateKeyCache = useRef<string>("")
 
     const importType = useMemo(() => CryptoUtils.determineKeyImportType(textValue), [textValue])
 

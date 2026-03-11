@@ -23,7 +23,7 @@ const SOCIAL_BUTTON_FLEX = {
     iconOnly: 1,
 } as const
 
-export const SocialLinksButtons = ({ links, onNavigate }: SocialLinksButtonsProps): JSX.Element | null => {
+export const SocialLinksButtons = ({ links, onNavigate }: SocialLinksButtonsProps): React.ReactNode | null => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
 

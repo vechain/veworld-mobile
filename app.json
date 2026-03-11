@@ -10,7 +10,9 @@
             {
                 "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
             }
-        ]
+        ],
+        "expo-web-browser",
+        "react-native-bootsplash"
     ],
     "ios": {
         "scheme": "VeWorld"
