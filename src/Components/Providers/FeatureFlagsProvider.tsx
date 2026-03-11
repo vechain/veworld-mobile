@@ -86,6 +86,7 @@ export const initialState: FeatureFlags = {
             enabled: false,
         },
     },
+    hiddenForYouPopularApps: [],
 }
 
 type FeatureFlagsContextType = FeatureFlags & {
