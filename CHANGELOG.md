@@ -1,5 +1,12 @@
 
 
+## 2.5.4 (2026-03-11)
+
+
+### Bug Fixes
+
+* normalize delegation URL input to lowercase ([#3809](https://github.com/vechain/veworld-mobile/issues/3809)) ([a2e3db9](https://github.com/vechain/veworld-mobile/commit/a2e3db99a4a53366794287f67540fd1b862b9e1f))
+
 ## 2.5.3 (2026-03-03)
 
 
