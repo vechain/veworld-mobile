@@ -12,9 +12,6 @@ import {
 import { addDelegationUrl, useAppDispatch } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
-const normalizeUrlScheme = (url: string) =>
-    url.replace(/^([a-z][a-z0-9+.-]*):\/\//i, (_, scheme) => `${scheme.toLowerCase()}://`)
-
 /**
  * BottomSheet content to add a new delegation url
  * @param newUrl {string} value of the new url
@@ -44,7 +41,7 @@ export const AddUrl = ({
     const { LL } = useI18nContext()
     const thor = useThor()
     const handleAddUrl = () => {
-        const normalizedUrl = normalizeUrlScheme(newUrl)
+        const normalizedUrl = URIUtils.normalizeUrlScheme(newUrl)
 
         dispatch(
             addDelegationUrl({
@@ -80,7 +77,7 @@ export const AddUrl = ({
                 <BaseSpacer height={24} />
                 <BaseBottomSheetTextInput
                     value={newUrl}
-                    onChangeText={value => setNewUrl(normalizeUrlScheme(value))}
+                    onChangeText={value => setNewUrl(URIUtils.normalizeUrlScheme(value))}
                     placeholder={LL.SEND_DELEGATION_ADD_URL_PLACEHOLDER()}
                     testID="AddUrl_input"
                 />
