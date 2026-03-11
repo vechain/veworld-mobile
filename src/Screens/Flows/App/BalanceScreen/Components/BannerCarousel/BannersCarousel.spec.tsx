@@ -1,9 +1,8 @@
 import { useRoute } from "@react-navigation/native"
 import { render, screen } from "@testing-library/react-native"
 import React from "react"
-import { TestWrapper } from "~Test"
+import { TestWrapper, TestHelpers } from "~Test"
 
-import { FeatureFlags } from "~Api/FeatureFlags/endpoint"
 import { FeatureFlagsProvider, useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { CURRENCY, CURRENCY_FORMATS, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
 import { AmountInputMode } from "~Model"
@@ -11,6 +10,8 @@ import { Routes } from "~Navigation"
 import { RootState } from "~Storage/Redux/Types"
 
 import { BannersCarousel } from "./BannersCarousel"
+
+const { mockedFeatureFlags } = TestHelpers.data
 
 const createWrapper = (preloadedState: Partial<RootState>) => {
     return ({ children }: { children: React.ReactNode }) => (
@@ -41,75 +42,6 @@ const mockedState: Partial<RootState> = {
         lastNotificationReminder: 1,
         defaultAmountInputMode: AmountInputMode.FIAT,
     },
-}
-
-const mockedFeatureFlags: FeatureFlags = {
-    marketsProxyFeature: {
-        enabled: true,
-        url: "https://coin-api.veworld.vechain.org",
-        fallbackUrl: "https://api.coingecko.com/api/v3",
-    },
-    pushNotificationFeature: {
-        enabled: false,
-    },
-    subdomainClaimFeature: {
-        enabled: true,
-    },
-    paymentProvidersFeature: {
-        "coinbase-pay": {
-            android: true,
-            iOS: false,
-            url: "",
-        },
-        transak: {
-            android: true,
-            iOS: true,
-            url: "",
-        },
-        coinify: {
-            android: true,
-            iOS: false,
-        },
-    },
-    discoveryFeature: {
-        bannersAutoplay: true,
-        showStellaPayBanner: false,
-        showStargateBanner: true,
-    },
-    forks: {
-        GALACTICA: {
-            transactions: {
-                ledger: false,
-            },
-        },
-        HAYABUSA: {
-            stargate: {},
-        },
-    },
-    notificationCenter: {
-        registration: {
-            enabled: false,
-        },
-    },
-    betterWorldFeature: {
-        appsScreen: {
-            enabled: false,
-        },
-        balanceScreen: {
-            enabled: false,
-            collectibles: { enabled: false },
-            tokens: { enabled: false },
-            send: { enabled: false },
-            sendCollectibles: { enabled: false },
-        },
-        onboardingScreen: {
-            enabled: false,
-        },
-    },
-    smartWalletFeature: {
-        enabled: false,
-    },
-    hiddenForYouPopularApps: [],
 }
 
 jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
