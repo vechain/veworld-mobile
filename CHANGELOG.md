@@ -1,5 +1,12 @@
 
 
+## 2.5.4 (2026-03-11)
+
+
+### Bug Fixes
+
+* updated deps for gemfile lock ([#3824](https://github.com/vechain/veworld-mobile/issues/3824)) ([f45c348](https://github.com/vechain/veworld-mobile/commit/f45c3487a875144b76b610a54d4b581d2c622e5a))
+
 ## 2.5.3 (2026-03-03)
 
 
