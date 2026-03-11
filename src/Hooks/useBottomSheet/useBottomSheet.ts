@@ -2,7 +2,7 @@ import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { RefObject, useCallback, useRef } from "react"
 
 export const useBottomSheet = () => {
-    const ref = useRef<BottomSheet>(null)
+    const ref = useRef<BottomSheet>(undefined!)
     const onOpen = useCallback(() => ref.current?.expand(), [ref])
 
     const onClose = useCallback(() => ref.current?.close(), [ref])
@@ -11,7 +11,7 @@ export const useBottomSheet = () => {
 }
 
 export const useBottomSheetRef = () => {
-    const ref = useRef<BottomSheetModal>(null)
+    const ref = useRef<BottomSheetModal>(undefined!)
     return ref
 }
 
@@ -20,7 +20,7 @@ type UseBottomSheetModalOpts = {
 }
 
 export const useBottomSheetModal = <TData>({ externalRef }: UseBottomSheetModalOpts = {}) => {
-    const ref = useRef<BottomSheetModal>(null)
+    const ref = useRef<BottomSheetModal>(undefined!)
 
     const onOpen = useCallback(
         (newData?: TData) => {

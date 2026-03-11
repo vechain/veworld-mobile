@@ -78,7 +78,7 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     const isGenericDelegator = useMemo(() => selectedDelegationToken !== VTHO.symbol, [selectedDelegationToken])
 
     return (
-        <BaseBottomSheet ref={ref} dynamicHeight contentStyle={styles.rootContent}>
+        <BaseBottomSheet ref={ref} dynamicHeight contentStyle={styles.rootContent} scrollable={false}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-thunder" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>

@@ -57,6 +57,15 @@ export const WelcomeScreenV2 = () => {
         onCreateSmartWallet,
     } = useHandleWalletCreation()
 
+    const handleOnSmartWalletPinSuccess = useCallback(
+        async ({ pin, address, name }: { pin: string; address: string; name?: string }) => {
+            // Convert linkedAccounts to provider array
+            const linkedProviders = linkedAccounts.map(acc => acc.type)
+            await onSmartWalletPinSuccess({ pin, address, name, linkedProviders })
+        },
+        [linkedAccounts, onSmartWalletPinSuccess],
+    )
+
     const {
         isLoginPending: isSocialLoginPending,
         handleLogin: handleSocialLogin,
@@ -72,14 +81,7 @@ export const WelcomeScreenV2 = () => {
             },
             [linkedAccounts, onCreateSmartWallet],
         ),
-        onSmartWalletPinSuccess: useCallback(
-            async ({ pin, address, name }) => {
-                // Convert linkedAccounts to provider array
-                const linkedProviders = linkedAccounts.map(acc => acc.type)
-                await onSmartWalletPinSuccess({ pin, address, name, linkedProviders })
-            },
-            [linkedAccounts, onSmartWalletPinSuccess],
-        ),
+        onSmartWalletPinSuccess: handleOnSmartWalletPinSuccess,
     })
 
     const handleGoogleLogin = useCallback(() => handleSocialLogin("google"), [handleSocialLogin])

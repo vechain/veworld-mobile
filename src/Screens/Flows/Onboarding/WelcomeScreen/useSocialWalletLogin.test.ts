@@ -291,6 +291,34 @@ describe("useSocialWalletLogin", () => {
             })
         })
 
+        it("should work when onSmartWalletPinSuccess is not provided", async () => {
+            const testAddress = "0x1234567890123456789012345678901234567890"
+            setAuthenticatedWithAddress(testAddress)
+
+            const { result } = renderHook(() =>
+                useSocialWalletLogin({
+                    onCreateSmartWallet: mockOnCreateSmartWallet,
+                }),
+            )
+
+            await act(async () => {
+                await result.current.handleLogin("google")
+            })
+
+            expect(result.current.pendingAddress).toBe(testAddress)
+
+            await act(async () => {
+                await result.current.handlePinSuccess("123456")
+            })
+
+            expect(mockOnSmartWalletPinSuccess).not.toHaveBeenCalled()
+            await waitFor(() => {
+                expect(result.current.pendingAddress).toBeNull()
+                expect(result.current.pendingProvider).toBeNull()
+                expect(result.current.isLoginPending).toBe(false)
+            })
+        })
+
         it("should do nothing when no pendingAddress exists", async () => {
             const { result } = renderHook(() => useSocialWalletLogin(defaultParams))
 

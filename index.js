@@ -1,3 +1,7 @@
+import "fast-text-encoding"
+import "react-native-get-random-values"
+import "@ethersproject/shims"
+
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { AppRegistry, LogBox } from "react-native"

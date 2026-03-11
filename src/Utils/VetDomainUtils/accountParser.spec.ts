@@ -30,16 +30,16 @@ describe("accountParser", () => {
     })
     describe("parseAvatarRecord", () => {
         it("should return the record if it is either https, ipfs or arweave", async () => {
-            await expect(() =>
-                parseAvatarRecord("https://vechain.org", { genesisId: "0x0", thor: {} as any }),
-            ).resolves.toBe("https://vechain.org")
-            await expect(() =>
+            await expect(parseAvatarRecord("https://vechain.org", { genesisId: "0x0", thor: {} as any })).resolves.toBe(
+                "https://vechain.org",
+            )
+            await expect(
                 parseAvatarRecord("ipfs://bafybeieaqrkywsnmssc3cqehwj6li65oop2eymt6ph6cucmw6yf3ajwr7u", {
                     genesisId: "0x0",
                     thor: {} as any,
                 }),
             ).resolves.toBe("ipfs://bafybeieaqrkywsnmssc3cqehwj6li65oop2eymt6ph6cucmw6yf3ajwr7u")
-            await expect(() =>
+            await expect(
                 parseAvatarRecord("ar://bafybeieaqrkywsnmssc3cqehwj6li65oop2eymt6ph6cucmw6yf3ajwr7u", {
                     genesisId: "0x0",
                     thor: {} as any,
@@ -48,7 +48,7 @@ describe("accountParser", () => {
         })
 
         it("should return null if it doesn't match anything", async () => {
-            await expect(() =>
+            await expect(
                 parseAvatarRecord("thisisatest", {
                     genesisId: "0x0",
                     thor: {} as any,
@@ -61,7 +61,7 @@ describe("accountParser", () => {
                     ...jest.requireActual("~Hooks/useCollectibleMetadata").getCollectibleMetadataOptions(...args),
                     queryFn: () => Promise.resolve({ image: "https://image_uri_test.org" }),
                 }))
-                await expect(() =>
+                await expect(
                     parseAvatarRecord("eip155:1/erc1155:0x0/123", {
                         genesisId: "0x0",
                         thor: thorMocker({ erc1155Uri: ["https://vechain1.org"] }),
@@ -78,13 +78,13 @@ describe("accountParser", () => {
                         ...jest.requireActual("~Hooks/useCollectibleMetadata").getCollectibleMetadataOptions(...args),
                         queryFn: () => Promise.resolve({ name: "TEST" }),
                     }))
-                await expect(() =>
+                await expect(
                     parseAvatarRecord("eip155:1/erc1155:0x0/123", {
                         genesisId: "0x0",
                         thor: thorMocker({ erc1155Uri: ["https://vechain2.org"] }),
                     }),
                 ).resolves.toBeNull()
-                await expect(() =>
+                await expect(
                     parseAvatarRecord("eip155:1/erc1155:0x0/123", {
                         genesisId: "0x0",
                         thor: thorMocker({ erc1155Uri: ["https://vechain3.org"] }),
@@ -96,7 +96,7 @@ describe("accountParser", () => {
                     ...jest.requireActual("~Hooks/useCollectibleMetadata").getCollectibleMetadataOptions(...args),
                     queryFn: () => Promise.resolve({ image: "https://image_uri_test.org" }),
                 }))
-                await expect(() =>
+                await expect(
                     parseAvatarRecord("eip155:1/erc1155:0x0/123", {
                         genesisId: "0x0",
                         thor: thorMocker({ erc1155Uri: ["https://vechain.org/{id}"] }),
@@ -114,7 +114,7 @@ describe("accountParser", () => {
                     queryFn: () => Promise.resolve({ image: "https://image_uri_test.org" }),
                 }))
                 ;(getCachedTokenURI as jest.Mock).mockResolvedValue("https://vechain4.org")
-                await expect(() =>
+                await expect(
                     parseAvatarRecord("eip155:1/erc721:0x0/123", {
                         genesisId: "0x0",
                         thor: {} as any,
@@ -135,13 +135,13 @@ describe("accountParser", () => {
                     .mockResolvedValueOnce("https://vechain5.org")
                     .mockResolvedValueOnce("https://vechain6.org")
 
-                await expect(() =>
+                await expect(
                     parseAvatarRecord("eip155:1/erc721:0x0/123", {
                         genesisId: "0x0",
                         thor: {} as any,
                     }),
                 ).resolves.toBeNull()
-                await expect(() =>
+                await expect(
                     parseAvatarRecord("eip155:1/erc721:0x0/123", {
                         genesisId: "0x0",
                         thor: {} as any,
@@ -155,7 +155,7 @@ describe("accountParser", () => {
                 queryFn: () => Promise.reject("TEST_ERROR"),
             }))
             ;(getCachedTokenURI as jest.Mock).mockResolvedValue("https://vechain7.org")
-            await expect(() =>
+            await expect(
                 parseAvatarRecord("eip155:1/erc721:0x0/123", {
                     genesisId: "0x0",
                     thor: {} as any,

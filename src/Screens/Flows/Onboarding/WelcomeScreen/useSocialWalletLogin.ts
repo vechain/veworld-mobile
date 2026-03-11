@@ -10,7 +10,7 @@ type SocialProvider = "google" | "apple"
 
 type UseSocialWalletLoginParams = {
     onCreateSmartWallet: (params: { address: string; name?: string }) => void
-    onSmartWalletPinSuccess: (params: { pin: string; address: string; name?: string }) => Promise<void>
+    onSmartWalletPinSuccess?: (params: { pin: string; address: string; name?: string }) => Promise<void>
 }
 
 export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSuccess }: UseSocialWalletLoginParams) => {
@@ -72,15 +72,15 @@ export const useSocialWalletLogin = ({ onCreateSmartWallet, onSmartWalletPinSucc
             isPinProcessingRef.current = true
 
             try {
-                await onSmartWalletPinSuccess({
+                await onSmartWalletPinSuccess?.({
                     pin,
                     address: pendingSmartAccountAddress,
                     name: userDisplayName ?? undefined,
                 })
             } finally {
                 isPinProcessingRef.current = false
-                setPendingSmartAccountAddress(null)
                 setPendingProvider(null)
+                setPendingSmartAccountAddress(null)
             }
         },
         [onSmartWalletPinSuccess, pendingSmartAccountAddress, userDisplayName],
