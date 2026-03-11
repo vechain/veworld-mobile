@@ -16,9 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        // Clear keychain on first install
-        clearKeychainIfNecessary()
-
         let delegate = ReactNativeDelegate()
         let factory = RCTReactNativeFactory(delegate: delegate)
         delegate.dependencyProvider = RCTAppDependencyProvider()
@@ -82,27 +79,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    // MARK: - Clear Keychain on First Install
-    private func clearKeychainIfNecessary() {
-        let hasRunBefore = UserDefaults.standard.bool(forKey: "HAS_RUN_BEFORE")
-
-        if !hasRunBefore {
-            UserDefaults.standard.set(true, forKey: "HAS_RUN_BEFORE")
-
-            let secItemClasses: [CFString] = [
-                kSecClassGenericPassword,
-                kSecClassInternetPassword,
-                kSecClassCertificate,
-                kSecClassKey,
-                kSecClassIdentity,
-            ]
-
-            for secItemClass in secItemClasses {
-                let spec: [String: Any] = [kSecClass as String: secItemClass]
-                SecItemDelete(spec as CFDictionary)
-            }
-        }
-    }
 }
 
 class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
