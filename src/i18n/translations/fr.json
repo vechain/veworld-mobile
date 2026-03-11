@@ -1063,7 +1063,7 @@
   "SB_CREATE_ONE": "Créez-en un",
   "SB_DELETING_CLOUD_BACKUP": "Suppression de la sauvegarde...",
   "SB_DESCRIPTION": "Description",
-  "SB_DESCRIPTION_ADD_EXISTING_WALLET": "Ajoutez un portefeuille existant en l'importing ou en le restaurant.",
+  "SB_DESCRIPTION_ADD_EXISTING_WALLET": "Ajoutez un portefeuille existant en l’important ou en le restaurant.",
   "SB_DESCRIPTION_APPLE_LOGIN": "Connectez-vous avec Apple pour accéder à votre portefeuille.",
   "SB_DESCRIPTION_CONTINUE_WITH_SOCIAL_LOGIN": "Connectez-vous avec votre compte social pour utiliser votre portefeuille.",
   "SB_DESCRIPTION_CREATE_WALLET": "Générer une nouvelle phrase de récupération",
