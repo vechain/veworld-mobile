@@ -1628,30 +1628,9 @@ PODS:
     - Yoga
   - react-native-context-menu-view (1.18.0):
     - React
-  - react-native-fast-url (0.6.0):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.11.18.00)
-    - RCTRequired
-    - RCTTypeSafety
+  - react-native-fast-url (1.2.0):
     - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-hermes
-    - React-ImageManager
     - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - react-native-get-random-values (1.11.0):
     - React-Core
   - react-native-in-app-review (4.3.5):
@@ -1734,30 +1713,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-quick-base64 (2.1.2):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.11.18.00)
-    - RCTRequired
-    - RCTTypeSafety
+  - react-native-quick-base64 (2.2.2):
     - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-hermes
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - react-native-quick-crypto (0.7.17):
     - DoubleConversion
     - glog
@@ -3047,7 +3004,7 @@ SPEC CHECKSUMS:
   react-native-cameraroll: 870e36cfbf3a3d1de81dec3244c59a906e5787bb
   react-native-compat: f0970e5b54a4233857b856c2d8e0e6984ad1cf0b
   react-native-context-menu-view: d8269d7c754ecfaa0034e514d419115ac3774f7f
-  react-native-fast-url: f5e36d4c92c7b4942fb04150b58115eac39b3c5b
+  react-native-fast-url: 2b59cfc92f1f8ade3739a09e8dbc877b0c3e82f6
   react-native-get-random-values: d16467cf726c618e9c7a8c3c39c31faa2244bbba
   react-native-in-app-review: 668f4c80d7f95945e0ad7833e98c466cb40d6808
   react-native-keyboard-controller: 261cea59370683c84ba3900db92a327f73973b62
@@ -3055,7 +3012,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-onesignal: 33ade92bd91578374c31c5a5a91f45f49c2d6614
   react-native-pager-view: 9a5f74c91c2623082043a22b6978083d1c79b563
-  react-native-quick-base64: 3bad295dd1d7dfb50e39e934f31cc5c0f6ef1a27
+  react-native-quick-base64: 6568199bb2ac8e72ecdfdc73a230fbc5c1d3aac4
   react-native-quick-crypto: b475b71e7fa4dbf3446be55e8ad4ef2c58ac4f7f
   react-native-restart: 0bc732f4461709022a742bb29bcccf6bbc5b4863
   react-native-safe-area-context: 827032edf27079702cbd006f11dc79451a2d744b
