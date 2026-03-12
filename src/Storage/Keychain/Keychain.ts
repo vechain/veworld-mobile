@@ -1,9 +1,11 @@
 import {
     ACCESSIBLE,
     getInternetCredentials,
-    Options,
     resetInternetCredentials,
     setInternetCredentials,
+    type SetOptions,
+    type GetOptions,
+    type BaseOptions,
 } from "react-native-keychain"
 import { ERROR_EVENTS } from "~Constants"
 import { debug } from "~Utils"
@@ -13,7 +15,7 @@ type Set = {
     key: string
     value: string
     isCloudSync?: boolean
-    options?: Options
+    options?: SetOptions
 }
 
 export async function set({ key, value, isCloudSync = false, options = {} }: Set) {
@@ -23,13 +25,16 @@ export async function set({ key, value, isCloudSync = false, options = {} }: Set
         : i18n.i18n()[locale].BIOMETRICS_PROMPT_UNLOCK()
     let cancel = i18n.i18n()[locale].COMMON_BTN_CANCEL()
 
-    options.accessible = isCloudSync ? ACCESSIBLE.WHEN_UNLOCKED : ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY
-    options.service = key
-    options.authenticationPrompt = { title, cancel }
+    const setOptions: SetOptions = {
+        ...options,
+        accessible: isCloudSync ? ACCESSIBLE.WHEN_UNLOCKED : ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+        service: key,
+        authenticationPrompt: { title, cancel },
+    }
 
-    debug(ERROR_EVENTS.ENCRYPTION, "KeyChain - SET:", key, options)
+    debug(ERROR_EVENTS.ENCRYPTION, "KeyChain - SET:", key, setOptions)
 
-    const res = await setInternetCredentials(key, key, value, options)
+    const res = await setInternetCredentials(key, key, value, setOptions)
 
     if (res === false) {
         throw new Error("Failed to set keychain")
@@ -40,7 +45,7 @@ export async function set({ key, value, isCloudSync = false, options = {} }: Set
 
 type Get = {
     key: string
-    options?: Options
+    options?: GetOptions
     isCloudSync?: boolean
 }
 
@@ -51,13 +56,15 @@ export async function get({ key, isCloudSync = false, options = {} }: Get): Prom
         : i18n.i18n()[locale].BIOMETRICS_PROMPT_UNLOCK()
     let cancel = i18n.i18n()[locale].COMMON_BTN_CANCEL()
 
-    options.accessible = isCloudSync ? ACCESSIBLE.WHEN_UNLOCKED : ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY
-    options.service = key
-    options.authenticationPrompt = { title, cancel }
+    const getOptions: GetOptions = {
+        ...options,
+        service: key,
+        authenticationPrompt: { title, cancel },
+    }
 
-    debug(ERROR_EVENTS.ENCRYPTION, "KeyChain - GET:", key, options)
+    debug(ERROR_EVENTS.ENCRYPTION, "KeyChain - GET:", key, getOptions)
 
-    const res = await getInternetCredentials(key, options)
+    const res = await getInternetCredentials(key, getOptions)
 
     if (res === false) {
         return null
@@ -68,13 +75,15 @@ export async function get({ key, isCloudSync = false, options = {} }: Get): Prom
 
 type Delete = {
     key: string
-    options?: Options
+    options?: BaseOptions
 }
 
 export async function deleteItem({ key, options = {} }: Delete) {
-    options.accessible = ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY
-    options.service = key
+    const deleteOptions: BaseOptions = {
+        ...options,
+        service: key,
+    }
 
-    debug(ERROR_EVENTS.ENCRYPTION, "KeyChain - DELETE:", key, options)
-    return resetInternetCredentials(key, options)
+    debug(ERROR_EVENTS.ENCRYPTION, "KeyChain - DELETE:", key, deleteOptions)
+    return resetInternetCredentials(deleteOptions)
 }

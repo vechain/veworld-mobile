@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-native-mmkv/android/CMakeLists.txt b/node_modules/react-native-mmkv/android/CMakeLists.txt
+index 91a8a6a..ff755db 100644
+--- a/node_modules/react-native-mmkv/android/CMakeLists.txt
++++ b/node_modules/react-native-mmkv/android/CMakeLists.txt
+@@ -39,3 +39,7 @@ target_link_libraries(
+         ReactAndroid::jsi   # <-- JSI
+         android             # <-- Android JNI core
+ )
++
++# 16KB page size support
++target_link_options(reactnativemmkv PRIVATE "-Wl,-z,max-page-size=16384")
++target_link_options(core PRIVATE "-Wl,-z,max-page-size=16384")

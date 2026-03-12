@@ -3,7 +3,7 @@ import { WalletEncryptionKey } from "~Components/Providers/EncryptedStorageProvi
 import { CryptoUtils, CryptoUtils_Legacy, HexUtils, PasswordUtils } from "~Utils"
 import { Keychain } from "~Storage"
 import SaltHelper from "./SaltHelper"
-import { ACCESS_CONTROL, Options } from "react-native-keychain"
+import { ACCESS_CONTROL, type SetOptions } from "react-native-keychain"
 
 const WALLET_ENCRYPTION_KEY_STORAGE = "WALLET_ENCRYPTION_KEY_STORAGE"
 const WALLET_BIOMETRIC_KEY_STORAGE = "WALLET_BIOMETRIC_KEY_STORAGE"
@@ -49,7 +49,7 @@ const setWithPinCode = async (encryptionKeys: WalletEncryptionKey, pinCode: stri
 const setWithBiometric = async (encryptionKeys: WalletEncryptionKey) => {
     const encryptedKeys = JSON.stringify(encryptionKeys)
 
-    const options: Options = {
+    const options: SetOptions = {
         accessControl: ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
     }
 
