@@ -2,7 +2,7 @@ import { StorageEncryptionKeys } from "~Components/Providers/EncryptedStoragePro
 import { Keychain } from "~Storage"
 import { CryptoUtils, CryptoUtils_Legacy, error, HexUtils, PasswordUtils } from "~Utils"
 import SaltHelper from "./SaltHelper"
-import { ACCESS_CONTROL, Options } from "react-native-keychain"
+import { ACCESS_CONTROL, type SetOptions } from "react-native-keychain"
 import { ERROR_EVENTS } from "~Constants"
 
 const PIN_CODE_STORAGE = "ENCRYPTION_KEY_STORAGE"
@@ -47,7 +47,7 @@ const setWithPinCode = async (encryptionKeys: StorageEncryptionKeys, pinCode: st
 const setWithBiometric = async (encryptionKeys: StorageEncryptionKeys) => {
     const encryptedKeys = JSON.stringify(encryptionKeys)
 
-    const options: Options = {
+    const options: SetOptions = {
         accessControl: ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
     }
 
