@@ -1,5 +1,12 @@
 
 
+## 2.6.0 (2026-03-13)
+
+
+### Features
+
+* add CMake support for react-native-scrypt on Android ([#3833](https://github.com/vechain/veworld-mobile/issues/3833)) ([72cfda2](https://github.com/vechain/veworld-mobile/commit/72cfda28fd7c00975a50bd16ff12b78f22e6ffd2))
+
 ## 2.5.3 (2026-03-03)
 
 
