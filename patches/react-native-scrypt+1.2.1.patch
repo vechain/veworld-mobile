@@ -1,8 +1,38 @@
+diff --git a/node_modules/react-native-scrypt/android/CMakeLists.txt b/node_modules/react-native-scrypt/android/CMakeLists.txt
+new file mode 100644
+index 0000000..b7281a5
+--- /dev/null
++++ b/node_modules/react-native-scrypt/android/CMakeLists.txt
+@@ -0,0 +1,24 @@
++cmake_minimum_required(VERSION 3.13)
++project(scrypt_jni C)
++
++set(LIBSCRYPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../libscrypt)
++set(JNI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/main/jni)
++
++add_library(scrypt_jni SHARED
++    ${JNI_DIR}/libscrypt-jni.c
++    ${LIBSCRYPT_DIR}/b64.c
++    ${LIBSCRYPT_DIR}/crypto_scrypt-hexconvert.c
++    ${LIBSCRYPT_DIR}/sha256.c
++    ${LIBSCRYPT_DIR}/crypto-mcf.c
++    ${LIBSCRYPT_DIR}/crypto_scrypt-nosse.c
++    ${LIBSCRYPT_DIR}/slowequals.c
++    ${LIBSCRYPT_DIR}/crypto_scrypt-check.c
++    ${LIBSCRYPT_DIR}/crypto-scrypt-saltgen.c
++    ${LIBSCRYPT_DIR}/crypto_scrypt-hash.c
++    ${LIBSCRYPT_DIR}/main.c
++)
++
++target_include_directories(scrypt_jni PRIVATE ${LIBSCRYPT_DIR})
++target_compile_options(scrypt_jni PRIVATE -std=c99)
++target_link_libraries(scrypt_jni log)
++target_link_options(scrypt_jni PRIVATE -Wl,-z,max-page-size=16384)
 diff --git a/node_modules/react-native-scrypt/android/build.gradle b/node_modules/react-native-scrypt/android/build.gradle
-index dac9cc5..8575880 100644
+index dac9cc5..ff53cdb 100644
 --- a/node_modules/react-native-scrypt/android/build.gradle
 +++ b/node_modules/react-native-scrypt/android/build.gradle
-@@ -27,6 +27,7 @@ android {
+@@ -27,25 +27,26 @@ android {
  
      defaultConfig {
          minSdkVersion safeExtGet('minSdkVersion', 16)
@@ -10,231 +40,44 @@ index dac9cc5..8575880 100644
          targetSdkVersion safeExtGet('targetSdkVersion', 23)
          versionCode 1
          versionName "1.0"
-@@ -54,6 +55,6 @@ repositories {
+-        ndk {
+-            abiFilters "armeabi-v7a", "x86"
+-            moduleName "libscrypt_jni"
+-            ldLibs "log"
+-            cFlags "-std=c99"
++
++        externalNativeBuild {
++            cmake {
++                arguments "-DANDROID_STL=c++_shared"
++            }
+         }
+     }
+ 
+-    lintOptions {
+-        abortOnError false
++    externalNativeBuild {
++        cmake {
++            path "CMakeLists.txt"
++        }
+     }
+ 
+-    // https://stackoverflow.com/questions/30675767/project-builds-with-ndk-build-but-not-android-studio
+-    sourceSets.main {
+-        jniLibs.srcDir 'src/main/libs' //set libs as .so's location instead of jniLibs
+-        jni.srcDirs = [] //disable automatic ndk-build call with auto-generated Android.mk
++    lintOptions {
++        abortOnError false
+     }
+ }
+ 
+@@ -54,6 +55,5 @@ repositories {
  }
  
  dependencies {
 -    compile 'com.facebook.react:react-native:+'
 +    implementation 'com.facebook.react:react-native:+'
  }
- 
-diff --git a/node_modules/react-native-scrypt/android/build/generated/source/buildConfig/debug/com/crypho/scrypt/BuildConfig.java b/node_modules/react-native-scrypt/android/build/generated/source/buildConfig/debug/com/crypho/scrypt/BuildConfig.java
-new file mode 100644
-index 0000000..cb64df8
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/generated/source/buildConfig/debug/com/crypho/scrypt/BuildConfig.java
-@@ -0,0 +1,10 @@
-+/**
-+ * Automatically generated file. DO NOT MODIFY
-+ */
-+package com.crypho.scrypt;
-+
-+public final class BuildConfig {
-+  public static final boolean DEBUG = Boolean.parseBoolean("true");
-+  public static final String LIBRARY_PACKAGE_NAME = "com.crypho.scrypt";
-+  public static final String BUILD_TYPE = "debug";
-+}
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml b/node_modules/react-native-scrypt/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml
-new file mode 100644
-index 0000000..25ffcf3
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml
-@@ -0,0 +1,7 @@
-+<?xml version="1.0" encoding="utf-8"?>
-+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-+    package="com.crypho.scrypt" >
-+
-+    <uses-sdk android:minSdkVersion="24" />
-+
-+</manifest>
-\ No newline at end of file
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/output-metadata.json b/node_modules/react-native-scrypt/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/output-metadata.json
-new file mode 100644
-index 0000000..5423890
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/output-metadata.json
-@@ -0,0 +1,18 @@
-+{
-+  "version": 3,
-+  "artifactType": {
-+    "type": "AAPT_FRIENDLY_MERGED_MANIFESTS",
-+    "kind": "Directory"
-+  },
-+  "applicationId": "com.crypho.scrypt",
-+  "variantName": "debug",
-+  "elements": [
-+    {
-+      "type": "SINGLE",
-+      "filters": [],
-+      "attributes": [],
-+      "outputFile": "AndroidManifest.xml"
-+    }
-+  ],
-+  "elementType": "File"
-+}
-\ No newline at end of file
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/aar_metadata/debug/writeDebugAarMetadata/aar-metadata.properties b/node_modules/react-native-scrypt/android/build/intermediates/aar_metadata/debug/writeDebugAarMetadata/aar-metadata.properties
-new file mode 100644
-index 0000000..1211b1e
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/aar_metadata/debug/writeDebugAarMetadata/aar-metadata.properties
-@@ -0,0 +1,6 @@
-+aarFormatVersion=1.0
-+aarMetadataVersion=1.0
-+minCompileSdk=1
-+minCompileSdkExtension=0
-+minAndroidGradlePluginVersion=1.0.0
-+coreLibraryDesugaringEnabled=false
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/annotation_processor_list/debug/javaPreCompileDebug/annotationProcessors.json b/node_modules/react-native-scrypt/android/build/intermediates/annotation_processor_list/debug/javaPreCompileDebug/annotationProcessors.json
-new file mode 100644
-index 0000000..9e26dfe
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/annotation_processor_list/debug/javaPreCompileDebug/annotationProcessors.json
-@@ -0,0 +1 @@
-+{}
-\ No newline at end of file
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar b/node_modules/react-native-scrypt/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar
-new file mode 100644
-index 0000000..6edfd14
-Binary files /dev/null and b/node_modules/react-native-scrypt/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar differ
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar b/node_modules/react-native-scrypt/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar
-new file mode 100644
-index 0000000..6a12bba
-Binary files /dev/null and b/node_modules/react-native-scrypt/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar differ
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/compile_symbol_list/debug/generateDebugRFile/R.txt b/node_modules/react-native-scrypt/android/build/intermediates/compile_symbol_list/debug/generateDebugRFile/R.txt
-new file mode 100644
-index 0000000..e69de29
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties b/node_modules/react-native-scrypt/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
-new file mode 100644
-index 0000000..4573dba
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
-@@ -0,0 +1 @@
-+#Thu Mar 12 11:27:58 CET 2026
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml b/node_modules/react-native-scrypt/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml
-new file mode 100644
-index 0000000..244e957
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml
-@@ -0,0 +1,2 @@
-+<?xml version="1.0" encoding="utf-8"?>
-+<merger version="3"><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main" generated-set="main$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="debug$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/debug/res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="debug" generated-set="debug$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/debug/res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="generated$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/build/generated/res/resValues/debug"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="generated" generated-set="generated$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/build/generated/res/resValues/debug"/></dataSet><mergedItems/></merger>
-\ No newline at end of file
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/incremental/mergeDebugShaders/merger.xml b/node_modules/react-native-scrypt/android/build/intermediates/incremental/mergeDebugShaders/merger.xml
-new file mode 100644
-index 0000000..d820852
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/incremental/mergeDebugShaders/merger.xml
-@@ -0,0 +1,2 @@
-+<?xml version="1.0" encoding="utf-8"?>
-+<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/shaders"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/debug/shaders"/></dataSet></merger>
-\ No newline at end of file
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/incremental/packageDebugAssets/merger.xml b/node_modules/react-native-scrypt/android/build/intermediates/incremental/packageDebugAssets/merger.xml
-new file mode 100644
-index 0000000..47bf0c1
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/incremental/packageDebugAssets/merger.xml
-@@ -0,0 +1,2 @@
-+<?xml version="1.0" encoding="utf-8"?>
-+<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/assets"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/debug/assets"/></dataSet><dataSet config="generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/build/intermediates/shader_assets/debug/compileDebugShaders/out"/></dataSet></merger>
-\ No newline at end of file
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/crypho/scrypt/BuildConfig.class b/node_modules/react-native-scrypt/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/crypho/scrypt/BuildConfig.class
-new file mode 100644
-index 0000000..f717666
-Binary files /dev/null and b/node_modules/react-native-scrypt/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/crypho/scrypt/BuildConfig.class differ
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/crypho/scrypt/RNScryptModule.class b/node_modules/react-native-scrypt/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/crypho/scrypt/RNScryptModule.class
-new file mode 100644
-index 0000000..3e5e1a4
-Binary files /dev/null and b/node_modules/react-native-scrypt/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/crypho/scrypt/RNScryptModule.class differ
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/crypho/scrypt/RNScryptPackage.class b/node_modules/react-native-scrypt/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/crypho/scrypt/RNScryptPackage.class
-new file mode 100644
-index 0000000..b9eb50c
-Binary files /dev/null and b/node_modules/react-native-scrypt/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/crypho/scrypt/RNScryptPackage.class differ
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt b/node_modules/react-native-scrypt/android/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt
-new file mode 100644
-index 0000000..78ac5b8
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt
-@@ -0,0 +1,2 @@
-+R_DEF: Internal format may change without notice
-+local
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/manifest_merge_blame_file/debug/processDebugManifest/manifest-merger-blame-debug-report.txt b/node_modules/react-native-scrypt/android/build/intermediates/manifest_merge_blame_file/debug/processDebugManifest/manifest-merger-blame-debug-report.txt
-new file mode 100644
-index 0000000..7b7b43a
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/manifest_merge_blame_file/debug/processDebugManifest/manifest-merger-blame-debug-report.txt
-@@ -0,0 +1,7 @@
-+1<?xml version="1.0" encoding="utf-8"?>
-+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-+3    package="com.crypho.scrypt" >
-+4
-+5    <uses-sdk android:minSdkVersion="24" />
-+6
-+7</manifest>
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml b/node_modules/react-native-scrypt/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml
-new file mode 100644
-index 0000000..25ffcf3
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml
-@@ -0,0 +1,7 @@
-+<?xml version="1.0" encoding="utf-8"?>
-+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-+    package="com.crypho.scrypt" >
-+
-+    <uses-sdk android:minSdkVersion="24" />
-+
-+</manifest>
-\ No newline at end of file
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/navigation_json/debug/extractDeepLinksDebug/navigation.json b/node_modules/react-native-scrypt/android/build/intermediates/navigation_json/debug/extractDeepLinksDebug/navigation.json
-new file mode 100644
-index 0000000..0637a08
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/navigation_json/debug/extractDeepLinksDebug/navigation.json
-@@ -0,0 +1 @@
-+[]
-\ No newline at end of file
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/nested_resources_validation_report/debug/generateDebugResources/nestedResourcesValidationReport.txt b/node_modules/react-native-scrypt/android/build/intermediates/nested_resources_validation_report/debug/generateDebugResources/nestedResourcesValidationReport.txt
-new file mode 100644
-index 0000000..08f4ebe
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/nested_resources_validation_report/debug/generateDebugResources/nestedResourcesValidationReport.txt
-@@ -0,0 +1 @@
-+0 Warning/Error
-\ No newline at end of file
-diff --git a/node_modules/react-native-scrypt/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt b/node_modules/react-native-scrypt/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt
-new file mode 100644
-index 0000000..b297628
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt
-@@ -0,0 +1 @@
-+com.crypho.scrypt
-diff --git a/node_modules/react-native-scrypt/android/build/outputs/logs/manifest-merger-debug-report.txt b/node_modules/react-native-scrypt/android/build/outputs/logs/manifest-merger-debug-report.txt
-new file mode 100644
-index 0000000..48e99cc
---- /dev/null
-+++ b/node_modules/react-native-scrypt/android/build/outputs/logs/manifest-merger-debug-report.txt
-@@ -0,0 +1,17 @@
-+-- Merging decision tree log ---
-+manifest
-+ADDED from /Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/AndroidManifest.xml:2:1-5:12
-+INJECTED from /Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/AndroidManifest.xml:2:1-5:12
-+	package
-+		ADDED from /Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/AndroidManifest.xml:3:11-38
-+		INJECTED from /Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/AndroidManifest.xml
-+	xmlns:android
-+		ADDED from /Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/AndroidManifest.xml:2:11-69
-+uses-sdk
-+INJECTED from /Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/AndroidManifest.xml reason: use-sdk injection requested
-+INJECTED from /Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/AndroidManifest.xml
-+INJECTED from /Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/AndroidManifest.xml
-+	android:targetSdkVersion
-+		INJECTED from /Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/AndroidManifest.xml
-+	android:minSdkVersion
-+		INJECTED from /Users/michaelmartin/vechain.org/veworld-mobile/node_modules/react-native-scrypt/android/src/main/AndroidManifest.xml
-diff --git a/node_modules/react-native-scrypt/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin b/node_modules/react-native-scrypt/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin
-new file mode 100644
-index 0000000..9003dfc
-Binary files /dev/null and b/node_modules/react-native-scrypt/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin differ
+-
 diff --git a/node_modules/react-native-scrypt/android/src/main/jni/Android.mk b/node_modules/react-native-scrypt/android/src/main/jni/Android.mk
 index 99fa064..b0d7f50 100644
 --- a/node_modules/react-native-scrypt/android/src/main/jni/Android.mk
@@ -247,6 +90,17 @@ index 99fa064..b0d7f50 100644
  
  include $(BUILD_SHARED_LIBRARY)
 \ No newline at end of file
+diff --git a/node_modules/react-native-scrypt/android/src/main/jni/libscrypt-jni.c b/node_modules/react-native-scrypt/android/src/main/jni/libscrypt-jni.c
+index c55d315..883e67e 100644
+--- a/node_modules/react-native-scrypt/android/src/main/jni/libscrypt-jni.c
++++ b/node_modules/react-native-scrypt/android/src/main/jni/libscrypt-jni.c
+@@ -1,5 +1,6 @@
+ 
+ #include <errno.h>
++#include <stdlib.h>
+ #include <string.h>
+ #include <jni.h>
+ #include <android/log.h>
 diff --git a/node_modules/react-native-scrypt/ios/RNScrypt.h b/node_modules/react-native-scrypt/ios/RNScrypt.h
 index 2daa63d..a546b30 100644
 --- a/node_modules/react-native-scrypt/ios/RNScrypt.h
