@@ -1,3 +1,6 @@
+jest.mock("~Generated/abi", () => require("../../Generated/abi"))
+jest.mock("~Generated/businessEvents", () => require("../../Generated/businessEvents"))
+
 import { ExpandedBlockDetail } from "@vechain/sdk-network"
 import { BusinessEventAbiManager } from "./BusinessEventAbiManager"
 import { GenericAbiManager } from "./GenericAbiManager"
