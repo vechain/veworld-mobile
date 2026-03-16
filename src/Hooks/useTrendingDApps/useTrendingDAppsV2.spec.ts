@@ -1,11 +1,14 @@
 import { useRoundXApps, useXAppsShares, useCurrentAllocationsRoundId, XApp } from "~Hooks/VeBetterDao"
-import { useTrendingDAppsV2 } from "./useTrendingDAppsV2"
 import { renderHook } from "@testing-library/react-hooks"
-import { TestWrapper } from "~Test"
+import { TestHelpers, TestWrapper } from "~Test"
 import moment from "moment"
 import { VbdDApp } from "~Model"
 import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps"
 import { useQuery } from "@tanstack/react-query"
+import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
+import { useTrendingDAppsV2 } from "./useTrendingDAppsV2"
+
+const { mockedFeatureFlags } = TestHelpers.data
 
 jest.mock("~Hooks/VeBetterDao")
 jest.mock("~Hooks/useFetchFeaturedDApps")
@@ -14,6 +17,10 @@ jest.mock("@tanstack/react-query", () => ({
     useQuery: jest.fn().mockImplementation(args => {
         return { data: args.queryFn() }
     }),
+}))
+jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
+    ...jest.requireActual("~Components/Providers/FeatureFlagsProvider"),
+    useFeatureFlags: jest.fn(),
 }))
 
 // Setup test dates
@@ -103,6 +110,7 @@ describe("useTrendingDAppsV2", () => {
         ;(useQuery as jest.Mock).mockImplementation(args => {
             return { data: args.queryFn(), isLoading: false }
         })
+        ;(useFeatureFlags as jest.Mock).mockReturnValue(mockedFeatureFlags)
     })
 
     it("should return the trending dapps", () => {
@@ -207,5 +215,18 @@ describe("useTrendingDAppsV2", () => {
         })
 
         expect(result.current.trendingDapps.length).toEqual(3)
+    })
+
+    it("shouldn' return hidden for you popular apps", () => {
+        ;(useFeatureFlags as jest.Mock).mockReturnValue({
+            ...mockedFeatureFlags,
+            hiddenForYouPopularApps: ["dapp1-id"],
+        })
+
+        const { result } = renderHook(() => useTrendingDAppsV2(), {
+            wrapper: TestWrapper,
+        })
+
+        expect(result.current.trendingDapps.length).toEqual(2)
     })
 })

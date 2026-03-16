@@ -209,6 +209,9 @@ const compareSecondLevelDomains = (url1: string, url2: string) => {
     return getSecondLevelDomain(ur1Lower) === getSecondLevelDomain(ur2Lower)
 }
 
+const normalizeUrlScheme = (url: string) =>
+    url.replace(/^([a-z][a-z0-9+.-]*):\/\//i, (_, scheme) => `${scheme.toLowerCase()}://`)
+
 export default {
     compareURLs,
     clean,
@@ -228,6 +231,7 @@ export default {
     parseUrl,
     parseUrlSafe,
     compareSecondLevelDomains,
+    normalizeUrlScheme,
     IPFS_GATEWAY,
     IPFS_GATEWAY_HOSTNAME,
     ARWEAVE_GATEWAY_HOSTNAME,

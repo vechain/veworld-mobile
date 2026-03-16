@@ -93,6 +93,7 @@ export type FeatureFlags = {
             enabled: boolean
         }
     }
+    hiddenForYouPopularApps: string[]
 }
 
 export const getFeatureFlags = async () => {

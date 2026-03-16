@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react-native"
+import { act, fireEvent, render, screen } from "@testing-library/react-native"
 import React from "react"
 import { DerivationPath } from "~Constants"
 import { useCloudBackup } from "~Hooks/useCloudBackup"
@@ -76,11 +76,11 @@ describe("SelfCustodyOptionsBottomSheet", () => {
             wrapper: TestWrapper,
         })
 
-        //Wait for the cloud option to be enabled because initialization is async
-        await waitFor(() => {
-            const cloudOption = screen.getByTestId("SELF_CUSTODY_OPTIONS_CLOUD")
-            expect(cloudOption).toBeEnabled()
-        })
+        // Flush the async useEffect that fetches wallets from cloud
+        await act(async () => {})
+
+        const cloudOption = screen.getByTestId("SELF_CUSTODY_OPTIONS_CLOUD")
+        expect(cloudOption).toBeEnabled()
     })
 
     it("should not have cloud option if platform is not iOS", async () => {

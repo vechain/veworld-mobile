@@ -109,14 +109,14 @@ apply from: "../../node_modules/@sentry/react-native/sentry.gradle"
  * The preferred build flavor of JavaScriptCore (JSC)
  *
  * For example, to use the international variant, you can use:
- * `def jscFlavor = 'org.webkit:android-jsc-intl:+'`
+ * `def jscFlavor = io.github.react-native-community:jsc-android-intl:2026004.+`
  *
  * The international variant includes ICU i18n library and necessary data
  * allowing to use e.g. `Date.toLocaleString` and `String.localeCompare` that
  * give correct results when using with locales other than en-US. Note that
  * this variant is about 6MiB larger per architecture than default.
  */
-def jscFlavor = 'org.webkit:android-jsc:+'
+def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
 android {
     ndkVersion rootProject.ext.ndkVersion
@@ -212,9 +212,9 @@ dependencies {
     implementation 'com.google.guava:guava:31.0.1-android'
     implementation 'com.google.api-client:google-api-client-android:2.6.0'
     implementation 'com.google.api-client:google-api-client-gson:1.34.0'
-    implementation 'com.facebook.fresco:webpsupport:3.2.0'
+    implementation 'com.facebook.fresco:webpsupport:3.6.0'
     // Animated WebP
-    implementation 'com.facebook.fresco:animated-webp:3.2.0'
+    implementation 'com.facebook.fresco:animated-webp:3.6.0'
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

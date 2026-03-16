@@ -1,8 +1,38 @@
+diff --git a/node_modules/react-native-scrypt/android/CMakeLists.txt b/node_modules/react-native-scrypt/android/CMakeLists.txt
+new file mode 100644
+index 0000000..b7281a5
+--- /dev/null
++++ b/node_modules/react-native-scrypt/android/CMakeLists.txt
+@@ -0,0 +1,24 @@
++cmake_minimum_required(VERSION 3.13)
++project(scrypt_jni C)
++
++set(LIBSCRYPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../libscrypt)
++set(JNI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/main/jni)
++
++add_library(scrypt_jni SHARED
++    ${JNI_DIR}/libscrypt-jni.c
++    ${LIBSCRYPT_DIR}/b64.c
++    ${LIBSCRYPT_DIR}/crypto_scrypt-hexconvert.c
++    ${LIBSCRYPT_DIR}/sha256.c
++    ${LIBSCRYPT_DIR}/crypto-mcf.c
++    ${LIBSCRYPT_DIR}/crypto_scrypt-nosse.c
++    ${LIBSCRYPT_DIR}/slowequals.c
++    ${LIBSCRYPT_DIR}/crypto_scrypt-check.c
++    ${LIBSCRYPT_DIR}/crypto-scrypt-saltgen.c
++    ${LIBSCRYPT_DIR}/crypto_scrypt-hash.c
++    ${LIBSCRYPT_DIR}/main.c
++)
++
++target_include_directories(scrypt_jni PRIVATE ${LIBSCRYPT_DIR})
++target_compile_options(scrypt_jni PRIVATE -std=c99)
++target_link_libraries(scrypt_jni log)
++target_link_options(scrypt_jni PRIVATE -Wl,-z,max-page-size=16384)
 diff --git a/node_modules/react-native-scrypt/android/build.gradle b/node_modules/react-native-scrypt/android/build.gradle
-index dac9cc5..8575880 100644
+index dac9cc5..ff53cdb 100644
 --- a/node_modules/react-native-scrypt/android/build.gradle
 +++ b/node_modules/react-native-scrypt/android/build.gradle
-@@ -27,6 +27,7 @@ android {
+@@ -27,25 +27,26 @@ android {
  
      defaultConfig {
          minSdkVersion safeExtGet('minSdkVersion', 16)
@@ -10,14 +40,67 @@ index dac9cc5..8575880 100644
          targetSdkVersion safeExtGet('targetSdkVersion', 23)
          versionCode 1
          versionName "1.0"
-@@ -54,6 +55,6 @@ repositories {
+-        ndk {
+-            abiFilters "armeabi-v7a", "x86"
+-            moduleName "libscrypt_jni"
+-            ldLibs "log"
+-            cFlags "-std=c99"
++
++        externalNativeBuild {
++            cmake {
++                arguments "-DANDROID_STL=c++_shared"
++            }
+         }
+     }
+ 
+-    lintOptions {
+-        abortOnError false
++    externalNativeBuild {
++        cmake {
++            path "CMakeLists.txt"
++        }
+     }
+ 
+-    // https://stackoverflow.com/questions/30675767/project-builds-with-ndk-build-but-not-android-studio
+-    sourceSets.main {
+-        jniLibs.srcDir 'src/main/libs' //set libs as .so's location instead of jniLibs
+-        jni.srcDirs = [] //disable automatic ndk-build call with auto-generated Android.mk
++    lintOptions {
++        abortOnError false
+     }
+ }
+ 
+@@ -54,6 +55,5 @@ repositories {
  }
  
  dependencies {
 -    compile 'com.facebook.react:react-native:+'
 +    implementation 'com.facebook.react:react-native:+'
  }
+-
+diff --git a/node_modules/react-native-scrypt/android/src/main/jni/Android.mk b/node_modules/react-native-scrypt/android/src/main/jni/Android.mk
+index 99fa064..b0d7f50 100644
+--- a/node_modules/react-native-scrypt/android/src/main/jni/Android.mk
++++ b/node_modules/react-native-scrypt/android/src/main/jni/Android.mk
+@@ -28,5 +28,6 @@ LOCAL_C_INCLUDES := $(LOCAL_LIBSCRYPT_SRC)
+ LOCAL_SRC_FILES := $(LOCAL_PATH)/libscrypt-jni.c
  
+ LOCAL_LDLIBS := -llog
++LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384
+ 
+ include $(BUILD_SHARED_LIBRARY)
+\ No newline at end of file
+diff --git a/node_modules/react-native-scrypt/android/src/main/jni/libscrypt-jni.c b/node_modules/react-native-scrypt/android/src/main/jni/libscrypt-jni.c
+index c55d315..883e67e 100644
+--- a/node_modules/react-native-scrypt/android/src/main/jni/libscrypt-jni.c
++++ b/node_modules/react-native-scrypt/android/src/main/jni/libscrypt-jni.c
+@@ -1,5 +1,6 @@
+ 
+ #include <errno.h>
++#include <stdlib.h>
+ #include <string.h>
+ #include <jni.h>
+ #include <android/log.h>
 diff --git a/node_modules/react-native-scrypt/ios/RNScrypt.h b/node_modules/react-native-scrypt/ios/RNScrypt.h
 index 2daa63d..a546b30 100644
 --- a/node_modules/react-native-scrypt/ios/RNScrypt.h

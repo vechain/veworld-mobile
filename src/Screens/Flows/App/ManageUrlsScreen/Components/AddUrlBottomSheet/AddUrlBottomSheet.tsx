@@ -25,9 +25,11 @@ export const AddUrlBottomSheet = React.forwardRef<BottomSheetModalMethods, Props
     const { LL } = useI18nContext()
     const thor = useThor()
     const handleAddUrl = () => {
+        const normalizedUrl = URIUtils.normalizeUrlScheme(newUrl)
+
         dispatch(
             addDelegationUrl({
-                url: newUrl,
+                url: normalizedUrl,
                 genesisId: thor.genesis.id,
                 callbackIfAlreadyPresent: () => {
                     showWarningToast({
@@ -49,7 +51,7 @@ export const AddUrlBottomSheet = React.forwardRef<BottomSheetModalMethods, Props
                     <BaseSpacer height={24} />
                     <BaseBottomSheetTextInput
                         value={newUrl}
-                        onChangeText={newValue => setNewUrl(newValue)}
+                        onChangeText={newValue => setNewUrl(URIUtils.normalizeUrlScheme(newValue))}
                         placeholder={LL.SEND_DELEGATION_ADD_URL_PLACEHOLDER()}
                         testID="AddUrl_input"
                     />

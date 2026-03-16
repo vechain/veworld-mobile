@@ -86,6 +86,7 @@ export const initialState: FeatureFlags = {
             enabled: false,
         },
     },
+    hiddenForYouPopularApps: [],
 }
 
 type FeatureFlagsContextType = FeatureFlags & {
@@ -115,6 +116,11 @@ export const FeatureFlagsProvider = ({ children }: { children: React.ReactNode }
             // If not an object, return as is
             if (typeof feature !== "object") {
                 return isFeatureEnabled(feature)
+            }
+
+            // If the feature is an array, return as is
+            if (Array.isArray(feature)) {
+                return feature
             }
 
             // Recursively process all keys if no availability keys at this level

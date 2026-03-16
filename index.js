@@ -1,3 +1,7 @@
+import "fast-text-encoding"
+import "react-native-get-random-values"
+import "@ethersproject/shims"
+
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { AppRegistry, LogBox } from "react-native"
@@ -55,7 +59,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
-import "react-native-fast-url/src/polyfill"
+import "react-native-fast-url"
 import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { clientPersister, queryClient, RQ_CACHE_MAX_AGE } from "~Api/QueryProvider"
