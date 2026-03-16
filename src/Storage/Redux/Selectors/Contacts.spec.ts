@@ -3,7 +3,7 @@ import { defaultMainNetwork } from "~Constants"
 
 import { selectSelectedAccountAddress } from "./Account"
 
-import { selectRecentContacts } from "./Contacts"
+import { selectKnownContacts, selectRecentContacts } from "./Contacts"
 
 jest.mock("./Account", () => ({
     selectSelectedAccountAddress: jest.fn(),
@@ -19,6 +19,27 @@ describe("Contacts - Selectors", () => {
     beforeEach(() => {
         jest.clearAllMocks()
     })
+
+    describe("selectKnownContacts", () => {
+        it("should return known contacts sorted alphabetically by alias", () => {
+            const state = {
+                contacts: {
+                    contacts: [
+                        { alias: "zeta", address: ethers.Wallet.createRandom().address, type: "known" },
+                        { alias: "Alpha", address: ethers.Wallet.createRandom().address, type: "known" },
+                        { alias: "bravo", address: ethers.Wallet.createRandom().address, type: "known" },
+                        { alias: "cache", address: ethers.Wallet.createRandom().address, type: "cache" },
+                    ],
+                    recentContacts: {},
+                },
+            }
+
+            const result = selectKnownContacts(state as any)
+
+            expect(result.map(contact => contact.alias)).toEqual(["Alpha", "bravo", "zeta"])
+        })
+    })
+
     describe("selectRecentContacts", () => {
         it("should not sort in place", () => {
             const address = ethers.Wallet.createRandom().address
