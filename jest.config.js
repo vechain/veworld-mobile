@@ -3,7 +3,7 @@ const { defaults: tsjPreset } = require("ts-jest/presets")
 /** @type {import("jest").Config} */
 module.exports = {
     ...tsjPreset,
-    testEnvironment: "@shopify/react-native-skia/jestEnv.mjs",
+    testEnvironment: "@shopify/react-native-skia/jestEnv.js",
     preset: "react-native",
     setupFiles: ["./node_modules/react-native-gesture-handler/jestSetup.js"],
     setupFilesAfterEnv: ["<rootDir>/jest.setup.ts", "@shopify/react-native-skia/jestSetup.js"],
@@ -59,6 +59,9 @@ module.exports = {
         "^~Networking(.*)": ["<rootDir>/src/Networking$1"],
         "^~Logging(.*)": ["<rootDir>/src/Logging$1"],
         "^~VechainWalletKit(.*)": ["<rootDir>/src/VechainWalletKit$1"],
+        "^~Generated/businessEvents$": "<rootDir>/src/Test/mocks/generated/businessEvents.ts",
+        "^~Generated/abi$": "<rootDir>/src/Test/mocks/generated/abi.ts",
+        "^~Generated/indexer/schema$": "<rootDir>/src/Test/mocks/generated/indexer/schema.ts",
         "^~Generated(.*)": ["<rootDir>/src/Generated$1"],
         "^~fixtures(.*)": ["<rootDir>/__fixtures__$1"],
         "^react-native-device-info$": "<rootDir>/src/Test/mocks/react-native-device-info.js",

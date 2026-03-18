@@ -1,8 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { PropsWithChildren, useCallback, useEffect, useMemo } from "react"
-import { StyleSheet } from "react-native"
-import { NestableScrollContainer } from "react-native-draggable-flatlist"
-import { Gesture, GestureDetector } from "react-native-gesture-handler"
+import React, { PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet } from "react-native"
+import { Gesture, GestureDetector, ScrollView as GestureScrollView, GestureType } from "react-native-gesture-handler"
 import Animated, {
     clamp,
     Extrapolation,
@@ -29,11 +28,14 @@ const PADDING_BOTTOM = 32
 const DEFAULT_TRANSLATION = 16
 
 const INITIAL_POS_Y_SCROLL = 0
-const SCROLL_THRESHOLD = 4
+const SCROLL_THRESHOLD = 100
 
 export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const nativeGestureRef = useRef<GestureType>(undefined)
+    const scrollPanGestureRef = useRef<GestureType>(undefined)
+    const [scrollEnabled, setScrollEnabled] = useState(true)
 
+    const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
 
     const height = useSharedValue(SCREEN_HEIGHT)
@@ -63,8 +65,8 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
     }, [nav.goBack])
 
     const onScrollOffsetChange = useCallback(
-        (scrollOffset: number) => {
-            scrollY.value = scrollOffset
+        (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+            scrollY.value = e.nativeEvent.contentOffset.y
         },
         [scrollY],
     )
@@ -98,8 +100,6 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
         }
     }, [height.value, nav, translateY])
 
-    const nativeGesture = Gesture.Native()
-
     const handleGesture = useMemo(() => {
         return Gesture.Pan()
             .onUpdate(v => {
@@ -116,22 +116,33 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
             })
     }, [height.value, onClose, translateY])
 
-    // This is needed on iOS only because the scroll view works in a different way than on Android
-    // Also on Android this gesture block the scroll completely
+    const nativeGesture = Gesture.Native().withRef(nativeGestureRef)
+
     const scrollPanGesture = Gesture.Pan()
+        .withRef(scrollPanGestureRef)
+        .hitSlop({ top: 200 })
         .onUpdate(({ translationY }) => {
             const clampedValue = clamp(translationY, 0, 0)
             scrollY.value = clampedValue
         })
         .onFinalize(({ translationY }) => {
             const scrollGoBackAnimation = withTiming(INITIAL_POS_Y_SCROLL)
-            if (translationY >= SCROLL_THRESHOLD && scrollY.value <= 0) {
+            if (translationY > SCROLL_THRESHOLD && scrollY.value <= 0) {
                 onClose()
                 scrollY.value = scrollGoBackAnimation
             }
         })
+        .activeOffsetY(200)
 
     const composedGestures = Gesture.Simultaneous(scrollPanGesture, nativeGesture)
+
+    const onContentSizeChange = useCallback(
+        (_: number, h: number) => {
+            // If the content is taller than the screen, then disable the scroll
+            setScrollEnabled(h > height.value)
+        },
+        [height.value],
+    )
 
     return (
         <BaseSafeArea grow={1} style={styles.safeArea} bg="transparent">
@@ -159,13 +170,17 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
                         )}
                     </GestureDetector>
 
-                    <NestableScrollContainer
-                        bounces={false}
-                        showsVerticalScrollIndicator={false}
+                    <GestureScrollView
+                        scrollEnabled={scrollEnabled}
                         nestedScrollEnabled
-                        onScrollOffsetChange={onScrollOffsetChange}>
+                        scrollEventThrottle={16}
+                        // Allows the scroll to close the bottom sheet gesture to be used simultaneously with the native gesture
+                        simultaneousHandlers={[scrollPanGestureRef, nativeGestureRef]}
+                        showsVerticalScrollIndicator={false}
+                        onContentSizeChange={onContentSizeChange}
+                        onScroll={onScrollOffsetChange}>
                         {children}
-                    </NestableScrollContainer>
+                    </GestureScrollView>
                 </Animated.View>
             </GestureDetector>
         </BaseSafeArea>
@@ -187,6 +202,17 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         safeArea: {
             justifyContent: "flex-end",
+        },
+        handleContainer: {
+            alignContent: "flex-start",
+            flexShrink: 0,
+            flexGrow: 0,
+            backgroundColor: "red",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1,
         },
         handle: {
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.APP_BACKGROUND_LIGHT,

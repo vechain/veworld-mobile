@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks"
-import { useNewDApps } from "./useNewDApps"
-import { useVeBetterDaoActiveDapps, useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 import { TestWrapper } from "~Test"
+import { useVeBetterDaoActiveDapps, useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
+import { useNewDApps } from "./useNewDApps"
 import moment from "moment"
 import { DiscoveryDApp } from "~Constants"
 import { VeBetterDaoDapp } from "~Model"
@@ -189,7 +189,7 @@ const initialStateMock = {
 
 describe("useNewDApps", () => {
     beforeEach(() => {
-        jest.resetAllMocks()
+        jest.clearAllMocks()
         ;(useVeBetterDaoDapps as jest.Mock).mockImplementation(() => ({
             data: [],
             isFetching: false,

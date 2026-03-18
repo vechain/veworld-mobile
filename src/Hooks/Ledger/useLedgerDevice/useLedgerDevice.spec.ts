@@ -1,12 +1,12 @@
-import { renderHook } from "@testing-library/react-hooks"
-import { useLedgerDevice } from "."
-
+import { act, renderHook } from "@testing-library/react-hooks"
 import { TestHelpers } from "~Test"
-import { act } from "@testing-library/react-native"
-import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { useScanLedgerDevices } from "~Hooks"
+import { useLedgerDevice } from "."
+import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
 import { LEDGER_ERROR_CODES } from "~Constants"
+
+const { mockedTransport } = TestHelpers.data
 
 jest.mock("~Hooks/Ledger/useScanLedgerDevices/useScanLedgerDevices")
 
@@ -16,7 +16,7 @@ describe("useLedgerDevice", () => {
     beforeEach(() => {
         jest.clearAllMocks()
         jest.mock("@ledgerhq/react-native-hw-transport-ble", () => ({
-            default: TestHelpers.data.mockedTransport,
+            default: mockedTransport,
         }))
         ;(useScanLedgerDevices as jest.MockedFunction<typeof useScanLedgerDevices>).mockReturnValue({
             availableDevices: [],
@@ -52,16 +52,19 @@ describe("useLedgerDevice", () => {
                 throw new Error("test error")
             })
 
-            const { result, waitForNextUpdate } = renderHook(() =>
+            const { result, waitFor } = renderHook(() =>
                 useLedgerDevice({
                     deviceId,
                 }),
             )
 
-            act(async () => {
-                await result.current.connectLedger()
+            await act(() => {
+                result.current.connectLedger()
             })
-            await waitForNextUpdate({ timeout: 5000 })
+
+            await waitFor(() => {
+                expect(result.current.isConnecting).toBe(false)
+            })
 
             expect(result.current).toEqual({
                 appOpen: false,
@@ -82,16 +85,19 @@ describe("useLedgerDevice", () => {
                 return TestHelpers.data.mockedTransport
             })
 
-            const { result, waitForNextUpdate } = renderHook(() =>
+            const { result, waitFor } = renderHook(() =>
                 useLedgerDevice({
                     deviceId,
                 }),
             )
 
-            act(async () => {
-                await result.current.connectLedger()
+            await act(() => {
+                result.current.connectLedger()
             })
-            await waitForNextUpdate({ timeout: 5000 })
+
+            await waitFor(() => {
+                expect(result.current.isConnecting).toBe(false)
+            })
 
             expect(result.current).toEqual({
                 appOpen: false,

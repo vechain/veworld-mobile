@@ -1,0 +1,756 @@
+diff --git a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebChromeClient.java b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebChromeClient.java
+index 07f73fd..ae061d3 100644
+--- a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebChromeClient.java
++++ b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebChromeClient.java
+@@ -3,6 +3,10 @@ package com.reactnativecommunity.webview;
+ import android.Manifest;
+ import android.annotation.TargetApi;
+ import android.app.Activity;
++import android.app.AlertDialog;
++import android.content.DialogInterface;
++import android.util.Log;
++import android.os.Handler;
+ import android.content.pm.PackageManager;
+ import android.net.Uri;
+ import android.os.Build;
+@@ -17,6 +21,7 @@ import android.webkit.ValueCallback;
+ import android.webkit.WebChromeClient;
+ import android.webkit.WebView;
+ import android.webkit.WebViewClient;
++import android.widget.Button;
+ import android.widget.FrameLayout;
+ 
+ import androidx.annotation.RequiresApi;
+@@ -37,6 +42,7 @@ import java.util.Collections;
+ import java.util.List;
+ 
+ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEventListener {
++    private static final String TAG = RNCWebChromeClient.class.getSimpleName();
+     protected static final FrameLayout.LayoutParams FULLSCREEN_LAYOUT_PARAMS = new FrameLayout.LayoutParams(
+             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+ 
+@@ -57,7 +63,8 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+ 
+     /*
+      * - Permissions -
+-     * As native permissions are asynchronously handled by the PermissionListener, many fields have
++     * As native permissions are asynchronously handled by the PermissionListener,
++     * many fields have
+      * to be stored to send permissions results to the webview
+      */
+ 
+@@ -65,6 +72,10 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+     protected PermissionRequest permissionRequest;
+     // Webview camera & audio permission already granted
+     protected List<String> grantedPermissions;
++    // Webview requested permissions from the OS
++    protected List<String> requestedAndroidPermissions;
++    // Webview granted permissions requested separately through isDialog
++    protected List<String> alertPermissions;
+ 
+     // Webview geolocation permission callback
+     protected GeolocationPermissions.Callback geolocationPermissionCallback;
+@@ -90,20 +101,19 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+ 
+         final WebView newWebView = new WebView(view.getContext());
+ 
+-        if(mHasOnOpenWindowEvent) {
+-            newWebView.setWebViewClient(new WebViewClient(){
+-            @Override
+-            public boolean shouldOverrideUrlLoading (WebView subview, String url) {
+-                WritableMap event = Arguments.createMap();
+-                event.putString("targetUrl", url);
++        if (mHasOnOpenWindowEvent) {
++            newWebView.setWebViewClient(new WebViewClient() {
++                @Override
++                public boolean shouldOverrideUrlLoading(WebView subview, String url) {
++                    WritableMap event = Arguments.createMap();
++                    event.putString("targetUrl", url);
+ 
+-                ((RNCWebView) view).dispatchEvent(
+-                    view,
+-                    new TopOpenWindowEvent(RNCWebViewWrapper.getReactTagFromWebView(view), event)
+-                );
++                    ((RNCWebView) view).dispatchEvent(
++                            view,
++                            new TopOpenWindowEvent(RNCWebViewWrapper.getReactTagFromWebView(view), event));
+ 
+-                return true;
+-            }
++                    return true;
++                }
+             });
+         }
+ 
+@@ -139,65 +149,133 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+         event.putBoolean("canGoForward", webView.canGoForward());
+         event.putDouble("progress", (float) newProgress / 100);
+ 
+-        UIManagerHelper.getEventDispatcherForReactTag(this.mWebView.getThemedReactContext(), reactTag).dispatchEvent(new TopLoadingProgressEvent(reactTag, event));
++        UIManagerHelper.getEventDispatcherForReactTag(this.mWebView.getThemedReactContext(), reactTag)
++                .dispatchEvent(new TopLoadingProgressEvent(reactTag, event));
+     }
+ 
+     @Override
+     public void onPermissionRequest(final PermissionRequest request) {
+-
++        permissionRequest = request;
+         grantedPermissions = new ArrayList<>();
++        alertPermissions = new ArrayList<>();
++        // Permissions that we need to ask permission for from the OS
++        requestedAndroidPermissions = new ArrayList<>();
+ 
+         ArrayList<String> requestedAndroidPermissions = new ArrayList<>();
+         for (String requestedResource : request.getResources()) {
+             String androidPermission = null;
++            String requestPermissionIdentifier = null;
+ 
+             if (requestedResource.equals(PermissionRequest.RESOURCE_AUDIO_CAPTURE)) {
+                 androidPermission = Manifest.permission.RECORD_AUDIO;
++                requestPermissionIdentifier = "microphone";
+             } else if (requestedResource.equals(PermissionRequest.RESOURCE_VIDEO_CAPTURE)) {
+                 androidPermission = Manifest.permission.CAMERA;
+-            } else if(requestedResource.equals(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID)) {
++                requestPermissionIdentifier = "camera";
++            } else if (requestedResource.equals(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID)) {
+                 if (mAllowsProtectedMedia) {
+-                  grantedPermissions.add(requestedResource);
++                    grantedPermissions.add(requestedResource);
+                 } else {
+-                  /**
+-                   * Legacy handling (Kept in case it was working under some conditions (given Android version or something))
+-                   *
+-                   * Try to ask user to grant permission using Activity.requestPermissions
+-                   *
+-                   * Find more details here: https://github.com/react-native-webview/react-native-webview/pull/2732
+-                   */
+-                  androidPermission = PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID;
+-                }            }
++                    androidPermission = PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID;
++                }
++            }
+             // TODO: RESOURCE_MIDI_SYSEX, RESOURCE_PROTECTED_MEDIA_ID.
+             if (androidPermission != null) {
+-                if (ContextCompat.checkSelfPermission(this.mWebView.getThemedReactContext(), androidPermission) == PackageManager.PERMISSION_GRANTED) {
+-                    grantedPermissions.add(requestedResource);
++                if (ContextCompat.checkSelfPermission(this.mWebView.getThemedReactContext(),
++                        androidPermission) == PackageManager.PERMISSION_GRANTED) {
++                    Activity activity = this.mWebView.getThemedReactContext().getCurrentActivity();
++                    if (activity == null) {
++                        Log.w(TAG, "Current activity is null, cannot show AlertDialog. Denying permission request.");
++                        continue;
++                    }
++                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
++                    builder.setMessage(this.makeAlertMessage(request, requestPermissionIdentifier));
++                    builder.setCancelable(false);
++                    String finalAndroidPermission = androidPermission;
++                    builder.setPositiveButton("Allow", (dialog, which) -> {
++                        this.grantedPermissions.add(requestedResource);
++                        this.alertPermissions.remove(finalAndroidPermission);
++                        if (!this.alertPermissions.isEmpty()) {
++                            return;
++                        }
++                        this.alertPermissions = null;
++                        if (this.requestedAndroidPermissions.isEmpty()) {
++                            this.permissionRequest.grant(this.grantedPermissions.toArray(new String[0]));
++                            this.permissionRequest = null;
++                            this.grantedPermissions = null;
++                        } else {
++                            this.requestPermissions(this.requestedAndroidPermissions);
++                        }
++                    });
++                    builder.setNegativeButton("Deny", (dialog, which) -> {
++                        this.alertPermissions.remove(finalAndroidPermission);
++                        if (!this.alertPermissions.isEmpty()) {
++                            return;
++                        }
++                        this.alertPermissions = null;
++                        if (!this.requestedAndroidPermissions.isEmpty()) {
++                            this.requestPermissions(this.requestedAndroidPermissions);
++                            return;
++                        }
++                        if (!this.grantedPermissions.isEmpty()) {
++                            this.permissionRequest.grant(this.grantedPermissions.toArray(new String[0]));
++                        } else {
++                            this.permissionRequest.deny();
++                        }
++                        this.permissionRequest = null;
++                        this.grantedPermissions = null;
++                    });
++                    AlertDialog alertDialog = builder.create();
++                    alertDialog.show();
++                    this.alertPermissions.add(finalAndroidPermission);
++                    // Delay making `allow` clickable for 500ms to avoid unwanted presses.
++                    Button posButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
++                    posButton.setEnabled(false);
++                    this.runDelayed(() -> posButton.setEnabled(true), 500);
+                 } else {
+                     requestedAndroidPermissions.add(androidPermission);
+                 }
+             }
+         }
+ 
+-        // If all the permissions are already granted, send the response to the WebView synchronously
+-        if (requestedAndroidPermissions.isEmpty()) {
+-            request.grant(grantedPermissions.toArray(new String[0]));
+-            grantedPermissions = null;
++        // if we have alerts in progress we will handle below with the last alert
++        if (!this.alertPermissions.isEmpty()) {
+             return;
+         }
+ 
+-        // Otherwise, ask to Android System for native permissions asynchronously
+-
+-        this.permissionRequest = request;
++        // If all the permissions are already granted, send the response to the WebView
++        // synchronously
++        if (requestedAndroidPermissions.isEmpty()) {
++            if (!grantedPermissions.isEmpty()) {
++                request.grant(grantedPermissions.toArray(new String[0]));
++                grantedPermissions = null;
++            } else {
++                request.deny();
++            }
++            return;
++        }
+ 
++        // Otherwise, ask to grant missing permissions
++        permissionRequest = request;
+         requestPermissions(requestedAndroidPermissions);
+     }
+ 
++    private String makeAlertMessage(PermissionRequest request, String requestIdentifier) {
++        Uri originUri = request.getOrigin();
++        String host = originUri.getHost();
++        return String.format("Allow " + host + " to use your " + requestIdentifier + "?");
++    }
++
++    private void runDelayed(Runnable function, long delayMillis) {
++        Handler handler = new Handler();
++        handler.postDelayed(function, delayMillis);
++    }
+ 
+     @Override
+     public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+ 
+-        if (ContextCompat.checkSelfPermission(this.mWebView.getThemedReactContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+-                != PackageManager.PERMISSION_GRANTED) {
++        if (ContextCompat.checkSelfPermission(this.mWebView.getThemedReactContext(),
++                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+ 
+             /*
+              * Keep the trace of callback and origin for the async permission request
+@@ -208,7 +286,28 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+             requestPermissions(Collections.singletonList(Manifest.permission.ACCESS_FINE_LOCATION));
+ 
+         } else {
+-            callback.invoke(origin, true, false);
++            String alertMessage = String.format("Allow %s to use your location?", origin);
++            Activity activity = this.mWebView.getThemedReactContext().getCurrentActivity();
++            if (activity == null) {
++                Log.w(TAG, "Current activity is null, cannot show AlertDialog. Calling negative callback.");
++                callback.invoke(origin, false, false);
++                return;
++            }
++            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
++            builder.setMessage(alertMessage);
++            builder.setCancelable(false);
++            builder.setPositiveButton("Allow", (dialog, which) -> {
++                callback.invoke(origin, true, false);
++            });
++            builder.setNegativeButton("Don't allow", (dialog, which) -> {
++                callback.invoke(origin, false, false);
++            });
++            AlertDialog alertDialog = builder.create();
++            alertDialog.show();
++            // Delay making `allow` clickable for 500ms to avoid unwanted presses.
++            Button posButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
++            posButton.setEnabled(false);
++            this.runDelayed(() -> posButton.setEnabled(true), 500);
+         }
+     }
+ 
+@@ -217,7 +316,8 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+         if (activity == null) {
+             throw new IllegalStateException("Tried to use permissions API while not attached to an Activity.");
+         } else if (!(activity instanceof PermissionAwareActivity)) {
+-            throw new IllegalStateException("Tried to use permissions API but the host Activity doesn't implement PermissionAwareActivity.");
++            throw new IllegalStateException(
++                    "Tried to use permissions API but the host Activity doesn't implement PermissionAwareActivity.");
+         }
+         return (PermissionAwareActivity) activity;
+     }
+@@ -225,8 +325,10 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+     private synchronized void requestPermissions(List<String> permissions) {
+ 
+         /*
+-         * If permissions request dialog is displayed on the screen and another request is sent to the
+-         * activity, the last permission asked is skipped. As a work-around, we use pendingPermissions
++         * If permissions request dialog is displayed on the screen and another request
++         * is sent to the
++         * activity, the last permission asked is skipped. As a work-around, we use
++         * pendingPermissions
+          * to store next required permissions.
+          */
+ 
+@@ -241,23 +343,24 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+         activity.requestPermissions(
+                 permissions.toArray(new String[0]),
+                 COMMON_PERMISSION_REQUEST,
+-                webviewPermissionsListener
+-        );
++                webviewPermissionsListener);
+ 
+         // Pending permissions have been sent, the list can be cleared
+         pendingPermissions.clear();
+     }
+ 
+-
+     private PermissionListener webviewPermissionsListener = (requestCode, permissions, grantResults) -> {
+ 
+         permissionsRequestShown = false;
+ 
+         /*
+-         * As a "pending requests" approach is used, requestCode cannot help to define if the request
+-         * came from geolocation or camera/audio. This is why shouldAnswerToPermissionRequest is used
++         * As a "pending requests" approach is used, requestCode cannot help to define
++         * if the request
++         * came from geolocation or camera/audio. This is why
++         * shouldAnswerToPermissionRequest is used
+          */
+-        boolean shouldAnswerToPermissionRequest = false;
++        boolean shouldAnswerToPermissionRequest = grantedPermissions != null && !grantedPermissions.isEmpty()
++                && permissionRequest != null;
+ 
+         for (int i = 0; i < permissions.length; i++) {
+ 
+@@ -317,23 +420,28 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+     };
+ 
+     protected void openFileChooser(ValueCallback<Uri> filePathCallback, String acceptType) {
+-      this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class).startPhotoPickerIntent(filePathCallback, acceptType);
++        this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class)
++                .startPhotoPickerIntent(filePathCallback, acceptType);
+     }
+ 
+     protected void openFileChooser(ValueCallback<Uri> filePathCallback) {
+-      this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class).startPhotoPickerIntent(filePathCallback, "");
++        this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class)
++                .startPhotoPickerIntent(filePathCallback, "");
+     }
+ 
+     protected void openFileChooser(ValueCallback<Uri> filePathCallback, String acceptType, String capture) {
+-      this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class).startPhotoPickerIntent(filePathCallback, acceptType);
++        this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class)
++                .startPhotoPickerIntent(filePathCallback, acceptType);
+     }
+ 
+     @Override
+-    public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
++    public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
++            FileChooserParams fileChooserParams) {
+         String[] acceptTypes = fileChooserParams.getAcceptTypes();
+         boolean allowMultiple = fileChooserParams.getMode() == WebChromeClient.FileChooserParams.MODE_OPEN_MULTIPLE;
+ 
+-        return this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class).startPhotoPickerIntent(filePathCallback, acceptTypes, allowMultiple, fileChooserParams.isCaptureEnabled());
++        return this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class).startPhotoPickerIntent(
++                filePathCallback, acceptTypes, allowMultiple, fileChooserParams.isCaptureEnabled());
+     }
+ 
+     @Override
+@@ -344,10 +452,12 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+     }
+ 
+     @Override
+-    public void onHostPause() { }
++    public void onHostPause() {
++    }
+ 
+     @Override
+-    public void onHostDestroy() { }
++    public void onHostDestroy() {
++    }
+ 
+     protected ViewGroup getRootView() {
+         return this.mWebView.getThemedReactContext().getCurrentActivity().findViewById(android.R.id.content);
+@@ -359,14 +469,15 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+ 
+     /**
+      * Set whether or not protected media should be allowed
+-     * /!\ Setting this to false won't revoke permission already granted to the current webpage.
++     * /!\ Setting this to false won't revoke permission already granted to the
++     * current webpage.
+      * In order to do so, you'd need to reload the page /!\
+      */
+     public void setAllowsProtectedMedia(boolean enabled) {
+-      mAllowsProtectedMedia = enabled;
++        mAllowsProtectedMedia = enabled;
+     }
+ 
+     public void setHasOnOpenWindowEvent(boolean hasEvent) {
+-      mHasOnOpenWindowEvent = hasEvent;
++        mHasOnOpenWindowEvent = hasEvent;
+     }
+ }
+\ No newline at end of file
+diff --git a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebView.java b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebView.java
+index 5932fc1..acbeec6 100644
+--- a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebView.java
++++ b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebView.java
+@@ -49,30 +49,25 @@ import java.util.Map;
+ import java.util.Set;
+ 
+ public class RNCWebView extends WebView implements LifecycleEventListener {
+-    protected @Nullable
+-    String injectedJS;
+-    protected @Nullable
+-    String injectedJSBeforeContentLoaded;
++    protected @Nullable String injectedJS;
++    protected @Nullable String injectedJSBeforeContentLoaded;
+     protected static final String JAVASCRIPT_INTERFACE = "ReactNativeWebView";
+-    protected @Nullable
+-    RNCWebViewBridge fallbackBridge;
+-    protected @Nullable
+-    WebViewCompat.WebMessageListener bridgeListener = null;
++    protected @Nullable RNCWebViewBridge fallbackBridge;
++    protected @Nullable WebViewCompat.WebMessageListener bridgeListener = null;
+ 
+     /**
+-     * android.webkit.WebChromeClient fundamentally does not support JS injection into frames other
+-     * than the main frame, so these two properties are mostly here just for parity with iOS & macOS.
++     * android.webkit.WebChromeClient fundamentally does not support JS injection
++     * into frames other
++     * than the main frame, so these two properties are mostly here just for parity
++     * with iOS & macOS.
+      */
+     protected boolean injectedJavaScriptForMainFrameOnly = true;
+     protected boolean injectedJavaScriptBeforeContentLoadedForMainFrameOnly = true;
+ 
+     protected boolean messagingEnabled = false;
+-    protected @Nullable
+-    String messagingModuleName;
+-    protected @Nullable
+-    RNCWebViewMessagingModule mMessagingJSModule;
+-    protected @Nullable
+-    RNCWebViewClient mRNCWebViewClient;
++    protected @Nullable String messagingModuleName;
++    protected @Nullable RNCWebViewMessagingModule mMessagingJSModule;
++    protected @Nullable RNCWebViewClient mRNCWebViewClient;
+     protected boolean sendContentSizeChangeEvents = false;
+     private OnScrollDispatchHelper mOnScrollDispatchHelper;
+     protected boolean hasScrollEvent = false;
+@@ -83,11 +78,13 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+      * WebView must be created with an context of the current activity
+      * <p>
+      * Activity Context is required for creation of dialogs internally by WebView
+-     * Reactive Native needed for access to ReactNative internal system functionality
++     * Reactive Native needed for access to ReactNative internal system
++     * functionality
+      */
+     public RNCWebView(ThemedReactContext reactContext) {
+         super(reactContext);
+-        mMessagingJSModule = ((ThemedReactContext) this.getContext()).getReactApplicationContext().getJSModule(RNCWebViewMessagingModule.class);
++        mMessagingJSModule = ((ThemedReactContext) this.getContext()).getReactApplicationContext()
++                .getJSModule(RNCWebViewMessagingModule.class);
+         progressChangedFilter = new ProgressChangedFilter();
+     }
+ 
+@@ -144,79 +141,77 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+                     new ContentSizeChangeEvent(
+                             RNCWebViewWrapper.getReactTagFromWebView(this),
+                             w,
+-                            h
+-                    )
+-            );
++                            h));
+         }
+     }
+ 
+-    protected @Nullable
+-    List<Map<String, String>> menuCustomItems;
++    protected @Nullable List<Map<String, String>> menuCustomItems;
+ 
+     public void setMenuCustomItems(List<Map<String, String>> menuCustomItems) {
+-      this.menuCustomItems = menuCustomItems;
++        this.menuCustomItems = menuCustomItems;
+     }
+ 
+     @Override
+     public ActionMode startActionMode(ActionMode.Callback callback, int type) {
+-      if(menuCustomItems == null ){
+-        return super.startActionMode(callback, type);
+-      }
+-
+-      return super.startActionMode(new ActionMode.Callback2() {
+-        @Override
+-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+-          for (int i = 0; i < menuCustomItems.size(); i++) {
+-            menu.add(Menu.NONE, i, i, (menuCustomItems.get(i)).get("label"));
+-          }
+-          return true;
++        if (menuCustomItems == null) {
++            return super.startActionMode(callback, type);
+         }
+ 
+-        @Override
+-        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+-          return false;
+-        }
++        return super.startActionMode(new ActionMode.Callback2() {
++            @Override
++            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
++                for (int i = 0; i < menuCustomItems.size(); i++) {
++                    menu.add(Menu.NONE, i, i, (menuCustomItems.get(i)).get("label"));
++                }
++                return true;
++            }
+ 
+-        @Override
+-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+-          WritableMap wMap = Arguments.createMap();
+-          RNCWebView.this.evaluateJavascript(
+-            "(function(){return {selection: window.getSelection().toString()} })()",
+-            new ValueCallback<String>() {
+-              @Override
+-              public void onReceiveValue(String selectionJson) {
+-                Map<String, String> menuItemMap = menuCustomItems.get(item.getItemId());
+-                wMap.putString("label", menuItemMap.get("label"));
+-                wMap.putString("key", menuItemMap.get("key"));
+-                String selectionText = "";
+-                try {
+-                  selectionText = new JSONObject(selectionJson).getString("selection");
+-                } catch (JSONException ignored) {}
+-                wMap.putString("selectedText", selectionText);
+-                dispatchEvent(RNCWebView.this, new TopCustomMenuSelectionEvent(RNCWebViewWrapper.getReactTagFromWebView(RNCWebView.this), wMap));
+-                mode.finish();
+-              }
++            @Override
++            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
++                return false;
+             }
+-          );
+-          return true;
+-        }
+ 
+-        @Override
+-        public void onDestroyActionMode(ActionMode mode) {
+-          mode = null;
+-        }
++            @Override
++            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
++                WritableMap wMap = Arguments.createMap();
++                RNCWebView.this.evaluateJavascript(
++                        "(function(){return {selection: window.getSelection().toString()} })()",
++                        new ValueCallback<String>() {
++                            @Override
++                            public void onReceiveValue(String selectionJson) {
++                                Map<String, String> menuItemMap = menuCustomItems.get(item.getItemId());
++                                wMap.putString("label", menuItemMap.get("label"));
++                                wMap.putString("key", menuItemMap.get("key"));
++                                String selectionText = "";
++                                try {
++                                    selectionText = new JSONObject(selectionJson).getString("selection");
++                                } catch (JSONException ignored) {
++                                }
++                                wMap.putString("selectedText", selectionText);
++                                dispatchEvent(RNCWebView.this, new TopCustomMenuSelectionEvent(
++                                        RNCWebViewWrapper.getReactTagFromWebView(RNCWebView.this), wMap));
++                                mode.finish();
++                            }
++                        });
++                return true;
++            }
+ 
+-        @Override
+-        public void onGetContentRect (ActionMode mode,
+-                View view,
+-                Rect outRect){
+-            if (callback instanceof ActionMode.Callback2) {
+-                ((ActionMode.Callback2) callback).onGetContentRect(mode, view, outRect);
+-            } else {
+-                super.onGetContentRect(mode, view, outRect);
++            @Override
++            public void onDestroyActionMode(ActionMode mode) {
++                mode = null;
++            }
++
++            @Override
++            public void onGetContentRect(ActionMode mode,
++                    View view,
++                    Rect outRect) {
++                if (callback instanceof ActionMode.Callback2) {
++                    ((ActionMode.Callback2) callback).onGetContentRect(mode, view, outRect);
++                } else {
++                    super.onGetContentRect(mode, view, outRect);
++                }
+             }
+-          }
+-      }, type);
++        }, type);
+     }
+ 
+     @Override
+@@ -229,6 +224,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+     }
+ 
+     WebChromeClient mWebChromeClient;
++
+     @Override
+     public void setWebChromeClient(WebChromeClient client) {
+         this.mWebChromeClient = client;
+@@ -242,8 +238,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+         return this.mWebChromeClient;
+     }
+ 
+-    public @Nullable
+-    RNCWebViewClient getRNCWebViewClient() {
++    public @Nullable RNCWebViewClient getRNCWebViewClient() {
+         return mRNCWebViewClient;
+     }
+ 
+@@ -251,39 +246,41 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+         return this.messagingEnabled;
+     }
+ 
++    @SuppressLint("RestrictedApi")
+     protected void createRNCWebViewBridge(RNCWebView webView) {
+-        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)){
+-          if (this.bridgeListener == null) {
+-            this.bridgeListener = new WebViewCompat.WebMessageListener() {
+-              @Override
+-              public void onPostMessage(@NonNull WebView view, @NonNull WebMessageCompat message, @NonNull Uri sourceOrigin, boolean isMainFrame, @NonNull JavaScriptReplyProxy replyProxy) {
+-                RNCWebView.this.onMessage(message.getData(), sourceOrigin.toString());
+-              }
+-            };
+-            WebViewCompat.addWebMessageListener(
+-              webView,
+-              JAVASCRIPT_INTERFACE,
+-              Set.of("*"),
+-              this.bridgeListener
+-            );
+-          }
++        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
++            if (this.bridgeListener == null) {
++                this.bridgeListener = new WebViewCompat.WebMessageListener() {
++                    @Override
++                    public void onPostMessage(@NonNull WebView view, @NonNull WebMessageCompat message,
++                            @NonNull Uri sourceOrigin, boolean isMainFrame, @NonNull JavaScriptReplyProxy replyProxy) {
++                        RNCWebView.this.onMessage(message.getData(), sourceOrigin.toString());
++                    }
++                };
++                WebViewCompat.addWebMessageListener(
++                        webView,
++                        JAVASCRIPT_INTERFACE,
++                        Set.of("*"),
++                        this.bridgeListener);
++            }
+         } else {
+-          if (fallbackBridge == null) {
+-            fallbackBridge = new RNCWebViewBridge(webView);
+-            addJavascriptInterface(fallbackBridge, JAVASCRIPT_INTERFACE);
+-          }
++            if (fallbackBridge == null) {
++                fallbackBridge = new RNCWebViewBridge(webView);
++                addJavascriptInterface(fallbackBridge, JAVASCRIPT_INTERFACE);
++            }
+         }
+         injectJavascriptObject();
+     }
+ 
+     private void injectJavascriptObject() {
+-      if (getSettings().getJavaScriptEnabled()) {
+-        String js = "(function(){\n" +
+-          "    window." + JAVASCRIPT_INTERFACE + " = window." + JAVASCRIPT_INTERFACE + " || {};\n" +
+-          "    window." + JAVASCRIPT_INTERFACE + ".injectedObjectJson = function () { return " + (injectedJavaScriptObject == null ? null : ("`" + injectedJavaScriptObject + "`")) + "; };\n" +
+-          "})();";
+-        evaluateJavascriptWithFallback(js);
+-      }
++        if (getSettings().getJavaScriptEnabled()) {
++            String js = "(function(){\n" +
++                    "    window." + JAVASCRIPT_INTERFACE + " = window." + JAVASCRIPT_INTERFACE + " || {};\n" +
++                    "    window." + JAVASCRIPT_INTERFACE + ".injectedObjectJson = function () { return "
++                    + (injectedJavaScriptObject == null ? null : ("`" + injectedJavaScriptObject + "`")) + "; };\n" +
++                    "})();";
++            evaluateJavascriptWithFallback(js);
++        }
+     }
+ 
+     @SuppressLint("AddJavascriptInterface")
+@@ -317,15 +314,15 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+                 injectedJSBeforeContentLoaded != null &&
+                 !TextUtils.isEmpty(injectedJSBeforeContentLoaded)) {
+             evaluateJavascriptWithFallback("(function() {\n" + injectedJSBeforeContentLoaded + ";\n})();");
+-            injectJavascriptObject();  // re-inject the Javascript object in case it has been overwritten.
++            injectJavascriptObject(); // re-inject the Javascript object in case it has been overwritten.
+         }
+     }
+ 
+     protected String injectedJavaScriptObject = null;
+ 
+     public void setInjectedJavaScriptObject(String obj) {
+-      this.injectedJavaScriptObject = obj;
+-      injectJavascriptObject();
++        this.injectedJavaScriptObject = obj;
++        injectJavascriptObject();
+     }
+ 
+     public void onMessage(String message, String sourceUrl) {
+@@ -346,7 +343,8 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+                     if (mMessagingJSModule != null) {
+                         dispatchDirectMessage(data);
+                     } else {
+-                        dispatchEvent(webView, new TopMessageEvent(RNCWebViewWrapper.getReactTagFromWebView(webView), data));
++                        dispatchEvent(webView,
++                                new TopMessageEvent(RNCWebViewWrapper.getReactTagFromWebView(webView), data));
+                     }
+                 }
+             });
+@@ -426,20 +424,20 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+         super.destroy();
+     }
+ 
+-  public ThemedReactContext getThemedReactContext() {
+-    return (ThemedReactContext) this.getContext();
+-  }
++    public ThemedReactContext getThemedReactContext() {
++        return (ThemedReactContext) this.getContext();
++    }
+ 
+-  public ReactApplicationContext getReactApplicationContext() {
+-      return this.getThemedReactContext().getReactApplicationContext();
+-  }
++    public ReactApplicationContext getReactApplicationContext() {
++        return this.getThemedReactContext().getReactApplicationContext();
++    }
+ 
+-  protected class RNCWebViewBridge {
++    protected class RNCWebViewBridge {
+         private String TAG = "RNCWebViewBridge";
+         RNCWebView mWebView;
+ 
+         RNCWebViewBridge(RNCWebView c) {
+-          mWebView = c;
++            mWebView = c;
+         }
+ 
+         /**
+@@ -449,15 +447,16 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+         @JavascriptInterface
+         public void postMessage(String message) {
+             if (mWebView.getMessagingEnabled()) {
+-                // Post to main thread because `mWebView.getUrl()` requires to be executed on main.
++                // Post to main thread because `mWebView.getUrl()` requires to be executed on
++                // main.
+                 mWebView.post(() -> mWebView.onMessage(message, mWebView.getUrl()));
+             } else {
+-                FLog.w(TAG, "ReactNativeWebView.postMessage method was called but messaging is disabled. Pass an onMessage handler to the WebView.");
++                FLog.w(TAG,
++                        "ReactNativeWebView.postMessage method was called but messaging is disabled. Pass an onMessage handler to the WebView.");
+             }
+         }
+     }
+ 
+-
+     protected static class ProgressChangedFilter {
+         private boolean waitingForCommandLoadUrl = false;
+ 

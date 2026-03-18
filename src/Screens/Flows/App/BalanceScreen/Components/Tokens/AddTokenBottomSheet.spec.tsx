@@ -24,7 +24,7 @@ jest.mock("~Hooks/useBottomSheet", () => ({
 }))
 
 describe("AddTokenBottomSheet", () => {
-    const mockBottomSheetRef = { current: null }
+    const mockBottomSheetRef = { current: undefined! }
     const onQrCodePress = jest.fn()
 
     beforeEach(() => {
