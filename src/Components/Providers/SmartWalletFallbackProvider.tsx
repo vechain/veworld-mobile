@@ -1,14 +1,18 @@
 import React, { createContext, useContext, useMemo } from "react"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
-import { SmartWalletContext, LoginOptions, SocialProvider } from "../../VechainWalletKit/types/wallet"
 import {
+    SmartWalletContext,
+    LoginOptions,
+    SocialProvider,
     TransactionOptions,
     SignOptions,
     TypedDataPayload,
     GenericDelegationDetails,
-} from "../../VechainWalletKit/types/transaction"
-import { WalletError, WalletErrorType } from "../../VechainWalletKit/utils/errors"
-import { LinkWithOAuthInput, PrivyUser } from "@privy-io/expo"
+    WalletError,
+    WalletErrorType,
+    LinkWithOAuthInput,
+    PrivyUser,
+} from "vechain-wallet-kit"
 
 export const SmartWalletFallbackContext = createContext<SmartWalletContext | null>(null)
 

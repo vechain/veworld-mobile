@@ -12,7 +12,7 @@ import { AccountWithDevice, DEVICE_TYPE, SmartWalletDevice, WALLET_STATUS } from
 import { error, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
-import { SocialProvider } from "~VechainWalletKit/types/wallet"
+import { SocialProvider } from "vechain-wallet-kit"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { FeedbackSeverity, FeedbackType } from "../FeedbackProvider/Model"
 import { Feedback } from "../FeedbackProvider/Events"
