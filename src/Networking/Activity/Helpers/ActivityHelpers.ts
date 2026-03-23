@@ -3,7 +3,7 @@ import { Transaction } from "thor-devkit"
 import { Transaction as SDKTransaction, TransactionClause } from "@vechain/sdk-core"
 import { ethers } from "ethers"
 import { chainTagToGenesisId, DIRECTIONS, ERROR_EVENTS, VET } from "~Constants"
-import { SimpleAccountABI } from "vechain-wallet-kit"
+import { SimpleAccountABI } from "@vechain/embedded-wallet-sdk"
 import {
     Activity,
     ActivityEvent,

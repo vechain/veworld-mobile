@@ -9,7 +9,7 @@ import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
 import { isEmpty } from "lodash"
 import { DerivationPath } from "~Constants"
-import { SocialProvider } from "vechain-wallet-kit"
+import { SocialProvider } from "@vechain/embedded-wallet-sdk"
 
 export const useHandleWalletCreation = () => {
     const biometrics = useBiometrics()

@@ -3,7 +3,7 @@ import { DEVICE_TYPE, IMPORT_TYPE, NewLedgerDevice } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { setMnemonic, setPrivateKey, setSelectedAccount, setNewLedgerDevice } from "~Storage/Redux/Slices"
-import { SocialProvider } from "vechain-wallet-kit"
+import { SocialProvider } from "@vechain/embedded-wallet-sdk"
 import {
     addDeviceAndAccounts,
     addSmartWalletDeviceAndAccount,

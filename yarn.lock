@@ -6423,6 +6423,11 @@
   resolved "https://registry.yarnpkg.com/@vechain/connex-types/-/connex-types-2.1.0.tgz#5a4d97554f659532a0ec00a09e5cf25244c55c8a"
   integrity sha512-8NtOHAO+idy5llrYEmuArWTkwYbwG/FEWqkRScz1f6QuaGvkkj+93IuAnp9E89Pi+kV3t2DKBTaF6mpPjjTmHg==
 
+"@vechain/embedded-wallet-sdk@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@vechain/embedded-wallet-sdk/-/embedded-wallet-sdk-0.1.0.tgz#4a335d8aff5375658152e5af4d5f56865f76a0d9"
+  integrity sha512-Nuzc6vTzC1fWHWHLHcHPwLLh/vZJjATOMr1oK90lAZbHIQDitpKDTBvWsNO6efjV/cXVGpzZxsbyQCK6R75FNw==
+
 "@vechain/ethers@^4.0.27-5":
   version "4.0.27-5"
   resolved "https://registry.yarnpkg.com/@vechain/ethers/-/ethers-4.0.27-5.tgz#2e7d40294b2e14ddf4cf6f6094bbdc871e26e299"
@@ -18421,12 +18426,6 @@ vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
-
-"vechain-wallet-kit@file:../vechain-wallet-kit":
-  version "0.1.0"
-  dependencies:
-    thor-devkit "^2.0.9"
-    viem "^2.21.45"
 
 viem@^2.21.45:
   version "2.23.12"

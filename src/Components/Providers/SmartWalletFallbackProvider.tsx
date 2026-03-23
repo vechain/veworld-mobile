@@ -12,7 +12,7 @@ import {
     WalletErrorType,
     LinkWithOAuthInput,
     PrivyUser,
-} from "vechain-wallet-kit"
+} from "@vechain/embedded-wallet-sdk"
 
 export const SmartWalletFallbackContext = createContext<SmartWalletContext | null>(null)
 

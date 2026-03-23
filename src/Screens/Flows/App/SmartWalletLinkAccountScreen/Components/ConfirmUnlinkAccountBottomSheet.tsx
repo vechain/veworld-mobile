@@ -10,7 +10,7 @@ import { useSmartWallet } from "~Hooks"
 import { useBottomSheetModal } from "~Hooks/useBottomSheet"
 import { useThemedStyles } from "~Hooks/useTheme"
 import { useI18nContext } from "~i18n"
-import { SocialProvider } from "vechain-wallet-kit"
+import { SocialProvider } from "@vechain/embedded-wallet-sdk"
 
 type Props = {
     bsRef: React.RefObject<BottomSheetModalMethods>

@@ -1,7 +1,7 @@
 import { DerivationPath } from "~Constants"
 import { XPub } from "../Crypto"
 import { DEVICE_TYPE, Wallet } from "../Wallet"
-import { SocialProvider } from "vechain-wallet-kit"
+import { SocialProvider } from "@vechain/embedded-wallet-sdk"
 
 /** A general model for storing data about devices in the wallet
  * @field `xPub` - used to generate new address without accessing the device directly

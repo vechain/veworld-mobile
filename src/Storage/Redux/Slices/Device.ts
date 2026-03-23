@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { BaseDevice, LedgerDevice, LocalDevice, SmartWalletDevice, DEVICE_TYPE } from "~Model"
 import { AddressUtils } from "~Utils"
-import { SocialProvider } from "vechain-wallet-kit"
+import { SocialProvider } from "@vechain/embedded-wallet-sdk"
 import { swapSmartWalletNetwork } from "../Actions/SmartWalletNetworkSwap"
 
 type Device = LedgerDevice | LocalDevice | SmartWalletDevice

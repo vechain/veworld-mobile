@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
-import { SmartWalletWithPrivyProvider } from "vechain-wallet-kit/adapters"
-import { useSmartWallet } from "vechain-wallet-kit"
+import { SmartWalletWithPrivyProvider } from "@vechain/embedded-wallet-sdk/adapters"
+import { useSmartWallet } from "@vechain/embedded-wallet-sdk"
 import { useFeatureFlags } from "./FeatureFlagsProvider"
 import { SmartWalletFallbackProvider } from "./SmartWalletFallbackProvider"
 import { useAppDispatch } from "~Storage/Redux"

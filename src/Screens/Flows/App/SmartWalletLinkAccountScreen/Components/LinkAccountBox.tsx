@@ -5,7 +5,7 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { useSmartWallet, useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 import { PlatformUtils } from "~Utils"
-import { SocialProvider } from "vechain-wallet-kit"
+import { SocialProvider } from "@vechain/embedded-wallet-sdk"
 
 type Props = ListRenderItemInfo<SocialProvider> & {
     onUnlink: (provider: SocialProvider, subject: string) => void

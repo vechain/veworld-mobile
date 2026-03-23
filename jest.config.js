@@ -58,7 +58,6 @@ module.exports = {
         "^~Test$": ["<rootDir>/src/Test/index.tsx"],
         "^~Networking(.*)": ["<rootDir>/src/Networking$1"],
         "^~Logging(.*)": ["<rootDir>/src/Logging$1"],
-        "^~VechainWalletKit(.*)": ["<rootDir>/src/VechainWalletKit$1"],
         "^~Generated/businessEvents$": "<rootDir>/src/Test/mocks/generated/businessEvents.ts",
         "^~Generated/abi$": "<rootDir>/src/Test/mocks/generated/abi.ts",
         "^~Generated/indexer/schema$": "<rootDir>/src/Test/mocks/generated/indexer/schema.ts",
