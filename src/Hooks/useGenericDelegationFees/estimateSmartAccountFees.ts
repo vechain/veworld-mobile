@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js"
 import { VTHO } from "~Constants"
 import { EstimateGenericDelegatorFeesResponse } from "~Networking/GenericDelegator"
 import { BigNutils } from "~Utils"
-import { GenericDelegationDetails } from "../../VechainWalletKit/types/transaction"
+import { GenericDelegationDetails } from "@vechain/embedded-wallet-sdk"
 
 const BASE_GAS_PRICE = BigInt("10000000000000") // 10^13 wei
 const MOCK_FEE_WEI = BigInt("1000000000000000000") // 1 token as mock fee

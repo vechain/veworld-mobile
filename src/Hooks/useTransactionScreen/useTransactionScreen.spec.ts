@@ -67,10 +67,9 @@ import { i18nObject } from "~i18n"
 import { showErrorToast } from "~Components/Base/BaseToast"
 import { loadLocale } from "~i18n/i18n-util.sync"
 import { setAuthenticatedUser, setMockPrivyProviderResp } from "../../Test/mocks/@privy-io/expo"
-import { useSmartWallet } from "~VechainWalletKit/providers/SmartWalletProvider"
 
 // Import the getSmartAccount mock so we can configure it
-import { getSmartAccount } from "~VechainWalletKit/utils/smartAccount"
+import { getSmartAccount, useSmartWallet } from "@vechain/embedded-wallet-sdk"
 
 // Import the hooks we need to mock
 import { useGenericDelegationFees } from "~Hooks/useGenericDelegationFees"
@@ -156,8 +155,8 @@ jest.mock("~Hooks/useGenericDelegationFees")
 jest.mock("~Hooks/useGenericDelegationTokens")
 jest.mock("~Hooks/useDelegatorDepositAddress")
 
-jest.mock("~VechainWalletKit/utils/smartAccount", () => ({
-    ...jest.requireActual("~VechainWalletKit/utils/smartAccount"),
+jest.mock("@vechain/embedded-wallet-sdk", () => ({
+    ...jest.requireActual("@vechain/embedded-wallet-sdk"),
     getSmartAccount: jest.fn(),
 }))
 

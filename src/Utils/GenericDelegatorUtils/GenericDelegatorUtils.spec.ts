@@ -8,7 +8,7 @@ import {
     validateGenericDelegatorTx,
     validateGenericDelegatorTxSmartAccount,
 } from "./GenericDelegatorUtils"
-import { SimpleAccountABI } from "../../VechainWalletKit/utils/abi"
+import { SimpleAccountABI } from "@vechain/embedded-wallet-sdk"
 
 const thorClient = ThorClient.at(TESTNET_URL)
 

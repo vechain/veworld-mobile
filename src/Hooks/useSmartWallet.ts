@@ -2,8 +2,7 @@ import { useContext } from "react"
 
 import { useFeatureFlags } from "../Components/Providers/FeatureFlagsProvider"
 import { SmartWalletFallbackContext } from "../Components/Providers/SmartWalletFallbackProvider"
-import type { SmartWalletContext } from "../VechainWalletKit/types/wallet"
-import { SmartWalletProviderContext } from "../VechainWalletKit/providers/SmartWalletProvider"
+import { SmartWalletProviderContext, SmartWalletContext } from "@vechain/embedded-wallet-sdk"
 
 // This allows the smart wallet feature to be toggled on/off by using a feature flag
 // Once the feature is enabled we can remove this hook and use the VechainWalletKit

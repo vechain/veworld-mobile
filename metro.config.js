@@ -44,6 +44,15 @@ const resolveRequestWithPackageExports = (context, moduleName, platform) => {
         return ctx.resolveRequest(ctx, moduleName, platform)
     }
 
+    // Enable package exports for @vechain/embedded-wallet-sdk to resolve subpath exports (e.g. @vechain/embedded-wallet-sdk/adapters)
+    if (moduleName === "@vechain/embedded-wallet-sdk" || moduleName.startsWith("@vechain/embedded-wallet-sdk/")) {
+        const ctx = {
+            ...context,
+            unstable_enablePackageExports: true,
+        }
+        return ctx.resolveRequest(ctx, moduleName, platform)
+    }
+
     return context.resolveRequest(context, moduleName, platform)
 }
 

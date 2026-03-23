@@ -3,7 +3,7 @@ import { ethers } from "ethers"
 import _ from "lodash"
 import { abis, VET } from "~Constants"
 import BigNutils, { BigNumberUtils } from "~Utils/BigNumberUtils"
-import { SimpleAccountABI } from "../../VechainWalletKit/utils/abi"
+import { SimpleAccountABI } from "@vechain/embedded-wallet-sdk"
 
 /* -------------------------- helpers -------------------------- */
 const lowercaseClauseMap = (clause: TransactionClause): TransactionClause => ({
