@@ -164,9 +164,9 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
     const explorerUrl = useMemo(() => {
         if (activity.txId && currentActivity.blockNumber)
-            return `${getExplorerLink(network, ExplorerLinkType.TRANSACTION)}/${HexUtils.addPrefix(activity.txId)}${
-                network.type === NETWORK_TYPE.MAIN ? "" : "?network=testnet"
-            }`
+            return `${getExplorerLink(network, ExplorerLinkType.TRANSACTION)}/${HexUtils.addPrefix(
+                activity.txId,
+            )}?network=${network.type === NETWORK_TYPE.MAIN ? "mainnet" : "testnet"}`
     }, [activity.txId, currentActivity.blockNumber, network])
 
     const renderActivityDetails = useMemo(() => {

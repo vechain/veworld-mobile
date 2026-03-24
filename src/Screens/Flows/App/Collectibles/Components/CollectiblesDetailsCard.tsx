@@ -72,7 +72,7 @@ export const CollectiblesDetailsCard: React.FC<Props> = ({ collectionMetadata })
                             Linking.openURL(
                                 `${getExplorerLink(selectedNetwork, ExplorerLinkType.ACCOUNT)}/${
                                     collectionMetadata?.address
-                                }${selectedNetwork.type === NETWORK_TYPE.MAIN ? "" : "?network=testnet"}`,
+                                }?network=${selectedNetwork.type === NETWORK_TYPE.MAIN ? "mainnet" : "testnet"}`,
                             )
                         }}
                         typographyFont="buttonMedium"
