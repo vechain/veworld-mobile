@@ -4,7 +4,7 @@ import { BaseButton, BaseIcon, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { NftCollection } from "~Model"
+import { NETWORK_TYPE, NftCollection } from "~Model"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { ExplorerLinkType, getExplorerLink } from "~Utils/AddressUtils/AddressUtils"
@@ -72,7 +72,7 @@ export const CollectiblesDetailsCard: React.FC<Props> = ({ collectionMetadata })
                             Linking.openURL(
                                 `${getExplorerLink(selectedNetwork, ExplorerLinkType.ACCOUNT)}/${
                                     collectionMetadata?.address
-                                }`,
+                                }${selectedNetwork.type === NETWORK_TYPE.MAIN ? "" : "?network=testnet"}`,
                             )
                         }}
                         typographyFont="buttonMedium"

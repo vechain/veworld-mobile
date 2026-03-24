@@ -32,6 +32,7 @@ import {
     DappTxActivity,
     FungibleTokenActivity,
     LoginActivity,
+    NETWORK_TYPE,
     NFTMarketplaceActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
@@ -163,7 +164,9 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
 
     const explorerUrl = useMemo(() => {
         if (activity.txId && currentActivity.blockNumber)
-            return `${getExplorerLink(network, ExplorerLinkType.TRANSACTION)}/${HexUtils.addPrefix(activity.txId)}`
+            return `${getExplorerLink(network, ExplorerLinkType.TRANSACTION)}/${HexUtils.addPrefix(activity.txId)}${
+                network.type === NETWORK_TYPE.MAIN ? "" : "?network=testnet"
+            }`
     }, [activity.txId, currentActivity.blockNumber, network])
 
     const renderActivityDetails = useMemo(() => {
