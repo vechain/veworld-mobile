@@ -29,8 +29,8 @@ const THOR_TESTNET_URLS = [
     "https://testnet.vecha.in",
 ]
 
-const MAIN_EXPLORER_URL = "https://vechainstats.com"
-const TEST_EXPLORER_URL = "https://explore-testnet.vechain.org"
+const MAIN_EXPLORER_URL = "https://explore.vechain.org"
+const TEST_EXPLORER_URL = "https://explore.vechain.org"
 
 const paramsGet: abi.Function.Definition = {
     constant: true,
