@@ -13,7 +13,7 @@ type UseTransactionReturnProps = {
     setGas: (gas: EstimateGasResult) => void
     loadingGas: boolean
     setGasPayer: (gasPayer: string) => void
-    calculateGasFees: (_clauses: Transaction.Body["clauses"]) => Promise<EstimateGasResult>
+    calculateGasFees: (_clauses: Transaction.LegacyBody["clauses"]) => Promise<EstimateGasResult>
 }
 
 type Props = {
@@ -44,7 +44,7 @@ export const useTransactionGas = ({
     const [gasPayer, setGasPayer] = useState<string>(providedGasPayer ?? account.address)
 
     const calculateGasFees = useCallback(
-        async (_clauses: Transaction.Body["clauses"]) => {
+        async (_clauses: Transaction.LegacyBody["clauses"]) => {
             return await GasUtils.estimateGas(
                 selectedNetwork.urls[0],
                 _clauses,

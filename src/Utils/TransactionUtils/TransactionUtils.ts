@@ -746,20 +746,20 @@ export const decodeSwapTransferAmounts = (
     }
 }
 
-export const toDelegation = (txBody: Transaction.Body) => {
+export const toDelegation = (txBody: Transaction.LegacyBody) => {
     const tx = new Transaction(txBody)
     tx.body.reserved = { features: 1 }
     return tx
 }
 
-export const fromBody = (txBody: Transaction.Body, delegate: boolean) => {
+export const fromBody = (txBody: Transaction.LegacyBody, delegate: boolean) => {
     return delegate ? toDelegation(txBody) : new Transaction(txBody)
 }
 
 /**
  * send signed transaction with thorest apis
  */
-export const sendSignedTransaction = async (tx: Transaction, networkUrl: string) => {
+export const sendSignedTransaction = async (tx: Transaction<Transaction.LegacyBody>, networkUrl: string) => {
     const encodedRawTx = {
         raw: HexUtils.addPrefix(tx.encode().toString("hex")),
     }
@@ -774,7 +774,7 @@ export const prepareNonFungibleClause = (
     addressTo: string,
     collectionAddress: string,
     tokenId: string,
-): Transaction.Body["clauses"] => {
+): Transaction.LegacyBody["clauses"] => {
     const func = new abi.Function(abis.VIP181.transferFrom)
     const data = func.encode(accountFrom, addressTo, tokenId)
 
@@ -791,7 +791,7 @@ export const prepareFungibleClause = (
     amount: string,
     _token: FungibleTokenWithBalance,
     addressTo: string,
-): Transaction.Body["clauses"] => {
+): Transaction.LegacyBody["clauses"] => {
     let _amount = BigNutils(amount).addTrailingZeros(_token.decimals).toHex
     const amountWithPrefix = "0x" + _amount
 
