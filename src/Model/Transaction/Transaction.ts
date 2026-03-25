@@ -30,7 +30,7 @@ export type ConnexClause = Connex.VM.Clause & {
 }
 
 export interface ConnexTransactionData {
-    transaction: Transaction
+    transaction: Transaction<Transaction.LegacyBody>
     delegationSignature?: Buffer
     isReverted: boolean
     clauses: TransactionOutcomes
@@ -40,7 +40,7 @@ export interface ConnexTransactionData {
 }
 
 export interface TransactionWithRevertData {
-    txBody: Transaction.Body
+    txBody: Transaction.LegacyBody
     isReverted: boolean
 }
 
