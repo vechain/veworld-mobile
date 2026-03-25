@@ -56,12 +56,14 @@ jest.mock("react-native-scrypt", () => ({
 // NOTE: snapshot testing
 describe("xPubFromHdNode", () => {
     it("xPubFromHdNode should return XPub with correct publicKey and chainCode values", () => {
-        const hdNode = HDNode.fromMnemonic(["agent", "resemble", "equip", "thought", "unfold", "bring"])
+        const hdNode = HDNode.fromMnemonic(
+            "barrel mass erase matter spy between century arm hammer atom loop feature".split(" "),
+        )
         const xPub = xPubFromHdNode(hdNode)
         expect(xPub.publicKey).toEqual(
-            "0483bc762aeeedb9de996d36e23b14fc0adb856f65da5f4f369d71909b89b9e3f82638d3f14057a5092be155017100cec045841929507e3e218c4d478449e0763a",
+            "04a9991e567052c90272985402b55d4867496c92883162399ea635bc7a339aa0f9ff248026313bbd23d97c3896abb46ee36e7100e9de2328838a351716c4a42c2f",
         )
-        expect(xPub.chainCode).toEqual("c1c4093fab85d89e01d7c6eb2fd247da4fc8cb0f561fead35ae3c49fcb659eb5")
+        expect(xPub.chainCode).toEqual("2345820a2f60f87a8db81928eee6a66ea3962110596d6a938162346b5534cad0")
     })
 })
 
@@ -70,10 +72,10 @@ describe("hdNodeFromXPub", () => {
     it("hdNodeFromXPub should return hdNode", () => {
         const hdNode = hdNodeFromXPub({
             publicKey:
-                "0483bc762aeeedb9de996d36e23b14fc0adb856f65da5f4f369d71909b89b9e3f82638d3f14057a5092be155017100cec045841929507e3e218c4d478449e0763a",
-            chainCode: "c1c4093fab85d89e01d7c6eb2fd247da4fc8cb0f561fead35ae3c49fcb659eb5",
+                "04a9991e567052c90272985402b55d4867496c92883162399ea635bc7a339aa0f9ff248026313bbd23d97c3896abb46ee36e7100e9de2328838a351716c4a42c2f",
+            chainCode: "2345820a2f60f87a8db81928eee6a66ea3962110596d6a938162346b5534cad0",
         })
-        expect(hdNode.address).toEqual("0x4fec365ab34c21784b05e3fed80633268e6457ff")
+        expect(hdNode.address).toEqual("0xddf3c759a3db99f7ba7a4b44e51e709d8252b5fa")
     })
 })
 

@@ -25,7 +25,7 @@ export const useTotalTokenBalance = (
     })
 
     const getGasFees = useCallback(
-        async (_clauses: Transaction.Body["clauses"]) => {
+        async (_clauses: Transaction.LegacyBody["clauses"]) => {
             let gasFee: BigNumberUtils = BigNutils("0")
             let isError = false
 

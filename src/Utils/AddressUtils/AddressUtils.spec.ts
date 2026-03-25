@@ -266,22 +266,22 @@ describe("Check vechain address", () => {
 
 describe("getExplorerLink", () => {
     it("MAINNET - should return accounts", () => {
-        expect(getExplorerLink(mainNetwork, ExplorerLinkType.ACCOUNT)).toBe("https://vechainstats.com/accounts")
+        expect(getExplorerLink(mainNetwork, ExplorerLinkType.ACCOUNT)).toBe("https://explore.vechain.org/accounts")
     })
 
     it("MAINNET - should return transfers", () => {
-        expect(getExplorerLink(mainNetwork, ExplorerLinkType.TRANSACTION)).toBe("https://vechainstats.com/transactions")
+        expect(getExplorerLink(mainNetwork, ExplorerLinkType.TRANSACTION)).toBe(
+            "https://explore.vechain.org/transactions",
+        )
     })
 
     it("TESTNET - should return accounts", () => {
-        expect(getExplorerLink(testNetwork, ExplorerLinkType.ACCOUNT)).toBe(
-            "https://explore-testnet.vechain.org/accounts",
-        )
+        expect(getExplorerLink(testNetwork, ExplorerLinkType.ACCOUNT)).toBe("https://explore.vechain.org/accounts")
     })
 
     it("TESTNET - should return transfers", () => {
         expect(getExplorerLink(testNetwork, ExplorerLinkType.TRANSACTION)).toBe(
-            "https://explore-testnet.vechain.org/transactions",
+            "https://explore.vechain.org/transactions",
         )
     })
 })

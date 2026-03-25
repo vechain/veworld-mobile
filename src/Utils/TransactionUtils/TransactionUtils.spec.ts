@@ -1299,7 +1299,7 @@ describe("TransactionUtils", () => {
 
 describe("toDelegation", () => {
     it("should create a new Transaction with reserved features set to 1", () => {
-        const result = toDelegation({} as Transaction.Body)
+        const result = toDelegation({} as Transaction.LegacyBody)
         expect(result.body.reserved).toEqual({ features: 1 })
     })
 })
