@@ -1,5 +1,12 @@
 
 
+## 2.5.5 (2026-03-25)
+
+
+### Bug Fixes
+
+* update thor-devkit to ^2.2.0 and @vechain/connex to ^2.3.2 ([#3853](https://github.com/vechain/veworld-mobile/issues/3853)) ([7257e44](https://github.com/vechain/veworld-mobile/commit/7257e44772c84a04ecace1880012c5d3c34e4bb0))
+
 ## 2.5.4 (2026-03-16)
 
 ## 2.5.3 (2026-03-03)
