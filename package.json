@@ -197,7 +197,7 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "striptags": "^3.2.0",
-    "thor-devkit": "^2.0.9",
+    "thor-devkit": "^2.2.0",
     "ts-retry-promise": "^0.8.1",
     "tweetnacl": "^1.0.3",
     "tweetnacl-util": "^0.15.1",
