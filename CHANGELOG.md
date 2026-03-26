@@ -1,5 +1,12 @@
 
 
+## 2.5.5 (2026-03-26)
+
+
+### Bug Fixes
+
+* **security:** autofix Template Injection in GitHub Workflows Action ([#3851](https://github.com/vechain/veworld-mobile/issues/3851)) ([d48ed2f](https://github.com/vechain/veworld-mobile/commit/d48ed2fa624636ad86dba662835d6adc3859462a))
+
 ## 2.5.4 (2026-03-16)
 
 ## 2.5.3 (2026-03-03)
