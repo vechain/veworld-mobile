@@ -9,8 +9,6 @@ env:
   ADDRESS: "0x8a9844e4750f5ce5f7988c4d1e04c278c718feea"
 onFlowStart:
   - runFlow: ../setup_reset/setupApp.yaml
-onFlowComplete:
-  - runFlow: ../setup_reset/resetApp.yaml
 ---
 ## User should be able to send custom tokens
 - tapOn:
