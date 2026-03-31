@@ -19,7 +19,10 @@ export const StargateCarouselItemAPY = ({
 
     const apy = useMemo(() => {
         if (!validatorId) return "-"
-        const yieldValue = (validatorDetails?.nftYieldsNextCycle?.[levelName] as number) ?? 0
+        const yieldValue =
+            (validatorDetails?.nftYieldsNextCycle?.[
+                levelName as keyof typeof validatorDetails.nftYieldsNextCycle
+            ] as number) ?? 0
         const displayValue = formatDisplayNumber(yieldValue, {
             forceDecimals: 1,
             includeSymbol: false,
@@ -27,7 +30,7 @@ export const StargateCarouselItemAPY = ({
             skipThreshold: true,
         })
         return `${displayValue}%`
-    }, [formatLocale, levelName, validatorDetails?.nftYieldsNextCycle, validatorId])
+    }, [formatLocale, levelName, validatorDetails, validatorId])
 
     return (
         <StargateCarouselItemStats.Simple
