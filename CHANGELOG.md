@@ -1,5 +1,12 @@
 
 
+## 2.5.6 (2026-03-31)
+
+
+### Bug Fixes
+
+* **deps:** pin axios version to 1.13.5 ([#3858](https://github.com/vechain/veworld-mobile/issues/3858)) ([70863a8](https://github.com/vechain/veworld-mobile/commit/70863a8adb1d327b012094698245fe8a51d86fc5))
+
 ## 2.5.5 (2026-03-26)
 
 
