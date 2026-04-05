@@ -3,8 +3,6 @@ tags:
   - pull-request
 onFlowStart:
   - runFlow: ../setup_reset/setupApp.yaml
-onFlowComplete:
-  - runFlow: ../setup_reset/resetApp.yaml
 ---
 ## User should be able to send tokens delegating with account method
 - tapOn:
