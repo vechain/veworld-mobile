@@ -34,13 +34,17 @@ export const ActivityTabBar = ({ state, position, layout, jumpTo, ...tabbarProps
             renderTabBarItem={props => {
                 const isFocused = props.navigationState.routes[props.navigationState.index].key === props.route.key
                 const label = tabbarProps.descriptors[props.route.key]?.options.title
+                const tabTestID =
+                    tabbarProps.descriptors[props.route.key]?.options.tabBarTestID ??
+                    (typeof label === "string" ? `ActivityTab_${label.replace(/\s+/g, "")}` : undefined) ??
+                    `ActivityTab_${props.route.key}`
 
                 return (
                     <Pressable
                         style={[styles.tab, props.style]}
                         onLayout={props.onLayout}
                         android_ripple={props.android_ripple}
-                        testID={props.testID}
+                        testID={tabTestID}
                         accessible={props.accessible}
                         role="tab"
                         aria-selected={isFocused}

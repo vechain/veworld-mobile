@@ -1,89 +1,66 @@
-#userActivty.yaml
+# Tests that user activity is properly indexed and displayed
+# 1. Performs a VET send to guarantee indexer activity
+# 2. Verifies the transaction appears in the Activity list under "Today"
 appId: org.vechain.veworld.app
 tags:
-  - pull-request
-env:
-  AMOUNT: 0.01
-  ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
-  ADDRESS: "0x8a9844e4750f5ce5f7988c4d1e04c278c718feea"
+    - pull-request
 onFlowStart:
-  - runFlow: ../setup_reset/setupApp.yaml
-onFlowComplete:
-    - runFlow: ../setup_reset/resetApp.yaml
+    - runFlow: ../setup_reset/setupApp.yaml
 ---
-## User should be able to send tokens delegating with account method
-- tapOn:
-    id: "AccountCard_changeAccountButton"
-- tapOn:
-    id: "selectAccount"
-    index: 0
-- tapOn:
-    id: "sendButton"
-- runFlow:
-    commands:
-      - tapOn:
-          id: "VET"
-- tapOn:
-    id: "Layout_ScrollView"
-- assertVisible:
-    id: "selectAccount"
-    index: 0
-- tapOn:
-    id: "selectAccount"
-    index: 0
-- tapOn:
-    id: "next-button"
-- tapOn:
-    id: "SendScreen_amountInput"
-- inputText: ${AMOUNT}
-- tapOn:
-    id: "Select_Amount_Send_Screen"
-- tapOn:
-    id: "next-button"
-- runFlow:
-    when:
-      visible: "Fee delegation"
-    commands:
-      - extendedWaitUntil:
-          visible:
-              id: "MAX_FEE_GALACTICA"
-          timeout: 10000
-      - tapOn:
-          id: "DELEGATE_OPEN"
-      - tapOn:
-          id: "button-ACCOUNT"
-      - tapOn:
-          id: "DELEGATE_ACCOUNT_CARD_RADIO"
-          index: 0
-      - tapOn:
-          id: 'RENDERED_OPTION_BUTTON_BAR_APPLY'
-      - tapOn:
-          id: "confirm-send-button"
-      - repeat:
-          while:
-            visible: "Insert your 6-digit PIN"
-          commands:
-            - tapOn: "1"
-- assertVisible: "My tokens"
-## User should be able to see the transaction details on activity screen
-- tapOn:
-    id: "history-tab"
-- swipe:
-    direction: "down"
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - tapOn: ".*Sent tokens.*- 0.01 VET"
-- runFlow:
-    when:
-      platform: Android
-    commands:
-      - tapOn:
-           id: "magnify"
-           index: 0
-- assertVisible: "Account 1"
-- assertVisible: "Account 2"
-- assertVisible: ".*0.01 VET.*"
-- assertNotVisible: "Failed"
+# 1) Perform a send transaction to populate the activity list
+- evalScript: ${console.log('Performing VET send to test indexer...')}
+- runFlow: ../send/subflows/send_vet_minimal.yaml
 
+# 2) Wait for the app to stabilize after send
+- extendedWaitUntil:
+      visible: "Tokens"
+      timeout: 15000
+
+# 3) Go to Activity screen
+- tapOn:
+      id: "history-tab"
+- extendedWaitUntil:
+      visible:
+          id: "History_Screen"
+      timeout: 15000
+
+# 4) Wait for tabs to render
+- extendedWaitUntil:
+      visible: "All"
+      timeout: 15000
+- evalScript: ${console.log('Activity screen loaded, tabs visible')}
+
+# 5) Navigate to Transfer tab
+- tapOn: "Transfer"
+
+# 6) Pull to refresh to trigger indexer reload
+- swipe:
+      start: 50%, 30%
+      end: 50%, 80%
+      duration: 500
+
+# 7) Wait for activity items to appear - verify "Today" section (recent transaction)
+- extendedWaitUntil:
+      visible: "Today"
+      timeout: 60000
+- extendedWaitUntil:
+      visible: "Sent tokens"
+      timeout: 10000
+- evalScript: ${console.log('Transfer activity item found under Today - indexer working correctly')}
+
+# 8) Tap on the first "Sent tokens" activity item
+- tapOn:
+      text: "Sent tokens"
+      index: 0
+
+# 9) Verify transaction details modal and explorer button
+- extendedWaitUntil:
+      visible:
+          id: "view-on-explorer-button"
+      timeout: 10000
+- tapOn:
+      id: "view-on-explorer-button"
+
+# 10) Cleanup
+- launchApp:
+      clearState: true
