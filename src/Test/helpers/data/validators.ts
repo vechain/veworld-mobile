@@ -18,7 +18,7 @@ export const mockedValidators: components["schemas"]["PaginatedResponseValidator
         validatorYield: 5.655616,
         avgDelegatorYield: 7.918249,
         nextCycleTvlBasedYield: 6.960107,
-        nftYieldsNextCycle: {
+        nftYields: {
             Strength: 2.674269,
             Thunder: 4.422349,
             Mjolnir: 5.947947,
@@ -69,7 +69,7 @@ export const mockedValidators: components["schemas"]["PaginatedResponseValidator
         nextCycleTvlBasedYield: 6.556698,
         nextCycleValidatorYield: 5.249554,
         nextCycleAvgDelegatorYield: 7.339981,
-        nftYieldsNextCycle: {
+        nftYields: {
             Strength: 3.515201,
             Thunder: 5.619185,
             Mjolnir: 6.724644,
@@ -115,7 +115,7 @@ export const mockedValidators: components["schemas"]["PaginatedResponseValidator
         nextCycleTvlBasedYield: 6.201873,
         nextCycleValidatorYield: 7.209305,
         nextCycleAvgDelegatorYield: 5.851438,
-        nftYieldsNextCycle: {
+        nftYields: {
             Strength: 2.874193,
             Thunder: 4.693343,
             Mjolnir: 5.992619,
