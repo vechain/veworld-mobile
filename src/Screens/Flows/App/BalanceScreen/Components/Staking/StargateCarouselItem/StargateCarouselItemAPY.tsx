@@ -20,9 +20,7 @@ export const StargateCarouselItemAPY = ({
     const apy = useMemo(() => {
         if (!validatorId) return "-"
         const yieldValue =
-            (validatorDetails?.nftYieldsNextCycle?.[
-                levelName as keyof typeof validatorDetails.nftYieldsNextCycle
-            ] as number) ?? 0
+            (validatorDetails?.nftYields?.[levelName as keyof typeof validatorDetails.nftYields] as number) ?? 0
         const displayValue = formatDisplayNumber(yieldValue, {
             forceDecimals: 1,
             includeSymbol: false,

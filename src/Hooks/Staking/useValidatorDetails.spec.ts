@@ -29,7 +29,7 @@ const MOCK_RESPONSE = {
     nextCycleAvgDelegatorYield: 5.151362,
     nextCycleTvlBasedYield: 5.722863,
     nextCycleValidatorYield: 7.721744,
-    nftYieldsNextCycle: {
+    nftYields: {
         Dawn: 1.4337,
         Flash: 1.864541,
         Lightning: 1.648873,
