@@ -1,6 +1,17 @@
 import businessEvents from "~Generated/businessEvents"
 
 export const defaultSorting = [
+    "B3MO_QUEST_CREATED(address,address,uint256,uint256,string)",
+    "B3MO_QUEST_JOINED(address,address,uint256,uint256)",
+    "B3MO_QUEST_JOINED(address,uint256)",
+    "B3MO_QUEST_REWARD_CLAIMED(address,address,uint256,uint256)",
+    "B3MO_QUEST_REWARD_CLAIMED(address,address,uint256,uint256,uint256)",
+    "B3MO_QUEST_REFUND_CLAIMED(address,address,uint256,uint256)",
+    "B3MO_QUEST_CREATOR_REFUNDED(address,address,uint256,uint256)",
+    "B3MO_QUEST_LEFT(address,address,uint256,uint256)",
+    "B3MO_QUEST_CANCELLED(address,uint256)",
+    "B3MO_QUEST_DECLINED(address,uint256)",
+    "B3MO_QUEST_COMPLETED(address,uint256,uint8,uint256,uint256)",
     "B3TR_ActionReward(address,address,uint256,bytes32,string)",
     "B3TR_ProposalVote(address,uint256,uint8,string,uint256,uint256)",
     "B3TR_B3trToVot3Swap(address,address,address,address,uint256,uint256)",

@@ -1,0 +1,36 @@
+{
+    "name": "B3MO_QUEST_COMPLETED",
+    "sameClause": true,
+    "events": [
+        {
+            "name": "ChallengeCompleted(indexed uint256,uint8,uint256,uint256)",
+            "alias": "questCompleted",
+            "conditions": [
+                {
+                    "firstOperand": "address",
+                    "isFirstStatic": false,
+                    "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
+                    "isSecondStatic": true,
+                    "operator": "EQ"
+                }
+            ]
+        }
+    ],
+    "rules": [],
+    "paramsDefinition": [
+        {
+            "name": "origin",
+            "eventName": "questCompleted",
+            "businessEventName": "from"
+        }
+    ],
+    "inputs": [
+        {
+            "type": "address",
+            "name": "from",
+            "internalType": "address",
+            "indexed": false
+        }
+    ],
+    "type": "event"
+}

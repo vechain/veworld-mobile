@@ -1,0 +1,92 @@
+{
+    "name": "B3MO_QUEST_LEFT",
+    "sameClause": true,
+    "events": [
+        {
+            "name": "Transfer(indexed address,indexed address,uint256)",
+            "alias": "transferB3TR",
+            "conditions": [
+                {
+                    "firstOperand": "from",
+                    "isFirstStatic": false,
+                    "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
+                    "isSecondStatic": true,
+                    "operator": "EQ"
+                },
+                {
+                    "firstOperand": "to",
+                    "isFirstStatic": false,
+                    "secondOperand": "origin",
+                    "isSecondStatic": false,
+                    "operator": "EQ"
+                },
+                {
+                    "firstOperand": "address",
+                    "isFirstStatic": false,
+                    "secondOperand": "${B3TR_CONTRACT}",
+                    "isSecondStatic": true,
+                    "operator": "EQ"
+                }
+            ]
+        },
+        {
+            "name": "ChallengeLeft(indexed uint256,indexed address)",
+            "alias": "questLeft",
+            "conditions": [
+                {
+                    "firstOperand": "participant",
+                    "isFirstStatic": false,
+                    "secondOperand": "origin",
+                    "isSecondStatic": false,
+                    "operator": "EQ"
+                },
+                {
+                    "firstOperand": "address",
+                    "isFirstStatic": false,
+                    "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
+                    "isSecondStatic": true,
+                    "operator": "EQ"
+                }
+            ]
+        }
+    ],
+    "rules": [],
+    "paramsDefinition": [
+        {
+            "name": "to",
+            "eventName": "transferB3TR",
+            "businessEventName": "to"
+        },
+        {
+            "name": "from",
+            "eventName": "transferB3TR",
+            "businessEventName": "from"
+        },
+        {
+            "name": "value",
+            "eventName": "transferB3TR",
+            "businessEventName": "value"
+        }
+    ],
+    "inputs": [
+        {
+            "indexed": false,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+        },
+        {
+            "indexed": false,
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+        },
+        {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+        }
+    ],
+    "type": "event"
+}

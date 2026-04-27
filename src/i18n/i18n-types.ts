@@ -587,6 +587,42 @@ type RootTranslation = {
 	 */
 	AUGUST: string
 	/**
+	 * C​a​n​c​e​l​l​e​d​ ​B​3​M​O​ ​q​u​e​s​t
+	 */
+	B3MO_QUEST_CANCELLED: string
+	/**
+	 * C​o​m​p​l​e​t​e​d​ ​B​3​M​O​ ​q​u​e​s​t
+	 */
+	B3MO_QUEST_COMPLETED: string
+	/**
+	 * C​r​e​a​t​e​d​ ​B​3​M​O​ ​q​u​e​s​t
+	 */
+	B3MO_QUEST_CREATED: string
+	/**
+	 * C​l​a​i​m​e​d​ ​u​n​u​s​e​d​ ​B​3​M​O​ ​q​u​e​s​t​ ​s​l​o​t​s
+	 */
+	B3MO_QUEST_CREATOR_REFUNDED: string
+	/**
+	 * D​e​c​l​i​n​e​d​ ​B​3​M​O​ ​q​u​e​s​t
+	 */
+	B3MO_QUEST_DECLINED: string
+	/**
+	 * J​o​i​n​e​d​ ​B​3​M​O​ ​q​u​e​s​t
+	 */
+	B3MO_QUEST_JOINED: string
+	/**
+	 * L​e​f​t​ ​B​3​M​O​ ​q​u​e​s​t
+	 */
+	B3MO_QUEST_LEFT: string
+	/**
+	 * C​l​a​i​m​e​d​ ​B​3​M​O​ ​q​u​e​s​t​ ​r​e​f​u​n​d
+	 */
+	B3MO_QUEST_REFUND_CLAIMED: string
+	/**
+	 * C​l​a​i​m​e​d​ ​B​3​M​O​ ​q​u​e​s​t​ ​r​e​w​a​r​d
+	 */
+	B3MO_QUEST_REWARD_CLAIMED: string
+	/**
 	 * V​e​B​e​t​t​e​r​ ​a​c​t​i​o​n​ ​o​n
 	 */
 	B3TR_ACTION: string
@@ -966,6 +1002,10 @@ type RootTranslation = {
 	 * N​e​v​e​r​ ​s​h​a​r​e​ ​t​h​e​ ​w​o​r​d​s​ ​a​n​d​ ​s​p​e​c​i​f​i​c​ ​o​r​d​e​r​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​l​e​a​r​n​s​ ​t​h​e​m​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​ ​a​s​s​e​t​s​.
 	 */
 	BD_MNEMONIC_WARMNING: string
+	/**
+	 * N​e​w​ ​W​a​l​l​e​t
+	 */
+	BD_NEW_WALLET_TITLE: string
 	/**
 	 * R​a​n​d​o​m​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​e​s​c​r​i​p​t​i​o​n​ ​p​l​a​c​e​h​o​l​d​e​r​ ​i​n​ ​c​a​s​e​ ​t​h​e​ ​N​F​T​ ​c​o​l​l​e​c​t​i​o​n​ ​d​o​e​s​n​'​t​ ​h​a​v​e​ ​o​n​e
 	 */
@@ -6275,10 +6315,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * N​e​w​ ​W​a​l​l​e​t
-	 */
-	BD_NEW_WALLET_TITLE: string
 }
 
 export type TranslationFunctions = {
@@ -6826,6 +6862,42 @@ Try reconnect your device to the internet.
 	 */
 	AUGUST: () => LocalizedString
 	/**
+	 * Cancelled B3MO quest
+	 */
+	B3MO_QUEST_CANCELLED: () => LocalizedString
+	/**
+	 * Completed B3MO quest
+	 */
+	B3MO_QUEST_COMPLETED: () => LocalizedString
+	/**
+	 * Created B3MO quest
+	 */
+	B3MO_QUEST_CREATED: () => LocalizedString
+	/**
+	 * Claimed unused B3MO quest slots
+	 */
+	B3MO_QUEST_CREATOR_REFUNDED: () => LocalizedString
+	/**
+	 * Declined B3MO quest
+	 */
+	B3MO_QUEST_DECLINED: () => LocalizedString
+	/**
+	 * Joined B3MO quest
+	 */
+	B3MO_QUEST_JOINED: () => LocalizedString
+	/**
+	 * Left B3MO quest
+	 */
+	B3MO_QUEST_LEFT: () => LocalizedString
+	/**
+	 * Claimed B3MO quest refund
+	 */
+	B3MO_QUEST_REFUND_CLAIMED: () => LocalizedString
+	/**
+	 * Claimed B3MO quest reward
+	 */
+	B3MO_QUEST_REWARD_CLAIMED: () => LocalizedString
+	/**
 	 * VeBetter action on
 	 */
 	B3TR_ACTION: () => LocalizedString
@@ -7201,6 +7273,10 @@ Try reconnect your device to the internet.
 	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
 	 */
 	BD_MNEMONIC_WARMNING: () => LocalizedString
+	/**
+	 * New Wallet
+	 */
+	BD_NEW_WALLET_TITLE: () => LocalizedString
 	/**
 	 * Random NFT collection description placeholder in case the NFT collection doesn't have one
 	 */
@@ -12442,10 +12518,6 @@ Make sure that it is unlocked and the location services are enabled.
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * New Wallet
-	 */
-	BD_NEW_WALLET_TITLE: () => LocalizedString
 }
 
 export type Formatters = {

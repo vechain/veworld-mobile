@@ -1,0 +1,43 @@
+{
+    "name": "B3MO_QUEST_JOINED",
+    "sameClause": true,
+    "events": [
+        {
+            "name": "ChallengeJoined(indexed uint256,indexed address)",
+            "alias": "questJoined",
+            "conditions": [
+                {
+                    "firstOperand": "participant",
+                    "isFirstStatic": false,
+                    "secondOperand": "origin",
+                    "isSecondStatic": false,
+                    "operator": "EQ"
+                },
+                {
+                    "firstOperand": "address",
+                    "isFirstStatic": false,
+                    "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
+                    "isSecondStatic": true,
+                    "operator": "EQ"
+                }
+            ]
+        }
+    ],
+    "rules": [],
+    "paramsDefinition": [
+        {
+            "name": "participant",
+            "eventName": "questJoined",
+            "businessEventName": "from"
+        }
+    ],
+    "inputs": [
+        {
+            "indexed": false,
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+        }
+    ],
+    "type": "event"
+}
