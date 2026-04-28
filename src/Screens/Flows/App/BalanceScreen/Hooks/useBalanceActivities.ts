@@ -71,7 +71,7 @@ export const useBalanceActivities = ({ tab }: { tab: BalanceTab }) => {
                         direction: "DESC",
                         page: 0,
                         size: DEFAULT_PAGE_SIZE,
-                        eventName: getActivityEventsByTab(tab) as any,
+                        eventName: getActivityEventsByTab(tab),
                     },
                 },
             })

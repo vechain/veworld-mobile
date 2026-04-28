@@ -1,36 +1,36 @@
 {
-    "name": "B3MO_QUEST_CANCELLED",
-    "sameClause": true,
-    "events": [
+  "name": "B3MO_QUEST_CANCELLED",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "ChallengeCancelled(indexed uint256)",
+      "alias": "questCancelled",
+      "conditions": [
         {
-            "name": "ChallengeCancelled(indexed uint256)",
-            "alias": "questCancelled",
-            "conditions": [
-                {
-                    "firstOperand": "address",
-                    "isFirstStatic": false,
-                    "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
-                    "isSecondStatic": true,
-                    "operator": "EQ"
-                }
-            ]
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
         }
-    ],
-    "rules": [],
-    "paramsDefinition": [
-        {
-            "name": "origin",
-            "eventName": "questCancelled",
-            "businessEventName": "from"
-        }
-    ],
-    "inputs": [
-        {
-            "type": "address",
-            "name": "from",
-            "internalType": "address",
-            "indexed": false
-        }
-    ],
-    "type": "event"
+      ]
+    }
+  ],
+  "rules": [],
+  "paramsDefinition": [
+    {
+      "name": "origin",
+      "eventName": "questCancelled",
+      "businessEventName": "from"
+    }
+  ],
+  "inputs": [
+    {
+      "type": "address",
+      "name": "from",
+      "internalType": "address",
+      "indexed": false
+    }
+  ],
+  "type": "event"
 }

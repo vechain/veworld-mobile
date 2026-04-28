@@ -1,100 +1,100 @@
 {
-    "name": "B3MO_QUEST_CREATED",
-    "sameClause": true,
-    "events": [
+  "name": "B3MO_QUEST_CREATED",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "Transfer(indexed address,indexed address,uint256)",
+      "alias": "transferB3TR",
+      "conditions": [
         {
-            "name": "Transfer(indexed address,indexed address,uint256)",
-            "alias": "transferB3TR",
-            "conditions": [
-                {
-                    "firstOperand": "from",
-                    "isFirstStatic": false,
-                    "secondOperand": "origin",
-                    "isSecondStatic": false,
-                    "operator": "EQ"
-                },
-                {
-                    "firstOperand": "to",
-                    "isFirstStatic": false,
-                    "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
-                    "isSecondStatic": true,
-                    "operator": "EQ"
-                },
-                {
-                    "firstOperand": "address",
-                    "isFirstStatic": false,
-                    "secondOperand": "${B3TR_CONTRACT}",
-                    "isSecondStatic": true,
-                    "operator": "EQ"
-                }
-            ]
+          "firstOperand": "from",
+          "isFirstStatic": false,
+          "secondOperand": "origin",
+          "isSecondStatic": false,
+          "operator": "EQ"
         },
         {
-            "name": "ChallengeCreated(indexed uint256,indexed address,indexed uint256,uint8,uint8,uint8,uint256,uint256,uint256,bool,bytes32[],string,string,string,string)",
-            "alias": "questCreated",
-            "conditions": [
-                {
-                    "firstOperand": "creator",
-                    "isFirstStatic": false,
-                    "secondOperand": "origin",
-                    "isSecondStatic": false,
-                    "operator": "EQ"
-                },
-                {
-                    "firstOperand": "address",
-                    "isFirstStatic": false,
-                    "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
-                    "isSecondStatic": true,
-                    "operator": "EQ"
-                }
-            ]
+          "firstOperand": "to",
+          "isFirstStatic": false,
+          "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${B3TR_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
         }
-    ],
-    "rules": [
+      ]
+    },
+    {
+      "name": "ChallengeCreated(indexed uint256,indexed address,indexed uint256,uint8,uint8,uint8,uint256,uint256,uint256,bool,bytes32[],string,string,string,string)",
+      "alias": "questCreated",
+      "conditions": [
         {
-            "firstEventName": "transferB3TR",
-            "firstEventProperty": "value",
-            "secondEventName": "questCreated",
-            "secondEventProperty": "stakeAmount",
-            "operator": "EQ"
+          "firstOperand": "creator",
+          "isFirstStatic": false,
+          "secondOperand": "origin",
+          "isSecondStatic": false,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
         }
-    ],
-    "paramsDefinition": [
-        {
-            "name": "from",
-            "eventName": "transferB3TR",
-            "businessEventName": "from"
-        },
-        {
-            "name": "to",
-            "eventName": "transferB3TR",
-            "businessEventName": "to"
-        },
-        {
-            "name": "value",
-            "eventName": "transferB3TR",
-            "businessEventName": "value"
-        }
-    ],
-    "inputs": [
-        {
-            "indexed": false,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-        },
-        {
-            "indexed": false,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-        },
-        {
-            "indexed": false,
-            "internalType": "uint256",
-            "name": "value",
-            "type": "uint256"
-        }
-    ],
-    "type": "event"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "firstEventName": "transferB3TR",
+      "firstEventProperty": "value",
+      "secondEventName": "questCreated",
+      "secondEventProperty": "stakeAmount",
+      "operator": "EQ"
+    }
+  ],
+  "paramsDefinition": [
+    {
+      "name": "from",
+      "eventName": "transferB3TR",
+      "businessEventName": "from"
+    },
+    {
+      "name": "to",
+      "eventName": "transferB3TR",
+      "businessEventName": "to"
+    },
+    {
+      "name": "value",
+      "eventName": "transferB3TR",
+      "businessEventName": "value"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    }
+  ],
+  "type": "event"
 }

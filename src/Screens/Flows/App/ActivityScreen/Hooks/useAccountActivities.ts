@@ -39,7 +39,7 @@ export const useAccountActivities = (
                             direction: "DESC",
                             page: pageParam,
                             size: DEFAULT_PAGE_SIZE,
-                            eventName: filters as any,
+                            eventName: filters as ActivityEvent[],
                         },
                     },
                 })

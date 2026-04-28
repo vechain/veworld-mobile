@@ -1,100 +1,100 @@
 {
-    "name": "B3MO_QUEST_REFUND_CLAIMED",
-    "sameClause": true,
-    "events": [
+  "name": "B3MO_QUEST_REFUND_CLAIMED",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "Transfer(indexed address,indexed address,uint256)",
+      "alias": "transferB3TR",
+      "conditions": [
         {
-            "name": "Transfer(indexed address,indexed address,uint256)",
-            "alias": "transferB3TR",
-            "conditions": [
-                {
-                    "firstOperand": "from",
-                    "isFirstStatic": false,
-                    "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
-                    "isSecondStatic": true,
-                    "operator": "EQ"
-                },
-                {
-                    "firstOperand": "to",
-                    "isFirstStatic": false,
-                    "secondOperand": "origin",
-                    "isSecondStatic": false,
-                    "operator": "EQ"
-                },
-                {
-                    "firstOperand": "address",
-                    "isFirstStatic": false,
-                    "secondOperand": "${B3TR_CONTRACT}",
-                    "isSecondStatic": true,
-                    "operator": "EQ"
-                }
-            ]
+          "firstOperand": "from",
+          "isFirstStatic": false,
+          "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
         },
         {
-            "name": "ChallengeRefundClaimed(indexed uint256,indexed address,uint256)",
-            "alias": "questRefundClaimed",
-            "conditions": [
-                {
-                    "firstOperand": "account",
-                    "isFirstStatic": false,
-                    "secondOperand": "origin",
-                    "isSecondStatic": false,
-                    "operator": "EQ"
-                },
-                {
-                    "firstOperand": "address",
-                    "isFirstStatic": false,
-                    "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
-                    "isSecondStatic": true,
-                    "operator": "EQ"
-                }
-            ]
+          "firstOperand": "to",
+          "isFirstStatic": false,
+          "secondOperand": "origin",
+          "isSecondStatic": false,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${B3TR_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
         }
-    ],
-    "rules": [
+      ]
+    },
+    {
+      "name": "ChallengeRefundClaimed(indexed uint256,indexed address,uint256)",
+      "alias": "questRefundClaimed",
+      "conditions": [
         {
-            "firstEventName": "transferB3TR",
-            "firstEventProperty": "value",
-            "secondEventName": "questRefundClaimed",
-            "secondEventProperty": "amount",
-            "operator": "EQ"
+          "firstOperand": "account",
+          "isFirstStatic": false,
+          "secondOperand": "origin",
+          "isSecondStatic": false,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
         }
-    ],
-    "paramsDefinition": [
-        {
-            "name": "to",
-            "eventName": "transferB3TR",
-            "businessEventName": "to"
-        },
-        {
-            "name": "from",
-            "eventName": "transferB3TR",
-            "businessEventName": "from"
-        },
-        {
-            "name": "value",
-            "eventName": "transferB3TR",
-            "businessEventName": "value"
-        }
-    ],
-    "inputs": [
-        {
-            "indexed": false,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-        },
-        {
-            "indexed": false,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-        },
-        {
-            "indexed": false,
-            "internalType": "uint256",
-            "name": "value",
-            "type": "uint256"
-        }
-    ],
-    "type": "event"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "firstEventName": "transferB3TR",
+      "firstEventProperty": "value",
+      "secondEventName": "questRefundClaimed",
+      "secondEventProperty": "amount",
+      "operator": "EQ"
+    }
+  ],
+  "paramsDefinition": [
+    {
+      "name": "to",
+      "eventName": "transferB3TR",
+      "businessEventName": "to"
+    },
+    {
+      "name": "from",
+      "eventName": "transferB3TR",
+      "businessEventName": "from"
+    },
+    {
+      "name": "value",
+      "eventName": "transferB3TR",
+      "businessEventName": "value"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    }
+  ],
+  "type": "event"
 }

@@ -1,43 +1,43 @@
 {
-    "name": "B3MO_QUEST_DECLINED",
-    "sameClause": true,
-    "events": [
+  "name": "B3MO_QUEST_DECLINED",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "ChallengeDeclined(indexed uint256,indexed address)",
+      "alias": "questDeclined",
+      "conditions": [
         {
-            "name": "ChallengeDeclined(indexed uint256,indexed address)",
-            "alias": "questDeclined",
-            "conditions": [
-                {
-                    "firstOperand": "participant",
-                    "isFirstStatic": false,
-                    "secondOperand": "origin",
-                    "isSecondStatic": false,
-                    "operator": "EQ"
-                },
-                {
-                    "firstOperand": "address",
-                    "isFirstStatic": false,
-                    "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
-                    "isSecondStatic": true,
-                    "operator": "EQ"
-                }
-            ]
-        }
-    ],
-    "rules": [],
-    "paramsDefinition": [
+          "firstOperand": "participant",
+          "isFirstStatic": false,
+          "secondOperand": "origin",
+          "isSecondStatic": false,
+          "operator": "EQ"
+        },
         {
-            "name": "participant",
-            "eventName": "questDeclined",
-            "businessEventName": "from"
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${B3TR_CHALLENGES_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
         }
-    ],
-    "inputs": [
-        {
-            "indexed": false,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-        }
-    ],
-    "type": "event"
+      ]
+    }
+  ],
+  "rules": [],
+  "paramsDefinition": [
+    {
+      "name": "participant",
+      "eventName": "questDeclined",
+      "businessEventName": "from"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    }
+  ],
+  "type": "event"
 }
