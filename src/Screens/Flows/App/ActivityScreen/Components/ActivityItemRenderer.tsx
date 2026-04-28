@@ -3,6 +3,7 @@ import { useVeBetterDaoDapps } from "~Hooks"
 import {
     Activity,
     ActivityType,
+    B3moQuestActivity,
     B3trActionActivity,
     B3trClaimRewardActivity,
     B3trProposalSupportActivity,
@@ -100,6 +101,16 @@ export const ActivityItemRenderer = ({ activity, onPress, ...props }: Overridabl
                     {...props}
                 />
             )
+        case ActivityType.B3MO_QUEST_CREATED:
+        case ActivityType.B3MO_QUEST_JOINED:
+        case ActivityType.B3MO_QUEST_REWARD_CLAIMED:
+        case ActivityType.B3MO_QUEST_REFUND_CLAIMED:
+        case ActivityType.B3MO_QUEST_CREATOR_REFUNDED:
+        case ActivityType.B3MO_QUEST_LEFT:
+        case ActivityType.B3MO_QUEST_CANCELLED:
+        case ActivityType.B3MO_QUEST_DECLINED:
+        case ActivityType.B3MO_QUEST_COMPLETED:
+            return <ActivityBox.B3moQuest activity={activity as B3moQuestActivity} onPress={onPress} {...props} />
         case ActivityType.B3TR_ACTION:
             return (
                 <ActivityBox.B3trAction

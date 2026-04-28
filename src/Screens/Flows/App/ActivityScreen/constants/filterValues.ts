@@ -19,6 +19,15 @@ export const filterValues = {
     b3tr: {
         type: FilterType.B3TR,
         value: [
+            ActivityEvent.B3MO_QUEST_CREATED,
+            ActivityEvent.B3MO_QUEST_JOINED,
+            ActivityEvent.B3MO_QUEST_REWARD_CLAIMED,
+            ActivityEvent.B3MO_QUEST_REFUND_CLAIMED,
+            ActivityEvent.B3MO_QUEST_CREATOR_REFUNDED,
+            ActivityEvent.B3MO_QUEST_LEFT,
+            ActivityEvent.B3MO_QUEST_CANCELLED,
+            ActivityEvent.B3MO_QUEST_DECLINED,
+            ActivityEvent.B3MO_QUEST_COMPLETED,
             ActivityEvent.B3TR_ACTION,
             ActivityEvent.B3TR_CLAIM_REWARD,
             ActivityEvent.B3TR_PROPOSAL_SUPPORT,
