@@ -1,5 +1,12 @@
 
 
+## 2.5.7 (2026-04-29)
+
+
+### Bug Fixes
+
+* reset tab stack to initial screen when pressing tab navigation icon ([#3879](https://github.com/vechain/veworld-mobile/issues/3879)) ([62f2409](https://github.com/vechain/veworld-mobile/commit/62f240990670677138ab6dcae3c0a4f27b938d28))
+
 ## 2.5.6 (2026-04-25)
 
 ## 2.5.5 (2026-03-26)
