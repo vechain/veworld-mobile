@@ -92,8 +92,20 @@ export const TabBar = ({ state, descriptors, navigation }: Props) => {
                         canPreventDefault: true,
                     })
 
-                    if (!isFocused && !event.defaultPrevented) {
-                        navigation.navigate(route.name, route.params)
+                    if (!event.defaultPrevented) {
+                        const initialScreenMap: Record<string, string> = {
+                            HomeStack: Routes.HOME,
+                            AppsStack: Routes.APPS,
+                            [Routes.HISTORY_STACK]: Routes.HISTORY,
+                            SettingsStack: Routes.SETTINGS,
+                        }
+
+                        const initialScreen = initialScreenMap[route.name]
+
+                        navigation.navigate({
+                            name: route.name as never,
+                            params: { screen: initialScreen },
+                        })
                     }
                 }
 
