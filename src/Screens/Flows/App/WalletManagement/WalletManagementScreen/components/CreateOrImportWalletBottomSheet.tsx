@@ -12,6 +12,8 @@ import { Routes } from "~Navigation"
 import { selectHasOnboarded, selectUserHasSmartWallet, useAppSelector } from "~Storage/Redux"
 import { ImportWalletOptions, SocialWalletOptions } from "./CreateOrImportBottomsheetViews"
 
+const HandleComponent = () => <BaseView p={8} />
+
 type Props = {
     onClose: () => void
     handleOnCreateWallet: () => void
@@ -129,7 +131,7 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
                 scrollable={false}
                 floating
                 backgroundStyle={styles.rootSheet}
-                handleComponent={() => <BaseView p={8} />}
+                handleComponent={HandleComponent}
                 onDismiss={onDismiss}>
                 <BaseView flexDirection="column" w={100} position="relative">
                     <BaseTouchable style={styles.closeButton} action={onGoBack}>

@@ -1,4 +1,5 @@
 import { BottomTabBarHeightCallbackContext, BottomTabBarProps } from "@react-navigation/bottom-tabs"
+import { CommonActions } from "@react-navigation/native"
 import React, { useContext, useEffect, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import Animated, {
@@ -102,10 +103,12 @@ export const TabBar = ({ state, descriptors, navigation }: Props) => {
 
                         const initialScreen = initialScreenMap[route.name]
 
-                        navigation.navigate({
-                            name: route.name as never,
-                            params: { screen: initialScreen },
-                        })
+                        navigation.dispatch(
+                            CommonActions.navigate({
+                                name: route.name,
+                                params: { screen: initialScreen },
+                            }),
+                        )
                     }
                 }
 
