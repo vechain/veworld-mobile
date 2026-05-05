@@ -737,6 +737,11 @@ type RootTranslation = {
 	 */
 	BANNER_VEBETTER_DESC: string
 	/**
+	 * M​e​e​t​ ​t​h​e​ ​*​*​N​a​v​i​g​a​t​o​r​s​*​*​
+​D​e​l​e​g​a​t​e​ ​*​*​V​O​T​3​*​*​ ​t​o​ ​a​ ​t​r​u​s​t​e​d​ ​s​t​r​a​t​e​g​y​.
+	 */
+	BANNER_VEBETTER_NAVIGATORS_DESC: string
+	/**
 	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​t​a​k​e​ ​l​o​n​g​e​r​ ​t​o​ ​p​r​o​c​e​s​s​.
 	 */
 	BASE_FEE_RAMPING_UP: string
@@ -7013,6 +7018,11 @@ Try reconnect your device to the internet.
 	 * Explore the **VeBetterDAO** platform
 	 */
 	BANNER_VEBETTER_DESC: () => LocalizedString
+	/**
+	 * Meet the **Navigators**
+Delegate **VOT3** to a trusted strategy.
+	 */
+	BANNER_VEBETTER_NAVIGATORS_DESC: () => LocalizedString
 	/**
 	 * The transaction may take longer to process.
 	 */

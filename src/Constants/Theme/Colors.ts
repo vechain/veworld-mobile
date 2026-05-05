@@ -335,6 +335,14 @@ export type Colors = {
         }
         text: string
     }
+    veBetterNavigatorsBanner: {
+        background: string[]
+        vbdLogo: {
+            symbol: string
+            text: string
+        }
+        text: string
+    }
     feedbackChip: {
         background: string
         text: string
@@ -870,6 +878,14 @@ const light: Colors = {
         },
         text: COLORS.BLACK,
     },
+    veBetterNavigatorsBanner: {
+        background: ["#0B3838", "#06222A"],
+        vbdLogo: {
+            symbol: "#B1F16C",
+            text: COLORS.WHITE,
+        },
+        text: COLORS.WHITE,
+    },
     feedbackChip: {
         background: COLORS.GREY_200,
         text: COLORS.PURPLE,
@@ -1270,6 +1286,14 @@ const dark: Colors = {
     },
     veBetterDaoBanner: {
         background: ["#003199", "#002466"],
+        vbdLogo: {
+            symbol: "#B1F16C",
+            text: COLORS.WHITE,
+        },
+        text: COLORS.WHITE,
+    },
+    veBetterNavigatorsBanner: {
+        background: ["#0B3838", "#06222A"],
         vbdLogo: {
             symbol: "#B1F16C",
             text: COLORS.WHITE,
