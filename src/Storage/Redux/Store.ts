@@ -2,6 +2,8 @@ import { combineReducers } from "redux"
 import {
     AccountSlice,
     ActivitiesSlice,
+    B3moSlice,
+    B3moSessionSlice,
     BalanceSlice,
     BeatSlice,
     CacheSlice,
@@ -51,4 +53,6 @@ export const reducer = (nftPersistConfig: PersistConfig<NftSliceState>) =>
         [VersionUpdateSlice.name]: VersionUpdateSlice.reducer,
         [ExternalDappsSlice.name]: ExternalDappsSlice.reducer,
         [WalletPreferencesSlice.name]: WalletPreferencesSlice.reducer,
+        [B3moSlice.name]: B3moSlice.reducer,
+        [B3moSessionSlice.name]: B3moSessionSlice.reducer,
     })
