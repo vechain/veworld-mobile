@@ -10,19 +10,19 @@ mnemonic wallet to execute on-chain actions on VeChain without per-tx user
 approval.
 
 When the current task touches **any** of the following, read
-`.cursor/skills/b3mo/SKILL.md` first and keep it in sync after every change:
+`.claude/skills/b3mo/SKILL.md` first and keep it in sync after every change:
 
-- The B3MO tab (`src/Screens/Flows/App/B3moScreen/**`)
-- The B3MO Redux slices (`src/Storage/Redux/Slices/B3mo.ts`,
-  `src/Storage/Redux/Slices/B3moSession.ts`,
-  `src/Storage/Redux/Selectors/B3mo.ts`)
-- The B3MO hooks (`src/Hooks/useB3mo/**`)
-- The B3MO navigation (`src/Navigation/Stacks/B3moStack.tsx`,
-  any change to `TabStack.tsx` involving the B3MO tab)
-- The companion repo at `~/vechain/veworld-b3mo-backend`
-- The shared MCP read-tool proxy or the VeChain Swap / Stargate clause builders
-- Any user request mentioning: `B3MO`, `autonomous wallet`, `agent chat`,
-  `veworld-b3mo-backend`, "agent that signs transactions on its own"
+-   The B3MO tab (`src/Screens/Flows/App/B3moScreen/**`)
+-   The B3MO Redux slices (`src/Storage/Redux/Slices/B3mo.ts`,
+    `src/Storage/Redux/Slices/B3moSession.ts`,
+    `src/Storage/Redux/Selectors/B3mo.ts`)
+-   The B3MO hooks (`src/Hooks/useB3mo/**`)
+-   The B3MO navigation (`src/Navigation/Stacks/B3moStack.tsx`,
+    any change to `TabStack.tsx` involving the B3MO tab)
+-   The companion repo at `~/vechain/veworld-b3mo-backend`
+-   The shared MCP read-tool proxy or the VeChain Swap / Stargate clause builders
+-   Any user request mentioning: `B3MO`, `autonomous wallet`, `agent chat`,
+    `veworld-b3mo-backend`, "agent that signs transactions on its own"
 
 ## Non-negotiables
 
@@ -40,15 +40,15 @@ When the current task touches **any** of the following, read
 
 ## Update protocol for the skill
 
-Update `.cursor/skills/b3mo/SKILL.md` whenever you:
+Update `.claude/skills/b3mo/SKILL.md` whenever you:
 
-- Add/modify a tool (write or read)
-- Change SSE event shapes
-- Add/remove an onboarding step
-- Change the trust model (caps, biometric, kill switch)
-- Add a new network
-- Rename/add backend endpoints or routes
-- Change Redux slice shape
+-   Add/modify a tool (write or read)
+-   Change SSE event shapes
+-   Add/remove an onboarding step
+-   Change the trust model (caps, biometric, kill switch)
+-   Add a new network
+-   Rename/add backend endpoints or routes
+-   Change Redux slice shape
 
 If you are about to do any of the above and have not read the skill yet,
 read it now.
