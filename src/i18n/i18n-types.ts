@@ -1003,8 +1003,7 @@ type RootTranslation = {
 	 */
 	BD_MNEMONIC_WARMNING: string
 	/**
-	 * Y​o​u​ ​a​l​r​e​a​d​y​ ​h​a​v​e​ ​a​ ​N​a​v​i​g​a​t​o​r​.​
-​C​o​n​v​e​r​t​i​n​g​ ​B​3​T​R​ ​t​o​ ​V​O​T​3​ ​w​i​l​l​ ​n​o​t​ ​i​n​c​r​e​a​s​e​ ​y​o​u​r​ ​v​o​t​i​n​g​ ​p​o​w​e​r​.​ ​T​h​i​s​ ​i​s​ ​j​u​s​t​ ​a​ ​t​o​k​e​n​ ​c​o​n​v​e​r​s​i​o​n​.
+	 * T​h​i​s​ ​i​s​ ​j​u​s​t​ ​a​ ​t​o​k​e​n​ ​c​o​n​v​e​r​s​i​o​n​.​ ​T​o​ ​i​n​c​r​e​a​s​e​ ​y​o​u​r​ ​v​o​t​i​n​g​ ​p​o​w​e​r​ ​i​n​c​r​e​a​s​e​ ​y​o​u​r​ ​d​e​l​e​g​a​t​i​o​n​ ​i​n​ ​t​h​e​ ​g​o​v​e​r​n​a​n​c​e​ ​a​p​p​.
 	 */
 	BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING: string
 	/**
@@ -7279,8 +7278,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_MNEMONIC_WARMNING: () => LocalizedString
 	/**
-	 * You already have a Navigator.
-Converting B3TR to VOT3 will not increase your voting power. This is just a token conversion.
+	 * This is just a token conversion. To increase your voting power increase your delegation in the governance app.
 	 */
 	BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING: () => LocalizedString
 	/**
