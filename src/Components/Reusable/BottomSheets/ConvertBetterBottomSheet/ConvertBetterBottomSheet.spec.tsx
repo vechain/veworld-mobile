@@ -1,9 +1,10 @@
-import { act, render, screen } from "@testing-library/react-native"
+import { act, fireEvent, render, screen, within } from "@testing-library/react-native"
 import { ethers } from "ethers"
 import React from "react"
 import { B3TR, VOT3 } from "~Constants"
 import { useConvertBetterTokens } from "~Hooks"
 import { useTokenBalance } from "~Hooks/useTokenBalance"
+import { useGetUnlockedVot3Balance, useUserHasNavigator } from "~Hooks/VeBetterDao"
 import { TestWrapper } from "~Test"
 import { ConvertBetterBottomSheet } from "./ConvertBetterBottomSheet"
 
@@ -49,6 +50,14 @@ jest.mock("~Hooks/useFormatFiat", () => ({
     })),
 }))
 
+jest.mock("~Hooks/VeBetterDao", () => ({
+    useUserHasNavigator: jest.fn(),
+    useGetUnlockedVot3Balance: jest.fn(),
+}))
+
+const mockUseUserHasNavigator = useUserHasNavigator as jest.Mock
+const mockUseGetUnlockedVot3Balance = useGetUnlockedVot3Balance as jest.Mock
+
 describe("ConvertBetterBottomSheet - Ref-based dismissal pattern", () => {
     const mockB3trBalance = {
         balance: ethers.utils.parseEther("100").toString(),
@@ -88,6 +97,8 @@ describe("ConvertBetterBottomSheet - Ref-based dismissal pattern", () => {
             convertB3tr: mockConvertB3tr,
             convertVot3: mockConvertVot3,
         })
+        mockUseUserHasNavigator.mockReturnValue({ data: false })
+        mockUseGetUnlockedVot3Balance.mockReturnValue({ data: undefined })
     })
 
     it("should call onDismiss when bottom sheet dismisses", async () => {
@@ -113,5 +124,49 @@ describe("ConvertBetterBottomSheet - Ref-based dismissal pattern", () => {
 
         const convertButton = screen.getByTestId("Convert_Action_BTN")
         expect(convertButton).toBeDefined()
+    })
+
+    it("should render the navigator warning alert when the user has a navigator", () => {
+        mockUseUserHasNavigator.mockReturnValue({ data: true })
+
+        render(<ConvertBetterBottomSheet ref={mockRef} onClose={mockedOnClose} />, {
+            wrapper: TestWrapper,
+        })
+
+        expect(screen.getByTestId("ConvertBetter_Navigator_Warning")).toBeTruthy()
+    })
+
+    it("should NOT render the navigator warning alert when the user does not have a navigator", () => {
+        mockUseUserHasNavigator.mockReturnValue({ data: false })
+
+        render(<ConvertBetterBottomSheet ref={mockRef} onClose={mockedOnClose} />, {
+            wrapper: TestWrapper,
+        })
+
+        expect(screen.queryByTestId("ConvertBetter_Navigator_Warning")).toBeNull()
+    })
+
+    it("should display the unlocked VOT3 balance after swapping when the user has a navigator", async () => {
+        const unlocked = ethers.utils.parseEther("25")
+        mockUseUserHasNavigator.mockReturnValue({ data: true })
+        mockUseGetUnlockedVot3Balance.mockReturnValue({
+            data: {
+                hex: unlocked.toHexString(),
+                original: unlocked.toBigInt(),
+                scaled: "25.0",
+                formatted: "25",
+            },
+        })
+
+        render(<ConvertBetterBottomSheet ref={mockRef} onClose={mockedOnClose} />, {
+            wrapper: TestWrapper,
+        })
+
+        await act(async () => {
+            fireEvent.press(screen.getByTestId("ConvertBetter_Swap_Button"))
+        })
+
+        const senderCard = screen.getByTestId("ConvertBetter_Sender_Card")
+        expect(within(senderCard).getByText(/25/)).toBeTruthy()
     })
 })
