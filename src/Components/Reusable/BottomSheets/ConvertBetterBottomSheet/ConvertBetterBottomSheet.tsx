@@ -239,7 +239,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                     {LL.BD_GAS_REQUIRED_FOR_CONVERSION()}
                 </BaseText>
 
-                <BaseSpacer height={24} />
+                <BaseSpacer height={16} />
                 {showNavigatorConversionWarning && (
                     <>
                         <AlertInline
@@ -249,7 +249,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                             contentStyle={styles.alertContent}
                             message={LL.BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING()}
                         />
-                        <BaseSpacer height={16} />
+                        <BaseSpacer height={24} />
                     </>
                 )}
                 <BaseButton
