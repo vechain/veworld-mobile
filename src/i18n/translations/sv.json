@@ -235,6 +235,7 @@
   "BD_MNEMONIC_PASSWORD_WARNING": "Om du förlorar din enhet eller appen avinstalleras, kan du använda de 12 orden nedan för att återställa denna plånbok och alla dina tillgångar.",
   "BD_MNEMONIC_SUBTITLE": "Din hemliga återställningsfras gör det enkelt att säkerhetskopiera och återställa ditt konto.",
   "BD_MNEMONIC_WARMNING": "Dela aldrig orden och den specifika ordningen. Vem som helst som lär sig dem kan stjäla alla dina krypto-tillgångar.",
+  "BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING": "Du har redan en Navigator.\nAtt konvertera B3TR till VOT3 kommer inte att öka din röststyrka. Detta är bara en tokenkonvertering.",
   "BD_NEW_WALLET_TITLE": "Ny plånbok",
   "BD_NFT_DESC_PLACEHOLDER": "Plats för beskrivning av slumpmässig NFT-samling om NFT-samlingen inte har någon",
   "BD_NOT_BACKED_UP_TO_CLOUD": "Inte säkerhetskopierad till iCloud",
