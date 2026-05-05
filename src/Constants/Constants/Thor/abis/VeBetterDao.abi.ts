@@ -1,6 +1,6 @@
 import { abi } from "thor-devkit"
 
-type Vot3AbiKeys = "convertToB3TR" | "convertToVOT3"
+type Vot3AbiKeys = "convertToB3TR" | "convertToVOT3" | "unlockedBalance" | "getNavigatorLockedAmount"
 
 export const X2EarnDapps = {
     inputs: [],
@@ -100,6 +100,44 @@ export const Vot3Abis: Record<Vot3AbiKeys, abi.Function.Definition> = {
         name: "convertToVOT3",
         outputs: [],
         stateMutability: "nonpayable",
+        type: "function",
+    },
+    getNavigatorLockedAmount: {
+        inputs: [
+            {
+                internalType: "address",
+                name: "account",
+                type: "address",
+            },
+        ],
+        name: "getNavigatorLockedAmount",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    unlockedBalance: {
+        inputs: [
+            {
+                internalType: "address",
+                name: "account",
+                type: "address",
+            },
+        ],
+        name: "unlockedBalance",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
         type: "function",
     },
 }
@@ -215,6 +253,28 @@ export const XAllocationPool = {
                 internalType: "uint256",
                 name: "",
                 type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+} as const
+
+export const Navigator = {
+    isDelegated: {
+        inputs: [
+            {
+                internalType: "address",
+                name: "citizen",
+                type: "address",
+            },
+        ],
+        name: "isDelegated",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
             },
         ],
         stateMutability: "view",

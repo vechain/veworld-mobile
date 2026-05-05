@@ -1,3 +1,5 @@
 export * from "./useCurrentAllocationRoundId"
 export * from "./useRoundXApps"
 export * from "./useXAppsShares"
+export * from "./useUserHasNavigator"
+export * from "./useGetUnlockedVot3Balance"

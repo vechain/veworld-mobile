@@ -1003,6 +1003,11 @@ type RootTranslation = {
 	 */
 	BD_MNEMONIC_WARMNING: string
 	/**
+	 * Y​o​u​ ​a​l​r​e​a​d​y​ ​h​a​v​e​ ​a​ ​N​a​v​i​g​a​t​o​r​.​
+​C​o​n​v​e​r​t​i​n​g​ ​B​3​T​R​ ​t​o​ ​V​O​T​3​ ​w​i​l​l​ ​n​o​t​ ​i​n​c​r​e​a​s​e​ ​y​o​u​r​ ​v​o​t​i​n​g​ ​p​o​w​e​r​.​ ​T​h​i​s​ ​i​s​ ​j​u​s​t​ ​a​ ​t​o​k​e​n​ ​c​o​n​v​e​r​s​i​o​n​.
+	 */
+	BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING: string
+	/**
 	 * N​e​w​ ​W​a​l​l​e​t
 	 */
 	BD_NEW_WALLET_TITLE: string
@@ -7273,6 +7278,11 @@ Try reconnect your device to the internet.
 	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
 	 */
 	BD_MNEMONIC_WARMNING: () => LocalizedString
+	/**
+	 * You already have a Navigator.
+Converting B3TR to VOT3 will not increase your voting power. This is just a token conversion.
+	 */
+	BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING: () => LocalizedString
 	/**
 	 * New Wallet
 	 */
