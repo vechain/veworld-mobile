@@ -11,6 +11,9 @@ import type { B3moListedSession } from "~Hooks/useB3mo"
 
 type Nav = NativeStackNavigationProp<{ [Routes.B3MO_CHAT]: undefined }>
 
+const UNTITLED = "Untitled"
+const SEPARATOR = "•"
+
 export const B3moHistoryScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation<Nav>()
@@ -58,12 +61,10 @@ export const B3moHistoryScreen = () => {
                             <BaseView p={12} style={[styles.row, { backgroundColor: theme.colors.card }]}>
                                 <BaseView flex={1}>
                                     <BaseText typographyFont="bodyBold" numberOfLines={1}>
-                                        {}
-                                        {item.title || "Untitled"}
+                                        {item.title || UNTITLED}
                                     </BaseText>
                                     <BaseText typographyFont="captionRegular" color={theme.colors.subtitle}>
-                                        {}
-                                        {`${moment(item.updatedAt).fromNow()} • ${item.messageCount}`}
+                                        {`${moment(item.updatedAt).fromNow()} ${SEPARATOR} ${item.messageCount}`}
                                     </BaseText>
                                 </BaseView>
                                 <BaseTouchable action={() => deleteSession(item.id).then(refresh)}>
