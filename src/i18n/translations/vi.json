@@ -235,7 +235,7 @@
   "BD_MNEMONIC_PASSWORD_WARNING": "Trong trường hợp bạn mất thiết bị hoặc ứng dụng bị gỡ cài đặt, bạn có thể sử dụng 12 từ dưới đây để khôi phục ví này và tất cả tài sản của bạn.",
   "BD_MNEMONIC_SUBTITLE": "Cụm từ Khôi phục Bí mật của bạn giúp dễ dàng sao lưu và khôi phục tài khoản của bạn.",
   "BD_MNEMONIC_WARMNING": "Không bao giờ chia sẻ các từ và thứ tự cụ thể. Bất kỳ ai biết chúng đều có thể đánh cắp tất cả các tài sản mã hóa của bạn.",
-  "BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING": "Bạn đã có một Navigator.\nChuyển đổi B3TR sang VOT3 sẽ không tăng sức mạnh biểu quyết của bạn. Đây chỉ là một thao tác chuyển đổi token.",
+  "BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING": "Đây chỉ là chuyển đổi token. Để tăng sức mạnh biểu quyết, hãy tăng lượng ủy quyền của bạn trong ứng dụng quản trị.",
   "BD_NEW_WALLET_TITLE": "Ví Mới",
   "BD_NFT_DESC_PLACEHOLDER": "Mô tả bộ sưu tập NFT ngẫu nhiên phòng trường hợp bộ sưu tập NFT không có mô tả",
   "BD_NOT_BACKED_UP_TO_CLOUD": "Chưa được sao lưu lên iCloud",

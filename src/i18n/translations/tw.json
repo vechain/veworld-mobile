@@ -235,7 +235,7 @@
   "BD_MNEMONIC_PASSWORD_WARNING": "如果您遺失設備或卸載應用程序，可以使用下面的12個單詞恢復此錢包以及您的所有資產。",
   "BD_MNEMONIC_SUBTITLE": "您的秘密恢復短語可讓您輕鬆備份和還原您的賬戶。",
   "BD_MNEMONIC_WARMNING": "切勿分享單詞及其順序。任何人獲知它們后都能竊取您的所有加密資產。",
-  "BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING": "你已經擁有一個Navigator。\n將B3TR轉換為VOT3不會增加你的投票權限。這只是一次代幣轉換。",
+  "BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING": "這只是代幣兌換。若要增加您的投票權重，請在治理應用程式中增加您的委託。",
   "BD_NEW_WALLET_TITLE": "新增錢包",
   "BD_NFT_DESC_PLACEHOLDER": "隨機的 NFT 集合描述卻在 NFT 集合沒有描述時作為佔位符",
   "BD_NOT_BACKED_UP_TO_CLOUD": "未備份到iCloud",

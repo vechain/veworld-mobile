@@ -235,7 +235,7 @@
   "BD_MNEMONIC_PASSWORD_WARNING": "デバイスを紛失した場合やアプリがアンインストールされた場合には、以下の12語を使用してこのウォレットとすべての資産を復元できます。",
   "BD_MNEMONIC_SUBTITLE": "シークレットリカバリーフレーズにより、アカウントのバックアップと復元が容易になります。",
   "BD_MNEMONIC_WARMNING": "これらの単語とその順序を他人と共有しないでください。知っている人は誰でもあなたの暗号資産をすべて盗むことができます。",
-  "BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING": "あなたはすでにナビゲーターを持っています。\nB3TRをVOT3に変換しても、投票権は増加しません。これはトークンの変換のみです。",
+  "BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING": "これはトークンの変換のみです。投票権を増やすには、ガバナンスアプリで委任額を増やしてください。",
   "BD_NEW_WALLET_TITLE": "新しいウォレット",
   "BD_NFT_DESC_PLACEHOLDER": "NFTコレクションに説明がない場合のランダムなNFTコレクション説明プレースホルダー",
   "BD_NOT_BACKED_UP_TO_CLOUD": "iCloudにバックアップされていません",
