@@ -1,5 +1,4 @@
-import { useNavigation } from "@react-navigation/native"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { CommonActions, useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { FlatList, StyleSheet } from "react-native"
 import { BaseSpacer, BaseText, BaseTouchable, BaseView, Layout } from "~Components"
@@ -15,11 +14,9 @@ import {
 } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
-type Nav = NativeStackNavigationProp<{ [Routes.B3MO_ONBOARDING_UNLOCK]: undefined }>
-
 export const B3moPickWalletScreen = () => {
     const { LL } = useI18nContext()
-    const nav = useNavigation<Nav>()
+    const nav = useNavigation()
     const dispatch = useAppDispatch()
     const accounts = useAppSelector(selectAccounts)
     const devices = useAppSelector(selectDevicesState)
@@ -34,7 +31,12 @@ export const B3moPickWalletScreen = () => {
     const onSelect = useCallback(
         (account: WalletAccount) => {
             dispatch(setB3moLinkedAddress({ address: account.address }))
-            nav.navigate(Routes.B3MO_ONBOARDING_UNLOCK)
+            nav.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: Routes.B3MO_CHAT }],
+                }),
+            )
         },
         [dispatch, nav],
     )

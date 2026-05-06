@@ -56,7 +56,7 @@ sequenceDiagram
 
 | Branch | Decision |
 | --- | --- |
-| Trust model | Zero hard caps. One-time biometric unlock at onboarding caches the wallet key for the session. Permanent banner + onboarding checkbox. |
+| Trust model | Zero hard caps. Biometric/PIN unlock auto-triggers as an inline overlay on chat entry (no dedicated screen). Caches the wallet key for the session. Permanent banner + onboarding checkbox. |
 | Wallet count | 1 linked wallet, switchable from Settings (resets chat). |
 | Wallet types | Only `LOCAL_MNEMONIC`. Smart Wallet / Ledger / Watched are rejected. |
 | Clause building | **Backend** translates ChatGPT intent (high-level tool calls) into VeChain clauses. App is a thin executor. |
@@ -93,8 +93,8 @@ sequenceDiagram
 | `src/Hooks/useB3mo/walletAccess.ts` | Decrypt wallet using cached walletKey, derive private key |
 | `src/Navigation/Stacks/B3moStack.tsx` | Stack with onboarding gating |
 | `src/Navigation/Tabs/TabStack.tsx` | Tab insertion (between Apps & History) |
-| `src/Screens/Flows/App/B3moScreen/Onboarding/*` | Intro / WalletChoice / PickWallet / Unlock |
-| `src/Screens/Flows/App/B3moScreen/B3moChatScreen.tsx` | Chat screen + banner + composer |
+| `src/Screens/Flows/App/B3moScreen/Onboarding/*` | Intro / WalletChoice / PickWallet (no dedicated unlock screen) |
+| `src/Screens/Flows/App/B3moScreen/B3moChatScreen.tsx` | Chat screen + banner + composer + inline auto-unlock overlay |
 | `src/Screens/Flows/App/B3moScreen/B3moHistoryScreen.tsx` | Sessions list (GET /sessions) |
 | `src/Screens/Flows/App/B3moScreen/B3moSettingsScreen.tsx` | Switch wallet / reset |
 | `src/Screens/Flows/App/B3moScreen/Components/*` | `B3moBanner`, `B3moComposer`, `B3moMessageBubble`, `B3moToolCard` |
@@ -183,17 +183,19 @@ Routes.B3MO_ONBOARDING_WALLET_CHOICE  ("Create new" | "Use existing")
         ↓                              ↓
 Routes.CREATE_WALLET_FLOW           Routes.B3MO_ONBOARDING_PICK_WALLET
                                        ↓
-Routes.B3MO_ONBOARDING_UNLOCK         (biometric + SIWV)
-        ↓
-Routes.B3MO_CHAT
+Routes.B3MO_CHAT  (auto-unlock overlay → biometric/PIN + SIWV → chat)
 ```
 
-`B3moStack.tsx` selects the initial route from `selectIsB3moOnboarded` +
-`selectIsB3moSessionUnlocked`.
+`B3moStack.tsx` selects the initial route from `selectIsB3moOnboarded`
+only. There is **no dedicated unlock route** — the chat screen renders an
+inline auth overlay (`testID="b3mo-unlock-retry"` for the CTA) whenever
+`selectIsB3moSessionUnlocked` is `false`, auto-triggering Face ID / PIN
+through `useCheckIdentity` on mount.
 
-The unlock screen calls `unlock(pin)` (returns the freshly-decrypted
+`B3moChatScreen.tsx` calls `unlock(pin)` (returns the freshly-decrypted
 `walletKey`) and immediately passes it to `signIn(walletKey)` to avoid a
 stale-selector closure that would otherwise reject the first SIWV attempt.
+The composer is disabled until the session is unlocked.
 
 ## Security & safety
 

@@ -715,10 +715,6 @@ type RootTranslation = {
 	 */
 	B3MO_AGENT_TOOL_VIEW_EXPLORER: string
 	/**
-	 * A​u​t​h​e​n​t​i​c​a​t​e​ ​t​o​ ​a​l​l​o​w​ ​B​3​M​O​ ​t​o​ ​s​i​g​n​ ​o​n​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​f​o​r​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​s​e​s​s​i​o​n​.
-	 */
-	B3MO_AGENT_UNLOCK_BODY: string
-	/**
 	 * U​n​l​o​c​k
 	 */
 	B3MO_AGENT_UNLOCK_CTA: string
@@ -726,10 +722,6 @@ type RootTranslation = {
 	 * A​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​f​a​i​l​e​d​.​ ​T​r​y​ ​a​g​a​i​n​.
 	 */
 	B3MO_AGENT_UNLOCK_FAIL: string
-	/**
-	 * U​n​l​o​c​k​ ​t​o​ ​e​n​a​b​l​e​ ​a​u​t​o​n​o​m​o​u​s​ ​m​o​d​e
-	 */
-	B3MO_AGENT_UNLOCK_TITLE: string
 	/**
 	 * C​r​e​a​t​e​ ​n​e​w​ ​w​a​l​l​e​t
 	 */
@@ -7150,10 +7142,6 @@ Try reconnect your device to the internet.
 	 */
 	B3MO_AGENT_TOOL_VIEW_EXPLORER: () => LocalizedString
 	/**
-	 * Authenticate to allow B3MO to sign on this wallet for the current session.
-	 */
-	B3MO_AGENT_UNLOCK_BODY: () => LocalizedString
-	/**
 	 * Unlock
 	 */
 	B3MO_AGENT_UNLOCK_CTA: () => LocalizedString
@@ -7161,10 +7149,6 @@ Try reconnect your device to the internet.
 	 * Authentication failed. Try again.
 	 */
 	B3MO_AGENT_UNLOCK_FAIL: () => LocalizedString
-	/**
-	 * Unlock to enable autonomous mode
-	 */
-	B3MO_AGENT_UNLOCK_TITLE: () => LocalizedString
 	/**
 	 * Create new wallet
 	 */

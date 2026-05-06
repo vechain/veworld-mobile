@@ -1,8 +1,8 @@
 # b3moConnectExistingWallet.yaml
 # Verifies that the user can link an existing mnemonic wallet to the B3MO
-# autonomous agent. Stops at the Unlock screen (linkedAddress is set in Redux);
-# the biometric/SIWV step requires real auth + backend and is not part of this
-# flow.
+# autonomous agent. After picking the wallet the app routes directly to the
+# B3MO chat; auth (biometric/SIWV) auto-triggers as an inline overlay and is
+# not exercised here (requires real auth + backend).
 appId: org.vechain.veworld.app
 tags:
     - pull-request
@@ -98,12 +98,13 @@ onFlowComplete:
       id: "b3mo-pick-wallet"
       index: 0
 
-# Verify we land on the Unlock screen with the unlock CTA visible.
-# Reaching this screen proves `b3mo.linkedAddress` was set in Redux and that
-# the navigation gate (`B3moStack`) routed accordingly.
+# Verify we land on the B3MO chat with the auth overlay's retry CTA visible.
+# (Auto-unlock cannot complete on the simulator without biometric / backend,
+# so the overlay surfaces the retry button.) Reaching this screen proves
+# `b3mo.linkedAddress` was set in Redux and the navigation gate routed to chat.
 - extendedWaitUntil:
       visible:
-          id: "b3mo-unlock-cta"
+          id: "b3mo-unlock-retry"
       timeout: 10000
 - assertVisible:
-      id: "b3mo-unlock-cta"
+      id: "b3mo-unlock-retry"

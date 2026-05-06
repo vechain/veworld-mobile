@@ -43,11 +43,43 @@ export const useB3moClient = () => {
     const [messages, setMessages] = useState<ChatMessage[]>([])
     const [isStreaming, setIsStreaming] = useState(false)
     const [error, setError] = useState<string | undefined>()
+    const [isLoadingTranscript, setIsLoadingTranscript] = useState(false)
     const sseRef = useRef<B3moSseClient | null>(null)
+    const loadedSessionIdRef = useRef<string | undefined>(undefined)
 
     useEffect(() => {
         return () => sseRef.current?.close()
     }, [])
+
+    useEffect(() => {
+        if (!jwt) return
+        if (loadedSessionIdRef.current === currentSessionId) return
+        if (!currentSessionId) {
+            loadedSessionIdRef.current = undefined
+            setMessages([])
+            return
+        }
+        let cancelled = false
+        setIsLoadingTranscript(true)
+        ;(async () => {
+            try {
+                const res = await axios.get(`${B3MO_BACKEND_URL}/sessions/${currentSessionId}`, {
+                    headers: { Authorization: `Bearer ${jwt}` },
+                })
+                if (cancelled) return
+                const transcript = (res.data.messages ?? []) as RawMessage[]
+                setMessages(rebuildMessages(transcript))
+                loadedSessionIdRef.current = currentSessionId
+            } catch {
+                // ignore — keep whatever messages we have
+            } finally {
+                if (!cancelled) setIsLoadingTranscript(false)
+            }
+        })()
+        return () => {
+            cancelled = true
+        }
+    }, [jwt, currentSessionId])
 
     const send = useCallback(
         async (text: string, opts: B3moSendOptions = {}) => {
@@ -90,6 +122,7 @@ export const useB3moClient = () => {
                 switch (event.type) {
                     case "session":
                         liveSessionId = event.sessionId
+                        loadedSessionIdRef.current = event.sessionId
                         dispatch(setB3moCurrentSession({ sessionId: event.sessionId }))
                         break
                     case "text_delta":
@@ -216,6 +249,7 @@ export const useB3moClient = () => {
     )
 
     const startNewSession = useCallback(() => {
+        loadedSessionIdRef.current = undefined
         dispatch(setB3moCurrentSession({ sessionId: undefined }))
         setMessages([])
         setError(undefined)
@@ -223,15 +257,9 @@ export const useB3moClient = () => {
 
     const loadSession = useCallback(
         async (sessionId: string) => {
-            if (!jwt) return
             dispatch(setB3moCurrentSession({ sessionId }))
-            const res = await axios.get(`${B3MO_BACKEND_URL}/sessions/${sessionId}`, {
-                headers: { Authorization: `Bearer ${jwt}` },
-            })
-            const transcript = (res.data.messages ?? []) as RawMessage[]
-            setMessages(rebuildMessages(transcript))
         },
-        [jwt, dispatch],
+        [dispatch],
     )
 
     const listSessions = useCallback(async (): Promise<B3moListedSession[]> => {
@@ -258,6 +286,7 @@ export const useB3moClient = () => {
     return {
         messages,
         isStreaming,
+        isLoadingTranscript,
         error,
         send,
         startNewSession,

@@ -32,15 +32,14 @@ export const B3moBanner = () => {
                 <BaseText typographyFont="bodyBold" numberOfLines={1}>
                     {account?.alias ?? "B3MO"}
                 </BaseText>
-                <BaseTouchable action={onCopy}>
+                <BaseTouchable action={onCopy} style={styles.addressRow}>
                     <BaseText typographyFont="captionMedium" color={theme.colors.subtitle}>
                         {AddressUtils.humanAddress(linkedAddress, 6, 6)}
                     </BaseText>
+                    <BaseSpacer width={6} />
+                    <BaseIcon name="icon-copy" size={14} color={theme.colors.subtitle} />
                 </BaseTouchable>
             </BaseView>
-            <BaseTouchable action={onCopy}>
-                <BaseIcon name="icon-copy" size={18} color={theme.colors.subtitle} />
-            </BaseTouchable>
             <BaseSpacer width={8} />
             <BaseView style={styles.warningPill}>
                 <BaseText typographyFont="captionRegular" color={COLORS.WHITE}>
@@ -68,5 +67,9 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingVertical: 4,
             borderRadius: 8,
             maxWidth: 140,
+        },
+        addressRow: {
+            flexDirection: "row",
+            alignItems: "center",
         },
     })
