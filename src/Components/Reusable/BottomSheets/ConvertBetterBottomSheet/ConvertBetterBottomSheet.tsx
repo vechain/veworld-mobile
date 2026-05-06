@@ -5,6 +5,7 @@ import { Keyboard, StyleSheet } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { AlertInline } from "~Components/Reusable/Alert/AlertInline"
 import { ColorThemeType } from "~Constants"
 import { useAmountInput, useConvertBetterTokens, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
@@ -12,6 +13,8 @@ import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ConvertBetterCard } from "./ConvertBetterCard"
+import { useUserHasNavigator, useGetUnlockedVot3Balance } from "~Hooks/VeBetterDao"
+import { Balance } from "~Model/Balance"
 
 type Props = {
     onClose: () => void
@@ -59,14 +62,28 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
         [theme.colors.convertBetterCard.borderColor, theme.colors.transparent],
     )
 
-    const b3trTokenTotal = BigNutils(b3tr?.balance?.balance).toString
-    const vot3TokenTotal = BigNutils(vot3?.balance?.balance).toString
-
     const { convertB3tr, convertVot3 } = useConvertBetterTokens()
+    const { data: isUserHasNavigator } = useUserHasNavigator()
+    const { data: unlockedVot3Balance } = useGetUnlockedVot3Balance()
 
     const isB3TRActive = !isSwapped
 
+    const vot3Balance = useMemo(() => {
+        return {
+            ...vot3?.balance,
+            balance: isUserHasNavigator ? unlockedVot3Balance?.hex ?? "0" : vot3?.balance?.balance ?? "0",
+        } as Balance
+    }, [isUserHasNavigator, unlockedVot3Balance?.hex, vot3?.balance])
+
+    const b3trTokenTotal = BigNutils(b3tr?.balance?.balance).toString
+    const vot3TokenTotal = BigNutils(vot3Balance.balance).toString
+
     const submitDisabled = useMemo(() => isError || !input, [input, isError])
+
+    const showNavigatorConversionWarning = useMemo(
+        () => Boolean(isUserHasNavigator) && isB3TRActive,
+        [isUserHasNavigator, isB3TRActive],
+    )
 
     const onAnimationEnd = () => {
         setIsSwapEnabled(true)
@@ -160,6 +177,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
             blurBackdrop
             dynamicHeight
             enablePanDownToClose
+            scrollable={false}
             onDismiss={onDismiss}>
             <BaseView>
                 <BaseText typographyFont="subSubTitleMedium">{LL.TITLE_CONVERT_BETTER_TOKENS()}</BaseText>
@@ -202,7 +220,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
 
                     <ConvertBetterCard
                         token={vot3}
-                        balance={vot3?.balance}
+                        balance={vot3Balance}
                         isSender={isSwapped}
                         sendAmount={input}
                         error={isError}
@@ -221,7 +239,19 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                     {LL.BD_GAS_REQUIRED_FOR_CONVERSION()}
                 </BaseText>
 
-                <BaseSpacer height={24} />
+                <BaseSpacer height={16} />
+                {showNavigatorConversionWarning && (
+                    <>
+                        <AlertInline
+                            testID="ConvertBetter_Navigator_Warning"
+                            variant="banner"
+                            status="info"
+                            contentStyle={styles.alertContent}
+                            message={LL.BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING()}
+                        />
+                        <BaseSpacer height={24} />
+                    </>
+                )}
                 <BaseButton
                     testID="Convert_Action_BTN"
                     title={LL.BTN_CONVERT()}
@@ -272,5 +302,8 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 6,
             width: 32,
             height: 32,
+        },
+        alertContent: {
+            paddingRight: 12,
         },
     })

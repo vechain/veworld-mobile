@@ -737,6 +737,11 @@ type RootTranslation = {
 	 */
 	BANNER_VEBETTER_DESC: string
 	/**
+	 * M​e​e​t​ ​t​h​e​ ​*​*​N​a​v​i​g​a​t​o​r​s​*​*​
+​D​e​l​e​g​a​t​e​ ​*​*​V​O​T​3​*​*​ ​t​o​ ​a​ ​t​r​u​s​t​e​d​ ​s​t​r​a​t​e​g​y​.
+	 */
+	BANNER_VEBETTER_NAVIGATORS_DESC: string
+	/**
 	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​t​a​k​e​ ​l​o​n​g​e​r​ ​t​o​ ​p​r​o​c​e​s​s​.
 	 */
 	BASE_FEE_RAMPING_UP: string
@@ -1002,6 +1007,10 @@ type RootTranslation = {
 	 * N​e​v​e​r​ ​s​h​a​r​e​ ​t​h​e​ ​w​o​r​d​s​ ​a​n​d​ ​s​p​e​c​i​f​i​c​ ​o​r​d​e​r​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​l​e​a​r​n​s​ ​t​h​e​m​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​ ​a​s​s​e​t​s​.
 	 */
 	BD_MNEMONIC_WARMNING: string
+	/**
+	 * T​h​i​s​ ​i​s​ ​j​u​s​t​ ​a​ ​t​o​k​e​n​ ​c​o​n​v​e​r​s​i​o​n​.​ ​T​o​ ​i​n​c​r​e​a​s​e​ ​y​o​u​r​ ​v​o​t​i​n​g​ ​p​o​w​e​r​ ​i​n​c​r​e​a​s​e​ ​y​o​u​r​ ​d​e​l​e​g​a​t​i​o​n​ ​i​n​ ​t​h​e​ ​g​o​v​e​r​n​a​n​c​e​ ​a​p​p​.
+	 */
+	BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING: string
 	/**
 	 * N​e​w​ ​W​a​l​l​e​t
 	 */
@@ -7010,6 +7019,11 @@ Try reconnect your device to the internet.
 	 */
 	BANNER_VEBETTER_DESC: () => LocalizedString
 	/**
+	 * Meet the **Navigators**
+Delegate **VOT3** to a trusted strategy.
+	 */
+	BANNER_VEBETTER_NAVIGATORS_DESC: () => LocalizedString
+	/**
 	 * The transaction may take longer to process.
 	 */
 	BASE_FEE_RAMPING_UP: () => LocalizedString
@@ -7273,6 +7287,10 @@ Try reconnect your device to the internet.
 	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
 	 */
 	BD_MNEMONIC_WARMNING: () => LocalizedString
+	/**
+	 * This is just a token conversion. To increase your voting power increase your delegation in the governance app.
+	 */
+	BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING: () => LocalizedString
 	/**
 	 * New Wallet
 	 */

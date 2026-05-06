@@ -5,7 +5,7 @@ import { SCREEN_WIDTH, STARGATE_DAPP_URL_DISCOVER_BANNER, STARGATE_DAPP_URL_HOME
 import { AnalyticsEvent } from "~Constants/Enums/AnalyticsEvent"
 import { useAnalyticTracking, useBottomSheetModal } from "~Hooks"
 import { Routes } from "~Navigation"
-import { StargateBanner, StellaPayBanner, VeBetterDaoBanner } from "./Banners"
+import { StargateBanner, StellaPayBanner, VeBetterDaoBanner, VeBetterNavigatorsBanner } from "./Banners"
 import { CarouselPressEvent } from "~Components/Base/BaseCarousel/BaseCarouselItem"
 import { selectHideStellaPayBottomSheet, useAppSelector } from "~Storage/Redux"
 
@@ -21,6 +21,12 @@ export const VeBetterDAOCarousel = () => {
 
     const slides: CarouselSlideItem[] = useMemo(
         () => [
+            {
+                testID: "VeBetter_navigators_banner",
+                content: <VeBetterNavigatorsBanner />,
+                href: `${DAO_URL}/navigators`,
+                name: "vbd_navigators",
+            },
             {
                 testID: "VeBetterDao_banner",
                 content: <VeBetterDaoBanner />,
