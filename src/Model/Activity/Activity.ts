@@ -40,8 +40,12 @@ export interface Activity {
     smartWalletAddress?: string
 }
 
-export type IndexedHistoryEvent =
+type RawIndexedHistoryEvent =
     paths["/api/v2/history/{account}"]["get"]["responses"]["200"]["content"]["*/*"]["data"][number]
+
+export type IndexedHistoryEvent = Omit<RawIndexedHistoryEvent, "eventName"> & {
+    eventName: RawIndexedHistoryEvent["eventName"] | ActivityEvent
+}
 export interface NonTransactionalActivity {
     type: ActivityType.CONNECTED_APP_TRANSACTION | ActivityType.SIGN_CERT
     timestamp: number
@@ -147,6 +151,20 @@ export type LoginActivity = Activity & {
     linkUrl: string
 } & LoginActivityValue
 
+export interface B3moQuestActivity extends Activity {
+    type:
+        | ActivityType.B3MO_QUEST_CREATED
+        | ActivityType.B3MO_QUEST_JOINED
+        | ActivityType.B3MO_QUEST_REWARD_CLAIMED
+        | ActivityType.B3MO_QUEST_REFUND_CLAIMED
+        | ActivityType.B3MO_QUEST_CREATOR_REFUNDED
+        | ActivityType.B3MO_QUEST_LEFT
+        | ActivityType.B3MO_QUEST_CANCELLED
+        | ActivityType.B3MO_QUEST_DECLINED
+        | ActivityType.B3MO_QUEST_COMPLETED
+    value?: string
+}
+
 export interface B3trActionActivity extends Activity {
     type: ActivityType.B3TR_ACTION
     value: string
@@ -216,6 +234,22 @@ export interface B3trActionEvent extends IndexedHistoryEvent {
     from: string
     value: string
     appId: string
+}
+
+export interface B3moQuestEvent extends IndexedHistoryEvent {
+    eventName:
+        | ActivityEvent.B3MO_QUEST_CREATED
+        | ActivityEvent.B3MO_QUEST_JOINED
+        | ActivityEvent.B3MO_QUEST_REWARD_CLAIMED
+        | ActivityEvent.B3MO_QUEST_REFUND_CLAIMED
+        | ActivityEvent.B3MO_QUEST_CREATOR_REFUNDED
+        | ActivityEvent.B3MO_QUEST_LEFT
+        | ActivityEvent.B3MO_QUEST_CANCELLED
+        | ActivityEvent.B3MO_QUEST_DECLINED
+        | ActivityEvent.B3MO_QUEST_COMPLETED
+    to?: string
+    from: string
+    value?: string
 }
 
 export interface TransferVetEvent extends IndexedHistoryEvent {

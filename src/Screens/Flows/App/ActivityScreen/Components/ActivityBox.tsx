@@ -12,6 +12,8 @@ import {
     Activity,
     ActivityEvent,
     ActivityStatus,
+    ActivityType,
+    B3moQuestActivity,
     B3trActionActivity,
     B3trClaimRewardActivity,
     B3trProposalSupportActivity,
@@ -673,6 +675,68 @@ const B3trAction = ({ activity, onPress, veBetterDaoDapps, ...props }: B3trActio
     )
 }
 
+const B3moQuest = ({ activity, onPress, ...props }: OverridableActivityBoxProps<B3moQuestActivity>) => {
+    const { LL } = useI18nContext()
+    const { formatLocale } = useFormatFiat()
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    const humanAmount = activity.value
+        ? Number(BigNutils(activity.value).toHuman(B3TR.decimals).toString).toFixed(6)
+        : undefined
+    const amount = humanAmount ? formatWithLessThan(humanAmount, 0.01, { locale: formatLocale }) : undefined
+    const isIncomingAmount =
+        activity.type === ActivityType.B3MO_QUEST_REWARD_CLAIMED ||
+        activity.type === ActivityType.B3MO_QUEST_REFUND_CLAIMED ||
+        activity.type === ActivityType.B3MO_QUEST_CREATOR_REFUNDED ||
+        activity.type === ActivityType.B3MO_QUEST_LEFT
+    const rightAmount = amount ? `${isIncomingAmount ? DIRECTIONS.UP : DIRECTIONS.DOWN} ${amount}` : undefined
+
+    const title = useMemo(() => {
+        switch (activity.type) {
+            case ActivityType.B3MO_QUEST_CREATED:
+                return LL.B3MO_QUEST_CREATED()
+            case ActivityType.B3MO_QUEST_JOINED:
+                return LL.B3MO_QUEST_JOINED()
+            case ActivityType.B3MO_QUEST_REWARD_CLAIMED:
+                return LL.B3MO_QUEST_REWARD_CLAIMED()
+            case ActivityType.B3MO_QUEST_REFUND_CLAIMED:
+                return LL.B3MO_QUEST_REFUND_CLAIMED()
+            case ActivityType.B3MO_QUEST_CREATOR_REFUNDED:
+                return LL.B3MO_QUEST_CREATOR_REFUNDED()
+            case ActivityType.B3MO_QUEST_LEFT:
+                return LL.B3MO_QUEST_LEFT()
+            case ActivityType.B3MO_QUEST_CANCELLED:
+                return LL.B3MO_QUEST_CANCELLED()
+            case ActivityType.B3MO_QUEST_DECLINED:
+                return LL.B3MO_QUEST_DECLINED()
+            case ActivityType.B3MO_QUEST_COMPLETED:
+                return LL.B3MO_QUEST_COMPLETED()
+            default:
+                return LL.B3MO_QUEST_CREATED()
+        }
+    }, [LL, activity.type])
+
+    return (
+        <BaseActivityBox
+            testID={`B3MO-QUEST-${activity.type}-${activity.id}`}
+            icon={isIncomingAmount ? "icon-gift" : "icon-leaf"}
+            iconColor={COLORS.GREY_700}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
+            timestamp={activity.timestamp}
+            title={title}
+            onPress={onPressHandler}
+            rightAmount={rightAmount}
+            rightAmountDescription={amount ? B3TR.symbol : undefined}
+            invertedStyles={isIncomingAmount}
+            activityStatus={activity.status}
+            {...props}
+        />
+    )
+}
+
 const B3trProposalVote = ({ activity, onPress, ...props }: OverridableActivityBoxProps<B3trProposalVoteActivity>) => {
     const { LL } = useI18nContext()
 
@@ -1183,6 +1247,7 @@ export const ActivityBox = {
     SignedTypedData: SignedTypedData,
     Staking: Staking,
     TokenSwap: TokenSwap,
+    B3moQuest: B3moQuest,
     B3trAction: B3trAction,
     B3trProposalVote: B3trProposalVote,
     B3trXAllocationVote: B3trXAllocationVote,

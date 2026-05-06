@@ -24,6 +24,24 @@ export const getActivityTitle = (activity: Activity, LL: TranslationFunctions) =
         case ActivityType.SWAP_FT_TO_VET:
         case ActivityType.SWAP_VET_TO_FT:
             return LL.SWAP()
+        case ActivityType.B3MO_QUEST_CREATED:
+            return LL.B3MO_QUEST_CREATED()
+        case ActivityType.B3MO_QUEST_JOINED:
+            return LL.B3MO_QUEST_JOINED()
+        case ActivityType.B3MO_QUEST_REWARD_CLAIMED:
+            return LL.B3MO_QUEST_REWARD_CLAIMED()
+        case ActivityType.B3MO_QUEST_REFUND_CLAIMED:
+            return LL.B3MO_QUEST_REFUND_CLAIMED()
+        case ActivityType.B3MO_QUEST_CREATOR_REFUNDED:
+            return LL.B3MO_QUEST_CREATOR_REFUNDED()
+        case ActivityType.B3MO_QUEST_LEFT:
+            return LL.B3MO_QUEST_LEFT()
+        case ActivityType.B3MO_QUEST_CANCELLED:
+            return LL.B3MO_QUEST_CANCELLED()
+        case ActivityType.B3MO_QUEST_DECLINED:
+            return LL.B3MO_QUEST_DECLINED()
+        case ActivityType.B3MO_QUEST_COMPLETED:
+            return LL.B3MO_QUEST_COMPLETED()
         case ActivityType.B3TR_SWAP_B3TR_TO_VOT3:
         case ActivityType.B3TR_SWAP_VOT3_TO_B3TR:
             return LL.TOKEN_CONVERSION()
@@ -97,6 +115,15 @@ export const getActivityModalTitle = (activity: Activity, LL: TranslationFunctio
         case ActivityType.SWAP_FT_TO_FT:
         case ActivityType.SWAP_FT_TO_VET:
         case ActivityType.SWAP_VET_TO_FT:
+        case ActivityType.B3MO_QUEST_CREATED:
+        case ActivityType.B3MO_QUEST_JOINED:
+        case ActivityType.B3MO_QUEST_REWARD_CLAIMED:
+        case ActivityType.B3MO_QUEST_REFUND_CLAIMED:
+        case ActivityType.B3MO_QUEST_CREATOR_REFUNDED:
+        case ActivityType.B3MO_QUEST_LEFT:
+        case ActivityType.B3MO_QUEST_CANCELLED:
+        case ActivityType.B3MO_QUEST_DECLINED:
+        case ActivityType.B3MO_QUEST_COMPLETED:
         case ActivityType.B3TR_SWAP_B3TR_TO_VOT3:
         case ActivityType.B3TR_SWAP_VOT3_TO_B3TR:
         case ActivityType.DAPP_TRANSACTION:

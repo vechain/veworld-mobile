@@ -6,6 +6,7 @@ import {
     ActivityStatus,
     ActivitySupport,
     ActivityType,
+    B3moQuestActivity,
     B3trActionActivity,
     B3trClaimRewardActivity,
     B3trProposalSupportActivity,
@@ -328,7 +329,6 @@ describe("createActivityFromIndexedHistoryEvent", () => {
             to: "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048",
             from: "0x0e73ea971849e16ca9098a7a987130e1a53eeab1",
             value: "2500000000000000000",
-            tokenAddress: "0x14653fca6319c7170db288ca9c2c599292ad303e", // Payment token address
         }
         const activity = createActivityFromIndexedHistoryEvent(
             event,
@@ -355,7 +355,6 @@ describe("createActivityFromIndexedHistoryEvent", () => {
             price: activity?.price,
             buyer: activity?.buyer,
             seller: activity?.seller,
-            tokenAddress: activity?.tokenAddress,
         })
     })
 
@@ -441,6 +440,53 @@ describe("createActivityFromIndexedHistoryEvent", () => {
             inputToken: token2.address,
             inputValue: activity?.inputValue,
             outputValue: activity?.outputValue,
+        })
+    })
+
+    it.each([
+        [ActivityEvent.B3MO_QUEST_CREATED, ActivityType.B3MO_QUEST_CREATED],
+        [ActivityEvent.B3MO_QUEST_JOINED, ActivityType.B3MO_QUEST_JOINED],
+        [ActivityEvent.B3MO_QUEST_REWARD_CLAIMED, ActivityType.B3MO_QUEST_REWARD_CLAIMED],
+        [ActivityEvent.B3MO_QUEST_REFUND_CLAIMED, ActivityType.B3MO_QUEST_REFUND_CLAIMED],
+        [ActivityEvent.B3MO_QUEST_CREATOR_REFUNDED, ActivityType.B3MO_QUEST_CREATOR_REFUNDED],
+        [ActivityEvent.B3MO_QUEST_LEFT, ActivityType.B3MO_QUEST_LEFT],
+        [ActivityEvent.B3MO_QUEST_CANCELLED, ActivityType.B3MO_QUEST_CANCELLED],
+        [ActivityEvent.B3MO_QUEST_DECLINED, ActivityType.B3MO_QUEST_DECLINED],
+        [ActivityEvent.B3MO_QUEST_COMPLETED, ActivityType.B3MO_QUEST_COMPLETED],
+    ])("Should create a activity from %s history event", (eventName, activityType) => {
+        const event: IndexedHistoryEvent = {
+            id: "b3mo-quest-event",
+            blockId: "0x014127c2c3e31d53cb14ce7feaa235cb265b25c1f6ea10793889c16dce7b7db2",
+            blockNumber: 21047234,
+            blockTimestamp: 1741001260,
+            txId: "0xf0b2c0fc13d70194044a5acc55a32bbcbd97ef7ee90ae6d402b5562148c249e6",
+            origin: "0xf901020a285e4980b1e8cdcfa7645970bf37c56c",
+            gasPayer: "0xf901020a285e4980b1e8cdcfa7645970bf37c56c",
+            eventName,
+            to: "0xf901020a285e4980b1e8cdcfa7645970bf37c56c",
+            from: "0x92a98f23ca4f9703781cf56088b76a1482667166",
+            value: "1200000000000000000",
+        }
+        const activity = createActivityFromIndexedHistoryEvent(
+            event,
+            "0xf901020a285e4980b1e8cdcfa7645970bf37c56c",
+            defaultTestNetwork,
+        ) as B3moQuestActivity
+
+        expect(activity).toStrictEqual({
+            from: activity?.from ?? "",
+            to: [...(activity?.to ?? [])],
+            id: activity?.id,
+            txId: activity?.txId,
+            blockNumber: activity?.blockNumber,
+            genesisId: defaultTestNetwork.genesis.id,
+            isTransaction: activity?.isTransaction ?? false,
+            type: activityType,
+            timestamp: expect.any(Number),
+            gasPayer: activity?.gasPayer,
+            delegated: activity?.delegated ?? false,
+            status: activity?.status ?? ActivityStatus.SUCCESS,
+            value: activity?.value,
         })
     })
 

@@ -18,7 +18,7 @@ describe("StargateCarouselItemAPY", () => {
     })
 
     it("should show value if validator", () => {
-        ;(useValidatorDetails as jest.Mock).mockReturnValue({ data: { nftYieldsNextCycle: { Dawn: 1.74 } } })
+        ;(useValidatorDetails as jest.Mock).mockReturnValue({ data: { nftYields: { Dawn: 1.74 } } })
 
         render(<StargateCarouselItemAPY validatorId={"0x0"} levelName="Dawn" />, { wrapper: TestWrapper })
 

@@ -185,6 +185,15 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
             }
             case ActivityType.B3TR_SWAP_B3TR_TO_VOT3:
             case ActivityType.B3TR_SWAP_VOT3_TO_B3TR:
+            case ActivityType.B3MO_QUEST_CREATED:
+            case ActivityType.B3MO_QUEST_JOINED:
+            case ActivityType.B3MO_QUEST_REWARD_CLAIMED:
+            case ActivityType.B3MO_QUEST_REFUND_CLAIMED:
+            case ActivityType.B3MO_QUEST_CREATOR_REFUNDED:
+            case ActivityType.B3MO_QUEST_LEFT:
+            case ActivityType.B3MO_QUEST_CANCELLED:
+            case ActivityType.B3MO_QUEST_DECLINED:
+            case ActivityType.B3MO_QUEST_COMPLETED:
             case ActivityType.B3TR_ACTION:
             case ActivityType.B3TR_CLAIM_REWARD:
             case ActivityType.B3TR_PROPOSAL_SUPPORT:

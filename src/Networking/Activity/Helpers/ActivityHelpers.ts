@@ -9,6 +9,7 @@ import {
     ActivityEvent,
     ActivityStatus,
     ActivityType,
+    B3moQuestActivity,
     B3trActionActivity,
     B3trClaimRewardActivity,
     B3trProposalSupportActivity,
@@ -747,7 +748,6 @@ export const createActivityFromIndexedHistoryEvent = (
                 price: value ?? "0",
                 buyer: to ?? "",
                 seller: from ?? "",
-                tokenAddress: event.tokenAddress,
             } as NFTMarketplaceActivity
         }
         case ActivityEvent.SWAP_FT_TO_VET: {
@@ -779,6 +779,21 @@ export const createActivityFromIndexedHistoryEvent = (
                 inputValue: inputValue,
                 outputValue: outputValue,
             } as SwapActivity
+        }
+        case ActivityEvent.B3MO_QUEST_CREATED:
+        case ActivityEvent.B3MO_QUEST_JOINED:
+        case ActivityEvent.B3MO_QUEST_REWARD_CLAIMED:
+        case ActivityEvent.B3MO_QUEST_REFUND_CLAIMED:
+        case ActivityEvent.B3MO_QUEST_CREATOR_REFUNDED:
+        case ActivityEvent.B3MO_QUEST_LEFT:
+        case ActivityEvent.B3MO_QUEST_CANCELLED:
+        case ActivityEvent.B3MO_QUEST_DECLINED:
+        case ActivityEvent.B3MO_QUEST_COMPLETED: {
+            return {
+                ...baseActivity,
+                to: to ? [to] : [],
+                value: value ?? undefined,
+            } as B3moQuestActivity
         }
         case ActivityEvent.B3TR_ACTION: {
             return {
