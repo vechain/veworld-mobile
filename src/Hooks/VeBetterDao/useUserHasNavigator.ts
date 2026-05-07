@@ -26,7 +26,7 @@ export const getUserHasNavigatorQueryKey = (address: string, network: Network) =
     "USER",
     "HAS_NAVIGATOR",
     address,
-    network.type,
+    network.genesis.id,
 ]
 
 /**

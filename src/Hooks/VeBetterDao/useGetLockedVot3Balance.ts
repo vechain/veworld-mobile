@@ -1,38 +1,37 @@
 import { useQuery } from "@tanstack/react-query"
 import { ThorClient } from "@vechain/sdk-network"
+import { formatEther } from "viem"
 import { VeBetterDao } from "~Constants/Constants/Thor/abis"
+import { TEST_VOT3_ADDRESS, VOT3 } from "~Constants/Constants/Token"
 import { useThorClient } from "~Hooks/useThorClient"
-import { selectSelectedAccountOrNull, selectSelectedNetwork } from "~Storage/Redux"
-import { useAppSelector } from "~Storage/Redux/Hooks"
 import { Network } from "~Model"
-import { TEST_VOT3_ADDRESS, VOT3 } from "~Constants"
-import { formatEther } from "ethers/lib/utils"
+import { selectSelectedAccountOrNull, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { formatTokenAmount } from "~Utils/StandardizedFormatting"
 
-const getUnlockedVot3Balance = async (address: string, thorClient: ThorClient, network: Network) => {
-    return await thorClient.contracts
+export const getLockedVot3Balance = async (address: string, thor: ThorClient, network: Network) => {
+    return await thor.contracts
         .load(network.type === "mainnet" ? VOT3.address : TEST_VOT3_ADDRESS, [
-            { ...VeBetterDao.Vot3Abis.unlockedBalance, stateMutability: "view" },
+            { ...VeBetterDao.Vot3Abis.getNavigatorLockedAmount, stateMutability: "view" },
         ])
-        .read.unlockedBalance(address)
+        .read.getNavigatorLockedAmount(address)
 }
 
-export const getUnlockedVot3BalanceQueryKey = (address: string, network: Network) => [
+export const getLockedVot3BalanceQueryKey = (address: string, network: Network) => [
     "VEBETTERDAO",
     "VOT3",
-    "UNLOCKED_BALANCE",
+    "NAVIGATOR_LOCKED_BALANCE",
     address,
     network.genesis.id,
 ]
 
-export const useGetUnlockedVot3Balance = () => {
-    const thorClient = useThorClient()
+export const useGetLockedVot3Balance = () => {
+    const thor = useThorClient()
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const network = useAppSelector(selectSelectedNetwork)
 
     return useQuery({
-        queryKey: getUnlockedVot3BalanceQueryKey(selectedAccount?.address ?? "", network),
-        queryFn: () => getUnlockedVot3Balance(selectedAccount?.address ?? "", thorClient, network),
+        queryKey: getLockedVot3BalanceQueryKey(selectedAccount?.address ?? "", network),
+        queryFn: () => getLockedVot3Balance(selectedAccount?.address ?? "", thor, network),
         select: data => {
             const raw = data[0] as bigint
             return {
@@ -42,7 +41,7 @@ export const useGetUnlockedVot3Balance = () => {
                 formatted: formatTokenAmount(raw.toString(), VOT3.symbol, VOT3.decimals, { includeSymbol: false }),
             }
         },
-        enabled: !!selectedAccount?.address && !!thorClient,
+        enabled: !!selectedAccount?.address && !!thor,
         staleTime: 1000 * 60 * 5, // 5 minutes
     })
 }
