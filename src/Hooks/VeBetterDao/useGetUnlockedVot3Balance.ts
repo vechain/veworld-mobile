@@ -25,7 +25,7 @@ export const getUnlockedVot3BalanceQueryKey = (address: string, network: Network
     network.genesis.id,
 ]
 
-export const useGetUnlockedVot3Balance = () => {
+export const useGetUnlockedVot3Balance = ({ enabled = true }: { enabled?: boolean } = {}) => {
     const thorClient = useThorClient()
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const network = useAppSelector(selectSelectedNetwork)
@@ -42,7 +42,7 @@ export const useGetUnlockedVot3Balance = () => {
                 formatted: formatTokenAmount(raw.toString(), VOT3.symbol, VOT3.decimals, { includeSymbol: false }),
             }
         },
-        enabled: !!selectedAccount?.address && !!thorClient,
+        enabled: enabled && !!selectedAccount?.address && !!thorClient,
         staleTime: 1000 * 60 * 5, // 5 minutes
     })
 }
