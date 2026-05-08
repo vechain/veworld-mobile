@@ -5857,6 +5857,18 @@ type RootTranslation = {
 	 */
 	TOKEN_DETAIL_BALANCE_TAB: string
 	/**
+	 * D​e​l​e​g​a​t​e​d​ ​V​O​T​3
+	 */
+	TOKEN_DETAIL_DELEGATED_VOT3: string
+	/**
+	 * D​e​l​e​g​a​t​e​d​ ​V​O​T​3​ ​a​r​e​ ​a​s​s​i​g​n​e​d​ ​t​o​ ​a​ ​N​a​v​i​g​a​t​o​r​ ​s​t​r​a​t​e​g​y​.​ ​T​h​e​y​ ​s​t​i​l​l​ ​b​e​l​o​n​g​ ​t​o​ ​y​o​u​,​ ​b​u​t​ ​t​h​e​y​ ​a​r​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​f​o​r​ ​c​o​n​v​e​r​s​i​o​n​ ​o​r​ ​t​r​a​n​s​f​e​r​ ​u​n​t​i​l​ ​u​n​d​e​l​e​g​a​t​e​d​.
+	 */
+	TOKEN_DETAIL_DELEGATED_VOT3_INFO_DESCRIPTION: string
+	/**
+	 * D​e​l​e​g​a​t​e​d​ ​V​O​T​3
+	 */
+	TOKEN_DETAIL_DELEGATED_VOT3_INFO_TITLE: string
+	/**
 	 * T​h​e​s​e​ ​t​o​k​e​n​s​ ​a​r​e​ ​s​t​a​k​e​d​ ​o​n​ ​v​e​d​e​l​e​g​a​t​e​.​v​e​t​ ​a​n​d​ ​c​a​n​ ​o​n​l​y​ ​b​e​ ​m​a​n​a​g​e​d​ ​t​h​e​r​e​.
 	 */
 	TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE: string
@@ -12075,6 +12087,18 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Balance
 	 */
 	TOKEN_DETAIL_BALANCE_TAB: () => LocalizedString
+	/**
+	 * Delegated VOT3
+	 */
+	TOKEN_DETAIL_DELEGATED_VOT3: () => LocalizedString
+	/**
+	 * Delegated VOT3 are assigned to a Navigator strategy. They still belong to you, but they are not available for conversion or transfer until undelegated.
+	 */
+	TOKEN_DETAIL_DELEGATED_VOT3_INFO_DESCRIPTION: () => LocalizedString
+	/**
+	 * Delegated VOT3
+	 */
+	TOKEN_DETAIL_DELEGATED_VOT3_INFO_TITLE: () => LocalizedString
 	/**
 	 * These tokens are staked on vedelegate.vet and can only be managed there.
 	 */
