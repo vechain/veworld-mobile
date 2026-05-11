@@ -138,9 +138,82 @@ const TokenFiatValue = ({
     )
 }
 
+const DelegatedTokenFiatValue = ({
+    value,
+    fiatValue,
+    label,
+    onInfoPress,
+    showFiat = true,
+    border = true,
+    testID = "DELEGATED_VALUE_VOT3",
+}: {
+    value: string
+    fiatValue: string
+    label: string
+    onInfoPress?: () => void
+    showFiat?: boolean
+    border?: boolean
+    testID?: string
+}) => {
+    const { styles, theme } = useThemedStyles(tokenValueStyles)
+    return (
+        <BaseView
+            flexDirection="row"
+            justifyContent="space-between"
+            py={12}
+            px={16}
+            style={border && styles.root}
+            testID={testID}>
+            <BaseView flexDirection="row" gap={12}>
+                <BaseIcon
+                    borderRadius={99}
+                    bg={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_100}
+                    name="icon-lock"
+                    size={12}
+                    p={6}
+                    color={theme.isDark ? COLORS.PURPLE_LABEL : COLORS.GREY_600}
+                />
+                <BaseView flexDirection="row" gap={4} alignItems="center">
+                    <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
+                        {label}
+                    </BaseText>
+                    {onInfoPress && (
+                        <BaseIcon
+                            name="icon-info"
+                            size={14}
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
+                            action={onInfoPress}
+                            haptics="Light"
+                            testID="DELEGATED_VALUE_INFO_BUTTON"
+                        />
+                    )}
+                </BaseView>
+            </BaseView>
+
+            <BaseView flexDirection="column" alignItems="flex-end">
+                <BaseText
+                    typographyFont="bodySemiBold"
+                    color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}
+                    testID={"DELEGATED_VALUE_TOKEN_VALUE"}>
+                    {value}
+                </BaseText>
+                {showFiat && (
+                    <BaseText
+                        typographyFont="smallCaptionMedium"
+                        color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
+                        testID={"DELEGATED_VALUE_FIAT_VALUE"}>
+                        {fiatValue}
+                    </BaseText>
+                )}
+            </BaseView>
+        </BaseView>
+    )
+}
+
 ValueContainer.DollarValue = DollarValue
 ValueContainer.TokenValue = TokenValue
 ValueContainer.TokenFiatValue = TokenFiatValue
+ValueContainer.DelegatedTokenFiatValue = DelegatedTokenFiatValue
 
 export { ValueContainer }
 

@@ -1,7 +1,10 @@
 import React, { useMemo } from "react"
-import { useFormatFiat } from "~Hooks"
+import { InfoBottomSheet } from "~Components"
+import { useBottomSheetModal, useFormatFiat } from "~Hooks"
+import { useGetLockedVot3Balance, useGetUnlockedVot3Balance, useUserHasNavigator } from "~Hooks/VeBetterDao"
 import { useTokenBalance } from "~Hooks/useTokenBalance"
 import { useTokenCardBalance } from "~Hooks/useTokenCardBalance"
+import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
@@ -14,28 +17,19 @@ type Props = {
 }
 
 export const BalanceTab = ({ token: _token }: Props) => {
+    const { LL } = useI18nContext()
+    const { ref: delegatedVot3InfoBottomSheetRef, onOpen: openDelegatedVot3InfoBottomSheet } = useBottomSheetModal()
     const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
     const isVOT3OrB3TR = useMemo(() => ["B3TR", "VOT3"].includes(_token.symbol), [_token.symbol])
     const { data: vot3Balance } = useTokenBalance({ tokenAddress: VOT3.address, enabled: isVOT3OrB3TR })
     const { data: b3trBalance } = useTokenBalance({ tokenAddress: B3TR.address, enabled: isVOT3OrB3TR })
-
-    const token = useMemo(() => {
-        if (!isVOT3OrB3TR) return _token
-        const veBetterBalances = [vot3Balance, b3trBalance].filter(
-            (balance): balance is NonNullable<typeof balance> => !!balance,
-        )
-        return {
-            ..._token,
-            balance: {
-                balance: veBetterBalances
-                    .reduce((acc, curr) => acc.plus(curr.balance), BigNutils("0"))
-                    .toBigInt.toString(),
-                isHidden: veBetterBalances.some(balance => balance.isHidden),
-                timeUpdated: veBetterBalances[0].timeUpdated,
-                tokenAddress: veBetterBalances[0].tokenAddress,
-            },
-        }
-    }, [_token, b3trBalance, isVOT3OrB3TR, vot3Balance])
+    const { data: hasNavigator } = useUserHasNavigator({ enabled: isVOT3OrB3TR })
+    const { data: unlockedVot3Balance } = useGetUnlockedVot3Balance({
+        enabled: isVOT3OrB3TR && Boolean(hasNavigator),
+    })
+    const { data: lockedVot3Balance } = useGetLockedVot3Balance({
+        enabled: isVOT3OrB3TR && Boolean(hasNavigator),
+    })
 
     const b3trToken = useMemo(() => {
         return {
@@ -45,16 +39,75 @@ export const BalanceTab = ({ token: _token }: Props) => {
     }, [B3TR, b3trBalance])
 
     const vot3Token = useMemo(() => {
+        const balance =
+            hasNavigator && unlockedVot3Balance
+                ? {
+                      balance: unlockedVot3Balance.original.toString(),
+                      isHidden: vot3Balance?.isHidden ?? false,
+                      timeUpdated: vot3Balance?.timeUpdated ?? new Date().toISOString(),
+                      tokenAddress: VOT3.address,
+                  }
+                : vot3Balance
+
         return {
             ...VOT3,
-            balance: vot3Balance,
+            balance,
         }
-    }, [VOT3, vot3Balance])
+    }, [VOT3, hasNavigator, unlockedVot3Balance, vot3Balance])
+
+    const vot3LockedToken = useMemo(() => {
+        const lockedBalance = lockedVot3Balance?.original.toString()
+
+        return {
+            ...VOT3,
+            balance:
+                lockedVot3Balance && lockedVot3Balance.original > 0n && lockedBalance
+                    ? {
+                          balance: lockedBalance,
+                          isHidden: vot3Balance?.isHidden ?? false,
+                          timeUpdated: vot3Balance?.timeUpdated ?? new Date().toISOString(),
+                          tokenAddress: VOT3.address,
+                      }
+                    : undefined,
+        }
+    }, [VOT3, lockedVot3Balance, vot3Balance?.isHidden, vot3Balance?.timeUpdated])
+
+    const token = useMemo(() => {
+        if (!isVOT3OrB3TR) return _token
+        const veBetterBalances = [b3trToken.balance, vot3Token.balance, vot3LockedToken.balance].filter(
+            (balance): balance is NonNullable<typeof balance> => !!balance,
+        )
+
+        const firstBalance = veBetterBalances[0]
+
+        return {
+            ..._token,
+            balance: {
+                balance: veBetterBalances
+                    .reduce((acc, curr) => acc.plus(curr.balance), BigNutils("0"))
+                    .toBigInt.toString(),
+                isHidden: veBetterBalances.some(balance => balance.isHidden),
+                timeUpdated: firstBalance?.timeUpdated ?? _token.balance.timeUpdated,
+                tokenAddress: firstBalance?.tokenAddress ?? _token.balance.tokenAddress,
+            },
+        }
+    }, [_token, b3trToken.balance, isVOT3OrB3TR, vot3LockedToken.balance, vot3Token.balance])
 
     const { fiatBalance: totalFiatBalance, showFiatBalance, tokenBalance } = useTokenCardBalance({ token })
     const { fiatBalance: b3trFiatBalance } = useTokenCardBalance({ token: b3trToken })
     const { fiatBalance: vot3FiatBalance } = useTokenCardBalance({ token: vot3Token })
+    const {
+        fiatBalance: lockedFiatBalance,
+        showFiatBalance: showLockedFiat,
+        tokenBalance: lockedTokenBalance,
+    } = useTokenCardBalance({ token: vot3LockedToken })
     const { formatLocale } = useFormatFiat()
+
+    const showLockedRow = useMemo(
+        () => isVOT3OrB3TR && Boolean(hasNavigator) && !!lockedVot3Balance && lockedVot3Balance.original > 0n,
+        [hasNavigator, isVOT3OrB3TR, lockedVot3Balance],
+    )
+
     return (
         <>
             <ValueContainer>
@@ -92,6 +145,15 @@ export const BalanceTab = ({ token: _token }: Props) => {
                                 border
                             />
                         )}
+                        {showLockedRow && (
+                            <ValueContainer.DelegatedTokenFiatValue
+                                label={LL.TOKEN_DETAIL_DELEGATED_VOT3()}
+                                value={lockedTokenBalance}
+                                fiatValue={lockedFiatBalance}
+                                showFiat={showLockedFiat}
+                                onInfoPress={openDelegatedVot3InfoBottomSheet}
+                            />
+                        )}
                     </>
                 ) : (
                     <ValueContainer.TokenValue token={token} value={tokenBalance} border={!!showFiatBalance} />
@@ -103,6 +165,11 @@ export const BalanceTab = ({ token: _token }: Props) => {
             ) : (
                 <BalanceTabActions token={token} />
             )}
+            <InfoBottomSheet
+                bsRef={delegatedVot3InfoBottomSheetRef}
+                title={LL.TOKEN_DETAIL_DELEGATED_VOT3_INFO_TITLE()}
+                description={LL.TOKEN_DETAIL_DELEGATED_VOT3_INFO_DESCRIPTION()}
+            />
         </>
     )
 }

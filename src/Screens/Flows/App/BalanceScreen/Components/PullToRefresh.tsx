@@ -80,6 +80,19 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
         })
     }, [queryClient])
 
+    const invalidateVeBetterDaoQueries = useCallback(async () => {
+        await queryClient.invalidateQueries({
+            predicate(query) {
+                const queryKey = query.queryKey as string[]
+                if (!["VEBETTERDAO"].includes(queryKey[0])) return false
+                if (queryKey.length < 5) return false
+                if (!AddressUtils.compareAddresses(queryKey[3], selectedAccountAddress!)) return false
+                if (queryKey[4] !== selectedNetwork.genesis.id) return false
+                return true
+            },
+        })
+    }, [queryClient, selectedAccountAddress, selectedNetwork.genesis.id])
+
     const onRefreshInner = useCallback(async () => {
         setRefreshing(true)
 
@@ -90,6 +103,7 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
             invalidateActivity(),
             invalidateCollectiblesQueries(),
             invalidateStargateTotalStats(),
+            invalidateVeBetterDaoQueries(),
         ])
 
         setRefreshing(false)
@@ -100,6 +114,7 @@ export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function Pull
         invalidateStargateQueries,
         invalidateStargateTotalStats,
         invalidateTokens,
+        invalidateVeBetterDaoQueries,
     ])
 
     const onRefresh = useOfflineCallback(onRefreshInner)

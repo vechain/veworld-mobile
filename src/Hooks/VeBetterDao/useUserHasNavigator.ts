@@ -26,14 +26,14 @@ export const getUserHasNavigatorQueryKey = (address: string, network: Network) =
     "USER",
     "HAS_NAVIGATOR",
     address,
-    network.type,
+    network.genesis.id,
 ]
 
 /**
  * Checks if the user has delegated to a navigator
  * @returns {boolean} true if the user has delegated to a navigator, false otherwise
  */
-export const useUserHasNavigator = () => {
+export const useUserHasNavigator = ({ enabled = true }: { enabled?: boolean } = {}) => {
     const thorClient = useThorClient()
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const network = useAppSelector(selectSelectedNetwork)
@@ -44,7 +44,7 @@ export const useUserHasNavigator = () => {
         select: data => {
             return data?.[0] ?? false
         },
-        enabled: !!selectedAccount?.address && !!thorClient,
+        enabled: enabled && !!selectedAccount?.address && !!thorClient,
         staleTime: 1000 * 60 * 5, // 5 minutes
     })
 }
