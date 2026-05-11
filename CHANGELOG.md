@@ -1,5 +1,12 @@
 
 
+## 2.5.8 (2026-05-11)
+
+
+### Features
+
+* add delegate VOT3 amount in token detail screen ([#3888](https://github.com/vechain/veworld-mobile/issues/3888)) ([7255c31](https://github.com/vechain/veworld-mobile/commit/7255c31a922756970420b6d51823265f48a5ab2c))
+
 ## 2.5.7 (2026-04-28)
 
 ## 2.5.6 (2026-04-25)
