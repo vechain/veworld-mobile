@@ -34,7 +34,7 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
               with:
                   # If it's a pre-release, check out the tag corresponding to the pre-release;
                   # otherwise, use the triggering branch unless it's a non-pre-release event.
@@ -42,7 +42,7 @@ jobs:
 
             # Setup Node.js
             - name: Setup Node
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3.9.1
               with:
                   node-version-file: .nvmrc
                   cache: "yarn"
