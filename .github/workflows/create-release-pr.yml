@@ -19,12 +19,12 @@ jobs:
         steps:
             - name: Generate a token
               id: generate-token
-              uses: actions/create-github-app-token@v1
+              uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
               with:
                 app-id: ${{ secrets.APP_ID }}
                 private-key: ${{ secrets.APP_PRIVATE_KEY }}
             - name: Checkout repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
             - name: Get version variables
               env:
