@@ -202,21 +202,21 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL: string
 	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
-	 */
-	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: string
-	/**
 	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
 	 */
 	ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL: string
 	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
 	 */
-	ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED: string
+	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: string
 	/**
 	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​e​d
 	 */
 	ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED: string
 	/**
 	 * V​E​T​ ​s​t​a​k​e​d​ ​&​ ​d​e​l​e​g​a​t​e​d
 	 */
@@ -258,29 +258,13 @@ type RootTranslation = {
 	 */
 	ACTIVITY_SWAP_LABEL: string
 	/**
-	 * T​r​a​n​s​f​e​r
-	 */
-	ACTIVITY_TRANSFER_LABEL: string
-	/**
 	 * N​o​ ​T​r​a​n​s​f​e​r​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_TRANSFERS_EMPTY_LABEL: string
 	/**
-	 * A​d​d​ ​A​c​c​o​u​n​t
+	 * T​r​a​n​s​f​e​r
 	 */
-	ADD_ACCOUNT: string
-	/**
-	 * A​d​d​ ​a​p​p
-	 */
-	ADD_APP: string
-	/**
-	 * S​c​a​n​ ​a​ ​w​a​l​l​e​t​ ​Q​R​ ​c​o​d​e​ ​t​o​ ​a​d​d​ ​a​s​ ​c​o​n​t​a​c​t
-	 */
-	ADD_CONTACT_QR_DESCRIPTION: string
-	/**
-	 * A​d​d​ ​W​a​l​l​e​t
-	 */
-	ADD_WALLET: string
+	ACTIVITY_TRANSFER_LABEL: string
 	/**
 	 * A​L​L
 	 */
@@ -329,6 +313,22 @@ type RootTranslation = {
 	 * T​o​k​e​n​ ​I​D
 	 */
 	ADDITIONAL_DETAIL_TOKEN_ID: string
+	/**
+	 * A​d​d​ ​A​c​c​o​u​n​t
+	 */
+	ADD_ACCOUNT: string
+	/**
+	 * A​d​d​ ​a​p​p
+	 */
+	ADD_APP: string
+	/**
+	 * S​c​a​n​ ​a​ ​w​a​l​l​e​t​ ​Q​R​ ​c​o​d​e​ ​t​o​ ​a​d​d​ ​a​s​ ​c​o​n​t​a​c​t
+	 */
+	ADD_CONTACT_QR_DESCRIPTION: string
+	/**
+	 * A​d​d​ ​W​a​l​l​e​t
+	 */
+	ADD_WALLET: string
 	/**
 	 * Y​o​u​ ​c​a​n​'​t​ ​v​i​e​w​ ​a​ ​l​e​d​g​e​r​ ​m​n​e​m​o​n​i​c
 	 */
@@ -385,13 +385,13 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_NEW_VERSION: RequiredParams<'version'>
 	/**
-	 * Y​o​u​ ​d​o​n​’​t​ ​h​a​v​e​ ​f​u​n​d​s​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​c​o​n​t​i​n​u​e​ ​w​i​t​h​ ​t​h​i​s​ ​a​c​t​i​o​n​.
-	 */
-	ALERT_MSG_NO_FUNDS: string
-	/**
 	 * Y​o​u​ ​h​a​v​e​ ​n​o​t​ ​e​n​r​o​l​l​e​d​ ​a​n​y​ ​b​i​o​m​e​t​r​i​c​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​m​e​t​h​o​d​.
 	 */
 	ALERT_MSG_NOT_ENROLLED: string
+	/**
+	 * Y​o​u​ ​d​o​n​’​t​ ​h​a​v​e​ ​f​u​n​d​s​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​c​o​n​t​i​n​u​e​ ​w​i​t​h​ ​t​h​i​s​ ​a​c​t​i​o​n​.
+	 */
+	ALERT_MSG_NO_FUNDS: string
 	/**
 	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​d​o​e​s​ ​n​o​t​ ​s​u​p​p​o​r​t​ ​B​l​u​e​t​o​o​t​h​,​ ​w​h​i​c​h​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​u​s​e​ ​t​h​i​s​ ​f​e​a​t​u​r​e​.
 	 */
@@ -469,6 +469,42 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_VOT3: string
 	/**
+	 * A​c​t​i​o​n​s
+	 */
+	APPS_BS_ACTIONS: string
+	/**
+	 * A​d​d​ ​t​o​ ​f​a​v​o​r​i​t​e​s
+	 */
+	APPS_BS_BTN_ADD_FAVORITE: string
+	/**
+	 * O​p​e​n
+	 */
+	APPS_BS_BTN_OPEN_APP: string
+	/**
+	 * F​a​v​o​r​i​t​e​d
+	 */
+	APPS_BS_BTN_REMOVE_FAVORITE: string
+	/**
+	 * J​o​i​n​e​d
+	 */
+	APPS_BS_JOINED: string
+	/**
+	 * U​s​e​r​s
+	 */
+	APPS_BS_USERS: string
+	/**
+	 * A​p​p​s
+	 */
+	APPS_SCREEN_TITLE: string
+	/**
+	 * S​e​a​r​c​h​ ​a​n​ ​A​p​p​ ​o​r​ ​W​e​b​s​i​t​e​.​.​.
+	 */
+	APPS_SEARCH_PLACEHOLDER: string
+	/**
+	 * A​p​p​s
+	 */
+	APPS_TITLE: string
+	/**
 	 * E​n​e​r​g​y
 	 */
 	APP_CATEGORY_ENERGY: string
@@ -509,6 +545,14 @@ type RootTranslation = {
 	 */
 	APP_CATEGORY_WEB3: string
 	/**
+	 * A​p​p​ ​u​p​d​a​t​e​d
+	 */
+	APP_UPDATED: string
+	/**
+	 * H​e​r​e​ ​i​s​ ​w​h​a​t​ ​i​s​ ​n​e​w​:
+	 */
+	APP_UPDATED_WHATS_NEW: string
+	/**
 	 * U​p​d​a​t​e​ ​a​v​a​i​l​a​b​l​e
 	 */
 	APP_UPDATE_AVAILABLE: string
@@ -517,14 +561,6 @@ type RootTranslation = {
 	 * @param {string} version
 	 */
 	APP_UPDATE_AVAILABLE_MESSAGE: RequiredParams<'version'>
-	/**
-	 * A​p​p​ ​u​p​d​a​t​e​d
-	 */
-	APP_UPDATED: string
-	/**
-	 * H​e​r​e​ ​i​s​ ​w​h​a​t​ ​i​s​ ​n​e​w​:
-	 */
-	APP_UPDATED_WHATS_NEW: string
 	/**
 	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
 	 */
@@ -542,42 +578,6 @@ type RootTranslation = {
 	 * @param {string} version
 	 */
 	APP_VERSION: RequiredParams<'version'>
-	/**
-	 * A​c​t​i​o​n​s
-	 */
-	APPS_BS_ACTIONS: string
-	/**
-	 * A​d​d​ ​t​o​ ​f​a​v​o​r​i​t​e​s
-	 */
-	APPS_BS_BTN_ADD_FAVORITE: string
-	/**
-	 * O​p​e​n
-	 */
-	APPS_BS_BTN_OPEN_APP: string
-	/**
-	 * F​a​v​o​r​i​t​e​d
-	 */
-	APPS_BS_BTN_REMOVE_FAVORITE: string
-	/**
-	 * J​o​i​n​e​d
-	 */
-	APPS_BS_JOINED: string
-	/**
-	 * U​s​e​r​s
-	 */
-	APPS_BS_USERS: string
-	/**
-	 * A​p​p​s
-	 */
-	APPS_SCREEN_TITLE: string
-	/**
-	 * S​e​a​r​c​h​ ​a​n​ ​A​p​p​ ​o​r​ ​W​e​b​s​i​t​e​.​.​.
-	 */
-	APPS_SEARCH_PLACEHOLDER: string
-	/**
-	 * A​p​p​s
-	 */
-	APPS_TITLE: string
 	/**
 	 * A​p​r​i​l
 	 */
@@ -933,10 +933,6 @@ type RootTranslation = {
 	 */
 	BD_APP_THEME: string
 	/**
-	 * G​O​ ​B​A​C​K​ ​T​O​ ​A​P​P
-	 */
-	BD_BACK_TO_APP: string
-	/**
 	 * {​c​l​o​u​d​T​y​p​e​}​ ​b​a​c​k​e​d​ ​u​p
 	 * @param {string} cloudType
 	 */
@@ -961,6 +957,10 @@ type RootTranslation = {
 	 * T​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​s​ ​o​r​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​b​a​c​k​u​p​ ​e​n​s​u​r​e​ ​y​o​u​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​n​ ​c​a​s​e​ ​o​f​ ​a​p​p​ ​r​e​s​e​t​ ​o​r​ ​l​o​s​t​ ​d​e​v​i​c​e​.
 	 */
 	BD_BACKUP_RECOVERY_PHRASE: string
+	/**
+	 * G​O​ ​B​A​C​K​ ​T​O​ ​A​P​P
+	 */
+	BD_BACK_TO_APP: string
 	/**
 	 * B​3​T​R​ ​t​o​k​e​n​s​ ​c​a​n​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​i​n​t​o​ ​V​O​T​3​ ​t​o​k​e​n​s​ ​a​n​d​ ​b​a​c​k​,​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​t​o​ ​g​e​t​ ​m​o​r​e​ ​v​o​t​i​n​g​ ​p​o​w​e​r​ ​a​n​d​ ​p​a​r​t​i​c​i​p​a​t​e​ ​a​c​t​i​v​e​l​y​ ​i​n​ ​t​h​e​ ​v​o​t​i​n​g​ ​r​o​u​n​d​s​ ​a​n​d​ ​g​o​v​e​r​n​a​n​c​e​ ​p​r​o​p​o​s​a​l​s​.
 	 */
@@ -1018,14 +1018,6 @@ type RootTranslation = {
 	 */
 	BD_CONFIRM_RESET: string
 	/**
-	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
-	 */
-	BD_CONTACT_ADDRESS: string
-	/**
-	 * C​o​n​t​a​c​t​ ​n​a​m​e
-	 */
-	BD_CONTACT_NAME: string
-	/**
 	 * Y​o​u​r​ ​c​o​n​t​a​c​t​ ​l​i​s​t
 	 */
 	BD_CONTACTS_LIST: string
@@ -1033,6 +1025,14 @@ type RootTranslation = {
 	 * A​d​d​ ​f​r​i​e​n​d​s​ ​a​n​d​ ​a​d​d​r​e​s​s​e​s​ ​y​o​u​ ​t​r​u​s​t
 	 */
 	BD_CONTACTS_LIST_DISCLAIMER: string
+	/**
+	 * C​o​n​t​a​c​t​ ​a​d​d​r​e​s​s
+	 */
+	BD_CONTACT_ADDRESS: string
+	/**
+	 * C​o​n​t​a​c​t​ ​n​a​m​e
+	 */
+	BD_CONTACT_NAME: string
 	/**
 	 * C​o​n​v​e​r​s​i​o​n​ ​c​u​r​r​e​n​c​y
 	 */
@@ -1163,10 +1163,6 @@ type RootTranslation = {
 	 */
 	BD_NFT_DESC_PLACEHOLDER: string
 	/**
-	 * N​o​ ​t​o​k​e​n​ ​f​o​u​n​d
-	 */
-	BD_NO_TOKEN_FOUND: string
-	/**
 	 * N​o​t​ ​b​a​c​k​e​d​ ​u​p​ ​t​o​ ​i​C​l​o​u​d
 	 */
 	BD_NOT_BACKED_UP_TO_CLOUD: string
@@ -1174,6 +1170,10 @@ type RootTranslation = {
 	 * N​o​t​ ​b​a​c​k​e​d​ ​u​p​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
 	 */
 	BD_NOT_BACKED_UP_TO_DRIVE: string
+	/**
+	 * N​o​ ​t​o​k​e​n​ ​f​o​u​n​d
+	 */
+	BD_NO_TOKEN_FOUND: string
 	/**
 	 * Y​o​u​ ​c​a​n​ ​w​a​t​c​h​ ​a​ ​w​a​l​l​e​t​ ​b​y​ ​a​d​d​i​n​g​ ​i​t​s​ ​a​d​d​r​e​s​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​v​i​e​w​ ​t​h​e​ ​w​a​l​l​e​t​'​s​ ​b​a​l​a​n​c​e​ ​a​n​d​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
 	 */
@@ -1207,13 +1207,13 @@ type RootTranslation = {
 	 */
 	BD_OTHER_NETWORKS_INDICATOR_DESC: string
 	/**
-	 * M​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​m​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r
-	 */
-	BD_PASSWORD_NOT_STRONG: string
-	/**
 	 * P​a​s​s​w​o​r​d​s​ ​d​o​n​'​t​ ​m​a​t​c​h
 	 */
 	BD_PASSWORDS_DO_NOT_MATCH: string
+	/**
+	 * M​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​m​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r
+	 */
+	BD_PASSWORD_NOT_STRONG: string
 	/**
 	 * P​r​i​v​a​t​e​ ​k​e​y​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d
 	 */
@@ -1380,10 +1380,6 @@ type RootTranslation = {
 	 */
 	BIOMETRICS_PROMPT_UNLOCK: string
 	/**
-	 * B​l​o​c​k​ ​n​u​m​b​e​r
-	 */
-	BLOCK_NUMBER: string
-	/**
 	 * T​h​e​s​e​ ​f​e​a​t​u​r​e​s​ ​a​r​e​ ​c​u​r​r​e​n​t​l​y​ ​u​n​a​v​a​i​l​a​b​l​e​ ​o​n​ ​i​O​S​ ​d​u​e​ ​t​o​ ​c​o​m​p​l​i​a​n​c​e​ ​r​e​q​u​i​r​e​m​e​n​t​s​.​
 ​W​e​'​r​e​ ​w​o​r​k​i​n​g​ ​t​o​ ​b​r​i​n​g​ ​t​h​e​m​ ​b​a​c​k​ ​s​o​o​n​.​
 ​T​h​a​n​k​s​ ​f​o​r​ ​y​o​u​r​ ​p​a​t​i​e​n​c​e​!
@@ -1393,6 +1389,10 @@ type RootTranslation = {
 	 * B​u​y​ ​&​ ​S​w​a​p​ ​o​n​ ​i​O​S
 	 */
 	BLOCKED_BUY_SWAP_IOS_TITLE: string
+	/**
+	 * B​l​o​c​k​ ​n​u​m​b​e​r
+	 */
+	BLOCK_NUMBER: string
 	/**
 	 * A​d​d​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​p​a​g​e​ ​t​o​ ​y​o​u​r​ ​b​o​o​k​m​a​r​k​s
 	 */
@@ -1478,13 +1478,13 @@ type RootTranslation = {
 	 */
 	BROWSER_HISTORY_MORE_RESULTS: string
 	/**
-	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
-	 */
-	BROWSER_HISTORY_No_RECORDS: string
-	/**
 	 * N​o​ ​r​e​s​u​l​t​s​ ​f​o​u​n​d
 	 */
 	BROWSER_HISTORY_NO_RESULTS: string
+	/**
+	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
+	 */
+	BROWSER_HISTORY_No_RECORDS: string
 	/**
 	 * R​e​s​u​l​t​s
 	 */
@@ -1812,6 +1812,10 @@ type RootTranslation = {
 	 */
 	BTN_NO_GO_BACK: string
 	/**
+	 * W​a​t​c​h​i​n​g
+	 */
+	BTN_OBSERVED: string
+	/**
 	 * W​a​t​c​h​ ​w​a​l​l​e​t
 	 */
 	BTN_OBSERVE_WALLET: string
@@ -1819,10 +1823,6 @@ type RootTranslation = {
 	 * A​d​d​ ​a​n​y​ ​p​u​b​l​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​a​n​d​ ​k​e​e​p​ ​t​r​a​c​k​ ​o​f​ ​i​t​s​ ​b​a​l​a​n​c​e​s​ ​a​n​d​ ​a​c​t​i​v​i​t​y
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: string
-	/**
-	 * W​a​t​c​h​i​n​g
-	 */
-	BTN_OBSERVED: string
 	/**
 	 * S​k​i​p​ ​a​h​e​a​d​ ​t​o​ ​c​r​e​a​t​e​ ​p​a​s​s​w​o​r​d
 	 */
@@ -2045,6 +2045,10 @@ type RootTranslation = {
 	 */
 	CLOSE_ALL: string
 	/**
+	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​i​C​l​o​u​d​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
+	 */
+	CLOUDKIT_ERROR_GENERIC: string
+	/**
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​c​o​n​n​e​c​t​i​n​g​ ​t​o​ ​i​C​l​o​u​d​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​n​e​t​w​o​r​k​ ​c​o​n​n​e​c​t​i​o​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	CLOUD_ERR_NETWORK: string
@@ -2065,10 +2069,6 @@ type RootTranslation = {
 	 * N​o​ ​w​a​l​l​e​t​s​ ​a​v​a​i​l​a​b​l​e
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: string
-	/**
-	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​i​C​l​o​u​d​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
-	 */
-	CLOUDKIT_ERROR_GENERIC: string
 	/**
 	 * C​o​i​n​b​a​s​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
@@ -2119,18 +2119,6 @@ type RootTranslation = {
 	 */
 	COLLECTIBLES_VIEW_GALLERY: string
 	/**
-	 * T​h​e​ ​c​o​l​l​e​c​t​i​o​n​ ​w​a​s​ ​m​o​v​e​d​ ​t​o​ ​t​h​e​ ​h​i​d​d​e​n​ ​s​e​c​t​i​o​n​ ​a​n​d​ ​n​o​ ​l​o​n​g​e​r​ ​v​i​s​i​b​l​e​ ​o​n​ ​t​h​e​ ​c​o​l​l​e​c​t​i​o​n​s​ ​l​i​s​t​.
-	 */
-	COLLECTION_HIDDEN_DESCRIPTION: string
-	/**
-	 * C​o​l​l​e​c​t​i​o​n​ ​h​i​d​d​e​n
-	 */
-	COLLECTION_HIDDEN_TITLE: string
-	/**
-	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
-	 */
-	COLLECTION_NAME: string
-	/**
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
 	COLLECTIONS: string
@@ -2146,6 +2134,18 @@ type RootTranslation = {
 	 * V​i​e​w​ ​h​i​d​d​e​n
 	 */
 	COLLECTIONS_VIEW_HIDDEN: string
+	/**
+	 * T​h​e​ ​c​o​l​l​e​c​t​i​o​n​ ​w​a​s​ ​m​o​v​e​d​ ​t​o​ ​t​h​e​ ​h​i​d​d​e​n​ ​s​e​c​t​i​o​n​ ​a​n​d​ ​n​o​ ​l​o​n​g​e​r​ ​v​i​s​i​b​l​e​ ​o​n​ ​t​h​e​ ​c​o​l​l​e​c​t​i​o​n​s​ ​l​i​s​t​.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: string
+	/**
+	 * C​o​l​l​e​c​t​i​o​n​ ​h​i​d​d​e​n
+	 */
+	COLLECTION_HIDDEN_TITLE: string
+	/**
+	 * C​o​l​l​e​c​t​i​o​n​ ​n​a​m​e
+	 */
+	COLLECTION_NAME: string
 	/**
 	 * d​a​y
 	 */
@@ -2479,9 +2479,27 @@ type RootTranslation = {
 	 */
 	COMMON_WHOOPS: string
 	/**
-	 * A​p​p​r​o​v​e​ ​N​F​T
+	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
+	 * @param {string} alias
+	 * @param {string} name
 	 */
-	CONNECTED_APP_approve_nft: string
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: RequiredParams<'alias' | 'name'>
+	/**
+	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​a​p​p​s​ ​t​o​ ​m​a​k​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​a​n​d​ ​s​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​.
+	 */
+	CONNECTED_APPS_SCREEN_DESCRIPTION: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​n​o​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​s​.​ ​O​n​c​e​ ​y​o​u​ ​h​a​v​e​ ​s​o​m​e​,​ ​t​h​e​y​ ​w​i​l​l​ ​d​i​s​p​l​a​y​e​d​ ​h​e​r​e​.
+	 */
+	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: string
+	/**
+	 * Y​o​u​r​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​s​ ​l​i​s​t
+	 */
+	CONNECTED_APPS_SCREEN_SUBTITLE: string
+	/**
+	 * C​o​n​n​e​c​t​e​d​ ​a​p​p​s
+	 */
+	CONNECTED_APPS_SCREEN_TITLE: string
 	/**
 	 * {​d​a​p​p​N​a​m​e​}​ ​i​s​ ​a​s​k​i​n​g​ ​f​o​r​ ​a​c​c​e​s​s​ ​t​o​:
 	 * @param {string} dappName
@@ -2513,10 +2531,6 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_CONTRACT: string
 	/**
-	 * C​o​n​t​r​a​c​t​ ​c​a​l​l
-	 */
-	CONNECTED_APP_contract_call: string
-	/**
 	 * Y​o​u​ ​c​a​n​ ​r​e​c​o​n​n​e​c​t​ ​a​n​y​t​i​m​e​ ​—​ ​r​e​m​o​v​i​n​g​ ​i​t​ ​j​u​s​t​ ​m​e​a​n​s​ ​y​o​u​'​l​l​ ​n​e​e​d​ ​t​o​ ​l​o​g​ ​i​n​ ​a​g​a​i​n​ ​n​e​x​t​ ​t​i​m​e​.
 	 */
 	CONNECTED_APP_DELETE_DESCRIPTION: string
@@ -2524,10 +2538,6 @@ type RootTranslation = {
 	 * D​i​s​c​o​n​n​e​c​t​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p
 	 */
 	CONNECTED_APP_DELETE_TITLE: string
-	/**
-	 * C​o​n​t​r​a​c​t​ ​d​e​p​l​o​y​m​e​n​t
-	 */
-	CONNECTED_APP_deploy_contract: string
 	/**
 	 * D​e​s​c​r​i​p​t​i​o​n
 	 */
@@ -2613,6 +2623,30 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: string
 	/**
+	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
+	 */
+	CONNECTED_APP_TITLE: string
+	/**
+	 * U​r​l
+	 */
+	CONNECTED_APP_URL: string
+	/**
+	 * v​e​r​s​i​o​n
+	 */
+	CONNECTED_APP_VERSION: string
+	/**
+	 * A​p​p​r​o​v​e​ ​N​F​T
+	 */
+	CONNECTED_APP_approve_nft: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​c​a​l​l
+	 */
+	CONNECTED_APP_contract_call: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​d​e​p​l​o​y​m​e​n​t
+	 */
+	CONNECTED_APP_deploy_contract: string
+	/**
 	 * S​w​a​p​ ​t​o​k​e​n​s​ ​f​o​r​ ​t​o​k​e​n​s
 	 */
 	CONNECTED_APP_swap_tokens_for_tokens: string
@@ -2625,43 +2659,9 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_swap_vet_for_tokens: string
 	/**
-	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
-	 */
-	CONNECTED_APP_TITLE: string
-	/**
 	 * T​o​k​e​n​ ​t​r​a​n​s​f​e​r
 	 */
 	CONNECTED_APP_token_transfer: string
-	/**
-	 * U​r​l
-	 */
-	CONNECTED_APP_URL: string
-	/**
-	 * v​e​r​s​i​o​n
-	 */
-	CONNECTED_APP_VERSION: string
-	/**
-	 * C​o​n​f​i​r​m​i​n​g​ ​t​h​i​s​ ​y​o​u​ ​w​i​l​l​ ​d​i​s​c​o​n​n​e​c​t​ ​t​h​e​ ​{​n​a​m​e​}​ ​a​p​p​ ​f​r​o​m​ ​{​a​l​i​a​s​}
-	 * @param {string} alias
-	 * @param {string} name
-	 */
-	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: RequiredParams<'alias' | 'name'>
-	/**
-	 * C​o​n​n​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​w​i​t​h​ ​a​p​p​s​ ​t​o​ ​m​a​k​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​a​n​d​ ​s​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​.
-	 */
-	CONNECTED_APPS_SCREEN_DESCRIPTION: string
-	/**
-	 * Y​o​u​ ​h​a​v​e​ ​n​o​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​s​.​ ​O​n​c​e​ ​y​o​u​ ​h​a​v​e​ ​s​o​m​e​,​ ​t​h​e​y​ ​w​i​l​l​ ​d​i​s​p​l​a​y​e​d​ ​h​e​r​e​.
-	 */
-	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: string
-	/**
-	 * Y​o​u​r​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​s​ ​l​i​s​t
-	 */
-	CONNECTED_APPS_SCREEN_SUBTITLE: string
-	/**
-	 * C​o​n​n​e​c​t​e​d​ ​a​p​p​s
-	 */
-	CONNECTED_APPS_SCREEN_TITLE: string
 	/**
 	 * C​o​n​n​e​c​t
 	 */
@@ -2925,6 +2925,10 @@ type RootTranslation = {
 	 */
 	DEVELOPER_NOTIFICATION_CENTER_TITLE: string
 	/**
+	 * R​e​s​e​t​ ​s​e​t​t​i​n​g​s
+	 */
+	DEVELOPER_SETTINGS_RESET_BUTTON: string
+	/**
 	 * C​o​n​f​i​g​u​r​e​ ​t​h​e​ ​i​n​d​e​x​e​r​ ​U​R​L​s​ ​f​o​r​ ​e​a​c​h​ ​n​e​t​w​o​r​k​.​ ​S​u​p​p​o​r​t​ ​i​s​ ​p​a​r​t​i​a​l
 	 */
 	DEVELOPER_SETTING_INDEXER_DESCRIPTION: string
@@ -2948,10 +2952,6 @@ type RootTranslation = {
 	 * S​o​c​i​a​l​ ​l​o​g​i​n
 	 */
 	DEVELOPER_SETTING_SMART_WALLET_TITLE: string
-	/**
-	 * R​e​s​e​t​ ​s​e​t​t​i​n​g​s
-	 */
-	DEVELOPER_SETTINGS_RESET_BUTTON: string
 	/**
 	 * O​n​e​ ​o​r​ ​m​o​r​e​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​s​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​ ​h​a​v​e​n​’​t​ ​b​e​e​n​ ​b​a​c​k​e​d​ ​u​p​ ​y​e​t​.​ ​M​a​k​e​ ​s​u​r​e​ ​t​o​ ​b​a​c​k​u​p​ ​t​o​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​c​r​y​p​t​o​.
 	 */
@@ -3383,6 +3383,10 @@ type RootTranslation = {
 	 */
 	GOOGLE_DRIVE: string
 	/**
+	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
+	 */
+	GOOGLE_DRIVE_ERROR_GENERIC: string
+	/**
 	 * G​o​o​g​l​e​ ​s​e​r​v​i​c​e​s​ ​a​r​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​n​e​t​w​o​r​k​ ​c​o​n​n​e​c​t​i​o​n​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	GOOGLE_DRIVE_ERR_GOOGLE_SERVICES: string
@@ -3398,10 +3402,6 @@ type RootTranslation = {
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​p​e​r​f​o​r​m​i​n​g​ ​t​h​i​s​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​w​a​l​l​e​t​ ​o​p​e​r​a​t​i​o​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	GOOGLE_DRIVE_ERR_WALLET_OPERATION: string
-	/**
-	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
-	 */
-	GOOGLE_DRIVE_ERROR_GENERIC: string
 	/**
 	 * G​o​o​g​l​e​ ​D​r​i​v​e​ ​e​r​r​o​r
 	 */
@@ -3459,10 +3459,6 @@ type RootTranslation = {
 	 */
 	JUNE: string
 	/**
-	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
-	 */
-	LEDGER_CERT_TITLE_SB: string
-	/**
 	 * C​e​r​t​i​f​i​c​a​t​e​ ​i​s​ ​r​e​a​d​y
 	 */
 	LEDGER_CERTIFICATE_READ: string
@@ -3471,13 +3467,17 @@ type RootTranslation = {
 	 */
 	LEDGER_CERTIFICATE_READ_SB: string
 	/**
-	 * C​h​e​c​k​ ​s​t​a​t​u​s
+	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
 	 */
-	LEDGER_CHECK_STATUS: string
+	LEDGER_CERT_TITLE_SB: string
 	/**
 	 * C​h​e​c​k​i​n​g
 	 */
 	LEDGER_CHECKING: string
+	/**
+	 * C​h​e​c​k​ ​s​t​a​t​u​s
+	 */
+	LEDGER_CHECK_STATUS: string
 	/**
 	 * C​o​n​n​e​c​t
 	 */
@@ -3503,25 +3503,25 @@ type RootTranslation = {
 	 */
 	LEDGER_DEVICE_ALERT: string
 	/**
-	 * T​h​e​ ​m​e​s​s​a​g​e​ ​i​s​ ​r​e​a​d​y​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​c​o​n​t​i​n​u​e
-	 */
-	LEDGER_MESSAGE_READ_SB: string
-	/**
 	 * M​e​s​s​a​g​e​ ​i​s​ ​r​e​a​d​y
 	 */
 	LEDGER_MESSAGE_READY: string
+	/**
+	 * T​h​e​ ​m​e​s​s​a​g​e​ ​i​s​ ​r​e​a​d​y​,​ ​p​r​e​s​s​ ​c​o​n​f​i​r​m​ ​t​o​ ​c​o​n​t​i​n​u​e
+	 */
+	LEDGER_MESSAGE_READ_SB: string
 	/**
 	 * P​l​e​a​s​e​ ​f​o​l​l​o​w​ ​t​h​e​ ​i​n​s​t​r​u​c​t​i​o​n​s​ ​b​e​l​o​w​ ​t​o​ ​s​i​g​n​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r
 	 */
 	LEDGER_MESSAGE_TITLE_SB: string
 	/**
-	 * S​i​g​n​ ​d​a​t​a
-	 */
-	LEDGER_SIGN_DATA: string
-	/**
 	 * S​i​g​n​i​n​g
 	 */
 	LEDGER_SIGNING: string
+	/**
+	 * S​i​g​n​ ​d​a​t​a
+	 */
+	LEDGER_SIGN_DATA: string
 	/**
 	 * S​t​a​t​u​s​ ​O​K
 	 */
@@ -3615,6 +3615,10 @@ type RootTranslation = {
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: string
 	/**
+	 * S​e​l​e​c​t​e​d
+	 */
+	MANAGE_TOKEN_SELECTED: string
+	/**
 	 * S​e​l​e​c​t​ ​a​ ​t​o​k​e​n​ ​f​r​o​m​ ​t​h​e​ ​r​e​g​i​s​t​r​y​ ​o​r​ ​a​d​d​ ​a​ ​c​u​s​t​o​m​ ​t​o​k​e​n
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: string
@@ -3622,10 +3626,6 @@ type RootTranslation = {
 	 * S​e​l​e​c​t​ ​y​o​u​r​ ​t​o​k​e​n
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: string
-	/**
-	 * S​e​l​e​c​t​e​d
-	 */
-	MANAGE_TOKEN_SELECTED: string
 	/**
 	 * W​e​ ​h​a​v​e​ ​n​o​t​i​c​e​d​ ​t​h​a​t​ ​y​o​u​ ​h​a​v​e​ ​t​o​k​e​n​s​ ​w​i​t​h​ ​b​a​l​a​n​c​e​,​ ​a​d​d​ ​t​h​e​m​ ​d​i​r​e​c​t​l​y​ ​f​r​o​m​ ​h​e​r​e
 	 */
@@ -3687,6 +3687,18 @@ type RootTranslation = {
 	 */
 	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: string
 	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​n​e​t​w​o​r​k
+	 */
+	NETWORKS_BS_SUBTITLE: string
+	/**
+	 * N​e​t​w​o​r​k​s
+	 */
+	NETWORKS_BS_TITLE: string
+	/**
+	 * N​e​t​w​o​r​k​ ​a​d​d​e​d
+	 */
+	NETWORK_ADDED: string
+	/**
 	 * A​d​d​ ​c​u​s​t​o​m
 	 */
 	NETWORK_ADD_CUSTOM: string
@@ -3743,10 +3755,6 @@ type RootTranslation = {
 	 */
 	NETWORK_ADD_CUSTOM_NODE_SB_DESC: string
 	/**
-	 * N​e​t​w​o​r​k​ ​a​d​d​e​d
-	 */
-	NETWORK_ADDED: string
-	/**
 	 * R​e​m​o​v​e​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
 	NETWORK_CONFIRM_REMOVE_NODE: string
@@ -3757,11 +3765,11 @@ type RootTranslation = {
 	/**
 	 * M​a​i​n​n​e​t
 	 */
-	NETWORK_LABEL_MAIN_NETWORKS: string
+	NETWORK_LABEL_MAINNET: string
 	/**
 	 * M​a​i​n​n​e​t
 	 */
-	NETWORK_LABEL_MAINNET: string
+	NETWORK_LABEL_MAIN_NETWORKS: string
 	/**
 	 * C​u​s​t​o​m​ ​n​e​t​w​o​r​k​s
 	 */
@@ -3769,11 +3777,11 @@ type RootTranslation = {
 	/**
 	 * T​e​s​t​n​e​t
 	 */
-	NETWORK_LABEL_TEST_NETWORKS: string
+	NETWORK_LABEL_TESTNET: string
 	/**
 	 * T​e​s​t​n​e​t
 	 */
-	NETWORK_LABEL_TESTNET: string
+	NETWORK_LABEL_TEST_NETWORKS: string
 	/**
 	 * M​a​n​a​g​e​ ​n​o​d​e​s
 	 */
@@ -3790,14 +3798,6 @@ type RootTranslation = {
 	 * O​n​l​y​ ​V​e​c​h​a​i​n​ ​n​e​t​w​o​r​k​ ​s​u​p​p​o​r​t​e​d
 	 */
 	NETWORK_WARNING_QR_CODE_FOR_ACCOUNT: string
-	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​n​e​t​w​o​r​k
-	 */
-	NETWORKS_BS_SUBTITLE: string
-	/**
-	 * N​e​t​w​o​r​k​s
-	 */
-	NETWORKS_BS_TITLE: string
 	/**
 	 * Y​o​u​ ​h​a​v​e​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​a​v​e​d​ ​t​h​e​ ​N​F​T​ ​i​m​a​g​e​ ​t​o​ ​y​o​u​r​ ​p​h​o​t​o​ ​a​l​b​u​m
 	 */
@@ -3896,39 +3896,6 @@ type RootTranslation = {
 	 */
 	NFT_TRANSFER_SENT: string
 	/**
-	 * T​h​e​r​e​ ​a​r​e​ ​n​o​ ​a​c​c​o​u​n​t​s​ ​w​i​t​h​ ​V​T​H​O​ ​b​a​l​a​n​c​e​ ​t​o​ ​d​e​l​e​g​a​t​e
-	 */
-	NO_ACCOUNTS_VTHO: string
-	/**
-	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​h​i​d​d​e​n​ ​{​n​a​m​e​}
-	 * @param {string} name
-	 */
-	NO_HIDDEN_COLLECTIONS: RequiredParams<'name'>
-	/**
-	 * U​n​a​b​l​e​ ​t​o​ ​o​p​e​n​ ​m​a​r​k​e​t​p​l​a​c​e
-	 */
-	NO_MARKETPLACE: string
-	/**
-	 * N​o​ ​t​h​a​n​k​s
-	 */
-	NO_THANKS: string
-	/**
-	 * N​o​ ​t​o​k​e​n​s​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​p​a​y​ ​t​h​e​ ​f​e​e​.
-	 */
-	NO_TOKENS_AVAILABLE_FOR_FEE: string
-	/**
-	 * N​o​ ​V​T​H​O​ ​b​a​l​a​n​c​e​.​ ​S​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​t​o​k​e​n
-	 */
-	NO_VTHO_BALANCE: string
-	/**
-	 * T​h​i​s​ ​d​A​p​p​ ​i​s​n​'​t​ ​v​e​r​i​f​i​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.
-	 */
-	NOT_VERIFIED_DAPP: string
-	/**
-	 * Y​o​u​ ​c​a​n​'​t​ ​c​o​n​n​e​c​t​ ​t​o​ ​t​h​i​s​ ​d​A​p​p​ ​w​i​t​h​ ​a​ ​v​i​e​w​ ​o​n​l​y​ ​a​c​c​o​u​n​t​.
-	 */
-	NOT_VERIFIED_WATCHED_ACCOUNT: string
-	/**
 	 * G​o​ ​t​o​ ​N​F​T​s
 	 */
 	NOTIFIACTION_INCOMING_NFT_ACTION: string
@@ -3957,29 +3924,17 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_DAPP_INVALID_REQUEST: string
 	/**
-	 * T​h​e​ ​D​A​p​p​ ​r​e​q​u​e​s​t​e​d​ ​a​n​ ​i​n​v​a​l​i​d​ ​a​c​c​o​u​n​t
-	 */
-	NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: string
-	/**
 	 * T​h​e​ ​D​A​p​p​ ​r​e​q​u​e​s​t​e​d​ ​a​n​ ​a​c​c​o​u​n​t​ ​t​h​a​t​ ​w​a​s​ ​n​o​t​ ​f​o​u​n​d
 	 */
 	NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND: string
 	/**
+	 * T​h​e​ ​D​A​p​p​ ​r​e​q​u​e​s​t​e​d​ ​a​n​ ​i​n​v​a​l​i​d​ ​a​c​c​o​u​n​t
+	 */
+	NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: string
+	/**
 	 * D​o​m​a​i​n​ ​n​a​m​e​ ​/​ ​a​d​d​r​e​s​s​ ​n​o​t​ ​f​o​u​n​d​.
 	 */
 	NOTIFICATION_DOMAIN_NAME_NOT_FOUND: string
-	/**
-	 * W​e​'​v​e​ ​r​e​a​c​h​e​d​ ​o​u​r​ ​d​a​i​l​y​ ​l​i​m​i​t​ ​f​o​r​ ​f​r​e​e​ ​u​s​e​r​n​a​m​e​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r​.
-	 */
-	NOTIFICATION_failed_no_gas: string
-	/**
-	 * F​a​i​l​e​d​ ​t​o​ ​c​r​e​a​t​e​ ​u​s​e​r​n​a​m​e
-	 */
-	NOTIFICATION_failed_subdomain: string
-	/**
-	 * U​s​e​r​n​a​m​e​ ​a​l​r​e​a​d​y​ ​c​l​a​i​m​e​d
-	 */
-	NOTIFICATION_failed_subdomain_already: string
 	/**
 	 * F​a​i​l​e​d​ ​t​o​ ​r​e​m​o​v​e​ ​a​c​c​o​u​n​t
 	 */
@@ -4014,30 +3969,13 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_OUTGOING_NFT_TITLE: string
 	/**
-	 * T​r​a​n​s​f​e​r​ ​r​e​c​e​i​v​e​d​:​ ​{​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}
-	 * @param {string} amount
-	 * @param {string} token
-	 */
-	NOTIFICATION_received_token_transfer: RequiredParams<'amount' | 'token'>
-	/**
 	 * S​e​e​ ​d​e​t​a​i​l​s
 	 */
 	NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION: string
 	/**
-	 * T​r​a​n​s​f​e​r​ ​s​e​n​t​:​ ​{​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}
-	 * @param {string} amount
-	 * @param {string} token
-	 */
-	NOTIFICATION_sent_token_transfer: RequiredParams<'amount' | 'token'>
-	/**
 	 * Q​R​ ​C​o​d​e​ ​N​o​t​ ​S​u​p​p​o​r​t​e​d
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: string
-	/**
-	 * T​r​a​n​s​a​c​t​i​o​n​ ​{​t​x​I​d​}​ ​w​a​s​ ​r​e​v​e​r​t​e​d​.
-	 * @param {string} txId
-	 */
-	NOTIFICATION_transaction_reverted: RequiredParams<'txId'>
 	/**
 	 * V​i​e​w​ ​a​c​c​o​u​n​t
 	 */
@@ -4046,6 +3984,45 @@ type RootTranslation = {
 	 * T​h​e​ ​D​A​p​p​ ​i​s​ ​n​o​t​ ​v​e​r​i​f​i​e​d​ ​o​n​ ​W​a​l​l​e​t​ ​C​o​n​n​e​c​t
 	 */
 	NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED: string
+	/**
+	 * A​c​c​o​u​n​t​ ​c​h​a​n​g​e​d​ ​t​o​:​ ​{​a​c​c​o​u​n​t​}
+	 * @param {string} account
+	 */
+	NOTIFICATION_WC_ACCOUNT_CHANGED: RequiredParams<'account'>
+	/**
+	 * N​e​t​w​o​r​k​ ​c​h​a​n​g​e​d​ ​t​o​:​ ​{​n​e​t​w​o​r​k​}
+	 * @param {string} network
+	 */
+	NOTIFICATION_WC_NETWORK_CHANGED: RequiredParams<'network'>
+	/**
+	 * W​e​'​v​e​ ​r​e​a​c​h​e​d​ ​o​u​r​ ​d​a​i​l​y​ ​l​i​m​i​t​ ​f​o​r​ ​f​r​e​e​ ​u​s​e​r​n​a​m​e​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r​.
+	 */
+	NOTIFICATION_failed_no_gas: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​c​r​e​a​t​e​ ​u​s​e​r​n​a​m​e
+	 */
+	NOTIFICATION_failed_subdomain: string
+	/**
+	 * U​s​e​r​n​a​m​e​ ​a​l​r​e​a​d​y​ ​c​l​a​i​m​e​d
+	 */
+	NOTIFICATION_failed_subdomain_already: string
+	/**
+	 * T​r​a​n​s​f​e​r​ ​r​e​c​e​i​v​e​d​:​ ​{​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}
+	 * @param {string} amount
+	 * @param {string} token
+	 */
+	NOTIFICATION_received_token_transfer: RequiredParams<'amount' | 'token'>
+	/**
+	 * T​r​a​n​s​f​e​r​ ​s​e​n​t​:​ ​{​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}
+	 * @param {string} amount
+	 * @param {string} token
+	 */
+	NOTIFICATION_sent_token_transfer: RequiredParams<'amount' | 'token'>
+	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​{​t​x​I​d​}​ ​w​a​s​ ​r​e​v​e​r​t​e​d​.
+	 * @param {string} txId
+	 */
+	NOTIFICATION_transaction_reverted: RequiredParams<'txId'>
 	/**
 	 * A​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​d​i​s​c​o​n​n​e​c​t​e​d​ ​f​r​o​m​ ​t​h​i​s​ ​w​a​l​l​e​t​.
 	 */
@@ -4108,19 +4085,42 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
 	/**
-	 * A​c​c​o​u​n​t​ ​c​h​a​n​g​e​d​ ​t​o​:​ ​{​a​c​c​o​u​n​t​}
-	 * @param {string} account
+	 * T​h​i​s​ ​d​A​p​p​ ​i​s​n​'​t​ ​v​e​r​i​f​i​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.
 	 */
-	NOTIFICATION_WC_ACCOUNT_CHANGED: RequiredParams<'account'>
+	NOT_VERIFIED_DAPP: string
 	/**
-	 * N​e​t​w​o​r​k​ ​c​h​a​n​g​e​d​ ​t​o​:​ ​{​n​e​t​w​o​r​k​}
-	 * @param {string} network
+	 * Y​o​u​ ​c​a​n​'​t​ ​c​o​n​n​e​c​t​ ​t​o​ ​t​h​i​s​ ​d​A​p​p​ ​w​i​t​h​ ​a​ ​v​i​e​w​ ​o​n​l​y​ ​a​c​c​o​u​n​t​.
 	 */
-	NOTIFICATION_WC_NETWORK_CHANGED: RequiredParams<'network'>
+	NOT_VERIFIED_WATCHED_ACCOUNT: string
 	/**
 	 * N​o​v​e​m​b​e​r
 	 */
 	NOVEMBER: string
+	/**
+	 * T​h​e​r​e​ ​a​r​e​ ​n​o​ ​a​c​c​o​u​n​t​s​ ​w​i​t​h​ ​V​T​H​O​ ​b​a​l​a​n​c​e​ ​t​o​ ​d​e​l​e​g​a​t​e
+	 */
+	NO_ACCOUNTS_VTHO: string
+	/**
+	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​h​i​d​d​e​n​ ​{​n​a​m​e​}
+	 * @param {string} name
+	 */
+	NO_HIDDEN_COLLECTIONS: RequiredParams<'name'>
+	/**
+	 * U​n​a​b​l​e​ ​t​o​ ​o​p​e​n​ ​m​a​r​k​e​t​p​l​a​c​e
+	 */
+	NO_MARKETPLACE: string
+	/**
+	 * N​o​ ​t​h​a​n​k​s
+	 */
+	NO_THANKS: string
+	/**
+	 * N​o​ ​t​o​k​e​n​s​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​p​a​y​ ​t​h​e​ ​f​e​e​.
+	 */
+	NO_TOKENS_AVAILABLE_FOR_FEE: string
+	/**
+	 * N​o​ ​V​T​H​O​ ​b​a​l​a​n​c​e​.​ ​S​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​t​o​k​e​n
+	 */
+	NO_VTHO_BALANCE: string
 	/**
 	 * O​c​t​o​b​e​r
 	 */
@@ -4324,21 +4324,21 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: string
 	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: string
-	/**
 	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​e​d
 	 */
 	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: string
 	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
+	 * D​e​l​e​g​a​t​i​o​n​ ​e​x​i​t​ ​r​e​q​u​e​s​t​e​d
 	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: string
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: string
 	/**
 	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​e​d
 	 */
 	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​q​u​e​s​t​ ​c​a​n​c​e​l​l​e​d
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: string
 	/**
 	 * M​a​n​a​g​e​r​ ​a​d​d​e​d
 	 */
@@ -4392,6 +4392,10 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_VEVOTE_CAST: string
 	/**
+	 * R​e​c​e​i​v​e​d
+	 */
+	RECEIVED: string
+	/**
 	 * R​e​c​e​i​v​e
 	 */
 	RECEIVE_ACTIVITY: string
@@ -4399,10 +4403,6 @@ type RootTranslation = {
 	 * R​e​c​e​i​v​e​ ​N​F​T
 	 */
 	RECEIVE_NFT: string
-	/**
-	 * R​e​c​e​i​v​e​d
-	 */
-	RECEIVED: string
 	/**
 	 * R​e​c​o​m​m​e​n​d​e​d
 	 */
@@ -4432,13 +4432,13 @@ type RootTranslation = {
 	 */
 	SAVE_MEDIA_ERROR_TITLE: string
 	/**
-	 * A​c​c​o​u​n​t​ ​m​a​n​a​g​e​m​e​n​t
-	 */
-	SB_ACCOUNT_MANAGEMENT: string
-	/**
 	 * A​c​c​o​u​n​t​s
 	 */
 	SB_ACCOUNTS: string
+	/**
+	 * A​c​c​o​u​n​t​ ​m​a​n​a​g​e​m​e​n​t
+	 */
+	SB_ACCOUNT_MANAGEMENT: string
 	/**
 	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​d​e​n​i​e​d​ ​c​a​m​e​r​a​ ​a​c​c​e​s​s​ ​t​o​ ​V​e​W​o​r​l​d​.​ ​P​l​e​a​s​e​ ​e​n​a​b​l​e​ ​i​t​ ​i​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​s​e​t​t​i​n​g​s​.
 	 */
@@ -4490,14 +4490,14 @@ type RootTranslation = {
 	 */
 	SB_CHOOSE_A_WALLET: string
 	/**
-	 * T​h​i​s​ ​u​s​e​r​n​a​m​e​ ​c​a​n​ ​b​e​ ​u​s​e​d​ ​i​n​s​t​e​a​d​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​c​o​n​n​e​c​t​ ​t​o​ ​d​A​p​p​s​.​ ​T​h​e​ ​c​l​a​i​m​i​n​g​ ​i​s​ ​f​r​e​e​ ​o​f​ ​c​h​a​r​g​e​.
-	 */
-	SB_CLAIM_USERNAME: string
-	/**
 	 * Y​o​u​ ​h​a​v​e​ ​{​u​s​e​r​n​a​m​e​s​}​ ​u​s​e​r​n​a​m​e​ ​c​l​a​i​m​ ​a​v​a​i​l​a​b​l​e
 	 * @param {number} usernames
 	 */
 	SB_CLAIMABLE_ACCOUNTS: RequiredParams<'usernames'>
+	/**
+	 * T​h​i​s​ ​u​s​e​r​n​a​m​e​ ​c​a​n​ ​b​e​ ​u​s​e​d​ ​i​n​s​t​e​a​d​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​c​o​n​n​e​c​t​ ​t​o​ ​d​A​p​p​s​.​ ​T​h​e​ ​c​l​a​i​m​i​n​g​ ​i​s​ ​f​r​e​e​ ​o​f​ ​c​h​a​r​g​e​.
+	 */
+	SB_CLAIM_USERNAME: string
 	/**
 	 * C​o​l​l​e​c​t​i​b​l​e
 	 */
@@ -4710,13 +4710,13 @@ type RootTranslation = {
 	 */
 	SB_UPGRADE_SECURITY_WARNING_ANDROID: string
 	/**
-	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​b​e​ ​u​s​e​d​ ​t​o​ ​a​u​t​h​o​r​i​z​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
-	 */
-	SB_USER_PASSWORD: string
-	/**
 	 * w​a​s​ ​c​l​a​i​m​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​f​o​r​ ​t​h​i​s​ ​a​c​c​o​u​n​t​.
 	 */
 	SB_USERNAME_CLAIMED: string
+	/**
+	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​b​e​ ​u​s​e​d​ ​t​o​ ​a​u​t​h​o​r​i​z​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 */
+	SB_USER_PASSWORD: string
 	/**
 	 * M​a​n​a​g​e​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​s​ ​a​n​d​ ​a​c​c​o​u​n​t​s​:
 	 */
@@ -5104,21 +5104,9 @@ type RootTranslation = {
 	 */
 	SEND_RANGE_ZERO: string
 	/**
-	 * R​e​c​e​i​v​e
-	 */
-	SEND_RECEIVE_TAB_RECEIVE: string
-	/**
-	 * S​c​a​n
-	 */
-	SEND_RECEIVE_TAB_SCAN: string
-	/**
 	 * R​e​c​e​i​v​e​r
 	 */
 	SEND_RECEIVER: string
-	/**
-	 * A​d​d​ ​t​h​i​s​ ​n​e​w​ ​a​d​d​r​e​s​s​ ​t​o​ ​m​y​ ​c​o​n​t​a​c​t​s
-	 */
-	SEND_RECEIVER_ADD_CONTACT_BTN: string
 	/**
 	 * C​l​e​a​r
 	 */
@@ -5139,6 +5127,10 @@ type RootTranslation = {
 	 * W​a​l​l​e​t​ ​o​r​ ​d​o​m​a​i​n
 	 */
 	SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER: string
+	/**
+	 * A​d​d​ ​t​h​i​s​ ​n​e​w​ ​a​d​d​r​e​s​s​ ​t​o​ ​m​y​ ​c​o​n​t​a​c​t​s
+	 */
+	SEND_RECEIVER_ADD_CONTACT_BTN: string
 	/**
 	 * R​e​v​i​e​w​ ​d​e​t​a​i​l​s
 	 */
@@ -5161,6 +5153,14 @@ type RootTranslation = {
 	 * R​e​c​e​n​t
 	 */
 	SEND_RECEIVER_FILTER_RECENT: string
+	/**
+	 * R​e​c​e​i​v​e
+	 */
+	SEND_RECEIVE_TAB_RECEIVE: string
+	/**
+	 * S​c​a​n
+	 */
+	SEND_RECEIVE_TAB_SCAN: string
 	/**
 	 * O​n​c​e​ ​y​o​u​ ​s​e​n​d​ ​t​o​ ​a​n​ ​a​d​d​r​e​s​s​,​ ​i​t​’​l​l​ ​s​h​o​w​ ​u​p​ ​h​e​r​e​ ​f​o​r​ ​q​u​i​c​k​ ​a​c​c​e​s​s​.
 	 */
@@ -5255,34 +5255,6 @@ type RootTranslation = {
 	 */
 	SEPTEMBER: string
 	/**
-	 * Y​e​s​,​ ​a​l​l​o​w
-	 */
-	SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW: string
-	/**
-	 * N​o​,​ ​g​o​ ​b​a​c​k
-	 */
-	SETTING_UNVERIFIED_APP_MODAL_CTA_BACK: string
-	/**
-	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​s​c​a​m​s​ ​a​n​d​ ​c​a​n​ ​l​e​a​d​ ​t​o​ ​a​s​s​e​t​ ​l​o​s​s​.​ ​D​i​s​a​b​l​e​ ​a​f​t​e​r​ ​u​s​e​.
-	 */
-	SETTING_UNVERIFIED_APP_MODAL_SUBTITLE: string
-	/**
-	 * A​l​l​o​w​ ​u​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
-	 */
-	SETTING_UNVERIFIED_APP_MODAL_TITLE: string
-	/**
-	 * A​l​l​o​w​i​n​g​ ​u​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​l​e​t​s​ ​y​o​u​ ​o​p​e​n​ ​a​p​p​s​ ​t​h​a​t​ ​h​a​v​e​n​'​t​ ​b​e​e​n​ ​r​e​v​i​e​w​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.​ ​T​h​e​s​e​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​m​a​l​i​c​i​o​u​s​ ​a​n​d​ ​c​o​u​l​d​ ​p​u​t​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​.
-	 */
-	SETTING_UNVERIFIED_APP_SUBTITLE: string
-	/**
-	 * U​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
-	 */
-	SETTING_UNVERIFIED_APP_TITLE: string
-	/**
-	 * A​l​l​o​w​ ​u​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
-	 */
-	SETTING_UNVERIFIED_APP_TOGGLE_CTA: string
-	/**
 	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
 	 * @param {unknown} version
 	 */
@@ -5370,6 +5342,34 @@ type RootTranslation = {
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: string
 	/**
+	 * Y​e​s​,​ ​a​l​l​o​w
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW: string
+	/**
+	 * N​o​,​ ​g​o​ ​b​a​c​k
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_BACK: string
+	/**
+	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​s​c​a​m​s​ ​a​n​d​ ​c​a​n​ ​l​e​a​d​ ​t​o​ ​a​s​s​e​t​ ​l​o​s​s​.​ ​D​i​s​a​b​l​e​ ​a​f​t​e​r​ ​u​s​e​.
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_SUBTITLE: string
+	/**
+	 * A​l​l​o​w​ ​u​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_TITLE: string
+	/**
+	 * A​l​l​o​w​i​n​g​ ​u​n​v​e​r​i​f​i​e​d​ ​a​p​p​s​ ​l​e​t​s​ ​y​o​u​ ​o​p​e​n​ ​a​p​p​s​ ​t​h​a​t​ ​h​a​v​e​n​'​t​ ​b​e​e​n​ ​r​e​v​i​e​w​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.​ ​T​h​e​s​e​ ​a​p​p​s​ ​m​a​y​ ​b​e​ ​m​a​l​i​c​i​o​u​s​ ​a​n​d​ ​c​o​u​l​d​ ​p​u​t​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​.
+	 */
+	SETTING_UNVERIFIED_APP_SUBTITLE: string
+	/**
+	 * U​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_TITLE: string
+	/**
+	 * A​l​l​o​w​ ​u​n​v​e​r​i​f​i​e​d​ ​A​p​p​s
+	 */
+	SETTING_UNVERIFIED_APP_TOGGLE_CTA: string
+	/**
 	 * S​h​a​r​e
 	 */
 	SHARE: string
@@ -5403,6 +5403,10 @@ type RootTranslation = {
 	 * S​h​o​w​ ​N​F​T
 	 */
 	SHOW_NFT: string
+	/**
+	 * S​i​g​n​e​d​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	SIGNED_CERTIFICATE: string
 	/**
 	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
@@ -5439,10 +5443,6 @@ type RootTranslation = {
 	 * S​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a
 	 */
 	SIGN_TYPED_DATA_REQUEST_TITLE: string
-	/**
-	 * S​i​g​n​e​d​ ​c​e​r​t​i​f​i​c​a​t​e
-	 */
-	SIGNED_CERTIFICATE: string
 	/**
 	 * D​e​l​e​g​a​t​e​d​ ​s​m​a​r​t​ ​w​a​l​l​e​t​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​y​e​t
 	 */
@@ -5717,6 +5717,10 @@ type RootTranslation = {
 	 */
 	TITLE_ADVANCED: string
 	/**
+	 * A​l​e​r​t​s
+	 */
+	TITLE_ALERTS: string
+	/**
 	 * B​i​o​m​e​t​r​i​c​s​ ​C​a​n​c​e​l​l​e​d
 	 */
 	TITLE_ALERT_BIOMETRICS_CANCELLED: string
@@ -5728,10 +5732,6 @@ type RootTranslation = {
 	 * F​a​c​e​ ​I​D​ ​C​a​n​c​e​l​l​e​d
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: string
-	/**
-	 * A​l​e​r​t​s
-	 */
-	TITLE_ALERTS: string
 	/**
 	 * B​a​c​k​u​p​ ​t​o​ ​a​ ​C​l​o​u​d
 	 */
@@ -5882,13 +5882,13 @@ type RootTranslation = {
 	 */
 	TITLE_RESET_APP: string
 	/**
-	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
-	 */
-	TITLE_SCAN_QRCODE: string
-	/**
 	 * A​d​d​r​e​s​s​ ​C​o​p​i​e​d​ ​t​o​ ​C​l​i​p​b​o​a​r​d
 	 */
 	TITLE_SCANED_ADDRESS_COPPIED: string
+	/**
+	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
+	 */
+	TITLE_SCAN_QRCODE: string
 	/**
 	 * P​r​o​t​e​c​t​ ​y​o​u​r​ ​w​a​l​l​e​t
 	 */
@@ -5914,6 +5914,10 @@ type RootTranslation = {
 	 */
 	TITLE_UNLOCK_KEYSTORE: string
 	/**
+	 * U​s​e​r​n​a​m​e​ ​c​l​a​i​m​e​d​!
+	 */
+	TITLE_USERNAME_CLAIMED: string
+	/**
 	 * C​h​o​o​s​e​ ​y​o​u​r​ ​6​-​d​i​g​i​t​ ​P​I​N
 	 */
 	TITLE_USER_PASSWORD: string
@@ -5921,10 +5925,6 @@ type RootTranslation = {
 	 * I​n​s​e​r​t​ ​y​o​u​r​ ​6​-​d​i​g​i​t​ ​P​I​N
 	 */
 	TITLE_USER_PIN: string
-	/**
-	 * U​s​e​r​n​a​m​e​ ​c​l​a​i​m​e​d​!
-	 */
-	TITLE_USERNAME_CLAIMED: string
 	/**
 	 * V​e​B​e​t​t​e​r
 	 */
@@ -6036,6 +6036,14 @@ type RootTranslation = {
 	 */
 	TOUCH_ID: string
 	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	TRANSACTIONS_SETTINGS_DELEGATION_PREFERENCES: string
+	/**
+	 * S​e​n​d​ ​p​r​e​f​e​r​e​n​c​e​s
+	 */
+	TRANSACTIONS_SETTINGS_SEND_PREFERENCES: string
+	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​d​o​n​e
 	 */
 	TRANSACTION_DONE: string
@@ -6055,14 +6063,6 @@ type RootTranslation = {
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​i​n​ ​p​r​o​g​r​e​s​s
 	 */
 	TRANSACTION_IN_PROGRESS: string
-	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​p​r​e​f​e​r​e​n​c​e​s
-	 */
-	TRANSACTIONS_SETTINGS_DELEGATION_PREFERENCES: string
-	/**
-	 * S​e​n​d​ ​p​r​e​f​e​r​e​n​c​e​s
-	 */
-	TRANSACTIONS_SETTINGS_SEND_PREFERENCES: string
 	/**
 	 * T​r​a​n​s​a​k​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
@@ -6245,13 +6245,21 @@ type RootTranslation = {
 	 */
 	VEWORLD: string
 	/**
+	 * V​i​e​w​ ​o​n​l​y
+	 */
+	VIEW_ONLY: string
+	/**
 	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
 	 */
 	VIEW_ON_EXPLORER: string
 	/**
-	 * V​i​e​w​ ​o​n​l​y
+	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.
 	 */
-	VIEW_ONLY: string
+	WALLETS_SAVED_ON_DRIVE: string
+	/**
+	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​i​C​l​o​u​d​.
+	 */
+	WALLETS_SAVED_ON_ICLOUD: string
 	/**
 	 * W​a​l​l​e​t​C​o​n​n​e​c​t​ ​s​u​p​p​o​r​t​e​d
 	 */
@@ -6444,21 +6452,13 @@ type RootTranslation = {
 	 */
 	WALLET_MANAGEMENT_WALLET_NAME: string
 	/**
-	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​G​o​o​g​l​e​ ​D​r​i​v​e​.
+	 * W​e​l​c​o​m​e​ ​b​a​c​k
 	 */
-	WALLETS_SAVED_ON_DRIVE: string
-	/**
-	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​i​C​l​o​u​d​.
-	 */
-	WALLETS_SAVED_ON_ICLOUD: string
+	WELCOME_BACK: string
 	/**
 	 * W​e​ ​f​o​u​n​d​ 
 	 */
 	WE_FOUND: string
-	/**
-	 * W​e​l​c​o​m​e​ ​b​a​c​k
-	 */
-	WELCOME_BACK: string
 	/**
 	 * W​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ 
 	 */
@@ -6633,21 +6633,21 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_STARGATE_DELEGATION_ACTIVE_LABEL: () => LocalizedString
 	/**
-	 * Delegation exit requested
-	 */
-	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: () => LocalizedString
-	/**
 	 * Delegation exited
 	 */
 	ACTIVITY_STARGATE_DELEGATION_EXITED_LABEL: () => LocalizedString
 	/**
-	 * Delegation request cancelled
+	 * Delegation exit requested
 	 */
-	ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
+	ACTIVITY_STARGATE_DELEGATION_EXIT_REQUESTED_LABEL: () => LocalizedString
 	/**
 	 * Delegation requested
 	 */
 	ACTIVITY_STARGATE_DELEGATION_REQUESTED_LABEL: () => LocalizedString
+	/**
+	 * Delegation request cancelled
+	 */
+	ACTIVITY_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
 	/**
 	 * VET staked & delegated
 	 */
@@ -6689,29 +6689,13 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_SWAP_LABEL: () => LocalizedString
 	/**
-	 * Transfer
-	 */
-	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
-	/**
 	 * No Transfers to show yet
 	 */
 	ACTIVITY_TRANSFERS_EMPTY_LABEL: () => LocalizedString
 	/**
-	 * Add Account
+	 * Transfer
 	 */
-	ADD_ACCOUNT: () => LocalizedString
-	/**
-	 * Add app
-	 */
-	ADD_APP: () => LocalizedString
-	/**
-	 * Scan a wallet QR code to add as contact
-	 */
-	ADD_CONTACT_QR_DESCRIPTION: () => LocalizedString
-	/**
-	 * Add Wallet
-	 */
-	ADD_WALLET: () => LocalizedString
+	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
 	/**
 	 * ALL
 	 */
@@ -6760,6 +6744,22 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Token ID
 	 */
 	ADDITIONAL_DETAIL_TOKEN_ID: () => LocalizedString
+	/**
+	 * Add Account
+	 */
+	ADD_ACCOUNT: () => LocalizedString
+	/**
+	 * Add app
+	 */
+	ADD_APP: () => LocalizedString
+	/**
+	 * Scan a wallet QR code to add as contact
+	 */
+	ADD_CONTACT_QR_DESCRIPTION: () => LocalizedString
+	/**
+	 * Add Wallet
+	 */
+	ADD_WALLET: () => LocalizedString
 	/**
 	 * You can't view a ledger mnemonic
 	 */
@@ -6814,13 +6814,13 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_MSG_NEW_VERSION: (arg: { version: string }) => LocalizedString
 	/**
-	 * You don’t have funds available to continue with this action.
-	 */
-	ALERT_MSG_NO_FUNDS: () => LocalizedString
-	/**
 	 * You have not enrolled any biometric authentication method.
 	 */
 	ALERT_MSG_NOT_ENROLLED: () => LocalizedString
+	/**
+	 * You don’t have funds available to continue with this action.
+	 */
+	ALERT_MSG_NO_FUNDS: () => LocalizedString
 	/**
 	 * Your device does not support Bluetooth, which is required to use this feature.
 	 */
@@ -6898,6 +6898,42 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
 	/**
+	 * Actions
+	 */
+	APPS_BS_ACTIONS: () => LocalizedString
+	/**
+	 * Add to favorites
+	 */
+	APPS_BS_BTN_ADD_FAVORITE: () => LocalizedString
+	/**
+	 * Open
+	 */
+	APPS_BS_BTN_OPEN_APP: () => LocalizedString
+	/**
+	 * Favorited
+	 */
+	APPS_BS_BTN_REMOVE_FAVORITE: () => LocalizedString
+	/**
+	 * Joined
+	 */
+	APPS_BS_JOINED: () => LocalizedString
+	/**
+	 * Users
+	 */
+	APPS_BS_USERS: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	APPS_SCREEN_TITLE: () => LocalizedString
+	/**
+	 * Search an App or Website...
+	 */
+	APPS_SEARCH_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	APPS_TITLE: () => LocalizedString
+	/**
 	 * Energy
 	 */
 	APP_CATEGORY_ENERGY: () => LocalizedString
@@ -6938,14 +6974,6 @@ Try reconnect your device to the internet.
 	 */
 	APP_CATEGORY_WEB3: () => LocalizedString
 	/**
-	 * Update available
-	 */
-	APP_UPDATE_AVAILABLE: () => LocalizedString
-	/**
-	 * Version {version} is now available to update with new features and improvements.
-	 */
-	APP_UPDATE_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
-	/**
 	 * App updated
 	 */
 	APP_UPDATED: () => LocalizedString
@@ -6953,6 +6981,14 @@ Try reconnect your device to the internet.
 	 * Here is what is new:
 	 */
 	APP_UPDATED_WHATS_NEW: () => LocalizedString
+	/**
+	 * Update available
+	 */
+	APP_UPDATE_AVAILABLE: () => LocalizedString
+	/**
+	 * Version {version} is now available to update with new features and improvements.
+	 */
+	APP_UPDATE_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
 	/**
 	 * Please confirm that you would like to process this request.
 	 */
@@ -6969,42 +7005,6 @@ Try reconnect your device to the internet.
 	 * version {version}
 	 */
 	APP_VERSION: (arg: { version: string }) => LocalizedString
-	/**
-	 * Actions
-	 */
-	APPS_BS_ACTIONS: () => LocalizedString
-	/**
-	 * Add to favorites
-	 */
-	APPS_BS_BTN_ADD_FAVORITE: () => LocalizedString
-	/**
-	 * Open
-	 */
-	APPS_BS_BTN_OPEN_APP: () => LocalizedString
-	/**
-	 * Favorited
-	 */
-	APPS_BS_BTN_REMOVE_FAVORITE: () => LocalizedString
-	/**
-	 * Joined
-	 */
-	APPS_BS_JOINED: () => LocalizedString
-	/**
-	 * Users
-	 */
-	APPS_BS_USERS: () => LocalizedString
-	/**
-	 * Apps
-	 */
-	APPS_SCREEN_TITLE: () => LocalizedString
-	/**
-	 * Search an App or Website...
-	 */
-	APPS_SEARCH_PLACEHOLDER: () => LocalizedString
-	/**
-	 * Apps
-	 */
-	APPS_TITLE: () => LocalizedString
 	/**
 	 * April
 	 */
@@ -7358,10 +7358,6 @@ Try reconnect your device to the internet.
 	 */
 	BD_APP_THEME: () => LocalizedString
 	/**
-	 * GO BACK TO APP
-	 */
-	BD_BACK_TO_APP: () => LocalizedString
-	/**
 	 * {cloudType} backed up
 	 */
 	BD_BACKED_UP: (arg: { cloudType: string }) => LocalizedString
@@ -7385,6 +7381,10 @@ Try reconnect your device to the internet.
 	 * The recovery phrases or private key backup ensure you never lose access to your wallet in case of app reset or lost device.
 	 */
 	BD_BACKUP_RECOVERY_PHRASE: () => LocalizedString
+	/**
+	 * GO BACK TO APP
+	 */
+	BD_BACK_TO_APP: () => LocalizedString
 	/**
 	 * B3TR tokens can be converted into VOT3 tokens and back, allowing you to get more voting power and participate actively in the voting rounds and governance proposals.
 	 */
@@ -7442,14 +7442,6 @@ Try reconnect your device to the internet.
 	 */
 	BD_CONFIRM_RESET: () => LocalizedString
 	/**
-	 * Contact address
-	 */
-	BD_CONTACT_ADDRESS: () => LocalizedString
-	/**
-	 * Contact name
-	 */
-	BD_CONTACT_NAME: () => LocalizedString
-	/**
 	 * Your contact list
 	 */
 	BD_CONTACTS_LIST: () => LocalizedString
@@ -7457,6 +7449,14 @@ Try reconnect your device to the internet.
 	 * Add friends and addresses you trust
 	 */
 	BD_CONTACTS_LIST_DISCLAIMER: () => LocalizedString
+	/**
+	 * Contact address
+	 */
+	BD_CONTACT_ADDRESS: () => LocalizedString
+	/**
+	 * Contact name
+	 */
+	BD_CONTACT_NAME: () => LocalizedString
 	/**
 	 * Conversion currency
 	 */
@@ -7586,10 +7586,6 @@ Try reconnect your device to the internet.
 	 */
 	BD_NFT_DESC_PLACEHOLDER: () => LocalizedString
 	/**
-	 * No token found
-	 */
-	BD_NO_TOKEN_FOUND: () => LocalizedString
-	/**
 	 * Not backed up to iCloud
 	 */
 	BD_NOT_BACKED_UP_TO_CLOUD: () => LocalizedString
@@ -7597,6 +7593,10 @@ Try reconnect your device to the internet.
 	 * Not backed up to Google Drive
 	 */
 	BD_NOT_BACKED_UP_TO_DRIVE: () => LocalizedString
+	/**
+	 * No token found
+	 */
+	BD_NO_TOKEN_FOUND: () => LocalizedString
 	/**
 	 * You can watch a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
 	 */
@@ -7630,13 +7630,13 @@ Try reconnect your device to the internet.
 	 */
 	BD_OTHER_NETWORKS_INDICATOR_DESC: () => LocalizedString
 	/**
-	 * Min 6 characters, 1 number, 1 special character
-	 */
-	BD_PASSWORD_NOT_STRONG: () => LocalizedString
-	/**
 	 * Passwords don't match
 	 */
 	BD_PASSWORDS_DO_NOT_MATCH: () => LocalizedString
+	/**
+	 * Min 6 characters, 1 number, 1 special character
+	 */
+	BD_PASSWORD_NOT_STRONG: () => LocalizedString
 	/**
 	 * Private key copied to clipboard
 	 */
@@ -7802,10 +7802,6 @@ Try reconnect your device to the internet.
 	 */
 	BIOMETRICS_PROMPT_UNLOCK: () => LocalizedString
 	/**
-	 * Block number
-	 */
-	BLOCK_NUMBER: () => LocalizedString
-	/**
 	 * These features are currently unavailable on iOS due to compliance requirements.
 We're working to bring them back soon.
 Thanks for your patience!
@@ -7815,6 +7811,10 @@ Thanks for your patience!
 	 * Buy & Swap on iOS
 	 */
 	BLOCKED_BUY_SWAP_IOS_TITLE: () => LocalizedString
+	/**
+	 * Block number
+	 */
+	BLOCK_NUMBER: () => LocalizedString
 	/**
 	 * Add the current page to your bookmarks
 	 */
@@ -7900,13 +7900,13 @@ Thanks for your patience!
 	 */
 	BROWSER_HISTORY_MORE_RESULTS: () => LocalizedString
 	/**
-	 * No History Available
-	 */
-	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
-	/**
 	 * No results found
 	 */
 	BROWSER_HISTORY_NO_RESULTS: () => LocalizedString
+	/**
+	 * No History Available
+	 */
+	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
 	/**
 	 * Results
 	 */
@@ -8232,6 +8232,10 @@ Thanks for your patience!
 	 */
 	BTN_NO_GO_BACK: () => LocalizedString
 	/**
+	 * Watching
+	 */
+	BTN_OBSERVED: () => LocalizedString
+	/**
 	 * Watch wallet
 	 */
 	BTN_OBSERVE_WALLET: () => LocalizedString
@@ -8239,10 +8243,6 @@ Thanks for your patience!
 	 * Add any public wallet address and keep track of its balances and activity
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: () => LocalizedString
-	/**
-	 * Watching
-	 */
-	BTN_OBSERVED: () => LocalizedString
 	/**
 	 * Skip ahead to create password
 	 */
@@ -8464,6 +8464,10 @@ Thanks for your patience!
 	 */
 	CLOSE_ALL: () => LocalizedString
 	/**
+	 * An error occurred while trying to connect to iCloud service. Try again!
+	 */
+	CLOUDKIT_ERROR_GENERIC: () => LocalizedString
+	/**
 	 * There was an error connecting to iCloud. Please check your network connection and try again.
 	 */
 	CLOUD_ERR_NETWORK: () => LocalizedString
@@ -8483,10 +8487,6 @@ Thanks for your patience!
 	 * No wallets available
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: () => LocalizedString
-	/**
-	 * An error occurred while trying to connect to iCloud service. Try again!
-	 */
-	CLOUDKIT_ERROR_GENERIC: () => LocalizedString
 	/**
 	 * Coinbase not available
 	 */
@@ -8537,18 +8537,6 @@ This action is irreversible.
 	 */
 	COLLECTIBLES_VIEW_GALLERY: () => LocalizedString
 	/**
-	 * The collection was moved to the hidden section and no longer visible on the collections list.
-	 */
-	COLLECTION_HIDDEN_DESCRIPTION: () => LocalizedString
-	/**
-	 * Collection hidden
-	 */
-	COLLECTION_HIDDEN_TITLE: () => LocalizedString
-	/**
-	 * Collection name
-	 */
-	COLLECTION_NAME: () => LocalizedString
-	/**
 	 * Collections
 	 */
 	COLLECTIONS: () => LocalizedString
@@ -8564,6 +8552,18 @@ This action is irreversible.
 	 * View hidden
 	 */
 	COLLECTIONS_VIEW_HIDDEN: () => LocalizedString
+	/**
+	 * The collection was moved to the hidden section and no longer visible on the collections list.
+	 */
+	COLLECTION_HIDDEN_DESCRIPTION: () => LocalizedString
+	/**
+	 * Collection hidden
+	 */
+	COLLECTION_HIDDEN_TITLE: () => LocalizedString
+	/**
+	 * Collection name
+	 */
+	COLLECTION_NAME: () => LocalizedString
 	/**
 	 * day
 	 */
@@ -8893,9 +8893,25 @@ This action is irreversible.
 	 */
 	COMMON_WHOOPS: () => LocalizedString
 	/**
-	 * Approve NFT
+	 * Confirming this you will disconnect the {name} app from {alias}
 	 */
-	CONNECTED_APP_approve_nft: () => LocalizedString
+	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { alias: string, name: string }) => LocalizedString
+	/**
+	 * Connect your wallet with apps to make transactions and sign certificates.
+	 */
+	CONNECTED_APPS_SCREEN_DESCRIPTION: () => LocalizedString
+	/**
+	 * You have no connected apps. Once you have some, they will displayed here.
+	 */
+	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: () => LocalizedString
+	/**
+	 * Your connected apps list
+	 */
+	CONNECTED_APPS_SCREEN_SUBTITLE: () => LocalizedString
+	/**
+	 * Connected apps
+	 */
+	CONNECTED_APPS_SCREEN_TITLE: () => LocalizedString
 	/**
 	 * {dappName} is asking for access to:
 	 */
@@ -8925,10 +8941,6 @@ This action is irreversible.
 	 */
 	CONNECTED_APP_CONTRACT: () => LocalizedString
 	/**
-	 * Contract call
-	 */
-	CONNECTED_APP_contract_call: () => LocalizedString
-	/**
 	 * You can reconnect anytime — removing it just means you'll need to log in again next time.
 	 */
 	CONNECTED_APP_DELETE_DESCRIPTION: () => LocalizedString
@@ -8936,10 +8948,6 @@ This action is irreversible.
 	 * Disconnect connected app
 	 */
 	CONNECTED_APP_DELETE_TITLE: () => LocalizedString
-	/**
-	 * Contract deployment
-	 */
-	CONNECTED_APP_deploy_contract: () => LocalizedString
 	/**
 	 * Description
 	 */
@@ -9025,6 +9033,30 @@ This action is irreversible.
 	 */
 	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: () => LocalizedString
 	/**
+	 * Connected app
+	 */
+	CONNECTED_APP_TITLE: () => LocalizedString
+	/**
+	 * Url
+	 */
+	CONNECTED_APP_URL: () => LocalizedString
+	/**
+	 * version
+	 */
+	CONNECTED_APP_VERSION: () => LocalizedString
+	/**
+	 * Approve NFT
+	 */
+	CONNECTED_APP_approve_nft: () => LocalizedString
+	/**
+	 * Contract call
+	 */
+	CONNECTED_APP_contract_call: () => LocalizedString
+	/**
+	 * Contract deployment
+	 */
+	CONNECTED_APP_deploy_contract: () => LocalizedString
+	/**
 	 * Swap tokens for tokens
 	 */
 	CONNECTED_APP_swap_tokens_for_tokens: () => LocalizedString
@@ -9037,41 +9069,9 @@ This action is irreversible.
 	 */
 	CONNECTED_APP_swap_vet_for_tokens: () => LocalizedString
 	/**
-	 * Connected app
-	 */
-	CONNECTED_APP_TITLE: () => LocalizedString
-	/**
 	 * Token transfer
 	 */
 	CONNECTED_APP_token_transfer: () => LocalizedString
-	/**
-	 * Url
-	 */
-	CONNECTED_APP_URL: () => LocalizedString
-	/**
-	 * version
-	 */
-	CONNECTED_APP_VERSION: () => LocalizedString
-	/**
-	 * Confirming this you will disconnect the {name} app from {alias}
-	 */
-	CONNECTED_APPS_CONFIRM_DISCONNECT_MESSAGE: (arg: { alias: string, name: string }) => LocalizedString
-	/**
-	 * Connect your wallet with apps to make transactions and sign certificates.
-	 */
-	CONNECTED_APPS_SCREEN_DESCRIPTION: () => LocalizedString
-	/**
-	 * You have no connected apps. Once you have some, they will displayed here.
-	 */
-	CONNECTED_APPS_SCREEN_NO_CONNECTED_APP: () => LocalizedString
-	/**
-	 * Your connected apps list
-	 */
-	CONNECTED_APPS_SCREEN_SUBTITLE: () => LocalizedString
-	/**
-	 * Connected apps
-	 */
-	CONNECTED_APPS_SCREEN_TITLE: () => LocalizedString
 	/**
 	 * Connect
 	 */
@@ -9334,6 +9334,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	DEVELOPER_NOTIFICATION_CENTER_TITLE: () => LocalizedString
 	/**
+	 * Reset settings
+	 */
+	DEVELOPER_SETTINGS_RESET_BUTTON: () => LocalizedString
+	/**
 	 * Configure the indexer URLs for each network. Support is partial
 	 */
 	DEVELOPER_SETTING_INDEXER_DESCRIPTION: () => LocalizedString
@@ -9357,10 +9361,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Social login
 	 */
 	DEVELOPER_SETTING_SMART_WALLET_TITLE: () => LocalizedString
-	/**
-	 * Reset settings
-	 */
-	DEVELOPER_SETTINGS_RESET_BUTTON: () => LocalizedString
 	/**
 	 * One or more of your accounts recovery phrase haven’t been backed up yet. Make sure to backup to never lose access to your crypto.
 	 */
@@ -9790,6 +9790,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	GOOGLE_DRIVE: () => LocalizedString
 	/**
+	 * An error occurred while trying to connect to Google Drive service. Try again!
+	 */
+	GOOGLE_DRIVE_ERROR_GENERIC: () => LocalizedString
+	/**
 	 * Google services are not available. Please check your network connection and try again.
 	 */
 	GOOGLE_DRIVE_ERR_GOOGLE_SERVICES: () => LocalizedString
@@ -9805,10 +9809,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * There was an error performing this Google Drive wallet operation. Please try again.
 	 */
 	GOOGLE_DRIVE_ERR_WALLET_OPERATION: () => LocalizedString
-	/**
-	 * An error occurred while trying to connect to Google Drive service. Try again!
-	 */
-	GOOGLE_DRIVE_ERROR_GENERIC: () => LocalizedString
 	/**
 	 * Google Drive error
 	 */
@@ -9866,10 +9866,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	JUNE: () => LocalizedString
 	/**
-	 * Please follow the instructions below to sign the certificate with your Ledger
-	 */
-	LEDGER_CERT_TITLE_SB: () => LocalizedString
-	/**
 	 * Certificate is ready
 	 */
 	LEDGER_CERTIFICATE_READ: () => LocalizedString
@@ -9878,13 +9874,17 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	LEDGER_CERTIFICATE_READ_SB: () => LocalizedString
 	/**
-	 * Check status
+	 * Please follow the instructions below to sign the certificate with your Ledger
 	 */
-	LEDGER_CHECK_STATUS: () => LocalizedString
+	LEDGER_CERT_TITLE_SB: () => LocalizedString
 	/**
 	 * Checking
 	 */
 	LEDGER_CHECKING: () => LocalizedString
+	/**
+	 * Check status
+	 */
+	LEDGER_CHECK_STATUS: () => LocalizedString
 	/**
 	 * Connect
 	 */
@@ -9910,25 +9910,25 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	LEDGER_DEVICE_ALERT: () => LocalizedString
 	/**
-	 * The message is ready, press confirm to continue
-	 */
-	LEDGER_MESSAGE_READ_SB: () => LocalizedString
-	/**
 	 * Message is ready
 	 */
 	LEDGER_MESSAGE_READY: () => LocalizedString
+	/**
+	 * The message is ready, press confirm to continue
+	 */
+	LEDGER_MESSAGE_READ_SB: () => LocalizedString
 	/**
 	 * Please follow the instructions below to sign the message with your Ledger
 	 */
 	LEDGER_MESSAGE_TITLE_SB: () => LocalizedString
 	/**
-	 * Sign data
-	 */
-	LEDGER_SIGN_DATA: () => LocalizedString
-	/**
 	 * Signing
 	 */
 	LEDGER_SIGNING: () => LocalizedString
+	/**
+	 * Sign data
+	 */
+	LEDGER_SIGN_DATA: () => LocalizedString
 	/**
 	 * Status OK
 	 */
@@ -10022,6 +10022,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	MANAGE_TOKEN_SEARCH_TOKEN: () => LocalizedString
 	/**
+	 * Selected
+	 */
+	MANAGE_TOKEN_SELECTED: () => LocalizedString
+	/**
 	 * Select a token from the registry or add a custom token
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY: () => LocalizedString
@@ -10029,10 +10033,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Select your token
 	 */
 	MANAGE_TOKEN_SELECT_YOUR_TOKEN_SUBTITLE: () => LocalizedString
-	/**
-	 * Selected
-	 */
-	MANAGE_TOKEN_SELECTED: () => LocalizedString
 	/**
 	 * We have noticed that you have tokens with balance, add them directly from here
 	 */
@@ -10094,6 +10094,18 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	MISSING_NETWORK_ALERT_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
+	 * Select the active network
+	 */
+	NETWORKS_BS_SUBTITLE: () => LocalizedString
+	/**
+	 * Networks
+	 */
+	NETWORKS_BS_TITLE: () => LocalizedString
+	/**
+	 * Network added
+	 */
+	NETWORK_ADDED: () => LocalizedString
+	/**
 	 * Add custom
 	 */
 	NETWORK_ADD_CUSTOM: () => LocalizedString
@@ -10150,10 +10162,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	NETWORK_ADD_CUSTOM_NODE_SB_DESC: () => LocalizedString
 	/**
-	 * Network added
-	 */
-	NETWORK_ADDED: () => LocalizedString
-	/**
 	 * Remove custom node
 	 */
 	NETWORK_CONFIRM_REMOVE_NODE: () => LocalizedString
@@ -10164,11 +10172,11 @@ Unverified apps may be malicious and could put your assets at risk.
 	/**
 	 * Mainnet
 	 */
-	NETWORK_LABEL_MAIN_NETWORKS: () => LocalizedString
+	NETWORK_LABEL_MAINNET: () => LocalizedString
 	/**
 	 * Mainnet
 	 */
-	NETWORK_LABEL_MAINNET: () => LocalizedString
+	NETWORK_LABEL_MAIN_NETWORKS: () => LocalizedString
 	/**
 	 * Custom networks
 	 */
@@ -10176,11 +10184,11 @@ Unverified apps may be malicious and could put your assets at risk.
 	/**
 	 * Testnet
 	 */
-	NETWORK_LABEL_TEST_NETWORKS: () => LocalizedString
+	NETWORK_LABEL_TESTNET: () => LocalizedString
 	/**
 	 * Testnet
 	 */
-	NETWORK_LABEL_TESTNET: () => LocalizedString
+	NETWORK_LABEL_TEST_NETWORKS: () => LocalizedString
 	/**
 	 * Manage nodes
 	 */
@@ -10197,14 +10205,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Only Vechain network supported
 	 */
 	NETWORK_WARNING_QR_CODE_FOR_ACCOUNT: () => LocalizedString
-	/**
-	 * Select the active network
-	 */
-	NETWORKS_BS_SUBTITLE: () => LocalizedString
-	/**
-	 * Networks
-	 */
-	NETWORKS_BS_TITLE: () => LocalizedString
 	/**
 	 * You have successfully saved the NFT image to your photo album
 	 */
@@ -10303,38 +10303,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	NFT_TRANSFER_SENT: () => LocalizedString
 	/**
-	 * There are no accounts with VTHO balance to delegate
-	 */
-	NO_ACCOUNTS_VTHO: () => LocalizedString
-	/**
-	 * You don't have any hidden {name}
-	 */
-	NO_HIDDEN_COLLECTIONS: (arg: { name: string }) => LocalizedString
-	/**
-	 * Unable to open marketplace
-	 */
-	NO_MARKETPLACE: () => LocalizedString
-	/**
-	 * No thanks
-	 */
-	NO_THANKS: () => LocalizedString
-	/**
-	 * No tokens available to pay the fee.
-	 */
-	NO_TOKENS_AVAILABLE_FOR_FEE: () => LocalizedString
-	/**
-	 * No VTHO balance. Select another token
-	 */
-	NO_VTHO_BALANCE: () => LocalizedString
-	/**
-	 * This dApp isn't verified by VeWorld.
-	 */
-	NOT_VERIFIED_DAPP: () => LocalizedString
-	/**
-	 * You can't connect to this dApp with a view only account.
-	 */
-	NOT_VERIFIED_WATCHED_ACCOUNT: () => LocalizedString
-	/**
 	 * Go to NFTs
 	 */
 	NOTIFIACTION_INCOMING_NFT_ACTION: () => LocalizedString
@@ -10359,29 +10327,17 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	NOTIFICATION_DAPP_INVALID_REQUEST: () => LocalizedString
 	/**
-	 * The DApp requested an invalid account
-	 */
-	NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: () => LocalizedString
-	/**
 	 * The DApp requested an account that was not found
 	 */
 	NOTIFICATION_DAPP_REQUESTED_ACCOUNT_NOT_FOUND: () => LocalizedString
 	/**
+	 * The DApp requested an invalid account
+	 */
+	NOTIFICATION_DAPP_REQUEST_INVALID_ACCOUNT: () => LocalizedString
+	/**
 	 * Domain name / address not found.
 	 */
 	NOTIFICATION_DOMAIN_NAME_NOT_FOUND: () => LocalizedString
-	/**
-	 * We've reached our daily limit for free usernames. Please try again later.
-	 */
-	NOTIFICATION_failed_no_gas: () => LocalizedString
-	/**
-	 * Failed to create username
-	 */
-	NOTIFICATION_failed_subdomain: () => LocalizedString
-	/**
-	 * Username already claimed
-	 */
-	NOTIFICATION_failed_subdomain_already: () => LocalizedString
 	/**
 	 * Failed to remove account
 	 */
@@ -10411,25 +10367,13 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	NOTIFICATION_OUTGOING_NFT_TITLE: () => LocalizedString
 	/**
-	 * Transfer received: {amount} {token}
-	 */
-	NOTIFICATION_received_token_transfer: (arg: { amount: string, token: string }) => LocalizedString
-	/**
 	 * See details
 	 */
 	NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION: () => LocalizedString
 	/**
-	 * Transfer sent: {amount} {token}
-	 */
-	NOTIFICATION_sent_token_transfer: (arg: { amount: string, token: string }) => LocalizedString
-	/**
 	 * QR Code Not Supported
 	 */
 	NOTIFICATION_TITLE_INVALID_QR: () => LocalizedString
-	/**
-	 * Transaction {txId} was reverted.
-	 */
-	NOTIFICATION_transaction_reverted: (arg: { txId: string }) => LocalizedString
 	/**
 	 * View account
 	 */
@@ -10438,6 +10382,38 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * The DApp is not verified on Wallet Connect
 	 */
 	NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED: () => LocalizedString
+	/**
+	 * Account changed to: {account}
+	 */
+	NOTIFICATION_WC_ACCOUNT_CHANGED: (arg: { account: string }) => LocalizedString
+	/**
+	 * Network changed to: {network}
+	 */
+	NOTIFICATION_WC_NETWORK_CHANGED: (arg: { network: string }) => LocalizedString
+	/**
+	 * We've reached our daily limit for free usernames. Please try again later.
+	 */
+	NOTIFICATION_failed_no_gas: () => LocalizedString
+	/**
+	 * Failed to create username
+	 */
+	NOTIFICATION_failed_subdomain: () => LocalizedString
+	/**
+	 * Username already claimed
+	 */
+	NOTIFICATION_failed_subdomain_already: () => LocalizedString
+	/**
+	 * Transfer received: {amount} {token}
+	 */
+	NOTIFICATION_received_token_transfer: (arg: { amount: string, token: string }) => LocalizedString
+	/**
+	 * Transfer sent: {amount} {token}
+	 */
+	NOTIFICATION_sent_token_transfer: (arg: { amount: string, token: string }) => LocalizedString
+	/**
+	 * Transaction {txId} was reverted.
+	 */
+	NOTIFICATION_transaction_reverted: (arg: { txId: string }) => LocalizedString
 	/**
 	 * A connected app successfully disconnected from this wallet.
 	 */
@@ -10499,17 +10475,41 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: () => LocalizedString
 	/**
-	 * Account changed to: {account}
+	 * This dApp isn't verified by VeWorld.
 	 */
-	NOTIFICATION_WC_ACCOUNT_CHANGED: (arg: { account: string }) => LocalizedString
+	NOT_VERIFIED_DAPP: () => LocalizedString
 	/**
-	 * Network changed to: {network}
+	 * You can't connect to this dApp with a view only account.
 	 */
-	NOTIFICATION_WC_NETWORK_CHANGED: (arg: { network: string }) => LocalizedString
+	NOT_VERIFIED_WATCHED_ACCOUNT: () => LocalizedString
 	/**
 	 * November
 	 */
 	NOVEMBER: () => LocalizedString
+	/**
+	 * There are no accounts with VTHO balance to delegate
+	 */
+	NO_ACCOUNTS_VTHO: () => LocalizedString
+	/**
+	 * You don't have any hidden {name}
+	 */
+	NO_HIDDEN_COLLECTIONS: (arg: { name: string }) => LocalizedString
+	/**
+	 * Unable to open marketplace
+	 */
+	NO_MARKETPLACE: () => LocalizedString
+	/**
+	 * No thanks
+	 */
+	NO_THANKS: () => LocalizedString
+	/**
+	 * No tokens available to pay the fee.
+	 */
+	NO_TOKENS_AVAILABLE_FOR_FEE: () => LocalizedString
+	/**
+	 * No VTHO balance. Select another token
+	 */
+	NO_VTHO_BALANCE: () => LocalizedString
 	/**
 	 * October
 	 */
@@ -10711,21 +10711,21 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	RECEIPT_OUTPUT_STARGATE_DELEGATION_ACTIVE: () => LocalizedString
 	/**
-	 * Delegation exit requested
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: () => LocalizedString
-	/**
 	 * Delegation exited
 	 */
 	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXITED: () => LocalizedString
 	/**
-	 * Delegation request cancelled
+	 * Delegation exit requested
 	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_EXIT_REQUESTED: () => LocalizedString
 	/**
 	 * Delegation requested
 	 */
 	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUESTED: () => LocalizedString
+	/**
+	 * Delegation request cancelled
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATION_REQUEST_CANCELLED: () => LocalizedString
 	/**
 	 * Manager added
 	 */
@@ -10779,6 +10779,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	RECEIPT_OUTPUT_VEVOTE_CAST: () => LocalizedString
 	/**
+	 * Received
+	 */
+	RECEIVED: () => LocalizedString
+	/**
 	 * Receive
 	 */
 	RECEIVE_ACTIVITY: () => LocalizedString
@@ -10786,10 +10790,6 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Receive NFT
 	 */
 	RECEIVE_NFT: () => LocalizedString
-	/**
-	 * Received
-	 */
-	RECEIVED: () => LocalizedString
 	/**
 	 * Recommended
 	 */
@@ -10819,13 +10819,13 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	SAVE_MEDIA_ERROR_TITLE: () => LocalizedString
 	/**
-	 * Account management
-	 */
-	SB_ACCOUNT_MANAGEMENT: () => LocalizedString
-	/**
 	 * Accounts
 	 */
 	SB_ACCOUNTS: () => LocalizedString
+	/**
+	 * Account management
+	 */
+	SB_ACCOUNT_MANAGEMENT: () => LocalizedString
 	/**
 	 * You have previously denied camera access to VeWorld. Please enable it in your device settings.
 	 */
@@ -10875,13 +10875,13 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	SB_CHOOSE_A_WALLET: () => LocalizedString
 	/**
-	 * This username can be used instead of your wallet address to send and receive tokens and connect to dApps. The claiming is free of charge.
-	 */
-	SB_CLAIM_USERNAME: () => LocalizedString
-	/**
 	 * You have {usernames} username claim available
 	 */
 	SB_CLAIMABLE_ACCOUNTS: (arg: { usernames: number }) => LocalizedString
+	/**
+	 * This username can be used instead of your wallet address to send and receive tokens and connect to dApps. The claiming is free of charge.
+	 */
+	SB_CLAIM_USERNAME: () => LocalizedString
 	/**
 	 * Collectible
 	 */
@@ -11091,13 +11091,13 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	SB_UPGRADE_SECURITY_WARNING_ANDROID: () => LocalizedString
 	/**
-	 * This password will be used to authorize transactions.
-	 */
-	SB_USER_PASSWORD: () => LocalizedString
-	/**
 	 * was claimed successfully for this account.
 	 */
 	SB_USERNAME_CLAIMED: () => LocalizedString
+	/**
+	 * This password will be used to authorize transactions.
+	 */
+	SB_USER_PASSWORD: () => LocalizedString
 	/**
 	 * Manage all of your wallets and accounts:
 	 */
@@ -11483,21 +11483,9 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	SEND_RANGE_ZERO: () => LocalizedString
 	/**
-	 * Receive
-	 */
-	SEND_RECEIVE_TAB_RECEIVE: () => LocalizedString
-	/**
-	 * Scan
-	 */
-	SEND_RECEIVE_TAB_SCAN: () => LocalizedString
-	/**
 	 * Receiver
 	 */
 	SEND_RECEIVER: () => LocalizedString
-	/**
-	 * Add this new address to my contacts
-	 */
-	SEND_RECEIVER_ADD_CONTACT_BTN: () => LocalizedString
 	/**
 	 * Clear
 	 */
@@ -11519,6 +11507,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	SEND_RECEIVER_ADDRESS_INPUT_PLACEHOLDER: () => LocalizedString
 	/**
+	 * Add this new address to my contacts
+	 */
+	SEND_RECEIVER_ADD_CONTACT_BTN: () => LocalizedString
+	/**
 	 * Review details
 	 */
 	SEND_RECEIVER_DETAILS: () => LocalizedString
@@ -11538,6 +11530,14 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Recent
 	 */
 	SEND_RECEIVER_FILTER_RECENT: () => LocalizedString
+	/**
+	 * Receive
+	 */
+	SEND_RECEIVE_TAB_RECEIVE: () => LocalizedString
+	/**
+	 * Scan
+	 */
+	SEND_RECEIVE_TAB_SCAN: () => LocalizedString
 	/**
 	 * Once you send to an address, it’ll show up here for quick access.
 	 */
@@ -11628,34 +11628,6 @@ Are you sure you want to continue?
 	 */
 	SEPTEMBER: () => LocalizedString
 	/**
-	 * Yes, allow
-	 */
-	SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW: () => LocalizedString
-	/**
-	 * No, go back
-	 */
-	SETTING_UNVERIFIED_APP_MODAL_CTA_BACK: () => LocalizedString
-	/**
-	 * Unverified apps may be scams and can lead to asset loss. Disable after use.
-	 */
-	SETTING_UNVERIFIED_APP_MODAL_SUBTITLE: () => LocalizedString
-	/**
-	 * Allow unverified Apps
-	 */
-	SETTING_UNVERIFIED_APP_MODAL_TITLE: () => LocalizedString
-	/**
-	 * Allowing unverified apps lets you open apps that haven't been reviewed by VeWorld. These apps may be malicious and could put your assets at risk.
-	 */
-	SETTING_UNVERIFIED_APP_SUBTITLE: () => LocalizedString
-	/**
-	 * Unverified Apps
-	 */
-	SETTING_UNVERIFIED_APP_TITLE: () => LocalizedString
-	/**
-	 * Allow unverified Apps
-	 */
-	SETTING_UNVERIFIED_APP_TOGGLE_CTA: () => LocalizedString
-	/**
 	 * Version {version}
 	 */
 	SETTINGS_ABOUT_APP_VERSION: (arg: { version: unknown }) => LocalizedString
@@ -11740,6 +11712,34 @@ Are you sure you want to continue?
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: () => LocalizedString
 	/**
+	 * Yes, allow
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_ALLOW: () => LocalizedString
+	/**
+	 * No, go back
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_CTA_BACK: () => LocalizedString
+	/**
+	 * Unverified apps may be scams and can lead to asset loss. Disable after use.
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Allow unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_MODAL_TITLE: () => LocalizedString
+	/**
+	 * Allowing unverified apps lets you open apps that haven't been reviewed by VeWorld. These apps may be malicious and could put your assets at risk.
+	 */
+	SETTING_UNVERIFIED_APP_SUBTITLE: () => LocalizedString
+	/**
+	 * Unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_TITLE: () => LocalizedString
+	/**
+	 * Allow unverified Apps
+	 */
+	SETTING_UNVERIFIED_APP_TOGGLE_CTA: () => LocalizedString
+	/**
 	 * Share
 	 */
 	SHARE: () => LocalizedString
@@ -11770,6 +11770,10 @@ Here's what it's all about:
 	 * Show NFT
 	 */
 	SHOW_NFT: () => LocalizedString
+	/**
+	 * Signed certificate
+	 */
+	SIGNED_CERTIFICATE: () => LocalizedString
 	/**
 	 * Sign certificate
 	 */
@@ -11806,10 +11810,6 @@ Here's what it's all about:
 	 * Sign typed data
 	 */
 	SIGN_TYPED_DATA_REQUEST_TITLE: () => LocalizedString
-	/**
-	 * Signed certificate
-	 */
-	SIGNED_CERTIFICATE: () => LocalizedString
 	/**
 	 * Delegated smart wallet not supported yet
 	 */
@@ -12080,6 +12080,10 @@ Available for Google and Apple Pay.
 	 */
 	TITLE_ADVANCED: () => LocalizedString
 	/**
+	 * Alerts
+	 */
+	TITLE_ALERTS: () => LocalizedString
+	/**
 	 * Biometrics Cancelled
 	 */
 	TITLE_ALERT_BIOMETRICS_CANCELLED: () => LocalizedString
@@ -12091,10 +12095,6 @@ Available for Google and Apple Pay.
 	 * Face ID Cancelled
 	 */
 	TITLE_ALERT_FACE_ID_CANCELLED: () => LocalizedString
-	/**
-	 * Alerts
-	 */
-	TITLE_ALERTS: () => LocalizedString
 	/**
 	 * Backup to a Cloud
 	 */
@@ -12244,13 +12244,13 @@ Available for Google and Apple Pay.
 	 */
 	TITLE_RESET_APP: () => LocalizedString
 	/**
-	 * Scan QR Code
-	 */
-	TITLE_SCAN_QRCODE: () => LocalizedString
-	/**
 	 * Address Copied to Clipboard
 	 */
 	TITLE_SCANED_ADDRESS_COPPIED: () => LocalizedString
+	/**
+	 * Scan QR Code
+	 */
+	TITLE_SCAN_QRCODE: () => LocalizedString
 	/**
 	 * Protect your wallet
 	 */
@@ -12276,6 +12276,10 @@ Available for Google and Apple Pay.
 	 */
 	TITLE_UNLOCK_KEYSTORE: () => LocalizedString
 	/**
+	 * Username claimed!
+	 */
+	TITLE_USERNAME_CLAIMED: () => LocalizedString
+	/**
 	 * Choose your 6-digit PIN
 	 */
 	TITLE_USER_PASSWORD: () => LocalizedString
@@ -12283,10 +12287,6 @@ Available for Google and Apple Pay.
 	 * Insert your 6-digit PIN
 	 */
 	TITLE_USER_PIN: () => LocalizedString
-	/**
-	 * Username claimed!
-	 */
-	TITLE_USERNAME_CLAIMED: () => LocalizedString
 	/**
 	 * VeBetter
 	 */
@@ -12398,6 +12398,14 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	TOUCH_ID: () => LocalizedString
 	/**
+	 * Delegation preferences
+	 */
+	TRANSACTIONS_SETTINGS_DELEGATION_PREFERENCES: () => LocalizedString
+	/**
+	 * Send preferences
+	 */
+	TRANSACTIONS_SETTINGS_SEND_PREFERENCES: () => LocalizedString
+	/**
 	 * Transaction done
 	 */
 	TRANSACTION_DONE: () => LocalizedString
@@ -12417,14 +12425,6 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Transaction in progress
 	 */
 	TRANSACTION_IN_PROGRESS: () => LocalizedString
-	/**
-	 * Delegation preferences
-	 */
-	TRANSACTIONS_SETTINGS_DELEGATION_PREFERENCES: () => LocalizedString
-	/**
-	 * Send preferences
-	 */
-	TRANSACTIONS_SETTINGS_SEND_PREFERENCES: () => LocalizedString
 	/**
 	 * Transak not available
 	 */
@@ -12602,13 +12602,21 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 */
 	VEWORLD: () => LocalizedString
 	/**
+	 * View only
+	 */
+	VIEW_ONLY: () => LocalizedString
+	/**
 	 * View on explorer
 	 */
 	VIEW_ON_EXPLORER: () => LocalizedString
 	/**
-	 * View only
+	 * wallets saved on Google Drive.
 	 */
-	VIEW_ONLY: () => LocalizedString
+	WALLETS_SAVED_ON_DRIVE: () => LocalizedString
+	/**
+	 * wallets saved on iCloud.
+	 */
+	WALLETS_SAVED_ON_ICLOUD: () => LocalizedString
 	/**
 	 * WalletConnect supported
 	 */
@@ -12799,21 +12807,13 @@ Make sure that it is unlocked and the location services are enabled.
 	 */
 	WALLET_MANAGEMENT_WALLET_NAME: () => LocalizedString
 	/**
-	 * wallets saved on Google Drive.
+	 * Welcome back
 	 */
-	WALLETS_SAVED_ON_DRIVE: () => LocalizedString
-	/**
-	 * wallets saved on iCloud.
-	 */
-	WALLETS_SAVED_ON_ICLOUD: () => LocalizedString
+	WELCOME_BACK: () => LocalizedString
 	/**
 	 * We found 
 	 */
 	WE_FOUND: () => LocalizedString
-	/**
-	 * Welcome back
-	 */
-	WELCOME_BACK: () => LocalizedString
 	/**
 	 * Would you like to 
 	 */
