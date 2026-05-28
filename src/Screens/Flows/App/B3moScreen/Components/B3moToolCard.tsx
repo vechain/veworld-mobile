@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Linking, StyleSheet } from "react-native"
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks/useTheme"
 import { useI18nContext } from "~i18n"
@@ -9,9 +9,11 @@ import type { ToolCallView } from "~Hooks/useB3mo"
 
 export type B3moToolCardProps = {
     toolCall: ToolCallView
+    onApprove?: (toolCallId: string) => void
+    onReject?: (toolCallId: string) => void
 }
 
-export const B3moToolCard = ({ toolCall }: B3moToolCardProps) => {
+export const B3moToolCard = ({ toolCall, onApprove, onReject }: B3moToolCardProps) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const network = useAppSelector(selectSelectedNetwork)
@@ -21,6 +23,8 @@ export const B3moToolCard = ({ toolCall }: B3moToolCardProps) => {
         switch (toolCall.status) {
             case "pending":
                 return LL.B3MO_AGENT_TOOL_QUEUED()
+            case "awaiting_approval":
+                return LL.B3MO_AGENT_TOOL_AWAITING_APPROVAL()
             case "executing":
                 return LL.B3MO_AGENT_TOOL_BROADCASTING()
             case "success":
@@ -35,6 +39,8 @@ export const B3moToolCard = ({ toolCall }: B3moToolCardProps) => {
             ? theme.colors.danger
             : toolCall.status === "success"
             ? theme.colors.success
+            : toolCall.status === "awaiting_approval"
+            ? theme.colors.warning
             : theme.colors.subtitle
 
     const onOpenExplorer = () => {
@@ -43,9 +49,11 @@ export const B3moToolCard = ({ toolCall }: B3moToolCardProps) => {
         Linking.openURL(`${base}/transactions/${toolCall.txId}`)
     }
 
+    const isAwaitingApproval = toolCall.status === "awaiting_approval"
+
     return (
-        <BaseTouchable action={() => setExpanded(p => !p)}>
-            <BaseView style={styles.card}>
+        <BaseView style={[styles.card, isAwaitingApproval && styles.cardAwaiting]}>
+            <BaseTouchable action={() => setExpanded(p => !p)}>
                 <BaseView flexDirection="row" alignItems="center">
                     <BaseIcon name="icon-zap" size={16} color={theme.colors.primary} />
                     <BaseSpacer width={8} />
@@ -80,8 +88,30 @@ export const B3moToolCard = ({ toolCall }: B3moToolCardProps) => {
                         )}
                     </>
                 )}
-            </BaseView>
-        </BaseTouchable>
+            </BaseTouchable>
+
+            {isAwaitingApproval && (onApprove || onReject) ? (
+                <BaseView style={styles.actionsRow}>
+                    {onReject ? (
+                        <BaseButton
+                            flex={1}
+                            variant="outline"
+                            title={LL.B3MO_AGENT_TOOL_REJECT()}
+                            action={() => onReject(toolCall.id)}
+                            testID={`b3mo-tool-reject-${toolCall.id}`}
+                        />
+                    ) : null}
+                    {onApprove ? (
+                        <BaseButton
+                            flex={1}
+                            title={LL.B3MO_AGENT_TOOL_APPROVE()}
+                            action={() => onApprove(toolCall.id)}
+                            testID={`b3mo-tool-approve-${toolCall.id}`}
+                        />
+                    ) : null}
+                </BaseView>
+            ) : null}
+        </BaseView>
     )
 }
 
@@ -94,5 +124,14 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 10,
             borderWidth: StyleSheet.hairlineWidth,
             borderColor: theme.colors.border,
+        },
+        cardAwaiting: {
+            borderColor: theme.colors.warning,
+            borderWidth: 1,
+        },
+        actionsRow: {
+            flexDirection: "row",
+            gap: 8,
+            marginTop: 10,
         },
     })

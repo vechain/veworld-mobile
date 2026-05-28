@@ -8,9 +8,11 @@ import { B3moToolCard } from "./B3moToolCard"
 
 export type B3moMessageBubbleProps = {
     message: ChatMessage
+    onApproveToolCall?: (toolCallId: string) => void
+    onRejectToolCall?: (toolCallId: string) => void
 }
 
-export const B3moMessageBubble = ({ message }: B3moMessageBubbleProps) => {
+export const B3moMessageBubble = ({ message, onApproveToolCall, onRejectToolCall }: B3moMessageBubbleProps) => {
     const { styles } = useThemedStyles(baseStyles)
     const isUser = message.role === "user"
 
@@ -26,7 +28,12 @@ export const B3moMessageBubble = ({ message }: B3moMessageBubbleProps) => {
                     <>
                         {message.content ? <BaseSpacer height={8} /> : null}
                         {message.toolCalls.map(tc => (
-                            <B3moToolCard key={tc.id} toolCall={tc} />
+                            <B3moToolCard
+                                key={tc.id}
+                                toolCall={tc}
+                                onApprove={onApproveToolCall}
+                                onReject={onRejectToolCall}
+                            />
                         ))}
                     </>
                 )}

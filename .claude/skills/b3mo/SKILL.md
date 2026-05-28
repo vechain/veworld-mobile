@@ -6,16 +6,29 @@ description: VeWorld Mobile B3MO autonomous AI agent tab — chat-driven on-chai
 # B3MO Skill
 
 B3MO is an AI agent tab inside **VeWorld Mobile** that controls one user-selected
-mnemonic wallet to execute on-chain actions on VeChain (mainnet / testnet)
-**autonomously, without per-tx user approval**. It is composed of:
+mnemonic wallet to execute on-chain actions on VeChain (mainnet / testnet).
+The user can choose between two execution modes:
+
+- `confirm` (**default**) — every clause batch produced by the backend is held
+  back until the user taps "Approve" on the inline tool card. "Reject" reports
+  `success: false, error: "Rejected by user"` to the backend so the agentic
+  loop continues with that context (often producing an alternative).
+- `auto` — every clause batch is signed and broadcast immediately, without
+  per-tx user approval (legacy behavior).
+
+The mode is persisted in the `b3mo` Redux slice (`executionMode`) and can be
+switched any time from `B3moSettingsScreen`. It is composed of:
 
 - A new tab in the mobile app at `~/vechain/veworld-mobile`
 - A dedicated backend at `~/vechain/veworld-b3mo-backend`
 - A built-in proxy to the existing `~/vechain/vechain-mcp-server`
 
-> **CRITICAL**: B3MO signs and broadcasts transactions silently. The mobile UX
-> shows a permanent banner ("B3MO is operating autonomously") and an explicit
-> onboarding disclaimer. Do not weaken these guards.
+> **CRITICAL**: In `auto` mode, B3MO signs and broadcasts transactions silently.
+> In `confirm` mode the user approves each tx inline. Regardless of the mode,
+> the mobile UX shows a permanent banner ("B3MO is operating autonomously") and
+> the onboarding disclaimer is mandatory. Do not weaken these guards. Do not
+> remove the `confirm` default — it is the safer default for new and existing
+> users (Migration39 sets existing users to `confirm` too).
 
 ## High-level architecture
 
@@ -56,7 +69,7 @@ sequenceDiagram
 
 | Branch | Decision |
 | --- | --- |
-| Trust model | Zero hard caps. Biometric/PIN unlock auto-triggers as an inline overlay on chat entry (no dedicated screen). Caches the wallet key for the session. Permanent banner + onboarding checkbox. |
+| Trust model | Zero hard caps. Biometric/PIN unlock auto-triggers as an inline overlay on chat entry (no dedicated screen). Caches the wallet key for the session. Permanent banner + onboarding checkbox. Per-user `executionMode` (`confirm` default / `auto`) gates whether each tx is auto-broadcast or held for inline approval. |
 | Wallet count | 1 linked wallet, switchable from Settings (resets chat). |
 | Wallet types | Only `LOCAL_MNEMONIC`. Smart Wallet / Ledger / Watched are rejected. |
 | Clause building | **Backend** translates ChatGPT intent (high-level tool calls) into VeChain clauses. App is a thin executor. |
@@ -68,7 +81,7 @@ sequenceDiagram
 | Streaming | Server-Sent Events. App uses XHR-based SSE polyfill in `src/Hooks/useB3mo/sseClient.ts`. |
 | Failure handling | Tx failures are reported back to OpenAI → loop continues, AI reasons (gas / allowance / balance / slippage). |
 | Iterations | Soft cap **30** per user turn (env `MAX_AGENTIC_ITERATIONS`). Backend emits `error` event on overflow. |
-| Tool rendering | Collapsed cards in chat with status states: `pending` → `executing` → `success`/`failed` + tx hash + explorer link. |
+| Tool rendering | Collapsed cards in chat with status states: `pending` → (`awaiting_approval` in confirm mode) → `executing` → `success`/`failed` + tx hash + explorer link. The `awaiting_approval` state shows inline `Approve` / `Reject` buttons. |
 | Tab placement | Between Apps and History. Hidden when selected account is observed. |
 | Tab icon | `icon-bot` from the existing icon font (no new SVG needed). |
 | i18n | All keys under `B3MO_AGENT_*`. 15 languages propagated via `/translate` flow. |
@@ -81,13 +94,14 @@ sequenceDiagram
 | Path | Role |
 | --- | --- |
 | `src/Constants/Constants/B3mo.ts` | Backend URL + cert domain/purpose constants |
-| `src/Storage/Redux/Slices/B3mo.ts` | Persisted slice: `linkedAddress`, `onboardingAcceptedAt` |
+| `src/Storage/Redux/Slices/B3mo.ts` | Persisted slice: `linkedAddress`, `onboardingAcceptedAt`, `executionMode` (`auto` \| `confirm`) |
 | `src/Storage/Redux/Slices/B3moSession.ts` | Non-persisted slice: `password` (walletKey), `jwt`, `currentSessionId` |
 | `src/Storage/Redux/Selectors/B3mo.ts` | All B3MO selectors |
 | `src/Storage/Redux/Migrations/Migration38.ts` | Adds `b3mo` slice |
+| `src/Storage/Redux/Migrations/Migration39.ts` | Adds `executionMode = "confirm"` to `b3mo` slice |
 | `src/Hooks/useB3mo/sseClient.ts` | XHR-based SSE polyfill |
 | `src/Hooks/useB3mo/useB3moAuth.ts` | SIWV — sign challenge, get JWT |
-| `src/Hooks/useB3mo/useB3moClient.ts` | Chat orchestration, SSE event reduction |
+| `src/Hooks/useB3mo/useB3moClient.ts` | Chat orchestration, SSE event reduction. In `confirm` mode, awaits a per-tool-call promise (resolved by `approveToolCall` / `rejectToolCall`) before forwarding clauses to the executor. |
 | `src/Hooks/useB3mo/useB3moExecutor.ts` | Sign + broadcast clauses received from backend |
 | `src/Hooks/useB3mo/useB3moUnlock.ts` | Biometric unlock → cache walletKey in memory |
 | `src/Hooks/useB3mo/walletAccess.ts` | Decrypt wallet using cached walletKey, derive private key |
@@ -96,7 +110,7 @@ sequenceDiagram
 | `src/Screens/Flows/App/B3moScreen/Onboarding/*` | Intro / WalletChoice / PickWallet (no dedicated unlock screen) |
 | `src/Screens/Flows/App/B3moScreen/B3moChatScreen.tsx` | Chat screen + banner + composer + inline auto-unlock overlay |
 | `src/Screens/Flows/App/B3moScreen/B3moHistoryScreen.tsx` | Sessions list (GET /sessions) |
-| `src/Screens/Flows/App/B3moScreen/B3moSettingsScreen.tsx` | Switch wallet / reset |
+| `src/Screens/Flows/App/B3moScreen/B3moSettingsScreen.tsx` | Switch wallet / reset / execution mode picker (`confirm` vs `auto`) |
 | `src/Screens/Flows/App/B3moScreen/Components/*` | `B3moBanner`, `B3moComposer`, `B3moMessageBubble`, `B3moToolCard` |
 | `src/Components/Reusable/AccountCard/AccountCard.tsx` | Robot badge on linked account |
 | `src/i18n/translations/<lang>.json` | 15 languages × `B3MO_AGENT_*` keys |

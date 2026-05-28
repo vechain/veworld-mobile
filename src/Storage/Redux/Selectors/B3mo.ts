@@ -12,6 +12,8 @@ export const selectIsB3moOnboarded = createSelector(selectB3moState, s =>
 
 export const selectB3moOnboardingAcceptedAt = createSelector(selectB3moState, s => s.onboardingAcceptedAt)
 
+export const selectB3moExecutionMode = createSelector(selectB3moState, s => s.executionMode)
+
 export const selectB3moSessionPassword = createSelector(selectB3moSessionState, s => s.password)
 
 export const selectB3moJwt = createSelector(selectB3moSessionState, s => s.jwt)

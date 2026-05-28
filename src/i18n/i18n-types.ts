@@ -623,6 +623,22 @@ type RootTranslation = {
 	 */
 	B3MO_AGENT_ERROR_MAX_ITER: string
 	/**
+	 * Automatic
+	 */
+	B3MO_AGENT_EXEC_MODE_AUTO: string
+	/**
+	 * B3MO signs and broadcasts every transaction immediately, without further approval.
+	 */
+	B3MO_AGENT_EXEC_MODE_AUTO_DESC: string
+	/**
+	 * Confirm before executing
+	 */
+	B3MO_AGENT_EXEC_MODE_CONFIRM: string
+	/**
+	 * B3MO asks for your approval before signing each transaction.
+	 */
+	B3MO_AGENT_EXEC_MODE_CONFIRM_DESC: string
+	/**
 	 * N​o​ ​c​o​n​v​e​r​s​a​t​i​o​n​s​ ​y​e​t
 	 */
 	B3MO_AGENT_HISTORY_EMPTY: string
@@ -663,6 +679,10 @@ type RootTranslation = {
 	 */
 	B3MO_AGENT_PICK_WALLET_TITLE: string
 	/**
+	 * Execution mode
+	 */
+	B3MO_AGENT_SETTINGS_EXEC_MODE_TITLE: string
+	/**
 	 * L​i​n​k​e​d​ ​w​a​l​l​e​t
 	 */
 	B3MO_AGENT_SETTINGS_LINKED_WALLET: string
@@ -691,6 +711,14 @@ type RootTranslation = {
 	 */
 	B3MO_AGENT_TAB_TITLE: string
 	/**
+	 * Approve
+	 */
+	B3MO_AGENT_TOOL_APPROVE: string
+	/**
+	 * Awaiting approval
+	 */
+	B3MO_AGENT_TOOL_AWAITING_APPROVAL: string
+	/**
 	 * B​r​o​a​d​c​a​s​t​i​n​g
 	 */
 	B3MO_AGENT_TOOL_BROADCASTING: string
@@ -706,6 +734,14 @@ type RootTranslation = {
 	 * Q​u​e​u​e​d
 	 */
 	B3MO_AGENT_TOOL_QUEUED: string
+	/**
+	 * Reject
+	 */
+	B3MO_AGENT_TOOL_REJECT: string
+	/**
+	 * Rejected by user
+	 */
+	B3MO_AGENT_TOOL_REJECTED_BY_USER: string
 	/**
 	 * S​i​g​n​i​n​g
 	 */
@@ -7050,6 +7086,22 @@ Try reconnect your device to the internet.
 	 */
 	B3MO_AGENT_ERROR_MAX_ITER: () => LocalizedString
 	/**
+	 * Automatic
+	 */
+	B3MO_AGENT_EXEC_MODE_AUTO: () => LocalizedString
+	/**
+	 * B3MO signs and broadcasts every transaction immediately, without further approval.
+	 */
+	B3MO_AGENT_EXEC_MODE_AUTO_DESC: () => LocalizedString
+	/**
+	 * Confirm before executing
+	 */
+	B3MO_AGENT_EXEC_MODE_CONFIRM: () => LocalizedString
+	/**
+	 * B3MO asks for your approval before signing each transaction.
+	 */
+	B3MO_AGENT_EXEC_MODE_CONFIRM_DESC: () => LocalizedString
+	/**
 	 * No conversations yet
 	 */
 	B3MO_AGENT_HISTORY_EMPTY: () => LocalizedString
@@ -7090,6 +7142,10 @@ Try reconnect your device to the internet.
 	 */
 	B3MO_AGENT_PICK_WALLET_TITLE: () => LocalizedString
 	/**
+	 * Execution mode
+	 */
+	B3MO_AGENT_SETTINGS_EXEC_MODE_TITLE: () => LocalizedString
+	/**
 	 * Linked wallet
 	 */
 	B3MO_AGENT_SETTINGS_LINKED_WALLET: () => LocalizedString
@@ -7118,6 +7174,14 @@ Try reconnect your device to the internet.
 	 */
 	B3MO_AGENT_TAB_TITLE: () => LocalizedString
 	/**
+	 * Approve
+	 */
+	B3MO_AGENT_TOOL_APPROVE: () => LocalizedString
+	/**
+	 * Awaiting approval
+	 */
+	B3MO_AGENT_TOOL_AWAITING_APPROVAL: () => LocalizedString
+	/**
 	 * Broadcasting
 	 */
 	B3MO_AGENT_TOOL_BROADCASTING: () => LocalizedString
@@ -7133,6 +7197,14 @@ Try reconnect your device to the internet.
 	 * Queued
 	 */
 	B3MO_AGENT_TOOL_QUEUED: () => LocalizedString
+	/**
+	 * Reject
+	 */
+	B3MO_AGENT_TOOL_REJECT: () => LocalizedString
+	/**
+	 * Rejected by user
+	 */
+	B3MO_AGENT_TOOL_REJECTED_BY_USER: () => LocalizedString
 	/**
 	 * Signing
 	 */

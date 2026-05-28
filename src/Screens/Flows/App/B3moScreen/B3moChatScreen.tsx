@@ -26,7 +26,16 @@ export const B3moChatScreen = () => {
     const nav = useNavigation<Nav>()
     const network = useAppSelector(selectSelectedNetwork)
     const isUnlocked = useAppSelector(selectIsB3moSessionUnlocked)
-    const { messages, send, isStreaming, isLoadingTranscript, startNewSession, error } = useB3moClient()
+    const {
+        messages,
+        send,
+        isStreaming,
+        isLoadingTranscript,
+        startNewSession,
+        error,
+        approveToolCall,
+        rejectToolCall,
+    } = useB3moClient()
     const { unlock } = useB3moUnlock()
     const { signIn } = useB3moAuth()
     const listRef = useRef<FlatList>(null)
@@ -143,7 +152,13 @@ export const B3moChatScreen = () => {
                     ref={listRef}
                     data={messages}
                     keyExtractor={item => item.id}
-                    renderItem={({ item }) => <B3moMessageBubble message={item} />}
+                    renderItem={({ item }) => (
+                        <B3moMessageBubble
+                            message={item}
+                            onApproveToolCall={approveToolCall}
+                            onRejectToolCall={rejectToolCall}
+                        />
+                    )}
                     contentContainerStyle={styles.listContent}
                     ListEmptyComponent={renderEmpty}
                 />

@@ -1,11 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
+export type B3moExecutionMode = "auto" | "confirm"
+
 export interface B3moState {
     linkedAddress?: string
     onboardingAcceptedAt?: number
+    executionMode: B3moExecutionMode
 }
 
-export const initialB3moState: B3moState = {}
+export const initialB3moState: B3moState = {
+    executionMode: "confirm",
+}
 
 export const B3moSlice = createSlice({
     name: "b3mo",
@@ -18,6 +23,9 @@ export const B3moSlice = createSlice({
         acceptB3moDisclaimer: state => {
             state.onboardingAcceptedAt = Date.now()
         },
+        setB3moExecutionMode: (state, action: PayloadAction<{ mode: B3moExecutionMode }>) => {
+            state.executionMode = action.payload.mode
+        },
         clearB3moLink: state => {
             state.linkedAddress = undefined
         },
@@ -25,4 +33,5 @@ export const B3moSlice = createSlice({
     },
 })
 
-export const { setB3moLinkedAddress, acceptB3moDisclaimer, clearB3moLink, resetB3moState } = B3moSlice.actions
+export const { setB3moLinkedAddress, acceptB3moDisclaimer, setB3moExecutionMode, clearB3moLink, resetB3moState } =
+    B3moSlice.actions

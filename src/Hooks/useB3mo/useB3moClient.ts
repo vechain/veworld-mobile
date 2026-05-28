@@ -2,9 +2,11 @@ import axios from "axios"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { B3MO_BACKEND_URL } from "~Constants"
 import { setB3moCurrentSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { selectB3moCurrentSessionId, selectB3moJwt } from "~Storage/Redux/Selectors/B3mo"
+import { selectB3moCurrentSessionId, selectB3moExecutionMode, selectB3moJwt } from "~Storage/Redux/Selectors/B3mo"
 import { B3moSseClient, type B3moSseEvent } from "./sseClient"
-import { useB3moExecutor } from "./useB3moExecutor"
+import { useB3moExecutor, type B3moClause } from "./useB3moExecutor"
+
+export type ToolCallStatus = "pending" | "awaiting_approval" | "executing" | "success" | "failed"
 
 export type ChatMessage =
     | { id: string; role: "user"; content: string }
@@ -15,7 +17,7 @@ export type ToolCallView = {
     name: string
     args: unknown
     summary?: string
-    status: "pending" | "executing" | "success" | "failed"
+    status: ToolCallStatus
     txId?: string
     network?: "mainnet" | "testnet"
     error?: string
@@ -34,10 +36,23 @@ export type B3moListedSession = {
     messageCount: number
 }
 
+type PendingExec = {
+    sessionId: string
+    toolCallId: string
+    network: "mainnet" | "testnet"
+    clauses: B3moClause[]
+    gasHint?: number
+    assistantMessageId: string
+    decide: (decision: "approve" | "reject") => void
+}
+
+const REJECTION_ERROR = "Rejected by user"
+
 export const useB3moClient = () => {
     const dispatch = useAppDispatch()
     const jwt = useAppSelector(selectB3moJwt)
     const currentSessionId = useAppSelector(selectB3moCurrentSessionId)
+    const executionMode = useAppSelector(selectB3moExecutionMode)
     const { execute } = useB3moExecutor()
 
     const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -46,6 +61,12 @@ export const useB3moClient = () => {
     const [isLoadingTranscript, setIsLoadingTranscript] = useState(false)
     const sseRef = useRef<B3moSseClient | null>(null)
     const loadedSessionIdRef = useRef<string | undefined>(undefined)
+    const pendingExecsRef = useRef<Map<string, PendingExec>>(new Map())
+    // Always read the latest mode at the moment a clause arrives.
+    const executionModeRef = useRef(executionMode)
+    useEffect(() => {
+        executionModeRef.current = executionMode
+    }, [executionMode])
 
     useEffect(() => {
         return () => sseRef.current?.close()
@@ -80,6 +101,22 @@ export const useB3moClient = () => {
             cancelled = true
         }
     }, [jwt, currentSessionId])
+
+    const reportRejection = useCallback(
+        async (sessionId: string, toolCallId: string) => {
+            if (!jwt) return
+            try {
+                await axios.post(
+                    `${B3MO_BACKEND_URL}/chat/exec-result`,
+                    { sessionId, toolCallId, success: false, error: REJECTION_ERROR },
+                    { headers: { Authorization: `Bearer ${jwt}` } },
+                )
+            } catch {
+                // best-effort
+            }
+        },
+        [jwt],
+    )
 
     const send = useCallback(
         async (text: string, opts: B3moSendOptions = {}) => {
@@ -159,7 +196,7 @@ export const useB3moClient = () => {
                                               ...tc,
                                               status: isErrorResult(event.result)
                                                   ? "failed"
-                                                  : tc.status === "executing"
+                                                  : tc.status === "executing" || tc.status === "awaiting_approval"
                                                   ? tc.status
                                                   : "success",
                                               error: extractError(event.result),
@@ -170,6 +207,66 @@ export const useB3moClient = () => {
                         )
                         break
                     case "exec_clauses": {
+                        if (!liveSessionId) {
+                            setMessages(prev =>
+                                updateAssistant(prev, assistantId, m => ({
+                                    ...m,
+                                    toolCalls: m.toolCalls.map(tc =>
+                                        tc.id === event.toolCallId
+                                            ? { ...tc, status: "failed", error: "No active session" }
+                                            : tc,
+                                    ),
+                                })),
+                            )
+                            return
+                        }
+                        const sessionId = liveSessionId
+                        const mode = executionModeRef.current
+                        if (mode === "confirm") {
+                            // Wait for user decision via a Promise stored in pendingExecsRef.
+                            const decision = await new Promise<"approve" | "reject">(resolve => {
+                                pendingExecsRef.current.set(event.toolCallId, {
+                                    sessionId,
+                                    toolCallId: event.toolCallId,
+                                    network: event.network,
+                                    clauses: event.clauses,
+                                    gasHint: event.gasHint,
+                                    assistantMessageId: assistantId,
+                                    decide: resolve,
+                                })
+                                setMessages(prev =>
+                                    updateAssistant(prev, assistantId, m => ({
+                                        ...m,
+                                        toolCalls: m.toolCalls.map(tc =>
+                                            tc.id === event.toolCallId
+                                                ? {
+                                                      ...tc,
+                                                      status: "awaiting_approval",
+                                                      summary: event.summary,
+                                                      network: event.network,
+                                                  }
+                                                : tc,
+                                        ),
+                                    })),
+                                )
+                            })
+                            pendingExecsRef.current.delete(event.toolCallId)
+                            if (decision === "reject") {
+                                await reportRejection(sessionId, event.toolCallId)
+                                setMessages(prev =>
+                                    updateAssistant(prev, assistantId, m => ({
+                                        ...m,
+                                        toolCalls: m.toolCalls.map(tc =>
+                                            tc.id === event.toolCallId
+                                                ? { ...tc, status: "failed", error: REJECTION_ERROR }
+                                                : tc,
+                                        ),
+                                    })),
+                                )
+                                return
+                            }
+                        }
+
                         setMessages(prev =>
                             updateAssistant(prev, assistantId, m => ({
                                 ...m,
@@ -185,21 +282,8 @@ export const useB3moClient = () => {
                                 ),
                             })),
                         )
-                        if (!liveSessionId) {
-                            setMessages(prev =>
-                                updateAssistant(prev, assistantId, m => ({
-                                    ...m,
-                                    toolCalls: m.toolCalls.map(tc =>
-                                        tc.id === event.toolCallId
-                                            ? { ...tc, status: "failed", error: "No active session" }
-                                            : tc,
-                                    ),
-                                })),
-                            )
-                            return
-                        }
                         const result = await execute({
-                            sessionId: liveSessionId,
+                            sessionId,
                             toolCallId: event.toolCallId,
                             network: event.network,
                             clauses: event.clauses,
@@ -245,10 +329,21 @@ export const useB3moClient = () => {
                 },
             })
         },
-        [jwt, currentSessionId, execute, dispatch],
+        [jwt, currentSessionId, execute, dispatch, reportRejection],
     )
 
+    const approveToolCall = useCallback((toolCallId: string) => {
+        pendingExecsRef.current.get(toolCallId)?.decide("approve")
+    }, [])
+
+    const rejectToolCall = useCallback((toolCallId: string) => {
+        pendingExecsRef.current.get(toolCallId)?.decide("reject")
+    }, [])
+
     const startNewSession = useCallback(() => {
+        // Auto-reject any in-flight approvals from the previous session.
+        for (const [, pending] of pendingExecsRef.current) pending.decide("reject")
+        pendingExecsRef.current.clear()
         loadedSessionIdRef.current = undefined
         dispatch(setB3moCurrentSession({ sessionId: undefined }))
         setMessages([])
@@ -293,6 +388,9 @@ export const useB3moClient = () => {
         loadSession,
         listSessions,
         deleteSession,
+        approveToolCall,
+        rejectToolCall,
+        executionMode,
     }
 }
 
