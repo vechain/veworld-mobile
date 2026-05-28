@@ -1,0 +1,153 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["config:recommended", ":semanticCommitTypeAll(chore)", ":disableRateLimiting"],
+    "timezone": "Europe/Rome",
+    "schedule": ["before 8am on the first day of the month"],
+    "minimumReleaseAge": "7 days",
+    "labels": ["dependencies"],
+    "prConcurrentLimit": 5,
+    "osvVulnerabilityAlerts": true,
+    "vulnerabilityAlerts": {
+        "enabled": true,
+        "addLabels": ["security"],
+        "schedule": ["at any time"],
+        "minimumReleaseAge": "0 days",
+        "prCreation": "immediate"
+    },
+    "packageRules": [
+        {
+            "description": "Batch every non-major routine bump across all managers (npm, cocoapods, gradle, bundler, github-actions) into one monthly PR",
+            "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+            "groupName": "non-major dependencies",
+            "groupSlug": "non-major"
+        },
+        {
+            "description": "Disable major bumps for React Native core stack — RN major migration is a multi-day project.",
+            "matchPackageNames": [
+                "react",
+                "react-dom",
+                "react-native",
+                "react-test-renderer",
+                "@types/react",
+                "@types/react-test-renderer",
+                "@react-native/babel-preset",
+                "@react-native/eslint-config",
+                "@react-native/metro-config",
+                "@react-native/typescript-config",
+                "@react-native-community/cli",
+                "@react-native-community/cli-platform-android",
+                "@react-native-community/cli-platform-ios"
+            ],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        },
+        {
+            "description": "Disable major bumps for Expo SDK — tied to RN version, breaking changes per SDK.",
+            "matchPackageNames": ["expo", "/^expo-/", "/^@expo//", "jest-expo"],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        },
+        {
+            "description": "Disable major bumps for React Navigation — v6→v7 is a breaking migration; several packages also patched via patch-package.",
+            "matchPackageNames": ["/^@react-navigation//"],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        },
+        {
+            "description": "Disable major bumps for VeChain SDK + Connex — all pinned to same version family. Manual coordinated migration.",
+            "matchPackageNames": ["/^@vechain//", "thor-devkit"],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        },
+        {
+            "description": "Group VeChain SDK packages so non-major bumps move together.",
+            "matchPackageNames": ["/^@vechain/sdk-/"],
+            "groupName": "vechain-sdk"
+        },
+        {
+            "description": "Disable major bumps for WalletConnect / Reown stack — pinned to 2.15.2 via package.json resolutions.",
+            "matchPackageNames": ["/^@walletconnect//", "/^@reown//"],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        },
+        {
+            "description": "Group WalletConnect packages.",
+            "matchPackageNames": ["/^@walletconnect//"],
+            "groupName": "walletconnect"
+        },
+        {
+            "description": "Disable major bumps for Privy SDK — wallet auth stack, breaking API per major.",
+            "matchPackageNames": ["/^@privy-io//"],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        },
+        {
+            "description": "Disable major bumps for ethers — v5 → v6 is a full rewrite. Pinned to v5 across @ethersproject/*.",
+            "matchPackageNames": ["ethers", "/^@ethersproject//"],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        },
+        {
+            "description": "Disable major bumps for Redux Toolkit + react-redux — coordinated migration.",
+            "matchPackageNames": ["@reduxjs/toolkit", "react-redux", "redux-persist"],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        },
+        {
+            "description": "Group TanStack Query packages — peer-dep coupled.",
+            "matchPackageNames": ["/^@tanstack//"],
+            "groupName": "tanstack-query"
+        },
+        {
+            "description": "Disable major bumps for TanStack Query — breaking API per major.",
+            "matchPackageNames": ["/^@tanstack//"],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        },
+        {
+            "description": "Disable major bumps for TypeScript — strict mode breakage per major.",
+            "matchPackageNames": ["typescript"],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        },
+        {
+            "description": "Disable major bumps for Skia + Reanimated + Gesture Handler + Screens — native modules tied to RN version.",
+            "matchPackageNames": [
+                "@shopify/react-native-skia",
+                "react-native-reanimated",
+                "react-native-gesture-handler",
+                "react-native-screens"
+            ],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        },
+        {
+            "description": "Disable major bumps for patch-package-patched packages — major bump invalidates the patch file.",
+            "matchPackageNames": [
+                "@react-navigation/bottom-tabs",
+                "react-native-draggable-flatlist",
+                "react-native-keyboard-controller",
+                "react-native-mmkv",
+                "react-native-safe-area-context",
+                "react-native-scrypt",
+                "react-native-wagmi-charts",
+                "react-native-webview"
+            ],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        },
+        {
+            "description": "Disable Node base image major bumps in Docker (if introduced). Defensive.",
+            "matchManagers": ["dockerfile"],
+            "matchPackageNames": ["node"],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        }
+    ],
+    "lockFileMaintenance": {
+        "enabled": true,
+        "schedule": ["before 8am on the first day of the month"],
+        "groupName": "lockfile maintenance",
+        "addLabels": ["lockfile"]
+    }
+}
