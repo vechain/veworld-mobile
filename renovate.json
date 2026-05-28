@@ -43,47 +43,47 @@
         },
         {
             "description": "Disable major bumps for Expo SDK — tied to RN version, breaking changes per SDK.",
-            "matchPackageNames": ["expo", "/^expo-/", "/^@expo//", "jest-expo"],
+            "matchPackageNames": ["expo", "/^expo-/", "/^@expo\\//", "jest-expo"],
             "matchUpdateTypes": ["major"],
             "enabled": false
         },
         {
             "description": "Disable major bumps for React Navigation — v6→v7 is a breaking migration; several packages also patched via patch-package.",
-            "matchPackageNames": ["/^@react-navigation//"],
+            "matchPackageNames": ["/^@react-navigation\\//"],
             "matchUpdateTypes": ["major"],
             "enabled": false
         },
         {
             "description": "Disable major bumps for VeChain SDK + Connex — all pinned to same version family. Manual coordinated migration.",
-            "matchPackageNames": ["/^@vechain//", "thor-devkit"],
+            "matchPackageNames": ["/^@vechain\\//", "thor-devkit"],
             "matchUpdateTypes": ["major"],
             "enabled": false
         },
         {
             "description": "Group VeChain SDK packages so non-major bumps move together.",
-            "matchPackageNames": ["/^@vechain/sdk-/"],
+            "matchPackageNames": ["/^@vechain\\/sdk-/"],
             "groupName": "vechain-sdk"
         },
         {
             "description": "Disable major bumps for WalletConnect / Reown stack — pinned to 2.15.2 via package.json resolutions.",
-            "matchPackageNames": ["/^@walletconnect//", "/^@reown//"],
+            "matchPackageNames": ["/^@walletconnect\\//", "/^@reown\\//"],
             "matchUpdateTypes": ["major"],
             "enabled": false
         },
         {
             "description": "Group WalletConnect packages.",
-            "matchPackageNames": ["/^@walletconnect//"],
+            "matchPackageNames": ["/^@walletconnect\\//"],
             "groupName": "walletconnect"
         },
         {
             "description": "Disable major bumps for Privy SDK — wallet auth stack, breaking API per major.",
-            "matchPackageNames": ["/^@privy-io//"],
+            "matchPackageNames": ["/^@privy-io\\//"],
             "matchUpdateTypes": ["major"],
             "enabled": false
         },
         {
             "description": "Disable major bumps for ethers — v5 → v6 is a full rewrite. Pinned to v5 across @ethersproject/*.",
-            "matchPackageNames": ["ethers", "/^@ethersproject//"],
+            "matchPackageNames": ["ethers", "/^@ethersproject\\//"],
             "matchUpdateTypes": ["major"],
             "enabled": false
         },
@@ -95,12 +95,12 @@
         },
         {
             "description": "Group TanStack Query packages — peer-dep coupled.",
-            "matchPackageNames": ["/^@tanstack//"],
+            "matchPackageNames": ["/^@tanstack\\//"],
             "groupName": "tanstack-query"
         },
         {
             "description": "Disable major bumps for TanStack Query — breaking API per major.",
-            "matchPackageNames": ["/^@tanstack//"],
+            "matchPackageNames": ["/^@tanstack\\//"],
             "matchUpdateTypes": ["major"],
             "enabled": false
         },
