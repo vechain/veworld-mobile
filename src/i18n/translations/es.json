@@ -1478,7 +1478,7 @@
   "TOKEN_DETAIL_ACTIVITY_TAB": "Actividad",
   "TOKEN_DETAIL_BALANCE_TAB": "Saldo",
   "TOKEN_DETAIL_DELEGATED_VOT3": "VOT3 Delegado",
-  "TOKEN_DETAIL_DELEGATED_VOT3_INFO_DESCRIPTION": "Los VOT3 delegados se asignan a una estrategia de Navigator. Siguen siendo tuyos, pero no están disponibles para conversión o transferencia hasta que se desdeleguen.",
+  "TOKEN_DETAIL_DELEGATED_VOT3_INFO_DESCRIPTION": "Los VOT3 delegados están asignados a una estrategia de Navegador. Siguen siendo tuyos, pero no están disponibles para conversión o transferencia hasta que los undelegues.",
   "TOKEN_DETAIL_DELEGATED_VOT3_INFO_TITLE": "VOT3 Delegado",
   "TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE": "Estos tokens están apostados en vedelegate.vet y solo se pueden gestionar allí.",
   "TOKEN_ID": "ID del token",
