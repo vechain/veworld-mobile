@@ -2,7 +2,7 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["config:recommended", ":semanticCommitTypeAll(chore)", ":disableRateLimiting"],
     "timezone": "Europe/Rome",
-    "schedule": ["before 8am on the first day of the month"],
+    "schedule": ["at 8am on the first day of the month"],
     "minimumReleaseAge": "7 days",
     "labels": ["dependencies"],
     "prConcurrentLimit": 5,
