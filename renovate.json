@@ -146,7 +146,7 @@
     ],
     "lockFileMaintenance": {
         "enabled": true,
-        "schedule": ["before 8am on the first day of the month"],
+        "schedule": ["at 8am on the first day of the month"],
         "groupName": "lockfile maintenance",
         "addLabels": ["lockfile"]
     }
