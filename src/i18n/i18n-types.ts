@@ -925,6 +925,11 @@ type RootTranslation = {
 	 */
 	BANNER_VEBETTER_DESC: string
 	/**
+	 * M​e​e​t​ ​t​h​e​ ​*​*​N​a​v​i​g​a​t​o​r​s​*​*​
+​D​e​l​e​g​a​t​e​ ​*​*​V​O​T​3​*​*​ ​t​o​ ​a​ ​t​r​u​s​t​e​d​ ​s​t​r​a​t​e​g​y​.
+	 */
+	BANNER_VEBETTER_NAVIGATORS_DESC: string
+	/**
 	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​t​a​k​e​ ​l​o​n​g​e​r​ ​t​o​ ​p​r​o​c​e​s​s​.
 	 */
 	BASE_FEE_RAMPING_UP: string
@@ -1190,6 +1195,10 @@ type RootTranslation = {
 	 * N​e​v​e​r​ ​s​h​a​r​e​ ​t​h​e​ ​w​o​r​d​s​ ​a​n​d​ ​s​p​e​c​i​f​i​c​ ​o​r​d​e​r​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​l​e​a​r​n​s​ ​t​h​e​m​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​ ​a​s​s​e​t​s​.
 	 */
 	BD_MNEMONIC_WARMNING: string
+	/**
+	 * T​h​i​s​ ​i​s​ ​j​u​s​t​ ​a​ ​t​o​k​e​n​ ​c​o​n​v​e​r​s​i​o​n​.​ ​T​o​ ​i​n​c​r​e​a​s​e​ ​y​o​u​r​ ​v​o​t​i​n​g​ ​p​o​w​e​r​ ​i​n​c​r​e​a​s​e​ ​y​o​u​r​ ​d​e​l​e​g​a​t​i​o​n​ ​i​n​ ​t​h​e​ ​g​o​v​e​r​n​a​n​c​e​ ​a​p​p​.
+	 */
+	BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING: string
 	/**
 	 * N​e​w​ ​W​a​l​l​e​t
 	 */
@@ -6036,6 +6045,18 @@ type RootTranslation = {
 	 */
 	TOKEN_DETAIL_BALANCE_TAB: string
 	/**
+	 * D​e​l​e​g​a​t​e​d​ ​V​O​T​3
+	 */
+	TOKEN_DETAIL_DELEGATED_VOT3: string
+	/**
+	 * D​e​l​e​g​a​t​e​d​ ​V​O​T​3​ ​a​r​e​ ​a​s​s​i​g​n​e​d​ ​t​o​ ​a​ ​N​a​v​i​g​a​t​o​r​ ​s​t​r​a​t​e​g​y​.​ ​T​h​e​y​ ​s​t​i​l​l​ ​b​e​l​o​n​g​ ​t​o​ ​y​o​u​,​ ​b​u​t​ ​t​h​e​y​ ​a​r​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​f​o​r​ ​c​o​n​v​e​r​s​i​o​n​ ​o​r​ ​t​r​a​n​s​f​e​r​ ​u​n​t​i​l​ ​u​n​d​e​l​e​g​a​t​e​d​.
+	 */
+	TOKEN_DETAIL_DELEGATED_VOT3_INFO_DESCRIPTION: string
+	/**
+	 * D​e​l​e​g​a​t​e​d​ ​V​O​T​3
+	 */
+	TOKEN_DETAIL_DELEGATED_VOT3_INFO_TITLE: string
+	/**
 	 * T​h​e​s​e​ ​t​o​k​e​n​s​ ​a​r​e​ ​s​t​a​k​e​d​ ​o​n​ ​v​e​d​e​l​e​g​a​t​e​.​v​e​t​ ​a​n​d​ ​c​a​n​ ​o​n​l​y​ ​b​e​ ​m​a​n​a​g​e​d​ ​t​h​e​r​e​.
 	 */
 	TOKEN_DETAIL_VEDELEGATE_FOOTER_MESSAGE: string
@@ -7386,6 +7407,11 @@ Try reconnect your device to the internet.
 	 */
 	BANNER_VEBETTER_DESC: () => LocalizedString
 	/**
+	 * Meet the **Navigators**
+Delegate **VOT3** to a trusted strategy.
+	 */
+	BANNER_VEBETTER_NAVIGATORS_DESC: () => LocalizedString
+	/**
 	 * The transaction may take longer to process.
 	 */
 	BASE_FEE_RAMPING_UP: () => LocalizedString
@@ -7649,6 +7675,10 @@ Try reconnect your device to the internet.
 	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
 	 */
 	BD_MNEMONIC_WARMNING: () => LocalizedString
+	/**
+	 * This is just a token conversion. To increase your voting power increase your delegation in the governance app.
+	 */
+	BD_NAVIGATOR_CONVERT_NO_VOTING_POWER_WARNING: () => LocalizedString
 	/**
 	 * New Wallet
 	 */
@@ -12433,6 +12463,18 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Balance
 	 */
 	TOKEN_DETAIL_BALANCE_TAB: () => LocalizedString
+	/**
+	 * Delegated VOT3
+	 */
+	TOKEN_DETAIL_DELEGATED_VOT3: () => LocalizedString
+	/**
+	 * Delegated VOT3 are assigned to a Navigator strategy. They still belong to you, but they are not available for conversion or transfer until undelegated.
+	 */
+	TOKEN_DETAIL_DELEGATED_VOT3_INFO_DESCRIPTION: () => LocalizedString
+	/**
+	 * Delegated VOT3
+	 */
+	TOKEN_DETAIL_DELEGATED_VOT3_INFO_TITLE: () => LocalizedString
 	/**
 	 * These tokens are staked on vedelegate.vet and can only be managed there.
 	 */

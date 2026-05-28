@@ -1,11 +1,8 @@
 name: Scan Workflows using Zizmor and ReviewDog
 
 on:
-  push:
-    branches: ["main"]
   pull_request:
     branches: ["**"]
-    paths: ['.github/workflows/**']
 
 permissions: {}
 

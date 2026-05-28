@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Linking, StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { ColorThemeType } from "~Constants"
@@ -17,7 +17,13 @@ export const B3moToolCard = ({ toolCall, onApprove, onReject }: B3moToolCardProp
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const network = useAppSelector(selectSelectedNetwork)
-    const [expanded, setExpanded] = useState(false)
+    const [expanded, setExpanded] = useState(toolCall.status === "awaiting_approval")
+
+    // Auto-expand when the tool transitions into awaiting_approval so the user
+    // can read what they're about to sign without an extra tap.
+    useEffect(() => {
+        if (toolCall.status === "awaiting_approval") setExpanded(true)
+    }, [toolCall.status])
 
     const statusLabel = (() => {
         switch (toolCall.status) {
