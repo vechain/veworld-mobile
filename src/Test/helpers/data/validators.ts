@@ -1,6 +1,6 @@
 import { components } from "~Generated/indexer/schema"
 
-export const mockedValidators: components["schemas"]["PaginatedResponseValidator"]["data"] = [
+export const mockedValidators: components["schemas"]["PaginatedResponseValidatorResponse"]["data"] = [
     {
         id: "0x1f66de57049ffd2cbc85d7a7ba5d1d76d6937678",
         endorser: "0x288b5361faa4daadd750ce997a9c8cab696994ef",
@@ -8,6 +8,13 @@ export const mockedValidators: components["schemas"]["PaginatedResponseValidator
         status: "ACTIVE",
         vetStaked: 179155283,
         validatorVetStaked: 67185283,
+        delegatorVetStaked: 112000000,
+        queuedVetStaked: 0,
+        validatorQueuedVetStaked: 0,
+        delegatorQueuedVetStaked: 0,
+        validatorExitingVetStaked: 0,
+        delegatorExitingVetStaked: 0,
+        exitingVetStaked: 0,
         cycleEndBlock: 23898240,
         blockProbability: 0.024867,
         blocksPerEpoch: 4.47606,
@@ -39,7 +46,6 @@ export const mockedValidators: components["schemas"]["PaginatedResponseValidator
         percentageOffline: 0,
         offlineBlocks: 0,
         totalRewards: 0,
-        validatorTvlPercentage: 0,
         exitBlock: 0,
         queuePosition: 0,
         availableStartBlock: 0,

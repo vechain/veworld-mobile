@@ -8,7 +8,7 @@ export const getValidatorsQueryKey = (genesisId: string) => ["validators", genes
 
 /**
  * Get all validators for a network
- * @returns {QueryResult<components["schemas"]["PaginatedResponseValidator"]["data"], Error>}
+ * @returns {QueryResult<components["schemas"]["PaginatedResponseValidatorResponse"]["data"], Error>}
  */
 export const useValidators = () => {
     const network = useAppSelector(selectSelectedNetwork)
@@ -19,7 +19,7 @@ export const useValidators = () => {
         queryFn: async () => {
             let hasNextPage = true
             let page = 0
-            const results: components["schemas"]["PaginatedResponseValidator"]["data"] = []
+            const results: components["schemas"]["PaginatedResponseValidatorResponse"]["data"] = []
 
             while (hasNextPage) {
                 try {
