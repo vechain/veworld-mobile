@@ -55,7 +55,8 @@ jobs:
             - name: Install macOS dependencies
               run: |
                   brew tap wix/brew
-                  brew install applesimutils
+                  brew trust --formula wix/brew/applesimutils
+                  brew install wix/brew/applesimutils
                   brew install fastlane
                   gem install cocoapods # Install CocoaPods globally
                   bundle install
