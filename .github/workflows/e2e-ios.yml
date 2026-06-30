@@ -35,8 +35,7 @@ jobs:
             # Install Homebrew and applesimutils for Detox
             - name: Install macOS dependencies
               run: |
-                  brew tap wix/brew
-                  brew install applesimutils
+                  brew install wix/brew/applesimutils
                   brew install fastlane
                   bundle install
               env:
