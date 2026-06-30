@@ -24,7 +24,7 @@ export const getValidatorName = (validators: Validator[], address: string): stri
 }
 
 export const getCurrentCycleValidatorStake = (
-    validator: components["schemas"]["PaginatedResponseValidator"]["data"][number],
+    validator: components["schemas"]["PaginatedResponseValidatorResponse"]["data"][number],
 ): number => {
     if (!validator) return 0
     return validator.validatorVetStaked ?? 0
