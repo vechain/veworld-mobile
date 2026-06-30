@@ -7,6 +7,8 @@ import { info, warn } from "~Utils/Logger"
 let isInitialized = false
 export let mixpanel: Mixpanel
 
+const MIXPANEL_EU_SERVER_URL = "https://api-eu.mixpanel.com"
+
 export interface AnalyticsProperties {
     [key: string]: unknown
 }
@@ -17,7 +19,7 @@ const initialize = () => {
     if (MIX_PANEL_TOKEN) {
         const trackAutomaticEvents = true
         mixpanel = new Mixpanel(MIX_PANEL_TOKEN as string, trackAutomaticEvents)
-        mixpanel.init()
+        mixpanel.init(false, {}, MIXPANEL_EU_SERVER_URL)
         isInitialized = true
         info(ERROR_EVENTS.APP, "Mixpanel initialized")
     } else {
