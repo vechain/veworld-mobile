@@ -96,7 +96,7 @@
     "aes-js": "3",
     "arweave": "1.13.7",
     "async-mutex": "^0.4.0",
-    "axios": "1.15.0",
+    "axios": "1.16.0",
     "basil-ws-flipper": "^1.0.0",
     "buffer": "^6.0.3",
     "crypto-js": "^4.2.0",
@@ -287,7 +287,7 @@
     "cross-spawn": "^6.0.6",
     "elliptic": "^6.6.0",
     "ethers/@ethersproject/providers/ws": "^7.5.10",
-    "@vechain/connex-driver/axios": "0.28.0",
+    "@vechain/connex-driver/axios": "1.15.2",
     "@walletconnect/types": "2.15.2"
   },
   "lint-staged": {
