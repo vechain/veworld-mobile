@@ -1,0 +1,50 @@
+# Minimal send VET flow - used as a subflow by other tests
+# Sends 1 VET from current account to Account 1
+
+appId: org.vechain.veworld.app
+
+---
+# Navigate to send screen
+- tapOn:
+    id: "BalanceScreen_SendButton"
+
+# Select amount: 1 VET
+- tapOn:
+    id: "SelectAmountConversionToggle_Button"
+- tapOn:
+    id: "SEND_1_KEY"
+- tapOn:
+    id: "SelectAmountSendComponent_NextButton"
+
+# Select recipient: Account 1 (self-transfer for testing)
+- tapOn:
+    id: "AnimatedFilterChips-accounts"
+- tapOn:
+    id: "AccountCard_Item"
+    index: 0
+- tapOn:
+    id: "ReceiverScreen_NextButton"
+
+# Handle fee delegation if visible
+- runFlow:
+    when:
+      visible: "Fee delegation"
+    commands:
+      - extendedWaitUntil:
+          visible:
+              id: "MAX_FEE_GALACTICA"
+          timeout: 10000
+      - tapOn:
+          id: "SummaryScreen_NextButton"
+
+# Enter PIN to confirm
+- repeat:
+    times: 6
+    commands:
+      - tapOn:
+          id: "numpad-1"
+
+# Wait for transaction to complete
+- assertVisible: "Tokens"
+- evalScript: ${console.log('VET transfer completed successfully')}
+
