@@ -1,5 +1,12 @@
 
 
+## 2.5.9 (2026-08-13)
+
+
+### Bug Fixes
+
+* **gendel:** updated estimate all endpoint ([#3932](https://github.com/vechain/veworld-mobile/issues/3932)) ([5f502ed](https://github.com/vechain/veworld-mobile/commit/5f502ed64b70370ccee95d332f8518a6c9646dc5))
+
 ## 2.5.8 (2026-07-01)
 
 ## 2.5.7 (2026-04-28)
