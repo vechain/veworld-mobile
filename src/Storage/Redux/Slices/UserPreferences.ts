@@ -51,6 +51,13 @@ export interface UserPreferenceState {
     hideStargateBannerVETScreen?: boolean
     hideNewUserVeBetterCard?: boolean
     hideStargateXVeBetterBanner?: boolean
+    /**
+     * Signature of the Apple migration banner payload the user dismissed, in the form
+     * `${startDate}|${endDate}` (so `"|"` for the generic, date-less banner).
+     * Stored as a signature rather than a boolean so the banner re-appears when the remote
+     * feature flag payload changes (e.g. once the maintenance dates are known).
+     */
+    dismissedAppleMigrationBanner?: string
     signKeyPair?: KeyPair
     notificationCenterUrl?: string
     developerMenuUnlocked?: boolean
@@ -98,6 +105,7 @@ export const initialUserPreferencesState: UserPreferenceState = {
     developerMenuUnlocked: false,
     hideStellaPayBottomSheet: false,
     hideStargateXVeBetterBanner: false,
+    dismissedAppleMigrationBanner: undefined,
     defaultAmountInputMode: AmountInputMode.FIAT,
 }
 
@@ -219,6 +227,10 @@ export const UserPreferencesSlice = createSlice({
             state.hideStargateXVeBetterBanner = action.payload
         },
 
+        setDismissedAppleMigrationBanner: (state, action: PayloadAction<string>) => {
+            state.dismissedAppleMigrationBanner = action.payload
+        },
+
         setSignKeyPair: (state, action: PayloadAction<KeyPair>) => {
             state.signKeyPair = action.payload
         },
@@ -273,6 +285,7 @@ export const {
     setHideStargateBannerVETScreen,
     setHideNewUserVeBetterCard,
     setHideStargateXVeBetterBanner,
+    setDismissedAppleMigrationBanner,
     setSignKeyPair,
     setNotificationCenterUrl,
     setDeveloperMenuUnlocked,

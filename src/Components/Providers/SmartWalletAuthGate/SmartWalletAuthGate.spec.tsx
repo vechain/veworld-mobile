@@ -1,12 +1,34 @@
 import React from "react"
 import { fireEvent, render, screen } from "@testing-library/react-native"
+// `~Test` MUST be imported before `~Components/Providers/FeatureFlagsProvider` (and before anything
+// that pulls it in): loading the mocked module first makes the providers inside TestWrapper capture
+// the actual module instead of the mock.
+import { TestHelpers, TestWrapper, setPlatform } from "~Test"
+import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { SmartWalletAuthGate } from "./SmartWalletAuthGate"
-import { TestWrapper, setPlatform } from "~Test"
 import { DEVICE_TYPE, WALLET_STATUS } from "~Model"
 import { useWalletStatus } from "~Components/Providers/EncryptedStorageProvider/ApplicationSecurityProvider"
 import { useSmartWallet } from "~Hooks/useSmartWallet"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 import { RootState } from "~Storage/Redux/Types"
+
+const { mockedFeatureFlags } = TestHelpers.data
+
+jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
+    ...jest.requireActual("~Components/Providers/FeatureFlagsProvider"),
+    useFeatureFlags: jest.fn(),
+}))
+
+const mockAppleLoginDisabled = (enabled: boolean) => {
+    ;(useFeatureFlags as jest.Mock).mockReturnValue({
+        ...mockedFeatureFlags,
+        appleMigrationFeature: {
+            banner: { enabled: false },
+            loginDisabled: { enabled },
+        },
+    })
+}
 
 jest.mock("~Components/Providers/EncryptedStorageProvider/ApplicationSecurityProvider", () => ({
     ...jest.requireActual("~Components/Providers/EncryptedStorageProvider/ApplicationSecurityProvider"),
@@ -114,6 +136,7 @@ describe("SmartWalletAuthGate", () => {
     beforeEach(() => {
         jest.clearAllMocks()
         setPlatform("ios")
+        mockAppleLoginDisabled(false)
     })
 
     describe("gate visibility", () => {
@@ -220,6 +243,47 @@ describe("SmartWalletAuthGate", () => {
             fireEvent.press(screen.getByTestId("RELOGIN_APPLE_BUTTON"))
             expect(mockLogin).toHaveBeenCalledWith({
                 provider: "apple",
+                oauthRedirectUri: "/auth/callback",
+            })
+        })
+    })
+
+    describe("apple migration maintenance", () => {
+        beforeEach(() => {
+            mockAppleLoginDisabled(true)
+        })
+
+        it("does not start apple login and shows the maintenance message", () => {
+            setupMocks()
+            const showSpy = jest.spyOn(Feedback, "show").mockImplementation(() => {})
+            const devices = [{ ...smartDevice, linkedProviders: ["apple"] }, localDevice]
+
+            renderGate(buildState({ devices }))
+            fireEvent.press(screen.getByTestId("RELOGIN_APPLE_BUTTON"))
+
+            expect(mockLogin).not.toHaveBeenCalled()
+            expect(showSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    message: expect.stringContaining("Maintenance work in progress"),
+                }),
+            )
+
+            showSpy.mockRestore()
+        })
+
+        it("still shows the apple button so it is not removed from the UI", () => {
+            setupMocks()
+            const devices = [{ ...smartDevice, linkedProviders: ["apple"] }, localDevice]
+            renderGate(buildState({ devices }))
+            expect(screen.getByTestId("RELOGIN_APPLE_BUTTON")).toBeTruthy()
+        })
+
+        it("still calls login with google provider when Google button pressed", () => {
+            setupMocks()
+            renderGate(buildState())
+            fireEvent.press(screen.getByTestId("RELOGIN_GOOGLE_BUTTON"))
+            expect(mockLogin).toHaveBeenCalledWith({
+                provider: "google",
                 oauthRedirectUri: "/auth/callback",
             })
         })
