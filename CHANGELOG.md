@@ -1,5 +1,12 @@
 
 
+## 2.5.9 (2026-08-28)
+
+
+### Bug Fixes
+
+* handle nullable indexer schema fields breaking CI type-check ([#3936](https://github.com/vechain/veworld-mobile/issues/3936)) ([0ddda8a](https://github.com/vechain/veworld-mobile/commit/0ddda8a89e18551500b8105ad02ff1fb48f8cc06))
+
 ## 2.5.8 (2026-07-01)
 
 ## 2.5.7 (2026-04-28)
