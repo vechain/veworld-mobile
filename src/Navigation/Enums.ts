@@ -103,4 +103,13 @@ export enum Routes {
 
     // Smart Wallet
     SMART_WALLET_LINK_ACCOUNT = "Smart_Wallet_Link_Account",
+
+    // B3MO
+    B3MO_STACK = "B3moStack",
+    B3MO_ONBOARDING_INTRO = "B3mo_Onboarding_Intro",
+    B3MO_ONBOARDING_WALLET_CHOICE = "B3mo_Onboarding_Wallet_Choice",
+    B3MO_ONBOARDING_PICK_WALLET = "B3mo_Onboarding_Pick_Wallet",
+    B3MO_CHAT = "B3mo_Chat",
+    B3MO_HISTORY = "B3mo_History",
+    B3MO_SETTINGS = "B3mo_Settings",
 }

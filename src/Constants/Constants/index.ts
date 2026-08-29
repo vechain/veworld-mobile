@@ -1,5 +1,6 @@
 import SettingsConstants from "./Settings"
 
+export * from "./B3mo"
 export * from "./Thor"
 export * from "./Token"
 export * from "./axios"

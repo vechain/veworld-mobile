@@ -8,6 +8,7 @@ import { IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { HomeStack, RootStackParamListHome, RootStackParamListSettings, SettingsStack } from "~Navigation/Stacks"
 import { AppsStack, RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
+import { B3moStack, RootStackParamListB3mo } from "~Navigation/Stacks/B3moStack"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { selectActivitiesWithoutFinality, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
@@ -20,6 +21,7 @@ export type TabStackParamList = {
     SettingsStack: NavigatorScreenParams<RootStackParamListSettings>
     [Routes.HISTORY_STACK]: NavigatorScreenParams<HistoryStackParamList>
     AppsStack: NavigatorScreenParams<RootStackParamListApps>
+    [Routes.B3MO_STACK]: NavigatorScreenParams<RootStackParamListB3mo>
 }
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
@@ -92,6 +94,18 @@ export const TabStack = () => {
                         tabBarLabel: "Apps",
                         tabBarTestID: "apps-tab",
                         tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-apps", LL.TAB_TITLE_APPS()),
+                    }}
+                />
+            )}
+
+            {!AccountUtils.isObservedAccount(selectedAccount) && isOnline && (
+                <Tab.Screen
+                    name={Routes.B3MO_STACK}
+                    component={B3moStack}
+                    options={{
+                        tabBarLabel: LL.B3MO_AGENT_TAB_TITLE(),
+                        tabBarTestID: "b3mo-tab",
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-bot", LL.B3MO_AGENT_TAB_TITLE()),
                     }}
                 />
             )}

@@ -1,0 +1,57 @@
+---
+description: Always-loaded pointer for the B3MO autonomous agent feature in VeWorld Mobile and the companion `veworld-b3mo-backend` repo.
+alwaysApply: true
+---
+
+# B3MO Agent
+
+VeWorld Mobile ships a **B3MO** tab — an autonomous AI agent that controls one
+mnemonic wallet to execute on-chain actions on VeChain without per-tx user
+approval.
+
+When the current task touches **any** of the following, read
+`.claude/skills/b3mo/SKILL.md` first and keep it in sync after every change:
+
+-   The B3MO tab (`src/Screens/Flows/App/B3moScreen/**`)
+-   The B3MO Redux slices (`src/Storage/Redux/Slices/B3mo.ts`,
+    `src/Storage/Redux/Slices/B3moSession.ts`,
+    `src/Storage/Redux/Selectors/B3mo.ts`)
+-   The B3MO hooks (`src/Hooks/useB3mo/**`)
+-   The B3MO navigation (`src/Navigation/Stacks/B3moStack.tsx`,
+    any change to `TabStack.tsx` involving the B3MO tab)
+-   The companion repo at `~/vechain/veworld-b3mo-backend`
+-   The shared MCP read-tool proxy or the VeChain Swap / Stargate clause builders
+-   Any user request mentioning: `B3MO`, `autonomous wallet`, `agent chat`,
+    `veworld-b3mo-backend`, "agent that signs transactions on its own"
+
+## Non-negotiables
+
+1. **Wallet types are restricted to `LOCAL_MNEMONIC`.** Do not introduce
+ silent paths for Ledger or Smart Wallet — they break the autonomy model.
+2. **The OpenAI key is server-side only.** Never read it from a mobile
+ constant or commit it to the repo. The shared `.env.example` ships empty.
+3. **Cached `walletKey` is memory-only.** It lives in `B3moSessionSlice`,
+ which is in `redux-persist`'s blacklist. Do not whitelist it.
+4. **Onboarding disclaimer is mandatory.** The checkbox in
+ `B3moIntroScreen.tsx` (`B3MO_AGENT_INTRO_DISCLAIMER`) and the sticky banner
+ in chat (`B3MO_AGENT_BANNER_TITLE`) cannot be hidden or made optional.
+5. **Soft cap `MAX_AGENTIC_ITERATIONS=30`.** Do not remove the loop guard
+ in `services/openaiClient.ts`.
+6. **`executionMode` defaults to `confirm`.** Migration39 sets existing
+ users to `confirm` too. Do not flip the default to `auto` without an
+ explicit user opt-in flow.
+
+## Update protocol for the skill
+
+Update `.claude/skills/b3mo/SKILL.md` whenever you:
+
+-   Add/modify a tool (write or read)
+-   Change SSE event shapes
+-   Add/remove an onboarding step
+-   Change the trust model (caps, biometric, kill switch)
+-   Add a new network
+-   Rename/add backend endpoints or routes
+-   Change Redux slice shape
+
+If you are about to do any of the above and have not read the skill yet,
+read it now.

@@ -12,6 +12,8 @@ import {
 } from "~Components"
 import { ColorThemeType, VET, VTHO } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
+import { useAppSelector } from "~Storage/Redux"
+import { selectB3moLinkedAddress } from "~Storage/Redux/Selectors/B3mo"
 import { useSimplifiedTokenBalance } from "~Hooks/useTokenBalance"
 import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
 import { AccountUtils, AddressUtils } from "~Utils"
@@ -55,6 +57,8 @@ export const AccountCard: React.FC<Props> = memo(
             name: "",
             address: account.address,
         })
+        const b3moLinkedAddress = useAppSelector(selectB3moLinkedAddress)
+        const isB3moLinked = !!b3moLinkedAddress && b3moLinkedAddress.toLowerCase() === account.address.toLowerCase()
 
         const balance = useMemo(() => {
             if (!isBalanceVisible && isVthoBalance) {
@@ -99,9 +103,19 @@ export const AccountCard: React.FC<Props> = memo(
                         <AccountIcon account={account} />
                         <BaseSpacer width={12} />
                         <BaseView flex={1}>
-                            <BaseText ellipsizeMode="tail" numberOfLines={1}>
-                                {account.alias}
-                            </BaseText>
+                            <BaseView flexDirection="row" alignItems="center">
+                                <BaseText ellipsizeMode="tail" numberOfLines={1} flex={1}>
+                                    {account.alias}
+                                </BaseText>
+                                {isB3moLinked && (
+                                    <BaseIcon
+                                        name="icon-bot"
+                                        size={14}
+                                        color={theme.colors.primary}
+                                        style={styles.b3moBadge}
+                                    />
+                                )}
+                            </BaseView>
                             <BaseView flexDirection="row" mt={3}>
                                 {accountWithDevice?.device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge mr={8} />}
                                 {watchedAccount?.type === DEVICE_TYPE.LOCAL_WATCHED && <WatchedAccountBadge />}
@@ -154,4 +168,7 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "flex-end",
         },
         eyeIcon: { marginLeft: 16, flex: 0.1 },
+        b3moBadge: {
+            marginLeft: 6,
+        },
     })

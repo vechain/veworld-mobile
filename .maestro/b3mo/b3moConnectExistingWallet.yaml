@@ -1,0 +1,110 @@
+# b3moConnectExistingWallet.yaml
+# Verifies that the user can link an existing mnemonic wallet to the B3MO
+# autonomous agent. After picking the wallet the app routes directly to the
+# B3MO chat; auth (biometric/SIWV) auto-triggers as an inline overlay and is
+# not exercised here (requires real auth + backend).
+appId: org.vechain.veworld.app
+tags:
+    - pull-request
+onFlowComplete:
+    - runFlow: ../setup_reset/resetApp.yaml
+---
+- launchApp:
+      clearState: true
+
+# Welcome screen v2: open the Self-Custody options bottom sheet, then choose "Create"
+- extendedWaitUntil:
+      visible:
+          id: "SELF_CUSTODY_WALLET_BUTTON"
+      timeout: 30000
+- tapOn:
+      id: "SELF_CUSTODY_WALLET_BUTTON"
+- extendedWaitUntil:
+      visible:
+          id: "SELF_CUSTODY_OPTIONS_CREATE"
+      timeout: 10000
+- tapOn:
+      id: "SELF_CUSTODY_OPTIONS_CREATE"
+
+# CreatePasswordModal opens (biometric not configured on simulator).
+# Tap "1" while the PIN screen is visible: covers both choose-PIN and
+# confirm-PIN phases; loop exits once the modal closes.
+- repeat:
+      while:
+          visible: "Choose your 6-digit PIN"
+      commands:
+          - tapOn:
+                id: "numpad-1"
+
+# Skip push-notifications enrollment if the bottom sheet appears
+- runFlow:
+      when:
+          visible:
+              id: "button_notifications_skip"
+      commands:
+          - tapOn:
+                id: "button_notifications_skip"
+
+# Dismiss VeBetter card if shown
+- runFlow:
+      when:
+          visible:
+              id: "close-button"
+      commands:
+          - tapOn:
+                id: "close-button"
+
+# Skip mnemonic backup prompt if shown
+- runFlow:
+      when:
+          visible:
+              id: "Backup_later_button"
+      commands:
+          - tapOn:
+                id: "Backup_later_button"
+
+# Open the B3MO tab. The tab is hidden when the selected account is observed.
+- extendedWaitUntil:
+      visible:
+          id: "b3mo-tab"
+      timeout: 15000
+- tapOn:
+      id: "b3mo-tab"
+
+# Onboarding intro: accept the autonomous-execution disclaimer and continue
+- extendedWaitUntil:
+      visible:
+          id: "b3mo-disclaimer-toggle"
+      timeout: 10000
+- tapOn:
+      id: "b3mo-disclaimer-toggle"
+- tapOn:
+      id: "b3mo-intro-continue"
+
+# Wallet choice screen: pick the existing-wallet path
+- extendedWaitUntil:
+      visible:
+          id: "b3mo-existing-wallet"
+      timeout: 10000
+- tapOn:
+      id: "b3mo-existing-wallet"
+
+# Wallet picker: tap the first eligible mnemonic wallet
+- extendedWaitUntil:
+      visible:
+          id: "b3mo-pick-wallet"
+      timeout: 10000
+- tapOn:
+      id: "b3mo-pick-wallet"
+      index: 0
+
+# Verify we land on the B3MO chat with the auth overlay's retry CTA visible.
+# (Auto-unlock cannot complete on the simulator without biometric / backend,
+# so the overlay surfaces the retry button.) Reaching this screen proves
+# `b3mo.linkedAddress` was set in Redux and the navigation gate routed to chat.
+- extendedWaitUntil:
+      visible:
+          id: "b3mo-unlock-retry"
+      timeout: 10000
+- assertVisible:
+      id: "b3mo-unlock-retry"

@@ -587,6 +587,194 @@ type RootTranslation = {
 	 */
 	AUGUST: string
 	/**
+	 * A​d​d​r​e​s​s​ ​c​o​p​i​e​d
+	 */
+	B3MO_AGENT_BANNER_COPIED: string
+	/**
+	 * M​a​i​n​n​e​t
+	 */
+	B3MO_AGENT_BANNER_NETWORK_MAINNET: string
+	/**
+	 * T​e​s​t​n​e​t
+	 */
+	B3MO_AGENT_BANNER_NETWORK_TESTNET: string
+	/**
+	 * B​3​M​O​ ​i​s​ ​o​p​e​r​a​t​i​n​g​ ​a​u​t​o​n​o​m​o​u​s​l​y
+	 */
+	B3MO_AGENT_BANNER_TITLE: string
+	/**
+	 * A​s​k​ ​B​3​M​O​ ​a​n​y​t​h​i​n​g​.​.​.
+	 */
+	B3MO_AGENT_COMPOSER_PLACEHOLDER: string
+	/**
+	 * S​e​n​d
+	 */
+	B3MO_AGENT_COMPOSER_SEND: string
+	/**
+	 * A​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​r​e​q​u​i​r​e​d​.
+	 */
+	B3MO_AGENT_ERROR_AUTH: string
+	/**
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	B3MO_AGENT_ERROR_GENERIC: string
+	/**
+	 * B​3​M​O​ ​r​e​a​c​h​e​d​ ​t​h​e​ ​m​a​x​i​m​u​m​ ​n​u​m​b​e​r​ ​o​f​ ​o​p​e​r​a​t​i​o​n​s​ ​f​o​r​ ​t​h​i​s​ ​t​u​r​n​.
+	 */
+	B3MO_AGENT_ERROR_MAX_ITER: string
+	/**
+	 * Automatic
+	 */
+	B3MO_AGENT_EXEC_MODE_AUTO: string
+	/**
+	 * B3MO signs and broadcasts every transaction immediately, without further approval.
+	 */
+	B3MO_AGENT_EXEC_MODE_AUTO_DESC: string
+	/**
+	 * Confirm before executing
+	 */
+	B3MO_AGENT_EXEC_MODE_CONFIRM: string
+	/**
+	 * B3MO asks for your approval before signing each transaction.
+	 */
+	B3MO_AGENT_EXEC_MODE_CONFIRM_DESC: string
+	/**
+	 * N​o​ ​c​o​n​v​e​r​s​a​t​i​o​n​s​ ​y​e​t
+	 */
+	B3MO_AGENT_HISTORY_EMPTY: string
+	/**
+	 * N​e​w​ ​c​h​a​t
+	 */
+	B3MO_AGENT_HISTORY_NEW: string
+	/**
+	 * C​o​n​v​e​r​s​a​t​i​o​n​ ​h​i​s​t​o​r​y
+	 */
+	B3MO_AGENT_HISTORY_TITLE: string
+	/**
+	 * B​3​M​O​ ​i​s​ ​a​n​ ​A​I​ ​a​g​e​n​t​ ​t​h​a​t​ ​c​o​n​t​r​o​l​s​ ​o​n​e​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​s​ ​t​o​ ​s​e​n​d​ ​t​o​k​e​n​s​,​ ​s​w​a​p​,​ ​d​e​l​e​g​a​t​e​ ​o​n​ ​S​t​a​r​g​a​t​e​,​ ​c​l​a​i​m​ ​r​e​w​a​r​d​s​,​ ​a​n​d​ ​m​o​r​e​.​ ​E​v​e​r​y​ ​a​c​t​i​o​n​ ​i​s​ ​s​i​g​n​e​d​ ​a​n​d​ ​b​r​o​a​d​c​a​s​t​ ​i​m​m​e​d​i​a​t​e​l​y​,​ ​w​i​t​h​o​u​t​ ​f​u​r​t​h​e​r​ ​a​p​p​r​o​v​a​l​.
+	 */
+	B3MO_AGENT_INTRO_BODY: string
+	/**
+	 * C​o​n​t​i​n​u​e
+	 */
+	B3MO_AGENT_INTRO_CTA: string
+	/**
+	 * I​ ​u​n​d​e​r​s​t​a​n​d​ ​B​3​M​O​ ​w​i​l​l​ ​s​i​g​n​ ​a​n​d​ ​b​r​o​a​d​c​a​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​f​r​o​m​ ​t​h​e​ ​c​o​n​n​e​c​t​e​d​ ​w​a​l​l​e​t​ ​a​u​t​o​n​o​m​o​u​s​l​y​,​ ​w​i​t​h​o​u​t​ ​f​u​r​t​h​e​r​ ​a​p​p​r​o​v​a​l​.
+	 */
+	B3MO_AGENT_INTRO_DISCLAIMER: string
+	/**
+	 * Y​o​u​r​ ​a​u​t​o​n​o​m​o​u​s​ ​o​n​-​c​h​a​i​n​ ​a​g​e​n​t
+	 */
+	B3MO_AGENT_INTRO_SUBTITLE: string
+	/**
+	 * M​e​e​t​ ​B​3​M​O
+	 */
+	B3MO_AGENT_INTRO_TITLE: string
+	/**
+	 * O​n​l​y​ ​m​n​e​m​o​n​i​c​-​b​a​s​e​d​ ​w​a​l​l​e​t​s​ ​c​a​n​ ​b​e​ ​c​o​n​t​r​o​l​l​e​d​ ​b​y​ ​B​3​M​O​.
+	 */
+	B3MO_AGENT_PICK_WALLET_SUBTITLE: string
+	/**
+	 * P​i​c​k​ ​a​ ​w​a​l​l​e​t
+	 */
+	B3MO_AGENT_PICK_WALLET_TITLE: string
+	/**
+	 * Execution mode
+	 */
+	B3MO_AGENT_SETTINGS_EXEC_MODE_TITLE: string
+	/**
+	 * L​i​n​k​e​d​ ​w​a​l​l​e​t
+	 */
+	B3MO_AGENT_SETTINGS_LINKED_WALLET: string
+	/**
+	 * R​e​s​e​t​ ​B​3​M​O
+	 */
+	B3MO_AGENT_SETTINGS_RESET: string
+	/**
+	 * T​h​i​s​ ​w​i​l​l​ ​u​n​l​i​n​k​ ​t​h​e​ ​w​a​l​l​e​t​ ​a​n​d​ ​c​l​e​a​r​ ​a​l​l​ ​c​h​a​t​ ​s​e​s​s​i​o​n​s​.
+	 */
+	B3MO_AGENT_SETTINGS_RESET_CONFIRM: string
+	/**
+	 * B​3​M​O​ ​h​a​s​ ​b​e​e​n​ ​r​e​s​e​t​.
+	 */
+	B3MO_AGENT_SETTINGS_RESET_DONE: string
+	/**
+	 * S​w​i​t​c​h​ ​w​a​l​l​e​t
+	 */
+	B3MO_AGENT_SETTINGS_SWITCH_WALLET: string
+	/**
+	 * B​3​M​O​ ​s​e​t​t​i​n​g​s
+	 */
+	B3MO_AGENT_SETTINGS_TITLE: string
+	/**
+	 * B​3​M​O
+	 */
+	B3MO_AGENT_TAB_TITLE: string
+	/**
+	 * Approve
+	 */
+	B3MO_AGENT_TOOL_APPROVE: string
+	/**
+	 * Awaiting approval
+	 */
+	B3MO_AGENT_TOOL_AWAITING_APPROVAL: string
+	/**
+	 * B​r​o​a​d​c​a​s​t​i​n​g
+	 */
+	B3MO_AGENT_TOOL_BROADCASTING: string
+	/**
+	 * F​a​i​l​e​d
+	 */
+	B3MO_AGENT_TOOL_FAILED: string
+	/**
+	 * C​o​n​f​i​r​m​e​d
+	 */
+	B3MO_AGENT_TOOL_MINED: string
+	/**
+	 * Q​u​e​u​e​d
+	 */
+	B3MO_AGENT_TOOL_QUEUED: string
+	/**
+	 * Reject
+	 */
+	B3MO_AGENT_TOOL_REJECT: string
+	/**
+	 * Rejected by user
+	 */
+	B3MO_AGENT_TOOL_REJECTED_BY_USER: string
+	/**
+	 * S​i​g​n​i​n​g
+	 */
+	B3MO_AGENT_TOOL_SIGNING: string
+	/**
+	 * V​i​e​w​ ​o​n​ ​e​x​p​l​o​r​e​r
+	 */
+	B3MO_AGENT_TOOL_VIEW_EXPLORER: string
+	/**
+	 * U​n​l​o​c​k
+	 */
+	B3MO_AGENT_UNLOCK_CTA: string
+	/**
+	 * A​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​f​a​i​l​e​d​.​ ​T​r​y​ ​a​g​a​i​n​.
+	 */
+	B3MO_AGENT_UNLOCK_FAIL: string
+	/**
+	 * C​r​e​a​t​e​ ​n​e​w​ ​w​a​l​l​e​t
+	 */
+	B3MO_AGENT_WALLET_CHOICE_CREATE: string
+	/**
+	 * U​s​e​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t
+	 */
+	B3MO_AGENT_WALLET_CHOICE_EXISTING: string
+	/**
+	 * C​r​e​a​t​e​ ​a​ ​w​a​l​l​e​t​ ​d​e​d​i​c​a​t​e​d​ ​t​o​ ​B​3​M​O​,​ ​o​r​ ​p​i​c​k​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​o​n​e​.​ ​Y​o​u​ ​c​a​n​ ​s​t​i​l​l​ ​o​p​e​r​a​t​e​ ​i​t​ ​m​a​n​u​a​l​l​y​.
+	 */
+	B3MO_AGENT_WALLET_CHOICE_SUBTITLE: string
+	/**
+	 * C​h​o​o​s​e​ ​a​ ​w​a​l​l​e​t​ ​f​o​r​ ​B​3​M​O
+	 */
+	B3MO_AGENT_WALLET_CHOICE_TITLE: string
+	/**
 	 * C​a​n​c​e​l​l​e​d​ ​B​3​M​O​ ​q​u​e​s​t
 	 */
 	B3MO_QUEST_CANCELLED: string
@@ -6882,6 +7070,194 @@ Try reconnect your device to the internet.
 	 * August
 	 */
 	AUGUST: () => LocalizedString
+	/**
+	 * Address copied
+	 */
+	B3MO_AGENT_BANNER_COPIED: () => LocalizedString
+	/**
+	 * Mainnet
+	 */
+	B3MO_AGENT_BANNER_NETWORK_MAINNET: () => LocalizedString
+	/**
+	 * Testnet
+	 */
+	B3MO_AGENT_BANNER_NETWORK_TESTNET: () => LocalizedString
+	/**
+	 * B3MO is operating autonomously
+	 */
+	B3MO_AGENT_BANNER_TITLE: () => LocalizedString
+	/**
+	 * Ask B3MO anything...
+	 */
+	B3MO_AGENT_COMPOSER_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Send
+	 */
+	B3MO_AGENT_COMPOSER_SEND: () => LocalizedString
+	/**
+	 * Authentication required.
+	 */
+	B3MO_AGENT_ERROR_AUTH: () => LocalizedString
+	/**
+	 * Something went wrong. Please try again.
+	 */
+	B3MO_AGENT_ERROR_GENERIC: () => LocalizedString
+	/**
+	 * B3MO reached the maximum number of operations for this turn.
+	 */
+	B3MO_AGENT_ERROR_MAX_ITER: () => LocalizedString
+	/**
+	 * Automatic
+	 */
+	B3MO_AGENT_EXEC_MODE_AUTO: () => LocalizedString
+	/**
+	 * B3MO signs and broadcasts every transaction immediately, without further approval.
+	 */
+	B3MO_AGENT_EXEC_MODE_AUTO_DESC: () => LocalizedString
+	/**
+	 * Confirm before executing
+	 */
+	B3MO_AGENT_EXEC_MODE_CONFIRM: () => LocalizedString
+	/**
+	 * B3MO asks for your approval before signing each transaction.
+	 */
+	B3MO_AGENT_EXEC_MODE_CONFIRM_DESC: () => LocalizedString
+	/**
+	 * No conversations yet
+	 */
+	B3MO_AGENT_HISTORY_EMPTY: () => LocalizedString
+	/**
+	 * New chat
+	 */
+	B3MO_AGENT_HISTORY_NEW: () => LocalizedString
+	/**
+	 * Conversation history
+	 */
+	B3MO_AGENT_HISTORY_TITLE: () => LocalizedString
+	/**
+	 * B3MO is an AI agent that controls one of your wallets to send tokens, swap, delegate on Stargate, claim rewards, and more. Every action is signed and broadcast immediately, without further approval.
+	 */
+	B3MO_AGENT_INTRO_BODY: () => LocalizedString
+	/**
+	 * Continue
+	 */
+	B3MO_AGENT_INTRO_CTA: () => LocalizedString
+	/**
+	 * I understand B3MO will sign and broadcast transactions from the connected wallet autonomously, without further approval.
+	 */
+	B3MO_AGENT_INTRO_DISCLAIMER: () => LocalizedString
+	/**
+	 * Your autonomous on-chain agent
+	 */
+	B3MO_AGENT_INTRO_SUBTITLE: () => LocalizedString
+	/**
+	 * Meet B3MO
+	 */
+	B3MO_AGENT_INTRO_TITLE: () => LocalizedString
+	/**
+	 * Only mnemonic-based wallets can be controlled by B3MO.
+	 */
+	B3MO_AGENT_PICK_WALLET_SUBTITLE: () => LocalizedString
+	/**
+	 * Pick a wallet
+	 */
+	B3MO_AGENT_PICK_WALLET_TITLE: () => LocalizedString
+	/**
+	 * Execution mode
+	 */
+	B3MO_AGENT_SETTINGS_EXEC_MODE_TITLE: () => LocalizedString
+	/**
+	 * Linked wallet
+	 */
+	B3MO_AGENT_SETTINGS_LINKED_WALLET: () => LocalizedString
+	/**
+	 * Reset B3MO
+	 */
+	B3MO_AGENT_SETTINGS_RESET: () => LocalizedString
+	/**
+	 * This will unlink the wallet and clear all chat sessions.
+	 */
+	B3MO_AGENT_SETTINGS_RESET_CONFIRM: () => LocalizedString
+	/**
+	 * B3MO has been reset.
+	 */
+	B3MO_AGENT_SETTINGS_RESET_DONE: () => LocalizedString
+	/**
+	 * Switch wallet
+	 */
+	B3MO_AGENT_SETTINGS_SWITCH_WALLET: () => LocalizedString
+	/**
+	 * B3MO settings
+	 */
+	B3MO_AGENT_SETTINGS_TITLE: () => LocalizedString
+	/**
+	 * B3MO
+	 */
+	B3MO_AGENT_TAB_TITLE: () => LocalizedString
+	/**
+	 * Approve
+	 */
+	B3MO_AGENT_TOOL_APPROVE: () => LocalizedString
+	/**
+	 * Awaiting approval
+	 */
+	B3MO_AGENT_TOOL_AWAITING_APPROVAL: () => LocalizedString
+	/**
+	 * Broadcasting
+	 */
+	B3MO_AGENT_TOOL_BROADCASTING: () => LocalizedString
+	/**
+	 * Failed
+	 */
+	B3MO_AGENT_TOOL_FAILED: () => LocalizedString
+	/**
+	 * Confirmed
+	 */
+	B3MO_AGENT_TOOL_MINED: () => LocalizedString
+	/**
+	 * Queued
+	 */
+	B3MO_AGENT_TOOL_QUEUED: () => LocalizedString
+	/**
+	 * Reject
+	 */
+	B3MO_AGENT_TOOL_REJECT: () => LocalizedString
+	/**
+	 * Rejected by user
+	 */
+	B3MO_AGENT_TOOL_REJECTED_BY_USER: () => LocalizedString
+	/**
+	 * Signing
+	 */
+	B3MO_AGENT_TOOL_SIGNING: () => LocalizedString
+	/**
+	 * View on explorer
+	 */
+	B3MO_AGENT_TOOL_VIEW_EXPLORER: () => LocalizedString
+	/**
+	 * Unlock
+	 */
+	B3MO_AGENT_UNLOCK_CTA: () => LocalizedString
+	/**
+	 * Authentication failed. Try again.
+	 */
+	B3MO_AGENT_UNLOCK_FAIL: () => LocalizedString
+	/**
+	 * Create new wallet
+	 */
+	B3MO_AGENT_WALLET_CHOICE_CREATE: () => LocalizedString
+	/**
+	 * Use an existing wallet
+	 */
+	B3MO_AGENT_WALLET_CHOICE_EXISTING: () => LocalizedString
+	/**
+	 * Create a wallet dedicated to B3MO, or pick an existing one. You can still operate it manually.
+	 */
+	B3MO_AGENT_WALLET_CHOICE_SUBTITLE: () => LocalizedString
+	/**
+	 * Choose a wallet for B3MO
+	 */
+	B3MO_AGENT_WALLET_CHOICE_TITLE: () => LocalizedString
 	/**
 	 * Cancelled B3MO quest
 	 */

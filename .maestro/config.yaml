@@ -9,4 +9,5 @@ flows:
   - onboarding/*
   - userActivity/userActivity.yaml
   - universal_link/*
+  - b3mo/*
   # - discover/* Currently skipped since it will need to be adapted to the new apps screen

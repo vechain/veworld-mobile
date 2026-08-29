@@ -78,6 +78,25 @@ target 'VeWorld' do
       end
     end
 
+    # Patch fmt's base.h to disable consteval-based format string validation on
+    # ALL Apple Clang versions. The header unconditionally `#define`s
+    # FMT_USE_CONSTEVAL, so passing -DFMT_USE_CONSTEVAL=0 from xcconfig is
+    # ignored. The existing guard only triggers for Apple Clang < 14, but the
+    # bug also affects Apple Clang 17 (Xcode 26.x / iPhoneSimulator26.x SDKs).
+    fmt_base = File.join(__dir__, 'Pods', 'fmt', 'include', 'fmt', 'base.h')
+    if File.exist?(fmt_base)
+      contents = File.read(fmt_base)
+      patched = contents.sub(
+        '#elif defined(__apple_build_version__) && __apple_build_version__ < 14000029L',
+        '#elif defined(__apple_build_version__)',
+      )
+      if patched != contents
+        File.chmod(0644, fmt_base) rescue nil
+        File.write(fmt_base, patched)
+        Pod::UI.puts "Patched Pods/fmt/include/fmt/base.h to force FMT_USE_CONSTEVAL=0 on Apple Clang".green
+      end
+    end
+
     # Ensure OpenSSL.framework is always writable before codesigning (fixes CI/dev builds)
     frameworks_script = File.join(__dir__, 'Pods', 'Target Support Files', 'Pods-VeWorld', 'Pods-VeWorld-frameworks.sh')
     if File.exist?(frameworks_script)

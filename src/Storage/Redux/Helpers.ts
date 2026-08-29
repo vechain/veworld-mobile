@@ -3,6 +3,8 @@ import { encryptTransform } from "../../Services/EncryptionService/EncryptionSer
 import {
     AccountSlice,
     ActivitiesSlice,
+    B3moSlice,
+    B3moSessionSlice,
     BalanceSlice,
     ContactsSlice,
     CurrencySlice,
@@ -14,6 +16,8 @@ import {
     PendingSlice,
     resetAccountState,
     resetActivityState,
+    resetB3moState,
+    resetB3moSessionState,
     resetBalancesState,
     resetCacheState,
     resetContactsState,
@@ -75,8 +79,8 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
     return {
         key: "root",
         storage,
-        version: 37,
-        blacklist: [NftSlice.name, PendingSlice.name],
+        version: 39,
+        blacklist: [NftSlice.name, PendingSlice.name, B3moSessionSlice.name],
         whitelist: [
             CurrencySlice.name,
             TokenSlice.name,
@@ -96,6 +100,7 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
             Notification.name,
             ExternalDappsSlice.name,
             WalletPreferencesSlice.name,
+            B3moSlice.name,
         ],
         migrate: createMigrate(migrationUpdates, { debug: true }),
         transforms: [encryptor],
@@ -127,4 +132,6 @@ export const resetActions = [
     resetVersionUpdateState,
     resetExternalDappsState,
     resetWalletPreferencesState,
+    resetB3moState,
+    resetB3moSessionState,
 ]
