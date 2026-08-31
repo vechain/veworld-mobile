@@ -469,6 +469,24 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_VOT3: string
 	/**
+	 * D​u​e​ ​t​o​ ​s​c​h​e​d​u​l​e​d​ ​m​a​i​n​t​e​n​a​n​c​e​,​ ​A​p​p​l​e​ ​l​o​g​i​n​ ​w​i​l​l​ ​b​e​ ​u​n​a​v​a​i​l​a​b​l​e​ ​f​o​r​ ​u​p​ ​t​o​ ​4​8​ ​h​o​u​r​s​.​ ​Y​o​u​ ​w​i​l​l​ ​b​e​ ​l​o​g​g​e​d​ ​o​u​t​ ​d​u​r​i​n​g​ ​t​h​i​s​ ​p​e​r​i​o​d​.​ ​Y​o​u​r​ ​f​u​n​d​s​ ​a​n​d​ ​w​a​l​l​e​t​ ​a​r​e​ ​s​a​f​e​.​ ​T​o​ ​k​e​e​p​ ​a​c​c​e​s​s​,​ ​a​d​d​ ​G​o​o​g​l​e​ ​a​s​ ​a​ ​s​e​c​o​n​d​a​r​y​ ​l​o​g​i​n​ ​m​e​t​h​o​d​ ​i​n​ ​W​a​l​l​e​t​ ​m​a​n​a​g​e​m​e​n​t​.
+	 */
+	APPLE_MIGRATION_BANNER_DESC: string
+	/**
+	 * B​e​t​w​e​e​n​ ​{​s​t​a​r​t​D​a​t​e​}​ ​a​n​d​ ​{​e​n​d​D​a​t​e​}​,​ ​A​p​p​l​e​ ​l​o​g​i​n​ ​w​i​l​l​ ​b​e​ ​u​n​a​v​a​i​l​a​b​l​e​.​ ​Y​o​u​ ​w​i​l​l​ ​b​e​ ​l​o​g​g​e​d​ ​o​u​t​ ​d​u​r​i​n​g​ ​t​h​i​s​ ​p​e​r​i​o​d​.​ ​Y​o​u​r​ ​f​u​n​d​s​ ​a​n​d​ ​w​a​l​l​e​t​ ​a​r​e​ ​s​a​f​e​.​ ​T​o​ ​k​e​e​p​ ​a​c​c​e​s​s​,​ ​a​d​d​ ​G​o​o​g​l​e​ ​a​s​ ​a​ ​s​e​c​o​n​d​a​r​y​ ​l​o​g​i​n​ ​m​e​t​h​o​d​ ​i​n​ ​W​a​l​l​e​t​ ​m​a​n​a​g​e​m​e​n​t​.
+	 * @param {string} endDate
+	 * @param {string} startDate
+	 */
+	APPLE_MIGRATION_BANNER_DESC_WITH_DATES: RequiredParams<'endDate' | 'startDate'>
+	/**
+	 * A​p​p​l​e​ ​l​o​g​i​n​ ​m​a​i​n​t​e​n​a​n​c​e​ ​u​p​c​o​m​i​n​g
+	 */
+	APPLE_MIGRATION_BANNER_TITLE: string
+	/**
+	 * M​a​i​n​t​e​n​a​n​c​e​ ​w​o​r​k​ ​i​n​ ​p​r​o​g​r​e​s​s​,​ ​t​h​i​s​ ​c​o​u​l​d​ ​t​a​k​e​ ​u​p​ ​t​o​ ​4​8​ ​h​o​u​r​s
+	 */
+	APPLE_MIGRATION_MAINTENANCE_MSG: string
+	/**
 	 * A​c​t​i​o​n​s
 	 */
 	APPS_BS_ACTIONS: string
@@ -6766,6 +6784,22 @@ Try reconnect your device to the internet.
 	 * VOT3
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
+	/**
+	 * Due to scheduled maintenance, Apple login will be unavailable for up to 48 hours. You will be logged out during this period. Your funds and wallet are safe. To keep access, add Google as a secondary login method in Wallet management.
+	 */
+	APPLE_MIGRATION_BANNER_DESC: () => LocalizedString
+	/**
+	 * Between {startDate} and {endDate}, Apple login will be unavailable. You will be logged out during this period. Your funds and wallet are safe. To keep access, add Google as a secondary login method in Wallet management.
+	 */
+	APPLE_MIGRATION_BANNER_DESC_WITH_DATES: (arg: { endDate: string, startDate: string }) => LocalizedString
+	/**
+	 * Apple login maintenance upcoming
+	 */
+	APPLE_MIGRATION_BANNER_TITLE: () => LocalizedString
+	/**
+	 * Maintenance work in progress, this could take up to 48 hours
+	 */
+	APPLE_MIGRATION_MAINTENANCE_MSG: () => LocalizedString
 	/**
 	 * Actions
 	 */

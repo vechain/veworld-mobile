@@ -86,6 +86,14 @@ export const initialState: FeatureFlags = {
             enabled: false,
         },
     },
+    appleMigrationFeature: {
+        banner: {
+            enabled: false,
+        },
+        loginDisabled: {
+            enabled: false,
+        },
+    },
     hiddenForYouPopularApps: [],
 }
 

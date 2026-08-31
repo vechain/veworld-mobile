@@ -19,6 +19,7 @@ import { useHandleWalletCreation } from "./useHandleWalletCreation"
 import { useSocialWalletLogin } from "./useSocialWalletLogin"
 import { CreatePasswordModal } from "../../../../Components"
 import { useSmartWallet } from "~Hooks/useSmartWallet"
+import { useAppleLoginAvailability } from "~Hooks/useAppleLoginAvailability"
 
 export const WelcomeScreenV2 = () => {
     const termsOfServiceUrl = process.env.REACT_APP_TERMS_OF_SERVICE_URL
@@ -84,8 +85,13 @@ export const WelcomeScreenV2 = () => {
         onSmartWalletPinSuccess: handleOnSmartWalletPinSuccess,
     })
 
+    const { isAppleLoginDisabled, showMaintenanceMessage } = useAppleLoginAvailability()
+
     const handleGoogleLogin = useCallback(() => handleSocialLogin("google"), [handleSocialLogin])
-    const handleAppleLogin = useCallback(() => handleSocialLogin("apple"), [handleSocialLogin])
+    const handleAppleLogin = useCallback(() => {
+        if (isAppleLoginDisabled) return showMaintenanceMessage()
+        handleSocialLogin("apple")
+    }, [handleSocialLogin, isAppleLoginDisabled, showMaintenanceMessage])
 
     const handleModalClose = useCallback(() => {
         clearSocialPendingState()
@@ -158,7 +164,7 @@ export const WelcomeScreenV2 = () => {
                         {PlatformUtils.isIOS() && (
                             <BaseButton
                                 testID="APPLE_LOGIN_BUTTON"
-                                style={styles.socialButton}
+                                style={[styles.socialButton, isAppleLoginDisabled && styles.dimmed]}
                                 leftIcon={<BaseIcon color={theme.colors.buttonText} name="icon-apple" size={24} />}
                                 textProps={{ typographyFont: "bodyMedium" }}
                                 title={LL.BTN_CONTINUE_WITH_APPLE()}
@@ -233,6 +239,13 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             justifyContent: "center",
             gap: 12,
+        },
+        /**
+         * Applied instead of the `disabled` prop: the button must keep handling the press so the
+         * maintenance message can be shown.
+         */
+        dimmed: {
+            opacity: 0.5,
         },
         markdown: {
             textAlign: "center",
