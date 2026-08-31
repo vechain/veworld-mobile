@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query"
-import { VIP181_ABI } from "@vechain/sdk-core"
+import { Revision, VIP181_ABI } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { queryClient } from "~Api/QueryProvider"
 import ThorUtils from "~Utils/ThorUtils"
@@ -26,7 +26,7 @@ export const getTokenURI = async (tokenId: string, contractAddress: string, thor
         if (error instanceof Error && error.message === "FAILED_TOKEN_URI" && blockNumber) {
             const r = await ThorUtils.clause
                 .getMethod(VIP181_ABI, contractAddress, "tokenURI")
-                .execute(thor, [BigInt(tokenId)], { revision: (blockNumber - 1).toString() })
+                .execute(thor, [BigInt(tokenId)], { revision: Revision.of(blockNumber - 1) })
             if (r.success) return r.result.plain
             throw new Error("FAILED_TOKEN_URI_READING")
         }
