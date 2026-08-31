@@ -1,5 +1,12 @@
 
 
+## 2.6.0 (2026-08-31)
+
+
+### Features
+
+* apple migration maintenance banner and apple login guard behind feature flags ([#3935](https://github.com/vechain/veworld-mobile/issues/3935)) ([ce1fb68](https://github.com/vechain/veworld-mobile/commit/ce1fb68fdb1f43b1432fe6ad89f45b298f3ac9ae))
+
 ## 2.5.8 (2026-07-01)
 
 ## 2.5.7 (2026-04-28)
