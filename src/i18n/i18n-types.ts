@@ -1106,6 +1106,10 @@ type RootTranslation = {
 	 */
 	BD_PRIVATE_KEY_WARMNING: string
 	/**
+	 * V​e​W​o​r​l​d​ ​c​o​u​l​d​n​'​t​ ​r​e​a​d​ ​t​h​e​ ​d​a​t​a​ ​s​t​o​r​e​d​ ​o​n​ ​t​h​i​s​ ​d​e​v​i​c​e​.​ ​Y​o​u​r​ ​w​a​l​l​e​t​ ​d​a​t​a​ ​h​a​s​ ​n​o​t​ ​b​e​e​n​ ​d​e​l​e​t​e​d​,​ ​b​u​t​ ​i​t​ ​c​a​n​'​t​ ​b​e​ ​d​e​c​r​y​p​t​e​d​ ​r​i​g​h​t​ ​n​o​w​.​ ​P​l​e​a​s​e​ ​r​e​s​t​a​r​t​ ​t​h​e​ ​a​p​p​ ​a​n​d​ ​c​o​n​t​a​c​t​ ​s​u​p​p​o​r​t​ ​i​f​ ​t​h​e​ ​p​r​o​b​l​e​m​ ​p​e​r​s​i​s​t​s​.
+	 */
+	BD_REHYDRATION_FAILED: string
+	/**
 	 * R​e​s​e​t​ ​a​p​p
 	 */
 	BD_RESET: string
@@ -3782,6 +3786,10 @@ type RootTranslation = {
 	 */
 	NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN: RequiredParams<'amount' | 'to' | 'token'>
 	/**
+	 * A​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​c​a​n​c​e​l​l​e​d​.​ ​T​a​p​ ​a​g​a​i​n​ ​t​o​ ​r​e​t​r​y​.
+	 */
+	NOTIFICATION_AUTHENTICATION_CANCELLED: string
+	/**
 	 * T​h​e​ ​a​s​s​o​c​i​a​t​e​d​ ​w​a​l​l​e​t​ ​o​n​l​y​ ​h​a​s​ ​1​ ​a​c​c​o​u​n​t​.​ ​P​l​e​a​s​e​ ​r​e​m​o​v​e​ ​t​h​e​ ​w​a​l​l​e​t​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​a​c​c​o​u​n​t
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: string
@@ -5748,6 +5756,10 @@ type RootTranslation = {
 	 */
 	TITLE_QR_CODE_FOR_ACCOUNT: string
 	/**
+	 * Y​o​u​r​ ​d​a​t​a​ ​c​a​n​'​t​ ​b​e​ ​l​o​a​d​e​d
+	 */
+	TITLE_REHYDRATION_FAILED: string
+	/**
 	 * R​e​n​a​m​e​ ​{​t​y​p​e​}
 	 * @param {string} type
 	 */
@@ -7413,6 +7425,10 @@ Delegate **VOT3** to a trusted strategy.
 	 * Never share your private key. Anyone who access it can steal all of your crypto assets.
 	 */
 	BD_PRIVATE_KEY_WARMNING: () => LocalizedString
+	/**
+	 * VeWorld couldn't read the data stored on this device. Your wallet data has not been deleted, but it can't be decrypted right now. Please restart the app and contact support if the problem persists.
+	 */
+	BD_REHYDRATION_FAILED: () => LocalizedString
 	/**
 	 * Reset app
 	 */
@@ -10071,6 +10087,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN: (arg: { amount: string, to: string, token: string }) => LocalizedString
 	/**
+	 * Authentication cancelled. Tap again to retry.
+	 */
+	NOTIFICATION_AUTHENTICATION_CANCELLED: () => LocalizedString
+	/**
 	 * The associated wallet only has 1 account. Please remove the wallet to remove this account
 	 */
 	NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT: () => LocalizedString
@@ -11995,6 +12015,10 @@ Available for Google and Apple Pay.
 	 * Receive
 	 */
 	TITLE_QR_CODE_FOR_ACCOUNT: () => LocalizedString
+	/**
+	 * Your data can't be loaded
+	 */
+	TITLE_REHYDRATION_FAILED: () => LocalizedString
 	/**
 	 * Rename {type}
 	 */

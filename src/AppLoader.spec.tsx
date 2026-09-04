@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen } from "@testing-library/react-native"
+import { act, render, screen } from "@testing-library/react-native"
 import { AppLoader } from "./AppLoader"
 import { TestWrapper } from "~Test"
 import { RootState } from "~Storage/Redux/Types"
@@ -31,6 +31,7 @@ describe("AppLoader", () => {
 
             const overlay = screen.getByTestId("app-loader-overlay")
             expect(overlay).toHaveAnimatedStyle({ opacity: 1 })
+            expect(overlay.props.pointerEvents).toBe("auto")
         })
     })
 
@@ -73,8 +74,15 @@ describe("AppLoader", () => {
                 </AppLoader>,
             )
 
-            jest.advanceTimersByTime(300)
+            // While the closing fade is still playing the overlay is visible,
+            // so it must keep swallowing touches.
+            expect(screen.getByTestId("app-loader-overlay").props.pointerEvents).toBe("auto")
+
+            act(() => {
+                jest.advanceTimersByTime(300)
+            })
             expect(overlay).toHaveAnimatedStyle({ opacity: 0 })
+            expect(screen.getByTestId("app-loader-overlay").props.pointerEvents).toBe("none")
         })
     })
 
@@ -147,7 +155,9 @@ describe("AppLoader", () => {
                 </AppLoader>,
             )
 
-            jest.advanceTimersByTime(300)
+            act(() => {
+                jest.advanceTimersByTime(300)
+            })
 
             expect(overlay).toHaveAnimatedStyle({
                 opacity: 0,

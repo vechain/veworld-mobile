@@ -21,6 +21,8 @@ import { PersistedCacheProvider, useApplicationSecurity } from "~Components/Prov
 import { getPersistorConfig, newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
 import { SplashScreen } from "../../../src/SplashScreen"
+import { StandaloneAppBlockedScreen } from "~Screens"
+import { useI18nContext } from "~i18n"
 
 type StoreContextType = {
     store:
@@ -28,6 +30,7 @@ type StoreContextType = {
               typeof configureStore<RootState, AnyAction, MiddlewareArray<[ThunkMiddleware<any, AnyAction, {}>]>, any[]>
           >
         | undefined
+    persistor: Persistor | undefined
 }
 
 const StoreContext = React.createContext<StoreContextType | undefined>(undefined)
@@ -36,6 +39,7 @@ type StoreContextProviderProps = { children: React.ReactNode }
 
 const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     const { redux: reduxStorage } = useApplicationSecurity()
+    const { LL } = useI18nContext()
 
     const store = useRef<
         | ReturnType<
@@ -58,9 +62,12 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         >()
 
     const [persistor, setPersistor] = useState<Persistor | undefined>()
+    const [rehydrationFailed, setRehydrationFailed] = useState(false)
 
     const initStore = useCallback(async (mmkv: MMKV, encryptionKey: string) => {
-        const persistConfig: PersistConfig<RootState> = await getPersistorConfig(mmkv, encryptionKey)
+        const persistConfig: PersistConfig<RootState> = await getPersistorConfig(mmkv, encryptionKey, () => {
+            setRehydrationFailed(true)
+        })
 
         const nftPersistence: PersistConfig<NftSliceState> = {
             key: NftSlice.name,
@@ -108,7 +115,13 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         reduxStorage && initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
     }, [initStore, reduxStorage])
 
-    const contextValue = useMemo(() => ({ store: reactiveStore }), [reactiveStore])
+    const contextValue = useMemo(() => ({ store: reactiveStore, persistor }), [persistor, reactiveStore])
+
+    if (rehydrationFailed) {
+        // Fail closed with copy specific to this cause: the default screen text blames a
+        // security downgrade and suggests biometrics, which is wrong and misleading here.
+        return <StandaloneAppBlockedScreen title={LL.TITLE_REHYDRATION_FAILED()} body={LL.BD_REHYDRATION_FAILED()} />
+    }
 
     if (!store.current || !persistor) {
         return <></>

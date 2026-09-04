@@ -6,6 +6,8 @@ import PreviousInstallation from "./PreviousInstallation"
 import MigrationToSecurity_v2 from "./MigrationToSecurity_v2"
 
 export * from "./Onboarding"
+export * from "./OnboardingOperation"
+export * from "./PersistorMigration"
 
 export {
     WalletEncryptionKeyHelper,

@@ -1,7 +1,8 @@
 import { Wallet } from "~Model"
 import { WalletEncryptionKey } from "~Components/Providers/EncryptedStorageProvider/Model"
-import { CryptoUtils, CryptoUtils_Legacy, HexUtils, PasswordUtils } from "~Utils"
+import { AddressUtils, CryptoUtils, CryptoUtils_Legacy, HexUtils, PasswordUtils } from "~Utils"
 import { Keychain } from "~Storage"
+import KeyCommit from "./KeyCommit"
 import SaltHelper from "./SaltHelper"
 import { ACCESS_CONTROL, type SetOptions } from "react-native-keychain"
 
@@ -44,6 +45,8 @@ const setWithPinCode = async (encryptionKeys: WalletEncryptionKey, pinCode: stri
         key: WALLET_ENCRYPTION_KEY_STORAGE,
         value: encryptedKeys,
     })
+
+    return encryptedKeys
 }
 
 const setWithBiometric = async (encryptionKeys: WalletEncryptionKey) => {
@@ -90,12 +93,25 @@ const decryptWallet = async ({
     return wallet
 }
 
+/**
+ * Encrypt a wallet and verify the ciphertext round-trips before it is persisted,
+ * using a single (possibly biometric-prompting) keychain read.
+ */
 const encryptWallet = async (wallet: Wallet, pinCode?: string) => {
     const { walletKey } = await get({ pinCode })
     const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
     const iv = PasswordUtils.base64ToBuffer(base64IV)
-    const walletEncrypted = await CryptoUtils.encrypt(wallet, walletKey, salt, iv)
-    return walletEncrypted
+    const encryptedWallet = await CryptoUtils.encrypt(wallet, walletKey, salt, iv)
+
+    const decryptedWallet = await CryptoUtils.decrypt<Wallet>(encryptedWallet, walletKey, salt, iv)
+    if (
+        !AddressUtils.compareAddresses(decryptedWallet.rootAddress, wallet.rootAddress) ||
+        (!decryptedWallet.mnemonic?.length && !decryptedWallet.privateKey)
+    ) {
+        throw new Error("Wallet encryption verification failed")
+    }
+
+    return encryptedWallet
 }
 
 const remove = async () => {
@@ -109,13 +125,24 @@ const remove = async () => {
 }
 
 const init = async (pinCode?: string) => {
-    await remove()
-
     const encryptionKeys: WalletEncryptionKey = {
         walletKey: HexUtils.generateRandom(256),
     }
 
-    await set(encryptionKeys, pinCode)
+    if (pinCode) {
+        const writtenCiphertext = await setWithPinCode(encryptionKeys, pinCode)
+        await KeyCommit.commitVerifiedKeys({
+            verifySlot: { key: WALLET_ENCRYPTION_KEY_STORAGE, expectedCiphertext: writtenCiphertext },
+            alternateSlotKey: WALLET_BIOMETRIC_KEY_STORAGE,
+        })
+    } else {
+        await setWithBiometric(encryptionKeys)
+        await KeyCommit.commitVerifiedKeys({
+            alternateSlotKey: WALLET_ENCRYPTION_KEY_STORAGE,
+        })
+    }
+
+    return encryptionKeys
 }
 
 export default {

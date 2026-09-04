@@ -157,6 +157,23 @@ describe("useCreateWallet", () => {
             await waitFor(() => result.current.isComplete)
             expect(result.current.isComplete).toBe(true)
         })
+
+        it("should not persist a wallet when encryption verification fails", async () => {
+            ;(WalletEncryptionKeyHelper.encryptWallet as jest.Mock).mockRejectedValueOnce(
+                new Error("Wallet encryption verification failed"),
+            )
+
+            const { result } = renderHook(() => useCreateWallet(), { wrapper: TestWrapper })
+
+            await expect(
+                result.current.createLocalWallet({
+                    mnemonic,
+                    derivationPath: DerivationPath.VET,
+                }),
+            ).rejects.toThrow("Wallet encryption verification failed")
+
+            expect(addDeviceAndAccounts).not.toHaveBeenCalled()
+        })
     })
 
     describe("createLedgerWallet", () => {
