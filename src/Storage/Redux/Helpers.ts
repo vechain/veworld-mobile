@@ -110,7 +110,8 @@ export const getPersistorConfig = async (
     config.getStoredState = async persistConfig => {
         try {
             return (await getStoredState(persistConfig)) as PersistedState
-        } catch {
+        } catch (rehydrationError) {
+            error(ERROR_EVENTS.ENCRYPTION, "redux_rehydration_failed", rehydrationError)
             onRehydrationError?.()
 
             // Keep the persistor sealed when encrypted state cannot be read. Rehydrating

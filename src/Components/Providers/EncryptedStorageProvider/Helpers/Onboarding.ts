@@ -49,7 +49,9 @@ const validateMigratedState = (persistedState: string, encryptionKey: string) =>
         const isLocalDevice =
             candidate.type === DEVICE_TYPE.LOCAL_MNEMONIC || candidate.type === DEVICE_TYPE.LOCAL_PRIVATE_KEY
 
-        if (isLocalDevice && !candidate.wallet) throw new Error("Migrated local device has no encrypted wallet")
+        if (isLocalDevice && (typeof candidate.wallet !== "string" || candidate.wallet.trim().length === 0)) {
+            throw new Error("Migrated local device has no encrypted wallet")
+        }
     }
 }
 

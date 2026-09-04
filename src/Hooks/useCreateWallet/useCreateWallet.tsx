@@ -59,11 +59,8 @@ export const useCreateWallet = () => {
             try {
                 const { device, wallet } = createDevice(derivationPath, mnemonic, privateKey, importType)
 
-                const encryptedWallet = await WalletEncryptionKeyHelper.encryptWallet(wallet, userPassword)
-                const verifiedWallet = await WalletEncryptionKeyHelper.decryptWallet({
-                    encryptedWallet,
-                    pinCode: userPassword,
-                })
+                const { encryptedWallet, decryptedWallet: verifiedWallet } =
+                    await WalletEncryptionKeyHelper.encryptAndDecryptWallet(wallet, userPassword)
 
                 if (
                     !AddressUtils.compareAddresses(verifiedWallet.rootAddress, device.rootAddress) ||

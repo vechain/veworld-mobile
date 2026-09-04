@@ -22,8 +22,6 @@ import { getPersistorConfig, newStorage, NftSlice, NftSliceState, reducer } from
 import { RootState } from "~Storage/Redux/Types"
 import { SplashScreen } from "../../../src/SplashScreen"
 import { StandaloneAppBlockedScreen } from "~Screens"
-import { error } from "~Utils/Logger"
-import { ERROR_EVENTS } from "~Constants"
 
 type StoreContextType = {
     store:
@@ -66,7 +64,6 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
 
     const initStore = useCallback(async (mmkv: MMKV, encryptionKey: string) => {
         const persistConfig: PersistConfig<RootState> = await getPersistorConfig(mmkv, encryptionKey, () => {
-            error(ERROR_EVENTS.ENCRYPTION, "redux_rehydration_failed")
             setRehydrationFailed(true)
         })
 

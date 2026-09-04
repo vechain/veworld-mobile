@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from "react"
 import {
     BaseButton,
+    runOnboardingOperationOnce,
     runOnboardingStorageMigration,
     showErrorToast,
     useApplicationSecurity,
@@ -35,34 +36,38 @@ export const useDemoWallet = () => {
         return demoMnemonic
     }, [])
 
-    const onDemoOnboarding = useCallback(async () => {
-        dispatch(setIsAppLoading(true))
-        try {
-            const mnemonic = getDemoMnemonic()
-            const userPassword = "111111"
-            await WalletEncryptionKeyHelper.init(userPassword)
-            await createWallet({
-                userPassword,
-                onError: e => debug(ERROR_EVENTS.APP, e),
-                mnemonic,
-                derivationPath: DerivationPath.VET,
-                importType: IMPORT_TYPE.MNEMONIC,
-            })
-            if (!persistor) throw new Error("Redux persistor is not ready")
-            await runOnboardingStorageMigration(persistor, () =>
-                migrateOnboarding(SecurityLevelType.SECRET, userPassword),
-            )
-        } catch (e) {
-            debug(ERROR_EVENTS.APP, e)
-            showErrorToast({ text1: LL.ERROR_CREATING_WALLET() })
-            await Promise.allSettled([
-                Promise.resolve().then(() => WalletEncryptionKeyHelper.remove()),
-                Promise.resolve().then(() => dispatch(resetApp())),
-            ])
-        } finally {
-            dispatch(setIsAppLoading(false))
-        }
-    }, [LL, createWallet, dispatch, getDemoMnemonic, migrateOnboarding, persistor])
+    const onDemoOnboarding = useCallback(
+        () =>
+            runOnboardingOperationOnce(async () => {
+                dispatch(setIsAppLoading(true))
+                try {
+                    const mnemonic = getDemoMnemonic()
+                    const userPassword = "111111"
+                    await WalletEncryptionKeyHelper.init(userPassword)
+                    await createWallet({
+                        userPassword,
+                        onError: e => debug(ERROR_EVENTS.APP, e),
+                        mnemonic,
+                        derivationPath: DerivationPath.VET,
+                        importType: IMPORT_TYPE.MNEMONIC,
+                    })
+                    if (!persistor) throw new Error("Redux persistor is not ready")
+                    await runOnboardingStorageMigration(persistor, () =>
+                        migrateOnboarding(SecurityLevelType.SECRET, userPassword),
+                    )
+                } catch (e) {
+                    debug(ERROR_EVENTS.APP, e)
+                    showErrorToast({ text1: LL.ERROR_CREATING_WALLET() })
+                    await Promise.allSettled([
+                        Promise.resolve().then(() => WalletEncryptionKeyHelper.remove()),
+                        Promise.resolve().then(() => dispatch(resetApp())),
+                    ])
+                } finally {
+                    dispatch(setIsAppLoading(false))
+                }
+            }),
+        [LL, createWallet, dispatch, getDemoMnemonic, migrateOnboarding, persistor],
+    )
 
     const DEV_DEMO_BUTTON = useMemo(() => {
         if (devFeaturesEnabled || IS_CI_BUILD) {

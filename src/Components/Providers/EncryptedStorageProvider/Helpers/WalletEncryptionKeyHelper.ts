@@ -98,6 +98,16 @@ const encryptWallet = async (wallet: Wallet, pinCode?: string) => {
     return walletEncrypted
 }
 
+const encryptAndDecryptWallet = async (wallet: Wallet, pinCode?: string) => {
+    const { walletKey } = await get({ pinCode })
+    const { salt, iv: base64IV } = await SaltHelper.getSaltAndIV()
+    const iv = PasswordUtils.base64ToBuffer(base64IV)
+    const encryptedWallet = await CryptoUtils.encrypt(wallet, walletKey, salt, iv)
+    const decryptedWallet = await CryptoUtils.decrypt<Wallet>(encryptedWallet, walletKey, salt, iv)
+
+    return { encryptedWallet, decryptedWallet }
+}
+
 const remove = async () => {
     await Keychain.deleteItem({
         key: WALLET_BIOMETRIC_KEY_STORAGE,
@@ -132,6 +142,7 @@ export default {
     get,
     decryptWallet,
     encryptWallet,
+    encryptAndDecryptWallet,
     init,
     remove,
 }

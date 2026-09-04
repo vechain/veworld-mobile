@@ -35,22 +35,22 @@ export const encryptTransform = <HSS, S = any, RS = any>(
 
         (outboundState, _key) => {
             if (typeof outboundState !== "string") {
-                return fail("redux-persist-transform-encrypt : Expected outbound state to be a string.")
+                return fail("Expected outbound state to be a string.")
             }
 
+            let decryptedString: string
             try {
-                const decryptedString = CryptoUtils.decryptState(outboundState, secretKey)
+                decryptedString = CryptoUtils.decryptState(outboundState, secretKey)
+            } catch {
+                return fail("Could not decrypt state. Please verify that you are using the correct secret key.")
+            }
 
-                if (!decryptedString) {
-                    throw new Error("Decrypted string is empty.")
-                }
+            if (!decryptedString) return fail("Decrypted string is empty.")
 
+            try {
                 return JSON.parse(decryptedString)
             } catch {
-                return fail(
-                    // eslint-disable-next-line max-len
-                    "redux-persist-transform-encrypt : Could not decrypt state. Please verify that you are using the correct secret key.",
-                )
+                return fail("Failed to parse decrypted state as JSON.")
             }
         },
         transformConfig,
