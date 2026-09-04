@@ -11,6 +11,7 @@ import {
 } from "~Storage/Redux/Actions"
 import { selectAccountsState, selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { warn } from "~Utils/Logger"
+import AddressUtils from "~Utils/AddressUtils"
 import { useBiometrics } from "../useBiometrics"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 import { AnalyticsEvent, DerivationPath, ERROR_EVENTS } from "~Constants"
@@ -59,6 +60,17 @@ export const useCreateWallet = () => {
                 const { device, wallet } = createDevice(derivationPath, mnemonic, privateKey, importType)
 
                 const encryptedWallet = await WalletEncryptionKeyHelper.encryptWallet(wallet, userPassword)
+                const verifiedWallet = await WalletEncryptionKeyHelper.decryptWallet({
+                    encryptedWallet,
+                    pinCode: userPassword,
+                })
+
+                if (
+                    !AddressUtils.compareAddresses(verifiedWallet.rootAddress, device.rootAddress) ||
+                    (!verifiedWallet.mnemonic?.length && !verifiedWallet.privateKey)
+                ) {
+                    throw new Error("Wallet encryption verification failed")
+                }
 
                 const newAccount = dispatch(
                     addDeviceAndAccounts({

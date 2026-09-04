@@ -7,10 +7,19 @@ import { setPlatform, TestWrapper } from "~Test"
 import { useHandleWalletCreation } from "../WelcomeScreen/useHandleWalletCreation"
 import { SelfCustodyOptionsBottomSheet } from "./SelfCustodyOptionsBottomSheet"
 
+const mockCloseBottomSheet = jest.fn()
+
 jest.mock("~Hooks/useCloudBackup", () => ({
     useCloudBackup: jest.fn(() => ({
         isCloudAvailable: true,
         getAllWalletFromCloud: jest.fn(),
+    })),
+}))
+
+jest.mock("~Hooks/useBottomSheet", () => ({
+    useBottomSheetModal: jest.fn(({ externalRef }: { externalRef: unknown }) => ({
+        ref: externalRef,
+        onClose: mockCloseBottomSheet,
     })),
 }))
 
@@ -101,7 +110,7 @@ describe("SelfCustodyOptionsBottomSheet", () => {
         expect(screen.queryByTestId("SELF_CUSTODY_OPTIONS_CLOUD")).not.toBeOnTheScreen()
     })
 
-    it("should call onNewWallet when create option is pressed", async () => {
+    it("should close the sheet before creating a new wallet", async () => {
         const onNewWallet = jest.fn()
         ;(useCloudBackup as jest.Mock).mockReturnValue({
             isCloudAvailable: true,
@@ -127,6 +136,8 @@ describe("SelfCustodyOptionsBottomSheet", () => {
 
         fireEvent.press(createOption)
 
+        expect(mockCloseBottomSheet).toHaveBeenCalledTimes(1)
         expect(onNewWallet).toHaveBeenCalled()
+        expect(mockCloseBottomSheet.mock.invocationCallOrder[0]).toBeLessThan(onNewWallet.mock.invocationCallOrder[0])
     })
 })

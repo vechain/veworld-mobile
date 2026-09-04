@@ -21,6 +21,9 @@ import { PersistedCacheProvider, useApplicationSecurity } from "~Components/Prov
 import { getPersistorConfig, newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
 import { SplashScreen } from "../../../src/SplashScreen"
+import { StandaloneAppBlockedScreen } from "~Screens"
+import { error } from "~Utils/Logger"
+import { ERROR_EVENTS } from "~Constants"
 
 type StoreContextType = {
     store:
@@ -28,6 +31,7 @@ type StoreContextType = {
               typeof configureStore<RootState, AnyAction, MiddlewareArray<[ThunkMiddleware<any, AnyAction, {}>]>, any[]>
           >
         | undefined
+    persistor: Persistor | undefined
 }
 
 const StoreContext = React.createContext<StoreContextType | undefined>(undefined)
@@ -58,9 +62,13 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         >()
 
     const [persistor, setPersistor] = useState<Persistor | undefined>()
+    const [rehydrationFailed, setRehydrationFailed] = useState(false)
 
     const initStore = useCallback(async (mmkv: MMKV, encryptionKey: string) => {
-        const persistConfig: PersistConfig<RootState> = await getPersistorConfig(mmkv, encryptionKey)
+        const persistConfig: PersistConfig<RootState> = await getPersistorConfig(mmkv, encryptionKey, () => {
+            error(ERROR_EVENTS.ENCRYPTION, "redux_rehydration_failed")
+            setRehydrationFailed(true)
+        })
 
         const nftPersistence: PersistConfig<NftSliceState> = {
             key: NftSlice.name,
@@ -108,7 +116,11 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         reduxStorage && initStore(reduxStorage.mmkv, reduxStorage.encryptionKey)
     }, [initStore, reduxStorage])
 
-    const contextValue = useMemo(() => ({ store: reactiveStore }), [reactiveStore])
+    const contextValue = useMemo(() => ({ store: reactiveStore, persistor }), [persistor, reactiveStore])
+
+    if (rehydrationFailed) {
+        return <StandaloneAppBlockedScreen />
+    }
 
     if (!store.current || !persistor) {
         return <></>

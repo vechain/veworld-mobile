@@ -31,6 +31,7 @@ describe("AppLoader", () => {
 
             const overlay = screen.getByTestId("app-loader-overlay")
             expect(overlay).toHaveAnimatedStyle({ opacity: 1 })
+            expect(overlay.props.pointerEvents).toBe("auto")
         })
     })
 
@@ -75,6 +76,7 @@ describe("AppLoader", () => {
 
             jest.advanceTimersByTime(300)
             expect(overlay).toHaveAnimatedStyle({ opacity: 0 })
+            expect(screen.getByTestId("app-loader-overlay").props.pointerEvents).toBe("none")
         })
     })
 

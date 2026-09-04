@@ -100,8 +100,6 @@ const remove = async () => {
 }
 
 const init = async (pinCode?: string) => {
-    await remove()
-
     const encryptionKeys: StorageEncryptionKeys = {
         redux: HexUtils.generateRandom(256),
         images: HexUtils.generateRandom(8),
@@ -109,6 +107,19 @@ const init = async (pinCode?: string) => {
     }
 
     await set(encryptionKeys, pinCode)
+
+    const storedKeys = await get({ pinCode })
+    if (
+        storedKeys.redux !== encryptionKeys.redux ||
+        storedKeys.images !== encryptionKeys.images ||
+        storedKeys.metadata !== encryptionKeys.metadata
+    ) {
+        throw new Error("Storage encryption key verification failed")
+    }
+
+    await Keychain.deleteItem({
+        key: pinCode ? BIOMETRIC_KEY_STORAGE : PIN_CODE_STORAGE,
+    })
 
     return encryptionKeys
 }

@@ -21,6 +21,11 @@ export const encryptTransform = <HSS, S = any, RS = any>(
 
     const { secretKey, onError } = config
 
+    const fail = (message: string): never => {
+        onError(message)
+        throw makeError(message)
+    }
+
     if (!secretKey) {
         throw makeError("No secret key provided.")
     }
@@ -30,7 +35,7 @@ export const encryptTransform = <HSS, S = any, RS = any>(
 
         (outboundState, _key) => {
             if (typeof outboundState !== "string") {
-                return onError("redux-persist-transform-encrypt : Expected outbound state to be a string.")
+                return fail("redux-persist-transform-encrypt : Expected outbound state to be a string.")
             }
 
             try {
@@ -40,13 +45,9 @@ export const encryptTransform = <HSS, S = any, RS = any>(
                     throw new Error("Decrypted string is empty.")
                 }
 
-                try {
-                    return JSON.parse(decryptedString)
-                } catch {
-                    return onError("redux-persist-transform-encrypt : Failed to parse state as JSON.")
-                }
+                return JSON.parse(decryptedString)
             } catch {
-                return onError(
+                return fail(
                     // eslint-disable-next-line max-len
                     "redux-persist-transform-encrypt : Could not decrypt state. Please verify that you are using the correct secret key.",
                 )

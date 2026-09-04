@@ -59,12 +59,10 @@ export const AppLoader = ({ children }: Props) => {
     const opacity = useSharedValue(isAppLoading ? 1 : 0)
     const timeoutRef = useRef<NodeJS.Timeout | null>(null)
     const lottieRef = useRef<LottieView>(null)
-    const isVisibleRef = useRef(false)
 
     const resetLoader = useCallback(() => {
         cancelAnimation(opacity)
         opacity.value = 0
-        isVisibleRef.current = false
         if (lottieRef.current) {
             lottieRef.current.pause()
         }
@@ -78,7 +76,6 @@ export const AppLoader = ({ children }: Props) => {
         }
 
         if (isAppLoading) {
-            isVisibleRef.current = true
             opacity.value = withTiming(1, { duration: 300 })
         } else {
             opacity.value = withTiming(0, { duration: 300 }, finished => {
@@ -126,7 +123,7 @@ export const AppLoader = ({ children }: Props) => {
             <Animated.View
                 testID="app-loader-overlay"
                 style={[styles.overlay, animatedStyle]}
-                pointerEvents={isVisibleRef.current ? "auto" : "none"}>
+                pointerEvents={isAppLoading ? "auto" : "none"}>
                 {RenderBackdrop}
                 <LottieView
                     ref={lottieRef}

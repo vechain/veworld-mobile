@@ -40,8 +40,9 @@ export const SelfCustodyOptionsBottomSheet = ({ bsRef }: Props) => {
 
     const onNewWallet = useCallback(async () => {
         track(AnalyticsEvent.SELECT_WALLET_CREATE_WALLET)
+        onClose()
         await onCreateWallet({ derivationPath: DerivationPath.VET })
-    }, [onCreateWallet, track])
+    }, [onClose, onCreateWallet, track])
 
     const goToImportFromCloud = useCallback(() => {
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_CLOUD)

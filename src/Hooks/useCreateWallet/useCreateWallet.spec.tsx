@@ -97,6 +97,7 @@ describe("useCreateWallet", () => {
     beforeEach(() => {
         jest.clearAllMocks()
         ;(WalletEncryptionKeyHelper.encryptWallet as jest.Mock).mockResolvedValue(JSON.stringify(wallet))
+        ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValue(wallet)
     })
 
     describe("createLocalWallet", () => {
@@ -156,6 +157,24 @@ describe("useCreateWallet", () => {
             expect(setMnemonic).toHaveBeenCalledWith(undefined)
             await waitFor(() => result.current.isComplete)
             expect(result.current.isComplete).toBe(true)
+        })
+
+        it("should not persist a wallet when encryption verification fails", async () => {
+            ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValueOnce({
+                ...wallet,
+                rootAddress: "0x0000000000000000000000000000000000000000",
+            })
+
+            const { result } = renderHook(() => useCreateWallet(), { wrapper: TestWrapper })
+
+            await expect(
+                result.current.createLocalWallet({
+                    mnemonic,
+                    derivationPath: DerivationPath.VET,
+                }),
+            ).rejects.toThrow("Wallet encryption verification failed")
+
+            expect(addDeviceAndAccounts).not.toHaveBeenCalled()
         })
     })
 

@@ -44,11 +44,12 @@ import {
 } from "./Slices"
 import { migrationUpdates } from "./Migrations"
 import { createMigrate } from "redux-persist"
-import { PersistConfig } from "redux-persist/es/types"
+import { PersistConfig, PersistedState } from "redux-persist/es/types"
 import { RootState } from "./Types"
 import { newStorage } from "./Storage"
 import { MMKV } from "react-native-mmkv"
 import { ERROR_EVENTS } from "~Constants"
+import getStoredState from "redux-persist/lib/getStoredState"
 
 // export const nftPersistConfig = {
 //     key: NftSlice.name,
@@ -62,7 +63,11 @@ import { ERROR_EVENTS } from "~Constants"
  *
  * @returns A `Promise` that resolves with the configuration object for a Redux Persistor.
  */
-export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Promise<PersistConfig<RootState>> => {
+export const getPersistorConfig = async (
+    mmkv: MMKV,
+    encryptionKey: string,
+    onRehydrationError?: () => void,
+): Promise<PersistConfig<RootState>> => {
     let encryptor = encryptTransform({
         secretKey: encryptionKey,
         onError: function (err) {
@@ -72,10 +77,11 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
 
     const storage = newStorage(mmkv)
 
-    return {
+    const config: PersistConfig<RootState> = {
         key: "root",
         storage,
         version: 37,
+        timeout: 0,
         blacklist: [NftSlice.name, PendingSlice.name],
         whitelist: [
             CurrencySlice.name,
@@ -100,6 +106,20 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
         migrate: createMigrate(migrationUpdates, { debug: true }),
         transforms: [encryptor],
     }
+
+    config.getStoredState = async persistConfig => {
+        try {
+            return (await getStoredState(persistConfig)) as PersistedState
+        } catch {
+            onRehydrationError?.()
+
+            // Keep the persistor sealed when encrypted state cannot be read. Rehydrating
+            // with undefined would immediately stage empty reducer defaults for writing.
+            return await new Promise<never>(() => undefined)
+        }
+    }
+
+    return config
 }
 
 /**

@@ -109,13 +109,22 @@ const remove = async () => {
 }
 
 const init = async (pinCode?: string) => {
-    await remove()
-
     const encryptionKeys: WalletEncryptionKey = {
         walletKey: HexUtils.generateRandom(256),
     }
 
     await set(encryptionKeys, pinCode)
+
+    const storedKeys = await get({ pinCode })
+    if (storedKeys.walletKey !== encryptionKeys.walletKey) {
+        throw new Error("Wallet encryption key verification failed")
+    }
+
+    await Keychain.deleteItem({
+        key: pinCode ? WALLET_BIOMETRIC_KEY_STORAGE : WALLET_ENCRYPTION_KEY_STORAGE,
+    })
+
+    return encryptionKeys
 }
 
 export default {
