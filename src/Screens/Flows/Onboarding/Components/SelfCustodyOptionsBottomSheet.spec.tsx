@@ -1,5 +1,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react-native"
 import React from "react"
+import { BaseBottomSheet } from "~Components/Base/BaseBottomSheet"
+import { CreatePasswordModal } from "~Components/Reusable/CreatePasswordModal"
 import { DerivationPath } from "~Constants"
 import { useCloudBackup } from "~Hooks/useCloudBackup"
 import { CloudKitWallet } from "~Model"
@@ -139,5 +141,36 @@ describe("SelfCustodyOptionsBottomSheet", () => {
         expect(mockCloseBottomSheet).toHaveBeenCalledTimes(1)
         expect(onNewWallet).toHaveBeenCalled()
         expect(mockCloseBottomSheet.mock.invocationCallOrder[0]).toBeLessThan(onNewWallet.mock.invocationCallOrder[0])
+    })
+
+    it("keeps the password modal mounted outside the bottom sheet", () => {
+        ;(useCloudBackup as jest.Mock).mockReturnValue({
+            isCloudAvailable: true,
+            getAllWalletFromCloud: jest.fn().mockResolvedValue([]),
+        })
+        ;(useHandleWalletCreation as jest.Mock).mockReturnValue({
+            onCreateWallet: jest.fn(),
+            isOpen: true,
+            isError: false,
+            onSuccess: jest.fn(),
+            onClose: jest.fn(),
+        })
+
+        const ref = {
+            current: { present: jest.fn(), close: jest.fn() },
+        }
+
+        render(<SelfCustodyOptionsBottomSheet bsRef={ref as any} />, {
+            wrapper: TestWrapper,
+        })
+
+        const bottomSheet = screen.UNSAFE_getByType(BaseBottomSheet)
+        const passwordModal = screen.UNSAFE_getByType(CreatePasswordModal)
+        let ancestor = passwordModal.parent
+
+        while (ancestor) {
+            expect(ancestor).not.toBe(bottomSheet)
+            ancestor = ancestor.parent
+        }
     })
 })

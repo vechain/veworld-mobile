@@ -133,43 +133,45 @@ export const SelfCustodyOptionsBottomSheet = ({ bsRef }: Props) => {
     }, [isError, LL])
 
     return (
-        <BaseBottomSheet
-            ref={bottomSheetRef}
-            floating
-            dynamicHeight
-            scrollable={false}
-            backgroundStyle={styles.rootSheet}
-            enablePanDownToClose>
-            {/* Title and description */}
-            <BaseView gap={8}>
-                <BaseView flexDirection="row" gap={12}>
-                    <BaseIcon name="icon-wallet" size={20} color={theme.colors.editSpeedBs.title} />
-                    <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                        {LL.SB_TITLE_SELF_CUSTODY_WALLET()}
+        <>
+            <BaseBottomSheet
+                ref={bottomSheetRef}
+                floating
+                dynamicHeight
+                scrollable={false}
+                backgroundStyle={styles.rootSheet}
+                enablePanDownToClose>
+                {/* Title and description */}
+                <BaseView gap={8}>
+                    <BaseView flexDirection="row" gap={12}>
+                        <BaseIcon name="icon-wallet" size={20} color={theme.colors.editSpeedBs.title} />
+                        <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                            {LL.SB_TITLE_SELF_CUSTODY_WALLET()}
+                        </BaseText>
+                    </BaseView>
+                    <BaseText typographyFont="body" color={theme.colors.editSpeedBs.subtitle}>
+                        {LL.SB_DESCRIPTION_SELF_CUSTODY_WALLET()}
                     </BaseText>
                 </BaseView>
-                <BaseText typographyFont="body" color={theme.colors.editSpeedBs.subtitle}>
-                    {LL.SB_DESCRIPTION_SELF_CUSTODY_WALLET()}
-                </BaseText>
-            </BaseView>
-            <BaseSpacer height={16} />
-            {/* Options */}
-            <FlatList
-                data={avaliableOptions}
-                keyExtractor={option => option.id}
-                bounces={false}
-                renderItem={({ item }) => (
-                    <CardListItem
-                        testID={`SELF_CUSTODY_OPTIONS_${item.id.toUpperCase()}`}
-                        icon={item.icon as IconKey}
-                        title={item.title}
-                        subtitle={item.description}
-                        action={item.action}
-                        disabled={item.disabled ?? false}
-                    />
-                )}
-                ItemSeparatorComponent={ItemsSeparator}
-            />
+                <BaseSpacer height={16} />
+                {/* Options */}
+                <FlatList
+                    data={avaliableOptions}
+                    keyExtractor={option => option.id}
+                    bounces={false}
+                    renderItem={({ item }) => (
+                        <CardListItem
+                            testID={`SELF_CUSTODY_OPTIONS_${item.id.toUpperCase()}`}
+                            icon={item.icon as IconKey}
+                            title={item.title}
+                            subtitle={item.description}
+                            action={item.action}
+                            disabled={item.disabled ?? false}
+                        />
+                    )}
+                    ItemSeparatorComponent={ItemsSeparator}
+                />
+            </BaseBottomSheet>
             <CreatePasswordModal
                 isOpen={isOpen}
                 onClose={onCloseCreateFlow}
@@ -180,7 +182,7 @@ export const SelfCustodyOptionsBottomSheet = ({ bsRef }: Props) => {
                     })
                 }
             />
-        </BaseBottomSheet>
+        </>
     )
 }
 
