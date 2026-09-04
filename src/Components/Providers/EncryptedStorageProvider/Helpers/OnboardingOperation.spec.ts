@@ -1,7 +1,11 @@
-import { runOnboardingOperationOnce } from "./OnboardingOperation"
+import { resetOnboardingOperation, runOnboardingOperationOnce } from "./OnboardingOperation"
 
 describe("runOnboardingOperationOnce", () => {
-    it("shares one in-flight creation and accepts another after completion", async () => {
+    afterEach(() => {
+        resetOnboardingOperation()
+    })
+
+    it("ignores a second operation while one is in flight and accepts another after completion", async () => {
         let release!: () => void
         const firstOperation = jest.fn(
             () =>
@@ -14,7 +18,10 @@ describe("runOnboardingOperationOnce", () => {
         const first = runOnboardingOperationOnce(firstOperation)
         const duplicate = runOnboardingOperationOnce(duplicateOperation)
 
-        expect(first).toBe(duplicate)
+        // The second caller must not receive the in-flight promise: it could be a
+        // different operation, and settling would read as its own success.
+        expect(duplicate).not.toBe(first)
+        await expect(duplicate).resolves.toBeUndefined()
         expect(firstOperation).toHaveBeenCalledTimes(1)
         expect(duplicateOperation).not.toHaveBeenCalled()
 
@@ -23,5 +30,15 @@ describe("runOnboardingOperationOnce", () => {
 
         await runOnboardingOperationOnce(duplicateOperation)
         expect(duplicateOperation).toHaveBeenCalledTimes(1)
+    })
+
+    it("releases the latch when the operation rejects", async () => {
+        const failingOperation = jest.fn().mockRejectedValue(new Error("boom"))
+        const nextOperation = jest.fn().mockResolvedValue(undefined)
+
+        await expect(runOnboardingOperationOnce(failingOperation)).rejects.toThrow("boom")
+
+        await runOnboardingOperationOnce(nextOperation)
+        expect(nextOperation).toHaveBeenCalledTimes(1)
     })
 })

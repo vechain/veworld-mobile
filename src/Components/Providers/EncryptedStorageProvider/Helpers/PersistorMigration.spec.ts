@@ -27,6 +27,8 @@ describe("runOnboardingStorageMigration", () => {
         await result
 
         expect(calls).toEqual(["flush", "pause", "migration"])
+        // The old persistor stays paused on success by design: the migration swaps the
+        // redux storage, which rebuilds the store with a fresh, unpaused persistor.
         expect(persist).not.toHaveBeenCalled()
     })
 

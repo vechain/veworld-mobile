@@ -89,6 +89,32 @@ describe("onboarding storage migration", () => {
         ).toThrow("Migrated state has no devices")
     })
 
+    it("throws when the written state does not read back verbatim", () => {
+        const source = createStorage()
+        const destination = createStorage()
+        const rootAddress = "0xec954b8e81777354d0a35111d83373b9ec171c64"
+        source.values.set(
+            ROOT_STATE_KEY,
+            JSON.stringify({
+                devices: serializeSlice(
+                    [{ type: DEVICE_TYPE.LOCAL_MNEMONIC, rootAddress, wallet: "encrypted-wallet" }],
+                    ONBOARDING_KEY,
+                ),
+                accounts: serializeSlice({ selectedAccount: { address: rootAddress } }, ONBOARDING_KEY),
+            }),
+        )
+        ;(destination.storage.getString as jest.Mock).mockReturnValue("truncated-write")
+
+        expect(() =>
+            Onboarding.migrateState({
+                onboardingStorage: source.storage,
+                encryptedStorage: destination.storage,
+                onboardingKey: ONBOARDING_KEY,
+                encryptionKey: ENCRYPTED_KEY,
+            }),
+        ).toThrow("Failed to write migrated state")
+    })
+
     it("rejects a local device whose encrypted wallet is not a non-empty string", () => {
         const source = createStorage()
         const destination = createStorage()

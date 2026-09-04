@@ -82,10 +82,15 @@ export const getPersistorConfig = async (
 
     const storage = newStorage(mmkv)
 
+    const migrate = createMigrate(migrationUpdates, { debug: true })
+
     const config: PersistConfig<RootState> = {
         key: "root",
         storage,
         version: 38,
+        // Load-bearing: with the default timeout (5000ms) redux-persist calls
+        // _rehydrate(undefined) after 5s, staging reducer defaults for writing over
+        // the encrypted state — the data-loss bug the sealed guards below prevent.
         timeout: 0,
         blacklist: [NftSlice.name, PendingSlice.name],
         whitelist: [
@@ -108,7 +113,18 @@ export const getPersistorConfig = async (
             ExternalDappsSlice.name,
             WalletPreferencesSlice.name,
         ],
-        migrate: createMigrate(migrationUpdates, { debug: true }),
+        migrate: async (state, currentVersion) => {
+            try {
+                return await migrate(state, currentVersion)
+            } catch (migrationError) {
+                error(ERROR_EVENTS.ENCRYPTION, "redux_migration_failed", migrationError)
+                onRehydrationError?.()
+
+                // Keep the persistor sealed when a migration throws. Rehydrating with
+                // undefined would immediately stage empty reducer defaults for writing.
+                return keepPersistorSealed()
+            }
+        },
         transforms: [encryptor],
     }
 

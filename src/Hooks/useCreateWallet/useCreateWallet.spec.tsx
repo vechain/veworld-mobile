@@ -59,7 +59,6 @@ jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
         set: jest.fn(),
         decryptWallet: jest.fn(),
         encryptWallet: jest.fn(),
-        encryptAndDecryptWallet: jest.fn(),
         init: jest.fn(),
     },
 }))
@@ -97,10 +96,7 @@ jest.mock("~Storage/Redux/Actions", () => ({
 describe("useCreateWallet", () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        ;(WalletEncryptionKeyHelper.encryptAndDecryptWallet as jest.Mock).mockResolvedValue({
-            encryptedWallet: JSON.stringify(wallet),
-            decryptedWallet: wallet,
-        })
+        ;(WalletEncryptionKeyHelper.encryptWallet as jest.Mock).mockResolvedValue(JSON.stringify(wallet))
     })
 
     describe("createLocalWallet", () => {
@@ -163,13 +159,9 @@ describe("useCreateWallet", () => {
         })
 
         it("should not persist a wallet when encryption verification fails", async () => {
-            ;(WalletEncryptionKeyHelper.encryptAndDecryptWallet as jest.Mock).mockResolvedValueOnce({
-                encryptedWallet: JSON.stringify(wallet),
-                decryptedWallet: {
-                    ...wallet,
-                    rootAddress: "0x0000000000000000000000000000000000000000",
-                },
-            })
+            ;(WalletEncryptionKeyHelper.encryptWallet as jest.Mock).mockRejectedValueOnce(
+                new Error("Wallet encryption verification failed"),
+            )
 
             const { result } = renderHook(() => useCreateWallet(), { wrapper: TestWrapper })
 

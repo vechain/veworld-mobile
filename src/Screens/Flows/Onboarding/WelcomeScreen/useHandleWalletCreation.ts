@@ -3,6 +3,7 @@ import {
     runOnboardingStorageMigration,
     runOnboardingOperationOnce,
     showErrorToast,
+    showInfoToast,
     useApplicationSecurity,
     useStore,
     WalletEncryptionKeyHelper,
@@ -33,6 +34,7 @@ export const useHandleWalletCreation = () => {
             dispatch(setIsAppLoading(false))
 
             if (BiometricsUtils.BiometricErrors.isBiometricCanceled(_error)) {
+                showInfoToast({ text1: LL.NOTIFICATION_AUTHENTICATION_CANCELLED() })
                 return
             }
 
@@ -59,10 +61,13 @@ export const useHandleWalletCreation = () => {
                     await operation()
                 } catch (e) {
                     onWalletCreationError(e)
-                    await Promise.allSettled([
-                        Promise.resolve().then(() => WalletEncryptionKeyHelper.remove()),
-                        Promise.resolve().then(() => dispatch(resetApp())),
-                    ])
+
+                    // A cancelled prompt is an intentional user action and nothing has been
+                    // migrated yet: keep redux and keychain state so a second tap retries cleanly.
+                    if (!BiometricsUtils.BiometricErrors.isBiometricCanceled(e)) {
+                        await WalletEncryptionKeyHelper.remove().catch(() => undefined)
+                        dispatch(resetApp())
+                    }
                 } finally {
                     dispatch(setIsAppLoading(false))
                 }
@@ -187,18 +192,6 @@ export const useHandleWalletCreation = () => {
             })
         },
         [completeOnboardingMigration, createSmartWallet, onClose, runOnboardingCreation],
-    )
-
-    const migrateFromOnboarding = useCallback(
-        (pin?: string) =>
-            runOnboardingCreation(async () => {
-                if (pin) {
-                    await completeOnboardingMigration(SecurityLevelType.SECRET, pin)
-                } else {
-                    await completeOnboardingMigration(SecurityLevelType.BIOMETRIC)
-                }
-            }),
-        [completeOnboardingMigration, runOnboardingCreation],
     )
 
     const onCreateLedgerWallet = useCallback(
@@ -340,7 +333,6 @@ export const useHandleWalletCreation = () => {
 
     return {
         onCreateWallet,
-        migrateFromOnboarding,
         isOpen,
         isError,
         onSuccess,

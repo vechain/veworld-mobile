@@ -1,6 +1,7 @@
 import { StorageEncryptionKeys } from "~Components/Providers/EncryptedStorageProvider/Model"
 import { Keychain } from "~Storage"
 import { CryptoUtils, CryptoUtils_Legacy, error, HexUtils, PasswordUtils } from "~Utils"
+import KeyCommit from "./KeyCommit"
 import SaltHelper from "./SaltHelper"
 import { ACCESS_CONTROL, type SetOptions } from "react-native-keychain"
 import { ERROR_EVENTS } from "~Constants"
@@ -42,6 +43,8 @@ const setWithPinCode = async (encryptionKeys: StorageEncryptionKeys, pinCode: st
         key: PIN_CODE_STORAGE,
         value: encryptedKeys,
     })
+
+    return encryptedKeys
 }
 
 const setWithBiometric = async (encryptionKeys: StorageEncryptionKeys) => {
@@ -106,20 +109,18 @@ const init = async (pinCode?: string) => {
         metadata: HexUtils.generateRandom(8),
     }
 
-    await set(encryptionKeys, pinCode)
-
-    const storedKeys = await get({ pinCode })
-    if (
-        storedKeys.redux !== encryptionKeys.redux ||
-        storedKeys.images !== encryptionKeys.images ||
-        storedKeys.metadata !== encryptionKeys.metadata
-    ) {
-        throw new Error("Storage encryption key verification failed")
+    if (pinCode) {
+        const writtenCiphertext = await setWithPinCode(encryptionKeys, pinCode)
+        await KeyCommit.commitVerifiedKeys({
+            verifySlot: { key: PIN_CODE_STORAGE, expectedCiphertext: writtenCiphertext },
+            alternateSlotKey: BIOMETRIC_KEY_STORAGE,
+        })
+    } else {
+        await setWithBiometric(encryptionKeys)
+        await KeyCommit.commitVerifiedKeys({
+            alternateSlotKey: PIN_CODE_STORAGE,
+        })
     }
-
-    await Keychain.deleteItem({
-        key: pinCode ? BIOMETRIC_KEY_STORAGE : PIN_CODE_STORAGE,
-    })
 
     return encryptionKeys
 }

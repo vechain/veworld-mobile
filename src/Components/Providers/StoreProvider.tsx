@@ -22,6 +22,7 @@ import { getPersistorConfig, newStorage, NftSlice, NftSliceState, reducer } from
 import { RootState } from "~Storage/Redux/Types"
 import { SplashScreen } from "../../../src/SplashScreen"
 import { StandaloneAppBlockedScreen } from "~Screens"
+import { useI18nContext } from "~i18n"
 
 type StoreContextType = {
     store:
@@ -38,6 +39,7 @@ type StoreContextProviderProps = { children: React.ReactNode }
 
 const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     const { redux: reduxStorage } = useApplicationSecurity()
+    const { LL } = useI18nContext()
 
     const store = useRef<
         | ReturnType<
@@ -116,7 +118,9 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     const contextValue = useMemo(() => ({ store: reactiveStore, persistor }), [persistor, reactiveStore])
 
     if (rehydrationFailed) {
-        return <StandaloneAppBlockedScreen />
+        // Fail closed with copy specific to this cause: the default screen text blames a
+        // security downgrade and suggests biometrics, which is wrong and misleading here.
+        return <StandaloneAppBlockedScreen title={LL.TITLE_REHYDRATION_FAILED()} body={LL.BD_REHYDRATION_FAILED()} />
     }
 
     if (!store.current || !persistor) {
