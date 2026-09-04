@@ -1,5 +1,12 @@
 
 
+## 2.5.9 (2026-09-04)
+
+
+### Bug Fixes
+
+* **onboarding:** preserve wallet creation state ([#3941](https://github.com/vechain/veworld-mobile/issues/3941)) ([48895da](https://github.com/vechain/veworld-mobile/commit/48895da3b2f586b2ac3d7580807fb0dd2216da81))
+
 ## 2.5.8 (2026-07-01)
 
 ## 2.5.7 (2026-04-28)
