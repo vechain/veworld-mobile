@@ -260,7 +260,7 @@
   "BD_PRIVATE_KEY_DISCLAIMER": "Non divulgare mai la tua chiave privata. Chiunque abbia queste informazioni può prendere i tuoi VeChain per sempre.",
   "BD_PRIVATE_KEY_PASSWORD_WARNING": "Nel caso in cui perdi il tuo dispositivo o l'app viene disinstallata, puoi utilizzare la chiave privata qui sotto per recuperare questo portafoglio e tutte le tue risorse.",
   "BD_PRIVATE_KEY_WARMNING": "Non condividere mai la tua chiave privata. Chiunque vi acceda può rubare tutti i tuoi asset crypto.",
-  "BD_REHYDRATION_FAILED": "VeWorld non è riuscito a leggere i dati memorizzati su questo dispositivo. I dati del tuo portafoglio non sono stati eliminati, ma al momento non possono essere decifrati. Riavvia l'app e contatta l'assistenza se il problema persiste.",
+  "BD_REHYDRATION_FAILED": "VeWorld non è riuscito a leggere i dati memorizzati su questo dispositivo. I dati del tuo wallet non sono stati eliminati, ma al momento non possono essere decifrati. Riavvia l'app e contatta il supporto se il problema persiste.",
   "BD_RESET": "Reimposta app",
   "BD_RESET_APP_01": "Reimpostare il tuo account ti disconnetterà e cancellerà tutti i tuoi dati memorizzati localmente (account, portafogli, cronologia delle transazioni ecc.).",
   "BD_RESET_APP_02": "Reimpostare VeWorld non modificherà il saldo dei tuoi account ma ti richiederà di reinserire la tua frase di recupero segreta per accedervi.",
