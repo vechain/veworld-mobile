@@ -51,6 +51,11 @@ import { MMKV } from "react-native-mmkv"
 import { ERROR_EVENTS } from "~Constants"
 import getStoredState from "redux-persist/lib/getStoredState"
 
+const keepPersistorSealed = (): Promise<never> =>
+    new Promise(() => {
+        // Intentionally never resolve after an unrecoverable rehydration failure.
+    })
+
 // export const nftPersistConfig = {
 //     key: NftSlice.name,
 //     storage: storage,
@@ -116,7 +121,7 @@ export const getPersistorConfig = async (
 
             // Keep the persistor sealed when encrypted state cannot be read. Rehydrating
             // with undefined would immediately stage empty reducer defaults for writing.
-            return await new Promise<never>(() => undefined)
+            return keepPersistorSealed()
         }
     }
 
