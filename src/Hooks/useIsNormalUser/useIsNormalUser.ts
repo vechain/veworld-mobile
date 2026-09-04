@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
+import { Address } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { useEffect, useMemo } from "react"
 import { VET } from "~Constants"
@@ -24,7 +25,9 @@ const getAccountsActions = async (thorClient: ThorClient, addresses: string[]) =
         generatedAbi["RewardDistributed(uint256,indexed bytes32,indexed address,string,indexed address)"],
     ])
     const criteriaSet = addresses.map(
-        address => loadedContract.criteria.RewardDistributed({ receiver: address }).criteria,
+        address =>
+            loadedContract.criteria.RewardDistributed({ receiver: Address.of(address).toString() as `0x${string}` })
+                .criteria,
     )
     const result = await thorClient.logs.filterRawEventLogs({
         criteriaSet,

@@ -80,7 +80,7 @@ export const getPersistorConfig = async (
     const config: PersistConfig<RootState> = {
         key: "root",
         storage,
-        version: 37,
+        version: 38,
         timeout: 0,
         blacklist: [NftSlice.name, PendingSlice.name],
         whitelist: [

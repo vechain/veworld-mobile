@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from "react"
 import { ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useSmartWallet, useThemedStyles } from "~Hooks"
+import { useAppleLoginAvailability, useSmartWallet, useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 import { PlatformUtils } from "~Utils"
 import { SocialProvider } from "@vechain/embedded-wallet-sdk"
@@ -20,8 +20,19 @@ const ICON_MAP: Record<string, IconKey> = {
 export const LinkAccountBox = ({ item, onUnlink, onLink }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { linkedAccounts } = useSmartWallet()
+    const { isAppleLoginDisabled } = useAppleLoginAvailability()
 
     const linkedAccount = useMemo(() => linkedAccounts.find(account => account.type === item), [linkedAccounts, item])
+
+    /**
+     * Linking apple is unavailable during the Apple migration maintenance window.
+     * The button keeps handling the press (the screen shows a maintenance message), so it is only
+     * dimmed and never actually disabled.
+     */
+    const isAppleLinkUnavailable = useMemo(
+        () => item === "apple" && !linkedAccount && isAppleLoginDisabled,
+        [item, linkedAccount, isAppleLoginDisabled],
+    )
 
     const isDisabled = useMemo(
         /**
@@ -68,7 +79,10 @@ export const LinkAccountBox = ({ item, onUnlink, onLink }: Props) => {
                     </BaseText>
                 )}
             </BaseView>
-            <BaseTouchable disabled={isDisabled} action={onPress} style={isDisabled ? styles.disabled : undefined}>
+            <BaseTouchable
+                disabled={isDisabled}
+                action={onPress}
+                style={isDisabled || isAppleLinkUnavailable ? styles.disabled : undefined}>
                 <BaseIcon
                     name={linkedAccount ? "icon-unlink" : "icon-link"}
                     style={styles.linkBtn}
