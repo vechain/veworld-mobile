@@ -1,5 +1,12 @@
 
 
+## 2.5.9 (2026-09-07)
+
+
+### Bug Fixes
+
+* update android target api level to 36 ([#3943](https://github.com/vechain/veworld-mobile/issues/3943)) ([77191ef](https://github.com/vechain/veworld-mobile/commit/77191ef9b5e9924d57333a5a5f47969d08a00cb1))
+
 ## 2.5.8 (2026-07-01)
 
 ## 2.5.7 (2026-04-28)
