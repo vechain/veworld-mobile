@@ -6,6 +6,7 @@ import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCar
 import { useWalletStatus } from "~Components/Providers/EncryptedStorageProvider/ApplicationSecurityProvider"
 import { useSmartWallet } from "~Hooks/useSmartWallet"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
+import { useAppleLoginAvailability } from "~Hooks/useAppleLoginAvailability"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType, ERROR_EVENTS, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 import { AccountWithDevice, DEVICE_TYPE, SmartWalletDevice, WALLET_STATUS } from "~Model"
@@ -46,6 +47,7 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
     const safeAreaInset = useSafeAreaInsets()
     const { LL } = useI18nContext()
     const { ref: infoBsRef, onOpenPlain: openInfoBs } = useBottomSheetModal()
+    const { isAppleLoginDisabled, showMaintenanceMessage } = useAppleLoginAvailability()
 
     const isSmartAccount = selectedAccount?.device?.type === DEVICE_TYPE.SMART_WALLET
 
@@ -67,6 +69,8 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
 
     const handleProviderLogin = useCallback(
         async (provider: SocialProvider) => {
+            if (provider === "apple" && isAppleLoginDisabled) return showMaintenanceMessage()
+
             try {
                 await login({ provider, oauthRedirectUri: "/auth/callback" })
             } catch (e) {
@@ -79,7 +83,7 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
                 })
             }
         },
-        [login, LL],
+        [isAppleLoginDisabled, showMaintenanceMessage, login, LL],
     )
 
     const handleSelectAccount = useCallback(
@@ -139,7 +143,7 @@ const SmartWalletAuthGateContent = ({ walletStatus }: { walletStatus: WALLET_STA
                             {showApple && (
                                 <BaseButton
                                     testID="RELOGIN_APPLE_BUTTON"
-                                    style={styles.socialButton}
+                                    style={[styles.socialButton, isAppleLoginDisabled && styles.dimmed]}
                                     leftIcon={<BaseIcon color={theme.colors.buttonText} name="icon-apple" size={24} />}
                                     textProps={{ typographyFont: "bodyMedium" }}
                                     title={LL.BTN_CONTINUE_WITH_APPLE()}
@@ -229,6 +233,13 @@ const baseStyles = (hasAlternativeWallets: boolean, bottomInset: number) => (_th
             alignItems: "center",
             justifyContent: "center",
             gap: 12,
+        },
+        /**
+         * Applied instead of the `disabled` prop: the button must keep handling the press so the
+         * maintenance message can be shown.
+         */
+        dimmed: {
+            opacity: 0.5,
         },
         walletHeader: {
             flexDirection: "column",

@@ -3,23 +3,31 @@ import React, { useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
 import Animated, { LinearTransition, ZoomIn, ZoomOut } from "react-native-reanimated"
 import { BaseIcon, BaseSimpleTabs, BaseSpacer, BaseTouchable, BaseView } from "~Components"
+import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { AnalyticsEvent, COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
 import {
     useAnalyticTracking,
     useDappBookmarksList,
     useHasAnyVeBetterActions,
+    useIsAppleLinkedSmartWallet,
     useIsOnline,
     useThemedStyles,
 } from "~Hooks"
 import { useLayoutScrollviewPadding } from "~Hooks/useLayoutScrollviewPadding"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { useAppSelector } from "~Storage/Redux/Hooks"
-import { selectHideNewUserVeBetterCard, selectSelectedAccount } from "~Storage/Redux/Selectors"
+import { setDismissedAppleMigrationBanner } from "~Storage/Redux"
+import { useAppDispatch, useAppSelector } from "~Storage/Redux/Hooks"
+import {
+    selectDismissedAppleMigrationBanner,
+    selectHideNewUserVeBetterCard,
+    selectSelectedAccount,
+} from "~Storage/Redux/Selectors"
 import { AccountUtils } from "~Utils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { FavouritesV2 } from "../../AppsScreen/Components/Favourites/FavouritesV2"
 import { useDAppActions } from "../../AppsScreen/Hooks/useDAppActions"
+import { AppleMigrationBanner } from "../Components/AppleMigration"
 import { BannersCarousel } from "../Components/BannerCarousel"
 import { NewUserVeBetterCard } from "../Components/VeBetterDao/NewUserVeBetterCard"
 import { Collectibles } from "./Collectibles"
@@ -45,6 +53,11 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const { onDAppPress } = useDAppActions(Routes.HOME)
     const nav = useNavigation()
     const track = useAnalyticTracking()
+    const dispatch = useAppDispatch()
+
+    const featureFlags = useFeatureFlags()
+    const isAppleLinkedSmartWallet = useIsAppleLinkedSmartWallet()
+    const dismissedAppleMigrationBanner = useAppSelector(selectDismissedAppleMigrationBanner)
 
     const isOnline = useIsOnline()
 
@@ -60,6 +73,34 @@ export const TabRenderer = ({ onLayout }: Props) => {
     const showNewUserVeBetterCard = useMemo(() => {
         return !hideNewUserVeBetterCard && !hasAnyVeBetterActions && selectedTab === "TOKENS"
     }, [hideNewUserVeBetterCard, hasAnyVeBetterActions, selectedTab])
+
+    const appleMigrationBanner = featureFlags?.appleMigrationFeature?.banner
+
+    /**
+     * Dismissal is persisted as a payload signature (not a boolean), so the banner re-appears
+     * when the remote payload changes, eg. once the maintenance dates are known.
+     */
+    const appleMigrationBannerSignature = useMemo(
+        () => `${appleMigrationBanner?.startDate ?? ""}|${appleMigrationBanner?.endDate ?? ""}`,
+        [appleMigrationBanner?.endDate, appleMigrationBanner?.startDate],
+    )
+
+    const showAppleMigrationBanner = useMemo(() => {
+        return (
+            Boolean(appleMigrationBanner?.enabled) &&
+            isAppleLinkedSmartWallet &&
+            dismissedAppleMigrationBanner !== appleMigrationBannerSignature
+        )
+    }, [
+        appleMigrationBanner?.enabled,
+        appleMigrationBannerSignature,
+        dismissedAppleMigrationBanner,
+        isAppleLinkedSmartWallet,
+    ])
+
+    const onCloseAppleMigrationBanner = useCallback(() => {
+        dispatch(setDismissedAppleMigrationBanner(appleMigrationBannerSignature))
+    }, [appleMigrationBannerSignature, dispatch])
 
     const rightIcon = useMemo(() => {
         if (selectedTab === "TOKENS" && isOnline) {
@@ -108,6 +149,13 @@ export const TabRenderer = ({ onLayout }: Props) => {
                         />
                         <BaseSpacer height={16} />
                     </BaseView>
+                )}
+
+                {showAppleMigrationBanner && (
+                    <Animated.View layout={LinearTransition.duration(400)}>
+                        <AppleMigrationBanner onClose={onCloseAppleMigrationBanner} />
+                        <BaseSpacer height={18} />
+                    </Animated.View>
                 )}
 
                 {showNewUserVeBetterCard && (

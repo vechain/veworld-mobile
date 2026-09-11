@@ -66,5 +66,13 @@ export const mockedFeatureFlags: FeatureFlags = {
     smartWalletFeature: {
         enabled: false,
     },
+    appleMigrationFeature: {
+        banner: {
+            enabled: false,
+        },
+        loginDisabled: {
+            enabled: false,
+        },
+    },
     hiddenForYouPopularApps: [],
 }

@@ -13,13 +13,18 @@ type Props = {
     action: () => void
     testID?: string
     disabled?: boolean
+    /**
+     * Renders the item with the disabled look while keeping it pressable.
+     * Use it when the press must still be handled, eg. to explain why the action is unavailable.
+     */
+    dimmed?: boolean
 }
 
-export const CardListItem = ({ icon, title, subtitle, action, testID, disabled }: Props) => {
+export const CardListItem = ({ icon, title, subtitle, action, testID, disabled, dimmed }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     return (
         <TouchableOpacity
-            style={[styles.root, disabled && styles.disabled]}
+            style={[styles.root, (disabled || dimmed) && styles.disabled]}
             onPress={action}
             activeOpacity={0.8}
             testID={testID}

@@ -10,7 +10,7 @@ import { PlatformUtils } from "~Utils"
 import { SocialProvider } from "@vechain/embedded-wallet-sdk"
 import { LinkAccountBox } from "./Components"
 import { COLORS } from "~Constants"
-import { useBottomSheetModal, useSmartWallet } from "~Hooks"
+import { useAppleLoginAvailability, useBottomSheetModal, useSmartWallet } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { ConfirmUnlinkAccountBottomSheet } from "./Components/ConfirmUnlinkAccountBottomSheet"
 import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
@@ -26,6 +26,7 @@ export const SmartWalletLinkAccountScreen = ({ route }: Props) => {
     const theme = useTheme()
 
     const { linkOAuth } = useSmartWallet()
+    const { isAppleLoginDisabled, showMaintenanceMessage } = useAppleLoginAvailability()
 
     const { link, status } = linkOAuth
 
@@ -69,11 +70,13 @@ export const SmartWalletLinkAccountScreen = ({ route }: Props) => {
                 <LinkAccountBox
                     {...props}
                     onUnlink={(provider, subject) => openConfirmUnlinkBottomSheet({ provider, subject })}
-                    onLink={provider => link(provider)}
+                    onLink={provider =>
+                        provider === "apple" && isAppleLoginDisabled ? showMaintenanceMessage() : link(provider)
+                    }
                 />
             )
         },
-        [openConfirmUnlinkBottomSheet, link],
+        [openConfirmUnlinkBottomSheet, isAppleLoginDisabled, showMaintenanceMessage, link],
     )
 
     const renderSeparator = useCallback(() => {

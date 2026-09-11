@@ -11,6 +11,10 @@ jest.mock("expo-clipboard", () => ({
     getStringAsync: jest.fn(),
 }))
 
+jest.mock("~Components/Providers/StoreProvider", () => ({
+    useStore: jest.fn(() => ({ persistor: {} })),
+}))
+
 describe("ImportLocalWallet", () => {
     beforeEach(() => {
         jest.clearAllMocks()

@@ -53,8 +53,7 @@ export type EstimateGenericDelegatorFeesResponse = {
 }
 
 export const estimateGenericDelegatorFees = ({ networkType, clauses, signer }: EstimateGenericDelegatorFeesRequest) => {
-    // the ","" is an existing hack to make the generic delegator send back prices for all tokens
-    return executeIfValidNetwork(networkType, "/api/v1/estimate/clauses/,", url =>
+    return executeIfValidNetwork(networkType, "/api/v1/estimate/clauses/all", url =>
         requestFromEndpoint<EstimateGenericDelegatorFeesResponse>({
             url: url,
             data: {

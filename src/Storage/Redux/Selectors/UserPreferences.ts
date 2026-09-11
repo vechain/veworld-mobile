@@ -95,6 +95,10 @@ export const selectHideStargateXVeBetterBanner = createSelector(reducer, state =
     return state.hideStargateXVeBetterBanner
 })
 
+export const selectDismissedAppleMigrationBanner = createSelector(reducer, state => {
+    return state.dismissedAppleMigrationBanner
+})
+
 export const selectHideStargateBannerVETScreen = createSelector(reducer, state => {
     return state.hideStargateBannerVETScreen
 })

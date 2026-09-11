@@ -1,9 +1,30 @@
 import React from "react"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native"
-import { setPlatform, TestWrapper } from "~Test"
+// `~Test` MUST be imported before `~Components/Providers/FeatureFlagsProvider`: loading the mocked
+// module first makes the providers inside TestWrapper capture the actual module instead of the mock.
+import { setPlatform, TestHelpers, TestWrapper } from "~Test"
+import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
+import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { WelcomeScreenV2 } from "./WelcomeScreenV2"
 import { useSmartWallet } from "~Hooks/useSmartWallet"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
+
+const { mockedFeatureFlags } = TestHelpers.data
+
+jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
+    ...jest.requireActual("~Components/Providers/FeatureFlagsProvider"),
+    useFeatureFlags: jest.fn(),
+}))
+
+const mockAppleLoginDisabled = (enabled: boolean) => {
+    ;(useFeatureFlags as jest.Mock).mockReturnValue({
+        ...mockedFeatureFlags,
+        appleMigrationFeature: {
+            banner: { enabled: false },
+            loginDisabled: { enabled },
+        },
+    })
+}
 
 jest.mock("~Hooks/useSmartWallet", () => ({
     useSmartWallet: jest.fn(() => ({
@@ -43,6 +64,10 @@ jest.mock("expo-haptics", () => {
 })
 
 describe("WelcomeScreenV2", () => {
+    beforeEach(() => {
+        mockAppleLoginDisabled(false)
+    })
+
     it("should render correctly", () => {
         render(<WelcomeScreenV2 />, {
             wrapper: TestWrapper,
@@ -142,6 +167,57 @@ describe("WelcomeScreenV2", () => {
                     address: mockSmartAccountAddress,
                     name: undefined,
                     linkedProviders: ["google"],
+                })
+            })
+        })
+    })
+
+    describe("Apple migration maintenance", () => {
+        const mockLogin = jest.fn()
+
+        beforeEach(() => {
+            jest.clearAllMocks()
+            setPlatform("ios")
+            mockAppleLoginDisabled(true)
+            ;(useSmartWallet as jest.Mock).mockReturnValue({
+                login: mockLogin,
+                isAuthenticated: false,
+                smartAccountAddress: "",
+                linkedAccounts: [],
+                userDisplayName: undefined,
+            })
+        })
+
+        it("should not start apple login and should show the maintenance message", () => {
+            const showSpy = jest.spyOn(Feedback, "show").mockImplementation(() => {})
+
+            render(<WelcomeScreenV2 />, {
+                wrapper: TestWrapper,
+            })
+
+            fireEvent.press(screen.getByTestId("APPLE_LOGIN_BUTTON"))
+
+            expect(mockLogin).not.toHaveBeenCalled()
+            expect(showSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    message: expect.stringContaining("Maintenance work in progress"),
+                }),
+            )
+
+            showSpy.mockRestore()
+        })
+
+        it("should still allow google login", async () => {
+            render(<WelcomeScreenV2 />, {
+                wrapper: TestWrapper,
+            })
+
+            fireEvent.press(screen.getByTestId("GOOGLE_LOGIN_BUTTON"))
+
+            await waitFor(() => {
+                expect(mockLogin).toHaveBeenCalledWith({
+                    provider: "google",
+                    oauthRedirectUri: "/auth/callback",
                 })
             })
         })

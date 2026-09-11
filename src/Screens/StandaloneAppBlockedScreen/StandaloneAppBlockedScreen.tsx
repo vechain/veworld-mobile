@@ -10,7 +10,12 @@ import { ColorThemeType } from "~Constants"
 import RNBootSplash from "react-native-bootsplash"
 import FontUtils from "~Utils/FontUtils"
 
-export const StandaloneAppBlockedScreen = () => {
+type Props = {
+    title?: string
+    body?: string
+}
+
+export const StandaloneAppBlockedScreen = ({ title, body }: Props) => {
     const { LL } = useI18nContext()
 
     useEffect(() => {
@@ -25,12 +30,12 @@ export const StandaloneAppBlockedScreen = () => {
         <SafeAreaView style={[PlatformUtils.isAndroid() ? styles.androidTopPadding : {}, styles.safeArea]}>
             <View style={styles.innerContainer}>
                 <View style={styles.title}>
-                    <Text style={styles.titleText}>{LL.TITLE_SECURITY_DOWNGRADE()}</Text>
+                    <Text style={styles.titleText}>{title ?? LL.TITLE_SECURITY_DOWNGRADE()}</Text>
                 </View>
 
                 <View style={styles.imageContainer}>
                     <LottieView source={lottieSource} autoPlay style={styles.lottie} />
-                    <Text style={styles.bodyText}>{LL.BD_APP_BLOCKED()}</Text>
+                    <Text style={styles.bodyText}>{body ?? LL.BD_APP_BLOCKED()}</Text>
                 </View>
             </View>
         </SafeAreaView>

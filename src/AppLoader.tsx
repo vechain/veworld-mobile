@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useCallback } from "react"
+import React, { useEffect, useMemo, useRef, useCallback, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import LottieView from "lottie-react-native"
 import { AppLoaderLight, AppLoaderDark } from "~Assets"
@@ -59,12 +59,15 @@ export const AppLoader = ({ children }: Props) => {
     const opacity = useSharedValue(isAppLoading ? 1 : 0)
     const timeoutRef = useRef<NodeJS.Timeout | null>(null)
     const lottieRef = useRef<LottieView>(null)
-    const isVisibleRef = useRef(false)
+    // Blocks touches for as long as the overlay is on screen, including the fade-out:
+    // flipping pointerEvents on isAppLoading alone would let taps through the
+    // still-visible overlay for the 300ms of the closing animation.
+    const [isOverlayInteractive, setIsOverlayInteractive] = useState(isAppLoading)
 
     const resetLoader = useCallback(() => {
         cancelAnimation(opacity)
         opacity.value = 0
-        isVisibleRef.current = false
+        setIsOverlayInteractive(false)
         if (lottieRef.current) {
             lottieRef.current.pause()
         }
@@ -78,7 +81,7 @@ export const AppLoader = ({ children }: Props) => {
         }
 
         if (isAppLoading) {
-            isVisibleRef.current = true
+            setIsOverlayInteractive(true)
             opacity.value = withTiming(1, { duration: 300 })
         } else {
             opacity.value = withTiming(0, { duration: 300 }, finished => {
@@ -126,7 +129,7 @@ export const AppLoader = ({ children }: Props) => {
             <Animated.View
                 testID="app-loader-overlay"
                 style={[styles.overlay, animatedStyle]}
-                pointerEvents={isVisibleRef.current ? "auto" : "none"}>
+                pointerEvents={isOverlayInteractive ? "auto" : "none"}>
                 {RenderBackdrop}
                 <LottieView
                     ref={lottieRef}

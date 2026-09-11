@@ -1,7 +1,7 @@
 import { queryOptions } from "@tanstack/react-query"
-import { ABIContract, Address, Clause, VIP181_ABI } from "@vechain/sdk-core"
+import { ABIContract, Address, Clause, VIP181_ABI, type ContractClause } from "@vechain/sdk-core"
 import { ContractCallError } from "@vechain/sdk-errors"
-import { ContractClause, ThorClient } from "@vechain/sdk-network"
+import { ThorClient } from "@vechain/sdk-network"
 
 const getNftNameAndSymbol = async (address: string, thor: ThorClient) => {
     const clauses: ContractClause[] = [

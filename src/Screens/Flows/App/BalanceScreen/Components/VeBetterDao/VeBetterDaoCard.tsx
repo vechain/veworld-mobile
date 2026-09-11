@@ -23,10 +23,10 @@ export const VeBetterDaoCard = forwardRef<View>((_, ref) => {
     const stats = useMemo(() => {
         if (!data) return { co2: 0, water: 0, energy: 0, plastic: 0 }
         return {
-            co2: data.totalImpact.carbon ?? 0,
-            water: data.totalImpact.water ?? 0,
-            energy: data.totalImpact.energy ?? 0,
-            plastic: data.totalImpact.plastic ?? 0,
+            co2: data.totalImpact?.carbon ?? 0,
+            water: data.totalImpact?.water ?? 0,
+            energy: data.totalImpact?.energy ?? 0,
+            plastic: data.totalImpact?.plastic ?? 0,
         }
     }, [data])
 

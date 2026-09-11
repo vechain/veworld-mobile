@@ -281,10 +281,13 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
     const migrateOnboarding = useCallback(
         async (type: SecurityLevelType, pinCode?: string): Promise<void> => {
-            updateSecurityType(type)
-
-            const encryptionKeys = await StorageEncryptionKeyHelper.init(pinCode)
             try {
+                info(ERROR_EVENTS.SECURITY, "onboarding_migration_started")
+                const encryptionKeys = await StorageEncryptionKeyHelper.init(pinCode)
+
+                // Commit the unlock method before the atomic MMKV write. If the process
+                // terminates immediately after that write, the next launch can unlock it.
+                updateSecurityType(type)
                 Onboarding.migrateState({
                     onboardingStorage: OnboardingStorage,
                     encryptedStorage: UserEncryptedStorage_V2,
@@ -310,10 +313,18 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 })
 
                 setWalletStatus(WALLET_STATUS.UNLOCKED)
+                info(ERROR_EVENTS.SECURITY, "onboarding_migration_completed")
             } catch (e) {
-                error(ERROR_EVENTS.SECURITY, e)
-                SecurityConfig.remove()
+                // A cancelled biometric prompt can only come from StorageEncryptionKeyHelper.init,
+                // which runs before anything is written — keep state intact so the user can retry.
+                if (BiometricsUtils.BiometricErrors.isBiometricCanceled(e)) {
+                    info(ERROR_EVENTS.SECURITY, "onboarding_migration_cancelled")
+                    throw e
+                }
+
+                error(ERROR_EVENTS.SECURITY, "onboarding_migration_failed", e)
                 await resetApplication()
+                throw e
             }
         },
         [updateSecurityType, onboardingKey, resetApplication],
@@ -391,6 +402,9 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                         }
 
                         for (const [index, device] of decryptedDevices.entries()) {
+                            // TODO: this re-encryption is not round-trip verified, unlike
+                            // WalletEncryptionKeyHelper.encryptWallet — a corrupt write here
+                            // persists an undecryptable wallet.
                             const walletEncrypted_V2 = await CryptoUtils.encrypt(
                                 decryptedWallets[index],
                                 walletKey,

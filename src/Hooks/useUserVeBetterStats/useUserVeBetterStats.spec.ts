@@ -59,7 +59,7 @@ describe("useUserVeBetterStats", () => {
         await waitFor(() => {
             expect(result.current.data?.week).toBe("300")
             expect(result.current.data?.month).toBe("400")
-            expect(result.current.data?.totalImpact.carbon).toBe(1000)
+            expect(result.current.data?.totalImpact?.carbon).toBe(1000)
         })
     })
 

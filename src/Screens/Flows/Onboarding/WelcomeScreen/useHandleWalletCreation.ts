@@ -1,7 +1,15 @@
 import { useCallback, useState } from "react"
-import { showErrorToast, useApplicationSecurity, WalletEncryptionKeyHelper } from "~Components"
+import {
+    runOnboardingStorageMigration,
+    runOnboardingOperationOnce,
+    showErrorToast,
+    showInfoToast,
+    useApplicationSecurity,
+    useStore,
+    WalletEncryptionKeyHelper,
+} from "~Components"
 import { useBiometrics, useCreateWallet, useDisclosure } from "~Hooks"
-import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
+import { resetApp, setIsAppLoading, useAppDispatch } from "~Storage/Redux"
 import { mnemonic as thorMnemonic } from "thor-devkit"
 import { IMPORT_TYPE, NewLedgerDevice, SecurityLevelType } from "~Model"
 import { BiometricsUtils } from "~Utils"
@@ -16,6 +24,7 @@ export const useHandleWalletCreation = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { createLocalWallet, createLedgerWallet, createSmartWallet } = useCreateWallet()
     const { migrateOnboarding } = useApplicationSecurity()
+    const { persistor } = useStore()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const [isError, setIsError] = useState("")
@@ -25,6 +34,7 @@ export const useHandleWalletCreation = () => {
             dispatch(setIsAppLoading(false))
 
             if (BiometricsUtils.BiometricErrors.isBiometricCanceled(_error)) {
+                showInfoToast({ text1: LL.NOTIFICATION_AUTHENTICATION_CANCELLED() })
                 return
             }
 
@@ -43,6 +53,38 @@ export const useHandleWalletCreation = () => {
         [LL, dispatch],
     )
 
+    const runOnboardingCreation = useCallback(
+        (operation: () => Promise<void>) => {
+            return runOnboardingOperationOnce(async () => {
+                dispatch(setIsAppLoading(true))
+                try {
+                    await operation()
+                } catch (e) {
+                    onWalletCreationError(e)
+
+                    // A cancelled prompt is an intentional user action and nothing has been
+                    // migrated yet: keep redux and keychain state so a second tap retries cleanly.
+                    if (!BiometricsUtils.BiometricErrors.isBiometricCanceled(e)) {
+                        await WalletEncryptionKeyHelper.remove().catch(() => undefined)
+                        dispatch(resetApp())
+                    }
+                } finally {
+                    dispatch(setIsAppLoading(false))
+                }
+            })
+        },
+        [dispatch, onWalletCreationError],
+    )
+
+    const completeOnboardingMigration = useCallback(
+        async (type: SecurityLevelType, pinCode?: string) => {
+            if (!persistor) throw new Error("Redux persistor is not ready")
+
+            await runOnboardingStorageMigration(persistor, () => migrateOnboarding(type, pinCode))
+        },
+        [migrateOnboarding, persistor],
+    )
+
     const onCreateWallet = useCallback(
         async ({
             importMnemonic,
@@ -56,24 +98,23 @@ export const useHandleWalletCreation = () => {
             importType?: IMPORT_TYPE
         }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
-                dispatch(setIsAppLoading(true))
-                const mnemonic = isEmpty(importMnemonic) ? getNewMnemonic() : importMnemonic
-                await WalletEncryptionKeyHelper.init()
-                await createLocalWallet({
-                    mnemonic: privateKey ? undefined : mnemonic,
-                    privateKey,
-                    importType,
-                    onError: onWalletCreationError,
-                    derivationPath,
-                })
+                return runOnboardingCreation(async () => {
+                    const mnemonic = isEmpty(importMnemonic) ? getNewMnemonic() : importMnemonic
+                    await WalletEncryptionKeyHelper.init()
+                    await createLocalWallet({
+                        mnemonic: privateKey ? undefined : mnemonic,
+                        privateKey,
+                        importType,
+                        derivationPath,
+                    })
 
-                await migrateOnboarding(SecurityLevelType.BIOMETRIC)
-                dispatch(setIsAppLoading(false))
+                    await completeOnboardingMigration(SecurityLevelType.BIOMETRIC)
+                })
             } else {
                 onOpen()
             }
         },
-        [biometrics, createLocalWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
+        [biometrics, completeOnboardingMigration, createLocalWallet, onOpen, runOnboardingCreation],
     )
 
     const onCreateSmartWallet = useCallback(
@@ -87,21 +128,16 @@ export const useHandleWalletCreation = () => {
             linkedProviders?: SocialProvider[]
         }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
-                dispatch(setIsAppLoading(true))
-                await WalletEncryptionKeyHelper.init()
-                await createSmartWallet({
-                    address,
-                    name,
-                    linkedProviders,
-                    onError: onWalletCreationError,
+                return runOnboardingCreation(async () => {
+                    await WalletEncryptionKeyHelper.init()
+                    await createSmartWallet({ address, name, linkedProviders })
+                    await completeOnboardingMigration(SecurityLevelType.BIOMETRIC)
                 })
-                await migrateOnboarding(SecurityLevelType.BIOMETRIC)
-                dispatch(setIsAppLoading(false))
             } else {
                 onOpen()
             }
         },
-        [biometrics, createSmartWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
+        [biometrics, completeOnboardingMigration, createSmartWallet, onOpen, runOnboardingCreation],
     )
 
     const onSuccess = useCallback(
@@ -119,22 +155,21 @@ export const useHandleWalletCreation = () => {
             importType?: IMPORT_TYPE
         }) => {
             onClose()
-            dispatch(setIsAppLoading(true))
-            const _mnemonic = isEmpty(mnemonic) ? getNewMnemonic() : mnemonic
-            await WalletEncryptionKeyHelper.init(pin)
-            await createLocalWallet({
-                mnemonic: privateKey ? undefined : _mnemonic,
-                privateKey: privateKey,
-                userPassword: pin,
-                importType,
-                onError: onWalletCreationError,
-                derivationPath,
-            })
+            return runOnboardingCreation(async () => {
+                const _mnemonic = isEmpty(mnemonic) ? getNewMnemonic() : mnemonic
+                await WalletEncryptionKeyHelper.init(pin)
+                await createLocalWallet({
+                    mnemonic: privateKey ? undefined : _mnemonic,
+                    privateKey: privateKey,
+                    userPassword: pin,
+                    importType,
+                    derivationPath,
+                })
 
-            await migrateOnboarding(SecurityLevelType.SECRET, pin)
-            dispatch(setIsAppLoading(false))
+                await completeOnboardingMigration(SecurityLevelType.SECRET, pin)
+            })
         },
-        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
+        [completeOnboardingMigration, createLocalWallet, onClose, runOnboardingCreation],
     )
 
     const onSmartWalletPinSuccess = useCallback(
@@ -150,29 +185,13 @@ export const useHandleWalletCreation = () => {
             linkedProviders?: SocialProvider[]
         }) => {
             onClose()
-            dispatch(setIsAppLoading(true))
-            await WalletEncryptionKeyHelper.init(pin)
-            await createSmartWallet({
-                address,
-                name,
-                linkedProviders,
-                onError: onWalletCreationError,
+            return runOnboardingCreation(async () => {
+                await WalletEncryptionKeyHelper.init(pin)
+                await createSmartWallet({ address, name, linkedProviders })
+                await completeOnboardingMigration(SecurityLevelType.SECRET, pin)
             })
-            await migrateOnboarding(SecurityLevelType.SECRET, pin)
-            dispatch(setIsAppLoading(false))
         },
-        [createSmartWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
-    )
-
-    const migrateFromOnboarding = useCallback(
-        async (pin?: string) => {
-            if (pin) {
-                await migrateOnboarding(SecurityLevelType.SECRET, pin)
-            } else {
-                await migrateOnboarding(SecurityLevelType.BIOMETRIC)
-            }
-        },
-        [migrateOnboarding],
+        [completeOnboardingMigration, createSmartWallet, onClose, runOnboardingCreation],
     )
 
     const onCreateLedgerWallet = useCallback(
@@ -184,20 +203,17 @@ export const useHandleWalletCreation = () => {
             disconnectLedger: () => Promise<void>
         }) => {
             if (biometrics && biometrics.currentSecurityLevel === "BIOMETRIC") {
-                dispatch(setIsAppLoading(true))
-                await WalletEncryptionKeyHelper.init()
-                await createLedgerWallet({
-                    newLedger,
-                    onError: onWalletCreationError,
+                return runOnboardingCreation(async () => {
+                    await WalletEncryptionKeyHelper.init()
+                    await createLedgerWallet({ newLedger })
+                    await disconnectLedger()
+                    await completeOnboardingMigration(SecurityLevelType.BIOMETRIC)
                 })
-                await disconnectLedger()
-                await migrateOnboarding(SecurityLevelType.BIOMETRIC)
-                dispatch(setIsAppLoading(false))
             } else {
                 onOpen()
             }
         },
-        [biometrics, createLedgerWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
+        [biometrics, completeOnboardingMigration, createLedgerWallet, onOpen, runOnboardingCreation],
     )
 
     const onLedgerPinSuccess = useCallback(
@@ -211,17 +227,14 @@ export const useHandleWalletCreation = () => {
             pin: string
         }) => {
             if (!newLedger || !pin) throw new Error("Wrong/corrupted data. No device available from ledger or no pin")
-            dispatch(setIsAppLoading(true))
-            await WalletEncryptionKeyHelper.init(pin)
-            await createLedgerWallet({
-                newLedger,
-                onError: onWalletCreationError,
+            return runOnboardingCreation(async () => {
+                await WalletEncryptionKeyHelper.init(pin)
+                await createLedgerWallet({ newLedger })
+                await disconnectLedger()
+                await completeOnboardingMigration(SecurityLevelType.SECRET, pin)
             })
-            await disconnectLedger()
-            await migrateOnboarding(SecurityLevelType.SECRET, pin)
-            dispatch(setIsAppLoading(false))
         },
-        [createLedgerWallet, dispatch, migrateOnboarding, onWalletCreationError],
+        [completeOnboardingMigration, createLedgerWallet, runOnboardingCreation],
     )
 
     const createOnboardedWallet = useCallback(
@@ -320,7 +333,6 @@ export const useHandleWalletCreation = () => {
 
     return {
         onCreateWallet,
-        migrateFromOnboarding,
         isOpen,
         isError,
         onSuccess,
@@ -341,6 +353,6 @@ function getNewMnemonic() {
     if (seed.length === 12 && seed.every(word => word.length > 0)) {
         return seed
     } else {
-        getNewMnemonic()
+        return getNewMnemonic()
     }
 }

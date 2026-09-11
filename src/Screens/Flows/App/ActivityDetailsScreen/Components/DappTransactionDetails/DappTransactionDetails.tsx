@@ -14,7 +14,7 @@ import { ClausesCarousel } from "./ClausesCarousel"
 
 type Props = {
     activity: DappTxActivity
-    clauses?: { to?: string; value: string; data: string }[]
+    clauses?: { to?: string | null; value: string; data: string }[]
     status?: ActivityStatus
     paid: string | undefined
     isLoading?: boolean

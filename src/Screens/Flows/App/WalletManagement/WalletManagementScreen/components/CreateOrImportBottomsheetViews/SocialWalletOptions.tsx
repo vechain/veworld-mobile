@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseSpacer } from "~Components/Base"
 import { CardListItem, RequireUserPassword } from "~Components/Reusable"
-import { useSmartWallet, useThemedStyles } from "~Hooks"
+import { useAppleLoginAvailability, useSmartWallet, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
@@ -19,6 +19,7 @@ export const SocialWalletOptions = ({ onClose }: Props) => {
     const { LL } = useI18nContext()
 
     const { linkedAccounts } = useSmartWallet()
+    const { isAppleLoginDisabled, showMaintenanceMessage } = useAppleLoginAvailability()
 
     const { isOpen, importOnboardedSmartWallet } = useHandleWalletCreation()
 
@@ -47,6 +48,7 @@ export const SocialWalletOptions = ({ onClose }: Props) => {
                     handleSocialLogin("google")
                 },
                 disabled: isSocialLoginPending,
+                dimmed: false,
             },
             {
                 id: "apple",
@@ -54,12 +56,14 @@ export const SocialWalletOptions = ({ onClose }: Props) => {
                 description: LL.SB_DESCRIPTION_APPLE_LOGIN(),
                 icon: "icon-apple",
                 action: () => {
+                    if (isAppleLoginDisabled) return showMaintenanceMessage()
                     handleSocialLogin("apple")
                 },
                 disabled: isSocialLoginPending,
+                dimmed: isAppleLoginDisabled,
             },
         ]
-    }, [LL, handleSocialLogin, isSocialLoginPending])
+    }, [LL, handleSocialLogin, isAppleLoginDisabled, isSocialLoginPending, showMaintenanceMessage])
 
     const ItemsSeparator = useCallback(() => {
         return <BaseSpacer height={16} />
@@ -89,6 +93,7 @@ export const SocialWalletOptions = ({ onClose }: Props) => {
                         subtitle={item.description}
                         action={item.action}
                         disabled={item.disabled}
+                        dimmed={item.dimmed}
                     />
                 )}
             />

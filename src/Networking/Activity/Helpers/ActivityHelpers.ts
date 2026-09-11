@@ -696,7 +696,7 @@ export const createActivityFromIndexedHistoryEvent = (
         isTransaction: isTransaction,
         type: eventName as ActivityEvent,
         timestamp: blockTimestamp * 1000,
-        gasPayer: gasPayer,
+        gasPayer: gasPayer ?? undefined,
         delegated: origin !== gasPayer,
         status: reverted ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS,
     }
@@ -704,7 +704,7 @@ export const createActivityFromIndexedHistoryEvent = (
     switch (eventName) {
         case ActivityEvent.TRANSFER_SF:
         case ActivityEvent.TRANSFER_FT: {
-            const direction = AddressUtils.compareAddresses(from, selectedAccountAddress)
+            const direction = AddressUtils.compareAddresses(from ?? undefined, selectedAccountAddress)
                 ? DIRECTIONS.UP
                 : DIRECTIONS.DOWN
             return {
@@ -715,7 +715,7 @@ export const createActivityFromIndexedHistoryEvent = (
             } as FungibleTokenActivity
         }
         case ActivityEvent.TRANSFER_VET: {
-            const direction = AddressUtils.compareAddresses(from, selectedAccountAddress)
+            const direction = AddressUtils.compareAddresses(from ?? undefined, selectedAccountAddress)
                 ? DIRECTIONS.UP
                 : DIRECTIONS.DOWN
             return {
@@ -726,7 +726,7 @@ export const createActivityFromIndexedHistoryEvent = (
             } as FungibleTokenActivity
         }
         case ActivityEvent.TRANSFER_NFT: {
-            const direction = AddressUtils.compareAddresses(from, selectedAccountAddress)
+            const direction = AddressUtils.compareAddresses(from ?? undefined, selectedAccountAddress)
                 ? DIRECTIONS.UP
                 : DIRECTIONS.DOWN
             return {
@@ -737,7 +737,7 @@ export const createActivityFromIndexedHistoryEvent = (
             } as NonFungibleTokenActivity
         }
         case ActivityEvent.NFT_SALE: {
-            const direction = AddressUtils.compareAddresses(from, selectedAccountAddress)
+            const direction = AddressUtils.compareAddresses(from ?? undefined, selectedAccountAddress)
                 ? DIRECTIONS.UP
                 : DIRECTIONS.DOWN
             return {

@@ -93,6 +93,24 @@ export type FeatureFlags = {
             enabled: boolean
         }
     }
+    appleMigrationFeature: {
+        banner: {
+            enabled: boolean
+            /**
+             * Full ISO date string (eg. "2026-09-10"); absent -> generic wording.
+             * NEVER a bare year: it matches the semver regex and would be converted to a boolean.
+             */
+            startDate?: string
+            /**
+             * Full ISO date string (eg. "2026-09-12"); absent -> generic wording.
+             * NEVER a bare year: it matches the semver regex and would be converted to a boolean.
+             */
+            endDate?: string
+        }
+        loginDisabled: {
+            enabled: boolean
+        }
+    }
     hiddenForYouPopularApps: string[]
 }
 
