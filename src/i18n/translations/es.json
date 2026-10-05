@@ -1068,6 +1068,7 @@
   "SB_CHOOSE_A_WALLET": "Elige una billetera",
   "SB_CLAIMABLE_ACCOUNTS": "Tienes disponible {usernames: number} nombre de usuario reclamable",
   "SB_CLAIM_USERNAME": "Este nombre de usuario puede ser utilizado en lugar de tu dirección de billetera para enviar y recibir tokens y conectar con dApps. La reclamación es gratuita.",
+  "SB_CLAIM_USERNAME_SMART_WALLET": "Este nombre de usuario puede ser utilizado en lugar de tu dirección de billetera para enviar y recibir tokens y conectar con dApps. Al reclamar se aplica una pequeña tarifa de red.",
   "SB_COLLECTIBLE": "Coleccionable",
   "SB_COLLECTIBLES": "Coleccionables",
   "SB_CONFIRM_DELETE": "Confirmar eliminación",

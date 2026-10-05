@@ -1068,6 +1068,7 @@
   "SB_CHOOSE_A_WALLET": "Wybierz portfel",
   "SB_CLAIMABLE_ACCOUNTS": "Masz dostępny roszczenie dla {usernames: number} nazwy użytkownika",
   "SB_CLAIM_USERNAME": "Ta nazwa użytkownika może być używana zamiast twojego adresu portfela do wysyłania i odbierania tokenów oraz łączenia się z dApps. Roszczenie jest bezpłatne.",
+  "SB_CLAIM_USERNAME_SMART_WALLET": "Ta nazwa użytkownika może być używana zamiast twojego adresu portfela do wysyłania i odbierania tokenów oraz łączenia się z dApps. Przy roszczeniu pobierana jest niewielka opłata sieciowa.",
   "SB_COLLECTIBLE": "Zbieralny",
   "SB_COLLECTIBLES": "Zbieralne",
   "SB_CONFIRM_DELETE": "Potwierdź usunięcie",

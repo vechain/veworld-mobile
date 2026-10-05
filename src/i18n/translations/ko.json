@@ -1068,6 +1068,7 @@
   "SB_CHOOSE_A_WALLET": "지갑 선택",
   "SB_CLAIMABLE_ACCOUNTS": "{usernames: number}개의 사용자 이름 청구 가능",
   "SB_CLAIM_USERNAME": "이 사용자 이름은 토큰을 보내고 받고 dApp에 연결하는 데 지갑 주소 대신 사용할 수 있습니다. 청구는 무료입니다.",
+  "SB_CLAIM_USERNAME_SMART_WALLET": "이 사용자 이름은 토큰을 보내고 받고 dApp에 연결하는 데 지갑 주소 대신 사용할 수 있습니다. 청구 시 소액의 네트워크 수수료가 부과됩니다.",
   "SB_COLLECTIBLE": "수집품",
   "SB_COLLECTIBLES": "수집품",
   "SB_CONFIRM_DELETE": "삭제 확인",

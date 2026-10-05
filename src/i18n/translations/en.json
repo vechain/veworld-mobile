@@ -1068,6 +1068,7 @@
   "SB_CHOOSE_A_WALLET": "Choose a wallet",
   "SB_CLAIMABLE_ACCOUNTS": "You have {usernames: number} username claim available",
   "SB_CLAIM_USERNAME": "This username can be used instead of your wallet address to send and receive tokens and connect to dApps. The claiming is free of charge.",
+  "SB_CLAIM_USERNAME_SMART_WALLET": "This username can be used instead of your wallet address to send and receive tokens and connect to dApps. A small network fee applies when claiming.",
   "SB_COLLECTIBLE": "Collectible",
   "SB_COLLECTIBLES": "Collectibles",
   "SB_CONFIRM_DELETE": "Confirm delete",

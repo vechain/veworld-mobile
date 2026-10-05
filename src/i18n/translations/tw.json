@@ -1068,6 +1068,7 @@
   "SB_CHOOSE_A_WALLET": "選擇一個錢包",
   "SB_CLAIMABLE_ACCOUNTS": "您有 {usernames: number} 個可用來領取的用戶名",
   "SB_CLAIM_USERNAME": "此用戶名稱可替代您的錢包地址來發送和接收代幣以及連接至 dApps。領取不收費。",
+  "SB_CLAIM_USERNAME_SMART_WALLET": "此用戶名稱可替代您的錢包地址來發送和接收代幣以及連接至 dApps。領取時需支付少量網路手續費。",
   "SB_COLLECTIBLE": "收藏品",
   "SB_COLLECTIBLES": "收藏品",
   "SB_CONFIRM_DELETE": "確認刪除",

@@ -1068,6 +1068,7 @@
   "SB_CHOOSE_A_WALLET": "Bir cüzdan seçin",
   "SB_CLAIMABLE_ACCOUNTS": "{usernames: number} kullanıcı adı talep edilebilir",
   "SB_CLAIM_USERNAME": "Bu kullanıcı adı, cüzdan adresiniz yerine token göndermek ve almak ve dApp'lere bağlanmak için kullanılabilir. Talep ücretsizdir.",
+  "SB_CLAIM_USERNAME_SMART_WALLET": "Bu kullanıcı adı, cüzdan adresiniz yerine token göndermek ve almak ve dApp'lere bağlanmak için kullanılabilir. Talep sırasında küçük bir ağ ücreti alınır.",
   "SB_COLLECTIBLE": "Koleksiyon",
   "SB_COLLECTIBLES": "Koleksiyonlar",
   "SB_CONFIRM_DELETE": "Silme işlemini onayla",

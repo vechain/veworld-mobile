@@ -4382,6 +4382,10 @@ type RootTranslation = {
 	 */
 	SB_CLAIM_USERNAME: string
 	/**
+	 * T​h​i​s​ ​u​s​e​r​n​a​m​e​ ​c​a​n​ ​b​e​ ​u​s​e​d​ ​i​n​s​t​e​a​d​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​c​o​n​n​e​c​t​ ​t​o​ ​d​A​p​p​s​.​ ​A​ ​s​m​a​l​l​ ​n​e​t​w​o​r​k​ ​f​e​e​ ​a​p​p​l​i​e​s​ ​w​h​e​n​ ​c​l​a​i​m​i​n​g​.
+	 */
+	SB_CLAIM_USERNAME_SMART_WALLET: string
+	/**
 	 * C​o​l​l​e​c​t​i​b​l​e
 	 */
 	SB_COLLECTIBLE: string
@@ -10662,6 +10666,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * This username can be used instead of your wallet address to send and receive tokens and connect to dApps. The claiming is free of charge.
 	 */
 	SB_CLAIM_USERNAME: () => LocalizedString
+	/**
+	 * This username can be used instead of your wallet address to send and receive tokens and connect to dApps. A small network fee applies when claiming.
+	 */
+	SB_CLAIM_USERNAME_SMART_WALLET: () => LocalizedString
 	/**
 	 * Collectible
 	 */

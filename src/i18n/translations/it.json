@@ -1068,6 +1068,7 @@
   "SB_CHOOSE_A_WALLET": "Scegli un portafoglio",
   "SB_CLAIMABLE_ACCOUNTS": "Hai {usernames: number} nomi utente disponibili per la rivendicazione",
   "SB_CLAIM_USERNAME": "Questo nome utente può essere utilizzato al posto del tuo indirizzo wallet per inviare e ricevere token e connetterti a dApp. La rivendicazione è gratuita.",
+  "SB_CLAIM_USERNAME_SMART_WALLET": "Questo nome utente può essere utilizzato al posto del tuo indirizzo wallet per inviare e ricevere token e connetterti a dApp. Per la rivendicazione è prevista una piccola commissione di rete.",
   "SB_COLLECTIBLE": "Collezionabile",
   "SB_COLLECTIBLES": "Collezionabili",
   "SB_CONFIRM_DELETE": "Conferma eliminazione",

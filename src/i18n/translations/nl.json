@@ -1068,6 +1068,7 @@
   "SB_CHOOSE_A_WALLET": "Kies een wallet",
   "SB_CLAIMABLE_ACCOUNTS": "Je hebt {usernames: number} gebruikersnaam claim beschikbaar",
   "SB_CLAIM_USERNAME": "Deze gebruikersnaam kan worden gebruikt in plaats van je wallet-adres om tokens te verzenden en ontvangen en om verbinding te maken met dApps. Het claimen is gratis.",
+  "SB_CLAIM_USERNAME_SMART_WALLET": "Deze gebruikersnaam kan worden gebruikt in plaats van je wallet-adres om tokens te verzenden en ontvangen en om verbinding te maken met dApps. Bij het claimen worden kleine netwerkkosten in rekening gebracht.",
   "SB_COLLECTIBLE": "Verzamelobject",
   "SB_COLLECTIBLES": "Verzamelobjecten",
   "SB_CONFIRM_DELETE": "Bevestig verwijderen",

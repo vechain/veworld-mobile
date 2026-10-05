@@ -1068,6 +1068,7 @@
   "SB_CHOOSE_A_WALLET": "Välj en plånbok",
   "SB_CLAIMABLE_ACCOUNTS": "Du har {usernames: number} användarnamn tillgängligt för anspråk",
   "SB_CLAIM_USERNAME": "Detta användarnamn kan användas istället för din plånboksadress för att skicka och ta emot tokens och ansluta till dApps. Anspråket är kostnadsfritt.",
+  "SB_CLAIM_USERNAME_SMART_WALLET": "Detta användarnamn kan användas istället för din plånboksadress för att skicka och ta emot tokens och ansluta till dApps. En liten nätverksavgift tillkommer vid anspråket.",
   "SB_COLLECTIBLE": "Samlarobjekt",
   "SB_COLLECTIBLES": "Samlarobjekt",
   "SB_CONFIRM_DELETE": "Bekräfta borttagning",

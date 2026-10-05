@@ -1068,6 +1068,7 @@
   "SB_CHOOSE_A_WALLET": "Choisissez un portefeuille",
   "SB_CLAIMABLE_ACCOUNTS": "Vous avez {usernames: number} nom d'utilisateur disponible pour réclamation",
   "SB_CLAIM_USERNAME": "Ce nom d'utilisateur peut être utilisé à la place de votre adresse de portefeuille pour envoyer et recevoir des tokens et se connecter à des dApps. La réclamation est gratuite.",
+  "SB_CLAIM_USERNAME_SMART_WALLET": "Ce nom d'utilisateur peut être utilisé à la place de votre adresse de portefeuille pour envoyer et recevoir des tokens et se connecter à des dApps. Des frais de réseau minimes s'appliquent lors de la réclamation.",
   "SB_COLLECTIBLE": "Objet de collection",
   "SB_COLLECTIBLES": "Objets de collection",
   "SB_CONFIRM_DELETE": "Confirmer la suppression",
