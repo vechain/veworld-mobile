@@ -128,8 +128,8 @@ android {
         applicationId "org.vechain.veworld.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-versionCode 1078
-versionName "2.5.9"
+versionCode 1079
+versionName "2.5.10"
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -198,7 +198,7 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation 'androidx.appcompat:appcompat:1.7.0'
 
-    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${rootProject.ext.kotlinVersion}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
@@ -209,7 +209,7 @@ dependencies {
     implementation('com.google.apis:google-api-services-drive:v3-rev20221023-2.0.0') {
         exclude group: 'com.google.guava', module: "guava"
     }
-    implementation 'com.google.guava:guava:31.0.1-android'
+    implementation 'com.google.guava:guava:32.0.1-android'
     implementation 'com.google.api-client:google-api-client-android:2.6.0'
     implementation 'com.google.api-client:google-api-client-gson:1.34.0'
     implementation 'com.facebook.fresco:webpsupport:3.6.0'
