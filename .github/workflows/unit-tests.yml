@@ -5,7 +5,32 @@ env:
     COVERAGE_PARENT_FOLDER: total-coverage
 
 jobs:
+    changes:
+        runs-on: ubuntu-latest
+        permissions:
+            pull-requests: read
+        outputs:
+            code: ${{ steps.filter.outputs.code }}
+        steps:
+            - name: Detect code changes
+              id: filter
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  REPO: ${{ github.repository }}
+                  PR: ${{ github.event.pull_request.number }}
+              run: |
+                  if [ -z "$PR" ]; then echo "code=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+                  files=$(gh api --paginate "/repos/$REPO/pulls/$PR/files" --jq '.[].filename')
+                  if echo "$files" | grep -qvE '^(\.github|docs)/|\.md$' ||
+                      echo "$files" | grep -qE '^\.github/workflows/(unit-tests|install-build-test-scan)\.yml$'; then
+                      echo "code=true" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "code=false" >> "$GITHUB_OUTPUT"
+                  fi
+
     unit:
+        needs: [changes]
+        if: needs.changes.outputs.code == 'true'
         runs-on: ubuntu-latest
         strategy:
             matrix:
