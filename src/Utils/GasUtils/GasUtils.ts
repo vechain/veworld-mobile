@@ -18,11 +18,7 @@ type Simulate = (gas: number) => Promise<Connex.VM.Output[]>
 
 const anyReverted = (outputs: Connex.VM.Output[]) => outputs.some(out => out.reverted)
 
-/**
- * EIP-150: each CALL/DELEGATECALL hop forwards only 63/64 of the remaining gas,
- * which the 20M simulation hides. Re-simulate at the real budget and step up.
- * Returns undefined when no budget up to `maxExecGas` passes.
- */
+// EIP-150: each call hop keeps 1/64 of the gas, which the 20M simulation hides. Undefined when nothing up to maxExecGas passes.
 const verifyExecGas = async (simulate: Simulate, execGas: number, maxExecGas: number): Promise<number | undefined> => {
     let gas = execGas + GAS_HEADROOM
     if (gas > maxExecGas) return undefined
