@@ -13,6 +13,7 @@ import { GalacticaEstimation } from "./GalacticaEstimation"
 import { GasFeeSpeedBottomSheet } from "./GasFeeSpeedBottomSheet"
 import { GasFeeTokenBottomSheet } from "./GasFeeTokenBottomSheet"
 import { LegacyEstimation } from "./LegacyEstimation"
+import { TxGasLimitAlert } from "./TxGasLimitAlert"
 
 type Props = {
     options: TransactionFeesResult
@@ -33,6 +34,8 @@ type Props = {
     }
     containerStyle?: StyleProp<ViewStyle>
     sendingTokenSymbol?: string
+    exceedsTxGasLimit?: boolean
+    estimatedGas?: number
 }
 
 const AnimatedBaseCard = Animated.createAnimatedComponent(wrapFunctionComponent(BaseCard))
@@ -55,6 +58,8 @@ export const GasFeeSpeed = ({
     hasEnoughBalanceOnToken,
     containerStyle,
     sendingTokenSymbol,
+    exceedsTxGasLimit = false,
+    estimatedGas,
 }: PropsWithChildren<Props>) => {
     const { styles } = useThemedStyles(baseStyles)
 
@@ -104,6 +109,7 @@ export const GasFeeSpeed = ({
                     isFirstTimeLoadingFees={isFirstTimeLoadingFees}
                 />
             )}
+            <TxGasLimitAlert exceedsTxGasLimit={exceedsTxGasLimit} estimatedGas={estimatedGas} />
             {children}
             <GasFeeSpeedBottomSheet
                 ref={speedBsRef}

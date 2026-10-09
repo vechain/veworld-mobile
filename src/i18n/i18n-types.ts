@@ -5105,21 +5105,27 @@ type RootTranslation = {
 	 */
 	SEND_TOTAL_COST: string
 	/**
-	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​s​e​n​d​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​-​ 
+	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​s​e​n​d​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SEND_TRANSACTION_ERROR: string
 	/**
-	 * g​a​s​ ​f​e​e​ ​u​s​e​d​ ​w​a​s​ ​t​o​o​ ​l​o​w
+	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​a​s​ ​r​e​j​e​c​t​e​d​:​ ​t​h​e​ ​g​a​s​ ​p​r​i​c​e​ ​i​s​ ​b​e​l​o​w​ ​t​h​e​ ​b​l​o​c​k​ ​b​a​s​e​ ​f​e​e
 	 */
 	SEND_TRANSACTION_ERROR_GAS_FEE: string
 	/**
-	 * g​e​n​e​r​i​c​ ​e​r​r​o​r
+	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​a​s​ ​r​e​j​e​c​t​e​d​:​ ​i​t​s​ ​g​a​s​ ​e​x​c​e​e​d​s​ ​t​h​e​ ​n​e​t​w​o​r​k​'​s​ ​{​l​i​m​i​t​}​ ​p​e​r​-​t​r​a​n​s​a​c​t​i​o​n​ ​l​i​m​i​t
+	 * @param {unknown} limit
 	 */
-	SEND_TRANSACTION_ERROR_GENERIC_ERROR: string
+	SEND_TRANSACTION_ERROR_GAS_LIMIT: RequiredParams<'limit'>
 	/**
-	 * g​a​s​ ​p​a​y​e​r​ ​c​a​n​n​o​t​ ​c​o​v​e​r​ ​f​e​e​s
+	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​w​a​s​ ​r​e​j​e​c​t​e​d​:​ ​n​o​t​ ​e​n​o​u​g​h​ ​V​T​H​O​ ​t​o​ ​p​a​y​ ​f​o​r​ ​g​a​s
 	 */
 	SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY: string
+	/**
+	 * T​h​e​ ​n​e​t​w​o​r​k​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​:​ ​{​r​e​a​s​o​n​}
+	 * @param {unknown} reason
+	 */
+	SEND_TRANSACTION_ERROR_REJECTED: RequiredParams<'reason'>
 	/**
 	 * Y​o​u​r​ ​V​O​T​3​ ​t​o​k​e​n​s​ ​c​a​n​ ​o​n​l​y​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​b​a​c​k​ ​t​o​ ​B​3​T​R​ ​i​n​ ​t​h​i​s​ ​s​p​e​c​i​f​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​.​ ​B​y​ ​s​e​n​d​i​n​g​ ​t​o​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​ ​y​o​u​ ​w​o​n​’​t​ ​b​e​ ​a​b​l​e​ ​t​o​ ​c​o​n​v​e​r​t​ ​t​o​ ​a​n​y​ ​o​t​h​e​r​ ​a​s​s​e​t​.​
 ​A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​c​o​n​t​i​n​u​e​?
@@ -5958,6 +5964,12 @@ type RootTranslation = {
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​a​i​l​e​d
 	 */
 	TRANSACTION_FAILED: string
+	/**
+	 * T​h​i​s​ ​t​r​a​n​s​a​c​t​i​o​n​ ​n​e​e​d​s​ ​a​t​ ​l​e​a​s​t​ ​{​n​e​e​d​e​d​}​ ​g​a​s​,​ ​m​o​r​e​ ​t​h​a​n​ ​t​h​e​ ​n​e​t​w​o​r​k​'​s​ ​{​l​i​m​i​t​}​ ​p​e​r​-​t​r​a​n​s​a​c​t​i​o​n​ ​l​i​m​i​t​.​ ​S​p​l​i​t​ ​i​t​ ​i​n​t​o​ ​s​m​a​l​l​e​r​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 * @param {unknown} limit
+	 * @param {unknown} needed
+	 */
+	TRANSACTION_EXCEEDS_GAS_LIMIT: RequiredParams<'limit' | 'needed'>
 	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​e​e
 	 */
@@ -11383,21 +11395,25 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	SEND_TOTAL_COST: () => LocalizedString
 	/**
-	 * There was an error sending the transaction - 
+	 * There was an error sending the transaction
 	 */
 	SEND_TRANSACTION_ERROR: () => LocalizedString
 	/**
-	 * gas fee used was too low
+	 * The transaction was rejected: the gas price is below the block base fee
 	 */
 	SEND_TRANSACTION_ERROR_GAS_FEE: () => LocalizedString
 	/**
-	 * generic error
+	 * The transaction was rejected: its gas exceeds the network's {limit} per-transaction limit
 	 */
-	SEND_TRANSACTION_ERROR_GENERIC_ERROR: () => LocalizedString
+	SEND_TRANSACTION_ERROR_GAS_LIMIT: (arg: { limit: unknown }) => LocalizedString
 	/**
-	 * gas payer cannot cover fees
+	 * The transaction was rejected: not enough VTHO to pay for gas
 	 */
 	SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY: () => LocalizedString
+	/**
+	 * The network rejected the transaction: {reason}
+	 */
+	SEND_TRANSACTION_ERROR_REJECTED: (arg: { reason: unknown }) => LocalizedString
 	/**
 	 * Your VOT3 tokens can only be converted back to B3TR in this specific wallet address. By sending to another wallet you won’t be able to convert to any other asset.
 Are you sure you want to continue?
@@ -12225,6 +12241,10 @@ VET can be used for staking on StarGate - VeChain’s native staking platform - 
 	 * Transaction failed
 	 */
 	TRANSACTION_FAILED: () => LocalizedString
+	/**
+	 * This transaction needs at least {needed} gas, more than the network's {limit} per-transaction limit. Split it into smaller transactions.
+	 */
+	TRANSACTION_EXCEEDS_GAS_LIMIT: (arg: { limit: unknown, needed: unknown }) => LocalizedString
 	/**
 	 * Transaction fee
 	 */
