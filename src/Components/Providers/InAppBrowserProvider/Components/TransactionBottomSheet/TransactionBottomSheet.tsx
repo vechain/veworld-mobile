@@ -111,6 +111,8 @@ export const TransactionBottomSheetContent = ({
         hasEnoughBalanceOnToken,
         isBiometricsEmpty,
         transactionOutputs,
+        exceedsTxGasLimit,
+        estimatedGas,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -168,6 +170,8 @@ export const TransactionBottomSheetContent = ({
                     hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
                     isFirstTimeLoadingFees={isFirstTimeLoadingFees}
                     hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}
+                    exceedsTxGasLimit={exceedsTxGasLimit}
+                    estimatedGas={estimatedGas}
                     containerStyle={styles.gasFeeSpeedContainer}>
                     <DelegationView
                         setNoDelegation={resetDelegation}

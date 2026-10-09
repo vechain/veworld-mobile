@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react-hooks"
-import { useSendTransaction } from "./useSendTransaction"
+import { getNodeRejectionReason, useSendTransaction } from "./useSendTransaction"
 import { TestHelpers, TestWrapper } from "~Test"
 import axios, { AxiosError } from "axios"
 import { Transaction } from "@vechain/sdk-core"
@@ -212,5 +212,26 @@ describe("useSendTransaction", () => {
         ;(axios.post as jest.Mock).mockRejectedValue(new Error("Not enough gas"))
 
         await expect(result.current.sendTransaction(vetTransaction1)).rejects.toEqual(new Error("Not enough gas"))
+    })
+})
+
+describe("getNodeRejectionReason", () => {
+    // axios is automocked here, so the AxiosError constructor sets nothing.
+    const rejection = (status: number, data: unknown) => Object.assign(new AxiosError(), { response: { status, data } })
+
+    it("returns thor's plain-text reason for a bad or rejected tx", () => {
+        expect(getNodeRejectionReason(rejection(400, "bad tx: tx gas limit exceeds the maximum allowed\n"))).toBe(
+            "bad tx: tx gas limit exceeds the maximum allowed",
+        )
+        expect(getNodeRejectionReason(rejection(403, { message: "tx rejected: insufficient energy" }))).toBe(
+            "tx rejected: insufficient energy",
+        )
+    })
+
+    it("ignores network failures and other statuses", () => {
+        expect(getNodeRejectionReason(new Error("Network Error"))).toBeUndefined()
+        expect(getNodeRejectionReason(new AxiosError("timeout"))).toBeUndefined()
+        expect(getNodeRejectionReason(rejection(500, "<html>"))).toBeUndefined()
+        expect(getNodeRejectionReason(rejection(400, ""))).toBeUndefined()
     })
 })

@@ -40,6 +40,8 @@ export const TransactionFeeCard = () => {
         hasEnoughBalanceOnAny,
         isFirstTimeLoadingFees,
         hasEnoughBalanceOnToken,
+        exceedsTxGasLimit,
+        estimatedGas,
     } = useTransactionContext()
 
     return (
@@ -68,6 +70,8 @@ export const TransactionFeeCard = () => {
                 isFirstTimeLoadingFees={isFirstTimeLoadingFees}
                 hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}
                 sendingTokenSymbol={token?.symbol}
+                exceedsTxGasLimit={exceedsTxGasLimit}
+                estimatedGas={estimatedGas}
                 containerStyle={styles.gasFeeSpeedContainer}>
                 <DelegationView
                     setNoDelegation={resetDelegation}
