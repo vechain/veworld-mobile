@@ -79,7 +79,7 @@ const resolveMimeTypeFromUri = async (resource: string) => {
         })
 
         const contentType = res.headers["content-type"]
-        return contentType ?? "image/png"
+        return typeof contentType === "string" ? contentType : "image/png"
     } catch (err) {
         warn(ERROR_EVENTS.NFT, `Failed to resolve mime type for ${resource}`, err)
     }
