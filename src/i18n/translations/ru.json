@@ -950,7 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "Имя пользователя уже занято",
   "NOTIFICATION_received_token_transfer": "Получен перевод: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "Отправлен перевод: {amount : string } {token : string}",
-  "NOTIFICATION_subdomain_pending": "Подтверждение имени пользователя занимает больше времени, чем обычно. Оно появится в вашем аккаунте после подтверждения.",
+  "NOTIFICATION_subdomain_pending": "Подтверждение вашего имени пользователя занимает больше времени, чем обычно. Оно появится в вашем аккаунте после подтверждения.",
   "NOTIFICATION_transaction_reverted": "Транзакция {txId : string} была отменена.",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "Подключенное приложение успешно отключилось от этого кошелька.",
   "NOTIFICATION_wallet_connect_disconnected_success": "Успешно отключено от приложения.",

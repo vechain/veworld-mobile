@@ -950,7 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "Benutzername bereits vergeben",
   "NOTIFICATION_received_token_transfer": "Überweisung erhalten: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "Überweisung gesendet: {amount : string } {token : string}",
-  "NOTIFICATION_subdomain_pending": "Die Bestätigung Ihres Benutzernamens dauert länger als üblich. Er wird nach der Bestätigung in Ihrem Konto angezeigt.",
+  "NOTIFICATION_subdomain_pending": "Die Bestätigung deines Benutzernamens dauert länger als üblich. Er wird auf deinem Konto angezeigt, sobald er bestätigt wurde.",
   "NOTIFICATION_transaction_reverted": "Transaktion {txId : string} wurde zurückgesetzt.",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "Eine verbundene App wurde erfolgreich von dieser Wallet getrennt.",
   "NOTIFICATION_wallet_connect_disconnected_success": "Erfolgreich von der App getrennt.",

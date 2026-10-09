@@ -950,7 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "用戶名已被註冊",
   "NOTIFICATION_received_token_transfer": "收到轉帳: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "轉帳發送: {amount : string } {token : string}",
-  "NOTIFICATION_subdomain_pending": "您的用戶名確認時間比平常更長。確認後將顯示在您的帳戶中。",
+  "NOTIFICATION_subdomain_pending": "您的用戶名稱確認時間比預期還要久。確認後會顯示在您的帳戶上。",
   "NOTIFICATION_transaction_reverted": "交易 {txId : string} 已被還原。",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "已成功從此錢包斷開連接的應用。",
   "NOTIFICATION_wallet_connect_disconnected_success": "成功斷開應用連接。",
