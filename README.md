@@ -349,3 +349,4 @@ For any issues or further assistance, please refer to the Maestro documentation(
 # Deployments
 The deployment process is automated for both Andorid and iOS.
 Every evening release-overnight.yaml is ran to check if there was any new PRs merged into main in the past day if so then the release process is kicked off for both operating systems. The release artifacts are then uploaded to the relevant app stores ready for testing and further release to end users.
+
