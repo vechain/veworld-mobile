@@ -950,6 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "Användarnamnet är redan taget",
   "NOTIFICATION_received_token_transfer": "Överföring mottagen: {amount : string} {token : string}",
   "NOTIFICATION_sent_token_transfer": "Överföring skickad: {amount : string} {token : string}",
+  "NOTIFICATION_subdomain_pending": "Bekräftelsen av ditt användarnamn tar längre tid än vanligt. Det visas på ditt konto när det har bekräftats.",
   "NOTIFICATION_transaction_reverted": "Transaktion {txId : string} återställdes.",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "En ansluten app har framgångsrikt kopplats bort från denna plånbok.",
   "NOTIFICATION_wallet_connect_disconnected_success": "Framgångsrikt bortkopplad från app.",

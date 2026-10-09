@@ -950,6 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "ユーザー名はすでに使用されています",
   "NOTIFICATION_received_token_transfer": "受け取った送金: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "送金: {amount : string } {token : string}",
+  "NOTIFICATION_subdomain_pending": "ユーザー名の確認に通常より時間がかかっています。確認が完了するとアカウントに表示されます。",
   "NOTIFICATION_transaction_reverted": "トランザクション {txId : string} は取り消されました。",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "接続されたアプリがこのウォレットから正常に切断されました。",
   "NOTIFICATION_wallet_connect_disconnected_success": "アプリから正常に切断されました。",

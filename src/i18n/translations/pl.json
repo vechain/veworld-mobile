@@ -950,6 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "Nazwa użytkownika już zajęta",
   "NOTIFICATION_received_token_transfer": "Otrzymano przelew: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "Wysłano przelew: {amount : string } {token : string}",
+  "NOTIFICATION_subdomain_pending": "Potwierdzenie nazwy użytkownika trwa dłużej niż zwykle. Pojawi się ona na Twoim koncie po potwierdzeniu.",
   "NOTIFICATION_transaction_reverted": "Transakcja {txId : string} została cofnięta.",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "Połączona aplikacja pomyślnie rozłączyła się z tym portfelem.",
   "NOTIFICATION_wallet_connect_disconnected_success": "Pomyślnie rozłączono z aplikacją.",

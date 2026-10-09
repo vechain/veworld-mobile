@@ -950,6 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "Kullanıcı adı zaten alınmış",
   "NOTIFICATION_received_token_transfer": "Transfer alındı: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "Transfer gönderildi: {amount : string } {token : string}",
+  "NOTIFICATION_subdomain_pending": "Kullanıcı adınızın onaylanması normalden uzun sürüyor. Onaylandığında hesabınızda görünecektir.",
   "NOTIFICATION_transaction_reverted": "İşlem {txId : string} geri alındı.",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "Bağlı bir uygulama bu cüzdandan başarıyla ayrıldı.",
   "NOTIFICATION_wallet_connect_disconnected_success": "Uygulamadan başarıyla ayrıldınız.",

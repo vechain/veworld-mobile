@@ -950,6 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "Nome utente già reclamato",
   "NOTIFICATION_received_token_transfer": "Trasferimento ricevuto: {amount : string} {token : string}",
   "NOTIFICATION_sent_token_transfer": "Trasferimento inviato: {amount : string} {token : string}",
+  "NOTIFICATION_subdomain_pending": "La conferma del tuo nome utente sta richiedendo più tempo del solito. Apparirà sul tuo account una volta confermato.",
   "NOTIFICATION_transaction_reverted": "La transazione {txId : string} è stata annullata.",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "Un'app collegata si è disconnessa con successo da questo portafoglio.",
   "NOTIFICATION_wallet_connect_disconnected_success": "Disconnessione dall'app riuscita.",

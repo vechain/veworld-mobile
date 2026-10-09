@@ -950,6 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "Tên người dùng đã được đăng ký",
   "NOTIFICATION_received_token_transfer": "Nhận được chuyển khoản: {amount : string} {token : string}",
   "NOTIFICATION_sent_token_transfer": "Đã gửi chuyển khoản: {amount : string} {token : string}",
+  "NOTIFICATION_subdomain_pending": "Việc xác nhận tên người dùng của bạn đang mất nhiều thời gian hơn bình thường. Tên sẽ xuất hiện trên tài khoản của bạn sau khi được xác nhận.",
   "NOTIFICATION_transaction_reverted": "Giao dịch {txId : string} đã bị hoàn tác.",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "Ứng dụng đã kết nối thành công ngắt kết nối khỏi ví này.",
   "NOTIFICATION_wallet_connect_disconnected_success": "Đã ngắt kết nối thành công khỏi ứng dụng.",

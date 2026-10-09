@@ -950,6 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "Nome de usuário já reivindicado",
   "NOTIFICATION_received_token_transfer": "Transferência recebida: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "Transferência enviada: {amount : string } {token : string}",
+  "NOTIFICATION_subdomain_pending": "A confirmação do seu nome de usuário está demorando mais do que o normal. Ele aparecerá na sua conta assim que for confirmado.",
   "NOTIFICATION_transaction_reverted": "Transação {txId : string} foi revertida.",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "Um aplicativo conectado foi desconectado com sucesso desta carteira.",
   "NOTIFICATION_wallet_connect_disconnected_success": "Desconectado do aplicativo com sucesso.",

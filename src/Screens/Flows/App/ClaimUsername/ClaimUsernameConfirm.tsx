@@ -1,7 +1,7 @@
 import { CommonActions } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { Transaction } from "@vechain/sdk-core"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import {
     BaseSpacer,
     BaseText,
@@ -12,6 +12,7 @@ import {
     Layout,
     RequireUserPassword,
     showErrorToast,
+    showInfoToast,
 } from "~Components"
 import { AnalyticsEvent, DOMAIN_BASE } from "~Constants"
 import { getSubdomainClaimClauses, useAnalyticTracking, useTheme, useTransactionScreen } from "~Hooks"
@@ -42,11 +43,51 @@ export const ClaimUsernameConfirm: React.FC<Props> = ({ route, navigation }) => 
         })
     }, [subdomain, trackEvent])
 
+    // useTransactionScreen does not await onTransactionSuccess, so the screen stays locked here until the receipt arrives
+    const [isConfirming, setIsConfirming] = useState(false)
+
+    // Remove both claim screens (optionally landing on the success screen), so that going back returns to where the
+    // claim started and the user cannot submit the same paid claim twice
+    const leaveClaimFlow = useCallback(
+        (claimedUsername?: string) => {
+            navigation.dispatch(state => {
+                const routes = [
+                    ...state.routes.filter(
+                        r => r.name !== Routes.CLAIM_USERNAME && r.name !== Routes.CLAIM_USERNAME_CONFIRM,
+                    ),
+                    ...(claimedUsername
+                        ? [{ name: Routes.USERNAME_CLAIMED, params: { username: claimedUsername } }]
+                        : []),
+                ]
+
+                return CommonActions.reset({
+                    ...state,
+                    routes,
+                    index: routes.length - 1,
+                })
+            })
+        },
+        [navigation],
+    )
+
     const onTransactionSuccess = useCallback(
         async (_transaction: Transaction, txId: string) => {
-            const receipt = await waitTransaction(txId, { network })
+            setIsConfirming(true)
 
-            if (!receipt || receipt.reverted) {
+            // waitTransaction resolves null on timeout and logs other errors before rethrowing
+            const receipt = await waitTransaction(txId, { network }).catch(() => null)
+
+            // The claim was sent but its outcome is unknown, so do not report a failure that invites a paid retry
+            if (!receipt) {
+                showInfoToast({
+                    text1: LL.NOTIFICATION_subdomain_pending(),
+                })
+                leaveClaimFlow()
+                return
+            }
+
+            if (receipt.reverted) {
+                setIsConfirming(false)
                 onTransactionFailure()
                 showErrorToast({
                     text1: LL.NOTIFICATION_failed_subdomain(),
@@ -57,24 +98,9 @@ export const ClaimUsernameConfirm: React.FC<Props> = ({ route, navigation }) => 
             trackEvent(AnalyticsEvent.CLAIM_USERNAME_CREATED, {
                 subdomain: username,
             })
-
-            // Swap both claim screens for the success screen, so that "Continue" returns to where the claim started
-            navigation.dispatch(state => {
-                const routes = [
-                    ...state.routes.filter(
-                        r => r.name !== Routes.CLAIM_USERNAME && r.name !== Routes.CLAIM_USERNAME_CONFIRM,
-                    ),
-                    { name: Routes.USERNAME_CLAIMED, params: { username } },
-                ]
-
-                return CommonActions.reset({
-                    ...state,
-                    routes,
-                    index: routes.length - 1,
-                })
-            })
+            leaveClaimFlow(username)
         },
-        [LL, navigation, network, onTransactionFailure, trackEvent, username],
+        [LL, leaveClaimFlow, network, onTransactionFailure, trackEvent, username],
     )
 
     const {
@@ -112,6 +138,7 @@ export const ClaimUsernameConfirm: React.FC<Props> = ({ route, navigation }) => 
     return (
         <Layout
             noStaticBottomPadding
+            preventGoBack={isConfirming}
             safeAreaTestID="Claim_Username_Confirm_Screen"
             title={LL.TITLE_CLAIM_USERNAME()}
             body={
@@ -164,7 +191,8 @@ export const ClaimUsernameConfirm: React.FC<Props> = ({ route, navigation }) => 
                     testID="ClaimUsernameConfirm_Btn"
                     title={LL.COMMON_BTN_CONFIRM().toUpperCase()}
                     action={onSubmit}
-                    disabled={isDisabledButtonState}
+                    disabled={isDisabledButtonState || isConfirming}
+                    isLoading={isConfirming}
                     bottom={0}
                     mx={0}
                     width={"auto"}

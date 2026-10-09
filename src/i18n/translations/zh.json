@@ -950,6 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "用户名已被认领",
   "NOTIFICATION_received_token_transfer": "收到转账: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "转账已发送: {amount : string } {token : string}",
+  "NOTIFICATION_subdomain_pending": "您的用户名确认时间比平常更长。确认后将显示在您的账户中。",
   "NOTIFICATION_transaction_reverted": "交易 {txId : string} 被撤销。",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "已成功与该钱包断开连接的应用。",
   "NOTIFICATION_wallet_connect_disconnected_success": "已成功与应用断开连接。",

@@ -950,6 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "Gebruikersnaam al geclaimd",
   "NOTIFICATION_received_token_transfer": "Overdracht ontvangen: {amount : string} {token : string}",
   "NOTIFICATION_sent_token_transfer": "Overdracht verzonden: {amount : string} {token : string}",
+  "NOTIFICATION_subdomain_pending": "Het bevestigen van je gebruikersnaam duurt langer dan normaal. Hij verschijnt op je account zodra hij is bevestigd.",
   "NOTIFICATION_transaction_reverted": "Transactie {txId : string} is teruggedraaid.",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "Een aangesloten app is met succes losgekoppeld van deze portemonnee.",
   "NOTIFICATION_wallet_connect_disconnected_success": "Succesvol losgekoppeld van app.",

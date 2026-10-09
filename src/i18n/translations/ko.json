@@ -950,6 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "사용자 이름이 이미 사용 중입니다",
   "NOTIFICATION_received_token_transfer": "전송 받음: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "전송 완료: {amount : string } {token : string}",
+  "NOTIFICATION_subdomain_pending": "사용자 이름 확인이 평소보다 오래 걸리고 있습니다. 확인되면 계정에 표시됩니다.",
   "NOTIFICATION_transaction_reverted": "거래 {txId : string}가 되돌려졌습니다.",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "연결된 앱이 이 지갑에서 성공적으로 연결이 끊겼습니다.",
   "NOTIFICATION_wallet_connect_disconnected_success": "앱에서 성공적으로 연결이 끊겼습니다.",

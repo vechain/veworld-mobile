@@ -950,6 +950,7 @@
   "NOTIFICATION_failed_subdomain_already": "Username already claimed",
   "NOTIFICATION_received_token_transfer": "Transfer received: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "Transfer sent: {amount : string } {token : string}",
+  "NOTIFICATION_subdomain_pending": "Your username is taking longer than usual to confirm. It will appear on your account once confirmed.",
   "NOTIFICATION_transaction_reverted": "Transaction {txId : string} was reverted.",
   "NOTIFICATION_wallet_connect_disconnected_from_remote": "A connected app successfully disconnected from this wallet.",
   "NOTIFICATION_wallet_connect_disconnected_success": "Successfully disconnected from app.",

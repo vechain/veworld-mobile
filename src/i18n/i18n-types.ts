@@ -3902,6 +3902,10 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_sent_token_transfer: RequiredParams<'amount' | 'token'>
 	/**
+	 * Y​o​u​r​ ​u​s​e​r​n​a​m​e​ ​i​s​ ​t​a​k​i​n​g​ ​l​o​n​g​e​r​ ​t​h​a​n​ ​u​s​u​a​l​ ​t​o​ ​c​o​n​f​i​r​m​.​ ​I​t​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​o​n​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​o​n​c​e​ ​c​o​n​f​i​r​m​e​d​.
+	 */
+	NOTIFICATION_subdomain_pending: string
+	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​{​t​x​I​d​}​ ​w​a​s​ ​r​e​v​e​r​t​e​d​.
 	 * @param {string} txId
 	 */
@@ -10194,6 +10198,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * Transfer sent: {amount} {token}
 	 */
 	NOTIFICATION_sent_token_transfer: (arg: { amount: string, token: string }) => LocalizedString
+	/**
+	 * Your username is taking longer than usual to confirm. It will appear on your account once confirmed.
+	 */
+	NOTIFICATION_subdomain_pending: () => LocalizedString
 	/**
 	 * Transaction {txId} was reverted.
 	 */
