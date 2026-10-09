@@ -151,3 +151,6 @@ export const chainTagToGenesisId: Record<number, string> = {
 
 // This is a high estimate of the gas cost for a VTHO transfer
 export const VTHO_GAS_ESTIMATE = new BigNumber(67000)
+
+/** thor.MaxTxGasLimit (EIP-7825); the txpool rejects anything above it. */
+export const MAX_TX_GAS_LIMIT = 16777216
