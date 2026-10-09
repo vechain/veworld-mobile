@@ -63,6 +63,8 @@ export type EncryptedStorage = {
     encryptionKey: string
 }
 
+type OnboardingMigrationStage = "init_storage_keys" | "migrate_state" | "prune_onboarding" | "swap_storage"
+
 export enum SecurityMigration {
     NOT_STARTED,
     IN_PROGRESS,
@@ -138,10 +140,13 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             encryptionKey: onboardingKey,
         })
 
-        await WalletEncryptionKeyHelper.remove()
-        await StorageEncryptionKeyHelper.remove()
+        // Order is load-bearing: state before vault, so a reset interrupted in between
+        // cannot leave a device record with a live storage key and no wallet key.
         UserEncryptedStorage.clearAll()
         UserEncryptedStorage_V2.clearAll()
+
+        await WalletEncryptionKeyHelper.remove()
+        await StorageEncryptionKeyHelper.remove()
     }, [onboardingKey, updateSecurityType])
 
     /**
@@ -281,6 +286,8 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
 
     const migrateOnboarding = useCallback(
         async (type: SecurityLevelType, pinCode?: string): Promise<void> => {
+            let stage: OnboardingMigrationStage = "init_storage_keys"
+
             try {
                 info(ERROR_EVENTS.SECURITY, "onboarding_migration_started")
                 const encryptionKeys = await StorageEncryptionKeyHelper.init(pinCode)
@@ -288,6 +295,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 // Commit the unlock method before the atomic MMKV write. If the process
                 // terminates immediately after that write, the next launch can unlock it.
                 updateSecurityType(type)
+                stage = "migrate_state"
                 Onboarding.migrateState({
                     onboardingStorage: OnboardingStorage,
                     encryptedStorage: UserEncryptedStorage_V2,
@@ -295,8 +303,10 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                     onboardingKey,
                 })
 
+                stage = "prune_onboarding"
                 Onboarding.prune(OnboardingStorage)
 
+                stage = "swap_storage"
                 setReduxStorage({
                     mmkv: UserEncryptedStorage_V2,
                     encryptionKey: encryptionKeys.redux,
@@ -318,11 +328,20 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 // A cancelled biometric prompt can only come from StorageEncryptionKeyHelper.init,
                 // which runs before anything is written — keep state intact so the user can retry.
                 if (BiometricsUtils.BiometricErrors.isBiometricCanceled(e)) {
-                    info(ERROR_EVENTS.SECURITY, "onboarding_migration_cancelled")
+                    info(ERROR_EVENTS.SECURITY, `onboarding_migration_cancelled stage=${stage}`)
                     throw e
                 }
 
-                error(ERROR_EVENTS.SECURITY, "onboarding_migration_failed", e)
+                // Read before resetApplication clears it: migrateState writes and then
+                // verifies, so the stage alone cannot say whether anything was written.
+                let migrated: "present" | "empty" | "unknown" = "unknown"
+                try {
+                    migrated = UserEncryptedStorage_V2.getAllKeys().length > 0 ? "present" : "empty"
+                } catch {
+                    // Leave as unknown rather than masking the original failure.
+                }
+
+                error(ERROR_EVENTS.SECURITY, `onboarding_migration_failed stage=${stage} migrated=${migrated} `, e)
                 await resetApplication()
                 throw e
             }
