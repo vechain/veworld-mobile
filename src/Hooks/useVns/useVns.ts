@@ -39,9 +39,6 @@ type SubdomainClaimTransaction = TransactionBody & {
     simulateTransactionOptions: { caller: string }
 }
 
-/**
- * Clauses that claim `<subdomain>.veworld.vet` for the sender and set it as the sender's primary name
- */
 export const getSubdomainClaimClauses = (subdomain: string, networkType: NETWORK_TYPE) => {
     const dataClaimer = new abi.Function(abis.VetDomains.claim).encode(subdomain, VNS_PUBLIC_RESOLVER[networkType])
 
