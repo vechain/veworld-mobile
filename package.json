@@ -28,6 +28,7 @@
     "format": "yarn prettier --write src",
     "format:check": "yarn prettier --check src",
     "postinstall": "patch-package --exclude 'nothing'",
+    "check:pr-bloat": "BASE_REF=origin/main HEAD_REF=WORKTREE node scripts/check-pr-bloat.mjs",
     "check-circular-dependencies": "npx madge --circular --warning --extensions js,jsx,ts,tsx .",
     "dapps-index:generate": "ts-node scripts/generate-dapps-index.ts",
     "i18n:types": "typesafe-i18n",
