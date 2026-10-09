@@ -20,4 +20,4 @@ jobs:
       issues: write
       pull-requests: write
     secrets:
-      ZIZMOR_TOKEN: ${{ secrets.ZIZMOR_TOKEN }}
+      ZIZMOR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
