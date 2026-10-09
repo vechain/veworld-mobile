@@ -52,6 +52,8 @@ export type EstimateGasResult = {
     vmError: string
     baseGasPrice: string
     outputs: InspectableOutput[]
+    /** `gas` is over the network's per-transaction cap; the node would refuse it. */
+    exceedsTxGasLimit?: boolean
 }
 export interface CreateBodyParams {
     thorClient: Connex.Thor

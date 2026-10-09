@@ -2,12 +2,51 @@ import { TransactionClause } from "@vechain/sdk-core"
 import axios from "axios"
 import BigNumber from "bignumber.js"
 import { Transaction } from "thor-devkit"
-import { GasPriceCoefficient, VTHO } from "~Constants"
+import { GasPriceCoefficient, MAX_TX_GAS_LIMIT, VTHO } from "~Constants"
 import { EstimateGasResult } from "~Model"
 import AddressUtils from "~Utils/AddressUtils"
 import BigNutils, { BigNumberUtils } from "~Utils/BigNumberUtils"
 import SemanticVersionUtils from "~Utils/SemanticVersionUtils"
 import TransactionUtils from "~Utils/TransactionUtils"
+
+const SIMULATION_GAS = 2000 * 10000
+const GAS_HEADROOM = 15000
+const CALL_DEPTH_PROBES = 4
+const BISECT_ROUNDS = 8
+
+type Simulate = (gas: number) => Promise<Connex.VM.Output[]>
+
+const anyReverted = (outputs: Connex.VM.Output[]) => outputs.some(out => out.reverted)
+
+/**
+ * EIP-150: each CALL/DELEGATECALL hop forwards only 63/64 of the remaining gas,
+ * which the 20M simulation hides. Re-simulate at the real budget and step up.
+ * Returns undefined when no budget up to `maxExecGas` passes.
+ */
+const verifyExecGas = async (simulate: Simulate, execGas: number, maxExecGas: number): Promise<number | undefined> => {
+    let gas = execGas + GAS_HEADROOM
+    if (gas > maxExecGas) return undefined
+    if (!anyReverted(await simulate(gas))) return gas
+
+    let lo = gas
+    for (let hop = 0; hop < CALL_DEPTH_PROBES; hop++) {
+        gas = Math.min(Math.ceil((gas * 64) / 63), maxExecGas)
+        if (!anyReverted(await simulate(gas))) return gas
+        if (gas === maxExecGas) return undefined
+        lo = gas
+    }
+    let hi = maxExecGas
+    if (anyReverted(await simulate(hi))) return undefined
+    for (let round = 0; round < BISECT_ROUNDS; round++) {
+        const mid = Math.floor((lo + hi) / 2)
+        if (anyReverted(await simulate(mid))) {
+            lo = mid
+        } else {
+            hi = mid
+        }
+    }
+    return hi
+}
 
 const estimateGas = async (
     url: string,
@@ -38,20 +77,36 @@ const estimateGas = async (
         }
     }
 
-    const offeredGas = providedGas ? Math.max(providedGas - intrinsicGas, 1) : 2000 * 10000
+    const maxExecGas = MAX_TX_GAS_LIMIT - intrinsicGas
 
-    const { data } = await axios.post<Connex.VM.Output[]>(`${url}/accounts/*?revision=${revision}`, {
-        clauses,
-        caller,
-        gas: offeredGas,
-        gasPayer,
-    })
+    const simulate: Simulate = async gas => {
+        const { data } = await axios.post<Connex.VM.Output[]>(`${url}/accounts/*?revision=${revision}`, {
+            clauses,
+            caller,
+            gas,
+            gasPayer,
+        })
+        return data
+    }
+
+    const data = await simulate(providedGas ? Math.max(providedGas - intrinsicGas, 1) : SIMULATION_GAS)
 
     let gas = providedGas
+    let exceedsTxGasLimit = false
 
-    if (!gas) {
+    if (gas) {
+        exceedsTxGasLimit = gas > MAX_TX_GAS_LIMIT
+    } else {
         const execGas = data.reduce((sum, out) => sum + out.gasUsed, 0)
-        gas = intrinsicGas + (execGas ? execGas + 15000 : 0)
+        let execBudget = execGas ? execGas + GAS_HEADROOM : 0
+        if (execGas && !anyReverted(data)) {
+            const verified = await verifyExecGas(simulate, execGas, maxExecGas)
+            if (verified !== undefined) execBudget = verified
+            else exceedsTxGasLimit = true
+        } else if (execBudget > maxExecGas) {
+            exceedsTxGasLimit = true
+        }
+        gas = intrinsicGas + execBudget
     }
     const lastOutput = data.slice().pop()
 
@@ -64,8 +119,11 @@ const estimateGas = async (
         //We can easily hard code it
         baseGasPrice: "10000000000000",
         outputs: data,
+        exceedsTxGasLimit,
     }
 }
+
+const formatGasMillions = (gas: number) => `${(gas / 1e6).toFixed(1)}M`
 
 const getRevertReason = (output: Connex.VM.Output | undefined): string => {
     if (output) {
@@ -197,6 +255,7 @@ const calculateVthoGas = (clauses: Transaction.Clause[], isDelegated: boolean, v
 
 export default {
     estimateGas,
+    formatGasMillions,
     gasToVtho,
     getTxFeeWithCoeff,
     getGasByCoefficient,

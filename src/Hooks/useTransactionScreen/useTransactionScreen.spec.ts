@@ -106,12 +106,16 @@ jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
     useFeatureFlags: () => mockUseFeatureFlags,
 }))
 
-jest.mock("~Hooks/useSendTransaction")
+jest.mock("~Hooks/useSendTransaction", () => ({
+    ...jest.requireActual("~Hooks/useSendTransaction"),
+    useSendTransaction: jest.fn(),
+}))
 
 // Minimal mock so gas calculation doesn't block this test file
+let mockGas: Record<string, unknown> = { outputs: [], totalGas: 21000 }
 jest.mock("~Hooks/useTransactionGas", () => ({
     useTransactionGas: () => ({
-        gas: { outputs: [], totalGas: 21000 },
+        gas: mockGas,
         loadingGas: false,
         setGas: jest.fn(),
         setGasPayer: jest.fn(),
@@ -328,7 +332,32 @@ describe("useTransactionScreen", () => {
             isFirstTimeLoadingFees: false,
             isBiometricsEmpty: false,
             transactionOutputs: [],
+            exceedsTxGasLimit: false,
+            estimatedGas: undefined,
         })
+    })
+
+    it("should disable confirm when the gas exceeds the per-transaction cap", async () => {
+        mockGas = { outputs: [], gas: 20900000, exceedsTxGasLimit: true }
+        try {
+            const { result } = renderHook(
+                () =>
+                    useTransactionScreen({
+                        clauses: vetTransaction1.body.clauses,
+                        onTransactionSuccess,
+                        onTransactionFailure,
+                    }),
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+
+            expect(result.current.exceedsTxGasLimit).toBe(true)
+            expect(result.current.estimatedGas).toBe(20900000)
+            expect(result.current.isDisabledButtonState).toBe(true)
+        } finally {
+            mockGas = { outputs: [], totalGas: 21000 }
+        }
     })
 
     describe("send token transaction", () => {
@@ -381,17 +410,27 @@ describe("useTransactionScreen", () => {
             const LL = i18nObject("en")
             it.each([
                 {
-                    thorMessage: "insufficient energy",
+                    thorMessage: "tx rejected: insufficient energy",
                     isAxios: true,
                     result: LL.SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY(),
                 },
                 {
-                    thorMessage: "gas price is less than block base fee",
+                    thorMessage: "tx rejected: gas price is less than block base fee",
                     isAxios: true,
                     result: LL.SEND_TRANSACTION_ERROR_GAS_FEE(),
                 },
-                { thorMessage: "unknown message", isAxios: true, result: LL.SEND_TRANSACTION_ERROR_GENERIC_ERROR() },
-                { isAxios: false, result: LL.SEND_TRANSACTION_ERROR_GENERIC_ERROR() },
+                {
+                    thorMessage: "bad tx: tx gas limit exceeds the maximum allowed\n",
+                    isAxios: true,
+                    result: LL.SEND_TRANSACTION_ERROR_GAS_LIMIT({ limit: "16.8M" }),
+                },
+                {
+                    thorMessage: "unknown message",
+                    isAxios: true,
+                    result: LL.SEND_TRANSACTION_ERROR_REJECTED({ reason: "unknown message" }),
+                },
+                { thorMessage: "", isAxios: true, result: LL.SEND_TRANSACTION_ERROR() },
+                { isAxios: false, result: LL.SEND_TRANSACTION_ERROR() },
             ])(
                 "should error: isAxios: $isAxios, thorMessage: $thorMessage",
                 async ({ isAxios, result: localizedResult, thorMessage }) => {
@@ -444,7 +483,7 @@ describe("useTransactionScreen", () => {
                             expect(onTransactionFailure).toHaveBeenCalled()
                             expect(showErrorToast).toHaveBeenCalledWith(
                                 expect.objectContaining({
-                                    text2: `${LL.SEND_TRANSACTION_ERROR()}${localizedResult}`,
+                                    text2: localizedResult,
                                 }),
                             )
                         },

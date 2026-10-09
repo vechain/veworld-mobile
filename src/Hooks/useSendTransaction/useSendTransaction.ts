@@ -22,6 +22,15 @@ import { useQueryClient } from "@tanstack/react-query"
  * @param onSuccess the function to handle success
  * @returns {sendTransactionAndPerformUpdates} the function to send the transaction and perform updates
  */
+/** Thor answers a refused `POST /transactions` with 400/403 and a plain-text reason. */
+export const getNodeRejectionReason = (e: unknown): string | undefined => {
+    if (!(e instanceof AxiosError) || !e.response) return undefined
+    if (e.response.status !== 400 && e.response.status !== 403) return undefined
+    const data = e.response.data
+    const text = typeof data === "string" ? data : typeof data?.message === "string" ? data.message : ""
+    return text.trim() || undefined
+}
+
 export const useSendTransaction = (onSuccess: (transaction: Transaction, id: string) => Promise<void> | void) => {
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectSelectedAccount)
