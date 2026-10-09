@@ -29,45 +29,95 @@
 
 VeWorld is an open-source crypto wallet for interacting with the Vechain blockchain. It supports viewing token balances and NFTs, executing transactions, connecting Ledger hardware wallets, and interacting with the VeBetterDAO ecosystem and other VeChain dApps
 
-# iOS
+# Prerequisites
 
-### How to run the project
+The versions are pinned in the repo's dotfiles. If this table and a dotfile disagree, the dotfile is correct.
 
-This project is using soe external services that are not neccesary during development, but in this moment some configuration files are needed in order to make it run. In order to generate these files do the following.
-
-##
-
-From the project root open your terminal and type the following:
+| Tool           | Version      | Pinned in                         |
+| -------------- | ------------ | --------------------------------- |
+| Node           | 20.19.0      | `.nvmrc`                          |
+| Yarn           | 1.22.x       | `package.json` (`packageManager`) |
+| Ruby (iOS)     | 3.2.6        | `.ruby-version`                   |
+| Java (Android) | Azul Zulu 17 | `.java-version`                   |
+| Xcode (iOS)    | 26.2         | CI (`release-ios.yml`)            |
+| Watchman       | latest       |                                   |
 
 ```bash
-cd ios
-
-echo -e "defaults.url=https://sentry.io/\ndefaults.org=vechain-foundation\ndefaults.project=veworld-mobile" > sentry.properties
+brew install watchman rbenv   # then follow the instructions printed by `rbenv init`, and open a new terminal
+rbenv install                 # installs the version in .ruby-version; `ruby -v` should now print 3.2.6
+brew install --cask zulu@17   # then: export JAVA_HOME=$(/usr/libexec/java_home -v 17)
 ```
 
-Then in Xcode add your account and a new `Bundle Id` for the project
+You can run the unit tests without Xcode or Android Studio: run `yarn install:android`, then `yarn test`.
 
-![Xcode](docs/img/Xcode.png)
+# iOS
 
-Then on the `Signing and capabilities` tab scroll down on the iCloud capability and a new container using the same `Bundle Id` that you used earlier.
+### 1. Install Xcode 26.2 and point the command line tools at it
 
-![Xcode](docs/img/cloudkit.png)
+Use the Xcode version CI uses. Xcode 27 builds the app, but iOS 27 stops it at launch because VeWorld doesn't use the UIScene lifecycle yet. You can install Xcode 26.2 alongside a newer Xcode:
 
-> **Note:** _You will see the following error on the logs when running the app:_
->
-> Error: _Couldn't get container configuration from the server for container_
->
-> _This error is related to the cloudKit container, if you need to use cloudkit you will have to setup the reccords manually through the developer portal clicking at the "Cloudkit Console" button._
+```bash
+brew install xcodes
+xcodes install 26.2 --select   # asks for your Apple ID and sets xcode-select to Xcode 26.2
+```
 
-Then type the following on your terminal:
+### 2. Create the Sentry config
 
-`yarn install:all`
+Sentry isn't used during development, but the build needs this file to exist:
 
-`yarn start`
+```bash
+echo -e "defaults.url=https://sentry.io/\ndefaults.org=vechain-foundation\ndefaults.project=veworld-mobile" > ios/sentry.properties
+```
 
-Then open a new instance of the terminal on the project root and type:
+### 3. Install dependencies
 
-`yarn ios`
+Run these from the repo root:
+
+```bash
+(cd ios && bundle install)   # installs CocoaPods 1.16.2, the version CI uses
+yarn install:all             # installs JS dependencies, generates code and installs pods
+```
+
+### 4. Run on the simulator
+
+```bash
+yarn start   # terminal 1: Metro
+yarn ios     # terminal 2
+```
+
+`yarn ios` launches the `iPhone 17 Pro` simulator, a default simulator in Xcode 26. To use a different one, set `IOS_SIMULATOR`, for example `IOS_SIMULATOR="iPhone 17" yarn ios`. `xcrun simctl list devices available` lists the simulators you have. To create a missing one, such as the SE that `yarn ios:old-device` uses:
+
+```bash
+xcrun simctl create "iPhone SE (3rd generation)" com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation
+```
+
+To build from Xcode instead, open `ios/VeWorld.xcworkspace`. Don't open `VeWorld.xcodeproj`, because it doesn't include the pods. Pick the **VeWorld** scheme and a simulator, then press ⌘R while `yarn start` is running.
+
+The project sets a development team only for device builds, so try the simulator before changing any signing settings. If Xcode reports _Signing for "VeWorld" requires a development team_, follow step 5.
+
+### 5. Signing (for physical devices, or if Xcode asks)
+
+1. Add your Apple ID under **Accounts** in Xcode's Settings.
+2. In the Project navigator, select the **VeWorld** project. Then select the **VeWorld** target (under TARGETS, not PROJECT) and open **Signing & Capabilities** → **All**.
+3. Tick **Automatically manage signing**, choose your **Team**, and set a unique **Bundle Identifier**, for example `org.vechain.veworld.app.<your-name>`.
+
+    ![Signing](docs/img/Xcode.png)
+
+4. In the **iCloud** capability, untick `iCloud.org.vechain.veworld.app` and add `iCloud.<your bundle id>`.
+
+    ![iCloud](docs/img/cloudkit.png)
+
+5. Repeat steps 3 and 4 for the **OneSignalNotificationServiceExtension** target, using the bundle ID `<your bundle id>.OneSignalNotificationServiceExtension`.
+
+Free personal teams don't support some of the app's capabilities, such as iCloud and Push Notifications. Xcode shows these in red, and you can delete them locally.
+
+Don't commit these changes. To undo them:
+
+```bash
+git restore ios/VeWorld.xcodeproj/project.pbxproj ios/VeWorld/VeWorld.entitlements ios/OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements
+```
+
+> **Note:** With your own iCloud container, the logs show _Couldn't get container configuration from the server for container_. This only affects iCloud backup. To test it, set up the records with the **CloudKit Console** button in the iCloud capability.
 
 # Android
 
@@ -98,83 +148,6 @@ Then open a new instance of the terminal on the project root and type:
 `yarn android:emus`
 
 to select an android emulator to run the app (you need to have at least once active emulator on your android studio).
-
-# React Native 0.74 Migration
-
-This project has been upgraded from React Native 0.72 to 0.74 to improve application performance and take advantage of the latest features. The following guide will help you update your development environment to work with the new version.
-
-## Environment Setup Requirements
-
-To work with React Native 0.74, you'll need to update your development environment with the following requirements:
-
-### Node.js
-
-- **Upgrade from Node 18 to Node 20**
-- You can use nvm to manage Node versions:
-  ```bash
-  nvm install 20
-  nvm use 20
-  ```
-- Verify installation: `node --version`
-
-### Java (for Android)
-
-- **Upgrade from Java 11 to Java 17**
-- Download and install Azul Zulu JDK 17:
-  - Visit [Azul Zulu Downloads](https://www.azul.com/downloads/?package=jdk#download-openjdk)
-  - Select JDK 17 (LTS)
-- Update your JAVA_HOME environment variable to point to the new JDK
-- Verify installation: `java -version`
-
-### Ruby (for iOS)
-
-- **Upgrade from Ruby 2.6.1 to 2.7.5**
-- Using rbenv:
-  ```bash
-  rbenv install 2.7.5
-  rbenv global 2.7.5
-  ```
-- Using rvm:
-  ```bash
-  rvm install 2.7.5
-  rvm use 2.7.5
-  ```
-- Verify installation: `ruby -v`
-
-### Flipper Removal
-
-- Flipper has been completely removed from the project
-- If you were using Flipper for debugging, consider alternatives like:
-  - React Native Debugger
-  - Chrome DevTools
-  - React Developer Tools
-
-### Clean Project Steps
-
-After updating your environment, clean your project thoroughly:
-
-1. Remove node_modules and reinstall dependencies:
-   ```bash
-   yarn reinstall
-   ```
-
-2. Reset Metro bundler cache:
-   ```bash
-   yarn start
-   ```
-
-3. Rebuild the app:
-   ```bash
-   # For iOS
-   yarn ios
-   
-   # For Android
-   yarn android:emus
-   ```
-
-If you encounter any issues during the migration process, please reach out for assistance.
-
-
 
 # How to contribute
 

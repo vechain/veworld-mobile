@@ -10,7 +10,7 @@
     "reinstall": "yarn purge && yarn install:all",
     "android": "react-native run-android",
     "android:emus": "react-native run-android --list-devices",
-    "ios": "SKIP_SENTRY=true react-native run-ios --simulator 'iPhone 17 Pro'",
+    "ios": "SKIP_SENTRY=true react-native run-ios --simulator \"${IOS_SIMULATOR:-iPhone 17 Pro}\"",
     "ios:device": "SKIP_SENTRY=true react-native run-ios",
     "ios:old-device": "SKIP_SENTRY=true react-native run-ios --simulator 'iPhone SE (3rd generation)'",
     "start": "watchman watch-del './'; watchman watch-project './'; react-native start --reset-cache",
