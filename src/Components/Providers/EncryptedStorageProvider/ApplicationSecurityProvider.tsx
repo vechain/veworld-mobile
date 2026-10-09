@@ -73,7 +73,7 @@ type IApplicationSecurity = {
     redux?: EncryptedStorage
     images?: EncryptedStorage
     metadata?: EncryptedStorage
-    migrateOnboarding: (type: SecurityLevelType, pinCode?: string) => Promise<void>
+    migrateOnboarding: (type: SecurityLevelType, encryptionKeys: StorageEncryptionKeys) => Promise<void>
     resetApplication: () => Promise<void>
     walletStatus: WALLET_STATUS
     updateSecurityMethod: (currentPinCode: string, newPinCode?: string) => Promise<boolean>
@@ -280,10 +280,9 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
     )
 
     const migrateOnboarding = useCallback(
-        async (type: SecurityLevelType, pinCode?: string): Promise<void> => {
+        async (type: SecurityLevelType, encryptionKeys: StorageEncryptionKeys): Promise<void> => {
             try {
                 info(ERROR_EVENTS.SECURITY, "onboarding_migration_started")
-                const encryptionKeys = await StorageEncryptionKeyHelper.init(pinCode)
 
                 // Commit the unlock method before the atomic MMKV write. If the process
                 // terminates immediately after that write, the next launch can unlock it.
@@ -315,13 +314,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 setWalletStatus(WALLET_STATUS.UNLOCKED)
                 info(ERROR_EVENTS.SECURITY, "onboarding_migration_completed")
             } catch (e) {
-                // A cancelled biometric prompt can only come from StorageEncryptionKeyHelper.init,
-                // which runs before anything is written — keep state intact so the user can retry.
-                if (BiometricsUtils.BiometricErrors.isBiometricCanceled(e)) {
-                    info(ERROR_EVENTS.SECURITY, "onboarding_migration_cancelled")
-                    throw e
-                }
-
                 error(ERROR_EVENTS.SECURITY, "onboarding_migration_failed", e)
                 await resetApplication()
                 throw e

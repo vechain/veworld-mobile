@@ -16,10 +16,17 @@ jest.mock("~Components", () => ({
     runOnboardingStorageMigration: jest.fn((_persistor: unknown, migration: () => Promise<void>) => migration()),
     showErrorToast: jest.fn(),
     showInfoToast: jest.fn(),
-    useApplicationSecurity: jest.fn(() => ({ migrateOnboarding: mockMigrateOnboarding })),
-    useStore: jest.fn(() => ({ persistor: {} })),
+    useApplicationSecurity: jest.fn(() => ({
+        migrateOnboarding: mockMigrateOnboarding,
+        walletStatus: "FIRST_TIME_ACCESS",
+    })),
+    useStore: jest.fn(() => ({ persistor: {}, store: { getState: () => ({ devices: [] }) } })),
     WalletEncryptionKeyHelper: {
         init: jest.fn().mockResolvedValue(undefined),
+        remove: jest.fn().mockResolvedValue(undefined),
+    },
+    StorageEncryptionKeyHelper: {
+        init: jest.fn().mockResolvedValue({ redux: "redux-key", images: "images-key", metadata: "metadata-key" }),
         remove: jest.fn().mockResolvedValue(undefined),
     },
 }))
@@ -46,6 +53,7 @@ jest.mock("~Storage/Redux", () => ({
 
 jest.mock("~Utils", () => ({
     debug: jest.fn(),
+    error: jest.fn(),
     BiometricsUtils: {
         BiometricErrors: {
             isBiometricCanceled: jest.fn(() => false),
@@ -103,6 +111,12 @@ describe("useDemoWallet", () => {
         })
 
         expect(mockMigrateOnboarding).toHaveBeenCalledTimes(1)
-        expect(mockMigrateOnboarding).toHaveBeenCalledWith(SecurityLevelType.SECRET, "111111")
+        // Both keys are minted with the demo PIN before the wallet exists; the migration
+        // receives the storage keys rather than minting them itself.
+        expect(mockMigrateOnboarding).toHaveBeenCalledWith(SecurityLevelType.SECRET, {
+            redux: "redux-key",
+            images: "images-key",
+            metadata: "metadata-key",
+        })
     })
 })
