@@ -62,7 +62,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
         [theme.colors.convertBetterCard.borderColor, theme.colors.transparent],
     )
 
-    const { convertB3tr, convertVot3 } = useConvertBetterTokens()
+    const { convertB3tr, convertVot3, isConvertB3trDisabled } = useConvertBetterTokens()
     const { data: isUserHasNavigator } = useUserHasNavigator()
     const { data: unlockedVot3Balance } = useGetUnlockedVot3Balance()
 
@@ -78,7 +78,10 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const b3trTokenTotal = BigNutils(b3tr?.balance?.balance).toString
     const vot3TokenTotal = BigNutils(vot3Balance.balance).toString
 
-    const submitDisabled = useMemo(() => isError || !input, [input, isError])
+    const submitDisabled = useMemo(
+        () => isError || !input || (isB3TRActive && isConvertB3trDisabled),
+        [input, isError, isB3TRActive, isConvertB3trDisabled],
+    )
 
     const showNavigatorConversionWarning = useMemo(
         () => Boolean(isUserHasNavigator) && isB3TRActive,
