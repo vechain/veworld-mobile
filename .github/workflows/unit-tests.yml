@@ -5,7 +5,6 @@ env:
     COVERAGE_PARENT_FOLDER: total-coverage
 
 jobs:
-    # Steps are skipped rather than the jobs so the required `unit (n)` checks still report.
     changes:
         runs-on: ubuntu-latest
         permissions:
@@ -31,6 +30,7 @@ jobs:
 
     unit:
         needs: [changes]
+        if: needs.changes.outputs.code == 'true'
         runs-on: ubuntu-latest
         strategy:
             matrix:
@@ -42,18 +42,15 @@ jobs:
 
         steps:
             - name: Checkout repository
-              if: needs.changes.outputs.code == 'true'
               uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
             - name: Setup Node.js
-              if: needs.changes.outputs.code == 'true'
               uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
               with:
                   node-version: 20.19
                   cache: "yarn"
 
             - name: Install & Patch packages
-              if: needs.changes.outputs.code == 'true'
               run: |
                   yarn abi:install
                   yarn abi:build
@@ -62,22 +59,18 @@ jobs:
                   yarn generate:indexer-schema:mainnet
 
             - name: Lint, Format Check & TS Check
-              if: needs.changes.outputs.code == 'true'
               run: yarn lint && yarn format:check & yarn ts-check
 
             - name: Tests with Coverage
-              if: needs.changes.outputs.code == 'true'
               env:
                   NODE_OPTIONS: "--max_old_space_size=8192"
                   REACT_APP_WALLET_CONNECT_PROJECT_ID: "f1c07ceecbc6115eaa26b2221c2e43cd"
               run: yarn test:coverage --shard=${{ matrix.shard }}/${{ strategy.job-total }} | tee ./coverage.txt  && exit ${PIPESTATUS[0]}
 
             - name: Upload coverage folder
-              if: needs.changes.outputs.code == 'true'
               run: mkdir -p $COVERAGE_PARENT_FOLDER && mv coverage/coverage-final.json $COVERAGE_PARENT_FOLDER/${{ matrix.shard }}.json
 
             - name: Upload coverage folder
-              if: needs.changes.outputs.code == 'true'
               uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
               with:
                   name: coverage-artifacts-${{ matrix.shard }}
@@ -86,8 +79,7 @@ jobs:
 
     coverage:
         runs-on: ubuntu-latest
-        needs: [changes, unit]
-        if: needs.changes.outputs.code == 'true'
+        needs: [unit]
         permissions:
             contents: read
             actions: read

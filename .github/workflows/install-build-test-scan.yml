@@ -40,6 +40,18 @@ jobs:
         uses: ./.github/workflows/unit-tests.yml
         secrets: inherit
 
+    # The single required check: a skipped matrix never reports `unit (n)`, which would block docs-only PRs.
+    unit-tests-passed:
+        name: Unit tests passed
+        runs-on: ubuntu-latest
+        needs: [scan]
+        if: always()
+        steps:
+            - name: Require unit tests to pass or be skipped as unneeded
+              env:
+                  RESULT: ${{ needs.scan.result }}
+              run: '[ "$RESULT" = "success" ]'
+
     report:
         runs-on: ubuntu-latest
         needs: [build-and-test-ios, build-and-test-android, scan]
