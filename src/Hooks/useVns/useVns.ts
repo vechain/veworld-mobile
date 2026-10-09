@@ -39,6 +39,27 @@ type SubdomainClaimTransaction = TransactionBody & {
     simulateTransactionOptions: { caller: string }
 }
 
+export const getSubdomainClaimClauses = (subdomain: string, networkType: NETWORK_TYPE) => {
+    const dataClaimer = new abi.Function(abis.VetDomains.claim).encode(subdomain, VNS_PUBLIC_RESOLVER[networkType])
+
+    const fulldomain = `${subdomain}${DOMAIN_BASE}`
+
+    const dataRegistrar = new abi.Function(abis.VetDomains.setName).encode(fulldomain)
+
+    return [
+        {
+            data: dataClaimer,
+            to: VNS_SUBDOMAIN_CONTRACT[networkType],
+            value: "0x0",
+        },
+        {
+            data: dataRegistrar,
+            to: VNS_REGISTRAR_CONTRACT[networkType],
+            value: "0x0",
+        },
+    ]
+}
+
 export const getVnsNames = async (thor: Connex.Thor, network: Network, addresses?: string[]) => {
     if (!addresses) return []
     const NETWORK_RESOLVER = VNS_RESOLVER[network.type]
@@ -212,27 +233,7 @@ export const useVns = (props?: Vns): VnsHook => {
     const buildClaimTx = useCallback(
         async (account: AccountWithDevice, subdomain: string) => {
             try {
-                const dataClaimer = new abi.Function(abis.VetDomains.claim).encode(
-                    subdomain,
-                    VNS_PUBLIC_RESOLVER[network.type],
-                )
-
-                const fulldomain = `${subdomain}${DOMAIN_BASE}`
-
-                const dataRegistrar = new abi.Function(abis.VetDomains.setName).encode(fulldomain)
-
-                const clauses = [
-                    {
-                        data: dataClaimer,
-                        to: VNS_SUBDOMAIN_CONTRACT[network.type],
-                        value: "0x0",
-                    },
-                    {
-                        data: dataRegistrar,
-                        to: VNS_REGISTRAR_CONTRACT[network.type],
-                        value: "0x0",
-                    },
-                ]
+                const clauses = getSubdomainClaimClauses(subdomain, network.type)
 
                 const gas = await thorClient.transactions.estimateGas(clauses, account.address)
                 const blockRef = await thorClient.blocks.getBestBlockRef()

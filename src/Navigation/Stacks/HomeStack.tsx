@@ -21,6 +21,7 @@ import {
     ActivityDetailsScreen,
     ChangeNetworkScreen,
     ClaimUsername,
+    ClaimUsernameConfirm,
     ConnectedAppsScreen,
     EnableAdditionalSettings,
     ImportFromCloudScreen,
@@ -141,6 +142,9 @@ export type RootStackParamListHome = {
     }
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.CLAIM_USERNAME]: undefined
+    [Routes.CLAIM_USERNAME_CONFIRM]: {
+        subdomain: string
+    }
     [Routes.USERNAME_CLAIMED]: {
         username: string
     }
@@ -347,6 +351,11 @@ export const HomeStack = () => {
             </Group>
             <Group>
                 <Screen name={Routes.CLAIM_USERNAME} component={ClaimUsername} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.CLAIM_USERNAME_CONFIRM}
+                    component={ClaimUsernameConfirm}
+                    options={{ headerShown: false }}
+                />
                 <Screen name={Routes.USERNAME_CLAIMED} component={UsernameClaimed} options={{ headerShown: false }} />
             </Group>
 
