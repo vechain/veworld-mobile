@@ -6,7 +6,7 @@ import { error } from "~Utils/Logger"
 import fastKeystoreDecrypt from "./Helpers/fastKeystoreDecrypt"
 import HexUtils from "~Utils/HexUtils"
 import { ERROR_EVENTS } from "~Constants"
-import { Cipher, Decipher } from "crypto"
+import type { Cipheriv as Cipher, Decipheriv as Decipher } from "crypto"
 
 // [START] - Used for testing purposes ONLY
 function encrypt<T>(data: T, encryptionKey: string, salt?: string): string {
