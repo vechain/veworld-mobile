@@ -9,7 +9,7 @@ import fastKeystoreDecrypt from "./Helpers/fastKeystoreDecrypt"
 import HexUtils from "~Utils/HexUtils"
 import { ERROR_EVENTS } from "~Constants"
 import { BinaryLike } from "react-native-quick-crypto/lib/typescript/src/Utils"
-import { Cipher, Decipher } from "crypto"
+import type { Cipheriv as Cipher, Decipheriv as Decipher } from "crypto"
 
 const N = Buffer.from("fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141", "hex")
 const ZERO = Buffer.alloc(32, 0)

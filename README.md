@@ -35,7 +35,7 @@ The versions are pinned in the repo's dotfiles. If this table and a dotfile disa
 
 | Tool           | Version      | Pinned in                         |
 | -------------- | ------------ | --------------------------------- |
-| Node           | 20.19.0      | `.nvmrc`                          |
+| Node           | 24.21.0      | `.nvmrc`                          |
 | Yarn           | 1.22.x       | `package.json` (`packageManager`) |
 | Ruby (iOS)     | 3.2.6        | `.ruby-version`                   |
 | Java (Android) | Azul Zulu 17 | `.java-version`                   |
