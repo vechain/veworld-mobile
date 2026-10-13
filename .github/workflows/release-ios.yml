@@ -125,6 +125,10 @@ jobs:
             - name: Build ipa with fastlane
               env:
                   MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
+                  APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.IOS_ASC_KEY_ID }}
+                  APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.IOS_ASC_ISSUER_ID }}
+                  APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.IOS_ASC_KEY_P8_BASE64 }}
+                  APP_STORE_CONNECT_API_KEY_IS_KEY_CONTENT_BASE64: "true"
                   EXTENSION_IDENTIFIER: "org.vechain.veworld.app.OneSignalNotificationServiceExtension"
                   INPUTS_VERSION: ${{inputs.version}}
                   INPUTS_BUILD: ${{inputs.build}}
