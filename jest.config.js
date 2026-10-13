@@ -4,7 +4,7 @@ const { defaults: tsjPreset } = require("ts-jest/presets")
 module.exports = {
     ...tsjPreset,
     testEnvironment: "@shopify/react-native-skia/jestEnv.js",
-    preset: "react-native",
+    preset: "@react-native/jest-preset",
     setupFiles: ["./node_modules/react-native-gesture-handler/jestSetup.js"],
     setupFilesAfterEnv: ["<rootDir>/jest.setup.ts", "@shopify/react-native-skia/jestSetup.js"],
     coverageReporters: ["json", "text", "json-summary", "html"],

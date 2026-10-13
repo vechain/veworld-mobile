@@ -47,7 +47,7 @@ module.exports = {
         ],
         [
             // should always come last
-            "react-native-reanimated/plugin",
+            "react-native-worklets/plugin",
             {
                 globals: ["__scanCodes"],
             },
