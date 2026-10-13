@@ -6,7 +6,7 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, min_ios_version_supported
+platform :ios, '16.4'
 prepare_react_native_project!
 
 # Force pods to match minimum iOS version for React Native
@@ -16,7 +16,7 @@ def __apply_Xcode_14_3_RC_post_install_workaround(installer)
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       current_target = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET']
-      minimum_target = '15.1'
+      minimum_target = '16.4'
       if current_target.to_f < minimum_target.to_f
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = minimum_target
       end
@@ -58,12 +58,12 @@ target 'VeWorld' do
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
-    :app_path => "#{Pod::Config.instance.installation_root}/..",
-    :new_arch_enabled => false
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  # Force OpenSSL version for react-native-quick-crypto
-  # pod 'OpenSSL-Universal', '~> 1.1.1100'
+  # quick-crypto and react-native-mmkv leave these open; pinned so crypto/storage only change deliberately
+  pod 'OpenSSL-Universal', '3.3.3001'
+  pod 'MMKV', '2.3.0'
   pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
 
   target 'VeWorldTests' do
@@ -102,12 +102,6 @@ target 'VeWorld' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
-    # fmt 11.0.2 fails to compile under C++20 with Xcode 27's clang (consteval errors); C++17 disables consteval
-    installer.pods_project.targets.select { |t| t.name == 'fmt' }.each do |target|
-      target.build_configurations.each do |config|
-        config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
-      end
-    end
     __apply_Xcode_14_3_RC_post_install_workaround(installer)
   end
 end
