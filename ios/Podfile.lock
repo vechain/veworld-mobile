@@ -1676,9 +1676,6 @@ PODS:
     - Yoga
   - react-native-context-menu-view (1.18.0):
     - React
-  - react-native-fast-url (1.2.0):
-    - React-Core
-    - React-jsi
   - react-native-get-random-values (1.11.0):
     - React-Core
   - react-native-in-app-review (4.3.5):
@@ -3025,7 +3022,6 @@ DEPENDENCIES:
   - "react-native-cameraroll (from `../node_modules/@react-native-camera-roll/camera-roll`)"
   - "react-native-compat (from `../node_modules/@walletconnect/react-native-compat`)"
   - react-native-context-menu-view (from `../node_modules/react-native-context-menu-view`)
-  - react-native-fast-url (from `../node_modules/react-native-fast-url`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-in-app-review (from `../node_modules/react-native-in-app-review`)
   - react-native-keyboard-controller (from `../node_modules/react-native-keyboard-controller`)
@@ -3287,8 +3283,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@walletconnect/react-native-compat"
   react-native-context-menu-view:
     :path: "../node_modules/react-native-context-menu-view"
-  react-native-fast-url:
-    :path: "../node_modules/react-native-fast-url"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
   react-native-in-app-review:
@@ -3533,7 +3527,6 @@ SPEC CHECKSUMS:
   react-native-cameraroll: 747b72c5a880c6e2f2ed8c9d8877b3612a9f0341
   react-native-compat: 2b81fc26eaeec46d3b69c5986067ab9889525e8c
   react-native-context-menu-view: d8269d7c754ecfaa0034e514d419115ac3774f7f
-  react-native-fast-url: 2b59cfc92f1f8ade3739a09e8dbc877b0c3e82f6
   react-native-get-random-values: d16467cf726c618e9c7a8c3c39c31faa2244bbba
   react-native-in-app-review: 668f4c80d7f95945e0ad7833e98c466cb40d6808
   react-native-keyboard-controller: d5682988ef16bd7d6a3c3423768b88f1da1b3a72

@@ -149,7 +149,6 @@
     "react-native-draggable-flatlist": "^4.0.3",
     "react-native-drop-shadow": "1.0.0",
     "react-native-fast-image": "^8.6.3",
-    "react-native-fast-url": "^1.2.0",
     "react-native-gesture-handler": "~3.2.1",
     "react-native-get-random-values": "^1.11.0",
     "react-native-haptic-feedback": "^2.3.3",
