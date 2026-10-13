@@ -42,16 +42,6 @@ target 'VeWorld' do
       end
     end
 
-    # Remove QuickCrypto's custom OpenSSL embed script that duplicates the Pods embed step
-    app_project_path = File.join(__dir__, 'VeWorld.xcodeproj', 'project.pbxproj')
-    if File.exist?(app_project_path)
-      pbx = File.read(app_project_path)
-
-      pbx.gsub!(/^\s*[A-F0-9]+ \/\* \[CP-User\] \[CP-User\] Embed OpenSSL Framework \*\/,\n/m, "")
-      pbx.gsub!(/^\s*[A-F0-9]+ \/\* \[CP-User\] \[CP-User\] Embed OpenSSL Framework \*\/ = \{\n(?:.|\n)*?\t\t\};\n/m, "")
-
-      File.write(app_project_path, pbx)
-    end
   end
   config = use_native_modules!
 
@@ -61,8 +51,8 @@ target 'VeWorld' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  # quick-crypto leaves this open; pinned so crypto only changes deliberately. MMKV 4 pins MMKVCore itself.
-  pod 'OpenSSL-Universal', '3.3.3001'
+  # quick-crypto 1.x vendors its own symbol-prefixed OpenSSL and MMKV 4 pins MMKVCore,
+  # so neither needs a pin here any more.
   pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
 
   target 'VeWorldTests' do

@@ -64,6 +64,37 @@ const getRandomIV = (byteCount: number = 16) => {
     return new Uint8Array(buffer)
 }
 
+const AES_256_KEY_BYTES = 32
+const AES_BLOCK_BYTES = 16
+
+/**
+ * OpenSSL's EVP_BytesToKey with MD5, no salt and one iteration. quick-crypto 0.7 routed a
+ * `null` IV here; 1.x rejects one, so state written by earlier releases only stays readable
+ * while this derivation is reproduced exactly.
+ * @see https://docs.openssl.org/3.0/man3/EVP_BytesToKey
+ */
+const deriveKeyAndIV = (password: string) => {
+    const passwordBytes = Buffer.from(password, "utf-8")
+    const blocks: Buffer[] = []
+    let block = Buffer.alloc(0)
+    let derived = 0
+
+    while (derived < AES_256_KEY_BYTES + AES_BLOCK_BYTES) {
+        block = crypto
+            .createHash("md5")
+            .update(Buffer.concat([block, passwordBytes]))
+            .digest()
+        blocks.push(block)
+        derived += block.length
+    }
+
+    const material = Buffer.concat(blocks)
+    return {
+        key: material.subarray(0, AES_256_KEY_BYTES),
+        iv: material.subarray(AES_256_KEY_BYTES, AES_256_KEY_BYTES + AES_BLOCK_BYTES),
+    }
+}
+
 const bufferToBase64 = (buffer: Uint8Array) => {
     return new Buffer(buffer).toString("base64")
 }
@@ -77,6 +108,7 @@ export default {
     hash,
     getIV,
     getRandomIV,
+    deriveKeyAndIV,
     bufferToBase64,
     base64ToBuffer,
 }
