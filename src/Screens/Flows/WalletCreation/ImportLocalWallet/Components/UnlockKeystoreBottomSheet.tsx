@@ -3,7 +3,6 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { BaseSpacer, BaseText, BaseButton, BaseBottomSheet, BaseBottomSheetTextInput, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
-import { InteractionManager } from "react-native"
 
 type Props = {
     onHide: () => void
@@ -20,7 +19,7 @@ export const UnlockKeystoreBottomSheet = React.forwardRef<BottomSheetModalMethod
         const handleUnlock = useCallback(() => {
             dispatch(setIsAppLoading(true))
             setTimeout(() => {
-                InteractionManager.runAfterInteractions(() => {
+                requestIdleCallback(() => {
                     onUnlock(password).finally(() => {
                         dispatch(setIsAppLoading(false))
                     })
