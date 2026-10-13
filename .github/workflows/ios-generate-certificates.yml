@@ -47,7 +47,7 @@ jobs:
                   APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.IOS_ASC_ISSUER_ID }}
                   APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.IOS_ASC_KEY_P8_BASE64 }}
                   APP_STORE_CONNECT_API_KEY_IS_KEY_CONTENT_BASE64: "true"
-                  EXTENSION_IDENTIFIER: "org.vechain.veworld.app.OneSignalNotificationServiceExtension"
+                  EXTENSION_IDENTIFIER: "org.vechain.veworld.app.OneSignalExtension"
                   CI_USER_TOKEN: ${{ secrets.CI_USER_TOKEN }}
               run: |
                   git config --global url."https://${CI_USER_TOKEN}@github.com".insteadOf https://github.com

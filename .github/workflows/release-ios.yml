@@ -129,7 +129,7 @@ jobs:
                   APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.IOS_ASC_ISSUER_ID }}
                   APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.IOS_ASC_KEY_P8_BASE64 }}
                   APP_STORE_CONNECT_API_KEY_IS_KEY_CONTENT_BASE64: "true"
-                  EXTENSION_IDENTIFIER: "org.vechain.veworld.app.OneSignalNotificationServiceExtension"
+                  EXTENSION_IDENTIFIER: "org.vechain.veworld.app.OneSignalExtension"
                   INPUTS_VERSION: ${{inputs.version}}
                   INPUTS_BUILD: ${{inputs.build}}
               run: |
