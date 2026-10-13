@@ -59,7 +59,6 @@ platform :ios do
       force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
       readonly: false, # If true, will only print out the commands it would run, without actually running them.
       git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
-      git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"],
       skip_docs: true, # If true, will skip the creation of a README.md file.
       verbose: true # If true, will print out extra information and debugging info.
     )
@@ -72,7 +71,6 @@ platform :ios do
       force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
       readonly: false, # If true, will only print out the commands it would run, without actually running them.
       git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
-      git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"],
       skip_docs: true, # If true, will skip the creation of a README.md file.
       verbose: true # If true, will print out extra information and debugging info.
     )
