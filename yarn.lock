@@ -11174,10 +11174,10 @@ expo-asset@~58.0.13:
     "@expo/image-utils" "^0.12.4"
     expo-constants "~58.0.10"
 
-expo-av@~15.1.7:
-  version "15.1.7"
-  resolved "https://registry.yarnpkg.com/expo-av/-/expo-av-15.1.7.tgz#a8422646eca9250c842e8a44fccccb1a4b070a05"
-  integrity sha512-NC+JR+65sxXfQN1mOHp3QBaXTL2J+BzNwVO27XgUEc5s9NaoBTdHWElYXrfxvik6xwytZ+a7abrqfNNgsbQzsA==
+expo-audio@~58.0.8:
+  version "58.0.8"
+  resolved "https://registry.yarnpkg.com/expo-audio/-/expo-audio-58.0.8.tgz#502ff9bc657c3f095eabb1611ea544e2fb1fa842"
+  integrity sha512-zgH2MxjhA2rULnvGvcEhz86gEF3e1sUTk1XSKnjWfO309HlGIDInPvjnEXcrJKWMbhOBZvn5Kb71MLpngGxijw==
 
 expo-background-fetch@~58.0.10:
   version "58.0.10"
@@ -11337,6 +11337,11 @@ expo-task-manager@~58.0.11:
   integrity sha512-ummXCHlVuQrWhnhwxBwIdWnao6bXneSgf1dzPTlMcPaflPlXr+wuiX30VMZNvA6mP9d2jVPlg+IRihj7udqbSQ==
   dependencies:
     unimodules-app-loader "~58.0.2"
+
+expo-video@~58.0.9:
+  version "58.0.9"
+  resolved "https://registry.yarnpkg.com/expo-video/-/expo-video-58.0.9.tgz#37769cb82383cb6fc3cbe50c00e9b324b2687d95"
+  integrity sha512-w6Li+VltYHXz46cBZBg55Kir1D/X8jm2LFg82SXPitq1U5O0SF0cWW1NMftpLJh8Pf9MHbC+4LA5aJybqCCuog==
 
 expo-web-browser@~58.0.6:
   version "58.0.6"
