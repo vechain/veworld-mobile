@@ -14,19 +14,14 @@ def keyFile = isDebug ? file(keyFileName) : file("../${keyFileName}")
 def signingPublicKey = "\"KEY_NOT_FOUND\""
 
 if (keyFile.exists()) {
-    def stdout = new ByteArrayOutputStream()
-    def stderr = new ByteArrayOutputStream()
-    exec {
+    def certContent = providers.exec {
         commandLine 'keytool',
                 '-exportcert',
                 '-alias', isDebug ? 'androiddebugkey' : keystoreProperties['keyAlias'],
                 '-keystore', keyFile,
                 '-storepass', isDebug ? 'android' : keystoreProperties['storePassword'],
                 '-rfc'
-        standardOutput = stdout
-    }
-
-    def certContent = stdout.toString().trim()
+    }.standardOutput.asText.get().trim()
             .replaceAll("-----BEGIN CERTIFICATE-----", "")
             .replaceAll("-----END CERTIFICATE-----", "")
             .replaceAll("\\s+", "")
@@ -87,7 +82,8 @@ react {
     //
     // Bundle with Expo CLI
     entryFile = file(["node", "-e", "require('expo/scripts/resolveAppEntry')", rootDir.getAbsoluteFile().getParentFile().getAbsolutePath(), "android", "absolute"].execute(null, rootDir).text.trim())
-    cliFile = new File(["node", "--print", "require.resolve('@expo/cli')"].execute(null, rootDir).text.trim())
+    hermesCommand = new File(["node", "--print", "require.resolve('hermes-compiler/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim()).getParentFile().getAbsolutePath() + "/hermesc/%OS-BIN%/hermesc"
+    cliFile = new File(["node", "--print", "require.resolve('@expo/cli', { paths: [require.resolve('expo/package.json')] })"].execute(null, rootDir).text.trim())
     bundleCommand = "export:embed"
 
     autolinkLibrariesWithApp()
@@ -132,6 +128,7 @@ versionCode 1079
 versionName "2.5.10"
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        buildConfigField "String", "REACT_NATIVE_RELEASE_LEVEL", "\"${findProperty('reactNativeReleaseLevel') ?: 'stable'}\""
     }
     signingConfigs {
         debug {
@@ -157,7 +154,7 @@ versionName "2.5.10"
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             buildConfigField "String", "PUBLIC_KEY", signingPublicKey
         }
     }
@@ -184,12 +181,12 @@ versionName "2.5.10"
 
 configurations.all {
     resolutionStrategy {
-        force 'io.sentry:sentry:8.27.0'
-        force 'io.sentry:sentry-android:8.27.0'
-        force 'io.sentry:sentry-android-core:8.27.0'
-        force 'io.sentry:sentry-compose:8.27.0'
-        force 'io.sentry:sentry-compose-android:8.27.0'
-        force 'io.sentry:sentry-okhttp:8.27.0'
+        force 'io.sentry:sentry:8.57.0'
+        force 'io.sentry:sentry-android:8.57.0'
+        force 'io.sentry:sentry-android-core:8.57.0'
+        force 'io.sentry:sentry-compose:8.57.0'
+        force 'io.sentry:sentry-compose-android:8.57.0'
+        force 'io.sentry:sentry-okhttp:8.57.0'
     }
 }
 
@@ -225,6 +222,6 @@ dependencies {
 
 sentry {
 	autoInstallation {
-		sentryVersion = "8.27.0"
+		sentryVersion = "8.57.0"
 	}
 }
