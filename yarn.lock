@@ -2425,13 +2425,13 @@
     "@simple-libs/stream-utils" "^1.2.0"
     semver "^7.5.2"
 
-"@craftzdog/react-native-buffer@^6.0.5":
-  version "6.0.5"
-  resolved "https://registry.yarnpkg.com/@craftzdog/react-native-buffer/-/react-native-buffer-6.0.5.tgz#0d4fbe0dd104186d2806655e3c0d25cebdae91d3"
-  integrity sha512-Av+YqfwA9e7jhgI9GFE/gTpwl/H+dRRLmZyJPOpKTy107j9Oj7oXlm3/YiMNz+C/CEGqcKAOqnXDLs4OL6AAFw==
+"@craftzdog/react-native-buffer@^6.0.5", "@craftzdog/react-native-buffer@^6.1.2":
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/@craftzdog/react-native-buffer/-/react-native-buffer-6.1.2.tgz#c4ac28ef7064f77abb7ef597648fdf653011f260"
+  integrity sha512-KV1HitN05FHLLDG7Zb/yftDsa+mKBYBzFMQ0PMldvUicq6vWOtAvz9mDavt7Fzozh+WNqORE+yFDkkdWysZ/SA==
   dependencies:
     ieee754 "^1.2.1"
-    react-native-quick-base64 "^2.0.5"
+    react-native-quick-base64 "^3.0.0"
 
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
@@ -16919,17 +16919,10 @@ react-native-qrcode-svg@^6.3.2:
     qrcode "^1.5.4"
     text-encoding "^0.7.0"
 
-react-native-quick-base64@^2.0.5:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/react-native-quick-base64/-/react-native-quick-base64-2.1.2.tgz#062b09b165c1530095fe99b94544c948318dbe99"
-  integrity sha512-xghaXpWdB0ji8OwYyo0fWezRroNxiNFCNFpGUIyE7+qc4gA/IGWnysIG5L0MbdoORv8FkTKUvfd6yCUN5R2VFA==
-  dependencies:
-    base64-js "^1.5.1"
-
-react-native-quick-base64@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/react-native-quick-base64/-/react-native-quick-base64-2.2.2.tgz#52005a0b455b04acc1c6ff3eb8fa220401656aae"
-  integrity sha512-WLHSifHLoamr2kF00Gov0W9ud6CfPshe1rmqWTquVIi9c62qxOaJCFVDrXFZhEBU8B8PvGLVuOlVKH78yhY0Fg==
+react-native-quick-base64@^3.0.0, react-native-quick-base64@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-quick-base64/-/react-native-quick-base64-3.0.1.tgz#d6eb0e316856aa6f68399729d56aceba38d585cc"
+  integrity sha512-EjUP2U7WqKmlMmoY7XGyHomy8bM0q4+yCDCRg4ZezQ6zedYRwc7yVk4V2O/iSftKaLEzhuW98lpyPMdk1iPHXQ==
 
 react-native-quick-crypto@0.7.17:
   version "0.7.17"
