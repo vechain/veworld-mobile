@@ -61,9 +61,8 @@ target 'VeWorld' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  # quick-crypto and react-native-mmkv leave these open; pinned so crypto/storage only change deliberately
+  # quick-crypto leaves this open; pinned so crypto only changes deliberately. MMKV 4 pins MMKVCore itself.
   pod 'OpenSSL-Universal', '3.3.3001'
-  pod 'MMKV', '2.3.0'
   pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
 
   target 'VeWorldTests' do

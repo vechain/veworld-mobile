@@ -7,7 +7,7 @@ import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-
 import { Component, PropsWithChildren, ReactNode } from "react"
 import { SecurityLevelType } from "~Model/Biometrics"
 import { WALLET_STATUS } from "~Model/Wallet"
-import { MMKV } from "react-native-mmkv"
+import { createMMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
 import * as dotenv from "dotenv"
 import { FlatList, SectionList, View } from "react-native"
@@ -266,7 +266,7 @@ jest.mock("~Components/Providers/EncryptedStorageProvider/ApplicationSecurityPro
     ...jest.requireActual("~Components/Providers/EncryptedStorageProvider/ApplicationSecurityProvider"),
     useApplicationSecurity: jest.fn().mockReturnValue({
         redux: {
-            mmkv: new MMKV({ id: "test-redux" }),
+            mmkv: createMMKV({ id: "test-redux" }),
             encryptionKey: "test-redux",
         },
         images: undefined,
