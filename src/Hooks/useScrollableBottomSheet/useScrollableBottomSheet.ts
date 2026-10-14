@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react"
-import { ViewToken } from "react-native"
+import { ListViewToken } from "react-native"
 import { useScrollableList } from "~Hooks/useScrollableList"
 
 export type FlatListScrollPropsType = {
-    onViewableItemsChanged: (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => void
+    onViewableItemsChanged: (info: { viewableItems: ListViewToken[]; changed: ListViewToken[] }) => void
     viewabilityConfig: {
         itemVisiblePercentThreshold: number
     }

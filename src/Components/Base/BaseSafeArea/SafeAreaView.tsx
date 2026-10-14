@@ -26,7 +26,7 @@ export const SafeAreaView = (props: SafeAreaProps) => {
 
     const insets = useSafeAreaInsets()
 
-    const baseStyle: Partial<StyleProp<ViewStyle>> = {
+    const baseStyle: ViewStyle = {
         flex: 1,
         paddingBottom: 0,
         paddingTop: 0,

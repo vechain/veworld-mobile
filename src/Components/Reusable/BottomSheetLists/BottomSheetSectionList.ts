@@ -1,13 +1,10 @@
 import { memo, Ref } from "react"
-import {
-    DefaultSectionT,
-    SectionList as RNSectionList,
-    SectionListProps as RNSectionListProps,
-    SectionListProps,
-} from "react-native"
+import { SectionList as RNSectionList, SectionListProps as RNSectionListProps, SectionListProps } from "react-native"
 import Animated, { AnimatedProps } from "react-native-reanimated"
 import { SCROLLABLE_TYPE, BottomSheetSectionListMethods, BottomSheetScrollableProps } from "@gorhom/bottom-sheet"
 import { createBottomSheetScrollableComponent } from "../createBottomSheetScrollableComponent"
+
+type DefaultSectionT = { [key: string]: any }
 
 export type BottomSheetSectionListProps<ItemT, SectionT> = Omit<
     AnimatedProps<SectionListProps<ItemT, SectionT>>,

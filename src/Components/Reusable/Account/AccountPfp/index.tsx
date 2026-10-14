@@ -1,4 +1,4 @@
-import * as FileSystem from "expo-file-system"
+import * as FileSystem from "expo-file-system/legacy"
 import React from "react"
 import { useVetDomainsAvatar } from "~Hooks/useVetDomainsAvatar"
 import { Device, DEVICE_TYPE, WalletAccount } from "~Model"

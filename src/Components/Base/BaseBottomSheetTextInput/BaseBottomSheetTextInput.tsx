@@ -4,7 +4,7 @@ import { BaseTextInput, BaseTextInputProps } from "../BaseTextInput"
 import { useBottomSheetInternal } from "@gorhom/bottom-sheet"
 import { BottomSheetTextInputProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetTextInput"
 import { TextInput } from "react-native-gesture-handler"
-import { findNodeHandle, NativeSyntheticEvent, TextInput as RNTextInput, TextInputFocusEventData } from "react-native"
+import { findNodeHandle, TextInput as RNTextInput, TextInputFocusEvent } from "react-native"
 
 // Mirrors the library's BottomSheetTextInput; v5 tracks the focused input by node handle.
 const BottomSheetTextInputComponent = forwardRef<TextInput, BottomSheetTextInputProps & BaseTextInputProps>(
@@ -13,7 +13,7 @@ const BottomSheetTextInputComponent = forwardRef<TextInput, BottomSheetTextInput
         const { animatedKeyboardState, textInputNodesRef } = useBottomSheetInternal()
 
         const handleOnFocus = useCallback(
-            (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+            (e: TextInputFocusEvent) => {
                 animatedKeyboardState.set(state => ({ ...state, target: e.nativeEvent.target }))
                 onFocus?.(e)
             },
@@ -21,7 +21,7 @@ const BottomSheetTextInputComponent = forwardRef<TextInput, BottomSheetTextInput
         )
 
         const handleOnBlur = useCallback(
-            (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+            (e: TextInputFocusEvent) => {
                 const currentFocusedInput = findNodeHandle(RNTextInput.State.currentlyFocusedInput())
                 const isOwnTarget = animatedKeyboardState.get().target === e.nativeEvent.target
                 const movedToAnotherInput = currentFocusedInput && textInputNodesRef.current.has(currentFocusedInput)

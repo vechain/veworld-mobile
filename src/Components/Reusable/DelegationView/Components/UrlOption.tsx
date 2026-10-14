@@ -1,5 +1,5 @@
 import { default as React, ReactNode, useCallback, useState } from "react"
-import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "react-native"
+import { StyleSheet, TextInputChangeEvent } from "react-native"
 import { BaseBottomSheetTextInput, BaseIcon, BaseRadioButton, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -23,7 +23,7 @@ export const UrlOption = ({ selectedDelegationUrl, children, delegationUrls }: P
         setUrl(selectedDelegationUrl)
     }, [selectedDelegationUrl])
 
-    const onChange = useCallback((e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    const onChange = useCallback((e: TextInputChangeEvent) => {
         setSelectedUrl(undefined)
         setUrl(e.nativeEvent.text)
     }, [])

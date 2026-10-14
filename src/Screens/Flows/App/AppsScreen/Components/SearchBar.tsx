@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
+import { StyleSheet, TextInputSubmitEditingEvent } from "react-native"
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler"
 import { BaseIcon, BaseTextInput } from "~Components"
 import { Spinner } from "~Components/Reusable/Spinner"
@@ -20,7 +20,7 @@ export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => 
     const [loading, setLoading] = useState(false)
 
     const handleOnSubmitEditing = useCallback(
-        async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+        async (e: TextInputSubmitEditingEvent) => {
             try {
                 setLoading(true)
                 await onSubmit?.(e.nativeEvent.text)

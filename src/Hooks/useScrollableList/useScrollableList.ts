@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react"
-import { ViewToken } from "react-native"
+import { ListViewToken } from "react-native"
 
 /**
  * A custom hook that returns state and configuration
@@ -13,7 +13,7 @@ import { ViewToken } from "react-native"
  * @returns {{
  *   isListScrollable: boolean;
  *   viewabilityConfig: { itemVisiblePercentThreshold: number };
- *   onViewableItemsChanged: (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => void;
+ *   onViewableItemsChanged: (info: { viewableItems: ListViewToken[]; changed: ListViewToken[] }) => void;
  * }} The state and configuration for the scrollable list.
  */
 export const useScrollableList = <T>(data: T[], snapIndex: number, snapPointsLength: number) => {
@@ -31,7 +31,7 @@ export const useScrollableList = <T>(data: T[], snapIndex: number, snapPointsLen
         [],
     )
 
-    const onViewableItemsChanged = useCallback((info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => {
+    const onViewableItemsChanged = useCallback((info: { viewableItems: ListViewToken[]; changed: ListViewToken[] }) => {
         setVisibleItemsCount(info.viewableItems.length)
     }, [])
 

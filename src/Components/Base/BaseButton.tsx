@@ -1,18 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 import Lottie from "lottie-react-native"
 import React, { useCallback, useMemo } from "react"
-import {
-    FlexAlignType,
-    StyleProp,
-    StyleSheet,
-    TextStyle,
-    TouchableOpacity,
-    TouchableOpacityProps,
-    ViewStyle,
-} from "react-native"
+import { StyleProp, StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native"
 import { StyleProps } from "react-native-reanimated"
 import { LoaderDark, LoaderLight } from "~Assets"
-import { ColorThemeType, TFonts } from "~Constants"
+import { ColorThemeType, FlexAlignType, TFonts } from "~Constants"
 import { typography } from "~Constants/Theme"
 import { useThemedStyles } from "~Hooks"
 import HapticsService from "~Services/HapticsService"

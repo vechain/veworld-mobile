@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from "react"
-import { FlexAlignType, Text, TextProps, TextStyle, ViewStyle } from "react-native"
-import { typography } from "~Constants/Theme"
+import { Text, TextProps, TextStyle, ViewStyle } from "react-native"
+import { FlexAlignType, typography } from "~Constants/Theme"
 import { useTheme } from "~Hooks"
 import FontUtils from "~Utils/FontUtils"
 import { BaseView, BaseViewProps } from "./BaseView"

@@ -145,7 +145,7 @@ jest.mock("expo-video", () => ({
     }),
 }))
 
-jest.mock("expo-file-system", () => ({
+jest.mock("expo-file-system/legacy", () => ({
     documentDirectory: "file:///test/documents/",
     getInfoAsync: jest.fn().mockResolvedValue({ exists: false }),
     makeDirectoryAsync: jest.fn().mockResolvedValue(undefined),

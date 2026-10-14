@@ -1,16 +1,16 @@
 import React, { FC, memo } from "react"
 import { StyleSheet, ViewProps } from "react-native"
-import Animated, { AnimateProps, useAnimatedStyle, withTiming } from "react-native-reanimated"
+import Animated, { AnimatedProps, SharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 
 const LONG_WIDTH = 28
 const WIDTH = 10
 
-interface Props extends AnimateProps<ViewProps> {
+interface Props extends AnimatedProps<ViewProps> {
     index: number
     length: number
-    animValue: Animated.SharedValue<number>
+    animValue: SharedValue<number>
 }
 
 export const PaginationItem: FC<Props> = memo(({ animValue, index, length, ...animatedViewProps }) => {

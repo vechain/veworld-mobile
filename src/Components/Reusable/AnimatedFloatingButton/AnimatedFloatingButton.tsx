@@ -44,8 +44,6 @@ export const AnimatedFloatingButton = React.memo(
                 damping: 22,
                 stiffness: 190,
                 overshootClamping: false,
-                restDisplacementThreshold: 0.01,
-                restSpeedThreshold: 2,
                 reduceMotion: ReduceMotion.System,
             })
         }, [bottom, bottomInitialValue, bottomStyle, isVisible, keyboardVisible])
