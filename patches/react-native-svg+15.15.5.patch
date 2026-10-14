@@ -1,0 +1,56 @@
+diff --git a/node_modules/react-native-svg/android/.gradle/7.5.1/checksums/checksums.lock b/node_modules/react-native-svg/android/.gradle/7.5.1/checksums/checksums.lock
+new file mode 100644
+index 0000000..cc6eb61
+Binary files /dev/null and b/node_modules/react-native-svg/android/.gradle/7.5.1/checksums/checksums.lock differ
+diff --git a/node_modules/react-native-svg/android/.gradle/7.5.1/fileChanges/last-build.bin b/node_modules/react-native-svg/android/.gradle/7.5.1/fileChanges/last-build.bin
+new file mode 100644
+index 0000000..f76dd23
+Binary files /dev/null and b/node_modules/react-native-svg/android/.gradle/7.5.1/fileChanges/last-build.bin differ
+diff --git a/node_modules/react-native-svg/android/.gradle/7.5.1/fileHashes/fileHashes.lock b/node_modules/react-native-svg/android/.gradle/7.5.1/fileHashes/fileHashes.lock
+new file mode 100644
+index 0000000..002d7b1
+Binary files /dev/null and b/node_modules/react-native-svg/android/.gradle/7.5.1/fileHashes/fileHashes.lock differ
+diff --git a/node_modules/react-native-svg/android/.gradle/7.5.1/gc.properties b/node_modules/react-native-svg/android/.gradle/7.5.1/gc.properties
+new file mode 100644
+index 0000000..e69de29
+diff --git a/node_modules/react-native-svg/android/.gradle/vcs-1/gc.properties b/node_modules/react-native-svg/android/.gradle/vcs-1/gc.properties
+new file mode 100644
+index 0000000..e69de29
+diff --git a/node_modules/react-native-svg/lib/commonjs/lib/resolveAssetUri.js b/node_modules/react-native-svg/lib/commonjs/lib/resolveAssetUri.js
+index 33448fb..b411e26 100644
+--- a/node_modules/react-native-svg/lib/commonjs/lib/resolveAssetUri.js
++++ b/node_modules/react-native-svg/lib/commonjs/lib/resolveAssetUri.js
+@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
+ });
+ exports.resolveAssetUri = resolveAssetUri;
+ var _reactNative = require("react-native");
+-var _registry = require("@react-native/assets-registry/registry");
++var _registry = require("react-native/asset-registry");
+ // @ts-expect-error react-native/assets-registry doesn't export types.
+ 
+ const svgDataUriPattern = /^(data:image\/svg\+xml;utf8,)(.*)/;
+diff --git a/node_modules/react-native-svg/lib/module/lib/resolveAssetUri.js b/node_modules/react-native-svg/lib/module/lib/resolveAssetUri.js
+index b7f3798..c0b8b33 100644
+--- a/node_modules/react-native-svg/lib/module/lib/resolveAssetUri.js
++++ b/node_modules/react-native-svg/lib/module/lib/resolveAssetUri.js
+@@ -1,6 +1,6 @@
+ import { PixelRatio } from 'react-native';
+ // @ts-expect-error react-native/assets-registry doesn't export types.
+-import { getAssetByID } from '@react-native/assets-registry/registry';
++import { getAssetByID } from 'react-native/asset-registry';
+ const svgDataUriPattern = /^(data:image\/svg\+xml;utf8,)(.*)/;
+ 
+ // Based on that function: https://github.com/necolas/react-native-web/blob/54c14d64dabd175e8055e1dc92e9196c821f9b7d/packages/react-native-web/src/exports/Image/index.js#L118-L156
+diff --git a/node_modules/react-native-svg/src/lib/resolveAssetUri.ts b/node_modules/react-native-svg/src/lib/resolveAssetUri.ts
+index a4f0193..89b5996 100644
+--- a/node_modules/react-native-svg/src/lib/resolveAssetUri.ts
++++ b/node_modules/react-native-svg/src/lib/resolveAssetUri.ts
+@@ -4,7 +4,7 @@ import {
+   type ImageProps as RNImageProps,
+ } from 'react-native';
+ // @ts-expect-error react-native/assets-registry doesn't export types.
+-import { getAssetByID } from '@react-native/assets-registry/registry';
++import { getAssetByID } from 'react-native/asset-registry';
+ 
+ export type PackagerAsset = {
+   __packager_asset: boolean;
