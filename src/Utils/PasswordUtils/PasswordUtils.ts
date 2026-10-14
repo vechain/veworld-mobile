@@ -57,8 +57,7 @@ async function getIV(length: number = 16): Promise<ArrayBuffer> {
 }
 */
 
-// quick-crypto 1.x dropped the plain-array fallback its 0.7 line accepted, and this IV
-// feeds the legacy decrypt path that every pre-existing wallet is read through.
+// quick-crypto 1.x rejects the plain array 0.7 coerced, and this IV reads every existing wallet.
 const getIV = () => new Uint8Array([37, 45, 216, 96, 97, 60, 157, 185, 144, 236, 35, 8, 65, 166, 177, 238])
 
 const getRandomIV = (byteCount: number = 16) => {

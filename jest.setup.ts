@@ -16,9 +16,7 @@ const componentMock = ({ children }: { children: ReactNode }) => children
 
 dotenv.config({ path: "./.env" })
 
-// Keyboard's native emitter is unwired under the RN 0.88 jest preset, so addListener
-// hands back undefined and anything mounting a Toast throws on unmount. Assigned rather
-// than spied because suites calling jest.restoreAllMocks() would put the gap back.
+// Emitter unwired under the RN 0.88 preset; assigned not spied, so restoreAllMocks can't undo it.
 Keyboard.addListener = (() => ({ remove: () => {} })) as never
 
 // RN 0.88 re-exports Touchable for react-native-svg but leaves it non-enumerable, so the

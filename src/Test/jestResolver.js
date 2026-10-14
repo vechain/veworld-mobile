@@ -4,8 +4,7 @@ const reanimatedResolver = require("react-native-reanimated/jest/resolver")
 const EXPO_WINTER_DIR = path.join("expo", "build", "winter")
 const eagerInstallGlobal = path.join(__dirname, "mocks", "expoInstallGlobal.js")
 
-// Reanimated 4 needs its own resolver, but setting `resolver` replaces the one
-// @react-native/jest-preset installs, so its packageFilter has to be reapplied here.
+// Setting `resolver` drops the preset's, so Reanimated 4's and its packageFilter both reapply here.
 module.exports = (request, options) => {
     // See the shim for why expo's lazy global installer can't be used under Jest.
     if (request === "./installGlobal" && options.basedir.includes(EXPO_WINTER_DIR)) {
