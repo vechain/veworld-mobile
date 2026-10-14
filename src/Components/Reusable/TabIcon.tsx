@@ -21,7 +21,7 @@ export const TabIcon: FC<Props> = memo(({ focused, title, label, isSettings, isS
     return (
         <BaseView justifyContent="center" alignItems="center" style={styles.container}>
             {isSettings && isShowBackupModal && <BaseView style={styles.warningLabel} />}
-            <Icon name={title} size={20} color={(styles.icon as TextStyle).color} />
+            <Icon name={title} size={20} color={(styles.icon as TextStyle).color ?? undefined} />
             <BaseText typographyFont="smallCaptionSemiBold" style={styles.label}>
                 {label}
             </BaseText>
@@ -39,7 +39,7 @@ export const AnimatedTabIcon: FC<Props & { isLoading?: boolean }> = memo(
                 {isLoading ? (
                     <Spinner color={theme.isDark ? COLORS.LIME_GREEN : theme.colors.text} size={20} />
                 ) : (
-                    <Icon name={title} size={20} color={(styles.icon as TextStyle).color} />
+                    <Icon name={title} size={20} color={(styles.icon as TextStyle).color ?? undefined} />
                 )}
 
                 <BaseText typographyFont="smallCaptionSemiBold" style={styles.label}>

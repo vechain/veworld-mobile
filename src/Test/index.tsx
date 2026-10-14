@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import { NavigationContainer } from "@react-navigation/native"
+import { DefaultTheme, NavigationContainer } from "@react-navigation/native"
 import { configureStore } from "@reduxjs/toolkit"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import React, { useEffect, useMemo, useState } from "react"
@@ -33,6 +33,7 @@ const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
         () => ({
             dark: theme.isDark,
             colors: theme.colors,
+            fonts: DefaultTheme.fonts,
         }),
         [theme],
     )

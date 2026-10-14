@@ -177,7 +177,6 @@ export const ContactsScreen = () => {
                                 renderItem={renderItem}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}
-                                estimatedItemSize={80}
                                 estimatedListSize={{
                                     height: 80 * contacts.length,
                                     width: 400,

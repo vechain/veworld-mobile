@@ -52,7 +52,7 @@ export const ActivityTab = ({ token }: { token: FungibleToken }) => {
             ListFooterComponent={
                 <ActivityTabFooter onClick={onLoadMore} isLoading={isFetchingNextPage} show={hasNextPage} />
             }
-            ListEmptyComponent={isPending ? <SkeletonActivityBox /> : null}
+            ListEmptyComponent={isPending ? <SkeletonActivityBox /> : undefined}
         />
     )
 }

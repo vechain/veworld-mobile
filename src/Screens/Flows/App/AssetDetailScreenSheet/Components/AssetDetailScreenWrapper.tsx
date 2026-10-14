@@ -147,7 +147,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
     return (
         <BaseSafeArea grow={1} style={styles.safeArea} bg="transparent">
             <Animated.View
-                style={[StyleSheet.absoluteFillObject, backdropStyles]}
+                style={[StyleSheet.absoluteFill, backdropStyles]}
                 onTouchStart={() => {
                     nav.goBack()
                 }}
