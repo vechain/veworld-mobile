@@ -87,7 +87,13 @@ const mockNav = jest.fn()
 
 jest.mock("../useBiometrics")
 jest.mock("../useWalletSecurity")
-jest.mock("react-native-quick-crypto")
+// Only randomFillSync is stubbed; automocking the module strands randomBytes and
+// HexUtils.generateRandom then throws before anything under test runs.
+jest.mock("react-native-quick-crypto", () => {
+    const actual = jest.requireActual("react-native-quick-crypto")
+    const randomFillSync = jest.fn()
+    return { ...actual, randomFillSync, default: { ...actual.default, randomFillSync } }
+})
 jest.mock("axios", () => ({
     ...Object.keys(jest.requireActual("axios")).reduce((pre, methodName) => ({ ...pre, [methodName]: jest.fn() }), {}),
     AxiosError: jest.requireActual("axios").AxiosError,

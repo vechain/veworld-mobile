@@ -10,35 +10,29 @@ import { WALLET_STATUS } from "~Model/Wallet"
 import { createMMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
 import * as dotenv from "dotenv"
-import { FlatList, SectionList, View } from "react-native"
-import { randomBytes as cryptoRandomBytes } from "crypto"
+import { FlatList, Keyboard, SectionList, View } from "react-native"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
 
 dotenv.config({ path: "./.env" })
 
+// Keyboard's native emitter is unwired under the RN 0.88 jest preset, so addListener
+// hands back undefined and anything mounting a Toast throws on unmount. Assigned rather
+// than spied because suites calling jest.restoreAllMocks() would put the gap back.
+Keyboard.addListener = (() => ({ remove: () => {} })) as never
+
+// RN 0.88 re-exports Touchable for react-native-svg but leaves it non-enumerable, so the
+// `{ ...jest.requireActual("react-native") }` mocks several suites use drop it and svg
+// reads Mixin off undefined.
+const actualReactNative = jest.requireActual("react-native")
+Object.defineProperty(actualReactNative, "Touchable", {
+    ...Object.getOwnPropertyDescriptor(actualReactNative, "Touchable"),
+    enumerable: true,
+})
+
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 jest.mock("react-native/src/private/animated/NativeAnimatedHelper.js")
 jest.mock("jail-monkey", () => require("./src/Test/mocks/jail-monkey"))
-jest.mock("react-native-quick-crypto", () => ({
-    getRandomValues: jest.fn(buffer => buffer),
-    randomFillSync: jest.fn(buffer => buffer),
-    randomBytes: jest.fn(size => cryptoRandomBytes(size)),
-    createCipheriv: jest.fn(() => ({
-        update: (first: string) => first,
-        final: () => "",
-    })),
-    createDecipheriv: jest.fn(() => ({
-        update: (first: string) => first,
-        final: () => "",
-    })),
-    createHash: jest.fn(() => ({
-        update: () => ({
-            digest: (first: string) => first,
-        }),
-    })),
-}))
-
 jest.mock("react-native-keyboard-controller", () => require("react-native-keyboard-controller/jest"))
 jest.mock("react-native-vision-camera", () => ({
     Camera: View,
@@ -131,8 +125,27 @@ jest.mock("expo-local-authentication", () => ({
     AuthenticationType: jest.requireActual("expo-local-authentication").AuthenticationType,
 }))
 
-jest.mock("expo-av", () => {})
 jest.mock("expo-background-fetch", () => {})
+
+// Gesture Handler 3 installs UI runtime bindings from a microtask at import time, and
+// the worklets web build throws there, which takes the worker down rather than a test.
+jest.mock("react-native-worklets", () => ({
+    ...jest.requireActual("react-native-worklets"),
+    getUIRuntimeHolder: () => ({}),
+}))
+
+jest.mock("expo-audio", () => ({
+    setAudioModeAsync: jest.fn().mockResolvedValue(undefined),
+}))
+
+jest.mock("expo-video", () => ({
+    VideoView: "VideoView",
+    useVideoPlayer: jest.fn((_source, setup) => {
+        const player = { loop: false, volume: 0, muted: false, playing: false, play: jest.fn(), pause: jest.fn() }
+        setup?.(player)
+        return player
+    }),
+}))
 
 jest.mock("expo-file-system", () => ({
     documentDirectory: "file:///test/documents/",
