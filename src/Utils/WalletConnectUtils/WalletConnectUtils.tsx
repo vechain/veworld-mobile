@@ -111,7 +111,7 @@ export function getSessionRequestAttributes(sessionRequest: SessionTypes.Struct)
     }
 }
 
-export function shouldAutoNavigate(navState: NavigationState<ReactNavigation.RootParamList>) {
+export function shouldAutoNavigate(navState: NavigationState) {
     if (!navState || !navState.routes) return false
 
     return !navState.routes.some(

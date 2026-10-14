@@ -19,7 +19,7 @@ export const BuyStack = () => {
     const { isLowEndDevice } = useDevice()
 
     return (
-        <Navigator screenOptions={{ headerShown: false, animationEnabled: !isLowEndDevice }}>
+        <Navigator screenOptions={{ headerShown: false, animation: !isLowEndDevice ? "default" : "none" }}>
             <Group>
                 <Screen name={Routes.BUY} component={BuyScreen} />
                 <Screen name={Routes.BUY_WEBVIEW} component={BuyWebviewScreen} />
