@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import { ethers } from "ethers"
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
@@ -102,7 +102,7 @@ type ContextType = {
     addAppAndNavToRequest: (request: InAppRequest) => void
     handleCloseChangeAccountNetworkBottomSheet: (event: TargetEvent) => void
     handleConfirmChangeAccountNetworkBottomSheet: (event: TargetEvent) => void
-    ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModalMethods | null>
+    ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModal | null>
     switchAccount: (request: WindowRequest) => void
     isLoading: boolean
     isDapp: boolean

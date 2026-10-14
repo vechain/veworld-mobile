@@ -1,5 +1,4 @@
-import { TouchableOpacity as BSTouchableOpacity } from "@gorhom/bottom-sheet"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal, TouchableOpacity as BSTouchableOpacity } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import React, { ComponentProps, PropsWithChildren, useCallback, useMemo, useState } from "react"
 import { SectionListData, StyleSheet } from "react-native"
@@ -201,7 +200,7 @@ const Content = ({
 }
 
 // component to select an account
-export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     (
         {
             closeBottomSheet,

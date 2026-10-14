@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useI18nContext } from "~i18n"
 import { BaseButton, DefaultBottomSheet } from "~Components"
 import { PlatformUtils } from "~Utils"
@@ -8,7 +8,7 @@ type Props = {
     onConfirm: () => void
 }
 
-export const BackupSuccessfulBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onConfirm }, ref) => {
+export const BackupSuccessfulBottomSheet = React.forwardRef<BottomSheetModal, Props>(({ onConfirm }, ref) => {
     const { LL } = useI18nContext()
 
     const handleOnProceed = useCallback(() => {

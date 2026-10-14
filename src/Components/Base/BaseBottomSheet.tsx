@@ -7,7 +7,6 @@ import {
     BottomSheetView,
 } from "@gorhom/bottom-sheet"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { isFinite } from "lodash"
 import { PropsWithChildren, default as React, ReactNode, useCallback, useMemo } from "react"
 import { Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
@@ -257,7 +256,7 @@ const _BaseBottomSheet = <TData,>(
         scrollEnabled = true,
         ...props
     }: BaseBottomSheetProps<TData>,
-    ref: React.ForwardedRef<BottomSheetModalMethods>,
+    ref: React.ForwardedRef<BottomSheetModal>,
 ) => {
     const { onChange, ...sheetProps } = props
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -301,10 +300,11 @@ const _BaseBottomSheet = <TData,>(
 
     const renderHandle = useCallback(() => <BaseBottomSheetHandle color={handleColor} />, [handleColor])
 
-    const onSheetPositionChange = useCallback(
-        (index: number) => {
-            if (enableBackToClose) handleSheetPositionChange(index)
-            onChange?.(index)
+    const onSheetPositionChange = useCallback<NonNullable<BottomSheetModalProps["onChange"]>>(
+        // v5's onChange also reports the position and snap-point type; both are forwarded on.
+        (index, position, type) => {
+            if (enableBackToClose) handleSheetPositionChange(index, position, type)
+            onChange?.(index, position, type)
         },
         [enableBackToClose, handleSheetPositionChange, onChange],
     )

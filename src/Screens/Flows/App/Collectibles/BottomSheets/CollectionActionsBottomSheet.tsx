@@ -1,5 +1,4 @@
-import { TouchableOpacity } from "@gorhom/bottom-sheet"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal, TouchableOpacity } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import React, { RefObject, useCallback } from "react"
 import { StyleSheet } from "react-native"
@@ -117,7 +116,7 @@ const Content = ({
 }
 
 type Props = {
-    bsRef: RefObject<BottomSheetModalMethods>
+    bsRef: RefObject<BottomSheetModal>
     onOpenReport: () => void
     onOpenHidden: () => void
 }

@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useI18nContext } from "~i18n"
 import { PlatformUtils } from "~Utils"
 import { DefaultBottomSheet } from "../DefaultBottomSheet"
@@ -13,7 +13,7 @@ type Props = {
     onProceedToDelete: () => void
 }
 
-export const DeleteCloudBackupBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const DeleteCloudBackupBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ onClose, onProceedToDelete }, ref) => {
         const { LL } = useI18nContext()
         const { styles, theme } = useThemedStyles(baseStyles)

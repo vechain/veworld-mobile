@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React from "react"
 import { BaseButton, DefaultBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -7,7 +7,7 @@ type Props = {
     onClose: () => void
 }
 
-export const NFTReportSuccessBottomsheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
+export const NFTReportSuccessBottomsheet = React.forwardRef<BottomSheetModal, Props>(({ onClose }, ref) => {
     const { LL } = useI18nContext()
 
     const mainButton = (

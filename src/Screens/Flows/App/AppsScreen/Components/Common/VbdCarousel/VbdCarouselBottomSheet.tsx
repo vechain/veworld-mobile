@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { SkSize } from "@shopify/react-native-skia"
 import React, { ElementType, useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
@@ -43,7 +43,7 @@ export type VbdCarouselBottomSheetMetadata = {
 }
 
 type VbdCarouselBottomSheetProps = {
-    bsRef: React.RefObject<BottomSheetModalMethods>
+    bsRef: React.RefObject<BottomSheetModal>
 }
 
 const VbdInfoColumn = ({

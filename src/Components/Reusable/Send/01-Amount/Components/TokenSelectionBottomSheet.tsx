@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
@@ -172,7 +172,7 @@ const EnhancedTokenCard = ({
     )
 }
 
-export const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModalMethods, TokenSelectionBottomSheetProps>(
+export const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModal, TokenSelectionBottomSheetProps>(
     function TokenSelectionBottomSheet({ selectedToken: _selectedToken, setSelectedToken, onClose }, ref) {
         const { LL } = useI18nContext()
         const { theme, styles } = useThemedStyles(baseBottomSheetStyles)

@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import React, { RefObject, useCallback } from "react"
 import { BaseButton } from "~Components/Base/BaseButton"
@@ -7,10 +7,10 @@ import { useBottomSheetModal } from "~Hooks/useBottomSheet"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation/Enums"
 
-export const MissingNetworkAlertBottomSheet = React.forwardRef<BottomSheetModalMethods, {}>((_, ref) => {
+export const MissingNetworkAlertBottomSheet = React.forwardRef<BottomSheetModal, {}>((_, ref) => {
     const { LL } = useI18nContext()
     const { ref: intenralRef, onClose } = useBottomSheetModal({
-        externalRef: ref as RefObject<BottomSheetModalMethods>,
+        externalRef: ref as RefObject<BottomSheetModal>,
     })
     const nav = useNavigation()
 

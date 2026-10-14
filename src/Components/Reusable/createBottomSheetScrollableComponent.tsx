@@ -8,7 +8,7 @@ import {
     BottomSheetDraggableView,
     GESTURE_SOURCE,
     SCROLLABLE_DECELERATION_RATE_MAPPER,
-    SCROLLABLE_STATE,
+    SCROLLABLE_STATUS,
     SCROLLABLE_TYPE,
     useBottomSheetInternal,
     useScrollHandler,
@@ -65,15 +65,15 @@ export function createBottomSheetScrollableComponent<T, P>(type: SCROLLABLE_TYPE
             onScrollBeginDrag,
             onScrollEndDrag,
         )
-        const { enableContentPanningGesture, animatedFooterHeight, animatedScrollableState } = useBottomSheetInternal()
+        const { enableContentPanningGesture, animatedLayoutState, animatedScrollableStatus } = useBottomSheetInternal()
         //#endregion
 
         //#region variables
         const scrollableAnimatedProps = useAnimatedProps(
             () => ({
-                decelerationRate: SCROLLABLE_DECELERATION_RATE_MAPPER[animatedScrollableState.value],
+                decelerationRate: SCROLLABLE_DECELERATION_RATE_MAPPER[animatedScrollableStatus.value],
                 showsVerticalScrollIndicator: showsVerticalScrollIndicator
-                    ? animatedScrollableState.value === SCROLLABLE_STATE.UNLOCKED
+                    ? animatedScrollableStatus.value === SCROLLABLE_STATUS.UNLOCKED
                     : showsVerticalScrollIndicator,
             }),
             [showsVerticalScrollIndicator],
@@ -91,7 +91,7 @@ export function createBottomSheetScrollableComponent<T, P>(type: SCROLLABLE_TYPE
         //#region styles
         const containerAnimatedStyle = useAnimatedStyle(
             () => ({
-                marginBottom: enableFooterMarginAdjustment ? animatedFooterHeight.value : 0,
+                marginBottom: enableFooterMarginAdjustment ? animatedLayoutState.value.footerHeight : 0,
             }),
             [enableFooterMarginAdjustment],
         )

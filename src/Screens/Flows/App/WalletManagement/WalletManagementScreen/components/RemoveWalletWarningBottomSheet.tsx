@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView, DeviceBox } from "~Components"
 import { useI18nContext } from "~i18n"
 import { BaseDevice, Device } from "~Model"
@@ -10,7 +10,7 @@ type Props = {
     selectedDevice?: Device
 }
 
-export const RemoveWalletWarningBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const RemoveWalletWarningBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ onClose, onConfirm, selectedDevice }, ref) => {
         const { LL } = useI18nContext()
 

@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback, useState } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useTheme, useThemedStyles } from "~Hooks"
@@ -11,7 +11,7 @@ type Props = {
     onClose: (path: DerivationPath) => void
 }
 
-export const SelectDerivationPathBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
+export const SelectDerivationPathBottomSheet = React.forwardRef<BottomSheetModal, Props>(({ onClose }, ref) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
     const track = useAnalyticTracking()

@@ -1,18 +1,17 @@
 import React, { RefObject, useCallback } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseSpacer, BaseText, BaseTouchableBox, BaseView, BaseBottomSheet, BaseIcon } from "~Components/Base"
 import { Locales, useI18nContext } from "~i18n"
 import { useBottomSheetModal } from "~Hooks/useBottomSheet"
 import { useThemedStyles } from "~Hooks/useTheme"
 import { StyleSheet } from "react-native"
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import { BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { languages } from "~Model"
 import { COLORS, ColorThemeType } from "~Constants"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { selectLanguage, setLanguage, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { LinearTransition } from "react-native-reanimated"
 
-type Props = { bsRef: RefObject<BottomSheetModalMethods> }
+type Props = { bsRef: RefObject<BottomSheetModal> }
 
 export const SelectLanguageBottomSheet = ({ bsRef }: Props) => {
     const selectedLanguage = useAppSelector(selectLanguage)

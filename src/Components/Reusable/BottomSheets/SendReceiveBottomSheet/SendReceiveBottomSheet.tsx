@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { Canvas, Fill, Skia } from "@shopify/react-native-skia"
 import { Camera } from "expo-camera"
 import React, { forwardRef, RefObject, useCallback, useEffect, useMemo, useState } from "react"
@@ -227,12 +227,12 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
     )
 }
 
-export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function SendReceiveBottomSheet(
+export const SendReceiveBottomSheet = forwardRef<BottomSheetModal, Props>(function SendReceiveBottomSheet(
     { onScan, title, description, hasWCTarget },
     ref,
 ) {
     const { styles } = useThemedStyles(baseStyles)
-    const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModalMethods> })
+    const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModal> })
 
     return (
         <BaseBottomSheet<SendReceiveBottomSheetOpenProps<typeof SEND_RECEIVE_BS_TABS>>

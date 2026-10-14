@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
@@ -26,7 +26,7 @@ type Props = {
     scrollable?: boolean
 }
 
-export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const DefaultBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     (
         {
             icon,

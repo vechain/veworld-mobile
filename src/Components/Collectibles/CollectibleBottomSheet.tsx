@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useQuery } from "@tanstack/react-query"
 import moment from "moment"
 import React, { RefObject, useMemo } from "react"
@@ -152,7 +152,7 @@ const CollectibleBottomSheetContent = ({ address, tokenId, onClose }: Collectibl
     )
 }
 
-export const CollectibleBottomSheet = ({ bsRef }: { bsRef: RefObject<BottomSheetModalMethods> }) => {
+export const CollectibleBottomSheet = ({ bsRef }: { bsRef: RefObject<BottomSheetModal> }) => {
     const { styles } = useThemedStyles(bsStyles)
     const { onClose } = useBottomSheetModal({ externalRef: bsRef })
     return (
