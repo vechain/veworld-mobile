@@ -67,12 +67,8 @@ const getRandomIV = (byteCount: number = 16) => {
 const AES_256_KEY_BYTES = 32
 const AES_BLOCK_BYTES = 16
 
-/**
- * OpenSSL's EVP_BytesToKey with MD5, no salt and one iteration. quick-crypto 0.7 routed a
- * `null` IV here; 1.x rejects one, so state written by earlier releases only stays readable
- * while this derivation is reproduced exactly.
- * @see https://docs.openssl.org/3.0/man3/EVP_BytesToKey
- */
+// EVP_BytesToKey (MD5, no salt, one iteration): what quick-crypto 0.7 did with a null IV.
+// Reproduced exactly or state written by earlier releases stops decrypting.
 const deriveKeyAndIV = (password: string) => {
     const passwordBytes = Buffer.from(password, "utf-8")
     const blocks: Buffer[] = []

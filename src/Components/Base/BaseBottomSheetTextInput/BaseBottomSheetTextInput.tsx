@@ -6,12 +6,7 @@ import { BottomSheetTextInputProps } from "@gorhom/bottom-sheet/lib/typescript/c
 import { TextInput } from "react-native-gesture-handler"
 import { findNodeHandle, NativeSyntheticEvent, TextInput as RNTextInput, TextInputFocusEventData } from "react-native"
 
-/**
- * Mirrors the library's own BottomSheetTextInput so the sheet reacts to the keyboard, but
- * renders BaseTextInput instead. v5 tracks the focused input by node handle rather than the
- * removed `shouldHandleKeyboardEvents` flag, and registers every input so a blur that only
- * moves focus to a sibling input does not clear the target.
- */
+// Mirrors the library's BottomSheetTextInput; v5 tracks the focused input by node handle.
 const BottomSheetTextInputComponent = forwardRef<TextInput, BottomSheetTextInputProps & BaseTextInputProps>(
     ({ onFocus, onBlur, ...rest }, providedRef) => {
         const ref = useRef<TextInput>(null)
