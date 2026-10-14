@@ -247,7 +247,7 @@ export function validateUri(providedUri: string | null | undefined): ValidURI | 
                 },
             }
         }
-    } catch (e) {
+    } catch {
         return { isValid: false }
     }
 }

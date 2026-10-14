@@ -28,7 +28,7 @@ type Props = {
     selectedDelegationToken: string
 }
 
-export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModal, Props>(function GasFeeSpeedBottomSheet(
+export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModal, Props>(function GasFeeSpeedBottomSheetRender(
     {
         setSelectedFeeOption,
         selectedFeeOption,

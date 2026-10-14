@@ -18,8 +18,6 @@ import { useThemedStyles } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
 import { BaseText, BaseTextProps } from "./BaseText"
 
-const { defaults: defaultTypography, ...otherTypography } = typography
-
 type Props = {
     action: () => void
     disabledAction?: () => void
@@ -40,10 +38,10 @@ type Props = {
     h?: number // NOTE: this is a number in percentage
     radius?: number
     size?: "sm" | "md" | "lg"
-    typographyFont?: keyof typeof defaultTypography
-    fontSize?: keyof typeof otherTypography.fontSize
-    fontWeight?: keyof typeof otherTypography.fontWeight
-    fontFamily?: keyof typeof otherTypography.fontFamily
+    typographyFont?: keyof typeof typography.defaults
+    fontSize?: keyof typeof typography.fontSize
+    fontWeight?: keyof typeof typography.fontWeight
+    fontFamily?: keyof typeof typography.fontFamily
     selfAlign?: "auto" | FlexAlignType
     haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
     leftIcon?: React.ReactNode

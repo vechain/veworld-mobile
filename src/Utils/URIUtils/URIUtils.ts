@@ -46,7 +46,7 @@ const isHttps = (url: string) => {
     try {
         const parsedURL = new URL(url)
         return parsedURL.protocol === "https:"
-    } catch (e) {
+    } catch {
         return false
     }
 }
@@ -59,7 +59,7 @@ const isLocalHost = (url: string) => {
             parsedURL.hostname === "127.0.0.1" ||
             (isAndroid() && parsedURL.hostname === "10.0.2.2")
         )
-    } catch (e) {
+    } catch {
         return false
     }
 }
@@ -68,7 +68,7 @@ const isHttp = (url: string) => {
     try {
         const parsedURL = new URL(url)
         return parsedURL.protocol === "http:"
-    } catch (e) {
+    } catch {
         return false
     }
 }

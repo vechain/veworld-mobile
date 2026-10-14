@@ -173,7 +173,7 @@ const EnhancedTokenCard = ({
 }
 
 export const TokenSelectionBottomSheet = React.forwardRef<BottomSheetModal, TokenSelectionBottomSheetProps>(
-    function TokenSelectionBottomSheet({ selectedToken: _selectedToken, setSelectedToken, onClose }, ref) {
+    function TokenSelectionBottomSheetRender({ selectedToken: _selectedToken, setSelectedToken, onClose }, ref) {
         const { LL } = useI18nContext()
         const { theme, styles } = useThemedStyles(baseBottomSheetStyles)
         const [vot3WarningVisible, setVot3WarningVisible] = useState(false)

@@ -18,8 +18,8 @@ import { ReceiveTab } from "./ReceiveTab"
 import { ScanTab } from "./ScanTab"
 import FontUtils from "~Utils/FontUtils"
 
-const SEND_RECEIVE_BS_TABS = ["scan", "receive"] as const
-export type SendReceiveBsTab = (typeof SEND_RECEIVE_BS_TABS)[number]
+type SendReceiveBsTabs = readonly ["scan", "receive"]
+export type SendReceiveBsTab = SendReceiveBsTabs[number]
 
 type Props = {
     onScan: (data: string) => Promise<boolean>
@@ -227,7 +227,7 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
     )
 }
 
-export const SendReceiveBottomSheet = forwardRef<BottomSheetModal, Props>(function SendReceiveBottomSheet(
+export const SendReceiveBottomSheet = forwardRef<BottomSheetModal, Props>(function SendReceiveBottomSheetRender(
     { onScan, title, description, hasWCTarget },
     ref,
 ) {
@@ -235,7 +235,7 @@ export const SendReceiveBottomSheet = forwardRef<BottomSheetModal, Props>(functi
     const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModal> })
 
     return (
-        <BaseBottomSheet<SendReceiveBottomSheetOpenProps<typeof SEND_RECEIVE_BS_TABS>>
+        <BaseBottomSheet<SendReceiveBottomSheetOpenProps<SendReceiveBsTabs>>
             snapPoints={["100%"]}
             noMargins
             ref={ref}

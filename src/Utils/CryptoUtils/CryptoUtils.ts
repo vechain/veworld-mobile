@@ -131,7 +131,7 @@ const isValidKeystoreFile = (fileContent: string): boolean => {
     try {
         const parsed = JSON.parse(fileContent)
         return Keystore.wellFormed(parsed)
-    } catch (err) {
+    } catch {
         return false
     }
 }

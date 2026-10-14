@@ -23,7 +23,7 @@ type Props = {
     setSelectedDelegationUrl: (url: string) => void
     onCloseBottomSheet: () => void
 }
-export const DelegationBottomSheet = forwardRef<BottomSheetModal, Props>(function DelegationBottomSheet(
+export const DelegationBottomSheet = forwardRef<BottomSheetModal, Props>(function DelegationBottomSheetRender(
     {
         setNoDelegation,
         selectedDelegationOption,

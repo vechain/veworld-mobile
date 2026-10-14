@@ -228,7 +228,7 @@ const BaseBottomSheetContent = ({
     )
 }
 
-const _BaseBottomSheet = <TData,>(
+const BaseBottomSheetWithRef = <TData,>(
     {
         contentStyle,
         snapPoints,
@@ -440,7 +440,7 @@ const _BaseBottomSheet = <TData,>(
  * `BaseBottomSheet` component. This is a wrapper around the `BottomSheetModal`
  * component from `@gorhom/bottom-sheet` library with some additional features.
  */
-export const BaseBottomSheet = typedForwardRef(_BaseBottomSheet)
+export const BaseBottomSheet = typedForwardRef(BaseBottomSheetWithRef)
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({

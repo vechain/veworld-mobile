@@ -93,7 +93,7 @@ export const ChooseBackupDetailsPassword = () => {
                     }),
                 )
                 onOpenSuccess()
-            } catch (error) {
+            } catch {
                 showErrorToast({
                     text1: PlatformUtils.isIOS() ? LL.CLOUDKIT_ERROR_GENERIC() : LL.GOOGLE_DRIVE_ERROR_GENERIC(),
                 })

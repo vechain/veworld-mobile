@@ -27,7 +27,7 @@ export type BaseIconProps =
           TouchableOpacityProps &
           ViewProps
 
-const BaseIconWithRef = forwardRef<View, BaseIconProps>(function BaseIconWithRef(props, ref) {
+const BaseIconWithRef = forwardRef<View, BaseIconProps>(function BaseIconRender(props, ref) {
     const { color, style, borderRadius, testID, haptics, name, ...otherProps } = props
     const theme = useTheme()
 
@@ -62,7 +62,7 @@ export const BaseIcon = memo(BaseIconWithRef)
 
 type BaseIconWrapperProps = BaseIconProps & { children: React.ReactNode }
 
-const BaseIconWrapperWithRef = forwardRef<View, BaseIconWrapperProps>(function BaseIconWrapperWithRef(
+const BaseIconWrapperWithRef = forwardRef<View, BaseIconWrapperProps>(function BaseIconWrapperRender(
     { style, bg, borderRadius, size, children, action, haptics, ...props },
     ref,
 ) {

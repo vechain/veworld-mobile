@@ -16,7 +16,7 @@ import { AddressUtils } from "~Utils"
 
 type Props = Omit<RefreshControlProps, "onRefresh" | "refreshing" | "tintColor">
 
-export const PullToRefresh = forwardRef<RefreshControl, Props>(function PullToRefresh(props, ref) {
+export const PullToRefresh = forwardRef<RefreshControl, Props>(function PullToRefreshRender(props, ref) {
     const [refreshing, setRefreshing] = useState(false)
     const queryClient = useQueryClient()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
