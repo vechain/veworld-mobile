@@ -1,5 +1,5 @@
 import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useMemo, useState } from "react"
-import { RefreshControlProps, ScrollView, StyleProp, StyleSheet, TextStyle } from "react-native"
+import { RefreshControlProps, ScrollViewInstance, StyleProp, StyleSheet, TextStyle } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { BackButtonHeader, CenteredHeader, SelectedNetworkViewer } from "~Components"
 import { BaseSafeArea, BaseScrollView, BaseTextProps, BaseView } from "~Components/Base"
@@ -22,7 +22,7 @@ type Props = {
     _iosOnlyTabBarBottomMargin?: number
     refreshControl?: ReactElement<RefreshControlProps, string | JSXElementConstructor<any>>
     noStaticBottomPadding?: boolean
-    scrollViewRef?: Ref<ScrollView>
+    scrollViewRef?: Ref<ScrollViewInstance>
     onGoBack?: () => void
     preventGoBack?: boolean
     beforeNavigating?: () => Promise<void> | void

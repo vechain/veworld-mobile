@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { StyleSheet, TextInputSubmitEditingEvent } from "react-native"
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler"
+import { StyleSheet, TextInputInstance, TextInputSubmitEditingEvent } from "react-native"
+import { TouchableOpacity } from "react-native-gesture-handler"
 import { BaseIcon, BaseTextInput } from "~Components"
 import { Spinner } from "~Components/Reusable/Spinner"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -16,7 +16,7 @@ type Props = {
 export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const inputRef = useRef<TextInput | null>(null)
+    const inputRef = useRef<TextInputInstance | null>(null)
     const [loading, setLoading] = useState(false)
 
     const handleOnSubmitEditing = useCallback(

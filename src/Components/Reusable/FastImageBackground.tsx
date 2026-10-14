@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
+import { HostInstance, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import FastImage, { FastImageProps, ImageStyle } from "react-native-fast-image"
 import { BlurView } from "./BlurView"
 
@@ -15,7 +15,7 @@ type Props = Omit<FastImageProps, "style"> & {
  * @param param0 Props
  * @returns a component that can be used in place of ImageBackground
  */
-export const FastImageBackground = React.forwardRef<View, Props>(
+export const FastImageBackground = React.forwardRef<HostInstance, Props>(
     ({ children, style, imageStyle, importantForAccessibility, blurred, ...props }, ref) => {
         const flattenedStyle = useMemo(() => {
             return StyleSheet.flatten(style)

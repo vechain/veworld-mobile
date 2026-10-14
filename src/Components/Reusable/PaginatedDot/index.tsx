@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react"
-import { ScrollView, View, ViewStyle, StyleProp, StyleSheet } from "react-native"
+import { ScrollView, ScrollViewInstance, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import Dot from "./Dot"
 import EmptyDot, { defaultEmptyDotSize } from "./EmptyDot"
 import { usePrevious } from "~Hooks"
@@ -18,7 +18,7 @@ const ONE_EMPTY_DOT_SIZE = defaultEmptyDotSize * defaultEmptyDotSize
 export const PaginatedDot: React.FC<Props> = (props: Props) => {
     const { pageIdx, maxPage, activeDotColor, inactiveDotColor } = props
 
-    const refScrollView = useRef<ScrollView>(null)
+    const refScrollView = useRef<ScrollViewInstance>(null)
     const prevPage = usePrevious(pageIdx)
 
     //Size of the dots are calculated based on the sizeRatio

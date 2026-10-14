@@ -28,23 +28,10 @@ export const SafeAreaView = (props: SafeAreaProps) => {
 
     const baseStyle: ViewStyle = {
         flex: 1,
-        paddingBottom: 0,
-        paddingTop: 0,
-        paddingRight: 0,
-        paddingLeft: 0,
-    }
-
-    if (!disableBottomSafeArea) {
-        baseStyle.paddingBottom = insets.bottom
-    }
-
-    if (!disableTopSafeArea) {
-        baseStyle.paddingTop = insets.top
-    }
-
-    if (!disableSidesSafeArea) {
-        baseStyle.paddingRight = insets.right
-        baseStyle.paddingLeft = insets.left
+        paddingBottom: disableBottomSafeArea ? 0 : insets.bottom,
+        paddingTop: disableTopSafeArea ? 0 : insets.top,
+        paddingRight: disableSidesSafeArea ? 0 : insets.right,
+        paddingLeft: disableSidesSafeArea ? 0 : insets.left,
     }
 
     return (

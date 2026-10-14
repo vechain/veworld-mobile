@@ -13,8 +13,8 @@ const ARWEAVE_GATEWAY_HOSTNAME = "arweave.net"
 // A helper function to normalize the URL by removing 'www.'
 const normalizeURL = (url: string) => {
     const parsedURL = new URL(url.toLowerCase())
-    parsedURL.hostname = parsedURL.hostname.replace("www.", "")
-    return parsedURL
+    const host = parsedURL.host.replace("www.", "")
+    return new URL(`${parsedURL.protocol}//${host}${parsedURL.pathname}${parsedURL.search}${parsedURL.hash}`)
 }
 
 const compareURLs = (url1?: string, url2?: string) => {

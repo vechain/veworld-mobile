@@ -4,12 +4,12 @@ import { BaseTextInput, BaseTextInputProps } from "../BaseTextInput"
 import { useBottomSheetInternal } from "@gorhom/bottom-sheet"
 import { BottomSheetTextInputProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetTextInput"
 import { TextInput } from "react-native-gesture-handler"
-import { findNodeHandle, TextInput as RNTextInput, TextInputFocusEvent } from "react-native"
+import { TextInput as RNTextInput, TextInputFocusEvent, TextInputInstance, findNodeHandle } from "react-native"
 
 // Mirrors the library's BottomSheetTextInput; v5 tracks the focused input by node handle.
-const BottomSheetTextInputComponent = forwardRef<TextInput, BottomSheetTextInputProps & BaseTextInputProps>(
+const BottomSheetTextInputComponent = forwardRef<TextInputInstance, BottomSheetTextInputProps & BaseTextInputProps>(
     ({ onFocus, onBlur, ...rest }, providedRef) => {
-        const ref = useRef<TextInput>(null)
+        const ref = useRef<TextInputInstance>(null)
         const { animatedKeyboardState, textInputNodesRef } = useBottomSheetInternal()
 
         const handleOnFocus = useCallback(
