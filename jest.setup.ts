@@ -179,6 +179,11 @@ jest.mock("expo-font", () => ({
 
 jest.mock("react-native-localize", () => localizeMock)
 
+jest.mock("react-native-android-location-enabler", () => ({
+    promptForEnableLocationIfNeeded: jest.fn().mockResolvedValue("already-enabled"),
+    isLocationEnabled: jest.fn().mockResolvedValue(true),
+}))
+
 jest.mock("react-native-webview", () => ({
     ...jest.requireActual("react-native-webview").WebView,
 }))
