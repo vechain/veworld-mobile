@@ -74,7 +74,7 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
     ): ActivityEventListener {
         return object : ActivityEventListener {
             override fun onActivityResult(
-                    activity: Activity?,
+                    activity: Activity,
                     requestCode: Int,
                     resultCode: Int,
                     intent: Intent?,
@@ -103,7 +103,7 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
                 }
             }
 
-            override fun onNewIntent(p0: Intent?) {}
+            override fun onNewIntent(p0: Intent) {}
         }
     }
 
@@ -159,7 +159,7 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
 
                     reactContext.addActivityEventListener(listener)
 
-                    currentActivity?.startActivityForResult(intent, Request.GOOGLE_SIGN_IN.code)
+                    getCurrentActivity()?.startActivityForResult(intent, Request.GOOGLE_SIGN_IN.code)
                             ?: promise.reject(
                                     DataError.Android.ACTIVITY_NOT_FOUND.code,
                                     DataError.Android.ACTIVITY_NOT_FOUND.name,
@@ -189,7 +189,7 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
 
         reactContext.addActivityEventListener(listener)
 
-        currentActivity?.startActivityForResult(intent, Request.USER_RECOVERABLE_AUTH.code)
+        getCurrentActivity()?.startActivityForResult(intent, Request.USER_RECOVERABLE_AUTH.code)
                 ?: promise.reject(
                         DataError.Android.ACTIVITY_NOT_FOUND.code,
                         DataError.Android.ACTIVITY_NOT_FOUND.name,
@@ -409,7 +409,7 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
     }
 
     override fun onHostResume() {
-        currentActivity?.let {
+        getCurrentActivity()?.let {
             if (googleDrive == null) {
                 googleDrive = GoogleDrive(it)
             }

@@ -16659,10 +16659,10 @@ react-keyed-flatten-children@^1.3.0:
   dependencies:
     react-is "^16.8.6"
 
-react-native-android-location-enabler@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-android-location-enabler/-/react-native-android-location-enabler-2.0.1.tgz#d3073d1ddc75c1afa304948156de3347fbf47174"
-  integrity sha512-hDNfQL4gImrmc6K6J44kd2iKrpPHc23V4stujNIg3I1LvYLT+kwWmfTGapeY0hl6EXACfaFdm/wBb4ggtNcnPA==
+react-native-android-location-enabler@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-android-location-enabler/-/react-native-android-location-enabler-3.0.1.tgz#b263b1fbac1491888601ccff9ef88430a13dc7ed"
+  integrity sha512-X4gHdEFf/dqSNhVDQ2cQUibnNRd6xIG34UGDMnwoCKIPLC2wYzALs/gPrDnjrAWsuxjaleZXwUIrX3o9nbtsgw==
 
 react-native-background-secure@^0.2.0:
   version "0.2.0"
@@ -16941,10 +16941,10 @@ react-native-screens@~4.28.0:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
-react-native-screenshot-prevent@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-screenshot-prevent/-/react-native-screenshot-prevent-1.2.1.tgz#f784a3303139690b9e8c1ef00f69839810941016"
-  integrity sha512-zY6U3xNlFrquCJJVNoyR6DcAv2c6tOHQIcleBUQo4OrbSKz5a94Y3MkuzVwpE+IMlxCASymenDwfMtnWopSiVA==
+react-native-screenshot-prevent@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-screenshot-prevent/-/react-native-screenshot-prevent-1.2.2.tgz#2c307af25af2bccf2796ca9b2cbff4b88d7260c6"
+  integrity sha512-aP6ZOs6sLeSAFGc30EC+XfCP4aFSWr4Q+LxKf8CIvKq2gi+viKQRBZZQJY4vcMx65UJvhxnB174hMScGRqGCTA==
 
 react-native-scrypt@^1.2.1:
   version "1.2.1"

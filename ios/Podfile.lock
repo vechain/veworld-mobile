@@ -336,6 +336,7 @@ PODS:
     - React-cxxstableapi
   - React-callinvoker/callinvokerUmbrella (0.88.0-rc.4):
     - React-cxxstableapi
+  - React-Codegen (0.1.0)
   - React-Core (0.88.0-rc.4):
     - React-Core-prebuilt
     - React-Core/Default (= 0.88.0-rc.4)
@@ -2784,8 +2785,31 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNScreenshotPrevent (1.2.1):
-    - React
+  - RNScreenshotPrevent (1.2.2):
+    - hermes-engine
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React-bridging
+    - React-Codegen
+    - React-Core
+    - React-Core-prebuilt
+    - React-cxxstableapi
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - RNScrypt (1.2.1):
     - React
   - RNSentry (8.28.0):
@@ -3130,6 +3154,7 @@ SPEC REPOS:
     - MMKVCore
     - MultiplatformBleAdapter
     - OneSignalXCFramework
+    - React-Codegen
     - SDWebImage
     - SDWebImageWebPCoder
     - SwiftUIIntrospect
@@ -3518,6 +3543,7 @@ SPEC CHECKSUMS:
   React: bec1c8775e9ad1059938a7d1b871d8b9625ce123
   React-bridging: 5a7946fb0ddb83b2aa599dd77ac5a9e2a9eade59
   React-callinvoker: 46d2719a212dafbb85e145f47ae8914bbde7bbc8
+  React-Codegen: 4b8b4817cea7a54b83851d4c1f91f79aa73de30a
   React-Core: 55c8dc05bdb7a88bd1b3e2165f1b561bba59bc01
   React-Core-prebuilt: ea766d518f507b43ed19bdaaf850c6088b987ade
   React-CoreModules: 820875df2084ca3f6e83d5594f445b728aaec917
@@ -3619,7 +3645,7 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: 328bb7388a733f317f2a943271749a30706c917b
   RNReanimated: 90f0bd8f7ee9856e7f47fcff15d081635610beec
   RNScreens: 3d3d94d97ee39a20fa35de959c32e356439991c7
-  RNScreenshotPrevent: 5f8473abaa2db2476561ef8f3704b66491ce7b01
+  RNScreenshotPrevent: 473f3203df9445c7b8b09b7154bc946b25668733
   RNScrypt: 3e8612600c93aaa3bfa7849b6d1a4ab61613e2af
   RNSentry: 3cbf06d950d99c59f52035316146024280d02930
   RNSVG: 8b5f2fdb9f0245a863cdd6e9c48a7689821a08b0
