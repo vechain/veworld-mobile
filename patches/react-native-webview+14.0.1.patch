@@ -719,3 +719,16 @@ index 80c6803..11a7cda 100644
      protected static class ProgressChangedFilter {
          private boolean waitingForCommandLoadUrl = false;
  
+diff --git a/node_modules/react-native-webview/index.d.ts b/node_modules/react-native-webview/index.d.ts
+index 10b9c14..193e4a7 100644
+--- a/node_modules/react-native-webview/index.d.ts
++++ b/node_modules/react-native-webview/index.d.ts
+@@ -5,7 +5,7 @@ export { FileDownload, WebViewMessageEvent, WebViewNavigation } from './lib/WebV
+ 
+ export type WebViewProps = IOSWebViewProps & AndroidWebViewProps & WindowsWebViewProps;
+ 
+-declare class WebView<P = undefined> extends Component<WebViewProps & P> {
++declare class WebView<P = object> extends Component<WebViewProps & P> {
+   /**
+    * Go back one page in the webview's history.
+    */

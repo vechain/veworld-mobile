@@ -1,7 +1,12 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet } from "react-native"
-import { Gesture, GestureDetector, ScrollView as GestureScrollView, GestureType } from "react-native-gesture-handler"
+import {
+    Gesture,
+    GestureDetector,
+    GestureType,
+    LegacyScrollView as GestureScrollView,
+} from "react-native-gesture-handler"
 import Animated, {
     clamp,
     Extrapolation,

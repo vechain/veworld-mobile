@@ -410,7 +410,7 @@ const BaseBottomSheetWithRef = <TData,>(
                         floating={floating}
                         scrollable={scrollable}
                         stickyHeaderIndices={stickyIndices}>
-                        {children(p?.data)}
+                        {children(p?.data as TData)}
                     </BaseBottomSheetContent>
                 )
             ) : (
