@@ -1,5 +1,5 @@
 import { memo, Ref } from "react"
-import { SectionList as RNSectionList, SectionListProps as RNSectionListProps, SectionListProps } from "react-native"
+import { SectionList as RNSectionList, SectionListProps } from "react-native"
 import Animated, { AnimatedProps } from "react-native-reanimated"
 import { SCROLLABLE_TYPE, BottomSheetSectionListMethods, BottomSheetScrollableProps } from "@gorhom/bottom-sheet"
 import { createBottomSheetScrollableComponent } from "../createBottomSheetScrollableComponent"
@@ -14,7 +14,7 @@ export type BottomSheetSectionListProps<ItemT, SectionT> = Omit<
         ref?: Ref<BottomSheetSectionListMethods>
     }
 
-const AnimatedSectionList = Animated.createAnimatedComponent<RNSectionListProps<any>>(RNSectionList)
+const AnimatedSectionList = Animated.createAnimatedComponent(RNSectionList)
 
 const BottomSheetSectionListComponent = createBottomSheetScrollableComponent<
     BottomSheetSectionListMethods,

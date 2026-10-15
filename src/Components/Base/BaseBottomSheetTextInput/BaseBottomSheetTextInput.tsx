@@ -3,7 +3,6 @@ import React, { memo, useCallback, useEffect, forwardRef, useImperativeHandle, u
 import { BaseTextInput, BaseTextInputProps } from "../BaseTextInput"
 import { useBottomSheetInternal } from "@gorhom/bottom-sheet"
 import { BottomSheetTextInputProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetTextInput"
-import { TextInput } from "react-native-gesture-handler"
 import { TextInput as RNTextInput, TextInputFocusEvent, TextInputInstance, findNodeHandle } from "react-native"
 
 // Mirrors the library's BottomSheetTextInput; v5 tracks the focused input by node handle.
@@ -49,7 +48,7 @@ const BottomSheetTextInputComponent = forwardRef<TextInputInstance, BottomSheetT
             }
         }, [textInputNodesRef, animatedKeyboardState])
 
-        useImperativeHandle(providedRef, () => ref.current as TextInput, [])
+        useImperativeHandle(providedRef, () => ref.current as TextInputInstance, [])
 
         return <BaseTextInput ref={ref} onFocus={handleOnFocus} onBlur={handleOnBlur} {...rest} />
     },
