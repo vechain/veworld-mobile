@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from "react"
-import { StatusBar, StatusBarProps } from "react-native"
+import { SystemBars } from "react-native-edge-to-edge"
 import { useTheme } from "~Hooks"
 import { Routes } from "~Navigation"
 import { selectCurrentScreen, useAppSelector } from "~Storage/Redux"
@@ -11,9 +11,9 @@ type Props = {
      * Indicate that this is the root status bar
      */
     root?: boolean
-} & StatusBarProps
+}
 
-export const BaseStatusBar = memo(({ hero, root, ...statusBarProps }: Props) => {
+export const BaseStatusBar = memo(({ hero, root }: Props) => {
     const theme = useTheme()
 
     const routeName = useAppSelector(selectCurrentScreen)
@@ -33,5 +33,5 @@ export const BaseStatusBar = memo(({ hero, root, ...statusBarProps }: Props) => 
         }
     }, [hero, root, routeName, theme.isDark])
 
-    return <StatusBar barStyle={barStyle} {...statusBarProps} />
+    return <SystemBars style={barStyle === "light-content" ? "light" : "dark"} />
 })

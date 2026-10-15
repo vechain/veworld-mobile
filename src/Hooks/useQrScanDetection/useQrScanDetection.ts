@@ -1,9 +1,6 @@
+import { BarcodeScanningResult } from "expo-camera"
 import { useCallback } from "react"
 import { SharedValue } from "react-native-reanimated"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { Code, CodeScannerFrame } from "react-native-vision-camera"
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
-import { PlatformUtils } from "~Utils"
 
 type Args = {
     /**
@@ -25,64 +22,33 @@ type Args = {
 }
 
 export const useQrScanDetection = ({ offsetX, offsetY, size, onScan }: Args) => {
-    const { bottom } = useSafeAreaInsets()
     return useCallback(
-        async (codes: Code[], frame: CodeScannerFrame) => {
-            if (codes.length === 0) return
-            const code = codes[0]
-            if (!code.frame || !code.value) return
-            const offset = PlatformUtils.isIOS() ? 100 : 0
-            // This is the only way to make it work.
-            // You should not change this unless you're 200% sure that what you're doing is correct.
-            // This has been developed in a full day of intensive work, so please be careful before touching it.
+        async ({ data, bounds }: BarcodeScanningResult) => {
+            if (!data) return
 
-            //react-native-vision-camera has wrong dimensions set (for example on Android the camera is in 4:3 and on iOS in 16:9).
-            //It also flips between width and height arbitrarily, without any explanation.
-            const topLeftX =
-                ((100 - ((code.frame.y + code.frame.width / 2) / frame.height || 0) * 100) / 100) * SCREEN_WIDTH -
-                offset
-            const topLeftY =
-                ((code.frame.x + code.frame.height / 2) / (frame.width || 0)) * (SCREEN_HEIGHT - bottom) - offset
-            const points = [
-                {
-                    x: topLeftX,
-                    y: topLeftY,
-                },
-                {
-                    x: topLeftX + 200,
-                    y: topLeftY,
-                },
-                {
-                    x: topLeftX + 200,
-                    y: topLeftY + 200,
-                },
-                {
-                    x: topLeftX,
-                    y: topLeftY + 200,
-                },
-            ]
+            // expo-camera reports bounds in view coordinates, so no frame conversion is
+            // needed — but it documents them as sometimes empty. A code we cannot place
+            // is better scanned than silently dropped.
+            if (!bounds?.size?.width || !bounds?.size?.height) return onScan(data)
 
-            const biggerRect = {
+            const centerX = bounds.origin.x + bounds.size.width / 2
+            const centerY = bounds.origin.y + bounds.size.height / 2
+
+            const detectionArea = {
                 x: offsetX.value * 0.8,
                 y: offsetY.value * 0.8,
                 width: size + offsetX.value * 0.4,
                 height: size + offsetY.value * 0.4,
             }
 
-            // Outside of detection area
-            if (
-                points.every(point => {
-                    return (
-                        point.x >= biggerRect.x &&
-                        point.x <= biggerRect.x + biggerRect.width &&
-                        point.y >= biggerRect.y &&
-                        point.y <= biggerRect.y + biggerRect.height
-                    )
-                })
-            ) {
-                return onScan(code.value)
-            }
+            const isInsideDetectionArea =
+                centerX >= detectionArea.x &&
+                centerX <= detectionArea.x + detectionArea.width &&
+                centerY >= detectionArea.y &&
+                centerY <= detectionArea.y + detectionArea.height
+
+            if (isInsideDetectionArea) return onScan(data)
         },
-        [bottom, offsetX.value, offsetY.value, size, onScan],
+        [offsetX, offsetY, size, onScan],
     )
 }

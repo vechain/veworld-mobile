@@ -10,7 +10,7 @@ import { WALLET_STATUS } from "~Model/Wallet"
 import { createMMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
 import * as dotenv from "dotenv"
-import { FlatList, Keyboard, SectionList, View } from "react-native"
+import { FlatList, Keyboard, SectionList } from "react-native"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
 
@@ -32,12 +32,6 @@ jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 jest.mock("react-native/src/private/animated/NativeAnimatedHelper.js")
 jest.mock("jail-monkey", () => require("./src/Test/mocks/jail-monkey"))
 jest.mock("react-native-keyboard-controller", () => require("react-native-keyboard-controller/jest"))
-jest.mock("react-native-vision-camera", () => ({
-    Camera: View,
-    useCameraDevice: jest.fn(),
-    useCodeScanner: jest.fn().mockImplementation(args => args),
-}))
-
 jest.mock("react-native-onesignal", () => ({
     ...jest.requireActual("react-native-onesignal"),
     OneSignal: {
@@ -215,8 +209,13 @@ jest.mock("react-native-wagmi-charts", () => {
         LineChart,
     }
 })
+jest.mock("react-native-edge-to-edge", () => ({
+    SystemBars: () => null,
+}))
+
 jest.mock("expo-camera", () => ({
     Camera: componentMock,
+    CameraView: componentMock,
     CameraType: {
         back: "back",
     },
