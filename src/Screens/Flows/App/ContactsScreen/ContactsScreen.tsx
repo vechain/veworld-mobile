@@ -177,10 +177,6 @@ export const ContactsScreen = () => {
                                 renderItem={renderItem}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}
-                                estimatedListSize={{
-                                    height: 80 * contacts.length,
-                                    width: 400,
-                                }}
                                 testID="contacts-list"
                             />
                         </BaseView>

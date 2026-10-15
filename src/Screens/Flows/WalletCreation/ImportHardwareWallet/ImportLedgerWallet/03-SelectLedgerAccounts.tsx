@@ -260,10 +260,6 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                                 renderItem={renderItem}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}
-                                estimatedListSize={{
-                                    height: 184,
-                                    width: 152 * ledgerAccounts.length + (ledgerAccounts.length - 1) * 16,
-                                }}
                                 contentContainerStyle={themedStyles.flashListContent}
                             />
                         )}

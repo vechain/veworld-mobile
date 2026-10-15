@@ -70,7 +70,7 @@ export const ActivityScreen = () => {
                     <Tab.Navigator
                         tabBarPosition="top"
                         screenOptions={{
-                            animation: !isLowEndDevice || PlatformUtils.isIOS() ? "default" : "none",
+                            animationEnabled: !isLowEndDevice || PlatformUtils.isIOS(),
                             lazy: true,
                             swipeEnabled: true,
                             tabBarBounces: false,
