@@ -28,6 +28,9 @@
             "~Test": ["./src/Test/index.tsx"],
             "~Logging/*": ["./src/Logging/*"],
             "~Generated/*": ["./src/Generated/*"],
+            // view-shot's "react-native" export condition points at untyped TSX source,
+            // which skipLibCheck does not cover. Type-check against its built types.
+            "react-native-view-shot": ["./node_modules/react-native-view-shot/lib/index.d.ts"]
         }
     }
 }

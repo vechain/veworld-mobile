@@ -11,7 +11,7 @@ import {
 } from "react-native-reanimated"
 
 interface UseFavoriteAnimationReturn {
-    animatedStyles: ViewStyle
+    animatedStyles: ReturnType<typeof useAnimatedStyle<ViewStyle>>
     /**
      * Trigger the animation
      *

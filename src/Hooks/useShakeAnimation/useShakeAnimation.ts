@@ -10,7 +10,7 @@ import {
 } from "react-native-reanimated"
 
 interface UseShakeAnimationReturn {
-    animatedStyles: ViewStyle
+    animatedStyles: ReturnType<typeof useAnimatedStyle<ViewStyle>>
     startShaking: () => void
     stopShaking: () => void
 }
