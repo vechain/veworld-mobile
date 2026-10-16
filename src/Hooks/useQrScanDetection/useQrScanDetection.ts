@@ -26,9 +26,7 @@ export const useQrScanDetection = ({ offsetX, offsetY, size, onScan }: Args) => 
         async ({ data, bounds }: BarcodeScanningResult) => {
             if (!data) return
 
-            // expo-camera reports bounds in view coordinates, so no frame conversion is
-            // needed — but it documents them as sometimes empty. A code we cannot place
-            // is better scanned than silently dropped.
+            // expo-camera documents bounds as sometimes empty; scan rather than drop silently
             if (!bounds?.size?.width || !bounds?.size?.height) return onScan(data)
 
             const centerX = bounds.origin.x + bounds.size.width / 2
